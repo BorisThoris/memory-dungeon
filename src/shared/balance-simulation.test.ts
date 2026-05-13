@@ -32,6 +32,13 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.relicOfferAvailable).toBe(4);
         expect(result.aggregate.consumableRewardPotential).toBeGreaterThan(0);
         expect(result.aggregate.treasureRewardPairs).toBeGreaterThan(0);
+        expect(result.aggregate.routeRewardPairs).toBeGreaterThanOrEqual(0);
+        expect(result.aggregate.eventRewardPotential).toBeGreaterThan(0);
+        expect(result.aggregate.roomRewardPotential).toBeGreaterThan(0);
+        expect(result.aggregate.keyInflowPotential).toBeGreaterThan(0);
+        expect(result.aggregate.shopGoldInflowPotential).toBeGreaterThan(result.aggregate.totalShopGoldEarned);
+        expect(result.aggregate.destroyChargeInflowPotential).toBeGreaterThan(0);
+        expect(result.aggregate.peekChargeInflowPotential).toBeGreaterThan(0);
         expect(result.rows.map((row) => row.key)).toEqual(
             expect.arrayContaining([
                 'avg_moving_enemy_hazards_per_floor',
@@ -44,7 +51,12 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'relic_offer_cadence',
                 'avg_consumable_reward_potential_per_floor',
                 'avg_treasure_reward_pairs_per_floor',
-                'reward_band_spread'
+                'reward_band_spread',
+                'avg_live_shop_gold_inflow_per_floor',
+                'avg_route_reward_pairs_per_floor',
+                'avg_event_room_reward_potential_per_floor',
+                'avg_key_inflow_potential_per_floor',
+                'avg_power_charge_inflow_per_floor'
             ])
         );
         const newRewardRows = new Set([
@@ -54,7 +66,12 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'relic_offer_cadence',
             'avg_consumable_reward_potential_per_floor',
             'avg_treasure_reward_pairs_per_floor',
-            'reward_band_spread'
+            'reward_band_spread',
+            'avg_live_shop_gold_inflow_per_floor',
+            'avg_route_reward_pairs_per_floor',
+            'avg_event_room_reward_potential_per_floor',
+            'avg_key_inflow_potential_per_floor',
+            'avg_power_charge_inflow_per_floor'
         ]);
         expect(result.rows.filter((row) => newRewardRows.has(row.key) && row.status !== 'within_range')).toEqual([]);
         expect(result.samples.some((sample) => sample.dungeonNodeKind === 'elite' && sample.enemyThreatPairs >= 2)).toBe(

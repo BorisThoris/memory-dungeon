@@ -26,12 +26,12 @@ The repeated pattern is clear: many systems are structurally present, but contra
 | GLD-P1-006 | Done | Destroy-charge policy conflicts across code/docs/UI | Destroy charges are an uncapped run-local bank across events, shop, rooms, inventory, reward copy, and tests |
 | GLD-P1-007 | Done | Hazard trigger contracts drift | Mirror Decoy is mismatch-counted; Shuffle Snare repeat/cursed behavior is covered |
 | GLD-P1-008 | Done | First-run board and onboarding can overexpose mechanics | First-run prompt targets filter hazards/exits/decoys/specials/findables and floor-2 progression remains covered |
-| GLD-P1-009 | Confirmed | Daily archive/objective/quest registries split | Decide one registry or explicit adapters with parity tests; daily archive needs per-date records if presented as history |
-| GLD-P1-010 | Confirmed | Balance simulation undercounts live economy | Sim gate must model route/event/room/reward inflow or clearly limit itself to schedule sampling |
+| GLD-P1-009 | Done | Daily archive/objective/quest registries split | Separate registries stay in place with a shared local-progress adapter and parity tests |
+| GLD-P1-010 | Done | Balance simulation undercounts live economy | Sim gate now estimates route/event/room/reward/key/shop/power-charge inflow from existing rules |
 
 ## Do Not Expand Before Stable
 - New card/hazard/relic/shop families should wait on GLD-P0-001 through GLD-P0-006.
-- Route, boss, and economy expansion should wait on GLD-P1-010.
+- Route, boss, and economy expansion can proceed after reviewing the live-inflow simulation guardrails.
 - True replay, dailies, and puzzle-facing features should treat GLD-P1-001 as a share-key baseline; structured replay remains a separate future contract.
 
 ## P2 Expand After Stabilization
@@ -75,12 +75,13 @@ yarn test:e2e:renderer-qa
 ```
 
 ## Implementation Closeout
-- Done: GLD-P0-001 through GLD-P0-006 and GLD-P1-001 through GLD-P1-008.
+- Done: GLD-P0-001 through GLD-P0-006 and GLD-P1-001 through GLD-P1-010.
 - GLD verification command bundle:
 
 ```powershell
 yarn typecheck:shared
-yarn vitest run src/shared/game.test.ts src/shared/softlock-fairness.test.ts src/renderer/store/useAppStore.test.ts src/shared/playable-onboarding.test.ts src/renderer/components/PlayableOnboardingHarness.test.tsx src/shared/run-events.test.ts
+yarn vitest run src/shared/daily-archive.test.ts src/shared/objective-board.test.ts src/shared/quest-campaign.test.ts src/shared/local-progress-registry.test.ts src/shared/balance-simulation.test.ts src/shared/exploit-surface.test.ts
+yarn sim:endless --floors=1000 --seed=42001
 yarn test
 ```
 

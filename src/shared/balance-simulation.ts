@@ -46,6 +46,13 @@ export interface BalanceSimulationReport {
         relicOfferAvailable: number;
         consumableRewardPotential: number;
         treasureRewardPairs: number;
+        routeRewardPairs: number;
+        eventRewardPotential: number;
+        roomRewardPotential: number;
+        keyInflowPotential: number;
+        shopGoldInflowPotential: number;
+        destroyChargeInflowPotential: number;
+        peekChargeInflowPotential: number;
     }>;
     aggregate: {
         totalShopGoldEarned: number;
@@ -65,6 +72,13 @@ export interface BalanceSimulationReport {
         relicOfferAvailable: number;
         consumableRewardPotential: number;
         treasureRewardPairs: number;
+        routeRewardPairs: number;
+        eventRewardPotential: number;
+        roomRewardPotential: number;
+        keyInflowPotential: number;
+        shopGoldInflowPotential: number;
+        destroyChargeInflowPotential: number;
+        peekChargeInflowPotential: number;
     };
     rows: BalanceSimulationRow[];
     notes: string[];
@@ -207,6 +221,21 @@ export const runBalanceSimulation = ({
                 board.tiles,
                 (tile) => (tile.routeCardKind || tile.routeSpecialKind ? tile.pairKey : null)
             );
+            const roomEffectIds = board.tiles
+                .map((tile) => tile.dungeonCardEffectId)
+                .filter((id): id is NonNullable<typeof id> => id != null && id.startsWith('room_'));
+            const eventRewardPotential = floor % 7 === 0 ? 2 : 0;
+            const roomRewardPotential = roomEffectIds.length > 0 || dungeonNodeKind === 'rest' ? 1 : 0;
+            const keyInflowPotential = keyPairs + (board.dungeonExitLockKind === 'iron' ? 1 : 0);
+            const shopGoldInflowPotential =
+                getShopGoldRewardForFloor(floor) +
+                treasureRewardPairs +
+                routeRewardPairs +
+                (eventRewardPotential > 0 ? 2 : 0);
+            const destroyChargeInflowPotential =
+                roomEffectIds.includes('room_armory') || eventRewardPotential > 0 ? 1 : 0;
+            const peekChargeInflowPotential =
+                floor % 3 === 0 ? SHOP_ITEM_CATALOG.peek_charge.stock : roomEffectIds.includes('room_scrying_lens') ? 1 : 0;
             return {
                 seed: sampleSeed,
                 floor,
@@ -226,7 +255,14 @@ export const runBalanceSimulation = ({
                 guardRewardPotential: shrinePairs + (dungeonNodeKind === 'rest' ? 1 : 0),
                 relicOfferAvailable: floor >= 3 && floor % 3 === 0 ? 1 : 0,
                 consumableRewardPotential: keyPairs + (floor % 3 === 0 ? SHOP_ITEM_CATALOG.peek_charge.stock : 0),
-                treasureRewardPairs
+                treasureRewardPairs,
+                routeRewardPairs,
+                eventRewardPotential,
+                roomRewardPotential,
+                keyInflowPotential,
+                shopGoldInflowPotential,
+                destroyChargeInflowPotential,
+                peekChargeInflowPotential
             };
         })
     );
@@ -251,7 +287,10 @@ export const runBalanceSimulation = ({
                 sample.comboShardPotential +
                 sample.guardRewardPotential +
                 sample.consumableRewardPotential +
-                sample.treasureRewardPairs
+                sample.treasureRewardPairs +
+                sample.routeRewardPairs +
+                sample.eventRewardPotential +
+                sample.roomRewardPotential
         }),
         { early: 0, mid: 0, late: 0 }
     );
@@ -384,6 +423,46 @@ export const runBalanceSimulation = ({
             0.35,
             1,
             'floor-band reward totals'
+        ),
+        row(
+            'avg_live_shop_gold_inflow_per_floor',
+            'Average live shop-gold inflow estimate per floor',
+            Number(average(samples.map((sample) => sample.shopGoldInflowPotential)).toFixed(2)),
+            4,
+            12,
+            'floor clear, route, event, and treasure estimates'
+        ),
+        row(
+            'avg_route_reward_pairs_per_floor',
+            'Average route reward carrier pairs per floor',
+            Number(average(samples.map((sample) => sample.routeRewardPairs)).toFixed(2)),
+            0,
+            2,
+            'route reward pair assignment'
+        ),
+        row(
+            'avg_event_room_reward_potential_per_floor',
+            'Average event-room reward options per floor',
+            Number(average(samples.map((sample) => sample.eventRewardPotential)).toFixed(2)),
+            0,
+            1,
+            'event node estimate'
+        ),
+        row(
+            'avg_key_inflow_potential_per_floor',
+            'Average key inflow estimate per floor',
+            Number(average(samples.map((sample) => sample.keyInflowPotential)).toFixed(2)),
+            0,
+            1.5,
+            'key cards and locked exits'
+        ),
+        row(
+            'avg_power_charge_inflow_per_floor',
+            'Average destroy/peek charge inflow estimate per floor',
+            Number(average(samples.map((sample) => sample.destroyChargeInflowPotential + sample.peekChargeInflowPotential)).toFixed(2)),
+            0.1,
+            2,
+            'room, event, and shop charge estimates'
         )
     ];
 
@@ -410,12 +489,20 @@ export const runBalanceSimulation = ({
             guardRewardPotential: samples.reduce((sum, sample) => sum + sample.guardRewardPotential, 0),
             relicOfferAvailable: samples.reduce((sum, sample) => sum + sample.relicOfferAvailable, 0),
             consumableRewardPotential: samples.reduce((sum, sample) => sum + sample.consumableRewardPotential, 0),
-            treasureRewardPairs: samples.reduce((sum, sample) => sum + sample.treasureRewardPairs, 0)
+            treasureRewardPairs: samples.reduce((sum, sample) => sum + sample.treasureRewardPairs, 0),
+            routeRewardPairs: samples.reduce((sum, sample) => sum + sample.routeRewardPairs, 0),
+            eventRewardPotential: samples.reduce((sum, sample) => sum + sample.eventRewardPotential, 0),
+            roomRewardPotential: samples.reduce((sum, sample) => sum + sample.roomRewardPotential, 0),
+            keyInflowPotential: samples.reduce((sum, sample) => sum + sample.keyInflowPotential, 0),
+            shopGoldInflowPotential: samples.reduce((sum, sample) => sum + sample.shopGoldInflowPotential, 0),
+            destroyChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.destroyChargeInflowPotential, 0),
+            peekChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.peekChargeInflowPotential, 0)
         },
         rows,
         notes: [
             'Simulation is deterministic and local-only; no leaderboard or server authority is implied.',
-            'Targets are smoke-test guardrails, not final balance verdicts.'
+            'Targets are smoke-test guardrails, not final balance verdicts.',
+            'Live economy fields are estimates from existing route/event/room/reward rules; runtime gameplay is unchanged.'
         ]
     };
 };
