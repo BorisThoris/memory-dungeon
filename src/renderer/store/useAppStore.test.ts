@@ -1,8 +1,8 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import type { BoardState, Tile } from '../../shared/contracts';
+import type { BoardState, RunState, Tile } from '../../shared/contracts';
 import { buildBoard, countFindablePairs } from '../../shared/board-generation';
 import { ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
-import { createNewRun } from '../../shared/game-core';
+import { createDailyRun, createNewRun, createPuzzleRun } from '../../shared/game-core';
 import { generateRouteChoices } from '../../shared/route-rules';
 import { rollRunEventRoom } from '../../shared/run-events';
 import { createDungeonRunMapState, revealDungeonChoices } from '../../shared/run-map';
@@ -54,6 +54,8 @@ const resetStore = (): void => {
         newlyUnlockedAchievements: [],
         achievementBridgeNotice: null,
         persistenceWriteNotice: null,
+        saveReadFailureNotice: null,
+        saveWritesBlockedByReadFailure: false,
         boardPinMode: false,
         destroyPairArmed: false,
         peekModeArmed: false,
@@ -125,6 +127,28 @@ describe('useAppStore timers', () => {
         notifyCurrentBoardReady();
         await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
         expect(useAppStore.getState().run?.status).toBe('playing');
+    });
+
+    it('GLD-P0-006: hydrate read failure is visible and blocks default-profile autosave', async () => {
+        window.localStorage.setItem('memory-dungeon-save-data', '{not-valid-json');
+        useAppStore.setState({
+            hydrated: false,
+            hydrating: false,
+            saveReadFailureNotice: null,
+            saveWritesBlockedByReadFailure: false
+        });
+
+        await useAppStore.getState().hydrate();
+
+        expect(useAppStore.getState().hydrated).toBe(true);
+        expect(useAppStore.getState().saveReadFailureNotice).toContain('Save read failed');
+        expect(useAppStore.getState().saveWritesBlockedByReadFailure).toBe(true);
+        expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('{not-valid-json');
+
+        await useAppStore.getState().dismissHowToPlay();
+
+        expect(useAppStore.getState().saveData.onboardingDismissed).toBe(true);
+        expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('{not-valid-json');
     });
 
     it('freezes a pending board resolution while settings are open', async () => {
@@ -424,6 +448,44 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().run?.status).toBe('memorize');
     });
 
+    it('does not open the floor-clear shop when the cleared floor has no existing offers', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, practiceMode: true, runSeed: 46 });
+        useAppStore.setState({
+            view: 'playing',
+            shopReturnMode: null,
+            run: {
+                ...baseRun,
+                status: 'levelComplete',
+                shopGold: 5,
+                shopOffers: [],
+                relicOffer: null,
+                timerState: {
+                    memorizeRemainingMs: null,
+                    resolveRemainingMs: null,
+                    debugRevealRemainingMs: null,
+                    pausedFromStatus: null
+                },
+                lastLevelResult: {
+                    level: 1,
+                    scoreGained: 100,
+                    rating: 'S',
+                    livesRemaining: baseRun.lives,
+                    perfect: true,
+                    mistakes: 0,
+                    clearLifeReason: 'none',
+                    clearLifeGained: 0
+                }
+            }
+        });
+
+        useAppStore.getState().openShopFromLevelComplete();
+
+        expect(useAppStore.getState().view).toBe('playing');
+        expect(useAppStore.getState().shopReturnMode).toBeNull();
+        expect(useAppStore.getState().run?.status).toBe('levelComplete');
+        expect(useAppStore.getState().run?.shopOffers).toEqual([]);
+    });
+
     it('selects a floor route through side room before shop and stamps the next board after continuing', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 45 });
         const levelCompleteRun = {
@@ -691,6 +753,64 @@ describe('useAppStore timers', () => {
         expect(gameSfxMocks.playTrapSfx).toHaveBeenCalled();
     });
 
+    it('finalizes game over immediately when a hidden trap reveal is fatal', () => {
+        const runSeed = 52;
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed });
+        const generatedBoard = buildBoard(5, {
+            runSeed,
+            runRulesVersion: baseRun.runRulesVersion,
+            dungeonNodeKind: 'trap',
+            gameMode: 'endless'
+        });
+        const generatedTrapTile = generatedBoard.tiles.find((tile) => tile.dungeonCardKind === 'trap')!;
+        const board = {
+            ...generatedBoard,
+            tiles: generatedBoard.tiles.map((tile) =>
+                tile.pairKey === generatedTrapTile.pairKey
+                    ? {
+                          ...tile,
+                          label: 'Spike Trap',
+                          dungeonCardKind: 'trap' as const,
+                          dungeonCardState: 'hidden' as const,
+                          dungeonCardEffectId: 'trap_spikes' as const
+                      }
+                    : tile
+            )
+        };
+        const trapTile = board.tiles.find((tile) => tile.pairKey === generatedTrapTile.pairKey)!;
+        useAppStore.setState({
+            view: 'playing',
+            run: {
+                ...baseRun,
+                board,
+                status: 'playing',
+                lives: 1,
+                stats: { ...baseRun.stats, guardTokens: 0 },
+                findablesTotalThisFloor: countFindablePairs(board.tiles)
+            },
+            boardPinMode: false,
+            destroyPairArmed: false,
+            peekModeArmed: false,
+            dungeonExitPromptOpen: true
+        });
+
+        useAppStore.getState().pressTile(trapTile.id);
+
+        const state = useAppStore.getState();
+        const nextRun = state.run!;
+        expect(state.view).toBe('gameOver');
+        expect(nextRun.status).toBe('gameOver');
+        expect(nextRun.lives).toBe(0);
+        expect(nextRun.dungeonTrapsTriggered).toBe(1);
+        expect(nextRun.lastRunSummary).not.toBeNull();
+        expect(state.saveData.lastRunSummary).toEqual(nextRun.lastRunSummary);
+        expect(state.boardPinMode).toBe(false);
+        expect(state.destroyPairArmed).toBe(false);
+        expect(state.peekModeArmed).toBe(false);
+        expect(state.dungeonExitPromptOpen).toBe(false);
+        expect(gameSfxMocks.playTrapSfx).toHaveBeenCalledTimes(1);
+    });
+
     it('claims a selected side-room event choice before advancing', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 46 });
         const event = rollRunEventRoom({ runSeed: baseRun.runSeed, rulesVersion: baseRun.runRulesVersion, floor: 2 });
@@ -749,6 +869,153 @@ describe('useAppStore timers', () => {
         useAppStore.setState({ view: 'shop', run: null });
         useAppStore.getState().closeShopToFloorSummary();
         expect(useAppStore.getState().view).toBe('menu');
+    });
+
+    it('GLD-P0-003: continueToNextLevel ignores non-complete runs', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_003 });
+        const statuses: RunState['status'][] = ['memorize', 'playing', 'resolving', 'paused', 'gameOver'];
+
+        for (const status of statuses) {
+            const run: RunState = { ...base, status };
+            useAppStore.setState({ view: 'playing', run });
+
+            useAppStore.getState().continueToNextLevel();
+
+            expect(useAppStore.getState().view).toBe('playing');
+            expect(useAppStore.getState().run).toBe(run);
+        }
+    });
+
+    it('GLD-P0-003: continueToNextLevel does not advance completed puzzle runs', () => {
+        const puzzleTiles: Tile[] = [
+            { id: 'p1', pairKey: 'P', symbol: 'P', label: 'P', state: 'matched' },
+            { id: 'p2', pairKey: 'P', symbol: 'P', label: 'P', state: 'matched' }
+        ];
+        const run: RunState = {
+            ...createPuzzleRun(0, 'guard_test', puzzleTiles),
+            status: 'levelComplete'
+        };
+        useAppStore.setState({ view: 'playing', run });
+
+        useAppStore.getState().continueToNextLevel();
+
+        expect(useAppStore.getState().view).toBe('playing');
+        expect(useAppStore.getState().run).toBe(run);
+    });
+
+    it('GLD-P0-004: clearing a builtin puzzle records completion in memory and persisted save data', async () => {
+        useAppStore.getState().startPuzzleRun('starter_pairs');
+        notifyCurrentBoardReady();
+
+        const memorizeDuration = useAppStore.getState().run?.timerState.memorizeRemainingMs ?? 0;
+        await vi.advanceTimersByTimeAsync(memorizeDuration + 1);
+
+        const board = useAppStore.getState().run?.board;
+        expect(board).toBeDefined();
+
+        for (const [first, second] of normalPairGroups(board!)) {
+            useAppStore.getState().pressTile(first!.id);
+            useAppStore.getState().pressTile(second!.id);
+        }
+
+        const state = useAppStore.getState();
+        const completion = state.saveData.playerStats?.puzzleCompletions?.starter_pairs;
+        expect(state.view).toBe('playing');
+        expect(state.run?.status).toBe('levelComplete');
+        expect(completion).toEqual({
+            completed: true,
+            bestMistakes: 0,
+            bestScore: state.run?.stats.totalScore
+        });
+
+        const persisted = JSON.parse(window.localStorage.getItem('memory-dungeon-save-data') ?? '{}') as SaveData;
+        expect(persisted.playerStats?.puzzleCompletions?.starter_pairs).toEqual(completion);
+    });
+
+    it('GLD-P0-005: zero-clear daily game over does not count as daily completion', async () => {
+        const baseRun = createDailyRun(0, { echoFeedbackEnabled: false, runSeed: 50_005 });
+        const board = buildBoard(1, {
+            gameMode: 'daily',
+            runSeed: baseRun.runSeed,
+            runRulesVersion: baseRun.runRulesVersion
+        });
+        const groups = normalPairGroups(board);
+        useAppStore.setState({
+            view: 'playing',
+            run: {
+                ...baseRun,
+                board,
+                status: 'playing',
+                lives: 1,
+                activeContract: {
+                    noShuffle: false,
+                    noDestroy: false,
+                    maxMismatches: 0,
+                    bonusRelicDraftPick: false
+                },
+                stats: { ...baseRun.stats, guardTokens: 0 },
+                findablesTotalThisFloor: countFindablePairs(board.tiles)
+            }
+        });
+
+        useAppStore.getState().pressTile(groups[0]![0]!.id);
+        useAppStore.getState().pressTile(groups[1]![0]!.id);
+        await vi.advanceTimersByTimeAsync(1400);
+
+        const state = useAppStore.getState();
+        expect(state.view).toBe('gameOver');
+        expect(state.run?.stats.levelsCleared).toBe(0);
+        expect(state.saveData.playerStats?.dailiesCompleted).toBe(0);
+        expect(state.saveData.playerStats?.lastDailyDateKeyUtc).toBeNull();
+        expect(state.saveData.achievements.ACH_SEVEN_DAILIES).toBe(false);
+    });
+
+    it('GLD-P0-005: first daily floor clear persists completion and can unlock seven dailies', async () => {
+        const saveData = createDefaultSaveData();
+        useAppStore.setState({
+            saveData: {
+                ...saveData,
+                playerStats: {
+                    ...saveData.playerStats!,
+                    dailiesCompleted: 6,
+                    lastDailyDateKeyUtc: '19990101'
+                }
+            }
+        });
+        const baseRun = createDailyRun(0, { echoFeedbackEnabled: false, runSeed: 50_006 });
+        const board = buildBoard(1, {
+            gameMode: 'daily',
+            runSeed: baseRun.runSeed,
+            runRulesVersion: baseRun.runRulesVersion
+        });
+        useAppStore.setState({
+            view: 'playing',
+            run: {
+                ...baseRun,
+                board,
+                status: 'playing',
+                findablesTotalThisFloor: countFindablePairs(board.tiles)
+            }
+        });
+
+        for (const [first, second] of normalPairGroups(board)) {
+            useAppStore.getState().pressTile(first!.id);
+            useAppStore.getState().pressTile(second!.id);
+        }
+        const exitTile = useAppStore.getState().run?.board?.tiles.find((tile) => tile.pairKey === '__exit__');
+        if (exitTile && useAppStore.getState().run?.status === 'playing') {
+            useAppStore.getState().pressTile(exitTile.id);
+            useAppStore.getState().activateDungeonExitFromPrompt('none');
+        }
+
+        const state = useAppStore.getState();
+        expect(state.run?.status).toBe('levelComplete');
+        expect(state.saveData.playerStats?.dailiesCompleted).toBe(7);
+        expect(state.saveData.playerStats?.lastDailyDateKeyUtc).toBe(baseRun.dailyDateKeyUtc);
+        expect(state.saveData.achievements.ACH_SEVEN_DAILIES).toBe(true);
+
+        useAppStore.getState().endRun();
+        expect(useAppStore.getState().saveData.playerStats?.dailiesCompleted).toBe(7);
     });
 
     it('REG-044: menu meta screens can open settings and return to the intended surface', () => {

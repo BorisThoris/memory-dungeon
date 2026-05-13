@@ -7,7 +7,7 @@ import {
     buildRunHistoryEntry,
     buildRunHistoryExportString,
     buildRunJournalRows,
-    buildRunReplayLink
+    buildRunShareKey
 } from './run-history';
 
 const completedRun = (): RunState => {
@@ -22,38 +22,63 @@ const completedRun = (): RunState => {
     return run;
 };
 
-describe('REG-085 run history, replay, and journal', () => {
+describe('REG-085 run history, share keys, and journal', () => {
     it('builds a local-only run history entry without a second save file', () => {
         const entry = buildRunHistoryEntry(completedRun());
 
         expect(entry).toMatchObject({
             runSeed: 85_001,
             localOnly: true,
-            replay: {
-                kind: 'local_replay_link'
+            share: {
+                kind: 'local_share_key'
             }
         });
         expect(entry.build.relicIds).toContain('chapter_compass');
         expect(entry.journalRows.find((row) => row.id === 'build')?.value).toContain('The Slayer');
         expect(entry.journalRows.find((row) => row.id === 'build')?.detail).toContain('prepare, focus, finish');
-        expect(entry.journalRows.map((row) => row.id).slice(0, 4)).toEqual(['summary', 'build', 'replay', 'encore']);
+        expect(entry.journalRows.map((row) => row.id).slice(0, 4)).toEqual(['summary', 'build', 'share', 'encore']);
         expect(entry.journalRows.map((row) => row.id)).toEqual(
             expect.arrayContaining(['dungeon_node', 'dungeon_objective', 'dungeon_rewards'])
         );
     });
 
-    it('produces privacy-safe replay links and journal rows', () => {
+    it('produces privacy-safe share keys and journal rows', () => {
         const run = completedRun();
-        const link = buildRunReplayLink(run);
+        const link = buildRunShareKey(run);
         const rows = buildRunJournalRows(run);
 
-        expect(link.shareString).toContain('local replay');
+        expect(link.shareString).toContain('local share');
         expect(link.shareString).not.toMatch(/account|token|path|email/i);
-        expect(rows.find((row) => row.id === 'replay')?.detail).toContain('3 flip ids');
+        expect(rows.find((row) => row.id === 'share')?.detail).toContain('3 flip ids are local-only');
+        expect(rows.find((row) => row.id === 'share')?.detail).toContain('does not include flip playback');
         expect(rows.every((row) => row.offlineOnly)).toBe(true);
     });
 
-    it('derives a capped dungeon journal without persisting full replay data', () => {
+    it('does not advertise puzzle boards as share-key reconstructable', () => {
+        const base = completedRun();
+        const run: RunState = {
+            ...base,
+            gameMode: 'puzzle',
+            lastRunSummary: base.lastRunSummary
+                ? {
+                      ...base.lastRunSummary,
+                      gameMode: 'puzzle'
+                  }
+                : base.lastRunSummary
+        };
+
+        const link = buildRunShareKey(run);
+
+        expect(link).toMatchObject({
+            kind: 'local_share_key',
+            shareKey: 'local-share-unavailable',
+            shareSupported: false,
+            shareString: 'local share unavailable'
+        });
+        expect(link.reason).toContain('tile payload');
+    });
+
+    it('derives a capped dungeon journal without persisting full playback data', () => {
         const base = completedRun();
         const run: RunState = {
             ...base,

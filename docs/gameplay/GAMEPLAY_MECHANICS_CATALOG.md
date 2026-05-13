@@ -117,7 +117,7 @@
 | Mimic Cache claim | `resolveBoardTurn` pays full loot if route-revealed first; blind match bites guard/life and pays reduced loot | `pressTile` pair match | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
 | Peek charges / revealed ids | `peekCharges`, `peekRevealedTileIds` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Pin tiles | `togglePinnedTile`, `pinnedTileIds`, `pinsPlacedCountThisRun` | `toggleBoardPinMode`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| Stray remove | `toggleStrayRemoveArmed`, `applyStrayRemove` | `toggleStrayArm`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Stray remove | `toggleStrayRemoveArmed`, `applyStrayRemove` removes completion-safe hidden singleton/special tiles only | `toggleStrayArm`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Stray-protected route anchors | `tileIsStrayEligiblePreview`, `applyStrayRemove` deny Keystone Pair, Final Ward, Omen Seal | `toggleStrayArm`, `pressTile` | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
 | Stray charges | `strayRemoveCharges`, `strayRemoveArmed` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Undo resolving | `cancelResolvingWithUndo` | `undoResolvingFlip` | [epic-powers-and-interactions](./epic-powers-and-interactions.md), [epic-run-session-flow](./epic-run-session-flow.md) |

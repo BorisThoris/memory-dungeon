@@ -135,10 +135,10 @@ export const getDungeonLevelResultTags = (run: RunState, board: BoardState, perf
     if ((run.dungeonTrapsResolvedThisFloor ?? 0) > 0) {
         tags.push('traps_disarmed');
     }
-    if (run.dungeonTreasuresOpened > 0) {
+    if ((run.dungeonTreasuresOpenedThisFloor ?? 0) > 0) {
         tags.push('treasure_claimed');
     }
-    if (run.dungeonGatewaysUsed > 0 || board.selectedGatewayRouteType != null) {
+    if ((run.dungeonGatewaysUsedThisFloor ?? 0) > 0 || board.selectedGatewayRouteType != null) {
         tags.push('route_claimed');
     }
     if (

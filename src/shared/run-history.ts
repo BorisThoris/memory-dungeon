@@ -10,16 +10,18 @@ export interface RunHistoryBuildSnapshot {
     mode: string;
 }
 
-export interface RunReplayLink {
-    kind?: 'local_replay_link';
-    replayKey: string;
-    replaySupported: boolean;
+export interface RunShareKey {
+    kind?: 'local_share_key';
+    shareKey: string;
+    shareSupported: boolean;
     reason: string;
     seed: number | null;
     rulesVersion: number | null;
     localOnly: true;
     shareString?: string;
 }
+
+export type RunReplayLink = RunShareKey;
 
 export interface RunHistoryJournalRow {
     id: string;
@@ -36,7 +38,7 @@ export interface RunHistoryEntry {
     localOnly?: true;
     summary: RunSummary | null;
     build: RunHistoryBuildSnapshot;
-    replay: RunReplayLink;
+    share: RunShareKey;
     journalRows: RunHistoryJournalRow[];
     piiFree: true;
     onlineRequired: false;
@@ -182,27 +184,27 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
     return rows.slice(0, MAX_DUNGEON_JOURNAL_ROWS);
 };
 
-export const buildRunReplayLink = (run: RunState): RunReplayLink => {
+export const buildRunShareKey = (run: RunState): RunShareKey => {
     const summary = run.lastRunSummary;
     const seed = summary?.runSeed ?? run.runSeed ?? null;
     const rulesVersion = summary?.runRulesVersion ?? run.runRulesVersion ?? null;
     const mode = summary?.gameMode ?? run.gameMode;
-    const replaySupported = seed != null && rulesVersion != null && mode !== 'puzzle';
+    const shareSupported = seed != null && rulesVersion != null && mode !== 'puzzle';
     return {
-        kind: 'local_replay_link',
-        replayKey: replaySupported ? `${mode}:${rulesVersion}:${seed}` : 'local-replay-unavailable',
-        replaySupported,
-        reason: replaySupported
-            ? 'Deterministic local seed/rules/mode can reconstruct the run start; flip timeline remains ephemeral.'
-            : 'Fixed/imported puzzle boards require their tile payload; do not invent a replay link.',
+        kind: 'local_share_key',
+        shareKey: shareSupported ? `${mode}:${rulesVersion}:${seed}` : 'local-share-unavailable',
+        shareSupported,
+        reason: shareSupported
+            ? 'Local seed/rules/mode share recipe only; it does not include flip playback, route choices, or importable replay data.'
+            : 'Fixed/imported puzzle boards require their tile payload; do not invent a share key.',
         seed,
         rulesVersion,
         localOnly: true,
-        shareString: replaySupported
-            ? `local replay ${mode}:${rulesVersion}:${seed}`
-            : 'local replay unavailable'
+        shareString: shareSupported ? `local share ${mode}:${rulesVersion}:${seed}` : 'local share unavailable'
     };
 };
+
+export const buildRunReplayLink = buildRunShareKey;
 
 export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
     const summary = run.lastRunSummary;
@@ -213,7 +215,7 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
         contract: contractLabel(run),
         mode: run.gameMode
     };
-    const replay = buildRunReplayLink(run);
+    const share = buildRunShareKey(run);
     const journalRows: RunHistoryJournalRow[] = [
         {
             id: 'summary',
@@ -235,12 +237,12 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
             offlineOnly: true
         },
         {
-            id: 'replay',
-            label: 'Replay key',
-            value: replay.replayKey,
-            detail: `${run.flipHistory.length} flip ids; ${replay.reason}`,
+            id: 'share',
+            label: 'Share key',
+            value: share.shareKey,
+            detail: `${run.flipHistory.length} flip ids are local-only; ${share.reason}`,
             persistence: 'derived_export',
-            exportSafe: replay.replaySupported,
+            exportSafe: share.shareSupported,
             offlineOnly: true
         },
         {
@@ -255,11 +257,11 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
     ];
     journalRows.push(...buildDungeonJournalRows(run));
     return {
-        runSeed: replay.seed ?? undefined,
+        runSeed: share.seed ?? undefined,
         localOnly: true,
         summary,
         build,
-        replay,
+        share,
         journalRows,
         piiFree: true,
         onlineRequired: false
@@ -272,18 +274,18 @@ export const buildRunJournalRows = (run: RunState): RunHistoryJournalRow[] =>
 export const buildRunJournalEntry = (run: RunState): {
     journalId: string;
     buildSummary: string;
-    replayLabel: string;
+    shareLabel: string;
     rows: RunHistoryJournalRow[];
     localOnly: true;
 } => {
     const entry = buildRunHistoryEntry(run);
     const buildProfile = getRunBuildProfile(run);
     return {
-        journalId: entry.replay.replayKey,
+        journalId: entry.share.shareKey,
         buildSummary: buildProfile.primary
             ? `${buildProfile.primary.label} · ${entry.build.relicIds.length} relics / ${entry.build.mutatorIds.length} mutators`
             : `${entry.build.relicIds.length} relics / ${entry.build.mutatorIds.length} mutators`,
-        replayLabel: entry.replay.replaySupported ? 'local replay available' : 'replay unavailable',
+        shareLabel: entry.share.shareSupported ? 'local share key available' : 'share key unavailable',
         rows: entry.journalRows,
         localOnly: true
     };
@@ -326,7 +328,7 @@ export const buildRunHistoryExportString = (run: RunState): string => {
         `${summary.totalScore} local score`,
         `build ${entry.build.relicIds.length} relics/${entry.build.mutatorIds.length} mutators`,
         ...dungeonRows,
-        entry.replay.replaySupported ? `replay ${entry.replay.replayKey}` : 'replay unavailable',
+        entry.share.shareSupported ? `share ${entry.share.shareKey}` : 'share unavailable',
         'offline local journal; no account or leaderboard rank'
     ].join(' · ');
 };

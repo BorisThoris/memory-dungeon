@@ -35,6 +35,7 @@ import {
     createDailyRun,
     createGauntletRun,
     createNewRun,
+    createPuzzleRun,
     createWildRun,
     enableDebugPeek,
     finishMemorizePhase,
@@ -132,6 +133,7 @@ import {
 } from './objective-rules';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 import { DAILY_MUTATOR_TABLE } from './mutators';
+import { RELIC_POOL } from './relics';
 import { makeBoard as createBoard, makePair as createPair, makeRun as createRun, makeTile as createTile } from './test/game-fixtures';
 import {
     EXPECTED_GAMEPLAY_CARD_KINDS,
@@ -310,6 +312,39 @@ describe('REG-088 first-run to first-win rules path', () => {
         expect(finished.stats.highestLevel).toBe(2);
         expect(finished.lastLevelResult?.perfect).toBe(true);
         expect(finished.stats.totalScore).toBeGreaterThan(0);
+    });
+});
+
+describe('GLD-P0-003 lifecycle advance guards', () => {
+    it('refuses to advance runs that are not levelComplete', () => {
+        const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_003 }));
+        const statuses: RunState['status'][] = ['memorize', 'playing', 'resolving', 'paused', 'gameOver'];
+
+        for (const status of statuses) {
+            const run: RunState = { ...base, status };
+
+            expect(advanceToNextLevel(run)).toBe(run);
+        }
+    });
+
+    it('refuses to advance completed puzzle runs into procedural floors', () => {
+        const puzzleRun = finishMemorizePhase(
+            createPuzzleRun(0, 'guard_test', [createTile('p1', 'P', 'P'), createTile('p2', 'P', 'P')])
+        );
+        const cleared = clearRealPairs(puzzleRun);
+
+        expect(cleared.status).toBe('levelComplete');
+        expect(advanceToNextLevel(cleared)).toBe(cleared);
+    });
+
+    it('still advances a non-puzzle levelComplete run', () => {
+        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_004 }), 1);
+
+        const next = advanceToNextLevel(cleared);
+
+        expect(next).not.toBe(cleared);
+        expect(next.board?.level).toBe((cleared.board?.level ?? 0) + 1);
+        expect(next.status).toBe('memorize');
     });
 });
 
@@ -2927,6 +2962,32 @@ describe('dungeon cards', () => {
             progress: 1,
             required: 1
         });
+        expect(
+            getDungeonObjectiveStatus({
+                ...lootRun,
+                board: { ...lootRun.board!, dungeonObjectiveId: 'loot_cache' },
+                dungeonTreasuresOpened: 1,
+                dungeonTreasuresOpenedThisFloor: 0
+            })
+        ).toMatchObject({
+            completed: true,
+            progress: 1,
+            required: 1
+        });
+
+        const staleLootRun = createRun([createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')]);
+        expect(
+            getDungeonObjectiveStatus({
+                ...staleLootRun,
+                board: { ...staleLootRun.board!, dungeonObjectiveId: 'loot_cache' },
+                dungeonTreasuresOpened: 1,
+                dungeonTreasuresOpenedThisFloor: 0
+            })
+        ).toMatchObject({
+            completed: false,
+            progress: 0,
+            required: 1
+        });
 
         const bossExit: Tile = {
             ...createTile('boss-exit', EXIT_PAIR_KEY, '^'),
@@ -2996,6 +3057,13 @@ describe('dungeon cards', () => {
             board: { ...gatewayRun.board!, dungeonObjectiveId: 'claim_route' }
         };
         expect(getDungeonObjectiveStatus(routeRun)).toMatchObject({ completed: false, progress: 0, required: 1 });
+        expect(
+            getDungeonObjectiveStatus({
+                ...routeRun,
+                dungeonGatewaysUsed: 1,
+                dungeonGatewaysUsedThisFloor: 0
+            })
+        ).toMatchObject({ completed: false, progress: 0, required: 1 });
 
         const claimedGateway = resolveBoardTurn(flipTile(flipTile(routeRun, 'g1'), 'g2'));
         expect(getDungeonObjectiveStatus(claimedGateway)).toMatchObject({ completed: true, progress: 1, required: 1 });
@@ -5225,6 +5293,7 @@ describe('game rules', () => {
         const finishedLevel = {
             ...afterLifeLoss,
             status: 'levelComplete' as const,
+            gameMode: 'meditation' as const,
             board: afterLifeLoss.board
                 ? {
                       ...afterLifeLoss.board,
@@ -5237,7 +5306,10 @@ describe('game rules', () => {
         const bankedMs = afterLifeLoss.pendingMemorizeBonusMs;
         const nextRun = advanceToNextLevel(finishedLevel);
         expect(nextRun.pendingMemorizeBonusMs).toBe(0);
-        expect(nextRun.timerState.memorizeRemainingMs).toBe(getMemorizeDuration(2) + bankedMs);
+        expect(nextRun.timerState.memorizeRemainingMs).toBe(
+            getMemorizeDurationForRun({ ...finishedLevel, activeMutators: nextRun.activeMutators }, nextRun.board!.level) +
+                bankedMs
+        );
     });
 
     it('carries the current life total into the next level instead of resetting it', () => {
@@ -5247,7 +5319,7 @@ describe('game rules', () => {
         expect(finishedLevel.status).toBe('levelComplete');
         expect(finishedLevel.lives).toBe(3);
 
-        const nextRun = advanceToNextLevel(finishedLevel);
+        const nextRun = advanceToNextLevel({ ...finishedLevel, gameMode: 'meditation' });
 
         expect(nextRun.status).toBe('memorize');
         expect(nextRun.lives).toBe(finishedLevel.lives);
@@ -5494,10 +5566,10 @@ describe('game rules', () => {
 
     it('advances to the next level in memorize phase, resets floor state, and preserves banked sustain', () => {
         const finishedLevel = {
-            ...createNewRun(250, { gameMode: 'puzzle' }),
+            ...createNewRun(250, { gameMode: 'meditation' }),
             status: 'levelComplete' as const,
             stats: {
-                ...createNewRun(250, { gameMode: 'puzzle' }).stats,
+                ...createNewRun(250, { gameMode: 'meditation' }).stats,
                 tries: 4,
                 totalScore: 300,
                 currentLevelScore: 145,
@@ -5525,7 +5597,9 @@ describe('game rules', () => {
         expect(nextRun.stats.guardTokens).toBe(2);
         expect(nextRun.stats.comboShards).toBe(2);
         expect(nextRun.stats.totalScore).toBe(300);
-        expect(nextRun.timerState.memorizeRemainingMs).toBe(1300);
+        expect(nextRun.timerState.memorizeRemainingMs).toBe(
+            getMemorizeDurationForRun({ ...finishedLevel, activeMutators: nextRun.activeMutators }, nextRun.board!.level)
+        );
         expect(nextRun.shuffleCharges).toBe(1);
         expect(nextRun.pinnedTileIds).toEqual([]);
     });
@@ -5721,14 +5795,52 @@ describe('board powers', () => {
             expect(collectPeekEligibleTileIds(board, ['a1'])).toEqual(new Set(['a2']));
         });
 
-        it('stray preview matches hidden non-decoy tiles', () => {
+        it('stray preview matches completion-safe hidden singleton tiles', () => {
             const tiles: Tile[] = [
                 createTile('a1', 'A', 'A'),
-                createTile('d1', DECOY_PAIR_KEY, '?')
+                createTile('a2', 'A', 'A'),
+                createTile('d1', DECOY_PAIR_KEY, '?'),
+                createTile('w1', WILD_PAIR_KEY, '*')
             ];
             const board = createRun(tiles).board!;
-            expect(tileIsStrayEligiblePreview(board, 'a1')).toBe(true);
+            expect(tileIsStrayEligiblePreview(board, 'a1')).toBe(false);
             expect(tileIsStrayEligiblePreview(board, 'd1')).toBe(false);
+            expect(tileIsStrayEligiblePreview(board, 'w1')).toBe(true);
+        });
+
+        it('stray remove refuses normal pair tiles without spending a charge', () => {
+            const run = {
+                ...createRun([createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')]),
+                status: 'playing' as const,
+                strayRemoveArmed: true,
+                strayRemoveCharges: 1
+            };
+
+            const after = applyStrayRemove(run, 'a1');
+
+            expect(after).toBe(run);
+            expect(after.strayRemoveArmed).toBe(true);
+            expect(after.strayRemoveCharges).toBe(1);
+        });
+
+        it('stray remove can remove a completion-safe singleton', () => {
+            const tiles = [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A'), createTile('w1', WILD_PAIR_KEY, '*')];
+            const board = createBoard(tiles, { pairCount: 1 });
+            const run = {
+                ...createRun(tiles, { board }),
+                status: 'playing' as const,
+                strayRemoveArmed: true,
+                strayRemoveCharges: 1
+            };
+
+            const after = applyStrayRemove(run, 'w1');
+
+            expect(after).not.toBe(run);
+            expect(after.board!.tiles.find((tile) => tile.id === 'w1')?.state).toBe('removed');
+            expect(after.strayRemoveArmed).toBe(false);
+            expect(after.strayRemoveCharges).toBe(0);
+            expect(after.powersUsedThisRun).toBe(true);
+            expect(inspectBoardFairness(after.board!).issues).toEqual([]);
         });
     });
 
@@ -5936,6 +6048,7 @@ describe('board powers', () => {
             const tiles: Tile[] = [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')];
             const finishedLevel = {
                 ...createRun(tiles),
+                gameMode: 'endless' as const,
                 findablesClaimedThisFloor: 2,
                 findablesTotalThisFloor: 2,
                 status: 'levelComplete' as const,
@@ -6028,6 +6141,7 @@ describe('board powers', () => {
             const tiles = [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')];
             const finishedLevel: RunState = {
                 ...createRun(tiles),
+                gameMode: 'endless',
                 shiftingSpotlightNonce: 12,
                 status: 'levelComplete',
                 board: {
@@ -6534,6 +6648,36 @@ describe('computeRelicOfferPickBudget', () => {
 });
 
 describe('relic draft multi-pick', () => {
+    it('skips an exhausted initial relic offer instead of opening an empty draft', () => {
+        let run = createNewRun(999, { gameMode: 'daily' });
+        run = {
+            ...run,
+            status: 'levelComplete',
+            relicIds: [...RELIC_POOL],
+            relicTiersClaimed: 0,
+            relicOffer: null,
+            bonusRelicPicksNextOffer: 3,
+            favorBonusRelicPicksNextOffer: 1,
+            lastLevelResult: {
+                level: 3,
+                scoreGained: 1,
+                rating: 'S',
+                livesRemaining: 3,
+                perfect: false,
+                mistakes: 0,
+                clearLifeReason: 'none',
+                clearLifeGained: 0
+            }
+        };
+
+        const opened = openRelicOffer(run);
+
+        expect(opened.relicOffer).toBeNull();
+        expect(opened.relicTiersClaimed).toBe(1);
+        expect(opened.bonusRelicPicksNextOffer).toBe(0);
+        expect(opened.favorBonusRelicPicksNextOffer).toBe(0);
+    });
+
     it('consumes bonus and completes one milestone tier after two picks', () => {
         let run = createNewRun(999, { gameMode: 'endless' });
         run = {

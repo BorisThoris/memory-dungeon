@@ -686,6 +686,23 @@ export const needsRelicPick = (run: RunState): boolean => {
     return run.relicTiersClaimed <= idx && !run.relicOffer;
 };
 
+export const skipRelicOfferMilestone = (run: RunState): RunState => {
+    if (run.status !== 'levelComplete' || !run.lastLevelResult) {
+        return run;
+    }
+    const idx = relicMilestoneIndexForFloor(run.lastLevelResult.level);
+    if (idx === null) {
+        return run;
+    }
+    return {
+        ...run,
+        bonusRelicPicksNextOffer: 0,
+        favorBonusRelicPicksNextOffer: 0,
+        relicTiersClaimed: Math.max(run.relicTiersClaimed, idx + 1),
+        relicOffer: null
+    };
+};
+
 const DRAFT_OPTION_COUNT = 3;
 /**
  * @param clearedFloor — level just cleared; included in RNG seed for stable options per floor.
@@ -790,6 +807,8 @@ export const createRelicOfferServices = (run: RunState): RelicOfferServiceState[
             unavailableReason = 'Already used this relic service during this visit.';
         } else if (run.shopGold < base.cost) {
             unavailableReason = 'Not enough shop gold.';
+        } else if (offer.options.length === 0) {
+            unavailableReason = 'No relic options remain.';
         } else if (serviceId === 'ban_option' && offer.options.length <= 1) {
             unavailableReason = 'Only one relic option remains.';
         } else if (serviceId === 'upgrade_offer' && offer.upgradedOffer) {
@@ -908,6 +927,15 @@ export const applyRelicOfferService = (
         upgradedOffer = true;
         pickRound += 1;
         options = upgradedRelicOptions(paidRun, tierIndex, cleared, pickRound, bannedRelicIds);
+    }
+
+    if (options.length === 0) {
+        return {
+            run: { ...run, relicOffer: { ...offer, services: createRelicOfferServices(run) } },
+            applied: false,
+            serviceId,
+            reason: 'unavailable'
+        };
     }
 
     const nextOffer = {

@@ -16,8 +16,9 @@ const readLocalSave = (): SaveData => {
 
     try {
         return normalizeSaveData(JSON.parse(rawValue) as SaveData);
-    } catch {
-        return createDefaultSaveData();
+    } catch (error) {
+        console.error('[desktop-client] localStorage read failed', error);
+        throw error;
     }
 };
 

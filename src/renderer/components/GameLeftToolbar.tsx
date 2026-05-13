@@ -499,7 +499,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         </button>
                     ) : null}
                     <button
-                        aria-label={`Remove one stray tile. Charges: ${run.strayRemoveCharges}. ${run.strayRemoveArmed ? 'Tap a tile' : 'Arm then tap'}. ${powerRow('stray_remove').perfectMemoryCopy}`}
+                        aria-label={`Remove one safe stray singleton. Charges: ${run.strayRemoveCharges}. ${run.strayRemoveArmed ? 'Tap a valid singleton' : 'Arm then tap a valid singleton'}. ${powerRow('stray_remove').perfectMemoryCopy}`}
                         aria-pressed={run.strayRemoveArmed}
                         className={`${styles.iconAction} ${styles.iconActionWithBadge} ${run.strayRemoveArmed ? styles.iconActionActive : ''}`}
                         disabled={run.strayRemoveCharges < 1}
@@ -509,8 +509,8 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                             run.strayRemoveCharges < 1
                                 ? 'No stray-remove charges'
                                 : run.strayRemoveArmed
-                                  ? 'Tap a hidden tile to remove it from play'
-                                  : 'Arm stray remove, then tap a hidden tile'
+                                  ? 'Tap a valid singleton tile to remove it from play'
+                                  : 'Arm stray remove, then tap a valid singleton tile'
                         )}
                         type="button"
                     >

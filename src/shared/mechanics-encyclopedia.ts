@@ -584,7 +584,7 @@ export const ENCYCLOPEDIA_POWER_TOPICS: readonly EncyclopediaTopic[] = [
         id: 'power_stray_remove',
         title: 'Stray remove',
         description:
-            'Arms removal of **one** hidden non-decoy tile—its partner becomes a singleton; does not score. Cannot remove the glass decoy trap tile, Keystone Pair, Final Ward, or Omen Seal route anchors.'
+            'Arms removal of **one** hidden completion-safe singleton tile, such as a wild joker or optional shop/room marker; does not score. Normal matched pairs are blocked so Stray cannot orphan a partner. Cannot remove the glass decoy trap tile, exit tile, Keystone Pair, Final Ward, or Omen Seal route anchors.'
     },
     {
         id: 'power_flash_pair',

@@ -84,6 +84,7 @@ import {
     mergeBestFloorNoPowers,
     mergeDailyComplete,
     mergeEncoreFromRun,
+    mergePuzzleCompletion,
     mergeRelicPickStat,
     metaRelicDraftExtraPerMilestoneFromSave,
     normalizeSaveData
@@ -153,6 +154,10 @@ interface AppState {
     /** Disk / localStorage save failures (autosave or settings write). */
     persistenceWriteNotice: string | null;
     clearPersistenceWriteNotice: () => void;
+    /** Save read failures during boot/hydration; blocks autosave so corrupt storage is not overwritten by defaults. */
+    saveReadFailureNotice: string | null;
+    saveWritesBlockedByReadFailure: boolean;
+    clearSaveReadFailureNotice: () => void;
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
@@ -343,6 +348,26 @@ const playRunStartUiSfxFromStore = (): void => {
     playRunStartSfx(sfxGainFromStore());
 };
 
+const SAVE_READ_FAILURE_NOTICE =
+    'Save read failed. Started a temporary in-memory profile and paused autosave to avoid overwriting recoverable data.';
+
+const persistSaveDataSafely = async (saveData: SaveData): Promise<SaveData> => {
+    if (useAppStore.getState().saveWritesBlockedByReadFailure) {
+        return saveData;
+    }
+    return persistSaveData(saveData);
+};
+
+const persistSaveDataThenUnlockAchievementsSafely = async (
+    saveData: SaveData,
+    achievements: AchievementId[]
+): Promise<{ failures: AchievementId[] }> => {
+    if (useAppStore.getState().saveWritesBlockedByReadFailure) {
+        return { failures: [] };
+    }
+    return persistSaveDataThenUnlockAchievements(saveData, achievements);
+};
+
 const applyResolveBoardTurn = (run: RunState): void => {
     const { saveData } = useAppStore.getState();
     const encore = saveData.playerStats?.encorePairKeysLastRun ?? [];
@@ -371,11 +396,10 @@ const applyResolvedRun = (resolvedRun: RunState): void => {
     let nextRun = resolvedRun.status === 'playing' ? resolvedRun : disableDebugPeek(resolvedRun);
 
     let saveForAchievements = state.saveData;
-    if (nextRun.status === 'gameOver') {
+    if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
+        saveForAchievements = mergeDailyComplete(state.saveData, nextRun.dailyDateKeyUtc);
+    } else if (nextRun.status === 'gameOver') {
         let projected = mergeEncoreFromRun(state.saveData, nextRun.matchedPairKeysThisRun);
-        if (nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
-            projected = mergeDailyComplete(projected, nextRun.dailyDateKeyUtc);
-        }
         if (!nextRun.powersUsedThisRun) {
             projected = mergeBestFloorNoPowers(projected, nextRun.stats.highestLevel);
         }
@@ -388,11 +412,19 @@ const applyResolvedRun = (resolvedRun: RunState): void => {
         bestScore: Math.max(state.saveData.bestScore, nextRun.stats.bestScore)
     });
 
+    if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
+        nextSave = mergeDailyComplete(nextSave, nextRun.dailyDateKeyUtc);
+    }
+
     if (nextRun.status === 'levelComplete' && !nextSave.onboardingDismissed) {
         nextSave = normalizeSaveData({
             ...nextSave,
             onboardingDismissed: true
         });
+    }
+
+    if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'puzzle') {
+        nextSave = mergePuzzleCompletion(nextSave, nextRun);
     }
 
     if (unlockedAchievements.length > 0) {
@@ -410,9 +442,13 @@ const applyResolvedRun = (resolvedRun: RunState): void => {
     if (nextRun.status === 'gameOver') {
         nextSave = mergeEncoreFromRun(nextSave, nextRun.matchedPairKeysThisRun);
         nextRun = createRunSummary(nextRun, unlockedAchievements);
-        if (nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
-            nextSave = mergeDailyComplete(nextSave, nextRun.dailyDateKeyUtc);
-        }
+        nextRun = {
+            ...nextRun,
+            lastRunSummary: normalizeSaveData({
+                ...nextSave,
+                lastRunSummary: nextRun.lastRunSummary
+            }).lastRunSummary
+        };
         if (!nextRun.powersUsedThisRun) {
             nextSave = mergeBestFloorNoPowers(nextSave, nextRun.stats.highestLevel);
         }
@@ -455,7 +491,7 @@ const applyResolvedRun = (resolvedRun: RunState): void => {
     }
 
     if (unlockedAchievements.length > 0) {
-        void persistSaveDataThenUnlockAchievements(nextSave, unlockedAchievements).then(({ failures }) => {
+        void persistSaveDataThenUnlockAchievementsSafely(nextSave, unlockedAchievements).then(({ failures }) => {
             if (failures.length > 0) {
                 useAppStore.setState({
                     achievementBridgeNotice:
@@ -464,8 +500,19 @@ const applyResolvedRun = (resolvedRun: RunState): void => {
             }
         });
     } else {
-        void persistSaveData(nextSave);
+        void persistSaveDataSafely(nextSave);
     }
+};
+
+const applyImmediateGameOverFromTilePress = (resolvedRun: RunState): void => {
+    applyResolvedRun(resolvedRun);
+    useAppStore.setState({
+        boardPinMode: false,
+        destroyPairArmed: false,
+        peekModeArmed: false,
+        dungeonExitPromptOpen: false,
+        ...BOARD_FLOATER_POP_CLEAR
+    });
 };
 
 function scheduleMemorizeTimer(duration: number): void {
@@ -621,6 +668,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     clearPersistenceWriteNotice: () => {
         set({ persistenceWriteNotice: null });
     },
+    saveReadFailureNotice: null,
+    saveWritesBlockedByReadFailure: false,
+    clearSaveReadFailureNotice: () => {
+        set({ saveReadFailureNotice: null });
+    },
     boardPinMode: false,
     destroyPairArmed: false,
     peekModeArmed: false,
@@ -641,14 +693,21 @@ export const useAppStore = create<AppState>((set, get) => ({
 
         set({ hydrating: true });
 
+        let saveReadFailed = false;
         const [rawSave, steamConnected] = await Promise.all([
-            desktopClient.getSaveData().then(normalizeSaveData).catch(() => createDefaultSaveData()),
+            desktopClient
+                .getSaveData()
+                .then(normalizeSaveData)
+                .catch(() => {
+                    saveReadFailed = true;
+                    return createDefaultSaveData();
+                }),
             desktopClient.isSteamConnected().catch(() => false)
         ]);
 
         const saveData = mergeHonorUnlockTags(rawSave);
-        if (saveData !== rawSave) {
-            void persistSaveData(saveData);
+        if (saveData !== rawSave && !saveReadFailed) {
+            void persistSaveDataSafely(saveData);
         }
 
         set({
@@ -657,7 +716,9 @@ export const useAppStore = create<AppState>((set, get) => ({
             steamConnected,
             saveData,
             settings: saveData.settings,
-            view: 'menu'
+            view: 'menu',
+            saveReadFailureNotice: saveReadFailed ? SAVE_READ_FAILURE_NOTICE : null,
+            saveWritesBlockedByReadFailure: saveReadFailed
         });
     },
 
@@ -915,7 +976,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             peekModeArmed: false
         });
         prepareMemorizeTimerForBoardReady(nextRun);
-        void persistSaveData(nextSave);
+        void persistSaveDataSafely(nextSave);
     },
 
     applyRelicOfferService: (serviceId, targetRelicId) => {
@@ -932,7 +993,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             powersFtueSeen: true
         });
         set({ saveData: nextSave, settings: nextSave.settings });
-        await persistSaveData(nextSave);
+        await persistSaveDataSafely(nextSave);
     },
 
     /** Abandon confirm / NAV-004: clears the run and normalizes return pointers so meta overlays cannot strand `inventory|codex` without a run (SIDE-014). */
@@ -1202,7 +1263,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             settings: nextSave.settings
         });
 
-        await persistSaveData(nextSave);
+        await persistSaveDataSafely(nextSave);
     },
 
     pressTile: (tileId) => {
@@ -1237,6 +1298,10 @@ export const useAppStore = create<AppState>((set, get) => ({
                 if (flippedAfter === 3) {
                     playGambitCommitSfx(g);
                 }
+            }
+            if (nextRun.status === 'gameOver') {
+                applyImmediateGameOverFromTilePress(nextRun);
+                return;
             }
             set({ run: nextRun, peekModeArmed: false });
             if (nextRun.status === 'resolving' && nextRun.timerState.resolveRemainingMs !== null) {
@@ -1399,6 +1464,11 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (nextRun.dungeonTrapsTriggered > actionRun.dungeonTrapsTriggered) {
             void resumeAudioContext();
             playTrapSfx(sfxGainFromStore());
+        }
+
+        if (nextRun.status === 'gameOver') {
+            applyImmediateGameOverFromTilePress(nextRun);
+            return;
         }
 
         set({
@@ -1633,9 +1703,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     continueToNextLevel: () => {
-        const { run } = get();
+        let { run } = get();
 
-        if (!run) {
+        if (!run || run.status !== 'levelComplete' || run.gameMode === 'puzzle' || run.relicOffer) {
             return;
         }
 
@@ -1654,19 +1724,19 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
 
         if (run.status === 'levelComplete' && needsRelicPick(run) && !run.relicOffer) {
-            set({
-                view: 'playing',
-                run: openRelicOffer(run),
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                ...BOARD_FLOATER_POP_CLEAR
-            });
-            return;
-        }
-
-        if (run.relicOffer) {
-            return;
+            const offerRun = openRelicOffer(run);
+            if (offerRun.relicOffer) {
+                set({
+                    view: 'playing',
+                    run: offerRun,
+                    boardPinMode: false,
+                    destroyPairArmed: false,
+                    peekModeArmed: false,
+                    ...BOARD_FLOATER_POP_CLEAR
+                });
+                return;
+            }
+            run = offerRun;
         }
 
         const nextRun = advanceToNextLevel(run);
@@ -1733,24 +1803,30 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
 
-        if (needsRelicPick(routeRun) && !routeRun.relicOffer) {
-            set({
-                view: 'playing',
-                run: openRelicOffer(routeRun),
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                ...BOARD_FLOATER_POP_CLEAR
-            });
+        let nextRouteRun = routeRun;
+
+        if (needsRelicPick(nextRouteRun) && !nextRouteRun.relicOffer) {
+            const offerRun = openRelicOffer(nextRouteRun);
+            if (offerRun.relicOffer) {
+                set({
+                    view: 'playing',
+                    run: offerRun,
+                    boardPinMode: false,
+                    destroyPairArmed: false,
+                    peekModeArmed: false,
+                    ...BOARD_FLOATER_POP_CLEAR
+                });
+                return;
+            }
+            nextRouteRun = offerRun;
+        }
+
+        if (nextRouteRun.relicOffer) {
+            set({ run: nextRouteRun });
             return;
         }
 
-        if (routeRun.relicOffer) {
-            set({ run: routeRun });
-            return;
-        }
-
-        const nextRun = advanceToNextLevel(routeRun);
+        const nextRun = advanceToNextLevel(nextRouteRun);
 
         if (nextRun.status === 'gameOver') {
             applyResolvedRun(nextRun);

@@ -288,9 +288,9 @@ const getPowerTargetAriaText = (
     }
     if (strayPowerVisualActive) {
         return strayEligibleTileIds.has(tile.id)
-            ? ' Stray target: valid. Removes this tile from play and locks Perfect Memory.'
+            ? ' Stray target: valid. Removes this safe singleton tile from play and locks Perfect Memory.'
             : tile.state === 'hidden'
-              ? ' Stray target: invalid or protected.'
+              ? ' Stray target: invalid, paired, or protected.'
               : '';
     }
     return '';

@@ -107,7 +107,8 @@ import {
     getRelicDraftOptionReasons,
     needsRelicPick,
     relicMilestoneIndexForFloor,
-    rollRelicOptions
+    rollRelicOptions,
+    skipRelicOfferMilestone
 } from './relics';
 import {
     createMulberry32,
@@ -4509,15 +4510,23 @@ const PEEK_REVEALED_ROUTE_SPECIALS = new Set<RouteSpecialKind>([
     'parasite_vessel'
 ]);
 
-/** Stray remove targets one hidden non-decoy, non-protected route tile (mirrors `applyStrayRemove`). */
-export const tileIsStrayEligiblePreview = (board: BoardState, tileId: string): boolean => {
+const isCompletionSafeStrayPairKey = (pairKey: string): boolean =>
+    pairKey === WILD_PAIR_KEY || pairKey === SHOP_PAIR_KEY || pairKey === ROOM_PAIR_KEY;
+
+const tileIsCompletionSafeStrayTarget = (board: BoardState, tileId: string): boolean => {
     const tile = board.tiles.find((t) => t.id === tileId);
     return Boolean(
         tile &&
             tile.state === 'hidden' &&
             tile.pairKey !== DECOY_PAIR_KEY &&
+            isCompletionSafeStrayPairKey(tile.pairKey) &&
             (!tile.routeSpecialKind || !STRAY_PROTECTED_ROUTE_SPECIALS.has(tile.routeSpecialKind))
     );
+};
+
+/** Stray remove targets hidden completion-safe singleton/special tiles (mirrors `applyStrayRemove`). */
+export const tileIsStrayEligiblePreview = (board: BoardState, tileId: string): boolean => {
+    return tileIsCompletionSafeStrayTarget(board, tileId);
 };
 
 export const applyShuffle = (run: RunState): RunState => {
@@ -4980,7 +4989,9 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         dungeonTrapsTriggered: 0,
         dungeonTrapsResolvedThisFloor: 0,
         dungeonTreasuresOpened: 0,
+        dungeonTreasuresOpenedThisFloor: 0,
         dungeonGatewaysUsed: 0,
+        dungeonGatewaysUsedThisFloor: 0,
         dungeonKeys: {},
         dungeonMasterKeys: 0,
         dungeonShopVisitedThisFloor: false,
@@ -5137,6 +5148,9 @@ export const openRelicOffer = (run: RunState): RunState => {
     }
     const picksRemaining = computeRelicOfferPickBudget(run);
     const options = rollRelicOptions(run, tierIndex, cleared, 0);
+    if (options.length === 0) {
+        return skipRelicOfferMilestone(run);
+    }
     const contextualOptionReasons = getRelicDraftOptionReasons(run, cleared, options);
 
     return {
@@ -5715,12 +5729,7 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
         return run;
     }
     const tile = run.board.tiles.find((t) => t.id === tileId);
-    if (
-        !tile ||
-        tile.state !== 'hidden' ||
-        tile.pairKey === DECOY_PAIR_KEY ||
-        (tile.routeSpecialKind && STRAY_PROTECTED_ROUTE_SPECIALS.has(tile.routeSpecialKind))
-    ) {
+    if (!tile || !tileIsCompletionSafeStrayTarget(run.board, tileId)) {
         return run;
     }
     const board: BoardState = {
@@ -6558,7 +6567,8 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
         const routeExitActivated = board.tiles.some(
             (tile) => tile.dungeonCardKind === 'exit' && tile.dungeonExitActivated === true && tile.dungeonRouteType != null
         );
-        const completed = run.dungeonGatewaysUsed > 0 || board.selectedGatewayRouteType != null || routeExitActivated;
+        const completed =
+            (run.dungeonGatewaysUsedThisFloor ?? 0) > 0 || board.selectedGatewayRouteType != null || routeExitActivated;
         return {
             objectiveId,
             completed,
@@ -6617,7 +6627,7 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
         const openedRooms = board.tiles.filter(
             (tile) => tile.dungeonCardEffectId === 'room_locked_cache' && tile.dungeonRoomUsed === true
         ).length;
-        const progress = Math.max(run.dungeonTreasuresOpened, resolvedPairs + openedRooms);
+        const progress = Math.max(run.dungeonTreasuresOpenedThisFloor ?? 0, resolvedPairs + openedRooms);
         return {
             objectiveId,
             completed: progress >= 1,
@@ -7571,8 +7581,12 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
                 (run.dungeonEnemiesDefeatedThisFloor ?? 0) + dungeonReward.enemiesDefeated + enemyDamage.defeated + hazardDamage.bossDefeated,
             enemyHazardsDefeatedThisFloor: (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardDamage.defeated,
             dungeonTreasuresOpened: run.dungeonTreasuresOpened + dungeonReward.treasuresOpened,
+            dungeonTreasuresOpenedThisFloor:
+                (run.dungeonTreasuresOpenedThisFloor ?? 0) + dungeonReward.treasuresOpened,
             dungeonTrapsResolvedThisFloor: (run.dungeonTrapsResolvedThisFloor ?? 0) + dungeonTrapResolvedDelta,
             dungeonGatewaysUsed: run.dungeonGatewaysUsed + dungeonReward.gatewaysUsed,
+            dungeonGatewaysUsedThisFloor:
+                (run.dungeonGatewaysUsedThisFloor ?? 0) + dungeonReward.gatewaysUsed,
             stats: {
                 ...run.stats,
                 totalScore,
@@ -7949,8 +7963,12 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
                 (run.dungeonEnemiesDefeatedThisFloor ?? 0) + dungeonReward.enemiesDefeated + enemyDamage.defeated + hazardDamage.bossDefeated,
             enemyHazardsDefeatedThisFloor: (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardDamage.defeated,
             dungeonTreasuresOpened: run.dungeonTreasuresOpened + dungeonReward.treasuresOpened,
+            dungeonTreasuresOpenedThisFloor:
+                (run.dungeonTreasuresOpenedThisFloor ?? 0) + dungeonReward.treasuresOpened,
             dungeonTrapsResolvedThisFloor: (run.dungeonTrapsResolvedThisFloor ?? 0) + dungeonTrapResolvedDelta,
             dungeonGatewaysUsed: run.dungeonGatewaysUsed + dungeonReward.gatewaysUsed,
+            dungeonGatewaysUsedThisFloor:
+                (run.dungeonGatewaysUsedThisFloor ?? 0) + dungeonReward.gatewaysUsed,
             stats: {
                 ...run.stats,
                 totalScore,
@@ -8136,7 +8154,7 @@ export const getMismatchFloaterAnchorTileIds = (
 };
 
 export const advanceToNextLevel = (run: RunState): RunState => {
-    if (!run.board) {
+    if (run.status !== 'levelComplete' || run.gameMode === 'puzzle' || !run.board) {
         return run;
     }
 
@@ -8254,6 +8272,8 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         shopRerolls: 0,
         dungeonEnemiesDefeatedThisFloor: 0,
         dungeonTrapsResolvedThisFloor: 0,
+        dungeonTreasuresOpenedThisFloor: 0,
+        dungeonGatewaysUsedThisFloor: 0,
         dungeonShopVisitedThisFloor: false,
         enemyHazardHitsThisFloor: 0,
         enemyHazardsDefeatedThisFloor: 0,

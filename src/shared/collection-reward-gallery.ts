@@ -97,7 +97,7 @@ export const getCollectionRewardGalleryRows = (save: SaveData): CollectionReward
         {
             id: 'history',
             title: 'Run journal',
-            description: 'Last-run summary and local replay/export hints.',
+            description: 'Last-run summary and local share-key hints.',
             owned: save.lastRunSummary ? 1 : 0,
             status: save.lastRunSummary ? 'owned' : 'missing',
             total: historyRows.length,

@@ -529,4 +529,51 @@ describe('REG-078 relic offer services', () => {
         const rarities = upgraded.run.relicOffer!.options.map((id) => getRelicDraftRow(id).rarity);
         expect(rarities.some((rarity) => rarity !== 'common')).toBe(true);
     });
+
+    it('marks services unavailable when an offer has no visible options', () => {
+        const run = {
+            ...openOfferRun(),
+            relicOffer: {
+                tier: 1,
+                options: [],
+                picksRemaining: 1,
+                pickRound: 0
+            }
+        } as RunState;
+
+        const rows = createRelicOfferServices(run);
+        expect(rows.every((row) => !row.available)).toBe(true);
+        expect(rows.map((row) => row.unavailableReason)).toEqual([
+            'No relic options remain.',
+            'No relic options remain.',
+            'No relic options remain.'
+        ]);
+
+        const result = applyRelicOfferService(run, 'reroll_offer');
+        expect(result.applied).toBe(false);
+        expect(result.reason).toBe('unavailable');
+        expect(result.run.shopGold).toBe(run.shopGold);
+        expect(result.run.relicOffer?.options).toEqual([]);
+    });
+
+    it('does not charge or replace the offer when a service would exhaust the remaining pool', () => {
+        const run = {
+            ...openOfferRun(),
+            relicIds: [...RELIC_POOL],
+            shopGold: 5,
+            relicOffer: {
+                tier: 1,
+                options: ['extra_shuffle_charge'],
+                picksRemaining: 1,
+                pickRound: 0
+            }
+        } as RunState;
+
+        const result = applyRelicOfferService(run, 'reroll_offer');
+
+        expect(result.applied).toBe(false);
+        expect(result.reason).toBe('unavailable');
+        expect(result.run.shopGold).toBe(run.shopGold);
+        expect(result.run.relicOffer?.options).toEqual(['extra_shuffle_charge']);
+    });
 });

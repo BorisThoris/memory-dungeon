@@ -859,7 +859,7 @@ export interface RunState {
      */
     wildTileId: string | null;
     wildMatchesRemaining: number;
-    /** Stray remover power charges (remove one hidden tile from play). */
+    /** Stray remover power charges (remove one completion-safe hidden singleton from play). */
     strayRemoveCharges: number;
     strayRemoveArmed: boolean;
     /** Match score multiplier (shuffle tax stacks). */
@@ -936,7 +936,9 @@ export interface RunState {
     dungeonTrapsTriggered: number;
     dungeonTrapsResolvedThisFloor: number;
     dungeonTreasuresOpened: number;
+    dungeonTreasuresOpenedThisFloor: number;
     dungeonGatewaysUsed: number;
+    dungeonGatewaysUsedThisFloor: number;
     dungeonKeys: Partial<Record<DungeonKeyKind, number>>;
     dungeonMasterKeys: number;
     dungeonShopVisitedThisFloor: boolean;

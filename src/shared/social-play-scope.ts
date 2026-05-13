@@ -17,7 +17,7 @@ export const SOCIAL_PLAY_DECISIONS: readonly SocialPlayDecisionRow[] = [
         status: 'shipped',
         title: 'Share strings only',
         description:
-            'v1 supports offline-safe share strings and deterministic local replay keys for daily/run summaries.',
+            'v1 supports offline-safe share strings and deterministic local share keys for daily/run summaries.',
         uiCopy: 'Share-only v1: compare local score, seed, and streak text outside the app; no account required.',
         persistence: 'derived_share_string',
         onlineRequired: false

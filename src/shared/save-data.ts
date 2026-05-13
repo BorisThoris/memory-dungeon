@@ -6,14 +6,19 @@ import {
     type BoardScreenSpaceAA,
     type CameraViewportModePreference,
     type DisplayMode,
+    type GameMode,
     type GraphicsQualityPreset,
+    type MutatorId,
     type PlayerStatsPersisted,
     type RelicId,
+    type RunSummary,
+    type RunState,
     type SaveData,
     type Settings,
     type WeakerShuffleMode
 } from './contracts';
 import { utcDateKeyMinusOneDay } from './rng';
+import { RELIC_POOL } from './relics';
 import { evaluateSaveMigrationGate } from './version-gate';
 
 export type DailyStreakFreezePolicy = 'not_supported';
@@ -84,6 +89,132 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
     relicShrineExtraPickUnlocked: false
 });
 
+const RELIC_ID_SET = new Set<RelicId>(RELIC_POOL);
+const GAME_MODE_SET = new Set<GameMode>(['endless', 'daily', 'puzzle', 'gauntlet', 'meditation']);
+
+const finiteNonNegativeInteger = (value: unknown, fallback: number): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : fallback;
+
+const finiteNonNegativeNumber = (value: unknown, fallback: number): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : fallback;
+
+const stringOrNull = (value: unknown, fallback: string | null): string | null =>
+    typeof value === 'string' ? value : value === null ? null : fallback;
+
+const normalizeAchievements = (input: unknown): AchievementState => {
+    const out = createAchievementState();
+    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+        return out;
+    }
+    const source = input as Partial<Record<AchievementId, unknown>>;
+    for (const id of ACHIEVEMENT_IDS) {
+        out[id] = source[id] === true;
+    }
+    return out;
+};
+
+const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPickCounts'] => {
+    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+        return {};
+    }
+    const out: PlayerStatsPersisted['relicPickCounts'] = {};
+    for (const [id, value] of Object.entries(input as Record<string, unknown>)) {
+        if (RELIC_ID_SET.has(id as RelicId)) {
+            const count = finiteNonNegativeInteger(value, 0);
+            if (count > 0) {
+                out[id as RelicId] = count;
+            }
+        }
+    }
+    return out;
+};
+
+const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => {
+    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+        return {};
+    }
+    const out: NonNullable<PlayerStatsPersisted['puzzleCompletions']> = {};
+    for (const [id, value] of Object.entries(input as Record<string, unknown>)) {
+        if (typeof id !== 'string' || id.length === 0 || !value || typeof value !== 'object' || Array.isArray(value)) {
+            continue;
+        }
+        const record = value as Record<string, unknown>;
+        if (record.completed !== true) {
+            continue;
+        }
+        const bestMistakes =
+            record.bestMistakes === null ? null : finiteNonNegativeInteger(record.bestMistakes, Number.NaN);
+        const bestScore = finiteNonNegativeInteger(record.bestScore, Number.NaN);
+        if ((bestMistakes !== null && !Number.isFinite(bestMistakes)) || !Number.isFinite(bestScore)) {
+            continue;
+        }
+        out[id] = {
+            completed: true,
+            bestMistakes,
+            bestScore
+        };
+    }
+    return out;
+};
+
+const normalizeUnlocks = (input: unknown): string[] => {
+    if (!Array.isArray(input)) {
+        return [];
+    }
+    const allowedPrefixes = ['achievement:', 'cosmetic:', 'honor:'];
+    return [...new Set(input)]
+        .filter((value): value is string => typeof value === 'string')
+        .filter((value) => allowedPrefixes.some((prefix) => value.startsWith(prefix)));
+};
+
+const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
+    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+        return null;
+    }
+    const source = input as Record<string, unknown>;
+    const totalScore = finiteNonNegativeInteger(source.totalScore, Number.NaN);
+    const bestScore = finiteNonNegativeInteger(source.bestScore, Number.NaN);
+    const levelsCleared = finiteNonNegativeInteger(source.levelsCleared, Number.NaN);
+    const highestLevel = finiteNonNegativeInteger(source.highestLevel, Number.NaN);
+    const bestStreak = finiteNonNegativeInteger(source.bestStreak, Number.NaN);
+    const perfectClears = finiteNonNegativeInteger(source.perfectClears, Number.NaN);
+    if ([totalScore, bestScore, levelsCleared, highestLevel, bestStreak, perfectClears].some((value) => !Number.isFinite(value))) {
+        return null;
+    }
+
+    const runSeed = source.runSeed === undefined ? undefined : finiteNonNegativeInteger(source.runSeed, Number.NaN);
+    const runRulesVersion =
+        source.runRulesVersion === undefined ? undefined : finiteNonNegativeInteger(source.runRulesVersion, Number.NaN);
+    const gameMode = GAME_MODE_SET.has(source.gameMode as GameMode) ? (source.gameMode as GameMode) : undefined;
+    const activeMutators = Array.isArray(source.activeMutators)
+        ? source.activeMutators.filter((value): value is MutatorId => typeof value === 'string')
+        : undefined;
+    const relicIds = Array.isArray(source.relicIds)
+        ? source.relicIds.filter((value): value is RelicId => RELIC_ID_SET.has(value as RelicId))
+        : undefined;
+
+    return {
+        totalScore,
+        bestScore,
+        levelsCleared,
+        highestLevel,
+        achievementsEnabled: source.achievementsEnabled === true,
+        unlockedAchievements: Array.isArray(source.unlockedAchievements)
+            ? source.unlockedAchievements.filter((id): id is AchievementId => ACHIEVEMENT_IDS.includes(id as AchievementId))
+            : [],
+        bestStreak,
+        perfectClears,
+        ...(Number.isFinite(runSeed) ? { runSeed } : {}),
+        ...(Number.isFinite(runRulesVersion) ? { runRulesVersion } : {}),
+        ...(gameMode ? { gameMode } : {}),
+        ...(typeof source.dailyDateKeyUtc === 'string' ? { dailyDateKeyUtc: source.dailyDateKeyUtc } : {}),
+        ...(activeMutators ? { activeMutators } : {}),
+        ...(relicIds ? { relicIds } : {}),
+        ...(typeof source.practiceMode === 'boolean' ? { practiceMode: source.practiceMode } : {}),
+        ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {})
+    };
+};
+
 /** +1 relic pick at each milestone when meta unlock is active (copied into `RunState.metaRelicDraftExtraPerMilestone`). */
 export const metaRelicDraftExtraPerMilestoneFromSave = (save: SaveData): number =>
     save.playerStats?.relicShrineExtraPickUnlocked === true ? 1 : 0;
@@ -151,28 +282,35 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
             ? boardPresentationRaw
             : defaults.settings.boardPresentation;
 
-    const mergedAchievements = {
-        ...defaults.achievements,
-        ...(input.achievements ?? {})
-    };
+    const mergedAchievements = normalizeAchievements(input.achievements);
     const psIn: Partial<PlayerStatsPersisted> = input.playerStats ?? {};
-    const dailiesCount =
-        typeof psIn.dailiesCompleted === 'number' ? psIn.dailiesCompleted : defaultPlayerStats().dailiesCompleted;
-    const relicPickCounts =
-        psIn.relicPickCounts && typeof psIn.relicPickCounts === 'object' && !Array.isArray(psIn.relicPickCounts)
-            ? psIn.relicPickCounts
-            : defaultPlayerStats().relicPickCounts;
+    const dailiesCount = finiteNonNegativeInteger(psIn.dailiesCompleted, defaultPlayerStats().dailiesCompleted);
+    const relicPickCounts = normalizeRelicPickCounts(psIn.relicPickCounts);
     const relicShrineExtraPickUnlocked =
         psIn.relicShrineExtraPickUnlocked === true ||
         mergedAchievements.ACH_SEVEN_DAILIES === true ||
         dailiesCount >= 7;
+    const lastRunSummary =
+        migrationGate.keepLastRunSummary ? normalizeLastRunSummary(input.lastRunSummary) : defaults.lastRunSummary;
 
     return {
         schemaVersion: SAVE_SCHEMA_VERSION,
-        bestScore: typeof input.bestScore === 'number' ? input.bestScore : defaults.bestScore,
+        bestScore: finiteNonNegativeInteger(input.bestScore, defaults.bestScore),
         achievements: mergedAchievements,
         settings: {
             ...mergedSettingsBase,
+            masterVolume: finiteNonNegativeNumber(mergedSettingsBase.masterVolume, defaults.settings.masterVolume),
+            musicVolume: finiteNonNegativeNumber(mergedSettingsBase.musicVolume, defaults.settings.musicVolume),
+            sfxVolume: finiteNonNegativeNumber(mergedSettingsBase.sfxVolume, defaults.settings.sfxVolume),
+            uiScale: finiteNonNegativeNumber(mergedSettingsBase.uiScale, defaults.settings.uiScale),
+            resolveDelayMultiplier: finiteNonNegativeNumber(
+                mergedSettingsBase.resolveDelayMultiplier,
+                defaults.settings.resolveDelayMultiplier
+            ),
+            reduceMotion:
+                typeof mergedSettingsBase.reduceMotion === 'boolean'
+                    ? mergedSettingsBase.reduceMotion
+                    : defaults.settings.reduceMotion,
             boardScreenSpaceAA,
             boardBloomEnabled,
             graphicsQuality,
@@ -180,24 +318,58 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
             pairProximityHintsEnabled,
             displayMode,
             weakerShuffleMode,
-            boardPresentation
+            boardPresentation,
+            tileFocusAssist:
+                typeof mergedSettingsBase.tileFocusAssist === 'boolean'
+                    ? mergedSettingsBase.tileFocusAssist
+                    : defaults.settings.tileFocusAssist,
+            echoFeedbackEnabled:
+                typeof mergedSettingsBase.echoFeedbackEnabled === 'boolean'
+                    ? mergedSettingsBase.echoFeedbackEnabled
+                    : defaults.settings.echoFeedbackEnabled,
+            distractionChannelEnabled:
+                typeof mergedSettingsBase.distractionChannelEnabled === 'boolean'
+                    ? mergedSettingsBase.distractionChannelEnabled
+                    : defaults.settings.distractionChannelEnabled,
+            shuffleScoreTaxEnabled:
+                typeof mergedSettingsBase.shuffleScoreTaxEnabled === 'boolean'
+                    ? mergedSettingsBase.shuffleScoreTaxEnabled
+                    : defaults.settings.shuffleScoreTaxEnabled,
+            debugFlags: {
+                showDebugTools:
+                    typeof mergedSettingsBase.debugFlags.showDebugTools === 'boolean'
+                        ? mergedSettingsBase.debugFlags.showDebugTools
+                        : defaults.settings.debugFlags.showDebugTools,
+                allowBoardReveal:
+                    typeof mergedSettingsBase.debugFlags.allowBoardReveal === 'boolean'
+                        ? mergedSettingsBase.debugFlags.allowBoardReveal
+                        : defaults.settings.debugFlags.allowBoardReveal,
+                disableAchievementsOnDebug:
+                    typeof mergedSettingsBase.debugFlags.disableAchievementsOnDebug === 'boolean'
+                        ? mergedSettingsBase.debugFlags.disableAchievementsOnDebug
+                        : defaults.settings.debugFlags.disableAchievementsOnDebug
+            }
         },
         onboardingDismissed: typeof input.onboardingDismissed === 'boolean' ? input.onboardingDismissed : defaults.onboardingDismissed,
-        lastRunSummary: migrationGate.keepLastRunSummary ? (input.lastRunSummary ?? defaults.lastRunSummary) : null,
+        lastRunSummary,
         playerStats: {
             ...defaultPlayerStats(),
             ...(input.playerStats ?? {}),
+            bestFloorNoPowers: finiteNonNegativeInteger(psIn.bestFloorNoPowers, defaultPlayerStats().bestFloorNoPowers),
+            dailiesCompleted: dailiesCount,
+            lastDailyDateKeyUtc: stringOrNull(psIn.lastDailyDateKeyUtc, defaultPlayerStats().lastDailyDateKeyUtc),
+            dailyStreakCosmetic: finiteNonNegativeInteger(
+                psIn.dailyStreakCosmetic,
+                defaultPlayerStats().dailyStreakCosmetic
+            ),
             encorePairKeysLastRun: Array.isArray(input.playerStats?.encorePairKeysLastRun)
-                ? input.playerStats.encorePairKeysLastRun
+                ? input.playerStats.encorePairKeysLastRun.filter((value): value is string => typeof value === 'string')
                 : defaultPlayerStats().encorePairKeysLastRun,
-            puzzleCompletions:
-                input.playerStats?.puzzleCompletions && typeof input.playerStats.puzzleCompletions === 'object'
-                    ? input.playerStats.puzzleCompletions
-                    : defaultPlayerStats().puzzleCompletions,
+            puzzleCompletions: normalizePuzzleCompletions(input.playerStats?.puzzleCompletions),
             relicPickCounts,
             relicShrineExtraPickUnlocked
         },
-        unlocks: Array.isArray(input.unlocks) ? input.unlocks : defaults.unlocks ?? [],
+        unlocks: normalizeUnlocks(input.unlocks),
         powersFtueSeen: typeof input.powersFtueSeen === 'boolean' ? input.powersFtueSeen : defaults.powersFtueSeen ?? false
     };
 };
@@ -246,6 +418,36 @@ export const getDailyStreakEthicsState = (save: SaveData, todayDateKeyUtc: strin
                 ? 'Missed days simply reset the cosmetic streak on the next clear. No core run fairness is lost.'
                 : 'Daily streaks are optional local motivation. Clear today before UTC reset if you want to extend it.'
     };
+};
+
+export const mergePuzzleCompletion = (save: SaveData, run: RunState): SaveData => {
+    if (run.gameMode !== 'puzzle' || !run.puzzleId || run.status !== 'levelComplete') {
+        return save;
+    }
+
+    const ps = save.playerStats ?? defaultPlayerStats();
+    const completions = ps.puzzleCompletions ?? {};
+    const existing = completions[run.puzzleId];
+    const mistakes = run.lastLevelResult?.mistakes ?? run.stats.tries;
+    const score = run.stats.totalScore;
+
+    return normalizeSaveData({
+        ...save,
+        playerStats: {
+            ...ps,
+            puzzleCompletions: {
+                ...completions,
+                [run.puzzleId]: {
+                    completed: true,
+                    bestMistakes:
+                        existing?.bestMistakes == null
+                            ? mistakes
+                            : Math.min(existing.bestMistakes, mistakes),
+                    bestScore: Math.max(existing?.bestScore ?? 0, score)
+                }
+            }
+        }
+    });
 };
 
 export const mergeBestFloorNoPowers = (save: SaveData, floor: number): SaveData => {

@@ -14,7 +14,7 @@ online_policy: no mandatory accounts, no server realtime, no competitive online 
 | inventory | Run snapshot, build value, consumable/loadout stack rules, economy rows, empty start guidance. | `RunState`, `run-inventory`, `run-economy`, `meta-reward-signals` | `InventoryScreen.test.tsx` | REG-011, REG-079, REG-094 |
 | codex | Search/filter/tabs, glossary-consistent mechanics copy, reward/learning signal, in-run framing. | `mechanics-encyclopedia`, `localization-readiness` | `mechanics-encyclopedia.test.ts`, Codex tests when changed | REG-011, REG-055, REG-064 |
 | settings | Sticky footer and scroll; honest future controls; save trust; premium economy; motion policy. | `Settings`, `settings-control-model`, `profile-summary`, `premium-economy-policy` | `SettingsScreen.test.tsx` | REG-006, REG-032, REG-036, REG-054, REG-092 |
-| game_over | Above-fold outcome/action; local replay/journal/share copy; daily result loop; no online rank. | `RunSummary`, `run-history`, `daily-archive` | `GameOverScreen.test.tsx` | REG-007, REG-023, REG-096 |
+| game_over | Above-fold outcome/action; local share-key/journal copy; daily result loop; no online rank. | `RunSummary`, `run-history`, `daily-archive` | `GameOverScreen.test.tsx` | REG-007, REG-023, REG-096 |
 
 ## Rollout order
 
@@ -52,7 +52,7 @@ bot_constraints:
 |---|---|
 | REG-015/024 economy | temporary run currencies and shop wallet are gameplay systems, not monetization placeholders |
 | REG-040 save trust | profile/save shell must show local-only persistence and failure recovery copy |
-| REG-041/085 run export/replay | share strings and local replay keys are allowed; online rank remains deferred |
+| REG-041/085 run history/share | share strings and local share keys are allowed; online rank remains deferred |
 | REG-052 leaderboards | competitive online work is out of v1 quality bar |
 | REG-013/059 assets | final art may be missing; fallback contracts must be visible and documented |
 

@@ -149,8 +149,8 @@ Wired through **`useAppStore`** and **`GameScreen`** / toolbar:
 | Area | Files |
 |------|--------|
 | Rules engine | `src/shared/game.ts`, `src/shared/contracts.ts` |
-| Run export / import JSON | `src/shared/run-export.ts` — `RUN_EXPORT_VERSION`, `serializeRunPayload`, `parseRunImport` (pairs with `createRunFromExportPayload` in `game.ts`) |
-| Run factories / summaries | `game.ts` — `createNewRun`, `createDailyRun`, `createGauntletRun`, `createPuzzleRun`, `createRunFromExportPayload`, `createRunSummary`, … |
+| Run history / share key | `src/shared/run-history.ts` — `buildRunShareKey`, `buildRunHistoryExportString`; share keys are seed/rules/mode summaries, not replay/import payloads |
+| Run factories / summaries | `game.ts` — `createNewRun`, `createDailyRun`, `createGauntletRun`, `createPuzzleRun`, `createRunSummary`, … |
 | Mutators metadata | `src/shared/mutators.ts`, `src/shared/floor-mutator-schedule.ts` |
 | Store / turns | `src/renderer/store/useAppStore.ts` |
 | Play UI | `src/renderer/components/GameScreen.tsx`, `TileBoard.tsx`, `TileBoardScene.tsx` |

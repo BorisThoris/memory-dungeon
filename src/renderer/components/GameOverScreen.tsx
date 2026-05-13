@@ -334,7 +334,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             ) : null}
                             <p className={styles.panelCopy}>{gameOverScreenCopy.flipHistoryCopy(flipCount)}</p>
                             <p className={styles.panelCopy}>
-                                Journal {journalEntry.journalId}: {journalEntry.buildSummary} · {journalEntry.replayLabel}
+                                Journal {journalEntry.journalId}: {journalEntry.buildSummary} · {journalEntry.shareLabel}
                             </p>
                             <div className={styles.journalRows} data-testid="game-over-dungeon-journal">
                                 {journalEntry.rows

@@ -18,6 +18,7 @@ import {
     finishMemorizePhase
 } from './game-core';
 import {
+    applyStrayRemove,
     applyRegionShuffle,
     applyShuffle,
     canRegionShuffleRow,
@@ -417,9 +418,29 @@ describe('REG-087 action eligibility edge cases', () => {
         expect(countFullyHiddenPairs(board)).toBe(1);
         expect(collectDestroyEligibleTileIds(board)).toEqual(new Set(['a1', 'a2']));
         expect(collectPeekEligibleTileIds(board, [])).toEqual(new Set(['a1', 'a2', 'decoy', 'wild']));
-        expect(tileIsStrayEligiblePreview(board, 'a1')).toBe(true);
+        expect(tileIsStrayEligiblePreview(board, 'a1')).toBe(false);
         expect(tileIsStrayEligiblePreview(board, 'decoy')).toBe(false);
         expect(tileIsStrayEligiblePreview(board, 'wild')).toBe(true);
+    });
+
+    it('preserves completion routes after legal stray use', () => {
+        const board = boardFromTiles([
+            tile('a1', 'a'),
+            tile('a2', 'a'),
+            tile('wild', WILD_PAIR_KEY)
+        ]);
+        const run: RunState = {
+            ...playableRun(createNewRun(0, { initialStrayRemoveCharges: 1 })),
+            board,
+            strayRemoveArmed: true,
+            strayRemoveCharges: 1
+        };
+
+        const after = applyStrayRemove(run, 'wild');
+
+        expect(after).not.toBe(run);
+        expect(after.board?.tiles.find((candidate) => candidate.id === 'wild')?.state).toBe('removed');
+        expectRunFair(after);
     });
 
     it('flags a stranded wild singleton once no real or removal route remains', () => {

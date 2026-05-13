@@ -1,11 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, SAVE_SCHEMA_VERSION } from './contracts';
+import { BUILTIN_PUZZLES } from './builtin-puzzles';
 import {
     DUNGEON_SAVE_MIGRATION_POLICY_VERSION,
     getDungeonSaveMigrationFieldPolicies,
     shouldDungeonSaveFieldRequireMigration
 } from './dungeon-save-migration';
-import { createAchievementState, DEFAULT_SETTINGS, mergeDailyComplete, normalizeSaveData } from './save-data';
+import { createNewRun, createPuzzleRun } from './game-core';
+import {
+    createAchievementState,
+    createDefaultSaveData,
+    DEFAULT_SETTINGS,
+    mergeDailyComplete,
+    mergePuzzleCompletion,
+    normalizeSaveData
+} from './save-data';
 import type { SaveData } from './contracts';
 import {
     CURRENT_VERSION_GATE,
@@ -223,6 +232,64 @@ describe('save normalization', () => {
         assertNoUndefinedDeep(normalized, 'dng073.');
     });
 
+    it('GLD-P0-006 clamps malformed progression, achievement, unlock, and puzzle values', () => {
+        const corrupted = {
+            bestScore: Number.POSITIVE_INFINITY,
+            achievements: {
+                ...createAchievementState(),
+                ACH_FIRST_CLEAR: 'yes',
+                ACH_LEVEL_FIVE: true,
+                BAD_ACHIEVEMENT: true
+            },
+            unlocks: ['achievement:ACH_LEVEL_FIVE', 44, 'bad:unlock', 'honor:honor_daily_initiate'],
+            playerStats: {
+                bestFloorNoPowers: -5,
+                dailiesCompleted: Number.NaN,
+                lastDailyDateKeyUtc: 20260513,
+                dailyStreakCosmetic: Number.NEGATIVE_INFINITY,
+                relicPickCounts: {
+                    extra_shuffle_charge: 2.8,
+                    missing_relic: 99,
+                    guard_token_plus_one: -1
+                },
+                encorePairKeysLastRun: ['A', 42, 'B'],
+                puzzleCompletions: {
+                    starter_pairs: { completed: true, bestMistakes: -1, bestScore: 120.9 },
+                    malformed: { completed: 'true', bestMistakes: 0, bestScore: 20 },
+                    bad_score: { completed: true, bestMistakes: 1, bestScore: Number.NaN }
+                }
+            } as unknown as SaveData['playerStats'],
+            lastRunSummary: {
+                totalScore: Number.NaN,
+                bestScore: 1,
+                levelsCleared: 1,
+                highestLevel: 1,
+                achievementsEnabled: true,
+                unlockedAchievements: [],
+                bestStreak: 0,
+                perfectClears: 0
+            }
+        } as unknown as Partial<SaveData>;
+
+        const normalized = normalizeSaveData(corrupted);
+
+        expect(normalized.bestScore).toBe(0);
+        expect(normalized.achievements.ACH_FIRST_CLEAR).toBe(false);
+        expect(normalized.achievements.ACH_LEVEL_FIVE).toBe(true);
+        expect(Object.keys(normalized.achievements)).not.toContain('BAD_ACHIEVEMENT');
+        expect(normalized.unlocks).toEqual(['achievement:ACH_LEVEL_FIVE', 'honor:honor_daily_initiate']);
+        expect(normalized.playerStats?.bestFloorNoPowers).toBe(0);
+        expect(normalized.playerStats?.dailiesCompleted).toBe(0);
+        expect(normalized.playerStats?.lastDailyDateKeyUtc).toBeNull();
+        expect(normalized.playerStats?.dailyStreakCosmetic).toBe(0);
+        expect(normalized.playerStats?.relicPickCounts).toEqual({ extra_shuffle_charge: 2 });
+        expect(normalized.playerStats?.encorePairKeysLastRun).toEqual(['A', 'B']);
+        expect(normalized.playerStats?.puzzleCompletions).toEqual({
+            starter_pairs: { completed: true, bestMistakes: 0, bestScore: 120 }
+        });
+        expect(normalized.lastRunSummary).toBeNull();
+    });
+
     it('DNG-073 drops summaries from future save schemas instead of trusting obsolete active-run data', () => {
         const normalized = normalizeSaveData({
             schemaVersion: SAVE_SCHEMA_VERSION + 1,
@@ -242,6 +309,40 @@ describe('save normalization', () => {
         });
 
         expect(normalized.lastRunSummary).toBeNull();
+    });
+
+    it('GLD-P0-004 merges puzzle completion records without losing previous bests', () => {
+        const puzzle = BUILTIN_PUZZLES.starter_pairs!;
+        const save = normalizeSaveData({
+            ...createDefaultSaveData(),
+            playerStats: {
+                ...createDefaultSaveData().playerStats!,
+                puzzleCompletions: {
+                    starter_pairs: {
+                        completed: true,
+                        bestMistakes: 1,
+                        bestScore: 150
+                    }
+                }
+            }
+        });
+        const puzzleRun = {
+            ...createPuzzleRun(0, puzzle.id, puzzle.tiles),
+            status: 'levelComplete' as const,
+            stats: {
+                ...createNewRun(0).stats,
+                tries: 0,
+                totalScore: 100
+            }
+        };
+
+        const merged = mergePuzzleCompletion(save, puzzleRun);
+
+        expect(merged.playerStats?.puzzleCompletions?.starter_pairs).toEqual({
+            completed: true,
+            bestMistakes: 0,
+            bestScore: 150
+        });
     });
 
     it('DNG-073 documents which dungeon fields require save migrations', () => {

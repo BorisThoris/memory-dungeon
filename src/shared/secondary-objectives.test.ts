@@ -59,7 +59,9 @@ describe('REG-048 secondary objective clarity', () => {
                 dungeonEnemiesDefeatedThisFloor: 1,
                 dungeonTrapsResolvedThisFloor: 2,
                 dungeonTreasuresOpened: 1,
+                dungeonTreasuresOpenedThisFloor: 1,
                 dungeonGatewaysUsed: 1,
+                dungeonGatewaysUsedThisFloor: 1,
                 peekRevealedTileIds: []
             },
             board,
@@ -75,6 +77,20 @@ describe('REG-048 secondary objective clarity', () => {
         ]);
         expect(getLevelResultTagDefinitions(tags).every((tag) => !tag.rewardBearing)).toBe(true);
         expect(LEVEL_RESULT_TAG_DEFINITIONS.boss_floor.rewardBearing).toBe(true);
+
+        expect(
+            getDungeonLevelResultTags(
+                {
+                    ...run,
+                    dungeonTreasuresOpened: 1,
+                    dungeonTreasuresOpenedThisFloor: 0,
+                    dungeonGatewaysUsed: 1,
+                    dungeonGatewaysUsedThisFloor: 0
+                },
+                run.board!,
+                false
+            )
+        ).toEqual([]);
     });
 
     it('prioritizes the top three visible result tags for floor-clear copy', () => {
