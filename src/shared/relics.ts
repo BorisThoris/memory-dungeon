@@ -884,6 +884,31 @@ const upgradedRelicOptions = (
     return [...first, ...rest];
 };
 
+const fillRelicOptions = (
+    run: RunState,
+    tierIndex: number,
+    clearedFloor: number,
+    pickRound: number,
+    currentOptions: readonly RelicId[],
+    bannedRelicIds: readonly RelicId[]
+): RelicId[] => {
+    const options = [...currentOptions].filter((id, index, all) => all.indexOf(id) === index && !bannedRelicIds.includes(id));
+    if (options.length >= DRAFT_OPTION_COUNT) {
+        return options.slice(0, DRAFT_OPTION_COUNT);
+    }
+    const rolled = rollRelicOptions(run, tierIndex, clearedFloor, pickRound).filter(
+        (id) => !bannedRelicIds.includes(id) && !options.includes(id)
+    );
+    options.push(...rolled);
+    if (options.length >= DRAFT_OPTION_COUNT) {
+        return options.slice(0, DRAFT_OPTION_COUNT);
+    }
+    const fallback = RELIC_POOL.filter(
+        (id) => isRelicDraftEligible(id, run) && !bannedRelicIds.includes(id) && !options.includes(id)
+    );
+    return [...options, ...fallback].slice(0, DRAFT_OPTION_COUNT);
+};
+
 export const applyRelicOfferService = (
     run: RunState,
     serviceId: RelicOfferServiceId,
@@ -914,15 +939,10 @@ export const applyRelicOfferService = (
         const banTarget = targetRelicId && options.includes(targetRelicId) ? targetRelicId : options[0]!;
         bannedRelicIds.push(banTarget);
         options = options.filter((id) => id !== banTarget);
-        if (options.length < DRAFT_OPTION_COUNT) {
-            const refill = rollRelicOptions(paidRun, tierIndex, cleared, pickRound + 1).filter(
-                (id) => !bannedRelicIds.includes(id) && !options.includes(id)
-            );
-            options = [...options, ...refill].slice(0, DRAFT_OPTION_COUNT);
-        }
+        options = fillRelicOptions(paidRun, tierIndex, cleared, pickRound + 1, options, bannedRelicIds);
     } else if (serviceId === 'reroll_offer') {
         pickRound += 1;
-        options = rollRelicOptions(paidRun, tierIndex, cleared, pickRound).filter((id) => !bannedRelicIds.includes(id));
+        options = fillRelicOptions(paidRun, tierIndex, cleared, pickRound, [], bannedRelicIds);
     } else {
         upgradedOffer = true;
         pickRound += 1;

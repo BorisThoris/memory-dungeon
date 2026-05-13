@@ -98,6 +98,30 @@ export interface DungeonNodeTypeContract {
     uiTone: DungeonRoomTone;
 }
 
+export interface RouteProfileBudgetRow {
+    routeType: RouteNodeType;
+    nodeKinds: DungeonRunNodeKind[];
+    minShare: number;
+    maxShare: number;
+}
+
+export interface RouteProfileBudgetReport {
+    total: number;
+    counts: Record<RouteNodeType, number>;
+    rows: Array<RouteProfileBudgetRow & { actualShare: number; status: 'within_range' | 'out_of_range' }>;
+}
+
+export interface RouteSemanticContract {
+    floor: number;
+    routeType: RouteNodeType;
+    nodeKind: DungeonRunNodeKind;
+    normalizedRouteType: RouteNodeType;
+    floorTag: FloorTag;
+    floorArchetypeId: FloorArchetypeId | null;
+    objectiveId: DungeonObjectiveId;
+    rewardPolicy: string;
+}
+
 const DUNGEON_ACT_LENGTH = 6;
 const DUNGEON_BRANCH_LANES = [-1, 0, 1] as const;
 const DUNGEON_RUN_NODE_KINDS: readonly DungeonRunNodeKind[] = [
@@ -357,6 +381,55 @@ const kindFromRouteType = (routeType: RouteNodeType, floor: number): DungeonRunN
         return floor % 4 === 0 ? 'rest' : 'combat';
     }
     return floor % 4 === 0 ? 'treasure' : 'event';
+};
+
+export const getDungeonRouteSemanticContract = ({
+    routeType,
+    floor,
+    nodeKind
+}: {
+    routeType: RouteNodeType;
+    floor: number;
+    nodeKind?: DungeonRunNodeKind | null;
+}): RouteSemanticContract => {
+    const kind = nodeKind ?? kindFromRouteType(routeType, floor);
+    const contract = getDungeonNodeTypeContract(kind);
+    return {
+        floor,
+        routeType,
+        nodeKind: kind,
+        normalizedRouteType: contract.routeType,
+        floorTag: contract.floorTag,
+        floorArchetypeId: contract.floorArchetypeId,
+        objectiveId: contract.defaultObjectiveId,
+        rewardPolicy: contract.rewardPolicy
+    };
+};
+
+export const ROUTE_PROFILE_BUDGET_POLICY: readonly RouteProfileBudgetRow[] = [
+    { routeType: 'safe', nodeKinds: ['combat', 'rest', 'entrance', 'exit'], minShare: 0.2, maxShare: 0.45 },
+    { routeType: 'greed', nodeKinds: ['elite', 'trap', 'shop', 'boss'], minShare: 0.25, maxShare: 0.55 },
+    { routeType: 'mystery', nodeKinds: ['event', 'treasure'], minShare: 0.2, maxShare: 0.45 }
+];
+
+export const inspectRouteProfileBudgets = (nodes: readonly Pick<DungeonRunNode, 'routeType' | 'kind'>[]): RouteProfileBudgetReport => {
+    const counts: Record<RouteNodeType, number> = { safe: 0, greed: 0, mystery: 0 };
+    for (const node of nodes) {
+        counts[node.routeType] += 1;
+    }
+    const total = nodes.length;
+    return {
+        total,
+        counts,
+        rows: ROUTE_PROFILE_BUDGET_POLICY.map((row) => {
+            const actualShare = total > 0 ? counts[row.routeType] / total : 0;
+            return {
+                ...row,
+                actualShare,
+                status: actualShare >= row.minShare && actualShare <= row.maxShare ? 'within_range' : 'out_of_range'
+            };
+        })
+    };
 };
 
 const kindFromRouteChoice = (choice: RouteChoice, fallbackFloor: number): DungeonRunNodeKind => {

@@ -35,7 +35,14 @@ The repeated pattern is clear: many systems are structurally present, but contra
 - True replay, dailies, and puzzle-facing features should treat GLD-P1-001 as a share-key baseline; structured replay remains a separate future contract.
 
 ## P2 Expand After Stabilization
-- Route profile budgets should become operational generation policy, not only metadata.
+- Route profile budgets are now operational generation policy with shared budget reports.
+- Route/run-map semantics are normalized through one shared route semantic contract.
+- Fixed-tile boards can opt into exact copy mode when fixture or puzzle contracts require no encounter enhancement.
+- Fuse Cache and Gambit/wild resolution contracts are covered before adding more pair-resolution variants.
+- Destroy/Peek action rows now report target-path legality before UI arming.
+- Relic reroll/ban services preserve offer count when enough eligible relics remain.
+- Economy source/sink rows have a local-only ledger view connected to balance simulation inflow.
+- `yarn gate:gameplay` is the gameplay release gate for GLD expansion work.
 - Safe card suite can expand, but only after pair-resolution and hazard contracts are locked.
 - Relic archetypes need decision-changing payoffs, not more resource bumps.
 - Shop/rest/event/treasure systems need stock pools, source/sink ledgers, and exploit gates.
@@ -83,6 +90,12 @@ yarn typecheck:shared
 yarn vitest run src/shared/daily-archive.test.ts src/shared/objective-board.test.ts src/shared/quest-campaign.test.ts src/shared/local-progress-registry.test.ts src/shared/balance-simulation.test.ts src/shared/exploit-surface.test.ts
 yarn sim:endless --floors=1000 --seed=42001
 yarn test
+```
+
+- P2 expansion foundation gate:
+
+```powershell
+yarn gate:gameplay
 ```
 
 - Verified with `yarn typecheck:shared`, focused Vitest coverage for gameplay/save/relic/objective/store/contracts, and full `yarn test`.

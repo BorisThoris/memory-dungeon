@@ -1812,6 +1812,8 @@ export interface BuildBoardOptions {
     activeMutators?: MutatorId[];
     /** Puzzle mode: skip RNG; copy these tiles as-is. */
     fixedTiles?: Tile[] | null;
+    /** `enhance` preserves legacy dungeon additions; `exact` copies fixed tiles without encounter layers. */
+    fixedTilesMode?: 'enhance' | 'exact';
     /** H4: include one wild tile that pairs with any real symbol. */
     includeWildTile?: boolean;
     floorTag?: FloorTag;
@@ -3634,44 +3636,49 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         : null;
 
     if (options.fixedTiles && options.fixedTiles.length > 0) {
-        const exitTiles = options.gameMode
+        const exactFixedTiles = options.fixedTilesMode === 'exact';
+        const exitTiles = options.gameMode && !exactFixedTiles
             ? addDungeonExitTile(
                   options.fixedTiles.map((t) => ({ ...t })),
                   dungeonBlueprint!
               ).tiles
             : options.fixedTiles.map((t) => ({ ...t }));
-        const shopAdded = dungeonBlueprint
+        const shopAdded = dungeonBlueprint && !exactFixedTiles
             ? addDungeonShopTile(exitTiles, dungeonBlueprint)
             : { tiles: exitTiles, shopTileId: null };
-        const roomAdded = dungeonBlueprint
+        const roomAdded = dungeonBlueprint && !exactFixedTiles
             ? addDungeonRoomTile(shopAdded.tiles, dungeonBlueprint)
             : { tiles: shopAdded.tiles, roomTileId: null };
-        const tiles = applyDungeonLayoutPlan(
-            roomAdded.tiles,
-            runSeed,
-            rulesVersion,
-            level,
-            floorTag,
-            floorArchetypeId,
-            options.gameMode,
-            encounter.nodeKind
-        );
+        const tiles = exactFixedTiles
+            ? roomAdded.tiles
+            : applyDungeonLayoutPlan(
+                  roomAdded.tiles,
+                  runSeed,
+                  rulesVersion,
+                  level,
+                  floorTag,
+                  floorArchetypeId,
+                  options.gameMode,
+                  encounter.nodeKind
+              );
         const tileCount = tiles.length;
         const columns = clamp(Math.ceil(Math.sqrt(tileCount)), 2, 8);
         const rows = Math.ceil(tileCount / columns);
         const realPairKeys = new Set(tiles.map((t) => t.pairKey).filter((k) => !isSingletonUtilityPairKey(k)));
         const exit = tiles.find((t) => t.pairKey === EXIT_PAIR_KEY);
-        const enemyHazards = createEnemyHazardsForBoard({
-            tiles,
-            runSeed,
-            rulesVersion,
-            level,
-            floorTag,
-            floorArchetypeId,
-            nodeKind: encounter.nodeKind,
-            bossId: dungeonBlueprint?.bossId ?? null,
-            gameMode: options.gameMode
-        });
+        const enemyHazards = exactFixedTiles
+            ? []
+            : createEnemyHazardsForBoard({
+                  tiles,
+                  runSeed,
+                  rulesVersion,
+                  level,
+                  floorTag,
+                  floorArchetypeId,
+                  nodeKind: encounter.nodeKind,
+                  bossId: dungeonBlueprint?.bossId ?? null,
+                  gameMode: options.gameMode
+              });
 
         return {
             level,
@@ -3703,8 +3710,8 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
             dungeonLeverCount: 0,
             dungeonShopTileId: shopAdded.shopTileId,
             dungeonShopVisited: false,
-            dungeonBossId: dungeonBlueprint?.bossId ?? null,
-            dungeonObjectiveId: dungeonBlueprint?.objectiveId ?? 'find_exit',
+            dungeonBossId: exactFixedTiles ? null : dungeonBlueprint?.bossId ?? null,
+            dungeonObjectiveId: exactFixedTiles ? 'find_exit' : dungeonBlueprint?.objectiveId ?? 'find_exit',
             enemyHazards,
             enemyHazardTurn: 0
         };
@@ -7493,7 +7500,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         const nBackAnchorPairKey =
             hasMutator(run, 'n_back_anchor') && nBackMatchCounter % 2 === 0 ? encoreKey : run.nBackAnchorPairKey;
         const wildMatchesRemaining =
-            isWildPairKey(ta.pairKey) || isWildPairKey(tb.pairKey) || isWildPairKey(tc.pairKey)
+            isWildPairKey(tileMatchA.pairKey) || isWildPairKey(tileMatchB.pairKey)
                 ? 0
                 : run.wildMatchesRemaining;
 

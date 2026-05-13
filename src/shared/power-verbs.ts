@@ -46,6 +46,44 @@ export const POWER_VERB_GROUPS = {
 const onlyWhilePlaying = (run: RunState): string | null => (run.status === 'playing' ? null : 'Only while playing.');
 const locksPerfectMemory = perfectMemoryImpactCopy('locks_perfect_memory');
 
+const hasOpenFlip = (run: RunState): boolean => (run.board?.flippedTileIds.length ?? 0) > 0;
+
+const hasDestroyTarget = (run: RunState): boolean => {
+    const tiles = run.board?.tiles ?? [];
+    return tiles.some((tile) => {
+        if (tile.state !== 'hidden') return false;
+        const pair = tiles.filter((candidate) => candidate.pairKey === tile.pairKey);
+        return pair.length === 2 && pair.every((candidate) => candidate.state === 'hidden');
+    });
+};
+
+const hasPeekTarget = (run: RunState): boolean =>
+    (run.board?.tiles ?? []).some(
+        (tile) => tile.state === 'hidden' && !run.peekRevealedTileIds.includes(tile.id)
+    );
+
+const peekDisabledReason = (run: RunState): string | null =>
+    onlyWhilePlaying(run) ??
+    (run.peekCharges < 1
+        ? 'No peek charges.'
+        : hasOpenFlip(run)
+          ? 'Resolve the current flip first.'
+          : !hasPeekTarget(run)
+            ? 'No hidden peek targets.'
+            : null);
+
+const destroyDisabledReason = (run: RunState): string | null =>
+    onlyWhilePlaying(run) ??
+    (run.activeContract?.noDestroy
+        ? 'Scholar contract disables destroy.'
+        : run.destroyPairCharges < 1
+          ? 'No destroy charges.'
+          : hasOpenFlip(run)
+            ? 'Resolve the current flip first.'
+            : !hasDestroyTarget(run)
+              ? 'No fully hidden pair to destroy.'
+              : null);
+
 export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
     {
         id: 'pin',
@@ -78,7 +116,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, informationBypass: 2, uiComprehensionLoad: 1 },
-        disabledReason: onlyWhilePlaying(run) ?? (run.peekCharges < 1 ? 'No peek charges.' : null)
+        disabledReason: peekDisabledReason(run)
     },
     {
         id: 'flash_pair',
@@ -148,13 +186,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, mistakeRecovery: 2, boardCompletionRisk: 1, uiComprehensionLoad: 1 },
-        disabledReason:
-            onlyWhilePlaying(run) ??
-            (run.activeContract?.noDestroy
-                ? 'Scholar contract disables destroy.'
-                : run.destroyPairCharges < 1
-                  ? 'No destroy charges.'
-                  : null)
+        disabledReason: destroyDisabledReason(run)
     },
     {
         id: 'stray_remove',

@@ -511,12 +511,29 @@ describe('REG-078 relic offer services', () => {
         expect(rerolled.applied).toBe(true);
         expect(rerolled.run.shopGold).toBe(run.shopGold - 2);
         expect(rerolled.run.relicOffer?.options).not.toEqual(run.relicOffer?.options);
+        expect(rerolled.run.relicOffer?.options).toHaveLength(3);
         expect(applyRelicOfferService(rerolled.run, 'reroll_offer').applied).toBe(false);
 
         const banned = applyRelicOfferService(openOfferRun(), 'ban_option', run.relicOffer!.options[1]);
         expect(banned.applied).toBe(true);
         expect(banned.run.relicOffer?.bannedRelicIds).toContain(run.relicOffer!.options[1]);
         expect(banned.run.relicOffer?.options).not.toContain(run.relicOffer!.options[1]);
+        expect(banned.run.relicOffer?.options).toHaveLength(3);
+    });
+
+    it('persists banned relic ids into subsequent reroll rounds in the same visit', () => {
+        const run = openOfferRun();
+        const bannedId = run.relicOffer!.options[1]!;
+        const banned = applyRelicOfferService(run, 'ban_option', bannedId);
+        const rerolled = applyRelicOfferService(
+            { ...banned.run, relicOffer: { ...banned.run.relicOffer!, serviceUses: {} }, shopGold: 5 },
+            'reroll_offer'
+        );
+
+        expect(rerolled.applied).toBe(true);
+        expect(rerolled.run.relicOffer?.bannedRelicIds).toContain(bannedId);
+        expect(rerolled.run.relicOffer?.options).toHaveLength(3);
+        expect(rerolled.run.relicOffer?.options).not.toContain(bannedId);
     });
 
     it('upgrade service biases visible options toward uncommon or rare relics', () => {
