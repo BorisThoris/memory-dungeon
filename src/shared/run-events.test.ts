@@ -51,4 +51,15 @@ describe('REG-074 run event rooms', () => {
         expect(result.applied).toBe(true);
         expect(result.next).toEqual(state);
     });
+
+    it('grants event destroy charges into the uncapped run bank', () => {
+        const event = Array.from({ length: 20 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 1, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_destroy_charge'))!;
+        const choice = event.options.find((option) => option.effect === 'gain_destroy_charge')!;
+        const result = chooseRunEventOption({ shopGold: 0, lives: 3, relicFavorProgress: 0, destroyPairCharges: 7 }, event, choice.id);
+
+        expect(result.applied).toBe(true);
+        expect(result.next.destroyPairCharges).toBe(8);
+    });
 });

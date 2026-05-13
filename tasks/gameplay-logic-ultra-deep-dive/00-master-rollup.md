@@ -22,16 +22,16 @@ The repeated pattern is clear: many systems are structurally present, but contra
 | GLD-P1-002 | Confirmed | Relic draft can initially open with zero options | Initial open and service-generated offers must never block with `options: []` and `picksRemaining > 0` |
 | GLD-P1-003 | Confirmed | Dungeon objective counters leak across floors | Per-floor objective and level-result tags must not read cumulative gateway/treasure counters unless explicitly intended |
 | GLD-P1-004 | Done | Floor-clear shops appear fixture-driven | Floor-clear opens only with existing offers; board/shop and route/shop are the natural stock sources |
-| GLD-P1-005 | Confirmed | Gauntlet can expire while paused | Either paused time extends deadline or paused gauntlet time burn is explicitly shown and tested |
-| GLD-P1-006 | Confirmed | Destroy-charge policy conflicts across code/docs/UI | One stack/cap policy must apply to events, shop, rooms, inventory, clean-clear reward, HUD copy, and tests |
-| GLD-P1-007 | Confirmed / Needs Repro | Hazard trigger contracts drift | Mirror Decoy copy/runtime must agree; Shuffle Snare repeat/cursed behavior needs targeted tests |
-| GLD-P1-008 | Confirmed / Needs Repro | First-run board and onboarding can overexpose mechanics | First-run targets must filter hazards/exits/decoys/specials/findables unless scripted; E2E should reach floor 2 |
+| GLD-P1-005 | Done | Gauntlet can expire while paused | Paused gauntlet time extends the deadline on resume; expiry checks ignore paused runs |
+| GLD-P1-006 | Done | Destroy-charge policy conflicts across code/docs/UI | Destroy charges are an uncapped run-local bank across events, shop, rooms, inventory, reward copy, and tests |
+| GLD-P1-007 | Done | Hazard trigger contracts drift | Mirror Decoy is mismatch-counted; Shuffle Snare repeat/cursed behavior is covered |
+| GLD-P1-008 | Done | First-run board and onboarding can overexpose mechanics | First-run prompt targets filter hazards/exits/decoys/specials/findables and floor-2 progression remains covered |
 | GLD-P1-009 | Confirmed | Daily archive/objective/quest registries split | Decide one registry or explicit adapters with parity tests; daily archive needs per-date records if presented as history |
 | GLD-P1-010 | Confirmed | Balance simulation undercounts live economy | Sim gate must model route/event/room/reward inflow or clearly limit itself to schedule sampling |
 
 ## Do Not Expand Before Stable
 - New card/hazard/relic/shop families should wait on GLD-P0-001 through GLD-P0-006.
-- Route, boss, and economy expansion should wait on GLD-P1-006 and GLD-P1-010.
+- Route, boss, and economy expansion should wait on GLD-P1-010.
 - True replay, dailies, and puzzle-facing features should treat GLD-P1-001 as a share-key baseline; structured replay remains a separate future contract.
 
 ## P2 Expand After Stabilization
@@ -75,12 +75,12 @@ yarn test:e2e:renderer-qa
 ```
 
 ## Implementation Closeout
-- Done: GLD-P0-001 through GLD-P0-006 and GLD-P1-001 through GLD-P1-004.
+- Done: GLD-P0-001 through GLD-P0-006 and GLD-P1-001 through GLD-P1-008.
 - GLD verification command bundle:
 
 ```powershell
 yarn typecheck:shared
-yarn vitest run src/shared/run-history.test.ts src/shared/game.test.ts src/renderer/store/useAppStore.test.ts src/shared/playable-path-fixtures.test.ts
+yarn vitest run src/shared/game.test.ts src/shared/softlock-fairness.test.ts src/renderer/store/useAppStore.test.ts src/shared/playable-onboarding.test.ts src/renderer/components/PlayableOnboardingHarness.test.tsx src/shared/run-events.test.ts
 yarn test
 ```
 

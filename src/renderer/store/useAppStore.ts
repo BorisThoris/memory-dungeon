@@ -284,6 +284,7 @@ const syncGauntletExpiryWatch = (): void => {
         run &&
         run.gameMode === 'gauntlet' &&
         run.gauntletDeadlineMs !== null &&
+        run.status !== 'paused' &&
         run.status !== 'gameOver';
 
     if (!shouldWatch) {
@@ -302,6 +303,7 @@ const syncGauntletExpiryWatch = (): void => {
             currentView !== 'playing' ||
             currentRun.gameMode !== 'gauntlet' ||
             currentRun.gauntletDeadlineMs === null ||
+            currentRun.status === 'paused' ||
             currentRun.status === 'gameOver'
         ) {
             clearGauntletExpiryWatch();
@@ -724,8 +726,12 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     startRun: () => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createNewRun(get().saveData.bestScore, metaRelicOpts(get().saveData)),
+            createNewRun(saveData.bestScore, {
+                ...metaRelicOpts(saveData),
+                onboardingSafeFirstFloor: !saveData.onboardingDismissed
+            }),
             get().settings
         );
         trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });

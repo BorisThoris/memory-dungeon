@@ -42,6 +42,8 @@ import {
     getMemorizeDuration,
     getMemorizeDurationForRun,
     isGauntletExpired,
+    pauseRun,
+    resumeRun,
     advanceToNextLevel
 } from './game-core';
 import {
@@ -2151,6 +2153,70 @@ describe('normal-run hazard tiles', () => {
         expect(inspectBoardFairness(resolved.board!).hasCompletionRoute).toBe(true);
     });
 
+    it('keeps cursed pairs fixed when shuffle snare resolves a mismatch', () => {
+        const run = {
+            ...createRun([
+                createTile('snare-a', 'A', 'A', { tileHazardKind: 'shuffle_snare' }),
+                createTile('snare-b', 'A', 'A', { tileHazardKind: 'shuffle_snare' }),
+                createTile('safe-a', 'B', 'B'),
+                createTile('safe-b', 'B', 'B'),
+                createTile('other-a', 'C', 'C'),
+                createTile('other-b', 'C', 'C'),
+                createTile('cursed-a', 'D', 'D'),
+                createTile('cursed-b', 'D', 'D')
+            ]),
+            board: {
+                ...createRun([
+                    createTile('snare-a', 'A', 'A', { tileHazardKind: 'shuffle_snare' }),
+                    createTile('snare-b', 'A', 'A', { tileHazardKind: 'shuffle_snare' }),
+                    createTile('safe-a', 'B', 'B'),
+                    createTile('safe-b', 'B', 'B'),
+                    createTile('other-a', 'C', 'C'),
+                    createTile('other-b', 'C', 'C'),
+                    createTile('cursed-a', 'D', 'D'),
+                    createTile('cursed-b', 'D', 'D')
+                ]).board!,
+                cursedPairKey: 'D'
+            }
+        };
+        const cursedSlotsBefore = run.board!.tiles
+            .map((tile, index) => ({ tile, index }))
+            .filter(({ tile }) => tile.pairKey === 'D')
+            .map(({ tile, index }) => `${index}:${tile.id}`);
+
+        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'snare-a'), 'safe-a'));
+        const cursedSlotsAfter = resolved.board!.tiles
+            .map((tile, index) => ({ tile, index }))
+            .filter(({ tile }) => tile.pairKey === 'D')
+            .map(({ tile, index }) => `${index}:${tile.id}`);
+
+        expect(resolved.hazardShuffleSnaresThisFloor).toBe(1);
+        expect(cursedSlotsAfter).toEqual(cursedSlotsBefore);
+        expect(inspectBoardFairness(resolved.board!).hasCompletionRoute).toBe(true);
+    });
+
+    it('allows repeated shuffle snare triggers only when each mismatch actually shuffles', () => {
+        const run = createRun([
+            createTile('snare-a', 'A', 'A', { tileHazardKind: 'shuffle_snare' }),
+            createTile('snare-b', 'A', 'A', { tileHazardKind: 'shuffle_snare' }),
+            createTile('safe-a', 'B', 'B'),
+            createTile('safe-b', 'B', 'B'),
+            createTile('other-a', 'C', 'C'),
+            createTile('other-b', 'C', 'C'),
+            createTile('extra-a', 'D', 'D'),
+            createTile('extra-b', 'D', 'D')
+        ]);
+
+        const first = resolveBoardTurn(flipTile(flipTile(run, 'snare-a'), 'safe-a'));
+        const second = resolveBoardTurn(flipTile(flipTile(first, 'snare-b'), 'safe-b'));
+
+        expect(first.hazardShuffleSnaresThisFloor).toBe(1);
+        expect(first.hazardTileTriggersThisFloor).toBe(1);
+        expect(second.hazardShuffleSnaresThisFloor).toBe(2);
+        expect(second.hazardTileTriggersThisFloor).toBe(2);
+        expect(inspectBoardFairness(second.board!).hasCompletionRoute).toBe(true);
+    });
+
     it('spends a Guard Cache ward to block shuffle snare and preserve pins', () => {
         const run = {
             ...createRun([
@@ -2232,6 +2298,20 @@ describe('normal-run hazard tiles', () => {
         expect(resolved.safeHazardWardsUsedThisFloor).toBe(0);
         expect(resolved.hazardMirrorDecoysThisFloor).toBe(1);
         expect(resolved.hazardTileTriggersThisFloor).toBe(1);
+    });
+
+    it('does not trigger mirror decoy counters on first reveal alone', () => {
+        const run = createRun([
+            createTile('safe-a', 'A', 'A'),
+            createTile('safe-b', 'A', 'A'),
+            createTile('mirror', DECOY_PAIR_KEY, '?', { tileHazardKind: 'mirror_decoy' })
+        ]);
+
+        const revealed = flipTile(run, 'mirror');
+
+        expect(revealed.board?.tiles.find((tile) => tile.id === 'mirror')?.state).toBe('flipped');
+        expect(revealed.hazardMirrorDecoysThisFloor).toBe(0);
+        expect(revealed.hazardTileTriggersThisFloor).toBe(0);
     });
 
     it('lets mirror decoys remain face-up without blocking completion', () => {
@@ -5604,7 +5684,7 @@ describe('game rules', () => {
         expect(nextRun.pinnedTileIds).toEqual([]);
     });
 
-    it('grants destroy charge on perfect clear when advancing and respects cap', () => {
+    it('grants destroy charge on perfect clear when advancing into the uncapped run bank', () => {
         const base = {
             ...createNewRun(0),
             status: 'levelComplete' as const,
@@ -6740,5 +6820,26 @@ describe('gauntlet deadline', () => {
 
         expect(finished.status).toBe('levelComplete');
         expect(finished.gauntletDeadlineMs).toBe(deadline + GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS);
+    });
+
+    it('does not expire while paused and extends the deadline by paused wall-clock time on resume', () => {
+        const pausedAtMs = Date.now() - 5_000;
+        const run = {
+            ...pauseRun(finishMemorizePhase(createGauntletRun(0, 60_000))),
+            gauntletDeadlineMs: Date.now() - 1,
+            timerState: {
+                ...pauseRun(finishMemorizePhase(createGauntletRun(0, 60_000))).timerState,
+                gauntletPausedAtMs: pausedAtMs
+            }
+        };
+
+        expect(run.status).toBe('paused');
+        expect(isGauntletExpired(run)).toBe(false);
+
+        const resumed = resumeRun(run);
+
+        expect(resumed.status).toBe('playing');
+        expect(resumed.timerState.gauntletPausedAtMs).toBeNull();
+        expect(resumed.gauntletDeadlineMs).toBeGreaterThan(Date.now());
     });
 });

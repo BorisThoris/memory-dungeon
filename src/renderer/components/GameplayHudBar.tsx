@@ -662,7 +662,7 @@ const GameplayHudBar = ({
                                                 title={
                                                     run.activeContract?.noDestroy
                                                         ? 'Scholar contract: destroy pair is locked.'
-                                                        : `Damage control — Destroy charges: ${run.destroyPairCharges}. Spend to remove a fully hidden pair with no match score — forfeits pickups on that pair. Clean clears can refill the bank.`
+                                                        : `Damage control — Destroy charges: ${run.destroyPairCharges}. Spend to remove a fully hidden pair with no match score — forfeits pickups on that pair. Run rewards can add to the uncapped bank.`
                                                 }
                                             >
                                                 <span className={styles.statKey}>Destroy</span>

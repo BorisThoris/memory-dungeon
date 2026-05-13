@@ -230,6 +230,7 @@ const createTimerState = (overrides?: Partial<RunState['timerState']>): RunState
     resolveRemainingMs: null,
     debugRevealRemainingMs: null,
     pausedFromStatus: null,
+    gauntletPausedAtMs: null,
     ...overrides
 });
 
@@ -1821,6 +1822,7 @@ export interface BuildBoardOptions {
     routeWorldProfile?: RouteWorldProfile | null;
     dungeonNodeKind?: DungeonRunNodeKind | null;
     gameMode?: GameMode;
+    suppressFindables?: boolean;
 }
 
 export interface DungeonEncounterContext {
@@ -3719,13 +3721,15 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
             mutators
     });
     const routeTiles = assignRouteWorldSpecials({
-        tiles: assignFindableKindsToTiles(
-            createTiles(level, pairCount, runSeed, rulesVersion, mutators, options.includeWildTile),
-            mutators,
-            runSeed,
-            rulesVersion,
-            level
-        ),
+        tiles: options.suppressFindables
+            ? createTiles(level, pairCount, runSeed, rulesVersion, mutators, options.includeWildTile)
+            : assignFindableKindsToTiles(
+                  createTiles(level, pairCount, runSeed, rulesVersion, mutators, options.includeWildTile),
+                  mutators,
+                  runSeed,
+                  rulesVersion,
+                  level
+              ),
         profile: routeWorldProfile,
         runSeed,
         rulesVersion,
@@ -3879,7 +3883,7 @@ const tileIsSafeHazardEffectTarget = (tile: Tile): boolean =>
 const applyShuffleSnareHazard = (board: BoardState, run: RunState): { board: BoardState; triggered: boolean } => {
     const hiddenIndices: number[] = [];
     board.tiles.forEach((tile, index) => {
-        if (tileIsSafeHazardEffectTarget(tile)) {
+        if (tileIsSafeHazardEffectTarget(tile) && tile.pairKey !== board.cursedPairKey) {
             hiddenIndices.push(index);
         }
     });
@@ -4784,6 +4788,8 @@ export interface CreateRunOptions {
     resolveDelayMultiplier?: number;
     echoFeedbackEnabled?: boolean;
     wildMenuRun?: boolean;
+    /** First-run guidance: build floor 1 as ordinary real pairs so prompts never target specials. */
+    onboardingSafeFirstFloor?: boolean;
     /** Copied from save: +1 relic pick at each milestone when meta unlock is active. */
     metaRelicDraftExtraPerMilestone?: number;
 }
@@ -4846,10 +4852,12 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
     let initialFloorArchetypeId: FloorArchetypeId | null = null;
     let initialFeaturedObjectiveId: FeaturedObjectiveId | null = null;
     let initialCycleFloor: number | null = null;
+    const useOnboardingSafeFirstFloor = options.onboardingSafeFirstFloor === true && gameMode === 'endless';
     if (
         gameMode === 'endless' &&
         usesEndlessFloorSchedule(gameMode, rulesVersion) &&
         !options.wildMenuRun &&
+        !useOnboardingSafeFirstFloor &&
         activeMutators.length === 0
     ) {
         const entry = pickFloorScheduleEntry(runSeed, rulesVersion, 1, gameMode);
@@ -4868,13 +4876,14 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         buildBoard(1, {
             runSeed,
             runRulesVersion: rulesVersion,
-            activeMutators,
+            activeMutators: useOnboardingSafeFirstFloor ? [] : activeMutators,
             includeWildTile: enableWildJoker,
             floorTag: initialFloorTag,
             floorArchetypeId: initialFloorArchetypeId,
             featuredObjectiveId: initialFeaturedObjectiveId,
             cycleFloor: initialCycleFloor,
-            gameMode
+            gameMode: useOnboardingSafeFirstFloor ? undefined : gameMode,
+            suppressFindables: useOnboardingSafeFirstFloor
         });
     const dungeonRun = createDungeonRunMapState(runSeed, rulesVersion, 1);
 
@@ -5119,7 +5128,7 @@ export const createPuzzleRun = (
 };
 
 export const isGauntletExpired = (run: RunState): boolean =>
-    run.gauntletDeadlineMs !== null && Date.now() > run.gauntletDeadlineMs;
+    run.status !== 'paused' && run.gauntletDeadlineMs !== null && Date.now() > run.gauntletDeadlineMs;
 
 /** Total relic selections this milestone visit (minimum 1). See `openRelicOffer`. */
 export const computeRelicOfferPickBudget = (run: RunState): number => {
@@ -8298,13 +8307,18 @@ export const pauseRun = (run: RunState): RunState => {
     if (!isResumableStatus(run.status)) {
         return run;
     }
+    const gauntletPausedAtMs =
+        run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null
+            ? Date.now()
+            : (run.timerState.gauntletPausedAtMs ?? null);
 
     return {
         ...run,
         status: 'paused',
         timerState: {
             ...run.timerState,
-            pausedFromStatus: run.status
+            pausedFromStatus: run.status,
+            gauntletPausedAtMs
         }
     };
 };
@@ -8313,13 +8327,21 @@ export const resumeRun = (run: RunState): RunState => {
     if (run.status !== 'paused' || !run.timerState.pausedFromStatus) {
         return run;
     }
+    const gauntletPausedAtMs = run.timerState.gauntletPausedAtMs ?? null;
+    const gauntletPauseDeltaMs =
+        run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null && gauntletPausedAtMs !== null
+            ? Math.max(0, Date.now() - gauntletPausedAtMs)
+            : 0;
 
     return {
         ...run,
+        gauntletDeadlineMs:
+            run.gauntletDeadlineMs !== null ? run.gauntletDeadlineMs + gauntletPauseDeltaMs : run.gauntletDeadlineMs,
         status: run.timerState.pausedFromStatus,
         timerState: {
             ...run.timerState,
-            pausedFromStatus: null
+            pausedFromStatus: null,
+            gauntletPausedAtMs: null
         }
     };
 };

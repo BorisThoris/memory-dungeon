@@ -209,7 +209,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'Shuffle Snare fired. Hidden safe tiles reordered. Cascade Cache fired. One safe hidden pair cleared. Mirror Decoy revealed. It cannot form a pair. Fragile Cache claimed. Bonus score added. Fragile Cache broke. Its bonus is gone, but the pair still matches. Toll Cache claimed. Shop gold gained; score toll paid. Fuse Cache claimed early. Full payout gained.'
+            'Shuffle Snare fired. Hidden safe tiles reordered. Cascade Cache fired. One safe hidden pair cleared. Mirror Decoy misled the mismatch. It cannot form a pair. Fragile Cache claimed. Bonus score added. Fragile Cache broke. Its bonus is gone, but the pair still matches. Toll Cache claimed. Shop gold gained; score toll paid. Fuse Cache claimed early. Full payout gained.'
         );
     });
 

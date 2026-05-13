@@ -351,6 +351,36 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().view).toBe('gameOver');
     });
 
+    it('does not expire a paused gauntlet until the run resumes', async () => {
+        useAppStore.getState().startGauntletRun();
+        const started = useAppStore.getState().run;
+        expect(started?.gameMode).toBe('gauntlet');
+
+        useAppStore.setState({
+            view: 'playing',
+            run: {
+                ...started!,
+                status: 'paused',
+                gauntletDeadlineMs: Date.now() - 50,
+                timerState: {
+                    ...started!.timerState,
+                    pausedFromStatus: 'playing',
+                    gauntletPausedAtMs: Date.now() - 1_000
+                }
+            }
+        });
+
+        await vi.advanceTimersByTimeAsync(400);
+
+        expect(useAppStore.getState().run?.status).toBe('paused');
+        expect(useAppStore.getState().view).toBe('playing');
+
+        useAppStore.getState().resume();
+
+        expect(useAppStore.getState().run?.status).toBe('playing');
+        expect(useAppStore.getState().run?.gauntletDeadlineMs).toBeGreaterThan(Date.now());
+    });
+
     it('SIDE-013: inventory overlay and run settings modal use the same frozen run snapshot after memorize', async () => {
         useAppStore.getState().startRun();
         notifyCurrentBoardReady();

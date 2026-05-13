@@ -9,7 +9,7 @@ This document turns [GAME_MECHANICS_IDEAS.md](./GAME_MECHANICS_IDEAS.md) into a 
 | **Forgiveness vs powers** | Mistake economy stays as-is; powers are **tools** (layout / planning / overload). |
 | **Shuffle** | **1** charge at **run start**; **no refill** between floors in v1. |
 | **Pin** | **Max 3** markers; **playing** only; no charge counter. |
-| **Destroy** | **0** at run start; **+1** charge on clean/no-mistake floor clear; uncapped run-local bank. |
+| **Destroy** | **0** at run start; rewards can add charges to an uncapped run-local bank. |
 | **Destroy scoring** | **0** match score; **no** `currentStreak` gain; counts toward `matchedPairs` / clear. |
 | **Achievements** | **Option B**: do **not** disable the whole run; only gate **perfect-run-style** checks when powers used (see §7). |
 | **Shuffle / pins** | **Clear all pins** after shuffle. |
@@ -63,7 +63,7 @@ This document turns [GAME_MECHANICS_IDEAS.md](./GAME_MECHANICS_IDEAS.md) into a 
 |-------|----------------|--------|
 | **Shuffle** | `1` | **None** in v1 (entire run). |
 | **Pin** | N/A | **Max 3** concurrent pins; unlimited pin/unpin while under cap. |
-| **Destroy pair** | `0` | **+1** on **clean** clear (`tries ≤ 1` for that floor), up to **`MAX_DESTROY_PAIR_CHARGES` = 2** banked. |
+| **Destroy pair** | `0` | Run-local rewards add charges to an uncapped bank. |
 
 *Rationale*: Shuffle is the simple “unstick”; pins are low power (slot cap); destroy is strong so it is **earned**, not free.
 
@@ -180,7 +180,7 @@ shufflesUsed: number;
 pairsDestroyed: number;
 ```
 
-Constants in `contracts.ts`: `INITIAL_SHUFFLE_CHARGES`, `MAX_PINS`, `MAX_DESTROY_PAIR_CHARGES`, `DESTROY_CHARGE_ON_CLEAN_CLEAR`, etc.
+Constants in `contracts.ts`: `INITIAL_SHUFFLE_CHARGES`, `MAX_PINS`, `DESTROY_CHARGE_ON_CLEAN_CLEAR`, etc. Destroy charges are stored as an uncapped run-local bank.
 
 Pure functions in `game.ts`:
 
@@ -255,7 +255,7 @@ Document the exact achievement predicates in `src/shared/achievements.ts` beside
 | Question | Answer stored here |
 |----------|-------------------|
 | Shuffle refill? | **No** — **1** charge for the **whole run** (v1). |
-| Destroy earn: perfect vs clean clear? | **Clean** clear (`tries ≤ 1`) grants **+1** destroy charge, cap **2**. |
+| Destroy earn: perfect vs clean clear? | Current rules grant destroy charges through run-local reward sources into an uncapped bank; update this table before changing earn cadence. |
 | Achievement disable: full vs selective? | **Selective (Option B)** — §7. |
 
 **Playtest note**: If data shows destroy too rare or shuffle too stingy, revise **this section and the summary table at the top** first, then change constants.

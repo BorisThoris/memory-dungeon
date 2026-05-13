@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RunState, Tile } from '../../shared/contracts';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
+import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
@@ -264,9 +265,11 @@ describe('GameScreen (OVR-014)', () => {
     });
 
     it('REG-026 surfaces action-gated playable onboarding without hiding card targets', () => {
-        const playing = finishMemorizePhase(createNewRun(0));
-        const firstRealTile = playing.board!.tiles.find((tile) => tile.dungeonCardKind == null && tile.pairKey !== '__decoy__')!;
-        const firstPair = playing.board!.tiles.filter((tile) => tile.pairKey === firstRealTile.pairKey);
+        const playing = finishMemorizePhase(createNewRun(0, { onboardingSafeFirstFloor: true }));
+        const expectedTargets = getPlayableOnboardingStep(playing, {
+            onboardingDismissed: false,
+            powersFtueSeen: false
+        })!.targetTileIds;
 
         const { rerender } = render(
             <PlatformTiltProvider>
@@ -279,7 +282,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('playable-onboarding-prompt')).toHaveTextContent(/Make your first match/i);
         expect(screen.getByTestId('tile-board-stub')).toHaveAttribute(
             'data-guided-targets',
-            firstPair.map((tile) => tile.id).join(',')
+            expectedTargets.join(',')
         );
 
         const runAfterMatch = {
@@ -288,7 +291,7 @@ describe('GameScreen (OVR-014)', () => {
                 ...playing.board!,
                 matchedPairs: 1,
                 tiles: playing.board!.tiles.map((tile) =>
-                    firstPair.some((target) => target.id === tile.id) ? { ...tile, state: 'matched' as const } : tile
+                    expectedTargets.includes(tile.id) ? { ...tile, state: 'matched' as const } : tile
                 )
             },
             stats: {

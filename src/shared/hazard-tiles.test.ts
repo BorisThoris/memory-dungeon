@@ -220,7 +220,7 @@ describe('hazard tiles', () => {
         expect(
             previewHazardTileOutcome({
                 tile: tile('mirror', { tileHazardKind: 'mirror_decoy' }),
-                trigger: 'flip',
+                trigger: 'mismatch',
                 candidateTargetTiles: [tile('decoy', { pairKey: '__decoy__' })]
             })
         ).toMatchObject({

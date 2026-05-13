@@ -2,6 +2,8 @@ import type { BoardState, RunState, SaveData } from './contracts';
 
 export type OnboardingStepId = 'first_match' | 'recovery' | 'handoff';
 
+const SPECIAL_PAIR_KEYS = new Set(['__decoy__', '__wild__', '__exit__', '__shop__', '__room__']);
+
 export interface OnboardingStepRow {
     id: OnboardingStepId;
     title: string;
@@ -27,18 +29,43 @@ export interface PlayableOnboardingPrompt {
     targetTileIds: string[];
 }
 
+const isSafeOnboardingTile = (board: BoardState, pairKey: string, tileId: string): boolean => {
+    const tile = board.tiles.find((candidate) => candidate.id === tileId);
+    if (!tile || tile.state === 'matched' || SPECIAL_PAIR_KEYS.has(tile.pairKey)) {
+        return false;
+    }
+    if (board.cursedPairKey === pairKey || board.wardPairKey === pairKey || board.bountyPairKey === pairKey) {
+        return false;
+    }
+    return (
+        tile.findableKind == null &&
+        tile.routeCardKind == null &&
+        tile.routeSpecialKind == null &&
+        tile.dungeonCardKind == null &&
+        tile.tileHazardKind == null &&
+        tile.dungeonBossId == null &&
+        tile.dungeonCardEffectId == null &&
+        tile.dungeonRouteType == null &&
+        tile.dungeonExitLockKind == null &&
+        tile.dungeonKeyKind == null
+    );
+};
+
 const firstUnmatchedPair = (board: BoardState | null): string[] => {
     if (!board) {
         return [];
     }
     const byPair = new Map<string, string[]>();
     for (const tile of board.tiles) {
-        if (tile.state === 'matched' || tile.pairKey === '__decoy__' || tile.pairKey === '__wild__') {
+        if (!isSafeOnboardingTile(board, tile.pairKey, tile.id)) {
             continue;
         }
         byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), tile.id]);
     }
-    return [...byPair.values()].find((ids) => ids.length >= 2)?.slice(0, 2) ?? [];
+    return (
+        [...byPair.entries()].find(([pairKey, ids]) => ids.length === 2 && ids.every((id) => isSafeOnboardingTile(board, pairKey, id)))?.[1] ??
+        []
+    );
 };
 
 export const getPlayableOnboardingScenario = ({

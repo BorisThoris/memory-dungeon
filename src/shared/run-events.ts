@@ -94,7 +94,7 @@ export const RUN_EVENT_TABLE: readonly RunEventDefinition[] = [
         title: 'Trap survey',
         body: 'Old chalk marks describe the next room mechanisms. You can turn the notes into tools or score.',
         choices: [
-            { id: 'prep_tools', label: 'Prepare tools', effect: 'gain_destroy_charge', detail: '+1 destroy charge if not capped.' },
+            { id: 'prep_tools', label: 'Prepare tools', effect: 'gain_destroy_charge', detail: '+1 destroy charge to the uncapped run bank.' },
             { id: 'study_marks', label: 'Study the marks', effect: 'gain_score', detail: '+25 score.' },
             { id: 'skip_marks', label: 'Skip the marks', effect: 'skip', detail: 'No change.' }
         ]
@@ -133,6 +133,7 @@ export interface RunEventPreviewState {
     shopGold: number;
     lives: number;
     relicFavorProgress: number;
+    destroyPairCharges?: number;
 }
 
 export const chooseRunEventOption = (
@@ -157,7 +158,9 @@ export const chooseRunEventOption = (
         next = { ...next, relicFavorProgress: (next.relicFavorProgress + 1) % 3 };
     } else if (choice.effect === 'heal_or_guard') {
         next = { ...next, lives: Math.min(5, next.lives + 1) };
-    } else if (choice.effect === 'gain_iron_key' || choice.effect === 'gain_destroy_charge' || choice.effect === 'gain_score') {
+    } else if (choice.effect === 'gain_destroy_charge') {
+        next = { ...next, destroyPairCharges: (next.destroyPairCharges ?? 0) + 1 };
+    } else if (choice.effect === 'gain_iron_key' || choice.effect === 'gain_score') {
         next = { ...next, shopGold: next.shopGold };
     }
     return { applied: true, eventId: event.id, choiceId, next };
@@ -230,7 +233,7 @@ export const applyRunEventChoice = (
                 applied: true
             };
         case 'gain_destroy_charge':
-            return { run: { ...run, destroyPairCharges: Math.min(2, run.destroyPairCharges + 1) }, applied: true };
+            return { run: { ...run, destroyPairCharges: run.destroyPairCharges + 1 }, applied: true };
         case 'gain_score':
             return {
                 run: {

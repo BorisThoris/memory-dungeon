@@ -759,6 +759,7 @@ export interface RunTimerState {
     resolveRemainingMs: number | null;
     debugRevealRemainingMs: number | null;
     pausedFromStatus: ResumableRunStatus | null;
+    gauntletPausedAtMs?: number | null;
 }
 
 export interface RunState {
