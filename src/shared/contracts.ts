@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 5;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 28;
+export const GAME_RULES_VERSION = 29;
 export const INITIAL_LIVES = 4;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MAX_LIVES = 5;
@@ -171,6 +171,13 @@ export const FINDABLE_MATCH_SCOUT_REVEALS: Record<FindableKind, number> = {
     score_glint: 0,
     ward_spark: 0,
     scout_glint: 1
+};
+/** Relative spawn weights for current-rules findable kind assignment. */
+export const FINDABLE_KIND_SPAWN_WEIGHTS: Record<FindableKind, number> = {
+    shard_spark: 35,
+    score_glint: 35,
+    ward_spark: 15,
+    scout_glint: 15
 };
 
 /** Hidden shuffle: full Fisher–Yates vs row-preserving permute. */

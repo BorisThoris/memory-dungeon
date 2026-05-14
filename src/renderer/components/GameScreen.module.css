@@ -1558,6 +1558,45 @@
     gap: var(--gameplay-hud-context-gap, 0.28rem);
 }
 
+.hudFeedbackStrip {
+    display: inline-flex;
+    flex: 1 1 18rem;
+    min-width: min(18rem, 100%);
+    max-width: 100%;
+    gap: var(--gameplay-hud-context-gap, 0.28rem);
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.hudFeedbackChip {
+    min-height: var(--gameplay-hud-context-pill-min-height, 2.35rem);
+    min-width: 8.5rem;
+    max-width: 13rem;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.08rem;
+    padding: var(--gameplay-hud-context-pill-padding, 0.22rem 0.45rem 0.26rem);
+    border-radius: var(--ui-radius-sm);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, var(--theme-hud-chrome-border-soft));
+    background: color-mix(in srgb, var(--theme-void) 28%, var(--theme-hud-accent-fill) 72%);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-hud-chrome-inset) 48%, transparent);
+}
+
+.hudFeedbackChip .statVal {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hudTouchDetailRows {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    gap: var(--gameplay-hud-context-gap, 0.35rem);
+    width: 100%;
+    margin-top: 0.35rem;
+}
+
 .hudDensityPrimary {
     color: var(--theme-gold-bright);
 }

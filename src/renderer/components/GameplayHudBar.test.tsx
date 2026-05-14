@@ -211,7 +211,7 @@ describe('GameplayHudBar', () => {
 
     it('shows Perfect Memory locked after a disqualifying assist', () => {
         const base = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
-        const run = { ...base, powersUsedThisRun: true };
+        const run = { ...base, powersUsedThisRun: true, gambitThirdFlipUsed: true };
 
         render(
             <GameplayHudBar
@@ -222,7 +222,35 @@ describe('GameplayHudBar', () => {
             />
         );
 
-        expect(screen.getByTestId('hud-perfect-memory')).toHaveTextContent('Locked');
+        expect(screen.getByTestId('hud-perfect-memory')).toHaveTextContent('Locked: gambit');
+        expect(screen.getByTestId('hud-perfect-memory').getAttribute('title')).toContain('locked by gambit');
+    });
+
+    it('renders shared cause strip and touch HUD detail rows', () => {
+        const base = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
+        const run = {
+            ...base,
+            findablesClaimedThisFloor: 1,
+            findablesTotalThisFloor: 2,
+            hazardTileTriggersThisFloor: 1,
+            safeHazardWardsUsedThisFloor: 1,
+            shopGold: 2
+        };
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement=""
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-in-run-cause-strip')).toHaveTextContent('Pickups');
+        expect(screen.getByTestId('hud-in-run-cause-strip')).toHaveTextContent('Hazards');
+        expect(screen.getByTestId('hud-touch-detail-rows')).toHaveTextContent('Objective');
+        expect(screen.getByTestId('hud-touch-detail-rows')).toHaveTextContent('Perfect Memory');
+        expect(screen.getByTestId('hud-touch-detail-economy')).toHaveTextContent('2 gold');
     });
 
     it('hides Perfect Memory pill when achievements are off (practice)', () => {

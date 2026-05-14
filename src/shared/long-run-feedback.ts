@@ -1,4 +1,4 @@
-import type { FindableKind, RunState } from './contracts';
+import { FINDABLE_KIND_SPAWN_WEIGHTS, type FindableKind, type RunState } from './contracts';
 import { getFindableKindLabel, getFindableRewardCopy } from './findables';
 import {
     getDungeonBoardPresentation,
@@ -64,6 +64,15 @@ export interface SafeExpansionImpactRow {
     objectiveImpact: string;
     perfectMemoryImpact: 'safe' | 'neutral';
     runtimeStatus: 'wired' | 'read_model_only';
+}
+
+export interface FindableDistributionRow {
+    id: FindableKind;
+    label: string;
+    spawnWeight: number;
+    targetShare: number;
+    claimedTotalThisFloor: number;
+    totalThisFloor: number;
 }
 
 const causeRow = (
@@ -256,6 +265,31 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
             tokens: ['reward', 'cost']
         }
     ];
+};
+
+export const getFindableDistributionRows = (run: RunState): FindableDistributionRow[] => {
+    const totalWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
+    const totalKinds = new Map<FindableKind, number>();
+    const tilesByPair = new Map<string, FindableKind>();
+
+    for (const tile of run.board?.tiles ?? []) {
+        if (tile.findableKind == null) {
+            continue;
+        }
+        tilesByPair.set(tile.pairKey, tile.findableKind);
+    }
+    for (const kind of tilesByPair.values()) {
+        totalKinds.set(kind, (totalKinds.get(kind) ?? 0) + 1);
+    }
+
+    return (Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]).map((kind) => ({
+        id: kind,
+        label: getFindableKindLabel(kind),
+        spawnWeight: FINDABLE_KIND_SPAWN_WEIGHTS[kind],
+        targetShare: totalWeight > 0 ? FINDABLE_KIND_SPAWN_WEIGHTS[kind] / totalWeight : 0,
+        claimedTotalThisFloor: run.findablesClaimedThisFloor,
+        totalThisFloor: totalKinds.get(kind) ?? 0
+    }));
 };
 
 export const LONG_RUN_TERMINOLOGY_ROWS: readonly TerminologyContractRow[] = [

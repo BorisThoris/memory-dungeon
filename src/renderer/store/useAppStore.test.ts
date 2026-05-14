@@ -1,5 +1,5 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import type { BoardState, RunState, Tile } from '../../shared/contracts';
+import type { BoardState, RunState, SaveData, Tile } from '../../shared/contracts';
 import { buildBoard, countFindablePairs } from '../../shared/board-generation';
 import { ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createDailyRun, createNewRun, createPuzzleRun } from '../../shared/game-core';

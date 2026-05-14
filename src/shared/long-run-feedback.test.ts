@@ -4,6 +4,7 @@ import {
     LONG_RUN_TERMINOLOGY_ROWS,
     SAFE_EXPANSION_IMPACT_ROWS,
     WARD_CACHE_CONTRACT_ROW,
+    getFindableDistributionRows,
     getInRunCauseRows,
     getPerfectMemoryAttribution,
     getTouchHudDetailRows
@@ -77,5 +78,30 @@ describe('GLD-FB long-run feedback read models', () => {
             ])
         );
         expect(WARD_CACHE_CONTRACT_ROW.surface).toBe('hazard_reward_contract');
+    });
+
+    it('reports weighted findable distribution targets and active floor counts', () => {
+        const base = createNewRun(0, { runSeed: 91_003, activeMutators: [] });
+        const firstPair = base.board!.tiles.slice(0, 2).map((tile) => ({
+            ...tile,
+            pairKey: 'weighted-a',
+            findableKind: 'ward_spark' as const
+        }));
+        const run = {
+            ...base,
+            board: {
+                ...base.board!,
+                tiles: [...firstPair, ...base.board!.tiles.slice(2)]
+            }
+        };
+
+        expect(getFindableDistributionRows(run)).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ id: 'shard_spark', spawnWeight: 35, targetShare: 0.35 }),
+                expect.objectContaining({ id: 'score_glint', spawnWeight: 35, targetShare: 0.35 }),
+                expect.objectContaining({ id: 'ward_spark', spawnWeight: 15, targetShare: 0.15, totalThisFloor: 1 }),
+                expect.objectContaining({ id: 'scout_glint', spawnWeight: 15, targetShare: 0.15 })
+            ])
+        );
     });
 });

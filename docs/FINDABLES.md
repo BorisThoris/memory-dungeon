@@ -3,7 +3,7 @@
 **Status:** **Implemented** in `game.ts` (`findableKind` on tiles, `findables_floor` mutator, HUD counter). Task file [`GP-FINDABLES.md`](./gameplay-tasks/GP-FINDABLES.md) is **historical** (checkboxes may lag).  
 **Backlog id:** **FN-01** in [`gameplay-depth/05-app-specific-idea-backlog.md`](./gameplay-depth/05-app-specific-idea-backlog.md).
 
-**Authoritative kinds and numbers:** [`FindableKind`](../src/shared/contracts.ts), `FINDABLE_MATCH_SCORE`, and `FINDABLE_MATCH_COMBO_SHARDS` in [`contracts.ts`](../src/shared/contracts.ts). Spawn logic: `assignFindableKindsToTiles` in [`game.ts`](../src/shared/game.ts).
+**Authoritative kinds and numbers:** [`FindableKind`](../src/shared/contracts.ts), `FINDABLE_MATCH_SCORE`, `FINDABLE_MATCH_COMBO_SHARDS`, `FINDABLE_MATCH_SAFE_HAZARD_WARDS`, `FINDABLE_MATCH_SCOUT_REVEALS`, and `FINDABLE_KIND_SPAWN_WEIGHTS` in [`contracts.ts`](../src/shared/contracts.ts). Spawn logic: `assignFindableKindsToTiles` in [`game.ts`](../src/shared/game.ts).
 
 ## Not to be confused with the **“?” glass decoy**
 
@@ -24,7 +24,7 @@ Design goals:
 
 | Term | Meaning |
 |------|---------|
-| **Findable kind** | `FindableKind` in `contracts.ts`: **`shard_spark` \| `score_glint`** (exactly these two). |
+| **Findable kind** | `FindableKind` in `contracts.ts`: **`shard_spark` \| `score_glint` \| `ward_spark` \| `scout_glint`**. |
 | **Carrier** | A **tile** (by `tile.id`) that **holds** the findable. **Both** tiles of a pair carry the same `findableKind` when spawned. |
 | **Claim** | On **match**, apply rewards from `FINDABLE_MATCH_SCORE` / `FINDABLE_MATCH_COMBO_SHARDS`, increment `findablesClaimedThisFloor`, clear `findableKind` on matched tiles. |
 | **Spawn** | `assignFindableKindsToTiles` in `buildBoard` (after `createTiles`), using a dedicated RNG seed string. |
@@ -39,7 +39,7 @@ Spawn runs inside `assignFindableKindsToTiles` (`game.ts`).
 - **Current (rules version at or above that baseline):**
   - With mutator **`findables_floor`**: **2** findable pairs (capped by eligible real pairs on the floor).
   - Without that mutator: **levels 1–3** → **1** pair; **level 4+** → **1** or **2** pairs (50% each), capped by eligible pairs.
-- **Kind per pair:** `shard_spark` vs `score_glint` is a **50/50** roll per chosen pair.
+- **Kind per pair:** weighted roll from `FINDABLE_KIND_SPAWN_WEIGHTS`: `shard_spark` **35**, `score_glint` **35**, `ward_spark` **15**, `scout_glint` **15**.
 - **Never** on decoy (`DECOY_PAIR_KEY`) or wild (`WILD_PAIR_KEY`) pairs.
 - **Fixed / handcrafted boards** (`buildBoard` with `fixedTiles`): `assignFindableKindsToTiles` is **not** applied — no spawned findables unless the fixed payload already sets `findableKind`.
 
@@ -49,12 +49,14 @@ Spawn runs inside `assignFindableKindsToTiles` (`game.ts`).
 
 ### Rewards (authoritative)
 
-Values are in **`FINDABLE_MATCH_SCORE`** and **`FINDABLE_MATCH_COMBO_SHARDS`** (`contracts.ts`). On claim, **both** apply: flat score bonus **and** immediate combo-shard gain (shard pipeline uses `findableComboShardGain` in match resolution).
+Values are in **`FINDABLE_MATCH_SCORE`**, **`FINDABLE_MATCH_COMBO_SHARDS`**, **`FINDABLE_MATCH_SAFE_HAZARD_WARDS`**, and **`FINDABLE_MATCH_SCOUT_REVEALS`** (`contracts.ts`). On claim, the matching reward channels apply through match resolution.
 
-| Kind | Flat match score (`FINDABLE_MATCH_SCORE`) | Combo shards on claim (`FINDABLE_MATCH_COMBO_SHARDS`) |
-|------|-------------------------------------------|--------------------------------------------------------|
-| `shard_spark` | **0** | **+1** |
-| `score_glint` | **+25** | **0** |
+| Kind | Flat match score | Combo shards | Safe hazard wards | Scout reveal |
+|------|------------------|--------------|-------------------|--------------|
+| `shard_spark` | **0** | **+1** | **0** | **0** |
+| `score_glint` | **+25** | **0** | **0** | **0** |
+| `ward_spark` | **0** | **0** | **+1 capped ward charge** | **0** |
+| `scout_glint` | **0** | **0** | **0** | **one existing scout reveal** |
 
 Tune so rewards **do not** obsolete secondary objectives (scholar style, glass witness, etc.) — findables are **extra sugar**, not the main economy.
 
@@ -66,6 +68,7 @@ Tune so rewards **do not** obsolete secondary objectives (scholar style, glass w
 | **Destroy pair** | Findable **not claimed** — destroy uses a separate path that clears `findableKind` without match-time findable score/shard awards. |
 | **Shuffle (full or row)** | Findables **move with tiles** (identity keyed by `tile.id`); still claimable on later match. |
 | **Peek** | Does not claim; may reveal carrier is special if UI shows marker only when face-up / peek face-up. |
+| **Perfect Memory** | Findable claims are Perfect Memory-safe; they are match rewards, not assist powers. |
 | **Decoy / glass** | Findable never on decoy tile (`DECOY_PAIR_KEY`). |
 
 ### Floor advance

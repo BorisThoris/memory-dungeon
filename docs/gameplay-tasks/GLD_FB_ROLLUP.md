@@ -18,3 +18,9 @@ This batch adds shared long-run feedback/readability contracts and a small safe 
 | GLD-FB-010 | Done | Rollup and task docs |
 
 `GAME_RULES_VERSION` is bumped because generated findable identity and player-visible run rules changed.
+
+## Follow-up implementation batch
+
+Status: Done
+
+The next long-run pass surfaces the shared feedback models in the HUD and inventory, fixes full repo typecheck, weights the new safe findables at 15% each, keeps `ward_cache` read-model-only, updates findables/encyclopedia docs, and adds `yarn gate:long-run-ui-feedback`.

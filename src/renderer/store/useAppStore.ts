@@ -3,6 +3,7 @@ import { evaluateAchievementUnlocks } from '../../shared/achievements';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import type {
     AchievementId,
+    AchievementUnlockResult,
     MutatorId,
     RelicId,
     RelicOfferServiceId,
@@ -363,7 +364,7 @@ const persistSaveDataSafely = async (saveData: SaveData): Promise<SaveData> => {
 const persistSaveDataThenUnlockAchievementsSafely = async (
     saveData: SaveData,
     achievements: AchievementId[]
-): Promise<{ failures: AchievementId[] }> => {
+): Promise<{ failures: { id: AchievementId; result: AchievementUnlockResult }[] }> => {
     if (useAppStore.getState().saveWritesBlockedByReadFailure) {
         return { failures: [] };
     }

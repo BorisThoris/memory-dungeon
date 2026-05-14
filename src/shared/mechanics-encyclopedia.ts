@@ -744,7 +744,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'pickup_findables',
         title: 'Findables (bonus pickups)',
         description:
-            'Procedural floors spawn **real** pickup pairs by default: floors 1–3 have one pair, later floors have one or two, and **Dense pickups** guarantees two. **Shard spark** grants +1 combo shard; **score glint** grants +25 score. Matching the carrier pair claims it, Destroy forfeits it, and Peek only reveals it.'
+            'Procedural floors spawn **real** pickup pairs by default: floors 1–3 have one pair, later floors have one or two, and **Dense pickups** guarantees two. **Shard spark** grants +1 combo shard, **score glint** grants +25 score, **ward spark** grants a capped safe-hazard ward charge, and **scout glint** scouts one hazard or dungeon family through the existing scout path. Matching the carrier pair claims it, Destroy forfeits it, and Peek only reveals it.'
     },
     {
         id: 'board_glass_decoy',

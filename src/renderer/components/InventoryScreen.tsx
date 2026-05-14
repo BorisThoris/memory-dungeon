@@ -6,6 +6,7 @@ import { getInventoryPrepRows } from '../../shared/inventory-prep';
 import { getInventoryRewardSignal } from '../../shared/meta-reward-signals';
 import { getRunInventoryRows, getRunLoadoutSummary } from '../../shared/run-inventory';
 import { getRunEconomyRows } from '../../shared/run-economy';
+import { getPerfectMemoryAttribution } from '../../shared/long-run-feedback';
 import { getRunBuildProfile, getRelicDecisionImpactCopy } from '../../shared/relics';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
@@ -82,6 +83,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     const inventoryRows = getRunInventoryRows(run);
     const loadoutSummary = getRunLoadoutSummary(run);
     const rewardSignal = getInventoryRewardSignal(run);
+    const perfectMemoryAttribution = run ? getPerfectMemoryAttribution(run) : null;
     const prepRows = getInventoryPrepRows(run);
     const buildProfile = getRunBuildProfile(run);
     const equippedCosmetic = getCosmeticCollectionRows(useAppStore.getState().saveData).find((row) => row.equipped);
@@ -191,7 +193,8 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                 {inventoryScreenCopy.perfectMemoryPowersHint(
                                     run.achievementsEnabled,
                                     run.powersUsedThisRun
-                                )}
+                                )}{' '}
+                                {perfectMemoryAttribution?.locked ? perfectMemoryAttribution.summary : ''}
                             </p>
                             {equippedCosmetic ? (
                                 <p className={styles.cosmeticNote}>

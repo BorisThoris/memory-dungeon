@@ -12,6 +12,11 @@ import { getDefaultDifficultyProfile } from '../../shared/difficulty-profile';
 import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
 import { getFindableRows } from '../../shared/findables';
 import { getHazardTileBoardSummary } from '../../shared/hazard-tiles';
+import {
+    getInRunCauseRows,
+    getPerfectMemoryAttribution,
+    getTouchHudDetailRows
+} from '../../shared/long-run-feedback';
 import { getRunEconomyEntry } from '../../shared/run-economy';
 import { getRunBuildProfile } from '../../shared/relics';
 import codexBookUrl from '../assets/ui/icons/icon-codex-book-v1.svg?url';
@@ -175,6 +180,7 @@ const GameplayHudBar = ({
         usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion) &&
         board.floorArchetypeId != null;
     const perfectMemoryHud = perfectMemoryHudKind(run.achievementsEnabled, run.powersUsedThisRun);
+    const perfectMemoryAttribution = getPerfectMemoryAttribution(run);
     const activeRiskWagerFavor =
         run.endlessRiskWager != null
             ? run.endlessRiskWager.bonusFavorOnSuccess + (run.relicIds.includes('wager_surety') ? 1 : 0)
@@ -191,6 +197,8 @@ const GameplayHudBar = ({
     const secondaryObjectiveRows = getSecondaryObjectiveStatusRows(run);
     const buildProfile = getRunBuildProfile(run);
     const hazardTileSummary = getHazardTileBoardSummary(board);
+    const inRunCauseRows = getInRunCauseRows(run).slice(0, 3);
+    const touchHudDetailRows = getTouchHudDetailRows(run);
     const encounterIdentity = getBossEncounterIdentityForFloor(board.floorTag ?? 'normal', {
         floorArchetypeId: board.floorArchetypeId,
         mutators: run.activeMutators,
@@ -627,6 +635,26 @@ const GameplayHudBar = ({
                                         <span className={styles.statVal}>×{run.stats.currentStreak}</span>
                                     </div>
                                 ) : null}
+                                {inRunCauseRows.length > 0 ? (
+                                    <div
+                                        aria-label="Recent run feedback"
+                                        className={styles.hudFeedbackStrip}
+                                        data-testid="hud-in-run-cause-strip"
+                                    >
+                                        {inRunCauseRows.map((row) => (
+                                            <span
+                                                className={styles.hudFeedbackChip}
+                                                data-feedback-kind={row.kind}
+                                                data-testid={`hud-cause-row-${row.id}`}
+                                                key={row.id}
+                                                title={row.detail}
+                                            >
+                                                <span className={styles.statKey}>{row.label}</span>
+                                                <span className={styles.statVal}>{row.summary}</span>
+                                            </span>
+                                        ))}
+                                    </div>
+                                ) : null}
                                 {endlessChapterActive && run.featuredObjectiveStreak > 0 ? (
                                     <div
                                         className={styles.statPillCompact}
@@ -722,14 +750,29 @@ const GameplayHudBar = ({
                                                 perfectMemoryHud === 'locked' ? styles.statPillCompactPerfectMemoryLocked : ''
                                             }`}
                                             data-testid="hud-perfect-memory"
-                                            title={PERFECT_MEMORY_BASE_RULES}
+                                            title={`${perfectMemoryAttribution.summary} ${PERFECT_MEMORY_BASE_RULES}`}
                                         >
                                             <span className={styles.statKey}>Perfect Memory</span>
                                             <span className={styles.statVal}>
-                                                {perfectMemoryHud === 'locked' ? 'Locked' : 'Eligible'}
+                                                {perfectMemoryHud === 'locked'
+                                                    ? `Locked${perfectMemoryAttribution.firstAction ? `: ${perfectMemoryAttribution.firstAction}` : ''}`
+                                                    : 'Eligible'}
                                             </span>
                                         </div>
                                     ) : null}
+                                    <div className={styles.hudTouchDetailRows} data-testid="hud-touch-detail-rows">
+                                        {touchHudDetailRows.map((row) => (
+                                            <div
+                                                className={styles.statPillCompact}
+                                                data-testid={`hud-touch-detail-${row.id}`}
+                                                key={row.id}
+                                                title={row.detail}
+                                            >
+                                                <span className={styles.statKey}>{row.label}</span>
+                                                <span className={styles.statVal}>{row.value}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </details>
                         </div>

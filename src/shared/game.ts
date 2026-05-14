@@ -9,6 +9,7 @@ import {
     ENDLESS_RISK_WAGER_BONUS_FAVOR,
     ENDLESS_RISK_WAGER_MIN_STREAK,
     FEATURED_OBJECTIVE_STREAK_MISS_DECAY,
+    FINDABLE_KIND_SPAWN_WEIGHTS,
     FINDABLE_MATCH_COMBO_SHARDS,
     FINDABLE_MATCH_SAFE_HAZARD_WARDS,
     FINDABLE_MATCH_SCORE,
@@ -2891,6 +2892,21 @@ const addDungeonRoomTile = (
 export const countFindablePairs = (tiles: readonly Tile[]): number =>
     new Set(tiles.filter((tile) => tile.findableKind != null).map((tile) => tile.pairKey)).size;
 
+const pickFindableKind = (roll: number): FindableKind => {
+    const rows = (Object.entries(FINDABLE_KIND_SPAWN_WEIGHTS) as [FindableKind, number][]).filter(
+        ([, weight]) => weight > 0
+    );
+    const total = rows.reduce((sum, [, weight]) => sum + weight, 0);
+    let cursor = roll * total;
+    for (const [kind, weight] of rows) {
+        if (cursor < weight) {
+            return kind;
+        }
+        cursor -= weight;
+    }
+    return rows[rows.length - 1]?.[0] ?? 'shard_spark';
+};
+
 const assignFindableKindsToTiles = (
     tiles: Tile[],
     mutators: MutatorId[],
@@ -2937,9 +2953,8 @@ const assignFindableKindsToTiles = (
     }
     const picked = keys.slice(0, n);
     const kindByKey = new Map<string, FindableKind>();
-    const kindCycle: readonly FindableKind[] = ['shard_spark', 'score_glint', 'ward_spark', 'scout_glint'];
     for (const key of picked) {
-        kindByKey.set(key, kindCycle[Math.floor(rng() * kindCycle.length)]!);
+        kindByKey.set(key, pickFindableKind(rng()));
     }
     return tiles.map((t) => {
         const kind = kindByKey.get(t.pairKey);
