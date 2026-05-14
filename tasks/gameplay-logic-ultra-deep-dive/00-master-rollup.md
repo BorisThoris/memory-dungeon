@@ -48,6 +48,15 @@ The repeated pattern is clear: many systems are structurally present, but contra
 - Shop/rest/event/treasure systems need stock pools, source/sink ledgers, and exploit gates.
 - Feedback needs in-run causality chips, Perfect Memory cause attribution, and touch-accessible detail.
 
+## Long-Run Depth
+- GLD-LR-001 through GLD-LR-010 are done on the long-run depth track.
+- Boss-tagged floors now align scheduled boss identity, generated boss id, encounter row, and `defeat_boss` objective.
+- Route previews have long-run rows that expose actual next-board inputs.
+- Shop stock pools are split by floor-clear, board, route, rest, event, and treasure source.
+- Long-run relic decision rows require changed-decision copy, UI surface, and regression keys for every relic.
+- Long-run fatigue guardrails cover pressure, reward inflation, breather spacing, relic cadence, and route-share balance.
+- `yarn gate:long-run` is the deterministic multi-seed long-run soak gate.
+
 ## Recommended Implementation Order
 1. Fix P0 softlock/lifecycle/persistence issues.
 2. Add pair-resolution and transition fairness matrix tests.
@@ -96,6 +105,12 @@ yarn test
 
 ```powershell
 yarn gate:gameplay
+```
+
+- Long-run depth gate:
+
+```powershell
+yarn gate:long-run
 ```
 
 - Verified with `yarn typecheck:shared`, focused Vitest coverage for gameplay/save/relic/objective/store/contracts, and full `yarn test`.

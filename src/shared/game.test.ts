@@ -2359,7 +2359,7 @@ describe('dungeon cards', () => {
         expect(blueprint.exitSpecs.length).toBeGreaterThanOrEqual(1);
         expect(blueprint.exitSpecs.some((exit) => exit.lockKind === 'none' || exit.lockKind === 'lever')).toBe(true);
         expect(blueprint.bossId).toBe('trap_warden');
-        expect(blueprint.objectiveId).toBe('disarm_traps');
+        expect(blueprint.objectiveId).toBe('defeat_boss');
         expect(blueprint.threatBudget).toBeGreaterThan(blueprint.rewardBudget);
         expect(blueprint.pairedCardSpecs).toEqual(
             expect.arrayContaining([expect.objectContaining({ bossId: 'trap_warden', label: 'Trap Warden', hp: 3 })])
@@ -2501,7 +2501,7 @@ describe('dungeon cards', () => {
         });
 
         expect(trapBoard.dungeonBossId).toBe('trap_warden');
-        expect(trapBoard.dungeonObjectiveId).toBe('disarm_traps');
+        expect(trapBoard.dungeonObjectiveId).toBe('defeat_boss');
         expect(trapBoard.tiles.filter((tile) => tile.dungeonBossId === 'trap_warden')).toHaveLength(2);
         expect(trapBoard.tiles.find((tile) => tile.dungeonBossId === 'trap_warden')).toMatchObject({
             label: 'Trap Warden',
@@ -2538,7 +2538,7 @@ describe('dungeon cards', () => {
             gameMode: 'endless'
         });
 
-        expect(trapBlueprint.objectiveId).toBe('disarm_traps');
+        expect(trapBlueprint.objectiveId).toBe('defeat_boss');
         expect(bossBlueprint.objectiveId).toBe('defeat_boss');
         expect(gatewayBlueprint.objectiveId).toBe('claim_route');
     });

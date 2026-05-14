@@ -36,6 +36,7 @@
         "audit:renderer-assets": "node scripts/audit-renderer-assets.mjs",
         "fullcheck": "yarn lint && yarn verify",
         "gate:gameplay": "yarn typecheck:shared && yarn vitest run src/shared/game.test.ts src/shared/softlock-fairness.test.ts src/shared/relics.test.ts src/shared/balance-simulation.test.ts src/shared/exploit-surface.test.ts src/shared/route-foundation.test.ts src/shared/p2-contracts.test.ts src/shared/economy-ledger.test.ts && yarn sim:endless --floors=1000 --seed=42001 && yarn test",
+        "gate:long-run": "yarn typecheck:shared && yarn vitest run src/shared/long-run-depth.test.ts src/shared/boss-encounters.test.ts src/shared/run-map.test.ts src/shared/relics.test.ts src/shared/balance-simulation.test.ts src/shared/economy-ledger.test.ts && tsx scripts/gate-long-run.ts --floors=48 && yarn sim:endless --floors=1000 --seed=42001",
         "sim:endless": "tsx scripts/sim-endless.ts",
         "test": "vitest run",
         "test:watch": "vitest",

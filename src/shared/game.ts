@@ -2330,11 +2330,11 @@ const dungeonObjectiveForFloor = (
     floorTag: FloorTag,
     floorArchetypeId: FloorArchetypeId | null
 ): DungeonFloorBlueprint['objectiveId'] => {
-    if (floorArchetypeId === 'trap_hall') {
-        return 'disarm_traps';
-    }
     if (floorTag === 'boss') {
         return 'defeat_boss';
+    }
+    if (floorArchetypeId === 'trap_hall') {
+        return 'disarm_traps';
     }
     if (floorArchetypeId === 'rush_recall') {
         return 'pacify_floor';
