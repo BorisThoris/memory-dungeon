@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 5;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 27;
+export const GAME_RULES_VERSION = 28;
 export const INITIAL_LIVES = 4;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MAX_LIVES = 5;
@@ -142,17 +142,35 @@ export type MutatorId =
     | 'generous_shrine';
 
 /** Bonus pickups attached to some pairs during eligible runs/floors. */
-export type FindableKind = 'shard_spark' | 'score_glint';
+export type FindableKind = 'shard_spark' | 'score_glint' | 'ward_spark' | 'scout_glint';
 
 /** Flat score added on top of normal match score when a findable pair is matched. */
 export const FINDABLE_MATCH_SCORE: Record<FindableKind, number> = {
     shard_spark: 0,
-    score_glint: 25
+    score_glint: 25,
+    ward_spark: 0,
+    scout_glint: 0
 };
 /** Immediate combo-shard gain when a findable pair is matched. */
 export const FINDABLE_MATCH_COMBO_SHARDS: Record<FindableKind, number> = {
     shard_spark: 1,
-    score_glint: 0
+    score_glint: 0,
+    ward_spark: 0,
+    scout_glint: 0
+};
+/** Immediate safe-hazard ward charge gain when a findable pair is matched. */
+export const FINDABLE_MATCH_SAFE_HAZARD_WARDS: Record<FindableKind, number> = {
+    shard_spark: 0,
+    score_glint: 0,
+    ward_spark: 1,
+    scout_glint: 0
+};
+/** Immediate limited scout reveal count when a findable pair is matched. */
+export const FINDABLE_MATCH_SCOUT_REVEALS: Record<FindableKind, number> = {
+    shard_spark: 0,
+    score_glint: 0,
+    ward_spark: 0,
+    scout_glint: 1
 };
 
 /** Hidden shuffle: full Fisher–Yates vs row-preserving permute. */

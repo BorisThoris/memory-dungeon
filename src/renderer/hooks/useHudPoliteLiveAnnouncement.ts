@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FindableKind, HazardTileKind, Tile } from '../../shared/contracts';
+import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import { getHazardTileLiveCopy } from '../../shared/hazard-tiles';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 
@@ -59,12 +60,10 @@ export const detectClaimedFindableKind = (
 };
 
 const getFindableAnnouncementText = (kind: FindableKind): string =>
-    kind === 'shard_spark'
-        ? 'Shard spark claimed: plus one combo shard.'
-        : 'Score glint claimed: plus twenty-five score.';
+    `${getFindableKindLabel(kind)} claimed: ${getFindableRewardCopy(kind)}.`;
 
 export const getFindableToastText = (kind: FindableKind): string =>
-    kind === 'shard_spark' ? 'Shard spark +1 shard' : 'Score glint +25 score';
+    `${getFindableKindLabel(kind)} ${getFindableRewardCopy(kind)}`;
 
 interface HudPoliteLiveAnnouncementInput {
     gauntletRemainingMs: number | null;

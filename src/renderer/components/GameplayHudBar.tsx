@@ -10,7 +10,7 @@ import {
 import { getSecondaryObjectiveStatusRows } from '../../shared/secondary-objectives';
 import { getDefaultDifficultyProfile } from '../../shared/difficulty-profile';
 import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
-import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
+import { getFindableRows } from '../../shared/findables';
 import { getHazardTileBoardSummary } from '../../shared/hazard-tiles';
 import { getRunEconomyEntry } from '../../shared/run-economy';
 import { getRunBuildProfile } from '../../shared/relics';
@@ -596,7 +596,9 @@ const GameplayHudBar = ({
                                     <div
                                         className={styles.statPillCompact}
                                         data-testid="hud-findables-claimed"
-                                        title={`Pickup progress this floor. ${getFindableKindLabel('shard_spark')}: ${getFindableRewardCopy('shard_spark')}; ${getFindableKindLabel('score_glint')}: ${getFindableRewardCopy('score_glint')}. Destroy forfeits pickups; shuffle preserves them.`}
+                                        title={`Pickup progress this floor. ${getFindableRows()
+                                            .map((row) => `${row.label}: ${row.rewardText}`)
+                                            .join('; ')}. Destroy forfeits pickups; shuffle preserves them.`}
                                     >
                                         <span className={styles.statKey}>Pickups</span>
                                         <span className={styles.statVal}>

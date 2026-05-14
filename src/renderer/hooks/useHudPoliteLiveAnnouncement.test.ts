@@ -171,7 +171,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         });
         await flushRaf();
 
-        expect(result.current.message).toBe('Shard spark claimed: plus one combo shard.');
+        expect(result.current.message).toBe('Shard spark claimed: +1 combo shard.');
     });
 
     it('announces hazard tile trigger deltas in a stable order', async () => {

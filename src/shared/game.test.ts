@@ -5,6 +5,7 @@ import {
     ENDLESS_RISK_WAGER_MIN_STREAK,
     FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP,
     FINDABLE_MATCH_COMBO_SHARDS,
+    FINDABLE_MATCH_SAFE_HAZARD_WARDS,
     FINDABLE_MATCH_SCORE,
     FLIP_PAR_BONUS_SCORE,
     FLOOR_CLEAR_GOLD_BASE,
@@ -6087,6 +6088,48 @@ describe('board powers', () => {
             const base = calculateMatchScore(1, 1, 1);
             expect(resolved.stats.totalScore).toBe(base + FINDABLE_MATCH_SCORE.score_glint);
             expect(resolved.findablesClaimedThisFloor).toBe(1);
+        });
+
+        it('claims ward spark as a capped safe hazard ward charge', () => {
+            const tiles: Tile[] = [
+                { ...createTile('a1', 'A', 'A'), findableKind: 'ward_spark' },
+                { ...createTile('a2', 'A', 'A'), findableKind: 'ward_spark' },
+                createTile('b1', 'B', 'B'),
+                createTile('b2', 'B', 'B')
+            ];
+            const started = { ...createRun(tiles), findablesClaimedThisFloor: 0, findablesTotalThisFloor: 1 };
+            const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
+
+            expect(FINDABLE_MATCH_SAFE_HAZARD_WARDS.ward_spark).toBe(1);
+            expect(resolved.safeHazardWardChargesThisFloor).toBe(1);
+            expect(resolved.findablesClaimedThisFloor).toBe(1);
+            expect(resolved.stats.totalScore).toBe(calculateMatchScore(1, 1, 1));
+        });
+
+        it('claims scout glint through the existing omen scout reveal path', () => {
+            const tiles: Tile[] = [
+                { ...createTile('a1', 'A', 'A'), findableKind: 'scout_glint' },
+                { ...createTile('a2', 'A', 'A'), findableKind: 'scout_glint' },
+                {
+                    ...createTile('b1', 'B', 'B'),
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'hidden',
+                    dungeonCardEffectId: 'trap_snare'
+                },
+                {
+                    ...createTile('b2', 'B', 'B'),
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'hidden',
+                    dungeonCardEffectId: 'trap_snare'
+                }
+            ];
+            const started = { ...createRun(tiles), findablesClaimedThisFloor: 0, findablesTotalThisFloor: 1 };
+            const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
+            const trapTiles = resolved.board!.tiles.filter((tile) => tile.pairKey === 'B');
+
+            expect(resolved.omenSealScoutsThisFloor).toBe(1);
+            expect(trapTiles.every((tile) => tile.dungeonCardState === 'revealed')).toBe(true);
+            expect(trapTiles.every((tile) => tile.scoutRevealSource === 'omen_seal')).toBe(true);
         });
 
         it('forfeits findable on destroy without score or claim counter', () => {

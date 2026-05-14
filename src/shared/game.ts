@@ -10,6 +10,7 @@ import {
     ENDLESS_RISK_WAGER_MIN_STREAK,
     FEATURED_OBJECTIVE_STREAK_MISS_DECAY,
     FINDABLE_MATCH_COMBO_SHARDS,
+    FINDABLE_MATCH_SAFE_HAZARD_WARDS,
     FINDABLE_MATCH_SCORE,
     GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS,
     FEATURED_OBJECTIVE_STREAK_BONUS_MAX,
@@ -1639,6 +1640,13 @@ const applyLanternWardScout = (board: BoardState, run: RunState): { board: Board
 const applyOmenSealScout = (board: BoardState, run: RunState): { board: BoardState; scouted: boolean } =>
     applyScoutReveal(board, run, 'omen_seal');
 
+const applyFindableScoutGlint = (
+    board: BoardState,
+    run: RunState,
+    claimedKind: FindableKind | null
+): { board: BoardState; scouted: boolean } =>
+    claimedKind === 'scout_glint' ? applyScoutReveal(board, run, 'omen_seal') : { board, scouted: false };
+
 const springArmedDungeonTraps = (
     run: RunState,
     board: BoardState,
@@ -2929,8 +2937,9 @@ const assignFindableKindsToTiles = (
     }
     const picked = keys.slice(0, n);
     const kindByKey = new Map<string, FindableKind>();
+    const kindCycle: readonly FindableKind[] = ['shard_spark', 'score_glint', 'ward_spark', 'scout_glint'];
     for (const key of picked) {
-        kindByKey.set(key, rng() < 0.5 ? 'shard_spark' : 'score_glint');
+        kindByKey.set(key, kindCycle[Math.floor(rng() * kindCycle.length)]!);
     }
     return tiles.map((t) => {
         const kind = kindByKey.get(t.pairKey);
@@ -7379,6 +7388,8 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             claimedFindableKind != null ? FINDABLE_MATCH_SCORE[claimedFindableKind] : 0;
         const findableComboShardGain =
             claimedFindableKind != null ? FINDABLE_MATCH_COMBO_SHARDS[claimedFindableKind] : 0;
+        const findableSafeHazardWardGain =
+            claimedFindableKind != null ? FINDABLE_MATCH_SAFE_HAZARD_WARDS[claimedFindableKind] : 0;
         const findablesClaimedDelta = claimedFindableKind != null ? 1 : 0;
 
         const boardBeforeEnemyDamage: BoardState = {
@@ -7414,10 +7425,11 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             matchedDungeonKind === 'lever' && (tileMatchA.dungeonCardEffectId ?? tileMatchB.dungeonCardEffectId) === 'rune_seal'
                 ? resolveOneArmedTrapPair(boardBeforeEnemyDamage)
                 : boardBeforeEnemyDamage;
+        const findableScout = applyFindableScoutGlint(dungeonEffectBoard, run, claimedFindableKind);
         const matchedHazards = hazardKindsInTiles(run.board.tiles, [matchA, matchB]);
         const cascadeHazard = matchedHazards.has('cascade_cache')
-            ? applyCascadeCacheHazard(dungeonEffectBoard, run, matchedPairKey)
-            : { board: dungeonEffectBoard, triggered: false };
+            ? applyCascadeCacheHazard(findableScout.board, run, matchedPairKey)
+            : { board: findableScout.board, triggered: false };
         const fragileCacheClaimed = matchedHazards.has('fragile_cache');
         const tollCacheClaimed = matchedHazards.has('toll_cache');
         const fuseCacheClaimed = matchedHazards.has('fuse_cache');
@@ -7560,7 +7572,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             findablesClaimedThisFloor: run.findablesClaimedThisFloor + findablesClaimedDelta,
             safeHazardWardChargesThisFloor: Math.min(
                 1,
-                (run.safeHazardWardChargesThisFloor ?? 0) + routeCardReward.safeHazardWardCharges
+                (run.safeHazardWardChargesThisFloor ?? 0) + routeCardReward.safeHazardWardCharges + findableSafeHazardWardGain
             ),
             hazardTileTriggersThisFloor:
                 run.hazardTileTriggersThisFloor +
@@ -7576,7 +7588,8 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             hazardFuseCacheExpiredClaimsThisFloor:
                 run.hazardFuseCacheExpiredClaimsThisFloor + (fuseCacheClaimed && !fuseCacheFresh ? 1 : 0),
             lanternWardScoutsThisFloor: run.lanternWardScoutsThisFloor + (lanternScout.scouted ? 1 : 0),
-            omenSealScoutsThisFloor: run.omenSealScoutsThisFloor + (omenScout.scouted ? 1 : 0),
+            omenSealScoutsThisFloor:
+                run.omenSealScoutsThisFloor + (findableScout.scouted ? 1 : 0) + (omenScout.scouted ? 1 : 0),
             mimicCacheClaimsThisFloor: run.mimicCacheClaimsThisFloor + (mimicCacheClaimed ? 1 : 0),
             mimicCacheBitesThisFloor: run.mimicCacheBitesThisFloor + (mimicCacheBite ? 1 : 0),
             mimicCacheGuardBitesThisFloor: run.mimicCacheGuardBitesThisFloor + (mimicCacheGuardBite ? 1 : 0),
@@ -7767,6 +7780,8 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             claimedFindableKind != null ? FINDABLE_MATCH_SCORE[claimedFindableKind] : 0;
         const findableComboShardGain =
             claimedFindableKind != null ? FINDABLE_MATCH_COMBO_SHARDS[claimedFindableKind] : 0;
+        const findableSafeHazardWardGain =
+            claimedFindableKind != null ? FINDABLE_MATCH_SAFE_HAZARD_WARDS[claimedFindableKind] : 0;
         const findablesClaimedDelta = claimedFindableKind != null ? 1 : 0;
 
         const boardBeforeEnemyDamage: BoardState = {
@@ -7798,10 +7813,11 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             matchedDungeonKind === 'lever' && (firstTile.dungeonCardEffectId ?? secondTile.dungeonCardEffectId) === 'rune_seal'
                 ? resolveOneArmedTrapPair(boardBeforeEnemyDamage)
                 : boardBeforeEnemyDamage;
+        const findableScout = applyFindableScoutGlint(dungeonEffectBoard, run, claimedFindableKind);
         const matchedHazards = hazardKindsInTiles(run.board.tiles, [firstId, secondId]);
         const cascadeHazard = matchedHazards.has('cascade_cache')
-            ? applyCascadeCacheHazard(dungeonEffectBoard, run, matchedPairKey)
-            : { board: dungeonEffectBoard, triggered: false };
+            ? applyCascadeCacheHazard(findableScout.board, run, matchedPairKey)
+            : { board: findableScout.board, triggered: false };
         const fragileCacheClaimed = matchedHazards.has('fragile_cache');
         const tollCacheClaimed = matchedHazards.has('toll_cache');
         const fuseCacheClaimed = matchedHazards.has('fuse_cache');
@@ -7942,7 +7958,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             findablesClaimedThisFloor: run.findablesClaimedThisFloor + findablesClaimedDelta,
             safeHazardWardChargesThisFloor: Math.min(
                 1,
-                (run.safeHazardWardChargesThisFloor ?? 0) + routeCardReward.safeHazardWardCharges
+                (run.safeHazardWardChargesThisFloor ?? 0) + routeCardReward.safeHazardWardCharges + findableSafeHazardWardGain
             ),
             hazardTileTriggersThisFloor:
                 run.hazardTileTriggersThisFloor +
@@ -7958,7 +7974,8 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             hazardFuseCacheExpiredClaimsThisFloor:
                 run.hazardFuseCacheExpiredClaimsThisFloor + (fuseCacheClaimed && !fuseCacheFresh ? 1 : 0),
             lanternWardScoutsThisFloor: run.lanternWardScoutsThisFloor + (lanternScout.scouted ? 1 : 0),
-            omenSealScoutsThisFloor: run.omenSealScoutsThisFloor + (omenScout.scouted ? 1 : 0),
+            omenSealScoutsThisFloor:
+                run.omenSealScoutsThisFloor + (findableScout.scouted ? 1 : 0) + (omenScout.scouted ? 1 : 0),
             mimicCacheClaimsThisFloor: run.mimicCacheClaimsThisFloor + (mimicCacheClaimed ? 1 : 0),
             mimicCacheBitesThisFloor: run.mimicCacheBitesThisFloor + (mimicCacheBite ? 1 : 0),
             mimicCacheGuardBitesThisFloor: run.mimicCacheGuardBitesThisFloor + (mimicCacheGuardBite ? 1 : 0),
