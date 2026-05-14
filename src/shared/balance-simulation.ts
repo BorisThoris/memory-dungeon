@@ -217,6 +217,19 @@ const sumFindableKindCounts = (
         return totals;
     }, emptyFindableKindCounts());
 
+export const getFindableKindShares = (
+    counts: Record<FindableKind, number>
+): Record<FindableKind, number> => {
+    const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+    return (Object.keys(counts) as FindableKind[]).reduce<Record<FindableKind, number>>(
+        (shares, kind) => ({
+            ...shares,
+            [kind]: total === 0 ? 0 : counts[kind] / total
+        }),
+        emptyFindableKindCounts()
+    );
+};
+
 export const runBalanceSimulation = ({
     seeds,
     seed,
@@ -313,7 +326,7 @@ export const runBalanceSimulation = ({
     const shopVisits = floorNumbers.filter((floor) => floor % 3 === 0).length;
     const findableCounts = samples.map((sample) => sample.findablePickupPairs);
     const aggregateFindableKindCounts = sumFindableKindCounts(samples.map((sample) => sample.findableKindCounts));
-    const totalFindableKinds = Object.values(aggregateFindableKindCounts).reduce((sum, count) => sum + count, 0);
+    const findableKindShares = getFindableKindShares(aggregateFindableKindCounts);
     const totalFindableWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
     const bossFloors = safeSeeds.flatMap((seed) =>
         floorNumbers.map((floor) => pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless').floorTag === 'boss' ? 1 : 0)
@@ -366,11 +379,10 @@ export const runBalanceSimulation = ({
         ),
         ...(Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]).map((kind) => {
             const targetShare = FINDABLE_KIND_SPAWN_WEIGHTS[kind] / totalFindableWeight;
-            const observedShare = totalFindableKinds === 0 ? 0 : aggregateFindableKindCounts[kind] / totalFindableKinds;
             return row(
                 `findable_share_${kind}`,
                 `Findable ${kind} observed share`,
-                Number(observedShare.toFixed(2)),
+                Number(findableKindShares[kind].toFixed(2)),
                 Math.max(0, Number((targetShare - 0.18).toFixed(2))),
                 Math.min(1, Number((targetShare + 0.18).toFixed(2))),
                 'FINDABLE_KIND_SPAWN_WEIGHTS'

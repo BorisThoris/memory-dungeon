@@ -22,8 +22,7 @@ test.setTimeout(120_000);
 
 async function readSettingsLayout(container: Locator): Promise<{
     contentBelowNav: boolean;
-    footerWidth: number;
-    buttonWidths: number[];
+    buttonMetrics: Array<{ width: number; groupWidth: number }>;
 }> {
     const navButton = await container.getByRole('button', { name: /gameplay/i }).first().boundingBox();
     const contentHeading = await container
@@ -31,20 +30,20 @@ async function readSettingsLayout(container: Locator): Promise<{
         .getByRole('heading', { name: /^gameplay$/i })
         .first()
         .boundingBox();
-    const footerActions = container.getByRole('button', { name: /^back$/i }).locator('..');
-    const footer = await footerActions.boundingBox();
+    const footerActions = container.locator('footer').locator('div').first();
     const buttons = await footerActions.locator('button').evaluateAll((elements) =>
-        elements.map((element) => (element as HTMLElement).getBoundingClientRect().width)
+        elements.map((element) => ({
+            width: (element as HTMLElement).getBoundingClientRect().width,
+            groupWidth: (element as HTMLElement).parentElement?.getBoundingClientRect().width ?? 0
+        }))
     );
 
     expect(navButton).toBeTruthy();
     expect(contentHeading).toBeTruthy();
-    expect(footer).toBeTruthy();
 
     return {
         contentBelowNav: contentHeading!.y >= navButton!.y + navButton!.height - 1,
-        footerWidth: footer!.width,
-        buttonWidths: buttons
+        buttonMetrics: buttons
     };
 }
 
@@ -186,6 +185,7 @@ test.describe('Mobile layout (renderer)', () => {
     test('phone portrait keeps condensed onboarding copy visible', async ({ page }) => {
         await page.setViewportSize({ width: 390, height: 844 });
         await openMainMenuFromSave(page, false);
+        await page.getByText(/^Open$/).click();
         await expect(page.getByText(/first live board highlights a real pair/i)).toBeVisible();
         await expect(page.getByText(/clean matches build score and streak/i)).toBeVisible();
         await expect(page.getByText(/runs turn into relic drafts/i)).toBeVisible();
@@ -195,6 +195,7 @@ test.describe('Mobile layout (renderer)', () => {
     test('phone landscape keeps condensed onboarding copy readable', async ({ page }) => {
         await page.setViewportSize({ width: 844, height: 390 });
         await openMainMenuFromSave(page, false);
+        await page.getByText(/^Open$/).click();
         await expect(page.getByText(/first live board highlights a real pair/i)).toBeVisible();
         await expect(page.getByText(/clean matches build score and streak/i)).toBeVisible();
         await expect(page.getByText(/runs turn into relic drafts/i)).toBeVisible();
@@ -301,17 +302,22 @@ test.describe('Mobile layout (renderer)', () => {
         await expect(page.getByRole('heading', { name: /^settings$/i })).toBeVisible();
         const back = page.getByRole('button', { name: /^back$/i });
         const save = page.getByRole('button', { name: /^save$/i });
-        const footer = back.locator('..');
+        const footer = page.getByTestId('settings-action-dock');
         const sizes = await footer.evaluate((el) => {
             const buttons = Array.from(el.querySelectorAll('button'));
             return {
                 container: el.getBoundingClientRect().width,
-                buttons: buttons.map((button) => button.getBoundingClientRect().width)
+                buttons: buttons.map((button) => ({
+                    width: button.getBoundingClientRect().width,
+                    groupWidth: button.parentElement?.getBoundingClientRect().width ?? 0
+                }))
             };
         });
         expect(sizes.buttons).toHaveLength(2);
-        expect(sizes.buttons[0]).toBeGreaterThanOrEqual(sizes.container - 2);
-        expect(sizes.buttons[1]).toBeGreaterThanOrEqual(sizes.container - 2);
+        expect(sizes.buttons[0].groupWidth).toBeGreaterThan(0);
+        expect(sizes.buttons[1].groupWidth).toBeGreaterThan(0);
+        expect(sizes.buttons[0].width).toBeGreaterThanOrEqual(sizes.buttons[0].groupWidth - 2);
+        expect(sizes.buttons[1].width).toBeGreaterThanOrEqual(sizes.buttons[1].groupWidth - 2);
         await expect(back).toBeVisible();
         await expect(save).toBeVisible();
     });
@@ -327,17 +333,22 @@ test.describe('Mobile layout (renderer)', () => {
         const back = dialog.getByRole('button', { name: /^back$/i });
         const save = dialog.getByRole('button', { name: /^save$/i });
         await expect(save).toBeVisible();
-        const footer = back.locator('..');
+        const footer = dialog.locator('footer');
         const sizes = await footer.evaluate((el) => {
             const buttons = Array.from(el.querySelectorAll('button'));
             return {
                 container: el.getBoundingClientRect().width,
-                buttons: buttons.map((button) => button.getBoundingClientRect().width)
+                buttons: buttons.map((button) => ({
+                    width: button.getBoundingClientRect().width,
+                    groupWidth: button.parentElement?.getBoundingClientRect().width ?? 0
+                }))
             };
         });
         expect(sizes.buttons).toHaveLength(2);
-        expect(sizes.buttons[0]).toBeGreaterThanOrEqual(sizes.container - 2);
-        expect(sizes.buttons[1]).toBeGreaterThanOrEqual(sizes.container - 2);
+        expect(sizes.buttons[0].groupWidth).toBeGreaterThan(0);
+        expect(sizes.buttons[1].groupWidth).toBeGreaterThan(0);
+        expect(sizes.buttons[0].width).toBeGreaterThanOrEqual(sizes.buttons[0].groupWidth - 2);
+        expect(sizes.buttons[1].width).toBeGreaterThanOrEqual(sizes.buttons[1].groupWidth - 2);
     });
 
     test('short-height landscape settings page collapses to one column with full-width actions', async ({ page }) => {
@@ -356,9 +367,9 @@ test.describe('Mobile layout (renderer)', () => {
         const metrics = await readSettingsShellMetrics(page, settingsSection);
 
         expect(layout.contentBelowNav).toBe(true);
-        expect(layout.buttonWidths).toHaveLength(2);
-        expect(layout.buttonWidths[0]).toBeGreaterThanOrEqual(layout.footerWidth - 2);
-        expect(layout.buttonWidths[1]).toBeGreaterThanOrEqual(layout.footerWidth - 2);
+        expect(layout.buttonMetrics).toHaveLength(2);
+        expect(layout.buttonMetrics[0].width).toBeGreaterThanOrEqual(layout.buttonMetrics[0].groupWidth - 2);
+        expect(layout.buttonMetrics[1].width).toBeGreaterThanOrEqual(layout.buttonMetrics[1].groupWidth - 2);
         expect(metrics.zoom).toBeCloseTo(1, 3);
         await expectSettingsPanelInset(page, settingsSection, 6);
         await expectSettingsCategoryStripReadable(settingsSection);
@@ -379,9 +390,9 @@ test.describe('Mobile layout (renderer)', () => {
         const metrics = await readSettingsShellMetrics(page, dialog);
 
         expect(layout.contentBelowNav).toBe(true);
-        expect(layout.buttonWidths).toHaveLength(2);
-        expect(layout.buttonWidths[0]).toBeGreaterThanOrEqual(layout.footerWidth - 2);
-        expect(layout.buttonWidths[1]).toBeGreaterThanOrEqual(layout.footerWidth - 2);
+        expect(layout.buttonMetrics).toHaveLength(2);
+        expect(layout.buttonMetrics[0].width).toBeGreaterThanOrEqual(layout.buttonMetrics[0].groupWidth - 2);
+        expect(layout.buttonMetrics[1].width).toBeGreaterThanOrEqual(layout.buttonMetrics[1].groupWidth - 2);
         expect(metrics.zoom).toBeCloseTo(1, 3);
         await expectSettingsPanelInset(page, dialog, 6);
         await expectSettingsCategoryStripReadable(dialog);

@@ -6036,6 +6036,24 @@ describe('board powers', () => {
             expect(tagged.every((t) => t.pairKey !== '__decoy__' && t.pairKey !== '__wild__')).toBe(true);
         });
 
+        it('does not emit deferred ward_cache candidates as runtime hazard tiles', () => {
+            const observedHazards = new Set<string>();
+            for (let level = 1; level <= 24; level += 1) {
+                const board = buildBoard(level, {
+                    activeMutators: ['findables_floor'],
+                    runSeed: 90210 + level,
+                    runRulesVersion: GAME_RULES_VERSION
+                });
+                for (const tile of board.tiles) {
+                    if (tile.tileHazardKind != null) {
+                        observedHazards.add(tile.tileHazardKind);
+                    }
+                }
+            }
+
+            expect(observedHazards).not.toContain('ward_cache');
+        });
+
         it('produces identical findable placement for the same seed and rules', () => {
             const opts = {
                 activeMutators: ['findables_floor'] as MutatorId[],

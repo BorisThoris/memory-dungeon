@@ -378,7 +378,7 @@ Elements of `BoardState.tiles`. Source: [`Tile`](../../src/shared/contracts.ts).
 | `label` | Accessible / HUD label text | [epic-onboarding-codex-copy](./epic-onboarding-codex-copy.md) |
 | `state` | hidden / flipped / matched / removed | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | `atomicVariant` | Optional deck art variant index | [epic-content-symbols-and-generation](./epic-content-symbols-and-generation.md) |
-| `findableKind` | Optional shard_spark / score_glint pickup | [epic-mutators](./epic-mutators.md) |
+| `findableKind` | Optional pickup kind: shard, score, ward, or scout reward | [epic-mutators](./epic-mutators.md) |
 | `tileHazardKind` | Optional promoted hazard tile marker: shuffle snare, cascade cache, mirror decoy, fragile cache, toll cache, or fuse cache | [hazard-tile-matrix](./hazard-tile-matrix.md) |
 
 ---

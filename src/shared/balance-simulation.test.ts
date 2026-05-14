@@ -4,6 +4,7 @@ import {
     assertBalanceSimulationWithinBaseline,
     assertDungeonBalanceProfilesWithinBounds,
     DUNGEON_BALANCE_PROFILES,
+    getFindableKindShares,
     runDungeonBalanceProfileSimulation,
     runBalanceSimulation
 } from './balance-simulation';
@@ -102,6 +103,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
 
         expect(total).toBeGreaterThan(0);
         expect(Object.values(result.aggregate.findableKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
+        const shares = getFindableKindShares(result.aggregate.findableKindCounts);
 
         const bounds: Record<FindableKind, { min: number; max: number }> = {
             shard_spark: { min: 0.2, max: 0.5 },
@@ -111,10 +113,39 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         };
 
         for (const kind of Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]) {
-            const share = result.aggregate.findableKindCounts[kind] / total;
+            const share = shares[kind];
             expect(share).toBeGreaterThanOrEqual(bounds[kind].min);
             expect(share).toBeLessThanOrEqual(bounds[kind].max);
         }
+    });
+
+    it('summarizes findable kind shares from aggregate counts', () => {
+        expect(
+            getFindableKindShares({
+                shard_spark: 35,
+                score_glint: 35,
+                ward_spark: 15,
+                scout_glint: 15
+            })
+        ).toEqual({
+            shard_spark: 0.35,
+            score_glint: 0.35,
+            ward_spark: 0.15,
+            scout_glint: 0.15
+        });
+        expect(
+            getFindableKindShares({
+                shard_spark: 0,
+                score_glint: 0,
+                ward_spark: 0,
+                scout_glint: 0
+            })
+        ).toEqual({
+            shard_spark: 0,
+            score_glint: 0,
+            ward_spark: 0,
+            scout_glint: 0
+        });
     });
 
     it('guards the shipped balance baseline against large drift', () => {

@@ -99,7 +99,7 @@ Score numbers (FIN04).
 ## GP-FIN04 — Rewards and scoring bookkeeping
 
 ### Status
-**Done** — `FINDABLE_MATCH_SCORE` / `FINDABLE_MATCH_COMBO_SHARDS` ([`contracts.ts`](../../src/shared/contracts.ts)); claim path [`game.ts`](../../src/shared/game.ts).
+**Done** — `FINDABLE_MATCH_SCORE`, `FINDABLE_MATCH_COMBO_SHARDS`, `FINDABLE_MATCH_SAFE_HAZARD_WARDS`, and `FINDABLE_MATCH_SCOUT_REVEALS` ([`contracts.ts`](../../src/shared/contracts.ts)); claim path [`game.ts`](../../src/shared/game.ts).
 
 ### Priority
 Medium

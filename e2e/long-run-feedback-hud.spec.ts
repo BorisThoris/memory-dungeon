@@ -42,6 +42,21 @@ test.describe('Long-run feedback HUD readability', () => {
             await expectFeedbackHudTextBoxesStayCoherent(page);
         });
     }
+
+    test('phone keeps nested HUD info panels viewport-bounded at 390px', async ({ page }) => {
+        test.setTimeout(90_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await expectGameplayReady(page);
+
+        await openHudInfo(page);
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('hud-in-run-cause-strip'), 8);
+
+        await openHudMore(page);
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('hud-secondary-stat-drawer'), 8);
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('hud-touch-detail-rows'), 8);
+        await expectNoHorizontalOverflow(page);
+    });
 });
 
 async function openHudInfo(page: Page): Promise<void> {

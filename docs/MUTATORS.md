@@ -24,7 +24,7 @@ Hooks in `src/shared/game.ts` consult `activeMutators` via `hasMutator` / `src/s
 - `silhouette_twist` — silhouette / reduced-face styling during play (CSS / materials); **rules:** flat match-score penalty per match.
 - `n_back_anchor` — every 2 successful matches, surface an “anchor” pair key for recall pressure (`nBackAnchorPairKey` on `RunState`).
 - `distraction_channel` — optional numeric HUD (settings `distractionChannelEnabled`, **off** by default; no mandatory audio); **rules:** flat match-score penalty per match while the mutator is active (`getPresentationMutatorMatchPenalty` in `game.ts`; HUD is cosmetic).
-- `findables_floor` — seeded 0–2 pairs per floor carry `findableKind` on tiles; matching claims `FINDABLE_MATCH_SCORE`; `applyDestroyPair` clears the marker without reward (`findablesClaimedThisFloor` on `RunState`).
+- `findables_floor` — seeded pickup pairs carry `findableKind` on tiles; matching claims the reward constants for score, combo shards, safe hazard wards, or scout reveals; `applyDestroyPair` clears the marker without reward (`findablesClaimedThisFloor` on `RunState`).
 - `shifting_spotlight` — `wardPairKey` / `bountyPairKey` on `BoardState` (distinct from `cursedPairKey` “match last” objective). Bounty adds `SHIFTING_BOUNTY_MATCH_BONUS`, ward subtracts `SHIFTING_WARD_MATCH_PENALTY` (match score floored at 0). Keys re-roll from unresolved pairs after each two-flip resolution (match or miss), gambit resolution, and `applyDestroyPair` (`shiftingSpotlightNonce` on `RunState`).
 - `generous_shrine` — extra relic pick at each milestone draft while active (stacks with Daily / meta / contract / `shrine_echo` bank).
 

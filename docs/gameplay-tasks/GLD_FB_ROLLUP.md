@@ -27,7 +27,7 @@ The next long-run pass surfaces the shared feedback models in the HUD and invent
 
 ## PR readiness
 
-Status: In progress
+Status: Done
 
 This follow-up batch adds HUD readability E2E coverage, findable kind distribution diagnostics, explicit `ward_cache` deferral coverage, and a version-gate guard for the v29 findable weighting rule.
 
@@ -35,14 +35,23 @@ Relevant commits in this stack:
 
 - `bc48c2d` - Add GLD long-run feedback baseline
 - `ef1507c` - Surface long-run feedback in HUD
+- `b97ca1c` - Add long-run feedback readiness coverage
 
-Verification target:
+Verification:
 
-- `yarn gate:long-run-ui-feedback`
-- `yarn gate:gameplay`
+- `yarn gate:long-run-ui-feedback` - passed
+- `yarn gate:gameplay` - passed
 
 Known release notes:
 
 - `ward_cache` remains read-model-only and is not registered as a runtime hazard tile.
 - Findable distribution checks are broad seeded guardrails, not final economy tuning.
 - HUD visual coverage is a desktop and phone smoke pass for the long-run feedback surfaces.
+
+## Release-risk checklist
+
+Status: Done
+
+- Broad findable distribution tolerance is intentional; use it to catch seeded drift, not final economy tuning.
+- `ward_cache` remains documented as a safe expansion candidate only; runtime hazard registration is guarded by tests.
+- HUD visual coverage exercises the long-run feedback surfaces on desktop and phone, with renderer QA now carrying the spec.
