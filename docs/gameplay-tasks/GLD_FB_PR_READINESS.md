@@ -12,7 +12,7 @@ Status: Done
 
 - `yarn gate:long-run-ui-feedback` passed.
 - `yarn gate:gameplay` passed.
-- `yarn test:e2e:renderer-qa` now includes `e2e/long-run-feedback-hud.spec.ts`.
+- Renderer QA passed across the curated spec set, including `e2e/long-run-feedback-hud.spec.ts` and the 844x390 short-height settings page/modal coverage in `e2e/mobile-layout.spec.ts`.
 
 ## Known non-goals
 

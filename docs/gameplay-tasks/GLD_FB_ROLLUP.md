@@ -41,6 +41,7 @@ Verification:
 
 - `yarn gate:long-run-ui-feedback` - passed
 - `yarn gate:gameplay` - passed
+- Renderer QA curated spec set - passed, including long-run feedback HUD and short-height settings layout coverage
 
 Known release notes:
 
@@ -54,4 +55,5 @@ Status: Done
 
 - Broad findable distribution tolerance is intentional; use it to catch seeded drift, not final economy tuning.
 - `ward_cache` remains documented as a safe expansion candidate only; runtime hazard registration is guarded by tests.
-- HUD visual coverage exercises the long-run feedback surfaces on desktop and phone, with renderer QA now carrying the spec.
+- HUD visual coverage exercises the long-run feedback surfaces on desktop and phone, with renderer QA carrying the spec.
+- Short-height settings page and run-settings modal coverage is locked at 844x390 through `e2e/mobile-layout.spec.ts`.

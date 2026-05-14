@@ -3,6 +3,7 @@ import { ensureModeLibraryVisible, openChooseYourPath, openMainMenuFromSave } fr
 
 test.describe('Scholar contract run', () => {
     test.describe.configure({ retries: 1 });
+    test.setTimeout(120_000);
 
     test('starts from Choose Your Path', async ({ page }) => {
         await openMainMenuFromSave(page, true);

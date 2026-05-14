@@ -18,6 +18,7 @@ Use the named package scripts from the repo root so local and CI runs share the 
 - `yarn test:e2e:playable-path:readability` runs the focused gameplay HUD/board/action-dock bounds suite across phone, short landscape, tablet, and desktop viewports.
 - `yarn test:e2e:playable-path:full` runs the full playable-path sweep: navigation, mode matrix, interlude/post-run coverage, and gameplay readability. Use it before merging changes that affect mode starts, floor-clear decisions, shop/route/side-room interludes, game-over actions, first-run onboarding, or active gameplay layout.
 - `yarn test:e2e:renderer-qa` remains the curated full renderer QA entry point for CI and release-candidate checks. It currently aliases `yarn test:e2e:renderer-qa:full`, which includes the full playable-path sweep plus the renderer layout, navigation, long-run feedback HUD, scholar, wild-run, tile face, and raycast contracts.
+- Renderer layout coverage includes the 844x390 short-height settings page and run-settings modal path; keep that viewport in `e2e/mobile-layout.spec.ts` when changing settings chrome.
 
 CI guidance:
 

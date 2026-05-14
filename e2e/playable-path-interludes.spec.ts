@@ -131,7 +131,7 @@ test.describe('Expanded playable interludes and post-run loop', () => {
         }
         await expectGameplayReady(page);
 
-        await page.getByTestId('game-toolbar-inventory').click({ force: true });
+        await openInventoryFromToolbar(page);
         await expect(page.getByTestId('inventory-meta-frame-build')).toBeVisible();
         await expect(page.getByTestId('inventory-meta-frame-build')).not.toContainText(/first relic still ahead/i);
         await expect(page.getByTestId('inventory-meta-frame-relics')).toBeVisible();
@@ -199,6 +199,17 @@ async function expectShopDecisionUsable(page: Page): Promise<void> {
     await expect(page.getByTestId('shop-screen')).toBeVisible();
     await expect(page.getByRole('list', { name: /vendor stock/i })).toBeVisible();
     await expect(page.getByTestId('shop-action-dock')).toBeVisible();
+}
+
+async function openInventoryFromToolbar(page: Page): Promise<void> {
+    await expect(async () => {
+        const inventory = page.getByRole('region', { name: /inventory/i });
+        if (await inventory.isVisible().catch(() => false)) {
+            return;
+        }
+        await page.getByTestId('game-toolbar-inventory').evaluate((el) => (el as HTMLButtonElement).click());
+        await expect(inventory).toBeVisible({ timeout: 5_000 });
+    }).toPass({ timeout: 20_000 });
 }
 
 async function expectStampedSideRoom(

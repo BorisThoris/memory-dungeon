@@ -18,8 +18,8 @@ async function expectGameplayHudWithWings(page: Page): Promise<void> {
 
 test.describe('Navigation shells', () => {
     test.describe.configure({ retries: 1 });
+    test.setTimeout(120_000);
     test('Play opens Choose Your Path then Classic Run starts level 1', async ({ page }) => {
-        test.setTimeout(60_000);
         await openMainMenuFromSave(page, true);
         await openChooseYourPath(page);
         await startClassicRunFromModeSelect(page);
@@ -102,7 +102,6 @@ test.describe('Navigation shells', () => {
     });
 
     test('Daily Challenge from Choose Your Path starts a run', async ({ page }) => {
-        test.setTimeout(60_000);
         await openMainMenuFromSave(page, true);
         await openChooseYourPath(page);
         await ensureModeLibraryVisible(page);

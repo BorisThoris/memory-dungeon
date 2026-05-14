@@ -60,18 +60,13 @@ test.describe('Tile card face (WebGL)', () => {
         await clickHiddenTileRowCol(page, 1, 1, hiddenCount);
 
         await expect.poll(async () => readFrameHiddenTileCount(page), { timeout: 4000 }).toBeLessThan(hiddenCount);
-        /** Wait until two consecutive stage screenshots match (WebGL buffer settled) instead of a fixed post-flip sleep. */
-        await expect
-            .poll(
-                async () => {
-                    const a = await screenshotStageShellPng(page, stageLocator);
-                    await page.waitForTimeout(100);
-                    const b = await screenshotStageShellPng(page, stageLocator);
-                    return a.equals(b);
-                },
-                { timeout: 25_000 }
-            )
-            .toBe(true);
+        const exitPrompt = page.getByRole('dialog', { name: /unlocked exit/i });
+        if (await exitPrompt.isVisible().catch(() => false)) {
+            await exitPrompt.getByRole('button', { name: /^stay$/i }).click();
+            await expect(exitPrompt).toBeHidden({ timeout: 10_000 });
+        }
+        /** The board can keep ambient GL motion; wait for the flip state to paint, then assert bounded stage diff. */
+        await page.waitForTimeout(650);
 
         const shotFlipped = await screenshotStageShellPng(page, stageLocator);
 
