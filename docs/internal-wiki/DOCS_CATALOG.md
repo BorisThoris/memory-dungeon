@@ -30,11 +30,11 @@
 | [GAME_MECHANICS_IDEAS.md](../GAME_MECHANICS_IDEAS.md) | Mechanics idea backlog |
 | [GAME_MECHANICS_IDEAS_TASKS.md](../GAME_MECHANICS_IDEAS_TASKS.md) | Task breakdown for ideas |
 | [GAME_MECHANICS_PLAN.md](../GAME_MECHANICS_PLAN.md) | Planning / roadmap notes |
-| [GAME_TECHSTACK_ANALYSIS.md](../GAME_TECHSTACK_ANALYSIS.md) | **Historical / Expo-era** tech survey — see [LEGACY_AND_CAVEATS.md](./LEGACY_AND_CAVEATS.md) |
 | [HOOK_AND_DEPTH_TASKS.md](../HOOK_AND_DEPTH_TASKS.md) | Hook + depth backlog |
 | [IDEAS_AUDITS.md](../IDEAS_AUDITS.md) | Idea audits |
 | [LEADERBOARDS_DEFERRAL.md](../LEADERBOARDS_DEFERRAL.md) | Leaderboards deferral rationale |
 | [MARKET_SIMILAR_GAMES_RESEARCH.md](../MARKET_SIMILAR_GAMES_RESEARCH.md) | Market / comps research |
+| [MEMORY_DUNGEON_PROJECT_REPORT.md](../MEMORY_DUNGEON_PROJECT_REPORT.md) | Current project report for the Windows-first Electron desktop game |
 | [MUTATORS.md](../MUTATORS.md) | Mutator reference checklist |
 | [OBSIDIAN_RELIC_THEORY.md](../OBSIDIAN_RELIC_THEORY.md) | Relic design theory |
 | [PICTURE_SUPERIORITY_CHECKLIST.md](../PICTURE_SUPERIORITY_CHECKLIST.md) | Picture-superiority UX checklist |

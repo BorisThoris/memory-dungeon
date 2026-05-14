@@ -14,7 +14,7 @@ This page states **what is covered**, **how we measure it**, and **what is expli
 
 - **Removed legacy Expo prototype** — was under `legacy/expo-roguelike/`; no longer in-tree (see [`legacy/README.md`](../../legacy/README.md)).
 - **Binary assets** (PNGs, installers, Steam DLLs, most of `docs/ui-design-reference/`, capture PNGs) — indexed at **folder + workflow** level, not file-by-file.
-- **`GAME_TECHSTACK_ANALYSIS.md`** as *current* architecture — treated as **historical**; see [LEGACY_AND_CAVEATS.md](./LEGACY_AND_CAVEATS.md).
+- **Old Expo / React Native tech-stack assumptions** as *current* architecture — replaced by [MEMORY_DUNGEON_PROJECT_REPORT.md](../MEMORY_DUNGEON_PROJECT_REPORT.md); see [LEGACY_AND_CAVEATS.md](./LEGACY_AND_CAVEATS.md).
 
 ## Coverage dimensions
 

@@ -4,17 +4,16 @@
 
 That prototype directory was **removed** from the repo to reduce dead-code surface; use git history for the old files. The shipping desktop game is under `src/`.
 
-## `docs/GAME_TECHSTACK_ANALYSIS.md`
+## Former `docs/GAME_TECHSTACK_ANALYSIS.md`
 
-Written as a **cross-platform / Expo-era** product survey (dungeon map, room types, Android/web). It is **not** the authoritative description of the **current Electron desktop** loop.
+The old tech-stack report was written as a **cross-platform / Expo-era** product survey (dungeon map, room types, Android/web). It was replaced by [MEMORY_DUNGEON_PROJECT_REPORT.md](../MEMORY_DUNGEON_PROJECT_REPORT.md), which describes the active Electron desktop product.
 
 **For the shipped desktop product, prefer:**
 
+- [MEMORY_DUNGEON_PROJECT_REPORT.md](../MEMORY_DUNGEON_PROJECT_REPORT.md)
 - [GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md)
 - [GAMEPLAY_MECHANICS_CATALOG.md](../gameplay/GAMEPLAY_MECHANICS_CATALOG.md)
 - Repo root [README.md](../../README.md)
-
-Keep `GAME_TECHSTACK_ANALYSIS.md` for historical product context or if reviving multi-room roguelike ideas—not as “what the EXE does today.”
 
 ## Visual / reference assets under `docs/`
 

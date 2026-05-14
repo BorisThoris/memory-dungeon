@@ -78,7 +78,7 @@ Also:
 - Local saves, settings, and achievements
 - Windows x64 only
 
-Design and mutator details: [docs/MUTATORS.md](docs/MUTATORS.md), [docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md](docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md) (full rules matrix), [docs/GAMEPLAY_SYSTEMS_ANALYSIS.md](docs/GAMEPLAY_SYSTEMS_ANALYSIS.md).
+Current project report and design details: [docs/MEMORY_DUNGEON_PROJECT_REPORT.md](docs/MEMORY_DUNGEON_PROJECT_REPORT.md), [docs/MUTATORS.md](docs/MUTATORS.md), [docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md](docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md) (full rules matrix), [docs/GAMEPLAY_SYSTEMS_ANALYSIS.md](docs/GAMEPLAY_SYSTEMS_ANALYSIS.md).
 
 The full v1 ship bar is the offline-first [complete product definition of done](docs/product/COMPLETE_PRODUCT_DEFINITION_OF_DONE.md): local play, Steam where already targeted, first-class responsive/mobile UI, save trust, and staged hardening. Competitive online leaderboards, server-backed online services, and mandatory online accounts are explicitly deferred.
 
