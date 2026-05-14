@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, SAVE_SCHEMA_VERSION } from './contracts';
+import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, SAVE_SCHEMA_VERSION } from './contracts';
 import { FLOOR_SCHEDULE_RULES_VERSION } from './floor-mutator-schedule';
 import {
     CURRENT_VERSION_MANIFEST,
@@ -68,6 +68,24 @@ describe('REG-089 local version gate', () => {
         expect(decision.validationCommands).toContain(
             'yarn vitest run src/shared/game.test.ts src/shared/floor-mutator-schedule.test.ts src/shared/version-gate.test.ts'
         );
+    });
+
+    it('covers the current findable weighting rules under the game-rules gate', () => {
+        expect(GAME_RULES_VERSION).toBe(29);
+        expect(FINDABLE_KIND_SPAWN_WEIGHTS).toEqual({
+            shard_spark: 35,
+            score_glint: 35,
+            ward_spark: 15,
+            scout_glint: 15
+        });
+
+        const decision = assessVersionGate({
+            kinds: ['gameplay_rules', 'generation_rules'],
+            touchedContracts: ['FindableKind'],
+            playerVisibleRuleChange: true
+        });
+
+        expect(decision.requiredBumps).toEqual(['game_rules']);
     });
 
     it('requires floor schedule review independently from game rules', () => {

@@ -3,7 +3,7 @@
  * Run: yarn sim:endless [--floors=10000] [--seed=42]
  */
 import { writeFileSync } from 'node:fs';
-import { GAME_RULES_VERSION } from '../src/shared/contracts';
+import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from '../src/shared/contracts';
 import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
 
@@ -24,6 +24,12 @@ const bossCounts: Record<string, number> = {};
 const dungeonCardKindCounts: Record<string, number> = {};
 const dungeonExitLockCounts: Record<string, number> = {};
 const dungeonExitCounts: Record<string, number> = {};
+const findableKindCounts: Record<FindableKind, number> = {
+    shard_spark: 0,
+    score_glint: 0,
+    ward_spark: 0,
+    scout_glint: 0
+};
 
 for (let level = 1; level <= floors; level++) {
     const { mutators, floorTag, floorArchetypeId, featuredObjectiveId, cycleFloor } = pickFloorScheduleEntry(
@@ -55,8 +61,13 @@ for (let level = 1; level <= floors; level++) {
         const lockKey = exit.dungeonExitLockKind ?? 'none';
         dungeonExitLockCounts[lockKey] = (dungeonExitLockCounts[lockKey] ?? 0) + 1;
     }
+    const seenFindablePairs = new Set<string>();
     const seenDungeonPairs = new Set<string>();
     for (const tile of board.tiles) {
+        if (tile.findableKind && !seenFindablePairs.has(tile.pairKey)) {
+            seenFindablePairs.add(tile.pairKey);
+            findableKindCounts[tile.findableKind] += 1;
+        }
         if (!tile.dungeonCardKind || seenDungeonPairs.has(tile.pairKey)) {
             continue;
         }
@@ -74,6 +85,12 @@ const lines = [
     ...Object.entries(mutatorCounts)
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([k, v]) => `mutator,${k},${v}`),
+    ...Object.entries(findableKindCounts)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([k, v]) => `findableKind,${k},${v}`),
+    ...Object.entries(FINDABLE_KIND_SPAWN_WEIGHTS)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([k, v]) => `findableTargetWeight,${k},${v}`),
     ...Object.entries(objectiveCounts)
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([k, v]) => `dungeonObjective,${k},${v}`),

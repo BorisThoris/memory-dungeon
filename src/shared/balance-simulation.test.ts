@@ -7,7 +7,7 @@ import {
     runDungeonBalanceProfileSimulation,
     runBalanceSimulation
 } from './balance-simulation';
-import { GAME_RULES_VERSION } from './contracts';
+import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from './contracts';
 
 describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     it('runs deterministic offline economy and drop-rate simulations', () => {
@@ -17,6 +17,9 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.samples).toHaveLength(12);
         expect(result.aggregate.totalShopGoldEarned).toBeGreaterThan(0);
         expect(result.aggregate.findablePickupPairs).toBeGreaterThanOrEqual(12);
+        expect(Object.values(result.aggregate.findableKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
+            result.aggregate.findablePickupPairs
+        );
         expect(result.aggregate.bossFloors).toBe(2);
         expect(result.aggregate.breatherFloors).toBe(3);
         expect(result.aggregate.eliteFloors).toBeGreaterThan(0);
@@ -56,10 +59,18 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'avg_route_reward_pairs_per_floor',
                 'avg_event_room_reward_potential_per_floor',
                 'avg_key_inflow_potential_per_floor',
-                'avg_power_charge_inflow_per_floor'
+                'avg_power_charge_inflow_per_floor',
+                'findable_share_shard_spark',
+                'findable_share_score_glint',
+                'findable_share_ward_spark',
+                'findable_share_scout_glint'
             ])
         );
         const newRewardRows = new Set([
+            'findable_share_shard_spark',
+            'findable_share_score_glint',
+            'findable_share_ward_spark',
+            'findable_share_scout_glint',
             'avg_relic_favor_potential_per_floor',
             'avg_combo_shard_potential_per_floor',
             'avg_guard_reward_potential_per_floor',
@@ -79,6 +90,31 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         );
         expect(result.samples.every((sample) => sample.hazardTileCount > 0)).toBe(true);
         expect(new Set(result.samples.map((sample) => sample.floorBand))).toEqual(new Set(['early', 'mid', 'late']));
+    });
+
+    it('keeps weighted findable distribution broadly aligned across longer deterministic samples', () => {
+        const result = runBalanceSimulation({
+            seeds: [42_001, 42_777, 43_001, 44_001],
+            floors: 48,
+            rulesVersion: GAME_RULES_VERSION
+        });
+        const total = result.aggregate.findablePickupPairs;
+
+        expect(total).toBeGreaterThan(0);
+        expect(Object.values(result.aggregate.findableKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
+
+        const bounds: Record<FindableKind, { min: number; max: number }> = {
+            shard_spark: { min: 0.2, max: 0.5 },
+            score_glint: { min: 0.2, max: 0.5 },
+            ward_spark: { min: 0.05, max: 0.3 },
+            scout_glint: { min: 0.05, max: 0.3 }
+        };
+
+        for (const kind of Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]) {
+            const share = result.aggregate.findableKindCounts[kind] / total;
+            expect(share).toBeGreaterThanOrEqual(bounds[kind].min);
+            expect(share).toBeLessThanOrEqual(bounds[kind].max);
+        }
     });
 
     it('guards the shipped balance baseline against large drift', () => {

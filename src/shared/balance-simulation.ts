@@ -1,4 +1,11 @@
-import { GAME_RULES_VERSION, type DungeonRunNodeKind, type MutatorId } from './contracts';
+import {
+    FINDABLE_KIND_SPAWN_WEIGHTS,
+    GAME_RULES_VERSION,
+    type DungeonRunNodeKind,
+    type FindableKind,
+    type MutatorId,
+    type Tile
+} from './contracts';
 import { buildBoard, countFindablePairs } from './board-generation';
 import { getShopGoldRewardForFloor, SHOP_ITEM_CATALOG } from './shop-rules';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
@@ -31,6 +38,7 @@ export interface BalanceSimulationReport {
         floor: number;
         shopGoldEarned: number;
         findablePickupPairs: number;
+        findableKindCounts: Record<FindableKind, number>;
         floorTag: string;
         dungeonNodeKind: DungeonRunNodeKind;
         shopSinkBudget: number;
@@ -57,6 +65,7 @@ export interface BalanceSimulationReport {
     aggregate: {
         totalShopGoldEarned: number;
         findablePickupPairs: number;
+        findableKindCounts: Record<FindableKind, number>;
         bossFloors: number;
         breatherFloors: number;
         eliteFloors: number;
@@ -178,6 +187,36 @@ const floorBandFor = (floor: number): 'early' | 'mid' | 'late' =>
 const uniquePairCount = <T>(items: readonly T[], keyFor: (item: T) => string | null): number =>
     new Set(items.map(keyFor).filter((key): key is string => key != null)).size;
 
+const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
+    shard_spark: 0,
+    score_glint: 0,
+    ward_spark: 0,
+    scout_glint: 0
+});
+
+const countFindableKinds = (tiles: readonly Tile[]): Record<FindableKind, number> => {
+    const counts = emptyFindableKindCounts();
+    const seenPairs = new Set<string>();
+    for (const tile of tiles) {
+        if (!tile.findableKind || seenPairs.has(tile.pairKey)) {
+            continue;
+        }
+        seenPairs.add(tile.pairKey);
+        counts[tile.findableKind] += 1;
+    }
+    return counts;
+};
+
+const sumFindableKindCounts = (
+    counts: readonly Record<FindableKind, number>[]
+): Record<FindableKind, number> =>
+    counts.reduce((totals, sampleCounts) => {
+        for (const kind of Object.keys(totals) as FindableKind[]) {
+            totals[kind] += sampleCounts[kind];
+        }
+        return totals;
+    }, emptyFindableKindCounts());
+
 export const runBalanceSimulation = ({
     seeds,
     seed,
@@ -227,6 +266,7 @@ export const runBalanceSimulation = ({
             const eventRewardPotential = floor % 7 === 0 ? 2 : 0;
             const roomRewardPotential = roomEffectIds.length > 0 || dungeonNodeKind === 'rest' ? 1 : 0;
             const keyInflowPotential = keyPairs + (board.dungeonExitLockKind === 'iron' ? 1 : 0);
+            const findableKindCounts = countFindableKinds(board.tiles);
             const shopGoldInflowPotential =
                 getShopGoldRewardForFloor(floor) +
                 treasureRewardPairs +
@@ -241,6 +281,7 @@ export const runBalanceSimulation = ({
                 floor,
                 shopGoldEarned: getShopGoldRewardForFloor(floor),
                 findablePickupPairs: countFindablePairs(board.tiles),
+                findableKindCounts,
                 floorTag: schedule.floorTag,
                 dungeonNodeKind,
                 shopSinkBudget: floor % 3 === 0 ? shopSinkPerVisit : 0,
@@ -271,6 +312,9 @@ export const runBalanceSimulation = ({
     );
     const shopVisits = floorNumbers.filter((floor) => floor % 3 === 0).length;
     const findableCounts = samples.map((sample) => sample.findablePickupPairs);
+    const aggregateFindableKindCounts = sumFindableKindCounts(samples.map((sample) => sample.findableKindCounts));
+    const totalFindableKinds = Object.values(aggregateFindableKindCounts).reduce((sum, count) => sum + count, 0);
+    const totalFindableWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
     const bossFloors = safeSeeds.flatMap((seed) =>
         floorNumbers.map((floor) => pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless').floorTag === 'boss' ? 1 : 0)
     );
@@ -320,6 +364,18 @@ export const runBalanceSimulation = ({
             2,
             'buildBoard/countFindablePairs'
         ),
+        ...(Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]).map((kind) => {
+            const targetShare = FINDABLE_KIND_SPAWN_WEIGHTS[kind] / totalFindableWeight;
+            const observedShare = totalFindableKinds === 0 ? 0 : aggregateFindableKindCounts[kind] / totalFindableKinds;
+            return row(
+                `findable_share_${kind}`,
+                `Findable ${kind} observed share`,
+                Number(observedShare.toFixed(2)),
+                Math.max(0, Number((targetShare - 0.18).toFixed(2))),
+                Math.min(1, Number((targetShare + 0.18).toFixed(2))),
+                'FINDABLE_KIND_SPAWN_WEIGHTS'
+            );
+        }),
         row(
             'boss_floor_share',
             'Boss floor share in schedule sample',
@@ -475,6 +531,7 @@ export const runBalanceSimulation = ({
         aggregate: {
             totalShopGoldEarned: samples.reduce((sum, sample) => sum + sample.shopGoldEarned, 0),
             findablePickupPairs: samples.reduce((sum, sample) => sum + sample.findablePickupPairs, 0),
+            findableKindCounts: aggregateFindableKindCounts,
             bossFloors: samples.filter((sample) => sample.floorTag === 'boss').length,
             breatherFloors: samples.filter((sample) => sample.floorTag === 'breather').length,
             eliteFloors: samples.filter((sample) => sample.dungeonNodeKind === 'elite').length,
@@ -502,7 +559,8 @@ export const runBalanceSimulation = ({
         notes: [
             'Simulation is deterministic and local-only; no leaderboard or server authority is implied.',
             'Targets are smoke-test guardrails, not final balance verdicts.',
-            'Live economy fields are estimates from existing route/event/room/reward rules; runtime gameplay is unchanged.'
+            'Live economy fields are estimates from existing route/event/room/reward rules; runtime gameplay is unchanged.',
+            'Findable kind distribution rows are diagnostics for seeded generation drift; they do not alter rewards or spawn rules.'
         ]
     };
 };

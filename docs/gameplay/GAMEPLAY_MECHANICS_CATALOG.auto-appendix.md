@@ -1,12 +1,12 @@
 # Gameplay mechanics — machine snapshot
 
-**Generated:** 2026-05-03T22:59:58.943Z
+**Generated:** 2026-05-14T10:52:32.320Z
 
 > Regenerate with `yarn docs:mechanics-appendix`. Do not edit by hand.
 
 | Constant / count | Value |
 | --- | --- |
-| `GAME_RULES_VERSION` | 27 |
+| `GAME_RULES_VERSION` | 29 |
 | `ENCYCLOPEDIA_VERSION` | 14 |
 | Relic entries (`RELIC_CATALOG`) | 16 |
 | Mutator entries (`MUTATOR_CATALOG`) | 12 |

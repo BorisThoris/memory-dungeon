@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createNewRun } from './game-core';
+import { HAZARD_TILE_DEFINITIONS } from './hazard-tiles';
 import {
     LONG_RUN_TERMINOLOGY_ROWS,
     SAFE_EXPANSION_IMPACT_ROWS,
@@ -77,6 +78,7 @@ describe('GLD-FB long-run feedback read models', () => {
                 expect.objectContaining({ id: 'ward_cache', runtimeStatus: 'read_model_only' })
             ])
         );
+        expect(Object.keys(HAZARD_TILE_DEFINITIONS)).not.toContain('ward_cache');
         expect(WARD_CACHE_CONTRACT_ROW.surface).toBe('hazard_reward_contract');
     });
 

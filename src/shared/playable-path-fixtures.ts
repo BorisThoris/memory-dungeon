@@ -75,13 +75,20 @@ export const createPlayablePathFixture = (
             return {
                 id,
                 view: 'playing',
-                run: finishMemorizePhase(
-                    createNewRun(0, {
-                        echoFeedbackEnabled: false,
-                        gameMode: 'endless',
-                        runSeed: HAZARD_PATH_SEED
-                    })
-                ),
+                run: {
+                    ...finishMemorizePhase(
+                        createNewRun(0, {
+                            echoFeedbackEnabled: false,
+                            gameMode: 'endless',
+                            runSeed: HAZARD_PATH_SEED
+                        })
+                    ),
+                    findablesClaimedThisFloor: 1,
+                    hazardTileTriggersThisFloor: 1,
+                    safeHazardWardsUsedThisFloor: 1,
+                    safeHazardWardChargesThisFloor: 1,
+                    shopGold: 2
+                },
                 saveData,
                 shopReturnMode: null
             };

@@ -7,7 +7,7 @@
 
 ## Not to be confused with the **“?” glass decoy**
 
-The **`glass_floor`** mutator adds a **singleton** tile with label **`?`** / `pairKey` **`__decoy__`**. It is **not** a findable pickup: it **never forms a pair** (by design), exists to tempt mis-flips, and supports the **glass witness** bonus when it stays face-down. **Findables** are optional **bonus score / shard** markers on **normal pairs** (corner ring in WebGL when face-up). If you saw a “?” and could not finish the floor, that was a **completion-rule bug** (decoy could not be `matched` or `removed` under the old `isBoardComplete` check) — fixed so a **hidden** decoy clears once all **non-decoy** tiles are matched or removed (`game.ts` `isBoardComplete`).
+The **`glass_floor`** mutator adds a **singleton** tile with label **`?`** / `pairKey` **`__decoy__`**. It is **not** a findable pickup: it **never forms a pair** (by design), exists to tempt mis-flips, and supports the **glass witness** bonus when it stays face-down. **Findables** are optional **reward markers** on **normal pairs** (corner ring in WebGL when face-up). Rewards can grant score, combo shards, safe hazard wards, or scout reveals depending on kind. If you saw a “?” and could not finish the floor, that was a **completion-rule bug** (decoy could not be `matched` or `removed` under the old `isBoardComplete` check) — fixed so a **hidden** decoy clears once all **non-decoy** tiles are matched or removed (`game.ts` `isBoardComplete`).
 
 ## Purpose
 
@@ -26,7 +26,7 @@ Design goals:
 |------|---------|
 | **Findable kind** | `FindableKind` in `contracts.ts`: **`shard_spark` \| `score_glint` \| `ward_spark` \| `scout_glint`**. |
 | **Carrier** | A **tile** (by `tile.id`) that **holds** the findable. **Both** tiles of a pair carry the same `findableKind` when spawned. |
-| **Claim** | On **match**, apply rewards from `FINDABLE_MATCH_SCORE` / `FINDABLE_MATCH_COMBO_SHARDS`, increment `findablesClaimedThisFloor`, clear `findableKind` on matched tiles. |
+| **Claim** | On **match**, apply rewards from `FINDABLE_MATCH_SCORE`, `FINDABLE_MATCH_COMBO_SHARDS`, `FINDABLE_MATCH_SAFE_HAZARD_WARDS`, and `FINDABLE_MATCH_SCOUT_REVEALS`; increment `findablesClaimedThisFloor`; clear `findableKind` on matched tiles. |
 | **Spawn** | `assignFindableKindsToTiles` in `buildBoard` (after `createTiles`), using a dedicated RNG seed string. |
 
 ## Implemented rules (code)

@@ -2962,6 +2962,32 @@
     opacity: 0.94;
 }
 
+.mobileCameraHud .hudFeedbackStrip,
+.shell[data-mobile-camera-mode='true'] .hudFeedbackStrip {
+    flex: 0 1 calc(100dvi - 1rem);
+    align-self: stretch;
+    width: calc(100dvi - 1rem);
+    max-width: 100%;
+    min-width: 0;
+}
+
+.mobileCameraHud .hudFeedbackChip,
+.shell[data-mobile-camera-mode='true'] .hudFeedbackChip {
+    min-width: min(7.5rem, calc(100dvi - 2rem));
+    max-width: min(11rem, calc(100dvi - 2rem));
+}
+
+.mobileCameraHud .hudTertiaryDetails .statRailTertiary,
+.shell[data-mobile-camera-mode='true'] .hudTertiaryDetails .statRailTertiary {
+    position: fixed;
+    left: max(0.5rem, env(safe-area-inset-left, 0px));
+    right: max(0.5rem, env(safe-area-inset-right, 0px));
+    top: max(5rem, env(safe-area-inset-top, 0px));
+    width: auto;
+    max-height: calc(100dvh - 6rem);
+    overflow-y: auto;
+}
+
 .mobileCameraLeftToolbar .iconAction {
     width: calc(var(--gameplay-rail-button-size, 2.8rem) - 0.28rem);
     height: calc(var(--gameplay-rail-button-size, 2.8rem) - 0.28rem);

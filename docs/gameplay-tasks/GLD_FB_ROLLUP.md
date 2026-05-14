@@ -24,3 +24,25 @@ This batch adds shared long-run feedback/readability contracts and a small safe 
 Status: Done
 
 The next long-run pass surfaces the shared feedback models in the HUD and inventory, fixes full repo typecheck, weights the new safe findables at 15% each, keeps `ward_cache` read-model-only, updates findables/encyclopedia docs, and adds `yarn gate:long-run-ui-feedback`.
+
+## PR readiness
+
+Status: In progress
+
+This follow-up batch adds HUD readability E2E coverage, findable kind distribution diagnostics, explicit `ward_cache` deferral coverage, and a version-gate guard for the v29 findable weighting rule.
+
+Relevant commits in this stack:
+
+- `bc48c2d` - Add GLD long-run feedback baseline
+- `ef1507c` - Surface long-run feedback in HUD
+
+Verification target:
+
+- `yarn gate:long-run-ui-feedback`
+- `yarn gate:gameplay`
+
+Known release notes:
+
+- `ward_cache` remains read-model-only and is not registered as a runtime hazard tile.
+- Findable distribution checks are broad seeded guardrails, not final economy tuning.
+- HUD visual coverage is a desktop and phone smoke pass for the long-run feedback surfaces.
