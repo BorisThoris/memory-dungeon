@@ -29,15 +29,16 @@ This starts:
 
 ## Demo run
 
-For a browser-only local demo, run the renderer directly:
+For a browser-only local demo, run the renderer dev server on the portfolio demo port:
 
 ```bash
 yarn install
-yarn build:renderer
-yarn preview --host 127.0.0.1 --port 4102
+yarn demo:browser
 ```
 
-Open `http://127.0.0.1:4102/`. For live renderer development, use `yarn dev:renderer`; for the full desktop shell, use `yarn dev`, which keeps the renderer on the repo default `http://127.0.0.1:5173` and launches Electron.
+`yarn demo:browser` is the stable package-script form of `yarn dev:renderer --host 127.0.0.1 --port 4102`. Open `http://127.0.0.1:4102/`.
+
+For full desktop-shell development, use `yarn dev`, which keeps the renderer on the repo default `http://127.0.0.1:5173` and launches Electron. For production-style validation, use `yarn build:renderer` or `yarn build:cloudflare`; preview the built `dist/` output separately as needed without treating the dev-server demo port as production deployment guidance.
 
 ## Scripts
 
