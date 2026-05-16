@@ -20,6 +20,7 @@ describe('modeArt vs run-mode-catalog', () => {
         const rows = getModePosterArtRows();
         expect(rows.find((row) => row.key === 'classic')?.status).toBe('custom');
         expect(rows.find((row) => row.key === MODE_POSTER_FALLBACK_KEY)?.status).toBe('fallback');
+        expect(rows.find((row) => row.key === 'dungeon_showcase')?.status).toBe('custom');
         expect(rows.find((row) => row.key === 'gauntlet')?.status).toBe('custom');
         expect(modePosterHasCustomArt('daily')).toBe(true);
         expect(modePosterHasCustomArt('scholar')).toBe(true);

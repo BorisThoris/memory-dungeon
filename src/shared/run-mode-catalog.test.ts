@@ -42,6 +42,7 @@ describe('REG-050 mode identity promises', () => {
             title: 'Dungeon Showcase',
             group: 'core',
             availability: 'available',
+            posterKey: 'dungeon_showcase',
             testId: 'choose-path-dungeon-showcase',
             action: { type: 'startDungeonShowcaseRun' }
         });

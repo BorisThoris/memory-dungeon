@@ -1,9 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import ChooseYourPathScreen from './ChooseYourPathScreen';
 
 const viewportSnapshot = { width: 390, height: 844 };
+const storeSpies = vi.hoisted(() => ({
+    startDungeonShowcaseRun: vi.fn()
+}));
 
 vi.mock('./MainMenuBackground', () => ({ default: () => null }));
 vi.mock('../hooks/useViewportSize', () => ({
@@ -43,7 +46,7 @@ vi.mock('../store/useAppStore', async () => {
         saveData,
         settings: saveData.settings,
         startDailyRun: vi.fn(),
-        startDungeonShowcaseRun: vi.fn(),
+        startDungeonShowcaseRun: storeSpies.startDungeonShowcaseRun,
         startGauntletRun: vi.fn(),
         startMeditationRun: vi.fn(),
         startMeditationRunWithMutators: vi.fn(),
@@ -60,16 +63,21 @@ vi.mock('../store/useAppStore', async () => {
 });
 
 describe('ChooseYourPathScreen REG-010 discoverability', () => {
-    it('defaults to a Classic Run launcher with browse content open', () => {
+    beforeEach(() => {
+        storeSpies.startDungeonShowcaseRun.mockClear();
+    });
+
+    it('defaults to a Dungeon Showcase launcher with browse content open', () => {
         render(<ChooseYourPathScreen />);
 
         const launcher = screen.getByTestId('choose-path-launcher');
-        expect(launcher).toHaveTextContent(/Classic Run/);
-        expect(launcher).toHaveTextContent(/clean dungeon descent/i);
+        expect(launcher).toHaveTextContent(/Dungeon Showcase/);
+        expect(launcher).toHaveTextContent(/enemy patrols/i);
         expect(screen.getByRole('button', { name: /start run/i })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /hide modes/i })).toBeInTheDocument();
         expect(screen.getByTestId('choose-path-more-modes')).toBeInTheDocument();
         expect(screen.getByTestId('choose-path-offline-note')).toBeInTheDocument();
+        expect(screen.getByText(/Classic Run/)).toBeInTheDocument();
         expect(screen.getByText(/Endless Mode/)).toBeInTheDocument();
     });
 
@@ -77,8 +85,8 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         render(<ChooseYourPathScreen />);
 
         const library = screen.getByTestId('choose-path-more-modes');
+        expect(library).toHaveTextContent(/Classic Run/);
         expect(library).toHaveTextContent(/Daily Challenge/);
-        expect(library).toHaveTextContent(/Dungeon Showcase/);
         expect(library).toHaveTextContent(/Endless Mode/);
         expect(library).toHaveTextContent(/Locked/);
         expect(screen.getByRole('button', { name: /search modes/i })).toBeInTheDocument();
@@ -88,14 +96,12 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         expect(offlineNote).toHaveTextContent(/Profile/);
     });
 
-    it('explains the dungeon showcase from Browse modes', async () => {
+    it('starts Dungeon Showcase from the hero launcher in one action', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
 
-        await user.click(screen.getByTestId('choose-path-dungeon-showcase'));
+        await user.click(screen.getByRole('button', { name: /start run/i }));
 
-        expect(screen.getByText(/Dungeon preview/i)).toBeInTheDocument();
-        expect(screen.getByText(/patrols, route exits, trap vocabulary/i)).toBeInTheDocument();
-        expect(screen.getByText(/disables achievements/i)).toBeInTheDocument();
+        expect(storeSpies.startDungeonShowcaseRun).toHaveBeenCalledTimes(1);
     });
 });

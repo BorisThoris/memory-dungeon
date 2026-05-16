@@ -169,10 +169,7 @@ const ChooseYourPathScreen = () => {
 
     const heroModes = useMemo((): readonly RunModeDefinition[] => choosePathHeroModes(), []);
     const launchMode = useMemo(
-        (): RunModeDefinition | null =>
-            heroModes.find((mode) => mode.id === 'classic') ??
-            heroModes.find((mode) => mode.availability === 'available') ??
-            null,
+        (): RunModeDefinition | null => heroModes.find((mode) => mode.availability === 'available') ?? null,
         [heroModes]
     );
     const browseModes = useMemo(

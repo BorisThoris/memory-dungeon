@@ -1,5 +1,6 @@
 import modeClassicUrl from './backgrounds/bg-mode-classic-v1.png';
 import modeDailyUrl from './backgrounds/bg-mode-daily-v1.png';
+import modeDungeonShowcaseUrl from './backgrounds/mode-dungeon-showcase.png';
 import modeEndlessUrl from './backgrounds/bg-mode-endless-v1.png';
 import modeGauntletUrl from './backgrounds/bg-mode-gauntlet-v1.png';
 import modeMeditationUrl from './backgrounds/bg-mode-meditation-v1.png';
@@ -22,6 +23,7 @@ export const MODE_POSTER_FALLBACK_COPY = {
 export const MODE_CARD_ART = {
     classic: modeClassicUrl,
     daily: modeDailyUrl,
+    dungeon_showcase: modeDungeonShowcaseUrl,
     endless: modeEndlessUrl,
     fallback: modePlaceholderUrl,
     gauntlet: modeGauntletUrl,

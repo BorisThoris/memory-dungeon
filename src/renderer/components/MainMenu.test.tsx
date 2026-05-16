@@ -41,6 +41,7 @@ describe('MainMenu REG-009 mobile landscape density', () => {
     it('keeps Play dominant and secondary actions in a compact group', async () => {
         const user = userEvent.setup();
         const onOpenProfile = vi.fn();
+        const onStartDungeonShowcase = vi.fn();
         render(
             <MainMenu
                 onDismissHowToPlay={async () => undefined}
@@ -50,6 +51,7 @@ describe('MainMenu REG-009 mobile landscape density', () => {
                 onOpenProfile={onOpenProfile}
                 onOpenSettings={vi.fn()}
                 onPlay={vi.fn()}
+                onStartDungeonShowcase={onStartDungeonShowcase}
                 reduceMotion
                 saveData={createDefaultSaveData()}
                 showHowToPlay={false}
@@ -57,9 +59,12 @@ describe('MainMenu REG-009 mobile landscape density', () => {
         );
 
         expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Dungeon Showcase' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Collection' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Profile' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Settings' })).toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: 'Dungeon Showcase' }));
+        expect(onStartDungeonShowcase).toHaveBeenCalledTimes(1);
         await user.click(screen.getByRole('button', { name: 'Profile' }));
         expect(onOpenProfile).toHaveBeenCalledTimes(1);
     });
@@ -74,6 +79,7 @@ describe('MainMenu REG-009 mobile landscape density', () => {
                 onOpenProfile={vi.fn()}
                 onOpenSettings={vi.fn()}
                 onPlay={vi.fn()}
+                onStartDungeonShowcase={vi.fn()}
                 reduceMotion
                 saveData={createDefaultSaveData()}
                 showHowToPlay

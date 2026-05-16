@@ -296,6 +296,17 @@
     min-height: 2.45rem !important;
 }
 
+.ctaButtonShowcase {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), transparent 48%),
+        color-mix(in srgb, var(--theme-panel-solid) 76%, var(--theme-gold-deep) 24%);
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-gold-bright) 28%);
+}
+
+.ctaButtonShowcase:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 54%, var(--theme-gold-bright) 34%);
+}
+
 .shell.touchCompactShell .ctaButton,
 .shell.shortTouchLandscapeShell .ctaButton,
 .shell.ultraCompactPhoneShell .ctaButton {

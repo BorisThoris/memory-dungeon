@@ -121,7 +121,7 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
         outcomeSummary: 'Showcase results are practice-only and do not affect daily fairness or Classic mastery.',
         group: 'core',
         availability: 'available',
-        posterKey: 'classic',
+        posterKey: 'dungeon_showcase',
         testId: 'choose-path-dungeon-showcase',
         action: { type: 'startDungeonShowcaseRun' }
     },
@@ -309,8 +309,8 @@ export function runModesByGroup(group: RunModeGroup): readonly RunModeDefinition
     return RUN_MODE_CATALOG.filter((def) => def.group === group);
 }
 
-/** Featured hero row on Choose Your Path (Classic, Daily, Endless). Order is fixed. */
-export const CHOOSE_PATH_HERO_MODE_IDS = ['classic', 'daily', 'endless'] as const;
+/** Featured hero row on Choose Your Path. Order is fixed; Dungeon Showcase is first for portfolio demos. */
+export const CHOOSE_PATH_HERO_MODE_IDS = ['dungeon_showcase', 'classic', 'daily', 'endless'] as const;
 export type ChoosePathHeroModeId = (typeof CHOOSE_PATH_HERO_MODE_IDS)[number];
 
 const CHOOSE_PATH_HERO_ID_SET = new Set<string>(CHOOSE_PATH_HERO_MODE_IDS);

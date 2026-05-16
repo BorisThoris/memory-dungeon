@@ -37,6 +37,7 @@ interface MainMenuProps {
     onOpenCodex: () => void;
     onOpenInventory: () => void;
     onOpenSettings: () => void;
+    onStartDungeonShowcase: () => void;
 }
 
 const MainMenu = ({
@@ -50,7 +51,8 @@ const MainMenu = ({
     onOpenProfile,
     onOpenCodex,
     onOpenInventory,
-    onOpenSettings
+    onOpenSettings,
+    onStartDungeonShowcase
 }: MainMenuProps) => {
     const { achievementBridgeNotice, clearAchievementBridgeNotice, persistenceWriteNotice, clearPersistenceWriteNotice } =
         useAppStore(
@@ -243,6 +245,21 @@ const MainMenu = ({
                                                 >
                                                     <span className={styles.ctaContent}>
                                                         <span className={styles.ctaTitle}>Play</span>
+                                                    </span>
+                                                </UiButton>
+                                                <UiButton
+                                                    aria-label="Dungeon Showcase"
+                                                    className={`${styles.ctaButton} ${styles.ctaButtonShowcase}`}
+                                                    fullWidth
+                                                    size={playButtonSize}
+                                                    variant="secondary"
+                                                    onClick={() => {
+                                                        playMenuOpen();
+                                                        onStartDungeonShowcase();
+                                                    }}
+                                                >
+                                                    <span className={styles.ctaContent}>
+                                                        <span className={styles.ctaTitle}>Dungeon Showcase</span>
                                                     </span>
                                                 </UiButton>
                                                 <div className={styles.secondaryActionGrid} data-testid="main-menu-secondary-actions">
