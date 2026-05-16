@@ -27,6 +27,18 @@ This starts:
 - the Electron main/preload build watcher
 - an Electron app window connected to the dev server
 
+## Demo run
+
+For a browser-only local demo, run the renderer directly:
+
+```bash
+yarn install
+yarn build:renderer
+yarn preview --host 127.0.0.1 --port 4102
+```
+
+Open `http://127.0.0.1:4102/`. For live renderer development, use `yarn dev:renderer`; for the full desktop shell, use `yarn dev`, which keeps the renderer on the repo default `http://127.0.0.1:5173` and launches Electron.
+
 ## Scripts
 
 ```bash
@@ -87,3 +99,18 @@ The full v1 ship bar is the offline-first [complete product definition of done](
 ## Archived Legacy Code
 
 - See [`legacy/README.md`](./legacy/README.md) for what used to live here and how to find it in git history.
+
+## Cloudflare Pages
+
+Use the renderer-only build for the public portfolio embed.
+
+- Pages project name: `memory-dungeon`
+- GitHub repository: `BorisThoris/memory-dungeon`
+- Production branch: `gld-long-run-feedback-safe-expansion`
+- Root directory: `.`
+- Build command: `yarn build:cloudflare`
+- Build output directory: `dist`
+- Environment variable: `NODE_VERSION=22.16.0`
+- Public URL target: `https://memory-dungeon.pages.dev/`
+
+Do not enable Cloudflare Access for the demo deployment. Leave frame-blocking headers unset so the portfolio can iframe the public build.
