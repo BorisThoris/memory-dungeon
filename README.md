@@ -38,6 +38,8 @@ yarn demo:browser
 
 `yarn demo:browser` is the stable package-script form of `yarn dev:renderer --host 127.0.0.1 --port 4102`. Open `http://127.0.0.1:4102/`.
 
+Portfolio capture steps, screenshot targets, and iframe/Cloudflare readiness notes live in [`docs/PORTFOLIO_DEMO.md`](docs/PORTFOLIO_DEMO.md).
+
 For full desktop-shell development, use `yarn dev`, which keeps the renderer on the repo default `http://127.0.0.1:5173` and launches Electron. For production-style validation, use `yarn build:renderer` or `yarn build:cloudflare`; preview the built `dist/` output separately as needed without treating the dev-server demo port as production deployment guidance.
 
 ## Scripts

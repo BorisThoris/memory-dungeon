@@ -8,6 +8,7 @@
 |--------|----------------|
 | `yarn dev` | Concurrently: Vite renderer, tsup watch for main/preload, Electron against dev server |
 | `yarn dev:renderer` | Vite only (`http://127.0.0.1:5173`) |
+| `yarn demo:browser` | Browser-only portfolio demo server (`http://127.0.0.1:4102`; see [Portfolio Demo Evidence](../PORTFOLIO_DEMO.md)) |
 | `yarn dev:electron:watch` | tsup watch for Electron bundles |
 | `yarn dev:electron` | Waits for Vite + built `dist-electron`, runs electronmon |
 
