@@ -14,6 +14,7 @@
         "dev": "concurrently -k \"yarn dev:renderer\" \"yarn dev:electron:watch\" \"yarn dev:electron\"",
         "dev:renderer": "vite",
         "demo:browser": "vite --host 127.0.0.1 --port 4102",
+        "portfolio:smoke": "yarn typecheck && yarn test:e2e:demo-readiness",
         "dev:electron:watch": "tsup --config tsup.config.ts --watch",
         "dev:electron": "wait-on tcp:5173 file:dist-electron/main/index.js file:dist-electron/preload/index.js && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electronmon dist-electron/main/index.js",
         "build": "yarn clean && yarn build:renderer && yarn build:electron",

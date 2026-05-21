@@ -111,3 +111,12 @@ yarn capture:gameplay-audit
 ```bash
 yarn capture:visual-inventory
 ```
+## Fast Smoke Gate
+
+Before a quick local portfolio capture pass, run:
+
+```bash
+yarn portfolio:smoke
+```
+
+This narrow gate runs `yarn typecheck` plus `yarn test:e2e:demo-readiness`, and exits nonzero if the demo readiness Playwright spec fails. Use the broader renderer QA, visual capture, and long-run gates before refreshing release-oriented media or validating riskier gameplay/UI changes.

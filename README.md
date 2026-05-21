@@ -40,6 +40,8 @@ yarn demo:browser
 
 Portfolio capture steps, screenshot targets, and iframe/Cloudflare readiness notes live in [`docs/PORTFOLIO_DEMO.md`](docs/PORTFOLIO_DEMO.md). Use its quick checklist for local menu, mode/featured run, board, relic offer, floor transition, settings, and mobile captures; use the full validation path there before refreshing release/demo media.
 
+Before a quick portfolio demo pass, run `yarn portfolio:smoke`. It keeps the gate narrow by running TypeScript static validation plus the demo readiness Playwright spec, so failures in that route still exit nonzero without paying for renderer QA, visual capture, or long-run suites. Use the broader verification commands (`yarn ci`, `yarn test:e2e:renderer-qa`, capture scripts, and long-run gates) before release-oriented media refreshes or changes with wider gameplay/UI risk.
+
 For full desktop-shell development, use `yarn dev`, which keeps the renderer on the repo default `http://127.0.0.1:5173` and launches Electron. For production-style validation, use `yarn build:renderer` or `yarn build:cloudflare`; preview the built `dist/` output separately as needed without treating the dev-server demo port as production deployment guidance.
 
 ## Scripts
