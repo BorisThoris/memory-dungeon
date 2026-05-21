@@ -63,3 +63,51 @@ yarn test:e2e:playable-path:audit
 - The Cloudflare Pages demo is intended to be public and iframe-ready. Do not enable Cloudflare Access, and leave frame-blocking headers unset so the portfolio can embed `https://memory-dungeon.pages.dev/`.
 - Treat browser capture as the public portfolio path and Electron as a Windows shell validation path.
 - Before linking the portfolio, confirm the deployed Pages build loads inside the portfolio iframe and that menu, mode selection, gameplay, settings, inventory, and profile/collection routes remain reachable without desktop shell APIs.
+
+## Portfolio Capture Checklist
+
+Use this short list for portfolio screenshots or review clips. The long capture inventories stay in the Playwright specs and generated audit output; this page should only point to the scripts needed to produce them.
+
+### Quick Local Capture
+
+1. Start the browser demo:
+
+   ```bash
+   yarn demo:browser
+   ```
+
+2. Open `http://127.0.0.1:4102/`.
+
+3. Capture these states at desktop `1440x900` and mobile `390x844`:
+
+   | State | Capture note |
+   | --- | --- |
+   | Menu | Main menu with the title, primary run actions, and readable background treatment. |
+   | Mode select or featured run | Show either the mode selection surface or a featured run card before starting. |
+   | Active board | Enter a run and capture the playable board with HUD, hand/memory state, and readable tile art. |
+   | Relic offer | Capture the post-floor relic choice state with all offer cards visible. |
+   | Floor transition | Capture the route/floor transition or interlude state between boards. |
+   | Settings | Open settings from the menu or in-run overlay and capture the controls at desktop size. |
+   | Mobile layout | Repeat the strongest menu or active-board shot at `390x844`; use `844x390` as an extra landscape check when mobile fit is in doubt. |
+
+4. For an automated smoke capture of the same visual surfaces, run:
+
+   ```bash
+   yarn test:e2e:visual:smoke
+   ```
+
+### Full Release/Demo Validation
+
+Run this path before publishing or refreshing portfolio media:
+
+```bash
+yarn build:cloudflare
+yarn test:e2e:visual:smoke
+yarn capture:gameplay-audit
+```
+
+`yarn capture:gameplay-audit` writes the detailed gameplay audit under `test-results/gameplay-visual-audit` and uses the existing Playwright capture script instead of duplicating the internal visual inventory here. Use the broader visual inventory only when you need full device-grid evidence:
+
+```bash
+yarn capture:visual-inventory
+```
