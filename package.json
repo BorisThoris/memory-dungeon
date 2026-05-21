@@ -44,6 +44,7 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "test:e2e": "playwright test",
+        "test:e2e:demo-readiness": "playwright test e2e/demo-readiness.spec.ts --workers=1",
         "test:e2e:illustration-regression": "playwright test e2e/tile-card-face-illustration-regression.spec.ts --workers=1",
         "test:e2e:a11y": "playwright test e2e/a11y-scoped-routes.spec.ts --workers=1",
         "test:e2e:visual": "yarn test:e2e:visual:device-grid",

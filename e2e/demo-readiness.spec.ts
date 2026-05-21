@@ -1,126 +1,115 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
+import { expect, test, type Page } from '@playwright/test';
 
-const demoUrl = process.env.DEMO_BROWSER_URL ?? "http://127.0.0.1:4102/";
+const blockingConsoleTypes = new Set(['error']);
 
-const severeConsoleTypes = new Set(["error"]);
+function installBlockingErrorChecks(page: Page) {
+    const blockingErrors: string[] = [];
 
-function installDemoErrorGuards(page: Page) {
-  const failures: string[] = [];
+    page.on('console', (message) => {
+        if (!blockingConsoleTypes.has(message.type())) {
+            return;
+        }
 
-  page.on("pageerror", (error) => {
-    failures.push(`pageerror: ${error.message}`);
-  });
+        blockingErrors.push(message.text());
+    });
 
-  page.on("console", (message) => {
-    if (!severeConsoleTypes.has(message.type())) {
-      return;
-    }
+    page.on('pageerror', (error) => {
+        blockingErrors.push(error.message);
+    });
 
-    failures.push(`console ${message.type()}: ${message.text()}`);
-  });
-
-  return {
-    expectClean() {
-      expect(failures).toEqual([]);
-    },
-  };
+    return {
+        expectClean() {
+            expect(blockingErrors).toEqual([]);
+        },
+    };
 }
 
-async function clickFirstVisible(candidates: Locator[], label: string) {
-  for (const candidate of candidates) {
-    const count = await candidate.count();
-    for (let index = 0; index < count; index += 1) {
-      const item = candidate.nth(index);
-      if (await item.isVisible().catch(() => false)) {
-        await item.click();
-        return;
-      }
-    }
-  }
+async function openFromCleanBrowserState(page: Page) {
+    await page.addInitScript(() => {
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+    });
 
-  throw new Error(`Could not find visible ${label}.`);
+    await page.goto('/');
+}
+
+async function expectMainMenu(page: Page) {
+    await expect(page.getByRole('heading', { name: /memory dungeon/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /classic|featured|daily|gauntlet|puzzle|meditation/i }).first()).toBeVisible();
 }
 
 async function startPortfolioRun(page: Page) {
-  await clickFirstVisible(
-    [
-      page.getByRole("button", { name: /classic run/i }),
-      page.getByRole("button", { name: /start.*classic|classic.*start/i }),
-      page.getByRole("button", { name: /new run|start run|begin run|play/i }),
-      page.getByText(/classic run/i),
-    ],
-    "demo run start control",
-  );
-}
+    const featuredRun = page.getByRole('button', { name: /featured|practice|scholar|wild|puzzle/i }).first();
+    const classicRun = page.getByRole('button', { name: /classic/i }).first();
+    const startRun = page.getByRole('button', { name: /start|begin|play/i }).first();
 
-async function interactWithBoard(page: Page) {
-  await expect(
-    page
-      .locator(
-        [
-          "[data-testid*='tile']",
-          "[data-testid*='card']",
-          "[aria-label*='tile' i]",
-          "[aria-label*='card' i]",
-          "canvas",
-        ].join(", "),
-      )
-      .first(),
-  ).toBeVisible({ timeout: 10_000 });
-
-  await clickFirstVisible(
-    [
-      page.locator("[data-testid*='tile']"),
-      page.locator("[data-testid*='card']"),
-      page.getByRole("button", { name: /tile|card|symbol|memory/i }),
-      page.locator("canvas"),
-    ],
-    "board interaction target",
-  );
-}
-
-async function openAndCloseSettings(page: Page) {
-  await clickFirstVisible(
-    [
-      page.getByRole("button", { name: /^settings$/i }),
-      page.getByRole("button", { name: /open settings|options/i }),
-      page.locator("[data-testid*='settings']"),
-    ],
-    "settings control",
-  );
-
-  await expect(
-    page
-      .getByRole("dialog", { name: /settings|options/i })
-      .or(page.getByText(/settings/i))
-      .first(),
-  ).toBeVisible({ timeout: 5_000 });
-
-  const closeCandidates = [
-    page.getByRole("button", { name: /close|done|back|resume|return/i }),
-    page.locator("[aria-label*='close' i]"),
-  ];
-
-  for (const candidate of closeCandidates) {
-    if ((await candidate.count()) > 0 && (await candidate.first().isVisible().catch(() => false))) {
-      await candidate.first().click();
-      return;
+    if (await featuredRun.isVisible()) {
+        await featuredRun.click();
+    } else if (await classicRun.isVisible()) {
+        await classicRun.click();
+    } else {
+        await startRun.click();
     }
-  }
-
-  await page.keyboard.press("Escape");
 }
 
-test("browser demo loads, starts, survives settings, and keeps gameplay usable", async ({ page }) => {
-  const errorGuard = installDemoErrorGuards(page);
+async function expectInteractiveBoard(page: Page) {
+    const board = page
+        .getByRole('grid')
+        .or(page.locator('[data-testid*="board" i]'))
+        .or(page.locator('canvas'))
+        .first();
 
-  await page.goto(demoUrl);
-  await expect(page.getByText(/memory dungeon/i).first()).toBeVisible({ timeout: 10_000 });
+    await expect(board).toBeVisible();
 
-  await startPortfolioRun(page);
-  await interactWithBoard(page);
-  await openAndCloseSettings(page);
-  await interactWithBoard(page);
+    const tile = page
+        .getByRole('button', { name: /tile|card|hidden|memory|symbol/i })
+        .or(page.locator('[data-testid*="tile" i], [data-testid*="card" i], button').filter({ hasNotText: /settings|menu|pause/i }))
+        .first();
 
-  errorGuard.expectClean();
+    await expect(tile).toBeVisible();
+    await tile.click();
+}
+
+async function expectSettingsCanOpenAndClose(page: Page) {
+    await page.getByRole('button', { name: /settings/i }).click();
+
+    const settingsSurface = page
+        .getByRole('dialog', { name: /settings/i })
+        .or(page.getByRole('heading', { name: /settings/i }))
+        .first();
+
+    await expect(settingsSurface).toBeVisible();
+
+    const closeSettings = page.getByRole('button', { name: /close|back|resume|done|settings/i }).first();
+    await closeSettings.click();
+    await expect(settingsSurface).toBeHidden();
+}
+
+test.describe('portfolio demo readiness', () => {
+    test.use({ storageState: { cookies: [], origins: [] } });
+
+    test('starts a clean desktop demo run and keeps the first board usable', async ({ page }) => {
+        const errors = installBlockingErrorChecks(page);
+
+        await openFromCleanBrowserState(page);
+        await expectMainMenu(page);
+        await startPortfolioRun(page);
+        await expectInteractiveBoard(page);
+        await expectSettingsCanOpenAndClose(page);
+
+        errors.expectClean();
+    });
+
+    test('keeps the first-run demo path available on mobile', async ({ page }) => {
+        test.setTimeout(45_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        const errors = installBlockingErrorChecks(page);
+
+        await openFromCleanBrowserState(page);
+        await expectMainMenu(page);
+        await startPortfolioRun(page);
+        await expectInteractiveBoard(page);
+
+        errors.expectClean();
+    });
 });
