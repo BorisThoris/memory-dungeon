@@ -41,6 +41,8 @@ interface OverlayModalProps {
     headerPlateTone?: OverlayModalHeaderPlateTone;
     /** Hybrid parity: compact decisions use a rail; body-heavy overlays use a bottom dock. */
     actionPlacement?: OverlayModalActionPlacement;
+    /** Optional keyboard back path for overlays with an existing safe cancel/resume action. */
+    onEscape?: () => void;
 }
 
 const modalKindFor = (actions: readonly ModalAction[], hasChildren: boolean): 'alert' | 'decision' | 'sheet' => {
@@ -123,6 +125,23 @@ const resolveActionPlacement = (
     return hasChildren ? 'dock' : 'rail';
 };
 
+const targetAllowsOverlayEscape = (target: EventTarget | null): boolean => {
+    if (!(target instanceof HTMLElement)) {
+        return true;
+    }
+
+    if (target.isContentEditable || target.closest('textarea, select')) {
+        return false;
+    }
+
+    const input = target.closest('input');
+    if (!input) {
+        return true;
+    }
+
+    return ['button', 'checkbox', 'radio', 'reset', 'submit'].includes(input.type);
+};
+
 const OverlayModal = ({
     title,
     subtitle,
@@ -132,7 +151,8 @@ const OverlayModal = ({
     ornamentalHeaderPlate = false,
     quietHeaderPlate = false,
     headerPlateTone = 'neutral',
-    actionPlacement = 'auto'
+    actionPlacement = 'auto',
+    onEscape
 }: OverlayModalProps) => {
     const modalRef = useRef<HTMLElement | null>(null);
     const titleId = useId();
@@ -162,6 +182,20 @@ const OverlayModal = ({
     useEffect(() => {
         const onDocumentKeyDown = (event: KeyboardEvent): void => {
             handleTabFocusTrapEvent(event, modalRef.current);
+
+            if (
+                onEscape &&
+                event.key === 'Escape' &&
+                !event.defaultPrevented &&
+                !event.repeat &&
+                !event.altKey &&
+                !event.ctrlKey &&
+                !event.metaKey &&
+                targetAllowsOverlayEscape(event.target)
+            ) {
+                event.preventDefault();
+                onEscape();
+            }
         };
 
         document.addEventListener('keydown', onDocumentKeyDown, true);
@@ -169,7 +203,7 @@ const OverlayModal = ({
         return () => {
             document.removeEventListener('keydown', onDocumentKeyDown, true);
         };
-    }, []);
+    }, [onEscape]);
 
     useEffect(() => {
         document.body.dataset.overlayModalOpen = 'true';

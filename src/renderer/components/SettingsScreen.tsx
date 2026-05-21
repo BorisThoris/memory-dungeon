@@ -925,6 +925,10 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                             variant: 'secondary'
                         }
                     ]}
+                    onEscape={() => {
+                        playUiBack();
+                        setUnsavedBackOpen(false);
+                    }}
                     subtitle="Save your changes, discard them, or keep editing."
                     testId="settings-unsaved-back-modal"
                     title="Unsaved settings"

@@ -58,6 +58,7 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | Script | What it does |
 |--------|----------------|
 | `yarn capture:ui-audit` / `capture:visual-inventory` | `VISUAL_CAPTURE_ROOT=docs/visual-capture` + device-grid spec |
+| `yarn capture:ui-audit` for portfolio evidence | Preferred visual capture entrypoint for the compact [Portfolio Demo Evidence Page](../PORTFOLIO_DEMO.md) |
 | `yarn capture:ui-design-reference` | Reference stills for design buckets |
 | `yarn capture:endproduct-parity` | End-product parity captures (defaults `VISUAL_CAPTURE_ROOT=docs/visual-capture/endproduct-parity`) |
 | `yarn capture:matched-flame` | Matched-card flame capture spec |

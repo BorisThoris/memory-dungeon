@@ -1,4 +1,5 @@
 import { getDailyArchiveSummary } from './daily-archive';
+import { FEATURE_CLOUD_SAVE } from './feature-flags';
 import { getMetaProgressionBoard } from './meta-progression';
 import { buildRunJournalRowsFromSave } from './run-history';
 import type { SaveData } from './contracts';
@@ -37,7 +38,7 @@ export interface SaveTrustRow {
 
 export const buildProfileSaveShellSummary = (
     save: SaveData,
-    { cloudSaveAvailable = false }: { cloudSaveAvailable?: boolean } = {}
+    { cloudSaveAvailable = FEATURE_CLOUD_SAVE }: { cloudSaveAvailable?: boolean } = {}
 ): ProfileSaveShellSummary => {
     const board = getMetaProgressionBoard(save);
     const daily = getDailyArchiveSummary(save);

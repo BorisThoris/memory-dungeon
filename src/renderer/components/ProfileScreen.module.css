@@ -9,6 +9,7 @@
 .panel {
     width: 100%;
     box-sizing: border-box;
+    flex: 0 0 auto;
 }
 
 .profileIdentity {
@@ -235,6 +236,77 @@
     color: var(--theme-text-muted);
 }
 
+.saveTrustHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--theme-space-md);
+}
+
+.saveTrustScope {
+    flex-shrink: 0;
+    border: 1px solid color-mix(in srgb, var(--theme-rune) 32%, transparent);
+    border-radius: var(--ui-radius-pill);
+    padding: 0.22rem 0.55rem;
+    background: color-mix(in srgb, var(--theme-rune) 11%, transparent);
+    color: var(--theme-rune);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.saveTrustList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: var(--theme-space-sm);
+    margin-top: var(--theme-space-md);
+}
+
+.saveTrustItem {
+    min-width: 0;
+    padding: var(--theme-space-sm) var(--theme-space-md);
+    border-radius: var(--ui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--theme-gold) 18%, var(--theme-border));
+    background: var(--theme-surface-glass);
+}
+
+.saveTrustItem[data-status='active'] {
+    border-color: color-mix(in srgb, var(--theme-success) 38%, var(--theme-border));
+}
+
+.saveTrustItem[data-status='deferred'] {
+    border-color: color-mix(in srgb, var(--theme-amber) 36%, var(--theme-border));
+}
+
+.saveTrustItemHeader {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--theme-space-sm);
+}
+
+.saveTrustItemHeader strong {
+    min-width: 0;
+    color: var(--theme-rune);
+}
+
+.saveTrustStatus {
+    flex-shrink: 0;
+    color: var(--theme-text-subtle);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.saveTrustItem p {
+    margin: 0.45rem 0 0;
+    color: var(--theme-text-muted);
+    font-size: 0.78rem;
+    line-height: 1.36;
+}
+
 .trustFooter {
     margin: 0;
     padding: var(--theme-space-md) 0 0;
@@ -242,4 +314,12 @@
     line-height: 1.4;
     color: var(--theme-text-muted);
     border-top: 1px solid var(--theme-divider-hairline);
+}
+
+@media (max-width: 520px) {
+    .saveTrustHeader,
+    .saveTrustItemHeader {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 }

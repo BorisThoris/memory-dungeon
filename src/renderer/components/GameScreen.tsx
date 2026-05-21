@@ -1509,6 +1509,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             }
                         ]}
                         headerPlateTone="success"
+                        onEscape={() => {
+                            playUiBack();
+                            closeDungeonExitPrompt();
+                        }}
                         ornamentalHeaderPlate
                         subtitle={`${dungeonExitRouteLine} ${dungeonExitLockLine}`}
                         testId="dungeon-exit-overlay"
@@ -1536,6 +1540,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             }
                         ]}
                         headerPlateTone="pause"
+                        onEscape={resume}
                         ornamentalHeaderPlate
                         subtitle="Game is paused. The board, memorize phase, and debug timers stay frozen until you resume or retreat. Press P to resume."
                         testId="game-pause-overlay"
@@ -1850,6 +1855,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             }
                         ]}
                         headerPlateTone="danger"
+                        onEscape={() => {
+                            playUiBack();
+                            setAbandonRunConfirmOpen(false);
+                        }}
                         ornamentalHeaderPlate
                         subtitle="You will lose this run and return to the main menu. This cannot be undone."
                         title="Abandon run?"

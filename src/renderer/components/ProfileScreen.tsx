@@ -4,7 +4,7 @@ import { RELIC_CATALOG } from '../../shared/game-catalog';
 import { countEligibleHonors, totalHonorUnlocks } from '../../shared/honorUnlocks';
 import { getDailyStreakEthicsRow } from '../../shared/daily-archive';
 import { getObjectiveBoardItems } from '../../shared/objective-board';
-import { buildProfileSaveShellSummary, getProfileSummaryRows } from '../../shared/profile-summary';
+import { buildProfileSaveShellSummary, getProfileSummaryRows, getSaveTrustRows } from '../../shared/profile-summary';
 import { formatNextUtcReset } from '../../shared/utc-countdown';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
@@ -37,6 +37,7 @@ const ProfileScreen = () => {
     const objectiveBoard = getObjectiveBoardItems(saveData);
     const profileSummary = getProfileSummaryRows(saveData);
     const trustShell = buildProfileSaveShellSummary(saveData);
+    const saveTrustRows = getSaveTrustRows(saveData);
     const profileTitle = getEquippedCosmeticId(saveData, 'title') === 'title_ascendant_v' ? 'Ascendant V' : 'Seeker';
     const profileCrest = getEquippedCosmeticId(saveData, 'crest') === 'crest_daily_bronze' ? 'Daily Bronze' : 'Lantern';
     const relicPickEntries = saveData.playerStats
@@ -175,6 +176,27 @@ const ProfileScreen = () => {
                         <p className={styles.emptyState}>No relic history yet.</p>
                     )}
                 </details>
+
+                <Panel className={styles.panel} padding="md" variant="default" data-testid="profile-save-trust-panel">
+                    <div className={styles.saveTrustHeader}>
+                        <div>
+                            <span className={styles.panelKicker}>Save Trust</span>
+                            <strong className={styles.panelHeading}>Local profile boundaries</strong>
+                        </div>
+                        <span className={styles.saveTrustScope}>No account required</span>
+                    </div>
+                    <div className={styles.saveTrustList}>
+                        {saveTrustRows.map((row) => (
+                            <div className={styles.saveTrustItem} data-status={row.status} key={row.id}>
+                                <div className={styles.saveTrustItemHeader}>
+                                    <strong>{row.label}</strong>
+                                    <span className={styles.saveTrustStatus}>{row.status.replace('_', ' ')}</span>
+                                </div>
+                                <p>{row.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Panel>
 
                 <p className={styles.trustFooter} data-testid="profile-trust-footer">
                     {trustShell.saveLocationCopy} {trustShell.exportCopy}

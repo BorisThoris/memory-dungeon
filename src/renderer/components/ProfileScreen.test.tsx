@@ -44,6 +44,10 @@ describe('ProfileScreen', () => {
         expect(screen.getByTestId('profile-daily-panel')).toBeInTheDocument();
         expect(screen.getByTestId('profile-recent-run')).toBeInTheDocument();
         expect(screen.getByTestId('profile-relic-details')).toBeInTheDocument();
+        expect(screen.getByTestId('profile-save-trust-panel')).toBeInTheDocument();
+        expect(screen.getByText('Local profile boundaries')).toBeInTheDocument();
+        expect(screen.getByText('Cloud sync')).toBeInTheDocument();
+        expect(screen.getByText(/cloud sync is not available in this build/i)).toBeInTheDocument();
         expect(screen.getByTestId('profile-trust-footer')).toBeInTheDocument();
 
         await user.click(screen.getByRole('button', { name: 'Settings' }));

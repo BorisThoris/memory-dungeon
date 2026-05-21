@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import OverlayModal from './OverlayModal';
 import { getOverlayDecisionPolicyRows } from '../../shared/overlay-decision-policy';
 
@@ -80,5 +80,77 @@ describe('OverlayModal (REF-061)', () => {
         expect(getOverlayDecisionPolicyRows().map((row) => row.modalKind)).toEqual(['alert', 'decision', 'sheet']);
         expect(screen.getByTestId('unit-modal')).toHaveAttribute('data-keyboard-contract', 'Tab trap + initial focus + focus restore');
         expect(screen.getByTestId('unit-modal')).toHaveAttribute('data-one-hand-placement', 'sticky action rail / mobile bottom-safe area');
+    });
+
+    it('REG-097 calls the optional keyboard back path on Escape', async () => {
+        const user = userEvent.setup();
+        const onEscape = vi.fn();
+        render(
+            <OverlayModal
+                actions={[{ label: 'Resume', onClick: () => {} }]}
+                onEscape={onEscape}
+                testId="unit-modal"
+                title="Run paused"
+            />
+        );
+
+        await user.keyboard('{Escape}');
+
+        expect(onEscape).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps Escape inert for required overlays without a back path', async () => {
+        const user = userEvent.setup();
+        render(<OverlayModal actions={[]} testId="unit-modal" title="Choose a relic" />);
+
+        await user.keyboard('{Escape}');
+
+        expect(screen.getByTestId('unit-modal')).toBeInTheDocument();
+    });
+
+    it('does not steal Escape from editable modal fields', async () => {
+        const user = userEvent.setup();
+        const onEscape = vi.fn();
+        render(
+            <OverlayModal
+                actions={[{ label: 'Close', onClick: () => {} }]}
+                onEscape={onEscape}
+                testId="unit-modal"
+                title="Rename save"
+            >
+                <label>
+                    Save name
+                    <input defaultValue="Daily run" />
+                </label>
+            </OverlayModal>
+        );
+
+        await user.click(screen.getByRole('textbox', { name: /save name/i }));
+        await user.keyboard('{Escape}');
+
+        expect(onEscape).not.toHaveBeenCalled();
+    });
+
+    it('still lets Escape close from checkbox controls in decision sheets', async () => {
+        const user = userEvent.setup();
+        const onEscape = vi.fn();
+        render(
+            <OverlayModal
+                actions={[{ label: 'Start', onClick: () => {} }]}
+                onEscape={onEscape}
+                testId="unit-modal"
+                title="Meditation setup"
+            >
+                <label>
+                    <input type="checkbox" />
+                    Glass floor
+                </label>
+            </OverlayModal>
+        );
+
+        await user.click(screen.getByRole('checkbox', { name: /glass floor/i }));
+        await user.keyboard('{Escape}');
+
+        expect(onEscape).toHaveBeenCalledTimes(1);
     });
 });

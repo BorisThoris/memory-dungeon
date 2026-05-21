@@ -548,6 +548,37 @@ describe('GameScreen (OVR-014)', () => {
         pauseSpy.mockRestore();
     });
 
+    it('REG-097 resumes a paused run when Escape uses the overlay back path', () => {
+        const resumeSpy = vi.spyOn(useAppStore.getState(), 'resume');
+        const paused: RunState = {
+            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' })),
+            status: 'paused',
+            timerState: {
+                memorizeRemainingMs: null,
+                resolveRemainingMs: null,
+                debugRevealRemainingMs: null,
+                pausedFromStatus: 'playing'
+            }
+        };
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={paused} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        act(() => {
+            document.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })
+            );
+        });
+
+        expect(resumeSpy).toHaveBeenCalledTimes(1);
+        resumeSpy.mockRestore();
+    });
+
     it('shows relic draft title, progress, and Scholar footnote for a multi-pick offer', () => {
         const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
         const playing = finishMemorizePhase(base);

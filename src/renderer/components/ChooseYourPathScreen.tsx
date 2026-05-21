@@ -717,6 +717,7 @@ const ChooseYourPathScreen = () => {
             {libraryDetailMode ? (
                 <OverlayModal
                     actions={buildLibraryDetailModalActions(libraryDetailMode)}
+                    onEscape={closeLibraryDetail}
                     subtitle={RUN_MODE_GROUP_LABEL[libraryDetailMode.group]}
                     testId="library-mode-detail-modal"
                     title={libraryDetailMode.title}
@@ -808,6 +809,10 @@ const ChooseYourPathScreen = () => {
                             variant: 'primary'
                         }
                     ]}
+                    onEscape={() => {
+                        playUiBack();
+                        setMeditationOpen(false);
+                    }}
                     subtitle="Toggle mutators for a focused study run, or start calm with a clean ruleset."
                     title="Meditation setup"
                 >
