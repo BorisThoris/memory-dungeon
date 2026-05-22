@@ -606,6 +606,8 @@ const hiddenSlotsAttr = useMemo(
             .map(([key, count]) => `${key}:${count}`)
             .join(';');
         if (next) {
+            // Keep the reduced-motion feedback test hook in lockstep with resolution state.
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setLastResolutionFeedback(next);
         }
     }, [board, runStatus]);

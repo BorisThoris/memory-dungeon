@@ -330,7 +330,6 @@ test.describe('Mobile layout (renderer)', () => {
         });
         const dialog = page.getByRole('dialog', { name: /run settings/i });
         await expect(dialog).toBeVisible();
-        const back = dialog.getByRole('button', { name: /^back$/i });
         const save = dialog.getByRole('button', { name: /^save$/i });
         await expect(save).toBeVisible();
         const footer = dialog.locator('footer');

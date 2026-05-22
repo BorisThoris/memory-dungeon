@@ -5,6 +5,14 @@
  * Dynamic barrels (e.g. generated URL maps) still reference files by basename in TS —
  * those count as referenced. Shelf stock named only in ASSET_SOURCES.md counts as referenced.
  *
+ * Browser demo fallback contract:
+ * - generated PNG/JPG/WebP background and mode poster art is an enhancement layer;
+ *   missing files must resolve to visible inline fallback art, not broken image UI.
+ * - generated OGG/WAV/MP3 audio is optional; missing files must resolve to silence
+ *   or procedural SFX fallback without repeated console errors.
+ * - renderer-only builds must use the local browser fallback client when Electron,
+ *   Steam, and desktop save APIs are absent.
+ *
  * Exit 0 always; orphans are informational (manual triage before delete).
  */
 import fs from 'node:fs';
@@ -118,7 +126,7 @@ const walkAllAssets = (dir) => {
             }
             continue;
         }
-        if (/\.(png|svg|jpe?g|webp|woff2)$/i.test(e.name)) {
+        if (/\.(png|svg|jpe?g|webp|woff2|ogg|wav|mp3)$/i.test(e.name)) {
             allAssetPaths.push(p);
             const rel = path.relative(root, p).replace(/\\/g, '/');
             const arr = basenamePaths.get(e.name) ?? [];
@@ -151,6 +159,9 @@ for (const assetAbs of allAssetPaths) {
 
 console.log(`Audited ${allAssetPaths.length} asset files under src/renderer/assets/`);
 console.log(`Search roots: ${SEARCH_DIRS.join(', ')} (basename substring)\n`);
+console.log(
+    'Fallback expectations: optional generated art may be absent if UI code supplies visible inline fallbacks; optional generated audio may be absent if playback resolves to silence or procedural SFX without repeated console errors.\n'
+);
 
 if (duplicateGroups.length > 0) {
     console.log('Duplicate basenames (different paths; substring matches may collide):\n');

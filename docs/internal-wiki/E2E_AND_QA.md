@@ -6,6 +6,8 @@
 
 **Curated gate (recommended for CI):** `yarn test:e2e:renderer-qa` — see root `package.json` for exact file list.
 
+**Portfolio demo fallback gate:** `yarn audit:renderer-assets`, `yarn portfolio:smoke`, `yarn build:cloudflare`, and `yarn test:e2e:demo-readiness` cover the browser-only embed path. Generated art and audio are enhancement layers: missing mode/background PNGs must render visible inline fallback art, missing music or sampled audio must degrade to silence/procedural SFX without repeated console errors, and the renderer-only Cloudflare build must not require Electron preload, Steam, or desktop save APIs.
+
 ## Spec inventory (`e2e/`)
 
 | Spec file | Typical focus |

@@ -1,7 +1,8 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { getAdaptiveMusicState, musicGainFromSettings, useGameplayMusic } from './gameplayMusic';
+import type { RunState } from '../../shared/contracts';
+import { getAdaptiveMusicState, musicGainFromSettings, resolveAdaptiveMusicState, useGameplayMusic } from './gameplayMusic';
 
 class MockAudioElement {
     static instances: MockAudioElement[] = [];
@@ -14,10 +15,27 @@ class MockAudioElement {
     pause = vi.fn();
     load = vi.fn();
     removeAttribute = vi.fn();
+    private readonly listeners = new Map<string, Set<() => void>>();
 
     constructor(src?: string) {
         this.src = src;
         MockAudioElement.instances.push(this);
+    }
+
+    addEventListener(eventName: string, listener: () => void): void {
+        const listeners = this.listeners.get(eventName) ?? new Set<() => void>();
+        listeners.add(listener);
+        this.listeners.set(eventName, listeners);
+    }
+
+    removeEventListener(eventName: string, listener: () => void): void {
+        this.listeners.get(eventName)?.delete(listener);
+    }
+
+    dispatch(eventName: string): void {
+        for (const listener of this.listeners.get(eventName) ?? []) {
+            listener();
+        }
     }
 }
 
@@ -60,6 +78,34 @@ describe('REG-038 adaptive music state', () => {
         expect(getAdaptiveMusicState({ active: true, runStatus: 'gameOver', track: 'run' })).toMatchObject({
             intensity: 'silent',
             shouldPlay: false
+        });
+    });
+
+    it('maps app views to menu, run, pressure, release, and silence layers', () => {
+        expect(resolveAdaptiveMusicState({ run: null, view: 'menu' })).toMatchObject({
+            active: true,
+            layer: 'menu_calm',
+            track: 'menu',
+            volumeMultiplier: 0.82
+        });
+
+        expect(
+            resolveAdaptiveMusicState({
+                run: {
+                    activeMutators: [],
+                    board: null,
+                    gameMode: 'endless',
+                    gauntletDeadlineMs: null,
+                    status: 'playing'
+                } as unknown as RunState,
+                view: 'playing'
+            })
+        ).toMatchObject({ active: true, layer: 'run_focus', track: 'run', volumeMultiplier: 0.74 });
+
+        expect(resolveAdaptiveMusicState({ run: null, view: 'settings' })).toMatchObject({
+            active: false,
+            layer: 'silent',
+            suppressed: true
         });
     });
 });
@@ -131,5 +177,29 @@ describe('useGameplayMusic', () => {
         expect(MockAudioElement.instances[0]?.pause).toHaveBeenCalled();
         expect(MockAudioElement.instances[1]?.src).toContain('run-loop.wav');
         await waitFor(() => expect(MockAudioElement.instances[1]?.play).toHaveBeenCalled());
+    });
+
+    it('silences unavailable media after a load error', async () => {
+        installMockAudio();
+
+        renderHook(() =>
+            useGameplayMusic({
+                active: true,
+                track: 'menu',
+                masterVolume: 1,
+                musicVolume: 1
+            })
+        );
+
+        const audio = MockAudioElement.instances[0];
+        await waitFor(() => expect(audio?.play).toHaveBeenCalledTimes(1));
+
+        audio?.dispatch('error');
+        document.dispatchEvent(new Event('pointerdown'));
+
+        expect(audio?.pause).toHaveBeenCalled();
+        expect(audio?.removeAttribute).toHaveBeenCalledWith('src');
+        expect(audio?.load).toHaveBeenCalled();
+        expect(audio?.play).toHaveBeenCalledTimes(1);
     });
 });

@@ -5,6 +5,8 @@ import {
     MODE_CARD_ART,
     MODE_POSTER_FALLBACK_KEY,
     modePosterHasCustomArt,
+    resolveModePosterUrl,
+    resolveUiBackgroundUrl,
     type ModePosterKey
 } from './modeArt';
 
@@ -26,5 +28,10 @@ describe('modeArt vs run-mode-catalog', () => {
         expect(modePosterHasCustomArt('scholar')).toBe(true);
         expect(RUN_MODE_CATALOG.every((mode) => modePosterHasCustomArt(mode.posterKey))).toBe(true);
         expect(rows.every((row) => row.assetUrl.length > 0)).toBe(true);
+    });
+
+    it('falls back to visible inline art for unknown or absent browser-demo backgrounds', () => {
+        expect(resolveModePosterUrl('unknown-mode')).toBe(MODE_CARD_ART.fallback);
+        expect(resolveUiBackgroundUrl('missing-background-from-demo-build.png')).toMatch(/^data:image\/svg\+xml/);
     });
 });

@@ -1,16 +1,16 @@
-import modeClassicUrl from './backgrounds/bg-mode-classic-v1.png';
-import modeDailyUrl from './backgrounds/bg-mode-daily-v1.png';
-import modeDungeonShowcaseUrl from './backgrounds/mode-dungeon-showcase.png';
-import modeEndlessUrl from './backgrounds/bg-mode-endless-v1.png';
-import modeGauntletUrl from './backgrounds/bg-mode-gauntlet-v1.png';
-import modeMeditationUrl from './backgrounds/bg-mode-meditation-v1.png';
-import modeMirrorPuzzleUrl from './backgrounds/bg-mode-mirror-puzzle-v1.png';
-import modePinVowUrl from './backgrounds/bg-mode-pin-vow-v1.png';
-import modePlaceholderUrl from './backgrounds/bg-mode-placeholder-v1.png';
-import modePracticeUrl from './backgrounds/bg-mode-practice-v1.png';
-import modePuzzleUrl from './backgrounds/bg-mode-puzzle-v1.png';
-import modeScholarUrl from './backgrounds/bg-mode-scholar-v1.png';
-import modeWildUrl from './backgrounds/bg-mode-wild-v1.png';
+const fallbackPosterUrl =
+    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1280"%3E%3Cdefs%3E%3ClinearGradient id="g" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop stop-color="%23240f1f"/%3E%3Cstop offset=".55" stop-color="%23153632"/%3E%3Cstop offset="1" stop-color="%23c08a35"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="960" height="1280" fill="url(%23g)"/%3E%3Cpath d="M480 196 736 352v300c0 214-146 370-256 430-110-60-256-216-256-430V352l256-156Z" fill="none" stroke="%23f5d28a" stroke-width="34" opacity=".8"/%3E%3Ccircle cx="480" cy="582" r="144" fill="%230b1215" opacity=".38"/%3E%3Cpath d="M480 438v288M336 582h288" stroke="%23f5d28a" stroke-width="42" stroke-linecap="round" opacity=".82"/%3E%3C/svg%3E';
+
+const backgroundUrls = import.meta.glob<string>('./backgrounds/*.{png,jpg,jpeg,webp}', {
+    eager: true,
+    query: '?url',
+    import: 'default'
+});
+
+export const resolveUiBackgroundUrl = (filename: string, fallback = fallbackPosterUrl): string =>
+    backgroundUrls[`./backgrounds/${filename}`] ?? fallback;
+
+const modePlaceholderUrl = resolveUiBackgroundUrl('bg-mode-placeholder-v1.png');
 
 export const MODE_POSTER_FALLBACK_KEY = 'fallback' as const;
 
@@ -21,19 +21,19 @@ export const MODE_POSTER_FALLBACK_COPY = {
 
 /** Per-mode poster rasters for Choose Your Path (TASK-018). */
 export const MODE_CARD_ART = {
-    classic: modeClassicUrl,
-    daily: modeDailyUrl,
-    dungeon_showcase: modeDungeonShowcaseUrl,
-    endless: modeEndlessUrl,
+    classic: resolveUiBackgroundUrl('bg-mode-classic-v1.png', modePlaceholderUrl),
+    daily: resolveUiBackgroundUrl('bg-mode-daily-v1.png', modePlaceholderUrl),
+    dungeon_showcase: resolveUiBackgroundUrl('mode-dungeon-showcase.png', modePlaceholderUrl),
+    endless: resolveUiBackgroundUrl('bg-mode-endless-v1.png', modePlaceholderUrl),
     fallback: modePlaceholderUrl,
-    gauntlet: modeGauntletUrl,
-    puzzle: modePuzzleUrl,
-    mirror_puzzle: modeMirrorPuzzleUrl,
-    wild: modeWildUrl,
-    practice: modePracticeUrl,
-    scholar: modeScholarUrl,
-    pin_vow: modePinVowUrl,
-    meditation: modeMeditationUrl
+    gauntlet: resolveUiBackgroundUrl('bg-mode-gauntlet-v1.png', modePlaceholderUrl),
+    puzzle: resolveUiBackgroundUrl('bg-mode-puzzle-v1.png', modePlaceholderUrl),
+    mirror_puzzle: resolveUiBackgroundUrl('bg-mode-mirror-puzzle-v1.png', modePlaceholderUrl),
+    wild: resolveUiBackgroundUrl('bg-mode-wild-v1.png', modePlaceholderUrl),
+    practice: resolveUiBackgroundUrl('bg-mode-practice-v1.png', modePlaceholderUrl),
+    scholar: resolveUiBackgroundUrl('bg-mode-scholar-v1.png', modePlaceholderUrl),
+    pin_vow: resolveUiBackgroundUrl('bg-mode-pin-vow-v1.png', modePlaceholderUrl),
+    meditation: resolveUiBackgroundUrl('bg-mode-meditation-v1.png', modePlaceholderUrl)
 } as const;
 
 export type ModePosterKey = keyof typeof MODE_CARD_ART;

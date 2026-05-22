@@ -2,7 +2,6 @@ import { getAllCardIllustrationUrls } from '../cardFace/cardIllustrationRegistry
 import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImages';
 import { preloadTileTextureImages } from '../components/tileTextures';
 import { loadRelicTextures, type RelicTextureSet } from '../components/startupIntroTextures';
-import { MODE_POSTER_FALLBACK_URL } from './ui/modePosterFallback';
 import { MODE_CARD_ART, UI_ART } from './ui';
 
 const preloadRasterUrl = (url: string): Promise<void> =>
@@ -16,7 +15,7 @@ const preloadRasterUrl = (url: string): Promise<void> =>
 
 /** Deduped menu / mode-poster rasters so MainMenu and Choose Your Path decode before first paint. */
 export const preloadUiRasterImages = (): Promise<void> => {
-    const urls = [...new Set([...Object.values(UI_ART), ...Object.values(MODE_CARD_ART), MODE_POSTER_FALLBACK_URL])];
+    const urls = [...new Set([...Object.values(UI_ART), ...Object.values(MODE_CARD_ART), MODE_CARD_ART.fallback])];
     return Promise.all(urls.map(preloadRasterUrl)).then(() => undefined);
 };
 

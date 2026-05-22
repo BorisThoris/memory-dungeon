@@ -1,8 +1,14 @@
 import { useEffect, useRef } from 'react';
 
-import menuLoopUrl from '../assets/audio/music/menu-loop.wav?url';
-import runLoopUrl from '../assets/audio/music/run-loop.wav?url';
 import type { RunState, ViewState } from '../../shared/contracts';
+
+const musicUrls = import.meta.glob<string>('../assets/audio/music/*.{ogg,wav,mp3}', {
+    eager: true,
+    query: '?url',
+    import: 'default'
+});
+
+const resolveMusicUrl = (filename: string): string | undefined => musicUrls[`../assets/audio/music/${filename}`];
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 
@@ -104,26 +110,52 @@ export const getAdaptiveMusicState = ({
  */
 export function useGameplayMusic({ active, track, masterVolume, musicVolume, suppressed = false }: GameplayMusicParams): void {
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const audioUnavailableRef = useRef(false);
 
     useEffect(() => {
         if (typeof Audio === 'undefined') return undefined;
+        const src = resolveMusicUrl(track === 'menu' ? 'menu-loop.wav' : 'run-loop.wav');
+        audioUnavailableRef.current = false;
+        if (!src) {
+            audioRef.current = null;
+            audioUnavailableRef.current = true;
+            return undefined;
+        }
 
-        const el = new Audio(track === 'menu' ? menuLoopUrl : runLoopUrl);
+        const el = new Audio(src);
         el.loop = true;
         el.preload = 'auto';
         audioRef.current = el;
 
+        const silenceUnavailableAudio = (): void => {
+            audioUnavailableRef.current = true;
+            el.pause();
+            el.removeAttribute('src');
+            try {
+                el.load();
+            } catch {
+                /* media element may already be detached */
+            }
+        };
         const onFirstPointer = (): void => {
-            void el.play().catch(() => {});
+            if (!audioUnavailableRef.current) {
+                void el.play().catch(() => {});
+            }
             document.removeEventListener('pointerdown', onFirstPointer);
         };
+        el.addEventListener('error', silenceUnavailableAudio, { once: true });
         document.addEventListener('pointerdown', onFirstPointer);
 
         return () => {
+            el.removeEventListener('error', silenceUnavailableAudio);
             document.removeEventListener('pointerdown', onFirstPointer);
             el.pause();
             el.removeAttribute('src');
-            el.load();
+            try {
+                el.load();
+            } catch {
+                /* media element may already be detached */
+            }
             audioRef.current = null;
         };
     }, [track]);
@@ -134,7 +166,7 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
 
         el.volume = musicGainFromSettings(masterVolume, musicVolume);
 
-        if (!active || suppressed) {
+        if (!active || suppressed || audioUnavailableRef.current) {
             el.pause();
             return;
         }

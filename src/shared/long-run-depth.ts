@@ -13,7 +13,7 @@ import {
     pickFloorScheduleEntry,
     type FloorScheduleEntry
 } from './floor-mutator-schedule';
-import { getEncounterIdentityForFloor, getEncounterIdentityForRouteKind } from './boss-encounters';
+import { getEncounterIdentityForFloor } from './boss-encounters';
 import { buildBoard } from './board-generation';
 import {
     getDungeonRouteSemanticContract,

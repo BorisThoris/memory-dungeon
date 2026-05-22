@@ -11,7 +11,6 @@ import {
     buildVisualSaveJson,
     gotoWithSave,
     mainMenuPlayButton,
-    openChooseYourPath,
     openLevel1Play,
     openMainMenuFromSave
 } from './visualScreenHelpers';

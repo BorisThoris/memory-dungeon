@@ -3,12 +3,31 @@ import { createDefaultSaveData, normalizeSaveData } from '../shared/save-data';
 
 const STORAGE_KEY = 'memory-dungeon-save-data';
 
+const getBrowserStorage = (): Storage | null => {
+    if (typeof window === 'undefined') {
+        return null;
+    }
+    try {
+        return window.localStorage ?? null;
+    } catch (error) {
+        console.warn('[desktop-client] localStorage unavailable; using in-memory defaults', error);
+        return null;
+    }
+};
+
 const readLocalSave = (): SaveData => {
-    if (typeof window === 'undefined' || !window.localStorage) {
+    const storage = getBrowserStorage();
+    if (!storage) {
         return createDefaultSaveData();
     }
 
-    const rawValue = window.localStorage.getItem(STORAGE_KEY);
+    let rawValue: string | null = null;
+    try {
+        rawValue = storage.getItem(STORAGE_KEY);
+    } catch (error) {
+        console.warn('[desktop-client] localStorage read unavailable; using in-memory defaults', error);
+        return createDefaultSaveData();
+    }
 
     if (!rawValue) {
         return createDefaultSaveData();
@@ -26,8 +45,9 @@ const writeLocalSave = (saveData: SaveData): SaveData => {
     const normalized = normalizeSaveData(saveData);
 
     try {
-        if (typeof window !== 'undefined' && window.localStorage) {
-            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+        const storage = getBrowserStorage();
+        if (storage) {
+            storage.setItem(STORAGE_KEY, JSON.stringify(normalized));
         }
     } catch (error) {
         console.error('[desktop-client] localStorage write failed', error);
