@@ -20,6 +20,7 @@
 | shuffle-quick | `shuffle-quick.wav` |
 | floor-clear | `floor-clear.wav` |
 | relic-offer-open | `relic-offer-open.wav` |
+| countdown-pressure | `countdown-pressure.wav` |
 | relic-pick | `relic-pick.wav` |
 | wager-arm | `wager-arm.wav` |
 

@@ -73,7 +73,12 @@ import TileBoard, { type TileBoardHandle } from './TileBoard';
 
 const MemoTileBoard = memo(TileBoard);
 const MemoGameplayHudBar = memo(GameplayHudBar);
-import { playRelicOfferOpenSfx, resumeAudioContext, sfxGainFromSettings } from '../audio/gameSfx';
+import {
+    playCountdownPressureSfx,
+    playRelicOfferOpenSfx,
+    resumeAudioContext,
+    sfxGainFromSettings
+} from '../audio/gameSfx';
 import {
     playMenuOpenSfx,
     playUiBackSfx,
@@ -521,6 +526,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const relicDraftProgressText = run.relicOffer ? relicDraftProgressLine(run.relicOffer) : null;
     const relicBonusFootnoteLines = run.relicOffer ? buildRelicDraftBonusFootnoteLines(run) : [];
     const previousRelicOfferOpenRef = useRef(false);
+    const previousCountdownPressureSecondRef = useRef<number | null>(null);
     const playMenuOpen = useCallback((): void => {
         resumeUiSfxContext();
         playMenuOpenSfx(uiGain);
@@ -957,6 +963,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const gauntletRemainingMs =
         run.gauntletDeadlineMs !== null ? Math.max(0, run.gauntletDeadlineMs - gauntletNowMs) : null;
     const gauntletActive = run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null;
+    useEffect(() => {
+        if (!gauntletActive || run.status !== 'playing' || gauntletRemainingMs === null) {
+            previousCountdownPressureSecondRef.current = null;
+            return;
+        }
+        const remainingSec = Math.ceil(gauntletRemainingMs / 1000);
+        if (remainingSec <= 0 || remainingSec > 10 || remainingSec === previousCountdownPressureSecondRef.current) {
+            return;
+        }
+        previousCountdownPressureSecondRef.current = remainingSec;
+        void resumeAudioContext();
+        playCountdownPressureSfx(shuffleSfxGain);
+    }, [gauntletActive, gauntletRemainingMs, run.status, shuffleSfxGain]);
     const { message: politeHudAnnouncement } = useHudPoliteLiveAnnouncement({
         boardLevel: run.board?.level ?? null,
         boardTiles: run.board?.tiles ?? [],

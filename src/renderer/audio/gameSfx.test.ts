@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
     __resetGameSfxEngineForTests,
+    playCountdownPressureSfx,
     playFlipSfx,
     playGambitCommitSfx,
     playFloorClearSfx,
@@ -224,5 +225,47 @@ describe('gameSfx', () => {
         playWagerArmSfx(gain);
 
         expect(createOscillator).toHaveBeenCalledTimes(3);
+    });
+
+    it('uses one pressure voice for countdown pulses', () => {
+        const stops: string[] = [];
+        let index = 0;
+        const createOscillator = vi.fn(() => {
+            const id = `pressure-${index}`;
+            index += 1;
+            return {
+                id,
+                type: 'sine' as OscillatorType,
+                frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+                connect: vi.fn(),
+                start: vi.fn(),
+                stop: vi.fn(() => {
+                    stops.push(id);
+                }),
+                addEventListener: vi.fn()
+            };
+        });
+        const createGain = vi.fn(() => ({
+            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn()
+        }));
+
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                createOscillator = createOscillator;
+                createGain = createGain;
+                close = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        const gain = sfxGainFromSettings(1, 1);
+        playCountdownPressureSfx(gain);
+        playCountdownPressureSfx(gain);
+
+        expect(createOscillator).toHaveBeenCalledTimes(2);
+        expect(stops.length).toBeGreaterThanOrEqual(1);
     });
 });

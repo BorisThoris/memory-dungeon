@@ -15,7 +15,7 @@ Authoritative semantic sound map for the renderer. Raw typing, passive scrolling
 Machine-readable mirror: `src/renderer/audio/audioInteractionCoverage.ts`.
 
 - Major startup/menu/settings/gameplay/overlay/meta interactions are represented by semantic rows with call sites.
-- Repeated one-shots are capped by category in `gameSfx.ts`, `sampledSfx.ts`, and `uiSfx.ts` (`flip` 5, `match` 4, `mismatch` 4, `power` 5, `shuffle` 4, `menu` 3, `ui` 5).
+- Repeated one-shots are capped by category in `gameSfx.ts`, `sampledSfx.ts`, and `uiSfx.ts` (`flip` 5, `match` 4, `mismatch` 4, `power` 5, `pressure` 1, `shuffle` 4, `menu` 3, `ui` 5).
 - Every audible row uses sampled WAV/OGG with procedural fallback; passive scroll/in-page anchors remain explicitly silent.
 - Reduced-motion visual mode never disables essential audio feedback; rows document `reducedMotionSafe`.
 
@@ -40,6 +40,7 @@ Machine-readable mirror: `src/renderer/audio/audioInteractionCoverage.ts`.
 | Game toolbar | Open settings/codex/inventory/abandon confirm | `GameLeftToolbar` / `GameScreen` | `reuse` | `menu-open` | panel reveal | 0.16s | sampled + procedural fallback | `Menu_load.wav` |
 | Gameplay | Tile flip / gambit third flip | `useAppStore.pressTile` | `reuse` | `flip` / `gambit-commit` | tactile wood tick / commit chirp | 0.05s / 0.068s | sampled + procedural fallback | existing |
 | Gameplay | Match tiers / mismatch | `playResolveSfx` | `reuse` | `match-tier-low|mid|high` / `mismatch` | reward bloom / soft fail | 0.12s–0.18s | sampled + procedural fallback | existing |
+| Gameplay | Final gauntlet countdown | `GameScreen` effect on `gauntletRemainingMs` | `new` | `countdown-pressure` | low countdown pulse | 0.09s | sampled + procedural fallback | portfolio-feedback-pack |
 | Gameplay | Arm powers and flash pair | store power actions | `reuse` | `power-arm` | affirmative charge chirp | 0.07s | sampled + procedural fallback | existing |
 | Gameplay | Peek / stray / destroy / shuffle / floor clear | existing gameplay actions | `reuse` | existing shipped gameplay cues | existing gameplay style | existing | sampled + procedural fallback | existing |
 | Pause | Enter paused state | `useAppStore.pause` | `new` | `pause-open` | low suspend chime | 0.12s | sampled + procedural fallback | `Menu_dong.wav` |

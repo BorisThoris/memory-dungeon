@@ -6,7 +6,7 @@
 import sfxManifest from '../assets/audio/sfx/manifest.json';
 import { getSharedAudioContext } from './webAudioContext';
 
-type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'shuffle';
+type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'pressure' | 'shuffle';
 
 type ManifestEntry = { file: string; category: SfxCategory };
 
@@ -29,6 +29,7 @@ const MAX_POLYPHONY: Record<SfxCategory, number> = {
     match: 4,
     mismatch: 4,
     power: 5,
+    pressure: 1,
     shuffle: 4
 };
 

@@ -1,0 +1,13 @@
+{
+  "jobs": [
+    {
+      "id": "portfolio-feedback-pack",
+      "task_type": "text2music",
+      "caption": "Create a cohesive Memory Dungeon audio micro-pack: short subtle dungeon-arcade cues for match success, mistake, relic offer shimmer, countdown pressure pulse, and floor clear. Keep each cue clean, non-intrusive, loop-safe where relevant, and suitable for a polished browser/Electron portfolio demo.",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 30,
+      "inference_steps": 8
+    }
+  ]
+}

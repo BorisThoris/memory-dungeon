@@ -15,6 +15,7 @@
         "shuffle-quick": { "file": "shuffle-quick.wav", "category": "shuffle" },
         "floor-clear": { "file": "floor-clear.wav", "category": "power" },
         "relic-offer-open": { "file": "relic-offer-open.wav", "category": "power" },
+        "countdown-pressure": { "file": "countdown-pressure.wav", "category": "pressure" },
         "relic-pick": { "file": "relic-pick.wav", "category": "power" },
         "wager-arm": { "file": "wager-arm.wav", "category": "power" }
     },

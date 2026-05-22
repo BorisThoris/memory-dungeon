@@ -13,6 +13,7 @@ export type AudioSemanticMoment =
     | 'lock'
     | 'resolve'
     | 'floor_clear'
+    | 'pressure'
     | 'route_choice'
     | 'navigation'
     | 'ambient';
@@ -33,6 +34,7 @@ const GAMEPLAY_CUES = new Set<string>([
     'shuffle-quick',
     'floor-clear',
     'relic-offer-open',
+    'countdown-pressure',
     'relic-pick',
     'wager-arm'
 ]);
@@ -163,6 +165,18 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
         decision: 'sampled_with_fallback',
         cooldownPolicy: 'deferred macrotask; shuffle/match caps still apply',
         mixRole: 'floor reward flourish',
+        reducedMotionSafe: true
+    },
+    {
+        id: 'gauntlet_pressure',
+        domain: 'gameplay',
+        interaction: 'Final gauntlet countdown seconds',
+        cue: 'countdown-pressure',
+        callsite: 'GameScreen gauntletRemainingMs effect',
+        semanticMoment: 'pressure',
+        decision: 'sampled_with_fallback',
+        cooldownPolicy: 'one pulse per visible final second; pressure category polyphony cap',
+        mixRole: 'low countdown pulse',
         reducedMotionSafe: true
     },
     {
