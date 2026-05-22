@@ -8,7 +8,21 @@ const musicUrls = import.meta.glob<string>('../assets/audio/music/*.{ogg,wav,mp3
     import: 'default'
 });
 
+const portfolioMusicUrls = import.meta.glob<string>('../../../assets/audio/portfolio-feedback-pack/*.{ogg,wav,mp3}', {
+    eager: true,
+    query: '?url',
+    import: 'default'
+});
+
 const resolveMusicUrl = (filename: string): string | undefined => musicUrls[`../assets/audio/music/${filename}`];
+const resolvePortfolioMusicUrl = (filename: string): string | undefined =>
+    portfolioMusicUrls[`../../../assets/audio/portfolio-feedback-pack/${filename}`];
+const resolveTrackUrl = (track: 'menu' | 'run'): string | undefined => {
+    if (track === 'run') {
+        return resolvePortfolioMusicUrl('demo-ambience-loop.wav') ?? resolveMusicUrl('run-loop.wav');
+    }
+    return resolveMusicUrl('menu-loop.wav');
+};
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 
@@ -114,7 +128,7 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
 
     useEffect(() => {
         if (typeof Audio === 'undefined') return undefined;
-        const src = resolveMusicUrl(track === 'menu' ? 'menu-loop.wav' : 'run-loop.wav');
+        const src = resolveTrackUrl(track);
         audioUnavailableRef.current = false;
         if (!src) {
             audioRef.current = null;

@@ -1,0 +1,13 @@
+{
+  "jobs": [
+    {
+      "id": "demo-ambience-loop",
+      "task_type": "text2music",
+      "caption": "Create a short subtle dungeon memory-game ambience loop for a portfolio demo, low volume, seamless, non-distracting, with soft room tone and faint magical texture.",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 30,
+      "inference_steps": 8
+    }
+  ]
+}

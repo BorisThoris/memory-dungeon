@@ -175,7 +175,7 @@ describe('useGameplayMusic', () => {
         rerender({ track: 'run' });
 
         expect(MockAudioElement.instances[0]?.pause).toHaveBeenCalled();
-        expect(MockAudioElement.instances[1]?.src).toContain('run-loop.wav');
+        expect(MockAudioElement.instances[1]?.src).toMatch(/demo-ambience-loop\.wav|run-loop\.wav/);
         await waitFor(() => expect(MockAudioElement.instances[1]?.play).toHaveBeenCalled());
     });
 

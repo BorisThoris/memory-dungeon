@@ -1,6 +1,15 @@
 {
   "jobs": [
     {
+      "id": "portfolio-demo-ambience-loop",
+      "task_type": "text2music",
+      "caption": "Create a short subtle dungeon memory-game ambience loop for a portfolio demo, low volume, seamless, non-distracting, with soft room tone and faint magical texture.",
+      "lyrics": "[Instrumental]",
+      "instrumental": true,
+      "duration": 16,
+      "inference_steps": 8
+    },
+    {
       "id": "portfolio-feedback-pack",
       "task_type": "text2music",
       "caption": "Create a cohesive Memory Dungeon audio micro-pack: short subtle dungeon-arcade cues for match success, mistake, relic offer shimmer, countdown pressure pulse, and floor clear. Keep each cue clean, non-intrusive, loop-safe where relevant, and suitable for a polished browser/Electron portfolio demo.",

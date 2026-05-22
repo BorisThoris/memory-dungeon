@@ -21,7 +21,7 @@ import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
 import { useViewportSize } from './hooks/useViewportSize';
 import styles from './styles/App.module.css';
 import { buildRendererThemeStyle } from './styles/theme';
-import { useGameplayMusic } from './audio/gameplayMusic';
+import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
 import { setTelemetrySink } from '../shared/telemetry';
 import { createRunSummary } from '../shared/game';
 import {
@@ -110,13 +110,15 @@ const App = () => {
             ? 'playing'
             : activeView;
 
+    const musicState = resolveAdaptiveMusicState({ run, view: visualView });
     const musicShellActive = hydrated && (visualView === 'menu' || visualView === 'playing');
 
     useGameplayMusic({
-        active: musicShellActive,
-        track: visualView === 'playing' ? 'run' : 'menu',
+        active: musicShellActive && musicState.active,
+        track: musicState.track,
         masterVolume: settings.masterVolume,
-        musicVolume: settings.musicVolume
+        musicVolume: settings.musicVolume * musicState.volumeMultiplier,
+        suppressed: musicState.suppressed
     });
 
     const ambientGridState =
