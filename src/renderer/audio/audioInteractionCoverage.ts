@@ -1,3 +1,4 @@
+import sfxManifest from '../assets/audio/sfx/manifest.json';
 import type { SfxSampleKey } from './sampledSfx';
 import type { UiSfxCue } from './uiSfx';
 
@@ -19,25 +20,7 @@ export type AudioSemanticMoment =
     | 'ambient';
 type AudioCue = SfxSampleKey | UiSfxCue | 'none';
 
-const GAMEPLAY_CUES = new Set<string>([
-    'flip',
-    'gambit-commit',
-    'match-tier-low',
-    'match-tier-mid',
-    'match-tier-high',
-    'mismatch',
-    'power-arm',
-    'destroy-pair',
-    'peek-power',
-    'stray-power',
-    'shuffle-full',
-    'shuffle-quick',
-    'floor-clear',
-    'relic-offer-open',
-    'countdown-pressure',
-    'relic-pick',
-    'wager-arm'
-]);
+const GAMEPLAY_CUES = new Set<string>(Object.keys(sfxManifest.entries));
 
 const UI_CUES = new Set<string>([
     'click',
@@ -234,5 +217,7 @@ export const getAudioCoverageRows = (): readonly AudioInteractionCoverageRow[] =
 export const audioCoverageRowsByDomain = (domain: AudioCoverageDomain): AudioInteractionCoverageRow[] =>
     AUDIO_INTERACTION_COVERAGE.filter((row) => row.domain === domain);
 
+export const audioCoverageCueIsGameplaySfx = (cue: AudioCue): cue is SfxSampleKey => GAMEPLAY_CUES.has(cue);
+
 export const audioCoverageCueIsKnown = (cue: AudioCue): boolean =>
-    cue === 'none' || GAMEPLAY_CUES.has(cue) || UI_CUES.has(cue);
+    cue === 'none' || audioCoverageCueIsGameplaySfx(cue) || UI_CUES.has(cue);

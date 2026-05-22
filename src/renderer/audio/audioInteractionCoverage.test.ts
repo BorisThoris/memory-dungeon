@@ -20,10 +20,12 @@ describe('REG-037 audio interaction coverage', () => {
             'tile_flip',
             'resolve_match',
             'resolve_mismatch',
-            'board_power'
+            'board_power',
+            'gauntlet_pressure'
         ]);
         expect(gameplay.find((row) => row.id === 'resolve_match')?.mixRole).toMatch(/reward/i);
         expect(gameplay.find((row) => row.id === 'board_power')?.semanticMoment).toBe('arm');
         expect(gameplay.find((row) => row.id === 'resolve_mismatch')?.mixRole).toMatch(/fail/i);
+        expect(gameplay.find((row) => row.id === 'gauntlet_pressure')?.cue).toBe('countdown-pressure');
     });
 });
