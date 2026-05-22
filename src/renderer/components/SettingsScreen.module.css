@@ -790,8 +790,28 @@
     width: 100%;
 }
 
+.stackedShell.shellModal .fitMeasureOuter,
+.stackedShell.shellModal .fitZoomInner {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-height: 100%;
+}
+
+.stackedShell.shellModal .panel.panelModal {
+    flex: 1 1 auto;
+    max-height: min(calc(100dvh - 16px), calc(100svh - 16px));
+    overflow: hidden;
+}
+
 .stackedShell .frame {
     grid-template-columns: 1fr;
+    min-height: 0;
+}
+
+.stackedShell.shellModal .frame {
+    flex: 1 1 auto;
     min-height: 0;
 }
 

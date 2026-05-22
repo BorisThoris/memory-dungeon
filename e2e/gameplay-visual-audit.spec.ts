@@ -16,6 +16,10 @@ import {
     waitLevel1PlayReady,
     waitLevel1VisualReady
 } from './visualScreenHelpers';
+import {
+    expectGameplayReady,
+    openPlayablePathFixture
+} from './playablePathHelpers';
 
 type GridPosition = { col: number; row: number };
 
@@ -89,6 +93,15 @@ async function captureGameplayStates(page: Page, viewportId: string): Promise<vo
     await waitForBoardPlayPhase(page);
 }
 
+async function captureTrapFeedbackState(page: Page, viewportId: string): Promise<void> {
+    await openPlayablePathFixture(page, 'activeRunWithHazards');
+    await expectGameplayReady(page);
+    await page.getByText(/^Info$/i).click({ force: true });
+    await expect(page.getByTestId('hud-hazard-tiles')).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByTestId('hud-in-run-cause-strip')).toBeVisible({ timeout: 20_000 });
+    await capture(page, viewportId, '05-trap-feedback');
+}
+
 async function expectCardFeedbackState(page: Page, pattern: RegExp): Promise<void> {
     await expect
         .poll(async () => (await page.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')) ?? '')
@@ -126,6 +139,10 @@ async function captureOverlayStates(page: Page, viewportId: string): Promise<voi
     await page.getByTestId('game-toolbar-codex').click({ force: true });
     await expect(page.getByRole('region', { name: /codex/i })).toBeVisible({ timeout: 20_000 });
     await capture(page, viewportId, '08-in-run-codex');
+
+    await openPlayablePathFixture(page, 'relicDraft');
+    await expect(page.getByTestId('game-relic-offer-overlay')).toBeVisible({ timeout: 30_000 });
+    await capture(page, viewportId, '09-relic-offer');
 }
 
 async function captureProgressionStates(page: Page, viewportId: string): Promise<void> {
@@ -249,6 +266,11 @@ for (const viewport of VIEWPORTS) {
         test('captures live gameplay card states', async ({ page }) => {
             test.setTimeout(140_000);
             await captureGameplayStates(page, viewport.id);
+        });
+
+        test('captures active trap feedback', async ({ page }) => {
+            test.setTimeout(90_000);
+            await captureTrapFeedbackState(page, viewport.id);
         });
 
         test('captures in-run overlays', async ({ page }) => {
