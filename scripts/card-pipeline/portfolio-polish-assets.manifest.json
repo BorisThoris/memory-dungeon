@@ -1,0 +1,23 @@
+{
+    "generatedAt": "2026-05-22",
+    "taskId": "memory-dungeon-c09-t05",
+    "assets": [
+        {
+            "id": "portfolio-key-art",
+            "path": "docs/visual-capture/portfolio-key-art.png",
+            "intendedUse": "README hero, portfolio project card, static demo thumbnail",
+            "readabilityNotes": "16:9 board-focused composition with no text; designed to remain legible when cropped for project cards."
+        },
+        {
+            "id": "memory-dungeon-card-backs",
+            "path": "assets/generated/card-backs/memory-dungeon-card-backs.png",
+            "intendedUse": "Source sheet for future sliced card-back textures",
+            "readabilityNotes": "Thick borders, centered glyphs, and restrained stone noise should be preserved when slicing or downscaling for 64px-plus gameplay tiles."
+        }
+    ],
+    "provenance": {
+        "requestedMode": "openai and sdxl-card-backs",
+        "actualMode": "local deterministic raster fallback",
+        "reason": "Live OpenAI image generation returned billing_hard_limit_reached in this environment."
+    }
+}
