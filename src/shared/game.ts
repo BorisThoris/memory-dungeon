@@ -1919,6 +1919,59 @@ const enemyHazardEligibleTiles = (tiles: readonly Tile[]): Tile[] =>
             tile.pairKey !== WILD_PAIR_KEY
     );
 
+const unclearedRealPairKeys = (tiles: readonly Tile[]): string[] => [
+    ...new Set(
+        tiles
+            .filter(
+                (tile) =>
+                    tile.state !== 'matched' &&
+                    tile.state !== 'removed' &&
+                    !isSingletonUtilityPairKey(tile.pairKey) &&
+                    tile.pairKey !== DECOY_PAIR_KEY &&
+                    tile.pairKey !== WILD_PAIR_KEY
+            )
+            .map((tile) => tile.pairKey)
+    )
+];
+
+const defeatEnemyHazardOccupationOnFinalPair = (board: BoardState): BoardState => {
+    const activeHazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    if (activeHazards.length === 0) {
+        return board;
+    }
+    const remainingPairKeys = unclearedRealPairKeys(board.tiles);
+    if (remainingPairKeys.length !== 1) {
+        return board;
+    }
+    const finalPairTileIds = new Set(
+        board.tiles
+            .filter(
+                (tile) =>
+                    tile.pairKey === remainingPairKeys[0] &&
+                    tile.state !== 'matched' &&
+                    tile.state !== 'removed'
+            )
+            .map((tile) => tile.id)
+    );
+    if (finalPairTileIds.size === 0) {
+        return board;
+    }
+    const hazardsToClear = new Set(
+        activeHazards
+            .filter((hazard) => finalPairTileIds.has(hazard.currentTileId) || finalPairTileIds.has(hazard.nextTileId))
+            .map((hazard) => hazard.id)
+    );
+    if (hazardsToClear.size === 0) {
+        return board;
+    }
+    return {
+        ...board,
+        enemyHazards: board.enemyHazards?.map((hazard) =>
+            hazardsToClear.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
+        )
+    };
+};
+
 export interface EnemyHazardPatternDefinition {
     pattern: EnemyHazardPattern;
     label: string;
@@ -2152,7 +2205,7 @@ const advanceEnemyHazardsOnBoard = (board: BoardState, steps: number = 1): Board
         const nextTileId = pickHazardTileId(board.tiles, hazard.pattern, nextTurn + 1, index + 1, occupied) ?? currentTileId;
         return { ...hazard, currentTileId, nextTileId };
     });
-    return { ...board, enemyHazardTurn: nextTurn, enemyHazards: nextHazards };
+    return defeatEnemyHazardOccupationOnFinalPair({ ...board, enemyHazardTurn: nextTurn, enemyHazards: nextHazards });
 };
 
 const damageFirstRevealedEnemyHazard = (
@@ -2205,7 +2258,9 @@ export const applyEnemyHazardClick = (
             candidate.id === hazard.id ? { ...candidate, state: 'revealed' as const } : candidate
         )
     };
-    const advancedBoard = advanceHazards ? advanceEnemyHazardsOnBoard(revealedBoard) : revealedBoard;
+    const advancedBoard = advanceHazards
+        ? advanceEnemyHazardsOnBoard(revealedBoard)
+        : defeatEnemyHazardOccupationOnFinalPair(revealedBoard);
     return {
         ...run,
         status: lives <= 0 ? 'gameOver' : run.status,

@@ -944,7 +944,8 @@ describe('REG-017 route choices', () => {
     it('can defer enemy movement to the match resolution on an occupied second flip', () => {
         const [a1, a2] = createPair('p1', 'A', 'a');
         const [b1, b2] = createPair('p2', 'B', 'b');
-        const board = createBoard([a1, a2, b1, b2], {
+        const [c1, c2] = createPair('p3', 'C', 'c');
+        const board = createBoard([a1, a2, b1, b2, c1, c2], {
             enemyHazards: [
                 {
                     id: 'h1',
@@ -961,7 +962,7 @@ describe('REG-017 route choices', () => {
             ],
             enemyHazardTurn: 0
         });
-        const base = createRun([a1, a2, b1, b2], { board, status: 'playing' });
+        const base = createRun([a1, a2, b1, b2, c1, c2], { board, status: 'playing' });
         const first = flipTile(base, a1.id);
         const hit = applyEnemyHazardClick(first, a2.id, { advanceHazards: false });
         const resolved = resolveBoardTurn(flipTile(hit, a2.id));
@@ -969,6 +970,66 @@ describe('REG-017 route choices', () => {
         expect(hit.board!.enemyHazards![0]!.currentTileId).toBe(a2.id);
         expect(resolved.board!.enemyHazards![0]!.currentTileId).toBe(b1.id);
         expect(resolved.board!.enemyHazardTurn).toBe(1);
+    });
+
+    it('clears one enemy occupation from the final remaining pair after contact', () => {
+        const [a1, a2] = createPair('p1', 'A', 'a');
+        const board = createBoard([a1, a2], {
+            enemyHazards: [
+                {
+                    id: 'final-single',
+                    kind: 'sentinel',
+                    label: 'Patrol Sentry',
+                    currentTileId: a1.id,
+                    nextTileId: a1.id,
+                    pattern: 'patrol',
+                    state: 'hidden',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 1
+                }
+            ],
+            enemyHazardTurn: 0
+        });
+        const run = createRun([a1, a2], { board, status: 'playing' });
+
+        const hit = applyEnemyHazardClick(run, a1.id, { advanceHazards: false });
+        const flipped = flipTile(hit, a1.id);
+
+        expect(hit.board!.enemyHazards![0]).toMatchObject({ state: 'defeated', hp: 0 });
+        expect(flipped.board!.tiles.find((tile) => tile.id === a1.id)!.state).toBe('flipped');
+        expect(flipped.status).toBe('playing');
+    });
+
+    it('clears two enemy occupations from the final remaining pair after the penultimate match', () => {
+        const [a1, a2] = createPair('p1', 'A', 'a');
+        const [b1, b2] = createPair('p2', 'B', 'b');
+        const board = createBoard([a1, a2, b1, b2], {
+            enemyHazards: [
+                {
+                    id: 'final-double',
+                    kind: 'sentinel',
+                    label: 'Patrol Sentry',
+                    currentTileId: a1.id,
+                    nextTileId: a2.id,
+                    pattern: 'patrol',
+                    state: 'hidden',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 1
+                }
+            ],
+            enemyHazardTurn: 0
+        });
+        const run = createRun([a1, a2, b1, b2], { board, status: 'playing' });
+
+        const afterPenultimateMatch = resolveBoardTurn(flipTile(flipTile(run, b1.id), b2.id));
+        const flipped = flipTile(afterPenultimateMatch, a1.id);
+
+        expect(afterPenultimateMatch.status).toBe('playing');
+        expect(afterPenultimateMatch.board!.matchedPairs).toBe(1);
+        expect(afterPenultimateMatch.board!.enemyHazards![0]).toMatchObject({ state: 'defeated', hp: 0 });
+        expect(flipped.board!.tiles.find((tile) => tile.id === a1.id)!.state).toBe('flipped');
     });
 
     it('defeats remaining enemy hazards when the floor is cleared', () => {
