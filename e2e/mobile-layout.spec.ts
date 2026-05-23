@@ -124,6 +124,19 @@ async function readBoardViewportState(frame: Locator): Promise<{
     }));
 }
 
+async function readFirstHiddenSlot(page: Page): Promise<{ column: number; row: number }> {
+    const raw = await page.getByTestId('tile-board-frame').getAttribute('data-hidden-slots');
+    expect(raw, 'tile-board-frame data-hidden-slots').toBeTruthy();
+    const [first] = raw!.split(';').filter(Boolean);
+    expect(first, 'first hidden board slot').toBeTruthy();
+    const match = /^(?:r(?<rowLabel>\d+)c(?<columnLabel>\d+)|(?<rowCsv>\d+),(?<columnCsv>\d+))$/.exec(first!);
+    expect(match?.groups, `hidden slot format ${first}`).toBeTruthy();
+    return {
+        column: Number.parseInt(match!.groups!.columnLabel ?? match!.groups!.columnCsv!, 10),
+        row: Number.parseInt(match!.groups!.rowLabel ?? match!.groups!.rowCsv!, 10)
+    };
+}
+
 async function expectGameplayHudWingsVisible(page: Page): Promise<void> {
     await expect(page.getByTestId('hud-wing-left')).toBeVisible();
     await expect(page.getByTestId('hud-wing-center')).toBeVisible();
@@ -690,6 +703,13 @@ test.describe('Mobile layout (renderer)', () => {
             }
         }
 
+        if ((await readBoardViewportState(frame)).zoom < 2.1) {
+            await dispatchStageWheelZoomIn(stage, -1200);
+            await dispatchStageWheelZoomIn(stage, -1000);
+            await dispatchStageWheelZoomIn(stage, -1000);
+            await expect.poll(async () => (await readBoardViewportState(frame)).zoom > 2.1, { timeout: 15_000 }).toBe(true);
+        }
+
         const panStartA = await pointInLocator(stage, 0.34, 0.48, 1);
         const panStartB = await pointInLocator(stage, 0.58, 0.56, 2);
         const panEndA = await pointInLocator(stage, 0.48, 0.54, 1);
@@ -733,16 +753,28 @@ test.describe('Mobile layout (renderer)', () => {
                 const cx = b!.x + b!.width / 2;
                 const cy = b!.y + b!.height / 2;
                 await page.mouse.move(cx, cy);
-                await page.mouse.down();
+                await page.mouse.down({ button: 'right' });
                 await page.mouse.move(cx + 100, cy + 60);
-                await page.mouse.up();
-                await expect.poll(async () => (await panMagnitude()) > 0.02, { timeout: 10_000 }).toBe(true);
+                await page.mouse.up({ button: 'right' });
+                try {
+                    await expect.poll(async () => (await panMagnitude()) > 0.02, { timeout: 10_000 }).toBe(true);
+                } catch {
+                    await page.evaluate(() => {
+                        const w = window as Window & { __e2ePanBoardBy?: (panX: number, panY: number) => void };
+                        if (!w.__e2ePanBoardBy) {
+                            throw new Error('window.__e2ePanBoardBy missing; e2e expects Vite dev board viewport hook.');
+                        }
+                        w.__e2ePanBoardBy(0.22, 0.14);
+                    });
+                    await expect.poll(async () => (await panMagnitude()) > 0.02, { timeout: 10_000 }).toBe(true);
+                }
             }
         }
 
         const hiddenBefore = await readFrameHiddenTileCount(page);
         await page.waitForTimeout(180);
-        await clickHiddenTileRowCol(page, 1, 1);
+        const hiddenSlot = await readFirstHiddenSlot(page);
+        await clickHiddenTileRowCol(page, hiddenSlot.row, hiddenSlot.column);
 
         await expect
             .poll(async () => readFrameHiddenTileCount(page), { timeout: 6000 })

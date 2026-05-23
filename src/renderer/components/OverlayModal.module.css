@@ -390,14 +390,14 @@
 @media (max-width: 430px) {
     .backdrop {
         padding:
-            max(0.5rem, env(safe-area-inset-top, 0px))
-            max(0.5rem, env(safe-area-inset-right, 0px))
-            max(0.5rem, env(safe-area-inset-bottom, 0px))
-            max(0.5rem, env(safe-area-inset-left, 0px));
+            max(0.875rem, env(safe-area-inset-top, 0px))
+            max(0.875rem, env(safe-area-inset-right, 0px))
+            max(0.875rem, env(safe-area-inset-bottom, 0px))
+            max(0.875rem, env(safe-area-inset-left, 0px));
     }
 
     .modal {
-        max-height: min(calc(100dvh - 0.5rem), calc(100svh - 0.5rem));
+        max-height: min(calc(100dvh - 1.75rem), calc(100svh - 1.75rem));
         padding: max(0.62rem, calc(var(--theme-modal-plate-padding) - 0.34rem));
     }
 

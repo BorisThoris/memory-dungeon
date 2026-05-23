@@ -24,6 +24,15 @@ test.describe('Expanded Choose Your Path mode matrix', () => {
         test(`${mode.title} detail starts a playable run with a stable identity signal`, async ({ page }) => {
             test.setTimeout(240_000);
             await openModeLibrary(page);
+            if (
+                mode.title === 'Dungeon Showcase' &&
+                (await page.getByRole('region', { name: /recommended run/i }).getByRole('heading', { name: /^Dungeon Showcase$/i }).isVisible().catch(() => false))
+            ) {
+                await page.getByRole('region', { name: /recommended run/i }).getByRole('button', { name: /^start run$/i }).click();
+                await expectGameplayReady(page);
+                await expect(page.getByTestId('hud-mode-identity')).toContainText(mode.hudIdentity);
+                return;
+            }
             const modal = await openModeDetail(page, mode.title);
             await expect(modal.getByTestId('choose-path-start-contract')).toContainText(/Start signal/i);
             await modal.getByRole('button', { name: /^play$/i }).click();

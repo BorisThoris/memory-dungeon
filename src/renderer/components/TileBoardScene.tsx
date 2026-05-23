@@ -16,6 +16,7 @@ import {
 import {
     Box3,
     CanvasTexture,
+    CircleGeometry,
     Color,
     DoubleSide,
     LinearFilter,
@@ -402,7 +403,7 @@ const EnemyHazardMarker = ({ hazard, currentTransform, graphicsQuality, nextTran
         <>
             {nextTransform ? (
                 <mesh
-                    geometry={ENEMY_NEXT_MARKER_GEOMETRY}
+                    geometry={hazard.bossId ? ENEMY_NEXT_BOSS_MARKER_GEOMETRY : ENEMY_NEXT_MARKER_GEOMETRY}
                     position={getDungeonEnemyMarkerAnchor(nextTransform, 'nextThreatTelegraph')}
                     renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.nextThreatTelegraph.renderOrder}
                     rotation={[0, 0, Math.PI / 4]}
@@ -422,7 +423,7 @@ const EnemyHazardMarker = ({ hazard, currentTransform, graphicsQuality, nextTran
                     <meshBasicMaterial color={color} depthWrite={false} opacity={lod.currentMarkerOpacity} toneMapped={false} transparent />
                 </mesh>
                 <mesh
-                    geometry={ENEMY_MARKER_GEOMETRY}
+                    geometry={hazard.bossId ? ENEMY_BOSS_HALO_GEOMETRY : ENEMY_MARKER_GEOMETRY}
                     renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.renderOrder}
                     rotation={[0, 0, Math.PI / 4]}
                     scale={1.42}
@@ -462,9 +463,11 @@ const ENEMY_MARKER_GEOMETRY = new PlaneGeometry(0.22, 0.22, 1, 1);
 const ENEMY_STALKER_MARKER_GEOMETRY = new PlaneGeometry(0.14, 0.28, 1, 1);
 const ENEMY_WARDEN_MARKER_GEOMETRY = new PlaneGeometry(0.28, 0.18, 1, 1);
 const ENEMY_OBSERVER_MARKER_GEOMETRY = new PlaneGeometry(0.3, 0.08, 1, 1);
-const ENEMY_BOSS_MARKER_GEOMETRY = new PlaneGeometry(0.28, 0.28, 1, 1);
-const ENEMY_BOSS_CROWN_GEOMETRY = new PlaneGeometry(0.24, 0.07, 1, 1);
+const ENEMY_BOSS_MARKER_GEOMETRY = new CircleGeometry(0.16, 32);
+const ENEMY_BOSS_HALO_GEOMETRY = new CircleGeometry(0.2, 32);
+const ENEMY_BOSS_CROWN_GEOMETRY = new CircleGeometry(0.055, 16);
 const ENEMY_NEXT_MARKER_GEOMETRY = new PlaneGeometry(0.32, 0.32, 1, 1);
+const ENEMY_NEXT_BOSS_MARKER_GEOMETRY = new CircleGeometry(0.18, 32);
 
 /** FX-006: thin quads approximating DOM `0 0 0 2px` gold ring on the visible back face while hidden. */
 const HOVER_GOLD_RIM_STRIP = 0.0036;

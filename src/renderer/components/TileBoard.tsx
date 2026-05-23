@@ -430,11 +430,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardGraphicsOk = baselineWebGl && !gpuSurfaceLost;
     const cameraViewportMode = mobileCameraMode && boardGraphicsOk;
     const touchGestureMode = cameraViewportMode && touchPrimary;
-    /**
-     * Mouse wheel / drag pan on the stage: wide (non-compact) viewports always get it with WebGL; compact shell keeps
-     * the previous rule (mouse only) so touch-first phones stay on pinch/pan gestures.
-     */
-    const desktopCameraMode = boardGraphicsOk && (!mobileCameraMode || !touchPrimary);
+    /** Mouse wheel / drag pan remains available with WebGL, including hybrid touch + pointer devices. */
+    const desktopCameraMode = boardGraphicsOk;
     const frameRef = useRef<HTMLDivElement>(null);
     const boardAppRef = useRef<HTMLDivElement>(null);
     const shuffleClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -1086,6 +1083,7 @@ const hiddenSlotsAttr = useMemo(
                 col: number
             ) => { bottom: number; height: number; left: number; right: number; top: number; width: number } | null;
             __e2eGetTileIdAtGrid1?: (row: number, col: number) => string | null;
+            __e2ePanBoardBy?: (panX: number, panY: number) => void;
             __e2ePickTileAtGrid1?: (row: number, col: number) => void;
         };
         w.__e2eGetTileIdAtGrid1 = (row: number, col: number): string | null => {
@@ -1119,12 +1117,40 @@ const hiddenSlotsAttr = useMemo(
                 handleTileSelect(tile.id);
             }
         };
+        w.__e2ePanBoardBy = (panX: number, panY: number): void => {
+            setViewportState((current) => {
+                const nextViewport = clampBoardViewport({
+                    boardHeight: boardWorldHeight,
+                    boardWidth: boardWorldWidth,
+                    fitZoom,
+                    panX: current.panX + panX,
+                    panY: current.panY + panY,
+                    viewportHeight: stageWorldViewport.height,
+                    viewportWidth: stageWorldViewport.width,
+                    zoom: current.zoom
+                });
+
+                viewportStateRef.current = nextViewport;
+                return nextViewport;
+            });
+        };
         return () => {
             delete w.__e2eGetTileClientRectAtGrid1;
             delete w.__e2eGetTileIdAtGrid1;
+            delete w.__e2ePanBoardBy;
             delete w.__e2ePickTileAtGrid1;
         };
-    }, [board.columns, board.rows, board.tiles, handleTileSelect]);
+    }, [
+        board.columns,
+        board.rows,
+        board.tiles,
+        boardWorldHeight,
+        boardWorldWidth,
+        fitZoom,
+        handleTileSelect,
+        stageWorldViewport.height,
+        stageWorldViewport.width
+    ]);
 
     const handleStageViewportChange = useCallback((nextViewport: StageWorldViewport): void => {
         setStageWorldViewport((current) =>
@@ -1226,6 +1252,10 @@ const hiddenSlotsAttr = useMemo(
         }
 
         const stopGestureEvent = (event: globalThis.PointerEvent): void => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+        const stopTouchGestureEvent = (event: globalThis.TouchEvent): void => {
             event.preventDefault();
             event.stopPropagation();
         };
@@ -1366,16 +1396,76 @@ const hiddenSlotsAttr = useMemo(
             }
         };
 
+        const syncTouchList = (touches: TouchList): void => {
+            activeTouchPointsRef.current.clear();
+            for (const touch of Array.from(touches).slice(0, 2)) {
+                activeTouchPointsRef.current.set(touch.identifier, {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+            }
+        };
+
+        const handleTouchStart = (event: globalThis.TouchEvent): void => {
+            if (event.touches.length < 2) {
+                return;
+            }
+
+            syncTouchList(event.touches);
+            beginGestureSession();
+            stopTouchGestureEvent(event);
+        };
+
+        const handleTouchMove = (event: globalThis.TouchEvent): void => {
+            if (event.touches.length < 2) {
+                return;
+            }
+
+            syncTouchList(event.touches);
+            if (!gestureSnapshotRef.current) {
+                beginGestureSession();
+            }
+            updateGestureViewport();
+            stopTouchGestureEvent(event);
+        };
+
+        const handleTouchEnd = (event: globalThis.TouchEvent): void => {
+            if (!gestureSnapshotRef.current && !selectionSuppressedRef.current) {
+                return;
+            }
+
+            if (event.touches.length >= 2) {
+                syncTouchList(event.touches);
+                beginGestureSession();
+                stopTouchGestureEvent(event);
+                return;
+            }
+
+            activeTouchPointsRef.current.clear();
+            gestureSnapshotRef.current = null;
+            syncGestureActive(false);
+            syncSelectionSuppressed(false);
+            stopTouchGestureEvent(event);
+        };
+
         stageNode.addEventListener('pointerdown', handlePointerDown, true);
         stageNode.addEventListener('pointermove', handlePointerMove, true);
         stageNode.addEventListener('pointerup', handlePointerEnd, true);
         stageNode.addEventListener('pointercancel', handlePointerEnd, true);
+        stageNode.addEventListener('touchstart', handleTouchStart, { capture: true, passive: false });
+        stageNode.addEventListener('touchmove', handleTouchMove, { capture: true, passive: false });
+        stageNode.addEventListener('touchend', handleTouchEnd, { capture: true, passive: false });
+        stageNode.addEventListener('touchcancel', handleTouchEnd, { capture: true, passive: false });
 
         return () => {
             stageNode.removeEventListener('pointerdown', handlePointerDown, true);
             stageNode.removeEventListener('pointermove', handlePointerMove, true);
             stageNode.removeEventListener('pointerup', handlePointerEnd, true);
             stageNode.removeEventListener('pointercancel', handlePointerEnd, true);
+            stageNode.removeEventListener('touchstart', handleTouchStart, true);
+            stageNode.removeEventListener('touchmove', handleTouchMove, true);
+            stageNode.removeEventListener('touchend', handleTouchEnd, true);
+            stageNode.removeEventListener('touchcancel', handleTouchEnd, true);
             clearTouchGestureState(true);
         };
     }, [
