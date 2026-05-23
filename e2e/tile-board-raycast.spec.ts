@@ -8,7 +8,7 @@ import {
     STORAGE_KEY,
     waitForBoardPlayPhase
 } from './tileBoardGameFlow';
-import { completeLevel1Play } from './visualScreenHelpers';
+import { completeLevel1Play, startClassicRunFromModeSelect } from './visualScreenHelpers';
 
 async function readBoardViewport(page: Page): Promise<{ panX: number; panY: number; zoom: number }> {
     return page.getByTestId('tile-board-frame').evaluate((element) => ({
@@ -64,10 +64,7 @@ test.describe('Tile board interaction', () => {
 
         await page.getByRole('button', { name: /^play$/i }).click();
         await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
-        const classicRun = page.getByRole('button', { name: /start run/i });
-        await expect(classicRun).toBeVisible();
-        await classicRun.evaluate((el) => (el as HTMLButtonElement).click());
-        await expect(page.getByRole('heading', { name: /level 1/i })).toBeAttached({ timeout: 15_000 });
+        await startClassicRunFromModeSelect(page);
 
         await expect(page.getByRole('group', { name: /run stats/i })).toBeVisible({ timeout: 15_000 });
 
@@ -108,11 +105,7 @@ test.describe('Tile board interaction', () => {
         await page.setViewportSize({ width: 1440, height: 900 });
         await page.getByRole('button', { name: /^play$/i }).click();
         await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
-        const classicRunWheel = page.getByRole('button', { name: /start run/i });
-        await expect(classicRunWheel).toBeVisible();
-        await classicRunWheel.evaluate((el) => (el as HTMLButtonElement).click());
-        await expect(page.getByRole('heading', { name: /level 1/i })).toBeAttached({ timeout: 15_000 });
-        await expect(page.getByRole('group', { name: /run stats/i })).toBeVisible({ timeout: 15_000 });
+        await startClassicRunFromModeSelect(page);
 
         const stageShell = page.getByTestId('tile-board-stage-shell');
         await expect(stageShell).toBeVisible();

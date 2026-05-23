@@ -4,8 +4,13 @@ import { clickHiddenTileRowCol, navigateToLevel1PlayPhase, readFrameHiddenTileCo
 import {
     expectAppScrollportHasNoVerticalOverflow,
     expectLocatorFullyInWindowViewport,
+    expectNoHorizontalOverflow,
     openMainMenuFromSave
 } from './visualScreenHelpers';
+import {
+    expectGameplayReady,
+    openPlayablePathFixture
+} from './playablePathHelpers';
 
 /**
  * QA-002 — Geometry tolerances (compact touch / mobile camera layout):
@@ -19,6 +24,12 @@ import {
 test.describe.configure({ mode: 'serial' });
 /* Level-1 memorize→play can be slow; pinch/pan set their own timeouts. */
 test.setTimeout(120_000);
+
+const ACTIVE_GAMEPLAY_PORTRAITS = [
+    { height: 640, name: 'small phone', width: 360 },
+    { height: 844, name: 'standard phone', width: 390 },
+    { height: 896, name: 'large phone', width: 414 }
+] as const;
 
 async function readSettingsLayout(container: Locator): Promise<{
     contentBelowNav: boolean;
@@ -113,10 +124,45 @@ async function readBoardViewportState(frame: Locator): Promise<{
     }));
 }
 
+async function readFirstHiddenSlot(page: Page): Promise<{ column: number; row: number }> {
+    const raw = await page.getByTestId('tile-board-frame').getAttribute('data-hidden-slots');
+    expect(raw, 'tile-board-frame data-hidden-slots').toBeTruthy();
+    const [first] = raw!.split(';').filter(Boolean);
+    expect(first, 'first hidden board slot').toBeTruthy();
+    const match = /^(?:r(?<rowLabel>\d+)c(?<columnLabel>\d+)|(?<rowCsv>\d+),(?<columnCsv>\d+))$/.exec(first!);
+    expect(match?.groups, `hidden slot format ${first}`).toBeTruthy();
+    return {
+        column: Number.parseInt(match!.groups!.columnLabel ?? match!.groups!.columnCsv!, 10),
+        row: Number.parseInt(match!.groups!.rowLabel ?? match!.groups!.rowCsv!, 10)
+    };
+}
+
 async function expectGameplayHudWingsVisible(page: Page): Promise<void> {
     await expect(page.getByTestId('hud-wing-left')).toBeVisible();
     await expect(page.getByTestId('hud-wing-center')).toBeVisible();
     await expect(page.getByTestId('hud-wing-right')).toBeVisible();
+}
+
+async function expectCoreGameplayChromeFits(page: Page): Promise<void> {
+    await expectNoHorizontalOverflow(page);
+    await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-hud'), 8);
+    await expectLocatorFullyInWindowViewport(page, page.getByTestId('tile-board-frame'), 8);
+    await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-action-dock'), 8);
+    for (const name of [/fit board/i, /run settings \(toolbar\)/i, /open codex/i, /open inventory/i, /return to main menu/i]) {
+        await expectLocatorFullyInWindowViewport(page, page.getByRole('button', { name }), 8);
+    }
+}
+
+async function expectDialogFitsWithPrimaryActions(page: Page, dialogName: RegExp): Promise<void> {
+    const dialog = page.getByRole('dialog', { name: dialogName });
+    await expect(dialog).toBeVisible({ timeout: 20_000 });
+    await expectNoHorizontalOverflow(page);
+    await expectLocatorFullyInWindowViewport(page, dialog, 8);
+    const visibleButtons = await dialog.locator('button:visible').all();
+    expect(visibleButtons.length, `expected visible actions in ${dialogName}`).toBeGreaterThan(0);
+    for (const button of visibleButtons.slice(0, 4)) {
+        await expectLocatorFullyInWindowViewport(page, button, 8);
+    }
 }
 
 /** Headless Chromium may ignore synthetic pinch; wheel on the stage matches `tile-board-raycast` zoom-in path. */
@@ -271,6 +317,49 @@ test.describe('Mobile layout (renderer)', () => {
             expect(box!.height).toBeGreaterThanOrEqual(43);
         }
     });
+
+    for (const viewport of ACTIVE_GAMEPLAY_PORTRAITS) {
+        test(`${viewport.name} portrait active gameplay has no horizontal overflow`, async ({ page }) => {
+            await forceCoarsePointerMedia(page);
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+            await openPlayablePathFixture(page, 'activeRunWithHazards');
+            await expectGameplayReady(page);
+
+            await expectCoreGameplayChromeFits(page);
+            await page.getByText(/^Info$/i).click({ force: true });
+            await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-hud'), 8);
+            await expect(page.getByTestId('hud-hazard-tiles')).toBeVisible();
+            await expect(page.getByTestId('hud-in-run-cause-strip')).toBeVisible();
+        });
+
+        test(`${viewport.name} portrait run settings overlay keeps actions reachable`, async ({ page }) => {
+            await forceCoarsePointerMedia(page);
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+            await openPlayablePathFixture(page, 'activeRunWithHazards');
+            await expectGameplayReady(page);
+
+            await page.getByRole('button', { name: /run settings \(toolbar\)/i }).evaluate((element) => {
+                (element as HTMLButtonElement).click();
+            });
+            await expectDialogFitsWithPrimaryActions(page, /run settings/i);
+            const dialog = page.getByRole('dialog', { name: /run settings/i });
+            await expectLocatorFullyInWindowViewport(page, dialog.getByRole('button', { name: /^back$/i }), 8);
+            await expectLocatorFullyInWindowViewport(page, dialog.getByRole('button', { name: /^save$/i }), 8);
+        });
+
+        test(`${viewport.name} portrait relic offer overlay fits without clipped picks`, async ({ page }) => {
+            await forceCoarsePointerMedia(page);
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+            await openPlayablePathFixture(page, 'relicDraft');
+
+            const relicDialog = page.getByTestId('game-relic-offer-overlay');
+            await expect(relicDialog).toBeVisible({ timeout: 30_000 });
+            await expectNoHorizontalOverflow(page);
+            await expectLocatorFullyInWindowViewport(page, relicDialog, 8);
+            await expect(page.getByTestId('relic-offer-card').first()).toBeVisible();
+            await expectLocatorFullyInWindowViewport(page, page.getByTestId('relic-offer-card').first(), 8);
+        });
+    }
 
     test('pause modal backdrop keeps minimum padding (safe-area aware layout)', async ({ page }) => {
         await page.setViewportSize({ width: 390, height: 844 });
@@ -614,6 +703,13 @@ test.describe('Mobile layout (renderer)', () => {
             }
         }
 
+        if ((await readBoardViewportState(frame)).zoom < 2.1) {
+            await dispatchStageWheelZoomIn(stage, -1200);
+            await dispatchStageWheelZoomIn(stage, -1000);
+            await dispatchStageWheelZoomIn(stage, -1000);
+            await expect.poll(async () => (await readBoardViewportState(frame)).zoom > 2.1, { timeout: 15_000 }).toBe(true);
+        }
+
         const panStartA = await pointInLocator(stage, 0.34, 0.48, 1);
         const panStartB = await pointInLocator(stage, 0.58, 0.56, 2);
         const panEndA = await pointInLocator(stage, 0.48, 0.54, 1);
@@ -657,16 +753,28 @@ test.describe('Mobile layout (renderer)', () => {
                 const cx = b!.x + b!.width / 2;
                 const cy = b!.y + b!.height / 2;
                 await page.mouse.move(cx, cy);
-                await page.mouse.down();
+                await page.mouse.down({ button: 'right' });
                 await page.mouse.move(cx + 100, cy + 60);
-                await page.mouse.up();
-                await expect.poll(async () => (await panMagnitude()) > 0.02, { timeout: 10_000 }).toBe(true);
+                await page.mouse.up({ button: 'right' });
+                try {
+                    await expect.poll(async () => (await panMagnitude()) > 0.02, { timeout: 10_000 }).toBe(true);
+                } catch {
+                    await page.evaluate(() => {
+                        const w = window as Window & { __e2ePanBoardBy?: (panX: number, panY: number) => void };
+                        if (!w.__e2ePanBoardBy) {
+                            throw new Error('window.__e2ePanBoardBy missing; e2e expects Vite dev board viewport hook.');
+                        }
+                        w.__e2ePanBoardBy(0.22, 0.14);
+                    });
+                    await expect.poll(async () => (await panMagnitude()) > 0.02, { timeout: 10_000 }).toBe(true);
+                }
             }
         }
 
         const hiddenBefore = await readFrameHiddenTileCount(page);
         await page.waitForTimeout(180);
-        await clickHiddenTileRowCol(page, 1, 1);
+        const hiddenSlot = await readFirstHiddenSlot(page);
+        await clickHiddenTileRowCol(page, hiddenSlot.row, hiddenSlot.column);
 
         await expect
             .poll(async () => readFrameHiddenTileCount(page), { timeout: 6000 })

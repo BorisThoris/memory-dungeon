@@ -423,13 +423,29 @@ export async function openMainMenuFromSave(page: Page, onboardingDismissed: bool
 }
 
 export async function startClassicRunFromModeSelect(page: Page): Promise<void> {
-    const classicBtn = page.getByRole('button', { name: /start run/i });
-    await expect(classicBtn).toBeVisible({ timeout: 15_000 });
-    await classicBtn.scrollIntoViewIfNeeded();
-    // Long serial visual runs against Vite can see `element was detached` / stability timeouts on animated cards.
-    await classicBtn.click({ force: true });
+    const recommended = page.getByRole('region', { name: /recommended run/i });
+    const recommendedClassic = recommended.getByRole('heading', { name: /^classic run$/i });
+    if (await recommendedClassic.isVisible().catch(() => false)) {
+        const classicBtn = recommended.getByRole('button', { name: /start run/i });
+        await expect(classicBtn).toBeVisible({ timeout: 15_000 });
+        await classicBtn.scrollIntoViewIfNeeded();
+        // Long serial visual runs against Vite can see `element was detached` / stability timeouts on animated cards.
+        await classicBtn.click({ force: true });
+    } else {
+        await ensureModeLibraryVisible(page);
+        const search = page.getByRole('searchbox', { name: /filter modes/i });
+        if (await search.isVisible().catch(() => false)) {
+            await search.fill('Classic Run');
+        }
+        const classicTile = page.getByRole('button', { name: /^Classic Run\. Open details\.$/i });
+        await expect(classicTile).toBeVisible({ timeout: 15_000 });
+        await classicTile.click({ force: true });
+        const modal = page.getByTestId('library-mode-detail-modal');
+        await expect(modal).toBeVisible({ timeout: 15_000 });
+        await modal.getByRole('button', { name: /^play$/i }).click();
+    }
     // GameScreen level title is `srOnly` (screen-reader-only); visible checks time out on narrow viewports.
-    await expect(page.getByRole('heading', { name: /level 1/i })).toBeAttached({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: /level \d+/i })).toBeAttached({ timeout: 15000 });
     await expect(page.getByRole('group', { name: /run stats/i })).toBeVisible({ timeout: 15000 });
 }
 

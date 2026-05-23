@@ -179,6 +179,7 @@ const RelicDraftOfferPanel = ({
                         <button
                             aria-label={`${ariaTier} relic: ${desc}. ${impactCopy}${reason ? `. ${reason}` : ''}`}
                             className={`${styles.card} ${rarityClass(row.rarity)}`}
+                            data-testid="relic-offer-card"
                             key={`${id}-${pickRound}`}
                             onClick={() => onPick(id)}
                             style={staggerStyle}

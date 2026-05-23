@@ -107,7 +107,7 @@ test.describe('Navigation shells', () => {
         await ensureModeLibraryVisible(page);
         await page.getByRole('button', { name: /daily challenge/i }).click();
         await page.getByTestId('library-mode-detail-modal').getByRole('button', { name: /^play$/i }).click();
-        await expect(page.getByRole('heading', { name: /level 1/i })).toBeAttached({ timeout: 15_000 });
+        await expect(page.getByRole('heading', { name: /level \d+/i })).toBeAttached({ timeout: 15_000 });
         await expect(page.getByRole('group', { name: /run stats/i })).toBeVisible({ timeout: 15_000 });
     });
 
