@@ -5375,9 +5375,25 @@ export const flipTile = (run: RunState, tileId: string): RunState => {
     if (!revealedBoard) {
         return runAfterDungeonReveal;
     }
-
     const peekRevealedTileIds =
         runAfterDungeonReveal.peekRevealedTileIds.length > 0 ? ([] as string[]) : runAfterDungeonReveal.peekRevealedTileIds;
+    if (
+        tile.state === 'hidden' &&
+        tile.dungeonCardKind === 'trap' &&
+        runAfterDungeonReveal.dungeonTrapsTriggered > runAfterFlashClear.dungeonTrapsTriggered
+    ) {
+        return {
+            ...runAfterDungeonReveal,
+            status: 'playing',
+            peekRevealedTileIds,
+            board: {
+                ...revealedBoard,
+                flippedTileIds: []
+            },
+            flipHistory: [...runAfterDungeonReveal.flipHistory, tileId],
+            timerState: clearResolveState(runAfterDungeonReveal)
+        };
+    }
 
     const flippedTileIds = [...revealedBoard.flippedTileIds, tileId];
     const firstFlippedId = revealedBoard.flippedTileIds[0] ?? null;
@@ -6882,6 +6898,9 @@ export const getDungeonCardCopy = (tile: Tile): string => {
                 : ' Can be opened once revealed.';
         const route = tile.dungeonRouteType ? ` Leads to a ${tile.dungeonRouteType} route.` : '';
         return `Dungeon exit: ${tile.label}.${lock}${route}`;
+    }
+    if (tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved') {
+        return `Resolved trap: ${tile.label}. Its effect has sprung and your next action is ready.`;
     }
     if (tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'revealed') {
         if (tile.dungeonCardEffectId === 'trap_alarm') {

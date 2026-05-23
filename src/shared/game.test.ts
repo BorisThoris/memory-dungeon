@@ -642,6 +642,61 @@ describe('REG-017 route choices', () => {
         });
     });
 
+    it('springs trap cards on first reveal and clears selection for the next action', () => {
+        const board = buildBoard(5, {
+            runSeed: 172_601,
+            runRulesVersion: GAME_RULES_VERSION,
+            dungeonNodeKind: 'trap',
+            gameMode: 'endless'
+        });
+        const groups = new Map<string, Tile[]>();
+        for (const tile of board.tiles) {
+            const group = groups.get(tile.pairKey) ?? [];
+            group.push(tile);
+            groups.set(tile.pairKey, group);
+        }
+        const trapPair = [...groups.values()].find((group) =>
+            group.every((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'hidden')
+        )!;
+        const supportPair = [...groups.values()].find((group) =>
+            group.length === 2 &&
+            group.every(
+                (tile) =>
+                    tile.dungeonCardKind !== 'enemy' &&
+                    tile.dungeonCardKind !== 'trap' &&
+                    tile.pairKey !== DECOY_PAIR_KEY &&
+                    tile.pairKey !== WILD_PAIR_KEY &&
+                    tile.pairKey !== EXIT_PAIR_KEY &&
+                    tile.pairKey !== SHOP_PAIR_KEY &&
+                    tile.pairKey !== ROOM_PAIR_KEY
+            )
+        )!;
+        expect(trapPair).toBeDefined();
+        expect(supportPair).toBeDefined();
+
+        const base = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 172_601 }));
+        const run: RunState = {
+            ...base,
+            board,
+            status: 'playing',
+            stats: { ...base.stats, tries: 1 },
+            findablesTotalThisFloor: countFindablePairs(board.tiles)
+        };
+
+        const sprung = flipTile(run, trapPair[0]!.id);
+        const sprungTrap = sprung.board!.tiles.find((tile) => tile.id === trapPair[0]!.id)!;
+
+        expect(sprung.status).toBe('playing');
+        expect(sprung.board!.flippedTileIds).toEqual([]);
+        expect(sprung.dungeonTrapsTriggered).toBe(run.dungeonTrapsTriggered + 1);
+        expect(sprung.dungeonTrapsResolvedThisFloor).toBe((run.dungeonTrapsResolvedThisFloor ?? 0) + 1);
+        expect(sprungTrap.dungeonCardState).toBe('resolved');
+        expect(getDungeonCardCopy(sprungTrap)).toContain('Resolved trap');
+
+        const next = flipTile(sprung, supportPair[0]!.id);
+        expect(next.board!.flippedTileIds).toEqual([supportPair[0]!.id]);
+    });
+
     it('generates deterministic rotating enemy hazards with telegraphed next targets', () => {
         const options = {
             runSeed: 182_001,
@@ -4059,16 +4114,15 @@ describe('dungeon cards', () => {
         ];
         const run = createRun(tiles);
         const afterTrapReveal = flipTile(run, 't1');
-        const resolvedMiss = resolveBoardTurn(flipTile(afterTrapReveal, 'a1'));
 
-        expect(resolvedMiss.dungeonTrapsTriggered).toBe(1);
+        expect(afterTrapReveal.dungeonTrapsTriggered).toBe(1);
         expect(
-            resolvedMiss.board!.tiles
+            afterTrapReveal.board!.tiles
                 .filter((tile) => tile.pairKey === 'T')
                 .every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'flipped')
         ).toBe(true);
 
-        const selectedFirstTrap = flipTile(resolvedMiss, 't1');
+        const selectedFirstTrap = flipTile(afterTrapReveal, 't1');
         expect(selectedFirstTrap.board!.flippedTileIds).toEqual(['t1']);
 
         const completed = resolveBoardTurn(flipTile(selectedFirstTrap, 't2'));
@@ -4097,12 +4151,13 @@ describe('dungeon cards', () => {
             createTile('a2', 'A', 'A')
         ];
         const run = createRun(tiles);
-        const resolved = resolveBoardTurn(flipTile(flipTile(run, 't1'), 't2'));
+        const afterReveal = flipTile(run, 't1');
+        const resolved = resolveBoardTurn(flipTile(flipTile(afterReveal, 't1'), 't2'));
 
         expect(resolved.dungeonTrapsTriggered).toBe(1);
         expect(resolved.lives).toBe(run.lives - 1);
         expect(resolved.shopGold).toBe(run.shopGold);
-        expect(resolved.stats.totalScore).toBeGreaterThan(run.stats.totalScore);
+        expect(resolved.stats.totalScore).toBeGreaterThanOrEqual(run.stats.totalScore);
         expect(
             resolved.board!.tiles.filter((tile) => tile.pairKey === 'T').every((tile) => tile.state === 'matched')
         ).toBe(true);
@@ -4258,7 +4313,7 @@ describe('dungeon cards', () => {
         ];
         const baseMimicRun = createRun(mimicTiles);
         const mimicRun = { ...baseMimicRun, shopGold: 2, stats: { ...baseMimicRun.stats, tries: 1 } };
-        const mimicMiss = resolveBoardTurn(flipTile(flipTile(mimicRun, 'm1'), 'a1'));
+        const mimicMiss = flipTile(mimicRun, 'm1');
 
         expect(mimicMiss.dungeonTrapsTriggered).toBe(1);
         expect(mimicMiss.lives).toBeLessThan(mimicRun.lives);
@@ -4302,10 +4357,10 @@ describe('dungeon cards', () => {
         ];
         const baseAlarmRun = createRun(alarmTiles);
         const alarmRun = { ...baseAlarmRun, stats: { ...baseAlarmRun.stats, tries: 1 } };
-        const alarmMiss = resolveBoardTurn(flipTile(flipTile(alarmRun, 'x1'), 'a1'));
+        const alarmMiss = flipTile(alarmRun, 'x1');
 
         expect(alarmMiss.dungeonTrapsTriggered).toBe(1);
-        expect(alarmMiss.lives).toBe(alarmRun.lives - 2);
+        expect(alarmMiss.lives).toBe(alarmRun.lives);
         expect(
             alarmMiss.board!.tiles
                 .filter((tile) => tile.pairKey === 'E')
@@ -4339,7 +4394,7 @@ describe('dungeon cards', () => {
             regionShuffleFreeThisFloor: true,
             stats: { ...guardedBase.stats, guardTokens: 1, tries: 0 }
         };
-        const guardedMiss = resolveBoardTurn(flipTile(flipTile(guardedRun, 's1'), 'a1'));
+        const guardedMiss = flipTile(guardedRun, 's1');
 
         expect(guardedMiss.stats.guardTokens).toBe(0);
         expect(guardedMiss.freeShuffleThisFloor).toBe(true);
@@ -4353,7 +4408,7 @@ describe('dungeon cards', () => {
             regionShuffleFreeThisFloor: true,
             stats: { ...unguardedBase.stats, guardTokens: 0, tries: 0 }
         };
-        const unguardedMiss = resolveBoardTurn(flipTile(flipTile(unguardedRun, 's1'), 'a1'));
+        const unguardedMiss = flipTile(unguardedRun, 's1');
 
         expect(unguardedMiss.lives).toBe(unguardedRun.lives);
         expect(unguardedMiss.freeShuffleThisFloor).toBe(false);
@@ -4402,7 +4457,7 @@ describe('dungeon cards', () => {
             ...baseRun,
             stats: { ...baseRun.stats, totalScore: 80, currentLevelScore: 80, tries: 1 }
         };
-        const hexMiss = resolveBoardTurn(flipTile(flipTile(run, 'h1'), 'a1'));
+        const hexMiss = flipTile(run, 'h1');
 
         expect(hexMiss.stats.totalScore).toBeLessThan(run.stats.totalScore);
         expect(
@@ -4410,7 +4465,7 @@ describe('dungeon cards', () => {
                 .filter((tile) => tile.pairKey === 'E')
                 .every((tile) => tile.dungeonCardState === 'revealed')
         ).toBe(true);
-        expect(hexMiss.lives).toBe(run.lives - 2);
+        expect(hexMiss.lives).toBe(run.lives);
         expect(getDungeonCardCopy({ ...tiles[0]!, dungeonCardState: 'revealed' })).toMatch(/hidden hazard/i);
     });
 
@@ -4454,9 +4509,9 @@ describe('dungeon cards', () => {
             createTile('b2', 'B', 'B')
         ];
         const run = { ...createRun(tiles), stats: { ...createRun(tiles).stats, tries: 1 } };
-        const trapMiss = resolveBoardTurn(flipTile(flipTile(run, 't1'), 'a1'));
+        const trapMiss = flipTile(run, 't1');
 
-        expect(trapMiss.lives).toBe(run.lives - 3);
+        expect(trapMiss.lives).toBe(run.lives - 1);
         expect(
             trapMiss.board!.tiles
                 .filter((tile) => tile.pairKey === 'E')
