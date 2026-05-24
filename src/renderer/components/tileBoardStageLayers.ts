@@ -93,9 +93,9 @@ export type DungeonEnemyMarkerShape = 'sentinel-diamond' | 'stalker-spear' | 'wa
 export const DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET = {
     version: 'dng-074-v1',
     maxActiveEnemyHazards: 6,
-    maxMovingThreatDrawCalls: 24,
-    maxMovingThreatMaterialSlots: 24,
-    sharedEnemyMarkerGeometryCount: 7,
+    maxMovingThreatDrawCalls: 36,
+    maxMovingThreatMaterialSlots: 36,
+    sharedEnemyMarkerGeometryCount: 10,
     trapCardExtraDrawCallsPerPair: 0,
     contextLossRecovery: 'remount_canvas_on_restore'
 } as const;
@@ -176,7 +176,7 @@ const movingThreatMeshCountFor = (
     hasNextTelegraph: boolean
 ): number => {
     const secondaryMeshCount = hazard.bossId || hazard.kind === 'observer' ? 1 : 0;
-    return 2 + secondaryMeshCount + (hasNextTelegraph ? 1 : 0);
+    return 4 + secondaryMeshCount + (hasNextTelegraph ? 1 : 0);
 };
 
 export const estimateDungeonBoardStagePerformanceCost = (input: {
