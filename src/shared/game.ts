@@ -1707,9 +1707,10 @@ const springArmedDungeonTraps = (
     );
     const nextBoard: BoardState = {
         ...board,
+        matchedPairs: Math.min(board.pairCount, board.matchedPairs + triggered),
         tiles: board.tiles.map((candidate) =>
             keys.includes(candidate.pairKey) && candidate.dungeonCardKind === 'trap'
-                ? { ...candidate, dungeonCardState: 'resolved' as const, state: 'flipped' as const }
+                ? { ...candidate, dungeonCardState: 'resolved' as const, state: 'matched' as const }
                 : alarmTriggered && candidate.dungeonCardKind === 'enemy' && candidate.dungeonCardState === 'hidden'
                   ? { ...candidate, dungeonCardState: 'revealed' as const }
                 : triggered > 0 &&
