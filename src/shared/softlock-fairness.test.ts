@@ -17,6 +17,7 @@ import {
     createWildRun,
     finishMemorizePhase
 } from './game-core';
+import { flipTile, resolveBoardTurn } from './game';
 import {
     applyStrayRemove,
     applyRegionShuffle,
@@ -75,6 +76,22 @@ const boardFromTiles = (tiles: Tile[], overrides: Partial<BoardState> = {}): Boa
     ),
     floorArchetypeId: null,
     featuredObjectiveId: null,
+    ...overrides
+});
+
+const enemyHazard = (
+    overrides: Partial<NonNullable<BoardState['enemyHazards']>[number]> = {}
+): NonNullable<BoardState['enemyHazards']>[number] => ({
+    id: 'hazard-1',
+    kind: 'sentinel',
+    label: 'Sentinel',
+    currentTileId: 'b1',
+    nextTileId: 'b2',
+    pattern: 'patrol',
+    state: 'hidden',
+    damage: 1,
+    hp: 1,
+    maxHp: 1,
     ...overrides
 });
 
@@ -344,6 +361,81 @@ describe('REG-087 board fairness inspection', () => {
             ]
         });
         expect(issueCodes(clearedRef)).toContain('enemy_hazard_on_cleared_tile');
+    });
+
+    it('defeats normal enemy hazards occupying the last unmatched pair before the flip resolves', () => {
+        const board = boardFromTiles(
+            [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), tile('b1', 'b'), tile('b2', 'b')],
+            {
+                matchedPairs: 1,
+                enemyHazards: [enemyHazard()]
+            }
+        );
+        const run: RunState = { ...playableRun(createNewRun(0, { runSeed: 87_501 })), board };
+
+        const afterFirstFlip = flipTile(run, 'b1');
+        const afterSecondFlip = flipTile(afterFirstFlip, 'b2');
+        const afterResolve = resolveBoardTurn(afterSecondFlip);
+
+        expect(afterFirstFlip.board?.enemyHazards?.[0]).toMatchObject({ state: 'defeated', hp: 0 });
+        expect(afterFirstFlip.enemyHazardsDefeatedThisFloor).toBe((run.enemyHazardsDefeatedThisFloor ?? 0) + 1);
+        expect(afterResolve.board ? isBoardComplete(afterResolve.board) : false).toBe(true);
+        expect(afterResolve.board?.enemyHazards?.filter((hazard) => hazard.state !== 'defeated')).toEqual([]);
+    });
+
+    it('defeats boss-linked hazards that telegraph blocking the last unmatched pair', () => {
+        const board = boardFromTiles(
+            [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), tile('b1', 'b'), tile('b2', 'b')],
+            {
+                level: 7,
+                floorTag: 'boss',
+                dungeonBossId: 'rush_sentinel',
+                matchedPairs: 1,
+                enemyHazards: [
+                    enemyHazard({
+                        id: '7:boss:rush_sentinel',
+                        kind: 'sentinel',
+                        label: 'Rush Sentinel',
+                        currentTileId: 'a1',
+                        nextTileId: 'b2',
+                        bossId: 'rush_sentinel',
+                        hp: 2,
+                        maxHp: 2
+                    })
+                ]
+            }
+        );
+        const run: RunState = { ...playableRun(createNewRun(0, { runSeed: 87_502 })), board };
+
+        const afterFlip = flipTile(run, 'b1');
+
+        expect(afterFlip.board?.enemyHazards?.[0]).toMatchObject({ state: 'defeated', hp: 0 });
+        expect(afterFlip.dungeonEnemiesDefeated).toBe(run.dungeonEnemiesDefeated + 1);
+        expect(issueCodes(afterFlip.board!)).not.toContain('enemy_hazard_on_cleared_tile');
+    });
+
+    it('keeps a trap final pair solvable when an enemy hazard occupies it', () => {
+        const trapA: Tile = {
+            ...tile('trap-a', 'trap'),
+            dungeonCardKind: 'trap',
+            dungeonCardEffectId: 'trap_alarm',
+            dungeonCardState: 'revealed'
+        };
+        const trapB: Tile = { ...trapA, id: 'trap-b' };
+        const board = boardFromTiles(
+            [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), trapA, trapB],
+            {
+                matchedPairs: 1,
+                enemyHazards: [enemyHazard({ currentTileId: 'trap-a', nextTileId: 'trap-b', pattern: 'stalk' })]
+            }
+        );
+        const run: RunState = { ...playableRun(createNewRun(0, { runSeed: 87_503 })), board };
+
+        const afterFlip = flipTile(run, 'trap-a');
+
+        expect(afterFlip.board?.enemyHazards?.[0]).toMatchObject({ state: 'defeated', hp: 0 });
+        expect(afterFlip.board?.tiles.find((candidate) => candidate.id === 'trap-a')?.state).toBe('flipped');
+        expect(inspectRunFairness(afterFlip).hasCompletionRoute).toBe(true);
     });
 
     it('flags defeat-boss objectives without any boss card or hazard route', () => {
