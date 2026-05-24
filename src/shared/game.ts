@@ -1935,13 +1935,27 @@ const unclearedRealPairKeys = (tiles: readonly Tile[]): string[] => [
 ];
 
 const defeatEnemyHazardOccupationOnFinalPair = (board: BoardState): BoardState => {
-    const activeHazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    const activeHazards = collectEnemyHazardsOccupyingFinalPair(board);
     if (activeHazards.length === 0) {
         return board;
     }
+    const hazardsToClear = new Set(activeHazards.map((hazard) => hazard.id));
+    return {
+        ...board,
+        enemyHazards: board.enemyHazards?.map((hazard) =>
+            hazardsToClear.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
+        )
+    };
+};
+
+const collectEnemyHazardsOccupyingFinalPair = (board: BoardState): EnemyHazardState[] => {
+    const activeHazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    if (activeHazards.length === 0) {
+        return [];
+    }
     const remainingPairKeys = unclearedRealPairKeys(board.tiles);
     if (remainingPairKeys.length !== 1) {
-        return board;
+        return [];
     }
     const finalPairTileIds = new Set(
         board.tiles
@@ -1954,21 +1968,32 @@ const defeatEnemyHazardOccupationOnFinalPair = (board: BoardState): BoardState =
             .map((tile) => tile.id)
     );
     if (finalPairTileIds.size === 0) {
-        return board;
+        return [];
     }
-    const hazardsToClear = new Set(
-        activeHazards
-            .filter((hazard) => finalPairTileIds.has(hazard.currentTileId) || finalPairTileIds.has(hazard.nextTileId))
-            .map((hazard) => hazard.id)
+    const occupyingHazards = activeHazards.filter(
+        (hazard) => finalPairTileIds.has(hazard.currentTileId) || finalPairTileIds.has(hazard.nextTileId)
     );
-    if (hazardsToClear.size === 0) {
-        return board;
+    if (board.pairCount <= 1 && board.matchedPairs <= 0) {
+        return occupyingHazards.filter((hazard) => hazard.currentTileId === hazard.nextTileId);
     }
+    return occupyingHazards;
+};
+
+const clearFinalPairEnemyHazardOccupationForRun = (run: RunState): RunState => {
+    if (!run.board) {
+        return run;
+    }
+    const hazardsToClear = collectEnemyHazardsOccupyingFinalPair(run.board);
+    if (hazardsToClear.length === 0) {
+        return run;
+    }
+    const bossHazardsToClear = hazardsToClear.filter((hazard) => hazard.bossId != null).length;
     return {
-        ...board,
-        enemyHazards: board.enemyHazards?.map((hazard) =>
-            hazardsToClear.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
-        )
+        ...run,
+        board: defeatEnemyHazardOccupationOnFinalPair(run.board),
+        dungeonEnemiesDefeated: run.dungeonEnemiesDefeated + bossHazardsToClear,
+        dungeonEnemiesDefeatedThisFloor: (run.dungeonEnemiesDefeatedThisFloor ?? 0) + bossHazardsToClear,
+        enemyHazardsDefeatedThisFloor: (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardsToClear.length
     };
 };
 
@@ -2243,15 +2268,16 @@ export const applyEnemyHazardClick = (
     tileId: string,
     options: { advanceHazards?: boolean } = {}
 ): RunState => {
-    const board = run.board;
+    const cleanedRun = clearFinalPairEnemyHazardOccupationForRun(run);
+    const board = cleanedRun.board;
     const hazard = board?.enemyHazards?.find((candidate) => candidate.currentTileId === tileId && candidate.state !== 'defeated');
     const tile = board?.tiles.find((candidate) => candidate.id === tileId) ?? null;
-    if (!board || !hazard || !tile || tile.state !== 'hidden' || run.status !== 'playing') {
-        return run;
+    if (!board || !hazard || !tile || tile.state !== 'hidden' || cleanedRun.status !== 'playing') {
+        return cleanedRun;
     }
     const advanceHazards = options.advanceHazards ?? true;
-    const consumesGuardToken = run.stats.guardTokens > 0;
-    const lives = consumesGuardToken ? run.lives : Math.max(0, run.lives - hazard.damage);
+    const consumesGuardToken = cleanedRun.stats.guardTokens > 0;
+    const lives = consumesGuardToken ? cleanedRun.lives : Math.max(0, cleanedRun.lives - hazard.damage);
     const revealedBoard: BoardState = {
         ...board,
         enemyHazards: board.enemyHazards?.map((candidate) =>
@@ -2262,14 +2288,14 @@ export const applyEnemyHazardClick = (
         ? advanceEnemyHazardsOnBoard(revealedBoard)
         : defeatEnemyHazardOccupationOnFinalPair(revealedBoard);
     return {
-        ...run,
-        status: lives <= 0 ? 'gameOver' : run.status,
+        ...cleanedRun,
+        status: lives <= 0 ? 'gameOver' : cleanedRun.status,
         lives,
         board: advancedBoard,
-        enemyHazardHitsThisFloor: (run.enemyHazardHitsThisFloor ?? 0) + 1,
+        enemyHazardHitsThisFloor: (cleanedRun.enemyHazardHitsThisFloor ?? 0) + 1,
         stats: {
-            ...run.stats,
-            guardTokens: consumesGuardToken ? run.stats.guardTokens - 1 : run.stats.guardTokens
+            ...cleanedRun.stats,
+            guardTokens: consumesGuardToken ? cleanedRun.stats.guardTokens - 1 : cleanedRun.stats.guardTokens
         }
     };
 };
@@ -5367,22 +5393,25 @@ export const finishMemorizePhase = (run: RunState): RunState =>
           };
 
 export const flipTile = (run: RunState, tileId: string): RunState => {
-    if (!run.board) {
+    const runAfterFinalPairCleanup = clearFinalPairEnemyHazardOccupationForRun(run);
+    if (!runAfterFinalPairCleanup.board) {
         return run;
     }
 
     const gambitThirdWhileResolving =
-        run.status === 'resolving' &&
-        run.gambitAvailableThisFloor &&
-        !run.gambitThirdFlipUsed &&
-        run.board.flippedTileIds.length === 2;
+        runAfterFinalPairCleanup.status === 'resolving' &&
+        runAfterFinalPairCleanup.gambitAvailableThisFloor &&
+        !runAfterFinalPairCleanup.gambitThirdFlipUsed &&
+        runAfterFinalPairCleanup.board.flippedTileIds.length === 2;
 
-    if (run.status !== 'playing' && !gambitThirdWhileResolving) {
-        return run;
+    if (runAfterFinalPairCleanup.status !== 'playing' && !gambitThirdWhileResolving) {
+        return runAfterFinalPairCleanup;
     }
 
     const runAfterFlashClear =
-        run.flashPairRevealedTileIds.length > 0 ? { ...run, flashPairRevealedTileIds: [] } : run;
+        runAfterFinalPairCleanup.flashPairRevealedTileIds.length > 0
+            ? { ...runAfterFinalPairCleanup, flashPairRevealedTileIds: [] }
+            : runAfterFinalPairCleanup;
     const board = runAfterFlashClear.board;
     if (!board) {
         return runAfterFlashClear;

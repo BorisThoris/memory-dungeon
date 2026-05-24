@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardState, DungeonRunNodeKind, FloorArchetypeId, MutatorId, RouteNodeType, RunState, Tile } from './contracts';
+import type {
+    BoardState,
+    DungeonRunNodeKind,
+    EnemyHazardState,
+    FloorArchetypeId,
+    MutatorId,
+    RouteNodeType,
+    RunState,
+    Tile
+} from './contracts';
 import {
     ENDLESS_RISK_WAGER_BONUS_FAVOR,
     ENDLESS_RISK_WAGER_MIN_STREAK,
@@ -262,6 +271,25 @@ const leaveThroughExit = (run: RunState): RunState => {
     return current;
 };
 
+const makeEnemyHazard = (
+    id: string,
+    currentTileId: string,
+    nextTileId: string = currentTileId,
+    overrides: Partial<EnemyHazardState> = {}
+): EnemyHazardState => ({
+    id,
+    kind: 'sentinel',
+    label: 'Patrol Sentry',
+    currentTileId,
+    nextTileId,
+    pattern: 'patrol',
+    state: 'hidden',
+    damage: 1,
+    hp: 1,
+    maxHp: 1,
+    ...overrides
+});
+
 const playPerfectFloors = (run: RunState, count: number): RunState => {
     let current = finishMemorizePhase(run);
     for (let floor = 0; floor < count; floor += 1) {
@@ -315,6 +343,75 @@ describe('REG-088 first-run to first-win rules path', () => {
         expect(finished.stats.highestLevel).toBe(2);
         expect(finished.lastLevelResult?.perfect).toBe(true);
         expect(finished.stats.totalScore).toBeGreaterThan(0);
+    });
+});
+
+describe('final-pair enemy occupation cleanup', () => {
+    it('defeats an enemy occupying one card when it becomes the final remaining pair', () => {
+        const [clearA, clearB] = createPair('clear', 'C');
+        const [finalA, finalB] = createPair('final', 'F');
+        const run = createRun([clearA, clearB, finalA, finalB], {
+            board: createBoard([clearA, clearB, finalA, finalB], {
+                enemyHazards: [makeEnemyHazard('hazard-final-a', finalA.id)]
+            })
+        });
+
+        const afterClear = resolveBoardTurn(flipTile(flipTile(run, clearA.id), clearB.id));
+        const hazard = afterClear.board?.enemyHazards?.find((candidate) => candidate.id === 'hazard-final-a');
+        const afterFinalFlip = flipTile(afterClear, finalA.id);
+
+        expect(afterClear.status).toBe('playing');
+        expect(hazard?.state).toBe('defeated');
+        expect(hazard?.hp).toBe(0);
+        expect(afterClear.board?.tiles.filter((tile) => tile.pairKey === 'final').every((tile) => tile.state === 'hidden')).toBe(true);
+        expect(afterFinalFlip.board?.flippedTileIds).toEqual([finalA.id]);
+    });
+
+    it('defeats enemies occupying both cards when they become the final remaining pair', () => {
+        const [clearA, clearB] = createPair('clear', 'C');
+        const [finalA, finalB] = createPair('final', 'F');
+        const run = createRun([clearA, clearB, finalA, finalB], {
+            board: createBoard([clearA, clearB, finalA, finalB], {
+                enemyHazards: [
+                    makeEnemyHazard('hazard-final-a', finalA.id),
+                    makeEnemyHazard('hazard-final-b', finalB.id)
+                ]
+            })
+        });
+
+        const afterClear = resolveBoardTurn(flipTile(flipTile(run, clearA.id), clearB.id));
+        const activeHazards = afterClear.board?.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+        const afterFinalFlip = flipTile(afterClear, finalB.id);
+
+        expect(afterClear.status).toBe('playing');
+        expect(activeHazards).toEqual([]);
+        expect(afterClear.board?.enemyHazards?.map((hazard) => [hazard.id, hazard.hp, hazard.state])).toEqual([
+            ['hazard-final-a', 0, 'defeated'],
+            ['hazard-final-b', 0, 'defeated']
+        ]);
+        expect(afterFinalFlip.board?.flippedTileIds).toEqual([finalB.id]);
+    });
+
+    it('cleans an already occupied final pair before enemy-click damage resolves', () => {
+        const [clearA, clearB] = createPair('clear', 'C');
+        const [finalA, finalB] = createPair('final', 'F');
+        const matchedClearA = { ...clearA, state: 'matched' as const };
+        const matchedClearB = { ...clearB, state: 'matched' as const };
+        const run = createRun([matchedClearA, matchedClearB, finalA, finalB], {
+            lives: 1,
+            board: createBoard([matchedClearA, matchedClearB, finalA, finalB], {
+                matchedPairs: 1,
+                enemyHazards: [makeEnemyHazard('hazard-final-a', finalA.id)]
+            })
+        });
+
+        const afterClick = applyEnemyHazardClick(run, finalA.id);
+        const afterFlip = flipTile(afterClick, finalA.id);
+
+        expect(afterClick.status).toBe('playing');
+        expect(afterClick.lives).toBe(1);
+        expect(afterClick.board?.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
+        expect(afterFlip.board?.flippedTileIds).toEqual([finalA.id]);
     });
 });
 
