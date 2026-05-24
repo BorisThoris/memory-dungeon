@@ -147,6 +147,9 @@ import {
     missingCoverage
 } from './test/dungeon-feature-coverage';
 
+const isSprungTrapForTest = (tile: Tile): boolean =>
+    tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved' && tile.state === 'flipped';
+
 describe('tilesArePairMatch', () => {
     it('matches two normal tiles with the same pairKey', () => {
         expect(tilesArePairMatch(createTile('a', 'p1', 'x'), createTile('b', 'p1', 'y'))).toBe(true);
@@ -695,6 +698,44 @@ describe('REG-017 route choices', () => {
 
         const next = flipTile(sprung, supportPair[0]!.id);
         expect(next.board!.flippedTileIds).toEqual([supportPair[0]!.id]);
+    });
+
+    it('clears the floor when a self-resolving trap is the final unmatched pair', () => {
+        const tiles: Tile[] = [
+            {
+                ...createTile('t1', 'T', '!'),
+                label: 'Spike Trap',
+                dungeonCardKind: 'trap',
+                dungeonCardState: 'hidden',
+                dungeonCardEffectId: 'trap_spikes'
+            },
+            {
+                ...createTile('t2', 'T', '!'),
+                label: 'Spike Trap',
+                dungeonCardKind: 'trap',
+                dungeonCardState: 'hidden',
+                dungeonCardEffectId: 'trap_spikes'
+            },
+            { ...createTile('a1', 'A', 'A'), state: 'matched' },
+            { ...createTile('a2', 'A', 'A'), state: 'matched' }
+        ];
+        const base = createRun(tiles);
+        const run: RunState = {
+            ...base,
+            status: 'playing',
+            board: {
+                ...base.board!,
+                matchedPairs: 1
+            }
+        };
+
+        const cleared = flipTile(run, 't1');
+
+        expect(cleared.status).toBe('levelComplete');
+        expect(cleared.board!.flippedTileIds).toEqual([]);
+        expect(cleared.dungeonTrapsTriggered).toBe(run.dungeonTrapsTriggered + 1);
+        expect(cleared.board!.tiles.filter((tile) => tile.pairKey === 'T').every(isSprungTrapForTest)).toBe(true);
+        expect(isBoardComplete(cleared.board!)).toBe(true);
     });
 
     it('generates deterministic rotating enemy hazards with telegraphed next targets', () => {
@@ -4093,7 +4134,7 @@ describe('dungeon cards', () => {
         expect(afterReveal.board!.tiles.find((tile) => tile.id === 't1')!.state).toBe('flipped');
     });
 
-    it('keeps sprung traps permanently face-up through misses until they are matched', () => {
+    it('keeps sprung traps permanently face-up without making them a second-card selection', () => {
         const tiles: Tile[] = [
             {
                 ...createTile('t1', 'T', '!'),
@@ -4123,15 +4164,15 @@ describe('dungeon cards', () => {
         ).toBe(true);
 
         const selectedFirstTrap = flipTile(afterTrapReveal, 't1');
-        expect(selectedFirstTrap.board!.flippedTileIds).toEqual(['t1']);
+        expect(selectedFirstTrap).toBe(afterTrapReveal);
 
-        const completed = resolveBoardTurn(flipTile(selectedFirstTrap, 't2'));
-        expect(completed.dungeonTrapsTriggered).toBe(1);
-        expect(completed.board!.tiles.filter((tile) => tile.pairKey === 'T').every((tile) => tile.state === 'matched')).toBe(true);
-        expect(isBoardComplete(completed.board!)).toBe(false);
+        const selectedSupport = flipTile(afterTrapReveal, 'a1');
+        expect(selectedSupport.board!.flippedTileIds).toEqual(['a1']);
+        expect(selectedSupport.board!.tiles.filter((tile) => tile.pairKey === 'T').every(isSprungTrapForTest)).toBe(true);
+        expect(isBoardComplete(selectedSupport.board!)).toBe(false);
     });
 
-    it('does not pay a disarm reward when matching an already-sprung trap pair', () => {
+    it('does not pay a disarm reward or require a trap pair match after springing', () => {
         const tiles: Tile[] = [
             {
                 ...createTile('t1', 'T', '!'),
@@ -4152,14 +4193,15 @@ describe('dungeon cards', () => {
         ];
         const run = createRun(tiles);
         const afterReveal = flipTile(run, 't1');
-        const resolved = resolveBoardTurn(flipTile(flipTile(afterReveal, 't1'), 't2'));
+        const trapClick = flipTile(afterReveal, 't1');
 
-        expect(resolved.dungeonTrapsTriggered).toBe(1);
-        expect(resolved.lives).toBe(run.lives - 1);
-        expect(resolved.shopGold).toBe(run.shopGold);
-        expect(resolved.stats.totalScore).toBeGreaterThanOrEqual(run.stats.totalScore);
+        expect(trapClick).toBe(afterReveal);
+        expect(afterReveal.dungeonTrapsTriggered).toBe(1);
+        expect(afterReveal.lives).toBe(run.lives - 1);
+        expect(afterReveal.shopGold).toBe(run.shopGold);
+        expect(afterReveal.stats.totalScore).toBeGreaterThanOrEqual(run.stats.totalScore);
         expect(
-            resolved.board!.tiles.filter((tile) => tile.pairKey === 'T').every((tile) => tile.state === 'matched')
+            afterReveal.board!.tiles.filter((tile) => tile.pairKey === 'T').every(isSprungTrapForTest)
         ).toBe(true);
     });
 
@@ -4234,7 +4276,9 @@ describe('dungeon cards', () => {
         expect(trapTilesAfterUndo.every((tile) => tile.dungeonCardState === 'resolved' && tile.state === 'flipped')).toBe(true);
 
         const selectedTrap = flipTile(undone, 't1');
-        const selectedMismatch = flipTile(selectedTrap, 'a2');
+        expect(selectedTrap).toBe(undone);
+
+        const selectedMismatch = flipTile(undone, 'a2');
         const gambitFail = resolveBoardTurn(flipTile(selectedMismatch, 'b1'));
         const trapTilesAfterGambit = gambitFail.board!.tiles.filter((tile) => tile.pairKey === 'T');
 

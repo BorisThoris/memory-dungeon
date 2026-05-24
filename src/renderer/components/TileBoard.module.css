@@ -68,7 +68,7 @@
 
 .trapResolutionToast {
     position: absolute;
-    top: clamp(0.45rem, 1.6vmin, 0.8rem);
+    top: clamp(3.1rem, 9vmin, 4.6rem);
     left: 50%;
     z-index: 6;
     display: inline-flex;
@@ -180,6 +180,13 @@
 
 :global([data-reduce-motion='true']) .trapResolutionToast {
     animation: none;
+}
+
+@media (max-width: 640px) {
+    .trapResolutionToast {
+        top: clamp(13rem, 28vh, 15.5rem);
+        max-width: min(92%, 21rem);
+    }
 }
 
 .scene {

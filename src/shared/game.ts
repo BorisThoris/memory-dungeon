@@ -3888,7 +3888,7 @@ export const isBoardComplete = (board: BoardState): boolean =>
         if (isSingletonUtilityPairKey(t.pairKey) && t.pairKey !== DECOY_PAIR_KEY) {
             return true;
         }
-        if (t.state === 'matched' || t.state === 'removed') {
+        if (t.state === 'matched' || t.state === 'removed' || isSprungTrapTile(t)) {
             return true;
         }
         if (
@@ -3897,7 +3897,7 @@ export const isBoardComplete = (board: BoardState): boolean =>
         ) {
             return board.tiles
                 .filter((x) => !isSingletonUtilityPairKey(x.pairKey))
-                .every((x) => x.state === 'matched' || x.state === 'removed');
+                .every((x) => x.state === 'matched' || x.state === 'removed' || isSprungTrapTile(x));
         }
         return false;
     });
@@ -4117,7 +4117,7 @@ export interface BoardFairnessReport {
 }
 
 const tileIsActionableForCompletion = (tile: Tile): boolean =>
-    tile.state === 'hidden' || tile.state === 'flipped';
+    tile.state === 'hidden' || (tile.state === 'flipped' && !isSprungTrapTile(tile));
 
 const pairIsCleared = (tiles: readonly Tile[]): boolean =>
     tiles.every((tile) => tile.state === 'matched' || tile.state === 'removed');
@@ -4180,6 +4180,9 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
         }
         if (pairIsCleared(tiles)) {
             matchedOrRemovedRealPairs += 1;
+            continue;
+        }
+        if (tiles.every(isSprungTrapTile)) {
             continue;
         }
         const actionableTiles = tiles.filter(tileIsActionableForCompletion);
@@ -5344,7 +5347,7 @@ export const flipTile = (run: RunState, tileId: string): RunState => {
 
     const tile = board.tiles.find((candidate) => candidate.id === tileId);
 
-    if (!tile || (!isSprungTrapTile(tile) && tile.state !== 'hidden') || board.flippedTileIds.includes(tileId)) {
+    if (!tile || tile.state !== 'hidden' || board.flippedTileIds.includes(tileId)) {
         return runAfterFlashClear;
     }
 
@@ -5382,7 +5385,7 @@ export const flipTile = (run: RunState, tileId: string): RunState => {
         tile.dungeonCardKind === 'trap' &&
         runAfterDungeonReveal.dungeonTrapsTriggered > runAfterFlashClear.dungeonTrapsTriggered
     ) {
-        return {
+        const trapResolvedRun: RunState = {
             ...runAfterDungeonReveal,
             status: 'playing',
             peekRevealedTileIds,
@@ -5393,6 +5396,9 @@ export const flipTile = (run: RunState, tileId: string): RunState => {
             flipHistory: [...runAfterDungeonReveal.flipHistory, tileId],
             timerState: clearResolveState(runAfterDungeonReveal)
         };
+        return trapResolvedRun.board && isBoardComplete(trapResolvedRun.board)
+            ? finalizeLevel(trapResolvedRun, trapResolvedRun.board)
+            : trapResolvedRun;
     }
 
     const flippedTileIds = [...revealedBoard.flippedTileIds, tileId];
