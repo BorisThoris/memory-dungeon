@@ -2240,6 +2240,63 @@ const defeatEnemyHazardsForFloorClear = (
     };
 };
 
+const getLastUnmatchedRealPairTileIds = (board: BoardState): string[] | null => {
+    const unresolvedByPairKey = new Map<string, string[]>();
+    for (const tile of board.tiles) {
+        if (isSingletonUtilityPairKey(tile.pairKey) || tile.state === 'matched' || tile.state === 'removed' || isSprungTrapTile(tile)) {
+            continue;
+        }
+        unresolvedByPairKey.set(tile.pairKey, [...(unresolvedByPairKey.get(tile.pairKey) ?? []), tile.id]);
+    }
+    return unresolvedByPairKey.size === 1 ? [...unresolvedByPairKey.values()][0] ?? null : null;
+};
+
+const defeatEnemyHazardsBlockingLastPair = (
+    board: BoardState
+): { board: BoardState; defeated: number; bossesDefeated: number } => {
+    const lastPairTileIds = getLastUnmatchedRealPairTileIds(board);
+    if (!lastPairTileIds || lastPairTileIds.length === 0) {
+        return { board, defeated: 0, bossesDefeated: 0 };
+    }
+    const blockedTileIds = new Set(lastPairTileIds);
+    const blockingHazards =
+        board.enemyHazards?.filter(
+            (hazard) =>
+                hazard.state === 'hidden' &&
+                (blockedTileIds.has(hazard.currentTileId) || blockedTileIds.has(hazard.nextTileId))
+        ) ?? [];
+    if (blockingHazards.length === 0) {
+        return { board, defeated: 0, bossesDefeated: 0 };
+    }
+    const blockingIds = new Set(blockingHazards.map((hazard) => hazard.id));
+    return {
+        board: {
+            ...board,
+            enemyHazards: board.enemyHazards?.map((hazard) =>
+                blockingIds.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
+            )
+        },
+        defeated: blockingHazards.length,
+        bossesDefeated: blockingHazards.filter((hazard) => hazard.bossId != null).length
+    };
+};
+
+const clearLastPairEnemyHazardSoftlock = (run: RunState, board: BoardState): RunState => {
+    const cleared = defeatEnemyHazardsBlockingLastPair(board);
+    if (cleared.defeated === 0) {
+        return run.board === board ? run : { ...run, board };
+    }
+    return {
+        ...run,
+        board: cleared.board,
+        dungeonEnemiesDefeated: run.dungeonEnemiesDefeated + cleared.bossesDefeated,
+        dungeonEnemiesDefeatedThisFloor:
+            (run.dungeonEnemiesDefeatedThisFloor ?? 0) + cleared.bossesDefeated,
+        enemyHazardsDefeatedThisFloor:
+            (run.enemyHazardsDefeatedThisFloor ?? 0) + cleared.defeated
+    };
+};
+
 const createTiles = (
     level: number,
     pairCount: number,
@@ -5331,46 +5388,52 @@ export const flipTile = (run: RunState, tileId: string): RunState => {
 
     const runAfterFlashClear =
         run.flashPairRevealedTileIds.length > 0 ? { ...run, flashPairRevealedTileIds: [] } : run;
-    const board = runAfterFlashClear.board;
-    if (!board) {
+    const boardBeforeLastPairFailsafe = runAfterFlashClear.board;
+    if (!boardBeforeLastPairFailsafe) {
         return runAfterFlashClear;
+    }
+    const runAfterLastPairFailsafe = clearLastPairEnemyHazardSoftlock(runAfterFlashClear, boardBeforeLastPairFailsafe);
+    const board = runAfterLastPairFailsafe.board;
+    if (!board) {
+        return runAfterLastPairFailsafe;
     }
 
     const allowThird =
-        runAfterFlashClear.gambitAvailableThisFloor &&
-        !runAfterFlashClear.gambitThirdFlipUsed &&
+        runAfterLastPairFailsafe.gambitAvailableThisFloor &&
+        !runAfterLastPairFailsafe.gambitThirdFlipUsed &&
         board.flippedTileIds.length === 2;
     const maxFlips = allowThird ? 3 : 2;
     if (board.flippedTileIds.length >= maxFlips) {
-        return runAfterFlashClear;
+        return runAfterLastPairFailsafe;
     }
 
     const tile = board.tiles.find((candidate) => candidate.id === tileId);
 
     if (!tile || tile.state !== 'hidden' || board.flippedTileIds.includes(tileId)) {
-        return runAfterFlashClear;
+        return runAfterLastPairFailsafe;
     }
 
     const tileIndex = board.tiles.findIndex((candidate) => candidate.id === tileId);
     if (
         board.flippedTileIds.length === 0 &&
-        runAfterFlashClear.stickyBlockIndex !== null &&
-        tileIndex === runAfterFlashClear.stickyBlockIndex
+        runAfterLastPairFailsafe.stickyBlockIndex !== null &&
+        tileIndex === runAfterLastPairFailsafe.stickyBlockIndex
     ) {
-        return runAfterFlashClear;
+        return runAfterLastPairFailsafe;
     }
 
     if (tile.pairKey === EXIT_PAIR_KEY) {
-        return revealDungeonExit(runAfterFlashClear, tileId);
+        return revealDungeonExit(runAfterLastPairFailsafe, tileId);
     }
     if (tile.pairKey === SHOP_PAIR_KEY) {
-        return revealDungeonShop(runAfterFlashClear, tileId);
+        return revealDungeonShop(runAfterLastPairFailsafe, tileId);
     }
     if (tile.pairKey === ROOM_PAIR_KEY) {
-        return revealDungeonRoom(runAfterFlashClear, tileId);
+        return revealDungeonRoom(runAfterLastPairFailsafe, tileId);
     }
 
-    const runAfterDungeonReveal = tile.state === 'hidden' ? revealDungeonCardPair(runAfterFlashClear, tile) : runAfterFlashClear;
+    const runAfterDungeonReveal =
+        tile.state === 'hidden' ? revealDungeonCardPair(runAfterLastPairFailsafe, tile) : runAfterLastPairFailsafe;
     if (runAfterDungeonReveal.status === 'gameOver') {
         return runAfterDungeonReveal;
     }
@@ -5383,7 +5446,7 @@ export const flipTile = (run: RunState, tileId: string): RunState => {
     if (
         tile.state === 'hidden' &&
         tile.dungeonCardKind === 'trap' &&
-        runAfterDungeonReveal.dungeonTrapsTriggered > runAfterFlashClear.dungeonTrapsTriggered
+        runAfterDungeonReveal.dungeonTrapsTriggered > runAfterLastPairFailsafe.dungeonTrapsTriggered
     ) {
         const trapResolvedRun: RunState = {
             ...runAfterDungeonReveal,
@@ -7476,7 +7539,9 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         const fuseCacheFresh = fuseCacheClaimed && run.matchResolutionsThisFloor < FUSE_CACHE_FRESH_RESOLUTION_LIMIT;
         const enemyDamage = damageFirstActiveDungeonEnemy(cascadeHazard.board, 1);
         const hazardDamage = damageFirstRevealedEnemyHazard(enemyDamage.board, 1);
-        const boardAfterHazards = advanceEnemyHazardsOnBoard(hazardDamage.board);
+        const advancedHazardBoard = advanceEnemyHazardsOnBoard(hazardDamage.board);
+        const lastPairHazardClear = defeatEnemyHazardsBlockingLastPair(advancedHazardBoard);
+        const boardAfterHazards = lastPairHazardClear.board;
         const lanternScout =
             claimedRouteCardKind === 'lantern_ward'
                 ? applyLanternWardScout(boardAfterHazards, run)
@@ -7645,10 +7710,19 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             pinLatticeRewardsThisFloor: run.pinLatticeRewardsThisFloor + (pinLatticeRewarded ? 1 : 0),
             parasiteFloors: parasiteVesselConverted ? Math.max(0, run.parasiteFloors - 1) : run.parasiteFloors,
             dungeonEnemiesDefeated:
-                run.dungeonEnemiesDefeated + dungeonReward.enemiesDefeated + enemyDamage.defeated + hazardDamage.bossDefeated,
+                run.dungeonEnemiesDefeated +
+                dungeonReward.enemiesDefeated +
+                enemyDamage.defeated +
+                hazardDamage.bossDefeated +
+                lastPairHazardClear.bossesDefeated,
             dungeonEnemiesDefeatedThisFloor:
-                (run.dungeonEnemiesDefeatedThisFloor ?? 0) + dungeonReward.enemiesDefeated + enemyDamage.defeated + hazardDamage.bossDefeated,
-            enemyHazardsDefeatedThisFloor: (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardDamage.defeated,
+                (run.dungeonEnemiesDefeatedThisFloor ?? 0) +
+                dungeonReward.enemiesDefeated +
+                enemyDamage.defeated +
+                hazardDamage.bossDefeated +
+                lastPairHazardClear.bossesDefeated,
+            enemyHazardsDefeatedThisFloor:
+                (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardDamage.defeated + lastPairHazardClear.defeated,
             dungeonTreasuresOpened: run.dungeonTreasuresOpened + dungeonReward.treasuresOpened,
             dungeonTreasuresOpenedThisFloor:
                 (run.dungeonTreasuresOpenedThisFloor ?? 0) + dungeonReward.treasuresOpened,
@@ -7864,7 +7938,9 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
         const fuseCacheFresh = fuseCacheClaimed && run.matchResolutionsThisFloor < FUSE_CACHE_FRESH_RESOLUTION_LIMIT;
         const enemyDamage = damageFirstActiveDungeonEnemy(cascadeHazard.board, 1);
         const hazardDamage = damageFirstRevealedEnemyHazard(enemyDamage.board, 1);
-        const boardAfterHazards = advanceEnemyHazardsOnBoard(hazardDamage.board);
+        const advancedHazardBoard = advanceEnemyHazardsOnBoard(hazardDamage.board);
+        const lastPairHazardClear = defeatEnemyHazardsBlockingLastPair(advancedHazardBoard);
+        const boardAfterHazards = lastPairHazardClear.board;
         const lanternScout =
             claimedRouteCardKind === 'lantern_ward'
                 ? applyLanternWardScout(boardAfterHazards, run)
@@ -8031,10 +8107,19 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             pinLatticeRewardsThisFloor: run.pinLatticeRewardsThisFloor + (pinLatticeRewarded ? 1 : 0),
             parasiteFloors: parasiteVesselConverted ? Math.max(0, run.parasiteFloors - 1) : run.parasiteFloors,
             dungeonEnemiesDefeated:
-                run.dungeonEnemiesDefeated + dungeonReward.enemiesDefeated + enemyDamage.defeated + hazardDamage.bossDefeated,
+                run.dungeonEnemiesDefeated +
+                dungeonReward.enemiesDefeated +
+                enemyDamage.defeated +
+                hazardDamage.bossDefeated +
+                lastPairHazardClear.bossesDefeated,
             dungeonEnemiesDefeatedThisFloor:
-                (run.dungeonEnemiesDefeatedThisFloor ?? 0) + dungeonReward.enemiesDefeated + enemyDamage.defeated + hazardDamage.bossDefeated,
-            enemyHazardsDefeatedThisFloor: (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardDamage.defeated,
+                (run.dungeonEnemiesDefeatedThisFloor ?? 0) +
+                dungeonReward.enemiesDefeated +
+                enemyDamage.defeated +
+                hazardDamage.bossDefeated +
+                lastPairHazardClear.bossesDefeated,
+            enemyHazardsDefeatedThisFloor:
+                (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardDamage.defeated + lastPairHazardClear.defeated,
             dungeonTreasuresOpened: run.dungeonTreasuresOpened + dungeonReward.treasuresOpened,
             dungeonTreasuresOpenedThisFloor:
                 (run.dungeonTreasuresOpenedThisFloor ?? 0) + dungeonReward.treasuresOpened,
