@@ -613,7 +613,7 @@ const hiddenSlotsAttr = useMemo(
             return undefined;
         }
 
-        const message = 'Trap sprung and resolved. Board ready; choose any playable tile.';
+        const message = 'Trap sprung and resolved. No second card needed; choose any playable tile.';
         setTrapResolutionMessage(message);
         const timeoutId = window.setTimeout(() => {
             setTrapResolutionMessage('');
