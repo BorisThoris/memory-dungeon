@@ -4308,6 +4308,20 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
             });
         }
     }
+    if (exitLockKind !== 'none' && exitLockKind !== 'lever') {
+        const requiredKeyKind = exitLockKind as DungeonKeyKind;
+        const matchingKeyPairCount = countUnclearedDungeonPairs(
+            board.tiles,
+            (tile) => tile.dungeonCardKind === 'key' && (tile.dungeonKeyKind ?? 'iron') === requiredKeyKind
+        );
+        if ((board.dungeonKeysHeld ?? 0) + matchingKeyPairCount < 1) {
+            structurallyClearable = false;
+            issues.push({
+                code: 'exit_lock_unreachable',
+                message: `${requiredKeyKind}-locked exit requires a matching key, but no reachable key route exists.`
+            });
+        }
+    }
     if (board.matchedPairs !== matchedOrRemovedRealPairs) {
         issues.push({
             code: 'matched_pairs_counter_mismatch',

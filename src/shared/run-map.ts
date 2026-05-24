@@ -122,6 +122,36 @@ export interface RouteSemanticContract {
     rewardPolicy: string;
 }
 
+export type DungeonRouteProgressionIssueCode =
+    | 'route_current_node_missing'
+    | 'route_current_node_blocked'
+    | 'route_entrance_blocked'
+    | 'route_no_legal_progression'
+    | 'route_edge_target_missing'
+    | 'route_edge_target_blocked'
+    | 'route_selected_node_unreachable'
+    | 'route_exit_unreachable'
+    | 'route_boss_transition_unreachable';
+
+export interface DungeonRouteProgressionIssue {
+    code: DungeonRouteProgressionIssueCode;
+    nodeId: string | null;
+    seed: number;
+    rulesVersion: number;
+    currentFloor: number;
+    detail: string;
+}
+
+export interface DungeonRouteProgressionReport {
+    seed: number;
+    rulesVersion: number;
+    currentFloor: number;
+    currentNodeId: string | null;
+    legalTargetIds: string[];
+    hasLegalProgressionPath: boolean;
+    issues: DungeonRouteProgressionIssue[];
+}
+
 const DUNGEON_ACT_LENGTH = 6;
 const DUNGEON_BRANCH_LANES = [-1, 0, 1] as const;
 const DUNGEON_RUN_NODE_KINDS: readonly DungeonRunNodeKind[] = [
@@ -484,6 +514,202 @@ const createNode = ({
 const connect = (nodes: DungeonRunNode[], fromId: string, toIds: string[]): DungeonRunNode[] =>
     nodes.map((node) => (node.id === fromId ? { ...node, edgeIds: [...new Set([...node.edgeIds, ...toIds])] } : node));
 
+const routeIssue = (
+    state: DungeonRunMapState,
+    code: DungeonRouteProgressionIssueCode,
+    nodeId: string | null,
+    detail: string
+): DungeonRouteProgressionIssue => ({
+    code,
+    nodeId,
+    seed: state.seed,
+    rulesVersion: state.rulesVersion,
+    currentFloor: state.currentFloor,
+    detail
+});
+
+const nodeCanBeEntered = (node: DungeonRunNode): boolean => node.status === 'revealed';
+
+export const inspectDungeonRunMapProgression = (state: DungeonRunMapState): DungeonRouteProgressionReport => {
+    const issues: DungeonRouteProgressionIssue[] = [];
+    const current = state.nodes.find((node) => node.id === state.currentNodeId) ?? null;
+    const nodeById = new Map(state.nodes.map((node) => [node.id, node]));
+    const legalTargetIds: string[] = [];
+
+    if (!current) {
+        issues.push(
+            routeIssue(
+                state,
+                'route_current_node_missing',
+                state.currentNodeId,
+                `Current route node '${state.currentNodeId}' is missing for seed ${state.seed}.`
+            )
+        );
+    } else if (current.status !== 'current' && (current.status !== 'cleared' || current.edgeIds.length === 0)) {
+        issues.push(
+            routeIssue(
+                state,
+                'route_current_node_blocked',
+                current.id,
+                `Current route node '${current.id}' is '${current.status}' instead of current for seed ${state.seed}.`
+            )
+        );
+    }
+
+    if (state.currentFloor <= 1) {
+        const entrance = current?.kind === 'entrance' ? current : state.nodes.find((node) => node.kind === 'entrance');
+        if (!entrance || (entrance.status !== 'current' && (entrance.status !== 'cleared' || entrance.edgeIds.length === 0))) {
+            issues.push(
+                routeIssue(
+                    state,
+                    'route_entrance_blocked',
+                    entrance?.id ?? null,
+                    `Entrance is not the playable current node for seed ${state.seed}.`
+                )
+            );
+        }
+    }
+
+    if (current) {
+        for (const edgeId of current.edgeIds) {
+            const target = nodeById.get(edgeId);
+            if (!target) {
+                issues.push(
+                    routeIssue(
+                        state,
+                        'route_edge_target_missing',
+                        edgeId,
+                        `Current route edge '${edgeId}' points at a missing node for seed ${state.seed}.`
+                    )
+                );
+                continue;
+            }
+            if (!nodeCanBeEntered(target)) {
+                issues.push(
+                    routeIssue(
+                        state,
+                        'route_edge_target_blocked',
+                        target.id,
+                        `Route target '${target.id}' is '${target.status}' and cannot be entered for seed ${state.seed}.`
+                    )
+                );
+                continue;
+            }
+            legalTargetIds.push(target.id);
+        }
+    }
+
+    const selected = state.selectedNodeId ? nodeById.get(state.selectedNodeId) ?? null : null;
+    if (state.selectedNodeId && (!selected || !legalTargetIds.includes(state.selectedNodeId))) {
+        issues.push(
+            routeIssue(
+                state,
+                'route_selected_node_unreachable',
+                state.selectedNodeId,
+                `Selected route node '${state.selectedNodeId}' is not reachable from '${state.currentNodeId}' for seed ${state.seed}.`
+            )
+        );
+    }
+
+    const revealedExits = state.nodes.filter((node) => node.kind === 'exit' && node.status === 'revealed');
+    for (const exit of revealedExits) {
+        if (!legalTargetIds.includes(exit.id) && exit.floor > state.currentFloor) {
+            issues.push(
+                routeIssue(
+                    state,
+                    'route_exit_unreachable',
+                    exit.id,
+                    `Exit route node '${exit.id}' is revealed but unreachable from '${state.currentNodeId}' for seed ${state.seed}.`
+                )
+            );
+        }
+    }
+
+    const revealedBosses = state.nodes.filter((node) => node.kind === 'boss' && node.status === 'revealed');
+    for (const boss of revealedBosses) {
+        if (!legalTargetIds.includes(boss.id) && boss.floor > state.currentFloor) {
+            issues.push(
+                routeIssue(
+                    state,
+                    'route_boss_transition_unreachable',
+                    boss.id,
+                    `Boss route node '${boss.id}' is revealed but unreachable from '${state.currentNodeId}' for seed ${state.seed}.`
+                )
+            );
+        }
+    }
+
+    if (current && current.edgeIds.length > 0 && legalTargetIds.length === 0) {
+        issues.push(
+            routeIssue(
+                state,
+                'route_no_legal_progression',
+                current.id,
+                `Route node '${current.id}' has no legal progression target for seed ${state.seed}.`
+            )
+        );
+    }
+
+    return {
+        seed: state.seed,
+        rulesVersion: state.rulesVersion,
+        currentFloor: state.currentFloor,
+        currentNodeId: state.currentNodeId,
+        legalTargetIds,
+        hasLegalProgressionPath: issues.every((issue) => issue.code !== 'route_no_legal_progression'),
+        issues
+    };
+};
+
+export const repairDungeonRunMapProgression = (state: DungeonRunMapState): DungeonRunMapState => {
+    const current = state.nodes.find((node) => node.id === state.currentNodeId) ?? state.nodes.find((node) => node.status === 'current');
+    if (!current) {
+        return createDungeonRunMapState(state.seed, state.rulesVersion, Math.max(1, state.currentFloor));
+    }
+
+    const edgeIds = new Set(current.edgeIds);
+    const repairedNodes = state.nodes.map((node) => {
+        if (node.id === current.id) {
+            return { ...node, status: node.edgeIds.length > 0 ? node.status : 'current' as const };
+        }
+        if (edgeIds.has(node.id) && node.floor > current.floor && node.status !== 'revealed') {
+            return { ...node, status: 'revealed' as const };
+        }
+        if (node.status === 'current') {
+            return { ...node, status: node.floor < current.floor ? 'cleared' as const : 'revealed' as const };
+        }
+        return node;
+    });
+
+    const repairedState = {
+        ...state,
+        currentFloor: current.floor,
+        currentNodeId: current.id,
+        selectedNodeId: state.selectedNodeId && edgeIds.has(state.selectedNodeId) ? state.selectedNodeId : null,
+        nodes: repairedNodes
+    };
+    const report = inspectDungeonRunMapProgression(repairedState);
+    if (report.issues.some((issue) => issue.code === 'route_no_legal_progression' || issue.code === 'route_edge_target_missing')) {
+        const nextFloor = current.floor + 1;
+        const fallbackChoices = generateRunMapChoices({
+            runSeed: state.seed,
+            rulesVersion: state.rulesVersion,
+            currentFloor: current.floor
+        });
+        const fallbackIds = fallbackChoices.map((node) => node.id);
+        const nodesWithoutNextFloor = repairedNodes.filter((node) => node.floor !== nextFloor);
+        const fallbackCurrent = { ...current, edgeIds: fallbackIds };
+        return {
+            ...repairedState,
+            selectedNodeId: null,
+            nodes: nodesWithoutNextFloor
+                .map((node) => (node.id === current.id ? fallbackCurrent : node))
+                .concat(fallbackChoices)
+        };
+    }
+    return repairedState;
+};
+
 export const createDungeonRunMapState = (
     seed: number,
     rulesVersion: number,
@@ -523,36 +749,42 @@ export const revealDungeonChoices = (
     currentFloor: number,
     choices: readonly RouteChoice[]
 ): DungeonRunMapState => {
+    const safeState = repairDungeonRunMapProgression(state);
     const nextFloor = currentFloor + 1;
     const revealed = choices.map((choice, index) =>
         routeChoiceToMapNode(choice, nextFloor, DUNGEON_BRANCH_LANES[index] ?? index)
     );
     const revealedIds = new Set(revealed.map((node) => node.id));
-    const existing = state.nodes.filter((node) => !revealedIds.has(node.id));
+    const existing = safeState.nodes.filter((node) => !revealedIds.has(node.id));
     const nodes = connect(
         existing.map((node) =>
-            node.id === state.currentNodeId ? { ...node, status: 'cleared' as const } : node
+            node.id === safeState.currentNodeId ? { ...node, status: 'cleared' as const } : node
         ),
-        state.currentNodeId,
+        safeState.currentNodeId,
         revealed.map((node) => node.id)
     );
-    return {
-        ...state,
+    return repairDungeonRunMapProgression({
+        ...safeState,
         currentFloor,
         selectedNodeId: null,
         nodes: [...nodes, ...revealed]
-    };
+    });
 };
 
 export const selectDungeonNode = (state: DungeonRunMapState, nodeId: string): DungeonRunMapState => {
-    const node = state.nodes.find((candidate) => candidate.id === nodeId);
+    const safeState = repairDungeonRunMapProgression(state);
+    const report = inspectDungeonRunMapProgression(safeState);
+    const node = safeState.nodes.find((candidate) => candidate.id === nodeId);
+    if (!report.legalTargetIds.includes(nodeId)) {
+        return safeState;
+    }
     if (!node || node.status !== 'revealed') {
-        return state;
+        return safeState;
     }
     return {
-        ...state,
+        ...safeState,
         selectedNodeId: node.id,
-        nodes: state.nodes.map((candidate) =>
+        nodes: safeState.nodes.map((candidate) =>
             candidate.status === 'revealed' && candidate.floor === node.floor && candidate.id !== node.id
                 ? { ...candidate, status: 'skipped' }
                 : candidate
@@ -561,17 +793,19 @@ export const selectDungeonNode = (state: DungeonRunMapState, nodeId: string): Du
 };
 
 export const enterSelectedDungeonNode = (state: DungeonRunMapState): DungeonRunMapState => {
-    const selected = state.nodes.find((node) => node.id === state.selectedNodeId);
-    if (!selected) {
-        return state;
+    const safeState = repairDungeonRunMapProgression(state);
+    const report = inspectDungeonRunMapProgression(safeState);
+    const selected = safeState.nodes.find((node) => node.id === safeState.selectedNodeId);
+    if (!selected || !report.legalTargetIds.includes(selected.id)) {
+        return safeState;
     }
     return {
-        ...state,
+        ...safeState,
         currentFloor: selected.floor,
         currentNodeId: selected.id,
         selectedNodeId: null,
         act: Math.max(1, Math.ceil(selected.floor / DUNGEON_ACT_LENGTH)),
-        nodes: state.nodes.map((node) =>
+        nodes: safeState.nodes.map((node) =>
             node.id === selected.id
                 ? { ...node, status: 'current' }
                 : node.status === 'current'
