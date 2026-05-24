@@ -1,5 +1,6 @@
-import type { BoardState, RunState, SaveData, ViewState } from './contracts';
+import { GAME_RULES_VERSION, type BoardState, type RunState, type SaveData, type ViewState } from './contracts';
 import { createDefaultSaveData, normalizeSaveData } from './save-data';
+import { buildBoard } from './game';
 import {
     advanceToNextLevel,
     createNewRun,
@@ -23,6 +24,7 @@ import { createRunShopOffers } from './shop-rules';
 export type PlayablePathFixtureId =
     | 'freshProfile'
     | 'activeRunWithHazards'
+    | 'activeTrapRun'
     | 'floorClearWithRouteChoices'
     | 'floorClearWithShop'
     | 'floorClearWithShopLowGold'
@@ -51,6 +53,7 @@ const HAZARD_PATH_SEED = 81_004;
 export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'freshProfile',
     'activeRunWithHazards',
+    'activeTrapRun',
     'floorClearWithRouteChoices',
     'floorClearWithShop',
     'floorClearWithShopLowGold',
@@ -92,6 +95,8 @@ export const createPlayablePathFixture = (
                 saveData,
                 shopReturnMode: null
             };
+        case 'activeTrapRun':
+            return { id, view: 'playing', run: activeTrapRun(), saveData, shopReturnMode: null };
         case 'floorClearWithRouteChoices':
             return { id, view: 'playing', run: floorClearWithRouteChoices(), saveData, shopReturnMode: null };
         case 'floorClearWithShop':
@@ -121,6 +126,28 @@ const createFixtureSaveData = (bestScore = 1250): SaveData =>
         bestScore,
         onboardingDismissed: true
     });
+
+const activeTrapRun = (): RunState => {
+    const board = buildBoard(5, {
+        dungeonNodeKind: 'trap',
+        gameMode: 'endless',
+        runRulesVersion: GAME_RULES_VERSION,
+        runSeed: HAZARD_PATH_SEED
+    });
+    const base = finishMemorizePhase(
+        createNewRun(0, {
+            echoFeedbackEnabled: false,
+            gameMode: 'endless',
+            runSeed: HAZARD_PATH_SEED
+        })
+    );
+    return {
+        ...base,
+        board,
+        findablesTotalThisFloor: board.tiles.filter((tile) => tile.findableKind != null).length,
+        status: 'playing'
+    };
+};
 
 const baseEndlessRun = (): RunState =>
     createNewRun(0, {

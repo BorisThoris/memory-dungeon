@@ -118,8 +118,61 @@
     outline-offset: 2px;
 }
 
+.trapResolutionToast {
+    position: absolute;
+    left: 50%;
+    top: max(var(--ui-space-sm), env(safe-area-inset-top));
+    z-index: 7;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: min(88%, 26rem);
+    min-height: 2.4rem;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid color-mix(in srgb, #f2d39d 62%, transparent);
+    border-radius: 8px;
+    background: color-mix(in srgb, #18110d 88%, transparent);
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.34),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    color: #fff4cf;
+    font-size: clamp(0.72rem, 1.6vw, 0.86rem);
+    font-weight: 760;
+    line-height: 1.22;
+    letter-spacing: 0;
+    text-align: left;
+    pointer-events: none;
+    transform: translateX(-50%);
+    animation: trapResolutionToastIn 180ms ease-out both;
+}
+
+.trapResolutionToast[data-visible='false'] {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.trapResolutionIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 1.35rem;
+    height: 1.35rem;
+    border: 1px solid rgba(255, 244, 207, 0.72);
+    border-radius: 999px;
+    background: #7d2522;
+    color: #fff7df;
+    font-size: 0.88rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
 :global([data-reduce-motion='true']) .motionChip {
     display: none;
+}
+
+:global([data-reduce-motion='true']) .trapResolutionToast {
+    animation: none;
 }
 
 .scene {
@@ -139,6 +192,18 @@
     pointer-events: auto;
     touch-action: none;
     image-rendering: auto;
+}
+
+@keyframes trapResolutionToastIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -0.45rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
 }
 
 @media (max-width: 760px) {
