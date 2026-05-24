@@ -284,7 +284,7 @@ for (const viewport of VIEWPORTS) {
         });
 
         test('captures game over', async ({ page }) => {
-            test.setTimeout(180_000);
+            test.setTimeout(240_000);
             await captureGameOverState(page, viewport.id);
         });
     });

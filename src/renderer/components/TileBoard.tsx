@@ -657,13 +657,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
 
         const trapCount = Math.max(1, Math.round((resolvedTrapTileCount - previous) / 2));
+        const trapLabel =
+            board.tiles.find((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved')
+                ?.label ?? 'Trap';
         const message =
             trapCount === 1
-                ? 'Trap resolved. Effect applied immediately; pick any available tile.'
-                : `${trapCount} traps resolved. Effects applied immediately; pick any available tile.`;
+                ? `${trapLabel} resolved. Effect applied; next tile ready.`
+                : `${trapCount} traps resolved. Effects applied; next tile ready.`;
         setTrapResolutionMessage(message);
         return undefined;
-    }, [resolvedTrapTileCount]);
+    }, [board.tiles, resolvedTrapTileCount]);
 
     useEffect(() => {
         if (resolvedTrapTileCount === 0 && trapResolutionMessage) {
