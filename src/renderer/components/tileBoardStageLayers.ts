@@ -2,7 +2,7 @@ import type { EnemyHazardState, GraphicsQualityPreset } from '../../shared/contr
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 
 export const DUNGEON_BOARD_STAGE_LAYER_POLICY = {
-    version: 'dng-061-v1',
+    version: 'dng-061-v2',
     cardSurface: { renderOrder: 0, z: 0 },
     cardWear: { renderOrder: 6 },
     passiveHover: { renderOrder: 7 },
@@ -74,8 +74,8 @@ export const getDungeonEnemyMarkerAnchor = (
     layer: 'currentThreat' | 'nextThreatTelegraph',
     bob = 0
 ): [number, number, number] => {
-    const xOffset = layer === 'currentThreat' ? CARD_PLANE_WIDTH * 0.39 : -CARD_PLANE_WIDTH * 0.39;
-    const yOffset = layer === 'currentThreat' ? CARD_PLANE_HEIGHT * 0.39 : -CARD_PLANE_HEIGHT * 0.39;
+    const xOffset = layer === 'currentThreat' ? CARD_PLANE_WIDTH * 0.42 : -CARD_PLANE_WIDTH * 0.42;
+    const yOffset = layer === 'currentThreat' ? CARD_PLANE_HEIGHT * 0.43 : -CARD_PLANE_HEIGHT * 0.43;
     const z =
         layer === 'currentThreat'
             ? DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.z
