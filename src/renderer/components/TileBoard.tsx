@@ -622,8 +622,23 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             if (tile.tileHazardKind) {
                 add('hazard');
             }
-            if (tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved') {
-                add('trap-resolved');
+            if (tile.dungeonCardKind === 'trap') {
+                add(
+                    tile.dungeonCardState === 'resolved'
+                        ? 'trap-resolved'
+                        : tile.dungeonCardState === 'revealed'
+                          ? 'trap-revealed'
+                          : 'trap-armed'
+                );
+            }
+            if (tile.dungeonBossId) {
+                add('boss-marked');
+            }
+            if (tile.dungeonCardKind === 'enemy') {
+                add('enemy-card');
+            }
+            if (tile.findableKind) {
+                add('relic');
             }
             if (tile.routeSpecialKind || tile.routeCardKind) {
                 add('route');

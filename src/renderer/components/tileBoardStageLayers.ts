@@ -74,8 +74,8 @@ export const getDungeonEnemyMarkerAnchor = (
     layer: 'currentThreat' | 'nextThreatTelegraph',
     bob = 0
 ): [number, number, number] => {
-    const xOffset = layer === 'currentThreat' ? CARD_PLANE_WIDTH * 0.34 : -CARD_PLANE_WIDTH * 0.34;
-    const yOffset = layer === 'currentThreat' ? CARD_PLANE_HEIGHT * 0.34 : -CARD_PLANE_HEIGHT * 0.34;
+    const xOffset = layer === 'currentThreat' ? CARD_PLANE_WIDTH * 0.39 : -CARD_PLANE_WIDTH * 0.39;
+    const yOffset = layer === 'currentThreat' ? CARD_PLANE_HEIGHT * 0.39 : -CARD_PLANE_HEIGHT * 0.39;
     const z =
         layer === 'currentThreat'
             ? DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.z
