@@ -269,6 +269,25 @@ describe('REG-087 board fairness inspection', () => {
         expect(report.issues).toEqual([]);
     });
 
+    it('keeps route-card special states from blocking the completion route', () => {
+        const board = buildBoard(2, {
+            runSeed: 87_504,
+            runRulesVersion: GAME_RULES_VERSION,
+            routeCardPlan: {
+                choiceId: 'fixture:mystery-route',
+                routeType: 'mystery',
+                sourceLevel: 1,
+                targetLevel: 2
+            }
+        });
+        const report = inspectBoardFairness(board);
+
+        expect(board.routeWorldProfile?.choiceId).toBe('fixture:mystery-route');
+        expect(board.tiles.some((candidate) => candidate.routeSpecialKind != null)).toBe(true);
+        expect(report.issues).toEqual([]);
+        expect(report.hasCompletionRoute).toBe(true);
+    });
+
     it('flags declared exits that point at missing or non-exit cards', () => {
         const missingExit = boardFromTiles([tile('a1', 'a'), tile('a2', 'a')], {
             dungeonExitTileId: 'missing-exit'
@@ -303,6 +322,28 @@ describe('REG-087 board fairness inspection', () => {
                 dungeonExitLockKind: 'lever',
                 dungeonExitRequiredLeverCount: 2,
                 dungeonLeverCount: 0
+            }
+        );
+
+        expect(issueCodes(board)).toContain('exit_lock_unreachable');
+        expect(inspectBoardFairness(board).hasCompletionRoute).toBe(false);
+    });
+
+    it('flags key-locked exits when no matching key route exists', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ],
+            {
+                pairCount: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron'
             }
         );
 
