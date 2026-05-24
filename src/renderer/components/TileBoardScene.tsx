@@ -292,6 +292,7 @@ interface TileBezelProps {
     hazardBackAccent?: HazardTileKind | null;
     routeBackAccent?: boolean;
     objectiveBackAccent?: boolean;
+    enemyOccupiedBack?: boolean;
     nonPickableBack?: boolean;
     destroyBlockedDecoyBack?: boolean;
 }
@@ -498,14 +499,15 @@ const ENEMY_NEXT_MARKER_GEOMETRY = new PlaneGeometry(0.32, 0.32, 1, 1);
 const ENEMY_NEXT_BOSS_MARKER_GEOMETRY = new CircleGeometry(0.18, 32);
 const ENEMY_MARKER_PLATE_GEOMETRY = new PlaneGeometry(0.42, 0.3, 1, 1);
 const ENEMY_MARKER_HP_TRACK_GEOMETRY = new PlaneGeometry(0.3, 0.028, 1, 1);
-const BOARD_READABILITY_PIP_GEOMETRY = new CircleGeometry(0.035, 18);
-const BOARD_READABILITY_LARGE_PIP_GEOMETRY = new CircleGeometry(0.047, 20);
-const BOARD_READABILITY_BAR_GEOMETRY = new PlaneGeometry(0.18, 0.026, 1, 1);
-const BOARD_READABILITY_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.12, 0.024, 1, 1);
-const BOARD_READABILITY_BOSS_MARK_GEOMETRY = new PlaneGeometry(0.22, 0.052, 1, 1);
-const BOARD_READABILITY_GLYPH_PLATE_GEOMETRY = new PlaneGeometry(0.16, 0.12, 1, 1);
-const BOARD_READABILITY_SELECTED_RAIL_GEOMETRY = new PlaneGeometry(0.012, CARD_FACE_HEIGHT * 0.68, 1, 1);
-const BOARD_READABILITY_DISABLED_SLASH_GEOMETRY = new PlaneGeometry(0.42, 0.018, 1, 1);
+const BOARD_READABILITY_PIP_GEOMETRY = new CircleGeometry(0.043, 20);
+const BOARD_READABILITY_LARGE_PIP_GEOMETRY = new CircleGeometry(0.057, 22);
+const BOARD_READABILITY_BAR_GEOMETRY = new PlaneGeometry(0.2, 0.032, 1, 1);
+const BOARD_READABILITY_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.13, 0.03, 1, 1);
+const BOARD_READABILITY_BOSS_MARK_GEOMETRY = new PlaneGeometry(0.25, 0.064, 1, 1);
+const BOARD_READABILITY_GLYPH_PLATE_GEOMETRY = new PlaneGeometry(0.19, 0.14, 1, 1);
+const BOARD_READABILITY_SELECTED_RAIL_GEOMETRY = new PlaneGeometry(0.018, CARD_FACE_HEIGHT * 0.74, 1, 1);
+const BOARD_READABILITY_DISABLED_SLASH_GEOMETRY = new PlaneGeometry(0.46, 0.024, 1, 1);
+const BOARD_READABILITY_ENEMY_OCCUPIED_GEOMETRY = new PlaneGeometry(0.22, 0.06, 1, 1);
 
 /** FX-006: thin quads approximating DOM `0 0 0 2px` gold ring on the visible back face while hidden. */
 const HOVER_GOLD_RIM_STRIP = 0.0036;
@@ -1643,6 +1645,7 @@ const TileBezelInner = ({
     hazardBackAccent = null,
     routeBackAccent = false,
     objectiveBackAccent = false,
+    enemyOccupiedBack = false,
     nonPickableBack = false,
     destroyBlockedDecoyBack = false,
     focusDimmed = false,
@@ -2223,6 +2226,7 @@ const TileBezelInner = ({
     const isBossCard = tile.dungeonBossId != null;
     const isRelicCard = tile.findableKind != null;
     const isSelectedCard = faceUp && tile.state === 'flipped';
+    const enemyOccupiedColor = '#ff9f86';
     const trapReadabilityColor =
         isResolvedTrap
             ? '#7bd88f'
@@ -2240,25 +2244,27 @@ const TileBezelInner = ({
               : tile.tileHazardKind
                 ? hazardTileColor(tile.tileHazardKind)
                 : '#f2d39d';
-    const hiddenReadabilityAccentColor = hazardBackAccent
-        ? hazardTileColor(hazardBackAccent)
-        : isBossCard
-          ? '#ffcf66'
-          : isTrapCard
-            ? trapReadabilityColor
-            : objectiveBackAccent
-              ? '#f2d39d'
-              : routeBackAccent
-                ? '#59b4d9'
-                : powerBackAccent === 'destroy'
-                  ? '#d94848'
-                  : powerBackAccent === 'peek'
-                    ? '#59b4d9'
-                    : powerBackAccent === 'stray'
-                      ? '#d4a03d'
-                      : powerBackAccent === 'pin'
-                        ? '#e8c878'
-                        : '#b6a4bd';
+    const hiddenReadabilityAccentColor = enemyOccupiedBack
+        ? enemyOccupiedColor
+        : hazardBackAccent
+          ? hazardTileColor(hazardBackAccent)
+          : isBossCard
+            ? '#ffcf66'
+            : isTrapCard
+              ? trapReadabilityColor
+              : objectiveBackAccent
+                ? '#f2d39d'
+                : routeBackAccent
+                  ? '#59b4d9'
+                  : powerBackAccent === 'destroy'
+                    ? '#d94848'
+                    : powerBackAccent === 'peek'
+                      ? '#59b4d9'
+                      : powerBackAccent === 'stray'
+                        ? '#d4a03d'
+                        : powerBackAccent === 'pin'
+                          ? '#e8c878'
+                          : '#b6a4bd';
     const showHiddenReadabilityRing =
         !faceUp &&
         tile.state === 'hidden' &&
@@ -2269,6 +2275,7 @@ const TileBezelInner = ({
             hazardBackAccent != null ||
             routeBackAccent ||
             objectiveBackAccent ||
+            enemyOccupiedBack ||
             nonPickableBack ||
             isTrapCard ||
             isBossCard ||
@@ -2529,6 +2536,7 @@ const TileBezelInner = ({
                     hazardBackAccent != null ||
                     routeBackAccent ||
                     objectiveBackAccent ||
+                    enemyOccupiedBack ||
                     nonPickableBack ||
                     isTrapCard ||
                     isBossCard ||
@@ -2547,7 +2555,7 @@ const TileBezelInner = ({
                                     color={hiddenReadabilityAccentColor}
                                     depthTest
                                     depthWrite={false}
-                                    opacity={isResolvedTrap ? 0.48 : nonPickableBack ? 0.34 : 0.58}
+                                    opacity={enemyOccupiedBack ? 0.7 : isResolvedTrap ? 0.5 : nonPickableBack ? 0.42 : 0.64}
                                     side={DoubleSide}
                                     toneMapped={false}
                                     transparent
@@ -2641,6 +2649,42 @@ const TileBezelInner = ({
                                         depthTest
                                         depthWrite={false}
                                         opacity={0.96}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </group>
+                        ) : null}
+                        {enemyOccupiedBack ? (
+                            <group position={[CARD_WIDTH * 0.36, CARD_HEIGHT * 0.37, 0.00064]}>
+                                <mesh
+                                    geometry={BOARD_READABILITY_GLYPH_PLATE_GEOMETRY}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                >
+                                    <meshBasicMaterial
+                                        color="#07060b"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.72}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={BOARD_READABILITY_ENEMY_OCCUPIED_GEOMETRY}
+                                    position={[0, 0, 0.00005]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                    rotation={[0, 0, Math.PI / 4]}
+                                >
+                                    <meshBasicMaterial
+                                        color={enemyOccupiedColor}
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.98}
                                         side={DoubleSide}
                                         toneMapped={false}
                                         transparent
@@ -2877,7 +2921,7 @@ const TileBezelInner = ({
                                         color="#d6cce0"
                                         depthTest
                                         depthWrite={false}
-                                        opacity={0.42}
+                                        opacity={0.62}
                                         side={DoubleSide}
                                         toneMapped={false}
                                         transparent
@@ -3390,6 +3434,15 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
 
     const tileStepLegacy = useMemo(() => readTileStepLegacy(), []);
     const hostConsolidatesTileFrames = !tileStepLegacy;
+    const enemyOccupiedTileIds = useMemo(
+        () =>
+            new Set(
+                (board.enemyHazards ?? [])
+                    .filter((hazard) => hazard.state !== 'defeated')
+                    .map((hazard) => hazard.currentTileId)
+            ),
+        [board.enemyHazards]
+    );
     const tileBezelRows = useMemo(() => {
         return board.tiles.map((tile, index) => {
             const faceUp =
@@ -3467,6 +3520,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             }
             return {
                 destroyBlockedDecoyBack,
+                enemyOccupiedBack: Boolean(enemyOccupiedTileIds.has(tile.id)),
                 faceUp,
                 fieldAmp: getTileFieldAmplification(index, totalColumns, totalRows),
                 focusDimmed: Boolean(dimmedTileIds?.has(tile.id)),
@@ -3502,6 +3556,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         destroyEligibleTileIds,
         destroyPowerVisualActive,
         dimmedTileIds,
+        enemyOccupiedTileIds,
         flipLocked,
         nBackAnchorPairKey,
         nBackMutatorActive,
@@ -3952,6 +4007,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 {tileBezelRows.map(
                     ({
                         destroyBlockedDecoyBack,
+                        enemyOccupiedBack,
                         faceUp,
                         fieldAmp,
                         focusDimmed,
@@ -3980,6 +4036,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                         <TileBezel
                             key={tile.id}
                             destroyBlockedDecoyBack={destroyBlockedDecoyBack}
+                            enemyOccupiedBack={enemyOccupiedBack}
                             faceUp={faceUp}
                             fieldAmp={fieldAmp}
                             fieldTiltRef={fieldTiltRef}
