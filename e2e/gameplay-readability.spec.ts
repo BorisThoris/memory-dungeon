@@ -8,6 +8,7 @@ import {
     expectGameplayReady,
     openPlayablePathFixture
 } from './playablePathHelpers';
+import { flipTileAtGridCellKeyboard, waitForBoardPlayPhase } from './tileBoardGameFlow';
 
 const READABILITY_VIEWPORTS = [
     { name: 'phone narrow', width: 360, height: 740 },
@@ -56,6 +57,58 @@ test.describe('Gameplay readability hardening', () => {
 
         await expectBoardKeepsPriority(page);
     });
+
+    for (const viewport of [
+        { name: 'desktop', width: 1440, height: 900 },
+        { name: 'mobile', width: 390, height: 844 }
+    ] as const) {
+        test(`${viewport.name} trap reveal resolves immediately and stays playable`, async ({ page }) => {
+            test.setTimeout(150_000);
+            await page.setViewportSize({ width: viewport.width, height: viewport.height });
+            await openPlayablePathFixture(page, 'activeRunWithTrapCard');
+            await expectGameplayReady(page);
+            await waitForBoardPlayPhase(page);
+
+            const frame = page.getByTestId('tile-board-frame');
+            await page.screenshot({
+                path: `test-results/trap-card-ux/${viewport.name}-trap-before-reveal.png`,
+                animations: 'disabled'
+            });
+
+            const trapSlot = await firstSlotFromAttr(page, 'data-e2e-hidden-trap-slots');
+            expect(trapSlot, 'activeRunWithTrapCard fixture should expose a hidden trap slot in dev mode').not.toBeNull();
+            const beforeResolvedTrapCount = Number.parseInt(
+                (await frame.getAttribute('data-dungeon-resolved-trap-count')) ?? '0',
+                10
+            );
+
+            await flipTileAtGridCellKeyboard(page, trapSlot!.row, trapSlot!.col);
+
+            await expect(frame).toHaveAttribute('data-board-run-status', 'playing');
+            await expect
+                .poll(
+                    async () =>
+                        Number.parseInt((await frame.getAttribute('data-dungeon-resolved-trap-count')) ?? '0', 10),
+                    { timeout: 15_000 }
+                )
+                .toBeGreaterThan(beforeResolvedTrapCount);
+            await expect(frame).toHaveAttribute('data-selected-tile-count', '0');
+            await expect(frame).toHaveAttribute('data-dungeon-resolved-trap-slots', /\d+,\d+;\d+,\d+/);
+            await expect(page.getByRole('status').filter({ hasText: /Trap resolved/i })).toBeVisible();
+            await expect(frame).toHaveAttribute('data-dungeon-trap-resolution-message', /Trap resolved/i);
+
+            await page.screenshot({
+                path: `test-results/trap-card-ux/${viewport.name}-trap-resolved-playable.png`,
+                animations: 'disabled'
+            });
+
+            const nextSlot = await firstSlotFromAttr(page, 'data-e2e-pickable-hidden-slots');
+            expect(nextSlot, 'board should still have a pickable hidden tile after trap resolution').not.toBeNull();
+            await flipTileAtGridCellKeyboard(page, nextSlot!.row, nextSlot!.col);
+            await expect(frame).toHaveAttribute('data-board-run-status', 'playing');
+            await expect(frame).toHaveAttribute('data-selected-tile-count', '1');
+        });
+    }
 });
 
 async function expectBoardKeepsPriority(page: Page): Promise<void> {
@@ -76,4 +129,14 @@ async function expectBoardKeepsPriority(page: Page): Promise<void> {
         metrics!.boardHeight / metrics!.shellHeight,
         `board should keep at least 45% of the gameplay shell height; got ${metrics!.boardHeight}/${metrics!.shellHeight}`
     ).toBeGreaterThanOrEqual(0.45);
+}
+
+async function firstSlotFromAttr(page: Page, attr: string): Promise<{ row: number; col: number } | null> {
+    const raw = (await page.getByTestId('tile-board-frame').getAttribute(attr)) ?? '';
+    const [first] = raw.split(';').filter(Boolean);
+    if (!first) {
+        return null;
+    }
+    const [row, col] = first.split(',').map((value) => Number.parseInt(value, 10));
+    return Number.isFinite(row) && Number.isFinite(col) ? { row, col } : null;
 }

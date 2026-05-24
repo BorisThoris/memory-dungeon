@@ -466,7 +466,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     /** When false, no tile should show the keyboard focus ring (avoids a permanent “hover” on first pickable tile). */
     const [boardApplicationFocused, setBoardApplicationFocused] = useState(false);
     const [boardLiveMessage, setBoardLiveMessage] = useState('');
+    const [trapResolutionMessage, setTrapResolutionMessage] = useState('');
     const [lastResolutionFeedback, setLastResolutionFeedback] = useState('');
+    const previousResolvedTrapTileCountRef = useRef<number | null>(null);
 
     useEffect(
         () => () => {
@@ -510,7 +512,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     );
 
     /** Row,col pairs for tiles still hidden — used by e2e (canvas picking has no per-tile DOM). */
-const hiddenSlotsAttr = useMemo(
+    const hiddenSlotsAttr = useMemo(
         () =>
             board.tiles
                 .map((tile, index) => {
@@ -525,6 +527,60 @@ const hiddenSlotsAttr = useMemo(
                 .join(';'),
         [board.columns, board.tiles]
     );
+    const hiddenTrapSlotsAttr = useMemo(() => {
+        if (!import.meta.env.DEV) {
+            return undefined;
+        }
+        return board.tiles
+            .map((tile, index) => {
+                if (tile.state !== 'hidden' || tile.dungeonCardKind !== 'trap' || tile.dungeonCardState !== 'hidden') {
+                    return null;
+                }
+                const row = Math.floor(index / board.columns) + 1;
+                const col = (index % board.columns) + 1;
+                return `${row},${col}`;
+            })
+            .filter((v): v is string => v != null)
+            .join(';');
+    }, [board.columns, board.tiles]);
+    const resolvedTrapSlotsAttr = useMemo(
+        () =>
+            board.tiles
+                .map((tile, index) => {
+                    if (tile.dungeonCardKind !== 'trap' || tile.dungeonCardState !== 'resolved') {
+                        return null;
+                    }
+                    const row = Math.floor(index / board.columns) + 1;
+                    const col = (index % board.columns) + 1;
+                    return `${row},${col}`;
+                })
+                .filter((v): v is string => v != null)
+                .join(';'),
+        [board.columns, board.tiles]
+    );
+    const resolvedTrapTileCount = useMemo(
+        () =>
+            board.tiles.filter((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved')
+                .length,
+        [board.tiles]
+    );
+    const pickableHiddenSlotsAttr = useMemo(() => {
+        if (!import.meta.env.DEV) {
+            return undefined;
+        }
+        const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
+        return board.tiles
+            .map((tile, index) => {
+                if (tile.state !== 'hidden' || !pickable.has(tile.id)) {
+                    return null;
+                }
+                const row = Math.floor(index / board.columns) + 1;
+                const col = (index % board.columns) + 1;
+                return `${row},${col}`;
+            })
+            .filter((v): v is string => v != null)
+            .join(';');
+    }, [allowGambitThirdFlip, board, interactive]);
 
     const cardFeedbackStatesAttr = useMemo(() => {
         const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
@@ -566,6 +622,9 @@ const hiddenSlotsAttr = useMemo(
             if (tile.tileHazardKind) {
                 add('hazard');
             }
+            if (tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved') {
+                add('trap-resolved');
+            }
             if (tile.routeSpecialKind || tile.routeCardKind) {
                 add('route');
             }
@@ -589,6 +648,28 @@ const hiddenSlotsAttr = useMemo(
         previewActive,
         runStatus
     ]);
+
+    useEffect(() => {
+        const previous = previousResolvedTrapTileCountRef.current;
+        previousResolvedTrapTileCountRef.current = resolvedTrapTileCount;
+        if (previous == null || resolvedTrapTileCount <= previous) {
+            return undefined;
+        }
+
+        const trapCount = Math.max(1, Math.round((resolvedTrapTileCount - previous) / 2));
+        const message =
+            trapCount === 1
+                ? 'Trap resolved. Effect applied immediately; pick any available tile.'
+                : `${trapCount} traps resolved. Effects applied immediately; pick any available tile.`;
+        setTrapResolutionMessage(message);
+        return undefined;
+    }, [resolvedTrapTileCount]);
+
+    useEffect(() => {
+        if (resolvedTrapTileCount === 0 && trapResolutionMessage) {
+            setTrapResolutionMessage('');
+        }
+    }, [resolvedTrapTileCount, trapResolutionMessage]);
 
     useEffect(() => {
         const counts = new Map<string, number>();
@@ -1721,6 +1802,12 @@ const hiddenSlotsAttr = useMemo(
             data-card-feedback-states={cardFeedbackStatesAttr}
             data-card-feedback-last-resolution={lastResolutionFeedback}
             data-card-feedback-reduced-motion={reduceMotion ? 'static-state-cues' : 'animated-state-cues'}
+            data-dungeon-resolved-trap-count={resolvedTrapTileCount}
+            data-dungeon-resolved-trap-slots={resolvedTrapSlotsAttr}
+            data-dungeon-trap-resolution-message={trapResolutionMessage}
+            data-selected-tile-count={board.flippedTileIds.length}
+            {...(hiddenTrapSlotsAttr != null ? { 'data-e2e-hidden-trap-slots': hiddenTrapSlotsAttr } : {})}
+            {...(pickableHiddenSlotsAttr != null ? { 'data-e2e-pickable-hidden-slots': pickableHiddenSlotsAttr } : {})}
             data-hidden-tile-count={hiddenTileCount}
             data-hidden-slots={hiddenSlotsAttr}
             {...(devE2ePairPositionsJson ? { 'data-e2e-pair-positions': devE2ePairPositionsJson } : {})}
@@ -1739,6 +1826,19 @@ const hiddenSlotsAttr = useMemo(
             <div className={styles.srBoardLive} aria-live="polite">
                 {boardLiveMessage}
             </div>
+            {trapResolutionMessage ? (
+                <div
+                    className={styles.trapResolutionToast}
+                    data-testid="trap-resolution-feedback"
+                    role="status"
+                    aria-live="polite"
+                >
+                    <span className={styles.trapResolutionSigil} aria-hidden="true">
+                        !
+                    </span>
+                    <span>{trapResolutionMessage}</span>
+                </div>
+            ) : null}
             {!baselineWebGl ? (
                 <div className={styles.webglRequired} data-testid="tile-board-webgl-required">
                     This game requires WebGL. Enable hardware acceleration or update your browser, then reload.

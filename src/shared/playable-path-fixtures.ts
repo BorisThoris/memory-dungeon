@@ -1,4 +1,4 @@
-import type { BoardState, RunState, SaveData, ViewState } from './contracts';
+import { GAME_RULES_VERSION, type BoardState, type RunState, type SaveData, type ViewState } from './contracts';
 import { createDefaultSaveData, normalizeSaveData } from './save-data';
 import {
     advanceToNextLevel,
@@ -7,6 +7,7 @@ import {
     finishMemorizePhase,
     openRelicOffer
 } from './game-core';
+import { buildBoard } from './game';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 import {
     activateDungeonExit,
@@ -23,6 +24,7 @@ import { createRunShopOffers } from './shop-rules';
 export type PlayablePathFixtureId =
     | 'freshProfile'
     | 'activeRunWithHazards'
+    | 'activeRunWithTrapCard'
     | 'floorClearWithRouteChoices'
     | 'floorClearWithShop'
     | 'floorClearWithShopLowGold'
@@ -51,6 +53,7 @@ const HAZARD_PATH_SEED = 81_004;
 export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'freshProfile',
     'activeRunWithHazards',
+    'activeRunWithTrapCard',
     'floorClearWithRouteChoices',
     'floorClearWithShop',
     'floorClearWithShopLowGold',
@@ -92,6 +95,8 @@ export const createPlayablePathFixture = (
                 saveData,
                 shopReturnMode: null
             };
+        case 'activeRunWithTrapCard':
+            return { id, view: 'playing', run: activeRunWithTrapCard(), saveData, shopReturnMode: null };
         case 'floorClearWithRouteChoices':
             return { id, view: 'playing', run: floorClearWithRouteChoices(), saveData, shopReturnMode: null };
         case 'floorClearWithShop':
@@ -128,6 +133,28 @@ const baseEndlessRun = (): RunState =>
         gameMode: 'endless',
         runSeed: PLAYABLE_PATH_SEED
     });
+
+const activeRunWithTrapCard = (): RunState => {
+    const base = finishMemorizePhase(
+        createNewRun(0, {
+            echoFeedbackEnabled: false,
+            gameMode: 'endless',
+            runSeed: 172_601
+        })
+    );
+    const board = buildBoard(5, {
+        activeMutators: base.activeMutators,
+        dungeonNodeKind: 'trap',
+        gameMode: 'endless',
+        runRulesVersion: GAME_RULES_VERSION,
+        runSeed: 172_601
+    });
+    return {
+        ...base,
+        board,
+        findablesTotalThisFloor: board.tiles.filter((tile) => tile.findableKind != null).length
+    };
+};
 
 const pairTileIds = (board: BoardState): string[][] => {
     const groups = new Map<string, string[]>();

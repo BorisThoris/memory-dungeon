@@ -18,6 +18,7 @@ import { dismissStartupIntro } from './startupIntroHelpers';
 export type PlayablePathFixtureId =
     | 'freshProfile'
     | 'activeRunWithHazards'
+    | 'activeRunWithTrapCard'
     | 'floorClearWithRouteChoices'
     | 'floorClearWithShop'
     | 'floorClearWithShopLowGold'
