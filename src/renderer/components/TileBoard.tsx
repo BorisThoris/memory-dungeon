@@ -610,6 +610,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             }
             if (faceUp && tile.state === 'flipped') {
                 add('flipped');
+                add('selected');
             }
             if (tile.state === 'matched') {
                 add('matched');
