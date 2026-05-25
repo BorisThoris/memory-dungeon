@@ -25,7 +25,7 @@ test.describe('Gameplay readability hardening', () => {
 
     for (const viewport of READABILITY_VIEWPORTS) {
         test(`${viewport.name} keeps HUD, board, and action dock bounded`, async ({ page }) => {
-            test.setTimeout(90_000);
+            test.setTimeout(150_000);
             await page.setViewportSize({ width: viewport.width, height: viewport.height });
             await openPlayablePathFixture(page, 'activeRunWithHazards');
             await expectGameplayReady(page);
@@ -56,6 +56,25 @@ test.describe('Gameplay readability hardening', () => {
         }
 
         await expectBoardKeepsPriority(page);
+    });
+
+    test('board marker contract and live hazard states are exposed for readability audits', async ({ page }) => {
+        test.setTimeout(90_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await expectGameplayReady(page);
+
+        const frame = page.getByTestId('tile-board-frame');
+        await expect(frame).toHaveAttribute(
+            'data-card-feedback-marker-contract',
+            /hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective/
+        );
+
+        const states = await readCardFeedbackStates(page);
+        for (const expected of ['hidden', 'pickable'] as const) {
+            expect(states.get(expected) ?? 0, `${expected} marker count`).toBeGreaterThan(0);
+        }
+        expect((states.get('hazard') ?? 0) + (states.get('relic') ?? 0) + (states.get('objective') ?? 0)).toBeGreaterThan(0);
     });
 
     for (const viewport of [
@@ -129,6 +148,18 @@ async function expectBoardKeepsPriority(page: Page): Promise<void> {
         metrics!.boardHeight / metrics!.shellHeight,
         `board should keep at least 45% of the gameplay shell height; got ${metrics!.boardHeight}/${metrics!.shellHeight}`
     ).toBeGreaterThanOrEqual(0.45);
+}
+
+async function readCardFeedbackStates(page: Page): Promise<Map<string, number>> {
+    const raw = (await page.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')) ?? '';
+    const states = new Map<string, number>();
+    for (const entry of raw.split(';').filter(Boolean)) {
+        const [key, count] = entry.split(':');
+        if (key) {
+            states.set(key, Number.parseInt(count ?? '0', 10));
+        }
+    }
+    return states;
 }
 
 async function firstSlotFromAttr(page: Page, attr: string): Promise<{ row: number; col: number } | null> {

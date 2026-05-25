@@ -2,7 +2,7 @@ import type { EnemyHazardState, GraphicsQualityPreset } from '../../shared/contr
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 
 export const DUNGEON_BOARD_STAGE_LAYER_POLICY = {
-    version: 'dng-061-v1',
+    version: 'dng-061-v2',
     cardSurface: { renderOrder: 0, z: 0 },
     cardWear: { renderOrder: 6 },
     passiveHover: { renderOrder: 7 },
@@ -74,8 +74,8 @@ export const getDungeonEnemyMarkerAnchor = (
     layer: 'currentThreat' | 'nextThreatTelegraph',
     bob = 0
 ): [number, number, number] => {
-    const xOffset = layer === 'currentThreat' ? CARD_PLANE_WIDTH * 0.34 : -CARD_PLANE_WIDTH * 0.34;
-    const yOffset = layer === 'currentThreat' ? CARD_PLANE_HEIGHT * 0.34 : -CARD_PLANE_HEIGHT * 0.34;
+    const xOffset = layer === 'currentThreat' ? CARD_PLANE_WIDTH * 0.42 : -CARD_PLANE_WIDTH * 0.42;
+    const yOffset = layer === 'currentThreat' ? CARD_PLANE_HEIGHT * 0.43 : -CARD_PLANE_HEIGHT * 0.43;
     const z =
         layer === 'currentThreat'
             ? DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.z
@@ -93,9 +93,9 @@ export type DungeonEnemyMarkerShape = 'sentinel-diamond' | 'stalker-spear' | 'wa
 export const DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET = {
     version: 'dng-074-v1',
     maxActiveEnemyHazards: 6,
-    maxMovingThreatDrawCalls: 24,
-    maxMovingThreatMaterialSlots: 24,
-    sharedEnemyMarkerGeometryCount: 7,
+    maxMovingThreatDrawCalls: 36,
+    maxMovingThreatMaterialSlots: 36,
+    sharedEnemyMarkerGeometryCount: 10,
     trapCardExtraDrawCallsPerPair: 0,
     contextLossRecovery: 'remount_canvas_on_restore'
 } as const;
@@ -176,7 +176,7 @@ const movingThreatMeshCountFor = (
     hasNextTelegraph: boolean
 ): number => {
     const secondaryMeshCount = hazard.bossId || hazard.kind === 'observer' ? 1 : 0;
-    return 2 + secondaryMeshCount + (hasNextTelegraph ? 1 : 0);
+    return 4 + secondaryMeshCount + (hasNextTelegraph ? 1 : 0);
 };
 
 export const estimateDungeonBoardStagePerformanceCost = (input: {

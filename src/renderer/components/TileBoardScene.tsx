@@ -292,6 +292,7 @@ interface TileBezelProps {
     hazardBackAccent?: HazardTileKind | null;
     routeBackAccent?: boolean;
     objectiveBackAccent?: boolean;
+    enemyOccupiedBack?: boolean;
     nonPickableBack?: boolean;
     destroyBlockedDecoyBack?: boolean;
 }
@@ -370,7 +371,7 @@ const EnemyHazardMarker = ({ hazard, currentTransform, graphicsQuality, nextTran
     const visual = getDungeonEnemyMarkerVisualProfile(hazard, graphicsQuality, reduceMotion);
     const geometry = enemyHazardGeometryForShape(visual.shape);
     const healthRatio = hazard.maxHp > 0 ? MathUtils.clamp(hazard.hp / hazard.maxHp, 0, 1) : 0;
-    const scale = (hazard.bossId ? 1.35 : 1) * (0.82 + healthRatio * 0.18);
+    const scale = (hazard.bossId ? 1.42 : 1.08) * (0.84 + healthRatio * 0.16);
 
     useLayoutEffect(() => {
         const group = groupRef.current;
@@ -419,6 +420,19 @@ const EnemyHazardMarker = ({ hazard, currentTransform, graphicsQuality, nextTran
                 </mesh>
             ) : null}
             <group ref={groupRef}>
+                <mesh
+                    geometry={ENEMY_MARKER_PLATE_GEOMETRY}
+                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.renderOrder - 1}
+                    scale={hazard.bossId ? [1.16, 1.08, 1] : [1, 1, 1]}
+                >
+                    <meshBasicMaterial
+                        color="#09070d"
+                        depthWrite={false}
+                        opacity={hazard.bossId ? 0.84 : 0.74}
+                        toneMapped={false}
+                        transparent
+                    />
+                </mesh>
                 <mesh geometry={geometry} renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.renderOrder} rotation={[0, 0, visual.mainRotation]} scale={visual.mainScale}>
                     <meshBasicMaterial color={color} depthWrite={false} opacity={lod.currentMarkerOpacity} toneMapped={false} transparent />
                 </mesh>
@@ -426,7 +440,7 @@ const EnemyHazardMarker = ({ hazard, currentTransform, graphicsQuality, nextTran
                     geometry={hazard.bossId ? ENEMY_BOSS_HALO_GEOMETRY : ENEMY_MARKER_GEOMETRY}
                     renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.renderOrder}
                     rotation={[0, 0, Math.PI / 4]}
-                    scale={1.42}
+                    scale={hazard.bossId ? 1.56 : 1.5}
                 >
                     <meshBasicMaterial color={color} depthWrite={false} opacity={visual.haloOpacity} toneMapped={false} transparent />
                 </mesh>
@@ -449,6 +463,21 @@ const EnemyHazardMarker = ({ hazard, currentTransform, graphicsQuality, nextTran
                         <meshBasicMaterial color="#fff8d8" depthWrite={false} opacity={visual.secondaryOpacity} toneMapped={false} transparent />
                     </mesh>
                 ) : null}
+                <mesh
+                    geometry={ENEMY_MARKER_HP_TRACK_GEOMETRY}
+                    position={[0, -0.165, 0.002]}
+                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.renderOrder}
+                >
+                    <meshBasicMaterial color="#07060a" depthWrite={false} opacity={0.82} toneMapped={false} transparent />
+                </mesh>
+                <mesh
+                    geometry={ENEMY_MARKER_HP_TRACK_GEOMETRY}
+                    position={[-0.15 * (1 - healthRatio), -0.165, 0.003]}
+                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.currentThreat.renderOrder + 1}
+                    scale={[Math.max(0.08, healthRatio), 1, 1]}
+                >
+                    <meshBasicMaterial color={color} depthWrite={false} opacity={0.94} toneMapped={false} transparent />
+                </mesh>
             </group>
         </>
     );
@@ -468,6 +497,19 @@ const ENEMY_BOSS_HALO_GEOMETRY = new CircleGeometry(0.2, 32);
 const ENEMY_BOSS_CROWN_GEOMETRY = new CircleGeometry(0.055, 16);
 const ENEMY_NEXT_MARKER_GEOMETRY = new PlaneGeometry(0.32, 0.32, 1, 1);
 const ENEMY_NEXT_BOSS_MARKER_GEOMETRY = new CircleGeometry(0.18, 32);
+const ENEMY_MARKER_PLATE_GEOMETRY = new PlaneGeometry(0.42, 0.3, 1, 1);
+const ENEMY_MARKER_HP_TRACK_GEOMETRY = new PlaneGeometry(0.3, 0.028, 1, 1);
+const BOARD_READABILITY_PIP_GEOMETRY = new CircleGeometry(0.043, 20);
+const BOARD_READABILITY_LARGE_PIP_GEOMETRY = new CircleGeometry(0.057, 22);
+const BOARD_READABILITY_BAR_GEOMETRY = new PlaneGeometry(0.2, 0.032, 1, 1);
+const BOARD_READABILITY_SHORT_BAR_GEOMETRY = new PlaneGeometry(0.13, 0.03, 1, 1);
+const BOARD_READABILITY_BOSS_MARK_GEOMETRY = new PlaneGeometry(0.25, 0.064, 1, 1);
+const BOARD_READABILITY_GLYPH_PLATE_GEOMETRY = new PlaneGeometry(0.19, 0.14, 1, 1);
+const BOARD_READABILITY_SELECTED_RAIL_GEOMETRY = new PlaneGeometry(0.018, CARD_FACE_HEIGHT * 0.74, 1, 1);
+const BOARD_READABILITY_DISABLED_SLASH_GEOMETRY = new PlaneGeometry(0.46, 0.024, 1, 1);
+const BOARD_READABILITY_ENEMY_OCCUPIED_GEOMETRY = new PlaneGeometry(0.22, 0.06, 1, 1);
+const BOARD_READABILITY_STATE_RAIL_GEOMETRY = new PlaneGeometry(0.26, 0.026, 1, 1);
+const BOARD_READABILITY_STATE_NOTCH_GEOMETRY = new PlaneGeometry(0.04, 0.13, 1, 1);
 
 /** FX-006: thin quads approximating DOM `0 0 0 2px` gold ring on the visible back face while hidden. */
 const HOVER_GOLD_RIM_STRIP = 0.0036;
@@ -742,6 +784,10 @@ interface TileBezelFramePropsSnapshot {
     presentationSilhouette: boolean;
     presentationNBackAnchor: boolean;
     nonPickableBack: boolean;
+    hazardBackAccent: HazardTileKind | null;
+    routeBackAccent: boolean;
+    objectiveBackAccent: boolean;
+    enemyOccupiedBack: boolean;
     /** Cancels match pulse / flip pop when a new resolving pair replaces the previous without a full idle frame. */
     resolvingMatchWaveKey: string | null;
 }
@@ -1110,6 +1156,20 @@ const advanceTileBezelFrame = (bag: TileBezelFrameBag, state: RootState, delta: 
         scratchCardTint.set('#d4b870');
     } else if (p.nonPickableBack) {
         scratchCardTint.set('#9a94a3');
+    } else if (!p.faceUp && p.tile.state === 'hidden' && p.enemyOccupiedBack) {
+        scratchCardTint.lerp(scratchGlowColor.set('#ff9f86'), 0.16);
+    } else if (!p.faceUp && p.tile.state === 'hidden' && p.tile.dungeonBossId != null) {
+        scratchCardTint.lerp(scratchGlowColor.set('#ffcf66'), 0.18);
+    } else if (!p.faceUp && p.tile.state === 'hidden' && p.tile.dungeonCardKind === 'trap') {
+        scratchCardTint.lerp(scratchGlowColor.set(p.tile.dungeonCardState === 'resolved' ? '#7bd88f' : '#ff7a6a'), 0.14);
+    } else if (!p.faceUp && p.tile.state === 'hidden' && p.tile.findableKind != null) {
+        scratchCardTint.lerp(scratchGlowColor.set('#5ee0c8'), 0.12);
+    } else if (!p.faceUp && p.tile.state === 'hidden' && p.hazardBackAccent != null) {
+        scratchCardTint.lerp(scratchGlowColor.set(hazardTileColor(p.hazardBackAccent)), 0.13);
+    } else if (!p.faceUp && p.tile.state === 'hidden' && p.objectiveBackAccent) {
+        scratchCardTint.lerp(scratchGlowColor.set('#f2d39d'), 0.11);
+    } else if (!p.faceUp && p.tile.state === 'hidden' && p.routeBackAccent) {
+        scratchCardTint.lerp(scratchGlowColor.set('#59b4d9'), 0.1);
     } else if (p.tile.state === 'matched' && p.faceUp) {
         /** No face tint when the ember rim shows (medium+); low quality uses static matched chrome instead. */
         if (p.graphicsQuality === 'low') {
@@ -1605,6 +1665,7 @@ const TileBezelInner = ({
     hazardBackAccent = null,
     routeBackAccent = false,
     objectiveBackAccent = false,
+    enemyOccupiedBack = false,
     nonPickableBack = false,
     destroyBlockedDecoyBack = false,
     focusDimmed = false,
@@ -1700,6 +1761,10 @@ const TileBezelInner = ({
         presentationSilhouette,
         presentationNBackAnchor,
         nonPickableBack,
+        hazardBackAccent,
+        routeBackAccent,
+        objectiveBackAccent,
+        enemyOccupiedBack,
         resolvingMatchWaveKey
     };
 
@@ -2178,6 +2243,77 @@ const TileBezelInner = ({
     const faceZ = halfDepth + 0.0004;
     const overlayZ = halfDepth + 0.004;
     const renderQuality = gameplayRenderQualityProfile(graphicsQuality);
+    const isTrapCard = tile.dungeonCardKind === 'trap';
+    const isResolvedTrap = isTrapCard && tile.dungeonCardState === 'resolved';
+    const isRevealedTrap = isTrapCard && tile.dungeonCardState === 'revealed';
+    const isArmedTrap = isTrapCard && !isResolvedTrap && !isRevealedTrap;
+    const isBossCard = tile.dungeonBossId != null;
+    const isRelicCard = tile.findableKind != null;
+    const isSelectedCard = faceUp && tile.state === 'flipped';
+    const enemyOccupiedColor = '#ff9f86';
+    const trapReadabilityColor =
+        isResolvedTrap
+            ? '#7bd88f'
+            : isRevealedTrap
+              ? '#ffcf66'
+              : '#ff7a6a';
+    const faceReadabilityAccentColor = isBossCard
+        ? '#ffcf66'
+        : isTrapCard
+          ? trapReadabilityColor
+          : isRelicCard
+            ? '#5ee0c8'
+            : tile.routeSpecialKind || tile.routeCardKind
+              ? '#59b4d9'
+              : tile.tileHazardKind
+                ? hazardTileColor(tile.tileHazardKind)
+                : '#f2d39d';
+    const hiddenReadabilityAccentColor = enemyOccupiedBack
+        ? enemyOccupiedColor
+        : hazardBackAccent
+          ? hazardTileColor(hazardBackAccent)
+          : isBossCard
+            ? '#ffcf66'
+            : isTrapCard
+              ? trapReadabilityColor
+              : objectiveBackAccent
+                ? '#f2d39d'
+                : routeBackAccent
+                  ? '#59b4d9'
+                  : powerBackAccent === 'destroy'
+                    ? '#d94848'
+                    : powerBackAccent === 'peek'
+                      ? '#59b4d9'
+                      : powerBackAccent === 'stray'
+                        ? '#d4a03d'
+                        : powerBackAccent === 'pin'
+                          ? '#e8c878'
+                          : '#b6a4bd';
+    const showHiddenReadabilityRing =
+        !faceUp &&
+        tile.state === 'hidden' &&
+        (spotlightWardOnBack ||
+            spotlightBountyOnBack ||
+            destroyBlockedDecoyBack ||
+            powerBackAccent != null ||
+            hazardBackAccent != null ||
+            routeBackAccent ||
+            objectiveBackAccent ||
+            enemyOccupiedBack ||
+            nonPickableBack ||
+            isTrapCard ||
+            isBossCard ||
+            isRelicCard ||
+            (stickyFingerSlotMark && tile.state === 'hidden'));
+    const showFaceReadabilityMarker =
+        faceUp &&
+        tile.state !== 'matched' &&
+        (isBossCard ||
+            isTrapCard ||
+            isRelicCard ||
+            tile.routeSpecialKind != null ||
+            tile.routeCardKind != null ||
+            tile.tileHazardKind != null);
 
     return (
         <>
@@ -2424,10 +2560,199 @@ const TileBezelInner = ({
                     hazardBackAccent != null ||
                     routeBackAccent ||
                     objectiveBackAccent ||
+                    enemyOccupiedBack ||
                     nonPickableBack ||
+                    isTrapCard ||
+                    isBossCard ||
+                    isRelicCard ||
                     (stickyFingerSlotMark && tile.state === 'hidden')) &&
                 !faceUp ? (
                     <group position={[0, 0, -faceZ - 0.00033]} rotation={[0, Math.PI, 0]}>
+                        {showHiddenReadabilityRing ? (
+                            <>
+                                <mesh
+                                    geometry={matchedEdgeGeometry}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveHalo.renderOrder - 1}
+                                    scale={[0.975, 0.975, 1]}
+                                >
+                                    <meshBasicMaterial
+                                        color="#050409"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={enemyOccupiedBack || isBossCard ? 0.78 : 0.56}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={matchedEdgeGeometry}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveHalo.renderOrder}
+                                    scale={[0.94, 0.94, 1]}
+                                >
+                                    <meshBasicMaterial
+                                        color={hiddenReadabilityAccentColor}
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={enemyOccupiedBack ? 0.84 : isResolvedTrap ? 0.68 : nonPickableBack ? 0.5 : 0.74}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </>
+                        ) : null}
+                        {isTrapCard || isRelicCard ? (
+                            <mesh
+                                geometry={BOARD_READABILITY_GLYPH_PLATE_GEOMETRY}
+                                position={[
+                                    isRelicCard ? CARD_WIDTH * 0.37 : -CARD_WIDTH * 0.37,
+                                    isRelicCard ? -CARD_HEIGHT * 0.4 : CARD_HEIGHT * 0.34,
+                                    0.0006
+                                ]}
+                                raycast={noopMeshRaycast}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder - 1}
+                            >
+                                <meshBasicMaterial
+                                    color="#07060b"
+                                    depthTest
+                                    depthWrite={false}
+                                    opacity={0.62}
+                                    side={DoubleSide}
+                                    toneMapped={false}
+                                    transparent
+                                />
+                            </mesh>
+                        ) : null}
+                        {isTrapCard ? (
+                            <group position={[-CARD_WIDTH * 0.37, CARD_HEIGHT * 0.32, 0.00061]}>
+                                <mesh
+                                    geometry={BOARD_READABILITY_BAR_GEOMETRY}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                    rotation={[0, 0, Math.PI / 2]}
+                                >
+                                    <meshBasicMaterial
+                                        color={trapReadabilityColor}
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={isResolvedTrap ? 0.72 : isArmedTrap ? 0.98 : 0.9}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                    position={[0.048, 0, 0.00003]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                    rotation={[0, 0, Math.PI / 2]}
+                                >
+                                    <meshBasicMaterial
+                                        color={isResolvedTrap ? '#d9ffe8' : '#1b0d10'}
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={isResolvedTrap ? 0.82 : 0.72}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </group>
+                        ) : null}
+                        {isBossCard ? (
+                            <group position={[0, CARD_HEIGHT * 0.41, 0.00062]}>
+                                <mesh
+                                    geometry={BOARD_READABILITY_BOSS_MARK_GEOMETRY}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                >
+                                    <meshBasicMaterial
+                                        color="#09070d"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.76}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                    position={[0, 0.002, 0.00004]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                >
+                                    <meshBasicMaterial
+                                        color="#ffcf66"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.96}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </group>
+                        ) : null}
+                        {enemyOccupiedBack ? (
+                            <group position={[CARD_WIDTH * 0.36, CARD_HEIGHT * 0.37, 0.00064]}>
+                                <mesh
+                                    geometry={BOARD_READABILITY_GLYPH_PLATE_GEOMETRY}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                >
+                                    <meshBasicMaterial
+                                        color="#07060b"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.72}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={BOARD_READABILITY_ENEMY_OCCUPIED_GEOMETRY}
+                                    position={[0, 0, 0.00005]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                    rotation={[0, 0, Math.PI / 4]}
+                                >
+                                    <meshBasicMaterial
+                                        color={enemyOccupiedColor}
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.98}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </group>
+                        ) : null}
+                        {isRelicCard ? (
+                            <mesh
+                                geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
+                                position={[CARD_WIDTH * 0.37, -CARD_HEIGHT * 0.4, 0.00063]}
+                                raycast={noopMeshRaycast}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                rotation={[0, 0, Math.PI / 4]}
+                            >
+                                <meshBasicMaterial
+                                    color="#5ee0c8"
+                                    depthTest
+                                    depthWrite={false}
+                                    opacity={0.95}
+                                    side={DoubleSide}
+                                    toneMapped={false}
+                                    transparent
+                                />
+                            </mesh>
+                        ) : null}
                         {spotlightWardOnBack ? (
                             <mesh
                                 geometry={findableCornerRingGeometry}
@@ -2555,77 +2880,149 @@ const TileBezelInner = ({
                             </mesh>
                         ) : null}
                         {hazardBackAccent ? (
-                            <mesh
-                                geometry={findableCornerRingGeometry}
-                                position={[0, CARD_HEIGHT * 0.4, 0.00055]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={10}
-                            >
-                                <meshBasicMaterial
-                                    color={hazardTileColor(hazardBackAccent)}
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.92}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
+                            <group position={[0, CARD_HEIGHT * 0.39, 0.00055]}>
+                                <mesh
+                                    geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
+                                >
+                                    <meshBasicMaterial
+                                        color={hazardTileColor(hazardBackAccent)}
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.96}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={BOARD_READABILITY_STATE_NOTCH_GEOMETRY}
+                                    position={[0, -0.03, 0.00004]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                >
+                                    <meshBasicMaterial
+                                        color="#12080a"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.76}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </group>
                         ) : null}
                         {routeBackAccent ? (
-                            <mesh
-                                geometry={findableCornerRingGeometry}
-                                position={[-CARD_WIDTH * 0.34, 0, 0.00057]}
-                                rotation={[0, 0, Math.PI / 4]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
-                            >
-                                <meshBasicMaterial
-                                    color="#59b4d9"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.86}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
+                            <group position={[-CARD_WIDTH * 0.36, 0, 0.00057]}>
+                                <mesh
+                                    geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
+                                    rotation={[0, 0, Math.PI / 2]}
+                                >
+                                    <meshBasicMaterial
+                                        color="#59b4d9"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.9}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
+                                    position={[0.045, 0, 0.00004]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                    rotation={[0, 0, Math.PI / 4]}
+                                >
+                                    <meshBasicMaterial
+                                        color="#d9f7ff"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.84}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </group>
                         ) : null}
                         {objectiveBackAccent ? (
-                            <mesh
-                                geometry={findableCornerRingGeometry}
-                                position={[CARD_WIDTH * 0.34, 0, 0.00058]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                            >
-                                <meshBasicMaterial
-                                    color="#f2d39d"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.9}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
+                            <group position={[CARD_WIDTH * 0.36, 0, 0.00058]}>
+                                <mesh
+                                    geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
+                                    rotation={[0, 0, Math.PI / 2]}
+                                >
+                                    <meshBasicMaterial
+                                        color="#f2d39d"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.92}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={BOARD_READABILITY_PIP_GEOMETRY}
+                                    position={[-0.045, 0, 0.00004]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                >
+                                    <meshBasicMaterial
+                                        color="#171008"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.78}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </group>
                         ) : null}
                         {nonPickableBack ? (
-                            <mesh
-                                geometry={hoverGoldRimGeomH}
-                                position={[0, -CARD_HEIGHT * 0.5 + HOVER_GOLD_RIM_STRIP * 1.15, 0.00059]}
-                                raycast={noopMeshRaycast}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.passiveHover.renderOrder}
-                            >
-                                <meshBasicMaterial
-                                    color="#b6a4bd"
-                                    depthTest
-                                    depthWrite={false}
-                                    opacity={0.34}
-                                    side={DoubleSide}
-                                    toneMapped={false}
-                                    transparent
-                                />
-                            </mesh>
+                            <group>
+                                <mesh
+                                    geometry={hoverGoldRimGeomH}
+                                    position={[0, -CARD_HEIGHT * 0.5 + HOVER_GOLD_RIM_STRIP * 1.15, 0.00059]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.passiveHover.renderOrder}
+                                >
+                                    <meshBasicMaterial
+                                        color="#b6a4bd"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.48}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={BOARD_READABILITY_DISABLED_SLASH_GEOMETRY}
+                                    position={[0, 0, 0.0006]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.passiveHover.renderOrder + 1}
+                                    rotation={[0, 0, -Math.PI / 4]}
+                                >
+                                    <meshBasicMaterial
+                                        color="#d6cce0"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.62}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </group>
                         ) : null}
                         {stickyFingerSlotMark && tile.state === 'hidden' ? (
                             <mesh
@@ -2639,6 +3036,150 @@ const TileBezelInner = ({
                                     depthTest
                                     depthWrite={false}
                                     opacity={0.88}
+                                    side={DoubleSide}
+                                    toneMapped={false}
+                                    transparent
+                                />
+                            </mesh>
+                        ) : null}
+                    </group>
+                ) : null}
+                {isSelectedCard ? (
+                    <group position={[0, 0, faceZ + 0.00047]}>
+                        <mesh
+                            geometry={BOARD_READABILITY_SELECTED_RAIL_GEOMETRY}
+                            position={[-CARD_WIDTH * 0.45, 0, 0.0007]}
+                            raycast={noopMeshRaycast}
+                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                        >
+                            <meshBasicMaterial
+                                color="#f2d39d"
+                                depthTest
+                                depthWrite={false}
+                                opacity={0.92}
+                                side={DoubleSide}
+                                toneMapped={false}
+                                transparent
+                            />
+                        </mesh>
+                        <mesh
+                            geometry={BOARD_READABILITY_SELECTED_RAIL_GEOMETRY}
+                            position={[CARD_WIDTH * 0.45, 0, 0.0007]}
+                            raycast={noopMeshRaycast}
+                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                        >
+                            <meshBasicMaterial
+                                color="#59b4d9"
+                                depthTest
+                                depthWrite={false}
+                                opacity={0.86}
+                                side={DoubleSide}
+                                toneMapped={false}
+                                transparent
+                            />
+                        </mesh>
+                    </group>
+                ) : null}
+                {showFaceReadabilityMarker ? (
+                    <group position={[0, 0, faceZ + 0.0005]}>
+                        <mesh
+                            geometry={matchedEdgeGeometry}
+                            raycast={noopMeshRaycast}
+                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
+                            scale={[0.93, 0.93, 1]}
+                        >
+                            <meshBasicMaterial
+                                color={faceReadabilityAccentColor}
+                                depthTest
+                                depthWrite={false}
+                                opacity={isResolvedTrap ? 0.46 : isBossCard ? 0.7 : 0.62}
+                                side={DoubleSide}
+                                toneMapped={false}
+                                transparent
+                            />
+                        </mesh>
+                        <mesh
+                            geometry={BOARD_READABILITY_PIP_GEOMETRY}
+                            position={[CARD_WIDTH * 0.35, CARD_HEIGHT * 0.39, 0.00072]}
+                            raycast={noopMeshRaycast}
+                            renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                        >
+                            <meshBasicMaterial
+                                color={faceReadabilityAccentColor}
+                                depthTest
+                                depthWrite={false}
+                                opacity={isResolvedTrap ? 0.78 : 0.96}
+                                side={DoubleSide}
+                                toneMapped={false}
+                                transparent
+                            />
+                        </mesh>
+                        {isTrapCard ? (
+                            <mesh
+                                geometry={BOARD_READABILITY_BAR_GEOMETRY}
+                                position={[0, -CARD_HEIGHT * 0.42, 0.00076]}
+                                raycast={noopMeshRaycast}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                            >
+                                <meshBasicMaterial
+                                    color={trapReadabilityColor}
+                                    depthTest
+                                    depthWrite={false}
+                                    opacity={isResolvedTrap ? 0.74 : 0.96}
+                                    side={DoubleSide}
+                                    toneMapped={false}
+                                    transparent
+                                />
+                            </mesh>
+                        ) : null}
+                        {isBossCard ? (
+                            <group position={[0, CARD_HEIGHT * 0.42, 0.00078]}>
+                                <mesh
+                                    geometry={BOARD_READABILITY_BOSS_MARK_GEOMETRY}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                >
+                                    <meshBasicMaterial
+                                        color="#09070d"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.72}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                                <mesh
+                                    geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                    position={[0, 0.002, 0.00004]}
+                                    raycast={noopMeshRaycast}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                >
+                                    <meshBasicMaterial
+                                        color="#ffcf66"
+                                        depthTest
+                                        depthWrite={false}
+                                        opacity={0.98}
+                                        side={DoubleSide}
+                                        toneMapped={false}
+                                        transparent
+                                    />
+                                </mesh>
+                            </group>
+                        ) : null}
+                        {isRelicCard ? (
+                            <mesh
+                                geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
+                                position={[CARD_WIDTH * 0.35, -CARD_HEIGHT * 0.39, 0.00077]}
+                                raycast={noopMeshRaycast}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                rotation={[0, 0, Math.PI / 4]}
+                            >
+                                <meshBasicMaterial
+                                    color="#5ee0c8"
+                                    depthTest
+                                    depthWrite={false}
+                                    opacity={0.96}
                                     side={DoubleSide}
                                     toneMapped={false}
                                     transparent
@@ -2988,6 +3529,15 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
 
     const tileStepLegacy = useMemo(() => readTileStepLegacy(), []);
     const hostConsolidatesTileFrames = !tileStepLegacy;
+    const enemyOccupiedTileIds = useMemo(
+        () =>
+            new Set(
+                (board.enemyHazards ?? [])
+                    .filter((hazard) => hazard.state !== 'defeated')
+                    .map((hazard) => hazard.currentTileId)
+            ),
+        [board.enemyHazards]
+    );
     const tileBezelRows = useMemo(() => {
         return board.tiles.map((tile, index) => {
             const faceUp =
@@ -3065,6 +3615,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             }
             return {
                 destroyBlockedDecoyBack,
+                enemyOccupiedBack: Boolean(enemyOccupiedTileIds.has(tile.id)),
                 faceUp,
                 fieldAmp: getTileFieldAmplification(index, totalColumns, totalRows),
                 focusDimmed: Boolean(dimmedTileIds?.has(tile.id)),
@@ -3100,6 +3651,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         destroyEligibleTileIds,
         destroyPowerVisualActive,
         dimmedTileIds,
+        enemyOccupiedTileIds,
         flipLocked,
         nBackAnchorPairKey,
         nBackMutatorActive,
@@ -3550,6 +4102,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 {tileBezelRows.map(
                     ({
                         destroyBlockedDecoyBack,
+                        enemyOccupiedBack,
                         faceUp,
                         fieldAmp,
                         focusDimmed,
@@ -3578,6 +4131,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                         <TileBezel
                             key={tile.id}
                             destroyBlockedDecoyBack={destroyBlockedDecoyBack}
+                            enemyOccupiedBack={enemyOccupiedBack}
                             faceUp={faceUp}
                             fieldAmp={fieldAmp}
                             fieldTiltRef={fieldTiltRef}

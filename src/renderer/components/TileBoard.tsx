@@ -174,6 +174,8 @@ const MOUSE_PAN_DRAG_THRESHOLD_PX = 8;
 const DECOY_PAIR_KEY = '__decoy__';
 
 const EMPTY_TILE_IDS: ReadonlySet<string> = new Set();
+const BOARD_MARKER_READABILITY_CONTRACT =
+    'hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective';
 
 const PRELOAD_READY_TIMEOUT_MS = 320;
 
@@ -584,6 +586,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
     const cardFeedbackStatesAttr = useMemo(() => {
         const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
+        const enemyOccupied = new Set(
+            (board.enemyHazards ?? [])
+                .filter((hazard) => hazard.state !== 'defeated')
+                .map((hazard) => hazard.currentTileId)
+        );
         const counts = new Map<string, number>();
         const add = (key: string): void => {
             counts.set(key, (counts.get(key) ?? 0) + 1);
@@ -603,6 +610,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             }
             if (faceUp && tile.state === 'flipped') {
                 add('flipped');
+                add('selected');
             }
             if (tile.state === 'matched') {
                 add('matched');
@@ -612,6 +620,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             }
             if (!pickable.has(tile.id) && tile.state !== 'matched') {
                 add('non-pickable');
+                add('disabled');
             }
             if (pickable.has(tile.id)) {
                 add('pickable');
@@ -622,8 +631,26 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             if (tile.tileHazardKind) {
                 add('hazard');
             }
-            if (tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved') {
-                add('trap-resolved');
+            if (tile.dungeonCardKind === 'trap') {
+                add(
+                    tile.dungeonCardState === 'resolved'
+                        ? 'trap-resolved'
+                        : tile.dungeonCardState === 'revealed'
+                          ? 'trap-revealed'
+                          : 'trap-armed'
+                );
+            }
+            if (tile.dungeonBossId) {
+                add('boss-marked');
+            }
+            if (tile.dungeonCardKind === 'enemy') {
+                add('enemy-card');
+            }
+            if (enemyOccupied.has(tile.id)) {
+                add('enemy-occupied');
+            }
+            if (tile.findableKind) {
+                add('relic');
             }
             if (tile.routeSpecialKind || tile.routeCardKind) {
                 add('route');
@@ -1803,6 +1830,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-dungeon-mobile-board-primary={DNG065_MOBILE_BOARD_PRIORITY.boardPrimary ? 'true' : 'false'}
             data-dungeon-touch-target-min={DNG065_MOBILE_BOARD_PRIORITY.minTouchTargetPx}
             data-card-feedback-states={cardFeedbackStatesAttr}
+            data-card-feedback-marker-contract={BOARD_MARKER_READABILITY_CONTRACT}
             data-card-feedback-last-resolution={lastResolutionFeedback}
             data-card-feedback-reduced-motion={reduceMotion ? 'static-state-cues' : 'animated-state-cues'}
             data-dungeon-resolved-trap-count={resolvedTrapTileCount}
