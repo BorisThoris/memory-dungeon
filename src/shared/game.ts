@@ -1910,7 +1910,7 @@ const springArmedDungeonTraps = (
         matchedPairs: Math.min(board.pairCount, board.matchedPairs + triggered),
         tiles: board.tiles.map((candidate) =>
             keys.includes(candidate.pairKey) && candidate.dungeonCardKind === 'trap'
-                ? { ...candidate, dungeonCardState: 'resolved' as const, state: 'matched' as const }
+                ? { ...candidate, dungeonCardState: 'resolved' as const, state: 'flipped' as const }
                 : alarmTriggered && candidate.dungeonCardKind === 'enemy' && candidate.dungeonCardState === 'hidden'
                   ? { ...candidate, dungeonCardState: 'revealed' as const }
                 : triggered > 0 &&
@@ -4534,6 +4534,7 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
             continue;
         }
         if (tiles.every(isSprungTrapTile)) {
+            matchedOrRemovedRealPairs += 1;
             continue;
         }
         const actionableTiles = tiles.filter(tileIsActionableForCompletion);
@@ -4619,7 +4620,7 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
     if (board.matchedPairs !== matchedOrRemovedRealPairs) {
         issues.push({
             code: 'matched_pairs_counter_mismatch',
-            message: `matchedPairs is ${board.matchedPairs}, but ${matchedOrRemovedRealPairs} real pair(s) are matched or removed.`
+            message: `matchedPairs is ${board.matchedPairs}, but ${matchedOrRemovedRealPairs} real pair(s) are cleared or self-resolved.`
         });
     }
 
