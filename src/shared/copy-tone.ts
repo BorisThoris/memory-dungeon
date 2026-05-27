@@ -1,9 +1,9 @@
 import { MECHANICS_GLOSSARY_TERMS } from './mechanics-encyclopedia';
 
-export type CopyToneSurface = 'hud' | 'codex' | 'game_over' | 'shop' | 'settings' | 'onboarding';
+export type CopyToneSurface = 'hud' | 'codex' | 'game_over' | 'shop' | 'settings' | 'onboarding' | 'run_feedback';
 
 export interface CopyToneRule {
-    id: 'preferred_terms' | 'premium_safe' | 'offline_honest' | 'concise_mobile';
+    id: 'preferred_terms' | 'premium_safe' | 'offline_honest' | 'concise_mobile' | 'atmospheric_feedback';
     surface: CopyToneSurface | 'all';
     rule: string;
     examples: string[];
@@ -38,6 +38,13 @@ export const COPY_TONE_RULES: readonly CopyToneRule[] = [
         rule: 'Keep HUD and card microcopy short enough for phone layouts.',
         examples: ['Favor', 'Wager', 'Perfect Memory', 'combo shard'],
         preferred: ['Favor', 'Wager', 'Rules', 'Codex']
+    },
+    {
+        id: 'atmospheric_feedback',
+        surface: 'run_feedback',
+        rule: 'Live and floor-clear feedback should name the mechanic first, then add restrained memory-dungeon texture.',
+        examples: ['Hazards: 2 triggered, 1 warded. Hazard marks woke under the cards.', 'Recall: Focus 2/3. Room log updated.'],
+        preferred: ['archive', 'room', 'memory', 'route', 'cards']
     }
 ];
 

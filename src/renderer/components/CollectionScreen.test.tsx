@@ -32,5 +32,11 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(gallery).toHaveTextContent(/Achievement gallery/);
         expect(gallery).toHaveTextContent(/Cosmetic gallery/);
         expect(gallery).toHaveTextContent(/in progress|missing|owned/i);
+
+        const metaBoard = screen.getByTestId('collection-meta-progression-board');
+        expect(metaBoard).toHaveTextContent(/Initiate tier - 3 honor marks to next profile level/i);
+        expect(metaBoard).toHaveTextContent(/Progression focus/i);
+        expect(metaBoard).toHaveTextContent(/Next: Week of Archives/i);
+        expect(metaBoard).toHaveTextContent(/Adept tier at profile level 3/i);
     });
 });

@@ -70,7 +70,7 @@ describe('GameplayHudBar', () => {
 
         expect(screen.getByTestId('hud-encounter-identity').textContent).toContain('Boss');
         expect(screen.getByTestId('hud-encounter-identity').getAttribute('title')).toContain('Boss pressure');
-        expect(screen.getByTestId('hud-encounter-identity').getAttribute('title')).toContain('Placeholder');
+        expect(screen.getByTestId('hud-encounter-identity').getAttribute('title')).toContain('Keystone Pair route anchor');
         expect(screen.getByTestId('hud-floor-identity-reminder')).toHaveTextContent('Boss trophy');
         expect(screen.getByTestId('hud-floor-identity-reminder').getAttribute('title')).toContain('Study the first reveal');
     });
@@ -163,7 +163,93 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-peek-charges').getAttribute('title')).toContain('Recall');
         expect(screen.getByTestId('hud-difficulty-profile')).toHaveTextContent('Standard');
         expect(screen.getByTestId('hud-combo-shards').getAttribute('title')).toContain('Temporary run currency');
+        expect(screen.getByTestId('hud-combo-shards').getAttribute('title')).toContain('Guard tokens absorb mismatch damage');
         expect(screen.getByTestId('hud-secondary-stat-drawer')).toHaveTextContent('Difficulty');
+    });
+
+    it('keeps pair progress visible in the HUD context rail', () => {
+        const baseRun = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
+        const run = {
+            ...baseRun,
+            board: {
+                ...baseRun.board!,
+                matchedPairs: 2,
+                pairCount: 5
+            }
+        } as RunState;
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement=""
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-pair-progress')).toHaveTextContent('Pairs');
+        expect(screen.getByTestId('hud-pair-progress')).toHaveTextContent('2/5');
+        expect(screen.getByTestId('hud-pair-progress').getAttribute('title')).toContain('3 pairs remain');
+    });
+
+    it('marks last-life health as critical in visible and accessible HUD copy', () => {
+        const run = {
+            ...finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false })),
+            lives: 1
+        } as RunState;
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement=""
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-lives')).toHaveAttribute('data-health', 'critical');
+        expect(screen.getByTestId('hud-lives')).toHaveTextContent('Critical 1 / 5');
+        expect(screen.getByLabelText(/Critical health; protect the last life/i)).toBeInTheDocument();
+        expect(screen.getByTestId('hud-lives').getAttribute('title')).toContain('one more unguarded hit');
+    });
+
+    it('mirrors the latest live action in a compact visible HUD chip', () => {
+        const run = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement="Match resolved. 4/6 pairs cleared. Recall focus 3/3."
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-recent-action')).toHaveTextContent('Last action');
+        expect(screen.getByTestId('hud-recent-action')).toHaveTextContent('Match resolved');
+        expect(screen.getByTestId('hud-recent-action')).toHaveAttribute('data-tone', 'info');
+        expect(screen.getByTestId('hud-recent-action').getAttribute('title')).toContain('Recall focus 3/3');
+    });
+
+    it('marks critical live action copy with the error tone', () => {
+        const run = {
+            ...finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false })),
+            lives: 1
+        } as RunState;
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement="Life lost. 1 life remains."
+                politeHudAnnouncementPriority="error"
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-recent-action')).toHaveTextContent('Critical');
+        expect(screen.getByTestId('hud-recent-action')).toHaveTextContent('Life lost');
+        expect(screen.getByTestId('hud-recent-action')).toHaveAttribute('data-tone', 'error');
     });
 
     it('shows active hazard tile count and shared hazard copy in the context rail', () => {

@@ -12,6 +12,7 @@ export type GraphicsQualityTierSnapshot = {
     boardDprCapStandard: number;
     boardDprCapCompact: number;
     menuPixiResolutionCap: number;
+    menuAtmosphereParticleCountDesktop: number;
     boardAnisotropyCap: number;
     /** Same rule as `TileBoard`: bloom post path only when not low. */
     tileBoardBloomPostPath: boolean;
@@ -29,6 +30,34 @@ export const getBoardDprCap = (quality: GraphicsQualityPreset, compact: boolean)
 export const getMenuPixiResolutionCap = (quality: GraphicsQualityPreset): number =>
     quality === 'low' ? 1.25 : quality === 'medium' ? 2 : 2.5;
 
+/** Main menu Pixi atmosphere: animated particle budget by viewport and quality preset. */
+export const getMenuAtmosphereParticleCount = (
+    width: number,
+    height: number,
+    quality: GraphicsQualityPreset
+): number => {
+    const base =
+        width <= 430 || height <= 620
+            ? 10
+            : width <= 760 || height <= 760
+              ? 16
+              : width <= 1220
+                ? 22
+                : 28;
+    const ambientPad = width <= 760 ? 2 : 4;
+    const fullBudget = base + ambientPad;
+
+    if (quality === 'low') {
+        return Math.max(8, Math.round(fullBudget * 0.58));
+    }
+
+    if (quality === 'high') {
+        return fullBudget + (width >= 1440 && height >= 820 ? 4 : 0);
+    }
+
+    return fullBudget;
+};
+
 /** WebGL tile textures: max anisotropy vs device cap (PERF-007). */
 export const getBoardAnisotropyCap = (quality: GraphicsQualityPreset): number =>
     quality === 'low' ? 2 : quality === 'medium' ? 4 : 8;
@@ -38,6 +67,7 @@ export const getGraphicsQualityTierSnapshot = (quality: GraphicsQualityPreset): 
     boardDprCapStandard: getBoardDprCap(quality, false),
     boardDprCapCompact: getBoardDprCap(quality, true),
     menuPixiResolutionCap: getMenuPixiResolutionCap(quality),
+    menuAtmosphereParticleCountDesktop: getMenuAtmosphereParticleCount(1280, 720, quality),
     boardAnisotropyCap: getBoardAnisotropyCap(quality),
     tileBoardBloomPostPath: quality !== 'low'
 });

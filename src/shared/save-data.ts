@@ -167,6 +167,13 @@ const normalizeUnlocks = (input: unknown): string[] => {
         .filter((value) => allowedPrefixes.some((prefix) => value.startsWith(prefix)));
 };
 
+const normalizeStringLedger = (input: unknown, limit: number): string[] => {
+    if (!Array.isArray(input)) {
+        return [];
+    }
+    return [...new Set(input.filter((value): value is string => typeof value === 'string'))].slice(0, limit);
+};
+
 const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
     if (!input || typeof input !== 'object' || Array.isArray(input)) {
         return null;
@@ -187,10 +194,10 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         source.runRulesVersion === undefined ? undefined : finiteNonNegativeInteger(source.runRulesVersion, Number.NaN);
     const gameMode = GAME_MODE_SET.has(source.gameMode as GameMode) ? (source.gameMode as GameMode) : undefined;
     const activeMutators = Array.isArray(source.activeMutators)
-        ? source.activeMutators.filter((value): value is MutatorId => typeof value === 'string')
+        ? [...new Set(source.activeMutators.filter((value): value is MutatorId => typeof value === 'string'))]
         : undefined;
     const relicIds = Array.isArray(source.relicIds)
-        ? source.relicIds.filter((value): value is RelicId => RELIC_ID_SET.has(value as RelicId))
+        ? [...new Set(source.relicIds.filter((value): value is RelicId => RELIC_ID_SET.has(value as RelicId)))]
         : undefined;
 
     return {
@@ -200,7 +207,7 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         highestLevel,
         achievementsEnabled: source.achievementsEnabled === true,
         unlockedAchievements: Array.isArray(source.unlockedAchievements)
-            ? source.unlockedAchievements.filter((id): id is AchievementId => ACHIEVEMENT_IDS.includes(id as AchievementId))
+            ? [...new Set(source.unlockedAchievements.filter((id): id is AchievementId => ACHIEVEMENT_IDS.includes(id as AchievementId)))]
             : [],
         bestStreak,
         perfectClears,
@@ -211,7 +218,8 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         ...(activeMutators ? { activeMutators } : {}),
         ...(relicIds ? { relicIds } : {}),
         ...(typeof source.practiceMode === 'boolean' ? { practiceMode: source.practiceMode } : {}),
-        ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {})
+        ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {}),
+        ...(typeof source.dungeonShowcaseRun === 'boolean' ? { dungeonShowcaseRun: source.dungeonShowcaseRun } : {})
     };
 };
 
@@ -225,6 +233,7 @@ export const createDefaultSaveData = (): SaveData => ({
     achievements: createAchievementState(),
     settings: { ...DEFAULT_SETTINGS, debugFlags: { ...DEFAULT_SETTINGS.debugFlags } },
     onboardingDismissed: false,
+    firstRunHelpDismissed: false,
     lastRunSummary: null,
     playerStats: defaultPlayerStats(),
     unlocks: [],
@@ -286,10 +295,7 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
     const psIn: Partial<PlayerStatsPersisted> = input.playerStats ?? {};
     const dailiesCount = finiteNonNegativeInteger(psIn.dailiesCompleted, defaultPlayerStats().dailiesCompleted);
     const relicPickCounts = normalizeRelicPickCounts(psIn.relicPickCounts);
-    const relicShrineExtraPickUnlocked =
-        psIn.relicShrineExtraPickUnlocked === true ||
-        mergedAchievements.ACH_SEVEN_DAILIES === true ||
-        dailiesCount >= 7;
+    const relicShrineExtraPickUnlocked = psIn.relicShrineExtraPickUnlocked === true;
     const lastRunSummary =
         migrationGate.keepLastRunSummary ? normalizeLastRunSummary(input.lastRunSummary) : defaults.lastRunSummary;
 
@@ -351,6 +357,8 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
             }
         },
         onboardingDismissed: typeof input.onboardingDismissed === 'boolean' ? input.onboardingDismissed : defaults.onboardingDismissed,
+        firstRunHelpDismissed:
+            typeof input.firstRunHelpDismissed === 'boolean' ? input.firstRunHelpDismissed : defaults.firstRunHelpDismissed,
         lastRunSummary,
         playerStats: {
             ...defaultPlayerStats(),
@@ -363,7 +371,7 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
                 defaultPlayerStats().dailyStreakCosmetic
             ),
             encorePairKeysLastRun: Array.isArray(input.playerStats?.encorePairKeysLastRun)
-                ? input.playerStats.encorePairKeysLastRun.filter((value): value is string => typeof value === 'string')
+                ? normalizeStringLedger(input.playerStats.encorePairKeysLastRun, 80)
                 : defaultPlayerStats().encorePairKeysLastRun,
             puzzleCompletions: normalizePuzzleCompletions(input.playerStats?.puzzleCompletions),
             relicPickCounts,
@@ -391,7 +399,7 @@ export const mergeDailyComplete = (save: SaveData, completedDateKeyUtc: string):
             dailiesCompleted: newDailies,
             lastDailyDateKeyUtc: completedDateKeyUtc,
             dailyStreakCosmetic: streak,
-            relicShrineExtraPickUnlocked: newDailies >= 7 || ps.relicShrineExtraPickUnlocked === true
+            relicShrineExtraPickUnlocked: ps.relicShrineExtraPickUnlocked === true
         }
     });
 };

@@ -72,6 +72,9 @@ const selectedDungeonNode = (run: RunState): DungeonRunNode | null =>
           ? run.dungeonRun.nodes.find((node) => node.id === run.dungeonRun.selectedNodeId) ?? null
           : null;
 
+const routeLabelForNode = (node: DungeonRunNode, routeType: string | null): string =>
+    node.routeApproachLabel ?? routeType ?? node.routeApproachType ?? node.routeType;
+
 const bossIdForRun = (run: RunState): DungeonBossId | null =>
     run.board?.dungeonBossId ??
     run.board?.tiles.find((tile) => tile.dungeonBossId != null)?.dungeonBossId ??
@@ -116,7 +119,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
             id: 'dungeon_route',
             label: 'Route taken',
             value: selectedNode
-                ? `${selectedNode.label} via ${routeType ?? selectedNode.routeType}`
+                ? `${selectedNode.label} via ${routeLabelForNode(selectedNode, routeType)}`
                 : `${routeType} route`,
             detail: selectedNode?.detail ?? `Selected after floor ${run.pendingRouteCardPlan?.sourceLevel ?? run.board?.level ?? 'unknown'}.`,
             persistence: 'ephemeral_run',

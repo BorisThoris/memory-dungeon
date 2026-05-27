@@ -16,9 +16,13 @@ import {
     GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS,
     GAME_RULES_VERSION,
     MATCH_DELAY_MS,
+    MAX_COMBO_SHARDS,
     MAX_GUARD_TOKENS,
     MAX_LIVES,
     MEMORIZE_BONUS_PER_LIFE_LOST_MS,
+    RECALL_CLUE_MATCH_SCORE,
+    RECALL_FOCUS_MAX,
+    RECALL_FOCUS_MATCH_SCORE,
     SHIFTING_BOUNTY_MATCH_BONUS,
     SHIFTING_WARD_MATCH_PENALTY,
     TOLL_CACHE_MATCH_SCORE_TOLL,
@@ -107,6 +111,7 @@ import {
     applyRouteChoiceOutcome,
     claimRouteSideRoomChoice,
     generateRouteChoices,
+    getRouteChoiceAvailability,
     claimRouteSideRoomPrimary,
     openRouteSideRoom,
     skipRouteSideRoom
@@ -114,6 +119,7 @@ import {
 import {
     createDungeonRunMapState,
     getSelectedDungeonNode,
+    inspectDungeonRunMapProgression,
     revealDungeonChoices
 } from './run-map';
 import {
@@ -226,6 +232,190 @@ describe('getMismatchFloaterAnchorTileIds', () => {
             tileIdB: 'b',
             tileIdC: 'c'
         });
+    });
+});
+
+describe('Recall Focus memory loop', () => {
+    const createMemorizeRunAfterRecall = (
+        previous: NonNullable<RunState['lastLevelResult']>,
+        routeApproachType?: RouteNodeType
+    ): RunState => {
+        const base = createRun(
+            [
+                createTile('a1', 'A', 'A'),
+                createTile('a2', 'A', 'A'),
+                createTile('b1', 'B', 'B'),
+                createTile('b2', 'B', 'B')
+            ],
+            {
+                gameMode: 'endless',
+                status: 'memorize',
+                lastLevelResult: previous
+            }
+        );
+
+        return {
+            ...base,
+            dungeonRun: routeApproachType
+                ? {
+                      ...base.dungeonRun,
+                      nodes: base.dungeonRun.nodes.map((node) =>
+                          node.id === base.dungeonRun.currentNodeId ? { ...node, routeApproachType } : node
+                      )
+                  }
+                : base.dungeonRun
+        };
+    };
+
+    const previousRecallResult = (
+        overrides: Partial<NonNullable<RunState['lastLevelResult']>> = {}
+    ): NonNullable<RunState['lastLevelResult']> => ({
+        level: 1,
+        scoreGained: 100,
+        rating: 'S',
+        livesRemaining: 5,
+        perfect: true,
+        mistakes: 0,
+        clearLifeReason: 'perfect',
+        clearLifeGained: 0,
+        recallMatches: 2,
+        recallBonusScore: RECALL_FOCUS_MATCH_SCORE * 2,
+        ...overrides
+    });
+
+    it('adds recall score and builds focus on clean remembered matches', () => {
+        const run = {
+            ...createRun([
+                createTile('a1', 'A', 'A'),
+                createTile('a2', 'A', 'A'),
+                createTile('b1', 'B', 'B'),
+                createTile('b2', 'B', 'B')
+            ]),
+            gameMode: 'endless' as const
+        };
+        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'a2'));
+
+        expect(run.recallFocus).toBe(1);
+        expect(resolved.recallFocus).toBe(2);
+        expect(resolved.recallMatchesThisFloor).toBe(1);
+        expect(resolved.recallBonusScoreThisFloor).toBe(RECALL_FOCUS_MATCH_SCORE);
+        expect(resolved.stats.currentLevelScore).toBe(
+            calculateMatchScore(1, 1, 1) + RECALL_FOCUS_MATCH_SCORE
+        );
+    });
+
+    it('pays an extra clue recall bonus when the player matches remembered scouted information', () => {
+        const run = {
+            ...createRun([
+                createTile('a1', 'A', 'A', { routeSpecialKind: 'mystery_veil', routeSpecialRevealed: true }),
+                createTile('a2', 'A', 'A', { routeSpecialKind: 'mystery_veil', routeSpecialRevealed: true }),
+                createTile('b1', 'B', 'B'),
+                createTile('b2', 'B', 'B')
+            ]),
+            gameMode: 'endless' as const
+        };
+        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'a2'));
+
+        expect(resolved.recallBonusScoreThisFloor).toBe(RECALL_FOCUS_MATCH_SCORE + RECALL_CLUE_MATCH_SCORE);
+        expect(resolved.stats.currentLevelScore).toBe(
+            calculateMatchScore(1, 1, 1) + RECALL_FOCUS_MATCH_SCORE + RECALL_CLUE_MATCH_SCORE
+        );
+    });
+
+    it('caps persisted recall focus before awarding match score', () => {
+        const run = {
+            ...createRun([
+                createTile('a1', 'A', 'A'),
+                createTile('a2', 'A', 'A'),
+                createTile('b1', 'B', 'B'),
+                createTile('b2', 'B', 'B')
+            ]),
+            gameMode: 'endless' as const,
+            recallFocus: RECALL_FOCUS_MAX + 10
+        };
+        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'a2'));
+
+        expect(resolved.recallFocus).toBe(RECALL_FOCUS_MAX);
+        expect(resolved.recallBonusScoreThisFloor).toBe(RECALL_FOCUS_MAX * RECALL_FOCUS_MATCH_SCORE);
+        expect(resolved.stats.currentLevelScore).toBe(
+            calculateMatchScore(1, 1, 1) + RECALL_FOCUS_MAX * RECALL_FOCUS_MATCH_SCORE
+        );
+    });
+
+    it('degrades focus and records forgotten tiles on mismatch and shuffle', () => {
+        const run = createRun([
+            createTile('a1', 'A', 'A'),
+            createTile('a2', 'A', 'A'),
+            createTile('b1', 'B', 'B'),
+            createTile('b2', 'B', 'B')
+        ]);
+
+        const missed = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'b1'));
+        expect(missed.recallFocus).toBe(0);
+        expect(missed.recallMistakesThisFloor).toBe(1);
+        expect(missed.forgottenTileIdsThisFloor).toEqual(['a1', 'b1']);
+
+        const shuffled = applyShuffle({ ...run, shuffleCharges: 1 });
+        expect(shuffled.recallFocus).toBe(0);
+        expect(shuffled.forgottenTileIdsThisFloor).toEqual(
+            expect.arrayContaining(['a1', 'a2', 'b1', 'b2'])
+        );
+    });
+
+    it('settles forgotten tile markers when the player recalls and matches them later', () => {
+        const run = createRun([
+            createTile('a1', 'A', 'A'),
+            createTile('a2', 'A', 'A'),
+            createTile('b1', 'B', 'B'),
+            createTile('b2', 'B', 'B')
+        ]);
+
+        const missed = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'b1'));
+        const recovered = resolveBoardTurn(flipTile(flipTile(missed, 'a1'), 'a2'));
+
+        expect(missed.forgottenTileIdsThisFloor).toEqual(['a1', 'b1']);
+        expect(recovered.forgottenTileIdsThisFloor).toEqual(['b1']);
+        expect(recovered.recallMatchesThisFloor).toBe(1);
+    });
+
+    it('carries clean recall discipline into the next memorize phase', () => {
+        const run = createMemorizeRunAfterRecall(previousRecallResult());
+
+        expect(finishMemorizePhase(run).recallFocus).toBe(2);
+    });
+
+    it('starts the next room unfocused after prior recall mistakes', () => {
+        const run = createMemorizeRunAfterRecall(
+            previousRecallResult({
+                perfect: false,
+                mistakes: 1,
+                recallMatches: 1,
+                recallMistakes: 1
+            })
+        );
+
+        expect(finishMemorizePhase(run).recallFocus).toBe(0);
+    });
+
+    it('lets remembered route approach modify next-room recall focus', () => {
+        const safe = createMemorizeRunAfterRecall(previousRecallResult(), 'safe');
+        const mystery = createMemorizeRunAfterRecall(
+            previousRecallResult({ recallMatches: 1, recallBonusScore: RECALL_CLUE_MATCH_SCORE }),
+            'mystery'
+        );
+        const greedAfterMistake = createMemorizeRunAfterRecall(
+            previousRecallResult({
+                perfect: false,
+                mistakes: 1,
+                recallMatches: 1,
+                recallMistakes: 1
+            }),
+            'greed'
+        );
+
+        expect(finishMemorizePhase(safe).recallFocus).toBe(RECALL_FOCUS_MAX);
+        expect(finishMemorizePhase(mystery).recallFocus).toBe(2);
+        expect(finishMemorizePhase(greedAfterMistake).recallFocus).toBe(0);
     });
 });
 
@@ -343,6 +533,21 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         expect(advanceToNextLevel(cleared)).toBe(cleared);
     });
 
+    it('refuses to bypass pending route side rooms and relic drafts', () => {
+        const sideRoomClear = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_005 }), 1);
+        const safeId = sideRoomClear.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!.id;
+        const sideRoomRun = openRouteSideRoom(applyRouteChoiceOutcome({ ...sideRoomClear, lives: 3 }, safeId).run);
+
+        expect(sideRoomRun.sideRoom).not.toBeNull();
+        expect(advanceToNextLevel(sideRoomRun)).toBe(sideRoomRun);
+
+        const relicClear = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_006 }), 3);
+        const relicRun = openRelicOffer(relicClear);
+
+        expect(relicRun.relicOffer).not.toBeNull();
+        expect(advanceToNextLevel(relicRun)).toBe(relicRun);
+    });
+
     it('still advances a non-puzzle levelComplete run', () => {
         const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_004 }), 1);
 
@@ -351,6 +556,205 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         expect(next).not.toBe(cleared);
         expect(next.board?.level).toBe((cleared.board?.level ?? 0) + 1);
         expect(next.status).toBe('memorize');
+    });
+
+    it('does not build the next board when a levelComplete run is already dead', () => {
+        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_005 }), 1);
+        const dead: RunState = { ...cleared, lives: 0, pendingRouteCardPlan: null };
+
+        const next = advanceToNextLevel(dead);
+
+        expect(next.status).toBe('gameOver');
+        expect(next.lives).toBe(0);
+        expect(next.board).toBe(dead.board);
+        expect(next.timerState.memorizeRemainingMs).toBeNull();
+    });
+
+    it('lets death win over pending side rooms and relic drafts during floor transition', () => {
+        const sideRoomClear = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_011 }), 1);
+        const safeId = sideRoomClear.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!.id;
+        const sideRoomRun = openRouteSideRoom(applyRouteChoiceOutcome({ ...sideRoomClear, lives: 3 }, safeId).run);
+        const deadSideRoom: RunState = { ...sideRoomRun, lives: 0 };
+
+        const sideRoomNext = advanceToNextLevel(deadSideRoom);
+
+        expect(sideRoomNext.status).toBe('gameOver');
+        expect(sideRoomNext.lives).toBe(0);
+        expect(sideRoomNext.sideRoom).toBeNull();
+        expect(sideRoomNext.pendingRouteCardPlan).toBeNull();
+        expect(sideRoomNext.lastLevelResult?.livesRemaining).toBe(0);
+        expect(openRouteSideRoom({ ...sideRoomRun, sideRoom: null, lives: 0 })).toMatchObject({
+            sideRoom: null,
+            lives: 0
+        });
+
+        const relicClear = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_012 }), 3);
+        const relicRun = openRelicOffer(relicClear);
+        const deadRelic: RunState = { ...relicRun, lives: 0 };
+
+        const relicNext = advanceToNextLevel(deadRelic);
+
+        expect(relicNext.status).toBe('gameOver');
+        expect(relicNext.lives).toBe(0);
+        expect(relicNext.relicOffer).toBeNull();
+        expect(relicNext.lastLevelResult?.livesRemaining).toBe(0);
+    });
+
+    it('does not let route choices resurrect a zero-health completed floor', () => {
+        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_007 }), 1);
+        const safeId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!.id;
+        const dead: RunState = { ...cleared, lives: 0, pendingRouteCardPlan: null };
+
+        const routed = applyRouteChoiceOutcome(dead, safeId);
+
+        expect(routed).toMatchObject({ applied: false, reason: 'invalid_status' });
+        expect(routed.run).toBe(dead);
+        expect(routed.run.lives).toBe(0);
+        expect(routed.run.pendingRouteCardPlan).toBeNull();
+    });
+
+    it('does not open or accept relic drafts for a zero-health completed floor', () => {
+        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_010 }), 3);
+        const dead: RunState = { ...cleared, lives: 0, pendingRouteCardPlan: null };
+        const blockedOffer = openRelicOffer(dead);
+        const staleOfferRun: RunState = {
+            ...dead,
+            relicOffer: {
+                tier: 1,
+                options: ['extra_shuffle_charge'],
+                picksRemaining: 1,
+                pickRound: 0
+            }
+        };
+
+        expect(blockedOffer).toBe(dead);
+        expect(completeRelicPickAndAdvance(staleOfferRun, 'extra_shuffle_charge')).toBe(staleOfferRun);
+    });
+
+    it('does not resume a paused zero-health run back into play', () => {
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_008 }));
+        const paused = pauseRun(playing);
+        const pausedDead: RunState = {
+            ...paused,
+            lives: 0,
+            pendingRouteCardPlan: {
+                choiceId: 'stale:route',
+                routeType: 'safe',
+                sourceLevel: 1,
+                targetLevel: 2
+            },
+            relicOffer: {
+                tier: 1,
+                options: ['extra_shuffle_charge'],
+                picksRemaining: 1,
+                pickRound: 0
+            },
+            shopOffers: createRunShopOffers(paused)
+        };
+
+        const resumed = resumeRun(pausedDead);
+
+        expect(resumed.status).toBe('gameOver');
+        expect(resumed.lives).toBe(0);
+        expect(resumed.pendingRouteCardPlan).toBeNull();
+        expect(resumed.relicOffer).toBeNull();
+        expect(resumed.shopOffers).toEqual([]);
+        expect(resumed.timerState.pausedFromStatus).toBeNull();
+    });
+
+    it('recovers a save-loaded paused resolving run with no pending flips', () => {
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_013 }));
+        const corruptedResolvingPause: RunState = {
+            ...playing,
+            status: 'paused',
+            timerState: {
+                ...playing.timerState,
+                resolveRemainingMs: 120,
+                pausedFromStatus: 'resolving'
+            },
+            board: playing.board
+                ? {
+                      ...playing.board,
+                      flippedTileIds: []
+                  }
+                : playing.board
+        };
+
+        const resumed = resumeRun(corruptedResolvingPause);
+
+        expect(resumed.status).toBe('playing');
+        expect(resumed.timerState.resolveRemainingMs).toBeNull();
+        expect(resumed.timerState.pausedFromStatus).toBeNull();
+    });
+
+    it('does not resume a paused resolving run that has lost its board', () => {
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_014 }));
+        const missingBoardPause: RunState = {
+            ...playing,
+            status: 'paused',
+            board: null,
+            timerState: {
+                ...playing.timerState,
+                resolveRemainingMs: 120,
+                pausedFromStatus: 'resolving'
+            }
+        };
+
+        const resumed = resumeRun(missingBoardPause);
+
+        expect(resumed.status).toBe('gameOver');
+        expect(resumed.lives).toBe(0);
+        expect(resumed.pendingRouteCardPlan).toBeNull();
+        expect(resumed.relicOffer).toBeNull();
+        expect(resumed.shopOffers).toEqual([]);
+        expect(resumed.timerState.resolveRemainingMs).toBeNull();
+        expect(resumed.timerState.pausedFromStatus).toBeNull();
+    });
+
+    it('stops on the cleared board when score parasite kills during floor transition', () => {
+        const cleared = playPerfectFloors(
+            createNewRun(0, {
+                echoFeedbackEnabled: false,
+                runSeed: 30_006,
+                activeMutators: ['score_parasite']
+            }),
+            1
+        );
+        const doomed: RunState = { ...cleared, lives: 1, parasiteFloors: 3, parasiteWardRemaining: 0 };
+
+        const next = advanceToNextLevel(doomed);
+
+        expect(next.status).toBe('gameOver');
+        expect(next.lives).toBe(0);
+        expect(next.board).toBe(doomed.board);
+        expect(next.parasiteFloors).toBe(0);
+    });
+
+    it('clears next-room progress state when score parasite kills during floor transition', () => {
+        const cleared = playPerfectFloors(
+            createNewRun(0, {
+                echoFeedbackEnabled: false,
+                runSeed: 30_009,
+                activeMutators: ['score_parasite']
+            }),
+            1
+        );
+        const mysteryId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'mystery')!.id;
+        const routed = applyRouteChoiceOutcome(cleared, mysteryId);
+        const doomed: RunState = {
+            ...routed.run,
+            lives: 1,
+            parasiteFloors: 3,
+            parasiteWardRemaining: 0
+        };
+
+        const next = advanceToNextLevel(doomed);
+
+        expect(next.status).toBe('gameOver');
+        expect(next.lives).toBe(0);
+        expect(next.pendingRouteCardPlan).toBeNull();
+        expect(next.sideRoom).toBeNull();
+        expect(next.lastLevelResult?.livesRemaining).toBe(0);
     });
 });
 
@@ -387,14 +791,51 @@ describe('REG-017 route choices', () => {
         const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_002 }), 1);
         const safeId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!.id;
 
-        const healed = applyRouteChoiceOutcome({ ...cleared, lives: 3 }, safeId);
+        const healed = applyRouteChoiceOutcome({ ...cleared, lives: 3, shopGold: 2 }, safeId);
         expect(healed.applied).toBe(true);
         expect(healed.run.lives).toBe(4);
+        expect(healed.run.shopGold).toBe(1);
         expect(healed.run.lastLevelResult?.livesRemaining).toBe(4);
+        expect(healed.summaryText).toContain('Spent 1 shop gold');
 
-        const guarded = applyRouteChoiceOutcome({ ...cleared, lives: MAX_LIVES }, safeId);
+        const freeHeal = applyRouteChoiceOutcome({ ...cleared, lives: 3, shopGold: 0 }, safeId);
+        expect(freeHeal.applied).toBe(true);
+        expect(freeHeal.run.lives).toBe(4);
+        expect(freeHeal.run.shopGold).toBe(0);
+
+        const guarded = applyRouteChoiceOutcome({ ...cleared, lives: MAX_LIVES, shopGold: 2 }, safeId);
         expect(guarded.applied).toBe(true);
         expect(guarded.run.stats.guardTokens).toBe(cleared.stats.guardTokens + 1);
+        expect(guarded.run.shopGold).toBe(1);
+
+        const capped = applyRouteChoiceOutcome(
+            { ...cleared, lives: MAX_LIVES, shopGold: 2, stats: { ...cleared.stats, guardTokens: MAX_GUARD_TOKENS } },
+            safeId
+        );
+        expect(capped.applied).toBe(true);
+        expect(capped.run.stats.guardTokens).toBe(MAX_GUARD_TOKENS);
+        expect(capped.run.shopGold).toBe(2);
+        expect(capped.summaryText).toBe('Safe route: guard tokens already full.');
+    });
+
+    it('lets safe route stabilize recall lapses into next-floor memorize time', () => {
+        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_012 }), 1);
+        const safeId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!.id;
+
+        const stabilized = applyRouteChoiceOutcome(
+            {
+                ...cleared,
+                lastLevelResult: {
+                    ...cleared.lastLevelResult!,
+                    recallMistakes: 1
+                }
+            },
+            safeId
+        );
+
+        expect(stabilized.applied).toBe(true);
+        expect(stabilized.run.pendingMemorizeBonusMs).toBe(MEMORIZE_BONUS_PER_LIFE_LOST_MS);
+        expect(stabilized.summaryText).toContain('Recall stabilized');
     });
 
     it('applies greedy route payout and refuses greed at one life', () => {
@@ -414,6 +855,54 @@ describe('REG-017 route choices', () => {
         expect(refused.applied).toBe(false);
         expect(refused.reason).toBe('unavailable');
         expect(refused.run.lives).toBe(1);
+        expect(
+            getRouteChoiceAvailability(
+                { ...cleared, lives: 1 },
+                cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'greed')!
+            )
+        ).toEqual({
+            available: false,
+            reason: 'needs_more_lives',
+            label: 'Unavailable at 1 life'
+        });
+    });
+
+    it('applies a route choice only once when the choice button is double-clicked', () => {
+        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_013 }), 1);
+        const greedId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'greed')!.id;
+        const safeId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!.id;
+
+        const first = applyRouteChoiceOutcome(cleared, greedId);
+        const second = applyRouteChoiceOutcome(first.run, greedId);
+        const changed = applyRouteChoiceOutcome(first.run, safeId);
+
+        expect(first.applied).toBe(true);
+        expect(second).toMatchObject({ applied: false, reason: 'unavailable' });
+        expect(second.run).toBe(first.run);
+        expect(changed).toMatchObject({ applied: false, reason: 'unavailable' });
+        expect(changed.run).toBe(first.run);
+        expect(second.run.shopGold).toBe(cleared.shopGold + 3);
+        expect(second.run.lives).toBe(cleared.lives - 1);
+        expect(second.run.stats.totalScore).toBe(cleared.stats.totalScore + 35);
+    });
+
+    it('does not let a route button overwrite an already planned gateway route', () => {
+        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_113 }), 1);
+        const safeId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!.id;
+        const gatewayPlanned: RunState = {
+            ...cleared,
+            pendingRouteCardPlan: {
+                choiceId: `gateway:${cleared.runRulesVersion}:${cleared.runSeed}:1:greed`,
+                routeType: 'greed',
+                sourceLevel: cleared.board!.level,
+                targetLevel: cleared.board!.level + 1
+            }
+        };
+
+        const result = applyRouteChoiceOutcome(gatewayPlanned, safeId);
+
+        expect(result).toMatchObject({ applied: false, routeType: 'safe', reason: 'unavailable' });
+        expect(result.run).toBe(gatewayPlanned);
     });
 
     it('opens route side rooms and clears them through claim or skip', () => {
@@ -431,9 +920,36 @@ describe('REG-017 route choices', () => {
         expect(safeRoom.sideRoom).toMatchObject({ kind: 'rest_shrine', routeType: 'safe' });
         expect(safeClaimed.sideRoom).toBeNull();
         expect(safeClaimed.lives).toBe(5);
+        expect(safeClaimed.lastLevelResult?.livesRemaining).toBe(5);
+        expect(safeClaimed.shopGold).toBe(Math.max(0, safeRoom.shopGold - 1));
+        expect(claimRouteSideRoomPrimary({ ...safeRoom, lives: 0 })).toMatchObject({
+            sideRoom: safeRoom.sideRoom,
+            lives: 0
+        });
         expect(greedRoom.sideRoom).toMatchObject({ kind: 'bonus_reward', routeType: 'greed' });
         expect(greedSkipped.sideRoom).toBeNull();
         expect(greedSkipped.shopGold).toBe(greedRoom.shopGold);
+        const duplicateRewardRoom = {
+            ...greedRoom,
+            bonusRewardLedger: {
+                claimedInstanceIds: [
+                    (greedRoom.sideRoom!.payload as { kind: 'bonus_reward'; instanceId: string }).instanceId,
+                    (greedRoom.sideRoom!.payload as { kind: 'bonus_reward'; instanceId: string }).instanceId,
+                    42
+                ],
+                claimedRewardIds: { supply_cache: Number.NaN },
+                discoveredSecretRooms: Number.NaN,
+                openedTreasureRooms: -1
+            } as unknown as RunState['bonusRewardLedger']
+        };
+        const duplicateRewardClaim = claimRouteSideRoomPrimary(duplicateRewardRoom);
+        expect(duplicateRewardClaim.sideRoom).toBeNull();
+        expect(duplicateRewardClaim.bonusRewardLedger).toMatchObject({
+            claimedInstanceIds: [(greedRoom.sideRoom!.payload as { kind: 'bonus_reward'; instanceId: string }).instanceId],
+            claimedRewardIds: {},
+            discoveredSecretRooms: 0,
+            openedTreasureRooms: 0
+        });
         expect(mysteryRoom.sideRoom?.routeType).toBe('mystery');
         expect(mysteryRoom.sideRoom?.kind).toMatch(/run_event|bonus_reward/);
     });
@@ -464,6 +980,10 @@ describe('REG-017 route choices', () => {
                 payload: { kind: 'event_choice', eventKey: event.eventKey, choiceId: event.options[0]!.id }
             }
         };
+
+        const invalid = claimRouteSideRoomChoice(eventRun, 'missing-choice');
+        expect(invalid).toBe(eventRun);
+        expect(invalid.sideRoom).toBe(eventRun.sideRoom);
 
         const claimed = claimRouteSideRoomChoice(eventRun, choice.id);
         const expected = applyRunEventChoice({ ...eventRun, sideRoom: null }, event, choice.id).run;
@@ -527,6 +1047,7 @@ describe('REG-017 route choices', () => {
         expect(next.dungeonRun.currentNodeId).toBe(greedId);
         expect(next.dungeonRun.selectedNodeId).toBeNull();
         expect(next.dungeonRun.nodes.find((node) => node.id === greedId)?.status).toBe('current');
+        expect(next.dungeonRun.nodes.filter((node) => node.status === 'skipped')).toHaveLength(2);
         expect(next.board!.floorArchetypeId).toBe('rush_recall');
         expect(next.board!.dungeonObjectiveId).toBe('pacify_floor');
     });
@@ -622,6 +1143,7 @@ describe('REG-017 route choices', () => {
 
         const afterEnemyMiss = resolveBoardTurn(flipTile(revealed, supportPair[0]!.id));
         expect(afterEnemyMiss.lives).toBeLessThan(run.lives);
+        expect(afterEnemyMiss.pendingMemorizeBonusMs).toBe(MEMORIZE_BONUS_PER_LIFE_LOST_MS * 2);
         expect(afterEnemyMiss.board!.tiles.find((tile) => tile.id === enemyPair[0]!.id)!.dungeonCardState).toBe(
             'revealed'
         );
@@ -846,6 +1368,7 @@ describe('REG-017 route choices', () => {
         const hit = applyEnemyHazardClick(run, hazard.currentTileId);
 
         expect(hit.lives).toBe(run.lives - hazard.damage);
+        expect(hit.pendingMemorizeBonusMs).toBe(MEMORIZE_BONUS_PER_LIFE_LOST_MS * hazard.damage);
         expect(hit.enemyHazardHitsThisFloor).toBe(1);
         expect(hit.board!.tiles.find((tile) => tile.id === targetTile.id)!.state).toBe('hidden');
         expect(hit.board!.flippedTileIds).toEqual([]);
@@ -855,6 +1378,7 @@ describe('REG-017 route choices', () => {
             movingEnemyHazardCount: board.enemyHazards!.length,
             revealedMovingEnemyHazardCount: 1
         });
+        expect(getDungeonBoardPresentation(hit).alertText).toMatch(/safe matches damage revealed patrols/i);
     });
 
     it('spends guard tokens before life on enemy contact', () => {
@@ -881,6 +1405,7 @@ describe('REG-017 route choices', () => {
         const hit = applyEnemyHazardClick(guardedRun, a1.id, { advanceHazards: false });
 
         expect(hit.lives).toBe(guardedRun.lives);
+        expect(hit.pendingMemorizeBonusMs).toBe(guardedRun.pendingMemorizeBonusMs);
         expect(hit.stats.guardTokens).toBe(0);
         expect(hit.enemyHazardHitsThisFloor).toBe(1);
         expect(hit.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: a1.id });
@@ -912,6 +1437,82 @@ describe('REG-017 route choices', () => {
         expect(hit.status).toBe('gameOver');
         expect(attemptedFlip).toBe(hit);
         expect(attemptedFlip.board!.tiles.find((tile) => tile.id === a1.id)!.state).toBe('hidden');
+    });
+
+    it('does not advance enemy movement after fatal direct contact', () => {
+        const [a1, a2] = createPair('p1', 'A', 'a');
+        const [b1, b2] = createPair('p2', 'B', 'b');
+        const board = createBoard([a1, a2, b1, b2], {
+            enemyHazards: [
+                {
+                    id: 'fatal-default-hit',
+                    kind: 'sentinel',
+                    label: 'Patrol Sentry',
+                    currentTileId: a1.id,
+                    nextTileId: b1.id,
+                    pattern: 'patrol',
+                    state: 'hidden',
+                    damage: 2,
+                    hp: 1,
+                    maxHp: 1
+                }
+            ],
+            enemyHazardTurn: 0
+        });
+        const run = { ...createRun([a1, a2, b1, b2], { board, status: 'playing' }), lives: 1 };
+
+        const hit = applyEnemyHazardClick(run, a1.id);
+
+        expect(hit.status).toBe('gameOver');
+        expect(hit.board!.enemyHazardTurn).toBe(0);
+        expect(hit.board!.enemyHazards![0]).toMatchObject({
+            state: 'revealed',
+            currentTileId: a1.id,
+            nextTileId: b1.id
+        });
+    });
+
+    it('ends a resolving turn immediately when enemy contact is fatal', () => {
+        const [a1, a2] = createPair('p1', 'A', 'a');
+        const [b1, b2] = createPair('p2', 'B', 'b');
+        const [c1, c2] = createPair('p3', 'C', 'c');
+        const board = createBoard([a1, a2, b1, b2, c1, c2], {
+            flippedTileIds: [a1.id, b1.id],
+            enemyHazards: [
+                {
+                    id: 'fatal-gambit-contact',
+                    kind: 'sentinel',
+                    label: 'Patrol Sentry',
+                    currentTileId: c1.id,
+                    nextTileId: c2.id,
+                    pattern: 'patrol',
+                    state: 'hidden',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 1
+                }
+            ],
+            enemyHazardTurn: 0
+        });
+        const run: RunState = {
+            ...createRun([a1, a2, b1, b2, c1, c2], { board, status: 'resolving' }),
+            lives: 1,
+            gambitAvailableThisFloor: true,
+            gambitThirdFlipUsed: false,
+            stats: { ...createRun([a1, a2, b1, b2, c1, c2]).stats, guardTokens: 0 }
+        };
+
+        const hit = applyEnemyHazardClick(run, c1.id, { advanceHazards: false });
+        const attemptedGambit = flipTile(hit, c1.id);
+        const attemptedResolve = resolveBoardTurn(hit);
+
+        expect(hit.status).toBe('gameOver');
+        expect(hit.lives).toBe(0);
+        expect(hit.board!.flippedTileIds).toEqual([a1.id, b1.id]);
+        expect(hit.board!.tiles.find((tile) => tile.id === c1.id)!.state).toBe('hidden');
+        expect(hit.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: c1.id });
+        expect(attemptedGambit).toBe(hit);
+        expect(attemptedResolve).toBe(hit);
     });
 
     it('can apply enemy contact and then flip the occupied card', () => {
@@ -1144,6 +1745,10 @@ describe('REG-017 route choices', () => {
                 .filter((tile) => tile.pairKey === enemyPair[0]!.pairKey)
                 .every((tile) => tile.state === 'removed' && tile.dungeonCardKind == null)
         ).toBe(true);
+        expect(resolved.board!.matchedPairs).toBe(run.board!.matchedPairs + 2);
+        expect(inspectBoardFairness(resolved.board!).issues.map((issue) => issue.code)).not.toContain(
+            'matched_pairs_counter_mismatch'
+        );
         expect(getDungeonObjectiveStatus({ ...resolved, board: { ...resolved.board!, dungeonObjectiveId: 'pacify_floor' } })).toMatchObject({
             completed: true,
             progress: 1,
@@ -1245,6 +1850,54 @@ describe('REG-017 route choices', () => {
         }
 
         expect([...enteredKinds].sort()).toEqual([...EXPECTED_GAMEPLAY_NODE_KINDS].sort());
+    });
+
+    it('repairs missing persistent map choices before applying a route reward', () => {
+        const runSeed = 171_091;
+        const base = createNewRun(0, { echoFeedbackEnabled: false, runSeed });
+        const board = buildBoard(1, {
+            runSeed,
+            runRulesVersion: GAME_RULES_VERSION,
+            gameMode: 'endless'
+        });
+        const routeChoices = generateRouteChoices(base, 2);
+        const completed: RunState = {
+            ...base,
+            status: 'levelComplete',
+            board,
+            dungeonRun: createDungeonRunMapState(runSeed, GAME_RULES_VERSION, 1),
+            lastLevelResult: {
+                level: 1,
+                scoreGained: 0,
+                rating: 'S',
+                livesRemaining: base.lives,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'none',
+                clearLifeGained: 0,
+                routeChoices
+            }
+        };
+        const greedChoice = routeChoices.find((candidate) => candidate.routeType === 'greed')!;
+
+        const selected = applyRouteChoiceOutcome(completed, greedChoice.id).run;
+
+        expect(getSelectedDungeonNode(selected.dungeonRun)).toMatchObject({
+            id: greedChoice.id,
+            kind: 'elite'
+        });
+        expect(inspectDungeonRunMapProgression(selected.dungeonRun).issues).toEqual([]);
+
+        const next = advanceToNextLevel(selected);
+        const currentNode = next.dungeonRun.nodes.find((node) => node.id === next.dungeonRun.currentNodeId);
+
+        expect(next.board!.level).toBe(2);
+        expect(currentNode).toMatchObject({
+            id: greedChoice.id,
+            kind: 'elite',
+            status: 'current'
+        });
+        expect(inspectDungeonRunMapProgression(next.dungeonRun).issues).toEqual([]);
     });
 
     it('gives Safe and Mystery distinct route-world profiles on next board', () => {
@@ -1372,6 +2025,7 @@ describe('REG-017 route choices', () => {
         });
 
         expect(rules).toMatchObject({
+            label: 'Mnemonic Sentinel',
             objectiveId: 'pacify_floor',
             threatBudgetFloor: 2,
             rewardBudgetFloor: 1,
@@ -1986,6 +2640,24 @@ describe('REG-017 route choices', () => {
         expect(favorCase!.relicFavorProgress).toBe(0);
         expect(favorCase!.bonusRelicPicksNextOffer).toBeGreaterThan(0);
         expect(favorCase!.favorBonusRelicPicksNextOffer).toBeGreaterThan(0);
+
+        let cappedShardCase: ReturnType<typeof applyRouteChoiceOutcome> | null = null;
+        for (let seed = 17_180; seed < 17_260; seed += 1) {
+            const candidate = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: seed }), 1);
+            const choice = candidate.lastLevelResult!.routeChoices!.find((route) => route.routeType === 'mystery')!;
+            const result = applyRouteChoiceOutcome(
+                { ...candidate, stats: { ...candidate.stats, comboShards: MAX_COMBO_SHARDS } },
+                choice.id
+            );
+            if (result.summaryText?.includes('combo shards')) {
+                cappedShardCase = result;
+                break;
+            }
+        }
+
+        expect(cappedShardCase).not.toBeNull();
+        expect(cappedShardCase!.run.stats.comboShards).toBe(MAX_COMBO_SHARDS);
+        expect(cappedShardCase!.summaryText).toBe('Mystery route: combo shards already full.');
     });
 
     it('does not apply route choices outside level complete state or with missing ids', () => {
@@ -1998,6 +2670,24 @@ describe('REG-017 route choices', () => {
 });
 
 describe('normal-run hazard tiles', () => {
+    it('keeps floor 1 generated runs hazard-free before introducing hazard tiles', () => {
+        const floorOne = buildBoard(1, {
+            gameMode: 'endless',
+            runSeed: 91_001,
+            runRulesVersion: GAME_RULES_VERSION
+        });
+        const floorTwo = buildBoard(2, {
+            gameMode: 'endless',
+            runSeed: 91_001,
+            runRulesVersion: GAME_RULES_VERSION
+        });
+
+        expect(floorOne.tiles.some((tile) => tile.tileHazardKind != null)).toBe(false);
+        expect(floorTwo.tiles.some((tile) => tile.tileHazardKind != null)).toBe(true);
+        expect(inspectBoardFairness(floorOne).issues).toEqual([]);
+        expect(inspectBoardFairness(floorTwo).issues).toEqual([]);
+    });
+
     it('generates hazard tiles deterministically across generated modes but not fixed boards', () => {
         const modes = ['endless', 'daily', 'gauntlet', 'meditation', 'puzzle'] as const;
 
@@ -2459,7 +3149,7 @@ describe('dungeon cards', () => {
         expect(blueprint.objectiveId).toBe('defeat_boss');
         expect(blueprint.threatBudget).toBeGreaterThan(blueprint.rewardBudget);
         expect(blueprint.pairedCardSpecs).toEqual(
-            expect.arrayContaining([expect.objectContaining({ bossId: 'trap_warden', label: 'Trap Warden', hp: 3 })])
+            expect.arrayContaining([expect.objectContaining({ bossId: 'trap_warden', label: 'Latch Warden', hp: 3 })])
         );
     });
 
@@ -2601,7 +3291,7 @@ describe('dungeon cards', () => {
         expect(trapBoard.dungeonObjectiveId).toBe('defeat_boss');
         expect(trapBoard.tiles.filter((tile) => tile.dungeonBossId === 'trap_warden')).toHaveLength(2);
         expect(trapBoard.tiles.find((tile) => tile.dungeonBossId === 'trap_warden')).toMatchObject({
-            label: 'Trap Warden',
+            label: 'Latch Warden',
             dungeonCardHp: 3
         });
         expect(trapBoard.tiles.some((tile) => tile.dungeonCardEffectId === 'rune_seal')).toBe(true);
@@ -2759,6 +3449,7 @@ describe('dungeon cards', () => {
         expect(presentation.objectiveText).toMatch(/Disarm the traps 0\/1/);
         expect(presentation.exitText).toBe('Levers 0/1');
         expect(presentation.alertText).toMatch(/armed trap/i);
+        expect(presentation.combatForecastText).toBeNull();
         expect(presentation.chips).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ id: 'exit', value: 'Levers 0/1' }),
@@ -2862,6 +3553,54 @@ describe('dungeon cards', () => {
         expect(presentation.chips.some((chip) => chip.id === 'room')).toBe(false);
         expect(presentation.chips.some((chip) => chip.id === 'shop')).toBe(false);
         expect(presentation.chips.some((chip) => chip.id === 'hidden')).toBe(false);
+    });
+
+    it('forecasts guard and life exposure for enemy combat pressure', () => {
+        const enemyA: Tile = {
+            ...createTile('enemy-a', 'enemy', 'E'),
+            label: 'Awake Sentry',
+            dungeonCardKind: 'enemy',
+            dungeonCardState: 'revealed',
+            dungeonCardHp: 2,
+            dungeonCardMaxHp: 2
+        };
+        const enemyB: Tile = { ...enemyA, id: 'enemy-b' };
+        const patrolTile = createTile('patrol-target', 'P', 'P');
+        const spareTile = createTile('spare', 'S', 'S');
+        const base = createRun([enemyA, enemyB, patrolTile, spareTile], { status: 'playing' });
+        const pressured: RunState = {
+            ...base,
+            stats: { ...base.stats, guardTokens: 0 },
+            board: {
+                ...base.board!,
+                tiles: [enemyA, enemyB, patrolTile, spareTile],
+                enemyHazards: [
+                    {
+                        id: 'heavy-patrol',
+                        kind: 'warden',
+                        label: 'Cache Warden',
+                        currentTileId: patrolTile.id,
+                        nextTileId: spareTile.id,
+                        pattern: 'guard',
+                        state: 'revealed',
+                        damage: 2,
+                        hp: 2,
+                        maxHp: 2
+                    }
+                ]
+            }
+        };
+
+        expect(getDungeonBoardPresentation(pressured).combatForecastText).toBe(
+            'No guard: patrol contact costs up to 2 lives; awake enemies cost 1 life on mismatch.'
+        );
+
+        expect(
+            getDungeonBoardPresentation({
+                ...pressured,
+                stats: { ...pressured.stats, guardTokens: 1 }
+            }).combatForecastText
+        ).toBe('1 guard ready: the next enemy hit spends guard before life.');
     });
 
     it('tracks dungeon objective progress and awards objective rewards on exit activation', () => {
@@ -2968,6 +3707,45 @@ describe('dungeon cards', () => {
 
         const pacified = resolveBoardTurn(flipTile(flipTile(pacifyRun, 'e1'), 'e2'));
         expect(getDungeonObjectiveStatus(pacified)).toMatchObject({ completed: true, progress: 1, required: 1 });
+
+        const movingThreatRun = createRun([createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')]);
+        const movingThreatBoard = {
+            ...movingThreatRun.board!,
+            dungeonObjectiveId: 'pacify_floor' as const,
+            enemyHazards: [
+                {
+                    id: 'moving-threat',
+                    kind: 'sentinel' as const,
+                    label: 'Patrol Sentry',
+                    currentTileId: 'a1',
+                    nextTileId: 'a2',
+                    pattern: 'patrol' as const,
+                    state: 'hidden' as const,
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 1
+                }
+            ]
+        };
+        expect(getDungeonObjectiveStatus({ ...movingThreatRun, board: movingThreatBoard })).toMatchObject({
+            completed: false,
+            progress: 0,
+            required: 1
+        });
+        expect(
+            getDungeonObjectiveStatus({
+                ...movingThreatRun,
+                board: {
+                    ...movingThreatBoard,
+                    enemyHazards: movingThreatBoard.enemyHazards.map((hazard) => ({
+                        ...hazard,
+                        hp: 0,
+                        state: 'defeated' as const
+                    }))
+                },
+                enemyHazardsDefeatedThisFloor: 1
+            })
+        ).toMatchObject({ completed: true, progress: 1, required: 1 });
 
         const trapRun = createRun([
             {
@@ -3307,6 +4085,20 @@ describe('dungeon cards', () => {
         expect(rushSentinel.stats.comboShards).toBe(1);
         expect(rushSentinel.stats.totalScore).toBeGreaterThan(trapWarden.stats.totalScore);
         expect(getDungeonCardCopy(bossPair('rush_sentinel', 'Rush Sentinel')[0])).toMatch(/combo shard/i);
+
+        const meditationRushSentinel = resolveBoardTurn(
+            flipTile(
+                flipTile(
+                    {
+                        ...createRun(bossPair('rush_sentinel', 'Rush Sentinel')),
+                        gameMode: 'meditation'
+                    },
+                    'rush_sentinel-a'
+                ),
+                'rush_sentinel-b'
+            )
+        );
+        expect(meditationRushSentinel.stats.comboShards).toBe(1);
 
         const treasureKeeper = resolveBoardTurn(
             flipTile(
@@ -3672,6 +4464,28 @@ describe('dungeon cards', () => {
         expect(purchased.shopGold).toBe(run.shopGold - peek.cost);
         expect(repurchased.shopGold).toBe(purchased.shopGold);
         expect(repurchased.peekCharges).toBe(purchased.peekCharges);
+    });
+
+    it('rechecks shop compatibility when the run becomes full after offers were generated', () => {
+        const damagedRun = {
+            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_043 })),
+            lives: MAX_LIVES - 1,
+            shopGold: 10
+        };
+        const staleShopRun = {
+            ...damagedRun,
+            lives: MAX_LIVES,
+            shopOffers: createRunShopOffers(damagedRun)
+        };
+        const heal = staleShopRun.shopOffers.find((offer) => offer.itemId === 'heal_life')!;
+
+        expect(heal.compatible).toBe(true);
+        expect(getRunShopReadModel(staleShopRun).availableOfferCount).toBe(
+            staleShopRun.shopOffers.filter(
+                (offer) => offer.itemId !== 'heal_life' && staleShopRun.shopGold >= offer.cost
+            ).length
+        );
+        expect(purchaseShopOffer(staleShopRun, heal.id)).toBe(staleShopRun);
     });
 
     it('spawns room cards on some dungeon floors', () => {
@@ -4932,6 +5746,17 @@ describe('REG-015 run shop wallet', () => {
         expect(destroyOffer.unavailableReason).toBeNull();
         expect(destroyOffer.stackLimit).toBeNull();
         expect(purchaseShopOffer({ ...stockedDestroy, shopOffers: [destroyOffer], shopGold: 99 }, destroyOffer.id).destroyPairCharges).toBe(8);
+
+        const noDestroyRun = {
+            ...stockedDestroy,
+            activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
+        };
+        const lockedDestroy = createRunShopOffers(noDestroyRun).find((offer) => offer.itemId === 'destroy_charge')!;
+        expect(lockedDestroy.compatible).toBe(false);
+        expect(lockedDestroy.unavailableReason).toBe('No-destroy contract locks this item.');
+        expect(purchaseShopOffer({ ...noDestroyRun, shopOffers: [destroyOffer], shopGold: 99 }, destroyOffer.id).destroyPairCharges).toBe(
+            stockedDestroy.destroyPairCharges
+        );
     });
 
     it('sells run-local dungeon keys', () => {
@@ -5784,7 +6609,7 @@ describe('game rules', () => {
         expect(nextRun.pinnedTileIds).toEqual([]);
     });
 
-    it('grants destroy charge on perfect clear when advancing into the uncapped run bank', () => {
+    it('does not grant destroy charges from clean clears when advancing floors', () => {
         const base = {
             ...createNewRun(0),
             status: 'levelComplete' as const,
@@ -5801,7 +6626,7 @@ describe('game rules', () => {
                 clearLifeGained: 0
             }
         };
-        expect(advanceToNextLevel(base).destroyPairCharges).toBe(1);
+        expect(advanceToNextLevel(base).destroyPairCharges).toBe(0);
 
         const clean = {
             ...base,
@@ -5817,7 +6642,7 @@ describe('game rules', () => {
             destroyPairCharges: 7,
             lastLevelResult: { ...base.lastLevelResult!, mistakes: 0 }
         };
-        expect(advanceToNextLevel(stocked).destroyPairCharges).toBe(8);
+        expect(advanceToNextLevel(stocked).destroyPairCharges).toBe(7);
     });
 
     it('can disable achievements when debug reveal is used', () => {
@@ -6885,9 +7710,46 @@ describe('computeRelicOfferPickBudget', () => {
         });
         expect(computeRelicOfferPickBudget(run)).toBe(3);
     });
+
+    it('clamps malformed bonus-pick counters before draft budgeting', () => {
+        const run: RunState = {
+            ...createNewRun(0),
+            bonusRelicPicksNextOffer: Number.NaN,
+            metaRelicDraftExtraPerMilestone: Number.POSITIVE_INFINITY
+        };
+
+        expect(computeRelicOfferPickBudget(run)).toBe(1);
+        expect(grantBonusRelicPickNextOffer(run, Number.NaN).bonusRelicPicksNextOffer).toBe(0);
+        expect(grantBonusRelicPickNextOffer({ ...run, bonusRelicPicksNextOffer: -2 }, 2.9).bonusRelicPicksNextOffer).toBe(2);
+    });
 });
 
 describe('relic draft multi-pick', () => {
+    it('rejects a stale offer option for a relic the run already owns', () => {
+        const run: RunState = {
+            ...createNewRun(999, { gameMode: 'endless', initialRelicIds: ['extra_shuffle_charge'] }),
+            status: 'levelComplete',
+            relicOffer: {
+                tier: 1,
+                options: ['extra_shuffle_charge'],
+                picksRemaining: 1,
+                pickRound: 0
+            },
+            lastLevelResult: {
+                level: 3,
+                scoreGained: 1,
+                rating: 'S',
+                livesRemaining: 3,
+                perfect: false,
+                mistakes: 0,
+                clearLifeReason: 'none',
+                clearLifeGained: 0
+            }
+        };
+
+        expect(completeRelicPickAndAdvance(run, 'extra_shuffle_charge')).toBe(run);
+    });
+
     it('skips an exhausted initial relic offer instead of opening an empty draft', () => {
         let run = createNewRun(999, { gameMode: 'daily' });
         run = {

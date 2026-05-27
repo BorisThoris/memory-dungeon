@@ -24,6 +24,7 @@ import scoreParasiteCrystalUrl from '../assets/ui/icons/icon-score-parasite-crys
 import shuffleIconUrl from '../assets/ui/icons/icon-shuffle-v1.svg?url';
 import { PERFECT_MEMORY_BASE_RULES, perfectMemoryHudKind } from '../copy/perfectMemory';
 import { REG106_HUD_IA } from '../gameplay/regPhase4PlayContract';
+import { formatHudActionFeedbackText } from '../hooks/useHudPoliteLiveAnnouncement';
 import styles from './GameScreen.module.css';
 
 const MUTATOR_HUD_LABELS: Record<MutatorId, string> = {
@@ -116,6 +117,8 @@ export interface GameplayHudBarProps {
     gauntletRemainingMs: number | null;
     /** HUD-015: low-frequency status line for screen readers (`aria-live="polite"`). */
     politeHudAnnouncement?: string;
+    /** Mirrors the visible board feedback tone in compact HUD context. */
+    politeHudAnnouncementPriority?: 'info' | 'error';
     /** Gates brief chain-pill emphasis animation */
     reduceMotion?: boolean;
 }
@@ -125,6 +128,7 @@ const GameplayHudBar = ({
     cameraViewportMode,
     gauntletRemainingMs,
     politeHudAnnouncement = '',
+    politeHudAnnouncementPriority = 'info',
     reduceMotion = false
 }: GameplayHudBarProps) => {
     const floorHexUid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
@@ -136,6 +140,30 @@ const GameplayHudBar = ({
         return null;
     }
 
+    const healthTone = run.lives <= 1 ? 'critical' : run.lives < MAX_LIVES ? 'wounded' : 'safe';
+    const lifeTrackLabel =
+        run.lives <= 1
+            ? `${run.lives} of ${MAX_LIVES} lives remaining. Critical health; protect the last life.`
+            : `${run.lives} of ${MAX_LIVES} lives remaining`;
+    const lifeSegmentTitle =
+        run.lives <= 1
+            ? 'Critical health: one more unguarded hit can end the run.'
+            : 'Lives carry across floors; clean clears, routes, shops, rests, and shrines can restore them.';
+    const resourceSegmentTitle = [
+        temporaryCurrencyPurpose(run, 'combo_shards'),
+        'Guard tokens absorb mismatch damage before lives are lost.'
+    ]
+        .filter(Boolean)
+        .join(' ');
+    const matchedPairCount = Math.min(board.pairCount, board.matchedPairs);
+    const remainingPairCount = Math.max(0, board.pairCount - matchedPairCount);
+    const pairProgressTitle =
+        remainingPairCount === 0
+            ? 'All required pairs are clear. The exit or floor clear prompt is ready.'
+            : `${remainingPairCount} ${remainingPairCount === 1 ? 'pair remains' : 'pairs remain'} before the floor is clear.`;
+    const compactHudAnnouncement = politeHudAnnouncement
+        ? formatHudActionFeedbackText(politeHudAnnouncement, { maxChars: 76, maxSentences: 1 })
+        : '';
     const dailyDateStripKey = run.gameMode === 'daily' && run.dailyDateKeyUtc ? run.dailyDateKeyUtc : null;
     const dungeonShowcaseActive =
         run.practiceMode &&
@@ -318,8 +346,8 @@ const GameplayHudBar = ({
                                 <span className={styles.floorLabel}>Floor</span>
                                 <span className={styles.floorValue}>{board.level}</span>
                                 {board.floorTag === 'boss' ? (
-                                    <span className={styles.floorTagPill} data-testid="hud-encounter-identity" title={encounterIdentity?.payoffCopy ?? 'Boss floor scoring'}>
-                                        {encounterIdentity?.label ?? 'Boss'}
+                                    <span className={styles.floorTagPill} data-testid="hud-encounter-identity" title={encounterIdentity?.payoffCopy ?? 'Keystone Warden scoring'}>
+                                        {encounterIdentity?.label ? `Boss: ${encounterIdentity.label}` : 'Boss'}
                                     </span>
                                 ) : board.floorTag === 'breather' ? (
                                     <span className={styles.floorTagPill} data-testid="hud-floor-identity" title={floorIdentity.activeReminder}>
@@ -338,12 +366,17 @@ const GameplayHudBar = ({
                          * Product: honest contract — always render MAX_LIVES heart slots plus an explicit
                          * current/max readout so five empty/filled slots stay legible on narrow HUD widths.
                          */}
-                        <div className={`${styles.hudSegment} ${styles.hudLivesSegment}`}>
+                        <div
+                            className={`${styles.hudSegment} ${styles.hudLivesSegment}`}
+                            data-health={healthTone}
+                            data-testid="hud-lives"
+                            title={lifeSegmentTitle}
+                        >
                             <span className={styles.statKey}>Lives</span>
                             <div
                                 className={styles.lifeTrack}
                                 role="group"
-                                aria-label={`${run.lives} of ${MAX_LIVES} lives remaining`}
+                                aria-label={lifeTrackLabel}
                             >
                                 {Array.from({ length: MAX_LIVES }).map((_, index) => (
                                     <span
@@ -355,15 +388,15 @@ const GameplayHudBar = ({
                                     </span>
                                 ))}
                             </div>
-                            <span className={`${styles.statSubline} ${styles.lifeCapReadout}`} aria-hidden="true">
-                                {run.lives} / {MAX_LIVES}
+                            <span className={`${styles.statSubline} ${styles.lifeCapReadout}`}>
+                                {run.lives <= 1 ? 'Critical ' : ''}{run.lives} / {MAX_LIVES}
                             </span>
                         </div>
                         <div className={styles.hudStripDivider} aria-hidden="true" />
                         <div
                             className={`${styles.hudSegment} ${styles.statPill} ${styles.hudShardsSegment}`}
                             data-testid="hud-combo-shards"
-                            title={temporaryCurrencyPurpose(run, 'combo_shards')}
+                            title={resourceSegmentTitle}
                         >
                             <span className={styles.statKey}>Shards</span>
                             <span className={`${styles.statVal} ${styles.hudShardsValue}`}>{run.stats.comboShards}</span>
@@ -493,9 +526,13 @@ const GameplayHudBar = ({
                                     <span
                                         className={styles.statSubline}
                                         data-testid="hud-floor-identity-reminder"
-                                        title={floorIdentity.counterplaySentence}
+                                        title={
+                                            board.floorTag === 'boss'
+                                                ? 'Study the first reveal, then finish the boss objective before leaving.'
+                                                : floorIdentity.counterplaySentence
+                                        }
                                     >
-                                        {floorIdentity.activeReminder}
+                                        {board.floorTag === 'boss' ? 'Boss trophy' : floorIdentity.activeReminder}
                                     </span>
                                 ) : null}
                                 {nBackLabel ? <span className={styles.statSubline}>{nBackLabel}</span> : null}
@@ -534,6 +571,14 @@ const GameplayHudBar = ({
                             </div>
 
                             <div className={styles.statRail} data-hud-priority="secondary">
+                                <div
+                                    className={styles.statPillCompact}
+                                    data-testid="hud-pair-progress"
+                                    title={pairProgressTitle}
+                                >
+                                    <span className={styles.statKey}>Pairs</span>
+                                    <span className={styles.statVal}>{matchedPairCount}/{board.pairCount}</span>
+                                </div>
                                 {gauntletRemainingMs !== null ? (
                                     <div className={styles.statPillCompact} title="Gauntlet time left">
                                         <span className={styles.statKey}>Time</span>
@@ -633,6 +678,19 @@ const GameplayHudBar = ({
                                     >
                                         <span className={styles.statKey}>Chain</span>
                                         <span className={styles.statVal}>×{run.stats.currentStreak}</span>
+                                    </div>
+                                ) : null}
+                                {compactHudAnnouncement ? (
+                                    <div
+                                        className={`${styles.statPillCompact} ${styles.hudRecentActionPill}`}
+                                        data-testid="hud-recent-action"
+                                        data-tone={politeHudAnnouncementPriority}
+                                        title={politeHudAnnouncement}
+                                    >
+                                        <span className={styles.statKey}>
+                                            {politeHudAnnouncementPriority === 'error' ? 'Critical' : 'Last action'}
+                                        </span>
+                                        <span className={styles.statVal}>{compactHudAnnouncement}</span>
                                     </div>
                                 ) : null}
                                 {inRunCauseRows.length > 0 ? (

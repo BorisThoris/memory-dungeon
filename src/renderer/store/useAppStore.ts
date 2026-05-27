@@ -46,6 +46,7 @@ import {
     applyStrayRemove,
     armRegionShuffleRow,
     cancelResolvingWithUndo,
+    collectDestroyEligibleTileIds,
     togglePinnedTile,
     toggleStrayRemoveArmed
 } from '../../shared/board-powers';
@@ -90,6 +91,10 @@ import {
     metaRelicDraftExtraPerMilestoneFromSave,
     normalizeSaveData
 } from '../../shared/save-data';
+import {
+    applyMetaProgressionUnlock,
+    type MetaProgressionUnlockResult
+} from '../../shared/meta-progression';
 import { desktopClient } from '../desktop-client';
 import { persistSaveDataThenUnlockAchievements } from './achievementPersistence';
 import {
@@ -133,6 +138,9 @@ const metaRelicOpts = (save: SaveData) => ({
     metaRelicDraftExtraPerMilestone: metaRelicDraftExtraPerMilestoneFromSave(save)
 });
 
+const isDungeonShowcaseRun = (run: RunState | null): boolean =>
+    run?.dungeonShowcaseRun === true || run?.lastRunSummary?.dungeonShowcaseRun === true;
+
 interface ActiveTimer {
     deadline: number;
     timeout: ReturnType<typeof setTimeout>;
@@ -148,6 +156,7 @@ interface AppState {
     saveData: SaveData;
     settings: Settings;
     run: RunState | null;
+    runStartSaveData: SaveData | null;
     newlyUnlockedAchievements: AchievementId[];
     /** Non-blocking copy when Steam achievement sync fails (local save still applied). */
     achievementBridgeNotice: string | null;
@@ -201,6 +210,7 @@ interface AppState {
     closeSettings: () => void;
     updateSettings: (settings: Settings) => Promise<void>;
     dismissHowToPlay: () => Promise<void>;
+    claimMetaProgressionReward: (rowId: string) => MetaProgressionUnlockResult;
     pressTile: (tileId: string) => void;
     closeDungeonExitPrompt: () => void;
     activateDungeonExitFromPrompt: (spend?: DungeonExitActivationSpend) => void;
@@ -228,6 +238,24 @@ interface AppState {
     endRun: () => void;
     triggerDebugReveal: () => void;
 }
+
+const RUN_SURFACE_RESET = {
+    boardPinMode: false,
+    destroyPairArmed: false,
+    peekModeArmed: false,
+    dungeonExitPromptOpen: false,
+    shopReturnMode: null,
+    ...BOARD_FLOATER_POP_CLEAR
+} satisfies Pick<
+    AppState,
+    | 'boardPinMode'
+    | 'destroyPairArmed'
+    | 'peekModeArmed'
+    | 'dungeonExitPromptOpen'
+    | 'shopReturnMode'
+    | 'matchScorePop'
+    | 'mismatchScorePop'
+>;
 
 let memorizeTimer: ActiveTimer | null = null;
 let resolveTimer: ActiveTimer | null = null;
@@ -476,11 +504,12 @@ const applyResolvedRun = (resolvedRun: RunState): void => {
 
         useAppStore.setState({
             run: nextRun,
+            runStartSaveData: state.runStartSaveData,
             view: 'gameOver',
             saveData: nextSave,
             settings: nextSave.settings,
             newlyUnlockedAchievements: unlockedAchievements,
-            ...BOARD_FLOATER_POP_CLEAR
+            ...RUN_SURFACE_RESET
         });
     } else {
         nextSave = mergeHonorUnlockTags(nextSave);
@@ -489,7 +518,8 @@ const applyResolvedRun = (resolvedRun: RunState): void => {
             view: 'playing',
             saveData: nextSave,
             settings: nextSave.settings,
-            newlyUnlockedAchievements: unlockedAchievements
+            newlyUnlockedAchievements: unlockedAchievements,
+            dungeonExitPromptOpen: false
         });
     }
 
@@ -510,11 +540,7 @@ const applyResolvedRun = (resolvedRun: RunState): void => {
 const applyImmediateGameOverFromTilePress = (resolvedRun: RunState): void => {
     applyResolvedRun(resolvedRun);
     useAppStore.setState({
-        boardPinMode: false,
-        destroyPairArmed: false,
-        peekModeArmed: false,
-        dungeonExitPromptOpen: false,
-        ...BOARD_FLOATER_POP_CLEAR
+        ...RUN_SURFACE_RESET
     });
 };
 
@@ -626,13 +652,23 @@ const freezeRun = (run: RunState): RunState => {
 };
 
 /**
- * SIDE-013 — In-run meta overlays (settings modal, inventory/codex shell)
+ * SIDE-013 - In-run meta overlays (settings modal, inventory/codex shell)
  * share one freeze policy: snapshot timers into `paused` for resumable states; leave user-pause and
  * floor-level overlays (`levelComplete`, `gameOver`) unchanged so `closeSubscreen` / `closeSettings`
  * do not double-clobber `pausedFromStatus`.
  */
 const freezeRunSnapshotForPlayingMetaOverlay = (run: RunState): RunState =>
     run.status === 'paused' || run.status === 'levelComplete' || run.status === 'gameOver' ? run : freezeRun(run);
+
+const runCanPause = (run: RunState): boolean =>
+    run.status === 'memorize' || run.status === 'playing' || run.status === 'resolving';
+
+const runCanUseShopSurface = (run: RunState, shopReturnMode: AppState['shopReturnMode']): boolean =>
+    (run.status === 'levelComplete' && run.lives > 0) ||
+    (shopReturnMode === 'floor' &&
+        run.status === 'paused' &&
+        run.lives > 0 &&
+        run.timerState.pausedFromStatus !== null);
 
 const resumeRunWithTimers = (run: RunState): RunState => {
     const resumedRun = resumeRun(run);
@@ -652,6 +688,23 @@ const resumeRunWithTimers = (run: RunState): RunState => {
     return resumedRun;
 };
 
+const routeDeadInterludeRunToGameOver = (run: RunState): boolean => {
+    if (run.status !== 'gameOver' && run.lives > 0) {
+        return false;
+    }
+
+    applyResolvedRun({
+        ...run,
+        status: 'gameOver',
+        lives: 0,
+        pendingRouteCardPlan: null,
+        sideRoom: null,
+        relicOffer: null,
+        shopOffers: []
+    });
+    return true;
+};
+
 export const useAppStore = create<AppState>((set, get) => ({
     hydrated: false,
     hydrating: false,
@@ -662,6 +715,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     saveData: createDefaultSaveData(),
     settings: createDefaultSaveData().settings,
     run: null,
+    runStartSaveData: null,
     newlyUnlockedAchievements: [],
     achievementBridgeNotice: null,
     clearAchievementBridgeNotice: () => {
@@ -741,10 +795,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
 
         prepareMemorizeTimerForBoardReady(run);
@@ -752,8 +805,9 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     startDungeonShowcaseRun: () => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createDungeonShowcaseRun(get().saveData.bestScore, metaRelicOpts(get().saveData)),
+            createDungeonShowcaseRun(saveData.bestScore, metaRelicOpts(saveData)),
             get().settings
         );
         trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode, showcase: 'dungeon' });
@@ -762,10 +816,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
 
         prepareMemorizeTimerForBoardReady(run);
@@ -773,8 +826,9 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     startDailyRun: () => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createDailyRun(get().saveData.bestScore, metaRelicOpts(get().saveData)),
+            createDailyRun(saveData.bestScore, metaRelicOpts(saveData)),
             get().settings
         );
         trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });
@@ -782,18 +836,18 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
         prepareMemorizeTimerForBoardReady(run);
     },
 
     startGauntletRun: (durationMs = 10 * 60 * 1000) => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createGauntletRun(get().saveData.bestScore, durationMs, metaRelicOpts(get().saveData)),
+            createGauntletRun(saveData.bestScore, durationMs, metaRelicOpts(saveData)),
             get().settings
         );
         trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });
@@ -801,10 +855,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
         prepareMemorizeTimerForBoardReady(run);
     },
@@ -815,8 +868,9 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createPuzzleRun(get().saveData.bestScore, puzzle.id, puzzle.tiles, 1, metaRelicOpts(get().saveData)),
+            createPuzzleRun(saveData.bestScore, puzzle.id, puzzle.tiles, 1, metaRelicOpts(saveData)),
             get().settings
         );
         trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode, puzzleId: puzzle.id });
@@ -824,18 +878,18 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
         prepareMemorizeTimerForBoardReady(run);
     },
 
     startPracticeRun: () => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createNewRun(get().saveData.bestScore, { practiceMode: true, ...metaRelicOpts(get().saveData) }),
+            createNewRun(saveData.bestScore, { practiceMode: true, ...metaRelicOpts(saveData) }),
             get().settings
         );
         trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });
@@ -843,19 +897,19 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
         prepareMemorizeTimerForBoardReady(run);
     },
 
     startScholarContractRun: () => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createNewRun(get().saveData.bestScore, {
-                ...metaRelicOpts(get().saveData),
+            createNewRun(saveData.bestScore, {
+                ...metaRelicOpts(saveData),
                 activeContract: {
                     noShuffle: true,
                     noDestroy: true,
@@ -870,18 +924,18 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
         prepareMemorizeTimerForBoardReady(run);
     },
 
     startMeditationRun: () => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createMeditationRun(get().saveData.bestScore, undefined, metaRelicOpts(get().saveData)),
+            createMeditationRun(saveData.bestScore, undefined, metaRelicOpts(saveData)),
             get().settings
         );
         trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });
@@ -889,18 +943,18 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
         prepareMemorizeTimerForBoardReady(run);
     },
 
     startMeditationRunWithMutators: (mutators) => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createMeditationRun(get().saveData.bestScore, mutators, metaRelicOpts(get().saveData)),
+            createMeditationRun(saveData.bestScore, mutators, metaRelicOpts(saveData)),
             get().settings
         );
         trackEvent('run_start', {
@@ -913,19 +967,19 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
         prepareMemorizeTimerForBoardReady(run);
     },
 
     startPinVowRun: () => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createNewRun(get().saveData.bestScore, {
-                ...metaRelicOpts(get().saveData),
+            createNewRun(saveData.bestScore, {
+                ...metaRelicOpts(saveData),
                 activeContract: { noShuffle: false, noDestroy: false, maxMismatches: null, maxPinsTotalRun: 10 }
             }),
             get().settings
@@ -935,18 +989,18 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
         prepareMemorizeTimerForBoardReady(run);
     },
 
     startWildRun: () => {
         clearAllTimers();
+        const saveData = get().saveData;
         const run = patchRunFromUserSettings(
-            createWildRun(get().saveData.bestScore, metaRelicOpts(get().saveData)),
+            createWildRun(saveData.bestScore, metaRelicOpts(saveData)),
             get().settings
         );
         trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode, wild: true });
@@ -954,10 +1008,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run
+            ...RUN_SURFACE_RESET,
+            run,
+            runStartSaveData: saveData
         });
         prepareMemorizeTimerForBoardReady(run);
     },
@@ -967,10 +1020,13 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (!run?.relicOffer?.options.includes(relicId)) {
             return;
         }
+        const nextRun = completeRelicPickAndAdvance(run, relicId);
+        if (nextRun === run) {
+            return;
+        }
         clearAllTimers();
         void resumeAudioContext();
         playRelicPickSfx(sfxGainFromStore());
-        const nextRun = completeRelicPickAndAdvance(run, relicId);
         let nextSave = mergeRelicPickStat(get().saveData, relicId);
         nextSave = normalizeSaveData(nextSave);
         nextSave = mergeHonorUnlockTags(nextSave);
@@ -1009,14 +1065,12 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'menu',
             run: null,
+            runStartSaveData: null,
             newlyUnlockedAchievements: [],
             achievementBridgeNotice: null,
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
             subscreenReturnView: 'menu',
             settingsReturnView: 'menu',
-            ...BOARD_FLOATER_POP_CLEAR
+            ...RUN_SURFACE_RESET
         });
     },
 
@@ -1077,10 +1131,15 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     openShopFromLevelComplete: () => {
         const { run, view } = get();
+        if (run && view === 'playing' && run.status === 'levelComplete' && run.lives <= 0) {
+            routeDeadInterludeRunToGameOver(run);
+            return;
+        }
         if (
             !run ||
             view !== 'playing' ||
             run.status !== 'levelComplete' ||
+            run.lives <= 0 ||
             run.relicOffer ||
             run.sideRoom ||
             run.shopOffers.length === 0
@@ -1094,9 +1153,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     closeShopToFloorSummary: () => {
         const { run, shopReturnMode } = get();
         const transition = resolveNavigationTransition(get(), 'closeShopToFloorSummary');
+        const nextRun = shopReturnMode === 'floor' && run ? resumeRunWithTimers(run) : run;
+        if (nextRun?.status === 'gameOver') {
+            applyResolvedRun(nextRun);
+            set({ shopReturnMode: null });
+            return;
+        }
         set({
             view: transition.view,
-            run: shopReturnMode === 'floor' && run ? resumeRunWithTimers(run) : run,
+            run: nextRun,
             shopReturnMode: null
         });
     },
@@ -1105,9 +1170,15 @@ export const useAppStore = create<AppState>((set, get) => ({
         const { run, shopReturnMode } = get();
         if (shopReturnMode === 'floor') {
             const transition = resolveNavigationTransition(get(), 'closeShopToFloorSummary');
+            const nextRun = run ? resumeRunWithTimers(run) : run;
+            if (nextRun?.status === 'gameOver') {
+                applyResolvedRun(nextRun);
+                set({ shopReturnMode: null });
+                return;
+            }
             set({
                 view: transition.view,
-                run: run ? resumeRunWithTimers(run) : run,
+                run: nextRun,
                 shopReturnMode: null
             });
             return;
@@ -1122,12 +1193,25 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     claimSideRoomPrimary: () => {
-        const { run } = get();
-        if (!run || run.status !== 'levelComplete' || !run.sideRoom) {
+        const { run, view } = get();
+        if (view !== 'sideRoom') {
+            return;
+        }
+        if (!run) {
+            set({ view: 'menu' });
+            return;
+        }
+        if (routeDeadInterludeRunToGameOver(run)) {
+            return;
+        }
+        if (run.status !== 'levelComplete' || !run.sideRoom) {
             set({ view: 'playing' });
             return;
         }
         const nextRun = claimRouteSideRoomPrimary(run);
+        if (nextRun === run) {
+            return;
+        }
         if (nextRun.shopOffers.length > 0) {
             set({
                 run: nextRun,
@@ -1145,12 +1229,25 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     claimSideRoomChoice: (choiceId: string) => {
-        const { run } = get();
-        if (!run || run.status !== 'levelComplete' || !run.sideRoom) {
+        const { run, view } = get();
+        if (view !== 'sideRoom') {
+            return;
+        }
+        if (!run) {
+            set({ view: 'menu' });
+            return;
+        }
+        if (routeDeadInterludeRunToGameOver(run)) {
+            return;
+        }
+        if (run.status !== 'levelComplete' || !run.sideRoom) {
             set({ view: 'playing' });
             return;
         }
         const nextRun = claimRouteSideRoomChoice(run, choiceId);
+        if (nextRun === run) {
+            return;
+        }
         if (nextRun.shopOffers.length > 0) {
             set({
                 run: nextRun,
@@ -1168,8 +1265,18 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     skipSideRoom: () => {
-        const { run } = get();
-        if (!run || run.status !== 'levelComplete' || !run.sideRoom) {
+        const { run, view } = get();
+        if (view !== 'sideRoom') {
+            return;
+        }
+        if (!run) {
+            set({ view: 'menu' });
+            return;
+        }
+        if (routeDeadInterludeRunToGameOver(run)) {
+            return;
+        }
+        if (run.status !== 'levelComplete' || !run.sideRoom) {
             set({ view: 'playing' });
             return;
         }
@@ -1196,6 +1303,11 @@ export const useAppStore = create<AppState>((set, get) => ({
 
         if (transition.resumeRun) {
             const nextRun = run?.status === 'paused' ? resumeRunWithTimers(run) : run;
+            if (nextRun?.status === 'gameOver') {
+                applyResolvedRun(nextRun);
+                set({ subscreenReturnView: 'menu' });
+                return;
+            }
             set({
                 view: transition.view,
                 subscreenReturnView: transition.subscreenReturnView,
@@ -1235,6 +1347,11 @@ export const useAppStore = create<AppState>((set, get) => ({
 
         if (transition.resumeRun) {
             const nextRun = run?.status === 'paused' ? resumeRunWithTimers(run) : run;
+            if (nextRun?.status === 'gameOver') {
+                applyResolvedRun(nextRun);
+                set({ settingsReturnView: 'menu' });
+                return;
+            }
             set({
                 view: transition.view,
                 settingsReturnView: transition.settingsReturnView,
@@ -1262,7 +1379,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     dismissHowToPlay: async () => {
         const nextSave = normalizeSaveData({
             ...get().saveData,
-            onboardingDismissed: true
+            firstRunHelpDismissed: true
         });
 
         set({
@@ -1271,6 +1388,20 @@ export const useAppStore = create<AppState>((set, get) => ({
         });
 
         await persistSaveDataSafely(nextSave);
+    },
+
+    claimMetaProgressionReward: (rowId) => {
+        const result = applyMetaProgressionUnlock(get().saveData, rowId);
+        if (!result.applied) {
+            return result;
+        }
+
+        set({
+            saveData: result.save,
+            settings: result.save.settings
+        });
+        void persistSaveDataSafely(result.save);
+        return result;
     },
 
     pressTile: (tileId) => {
@@ -1292,9 +1423,20 @@ export const useAppStore = create<AppState>((set, get) => ({
                 applyResolvedRun({ ...run, status: 'gameOver', lives: 0 });
                 return;
             }
-            const flippedBefore = run.board?.flippedTileIds.length ?? 0;
-            const nextRun = flipTile(run, tileId);
-            if (nextRun === run) {
+            let actionRun = run;
+            const hazardRun = applyEnemyHazardClick(actionRun, tileId, { advanceHazards: false });
+            if (hazardRun !== actionRun) {
+                void resumeAudioContext();
+                playResolveSfx(actionRun, hazardRun, sfxGainFromStore());
+                if (hazardRun.status === 'gameOver') {
+                    applyImmediateGameOverFromTilePress(hazardRun);
+                    return;
+                }
+                actionRun = hazardRun;
+            }
+            const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
+            const nextRun = flipTile(actionRun, tileId);
+            if (nextRun === actionRun) {
                 return;
             }
             const flippedAfter = nextRun.board?.flippedTileIds.length ?? 0;
@@ -1326,6 +1468,8 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
 
+        const armedPowerCount = [run.strayRemoveArmed, peekModeArmed, destroyPairArmed].filter(Boolean).length;
+        const canContinueSinglePowerAfterContact = !boardPinMode && armedPowerCount === 1;
         let actionRun = run;
         let pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
         const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
@@ -1335,7 +1479,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             void resumeAudioContext();
             playResolveSfx(run, hazardRun, sfxGainFromStore());
             if (hazardRun.status === 'gameOver') {
-                applyResolvedRun(hazardRun);
+                applyResolvedRun({ ...hazardRun, strayRemoveArmed: false });
                 set({
                     boardPinMode: false,
                     destroyPairArmed: false,
@@ -1344,7 +1488,10 @@ export const useAppStore = create<AppState>((set, get) => ({
                 });
                 return;
             }
-            actionRun = hazardRun;
+            actionRun = {
+                ...hazardRun,
+                strayRemoveArmed: canContinueSinglePowerAfterContact ? hazardRun.strayRemoveArmed : false
+            };
             pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? pressedTile;
         }
 
@@ -1405,18 +1552,20 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
 
-        if (!enemyContacted && actionRun.strayRemoveArmed) {
+        if ((!enemyContacted || canContinueSinglePowerAfterContact) && actionRun.strayRemoveArmed) {
             const nextRun = applyStrayRemove(actionRun, tileId);
             if (nextRun !== actionRun) {
                 void resumeAudioContext();
                 playStrayPowerSfx(sfxGainFromStore());
                 set({ run: nextRun });
+            } else if (enemyContacted) {
+                set({ run: actionRun });
             }
             return;
         }
 
         if (
-            !enemyContacted &&
+            (!enemyContacted || canContinueSinglePowerAfterContact) &&
             peekModeArmed &&
             actionRun.peekCharges > 0 &&
             actionRun.board &&
@@ -1431,9 +1580,12 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
 
-        if (!enemyContacted && destroyPairArmed) {
+        if ((!enemyContacted || canContinueSinglePowerAfterContact) && destroyPairArmed) {
             const nextRun = applyDestroyPair(actionRun, tileId);
             if (nextRun === actionRun) {
+                if (enemyContacted) {
+                    set({ run: actionRun });
+                }
                 return;
             }
 
@@ -1464,7 +1616,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         }
 
         const flippedAfter = nextRun.board?.flippedTileIds.length ?? 0;
-        if (flippedAfter > flippedBefore) {
+        const pressedTileAfter = nextRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
+        const pressedTileBecameFaceUp = pressedTile?.state === 'hidden' && pressedTileAfter?.state === 'flipped';
+        if (flippedAfter > flippedBefore || pressedTileBecameFaceUp) {
             void resumeAudioContext();
             playFlipSfx(sfxGainFromStore());
         }
@@ -1630,6 +1784,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     toggleBoardPinMode: () => {
         const { boardPinMode, run, view } = get();
         const next = !boardPinMode;
+        if (next && (!run || view !== 'playing' || run.status !== 'playing')) {
+            return;
+        }
         if (next && run && view === 'playing' && run.status === 'playing') {
             void resumeAudioContext();
             playPowerArmSfx(sfxGainFromStore() * 0.92);
@@ -1644,6 +1801,18 @@ export const useAppStore = create<AppState>((set, get) => ({
     toggleDestroyPairArmed: () => {
         const { destroyPairArmed, run, view } = get();
         const next = !destroyPairArmed;
+        const canArmDestroy =
+            run != null &&
+            view === 'playing' &&
+            run.status === 'playing' &&
+            !run.activeContract?.noDestroy &&
+            run.destroyPairCharges > 0 &&
+            run.board != null &&
+            run.board.flippedTileIds.length === 0 &&
+            collectDestroyEligibleTileIds(run.board).size > 0;
+        if (next && !canArmDestroy) {
+            return;
+        }
         if (next && run && view === 'playing' && run.status === 'playing' && run.destroyPairCharges > 0) {
             void resumeAudioContext();
             playPowerArmSfx(sfxGainFromStore());
@@ -1658,7 +1827,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     pause: () => {
         const { run } = get();
 
-        if (!run) {
+        if (!run || !runCanPause(run)) {
             return;
         }
 
@@ -1672,13 +1841,19 @@ export const useAppStore = create<AppState>((set, get) => ({
     resume: () => {
         const { run } = get();
 
-        if (!run) {
+        if (!run || run.status !== 'paused' || !run.timerState.pausedFromStatus) {
+            return;
+        }
+
+        const nextRun = resumeRunWithTimers(run);
+        if (nextRun.status === 'gameOver') {
+            applyResolvedRun(nextRun);
             return;
         }
 
         void resumeUiSfxContext();
         playPauseResumeSfx(sfxGainFromStore());
-        set({ run: resumeRunWithTimers(run) });
+        set({ run: nextRun });
     },
 
     acceptEndlessRiskWager: () => {
@@ -1695,7 +1870,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     purchaseShopOffer: (offerId) => {
         const { run, view, shopReturnMode } = get();
-        if (!run || view !== 'shop' || (run.status !== 'levelComplete' && shopReturnMode !== 'floor')) {
+        if (!run || view !== 'shop' || !runCanUseShopSurface(run, shopReturnMode)) {
             return;
         }
         set({ run: purchaseShopOfferRule(run, offerId) });
@@ -1703,7 +1878,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     rerollShopOffers: () => {
         const { run, view, shopReturnMode } = get();
-        if (!run || view !== 'shop' || (run.status !== 'levelComplete' && shopReturnMode !== 'floor')) {
+        if (!run || view !== 'shop' || !runCanUseShopSurface(run, shopReturnMode)) {
             return;
         }
         set({ run: rerollShopOffersRule(run) });
@@ -1712,7 +1887,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     continueToNextLevel: () => {
         let { run } = get();
 
-        if (!run || run.status !== 'levelComplete' || run.gameMode === 'puzzle' || run.relicOffer) {
+        if (!run || run.status !== 'levelComplete') {
+            return;
+        }
+
+        if (routeDeadInterludeRunToGameOver(run)) {
+            return;
+        }
+
+        if (run.gameMode === 'puzzle' || run.relicOffer) {
             return;
         }
 
@@ -1767,9 +1950,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     chooseRouteAndContinue: (choiceId) => {
-        const { run } = get();
+        const { run, view } = get();
 
-        if (!run || run.status !== 'levelComplete') {
+        if (!run || view !== 'playing' || run.status !== 'levelComplete') {
             return;
         }
         if (run.pendingRouteCardPlan) {
@@ -1802,6 +1985,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             set({
                 view: 'shop',
                 run: routeRun,
+                shopReturnMode: 'summary',
                 boardPinMode: false,
                 destroyPairArmed: false,
                 peekModeArmed: false,
@@ -1861,7 +2045,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         const meta = metaRelicOpts(save);
         const settings = get().settings;
         let run: RunState;
-        if (prev?.gameMode === 'daily') {
+        if (isDungeonShowcaseRun(prev)) {
+            run = createDungeonShowcaseRun(best, meta);
+        } else if (prev?.gameMode === 'daily') {
             run = createDailyRun(best, meta);
         } else if (prev?.gameMode === 'gauntlet') {
             run = createGauntletRun(best, prev.gauntletSessionDurationMs ?? 10 * 60 * 1000, meta);
@@ -1886,7 +2072,10 @@ export const useAppStore = create<AppState>((set, get) => ({
                 activeContract: prev.activeContract
             });
         } else {
-            run = createNewRun(best, meta);
+            run = createNewRun(best, {
+                ...meta,
+                onboardingSafeFirstFloor: !save.onboardingDismissed
+            });
         }
         run = patchRunFromUserSettings(run, settings);
 
@@ -1896,11 +2085,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'playing',
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
+            ...RUN_SURFACE_RESET,
             run,
-            ...BOARD_FLOATER_POP_CLEAR
+            runStartSaveData: save
         });
 
         prepareMemorizeTimerForBoardReady(run);
@@ -1911,13 +2098,11 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({
             view: 'menu',
             run: null,
+            runStartSaveData: null,
             newlyUnlockedAchievements: [],
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
             subscreenReturnView: 'menu',
             settingsReturnView: 'menu',
-            ...BOARD_FLOATER_POP_CLEAR
+            ...RUN_SURFACE_RESET
         });
     },
 

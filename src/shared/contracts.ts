@@ -21,7 +21,7 @@ export const ENDLESS_RISK_WAGER_BONUS_FAVOR = 2;
 /** Timed gauntlet reward for clearing a floor before the clock expires. */
 export const GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS = 30_000;
 /** REG-015: temporary run-only shop wallet earned on floor clear. Never persisted outside RunState. */
-export const FLOOR_CLEAR_GOLD_BASE = 3;
+export const FLOOR_CLEAR_GOLD_BASE = 2;
 /** Minimum value for Settings → Gameplay → Resolve Delay — keep in sync with `SettingsScreen` slider `min`. */
 export const RESOLVE_DELAY_MULTIPLIER_MIN = 0.5;
 export const DEBUG_REVEAL_MS = 1500;
@@ -40,6 +40,10 @@ export const MAX_COMBO_SHARDS = 2;
 export const INITIAL_SHUFFLE_CHARGES = 1;
 export const INITIAL_REGION_SHUFFLE_CHARGES = 1;
 export const MAX_PINNED_TILES = 3;
+export const RECALL_FOCUS_MAX = 3;
+export const INITIAL_RECALL_FOCUS = 1;
+export const RECALL_FOCUS_MATCH_SCORE = 8;
+export const RECALL_CLUE_MATCH_SCORE = 12;
 
 /** Bonus score when the floor is cleared without shuffle or destroy (per-floor). */
 /** Rules v16 higher-tension rebalance: optional objectives pay harder, but missed streaks decay faster. */
@@ -514,6 +518,9 @@ export interface LevelResult {
     parasiteVesselConversions?: number;
     pinLatticeRewards?: number;
     safeHazardWardsUsed?: number;
+    recallMatches?: number;
+    recallMistakes?: number;
+    recallBonusScore?: number;
     /** REG-017: deterministic local route options for the next floor; UI-only until map/shop nodes land. */
     routeChoices?: RouteChoice[];
 }
@@ -706,6 +713,10 @@ export interface DungeonRunNode {
     detail: string;
     rewardPreview?: string;
     riskPreview?: string;
+    /** Player-facing route label that produced this node, retained when node kind normalizes to boss/exit. */
+    routeApproachLabel?: string;
+    /** Original choice route before node-kind normalization; useful for converged boss-gate readability. */
+    routeApproachType?: RouteNodeType;
     edgeIds: string[];
     choiceId?: string;
     offlineOnly: true;
@@ -722,7 +733,7 @@ export interface DungeonRunMapState {
     nodes: DungeonRunNode[];
 }
 
-export type BonusRewardId = 'chest_gold' | 'secret_favor' | 'bonus_shards';
+export type BonusRewardId = 'chest_gold' | 'secret_favor' | 'bonus_shards' | 'supply_cache';
 
 export interface BonusRewardLedger {
     claimedInstanceIds: string[];
@@ -776,6 +787,7 @@ export interface RunSummary {
     relicIds?: RelicId[];
     practiceMode?: boolean;
     wildMenuRun?: boolean;
+    dungeonShowcaseRun?: boolean;
     activeContract?: ContractFlags | null;
 }
 
@@ -902,6 +914,8 @@ export interface RunState {
     echoFeedbackEnabled: boolean;
     /** Started from Wild / Joker menu (restart routing). */
     wildMenuRun: boolean;
+    /** Started from the dungeon showcase entry; retry should return to the authored combat-room setup. */
+    dungeonShowcaseRun: boolean;
     /** GP-O04: shuffle used this floor (for scholar-style bonus). */
     shuffleUsedThisFloor: boolean;
     /** GP-O04: destroy used this floor. */
@@ -932,6 +946,13 @@ export interface RunState {
     findablesClaimedThisFloor: number;
     /** Findables: total pickup pairs that spawned this floor (claimed or forfeited). */
     findablesTotalThisFloor: number;
+    /** Memory loop: current clean-recall momentum. Matches raise it, misses and disruptive assists lower it. */
+    recallFocus: number;
+    recallMatchesThisFloor: number;
+    recallMistakesThisFloor: number;
+    recallBonusScoreThisFloor: number;
+    /** Tile ids whose remembered position was invalidated by a miss, peek, shuffle, or route pressure this floor. */
+    forgottenTileIdsThisFloor: string[];
     /** Hazard tiles: total normal-run hazard triggers this floor. */
     hazardTileTriggersThisFloor: number;
     hazardShuffleSnaresThisFloor: number;
@@ -985,7 +1006,7 @@ export interface PlayerStatsPersisted {
     puzzleCompletions?: Record<string, PuzzleCompletionRecord>;
     /** Spaced encore: pairKeys seen on previous completed run (no PII). */
     encorePairKeysLastRun: string[];
-    /** Meta: +1 relic pick at each milestone draft (unlocked after 7 dailies or migration from achievement). */
+    /** Meta: +1 relic pick at each milestone draft after the Profile reward is claimed. */
     relicShrineExtraPickUnlocked?: boolean;
 }
 
@@ -995,6 +1016,8 @@ export interface SaveData {
     achievements: AchievementState;
     settings: Settings;
     onboardingDismissed: boolean;
+    /** Menu-only explainer panel state; does not suppress playable first-run prompts. */
+    firstRunHelpDismissed?: boolean;
     lastRunSummary: RunSummary | null;
     /** v3+ meta */
     playerStats?: PlayerStatsPersisted;

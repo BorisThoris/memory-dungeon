@@ -17,7 +17,12 @@ describe('REG-026 playable onboarding harness', () => {
             </div>
         );
 
-        expect(screen.getByTestId('onboarding-harness')).toHaveAttribute('data-targets');
-        expect(screen.getAllByText(/Make your first match/i)).toHaveLength(2);
+        expect(screen.getByTestId('onboarding-harness')).toHaveAttribute(
+            'data-targets',
+            step?.targetTileIds.join(',')
+        );
+        expect(step?.targetTileIds).toHaveLength(2);
+        expect(screen.getByText(/Make your first match/i)).toBeInTheDocument();
+        expect(screen.getByText(/Flip a marked tile/i)).toBeInTheDocument();
     });
 });

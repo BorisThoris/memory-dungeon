@@ -1,4 +1,9 @@
 import type { SaveData } from './contracts';
+import {
+    getMetaProgressionDifficultyTierLabel,
+    getMetaProgressionFeedback,
+    type MetaProgressionDifficultyTier
+} from './meta-progression';
 import { RUN_MODE_CATALOG, type RunModeDefinition } from './run-mode-catalog';
 
 export type ChallengeGateStatus = 'available' | 'locked' | 'deferred';
@@ -151,9 +156,27 @@ export type ChallengeProgressionStatus = 'unlocked' | 'in_progress' | 'locked' |
 export type ChallengeModeProgressionRow = Omit<ChallengeModeGateRow, 'status'> & {
     status: ChallengeProgressionStatus;
     lockReason: string | null;
+    recommendedTier: MetaProgressionDifficultyTier;
+    recommendedTierLabel: string;
+    motivationCopy: string;
 };
 
 const progressionModeIds = ['daily', 'gauntlet', 'puzzle_glyph_cross', 'scholar', 'pin_vow'] as const;
+
+const challengeTierRank: Record<MetaProgressionDifficultyTier, number> = {
+    initiate: 0,
+    adept: 1,
+    ascendant: 2,
+    legend: 3
+};
+
+const recommendedTierByModeId: Record<(typeof progressionModeIds)[number], MetaProgressionDifficultyTier> = {
+    daily: 'initiate',
+    gauntlet: 'adept',
+    puzzle_glyph_cross: 'adept',
+    scholar: 'ascendant',
+    pin_vow: 'ascendant'
+};
 
 const progressionStatus = (row: ChallengeModeGateRow): ChallengeProgressionStatus =>
     row.status === 'available'
@@ -164,13 +187,31 @@ const progressionStatus = (row: ChallengeModeGateRow): ChallengeProgressionStatu
             ? 'in_progress'
             : 'locked';
 
+const challengeMotivationCopy = (row: ChallengeModeGateRow, status: ChallengeProgressionStatus): string => {
+    if (status === 'unlocked') {
+        return `${row.title} is ready for local play.`;
+    }
+    if (status === 'in_progress') {
+        return `${row.title}: ${row.progress.current}/${row.progress.target} toward ${row.entryCondition}`;
+    }
+    if (status === 'deferred') {
+        return row.lockoutReason ?? `${row.title} is deferred in this build.`;
+    }
+    return row.lockoutReason ?? `${row.title} is locked.`;
+};
+
 export const getChallengeModeProgressionRows = (save: SaveData): ChallengeModeProgressionRow[] =>
     progressionModeIds.map((modeId) => {
         const row = getChallengeModeGateRow(save, modeId)!;
+        const recommendedTier = recommendedTierByModeId[modeId];
+        const status = progressionStatus(row);
         return {
             ...row,
-            status: progressionStatus(row),
-            lockReason: row.lockoutReason
+            status,
+            lockReason: row.lockoutReason,
+            recommendedTier,
+            recommendedTierLabel: getMetaProgressionDifficultyTierLabel(recommendedTier),
+            motivationCopy: challengeMotivationCopy(row, status)
         };
     });
 
@@ -179,11 +220,52 @@ export const getChallengeModeGateForMode = (
     modeId: string
 ): ChallengeModeProgressionRow | undefined => {
     const row = getChallengeModeGateRow(save, modeId);
+    const progressionModeId = progressionModeIds.find((id) => id === modeId);
+    const recommendedTier = progressionModeId ? recommendedTierByModeId[progressionModeId] : 'initiate';
+    const status = row ? progressionStatus(row) : 'locked';
     return row
         ? {
               ...row,
-              status: progressionStatus(row),
-              lockReason: row.lockoutReason
+              status,
+              lockReason: row.lockoutReason,
+              recommendedTier,
+              recommendedTierLabel: getMetaProgressionDifficultyTierLabel(recommendedTier),
+              motivationCopy: challengeMotivationCopy(row, status)
           }
         : undefined;
+};
+
+export interface ChallengeModeMotivationSummary {
+    profileTier: MetaProgressionDifficultyTier;
+    profileTierLabel: string;
+    activeRows: ChallengeModeProgressionRow[];
+    nextRecommendedRow: ChallengeModeProgressionRow | null;
+    nextChallengeCopy: string;
+}
+
+const tierArticle = (label: string): 'a' | 'an' => (/^[aeiou]/i.test(label) ? 'an' : 'a');
+
+export const getChallengeModeMotivationSummary = (save: SaveData): ChallengeModeMotivationSummary => {
+    const feedback = getMetaProgressionFeedback(save);
+    const rows = getChallengeModeProgressionRows(save);
+    const profileTierRank = challengeTierRank[feedback.difficultyTier];
+    const activeRows = rows.filter(
+        (row) => row.status === 'unlocked' && challengeTierRank[row.recommendedTier] <= profileTierRank
+    );
+    const nextRecommendedRow =
+        rows.find((row) => row.status !== 'unlocked' && challengeTierRank[row.recommendedTier] <= profileTierRank) ??
+        rows.find((row) => challengeTierRank[row.recommendedTier] > profileTierRank) ??
+        rows.find((row) => row.status !== 'unlocked') ??
+        null;
+    const nextChallengeCopy = nextRecommendedRow
+        ? `${nextRecommendedRow.title} sits as ${tierArticle(nextRecommendedRow.recommendedTierLabel)} ${nextRecommendedRow.recommendedTierLabel} goal; ${nextRecommendedRow.motivationCopy}`
+        : 'All visible challenge lanes are in the active profile tier.';
+
+    return {
+        profileTier: feedback.difficultyTier,
+        profileTierLabel: feedback.difficultyTierLabel,
+        activeRows,
+        nextRecommendedRow,
+        nextChallengeCopy
+    };
 };

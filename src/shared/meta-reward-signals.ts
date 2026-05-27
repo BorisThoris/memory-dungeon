@@ -1,6 +1,6 @@
 import type { RunState, SaveData } from './contracts';
 import { getDailyArchiveSummary } from './daily-archive';
-import { getMetaProgressionBoard } from './meta-progression';
+import { getMetaProgressionBoard, getMetaProgressionFeedback } from './meta-progression';
 import { getObjectiveBoardItems } from './objective-board';
 
 export type MetaScreenId = 'collection' | 'inventory' | 'codex';
@@ -18,6 +18,7 @@ export interface MetaRewardSignalRow {
 
 export const getCollectionRewardSignals = (save: SaveData): MetaRewardSignalRow[] => {
     const board = getMetaProgressionBoard(save);
+    const progression = getMetaProgressionFeedback(save);
     const objective = getObjectiveBoardItems(save).find((row) => row.status === 'active' || row.status === 'locked');
     const daily = getDailyArchiveSummary(save);
     return [
@@ -26,8 +27,8 @@ export const getCollectionRewardSignals = (save: SaveData): MetaRewardSignalRow[
             screen: 'collection',
             kind: 'progress',
             title: `Profile level ${board.level}`,
-            body: `${board.summary.honorMarks} honor marks · ${board.summary.owned} visible reward(s) owned.`,
-            cta: board.nextReward ? `Next reward: ${board.nextReward.title}` : 'All visible rewards owned.',
+            body: `${board.summary.honorMarks} honor marks; ${board.summary.honorsEarned} honors earned; ${board.summary.owned} visible reward(s) owned. ${progression.nextMilestoneCopy}`,
+            cta: progression.nextHonorMarkSource?.nextMarkCopy ?? (board.nextReward ? `Next reward: ${board.nextReward.title}` : 'All visible rewards owned.'),
             progress: board.levelProgress
         },
         {
@@ -35,7 +36,7 @@ export const getCollectionRewardSignals = (save: SaveData): MetaRewardSignalRow[
             screen: 'collection',
             kind: 'next_goal',
             title: objective?.title ?? 'Start a mastery goal',
-            body: objective ? `${objective.progress.current}/${objective.progress.target} · ${objective.status}` : 'No active objective rows yet.',
+            body: objective ? `${objective.progress.current}/${objective.progress.target} | ${objective.status}` : 'No active objective rows yet.',
             cta: objective?.reward ?? 'Play Classic or Daily to create progress.'
         },
         {
@@ -43,7 +44,7 @@ export const getCollectionRewardSignals = (save: SaveData): MetaRewardSignalRow[
             screen: 'collection',
             kind: daily.dailiesCompleted > 0 ? 'progress' : 'empty_state',
             title: 'Daily archive value',
-            body: `${daily.dailiesCompleted} daily clear(s) · streak ${daily.streak}.`,
+            body: `${daily.dailiesCompleted} daily clear(s) | streak ${daily.streak}.`,
             cta: daily.dailiesCompleted > 0 ? 'Return tomorrow to extend the local streak.' : 'Try Daily Challenge to add your first archive row.'
         }
     ];
@@ -68,7 +69,7 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
             screen: 'inventory',
             kind: run.relicIds.length > 0 ? 'discovery' : 'next_goal',
             title: run.relicIds.length > 0 ? `${run.relicIds.length} relic(s) shaping this build` : 'First relic still ahead',
-            body: `${run.activeMutators.length} active mutator(s) · ${run.shopGold} shop gold · ${run.stats.comboShards} shard(s).`,
+            body: `${run.activeMutators.length} active mutator(s) | ${run.shopGold} shop gold | ${run.stats.comboShards} shard(s).`,
             cta: run.relicIds.length > 0 ? 'Use this snapshot to plan the next floor.' : 'Clear milestone floors to draft relics.'
         },
         {
@@ -76,7 +77,7 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
             screen: 'inventory',
             kind: 'progress',
             title: `Floor ${run.board?.level ?? run.stats.highestLevel}`,
-            body: `${run.stats.totalScore.toLocaleString()} score · ${run.lives} life/lives remaining.`,
+            body: `${run.stats.totalScore.toLocaleString()} score | ${run.lives} life/lives remaining.`,
             cta: run.achievementsEnabled ? 'Achievements remain eligible.' : 'Practice/debug state: achievements disabled.'
         }
     ];

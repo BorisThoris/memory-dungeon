@@ -11,6 +11,7 @@ import {
     getTileFaceOverlayTextureCacheKey,
     getStaticCardTexturePixelSize,
     getTileFaceOverlayTexture,
+    preloadTileTextureImages,
     prewarmTileFaceOverlayTextures,
     resetDemandDrivenOverlayPrewarmForTest,
     runDemandDrivenTileFaceOverlayPrewarmSession
@@ -166,6 +167,92 @@ describe('tileTextures layout', () => {
         } finally {
             window.requestIdleCallback = previousRequestIdleCallback;
             window.cancelIdleCallback = previousCancelIdleCallback;
+        }
+    });
+
+    it('shares in-flight tile texture image loads across concurrent preloads', async () => {
+        clearTileTextureCachesForDebug();
+        const originalImage = globalThis.Image;
+        const requestedUrls: string[] = [];
+        const releaseQueue: Array<() => void> = [];
+
+        class MockImage {
+            decoding: 'async' | 'auto' | 'sync' = 'auto';
+            complete = true;
+            naturalHeight = 64;
+            naturalWidth = 64;
+            onerror: (() => void) | null = null;
+            onload: (() => void) | null = null;
+
+            set src(value: string) {
+                requestedUrls.push(value);
+                releaseQueue.push(() => this.onload?.());
+            }
+        }
+
+        Object.defineProperty(globalThis, 'Image', {
+            configurable: true,
+            value: MockImage
+        });
+
+        try {
+            const first = preloadTileTextureImages();
+            const second = preloadTileTextureImages();
+
+            await vi.waitFor(() => expect(releaseQueue).toHaveLength(7));
+            expect(requestedUrls).toHaveLength(7);
+            releaseQueue.splice(0).forEach((release) => release());
+            await Promise.all([first, second]);
+
+            await preloadTileTextureImages();
+            expect(requestedUrls).toHaveLength(7);
+        } finally {
+            Object.defineProperty(globalThis, 'Image', {
+                configurable: true,
+                value: originalImage
+            });
+        }
+    });
+
+    it('resolves tile texture preloads when image requests stall', async () => {
+        clearTileTextureCachesForDebug();
+        vi.useFakeTimers();
+        const originalImage = globalThis.Image;
+        let requestedCount = 0;
+
+        class MockImage {
+            decoding: 'async' | 'auto' | 'sync' = 'auto';
+            complete = false;
+            naturalHeight = 0;
+            naturalWidth = 0;
+            onerror: (() => void) | null = null;
+            onload: (() => void) | null = null;
+
+            set src(_value: string) {
+                requestedCount += 1;
+            }
+        }
+
+        Object.defineProperty(globalThis, 'Image', {
+            configurable: true,
+            value: MockImage
+        });
+
+        try {
+            const preload = preloadTileTextureImages();
+
+            await vi.advanceTimersByTimeAsync(1500);
+            await expect(preload).resolves.toBeUndefined();
+            expect(requestedCount).toBe(7);
+
+            await preloadTileTextureImages();
+            expect(requestedCount).toBe(7);
+        } finally {
+            vi.useRealTimers();
+            Object.defineProperty(globalThis, 'Image', {
+                configurable: true,
+                value: originalImage
+            });
         }
     });
 

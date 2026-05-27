@@ -108,7 +108,7 @@ export const getObjectiveBoardItems = (save: SaveData): ObjectiveBoardItem[] => 
         {
             id: 'relic_shrine_extra',
             title: 'Week of Archives',
-            description: 'Clear seven daily floors to unlock +1 relic pick at each shrine.',
+            description: 'Clear seven daily floors to make +1 relic pick at each shrine claimable.',
             status: (ps?.relicShrineExtraPickUnlocked ?? false) ? 'completed' : dailies >= 3 ? 'active' : 'locked',
             progress: { current: Math.min(dailies, 7), target: 7 },
             reward: '+1 relic selection at milestones'

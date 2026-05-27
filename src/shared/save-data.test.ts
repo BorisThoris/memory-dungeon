@@ -15,7 +15,7 @@ import {
     mergePuzzleCompletion,
     normalizeSaveData
 } from './save-data';
-import type { SaveData } from './contracts';
+import type { RunSummary, SaveData } from './contracts';
 import {
     CURRENT_VERSION_GATE,
     formatVersionGateSummary,
@@ -46,6 +46,7 @@ describe('save normalization', () => {
         expect(saveData.settings.displayMode).toBe(DEFAULT_SETTINGS.displayMode);
         expect(saveData.achievements.ACH_FIRST_CLEAR).toBe(false);
         expect(saveData.onboardingDismissed).toBe(false);
+        expect(saveData.firstRunHelpDismissed).toBe(false);
     });
 
     it('merges nested debug settings without dropping defaults', () => {
@@ -114,11 +115,11 @@ describe('save normalization', () => {
         expect(saveData.settings.boardPresentation).toBe(DEFAULT_SETTINGS.boardPresentation);
     });
 
-    it('sets relicShrineExtraPickUnlocked when seven-dailies achievement is present or dailies count is 7+', () => {
+    it('keeps the relic shrine upgrade claim-driven when seven-dailies progress is present', () => {
         const fromAchievement = normalizeSaveData({
             achievements: { ...createAchievementState(), ACH_SEVEN_DAILIES: true }
         });
-        expect(fromAchievement.playerStats?.relicShrineExtraPickUnlocked).toBe(true);
+        expect(fromAchievement.playerStats?.relicShrineExtraPickUnlocked).toBe(false);
 
         const fromCount = normalizeSaveData({
             playerStats: {
@@ -130,7 +131,20 @@ describe('save normalization', () => {
                 encorePairKeysLastRun: []
             }
         });
-        expect(fromCount.playerStats?.relicShrineExtraPickUnlocked).toBe(true);
+        expect(fromCount.playerStats?.relicShrineExtraPickUnlocked).toBe(false);
+
+        const claimed = normalizeSaveData({
+            playerStats: {
+                bestFloorNoPowers: 0,
+                dailiesCompleted: 7,
+                lastDailyDateKeyUtc: null,
+                dailyStreakCosmetic: 0,
+                relicPickCounts: {},
+                encorePairKeysLastRun: [],
+                relicShrineExtraPickUnlocked: true
+            }
+        });
+        expect(claimed.playerStats?.relicShrineExtraPickUnlocked).toBe(true);
     });
 
     it('REG-053 tracks UTC daily streaks without freeze currency or pressure fields', () => {
@@ -203,6 +217,7 @@ describe('save normalization', () => {
                 runSeed: 72001,
                 runRulesVersion: GAME_RULES_VERSION,
                 gameMode: 'endless',
+                dungeonShowcaseRun: true,
                 dungeonKeys: null,
                 dungeonRun: { corrupt: true },
                 board: null
@@ -228,6 +243,7 @@ describe('save normalization', () => {
         expect(normalized.playerStats?.puzzleCompletions).toEqual({});
         expect(normalized.lastRunSummary?.runSeed).toBe(72001);
         expect(normalized.lastRunSummary?.runRulesVersion).toBe(GAME_RULES_VERSION);
+        expect(normalized.lastRunSummary?.dungeonShowcaseRun).toBe(true);
         expect('currentRun' in normalized).toBe(false);
         assertNoUndefinedDeep(normalized, 'dng073.');
     });
@@ -288,6 +304,35 @@ describe('save normalization', () => {
             starter_pairs: { completed: true, bestMistakes: 0, bestScore: 120 }
         });
         expect(normalized.lastRunSummary).toBeNull();
+    });
+
+    it('dedupes save-loaded reward and run summary ledgers before they can replay duplicates', () => {
+        const normalized = normalizeSaveData({
+            playerStats: {
+                ...createDefaultSaveData().playerStats!,
+                encorePairKeysLastRun: ['A', 'B', 'A', 42, 'C', 'B'] as unknown as string[]
+            },
+            lastRunSummary: {
+                totalScore: 900,
+                bestScore: 900,
+                levelsCleared: 2,
+                highestLevel: 2,
+                achievementsEnabled: true,
+                unlockedAchievements: ['ACH_FIRST_CLEAR', 'ACH_FIRST_CLEAR', 'BAD_ACHIEVEMENT'] as unknown as RunSummary['unlockedAchievements'],
+                bestStreak: 3,
+                perfectClears: 1,
+                runSeed: 73002,
+                runRulesVersion: GAME_RULES_VERSION,
+                gameMode: 'endless',
+                activeMutators: ['short_memorize', 'short_memorize', 'wide_recall'],
+                relicIds: ['extra_shuffle_charge', 'extra_shuffle_charge', 'guard_token_plus_one']
+            }
+        });
+
+        expect(normalized.playerStats?.encorePairKeysLastRun).toEqual(['A', 'B', 'C']);
+        expect(normalized.lastRunSummary?.unlockedAchievements).toEqual(['ACH_FIRST_CLEAR']);
+        expect(normalized.lastRunSummary?.activeMutators).toEqual(['short_memorize', 'wide_recall']);
+        expect(normalized.lastRunSummary?.relicIds).toEqual(['extra_shuffle_charge', 'guard_token_plus_one']);
     });
 
     it('DNG-073 drops summaries from future save schemas instead of trusting obsolete active-run data', () => {

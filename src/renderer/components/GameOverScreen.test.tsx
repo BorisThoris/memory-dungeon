@@ -55,7 +55,8 @@ describe('GameOverScreen (REF-031)', () => {
         expect(polite).toHaveAttribute('aria-live', 'polite');
         expect(polite).toHaveTextContent(/Expedition complete/);
 
-        expect(screen.getAllByRole('button', { name: 'Play Again — start a new run after this expedition' })[0]).toBeInTheDocument();
+        expect(screen.getAllByRole('button', { name: 'Play Again - start a new run after this expedition' })[0]).toBeInTheDocument();
+        expect(screen.getAllByRole('button', { name: 'Mobile Play Again - start a new run after this expedition' })[0]).toBeInTheDocument();
         expect(screen.getAllByRole('button', { name: 'Return to the main menu' })[0]).toBeInTheDocument();
     });
 

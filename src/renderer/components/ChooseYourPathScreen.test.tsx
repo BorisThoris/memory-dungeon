@@ -5,6 +5,7 @@ import ChooseYourPathScreen from './ChooseYourPathScreen';
 
 const viewportSnapshot = { width: 390, height: 844 };
 const storeSpies = vi.hoisted(() => ({
+    startRun: vi.fn(),
     startDungeonShowcaseRun: vi.fn()
 }));
 
@@ -53,7 +54,7 @@ vi.mock('../store/useAppStore', async () => {
         startPinVowRun: vi.fn(),
         startPracticeRun: vi.fn(),
         startPuzzleRun: vi.fn(),
-        startRun: vi.fn(),
+        startRun: storeSpies.startRun,
         startScholarContractRun: vi.fn(),
         startWildRun: vi.fn()
     };
@@ -64,20 +65,25 @@ vi.mock('../store/useAppStore', async () => {
 
 describe('ChooseYourPathScreen REG-010 discoverability', () => {
     beforeEach(() => {
+        storeSpies.startRun.mockClear();
         storeSpies.startDungeonShowcaseRun.mockClear();
     });
 
-    it('defaults to a Dungeon Showcase launcher with browse content open', () => {
+    it('defaults a fresh profile to Classic Run with browse content open', () => {
         render(<ChooseYourPathScreen />);
 
         const launcher = screen.getByTestId('choose-path-launcher');
-        expect(launcher).toHaveTextContent(/Dungeon Showcase/);
-        expect(launcher).toHaveTextContent(/enemy patrols/i);
+        expect(launcher).toHaveTextContent(/Classic Run/);
+        expect(launcher).toHaveTextContent(/guided first room/i);
+        const firstRunBeats = screen.getByTestId('choose-path-first-run-beats');
+        expect(firstRunBeats).toHaveTextContent(/Match the marked pair/i);
+        expect(firstRunBeats).toHaveTextContent(/Clear the room/i);
+        expect(firstRunBeats).toHaveTextContent(/Safe, Greed, or Mystery/i);
         expect(screen.getByRole('button', { name: /start run/i })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /hide modes/i })).toBeInTheDocument();
         expect(screen.getByTestId('choose-path-more-modes')).toBeInTheDocument();
         expect(screen.getByTestId('choose-path-offline-note')).toBeInTheDocument();
-        expect(screen.getByText(/Classic Run/)).toBeInTheDocument();
+        expect(screen.getByText(/Dungeon Showcase/)).toBeInTheDocument();
         expect(screen.getByText(/Endless Mode/)).toBeInTheDocument();
     });
 
@@ -85,7 +91,7 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         render(<ChooseYourPathScreen />);
 
         const library = screen.getByTestId('choose-path-more-modes');
-        expect(library).toHaveTextContent(/Classic Run/);
+        expect(library).toHaveTextContent(/Dungeon Showcase/);
         expect(library).toHaveTextContent(/Daily Challenge/);
         expect(library).toHaveTextContent(/Endless Mode/);
         expect(library).toHaveTextContent(/Locked/);
@@ -96,12 +102,13 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         expect(offlineNote).toHaveTextContent(/Profile/);
     });
 
-    it('starts Dungeon Showcase from the hero launcher in one action', async () => {
+    it('starts Classic Run from the fresh-profile hero launcher in one action', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);
 
         await user.click(screen.getByRole('button', { name: /start run/i }));
 
-        expect(storeSpies.startDungeonShowcaseRun).toHaveBeenCalledTimes(1);
+        expect(storeSpies.startRun).toHaveBeenCalledTimes(1);
+        expect(storeSpies.startDungeonShowcaseRun).not.toHaveBeenCalled();
     });
 });

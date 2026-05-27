@@ -142,7 +142,7 @@ const MainMenu = ({
                     </span>
                     <span className={styles.helpSummaryAction}>Open</span>
                 </summary>
-            <p className={styles.emptyState}>Skippable/replayable help center · guided prompts continue inside the first run.</p>
+            <p className={styles.emptyState}>Skippable help center - guided prompts continue inside the first run.</p>
             <div className={styles.howToGrid} data-testid="main-menu-help-center">
                 {helpCenterRows.map((row) => (
                     <p key={row.id}>

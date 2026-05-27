@@ -16,7 +16,12 @@ import {
 import { RELIC_CATALOG } from '../../shared/game-catalog';
 import { getCollectionGalleryRows } from '../../shared/collection-reward-gallery';
 import { getDailyArchiveRows } from '../../shared/daily-archive';
-import { getMetaCosmeticTrackRows, getMetaProgressionBoard, getPermanentUpgradeRows } from '../../shared/meta-progression';
+import {
+    getMetaCosmeticTrackRows,
+    getMetaProgressionBoard,
+    getMetaProgressionFeedback,
+    getPermanentUpgradeRows
+} from '../../shared/meta-progression';
 import { getCollectionRewardSignals } from '../../shared/meta-reward-signals';
 import { ACHIEVEMENT_IDS } from '../../shared/save-data';
 import {
@@ -45,6 +50,7 @@ const CollectionScreen = () => {
     const summary = saveData.lastRunSummary;
     const honorEarned = new Set(eligibleHonorUnlockIds(saveData));
     const metaProgressionBoard = getMetaProgressionBoard(saveData);
+    const metaProgressionFeedback = getMetaProgressionFeedback(saveData);
     const rewardSignals = getCollectionRewardSignals(saveData);
     const rewardGalleryRows = getCollectionGalleryRows(saveData);
     const permanentUpgradeRows = getPermanentUpgradeRows(saveData);
@@ -186,10 +192,9 @@ const CollectionScreen = () => {
                             </p>
                             <div className={`${styles.galleryGrid} ${metaStyles.metaLongList}`} data-testid="collection-reward-gallery">
                                 {rewardGalleryRows.map((row) => {
-                                    const status = row.owned >= row.total ? 'owned' : row.owned > 0 ? 'in_progress' : 'missing';
                                     return (
-                                    <div className={styles.galleryCard} data-status={status} key={row.id}>
-                                        <span className={styles.galleryBadge}>{status.replace('_', ' ')}</span>
+                                    <div className={styles.galleryCard} data-status={row.status} key={row.id}>
+                                        <span className={styles.galleryBadge}>{row.status.replace('_', ' ')}</span>
                                         <strong>{row.title}</strong>
                                         <p className={metaStyles.subtitle}>{row.description}</p>
                                         <span className={styles.symbolMeta}>{row.owned}/{row.total}</span>
@@ -242,11 +247,22 @@ const CollectionScreen = () => {
                             <div className={metaStyles.archiveCatalogGrid} data-testid="collection-meta-progression-board">
                                 <div className={metaStyles.archiveCatalogRow}>
                                     <p className={metaStyles.archiveCatalogRowTitle}>Profile level {metaProgressionBoard.level}</p>
-                                    <span>{metaProgressionBoard.levelProgress.current}/{metaProgressionBoard.levelProgress.target} honor marks to next profile level</span>
+                                    <span>
+                                        {metaProgressionFeedback.difficultyTierLabel} - {metaProgressionFeedback.honorMarksToNextLevel} honor mark
+                                        {metaProgressionFeedback.honorMarksToNextLevel === 1 ? '' : 's'} to next profile level
+                                    </span>
                                 </div>
                                 <div className={metaStyles.archiveCatalogRow}>
                                     <p className={metaStyles.archiveCatalogRowTitle}>Next reward</p>
                                     <span>{metaProgressionBoard.nextReward ? `${metaProgressionBoard.nextReward.title} · ${metaProgressionBoard.nextReward.source}` : 'All visible rewards owned'}</span>
+                                </div>
+                                <div className={metaStyles.archiveCatalogRow}>
+                                    <p className={metaStyles.archiveCatalogRowTitle}>Progression focus</p>
+                                    <span>{metaProgressionFeedback.motivationCopy}</span>
+                                </div>
+                                <div className={metaStyles.archiveCatalogRow}>
+                                    <p className={metaStyles.archiveCatalogRowTitle}>Next tier milestone</p>
+                                    <span>{metaProgressionFeedback.nextMilestoneCopy}</span>
                                 </div>
                                 <div className={metaStyles.archiveCatalogRow}>
                                     <p className={metaStyles.archiveCatalogRowTitle}>Long-term goal</p>

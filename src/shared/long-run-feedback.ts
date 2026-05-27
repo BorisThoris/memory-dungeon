@@ -1,4 +1,4 @@
-import { FINDABLE_KIND_SPAWN_WEIGHTS, type FindableKind, type RunState } from './contracts';
+import { FINDABLE_KIND_SPAWN_WEIGHTS, RECALL_FOCUS_MAX, type FindableKind, type RunState } from './contracts';
 import { getFindableKindLabel, getFindableRewardCopy } from './findables';
 import {
     getDungeonBoardPresentation,
@@ -7,6 +7,7 @@ import {
     getDungeonObjectiveStatus
 } from './game';
 import type { MechanicTokenId } from './mechanic-feedback';
+import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { getRunEconomyRows } from './run-economy';
 
 export type FeedbackCauseKind =
@@ -17,6 +18,8 @@ export type FeedbackCauseKind =
     | 'objective_progress'
     | 'boss_pressure'
     | 'economy_delta'
+    | 'recall_feedback'
+    | 'combat_feedback'
     | 'perfect_memory_locked';
 
 export interface FeedbackCauseRow {
@@ -39,7 +42,7 @@ export interface PerfectMemoryAttribution {
     tokens: readonly MechanicTokenId[];
 }
 
-export type TouchHudDetailKind = 'objective' | 'hazard' | 'boss' | 'route' | 'perfect_memory' | 'economy';
+export type TouchHudDetailKind = 'objective' | 'hazard' | 'boss' | 'route' | 'memory' | 'perfect_memory' | 'economy';
 
 export interface TouchHudDetailRow {
     id: TouchHudDetailKind;
@@ -138,7 +141,7 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
                 kind: 'match_reward',
                 label: 'Pickups',
                 summary: `${run.findablesClaimedThisFloor}/${run.findablesTotalThisFloor} claimed`,
-                detail: 'Matched carrier pairs paid their findable rewards.',
+                detail: 'Matched carrier pairs shook loose their marked archive finds.',
                 tokens: ['reward', 'momentum'],
                 priority: 20
             })
@@ -152,9 +155,46 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
                 kind: 'hazard_trigger',
                 label: 'Hazards',
                 summary: `${run.hazardTileTriggersThisFloor} triggered, ${run.safeHazardWardsUsedThisFloor} warded`,
-                detail: dungeon.alertText ?? 'Hazard events changed board pressure this floor.',
+                detail: dungeon.alertText ?? 'Hazard marks woke under the cards and changed the room pressure.',
                 tokens: ['risk', run.safeHazardWardsUsedThisFloor > 0 ? 'safe' : 'armed'],
                 priority: 30
+            })
+        );
+    }
+
+    if (run.enemyHazardHitsThisFloor > 0 || run.enemyHazardsDefeatedThisFloor > 0) {
+        rows.push(
+            causeRow({
+                id: 'enemy-contact',
+                kind: 'combat_feedback',
+                label: 'Combat',
+                summary: `${run.enemyHazardHitsThisFloor} contact hit(s), ${run.enemyHazardsDefeatedThisFloor} patrol(s) defeated`,
+                detail:
+                    run.enemyHazardHitsThisFloor > 0
+                        ? 'Enemy patrol contact spent guard first, then life if no guard was available.'
+                        : 'Revealed patrol pressure was cleared by safe match damage or floor completion.',
+                tokens: ['risk', run.enemyHazardsDefeatedThisFloor > 0 ? 'resolved' : 'cost'],
+                priority: 32
+            })
+        );
+    }
+
+    if (
+        run.recallMatchesThisFloor > 0 ||
+        run.recallMistakesThisFloor > 0 ||
+        run.recallBonusScoreThisFloor > 0 ||
+        run.forgottenTileIdsThisFloor.length > 0
+    ) {
+        const recall = getMemoryRecallFeedback(run);
+        rows.push(
+            causeRow({
+                id: 'recall-focus',
+                kind: 'recall_feedback',
+                label: 'Recall',
+                summary: `Focus ${recall.focus}/${RECALL_FOCUS_MAX}, +${run.recallBonusScoreThisFloor} score`,
+                detail: `${run.recallMatchesThisFloor} remembered match(es), ${run.recallMistakesThisFloor} lapse(s), ${run.forgottenTileIdsThisFloor.length} forgotten tile marker(s) etched into the room log. ${recall.atmosphericSummary} ${recall.atmosphericBeat} Next memory move: ${recall.nextMemoryMove.label}.`,
+                tokens: ['hidden_known', run.recallMistakesThisFloor > 0 ? 'risk' : 'momentum'],
+                priority: 35
             })
         );
     }
@@ -169,7 +209,7 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
                 detail:
                     run.pendingRouteCardPlan?.routeType != null
                         ? `${run.pendingRouteCardPlan.routeType} route plan is pending.`
-                        : 'Resolved matches may advance route cards, exits, or local rewards.',
+                        : 'Resolved matches may open route cards, exits, or local archive rewards.',
                 tokens: ['reward', 'objective'],
                 priority: 40
             })
@@ -197,7 +237,7 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
                 kind: 'economy_delta',
                 label: 'Economy',
                 summary: `${run.shopGold} gold, ${run.stats.comboShards}/2 shards, ${run.stats.guardTokens}/2 guard`,
-                detail: 'Temporary run resources changed through matches, route cards, shops, or pickups.',
+                detail: 'Temporary run resources shifted as caches, route cards, shops, and pickups resolved.',
                 tokens: ['reward', 'cost'],
                 priority: 60
             })
@@ -217,6 +257,7 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
         .join(', ');
     const pm = getPerfectMemoryAttribution(run);
     const routeType = run.board?.routeWorldProfile?.routeType ?? run.pendingRouteCardPlan?.routeType ?? 'none';
+    const recall = getMemoryRecallFeedback(run);
 
     return [
         {
@@ -230,7 +271,7 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
             id: 'hazard',
             label: 'Hazards',
             value: `${run.hazardTileTriggersThisFloor} events`,
-            detail: `${status.armedTrapCount} armed trap card(s), ${status.enemyHazardCount} patrol(s), ${run.safeHazardWardChargesThisFloor} ward charge(s).`,
+            detail: `${status.armedTrapCount} armed trap card(s), ${status.enemyHazardCount} patrol(s), ${run.enemyHazardHitsThisFloor} contact hit(s), ${run.enemyHazardsDefeatedThisFloor} patrol defeat(s), ${run.safeHazardWardChargesThisFloor} ward charge(s) holding the room line.`,
             tokens: ['risk', 'safe']
         },
         {
@@ -249,6 +290,13 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
                     ? `${run.pendingRouteCardPlan.routeType} route plan queued.`
                     : 'No pending route card plan.',
             tokens: ['objective', 'reward']
+        },
+        {
+            id: 'memory',
+            label: 'Recall',
+            value: `${recall.focus}/${RECALL_FOCUS_MAX}`,
+            detail: `${run.recallMatchesThisFloor} remembered match(es), ${run.recallMistakesThisFloor} lapse(s), +${run.recallBonusScoreThisFloor} recall score recorded in the room log. ${recall.pressureDetail} ${recall.atmosphericBeat} Next memory move: ${recall.nextMemoryMove.detail}`,
+            tokens: ['hidden_known', run.recallMistakesThisFloor > 0 ? 'risk' : 'momentum']
         },
         {
             id: 'perfect_memory',

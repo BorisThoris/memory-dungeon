@@ -90,6 +90,8 @@ describe('GLD long-run depth contracts', () => {
         expect(report.ok).toBe(true);
         expect(report.issues).toEqual([]);
         expect(report.rows.length).toBeGreaterThanOrEqual(8);
+        expect(report.rows.map((row) => row.key)).toContain('max_profile_worst_seed_unhealed_low_life_share');
+        expect(report.rows.map((row) => row.key)).toContain('max_profile_unhealed_low_life_streak');
         expect(report.economySummary.totalSources).toBeGreaterThan(0);
     });
 });

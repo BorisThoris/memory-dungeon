@@ -8,6 +8,43 @@ const FIELD_DAMP = 18;
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 
+interface PointerCapabilities {
+    coarse: boolean;
+    fine: boolean;
+}
+
+interface CssTiltWrite {
+    x: string;
+    y: string;
+}
+
+export const shouldUseGyroForPointerCapabilities = (
+    { coarse, fine }: PointerCapabilities,
+    mouseDriving: boolean
+): boolean => {
+    const hybrid = fine && coarse;
+    const coarseOnly = coarse && !fine;
+
+    if (coarseOnly) {
+        return true;
+    }
+
+    if (hybrid) {
+        return !mouseDriving;
+    }
+
+    return false;
+};
+
+export const shouldCommitTiltCssVars = (
+    previousTilt: CssTiltWrite | null,
+    previousNode: HTMLElement | null,
+    nextTilt: CssTiltWrite,
+    nextNode: HTMLElement | null
+): boolean =>
+    nextNode !== null &&
+    (previousNode !== nextNode || previousTilt?.x !== nextTilt.x || previousTilt?.y !== nextTilt.y);
+
 const normalizePointerInViewport = (clientX: number, clientY: number): TiltVector => {
     if (typeof window === 'undefined') {
         return zeroTilt();
@@ -54,6 +91,9 @@ export const usePlatformTiltField = ({
     const mouseDrivingRef = useRef(false);
     const pointerTargetRef = useRef<TiltVector>(zeroTilt());
     const lastFrameRef = useRef<number | null>(null);
+    const lastCssTiltRef = useRef<CssTiltWrite | null>(null);
+    const lastCssNodeRef = useRef<HTMLElement | null>(null);
+    const pointerCapabilitiesRef = useRef<PointerCapabilities>({ coarse: false, fine: false });
 
     const strength = strengthProp;
 
@@ -62,20 +102,7 @@ export const usePlatformTiltField = ({
             return false;
         }
 
-        const fine = window.matchMedia('(pointer: fine)').matches;
-        const coarse = window.matchMedia('(pointer: coarse)').matches;
-        const hybrid = fine && coarse;
-        const coarseOnly = coarse && !fine;
-
-        if (coarseOnly) {
-            return true;
-        }
-
-        if (hybrid) {
-            return !mouseDrivingRef.current;
-        }
-
-        return false;
+        return shouldUseGyroForPointerCapabilities(pointerCapabilitiesRef.current, mouseDrivingRef.current);
     };
 
     useEffect(() => {
@@ -127,8 +154,8 @@ export const usePlatformTiltField = ({
             resetPointer();
         };
 
-        window.addEventListener('pointerdown', onPointerDown);
-        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerdown', onPointerDown, { passive: true });
+        window.addEventListener('pointermove', onPointerMove, { passive: true });
         window.addEventListener('mouseout', onMouseOut);
         window.addEventListener('blur', onBlur);
 
@@ -144,12 +171,39 @@ export const usePlatformTiltField = ({
     }, []);
 
     useEffect(() => {
+        if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+            return;
+        }
+
+        const fineQuery = window.matchMedia('(pointer: fine)');
+        const coarseQuery = window.matchMedia('(pointer: coarse)');
+
+        const updatePointerCapabilities = (): void => {
+            pointerCapabilitiesRef.current = {
+                coarse: coarseQuery.matches,
+                fine: fineQuery.matches
+            };
+        };
+
+        updatePointerCapabilities();
+        fineQuery.addEventListener?.('change', updatePointerCapabilities);
+        coarseQuery.addEventListener?.('change', updatePointerCapabilities);
+
+        return () => {
+            fineQuery.removeEventListener?.('change', updatePointerCapabilities);
+            coarseQuery.removeEventListener?.('change', updatePointerCapabilities);
+        };
+    }, []);
+
+    useEffect(() => {
         const surfaceNode = surfaceRef.current;
 
         if (!enabled || motionParallaxSuppressed || suspended) {
             tiltRef.current = zeroTilt();
             sourceRef.current = 'none';
             lastFrameRef.current = null;
+            lastCssTiltRef.current = null;
+            lastCssNodeRef.current = null;
 
             if (surfaceNode) {
                 surfaceNode.style.removeProperty('--tilt-x');
@@ -187,9 +241,12 @@ export const usePlatformTiltField = ({
             const sy = (tiltRef.current.y * strength).toFixed(4);
             const node = surfaceRef.current;
 
-            if (node) {
+            const nextCssTilt = { x: sx, y: sy };
+            if (node && shouldCommitTiltCssVars(lastCssTiltRef.current, lastCssNodeRef.current, nextCssTilt, node)) {
                 node.style.setProperty('--tilt-x', sx);
                 node.style.setProperty('--tilt-y', sy);
+                lastCssTiltRef.current = nextCssTilt;
+                lastCssNodeRef.current = node;
             }
 
             frameId = window.requestAnimationFrame(tick);
@@ -200,6 +257,8 @@ export const usePlatformTiltField = ({
         return () => {
             window.cancelAnimationFrame(frameId);
             lastFrameRef.current = null;
+            lastCssTiltRef.current = null;
+            lastCssNodeRef.current = null;
 
             if (surfaceNode) {
                 surfaceNode.style.removeProperty('--tilt-x');

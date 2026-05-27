@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { Application, Container, Sprite, Texture } from 'pixi.js';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
-import { getMenuPixiResolutionCap } from '../../shared/graphicsQuality';
+import { getMenuAtmosphereParticleCount, getMenuPixiResolutionCap } from '../../shared/graphicsQuality';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type * as PixiNamespace from 'pixi.js';
 import { RENDERER_THEME } from '../styles/theme';
@@ -249,22 +249,6 @@ const createGridTexture = (pixi: PixiModule, width: number, height: number): Tex
         context.fillRect(0, 0, canvas.width, canvas.height);
     });
 
-const getParticleCount = (width: number, height: number): number => {
-    if (width <= 430 || height <= 620) {
-        return 10;
-    }
-
-    if (width <= 760 || height <= 760) {
-        return 16;
-    }
-
-    if (width <= 1220) {
-        return 22;
-    }
-
-    return 28;
-};
-
 const pickParticleColor = (index: number): string => PARTICLE_COLORS[index % PARTICLE_COLORS.length];
 
 const createSceneController = (
@@ -400,7 +384,7 @@ const createSceneController = (
         grid.alpha = 0.52;
         gridLayer.addChild(grid);
 
-        const particleCount = getParticleCount(surfaceWidth, surfaceHeight) + (surfaceWidth <= 760 ? 2 : 4);
+        const particleCount = getMenuAtmosphereParticleCount(surfaceWidth, surfaceHeight, graphicsQuality);
         const streakCount = Math.max(3, Math.round(particleCount * 0.28));
 
         for (let index = 0; index < particleCount; index += 1) {
@@ -553,9 +537,12 @@ const createSceneController = (
             }
         },
         setGraphicsQuality: (nextQuality) => {
+            if (graphicsQuality === nextQuality) {
+                return;
+            }
             graphicsQuality = nextQuality;
             applyRendererResolution();
-            renderStaticFrame();
+            rebuildScene();
         },
         setReduceMotion: (nextReduceMotion) => {
             reduceMotion = nextReduceMotion;
@@ -621,10 +608,17 @@ const MainMenuBackground = ({
                     return;
                 }
 
+                const {
+                    graphicsQuality: currentGq,
+                    height: currentHeight,
+                    reduceMotion: currentReduceMotion,
+                    width: currentWidth
+                } = latestPropsRef.current;
+
                 app = new pixi.Application();
 
                 await app.init({
-                    antialias: true,
+                    antialias: currentGq !== 'low',
                     autoDensity: true,
                     autoStart: false,
                     backgroundAlpha: 0,
@@ -641,13 +635,6 @@ const MainMenuBackground = ({
                 app.canvas.className = styles.atmosphereCanvas;
                 app.canvas.setAttribute('aria-hidden', 'true');
                 host.appendChild(app.canvas);
-
-                const {
-                    graphicsQuality: currentGq,
-                    height: currentHeight,
-                    reduceMotion: currentReduceMotion,
-                    width: currentWidth
-                } = latestPropsRef.current;
 
                 sceneRef.current = createSceneController(
                     pixi,

@@ -1,6 +1,7 @@
 import { getDailyArchiveSummary } from './daily-archive';
 import { FEATURE_CLOUD_SAVE } from './feature-flags';
-import { getMetaProgressionBoard } from './meta-progression';
+import { countEligibleHonors } from './honorUnlocks';
+import { getMetaProgressionBoard, getMetaProgressionFeedback } from './meta-progression';
 import { buildRunJournalRowsFromSave } from './run-history';
 import type { SaveData } from './contracts';
 
@@ -11,6 +12,14 @@ export interface ProfileSaveShellSummary {
     profileLevel: number;
     honorMarks: number;
     honorsEarned: number;
+    difficultyTierLabel: string;
+    honorMarksToNextLevel: number;
+    nextMilestoneLabel: string | null;
+    nextMilestoneProgressCopy: string;
+    nextRewardTitle: string | null;
+    nextRewardProgressCopy: string | null;
+    nextHonorMarkSourceCopy: string | null;
+    progressionMotivationCopy: string;
     cosmeticOwned: number;
     runHistoryEntries: number;
     dailyStreak: number;
@@ -41,12 +50,21 @@ export const buildProfileSaveShellSummary = (
     { cloudSaveAvailable = FEATURE_CLOUD_SAVE }: { cloudSaveAvailable?: boolean } = {}
 ): ProfileSaveShellSummary => {
     const board = getMetaProgressionBoard(save);
+    const progression = getMetaProgressionFeedback(save);
     const daily = getDailyArchiveSummary(save);
     return {
         profileScope: 'single_local_profile',
         profileLevel: board.level,
         honorMarks: board.summary.honorMarks,
-        honorsEarned: board.summary.gameplayUpgradesOwned,
+        honorsEarned: countEligibleHonors(save),
+        difficultyTierLabel: progression.difficultyTierLabel,
+        honorMarksToNextLevel: progression.honorMarksToNextLevel,
+        nextMilestoneLabel: progression.nextMilestone?.label ?? null,
+        nextMilestoneProgressCopy: progression.nextMilestoneCopy,
+        nextRewardTitle: progression.nextReward?.title ?? null,
+        nextRewardProgressCopy: progression.nextReward?.progressCopy ?? null,
+        nextHonorMarkSourceCopy: progression.nextHonorMarkSource?.nextMarkCopy ?? null,
+        progressionMotivationCopy: progression.motivationCopy,
         cosmeticOwned: board.summary.cosmeticOwned,
         runHistoryEntries: buildRunJournalRowsFromSave(save).length,
         dailyStreak: daily.streak,

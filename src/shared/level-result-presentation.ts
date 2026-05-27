@@ -38,6 +38,8 @@ const clearLifeDetail = (result: LevelResult): string | null => {
           : null;
 };
 
+const withAtmosphere = (mechanicDetail: string, atmosphere: string): string => `${mechanicDetail} ${atmosphere}`;
+
 export const getFloorClearCausalityRows = (
     result: LevelResult,
     powersUsedThisRun: boolean,
@@ -69,7 +71,7 @@ export const getFloorClearCausalityRows = (
             id: 'encounter_identity',
             group: 'encounter',
             label: floorIdentity.label,
-            detail: floorIdentity.floorClearSentence,
+            detail: `${floorIdentity.floorClearSentence} ${floorIdentity.atmosphericFeedback}`,
             tokens: floorIdentity.tokens
         });
     }
@@ -139,7 +141,10 @@ export const getFloorClearCausalityRows = (
             id: 'hazard_tiles',
             group: 'hazard',
             label: 'Hazard tiles',
-            detail: parts.length > 0 ? parts.join('; ') + '.' : `${result.hazardTileTriggers} hazard trigger${result.hazardTileTriggers === 1 ? '' : 's'}.`,
+            detail: withAtmosphere(
+                parts.length > 0 ? parts.join('; ') + '.' : `${result.hazardTileTriggers} hazard trigger${result.hazardTileTriggers === 1 ? '' : 's'}.`,
+                'Hazard marks woke under the cards.'
+            ),
             tokens: ['risk', 'hidden_known', 'momentum']
         });
     }
@@ -149,7 +154,10 @@ export const getFloorClearCausalityRows = (
             id: 'lantern_ward_scouts',
             group: 'reward',
             label: 'Lantern Ward',
-            detail: `${result.lanternWardScouts} lantern scout${result.lanternWardScouts === 1 ? '' : 's'} identified hidden danger or mystery information.`,
+            detail: withAtmosphere(
+                `${result.lanternWardScouts} lantern scout${result.lanternWardScouts === 1 ? '' : 's'} identified hidden danger or mystery information.`,
+                'The light left a readable mark in the room log.'
+            ),
             tokens: ['safe', 'hidden_known', 'reward']
         });
     }
@@ -159,7 +167,10 @@ export const getFloorClearCausalityRows = (
             id: 'omen_seal_scouts',
             group: 'reward',
             label: 'Omen Seal',
-            detail: `${result.omenSealScouts} omen scout${result.omenSealScouts === 1 ? '' : 's'} revealed hidden danger or mystery information.`,
+            detail: withAtmosphere(
+                `${result.omenSealScouts} omen scout${result.omenSealScouts === 1 ? '' : 's'} revealed hidden danger or mystery information.`,
+                'The seal wrote the warning before the cards forgot it.'
+            ),
             tokens: ['hidden_known', 'reward', 'risk']
         });
     }
@@ -233,8 +244,27 @@ export const getFloorClearCausalityRows = (
             id: 'safe_hazard_wards',
             group: 'assist',
             label: 'Guard Cache ward',
-            detail: `${result.safeHazardWardsUsed} hazard ward${result.safeHazardWardsUsed === 1 ? '' : 's'} blocked a snare or fragile cache break.`,
+            detail: withAtmosphere(
+                `${result.safeHazardWardsUsed} hazard ward${result.safeHazardWardsUsed === 1 ? '' : 's'} blocked a snare or fragile cache break.`,
+                'The room kept one guarded memory intact.'
+            ),
             tokens: ['safe', 'risk', 'hidden_known']
+        });
+    }
+
+    if (result.recallMatches || result.recallMistakes || result.recallBonusScore) {
+        const matchCount = result.recallMatches ?? 0;
+        const mistakeCount = result.recallMistakes ?? 0;
+        const score = result.recallBonusScore ?? 0;
+        rows.push({
+            id: 'recall_focus',
+            group: 'performance',
+            label: 'Recall focus',
+            detail: withAtmosphere(
+                `${matchCount} remembered match${matchCount === 1 ? '' : 'es'}; ${mistakeCount} recall lapse${mistakeCount === 1 ? '' : 's'}; +${score.toLocaleString()} memory score.`,
+                'Room log updated.'
+            ),
+            tokens: mistakeCount > 0 ? ['momentum', 'risk', 'reward'] : ['momentum', 'safe', 'reward']
         });
     }
 
@@ -249,11 +279,15 @@ export const getFloorClearCausalityRows = (
     });
 
     if (result.routeChoices?.length) {
+        const choiceLabels = result.routeChoices.map((choice) => choice.label).join(', ');
         rows.push({
             id: 'route_choice',
             group: 'route',
             label: 'Next route',
-            detail: `${result.routeChoices.length} connected room choices are available.`,
+            detail: withAtmosphere(
+                `${result.routeChoices.length} connected room choice${result.routeChoices.length === 1 ? '' : 's'} opened in the route archive: ${choiceLabels}.`,
+                'The next route is now written into the archive margin.'
+            ),
             tokens: ['objective', 'reward', 'risk']
         });
     }

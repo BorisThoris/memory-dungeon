@@ -305,7 +305,7 @@ const App = () => {
                                 onOpenInventory={openInventoryFromMenu}
                                 onPlay={openModeSelect}
                                 onStartDungeonShowcase={startDungeonShowcaseRun}
-                                showHowToPlay={!saveData.onboardingDismissed}
+                                showHowToPlay={!saveData.firstRunHelpDismissed && !saveData.onboardingDismissed}
                             />
                         ) : null}
                     </div>

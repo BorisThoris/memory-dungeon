@@ -68,6 +68,62 @@ const firstUnmatchedPair = (board: BoardState | null): string[] => {
     );
 };
 
+const getStepCopy = (
+    run: RunState,
+    step: OnboardingStepRow
+): Pick<PlayableOnboardingPrompt, 'title' | 'prompt' | 'detail'> => {
+    if (step.id === 'recovery') {
+        if (run.stats.mismatches > 0) {
+            return {
+                title: 'Recover and continue',
+                prompt: 'Stabilize the next pair',
+                detail: 'A miss costs tempo, not the run. Use the marked pair to rebuild streak before spending a rescue tool.'
+            };
+        }
+        if ((run.board?.matchedPairs ?? 0) >= (run.board?.pairCount ?? 0) - 1) {
+            return {
+                title: 'Exit in sight',
+                prompt: 'Clear the final pair',
+                detail: 'The first match paid score and streak. One more clean pair clears the room and opens your first route choice.'
+            };
+        }
+        return {
+            title: 'First reward banked',
+            prompt: 'Keep the streak clean',
+            detail: 'The first match paid score and streak. Make one more clean pair before the guide hands control back.'
+        };
+    }
+
+    if (step.id !== 'first_match') {
+        return {
+            title: step.title,
+            prompt: step.title,
+            detail: step.body
+        };
+    }
+
+    const flippedCount = run.board?.flippedTileIds.length ?? 0;
+    if ((run.stats.mismatches > 0 || run.stats.tries > 0) && (run.board?.matchedPairs ?? 0) === 0) {
+        return {
+            title: 'Recover from the miss',
+            prompt: 'Use the marked pair to stabilize',
+            detail: 'The miss reset the flip. Follow the marked pair, then keep matching for streak and score.'
+        };
+    }
+    if (flippedCount === 1) {
+        return {
+            title: 'Find its twin',
+            prompt: 'Pick the matching tile',
+            detail: 'One tile is open; the guide marks the safe twin so your first action teaches score and streak.'
+        };
+    }
+    return {
+        title: step.title,
+        prompt: 'Flip a marked tile',
+        detail: 'The first floor starts with ordinary pairs. Match the marked pair, then use the same read on the rest of the board.'
+    };
+};
+
 export const getPlayableOnboardingScenario = ({
     board,
     onboardingDismissed
@@ -95,7 +151,7 @@ export const getPlayableOnboardingScenario = ({
             id: 'first_match',
             title: 'Make your first match',
             body: 'Flip the highlighted pair. Matching teaches score and streak faster than a rules modal.',
-            status: activeId === 'first_match' ? 'active' : stepIndex > 1 ? 'complete' : 'locked',
+            status: activeId === 'first_match' ? 'active' : stepIndex > 0 ? 'complete' : 'locked',
             targetTileIds,
             mobilePlacement: 'bottom'
         },
@@ -103,7 +159,7 @@ export const getPlayableOnboardingScenario = ({
             id: 'recovery',
             title: 'Use recovery tools',
             body: 'Shards, peek, shuffle, and route rewards help you recover after the board gets harder.',
-            status: activeId === 'recovery' ? 'active' : stepIndex > 3 ? 'complete' : 'locked',
+            status: activeId === 'recovery' ? 'active' : stepIndex > 1 ? 'complete' : 'locked',
             targetTileIds,
             mobilePlacement: 'bottom'
         },
@@ -148,11 +204,13 @@ export const getPlayableOnboardingStep = (
         return null;
     }
 
+    const copy = getStepCopy(run, step);
+
     return {
         id: step.id,
-        title: step.title,
-        prompt: step.title,
-        detail: step.body,
+        title: copy.title,
+        prompt: copy.prompt,
+        detail: copy.detail,
         targetTileIds: step.targetTileIds
     };
 };

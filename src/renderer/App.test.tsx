@@ -13,6 +13,7 @@ vi.mock('./assets/preloadStartupAssets', () => ({
 import App, { APP_MAIN_LANDMARK_ID } from './App';
 import type { RunState } from '../shared/contracts';
 import { createNewRun, pauseRun } from '../shared/game-core';
+import { generateRouteChoices } from '../shared/route-rules';
 import { createRunShopOffers } from '../shared/shop-rules';
 import { createDefaultSaveData } from '../shared/save-data';
 import { desktopClient } from './desktop-client';
@@ -169,7 +170,7 @@ describe('desktop app flow', () => {
         });
     });
 
-    it('dismisses the how-to panel and persists the onboarding flag', async () => {
+    it('dismisses the how-to panel without completing playable onboarding', async () => {
         const user = userEvent.setup();
 
         renderApp();
@@ -190,7 +191,8 @@ describe('desktop app flow', () => {
         expect(rawSave).not.toBeNull();
 
         const parsed = JSON.parse(rawSave ?? '{}') as ReturnType<typeof createDefaultSaveData>;
-        expect(parsed.onboardingDismissed).toBe(true);
+        expect(parsed.firstRunHelpDismissed).toBe(true);
+        expect(parsed.onboardingDismissed).toBe(false);
     });
 
     it('shows the life-bonus reason in the floor-cleared modal', async () => {
@@ -654,6 +656,46 @@ describe('desktop app flow', () => {
         await waitFor(() => {
             expect(within(choosePath).getAllByText(/locked intentionally/i).length).toBeGreaterThan(0);
         });
+    });
+
+    it('explains and disables greedy route choice when the run is on its last life', async () => {
+        const baseRun = createNewRun(0, { runSeed: 88_120 });
+        const routeChoices = generateRouteChoices(baseRun, 2);
+        const run: RunState = {
+            ...baseRun,
+            status: 'levelComplete',
+            lives: 1,
+            lastLevelResult: {
+                level: 1,
+                scoreGained: 120,
+                rating: 'S',
+                livesRemaining: 1,
+                perfect: false,
+                mistakes: 1,
+                clearLifeReason: 'none',
+                clearLifeGained: 0,
+                routeChoices
+            }
+        };
+
+        act(() => {
+            const saveData = createDefaultSaveData();
+            useAppStore.setState({
+                hydrated: true,
+                hydrating: false,
+                view: 'playing',
+                run,
+                saveData,
+                settings: saveData.settings
+            });
+        });
+
+        renderApp();
+
+        expect(await screen.findByRole('dialog', { name: /floor cleared/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /greedy route/i })).toBeDisabled();
+        expect(screen.getByText(/unavailable at 1 life/i)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /safe passage/i })).toBeEnabled();
     });
 
     it('opens Collection from the main menu and returns', async () => {

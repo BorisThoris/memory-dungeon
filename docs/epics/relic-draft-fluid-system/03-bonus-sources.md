@@ -6,7 +6,7 @@
   - Base **1** + `bonusRelicPicksNextOffer` (from **`shrine_echo`** via `grantBonusRelicPickNextOffer`, then cleared when the offer opens).
   - **+1** if **`generous_shrine`** mutator is active.
   - **+1** if **`gameMode === 'daily'`**.
-  - **+1** if **`metaRelicDraftExtraPerMilestone`** (from save: **`relicShrineExtraPickUnlocked`**, unlocked after **7** daily completions or migration from `ACH_SEVEN_DAILIES`).
+  - **+1** if **`metaRelicDraftExtraPerMilestone`** (from save: claimed **`relicShrineExtraPickUnlocked`** after **7** daily completions make Week of Archives available).
   - **+1** if **`activeContract.bonusRelicDraftPick`** (Scholar contract run from the menu).
 
 - **`grantBonusRelicPickNextOffer(run, amount?)`** — increments `bonusRelicPicksNextOffer` for the next `openRelicOffer`.

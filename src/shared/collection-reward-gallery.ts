@@ -27,6 +27,21 @@ const statusFor = (current: number, target: number): CollectionRewardGalleryStat
     return 'missing';
 };
 
+const statusForMetaReward = (
+    row: ReturnType<typeof getMetaProgressionBoard>['nextReward']
+): CollectionRewardGalleryStatus => {
+    if (!row) {
+        return 'owned';
+    }
+    if (row.status === 'owned') {
+        return 'owned';
+    }
+    if (row.status === 'available' || row.progress.current > 0) {
+        return 'in_progress';
+    }
+    return 'missing';
+};
+
 export const getCollectionRewardGalleryRows = (save: SaveData): CollectionRewardGalleryRow[] => {
     const achievements = Object.values(save.achievements);
     const meta = getMetaProgressionBoard(save);
@@ -55,7 +70,7 @@ export const getCollectionRewardGalleryRows = (save: SaveData): CollectionReward
             title: meta.nextReward?.title ?? meta.longTermGoal?.title ?? 'Profile mastery',
             description: meta.nextReward?.description ?? meta.longTermGoal?.description ?? 'All visible local rewards are owned.',
             owned: meta.nextReward?.progress.current ?? meta.summary.owned,
-            status: meta.nextReward ? statusFor(meta.nextReward.progress.current, meta.nextReward.progress.target) : 'owned',
+            status: statusForMetaReward(meta.nextReward),
             total: meta.nextReward?.progress.target ?? Math.max(1, meta.summary.owned),
             progressLabel: meta.nextReward
                 ? `${meta.nextReward.progress.current}/${meta.nextReward.progress.target}`

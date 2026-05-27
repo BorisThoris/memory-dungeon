@@ -691,13 +691,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             trapCount === 1
                 ? `${trapLabel} resolved. Effect applied; next tile ready.`
                 : `${trapCount} traps resolved. Effects applied; next tile ready.`;
-        setTrapResolutionMessage(message);
+        queueMicrotask(() => setTrapResolutionMessage(message));
         return undefined;
     }, [board.tiles, resolvedTrapTileCount]);
 
     useEffect(() => {
         if (resolvedTrapTileCount === 0 && trapResolutionMessage) {
-            setTrapResolutionMessage('');
+            queueMicrotask(() => setTrapResolutionMessage(''));
         }
     }, [resolvedTrapTileCount, trapResolutionMessage]);
 

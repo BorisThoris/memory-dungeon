@@ -36,7 +36,7 @@ export const getInventoryPrepRows = (run: RunState | null): InventoryPrepRow[] =
             id: 'run_prep',
             label: 'Prep status',
             title: 'Run prep snapshot',
-            value: `${run.gameMode} · floor ${run.board?.level ?? run.stats.highestLevel}`,
+            value: `${run.gameMode} | floor ${run.board?.level ?? run.stats.highestLevel}`,
             detail: 'Mode, floor, lives, achievements, and power-use state are visible before returning to play.',
             actionHint: 'Offline ready: continue the active run.',
             status: 'ready',

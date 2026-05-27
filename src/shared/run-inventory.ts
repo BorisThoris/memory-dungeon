@@ -40,6 +40,9 @@ export interface RunInventoryRow extends RunInventoryDefinition {
     quantity: number;
     quantityLabel: string;
     maxStack: number;
+    remainingCapacity: number | null;
+    atStackLimit: boolean;
+    fullReason: string | null;
     slotId?: string;
     mutability?: RunInventoryMutability;
     useWindow?: string;
@@ -69,7 +72,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         label: 'Shuffle charge',
         stackLimit: null,
         mutableAt: 'mid_run',
-        source: 'Run start, relics, and clean floor rewards.',
+        source: 'Run start, relics, and explicit reward pickups.',
         useRule: 'Spend during play to reshuffle hidden tiles; disabled by no-shuffle contracts.'
     },
     region_shuffle_charge: {
@@ -87,7 +90,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         label: 'Destroy charge',
         stackLimit: null,
         mutableAt: 'mid_run',
-        source: 'Clean clears, relics, room rewards, and shop services.',
+        source: 'Relics, room rewards, shop services, events, and explicit pickups.',
         useRule: 'Spend during play to remove a hidden pair; disabled by no-destroy contracts.'
     },
     peek_charge: {
@@ -130,7 +133,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
         id: 'gambit_token',
         kind: 'consumable',
         label: 'Gambit token',
-        stackLimit: null,
+        stackLimit: 1,
         mutableAt: 'floor_only',
         source: 'Floor start and future risk pickups.',
         useRule: 'Spend the floor gambit window to attempt a third flip rescue.'
@@ -209,34 +212,34 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
     }
 };
 
-const quantityFor = (run: RunState, id: RunInventoryItemId): number => {
+export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemId): number => {
     switch (id) {
         case 'shuffle_charge':
-            return run.shuffleCharges + (run.freeShuffleThisFloor ? 1 : 0);
+            return nonNegativeQuantity(run.shuffleCharges) + (run.freeShuffleThisFloor ? 1 : 0);
         case 'region_shuffle_charge':
-            return run.regionShuffleCharges + (run.regionShuffleFreeThisFloor ? 1 : 0);
+            return nonNegativeQuantity(run.regionShuffleCharges) + (run.regionShuffleFreeThisFloor ? 1 : 0);
         case 'destroy_charge':
-            return run.destroyPairCharges;
+            return nonNegativeQuantity(run.destroyPairCharges);
         case 'peek_charge':
-            return run.peekCharges;
+            return nonNegativeQuantity(run.peekCharges);
         case 'stray_remove_charge':
-            return run.strayRemoveCharges;
+            return nonNegativeQuantity(run.strayRemoveCharges);
         case 'flash_pair_charge':
-            return run.flashPairCharges;
+            return nonNegativeQuantity(run.flashPairCharges);
         case 'undo_charge':
-            return run.undoUsesThisFloor;
+            return nonNegativeQuantity(run.undoUsesThisFloor);
         case 'gambit_token':
             return run.gambitAvailableThisFloor && !run.gambitThirdFlipUsed ? 1 : 0;
         case 'wild_match_token':
-            return run.wildMatchesRemaining;
+            return nonNegativeQuantity(run.wildMatchesRemaining);
         case 'iron_key':
-            return Object.values(run.dungeonKeys).reduce((sum, count) => sum + (count ?? 0), 0);
+            return Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeQuantity(count), 0);
         case 'master_key':
-            return run.dungeonMasterKeys;
+            return nonNegativeQuantity(run.dungeonMasterKeys);
         case 'guard_token':
-            return run.stats.guardTokens;
+            return nonNegativeQuantity(run.stats.guardTokens);
         case 'combo_shard':
-            return run.stats.comboShards;
+            return nonNegativeQuantity(run.stats.comboShards);
         case 'relic_loadout':
             return run.relicIds.length;
         case 'mutator_loadout':
@@ -267,16 +270,35 @@ const quantityLabelFor = (definition: RunInventoryDefinition, quantity: number):
 const maxStackFor = (definition: RunInventoryDefinition, quantity: number): number =>
     definition.stackLimit ?? Math.max(1, quantity);
 
+const remainingCapacityFor = (definition: RunInventoryDefinition, quantity: number): number | null => {
+    if (definition.kind !== 'consumable' || definition.stackLimit == null) {
+        return null;
+    }
+    return Math.max(0, definition.stackLimit - quantity);
+};
+
+const fullReasonFor = (definition: RunInventoryDefinition, quantity: number): string | null => {
+    const remainingCapacity = remainingCapacityFor(definition, quantity);
+    if (remainingCapacity !== 0) {
+        return null;
+    }
+    return `${definition.label} is at its run limit.`;
+};
+
 export const getRunInventoryRows = (run: RunState): RunInventoryRow[] =>
     (Object.keys(RUN_INVENTORY_CATALOG) as RunInventoryItemId[]).map((id) => {
         const definition = RUN_INVENTORY_CATALOG[id];
-        const quantity = quantityFor(run, id);
+        const quantity = getRunInventoryItemQuantity(run, id);
         const unavailableReason = unavailableReasonFor(run, id, quantity);
+        const remainingCapacity = remainingCapacityFor(definition, quantity);
         return {
             ...definition,
             quantity,
             quantityLabel: quantityLabelFor(definition, quantity),
             maxStack: maxStackFor(definition, quantity),
+            remainingCapacity,
+            atStackLimit: remainingCapacity === 0,
+            fullReason: fullReasonFor(definition, quantity),
             slotId: id,
             mutability: definition.mutableAt,
             useWindow: definition.useRule,
@@ -337,44 +359,192 @@ export interface RunInventoryActionResult {
     reason?: 'unavailable' | 'not_usable';
 }
 
+export interface RunInventoryGainPreview {
+    itemId: RunInventoryItemId;
+    requested: number;
+    accepted: number;
+    capped: boolean;
+    quantity: number;
+    nextQuantity: number;
+    remainingCapacity: number | null;
+}
+
+export interface RunInventoryGainFeedback extends RunInventoryGainPreview {
+    gainedLabel: string | null;
+    cappedLabel: string | null;
+    noPickupLabel: string | null;
+}
+
 const KEY_SPEND_ORDER: DungeonKeyKind[] = ['iron', 'treasure', 'shrine', 'boss', 'trap'];
+
+const nonNegativeQuantity = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const nonNegativeFiniteAmount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+export const previewRunInventoryItemGain = (
+    run: RunState,
+    itemId: RunInventoryItemId,
+    amount: number = 1
+): RunInventoryGainPreview => {
+    const requested = nonNegativeFiniteAmount(amount);
+    const definition = RUN_INVENTORY_CATALOG[itemId];
+    const quantity = getRunInventoryItemQuantity(run, itemId);
+    if (!definition) {
+        return {
+            itemId,
+            requested,
+            accepted: 0,
+            capped: requested > 0,
+            quantity,
+            nextQuantity: quantity,
+            remainingCapacity: null
+        };
+    }
+    if (requested <= 0 || definition.kind !== 'consumable') {
+        return {
+            itemId,
+            requested,
+            accepted: 0,
+            capped: requested > 0,
+            quantity,
+            nextQuantity: quantity,
+            remainingCapacity: remainingCapacityFor(definition, quantity)
+        };
+    }
+
+    const remainingCapacity = remainingCapacityFor(definition, quantity);
+    const accepted = remainingCapacity == null ? requested : Math.min(requested, remainingCapacity);
+    return {
+        itemId,
+        requested,
+        accepted,
+        capped: accepted < requested,
+        quantity,
+        nextQuantity: quantity + accepted,
+        remainingCapacity: remainingCapacity == null ? null : Math.max(0, remainingCapacity - accepted)
+    };
+};
+
+const PICKUP_GAIN_LABELS: Record<RunInventoryItemId, { singular: string; plural: string }> = {
+    shuffle_charge: { singular: 'shuffle charge', plural: 'shuffle charges' },
+    region_shuffle_charge: { singular: 'row shuffle charge', plural: 'row shuffle charges' },
+    destroy_charge: { singular: 'destroy charge', plural: 'destroy charges' },
+    peek_charge: { singular: 'peek charge', plural: 'peek charges' },
+    stray_remove_charge: { singular: 'stray remover', plural: 'stray removers' },
+    flash_pair_charge: { singular: 'flash pair', plural: 'flash pairs' },
+    undo_charge: { singular: 'undo charge', plural: 'undo charges' },
+    gambit_token: { singular: 'Gambit token', plural: 'Gambit tokens' },
+    wild_match_token: { singular: 'wild match', plural: 'wild matches' },
+    iron_key: { singular: 'dungeon key', plural: 'dungeon keys' },
+    master_key: { singular: 'master key', plural: 'master keys' },
+    guard_token: { singular: 'guard token', plural: 'guard tokens' },
+    combo_shard: { singular: 'combo shard', plural: 'combo shards' },
+    relic_loadout: { singular: 'relic loadout', plural: 'relic loadouts' },
+    mutator_loadout: { singular: 'mutator loadout', plural: 'mutator loadouts' },
+    contract_loadout: { singular: 'contract loadout', plural: 'contract loadouts' }
+};
+
+const inventoryGainLabelFor = (itemId: RunInventoryItemId, amount: number): string => {
+    const labels = PICKUP_GAIN_LABELS[itemId];
+    return amount === 1 ? labels.singular : labels.plural;
+};
+
+const CAPPED_GAIN_LABELS: Partial<Record<RunInventoryItemId, string>> = {
+    peek_charge: 'Peek charges already full',
+    guard_token: 'Guard tokens already full',
+    combo_shard: 'Combo shards already full',
+    iron_key: 'Dungeon keys already full',
+    master_key: 'Master keys already full'
+};
+
+const cappedFeedbackLabelFor = (itemId: RunInventoryItemId): string => {
+    const definition = RUN_INVENTORY_CATALOG[itemId];
+    return CAPPED_GAIN_LABELS[itemId] ?? (definition.stackLimit == null
+        ? `${definition.label}s cannot take this pickup`
+        : `${definition.label} already full`);
+};
+
+export const getRunInventoryGainFeedback = (
+    run: RunState,
+    itemId: RunInventoryItemId,
+    amount: number = 1
+): RunInventoryGainFeedback => {
+    const preview = previewRunInventoryItemGain(run, itemId, amount);
+    const definition = RUN_INVENTORY_CATALOG[itemId];
+    if (!definition) {
+        return {
+            ...preview,
+            gainedLabel: null,
+            cappedLabel: preview.capped ? 'Inventory pickup unavailable' : null,
+            noPickupLabel: 'No inventory pickup available'
+        };
+    }
+    if (definition.kind !== 'consumable' || preview.requested <= 0) {
+        return {
+            ...preview,
+            gainedLabel: null,
+            cappedLabel: null,
+            noPickupLabel: 'No inventory pickup available'
+        };
+    }
+
+    const gainedLabel =
+        preview.accepted > 0
+            ? `+${preview.accepted} ${inventoryGainLabelFor(itemId, preview.accepted)}`
+            : null;
+    const cappedLabel = preview.capped ? cappedFeedbackLabelFor(itemId) : null;
+    return {
+        ...preview,
+        gainedLabel,
+        cappedLabel,
+        noPickupLabel: gainedLabel || cappedLabel ? null : 'No inventory pickup available'
+    };
+};
 
 export const gainRunInventoryItem = (
     run: RunState,
     itemId: RunInventoryItemId,
     amount: number = 1
 ): RunState => {
-    const gain = Math.max(0, Math.floor(amount));
+    const gain = previewRunInventoryItemGain(run, itemId, amount).accepted;
     if (gain <= 0) {
         return run;
     }
     switch (itemId) {
         case 'shuffle_charge':
-            return { ...run, shuffleCharges: run.shuffleCharges + gain };
+            return { ...run, shuffleCharges: nonNegativeQuantity(run.shuffleCharges) + gain };
         case 'region_shuffle_charge':
-            return { ...run, regionShuffleCharges: run.regionShuffleCharges + gain };
+            return { ...run, regionShuffleCharges: nonNegativeQuantity(run.regionShuffleCharges) + gain };
         case 'destroy_charge':
-            return { ...run, destroyPairCharges: run.destroyPairCharges + gain };
+            return { ...run, destroyPairCharges: nonNegativeQuantity(run.destroyPairCharges) + gain };
         case 'peek_charge':
-            return { ...run, peekCharges: run.peekCharges + gain };
+            return { ...run, peekCharges: nonNegativeQuantity(run.peekCharges) + gain };
         case 'stray_remove_charge':
-            return { ...run, strayRemoveCharges: run.strayRemoveCharges + gain };
+            return { ...run, strayRemoveCharges: nonNegativeQuantity(run.strayRemoveCharges) + gain };
         case 'flash_pair_charge':
-            return { ...run, flashPairCharges: run.flashPairCharges + gain };
+            return { ...run, flashPairCharges: nonNegativeQuantity(run.flashPairCharges) + gain };
         case 'undo_charge':
-            return { ...run, undoUsesThisFloor: run.undoUsesThisFloor + gain };
+            return { ...run, undoUsesThisFloor: nonNegativeQuantity(run.undoUsesThisFloor) + gain };
         case 'gambit_token':
-            return { ...run, gambitAvailableThisFloor: true };
+            return { ...run, gambitAvailableThisFloor: true, gambitThirdFlipUsed: false };
         case 'wild_match_token':
-            return { ...run, wildMatchesRemaining: run.wildMatchesRemaining + gain };
+            return { ...run, wildMatchesRemaining: nonNegativeQuantity(run.wildMatchesRemaining) + gain };
         case 'iron_key':
-            return { ...run, dungeonKeys: { ...run.dungeonKeys, iron: (run.dungeonKeys.iron ?? 0) + gain } };
+            return { ...run, dungeonKeys: { ...run.dungeonKeys, iron: nonNegativeQuantity(run.dungeonKeys.iron) + gain } };
         case 'master_key':
-            return { ...run, dungeonMasterKeys: run.dungeonMasterKeys + gain };
+            return { ...run, dungeonMasterKeys: nonNegativeQuantity(run.dungeonMasterKeys) + gain };
         case 'guard_token':
-            return { ...run, stats: { ...run.stats, guardTokens: Math.min(MAX_GUARD_TOKENS, run.stats.guardTokens + gain) } };
+            return {
+                ...run,
+                stats: { ...run.stats, guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeQuantity(run.stats.guardTokens) + gain) }
+            };
         case 'combo_shard':
-            return { ...run, stats: { ...run.stats, comboShards: Math.min(MAX_COMBO_SHARDS, run.stats.comboShards + gain) } };
+            return {
+                ...run,
+                stats: { ...run.stats, comboShards: Math.min(MAX_COMBO_SHARDS, nonNegativeQuantity(run.stats.comboShards) + gain) }
+            };
         default:
             return run;
     }

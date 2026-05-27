@@ -11,8 +11,9 @@ describe('REG-011 meta reward signals', () => {
         const signal = getCollectionRewardSignal(save);
         expect(signal.id).toBe('collection_profile_level');
         expect(signal.progress).toBeDefined();
-        expect(signal.cta).toMatch(/Next reward/i);
+        expect(signal.cta).toBe('Clear one more Daily Challenge for 1 honor mark.');
         expect(signal.body).toMatch(/honor marks/i);
+        expect(signal.body).toMatch(/Adept tier at profile level 3/i);
     });
 
     it('gives inventory and codex active return reasons without new persistence', () => {

@@ -4,6 +4,7 @@
  */
 
 import uiSfxManifest from '../assets/audio/ui/manifest.json';
+import { preloadAudioBuffers } from './preloadAudioBuffers';
 import {
     getSharedAudioContext,
     resetSharedAudioContextForTests,
@@ -25,6 +26,7 @@ const globUrls = import.meta.glob<string>('../assets/audio/ui/*.{ogg,wav}', {
     query: '?url',
     import: 'default'
 });
+const urlsByFilename = new Map(Object.entries(globUrls).map(([path, url]) => [path.replace(/^.*\//, ''), url]));
 
 const MAX_POLYPHONY: Record<UiSfxCategory, number> = {
     ui: 5,
@@ -99,8 +101,7 @@ export const resumeUiSfxContext = (): void => {
 };
 
 function urlForFilename(filename: string): string | undefined {
-    const hit = Object.entries(globUrls).find(([path]) => path.replace(/^.*\//, '') === filename);
-    return hit?.[1];
+    return urlsByFilename.get(filename);
 }
 
 const removeSampleVoice = (voice: SampleVoice): void => {
@@ -203,26 +204,14 @@ export async function preloadUiSfx(): Promise<void> {
     if (!ctx) {
         return;
     }
-    const loaded = new Map<UiSfxSampleKey, AudioBuffer>();
-    await Promise.all(
-        (Object.keys(manifest.entries) as UiSfxSampleKey[]).map(async (key) => {
+    const loaded = await preloadAudioBuffers({
+        decode: (arrayBuffer) => ctx.decodeAudioData(arrayBuffer),
+        keys: Object.keys(manifest.entries) as UiSfxSampleKey[],
+        urlForKey: (key) => {
             const file = manifest.entries[key]?.file;
-            const url = file ? urlForFilename(file) : undefined;
-            if (!url) {
-                return;
-            }
-            try {
-                const res = await fetch(url);
-                if (!res.ok) {
-                    return;
-                }
-                const arr = await res.arrayBuffer();
-                loaded.set(key, await ctx.decodeAudioData(arr.slice(0)));
-            } catch {
-                /* missing file or decode error: procedural fallback */
-            }
-        })
-    );
+            return file ? urlForFilename(file) : undefined;
+        }
+    });
     buffers.clear();
     loaded.forEach((ab, key) => buffers.set(key, ab));
 }
@@ -278,6 +267,29 @@ const playTone = (
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + options.durationSec);
     osc.connect(g);
     g.connect(ctx.destination);
+
+    const voice: SampleVoice = {
+        category: meta.category,
+        startTime: t0,
+        stop: (): void => {
+            try {
+                osc.stop();
+            } catch {
+                /* already stopped */
+            }
+            try {
+                osc.disconnect();
+                g.disconnect();
+            } catch {
+                /* noop */
+            }
+            removeSampleVoice(voice);
+        }
+    };
+    activeSampleVoices.push(voice);
+    osc.addEventListener?.('ended', () => removeSampleVoice(voice));
+    globalThis.setTimeout(() => removeSampleVoice(voice), options.durationSec * 1000 + 120);
+
     osc.start(t0);
     osc.stop(t0 + options.durationSec + 0.02);
 };

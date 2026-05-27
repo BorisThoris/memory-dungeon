@@ -139,7 +139,7 @@ describe('DNG-020 dungeon card taxonomy', () => {
             effectKnown: true,
             claimable: true,
             familyLabel: 'Dungeon trap',
-            effectLabel: 'Alarm Trap'
+            effectLabel: 'Bell Trap'
         });
         expect(getDungeonCardKnowledge({ ...hiddenTile, dungeonCardState: 'revealed' })).toMatchObject({
             state: 'revealed',

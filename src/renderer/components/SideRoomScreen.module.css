@@ -68,6 +68,38 @@
     color: var(--theme-text);
 }
 
+.rewardFeedbackList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.rewardFeedbackList li {
+    min-width: 0;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+    border-radius: var(--ui-radius-sm);
+    padding: 4px 8px;
+    background: color-mix(in srgb, var(--theme-surface-control) 82%, transparent);
+    color: var(--theme-text-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.rewardFeedbackList li[data-reward-feedback-kind='gain'] {
+    border-color: color-mix(in srgb, var(--theme-success, #8edb9b) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-success, #8edb9b) 86%, white);
+}
+
+.rewardFeedbackList li[data-reward-feedback-kind='capped'] {
+    border-color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 46%, transparent);
+    color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 88%, white);
+}
+
 .choiceList {
     display: grid;
     gap: 8px;

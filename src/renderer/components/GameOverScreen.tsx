@@ -34,12 +34,7 @@ const runModeIdentityLine = (summary: NonNullable<RunState['lastRunSummary']>): 
     if (summary.wildMenuRun) {
         return gameOverScreenCopy.modeIdentity.wild;
     }
-    if (
-        summary.practiceMode &&
-        summary.gameMode === 'endless' &&
-        summary.highestLevel >= 5 &&
-        summary.activeMutators?.includes('wide_recall')
-    ) {
+    if (summary.dungeonShowcaseRun) {
         return gameOverScreenCopy.modeIdentity.dungeonShowcase;
     }
     switch (summary.gameMode) {
@@ -72,12 +67,7 @@ const runModeHeading = (summary: NonNullable<RunState['lastRunSummary']>): strin
     if (summary.wildMenuRun) {
         return gameOverScreenCopy.runModeHeadings.wild;
     }
-    if (
-        summary.practiceMode &&
-        summary.gameMode === 'endless' &&
-        summary.highestLevel >= 5 &&
-        summary.activeMutators?.includes('wide_recall')
-    ) {
+    if (summary.dungeonShowcaseRun) {
         return gameOverScreenCopy.runModeHeadings.dungeonShowcase;
     }
     switch (summary.gameMode) {
@@ -97,10 +87,11 @@ const runModeHeading = (summary: NonNullable<RunState['lastRunSummary']>): strin
 const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const shellRef = useRef<HTMLElement | null>(null);
     const { height, width } = useViewportSize();
-    const { goToMenu, restartRun, saveData, settings } = useAppStore(
+    const { goToMenu, restartRun, runStartSaveData, saveData, settings } = useAppStore(
         useShallow((state) => ({
             goToMenu: state.goToMenu,
             restartRun: state.restartRun,
+            runStartSaveData: state.runStartSaveData,
             saveData: state.saveData,
             settings: state.settings
         }))
@@ -140,7 +131,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
 
     const flipCount = run.flipHistory?.length ?? 0;
     const journalEntry = buildRunJournalEntry(run);
-    const nextRunRows = getGameOverNextRunRows(run);
+    const nextRunRows = getGameOverNextRunRows(run, saveData, runStartSaveData ?? undefined);
     const metaItems = [
         ...(summary.activeMutators?.map((id) => ({ kind: 'mutator' as const, label: mutatorLabel(id) })) ?? []),
         ...(summary.relicIds?.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) })) ?? [])
@@ -179,11 +170,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 >
                     <div className={styles.mobileOutcomeCopy}>
                         <strong>{summary.totalScore.toLocaleString()} score</strong>
-                        <span>Floor {summary.highestLevel} · {summary.levelsCleared} clears · {summary.bestStreak} streak</span>
+                        <span>Floor {summary.highestLevel} / {summary.levelsCleared} clears / {summary.bestStreak} streak</span>
                     </div>
                     <UiButton
                         fullWidth
-                        aria-label="Mobile Play Again — start a new run after this expedition"
+                        aria-label="Mobile Play Again - start a new run after this expedition"
                         size="lg"
                         variant="primary"
                         onClick={restartRun}
@@ -329,12 +320,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             </p>
                             {dailyResultRow ? (
                                 <p className={styles.panelCopy}>
-                                    Share: {dailyResultRow.shareString} · {dailyResultRow.repeatAttemptRule}
+                                    Share: {dailyResultRow.shareString} / {dailyResultRow.repeatAttemptRule}
                                 </p>
                             ) : null}
                             <p className={styles.panelCopy}>{gameOverScreenCopy.flipHistoryCopy(flipCount)}</p>
                             <p className={styles.panelCopy}>
-                                Journal {journalEntry.journalId}: {journalEntry.buildSummary} · {journalEntry.shareLabel}
+                                Journal {journalEntry.journalId}: {journalEntry.buildSummary} / {journalEntry.shareLabel}
                             </p>
                             <div className={styles.journalRows} data-testid="game-over-dungeon-journal">
                                 {journalEntry.rows

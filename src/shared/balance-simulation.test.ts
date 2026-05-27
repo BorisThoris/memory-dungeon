@@ -43,11 +43,18 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.shopGoldInflowPotential).toBeGreaterThan(result.aggregate.totalShopGoldEarned);
         expect(result.aggregate.destroyChargeInflowPotential).toBeGreaterThan(0);
         expect(result.aggregate.peekChargeInflowPotential).toBeGreaterThan(0);
+        expect(result.aggregate.recoveryReliefPotential).toBeGreaterThan(0);
+        expect(result.aggregate.netPressureAfterRelief).toBeGreaterThanOrEqual(0);
+        expect(result.aggregate.highPressureLowRecoveryFloors).toBeGreaterThanOrEqual(0);
         expect(result.rows.map((row) => row.key)).toEqual(
             expect.arrayContaining([
                 'avg_moving_enemy_hazards_per_floor',
                 'avg_hazard_tiles_per_floor',
+                'opener_hazard_tiles_per_seed',
                 'avg_contact_risk_per_floor',
+                'max_pressure_step_up',
+                'avg_recovery_relief_on_pressure_floors',
+                'max_recovery_debt_streak',
                 'elite_route_node_share',
                 'avg_relic_favor_potential_per_floor',
                 'avg_combo_shard_potential_per_floor',
@@ -68,6 +75,10 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             ])
         );
         const newRewardRows = new Set([
+            'opener_hazard_tiles_per_seed',
+            'max_pressure_step_up',
+            'avg_recovery_relief_on_pressure_floors',
+            'max_recovery_debt_streak',
             'findable_share_shard_spark',
             'findable_share_score_glint',
             'findable_share_ward_spark',
@@ -89,7 +100,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.samples.some((sample) => sample.dungeonNodeKind === 'elite' && sample.enemyThreatPairs >= 2)).toBe(
             true
         );
-        expect(result.samples.every((sample) => sample.hazardTileCount > 0)).toBe(true);
+        expect(result.samples.find((sample) => sample.floor === 1)?.hazardTileCount).toBe(0);
+        expect(result.samples.filter((sample) => sample.floor > 1).every((sample) => sample.hazardTileCount > 0)).toBe(true);
         expect(new Set(result.samples.map((sample) => sample.floorBand))).toEqual(new Set(['early', 'mid', 'late']));
     });
 
@@ -168,7 +180,56 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(profile.floorsCleared).toBeGreaterThan(0);
             expect(profile.livesLost).toBeGreaterThanOrEqual(0);
             expect(profile.guardUsed).toBeGreaterThanOrEqual(0);
+            expect(profile.healingPurchased).toBeGreaterThanOrEqual(0);
+            expect(profile.healingPurchaseShare).toBeGreaterThanOrEqual(0);
+            expect(profile.minLivesRemaining).toBeGreaterThanOrEqual(1);
+            expect(profile.runFalls).toBe(0);
+            expect(profile.maxAtRiskStreak).toBeLessThanOrEqual(result.bounds.maxAtRiskStreak);
+            expect(profile.lowLifeFloors).toBeGreaterThanOrEqual(0);
+            expect(profile.lowLifeFloorShare).toBeLessThanOrEqual(result.bounds.maxLowLifeFloorShare);
+            expect(profile.maxLowLifeStreak).toBeLessThanOrEqual(result.bounds.maxLowLifeStreak);
+            expect(profile.unhealedLowLifeFloors).toBeGreaterThanOrEqual(0);
+            expect(profile.unhealedLowLifeFloors).toBeLessThanOrEqual(profile.lowLifeFloors);
+            expect(profile.unhealedLowLifeFloorShare).toBeLessThanOrEqual(result.bounds.maxUnhealedLowLifeFloorShare);
+            expect(profile.maxUnhealedLowLifeStreak).toBeLessThanOrEqual(result.bounds.maxUnhealedLowLifeStreak);
+            expect(profile.recoveryDebtFloors).toBeGreaterThanOrEqual(0);
+            expect(profile.maxRecoveryDebtStreak).toBeLessThanOrEqual(result.bounds.maxRecoveryDebtStreak);
+            expect(profile.routeChoiceCounts.safe + profile.routeChoiceCounts.greed + profile.routeChoiceCounts.mystery).toBe(
+                profile.floorsCleared
+            );
+            expect(profile.dominantRouteShare).toBeLessThanOrEqual(result.bounds.maxDominantRouteShare);
+            expect(profile.safeRouteTollSpend).toBeGreaterThanOrEqual(0);
+            expect(profile.greedLifeCosts).toBeGreaterThanOrEqual(0);
+            expect(profile.shopServiceSpend).toBeGreaterThan(0);
             expect(profile.shopGoldEarned).toBeGreaterThan(0);
+            expect(profile.endingShopGold).toBeGreaterThanOrEqual(0);
+            expect(profile.endingShopGold / result.base.samples.length).toBeLessThanOrEqual(
+                result.bounds.maxEndingShopGoldPerFloor
+            );
+            expect(profile.maxShopGoldHeld).toBeGreaterThanOrEqual(profile.endingShopGold / result.base.seeds.length);
+            expect(profile.maxShopGoldHeld / result.base.floors).toBeLessThanOrEqual(
+                result.bounds.maxShopGoldHeldPerFloor
+            );
+            expect(profile.seedOutcomes).toHaveLength(result.base.seeds.length);
+            expect(profile.seedOutcomes.map((outcome) => outcome.seed)).toEqual(result.base.seeds);
+            expect(profile.seedOutcomes.reduce((sum, outcome) => sum + outcome.floorsCleared, 0)).toBe(
+                profile.floorsCleared
+            );
+            expect(profile.seedOutcomes.reduce((sum, outcome) => sum + outcome.livesLost, 0)).toBe(profile.livesLost);
+            expect(profile.worstSeedFloorsClearedShare).toBeGreaterThanOrEqual(
+                result.bounds.minWorstSeedFloorsClearedShare
+            );
+            expect(profile.worstSeedLowLifeFloorShare).toBeLessThanOrEqual(
+                result.bounds.maxWorstSeedLowLifeFloorShare
+            );
+            expect(profile.worstSeedUnhealedLowLifeFloorShare).toBeLessThanOrEqual(
+                result.bounds.maxWorstSeedUnhealedLowLifeFloorShare
+            );
+            expect(profile.worstSeedRunFalls).toBeLessThanOrEqual(result.bounds.maxWorstSeedRunFalls);
+            expect(profile.maxSeedEndingShopGold / result.base.floors).toBeLessThanOrEqual(
+                result.bounds.maxSeedEndingShopGoldPerFloor
+            );
+            expect(profile.seedFloorClearShareSpread).toBeLessThanOrEqual(result.bounds.maxSeedFloorClearShareSpread);
             expect(profile.rewardClaims).toBeGreaterThan(0);
             expect(profile.bossAttempts).toBeGreaterThan(0);
             expect(profile.shopsVisited).toBeGreaterThanOrEqual(0);
@@ -176,8 +237,15 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
 
         const greedy = result.profiles.find((profile) => profile.profile === 'greedy')!;
         const cautious = result.profiles.find((profile) => profile.profile === 'cautious')!;
+        const highSkill = result.profiles.find((profile) => profile.profile === 'high_skill')!;
         expect(greedy.rewardClaims).toBeGreaterThan(cautious.rewardClaims);
         expect(cautious.guardUsed).toBeGreaterThanOrEqual(greedy.guardUsed);
+        expect(greedy.healingPurchased).toBeGreaterThanOrEqual(cautious.healingPurchased);
+        expect(greedy.routeChoiceCounts.greed).toBeGreaterThan(cautious.routeChoiceCounts.greed);
+        expect(cautious.routeChoiceCounts.safe).toBeGreaterThan(cautious.routeChoiceCounts.greed);
+        expect(highSkill.safeRouteTollSpend).toBeGreaterThan(0);
+        expect(greedy.safeRouteTollSpend).toBeGreaterThan(0);
+        expect(greedy.greedLifeCosts).toBe(greedy.routeChoiceCounts.greed);
     });
 
     it('DNG-071 profile bounds fail with profile/seed/floor context', () => {
@@ -195,5 +263,132 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(impossible.issues[0]).toMatch(/@(seed|seed:)/);
         expect(impossible.issues[0]).toMatch(/floor:/);
         expect(impossible.issues[0]).toMatch(/floorsCleared/);
+
+        const deadRun = assertDungeonBalanceProfilesWithinBounds({
+            ...result,
+            profiles: [{ ...result.profiles[0]!, minLivesRemaining: 0, runFalls: 1 }]
+        });
+        expect(deadRun.ok).toBe(false);
+        expect(deadRun.issues).toEqual(expect.arrayContaining([expect.stringMatching(/minLivesRemaining=0/)]));
+        expect(deadRun.issues).toEqual(expect.arrayContaining([expect.stringMatching(/runFalls=1/)]));
+
+        const routeDominated = assertDungeonBalanceProfilesWithinBounds({
+            ...result,
+            profiles: [{ ...result.profiles[0]!, dominantRouteShare: 0.95 }]
+        });
+        expect(routeDominated.ok).toBe(false);
+        expect(routeDominated.issues).toEqual(expect.arrayContaining([expect.stringMatching(/dominantRouteShare=0.95/)]));
+
+        const recoveryDebtCluster = assertDungeonBalanceProfilesWithinBounds({
+            ...result,
+            profiles: [{ ...result.profiles[0]!, maxRecoveryDebtStreak: 99 }]
+        });
+        expect(recoveryDebtCluster.ok).toBe(false);
+        expect(recoveryDebtCluster.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/maxRecoveryDebtStreak=99/)])
+        );
+
+        const lowLifeExposure = assertDungeonBalanceProfilesWithinBounds({
+            ...result,
+            profiles: [{ ...result.profiles[0]!, lowLifeFloorShare: 0.99, maxLowLifeStreak: 99 }]
+        });
+        expect(lowLifeExposure.ok).toBe(false);
+        expect(lowLifeExposure.issues).toEqual(expect.arrayContaining([expect.stringMatching(/lowLifeFloorShare=0.99/)]));
+        expect(lowLifeExposure.issues).toEqual(expect.arrayContaining([expect.stringMatching(/maxLowLifeStreak=99/)]));
+
+        const strandedLowLife = assertDungeonBalanceProfilesWithinBounds({
+            ...result,
+            profiles: [
+                {
+                    ...result.profiles[0]!,
+                    unhealedLowLifeFloorShare: 0.99,
+                    maxUnhealedLowLifeStreak: 99,
+                    worstSeedUnhealedLowLifeFloorShare: 0.9
+                }
+            ]
+        });
+        expect(strandedLowLife.ok).toBe(false);
+        expect(strandedLowLife.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/unhealedLowLifeFloorShare=0.99/)])
+        );
+        expect(strandedLowLife.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/maxUnhealedLowLifeStreak=99/)])
+        );
+        expect(strandedLowLife.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/worstSeedUnhealedLowLifeFloorShare=0.9/)])
+        );
+
+        const walletBloated = assertDungeonBalanceProfilesWithinBounds({
+            ...result,
+            profiles: [{ ...result.profiles[0]!, endingShopGold: 999, maxShopGoldHeld: 999 }]
+        });
+        expect(walletBloated.ok).toBe(false);
+        expect(walletBloated.issues).toEqual(expect.arrayContaining([expect.stringMatching(/endingShopGold=999/)]));
+        expect(walletBloated.issues).toEqual(expect.arrayContaining([expect.stringMatching(/maxShopGoldHeld=999/)]));
+
+        const roughSeedHiddenByAggregate = assertDungeonBalanceProfilesWithinBounds({
+            ...result,
+            profiles: [
+                {
+                    ...result.profiles[0]!,
+                    worstSeedFloorsClearedShare: 0.1,
+                    worstSeedLowLifeFloorShare: 0.9,
+                    worstSeedUnhealedLowLifeFloorShare: 0.9,
+                    worstSeedRunFalls: 1,
+                    maxSeedEndingShopGold: 999,
+                    seedFloorClearShareSpread: 0.9
+                }
+            ]
+        });
+        expect(roughSeedHiddenByAggregate.ok).toBe(false);
+        expect(roughSeedHiddenByAggregate.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/worstSeedFloorsClearedShare=0.1/)])
+        );
+        expect(roughSeedHiddenByAggregate.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/worstSeedLowLifeFloorShare=0.9/)])
+        );
+        expect(roughSeedHiddenByAggregate.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/worstSeedUnhealedLowLifeFloorShare=0.9/)])
+        );
+        expect(roughSeedHiddenByAggregate.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/worstSeedRunFalls=1/)])
+        );
+        expect(roughSeedHiddenByAggregate.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/maxSeedEndingShopGold=999/)])
+        );
+        expect(roughSeedHiddenByAggregate.issues).toEqual(
+            expect.arrayContaining([expect.stringMatching(/seedFloorClearShareSpread=0.9/)])
+        );
+    });
+
+    it('keeps long-run wallet growth and boss survivability inside profile bounds', () => {
+        const result = runDungeonBalanceProfileSimulation({
+            seeds: [42_001, 42_077, 42_123],
+            floors: 48,
+            rulesVersion: GAME_RULES_VERSION
+        });
+        const healthy = assertDungeonBalanceProfilesWithinBounds(result);
+
+        expect(healthy.ok).toBe(true);
+        expect(healthy.issues).toEqual([]);
+    });
+
+    it('keeps greedy reward upside bounded by route life costs', () => {
+        const result = runDungeonBalanceProfileSimulation({
+            seeds: [42_001, 42_077, 42_123],
+            floors: 48,
+            rulesVersion: GAME_RULES_VERSION
+        });
+        const cautious = result.profiles.find((profile) => profile.profile === 'cautious')!;
+        const greedy = result.profiles.find((profile) => profile.profile === 'greedy')!;
+        const highSkill = result.profiles.find((profile) => profile.profile === 'high_skill')!;
+
+        expect(greedy.rewardClaims).toBeGreaterThan(highSkill.rewardClaims);
+        expect(greedy.rewardClaims / cautious.rewardClaims).toBeLessThanOrEqual(1.6);
+        expect(greedy.greedLifeCosts).toBe(greedy.routeChoiceCounts.greed);
+        expect(greedy.greedLifeCosts).toBeGreaterThan(0);
+        expect(greedy.lowLifeFloorShare).toBeGreaterThan(highSkill.lowLifeFloorShare);
+        expect(greedy.minLivesRemaining).toBe(1);
+        expect(greedy.runFalls).toBe(0);
     });
 });

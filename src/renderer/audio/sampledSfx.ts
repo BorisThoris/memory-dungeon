@@ -4,6 +4,7 @@
  */
 
 import sfxManifest from '../assets/audio/sfx/manifest.json';
+import { preloadAudioBuffers } from './preloadAudioBuffers';
 import { getSharedAudioContext } from './webAudioContext';
 
 type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'pressure' | 'shuffle';
@@ -23,6 +24,7 @@ const globUrls = import.meta.glob<string>('../assets/audio/sfx/*.{ogg,wav}', {
     query: '?url',
     import: 'default'
 });
+const urlsByFilename = new Map(Object.entries(globUrls).map(([path, url]) => [path.replace(/^.*\//, ''), url]));
 
 const MAX_POLYPHONY: Record<SfxCategory, number> = {
     flip: 5,
@@ -75,8 +77,7 @@ const stealOldestSampleInCategory = (category: SfxCategory): void => {
 };
 
 function urlForFilename(filename: string): string | undefined {
-    const hit = Object.entries(globUrls).find(([path]) => path.replace(/^.*\//, '') === filename);
-    return hit?.[1];
+    return urlsByFilename.get(filename);
 }
 
 /** Map consecutive-match streak depth to one of three tier samples (see manifest matchTierDepthRanges). */
@@ -173,31 +174,14 @@ export async function preloadSampledSfx(): Promise<void> {
         return;
     }
 
-    const loaded = new Map<SfxSampleKey, AudioBuffer>();
-
-    await Promise.all(
-        (Object.keys(manifest.entries) as SfxSampleKey[]).map(async (key) => {
+    const loaded = await preloadAudioBuffers({
+        decode: (arrayBuffer) => ctx.decodeAudioData(arrayBuffer),
+        keys: Object.keys(manifest.entries) as SfxSampleKey[],
+        urlForKey: (key) => {
             const file = manifest.entries[key]?.file;
-            if (!file) {
-                return;
-            }
-            const url = urlForFilename(file);
-            if (!url) {
-                return;
-            }
-            try {
-                const res = await fetch(url);
-                if (!res.ok) {
-                    return;
-                }
-                const arr = await res.arrayBuffer();
-                const decoded = await ctx.decodeAudioData(arr.slice(0));
-                loaded.set(key, decoded);
-            } catch {
-                /* missing file or decode error — procedural fallback */
-            }
-        })
-    );
+            return file ? urlForFilename(file) : undefined;
+        }
+    });
 
     buffers.clear();
     loaded.forEach((ab, k) => {

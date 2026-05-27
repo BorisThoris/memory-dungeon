@@ -27,6 +27,7 @@ import {
     SHIFTING_WARD_MATCH_PENALTY,
     GLASS_WITNESS_BONUS_SCORE,
     INITIAL_LIVES,
+    INITIAL_RECALL_FOCUS,
     INITIAL_REGION_SHUFFLE_CHARGES,
     INITIAL_SHUFFLE_CHARGES,
     MATCH_DELAY_MS,
@@ -35,6 +36,9 @@ import {
     MAX_LIVES,
     MAX_PENDING_MEMORIZE_BONUS_MS,
     MAX_PINNED_TILES,
+    RECALL_CLUE_MATCH_SCORE,
+    RECALL_FOCUS_MATCH_SCORE,
+    RECALL_FOCUS_MAX,
     LOADED_GATEWAY_SCORE_REWARD,
     MIMIC_CACHE_BLIND_SHOP_GOLD_REWARD,
     MIMIC_CACHE_CONTROLLED_SCORE_REWARD,
@@ -92,6 +96,8 @@ import {
 import {
     claimBonusReward,
     createBonusRewardLedger,
+    previewBonusRewardClaim,
+    resolveBonusRewardRoomByInstanceId,
     rollBonusRewardRoom
 } from './bonus-rewards';
 import {
@@ -107,6 +113,7 @@ import {
     applyRelicOfferService,
     getRelicOfferServiceActions,
     getRelicDraftOptionReasons,
+    isRelicDraftEligible,
     needsRelicPick,
     relicMilestoneIndexForFloor,
     rollRelicOptions,
@@ -126,9 +133,11 @@ import {
     assignRouteWorldSpecials,
     deriveRouteWorldProfile
 } from './route-world';
+import { gainRunInventoryItem } from './run-inventory';
 import {
     createDungeonRunMapState,
     enterSelectedDungeonNode,
+    getCurrentDungeonNode,
     getSelectedDungeonNode,
     revealDungeonChoices,
     selectDungeonNode
@@ -206,6 +215,86 @@ const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number> = {
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 
+const FORGOTTEN_TILE_LEDGER_LIMIT = 16;
+
+const rememberForgottenTiles = (run: RunState, tileIds: readonly string[]): string[] => {
+    const ordered = [...(run.forgottenTileIdsThisFloor ?? [])];
+    for (const id of tileIds) {
+        if (!ordered.includes(id)) {
+            ordered.push(id);
+        }
+    }
+    return ordered.slice(-FORGOTTEN_TILE_LEDGER_LIMIT);
+};
+
+const settleForgottenTiles = (run: RunState, tileIds: readonly string[]): string[] => {
+    if (run.forgottenTileIdsThisFloor.length === 0) {
+        return run.forgottenTileIdsThisFloor;
+    }
+    const settled = new Set(tileIds);
+    return run.forgottenTileIdsThisFloor.filter((id) => !settled.has(id));
+};
+
+const tileCarriesRecallClue = (tile: Tile): boolean =>
+    tile.routeSpecialRevealed === true ||
+    tile.lanternScouted === true ||
+    tile.scoutRevealSource != null ||
+    tile.dungeonCardState === 'revealed';
+
+const normalizedRecallFocus = (focus: number): number => clamp(focus, 0, RECALL_FOCUS_MAX);
+
+const calculateRecallMatchBonus = (run: RunState, tiles: readonly Tile[]): number => {
+    if (run.gameMode === 'puzzle') {
+        return 0;
+    }
+    const focusBonus = normalizedRecallFocus(run.recallFocus) * RECALL_FOCUS_MATCH_SCORE;
+    const clueBonus = tiles.some(tileCarriesRecallClue) ? RECALL_CLUE_MATCH_SCORE : 0;
+    return focusBonus + clueBonus;
+};
+
+const increaseRecallFocus = (run: RunState): number => normalizedRecallFocus(run.recallFocus + 1);
+
+const decreaseRecallFocus = (run: RunState, amount = 1): number => normalizedRecallFocus(run.recallFocus - amount);
+
+const addPendingMemorizeBonusForLostLives = (pendingMemorizeBonusMs: number, lostLives: number): number =>
+    lostLives <= 0
+        ? pendingMemorizeBonusMs
+        : Math.min(
+              MAX_PENDING_MEMORIZE_BONUS_MS,
+              pendingMemorizeBonusMs + MEMORIZE_BONUS_PER_LIFE_LOST_MS * lostLives
+          );
+
+const getMemorizePhaseRecallFocus = (run: RunState): number => {
+    if (run.gameMode === 'puzzle') {
+        return INITIAL_RECALL_FOCUS;
+    }
+
+    const previous = run.lastLevelResult;
+    if (!previous) {
+        return INITIAL_RECALL_FOCUS;
+    }
+
+    const recallMatches = previous.recallMatches ?? 0;
+    const recallMistakes = previous.recallMistakes ?? 0;
+    const currentRouteType = getCurrentDungeonNode(dungeonRunFor(run))?.routeApproachType;
+    let focus =
+        recallMistakes > 0
+            ? 0
+            : recallMatches >= 2
+              ? INITIAL_RECALL_FOCUS + 1
+              : INITIAL_RECALL_FOCUS;
+
+    if (currentRouteType === 'safe' && recallMistakes === 0) {
+        focus += 1;
+    } else if (currentRouteType === 'greed' && recallMistakes > 0) {
+        focus -= 1;
+    } else if (currentRouteType === 'mystery' && recallMistakes === 0 && (previous.recallBonusScore ?? 0) > 0) {
+        focus += 1;
+    }
+
+    return clamp(focus, 0, RECALL_FOCUS_MAX);
+};
+
 /** Documented in `docs/BALANCE_NOTES.md` (presentation mutator match penalties). */
 export const PRESENTATION_MUTATOR_MATCH_PENALTIES = {
     wide_recall: 5,
@@ -239,10 +328,23 @@ const createTimerState = (overrides?: Partial<RunState['timerState']>): RunState
 const dungeonRunFor = (run: RunState): RunState['dungeonRun'] =>
     run.dungeonRun ?? createDungeonRunMapState(run.runSeed, run.runRulesVersion, run.board?.level ?? run.stats.highestLevel);
 
-const withSelectedDungeonRoute = (run: RunState, choiceId: string): RunState => ({
-    ...run,
-    dungeonRun: selectDungeonNode(dungeonRunFor(run), choiceId)
-});
+const withSelectedDungeonRoute = (
+    run: RunState,
+    choiceId: string,
+    routeChoices: readonly RouteChoice[] = run.lastLevelResult?.routeChoices ?? []
+): RunState => {
+    const selected = selectDungeonNode(dungeonRunFor(run), choiceId);
+    if (selected.selectedNodeId === choiceId || routeChoices.length === 0) {
+        return { ...run, dungeonRun: selected };
+    }
+
+    const sourceFloor = run.lastLevelResult?.level ?? run.board?.level ?? selected.currentFloor;
+    const revealed = revealDungeonChoices(selected, sourceFloor, routeChoices);
+    return {
+        ...run,
+        dungeonRun: selectDungeonNode(revealed, choiceId)
+    };
+};
 
 export const generateRouteChoices = (run: RunState, nextLevel: number): NonNullable<LevelResult['routeChoices']> => {
     const baseId = `${run.runRulesVersion}:${run.runSeed}:${nextLevel}`;
@@ -260,7 +362,7 @@ export const generateRouteChoices = (run: RunState, nextLevel: number): NonNulla
             routeType: 'safe',
             label: 'Safe passage',
             detail: 'Standard next floor. Keep the run curve predictable.',
-            rewardPreview: 'Recover 1 life if wounded; otherwise gain 1 guard token.'
+            rewardPreview: 'Recover 1 life if wounded; otherwise gain 1 guard token; costs 1 shop gold if you have any.'
         },
         {
             id: `${baseId}:greed`,
@@ -288,6 +390,23 @@ export interface RouteChoiceOutcomeResult {
     summaryText?: string;
 }
 
+export interface RouteChoiceAvailability {
+    available: boolean;
+    reason?: 'needs_more_lives';
+    label?: string;
+}
+
+export const getRouteChoiceAvailability = (run: RunState, choice: RouteChoice): RouteChoiceAvailability => {
+    if (choice.routeType === 'greed' && run.lives <= 1) {
+        return {
+            available: false,
+            reason: 'needs_more_lives',
+            label: 'Unavailable at 1 life'
+        };
+    }
+    return { available: true };
+};
+
 const mysteryRouteOutcomeFor = (run: RunState, clearedFloor: number): MysteryRouteOutcome => {
     const outcomes: MysteryRouteOutcome[] = ['shop_gold', 'combo_shard', 'relic_favor'];
     const seed = hashStringToSeed(`routeMystery:${run.runRulesVersion}:${run.runSeed}:${clearedFloor}`);
@@ -314,6 +433,35 @@ const addRouteScore = (run: RunState, score: number): RunState => {
     };
 };
 
+const applySafeRouteRecallStabilization = (run: RunState): { run: RunState; summarySuffix: string } => {
+    const recallLapses = run.lastLevelResult?.recallMistakes ?? 0;
+    if (recallLapses <= 0) {
+        return { run, summarySuffix: '' };
+    }
+    const pendingMemorizeBonusMs = Math.min(
+        MAX_PENDING_MEMORIZE_BONUS_MS,
+        run.pendingMemorizeBonusMs + MEMORIZE_BONUS_PER_LIFE_LOST_MS
+    );
+    const gainedMs = pendingMemorizeBonusMs - run.pendingMemorizeBonusMs;
+    if (gainedMs <= 0) {
+        return { run, summarySuffix: '' };
+    }
+    return {
+        run: { ...run, pendingMemorizeBonusMs },
+        summarySuffix: ` Recall stabilized: +${gainedMs}ms memorize time.`
+    };
+};
+
+const applySafeRouteRecoveryToll = (run: RunState): { run: RunState; summarySuffix: string } => {
+    if (run.shopGold <= 0) {
+        return { run, summarySuffix: '' };
+    }
+    return {
+        run: { ...run, shopGold: run.shopGold - 1 },
+        summarySuffix: ' Spent 1 shop gold.'
+    };
+};
+
 const applyMysteryRouteOutcome = (run: RunState): { run: RunState; summaryText: string } => {
     const clearedFloor = run.lastLevelResult?.level ?? run.board?.level ?? run.stats.highestLevel;
     const outcome = mysteryRouteOutcomeFor(run, clearedFloor);
@@ -324,15 +472,19 @@ const applyMysteryRouteOutcome = (run: RunState): { run: RunState; summaryText: 
         };
     }
     if (outcome === 'combo_shard') {
+        const comboShards = Math.min(MAX_COMBO_SHARDS, run.stats.comboShards + 1);
         return {
             run: {
                 ...run,
                 stats: {
                     ...run.stats,
-                    comboShards: Math.min(MAX_COMBO_SHARDS, run.stats.comboShards + 1)
+                    comboShards
                 }
             },
-            summaryText: 'Mystery route: +1 combo shard.'
+            summaryText:
+                comboShards > run.stats.comboShards
+                    ? 'Mystery route: +1 combo shard.'
+                    : 'Mystery route: combo shards already full.'
         };
     }
     const favor = gainRelicFavor(run, 1);
@@ -348,38 +500,64 @@ const applyMysteryRouteOutcome = (run: RunState): { run: RunState; summaryText: 
 };
 
 export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteChoiceOutcomeResult => {
-    if (run.status !== 'levelComplete') {
+    if (run.status !== 'levelComplete' || run.lives <= 0) {
         return { run, applied: false, reason: 'invalid_status' };
     }
-    const choice: RouteChoice | undefined = run.lastLevelResult?.routeChoices?.find((item) => item.id === choiceId);
+    const routeChoices = run.lastLevelResult?.routeChoices ?? [];
+    const choice: RouteChoice | undefined = routeChoices.find((item) => item.id === choiceId);
     if (!choice) {
         return { run, applied: false, reason: 'missing_choice' };
+    }
+    if (
+        run.pendingRouteCardPlan &&
+        (routeChoices.some((item) => item.id === run.pendingRouteCardPlan?.choiceId) ||
+            run.pendingRouteCardPlan.choiceId.startsWith('gateway:') ||
+            run.pendingRouteCardPlan.choiceId.startsWith('loaded_gateway:'))
+    ) {
+        return { run, applied: false, routeType: choice.routeType, reason: 'unavailable' };
+    }
+    const availability = getRouteChoiceAvailability(run, choice);
+    if (!availability.available) {
+        return { run, applied: false, routeType: choice.routeType, reason: 'unavailable' };
     }
     const pendingRouteCardPlan = createRouteCardPlan(run, choice);
     if (choice.routeType === 'safe') {
         if (run.lives < MAX_LIVES) {
-            const nextRun = {
-                ...run,
-                lives: run.lives + 1,
+            const tolled = applySafeRouteRecoveryToll(run);
+            const nextRun = applySafeRouteRecallStabilization({
+                ...tolled.run,
+                lives: tolled.run.lives + 1,
                 pendingRouteCardPlan,
-                lastLevelResult: run.lastLevelResult
-                    ? { ...run.lastLevelResult, livesRemaining: run.lives + 1 }
-                    : run.lastLevelResult
+                lastLevelResult: tolled.run.lastLevelResult
+                    ? { ...tolled.run.lastLevelResult, livesRemaining: tolled.run.lives + 1 }
+                    : tolled.run.lastLevelResult
+            });
+            return {
+                run: withSelectedDungeonRoute(nextRun.run, choiceId, routeChoices),
+                applied: true,
+                routeType: choice.routeType,
+                summaryText: `Safe route: +1 life.${tolled.summarySuffix}${nextRun.summarySuffix}`
             };
-            return { run: withSelectedDungeonRoute(nextRun, choiceId), applied: true, routeType: choice.routeType, summaryText: 'Safe route: +1 life.' };
         }
         const guardTokens = Math.min(MAX_GUARD_TOKENS, run.stats.guardTokens + 1);
+        const guardGained = guardTokens > run.stats.guardTokens;
+        const tolled = guardGained ? applySafeRouteRecoveryToll(run) : { run, summarySuffix: '' };
+        const guardSummary = guardGained
+            ? 'Safe route: +1 guard token.'
+            : 'Safe route: guard tokens already full.';
+        const nextRun = applySafeRouteRecallStabilization({
+            ...tolled.run,
+            pendingRouteCardPlan,
+            stats: { ...tolled.run.stats, guardTokens }
+        });
         return {
-            run: withSelectedDungeonRoute({ ...run, pendingRouteCardPlan, stats: { ...run.stats, guardTokens } }, choiceId),
+            run: withSelectedDungeonRoute(nextRun.run, choiceId, routeChoices),
             applied: true,
             routeType: choice.routeType,
-            summaryText: 'Safe route: +1 guard token.'
+            summaryText: `${guardSummary}${tolled.summarySuffix}${nextRun.summarySuffix}`
         };
     }
     if (choice.routeType === 'greed') {
-        if (run.lives <= 1) {
-            return { run, applied: false, routeType: choice.routeType, reason: 'unavailable' };
-        }
         const scored = addRouteScore(run, ROUTE_GREED_SCORE_REWARD);
         const nextRun = {
             ...scored,
@@ -391,7 +569,7 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
                 : scored.lastLevelResult
         };
         return {
-            run: withSelectedDungeonRoute(nextRun, choiceId),
+            run: withSelectedDungeonRoute(nextRun, choiceId, routeChoices),
             applied: true,
             routeType: choice.routeType,
             summaryText: `Greedy route: +${ROUTE_GREED_SHOP_GOLD_REWARD} shop gold, +${ROUTE_GREED_SCORE_REWARD} score, -1 life.`
@@ -399,7 +577,7 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
     }
     const outcome = applyMysteryRouteOutcome(run);
     return {
-        run: withSelectedDungeonRoute({ ...outcome.run, pendingRouteCardPlan }, choiceId),
+        run: withSelectedDungeonRoute({ ...outcome.run, pendingRouteCardPlan }, choiceId, routeChoices),
         applied: true,
         routeType: choice.routeType,
         summaryText: outcome.summaryText
@@ -430,6 +608,9 @@ const buildBonusSideRoom = (
         ledger: run.bonusRewardLedger
     });
     const routeLabel = routeType === 'safe' ? 'Safe' : routeType === 'greed' ? 'Greed' : 'Mystery';
+    const rewardPreview = reward.eligible
+        ? previewBonusRewardClaim(run, reward).feedback.summary
+        : (reward.unavailableReason ?? 'No reward available.');
     return {
         id: `${reward.instanceId}:side`,
         kind: 'bonus_reward',
@@ -441,14 +622,14 @@ const buildBonusSideRoom = (
             ? `${reward.trigger} ${reward.discoverability}`
             : `${reward.label} is exhausted for this run.`,
         primaryLabel: reward.eligible ? `Claim ${reward.label}` : 'Continue',
-        primaryDetail: reward.eligible ? reward.summaryText : (reward.unavailableReason ?? 'No reward available.'),
+        primaryDetail: rewardPreview,
         skipLabel: reward.eligible ? 'Leave it' : 'Continue',
         payload: { kind: 'bonus_reward', instanceId: reward.instanceId }
     };
 };
 
 export const openRouteSideRoom = (run: RunState): RunState => {
-    if (run.status !== 'levelComplete' || run.sideRoom || !run.pendingRouteCardPlan) {
+    if (run.status !== 'levelComplete' || run.lives <= 0 || run.sideRoom || !run.pendingRouteCardPlan) {
         return run;
     }
     const routeType = run.pendingRouteCardPlan.routeType;
@@ -470,7 +651,7 @@ export const openRouteSideRoom = (run: RunState): RunState => {
                     title: 'Safe Quiet Rest',
                     body: 'The safe route opens a recovery stop before the next floor.',
                     primaryLabel: service.label,
-                    primaryDetail: 'Restore 1 life without spending shop gold.',
+                    primaryDetail: 'Restore 1 life; costs 1 shop gold if you have any.',
                     skipLabel: 'Save the time',
                     payload: { kind: 'rest_heal', serviceId: service.id }
                 }
@@ -519,13 +700,21 @@ export const claimRouteSideRoomPrimary = (run: RunState): RunState => {
 };
 
 export const claimRouteSideRoomChoice = (run: RunState, choiceId?: string): RunState => {
-    if (run.status !== 'levelComplete' || !run.sideRoom) {
+    if (run.status !== 'levelComplete' || run.lives <= 0 || !run.sideRoom) {
         return run;
     }
     const sideRoom = run.sideRoom;
     const clearedRun = { ...run, sideRoom: null };
     if (sideRoom.payload.kind === 'rest_heal') {
-        return { ...clearedRun, lives: Math.min(MAX_LIVES, clearedRun.lives + 1) };
+        const lives = Math.min(MAX_LIVES, clearedRun.lives + 1);
+        return {
+            ...clearedRun,
+            lives,
+            lastLevelResult: clearedRun.lastLevelResult
+                ? { ...clearedRun.lastLevelResult, livesRemaining: lives }
+                : clearedRun.lastLevelResult,
+            shopGold: Math.max(0, clearedRun.shopGold - 1)
+        };
     }
     if (sideRoom.payload.kind === 'event_choice') {
         const event = rollRunEventRoom({
@@ -536,24 +725,28 @@ export const claimRouteSideRoomChoice = (run: RunState, choiceId?: string): RunS
         if (event.eventKey !== sideRoom.payload.eventKey) {
             return clearedRun;
         }
-        return applyRunEventChoice(clearedRun, event, choiceId ?? sideRoom.payload.choiceId).run;
+        const result = applyRunEventChoice(clearedRun, event, choiceId ?? sideRoom.payload.choiceId);
+        return result.applied ? result.run : run;
     }
-    const reward = rollBonusRewardRoom({
+    const reward = resolveBonusRewardRoomByInstanceId({
         runSeed: run.runSeed,
         rulesVersion: run.runRulesVersion,
         floor: sideRoom.floor,
         routeKind: sideRoom.nodeKind,
-        ledger: run.bonusRewardLedger
+        ledger: run.bonusRewardLedger,
+        instanceId: sideRoom.payload.instanceId
     });
-    if (reward.instanceId !== sideRoom.payload.instanceId) {
+    if (!reward) {
         return clearedRun;
     }
     const result = claimBonusReward(clearedRun, run.bonusRewardLedger, reward);
-    return result.claimed ? { ...result.run, bonusRewardLedger: result.ledger } : clearedRun;
+    return result.claimed
+        ? { ...result.run, bonusRewardLedger: result.ledger }
+        : { ...clearedRun, bonusRewardLedger: result.ledger };
 };
 
 export const skipRouteSideRoom = (run: RunState): RunState =>
-    run.sideRoom ? { ...run, sideRoom: null } : run;
+    run.status === 'levelComplete' && run.lives > 0 && run.sideRoom ? { ...run, sideRoom: null } : run;
 
 export const SHOP_ITEM_CATALOG: Record<
     RunShopItemId,
@@ -622,7 +815,7 @@ export const SHOP_ITEM_CATALOG: Record<
 };
 
 export const getShopGoldRewardForFloor = (level: number): number =>
-    FLOOR_CLEAR_GOLD_BASE + Math.max(0, Math.floor(level) - 1);
+    Math.min(8, FLOOR_CLEAR_GOLD_BASE + Math.max(0, Math.floor(level) - 1));
 
 export const getShopRerollCostForFloor = (level: number): number =>
     1 + Math.floor(Math.max(0, Math.floor(level) - 1) / 3);
@@ -707,6 +900,9 @@ const getShopOfferCompatibility = (
     if (itemId === 'heal_life' && run.lives >= MAX_LIVES) {
         return { compatible: false, unavailableReason: 'Life already full.' };
     }
+    if (itemId === 'destroy_charge' && run.activeContract?.noDestroy) {
+        return { compatible: false, unavailableReason: 'No-destroy contract locks this item.' };
+    }
     return { compatible: true, unavailableReason: null };
 };
 
@@ -730,9 +926,10 @@ export const canRerollShopOffers = (run: RunState): boolean =>
 
 export const getRunShopReadModel = (run: RunState): RunShopReadModel => {
     const plan = getRunShopStockPlan(run);
-    const availableOfferCount = run.shopOffers.filter(
-        (offer) => !offer.purchased && offer.compatible && run.shopGold >= offer.cost
-    ).length;
+    const availableOfferCount = run.shopOffers.filter((offer) => {
+        const currentCompatibility = getShopOfferCompatibility(run, offer.itemId);
+        return !offer.purchased && currentCompatibility.compatible && run.shopGold >= offer.cost;
+    }).length;
     return {
         source: plan.source,
         level: plan.level,
@@ -758,7 +955,12 @@ export const rerollShopOffers = (run: RunState): RunState => {
 
 export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
     const offer = run.shopOffers.find((item) => item.id === offerId);
-    if (!offer || offer.purchased || !offer.compatible || run.shopGold < offer.cost) {
+    if (!offer || offer.purchased || run.shopGold < offer.cost) {
+        return run;
+    }
+
+    const currentCompatibility = getShopOfferCompatibility(run, offer.itemId);
+    if (!offer.compatible || !currentCompatibility.compatible) {
         return run;
     }
 
@@ -773,19 +975,16 @@ export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
             next = { ...next, lives: Math.min(MAX_LIVES, next.lives + 1) };
             break;
         case 'peek_charge':
-            next = { ...next, peekCharges: next.peekCharges + 1 };
+            next = gainRunInventoryItem(next, 'peek_charge');
             break;
         case 'destroy_charge':
-            next = { ...next, destroyPairCharges: next.destroyPairCharges + 1 };
+            next = gainRunInventoryItem(next, 'destroy_charge');
             break;
         case 'iron_key':
-            next = {
-                ...next,
-                dungeonKeys: { ...next.dungeonKeys, iron: (next.dungeonKeys.iron ?? 0) + 1 }
-            };
+            next = gainRunInventoryItem(next, 'iron_key');
             break;
         case 'master_key':
-            next = { ...next, dungeonMasterKeys: next.dungeonMasterKeys + 1 };
+            next = gainRunInventoryItem(next, 'master_key');
             break;
         default:
             break;
@@ -956,14 +1155,14 @@ export interface DungeonBossDefinition {
 export const DUNGEON_BOSS_DEFINITIONS: Record<DungeonBossId, DungeonBossDefinition> = {
     trap_warden: {
         id: 'trap_warden',
-        label: 'Trap Warden',
+        label: 'Latch Warden',
         symbol: 'W',
         hp: 3,
         hazardKind: 'warden',
         hazardPattern: 'guard',
         signatureModifier: 'Guard pattern prioritizes traps, locks, keys, levers, and reward-adjacent pressure.',
-        rewardHook: 'Defeat grants guard, score, and Favor.',
-        cardCopy: 'Defeat it for score, guard, and Favor.',
+        rewardHook: 'Defeat breaks the latch for guard, score, and Favor.',
+        cardCopy: 'Defeat the Latch Warden for score, guard, and Favor.',
         visualAudioPlaceholders: ['trap chain tell', 'warding shield hit flash', 'boss defeat lockbreak stinger'],
         reward: {
             score: DUNGEON_BOSS_DEFEAT_SCORE,
@@ -977,14 +1176,14 @@ export const DUNGEON_BOSS_DEFINITIONS: Record<DungeonBossId, DungeonBossDefiniti
     },
     rush_sentinel: {
         id: 'rush_sentinel',
-        label: 'Rush Sentinel',
+        label: 'Bell-Rush Sentinel',
         symbol: 'S',
         hp: 3,
         hazardKind: 'sentinel',
         hazardPattern: 'patrol',
         signatureModifier: 'Patrol pattern rotates pressure across active non-utility cards.',
-        rewardHook: 'Defeat grants a combo shard, bonus score, and Favor.',
-        cardCopy: 'Defeat it for score, a combo shard, and Favor.',
+        rewardHook: 'Defeat stills the bell for a combo shard, bonus score, and Favor.',
+        cardCopy: 'Defeat the Bell-Rush Sentinel for score, a combo shard, and Favor.',
         visualAudioPlaceholders: ['rush windup tell', 'dash lane afterimage', 'combo shard defeat stinger'],
         reward: {
             score: DUNGEON_BOSS_DEFEAT_SCORE + 10,
@@ -998,14 +1197,14 @@ export const DUNGEON_BOSS_DEFINITIONS: Record<DungeonBossId, DungeonBossDefiniti
     },
     treasure_keeper: {
         id: 'treasure_keeper',
-        label: 'Treasure Keeper',
+        label: 'Gilded Keeper',
         symbol: 'K',
         hp: 3,
         hazardKind: 'warden',
         hazardPattern: 'guard',
         signatureModifier: 'Guard pattern favors treasure, key, lever, and lock cards.',
-        rewardHook: 'Defeat grants shop gold, treasure progress, score, and Favor.',
-        cardCopy: 'Defeat it for score, shop gold, and Favor.',
+        rewardHook: 'Defeat opens the ledger for shop gold, treasure progress, score, and Favor.',
+        cardCopy: 'Defeat the Gilded Keeper for score, shop gold, and Favor.',
         visualAudioPlaceholders: ['coin guard tell', 'cache glint hit flash', 'treasure spill defeat stinger'],
         reward: {
             score: DUNGEON_BOSS_DEFEAT_SCORE,
@@ -1019,14 +1218,14 @@ export const DUNGEON_BOSS_DEFINITIONS: Record<DungeonBossId, DungeonBossDefiniti
     },
     spire_observer: {
         id: 'spire_observer',
-        label: 'Spire Observer',
+        label: 'Mnemonist Observer',
         symbol: 'O',
         hp: 3,
         hazardKind: 'observer',
         hazardPattern: 'observe',
         signatureModifier: 'Observe pattern prioritizes boss, enemy, and trap encounter cards.',
-        rewardHook: 'Defeat grants extra Favor and score.',
-        cardCopy: 'Defeat it for extra Favor.',
+        rewardHook: 'Defeat closes the gaze for extra Favor and score.',
+        cardCopy: 'Defeat the Mnemonist Observer for extra Favor.',
         visualAudioPlaceholders: ['spire gaze tell', 'observation pulse hit flash', 'favor chime defeat stinger'],
         reward: {
             score: DUNGEON_BOSS_DEFEAT_SCORE,
@@ -1058,14 +1257,14 @@ export interface DungeonEliteEncounterRules {
 
 export const DUNGEON_ELITE_ENCOUNTER_RULES: DungeonEliteEncounterRules = {
     nodeKind: 'elite',
-    label: 'Elite memory',
+    label: 'Mnemonic Sentinel',
     objectiveId: 'pacify_floor',
     threatBudgetFloor: 2,
     rewardBudgetFloor: 1,
     movingPatrolFloor: 1,
-    ruleHook: 'Elite nodes force rush-recall enemy pressure with at least one elite enemy pair and a moving patrol.',
+    ruleHook: 'Elite nodes force rush-recall pressure with at least one named enemy pair and a moving patrol.',
     rewardHook: 'Elite boards add a small reward budget and route elite anchors without boss score or boss Favor rules.',
-    completionCopy: 'Elite pacified. Claim the premium route reward without applying boss-floor scoring.',
+    completionCopy: 'Elite pacified. Claim the hard-route memory reward without applying boss-floor scoring.',
     scoreRule: 'Uses normal floor scoring; no boss multiplier.'
 };
 
@@ -1103,7 +1302,7 @@ export interface DungeonRoomReadModel {
 export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, DungeonRoomEffectDefinition> = {
     room_campfire: {
         effectId: 'room_campfire',
-        label: 'Campfire',
+        label: 'Mnemonic Hearth',
         trigger: 'reveal',
         costText: 'No cost.',
         rewardText: 'Restores 1 life, or grants score if already at full life.',
@@ -1112,7 +1311,7 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
     },
     room_fountain: {
         effectId: 'room_fountain',
-        label: 'Fountain',
+        label: 'Stillwater Font',
         trigger: 'reveal',
         costText: 'No cost.',
         rewardText: 'Grants 1 guard token up to the guard cap.',
@@ -1121,7 +1320,7 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
     },
     room_map: {
         effectId: 'room_map',
-        label: 'Map Room',
+        label: 'Cartographer Cell',
         trigger: 'reveal',
         costText: 'No cost.',
         rewardText: 'Reveals hidden utility card families on this floor without solving exact pairs.',
@@ -1130,7 +1329,7 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
     },
     room_forge: {
         effectId: 'room_forge',
-        label: 'Forge',
+        label: 'Breaker Forge',
         trigger: 'reveal_or_reuse',
         costText: 'Costs 2 shop gold.',
         rewardText: 'Adds 1 destroy-pair charge to the uncapped bank.',
@@ -1139,7 +1338,7 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
     },
     room_shrine: {
         effectId: 'room_shrine',
-        label: 'Shrine Room',
+        label: 'Whisper Shrine',
         trigger: 'reveal',
         costText: 'Spends 1 shop gold when available.',
         rewardText: 'Grants guard when paid, otherwise grants score.',
@@ -1157,7 +1356,7 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
     },
     room_armory: {
         effectId: 'room_armory',
-        label: 'Armory',
+        label: 'Recall Armory',
         trigger: 'reveal',
         costText: 'No cost.',
         rewardText: 'Adds 1 destroy-pair charge to the uncapped bank.',
@@ -1166,7 +1365,7 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
     },
     room_locked_cache: {
         effectId: 'room_locked_cache',
-        label: 'Locked Cache Room',
+        label: 'Sealed Cache Cell',
         trigger: 'reveal_or_reuse',
         costText: 'Requires an iron key or master key.',
         rewardText: 'Spends the key for shop gold and score; without a key it stays revealed until paid.',
@@ -1175,7 +1374,7 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
     },
     room_key_cache: {
         effectId: 'room_key_cache',
-        label: 'Key Cache',
+        label: 'Key Niche',
         trigger: 'reveal',
         costText: 'No cost.',
         rewardText: 'Grants an iron key and score.',
@@ -1184,7 +1383,7 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
     },
     room_trap_workshop: {
         effectId: 'room_trap_workshop',
-        label: 'Trap Workshop',
+        label: 'Trapwright Bench',
         trigger: 'reveal',
         costText: 'No cost.',
         rewardText: 'Resolves one armed trap pair, or reveals one hidden trap family clue.',
@@ -1283,7 +1482,7 @@ export interface DungeonTreasureReadModel extends DungeonTreasureRewardDefinitio
 export const DUNGEON_TREASURE_REWARD_DEFINITIONS: Record<DungeonTreasureRewardId, DungeonTreasureRewardDefinition> = {
     treasure_gold: {
         rewardId: 'treasure_gold',
-        label: 'Treasure',
+        label: 'Coin Memory',
         tier: 'standard',
         gateText: 'Ungated.',
         payoutText: 'Pays shop gold and score.',
@@ -1291,7 +1490,7 @@ export const DUNGEON_TREASURE_REWARD_DEFINITIONS: Record<DungeonTreasureRewardId
     },
     treasure_cache: {
         rewardId: 'treasure_cache',
-        label: 'Treasure Cache',
+        label: 'Gallery Cache',
         tier: 'cache',
         gateText: 'Ungated, but weighted toward treasure floors.',
         payoutText: 'Pays increased shop gold and score.',
@@ -1299,7 +1498,7 @@ export const DUNGEON_TREASURE_REWARD_DEFINITIONS: Record<DungeonTreasureRewardId
     },
     treasure_shard: {
         rewardId: 'treasure_shard',
-        label: 'Supply Cache',
+        label: 'Supply Niche',
         tier: 'minor',
         gateText: 'Ungated supply reward.',
         payoutText: 'Pays a small shop gold and score reward.',
@@ -1307,7 +1506,7 @@ export const DUNGEON_TREASURE_REWARD_DEFINITIONS: Record<DungeonTreasureRewardId
     },
     lock_cache: {
         rewardId: 'lock_cache',
-        label: 'Locked Cache',
+        label: 'Sealed Cache',
         tier: 'cache',
         gateText: 'Can spend an iron/master key for full value.',
         payoutText: 'Pays cache score and treasure progress, or a small consolation when matched.',
@@ -1315,7 +1514,7 @@ export const DUNGEON_TREASURE_REWARD_DEFINITIONS: Record<DungeonTreasureRewardId
     },
     room_locked_cache: {
         rewardId: 'room_locked_cache',
-        label: 'Locked Cache Room',
+        label: 'Sealed Cache Cell',
         tier: 'cache',
         gateText: 'Requires an iron key or master key.',
         payoutText: 'Pays shop gold and score.',
@@ -1464,6 +1663,7 @@ const damageFirstActiveDungeonEnemy = (
     return {
         board: {
             ...board,
+            matchedPairs: defeated ? Math.min(board.pairCount, board.matchedPairs + 1) : board.matchedPairs,
             tiles: board.tiles.map((tile) =>
                 tile.pairKey === pairKey && tile.dungeonCardKind === 'enemy'
                     ? defeated
@@ -2052,7 +2252,7 @@ const enemyHazardCountForFloor = (
         return 0;
     }
     if (nodeKind === 'boss' || floorTag === 'boss') {
-        return level >= 10 ? 2 : 1;
+        return 1;
     }
     if (nodeKind === 'rest' || nodeKind === 'shop') {
         return level >= 7 ? 1 : 0;
@@ -2193,23 +2393,31 @@ export const applyEnemyHazardClick = (
     const board = run.board;
     const hazard = board?.enemyHazards?.find((candidate) => candidate.currentTileId === tileId && candidate.state !== 'defeated');
     const tile = board?.tiles.find((candidate) => candidate.id === tileId) ?? null;
-    if (!board || !hazard || !tile || tile.state !== 'hidden' || run.status !== 'playing') {
+    const canApplyContact =
+        run.status === 'playing' ||
+        (run.status === 'resolving' &&
+            run.gambitAvailableThisFloor &&
+            !run.gambitThirdFlipUsed &&
+            board?.flippedTileIds.length === 2);
+    if (!board || !hazard || !tile || tile.state !== 'hidden' || !canApplyContact) {
         return run;
     }
     const advanceHazards = options.advanceHazards ?? true;
     const consumesGuardToken = run.stats.guardTokens > 0;
     const lives = consumesGuardToken ? run.lives : Math.max(0, run.lives - hazard.damage);
+    const lostLives = Math.max(0, run.lives - lives);
     const revealedBoard: BoardState = {
         ...board,
         enemyHazards: board.enemyHazards?.map((candidate) =>
             candidate.id === hazard.id ? { ...candidate, state: 'revealed' as const } : candidate
         )
     };
-    const advancedBoard = advanceHazards ? advanceEnemyHazardsOnBoard(revealedBoard) : revealedBoard;
+    const advancedBoard = advanceHazards && lives > 0 ? advanceEnemyHazardsOnBoard(revealedBoard) : revealedBoard;
     return {
         ...run,
         status: lives <= 0 ? 'gameOver' : run.status,
         lives,
+        pendingMemorizeBonusMs: addPendingMemorizeBonusForLostLives(run.pendingMemorizeBonusMs, lostLives),
         board: advancedBoard,
         enemyHazardHitsThisFloor: (run.enemyHazardHitsThisFloor ?? 0) + 1,
         stats: {
@@ -3087,7 +3295,7 @@ const sentryCard = (): DungeonCardAssignment => ({
     kind: 'enemy',
     effectId: 'enemy_sentry',
     symbol: 'e',
-    label: 'Sentry',
+    label: 'Archivist Sentry',
     hp: 1
 });
 
@@ -3095,7 +3303,7 @@ const eliteCard = (): DungeonCardAssignment => ({
     kind: 'enemy',
     effectId: 'enemy_elite',
     symbol: 'E',
-    label: 'Elite Sentinel',
+    label: 'Mnemonic Sentinel',
     hp: 2
 });
 
@@ -3103,7 +3311,7 @@ const stalkerCard = (): DungeonCardAssignment => ({
     kind: 'enemy',
     effectId: 'enemy_stalker',
     symbol: 's',
-    label: 'Stalker',
+    label: 'Afterimage Stalker',
     hp: 2
 });
 
@@ -3113,27 +3321,27 @@ const trapCard = (effectId: DungeonCardEffectId, floorArchetypeId: FloorArchetyp
     symbol: '!',
     label:
         effectId === 'trap_alarm'
-            ? 'Alarm Trap'
+            ? 'Bell Trap'
             : effectId === 'trap_snare'
-              ? 'Snare Trap'
+              ? 'Latch Snare'
               : effectId === 'trap_hex'
-                ? 'Hex Trap'
+                ? 'Forgetful Hex'
             : effectId === 'trap_mimic'
-              ? 'Mimic Trap'
+              ? 'Mimic Bounty'
               : floorArchetypeId === 'shadow_read' || effectId === 'trap_curse'
-                ? 'Curse Trap'
-                : 'Spike Trap'
+                ? 'Curse Sigil'
+                : 'Spike Plate'
 });
 
 const treasureCard = (level: number, floorArchetypeId: FloorArchetypeId | null): DungeonCardAssignment => ({
     kind: 'treasure',
     effectId: floorArchetypeId === 'treasure_gallery' || level >= 5 ? 'treasure_cache' : 'treasure_gold',
     symbol: '$',
-    label: 'Treasure Cache'
+    label: floorArchetypeId === 'treasure_gallery' || level >= 5 ? 'Gallery Cache' : 'Coin Memory'
 });
 
-const lockCard = (): DungeonCardAssignment => ({ kind: 'lock', effectId: 'lock_cache', symbol: 'L', label: 'Locked Cache' });
-const keyCard = (): DungeonCardAssignment => ({ kind: 'key', effectId: 'key_iron', symbol: 'K', label: 'Iron Key' });
+const lockCard = (): DungeonCardAssignment => ({ kind: 'lock', effectId: 'lock_cache', symbol: 'L', label: 'Sealed Cache' });
+const keyCard = (): DungeonCardAssignment => ({ kind: 'key', effectId: 'key_iron', symbol: 'K', label: 'Iron Memory Key' });
 const shrineCard = (): DungeonCardAssignment => ({ kind: 'shrine', effectId: 'shrine_guard', symbol: '+', label: 'Guard Shrine' });
 const gatewayCard = (routeType: RouteNodeType = 'greed'): DungeonCardAssignment => ({
     kind: 'gateway',
@@ -3147,7 +3355,7 @@ const minorSupplyCard = (): DungeonCardAssignment => ({
     kind: 'treasure',
     effectId: 'treasure_shard',
     symbol: '.',
-    label: 'Supply Cache'
+    label: 'Supply Niche'
 });
 
 const dungeonCardRecipeForFloor = (
@@ -3213,6 +3421,8 @@ const dungeonCardRecipeForFloor = (
     for (let i = 0; i < budgets.utilityBudget; i++) {
         if (floorArchetypeId === 'trap_hall' && level >= 4 && i === 0) {
             cards.push({ kind: 'lever', effectId: 'rune_seal', symbol: 'R', label: 'Rune Seal' });
+        } else if (floorTag === 'boss' && i === 0) {
+            cards.push(shrineCard());
         } else if (floorTag === 'breather') {
             cards.push(shrineCard());
         } else if (floorArchetypeId === 'script_room' || floorArchetypeId === 'spotlight_hunt' || floorArchetypeId === 'parasite_tithe') {
@@ -3380,7 +3590,7 @@ const assignHazardTilesToGeneratedBoard = (
     level: number,
     gameMode?: GameMode
 ): Tile[] => {
-    if (!gameMode || rulesVersion < HAZARD_TILE_BASELINE_RULES_VERSION) {
+    if (!gameMode || rulesVersion < HAZARD_TILE_BASELINE_RULES_VERSION || level <= 1) {
         return tiles;
     }
 
@@ -4691,6 +4901,7 @@ export const applyShuffle = (run: RunState): RunState => {
     if (run.shuffleScoreTaxActive) {
         matchScoreMultiplier *= SHUFFLE_SCORE_TAX_FACTOR;
     }
+    const shuffledTileIds = hiddenIndices.map((index) => run.board!.tiles[index]!.id);
 
     return {
         ...run,
@@ -4701,6 +4912,8 @@ export const applyShuffle = (run: RunState): RunState => {
         freeShuffleThisFloor: nextFree,
         matchScoreMultiplier,
         pinnedTileIds: [],
+        recallFocus: 0,
+        forgottenTileIdsThisFloor: rememberForgottenTiles(run, shuffledTileIds),
         board: {
             ...run.board,
             tiles: nextTiles
@@ -4773,6 +4986,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
     hiddenInRow.forEach((cellIdx, slot) => {
         nextTiles[cellIdx] = shuffledChunk[slot]!;
     });
+    const shuffledTileIds = hiddenInRow.map((index) => run.board!.tiles[index]!.id);
 
     return {
         ...run,
@@ -4783,6 +4997,8 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         regionShuffleFreeThisFloor: nextFree,
         regionShuffleRowArmed: null,
         pinnedTileIds: [],
+        recallFocus: 0,
+        forgottenTileIdsThisFloor: rememberForgottenTiles(run, shuffledTileIds),
         board: {
             ...run.board,
             tiles: nextTiles
@@ -4893,6 +5109,7 @@ export interface CreateRunOptions {
     resolveDelayMultiplier?: number;
     echoFeedbackEnabled?: boolean;
     wildMenuRun?: boolean;
+    dungeonShowcaseRun?: boolean;
     /** First-run guidance: build floor 1 as ordinary real pairs so prompts never target specials. */
     onboardingSafeFirstFloor?: boolean;
     /** Copied from save: +1 relic pick at each milestone when meta unlock is active. */
@@ -5059,6 +5276,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         resolveDelayMultiplier: options.resolveDelayMultiplier ?? 1,
         echoFeedbackEnabled: options.echoFeedbackEnabled ?? true,
         wildMenuRun: options.wildMenuRun ?? false,
+        dungeonShowcaseRun: options.dungeonShowcaseRun ?? false,
         shuffleUsedThisFloor: false,
         destroyUsedThisFloor: false,
         decoyFlippedThisFloor: false,
@@ -5075,6 +5293,11 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         pinsPlacedCountThisRun: 0,
         findablesClaimedThisFloor: 0,
         findablesTotalThisFloor: countFindablePairs(board.tiles),
+        recallFocus: INITIAL_RECALL_FOCUS,
+        recallMatchesThisFloor: 0,
+        recallMistakesThisFloor: 0,
+        recallBonusScoreThisFloor: 0,
+        forgottenTileIdsThisFloor: [],
         hazardTileTriggersThisFloor: 0,
         hazardShuffleSnaresThisFloor: 0,
         hazardCascadeCachesThisFloor: 0,
@@ -5155,6 +5378,7 @@ export const createDungeonShowcaseRun = (bestScore: number, extra: Partial<Creat
             ...extra,
             gameMode: 'endless',
             practiceMode: true,
+            dungeonShowcaseRun: true,
             runSeed,
             activeMutators: extra.activeMutators ?? ['wide_recall']
         })
@@ -5236,15 +5460,18 @@ export const isGauntletExpired = (run: RunState): boolean =>
     run.status !== 'paused' && run.gauntletDeadlineMs !== null && Date.now() > run.gauntletDeadlineMs;
 
 /** Total relic selections this milestone visit (minimum 1). See `openRelicOffer`. */
+const nonNegativeFiniteInteger = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const computeRelicOfferPickBudget = (run: RunState): number => {
-    let n = 1 + run.bonusRelicPicksNextOffer;
+    let n = 1 + nonNegativeFiniteInteger(run.bonusRelicPicksNextOffer);
     if (hasMutator(run, 'generous_shrine')) {
         n += 1;
     }
     if (run.gameMode === 'daily') {
         n += 1;
     }
-    n += run.metaRelicDraftExtraPerMilestone ?? 0;
+    n += nonNegativeFiniteInteger(run.metaRelicDraftExtraPerMilestone);
     if (run.activeContract?.bonusRelicDraftPick) {
         n += 1;
     }
@@ -5294,12 +5521,16 @@ export const openRelicOffer = (run: RunState): RunState => {
 /** Increment extra selections for the next milestone draft (consumed in `openRelicOffer`). */
 export const grantBonusRelicPickNextOffer = (run: RunState, amount: number = 1): RunState => ({
     ...run,
-    bonusRelicPicksNextOffer: run.bonusRelicPicksNextOffer + amount
+    bonusRelicPicksNextOffer:
+        nonNegativeFiniteInteger(run.bonusRelicPicksNextOffer) + nonNegativeFiniteInteger(amount)
 });
 
 export const completeRelicPickAndAdvance = (run: RunState, relicId: RelicId): RunState => {
+    if (run.status !== 'levelComplete' || run.lives <= 0) {
+        return run;
+    }
     const offer = run.relicOffer;
-    if (!offer?.options.includes(relicId)) {
+    if (!offer?.options.includes(relicId) || !isRelicDraftEligible(relicId, run)) {
         return run;
     }
 
@@ -5378,6 +5609,7 @@ export const finishMemorizePhase = (run: RunState): RunState =>
         : {
               ...run,
               status: 'playing',
+              recallFocus: getMemorizePhaseRecallFocus(run),
               timerState: {
                   ...run.timerState,
                   memorizeRemainingMs: null,
@@ -5704,6 +5936,9 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
             run.parasiteVesselConversionsThisFloor > 0 ? run.parasiteVesselConversionsThisFloor : undefined,
         pinLatticeRewards: run.pinLatticeRewardsThisFloor > 0 ? run.pinLatticeRewardsThisFloor : undefined,
         safeHazardWardsUsed: run.safeHazardWardsUsedThisFloor > 0 ? run.safeHazardWardsUsedThisFloor : undefined,
+        recallMatches: run.recallMatchesThisFloor > 0 ? run.recallMatchesThisFloor : undefined,
+        recallMistakes: run.recallMistakesThisFloor > 0 ? run.recallMistakesThisFloor : undefined,
+        recallBonusScore: run.recallBonusScoreThisFloor > 0 ? run.recallBonusScoreThisFloor : undefined,
         routeChoices
     };
 
@@ -5790,6 +6025,8 @@ export const applyDestroyPair = (run: RunState, tileId: string): RunState => {
         pinnedTileIds,
         board: spunDestroy.board,
         shiftingSpotlightNonce: spunDestroy.shiftingSpotlightNonce,
+        recallFocus: decreaseRecallFocus(run),
+        forgottenTileIdsThisFloor: rememberForgottenTiles(run, pairTileIds),
         parasiteFloors: hasMutator(run, 'score_parasite') ? 0 : run.parasiteFloors,
         stats: {
             ...run.stats,
@@ -5831,6 +6068,8 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
         board,
         peekCharges: run.peekCharges - 1,
         powersUsedThisRun: true,
+        recallFocus: decreaseRecallFocus(run),
+        forgottenTileIdsThisFloor: rememberForgottenTiles(run, [tileId]),
         peekRevealedTileIds: [...run.peekRevealedTileIds, tileId]
     };
 };
@@ -5851,6 +6090,8 @@ export const cancelResolvingWithUndo = (run: RunState): RunState => {
         board,
         undoUsesThisFloor: run.undoUsesThisFloor - 1,
         powersUsedThisRun: true,
+        recallFocus: decreaseRecallFocus(run),
+        forgottenTileIdsThisFloor: rememberForgottenTiles(run, ids),
         timerState: clearResolveState(run)
     };
 };
@@ -5903,6 +6144,8 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
         powersUsedThisRun: true,
         strayRemoveCharges: run.strayRemoveCharges - 1,
         strayRemoveArmed: false,
+        recallFocus: decreaseRecallFocus(run),
+        forgottenTileIdsThisFloor: rememberForgottenTiles(run, [tileId]),
         board
     };
 };
@@ -6391,10 +6634,14 @@ export interface DungeonBoardPresentation {
     title: string;
     objectiveText: string | null;
     objectiveDetail: string | null;
+    objectiveProgress: number;
+    objectiveRequired: number;
+    objectiveLabel: string | null;
     exitText: string | null;
     keyText: string | null;
     bossText: string | null;
     alertText: string | null;
+    combatForecastText: string | null;
     chips: DungeonBoardPresentationChip[];
 }
 
@@ -6689,16 +6936,21 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
     if (objectiveId === 'pacify_floor') {
         const activeEnemyPairs = countDungeonPairs(board.tiles, (tile) => tile.dungeonCardKind === 'enemy');
         const resolvedEnemyPairs = countResolvedDungeonPairs(board.tiles, (tile) => tile.dungeonCardKind === 'enemy');
-        const counterOnlyDefeated = Math.max(0, (run.dungeonEnemiesDefeatedThisFloor ?? 0) - resolvedEnemyPairs);
-        const progress = resolvedEnemyPairs + counterOnlyDefeated;
-        const required = Math.max(1, activeEnemyPairs + counterOnlyDefeated);
+        const movingEnemyHazards = board.enemyHazards ?? [];
+        const defeatedMovingEnemyHazards = movingEnemyHazards.filter((hazard) => hazard.state === 'defeated').length;
+        const counterOnlyDefeated = Math.max(
+            0,
+            (run.dungeonEnemiesDefeatedThisFloor ?? 0) - resolvedEnemyPairs - defeatedMovingEnemyHazards
+        );
+        const progress = resolvedEnemyPairs + defeatedMovingEnemyHazards + counterOnlyDefeated;
+        const required = Math.max(1, activeEnemyPairs + defeatedMovingEnemyHazards + counterOnlyDefeated);
         return {
             objectiveId,
             completed: progress >= required,
             progress: Math.min(progress, required),
             required,
             label,
-            detail: `${Math.min(progress, required)}/${required} enemy pair(s) pacified.`
+            detail: `${Math.min(progress, required)}/${required} enemy threat(s) pacified.`
         };
     }
 
@@ -6874,6 +7126,29 @@ const dungeonHudChip = (
 const orderDungeonHudChips = (chips: readonly DungeonBoardPresentationChip[]): DungeonBoardPresentationChip[] =>
     [...chips].sort((a, b) => a.priority - b.priority || a.id.localeCompare(b.id)).slice(0, DUNGEON_HUD_CHIP_LIMIT);
 
+const getDungeonCombatForecastText = (run: RunState, status: DungeonBoardStatus): string | null => {
+    const activeHazards = run.board?.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    const maxContactDamage = activeHazards.reduce((max, hazard) => Math.max(max, hazard.damage), 0);
+    const hasEnemyPressure = maxContactDamage > 0 || status.awakeEnemyCount > 0;
+    if (!hasEnemyPressure) {
+        return null;
+    }
+
+    if (run.stats.guardTokens > 0) {
+        const noun = run.stats.guardTokens === 1 ? 'guard' : 'guards';
+        return `${run.stats.guardTokens} ${noun} ready: the next enemy hit spends guard before life.`;
+    }
+
+    const forecasts: string[] = [];
+    if (maxContactDamage > 0) {
+        forecasts.push(`patrol contact costs up to ${maxContactDamage} ${maxContactDamage === 1 ? 'life' : 'lives'}`);
+    }
+    if (status.awakeEnemyCount > 0) {
+        forecasts.push('awake enemies cost 1 life on mismatch');
+    }
+    return `No guard: ${forecasts.join('; ')}.`;
+};
+
 export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresentation => {
     const board = run.board;
     const objective = getDungeonObjectiveStatus(run);
@@ -6888,10 +7163,14 @@ export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresenta
             title: 'Dungeon',
             objectiveText: null,
             objectiveDetail: null,
+            objectiveProgress: 0,
+            objectiveRequired: 0,
+            objectiveLabel: null,
             exitText: null,
             keyText: null,
             bossText: null,
             alertText: null,
+            combatForecastText: null,
             chips: []
         };
     }
@@ -6899,6 +7178,7 @@ export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresenta
     const hiddenCount = status.hiddenDungeonCardCount;
     const activeExitText = dungeonLockSummary(exit);
     const keyText = `${status.keyCount} ${status.keyCount === 1 ? 'key' : 'keys'}`;
+    const patrolNoun = status.enemyHazardCount === 1 ? 'patrol is' : 'patrols are';
     const chips: DungeonBoardPresentationChip[] = [];
     if (activeExitText) {
         chips.push(dungeonHudChip('exit', 'Exit', activeExitText, exit.canActivate ? 'success' : exit.revealed ? 'warning' : 'neutral', 30));
@@ -6943,8 +7223,10 @@ export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresenta
     const alertText =
         status.armedTrapCount > 0
             ? `${status.armedTrapCount} armed ${status.armedTrapCount === 1 ? 'trap card' : 'trap cards'} will spring on mismatches.`
+            : status.revealedEnemyHazardCount > 0
+              ? `${status.revealedEnemyHazardCount}/${status.enemyHazardCount} moving enemy ${patrolNoun} revealed. Safe matches damage revealed patrols; occupied cards still cost guard or life.`
             : status.enemyHazardCount > 0
-              ? `${status.enemyHazardCount} moving enemy ${status.enemyHazardCount === 1 ? 'patrol is' : 'patrols are'} moving after each action. Avoid occupied cards.`
+              ? `${status.enemyHazardCount} moving enemy ${patrolNoun} moving after each action. Avoid occupied cards.`
             : status.awakeEnemyCount > 0
               ? `${status.awakeEnemyCount} awake ${status.awakeEnemyCount === 1 ? 'enemy' : 'enemies'} can attack on mismatches.`
               : exit.lockedReason
@@ -6952,6 +7234,7 @@ export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresenta
                 : hiddenCount > 0
                   ? `${hiddenCount} hidden dungeon ${hiddenCount === 1 ? 'card' : 'cards'} remain.`
                   : null;
+    const combatForecastText = getDungeonCombatForecastText(run, status);
 
     return {
         visible: true,
@@ -6962,10 +7245,14 @@ export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresenta
               }`
             : null,
         objectiveDetail: objective.detail,
+        objectiveProgress: status.objectiveProgress,
+        objectiveRequired: status.objectiveRequired,
+        objectiveLabel: status.objectiveLabel,
         exitText: activeExitText,
         keyText,
         bossText,
         alertText,
+        combatForecastText,
         chips: orderDungeonHudChips(chips)
     };
 };
@@ -6980,51 +7267,51 @@ export const getDungeonCardCopy = (tile: Tile): string => {
                 ? ` Requires ${tile.dungeonExitLockKind === 'lever' ? `${tile.dungeonExitRequiredLeverCount ?? 1} lever(s)` : `${tile.dungeonExitLockKind} key`}.`
                 : ' Can be opened once revealed.';
         const route = tile.dungeonRouteType ? ` Leads to a ${tile.dungeonRouteType} route.` : '';
-        return `Dungeon exit: ${tile.label}.${lock}${route}`;
+        return `Dungeon exit: ${tile.label}.${lock}${route} The descent continues only after this memory is confirmed.`;
     }
     if (tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved') {
         return `Resolved trap: ${tile.label}. Its effect has sprung and your next action is ready.`;
     }
     if (tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'revealed') {
         if (tile.dungeonCardEffectId === 'trap_alarm') {
-            return `Armed trap: ${tile.label}. Match its pair to disarm. Mismatches wake hidden enemies.`;
+            return `Armed trap: ${tile.label}. Match its pair to silence the bell. Mismatches wake hidden enemies.`;
         }
         if (tile.dungeonCardEffectId === 'trap_snare') {
-            return `Armed trap: ${tile.label}. Match its pair to disarm. Mismatches consume guard or disable free shuffles this floor.`;
+            return `Armed trap: ${tile.label}. Match its pair to release the latch. Mismatches consume guard or disable free shuffles this floor.`;
         }
         if (tile.dungeonCardEffectId === 'trap_hex') {
-            return `Armed trap: ${tile.label}. Match its pair to disarm. Mismatches cut score and reveal a hidden hazard.`;
+            return `Armed trap: ${tile.label}. Match its pair to break the hex. Mismatches cut score and reveal a hidden hazard.`;
         }
         if (tile.dungeonCardEffectId === 'trap_mimic') {
-            return `Armed trap: ${tile.label}. Match its pair for loot. Mismatches cost life and gold.`;
+            return `Armed trap: ${tile.label}. Match its pair for bounty loot. Mismatches cost life and gold.`;
         }
-        return `Armed trap: ${tile.label}. Match its pair to disarm.`;
+        return `Armed trap: ${tile.label}. Match its pair to disarm before the room remembers your mistake.`;
     }
     if (tile.dungeonCardKind === 'room') {
         return getDungeonRoomReadModel(tile)?.copy ?? `Dungeon room: ${tile.label}.`;
     }
     if (tile.dungeonCardKind === 'shop') {
-        return `Dungeon shop: ${tile.label}. Opens the vendor and can be revisited on this floor.`;
+        return `Dungeon shop: ${tile.label}. Opens the vendor alcove and can be revisited on this floor.`;
     }
     if (tile.dungeonCardKind === 'key') {
-        return `Dungeon key: ${tile.label}. Matching it banks an iron key for locked cards or bonus exits.`;
+        return `Dungeon key: ${tile.label}. Matching it banks an iron key for sealed caches, locked rooms, or bonus exits.`;
     }
     if (tile.dungeonCardKind === 'lock') {
         const treasure = getDungeonTreasureReadModel(tile);
         return treasure
             ? `Dungeon lock: ${tile.label}. ${treasure.payoutText} ${treasure.gateText}`
-            : `Dungeon lock: ${tile.label}. Spend a key to turn it into loot, or match it for a small consolation.`;
+            : `Dungeon lock: ${tile.label}. Spend a key to open the remembered cache, or match it for a small consolation.`;
     }
     if (tile.dungeonCardKind === 'lever') {
         return tile.dungeonCardEffectId === 'rune_seal'
             ? `Dungeon lever: ${tile.label}. Matching it seals revealed traps.`
-            : `Dungeon lever: ${tile.label}. Matching it powers lever exits.`;
+            : `Dungeon lever: ${tile.label}. Matching it wakes the exit mechanism.`;
     }
     if (tile.dungeonCardKind === 'treasure') {
         const treasure = getDungeonTreasureReadModel(tile);
         return treasure
             ? `Dungeon treasure: ${tile.label}. ${treasure.payoutText} ${treasure.claimCondition}`
-            : `Dungeon treasure: ${tile.label}. Matching it pays gold and score.`;
+            : `Dungeon treasure: ${tile.label}. Matching it recovers gold and score from the archive.`;
     }
     if (tile.dungeonCardKind === 'shrine') {
         return `Dungeon shrine: ${tile.label}. Matching it grants guard and Favor.`;
@@ -7607,9 +7894,11 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         const encoreBonus = encorePairKeys.includes(encoreKey) ? ENCORE_BONUS_SCORE : 0;
         const spotlightDelta = shiftingSpotlightMatchDelta(run.board, encoreKey);
         const presentationPenalty = getPresentationMutatorMatchPenalty(run);
+        const recallBonus = calculateRecallMatchBonus(run, [tileMatchA, tileMatchB]);
         const matchScore = Math.max(
             0,
             calculateMatchScore(board.level, currentStreak, run.matchScoreMultiplier) +
+                recallBonus +
                 encoreBonus +
                 findableScoreBonus +
                 routeCardReward.score +
@@ -7683,6 +7972,10 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
                       )
                     : run.pendingRouteCardPlan,
             pinnedTileIds: run.pinnedTileIds.filter((id) => id !== matchA && id !== matchB),
+            recallFocus: increaseRecallFocus(run),
+            recallMatchesThisFloor: run.recallMatchesThisFloor + 1,
+            recallBonusScoreThisFloor: run.recallBonusScoreThisFloor + recallBonus,
+            forgottenTileIdsThisFloor: settleForgottenTiles(run, [matchA, matchB]),
             stickyBlockIndex: hasMutator(run, 'sticky_fingers')
                 ? run.board.tiles.findIndex((t) => t.id === matchA)
                 : null,
@@ -7784,6 +8077,10 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         lives = 0;
     }
     const guardTokens = consumesGuardToken ? run.stats.guardTokens - 1 : run.stats.guardTokens;
+    let pendingMemorizeBonusMs = addPendingMemorizeBonusForLostLives(
+        run.pendingMemorizeBonusMs,
+        lostLife ? 1 : 0
+    );
     const gambitDecoy =
         ta.pairKey === DECOY_PAIR_KEY || tb.pairKey === DECOY_PAIR_KEY || tc.pairKey === DECOY_PAIR_KEY;
 
@@ -7795,12 +8092,15 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             .map((tile) => tile.pairKey)
     );
     lives = trapSpring.run.lives;
+    const livesBeforeEnemyAttack = lives;
     const enemyAttack = applyDungeonEnemyAttack(
         lives,
         trapSpring.run.stats.guardTokens,
         trapSpring.alarmTriggered || trapSpring.enemyWoken ? board : trapSpring.board
     );
     lives = enemyAttack.lives;
+    const enemyAttackLostLives = Math.max(0, livesBeforeEnemyAttack - Math.max(lives, 0));
+    pendingMemorizeBonusMs = addPendingMemorizeBonusForLostLives(pendingMemorizeBonusMs, enemyAttackLostLives);
     const statusAfterEnemy: RunStatus = lives <= 0 || contractFail || trapSpring.run.status === 'gameOver' ? 'gameOver' : status;
     const advancedTrapBoard = advanceEnemyHazardsOnBoard(trapSpring.board);
     const mismatchHazards = hazardKindsInTiles(run.board.tiles, [aId, bId, cId]);
@@ -7835,7 +8135,11 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             (run.safeHazardWardChargesThisFloor ?? 0) - (wardedHazards.wardUsed ? 1 : 0),
         safeHazardWardsUsedThisFloor:
             (run.safeHazardWardsUsedThisFloor ?? 0) + (wardedHazards.wardUsed ? 1 : 0),
+        pendingMemorizeBonusMs,
         stickyBlockIndex: null,
+        recallFocus: decreaseRecallFocus(run),
+        recallMistakesThisFloor: run.recallMistakesThisFloor + 1,
+        forgottenTileIdsThisFloor: rememberForgottenTiles(run, [aId, bId, cId]),
         decoyFlippedThisFloor: run.decoyFlippedThisFloor || gambitDecoy,
         stats: {
             ...trapSpring.run.stats,
@@ -7977,7 +8281,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             ? applyComboShardGain(
                   Math.max(0, run.stats.comboShards - (catalystAltarUpgraded ? 1 : 0)),
                   mimicCacheFatalBite ? 0 : run.lives - (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0),
-                  findableComboShardGain + routeCardReward.comboShards,
+                  findableComboShardGain + routeCardReward.comboShards + dungeonReward.comboShards,
                   false
               )
             : applyComboShardGain(
@@ -8006,9 +8310,11 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
         const encoreBonus = encorePairKeys.includes(encoreKey) ? ENCORE_BONUS_SCORE : 0;
         const spotlightDelta = shiftingSpotlightMatchDelta(run.board, encoreKey);
         const presentationPenalty = getPresentationMutatorMatchPenalty(run);
+        const recallBonus = calculateRecallMatchBonus(run, [firstTile, secondTile]);
         const matchScore = Math.max(
             0,
             calculateMatchScore(board.level, currentStreak, run.matchScoreMultiplier) +
+                recallBonus +
                 encoreBonus +
                 findableScoreBonus +
                 routeCardReward.score +
@@ -8082,6 +8388,10 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
                       )
                     : run.pendingRouteCardPlan,
             pinnedTileIds: matchedPinsFiltered,
+            recallFocus: increaseRecallFocus(run),
+            recallMatchesThisFloor: run.recallMatchesThisFloor + 1,
+            recallBonusScoreThisFloor: run.recallBonusScoreThisFloor + recallBonus,
+            forgottenTileIdsThisFloor: settleForgottenTiles(run, [firstId, secondId]),
             stickyBlockIndex: hasMutator(run, 'sticky_fingers') ? firstFlippedIdx : null,
             cursedMatchedEarlyThisFloor: run.cursedMatchedEarlyThisFloor || cursedEarly,
             matchResolutionsThisFloor: run.matchResolutionsThisFloor + 1,
@@ -8183,12 +8493,10 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
     }
     const guardTokens = consumesGuardToken ? run.stats.guardTokens - 1 : run.stats.guardTokens;
 
-    const pendingMemorizeBonusMs = lostLife
-        ? Math.min(
-              MAX_PENDING_MEMORIZE_BONUS_MS,
-              run.pendingMemorizeBonusMs + MEMORIZE_BONUS_PER_LIFE_LOST_MS
-          )
-        : run.pendingMemorizeBonusMs;
+    let pendingMemorizeBonusMs = addPendingMemorizeBonusForLostLives(
+        run.pendingMemorizeBonusMs,
+        lostLife ? 1 : 0
+    );
 
     const decoyTouch =
         firstTile.pairKey === DECOY_PAIR_KEY || secondTile.pairKey === DECOY_PAIR_KEY;
@@ -8201,12 +8509,17 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             .map((tile) => tile.pairKey)
     );
     lives = trapSpring.run.lives;
+    const livesBeforeEnemyAttack = lives;
     const enemyAttack = applyDungeonEnemyAttack(
         lives,
         trapSpring.run.stats.guardTokens,
         trapSpring.alarmTriggered || trapSpring.enemyWoken ? board : trapSpring.board
     );
     lives = enemyAttack.lives;
+    pendingMemorizeBonusMs = addPendingMemorizeBonusForLostLives(
+        pendingMemorizeBonusMs,
+        Math.max(0, livesBeforeEnemyAttack - Math.max(lives, 0))
+    );
     const statusAfterEnemy: RunStatus = lives <= 0 || contractFail || trapSpring.run.status === 'gameOver' ? 'gameOver' : status;
     const advancedTrapBoard = advanceEnemyHazardsOnBoard(trapSpring.board);
     const mismatchHazards = hazardKindsInTiles(run.board.tiles, [firstId, secondId]);
@@ -8240,6 +8553,9 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             (run.safeHazardWardsUsedThisFloor ?? 0) + (wardedHazards.wardUsed ? 1 : 0),
         pendingMemorizeBonusMs,
         stickyBlockIndex: null,
+        recallFocus: decreaseRecallFocus(run),
+        recallMistakesThisFloor: run.recallMistakesThisFloor + 1,
+        forgottenTileIdsThisFloor: rememberForgottenTiles(run, [firstId, secondId]),
         decoyFlippedThisFloor: run.decoyFlippedThisFloor || decoyTouch,
         stats: {
             ...trapSpring.run.stats,
@@ -8255,6 +8571,9 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
 };
 
 export const resolveBoardTurn = (run: RunState, encorePairKeys: string[] = []): RunState => {
+    if (run.status === 'gameOver') {
+        return run;
+    }
     if (!run.board) {
         return run;
     }
@@ -8326,13 +8645,28 @@ export const getMismatchFloaterAnchorTileIds = (
 };
 
 export const advanceToNextLevel = (run: RunState): RunState => {
-    if (run.status !== 'levelComplete' || run.gameMode === 'puzzle' || !run.board) {
+    if (run.status !== 'levelComplete' || !run.board) {
         return run;
     }
 
-    const cleanClearDestroyBonus =
-        run.lastLevelResult !== null && run.lastLevelResult.mistakes === 0 ? 1 : 0;
-    const nextDestroyPairCharges = run.destroyPairCharges + cleanClearDestroyBonus;
+    if (run.lives <= 0) {
+        return {
+            ...run,
+            status: 'gameOver',
+            lives: 0,
+            pendingRouteCardPlan: null,
+            sideRoom: null,
+            relicOffer: null,
+            lastLevelResult: run.lastLevelResult
+                ? { ...run.lastLevelResult, livesRemaining: 0 }
+                : run.lastLevelResult,
+            timerState: createTimerState()
+        };
+    }
+
+    if (run.gameMode === 'puzzle' || run.sideRoom || run.relicOffer) {
+        return run;
+    }
 
     const nextLevelNum = run.board.level + 1;
     const currentDungeonRun = dungeonRunFor(run);
@@ -8365,6 +8699,23 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         }
     }
 
+    if (lives <= 0) {
+        return {
+            ...run,
+            status: 'gameOver',
+            lives: 0,
+            parasiteFloors,
+            parasiteWardRemaining: nextParasiteWard,
+            pendingRouteCardPlan: null,
+            sideRoom: null,
+            relicOffer: null,
+            lastLevelResult: run.lastLevelResult
+                ? { ...run.lastLevelResult, livesRemaining: 0 }
+                : run.lastLevelResult,
+            timerState: createTimerState()
+        };
+    }
+
     const nextBoard = buildBoard(nextLevelNum, {
         runSeed: run.runSeed,
         runRulesVersion: run.runRulesVersion,
@@ -8382,11 +8733,9 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
     const memorizeWithBonus = baseMemorizeMs + run.pendingMemorizeBonusMs;
 
-    const status = lives <= 0 ? 'gameOver' : 'memorize';
-
     return {
         ...run,
-        status,
+        status: 'memorize',
         lives,
         activeMutators: nextActiveMutators,
         dungeonRun: enterSelectedDungeonNode(currentDungeonRun),
@@ -8396,7 +8745,7 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         debugPeekActive: false,
         pendingMemorizeBonusMs: 0,
         pinnedTileIds: [],
-        destroyPairCharges: nextDestroyPairCharges,
+        destroyPairCharges: run.destroyPairCharges,
         parasiteFloors,
         parasiteWardRemaining: nextParasiteWard,
         stickyBlockIndex: null,
@@ -8414,6 +8763,11 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         matchResolutionsThisFloor: 0,
         findablesClaimedThisFloor: 0,
         findablesTotalThisFloor: countFindablePairs(nextBoard.tiles),
+        recallFocus: 0,
+        recallMatchesThisFloor: 0,
+        recallMistakesThisFloor: 0,
+        recallBonusScoreThisFloor: 0,
+        forgottenTileIdsThisFloor: [],
         hazardTileTriggersThisFloor: 0,
         hazardShuffleSnaresThisFloor: 0,
         hazardCascadeCachesThisFloor: 0,
@@ -8450,7 +8804,7 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         enemyHazardHitsThisFloor: 0,
         enemyHazardsDefeatedThisFloor: 0,
         wildTileId: getWildTileIdFromBoard(nextBoard),
-        timerState: createTimerState({ memorizeRemainingMs: status === 'memorize' ? memorizeWithBonus : null }),
+        timerState: createTimerState({ memorizeRemainingMs: memorizeWithBonus }),
         lastLevelResult: null,
         stats: {
             ...run.stats,
@@ -8489,6 +8843,53 @@ export const pauseRun = (run: RunState): RunState => {
 export const resumeRun = (run: RunState): RunState => {
     if (run.status !== 'paused' || !run.timerState.pausedFromStatus) {
         return run;
+    }
+    if (run.lives <= 0) {
+        return {
+            ...run,
+            status: 'gameOver',
+            lives: 0,
+            pendingRouteCardPlan: null,
+            sideRoom: null,
+            relicOffer: null,
+            shopOffers: [],
+            timerState: {
+                ...run.timerState,
+                pausedFromStatus: null,
+                gauntletPausedAtMs: null
+            }
+        };
+    }
+    if (run.timerState.pausedFromStatus === 'resolving') {
+        if (!run.board) {
+            return {
+                ...run,
+                status: 'gameOver',
+                lives: 0,
+                pendingRouteCardPlan: null,
+                sideRoom: null,
+                relicOffer: null,
+                shopOffers: [],
+                timerState: {
+                    ...run.timerState,
+                    resolveRemainingMs: null,
+                    pausedFromStatus: null,
+                    gauntletPausedAtMs: null
+                }
+            };
+        }
+        if (run.board.flippedTileIds.length < 2) {
+            return {
+                ...run,
+                status: 'playing',
+                timerState: {
+                    ...run.timerState,
+                    resolveRemainingMs: null,
+                    pausedFromStatus: null,
+                    gauntletPausedAtMs: null
+                }
+            };
+        }
     }
     const gauntletPausedAtMs = run.timerState.gauntletPausedAtMs ?? null;
     const gauntletPauseDeltaMs =
@@ -8551,6 +8952,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
         relicIds: [...run.relicIds],
         practiceMode: run.practiceMode,
         wildMenuRun: run.wildMenuRun,
+        dungeonShowcaseRun: run.dungeonShowcaseRun,
         activeContract: run.activeContract ? { ...run.activeContract } : null
     }
 });

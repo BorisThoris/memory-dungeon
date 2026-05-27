@@ -1,6 +1,16 @@
 import { describe, expect, it } from 'vitest';
+import { copyToneAllowsPlayerFacingText } from './copy-tone';
+import { createNewRun } from './game-core';
 import { GAME_RULES_VERSION } from './contracts';
-import { chooseRunEventOption, getRunEventCatalogRows, rollRunEventRoom } from './run-events';
+import {
+    RUN_EVENT_TABLE,
+    applyRunEventChoice,
+    chooseRunEventOption,
+    createRunEventPreviewState,
+    getRunEventCatalogRows,
+    getRunEventToneAuditRows,
+    rollRunEventRoom
+} from './run-events';
 
 describe('REG-074 run event rooms', () => {
     it('rolls deterministic offline events with bounded choices', () => {
@@ -32,13 +42,184 @@ describe('REG-074 run event rooms', () => {
     it('lists every event with conditions and bounded choice result copy', () => {
         const rows = getRunEventCatalogRows();
 
-        expect(rows.length).toBeGreaterThanOrEqual(6);
+        expect(rows.length).toBeGreaterThanOrEqual(16);
         for (const row of rows) {
+            expect(row.family).toBeTruthy();
+            expect(row.roomCue.length).toBeGreaterThan(40);
             expect(row.conditionText).toMatch(/Seed-stable/);
             expect(row.choiceCount).toBe(row.choices.length);
             expect(row.choices.length).toBeGreaterThanOrEqual(2);
             expect(row.choices.some((choice) => choice.effect === 'skip')).toBe(true);
             expect(row.choices.every((choice) => choice.detail.length > 0)).toBe(true);
+            expect(row.choices.every((choice) => choice.outcomeText.length > 0)).toBe(true);
+        }
+    });
+
+    it('keeps expanded event identities tied to memory dungeon atmosphere', () => {
+        const rows = getRunEventCatalogRows();
+
+        expect(rows.map((row) => row.id)).toEqual(
+            expect.arrayContaining([
+                'palimpsest_stair',
+                'moth_eaten_map',
+                'oath_ledger',
+                'drowned_bell',
+                'paper_tide',
+                'ashen_portrait',
+                'soot_black_cabinet',
+                'whisper_vault',
+                'mnemonic_well',
+                'candle_census',
+                'inverted_planetarium',
+                'salt_archive',
+                'hourglass_orrery',
+                'blank_chorus',
+                'breath_index',
+                'threadbare_scriptorium'
+            ])
+        );
+        expect(rows.map((row) => row.title)).toEqual(
+            expect.arrayContaining([
+                'Palimpsest stair',
+                'Moth-eaten map',
+                'Oath ledger',
+                'Drowned bell',
+                'Paper tide',
+                'Ashen portrait',
+                'Soot-black cabinet',
+                'Whisper vault',
+                'Mnemonic well',
+                'Candle census',
+                'Inverted planetarium',
+                'Salt archive',
+                'Hourglass orrery',
+                'Blank chorus',
+                'Breath index',
+                'Threadbare scriptorium'
+            ])
+        );
+    });
+
+    it('keeps the event room catalog broad enough for repeat route variety', () => {
+        const rows = getRunEventCatalogRows();
+        const allEffects = new Set(rows.flatMap((row) => row.choices.map((choice) => choice.effect)));
+        const allFamilies = new Set(rows.map((row) => row.family));
+
+        expect(rows.length).toBeGreaterThanOrEqual(24);
+        expect(allFamilies.size).toBeGreaterThanOrEqual(9);
+        expect([...allFamilies]).toEqual(
+            expect.arrayContaining([
+                'archive_record',
+                'echo_bargain',
+                'key_memory',
+                'route_palimpsest',
+                'sunken_chamber',
+                'keeper_relic',
+                'celestial_archive'
+            ])
+        );
+        expect(allEffects).toEqual(
+            new Set([
+                'gain_shop_gold',
+                'gain_relic_favor',
+                'heal_or_guard',
+                'gain_iron_key',
+                'gain_destroy_charge',
+                'gain_score',
+                'skip'
+            ])
+        );
+    });
+
+    it('uses atmospheric result text when an event choice defines it', () => {
+        const event = RUN_EVENT_TABLE.find((candidate) => candidate.id === 'drowned_bell')!;
+        const choice = event.choices.find((option) => option.id === 'raise_bell')!;
+
+        expect(choice.resultText).toBe('The bell rises silent, heavy enough to break a false pair.');
+        expect(choice.resultText).not.toBe(choice.detail);
+    });
+
+    it('publishes atmospheric outcome text through event catalog rows', () => {
+        const bell = getRunEventCatalogRows().find((event) => event.id === 'drowned_bell')!;
+        const raiseBell = bell.choices.find((choice) => choice.id === 'raise_bell')!;
+
+        expect(raiseBell.detail).toBe('+1 destroy charge to the uncapped run bank.');
+        expect(raiseBell.outcomeText).toBe('The bell rises silent, heavy enough to break a false pair.');
+        expect(raiseBell.outcomeText).not.toBe(raiseBell.detail);
+    });
+
+    it('keeps newer event outcomes tied to route memory and keeper atmosphere', () => {
+        const paper = RUN_EVENT_TABLE.find((event) => event.id === 'paper_tide')!;
+        const portrait = RUN_EVENT_TABLE.find((event) => event.id === 'ashen_portrait')!;
+
+        expect(paper.body).toContain('copied routes');
+        expect(paper.choices.find((choice) => choice.id === 'bind_pages')?.resultText).toContain('remembered key');
+        expect(portrait.body).toContain('forgotten keeper');
+        expect(portrait.choices.find((choice) => choice.id === 'study_face')?.resultText).toContain('fixes in memory');
+    });
+
+    it('audits every event room for memory-dungeon anchors and authored outcomes', () => {
+        const rows = getRunEventToneAuditRows();
+
+        expect(rows).toHaveLength(RUN_EVENT_TABLE.length);
+        expect(rows.every((row) => row.toneReady)).toBe(true);
+        expect(rows.find((row) => row.id === 'sealed_keyring')?.memoryAnchors).toEqual(
+            expect.arrayContaining(['key', 'route'])
+        );
+        expect(rows.find((row) => row.id === 'ashen_portrait')?.memoryAnchors).toEqual(
+            expect.arrayContaining(['keeper', 'memory'])
+        );
+        expect(rows.find((row) => row.id === 'mnemonic_well')?.memoryAnchors).toEqual(
+            expect.arrayContaining(['mnemonic', 'well'])
+        );
+        expect(rows.find((row) => row.id === 'whisper_vault')?.memoryAnchors).toEqual(
+            expect.arrayContaining(['route', 'shrine', 'vault'])
+        );
+        expect(rows.find((row) => row.id === 'patrol_diary')).toEqual(
+            expect.objectContaining({
+                family: 'patrol_record',
+                roomCue: expect.stringContaining('enemy movement')
+            })
+        );
+        expect(rows.find((row) => row.id === 'candle_census')).toEqual(
+            expect.objectContaining({
+                family: 'archive_record',
+                roomCue: expect.stringContaining('darkness')
+            })
+        );
+        expect(rows.find((row) => row.id === 'inverted_planetarium')).toEqual(
+            expect.objectContaining({
+                family: 'celestial_archive',
+                roomCue: expect.stringContaining('star map')
+            })
+        );
+        expect(rows.find((row) => row.id === 'hourglass_orrery')?.memoryAnchors).toEqual(
+            expect.arrayContaining(['glass'])
+        );
+        expect(rows.find((row) => row.id === 'breath_index')?.memoryAnchors).toEqual(
+            expect.arrayContaining(['index', 'room'])
+        );
+        expect(rows.find((row) => row.id === 'threadbare_scriptorium')?.memoryAnchors).toEqual(
+            expect.arrayContaining(['key', 'memory', 'route'])
+        );
+    });
+
+    it('gives every event choice atmospheric resolution feedback', () => {
+        for (const choice of RUN_EVENT_TABLE.flatMap((event) => event.choices)) {
+            expect(choice.resultText).toBeTruthy();
+            expect(choice.resultText).not.toBe(choice.detail);
+        }
+    });
+
+    it('keeps event room copy clear of real-money and online-rank language', () => {
+        for (const event of RUN_EVENT_TABLE) {
+            expect(copyToneAllowsPlayerFacingText(event.title)).toBe(true);
+            expect(copyToneAllowsPlayerFacingText(event.body)).toBe(true);
+            for (const choice of event.choices) {
+                expect(copyToneAllowsPlayerFacingText(choice.label)).toBe(true);
+                expect(copyToneAllowsPlayerFacingText(choice.detail)).toBe(true);
+                expect(copyToneAllowsPlayerFacingText(choice.resultText ?? '')).toBe(true);
+            }
         }
     });
 
@@ -61,5 +242,123 @@ describe('REG-074 run event rooms', () => {
 
         expect(result.applied).toBe(true);
         expect(result.next.destroyPairCharges).toBe(8);
+    });
+
+    it('previews key and score event rewards with the same visible counters as the claim path', () => {
+        const keyEvent = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_201, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_iron_key'))!;
+        const scoreEvent = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_202, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_score'))!;
+
+        const keyChoice = keyEvent.options.find((option) => option.effect === 'gain_iron_key')!;
+        const scoreChoice = scoreEvent.options.find((option) => option.effect === 'gain_score')!;
+
+        expect(
+            chooseRunEventOption(
+                { shopGold: 0, lives: 4, relicFavorProgress: 0, ironKeys: 1 },
+                keyEvent,
+                keyChoice.id
+            ).next.ironKeys
+        ).toBe(2);
+        expect(
+            chooseRunEventOption(
+                { shopGold: 0, lives: 4, relicFavorProgress: 0, totalScore: 40, currentLevelScore: 10, bestScore: 50 },
+                scoreEvent,
+                scoreChoice.id
+            ).next
+        ).toMatchObject({
+            totalScore: 65,
+            currentLevelScore: 35,
+            bestScore: 65
+        });
+    });
+
+    it('builds event preview state from the active run counters before resolving a choice', () => {
+        const run = {
+            ...createNewRun(0),
+            shopGold: 3,
+            lives: 5,
+            relicFavorProgress: 2,
+            bonusRelicPicksNextOffer: 1,
+            favorBonusRelicPicksNextOffer: 1,
+            dungeonKeys: { iron: 1, treasure: 1 },
+            destroyPairCharges: 4,
+            stats: {
+                ...createNewRun(0).stats,
+                totalScore: 75,
+                currentLevelScore: 25,
+                bestScore: 100,
+                guardTokens: 1
+            }
+        };
+        const event = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_203, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_relic_favor'))!;
+        const choice = event.options.find((option) => option.effect === 'gain_relic_favor')!;
+
+        const result = chooseRunEventOption(createRunEventPreviewState(run), event, choice.id);
+
+        expect(result.next).toMatchObject({
+            shopGold: 3,
+            lives: 5,
+            ironKeys: 2,
+            totalScore: 75,
+            currentLevelScore: 25,
+            bestScore: 100,
+            destroyPairCharges: 4,
+            guardTokens: 1,
+            relicFavorProgress: 0,
+            bonusRelicPicksNextOffer: 2,
+            favorBonusRelicPicksNextOffer: 2
+        });
+    });
+
+    it('previews full-life recovery as guard instead of hiding the promised fallback', () => {
+        const event = Array.from({ length: 20 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 2, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'heal_or_guard'))!;
+        const choice = event.options.find((option) => option.effect === 'heal_or_guard')!;
+        const result = chooseRunEventOption(
+            { shopGold: 0, lives: 5, relicFavorProgress: 0, guardTokens: 1 },
+            event,
+            choice.id
+        );
+
+        expect(result.applied).toBe(true);
+        expect(result.next.lives).toBe(5);
+        expect(result.next.guardTokens).toBe(2);
+    });
+
+    it('rejects stale event choices after a run has reached zero health', () => {
+        const event = Array.from({ length: 20 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_204, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'heal_or_guard'))!;
+        const choice = event.options.find((option) => option.effect === 'heal_or_guard')!;
+        const deadPreview = { shopGold: 2, lives: 0, relicFavorProgress: 1, guardTokens: 0 };
+        const deadRun = {
+            ...createNewRun(0),
+            status: 'gameOver' as const,
+            lives: 0,
+            shopGold: 2,
+            stats: {
+                ...createNewRun(0).stats,
+                guardTokens: 0
+            }
+        };
+
+        expect(chooseRunEventOption(deadPreview, event, choice.id)).toEqual({
+            applied: false,
+            eventId: event.id,
+            choiceId: choice.id,
+            next: deadPreview,
+            reason: 'invalid_state'
+        });
+        expect(applyRunEventChoice(deadRun, event, choice.id)).toEqual({
+            run: deadRun,
+            applied: false,
+            reason: 'invalid_state'
+        });
     });
 });

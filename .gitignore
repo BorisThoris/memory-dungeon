@@ -3,6 +3,7 @@ node_modules/
 *.tsbuildinfo
 .tsbuild/
 .expo/
+.codex-run/
 dist/
 dist-build/
 dist-electron/
@@ -13,6 +14,7 @@ tmp/
 test-results/
 playwright-report/
 playwright/.cache/
+.playwright-cli/
 .playwright-mcp/
 *.log
 *.orig.*

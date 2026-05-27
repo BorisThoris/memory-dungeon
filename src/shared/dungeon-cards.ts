@@ -237,84 +237,84 @@ export const DUNGEON_CARD_EFFECT_DEFINITIONS: Record<DungeonCardEffectId, Dungeo
     enemy_sentry: {
         effectId: 'enemy_sentry',
         kind: 'enemy',
-        label: 'Sentry',
+        label: 'Archivist Sentry',
         rulesRole: 'Baseline enemy card pair.',
         helpText: 'A low-HP enemy defeated by matching its pair.'
     },
     enemy_elite: {
         effectId: 'enemy_elite',
         kind: 'enemy',
-        label: 'Elite Enemy',
+        label: 'Mnemonic Sentinel',
         rulesRole: 'Higher-HP enemy or boss card pair.',
         helpText: 'A stronger enemy that may represent the floor boss.'
     },
     enemy_stalker: {
         effectId: 'enemy_stalker',
         kind: 'enemy',
-        label: 'Stalker',
+        label: 'Afterimage Stalker',
         rulesRole: 'Enemy card pair that wakes when traps spring.',
         helpText: 'A hidden enemy that becomes dangerous when trap pressure escalates.'
     },
     trap_spikes: {
         effectId: 'trap_spikes',
         kind: 'trap',
-        label: 'Spike Trap',
+        label: 'Spike Plate',
         rulesRole: 'Baseline armed trap.',
         helpText: 'A revealed trap that should be matched quickly to disarm.'
     },
     trap_curse: {
         effectId: 'trap_curse',
         kind: 'trap',
-        label: 'Curse Trap',
+        label: 'Curse Sigil',
         rulesRole: 'Trap pressure for shadow floors.',
         helpText: 'A trap tuned for information-denial floors.'
     },
     trap_mimic: {
         effectId: 'trap_mimic',
         kind: 'trap',
-        label: 'Disarm Bounty',
+        label: 'Mimic Bounty',
         rulesRole: 'Trap that pays loot when disarmed.',
         helpText: 'A visible risk-reward trap: destroy removes danger but forfeits the bounty; matching pays once.'
     },
     trap_alarm: {
         effectId: 'trap_alarm',
         kind: 'trap',
-        label: 'Alarm Trap',
+        label: 'Bell Trap',
         rulesRole: 'Trap that wakes hidden enemies.',
         helpText: 'Mismatches while it is armed wake hidden enemy cards.'
     },
     trap_snare: {
         effectId: 'trap_snare',
         kind: 'trap',
-        label: 'Snare Trap',
+        label: 'Latch Snare',
         rulesRole: 'Trap that consumes defensive tempo.',
         helpText: 'Mismatches can spend guard or disable free shuffle help.'
     },
     trap_hex: {
         effectId: 'trap_hex',
         kind: 'trap',
-        label: 'Hex Trap',
+        label: 'Forgetful Hex',
         rulesRole: 'Trap that cuts score and reveals hazards.',
         helpText: 'Mismatches punish score and expose more dungeon pressure.'
     },
     treasure_gold: {
         effectId: 'treasure_gold',
         kind: 'treasure',
-        label: 'Gold Treasure',
+        label: 'Coin Memory',
         rulesRole: 'Baseline treasure reward.',
         helpText: 'Pays score and shop gold when matched.'
     },
     treasure_cache: {
         effectId: 'treasure_cache',
         kind: 'treasure',
-        label: 'Treasure Cache',
+        label: 'Gallery Cache',
         rulesRole: 'Larger treasure reward.',
         helpText: 'Pays a larger cache reward and objective credit.'
     },
     treasure_shard: {
         effectId: 'treasure_shard',
         kind: 'treasure',
-        label: 'Supply Cache',
+        label: 'Supply Niche',
         rulesRole: 'Small supply reward.',
         helpText: 'Pays a modest score and gold reward.'
     },
@@ -356,7 +356,7 @@ export const DUNGEON_CARD_EFFECT_DEFINITIONS: Record<DungeonCardEffectId, Dungeo
     key_iron: {
         effectId: 'key_iron',
         kind: 'key',
-        label: 'Iron Key',
+        label: 'Iron Memory Key',
         rulesRole: 'Standard key reward.',
         helpText: 'Banks an iron key for a future lock.'
     },
@@ -370,7 +370,7 @@ export const DUNGEON_CARD_EFFECT_DEFINITIONS: Record<DungeonCardEffectId, Dungeo
     lock_cache: {
         effectId: 'lock_cache',
         kind: 'lock',
-        label: 'Locked Cache',
+        label: 'Sealed Cache',
         rulesRole: 'Key-gated loot cache.',
         helpText: 'Spends a key for full cache rewards, or pays only a small fallback when no key is available.'
     },
@@ -426,35 +426,35 @@ export const DUNGEON_CARD_EFFECT_DEFINITIONS: Record<DungeonCardEffectId, Dungeo
     room_campfire: {
         effectId: 'room_campfire',
         kind: 'room',
-        label: 'Campfire',
+        label: 'Mnemonic Hearth',
         rulesRole: 'Room healing service.',
         helpText: 'Restores life or grants recovery value.'
     },
     room_fountain: {
         effectId: 'room_fountain',
         kind: 'room',
-        label: 'Fountain',
+        label: 'Stillwater Font',
         rulesRole: 'Room guard service.',
         helpText: 'Adds guard-oriented safety.'
     },
     room_map: {
         effectId: 'room_map',
         kind: 'room',
-        label: 'Map Room',
+        label: 'Cartographer Cell',
         rulesRole: 'Room scouting service.',
         helpText: 'Reveals scoped utility-family information without identifying exact pair solutions.'
     },
     room_forge: {
         effectId: 'room_forge',
         kind: 'room',
-        label: 'Forge',
+        label: 'Breaker Forge',
         rulesRole: 'Room upgrade service.',
         helpText: 'Improves run tools or rewards.'
     },
     room_shrine: {
         effectId: 'room_shrine',
         kind: 'room',
-        label: 'Shrine Room',
+        label: 'Whisper Shrine',
         rulesRole: 'Room favor service.',
         helpText: 'Grants relic favor or shrine-style progression.'
     },
@@ -468,28 +468,28 @@ export const DUNGEON_CARD_EFFECT_DEFINITIONS: Record<DungeonCardEffectId, Dungeo
     room_armory: {
         effectId: 'room_armory',
         kind: 'room',
-        label: 'Armory',
+        label: 'Recall Armory',
         rulesRole: 'Room combat service.',
         helpText: 'Adds combat safety or damage pressure relief.'
     },
     room_locked_cache: {
         effectId: 'room_locked_cache',
         kind: 'room',
-        label: 'Locked Cache Room',
+        label: 'Sealed Cache Cell',
         rulesRole: 'Room key-gated loot service.',
         helpText: 'Stays revealed until an iron or master key is spent for the full cache reward.'
     },
     room_key_cache: {
         effectId: 'room_key_cache',
         kind: 'room',
-        label: 'Key Cache',
+        label: 'Key Niche',
         rulesRole: 'Room key service.',
         helpText: 'Grants an iron key and score.'
     },
     room_trap_workshop: {
         effectId: 'room_trap_workshop',
         kind: 'room',
-        label: 'Trap Workshop',
+        label: 'Trapwright Bench',
         rulesRole: 'Room trap-control service.',
         helpText: 'One-shot room that resolves an armed trap pair, otherwise reveals a hidden trap family clue.'
     },

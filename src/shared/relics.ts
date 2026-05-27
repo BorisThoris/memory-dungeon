@@ -93,27 +93,27 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
     guard_tank: {
         id: 'guard_tank',
         label: 'The Warden',
-        fantasy: 'Protection and recovery build.',
+        fantasy: 'Hold the line while the archive turns hostile.',
         decisionVerbs: ['guard', 'absorb', 'stabilize'],
-        summary: 'Bank guard and study time so enemy patrols, traps, and safe routes can be played through mistakes.',
+        summary: 'Bank guard and study time so patrol pressure, trap springs, and safe-route exits remain recoverable after a bad recall.',
         dungeonInteractions: ['guard tokens', 'safe routes', 'enemy contact', 'trap pressure'],
         supportHooks: ['guard_token_plus_one immediate capped guard', 'safe route contextual draft weighting']
     },
     trap_control: {
         id: 'trap_control',
         label: 'The Saboteur',
-        fantasy: 'Trap-control and disruption build.',
+        fantasy: 'Turn the dungeon machinery against itself.',
         decisionVerbs: ['disarm', 'delete', 'reroute'],
-        summary: 'Use shuffle, destroy, and search tools to stabilize trap halls and armed dungeon trap pairs.',
+        summary: 'Use shuffle, destroy, and search tools to convert trap halls from hidden punishment into planned disarms.',
         dungeonInteractions: ['trap halls', 'dungeon trap cards', 'row shuffle', 'destroy-pair charges'],
         supportHooks: ['shuffle relic contract filters', 'destroy_bank_plus_one uncapped charge grant', 'trap route contextual weighting']
     },
     treasure_greed: {
         id: 'treasure_greed',
         label: 'The Vaultbreaker',
-        fantasy: 'Key, lock, cache, and route extraction build.',
+        fantasy: 'Remember which locked doors are worth the noise.',
         decisionVerbs: ['unlock', 'extract', 'bank'],
-        summary: 'Lean into Greed routes and bonus shrine picks while keeping the current treasure payout hooks bounded.',
+        summary: 'Lean into Greed routes, keys, caches, and bonus shrine picks while keeping treasure extraction bounded.',
         dungeonInteractions: ['treasure rooms', 'Greed routes', 'Relic Favor', 'shop gold pressure'],
         supportHooks: ['Greed route contextual draft weighting', 'shrine_echo one-shot extra relic selection'],
         deferredHooks: ['Direct treasure-cache payout relics are deferred until the bonus-reward tuning pass.']
@@ -121,9 +121,9 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
     boss_hunter: {
         id: 'boss_hunter',
         label: 'The Slayer',
-        fantasy: 'Boss-prep and trophy payoff build.',
+        fantasy: 'Study the boss before the boss studies you.',
         decisionVerbs: ['prepare', 'focus', 'finish'],
-        summary: 'Prepare for boss floors with chapter-aware draft pressure and bounded wager/Favor conversion.',
+        summary: 'Prepare for boss floors with chapter-aware draft pressure, route wagers, and bounded Favor conversion.',
         dungeonInteractions: ['boss floors', 'boss prep', 'Relic Favor', 'chapter schedule'],
         supportHooks: ['chapter_compass future chapter answer weighting', 'wager_surety bounded Favor bonus'],
         deferredHooks: ['Direct boss-damage or boss-ward relics are deferred to boss presentation/tuning tickets.']
@@ -131,27 +131,27 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
     route_gambler: {
         id: 'route_gambler',
         label: 'The Gambit',
-        fantasy: 'Risk shaping and wager build.',
+        fantasy: 'Choose the dangerous stair when the memory is sharp.',
         decisionVerbs: ['wager', 'push', 'cash out'],
-        summary: 'Turn risky route choices and Endless wagers into more Favor without removing the bust condition.',
+        summary: 'Turn risky route choices and Endless wagers into more Favor without erasing the cost of a failed read.',
         dungeonInteractions: ['risk wagers', 'Greed routes', 'Mystery routes', 'Relic Favor'],
         supportHooks: ['risk wager payout hook', 'wager_surety loss floor', 'route contextual draft weighting']
     },
     reveal_scout: {
         id: 'reveal_scout',
         label: 'The Seer',
-        fantasy: 'Fair-information and read-control build.',
+        fantasy: 'Make hidden cards give up fair clues before commitment.',
         decisionVerbs: ['peek', 'pin', 'read'],
-        summary: 'Use peeks, pins, stray removal, and study time to read mystery rooms before committing.',
+        summary: 'Use peeks, pins, stray removal, and study time to separate true pair memory from Mystery-route noise.',
         dungeonInteractions: ['Mystery routes', 'hidden dungeon cards', 'observe patrols', 'memorize phase'],
         supportHooks: ['peek_charge_plus_one immediate charge', 'pin_cap_plus_one capacity cap', 'stray_charge_plus_one immediate charge']
     },
     combo_shard_engine: {
         id: 'combo_shard_engine',
         label: 'The Catalyst',
-        fantasy: 'Clean-play momentum and Favor engine build.',
+        fantasy: 'Turn clean recall into enough momentum to survive the long descent.',
         decisionVerbs: ['chain', 'convert', 'accelerate'],
-        summary: 'Convert clean play, parasite answers, and guard safety into bounded combo shard momentum.',
+        summary: 'Convert clean play, parasite answers, and guard safety into bounded combo-shard momentum.',
         dungeonInteractions: ['combo shards', 'parasite floors', 'featured objectives', 'guard tokens'],
         supportHooks: ['combo_shard_plus_step shard cap', 'parasite_ward_once one-shot ward', 'parasite_ledger featured-objective hook']
     }
@@ -670,6 +670,9 @@ const makeRng = (seed: number): (() => number) => {
 
 export const needsRelicPick = (run: RunState): boolean => {
     if (run.gameMode === 'puzzle') {
+        return false;
+    }
+    if (run.lives <= 0) {
         return false;
     }
     if (run.relicTiersClaimed >= MAX_RELIC_PICKS_PER_RUN) {

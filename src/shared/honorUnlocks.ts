@@ -3,6 +3,7 @@
  * Does not require Steam Partner slots. See `AchievementId` for Steam trophies.
  */
 import type { SaveData } from './contracts';
+import { cosmeticUnlockTag, type CosmeticId } from './cosmetics';
 import { normalizeSaveData } from './save-data';
 
 export const HONOR_UNLOCK_PREFIX = 'honor:' as const;
@@ -78,6 +79,11 @@ export const HONOR_UNLOCK_ORDER: HonorUnlockId[] = [
     'honor_gauntlet_proof'
 ];
 
+const HONOR_COSMETIC_UNLOCKS: Partial<Record<HonorUnlockId, CosmeticId>> = {
+    honor_daily_initiate: 'crest_daily_bronze',
+    honor_ascendant_5: 'title_ascendant_v'
+};
+
 export const honorUnlockTag = (id: HonorUnlockId): string => `${HONOR_UNLOCK_PREFIX}${id}`;
 
 export const parseHonorUnlockTag = (tag: string): HonorUnlockId | null => {
@@ -123,6 +129,14 @@ export const mergeHonorUnlockTags = (save: SaveData): SaveData => {
         if (!set.has(t)) {
             set.add(t);
             added = true;
+        }
+        const cosmeticId = HONOR_COSMETIC_UNLOCKS[id];
+        if (cosmeticId) {
+            const cosmeticTag = cosmeticUnlockTag(cosmeticId);
+            if (!set.has(cosmeticTag)) {
+                set.add(cosmeticTag);
+                added = true;
+            }
         }
     }
     if (!added) {

@@ -17,6 +17,22 @@ describe('honorUnlocks', () => {
         expect(merged).not.toBe(base);
     });
 
+    it('bridges earned honors into cosmetic unlock tags', () => {
+        const base = createDefaultSaveData();
+        base.playerStats = {
+            ...base.playerStats!,
+            dailiesCompleted: 1,
+            bestFloorNoPowers: 5
+        };
+
+        const merged = mergeHonorUnlockTags(base);
+
+        expect(merged.unlocks).toContain(honorUnlockTag('honor_daily_initiate'));
+        expect(merged.unlocks).toContain('cosmetic:crest_daily_bronze');
+        expect(merged.unlocks).toContain(honorUnlockTag('honor_ascendant_5'));
+        expect(merged.unlocks).toContain('cosmetic:title_ascendant_v');
+    });
+
     it('is idempotent when nothing new is eligible', () => {
         const base = createDefaultSaveData();
         const once = mergeHonorUnlockTags(base);

@@ -2,6 +2,7 @@ import { ACHIEVEMENTS } from '../../shared/achievements';
 import {
     ENDLESS_RISK_WAGER_BONUS_FAVOR,
     MAX_PINNED_TILES,
+    RECALL_FOCUS_MAX,
     type AchievementId,
     type RouteCardKind,
     type RouteSpecialKind,
@@ -14,8 +15,9 @@ import { getFloorIdentityContract } from '../../shared/boss-encounters';
 import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
 import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
 import {
-    canOfferEndlessRiskWager,
+    canOfferEndlessRiskWager
 } from '../../shared/objective-rules';
+import { getRouteChoiceAvailability } from '../../shared/route-rules';
 import {
     canRegionShuffle,
     canRegionShuffleRow,
@@ -26,8 +28,10 @@ import {
 } from '../../shared/board-powers';
 import {
     getDungeonBoardPresentation,
-    getDungeonExitStatus
+    getDungeonExitStatus,
+    getDungeonObjectiveStatus
 } from '../../shared/dungeon-rules';
+import { getMemoryRecallFeedback } from '../../shared/memory-recall-feedback';
 import { getDungeonMapPresentation, getDungeonRouteDecisionPresentation } from '../../shared/run-map';
 import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
@@ -47,6 +51,7 @@ import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import { useDistractionChannelTick } from '../hooks/useDistractionChannelTick';
 import {
     detectClaimedFindableKind,
+    formatHudActionFeedbackText,
     getFindableToastText,
     useHudPoliteLiveAnnouncement
 } from '../hooks/useHudPoliteLiveAnnouncement';
@@ -89,6 +94,7 @@ import {
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import { REG104_DATA_SHELL } from '../gameplay/regPhase4PlayContract';
 import styles from './GameScreen.module.css';
+import { getDungeonCombatLogRows, getVisualHudAnnouncementFollowup } from './gameScreenFeedback';
 import {
     MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS,
     matchScoreFloatDurationMs
@@ -198,6 +204,16 @@ const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>
 
 const FLOOR_CLEAR_LIFE_CARRYOVER_NOTE =
     'Lives carry across the run. Clean clears, safe routes, shops, rests, and shrines can restore them.';
+
+const getFirstRouteChoiceTeachingLabel = (routeType: NonNullable<RunState['pendingRouteCardPlan']>['routeType']): string => {
+    if (routeType === 'safe') {
+        return 'Recommended first route';
+    }
+    if (routeType === 'greed') {
+        return 'High reward, higher danger';
+    }
+    return 'Changes the next board';
+};
 
 const formatBonusTagsLine = (tags: string[] | undefined): string | null => {
     if (!tags || tags.length === 0) {
@@ -330,6 +346,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     );
     const onboardingStep = getPlayableOnboardingStep(run, saveData);
     const onboardingBoardTargetIds = useMemo(() => onboardingStep?.targetTileIds ?? [], [onboardingStep]);
+    const firstRunRoomGoalPrompt =
+        !saveData.onboardingDismissed &&
+        !onboardingStep &&
+        run.status === 'playing' &&
+        run.board &&
+        run.board.level === 1 &&
+        run.board.matchedPairs >= 2 &&
+        run.board.matchedPairs < run.board.pairCount
+            ? {
+                  title: 'Room goal',
+                  prompt: 'Clear the remaining pairs',
+                  detail: 'Each clean pair moves the room toward its exit. Clearing the floor opens the first route choice.'
+              }
+            : null;
     const rulesHintNudge =
         onboardingStep?.prompt ??
         (showTutorialPairMarkers
@@ -868,12 +898,43 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             ? run.endlessRiskWager
             : null;
     const routeChoiceRequired = Boolean(run.lastLevelResult?.routeChoices && !run.pendingRouteCardPlan);
+    const firstRouteChoiceRequired = routeChoiceRequired && run.lastLevelResult?.level === 1;
+    const routeChoiceRequiredCopy =
+        firstRouteChoiceRequired
+            ? 'Choose the next room type. Safe protects the run, Greed trades danger for reward, and Mystery changes the next board.'
+            : 'Pick one room to continue. Route choice is the active decision; other floor-clear actions resume after the route is locked.';
     const currentDungeonNode = run.dungeonRun?.nodes.find((node) => node.id === run.dungeonRun.currentNodeId) ?? null;
     const dungeonMapPresentation = getDungeonMapPresentation(run.dungeonRun);
     const dungeonRouteDecisionPresentation =
         routeChoiceRequired && run.lastLevelResult?.routeChoices
             ? getDungeonRouteDecisionPresentation(run.dungeonRun, run.lastLevelResult.routeChoices)
             : null;
+    const memoryRecallFeedback = useMemo(() => getMemoryRecallFeedback(run), [run]);
+    const routeChoiceMemoryById = useMemo(
+        () => new Map(memoryRecallFeedback.choices.map((choice) => [choice.id, choice])),
+        [memoryRecallFeedback.choices]
+    );
+    const memoryRecallPanelRows = useMemo(
+        () =>
+            [
+                ...memoryRecallFeedback.path,
+                ...memoryRecallFeedback.clues,
+                ...memoryRecallFeedback.enemies,
+                ...memoryRecallFeedback.symbols,
+                ...memoryRecallFeedback.penalties,
+                ...memoryRecallFeedback.recallPlan,
+                ...memoryRecallFeedback.upgrades
+            ].slice(0, 6),
+        [
+            memoryRecallFeedback.path,
+            memoryRecallFeedback.clues,
+            memoryRecallFeedback.enemies,
+            memoryRecallFeedback.symbols,
+            memoryRecallFeedback.recallPlan,
+            memoryRecallFeedback.penalties,
+            memoryRecallFeedback.upgrades
+        ]
+    );
     const currentDungeonRoom = dungeonMapPresentation.current;
     const visibleDungeonMapNodes = dungeonMapPresentation.nodes.filter(
         (node) => node.status === 'current' || node.status === 'cleared' || node.status === 'revealed' || node.status === 'skipped'
@@ -927,6 +988,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             : null;
     const dungeonPresentation = getDungeonBoardPresentation(run);
     const activeDungeonPanel = run.status !== 'levelComplete' && dungeonPresentation.visible ? dungeonPresentation : null;
+    const activeDungeonObjectiveStatus = activeDungeonPanel ? getDungeonObjectiveStatus(run) : null;
+    const dungeonCombatLogRows = activeDungeonPanel ? getDungeonCombatLogRows(run) : [];
     const nextFloorPreview =
         endlessChapterActive && run.lastLevelResult
             ? pickFloorScheduleEntry(run.runSeed, run.runRulesVersion, run.lastLevelResult.level + 1, run.gameMode)
@@ -953,7 +1016,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             : nextFloorMutatorNames;
     const nextFloorPreviewLine =
         nextFloorPreview?.title && nextFloorObjectiveLabel
-            ? `Next: ${nextFloorPreview.title} В· ${nextFloorObjectiveLabel} В· ${nextFloorMutatorLabels}`
+            ? `Next: ${nextFloorPreview.title} - ${nextFloorObjectiveLabel} - ${nextFloorMutatorLabels}`
             : null;
 
     const nextFloorPreviewIdentityLine = nextFloorPreview && nextFloorIdentity
@@ -976,16 +1039,31 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         void resumeAudioContext();
         playCountdownPressureSfx(shuffleSfxGain);
     }, [gauntletActive, gauntletRemainingMs, run.status, shuffleSfxGain]);
-    const { message: politeHudAnnouncement } = useHudPoliteLiveAnnouncement({
+    const { message: politeHudAnnouncement, priority: politeHudAnnouncementPriority } = useHudPoliteLiveAnnouncement({
         boardLevel: run.board?.level ?? null,
         boardTiles: run.board?.tiles ?? [],
         findablesClaimedThisFloor: run.findablesClaimedThisFloor,
         gauntletActive,
         gauntletRemainingMs,
         lives: run.lives,
+        guardTokens: run.stats.guardTokens,
+        comboShards: run.stats.comboShards,
+        shopGold: run.shopGold,
         parasiteFloors: run.parasiteFloors,
         parasiteWardRemaining: run.parasiteWardRemaining,
         scoreParasiteActive: run.activeMutators.includes('score_parasite'),
+        matchedPairs: run.board?.matchedPairs ?? 0,
+        pairCount: run.board?.pairCount ?? 0,
+        mismatches: run.stats.mismatches,
+        objectiveProgress: activeDungeonObjectiveStatus?.progress,
+        objectiveRequired: activeDungeonObjectiveStatus?.required,
+        objectiveLabel: activeDungeonObjectiveStatus?.label,
+        recallFocus: run.recallFocus,
+        recallFocusMax: RECALL_FOCUS_MAX,
+        recallMatchesThisFloor: run.recallMatchesThisFloor,
+        recallMistakesThisFloor: run.recallMistakesThisFloor,
+        recallBonusScoreThisFloor: run.recallBonusScoreThisFloor,
+        forgottenTileCountThisFloor: run.forgottenTileIdsThisFloor.length,
         chainMatchStreak: run.stats.currentStreak,
         chainAnnounceActive: run.status === 'playing',
         gambitThirdPickActive,
@@ -1011,7 +1089,22 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         catalystAltarUpgradesThisFloor: run.catalystAltarUpgradesThisFloor,
         parasiteVesselConversionsThisFloor: run.parasiteVesselConversionsThisFloor,
         pinLatticeRewardsThisFloor: run.pinLatticeRewardsThisFloor,
-        safeHazardWardsUsedThisFloor: run.safeHazardWardsUsedThisFloor
+        safeHazardWardsUsedThisFloor: run.safeHazardWardsUsedThisFloor,
+        dungeonEnemiesDefeatedThisFloor: run.dungeonEnemiesDefeatedThisFloor,
+        enemyHazardHitsThisFloor: run.enemyHazardHitsThisFloor,
+        enemyHazardsDefeatedThisFloor: run.enemyHazardsDefeatedThisFloor
+    });
+    const visualHudAnnouncement = politeHudAnnouncement
+        ? formatHudActionFeedbackText(politeHudAnnouncement)
+        : '';
+    const visualHudAnnouncementLabel = politeHudAnnouncementPriority === 'error' ? 'Critical' : 'Last action';
+    const remainingPairCount = Math.max(0, (run.board?.pairCount ?? 0) - (run.board?.matchedPairs ?? 0));
+    const visualHudAnnouncementFollowup = getVisualHudAnnouncementFollowup({
+        announcement: politeHudAnnouncement,
+        priority: politeHudAnnouncementPriority,
+        runStatus: run.status,
+        remainingPairCount,
+        lives: run.lives
     });
 
     const shiftingSpotlightActive = useMemo(
@@ -1215,6 +1308,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             cameraViewportMode={cameraViewportMode}
                             gauntletRemainingMs={gauntletRemainingMs}
                             politeHudAnnouncement={politeHudAnnouncement}
+                            politeHudAnnouncementPriority={politeHudAnnouncementPriority}
                             reduceMotion={settingsReduceMotion}
                             run={run}
                         />
@@ -1293,8 +1387,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             ) : null}
                             {activeDungeonPanel ? (
                                 <div
+                                    aria-label="Dungeon combat status"
+                                    aria-live="polite"
                                     className={styles.dungeonStatusPanel}
                                     data-testid="dungeon-status-panel"
+                                    role="status"
                                 >
                                     <div className={styles.dungeonStatusHeader}>
                                         <strong>{activeDungeonPanel.title}</strong>
@@ -1325,6 +1422,38 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     ) : null}
                                     {activeDungeonPanel.alertText ? (
                                         <div className={styles.dungeonStatusAlert}>{activeDungeonPanel.alertText}</div>
+                                    ) : null}
+                                    {dungeonCombatLogRows.length > 0 ? (
+                                        <div
+                                            aria-label="This floor combat log"
+                                            className={styles.dungeonCombatLog}
+                                            data-testid="dungeon-combat-log"
+                                        >
+                                            {dungeonCombatLogRows.map((row) => (
+                                                <span
+                                                    className={styles.dungeonCombatLogRow}
+                                                    data-tone={row.tone}
+                                                    key={row.id}
+                                                >
+                                                    <strong>{row.label}</strong>
+                                                    <small>{row.detail}</small>
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ) : null}
+                                </div>
+                            ) : null}
+                            {visualHudAnnouncement ? (
+                                <div
+                                    aria-hidden="true"
+                                    className={styles.actionFeedbackRail}
+                                    data-testid="action-feedback-rail"
+                                    data-tone={politeHudAnnouncementPriority}
+                                >
+                                    <span>{visualHudAnnouncementLabel}</span>
+                                    <strong>{visualHudAnnouncement}</strong>
+                                    {visualHudAnnouncementFollowup ? (
+                                        <small>{visualHudAnnouncementFollowup}</small>
                                     ) : null}
                                 </div>
                             ) : null}
@@ -1433,6 +1562,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     <span className={styles.playableOnboardingStep}>{onboardingStep.title}</span>
                                     <strong>{onboardingStep.prompt}</strong>
                                     <p>{onboardingStep.detail}</p>
+                                </aside>
+                            ) : null}
+                            {firstRunRoomGoalPrompt ? (
+                                <aside className={styles.playableOnboardingPrompt} data-testid="first-run-room-goal-prompt">
+                                    <span className={styles.playableOnboardingStep}>{firstRunRoomGoalPrompt.title}</span>
+                                    <strong>{firstRunRoomGoalPrompt.prompt}</strong>
+                                    <p>{firstRunRoomGoalPrompt.detail}</p>
                                 </aside>
                             ) : null}
                         </div>
@@ -1710,13 +1846,66 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     </small>
                                 </div>
                                 <p className={styles.dungeonMapChoiceInstruction} data-testid="route-choice-required-copy">
-                                    Pick one room to continue. Route choice is the active decision; other floor-clear actions resume after the route is locked.
+                                    {routeChoiceRequiredCopy}
                                 </p>
                                 <span className={styles.dungeonMapChoiceSummary}>
-                                    {run.lastLevelResult.routeChoices
+                                    {dungeonRouteDecisionPresentation?.summary ?? run.lastLevelResult.routeChoices
                                         .map((option) => `${option.label}: ${option.detail}`)
                                         .join(' · ')}
                                 </span>
+                                <section
+                                    aria-labelledby="route-memory-read-title"
+                                    className={styles.routeMemoryReadPanel}
+                                    data-pressure={memoryRecallFeedback.pressure}
+                                    data-testid="route-memory-read-panel"
+                                >
+                                    <div className={styles.routeMemoryReadHeader}>
+                                        <span>Memory read</span>
+                                        <strong id="route-memory-read-title">
+                                            Focus {memoryRecallFeedback.focus}/{RECALL_FOCUS_MAX} - {memoryRecallFeedback.focusLabel}
+                                        </strong>
+                                        <small>{memoryRecallFeedback.atmosphericSummary}</small>
+                                    </div>
+                                    <div className={styles.routeMemoryReadStats} aria-label="Recall state">
+                                        <span>
+                                            Bonus <strong>+{memoryRecallFeedback.nextCleanMatchBonus}</strong>
+                                        </span>
+                                        <span>
+                                            Clues <strong>{memoryRecallFeedback.rememberedClueTileCount}</strong>
+                                        </span>
+                                        <span>
+                                            Forgotten <strong>{memoryRecallFeedback.forgottenTileCount}</strong>
+                                        </span>
+                                        <span
+                                            data-tone={memoryRecallFeedback.burden.tone}
+                                            title={memoryRecallFeedback.burden.detail}
+                                        >
+                                            Burden <strong>{memoryRecallFeedback.burden.label}</strong>
+                                        </span>
+                                    </div>
+                                    <p className={styles.routeMemoryReadPressure}>{memoryRecallFeedback.pressureDetail}</p>
+                                    <p
+                                        className={styles.routeMemoryReadNextMove}
+                                        data-tone={memoryRecallFeedback.nextMemoryMove.tone}
+                                    >
+                                        <strong>{memoryRecallFeedback.nextMemoryMove.label}</strong>
+                                        <span>{memoryRecallFeedback.nextMemoryMove.detail}</span>
+                                    </p>
+                                    {memoryRecallPanelRows.length > 0 ? (
+                                        <div className={styles.routeMemoryReadRows}>
+                                            {memoryRecallPanelRows.map((line) => (
+                                                <span
+                                                    className={styles.routeMemoryReadRow}
+                                                    data-tone={line.tone}
+                                                    key={line.id}
+                                                >
+                                                    <strong>{line.label}</strong>
+                                                    <small>{line.detail}</small>
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ) : null}
+                                </section>
                                 <div className={styles.dungeonMapTimeline} aria-label="Dungeon map route">
                                     {visibleDungeonMapNodes.map((node) => (
                                         <span
@@ -1733,15 +1922,27 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 </div>
                                 <div className={styles.dungeonMapChoiceActions}>
                                     {dungeonRouteDecisionPresentation?.rows.map((row) => {
+                                        const choice = run.lastLevelResult?.routeChoices?.find((option) => option.id === row.id);
+                                        const availability = choice
+                                            ? getRouteChoiceAvailability(run, choice)
+                                            : { available: true as const };
+                                        const memoryChoice = routeChoiceMemoryById.get(row.id);
+                                        const firstRouteTeachingLabel = firstRouteChoiceRequired
+                                            ? getFirstRouteChoiceTeachingLabel(row.routeType)
+                                            : null;
                                         return (
                                             <button
                                                 aria-label={row.choiceLabel}
                                                 className={styles.dungeonMapRoomButton}
+                                                disabled={!availability.available}
                                                 data-route-type={row.routeType}
                                                 data-testid={`route-choice-${row.routeType}`}
                                                 data-tone={row.tone}
                                                 key={row.id}
                                                 onClick={() => {
+                                                    if (!availability.available) {
+                                                        return;
+                                                    }
                                                     playUiClick();
                                                     chooseRouteAndContinue(row.id);
                                                 }}
@@ -1750,11 +1951,36 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 <span className={styles.dungeonMapRoomGlyph}>{row.glyph}</span>
                                                 <span className={styles.dungeonMapRoomCopy}>
                                                     <strong>{row.choiceLabel}</strong>
+                                                    {row.approachLabel ? (
+                                                        <small className={styles.dungeonMapRoomApproach}>
+                                                            Approach: {row.approachLabel}
+                                                        </small>
+                                                    ) : null}
                                                     <small>{row.nodeLabel}: {row.mechanic}</small>
                                                     <em>Reward: {row.reward}</em>
+                                                    {firstRouteTeachingLabel ? (
+                                                        <small className={styles.dungeonMapRoomTeaching}>
+                                                            {firstRouteTeachingLabel}
+                                                        </small>
+                                                    ) : null}
+                                                    {memoryChoice ? (
+                                                        <small className={styles.dungeonMapRoomMemory}>
+                                                            Memory: {memoryChoice.memoryPrompt}
+                                                        </small>
+                                                    ) : null}
+                                                    {memoryChoice ? (
+                                                        <small className={styles.dungeonMapRoomMemory}>
+                                                            Recall: {memoryChoice.readinessLabel}
+                                                        </small>
+                                                    ) : null}
+                                                    {memoryChoice ? (
+                                                        <small className={styles.dungeonMapRoomMemory}>
+                                                            Atmosphere: {memoryChoice.atmosphericCue}
+                                                        </small>
+                                                    ) : null}
                                                 </span>
                                                 <span className={styles.dungeonMapRoomRisk}>
-                                                    Risk: {row.risk}
+                                                    {availability.available ? `Risk: ${row.risk}` : availability.label}
                                                 </span>
                                             </button>
                                         );

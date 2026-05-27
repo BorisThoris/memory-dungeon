@@ -21,6 +21,43 @@ describe('REG-032 profile summary and save trust shell', () => {
         expect(rows.every((row) => row.source.length > 0)).toBe(true);
     });
 
+    it('counts earned honors separately from owned gameplay upgrades', () => {
+        const save = createDefaultSaveData();
+        save.bestScore = 2400;
+        save.playerStats = {
+            ...save.playerStats!,
+            dailiesCompleted: 1,
+            bestFloorNoPowers: 5
+        };
+
+        const summary = buildProfileSaveShellSummary(save);
+
+        expect(summary.honorsEarned).toBe(3);
+        expect(summary.honorMarks).toBeGreaterThan(0);
+    });
+
+    it('includes progression feedback for profile motivation copy', () => {
+        const save = createDefaultSaveData();
+        save.playerStats = {
+            ...save.playerStats!,
+            dailiesCompleted: 4,
+            bestFloorNoPowers: 2
+        };
+
+        const summary = buildProfileSaveShellSummary(save);
+
+        expect(summary).toMatchObject({
+            difficultyTierLabel: 'Initiate tier',
+            honorMarksToNextLevel: 4,
+            nextMilestoneLabel: 'Adept tier',
+            nextMilestoneProgressCopy: 'Adept tier at profile level 3 (4 honor marks).',
+            nextRewardTitle: 'Week of Archives',
+            nextRewardProgressCopy: '4/7 from Daily archive completions',
+            nextHonorMarkSourceCopy: 'Clear one more Daily Challenge for 1 honor mark.',
+            progressionMotivationCopy: 'Next: Week of Archives (4/7 from Daily archive completions).'
+        });
+    });
+
     it('explains save scope, cloud deferral, export/import, backup, and reset behavior', () => {
         const rows = getSaveTrustRows(createDefaultSaveData());
         expect(rows.map((row) => row.id)).toEqual(['slot_scope', 'cloud_sync', 'export_import', 'backup', 'reset']);

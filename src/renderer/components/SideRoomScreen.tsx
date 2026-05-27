@@ -30,6 +30,24 @@ const sideRoomNodeKindStamp = (sideRoom: RouteSideRoomState): string => {
     return sideRoom.routeType === 'greed' ? 'treasure' : sideRoom.routeType;
 };
 
+const rewardFeedbackSegments = (sideRoom: RouteSideRoomState): { label: string; kind: 'gain' | 'capped' | 'neutral' }[] => {
+    if (sideRoom.kind !== 'bonus_reward') {
+        return [];
+    }
+    return sideRoom.primaryDetail
+        .split(';')
+        .map((segment) => segment.trim())
+        .filter(Boolean)
+        .map((label) => ({
+            label,
+            kind: label.startsWith('+')
+                ? 'gain'
+                : /already full|unavailable|exhausted/i.test(label)
+                  ? 'capped'
+                  : 'neutral'
+        }));
+};
+
 const SideRoomScreen = () => {
     const rootRef = useRef<HTMLElement | null>(null);
     const { claimSideRoomChoice, claimSideRoomPrimary, run, settings, skipSideRoom } = useAppStore(
@@ -75,6 +93,7 @@ const SideRoomScreen = () => {
 
     const sideRoom = run.sideRoom;
     const nodeKindStamp = sideRoomNodeKindStamp(sideRoom);
+    const rewardSegments = rewardFeedbackSegments(sideRoom);
 
     return (
         <section
@@ -93,7 +112,7 @@ const SideRoomScreen = () => {
             <div className={styles.shell}>
                 <header className={styles.header}>
                     <span className={styles.eyebrow}>
-                        {routeLabel(sideRoom.routeType)} · Floor {sideRoom.floor}
+                        {routeLabel(sideRoom.routeType)} / Floor {sideRoom.floor}
                     </span>
                     <h2>{sideRoom.title}</h2>
                     <p>{sideRoom.body}</p>
@@ -102,6 +121,19 @@ const SideRoomScreen = () => {
                 <div className={styles.rewardPanel} data-testid="side-room-reward-panel">
                     <strong>{sideRoom.primaryLabel}</strong>
                     <p className={styles.rewardText}>{sideRoom.primaryDetail}</p>
+                    {rewardSegments.length > 1 ? (
+                        <ul
+                            aria-label="Reward feedback breakdown"
+                            className={styles.rewardFeedbackList}
+                            data-testid="side-room-reward-feedback"
+                        >
+                            {rewardSegments.map((segment, index) => (
+                                <li data-reward-feedback-kind={segment.kind} key={`${segment.kind}:${index}:${segment.label}`}>
+                                    {segment.label}
+                                </li>
+                            ))}
+                        </ul>
+                    ) : null}
                     {sideRoom.choices && sideRoom.choices.length > 0 ? (
                         <div className={styles.choiceList}>
                             {sideRoom.choices.map((choice) => (
@@ -123,15 +155,19 @@ const SideRoomScreen = () => {
                 <footer className={styles.actions}>
                     <OverlayActionDock
                         actions={[
-                            {
-                                label: sideRoom.skipLabel,
-                                onClick: () => {
-                                    resumeUiSfxContext();
-                                    playUiBackSfx(uiGain);
-                                    skipSideRoom();
-                                },
-                                variant: 'secondary'
-                            },
+                            ...(sideRoom.choices || sideRoom.skipLabel !== sideRoom.primaryLabel
+                                ? [
+                                      {
+                                          label: sideRoom.skipLabel,
+                                          onClick: () => {
+                                              resumeUiSfxContext();
+                                              playUiBackSfx(uiGain);
+                                              skipSideRoom();
+                                          },
+                                          variant: 'secondary' as const
+                                      }
+                                  ]
+                                : []),
                             ...(sideRoom.choices && sideRoom.choices.length > 0
                                 ? sideRoom.choices.map((choice) => ({
                                       label: choice.label,

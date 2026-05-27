@@ -333,6 +333,34 @@
     text-wrap: balance;
 }
 
+.launchFirstRunBeats {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0.15rem 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--theme-text);
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.launchFirstRunBeats li {
+    display: flex;
+    gap: 0.45rem;
+    align-items: center;
+}
+
+.launchFirstRunBeats li::before {
+    content: '';
+    flex: 0 0 0.42rem;
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: var(--theme-gold-bright);
+    box-shadow: 0 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
 .launchActions {
     display: flex;
     flex-wrap: wrap;
@@ -1039,6 +1067,10 @@
 .compactPathShell .launchSummary {
     font-size: 0.88rem;
     line-height: 1.36;
+}
+
+.compactPathShell .launchFirstRunBeats {
+    font-size: 0.8rem;
 }
 
 .compactPathShell .launchActions {

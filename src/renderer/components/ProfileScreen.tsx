@@ -2,6 +2,7 @@ import type { RelicId } from '../../shared/contracts';
 import { getEquippedCosmeticId } from '../../shared/cosmetics';
 import { RELIC_CATALOG } from '../../shared/game-catalog';
 import { countEligibleHonors, totalHonorUnlocks } from '../../shared/honorUnlocks';
+import { getMetaProgressionBoard, getMetaProgressionMilestones } from '../../shared/meta-progression';
 import { getDailyStreakEthicsRow } from '../../shared/daily-archive';
 import { getObjectiveBoardItems } from '../../shared/objective-board';
 import { buildProfileSaveShellSummary, getProfileSummaryRows, getSaveTrustRows } from '../../shared/profile-summary';
@@ -17,8 +18,9 @@ import styles from './ProfileScreen.module.css';
 
 const ProfileScreen = () => {
     const [nowMs, setNowMs] = useState(() => Date.now());
-    const { closeSubscreen, openSettings, saveData, settings, steamConnected } = useAppStore(
+    const { claimMetaProgressionReward, closeSubscreen, openSettings, saveData, settings, steamConnected } = useAppStore(
         useShallow((state) => ({
+            claimMetaProgressionReward: state.claimMetaProgressionReward,
             closeSubscreen: state.closeSubscreen,
             openSettings: state.openSettings,
             saveData: state.saveData,
@@ -37,6 +39,9 @@ const ProfileScreen = () => {
     const objectiveBoard = getObjectiveBoardItems(saveData);
     const profileSummary = getProfileSummaryRows(saveData);
     const trustShell = buildProfileSaveShellSummary(saveData);
+    const progressionBoard = getMetaProgressionBoard(saveData);
+    const progressionMilestones = getMetaProgressionMilestones(saveData);
+    const readyProgressionReward = progressionBoard.nextReward?.status === 'available' ? progressionBoard.nextReward : null;
     const saveTrustRows = getSaveTrustRows(saveData);
     const profileTitle = getEquippedCosmeticId(saveData, 'title') === 'title_ascendant_v' ? 'Ascendant V' : 'Seeker';
     const profileCrest = getEquippedCosmeticId(saveData, 'crest') === 'crest_daily_bronze' ? 'Daily Bronze' : 'Lantern';
@@ -56,6 +61,15 @@ const ProfileScreen = () => {
         resumeUiSfxContext();
         playUiClickSfx(uiGain);
         openSettings('profile');
+    };
+
+    const handleClaimProgressionReward = (): void => {
+        if (!readyProgressionReward) {
+            return;
+        }
+        resumeUiSfxContext();
+        playUiClickSfx(uiGain);
+        claimMetaProgressionReward(readyProgressionReward.id);
     };
 
     useEffect(() => {
@@ -98,6 +112,40 @@ const ProfileScreen = () => {
                             <div className={styles.summaryCell} key={row.id}>
                                 <span className={styles.summaryLabel}>{row.label}</span>
                                 <strong className={styles.summaryValue}>{row.value}</strong>
+                            </div>
+                        ))}
+                    </div>
+                    <div className={styles.progressionBrief} data-testid="profile-progression-brief">
+                        <span className={styles.kicker}>{trustShell.difficultyTierLabel}</span>
+                        <strong>{trustShell.progressionMotivationCopy}</strong>
+                        <p>
+                            {trustShell.honorMarksToNextLevel} honor mark
+                            {trustShell.honorMarksToNextLevel === 1 ? '' : 's'} to next profile level
+                            {trustShell.nextRewardProgressCopy ? `; ${trustShell.nextRewardProgressCopy}.` : '.'}
+                        </p>
+                        <p>{trustShell.nextMilestoneProgressCopy}</p>
+                        {readyProgressionReward ? (
+                            <UiButton
+                                className={styles.progressionClaimButton}
+                                size="sm"
+                                variant="primary"
+                                onClick={handleClaimProgressionReward}
+                                type="button"
+                            >
+                                Claim {readyProgressionReward.title}
+                            </UiButton>
+                        ) : null}
+                    </div>
+                    <div className={styles.milestoneRail} data-testid="profile-milestone-rail" aria-label="Profile tier milestones">
+                        {progressionMilestones.map((milestone) => (
+                            <div className={styles.milestoneChip} data-status={milestone.status} key={milestone.tier}>
+                                <span className={styles.milestoneLevel}>Lv {milestone.level}</span>
+                                <strong>{milestone.label}</strong>
+                                <span>
+                                    {milestone.status === 'upcoming'
+                                        ? `${milestone.marksRemaining} honor marks`
+                                        : milestone.status}
+                                </span>
                             </div>
                         ))}
                     </div>

@@ -65,10 +65,82 @@ describe('SideRoomScreen', () => {
         render(<SideRoomScreen />);
 
         expect(screen.getByRole('dialog', { name: /route side room/i })).toBeInTheDocument();
+        expect(screen.getByText(/Mystery route \/ Floor 2/)).toBeInTheDocument();
         for (const choice of event.options) {
             expect(screen.getByRole('button', { name: choice.label })).toBeInTheDocument();
             expect(screen.getAllByText(choice.detail).length).toBeGreaterThan(0);
         }
+    });
+
+    it('breaks bonus reward feedback into gained and capped pickup chips', () => {
+        const saveData = createDefaultSaveData();
+        const run = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 48 });
+        useAppStore.setState({
+            hydrated: true,
+            hydrating: false,
+            view: 'sideRoom',
+            saveData,
+            settings: saveData.settings,
+            run: {
+                ...run,
+                status: 'levelComplete',
+                sideRoom: {
+                    id: 'bonus-feedback-test',
+                    kind: 'bonus_reward',
+                    routeType: 'greed',
+                    nodeKind: 'treasure',
+                    floor: 3,
+                    title: 'Greed Bonus cache',
+                    body: 'A capped cache still converts unused pickup value before the next floor.',
+                    primaryLabel: 'Claim Bonus cache',
+                    primaryDetail: '+1 guard token; +5 overflow score; Combo shards already full',
+                    skipLabel: 'Leave it',
+                    payload: { kind: 'bonus_reward', instanceId: 'missing' }
+                }
+            }
+        });
+
+        render(<SideRoomScreen />);
+
+        const feedback = screen.getByTestId('side-room-reward-feedback');
+        expect(feedback).toHaveTextContent('+1 guard token');
+        expect(feedback).toHaveTextContent('+5 overflow score');
+        expect(feedback).toHaveTextContent('Combo shards already full');
+        expect(feedback.querySelectorAll("[data-reward-feedback-kind='gain']")).toHaveLength(2);
+        expect(feedback.querySelectorAll("[data-reward-feedback-kind='capped']")).toHaveLength(1);
+    });
+
+    it('collapses exhausted bonus rewards to one continue action', () => {
+        const saveData = createDefaultSaveData();
+        const run = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 49 });
+        useAppStore.setState({
+            hydrated: true,
+            hydrating: false,
+            view: 'sideRoom',
+            saveData,
+            settings: saveData.settings,
+            run: {
+                ...run,
+                status: 'levelComplete',
+                sideRoom: {
+                    id: 'bonus-exhausted-test',
+                    kind: 'bonus_reward',
+                    routeType: 'greed',
+                    nodeKind: 'treasure',
+                    floor: 3,
+                    title: 'Greed Treasure chest',
+                    body: 'Treasure chest is exhausted for this run.',
+                    primaryLabel: 'Continue',
+                    primaryDetail: 'Treasure chest claim limit reached for this run.',
+                    skipLabel: 'Continue',
+                    payload: { kind: 'bonus_reward', instanceId: 'missing' }
+                }
+            }
+        });
+
+        render(<SideRoomScreen />);
+
+        expect(screen.getAllByRole('button', { name: 'Continue' })).toHaveLength(1);
     });
 
     it('claims the clicked event choice', () => {

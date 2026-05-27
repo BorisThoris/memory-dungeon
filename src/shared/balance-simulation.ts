@@ -1,9 +1,12 @@
 import {
     FINDABLE_KIND_SPAWN_WEIGHTS,
     GAME_RULES_VERSION,
+    INITIAL_LIVES,
+    MAX_LIVES,
     type DungeonRunNodeKind,
     type FindableKind,
     type MutatorId,
+    type RouteNodeType,
     type Tile
 } from './contracts';
 import { buildBoard, countFindablePairs } from './board-generation';
@@ -61,6 +64,8 @@ export interface BalanceSimulationReport {
         shopGoldInflowPotential: number;
         destroyChargeInflowPotential: number;
         peekChargeInflowPotential: number;
+        recoveryReliefPotential: number;
+        netPressureAfterRelief: number;
     }>;
     aggregate: {
         totalShopGoldEarned: number;
@@ -88,6 +93,9 @@ export interface BalanceSimulationReport {
         shopGoldInflowPotential: number;
         destroyChargeInflowPotential: number;
         peekChargeInflowPotential: number;
+        recoveryReliefPotential: number;
+        netPressureAfterRelief: number;
+        highPressureLowRecoveryFloors: number;
     };
     rows: BalanceSimulationRow[];
     notes: string[];
@@ -105,10 +113,48 @@ export interface DungeonBalanceProfileDefinition {
 
 export interface DungeonBalanceProfileMetrics {
     profile: DungeonBalanceProfileId;
+    seedOutcomes: Array<{
+        seed: number;
+        floorsCleared: number;
+        livesLost: number;
+        runFalls: number;
+        minLivesRemaining: number;
+        lowLifeFloors: number;
+        unhealedLowLifeFloors: number;
+        endingShopGold: number;
+        bossWins: number;
+        bossAttempts: number;
+    }>;
     floorsCleared: number;
     livesLost: number;
     guardUsed: number;
+    healingPurchased: number;
+    healingPurchaseShare: number;
+    minLivesRemaining: number;
+    runFalls: number;
+    maxAtRiskStreak: number;
+    lowLifeFloors: number;
+    lowLifeFloorShare: number;
+    maxLowLifeStreak: number;
+    unhealedLowLifeFloors: number;
+    unhealedLowLifeFloorShare: number;
+    maxUnhealedLowLifeStreak: number;
+    recoveryDebtFloors: number;
+    maxRecoveryDebtStreak: number;
+    routeChoiceCounts: Record<RouteNodeType, number>;
+    dominantRouteShare: number;
+    safeRouteTollSpend: number;
+    greedLifeCosts: number;
+    shopServiceSpend: number;
     shopGoldEarned: number;
+    endingShopGold: number;
+    maxShopGoldHeld: number;
+    worstSeedFloorsClearedShare: number;
+    worstSeedLowLifeFloorShare: number;
+    worstSeedUnhealedLowLifeFloorShare: number;
+    worstSeedRunFalls: number;
+    maxSeedEndingShopGold: number;
+    seedFloorClearShareSpread: number;
     rewardClaims: number;
     bossWins: number;
     bossAttempts: number;
@@ -124,6 +170,24 @@ export interface DungeonBalanceProfileReport {
         maxLivesLostPerFloor: number;
         minBossWinShare: number;
         maxShopGoldPerFloor: number;
+        minLivesRemaining: number;
+        maxRunFalls: number;
+        maxHealingPurchaseShare: number;
+        maxAtRiskStreak: number;
+        maxLowLifeFloorShare: number;
+        maxLowLifeStreak: number;
+        maxUnhealedLowLifeFloorShare: number;
+        maxUnhealedLowLifeStreak: number;
+        maxRecoveryDebtStreak: number;
+        maxDominantRouteShare: number;
+        maxEndingShopGoldPerFloor: number;
+        maxShopGoldHeldPerFloor: number;
+        minWorstSeedFloorsClearedShare: number;
+        maxWorstSeedLowLifeFloorShare: number;
+        maxWorstSeedUnhealedLowLifeFloorShare: number;
+        maxWorstSeedRunFalls: number;
+        maxSeedEndingShopGoldPerFloor: number;
+        maxSeedFloorClearShareSpread: number;
     };
     notes: string[];
 }
@@ -230,6 +294,85 @@ export const getFindableKindShares = (
     );
 };
 
+const samplePressure = (sample: BalanceSimulationReport['samples'][number]): number =>
+    sample.contactRisk + sample.enemyThreatPairs * 0.25 + sample.bossMovingEnemyHazards * 0.9;
+
+const sampleRecoveryReliefPotential = (sample: {
+    guardRewardPotential: number;
+    roomRewardPotential: number;
+    dungeonNodeKind: DungeonRunNodeKind;
+    shopSinkBudget: number;
+    keyInflowPotential: number;
+}): number =>
+    sample.guardRewardPotential +
+    sample.roomRewardPotential +
+    (sample.dungeonNodeKind === 'shop' ? 1 : 0) +
+    (sample.shopSinkBudget > 0 ? 0.5 : 0) +
+    (sample.keyInflowPotential > 0 ? 0.5 : 0);
+
+const longestStreak = <T>(items: readonly T[], predicate: (item: T) => boolean): number => {
+    let current = 0;
+    let longest = 0;
+    for (const item of items) {
+        current = predicate(item) ? current + 1 : 0;
+        longest = Math.max(longest, current);
+    }
+    return longest;
+};
+
+const healingBuyThresholdForProfile = (profile: DungeonBalanceProfileId): number => {
+    switch (profile) {
+        case 'cautious':
+            return MAX_LIVES;
+        case 'greedy':
+            return 3;
+        case 'high_skill':
+            return 3;
+        case 'average':
+        default:
+            return 3;
+    }
+};
+
+const shopServiceSpendShareForProfile = (profile: DungeonBalanceProfileId): number => {
+    switch (profile) {
+        case 'cautious':
+            return 0.6;
+        case 'greedy':
+            return 0.9;
+        case 'high_skill':
+            return 0.7;
+        case 'average':
+        default:
+            return 0.75;
+    }
+};
+
+const emptyRouteChoiceCounts = (): Record<RouteNodeType, number> => ({ safe: 0, greed: 0, mystery: 0 });
+
+const chooseProfileRoute = (
+    profile: DungeonBalanceProfileId,
+    lives: number,
+    sample: BalanceSimulationReport['samples'][number]
+): RouteNodeType => {
+    const pressure = samplePressure(sample);
+    if (profile === 'cautious') {
+        if (lives < MAX_LIVES || pressure >= 3.2) return 'safe';
+        return sample.floor % 2 === 0 ? 'mystery' : 'safe';
+    }
+    if (profile === 'greedy') {
+        if (lives >= 3 && pressure <= 3.5) return 'greed';
+        return lives <= 2 ? 'safe' : 'mystery';
+    }
+    if (profile === 'high_skill') {
+        if (lives <= 2 || (pressure >= 3.1 && lives < MAX_LIVES)) return 'safe';
+        if (sample.floor % 5 === 0 && lives >= 4) return 'greed';
+        return sample.floor % 2 === 0 ? 'mystery' : 'safe';
+    }
+    if (lives <= 2 || pressure >= 3) return 'safe';
+    return sample.floor % 4 === 0 ? 'greed' : 'mystery';
+};
+
 export const runBalanceSimulation = ({
     seeds,
     seed,
@@ -289,6 +432,17 @@ export const runBalanceSimulation = ({
                 roomEffectIds.includes('room_armory') || eventRewardPotential > 0 ? 1 : 0;
             const peekChargeInflowPotential =
                 floor % 3 === 0 ? SHOP_ITEM_CATALOG.peek_charge.stock : roomEffectIds.includes('room_scrying_lens') ? 1 : 0;
+            const recoveryReliefPotential = sampleRecoveryReliefPotential({
+                guardRewardPotential: shrinePairs + (dungeonNodeKind === 'rest' ? 1 : 0),
+                roomRewardPotential,
+                dungeonNodeKind,
+                shopSinkBudget: floor % 3 === 0 ? shopSinkPerVisit : 0,
+                keyInflowPotential
+            });
+            const pressure =
+                activeHazards.reduce((sum, hazard) => sum + hazard.damage, 0) +
+                enemyThreatPairs * 0.25 +
+                activeHazards.filter((hazard) => hazard.bossId != null).length * 0.9;
             return {
                 seed: sampleSeed,
                 floor,
@@ -316,7 +470,9 @@ export const runBalanceSimulation = ({
                 keyInflowPotential,
                 shopGoldInflowPotential,
                 destroyChargeInflowPotential,
-                peekChargeInflowPotential
+                peekChargeInflowPotential,
+                recoveryReliefPotential,
+                netPressureAfterRelief: Math.max(0, pressure - recoveryReliefPotential)
             };
         })
     );
@@ -334,6 +490,18 @@ export const runBalanceSimulation = ({
     const movingHazardCounts = samples.map((sample) => sample.movingEnemyHazards);
     const hazardTileCounts = samples.map((sample) => sample.hazardTileCount);
     const contactRiskCounts = samples.map((sample) => sample.contactRisk);
+    const openerHazardCounts = samples.filter((sample) => sample.floor === 1).map((sample) => sample.hazardTileCount);
+    const pressureStepUps = safeSeeds.flatMap((sampleSeed) => {
+        const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
+        return seedSamples.slice(1).map((sample, index) => samplePressure(sample) - samplePressure(seedSamples[index]!));
+    });
+    const recoveryDebtStreaks = safeSeeds.map((sampleSeed) => {
+        const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
+        return longestStreak(seedSamples, (sample) => sample.netPressureAfterRelief >= 2);
+    });
+    const pressureFloorRelief = samples
+        .filter((sample) => samplePressure(sample) >= 2.5)
+        .map((sample) => sample.recoveryReliefPotential);
     const rewardTotalsByBand = samples.reduce<Record<'early' | 'mid' | 'late', number>>(
         (totals, sample) => ({
             ...totals,
@@ -351,6 +519,13 @@ export const runBalanceSimulation = ({
         }),
         { early: 0, mid: 0, late: 0 }
     );
+    const sampleCountsByBand = samples.reduce<Record<'early' | 'mid' | 'late', number>>(
+        (counts, sample) => ({ ...counts, [sample.floorBand]: counts[sample.floorBand] + 1 }),
+        { early: 0, mid: 0, late: 0 }
+    );
+    const rewardAverageByBand = (Object.keys(rewardTotalsByBand) as Array<keyof typeof rewardTotalsByBand>).map((band) =>
+        sampleCountsByBand[band] === 0 ? 0 : rewardTotalsByBand[band] / sampleCountsByBand[band]
+    );
 
     const rows = [
         row(
@@ -365,8 +540,8 @@ export const runBalanceSimulation = ({
             'shop_sink_pressure',
             'Shop sink total per simulated shop visit',
             shopSinkPerVisit * shopVisits,
-            shopVisits * 4,
-            shopVisits * 8,
+            shopVisits * 6,
+            shopVisits * 16,
             'SHOP_ITEM_CATALOG baseCost'
         ),
         row(
@@ -413,12 +588,44 @@ export const runBalanceSimulation = ({
             'buildBoard tileHazardKind'
         ),
         row(
+            'opener_hazard_tiles_per_seed',
+            'Average floor-1 hazard tiles per simulated seed',
+            Number(average(openerHazardCounts).toFixed(2)),
+            0,
+            0,
+            'buildBoard tileHazardKind opener gate'
+        ),
+        row(
             'avg_contact_risk_per_floor',
             'Average moving enemy contact damage per floor',
             Number(average(contactRiskCounts).toFixed(2)),
             0.6,
             1.6,
             'EnemyHazardState damage'
+        ),
+        row(
+            'max_pressure_step_up',
+            'Largest floor-to-floor pressure increase per seed',
+            Number(Math.max(0, ...pressureStepUps).toFixed(2)),
+            0,
+            3,
+            'contact, enemy-card, and boss hazard pressure'
+        ),
+        row(
+            'avg_recovery_relief_on_pressure_floors',
+            'Average recovery relief on high-pressure floors',
+            Number(average(pressureFloorRelief).toFixed(2)),
+            0.4,
+            4,
+            'guard, room, shop, and key recovery relief'
+        ),
+        row(
+            'max_recovery_debt_streak',
+            'Longest seeded streak of high net pressure after relief',
+            Math.max(0, ...recoveryDebtStreaks),
+            0,
+            3,
+            'pressure minus guard/shop/room/key relief'
         ),
         row(
             'elite_route_node_share',
@@ -481,13 +688,13 @@ export const runBalanceSimulation = ({
             'Average treasure/cache pairs per floor',
             Number(average(samples.map((sample) => sample.treasureRewardPairs)).toFixed(2)),
             0.1,
-            2,
+            2.5,
             'treasure and lock card pairs'
         ),
         row(
             'reward_band_spread',
             'Reward-source spread across early/mid/late bands',
-            Number((Math.min(...Object.values(rewardTotalsByBand)) / Math.max(1, Math.max(...Object.values(rewardTotalsByBand)))).toFixed(2)),
+            Number((Math.min(...rewardAverageByBand) / Math.max(1, Math.max(...rewardAverageByBand))).toFixed(2)),
             0.35,
             1,
             'floor-band reward totals'
@@ -565,7 +772,10 @@ export const runBalanceSimulation = ({
             keyInflowPotential: samples.reduce((sum, sample) => sum + sample.keyInflowPotential, 0),
             shopGoldInflowPotential: samples.reduce((sum, sample) => sum + sample.shopGoldInflowPotential, 0),
             destroyChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.destroyChargeInflowPotential, 0),
-            peekChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.peekChargeInflowPotential, 0)
+            peekChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.peekChargeInflowPotential, 0),
+            recoveryReliefPotential: samples.reduce((sum, sample) => sum + sample.recoveryReliefPotential, 0),
+            netPressureAfterRelief: samples.reduce((sum, sample) => sum + sample.netPressureAfterRelief, 0),
+            highPressureLowRecoveryFloors: samples.filter((sample) => sample.netPressureAfterRelief >= 2).length
         },
         rows,
         notes: [
@@ -581,7 +791,7 @@ export const summarizeBalanceSimulation = (report: BalanceSimulationReport): str
     report.rows.map((entry) => `${entry.key}=${entry.value}(${entry.status})`).join('; ');
 
 export const BALANCE_SIMULATION_BASELINE = {
-    totalShopGoldEarned: { min: 95, max: 110 },
+    totalShopGoldEarned: { min: 70, max: 85 },
     findablePickupPairs: { min: 12, max: 24 },
     bossFloors: { min: 2, max: 2 },
     breatherFloors: { min: 3, max: 3 },
@@ -608,9 +818,6 @@ const sampleRewardPotential = (sample: BalanceSimulationReport['samples'][number
     sample.treasureRewardPairs +
     sample.findablePickupPairs;
 
-const samplePressure = (sample: BalanceSimulationReport['samples'][number]): number =>
-    sample.contactRisk + sample.enemyThreatPairs * 0.25 + sample.bossMovingEnemyHazards * 0.9;
-
 export const runDungeonBalanceProfileSimulation = (
     input: BalanceSimulationInput & { profiles?: readonly DungeonBalanceProfileId[] }
 ): DungeonBalanceProfileReport => {
@@ -618,55 +825,248 @@ export const runDungeonBalanceProfileSimulation = (
     const selectedProfiles = input.profiles?.length
         ? DUNGEON_BALANCE_PROFILES.filter((profile) => input.profiles?.includes(profile.id))
         : DUNGEON_BALANCE_PROFILES;
+    const samplesBySeed = base.seeds.map((sampleSeed) =>
+        base.samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor)
+    );
+    const healLifeCost = SHOP_ITEM_CATALOG.heal_life.baseCost;
 
     const profiles = selectedProfiles.map((profile) => {
         let floorsCleared = 0;
         let livesLost = 0;
         let guardUsed = 0;
+        let healingPurchased = 0;
+        let minLivesRemaining = INITIAL_LIVES;
+        let runFalls = 0;
+        let maxAtRiskStreak = 0;
+        let lowLifeFloors = 0;
+        let maxLowLifeStreak = 0;
+        let unhealedLowLifeFloors = 0;
+        let maxUnhealedLowLifeStreak = 0;
+        let recoveryDebtFloors = 0;
+        let maxRecoveryDebtStreak = 0;
+        let healingSpend = 0;
+        let shopSpendBudget = 0;
+        const routeChoiceCounts = emptyRouteChoiceCounts();
+        let safeRouteTollSpend = 0;
+        let greedLifeCosts = 0;
+        let shopServiceSpend = 0;
+        let endingShopGold = 0;
+        let maxShopGoldHeld = 0;
         let rewardClaims = 0;
         let bossWins = 0;
         let bossAttempts = 0;
+        const seedOutcomes: DungeonBalanceProfileMetrics['seedOutcomes'] = [];
         let firstRiskSample: DungeonBalanceProfileMetrics['firstRiskSample'] = null;
 
-        for (const sample of base.samples) {
-            const pressure = samplePressure(sample);
-            const guardAvailable = sample.guardRewardPotential + (profile.id === 'cautious' ? 1 : 0);
-            const guardSpend = Math.min(guardAvailable, Math.floor(pressure * profile.guardEfficiency));
-            const residualPressure = Math.max(0, pressure - guardSpend - profile.riskTolerance);
-            const lost = Math.floor(residualPressure / (profile.id === 'greedy' ? 1.35 : 1.55));
-            const cleared = lost <= (profile.id === 'greedy' ? 1 : 2);
+        for (const seedSamples of samplesBySeed) {
+            let lives = INITIAL_LIVES;
+            let shopGold = 0;
+            let atRiskStreak = 0;
+            let lowLifeStreak = 0;
+            let recoveryDebtStreak = 0;
+            let seedFloorsCleared = 0;
+            let seedLivesLost = 0;
+            let seedRunFalls = 0;
+            let seedMinLivesRemaining = INITIAL_LIVES;
+            let seedLowLifeFloors = 0;
+            let seedUnhealedLowLifeFloors = 0;
+            let seedBossWins = 0;
+            let seedBossAttempts = 0;
+            let unhealedLowLifeStreak = 0;
 
-            guardUsed += guardSpend;
-            livesLost += lost;
-            rewardClaims += sampleRewardPotential(sample) * profile.rewardBias;
-            if (sample.floorTag === 'boss') {
-                bossAttempts += 1;
-                if (cleared && residualPressure <= 2.25) {
-                    bossWins += 1;
+            for (const sample of seedSamples) {
+                shopGold += Math.floor(sample.shopGoldEarned * profile.rewardBias);
+                maxShopGoldHeld = Math.max(maxShopGoldHeld, shopGold);
+                shopSpendBudget += sample.shopSinkBudget;
+
+                const shopAvailable = sample.shopSinkBudget > 0 || sample.dungeonNodeKind === 'shop';
+                const healThreshold = healingBuyThresholdForProfile(profile.id);
+                if (shopAvailable && lives < healThreshold && lives < MAX_LIVES && shopGold >= healLifeCost) {
+                    lives += 1;
+                    shopGold -= healLifeCost;
+                    healingPurchased += 1;
+                    healingSpend += healLifeCost;
+                    maxShopGoldHeld = Math.max(maxShopGoldHeld, shopGold);
                 }
+                if (shopAvailable && sample.shopSinkBudget > 0 && shopGold > 0) {
+                    const discretionarySpend = Math.min(
+                        shopGold,
+                        Math.floor(sample.shopSinkBudget * shopServiceSpendShareForProfile(profile.id))
+                    );
+                    shopGold -= discretionarySpend;
+                    shopServiceSpend += discretionarySpend;
+                }
+
+                const pressure = samplePressure(sample);
+                const guardAvailable = sample.guardRewardPotential + (profile.id === 'cautious' ? 1 : 0);
+                const guardSpend = Math.min(guardAvailable, Math.floor(pressure * profile.guardEfficiency));
+                const residualPressure = Math.max(0, pressure - guardSpend - profile.riskTolerance);
+                const profileRecoveryDebt = Math.max(
+                    0,
+                    residualPressure -
+                        sample.recoveryReliefPotential -
+                        (shopAvailable && shopGold >= healLifeCost ? 0.75 : 0)
+                );
+                if (profileRecoveryDebt >= 1) {
+                    recoveryDebtFloors += 1;
+                    recoveryDebtStreak += 1;
+                } else {
+                    recoveryDebtStreak = 0;
+                }
+                maxRecoveryDebtStreak = Math.max(maxRecoveryDebtStreak, recoveryDebtStreak);
+                const lost = Math.floor(residualPressure / (profile.id === 'greedy' ? 1.35 : 1.55));
+                const cleared = lost <= (profile.id === 'greedy' ? 1 : 2) && lives - lost > 0;
+
+                guardUsed += guardSpend;
+                livesLost += lost;
+                seedLivesLost += lost;
+                lives -= lost;
+                minLivesRemaining = Math.min(minLivesRemaining, lives);
+                seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
+                atRiskStreak = lost > 0 ? atRiskStreak + 1 : 0;
+                maxAtRiskStreak = Math.max(maxAtRiskStreak, atRiskStreak);
+                rewardClaims += sampleRewardPotential(sample) * profile.rewardBias;
+                if (sample.floorTag === 'boss') {
+                    bossAttempts += 1;
+                    seedBossAttempts += 1;
+                    if (cleared && residualPressure <= 2.25) {
+                        bossWins += 1;
+                        seedBossWins += 1;
+                    }
+                }
+                if (cleared) {
+                    floorsCleared += 1;
+                    seedFloorsCleared += 1;
+                    if (residualPressure <= 0.75 && lives < MAX_LIVES) {
+                        lives += 1;
+                        minLivesRemaining = Math.min(minLivesRemaining, lives);
+                        seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
+                    }
+                    const routeChoice = chooseProfileRoute(profile.id, lives, sample);
+                    routeChoiceCounts[routeChoice] += 1;
+                    if (routeChoice === 'safe') {
+                        if (lives < MAX_LIVES) {
+                            if (shopGold > 0) {
+                                shopGold -= 1;
+                                safeRouteTollSpend += 1;
+                            }
+                            lives += 1;
+                        }
+                    } else if (routeChoice === 'greed' && lives > 1) {
+                        lives -= 1;
+                        shopGold += 2;
+                        greedLifeCosts += 1;
+                        rewardClaims += 1.5;
+                        maxShopGoldHeld = Math.max(maxShopGoldHeld, shopGold);
+                    } else if (routeChoice === 'mystery') {
+                        rewardClaims += 1;
+                    }
+                    minLivesRemaining = Math.min(minLivesRemaining, lives);
+                    seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
+                } else {
+                    if (!firstRiskSample) {
+                        firstRiskSample = { floor: sample.floor, seed: sample.seed };
+                    }
+                    if (lives <= 0) {
+                        runFalls += 1;
+                        seedRunFalls += 1;
+                        lives = INITIAL_LIVES;
+                        atRiskStreak = 0;
+                    }
+                }
+                if (lives <= 2) {
+                    lowLifeFloors += 1;
+                    seedLowLifeFloors += 1;
+                    lowLifeStreak += 1;
+                    if (!(shopAvailable && lives < MAX_LIVES && shopGold >= healLifeCost)) {
+                        unhealedLowLifeFloors += 1;
+                        seedUnhealedLowLifeFloors += 1;
+                        unhealedLowLifeStreak += 1;
+                    } else {
+                        unhealedLowLifeStreak = 0;
+                    }
+                } else {
+                    lowLifeStreak = 0;
+                    unhealedLowLifeStreak = 0;
+                }
+                maxLowLifeStreak = Math.max(maxLowLifeStreak, lowLifeStreak);
+                maxUnhealedLowLifeStreak = Math.max(maxUnhealedLowLifeStreak, unhealedLowLifeStreak);
             }
-            if (cleared) {
-                floorsCleared += 1;
-            } else if (!firstRiskSample) {
-                firstRiskSample = { floor: sample.floor, seed: sample.seed };
-            }
+            endingShopGold += shopGold;
+            seedOutcomes.push({
+                seed: seedSamples[0]?.seed ?? 0,
+                floorsCleared: seedFloorsCleared,
+                livesLost: seedLivesLost,
+                runFalls: seedRunFalls,
+                minLivesRemaining: seedMinLivesRemaining,
+                lowLifeFloors: seedLowLifeFloors,
+                unhealedLowLifeFloors: seedUnhealedLowLifeFloors,
+                endingShopGold: shopGold,
+                bossWins: seedBossWins,
+                bossAttempts: seedBossAttempts
+            });
         }
 
         const shopsVisited = Math.round(
             base.samples.filter((sample) => sample.dungeonNodeKind === 'shop').length * profile.shopVisitBias
         );
+        const totalRouteChoices = Object.values(routeChoiceCounts).reduce((sum, count) => sum + count, 0);
+        const dominantRouteShare =
+            totalRouteChoices === 0 ? 0 : Math.max(...Object.values(routeChoiceCounts)) / totalRouteChoices;
+        const seedFloorClearShares = seedOutcomes.map((outcome) => outcome.floorsCleared / Math.max(1, base.floors));
+        const worstSeedFloorsClearedShare = seedFloorClearShares.length === 0 ? 0 : Math.min(...seedFloorClearShares);
+        const bestSeedFloorsClearedShare = seedFloorClearShares.length === 0 ? 0 : Math.max(...seedFloorClearShares);
+        const worstSeedLowLifeFloorShare =
+            seedOutcomes.length === 0
+                ? 0
+                : Math.max(...seedOutcomes.map((outcome) => outcome.lowLifeFloors / Math.max(1, base.floors)));
+        const worstSeedUnhealedLowLifeFloorShare =
+            seedOutcomes.length === 0
+                ? 0
+                : Math.max(
+                      ...seedOutcomes.map((outcome) => outcome.unhealedLowLifeFloors / Math.max(1, base.floors))
+                  );
 
         return {
             profile: profile.id,
+            seedOutcomes,
             floorsCleared,
             livesLost,
             guardUsed,
+            healingPurchased,
+            minLivesRemaining,
+            runFalls,
+            maxAtRiskStreak,
+            lowLifeFloors,
+            lowLifeFloorShare: Number((lowLifeFloors / Math.max(1, base.samples.length)).toFixed(2)),
+            maxLowLifeStreak,
+            unhealedLowLifeFloors,
+            unhealedLowLifeFloorShare: Number(
+                (unhealedLowLifeFloors / Math.max(1, base.samples.length)).toFixed(2)
+            ),
+            maxUnhealedLowLifeStreak,
+            recoveryDebtFloors,
+            maxRecoveryDebtStreak,
+            routeChoiceCounts,
+            dominantRouteShare: Number(dominantRouteShare.toFixed(2)),
+            safeRouteTollSpend,
+            greedLifeCosts,
+            shopServiceSpend,
             shopGoldEarned: Number((base.aggregate.totalShopGoldEarned * profile.rewardBias).toFixed(2)),
+            endingShopGold,
+            maxShopGoldHeld,
+            worstSeedFloorsClearedShare: Number(worstSeedFloorsClearedShare.toFixed(2)),
+            worstSeedLowLifeFloorShare: Number(worstSeedLowLifeFloorShare.toFixed(2)),
+            worstSeedUnhealedLowLifeFloorShare: Number(worstSeedUnhealedLowLifeFloorShare.toFixed(2)),
+            worstSeedRunFalls: Math.max(0, ...seedOutcomes.map((outcome) => outcome.runFalls)),
+            maxSeedEndingShopGold: Math.max(0, ...seedOutcomes.map((outcome) => outcome.endingShopGold)),
+            seedFloorClearShareSpread: Number((bestSeedFloorsClearedShare - worstSeedFloorsClearedShare).toFixed(2)),
             rewardClaims: Number(rewardClaims.toFixed(2)),
             bossWins,
             bossAttempts,
             shopsVisited,
-            firstRiskSample
+            firstRiskSample,
+            healingPurchaseShare: shopSpendBudget === 0 ? 0 : Number((healingSpend / shopSpendBudget).toFixed(2))
         };
     });
 
@@ -677,11 +1077,36 @@ export const runDungeonBalanceProfileSimulation = (
             minFloorsClearedShare: 0.82,
             maxLivesLostPerFloor: 1.35,
             minBossWinShare: 0.5,
-            maxShopGoldPerFloor: 12
+            maxShopGoldPerFloor: 12,
+            minLivesRemaining: 1,
+            maxRunFalls: 0,
+            maxHealingPurchaseShare: 0.45,
+            maxAtRiskStreak: 5,
+            maxLowLifeFloorShare: 0.45,
+            maxLowLifeStreak: 5,
+            maxUnhealedLowLifeFloorShare: 0.35,
+            maxUnhealedLowLifeStreak: 4,
+            maxRecoveryDebtStreak: 3,
+            maxDominantRouteShare: 0.75,
+            maxEndingShopGoldPerFloor: 5,
+            maxShopGoldHeldPerFloor: 6,
+            minWorstSeedFloorsClearedShare: 0.72,
+            maxWorstSeedLowLifeFloorShare: 0.55,
+            maxWorstSeedUnhealedLowLifeFloorShare: 0.45,
+            maxWorstSeedRunFalls: 0,
+            maxSeedEndingShopGoldPerFloor: 7,
+            maxSeedFloorClearShareSpread: 0.28
         },
         notes: [
             'Profiles are broad deterministic guardrails, not exact win-rate claims.',
-            'Bounds intentionally report profile/seed/floor context so balance failures are actionable.'
+            'Bounds intentionally report profile/seed/floor context so balance failures are actionable.',
+            'Profile diagnostics carry lives and healing across each seed to catch survivability cliffs hidden by average loss rates.',
+            'Route-choice diagnostics model safe, greed, and mystery pressure so one route cannot silently become the default answer.',
+            'Wallet-carry diagnostics keep profile survivability from masking runaway unspent shop gold.',
+            'Recovery-debt diagnostics catch clustered pressure floors whose local guard, shop, room, or key relief is too thin.',
+            'Low-life exposure diagnostics catch runs that survive on paper while spending too many floors near collapse.',
+            'Unhealed low-life diagnostics separate ordinary danger from low-life floors without immediate shop healing access.',
+            'Per-seed profile outcomes keep a rough seed from hiding inside healthy aggregate averages.'
         ]
     };
 };
@@ -700,6 +1125,62 @@ export const assertDungeonBalanceProfilesWithinBounds = (
         }
         if (profile.livesLost / totalFloors > report.bounds.maxLivesLostPerFloor) {
             profileIssues.push(`${context}:livesLost=${profile.livesLost}/${totalFloors}`);
+        }
+        if (profile.minLivesRemaining < report.bounds.minLivesRemaining) {
+            profileIssues.push(`${context}:minLivesRemaining=${profile.minLivesRemaining}`);
+        }
+        if (profile.runFalls > report.bounds.maxRunFalls) {
+            profileIssues.push(`${context}:runFalls=${profile.runFalls}`);
+        }
+        if (profile.healingPurchaseShare > report.bounds.maxHealingPurchaseShare) {
+            profileIssues.push(`${context}:healingPurchaseShare=${profile.healingPurchaseShare}`);
+        }
+        if (profile.maxAtRiskStreak > report.bounds.maxAtRiskStreak) {
+            profileIssues.push(`${context}:maxAtRiskStreak=${profile.maxAtRiskStreak}`);
+        }
+        if (profile.lowLifeFloorShare > report.bounds.maxLowLifeFloorShare) {
+            profileIssues.push(`${context}:lowLifeFloorShare=${profile.lowLifeFloorShare}`);
+        }
+        if (profile.maxLowLifeStreak > report.bounds.maxLowLifeStreak) {
+            profileIssues.push(`${context}:maxLowLifeStreak=${profile.maxLowLifeStreak}`);
+        }
+        if (profile.unhealedLowLifeFloorShare > report.bounds.maxUnhealedLowLifeFloorShare) {
+            profileIssues.push(`${context}:unhealedLowLifeFloorShare=${profile.unhealedLowLifeFloorShare}`);
+        }
+        if (profile.maxUnhealedLowLifeStreak > report.bounds.maxUnhealedLowLifeStreak) {
+            profileIssues.push(`${context}:maxUnhealedLowLifeStreak=${profile.maxUnhealedLowLifeStreak}`);
+        }
+        if (profile.maxRecoveryDebtStreak > report.bounds.maxRecoveryDebtStreak) {
+            profileIssues.push(`${context}:maxRecoveryDebtStreak=${profile.maxRecoveryDebtStreak}`);
+        }
+        if (profile.dominantRouteShare > report.bounds.maxDominantRouteShare) {
+            profileIssues.push(`${context}:dominantRouteShare=${profile.dominantRouteShare}`);
+        }
+        if (profile.endingShopGold / totalFloors > report.bounds.maxEndingShopGoldPerFloor) {
+            profileIssues.push(`${context}:endingShopGold=${profile.endingShopGold}/${totalFloors}`);
+        }
+        if (profile.maxShopGoldHeld / report.base.floors > report.bounds.maxShopGoldHeldPerFloor) {
+            profileIssues.push(`${context}:maxShopGoldHeld=${profile.maxShopGoldHeld}/${report.base.floors}`);
+        }
+        if (profile.worstSeedFloorsClearedShare < report.bounds.minWorstSeedFloorsClearedShare) {
+            profileIssues.push(`${context}:worstSeedFloorsClearedShare=${profile.worstSeedFloorsClearedShare}`);
+        }
+        if (profile.worstSeedLowLifeFloorShare > report.bounds.maxWorstSeedLowLifeFloorShare) {
+            profileIssues.push(`${context}:worstSeedLowLifeFloorShare=${profile.worstSeedLowLifeFloorShare}`);
+        }
+        if (profile.worstSeedUnhealedLowLifeFloorShare > report.bounds.maxWorstSeedUnhealedLowLifeFloorShare) {
+            profileIssues.push(
+                `${context}:worstSeedUnhealedLowLifeFloorShare=${profile.worstSeedUnhealedLowLifeFloorShare}`
+            );
+        }
+        if (profile.worstSeedRunFalls > report.bounds.maxWorstSeedRunFalls) {
+            profileIssues.push(`${context}:worstSeedRunFalls=${profile.worstSeedRunFalls}`);
+        }
+        if (profile.maxSeedEndingShopGold / report.base.floors > report.bounds.maxSeedEndingShopGoldPerFloor) {
+            profileIssues.push(`${context}:maxSeedEndingShopGold=${profile.maxSeedEndingShopGold}/${report.base.floors}`);
+        }
+        if (profile.seedFloorClearShareSpread > report.bounds.maxSeedFloorClearShareSpread) {
+            profileIssues.push(`${context}:seedFloorClearShareSpread=${profile.seedFloorClearShareSpread}`);
         }
         if (profile.bossAttempts > 0 && profile.bossWins / profile.bossAttempts < report.bounds.minBossWinShare) {
             profileIssues.push(`${context}:bossWins=${profile.bossWins}/${profile.bossAttempts}`);

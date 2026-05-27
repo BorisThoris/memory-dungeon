@@ -8,7 +8,7 @@
 import type { AchievementId, GameMode, MutatorId, RelicId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 14 as const;
+export const ENCYCLOPEDIA_VERSION = 15 as const;
 
 export interface RelicDefinition {
     id: RelicId;
@@ -55,6 +55,7 @@ export interface MechanicsGlossaryTerm {
         | 'mutators'
         | 'contracts'
         | 'findables'
+        | 'recall_focus'
         | 'perfect_memory'
         | 'daily_challenge'
         | 'powers'
@@ -139,6 +140,13 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
         shortDefinition: 'Bonus pickup pairs on the board; match to claim, Destroy forfeits.',
         avoidLabels: ['loot boxes', 'random drops'],
         surfaces: ['Tile a11y', 'HUD', 'Codex']
+    },
+    {
+        id: 'recall_focus',
+        preferredLabel: 'Recall Focus',
+        shortDefinition: 'Run-floor memory meter: clean remembered matches build it, mistakes and memory aids break it, and forgotten tile markers settle when recalled pairs are matched.',
+        avoidLabels: ['mana', 'energy', 'combo only'],
+        surfaces: ['HUD', 'Results', 'Codex']
     },
     {
         id: 'perfect_memory',
@@ -307,85 +315,85 @@ export const ACHIEVEMENT_CATALOG: Record<AchievementId, AchievementCodexEntry> =
 export const RELIC_CATALOG: Record<RelicId, RelicDefinition> = {
     extra_shuffle_charge: {
         id: 'extra_shuffle_charge',
-        title: 'Extra shuffle charge',
-        description: 'Begin the run with one additional shuffle charge for trap halls and dense dungeon layouts.'
+        title: 'Archive Shuffle',
+        description: 'Begin the run with one additional full-board shuffle charge for trap halls and dense archive layouts.'
     },
     first_shuffle_free_per_floor: {
         id: 'first_shuffle_free_per_floor',
-        title: 'First shuffle free per floor',
-        description: 'The first shuffle each dungeon floor costs no charge (once per floor).'
+        title: 'Free First Shuffle',
+        description: 'The first full-board shuffle each dungeon floor costs no charge (once per floor).'
     },
     memorize_bonus_ms: {
         id: 'memorize_bonus_ms',
-        title: 'Longer memorize window',
-        description: 'Adds memorize study time before dungeon cards, patrol reads, and traps hide.'
+        title: 'Lantern Study',
+        description: 'Adds study time before dungeon cards, patrol reads, rooms, and traps hide again.'
     },
     destroy_bank_plus_one: {
         id: 'destroy_bank_plus_one',
-        title: 'Destroy charge +1',
+        title: 'Breaker Chisel',
         description: 'Adds one destroy-pair charge to the uncapped run bank for trap-control routes.'
     },
     combo_shard_plus_step: {
         id: 'combo_shard_plus_step',
-        title: 'Combo shard head start',
-        description: 'Combo shard streak thresholds start slightly closer for clean dungeon floors.'
+        title: 'Catalyst Thread',
+        description: 'Combo-shard streak thresholds start slightly closer for clean dungeon floors.'
     },
     memorize_under_short_memorize: {
         id: 'memorize_under_short_memorize',
-        title: 'Study cushion',
+        title: 'Compressed Margins',
         description: 'Adds dungeon scout time while Short memorize is active.'
     },
     parasite_ward_once: {
         id: 'parasite_ward_once',
-        title: 'Parasite ward',
+        title: 'Parasite Ward',
         description: 'Ignore the next score-parasite life loss once.'
     },
     region_shuffle_free_first: {
         id: 'region_shuffle_free_first',
-        title: 'Free row shuffle',
+        title: 'Row Compass',
         description: 'The first row shuffle each dungeon floor costs no charge.'
     },
     peek_charge_plus_one: {
         id: 'peek_charge_plus_one',
-        title: 'Peek charge',
+        title: 'Scrying Spark',
         description: 'Gain one additional peek charge for Mystery rooms and hidden dungeon cards.'
     },
     stray_charge_plus_one: {
         id: 'stray_charge_plus_one',
-        title: 'Stray remover charge',
+        title: 'Stray Hook',
         description: 'Gain one additional stray-remover charge for scout routes and awkward dungeon layouts.'
     },
     pin_cap_plus_one: {
         id: 'pin_cap_plus_one',
-        title: 'Pin capacity',
+        title: 'Memory Nail',
         description: 'Place one extra pinned tile at a time for dungeon card reads (run-wide).'
     },
     guard_token_plus_one: {
         id: 'guard_token_plus_one',
-        title: 'Guard token',
+        title: 'Warden Sigil',
         description: 'Gain one guard token toward mismatch and enemy-contact protection (capped like normal play).'
     },
     shrine_echo: {
         id: 'shrine_echo',
-        title: 'Shrine echo',
+        title: 'Shrine Echo',
         description:
             'The **next** relic milestone offers **one extra selection** for Greed and treasure-route builds (reroll after each pick until spent).'
     },
     chapter_compass: {
         id: 'chapter_compass',
-        title: 'Chapter compass',
+        title: 'Chapter Compass',
         description:
             'In scheduled Endless runs, future relic drafts lean harder into relics that answer the current or next chapter, including boss floors.'
     },
     wager_surety: {
         id: 'wager_surety',
-        title: 'Wager surety',
+        title: 'Wager Surety',
         description:
             'Won Endless risk wagers grant +1 extra Favor. Lost boss-route wagers keep the featured-objective streak at x1 instead of x0.'
     },
     parasite_ledger: {
         id: 'parasite_ledger',
-        title: 'Parasite ledger',
+        title: 'Parasite Ledger',
         description:
             'On scheduled Endless parasite floors, completing the featured objective slows score-parasite pressure by one step.'
     }
@@ -627,6 +635,12 @@ export const ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS: readonly EncyclopediaTopi
         title: 'Perfect floor vs Perfect Memory (achievement)',
         description:
             'A **perfect floor** means **zero tries** (no failed mismatches) on that level: you get the perfect-clear **score** bonus and a top **rating** tier. The **Perfect Memory** achievement additionally requires you **never used disallowed powers in that run**—no **shuffle** (full-board or row/region), destroy, peek, undo resolve, gambit, stray, flash, or wild match (pins are still fine). Do not confuse “perfect floor score” with the achievement gate.'
+    },
+    {
+        id: 'sys_recall_focus',
+        title: 'Recall Focus and forgotten tiles',
+        description:
+            '**Recall Focus** is the floor-level memory readout. Clean remembered matches raise focus and can add memory score; mismatches, shuffles, peeks, destroy, stray, and other memory aids can lower focus and mark affected tile memories as unstable. If you later match a pair containing those tiles, the forgotten markers are removed, so the HUD distinguishes a lapse from a recovered route through the room.'
     },
     {
         id: 'sys_scholar_style_floor',

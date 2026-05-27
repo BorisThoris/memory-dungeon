@@ -90,6 +90,84 @@
     color: var(--theme-gold-bright);
 }
 
+.progressionBrief {
+    margin-top: var(--theme-space-md);
+    padding: var(--theme-space-md);
+    border-radius: var(--ui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--theme-rune) 24%, var(--theme-border));
+    background: color-mix(in srgb, var(--theme-rune) 8%, var(--theme-surface-glass));
+}
+
+.progressionBrief strong {
+    display: block;
+    margin-top: 0.18rem;
+    color: var(--theme-rune);
+    font-family: var(--ui-font-display-family);
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.progressionBrief p {
+    margin: 0.35rem 0 0;
+    color: var(--theme-text-muted);
+    font-size: 0.8rem;
+    line-height: 1.35;
+}
+
+.progressionClaimButton {
+    margin-top: var(--theme-space-sm);
+}
+
+.milestoneRail {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    gap: var(--theme-space-sm);
+    margin-top: var(--theme-space-sm);
+}
+
+.milestoneChip {
+    min-width: 0;
+    padding: var(--theme-space-sm);
+    border-radius: var(--ui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--theme-border) 82%, transparent);
+    background: var(--theme-surface-control);
+}
+
+.milestoneChip[data-status='current'] {
+    border-color: color-mix(in srgb, var(--theme-rune) 46%, var(--theme-border));
+    background: color-mix(in srgb, var(--theme-rune) 11%, var(--theme-surface-control));
+}
+
+.milestoneChip[data-status='reached'] {
+    border-color: color-mix(in srgb, var(--theme-success) 34%, var(--theme-border));
+}
+
+.milestoneChip strong,
+.milestoneChip span {
+    display: block;
+}
+
+.milestoneChip strong {
+    margin-top: 0.12rem;
+    color: var(--theme-rune);
+    font-family: var(--ui-font-display-family);
+    font-size: 0.9rem;
+    line-height: 1.18;
+}
+
+.milestoneChip span {
+    color: var(--theme-text-muted);
+    font-size: 0.72rem;
+    line-height: 1.25;
+}
+
+.milestoneChip .milestoneLevel {
+    color: var(--theme-text-subtle);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
 .inlineMetaRow {
     display: grid;
     grid-template-columns: auto 1fr;

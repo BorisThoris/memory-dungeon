@@ -107,7 +107,7 @@ export const PlatformTiltProvider = ({ children }: { children: ReactNode }) => {
             return;
         }
 
-        window.addEventListener('deviceorientation', handleOrientation, true);
+        window.addEventListener('deviceorientation', handleOrientation, { capture: true, passive: true });
         listenerAttachedRef.current = true;
     }, [handleOrientation]);
 

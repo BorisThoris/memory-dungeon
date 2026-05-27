@@ -92,7 +92,7 @@ export const RUN_ECONOMY_DEFINITIONS = [
         label: 'Assist charges',
         bucket: 'temporary_run',
         purpose: 'Temporary run action budget.',
-        source: 'run start, clean clears, relics, and future shop/rest hooks',
+        source: 'run start, shops, relics, events, rooms, and pickup rewards',
         sink: 'shuffle, row shuffle, destroy, peek, and stray-remove actions',
         persistence: 'temporary_run'
     }

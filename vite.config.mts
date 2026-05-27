@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => ({
         port: 5173,
         strictPort: true,
         watch: {
-            ignored: ['**/output/**', '**/release/**', '**/dist/**', '**/dist-electron/**']
+            ignored: ['**/.codex-run/**', '**/output/**', '**/release/**', '**/dist/**', '**/dist-build/**', '**/dist-electron/**']
         }
     },
     test: {

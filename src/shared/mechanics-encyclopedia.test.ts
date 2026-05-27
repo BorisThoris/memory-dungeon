@@ -36,6 +36,7 @@ describe('mechanics-encyclopedia', () => {
 
     it('REG-064 glossary locks preferred player-facing labels for recurring mechanics', () => {
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'perfect_memory')?.preferredLabel).toBe('Perfect Memory');
+        expect(MECHANICS_GLOSSARY.find((row) => row.id === 'recall_focus')?.preferredLabel).toBe('Recall Focus');
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'shop_gold')?.preferredLabel).toBe('shop gold');
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'combo_shards')?.avoidLabels).toContain('paid shards');
         expect(MECHANICS_GLOSSARY.every((row) => row.shortDefinition.length > 0)).toBe(true);
@@ -165,5 +166,7 @@ describe('mechanics-encyclopedia', () => {
         expect(MUTATOR_CATALOG.wide_recall.description).toContain('scores slightly less');
         expect(MUTATOR_CATALOG.silhouette_twist.description).toContain('scores slightly less');
         expect(MUTATOR_CATALOG.distraction_channel.description).toContain('scores slightly less');
+        expect(ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS.find((topic) => topic.id === 'sys_recall_focus')?.description)
+            .toContain('forgotten markers are removed');
     });
 });

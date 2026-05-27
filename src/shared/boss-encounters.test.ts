@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { getEncounterIdentityForFloor, getEncounterIdentityForRouteKind, getFloorIdentityContract } from './boss-encounters';
+import {
+    getBossEncounterIdentityForFloor,
+    getEncounterIdentityForFloor,
+    getEncounterIdentityForRouteKind,
+    getFloorIdentityContract
+} from './boss-encounters';
 import { GAME_RULES_VERSION } from './contracts';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 
@@ -7,6 +12,7 @@ describe('REG-076 boss and elite encounter identity', () => {
     it('derives boss identity from scheduled boss floor tags', () => {
         const entry = pickFloorScheduleEntry(76_001, GAME_RULES_VERSION, 7, 'endless');
         const identity = getEncounterIdentityForFloor(entry);
+        const floorIdentity = getBossEncounterIdentityForFloor(entry.floorTag, entry)!;
 
         expect(identity).not.toBeNull();
         expect(identity).toMatchObject({
@@ -15,9 +21,12 @@ describe('REG-076 boss and elite encounter identity', () => {
             scoreRule: 'Applies the boss floor score multiplier after bonuses.'
         });
         expect(identity!.mechanics.length).toBeGreaterThanOrEqual(2);
+        expect(identity!.mechanics.join(' ')).toContain('Keystone Warden');
         expect(identity!.mechanics).toEqual(expect.arrayContaining([expect.stringContaining('Keystone Pair')]));
         expect(identity!.placeholderNeeded).toBe(true);
         expect(identity!.placeholderSlots).toContain('boss intro stinger');
+        expect(floorIdentity.payoffCopy).toContain('Offline-safe fallback art and audio');
+        expect(floorIdentity.payoffCopy).not.toMatch(/placeholder/i);
     });
 
     it('names elite route identity without claiming boss score rules', () => {
@@ -25,6 +34,7 @@ describe('REG-076 boss and elite encounter identity', () => {
 
         expect(identity).not.toBeNull();
         expect(identity!.encounterRank).toBe('elite');
+        expect(identity!.label).toBe('Mnemonic Sentinel');
         expect(identity!.scoreRule).toBe('No boss score multiplier; elite identity is route-pressure and reward pacing only.');
         expect(identity!.mechanics.join(' ')).toContain('Elite Cache');
         expect(identity!.mechanics.join(' ')).toContain('Final Ward');
@@ -80,10 +90,16 @@ describe('REG-076 boss and elite encounter identity', () => {
             'locked_gallery_late',
             'parasite_tithe'
         ]);
+        expect(rows[1]).toMatchObject({
+            label: 'Keystone chamber',
+            activeReminder: 'Keystone Warden: finish the boss objective before leaving.'
+        });
         for (const row of rows) {
             expect(row.teachingSentence.length).toBeGreaterThan(20);
             expect(row.counterplaySentence.length).toBeGreaterThan(20);
             expect(row.floorClearSentence.length).toBeGreaterThan(20);
+            expect(row.atmosphericFeedback.length).toBeGreaterThan(20);
+            expect(row.atmosphericFeedback).not.toBe(row.floorClearSentence);
             expect(row.activeReminder.length).toBeGreaterThan(10);
             expect(row.tokens.length).toBeGreaterThan(0);
         }

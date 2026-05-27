@@ -22,7 +22,13 @@ import {
     routeChoiceToMapNode,
     type DungeonRouteDecisionRow
 } from './run-map';
-import { runBalanceSimulation, type BalanceSimulationReport, type BalanceSimulationRow } from './balance-simulation';
+import {
+    assertDungeonBalanceProfilesWithinBounds,
+    runBalanceSimulation,
+    runDungeonBalanceProfileSimulation,
+    type BalanceSimulationReport,
+    type BalanceSimulationRow
+} from './balance-simulation';
 import { getRelicRoleAuditRows, type RelicRoleAuditRow } from './relics';
 
 export interface LongRunStatusRow {
@@ -306,6 +312,7 @@ export const runLongRunSoak = ({
     rulesVersion?: number;
 } = {}): LongRunSoakReport => {
     const report = runBalanceSimulation({ seeds, floors, rulesVersion });
+    const profileReport = runDungeonBalanceProfileSimulation({ seeds, floors, rulesVersion });
     const routeBudget = inspectRouteProfileBudgets(
         seeds.flatMap((seed) =>
             Array.from({ length: floors }, (_, index) =>
@@ -314,6 +321,106 @@ export const runLongRunSoak = ({
         )
     );
     const fatigueRows = getLongRunFatigueRows(report);
+    const profileRows = [
+        longRunRow(
+            'min_profile_lives_remaining',
+            'Lowest carried-life balance profile floor',
+            Math.min(...profileReport.profiles.map((profile) => profile.minLivesRemaining)),
+            profileReport.bounds.minLivesRemaining,
+            5,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'max_profile_run_falls',
+            'Most run falls in any balance profile',
+            Math.max(...profileReport.profiles.map((profile) => profile.runFalls)),
+            0,
+            profileReport.bounds.maxRunFalls,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'max_profile_healing_purchase_share',
+            'Largest heal spend share in any balance profile',
+            Math.max(...profileReport.profiles.map((profile) => profile.healingPurchaseShare)),
+            0,
+            profileReport.bounds.maxHealingPurchaseShare,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'max_profile_at_risk_streak',
+            'Longest repeated at-risk floor streak in any balance profile',
+            Math.max(...profileReport.profiles.map((profile) => profile.maxAtRiskStreak)),
+            0,
+            profileReport.bounds.maxAtRiskStreak,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'max_profile_ending_gold_per_floor',
+            'Largest carried ending wallet per simulated floor',
+            Number(
+                Math.max(
+                    ...profileReport.profiles.map((profile) => profile.endingShopGold / profileReport.base.samples.length)
+                ).toFixed(2)
+            ),
+            0,
+            profileReport.bounds.maxEndingShopGoldPerFloor,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'max_profile_gold_held_per_floor',
+            'Largest peak wallet held per seed-floor span',
+            Number(
+                Math.max(
+                    ...profileReport.profiles.map((profile) => profile.maxShopGoldHeld / profileReport.base.floors)
+                ).toFixed(2)
+            ),
+            0,
+            profileReport.bounds.maxShopGoldHeldPerFloor,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'min_profile_worst_seed_clear_share',
+            'Lowest per-seed clear share across balance profiles',
+            Number(Math.min(...profileReport.profiles.map((profile) => profile.worstSeedFloorsClearedShare)).toFixed(2)),
+            profileReport.bounds.minWorstSeedFloorsClearedShare,
+            1,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'max_profile_worst_seed_low_life_share',
+            'Largest per-seed low-life exposure share across balance profiles',
+            Number(Math.max(...profileReport.profiles.map((profile) => profile.worstSeedLowLifeFloorShare)).toFixed(2)),
+            0,
+            profileReport.bounds.maxWorstSeedLowLifeFloorShare,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'max_profile_worst_seed_unhealed_low_life_share',
+            'Largest per-seed low-life exposure without immediate healing access',
+            Number(
+                Math.max(...profileReport.profiles.map((profile) => profile.worstSeedUnhealedLowLifeFloorShare)).toFixed(2)
+            ),
+            0,
+            profileReport.bounds.maxWorstSeedUnhealedLowLifeFloorShare,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'max_profile_unhealed_low_life_streak',
+            'Longest low-life streak without immediate healing access',
+            Math.max(...profileReport.profiles.map((profile) => profile.maxUnhealedLowLifeStreak)),
+            0,
+            profileReport.bounds.maxUnhealedLowLifeStreak,
+            'runDungeonBalanceProfileSimulation'
+        ),
+        longRunRow(
+            'max_profile_seed_clear_spread',
+            'Largest best-versus-worst seed clear spread across balance profiles',
+            Number(Math.max(...profileReport.profiles.map((profile) => profile.seedFloorClearShareSpread)).toFixed(2)),
+            0,
+            profileReport.bounds.maxSeedFloorClearShareSpread,
+            'runDungeonBalanceProfileSimulation'
+        )
+    ];
     const routeRows = routeBudget.rows.map((row) =>
         longRunRow(
             `route_share_${row.routeType}`,
@@ -324,9 +431,13 @@ export const runLongRunSoak = ({
             'inspectRouteProfileBudgets'
         )
     );
-    const rows = [...fatigueRows, ...routeRows];
+    const rows = [...fatigueRows, ...profileRows, ...routeRows];
     const economySummary = summarizeEconomyLedger(getBalanceSimulationEconomyLedgerRows(report));
-    const issues = rows.filter((row) => row.status !== 'within_range').map((row) => `${row.key}:${row.value} outside ${row.targetMin}-${row.targetMax}`);
+    const profileBounds = assertDungeonBalanceProfilesWithinBounds(profileReport);
+    const issues = [
+        ...rows.filter((row) => row.status !== 'within_range').map((row) => `${row.key}:${row.value} outside ${row.targetMin}-${row.targetMax}`),
+        ...profileBounds.issues
+    ];
     return {
         rulesVersion,
         seeds: [...seeds],

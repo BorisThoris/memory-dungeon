@@ -5,12 +5,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RunState, Tile } from '../../shared/contracts';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
+import { applyEnemyHazardClick } from '../../shared/turn-resolution';
 import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
+import { createDungeonRunMapState } from '../../shared/run-map';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
 import { useAppStore } from '../store/useAppStore';
 import GameScreen from './GameScreen';
+import { getDungeonCombatLogRows, getVisualHudAnnouncementFollowup } from './gameScreenFeedback';
 import { BOARD_FLOATER_POP_CLEAR } from '../store/matchScorePop';
 import {
     MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS,
@@ -32,6 +35,13 @@ const uiSfxMocks = vi.hoisted(() => ({
     resumeUiSfxContext: vi.fn(),
     uiSfxGainFromSettings: (masterVolume: number, sfxVolume: number) =>
         Math.max(0, Math.min(1, masterVolume)) * Math.max(0, Math.min(1, sfxVolume))
+}));
+
+const hudAnnouncementMock = vi.hoisted(() => ({
+    message: '',
+    priority: 'info' as 'info' | 'error',
+    queuePoliteAnnouncement: vi.fn(),
+    formatHudActionFeedbackText: (text: string) => text.length > 48 ? `${text.slice(0, 45)}...` : text
 }));
 
 vi.mock('./MainMenuBackground', () => ({ default: () => null }));
@@ -90,10 +100,12 @@ vi.mock('../hooks/useDistractionChannelTick', () => ({
 }));
 vi.mock('../hooks/useHudPoliteLiveAnnouncement', () => ({
     detectClaimedFindableKind: () => null,
+    formatHudActionFeedbackText: hudAnnouncementMock.formatHudActionFeedbackText,
     getFindableToastText: () => '',
     useHudPoliteLiveAnnouncement: () => ({
-        message: '',
-        queuePoliteAnnouncement: vi.fn()
+        message: hudAnnouncementMock.message,
+        priority: hudAnnouncementMock.priority,
+        queuePoliteAnnouncement: hudAnnouncementMock.queuePoliteAnnouncement
     })
 }));
 vi.mock('../platformTilt/usePlatformTiltField', () => ({
@@ -147,6 +159,8 @@ const levelCompleteRunFixture = (): RunState => {
 describe('GameScreen (OVR-014)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
+        hudAnnouncementMock.message = '';
+        hudAnnouncementMock.priority = 'info';
         useNotificationStore.setState({
             notifications: [],
             maxNotifications: 5,
@@ -242,6 +256,291 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('playable-onboarding-prompt')).toHaveTextContent(/Make your first match/i);
     });
 
+    it('shows critical visible action feedback for high-priority health loss announcements', () => {
+        hudAnnouncementMock.message = 'Life lost. 2 lives remain.';
+        hudAnnouncementMock.priority = 'error';
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={finishMemorizePhase(createNewRun(0))} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        const rail = screen.getByTestId('action-feedback-rail');
+        expect(rail).toHaveAttribute('data-tone', 'error');
+        expect(rail).toHaveTextContent('Critical');
+        expect(rail).toHaveTextContent('Life lost. 2 lives remain.');
+    });
+
+    it('adds a next-step line to visible match action feedback', () => {
+        hudAnnouncementMock.message = 'Match resolved. 3/4 pairs cleared.';
+        hudAnnouncementMock.priority = 'info';
+        const playing = finishMemorizePhase(createNewRun(0));
+        const run: RunState = {
+            ...playing,
+            board: {
+                ...playing.board!,
+                matchedPairs: 3,
+                pairCount: 4
+            }
+        };
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        const rail = screen.getByTestId('action-feedback-rail');
+        expect(rail).toHaveTextContent('Last action');
+        expect(rail).toHaveTextContent('Match resolved. 3/4 pairs cleared.');
+        expect(rail).toHaveTextContent('Next: 1 pair left.');
+    });
+
+    it('adds next-step lines for guard, hazard, and resource feedback rail messages', () => {
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Guard token spent. 0 guard tokens remain.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: guard absorbed the mistake; keep lives protected.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Guard Cache ward blocked a hazard.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: hazard blocked; continue from the safest known pair.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: '2 guard tokens gained. 2 available.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: guard can absorb the next unsafe hit before lives drop.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: '2 combo shards spent. 1 available.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: spend shards on powers when the board gets risky.');
+    });
+
+    it('adds next-step lines for scout and route-special feedback rail messages', () => {
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Lantern Ward scouted a hidden threat.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: use the revealed threat marker to route around danger.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Omen Seal revealed hidden danger.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: treat the marked danger as known information before flipping.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Anchor Seal froze rotating pressure.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: pressure is frozen; clear the best confirmed pair now.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Pin Lattice rewarded deliberate planning.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: planning paid out; preserve pins for uncertain pairs.');
+    });
+
+    it('adds specific next-step lines for disruptive hazard and mimic feedback', () => {
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Shuffle Snare fired. Hidden safe tiles reordered.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: board order changed; recheck positions before pairing.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Mimic Cache bit. Life lost; reduced loot claimed.',
+                priority: 'error',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 1
+            })
+        ).toBe('Next: recover control before touching another risky cache.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Fuse Cache claimed late. Fuse expired; consolation gold gained.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 2,
+                lives: 3
+            })
+        ).toBe('Next: late fuse still pays consolation gold; clear safer pairs.');
+    });
+
+    it('adds specific next-step lines for moving enemy combat feedback', () => {
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Life lost. 1 life remains. Moving enemy contact.',
+                priority: 'error',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 1
+            })
+        ).toBe('Next: track the patrol path before risking the last life.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Match resolved. 2/4 pairs cleared. Moving enemy defeated. 1 cleared this floor.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 2,
+                lives: 3
+            })
+        ).toBe('Next: threat removed; use the opened space to clear confirmed pairs.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Match resolved. 2/4 pairs cleared. Dungeon enemy defeated. 1 defeated this floor.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 2,
+                lives: 3
+            })
+        ).toBe('Next: pressure is down; keep clearing confirmed pairs.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Life lost. 0 lives remain. Moving enemy contact.',
+                priority: 'error',
+                runStatus: 'gameOver',
+                remainingPairCount: 3,
+                lives: 0
+            })
+        ).toBe('Next: review the run summary before starting the next descent.');
+    });
+
+    it('builds a compact per-floor dungeon combat log from combat counters', () => {
+        const rows = getDungeonCombatLogRows({
+            ...finishMemorizePhase(createNewRun(0)),
+            lives: 1,
+            enemyHazardHitsThisFloor: 1,
+            enemyHazardsDefeatedThisFloor: 1,
+            dungeonEnemiesDefeatedThisFloor: 1,
+            safeHazardWardsUsedThisFloor: 1
+        });
+
+        expect(rows).toEqual([
+            {
+                id: 'patrol-contact',
+                label: '1 patrol contact',
+                detail: 'Critical health; avoid the next patrol path.',
+                tone: 'danger'
+            },
+            {
+                id: 'patrol-defeats',
+                label: '1 patrol defeated',
+                detail: 'Moving threat removed from this floor.',
+                tone: 'success'
+            },
+            {
+                id: 'dungeon-enemy-defeats',
+                label: '1 enemy pair defeated',
+                detail: 'Dungeon objective pressure converted into progress.',
+                tone: 'success'
+            },
+            {
+                id: 'ward-blocks',
+                label: '1 hazard warded',
+                detail: 'A ward absorbed a trap or cache effect.',
+                tone: 'info'
+            }
+        ]);
+    });
+
+    it('pluralizes combat-log counters when multiple threats resolve', () => {
+        const rows = getDungeonCombatLogRows({
+            ...finishMemorizePhase(createNewRun(0)),
+            lives: 3,
+            enemyHazardHitsThisFloor: 2,
+            enemyHazardsDefeatedThisFloor: 2,
+            dungeonEnemiesDefeatedThisFloor: 3
+        });
+
+        expect(rows.map((row) => row.label)).toEqual([
+            '2 patrol contacts',
+            '2 patrols defeated',
+            '3 enemy pairs defeated'
+        ]);
+    });
+
+    it('adds next-step lines for health recovery, pickups, chains, and Gambit feedback', () => {
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Life restored. 3 lives available.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: extra life secured; spend it only on controlled risks.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Shard spark claimed: +1 combo shard.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: pickup reward applied; keep clearing confirmed pairs.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Chain times three - consecutive matches boost your score.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 2,
+                lives: 3
+            })
+        ).toBe('Next: preserve the streak with the safest known match.');
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Gambit window open: take the third flip for a chance at bonus score.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 2,
+                lives: 3
+            })
+        ).toBe('Next: take the third flip only if the wager is worth it.');
+    });
+
     it('keyboard shortcuts overlay lists board navigation and Gambit tip after F1', () => {
         const playing = finishMemorizePhase(createNewRun(0));
         render(
@@ -311,7 +610,40 @@ describe('GameScreen (OVR-014)', () => {
             </PlatformTiltProvider>
         );
 
-        expect(screen.getByTestId('playable-onboarding-prompt')).toHaveTextContent(/Use recovery tools/i);
+        expect(screen.getByTestId('playable-onboarding-prompt')).toHaveTextContent(/Exit in sight/i);
+        expect(screen.getByTestId('playable-onboarding-prompt')).toHaveTextContent(/Clear the final pair/i);
+        expect(screen.getByTestId('playable-onboarding-prompt')).toHaveTextContent(/opens your first route choice/i);
+
+        const runAfterGuidedPairs = {
+            ...runAfterMatch,
+            board: {
+                ...runAfterMatch.board,
+                matchedPairs: 2,
+                pairCount: Math.max(runAfterMatch.board.pairCount, 4),
+                tiles: runAfterMatch.board.tiles.map((tile, index) =>
+                    index < 4 ? { ...tile, state: 'matched' as const } : tile
+                )
+            },
+            stats: {
+                ...runAfterMatch.stats,
+                matchesFound: 2,
+                currentStreak: 2,
+                currentLevelScore: 70,
+                totalScore: 70
+            }
+        };
+
+        rerender(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={runAfterGuidedPairs} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.queryByTestId('playable-onboarding-prompt')).toBeNull();
+        expect(screen.getByTestId('first-run-room-goal-prompt')).toHaveTextContent(/Clear the remaining pairs/i);
+        expect(screen.getByTestId('first-run-room-goal-prompt')).toHaveTextContent(/opens the first route choice/i);
     });
 
     it('renders match score floater from store and clears after float window', async () => {
@@ -738,6 +1070,17 @@ describe('GameScreen (OVR-014)', () => {
                 }
             ],
             relicFavorProgress: 0,
+            recallFocus: 2,
+            recallMistakesThisFloor: 1,
+            forgottenTileIdsThisFloor: [baseRun.board!.tiles[1].id],
+            board: {
+                ...baseRun.board!,
+                tiles: baseRun.board!.tiles.map((tile, index) =>
+                    index === 0
+                        ? { ...tile, routeSpecialKind: 'mystery_veil' as const, routeSpecialRevealed: true }
+                        : tile
+                )
+            },
             bonusRelicPicksNextOffer: 1,
             favorBonusRelicPicksNextOffer: 1,
             stats: {
@@ -788,6 +1131,12 @@ describe('GameScreen (OVR-014)', () => {
                         routeType: 'greed',
                         label: 'Greedy route',
                         detail: 'Higher pressure route hook for future shop, elite, or bonus rewards.'
+                    },
+                    {
+                        id: '14:1:2:mystery',
+                        routeType: 'mystery',
+                        label: 'Mystery route',
+                        detail: 'Hidden treasure or secret-room hook.'
                     }
                 ]
             }
@@ -814,11 +1163,39 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'true');
         expect(screen.getByTestId('route-choice-panel')).toHaveTextContent('Choose the next room');
         expect(screen.getByTestId('route-choice-panel')).toHaveAttribute('data-decision-state', 'required');
-        expect(screen.getByTestId('route-choice-required-copy')).toHaveTextContent('Pick one room to continue');
+        expect(screen.getByTestId('route-choice-required-copy')).toHaveTextContent('Choose the next room type');
+        expect(screen.getByTestId('route-memory-read-panel')).toHaveAttribute('data-pressure', 'strained');
+        expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('Focus 2/3 - locked');
+        expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('Bonus +28');
+        expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('1 learned clue');
+        expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('1 recall lapse');
         expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Reward: Balanced score and survival path.');
         expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Risk: Stable path.');
+        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Recommended first route');
+        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Memory: Use this when the last room left forgotten tiles or broken focus.');
+        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent(
+            'Recall: Safe route fits the current recall state.'
+        );
+        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent(
+            'Atmosphere: A steadier corridor keeps its marks close to the wall.'
+        );
         expect(screen.getByTestId('route-choice-greed')).toHaveAttribute('data-route-type', 'greed');
-        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent('Elite memory: Elite enemy pressure and greed anchors.');
+        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent('Mnemonic Sentinel: Sentinel pressure and greed anchors.');
+        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent('High reward, higher danger');
+        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent('Memory: Take only if you can remember enemy, trap, and symbol positions under pressure.');
+        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent(
+            'Recall: Greed is unsafe until forgotten markers are repaired.'
+        );
+        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent(
+            'Atmosphere: The louder stair promises value, but every card remembers the noise.'
+        );
+        expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent('Changes the next board');
+        expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent(
+            'Recall: Mystery has a remembered clue to anchor the unknown.'
+        );
+        expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent(
+            'Atmosphere: The unindexed door offers a clue first and an answer later.'
+        );
         expect(screen.getByRole('button', { name: 'Safe passage' })).toBeTruthy();
         expect(screen.getByRole('button', { name: 'Greedy route' })).toBeTruthy();
         expect(screen.queryByRole('button', { name: /^Continue$/i })).toBeNull();
@@ -871,6 +1248,59 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.queryByTestId('route-choice-panel')).toBeNull();
         expect(screen.getByText(/Greedy route selected: next floor adds richer caches and extra reward-risk pressure/i)).toBeTruthy();
         expect(screen.getByRole('button', { name: /continue to greedy route floor/i })).toBeTruthy();
+    });
+
+    it('keeps boss-route approach labels visible when room choices converge', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 66_006 });
+        const run: RunState = {
+            ...baseRun,
+            status: 'levelComplete',
+            relicOffer: null,
+            dungeonRun: createDungeonRunMapState(baseRun.runSeed, baseRun.runRulesVersion, 5),
+            lastLevelResult: {
+                level: 5,
+                scoreGained: 220,
+                rating: 'S',
+                livesRemaining: 4,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'none',
+                clearLifeGained: 0,
+                routeChoices: [
+                    {
+                        id: 'boss:safe',
+                        routeType: 'safe',
+                        label: 'Safe passage',
+                        detail: 'Boss gate through a controlled route.'
+                    },
+                    {
+                        id: 'boss:greed',
+                        routeType: 'greed',
+                        label: 'Greedy route',
+                        detail: 'Boss gate through an elite route.'
+                    },
+                    {
+                        id: 'boss:mystery',
+                        routeType: 'mystery',
+                        label: 'Mystery route',
+                        detail: 'Boss gate through an omen route.'
+                    }
+                ]
+            }
+        };
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Approach: Safe passage');
+        expect(screen.getByTestId('route-choice-safe')).toHaveTextContent('Keeper Chamber via Safe passage');
+        expect(screen.getByTestId('route-choice-greed')).toHaveTextContent('Approach: Greedy route');
+        expect(screen.getByTestId('route-choice-mystery')).toHaveTextContent('Approach: Mystery route');
     });
 
     it('shows an in-board route card banner while route cards are unclaimed', () => {
@@ -936,6 +1366,9 @@ describe('GameScreen (OVR-014)', () => {
         };
         const run: RunState = {
             ...baseRun,
+            enemyHazardHitsThisFloor: 1,
+            enemyHazardsDefeatedThisFloor: 1,
+            safeHazardWardsUsedThisFloor: 1,
             board: {
                 ...baseRun.board!,
                 tiles: [exitTile, trapA, trapB, roomTile],
@@ -959,6 +1392,9 @@ describe('GameScreen (OVR-014)', () => {
         );
 
         const panel = screen.getByTestId('dungeon-status-panel');
+        expect(panel).toHaveAttribute('role', 'status');
+        expect(panel).toHaveAttribute('aria-live', 'polite');
+        expect(panel).toHaveAccessibleName('Dungeon combat status');
         expect(panel).toHaveTextContent('Dungeon');
         expect(panel).toHaveTextContent('Disarm the traps 0/1');
         expect(panel).toHaveTextContent('Exit');
@@ -966,8 +1402,12 @@ describe('GameScreen (OVR-014)', () => {
         expect(panel).toHaveTextContent('Traps');
         expect(panel).toHaveTextContent('Room');
         expect(panel).toHaveTextContent(/armed trap/i);
+        expect(screen.getByTestId('dungeon-combat-log')).toHaveAccessibleName('This floor combat log');
+        expect(screen.getByTestId('dungeon-combat-log')).toHaveTextContent('1 patrol contact');
+        expect(screen.getByTestId('dungeon-combat-log')).toHaveTextContent('1 patrol defeated');
+        expect(screen.getByTestId('dungeon-combat-log')).toHaveTextContent('1 hazard warded');
         expect(screen.queryByTestId('dungeon-card-board-banner')).toBeNull();
-        expect(screen.getByTestId('dungeon-run-strip')).toHaveTextContent('Dungeon gate');
+        expect(screen.getByTestId('dungeon-run-strip')).toHaveTextContent('Threshold Archive');
     });
 
     it('renders crowded dungeon status chips in priority order with one alert', () => {
@@ -1096,6 +1536,86 @@ describe('GameScreen (OVR-014)', () => {
         expect(panel).not.toHaveTextContent(/moving enemy/);
         expect(panel).not.toHaveTextContent('Room available');
         expect(panel).not.toHaveTextContent('Shop available');
+    });
+
+    it('keeps fatal patrol contact on a stable game-over combat read', () => {
+        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
+        const occupiedTile: Tile = {
+            id: 'enemy-occupied',
+            pairKey: 'enemy',
+            state: 'hidden',
+            symbol: 'E',
+            label: 'Awake Sentry',
+            dungeonCardKind: 'enemy',
+            dungeonCardState: 'revealed'
+        };
+        const pairedTile: Tile = { ...occupiedTile, id: 'enemy-pair' };
+        const safeTile: Tile = {
+            id: 'safe-a',
+            pairKey: 'safe',
+            state: 'hidden',
+            symbol: 'S',
+            label: 'Safe Rune'
+        };
+        const safePairTile: Tile = { ...safeTile, id: 'safe-b' };
+        const runBeforeContact: RunState = {
+            ...baseRun,
+            lives: 1,
+            status: 'playing',
+            stats: { ...baseRun.stats, guardTokens: 0 },
+            board: {
+                ...baseRun.board!,
+                tiles: [occupiedTile, pairedTile, safeTile, safePairTile],
+                pairCount: 2,
+                columns: 2,
+                rows: 2,
+                matchedPairs: 0,
+                flippedTileIds: [],
+                dungeonObjectiveId: 'pacify_floor',
+                enemyHazards: [
+                    {
+                        id: 'fatal-patrol',
+                        kind: 'sentinel',
+                        label: 'Patrol Sentry',
+                        currentTileId: occupiedTile.id,
+                        nextTileId: safeTile.id,
+                        pattern: 'patrol',
+                        state: 'hidden',
+                        damage: 2,
+                        hp: 1,
+                        maxHp: 1
+                    }
+                ],
+                enemyHazardTurn: 0
+            }
+        };
+
+        const fatalRun = applyEnemyHazardClick(runBeforeContact, occupiedTile.id);
+        hudAnnouncementMock.message = 'Life lost. 0 lives remain. Moving enemy contact.';
+        hudAnnouncementMock.priority = 'error';
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={fatalRun} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(fatalRun.status).toBe('gameOver');
+        expect(fatalRun.board!.enemyHazardTurn).toBe(0);
+        expect(fatalRun.board!.tiles.find((tile) => tile.id === occupiedTile.id)?.state).toBe('hidden');
+        expect(fatalRun.board!.enemyHazards![0]).toMatchObject({
+            state: 'revealed',
+            currentTileId: occupiedTile.id,
+            nextTileId: safeTile.id
+        });
+        expect(screen.getByTestId('dungeon-status-panel')).toHaveTextContent('Patrols1/1');
+        expect(screen.getByTestId('dungeon-status-panel')).toHaveTextContent(/safe matches damage revealed patrols/i);
+        expect(screen.getByTestId('dungeon-combat-log')).toHaveTextContent('1 patrol contact');
+        expect(screen.getByTestId('action-feedback-rail')).toHaveTextContent(
+            'Next: review the run summary before starting the next descent.'
+        );
     });
 
     it('hides the dungeon status panel on plain boards', () => {

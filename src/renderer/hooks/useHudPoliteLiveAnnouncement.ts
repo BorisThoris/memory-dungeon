@@ -65,6 +65,59 @@ const getFindableAnnouncementText = (kind: FindableKind): string =>
 export const getFindableToastText = (kind: FindableKind): string =>
     `${getFindableKindLabel(kind)} ${getFindableRewardCopy(kind)}`;
 
+const pluralize = (count: number, singular: string, plural = `${singular}s`): string =>
+    `${count} ${count === 1 ? singular : plural}`;
+
+const splitHudAnnouncementSentences = (text: string): string[] =>
+    text
+        .replace(/\s+/g, ' ')
+        .trim()
+        .match(/[^.?!]+[.?!]?/g)
+        ?.map((part) => part.trim())
+        .filter(Boolean) ?? [];
+
+export const formatHudActionFeedbackText = (
+    text: string,
+    { maxChars = 132, maxSentences = 2 }: { maxChars?: number; maxSentences?: number } = {}
+): string => {
+    const normalized = text.replace(/\s+/g, ' ').trim();
+    if (normalized.length <= maxChars) {
+        return normalized;
+    }
+
+    const sentences = splitHudAnnouncementSentences(normalized);
+    if (sentences.length > 1) {
+        const selected: string[] = [];
+        for (const sentence of sentences) {
+            if (selected.length >= maxSentences) {
+                break;
+            }
+            const next = [...selected, sentence].join(' ');
+            if (next.length > maxChars && selected.length > 0) {
+                break;
+            }
+            selected.push(sentence);
+        }
+        const remaining = Math.max(0, sentences.length - selected.length);
+        const summary = selected.join(' ');
+        return remaining > 0 ? `${summary} +${remaining} more updates.` : summary;
+    }
+
+    const clipped = normalized.slice(0, maxChars - 3).replace(/\s+\S*$/, '').trim();
+    return `${clipped}...`;
+};
+
+const resourceDeltaCopy = (
+    delta: number,
+    displayLabel: string,
+    countedLabel: string,
+    verb: 'gained' | 'spent',
+    countedPlural = `${countedLabel}s`
+): string => {
+    const amount = Math.abs(delta);
+    return amount === 1 ? `${displayLabel} ${verb}` : `${pluralize(amount, countedLabel, countedPlural)} ${verb}`;
+};
+
 interface HudPoliteLiveAnnouncementInput {
     gauntletRemainingMs: number | null;
     gauntletActive: boolean;
@@ -72,9 +125,24 @@ interface HudPoliteLiveAnnouncementInput {
     parasiteFloors: number;
     parasiteWardRemaining: number;
     lives: number;
+    guardTokens: number;
+    comboShards: number;
+    shopGold: number;
     boardLevel: number | null;
     boardTiles: readonly Tile[];
+    matchedPairs: number;
+    pairCount: number;
+    mismatches: number;
     findablesClaimedThisFloor: number;
+    objectiveProgress?: number;
+    objectiveRequired?: number;
+    objectiveLabel?: string | null;
+    recallFocus?: number;
+    recallFocusMax?: number;
+    recallMatchesThisFloor?: number;
+    recallMistakesThisFloor?: number;
+    recallBonusScoreThisFloor?: number;
+    forgottenTileCountThisFloor?: number;
     /** Current consecutive-match streak (run stats). */
     chainMatchStreak: number;
     /** When false, chain milestone announcements are suppressed (e.g. memorize or menus). */
@@ -105,14 +173,26 @@ interface HudPoliteLiveAnnouncementInput {
     parasiteVesselConversionsThisFloor?: number;
     pinLatticeRewardsThisFloor?: number;
     safeHazardWardsUsedThisFloor?: number;
+    dungeonEnemiesDefeatedThisFloor?: number;
+    enemyHazardHitsThisFloor?: number;
+    enemyHazardsDefeatedThisFloor?: number;
 }
 
 interface UseHudPoliteLiveAnnouncementResult {
     message: string;
+    priority: HudAnnouncePriority;
     queuePoliteAnnouncement: (text: string, opts?: { dedupeKey?: string; priority?: HudAnnouncePriority }) => void;
 }
 
 const nowMs = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+
+const normalizeRecallFocusForAnnouncement = (focus: number, max: number): number => {
+    const boundedMax = Number.isFinite(max) ? Math.max(0, Math.floor(max)) : 3;
+    if (!Number.isFinite(focus)) {
+        return 0;
+    }
+    return Math.min(boundedMax, Math.max(0, Math.floor(focus)));
+};
 
 /**
  * HUD-015: polite `aria-live` source text for gauntlet deadline buckets and score-parasite milestones.
@@ -129,9 +209,24 @@ export const useHudPoliteLiveAnnouncement = ({
     parasiteFloors,
     parasiteWardRemaining,
     lives,
+    guardTokens,
+    comboShards,
+    shopGold,
     boardLevel,
     boardTiles,
+    matchedPairs,
+    pairCount,
+    mismatches,
     findablesClaimedThisFloor,
+    objectiveProgress = 0,
+    objectiveRequired = 0,
+    objectiveLabel = null,
+    recallFocus = 0,
+    recallFocusMax = 3,
+    recallMatchesThisFloor = 0,
+    recallMistakesThisFloor = 0,
+    recallBonusScoreThisFloor = 0,
+    forgottenTileCountThisFloor = 0,
     chainMatchStreak,
     chainAnnounceActive,
     gambitThirdPickActive,
@@ -156,9 +251,13 @@ export const useHudPoliteLiveAnnouncement = ({
     catalystAltarUpgradesThisFloor = 0,
     parasiteVesselConversionsThisFloor = 0,
     pinLatticeRewardsThisFloor = 0,
-    safeHazardWardsUsedThisFloor = 0
+    safeHazardWardsUsedThisFloor = 0,
+    dungeonEnemiesDefeatedThisFloor = 0,
+    enemyHazardHitsThisFloor = 0,
+    enemyHazardsDefeatedThisFloor = 0
 }: HudPoliteLiveAnnouncementInput): UseHudPoliteLiveAnnouncementResult => {
     const [message, setMessage] = useState('');
+    const [messagePriority, setMessagePriority] = useState<HudAnnouncePriority>('info');
     const prevGauntletSecsRef = useRef<number | null>(null);
     const parasiteSnapRef = useRef<{
         level: number;
@@ -170,6 +269,27 @@ export const useHudPoliteLiveAnnouncement = ({
         level: number;
         claimed: number;
         tiles: readonly Tile[];
+    } | null>(null);
+    const actionSnapRef = useRef<{
+        level: number;
+        lives: number;
+        guardTokens: number;
+        comboShards: number;
+        shopGold: number;
+        matchedPairs: number;
+        pairCount: number;
+        mismatches: number;
+        objectiveProgress: number;
+        objectiveRequired: number;
+        objectiveLabel: string | null;
+        recallFocus: number;
+        recallMatches: number;
+        recallMistakes: number;
+        recallBonusScore: number;
+        forgottenTileCount: number;
+        dungeonEnemiesDefeated: number;
+        enemyHazardHits: number;
+        enemyHazardsDefeated: number;
     } | null>(null);
     const chainSnapRef = useRef<{ level: number | null; streak: number } | null>(null);
     const hazardSnapRef = useRef<{
@@ -196,23 +316,25 @@ export const useHudPoliteLiveAnnouncement = ({
         pin: number;
     } | null>(null);
     const safeWardSnapRef = useRef<{ level: number; wardsUsed: number } | null>(null);
+    const normalizedRecallFocus = normalizeRecallFocusForAnnouncement(recallFocus, recallFocusMax);
 
     const queueRef = useRef(new Map<string, { text: string; priority: HudAnnouncePriority }>());
     const rafIdRef = useRef<number | null>(null);
     const lastDisplayedAtRef = useRef(0);
     const throttleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const pendingThrottledTextRef = useRef<string | null>(null);
+    const pendingThrottledAnnouncementRef = useRef<{ text: string; priority: HudAnnouncePriority } | null>(null);
 
-    const tryDeliver = useCallback((text: string) => {
+    const tryDeliver = useCallback((text: string, priority: HudAnnouncePriority) => {
         const now = nowMs();
         const last = lastDisplayedAtRef.current;
         const elapsed = last === 0 ? POLITE_HUD_THROTTLE_MS : now - last;
 
         const fire = (): void => {
+            setMessagePriority(priority);
             flushThenSet(text, setMessage);
             lastDisplayedAtRef.current = nowMs();
             throttleTimerRef.current = null;
-            pendingThrottledTextRef.current = null;
+            pendingThrottledAnnouncementRef.current = null;
         };
 
         if (last === 0 || elapsed >= POLITE_HUD_THROTTLE_MS) {
@@ -224,19 +346,24 @@ export const useHudPoliteLiveAnnouncement = ({
             return;
         }
 
-        pendingThrottledTextRef.current = text;
+        const pending = pendingThrottledAnnouncementRef.current;
+        if (pending && PRIORITY_RANK[pending.priority] > PRIORITY_RANK[priority]) {
+            return;
+        }
+        pendingThrottledAnnouncementRef.current = { text, priority };
         const wait = POLITE_HUD_THROTTLE_MS - elapsed;
         if (throttleTimerRef.current) {
             clearTimeout(throttleTimerRef.current);
         }
         throttleTimerRef.current = setTimeout(() => {
-            const pending = pendingThrottledTextRef.current;
+            const pending = pendingThrottledAnnouncementRef.current;
             if (pending) {
-                flushThenSet(pending, setMessage);
+                setMessagePriority(pending.priority);
+                flushThenSet(pending.text, setMessage);
                 lastDisplayedAtRef.current = nowMs();
             }
             throttleTimerRef.current = null;
-            pendingThrottledTextRef.current = null;
+            pendingThrottledAnnouncementRef.current = null;
         }, wait);
     }, []);
 
@@ -254,7 +381,7 @@ export const useHudPoliteLiveAnnouncement = ({
             return a.key.localeCompare(b.key);
         });
         const combined = entries.map((e) => e.text).join(' ');
-        tryDeliver(combined);
+        tryDeliver(combined, entries[0]?.priority ?? 'info');
     }, [tryDeliver]);
 
     const scheduleQueueFlush = useCallback(() => {
@@ -397,6 +524,184 @@ export const useHudPoliteLiveAnnouncement = ({
     }, [boardLevel, boardTiles, findablesClaimedThisFloor, queuePoliteAnnouncement]);
 
     useEffect(() => {
+        if (boardLevel === null) {
+            actionSnapRef.current = null;
+            return;
+        }
+
+        const nextSnap = {
+            level: boardLevel,
+            lives,
+            guardTokens,
+            comboShards,
+            shopGold,
+            matchedPairs,
+            pairCount,
+            mismatches,
+            objectiveProgress,
+            objectiveRequired,
+            objectiveLabel,
+            recallFocus: normalizedRecallFocus,
+            recallMatches: recallMatchesThisFloor,
+            recallMistakes: recallMistakesThisFloor,
+            recallBonusScore: recallBonusScoreThisFloor,
+            forgottenTileCount: forgottenTileCountThisFloor,
+            dungeonEnemiesDefeated: dungeonEnemiesDefeatedThisFloor,
+            enemyHazardHits: enemyHazardHitsThisFloor,
+            enemyHazardsDefeated: enemyHazardsDefeatedThisFloor
+        };
+        const snap = actionSnapRef.current;
+
+        if (snap === null || snap.level !== boardLevel) {
+            actionSnapRef.current = nextSnap;
+            return;
+        }
+
+        const lines: string[] = [];
+        const lifeDelta = lives - snap.lives;
+        const guardDelta = guardTokens - snap.guardTokens;
+        const shardDelta = comboShards - snap.comboShards;
+        const goldDelta = shopGold - snap.shopGold;
+        const matchDelta = matchedPairs - snap.matchedPairs;
+        const mismatchDelta = mismatches - snap.mismatches;
+        const objectiveDelta = objectiveProgress - snap.objectiveProgress;
+        const recallMatchDelta = recallMatchesThisFloor - snap.recallMatches;
+        const recallMistakeDelta = recallMistakesThisFloor - snap.recallMistakes;
+        const recallBonusDelta = recallBonusScoreThisFloor - snap.recallBonusScore;
+        const forgottenDelta = forgottenTileCountThisFloor - snap.forgottenTileCount;
+        const dungeonEnemyDefeatDelta = dungeonEnemiesDefeatedThisFloor - snap.dungeonEnemiesDefeated;
+        const enemyHazardHitDelta = enemyHazardHitsThisFloor - snap.enemyHazardHits;
+        const enemyHazardDefeatDelta = enemyHazardsDefeatedThisFloor - snap.enemyHazardsDefeated;
+        const recallFocusLost = normalizedRecallFocus < snap.recallFocus;
+
+        if (lifeDelta < 0) {
+            lines.push(`Life lost. ${lives} ${lives === 1 ? 'life remains' : 'lives remain'}.`);
+        } else if (lifeDelta > 0) {
+            lines.push(`Life restored. ${lives} ${lives === 1 ? 'life available' : 'lives available'}.`);
+        } else if (guardDelta < 0) {
+            lines.push(`Guard token spent. ${guardTokens} guard ${guardTokens === 1 ? 'token remains' : 'tokens remain'}.`);
+        } else if (guardDelta > 0) {
+            lines.push(`${pluralize(guardDelta, 'guard token')} gained. ${guardTokens} available.`);
+        }
+
+        if (mismatchDelta > 0 && lifeDelta >= 0 && guardDelta >= 0) {
+            lines.push('No match. Cards will turn back.');
+        }
+
+        if (enemyHazardHitDelta > 0) {
+            lines.push(
+                enemyHazardHitDelta === 1
+                    ? 'Moving enemy contact.'
+                    : `${enemyHazardHitDelta} moving enemy contacts.`
+            );
+        }
+
+        if (recallMistakeDelta > 0) {
+            const forgottenCount = forgottenTileCountThisFloor;
+            lines.push(
+                forgottenCount > 0
+                    ? `Recall broken. ${forgottenCount} ${forgottenCount === 1 ? 'tile memory is' : 'tile memories are'} unstable.`
+                    : 'Recall broken. Focus lost.'
+            );
+        } else if (forgottenDelta > 0 || (recallFocusLost && matchDelta <= 0)) {
+            const forgottenCount = Math.max(forgottenDelta, forgottenTileCountThisFloor);
+            lines.push(
+                forgottenCount > 0
+                    ? `Memory aid used. Recall focus ${normalizedRecallFocus}/${recallFocusMax}; ${forgottenCount} ${forgottenCount === 1 ? 'tile memory is' : 'tile memories are'} unstable.`
+                    : `Memory aid used. Recall focus ${normalizedRecallFocus}/${recallFocusMax}.`
+            );
+        }
+
+        if (matchDelta > 0) {
+            const pairTotal = Math.max(pairCount, matchedPairs, snap.pairCount);
+            lines.push(`Match resolved. ${matchedPairs}/${pairTotal} pairs cleared.`);
+            if (recallMatchDelta > 0) {
+                lines.push(
+                    recallBonusDelta > 0
+                        ? `Recall focus ${normalizedRecallFocus}/${recallFocusMax}; +${recallBonusDelta} memory score.`
+                        : `Recall focus ${normalizedRecallFocus}/${recallFocusMax}.`
+                );
+            }
+            if (forgottenDelta < 0) {
+                const settledCount = Math.abs(forgottenDelta);
+                lines.push(
+                    `${settledCount} ${settledCount === 1 ? 'unstable tile memory' : 'unstable tile memories'} stabilized.`
+                );
+            }
+            if (enemyHazardDefeatDelta > 0) {
+                lines.push(
+                    enemyHazardDefeatDelta === 1
+                        ? `Moving enemy defeated. ${enemyHazardsDefeatedThisFloor} cleared this floor.`
+                        : `${enemyHazardDefeatDelta} moving enemies defeated. ${enemyHazardsDefeatedThisFloor} cleared this floor.`
+                );
+            }
+            if (dungeonEnemyDefeatDelta > 0) {
+                lines.push(
+                    dungeonEnemyDefeatDelta === 1
+                        ? `Dungeon enemy defeated. ${dungeonEnemiesDefeatedThisFloor} defeated this floor.`
+                        : `${dungeonEnemyDefeatDelta} dungeon enemies defeated. ${dungeonEnemiesDefeatedThisFloor} defeated this floor.`
+                );
+            }
+        }
+
+        if (
+            objectiveRequired > 0 &&
+            (objectiveDelta > 0 || (objectiveProgress >= objectiveRequired && snap.objectiveProgress < snap.objectiveRequired))
+        ) {
+            const label = objectiveLabel ?? 'Objective';
+            const complete = objectiveRequired > 0 && objectiveProgress >= objectiveRequired;
+            lines.push(
+                `${label}: ${Math.min(objectiveProgress, objectiveRequired)}/${objectiveRequired}${
+                    complete ? ' complete' : ''
+                }.`
+            );
+        }
+
+        if (shardDelta > 0) {
+            lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'gained')}. ${comboShards} available.`);
+        } else if (shardDelta < 0) {
+            lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'spent')}. ${comboShards} available.`);
+        }
+
+        if (goldDelta > 0) {
+            lines.push(`${resourceDeltaCopy(goldDelta, 'Shop gold', 'shop gold', 'gained', 'shop gold')}. ${shopGold} available.`);
+        } else if (goldDelta < 0) {
+            lines.push(`${resourceDeltaCopy(goldDelta, 'Shop gold', 'shop gold', 'spent', 'shop gold')}. ${shopGold} available.`);
+        }
+
+        if (lines.length > 0) {
+            queuePoliteAnnouncement(lines.join(' '), {
+                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${objectiveProgress}:${normalizedRecallFocus}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}`,
+                priority: lifeDelta < 0 || enemyHazardHitDelta > 0 ? 'error' : 'info'
+            });
+        }
+
+        actionSnapRef.current = nextSnap;
+    }, [
+        boardLevel,
+        comboShards,
+        dungeonEnemiesDefeatedThisFloor,
+        guardTokens,
+        lives,
+        matchedPairs,
+        mismatches,
+        objectiveLabel,
+        objectiveProgress,
+        objectiveRequired,
+        pairCount,
+        queuePoliteAnnouncement,
+        forgottenTileCountThisFloor,
+        enemyHazardHitsThisFloor,
+        enemyHazardsDefeatedThisFloor,
+        recallBonusScoreThisFloor,
+        recallFocusMax,
+        normalizedRecallFocus,
+        recallMatchesThisFloor,
+        recallMistakesThisFloor,
+        shopGold
+    ]);
+
+    useEffect(() => {
         if (!chainAnnounceActive || boardLevel === null) {
             return;
         }
@@ -413,8 +718,8 @@ export const useHudPoliteLiveAnnouncement = ({
                 if (prev < m && chainMatchStreak >= m) {
                     queuePoliteAnnouncement(
                         m === 3
-                            ? 'Chain times three — consecutive matches boost your score.'
-                            : `Chain times ${m} — keep the chain for bigger match payouts.`,
+                            ? 'Chain times three - consecutive matches boost your score.'
+                            : `Chain times ${m} - keep the chain for bigger match payouts.`,
                         { dedupeKey: `chain:${boardLevel}:${m}`, priority: 'info' }
                     );
                     break;
@@ -701,5 +1006,5 @@ export const useHudPoliteLiveAnnouncement = ({
         queuePoliteAnnouncement
     ]);
 
-    return { message, queuePoliteAnnouncement };
+    return { message, priority: messagePriority, queuePoliteAnnouncement };
 };

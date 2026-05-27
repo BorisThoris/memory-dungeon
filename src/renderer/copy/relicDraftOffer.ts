@@ -5,22 +5,22 @@
 import type { RelicId, RelicOfferState, RunState } from '../../shared/contracts';
 
 export const relicEffectLabels: Record<RelicId, string> = {
-    extra_shuffle_charge: '+1 shuffle charge for trap halls (now)',
-    first_shuffle_free_per_floor: 'First shuffle each dungeon floor is free',
-    memorize_bonus_ms: 'Longer memorize phases for patrol and trap reads',
-    destroy_bank_plus_one: '+1 destroy charge for trap control (now)',
-    combo_shard_plus_step: '+1 combo shard (now)',
-    memorize_under_short_memorize: '+220ms dungeon scout time when Short memorize is active',
-    parasite_ward_once: 'Ignore next parasite life loss once',
-    region_shuffle_free_first: 'First row shuffle each dungeon floor is free',
-    peek_charge_plus_one: '+1 peek charge for Mystery rooms (now)',
-    stray_charge_plus_one: '+1 stray remover charge for scout routes (now)',
-    pin_cap_plus_one: '+1 max pinned dungeon read',
-    guard_token_plus_one: '+1 guard token for enemy contact (now, capped)',
-    shrine_echo: 'Next relic milestone: +1 extra selection for Greed routes',
-    chapter_compass: 'Future Endless drafts lean harder into boss and chapter answers',
+    extra_shuffle_charge: '+1 archive shuffle charge for trap halls (now)',
+    first_shuffle_free_per_floor: 'First full-board shuffle each dungeon floor costs no charge',
+    memorize_bonus_ms: 'Longer study window before patrol, trap, and room reads hide',
+    destroy_bank_plus_one: '+1 breaker charge for trap control (now)',
+    combo_shard_plus_step: 'Clean recall starts closer to combo-shard momentum',
+    memorize_under_short_memorize: '+220ms scout time when Short memorize compresses the floor',
+    parasite_ward_once: 'Ignore the next score-parasite life loss once',
+    region_shuffle_free_first: 'First row shuffle each dungeon floor costs no charge',
+    peek_charge_plus_one: '+1 peek charge for Mystery rooms and hidden archives (now)',
+    stray_charge_plus_one: '+1 stray remover charge for awkward route layouts (now)',
+    pin_cap_plus_one: '+1 pinned memory mark on the dungeon board',
+    guard_token_plus_one: '+1 guard token for enemy contact and recall slips (now, capped)',
+    shrine_echo: 'Next relic milestone echoes into +1 extra selection',
+    chapter_compass: 'Future Endless drafts lean toward boss, chapter, and mutator answers',
     wager_surety: 'Risk wagers pay +1 Favor and soften boss-route busts',
-    parasite_ledger: 'Successful parasite floors slow parasite pressure'
+    parasite_ledger: 'Successful parasite floors slow the next parasite tax'
 };
 
 /**
@@ -58,7 +58,7 @@ export function relicDraftProgressLine(offer: RelicOfferState): string | null {
 }
 
 export function relicDraftRoundAdvancedAnnouncement(): string {
-    return 'New relic choices.';
+    return 'The shrine redraws new relic choices.';
 }
 
 /**

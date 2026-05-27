@@ -300,13 +300,72 @@ const invalidateCachesAfterImageLoad = (id: TextureImageId): void => {
 
 interface TextureImageState {
     image: HTMLImageElement | null;
+    promise?: Promise<void>;
     status: 'loading' | 'loaded' | 'error';
 }
 
 const textureImages = new Map<TextureImageId, TextureImageState>();
+const TILE_TEXTURE_IMAGE_LOAD_TIMEOUT_MS = 1500;
 
 const emitTextureImageUpdate = (): void => {
     textureImageUpdateListeners.forEach((listener) => listener());
+};
+
+const startTextureImageLoad = (id: TextureImageId): Promise<void> => {
+    const existing = textureImages.get(id);
+
+    if (existing?.status === 'loaded' || existing?.status === 'error') {
+        return Promise.resolve();
+    }
+
+    if (existing?.promise) {
+        return existing.promise;
+    }
+
+    const image = new Image();
+    image.decoding = 'async';
+
+    const promise = new Promise<void>((resolve) => {
+        let resolved = false;
+        let timeoutHandle: ReturnType<typeof setTimeout> | null = null;
+
+        const resolveOnce = (): void => {
+            if (resolved) {
+                return;
+            }
+
+            resolved = true;
+            if (timeoutHandle) {
+                globalThis.clearTimeout(timeoutHandle);
+            }
+            resolve();
+        };
+
+        image.onload = () => {
+            textureImages.set(id, { image, status: 'loaded' });
+            invalidateCachesAfterImageLoad(id);
+            emitTextureImageUpdate();
+            resolveOnce();
+        };
+
+        image.onerror = () => {
+            textureImages.set(id, { image: null, status: 'error' });
+            resolveOnce();
+        };
+
+        timeoutHandle = globalThis.setTimeout(() => {
+            const current = textureImages.get(id);
+            if (current?.status === 'loading') {
+                textureImages.set(id, { image: null, status: 'error' });
+            }
+            resolveOnce();
+        }, TILE_TEXTURE_IMAGE_LOAD_TIMEOUT_MS);
+    });
+
+    textureImages.set(id, { image: null, promise, status: 'loading' });
+    image.src = textureImageUrls[id];
+
+    return promise;
 };
 
 /** Ensures all card PNGs are decoded so the tile board can build CanvasTextures without a first-frame hitch. */
@@ -316,46 +375,7 @@ export const preloadTileTextureImages = (): Promise<void> => {
     }
 
     const ids = Object.keys(textureImageUrls) as TextureImageId[];
-
-    return Promise.all(
-        ids.map(
-            (id) =>
-                new Promise<void>((resolve) => {
-                    const existing = textureImages.get(id);
-
-                    if (existing?.status === 'loaded') {
-                        resolve();
-                        return;
-                    }
-
-                    if (existing?.status === 'error') {
-                        resolve();
-                        return;
-                    }
-
-                    const image = new Image();
-                    image.decoding = 'async';
-
-                    image.onload = () => {
-                        textureImages.set(id, { image, status: 'loaded' });
-                        invalidateCachesAfterImageLoad(id);
-                        emitTextureImageUpdate();
-                        resolve();
-                    };
-
-                    image.onerror = () => {
-                        textureImages.set(id, { image: null, status: 'error' });
-                        resolve();
-                    };
-
-                    if (!textureImages.has(id)) {
-                        textureImages.set(id, { image: null, status: 'loading' });
-                    }
-
-                    image.src = textureImageUrls[id];
-                })
-        )
-    ).then(() => undefined);
+    return Promise.all(ids.map(startTextureImageLoad)).then(() => undefined);
 };
 
 const hashString = (value: string): number => {
@@ -393,18 +413,7 @@ const getTextureImage = (imageId: TextureImageId): HTMLImageElement | null => {
     }
 
     if (!current) {
-        const image = new Image();
-        image.decoding = 'async';
-        textureImages.set(imageId, { image: null, status: 'loading' });
-        image.onload = () => {
-            textureImages.set(imageId, { image, status: 'loaded' });
-            invalidateCachesAfterImageLoad(imageId);
-            emitTextureImageUpdate();
-        };
-        image.onerror = () => {
-            textureImages.set(imageId, { image: null, status: 'error' });
-        };
-        image.src = textureImageUrls[imageId];
+        void startTextureImageLoad(imageId);
     }
 
     return null;
@@ -1664,6 +1673,7 @@ export const getOverlayPrewarmDebugState = (): OverlayPrewarmDebugState => ({
 
 export const clearTileTextureCachesForDebug = (): void => {
     disposeAllCachedTextures();
+    textureImages.clear();
     overlayTextureCacheVersionToken = OVERLAY_TEXTURE_CACHE_VERSION;
     forceProceduralIllustrationBitmapCacheVersion(OVERLAY_TEXTURE_CACHE_VERSION);
     clearProceduralIllustrationBitmapCache();

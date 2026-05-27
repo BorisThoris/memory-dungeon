@@ -832,6 +832,154 @@
     line-height: 1.32;
 }
 
+.routeMemoryReadPanel {
+    display: grid;
+    gap: 0.4rem;
+    padding: 0.48rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    border-radius: 8px;
+    background:
+        linear-gradient(180deg, rgba(255, 243, 217, 0.04), transparent 58%),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+}
+
+.routeMemoryReadPanel[data-pressure='strained'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+}
+
+.routeMemoryReadPanel[data-pressure='overloaded'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 42%, transparent);
+}
+
+.routeMemoryReadHeader {
+    display: grid;
+    gap: 0.06rem;
+}
+
+.routeMemoryReadHeader span {
+    color: var(--theme-gold-bright);
+    font-size: 0.56rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.routeMemoryReadHeader strong {
+    color: var(--theme-text);
+    font-size: 0.82rem;
+}
+
+.routeMemoryReadHeader small,
+.routeMemoryReadPressure {
+    color: var(--theme-text-muted);
+    font-size: 0.66rem;
+    line-height: 1.3;
+}
+
+.routeMemoryReadStats,
+.routeMemoryReadRows {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.32rem;
+}
+
+.routeMemoryReadStats span,
+.routeMemoryReadRow {
+    min-width: 0;
+    padding: 0.26rem 0.38rem;
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
+    background: color-mix(in srgb, var(--theme-panel-solid) 34%, transparent);
+}
+
+.routeMemoryReadStats span {
+    color: var(--theme-text-muted);
+    font-size: 0.62rem;
+    font-weight: 800;
+}
+
+.routeMemoryReadStats strong {
+    color: var(--theme-text);
+}
+
+.routeMemoryReadStats span[data-tone='danger'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 34%, transparent);
+}
+
+.routeMemoryReadStats span[data-tone='watch'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+}
+
+.routeMemoryReadStats span[data-tone='stable'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
+.routeMemoryReadPressure {
+    margin: 0;
+}
+
+.routeMemoryReadNextMove {
+    display: grid;
+    gap: 0.08rem;
+    margin: 0;
+    padding: 0.34rem 0.42rem;
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+    background: color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
+}
+
+.routeMemoryReadNextMove strong {
+    color: var(--theme-text);
+    font-size: 0.68rem;
+}
+
+.routeMemoryReadNextMove span {
+    color: var(--theme-text-muted);
+    font-size: 0.63rem;
+    line-height: 1.28;
+}
+
+.routeMemoryReadNextMove[data-tone='danger'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 36%, transparent);
+}
+
+.routeMemoryReadNextMove[data-tone='reward'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, transparent);
+}
+
+.routeMemoryReadNextMove[data-tone='watch'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+}
+
+.routeMemoryReadRow {
+    display: grid;
+    flex: 1 1 10rem;
+    gap: 0.08rem;
+}
+
+.routeMemoryReadRow strong {
+    color: var(--theme-text);
+    font-size: 0.66rem;
+}
+
+.routeMemoryReadRow small {
+    color: var(--theme-text-muted);
+    font-size: 0.62rem;
+    line-height: 1.28;
+}
+
+.routeMemoryReadRow[data-tone='danger'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 32%, transparent);
+}
+
+.routeMemoryReadRow[data-tone='reward'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+}
+
+.routeMemoryReadRow[data-tone='stable'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
 .dungeonMapTimeline {
     display: flex;
     align-items: center;
@@ -921,6 +1069,17 @@
     box-shadow: 0 12px 24px color-mix(in srgb, var(--theme-shadow) 28%, transparent);
 }
 
+.dungeonMapRoomButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+    transform: none;
+}
+
+.dungeonMapRoomButton:disabled:hover {
+    border-color: color-mix(in srgb, var(--theme-danger) 36%, var(--theme-border-strong));
+    box-shadow: none;
+}
+
 .dungeonMapRoomButton[data-tone='danger'],
 .dungeonMapRoomButton[data-tone='boss'] {
     border-color: color-mix(in srgb, var(--theme-danger) 42%, var(--theme-border-strong));
@@ -964,6 +1123,27 @@
     font-size: 0.66rem;
     font-style: normal;
     line-height: 1.28;
+}
+
+.dungeonMapRoomApproach {
+    color: var(--theme-cyan-bright);
+    font-weight: 800;
+}
+
+.dungeonMapRoomTeaching {
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.12rem 0.36rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 78%, white) !important;
+    font-weight: 900;
+}
+
+.dungeonMapRoomMemory {
+    color: color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-text-muted)) !important;
+    font-weight: 750;
 }
 
 .dungeonMapRoomRisk {
@@ -1146,6 +1326,131 @@
     color: color-mix(in srgb, var(--theme-text-muted) 72%, var(--theme-cyan-bright));
     font-size: 0.62rem;
     line-height: 1.25;
+}
+
+.dungeonCombatLog {
+    display: grid;
+    gap: 0.22rem;
+    padding-top: 0.08rem;
+}
+
+.dungeonCombatLogRow {
+    display: grid;
+    gap: 0.04rem;
+    min-width: 0;
+    padding: 0.24rem 0.34rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--theme-panel-solid) 36%, transparent);
+}
+
+.dungeonCombatLogRow strong {
+    overflow: hidden;
+    color: var(--theme-text);
+    font-size: 0.62rem;
+    line-height: 1.12;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dungeonCombatLogRow small {
+    display: block;
+    overflow: hidden;
+    color: var(--theme-text-muted);
+    font-size: 0.58rem;
+    line-height: 1.18;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dungeonCombatLogRow[data-tone='danger'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 42%, transparent);
+}
+
+.dungeonCombatLogRow[data-tone='success'] {
+    border-color: color-mix(in srgb, var(--theme-success) 34%, transparent);
+}
+
+.actionFeedbackRail {
+    position: absolute;
+    left: 50%;
+    top: clamp(0.6rem, 1.8dvb, 1.1rem);
+    z-index: 8;
+    display: grid;
+    gap: 0.08rem;
+    width: min(32rem, calc(100% - 1.5rem));
+    padding: 0.42rem 0.58rem;
+    transform: translateX(-50%);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-border-strong));
+    border-radius: 8px;
+    background:
+        radial-gradient(ellipse 90% 150% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 62%),
+        color-mix(in srgb, var(--theme-void) 84%, transparent);
+    box-shadow:
+        0 12px 30px color-mix(in srgb, var(--theme-shadow) 34%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 5%, transparent);
+    color: var(--theme-text);
+    pointer-events: none;
+}
+
+.actionFeedbackRail[data-tone='error'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 62%, var(--theme-border-strong));
+    background:
+        radial-gradient(ellipse 90% 150% at 50% 0%, color-mix(in srgb, var(--theme-danger) 16%, transparent), transparent 62%),
+        color-mix(in srgb, var(--theme-void) 86%, transparent);
+}
+
+.actionFeedbackRail[data-tone='error'] span {
+    color: color-mix(in srgb, var(--theme-danger) 84%, white);
+}
+
+.actionFeedbackRail span {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    font-size: 0.56rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.actionFeedbackRail strong {
+    display: block;
+    display: -webkit-box;
+    overflow-wrap: anywhere;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: clamp(0.68rem, 1.15vw, 0.82rem);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.2;
+}
+
+.actionFeedbackRail small {
+    display: block;
+    display: -webkit-box;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-text-muted) 78%, var(--theme-cyan-bright));
+    font-size: 0.62rem;
+    font-weight: 750;
+    letter-spacing: 0;
+    line-height: 1.18;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.actionFeedbackRail[data-tone='error'] small {
+    color: color-mix(in srgb, var(--theme-text-muted) 72%, var(--theme-danger) 28%);
+}
+
+.boardStage:has(.routeCardBanner) .actionFeedbackRail {
+    top: clamp(3.35rem, 9dvb, 4.6rem);
+}
+
+.boardStage:has(.dungeonStatusPanel) .actionFeedbackRail {
+    top: auto;
+    bottom: clamp(4.9rem, 12dvb, 6.6rem);
 }
 
 .powerTeachingPanel {
@@ -1589,6 +1894,39 @@
     white-space: nowrap;
 }
 
+.hudRecentActionPill {
+    flex: 1 1 14rem;
+    min-width: min(14rem, 100%);
+    max-width: 24rem;
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 22%, var(--theme-hud-chrome-border-soft));
+    background:
+        linear-gradient(180deg, rgba(255, 243, 217, 0.018), transparent 42%),
+        color-mix(in srgb, var(--theme-cyan-deep) 10%, var(--theme-void) 32%);
+}
+
+.hudRecentActionPill[data-tone='error'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 46%, var(--theme-hud-chrome-border-soft));
+    background:
+        radial-gradient(ellipse 100% 130% at 50% 0%, color-mix(in srgb, var(--theme-danger) 14%, transparent), transparent 64%),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+}
+
+.hudRecentActionPill .statVal {
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-rune) 86%, var(--theme-cyan-bright));
+    font-family: var(--ui-font-body-family);
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.16;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hudRecentActionPill[data-tone='error'] .statKey,
+.hudRecentActionPill[data-tone='error'] .statVal {
+    color: color-mix(in srgb, var(--theme-danger) 78%, white);
+}
+
 .hudTouchDetailRows {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
@@ -1901,6 +2239,19 @@
 
 .hudLivesSegment {
     min-width: 10rem;
+}
+
+.hudLivesSegment[data-health='critical'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 54%, var(--theme-border-strong));
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-danger) 11%, transparent), transparent 62%),
+        color-mix(in srgb, var(--theme-panel-solid) 58%, transparent);
+}
+
+.hudLivesSegment[data-health='critical'] .lifeCapReadout {
+    color: color-mix(in srgb, var(--theme-danger) 84%, white);
+    font-weight: 900;
+    letter-spacing: 0.04em;
 }
 
 .lifeTrack {
@@ -3063,6 +3414,7 @@
 
 .shell:not([data-mobile-camera-mode='true']) .routeCardBanner,
 .shell:not([data-mobile-camera-mode='true']) .dungeonStatusPanel,
+.shell:not([data-mobile-camera-mode='true']) .actionFeedbackRail,
 .shell:not([data-mobile-camera-mode='true']) .playableOnboardingPrompt,
 .shell:not([data-mobile-camera-mode='true']) .matchScoreFloater,
 .shell:not([data-mobile-camera-mode='true']) .mismatchScoreFloater,

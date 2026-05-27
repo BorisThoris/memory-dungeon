@@ -88,6 +88,6 @@ describe('MainMenu REG-009 mobile landscape density', () => {
 
         const help = screen.getByTestId('main-menu-help-center');
         expect(help).toHaveTextContent(/Flip and match/);
-        expect(screen.getByText(/Skippable\/replayable help center/i)).toBeInTheDocument();
+        expect(screen.getByText(/Skippable help center/i)).toBeInTheDocument();
     });
 });

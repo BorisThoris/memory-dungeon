@@ -58,7 +58,7 @@ describe('tileBoardViewport', () => {
             viewportWidth: 360
         });
 
-        expect(MOBILE_CAMERA_FIT_MARGIN).toBeGreaterThan(1);
+        expect(MOBILE_CAMERA_FIT_MARGIN).toBeLessThan(1);
         expect(zoom).toBeCloseTo((360 * MOBILE_CAMERA_FIT_MARGIN) / 360, 5);
     });
 
@@ -72,7 +72,7 @@ describe('tileBoardViewport', () => {
         });
 
         expect(DESKTOP_STAGE_FIT_MARGIN).toBeGreaterThan(0.9);
-        expect(DESKTOP_STAGE_FIT_MARGIN).toBeLessThan(MOBILE_CAMERA_FIT_MARGIN);
+        expect(DESKTOP_STAGE_FIT_MARGIN).toBeGreaterThan(MOBILE_CAMERA_FIT_MARGIN);
         expect(zoom).toBeCloseTo((768 * DESKTOP_STAGE_FIT_MARGIN) / 640, 5);
     });
 

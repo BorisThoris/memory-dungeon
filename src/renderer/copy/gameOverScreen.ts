@@ -6,7 +6,7 @@ export const gameOverScreenCopy = {
     heroTitle: 'Expedition Over',
     scoreLabel: 'Score',
     floorCaption: (highestLevel: number) =>
-        `Floor ${highestLevel} reached before the archive sealed — details below.`,
+        `Floor ${highestLevel} reached before the archive sealed - details below.`,
     politeRunSummary: (totalScore: number, highestLevel: number) =>
         `Expedition complete. Final score ${totalScore.toLocaleString()}. Highest floor ${highestLevel}.`,
     achievementsNoteOn: 'Achievements counted for this run.',
@@ -14,7 +14,7 @@ export const gameOverScreenCopy = {
     actionKicker: 'Next move',
     actionHeading: 'Continue the archive',
     playAgainLabel: 'Play Again',
-    playAgainAriaLabel: 'Play Again — start a new run after this expedition',
+    playAgainAriaLabel: 'Play Again - start a new run after this expedition',
     mainMenuLabel: 'Main Menu',
     mainMenuAriaLabel: 'Return to the main menu',
     runSnapshotKicker: 'Run snapshot',

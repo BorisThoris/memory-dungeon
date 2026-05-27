@@ -22,20 +22,36 @@ export const useViewportSize = (): ViewportSize => {
     const [viewportSize, setViewportSize] = useState(readViewportSize);
 
     useEffect(() => {
-        const updateViewportSize = (): void => {
-            setViewportSize(readViewportSize());
+        let frameId = 0;
+
+        const commitViewportSize = (): void => {
+            frameId = 0;
+            const next = readViewportSize();
+            setViewportSize((current) =>
+                current.width === next.width && current.height === next.height ? current : next
+            );
         };
 
-        updateViewportSize();
+        const scheduleViewportSizeUpdate = (): void => {
+            if (frameId !== 0) {
+                return;
+            }
+            frameId = window.requestAnimationFrame(commitViewportSize);
+        };
 
-        window.addEventListener('resize', updateViewportSize);
-        window.addEventListener('orientationchange', updateViewportSize);
-        window.visualViewport?.addEventListener('resize', updateViewportSize);
+        commitViewportSize();
+
+        window.addEventListener('resize', scheduleViewportSizeUpdate);
+        window.addEventListener('orientationchange', scheduleViewportSizeUpdate);
+        window.visualViewport?.addEventListener('resize', scheduleViewportSizeUpdate);
 
         return () => {
-            window.removeEventListener('resize', updateViewportSize);
-            window.removeEventListener('orientationchange', updateViewportSize);
-            window.visualViewport?.removeEventListener('resize', updateViewportSize);
+            if (frameId !== 0) {
+                window.cancelAnimationFrame(frameId);
+            }
+            window.removeEventListener('resize', scheduleViewportSizeUpdate);
+            window.removeEventListener('orientationchange', scheduleViewportSizeUpdate);
+            window.visualViewport?.removeEventListener('resize', scheduleViewportSizeUpdate);
         };
     }, []);
 

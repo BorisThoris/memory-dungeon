@@ -45,6 +45,8 @@ export interface DungeonMapNodePresentation extends DungeonRoomPresentation {
     status: DungeonRunNodeStatus;
     edgeIds: string[];
     routeType: RouteNodeType;
+    routeApproachLabel?: string;
+    routeApproachType?: RouteNodeType;
 }
 
 export interface DungeonMapPresentation {
@@ -65,6 +67,7 @@ export interface DungeonRouteDecisionRow {
     routeType: RouteNodeType;
     choiceLabel: string;
     nodeLabel: string;
+    approachLabel?: string;
     nodeKind: DungeonRunNodeKind;
     glyph: string;
     tone: DungeonRoomTone;
@@ -92,6 +95,7 @@ export interface DungeonNodeTypeContract {
     floorTag: FloorTag;
     floorArchetypeId: FloorArchetypeId | null;
     defaultObjectiveId: DungeonObjectiveId;
+    mechanic: string;
     rewardPolicy: string;
     cardFamilyBounds: Partial<Record<'enemy' | 'trap' | 'treasure' | 'shop' | 'room' | 'boss' | 'exit' | 'key' | 'lock' | 'shrine' | 'gateway' | 'lever', { min: number; max: number }>>;
     routeType: RouteNodeType;
@@ -119,19 +123,29 @@ export interface RouteSemanticContract {
     floorTag: FloorTag;
     floorArchetypeId: FloorArchetypeId | null;
     objectiveId: DungeonObjectiveId;
+    mechanic: string;
     rewardPolicy: string;
 }
 
+type RouteChoiceWithApproach = RouteChoice &
+    Partial<Pick<DungeonRunNode, 'routeApproachLabel' | 'routeApproachType'>>;
+
 export type DungeonRouteProgressionIssueCode =
     | 'route_current_node_missing'
+    | 'route_multiple_current_nodes'
     | 'route_current_node_blocked'
+    | 'route_current_floor_mismatch'
     | 'route_entrance_blocked'
+    | 'route_duplicate_node_id'
     | 'route_no_legal_progression'
+    | 'route_duplicate_edge_target'
     | 'route_edge_target_missing'
     | 'route_edge_target_blocked'
     | 'route_selected_node_unreachable'
     | 'route_exit_unreachable'
-    | 'route_boss_transition_unreachable';
+    | 'route_boss_transition_unreachable'
+    | 'route_orphan_revealed_future'
+    | 'route_stale_revealed_backtrack';
 
 export interface DungeonRouteProgressionIssue {
     code: DungeonRouteProgressionIssueCode;
@@ -152,8 +166,32 @@ export interface DungeonRouteProgressionReport {
     issues: DungeonRouteProgressionIssue[];
 }
 
+const DUNGEON_ROUTE_BLOCKING_ISSUES: readonly DungeonRouteProgressionIssueCode[] = [
+    'route_current_node_missing',
+    'route_multiple_current_nodes',
+    'route_current_node_blocked',
+    'route_current_floor_mismatch',
+    'route_entrance_blocked',
+    'route_duplicate_node_id',
+    'route_no_legal_progression',
+    'route_edge_target_missing',
+    'route_edge_target_blocked',
+    'route_selected_node_unreachable',
+    'route_exit_unreachable',
+    'route_boss_transition_unreachable',
+    'route_orphan_revealed_future'
+];
+
 const DUNGEON_ACT_LENGTH = 6;
 const DUNGEON_BRANCH_LANES = [-1, 0, 1] as const;
+const DUNGEON_BRANCH_APPROACHES: readonly {
+    label: string;
+    routeType: RouteNodeType;
+}[] = [
+    { label: 'Safe passage', routeType: 'safe' },
+    { label: 'Greedy route', routeType: 'greed' },
+    { label: 'Mystery route', routeType: 'mystery' }
+];
 const DUNGEON_RUN_NODE_KINDS: readonly DungeonRunNodeKind[] = [
     'entrance',
     'combat',
@@ -169,55 +207,57 @@ const DUNGEON_RUN_NODE_KINDS: readonly DungeonRunNodeKind[] = [
 
 const nodeId = (floor: number, lane: number, kind: DungeonRunNodeKind): string => `floor-${floor}:lane-${lane}:${kind}`;
 
+const actForFloor = (floor: number): number => Math.max(1, Math.ceil(Math.max(1, floor) / DUNGEON_ACT_LENGTH));
+
 const labelForKind = (kind: DungeonRunNodeKind): string => {
     switch (kind) {
         case 'entrance':
-            return 'Dungeon gate';
+            return 'Threshold Archive';
         case 'shop':
-            return 'Vendor alcove';
+            return 'Candle Vendor';
         case 'elite':
-            return 'Elite memory';
+            return 'Mnemonic Sentinel';
         case 'trap':
-            return 'Trap hall';
+            return 'Latchwork Hall';
         case 'rest':
-            return 'Quiet rest';
+            return 'Lantern Rest';
         case 'event':
-            return 'Odd event';
+            return 'Omen Archive';
         case 'treasure':
-            return 'Treasure gallery';
+            return 'Sealed Gallery';
         case 'boss':
-            return 'Boss chamber';
+            return 'Keeper Chamber';
         case 'exit':
-            return 'Descent stair';
+            return 'Palimpsest Stair';
         case 'combat':
         default:
-            return 'Survey hall';
+            return 'Recall Hall';
     }
 };
 
 const detailForKind = (kind: DungeonRunNodeKind): string => {
     switch (kind) {
         case 'shop':
-            return 'A vendor room is embedded in the next board.';
+            return 'A candlelit vendor is embedded in the next memory board.';
         case 'elite':
-            return 'A harder memory room with richer reward pressure.';
+            return 'A named sentinel pressures recall for a richer route payout.';
         case 'trap':
-            return 'Hazards are denser and safer paths are less obvious.';
+            return 'Latch plates and alarm sigils crowd the safest route reads.';
         case 'rest':
-            return 'A breather room with more utility and recovery hooks.';
+            return 'Lantern light turns the next mistake into recovery or guard.';
         case 'event':
-            return 'A scripted oddity changes the next encounter texture.';
+            return 'An archive oddity rewrites one reward choice before the next board.';
         case 'treasure':
-            return 'Reward cards and locked caches are more likely.';
+            return 'Coin memories, keys, and sealed caches are more likely.';
         case 'boss':
-            return 'A chapter guardian anchors the room.';
+            return 'A chapter keeper anchors the room and tests the whole route.';
         case 'exit':
-            return 'A descent marker that closes the current chapter.';
+            return 'An overwritten stair closes the current chapter.';
         case 'entrance':
-            return 'The first room of the run.';
+            return 'The first indexed room of the descent.';
         case 'combat':
         default:
-            return 'A standard memory encounter.';
+            return 'A standard recall encounter with a visible way down.';
     }
 };
 
@@ -261,21 +301,21 @@ const mechanicForKind = (kind: DungeonRunNodeKind): string => {
         case 'shop':
             return 'Vendor card appears inside the encounter.';
         case 'elite':
-            return 'Elite enemy pressure and greed anchors.';
+            return 'Sentinel pressure and greed anchors.';
         case 'trap':
-            return 'Snare, hex, or alarm traps disrupt mistakes.';
+            return 'Snare, hex, or bell traps punish noisy mistakes.';
         case 'rest':
-            return 'Utility rooms and recovery cards replace most threats.';
+            return 'Utility rooms and lantern recovery replace most threats.';
         case 'event':
-            return 'Archive and omen cards bend the room texture.';
+            return 'Archive and omen choices bend the room texture.';
         case 'treasure':
             return 'Caches, keys, and locks compete for side pockets.';
         case 'boss':
-            return 'Named boss card and pacify objective define the room.';
+            return 'Named keeper card and pacify objective define the room.';
         case 'exit':
             return 'Commit to the descent and close the chapter.';
         case 'entrance':
-            return 'Entry room teaches the run shape.';
+            return 'Entry archive teaches the run shape.';
         case 'combat':
         default:
             return 'Standard memory combat with a visible exit route.';
@@ -287,17 +327,17 @@ const rewardForKind = (kind: DungeonRunNodeKind): string => {
         case 'shop':
             return 'Spend gold on run services.';
         case 'elite':
-            return 'Higher score and stronger route rewards.';
+            return 'Higher score and stronger sentinel rewards.';
         case 'trap':
-            return 'Safer exits after disarming hazards.';
+            return 'Safer exits after disarming latchwork.';
         case 'rest':
             return 'Recovery, keys, guard, or shrine utility.';
         case 'event':
-            return 'Odd reward, map, favor, or key outcome.';
+            return 'Omen reward, map, favor, or key outcome.';
         case 'treasure':
             return 'Gold, cache cards, keys, and locked loot.';
         case 'boss':
-            return 'Boss multiplier and chapter payoff.';
+            return 'Keeper multiplier and chapter payoff.';
         case 'exit':
             return 'Next act path opens.';
         case 'entrance':
@@ -311,13 +351,13 @@ const rewardForKind = (kind: DungeonRunNodeKind): string => {
 const riskForKind = (kind: DungeonRunNodeKind): string => {
     switch (kind) {
         case 'elite':
-            return 'High pressure.';
+            return 'Sentinel pressure.';
         case 'trap':
             return 'Mistakes can cost tempo, guard, or life.';
         case 'boss':
-            return 'Chapter danger.';
+            return 'Keeper danger.';
         case 'event':
-            return 'Unusual rules.';
+            return 'Uncertain omen.';
         case 'treasure':
             return 'Greed can delay the exit.';
         case 'shop':
@@ -391,6 +431,7 @@ export const getDungeonNodeTypeContract = (kind: DungeonRunNodeKind): DungeonNod
     floorTag: floorTagForKind(kind),
     floorArchetypeId: floorArchetypeForKind(kind),
     defaultObjectiveId: objectiveForKind(kind),
+    mechanic: mechanicForKind(kind),
     rewardPolicy: rewardForKind(kind),
     cardFamilyBounds: cardFamilyBoundsForKind(kind),
     routeType: routeTypeForKind(kind),
@@ -432,6 +473,7 @@ export const getDungeonRouteSemanticContract = ({
         floorTag: contract.floorTag,
         floorArchetypeId: contract.floorArchetypeId,
         objectiveId: contract.defaultObjectiveId,
+        mechanic: contract.mechanic,
         rewardPolicy: contract.rewardPolicy
     };
 };
@@ -491,7 +533,8 @@ const createNode = ({
     status: DungeonRunNodeStatus;
     choice?: RouteChoice;
 }): DungeonRunNode => {
-    const routeType = choice?.routeType ?? routeTypeForKind(kind);
+    const routeType = kind === 'boss' ? routeTypeForKind(kind) : choice?.routeType ?? routeTypeForKind(kind);
+    const choiceApproach = choice as RouteChoiceWithApproach | undefined;
     return {
         id: choice?.id ?? nodeId(floor, lane, kind),
         floor,
@@ -500,10 +543,12 @@ const createNode = ({
         kind,
         status,
         routeType,
-        label: kind === 'boss' && choice ? 'Boss chamber' : choice?.label ?? labelForKind(kind),
+        label: kind === 'boss' && choice ? labelForKind(kind) : choice?.label ?? labelForKind(kind),
         detail: choice?.detail ?? detailForKind(kind),
         rewardPreview: choice?.rewardPreview,
         riskPreview: choice?.riskPreview,
+        routeApproachLabel: choiceApproach?.routeApproachLabel ?? choice?.label,
+        routeApproachType: choiceApproach?.routeApproachType ?? choice?.routeType,
         edgeIds: [],
         choiceId: choice?.id,
         offlineOnly: true,
@@ -530,11 +575,98 @@ const routeIssue = (
 
 const nodeCanBeEntered = (node: DungeonRunNode): boolean => node.status === 'revealed';
 
+const isSkippedSiblingAfterSelection = (
+    state: DungeonRunMapState,
+    node: DungeonRunNode
+): boolean => state.selectedNodeId != null && node.id !== state.selectedNodeId && node.status === 'skipped';
+
+const routeNodeStatusPreference = (status: DungeonRunNodeStatus): number => {
+    switch (status) {
+        case 'current':
+            return 50;
+        case 'revealed':
+            return 40;
+        case 'cleared':
+            return 30;
+        case 'skipped':
+            return 20;
+        case 'hidden':
+            return 10;
+        case 'locked':
+        default:
+            return 0;
+    }
+};
+
+const routeNodeRepairPreference = (
+    node: DungeonRunNode,
+    currentNodeId: string,
+    selectedNodeId: string | null
+): number =>
+    (node.id === currentNodeId ? 1_000 : 0) +
+    (node.id === selectedNodeId ? 500 : 0) +
+    routeNodeStatusPreference(node.status) +
+    Math.min(node.edgeIds.length, 20);
+
+const dedupeDungeonRunNodes = (state: DungeonRunMapState): DungeonRunNode[] => {
+    const byId = new Map<string, DungeonRunNode>();
+    for (const node of state.nodes) {
+        const existing = byId.get(node.id);
+        if (!existing) {
+            byId.set(node.id, node);
+            continue;
+        }
+        if (
+            routeNodeRepairPreference(node, state.currentNodeId, state.selectedNodeId) >
+            routeNodeRepairPreference(existing, state.currentNodeId, state.selectedNodeId)
+        ) {
+            byId.set(node.id, node);
+        }
+    }
+    return [...byId.values()];
+};
+
+const getRepairableCurrentEdgeIds = (state: DungeonRunMapState, current: DungeonRunNode): string[] => {
+    const nodeById = new Map(state.nodes.map((node) => [node.id, node]));
+    const ids: string[] = [];
+    for (const edgeId of current.edgeIds) {
+        if (ids.includes(edgeId)) {
+            continue;
+        }
+        const target = nodeById.get(edgeId);
+        if (!target) {
+            continue;
+        }
+        if (target.status === 'revealed' || isSkippedSiblingAfterSelection(state, target)) {
+            ids.push(edgeId);
+        }
+    }
+    return ids;
+};
+
 export const inspectDungeonRunMapProgression = (state: DungeonRunMapState): DungeonRouteProgressionReport => {
     const issues: DungeonRouteProgressionIssue[] = [];
     const current = state.nodes.find((node) => node.id === state.currentNodeId) ?? null;
     const nodeById = new Map(state.nodes.map((node) => [node.id, node]));
     const legalTargetIds: string[] = [];
+    const statusCurrentNodes = state.nodes.filter((node) => node.status === 'current');
+    const nodeIdCounts = new Map<string, number>();
+
+    for (const node of state.nodes) {
+        nodeIdCounts.set(node.id, (nodeIdCounts.get(node.id) ?? 0) + 1);
+    }
+    for (const [id, count] of nodeIdCounts) {
+        if (count > 1) {
+            issues.push(
+                routeIssue(
+                    state,
+                    'route_duplicate_node_id',
+                    id,
+                    `Route node id '${id}' appears ${count} times for seed ${state.seed}.`
+                )
+            );
+        }
+    }
 
     if (!current) {
         issues.push(
@@ -555,6 +687,26 @@ export const inspectDungeonRunMapProgression = (state: DungeonRunMapState): Dung
             )
         );
     }
+    if (current && current.floor !== state.currentFloor) {
+        issues.push(
+            routeIssue(
+                state,
+                'route_current_floor_mismatch',
+                current.id,
+                `Current route node '${current.id}' is on floor ${current.floor}, but map currentFloor is ${state.currentFloor} for seed ${state.seed}.`
+            )
+        );
+    }
+    if (statusCurrentNodes.length > 1) {
+        issues.push(
+            routeIssue(
+                state,
+                'route_multiple_current_nodes',
+                current?.id ?? state.currentNodeId,
+                `Route has ${statusCurrentNodes.length} current rooms for seed ${state.seed}: ${statusCurrentNodes.map((node) => node.id).join(', ')}.`
+            )
+        );
+    }
 
     if (state.currentFloor <= 1) {
         const entrance = current?.kind === 'entrance' ? current : state.nodes.find((node) => node.kind === 'entrance');
@@ -571,7 +723,20 @@ export const inspectDungeonRunMapProgression = (state: DungeonRunMapState): Dung
     }
 
     if (current) {
+        const seenEdgeIds = new Set<string>();
         for (const edgeId of current.edgeIds) {
+            if (seenEdgeIds.has(edgeId)) {
+                issues.push(
+                    routeIssue(
+                        state,
+                        'route_duplicate_edge_target',
+                        edgeId,
+                        `Current route node '${current.id}' has duplicate edge '${edgeId}' for seed ${state.seed}.`
+                    )
+                );
+                continue;
+            }
+            seenEdgeIds.add(edgeId);
             const target = nodeById.get(edgeId);
             if (!target) {
                 issues.push(
@@ -582,6 +747,9 @@ export const inspectDungeonRunMapProgression = (state: DungeonRunMapState): Dung
                         `Current route edge '${edgeId}' points at a missing node for seed ${state.seed}.`
                     )
                 );
+                continue;
+            }
+            if (isSkippedSiblingAfterSelection(state, target)) {
                 continue;
             }
             if (!nodeCanBeEntered(target)) {
@@ -596,6 +764,37 @@ export const inspectDungeonRunMapProgression = (state: DungeonRunMapState): Dung
                 continue;
             }
             legalTargetIds.push(target.id);
+        }
+    }
+
+    if (current) {
+        const edgeIds = new Set(current.edgeIds);
+        for (const node of state.nodes) {
+            if (node.id === current.id || node.status !== 'revealed' || node.floor > current.floor || edgeIds.has(node.id)) {
+                continue;
+            }
+            issues.push(
+                routeIssue(
+                    state,
+                    'route_stale_revealed_backtrack',
+                    node.id,
+                    `Route node '${node.id}' is still revealed behind current room '${current.id}' for seed ${state.seed}.`
+                )
+            );
+        }
+
+        for (const node of state.nodes) {
+            if (node.status !== 'revealed' || node.floor <= current.floor || edgeIds.has(node.id)) {
+                continue;
+            }
+            issues.push(
+                routeIssue(
+                    state,
+                    'route_orphan_revealed_future',
+                    node.id,
+                    `Route node '${node.id}' is revealed ahead of current room '${current.id}' but is not a legal edge for seed ${state.seed}.`
+                )
+            );
         }
     }
 
@@ -656,39 +855,74 @@ export const inspectDungeonRunMapProgression = (state: DungeonRunMapState): Dung
         currentFloor: state.currentFloor,
         currentNodeId: state.currentNodeId,
         legalTargetIds,
-        hasLegalProgressionPath: issues.every((issue) => issue.code !== 'route_no_legal_progression'),
+        hasLegalProgressionPath: issues.every((issue) => !DUNGEON_ROUTE_BLOCKING_ISSUES.includes(issue.code)),
         issues
     };
 };
 
 export const repairDungeonRunMapProgression = (state: DungeonRunMapState): DungeonRunMapState => {
-    const current = state.nodes.find((node) => node.id === state.currentNodeId) ?? state.nodes.find((node) => node.status === 'current');
+    const sourceNodes = dedupeDungeonRunNodes(state);
+    const current =
+        sourceNodes.find((node) => node.id === state.currentNodeId) ??
+        sourceNodes.find((node) => node.status === 'current') ??
+        sourceNodes.find((node) => node.status === 'cleared' && node.edgeIds.length > 0);
     if (!current) {
         return createDungeonRunMapState(state.seed, state.rulesVersion, Math.max(1, state.currentFloor));
     }
 
     const edgeIds = new Set(current.edgeIds);
-    const repairedNodes = state.nodes.map((node) => {
+    const repairedNodes = sourceNodes.map((node) => {
         if (node.id === current.id) {
-            return { ...node, status: node.edgeIds.length > 0 ? node.status : 'current' as const };
+            return {
+                ...node,
+                edgeIds: [...edgeIds],
+                status: node.status === 'cleared' && node.edgeIds.length > 0 ? ('cleared' as const) : ('current' as const)
+            };
+        }
+        if (isSkippedSiblingAfterSelection(state, node)) {
+            return node;
+        }
+        if (node.status === 'revealed' && node.floor <= current.floor && !edgeIds.has(node.id)) {
+            return { ...node, status: 'skipped' as const };
+        }
+        if (node.status === 'revealed' && node.floor > current.floor && !edgeIds.has(node.id)) {
+            return { ...node, status: 'hidden' as const };
         }
         if (edgeIds.has(node.id) && node.floor > current.floor && node.status !== 'revealed') {
             return { ...node, status: 'revealed' as const };
         }
         if (node.status === 'current') {
-            return { ...node, status: node.floor < current.floor ? 'cleared' as const : 'revealed' as const };
+            if (edgeIds.has(node.id) && node.floor > current.floor) {
+                return { ...node, status: 'revealed' as const };
+            }
+            return { ...node, status: node.floor <= current.floor ? 'skipped' as const : 'hidden' as const };
         }
         return node;
     });
 
     const repairedState = {
         ...state,
+        act: actForFloor(current.floor),
         currentFloor: current.floor,
         currentNodeId: current.id,
         selectedNodeId: state.selectedNodeId && edgeIds.has(state.selectedNodeId) ? state.selectedNodeId : null,
         nodes: repairedNodes
     };
     const report = inspectDungeonRunMapProgression(repairedState);
+    const currentWithRepairedTargets =
+        repairedState.nodes.find((node) => node.id === repairedState.currentNodeId) ?? current;
+    const repairableEdgeIds = getRepairableCurrentEdgeIds(repairedState, currentWithRepairedTargets);
+    if (
+        repairableEdgeIds.length > 0 &&
+        report.issues.some((issue) => issue.code === 'route_duplicate_edge_target' || issue.code === 'route_edge_target_missing')
+    ) {
+        return {
+            ...repairedState,
+            nodes: repairedState.nodes.map((node) =>
+                node.id === repairedState.currentNodeId ? { ...node, edgeIds: repairableEdgeIds } : node
+            )
+        };
+    }
     if (report.issues.some((issue) => issue.code === 'route_no_legal_progression' || issue.code === 'route_edge_target_missing')) {
         const nextFloor = current.floor + 1;
         const fallbackChoices = generateRunMapChoices({
@@ -698,7 +932,7 @@ export const repairDungeonRunMapProgression = (state: DungeonRunMapState): Dunge
         });
         const fallbackIds = fallbackChoices.map((node) => node.id);
         const nodesWithoutNextFloor = repairedNodes.filter((node) => node.floor !== nextFloor);
-        const fallbackCurrent = { ...current, edgeIds: fallbackIds };
+        const fallbackCurrent = { ...current, edgeIds: fallbackIds, status: 'current' as const };
         return {
             ...repairedState,
             selectedNodeId: null,
@@ -726,7 +960,7 @@ export const createDungeonRunMapState = (
     return {
         seed,
         rulesVersion,
-        act: Math.max(1, Math.ceil(currentFloor / DUNGEON_ACT_LENGTH)),
+        act: actForFloor(currentFloor),
         currentFloor,
         currentNodeId: current.id,
         selectedNodeId: null,
@@ -750,22 +984,38 @@ export const revealDungeonChoices = (
     choices: readonly RouteChoice[]
 ): DungeonRunMapState => {
     const safeState = repairDungeonRunMapProgression(state);
-    const nextFloor = currentFloor + 1;
-    const revealed = choices.map((choice, index) =>
-        routeChoiceToMapNode(choice, nextFloor, DUNGEON_BRANCH_LANES[index] ?? index)
-    );
+    const current = safeState.nodes.find((node) => node.id === safeState.currentNodeId) ?? null;
+    const sourceFloor = Math.max(currentFloor, safeState.currentFloor, current?.floor ?? currentFloor);
+    const nextFloor = sourceFloor + 1;
+    const revealed =
+        choices.length > 0
+            ? choices.map((choice, index) => routeChoiceToMapNode(choice, nextFloor, DUNGEON_BRANCH_LANES[index] ?? index))
+            : generateRunMapChoices({
+                  runSeed: safeState.seed,
+                  rulesVersion: safeState.rulesVersion,
+                  currentFloor: sourceFloor
+              });
     const revealedIds = new Set(revealed.map((node) => node.id));
-    const existing = safeState.nodes.filter((node) => !revealedIds.has(node.id));
+    const replaceableBranchStatuses: readonly DungeonRunNodeStatus[] = ['hidden', 'revealed', 'skipped', 'locked'];
+    const existing = safeState.nodes.filter(
+        (node) =>
+            !revealedIds.has(node.id) &&
+            !(
+                node.floor === nextFloor &&
+                node.id !== safeState.currentNodeId &&
+                replaceableBranchStatuses.includes(node.status)
+            )
+    );
     const nodes = connect(
         existing.map((node) =>
-            node.id === safeState.currentNodeId ? { ...node, status: 'cleared' as const } : node
+            node.id === safeState.currentNodeId ? { ...node, status: 'cleared' as const, edgeIds: [] } : node
         ),
         safeState.currentNodeId,
         revealed.map((node) => node.id)
     );
     return repairDungeonRunMapProgression({
         ...safeState,
-        currentFloor,
+        currentFloor: sourceFloor,
         selectedNodeId: null,
         nodes: [...nodes, ...revealed]
     });
@@ -804,7 +1054,7 @@ export const enterSelectedDungeonNode = (state: DungeonRunMapState): DungeonRunM
         currentFloor: selected.floor,
         currentNodeId: selected.id,
         selectedNodeId: null,
-        act: Math.max(1, Math.ceil(selected.floor / DUNGEON_ACT_LENGTH)),
+        act: actForFloor(selected.floor),
         nodes: safeState.nodes.map((node) =>
             node.id === selected.id
                 ? { ...node, status: 'current' }
@@ -831,7 +1081,12 @@ export const getDungeonRoomPresentation = (node: DungeonRunNode): DungeonRoomPre
     label: node.label,
     eyebrow:
         node.kind === 'boss'
-            ? `Act ${Math.max(1, Math.ceil(node.floor / DUNGEON_ACT_LENGTH))} boss`
+            ? [
+                  `Act ${Math.max(1, Math.ceil(node.floor / DUNGEON_ACT_LENGTH))} boss`,
+                  node.routeApproachLabel
+              ]
+                  .filter(Boolean)
+                  .join(' / ')
             : `Depth ${node.floor} / Lane ${node.lane > 0 ? `+${node.lane}` : node.lane}`,
     detail: node.detail,
     mechanic: mechanicForKind(node.kind),
@@ -847,7 +1102,9 @@ const presentNode = (node: DungeonRunNode): DungeonMapNodePresentation => ({
     lane: node.lane,
     status: node.status,
     edgeIds: node.edgeIds,
-    routeType: node.routeType
+    routeType: node.routeType,
+    routeApproachLabel: node.routeApproachLabel,
+    routeApproachType: node.routeApproachType
 });
 
 export const getDungeonMapPresentation = (state: DungeonRunMapState): DungeonMapPresentation => {
@@ -885,7 +1142,11 @@ export const getDungeonRouteDecisionPresentation = (
             id: choice.id,
             routeType: choice.routeType,
             choiceLabel: choice.label,
-            nodeLabel: labelForKind(source.kind),
+            nodeLabel:
+                source.kind === 'boss' && source.routeApproachLabel
+                    ? `${labelForKind(source.kind)} via ${source.routeApproachLabel}`
+                    : labelForKind(source.kind),
+            approachLabel: source.routeApproachLabel,
             nodeKind: source.kind,
             glyph: node.glyph,
             tone: node.tone,
@@ -905,7 +1166,9 @@ export const getDungeonRouteDecisionPresentation = (
         bossDistance: map.bossDistance,
         current: map.current,
         rows,
-        summary: rows.map((row) => `${row.choiceLabel}: ${row.detail}`).join(' · ')
+        summary: rows
+            .map((row) => `${row.choiceLabel} -> ${row.nodeLabel} depth ${row.targetFloor}: ${row.detail}`)
+            .join(' | ')
     };
 };
 
@@ -928,7 +1191,17 @@ export const generateRunMapChoices = ({
         createNode({ floor: nextFloor, depth: nextFloor, lane: -1, kind: boss ? 'boss' : 'combat', status: 'revealed' }),
         createNode({ floor: nextFloor, depth: nextFloor, lane: 0, kind: boss ? 'boss' : middleKind, status: 'revealed' }),
         createNode({ floor: nextFloor, depth: nextFloor, lane: 1, kind: boss ? 'boss' : mysteryKind, status: 'revealed' })
-    ];
+    ].map((node, index) => {
+        if (!boss) {
+            return node;
+        }
+        const approach = DUNGEON_BRANCH_APPROACHES[index] ?? DUNGEON_BRANCH_APPROACHES[0]!;
+        return {
+            ...node,
+            routeApproachLabel: approach.label,
+            routeApproachType: approach.routeType
+        };
+    });
     return shuffleWithRng(() => rng(), nodes).map((node, index) => ({
         ...node,
         id: `${base}:${node.routeType}:${index}`,

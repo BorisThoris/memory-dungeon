@@ -40,6 +40,11 @@ describe('GLD-FB long-run feedback read models', () => {
             hazardTileTriggersThisFloor: 2,
             safeHazardWardsUsedThisFloor: 1,
             safeHazardWardChargesThisFloor: 1,
+            enemyHazardHitsThisFloor: 1,
+            enemyHazardsDefeatedThisFloor: 1,
+            recallFocus: 2,
+            recallMatchesThisFloor: 1,
+            recallBonusScoreThisFloor: 16,
             shopGold: 3,
             stats: {
                 ...createNewRun(0, { runSeed: 91_002, activeMutators: [] }).stats,
@@ -49,16 +54,52 @@ describe('GLD-FB long-run feedback read models', () => {
         };
 
         expect(getInRunCauseRows(run).map((row) => row.id)).toEqual(
-            expect.arrayContaining(['findables-claimed', 'hazard-events', 'economy'])
+            expect.arrayContaining(['findables-claimed', 'hazard-events', 'enemy-contact', 'recall-focus', 'economy'])
+        );
+        expect(getInRunCauseRows(run).map((row) => row.detail).join(' ')).toContain('archive finds');
+        expect(getInRunCauseRows(run).map((row) => row.detail).join(' ')).toContain('guard first');
+        expect(getInRunCauseRows(run).map((row) => row.detail).join(' ')).toContain('room log');
+        expect(getInRunCauseRows(run).find((row) => row.id === 'recall-focus')?.detail).toContain(
+            'clean recall is carrying the room'
+        );
+        expect(getInRunCauseRows(run).find((row) => row.id === 'recall-focus')?.detail).toContain(
+            'Threshold Archive'
+        );
+        expect(getInRunCauseRows(run).find((row) => row.id === 'recall-focus')?.detail).toContain(
+            'Next memory move: Cash in clean recall.'
         );
         expect(getTouchHudDetailRows(run).map((row) => row.id)).toEqual([
             'objective',
             'hazard',
             'boss',
             'route',
+            'memory',
             'perfect_memory',
             'economy'
         ]);
+        expect(getTouchHudDetailRows(run).find((row) => row.id === 'hazard')?.detail).toContain('1 contact hit');
+        expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain('room log');
+        expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain('Recall is clear');
+        expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain(
+            'route marks are holding steady'
+        );
+        expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.detail).toContain(
+            'Next memory move: Resolve the safest known pair'
+        );
+    });
+
+    it('normalizes stale Recall Focus before long-run summaries render', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 91_004, activeMutators: [] }),
+            recallFocus: 99,
+            recallMatchesThisFloor: 1,
+            recallBonusScoreThisFloor: 24
+        };
+
+        expect(getInRunCauseRows(run).find((row) => row.id === 'recall-focus')?.summary).toBe(
+            'Focus 3/3, +24 score'
+        );
+        expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.value).toBe('3/3');
     });
 
     it('publishes terminology and safe expansion contract matrices', () => {

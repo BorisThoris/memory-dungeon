@@ -92,12 +92,14 @@ describe('uiSfx', () => {
             type: 'sine' as OscillatorType,
             frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
             connect: vi.fn(),
+            disconnect: vi.fn(),
             start: vi.fn(),
             stop: vi.fn()
         }));
         const createGain = vi.fn(() => ({
             gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
-            connect: vi.fn()
+            connect: vi.fn(),
+            disconnect: vi.fn()
         }));
         vi.stubGlobal(
             'AudioContext',
@@ -119,5 +121,45 @@ describe('uiSfx', () => {
         playUiCopySfx(gain);
 
         expect(createOscillator).toHaveBeenCalledTimes(5);
+    });
+
+    it('steals oldest procedural UI fallback voices by category', () => {
+        const stops: Array<ReturnType<typeof vi.fn>> = [];
+        const createOscillator = vi.fn(() => {
+            const stop = vi.fn();
+            stops.push(stop);
+            return {
+                type: 'sine' as OscillatorType,
+                frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+                connect: vi.fn(),
+                disconnect: vi.fn(),
+                start: vi.fn(),
+                stop
+            };
+        });
+        const createGain = vi.fn(() => ({
+            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn(),
+            disconnect: vi.fn()
+        }));
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                createOscillator = createOscillator;
+                createGain = createGain;
+                close = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        resumeUiSfxContext();
+        const gain = uiSfxGainFromSettings(1, 1);
+        for (let i = 0; i < 6; i += 1) {
+            playUiClickSfx(gain);
+        }
+
+        expect(createOscillator).toHaveBeenCalledTimes(6);
+        expect(stops[0]).toHaveBeenCalledTimes(2);
     });
 });

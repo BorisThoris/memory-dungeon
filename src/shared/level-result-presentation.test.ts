@@ -42,6 +42,10 @@ describe('floor clear causality presentation', () => {
         expect(rows.find((row) => row.id === 'perfect_memory')).toMatchObject({
             detail: 'Still eligible if the run also clears with zero mismatches.'
         });
+        expect(rows.find((row) => row.id === 'route_choice')).toMatchObject({
+            detail:
+                '1 connected room choice opened in the route archive: Safe. The next route is now written into the archive margin.'
+        });
     });
 
     it('names assist lock and wager loss causes', () => {
@@ -77,9 +81,10 @@ describe('floor clear causality presentation', () => {
         expect(rows.find((row) => row.id === 'encounter_identity')).toMatchObject({
             group: 'encounter',
             label: 'Trap bounty hall',
-            detail: identity.floorClearSentence,
+            detail: `${identity.floorClearSentence} ${identity.atmosphericFeedback}`,
             tokens: identity.tokens
         });
+        expect(rows.find((row) => row.id === 'encounter_identity')?.detail).toContain('pressure plates');
         expect(rows.every((row) => assertTokenCoverage(row.tokens))).toBe(true);
     });
 
@@ -130,7 +135,8 @@ describe('floor clear causality presentation', () => {
         expect(rows.find((row) => row.id === 'hazard_tiles')).toMatchObject({
             group: 'hazard',
             label: 'Hazard tiles',
-            detail: '2 snare shuffles; 1 cascade clear; 1 mirror decoy read; 1 fragile cache claim; 1 fragile cache break; 1 toll cache claim; 2 fuse cache claims (1 late).',
+            detail:
+                '2 snare shuffles; 1 cascade clear; 1 mirror decoy read; 1 fragile cache claim; 1 fragile cache break; 1 toll cache claim; 2 fuse cache claims (1 late). Hazard marks woke under the cards.',
             tokens: ['risk', 'hidden_known', 'momentum']
         });
         expect(rows.every((row) => assertTokenCoverage(row.tokens))).toBe(true);
@@ -148,7 +154,8 @@ describe('floor clear causality presentation', () => {
         expect(rows.find((row) => row.id === 'lantern_ward_scouts')).toMatchObject({
             group: 'reward',
             label: 'Lantern Ward',
-            detail: '1 lantern scout identified hidden danger or mystery information.',
+            detail:
+                '1 lantern scout identified hidden danger or mystery information. The light left a readable mark in the room log.',
             tokens: ['safe', 'hidden_known', 'reward']
         });
         expect(rows.every((row) => assertTokenCoverage(row.tokens))).toBe(true);
@@ -166,7 +173,8 @@ describe('floor clear causality presentation', () => {
         expect(rows.find((row) => row.id === 'omen_seal_scouts')).toMatchObject({
             group: 'reward',
             label: 'Omen Seal',
-            detail: '2 omen scouts revealed hidden danger or mystery information.',
+            detail:
+                '2 omen scouts revealed hidden danger or mystery information. The seal wrote the warning before the cards forgot it.',
             tokens: ['hidden_known', 'reward', 'risk']
         });
         expect(rows.every((row) => assertTokenCoverage(row.tokens))).toBe(true);
@@ -203,8 +211,28 @@ describe('floor clear causality presentation', () => {
         expect(rows.find((row) => row.id === 'safe_hazard_wards')).toMatchObject({
             group: 'assist',
             label: 'Guard Cache ward',
-            detail: '1 hazard ward blocked a snare or fragile cache break.',
+            detail: '1 hazard ward blocked a snare or fragile cache break. The room kept one guarded memory intact.',
             tokens: ['safe', 'risk', 'hidden_known']
+        });
+        expect(rows.every((row) => assertTokenCoverage(row.tokens))).toBe(true);
+    });
+
+    it('summarizes recall focus as floor-clear memory performance', () => {
+        const rows = getFloorClearCausalityRows(
+            {
+                ...baseResult,
+                recallMatches: 3,
+                recallMistakes: 1,
+                recallBonusScore: 40
+            },
+            false
+        );
+
+        expect(rows.find((row) => row.id === 'recall_focus')).toMatchObject({
+            group: 'performance',
+            label: 'Recall focus',
+            detail: '3 remembered matches; 1 recall lapse; +40 memory score. Room log updated.',
+            tokens: ['momentum', 'risk', 'reward']
         });
         expect(rows.every((row) => assertTokenCoverage(row.tokens))).toBe(true);
     });

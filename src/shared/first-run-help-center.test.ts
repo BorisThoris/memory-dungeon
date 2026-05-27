@@ -6,9 +6,16 @@ describe('REG-098 first-run help center rows', () => {
     it('uses guided beats for fresh profiles and replay copy for completed profiles', () => {
         const fresh = createDefaultSaveData();
         const freshRows = getFirstRunHelpCenterRows(fresh);
-        expect(freshRows.map((row) => row.id)).toEqual(['flip_match', 'score_recover', 'relic_rewards', 'deeper_help']);
+        expect(freshRows.map((row) => row.id)).toEqual([
+            'flip_match',
+            'score_recover',
+            'route_choice',
+            'relic_rewards',
+            'deeper_help'
+        ]);
         expect(freshRows.every((row) => row.localOnly)).toBe(true);
         expect(freshRows.find((row) => row.id === 'flip_match')?.status).toBe('active');
+        expect(freshRows.find((row) => row.id === 'route_choice')?.body).toMatch(/Safe protects/i);
 
         const completed = { ...fresh, onboardingDismissed: true, powersFtueSeen: true };
         const completedRows = getFirstRunHelpCenterRows(completed);

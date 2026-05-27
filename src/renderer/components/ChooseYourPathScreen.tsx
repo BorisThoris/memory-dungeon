@@ -168,10 +168,14 @@ const ChooseYourPathScreen = () => {
     const challengeGateRows = getChallengeModeGateRows(saveData);
 
     const heroModes = useMemo((): readonly RunModeDefinition[] => choosePathHeroModes(), []);
-    const launchMode = useMemo(
-        (): RunModeDefinition | null => heroModes.find((mode) => mode.availability === 'available') ?? null,
-        [heroModes]
-    );
+    const launchMode = useMemo((): RunModeDefinition | null => {
+        const preferredLaunchId = saveData.onboardingDismissed ? 'dungeon_showcase' : 'classic';
+        return (
+            heroModes.find((mode) => mode.id === preferredLaunchId && mode.availability === 'available') ??
+            heroModes.find((mode) => mode.availability === 'available') ??
+            null
+        );
+    }, [heroModes, saveData.onboardingDismissed]);
     const browseModes = useMemo(
         (): readonly RunModeDefinition[] => [
             ...heroModes.filter((mode) => mode.id !== launchMode?.id),
@@ -355,9 +359,12 @@ const ChooseYourPathScreen = () => {
     const renderLaunchPanel = (def: RunModeDefinition): ReactElement => {
         const poster = resolveModePosterUrl(def.posterKey);
         const canStart = def.availability === 'available' && def.action.type !== 'gauntlet';
+        const freshClassicLaunch = def.id === 'classic' && !saveData.onboardingDismissed;
         const summary =
-            def.id === 'classic'
-                ? 'A clean dungeon descent with procedural floors, route choices, shops, and relic milestones.'
+            freshClassicLaunch
+                ? 'Start with a guided first room: match the marked pair, clear the floor, then choose what the next room changes.'
+                : def.id === 'classic'
+                  ? 'A clean dungeon descent with procedural floors, route choices, shops, and relic milestones.'
                 : def.shortDescription;
 
         return (
@@ -374,6 +381,13 @@ const ChooseYourPathScreen = () => {
                             {def.title}
                         </ScreenTitle>
                         <p className={styles.launchSummary}>{summary}</p>
+                        {freshClassicLaunch ? (
+                            <ol className={styles.launchFirstRunBeats} data-testid="choose-path-first-run-beats">
+                                <li>Match the marked pair.</li>
+                                <li>Clear the room for score and streak.</li>
+                                <li>Pick Safe, Greed, or Mystery for room two.</li>
+                            </ol>
+                        ) : null}
                         <div className={styles.launchActions}>
                             <UiButton
                                 className={styles.launchPrimaryButton}

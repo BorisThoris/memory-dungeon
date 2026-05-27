@@ -81,6 +81,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     const contract = run.activeContract;
     const economyRows = getRunEconomyRows(run);
     const inventoryRows = getRunInventoryRows(run);
+    const inventoryQuantityById = new Map(inventoryRows.map((row) => [row.id, row.quantity]));
     const loadoutSummary = getRunLoadoutSummary(run);
     const rewardSignal = getInventoryRewardSignal(run);
     const perfectMemoryAttribution = run ? getPerfectMemoryAttribution(run) : null;
@@ -110,6 +111,9 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                     </a>
                     <a href="#inventory-build" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
                         Build
+                    </a>
+                    <a href="#inventory-consumables" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
+                        Consumables
                     </a>
                     <a href="#inventory-relics" onClick={(e) => handleMetaBodyTocLinkClick(bodyScrollRef, e)}>
                         Relics
@@ -251,8 +255,13 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                             {row.label}: {row.quantityLabel}
                                         </p>
                                         <p className={metaStyles.subtitle}>
-                                            {row.mutability}. {row.source} → {row.useWindow}. {row.effectPreview}
+                                            {row.mutability}. {row.source} {'\u2192'} {row.useWindow}. {row.effectPreview}
                                         </p>
+                                        {row.fullReason ?? row.unavailableReason ? (
+                                            <span className={styles.inventoryRowNote}>
+                                                {row.fullReason ?? row.unavailableReason}
+                                            </span>
+                                        ) : null}
                                     </div>
                                 ))}
                             </div>
@@ -314,41 +323,45 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 </MetaFrame>
 
                 <Panel className={panelClassName} padding="lg" variant="default">
-                    <div className={`${styles.loadoutSection} ${metaStyles.sectionAnchor}`} id="inventory-charges">
+                    <div
+                        className={`${styles.loadoutSection} ${metaStyles.sectionAnchor}`}
+                        data-testid="inventory-charges-panel"
+                        id="inventory-charges"
+                    >
                         <h2 className={styles.sectionTitle}>Charges and tokens</h2>
                         <div className={styles.kv}>
                             <div className={styles.kvRow}>
                                 <span>
-                                    Shuffle charges<strong>{run.shuffleCharges}</strong>
+                                    Shuffle charges<strong>{inventoryQuantityById.get('shuffle_charge') ?? 0}</strong>
                                 </span>
                                 <span>
-                                    Destroy charges<strong>{run.destroyPairCharges}</strong>
+                                    Destroy charges<strong>{inventoryQuantityById.get('destroy_charge') ?? 0}</strong>
                                 </span>
                                 <span>
-                                    Peek charges<strong>{run.peekCharges}</strong>
-                                </span>
-                            </div>
-                            <div className={styles.kvRow}>
-                                <span>
-                                    Stray remove<strong>{run.strayRemoveCharges}</strong>
-                                </span>
-                                <span>
-                                    Guard tokens<strong>{run.stats.guardTokens}</strong>
-                                </span>
-                                <span>
-                                    Combo shards<strong>{run.stats.comboShards}</strong>
+                                    Peek charges<strong>{inventoryQuantityById.get('peek_charge') ?? 0}</strong>
                                 </span>
                             </div>
                             <div className={styles.kvRow}>
                                 <span>
-                                    Undo this floor<strong>{run.undoUsesThisFloor}</strong>
+                                    Stray remove<strong>{inventoryQuantityById.get('stray_remove_charge') ?? 0}</strong>
+                                </span>
+                                <span>
+                                    Guard tokens<strong>{inventoryQuantityById.get('guard_token') ?? 0}</strong>
+                                </span>
+                                <span>
+                                    Combo shards<strong>{inventoryQuantityById.get('combo_shard') ?? 0}</strong>
+                                </span>
+                            </div>
+                            <div className={styles.kvRow}>
+                                <span>
+                                    Undo this floor<strong>{inventoryQuantityById.get('undo_charge') ?? 0}</strong>
                                 </span>
                                 <span>
                                     Free shuffle this floor
                                     <strong>{run.freeShuffleThisFloor ? 'Available' : 'Used / n/a'}</strong>
                                 </span>
                                 <span>
-                                    Match score mult.<strong>{run.matchScoreMultiplier.toFixed(2)}×</strong>
+                                    Match score mult.<strong>{run.matchScoreMultiplier.toFixed(2)}&times;</strong>
                                 </span>
                             </div>
                         </div>

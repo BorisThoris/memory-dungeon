@@ -6,6 +6,8 @@ import {
     deriveCosmeticStates,
     type CosmeticId
 } from './cosmetics';
+import { countEligibleHonors } from './honorUnlocks';
+import { normalizeSaveData } from './save-data';
 
 export type MetaProgressionTrack = 'permanent_upgrade' | 'cosmetic';
 export type MetaProgressionStatus = 'owned' | 'available' | 'locked';
@@ -53,11 +55,24 @@ export interface CosmeticTrackRow {
 
 export interface MetaProgressionSummary {
     honorMarks: number;
+    honorsEarned: number;
     owned: number;
     available: number;
     locked: number;
     gameplayUpgradesOwned: number;
     cosmeticOwned: number;
+}
+
+export type MetaHonorMarkSourceId = 'achievements' | 'daily_archive' | 'no_powers_mastery' | 'relic_mastery';
+
+export interface MetaHonorMarkSourceRow {
+    id: MetaHonorMarkSourceId;
+    label: string;
+    marks: number;
+    cap: number | null;
+    progress: { current: number; target: number };
+    nextMarkCopy: string | null;
+    nextMarkUnitsRemaining: number | null;
 }
 
 export interface MetaProgressionBoard {
@@ -69,16 +84,134 @@ export interface MetaProgressionBoard {
     summary: MetaProgressionSummary;
 }
 
+export type MetaProgressionUnlockReason = 'applied' | 'already_owned' | 'locked' | 'unknown_row' | 'deferred';
+
+export interface MetaProgressionUnlockResult {
+    save: SaveData;
+    row: MetaProgressionRow | null;
+    applied: boolean;
+    reason: MetaProgressionUnlockReason;
+    feedbackCopy: string;
+}
+
+export type MetaProgressionDifficultyTier = 'initiate' | 'adept' | 'ascendant' | 'legend';
+export type MetaProgressionMilestoneStatus = 'reached' | 'current' | 'upcoming';
+
+export interface MetaProgressionRewardFeedback {
+    id: string;
+    title: string;
+    status: MetaProgressionStatus;
+    progressCopy: string;
+    source: string;
+    modeRule: MetaUpgradeModeRule;
+}
+
+export interface MetaProgressionFeedback {
+    profileLevel: number;
+    difficultyTier: MetaProgressionDifficultyTier;
+    difficultyTierLabel: string;
+    honorMarks: number;
+    honorMarksToNextLevel: number;
+    nextReward: MetaProgressionRewardFeedback | null;
+    longTermGoal: MetaProgressionRewardFeedback | null;
+    honorMarkSources: MetaHonorMarkSourceRow[];
+    nextHonorMarkSource: MetaHonorMarkSourceRow | null;
+    nextMilestone: MetaProgressionMilestoneRow | null;
+    nextMilestoneCopy: string;
+    motivationCopy: string;
+}
+
+export interface MetaProgressionMilestoneRow {
+    level: number;
+    tier: MetaProgressionDifficultyTier;
+    label: string;
+    status: MetaProgressionMilestoneStatus;
+    marksRequired: number;
+    marksRemaining: number;
+    progress: { current: number; target: number };
+    reward: string;
+}
+
 const totalRelicPicks = (save: SaveData): number =>
     Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
 
-export const getMetaHonorMarks = (save: SaveData): number => {
+const META_MARKS_PER_LEVEL = 5;
+
+const META_PROGRESS_MILESTONES: Array<{
+    level: number;
+    tier: MetaProgressionDifficultyTier;
+    reward: string;
+}> = [
+    { level: 1, tier: 'initiate', reward: 'Profile ladder opened' },
+    { level: 3, tier: 'adept', reward: 'Adept-tier challenge focus' },
+    { level: 5, tier: 'ascendant', reward: 'Ascendant mastery identity' },
+    { level: 8, tier: 'legend', reward: 'Legend long-run prestige target' }
+];
+
+export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceRow[] => {
     const achievements = Object.values(save.achievements).filter(Boolean).length;
+    const achievementTotal = Object.keys(save.achievements).length;
     const dailies = Math.min(7, save.playerStats?.dailiesCompleted ?? 0);
     const noPowers = Math.min(5, save.playerStats?.bestFloorNoPowers ?? 0);
     const relics = Math.min(10, totalRelicPicks(save));
-    return achievements * 2 + dailies + noPowers + Math.floor(relics / 2);
+    const relicsToNextMark = relics >= 10 ? null : relics % 2 === 0 ? 2 : 1;
+    return [
+        {
+            id: 'achievements',
+            label: 'Achievements',
+            marks: achievements * 2,
+            cap: achievementTotal * 2,
+            progress: { current: achievements, target: achievementTotal },
+            nextMarkCopy: achievements < achievementTotal ? 'Earn one more achievement for 2 honor marks.' : null,
+            nextMarkUnitsRemaining: achievements < achievementTotal ? 1 : null
+        },
+        {
+            id: 'daily_archive',
+            label: 'Daily archive',
+            marks: dailies,
+            cap: 7,
+            progress: { current: dailies, target: 7 },
+            nextMarkCopy: dailies < 7 ? 'Clear one more Daily Challenge for 1 honor mark.' : null,
+            nextMarkUnitsRemaining: dailies < 7 ? 1 : null
+        },
+        {
+            id: 'no_powers_mastery',
+            label: 'No-powers mastery',
+            marks: noPowers,
+            cap: 5,
+            progress: { current: noPowers, target: 5 },
+            nextMarkCopy: noPowers < 5 ? 'Raise your best no-powers floor by 1 for 1 honor mark.' : null,
+            nextMarkUnitsRemaining: noPowers < 5 ? 1 : null
+        },
+        {
+            id: 'relic_mastery',
+            label: 'Relic mastery',
+            marks: Math.floor(relics / 2),
+            cap: 5,
+            progress: { current: relics, target: 10 },
+            nextMarkCopy:
+                relicsToNextMark === null
+                    ? null
+                    : `Pick ${relicsToNextMark} more relic${relicsToNextMark === 1 ? '' : 's'} for 1 honor mark.`,
+            nextMarkUnitsRemaining: relicsToNextMark
+        }
+    ];
 };
+
+export const getMetaHonorMarks = (save: SaveData): number =>
+    getMetaHonorMarkSourceRows(save).reduce((sum, source) => sum + source.marks, 0);
+
+export const getNextMetaHonorMarkSource = (save: SaveData): MetaHonorMarkSourceRow | null =>
+    getMetaHonorMarkSourceRows(save)
+        .filter((source) => source.nextMarkUnitsRemaining !== null)
+        .sort((a, b) => {
+            const remainingA = a.nextMarkUnitsRemaining ?? Number.POSITIVE_INFINITY;
+            const remainingB = b.nextMarkUnitsRemaining ?? Number.POSITIVE_INFINITY;
+            if (remainingA !== remainingB) {
+                return remainingA - remainingB;
+            }
+            return b.progress.current - a.progress.current;
+        })[0] ?? null;
 
 const statusForProgress = (current: number, target: number, owned: boolean): MetaProgressionStatus => {
     if (owned) {
@@ -86,6 +219,9 @@ const statusForProgress = (current: number, target: number, owned: boolean): Met
     }
     return current >= target ? 'available' : 'locked';
 };
+
+const lockedStatusForProgress = (current: number, target: number, owned: boolean, enabled: boolean): MetaProgressionStatus =>
+    enabled ? statusForProgress(current, target, owned) : owned ? 'owned' : 'locked';
 
 export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] => {
     const dailies = save.playerStats?.dailiesCompleted ?? 0;
@@ -111,8 +247,8 @@ export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] =>
             id: 'upgrade_scholar_prep_slot',
             track: 'permanent_upgrade',
             title: 'Scholar Prep Slot',
-            description: 'Future permanent upgrade slot; documented but not purchasable in v1.',
-            status: statusForProgress(bestNoPowers, 8, false),
+            description: 'Future permanent upgrade slot; visible for planning but locked until the balance pass ships.',
+            status: lockedStatusForProgress(bestNoPowers, 8, false, false),
             progress: { current: Math.min(bestNoPowers, 8), target: 8 },
             reward: 'Future pre-run assist slot',
             currencyId: 'honor_marks',
@@ -152,12 +288,15 @@ export const getMetaProgressionRows = (save: SaveData): MetaProgressionRow[] => 
     ...getMetaCosmeticTrackRows(save)
 ];
 
+const isDeferredMetaProgressionRow = (row: MetaProgressionRow): boolean => row.gate.toLowerCase().startsWith('deferred:');
+
 export const getMetaProgressionSummary = (
     save: SaveData
-): { honorMarks: number; owned: number; available: number; locked: number; gameplayUpgradesOwned: number; cosmeticOwned: number } => {
+): MetaProgressionSummary => {
     const rows = getMetaProgressionRows(save);
     return {
         honorMarks: getMetaHonorMarks(save),
+        honorsEarned: countEligibleHonors(save),
         owned: rows.filter((row) => row.status === 'owned').length,
         available: rows.filter((row) => row.status === 'available').length,
         locked: rows.filter((row) => row.status === 'locked').length,
@@ -170,10 +309,11 @@ export const getMetaProgressionBoard = (save: SaveData): MetaProgressionBoard =>
     const rows = getMetaProgressionRows(save);
     const summary = getMetaProgressionSummary(save);
     const honorMarks = summary.honorMarks;
+    const shortTermRows = rows.filter((row) => !isDeferredMetaProgressionRow(row));
     const nextReward =
-        rows.find((row) => row.status === 'available') ??
-        rows.find((row) => row.status === 'locked' && row.progress.current > 0) ??
-        rows.find((row) => row.status === 'locked') ??
+        shortTermRows.find((row) => row.status === 'available') ??
+        shortTermRows.find((row) => row.status === 'locked' && row.progress.current > 0) ??
+        shortTermRows.find((row) => row.status === 'locked') ??
         null;
     const longTermGoal =
         rows.find((row) => row.id === 'upgrade_scholar_prep_slot') ??
@@ -190,6 +330,187 @@ export const getMetaProgressionBoard = (save: SaveData): MetaProgressionBoard =>
     };
 };
 
+export const applyMetaProgressionUnlock = (save: SaveData, rowId: string): MetaProgressionUnlockResult => {
+    const row = getMetaProgressionRows(save).find((entry) => entry.id === rowId) ?? null;
+    if (!row) {
+        return {
+            save,
+            row: null,
+            applied: false,
+            reason: 'unknown_row',
+            feedbackCopy: 'Progression reward not found.'
+        };
+    }
+    if (isDeferredMetaProgressionRow(row)) {
+        return {
+            save,
+            row,
+            applied: false,
+            reason: 'deferred',
+            feedbackCopy: `${row.title} is visible for planning, but is not enabled in this build.`
+        };
+    }
+    if (row.status === 'owned') {
+        return {
+            save,
+            row,
+            applied: false,
+            reason: 'already_owned',
+            feedbackCopy: `${row.title} is already owned.`
+        };
+    }
+    if (row.status !== 'available') {
+        return {
+            save,
+            row,
+            applied: false,
+            reason: 'locked',
+            feedbackCopy: `${row.title} needs ${row.progress.target - row.progress.current} more from ${row.source}.`
+        };
+    }
+
+    if (row.id === 'upgrade_relic_shrine_extra_pick') {
+        const nextSave = normalizeSaveData({
+            ...save,
+            playerStats: {
+                ...save.playerStats!,
+                relicShrineExtraPickUnlocked: true
+            }
+        });
+        return {
+            save: nextSave,
+            row: { ...row, status: 'owned' },
+            applied: true,
+            reason: 'applied',
+            feedbackCopy: `${row.title} unlocked: ${row.reward}.`
+        };
+    }
+
+    return {
+        save,
+        row,
+        applied: false,
+        reason: 'unknown_row',
+        feedbackCopy: 'Progression reward has no unlock application rule yet.'
+    };
+};
+
+export const getMetaProgressionDifficultyTier = (profileLevel: number): MetaProgressionDifficultyTier => {
+    if (profileLevel >= 8) {
+        return 'legend';
+    }
+    if (profileLevel >= 5) {
+        return 'ascendant';
+    }
+    if (profileLevel >= 3) {
+        return 'adept';
+    }
+    return 'initiate';
+};
+
+export const getMetaProgressionDifficultyTierLabel = (tier: MetaProgressionDifficultyTier): string => {
+    switch (tier) {
+        case 'legend':
+            return 'Legend tier';
+        case 'ascendant':
+            return 'Ascendant tier';
+        case 'adept':
+            return 'Adept tier';
+        case 'initiate':
+            return 'Initiate tier';
+    }
+};
+
+const metaMarksRequiredForLevel = (level: number): number => Math.max(0, (level - 1) * META_MARKS_PER_LEVEL);
+
+export const getMetaProgressionMilestones = (save: SaveData): MetaProgressionMilestoneRow[] => {
+    const board = getMetaProgressionBoard(save);
+    const currentTier = getMetaProgressionDifficultyTier(board.level);
+    const honorMarks = board.summary.honorMarks;
+
+    return META_PROGRESS_MILESTONES.map((milestone) => {
+        const marksRequired = metaMarksRequiredForLevel(milestone.level);
+        const reached = honorMarks >= marksRequired;
+        const status: MetaProgressionMilestoneStatus = reached
+            ? milestone.tier === currentTier
+                ? 'current'
+                : 'reached'
+            : 'upcoming';
+        return {
+            level: milestone.level,
+            tier: milestone.tier,
+            label: getMetaProgressionDifficultyTierLabel(milestone.tier),
+            status,
+            marksRequired,
+            marksRemaining: Math.max(0, marksRequired - honorMarks),
+            progress: { current: Math.min(honorMarks, marksRequired), target: marksRequired },
+            reward: milestone.reward
+        };
+    });
+};
+
+export const getNextMetaProgressionMilestone = (save: SaveData): MetaProgressionMilestoneRow | null =>
+    getMetaProgressionMilestones(save).find((row) => row.status === 'upcoming') ?? null;
+
+const pluralHonorMarks = (count: number): string => `${count} honor mark${count === 1 ? '' : 's'}`;
+
+const rowProgressCopy = (row: MetaProgressionRow): string => {
+    if (row.status === 'owned') {
+        return 'Owned';
+    }
+    if (row.status === 'available') {
+        return 'Ready to unlock';
+    }
+    return `${row.progress.current}/${row.progress.target} from ${row.source}`;
+};
+
+const rowFeedback = (row: MetaProgressionRow | null): MetaProgressionRewardFeedback | null =>
+    row === null
+        ? null
+        : {
+              id: row.id,
+              title: row.title,
+              status: row.status,
+              progressCopy: rowProgressCopy(row),
+              source: row.source,
+              modeRule: row.modeRule
+          };
+
+export const getMetaProgressionFeedback = (save: SaveData): MetaProgressionFeedback => {
+    const board = getMetaProgressionBoard(save);
+    const tier = getMetaProgressionDifficultyTier(board.level);
+    const nextReward = rowFeedback(board.nextReward);
+    const longTermGoal = rowFeedback(board.longTermGoal);
+    const honorMarkSources = getMetaHonorMarkSourceRows(save);
+    const nextHonorMarkSource = getNextMetaHonorMarkSource(save);
+    const nextMilestone = getNextMetaProgressionMilestone(save);
+    const honorMarksToNextLevel = board.levelProgress.target - board.levelProgress.current;
+    const nextMilestoneCopy = nextMilestone
+        ? `${nextMilestone.label} at profile level ${nextMilestone.level} (${pluralHonorMarks(nextMilestone.marksRemaining)}).`
+        : 'Legend tier reached; keep pushing long-run mastery.';
+    const motivationCopy =
+        nextReward?.status === 'available'
+            ? `${nextReward.title} is ready.`
+            : nextReward
+              ? `Next: ${nextReward.title} (${nextReward.progressCopy}).`
+              : 'All visible rewards are complete.';
+
+    return {
+        profileLevel: board.level,
+        difficultyTier: tier,
+        difficultyTierLabel: getMetaProgressionDifficultyTierLabel(tier),
+        honorMarks: board.summary.honorMarks,
+        honorMarksToNextLevel,
+        nextReward,
+        longTermGoal,
+        honorMarkSources,
+        nextHonorMarkSource,
+        nextMilestone,
+        nextMilestoneCopy,
+        motivationCopy
+    };
+};
+
 const legacyStatus = (owned: boolean, current: number, target: number): LegacyMetaProgressionStatus =>
     owned ? 'owned' : current > 0 || current >= target ? 'in_progress' : 'locked';
 
@@ -200,7 +521,7 @@ export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[]
         {
             id: 'relic_shrine_extra_pick',
             title: 'Week of Archives',
-            status: save.playerStats?.relicShrineExtraPickUnlocked || dailies >= 7 ? 'unlocked' : dailies > 0 ? 'in_progress' : 'locked',
+            status: save.playerStats?.relicShrineExtraPickUnlocked ? 'unlocked' : dailies > 0 ? 'in_progress' : 'locked',
             offlineOnly: true,
             payToSkip: false,
             progress: { current: Math.min(dailies, 7), target: 7 },
@@ -227,7 +548,7 @@ export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[]
     ];
 };
 
-/** One row per cosmetic track (daily/mastery/relic gating) — not the aggregate summary from `getCosmeticTrackProgressSummary`. */
+/** One row per cosmetic track (daily/mastery/relic gating), not the aggregate summary from `getCosmeticTrackProgressSummary`. */
 export const getCosmeticTrackDefinitionRows = (save: SaveData): CosmeticTrackRow[] => [
     {
         trackId: 'starter',
@@ -258,7 +579,7 @@ export const getCosmeticTrackDefinitionRows = (save: SaveData): CosmeticTrackRow
     }
 ];
 
-/** Aggregate owned/total per track for collection UI. Lives here to avoid a cosmetics ↔ meta-progression import cycle. */
+/** Aggregate owned/total per track for collection UI. Lives here to avoid a cosmetics/meta-progression import cycle. */
 export const getCosmeticTrackProgressSummary = (save: SaveData) => {
     const legacyRows = getCosmeticTrackDefinitionRows(save);
     const trackIds = ['starter', 'daily', 'mastery'] as const;
@@ -281,7 +602,9 @@ export const getCosmeticTrackProgressSummary = (save: SaveData) => {
 export const metaProgressionSummary = (save: SaveData): {
     upgradesUnlocked: number;
     cosmeticTrackOwned: number;
+    honorsEarned: number;
 } => ({
     upgradesUnlocked: buildPermanentUpgradeRows(save).filter((row) => row.status === 'unlocked').length,
-    cosmeticTrackOwned: getCosmeticTrackDefinitionRows(save).length
+    cosmeticTrackOwned: getCosmeticTrackDefinitionRows(save).filter((row) => row.status === 'owned').length,
+    honorsEarned: countEligibleHonors(save)
 });

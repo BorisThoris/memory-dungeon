@@ -9,6 +9,7 @@ import {
     buildRunJournalRows,
     buildRunShareKey
 } from './run-history';
+import { createDungeonRunMapState, revealDungeonChoices, selectDungeonNode } from './run-map';
 
 const completedRun = (): RunState => {
     const run = createRunSummary(
@@ -139,6 +140,32 @@ describe('REG-085 run history, share keys, and journal', () => {
         expect(rows.every((row) => row.exportSafe && row.offlineOnly)).toBe(true);
         expect(buildRunHistoryExportString(run)).toContain('Dungeon node');
         expect(buildRunHistoryExportString(run)).not.toMatch(/token|email|path/i);
+    });
+
+    it('keeps converged boss route approach labels in the dungeon journal', () => {
+        const dungeonRun = selectDungeonNode(
+            revealDungeonChoices(createDungeonRunMapState(85_002, 1, 5), 5, [
+                { id: 'boss-safe', routeType: 'safe', label: 'Safe passage', detail: 'Controlled boss approach.' },
+                { id: 'boss-greed', routeType: 'greed', label: 'Greedy route', detail: 'Risky boss approach.' },
+                { id: 'boss-mystery', routeType: 'mystery', label: 'Mystery route', detail: 'Omen boss approach.' }
+            ]),
+            'boss-mystery'
+        );
+        const run: RunState = {
+            ...completedRun(),
+            gameMode: 'endless',
+            dungeonRun,
+            pendingRouteCardPlan: {
+                choiceId: 'boss-mystery',
+                routeType: 'mystery',
+                sourceLevel: 5,
+                targetLevel: 6
+            }
+        };
+
+        expect(buildDungeonJournalRows(run).find((row) => row.id === 'dungeon_route')?.value).toBe(
+            'Keeper Chamber via Mystery route'
+        );
     });
 
     it('uses primary build archetype in journal recap when relics exist', () => {
