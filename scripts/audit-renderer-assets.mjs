@@ -13,7 +13,8 @@
  * - renderer-only builds must use the local browser fallback client when Electron,
  *   Steam, and desktop save APIs are absent.
  *
- * Exit 0 always; orphans are informational (manual triage before delete).
+ * Exit 1 for broken renderer audio manifests; orphaned assets are informational
+ * (manual triage before delete).
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,6 +24,8 @@ import { spawnSync } from 'node:child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
 const ASSET_ROOT = path.join(root, 'src', 'renderer', 'assets');
+const RENDERER_SFX_DIR = path.join(ASSET_ROOT, 'audio', 'sfx');
+const RENDERER_SFX_MANIFEST = path.join(RENDERER_SFX_DIR, 'manifest.json');
 const SEARCH_DIRS = ['src', 'scripts', 'e2e', 'public'];
 const TEXT_EXTS = new Set([
     '.ts',
@@ -138,6 +141,50 @@ const walkAllAssets = (dir) => {
 walkAllAssets(ASSET_ROOT);
 
 const duplicateGroups = [...basenamePaths.values()].filter((g) => g.length > 1);
+const fatalAssetErrors = [];
+
+const auditRendererSfxManifestFiles = () => {
+    if (!fs.existsSync(RENDERER_SFX_MANIFEST)) {
+        fatalAssetErrors.push('Renderer SFX manifest is missing: src/renderer/assets/audio/sfx/manifest.json');
+        return;
+    }
+
+    let manifest;
+    try {
+        manifest = JSON.parse(fs.readFileSync(RENDERER_SFX_MANIFEST, 'utf8'));
+    } catch (error) {
+        fatalAssetErrors.push(`Renderer SFX manifest is not valid JSON: ${error.message}`);
+        return;
+    }
+
+    const entries = manifest?.entries;
+    if (!entries || typeof entries !== 'object' || Array.isArray(entries)) {
+        fatalAssetErrors.push('Renderer SFX manifest must contain an object at entries.');
+        return;
+    }
+
+    for (const [key, entry] of Object.entries(entries)) {
+        const file = entry?.file;
+        if (typeof file !== 'string' || file.length === 0) {
+            fatalAssetErrors.push(`Renderer SFX manifest key "${key}" is missing a non-empty file field.`);
+            continue;
+        }
+        if (file.includes('/') || file.includes('\\')) {
+            fatalAssetErrors.push(`Renderer SFX manifest key "${key}" must use a basename, got "${file}".`);
+            continue;
+        }
+        const abs = path.join(RENDERER_SFX_DIR, file);
+        if (!fs.existsSync(abs)) {
+            fatalAssetErrors.push(`Renderer SFX manifest key "${key}" points to missing file: ${file}`);
+            continue;
+        }
+        if (!fs.statSync(abs).isFile()) {
+            fatalAssetErrors.push(`Renderer SFX manifest key "${key}" does not point to a file: ${file}`);
+        }
+    }
+};
+
+auditRendererSfxManifestFiles();
 
 const orphans = [];
 
@@ -160,8 +207,16 @@ for (const assetAbs of allAssetPaths) {
 console.log(`Audited ${allAssetPaths.length} asset files under src/renderer/assets/`);
 console.log(`Search roots: ${SEARCH_DIRS.join(', ')} (basename substring)\n`);
 console.log(
-    'Fallback expectations: optional generated art may be absent if UI code supplies visible inline fallbacks; optional generated audio may be absent if playback resolves to silence or procedural SFX without repeated console errors.\n'
+    'Fallback expectations: optional generated art may be absent if UI code supplies visible inline fallbacks; renderer SFX manifest entries must point to existing files even though runtime playback has procedural fallbacks.\n'
 );
+
+if (fatalAssetErrors.length > 0) {
+    console.error('Fatal renderer asset issues:\n');
+    for (const issue of fatalAssetErrors) {
+        console.error(`  ${issue}`);
+    }
+    console.error('');
+}
 
 if (duplicateGroups.length > 0) {
     console.log('Duplicate basenames (different paths; substring matches may collide):\n');
@@ -172,10 +227,14 @@ if (duplicateGroups.length > 0) {
 
 if (orphans.length === 0) {
     console.log('No unreferenced candidates (every file basename appears elsewhere under src/scripts/e2e/public).');
-    process.exit(0);
+    process.exit(fatalAssetErrors.length > 0 ? 1 : 0);
 }
 
 console.log(`Candidate orphans (${orphans.length}) — verify manually (docs-only / pipeline / intentional shelf stock):\n`);
 for (const { path: p } of orphans.sort((a, b) => a.path.localeCompare(b.path))) {
     console.log(`  ${p}`);
+}
+
+if (fatalAssetErrors.length > 0) {
+    process.exit(1);
 }

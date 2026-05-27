@@ -1,4 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import sfxManifest from '../assets/audio/sfx/manifest.json';
+import {
+    AUDIO_INTERACTION_COVERAGE,
+    audioCoverageCueIsGameplaySfx,
+    audioCoverageCueIsKnown
+} from './audioInteractionCoverage';
 import {
     __resetGameSfxEngineForTests,
     playCountdownPressureSfx,
@@ -267,5 +275,34 @@ describe('gameSfx', () => {
 
         expect(createOscillator).toHaveBeenCalledTimes(2);
         expect(stops.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('keeps sampled gameplay coverage backed by manifest entries and files', () => {
+        const manifestKeys = new Set(Object.keys(sfxManifest.entries));
+        const sfxAssetDir = path.resolve(process.cwd(), 'src/renderer/assets/audio/sfx');
+
+        for (const row of AUDIO_INTERACTION_COVERAGE) {
+            expect(audioCoverageCueIsKnown(row.cue), `${row.id} cue ${row.cue} is not registered`).toBe(true);
+
+            if (row.decision === 'sampled_with_fallback' && audioCoverageCueIsGameplaySfx(row.cue)) {
+                expect(manifestKeys.has(row.cue), `${row.id} cue ${row.cue} is missing from SFX manifest`).toBe(true);
+            }
+        }
+
+        for (const [key, entry] of Object.entries(sfxManifest.entries)) {
+            const assetPath = path.join(sfxAssetDir, entry.file);
+            expect(fs.existsSync(assetPath), `manifest key ${key} points to missing file ${entry.file}`).toBe(true);
+        }
+    });
+
+    it('keeps the countdown pressure cue covered by first-run asset checks', () => {
+        const coverageRow = AUDIO_INTERACTION_COVERAGE.find((row) => row.id === 'gauntlet_pressure');
+        const manifestEntry = sfxManifest.entries['countdown-pressure'];
+
+        expect(coverageRow?.cue).toBe('countdown-pressure');
+        expect(manifestEntry.file).toBe('countdown-pressure.wav');
+        expect(
+            fs.existsSync(path.resolve(process.cwd(), 'src/renderer/assets/audio/sfx', manifestEntry.file))
+        ).toBe(true);
     });
 });

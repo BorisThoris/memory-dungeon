@@ -1,6 +1,6 @@
 # Sampled gameplay SFX (optional)
 
-[`manifest.json`](manifest.json) lists logical keys to filenames. Drop matching OGG or WAV files next to this README. Vite bundles only files that exist; missing files fall back to procedural Web Audio in [`gameSfx.ts`](../../../audio/gameSfx.ts).
+[`manifest.json`](manifest.json) lists logical keys to filenames. Drop matching OGG or WAV files next to this README. Vite bundles only files that exist; runtime decode failures fall back to procedural Web Audio in [`gameSfx.ts`](../../../audio/gameSfx.ts), but manifest entries must point to existing files. `yarn audit:renderer-assets` and `src/renderer/audio/gameSfx.test.ts` fail when a listed SFX file is missing.
 
 ## Filenames
 
