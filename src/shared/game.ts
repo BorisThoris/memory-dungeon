@@ -7357,7 +7357,7 @@ export const getDungeonCardCopy = (tile: Tile): string => {
         return `Dungeon exit: ${tile.label}.${lock}${route} The descent continues only after this memory is confirmed.`;
     }
     if (tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved') {
-        return `Resolved trap: ${tile.label}. Its effect has sprung and your next action is ready.`;
+        return `Resolved trap: ${tile.label}. Its effect has sprung, no second card is pending, and your next action is ready.`;
     }
     if (tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'revealed') {
         if (tile.dungeonCardEffectId === 'trap_alarm') {
