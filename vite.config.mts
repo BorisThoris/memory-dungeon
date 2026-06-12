@@ -2,6 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
+import { visualizer } from 'rollup-plugin-visualizer';
 /* Plain ESM helper (`.mjs`); no `allowJs` typings — Vite load-time only. */
 // @ts-expect-error TS7016
 import { viteDevBlueprintApi } from './scripts/vite-dev-blueprint-api.mjs';
@@ -15,7 +16,18 @@ const boardWebglPerfSample = path.resolve(__dirname, 'src/renderer/dev/boardWebg
 const boardWebglPerfSampleStub = path.resolve(__dirname, 'src/renderer/dev/boardWebglPerfSample.stub.ts');
 
 export default defineConfig(({ mode }) => ({
-    plugins: [viteDevBlueprintApi(), react()],
+    plugins: [
+        viteDevBlueprintApi(),
+        react(),
+        process.env.VITE_BUNDLE_ANALYZE === '1'
+            ? visualizer({
+                  filename: 'dist-bundle-report.html',
+                  gzipSize: true,
+                  brotliSize: true,
+                  template: 'treemap'
+              })
+            : null
+    ],
     resolve: {
         dedupe: ['react', 'react-dom'],
         alias: {

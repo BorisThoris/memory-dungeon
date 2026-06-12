@@ -12,7 +12,7 @@ import {
     usesEndlessFloorSchedule
 } from './floor-mutator-schedule';
 import { GAME_RULES_VERSION } from './contracts';
-import { buildBoard, inspectBoardFairness } from './game';
+import { buildBoard, inspectBoardFairness } from './board-generation';
 
 describe('usesEndlessFloorSchedule', () => {
     it('is false for non-endless modes', () => {

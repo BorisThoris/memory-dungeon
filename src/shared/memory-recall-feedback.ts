@@ -1,7 +1,6 @@
 import {
     MAX_PENDING_MEMORIZE_BONUS_MS,
     RECALL_CLUE_MATCH_SCORE,
-    RECALL_FOCUS_MAX,
     RECALL_FOCUS_MATCH_SCORE,
     type RouteChoice,
     type RunState,
@@ -9,7 +8,9 @@ import {
     type RelicId,
     type Tile
 } from './contracts';
+import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
 import { getCurrentDungeonNode } from './run-map';
+import { isSingletonUtilityPairKey } from './tile-identity';
 
 export type MemoryFeedbackTone = 'stable' | 'watch' | 'danger' | 'reward';
 
@@ -76,27 +77,15 @@ export interface MemorySymbolMap {
 
 const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
 
-const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
-
-const normalizedRecallFocus = (focus: number): number => clamp(focus, 0, RECALL_FOCUS_MAX);
-
-const SINGLETON_UTILITY_PAIR_KEYS = new Set(['__decoy__', '__wild__', '__exit__', '__shop__', '__room__']);
-
 const isMemorySolvablePair = (pairKey: string, tiles: readonly Tile[]): boolean =>
-    tiles.length === 2 && !SINGLETON_UTILITY_PAIR_KEYS.has(pairKey);
-
-const tileHasRememberedClue = (tile: Tile): boolean =>
-    tile.routeSpecialRevealed === true ||
-    tile.lanternScouted === true ||
-    tile.scoutRevealSource != null ||
-    tile.dungeonCardState === 'revealed';
+    tiles.length === 2 && !isSingletonUtilityPairKey(pairKey);
 
 const tileMemoryLabel = (tile: Tile): string => tile.label || tile.symbol || tile.id;
 
 const tileIsCleared = (tile: Tile): boolean => tile.state === 'matched' || tile.state === 'removed';
 
 const tileIsKnownToMemory = (tile: Tile, pinnedTileIds: ReadonlySet<string>): boolean =>
-    tile.state === 'flipped' || tile.state === 'matched' || tileHasRememberedClue(tile) || pinnedTileIds.has(tile.id);
+    tile.state === 'flipped' || tile.state === 'matched' || tileHasRecallClue(tile) || pinnedTileIds.has(tile.id);
 
 const buildSymbolMap = (tiles: readonly Tile[], pinnedTileIds: readonly string[], forgottenTileIds: readonly string[]): MemorySymbolMap => {
     const pinnedSet = new Set(pinnedTileIds);
@@ -658,7 +647,7 @@ const buildMemoryAssistLines = (run: RunState): MemoryFeedbackLine[] =>
 export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => {
     const board = run.board;
     const tiles = board?.tiles ?? [];
-    const rememberedClueTiles = tiles.filter(tileHasRememberedClue);
+    const rememberedClueTiles = tiles.filter(tileHasRecallClue);
     const forgottenTileIds = run.forgottenTileIdsThisFloor ?? [];
     const forgottenSet = new Set(forgottenTileIds);
     const forgottenSymbols = unique(
@@ -671,7 +660,7 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
         (tile) => tile.dungeonCardKind === 'enemy' && tile.dungeonCardState === 'revealed'
     );
     const activeRoute = getCurrentDungeonNode(run.dungeonRun);
-    const focus = normalizedRecallFocus(run.recallFocus);
+    const focus = normalizeRecallFocus(run.recallFocus);
     const nextCleanMatchBonus = focus * RECALL_FOCUS_MATCH_SCORE;
     const clueBonus = rememberedClueTiles.length > 0 ? RECALL_CLUE_MATCH_SCORE : 0;
     const symbolMap = buildSymbolMap(tiles, run.pinnedTileIds, forgottenTileIds);

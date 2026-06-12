@@ -1,16 +1,20 @@
 export {
-    boardHasGlassDecoy,
     buildBoard,
-    countFindablePairs,
+    type BuildBoardOptions
+} from './board-build-rules';
+export {
+    countFindablePairs
+} from './board-tile-generation-rules';
+export {
+    boardHasGlassDecoy,
     countFullyHiddenPairs,
     getWildTileIdFromBoard,
     inspectBoardFairness,
     inspectRunFairness,
-    isBoardComplete,
     type BoardFairnessIssue,
     type BoardFairnessIssueCode,
     type BoardFairnessReport,
-    type BuildBoardOptions,
-    type RunFairnessReport
-} from './game';
+    type RunFairnessReport,
+    isBoardComplete
+} from './board-inspection';
 

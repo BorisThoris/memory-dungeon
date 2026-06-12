@@ -1,8 +1,7 @@
 import type { BoardState, RunState, SaveData } from './contracts';
+import { isSingletonUtilityPairKey } from './tile-identity';
 
 export type OnboardingStepId = 'first_match' | 'recovery' | 'handoff';
-
-const SPECIAL_PAIR_KEYS = new Set(['__decoy__', '__wild__', '__exit__', '__shop__', '__room__']);
 
 export interface OnboardingStepRow {
     id: OnboardingStepId;
@@ -31,7 +30,7 @@ export interface PlayableOnboardingPrompt {
 
 const isSafeOnboardingTile = (board: BoardState, pairKey: string, tileId: string): boolean => {
     const tile = board.tiles.find((candidate) => candidate.id === tileId);
-    if (!tile || tile.state === 'matched' || SPECIAL_PAIR_KEYS.has(tile.pairKey)) {
+    if (!tile || tile.state === 'matched' || isSingletonUtilityPairKey(tile.pairKey)) {
         return false;
     }
     if (board.cursedPairKey === pairKey || board.wardPairKey === pairKey || board.bountyPairKey === pairKey) {

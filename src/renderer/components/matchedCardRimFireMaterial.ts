@@ -31,7 +31,7 @@ const innerHalfSize = new Vector2(
     CARD_PLANE_HEIGHT * 0.5 - matchedEdgeGeometry.innerPad
 );
 
-interface MatchedCardRimFireUniforms {
+export interface MatchedCardRimFireUniforms {
     uTime: { value: number };
     uSeed: { value: number };
     uIntensity: { value: number };

@@ -26,6 +26,23 @@ export interface TileBoardScreenPoint {
     clientY: number;
 }
 
+export type TileBoardGesturePoint = TileBoardScreenPoint;
+
+export interface TileBoardPinchGestureSnapshot {
+    anchorBoardX: number;
+    anchorBoardY: number;
+    pointerIds: [number, number];
+    startDistance: number;
+    startZoom: number;
+}
+
+export interface TileBoardMouseDragSnapshot {
+    startPanX: number;
+    startPanY: number;
+    startWorldX: number;
+    startWorldY: number;
+}
+
 const BOARD_CAMERA_FIT_ZOOM = 1;
 const MOBILE_CAMERA_MIN_ZOOM = 0.01;
 const MOBILE_CAMERA_MAX_ZOOM = 2.8;
@@ -244,3 +261,149 @@ export const screenPointToWorld = (
         panY: normalizedY * viewportHeight
     };
 };
+
+export const getGestureCentroid = (
+    first: TileBoardGesturePoint,
+    second: TileBoardGesturePoint
+): TileBoardGesturePoint => ({
+    clientX: (first.clientX + second.clientX) / 2,
+    clientY: (first.clientY + second.clientY) / 2
+});
+
+export const getGestureDistance = (first: TileBoardGesturePoint, second: TileBoardGesturePoint): number =>
+    Math.max(1, Math.hypot(second.clientX - first.clientX, second.clientY - first.clientY));
+
+export const createPinchBoardGestureSnapshot = ({
+    centroidWorld,
+    firstPointerId,
+    firstTouch,
+    secondPointerId,
+    secondTouch,
+    viewport
+}: {
+    centroidWorld: Pick<TileBoardViewportState, 'panX' | 'panY'>;
+    firstPointerId: number;
+    firstTouch: TileBoardGesturePoint;
+    secondPointerId: number;
+    secondTouch: TileBoardGesturePoint;
+    viewport: TileBoardViewportState;
+}): TileBoardPinchGestureSnapshot => {
+    const activeScale = Math.max(viewport.fitZoom * viewport.zoom, 0.0001);
+
+    return {
+        anchorBoardX: (centroidWorld.panX - viewport.panX) / activeScale,
+        anchorBoardY: (centroidWorld.panY - viewport.panY) / activeScale,
+        pointerIds: [firstPointerId, secondPointerId],
+        startDistance: getGestureDistance(firstTouch, secondTouch),
+        startZoom: viewport.zoom
+    };
+};
+
+export const resolveAnchoredBoardViewport = ({
+    boardHeight,
+    boardWidth,
+    currentViewport,
+    nextZoom,
+    pointerWorld,
+    viewportHeight,
+    viewportWidth
+}: TileBoardWorldMetrics & {
+    currentViewport: TileBoardViewportState;
+    nextZoom: number;
+    pointerWorld: Pick<TileBoardViewportState, 'panX' | 'panY'>;
+}): TileBoardViewportState => {
+    const currentScale = Math.max(currentViewport.fitZoom * currentViewport.zoom, 0.0001);
+    const anchorBoardX = (pointerWorld.panX - currentViewport.panX) / currentScale;
+    const anchorBoardY = (pointerWorld.panY - currentViewport.panY) / currentScale;
+
+    return clampBoardViewport({
+        boardHeight,
+        boardWidth,
+        fitZoom: currentViewport.fitZoom,
+        panX: pointerWorld.panX - anchorBoardX * currentViewport.fitZoom * nextZoom,
+        panY: pointerWorld.panY - anchorBoardY * currentViewport.fitZoom * nextZoom,
+        viewportHeight,
+        viewportWidth,
+        zoom: nextZoom
+    });
+};
+
+export const resolveWheelBoardViewport = ({
+    boardHeight,
+    boardWidth,
+    currentViewport,
+    deltaY,
+    pointerWorld,
+    viewportHeight,
+    viewportWidth
+}: TileBoardWorldMetrics & {
+    currentViewport: TileBoardViewportState;
+    deltaY: number;
+    pointerWorld: Pick<TileBoardViewportState, 'panX' | 'panY'>;
+}): TileBoardViewportState =>
+    resolveAnchoredBoardViewport({
+        boardHeight,
+        boardWidth,
+        currentViewport,
+        nextZoom: clampBoardZoom(currentViewport.zoom * Math.exp(-deltaY * 0.0016)),
+        pointerWorld,
+        viewportHeight,
+        viewportWidth
+    });
+
+export const resolvePinchBoardViewport = ({
+    boardHeight,
+    boardWidth,
+    centroidWorld,
+    firstTouch,
+    fitZoom,
+    secondTouch,
+    snapshot,
+    viewportHeight,
+    viewportWidth
+}: TileBoardWorldMetrics & {
+    centroidWorld: Pick<TileBoardViewportState, 'panX' | 'panY'>;
+    firstTouch: TileBoardGesturePoint;
+    fitZoom: number;
+    secondTouch: TileBoardGesturePoint;
+    snapshot: TileBoardPinchGestureSnapshot;
+}): TileBoardViewportState => {
+    const nextZoom = snapshot.startZoom * (getGestureDistance(firstTouch, secondTouch) / snapshot.startDistance);
+
+    return clampBoardViewport({
+        boardHeight,
+        boardWidth,
+        fitZoom,
+        panX: centroidWorld.panX - snapshot.anchorBoardX * fitZoom * nextZoom,
+        panY: centroidWorld.panY - snapshot.anchorBoardY * fitZoom * nextZoom,
+        viewportHeight,
+        viewportWidth,
+        zoom: nextZoom
+    });
+};
+
+export const resolveDraggedBoardViewport = ({
+    boardHeight,
+    boardWidth,
+    currentZoom,
+    currentWorld,
+    fitZoom,
+    snapshot,
+    viewportHeight,
+    viewportWidth
+}: TileBoardWorldMetrics & {
+    currentWorld: Pick<TileBoardViewportState, 'panX' | 'panY'>;
+    currentZoom: number;
+    fitZoom: number;
+    snapshot: TileBoardMouseDragSnapshot;
+}): TileBoardViewportState =>
+    clampBoardViewport({
+        boardHeight,
+        boardWidth,
+        fitZoom,
+        panX: snapshot.startPanX + (currentWorld.panX - snapshot.startWorldX),
+        panY: snapshot.startPanY + (currentWorld.panY - snapshot.startWorldY),
+        viewportHeight,
+        viewportWidth,
+        zoom: currentZoom
+    });

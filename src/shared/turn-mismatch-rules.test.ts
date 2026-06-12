@@ -1,0 +1,149 @@
+import { describe, expect, it } from 'vitest';
+
+import { type BoardState, type RunState, type Tile } from './contracts';
+import { createNewRun } from './run-creation-rules';
+import { calculateMismatchPenalty, createHiddenMismatchBoard, resolveMismatchTurnTransition } from './turn-mismatch-rules';
+
+const tile = (id: string, state: Tile['state'] = 'flipped', overrides: Partial<Tile> = {}): Tile => ({
+    id,
+    pairKey: id,
+    symbol: id,
+    label: id,
+    state,
+    ...overrides
+});
+
+const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState => ({
+    ...createNewRun(0, { runSeed: 21_001 }).board!,
+    tiles,
+    flippedTileIds: tiles.filter((candidate) => candidate.state === 'flipped').map((candidate) => candidate.id),
+    ...overrides
+});
+
+const run = (b: BoardState, overrides: Partial<RunState> = {}): RunState => ({
+    ...createNewRun(0, { runSeed: 21_002 }),
+    board: b,
+    pendingMemorizeBonusMs: 0,
+    stats: {
+        ...createNewRun(0, { runSeed: 21_003 }).stats,
+        tries: 2,
+        guardTokens: 0
+    },
+    ...overrides
+});
+
+describe('turn mismatch rules', () => {
+    it('hides mismatched tiles and preserves sprung trap state', () => {
+        const b = board([
+            tile('a'),
+            tile('b'),
+            tile('trap', 'flipped', { dungeonCardKind: 'trap', dungeonCardState: 'resolved' })
+        ]);
+
+        const hidden = createHiddenMismatchBoard(b, ['a', 'trap']);
+
+        expect(hidden.flippedTileIds).toEqual([]);
+        expect(hidden.tiles.find((candidate) => candidate.id === 'a')?.state).toBe('hidden');
+        expect(hidden.tiles.find((candidate) => candidate.id === 'b')?.state).toBe('flipped');
+        expect(hidden.tiles.find((candidate) => candidate.id === 'trap')?.state).toBe('flipped');
+    });
+
+    it('uses guard tokens before life loss', () => {
+        const b = board([tile('a'), tile('b')]);
+        const penalty = calculateMismatchPenalty(run(b, {
+            stats: { ...run(b).stats, guardTokens: 1 }
+        }), b, 1);
+
+        expect(penalty).toMatchObject({
+            consumesGuardToken: true,
+            guardTokens: 0,
+            lives: 4,
+            lostLife: false,
+            status: 'playing',
+            tries: 3
+        });
+    });
+
+    it('applies first mismatch grace when eligible', () => {
+        const b = board([tile('a'), tile('b')], { matchedPairs: 0 });
+        const penalty = calculateMismatchPenalty(run(b, {
+            stats: { ...run(b).stats, tries: 0, guardTokens: 0 },
+            lives: 2
+        }), b, 1);
+
+        expect(penalty.hasGraceMismatch).toBe(true);
+        expect(penalty.lostLife).toBe(false);
+        expect(penalty.lives).toBe(2);
+    });
+
+    it('forces game over when mismatch contract is exceeded', () => {
+        const b = board([tile('a'), tile('b')]);
+        const penalty = calculateMismatchPenalty(run(b, {
+            activeContract: { noShuffle: false, noDestroy: false, maxMismatches: 2 },
+            stats: { ...run(b).stats, tries: 2, guardTokens: 0 }
+        }), b, 1);
+
+        expect(penalty.contractFail).toBe(true);
+        expect(penalty.lives).toBe(0);
+        expect(penalty.status).toBe('gameOver');
+    });
+
+    it('resolves mismatch transition bookkeeping', () => {
+        const b = board([tile('a'), tile('b')]);
+        const base = run(b, {
+            recallFocus: 2,
+            forgottenTileIdsThisFloor: ['old'],
+            stats: { ...run(b).stats, currentStreak: 5, tries: 1, mismatches: 2 }
+        });
+
+        const resolved = resolveMismatchTurnTransition({
+            run: base,
+            board: b,
+            tileIds: ['a', 'b'],
+            sourceTiles: b.tiles,
+            triesDelta: 1,
+            decoyTouched: true
+        });
+
+        expect(resolved.board?.flippedTileIds).toEqual([]);
+        expect(resolved.board?.tiles.map((candidate) => candidate.state)).toEqual(['hidden', 'hidden']);
+        expect(resolved.recallFocus).toBe(1);
+        expect(resolved.recallMistakesThisFloor).toBe(base.recallMistakesThisFloor + 1);
+        expect(resolved.forgottenTileIdsThisFloor).toEqual(['old', 'a', 'b']);
+        expect(resolved.decoyFlippedThisFloor).toBe(true);
+        expect(resolved.stats.tries).toBe(2);
+        expect(resolved.stats.mismatches).toBe(3);
+        expect(resolved.stats.currentStreak).toBe(2);
+        expect(resolved.stickyBlockIndex).toBeNull();
+    });
+
+    it('springs revealed trap mismatches through the transition', () => {
+        const b = board([
+            tile('trap-a', 'flipped', {
+                pairKey: 'trap',
+                dungeonCardKind: 'trap',
+                dungeonCardState: 'revealed'
+            }),
+            tile('trap-b', 'flipped', {
+                pairKey: 'trap',
+                dungeonCardKind: 'trap',
+                dungeonCardState: 'revealed'
+            }),
+            tile('c')
+        ]);
+        const base = run(b, { lives: 3 });
+
+        const resolved = resolveMismatchTurnTransition({
+            run: base,
+            board: b,
+            tileIds: ['trap-a', 'c'],
+            sourceTiles: [b.tiles[0]!, b.tiles[2]!],
+            triesDelta: 1,
+            decoyTouched: false
+        });
+
+        expect(resolved.dungeonTrapsTriggered).toBe(base.dungeonTrapsTriggered + 1);
+        expect(resolved.lives).toBeLessThanOrEqual(3);
+        expect(resolved.board?.tiles.find((candidate) => candidate.id === 'trap-a')?.dungeonCardState).toBe('resolved');
+    });
+});

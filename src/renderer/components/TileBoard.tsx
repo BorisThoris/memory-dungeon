@@ -1,6 +1,5 @@
 import { Canvas } from '@react-three/fiber';
 import {
-    Component,
     forwardRef,
     useCallback,
     useEffect,
@@ -10,16 +9,10 @@ import {
     useRef,
     useState,
     type CSSProperties,
-    type FocusEvent,
-    type ReactNode
+    type FocusEvent
 } from 'react';
 import { flushSync } from 'react-dom';
-import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RunStatus, Tile } from '../../shared/contracts';
-import { getFindableRewardText } from '../../shared/findables';
-import { getDungeonCardCopy } from '../../shared/dungeon-rules';
-import { getDungeonCardKnowledge } from '../../shared/dungeon-cards';
-import { getHazardTileTelegraph } from '../../shared/hazard-tiles';
-import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
+import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
 import { isNarrowShortLandscapeForMenuStack, VIEWPORT_MOBILE_MAX } from '../breakpoints';
 import { useCoarsePointer } from '../hooks/useCoarsePointer';
@@ -28,9 +21,6 @@ import { getMotionPermissionButtonLabels, shouldOfferDeviceMotionPermission } fr
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import styles from './TileBoard.module.css';
 import { playShuffleSfx, resumeAudioContext } from '../audio/gameSfx';
-import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
-import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
-import { isTilePickable } from './tileBoardPick';
 import TileBoardPostFx from './TileBoardPostFx';
 import TileBoardScene, { type TileBoardSceneHandle, type TileHoverTiltState } from './TileBoardScene';
 import { getResolvingSelectionState } from './tileResolvingSelection';
@@ -40,11 +30,17 @@ import {
     MOBILE_CAMERA_FIT_MARGIN,
     ROOMY_BOARD_FIT_MARGIN,
     carryBoardViewportForward,
-    clampBoardZoom,
     clampBoardViewport,
+    createPinchBoardGestureSnapshot,
     createFittedBoardViewport,
+    getGestureCentroid,
     getBoardFitZoom,
+    resolveDraggedBoardViewport,
+    resolvePinchBoardViewport,
+    resolveWheelBoardViewport,
     screenPointToWorld,
+    type TileBoardGesturePoint,
+    type TileBoardPinchGestureSnapshot,
     type TileBoardViewportMetrics,
     type TileBoardViewportState
 } from './tileBoardViewport';
@@ -60,6 +56,15 @@ import {
     REG105_DATA_DAIS,
     REG105_DATA_STAGEVIEW
 } from '../gameplay/regPhase4PlayContract';
+import {
+    getFocusedTileLiveLabel,
+    getPickableTileIds,
+    moveFocusInGrid
+} from './tileBoardDomAccessibility';
+import { getDevE2ePairPositionsJson } from './tileBoardDomTelemetry';
+import { buildTileBoardDomSurfaceModel } from './tileBoardDomSurfaceModel';
+import { TileBoardErrorBoundary } from './tileBoardWebglBoundary';
+import { canUseWebGL } from './tileBoardWebglSupport';
 
 /** Minimum time the pre-board “gather / release” motif stays visible while GPU warm-up runs in parallel. */
 const BOARD_PRESTAGE_DWELL_MS = 360;
@@ -145,19 +150,6 @@ interface StageWorldViewport {
     width: number;
 }
 
-interface TouchPoint {
-    clientX: number;
-    clientY: number;
-}
-
-interface TouchGestureSnapshot {
-    anchorBoardX: number;
-    anchorBoardY: number;
-    pointerIds: [number, number];
-    startDistance: number;
-    startZoom: number;
-}
-
 interface MouseDragSnapshot {
     dragActive: boolean;
     pickOnRelease: boolean;
@@ -171,209 +163,11 @@ interface MouseDragSnapshot {
 }
 
 const MOUSE_PAN_DRAG_THRESHOLD_PX = 8;
-const DECOY_PAIR_KEY = '__decoy__';
-
 const EMPTY_TILE_IDS: ReadonlySet<string> = new Set();
 const BOARD_MARKER_READABILITY_CONTRACT =
     'hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective';
 
 const PRELOAD_READY_TIMEOUT_MS = 320;
-
-const canUseWebGL = (): boolean => {
-    if (typeof document === 'undefined') {
-        return false;
-    }
-
-    try {
-        const canvas = document.createElement('canvas');
-        return Boolean(canvas.getContext('webgl2') ?? canvas.getContext('webgl') ?? canvas.getContext('experimental-webgl'));
-    } catch {
-        return false;
-    }
-};
-
-const getTilePosition = (index: number, columns: number): { row: number; column: number } => ({
-    row: Math.floor(index / columns) + 1,
-    column: (index % columns) + 1
-});
-
-const getDungeonCardText = (tile: Tile): string => {
-    const copy = getDungeonCardCopy(tile);
-    return copy ? ` ${copy}` : '';
-};
-
-const getEnemyHazardText = (board: BoardState, tileId: string): string => {
-    const hazard = board.enemyHazards?.find((candidate) => candidate.currentTileId === tileId && candidate.state !== 'defeated');
-    if (hazard) {
-        const revealed = hazard.state === 'revealed' ? 'revealed ' : 'hidden ';
-        return ` Occupied by ${revealed}moving enemy patrol ${hazard.label}, ${hazard.hp}/${hazard.maxHp} HP, ${hazard.damage} damage.`;
-    }
-    const nextHazard = board.enemyHazards?.find((candidate) => candidate.nextTileId === tileId && candidate.state !== 'defeated');
-    return nextHazard
-        ? ` Next target of moving enemy patrol ${nextHazard.label}, ${nextHazard.hp}/${nextHazard.maxHp} HP, ${nextHazard.damage} damage.`
-        : '';
-};
-
-const getHazardTileText = (tile: Tile): string => {
-    const telegraph = getHazardTileTelegraph(tile);
-    return telegraph.hasHazard && telegraph.label && telegraph.telegraph
-        ? ` Hazard tile: ${telegraph.label}. ${telegraph.telegraph}`
-        : '';
-};
-
-const getTileAriaLabel = (board: BoardState, tile: Tile, faceUp: boolean, row: number, column: number): string => {
-    const base = faceUp
-        ? tile.pairKey === DECOY_PAIR_KEY
-            ? `Decoy trap tile, row ${row}, column ${column}. It never forms a pair.`
-            : `Tile ${tile.label}, row ${row}, column ${column}`
-        : `Hidden tile, row ${row}, column ${column}`;
-    const findableNote = tile.findableKind && faceUp && tile.state !== 'matched' ? ` ${getFindableRewardText(tile.findableKind)}` : '';
-    const scoutSourceNote =
-        tile.scoutRevealSource === 'omen_seal'
-            ? ' Scouted by Omen Seal.'
-            : tile.scoutRevealSource === 'lantern_ward' || tile.lanternScouted
-              ? ' Scouted by Lantern Ward.'
-              : '';
-    const routeNote =
-        (tile.routeSpecialKind || tile.routeCardKind) && tile.state !== 'matched'
-            ? ` Route card: ${
-                  tile.routeSpecialKind
-                      ? `${routeSpecialLabel(tile.routeSpecialKind)}. ${routeSpecialRewardLine(tile.routeSpecialKind)}`
-                      : tile.routeCardKind === 'safe_ward'
-                        ? 'Safe ward.'
-                        : tile.routeCardKind === 'greed_cache'
-                          ? 'Greed cache.'
-                          : 'Mystery veil.'
-              }${
-                  (tile.routeSpecialKind === 'mystery_veil' ||
-                      tile.routeSpecialKind === 'secret_door' ||
-                      tile.routeSpecialKind === 'omen_seal' ||
-                      tile.routeSpecialKind === 'mimic_cache' ||
-                      tile.routeSpecialKind === 'loaded_gateway' ||
-                      tile.routeSpecialKind === 'parasite_vessel') &&
-                  tile.routeSpecialRevealed
-                      ? tile.routeSpecialRevealSource === 'lantern_ward'
-                          ? ' Scouted by Lantern Ward.'
-                          : tile.routeSpecialRevealSource === 'omen_seal'
-                            ? ' Scouted by Omen Seal.'
-                          : ' Revealed by peek.'
-                      : ''
-              }`
-            : '';
-    const dungeonKnowledge = getDungeonCardKnowledge(tile, faceUp);
-    const dungeonNote = dungeonKnowledge.familyKnown ? getDungeonCardText(tile) : '';
-    const passiveScoutNote = scoutSourceNote && !routeNote.includes(scoutSourceNote.trim()) ? scoutSourceNote : '';
-    return `${base}${findableNote}${routeNote}${dungeonNote}${getHazardTileText(tile)}${passiveScoutNote}${getEnemyHazardText(board, tile.id)}`;
-};
-
-const getPowerTargetAriaText = (
-    tile: Tile,
-    destroyPowerVisualActive: boolean,
-    destroyEligibleTileIds: ReadonlySet<string>,
-    peekPowerVisualActive: boolean,
-    peekEligibleTileIds: ReadonlySet<string>,
-    strayPowerVisualActive: boolean,
-    strayEligibleTileIds: ReadonlySet<string>
-): string => {
-    if (destroyPowerVisualActive) {
-        if (destroyEligibleTileIds.has(tile.id)) {
-            return ' Destroy target: valid. Forfeits match score and pickups or rewards on this pair.';
-        }
-        return tile.state === 'hidden' ? ' Destroy target: invalid for this power.' : '';
-    }
-    if (peekPowerVisualActive) {
-        return peekEligibleTileIds.has(tile.id)
-            ? ' Peek target: valid. Reveals this one tile and locks Perfect Memory.'
-            : tile.state === 'hidden'
-              ? ' Peek target: invalid or already revealed.'
-              : '';
-    }
-    if (strayPowerVisualActive) {
-        return strayEligibleTileIds.has(tile.id)
-            ? ' Stray target: valid. Removes this safe singleton tile from play and locks Perfect Memory.'
-            : tile.state === 'hidden'
-              ? ' Stray target: invalid, paired, or protected.'
-              : '';
-    }
-    return '';
-};
-
-const getTouchCentroid = (first: TouchPoint, second: TouchPoint): TouchPoint => ({
-    clientX: (first.clientX + second.clientX) / 2,
-    clientY: (first.clientY + second.clientY) / 2
-});
-
-const getTouchDistance = (first: TouchPoint, second: TouchPoint): number =>
-    Math.max(1, Math.hypot(second.clientX - first.clientX, second.clientY - first.clientY));
-
-const getPickableTileIds = (board: BoardState, interactive: boolean, allowGambitThirdFlip: boolean): string[] => {
-    const flippedN = board.flippedTileIds.length;
-    const flipLocked = flippedN >= 2 && !(allowGambitThirdFlip && flippedN === 2);
-    const ids: string[] = [];
-    for (const tile of board.tiles) {
-        if (tile.state === 'removed') {
-            continue;
-        }
-        if (isTilePickable(tile, interactive, flipLocked)) {
-            ids.push(tile.id);
-        }
-    }
-    return ids;
-};
-
-const gridIndexFromTileId = (board: BoardState, tileId: string): number => {
-    const i = board.tiles.findIndex((t) => t.id === tileId);
-    return i >= 0 ? i : 0;
-};
-
-const moveFocusInGrid = (
-    board: BoardState,
-    fromId: string | null,
-    dir: 'up' | 'down' | 'left' | 'right',
-    interactive: boolean,
-    allowGambitThirdFlip: boolean
-): string | null => {
-    const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
-    if (pickable.size === 0) {
-        return null;
-    }
-    const cols = board.columns;
-    const rows = board.rows;
-    let startIdx = 0;
-    if (fromId && pickable.has(fromId)) {
-        startIdx = gridIndexFromTileId(board, fromId);
-    } else {
-        const firstPickable = board.tiles.find((t) => pickable.has(t.id));
-        startIdx = firstPickable ? gridIndexFromTileId(board, firstPickable.id) : 0;
-    }
-    const r = Math.floor(startIdx / cols);
-    const c = startIdx % cols;
-    const dr = dir === 'up' ? -1 : dir === 'down' ? 1 : 0;
-    const dc = dir === 'left' ? -1 : dir === 'right' ? 1 : 0;
-    let nr = r + dr;
-    let nc = c + dc;
-    while (nr >= 0 && nr < rows && nc >= 0 && nc < cols) {
-        const t = board.tiles[nr * cols + nc];
-        if (t.state !== 'removed' && pickable.has(t.id)) {
-            return t.id;
-        }
-        nr += dr;
-        nc += dc;
-    }
-    return fromId;
-};
-
-class TileBoardErrorBoundary extends Component<{ fallback: ReactNode; children: ReactNode }, { hasError: boolean }> {
-    state = { hasError: false };
-
-    static getDerivedStateFromError(): { hasError: boolean } {
-        return { hasError: true };
-    }
-
-    render(): ReactNode {
-        return this.state.hasError ? this.props.fallback : this.props.children;
-    }
-}
 
 // FX-016 matrix: docs/new_design/FX_REDUCE_MOTION_MATRIX.md
 const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard(
@@ -452,8 +246,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const sceneHandleRef = useRef<TileBoardSceneHandle | null>(null);
     const stageRef = useRef<HTMLDivElement>(null);
     const hoverTiltRef = useRef<TileHoverTiltState>({ tileId: null, x: 0, y: 0 });
-    const activeTouchPointsRef = useRef<Map<number, TouchPoint>>(new Map());
-    const gestureSnapshotRef = useRef<TouchGestureSnapshot | null>(null);
+    const activeTouchPointsRef = useRef<Map<number, TileBoardGesturePoint>>(new Map());
+    const gestureSnapshotRef = useRef<TileBoardPinchGestureSnapshot | null>(null);
     const mouseDragSnapshotRef = useRef<MouseDragSnapshot | null>(null);
     const gestureActiveRef = useRef(false);
     const selectionSuppressedRef = useRef(false);
@@ -508,174 +302,40 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         });
     }, [boardRenderDigest]);
 
-    const hiddenTileCount = useMemo(
-        () => board.tiles.filter((t) => t.state === 'hidden').length,
-        [board.tiles]
-    );
-
-    /** Row,col pairs for tiles still hidden — used by e2e (canvas picking has no per-tile DOM). */
-    const hiddenSlotsAttr = useMemo(
-        () =>
-            board.tiles
-                .map((tile, index) => {
-                    if (tile.state !== 'hidden') {
-                        return null;
-                    }
-                    const row = Math.floor(index / board.columns) + 1;
-                    const col = (index % board.columns) + 1;
-                    return `${row},${col}`;
-                })
-                .filter((v): v is string => v != null)
-                .join(';'),
-        [board.columns, board.tiles]
-    );
-    const hiddenTrapSlotsAttr = useMemo(() => {
-        if (!import.meta.env.DEV) {
-            return undefined;
-        }
-        return board.tiles
-            .map((tile, index) => {
-                if (tile.state !== 'hidden' || tile.dungeonCardKind !== 'trap' || tile.dungeonCardState !== 'hidden') {
-                    return null;
-                }
-                const row = Math.floor(index / board.columns) + 1;
-                const col = (index % board.columns) + 1;
-                return `${row},${col}`;
-            })
-            .filter((v): v is string => v != null)
-            .join(';');
-    }, [board.columns, board.tiles]);
-    const resolvedTrapSlotsAttr = useMemo(
-        () =>
-            board.tiles
-                .map((tile, index) => {
-                    if (tile.dungeonCardKind !== 'trap' || tile.dungeonCardState !== 'resolved') {
-                        return null;
-                    }
-                    const row = Math.floor(index / board.columns) + 1;
-                    const col = (index % board.columns) + 1;
-                    return `${row},${col}`;
-                })
-                .filter((v): v is string => v != null)
-                .join(';'),
-        [board.columns, board.tiles]
-    );
-    const resolvedTrapTileCount = useMemo(
-        () =>
-            board.tiles.filter((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved')
-                .length,
-        [board.tiles]
-    );
-    const pickableHiddenSlotsAttr = useMemo(() => {
-        if (!import.meta.env.DEV) {
-            return undefined;
-        }
-        const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
-        return board.tiles
-            .map((tile, index) => {
-                if (tile.state !== 'hidden' || !pickable.has(tile.id)) {
-                    return null;
-                }
-                const row = Math.floor(index / board.columns) + 1;
-                const col = (index % board.columns) + 1;
-                return `${row},${col}`;
-            })
-            .filter((v): v is string => v != null)
-            .join(';');
-    }, [allowGambitThirdFlip, board, interactive]);
-
-    const cardFeedbackStatesAttr = useMemo(() => {
-        const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
-        const enemyOccupied = new Set(
-            (board.enemyHazards ?? [])
-                .filter((hazard) => hazard.state !== 'defeated')
-                .map((hazard) => hazard.currentTileId)
-        );
-        const counts = new Map<string, number>();
-        const add = (key: string): void => {
-            counts.set(key, (counts.get(key) ?? 0) + 1);
-        };
-
-        for (const tile of board.tiles) {
-            if (tile.state === 'removed') {
-                add('removed');
-                continue;
-            }
-
-            const faceUp = tile.state !== 'hidden' || previewActive || debugPeekActive || peekSet.has(tile.id);
-            const resolvingSelection = getResolvingSelectionState(board, runStatus, tile.id);
-
-            if (tile.state === 'hidden' && !faceUp) {
-                add('hidden');
-            }
-            if (faceUp && tile.state === 'flipped') {
-                add('flipped');
-                add('selected');
-            }
-            if (tile.state === 'matched') {
-                add('matched');
-            }
-            if (resolvingSelection) {
-                add(resolvingSelection);
-            }
-            if (!pickable.has(tile.id) && tile.state !== 'matched') {
-                add('non-pickable');
-                add('disabled');
-            }
-            if (pickable.has(tile.id)) {
-                add('pickable');
-            }
-            if (focusedTileId === tile.id && boardApplicationFocused) {
-                add('focused');
-            }
-            if (tile.tileHazardKind) {
-                add('hazard');
-            }
-            if (tile.dungeonCardKind === 'trap') {
-                add(
-                    tile.dungeonCardState === 'resolved'
-                        ? 'trap-resolved'
-                        : tile.dungeonCardState === 'revealed'
-                          ? 'trap-revealed'
-                          : 'trap-armed'
-                );
-            }
-            if (tile.dungeonBossId) {
-                add('boss-marked');
-            }
-            if (tile.dungeonCardKind === 'enemy') {
-                add('enemy-card');
-            }
-            if (enemyOccupied.has(tile.id)) {
-                add('enemy-occupied');
-            }
-            if (tile.findableKind) {
-                add('relic');
-            }
-            if (tile.routeSpecialKind || tile.routeCardKind) {
-                add('route');
-            }
-            if (tile.dungeonCardKind || tile.dungeonBossId) {
-                add('objective');
-            }
-        }
-
-        return [...counts.entries()]
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([key, count]) => `${key}:${count}`)
-            .join(';');
+    const includeDevAttributes = import.meta.env.DEV;
+    const {
+        cardFeedbackStatesAttr,
+        hiddenSlotsAttr,
+        hiddenTileCount,
+        hiddenTrapSlotsAttr,
+        pickableHiddenSlotsAttr,
+        resolvedTrapSlotsAttr,
+        resolvedTrapTileCount
+    } = useMemo(() => {
+        return buildTileBoardDomSurfaceModel({
+            allowGambitThirdFlip,
+            board,
+            boardApplicationFocused,
+            debugPeekActive,
+            focusedTileId,
+            includeDevAttributes,
+            interactive,
+            peekRevealedTileIds: peekSet,
+            previewActive,
+            runStatus
+        });
     }, [
         allowGambitThirdFlip,
         board,
         boardApplicationFocused,
         debugPeekActive,
         focusedTileId,
+        includeDevAttributes,
         interactive,
         peekSet,
         previewActive,
         runStatus
     ]);
-
     useEffect(() => {
         const previous = previousResolvedTrapTileCountRef.current;
         previousResolvedTrapTileCountRef.current = resolvedTrapTileCount;
@@ -831,29 +491,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
      * Omitted in production builds — see `e2e/memorizeSnapshot.ts` `readDevPairPositionsFromFrame`.
      */
     const devE2ePairPositionsJson = useMemo(() => {
-        if (!import.meta.env.DEV) {
-            return undefined;
-        }
-        const byKey: Record<string, { row: number; col: number }[]> = {};
-        board.tiles.forEach((tile, index) => {
-            const row = Math.floor(index / board.columns) + 1;
-            const col = (index % board.columns) + 1;
-            const k = tile.pairKey;
-            if (!byKey[k]) {
-                byKey[k] = [];
-            }
-            byKey[k]!.push({ row, col });
-        });
-        const keys = Object.keys(byKey).filter((k) => byKey[k]!.length === 2);
-        if (keys.length < 2) {
-            return undefined;
-        }
-        const slim: Record<string, { row: number; col: number }[]> = {};
-        for (const k of keys) {
-            slim[k] = byKey[k]!;
-        }
-        return JSON.stringify(slim);
-    }, [board.columns, board.tiles]);
+        return getDevE2ePairPositionsJson(board, includeDevAttributes);
+    }, [board, includeDevAttributes]);
 
     useEffect(() => {
         const pickable = getPickableTileIds(board, interactive, allowGambitThirdFlip);
@@ -871,38 +510,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     }, [board, interactive, allowGambitThirdFlip]);
 
     const focusedTileLabel = useMemo(() => {
-        if (!focusedTileId) {
-            return '';
-        }
-        const idx = board.tiles.findIndex((t) => t.id === focusedTileId);
-        if (idx < 0) {
-            return '';
-        }
-        const tile = board.tiles[idx];
-        const faceUp =
-            tile.state !== 'hidden' || debugPeekActive || previewActive || peekSet.has(tile.id);
-        const { row, column } = getTilePosition(idx, board.columns);
-        let label = getTileAriaLabel(board, tile, faceUp, row, column);
-        label += getPowerTargetAriaText(
-            tile,
-            destroyPowerVisualActive,
+        return getFocusedTileLiveLabel({
+            board,
+            debugPeekActive,
             destroyEligibleTileIds,
-            peekPowerVisualActive,
+            destroyPowerVisualActive,
+            focusedTileId,
+            pairProximityHintsEnabled,
             peekEligibleTileIds,
-            strayPowerVisualActive,
-            strayEligibleTileIds
-        );
-        if (
-            pairProximityHintsEnabled &&
-            (runStatus === 'playing' || runStatus === 'resolving') &&
-            tile.state === 'flipped'
-        ) {
-            const d = getPairProximityGridDistance(board, tile.id);
-            if (d != null) {
-                label += pairProximityUiStrings.focusPairSteps(d);
-            }
-        }
-        return label;
+            peekPowerVisualActive,
+            peekRevealedTileIds: peekSet,
+            previewActive,
+            runStatus,
+            strayEligibleTileIds,
+            strayPowerVisualActive
+        });
     }, [
         board,
         debugPeekActive,
@@ -1371,7 +993,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             event.stopPropagation();
         };
 
-        const getTrackedGestureTouches = (): [TouchPoint, TouchPoint] | null => {
+        const getTrackedGestureTouches = (): [TileBoardGesturePoint, TileBoardGesturePoint] | null => {
             const snapshot = gestureSnapshotRef.current;
 
             if (snapshot) {
@@ -1397,18 +1019,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
             const [[firstPointerId, firstTouch], [secondPointerId, secondTouch]] = touches;
             const stageRect = stageNode.getBoundingClientRect();
-            const centroid = getTouchCentroid(firstTouch, secondTouch);
+            const centroid = getGestureCentroid(firstTouch, secondTouch);
             const centroidWorld = screenPointToWorld(centroid, stageRect, stageWorldViewport.width, stageWorldViewport.height);
             const activeViewport = viewportStateRef.current;
-            const activeScale = Math.max(activeViewport.fitZoom * activeViewport.zoom, 0.0001);
 
-            gestureSnapshotRef.current = {
-                anchorBoardX: (centroidWorld.panX - activeViewport.panX) / activeScale,
-                anchorBoardY: (centroidWorld.panY - activeViewport.panY) / activeScale,
-                pointerIds: [firstPointerId, secondPointerId],
-                startDistance: getTouchDistance(firstTouch, secondTouch),
-                startZoom: activeViewport.zoom
-            };
+            gestureSnapshotRef.current = createPinchBoardGestureSnapshot({
+                centroidWorld,
+                firstPointerId,
+                firstTouch,
+                secondPointerId,
+                secondTouch,
+                viewport: activeViewport
+            });
 
             syncGestureActive(true);
             syncSelectionSuppressed(true);
@@ -1424,22 +1046,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
             const [firstTouch, secondTouch] = trackedTouches;
             const stageRect = stageNode.getBoundingClientRect();
-            const centroid = getTouchCentroid(firstTouch, secondTouch);
+            const centroid = getGestureCentroid(firstTouch, secondTouch);
             const centroidWorld = screenPointToWorld(centroid, stageRect, stageWorldViewport.width, stageWorldViewport.height);
-            const nextZoom = snapshot.startZoom * (getTouchDistance(firstTouch, secondTouch) / snapshot.startDistance);
-            const nextPanX = centroidWorld.panX - snapshot.anchorBoardX * fitZoom * nextZoom;
-            const nextPanY = centroidWorld.panY - snapshot.anchorBoardY * fitZoom * nextZoom;
 
             setViewportState((current) => {
-                const nextViewport = clampBoardViewport({
+                const nextViewport = resolvePinchBoardViewport({
                     boardHeight: boardWorldHeight,
                     boardWidth: boardWorldWidth,
+                    centroidWorld,
+                    firstTouch,
                     fitZoom,
-                    panX: nextPanX,
-                    panY: nextPanY,
+                    secondTouch,
+                    snapshot,
                     viewportHeight: stageWorldViewport.height,
                     viewportWidth: stageWorldViewport.width,
-                    zoom: nextZoom
                 });
 
                 viewportStateRef.current = nextViewport;
@@ -1622,24 +1242,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 stageWorldViewport.width,
                 stageWorldViewport.height
             );
-            const currentViewport = viewportStateRef.current;
-            const currentScale = Math.max(currentViewport.fitZoom * currentViewport.zoom, 0.0001);
-            const nextZoom = clampBoardZoom(currentViewport.zoom * Math.exp(-event.deltaY * 0.0016));
-            const anchorBoardX = (pointerWorld.panX - currentViewport.panX) / currentScale;
-            const anchorBoardY = (pointerWorld.panY - currentViewport.panY) / currentScale;
-            const nextPanX = pointerWorld.panX - anchorBoardX * currentViewport.fitZoom * nextZoom;
-            const nextPanY = pointerWorld.panY - anchorBoardY * currentViewport.fitZoom * nextZoom;
 
             setViewportState((current) => {
-                const nextViewport = clampBoardViewport({
+                const nextViewport = resolveWheelBoardViewport({
                     boardHeight: boardWorldHeight,
                     boardWidth: boardWorldWidth,
-                    fitZoom,
-                    panX: nextPanX,
-                    panY: nextPanY,
+                    currentViewport: current,
+                    deltaY: event.deltaY,
+                    pointerWorld,
                     viewportHeight: stageWorldViewport.height,
-                    viewportWidth: stageWorldViewport.width,
-                    zoom: nextZoom
+                    viewportWidth: stageWorldViewport.width
                 });
 
                 viewportStateRef.current = nextViewport;
@@ -1716,19 +1328,17 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 stageWorldViewport.width,
                 stageWorldViewport.height
             );
-            const nextPanX = snapshot.startPanX + (currentWorld.panX - snapshot.startWorldX);
-            const nextPanY = snapshot.startPanY + (currentWorld.panY - snapshot.startWorldY);
 
             setViewportState((current) => {
-                const nextViewport = clampBoardViewport({
+                const nextViewport = resolveDraggedBoardViewport({
                     boardHeight: boardWorldHeight,
                     boardWidth: boardWorldWidth,
+                    currentWorld,
+                    currentZoom: current.zoom,
                     fitZoom,
-                    panX: nextPanX,
-                    panY: nextPanY,
+                    snapshot,
                     viewportHeight: stageWorldViewport.height,
-                    viewportWidth: stageWorldViewport.width,
-                    zoom: current.zoom
+                    viewportWidth: stageWorldViewport.width
                 });
 
                 viewportStateRef.current = nextViewport;

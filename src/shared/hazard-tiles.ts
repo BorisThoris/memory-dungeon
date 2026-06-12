@@ -1,8 +1,6 @@
 import type { BoardState, FeaturedObjectiveId, HazardTileKind, Tile } from './contracts';
 import { CORE_SAFE_MEMORY_TAX, type MechanicTokenId, type MemoryTaxScore } from './mechanic-feedback';
-
-/** Keep in sync with `DECOY_PAIR_KEY` in `game.ts`; imported there would create a shared helper cycle. */
-const DECOY_PAIR_KEY = '__decoy__';
+import { DECOY_PAIR_KEY } from './tile-identity';
 
 export type HazardTileFamily = 'penalty' | 'reward' | 'dual';
 export type HazardTileTrigger = 'flip' | 'mismatch' | 'match';

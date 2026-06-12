@@ -1,5 +1,6 @@
 import type { BoardState, FeaturedObjectiveId, LevelResult, RunState } from './contracts';
 import { getFeaturedObjectiveLabel } from './floor-mutator-schedule';
+import { getFeaturedObjectiveRewardCopy, getFlipParLimit } from './secondary-objective-rules';
 
 export type SecondaryObjectiveState = 'active' | 'completed' | 'failed';
 export type LevelResultTagId =
@@ -31,8 +32,6 @@ export interface SecondaryObjectiveProgress {
     failureReason: string | null;
     reward: string;
 }
-
-const flipParLimit = (pairCount: number): number => Math.ceil(pairCount * 1.25) + 2;
 
 export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultTagDefinition> = {
     scholar_style: {
@@ -166,21 +165,6 @@ export const getVisibleLevelResultTags = (
 export const formatLevelResultTagLabel = (tag: string): string =>
     LEVEL_RESULT_TAG_DEFINITIONS[tag as LevelResultTagId]?.label ?? tag;
 
-const objectiveReward = (id: FeaturedObjectiveId): string => {
-    switch (id) {
-        case 'scholar_style':
-            return '+40 score and featured-objective Favor when scheduled.';
-        case 'glass_witness':
-            return '+35 score and featured-objective Favor when scheduled.';
-        case 'cursed_last':
-            return '+50 score and featured-objective Favor when scheduled.';
-        case 'flip_par':
-            return '+30 score and featured-objective Favor when scheduled.';
-        default:
-            return 'Bonus score and Favor when scheduled.';
-    }
-};
-
 export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjectiveProgress | null => {
     const board = run.board;
     const id = board?.featuredObjectiveId;
@@ -195,7 +179,7 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
 
     if (run.lastLevelResult?.featuredObjectiveId === id) {
         state = run.lastLevelResult.featuredObjectiveCompleted ? 'completed' : 'failed';
-        const reward = objectiveReward(id);
+        const reward = getFeaturedObjectiveRewardCopy(id);
         return {
             id,
             label,
@@ -228,7 +212,7 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
             detail = state === 'failed' ? `Failed: ${failureReason}` : 'Clear the cursed pair last among real pairs.';
             break;
         case 'flip_par': {
-            const limit = flipParLimit(board.pairCount);
+            const limit = getFlipParLimit(board.pairCount);
             state = run.matchResolutionsThisFloor > limit ? 'failed' : 'active';
             condition = `Stay within match-resolution par (${run.matchResolutionsThisFloor}/${limit}).`;
             failureReason = state === 'failed' ? `Match-resolution par exceeded (${run.matchResolutionsThisFloor}/${limit}).` : null;
@@ -252,7 +236,7 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
         condition,
         detail,
         failureReason,
-        reward: objectiveReward(id)
+        reward: getFeaturedObjectiveRewardCopy(id)
     };
 };
 

@@ -1,7 +1,7 @@
 /**
  * Relic **pool and milestone selection** (`RELIC_POOL`, `rollRelicOptions`, `needsRelicPick`).
  * Draft uses **rarity + weights** (`RELIC_DRAFT`) and in-repo {@link pickWeightedWithoutReplacement}.
- * Per-relic gameplay lives in `game.ts` (`applyRelicImmediate`, memorize duration, shuffle/destroy economy, parasite ward, etc.).
+ * Per-relic immediate gameplay lives in `relic-immediate-rules`; phase and economy effects live with their owning systems.
  *
  * Balance cross-check: `docs/BALANCE_NOTES.md` (Relic roster) — update when adding IDs or changing memorize /
  * charge numbers; `relicBalanceDoc.test.ts` guards key doc strings.

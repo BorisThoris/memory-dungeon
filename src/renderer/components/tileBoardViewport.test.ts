@@ -2,9 +2,15 @@ import { describe, expect, it, vi } from 'vitest';
 import {
     DESKTOP_STAGE_FIT_MARGIN,
     clampBoardViewport,
+    createPinchBoardGestureSnapshot,
     createRafCoalescedViewportNotifier,
     getBoardFitZoom,
+    getGestureCentroid,
+    getGestureDistance,
     MOBILE_CAMERA_FIT_MARGIN,
+    resolveDraggedBoardViewport,
+    resolvePinchBoardViewport,
+    resolveWheelBoardViewport,
     screenPointToWorld,
     type TileBoardScreenPoint
 } from './tileBoardViewport';
@@ -106,5 +112,92 @@ describe('tileBoardViewport', () => {
 
         expect(viewport.panX).toBe(250);
         expect(viewport.panY).toBe(250);
+    });
+
+    it('creates pinch snapshots around the board-space anchor under the gesture centroid', () => {
+        const first = { clientX: 80, clientY: 100 };
+        const second = { clientX: 120, clientY: 100 };
+        const centroid = getGestureCentroid(first, second);
+
+        const snapshot = createPinchBoardGestureSnapshot({
+            centroidWorld: { panX: 20, panY: -10 },
+            firstPointerId: 7,
+            firstTouch: first,
+            secondPointerId: 9,
+            secondTouch: second,
+            viewport: { fitZoom: 2, panX: 10, panY: -20, zoom: 1.25 }
+        });
+
+        expect(centroid).toEqual({ clientX: 100, clientY: 100 });
+        expect(snapshot.pointerIds).toEqual([7, 9]);
+        expect(snapshot.startDistance).toBe(40);
+        expect(snapshot.anchorBoardX).toBeCloseTo(4, 5);
+        expect(snapshot.anchorBoardY).toBeCloseTo(4, 5);
+    });
+
+    it('resolves pinch zoom while keeping the starting board anchor under the moving centroid', () => {
+        const snapshot = createPinchBoardGestureSnapshot({
+            centroidWorld: { panX: 0, panY: 0 },
+            firstPointerId: 1,
+            firstTouch: { clientX: 90, clientY: 100 },
+            secondPointerId: 2,
+            secondTouch: { clientX: 110, clientY: 100 },
+            viewport: { fitZoom: 1, panX: 0, panY: 0, zoom: 1 }
+        });
+
+        const next = resolvePinchBoardViewport({
+            boardHeight: 400,
+            boardWidth: 400,
+            centroidWorld: { panX: 25, panY: -10 },
+            firstTouch: { clientX: 80, clientY: 100 },
+            fitZoom: 1,
+            secondTouch: { clientX: 120, clientY: 100 },
+            snapshot,
+            viewportHeight: 300,
+            viewportWidth: 300
+        });
+
+        expect(getGestureDistance({ clientX: 80, clientY: 100 }, { clientX: 120, clientY: 100 })).toBe(40);
+        expect(next.zoom).toBe(2);
+        expect(next.panX).toBe(25);
+        expect(next.panY).toBe(-10);
+    });
+
+    it('resolves wheel zoom around the pointer world anchor', () => {
+        const next = resolveWheelBoardViewport({
+            boardHeight: 400,
+            boardWidth: 400,
+            currentViewport: { fitZoom: 1, panX: 0, panY: 0, zoom: 1 },
+            deltaY: -200,
+            pointerWorld: { panX: 50, panY: -25 },
+            viewportHeight: 300,
+            viewportWidth: 300
+        });
+
+        expect(next.zoom).toBeGreaterThan(1);
+        expect(next.panX).toBeLessThan(0);
+        expect(next.panY).toBeGreaterThan(0);
+    });
+
+    it('resolves drag pan from the initial world-space grab point', () => {
+        const next = resolveDraggedBoardViewport({
+            boardHeight: 400,
+            boardWidth: 400,
+            currentWorld: { panX: 55, panY: 15 },
+            currentZoom: 1.5,
+            fitZoom: 1,
+            snapshot: {
+                startPanX: 10,
+                startPanY: -20,
+                startWorldX: 40,
+                startWorldY: 25
+            },
+            viewportHeight: 300,
+            viewportWidth: 300
+        });
+
+        expect(next.panX).toBe(25);
+        expect(next.panY).toBe(-30);
+        expect(next.zoom).toBe(1.5);
     });
 });

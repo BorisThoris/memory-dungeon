@@ -4,6 +4,7 @@ import {
     createDungeonRunMapState,
     createRunMapState,
     chooseRunMapNode,
+    clearCurrentDungeonNode,
     enterSelectedDungeonNode,
     generateRunMapChoices,
     getDungeonMapPresentation,
@@ -86,6 +87,18 @@ describe('REG-069 run map route nodes', () => {
             status: 'current'
         });
         expect(entered.nodes.find((node) => node.id === 'choice:safe')?.status).toBe('skipped');
+    });
+
+    it('clears the current dungeon node without revealing a branch', () => {
+        const state = createDungeonRunMapState(99, GAME_RULES_VERSION, 1);
+
+        const cleared = clearCurrentDungeonNode(state, 1);
+
+        expect(cleared.currentFloor).toBe(1);
+        expect(cleared.currentNodeId).toBe(state.currentNodeId);
+        expect(cleared.nodes.find((node) => node.id === state.currentNodeId)).toMatchObject({
+            status: 'cleared'
+        });
     });
 
     it('keeps skipped route siblings from reopening after a branch is selected', () => {

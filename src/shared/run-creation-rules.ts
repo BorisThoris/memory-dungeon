@@ -1,0 +1,323 @@
+import {
+    GAME_RULES_VERSION,
+    INITIAL_LIVES,
+    INITIAL_RECALL_FOCUS,
+    INITIAL_REGION_SHUFFLE_CHARGES,
+    INITIAL_SHUFFLE_CHARGES,
+    type BoardState,
+    type MutatorId,
+    type RelicId,
+    type RunState,
+    type Tile,
+    type WeakerShuffleMode
+} from './contracts';
+import { createBonusRewardLedger } from './bonus-rewards';
+import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
+import { DAILY_MUTATOR_TABLE } from './mutators';
+import { applyRelicImmediate } from './relic-immediate-rules';
+import { deriveDailyMutatorIndex, deriveDailyRunSeed, formatDailyDateKeyUtc } from './rng';
+import { createDungeonRunMapState } from './run-map';
+import { countFindablePairs } from './board-tile-generation-rules';
+import { boardHasGlassDecoy, getWildTileIdFromBoard } from './board-inspection';
+import { DECOY_PAIR_KEY } from './tile-identity';
+import { getMemorizeDurationForRun } from './scoring-rules';
+import { createSessionStats } from './session-stats-rules';
+import { createTimerState } from './run-timer-rules';
+import { buildBoard } from './board-build-rules';
+
+const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
+
+export interface CreateRunOptions {
+    runSeed?: number;
+    gameMode?: RunState['gameMode'];
+    activeMutators?: MutatorId[];
+    practiceMode?: boolean;
+    activeContract?: RunState['activeContract'];
+    dailyDateKeyUtc?: string | null;
+    puzzleId?: string | null;
+    gauntletDurationMs?: number | null;
+    fixedBoard?: BoardState | null;
+    initialRelicIds?: RelicId[];
+    /** Import / debug: use historical rules version for same tile order. */
+    runRulesVersionOverride?: number;
+    /** H4: add wild tile to generated boards. */
+    enableWildJoker?: boolean;
+    weakerShuffleMode?: WeakerShuffleMode;
+    shuffleScoreTaxActive?: boolean;
+    /** Hook powers: defaults on if undefined. */
+    enablePeek?: boolean;
+    initialStrayRemoveCharges?: number;
+    resolveDelayMultiplier?: number;
+    echoFeedbackEnabled?: boolean;
+    wildMenuRun?: boolean;
+    dungeonShowcaseRun?: boolean;
+    /** First-run guidance: build floor 1 as ordinary real pairs so prompts never target specials. */
+    onboardingSafeFirstFloor?: boolean;
+    /** Copied from save: +1 relic pick at each milestone when meta unlock is active. */
+    metaRelicDraftExtraPerMilestone?: number;
+}
+
+const randomRunSeed = (): number => Math.floor(Math.random() * 0x7fffffff);
+
+export const createNewRun = (bestScore: number, options: CreateRunOptions = {}): RunState => {
+    const runSeed = options.runSeed ?? randomRunSeed();
+    const gameMode = options.gameMode ?? 'endless';
+    const rulesVersion = options.runRulesVersionOverride ?? GAME_RULES_VERSION;
+    let activeMutators = options.activeMutators ?? [];
+    let initialFloorTag: BoardState['floorTag'] = 'normal';
+    let initialFloorArchetypeId: BoardState['floorArchetypeId'] = null;
+    let initialFeaturedObjectiveId: BoardState['featuredObjectiveId'] = null;
+    let initialCycleFloor: number | null = null;
+    const useOnboardingSafeFirstFloor = options.onboardingSafeFirstFloor === true && gameMode === 'endless';
+    if (
+        gameMode === 'endless' &&
+        usesEndlessFloorSchedule(gameMode, rulesVersion) &&
+        !options.wildMenuRun &&
+        !useOnboardingSafeFirstFloor &&
+        activeMutators.length === 0
+    ) {
+        const entry = pickFloorScheduleEntry(runSeed, rulesVersion, 1, gameMode);
+        activeMutators = entry.mutators;
+        initialFloorTag = entry.floorTag;
+        initialFloorArchetypeId = entry.floorArchetypeId;
+        initialFeaturedObjectiveId = entry.featuredObjectiveId;
+        initialCycleFloor = entry.cycleFloor;
+    }
+    const weakerShuffleMode: WeakerShuffleMode = options.weakerShuffleMode ?? 'full';
+    const shuffleScoreTaxActive = options.shuffleScoreTaxActive ?? false;
+    const enableWildJoker = options.enableWildJoker ?? false;
+    const peekCharges = options.enablePeek === false ? 0 : 1;
+    const board =
+        options.fixedBoard ??
+        buildBoard(1, {
+            runSeed,
+            runRulesVersion: rulesVersion,
+            activeMutators: useOnboardingSafeFirstFloor ? [] : activeMutators,
+            includeWildTile: enableWildJoker,
+            floorTag: initialFloorTag,
+            floorArchetypeId: initialFloorArchetypeId,
+            featuredObjectiveId: initialFeaturedObjectiveId,
+            cycleFloor: initialCycleFloor,
+            gameMode: useOnboardingSafeFirstFloor ? undefined : gameMode,
+            suppressFindables: useOnboardingSafeFirstFloor
+        });
+    const dungeonRun = createDungeonRunMapState(runSeed, rulesVersion, 1);
+
+    const run: RunState = {
+        status: 'memorize',
+        lives: INITIAL_LIVES,
+        board,
+        stats: createSessionStats(bestScore),
+        achievementsEnabled: !options.practiceMode,
+        debugUsed: false,
+        debugPeekActive: false,
+        pendingMemorizeBonusMs: 0,
+        shuffleCharges: INITIAL_SHUFFLE_CHARGES,
+        destroyPairCharges: 0,
+        pinnedTileIds: [],
+        powersUsedThisRun: false,
+        timerState: createTimerState({ memorizeRemainingMs: null }),
+        lastLevelResult: null,
+        lastRunSummary: null,
+        runSeed,
+        runRulesVersion: rulesVersion,
+        gameMode,
+        shuffleNonce: 0,
+        activeMutators,
+        relicIds: [...(options.initialRelicIds ?? [])],
+        relicTiersClaimed: 0,
+        bonusRelicPicksNextOffer: 0,
+        favorBonusRelicPicksNextOffer: 0,
+        relicFavorProgress: 0,
+        shopGold: 0,
+        shopOffers: [],
+        shopRerolls: 0,
+        featuredObjectiveStreak: 0,
+        endlessRiskWager: null,
+        pendingRouteCardPlan: null,
+        sideRoom: null,
+        dungeonRun,
+        bonusRewardLedger: createBonusRewardLedger(),
+        metaRelicDraftExtraPerMilestone: options.metaRelicDraftExtraPerMilestone ?? 0,
+        relicOffer: null,
+        activeContract: options.activeContract ?? null,
+        practiceMode: options.practiceMode ?? false,
+        dailyDateKeyUtc: options.dailyDateKeyUtc ?? null,
+        puzzleId: options.puzzleId ?? null,
+        stickyBlockIndex: null,
+        parasiteFloors: 0,
+        freeShuffleThisFloor: false,
+        gauntletDeadlineMs:
+            options.gauntletDurationMs != null ? Date.now() + options.gauntletDurationMs : null,
+        gauntletSessionDurationMs: options.gauntletDurationMs ?? null,
+        dailyStreakCount: 0,
+        flipHistory: [],
+        peekCharges,
+        peekRevealedTileIds: [],
+        undoUsesThisFloor: 1,
+        gambitAvailableThisFloor: true,
+        gambitThirdFlipUsed: false,
+        wildTileId: getWildTileIdFromBoard(board),
+        wildMatchesRemaining: enableWildJoker ? 1 : 0,
+        strayRemoveCharges: options.initialStrayRemoveCharges ?? 0,
+        strayRemoveArmed: false,
+        matchScoreMultiplier: 1,
+        nBackMatchCounter: 0,
+        nBackAnchorPairKey: null,
+        matchedPairKeysThisRun: [],
+        weakerShuffleMode,
+        shuffleScoreTaxActive,
+        resolveDelayMultiplier: options.resolveDelayMultiplier ?? 1,
+        echoFeedbackEnabled: options.echoFeedbackEnabled ?? true,
+        wildMenuRun: options.wildMenuRun ?? false,
+        dungeonShowcaseRun: options.dungeonShowcaseRun ?? false,
+        shuffleUsedThisFloor: false,
+        destroyUsedThisFloor: false,
+        decoyFlippedThisFloor: false,
+        glassDecoyActiveThisFloor: boardHasGlassDecoy(board),
+        cursedMatchedEarlyThisFloor: false,
+        matchResolutionsThisFloor: 0,
+        parasiteWardRemaining: 0,
+        flashPairCharges:
+            options.practiceMode || options.wildMenuRun ? 1 : 0,
+        flashPairRevealedTileIds: [],
+        regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,
+        regionShuffleRowArmed: null,
+        regionShuffleFreeThisFloor: false,
+        pinsPlacedCountThisRun: 0,
+        findablesClaimedThisFloor: 0,
+        findablesTotalThisFloor: countFindablePairs(board.tiles),
+        recallFocus: INITIAL_RECALL_FOCUS,
+        recallMatchesThisFloor: 0,
+        recallMistakesThisFloor: 0,
+        recallBonusScoreThisFloor: 0,
+        forgottenTileIdsThisFloor: [],
+        hazardTileTriggersThisFloor: 0,
+        hazardShuffleSnaresThisFloor: 0,
+        hazardCascadeCachesThisFloor: 0,
+        hazardMirrorDecoysThisFloor: 0,
+        hazardFragileCacheClaimsThisFloor: 0,
+        hazardFragileCacheBreaksThisFloor: 0,
+        hazardTollCachesThisFloor: 0,
+        hazardFuseCachesThisFloor: 0,
+        hazardFuseCacheExpiredClaimsThisFloor: 0,
+        lanternWardScoutsThisFloor: 0,
+        omenSealScoutsThisFloor: 0,
+        mimicCacheClaimsThisFloor: 0,
+        mimicCacheBitesThisFloor: 0,
+        mimicCacheGuardBitesThisFloor: 0,
+        anchorSealChargesThisFloor: 0,
+        anchorSealUsesThisFloor: 0,
+        loadedGatewayPlansThisFloor: 0,
+        catalystAltarUpgradesThisFloor: 0,
+        parasiteVesselConversionsThisFloor: 0,
+        pinLatticeRewardsThisFloor: 0,
+        safeHazardWardChargesThisFloor: 0,
+        safeHazardWardsUsedThisFloor: 0,
+        shiftingSpotlightNonce: 0,
+        dungeonEnemiesDefeated: 0,
+        dungeonEnemiesDefeatedThisFloor: 0,
+        dungeonTrapsTriggered: 0,
+        dungeonTrapsResolvedThisFloor: 0,
+        dungeonTreasuresOpened: 0,
+        dungeonTreasuresOpenedThisFloor: 0,
+        dungeonGatewaysUsed: 0,
+        dungeonGatewaysUsedThisFloor: 0,
+        dungeonKeys: {},
+        dungeonMasterKeys: 0,
+        dungeonShopVisitedThisFloor: false,
+        enemyHazardHitsThisFloor: 0,
+        enemyHazardsDefeatedThisFloor: 0
+    };
+
+    let runWithRelics = run;
+    for (const relicId of runWithRelics.relicIds) {
+        runWithRelics = applyRelicImmediate(runWithRelics, relicId);
+    }
+
+    const memorizeMs = getMemorizeDurationForRun(runWithRelics, 1) + runWithRelics.pendingMemorizeBonusMs;
+
+    return {
+        ...runWithRelics,
+        freeShuffleThisFloor: runWithRelics.relicIds.includes('first_shuffle_free_per_floor'),
+        regionShuffleFreeThisFloor: runWithRelics.relicIds.includes('region_shuffle_free_first'),
+        timerState: createTimerState({ memorizeRemainingMs: memorizeMs })
+    };
+};
+
+export const createMeditationRun = (
+    bestScore: number,
+    focusMutators?: MutatorId[],
+    extra: Partial<CreateRunOptions> = {}
+): RunState =>
+    createNewRun(bestScore, {
+        gameMode: 'meditation',
+        activeMutators: focusMutators && focusMutators.length > 0 ? focusMutators : undefined,
+        ...extra
+    });
+
+export const createWildRun = (bestScore: number, extra: Partial<CreateRunOptions> = {}): RunState =>
+    createNewRun(bestScore, {
+        enableWildJoker: true,
+        initialStrayRemoveCharges: 1,
+        wildMenuRun: true,
+        activeMutators: ['sticky_fingers', 'short_memorize', 'findables_floor'],
+        ...extra
+    });
+
+export const createDailyRun = (bestScore: number, extra: Partial<CreateRunOptions> = {}): RunState => {
+    const runSeed = deriveDailyRunSeed(GAME_RULES_VERSION);
+    const mutIndex = deriveDailyMutatorIndex(runSeed, DAILY_MUTATOR_TABLE.length);
+    const activeMutators = [DAILY_MUTATOR_TABLE[mutIndex]!];
+
+    return createNewRun(bestScore, {
+        runSeed,
+        gameMode: 'daily',
+        activeMutators,
+        dailyDateKeyUtc: formatDailyDateKeyUtc(),
+        ...extra
+    });
+};
+
+export const createGauntletRun = (
+    bestScore: number,
+    gauntletDurationMs: number = 10 * 60 * 1000,
+    extra: Partial<CreateRunOptions> = {}
+): RunState =>
+    createNewRun(bestScore, {
+        gameMode: 'gauntlet',
+        gauntletDurationMs,
+        ...extra
+    });
+
+export const createPuzzleRun = (
+    bestScore: number,
+    puzzleId: string,
+    tiles: Tile[],
+    level = 1,
+    extra: Partial<CreateRunOptions> = {}
+): RunState => {
+    const columns = clamp(Math.ceil(Math.sqrt(tiles.length)), 2, 8);
+    const rows = Math.ceil(tiles.length / columns);
+    const pairCount = new Set(tiles.map((t) => t.pairKey).filter((k) => k !== DECOY_PAIR_KEY)).size;
+
+    return createNewRun(bestScore, {
+        gameMode: 'puzzle',
+        puzzleId,
+        fixedBoard: {
+            level,
+            pairCount,
+            columns,
+            rows,
+            tiles: tiles.map((t) => ({ ...t })),
+            flippedTileIds: [],
+            matchedPairs: 0,
+            floorArchetypeId: null,
+            featuredObjectiveId: null
+        },
+        ...extra
+    });
+};
+
+export const isGauntletExpired = (run: RunState): boolean =>
+    run.status !== 'paused' && run.gauntletDeadlineMs !== null && Date.now() > run.gauntletDeadlineMs;

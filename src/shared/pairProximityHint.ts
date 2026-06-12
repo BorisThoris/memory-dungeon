@@ -1,8 +1,6 @@
 import type { BoardState, Tile } from './contracts';
+import { DECOY_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './turn-resolution';
-
-/** Keep in sync with `DECOY_PAIR_KEY` in `game.ts`. */
-const DECOY_PAIR_KEY = '__decoy__';
 
 const indexToPos = (board: BoardState, index: number): { col: number; row: number } => ({
     row: Math.floor(index / board.columns),

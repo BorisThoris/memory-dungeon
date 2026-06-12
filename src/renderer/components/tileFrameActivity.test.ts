@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { Group } from 'three';
 import type { Tile } from '../../shared/contracts';
-import { shouldAdvanceTileBezelThisFrame, type TileBezelActivityBag } from './tileFrameActivity';
+import {
+    advanceScheduledTileBezelFrames,
+    scheduleTileBezelFrameActivity,
+    shouldAdvanceTileBezelThisFrame,
+    type TileBezelActivityBag
+} from './tileFrameActivity';
 
 const baseTile = (overrides: Partial<Tile> = {}): Tile => ({
     id: 't1',
@@ -65,6 +70,97 @@ const makeBag = (opts: {
 };
 
 describe('shouldAdvanceTileBezelThisFrame', () => {
+    it('schedules requested frames immediately and resets the idle streak', () => {
+        expect(scheduleTileBezelFrameActivity(true, 5)).toEqual({
+            nextIdleStreak: 0,
+            runFrame: true
+        });
+    });
+
+    it('keeps two grace frames after a tile stops requesting work', () => {
+        expect(scheduleTileBezelFrameActivity(false, 0)).toEqual({
+            nextIdleStreak: 1,
+            runFrame: true
+        });
+        expect(scheduleTileBezelFrameActivity(false, 1)).toEqual({
+            nextIdleStreak: 2,
+            runFrame: true
+        });
+        expect(scheduleTileBezelFrameActivity(false, 2)).toEqual({
+            nextIdleStreak: 3,
+            runFrame: false
+        });
+    });
+
+    it('advances scheduled tile frames and records idle streaks per tile', () => {
+        const pForTile = (id: string) => ({
+            reduceMotion: false,
+            faceUp: false,
+            pickable: true,
+            focusDimmed: false,
+            keyboardFocused: false,
+            graphicsQuality: 'high' as const,
+            textureRevision: 0,
+            resolvingSelection: null,
+            shuffleMotionDeadlineMs: 0,
+            shuffleMotionBudgetMs: 0,
+            shuffleStaggerTileCount: 0,
+            boardEntranceMotionDeadlineMs: 0,
+            boardEntranceMotionBudgetMs: 0,
+            boardEntranceStaggerTileCount: 0,
+            tile: baseTile({ id }),
+            tileFieldParallaxEnabled: false,
+            fieldAmp: 1,
+            fieldTiltRef: { current: { x: 0, y: 0 } },
+            hoverTiltRef: { current: { tileId: null, x: 0, y: 0 } },
+            transform: {
+                imperfectionRotationX: 0,
+                imperfectionRotationZ: 0,
+                layoutYaw: 0,
+                flipRotationY: Math.PI,
+                baseX: 0,
+                baseY: 0,
+                imperfectionX: 0,
+                imperfectionY: 0,
+                layoutJitterX: 0,
+                layoutJitterY: 0,
+                layoutJitterZ: 0
+            }
+        }) as TileBezelActivityBag['propsRef']['current'];
+        const bags = new Map([
+            ['a', makeBag({ p: pForTile('a') })],
+            ['b', makeBag({ p: pForTile('b') })],
+            ['c', makeBag({ p: pForTile('c') })]
+        ]);
+        const idleStreaks = new Map([
+            ['a', 3],
+            ['b', 0],
+            ['c', 2]
+        ]);
+        const advanced: string[] = [];
+
+        const result = advanceScheduledTileBezelFrames({
+            advanceFrame: (bag) => advanced.push(bag.propsRef.current.tile.id),
+            bags,
+            clockElapsedTime: 10,
+            idleStreaks,
+            nowMs: 1_000,
+            shouldAdvance: (bag, clockElapsedTime, nowMs) => {
+                expect(clockElapsedTime).toBe(10);
+                expect(nowMs).toBe(1_000);
+                return bag.propsRef.current.tile.id === 'a';
+            }
+        });
+
+        expect(result).toEqual({ advancedCount: 2, scheduledCount: 3 });
+        expect(advanced).toEqual(['a', 'b']);
+        expect([...idleStreaks.entries()]).toEqual([
+            ['a', 0],
+            ['b', 1],
+            ['c', 3]
+        ]);
+    });
+
     it('returns true while shuffle motion window is active', () => {
         const nowMs = 1_000_000;
         const p = {

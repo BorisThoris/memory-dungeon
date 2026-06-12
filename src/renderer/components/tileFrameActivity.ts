@@ -6,7 +6,7 @@ import type { ResolvingSelectionState } from './tileResolvingSelection';
 
 /**
  * Subset of `TileBezelFrameBag` / props used to decide whether consolidated `useFrame` must run
- * `advanceTileBezelFrame` for this tile. When false for ~2 frames (hysteresis in scene), idle drift
+ * `advanceTileBezelFrame` for this tile. When false for ~2 frames (hysteresis below), idle drift
  * is skipped for that tile (spec: drop subtle motion while quiescent).
  */
 export type TileBezelActivityBag = {
@@ -63,6 +63,65 @@ export type TileBezelActivityBag = {
 
 const POS_EPS = 0.00028;
 const ROT_EPS = 0.0004;
+
+export interface TileFrameActivitySchedule {
+    nextIdleStreak: number;
+    runFrame: boolean;
+}
+
+export interface AdvanceScheduledTileBezelFramesInput<TBag extends TileBezelActivityBag> {
+    advanceFrame: (bag: TBag) => void;
+    bags: Iterable<[string, TBag]>;
+    clockElapsedTime: number;
+    idleStreaks: Map<string, number>;
+    nowMs: number;
+    shouldAdvance?: (bag: TBag, clockElapsedTime: number, nowMs: number) => boolean;
+}
+
+export interface AdvanceScheduledTileBezelFramesResult {
+    advancedCount: number;
+    scheduledCount: number;
+}
+
+export const scheduleTileBezelFrameActivity = (
+    wantsFrame: boolean,
+    previousIdleStreak: number
+): TileFrameActivitySchedule => {
+    const nextIdleStreak = wantsFrame ? 0 : previousIdleStreak + 1;
+
+    return {
+        nextIdleStreak,
+        runFrame: wantsFrame || nextIdleStreak <= 2
+    };
+};
+
+export const advanceScheduledTileBezelFrames = <TBag extends TileBezelActivityBag>({
+    advanceFrame,
+    bags,
+    clockElapsedTime,
+    idleStreaks,
+    nowMs,
+    shouldAdvance = shouldAdvanceTileBezelThisFrame
+}: AdvanceScheduledTileBezelFramesInput<TBag>): AdvanceScheduledTileBezelFramesResult => {
+    let advancedCount = 0;
+    let scheduledCount = 0;
+
+    for (const [id, bag] of bags) {
+        const schedule = scheduleTileBezelFrameActivity(
+            shouldAdvance(bag, clockElapsedTime, nowMs),
+            idleStreaks.get(id) ?? 0
+        );
+        idleStreaks.set(id, schedule.nextIdleStreak);
+        scheduledCount += 1;
+
+        if (schedule.runFrame) {
+            advanceFrame(bag);
+            advancedCount += 1;
+        }
+    }
+
+    return { advancedCount, scheduledCount };
+};
 
 export function shouldAdvanceTileBezelThisFrame(
     bag: TileBezelActivityBag,

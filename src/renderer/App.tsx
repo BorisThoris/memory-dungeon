@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent } from 'react';
+import { lazy, Suspense, useEffect, useState, type MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { useShallow } from 'zustand/react/shallow';
 import ChooseYourPathScreen from './components/ChooseYourPathScreen';
@@ -6,7 +6,6 @@ import CodexScreen from './components/CodexScreen';
 import CollectionScreen from './components/CollectionScreen';
 import ProfileScreen from './components/ProfileScreen';
 import GameOverScreen from './components/GameOverScreen';
-import GameScreen from './components/GameScreen';
 import InventoryScreen from './components/InventoryScreen';
 import MainMenu from './components/MainMenu';
 import SettingsScreen from './components/SettingsScreen';
@@ -32,6 +31,8 @@ import { useAppStore } from './store/useAppStore';
 
 /** Landmark id for A11Y-002 skip link (`href` / programmatic focus). */
 export const APP_MAIN_LANDMARK_ID = 'app-main';
+
+const GameScreen = lazy(() => import('./components/GameScreen'));
 
 const focusAppMainLandmark = (): void => {
     document.getElementById(APP_MAIN_LANDMARK_ID)?.focus({ preventScroll: true });
@@ -340,13 +341,15 @@ const App = () => {
                         inGameShopOverlay ||
                         inGameSideRoomOverlay) &&
                     run && (
-                    <GameScreen
-                        achievements={newlyUnlockedAchievements}
-                        run={run}
-                        suppressStatusOverlays={
-                            inGameSettingsOverlay || inGameShellOverlay || inGameShopOverlay || inGameSideRoomOverlay
-                        }
-                    />
+                    <Suspense fallback={<div role="status">Loading run...</div>}>
+                        <GameScreen
+                            achievements={newlyUnlockedAchievements}
+                            run={run}
+                            suppressStatusOverlays={
+                                inGameSettingsOverlay || inGameShellOverlay || inGameShopOverlay || inGameSideRoomOverlay
+                            }
+                        />
+                    </Suspense>
                 )}
 
                 {/* Portal: `main` uses CSS `zoom` for UI scale; fixed overlays inside it become positioned

@@ -1,6 +1,4 @@
 import { create } from 'zustand/react';
-import { evaluateAchievementUnlocks } from '../../shared/achievements';
-import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import type {
     AchievementId,
     AchievementUnlockResult,
@@ -13,89 +11,41 @@ import type {
     SubscreenReturnView,
     ViewState
 } from '../../shared/contracts';
-import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
 import {
-    acceptEndlessRiskWager as acceptEndlessRiskWagerRule,
-    applyRelicOfferServiceToRun,
-    completeRelicPickAndAdvance,
-    openRelicOffer
-} from '../../shared/objective-rules';
-import {
-    advanceToNextLevel,
-    createDailyRun,
-    createDungeonShowcaseRun,
-    createGauntletRun,
-    createMeditationRun,
-    createNewRun,
-    createPuzzleRun,
-    createWildRun,
-    createRunSummary,
-    disableDebugPeek,
-    enableDebugPeek,
-    finishMemorizePhase,
     isGauntletExpired,
-    pauseRun,
-    resumeRun
 } from '../../shared/game-core';
 import {
-    applyDestroyPair,
-    applyFlashPair,
-    applyPeek,
-    applyRegionShuffle,
-    applyShuffle,
-    applyStrayRemove,
-    armRegionShuffleRow,
     cancelResolvingWithUndo,
-    collectDestroyEligibleTileIds,
-    togglePinnedTile,
-    toggleStrayRemoveArmed
 } from '../../shared/board-powers';
 import {
-    applyRouteChoiceOutcome,
     claimRouteSideRoomChoice,
     claimRouteSideRoomPrimary,
-    openRouteSideRoom,
     skipRouteSideRoom
 } from '../../shared/route-rules';
 import {
-    purchaseShopOffer as purchaseShopOfferRule,
-    rerollShopOffers as rerollShopOffersRule
-} from '../../shared/shop-rules';
-import {
     activateDungeonExit,
-    EXIT_PAIR_KEY,
-    revealDungeonExit,
-    revealDungeonRoom,
-    revealDungeonShop,
-    ROOM_PAIR_KEY,
-    SHOP_PAIR_KEY,
     type DungeonExitActivationSpend
 } from '../../shared/dungeon-rules';
-import {
-    applyEnemyHazardClick,
-    flipTile,
-    resolveBoardTurn
-} from '../../shared/turn-resolution';
 import { trackEvent } from '../../shared/telemetry';
+import { executeRunStartRequest } from './runStartExecutor';
+import type { RunStartRequest } from './runStartState';
+import { createSideRoomActionController } from './sideRoomActionController';
 import {
-    shouldScheduleDebugRevealTimerOnResume,
-    shouldScheduleMemorizeTimerOnResume
-} from './runTimerResumeConditions';
+    type MetaOverlayReturnPointer
+} from './metaOverlayState';
 import {
-    createDefaultSaveData,
-    mergeBestFloorNoPowers,
-    mergeDailyComplete,
-    mergeEncoreFromRun,
-    mergePuzzleCompletion,
-    mergeRelicPickStat,
-    metaRelicDraftExtraPerMilestoneFromSave,
-    normalizeSaveData
-} from '../../shared/save-data';
+    executeMetaOverlayClose,
+    executeMetaOverlayOpen
+} from './metaOverlayExecutor';
 import {
-    applyMetaProgressionUnlock,
-    type MetaProgressionUnlockResult
-} from '../../shared/meta-progression';
+    createShopPurchaseSurfaceResult,
+    createShopRerollSurfaceResult
+} from './shopSurfaceState';
+import { createDefaultSaveData } from '../../shared/save-data';
+import type { MetaProgressionUnlockResult } from '../../shared/meta-progression';
 import { desktopClient } from '../desktop-client';
+import { createRunResolutionController } from './runResolutionController';
+import { createRunTimerController } from './runTimerController';
 import { persistSaveDataThenUnlockAchievements } from './achievementPersistence';
 import {
     persistSaveData,
@@ -105,17 +55,60 @@ import {
 } from './persistBridge';
 import {
     BOARD_FLOATER_POP_CLEAR,
-    buildMatchScorePopPayload,
-    buildMismatchScorePopPayload,
     type MatchScorePop,
     type MismatchScorePop
 } from './matchScorePop';
-import { needsRelicPick } from '../../shared/relics';
+import {
+    createBoardPinModeToggleResult,
+    createDestroyPairArmedToggleResult,
+    createFlashPairSurfaceResult,
+    createGambitThirdPickPressResult,
+    createPeekModeToggleResult,
+    createRegionShuffleArmSurfaceResult,
+    createRegionShuffleSurfaceResult,
+    createRunSurfaceReset,
+    createShuffleBoardSurfaceResult,
+    createStrayArmToggleResult,
+    createRunWithPeekDisarmedPatch
+} from './runSurfaceState';
+import {
+    createPlayingTilePressSurfaceResult,
+} from './tilePressController';
+import { playTilePressAudioCues } from './tilePressAudioCues';
+import {
+    applyPlayingTilePressSurfaceResult
+} from './playingTilePressResultApplier';
+import {
+    executeContinueFromShop,
+    executeShopCloseToFloorSummary
+} from './shopCloseExecutor';
+import {
+    executeOpenShopFromLevelComplete
+} from './levelCompleteShopExecutor';
+import {
+    executePauseRun,
+    executeResumeRun
+} from './pauseResumeExecutor';
+import {
+    executeHowToPlayDismiss,
+    executeMetaProgressionRewardClaim,
+    executePowersFtueDismiss,
+    executeSettingsUpdate
+} from './savePreferenceExecutor';
+import {
+    createRelicOfferServiceSurfaceResult,
+    createRelicPickSurfaceResult
+} from './relicOfferSurfaceState';
+import {
+    executeChooseRouteAndContinue,
+    executeContinueToNextLevel
+} from './levelCompleteContinuationExecutor';
+import { createMenuSurfacePatch } from './menuSurfaceState';
+import { createRiskWagerSurfaceResult } from './riskWagerSurfaceState';
 import {
     playDestroyPairSfx,
     playFlipSfx,
     playGambitCommitSfx,
-    playFloorClearSfx,
     playPeekPowerSfx,
     playPowerArmSfx,
     playRelicPickSfx,
@@ -132,19 +125,9 @@ import {
     playRunStartSfx,
     resumeUiSfxContext
 } from '../audio/uiSfx';
-import { resolveNavigationTransition } from './navigationModel';
-
-const metaRelicOpts = (save: SaveData) => ({
-    metaRelicDraftExtraPerMilestone: metaRelicDraftExtraPerMilestoneFromSave(save)
-});
-
-const isDungeonShowcaseRun = (run: RunState | null): boolean =>
-    run?.dungeonShowcaseRun === true || run?.lastRunSummary?.dungeonShowcaseRun === true;
-
-interface ActiveTimer {
-    deadline: number;
-    timeout: ReturnType<typeof setTimeout>;
-}
+import type { StoreNavigationAction } from './navigationModel';
+import { createHydratedAppStatePatch } from './hydrationController';
+import { createRunLifecycleController } from './runLifecycleController';
 
 interface AppState {
     hydrated: boolean;
@@ -239,135 +222,7 @@ interface AppState {
     triggerDebugReveal: () => void;
 }
 
-const RUN_SURFACE_RESET = {
-    boardPinMode: false,
-    destroyPairArmed: false,
-    peekModeArmed: false,
-    dungeonExitPromptOpen: false,
-    shopReturnMode: null,
-    ...BOARD_FLOATER_POP_CLEAR
-} satisfies Pick<
-    AppState,
-    | 'boardPinMode'
-    | 'destroyPairArmed'
-    | 'peekModeArmed'
-    | 'dungeonExitPromptOpen'
-    | 'shopReturnMode'
-    | 'matchScorePop'
-    | 'mismatchScorePop'
->;
-
-let memorizeTimer: ActiveTimer | null = null;
-let resolveTimer: ActiveTimer | null = null;
-let debugRevealTimer: ActiveTimer | null = null;
-let pendingMemorizeBoardKey: string | null = null;
-
-const clearTimer = (timer: ActiveTimer | null): void => {
-    if (timer) {
-        clearTimeout(timer.timeout);
-    }
-};
-
-const clearMemorizeTimer = (): void => {
-    clearTimer(memorizeTimer);
-    memorizeTimer = null;
-};
-
-const getMemorizeBoardKey = (run: RunState): string | null =>
-    run.board
-        ? `${run.board.level}|${run.board.columns}x${run.board.rows}|${[...run.board.tiles]
-              .map((t) => t.id)
-              .sort()
-              .join('|')}`
-        : null;
-
-const prepareMemorizeTimerForBoardReady = (run: RunState): void => {
-    clearMemorizeTimer();
-    pendingMemorizeBoardKey =
-        run.status === 'memorize' && run.timerState.memorizeRemainingMs !== null ? getMemorizeBoardKey(run) : null;
-};
-
-const clearResolveTimer = (): void => {
-    clearTimer(resolveTimer);
-    resolveTimer = null;
-};
-
-const clearDebugRevealTimer = (): void => {
-    clearTimer(debugRevealTimer);
-    debugRevealTimer = null;
-};
-
-let gauntletExpiryIntervalId: ReturnType<typeof setInterval> | null = null;
-
-const clearGauntletExpiryWatch = (): void => {
-    if (gauntletExpiryIntervalId !== null) {
-        clearInterval(gauntletExpiryIntervalId);
-        gauntletExpiryIntervalId = null;
-    }
-};
-
-const syncGauntletExpiryWatch = (): void => {
-    const { run, view } = useAppStore.getState();
-    const shouldWatch =
-        view === 'playing' &&
-        run &&
-        run.gameMode === 'gauntlet' &&
-        run.gauntletDeadlineMs !== null &&
-        run.status !== 'paused' &&
-        run.status !== 'gameOver';
-
-    if (!shouldWatch) {
-        clearGauntletExpiryWatch();
-        return;
-    }
-
-    if (gauntletExpiryIntervalId !== null) {
-        return;
-    }
-
-    gauntletExpiryIntervalId = setInterval(() => {
-        const { run: currentRun, view: currentView } = useAppStore.getState();
-        if (
-            !currentRun ||
-            currentView !== 'playing' ||
-            currentRun.gameMode !== 'gauntlet' ||
-            currentRun.gauntletDeadlineMs === null ||
-            currentRun.status === 'paused' ||
-            currentRun.status === 'gameOver'
-        ) {
-            clearGauntletExpiryWatch();
-            return;
-        }
-        if (isGauntletExpired(currentRun)) {
-            clearGauntletExpiryWatch();
-            applyResolvedRun({ ...currentRun, status: 'gameOver', lives: 0 });
-        }
-    }, 300);
-};
-
-const clearAllTimers = (): void => {
-    clearMemorizeTimer();
-    clearResolveTimer();
-    clearDebugRevealTimer();
-    clearGauntletExpiryWatch();
-    pendingMemorizeBoardKey = null;
-};
-
-const patchRunFromUserSettings = (run: RunState, settings: Settings): RunState => ({
-    ...run,
-    weakerShuffleMode: settings.weakerShuffleMode,
-    shuffleScoreTaxActive: settings.shuffleScoreTaxEnabled,
-    resolveDelayMultiplier: settings.resolveDelayMultiplier,
-    echoFeedbackEnabled: settings.echoFeedbackEnabled
-});
-
-const getRemainingMs = (timer: ActiveTimer | null, fallback: number | null): number | null => {
-    if (!timer) {
-        return fallback;
-    }
-
-    return Math.max(timer.deadline - Date.now(), 0);
-};
+const RUN_SURFACE_RESET = createRunSurfaceReset();
 
 const sfxGainFromStore = (): number => {
     const { settings } = useAppStore.getState();
@@ -378,9 +233,6 @@ const playRunStartUiSfxFromStore = (): void => {
     void resumeUiSfxContext();
     playRunStartSfx(sfxGainFromStore());
 };
-
-const SAVE_READ_FAILURE_NOTICE =
-    'Save read failed. Started a temporary in-memory profile and paused autosave to avoid overwriting recoverable data.';
 
 const persistSaveDataSafely = async (saveData: SaveData): Promise<SaveData> => {
     if (useAppStore.getState().saveWritesBlockedByReadFailure) {
@@ -399,310 +251,115 @@ const persistSaveDataThenUnlockAchievementsSafely = async (
     return persistSaveDataThenUnlockAchievements(saveData, achievements);
 };
 
-const applyResolveBoardTurn = (run: RunState): void => {
-    const { saveData } = useAppStore.getState();
-    const encore = saveData.playerStats?.encorePairKeysLastRun ?? [];
-    const next = resolveBoardTurn(run, encore);
-    const pop = buildMatchScorePopPayload(run, next);
-    const missPop = buildMismatchScorePopPayload(run, next);
-    if (pop) {
-        useAppStore.setState({ ...BOARD_FLOATER_POP_CLEAR, matchScorePop: pop });
-    } else if (missPop) {
-        useAppStore.setState({ ...BOARD_FLOATER_POP_CLEAR, mismatchScorePop: missPop });
-    } else {
-        useAppStore.setState({ ...BOARD_FLOATER_POP_CLEAR });
-    }
-    void resumeAudioContext();
-    playResolveSfx(run, next, sfxGainFromStore());
-    applyResolvedRun(next);
-};
+const runResolutionController = createRunResolutionController({
+    getSfxGain: sfxGainFromStore,
+    getState: () => useAppStore.getState(),
+    persistSaveData: persistSaveDataSafely,
+    persistSaveDataThenUnlockAchievements: persistSaveDataThenUnlockAchievementsSafely,
+    runSurfaceReset: RUN_SURFACE_RESET,
+    setState: (patch) => useAppStore.setState(patch)
+});
 
-const applyResolvedRun = (resolvedRun: RunState): void => {
-    const state = useAppStore.getState();
-    const prevStatus = state.run?.status;
-    if (resolvedRun.status === 'levelComplete' && prevStatus !== 'levelComplete') {
-        void resumeAudioContext();
-        playFloorClearSfx(sfxGainFromStore());
-    }
-    let nextRun = resolvedRun.status === 'playing' ? resolvedRun : disableDebugPeek(resolvedRun);
+const applyResolveBoardTurn = (run: RunState): void => runResolutionController.applyResolveBoardTurn(run);
+const applyResolvedRun = (resolvedRun: RunState): void => runResolutionController.applyResolvedRun(resolvedRun);
+const applyImmediateGameOverFromTilePress = (resolvedRun: RunState): void =>
+    runResolutionController.applyImmediateGameOverFromTilePress(resolvedRun);
 
-    let saveForAchievements = state.saveData;
-    if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
-        saveForAchievements = mergeDailyComplete(state.saveData, nextRun.dailyDateKeyUtc);
-    } else if (nextRun.status === 'gameOver') {
-        let projected = mergeEncoreFromRun(state.saveData, nextRun.matchedPairKeysThisRun);
-        if (!nextRun.powersUsedThisRun) {
-            projected = mergeBestFloorNoPowers(projected, nextRun.stats.highestLevel);
-        }
-        saveForAchievements = projected;
-    }
+const runTimerController = createRunTimerController({
+    getState: () => useAppStore.getState(),
+    onResolveBoardTurn: applyResolveBoardTurn,
+    onResolvedRun: applyResolvedRun,
+    setRun: (run) => useAppStore.setState({ run })
+});
 
-    const unlockedAchievements = evaluateAchievementUnlocks(nextRun, saveForAchievements);
-    let nextSave = normalizeSaveData({
-        ...state.saveData,
-        bestScore: Math.max(state.saveData.bestScore, nextRun.stats.bestScore)
-    });
-
-    if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'daily' && nextRun.dailyDateKeyUtc) {
-        nextSave = mergeDailyComplete(nextSave, nextRun.dailyDateKeyUtc);
-    }
-
-    if (nextRun.status === 'levelComplete' && !nextSave.onboardingDismissed) {
-        nextSave = normalizeSaveData({
-            ...nextSave,
-            onboardingDismissed: true
-        });
-    }
-
-    if (nextRun.status === 'levelComplete' && nextRun.gameMode === 'puzzle') {
-        nextSave = mergePuzzleCompletion(nextSave, nextRun);
-    }
-
-    if (unlockedAchievements.length > 0) {
-        const unlockTags = unlockedAchievements.map((id) => `achievement:${id}`);
-        nextSave = normalizeSaveData({
-            ...nextSave,
-            achievements: {
-                ...nextSave.achievements,
-                ...Object.fromEntries(unlockedAchievements.map((achievementId) => [achievementId, true]))
-            },
-            unlocks: [...new Set([...(nextSave.unlocks ?? []), ...unlockTags])]
-        });
-    }
-
-    if (nextRun.status === 'gameOver') {
-        nextSave = mergeEncoreFromRun(nextSave, nextRun.matchedPairKeysThisRun);
-        nextRun = createRunSummary(nextRun, unlockedAchievements);
-        nextRun = {
-            ...nextRun,
-            lastRunSummary: normalizeSaveData({
-                ...nextSave,
-                lastRunSummary: nextRun.lastRunSummary
-            }).lastRunSummary
-        };
-        if (!nextRun.powersUsedThisRun) {
-            nextSave = mergeBestFloorNoPowers(nextSave, nextRun.stats.highestLevel);
-        }
-        nextSave = normalizeSaveData({
-            ...nextSave,
-            onboardingDismissed: true,
-            lastRunSummary: nextRun.lastRunSummary
-        });
-        nextSave = mergeHonorUnlockTags(nextSave);
-
-        const s = nextRun.lastRunSummary;
-        if (s) {
-            trackEvent('run_complete', {
-                mode: s.gameMode ?? 'endless',
-                practice: nextRun.practiceMode,
-                highestLevel: s.highestLevel,
-                totalScore: s.totalScore,
-                mutatorCount: s.activeMutators?.length ?? 0,
-                relicCount: s.relicIds?.length ?? 0
-            });
-        }
-
-        useAppStore.setState({
-            run: nextRun,
-            runStartSaveData: state.runStartSaveData,
-            view: 'gameOver',
-            saveData: nextSave,
-            settings: nextSave.settings,
-            newlyUnlockedAchievements: unlockedAchievements,
-            ...RUN_SURFACE_RESET
-        });
-    } else {
-        nextSave = mergeHonorUnlockTags(nextSave);
-        useAppStore.setState({
-            run: nextRun,
-            view: 'playing',
-            saveData: nextSave,
-            settings: nextSave.settings,
-            newlyUnlockedAchievements: unlockedAchievements,
-            dungeonExitPromptOpen: false
-        });
-    }
-
-    if (unlockedAchievements.length > 0) {
-        void persistSaveDataThenUnlockAchievementsSafely(nextSave, unlockedAchievements).then(({ failures }) => {
-            if (failures.length > 0) {
-                useAppStore.setState({
-                    achievementBridgeNotice:
-                        'Some achievements could not sync with Steam. Your unlocks are saved in this build.'
-                });
-            }
-        });
-    } else {
-        void persistSaveDataSafely(nextSave);
-    }
-};
-
-const applyImmediateGameOverFromTilePress = (resolvedRun: RunState): void => {
-    applyResolvedRun(resolvedRun);
-    useAppStore.setState({
-        ...RUN_SURFACE_RESET
-    });
-};
-
-function scheduleMemorizeTimer(duration: number): void {
-    clearMemorizeTimer();
-    pendingMemorizeBoardKey = null;
-
-    if (duration <= 0) {
-        const { run } = useAppStore.getState();
-
-        if (run && run.status === 'memorize') {
-            useAppStore.setState({ run: finishMemorizePhase(run) });
-        }
-
-        return;
-    }
-
-    memorizeTimer = {
-        deadline: Date.now() + duration,
-        timeout: setTimeout(() => {
-            memorizeTimer = null;
-            const { run } = useAppStore.getState();
-
-            if (!run || run.status !== 'memorize') {
-                return;
-            }
-
-            useAppStore.setState({ run: finishMemorizePhase(run) });
-        }, duration)
-    };
-}
-
-function scheduleResolveTimer(duration: number): void {
-    clearResolveTimer();
-
-    if (duration <= 0) {
-        const { run } = useAppStore.getState();
-
-        if (run && run.status === 'resolving') {
-            applyResolveBoardTurn(run);
-        }
-
-        return;
-    }
-
-    resolveTimer = {
-        deadline: Date.now() + duration,
-        timeout: setTimeout(() => {
-            resolveTimer = null;
-            const { run } = useAppStore.getState();
-
-            if (!run || run.status !== 'resolving') {
-                return;
-            }
-
-            applyResolveBoardTurn(run);
-        }, duration)
-    };
-}
-
-function scheduleDebugRevealTimer(duration: number): void {
-    clearDebugRevealTimer();
-
-    if (duration <= 0) {
-        const { run } = useAppStore.getState();
-
-        if (run?.debugPeekActive) {
-            useAppStore.setState({ run: disableDebugPeek(run) });
-        }
-
-        return;
-    }
-
-    debugRevealTimer = {
-        deadline: Date.now() + duration,
-        timeout: setTimeout(() => {
-            debugRevealTimer = null;
-            const { run } = useAppStore.getState();
-
-            if (!run?.debugPeekActive) {
-                return;
-            }
-
-            useAppStore.setState({ run: disableDebugPeek(run) });
-        }, duration)
-    };
-}
-
-const freezeRun = (run: RunState): RunState => {
-    const pausedRun = pauseRun(run);
-
-    return {
-        ...pausedRun,
-        timerState: {
-            ...pausedRun.timerState,
-            memorizeRemainingMs:
-                run.status === 'memorize'
-                    ? getRemainingMs(memorizeTimer, run.timerState.memorizeRemainingMs)
-                    : pausedRun.timerState.memorizeRemainingMs,
-            resolveRemainingMs:
-                run.status === 'resolving'
-                    ? getRemainingMs(resolveTimer, run.timerState.resolveRemainingMs)
-                    : pausedRun.timerState.resolveRemainingMs,
-            debugRevealRemainingMs: run.debugPeekActive
-                ? getRemainingMs(debugRevealTimer, run.timerState.debugRevealRemainingMs)
-                : pausedRun.timerState.debugRevealRemainingMs
-        }
-    };
-};
-
-/**
- * SIDE-013 - In-run meta overlays (settings modal, inventory/codex shell)
- * share one freeze policy: snapshot timers into `paused` for resumable states; leave user-pause and
- * floor-level overlays (`levelComplete`, `gameOver`) unchanged so `closeSubscreen` / `closeSettings`
- * do not double-clobber `pausedFromStatus`.
- */
+const clearAllTimers = (): void => runTimerController.clearAllTimers();
+const clearResolveTimer = (): void => runTimerController.clearResolveTimer();
+const freezeRun = (run: RunState): RunState => runTimerController.freezeRun(run);
 const freezeRunSnapshotForPlayingMetaOverlay = (run: RunState): RunState =>
-    run.status === 'paused' || run.status === 'levelComplete' || run.status === 'gameOver' ? run : freezeRun(run);
+    runTimerController.freezeRunSnapshotForPlayingMetaOverlay(run);
+const prepareMemorizeTimerForBoardReady = (run: RunState): void =>
+    runTimerController.prepareMemorizeTimerForBoardReady(run);
+const resumeRunWithTimers = (run: RunState): RunState => runTimerController.resumeRunWithTimers(run);
+const scheduleDebugRevealTimer = (duration: number): void => runTimerController.scheduleDebugRevealTimer(duration);
+const scheduleResolveTimer = (duration: number): void => runTimerController.scheduleResolveTimer(duration);
+const syncGauntletExpiryWatch = (): void => runTimerController.syncGauntletExpiryWatch();
 
-const runCanPause = (run: RunState): boolean =>
-    run.status === 'memorize' || run.status === 'playing' || run.status === 'resolving';
+const sideRoomActionController = createSideRoomActionController<AppState>({
+    applyResolvedRun,
+    continueToNextLevel: () => useAppStore.getState().continueToNextLevel(),
+    getState: () => useAppStore.getState(),
+    setState: (patch) => useAppStore.setState(patch)
+});
 
-const runCanUseShopSurface = (run: RunState, shopReturnMode: AppState['shopReturnMode']): boolean =>
-    (run.status === 'levelComplete' && run.lives > 0) ||
-    (shopReturnMode === 'floor' &&
-        run.status === 'paused' &&
-        run.lives > 0 &&
-        run.timerState.pausedFromStatus !== null);
+const runLifecycleController = createRunLifecycleController<AppState>({
+    clearAllTimers,
+    getState: () => useAppStore.getState(),
+    playRunStartSfx: playRunStartUiSfxFromStore,
+    prepareMemorizeTimerForBoardReady,
+    scheduleDebugRevealTimer,
+    setState: (patch) => useAppStore.setState(patch)
+});
 
-const resumeRunWithTimers = (run: RunState): RunState => {
-    const resumedRun = resumeRun(run);
-
-    if (shouldScheduleMemorizeTimerOnResume(resumedRun)) {
-        scheduleMemorizeTimer(resumedRun.timerState.memorizeRemainingMs!);
-    }
-
-    if (resumedRun.status === 'resolving' && resumedRun.timerState.resolveRemainingMs !== null) {
-        scheduleResolveTimer(resumedRun.timerState.resolveRemainingMs);
-    }
-
-    if (shouldScheduleDebugRevealTimerOnResume(resumedRun)) {
-        scheduleDebugRevealTimer(resumedRun.timerState.debugRevealRemainingMs!);
-    }
-
-    return resumedRun;
+const executeStoreRunStartRequest = (
+    request: RunStartRequest,
+    set: (patch: Partial<AppState>) => void,
+    get: () => AppState
+): void => {
+    executeRunStartRequest(request, {
+        clearAllTimers,
+        getState: get,
+        playRunStartSfx: playRunStartUiSfxFromStore,
+        prepareMemorizeTimerForBoardReady,
+        setState: set,
+        trackRunStart: (payload) => trackEvent('run_start', payload)
+    });
 };
 
-const routeDeadInterludeRunToGameOver = (run: RunState): boolean => {
-    if (run.status !== 'gameOver' && run.lives > 0) {
-        return false;
-    }
-
-    applyResolvedRun({
-        ...run,
-        status: 'gameOver',
-        lives: 0,
-        pendingRouteCardPlan: null,
-        sideRoom: null,
-        relicOffer: null,
-        shopOffers: []
+const executeStoreShopCloseToFloorSummary = (set: (patch: Partial<AppState>) => void, get: () => AppState): void => {
+    executeShopCloseToFloorSummary({
+        applyResolvedRun,
+        getState: get,
+        resumeRunWithTimers,
+        setState: set
     });
-    return true;
+};
+
+const executeStoreMetaOverlayOpen = (
+    pointer: MetaOverlayReturnPointer,
+    transitionAction: StoreNavigationAction,
+    set: (patch: Partial<AppState>) => void,
+    get: () => AppState,
+    requestedReturnView?: SubscreenReturnView
+): void => {
+    executeMetaOverlayOpen(
+        pointer,
+        transitionAction,
+        {
+            applyResolvedRun,
+            clearAllTimers,
+            freezeRunSnapshotForPlayingMetaOverlay,
+            getState: get,
+            resumeRunWithTimers,
+            setState: set
+        },
+        requestedReturnView
+    );
+};
+
+const executeStoreMetaOverlayClose = (
+    pointer: MetaOverlayReturnPointer,
+    transitionAction: 'closeSettings' | 'closeSubscreen',
+    set: (patch: Partial<AppState>) => void,
+    get: () => AppState
+): void => {
+    executeMetaOverlayClose(pointer, transitionAction, {
+        applyResolvedRun,
+        clearAllTimers,
+        freezeRunSnapshotForPlayingMetaOverlay,
+        getState: get,
+        resumeRunWithTimers,
+        setState: set
+    });
 };
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -750,658 +407,196 @@ export const useAppStore = create<AppState>((set, get) => ({
 
         set({ hydrating: true });
 
-        let saveReadFailed = false;
-        const [rawSave, steamConnected] = await Promise.all([
-            desktopClient
-                .getSaveData()
-                .then(normalizeSaveData)
-                .catch(() => {
-                    saveReadFailed = true;
-                    return createDefaultSaveData();
-                }),
-            desktopClient.isSteamConnected().catch(() => false)
-        ]);
-
-        const saveData = mergeHonorUnlockTags(rawSave);
-        if (saveData !== rawSave && !saveReadFailed) {
-            void persistSaveDataSafely(saveData);
-        }
-
-        set({
-            hydrating: false,
-            hydrated: true,
-            steamConnected,
-            saveData,
-            settings: saveData.settings,
-            view: 'menu',
-            saveReadFailureNotice: saveReadFailed ? SAVE_READ_FAILURE_NOTICE : null,
-            saveWritesBlockedByReadFailure: saveReadFailed
-        });
+        set(await createHydratedAppStatePatch({ desktop: desktopClient, persistSaveData: persistSaveDataSafely }));
     },
 
     startRun: () => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createNewRun(saveData.bestScore, {
-                ...metaRelicOpts(saveData),
-                onboardingSafeFirstFloor: !saveData.onboardingDismissed
-            }),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });
-        playRunStartUiSfxFromStore();
-
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'endless' }, set, get);
     },
 
     startDungeonShowcaseRun: () => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createDungeonShowcaseRun(saveData.bestScore, metaRelicOpts(saveData)),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode, showcase: 'dungeon' });
-        playRunStartUiSfxFromStore();
-
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'dungeonShowcase' }, set, get);
     },
 
     startDailyRun: () => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createDailyRun(saveData.bestScore, metaRelicOpts(saveData)),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });
-        playRunStartUiSfxFromStore();
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'daily' }, set, get);
     },
 
     startGauntletRun: (durationMs = 10 * 60 * 1000) => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createGauntletRun(saveData.bestScore, durationMs, metaRelicOpts(saveData)),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });
-        playRunStartUiSfxFromStore();
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ durationMs, kind: 'gauntlet' }, set, get);
     },
 
     startPuzzleRun: (puzzleId) => {
-        const puzzle = BUILTIN_PUZZLES[puzzleId];
-        if (!puzzle) {
-            return;
-        }
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createPuzzleRun(saveData.bestScore, puzzle.id, puzzle.tiles, 1, metaRelicOpts(saveData)),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode, puzzleId: puzzle.id });
-        playRunStartUiSfxFromStore();
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'puzzle', puzzleId }, set, get);
     },
 
     startPracticeRun: () => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createNewRun(saveData.bestScore, { practiceMode: true, ...metaRelicOpts(saveData) }),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });
-        playRunStartUiSfxFromStore();
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'practice' }, set, get);
     },
 
     startScholarContractRun: () => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createNewRun(saveData.bestScore, {
-                ...metaRelicOpts(saveData),
-                activeContract: {
-                    noShuffle: true,
-                    noDestroy: true,
-                    maxMismatches: null,
-                    bonusRelicDraftPick: true
-                }
-            }),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode, scholar: true });
-        playRunStartUiSfxFromStore();
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'scholarContract' }, set, get);
     },
 
     startMeditationRun: () => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createMeditationRun(saveData.bestScore, undefined, metaRelicOpts(saveData)),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode });
-        playRunStartUiSfxFromStore();
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'meditation' }, set, get);
     },
 
     startMeditationRunWithMutators: (mutators) => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createMeditationRun(saveData.bestScore, mutators, metaRelicOpts(saveData)),
-            get().settings
-        );
-        trackEvent('run_start', {
-            mode: run.gameMode,
-            practice: run.practiceMode,
-            meditation_focus_count: mutators.length,
-            meditation_focus: mutators.length > 0 ? mutators.join(',') : undefined
-        });
-        playRunStartUiSfxFromStore();
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'meditationWithMutators', mutators }, set, get);
     },
 
     startPinVowRun: () => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createNewRun(saveData.bestScore, {
-                ...metaRelicOpts(saveData),
-                activeContract: { noShuffle: false, noDestroy: false, maxMismatches: null, maxPinsTotalRun: 10 }
-            }),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode, pinVow: true });
-        playRunStartUiSfxFromStore();
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'pinVow' }, set, get);
     },
 
     startWildRun: () => {
-        clearAllTimers();
-        const saveData = get().saveData;
-        const run = patchRunFromUserSettings(
-            createWildRun(saveData.bestScore, metaRelicOpts(saveData)),
-            get().settings
-        );
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode, wild: true });
-        playRunStartUiSfxFromStore();
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: saveData
-        });
-        prepareMemorizeTimerForBoardReady(run);
+        executeStoreRunStartRequest({ kind: 'wild' }, set, get);
     },
 
     pickRelic: (relicId) => {
-        const { run } = get();
-        if (!run?.relicOffer?.options.includes(relicId)) {
-            return;
-        }
-        const nextRun = completeRelicPickAndAdvance(run, relicId);
-        if (nextRun === run) {
+        const result = createRelicPickSurfaceResult({
+            relicId,
+            run: get().run,
+            saveData: get().saveData
+        });
+        if (result.kind === 'ignored') {
             return;
         }
         clearAllTimers();
         void resumeAudioContext();
         playRelicPickSfx(sfxGainFromStore());
-        let nextSave = mergeRelicPickStat(get().saveData, relicId);
-        nextSave = normalizeSaveData(nextSave);
-        nextSave = mergeHonorUnlockTags(nextSave);
-        set({
-            run: nextRun,
-            saveData: nextSave,
-            settings: nextSave.settings,
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false
-        });
-        prepareMemorizeTimerForBoardReady(nextRun);
-        void persistSaveDataSafely(nextSave);
+        set(result.patch);
+        prepareMemorizeTimerForBoardReady(result.patch.run);
+        void persistSaveDataSafely(result.nextSave);
     },
 
     applyRelicOfferService: (serviceId, targetRelicId) => {
-        const { run } = get();
-        if (!run?.relicOffer) {
+        const result = createRelicOfferServiceSurfaceResult({
+            run: get().run,
+            serviceId,
+            targetRelicId
+        });
+        if (result.kind === 'ignored') {
             return;
         }
-        set({ run: applyRelicOfferServiceToRun(run, serviceId, targetRelicId) });
+        set(result.patch);
     },
 
     dismissPowersFtue: async () => {
-        const nextSave = normalizeSaveData({
-            ...get().saveData,
-            powersFtueSeen: true
+        await executePowersFtueDismiss({
+            getState: get,
+            persistSaveData: persistSaveDataSafely,
+            persistSaveSettings,
+            setState: set
         });
-        set({ saveData: nextSave, settings: nextSave.settings });
-        await persistSaveDataSafely(nextSave);
     },
 
     /** Abandon confirm / NAV-004: clears the run and normalizes return pointers so meta overlays cannot strand `inventory|codex` without a run (SIDE-014). */
     goToMenu: () => {
         clearAllTimers();
-        set({
-            view: 'menu',
-            run: null,
-            runStartSaveData: null,
-            newlyUnlockedAchievements: [],
-            achievementBridgeNotice: null,
-            subscreenReturnView: 'menu',
-            settingsReturnView: 'menu',
-            ...RUN_SURFACE_RESET
-        });
+        set(createMenuSurfacePatch());
     },
 
     openModeSelect: () => {
-        const transition = resolveNavigationTransition(get(), 'openModeSelect');
-        set({ view: transition.view, subscreenReturnView: transition.subscreenReturnView });
+        executeStoreMetaOverlayOpen('subscreenReturnView', 'openModeSelect', set, get);
     },
 
     openCollection: () => {
-        const transition = resolveNavigationTransition(get(), 'openCollection');
-        set({ view: transition.view, subscreenReturnView: transition.subscreenReturnView });
+        executeStoreMetaOverlayOpen('subscreenReturnView', 'openCollection', set, get);
     },
 
     openProfile: () => {
-        const transition = resolveNavigationTransition(get(), 'openProfile');
-        set({ view: transition.view, subscreenReturnView: transition.subscreenReturnView });
+        executeStoreMetaOverlayOpen('subscreenReturnView', 'openProfile', set, get);
     },
 
     openInventoryFromMenu: () => {
-        const transition = resolveNavigationTransition(get(), 'openInventoryFromMenu');
-        set({ view: transition.view, subscreenReturnView: transition.subscreenReturnView });
+        executeStoreMetaOverlayOpen('subscreenReturnView', 'openInventoryFromMenu', set, get);
     },
 
     openCodexFromMenu: () => {
-        const transition = resolveNavigationTransition(get(), 'openCodexFromMenu');
-        set({ view: transition.view, subscreenReturnView: transition.subscreenReturnView });
+        executeStoreMetaOverlayOpen('subscreenReturnView', 'openCodexFromMenu', set, get);
     },
 
     openInventoryFromPlaying: () => {
-        const { run, view } = get();
-        if (!run || view !== 'playing') {
-            return;
-        }
-        const nextRun = freezeRunSnapshotForPlayingMetaOverlay(run);
-        clearAllTimers();
-        const transition = resolveNavigationTransition(get(), 'openInventoryFromPlaying');
-        set({
-            view: transition.view,
-            subscreenReturnView: transition.subscreenReturnView,
-            run: nextRun
-        });
+        executeStoreMetaOverlayOpen('subscreenReturnView', 'openInventoryFromPlaying', set, get);
     },
 
     openCodexFromPlaying: () => {
-        const { run, view } = get();
-        if (!run || view !== 'playing') {
-            return;
-        }
-        const nextRun = freezeRunSnapshotForPlayingMetaOverlay(run);
-        clearAllTimers();
-        const transition = resolveNavigationTransition(get(), 'openCodexFromPlaying');
-        set({
-            view: transition.view,
-            subscreenReturnView: transition.subscreenReturnView,
-            run: nextRun
-        });
+        executeStoreMetaOverlayOpen('subscreenReturnView', 'openCodexFromPlaying', set, get);
     },
 
     openShopFromLevelComplete: () => {
-        const { run, view } = get();
-        if (run && view === 'playing' && run.status === 'levelComplete' && run.lives <= 0) {
-            routeDeadInterludeRunToGameOver(run);
-            return;
-        }
-        if (
-            !run ||
-            view !== 'playing' ||
-            run.status !== 'levelComplete' ||
-            run.lives <= 0 ||
-            run.relicOffer ||
-            run.sideRoom ||
-            run.shopOffers.length === 0
-        ) {
-            return;
-        }
-        const transition = resolveNavigationTransition(get(), 'openShopFromLevelComplete');
-        set({ view: transition.view, shopReturnMode: 'summary' });
+        executeOpenShopFromLevelComplete({
+            applyResolvedRun,
+            getState: get,
+            setState: set
+        });
     },
 
     closeShopToFloorSummary: () => {
-        const { run, shopReturnMode } = get();
-        const transition = resolveNavigationTransition(get(), 'closeShopToFloorSummary');
-        const nextRun = shopReturnMode === 'floor' && run ? resumeRunWithTimers(run) : run;
-        if (nextRun?.status === 'gameOver') {
-            applyResolvedRun(nextRun);
-            set({ shopReturnMode: null });
-            return;
-        }
-        set({
-            view: transition.view,
-            run: nextRun,
-            shopReturnMode: null
-        });
+        executeStoreShopCloseToFloorSummary(set, get);
     },
 
     continueFromShop: () => {
-        const { run, shopReturnMode } = get();
-        if (shopReturnMode === 'floor') {
-            const transition = resolveNavigationTransition(get(), 'closeShopToFloorSummary');
-            const nextRun = run ? resumeRunWithTimers(run) : run;
-            if (nextRun?.status === 'gameOver') {
-                applyResolvedRun(nextRun);
-                set({ shopReturnMode: null });
-                return;
-            }
-            set({
-                view: transition.view,
-                run: nextRun,
-                shopReturnMode: null
-            });
-            return;
-        }
-        if (!run || run.status !== 'levelComplete') {
-            const transition = resolveNavigationTransition(get(), 'closeShopToFloorSummary');
-            set({ view: transition.view, shopReturnMode: null });
-            return;
-        }
-        set({ shopReturnMode: null });
-        get().continueToNextLevel();
+        executeContinueFromShop({
+            applyResolvedRun,
+            continueToNextLevel: () => get().continueToNextLevel(),
+            getState: get,
+            resumeRunWithTimers,
+            setState: set
+        });
     },
 
     claimSideRoomPrimary: () => {
-        const { run, view } = get();
-        if (view !== 'sideRoom') {
-            return;
-        }
-        if (!run) {
-            set({ view: 'menu' });
-            return;
-        }
-        if (routeDeadInterludeRunToGameOver(run)) {
-            return;
-        }
-        if (run.status !== 'levelComplete' || !run.sideRoom) {
-            set({ view: 'playing' });
-            return;
-        }
-        const nextRun = claimRouteSideRoomPrimary(run);
-        if (nextRun === run) {
-            return;
-        }
-        if (nextRun.shopOffers.length > 0) {
-            set({
-                run: nextRun,
-                view: 'shop',
-                shopReturnMode: 'summary',
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                ...BOARD_FLOATER_POP_CLEAR
-            });
-            return;
-        }
-        set({ run: nextRun, view: 'playing' });
-        get().continueToNextLevel();
+        sideRoomActionController.applySideRoomAction(claimRouteSideRoomPrimary);
     },
 
     claimSideRoomChoice: (choiceId: string) => {
-        const { run, view } = get();
-        if (view !== 'sideRoom') {
-            return;
-        }
-        if (!run) {
-            set({ view: 'menu' });
-            return;
-        }
-        if (routeDeadInterludeRunToGameOver(run)) {
-            return;
-        }
-        if (run.status !== 'levelComplete' || !run.sideRoom) {
-            set({ view: 'playing' });
-            return;
-        }
-        const nextRun = claimRouteSideRoomChoice(run, choiceId);
-        if (nextRun === run) {
-            return;
-        }
-        if (nextRun.shopOffers.length > 0) {
-            set({
-                run: nextRun,
-                view: 'shop',
-                shopReturnMode: 'summary',
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                ...BOARD_FLOATER_POP_CLEAR
-            });
-            return;
-        }
-        set({ run: nextRun, view: 'playing' });
-        get().continueToNextLevel();
+        sideRoomActionController.applySideRoomAction((sideRoomRun) => claimRouteSideRoomChoice(sideRoomRun, choiceId));
     },
 
     skipSideRoom: () => {
-        const { run, view } = get();
-        if (view !== 'sideRoom') {
-            return;
-        }
-        if (!run) {
-            set({ view: 'menu' });
-            return;
-        }
-        if (routeDeadInterludeRunToGameOver(run)) {
-            return;
-        }
-        if (run.status !== 'levelComplete' || !run.sideRoom) {
-            set({ view: 'playing' });
-            return;
-        }
-        const nextRun = skipRouteSideRoom(run);
-        if (nextRun.shopOffers.length > 0) {
-            set({
-                run: nextRun,
-                view: 'shop',
-                shopReturnMode: 'summary',
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                ...BOARD_FLOATER_POP_CLEAR
-            });
-            return;
-        }
-        set({ run: nextRun, view: 'playing' });
-        get().continueToNextLevel();
+        sideRoomActionController.applySideRoomAction(skipRouteSideRoom);
     },
 
     closeSubscreen: () => {
-        const { run } = get();
-        const transition = resolveNavigationTransition(get(), 'closeSubscreen');
-
-        if (transition.resumeRun) {
-            const nextRun = run?.status === 'paused' ? resumeRunWithTimers(run) : run;
-            if (nextRun?.status === 'gameOver') {
-                applyResolvedRun(nextRun);
-                set({ subscreenReturnView: 'menu' });
-                return;
-            }
-            set({
-                view: transition.view,
-                subscreenReturnView: transition.subscreenReturnView,
-                run: nextRun ?? null
-            });
-            return;
-        }
-
-        set({ view: transition.view, subscreenReturnView: transition.subscreenReturnView });
+        executeStoreMetaOverlayClose('subscreenReturnView', 'closeSubscreen', set, get);
     },
 
     openSettings: (returnView = 'menu') => {
-        const { run } = get();
-        const transition = resolveNavigationTransition(get(), 'openSettings', returnView);
-
-        if (transition.freezeRun && run) {
-            const nextRun = freezeRunSnapshotForPlayingMetaOverlay(run);
-
-            clearAllTimers();
-            set({
-                view: transition.view,
-                settingsReturnView: transition.settingsReturnView,
-                run: nextRun
-            });
-            return;
-        }
-
-        set({
-            view: transition.view,
-            settingsReturnView: transition.settingsReturnView
-        });
+        executeStoreMetaOverlayOpen('settingsReturnView', 'openSettings', set, get, returnView);
     },
 
     closeSettings: () => {
-        const { run } = get();
-        const transition = resolveNavigationTransition(get(), 'closeSettings');
-
-        if (transition.resumeRun) {
-            const nextRun = run?.status === 'paused' ? resumeRunWithTimers(run) : run;
-            if (nextRun?.status === 'gameOver') {
-                applyResolvedRun(nextRun);
-                set({ settingsReturnView: 'menu' });
-                return;
-            }
-            set({
-                view: transition.view,
-                settingsReturnView: transition.settingsReturnView,
-                run: nextRun ?? null
-            });
-            return;
-        }
-
-        set({ view: transition.view, settingsReturnView: transition.settingsReturnView });
+        executeStoreMetaOverlayClose('settingsReturnView', 'closeSettings', set, get);
     },
 
     updateSettings: async (settings) => {
-        const persistedSettings = await persistSaveSettings(settings);
-        const nextSave = normalizeSaveData({
-            ...get().saveData,
-            settings: persistedSettings
-        });
-
-        set({
-            settings: persistedSettings,
-            saveData: nextSave
+        await executeSettingsUpdate(settings, {
+            getState: get,
+            persistSaveData: persistSaveDataSafely,
+            persistSaveSettings,
+            setState: set
         });
     },
 
     dismissHowToPlay: async () => {
-        const nextSave = normalizeSaveData({
-            ...get().saveData,
-            firstRunHelpDismissed: true
+        await executeHowToPlayDismiss({
+            getState: get,
+            persistSaveData: persistSaveDataSafely,
+            persistSaveSettings,
+            setState: set
         });
-
-        set({
-            saveData: nextSave,
-            settings: nextSave.settings
-        });
-
-        await persistSaveDataSafely(nextSave);
     },
 
     claimMetaProgressionReward: (rowId) => {
-        const result = applyMetaProgressionUnlock(get().saveData, rowId);
-        if (!result.applied) {
-            return result;
-        }
-
-        set({
-            saveData: result.save,
-            settings: result.save.settings
+        return executeMetaProgressionRewardClaim(rowId, {
+            getState: get,
+            persistSaveData: persistSaveDataSafely,
+            persistSaveSettings,
+            setState: set
         });
-        void persistSaveDataSafely(result.save);
-        return result;
     },
 
     pressTile: (tileId) => {
@@ -1423,38 +618,33 @@ export const useAppStore = create<AppState>((set, get) => ({
                 applyResolvedRun({ ...run, status: 'gameOver', lives: 0 });
                 return;
             }
-            let actionRun = run;
-            const hazardRun = applyEnemyHazardClick(actionRun, tileId, { advanceHazards: false });
-            if (hazardRun !== actionRun) {
+            const result = createGambitThirdPickPressResult(run, tileId);
+            if (result.hazardContact) {
                 void resumeAudioContext();
-                playResolveSfx(actionRun, hazardRun, sfxGainFromStore());
-                if (hazardRun.status === 'gameOver') {
-                    applyImmediateGameOverFromTilePress(hazardRun);
-                    return;
-                }
-                actionRun = hazardRun;
+                playResolveSfx(result.hazardContact.fromRun, result.hazardContact.toRun, sfxGainFromStore());
             }
-            const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
-            const nextRun = flipTile(actionRun, tileId);
-            if (nextRun === actionRun) {
+            if (result.kind === 'unchanged') {
                 return;
             }
-            const flippedAfter = nextRun.board?.flippedTileIds.length ?? 0;
-            if (flippedAfter > flippedBefore) {
+            if (result.kind === 'hazardGameOver') {
+                applyImmediateGameOverFromTilePress(result.run);
+                return;
+            }
+            if (result.playFlipSfx) {
                 void resumeAudioContext();
                 const g = sfxGainFromStore();
                 playFlipSfx(g);
-                if (flippedAfter === 3) {
+                if (result.playGambitCommitSfx) {
                     playGambitCommitSfx(g);
                 }
             }
-            if (nextRun.status === 'gameOver') {
-                applyImmediateGameOverFromTilePress(nextRun);
+            if (result.kind === 'flipGameOver') {
+                applyImmediateGameOverFromTilePress(result.run);
                 return;
             }
-            set({ run: nextRun, peekModeArmed: false });
-            if (nextRun.status === 'resolving' && nextRun.timerState.resolveRemainingMs !== null) {
-                scheduleResolveTimer(nextRun.timerState.resolveRemainingMs);
+            set(createRunWithPeekDisarmedPatch(result.run));
+            if (result.resolveDelayMs !== null) {
+                scheduleResolveTimer(result.resolveDelayMs);
             }
             return;
         }
@@ -1468,180 +658,35 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
 
-        const armedPowerCount = [run.strayRemoveArmed, peekModeArmed, destroyPairArmed].filter(Boolean).length;
-        const canContinueSinglePowerAfterContact = !boardPinMode && armedPowerCount === 1;
-        let actionRun = run;
-        let pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
-        const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
-        const hazardRun = applyEnemyHazardClick(actionRun, tileId, { advanceHazards: flippedBefore === 0 });
-        const enemyContacted = hazardRun !== actionRun;
-        if (enemyContacted) {
-            void resumeAudioContext();
-            playResolveSfx(run, hazardRun, sfxGainFromStore());
-            if (hazardRun.status === 'gameOver') {
-                applyResolvedRun({ ...hazardRun, strayRemoveArmed: false });
-                set({
-                    boardPinMode: false,
-                    destroyPairArmed: false,
-                    peekModeArmed: false,
-                    ...BOARD_FLOATER_POP_CLEAR
-                });
-                return;
+        applyPlayingTilePressSurfaceResult(
+            createPlayingTilePressSurfaceResult({
+                boardPinMode,
+                destroyPairArmed,
+                peekModeArmed,
+                run,
+                tileId
+            }),
+            {
+                applyImmediateGameOverFromTilePress,
+                applyResolvedRun,
+                clearAllTimers,
+                freezeRunSnapshotForPlayingMetaOverlay,
+                playTilePressAudioCues: (audio) => {
+                    playTilePressAudioCues(audio, {
+                        getSfxGain: sfxGainFromStore,
+                        playDestroyPairSfx,
+                        playFlipSfx,
+                        playPeekPowerSfx,
+                        playResolveSfx,
+                        playStrayPowerSfx,
+                        playTrapSfx,
+                        resumeAudioContext
+                    });
+                },
+                scheduleResolveTimer,
+                setState: (patch) => useAppStore.setState(patch)
             }
-            actionRun = {
-                ...hazardRun,
-                strayRemoveArmed: canContinueSinglePowerAfterContact ? hazardRun.strayRemoveArmed : false
-            };
-            pressedTile = actionRun.board?.tiles.find((tile) => tile.id === tileId) ?? pressedTile;
-        }
-
-        if (pressedTile?.pairKey === EXIT_PAIR_KEY) {
-            const nextRun = revealDungeonExit(actionRun, tileId);
-            if (nextRun !== actionRun) {
-                void resumeAudioContext();
-                playFlipSfx(sfxGainFromStore());
-            }
-            set({
-                run: nextRun,
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                dungeonExitPromptOpen: true
-            });
-            return;
-        }
-        if (pressedTile?.pairKey === SHOP_PAIR_KEY) {
-            const nextRun = revealDungeonShop(actionRun, tileId);
-            if (nextRun === actionRun || nextRun.shopOffers.length === 0) {
-                return;
-            }
-            void resumeAudioContext();
-            playFlipSfx(sfxGainFromStore());
-            clearAllTimers();
-            set({
-                run: freezeRunSnapshotForPlayingMetaOverlay(nextRun),
-                view: 'shop',
-                shopReturnMode: 'floor',
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                ...BOARD_FLOATER_POP_CLEAR
-            });
-            return;
-        }
-        if (pressedTile?.pairKey === ROOM_PAIR_KEY) {
-            const nextRun = revealDungeonRoom(actionRun, tileId);
-            if (nextRun !== actionRun) {
-                void resumeAudioContext();
-                playFlipSfx(sfxGainFromStore());
-                set({
-                    run: nextRun,
-                    boardPinMode: false,
-                    destroyPairArmed: false,
-                    peekModeArmed: false
-                });
-            }
-            return;
-        }
-
-        if (!enemyContacted && boardPinMode) {
-            const nextRun = togglePinnedTile(actionRun, tileId);
-            if (nextRun !== actionRun) {
-                set({ run: nextRun });
-            }
-            return;
-        }
-
-        if ((!enemyContacted || canContinueSinglePowerAfterContact) && actionRun.strayRemoveArmed) {
-            const nextRun = applyStrayRemove(actionRun, tileId);
-            if (nextRun !== actionRun) {
-                void resumeAudioContext();
-                playStrayPowerSfx(sfxGainFromStore());
-                set({ run: nextRun });
-            } else if (enemyContacted) {
-                set({ run: actionRun });
-            }
-            return;
-        }
-
-        if (
-            (!enemyContacted || canContinueSinglePowerAfterContact) &&
-            peekModeArmed &&
-            actionRun.peekCharges > 0 &&
-            actionRun.board &&
-            actionRun.board.flippedTileIds.length === 0
-        ) {
-            const nextRun = applyPeek(actionRun, tileId);
-            if (nextRun !== actionRun) {
-                void resumeAudioContext();
-                playPeekPowerSfx(sfxGainFromStore());
-                set({ run: nextRun, peekModeArmed: false });
-            }
-            return;
-        }
-
-        if ((!enemyContacted || canContinueSinglePowerAfterContact) && destroyPairArmed) {
-            const nextRun = applyDestroyPair(actionRun, tileId);
-            if (nextRun === actionRun) {
-                if (enemyContacted) {
-                    set({ run: actionRun });
-                }
-                return;
-            }
-
-            void resumeAudioContext();
-            playDestroyPairSfx(sfxGainFromStore());
-
-            set({ run: nextRun, destroyPairArmed: false, peekModeArmed: false });
-
-            if (nextRun.status === 'levelComplete' || nextRun.status === 'gameOver') {
-                applyResolvedRun(nextRun);
-            }
-            return;
-        }
-
-        const nextRun = flipTile(actionRun, tileId);
-
-        if (nextRun === actionRun) {
-            if (enemyContacted) {
-                set({
-                    run: actionRun,
-                    boardPinMode: false,
-                    destroyPairArmed: false,
-                    peekModeArmed: false,
-                    ...BOARD_FLOATER_POP_CLEAR
-                });
-            }
-            return;
-        }
-
-        const flippedAfter = nextRun.board?.flippedTileIds.length ?? 0;
-        const pressedTileAfter = nextRun.board?.tiles.find((tile) => tile.id === tileId) ?? null;
-        const pressedTileBecameFaceUp = pressedTile?.state === 'hidden' && pressedTileAfter?.state === 'flipped';
-        if (flippedAfter > flippedBefore || pressedTileBecameFaceUp) {
-            void resumeAudioContext();
-            playFlipSfx(sfxGainFromStore());
-        }
-        if (nextRun.dungeonTrapsTriggered > actionRun.dungeonTrapsTriggered) {
-            void resumeAudioContext();
-            playTrapSfx(sfxGainFromStore());
-        }
-
-        if (nextRun.status === 'gameOver') {
-            applyImmediateGameOverFromTilePress(nextRun);
-            return;
-        }
-
-        set({
-            run: nextRun,
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false
-        });
-
-        if (nextRun.status === 'resolving' && nextRun.timerState.resolveRemainingMs !== null) {
-            scheduleResolveTimer(nextRun.timerState.resolveRemainingMs);
-        }
+        );
     },
 
     closeDungeonExitPrompt: () => {
@@ -1662,22 +707,21 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     togglePeekMode: () => {
         const { run, view, boardPinMode, destroyPairArmed, peekModeArmed } = get();
-        if (!run || view !== 'playing' || run.status !== 'playing' || run.peekCharges < 1) {
+        const result = createPeekModeToggleResult({
+            boardPinMode,
+            destroyPairArmed,
+            peekModeArmed,
+            run,
+            view
+        });
+        if (result.kind === 'ignored') {
             return;
         }
-        if (boardPinMode || destroyPairArmed) {
-            return;
-        }
-        const nextPeekArmed = !peekModeArmed;
-        const nextRun = run.strayRemoveArmed ? { ...run, strayRemoveArmed: false } : run;
-        if (nextPeekArmed) {
+        if (result.playArmSfx) {
             void resumeAudioContext();
             playPowerArmSfx(sfxGainFromStore());
         }
-        set({
-            peekModeArmed: nextPeekArmed,
-            run: nextRun
-        });
+        set(result.patch);
     },
 
     undoResolvingFlip: () => {
@@ -1694,432 +738,185 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     toggleStrayArm: () => {
         const { run, view } = get();
-        if (!run || view !== 'playing' || run.status !== 'playing') {
+        const result = createStrayArmToggleResult({ run, view });
+        if (result.kind === 'ignored') {
             return;
         }
-        const wasArmed = run.strayRemoveArmed;
-        const nextRun = toggleStrayRemoveArmed(run);
-        if (nextRun !== run) {
-            if (nextRun.strayRemoveArmed && !wasArmed) {
-                void resumeAudioContext();
-                playPowerArmSfx(sfxGainFromStore());
-            }
-            set({
-                run: nextRun,
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false
-            });
+        if (result.playArmSfx) {
+            void resumeAudioContext();
+            playPowerArmSfx(sfxGainFromStore());
         }
+        set(result.patch);
     },
 
     shuffleBoard: () => {
         const { run, view } = get();
-
-        if (!run || view !== 'playing' || run.status !== 'playing') {
+        const result = createShuffleBoardSurfaceResult({ run, view });
+        if (result.kind === 'ignored') {
             return;
         }
-
-        const nextRun = applyShuffle(run);
-        if (nextRun !== run) {
-            set({ run: nextRun });
-        }
+        set(result.patch);
     },
 
     armRegionShuffleRowPick: (row) => {
         const { run, view } = get();
-        if (!run || view !== 'playing' || run.status !== 'playing') {
+        const result = createRegionShuffleArmSurfaceResult({ row, run, view });
+        if (result.kind === 'ignored') {
             return;
         }
-        const nextRun = armRegionShuffleRow(run, row);
-        if (nextRun !== run) {
-            set({ run: nextRun, boardPinMode: false, destroyPairArmed: false, peekModeArmed: false });
-        }
+        set(result.patch);
     },
 
     shuffleRegionRow: (row) => {
         const { run, view } = get();
-        if (!run || view !== 'playing' || run.status !== 'playing') {
+        const result = createRegionShuffleSurfaceResult({ row, run, view });
+        if (result.kind === 'ignored') {
             return;
         }
-        const nextRun = applyRegionShuffle(run, row);
-        if (nextRun !== run) {
-            set({ run: nextRun, boardPinMode: false, destroyPairArmed: false, peekModeArmed: false });
-        }
+        set(result.patch);
     },
 
     notifyMemorizeBoardReady: (boardKey) => {
-        const { run, view } = get();
-        if (
-            !run ||
-            view !== 'playing' ||
-            run.status !== 'memorize' ||
-            run.timerState.memorizeRemainingMs === null ||
-            memorizeTimer ||
-            pendingMemorizeBoardKey !== boardKey ||
-            getMemorizeBoardKey(run) !== boardKey
-        ) {
-            return;
-        }
-
-        scheduleMemorizeTimer(run.timerState.memorizeRemainingMs);
+        runTimerController.notifyMemorizeBoardReady(boardKey);
     },
 
     applyFlashPairPower: () => {
         const { run, view } = get();
-        if (!run || view !== 'playing' || run.status !== 'playing') {
+        const result = createFlashPairSurfaceResult({ run, view });
+        if (result.kind === 'ignored') {
             return;
         }
-        if (!run.practiceMode && !run.wildMenuRun) {
-            return;
-        }
-        const nextRun = applyFlashPair(run);
-        if (nextRun !== run) {
+        if (result.playArmSfx) {
             void resumeAudioContext();
             playPowerArmSfx(sfxGainFromStore() * 0.78);
-            set({ run: nextRun });
         }
+        set(result.patch);
     },
 
     toggleBoardPinMode: () => {
         const { boardPinMode, run, view } = get();
-        const next = !boardPinMode;
-        if (next && (!run || view !== 'playing' || run.status !== 'playing')) {
+        const result = createBoardPinModeToggleResult({ boardPinMode, run, view });
+        if (result.kind === 'ignored') {
             return;
         }
-        if (next && run && view === 'playing' && run.status === 'playing') {
+        if (result.playArmSfx) {
             void resumeAudioContext();
             playPowerArmSfx(sfxGainFromStore() * 0.92);
         }
-        set({
-            boardPinMode: next,
-            destroyPairArmed: false,
-            peekModeArmed: false
-        });
+        set(result.patch);
     },
 
     toggleDestroyPairArmed: () => {
         const { destroyPairArmed, run, view } = get();
-        const next = !destroyPairArmed;
-        const canArmDestroy =
-            run != null &&
-            view === 'playing' &&
-            run.status === 'playing' &&
-            !run.activeContract?.noDestroy &&
-            run.destroyPairCharges > 0 &&
-            run.board != null &&
-            run.board.flippedTileIds.length === 0 &&
-            collectDestroyEligibleTileIds(run.board).size > 0;
-        if (next && !canArmDestroy) {
+        const result = createDestroyPairArmedToggleResult({ destroyPairArmed, run, view });
+        if (result.kind === 'ignored') {
             return;
         }
-        if (next && run && view === 'playing' && run.status === 'playing' && run.destroyPairCharges > 0) {
+        if (result.playArmSfx) {
             void resumeAudioContext();
             playPowerArmSfx(sfxGainFromStore());
         }
-        set({
-            destroyPairArmed: next,
-            boardPinMode: false,
-            peekModeArmed: false
-        });
+        set(result.patch);
     },
 
     pause: () => {
-        const { run } = get();
-
-        if (!run || !runCanPause(run)) {
-            return;
-        }
-
-        const pausedRun = freezeRun(run);
-        clearAllTimers();
-        void resumeUiSfxContext();
-        playPauseOpenSfx(sfxGainFromStore());
-        set({ run: pausedRun, ...BOARD_FLOATER_POP_CLEAR });
+        executePauseRun({
+            applyResolvedRun,
+            clearAllTimers,
+            freezeRun,
+            getState: get,
+            playPauseOpenSfx: () => playPauseOpenSfx(sfxGainFromStore()),
+            playPauseResumeSfx: () => playPauseResumeSfx(sfxGainFromStore()),
+            resumeRunWithTimers,
+            resumeUiSfxContext,
+            setState: set
+        });
     },
 
     resume: () => {
-        const { run } = get();
-
-        if (!run || run.status !== 'paused' || !run.timerState.pausedFromStatus) {
-            return;
-        }
-
-        const nextRun = resumeRunWithTimers(run);
-        if (nextRun.status === 'gameOver') {
-            applyResolvedRun(nextRun);
-            return;
-        }
-
-        void resumeUiSfxContext();
-        playPauseResumeSfx(sfxGainFromStore());
-        set({ run: nextRun });
+        executeResumeRun({
+            applyResolvedRun,
+            clearAllTimers,
+            freezeRun,
+            getState: get,
+            playPauseOpenSfx: () => playPauseOpenSfx(sfxGainFromStore()),
+            playPauseResumeSfx: () => playPauseResumeSfx(sfxGainFromStore()),
+            resumeRunWithTimers,
+            resumeUiSfxContext,
+            setState: set
+        });
     },
 
     acceptEndlessRiskWager: () => {
-        const { run } = get();
-
-        if (!run) {
+        const result = createRiskWagerSurfaceResult(get().run);
+        if (result.kind === 'ignored') {
             return;
         }
 
         void resumeAudioContext();
         playWagerArmSfx(sfxGainFromStore());
-        set({ run: acceptEndlessRiskWagerRule(run) });
+        set(result.patch);
     },
 
     purchaseShopOffer: (offerId) => {
         const { run, view, shopReturnMode } = get();
-        if (!run || view !== 'shop' || !runCanUseShopSurface(run, shopReturnMode)) {
+        const result = createShopPurchaseSurfaceResult({
+            offerId,
+            run,
+            shopReturnMode,
+            view
+        });
+        if (result.kind === 'ignored') {
             return;
         }
-        set({ run: purchaseShopOfferRule(run, offerId) });
+        set(result.patch);
     },
 
     rerollShopOffers: () => {
         const { run, view, shopReturnMode } = get();
-        if (!run || view !== 'shop' || !runCanUseShopSurface(run, shopReturnMode)) {
+        const result = createShopRerollSurfaceResult({
+            run,
+            shopReturnMode,
+            view
+        });
+        if (result.kind === 'ignored') {
             return;
         }
-        set({ run: rerollShopOffersRule(run) });
+        set(result.patch);
     },
 
     continueToNextLevel: () => {
-        let { run } = get();
-
-        if (!run || run.status !== 'levelComplete') {
-            return;
-        }
-
-        if (routeDeadInterludeRunToGameOver(run)) {
-            return;
-        }
-
-        if (run.gameMode === 'puzzle' || run.relicOffer) {
-            return;
-        }
-
-        clearAllTimers();
-
-        if (run.status === 'levelComplete' && run.sideRoom) {
-            set({
-                view: 'sideRoom',
-                run,
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                ...BOARD_FLOATER_POP_CLEAR
-            });
-            return;
-        }
-
-        if (run.status === 'levelComplete' && needsRelicPick(run) && !run.relicOffer) {
-            const offerRun = openRelicOffer(run);
-            if (offerRun.relicOffer) {
-                set({
-                    view: 'playing',
-                    run: offerRun,
-                    boardPinMode: false,
-                    destroyPairArmed: false,
-                    peekModeArmed: false,
-                    ...BOARD_FLOATER_POP_CLEAR
-                });
-                return;
-            }
-            run = offerRun;
-        }
-
-        const nextRun = advanceToNextLevel(run);
-
-        if (nextRun.status === 'gameOver') {
-            applyResolvedRun(nextRun);
-            return;
-        }
-
-        set({
-            newlyUnlockedAchievements: [],
-            view: 'playing',
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run: nextRun,
-            ...BOARD_FLOATER_POP_CLEAR
+        executeContinueToNextLevel({
+            applyResolvedRun,
+            clearAllTimers,
+            continueToNextLevel: () => get().continueToNextLevel(),
+            getState: get,
+            prepareMemorizeTimerForBoardReady,
+            setState: set
         });
-
-        prepareMemorizeTimerForBoardReady(nextRun);
     },
 
     chooseRouteAndContinue: (choiceId) => {
-        const { run, view } = get();
-
-        if (!run || view !== 'playing' || run.status !== 'levelComplete') {
-            return;
-        }
-        if (run.pendingRouteCardPlan) {
-            get().continueToNextLevel();
-            return;
-        }
-
-        const routeOutcome = applyRouteChoiceOutcome(run, choiceId);
-        if (!routeOutcome.applied) {
-            return;
-        }
-
-        clearAllTimers();
-
-        const routeRun = openRouteSideRoom(routeOutcome.run);
-
-        if (routeRun.sideRoom) {
-            set({
-                view: 'sideRoom',
-                run: routeRun,
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                ...BOARD_FLOATER_POP_CLEAR
-            });
-            return;
-        }
-
-        if (routeRun.shopOffers.length > 0) {
-            set({
-                view: 'shop',
-                run: routeRun,
-                shopReturnMode: 'summary',
-                boardPinMode: false,
-                destroyPairArmed: false,
-                peekModeArmed: false,
-                ...BOARD_FLOATER_POP_CLEAR
-            });
-            return;
-        }
-
-        let nextRouteRun = routeRun;
-
-        if (needsRelicPick(nextRouteRun) && !nextRouteRun.relicOffer) {
-            const offerRun = openRelicOffer(nextRouteRun);
-            if (offerRun.relicOffer) {
-                set({
-                    view: 'playing',
-                    run: offerRun,
-                    boardPinMode: false,
-                    destroyPairArmed: false,
-                    peekModeArmed: false,
-                    ...BOARD_FLOATER_POP_CLEAR
-                });
-                return;
-            }
-            nextRouteRun = offerRun;
-        }
-
-        if (nextRouteRun.relicOffer) {
-            set({ run: nextRouteRun });
-            return;
-        }
-
-        const nextRun = advanceToNextLevel(nextRouteRun);
-
-        if (nextRun.status === 'gameOver') {
-            applyResolvedRun(nextRun);
-            return;
-        }
-
-        set({
-            newlyUnlockedAchievements: [],
-            view: 'playing',
-            boardPinMode: false,
-            destroyPairArmed: false,
-            peekModeArmed: false,
-            run: nextRun,
-            ...BOARD_FLOATER_POP_CLEAR
+        executeChooseRouteAndContinue(choiceId, {
+            applyResolvedRun,
+            clearAllTimers,
+            continueToNextLevel: () => get().continueToNextLevel(),
+            getState: get,
+            prepareMemorizeTimerForBoardReady,
+            setState: set
         });
-
-        prepareMemorizeTimerForBoardReady(nextRun);
     },
 
     restartRun: () => {
-        clearAllTimers();
-        const prev = get().run;
-        const best = get().saveData.bestScore;
-        const save = get().saveData;
-        const meta = metaRelicOpts(save);
-        const settings = get().settings;
-        let run: RunState;
-        if (isDungeonShowcaseRun(prev)) {
-            run = createDungeonShowcaseRun(best, meta);
-        } else if (prev?.gameMode === 'daily') {
-            run = createDailyRun(best, meta);
-        } else if (prev?.gameMode === 'gauntlet') {
-            run = createGauntletRun(best, prev.gauntletSessionDurationMs ?? 10 * 60 * 1000, meta);
-        } else if (prev?.gameMode === 'puzzle' && prev.puzzleId) {
-            const puzzle = BUILTIN_PUZZLES[prev.puzzleId];
-            run = puzzle ? createPuzzleRun(best, puzzle.id, puzzle.tiles, 1, meta) : createNewRun(best, meta);
-        } else if (prev?.gameMode === 'meditation') {
-            run = createMeditationRun(
-                best,
-                prev.activeMutators.length > 0 ? prev.activeMutators : undefined,
-                meta
-            );
-        } else if (prev?.activeContract?.maxPinsTotalRun != null) {
-            run = createNewRun(best, { ...meta, activeContract: prev.activeContract });
-        } else if (prev?.wildMenuRun) {
-            run = createWildRun(best, meta);
-        } else if (prev?.practiceMode) {
-            run = createNewRun(best, { practiceMode: true, ...meta });
-        } else if (prev?.activeContract?.noShuffle && prev.activeContract.noDestroy) {
-            run = createNewRun(best, {
-                ...meta,
-                activeContract: prev.activeContract
-            });
-        } else {
-            run = createNewRun(best, {
-                ...meta,
-                onboardingSafeFirstFloor: !save.onboardingDismissed
-            });
-        }
-        run = patchRunFromUserSettings(run, settings);
-
-        trackEvent('run_start', { mode: run.gameMode, practice: run.practiceMode, restarted: true });
-        playRunStartUiSfxFromStore();
-
-        set({
-            view: 'playing',
-            newlyUnlockedAchievements: [],
-            ...RUN_SURFACE_RESET,
-            run,
-            runStartSaveData: save
-        });
-
-        prepareMemorizeTimerForBoardReady(run);
+        runLifecycleController.restartRun();
     },
 
     endRun: () => {
-        clearAllTimers();
-        set({
-            view: 'menu',
-            run: null,
-            runStartSaveData: null,
-            newlyUnlockedAchievements: [],
-            subscreenReturnView: 'menu',
-            settingsReturnView: 'menu',
-            ...RUN_SURFACE_RESET
-        });
+        runLifecycleController.endRun();
     },
 
     triggerDebugReveal: () => {
-        const { run, settings } = get();
-
-        if (!run || run.status !== 'playing' || !settings.debugFlags.allowBoardReveal) {
-            return;
-        }
-
-        const nextRun = enableDebugPeek(run, settings.debugFlags.disableAchievementsOnDebug);
-
-        set({ run: nextRun });
-
-        if (nextRun.timerState.debugRevealRemainingMs !== null) {
-            scheduleDebugRevealTimer(nextRun.timerState.debugRevealRemainingMs);
-        }
+        runLifecycleController.triggerDebugReveal();
     }
 }));
 

@@ -1,0 +1,78 @@
+import type { HazardTileKind, Tile } from '../../shared/contracts';
+import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
+import { isTilePickable } from './tileBoardPick';
+
+export type TileBoardPowerBackAccent = 'destroy' | 'peek' | 'stray' | 'pin';
+
+export interface TileBoardHiddenBackAccents {
+    destroyBlockedDecoyBack: boolean;
+    hazardBackAccent: HazardTileKind | null;
+    nonPickableBack: boolean;
+    objectiveBackAccent: boolean;
+    powerBackAccent: TileBoardPowerBackAccent | null;
+    routeBackAccent: boolean;
+}
+
+export interface TileBoardHiddenBackAccentsInput {
+    destroyEligibleTileIds: ReadonlySet<string>;
+    destroyPowerVisualActive: boolean;
+    faceUp: boolean;
+    flipLocked: boolean;
+    interactive: boolean;
+    peekEligibleTileIds: ReadonlySet<string>;
+    peekPowerVisualActive: boolean;
+    pinModeBoardHintActive: boolean;
+    strayEligibleTileIds: ReadonlySet<string>;
+    strayPowerVisualActive: boolean;
+    tile: Tile;
+}
+
+export const getTileBoardHiddenBackAccents = ({
+    destroyEligibleTileIds,
+    destroyPowerVisualActive,
+    faceUp,
+    flipLocked,
+    interactive,
+    peekEligibleTileIds,
+    peekPowerVisualActive,
+    pinModeBoardHintActive,
+    strayEligibleTileIds,
+    strayPowerVisualActive,
+    tile
+}: TileBoardHiddenBackAccentsInput): TileBoardHiddenBackAccents => {
+    const destroyBlockedDecoyBack =
+        destroyPowerVisualActive && !faceUp && tile.state === 'hidden' && tile.pairKey === DECOY_PAIR_KEY;
+
+    if (tile.state !== 'hidden' || faceUp) {
+        return {
+            destroyBlockedDecoyBack,
+            hazardBackAccent: null,
+            nonPickableBack: false,
+            objectiveBackAccent: false,
+            powerBackAccent: null,
+            routeBackAccent: false
+        };
+    }
+
+    let powerBackAccent: TileBoardPowerBackAccent | null = null;
+    if (pinModeBoardHintActive) {
+        powerBackAccent = 'pin';
+    } else if (destroyBlockedDecoyBack) {
+        powerBackAccent = null;
+    } else if (destroyPowerVisualActive && destroyEligibleTileIds.has(tile.id)) {
+        powerBackAccent = 'destroy';
+    } else if (peekPowerVisualActive && peekEligibleTileIds.has(tile.id)) {
+        powerBackAccent = 'peek';
+    } else if (strayPowerVisualActive && strayEligibleTileIds.has(tile.id)) {
+        powerBackAccent = 'stray';
+    }
+
+    return {
+        destroyBlockedDecoyBack,
+        hazardBackAccent: tile.tileHazardKind ?? null,
+        nonPickableBack: !isTilePickable(tile, interactive, flipLocked),
+        objectiveBackAccent: Boolean(tile.dungeonCardKind || tile.dungeonBossId),
+        powerBackAccent,
+        routeBackAccent: Boolean(tile.routeSpecialKind || tile.routeCardKind)
+    };
+};

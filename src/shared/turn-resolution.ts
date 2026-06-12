@@ -1,13 +1,15 @@
 export {
-    calculateMatchScore,
     applyEnemyHazardClick,
     cancelResolvingWithUndo,
-    computeFlipResolveDelayMs,
     flipTile,
     getMatchFloaterAnchorTileIds,
     getMismatchFloaterAnchorTileIds,
+    resolveBoardTurn
+} from './game';
+export {
+    calculateMatchScore,
+    computeFlipResolveDelayMs,
     getPresentationMutatorMatchPenalty,
     PRESENTATION_MUTATOR_MATCH_PENALTIES,
-    resolveBoardTurn,
     tilesArePairMatch
-} from './game';
+} from './scoring-rules';

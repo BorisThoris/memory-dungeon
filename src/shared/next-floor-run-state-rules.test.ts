@@ -1,0 +1,102 @@
+import { describe, expect, it } from 'vitest';
+import { type RelicId } from './contracts';
+import { createNewRun } from './game';
+import { createNextFloorRunState } from './next-floor-run-state-rules';
+import { createRunShopOffers } from './shop-rules';
+
+describe('createNextFloorRunState', () => {
+    it('resets per-floor counters and prepares memorize timing for the next board', () => {
+        const baseRun = createNewRun(0, { runSeed: 12 });
+        const run = {
+            ...baseRun,
+            status: 'levelComplete' as const,
+            lives: 2,
+            pendingMemorizeBonusMs: 900,
+            pinnedTileIds: ['old'],
+            matchResolutionsThisFloor: 7,
+            findablesClaimedThisFloor: 2,
+            recallMatchesThisFloor: 3,
+            hazardTileTriggersThisFloor: 4,
+            hazardShuffleSnaresThisFloor: 1,
+            dungeonTrapsResolvedThisFloor: 2,
+            enemyHazardsDefeatedThisFloor: 1,
+            shopOffers: createRunShopOffers(baseRun).slice(0, 1),
+            shopRerolls: 1,
+            timerState: {
+                memorizeRemainingMs: null,
+                resolveRemainingMs: 100,
+                debugRevealRemainingMs: 100,
+                pausedFromStatus: null
+            },
+            stats: {
+                ...createNewRun(0, { runSeed: 12 }).stats,
+                tries: 5,
+                currentLevelScore: 123,
+                highestLevel: 1,
+                currentStreak: 3,
+                rating: 'A' as const
+            }
+        };
+        const nextBoard = createNewRun(0, { runSeed: 12 }).board!;
+
+        const next = createNextFloorRunState(run, {
+            lives: 2,
+            activeMutators: run.activeMutators,
+            dungeonRun: run.dungeonRun,
+            board: { ...nextBoard, level: 4 },
+            parasiteFloors: 1,
+            parasiteWardRemaining: 0,
+            memorizeRemainingMs: 2500
+        });
+
+        expect(next.status).toBe('memorize');
+        expect(next.activeMutators).toEqual(run.activeMutators);
+        expect(next.pendingRouteCardPlan).toBeNull();
+        expect(next.sideRoom).toBeNull();
+        expect(next.pendingMemorizeBonusMs).toBe(0);
+        expect(next.pinnedTileIds).toEqual([]);
+        expect(next.matchResolutionsThisFloor).toBe(0);
+        expect(next.findablesClaimedThisFloor).toBe(0);
+        expect(next.recallMatchesThisFloor).toBe(0);
+        expect(next.hazardTileTriggersThisFloor).toBe(0);
+        expect(next.hazardShuffleSnaresThisFloor).toBe(0);
+        expect(next.dungeonTrapsResolvedThisFloor).toBe(0);
+        expect(next.enemyHazardsDefeatedThisFloor).toBe(0);
+        expect(next.shopOffers).toEqual([]);
+        expect(next.shopRerolls).toBe(0);
+        expect(next.timerState).toMatchObject({
+            memorizeRemainingMs: 2500,
+            resolveRemainingMs: null,
+            debugRevealRemainingMs: null,
+            pausedFromStatus: null
+        });
+        expect(next.lastLevelResult).toBeNull();
+        expect(next.stats.tries).toBe(0);
+        expect(next.stats.currentLevelScore).toBe(0);
+        expect(next.stats.currentStreak).toBe(0);
+        expect(next.stats.highestLevel).toBe(4);
+    });
+
+    it('restores per-floor relic free-use flags', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 15 }),
+            relicIds: ['first_shuffle_free_per_floor', 'region_shuffle_free_first'] satisfies RelicId[],
+            freeShuffleThisFloor: false,
+            regionShuffleFreeThisFloor: false
+        };
+        const nextBoard = run.board!;
+
+        const next = createNextFloorRunState(run, {
+            lives: run.lives,
+            activeMutators: run.activeMutators,
+            dungeonRun: run.dungeonRun,
+            board: nextBoard,
+            parasiteFloors: run.parasiteFloors,
+            parasiteWardRemaining: run.parasiteWardRemaining,
+            memorizeRemainingMs: 1000
+        });
+
+        expect(next.freeShuffleThisFloor).toBe(true);
+        expect(next.regionShuffleFreeThisFloor).toBe(true);
+    });
+});

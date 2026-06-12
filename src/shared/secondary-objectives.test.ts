@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { FLIP_PAR_BONUS_SCORE } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import {
     getDungeonLevelResultTags,
@@ -15,7 +16,7 @@ describe('REG-048 secondary objective clarity', () => {
 
         expect(row?.status).toBe('active');
         expect(row?.condition).toMatch(/match-resolution par/i);
-        expect(row?.reward).toContain('+30');
+        expect(row?.reward).toContain(`+${FLIP_PAR_BONUS_SCORE}`);
 
         const failed = {
             ...active,

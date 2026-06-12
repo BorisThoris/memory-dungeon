@@ -1,0 +1,167 @@
+import { type BoardState, type DungeonKeyKind, type RunState } from './contracts';
+import {
+    getDungeonExitStatus,
+    getDungeonObjectiveStatus,
+    type DungeonExitStatus
+} from './dungeon-board-status';
+import { addRunDungeonKey } from './dungeon-key-rules';
+import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
+import { gainRelicFavor } from './relic-favor-rules';
+import { createRouteCardPlanForRoute } from './route-card-plan-rules';
+import {
+    EXIT_PAIR_KEY,
+    isSingletonUtilityPairKey
+} from './tile-identity';
+
+export const DUNGEON_OBJECTIVE_SCORE_REWARD = 35;
+export const DUNGEON_OBJECTIVE_FAVOR_REWARD = 1;
+
+export type DungeonExitActivationSpend = 'none' | 'key' | 'master_key';
+
+export interface DungeonExitActivationSpendResult {
+    canOpen: boolean;
+    spendsKey: boolean;
+    spendsMasterKey: boolean;
+    keyKind: DungeonKeyKind | null;
+}
+
+export interface DungeonExitObjectiveRewardResult {
+    run: RunState;
+    rewarded: boolean;
+}
+
+export interface DungeonExitActivationTransition {
+    board: BoardState;
+    run: RunState;
+}
+
+export const resolveDungeonExitActivationSpend = (
+    status: Pick<
+        DungeonExitStatus,
+        | 'canActivate'
+        | 'canActivateWithKey'
+        | 'canActivateWithMasterKey'
+        | 'canActivateWithoutSpend'
+        | 'lockKind'
+    >,
+    spend: DungeonExitActivationSpend
+): DungeonExitActivationSpendResult => {
+    const lockKind = status.lockKind;
+    const spendsKey = spend === 'key' && lockKind !== 'none' && lockKind !== 'lever' && status.canActivateWithKey;
+    const spendsMasterKey =
+        spend === 'master_key' && lockKind !== 'none' && lockKind !== 'lever' && status.canActivateWithMasterKey;
+    const canOpen =
+        status.canActivateWithoutSpend ||
+        (lockKind === 'lever' && status.canActivate) ||
+        spendsKey ||
+        spendsMasterKey;
+
+    return {
+        canOpen,
+        spendsKey,
+        spendsMasterKey,
+        keyKind: spendsKey ? lockKind : null
+    };
+};
+
+export const sealBoardForDungeonExit = (board: BoardState): BoardState => {
+    const realPairKeys = new Set(
+        board.tiles
+            .map((tile) => tile.pairKey)
+            .filter((pairKey) => !isSingletonUtilityPairKey(pairKey))
+    );
+    return {
+        ...board,
+        matchedPairs: realPairKeys.size,
+        flippedTileIds: [],
+        dungeonExitActivated: true,
+        tiles: board.tiles.map((tile) => {
+            if (tile.pairKey === EXIT_PAIR_KEY) {
+                return {
+                    ...tile,
+                    state: 'matched' as const,
+                    dungeonCardState: 'resolved' as const,
+                    dungeonExitActivated: true
+                };
+            }
+            if (isSingletonUtilityPairKey(tile.pairKey)) {
+                return tile.state === 'flipped' ? { ...tile, state: 'hidden' as const } : tile;
+            }
+            return tile.state === 'matched' || tile.state === 'removed'
+                ? tile
+                : clearDungeonCardFields({ ...tile, state: 'removed' as const });
+        })
+    };
+};
+
+export const applyDungeonExitObjectiveReward = (
+    run: RunState,
+    status: Pick<DungeonExitStatus, 'routeType'>
+): DungeonExitObjectiveRewardResult => {
+    const objective = getDungeonObjectiveStatus(run);
+    const rewarded =
+        (objective.completed || (objective.objectiveId === 'claim_route' && status.routeType != null)) &&
+        objective.objectiveId !== 'find_exit';
+    const favor = gainRelicFavor(run, rewarded ? DUNGEON_OBJECTIVE_FAVOR_REWARD : 0);
+
+    return {
+        rewarded,
+        run: {
+            ...run,
+            stats: rewarded
+                ? {
+                      ...run.stats,
+                      totalScore: run.stats.totalScore + DUNGEON_OBJECTIVE_SCORE_REWARD,
+                      currentLevelScore: run.stats.currentLevelScore + DUNGEON_OBJECTIVE_SCORE_REWARD
+                  }
+                : run.stats,
+            bonusRelicPicksNextOffer: favor.bonusRelicPicksNextOffer,
+            favorBonusRelicPicksNextOffer: favor.favorBonusRelicPicksNextOffer,
+            relicFavorProgress: favor.relicFavorProgress
+        }
+    };
+};
+
+export const createDungeonExitActivationTransition = (
+    run: RunState,
+    spend: DungeonExitActivationSpend = 'none'
+): DungeonExitActivationTransition | null => {
+    if (run.status !== 'playing' || !run.board) {
+        return null;
+    }
+    const status = getDungeonExitStatus(run);
+    if (!status.exitTile || !status.revealed) {
+        return null;
+    }
+    const activationSpend = resolveDungeonExitActivationSpend(status, spend);
+    if (!activationSpend.canOpen) {
+        return null;
+    }
+    const nextKeys = activationSpend.keyKind
+        ? addRunDungeonKey(run.dungeonKeys, activationSpend.keyKind, -1)
+        : run.dungeonKeys;
+    const objectiveReward = applyDungeonExitObjectiveReward(run, status);
+    const openedBoard = sealBoardForDungeonExit(run.board);
+    const routeType = status.routeType;
+
+    return {
+        board: openedBoard,
+        run: {
+            ...objectiveReward.run,
+            dungeonKeys: nextKeys,
+            dungeonMasterKeys: activationSpend.spendsMasterKey
+                ? Math.max(0, run.dungeonMasterKeys - 1)
+                : run.dungeonMasterKeys,
+            dungeonGatewaysUsed: run.dungeonGatewaysUsed + 1,
+            pendingRouteCardPlan:
+                run.pendingRouteCardPlan == null && routeType
+                    ? createRouteCardPlanForRoute(
+                          run,
+                          routeType,
+                          `exit:${run.runRulesVersion}:${run.runSeed}:${run.board.level}:${routeType}`
+                      )
+                    : run.pendingRouteCardPlan,
+            board: openedBoard
+        }
+    };
+};

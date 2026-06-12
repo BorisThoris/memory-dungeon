@@ -1,9 +1,7 @@
 import type { PuzzleDifficulty, PuzzleGoal, PuzzlePackId, Tile } from './contracts';
 import type { SaveData } from './contracts';
 import { BUILTIN_PUZZLES } from './builtin-puzzles';
-
-/** Keep in sync with `game.ts` glass decoy key. */
-const DECOY_PAIR_KEY = '__decoy__';
+import { DECOY_PAIR_KEY } from './tile-identity';
 
 /**
  * Runtime checks for hand-authored puzzle tile lists (builtins and tests):

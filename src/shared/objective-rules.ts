@@ -1,11 +1,19 @@
 export {
-    acceptEndlessRiskWager,
-    applyRelicOfferServiceToRun,
-    canOfferEndlessRiskWager,
     completeRelicPickAndAdvance,
-    computeRelicOfferPickBudget,
-    grantBonusRelicPickNextOffer,
-    openRelicOffer,
-    useRelicOfferService
 } from './game';
 
+export {
+    acceptEndlessRiskWager,
+    canOfferEndlessRiskWager
+} from './risk-wager-rules';
+
+export {
+    applyRelicOfferServiceToRun,
+    computeRelicOfferPickBudget,
+    openRelicOffer,
+    useRelicOfferService
+} from './relic-offer-rules';
+
+export {
+    grantBonusRelicPickNextOffer
+} from './relic-immediate-rules';

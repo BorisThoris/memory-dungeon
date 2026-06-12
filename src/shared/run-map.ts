@@ -1021,6 +1021,20 @@ export const revealDungeonChoices = (
     });
 };
 
+export const clearCurrentDungeonNode = (
+    state: DungeonRunMapState,
+    currentFloor: number
+): DungeonRunMapState => {
+    const safeState = repairDungeonRunMapProgression(state);
+    return {
+        ...safeState,
+        currentFloor,
+        nodes: safeState.nodes.map((node) =>
+            node.id === safeState.currentNodeId ? { ...node, status: 'cleared' as const } : node
+        )
+    };
+};
+
 export const selectDungeonNode = (state: DungeonRunMapState, nodeId: string): DungeonRunMapState => {
     const safeState = repairDungeonRunMapProgression(state);
     const report = inspectDungeonRunMapProgression(safeState);

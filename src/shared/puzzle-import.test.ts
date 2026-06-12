@@ -1,5 +1,7 @@
+import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { BUILTIN_PUZZLES } from './builtin-puzzles';
+import type { Tile } from './contracts';
 import { createDefaultSaveData } from './save-data';
 import { getPuzzleLibraryRows, getPuzzlePackProgressRows, isValidPuzzleImportTileSet, validatePuzzleImportPayload } from './puzzle-import';
 
@@ -70,6 +72,34 @@ describe('isValidPuzzleImportTileSet', () => {
             ok: false,
             errors: ['tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey']
         });
+    });
+
+    it('property-checks exact non-decoy pair cardinality', () => {
+        const makeTiles = (pairCount: number): Tile[] =>
+            Array.from({ length: pairCount }, (_, index) => {
+                const pairKey = `pair-${index}`;
+                const symbol = String.fromCharCode(65 + (index % 26));
+                return [
+                    { id: `${pairKey}-a`, pairKey, symbol, label: symbol, state: 'hidden' as const },
+                    { id: `${pairKey}-b`, pairKey, symbol, label: symbol, state: 'hidden' as const }
+                ];
+            }).flat();
+
+        fc.assert(
+            fc.property(fc.integer({ min: 2, max: 32 }), (pairCount) => {
+                expect(isValidPuzzleImportTileSet(makeTiles(pairCount))).toBe(true);
+            })
+        );
+
+        fc.assert(
+            fc.property(fc.integer({ min: 2, max: 31 }), (pairCount) => {
+                const tiles = [
+                    ...makeTiles(pairCount),
+                    { id: 'orphan', pairKey: 'orphan', symbol: '?', label: 'orphan', state: 'hidden' as const }
+                ];
+                expect(isValidPuzzleImportTileSet(tiles)).toBe(false);
+            })
+        );
     });
 });
 
