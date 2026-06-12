@@ -55,4 +55,16 @@ describe('hydrationController', () => {
         expect(patch.saveData).toEqual(createDefaultSaveData());
         expect(persistSaveData).not.toHaveBeenCalled();
     });
+
+    it('normalizes malformed Steam connection bridge responses to offline', async () => {
+        const patch = await createHydratedAppStatePatch({
+            desktop: {
+                getSaveData: async () => createDefaultSaveData(),
+                isSteamConnected: async () => 'yes'
+            },
+            persistSaveData: vi.fn()
+        });
+
+        expect(patch.steamConnected).toBe(false);
+    });
 });

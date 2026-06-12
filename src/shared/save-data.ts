@@ -17,6 +17,7 @@ import {
     type Settings,
     type WeakerShuffleMode
 } from './contracts';
+import { z } from 'zod';
 import { utcDateKeyMinusOneDay } from './rng';
 import { RELIC_POOL } from './relics';
 import { evaluateSaveMigrationGate } from './version-gate';
@@ -239,6 +240,62 @@ export const createDefaultSaveData = (): SaveData => ({
     unlocks: [],
     powersFtueSeen: false
 });
+
+const objectBoundarySchema = z.object({}).passthrough();
+const unknownRecordBoundarySchema = z.preprocess(
+    (value) => value && typeof value === 'object' && !Array.isArray(value) ? value : undefined,
+    z.record(z.string(), z.unknown()).optional()
+);
+
+export const settingsBoundarySchema = z.object({
+    boardBloomEnabled: z.unknown().optional(),
+    boardPresentation: z.unknown().optional(),
+    boardScreenSpaceAA: z.unknown().optional(),
+    cameraViewportModePreference: z.unknown().optional(),
+    debugFlags: unknownRecordBoundarySchema,
+    displayMode: z.unknown().optional(),
+    distractionChannelEnabled: z.unknown().optional(),
+    echoFeedbackEnabled: z.unknown().optional(),
+    graphicsQuality: z.unknown().optional(),
+    masterVolume: z.unknown().optional(),
+    musicVolume: z.unknown().optional(),
+    pairProximityHintsEnabled: z.unknown().optional(),
+    reduceMotion: z.unknown().optional(),
+    resolveDelayMultiplier: z.unknown().optional(),
+    sfxVolume: z.unknown().optional(),
+    shuffleScoreTaxEnabled: z.unknown().optional(),
+    tileFocusAssist: z.unknown().optional(),
+    uiScale: z.unknown().optional(),
+    weakerShuffleMode: z.unknown().optional()
+});
+
+export const saveDataBoundarySchema = objectBoundarySchema.extend({
+    achievements: unknownRecordBoundarySchema,
+    bestScore: z.unknown().optional(),
+    firstRunHelpDismissed: z.unknown().optional(),
+    lastRunSummary: z.unknown().optional(),
+    onboardingDismissed: z.unknown().optional(),
+    playerStats: unknownRecordBoundarySchema,
+    powersFtueSeen: z.unknown().optional(),
+    schemaVersion: z.unknown().optional(),
+    settings: z.preprocess(
+        (value) => value && typeof value === 'object' && !Array.isArray(value) ? value : undefined,
+        settingsBoundarySchema.optional()
+    ),
+    unlocks: z.unknown().optional()
+});
+
+export const normalizeUnknownSaveData = (input: unknown): SaveData => {
+    const parsed = saveDataBoundarySchema.safeParse(input);
+    return normalizeSaveData(parsed.success ? (parsed.data as Partial<SaveData>) : null);
+};
+
+export const normalizeUnknownSettings = (input: unknown): Settings => {
+    const parsed = settingsBoundarySchema.safeParse(input);
+    return normalizeSaveData({
+        settings: parsed.success ? (parsed.data as unknown as Settings) : undefined
+    }).settings;
+};
 
 export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData => {
     const defaults = createDefaultSaveData();

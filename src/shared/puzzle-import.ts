@@ -1,32 +1,37 @@
 import type { PuzzleDifficulty, PuzzleGoal, PuzzlePackId, Tile } from './contracts';
 import type { SaveData } from './contracts';
+import { z } from 'zod';
 import { BUILTIN_PUZZLES } from './builtin-puzzles';
 import { DECOY_PAIR_KEY } from './tile-identity';
+
+const puzzleTileSchema = z.object({
+    id: z.string().trim().min(1),
+    pairKey: z.string().trim().min(1),
+    symbol: z.string(),
+    label: z.string(),
+    state: z.enum(['hidden', 'flipped', 'matched', 'removed']),
+    atomicVariant: z.number().finite().optional()
+}).passthrough();
+
+export const puzzleImportPayloadSchema = z.object({
+    title: z.string().trim().min(3),
+    goal: z.enum(['clear_all', 'perfect_clear', 'flip_par']),
+    difficulty: z.enum(['starter', 'standard', 'advanced']),
+    tags: z.array(z.string().trim().min(1)).optional(),
+    tiles: z.array(puzzleTileSchema).min(4).max(64)
+});
 
 /**
  * Runtime checks for hand-authored puzzle tile lists (builtins and tests):
  * count 4–64, required string fields (non-empty id/pairKey after trim), optional finite `atomicVariant`,
  * and exactly two tiles per non-decoy `pairKey`.
  */
-export const isValidPuzzleImportTileSet = (tiles: Tile[]): boolean => {
-    if (tiles.length < 4 || tiles.length > 64) {
+export const isValidPuzzleImportTileSet = (tiles: unknown): tiles is Tile[] => {
+    const parsed = z.array(puzzleTileSchema).min(4).max(64).safeParse(tiles);
+    if (!parsed.success) {
         return false;
     }
-    for (const tile of tiles) {
-        const { id, pairKey, symbol, label } = tile;
-        if (typeof id !== 'string' || typeof pairKey !== 'string' || typeof symbol !== 'string' || typeof label !== 'string') {
-            return false;
-        }
-        if (!id.trim() || !pairKey.trim()) {
-            return false;
-        }
-        if ('atomicVariant' in tile && tile.atomicVariant !== undefined) {
-            if (typeof tile.atomicVariant !== 'number' || !Number.isFinite(tile.atomicVariant)) {
-                return false;
-            }
-        }
-    }
-    const pairKeys = tiles.map((x) => x.pairKey).filter((k) => k !== DECOY_PAIR_KEY);
+    const pairKeys = parsed.data.map((x) => x.pairKey).filter((k) => k !== DECOY_PAIR_KEY);
     const counts = new Map<string, number>();
     for (const k of pairKeys) {
         counts.set(k, (counts.get(k) ?? 0) + 1);
@@ -93,27 +98,46 @@ export interface PuzzlePackProgressRow extends PuzzlePackSummary {
     offlineOnly: true;
 }
 
-const VALID_GOALS = new Set<PuzzleGoal>(['clear_all', 'perfect_clear', 'flip_par']);
-const VALID_DIFFICULTIES = new Set<PuzzleDifficulty>(['starter', 'standard', 'advanced']);
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+    value !== null && typeof value === 'object' && !Array.isArray(value);
 
-export const validatePuzzleImportPayload = (payload: PuzzleImportPayload): PuzzleImportResult => {
+export const validatePuzzleImportPayload = (payload: unknown): PuzzleImportResult => {
     const errors: string[] = [];
-    if (typeof payload.title !== 'string' || payload.title.trim().length < 3) {
-        errors.push('title must be a string with at least 3 characters');
+    if (!isRecord(payload)) {
+        return {
+            ok: false,
+            errors: [
+                'title must be a string with at least 3 characters',
+                'goal must be one of clear_all, perfect_clear, flip_par',
+                'difficulty must be starter, standard, or advanced',
+                'tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey'
+            ]
+        };
     }
-    if (typeof payload.goal !== 'string' || !VALID_GOALS.has(payload.goal as PuzzleGoal)) {
-        errors.push('goal must be one of clear_board, perfect_clear, limited_mistakes');
+
+    const parsed = puzzleImportPayloadSchema.safeParse(payload);
+    let hasTileSchemaIssue = false;
+
+    if (!parsed.success) {
+        const issuePaths = new Set(parsed.error.issues.map((issue) => issue.path[0]));
+        if (issuePaths.has('title')) {
+            errors.push('title must be a string with at least 3 characters');
+        }
+        if (issuePaths.has('goal')) {
+            errors.push('goal must be one of clear_all, perfect_clear, flip_par');
+        }
+        if (issuePaths.has('difficulty')) {
+            errors.push('difficulty must be starter, standard, or advanced');
+        }
+        if (issuePaths.has('tags')) {
+            errors.push('tags must be non-empty strings when provided');
+        }
+        if (issuePaths.has('tiles')) {
+            hasTileSchemaIssue = true;
+            errors.push('tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey');
+        }
     }
-    if (typeof payload.difficulty !== 'string' || !VALID_DIFFICULTIES.has(payload.difficulty as PuzzleDifficulty)) {
-        errors.push('difficulty must be intro, standard, or advanced');
-    }
-    if (
-        payload.tags !== undefined &&
-        (!Array.isArray(payload.tags) || !payload.tags.every((tag) => typeof tag === 'string' && tag.trim().length > 0))
-    ) {
-        errors.push('tags must be non-empty strings when provided');
-    }
-    if (!Array.isArray(payload.tiles) || !isValidPuzzleImportTileSet(payload.tiles as Tile[])) {
+    if (!hasTileSchemaIssue && Array.isArray(payload.tiles) && !isValidPuzzleImportTileSet(payload.tiles as Tile[])) {
         errors.push('tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey');
     }
     return { ok: errors.length === 0, errors };

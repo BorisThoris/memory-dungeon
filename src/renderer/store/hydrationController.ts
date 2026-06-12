@@ -1,6 +1,7 @@
 import type { DesktopApi, SaveData, Settings } from '../../shared/contracts';
+import { normalizeUnknownSteamConnected } from '../../shared/desktop-api-boundary';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
-import { createDefaultSaveData, normalizeSaveData } from '../../shared/save-data';
+import { createDefaultSaveData, normalizeUnknownSaveData } from '../../shared/save-data';
 
 export const SAVE_READ_FAILURE_NOTICE =
     'Save read failed. Started a temporary in-memory profile and paused autosave to avoid overwriting recoverable data.';
@@ -29,12 +30,15 @@ export const createHydratedAppStatePatch = async ({
     const [rawSave, steamConnected] = await Promise.all([
         desktop
             .getSaveData()
-            .then(normalizeSaveData)
+            .then(normalizeUnknownSaveData)
             .catch(() => {
                 saveReadFailed = true;
                 return createDefaultSaveData();
             }),
-        desktop.isSteamConnected().catch(() => false)
+        desktop
+            .isSteamConnected()
+            .then(normalizeUnknownSteamConnected)
+            .catch(() => false)
     ]);
 
     const saveData = mergeHonorUnlockTags(rawSave);

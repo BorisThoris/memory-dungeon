@@ -1031,12 +1031,12 @@ export type AchievementUnlockResult =
     | { ok: false; reason: 'not_connected' | 'steam_rejected' | 'persistence_error'; detail?: string };
 
 export interface DesktopApi {
-    getSettings: () => Promise<Settings>;
-    saveSettings: (settings: Settings) => Promise<Settings>;
-    getSaveData: () => Promise<SaveData>;
-    saveGame: (data: SaveData) => Promise<SaveData>;
-    unlockAchievement: (id: AchievementId) => Promise<AchievementUnlockResult>;
-    isSteamConnected: () => Promise<boolean>;
+    getSettings: () => Promise<unknown>;
+    saveSettings: (settings: Settings) => Promise<unknown>;
+    getSaveData: () => Promise<unknown>;
+    saveGame: (data: SaveData) => Promise<unknown>;
+    unlockAchievement: (id: AchievementId) => Promise<unknown>;
+    isSteamConnected: () => Promise<unknown>;
     setDisplayMode: (mode: DisplayMode) => Promise<void>;
     quitApp: () => Promise<void>;
 }

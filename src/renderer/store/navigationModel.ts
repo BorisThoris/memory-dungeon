@@ -1,4 +1,5 @@
 import type { RunStatus, SubscreenReturnView, ViewState } from '../../shared/contracts';
+import { isResumableLifecycleState, lifecycleStateFromRunStatus } from '../../shared/run-lifecycle-machine';
 
 export type NavigationSurface =
     | 'boot'
@@ -237,7 +238,7 @@ export const getNavigationShellChromeRows = (): NavigationShellChromeRow[] => [
 ];
 
 export const isRunStatusResumableAfterMetaOverlay = (status: RunStatus): boolean =>
-    status === 'memorize' || status === 'playing' || status === 'resolving';
+    isResumableLifecycleState(lifecycleStateFromRunStatus(status));
 
 export const resolveSubscreenCloseTarget = ({
     currentView,

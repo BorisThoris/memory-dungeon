@@ -1,6 +1,6 @@
 import Store from 'electron-store';
 import type { AchievementId, SaveData, Settings } from '../shared/contracts';
-import { normalizeSaveData } from '../shared/save-data';
+import { normalizeSaveData, normalizeUnknownSaveData, normalizeUnknownSettings } from '../shared/save-data';
 
 interface StoreShape {
     saveData: SaveData;
@@ -53,25 +53,26 @@ export class PersistenceService {
     }
 
     getSaveData(): SaveData {
-        return normalizeSaveData(this.store.get('saveData'));
+        return normalizeUnknownSaveData(this.store.get('saveData'));
     }
 
     getSettings(): Settings {
         return this.getSaveData().settings;
     }
 
-    saveSettings(settings: Settings): SaveData {
+    saveSettings(settings: unknown): SaveData {
+        const normalizedSettings = normalizeUnknownSettings(settings);
         const nextSave = normalizeSaveData({
             ...this.getSaveData(),
-            settings
+            settings: normalizedSettings
         });
 
         this.commitSaveData(nextSave);
         return nextSave;
     }
 
-    saveGame(saveData: SaveData): SaveData {
-        const nextSave = normalizeSaveData(saveData);
+    saveGame(saveData: unknown): SaveData {
+        const nextSave = normalizeUnknownSaveData(saveData);
         this.commitSaveData(nextSave);
         return nextSave;
     }

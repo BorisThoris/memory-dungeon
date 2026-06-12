@@ -14,6 +14,7 @@ import {
     applyEnemyHazardClick,
     flipTile
 } from '../../shared/turn-resolution';
+import { isResumableLifecycleState, lifecycleStateFromRun } from '../../shared/run-lifecycle-machine';
 import {
     BOARD_FLOATER_POP_CLEAR,
     type MatchScorePop,
@@ -105,7 +106,7 @@ export const createRunSurfaceReset = (): RunSurfaceState => ({
 });
 
 export const canPauseRunSurface = (run: RunState | null): run is RunState =>
-    run?.status === 'memorize' || run?.status === 'playing' || run?.status === 'resolving';
+    run !== null && isResumableLifecycleState(lifecycleStateFromRun(run));
 
 export const createBoardPinModeToggleResult = ({
     boardPinMode,

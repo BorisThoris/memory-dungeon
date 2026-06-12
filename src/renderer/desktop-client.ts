@@ -1,5 +1,5 @@
 import type { AchievementUnlockResult, DesktopApi, DisplayMode, SaveData, Settings } from '../shared/contracts';
-import { createDefaultSaveData, normalizeSaveData } from '../shared/save-data';
+import { createDefaultSaveData, normalizeSaveData, normalizeUnknownSaveData } from '../shared/save-data';
 
 const STORAGE_KEY = 'memory-dungeon-save-data';
 
@@ -34,7 +34,7 @@ const readLocalSave = (): SaveData => {
     }
 
     try {
-        return normalizeSaveData(JSON.parse(rawValue) as SaveData);
+        return normalizeUnknownSaveData(JSON.parse(rawValue));
     } catch (error) {
         console.error('[desktop-client] localStorage read failed', error);
         throw error;

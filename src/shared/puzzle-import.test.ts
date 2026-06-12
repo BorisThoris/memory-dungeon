@@ -35,6 +35,11 @@ describe('isValidPuzzleImportTileSet', () => {
         expect(isValidPuzzleImportTileSet(tiles)).toBe(false);
     });
 
+    it('rejects non-array tile sets without throwing', () => {
+        expect(isValidPuzzleImportTileSet(null)).toBe(false);
+        expect(isValidPuzzleImportTileSet({ tiles: minimalValidTiles })).toBe(false);
+    });
+
     it('rejects empty tile id after trim', () => {
         const tiles = [
             { id: '   ', pairKey: 'p1', symbol: 'A', label: 'a', state: 'hidden' as const },
@@ -74,6 +79,19 @@ describe('isValidPuzzleImportTileSet', () => {
         });
     });
 
+    it('rejects non-object import payloads without throwing', () => {
+        expect(validatePuzzleImportPayload(null)).toEqual({
+            ok: false,
+            errors: [
+                'title must be a string with at least 3 characters',
+                'goal must be one of clear_all, perfect_clear, flip_par',
+                'difficulty must be starter, standard, or advanced',
+                'tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey'
+            ]
+        });
+        expect(validatePuzzleImportPayload('not a puzzle').ok).toBe(false);
+    });
+
     it('property-checks exact non-decoy pair cardinality', () => {
         const makeTiles = (pairCount: number): Tile[] =>
             Array.from({ length: pairCount }, (_, index) => {
@@ -99,6 +117,17 @@ describe('isValidPuzzleImportTileSet', () => {
                 ];
                 expect(isValidPuzzleImportTileSet(tiles)).toBe(false);
             })
+        );
+    });
+
+    it('property-checks arbitrary import payloads never throw', () => {
+        fc.assert(
+            fc.property(fc.anything(), (payload) => {
+                const result = validatePuzzleImportPayload(payload);
+                expect(typeof result.ok).toBe('boolean');
+                expect(Array.isArray(result.errors)).toBe(true);
+            }),
+            { numRuns: 100 }
         );
     });
 });

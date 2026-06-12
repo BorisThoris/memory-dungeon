@@ -1,6 +1,7 @@
 import { app, ipcMain } from 'electron';
 import type { BrowserWindow, IpcMainInvokeEvent } from 'electron';
-import type { AchievementId, DisplayMode, SaveData, Settings } from '../shared/contracts';
+import type { DisplayMode, SaveData, Settings } from '../shared/contracts';
+import { normalizeUnknownAchievementId, normalizeUnknownDisplayMode } from '../shared/desktop-api-boundary';
 import { IPC_CHANNELS, IPC_CHANNELS_LEGACY_DESKTOP } from '../shared/ipc-channels';
 import type { PersistenceService } from './persistence';
 import type { SteamAdapter } from './steam';
@@ -56,8 +57,13 @@ export const registerIpcHandlers = (
     register(IPC_CHANNELS.steamIsConnected, isSteamConnected);
     register(IPC_CHANNELS_LEGACY_DESKTOP.isSteamConnected, isSteamConnected);
 
-    const setDisplayMode = (_event: IpcMainInvokeEvent, mode: DisplayMode): void => {
+    const setDisplayMode = (_event: IpcMainInvokeEvent, rawMode: unknown): void => {
         try {
+            const mode = normalizeUnknownDisplayMode(rawMode);
+            if (!mode) {
+                console.warn('[ipc] set-display-mode skipped: invalid display mode', rawMode);
+                return;
+            }
             const window = getMainWindow();
             if (!window || window.isDestroyed()) {
                 console.warn('[ipc] set-display-mode skipped: no main window');
@@ -72,7 +78,7 @@ export const registerIpcHandlers = (
     register(IPC_CHANNELS.windowSetDisplayMode, setDisplayMode);
     register(IPC_CHANNELS_LEGACY_DESKTOP.setDisplayMode, setDisplayMode);
 
-    const saveSettings = (_event: IpcMainInvokeEvent, settings: Settings): Settings => {
+    const saveSettings = (_event: IpcMainInvokeEvent, settings: unknown): Settings => {
         try {
             const saveData = persistence.saveSettings(settings);
             const window = getMainWindow();
@@ -88,7 +94,7 @@ export const registerIpcHandlers = (
     register(IPC_CHANNELS.saveSaveSettings, saveSettings);
     register(IPC_CHANNELS_LEGACY_DESKTOP.saveSettings, saveSettings);
 
-    const saveGame = (_event: IpcMainInvokeEvent, saveData: SaveData): SaveData => {
+    const saveGame = (_event: IpcMainInvokeEvent, saveData: unknown): SaveData => {
         try {
             return persistence.saveGame(saveData);
         } catch (error) {
@@ -99,12 +105,16 @@ export const registerIpcHandlers = (
     register(IPC_CHANNELS.saveSaveGame, saveGame);
     register(IPC_CHANNELS_LEGACY_DESKTOP.saveGame, saveGame);
 
-    const unlockAchievement = (_event: IpcMainInvokeEvent, achievementId: AchievementId) => {
+    const unlockAchievement = (_event: IpcMainInvokeEvent, rawAchievementId: unknown) => {
         try {
+            const achievementId = normalizeUnknownAchievementId(rawAchievementId);
+            if (!achievementId) {
+                return { ok: false, reason: 'persistence_error', detail: 'Invalid achievement id.' } as const;
+            }
             persistence.unlockAchievement(achievementId);
             return steamAdapter.unlockAchievement(achievementId);
         } catch (error) {
-            console.error('[ipc] unlock-achievement failed', achievementId, error);
+            console.error('[ipc] unlock-achievement failed', rawAchievementId, error);
             throw error;
         }
     };

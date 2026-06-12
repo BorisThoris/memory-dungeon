@@ -108,6 +108,37 @@ describe('REG-038 adaptive music state', () => {
             suppressed: true
         });
     });
+
+    it('uses lifecycle overlays as run release music states', () => {
+        const levelCompleteRun = {
+            activeMutators: [],
+            board: null,
+            gameMode: 'endless',
+            gauntletDeadlineMs: null,
+            relicOffer: null,
+            sideRoom: { id: 'rest' },
+            status: 'levelComplete'
+        } as unknown as RunState;
+
+        expect(resolveAdaptiveMusicState({ run: levelCompleteRun, view: 'sideRoom' })).toMatchObject({
+            active: true,
+            layer: 'run_release',
+            track: 'run',
+            volumeMultiplier: 0.56
+        });
+
+        expect(
+            resolveAdaptiveMusicState({
+                run: { ...levelCompleteRun, relicOffer: { offers: [] }, sideRoom: null } as unknown as RunState,
+                view: 'playing'
+            })
+        ).toMatchObject({
+            active: true,
+            layer: 'run_release',
+            track: 'run',
+            volumeMultiplier: 0.56
+        });
+    });
 });
 
 describe('useGameplayMusic', () => {

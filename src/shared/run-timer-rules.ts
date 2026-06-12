@@ -3,6 +3,7 @@ import {
     type ResumableRunStatus,
     type RunState
 } from './contracts';
+import { isResumableLifecycleState, lifecycleStateFromRunStatus } from './run-lifecycle-machine';
 
 export const createTimerState = (overrides?: Partial<RunState['timerState']>): RunState['timerState'] => ({
     memorizeRemainingMs: null,
@@ -20,7 +21,7 @@ export const clearResolveState = (run: RunState): RunState['timerState'] => ({
 });
 
 export const isResumableStatus = (status: RunState['status']): status is ResumableRunStatus =>
-    status === 'memorize' || status === 'playing' || status === 'resolving';
+    isResumableLifecycleState(lifecycleStateFromRunStatus(status));
 
 export const pauseRun = (run: RunState): RunState => {
     if (!isResumableStatus(run.status)) {

@@ -1,3 +1,4 @@
+import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, SAVE_SCHEMA_VERSION } from './contracts';
 import { BUILTIN_PUZZLES } from './builtin-puzzles';
@@ -13,7 +14,11 @@ import {
     DEFAULT_SETTINGS,
     mergeDailyComplete,
     mergePuzzleCompletion,
-    normalizeSaveData
+    normalizeSaveData,
+    normalizeUnknownSaveData,
+    normalizeUnknownSettings,
+    saveDataBoundarySchema,
+    settingsBoundarySchema
 } from './save-data';
 import type { RunSummary, SaveData } from './contracts';
 import {
@@ -36,6 +41,44 @@ const assertNoUndefinedDeep = (value: unknown, path: string): void => {
 };
 
 describe('save normalization', () => {
+    it('uses a schema boundary for raw save payloads before normalization', () => {
+        expect(saveDataBoundarySchema.safeParse({ bestScore: 12 }).success).toBe(true);
+        expect(saveDataBoundarySchema.safeParse(['not', 'a', 'save']).success).toBe(false);
+        expect(saveDataBoundarySchema.safeParse({ bestScore: 12, playerStats: 'bad', settings: 'bad' }).success).toBe(true);
+
+        expect(normalizeUnknownSaveData(['not', 'a', 'save'])).toEqual(createDefaultSaveData());
+        expect(normalizeUnknownSaveData('not a save')).toEqual(createDefaultSaveData());
+        expect(normalizeUnknownSaveData({ bestScore: 42 }).bestScore).toBe(42);
+        expect(normalizeUnknownSaveData({ bestScore: 42, playerStats: 'bad', settings: 'bad' }).bestScore).toBe(42);
+        expect(normalizeUnknownSaveData({ bestScore: 42, playerStats: 'bad', settings: 'bad' }).settings).toEqual(DEFAULT_SETTINGS);
+    });
+
+    it('uses a schema boundary for raw settings payloads before normalization', () => {
+        expect(settingsBoundarySchema.safeParse({ displayMode: 'fullscreen' }).success).toBe(true);
+        expect(settingsBoundarySchema.safeParse('not settings').success).toBe(false);
+
+        expect(normalizeUnknownSettings('not settings')).toEqual(DEFAULT_SETTINGS);
+        expect(normalizeUnknownSettings({ displayMode: 'fullscreen', debugFlags: 'bad' }).displayMode).toBe('fullscreen');
+        expect(normalizeUnknownSettings({ displayMode: 'kiosk' }).displayMode).toBe(DEFAULT_SETTINGS.displayMode);
+    });
+
+    it('property-checks raw save and settings boundaries against arbitrary malformed payloads', () => {
+        fc.assert(
+            fc.property(fc.anything(), (payload) => {
+                const save = normalizeUnknownSaveData(payload);
+                expect(save.schemaVersion).toBe(SAVE_SCHEMA_VERSION);
+                expect(save.settings).toBeDefined();
+                assertNoUndefinedDeep(save, 'rawSave.');
+
+                const settings = normalizeUnknownSettings(payload);
+                expect(settings.displayMode).toBeDefined();
+                expect(settings.debugFlags).toBeDefined();
+                assertNoUndefinedDeep(settings, 'rawSettings.');
+            }),
+            { numRuns: 100 }
+        );
+    });
+
     it('fills missing fields with defaults', () => {
         const saveData = normalizeSaveData({
             bestScore: 420

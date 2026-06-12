@@ -28,6 +28,7 @@ import {
     type PlayablePathFixtureId
 } from '../shared/playable-path-fixtures';
 import { useAppStore } from './store/useAppStore';
+import { getNavigationShellChromeContract } from './store/navigationModel';
 
 /** Landmark id for A11Y-002 skip link (`href` / programmatic focus). */
 export const APP_MAIN_LANDMARK_ID = 'app-main';
@@ -96,20 +97,23 @@ const App = () => {
     );
     const activeView = hydrated ? view : 'boot';
     const [introPlayback, setIntroPlayback] = useState<Exclude<IntroPlaybackState, 'playing'>>('pending');
+    const shellChromeContract = getNavigationShellChromeContract({
+        runPresent: Boolean(run),
+        settingsReturnView,
+        subscreenReturnView,
+        view: activeView
+    });
     const inGameSettingsOverlay =
-        hydrated && view === 'settings' && settingsReturnView === 'playing' && Boolean(run);
+        hydrated && view === 'settings' && shellChromeContract.shellChrome === 'gameplay_modal';
     /* SIDE-013/014 — logical `view` is inventory/codex but `data-view` stays `playing` so GameScreen stays mounted under the meta shell; store still owns `view` for Back/closeSubscreen. */
     const inGameShellOverlay =
         hydrated &&
         (view === 'inventory' || view === 'codex') &&
-        subscreenReturnView === 'playing' &&
-        run !== null;
-    const inGameShopOverlay = hydrated && view === 'shop' && run !== null;
-    const inGameSideRoomOverlay = hydrated && view === 'sideRoom' && run !== null;
-    const visualView =
-        inGameSettingsOverlay || inGameShellOverlay || inGameShopOverlay || inGameSideRoomOverlay
-            ? 'playing'
-            : activeView;
+        shellChromeContract.shellChrome === 'gameplay_modal';
+    const inGameShopOverlay = hydrated && view === 'shop' && shellChromeContract.shellChrome === 'gameplay_modal';
+    const inGameSideRoomOverlay = hydrated && view === 'sideRoom' && shellChromeContract.shellChrome === 'gameplay_modal';
+    const visualView = shellChromeContract.visualView;
+    const suppressGameplayStatusOverlays = shellChromeContract.shellChrome === 'gameplay_modal';
 
     const musicState = resolveAdaptiveMusicState({ run, view: visualView });
     const musicShellActive = hydrated && (visualView === 'menu' || visualView === 'playing');
@@ -336,18 +340,13 @@ const App = () => {
 
                 {hydrated &&
                     (view === 'playing' ||
-                        inGameSettingsOverlay ||
-                        inGameShellOverlay ||
-                        inGameShopOverlay ||
-                        inGameSideRoomOverlay) &&
+                        shellChromeContract.boardMounted) &&
                     run && (
                     <Suspense fallback={<div role="status">Loading run...</div>}>
                         <GameScreen
                             achievements={newlyUnlockedAchievements}
                             run={run}
-                            suppressStatusOverlays={
-                                inGameSettingsOverlay || inGameShellOverlay || inGameShopOverlay || inGameSideRoomOverlay
-                            }
+                            suppressStatusOverlays={suppressGameplayStatusOverlays}
                         />
                     </Suspense>
                 )}

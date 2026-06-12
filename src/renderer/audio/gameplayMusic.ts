@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 import type { RunState, ViewState } from '../../shared/contracts';
+import { lifecycleStateFromSurface } from '../../shared/run-lifecycle-machine';
 
 const musicUrls = import.meta.glob<string>('../assets/audio/music/*.{ogg,wav,mp3}', {
     eager: true,
@@ -68,19 +69,33 @@ export const resolveAdaptiveMusicState = ({ hidden = false, run, view }: Adaptiv
     ) {
         return { active: false, layer: 'silent', suppressed: true, track: 'menu', volumeMultiplier: 0 };
     }
-    if (view === 'menu' || view === 'modeSelect') {
+    const lifecycleState = lifecycleStateFromSurface({ run, view });
+
+    if (lifecycleState === 'menu' || view === 'modeSelect') {
         return { active: true, layer: 'menu_calm', suppressed: false, track: 'menu', volumeMultiplier: 0.82 };
     }
-    if (view === 'gameOver') {
+    if (view === 'gameOver' || lifecycleState === 'gameOver') {
         return { active: false, layer: 'silent', suppressed: true, track: 'run', volumeMultiplier: 0 };
     }
-    if ((view === 'playing' || view === 'shop') && run) {
-        if (run.status === 'paused') {
-            return { active: false, layer: 'silent', suppressed: true, track: 'run', volumeMultiplier: 0 };
-        }
-        if (run.status === 'levelComplete') {
-            return { active: true, layer: 'run_release', suppressed: false, track: 'run', volumeMultiplier: 0.56 };
-        }
+
+    if (!run) {
+        return { active: false, layer: 'silent', suppressed: true, track: 'menu', volumeMultiplier: 0 };
+    }
+
+    if (lifecycleState === 'paused') {
+        return { active: false, layer: 'silent', suppressed: true, track: 'run', volumeMultiplier: 0 };
+    }
+
+    if (
+        lifecycleState === 'levelComplete' ||
+        lifecycleState === 'shop' ||
+        lifecycleState === 'sideRoom' ||
+        lifecycleState === 'relicOffer'
+    ) {
+        return { active: true, layer: 'run_release', suppressed: false, track: 'run', volumeMultiplier: 0.56 };
+    }
+
+    if (lifecycleState === 'memorize' || lifecycleState === 'playing' || lifecycleState === 'resolving') {
         const gauntletPressure = run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null;
         const bossPressure = run.board?.floorTag === 'boss';
         const mutatorPressure = run.activeMutators.length >= 2;
@@ -89,6 +104,7 @@ export const resolveAdaptiveMusicState = ({ hidden = false, run, view }: Adaptiv
         }
         return { active: true, layer: 'run_focus', suppressed: false, track: 'run', volumeMultiplier: 0.74 };
     }
+
     return { active: false, layer: 'silent', suppressed: true, track: 'menu', volumeMultiplier: 0 };
 };
 

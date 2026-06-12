@@ -3,6 +3,7 @@ import type { RunState } from './contracts';
 import { createNewRun } from './game-core';
 import { grantBonusRelicPickNextOffer } from './relic-immediate-rules';
 import {
+    MAX_RELIC_PICKS_PER_OFFER,
     computeRelicOfferPickBudget,
     createRelicPickAdvanceResult,
     openRelicOffer
@@ -25,7 +26,7 @@ const levelCompleteRun = (overrides: Partial<RunState> = {}): RunState => ({
 });
 
 describe('relic-offer-rules', () => {
-    it('computes draft pick budget from run bonuses, daily mode, mutators, and contract flags', () => {
+    it('caps draft pick budget even when bonuses stack heavily', () => {
         const run = createNewRun(0, {
             activeContract: {
                 bonusRelicDraftPick: true,
@@ -38,10 +39,10 @@ describe('relic-offer-rules', () => {
             metaRelicDraftExtraPerMilestone: 1
         });
 
-        expect(computeRelicOfferPickBudget(grantBonusRelicPickNextOffer(run, 1))).toBe(6);
+        expect(computeRelicOfferPickBudget(grantBonusRelicPickNextOffer(run, 1))).toBe(MAX_RELIC_PICKS_PER_OFFER);
     });
 
-    it('opens an offer and consumes pending bonus pick counters', () => {
+    it('opens an offer and consumes pending bonus pick counters used by the capped visit', () => {
         const run = grantBonusRelicPickNextOffer(levelCompleteRun({
             favorBonusRelicPicksNextOffer: 1
         }), 1);
@@ -52,6 +53,20 @@ describe('relic-offer-rules', () => {
         expect(opened.bonusRelicPicksNextOffer).toBe(0);
         expect(opened.favorBonusRelicPicksNextOffer).toBe(0);
         expect(opened.relicOffer?.favorBonusPicks).toBe(1);
+    });
+
+    it('carries unused banked bonus picks into later relic offers', () => {
+        const run = grantBonusRelicPickNextOffer(levelCompleteRun({
+            bonusRelicPicksNextOffer: 3,
+            favorBonusRelicPicksNextOffer: 2
+        }), 0);
+
+        const opened = openRelicOffer(run);
+
+        expect(opened.relicOffer?.picksRemaining).toBe(MAX_RELIC_PICKS_PER_OFFER);
+        expect(opened.bonusRelicPicksNextOffer).toBe(1);
+        expect(opened.favorBonusRelicPicksNextOffer).toBe(0);
+        expect(opened.relicOffer?.favorBonusPicks).toBe(2);
     });
 
     it('returns unchanged for stale or invalid relic picks', () => {

@@ -1,4 +1,5 @@
 import type { AchievementId, AchievementUnlockResult, SaveData } from '../../shared/contracts';
+import { normalizeUnknownAchievementUnlockResult } from '../../shared/desktop-api-boundary';
 import { desktopClient } from '../desktop-client';
 import { persistSaveData } from './persistBridge';
 
@@ -13,7 +14,7 @@ export const persistSaveDataThenUnlockAchievements = async (
     await persistSaveData(saveData);
     const failures: { id: AchievementId; result: AchievementUnlockResult }[] = [];
     for (const achievementId of achievementIds) {
-        const result = await desktopClient.unlockAchievement(achievementId);
+        const result = normalizeUnknownAchievementUnlockResult(await desktopClient.unlockAchievement(achievementId));
         if (!result.ok) {
             failures.push({ id: achievementId, result });
             console.warn('[achievements] Steam bridge did not report success', achievementId, result);

@@ -35,4 +35,28 @@ describe('persistSaveDataThenUnlockAchievements (REF-036)', () => {
         expect(calls).toEqual(['save', 'unlock:ACH_FIRST_CLEAR', 'unlock:ACH_LEVEL_FIVE']);
         expect(failures).toEqual([]);
     });
+
+    it('normalizes malformed unlock IPC responses into structured failures', async () => {
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+        vi.mocked(desktopClient.unlockAchievement).mockResolvedValueOnce({ nope: true });
+
+        const { failures } = await persistSaveDataThenUnlockAchievements(createDefaultSaveData(), ['ACH_FIRST_CLEAR']);
+
+        expect(failures).toEqual([
+            {
+                id: 'ACH_FIRST_CLEAR',
+                result: {
+                    ok: false,
+                    reason: 'steam_rejected',
+                    detail: 'Malformed Steam bridge response.'
+                }
+            }
+        ]);
+        expect(warn).toHaveBeenCalledWith(
+            '[achievements] Steam bridge did not report success',
+            'ACH_FIRST_CLEAR',
+            failures[0]?.result
+        );
+        warn.mockRestore();
+    });
 });

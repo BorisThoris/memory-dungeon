@@ -12,12 +12,14 @@ import {
 } from './relics';
 import { applyRelicImmediate } from './relic-immediate-rules';
 
+export const MAX_RELIC_PICKS_PER_OFFER = 3;
+
 /** Total relic selections this milestone visit (minimum 1). See `openRelicOffer`. */
 const nonNegativeFiniteInteger = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-export const computeRelicOfferPickBudget = (run: RunState): number => {
-    let n = 1 + nonNegativeFiniteInteger(run.bonusRelicPicksNextOffer);
+const recurringRelicPickBonusCount = (run: RunState): number => {
+    let n = 0;
     if (hasMutator(run, 'generous_shrine')) {
         n += 1;
     }
@@ -28,7 +30,13 @@ export const computeRelicOfferPickBudget = (run: RunState): number => {
     if (run.activeContract?.bonusRelicDraftPick) {
         n += 1;
     }
-    return Math.max(1, n);
+    return n;
+};
+
+export const computeRelicOfferPickBudget = (run: RunState): number => {
+    const bankedBonusPicks = nonNegativeFiniteInteger(run.bonusRelicPicksNextOffer);
+    const total = 1 + bankedBonusPicks + recurringRelicPickBonusCount(run);
+    return Math.max(1, Math.min(MAX_RELIC_PICKS_PER_OFFER, total));
 };
 
 export const openRelicOffer = (run: RunState): RunState => {
@@ -41,6 +49,10 @@ export const openRelicOffer = (run: RunState): RunState => {
         return run;
     }
     const picksRemaining = computeRelicOfferPickBudget(run);
+    const bankedBonusPicks = nonNegativeFiniteInteger(run.bonusRelicPicksNextOffer);
+    const consumedBankedBonusPicks = Math.min(bankedBonusPicks, Math.max(0, picksRemaining - 1));
+    const favorBonusPicks = nonNegativeFiniteInteger(run.favorBonusRelicPicksNextOffer);
+    const consumedFavorBonusPicks = Math.min(favorBonusPicks, consumedBankedBonusPicks);
     const options = rollRelicOptions(run, tierIndex, cleared, 0);
     if (options.length === 0) {
         return skipRelicOfferMilestone(run);
@@ -49,8 +61,8 @@ export const openRelicOffer = (run: RunState): RunState => {
 
     return {
         ...run,
-        bonusRelicPicksNextOffer: 0,
-        favorBonusRelicPicksNextOffer: 0,
+        bonusRelicPicksNextOffer: Math.max(0, bankedBonusPicks - consumedBankedBonusPicks),
+        favorBonusRelicPicksNextOffer: Math.max(0, favorBonusPicks - consumedFavorBonusPicks),
         relicOffer: {
             tier: tierIndex + 1,
             options,
@@ -65,7 +77,7 @@ export const openRelicOffer = (run: RunState): RunState => {
                     pickRound: 0
                 }
             }),
-            favorBonusPicks: run.favorBonusRelicPicksNextOffer,
+            favorBonusPicks: consumedFavorBonusPicks,
             contextualOptionReasons
         }
     };

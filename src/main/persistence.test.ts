@@ -43,6 +43,18 @@ describe('PersistenceService', () => {
         expect(roundTrip.settings.weakerShuffleMode).toBe('rows_only');
     });
 
+    it('saveSettings normalizes malformed runtime settings payloads', () => {
+        const p = new PersistenceService();
+        const next = p.saveSettings({
+            ...p.getSaveData().settings,
+            displayMode: 'kiosk',
+            debugFlags: 'bad'
+        } as unknown as Settings);
+
+        expect(next.settings.displayMode).toBe(createDefaultSaveData().settings.displayMode);
+        expect(next.settings.debugFlags).toEqual(createDefaultSaveData().settings.debugFlags);
+    });
+
     it('saveGame writes normalized payload', () => {
         const p = new PersistenceService();
         const corrupted = {
