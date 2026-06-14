@@ -39,11 +39,11 @@ describe('relic immediate rules', () => {
         expect(applyRelicImmediate(run, 'guard_token_plus_one').stats.guardTokens).toBe(MAX_GUARD_TOKENS);
     });
 
-    it('leaves passive relics unchanged until their owning systems consume them', () => {
+    it('adds immediate tactical value to long-term synergy relics', () => {
         const run = createNewRun(0);
 
-        expect(applyRelicImmediate(run, 'chapter_compass')).toBe(run);
-        expect(applyRelicImmediate(run, 'wager_surety')).toBe(run);
-        expect(applyRelicImmediate(run, 'parasite_ledger')).toBe(run);
+        expect(applyRelicImmediate(run, 'chapter_compass').peekCharges).toBe(run.peekCharges + 1);
+        expect(applyRelicImmediate(run, 'wager_surety').stats.guardTokens).toBe(run.stats.guardTokens + 1);
+        expect(applyRelicImmediate(run, 'parasite_ledger').parasiteWardRemaining).toBe(run.parasiteWardRemaining + 1);
     });
 });

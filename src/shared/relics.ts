@@ -125,7 +125,7 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
         decisionVerbs: ['prepare', 'focus', 'finish'],
         summary: 'Prepare for boss floors with chapter-aware draft pressure, route wagers, and bounded Favor conversion.',
         dungeonInteractions: ['boss floors', 'boss prep', 'Relic Favor', 'chapter schedule'],
-        supportHooks: ['chapter_compass future chapter answer weighting', 'wager_surety bounded Favor bonus'],
+        supportHooks: ['chapter_compass immediate peek plus future chapter answer weighting', 'wager_surety immediate guard plus bounded Favor bonus'],
         deferredHooks: ['Direct boss-damage or boss-ward relics are deferred to boss presentation/tuning tickets.']
     },
     route_gambler: {
@@ -135,7 +135,7 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
         decisionVerbs: ['wager', 'push', 'cash out'],
         summary: 'Turn risky route choices and Endless wagers into more Favor without erasing the cost of a failed read.',
         dungeonInteractions: ['risk wagers', 'Greed routes', 'Mystery routes', 'Relic Favor'],
-        supportHooks: ['risk wager payout hook', 'wager_surety loss floor', 'route contextual draft weighting']
+        supportHooks: ['risk wager payout hook', 'wager_surety immediate guard and loss floor', 'route contextual draft weighting']
     },
     reveal_scout: {
         id: 'reveal_scout',
@@ -153,7 +153,7 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
         decisionVerbs: ['chain', 'convert', 'accelerate'],
         summary: 'Convert clean play, parasite answers, and guard safety into bounded combo-shard momentum.',
         dungeonInteractions: ['combo shards', 'parasite floors', 'featured objectives', 'guard tokens'],
-        supportHooks: ['combo_shard_plus_step shard cap', 'parasite_ward_once one-shot ward', 'parasite_ledger featured-objective hook']
+        supportHooks: ['combo_shard_plus_step shard cap', 'parasite_ward_once one-shot ward', 'parasite_ledger immediate ward and featured-objective hook']
     }
 };
 

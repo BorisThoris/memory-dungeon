@@ -383,19 +383,19 @@ export const RELIC_CATALOG: Record<RelicId, RelicDefinition> = {
         id: 'chapter_compass',
         title: 'Chapter Compass',
         description:
-            'In scheduled Endless runs, future relic drafts lean harder into relics that answer the current or next chapter, including boss floors.'
+            'Gain one peek charge now. In scheduled Endless runs, future relic drafts lean harder into relics that answer the current or next chapter, including boss floors.'
     },
     wager_surety: {
         id: 'wager_surety',
         title: 'Wager Surety',
         description:
-            'Won Endless risk wagers grant +1 extra Favor. Lost boss-route wagers keep the featured-objective streak at x1 instead of x0.'
+            'Gain one guard token now. Won Endless risk wagers grant +1 extra Favor. Lost boss-route wagers keep the featured-objective streak at x1 instead of x0.'
     },
     parasite_ledger: {
         id: 'parasite_ledger',
         title: 'Parasite Ledger',
         description:
-            'On scheduled Endless parasite floors, completing the featured objective slows score-parasite pressure by one step.'
+            'Gain one parasite ward now. On scheduled Endless parasite floors, completing the featured objective slows score-parasite pressure by one step.'
     }
 };
 

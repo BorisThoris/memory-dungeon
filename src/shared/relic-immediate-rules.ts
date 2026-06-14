@@ -54,9 +54,17 @@ export const applyRelicImmediate = (run: RunState, relicId: RelicId): RunState =
         case 'shrine_echo':
             return grantBonusRelicPickNextOffer(run, 1);
         case 'chapter_compass':
+            return { ...run, peekCharges: run.peekCharges + 1 };
         case 'wager_surety':
+            return {
+                ...run,
+                stats: {
+                    ...run.stats,
+                    guardTokens: Math.min(MAX_GUARD_TOKENS, run.stats.guardTokens + 1)
+                }
+            };
         case 'parasite_ledger':
-            return run;
+            return { ...run, parasiteWardRemaining: run.parasiteWardRemaining + 1 };
         default:
             return run;
     }

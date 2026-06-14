@@ -18,9 +18,9 @@ export const relicEffectLabels: Record<RelicId, string> = {
     pin_cap_plus_one: '+1 pinned memory mark on the dungeon board',
     guard_token_plus_one: '+1 guard token for enemy contact and recall slips (now, capped)',
     shrine_echo: 'Next relic milestone echoes into +1 extra selection',
-    chapter_compass: 'Future Endless drafts lean toward boss, chapter, and mutator answers',
-    wager_surety: 'Risk wagers pay +1 Favor and soften boss-route busts',
-    parasite_ledger: 'Successful parasite floors slow the next parasite tax'
+    chapter_compass: '+1 peek now; future Endless drafts lean toward boss, chapter, and mutator answers',
+    wager_surety: '+1 guard now; risk wagers pay +1 Favor and soften boss-route busts',
+    parasite_ledger: '+1 parasite ward now; successful parasite floors slow the next parasite tax'
 };
 
 /**
