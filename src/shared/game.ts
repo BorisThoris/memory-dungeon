@@ -1,6 +1,7 @@
 import {
     GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS,
     MATCH_DELAY_MS,
+    MAX_GUARD_TOKENS,
     MAX_LIVES,
     type BoardState,
     type LevelResult,
@@ -104,6 +105,8 @@ import { resolveTurnMatchEconomy } from './turn-match-economy-rules';
 import { resolveTurnMatchProgress } from './turn-match-progress-rules';
 import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
+import { calculateTileTraitMatchRewards } from './tile-trait-rules';
+import { addTileTraitCountStats } from './session-stats-rules';
 export {
     completeRelicPickAndAdvance
 } from './relic-pick-advance-rules';
@@ -675,6 +678,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             lanternScout,
             omenScout
         } = resolution;
+        const traitReward = calculateTileTraitMatchRewards(run, [tileMatchA, tileMatchB]);
         const scoring = resolveTurnMatchScoringSummary({
             run,
             sourceBoard: run.board,
@@ -682,7 +686,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             matchedPairKey,
             matchedTiles: [tileMatchA, tileMatchB],
             encorePairKeys,
-            findableScoreBonus,
+            findableScoreBonus: findableScoreBonus + traitReward.scoreBonus,
             routeCardScore: routeCardReward.score,
             dungeonScore: dungeonReward.score,
             enemyDamageScore: enemyDamage.score,
@@ -696,7 +700,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             catalystAltarUpgraded,
             currentStreak: scoring.currentStreak,
             dungeonReward,
-            findableComboShardGain,
+            findableComboShardGain: findableComboShardGain + traitReward.comboShardGain,
             mimicCacheBite,
             mimicCacheFatalBite,
             mimicCacheGuardBite,
@@ -704,7 +708,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             run
         });
         const lives = survivalReward.lives;
-        const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor);
+        const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
         const wildMatchesRemaining = usedWild ? 0 : run.wildMatchesRemaining;
 
         const spunG = rotateAnchorSealPressure(run, board);
@@ -778,7 +782,8 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             board: spunG.board,
             shiftingSpotlightNonce: spunG.shiftingSpotlightNonce,
             wildMatchesRemaining,
-            shopGold: economy.shopGold,
+            peekCharges: run.peekCharges + traitReward.peekChargeGain,
+            shopGold: economy.shopGold + traitReward.shopGoldGain,
             dungeonKeys: economy.dungeonKeys,
             bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
             favorBonusRelicPicksNextOffer: routeFavor.favorBonusRelicPicksNextOffer,
@@ -803,8 +808,9 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
                 currentStreak: scoring.currentStreak,
                 bestStreak: Math.max(run.stats.bestStreak, scoring.currentStreak),
                 highestLevel: Math.max(run.stats.highestLevel, board.level),
-                guardTokens: survivalReward.guardTokens,
-                comboShards: survivalReward.comboShards
+                guardTokens: Math.min(MAX_GUARD_TOKENS, survivalReward.guardTokens + traitReward.guardTokenGain),
+                comboShards: survivalReward.comboShards,
+                tileTraitMatches: addTileTraitCountStats(run.stats.tileTraitMatches, [tileMatchA, tileMatchB])
             },
             timerState: clearResolveState(run)
         };
@@ -902,6 +908,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             lanternScout,
             omenScout
         } = resolution;
+        const traitReward = calculateTileTraitMatchRewards(run, [firstTile, secondTile]);
         const scoring = resolveTurnMatchScoringSummary({
             run,
             sourceBoard: run.board,
@@ -909,7 +916,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             matchedPairKey,
             matchedTiles: [firstTile, secondTile],
             encorePairKeys,
-            findableScoreBonus,
+            findableScoreBonus: findableScoreBonus + traitReward.scoreBonus,
             routeCardScore: routeCardReward.score,
             dungeonScore: dungeonReward.score,
             enemyDamageScore: enemyDamage.score,
@@ -923,7 +930,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             catalystAltarUpgraded,
             currentStreak: scoring.currentStreak,
             dungeonReward,
-            findableComboShardGain,
+            findableComboShardGain: findableComboShardGain + traitReward.comboShardGain,
             mimicCacheBite,
             mimicCacheFatalBite,
             mimicCacheGuardBite,
@@ -931,7 +938,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             run
         });
         const lives = survivalReward.lives;
-        const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor);
+        const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
 
         const wildMatchesRemaining = usedWild ? 0 : run.wildMatchesRemaining;
 
@@ -1004,7 +1011,8 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
             wildMatchesRemaining,
-            shopGold: economy.shopGold,
+            peekCharges: run.peekCharges + traitReward.peekChargeGain,
+            shopGold: economy.shopGold + traitReward.shopGoldGain,
             dungeonKeys: economy.dungeonKeys,
             bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
             favorBonusRelicPicksNextOffer: routeFavor.favorBonusRelicPicksNextOffer,
@@ -1029,8 +1037,9 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
                 currentStreak: scoring.currentStreak,
                 bestStreak: Math.max(run.stats.bestStreak, scoring.currentStreak),
                 highestLevel: Math.max(run.stats.highestLevel, board.level),
-                guardTokens: survivalReward.guardTokens,
-                comboShards: survivalReward.comboShards
+                guardTokens: Math.min(MAX_GUARD_TOKENS, survivalReward.guardTokens + traitReward.guardTokenGain),
+                comboShards: survivalReward.comboShards,
+                tileTraitMatches: addTileTraitCountStats(run.stats.tileTraitMatches, [firstTile, secondTile])
             },
             timerState: clearResolveState(run)
         };

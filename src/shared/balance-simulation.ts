@@ -7,6 +7,7 @@ import {
     type FindableKind,
     type MutatorId,
     type RouteNodeType,
+    type TileTraitKind,
     type Tile
 } from './contracts';
 import { buildBoard, countFindablePairs } from './board-generation';
@@ -42,6 +43,8 @@ export interface BalanceSimulationReport {
         shopGoldEarned: number;
         findablePickupPairs: number;
         findableKindCounts: Record<FindableKind, number>;
+        tileTraitPairs: number;
+        tileTraitKindCounts: Record<TileTraitKind, number>;
         floorTag: string;
         dungeonNodeKind: DungeonRunNodeKind;
         shopSinkBudget: number;
@@ -71,6 +74,8 @@ export interface BalanceSimulationReport {
         totalShopGoldEarned: number;
         findablePickupPairs: number;
         findableKindCounts: Record<FindableKind, number>;
+        tileTraitPairs: number;
+        tileTraitKindCounts: Record<TileTraitKind, number>;
         bossFloors: number;
         breatherFloors: number;
         eliteFloors: number;
@@ -258,6 +263,17 @@ const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     scout_glint: 0
 });
 
+const TILE_TRAIT_KINDS: readonly TileTraitKind[] = ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy'];
+
+const emptyTileTraitKindCounts = (): Record<TileTraitKind, number> => ({
+    echo: 0,
+    volatile: 0,
+    mirror: 0,
+    cursed: 0,
+    sealed: 0,
+    heavy: 0
+});
+
 const countFindableKinds = (tiles: readonly Tile[]): Record<FindableKind, number> => {
     const counts = emptyFindableKindCounts();
     const seenPairs = new Set<string>();
@@ -267,6 +283,19 @@ const countFindableKinds = (tiles: readonly Tile[]): Record<FindableKind, number
         }
         seenPairs.add(tile.pairKey);
         counts[tile.findableKind] += 1;
+    }
+    return counts;
+};
+
+const countTileTraitKinds = (tiles: readonly Tile[]): Record<TileTraitKind, number> => {
+    const counts = emptyTileTraitKindCounts();
+    const seenPairs = new Set<string>();
+    for (const tile of tiles) {
+        if (!tile.tileTraitKind || seenPairs.has(tile.pairKey)) {
+            continue;
+        }
+        seenPairs.add(tile.pairKey);
+        counts[tile.tileTraitKind] += 1;
     }
     return counts;
 };
@@ -281,6 +310,16 @@ const sumFindableKindCounts = (
         return totals;
     }, emptyFindableKindCounts());
 
+const sumTileTraitKindCounts = (
+    counts: readonly Record<TileTraitKind, number>[]
+): Record<TileTraitKind, number> =>
+    counts.reduce((totals, sampleCounts) => {
+        for (const kind of TILE_TRAIT_KINDS) {
+            totals[kind] += sampleCounts[kind];
+        }
+        return totals;
+    }, emptyTileTraitKindCounts());
+
 export const getFindableKindShares = (
     counts: Record<FindableKind, number>
 ): Record<FindableKind, number> => {
@@ -291,6 +330,19 @@ export const getFindableKindShares = (
             [kind]: total === 0 ? 0 : counts[kind] / total
         }),
         emptyFindableKindCounts()
+    );
+};
+
+export const getTileTraitKindShares = (
+    counts: Record<TileTraitKind, number>
+): Record<TileTraitKind, number> => {
+    const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+    return TILE_TRAIT_KINDS.reduce<Record<TileTraitKind, number>>(
+        (shares, kind) => ({
+            ...shares,
+            [kind]: total === 0 ? 0 : counts[kind] / total
+        }),
+        emptyTileTraitKindCounts()
     );
 };
 
@@ -423,6 +475,8 @@ export const runBalanceSimulation = ({
             const roomRewardPotential = roomEffectIds.length > 0 || dungeonNodeKind === 'rest' ? 1 : 0;
             const keyInflowPotential = keyPairs + (board.dungeonExitLockKind === 'iron' ? 1 : 0);
             const findableKindCounts = countFindableKinds(board.tiles);
+            const tileTraitKindCounts = countTileTraitKinds(board.tiles);
+            const tileTraitPairs = Object.values(tileTraitKindCounts).reduce((sum, count) => sum + count, 0);
             const shopGoldInflowPotential =
                 getShopGoldRewardForFloor(floor) +
                 treasureRewardPairs +
@@ -449,6 +503,8 @@ export const runBalanceSimulation = ({
                 shopGoldEarned: getShopGoldRewardForFloor(floor),
                 findablePickupPairs: countFindablePairs(board.tiles),
                 findableKindCounts,
+                tileTraitPairs,
+                tileTraitKindCounts,
                 floorTag: schedule.floorTag,
                 dungeonNodeKind,
                 shopSinkBudget: floor % 3 === 0 ? shopSinkPerVisit : 0,
@@ -483,6 +539,9 @@ export const runBalanceSimulation = ({
     const findableCounts = samples.map((sample) => sample.findablePickupPairs);
     const aggregateFindableKindCounts = sumFindableKindCounts(samples.map((sample) => sample.findableKindCounts));
     const findableKindShares = getFindableKindShares(aggregateFindableKindCounts);
+    const tileTraitCounts = samples.map((sample) => sample.tileTraitPairs);
+    const aggregateTileTraitKindCounts = sumTileTraitKindCounts(samples.map((sample) => sample.tileTraitKindCounts));
+    const tileTraitKindShares = getTileTraitKindShares(aggregateTileTraitKindCounts);
     const totalFindableWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
     const bossFloors = safeSeeds.flatMap((seed) =>
         floorNumbers.map((floor) => pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless').floorTag === 'boss' ? 1 : 0)
@@ -551,6 +610,24 @@ export const runBalanceSimulation = ({
             1,
             2,
             'buildBoard/countFindablePairs'
+        ),
+        row(
+            'avg_tile_trait_pairs_per_floor',
+            'Average trait-marked pairs per floor',
+            Number(average(tileTraitCounts).toFixed(2)),
+            0.45,
+            2.6,
+            'assignTileTraitsToGeneratedBoard'
+        ),
+        ...TILE_TRAIT_KINDS.map((kind) =>
+            row(
+                `tile_trait_share_${kind}`,
+                `Tile trait ${kind} observed share`,
+                Number(tileTraitKindShares[kind].toFixed(2)),
+                0,
+                0.45,
+                'assignTileTraitsToGeneratedBoard'
+            )
         ),
         ...(Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]).map((kind) => {
             const targetShare = FINDABLE_KIND_SPAWN_WEIGHTS[kind] / totalFindableWeight;
@@ -751,6 +828,8 @@ export const runBalanceSimulation = ({
             totalShopGoldEarned: samples.reduce((sum, sample) => sum + sample.shopGoldEarned, 0),
             findablePickupPairs: samples.reduce((sum, sample) => sum + sample.findablePickupPairs, 0),
             findableKindCounts: aggregateFindableKindCounts,
+            tileTraitPairs: samples.reduce((sum, sample) => sum + sample.tileTraitPairs, 0),
+            tileTraitKindCounts: aggregateTileTraitKindCounts,
             bossFloors: samples.filter((sample) => sample.floorTag === 'boss').length,
             breatherFloors: samples.filter((sample) => sample.floorTag === 'breather').length,
             eliteFloors: samples.filter((sample) => sample.dungeonNodeKind === 'elite').length,
@@ -782,7 +861,8 @@ export const runBalanceSimulation = ({
             'Simulation is deterministic and local-only; no leaderboard or server authority is implied.',
             'Targets are smoke-test guardrails, not final balance verdicts.',
             'Live economy fields are estimates from existing route/event/room/reward rules; runtime gameplay is unchanged.',
-            'Findable kind distribution rows are diagnostics for seeded generation drift; they do not alter rewards or spawn rules.'
+            'Findable kind distribution rows are diagnostics for seeded generation drift; they do not alter rewards or spawn rules.',
+            'Tile trait rows verify density and mix for the reward/drawback layer without changing runtime gameplay.'
         ]
     };
 };

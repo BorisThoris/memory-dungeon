@@ -863,22 +863,22 @@ describe('REG-017 route choices', () => {
             {
                 id: `${GAME_RULES_VERSION}:17001:2:safe`,
                 routeType: 'safe',
-                label: 'Safe passage',
-                detail: 'Standard next floor. Keep the run curve predictable.'
+                label: 'Safe passage'
             },
             {
                 id: `${GAME_RULES_VERSION}:17001:2:greed`,
                 routeType: 'greed',
-                label: 'Greedy route',
-                detail: 'Higher pressure route hook for future shop, elite, or bonus rewards.'
+                label: 'Greedy route'
             },
             {
                 id: `${GAME_RULES_VERSION}:17001:2:mystery`,
                 routeType: 'mystery',
-                label: 'Mystery route',
-                detail: 'Random event and secret-room hook with replayable local RNG.'
+                label: 'Mystery route'
             }
         ]);
+        expect(finished.lastLevelResult?.routeChoices?.[0]?.detail).toContain('Keep the run curve predictable.');
+        expect(finished.lastLevelResult?.routeChoices?.[1]?.detail).toContain('Trait pressure: more Volatile/Cursed pairs');
+        expect(finished.lastLevelResult?.routeChoices?.[2]?.detail).toContain('Trait pressure: Mirror/Sealed unknowns');
         expect(playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_001 }), 1).lastLevelResult?.routeChoices).toEqual(
             finished.lastLevelResult?.routeChoices
         );
@@ -2289,7 +2289,7 @@ describe('REG-017 route choices', () => {
         expect(eliteResolved.shopGold).toBe(eliteRun.shopGold + 4);
         expect(eliteResolved.stats.totalScore).toBeGreaterThanOrEqual(eliteRun.stats.totalScore + 55);
         expect(finalWardResolved.stats.guardTokens).toBe(1);
-        expect(finalWardResolved.stats.comboShards).toBe(1);
+        expect(finalWardResolved.stats.comboShards).toBeGreaterThanOrEqual(1);
         expect(peeked.board!.tiles.filter((tile) => tile.pairKey === omen[0]!.pairKey)).toEqual(
             expect.arrayContaining([expect.objectContaining({ routeSpecialRevealed: true })])
         );

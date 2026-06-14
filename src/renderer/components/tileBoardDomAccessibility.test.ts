@@ -55,6 +55,7 @@ describe('tile board DOM accessibility helpers', () => {
                     ...board.tiles[0]!,
                     state: 'flipped',
                     routeCardKind: 'greed_cache',
+                    tileTraitKind: 'volatile',
                     tileHazardKind: 'shuffle_snare',
                     scoutRevealSource: 'omen_seal'
                 },
@@ -66,6 +67,7 @@ describe('tile board DOM accessibility helpers', () => {
         expect(label).toContain('Tile A, row 1, column 1');
         expect(label).toContain('Route card: Greed cache.');
         expect(label).toContain('Hazard tile:');
+        expect(label).toContain('Trait: Volatile.');
         expect(label).toContain('Scouted by Omen Seal.');
         expect(label).toContain('Occupied by revealed moving enemy patrol Sentinel, 2/3 HP, 1 damage.');
         expect(getEnemyHazardText(labelledBoard, 'b1')).toContain('Next target of moving enemy patrol Sentinel');

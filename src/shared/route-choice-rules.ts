@@ -1,4 +1,5 @@
 import type { LevelResult, RouteChoice, RunState } from './contracts';
+import { getRouteTraitForecastLine } from './tile-trait-rules';
 
 export const ROUTE_GREED_SHOP_GOLD_REWARD = 3;
 export const ROUTE_GREED_SCORE_REWARD = 35;
@@ -28,14 +29,14 @@ export const generateRouteChoices = (run: RunState, nextLevel: number): NonNulla
             id: `${baseId}:safe`,
             routeType: 'safe',
             label: 'Safe passage',
-            detail: 'Standard next floor. Keep the run curve predictable.',
+            detail: `Standard next floor. Keep the run curve predictable. ${getRouteTraitForecastLine('safe', run.relicIds)}`,
             rewardPreview: 'Recover 1 life if wounded; otherwise gain 1 guard token; costs 1 shop gold if you have any.'
         },
         {
             id: `${baseId}:greed`,
             routeType: 'greed',
             label: 'Greedy route',
-            detail: greedDetail,
+            detail: `${greedDetail} ${getRouteTraitForecastLine('greed', run.relicIds)}`,
             rewardPreview: `+${ROUTE_GREED_SHOP_GOLD_REWARD} shop gold and +${ROUTE_GREED_SCORE_REWARD} score.`,
             riskPreview: '-1 life; unavailable at 1 life.'
         },
@@ -43,7 +44,7 @@ export const generateRouteChoices = (run: RunState, nextLevel: number): NonNulla
             id: `${baseId}:mystery`,
             routeType: 'mystery',
             label: 'Mystery route',
-            detail: mysteryDetail,
+            detail: `${mysteryDetail} ${getRouteTraitForecastLine('mystery', run.relicIds)}`,
             rewardPreview: 'Deterministic local reward: gold, combo shard, or relic Favor.'
         }
     ];

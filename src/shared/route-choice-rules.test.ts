@@ -23,16 +23,17 @@ describe('route choice rules', () => {
         expect(choices.map((choice) => choice.id)).toEqual(['8:123:3:safe', '8:123:3:greed', '8:123:3:mystery']);
         expect(choices.map((choice) => choice.routeType)).toEqual(['safe', 'greed', 'mystery']);
         expect(choices[1]).toMatchObject({
-            detail: 'Higher pressure route hook with vendor access after the next floor.',
             rewardPreview: `+${ROUTE_GREED_SHOP_GOLD_REWARD} shop gold and +${ROUTE_GREED_SCORE_REWARD} score.`,
             riskPreview: '-1 life; unavailable at 1 life.'
         });
+        expect(choices[1]!.detail).toContain('Higher pressure route hook with vendor access after the next floor.');
+        expect(choices[1]!.detail).toContain('Trait pressure: more Volatile/Cursed pairs');
     });
 
     it('switches mystery detail on fourth floors', () => {
-        expect(generateRouteChoices(run(), 4)[2]).toMatchObject({
-            detail: 'Hidden treasure or secret-room hook with capped bonus rewards.'
-        });
+        const detail = generateRouteChoices(run(), 4)[2]!.detail;
+        expect(detail).toContain('Hidden treasure or secret-room hook with capped bonus rewards.');
+        expect(detail).toContain('Trait pressure: Mirror/Sealed unknowns');
     });
 
     it('blocks greed route choices when only one life remains', () => {

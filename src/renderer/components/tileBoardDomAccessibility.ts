@@ -6,6 +6,7 @@ import { getHazardTileTelegraph } from '../../shared/hazard-tiles';
 import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
 import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
+import { getTileTraitText } from '../../shared/tile-trait-rules';
 import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import { isTilePickable } from './tileBoardPick';
 
@@ -86,7 +87,7 @@ export const getTileAriaLabel = (
     const dungeonKnowledge = getDungeonCardKnowledge(tile, faceUp);
     const dungeonNote = dungeonKnowledge.familyKnown ? getDungeonCardText(tile) : '';
     const passiveScoutNote = scoutSourceNote && !routeNote.includes(scoutSourceNote.trim()) ? scoutSourceNote : '';
-    return `${base}${findableNote}${routeNote}${dungeonNote}${getHazardTileText(tile)}${passiveScoutNote}${getEnemyHazardText(board, tile.id)}`;
+    return `${base}${findableNote}${routeNote}${dungeonNote}${getHazardTileText(tile)}${getTileTraitText(tile)}${passiveScoutNote}${getEnemyHazardText(board, tile.id)}`;
 };
 
 export const getPowerTargetAriaText = (

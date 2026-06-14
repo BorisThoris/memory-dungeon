@@ -177,7 +177,7 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
             }
         });
 
-        expect(room.id).toBe('supply_cache');
+        expect(room.id).toBe('chest_gold');
         expect(room.eligible).toBe(true);
         expect(room.unavailableReason).toBeNull();
     });

@@ -5,6 +5,7 @@ import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY } from './tileBoardStageLayers';
 import { getTileBoardReadabilityState } from './tileBoardReadability';
 import { hazardTileColor } from './tileBoardThreatColors';
+import { tileTraitColor } from '../../shared/tile-trait-rules';
 
 const CARD_WIDTH = CARD_PLANE_WIDTH;
 const CARD_HEIGHT = CARD_PLANE_HEIGHT;
@@ -469,6 +470,42 @@ export const TileBoardReadabilityMarkers = ({
                                     depthTest
                                     depthWrite={false}
                                     opacity={0.84}
+                                    side={DoubleSide}
+                                    toneMapped={false}
+                                    transparent
+                                />
+                            </mesh>
+                        </group>
+                    ) : null}
+                    {tile.tileTraitKind ? (
+                        <group position={[0, -CARD_HEIGHT * 0.39, 0.00057]}>
+                            <mesh
+                                geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
+                                raycast={noopMeshRaycast}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveRing.renderOrder}
+                            >
+                                <meshBasicMaterial
+                                    color={tileTraitColor(tile.tileTraitKind)}
+                                    depthTest
+                                    depthWrite={false}
+                                    opacity={0.92}
+                                    side={DoubleSide}
+                                    toneMapped={false}
+                                    transparent
+                                />
+                            </mesh>
+                            <mesh
+                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
+                                position={[0, 0.034, 0.00004]}
+                                raycast={noopMeshRaycast}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                rotation={[0, 0, Math.PI / 4]}
+                            >
+                                <meshBasicMaterial
+                                    color="#100d14"
+                                    depthTest
+                                    depthWrite={false}
+                                    opacity={0.78}
                                     side={DoubleSide}
                                     toneMapped={false}
                                     transparent

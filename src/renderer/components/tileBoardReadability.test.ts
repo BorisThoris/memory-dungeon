@@ -49,6 +49,7 @@ describe('tileBoardReadability', () => {
         );
         expect(state({ objectiveBackAccent: true }).hiddenReadabilityAccentColor).toBe('#f2d39d');
         expect(state({ routeBackAccent: true }).hiddenReadabilityAccentColor).toBe('#59b4d9');
+        expect(state({ tile: tile({ tileTraitKind: 'mirror' }) }).hiddenReadabilityAccentColor).toBe('#b890ff');
         expect(state({ powerBackAccent: 'destroy' }).hiddenReadabilityAccentColor).toBe('#d94848');
         expect(state({ powerBackAccent: 'stray' }).hiddenReadabilityAccentColor).toBe('#d4a03d');
     });
@@ -62,6 +63,9 @@ describe('tileBoardReadability', () => {
         );
         expect(state({ faceUp: false, tile: tile({ tileHazardKind: 'mirror_decoy' }) }).showFaceReadabilityMarker).toBe(
             false
+        );
+        expect(state({ faceUp: true, tile: tile({ state: 'flipped', tileTraitKind: 'echo' }) }).showFaceReadabilityMarker).toBe(
+            true
         );
     });
 

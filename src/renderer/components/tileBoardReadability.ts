@@ -1,5 +1,6 @@
 import type { HazardTileKind, Tile } from '../../shared/contracts';
 import { hazardTileColor } from './tileBoardThreatColors';
+import { tileTraitColor } from '../../shared/tile-trait-rules';
 import type { TileBoardPowerBackAccent } from './tileBoardRows';
 
 export interface TileBoardReadabilityInput {
@@ -67,6 +68,8 @@ export const getTileBoardReadabilityState = ({
               ? '#59b4d9'
               : tile.tileHazardKind
                 ? hazardTileColor(tile.tileHazardKind)
+                : tile.tileTraitKind
+                  ? tileTraitColor(tile.tileTraitKind)
                 : '#f2d39d';
     const hiddenReadabilityAccentColor = enemyOccupiedBack
         ? enemyOccupiedColor
@@ -80,6 +83,8 @@ export const getTileBoardReadabilityState = ({
                 ? '#f2d39d'
                 : routeBackAccent
                   ? '#59b4d9'
+                  : tile.tileTraitKind
+                    ? tileTraitColor(tile.tileTraitKind)
                   : powerBackAccent === 'destroy'
                     ? '#d94848'
                     : powerBackAccent === 'peek'
@@ -104,6 +109,7 @@ export const getTileBoardReadabilityState = ({
             isTrapCard ||
             isBossCard ||
             isRelicCard ||
+            tile.tileTraitKind != null ||
             stickyFingerSlotMark);
     const showFaceReadabilityMarker =
         faceUp &&
@@ -113,7 +119,8 @@ export const getTileBoardReadabilityState = ({
             isRelicCard ||
             tile.routeSpecialKind != null ||
             tile.routeCardKind != null ||
-            tile.tileHazardKind != null);
+            tile.tileHazardKind != null ||
+            tile.tileTraitKind != null);
 
     return {
         enemyOccupiedColor,

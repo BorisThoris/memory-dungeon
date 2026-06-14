@@ -18,6 +18,23 @@ describe('session-stats-rules', () => {
             perfectClears: 0,
             guardTokens: 0,
             comboShards: 0,
+            tileTraitMatches: {
+                echo: 0,
+                volatile: 0,
+                mirror: 0,
+                cursed: 0,
+                sealed: 0,
+                heavy: 0
+            },
+            tileTraitMismatches: {
+                echo: 0,
+                volatile: 0,
+                mirror: 0,
+                cursed: 0,
+                sealed: 0,
+                heavy: 0
+            },
+            volatileTraitShuffles: 0,
             shufflesUsed: 0,
             pairsDestroyed: 0
         });

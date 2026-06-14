@@ -19,6 +19,23 @@ const base = {
     matchedPairs: 0,
     pairCount: 2,
     mismatches: 0,
+    tileTraitMatches: {
+        echo: 0,
+        volatile: 0,
+        mirror: 0,
+        cursed: 0,
+        sealed: 0,
+        heavy: 0
+    },
+    tileTraitMismatches: {
+        echo: 0,
+        volatile: 0,
+        mirror: 0,
+        cursed: 0,
+        sealed: 0,
+        heavy: 0
+    },
+    volatileTraitShuffles: 0,
     findablesClaimedThisFloor: 0,
     objectiveProgress: 0,
     objectiveRequired: 1,
@@ -233,6 +250,50 @@ describe('useHudPoliteLiveAnnouncement', () => {
             'Match resolved. 1/4 pairs cleared. Disarm traps: 1/2. Combo shard gained. 1 available.'
         );
         expect(result.current.priority).toBe('info');
+    });
+
+    it('announces matched tile trait effects with the resolved match', async () => {
+        const { result, rerender } = renderHook(
+            (p: { pairs: number; echoMatches: number }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 2,
+                    pairCount: 4,
+                    matchedPairs: p.pairs,
+                    tileTraitMatches: { ...base.tileTraitMatches, echo: p.echoMatches }
+                }),
+            { initialProps: { pairs: 0, echoMatches: 0 } }
+        );
+
+        await act(async () => {
+            rerender({ pairs: 1, echoMatches: 1 });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared. Echo trait resolved.');
+    });
+
+    it('announces tile trait mismatch penalties and volatile shuffles', async () => {
+        const { result, rerender } = renderHook(
+            (p: { mismatches: number; mirrorMisses: number; shuffles: number }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 2,
+                    mismatches: p.mismatches,
+                    tileTraitMismatches: { ...base.tileTraitMismatches, mirror: p.mirrorMisses },
+                    volatileTraitShuffles: p.shuffles
+                }),
+            { initialProps: { mismatches: 0, mirrorMisses: 0, shuffles: 0 } }
+        );
+
+        await act(async () => {
+            rerender({ mismatches: 1, mirrorMisses: 1, shuffles: 1 });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe(
+            'No match. Cards will turn back. Mirror trait penalty applied. Volatile trait shuffled hidden cards.'
+        );
     });
 
     it('announces recall focus and memory score when a remembered match resolves', async () => {

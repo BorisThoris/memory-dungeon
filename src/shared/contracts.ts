@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 5;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 29;
+export const GAME_RULES_VERSION = 30;
 export const INITIAL_LIVES = 4;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MAX_LIVES = 5;
@@ -373,6 +373,8 @@ export interface Tile {
     dungeonCardKind?: DungeonCardKind;
     /** Optional board hazard marker for generated or authored hazard tile effects. */
     tileHazardKind?: HazardTileKind;
+    /** Optional lightweight pair modifier: adds match rewards or mismatch drawbacks without changing pair identity. */
+    tileTraitKind?: TileTraitKind;
     /** True when Lantern Ward has identified this hidden card as safe-to-know information. */
     lanternScouted?: boolean;
     /** Source of passive scout information for hidden dungeon/hazard cards; affects player-facing copy only. */
@@ -472,6 +474,9 @@ export interface SessionStats {
     perfectClears: number;
     guardTokens: number;
     comboShards: number;
+    tileTraitMatches: Record<TileTraitKind, number>;
+    tileTraitMismatches: Record<TileTraitKind, number>;
+    volatileTraitShuffles: number;
     shufflesUsed: number;
     pairsDestroyed: number;
 }
@@ -560,6 +565,7 @@ export type DungeonCardKind =
     | 'shop'
     | 'room';
 export type HazardTileKind = 'shuffle_snare' | 'cascade_cache' | 'mirror_decoy' | 'fragile_cache' | 'toll_cache' | 'fuse_cache';
+export type TileTraitKind = 'echo' | 'volatile' | 'mirror' | 'cursed' | 'sealed' | 'heavy';
 export type DungeonCardState = 'hidden' | 'revealed' | 'resolved';
 export type DungeonBossId = 'trap_warden' | 'rush_sentinel' | 'treasure_keeper' | 'spire_observer';
 export type EnemyHazardKind = 'sentinel' | 'stalker' | 'warden' | 'observer';

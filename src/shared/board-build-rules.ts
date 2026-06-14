@@ -7,6 +7,7 @@ import {
     type FloorTag,
     type GameMode,
     type MutatorId,
+    type RelicId,
     type RouteCardPlan,
     type RouteWorldProfile,
     type Tile
@@ -19,6 +20,7 @@ import {
     createTiles,
     pickCursedPairKey
 } from './board-tile-generation-rules';
+import { assignTileTraitsToGeneratedBoard } from './tile-trait-rules';
 import { createDungeonEncounterContext } from './dungeon-encounter-context-rules';
 import { createDungeonFloorBlueprint } from './dungeon-floor-blueprint-rules';
 import {
@@ -62,6 +64,7 @@ export interface BuildBoardOptions {
     dungeonNodeKind?: DungeonRunNodeKind | null;
     gameMode?: GameMode;
     suppressFindables?: boolean;
+    relicIds?: readonly RelicId[];
 }
 
 export const buildBoard = (level: number, options: BuildBoardOptions = {}): BoardState => {
@@ -234,8 +237,16 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         level,
         options.gameMode
     );
-    const tiles = applyDungeonLayoutPlan(
+    const traitTiles = assignTileTraitsToGeneratedBoard(
         hazardTiles,
+        runSeed,
+        rulesVersion,
+        level,
+        routeWorldProfile?.intensity,
+        options.relicIds ?? []
+    );
+    const tiles = applyDungeonLayoutPlan(
+        traitTiles,
         runSeed,
         rulesVersion,
         level,

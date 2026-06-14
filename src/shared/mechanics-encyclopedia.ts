@@ -8,7 +8,7 @@
 import type { AchievementId, GameMode, MutatorId, RelicId } from './contracts';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 15 as const;
+export const ENCYCLOPEDIA_VERSION = 16 as const;
 
 export interface RelicDefinition {
     id: RelicId;
@@ -55,6 +55,7 @@ export interface MechanicsGlossaryTerm {
         | 'mutators'
         | 'contracts'
         | 'findables'
+        | 'tile_traits'
         | 'recall_focus'
         | 'perfect_memory'
         | 'daily_challenge'
@@ -140,6 +141,13 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
         shortDefinition: 'Bonus pickup pairs on the board; match to claim, Destroy forfeits.',
         avoidLabels: ['loot boxes', 'random drops'],
         surfaces: ['Tile a11y', 'HUD', 'Codex']
+    },
+    {
+        id: 'tile_traits',
+        preferredLabel: 'Tile traits',
+        shortDefinition: 'Pair-level modifiers such as Echo, Volatile, Mirror, Cursed, Sealed, and Heavy that add match rewards or miss drawbacks.',
+        avoidLabels: ['random punishments', 'status ailments'],
+        surfaces: ['Board', 'Route choice', 'Tile a11y', 'Codex']
     },
     {
         id: 'recall_focus',
@@ -552,7 +560,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'route_world',
         title: 'Route-world cards',
         description:
-            'Choosing Safe, Greed, or Mystery after a clear stores a route plan for the next floor. That next board gains route-specific card families, hard-route elite anchors, side-room pacing, and relic draft weighting tied to the route you selected.'
+            'Choosing Safe, Greed, or Mystery after a clear stores a route plan for the next floor. That next board gains route-specific card families, hard-route elite anchors, tile-trait pressure, side-room pacing, and relic draft weighting tied to the route you selected.'
     }
 ];
 
@@ -777,6 +785,12 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         title: 'Cursed pair objective',
         description:
             'One **real** pair may be marked **cursed**. Match it **last** among normal pairs to earn the **cursed last** floor bonus; matching it while other real pairs remain forfeits that bonus.'
+    },
+    {
+        id: 'board_tile_traits',
+        title: 'Tile traits',
+        description:
+            '**Tile traits** are pair-level rules layered onto ordinary match pairs from floor 2 onward. **Echo** grants a peek charge on clean match. **Volatile** shuffles safe hidden tiles on a miss. **Mirror** grants guard on clean match but deepens miss pressure. **Cursed** grants Relic Favor on clean match but counts as an extra mistake on miss. **Sealed** grants a combo shard on clean match and drains a peek charge on miss. **Heavy** grants bonus score on clean match. Safe routes bias toward readable traits, Greed toward higher reward-risk traits, and Mystery toward hidden-information traits; Chapter Compass, Wager Surety, and Parasite Ledger add trait synergies.'
     },
     {
         id: 'board_shifting_spotlight',

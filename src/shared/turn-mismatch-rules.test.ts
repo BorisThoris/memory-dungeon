@@ -117,6 +117,33 @@ describe('turn mismatch rules', () => {
         expect(resolved.stickyBlockIndex).toBeNull();
     });
 
+    it('tracks trait mismatch and volatile shuffle counters', () => {
+        const b = board([
+            tile('volatile-a', 'flipped', { pairKey: 'volatile', tileTraitKind: 'volatile' }),
+            tile('mirror-a', 'flipped', { pairKey: 'mirror', tileTraitKind: 'mirror' }),
+            tile('safe-a', 'hidden', { pairKey: 'safe' }),
+            tile('safe-b', 'hidden', { pairKey: 'safe' }),
+            tile('extra-a', 'hidden', { pairKey: 'extra' }),
+            tile('extra-b', 'hidden', { pairKey: 'extra' })
+        ]);
+        const base = run(b, {
+            stats: { ...run(b).stats, tries: 1, mismatches: 0 }
+        });
+
+        const resolved = resolveMismatchTurnTransition({
+            run: base,
+            board: b,
+            tileIds: ['volatile-a', 'mirror-a'],
+            sourceTiles: [b.tiles[0]!, b.tiles[1]!],
+            triesDelta: 1,
+            decoyTouched: false
+        });
+
+        expect(resolved.stats.tileTraitMismatches.volatile).toBe(1);
+        expect(resolved.stats.tileTraitMismatches.mirror).toBe(1);
+        expect(resolved.stats.volatileTraitShuffles).toBe(1);
+    });
+
     it('springs revealed trap mismatches through the transition', () => {
         const b = board([
             tile('trap-a', 'flipped', {

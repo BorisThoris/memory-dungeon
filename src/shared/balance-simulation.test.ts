@@ -5,10 +5,11 @@ import {
     assertDungeonBalanceProfilesWithinBounds,
     DUNGEON_BALANCE_PROFILES,
     getFindableKindShares,
+    getTileTraitKindShares,
     runDungeonBalanceProfileSimulation,
     runBalanceSimulation
 } from './balance-simulation';
-import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from './contracts';
+import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind, type TileTraitKind } from './contracts';
 
 describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     it('runs deterministic offline economy and drop-rate simulations', () => {
@@ -20,6 +21,10 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.findablePickupPairs).toBeGreaterThanOrEqual(12);
         expect(Object.values(result.aggregate.findableKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
             result.aggregate.findablePickupPairs
+        );
+        expect(result.aggregate.tileTraitPairs).toBeGreaterThan(0);
+        expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
+            result.aggregate.tileTraitPairs
         );
         expect(result.aggregate.bossFloors).toBe(2);
         expect(result.aggregate.breatherFloors).toBe(3);
@@ -68,6 +73,13 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'avg_event_room_reward_potential_per_floor',
                 'avg_key_inflow_potential_per_floor',
                 'avg_power_charge_inflow_per_floor',
+                'avg_tile_trait_pairs_per_floor',
+                'tile_trait_share_echo',
+                'tile_trait_share_volatile',
+                'tile_trait_share_mirror',
+                'tile_trait_share_cursed',
+                'tile_trait_share_sealed',
+                'tile_trait_share_heavy',
                 'findable_share_shard_spark',
                 'findable_share_score_glint',
                 'findable_share_ward_spark',
@@ -79,10 +91,6 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'max_pressure_step_up',
             'avg_recovery_relief_on_pressure_floors',
             'max_recovery_debt_streak',
-            'findable_share_shard_spark',
-            'findable_share_score_glint',
-            'findable_share_ward_spark',
-            'findable_share_scout_glint',
             'avg_relic_favor_potential_per_floor',
             'avg_combo_shard_potential_per_floor',
             'avg_guard_reward_potential_per_floor',
@@ -94,7 +102,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'avg_route_reward_pairs_per_floor',
             'avg_event_room_reward_potential_per_floor',
             'avg_key_inflow_potential_per_floor',
-            'avg_power_charge_inflow_per_floor'
+            'avg_power_charge_inflow_per_floor',
+            'avg_tile_trait_pairs_per_floor'
         ]);
         expect(result.rows.filter((row) => newRewardRows.has(row.key) && row.status !== 'within_range')).toEqual([]);
         expect(result.samples.some((sample) => sample.dungeonNodeKind === 'elite' && sample.enemyThreatPairs >= 2)).toBe(
@@ -246,6 +255,33 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(highSkill.safeRouteTollSpend).toBeGreaterThan(0);
         expect(greedy.safeRouteTollSpend).toBeGreaterThan(0);
         expect(greedy.greedLifeCosts).toBe(greedy.routeChoiceCounts.greed);
+    });
+
+    it('keeps tile trait distribution present across longer deterministic samples', () => {
+        const result = runBalanceSimulation({
+            seeds: [42_001, 42_777, 43_001, 44_001],
+            floors: 48,
+            rulesVersion: GAME_RULES_VERSION
+        });
+        const total = result.aggregate.tileTraitPairs;
+
+        expect(total).toBeGreaterThan(0);
+        expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
+
+        const shares = getTileTraitKindShares(result.aggregate.tileTraitKindCounts);
+        const bounds: Record<TileTraitKind, { min: number; max: number }> = {
+            echo: { min: 0.08, max: 0.35 },
+            volatile: { min: 0.08, max: 0.35 },
+            mirror: { min: 0.08, max: 0.35 },
+            cursed: { min: 0.02, max: 0.28 },
+            sealed: { min: 0.02, max: 0.28 },
+            heavy: { min: 0.02, max: 0.28 }
+        };
+
+        for (const kind of Object.keys(bounds) as TileTraitKind[]) {
+            expect(shares[kind]).toBeGreaterThanOrEqual(bounds[kind].min);
+            expect(shares[kind]).toBeLessThanOrEqual(bounds[kind].max);
+        }
     });
 
     it('DNG-071 profile bounds fail with profile/seed/floor context', () => {

@@ -16,8 +16,13 @@ import {
     clearResolveState
 } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
+import { addTileTraitCountStats } from './session-stats-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
+import {
+    applyVolatileMismatchTrait,
+    calculateTileTraitMismatchPenalty
+} from './tile-trait-rules';
 
 export interface MismatchPenalty {
     consumesGuardToken: boolean;
@@ -87,7 +92,8 @@ export const resolveMismatchTurnTransition = ({
     triesDelta,
     decoyTouched
 }: MismatchTurnTransitionInput): RunState => {
-    const penalty = calculateMismatchPenalty(run, board, triesDelta);
+    const traitPenalty = calculateTileTraitMismatchPenalty(run, sourceTiles);
+    const penalty = calculateMismatchPenalty(run, board, triesDelta + traitPenalty.triesDelta);
     let lives = penalty.lives;
     const hiddenBoard = createHiddenMismatchBoard(board, tileIds);
     let pendingMemorizeBonusMs = penalty.pendingMemorizeBonusMs;
@@ -118,13 +124,16 @@ export const resolveMismatchTurnTransition = ({
     const wardedHazards = applySafeHazardWardMismatch(run, advancedTrapBoard, sourceTiles, mismatchHazards);
     const { fragileBreak, snareHazard } = wardedHazards;
     const mirrorTriggered = mismatchHazards.has('mirror_decoy');
-    const spunMiss = rotateRunShiftingSpotlight(run, wardedHazards.board);
+    const volatileTrait = traitPenalty.blocksVolatileShuffle
+        ? { board: wardedHazards.board, triggered: false }
+        : applyVolatileMismatchTrait(wardedHazards.board, run, sourceTiles);
+    const spunMiss = rotateRunShiftingSpotlight(run, volatileTrait.board);
 
     return {
         ...run,
         status: statusAfterEnemy,
         lives: Math.max(lives, 0),
-        shopGold: trapSpring.run.shopGold,
+        shopGold: Math.max(0, trapSpring.run.shopGold),
         freeShuffleThisFloor: trapSpring.run.freeShuffleThisFloor,
         regionShuffleFreeThisFloor: trapSpring.run.regionShuffleFreeThisFloor,
         dungeonTrapsTriggered: trapSpring.run.dungeonTrapsTriggered,
@@ -135,7 +144,8 @@ export const resolveMismatchTurnTransition = ({
             run.hazardTileTriggersThisFloor +
             (snareHazard.triggered ? 1 : 0) +
             (mirrorTriggered ? 1 : 0) +
-            fragileBreak.brokenCount,
+            fragileBreak.brokenCount +
+            (volatileTrait.triggered ? 1 : 0),
         hazardShuffleSnaresThisFloor: run.hazardShuffleSnaresThisFloor + (snareHazard.triggered ? 1 : 0),
         hazardMirrorDecoysThisFloor: run.hazardMirrorDecoysThisFloor + (mirrorTriggered ? 1 : 0),
         hazardFragileCacheBreaksThisFloor: run.hazardFragileCacheBreaksThisFloor + fragileBreak.brokenCount,
@@ -144,9 +154,10 @@ export const resolveMismatchTurnTransition = ({
         safeHazardWardsUsedThisFloor:
             (run.safeHazardWardsUsedThisFloor ?? 0) + (wardedHazards.wardUsed ? 1 : 0),
         pendingMemorizeBonusMs,
+        peekCharges: Math.max(0, run.peekCharges - traitPenalty.peekChargeLoss),
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
-        recallMistakesThisFloor: run.recallMistakesThisFloor + 1,
+        recallMistakesThisFloor: run.recallMistakesThisFloor + 1 + traitPenalty.recallMistakesDelta,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, tileIds),
         decoyFlippedThisFloor: run.decoyFlippedThisFloor || decoyTouched,
         stats: {
@@ -156,7 +167,10 @@ export const resolveMismatchTurnTransition = ({
             currentStreak: Math.floor(run.stats.currentStreak / 2),
             rating: calculateRating(penalty.tries),
             highestLevel: Math.max(run.stats.highestLevel, advancedTrapBoard.level),
-            guardTokens: enemyAttack.guardTokens
+            guardTokens: enemyAttack.guardTokens,
+            tileTraitMismatches: addTileTraitCountStats(trapSpring.run.stats.tileTraitMismatches, sourceTiles),
+            volatileTraitShuffles:
+                (trapSpring.run.stats.volatileTraitShuffles ?? 0) + (volatileTrait.triggered ? 1 : 0)
         },
         timerState: clearResolveState(run)
     };

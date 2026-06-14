@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { FindableKind, HazardTileKind, Tile } from '../../shared/contracts';
+import type { FindableKind, HazardTileKind, Tile, TileTraitKind } from '../../shared/contracts';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import { getHazardTileLiveCopy } from '../../shared/hazard-tiles';
+import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
+import { TILE_TRAIT_COPY } from '../../shared/tile-trait-rules';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 
 const GAUNTLET_WARN_SECS = [60, 30, 10, 5] as const;
@@ -32,6 +34,20 @@ const POLITE_HUD_THROTTLE_MS = 400;
 type HudAnnouncePriority = 'info' | 'error';
 
 const PRIORITY_RANK: Record<HudAnnouncePriority, number> = { error: 2, info: 1 };
+
+const countTileTraitTotal = (counts: Partial<Record<TileTraitKind, number>> | undefined): number =>
+    TILE_TRAIT_COUNT_KINDS.reduce((sum, kind) => sum + (counts?.[kind] ?? 0), 0);
+
+const changedTileTraitLabels = (
+    previous: Partial<Record<TileTraitKind, number>> | undefined,
+    next: Partial<Record<TileTraitKind, number>> | undefined
+): string[] =>
+    TILE_TRAIT_COUNT_KINDS.filter((kind) => (next?.[kind] ?? 0) > (previous?.[kind] ?? 0)).map(
+        (kind) => TILE_TRAIT_COPY[kind].label
+    );
+
+const joinReadableList = (items: readonly string[]): string =>
+    items.length <= 1 ? items[0] ?? '' : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;
 
 export const detectClaimedFindableKind = (
     previousTiles: readonly Tile[],
@@ -133,6 +149,9 @@ interface HudPoliteLiveAnnouncementInput {
     matchedPairs: number;
     pairCount: number;
     mismatches: number;
+    tileTraitMatches?: Partial<Record<TileTraitKind, number>>;
+    tileTraitMismatches?: Partial<Record<TileTraitKind, number>>;
+    volatileTraitShuffles?: number;
     findablesClaimedThisFloor: number;
     objectiveProgress?: number;
     objectiveRequired?: number;
@@ -217,6 +236,9 @@ export const useHudPoliteLiveAnnouncement = ({
     matchedPairs,
     pairCount,
     mismatches,
+    tileTraitMatches,
+    tileTraitMismatches,
+    volatileTraitShuffles = 0,
     findablesClaimedThisFloor,
     objectiveProgress = 0,
     objectiveRequired = 0,
@@ -279,6 +301,9 @@ export const useHudPoliteLiveAnnouncement = ({
         matchedPairs: number;
         pairCount: number;
         mismatches: number;
+        tileTraitMatches: Partial<Record<TileTraitKind, number>> | undefined;
+        tileTraitMismatches: Partial<Record<TileTraitKind, number>> | undefined;
+        volatileTraitShuffles: number;
         objectiveProgress: number;
         objectiveRequired: number;
         objectiveLabel: string | null;
@@ -538,6 +563,9 @@ export const useHudPoliteLiveAnnouncement = ({
             matchedPairs,
             pairCount,
             mismatches,
+            tileTraitMatches,
+            tileTraitMismatches,
+            volatileTraitShuffles,
             objectiveProgress,
             objectiveRequired,
             objectiveLabel,
@@ -564,6 +592,9 @@ export const useHudPoliteLiveAnnouncement = ({
         const goldDelta = shopGold - snap.shopGold;
         const matchDelta = matchedPairs - snap.matchedPairs;
         const mismatchDelta = mismatches - snap.mismatches;
+        const traitMatchLabels = changedTileTraitLabels(snap.tileTraitMatches, tileTraitMatches);
+        const traitMismatchLabels = changedTileTraitLabels(snap.tileTraitMismatches, tileTraitMismatches);
+        const volatileTraitShuffleDelta = volatileTraitShuffles - snap.volatileTraitShuffles;
         const objectiveDelta = objectiveProgress - snap.objectiveProgress;
         const recallMatchDelta = recallMatchesThisFloor - snap.recallMatches;
         const recallMistakeDelta = recallMistakesThisFloor - snap.recallMistakes;
@@ -615,6 +646,9 @@ export const useHudPoliteLiveAnnouncement = ({
         if (matchDelta > 0) {
             const pairTotal = Math.max(pairCount, matchedPairs, snap.pairCount);
             lines.push(`Match resolved. ${matchedPairs}/${pairTotal} pairs cleared.`);
+            if (traitMatchLabels.length > 0) {
+                lines.push(`${joinReadableList(traitMatchLabels)} trait resolved.`);
+            }
             if (recallMatchDelta > 0) {
                 lines.push(
                     recallBonusDelta > 0
@@ -644,6 +678,14 @@ export const useHudPoliteLiveAnnouncement = ({
             }
         }
 
+        if (traitMismatchLabels.length > 0) {
+            lines.push(`${joinReadableList(traitMismatchLabels)} trait penalty applied.`);
+        }
+
+        if (volatileTraitShuffleDelta > 0) {
+            lines.push('Volatile trait shuffled hidden cards.');
+        }
+
         if (
             objectiveRequired > 0 &&
             (objectiveDelta > 0 || (objectiveProgress >= objectiveRequired && snap.objectiveProgress < snap.objectiveRequired))
@@ -671,7 +713,7 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${objectiveProgress}:${normalizedRecallFocus}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}`,
+                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${objectiveProgress}:${normalizedRecallFocus}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${countTileTraitTotal(tileTraitMatches)}:${countTileTraitTotal(tileTraitMismatches)}:${volatileTraitShuffles}`,
                 priority: lifeDelta < 0 || enemyHazardHitDelta > 0 ? 'error' : 'info'
             });
         }
@@ -698,7 +740,10 @@ export const useHudPoliteLiveAnnouncement = ({
         normalizedRecallFocus,
         recallMatchesThisFloor,
         recallMistakesThisFloor,
-        shopGold
+        shopGold,
+        tileTraitMatches,
+        tileTraitMismatches,
+        volatileTraitShuffles
     ]);
 
     useEffect(() => {

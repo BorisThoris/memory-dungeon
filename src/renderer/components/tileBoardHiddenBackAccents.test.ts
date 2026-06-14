@@ -36,7 +36,8 @@ describe('tileBoardHiddenBackAccents', () => {
             nonPickableBack: false,
             objectiveBackAccent: false,
             powerBackAccent: null,
-            routeBackAccent: false
+            routeBackAccent: false,
+            traitBackAccent: null
         });
         expect(accents({ tile: tile({ state: 'flipped', tileHazardKind: 'fuse_cache' }) })).toEqual({
             destroyBlockedDecoyBack: false,
@@ -44,7 +45,8 @@ describe('tileBoardHiddenBackAccents', () => {
             nonPickableBack: false,
             objectiveBackAccent: false,
             powerBackAccent: null,
-            routeBackAccent: false
+            routeBackAccent: false,
+            traitBackAccent: null
         });
     });
 
@@ -62,6 +64,10 @@ describe('tileBoardHiddenBackAccents', () => {
         expect(result.routeBackAccent).toBe(true);
         expect(result.objectiveBackAccent).toBe(true);
         expect(result.nonPickableBack).toBe(true);
+    });
+
+    it('surfaces trait accents for hidden backs', () => {
+        expect(accents({ tile: tile({ tileTraitKind: 'volatile' }) }).traitBackAccent).toBe('volatile');
     });
 
     it('applies power accent precedence and blocks destroy on decoys', () => {

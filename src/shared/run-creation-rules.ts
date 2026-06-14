@@ -99,7 +99,8 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
             featuredObjectiveId: initialFeaturedObjectiveId,
             cycleFloor: initialCycleFloor,
             gameMode: useOnboardingSafeFirstFloor ? undefined : gameMode,
-            suppressFindables: useOnboardingSafeFirstFloor
+            suppressFindables: useOnboardingSafeFirstFloor,
+            relicIds: options.initialRelicIds ?? []
         });
     const dungeonRun = createDungeonRunMapState(runSeed, rulesVersion, 1);
 
