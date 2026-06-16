@@ -19,6 +19,8 @@ describe('levelCompleteSurfaceState', () => {
                 matchScorePop: null,
                 mismatchScorePop: null,
                 peekModeArmed: false,
+                tileSwapArmed: false,
+                tileSwapFirstTileId: null,
                 run,
                 view: 'sideRoom'
             }
@@ -41,6 +43,8 @@ describe('levelCompleteSurfaceState', () => {
                 matchScorePop: null,
                 mismatchScorePop: null,
                 peekModeArmed: false,
+                tileSwapArmed: false,
+                tileSwapFirstTileId: null,
                 run: { shopOffers: run.shopOffers },
                 shopReturnMode: 'summary',
                 view: 'shop'
@@ -64,6 +68,8 @@ describe('levelCompleteSurfaceState', () => {
                 matchScorePop: null,
                 mismatchScorePop: null,
                 peekModeArmed: false,
+                tileSwapArmed: false,
+                tileSwapFirstTileId: null,
                 view: 'playing'
             }
         });
@@ -96,6 +102,8 @@ describe('levelCompleteSurfaceState', () => {
                 mismatchScorePop: null,
                 newlyUnlockedAchievements: [],
                 peekModeArmed: false,
+                tileSwapArmed: false,
+                tileSwapFirstTileId: null,
                 run: result.run,
                 view: 'playing'
             });

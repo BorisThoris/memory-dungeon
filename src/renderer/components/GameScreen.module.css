@@ -3889,6 +3889,12 @@
     z-index: 5;
     transform: translate(-50%, -120%);
     pointer-events: none;
+    display: flex;
+    width: max-content;
+    max-width: min(18rem, 72vi);
+    flex-direction: column;
+    align-items: center;
+    gap: 0.08rem;
     font-variant-numeric: tabular-nums;
     font-weight: 700;
     font-size: clamp(0.95rem, 2.4vi, 1.3rem);
@@ -3910,6 +3916,12 @@
     z-index: 5;
     transform: translate(-50%, -120%);
     pointer-events: none;
+    display: flex;
+    width: max-content;
+    max-width: min(18rem, 72vi);
+    flex-direction: column;
+    align-items: center;
+    gap: 0.08rem;
     font-variant-numeric: tabular-nums;
     font-weight: 700;
     font-size: clamp(0.95rem, 2.4vi, 1.3rem);
@@ -3927,6 +3939,25 @@
 
 .matchScoreFloaterReduced {
     animation-name: matchScoreFloaterFade;
+}
+
+.boardFloaterMain,
+.boardFloaterTraitLine {
+    display: block;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-align: center;
+}
+
+.boardFloaterTraitLine {
+    padding: 0.08rem 0.36rem;
+    border: 1px solid color-mix(in srgb, currentColor 42%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-void) 64%, transparent);
+    font-size: clamp(0.62rem, 1.45vi, 0.78rem);
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    text-transform: none;
 }
 
 /* UI-REFINE: final chrome pass for the HTML gameplay shell. */

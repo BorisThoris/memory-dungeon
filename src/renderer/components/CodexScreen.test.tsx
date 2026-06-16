@@ -43,4 +43,14 @@ describe('CodexScreen REG-095 knowledge base', () => {
         expect(screen.getByText(/peek, pin, read/i)).toBeInTheDocument();
         expect(screen.getAllByText(/Peek charge/i).length).toBeGreaterThan(0);
     });
+
+    it('documents tile trait rules and interactions without relying on gameplay state', () => {
+        render(<CodexScreen />);
+
+        expect(screen.getByRole('link', { name: 'Traits' })).toBeInTheDocument();
+        expect(screen.getByText('Traits & interactions')).toBeInTheDocument();
+        expect(screen.getByText('Echo')).toBeInTheDocument();
+        expect(screen.getByText('Echo + Sealed: combo shard')).toBeInTheDocument();
+        expect(screen.getByText(/Match Echo next to a different Sealed trait pair/i)).toBeInTheDocument();
+    });
 });

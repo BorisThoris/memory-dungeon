@@ -45,6 +45,8 @@ describe('sideRoomSurfaceState', () => {
             matchScorePop: null,
             mismatchScorePop: null,
             peekModeArmed: false,
+            tileSwapArmed: false,
+            tileSwapFirstTileId: null,
             run,
             shopReturnMode: 'summary',
             view: 'shop'

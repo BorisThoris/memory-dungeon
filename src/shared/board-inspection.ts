@@ -126,6 +126,71 @@ const countUnclearedDungeonPairs = (tiles: readonly Tile[], predicate: (tile: Ti
     return pairKeys.size;
 };
 
+export const countReachableExitLeverSources = (board: BoardState): number =>
+    (board.dungeonLeverCount ?? 0) +
+    countUnclearedDungeonPairs(
+        board.tiles,
+        (tile) => tile.dungeonCardKind === 'lever' && tile.dungeonCardEffectId === 'lever_floor'
+    );
+
+export const countReachableExitKeySources = (board: BoardState, keyKind: DungeonKeyKind): number => {
+    const matchingKeyPairCount = countUnclearedDungeonPairs(
+        board.tiles,
+        (tile) => tile.dungeonCardKind === 'key' && (tile.dungeonKeyKind ?? 'iron') === keyKind
+    );
+    const roomKeyCacheCount =
+        keyKind === 'iron'
+            ? board.tiles.filter((tile) => !tileIsClearedForFairness(tile) && tile.dungeonCardEffectId === 'room_key_cache').length
+            : 0;
+    return (board.dungeonKeysHeld ?? 0) + matchingKeyPairCount + roomKeyCacheCount;
+};
+
+export const repairDungeonExitSoftlocks = (board: BoardState): BoardState => {
+    if (!board.dungeonExitTileId) {
+        return board;
+    }
+    const primaryExit = board.tiles.find((tile) => tile.id === board.dungeonExitTileId);
+    if (!primaryExit) {
+        return board;
+    }
+    const exitLockKind = primaryExit.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
+    const requiredLeverCount = primaryExit.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount ?? 0;
+    let repairedLockKind = exitLockKind;
+    let repairedLeverCount = requiredLeverCount;
+
+    if (exitLockKind === 'lever') {
+        const reachableLevers = countReachableExitLeverSources(board);
+        if (reachableLevers <= 0) {
+            repairedLockKind = 'none';
+            repairedLeverCount = 0;
+        } else if (reachableLevers < requiredLeverCount) {
+            repairedLeverCount = reachableLevers;
+        }
+    } else if (exitLockKind !== 'none' && countReachableExitKeySources(board, exitLockKind as DungeonKeyKind) < 1) {
+        repairedLockKind = 'none';
+        repairedLeverCount = 0;
+    }
+
+    if (repairedLockKind === exitLockKind && repairedLeverCount === requiredLeverCount) {
+        return board;
+    }
+
+    return {
+        ...board,
+        dungeonExitLockKind: repairedLockKind,
+        dungeonExitRequiredLeverCount: repairedLeverCount,
+        tiles: board.tiles.map((tile) =>
+            tile.id === primaryExit.id
+                ? {
+                      ...tile,
+                      dungeonExitLockKind: repairedLockKind,
+                      dungeonExitRequiredLeverCount: repairedLeverCount
+                  }
+                : tile
+        )
+    };
+};
+
 /**
  * REG-087 anti-softlock inspection for board structure and completion reachability.
  *
@@ -236,24 +301,20 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
     const requiredLeverCount =
         primaryExit?.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount ?? 0;
     if (exitLockKind === 'lever' && (board.dungeonLeverCount ?? 0) < requiredLeverCount) {
-        const leverPairCount = countUnclearedDungeonPairs(board.tiles, (tile) => tile.dungeonCardKind === 'lever');
-        if ((board.dungeonLeverCount ?? 0) + leverPairCount < requiredLeverCount) {
+        const reachableLevers = countReachableExitLeverSources(board);
+        if (reachableLevers < requiredLeverCount) {
             structurallyClearable = false;
             issues.push({
                 code: 'exit_lock_unreachable',
                 message: `Lever-locked exit requires ${requiredLeverCount} lever(s), but only ${
-                    (board.dungeonLeverCount ?? 0) + leverPairCount
+                    reachableLevers
                 } can be reached.`
             });
         }
     }
     if (exitLockKind !== 'none' && exitLockKind !== 'lever') {
         const requiredKeyKind = exitLockKind as DungeonKeyKind;
-        const matchingKeyPairCount = countUnclearedDungeonPairs(
-            board.tiles,
-            (tile) => tile.dungeonCardKind === 'key' && (tile.dungeonKeyKind ?? 'iron') === requiredKeyKind
-        );
-        if ((board.dungeonKeysHeld ?? 0) + matchingKeyPairCount < 1) {
+        if (countReachableExitKeySources(board, requiredKeyKind) < 1) {
             structurallyClearable = false;
             issues.push({
                 code: 'exit_lock_unreachable',

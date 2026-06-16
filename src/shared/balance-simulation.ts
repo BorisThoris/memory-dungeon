@@ -263,7 +263,17 @@ const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     scout_glint: 0
 });
 
-const TILE_TRAIT_KINDS: readonly TileTraitKind[] = ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy'];
+const TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
+    'echo',
+    'volatile',
+    'mirror',
+    'cursed',
+    'sealed',
+    'heavy',
+    'drift',
+    'conduit',
+    'stasis'
+];
 
 const emptyTileTraitKindCounts = (): Record<TileTraitKind, number> => ({
     echo: 0,
@@ -271,7 +281,10 @@ const emptyTileTraitKindCounts = (): Record<TileTraitKind, number> => ({
     mirror: 0,
     cursed: 0,
     sealed: 0,
-    heavy: 0
+    heavy: 0,
+    drift: 0,
+    conduit: 0,
+    stasis: 0
 });
 
 const countFindableKinds = (tiles: readonly Tile[]): Record<FindableKind, number> => {

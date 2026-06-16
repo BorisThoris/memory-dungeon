@@ -78,11 +78,11 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
     region_shuffle_charge: {
         id: 'region_shuffle_charge',
         kind: 'consumable',
-        label: 'Row shuffle charge',
+        label: 'Row/swap charge',
         stackLimit: null,
         mutableAt: 'mid_run',
         source: 'Run start and relic services.',
-        useRule: 'Spend during play to reshuffle one row; disabled by no-shuffle contracts.'
+        useRule: 'Spend during play to reshuffle one row or swap two hidden tiles; disabled by no-shuffle contracts.'
     },
     destroy_charge: {
         id: 'destroy_charge',
@@ -429,7 +429,7 @@ export const previewRunInventoryItemGain = (
 
 const PICKUP_GAIN_LABELS: Record<RunInventoryItemId, { singular: string; plural: string }> = {
     shuffle_charge: { singular: 'shuffle charge', plural: 'shuffle charges' },
-    region_shuffle_charge: { singular: 'row shuffle charge', plural: 'row shuffle charges' },
+    region_shuffle_charge: { singular: 'row/swap charge', plural: 'row/swap charges' },
     destroy_charge: { singular: 'destroy charge', plural: 'destroy charges' },
     peek_charge: { singular: 'peek charge', plural: 'peek charges' },
     stray_remove_charge: { singular: 'stray remover', plural: 'stray removers' },

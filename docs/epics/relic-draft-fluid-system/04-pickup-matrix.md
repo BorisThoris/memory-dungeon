@@ -7,7 +7,7 @@ Draft tier (`RelicDraftRarity` in [`relics.ts`](../../../src/shared/relics.ts)) 
 | `extra_shuffle_charge` | common | +1 shuffle charge now |
 | `first_shuffle_free_per_floor` | common | First full-board shuffle each floor free |
 | `memorize_bonus_ms` | common | Longer memorize phases |
-| `region_shuffle_free_first` | common | First row shuffle each floor free |
+| `region_shuffle_free_first` | common | First row shuffle or tile swap each floor free |
 | `memorize_under_short_memorize` | uncommon | +memorize when Short memorize mutator active |
 | `destroy_bank_plus_one` | uncommon | +1 destroy charge now |
 | `combo_shard_plus_step` | uncommon | +1 combo shard step |

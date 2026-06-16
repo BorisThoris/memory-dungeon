@@ -69,6 +69,7 @@ import {
     createRunSurfaceReset,
     createShuffleBoardSurfaceResult,
     createStrayArmToggleResult,
+    createTileSwapToggleResult,
     createRunWithPeekDisarmedPatch
 } from './runSurfaceState';
 import {
@@ -154,6 +155,8 @@ interface AppState {
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
+    tileSwapArmed: boolean;
+    tileSwapFirstTileId: string | null;
     dungeonExitPromptOpen: boolean;
     shopReturnMode: 'floor' | 'summary' | null;
     /** Transient floating +score near matched tiles (Gameplay column). */
@@ -198,6 +201,7 @@ interface AppState {
     closeDungeonExitPrompt: () => void;
     activateDungeonExitFromPrompt: (spend?: DungeonExitActivationSpend) => void;
     togglePeekMode: () => void;
+    toggleTileSwapArmed: () => void;
     undoResolvingFlip: () => void;
     toggleStrayArm: () => void;
     shuffleBoard: () => void;
@@ -390,6 +394,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     boardPinMode: false,
     destroyPairArmed: false,
     peekModeArmed: false,
+    tileSwapArmed: false,
+    tileSwapFirstTileId: null,
     dungeonExitPromptOpen: false,
     shopReturnMode: null,
     ...BOARD_FLOATER_POP_CLEAR,
@@ -600,7 +606,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     pressTile: (tileId) => {
-        const { run, view, boardPinMode, destroyPairArmed, peekModeArmed } = get();
+        const {
+            run,
+            view,
+            boardPinMode,
+            destroyPairArmed,
+            peekModeArmed,
+            tileSwapArmed,
+            tileSwapFirstTileId
+        } = get();
 
         if (!run || view !== 'playing') {
             return;
@@ -664,6 +678,8 @@ export const useAppStore = create<AppState>((set, get) => ({
                 destroyPairArmed,
                 peekModeArmed,
                 run,
+                tileSwapArmed,
+                tileSwapFirstTileId,
                 tileId
             }),
             {
@@ -706,11 +722,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     togglePeekMode: () => {
-        const { run, view, boardPinMode, destroyPairArmed, peekModeArmed } = get();
+        const { run, view, boardPinMode, destroyPairArmed, peekModeArmed, tileSwapArmed } = get();
         const result = createPeekModeToggleResult({
             boardPinMode,
             destroyPairArmed,
             peekModeArmed,
+            tileSwapArmed,
             run,
             view
         });
@@ -720,6 +737,25 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (result.playArmSfx) {
             void resumeAudioContext();
             playPowerArmSfx(sfxGainFromStore());
+        }
+        set(result.patch);
+    },
+
+    toggleTileSwapArmed: () => {
+        const { run, view, destroyPairArmed, peekModeArmed, tileSwapArmed } = get();
+        const result = createTileSwapToggleResult({
+            destroyPairArmed,
+            peekModeArmed,
+            run,
+            tileSwapArmed,
+            view
+        });
+        if (result.kind === 'ignored') {
+            return;
+        }
+        if (result.playArmSfx) {
+            void resumeAudioContext();
+            playPowerArmSfx(sfxGainFromStore() * 0.9);
         }
         set(result.patch);
     },

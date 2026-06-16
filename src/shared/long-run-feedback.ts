@@ -99,7 +99,7 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
 
     const actions: string[] = [];
     if (run.gambitThirdFlipUsed) actions.push('gambit');
-    if (run.shuffleUsedThisFloor || run.stats.shufflesUsed > 0) actions.push('shuffle');
+    if (run.shuffleUsedThisFloor || run.stats.shufflesUsed > 0) actions.push('shuffle or swap');
     if (run.stats.pairsDestroyed > 0) actions.push('destroy pair');
     if (run.peekRevealedTileIds.length > 0) actions.push('peek');
     const firstAction = actions[0] ?? 'assist or wild action';

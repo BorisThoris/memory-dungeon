@@ -26,7 +26,7 @@ describe('GLD-FB long-run feedback read models', () => {
         expect(getPerfectMemoryAttribution(run)).toEqual({
             locked: true,
             firstAction: 'gambit',
-            latestAction: 'shuffle',
+            latestAction: 'shuffle or swap',
             summary: 'Perfect Memory locked by gambit.',
             tokens: ['locked', 'forfeit']
         });

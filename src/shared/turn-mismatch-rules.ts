@@ -92,7 +92,7 @@ export const resolveMismatchTurnTransition = ({
     triesDelta,
     decoyTouched
 }: MismatchTurnTransitionInput): RunState => {
-    const traitPenalty = calculateTileTraitMismatchPenalty(run, sourceTiles);
+    const traitPenalty = calculateTileTraitMismatchPenalty(run, sourceTiles, board);
     const penalty = calculateMismatchPenalty(run, board, triesDelta + traitPenalty.triesDelta);
     let lives = penalty.lives;
     const hiddenBoard = createHiddenMismatchBoard(board, tileIds);

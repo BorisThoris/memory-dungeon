@@ -42,3 +42,19 @@ export const canRegionShuffleRow = (run: RunState, rowIndex: number): boolean =>
     });
     return hidden >= 2;
 };
+
+export const canSwapHiddenTiles = (run: RunState, firstTileId: string, secondTileId: string): boolean => {
+    if (
+        run.status !== 'playing' ||
+        !run.board ||
+        run.board.flippedTileIds.length !== 0 ||
+        run.activeContract?.noShuffle ||
+        firstTileId === secondTileId ||
+        (run.regionShuffleCharges <= 0 && !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first')))
+    ) {
+        return false;
+    }
+    const firstTile = run.board.tiles.find((tile) => tile.id === firstTileId);
+    const secondTile = run.board.tiles.find((tile) => tile.id === secondTileId);
+    return Boolean(firstTile && secondTile && firstTile.state === 'hidden' && secondTile.state === 'hidden');
+};

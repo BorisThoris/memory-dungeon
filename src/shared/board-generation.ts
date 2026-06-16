@@ -11,6 +11,7 @@ export {
     getWildTileIdFromBoard,
     inspectBoardFairness,
     inspectRunFairness,
+    repairDungeonExitSoftlocks,
     type BoardFairnessIssue,
     type BoardFairnessIssueCode,
     type BoardFairnessReport,

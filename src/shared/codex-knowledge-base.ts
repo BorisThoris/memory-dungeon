@@ -12,6 +12,7 @@ import {
     RELIC_CATALOG,
     VISUAL_ENDLESS_MODE_LOCKED
 } from './mechanics-encyclopedia';
+import { getTileTraitCodexRows, getTileTraitInteractionCodexRows } from './tile-trait-codex';
 
 export type CodexKnowledgeSectionId =
     | 'guides'
@@ -38,14 +39,16 @@ export const getCodexKnowledgeSectionRows = (): CodexKnowledgeSectionRow[] => {
         ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS.length +
         ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS.length +
         ENCYCLOPEDIA_CONTRACT_TOPICS.length +
-        ENCYCLOPEDIA_FEATURED_RUN_TOPICS.length;
+        ENCYCLOPEDIA_FEATURED_RUN_TOPICS.length +
+        getTileTraitCodexRows().length +
+        getTileTraitInteractionCodexRows().length;
     const modeCount = GAME_MODE_CODEX.length + 1;
     return [
         {
             id: 'guides',
             title: 'Guide articles',
             entryCount: guideCount,
-            description: 'Rules, scoring, powers, pickups, contracts, settings, and featured-run guidance.',
+            description: 'Rules, scoring, powers, pickups, traits, contracts, settings, and featured-run guidance.',
             deepLink: '#codex-core',
             localOnly: true
         },

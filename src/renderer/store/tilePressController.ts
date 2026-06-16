@@ -35,6 +35,8 @@ type TilePressPatch = Partial<{
     peekModeArmed: boolean;
     run: RunState;
     shopReturnMode: 'floor' | 'summary' | null;
+    tileSwapArmed: boolean;
+    tileSwapFirstTileId: string | null;
     view: ViewState;
 }>;
 
@@ -49,12 +51,16 @@ export const createPlayingTilePressSurfaceResult = ({
     destroyPairArmed,
     peekModeArmed,
     run,
+    tileSwapArmed = false,
+    tileSwapFirstTileId = null,
     tileId
 }: {
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
     run: RunState;
+    tileSwapArmed?: boolean;
+    tileSwapFirstTileId?: string | null;
     tileId: string;
 }): PlayingTilePressSurfaceResult => {
     const audio: TilePressAudioCue[] = [];
@@ -62,6 +68,7 @@ export const createPlayingTilePressSurfaceResult = ({
         boardPinMode,
         destroyPairArmed,
         peekModeArmed,
+        tileSwapArmed,
         strayRemoveArmed: run.strayRemoveArmed
     });
     let actionRun = run;
@@ -146,10 +153,15 @@ export const createPlayingTilePressSurfaceResult = ({
         enemyContacted,
         peekModeArmed,
         run: actionRun,
+        tileSwapArmed,
+        tileSwapFirstTileId,
         tileId
     });
     if (armedPowerPressResult.kind !== 'notArmed') {
         if (armedPowerPressResult.kind === 'handled') {
+            if (enemyContacted) {
+                return { kind: 'patch', patch: { run: actionRun }, audio, resolveDelayMs: null };
+            }
             return { kind: 'ignored', audio };
         }
         if (armedPowerPressResult.kind === 'persistEnemyContact') {
@@ -164,6 +176,36 @@ export const createPlayingTilePressSurfaceResult = ({
             return {
                 kind: 'patch',
                 patch: createRunWithPeekDisarmedPatch(armedPowerPressResult.run),
+                audio,
+                resolveDelayMs: null
+            };
+        }
+        if (armedPowerPressResult.kind === 'tileSwapFirstSelected') {
+            return {
+                kind: 'patch',
+                patch: {
+                    ...(enemyContacted ? { run: actionRun } : {}),
+                    tileSwapFirstTileId: armedPowerPressResult.tileId
+                },
+                audio,
+                resolveDelayMs: null
+            };
+        }
+        if (armedPowerPressResult.kind === 'tileSwapFirstCleared') {
+            return {
+                kind: 'patch',
+                patch: {
+                    ...(enemyContacted ? { run: actionRun } : {}),
+                    tileSwapFirstTileId: null
+                },
+                audio,
+                resolveDelayMs: null
+            };
+        }
+        if (armedPowerPressResult.kind === 'tileSwapApplied') {
+            return {
+                kind: 'patch',
+                patch: createRunWithBoardPowersDisarmedPatch(armedPowerPressResult.run),
                 audio,
                 resolveDelayMs: null
             };

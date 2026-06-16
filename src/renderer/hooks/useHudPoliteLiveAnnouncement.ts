@@ -144,6 +144,9 @@ interface HudPoliteLiveAnnouncementInput {
     guardTokens: number;
     comboShards: number;
     shopGold: number;
+    shuffleCharges?: number;
+    regionShuffleCharges?: number;
+    stickyBlockIndex?: number | null;
     boardLevel: number | null;
     boardTiles: readonly Tile[];
     matchedPairs: number;
@@ -231,6 +234,9 @@ export const useHudPoliteLiveAnnouncement = ({
     guardTokens,
     comboShards,
     shopGold,
+    shuffleCharges = 0,
+    regionShuffleCharges = 0,
+    stickyBlockIndex = null,
     boardLevel,
     boardTiles,
     matchedPairs,
@@ -298,6 +304,9 @@ export const useHudPoliteLiveAnnouncement = ({
         guardTokens: number;
         comboShards: number;
         shopGold: number;
+        shuffleCharges: number;
+        regionShuffleCharges: number;
+        stickyBlockIndex: number | null;
         matchedPairs: number;
         pairCount: number;
         mismatches: number;
@@ -560,6 +569,9 @@ export const useHudPoliteLiveAnnouncement = ({
             guardTokens,
             comboShards,
             shopGold,
+            shuffleCharges,
+            regionShuffleCharges,
+            stickyBlockIndex,
             matchedPairs,
             pairCount,
             mismatches,
@@ -590,6 +602,9 @@ export const useHudPoliteLiveAnnouncement = ({
         const guardDelta = guardTokens - snap.guardTokens;
         const shardDelta = comboShards - snap.comboShards;
         const goldDelta = shopGold - snap.shopGold;
+        const shuffleChargeDelta = shuffleCharges - snap.shuffleCharges;
+        const regionShuffleChargeDelta = regionShuffleCharges - snap.regionShuffleCharges;
+        const stasisLocked = stickyBlockIndex !== null && snap.stickyBlockIndex !== stickyBlockIndex;
         const matchDelta = matchedPairs - snap.matchedPairs;
         const mismatchDelta = mismatches - snap.mismatches;
         const traitMatchLabels = changedTileTraitLabels(snap.tileTraitMatches, tileTraitMatches);
@@ -648,6 +663,15 @@ export const useHudPoliteLiveAnnouncement = ({
             lines.push(`Match resolved. ${matchedPairs}/${pairTotal} pairs cleared.`);
             if (traitMatchLabels.length > 0) {
                 lines.push(`${joinReadableList(traitMatchLabels)} trait resolved.`);
+            }
+            if (regionShuffleChargeDelta > 0) {
+                lines.push(`${pluralize(regionShuffleChargeDelta, 'row/swap charge')} gained.`);
+            }
+            if (shuffleChargeDelta > 0) {
+                lines.push(`${pluralize(shuffleChargeDelta, 'full shuffle charge')} gained.`);
+            }
+            if (stasisLocked) {
+                lines.push('Stasis blocked a nearby trait tile from opening first next turn.');
             }
             if (recallMatchDelta > 0) {
                 lines.push(
@@ -713,7 +737,7 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${objectiveProgress}:${normalizedRecallFocus}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${countTileTraitTotal(tileTraitMatches)}:${countTileTraitTotal(tileTraitMismatches)}:${volatileTraitShuffles}`,
+                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocus}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${countTileTraitTotal(tileTraitMatches)}:${countTileTraitTotal(tileTraitMismatches)}:${volatileTraitShuffles}`,
                 priority: lifeDelta < 0 || enemyHazardHitDelta > 0 ? 'error' : 'info'
             });
         }
@@ -732,6 +756,7 @@ export const useHudPoliteLiveAnnouncement = ({
         objectiveRequired,
         pairCount,
         queuePoliteAnnouncement,
+        regionShuffleCharges,
         forgottenTileCountThisFloor,
         enemyHazardHitsThisFloor,
         enemyHazardsDefeatedThisFloor,
@@ -740,7 +765,9 @@ export const useHudPoliteLiveAnnouncement = ({
         normalizedRecallFocus,
         recallMatchesThisFloor,
         recallMistakesThisFloor,
+        shuffleCharges,
         shopGold,
+        stickyBlockIndex,
         tileTraitMatches,
         tileTraitMismatches,
         volatileTraitShuffles

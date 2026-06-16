@@ -145,6 +145,7 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
     {
         id: 'tile_traits',
         preferredLabel: 'Tile traits',
+        // Skip Codex copy refresh for the new trait interactions until a dedicated Codex clarity pass.
         shortDefinition: 'Pair-level modifiers such as Echo, Volatile, Mirror, Cursed, Sealed, and Heavy that add match rewards or miss drawbacks.',
         avoidLabels: ['random punishments', 'status ailments'],
         surfaces: ['Board', 'Route choice', 'Tile a11y', 'Codex']
@@ -790,6 +791,7 @@ export const ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS: readonly EncyclopediaTopic[] 
         id: 'board_tile_traits',
         title: 'Tile traits',
         description:
+            // Skip Codex copy refresh for the new trait interactions until a dedicated Codex clarity pass.
             '**Tile traits** are pair-level rules layered onto ordinary match pairs from floor 2 onward. **Echo** grants a peek charge on clean match. **Volatile** shuffles safe hidden tiles on a miss. **Mirror** grants guard on clean match but deepens miss pressure. **Cursed** grants Relic Favor on clean match but counts as an extra mistake on miss. **Sealed** grants a combo shard on clean match and drains a peek charge on miss. **Heavy** grants bonus score on clean match. Safe routes bias toward readable traits, Greed toward higher reward-risk traits, and Mystery toward hidden-information traits; Chapter Compass, Wager Surety, and Parasite Ledger add trait synergies.'
     },
     {

@@ -104,8 +104,8 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
         label: 'The Saboteur',
         fantasy: 'Turn the dungeon machinery against itself.',
         decisionVerbs: ['disarm', 'delete', 'reroute'],
-        summary: 'Use shuffle, destroy, and search tools to convert trap halls from hidden punishment into planned disarms.',
-        dungeonInteractions: ['trap halls', 'dungeon trap cards', 'row shuffle', 'destroy-pair charges'],
+        summary: 'Use shuffle, swap, destroy, and search tools to convert trap halls from hidden punishment into planned disarms.',
+        dungeonInteractions: ['trap halls', 'dungeon trap cards', 'row shuffle / tile swap', 'destroy-pair charges'],
         supportHooks: ['shuffle relic contract filters', 'destroy_bank_plus_one uncapped charge grant', 'trap route contextual weighting']
     },
     treasure_greed: {

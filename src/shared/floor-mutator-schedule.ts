@@ -113,7 +113,7 @@ export const FEATURED_OBJECTIVE_LABELS: Record<FeaturedObjectiveId, string> = {
 export const FEATURED_OBJECTIVE_HUD_TOOLTIPS: Record<FeaturedObjectiveId, string> = {
     flip_par:
         'Match resolutions (pair clears, including gambit) this floor must stay at or below ceil(pairCount × 1.25) + 2. Not the same as every tile flip.',
-    scholar_style: 'Do not use board shuffle or destroy pair on this floor.',
+    scholar_style: 'Do not use board shuffle, tile swap, or destroy pair on this floor.',
     glass_witness: 'With a glass decoy, it must never be flipped into a mismatch.',
     cursed_last: 'The cursed pair must be the last real pair you clear on this floor (not resolved early).'
 };

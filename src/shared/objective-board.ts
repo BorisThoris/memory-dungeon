@@ -151,7 +151,7 @@ export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgre
             id: 'scholar_contract',
             label: 'Scholar contract',
             state: failed ? 'failed' : 'active',
-            detail: failed ? 'Shuffle/destroy used this floor' : 'No shuffle or destroy'
+            detail: failed ? 'Shuffle/swap/destroy used this floor' : 'No shuffle, swap, or destroy'
         });
     }
     if (run.activeContract?.maxPinsTotalRun != null) {

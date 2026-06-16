@@ -80,6 +80,9 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'tile_trait_share_cursed',
                 'tile_trait_share_sealed',
                 'tile_trait_share_heavy',
+                'tile_trait_share_drift',
+                'tile_trait_share_conduit',
+                'tile_trait_share_stasis',
                 'findable_share_shard_spark',
                 'findable_share_score_glint',
                 'findable_share_ward_spark',
@@ -271,11 +274,14 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         const shares = getTileTraitKindShares(result.aggregate.tileTraitKindCounts);
         const bounds: Record<TileTraitKind, { min: number; max: number }> = {
             echo: { min: 0.08, max: 0.35 },
-            volatile: { min: 0.08, max: 0.35 },
-            mirror: { min: 0.08, max: 0.35 },
-            cursed: { min: 0.02, max: 0.28 },
-            sealed: { min: 0.02, max: 0.28 },
-            heavy: { min: 0.02, max: 0.28 }
+            volatile: { min: 0.05, max: 0.35 },
+            mirror: { min: 0.05, max: 0.35 },
+            cursed: { min: 0.04, max: 0.28 },
+            sealed: { min: 0.04, max: 0.28 },
+            heavy: { min: 0.04, max: 0.28 },
+            drift: { min: 0.04, max: 0.28 },
+            conduit: { min: 0.08, max: 0.35 },
+            stasis: { min: 0.04, max: 0.28 }
         };
 
         for (const kind of Object.keys(bounds) as TileTraitKind[]) {

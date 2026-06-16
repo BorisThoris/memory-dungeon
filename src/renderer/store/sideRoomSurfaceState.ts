@@ -13,6 +13,8 @@ export type SideRoomResultSurfacePatch =
           matchScorePop: RunSurfaceState['matchScorePop'];
           mismatchScorePop: RunSurfaceState['mismatchScorePop'];
           peekModeArmed: RunSurfaceState['peekModeArmed'];
+          tileSwapArmed: RunSurfaceState['tileSwapArmed'];
+          tileSwapFirstTileId: RunSurfaceState['tileSwapFirstTileId'];
           run: RunState;
           shopReturnMode: 'summary';
           view: 'shop';

@@ -132,7 +132,7 @@ interface TileBezelProps {
     resolvingMatchWaveKey: string | null;
     spotlightWardOnBack?: boolean;
     spotlightBountyOnBack?: boolean;
-    powerBackAccent?: 'destroy' | 'peek' | 'stray' | 'pin' | null;
+    powerBackAccent?: 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | null;
     hazardBackAccent?: HazardTileKind | null;
     routeBackAccent?: boolean;
     objectiveBackAccent?: boolean;

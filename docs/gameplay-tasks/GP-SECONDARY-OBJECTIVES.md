@@ -104,13 +104,13 @@ Leaderboard for flip efficiency (future).
 ## GP-O04 — Per-floor scholar-style bonus
 
 ### Status
-**Done** — `shuffleUsedThisFloor` / `destroyUsedThisFloor`; bonus tag `scholar_style`; encyclopedia topic `sys_scholar_style_floor` ([`mechanics-encyclopedia.ts`](../../src/shared/mechanics-encyclopedia.ts)).
+**Done** — `shuffleUsedThisFloor` / `destroyUsedThisFloor`; tile swap sets the shuffle-side flag; bonus tag `scholar_style`; encyclopedia topic `sys_scholar_style_floor` ([`mechanics-encyclopedia.ts`](../../src/shared/mechanics-encyclopedia.ts)).
 
 ### Priority
 High
 
 ### Objective
-Bonus if the floor is cleared **without shuffle and without destroy** on that floor (even when allowed). Separate from run-wide `powersUsedThisRun` where needed.
+Bonus if the floor is cleared **without shuffle, tile swap, and destroy** on that floor (even when allowed). Separate from run-wide `powersUsedThisRun` where needed.
 
 ### Spec reference
 Backlog **O-04**.

@@ -40,6 +40,8 @@ interface GameLeftToolbarProps {
     shuffleTitle: string;
     regionShuffleDisabled: boolean;
     regionShuffleTitle: string;
+    tileSwapDisabled: boolean;
+    tileSwapTitle: string;
     canRegionShuffleRow: (rowIndex: number) => boolean;
     shuffleRegionRow: (rowIndex: number) => void;
     showFlashPairPower: boolean;
@@ -61,6 +63,9 @@ interface GameLeftToolbarProps {
     destroyPairArmed: boolean;
     togglePeekMode: () => void;
     peekModeArmed: boolean;
+    toggleTileSwapArmed: () => void;
+    tileSwapArmed: boolean;
+    tileSwapFirstTileId: string | null;
     toggleStrayArm: () => void;
     undoResolvingFlip: () => void;
     triggerDebugReveal: () => void;
@@ -79,6 +84,8 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     shuffleTitle,
     regionShuffleDisabled,
     regionShuffleTitle,
+    tileSwapDisabled,
+    tileSwapTitle,
     canRegionShuffleRow,
     shuffleRegionRow,
     showFlashPairPower,
@@ -99,6 +106,9 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     destroyPairArmed,
     togglePeekMode,
     peekModeArmed,
+    toggleTileSwapArmed,
+    tileSwapArmed,
+    tileSwapFirstTileId,
     toggleStrayArm,
     undoResolvingFlip,
     triggerDebugReveal,
@@ -132,6 +142,9 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
         destroyPairArmed,
         flashPairDisabled,
         peekModeArmed,
+        tileSwapArmed,
+        tileSwapDisabled,
+        tileSwapFirstTileId,
         regionShuffleDisabled,
         run.board?.rows,
         run.destroyPairCharges,
@@ -350,7 +363,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         className={styles.regionShuffleCluster}
                         aria-label={`Row shuffle. Charges ${run.regionShuffleCharges}.${
                             run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first')
-                                ? ' First row shuffle this floor is free.'
+                                ? ' First row shuffle or tile swap this floor is free.'
                                 : ''
                         }`}
                     >
@@ -400,6 +413,36 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                                 : null}
                         </div>
                     </details>
+                    <button
+                        aria-label={`Swap two hidden tiles. Row/swap charges: ${run.regionShuffleCharges}. ${
+                            tileSwapArmed
+                                ? tileSwapFirstTileId
+                                    ? 'Tap the destination tile'
+                                    : 'Tap the first tile'
+                                : 'Arm swap, then tap two hidden tiles'
+                        }.`}
+                        aria-pressed={tileSwapArmed}
+                        className={`${styles.iconAction} ${styles.iconActionWithBadge} ${tileSwapArmed ? styles.iconActionActive : ''}`}
+                        disabled={tileSwapDisabled}
+                        onClick={() => toggleTileSwapArmed()}
+                        title={powerTitle('tile_swap', tileSwapTitle)}
+                        type="button"
+                    >
+                        <img alt="" className={styles.toolbarGlyphImg} src={GAMEPLAY_TOOLBAR_ICONS.shuffle} />
+                        <span aria-hidden="true" className={styles.toolbarFlyoutLabel}>
+                            Swap
+                        </span>
+                        <span
+                            className={`${styles.powerBadge} ${
+                                run.regionShuffleCharges > 0 ||
+                                (run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))
+                                    ? styles.powerBadgeCharged
+                                    : styles.powerBadgeDepleted
+                            }`}
+                        >
+                            {run.regionShuffleCharges}
+                        </span>
+                    </button>
                     <button
                         aria-label={boardPinMode ? 'Exit pin mode' : 'Pin mode - tap tiles to mark'}
                         aria-pressed={boardPinMode}

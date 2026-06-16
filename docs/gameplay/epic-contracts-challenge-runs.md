@@ -8,7 +8,7 @@
 
 | Flag | Role |
 |------|------|
-| `noShuffle` | Blocks full-board shuffle (and related availability checks in `game.ts`). |
+| `noShuffle` | Blocks full-board shuffle, row shuffle, and tile swap availability. |
 | `noDestroy` | Blocks destroy-pair power. |
 | `maxMismatches` | When set, exceeding cumulative tries vs threshold can force **game over** (see mismatch resolution paths). |
 | `maxPinsTotalRun` | Caps total pins placed across the run (`pinsThisRun` vs contract). |
@@ -17,7 +17,7 @@
 
 | Aspect | Status | Notes |
 |--------|--------|--------|
-| Rule gating in sim | **Shippable** | `applyShuffle`, `applyDestroyPair`, `togglePinnedTile` consult `activeContract`; tests in `game.test.ts` cover many combinations. |
+| Rule gating in sim | **Shippable** | `applyShuffle`, `applyRegionShuffle`, `applyTileSwap`, `applyDestroyPair`, and `togglePinnedTile` consult `activeContract`; tests cover many combinations. |
 | Scholar / menu wiring | **Functional** | Started from main menu with explicit `activeContract` payloads (`useAppStore` / `createNewRun` options). |
 | Codex alignment | **Functional** | Dedicated contract articles in `ENCYCLOPEDIA_CONTRACT_TOPICS` (`mechanics-encyclopedia.ts`): scholar, pin vow, max mismatches — re-exported via `game-catalog.ts`; core topics still give high-level cross-links. |
 | HUD surfacing | **Functional** | Contract state may be less visible than mutators; players learn from disabled buttons / toasts. |
@@ -31,7 +31,7 @@
 
 - `src/shared/mechanics-encyclopedia.ts` — `ENCYCLOPEDIA_CONTRACT_TOPICS` (player-facing codex copy for contracts).
 - `src/shared/contracts.ts` — `ContractFlags`, `activeContract` on `RunState`.
-- `src/shared/game.ts` — guards on shuffle, destroy, pin cap; mismatch game-over when `maxMismatches` exceeded.
+- `src/shared/game.ts` — guards on shuffle, row shuffle, tile swap, destroy, pin cap; mismatch game-over when `maxMismatches` exceeded.
 - `src/shared/game.test.ts` — extensive contract + wild matrix.
 - `src/renderer/store/useAppStore.ts` — `startScholarContractRun`, `startPinVowRun` (both set `activeContract` via `createNewRun` options).
 

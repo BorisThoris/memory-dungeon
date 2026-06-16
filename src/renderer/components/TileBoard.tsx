@@ -14,6 +14,7 @@ import {
 import { flushSync } from 'react-dom';
 import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
+import { getTileSwapTraitPreviewLines, getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
 import { isNarrowShortLandscapeForMenuStack, VIEWPORT_MOBILE_MAX } from '../breakpoints';
 import { useCoarsePointer } from '../hooks/useCoarsePointer';
 import { useViewportSize } from '../hooks/useViewportSize';
@@ -136,6 +137,9 @@ interface TileBoardProps {
     peekEligibleTileIds?: ReadonlySet<string>;
     strayPowerVisualActive?: boolean;
     strayEligibleTileIds?: ReadonlySet<string>;
+    tileSwapPowerVisualActive?: boolean;
+    tileSwapEligibleTileIds?: ReadonlySet<string>;
+    tileSwapFirstTileId?: string | null;
     pinModeBoardHintActive?: boolean;
     /** Effective SFX gain (0–1) for shuffle whoosh; from settings in GameScreen. */
     shuffleSfxGain?: number;
@@ -206,6 +210,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         peekEligibleTileIds = EMPTY_TILE_IDS,
         strayPowerVisualActive = false,
         strayEligibleTileIds = EMPTY_TILE_IDS,
+        tileSwapPowerVisualActive = false,
+        tileSwapEligibleTileIds = EMPTY_TILE_IDS,
+        tileSwapFirstTileId = null,
         pinModeBoardHintActive = false,
         shuffleSfxGain = 1,
         stickyBlockedTileId = null,
@@ -523,7 +530,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             previewActive,
             runStatus,
             strayEligibleTileIds,
-            strayPowerVisualActive
+            strayPowerVisualActive,
+            tileSwapEligibleTileIds,
+            tileSwapFirstTileId,
+            tileSwapPowerVisualActive
         });
     }, [
         board,
@@ -538,8 +548,30 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         previewActive,
         runStatus,
         strayEligibleTileIds,
-        strayPowerVisualActive
+        strayPowerVisualActive,
+        tileSwapEligibleTileIds,
+        tileSwapFirstTileId,
+        tileSwapPowerVisualActive
     ]);
+
+    const focusedTraitPreviewLines = useMemo(() => {
+        if (!focusedTileId || !boardApplicationFocused) {
+            return [];
+        }
+        const focusedTile = board.tiles.find((tile) => tile.id === focusedTileId);
+        if (!focusedTile) {
+            return [];
+        }
+        if (tileSwapPowerVisualActive && tileSwapFirstTileId && focusedTileId !== tileSwapFirstTileId) {
+            return getTileSwapTraitPreviewLines(board, tileSwapFirstTileId, focusedTileId).slice(0, 2);
+        }
+        return [
+            ...new Set([
+                ...getTileTraitInteractionPreviewLines(board, [focusedTile.id], 'match'),
+                ...getTileTraitInteractionPreviewLines(board, [focusedTile.id], 'mismatch')
+            ])
+        ].slice(0, 2);
+    }, [board, boardApplicationFocused, focusedTileId, tileSwapFirstTileId, tileSwapPowerVisualActive]);
 
     useEffect(() => {
         queueMicrotask(() => {
@@ -1611,6 +1643,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         peekEligibleTileIds={peekEligibleTileIds}
                                         strayPowerVisualActive={strayPowerVisualActive}
                                         strayEligibleTileIds={strayEligibleTileIds}
+                                        tileSwapPowerVisualActive={tileSwapPowerVisualActive}
+                                        tileSwapEligibleTileIds={tileSwapEligibleTileIds}
+                                        tileSwapFirstTileId={tileSwapFirstTileId}
                                         pinModeBoardHintActive={pinModeBoardHintActive}
                                     />
                                     <TileBoardPostFx
@@ -1636,6 +1671,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             >
                                 {motionChipLabels.buttonText}
                             </button>
+                        ) : null}
+                        {focusedTraitPreviewLines.length > 0 ? (
+                            <div
+                                aria-hidden="true"
+                                className={styles.traitPreviewChip}
+                                data-testid="trait-preview-chip"
+                            >
+                                <span className={styles.traitPreviewEyebrow}>
+                                    {tileSwapPowerVisualActive && tileSwapFirstTileId ? 'Swap preview' : 'Trait combo'}
+                                </span>
+                                {focusedTraitPreviewLines.map((line) => (
+                                    <span className={styles.traitPreviewLine} key={line}>
+                                        {line}
+                                    </span>
+                                ))}
+                            </div>
                         ) : null}
                     </div>
                 </div>

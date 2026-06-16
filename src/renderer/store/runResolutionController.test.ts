@@ -32,6 +32,8 @@ type ResolutionPatch = Partial<{
     saveData: SaveData;
     settings: Settings;
     shopReturnMode: 'floor' | 'summary' | null;
+    tileSwapArmed: boolean;
+    tileSwapFirstTileId: string | null;
     view: ViewState;
 }>;
 
@@ -54,7 +56,9 @@ const runSurfaceReset = {
     matchScorePop: null,
     mismatchScorePop: null,
     peekModeArmed: false,
-    shopReturnMode: null
+    shopReturnMode: null,
+    tileSwapArmed: false,
+    tileSwapFirstTileId: null
 } satisfies ResolutionPatch;
 
 const createHarness = (run: RunState | null = null): Harness => {
@@ -125,7 +129,9 @@ describe('runResolutionController', () => {
             destroyPairArmed: true,
             dungeonExitPromptOpen: true,
             peekModeArmed: true,
-            shopReturnMode: 'floor' as const
+            shopReturnMode: 'floor' as const,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: baseRun.board!.tiles[0]?.id ?? null
         });
         const gameOverRun: RunState = {
             ...baseRun,
@@ -152,6 +158,8 @@ describe('runResolutionController', () => {
         expect(harness.state.dungeonExitPromptOpen).toBe(false);
         expect(harness.state.peekModeArmed).toBe(false);
         expect(harness.state.shopReturnMode).toBeNull();
+        expect(harness.state.tileSwapArmed).toBe(false);
+        expect(harness.state.tileSwapFirstTileId).toBeNull();
         expect(telemetryMocks.trackEvent).toHaveBeenCalledWith(
             'run_complete',
             expect.objectContaining({ highestLevel: 3, totalScore: 500 })
@@ -196,7 +204,9 @@ describe('runResolutionController', () => {
         Object.assign(harness.state, {
             boardPinMode: true,
             dungeonExitPromptOpen: true,
-            peekModeArmed: true
+            peekModeArmed: true,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: baseRun.board!.tiles[0]?.id ?? null
         });
 
         harness.controller.applyImmediateGameOverFromTilePress({
@@ -210,6 +220,8 @@ describe('runResolutionController', () => {
         expect(harness.state.boardPinMode).toBe(false);
         expect(harness.state.dungeonExitPromptOpen).toBe(false);
         expect(harness.state.peekModeArmed).toBe(false);
+        expect(harness.state.tileSwapArmed).toBe(false);
+        expect(harness.state.tileSwapFirstTileId).toBeNull();
         expect(harness.patches.at(-1)).toEqual(runSurfaceReset);
     });
 });

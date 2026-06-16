@@ -19,6 +19,7 @@ import { getCodexKnowledgeBaseRows } from '../../shared/codex-knowledge-base';
 import type { MutatorId, RelicId } from '../../shared/contracts';
 import { getCodexRewardSignal } from '../../shared/meta-reward-signals';
 import { getRelicBuildArchetypeSummaries } from '../../shared/relics';
+import { getTileTraitCodexRows, getTileTraitInteractionCodexRows } from '../../shared/tile-trait-codex';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
 import {
@@ -52,6 +53,7 @@ const TOC: { href: string; label: string; kind: TocKind }[] = [
     { href: '#codex-scoring', label: 'Scoring', kind: 'guide' },
     { href: '#codex-settings', label: 'Settings', kind: 'guide' },
     { href: '#codex-pickups', label: 'Pickups', kind: 'guide' },
+    { href: '#codex-traits', label: 'Traits', kind: 'guide' },
     { href: '#codex-contracts', label: 'Contracts', kind: 'guide' },
     { href: '#codex-featured-runs', label: 'Featured', kind: 'guide' },
     { href: '#codex-builds', label: 'Builds', kind: 'guide' },
@@ -119,6 +121,14 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     const scoringFiltered = filterTopics(ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS, debouncedFilterQuery);
     const settingsFiltered = filterTopics(ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS, debouncedFilterQuery);
     const pickupsFiltered = filterTopics(ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS, debouncedFilterQuery);
+    const traitRows = useMemo(
+        () => [
+            ...getTileTraitCodexRows(),
+            ...getTileTraitInteractionCodexRows()
+        ],
+        []
+    );
+    const traitsFiltered = filterTopics(traitRows, debouncedFilterQuery);
     const contractsFiltered = filterTopics(ENCYCLOPEDIA_CONTRACT_TOPICS, debouncedFilterQuery);
     const featuredFiltered = filterTopics(ENCYCLOPEDIA_FEATURED_RUN_TOPICS, debouncedFilterQuery);
     const buildRows = useMemo(
@@ -178,6 +188,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
             tabAllows('guide') ? scoringFiltered.length : 0,
             tabAllows('guide') ? settingsFiltered.length : 0,
             tabAllows('guide') ? pickupsFiltered.length : 0,
+            tabAllows('guide') ? traitsFiltered.length : 0,
             tabAllows('guide') ? contractsFiltered.length : 0,
             tabAllows('guide') ? featuredFiltered.length : 0,
             tabAllows('guide') ? buildRowsFiltered.length : 0,
@@ -418,6 +429,28 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                                 </summary>
                                 <div className={styles.group}>
                                     {pickupsFiltered.map((topic) => (
+                                        <div className={styles.entry} key={topic.id}>
+                                            <strong>{topic.title}</strong>
+                                            <p>{topic.description}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </details>
+                        </Panel>
+                    ) : null}
+
+                    {showGuidePanel(traitsFiltered.length) ? (
+                        <Panel className={panelClassName} padding="lg" variant="default">
+                            <details
+                                className={`${styles.sectionFold} ${metaStyles.sectionAnchor}`}
+                                id="codex-traits"
+                                open
+                            >
+                                <summary className={`${styles.groupTitle} ${styles.foldSummary}`}>
+                                    Traits &amp; interactions
+                                </summary>
+                                <div className={styles.group}>
+                                    {traitsFiltered.map((topic) => (
                                         <div className={styles.entry} key={topic.id}>
                                             <strong>{topic.title}</strong>
                                             <p>{topic.description}</p>

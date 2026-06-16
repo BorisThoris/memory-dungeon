@@ -49,7 +49,7 @@ The route should bias the scheduled floor instead of replacing it. A Greedy `tra
 ## Rough edges
 
 - Current Greed selection now changes board metadata and named reward-risk families; higher-danger trap families are still future work.
-- Destroy, peek, shuffle, pin, and stray interactions have v1 policy for shipped route specials; future card families still need per-family tests.
+- Destroy, peek, shuffle, tile swap, pin, and stray interactions have v1 policy for shipped route specials; future card families still need per-family tests.
 - Mystery must be deterministic and fair: reveal before punishment, seed-replayable outcomes, and clear summary copy.
 - Safe must not become the best economy route; it should pay in stability, streak preservation, and recovery.
 - Greed must use real danger or reward denial, not only bigger numbers; side-room rewards stay capped by the bonus ledger.

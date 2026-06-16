@@ -1,9 +1,15 @@
 import type {
     BoardState,
+    DungeonKeyKind,
     RouteSpecialKind
 } from './contracts';
 import {
+    countReachableExitKeySources,
+    countReachableExitLeverSources
+} from './board-inspection';
+import {
     DECOY_PAIR_KEY,
+    EXIT_PAIR_KEY,
     ROOM_PAIR_KEY,
     SHOP_PAIR_KEY,
     WILD_PAIR_KEY
@@ -24,6 +30,30 @@ export const PEEK_REVEALED_ROUTE_SPECIALS = new Set<RouteSpecialKind>([
     'parasite_vessel'
 ]);
 
+const pairIsExitCriticalDestroyTarget = (board: BoardState, pairTiles: readonly BoardState['tiles'][number][]): boolean => {
+    const primaryExit = board.dungeonExitTileId
+        ? board.tiles.find((tile) => tile.id === board.dungeonExitTileId)
+        : board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
+    const lockKind = primaryExit?.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
+    if (lockKind === 'none') {
+        return false;
+    }
+    if (
+        lockKind === 'lever' &&
+        pairTiles.some((tile) => tile.dungeonCardKind === 'lever' && tile.dungeonCardEffectId === 'lever_floor')
+    ) {
+        const requiredLeverCount = primaryExit?.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount ?? 0;
+        return countReachableExitLeverSources(board) - 1 < requiredLeverCount;
+    }
+    if (lockKind !== 'lever') {
+        const keyKind = lockKind as DungeonKeyKind;
+        if (pairTiles.some((tile) => tile.dungeonCardKind === 'key' && (tile.dungeonKeyKind ?? 'iron') === keyKind)) {
+            return countReachableExitKeySources(board, keyKind) - 1 < 1;
+        }
+    }
+    return false;
+};
+
 /**
  * Board-only checks for destroy targeting (mirrors `canDestroyPair` tile rules).
  * Caller gates run status, charges, contract `noDestroy`, armed state, and flipped tiles.
@@ -34,7 +64,11 @@ export const tileIsDestroyEligiblePreview = (board: BoardState, tileId: string):
         return false;
     }
     const pairTiles = board.tiles.filter((t) => t.pairKey === tile.pairKey);
-    return pairTiles.length === 2 && pairTiles.every((t) => t.state === 'hidden');
+    return (
+        pairTiles.length === 2 &&
+        pairTiles.every((t) => t.state === 'hidden') &&
+        !pairIsExitCriticalDestroyTarget(board, pairTiles)
+    );
 };
 
 /** All tile ids that are valid destroy targets when run rules would allow destroy (fully hidden real pairs). */

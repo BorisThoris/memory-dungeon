@@ -11,6 +11,7 @@ import {
 export type PowerVerbId =
     | 'shuffle'
     | 'region_shuffle'
+    | 'tile_swap'
     | 'pin'
     | 'peek'
     | 'destroy_pair'
@@ -61,6 +62,13 @@ const hasPeekTarget = (run: RunState): boolean =>
     (run.board?.tiles ?? []).some(
         (tile) => tile.state === 'hidden' && !run.peekRevealedTileIds.includes(tile.id)
     );
+
+const hasRowShufflePayment = (run: RunState): boolean =>
+    run.regionShuffleCharges > 0 ||
+    (run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'));
+
+const hiddenTileCount = (run: RunState): number =>
+    (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden').length;
 
 const peekDisabledReason = (run: RunState): string | null =>
     onlyWhilePlaying(run) ??
@@ -161,7 +169,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'locked'],
         purpose: 'Shuffle one row while preserving the rest of your spatial read.',
-        cost: `${run.regionShuffleCharges} row charge(s); relics may make the first row free.`,
+        cost: `${run.regionShuffleCharges} row/swap charge(s); relics may make the first row shuffle or tile swap free.`,
         consequence: 'Breaks memory for one row and counts as an assist.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
@@ -170,9 +178,35 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
             onlyWhilePlaying(run) ??
             (run.activeContract?.noShuffle
                 ? 'Scholar contract disables row shuffle.'
-                : run.regionShuffleCharges < 1 && !run.regionShuffleFreeThisFloor
-                  ? 'No row shuffle charge or free row shuffle.'
-                  : null)
+                : hasOpenFlip(run)
+                  ? 'Resolve the current flip first.'
+                  : !hasRowShufflePayment(run)
+                    ? 'No row/swap charge or free row shuffle.'
+                    : null)
+    },
+    {
+        id: 'tile_swap',
+        label: 'Swap',
+        job: 'Search',
+        mechanicClass: 'bailout',
+        tokens: ['cost', 'forfeit', 'locked'],
+        purpose: 'Exchange two hidden tile positions to set up trait adjacency or repair a bad layout read.',
+        cost: `${run.regionShuffleCharges} row/swap charge(s); relics may make the first row shuffle or tile swap free.`,
+        consequence: 'Invalidates memory for the two moved tiles and counts as an assist.',
+        perfectMemoryImpact: 'locks_perfect_memory',
+        perfectMemoryCopy: locksPerfectMemory,
+        memoryTax: { ...CORE_SAFE_MEMORY_TAX, spatialDisruption: 1, mistakeRecovery: 1, uiComprehensionLoad: 2 },
+        disabledReason:
+            onlyWhilePlaying(run) ??
+            (run.activeContract?.noShuffle
+                ? 'Scholar contract disables tile swap.'
+                : hasOpenFlip(run)
+                  ? 'Resolve the current flip first.'
+                  : !hasRowShufflePayment(run)
+                    ? 'No row/swap charge or free swap.'
+                    : hiddenTileCount(run) < 2
+                      ? 'Need two hidden tiles to swap.'
+                      : null)
     },
     {
         id: 'destroy_pair',

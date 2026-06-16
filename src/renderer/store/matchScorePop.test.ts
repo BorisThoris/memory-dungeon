@@ -16,8 +16,10 @@ const minimalRun = (partial: Partial<RunState>): RunState =>
             currentStreak: 0,
             bestStreak: 0,
             levelsCleared: 0,
-            mismatches: 0
+            mismatches: 0,
+            guardTokens: 0
         },
+        relicIds: [],
         board: null,
         ...partial
     }) as RunState;
@@ -130,6 +132,31 @@ describe('buildMatchScorePopPayload', () => {
             'Greed Cache +2 gold +25 score'
         );
     });
+
+    it('adds trait interaction copy from adjacent matched traits', () => {
+        const run = minimalRun({
+            board: {
+                level: 3,
+                rows: 2,
+                columns: 2,
+                flippedTileIds: ['e1', 'e2'],
+                tiles: [
+                    { id: 'e1', pairKey: 'echo', symbol: 'e', label: 'Echo', state: 'flipped', tileTraitKind: 'echo' },
+                    { id: 's1', pairKey: 'sealed', symbol: 's', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+                    { id: 'e2', pairKey: 'echo', symbol: 'e', label: 'Echo', state: 'flipped', tileTraitKind: 'echo' },
+                    { id: 's2', pairKey: 'sealed', symbol: 's', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' }
+                ]
+            } as unknown as BoardState,
+            stats: { matchesFound: 2, totalScore: 40, comboShards: 0 } as RunState['stats']
+        });
+        const next = {
+            ...run,
+            stats: { ...run.stats, matchesFound: 3, totalScore: 60 }
+        };
+        expect(buildMatchScorePopPayload(run, next, 'trait')?.traitInteractionTexts).toContain(
+            'Echo + Sealed: combo shard'
+        );
+    });
 });
 
 describe('buildMismatchScorePopPayload', () => {
@@ -188,5 +215,30 @@ describe('buildMismatchScorePopPayload', () => {
             tileIdC: 'w',
             key: 'miss-4-trip-u-v-w'
         });
+    });
+
+    it('adds trait interaction copy from risky adjacent misses', () => {
+        const run = minimalRun({
+            board: {
+                level: 4,
+                rows: 2,
+                columns: 2,
+                flippedTileIds: ['c1', 'v1'],
+                tiles: [
+                    { id: 'c1', pairKey: 'cursed', symbol: 'c', label: 'Cursed', state: 'flipped', tileTraitKind: 'cursed' },
+                    { id: 'z1', pairKey: 'nearby-volatile', symbol: 'z', label: 'Nearby Volatile', state: 'hidden', tileTraitKind: 'volatile' },
+                    { id: 'v1', pairKey: 'volatile', symbol: 'v', label: 'Volatile', state: 'flipped', tileTraitKind: 'volatile' },
+                    { id: 'c2', pairKey: 'cursed', symbol: 'c', label: 'Cursed', state: 'hidden', tileTraitKind: 'cursed' }
+                ]
+            } as unknown as BoardState,
+            stats: { mismatches: 1 } as RunState['stats']
+        });
+        const next = {
+            ...run,
+            stats: { ...run.stats, mismatches: 2 }
+        };
+        expect(buildMismatchScorePopPayload(run, next, 'trait')?.traitInteractionTexts).toContain(
+            'Cursed + Volatile: recall pressure'
+        );
     });
 });

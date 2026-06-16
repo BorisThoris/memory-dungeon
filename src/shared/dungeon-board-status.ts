@@ -136,25 +136,10 @@ export interface DungeonBoardPresentation {
     chips: DungeonBoardPresentationChip[];
 }
 
-const getDungeonExitTile = (board: BoardState | null): Tile | null => {
-    const exits = board?.tiles.filter((tile) => tile.pairKey === EXIT_PAIR_KEY) ?? [];
-    return (
-        exits.find((tile) => tile.dungeonExitActivated) ??
-        exits.find((tile) => tile.state !== 'hidden') ??
-        exits.find((tile) => tile.id === board?.dungeonExitTileId) ??
-        exits[0] ??
-        null
-    );
-};
 export const getDungeonExitStatus = (run: RunState): DungeonExitStatus => {
     const board = run.board;
-    const exitTile = getDungeonExitTile(board);
-    const lockKind = exitTile?.dungeonExitLockKind ?? board?.dungeonExitLockKind ?? 'none';
-    const requiredLeverCount = exitTile?.dungeonExitRequiredLeverCount ?? board?.dungeonExitRequiredLeverCount ?? 0;
-    const leverCount = board?.dungeonLeverCount ?? 0;
-    const hasMatchingKey = lockKind !== 'none' && lockKind !== 'lever' && (run.dungeonKeys[lockKind] ?? 0) > 0;
-    const hasMasterKey = run.dungeonMasterKeys > 0;
-    const revealed = Boolean(exitTile && exitTile.state !== 'hidden');
+    const exits = board?.tiles.filter((tile) => tile.pairKey === EXIT_PAIR_KEY) ?? [];
+    const primaryExit = exits.find((tile) => tile.id === board?.dungeonExitTileId) ?? null;
     const undefeatedBossHazard = board?.enemyHazards?.find((hazard) => hazard.bossId && hazard.state !== 'defeated') ?? null;
     const activeBossCard = board?.tiles.find(
         (tile) => tile.dungeonBossId != null && tile.state !== 'matched' && tile.state !== 'removed'
@@ -165,6 +150,36 @@ export const getDungeonExitStatus = (run: RunState): DungeonExitStatus => {
             activeBossCard != null ||
             (board.dungeonBossId != null && (run.dungeonEnemiesDefeatedThisFloor ?? 0) <= 0));
     const bossBlocksExit = unresolvedBossObjective;
+    const tileCanActivate = (tile: Tile): boolean => {
+        const candidateLockKind = tile.dungeonExitLockKind ?? board?.dungeonExitLockKind ?? 'none';
+        const candidateRequiredLevers = tile.dungeonExitRequiredLeverCount ?? board?.dungeonExitRequiredLeverCount ?? 0;
+        const candidateLeverSatisfied =
+            candidateLockKind !== 'lever' || (board?.dungeonLeverCount ?? 0) >= candidateRequiredLevers;
+        const candidateHasKey =
+            candidateLockKind !== 'none' &&
+            candidateLockKind !== 'lever' &&
+            ((run.dungeonKeys[candidateLockKind] ?? 0) > 0 || run.dungeonMasterKeys > 0);
+        return (
+            tile.state !== 'hidden' &&
+            !bossBlocksExit &&
+            (candidateLockKind === 'none' ||
+                (candidateLockKind === 'lever' && candidateLeverSatisfied) ||
+                candidateHasKey)
+        );
+    };
+    const exitTile =
+        exits.find((tile) => tile.dungeonExitActivated) ??
+        exits.find(tileCanActivate) ??
+        primaryExit ??
+        exits.find((tile) => tile.state !== 'hidden') ??
+        exits[0] ??
+        null;
+    const lockKind = exitTile?.dungeonExitLockKind ?? board?.dungeonExitLockKind ?? 'none';
+    const requiredLeverCount = exitTile?.dungeonExitRequiredLeverCount ?? board?.dungeonExitRequiredLeverCount ?? 0;
+    const leverCount = board?.dungeonLeverCount ?? 0;
+    const hasMatchingKey = lockKind !== 'none' && lockKind !== 'lever' && (run.dungeonKeys[lockKind] ?? 0) > 0;
+    const hasMasterKey = run.dungeonMasterKeys > 0;
+    const revealed = Boolean(exitTile && exitTile.state !== 'hidden');
     const leverSatisfied = lockKind !== 'lever' || leverCount >= requiredLeverCount;
     const canActivateWithoutSpend = revealed && lockKind === 'none' && !bossBlocksExit;
     const canActivateWithKey = revealed && lockKind !== 'none' && lockKind !== 'lever' && hasMatchingKey && !bossBlocksExit;

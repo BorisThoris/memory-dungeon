@@ -24,6 +24,9 @@ const accents = (overrides: Partial<TileBoardHiddenBackAccentsInput> = {}) =>
         pinModeBoardHintActive: false,
         strayEligibleTileIds: new Set(),
         strayPowerVisualActive: false,
+        tileSwapEligibleTileIds: new Set(),
+        tileSwapFirstTileId: null,
+        tileSwapPowerVisualActive: false,
         tile: tile(),
         ...overrides
     });
@@ -90,6 +93,19 @@ describe('tileBoardHiddenBackAccents', () => {
                 strayPowerVisualActive: true
             }).powerBackAccent
         ).toBe('stray');
+        expect(
+            accents({
+                tileSwapEligibleTileIds: new Set(['tile-a']),
+                tileSwapPowerVisualActive: true
+            }).powerBackAccent
+        ).toBe('swap');
+        expect(
+            accents({
+                tileSwapEligibleTileIds: new Set(['tile-a']),
+                tileSwapFirstTileId: 'tile-a',
+                tileSwapPowerVisualActive: true
+            }).powerBackAccent
+        ).toBe('swapOrigin');
 
         const decoy = accents({
             destroyEligibleTileIds: new Set(['decoy']),

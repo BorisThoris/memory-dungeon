@@ -127,6 +127,9 @@ interface TileBoardSceneProps {
     peekEligibleTileIds?: ReadonlySet<string>;
     strayPowerVisualActive?: boolean;
     strayEligibleTileIds?: ReadonlySet<string>;
+    tileSwapPowerVisualActive?: boolean;
+    tileSwapEligibleTileIds?: ReadonlySet<string>;
+    tileSwapFirstTileId?: string | null;
     pinModeBoardHintActive?: boolean;
     /** `sticky_fingers`: tile id at `stickyBlockIndex` while the next opening flip is restricted. */
     stickyBlockedTileId?: string | null;
@@ -179,6 +182,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     peekEligibleTileIds = EMPTY_TILE_IDS,
     strayPowerVisualActive = false,
     strayEligibleTileIds = EMPTY_TILE_IDS,
+    tileSwapPowerVisualActive = false,
+    tileSwapEligibleTileIds = EMPTY_TILE_IDS,
+    tileSwapFirstTileId = null,
     pinModeBoardHintActive = false,
     stickyBlockedTileId = null
 }: TileBoardSceneProps, ref) => {
@@ -238,6 +244,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             strayEligibleTileIds,
             strayPowerVisualActive,
             stickyBlockedTileId,
+            tileSwapEligibleTileIds,
+            tileSwapFirstTileId,
+            tileSwapPowerVisualActive,
             tileSpacing: TILE_SPACING,
             wardPairKey,
             wideRecallInPlay
@@ -271,6 +280,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         strayEligibleTileIds,
         strayPowerVisualActive,
         stickyBlockedTileId,
+        tileSwapEligibleTileIds,
+        tileSwapFirstTileId,
+        tileSwapPowerVisualActive,
         wardPairKey,
         wideRecallInPlay
     ]);

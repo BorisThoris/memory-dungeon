@@ -93,7 +93,7 @@ export const RUN_ECONOMY_DEFINITIONS = [
         bucket: 'temporary_run',
         purpose: 'Temporary run action budget.',
         source: 'run start, shops, relics, events, rooms, and pickup rewards',
-        sink: 'shuffle, row shuffle, destroy, peek, and stray-remove actions',
+        sink: 'shuffle, row shuffle, tile swap, destroy, peek, and stray-remove actions',
         persistence: 'temporary_run'
     }
 ] as const satisfies readonly RunEconomyDefinition[];

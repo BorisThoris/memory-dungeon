@@ -36,6 +36,10 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         expect(inventory.consumables.find((row) => row.id === 'destroy_charge')?.source).toBe(
             'Relics, room rewards, shop services, events, and explicit pickups.'
         );
+        expect(inventory.consumables.find((row) => row.id === 'region_shuffle_charge')).toMatchObject({
+            label: 'Row/swap charge',
+            useRule: 'Spend during play to reshuffle one row or swap two hidden tiles; disabled by no-shuffle contracts.'
+        });
         expect(getRunConsumableRows({ ...run, shuffleCharges: 99 }).find((row) => row.id === 'shuffle_charge')?.quantity).toBe(99);
         expect(getRunConsumableRows({ ...run, destroyPairCharges: 7 }).find((row) => row.id === 'destroy_charge')?.quantityLabel).toBe('7');
     });
@@ -124,6 +128,12 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
             accepted: 2,
             capped: false,
             gainedLabel: '+2 wild matches',
+            cappedLabel: null
+        });
+        expect(getRunInventoryGainFeedback(run, 'region_shuffle_charge', 1)).toMatchObject({
+            accepted: 1,
+            capped: false,
+            gainedLabel: '+1 row/swap charge',
             cappedLabel: null
         });
         expect(getRunInventoryGainFeedback(run, 'gambit_token', 1)).toMatchObject({

@@ -15,6 +15,7 @@ describe('REG-045 power verb teaching', () => {
             'flash_pair',
             'shuffle',
             'region_shuffle',
+            'tile_swap',
             'destroy_pair',
             'stray_remove',
             'undo_resolve',
@@ -42,6 +43,18 @@ describe('REG-045 power verb teaching', () => {
         expect(rows.find((row) => row.id === 'shuffle')?.disabledReason).toBeNull();
         expect(getPowerVerbRows({ ...run, shuffleCharges: 0 }).find((row) => row.id === 'shuffle')?.disabledReason).toBe(
             'No shuffle charges.'
+        );
+        expect(rows.find((row) => row.id === 'region_shuffle')?.cost).toBe(
+            '1 row/swap charge(s); relics may make the first row shuffle or tile swap free.'
+        );
+        expect(getPowerVerbRows({ ...run, regionShuffleCharges: 0 }).find((row) => row.id === 'region_shuffle')?.disabledReason).toBe(
+            'No row/swap charge or free row shuffle.'
+        );
+        expect(rows.find((row) => row.id === 'tile_swap')?.cost).toBe(
+            '1 row/swap charge(s); relics may make the first row shuffle or tile swap free.'
+        );
+        expect(getPowerVerbRows({ ...run, regionShuffleCharges: 0 }).find((row) => row.id === 'tile_swap')?.disabledReason).toBe(
+            'No row/swap charge or free swap.'
         );
         expect(getPowerVerbRows({ ...run, status: 'memorize' }).find((row) => row.id === 'peek')?.disabledReason).toBe(
             'Only while playing.'

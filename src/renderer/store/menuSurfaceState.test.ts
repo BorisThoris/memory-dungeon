@@ -17,6 +17,8 @@ describe('menuSurfaceState', () => {
             settingsReturnView: 'menu',
             shopReturnMode: null,
             subscreenReturnView: 'menu',
+            tileSwapArmed: false,
+            tileSwapFirstTileId: null,
             view: 'menu'
         });
     });

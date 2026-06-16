@@ -48,6 +48,8 @@ type RunResolutionPatch = Partial<{
     saveData: SaveData;
     settings: Settings;
     shopReturnMode: 'floor' | 'summary' | null;
+    tileSwapArmed: boolean;
+    tileSwapFirstTileId: string | null;
     view: ViewState;
 }>;
 

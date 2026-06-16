@@ -127,4 +127,110 @@ describe('tile press controller', () => {
             expect(result.audio).toEqual([]);
         }
     });
+
+    it('selects then swaps hidden tiles while tile swap is armed', () => {
+        const run = playingRun({ regionShuffleCharges: 1 });
+        const first = run.board!.tiles[0]!;
+        const second = run.board!.tiles[3]!;
+
+        const selected = createPlayingTilePressSurfaceResult({
+            boardPinMode: false,
+            destroyPairArmed: false,
+            peekModeArmed: false,
+            run,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: null,
+            tileId: first.id
+        });
+        expect(selected).toMatchObject({
+            kind: 'patch',
+            patch: { tileSwapFirstTileId: first.id },
+            audio: []
+        });
+
+        const deselected = createPlayingTilePressSurfaceResult({
+            boardPinMode: false,
+            destroyPairArmed: false,
+            peekModeArmed: false,
+            run,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: first.id,
+            tileId: first.id
+        });
+        expect(deselected).toMatchObject({
+            kind: 'patch',
+            patch: { tileSwapFirstTileId: null },
+            audio: []
+        });
+
+        const swapped = createPlayingTilePressSurfaceResult({
+            boardPinMode: false,
+            destroyPairArmed: false,
+            peekModeArmed: false,
+            run,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: first.id,
+            tileId: second.id
+        });
+        expect(swapped.kind).toBe('patch');
+        if (swapped.kind === 'patch') {
+            expect(swapped.patch.run?.regionShuffleCharges).toBe(0);
+            expect(swapped.patch.run?.board?.tiles[0]?.id).toBe(second.id);
+            expect(swapped.patch.run?.board?.tiles[3]?.id).toBe(first.id);
+            expect(swapped.patch.tileSwapArmed).toBe(false);
+            expect(swapped.patch.tileSwapFirstTileId).toBeNull();
+            expect(swapped.audio).toEqual([]);
+        }
+    });
+
+    it('preserves enemy contact when tile swap selects or fails after contact', () => {
+        const runSeed = 8;
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed });
+        const board = buildBoard(7, {
+            gameMode: 'endless',
+            runRulesVersion: baseRun.runRulesVersion,
+            runSeed
+        });
+        const hazard = board.enemyHazards![0]!;
+        const run = playingRun({
+            board,
+            lives: 3,
+            regionShuffleCharges: 1,
+            runSeed,
+            stats: { ...baseRun.stats, guardTokens: 0 }
+        });
+
+        const selected = createPlayingTilePressSurfaceResult({
+            boardPinMode: false,
+            destroyPairArmed: false,
+            peekModeArmed: false,
+            run,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: null,
+            tileId: hazard.currentTileId
+        });
+        expect(selected.kind).toBe('patch');
+        if (selected.kind === 'patch') {
+            expect(selected.patch.tileSwapFirstTileId).toBe(hazard.currentTileId);
+            expect(selected.patch.run?.lives).toBe(run.lives - hazard.damage);
+            expect(selected.patch.run?.enemyHazardHitsThisFloor).toBe(1);
+        }
+
+        const failed = createPlayingTilePressSurfaceResult({
+            boardPinMode: false,
+            destroyPairArmed: false,
+            peekModeArmed: false,
+            run,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: 'missing-tile',
+            tileId: hazard.currentTileId
+        });
+        expect(failed.kind).toBe('patch');
+        if (failed.kind === 'patch') {
+            expect(failed.patch.run?.lives).toBe(run.lives - hazard.damage);
+            expect(failed.patch.run?.enemyHazardHitsThisFloor).toBe(1);
+            expect(failed.patch.tileSwapArmed).toBeUndefined();
+            expect(failed.patch.tileSwapFirstTileId).toBeUndefined();
+        }
+    });
 });

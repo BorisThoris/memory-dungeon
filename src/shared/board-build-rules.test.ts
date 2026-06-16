@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { GAME_RULES_VERSION, type Tile } from './contracts';
+import { GAME_RULES_VERSION, type DungeonExitLockKind, type Tile } from './contracts';
 import { buildBoard } from './board-build-rules';
 import { EXIT_PAIR_KEY } from './tile-identity';
 
@@ -46,5 +46,45 @@ describe('board build rules', () => {
 
         expect(board.tiles.some((candidate) => candidate.pairKey === EXIT_PAIR_KEY)).toBe(true);
         expect(new Set([board.wardPairKey, board.bountyPairKey]).size).toBe(2);
+    });
+
+    it('does not generate unsolvable primary dungeon exits across seeded floors', () => {
+        const seeds = [19_101, 19_202, 19_303, 19_404, 19_505];
+        const floors = Array.from({ length: 18 }, (_, index) => index + 1);
+
+        for (const runSeed of seeds) {
+            for (const level of floors) {
+                const board = buildBoard(level, {
+                    gameMode: 'endless',
+                    runSeed,
+                    runRulesVersion: GAME_RULES_VERSION
+                });
+                const primaryExit = board.tiles.find((candidate) => candidate.id === board.dungeonExitTileId);
+                expect(primaryExit, `seed ${runSeed} level ${level} primary exit`).toBeTruthy();
+
+                const lockKind = (primaryExit?.dungeonExitLockKind ?? 'none') as DungeonExitLockKind;
+                if (lockKind === 'lever') {
+                    const leverPairs = new Set(
+                        board.tiles
+                            .filter((candidate) => candidate.dungeonCardKind === 'lever' && candidate.dungeonCardEffectId === 'lever_floor')
+                            .map((candidate) => candidate.pairKey)
+                    );
+                    expect(
+                        leverPairs.size,
+                        `seed ${runSeed} level ${level} lever exit needs ${primaryExit?.dungeonExitRequiredLeverCount ?? 0}`
+                    ).toBeGreaterThanOrEqual(primaryExit?.dungeonExitRequiredLeverCount ?? 0);
+                } else if (lockKind !== 'none') {
+                    const hasMatchingKeyPair = board.tiles.some(
+                        (candidate) => candidate.dungeonCardKind === 'key' && candidate.dungeonKeyKind === lockKind
+                    );
+                    const hasKeyRoom = board.tiles.some((candidate) => candidate.dungeonCardEffectId === 'room_key_cache');
+                    const hasShop = board.dungeonShopTileId != null;
+                    expect(
+                        hasMatchingKeyPair || hasKeyRoom || hasShop,
+                        `seed ${runSeed} level ${level} ${lockKind} exit has no key source`
+                    ).toBe(true);
+                }
+            }
+        }
     });
 });

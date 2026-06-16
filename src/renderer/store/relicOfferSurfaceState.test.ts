@@ -76,6 +76,8 @@ describe('relicOfferSurfaceState', () => {
         expect(result.patch.boardPinMode).toBe(false);
         expect(result.patch.destroyPairArmed).toBe(false);
         expect(result.patch.peekModeArmed).toBe(false);
+        expect(result.patch.tileSwapArmed).toBe(false);
+        expect(result.patch.tileSwapFirstTileId).toBeNull();
         expect(result.patch.saveData.playerStats?.relicPickCounts?.extra_shuffle_charge).toBe(1);
         expect(result.patch.settings).toBe(result.nextSave.settings);
     });

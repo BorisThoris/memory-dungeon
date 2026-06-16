@@ -2,7 +2,7 @@ import type { HazardTileKind, Tile, TileTraitKind } from '../../shared/contracts
 import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import { isTilePickable } from './tileBoardPick';
 
-export type TileBoardPowerBackAccent = 'destroy' | 'peek' | 'stray' | 'pin';
+export type TileBoardPowerBackAccent = 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin';
 
 export interface TileBoardHiddenBackAccents {
     destroyBlockedDecoyBack: boolean;
@@ -25,6 +25,9 @@ export interface TileBoardHiddenBackAccentsInput {
     pinModeBoardHintActive: boolean;
     strayEligibleTileIds: ReadonlySet<string>;
     strayPowerVisualActive: boolean;
+    tileSwapEligibleTileIds: ReadonlySet<string>;
+    tileSwapFirstTileId: string | null;
+    tileSwapPowerVisualActive: boolean;
     tile: Tile;
 }
 
@@ -39,6 +42,9 @@ export const getTileBoardHiddenBackAccents = ({
     pinModeBoardHintActive,
     strayEligibleTileIds,
     strayPowerVisualActive,
+    tileSwapEligibleTileIds,
+    tileSwapFirstTileId,
+    tileSwapPowerVisualActive,
     tile
 }: TileBoardHiddenBackAccentsInput): TileBoardHiddenBackAccents => {
     const destroyBlockedDecoyBack =
@@ -63,6 +69,10 @@ export const getTileBoardHiddenBackAccents = ({
         powerBackAccent = null;
     } else if (destroyPowerVisualActive && destroyEligibleTileIds.has(tile.id)) {
         powerBackAccent = 'destroy';
+    } else if (tileSwapPowerVisualActive && tileSwapFirstTileId === tile.id) {
+        powerBackAccent = 'swapOrigin';
+    } else if (tileSwapPowerVisualActive && tileSwapEligibleTileIds.has(tile.id)) {
+        powerBackAccent = 'swap';
     } else if (peekPowerVisualActive && peekEligibleTileIds.has(tile.id)) {
         powerBackAccent = 'peek';
     } else if (strayPowerVisualActive && strayEligibleTileIds.has(tile.id)) {

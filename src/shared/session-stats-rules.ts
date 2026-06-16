@@ -1,7 +1,17 @@
 import type { SessionStats, Tile, TileTraitKind } from './contracts';
 import { calculateRating } from './scoring-rules';
 
-export const TILE_TRAIT_COUNT_KINDS: readonly TileTraitKind[] = ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy'];
+export const TILE_TRAIT_COUNT_KINDS: readonly TileTraitKind[] = [
+    'echo',
+    'volatile',
+    'mirror',
+    'cursed',
+    'sealed',
+    'heavy',
+    'drift',
+    'conduit',
+    'stasis'
+];
 
 export const createTileTraitCountStats = (): Record<TileTraitKind, number> => ({
     echo: 0,
@@ -9,7 +19,10 @@ export const createTileTraitCountStats = (): Record<TileTraitKind, number> => ({
     mirror: 0,
     cursed: 0,
     sealed: 0,
-    heavy: 0
+    heavy: 0,
+    drift: 0,
+    conduit: 0,
+    stasis: 0
 });
 
 export const addTileTraitCountStats = (

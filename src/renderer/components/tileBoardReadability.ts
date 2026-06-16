@@ -93,6 +93,10 @@ export const getTileBoardReadabilityState = ({
                         ? '#d4a03d'
                         : powerBackAccent === 'pin'
                           ? '#e8c878'
+                          : powerBackAccent === 'swap'
+                            ? '#5dd6ff'
+                            : powerBackAccent === 'swapOrigin'
+                              ? '#f2f9ff'
                           : '#b6a4bd';
     const showHiddenReadabilityRing =
         !faceUp &&

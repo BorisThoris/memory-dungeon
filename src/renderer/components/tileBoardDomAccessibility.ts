@@ -6,7 +6,11 @@ import { getHazardTileTelegraph } from '../../shared/hazard-tiles';
 import { getPairProximityGridDistance } from '../../shared/pairProximityHint';
 import { DECOY_PAIR_KEY } from '../../shared/tile-identity';
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
-import { getTileTraitText } from '../../shared/tile-trait-rules';
+import {
+    getTileSwapTraitPreviewLines,
+    getTileTraitInteractionPreviewLines,
+    getTileTraitText
+} from '../../shared/tile-trait-rules';
 import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import { isTilePickable } from './tileBoardPick';
 
@@ -37,6 +41,15 @@ export const getHazardTileText = (tile: Tile): string => {
     return telegraph.hasHazard && telegraph.label && telegraph.telegraph
         ? ` Hazard tile: ${telegraph.label}. ${telegraph.telegraph}`
         : '';
+};
+
+export const getTileTraitPreviewText = (board: BoardState, tile: Tile): string => {
+    const lines = [
+        ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
+        ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
+    ];
+    const unique = [...new Set(lines)];
+    return unique.length > 0 ? ` Nearby trait interaction: ${unique.slice(0, 2).join('; ')}.` : '';
 };
 
 export const getTileAriaLabel = (
@@ -87,7 +100,7 @@ export const getTileAriaLabel = (
     const dungeonKnowledge = getDungeonCardKnowledge(tile, faceUp);
     const dungeonNote = dungeonKnowledge.familyKnown ? getDungeonCardText(tile) : '';
     const passiveScoutNote = scoutSourceNote && !routeNote.includes(scoutSourceNote.trim()) ? scoutSourceNote : '';
-    return `${base}${findableNote}${routeNote}${dungeonNote}${getHazardTileText(tile)}${getTileTraitText(tile)}${passiveScoutNote}${getEnemyHazardText(board, tile.id)}`;
+    return `${base}${findableNote}${routeNote}${dungeonNote}${getHazardTileText(tile)}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${passiveScoutNote}${getEnemyHazardText(board, tile.id)}`;
 };
 
 export const getPowerTargetAriaText = (
@@ -97,7 +110,11 @@ export const getPowerTargetAriaText = (
     peekPowerVisualActive: boolean,
     peekEligibleTileIds: ReadonlySet<string>,
     strayPowerVisualActive: boolean,
-    strayEligibleTileIds: ReadonlySet<string>
+    strayEligibleTileIds: ReadonlySet<string>,
+    tileSwapPowerVisualActive: boolean,
+    tileSwapEligibleTileIds: ReadonlySet<string>,
+    tileSwapFirstTileId: string | null,
+    board?: BoardState
 ): string => {
     if (destroyPowerVisualActive) {
         if (destroyEligibleTileIds.has(tile.id)) {
@@ -117,6 +134,22 @@ export const getPowerTargetAriaText = (
             ? ' Stray target: valid. Removes this safe singleton tile from play and locks Perfect Memory.'
             : tile.state === 'hidden'
               ? ' Stray target: invalid, paired, or protected.'
+              : '';
+    }
+    if (tileSwapPowerVisualActive) {
+        if (tileSwapFirstTileId === tile.id) {
+            return ' Swap origin selected. Select a different hidden tile to exchange positions.';
+        }
+        const swapTraitPreview =
+            board && tileSwapEligibleTileIds.has(tile.id)
+                ? getTileSwapTraitPreviewLines(board, tileSwapFirstTileId, tile.id)
+                : [];
+        return tileSwapEligibleTileIds.has(tile.id)
+            ? ` Swap target: valid. Select two hidden tiles to exchange their positions.${
+                  swapTraitPreview.length > 0 ? ` Swap preview: ${swapTraitPreview.slice(0, 2).join('; ')}.` : ''
+              }`
+            : tile.state === 'hidden'
+              ? ' Swap target: invalid for this power.'
               : '';
     }
     return '';
@@ -205,7 +238,10 @@ export const getFocusedTileLiveLabel = ({
     previewActive,
     runStatus,
     strayEligibleTileIds,
-    strayPowerVisualActive
+    strayPowerVisualActive,
+    tileSwapEligibleTileIds,
+    tileSwapFirstTileId,
+    tileSwapPowerVisualActive
 }: {
     board: BoardState;
     debugPeekActive: boolean;
@@ -220,6 +256,9 @@ export const getFocusedTileLiveLabel = ({
     runStatus: RunStatus;
     strayEligibleTileIds: ReadonlySet<string>;
     strayPowerVisualActive: boolean;
+    tileSwapEligibleTileIds: ReadonlySet<string>;
+    tileSwapFirstTileId: string | null;
+    tileSwapPowerVisualActive: boolean;
 }): string => {
     if (!focusedTileId) {
         return '';
@@ -241,7 +280,11 @@ export const getFocusedTileLiveLabel = ({
         peekPowerVisualActive,
         peekEligibleTileIds,
         strayPowerVisualActive,
-        strayEligibleTileIds
+        strayEligibleTileIds,
+        tileSwapPowerVisualActive,
+        tileSwapEligibleTileIds,
+        tileSwapFirstTileId,
+        board
     );
 
     if (

@@ -61,6 +61,9 @@ const rows = (input: Partial<Parameters<typeof buildTileBoardRows>[0]> = {}) => 
         strayEligibleTileIds: new Set(),
         strayPowerVisualActive: false,
         stickyBlockedTileId: null,
+        tileSwapEligibleTileIds: new Set(),
+        tileSwapFirstTileId: null,
+        tileSwapPowerVisualActive: false,
         wardPairKey: null,
         wideRecallInPlay: false,
         ...input
@@ -116,6 +119,14 @@ describe('tileBoardRows', () => {
             pinModeBoardHintActive: true
         });
         expect(pinRows.map((row) => row.powerBackAccent)).toEqual(['pin', 'pin', 'pin']);
+
+        const swapRows = rows({
+            board: b,
+            tileSwapEligibleTileIds: new Set(['real', 'peek']),
+            tileSwapFirstTileId: 'real',
+            tileSwapPowerVisualActive: true
+        });
+        expect(swapRows.map((row) => row.powerBackAccent)).toEqual([null, 'swapOrigin', 'swap']);
     });
 
     it('marks occupied hidden backs only for active enemy hazards', () => {

@@ -8,6 +8,7 @@ export {
     applyRegionShuffle,
     applyShuffle,
     applyStrayRemove,
+    applyTileSwap,
     cancelResolvingWithUndo
 } from './board-power-actions';
 
@@ -15,7 +16,8 @@ export {
     canDestroyPair,
     canRegionShuffle,
     canRegionShuffleRow,
-    canShuffleBoard
+    canShuffleBoard,
+    canSwapHiddenTiles
 } from './board-power-availability';
 
 export {

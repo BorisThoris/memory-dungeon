@@ -315,6 +315,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             toggleBoardPinMode: state.toggleBoardPinMode,
             toggleDestroyPairArmed: state.toggleDestroyPairArmed,
             togglePeekMode: state.togglePeekMode,
+            toggleTileSwapArmed: state.toggleTileSwapArmed,
             toggleStrayArm: state.toggleStrayArm,
             triggerDebugReveal: state.triggerDebugReveal,
             undoResolvingFlip: state.undoResolvingFlip
@@ -367,11 +368,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             : run.activeMutators.length > 0 && run.board?.matchedPairs === 0
               ? `New pressure: ${run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id).join(', ')}.`
               : null);
-    const { boardPinMode, destroyPairArmed, peekModeArmed } = useAppStore(
+    const { boardPinMode, destroyPairArmed, peekModeArmed, tileSwapArmed, tileSwapFirstTileId } = useAppStore(
         useShallow((state) => ({
             boardPinMode: state.boardPinMode,
             destroyPairArmed: state.destroyPairArmed,
-            peekModeArmed: state.peekModeArmed
+            peekModeArmed: state.peekModeArmed,
+            tileSwapArmed: state.tileSwapArmed,
+            tileSwapFirstTileId: state.tileSwapFirstTileId
         }))
     );
     const { persistenceWriteNotice, clearPersistenceWriteNotice } = useAppStore(
@@ -548,6 +551,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         toggleBoardPinMode,
         toggleDestroyPairArmed,
         togglePeekMode,
+        toggleTileSwapArmed,
         toggleStrayArm,
         triggerDebugReveal,
         undoResolvingFlip
@@ -1049,6 +1053,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         guardTokens: run.stats.guardTokens,
         comboShards: run.stats.comboShards,
         shopGold: run.shopGold,
+        shuffleCharges: run.shuffleCharges,
+        regionShuffleCharges: run.regionShuffleCharges,
+        stickyBlockIndex: run.stickyBlockIndex,
         parasiteFloors: run.parasiteFloors,
         parasiteWardRemaining: run.parasiteWardRemaining,
         scoreParasiteActive: run.activeMutators.includes('score_parasite'),
@@ -1210,11 +1217,45 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         : regionShuffleDisabled
           ? run.regionShuffleCharges < 1 &&
               !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))
-            ? 'No row shuffle charges'
+            ? 'No row/swap charges'
             : run.board.flippedTileIds.length > 0
               ? 'Finish the current flip first'
               : 'Need at least one hidden pair on the board'
-          : 'Shuffle hidden tiles within one row (uses 1 row charge)';
+          : 'Shuffle hidden tiles within one row (uses 1 row/swap charge)';
+    const hiddenTileCount = run.board.tiles.filter((tile) => tile.state === 'hidden').length;
+    const tileSwapDisabled =
+        run.activeContract?.noShuffle ||
+        run.board.flippedTileIds.length > 0 ||
+        hiddenTileCount < 2 ||
+        (run.regionShuffleCharges < 1 &&
+            !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first')));
+    const tileSwapTitle = run.activeContract?.noShuffle
+        ? 'Scholar contract: tile swap disabled'
+        : run.board.flippedTileIds.length > 0
+          ? 'Finish the current flip first'
+          : hiddenTileCount < 2
+            ? 'Need two hidden tiles to swap'
+              : run.regionShuffleCharges < 1 &&
+                  !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))
+                ? 'No row/swap charges'
+              : tileSwapArmed
+                ? tileSwapFirstTileId
+                    ? 'Tap a second hidden tile to swap positions'
+                    : 'Tap the first hidden tile to move'
+                : 'Swap two hidden tiles (uses 1 row/swap charge)';
+    const tileSwapPowerVisualActive = run.status === 'playing' && tileSwapArmed && !tileSwapDisabled;
+    const tileSwapEligibleTileIds = (() => {
+        if (!tileSwapPowerVisualActive) {
+            return EMPTY_TILE_ID_SET;
+        }
+        const next = new Set<string>();
+        for (const tile of run.board.tiles) {
+            if (tile.state === 'hidden') {
+                next.add(tile.id);
+            }
+        }
+        return next;
+    })();
     const showFlashPairPower = (run.practiceMode || run.wildMenuRun) && run.status === 'playing';
     const flashPairDisabled =
         !showFlashPairPower ||
@@ -1501,6 +1542,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 peekEligibleTileIds={peekEligibleTileIds}
                                 strayPowerVisualActive={strayPowerVisualActive}
                                 strayEligibleTileIds={strayEligibleTileIds}
+                                tileSwapPowerVisualActive={tileSwapPowerVisualActive}
+                                tileSwapEligibleTileIds={tileSwapEligibleTileIds}
+                                tileSwapFirstTileId={tileSwapFirstTileId}
                                 pinModeBoardHintActive={pinModeBoardHintActive}
                                 shuffleSfxGain={shuffleSfxGain}
                                 stickyBlockedTileId={stickyBlockedTileId}
@@ -1513,8 +1557,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     className={styles.srOnly}
                                 >
                                     {boardFloaterPayload.kind === 'match'
-                                        ? matchScoreFloaterLiveRegionText(boardFloaterPayload.amount)
-                                        : mismatchFloaterLiveRegionText()}
+                                        ? matchScoreFloaterLiveRegionText(
+                                              boardFloaterPayload.amount,
+                                              boardFloaterPayload.traitInteractionTexts
+                                          )
+                                        : mismatchFloaterLiveRegionText(boardFloaterPayload.traitInteractionTexts)}
                                 </span>
                             ) : null}
                             {boardFloaterPos && boardFloaterPayload ? (
@@ -1540,10 +1587,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         } as CSSProperties
                                     }
                                 >
-                                    {boardFloaterPayload.kind === 'match'
-                                        ? boardFloaterPayload.routeRewardText ??
-                                          `+${boardFloaterPayload.amount.toLocaleString()}`
-                                        : mismatchFloaterVisualLabel()}
+                                    <span className={styles.boardFloaterMain}>
+                                        {boardFloaterPayload.kind === 'match'
+                                            ? boardFloaterPayload.routeRewardText ??
+                                              `+${boardFloaterPayload.amount.toLocaleString()}`
+                                            : mismatchFloaterVisualLabel()}
+                                    </span>
+                                    {boardFloaterPayload.traitInteractionTexts?.slice(0, 2).map((line) => (
+                                        <span className={styles.boardFloaterTraitLine} key={line}>
+                                            {line}
+                                        </span>
+                                    ))}
                                 </div>
                             ) : null}
                             {distractionHudOn ? (
@@ -1606,9 +1660,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             shuffleRegionRow={shuffleRegionRow}
                             shuffleTitle={shuffleTitle}
                             tileBoardRef={tileBoardRef}
+                            tileSwapArmed={tileSwapArmed}
+                            tileSwapDisabled={tileSwapDisabled}
+                            tileSwapFirstTileId={tileSwapFirstTileId}
+                            tileSwapTitle={tileSwapTitle}
                             toggleBoardPinMode={toggleBoardPinMode}
                             toggleDestroyPairArmed={toggleDestroyPairArmed}
                             togglePeekMode={togglePeekMode}
+                            toggleTileSwapArmed={toggleTileSwapArmed}
                             toggleStrayArm={toggleStrayArm}
                             triggerDebugReveal={triggerDebugReveal}
                             undoResolvingFlip={undoResolvingFlip}

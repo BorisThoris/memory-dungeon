@@ -12,7 +12,7 @@ export const relicEffectLabels: Record<RelicId, string> = {
     combo_shard_plus_step: 'Clean recall starts closer to combo-shard momentum',
     memorize_under_short_memorize: '+220ms scout time when Short memorize compresses the floor',
     parasite_ward_once: 'Ignore the next score-parasite life loss once',
-    region_shuffle_free_first: 'First row shuffle each dungeon floor costs no charge',
+    region_shuffle_free_first: 'First row shuffle or tile swap each dungeon floor costs no charge',
     peek_charge_plus_one: '+1 peek charge for Mystery rooms and hidden archives (now)',
     stray_charge_plus_one: '+1 stray remover charge for awkward route layouts (now)',
     pin_cap_plus_one: '+1 pinned memory mark on the dungeon board',

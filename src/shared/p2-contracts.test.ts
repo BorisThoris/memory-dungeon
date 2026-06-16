@@ -85,6 +85,8 @@ describe('GLD-P2 board, power, and resolution contracts', () => {
 
         expect(rows.find((row) => row.id === 'destroy_pair')?.disabledReason).toBe('Resolve the current flip first.');
         expect(rows.find((row) => row.id === 'peek')?.disabledReason).toBe('Resolve the current flip first.');
+        expect(rows.find((row) => row.id === 'region_shuffle')?.disabledReason).toBe('Resolve the current flip first.');
+        expect(rows.find((row) => row.id === 'tile_swap')?.disabledReason).toBe('Resolve the current flip first.');
         expect(
             getPowerVerbRows({ ...base, activeContract: { noDestroy: true, noShuffle: false, maxMismatches: null }, destroyPairCharges: 1 }).find(
                 (row) => row.id === 'destroy_pair'

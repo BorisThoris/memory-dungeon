@@ -3,6 +3,7 @@ import {
     MATCH_DELAY_MS,
     MAX_GUARD_TOKENS,
     MAX_LIVES,
+    RECALL_FOCUS_MAX,
     type BoardState,
     type LevelResult,
     type RunState
@@ -105,7 +106,7 @@ import { resolveTurnMatchEconomy } from './turn-match-economy-rules';
 import { resolveTurnMatchProgress } from './turn-match-progress-rules';
 import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
-import { calculateTileTraitMatchRewards } from './tile-trait-rules';
+import { resolveTileTraitEffects } from './tile-trait-rules';
 import { addTileTraitCountStats } from './session-stats-rules';
 export {
     completeRelicPickAndAdvance
@@ -181,6 +182,7 @@ export {
     applyRegionShuffle,
     applyShuffle,
     applyStrayRemove,
+    applyTileSwap,
     applyDestroyPairTransition,
     cancelResolvingWithUndo
 } from './board-power-actions';
@@ -188,7 +190,8 @@ export {
     canDestroyPair,
     canRegionShuffle,
     canRegionShuffleRow,
-    canShuffleBoard
+    canShuffleBoard,
+    canSwapHiddenTiles
 } from './board-power-availability';
 export {
     armRegionShuffleRow,
@@ -678,7 +681,12 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             lanternScout,
             omenScout
         } = resolution;
-        const traitReward = calculateTileTraitMatchRewards(run, [tileMatchA, tileMatchB]);
+        const traitReward = resolveTileTraitEffects({
+            run,
+            board: run.board,
+            sourceTiles: [tileMatchA, tileMatchB],
+            source: 'match'
+        });
         const scoring = resolveTurnMatchScoringSummary({
             run,
             sourceBoard: run.board,
@@ -783,6 +791,8 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             shiftingSpotlightNonce: spunG.shiftingSpotlightNonce,
             wildMatchesRemaining,
             peekCharges: run.peekCharges + traitReward.peekChargeGain,
+            shuffleCharges: run.shuffleCharges + traitReward.shuffleChargeGain,
+            regionShuffleCharges: run.regionShuffleCharges + traitReward.regionShuffleChargeGain,
             shopGold: economy.shopGold + traitReward.shopGoldGain,
             dungeonKeys: economy.dungeonKeys,
             bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
@@ -793,11 +803,11 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             matchedPairKeysThisRun: [...run.matchedPairKeysThisRun, scoring.encoreKey],
             pendingRouteCardPlan: followup.pendingRouteCardPlan,
             pinnedTileIds: boardCleanup.pinnedTileIds,
-            recallFocus: boardCleanup.recallFocus,
+            recallFocus: Math.min(RECALL_FOCUS_MAX, boardCleanup.recallFocus + traitReward.recallFocusGain),
             recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
-            stickyBlockIndex: boardCleanup.stickyBlockIndex,
+            stickyBlockIndex: traitReward.stickyBlockIndex ?? boardCleanup.stickyBlockIndex,
             ...progress,
             stats: {
                 ...run.stats,
@@ -908,7 +918,12 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             lanternScout,
             omenScout
         } = resolution;
-        const traitReward = calculateTileTraitMatchRewards(run, [firstTile, secondTile]);
+        const traitReward = resolveTileTraitEffects({
+            run,
+            board: run.board,
+            sourceTiles: [firstTile, secondTile],
+            source: 'match'
+        });
         const scoring = resolveTurnMatchScoringSummary({
             run,
             sourceBoard: run.board,
@@ -1012,6 +1027,8 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
             wildMatchesRemaining,
             peekCharges: run.peekCharges + traitReward.peekChargeGain,
+            shuffleCharges: run.shuffleCharges + traitReward.shuffleChargeGain,
+            regionShuffleCharges: run.regionShuffleCharges + traitReward.regionShuffleChargeGain,
             shopGold: economy.shopGold + traitReward.shopGoldGain,
             dungeonKeys: economy.dungeonKeys,
             bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
@@ -1022,11 +1039,11 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             matchedPairKeysThisRun: [...run.matchedPairKeysThisRun, scoring.encoreKey],
             pendingRouteCardPlan: followup.pendingRouteCardPlan,
             pinnedTileIds: boardCleanup.pinnedTileIds,
-            recallFocus: boardCleanup.recallFocus,
+            recallFocus: Math.min(RECALL_FOCUS_MAX, boardCleanup.recallFocus + traitReward.recallFocusGain),
             recallMatchesThisFloor: boardCleanup.recallMatchesThisFloor,
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
-            stickyBlockIndex: boardCleanup.stickyBlockIndex,
+            stickyBlockIndex: traitReward.stickyBlockIndex ?? boardCleanup.stickyBlockIndex,
             ...progress,
             stats: {
                 ...run.stats,

@@ -161,8 +161,8 @@ export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContract
             id: 'scholar_oath',
             label: 'Scholar Oath',
             status: failed ? 'failed' : 'active',
-            progressLabel: failed ? 'Contract broken this floor' : 'No shuffle / no destroy',
-            failureReason: failed ? 'Shuffle or destroy was used; retry on the next run.' : null,
+            progressLabel: failed ? 'Contract broken this floor' : 'No shuffle / swap / destroy',
+            failureReason: failed ? 'Shuffle, swap, or destroy was used; retry on the next run.' : null,
             retryPolicy: 'retry_next_run',
             offlineOnly: true
         });

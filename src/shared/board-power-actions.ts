@@ -16,6 +16,7 @@ import { DECOY_PAIR_KEY } from './tile-identity';
 import {
     canDestroyPair,
     canRegionShuffle,
+    canSwapHiddenTiles,
     canShuffleBoard
 } from './board-power-availability';
 import { hasMutator } from './mutators';
@@ -226,6 +227,53 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         pinnedTileIds: [],
         recallFocus: 0,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, shuffledTileIds),
+        board: {
+            ...run.board,
+            tiles: nextTiles
+        },
+        stats: {
+            ...run.stats,
+            shufflesUsed: run.stats.shufflesUsed + 1
+        }
+    };
+};
+
+export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: string): RunState => {
+    if (!canSwapHiddenTiles(run, firstTileId, secondTileId) || !run.board) {
+        return run;
+    }
+    const firstIndex = run.board.tiles.findIndex((tile) => tile.id === firstTileId);
+    const secondIndex = run.board.tiles.findIndex((tile) => tile.id === secondTileId);
+    if (firstIndex < 0 || secondIndex < 0) {
+        return run;
+    }
+
+    let nextFree = run.regionShuffleFreeThisFloor;
+    let nextCharges = run.regionShuffleCharges;
+    if (nextFree && run.relicIds.includes('region_shuffle_free_first')) {
+        nextFree = false;
+    } else if (nextCharges > 0) {
+        nextCharges -= 1;
+    } else {
+        return run;
+    }
+
+    const nextTiles = [...run.board.tiles];
+    const firstTile = nextTiles[firstIndex]!;
+    nextTiles[firstIndex] = nextTiles[secondIndex]!;
+    nextTiles[secondIndex] = firstTile;
+
+    return {
+        ...run,
+        powersUsedThisRun: true,
+        shuffleUsedThisFloor: true,
+        shuffleNonce: run.shuffleNonce + 1,
+        regionShuffleCharges: nextCharges,
+        regionShuffleFreeThisFloor: nextFree,
+        regionShuffleRowArmed: null,
+        pinnedTileIds: [],
+        recallFocus: 0,
+        forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [firstTileId, secondTileId]),
         board: {
             ...run.board,
             tiles: nextTiles

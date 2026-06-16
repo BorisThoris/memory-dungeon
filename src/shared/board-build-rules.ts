@@ -42,6 +42,7 @@ import {
     isSingletonUtilityPairKey
 } from './tile-identity';
 import { pickShiftingSpotlightKeys } from './shifting-spotlight-rules';
+import { repairDungeonExitSoftlocks } from './board-inspection';
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 
@@ -138,7 +139,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
                   gameMode: options.gameMode
               });
 
-        return {
+        return repairDungeonExitSoftlocks({
             level,
             pairCount: realPairKeys.size,
             columns,
@@ -172,7 +173,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
             dungeonObjectiveId: exactFixedTiles ? 'find_exit' : dungeonBlueprint?.objectiveId ?? 'find_exit',
             enemyHazards,
             enemyHazardTurn: 0
-        };
+        });
     }
 
     const pairCount = clamp(level + 1 + encounter.pairCountDelta, Math.min(2, NUMBER_SYMBOLS.length), NUMBER_SYMBOLS.length);
@@ -272,7 +273,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         bossId: dungeonBlueprint?.bossId ?? null,
         gameMode: options.gameMode
     });
-    const baseBoard: BoardState = {
+    const baseBoard: BoardState = repairDungeonExitSoftlocks({
         level,
         pairCount,
         columns,
@@ -304,7 +305,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         dungeonObjectiveId: dungeonBlueprint?.objectiveId ?? 'find_exit',
         enemyHazards,
         enemyHazardTurn: 0
-    };
+    });
     if (!mutators.includes('shifting_spotlight')) {
         return { ...baseBoard, wardPairKey: null, bountyPairKey: null };
     }

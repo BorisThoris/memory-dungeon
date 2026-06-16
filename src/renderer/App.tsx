@@ -205,6 +205,8 @@ const App = () => {
                     boardPinMode: false,
                     destroyPairArmed: false,
                     peekModeArmed: false,
+                    tileSwapArmed: false,
+                    tileSwapFirstTileId: null,
                     dungeonExitPromptOpen: false,
                     matchScorePop: null,
                     mismatchScorePop: null

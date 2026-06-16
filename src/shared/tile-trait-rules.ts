@@ -1,6 +1,7 @@
 import {
     MAX_COMBO_SHARDS,
     MAX_GUARD_TOKENS,
+    RECALL_FOCUS_MAX,
     type BoardState,
     type RelicId,
     type RouteNodeType,
@@ -14,33 +15,48 @@ import { isSingletonUtilityPairKey } from './tile-identity';
 export const TILE_TRAIT_COPY: Record<TileTraitKind, { label: string; match: string; mismatch: string }> = {
     echo: {
         label: 'Echo',
-        match: 'Clean match grants +1 peek charge.',
+        match: 'Clean match grants +1 peek charge; adjacent Sealed also grants +1 combo shard.',
         mismatch: 'No extra miss penalty.'
     },
     volatile: {
         label: 'Volatile',
-        match: 'Clean match safely disarms the volatile pair.',
-        mismatch: 'Mismatch shuffles safe hidden tiles.'
+        match: 'Clean match safely disarms the volatile pair; adjacent Heavy grants +1 guard token.',
+        mismatch: 'Mismatch shuffles safe hidden tiles; adjacent Cursed deepens recall pressure unless buffered by Stasis.'
     },
     mirror: {
         label: 'Mirror',
-        match: 'Clean match grants +1 guard token if there is room.',
+        match: 'Clean match grants +1 guard token if there is room; adjacent Stasis grants another guard and score.',
         mismatch: 'Mismatch counts as a deeper memory slip.'
     },
     cursed: {
         label: 'Cursed',
-        match: 'Clean match grants +1 relic Favor.',
-        mismatch: 'Mismatch counts as an extra mistake.'
+        match: 'Clean match grants +1 relic Favor; adjacent Volatile adds gold and score.',
+        mismatch: 'Mismatch counts as an extra mistake; adjacent Volatile deepens recall unless Stasis buffers it.'
     },
     sealed: {
         label: 'Sealed',
-        match: 'Clean match grants +1 combo shard if there is room.',
+        match: 'Clean match grants +1 combo shard if there is room; adjacent Heavy adds score.',
         mismatch: 'Mismatch drains 1 peek charge, or deepens the recall slip if empty.'
     },
     heavy: {
         label: 'Heavy',
-        match: 'Clean match grants +35 score.',
+        match: 'Clean match grants +35 score; adjacency improves Sealed and Volatile rewards.',
         mismatch: 'Mismatch has no extra penalty, but the pair still costs a normal miss.'
+    },
+    drift: {
+        label: 'Drift',
+        match: 'Clean match grants +1 row/swap charge; adjacent Volatile also grants +1 full shuffle charge.',
+        mismatch: 'No extra miss penalty.'
+    },
+    conduit: {
+        label: 'Conduit',
+        match: 'Clean match converts nearby traits into score and small resource sparks.',
+        mismatch: 'Mismatch near Volatile or Cursed adds a deeper recall slip.'
+    },
+    stasis: {
+        label: 'Stasis',
+        match: 'Clean match locks a nearby trait tile from being opened first next turn when completion remains safe.',
+        mismatch: 'No extra miss penalty.'
     }
 };
 
@@ -48,6 +64,222 @@ export const TILE_TRAIT_MATCH_SCORE_BONUS: Partial<Record<TileTraitKind, number>
     cursed: 15,
     heavy: 35
 };
+
+export interface TileTraitEffectResult {
+    comboShardGain: number;
+    guardTokenGain: number;
+    interactionTags: TileTraitInteractionTag[];
+    peekChargeGain: number;
+    recallFocusGain: number;
+    relicFavorGain: number;
+    regionShuffleChargeGain: number;
+    scoreBonus: number;
+    shopGoldGain: number;
+    shuffleChargeGain: number;
+    stickyBlockIndex: number | null;
+    blocksVolatileShuffle: boolean;
+    peekChargeLoss: number;
+    recallMistakesDelta: number;
+    triesDelta: number;
+}
+
+export interface TileTraitEffectContext {
+    run: RunState;
+    board?: BoardState | null;
+    sourceTiles: readonly Tile[];
+    source: 'match' | 'mismatch';
+}
+
+export const TILE_TRAIT_INTERACTION_TEXT = {
+    'echo:sealed-combo': 'Echo + Sealed: combo shard',
+    'mirror:stasis-guard': 'Mirror + Stasis: guard ward',
+    'sealed:heavy-score': 'Sealed + Heavy: score surge',
+    'cursed:volatile-greed': 'Cursed + Volatile: risky greed',
+    'volatile:heavy-guard': 'Volatile + Heavy: guard spark',
+    'drift:row-shuffle': 'Drift: row/swap charge',
+    'drift:volatile-full-shuffle': 'Drift + Volatile: full shuffle',
+    'conduit:adjacent-score': 'Conduit: adjacent trait charge',
+    'conduit:mirror-guard': 'Conduit + Mirror: guard spark',
+    'conduit:echo-peek': 'Conduit + Echo: peek spark',
+    'echo:mirror-focus': 'Echo + Mirror: recall focus',
+    'stasis:nearby-block': 'Stasis: nearby trait blocked',
+    'conduit:danger-recall': 'Conduit near danger: recall pressure',
+    'stasis:sealed-buffer': 'Stasis buffered Sealed',
+    'stasis:cursed-volatile-buffer': 'Stasis buffered Cursed + Volatile',
+    'cursed:volatile-danger': 'Cursed + Volatile: recall pressure'
+} as const;
+
+export type TileTraitInteractionTag = keyof typeof TILE_TRAIT_INTERACTION_TEXT;
+
+export const TILE_TRAIT_INTERACTION_TAGS = Object.keys(TILE_TRAIT_INTERACTION_TEXT) as TileTraitInteractionTag[];
+
+export const formatTileTraitInteractionTags = (tags: readonly string[]): string[] => {
+    const seen = new Set<string>();
+    const lines: string[] = [];
+    for (const tag of tags) {
+        const line =
+            tag in TILE_TRAIT_INTERACTION_TEXT
+                ? TILE_TRAIT_INTERACTION_TEXT[tag as TileTraitInteractionTag]
+                : undefined;
+        if (!line || seen.has(line)) {
+            continue;
+        }
+        seen.add(line);
+        lines.push(line);
+    }
+    return lines;
+};
+
+const collectTileTraitInteractionTags = ({
+    adjacentTraitKinds,
+    board,
+    source,
+    sourceTiles,
+    traits
+}: {
+    adjacentTraitKinds: ReadonlySet<TileTraitKind>;
+    board?: BoardState | null;
+    source: 'match' | 'mismatch';
+    sourceTiles: readonly Tile[];
+    traits: ReadonlySet<TileTraitKind>;
+}): TileTraitInteractionTag[] => {
+    const tags: TileTraitInteractionTag[] = [];
+    const hasTrait = (kind: TileTraitKind): boolean => traits.has(kind);
+
+    if (source === 'match') {
+        if (hasTrait('echo') && adjacentTraitKinds.has('sealed')) {
+            tags.push('echo:sealed-combo');
+        }
+        if (hasTrait('echo') && adjacentTraitKinds.has('mirror')) {
+            tags.push('echo:mirror-focus');
+        }
+        if (hasTrait('mirror') && adjacentTraitKinds.has('stasis')) {
+            tags.push('mirror:stasis-guard');
+        }
+        if (hasTrait('sealed') && adjacentTraitKinds.has('heavy')) {
+            tags.push('sealed:heavy-score');
+        }
+        if (hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
+            tags.push('cursed:volatile-greed');
+        }
+        if (hasTrait('volatile') && adjacentTraitKinds.has('heavy')) {
+            tags.push('volatile:heavy-guard');
+        }
+        if (hasTrait('drift')) {
+            tags.push('drift:row-shuffle');
+            if (adjacentTraitKinds.has('volatile')) {
+                tags.push('drift:volatile-full-shuffle');
+            }
+        }
+        if (hasTrait('conduit') && adjacentTraitKinds.size > 0) {
+            tags.push('conduit:adjacent-score');
+            if (adjacentTraitKinds.has('mirror')) {
+                tags.push('conduit:mirror-guard');
+            }
+            if (adjacentTraitKinds.has('echo')) {
+                tags.push('conduit:echo-peek');
+            }
+        }
+        if (hasTrait('stasis') && board && selectStasisBlockIndex(board, sourceTiles) !== null) {
+            tags.push('stasis:nearby-block');
+        }
+        return tags;
+    }
+
+    if (hasTrait('conduit') && (adjacentTraitKinds.has('volatile') || adjacentTraitKinds.has('cursed'))) {
+        tags.push('conduit:danger-recall');
+    }
+    if (hasTrait('sealed') && adjacentTraitKinds.has('stasis')) {
+        tags.push('stasis:sealed-buffer');
+    }
+    if (hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
+        tags.push(adjacentTraitKinds.has('stasis') ? 'stasis:cursed-volatile-buffer' : 'cursed:volatile-danger');
+    }
+    return tags;
+};
+
+export const getTileTraitInteractionPreviewLines = (
+    board: BoardState,
+    sourceTileIds: readonly string[],
+    source: 'match' | 'mismatch' = 'match'
+): string[] => {
+    const sourceTiles = sourceTileIds
+        .map((tileId) => board.tiles.find((tile) => tile.id === tileId))
+        .filter((tile): tile is Tile => tile != null);
+    if (sourceTiles.length === 0) {
+        return [];
+    }
+    const traits = new Set(sourceTiles.map((tile) => tile.tileTraitKind).filter((kind): kind is TileTraitKind => kind != null));
+    if (traits.size === 0) {
+        return [];
+    }
+    const adjacentTraitTiles = collectAdjacentTraitTiles(board, sourceTiles);
+    const adjacentTraitKinds = new Set(
+        adjacentTraitTiles.map((tile) => tile.tileTraitKind).filter((kind): kind is TileTraitKind => kind != null)
+    );
+    return formatTileTraitInteractionTags(
+        collectTileTraitInteractionTags({
+            adjacentTraitKinds,
+            board,
+            source,
+            sourceTiles,
+            traits
+        })
+    );
+};
+
+const createBoardWithSwappedTiles = (board: BoardState, firstTileId: string, secondTileId: string): BoardState | null => {
+    const firstIndex = board.tiles.findIndex((tile) => tile.id === firstTileId);
+    const secondIndex = board.tiles.findIndex((tile) => tile.id === secondTileId);
+    if (firstIndex < 0 || secondIndex < 0 || firstIndex === secondIndex) {
+        return null;
+    }
+    const tiles = [...board.tiles];
+    const first = tiles[firstIndex]!;
+    tiles[firstIndex] = tiles[secondIndex]!;
+    tiles[secondIndex] = first;
+    return { ...board, tiles };
+};
+
+export const getTileSwapTraitPreviewLines = (
+    board: BoardState,
+    firstTileId: string | null,
+    secondTileId: string
+): string[] => {
+    if (!firstTileId || firstTileId === secondTileId) {
+        return [];
+    }
+    const swapped = createBoardWithSwappedTiles(board, firstTileId, secondTileId);
+    if (!swapped) {
+        return [];
+    }
+    return [
+        ...new Set([
+            ...getTileTraitInteractionPreviewLines(swapped, [firstTileId], 'match'),
+            ...getTileTraitInteractionPreviewLines(swapped, [secondTileId], 'match'),
+            ...getTileTraitInteractionPreviewLines(swapped, [firstTileId], 'mismatch'),
+            ...getTileTraitInteractionPreviewLines(swapped, [secondTileId], 'mismatch')
+        ])
+    ];
+};
+
+const createEmptyTraitEffectResult = (): TileTraitEffectResult => ({
+    comboShardGain: 0,
+    guardTokenGain: 0,
+    interactionTags: [],
+    peekChargeGain: 0,
+    recallFocusGain: 0,
+    relicFavorGain: 0,
+    regionShuffleChargeGain: 0,
+    scoreBonus: 0,
+    shopGoldGain: 0,
+    shuffleChargeGain: 0,
+    stickyBlockIndex: null,
+    blocksVolatileShuffle: false,
+    peekChargeLoss: 0,
+    recallMistakesDelta: 0,
+    triesDelta: 0
+});
 
 const tileCanReceiveTrait = (tile: Tile): boolean =>
     tile.state === 'hidden' &&
@@ -69,18 +301,84 @@ const tileCanShuffleFromVolatileMiss = (tile: Tile, blockedPairKeys: ReadonlySet
     tile.findableKind == null &&
     tile.tileHazardKind == null;
 
-export const tileTraitColor = (kind: TileTraitKind): string =>
-    kind === 'echo'
-        ? '#62d6d1'
-        : kind === 'volatile'
-          ? '#f08f48'
-          : kind === 'mirror'
-            ? '#b890ff'
-            : kind === 'cursed'
-              ? '#e85d87'
-              : kind === 'sealed'
-                ? '#8bc3ff'
-                : '#d7b46a';
+const TILE_TRAIT_COLORS: Record<TileTraitKind, string> = {
+    echo: '#62d6d1',
+    volatile: '#f08f48',
+    mirror: '#b890ff',
+    cursed: '#e85d87',
+    sealed: '#8bc3ff',
+    heavy: '#d7b46a',
+    drift: '#76d672',
+    conduit: '#f5cc48',
+    stasis: '#a5b4fc'
+};
+
+export const tileTraitColor = (kind: TileTraitKind): string => TILE_TRAIT_COLORS[kind];
+
+const columnsForTileCount = (tileCount: number): number => Math.min(Math.max(Math.ceil(Math.sqrt(tileCount)), 2), 8);
+
+const calculateCoreTraitCount = (eligiblePairCount: number, level: number): number => {
+    if (eligiblePairCount <= 0) {
+        return 0;
+    }
+    if (level <= 1) {
+        return 1;
+    }
+    const densityCount = Math.ceil(eligiblePairCount * (level >= 8 ? 0.5 : 0.42));
+    const floorBandMinimum = level >= 8 ? 4 : level >= 4 ? 3 : 2;
+    return Math.min(Math.max(densityCount, floorBandMinimum), eligiblePairCount);
+};
+
+const routeInteractionSeed = (
+    intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
+    relicIds: readonly RelicId[]
+): readonly [TileTraitKind, TileTraitKind] => {
+    if (intensity === 'greed') {
+        return ['drift', 'volatile'];
+    }
+    if (intensity === 'mystery') {
+        return relicIds.includes('parasite_ledger') ? ['stasis', 'cursed'] : ['stasis', 'conduit'];
+    }
+    return relicIds.includes('chapter_compass') ? ['conduit', 'mirror'] : ['conduit', 'echo'];
+};
+
+const collectAdjacentEligiblePairKeys = (
+    tiles: readonly Tile[],
+    eligiblePairKeys: readonly string[]
+): [string, string][] => {
+    const eligible = new Set(eligiblePairKeys);
+    const columns = columnsForTileCount(tiles.length);
+    const pairs: [string, string][] = [];
+    const seen = new Set<string>();
+    tiles.forEach((tile, index) => {
+        if (!eligible.has(tile.pairKey)) {
+            return;
+        }
+        const row = Math.floor(index / columns);
+        const neighborIndexes = [index - 1, index + 1, index - columns, index + columns].filter((neighborIndex) => {
+            if (neighborIndex < 0 || neighborIndex >= tiles.length) {
+                return false;
+            }
+            if ((neighborIndex === index - 1 || neighborIndex === index + 1) && Math.floor(neighborIndex / columns) !== row) {
+                return false;
+            }
+            return true;
+        });
+        for (const neighborIndex of neighborIndexes) {
+            const neighbor = tiles[neighborIndex]!;
+            if (!eligible.has(neighbor.pairKey) || neighbor.pairKey === tile.pairKey) {
+                continue;
+            }
+            const ordered = [tile.pairKey, neighbor.pairKey].sort() as [string, string];
+            const key = ordered.join(':');
+            if (!seen.has(key)) {
+                seen.add(key);
+                pairs.push(ordered);
+            }
+        }
+    });
+    return pairs;
+};
 
 export const getRouteTraitForecastLine = (routeType: RouteNodeType, relicIds: readonly RelicId[] = []): string => {
     const hasChapterCompass = relicIds.includes('chapter_compass');
@@ -88,17 +386,17 @@ export const getRouteTraitForecastLine = (routeType: RouteNodeType, relicIds: re
     const hasParasiteLedger = relicIds.includes('parasite_ledger');
     if (routeType === 'safe') {
         return hasChapterCompass
-            ? 'Trait pressure: safer Echo/Mirror clues, with Compass bias toward readable traits.'
-            : 'Trait pressure: mostly Echo/Mirror clues and fewer punishing drawbacks.';
+            ? 'Trait pressure: safer Echo/Mirror/Conduit clues, with Compass bias toward readable traits.'
+            : 'Trait pressure: mostly Echo/Mirror/Conduit clues and fewer punishing drawbacks.';
     }
     if (routeType === 'greed') {
         return hasWagerSurety
-            ? 'Trait pressure: Volatile/Cursed upside, with Surety softening volatile misses while guarded.'
-            : 'Trait pressure: more Volatile/Cursed pairs for higher reward-risk.';
+            ? 'Trait pressure: Volatile/Cursed/Drift upside, with Surety softening volatile misses while guarded.'
+            : 'Trait pressure: more Volatile/Cursed pairs with Drift reposition rewards.';
     }
     return hasParasiteLedger
-        ? 'Trait pressure: Mirror/Sealed/Cursed unknowns; Ledger converts cursed matches into extra gold.'
-        : 'Trait pressure: Mirror/Sealed unknowns with fair reveal counterplay.';
+        ? 'Trait pressure: Mirror/Sealed/Cursed/Conduit unknowns; Ledger converts cursed matches into extra gold.'
+        : 'Trait pressure: Mirror/Sealed unknowns with Conduit/Stasis interactions.';
 };
 
 export const getTileTraitText = (tile: Tile): string => {
@@ -131,10 +429,6 @@ export const assignTileTraitsToGeneratedBoard = (
     intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
     relicIds: readonly RelicId[] = []
 ): Tile[] => {
-    if (level < 2) {
-        return tiles.map((tile) => ({ ...tile }));
-    }
-
     const eligiblePairKeys = [
         ...new Set(tiles.filter(tileCanReceiveTrait).map((tile) => tile.pairKey))
     ].filter((pairKey) => tiles.filter((tile) => tile.pairKey === pairKey && tileCanReceiveTrait(tile)).length === 2);
@@ -143,27 +437,41 @@ export const assignTileTraitsToGeneratedBoard = (
     }
 
     const rng = createMulberry32(hashStringToSeed(`tileTraits:${rulesVersion}:${runSeed}:${level}:${intensity ?? 'none'}`));
-    const traitCount = Math.min(level >= 11 ? 3 : level >= 6 ? 2 : 1, eligiblePairKeys.length);
+    const traitCount = calculateCoreTraitCount(eligiblePairKeys.length, level);
     const hasChapterCompass = relicIds.includes('chapter_compass');
     const hasWagerSurety = relicIds.includes('wager_surety');
     const hasParasiteLedger = relicIds.includes('parasite_ledger');
     const pool: TileTraitKind[] =
-        intensity === 'safe'
+        level <= 1
+            ? ['echo', 'mirror', 'heavy']
+            : intensity === 'safe'
             ? hasChapterCompass
-                ? ['echo', 'echo', 'mirror', 'sealed']
-                : ['echo', 'mirror', 'echo', 'heavy']
+                ? ['echo', 'echo', 'mirror', 'sealed', 'conduit']
+                : ['echo', 'mirror', 'echo', 'heavy', 'conduit']
             : intensity === 'greed'
               ? hasWagerSurety
-                  ? ['volatile', 'cursed', 'echo', 'heavy']
-                  : ['volatile', 'cursed', 'volatile', 'heavy']
+                  ? ['volatile', 'cursed', 'echo', 'heavy', 'drift']
+                  : ['volatile', 'cursed', 'volatile', 'heavy', 'drift']
               : intensity === 'mystery'
                 ? hasParasiteLedger
-                    ? ['mirror', 'sealed', 'cursed', 'echo']
-                    : ['mirror', 'sealed', 'volatile', 'echo']
-                : ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy'];
-    const pickedPairKeys = shuffleWithRng(() => rng(), eligiblePairKeys).slice(0, traitCount);
+                    ? ['mirror', 'sealed', 'cursed', 'echo', 'conduit', 'stasis']
+                    : ['mirror', 'sealed', 'volatile', 'echo', 'conduit', 'stasis']
+                : ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy', 'drift', 'conduit', 'stasis'];
+    const shuffledPairKeys = shuffleWithRng(() => rng(), eligiblePairKeys);
     const traitByPairKey = new Map<string, TileTraitKind>();
-    pickedPairKeys.forEach((pairKey, index) => {
+    if (traitCount >= 2) {
+        const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys);
+        const [firstPairKey, secondPairKey] = shuffleWithRng(() => rng(), adjacentPairs)[0] ?? [];
+        if (firstPairKey && secondPairKey) {
+            const [firstTrait, secondTrait] = routeInteractionSeed(intensity, relicIds);
+            traitByPairKey.set(firstPairKey, firstTrait);
+            traitByPairKey.set(secondPairKey, secondTrait);
+        }
+    }
+    shuffledPairKeys.forEach((pairKey, index) => {
+        if (traitByPairKey.size >= traitCount || traitByPairKey.has(pairKey)) {
+            return;
+        }
         const trait = shuffleWithRng(() => rng(), pool)[index % pool.length]!;
         traitByPairKey.set(pairKey, trait);
     });
@@ -212,9 +520,200 @@ export const applyVolatileMismatchTrait = (
     return { board: { ...board, tiles: nextTiles }, triggered: true };
 };
 
+const getTileIndex = (board: BoardState, tile: Tile): number => board.tiles.findIndex((candidate) => candidate.id === tile.id);
+
+const getOrthogonalNeighborIndexes = (board: BoardState, index: number): number[] => {
+    const columns = Math.max(1, board.columns);
+    const row = Math.floor(index / columns);
+    const col = index % columns;
+    const indexes: number[] = [];
+    if (col > 0) {
+        indexes.push(index - 1);
+    }
+    if (col < columns - 1 && index + 1 < board.tiles.length) {
+        indexes.push(index + 1);
+    }
+    if (row > 0) {
+        indexes.push(index - columns);
+    }
+    if (index + columns < board.tiles.length) {
+        indexes.push(index + columns);
+    }
+    return indexes;
+};
+
+const collectAdjacentTraitTiles = (board: BoardState, sourceTiles: readonly Tile[]): Tile[] => {
+    const sourceIds = new Set(sourceTiles.map((tile) => tile.id));
+    const sourcePairKeys = new Set(sourceTiles.map((tile) => tile.pairKey));
+    const seenIds = new Set<string>();
+    const adjacentTiles: Tile[] = [];
+    for (const sourceTile of sourceTiles) {
+        const index = getTileIndex(board, sourceTile);
+        if (index < 0) {
+            continue;
+        }
+        for (const neighborIndex of getOrthogonalNeighborIndexes(board, index)) {
+            const neighbor = board.tiles[neighborIndex];
+            if (
+                !neighbor ||
+                sourceIds.has(neighbor.id) ||
+                sourcePairKeys.has(neighbor.pairKey) ||
+                seenIds.has(neighbor.id) ||
+                neighbor.tileTraitKind == null ||
+                neighbor.state === 'matched' ||
+                neighbor.state === 'removed'
+            ) {
+                continue;
+            }
+            seenIds.add(neighbor.id);
+            adjacentTiles.push(neighbor);
+        }
+    }
+    return adjacentTiles;
+};
+
+const countRemainingFullyHiddenPairs = (board: BoardState): number => {
+    const byPair = new Map<string, Tile[]>();
+    for (const tile of board.tiles) {
+        if (tile.state !== 'hidden' || isSingletonUtilityPairKey(tile.pairKey)) {
+            continue;
+        }
+        byPair.set(tile.pairKey, [...(byPair.get(tile.pairKey) ?? []), tile]);
+    }
+    return [...byPair.values()].filter((tiles) => tiles.length >= 2).length;
+};
+
+const selectStasisBlockIndex = (board: BoardState, sourceTiles: readonly Tile[]): number | null => {
+    if (countRemainingFullyHiddenPairs(board) <= 1) {
+        return null;
+    }
+    const sourcePairKeys = new Set(sourceTiles.map((tile) => tile.pairKey));
+    const candidates = collectAdjacentTraitTiles(board, sourceTiles)
+        .map((tile) => ({ index: getTileIndex(board, tile), tile }))
+        .filter(({ index, tile }) => index >= 0 && tile.state === 'hidden' && !sourcePairKeys.has(tile.pairKey))
+        .sort((a, b) => a.index - b.index);
+    return candidates[0]?.index ?? null;
+};
+
+export const resolveTileTraitEffects = ({
+    run,
+    board,
+    sourceTiles,
+    source
+}: TileTraitEffectContext): TileTraitEffectResult => {
+    const result = createEmptyTraitEffectResult();
+    const traits = new Set(sourceTiles.map((tile) => tile.tileTraitKind).filter((kind): kind is TileTraitKind => kind != null));
+    const hasTrait = (kind: TileTraitKind): boolean => traits.has(kind);
+    const adjacentTraitTiles = board ? collectAdjacentTraitTiles(board, sourceTiles) : [];
+    const adjacentTraitKinds = new Set(
+        adjacentTraitTiles.map((tile) => tile.tileTraitKind).filter((kind): kind is TileTraitKind => kind != null)
+    );
+
+    if (source === 'match') {
+        result.comboShardGain = hasTrait('sealed') && run.stats.comboShards < MAX_COMBO_SHARDS ? 1 : 0;
+        result.guardTokenGain =
+            (hasTrait('mirror') ? 1 : 0) +
+            (hasTrait('volatile') && run.relicIds.includes('wager_surety') && run.stats.guardTokens < MAX_GUARD_TOKENS ? 1 : 0);
+        result.peekChargeGain = hasTrait('echo') ? 1 : 0;
+        result.relicFavorGain = hasTrait('cursed') ? 1 : 0;
+        result.scoreBonus =
+            [...traits].reduce((sum, trait) => sum + (TILE_TRAIT_MATCH_SCORE_BONUS[trait] ?? 0), 0) +
+            (hasTrait('echo') && run.relicIds.includes('chapter_compass') ? 10 : 0);
+        result.shopGoldGain = hasTrait('cursed') && run.relicIds.includes('parasite_ledger') ? 1 : 0;
+
+        if (hasTrait('echo') && adjacentTraitKinds.has('sealed') && run.stats.comboShards < MAX_COMBO_SHARDS) {
+            result.comboShardGain += 1;
+            result.interactionTags.push('echo:sealed-combo');
+        }
+
+        if (hasTrait('echo') && adjacentTraitKinds.has('mirror') && run.recallFocus < RECALL_FOCUS_MAX) {
+            result.recallFocusGain += 1;
+            result.interactionTags.push('echo:mirror-focus');
+        }
+
+        if (hasTrait('mirror') && adjacentTraitKinds.has('stasis')) {
+            result.guardTokenGain += 1;
+            result.scoreBonus += 10;
+            result.interactionTags.push('mirror:stasis-guard');
+        }
+
+        if (hasTrait('sealed') && adjacentTraitKinds.has('heavy')) {
+            result.scoreBonus += 20;
+            result.interactionTags.push('sealed:heavy-score');
+        }
+
+        if (hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
+            result.shopGoldGain += 1;
+            result.scoreBonus += 20;
+            result.interactionTags.push('cursed:volatile-greed');
+        }
+
+        if (hasTrait('volatile') && adjacentTraitKinds.has('heavy')) {
+            result.guardTokenGain += 1;
+            result.interactionTags.push('volatile:heavy-guard');
+        }
+
+        if (hasTrait('drift')) {
+            result.regionShuffleChargeGain += 1;
+            result.interactionTags.push('drift:row-shuffle');
+            if (adjacentTraitKinds.has('volatile')) {
+                result.shuffleChargeGain += 1;
+                result.interactionTags.push('drift:volatile-full-shuffle');
+            }
+        }
+
+        if (hasTrait('conduit') && adjacentTraitTiles.length > 0) {
+            result.scoreBonus += adjacentTraitTiles.length * 12;
+            result.interactionTags.push('conduit:adjacent-score');
+            if (adjacentTraitKinds.has('mirror')) {
+                result.guardTokenGain += 1;
+                result.interactionTags.push('conduit:mirror-guard');
+            }
+            if (adjacentTraitKinds.has('echo')) {
+                result.peekChargeGain += 1;
+                result.interactionTags.push('conduit:echo-peek');
+            }
+        }
+
+        if (hasTrait('stasis') && board) {
+            result.stickyBlockIndex = selectStasisBlockIndex(board, sourceTiles);
+            if (result.stickyBlockIndex !== null) {
+                result.scoreBonus += 10;
+                result.interactionTags.push('stasis:nearby-block');
+            }
+        }
+
+        return result;
+    }
+
+    const stasisBuffersSealed = hasTrait('sealed') && adjacentTraitKinds.has('stasis');
+    const sealedPeekLoss = hasTrait('sealed') && !stasisBuffersSealed && run.peekCharges > 0 ? 1 : 0;
+    result.blocksVolatileShuffle = hasTrait('volatile') && run.relicIds.includes('wager_surety') && run.stats.guardTokens > 0;
+    result.peekChargeLoss = sealedPeekLoss;
+    result.recallMistakesDelta =
+        (hasTrait('mirror') ? 1 : 0) +
+        (hasTrait('sealed') && sealedPeekLoss === 0 && !stasisBuffersSealed ? 1 : 0) +
+        (hasTrait('conduit') && (adjacentTraitKinds.has('volatile') || adjacentTraitKinds.has('cursed')) ? 1 : 0) +
+        (hasTrait('cursed') && adjacentTraitKinds.has('volatile') && !adjacentTraitKinds.has('stasis') ? 1 : 0);
+    result.triesDelta = (hasTrait('mirror') ? 1 : 0) + (hasTrait('cursed') ? 1 : 0);
+    if (hasTrait('conduit') && (adjacentTraitKinds.has('volatile') || adjacentTraitKinds.has('cursed'))) {
+        result.interactionTags.push('conduit:danger-recall');
+    }
+    if (stasisBuffersSealed) {
+        result.interactionTags.push('stasis:sealed-buffer');
+    }
+    if (hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
+        result.interactionTags.push(
+            adjacentTraitKinds.has('stasis') ? 'stasis:cursed-volatile-buffer' : 'cursed:volatile-danger'
+        );
+    }
+    return result;
+};
+
 export const calculateTileTraitMatchRewards = (
     run: RunState,
-    matchedTiles: readonly Tile[]
+    matchedTiles: readonly Tile[],
+    board?: BoardState | null
 ): {
     comboShardGain: number;
     guardTokenGain: number;
@@ -223,39 +722,32 @@ export const calculateTileTraitMatchRewards = (
     scoreBonus: number;
     shopGoldGain: number;
 } => {
-    const traits = new Set(matchedTiles.map((tile) => tile.tileTraitKind).filter((kind): kind is TileTraitKind => kind != null));
-    const hasTrait = (kind: TileTraitKind): boolean => traits.has(kind);
+    const effect = resolveTileTraitEffects({ run, board, sourceTiles: matchedTiles, source: 'match' });
     return {
-        comboShardGain: hasTrait('sealed') && run.stats.comboShards < MAX_COMBO_SHARDS ? 1 : 0,
-        guardTokenGain:
-            (hasTrait('mirror') ? 1 : 0) +
-            (hasTrait('volatile') && run.relicIds.includes('wager_surety') && run.stats.guardTokens < MAX_GUARD_TOKENS ? 1 : 0),
-        peekChargeGain: hasTrait('echo') ? 1 : 0,
-        relicFavorGain: hasTrait('cursed') ? 1 : 0,
-        scoreBonus:
-            [...traits].reduce((sum, trait) => sum + (TILE_TRAIT_MATCH_SCORE_BONUS[trait] ?? 0), 0) +
-            (hasTrait('echo') && run.relicIds.includes('chapter_compass') ? 10 : 0),
-        shopGoldGain: hasTrait('cursed') && run.relicIds.includes('parasite_ledger') ? 1 : 0
+        comboShardGain: effect.comboShardGain,
+        guardTokenGain: effect.guardTokenGain,
+        peekChargeGain: effect.peekChargeGain,
+        relicFavorGain: effect.relicFavorGain,
+        scoreBonus: effect.scoreBonus,
+        shopGoldGain: effect.shopGoldGain
     };
 };
 
 export const calculateTileTraitMismatchPenalty = (
     run: RunState,
-    sourceTiles: readonly Tile[]
+    sourceTiles: readonly Tile[],
+    board?: BoardState | null
 ): {
     blocksVolatileShuffle: boolean;
     peekChargeLoss: number;
     recallMistakesDelta: number;
     triesDelta: number;
 } => {
-    const traits = tileTraitKindsInTiles(sourceTiles, sourceTiles.map((tile) => tile.id));
-    const sealedPeekLoss = traits.has('sealed') && run.peekCharges > 0 ? 1 : 0;
-    const blocksVolatileShuffle =
-        traits.has('volatile') && run.relicIds.includes('wager_surety') && run.stats.guardTokens > 0;
+    const effect = resolveTileTraitEffects({ run, board, sourceTiles, source: 'mismatch' });
     return {
-        blocksVolatileShuffle,
-        peekChargeLoss: sealedPeekLoss,
-        recallMistakesDelta: (traits.has('mirror') ? 1 : 0) + (traits.has('sealed') && sealedPeekLoss === 0 ? 1 : 0),
-        triesDelta: (traits.has('mirror') ? 1 : 0) + (traits.has('cursed') ? 1 : 0)
+        blocksVolatileShuffle: effect.blocksVolatileShuffle,
+        peekChargeLoss: effect.peekChargeLoss,
+        recallMistakesDelta: effect.recallMistakesDelta,
+        triesDelta: effect.triesDelta
     };
 };

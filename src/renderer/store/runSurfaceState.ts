@@ -6,6 +6,7 @@ import {
     applyRegionShuffle,
     applyShuffle,
     applyStrayRemove,
+    applyTileSwap,
     armRegionShuffleRow,
     collectDestroyEligibleTileIds,
     toggleStrayRemoveArmed
@@ -25,6 +26,8 @@ export interface RunSurfaceState {
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
+    tileSwapArmed: boolean;
+    tileSwapFirstTileId: string | null;
     dungeonExitPromptOpen: boolean;
     shopReturnMode: 'floor' | 'summary' | null;
     matchScorePop: MatchScorePop | null;
@@ -35,7 +38,7 @@ export type RunSurfaceToggleResult =
     | { kind: 'ignored' }
     | {
           kind: 'applied';
-          patch: Pick<RunSurfaceState, 'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed'> & {
+          patch: Pick<RunSurfaceState, 'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'> & {
               run?: RunState;
           };
           playArmSfx: boolean;
@@ -55,6 +58,9 @@ export type ArmedBoardPowerPressResult =
     | { kind: 'persistEnemyContact'; run: RunState }
     | { kind: 'strayApplied'; run: RunState }
     | { kind: 'peekApplied'; run: RunState }
+    | { kind: 'tileSwapFirstSelected'; tileId: string }
+    | { kind: 'tileSwapFirstCleared' }
+    | { kind: 'tileSwapApplied'; run: RunState }
     | { kind: 'destroyApplied'; run: RunState; resolvesRun: boolean };
 
 export type OrdinaryTileFlipResult =
@@ -100,6 +106,8 @@ export const createRunSurfaceReset = (): RunSurfaceState => ({
     boardPinMode: false,
     destroyPairArmed: false,
     peekModeArmed: false,
+    tileSwapArmed: false,
+    tileSwapFirstTileId: null,
     dungeonExitPromptOpen: false,
     shopReturnMode: null,
     ...BOARD_FLOATER_POP_CLEAR
@@ -128,7 +136,9 @@ export const createBoardPinModeToggleResult = ({
         patch: {
             boardPinMode: next,
             destroyPairArmed: false,
-            peekModeArmed: false
+            peekModeArmed: false,
+            tileSwapArmed: false,
+            tileSwapFirstTileId: null
         },
         playArmSfx: next
     };
@@ -164,7 +174,9 @@ export const createDestroyPairArmedToggleResult = ({
         patch: {
             boardPinMode: false,
             destroyPairArmed: next,
-            peekModeArmed: false
+            peekModeArmed: false,
+            tileSwapArmed: false,
+            tileSwapFirstTileId: null
         },
         playArmSfx: next
     };
@@ -174,12 +186,14 @@ export const createPeekModeToggleResult = ({
     boardPinMode,
     destroyPairArmed,
     peekModeArmed,
+    tileSwapArmed = false,
     run,
     view
 }: {
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
+    tileSwapArmed?: boolean;
     run: RunState | null;
     view: ViewState;
 }): RunSurfaceToggleResult => {
@@ -189,7 +203,8 @@ export const createPeekModeToggleResult = ({
         run.status !== 'playing' ||
         run.peekCharges < 1 ||
         boardPinMode ||
-        destroyPairArmed
+        destroyPairArmed ||
+        tileSwapArmed
     ) {
         return { kind: 'ignored' };
     }
@@ -203,7 +218,53 @@ export const createPeekModeToggleResult = ({
             boardPinMode: false,
             destroyPairArmed: false,
             peekModeArmed: next,
+            tileSwapArmed: false,
+            tileSwapFirstTileId: null,
             run: nextRun
+        },
+        playArmSfx: next
+    };
+};
+
+export const createTileSwapToggleResult = ({
+    destroyPairArmed,
+    peekModeArmed,
+    run,
+    tileSwapArmed = false,
+    view
+}: {
+    destroyPairArmed: boolean;
+    peekModeArmed: boolean;
+    run: RunState | null;
+    tileSwapArmed?: boolean;
+    view: ViewState;
+}): RunSurfaceToggleResult => {
+    const next = !tileSwapArmed;
+    if (
+        next &&
+        (!run ||
+            view !== 'playing' ||
+            run.status !== 'playing' ||
+            run.activeContract?.noShuffle ||
+            run.board?.flippedTileIds.length !== 0 ||
+            (run.regionShuffleCharges <= 0 &&
+                !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))) ||
+            !run.board ||
+            run.board.tiles.filter((tile) => tile.state === 'hidden').length < 2 ||
+            destroyPairArmed ||
+            peekModeArmed)
+    ) {
+        return { kind: 'ignored' };
+    }
+
+    return {
+        kind: 'applied',
+        patch: {
+            boardPinMode: false,
+            destroyPairArmed: false,
+            peekModeArmed: false,
+            tileSwapArmed: next,
+            tileSwapFirstTileId: null
         },
         playArmSfx: next
     };
@@ -317,17 +378,19 @@ export const createBoardPowerContactPolicy = ({
     boardPinMode,
     destroyPairArmed,
     peekModeArmed,
+    tileSwapArmed,
     strayRemoveArmed
 }: {
     boardPinMode: boolean;
     destroyPairArmed: boolean;
     peekModeArmed: boolean;
+    tileSwapArmed?: boolean;
     strayRemoveArmed: boolean;
 }): {
     armedPowerCount: number;
     canContinueSinglePowerAfterContact: boolean;
 } => {
-    const armedPowerCount = [strayRemoveArmed, peekModeArmed, destroyPairArmed].filter(Boolean).length;
+    const armedPowerCount = [strayRemoveArmed, peekModeArmed, destroyPairArmed, tileSwapArmed].filter(Boolean).length;
 
     return {
         armedPowerCount,
@@ -341,6 +404,8 @@ export const createArmedBoardPowerPressResult = ({
     enemyContacted,
     peekModeArmed,
     run,
+    tileSwapArmed = false,
+    tileSwapFirstTileId = null,
     tileId
 }: {
     canContinueSinglePowerAfterContact: boolean;
@@ -348,6 +413,8 @@ export const createArmedBoardPowerPressResult = ({
     enemyContacted: boolean;
     peekModeArmed: boolean;
     run: RunState;
+    tileSwapArmed?: boolean;
+    tileSwapFirstTileId?: string | null;
     tileId: string;
 }): ArmedBoardPowerPressResult => {
     const canApplyAfterContact = !enemyContacted || canContinueSinglePowerAfterContact;
@@ -358,6 +425,21 @@ export const createArmedBoardPowerPressResult = ({
             return { kind: 'strayApplied', run: nextRun };
         }
         return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
+    }
+
+    if (canApplyAfterContact && tileSwapArmed) {
+        const tile = run.board?.tiles.find((candidate) => candidate.id === tileId);
+        if (!tile || tile.state !== 'hidden') {
+            return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
+        }
+        if (tileSwapFirstTileId === null) {
+            return { kind: 'tileSwapFirstSelected', tileId };
+        }
+        if (tileSwapFirstTileId === tileId) {
+            return { kind: 'tileSwapFirstCleared' };
+        }
+        const nextRun = applyTileSwap(run, tileSwapFirstTileId, tileId);
+        return nextRun === run ? { kind: 'handled' } : { kind: 'tileSwapApplied', run: nextRun };
     }
 
     if (
@@ -480,31 +562,39 @@ export const createGambitThirdPickPressResult = (
 
 export const clearRunSurfaceArmedModes = (): Pick<
     RunSurfaceState,
-    'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed'
+    'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'
 > => ({
     boardPinMode: false,
     destroyPairArmed: false,
-    peekModeArmed: false
+    peekModeArmed: false,
+    tileSwapArmed: false,
+    tileSwapFirstTileId: null
 });
 
 export const createRunWithPeekDisarmedPatch = (
     run: RunState
-): Pick<RunSurfaceState, 'peekModeArmed'> & { run: RunState } => ({
+): Pick<RunSurfaceState, 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'> & { run: RunState } => ({
     run,
-    peekModeArmed: false
+    peekModeArmed: false,
+    tileSwapArmed: false,
+    tileSwapFirstTileId: null
 });
 
 export const createRunWithBoardPowersDisarmedPatch = (
     run: RunState
-): Pick<RunSurfaceState, 'destroyPairArmed' | 'peekModeArmed'> & { run: RunState } => ({
+): Pick<RunSurfaceState, 'destroyPairArmed' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'> & { run: RunState } => ({
     run,
     destroyPairArmed: false,
-    peekModeArmed: false
+    peekModeArmed: false,
+    tileSwapArmed: false,
+    tileSwapFirstTileId: null
 });
 
 export const createRunWithArmedModesClearedPatch = (
     run: RunState
-): Pick<RunSurfaceState, 'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed'> & { run: RunState } => ({
+): Pick<RunSurfaceState, 'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'> & {
+    run: RunState;
+} => ({
     run,
     ...clearRunSurfaceArmedModes()
 });
@@ -513,7 +603,7 @@ export const createRunWithBoardInteractionClearedPatch = (
     run: RunState
 ): Pick<
     RunSurfaceState,
-    'boardPinMode' | 'destroyPairArmed' | 'matchScorePop' | 'mismatchScorePop' | 'peekModeArmed'
+    'boardPinMode' | 'destroyPairArmed' | 'matchScorePop' | 'mismatchScorePop' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'
 > & { run: RunState } => ({
     run,
     ...clearRunSurfaceArmedModes(),

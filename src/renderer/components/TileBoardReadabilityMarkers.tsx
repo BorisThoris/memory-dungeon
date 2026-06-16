@@ -36,7 +36,7 @@ interface TileBoardReadabilityMarkersProps {
     matchedEdgeGeometry: BufferGeometry;
     nonPickableBack: boolean;
     objectiveBackAccent: boolean;
-    powerBackAccent: 'destroy' | 'peek' | 'stray' | 'pin' | null;
+    powerBackAccent: 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | null;
     routeBackAccent: boolean;
     spotlightBountyOnBack: boolean;
     spotlightWardOnBack: boolean;
@@ -399,6 +399,42 @@ export const TileBoardReadabilityMarkers = ({
                                 depthTest
                                 depthWrite={false}
                                 opacity={0.88}
+                                side={DoubleSide}
+                                toneMapped={false}
+                                transparent
+                            />
+                        </mesh>
+                    ) : null}
+                    {powerBackAccent === 'swap' ? (
+                        <mesh
+                            geometry={findableCornerRingGeometry}
+                            position={[0, CARD_HEIGHT * 0.42, 0.00054]}
+                            raycast={noopMeshRaycast}
+                            renderOrder={10}
+                        >
+                            <meshBasicMaterial
+                                color="#5dd6ff"
+                                depthTest
+                                depthWrite={false}
+                                opacity={0.9}
+                                side={DoubleSide}
+                                toneMapped={false}
+                                transparent
+                            />
+                        </mesh>
+                    ) : null}
+                    {powerBackAccent === 'swapOrigin' ? (
+                        <mesh
+                            geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
+                            position={[0, CARD_HEIGHT * 0.42, 0.00055]}
+                            raycast={noopMeshRaycast}
+                            renderOrder={11}
+                        >
+                            <meshBasicMaterial
+                                color="#f2f9ff"
+                                depthTest
+                                depthWrite={false}
+                                opacity={0.96}
                                 side={DoubleSide}
                                 toneMapped={false}
                                 transparent

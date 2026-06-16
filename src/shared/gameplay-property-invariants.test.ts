@@ -1,9 +1,9 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import type { BoardState, LevelResult, RunState, Tile } from './contracts';
+import { GAME_RULES_VERSION, type BoardState, type LevelResult, type RunState, type Tile } from './contracts';
 import { inspectBoardFairness, inspectRunFairness } from './board-inspection';
-import { canRegionShuffleRow, canShuffleBoard } from './board-power-availability';
-import { applyFlashPair, applyPeek, applyRegionShuffle, applyShuffle, applyStrayRemove } from './board-power-actions';
+import { canRegionShuffleRow, canShuffleBoard, canSwapHiddenTiles } from './board-power-availability';
+import { applyFlashPair, applyPeek, applyRegionShuffle, applyShuffle, applyStrayRemove, applyTileSwap } from './board-power-actions';
 import { buildBoard } from './board-build-rules';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { advanceToNextLevel } from './next-floor-transition-rules';
@@ -19,7 +19,7 @@ const propertyRuns = Number(process.env.GAMEPLAY_PROPERTY_RUNS ?? 80);
 const generatedRun = fc.record({
     level: fc.integer({ min: 1, max: 24 }),
     runSeed: fc.integer({ min: 1, max: 0x7fffffff }),
-    rulesVersion: fc.integer({ min: 1, max: 29 })
+    rulesVersion: fc.integer({ min: 1, max: GAME_RULES_VERSION })
 });
 
 const sortedTileIds = (tiles: readonly Tile[]): string[] => tiles.map((tile) => tile.id).sort();
@@ -153,9 +153,13 @@ describe('gameplay property invariants', () => {
         );
     });
 
-    it('shuffle powers preserve board identity and non-negative resources', () => {
+    it('shuffle and swap powers preserve board identity and non-negative resources', () => {
         fc.assert(
-            fc.property(generatedRun, fc.integer({ min: 0, max: 7 }), ({ runSeed, rulesVersion }, row) => {
+            fc.property(
+                generatedRun,
+                fc.integer({ min: 0, max: 7 }),
+                fc.integer({ min: 0, max: 63 }),
+                ({ runSeed, rulesVersion }, row, pick) => {
                 const run = finishMemorizePhase(createNewRun(0, {
                     echoFeedbackEnabled: false,
                     runRulesVersionOverride: rulesVersion,
@@ -180,6 +184,21 @@ describe('gameplay property invariants', () => {
                     expect(inspectRunFairness(regionShuffled).issues).toEqual([]);
                 } else {
                     expect(regionShuffled).toBe(run);
+                }
+
+                const hiddenTiles = beforeBoard.tiles.filter((tile) => tile.state === 'hidden');
+                if (hiddenTiles.length < 2) {
+                    return;
+                }
+                const first = hiddenTiles[pick % hiddenTiles.length]!;
+                const second = hiddenTiles[(pick + 1) % hiddenTiles.length]!;
+                const swapped = applyTileSwap(run, first.id, second.id);
+                if (canSwapHiddenTiles(run, first.id, second.id)) {
+                    expectStableTileIdentity(beforeBoard, swapped.board!);
+                    expect(swapped.regionShuffleCharges).toBeGreaterThanOrEqual(0);
+                    expect(inspectRunFairness(swapped).issues).toEqual([]);
+                } else {
+                    expect(swapped).toBe(run);
                 }
             }),
             { numRuns: propertyRuns }

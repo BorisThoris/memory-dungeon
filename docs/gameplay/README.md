@@ -24,7 +24,7 @@ Epics below are **narrative deep dives** + refinement notes; they must stay cons
 | [epic-mutators](./epic-mutators.md) | All mutator IDs, daily table, endless floor schedule |
 | [epic-scoring-objectives](./epic-scoring-objectives.md) | Match score, floor clear, flip par, boss multiplier, penalties |
 | [epic-lives-and-pressure](./epic-lives-and-pressure.md) | Lives, guard, combo shards, echo, gauntlet timer, score parasite |
-| [epic-powers-and-interactions](./epic-powers-and-interactions.md) | Peek, shuffle, region shuffle, destroy, pin, stray, undo, flash pair |
+| [epic-powers-and-interactions](./epic-powers-and-interactions.md) | Peek, shuffle, region shuffle, tile swap, destroy, pin, stray, undo, flash pair |
 | [epic-relics](./epic-relics.md) | Relic pool, milestones, `applyRelicImmediate` |
 | [epic-route-world-pipeline](./epic-route-world-pipeline.md) | Route choice as next-floor world generation: Safe/Greed/Mystery profiles, card families, side-room hooks |
 | [epic-modes-and-runs](./epic-modes-and-runs.md) | Game modes, practice/scholar/pin vow/wild, puzzles, import/export |

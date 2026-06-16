@@ -8,6 +8,7 @@ import { rollRunEventRoom } from '../../shared/run-events';
 import { createDungeonRunMapState, revealDungeonChoices } from '../../shared/run-map';
 import { createRunShopOffers } from '../../shared/shop-rules';
 import { createDefaultSaveData } from '../../shared/save-data';
+import { calculateTileTraitMismatchPenalty } from '../../shared/tile-trait-rules';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import { useAppStore } from './useAppStore';
 
@@ -201,6 +202,9 @@ describe('useAppStore timers', () => {
         expect(firstTile).toBeDefined();
         expect(mismatchTile).toBeDefined();
 
+        const expectedTriesAfterResolve =
+            1 + calculateTileTraitMismatchPenalty(run!, [firstTile!, mismatchTile!], board!).triesDelta;
+
         useAppStore.getState().pressTile(firstTile!.id);
         useAppStore.getState().pressTile(mismatchTile!.id);
 
@@ -222,7 +226,7 @@ describe('useAppStore timers', () => {
         await vi.advanceTimersByTimeAsync(1400);
 
         expect(useAppStore.getState().run?.status).toBe('playing');
-        expect(useAppStore.getState().run?.stats.tries).toBe(1);
+        expect(useAppStore.getState().run?.stats.tries).toBe(expectedTriesAfterResolve);
         expect(useAppStore.getState().run?.lives).toBe(4);
     });
 
@@ -772,7 +776,9 @@ describe('useAppStore timers', () => {
             },
             boardPinMode: true,
             destroyPairArmed: true,
-            peekModeArmed: true
+            peekModeArmed: true,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: shopTile.id
         });
 
         useAppStore.getState().pressTile(shopTile.id);
@@ -785,6 +791,8 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
     });
 
     it('claims a generated in-board dungeon room through tile press without leaving the board', () => {
@@ -808,7 +816,9 @@ describe('useAppStore timers', () => {
             },
             boardPinMode: true,
             destroyPairArmed: true,
-            peekModeArmed: true
+            peekModeArmed: true,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: roomTile.id
         });
 
         useAppStore.getState().pressTile(roomTile.id);
@@ -820,15 +830,16 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
     });
 
     it('handles generated rotating enemy hazard contact and flips the occupied card', () => {
-        const runSeed = 50;
+        const runSeed = 8;
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed });
-        const board = buildBoard(5, {
+        const board = buildBoard(7, {
             runSeed,
             runRulesVersion: baseRun.runRulesVersion,
-            dungeonNodeKind: 'trap',
             gameMode: 'endless'
         });
         const hazard = board.enemyHazards![0]!;
@@ -844,7 +855,9 @@ describe('useAppStore timers', () => {
             },
             boardPinMode: true,
             destroyPairArmed: true,
-            peekModeArmed: true
+            peekModeArmed: true,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: hazard.currentTileId
         });
 
         useAppStore.getState().pressTile(hazard.currentTileId);
@@ -859,6 +872,8 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.getState().pressTile(hazard.currentTileId);
 
@@ -1993,7 +2008,9 @@ describe('useAppStore timers', () => {
             shopReturnMode: 'floor',
             boardPinMode: true,
             destroyPairArmed: true,
-            peekModeArmed: true
+            peekModeArmed: true,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: 'stale-tile'
         });
 
         useAppStore.getState().goToMenu();
@@ -2003,13 +2020,17 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.setState({
             dungeonExitPromptOpen: true,
             shopReturnMode: 'summary',
             boardPinMode: true,
             destroyPairArmed: true,
-            peekModeArmed: true
+            peekModeArmed: true,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: 'stale-tile'
         });
         useAppStore.getState().startRun();
 
@@ -2019,13 +2040,17 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.setState({
             dungeonExitPromptOpen: true,
             shopReturnMode: 'floor',
             boardPinMode: true,
             destroyPairArmed: true,
-            peekModeArmed: true
+            peekModeArmed: true,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: 'stale-tile'
         });
         useAppStore.getState().restartRun();
 
@@ -2034,13 +2059,17 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
 
         useAppStore.setState({
             dungeonExitPromptOpen: true,
             shopReturnMode: 'summary',
             boardPinMode: true,
             destroyPairArmed: true,
-            peekModeArmed: true
+            peekModeArmed: true,
+            tileSwapArmed: true,
+            tileSwapFirstTileId: 'stale-tile'
         });
         useAppStore.getState().startWildRun();
 
@@ -2049,6 +2078,8 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(useAppStore.getState().peekModeArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
     });
 
     it('only arms destroy mode when a valid destroy target and charge exist', () => {
@@ -2252,7 +2283,7 @@ describe('useAppStore scholar contract', () => {
         vi.useRealTimers();
     });
 
-    it('startScholarContractRun leaves shuffle and region shuffle as no-ops from store', async () => {
+    it('startScholarContractRun leaves shuffle, region shuffle, and tile swap as no-ops from store', async () => {
         useAppStore.getState().startScholarContractRun();
         notifyCurrentBoardReady();
         const started = useAppStore.getState().run;
@@ -2279,6 +2310,13 @@ describe('useAppStore scholar contract', () => {
 
         useAppStore.getState().shuffleRegionRow(0);
         after = useAppStore.getState().run;
+        expect(after?.shuffleNonce).toBe(nonceBefore);
+        expect(after?.board!.tiles.map((t) => t.id)).toEqual(tileIdsBefore);
+
+        useAppStore.getState().toggleTileSwapArmed();
+        after = useAppStore.getState().run;
+        expect(useAppStore.getState().tileSwapArmed).toBe(false);
+        expect(useAppStore.getState().tileSwapFirstTileId).toBeNull();
         expect(after?.shuffleNonce).toBe(nonceBefore);
         expect(after?.board!.tiles.map((t) => t.id)).toEqual(tileIdsBefore);
     });

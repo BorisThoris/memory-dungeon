@@ -47,6 +47,9 @@ const renderBoard = (props: {
     runStatus?: RunStatus;
     viewportResetToken?: number;
     guidedTargetTileIds?: string[];
+    tileSwapPowerVisualActive?: boolean;
+    tileSwapEligibleTileIds?: ReadonlySet<string>;
+    tileSwapFirstTileId?: string | null;
 }): ReturnType<typeof render> =>
     {
         const {
@@ -266,6 +269,57 @@ describe('TileBoard touch and click controls', () => {
         await waitFor(() => {
             expect(screen.getByText(/Focus: Hidden tile, row 1, column 1/i)).toBeInTheDocument();
         });
+    });
+
+    it('shows a visible trait combo preview when the focused tile has nearby trait interactions', async () => {
+        renderBoard({
+            board: {
+                ...board,
+                tiles: [
+                    { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                    { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
+                    board.tiles[2]!,
+                    board.tiles[3]!
+                ]
+            },
+            debugPeekActive: false,
+            interactive: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false
+        });
+
+        fireEvent.focus(screen.getByTestId('tile-board-application'));
+
+        await waitFor(() => expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Trait combo'));
+        expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Echo + Sealed: combo shard');
+    });
+
+    it('shows a visible swap preview when the focused target would create a trait interaction', async () => {
+        renderBoard({
+            board: {
+                ...board,
+                tiles: [
+                    { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+                    { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
+                    { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
+                    { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
+                ]
+            },
+            debugPeekActive: false,
+            interactive: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false,
+            tileSwapEligibleTileIds: new Set(['s1']),
+            tileSwapFirstTileId: 'x1',
+            tileSwapPowerVisualActive: true
+        });
+
+        fireEvent.focus(screen.getByTestId('tile-board-application'));
+
+        await waitFor(() => expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Swap preview'));
+        expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Sealed + Heavy: score surge');
     });
 
     it('announces decoy trap language for face-up decoy tiles', async () => {

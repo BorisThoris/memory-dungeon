@@ -10,7 +10,7 @@ Screens that **display** run or save information **without changing** simulation
 |--------|------------|-----------------|
 | **Codex** | Topic groups from `mechanics-encyclopedia` (via `game-catalog`): **powers**, **scoring & survival**, **pickups & board**, **contracts**, **featured runs**, **core**, **modes**, **achievements**, **relics**, **mutators** | **None** — subtitle states this explicitly. |
 | **Collection** | Save achievements, relic pick counts, bests, daily streak cosmetic, symbol catalog slices | **None** — archive / progress readout. |
-| **Inventory** (in-run) | Current `RunState`: mutators, relics, charges (peek, shuffle, destroy, region, stray, flash, gambit, undo, wild) | **None** — mirror of run; closing does not mutate run. |
+| **Inventory** (in-run) | Current `RunState`: mutators, relics, charges (peek, shuffle, destroy, region, tile swap, stray, flash, gambit, undo, wild) | **None** — mirror of run; closing does not mutate run. |
 
 ## Implementation status
 

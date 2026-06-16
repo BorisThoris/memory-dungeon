@@ -8,7 +8,13 @@ export type LevelCompleteContinuationSurfaceResult =
           kind: 'sideRoom';
           patch: Pick<
               RunSurfaceState,
-              'boardPinMode' | 'destroyPairArmed' | 'matchScorePop' | 'mismatchScorePop' | 'peekModeArmed'
+              | 'boardPinMode'
+              | 'destroyPairArmed'
+              | 'matchScorePop'
+              | 'mismatchScorePop'
+              | 'peekModeArmed'
+              | 'tileSwapArmed'
+              | 'tileSwapFirstTileId'
           > & {
               run: RunState;
               view: 'sideRoom';
@@ -18,7 +24,13 @@ export type LevelCompleteContinuationSurfaceResult =
           kind: 'shop';
           patch: Pick<
               RunSurfaceState,
-              'boardPinMode' | 'destroyPairArmed' | 'matchScorePop' | 'mismatchScorePop' | 'peekModeArmed'
+              | 'boardPinMode'
+              | 'destroyPairArmed'
+              | 'matchScorePop'
+              | 'mismatchScorePop'
+              | 'peekModeArmed'
+              | 'tileSwapArmed'
+              | 'tileSwapFirstTileId'
           > & {
               run: RunState;
               shopReturnMode: 'summary';
@@ -29,7 +41,13 @@ export type LevelCompleteContinuationSurfaceResult =
           kind: 'relicOffer';
           patch: Pick<
               RunSurfaceState,
-              'boardPinMode' | 'destroyPairArmed' | 'matchScorePop' | 'mismatchScorePop' | 'peekModeArmed'
+              | 'boardPinMode'
+              | 'destroyPairArmed'
+              | 'matchScorePop'
+              | 'mismatchScorePop'
+              | 'peekModeArmed'
+              | 'tileSwapArmed'
+              | 'tileSwapFirstTileId'
           > & {
               run: RunState;
               view: 'playing';
@@ -49,7 +67,13 @@ export type LevelCompleteContinuationSurfaceResult =
           kind: 'nextLevel';
           patch: Pick<
               RunSurfaceState,
-              'boardPinMode' | 'destroyPairArmed' | 'matchScorePop' | 'mismatchScorePop' | 'peekModeArmed'
+              | 'boardPinMode'
+              | 'destroyPairArmed'
+              | 'matchScorePop'
+              | 'mismatchScorePop'
+              | 'peekModeArmed'
+              | 'tileSwapArmed'
+              | 'tileSwapFirstTileId'
           > & {
               newlyUnlockedAchievements: [];
               run: RunState;

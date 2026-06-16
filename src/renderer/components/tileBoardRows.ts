@@ -84,6 +84,9 @@ export interface BuildTileBoardRowsInput {
     strayEligibleTileIds: ReadonlySet<string>;
     strayPowerVisualActive: boolean;
     stickyBlockedTileId: string | null;
+    tileSwapEligibleTileIds: ReadonlySet<string>;
+    tileSwapFirstTileId: string | null;
+    tileSwapPowerVisualActive: boolean;
     wardPairKey: string | null;
     wideRecallInPlay: boolean;
 }
@@ -123,6 +126,9 @@ export const buildTileBoardRows = ({
     strayEligibleTileIds,
     strayPowerVisualActive,
     stickyBlockedTileId,
+    tileSwapEligibleTileIds,
+    tileSwapFirstTileId,
+    tileSwapPowerVisualActive,
     wardPairKey,
     wideRecallInPlay
 }: BuildTileBoardRowsInput): TileBoardRow[] => {
@@ -198,6 +204,9 @@ export const buildTileBoardRows = ({
             pinModeBoardHintActive,
             strayEligibleTileIds,
             strayPowerVisualActive,
+            tileSwapEligibleTileIds,
+            tileSwapFirstTileId,
+            tileSwapPowerVisualActive,
             tile
         });
 

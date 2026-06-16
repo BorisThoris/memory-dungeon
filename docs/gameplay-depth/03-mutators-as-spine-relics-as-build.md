@@ -83,7 +83,7 @@ Some relics **get worse** under certain mutators if you want run texture:
 From `RELIC_ROSTER.md`, “second pin slot” and raw score multipliers were deferred. Better fits for **build fantasy**:
 
 - **Anchor buddy** — every N anchor refreshes (under `n_back_anchor` only), or peek charge.  
-- **Row shuffler** — improves `rows_only` shuffle or grants a free row shuffle (Search tier).  
+- **Row/swap shuffler** — improves `rows_only` shuffle or grants a free row shuffle / tile swap (Search tier).
 - **Parasite ward** — one-time ignore of parasite life loss (narrow, test vs `MAX_LIVES`).
 
 Each should be checked against the forgiveness deep dive so we do not double-heal the same failure mode.

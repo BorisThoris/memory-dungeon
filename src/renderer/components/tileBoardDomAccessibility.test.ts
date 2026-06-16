@@ -7,6 +7,7 @@ import {
     getPowerTargetAriaText,
     getTileAriaLabel,
     getTilePosition,
+    getTileTraitPreviewText,
     moveFocusInGrid
 } from './tileBoardDomAccessibility';
 
@@ -75,15 +76,59 @@ describe('tile board DOM accessibility helpers', () => {
 
     it('describes board power target validity', () => {
         const hidden = board.tiles[0]!;
-        expect(getPowerTargetAriaText(hidden, true, new Set(['a1']), false, new Set(), false, new Set())).toContain(
+        expect(
+            getPowerTargetAriaText(hidden, true, new Set(['a1']), false, new Set(), false, new Set(), false, new Set(), null)
+        ).toContain(
             'Destroy target: valid'
         );
-        expect(getPowerTargetAriaText(hidden, false, new Set(), true, new Set(['a1']), false, new Set())).toContain(
+        expect(
+            getPowerTargetAriaText(hidden, false, new Set(), true, new Set(['a1']), false, new Set(), false, new Set(), null)
+        ).toContain(
             'Peek target: valid'
         );
-        expect(getPowerTargetAriaText(hidden, false, new Set(), false, new Set(), true, new Set(['a1']))).toContain(
+        expect(
+            getPowerTargetAriaText(hidden, false, new Set(), false, new Set(), true, new Set(['a1']), false, new Set(), null)
+        ).toContain(
             'Stray target: valid'
         );
+        expect(
+            getPowerTargetAriaText(hidden, false, new Set(), false, new Set(), false, new Set(), true, new Set(['a1']), null)
+        ).toContain('Swap target: valid');
+        expect(
+            getPowerTargetAriaText(hidden, false, new Set(), false, new Set(), false, new Set(), true, new Set(['a1']), 'a1')
+        ).toContain('Swap origin selected');
+    });
+
+    it('announces nearby trait interactions and swap-created trait previews', () => {
+        const traitBoard: BoardState = {
+            ...board,
+            tiles: [
+                { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
+                board.tiles[2]!,
+                { ...board.tiles[3]!, tileTraitKind: 'heavy' }
+            ]
+        };
+
+        expect(getTileTraitPreviewText(traitBoard, traitBoard.tiles[0]!)).toContain('Echo + Sealed: combo shard');
+        expect(getTileAriaLabel(traitBoard, traitBoard.tiles[0]!, true, 1, 1)).toContain(
+            'Nearby trait interaction: Echo + Sealed: combo shard.'
+        );
+        expect(
+            getPowerTargetAriaText(
+                traitBoard.tiles[1]!,
+                false,
+                new Set(),
+                false,
+                new Set(),
+                false,
+                new Set(),
+                true,
+                new Set(['a2']),
+                'b1',
+                traitBoard
+            )
+        ).toContain('Swap preview: Sealed + Heavy: score surge.');
     });
 
     it('collects pickable tiles and moves keyboard focus across available grid slots', () => {
@@ -128,7 +173,10 @@ describe('tile board DOM accessibility helpers', () => {
             previewActive: false,
             runStatus: 'playing',
             strayEligibleTileIds: new Set(),
-            strayPowerVisualActive: false
+            strayPowerVisualActive: false,
+            tileSwapEligibleTileIds: new Set(),
+            tileSwapFirstTileId: null,
+            tileSwapPowerVisualActive: false
         });
 
         expect(label).toContain('Tile A, row 1, column 1');
@@ -151,7 +199,10 @@ describe('tile board DOM accessibility helpers', () => {
                 previewActive: false,
                 runStatus: 'playing',
                 strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false
+                strayPowerVisualActive: false,
+                tileSwapEligibleTileIds: new Set(),
+                tileSwapFirstTileId: null,
+                tileSwapPowerVisualActive: false
             })
         ).toBe('');
         expect(
@@ -168,7 +219,10 @@ describe('tile board DOM accessibility helpers', () => {
                 previewActive: false,
                 runStatus: 'playing',
                 strayEligibleTileIds: new Set(),
-                strayPowerVisualActive: false
+                strayPowerVisualActive: false,
+                tileSwapEligibleTileIds: new Set(),
+                tileSwapFirstTileId: null,
+                tileSwapPowerVisualActive: false
             })
         ).toBe('');
     });

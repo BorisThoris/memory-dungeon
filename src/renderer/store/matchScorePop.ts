@@ -1,10 +1,12 @@
 import type { RunState } from '../../shared/contracts';
 import { getMatchFloaterAnchorTileIds, getMismatchFloaterAnchorTileIds } from '../../shared/turn-resolution';
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
+import { formatTileTraitInteractionTags, resolveTileTraitEffects } from '../../shared/tile-trait-rules';
 
 export type MatchScorePop = {
     amount: number;
     routeRewardText?: string;
+    traitInteractionTexts?: string[];
     tileIdA: string;
     tileIdB: string;
     key: string;
@@ -15,6 +17,7 @@ export type MismatchScorePop = {
     tileIdB: string;
     /** Gambit triple-miss only — centroid anchor for GameScreen. */
     tileIdC?: string;
+    traitInteractionTexts?: string[];
     key: string;
 };
 
@@ -22,6 +25,33 @@ export type MismatchScorePop = {
 export const BOARD_FLOATER_POP_CLEAR = {
     matchScorePop: null as MatchScorePop | null,
     mismatchScorePop: null as MismatchScorePop | null
+};
+
+const getTilesByIds = (run: RunState, tileIds: readonly string[]) =>
+    tileIds
+        .map((tileId) => run.board?.tiles.find((tile) => tile.id === tileId))
+        .filter((tile): tile is NonNullable<RunState['board']>['tiles'][number] => tile != null);
+
+const resolveTraitInteractionTexts = (
+    run: RunState,
+    tileIds: readonly string[],
+    source: 'match' | 'mismatch'
+): string[] => {
+    if (!run.board) {
+        return [];
+    }
+    const sourceTiles = getTilesByIds(run, tileIds);
+    if (sourceTiles.length === 0) {
+        return [];
+    }
+    return formatTileTraitInteractionTags(
+        resolveTileTraitEffects({
+            run,
+            board: run.board,
+            sourceTiles,
+            source
+        }).interactionTags
+    );
 };
 
 /**
@@ -54,11 +84,15 @@ export function buildMatchScorePopPayload(
         run.board.tiles.find((tile) => tile.id === tileIdB)?.routeCardKind ??
         null;
     const routeRewardText = routeKind ? `${routeSpecialLabel(routeKind)} ${routeSpecialRewardLine(routeKind)}` : undefined;
+    const traitInteractionTexts = resolveTraitInteractionTexts(run, [tileIdA, tileIdB], 'match');
     const nonce = keyNonce ?? `${Date.now()}`;
     const key = `${run.board.level}-${nonce}-${tileIdA}-${tileIdB}`;
     const payload: MatchScorePop = { amount, tileIdA, tileIdB, key };
     if (routeRewardText) {
         payload.routeRewardText = routeRewardText;
+    }
+    if (traitInteractionTexts.length > 0) {
+        payload.traitInteractionTexts = traitInteractionTexts;
     }
     return payload;
 }
@@ -86,9 +120,17 @@ export function buildMismatchScorePopPayload(
     const key = tileIdC
         ? `miss-${run.board.level}-${nonce}-${tileIdA}-${tileIdB}-${tileIdC}`
         : `miss-${run.board.level}-${nonce}-${tileIdA}-${tileIdB}`;
+    const traitInteractionTexts = resolveTraitInteractionTexts(
+        run,
+        tileIdC ? [tileIdA, tileIdB, tileIdC] : [tileIdA, tileIdB],
+        'mismatch'
+    );
     const payload: MismatchScorePop = { tileIdA, tileIdB, key };
     if (tileIdC !== undefined) {
         payload.tileIdC = tileIdC;
+    }
+    if (traitInteractionTexts.length > 0) {
+        payload.traitInteractionTexts = traitInteractionTexts;
     }
     return payload;
 }

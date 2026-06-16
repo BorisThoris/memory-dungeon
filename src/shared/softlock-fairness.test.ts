@@ -6,7 +6,8 @@ import {
     countFullyHiddenPairs,
     inspectBoardFairness,
     inspectRunFairness,
-    isBoardComplete
+    isBoardComplete,
+    repairDungeonExitSoftlocks
 } from './board-generation';
 import {
     createDailyRun,
@@ -22,6 +23,7 @@ import {
     applyStrayRemove,
     applyRegionShuffle,
     applyShuffle,
+    applyTileSwap,
     canRegionShuffleRow,
     canShuffleBoard,
     collectDestroyEligibleTileIds,
@@ -351,6 +353,116 @@ describe('REG-087 board fairness inspection', () => {
         expect(inspectBoardFairness(board).hasCompletionRoute).toBe(false);
     });
 
+    it('repairs impossible generated primary exit locks instead of trusting shop access', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                },
+                {
+                    ...tile('shop', '__shop__'),
+                    dungeonCardKind: 'shop',
+                    dungeonCardEffectId: 'shop_vendor'
+                }
+            ],
+            {
+                pairCount: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron',
+                dungeonShopTileId: 'shop'
+            }
+        );
+
+        const repaired = repairDungeonExitSoftlocks(board);
+
+        expect(repaired.dungeonExitLockKind).toBe('none');
+        expect(repaired.tiles.find((candidate) => candidate.id === 'exit')?.dungeonExitLockKind).toBe('none');
+        expect(inspectBoardFairness(repaired).issues).toEqual([]);
+    });
+
+    it('preserves key-locked exits when a guaranteed key source exists', () => {
+        const withKeyPair = boardFromTiles(
+            [
+                tile('key-a', 'key', 'hidden'),
+                tile('key-b', 'key', 'hidden'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ],
+            {
+                pairCount: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron'
+            }
+        );
+        withKeyPair.tiles[0] = { ...withKeyPair.tiles[0]!, dungeonCardKind: 'key', dungeonKeyKind: 'iron' };
+        withKeyPair.tiles[1] = { ...withKeyPair.tiles[1]!, dungeonCardKind: 'key', dungeonKeyKind: 'iron' };
+
+        const withKeyCacheRoom = boardFromTiles(
+            [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                },
+                {
+                    ...tile('room', '__room__'),
+                    dungeonCardKind: 'room',
+                    dungeonCardEffectId: 'room_key_cache'
+                }
+            ],
+            {
+                pairCount: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron'
+            }
+        );
+
+        expect(repairDungeonExitSoftlocks(withKeyPair).dungeonExitLockKind).toBe('iron');
+        expect(inspectBoardFairness(withKeyPair).issues).toEqual([]);
+        expect(repairDungeonExitSoftlocks(withKeyCacheRoom).dungeonExitLockKind).toBe('iron');
+        expect(inspectBoardFairness(withKeyCacheRoom).issues).toEqual([]);
+    });
+
+    it('caps impossible lever requirements to reachable lever count', () => {
+        const board = boardFromTiles(
+            [
+                tile('lever-a', 'lever'),
+                tile('lever-b', 'lever'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'lever',
+                    dungeonExitRequiredLeverCount: 2
+                }
+            ],
+            {
+                pairCount: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'lever',
+                dungeonExitRequiredLeverCount: 2,
+                dungeonLeverCount: 0
+            }
+        );
+        board.tiles[0] = { ...board.tiles[0]!, dungeonCardKind: 'lever', dungeonCardEffectId: 'lever_floor' };
+        board.tiles[1] = { ...board.tiles[1]!, dungeonCardKind: 'lever', dungeonCardEffectId: 'lever_floor' };
+
+        const repaired = repairDungeonExitSoftlocks(board);
+
+        expect(repaired.dungeonExitLockKind).toBe('lever');
+        expect(repaired.dungeonExitRequiredLeverCount).toBe(1);
+        expect(repaired.tiles.find((candidate) => candidate.id === 'exit')?.dungeonExitRequiredLeverCount).toBe(1);
+        expect(inspectBoardFairness(repaired).issues).toEqual([]);
+    });
+
     it('flags inconsistent dungeon pair metadata and enemy HP mirrors', () => {
         const kindMismatch = boardFromTiles([
             { ...tile('e1', 'enemy'), dungeonCardKind: 'enemy', dungeonCardEffectId: 'enemy_sentry', dungeonCardHp: 2, dungeonCardMaxHp: 2 },
@@ -585,7 +697,7 @@ describe('REG-087 action eligibility edge cases', () => {
         expect(inspectBoardFairness(board).hasCompletionRoute).toBe(false);
     });
 
-    it('preserves completion routes after full shuffle and row shuffle assists', () => {
+    it('preserves completion routes after full shuffle, row shuffle, and tile swap assists', () => {
         const fullShuffleRun = playableRun(createNewRun(0, { runSeed: 80_870 }));
         expect(canShuffleBoard(fullShuffleRun)).toBe(true);
         const afterFullShuffle = applyShuffle(fullShuffleRun);
@@ -610,5 +722,19 @@ describe('REG-087 action eligibility edge cases', () => {
         expect(afterRowShuffle).not.toBe(rowShuffleRun);
         expectRunFair(afterRowShuffle);
         expect(afterRowShuffle.regionShuffleRowArmed).toBeNull();
+
+        const tileSwapRun = playableRun(
+            createNewRun(0, {
+                runSeed: 80_872,
+                initialRelicIds: ['region_shuffle_free_first']
+            })
+        );
+        const hiddenTiles = tileSwapRun.board?.tiles.filter((candidate) => candidate.state === 'hidden') ?? [];
+        expect(hiddenTiles.length).toBeGreaterThanOrEqual(2);
+        const afterTileSwap = applyTileSwap(tileSwapRun, hiddenTiles[0]!.id, hiddenTiles[1]!.id);
+
+        expect(afterTileSwap).not.toBe(tileSwapRun);
+        expectRunFair(afterTileSwap);
+        expect(afterTileSwap.regionShuffleRowArmed).toBeNull();
     });
 });

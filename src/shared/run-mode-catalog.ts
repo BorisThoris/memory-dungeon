@@ -257,7 +257,7 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
             signal: 'HUD mode reads Scholar Contract.',
             testId: 'hud-mode-identity'
         },
-        shortDescription: 'Mastery contract: no shuffle, no destroy — prove the read without damage-control tools.',
+        shortDescription: 'Mastery contract: no shuffle, no swap, no destroy — prove the read without damage-control tools.',
         promise: 'Purist memory — planning and recall over rescue buttons.',
         eligibilityNote: 'Achievements remain eligible; the contract also grants an extra relic choice at shrines.',
         challengeGateId: 'scholar_entry',

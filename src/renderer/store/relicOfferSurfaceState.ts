@@ -9,7 +9,10 @@ export type RelicPickSurfaceResult =
     | {
           kind: 'accepted';
           nextSave: SaveData;
-          patch: Pick<RunSurfaceState, 'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed'> & {
+          patch: Pick<
+              RunSurfaceState,
+              'boardPinMode' | 'destroyPairArmed' | 'peekModeArmed' | 'tileSwapArmed' | 'tileSwapFirstTileId'
+          > & {
               run: RunState;
               saveData: SaveData;
               settings: Settings;

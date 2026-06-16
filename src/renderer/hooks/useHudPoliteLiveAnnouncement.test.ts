@@ -14,6 +14,9 @@ const base = {
     guardTokens: 0,
     comboShards: 0,
     shopGold: 0,
+    shuffleCharges: 0,
+    regionShuffleCharges: 0,
+    stickyBlockIndex: null as number | null,
     boardLevel: 1 as number | null,
     boardTiles: [] as Tile[],
     matchedPairs: 0,
@@ -25,7 +28,10 @@ const base = {
         mirror: 0,
         cursed: 0,
         sealed: 0,
-        heavy: 0
+        heavy: 0,
+        drift: 0,
+        conduit: 0,
+        stasis: 0
     },
     tileTraitMismatches: {
         echo: 0,
@@ -33,7 +39,10 @@ const base = {
         mirror: 0,
         cursed: 0,
         sealed: 0,
-        heavy: 0
+        heavy: 0,
+        drift: 0,
+        conduit: 0,
+        stasis: 0
     },
     volatileTraitShuffles: 0,
     findablesClaimedThisFloor: 0,
@@ -271,6 +280,45 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe('Match resolved. 1/4 pairs cleared. Echo trait resolved.');
+    });
+
+    it('announces trait-driven shuffle charges and stasis locks with the resolved match', async () => {
+        const { result, rerender } = renderHook(
+            (p: { pairs: number; driftMatches: number; stasisMatches: number; rowCharges: number; fullCharges: number; sticky: number | null }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 2,
+                    pairCount: 4,
+                    matchedPairs: p.pairs,
+                    tileTraitMatches: {
+                        ...base.tileTraitMatches,
+                        drift: p.driftMatches,
+                        stasis: p.stasisMatches
+                    },
+                    regionShuffleCharges: p.rowCharges,
+                    shuffleCharges: p.fullCharges,
+                    stickyBlockIndex: p.sticky
+                }),
+            {
+                initialProps: {
+                    pairs: 0,
+                    driftMatches: 0,
+                    stasisMatches: 0,
+                    rowCharges: 0,
+                    fullCharges: 0,
+                    sticky: null as number | null
+                }
+            }
+        );
+
+        await act(async () => {
+            rerender({ pairs: 1, driftMatches: 1, stasisMatches: 1, rowCharges: 1, fullCharges: 1, sticky: 3 });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe(
+            'Match resolved. 1/4 pairs cleared. Drift and Stasis trait resolved. 1 row/swap charge gained. 1 full shuffle charge gained. Stasis blocked a nearby trait tile from opening first next turn.'
+        );
     });
 
     it('announces tile trait mismatch penalties and volatile shuffles', async () => {

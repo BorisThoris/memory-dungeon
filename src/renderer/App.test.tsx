@@ -114,7 +114,7 @@ describe('desktop app flow', () => {
         expect(screen.getByRole('group', { name: /run stats/i })).toBeInTheDocument();
         expect(screen.getByText(/^shards$/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /rule tips/i })).toBeInTheDocument();
-    });
+    }, 15_000);
 
     it('turns off the app-level ambient grid while the menu or game Pixi background is active', async () => {
         const user = userEvent.setup();

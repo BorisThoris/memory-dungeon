@@ -12,6 +12,7 @@ import {
     applyRegionShuffle,
     applyShuffle,
     applyStrayRemove,
+    applyTileSwap,
     cancelResolvingWithUndo
 } from './board-power-actions';
 import {
@@ -228,6 +229,59 @@ describe('board power actions', () => {
         expect(shuffled.stats.shufflesUsed).toBe(1);
         expect(shuffled.board!.tiles[2]?.id).toBe('b1');
         expect(shuffled.board!.tiles[3]?.id).toBe('b2');
+    });
+
+    it('swaps two hidden tile positions using row-shuffle charge accounting', () => {
+        const state = run({
+            board: board([
+                tile('a1', 'A'),
+                tile('a2', 'A'),
+                tile('b1', 'B'),
+                tile('b2', 'B')
+            ], 2),
+            pinnedTileIds: ['a1', 'b1'],
+            regionShuffleCharges: 1,
+            recallFocus: 2
+        });
+
+        const swapped = applyTileSwap(state, 'a1', 'b2');
+
+        expect(swapped).not.toBe(state);
+        expect(swapped.regionShuffleCharges).toBe(0);
+        expect(swapped.regionShuffleRowArmed).toBeNull();
+        expect(swapped.powersUsedThisRun).toBe(true);
+        expect(swapped.shuffleUsedThisFloor).toBe(true);
+        expect(swapped.shuffleNonce).toBe(1);
+        expect(swapped.pinnedTileIds).toEqual([]);
+        expect(swapped.recallFocus).toBe(0);
+        expect(swapped.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 'b2']));
+        expect(swapped.stats.shufflesUsed).toBe(1);
+        expect(swapped.board!.tiles.map((item) => item.id)).toEqual(['b2', 'a2', 'b1', 'a1']);
+    });
+
+    it('uses the free row-shuffle relic charge for tile swaps before spending normal charges', () => {
+        const swapped = applyTileSwap(run({
+            regionShuffleCharges: 1,
+            regionShuffleFreeThisFloor: true,
+            relicIds: ['region_shuffle_free_first']
+        }), 'a1', 'b1');
+
+        expect(swapped.regionShuffleCharges).toBe(1);
+        expect(swapped.regionShuffleFreeThisFloor).toBe(false);
+    });
+
+    it('refuses tile swaps while blocked by state, contract, or target legality', () => {
+        const flipped = run({ board: { ...defaultBoard(), flippedTileIds: ['a1'] } });
+        expect(applyTileSwap(flipped, 'a1', 'b1')).toBe(flipped);
+
+        const noCharge = run({ regionShuffleCharges: 0 });
+        expect(applyTileSwap(noCharge, 'a1', 'b1')).toBe(noCharge);
+
+        const noShuffle = run({ activeContract: { noShuffle: true } as RunState['activeContract'] });
+        expect(applyTileSwap(noShuffle, 'a1', 'b1')).toBe(noShuffle);
+
+        const matchedTile = run({ board: board([tile('a1', 'A', 'matched'), tile('b1', 'B')]) });
+        expect(applyTileSwap(matchedTile, 'a1', 'b1')).toBe(matchedTile);
     });
 
     it('reveals a deterministic hidden non-decoy pair for flash pair', () => {

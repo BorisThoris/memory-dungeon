@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 5;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 30;
+export const GAME_RULES_VERSION = 32;
 export const INITIAL_LIVES = 4;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MAX_LIVES = 5;
@@ -565,7 +565,16 @@ export type DungeonCardKind =
     | 'shop'
     | 'room';
 export type HazardTileKind = 'shuffle_snare' | 'cascade_cache' | 'mirror_decoy' | 'fragile_cache' | 'toll_cache' | 'fuse_cache';
-export type TileTraitKind = 'echo' | 'volatile' | 'mirror' | 'cursed' | 'sealed' | 'heavy';
+export type TileTraitKind =
+    | 'echo'
+    | 'volatile'
+    | 'mirror'
+    | 'cursed'
+    | 'sealed'
+    | 'heavy'
+    | 'drift'
+    | 'conduit'
+    | 'stasis';
 export type DungeonCardState = 'hidden' | 'revealed' | 'resolved';
 export type DungeonBossId = 'trap_warden' | 'rush_sentinel' | 'treasure_keeper' | 'spire_observer';
 export type EnemyHazardKind = 'sentinel' | 'stalker' | 'warden' | 'observer';
@@ -820,8 +829,8 @@ export interface RunState {
     pinnedTileIds: string[];
     /**
      * Set when the player uses a **meta power or assist** that disqualifies the perfect-clear achievement
-     * (`ACH_PERFECT_CLEAR`): full-board shuffle, row shuffle, destroy, peek, undo resolving, gambit third pick,
-     * stray remove, flash pair, wild match, etc. Pins do **not** set this flag.
+     * (`ACH_PERFECT_CLEAR`): full-board shuffle, row shuffle, tile swap, destroy, peek, undo resolving,
+     * gambit third pick, stray remove, flash pair, wild match, etc. Pins do **not** set this flag.
      */
     powersUsedThisRun: boolean;
     timerState: RunTimerState;
@@ -940,11 +949,11 @@ export interface RunState {
     flashPairCharges: number;
     /** Tile ids temporarily shown by flash pair (ms handled in renderer/timer). */
     flashPairRevealedTileIds: string[];
-    /** GP-H01: charges for shuffling a single row. */
+    /** GP-H01: charges for shuffling a single row or swapping two hidden tiles. */
     regionShuffleCharges: number;
     /** GP-H01: arm row index or null. */
     regionShuffleRowArmed: number | null;
-    /** First region shuffle this floor free when relic (GP-R03). */
+    /** First region shuffle or tile swap this floor free when relic (GP-R03). */
     regionShuffleFreeThisFloor: boolean;
     /** GP-C01: cumulative pins placed this run (for maxPinsTotalRun contract). */
     pinsPlacedCountThisRun: number;

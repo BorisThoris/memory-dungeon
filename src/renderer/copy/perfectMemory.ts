@@ -3,7 +3,7 @@
  * Align with `powersUsedThisRun` on `RunState` and `mechanics-encyclopedia`; pins do not disqualify.
  */
 export const PERFECT_MEMORY_BASE_RULES =
-    'Perfect Memory unlocks when your last cleared level had zero mismatches and you never used disallowed powers that run: shuffle (full-board or row/region), destroy pair, peek, undo resolve, gambit, stray remove, flash pair, or wild match. Pins are allowed.';
+    'Perfect Memory unlocks when your last cleared level had zero mismatches and you never used disallowed powers that run: shuffle (full-board or row/region), tile swap, destroy pair, peek, undo resolve, gambit, stray remove, flash pair, or wild match. Pins are allowed.';
 
 /** Inventory / long-form hint paragraphs. */
 export const perfectMemoryInventoryHint = (

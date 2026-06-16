@@ -12,6 +12,7 @@ import {
     EXIT_PAIR_KEY,
     SHOP_PAIR_KEY
 } from './tile-identity';
+import { getDungeonExitStatus } from './dungeon-board-status';
 
 const tile = (id: string, pairKey: string, overrides: Partial<Tile> = {}): Tile => ({
     id,
@@ -209,5 +210,54 @@ describe('createDungeonExitActivationTransition', () => {
         expect(transition?.run.dungeonKeys.iron).toBe(0);
         expect(transition?.run.dungeonGatewaysUsed).toBe(1);
         expect(transition?.run.pendingRouteCardPlan?.routeType).toBe('safe');
+    });
+});
+
+describe('getDungeonExitStatus softlock prevention', () => {
+    it('prefers the primary lever exit over a revealed locked alternate exit', () => {
+        const base = createNewRun(0, { runSeed: 25 });
+        const board = {
+            ...createBoard([
+                tile('alternate-exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'revealed',
+                    dungeonExitLockKind: 'iron',
+                    dungeonRouteType: 'greed'
+                }),
+                tile('primary-exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'revealed',
+                    dungeonExitLockKind: 'lever',
+                    dungeonExitRequiredLeverCount: 1,
+                    dungeonRouteType: 'safe'
+                }),
+                tile('lever-a', 'lever', {
+                    state: 'matched',
+                    dungeonCardKind: 'lever',
+                    dungeonCardState: 'resolved',
+                    dungeonCardEffectId: 'lever_floor'
+                }),
+                tile('lever-b', 'lever', {
+                    state: 'matched',
+                    dungeonCardKind: 'lever',
+                    dungeonCardState: 'resolved',
+                    dungeonCardEffectId: 'lever_floor'
+                })
+            ]),
+            dungeonExitTileId: 'primary-exit',
+            dungeonExitLockKind: 'lever' as const,
+            dungeonExitRequiredLeverCount: 1,
+            dungeonLeverCount: 1
+        };
+        const run: RunState = { ...base, board, dungeonKeys: { iron: 0, treasure: 0, boss: 0 }, dungeonMasterKeys: 0 };
+
+        const status = getDungeonExitStatus(run);
+
+        expect(status.exitTile?.id).toBe('primary-exit');
+        expect(status.lockKind).toBe('lever');
+        expect(status.canActivate).toBe(true);
+        expect(status.lockedReason).toBeNull();
     });
 });

@@ -106,7 +106,8 @@
 | Free shuffle per floor (relic) | `freeShuffleThisFloor` | — | [epic-relics](./epic-relics.md) |
 | Scholar: shuffle used flag | `shuffleUsedThisFloor` | — | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | Region shuffle | `canRegionShuffle`, `canRegionShuffleRow`, `armRegionShuffleRow`, `applyRegionShuffle` | `armRegionShuffleRowPick`, `shuffleRegionRow` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| Region charges / arm row / free first | `regionShuffleCharges`, `regionShuffleRowArmed`, `regionShuffleFreeThisFloor` | — | [epic-relics](./epic-relics.md) |
+| Tile swap | `canSwapHiddenTiles`, `applyTileSwap` | `toggleTileSwapArmed`, `pressTile` | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| Region charges / arm row / free first | `regionShuffleCharges`, `regionShuffleRowArmed`, `regionShuffleFreeThisFloor`; also spent by tile swap | — | [epic-relics](./epic-relics.md) |
 | Destroy pair | `applyDestroyPair`, `canDestroyPair` | `pressTile` when armed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | Destroy-denied route rewards | `applyDestroyPair` clears route metadata before reward resolution | `pressTile` when armed | [epic-route-world-pipeline](./epic-route-world-pipeline.md) |
 | Destroy charges | `destroyPairCharges` | — | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
@@ -286,9 +287,9 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `parasiteWardRemaining` | Relic ward vs parasite | [epic-relics](./epic-relics.md), [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | `flashPairCharges` | Practice / wild flash reveal | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `flashPairRevealedTileIds` | Tiles shown by flash | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| `regionShuffleCharges` | Row shuffle budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| `regionShuffleCharges` | Row shuffle / tile swap budget | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `regionShuffleRowArmed` | Pending row index | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
-| `regionShuffleFreeThisFloor` | Relic free row shuffle | [epic-relics](./epic-relics.md) |
+| `regionShuffleFreeThisFloor` | Relic free row shuffle or tile swap | [epic-relics](./epic-relics.md) |
 | `pinsPlacedCountThisRun` | Contract pin cap | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) |
 | `findablesClaimedThisFloor` | Successful findable pickup matches this floor | [epic-mutators](./epic-mutators.md) |
 | `findablesTotalThisFloor` | Total pickup pairs spawned this floor (claimed or not) | [epic-mutators](./epic-mutators.md) |
@@ -341,7 +342,7 @@ Nested under `RunState.stats`. Drives score display, rating, and HUD.
 | `perfectClears` | Floors with zero tries | [epic-scoring-objectives](./epic-scoring-objectives.md) |
 | `guardTokens` | Mismatch buffer tokens | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | `comboShards` | Combo shard progress toward rewards | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
-| `shufflesUsed` | Full shuffles consumed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
+| `shufflesUsed` | Position-changing shuffle/swap powers consumed | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 | `pairsDestroyed` | Pairs removed via destroy power | [epic-powers-and-interactions](./epic-powers-and-interactions.md) |
 
 ---

@@ -12,6 +12,8 @@ interface TestState {
     settings: Settings;
     settingsReturnView: ViewState;
     subscreenReturnView: ViewState;
+    tileSwapArmed: boolean;
+    tileSwapFirstTileId: string | null;
     view: ViewState;
 }
 
@@ -24,6 +26,8 @@ const createHarness = (initialState?: Partial<TestState>) => {
         settings: createDefaultSaveData().settings,
         settingsReturnView: 'playing',
         subscreenReturnView: 'inventory',
+        tileSwapArmed: true,
+        tileSwapFirstTileId: 'stale-tile',
         view: 'playing',
         ...initialState
     };
@@ -65,6 +69,8 @@ describe('runLifecycleController', () => {
             runStartSaveData: null,
             settingsReturnView: 'menu',
             subscreenReturnView: 'menu',
+            tileSwapArmed: false,
+            tileSwapFirstTileId: null,
             view: 'menu'
         });
     });
