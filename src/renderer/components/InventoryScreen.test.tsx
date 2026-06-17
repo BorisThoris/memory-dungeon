@@ -55,6 +55,40 @@ describe('InventoryScreen REG-079 run inventory model', () => {
         expect(screen.getByTestId('inventory-build-identity')).toHaveTextContent('Scrying Spark');
     });
 
+    it('shows active trait-build rewards enabled by drafted relics', () => {
+        currentRun = {
+            ...currentRun,
+            relicIds: ['chapter_compass', 'combo_shard_plus_step', 'region_shuffle_free_first']
+        };
+        render(<InventoryScreen />);
+
+        expect(screen.getByTestId('inventory-trait-builds')).toHaveTextContent('Conduit Cartographer');
+        expect(screen.getByTestId('inventory-trait-builds')).toHaveTextContent('Sealed Catalyst');
+        expect(screen.getByTestId('inventory-trait-builds')).toHaveTextContent('Drift Routing');
+    });
+
+    it('shows active durable reward perks claimed from route drafts', () => {
+        currentRun = {
+            ...currentRun,
+            rewardPerkIds: ['echo_conduit_double', 'hazard_banish_per_floor']
+        };
+        render(<InventoryScreen />);
+
+        expect(screen.getByTestId('inventory-reward-perks')).toHaveTextContent('Echo doubles beside Conduit');
+        expect(screen.getByTestId('inventory-reward-perks')).toHaveTextContent('hazard banish charge each floor');
+    });
+
+    it('shows the selected starting loadout identity when present', () => {
+        currentRun = {
+            ...currentRun,
+            startingLoadoutId: 'route_tactician'
+        };
+        render(<InventoryScreen />);
+
+        expect(screen.getByTestId('inventory-starting-loadout')).toHaveTextContent('Route Tactician');
+        expect(screen.getByTestId('inventory-starting-loadout')).toHaveTextContent('Move trait pairs into adjacency');
+    });
+
     it('shows run-scoped loadout and consumable stack rules', () => {
         render(<InventoryScreen />);
 

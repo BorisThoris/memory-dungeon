@@ -102,7 +102,7 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         gameMode: run.gameMode,
         relicIds: run.relicIds
     });
-    const runForNextMemorize: RunState = { ...run, activeMutators: nextActiveMutators };
+    const runForNextMemorize: RunState = { ...run, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);
     const memorizeWithBonus = baseMemorizeMs + run.pendingMemorizeBonusMs;
 

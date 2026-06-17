@@ -13,10 +13,12 @@ import type {
     RelicOfferServiceId,
     RelicOfferServiceState,
     RouteNodeType,
-    RunState
+    RunState,
+    TileTraitKind
 } from './contracts';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { hashStringToSeed } from './rng';
+import { getTraitBuildRewardRowsForRelic } from './trait-build-rewards';
 import { pickWeightedWithoutReplacement } from './weightedPick';
 
 /** First floor (after clear) that can trigger a relic offer. */
@@ -63,6 +65,7 @@ export interface RelicDraftContext {
     routeType: RouteNodeType | null;
     routePressure: 'none' | RouteNodeType;
     routeReasonSource: 'pending_route' | 'active_board' | null;
+    activeTraitKinds: TileTraitKind[];
     activeOrAcceptedRiskWager: boolean;
     favorNearRelicPick: boolean;
     hasChapterCompass: boolean;
@@ -267,6 +270,14 @@ const SAFE_ROUTE_RELICS = new Set<RelicId>([
     'region_shuffle_free_first',
     'peek_charge_plus_one'
 ]);
+
+const getActiveTraitKinds = (run: RunState): TileTraitKind[] => [
+    ...new Set(
+        (run.board?.tiles ?? [])
+            .map((tile) => tile.tileTraitKind)
+            .filter((kind): kind is TileTraitKind => kind != null)
+    )
+];
 
 const hasAnyMutator = (mutators: readonly MutatorId[], ids: readonly MutatorId[]): boolean =>
     ids.some((id) => mutators.includes(id));
@@ -484,6 +495,7 @@ export const getRelicDraftContext = (run: RunState, clearedFloor: number): Relic
                 : isScheduledEndless && activeRouteType
                   ? 'active_board'
                   : null,
+        activeTraitKinds: getActiveTraitKinds(run),
         activeOrAcceptedRiskWager: isScheduledEndless && run.endlessRiskWager != null,
         favorNearRelicPick: isScheduledEndless && run.relicFavorProgress >= 2,
         hasChapterCompass: run.relicIds.includes('chapter_compass')
@@ -554,8 +566,21 @@ const getRouteRelicDraftReason = (id: RelicId, context: RelicDraftContext): stri
     return null;
 };
 
+const getTraitBuildRelicDraftReason = (id: RelicId, context: RelicDraftContext): string | null => {
+    if (!context.isScheduledEndless || context.activeTraitKinds.length === 0) {
+        return null;
+    }
+    const activeTraits = new Set(context.activeTraitKinds);
+    const row = getTraitBuildRewardRowsForRelic(id).find((candidate) =>
+        candidate.traitKinds.some((traitKind) => activeTraits.has(traitKind))
+    );
+    return row ? `Supports ${row.label}` : null;
+};
+
 export const getRelicDraftReason = (id: RelicId, context: RelicDraftContext): string | null =>
-    getHardRelicDraftReason(id, context) ?? getRouteRelicDraftReason(id, context);
+    getHardRelicDraftReason(id, context) ??
+    getRouteRelicDraftReason(id, context) ??
+    getTraitBuildRelicDraftReason(id, context);
 
 export const getContextualRelicDraftWeight = (
     id: RelicId,
@@ -607,6 +632,15 @@ export const getContextualRelicDraftWeight = (
     }
     if (context.routeType === 'safe' && SAFE_ROUTE_RELICS.has(id)) {
         multiplier *= 1.22;
+    }
+    if (context.activeTraitKinds.length > 0) {
+        const activeTraits = new Set(context.activeTraitKinds);
+        const traitBuildMatches = getTraitBuildRewardRowsForRelic(id).filter((row) =>
+            row.traitKinds.some((traitKind) => activeTraits.has(traitKind))
+        ).length;
+        if (traitBuildMatches > 0) {
+            multiplier *= 1 + Math.min(0.7, traitBuildMatches * 0.22);
+        }
     }
     if (id === 'chapter_compass' && getRelicDraftReason(id, context) != null) {
         multiplier *= 1.45;

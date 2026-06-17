@@ -219,17 +219,17 @@ export const getLongRunShopStockPools = (): LongRunShopStockPool[] => [
         source: 'floor_clear_shop',
         routeType: null,
         nodeKind: null,
-        itemIds: ['heal_life', 'peek_charge', 'destroy_charge', 'iron_key'],
+        itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key'],
         rerollPolicy: 'one deterministic reroll per visit',
-        previewCopy: 'Floor-clear shops sell recovery and basic run tools.'
+        previewCopy: 'Floor-clear shops sell recovery, trait routing, and basic run tools.'
     },
     {
         source: 'board_shop',
         routeType: null,
         nodeKind: 'shop',
-        itemIds: ['heal_life', 'peek_charge', 'destroy_charge', 'iron_key', 'master_key'],
+        itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key', 'master_key'],
         rerollPolicy: 'one deterministic reroll per board vendor',
-        previewCopy: 'Board vendors add master-key depth after early floors.'
+        previewCopy: 'Board vendors add trait-routing and master-key depth after early floors.'
     },
     {
         source: 'route_shop',
@@ -251,7 +251,7 @@ export const getLongRunShopStockPools = (): LongRunShopStockPool[] => [
         source: 'event_hook',
         routeType: 'mystery',
         nodeKind: 'event',
-        itemIds: ['peek_charge', 'destroy_charge', 'iron_key'],
+        itemIds: ['peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key'],
         rerollPolicy: 'event choices are deterministic by seed',
         previewCopy: 'Event hooks trade uncertainty for information and tactical charges.'
     },

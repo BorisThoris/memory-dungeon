@@ -28,6 +28,9 @@ export const createNextFloorRunState = (
 ): RunState => {
     const nextBoard = options.board;
 
+    const hasRewardPerk = (id: NonNullable<RunState['rewardPerkIds']>[number]): boolean =>
+        (run.rewardPerkIds ?? []).includes(id);
+
     return {
         ...run,
         status: 'memorize',
@@ -40,12 +43,14 @@ export const createNextFloorRunState = (
         debugPeekActive: false,
         pendingMemorizeBonusMs: 0,
         pinnedTileIds: [],
-        destroyPairCharges: run.destroyPairCharges,
+        destroyPairCharges:
+            run.destroyPairCharges + (hasRewardPerk('hazard_banish_per_floor') && !run.activeContract?.noDestroy ? 1 : 0),
         parasiteFloors: options.parasiteFloors,
         parasiteWardRemaining: options.parasiteWardRemaining,
         stickyBlockIndex: null,
         freeShuffleThisFloor: run.relicIds.includes('first_shuffle_free_per_floor'),
-        regionShuffleFreeThisFloor: run.relicIds.includes('region_shuffle_free_first'),
+        regionShuffleFreeThisFloor:
+            run.relicIds.includes('region_shuffle_free_first') || hasRewardPerk('free_first_swap_per_floor'),
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,
         gambitThirdFlipUsed: false,

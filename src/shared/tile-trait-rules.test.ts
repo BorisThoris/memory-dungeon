@@ -254,6 +254,150 @@ describe('tile trait rules', () => {
         expect(effect.peekChargeGain).toBe(1);
     });
 
+    it('lets reward perks turn Echo, trait streaks, and Cursed openers into build engines', () => {
+        const board = makeBoard(
+            [
+                makeTile('e1', 'e', 'E', { tileTraitKind: 'echo', state: 'flipped' }),
+                makeTile('e2', 'e', 'E', { tileTraitKind: 'echo', state: 'flipped' }),
+                makeTile('c1', 'conduit', 'C', { tileTraitKind: 'conduit' }),
+                makeTile('s1', 'sealed', 'S', { tileTraitKind: 'sealed' }),
+                makeTile('x1', 'x', 'X'),
+                makeTile('x2', 'x', 'X')
+            ],
+            { columns: 3, rows: 2 }
+        );
+        const run = makeRun(board.tiles, {
+            board,
+            rewardPerkIds: ['echo_conduit_double', 'trait_streak_toolkit', 'cursed_opener_greed'],
+            stats: { ...makeRun(board.tiles).stats, currentStreak: 2 }
+        });
+
+        const echoEffect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[0]!, board.tiles[1]!],
+            source: 'match'
+        });
+        const cursedEffect = resolveTileTraitEffects({
+            run: { ...run, matchResolutionsThisFloor: 0 },
+            board,
+            sourceTiles: [
+                makeTile('curse-a', 'curse', 'C', { tileTraitKind: 'cursed', state: 'flipped' }),
+                makeTile('curse-b', 'curse', 'C', { tileTraitKind: 'cursed', state: 'flipped' })
+            ],
+            source: 'match'
+        });
+
+        expect(echoEffect.peekChargeGain).toBe(2);
+        expect(echoEffect.comboShardGain).toBe(2);
+        expect(echoEffect.flashPairChargeGain).toBe(1);
+        expect(echoEffect.interactionTags).toEqual(
+            expect.arrayContaining(['reward-perk:echo-conduit-double', 'reward-perk:trait-streak-flash'])
+        );
+        expect(cursedEffect.shopGoldGain).toBe(1);
+        expect(cursedEffect.scoreBonus).toBe(40);
+        expect(cursedEffect.interactionTags).toContain('reward-perk:cursed-opener-greed');
+    });
+
+    it('applies trait streak flash-pair perk through normal two-card resolution', () => {
+        const board = makeBoard([
+            makeTile('e1', 'e', 'E', { tileTraitKind: 'echo' }),
+            makeTile('e2', 'e', 'E', { tileTraitKind: 'echo' })
+        ]);
+        const run = makeRun(board.tiles, {
+            board,
+            flashPairCharges: 0,
+            rewardPerkIds: ['trait_streak_toolkit'],
+            stats: { ...makeRun(board.tiles).stats, currentStreak: 2 }
+        });
+
+        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'e1'), 'e2'));
+
+        expect(resolved.flashPairCharges).toBe(1);
+    });
+
+    it('lets relic choices amplify trait-combo play patterns', () => {
+        const board = makeBoard(
+            [
+                makeTile('c1', 'conduit', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
+                makeTile('c2', 'conduit', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
+                makeTile('e1', 'echo', 'E', { tileTraitKind: 'echo' }),
+                makeTile('s1', 'sealed', 'S', { tileTraitKind: 'sealed' }),
+                makeTile('d1', 'drift', 'D', { tileTraitKind: 'drift', state: 'flipped' }),
+                makeTile('d2', 'drift', 'D', { tileTraitKind: 'drift', state: 'flipped' })
+            ],
+            { columns: 3, rows: 2 }
+        );
+        const run = makeRun(board.tiles, {
+            board,
+            relicIds: ['chapter_compass', 'combo_shard_plus_step', 'region_shuffle_free_first']
+        });
+
+        const conduitEffect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[0]!, board.tiles[1]!],
+            source: 'match'
+        });
+        const sealedEffect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [{ ...board.tiles[3]!, state: 'flipped' }, { ...board.tiles[3]!, id: 's2', state: 'flipped' }],
+            source: 'match'
+        });
+        const driftEffect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[4]!, board.tiles[5]!],
+            source: 'match'
+        });
+
+        expect(conduitEffect.peekChargeGain).toBe(2);
+        expect(conduitEffect.scoreBonus).toBe(46);
+        expect(conduitEffect.interactionTags).toEqual(expect.arrayContaining(['chapter-compass:conduit-map']));
+        expect(sealedEffect.comboShardGain).toBe(2);
+        expect(sealedEffect.interactionTags).toContain('catalyst-thread:sealed-engine');
+        expect(driftEffect.regionShuffleChargeGain).toBe(2);
+        expect(driftEffect.scoreBonus).toBe(10);
+        expect(driftEffect.interactionTags).toContain('row-compass:drift-routing');
+    });
+
+    it('turns trait relic overflow into score instead of wasting capped rewards', () => {
+        const board = makeBoard(
+            [
+                makeTile('m1', 'mirror', 'M', { tileTraitKind: 'mirror', state: 'flipped' }),
+                makeTile('m2', 'mirror', 'M', { tileTraitKind: 'mirror', state: 'flipped' }),
+                makeTile('s1', 'sealed', 'S', { tileTraitKind: 'sealed', state: 'flipped' }),
+                makeTile('s2', 'sealed', 'S', { tileTraitKind: 'sealed', state: 'flipped' })
+            ],
+            { columns: 2, rows: 2 }
+        );
+        const run = makeRun(board.tiles, {
+            board,
+            relicIds: ['guard_token_plus_one', 'combo_shard_plus_step'],
+            stats: { ...makeRun(board.tiles).stats, guardTokens: 2, comboShards: 2 }
+        });
+
+        const mirrorEffect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[0]!, board.tiles[1]!],
+            source: 'match'
+        });
+        const sealedEffect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[2]!, board.tiles[3]!],
+            source: 'match'
+        });
+
+        expect(mirrorEffect.guardTokenGain).toBe(1);
+        expect(mirrorEffect.scoreBonus).toBe(20);
+        expect(mirrorEffect.interactionTags).toContain('warden-sigil:mirror-ward');
+        expect(sealedEffect.comboShardGain).toBe(0);
+        expect(sealedEffect.scoreBonus).toBe(18);
+    });
+
     it('lets older traits interact through nearby trait layout', () => {
         const board = makeBoard(
             [
@@ -339,6 +483,31 @@ describe('tile trait rules', () => {
         expect(matchEffect.scoreBonus).toBe(35);
         expect(matchEffect.interactionTags).toContain('cursed:volatile-greed');
         expect(missPenalty).toMatchObject({ triesDelta: 1, recallMistakesDelta: 1 });
+    });
+
+    it('lets wager surety buffer cursed plus volatile miss pressure without removing recall pressure', () => {
+        const board = makeBoard(
+            [
+                makeTile('c1', 'c', 'C', { tileTraitKind: 'cursed', state: 'flipped' }),
+                makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile' }),
+                makeTile('x1', 'x', 'X', { state: 'flipped' }),
+                makeTile('y1', 'y', 'Y')
+            ],
+            { columns: 2, rows: 2 }
+        );
+        const run = makeRun(board.tiles, { board, relicIds: ['wager_surety'] });
+        const effect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[0]!, board.tiles[2]!],
+            source: 'mismatch'
+        });
+
+        expect(effect.triesDelta).toBe(0);
+        expect(effect.recallMistakesDelta).toBe(1);
+        expect(effect.interactionTags).toEqual(
+            expect.arrayContaining(['cursed:volatile-danger', 'wager-surety:cursed-buffer'])
+        );
     });
 
     it('lets stasis buffer sealed mismatch drain and recall pressure', () => {

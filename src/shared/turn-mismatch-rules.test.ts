@@ -117,6 +117,28 @@ describe('turn mismatch rules', () => {
         expect(resolved.stickyBlockIndex).toBeNull();
     });
 
+    it('adds boss identity mismatch pressure on boss floors', () => {
+        const b = board([tile('a'), tile('b')], {
+            floorTag: 'boss',
+            dungeonBossId: 'spire_observer'
+        });
+        const base = run(b, {
+            stats: { ...run(b).stats, tries: 1, mismatches: 0 }
+        });
+
+        const resolved = resolveMismatchTurnTransition({
+            run: base,
+            board: b,
+            tileIds: ['a', 'b'],
+            sourceTiles: b.tiles,
+            triesDelta: 1,
+            decoyTouched: false
+        });
+
+        expect(resolved.stats.tries).toBe(3);
+        expect(resolved.stats.mismatches).toBe(1);
+    });
+
     it('tracks trait mismatch and volatile shuffle counters', () => {
         const b = board([
             tile('volatile-a', 'flipped', { pairKey: 'volatile', tileTraitKind: 'volatile' }),

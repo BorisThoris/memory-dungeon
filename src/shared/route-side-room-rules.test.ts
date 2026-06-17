@@ -67,4 +67,27 @@ describe('route side-room rules', () => {
             sideRoom: bonusRun.sideRoom
         });
     });
+
+    it('opens bonus side rooms as deterministic reward drafts and claims the clicked reward', () => {
+        const bonusRun = createPlayablePathFixture('sideRoomSkip').run!;
+        const choices = bonusRun.sideRoom!.choices!;
+
+        expect(bonusRun.sideRoom).toMatchObject({ kind: 'bonus_reward' });
+        expect(choices.length).toBeGreaterThan(1);
+        expect(choices.filter((choice) => choice.primary)).toHaveLength(1);
+
+        const traitChoice =
+            choices.find((choice) => /trait|row\/swap/i.test(`${choice.label} ${choice.detail}`)) ??
+            choices.find((choice) => choice.primary)!;
+        const claimed = claimRouteSideRoomChoice(bonusRun, traitChoice.id);
+
+        expect(claimed.sideRoom).toBeNull();
+        expect(
+                claimed.regionShuffleCharges > bonusRun.regionShuffleCharges ||
+                claimed.peekCharges > bonusRun.peekCharges ||
+                claimed.shopGold > bonusRun.shopGold ||
+                claimed.dungeonKeys.iron !== bonusRun.dungeonKeys.iron ||
+                (claimed.rewardPerkIds?.length ?? 0) > (bonusRun.rewardPerkIds?.length ?? 0)
+        ).toBe(true);
+    });
 });

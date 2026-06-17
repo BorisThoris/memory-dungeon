@@ -107,6 +107,7 @@ export type ViewState =
 export type SubscreenReturnView = Exclude<ViewState, 'boot' | 'settings'>;
 
 export type GameMode = 'endless' | 'daily' | 'puzzle' | 'gauntlet' | 'meditation';
+export type StartingLoadoutId = 'memory_scout' | 'route_tactician' | 'cursebreaker' | 'vaultbreaker';
 
 export type PuzzleDifficulty = 'starter' | 'standard' | 'advanced';
 export type PuzzleGoal = 'clear_all' | 'perfect_clear' | 'flip_par';
@@ -240,7 +241,14 @@ export interface RelicOfferServiceState {
     usedThisRound: number;
 }
 
-export type RunShopItemId = 'heal_life' | 'peek_charge' | 'destroy_charge' | 'iron_key' | 'master_key';
+export type RunShopItemId =
+    | 'heal_life'
+    | 'peek_charge'
+    | 'region_shuffle_charge'
+    | 'destroy_charge'
+    | 'trait_cleanse'
+    | 'iron_key'
+    | 'master_key';
 export type RunShopItemCategory = 'consumable' | 'service';
 export type RunShopOfferAvailability = 'available' | 'sold_out' | 'insufficient_funds' | 'incompatible';
 
@@ -748,7 +756,26 @@ export interface DungeonRunMapState {
     nodes: DungeonRunNode[];
 }
 
-export type BonusRewardId = 'chest_gold' | 'secret_favor' | 'bonus_shards' | 'supply_cache';
+export type BonusRewardId =
+    | 'chest_gold'
+    | 'secret_favor'
+    | 'bonus_shards'
+    | 'supply_cache'
+    | 'trait_toolkit'
+    | 'key_insurance'
+    | 'hazard_ward'
+    | 'free_swap_floor'
+    | 'echo_conduit_lens'
+    | 'trait_streak_lens'
+    | 'cursed_opener_contract'
+    | 'hazard_banisher';
+
+export type RewardPerkId =
+    | 'free_first_swap_per_floor'
+    | 'echo_conduit_double'
+    | 'trait_streak_toolkit'
+    | 'cursed_opener_greed'
+    | 'hazard_banish_per_floor';
 
 export interface BonusRewardLedger {
     claimedInstanceIds: string[];
@@ -840,6 +867,8 @@ export interface RunState {
     runSeed: number;
     runRulesVersion: number;
     gameMode: GameMode;
+    /** Optional starting archetype that shapes early resources and first-floor decisions. */
+    startingLoadoutId?: StartingLoadoutId | null;
     /** Increments each time the player shuffles (deterministic shuffle order). */
     shuffleNonce: number;
     activeMutators: MutatorId[];
@@ -873,6 +902,8 @@ export interface RunState {
     dungeonRun: DungeonRunMapState;
     /** Anti-grind ledger for route side-room bonus rewards. */
     bonusRewardLedger: BonusRewardLedger;
+    /** Durable perks claimed from route reward drafts; optional for old run snapshots/tests. */
+    rewardPerkIds?: RewardPerkId[];
     /**
      * Copied from save at run start: meta unlock grants +1 relic pick at **each** milestone (`relicShrineExtraPickUnlocked`).
      */

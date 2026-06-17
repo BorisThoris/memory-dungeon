@@ -35,7 +35,15 @@ const INTERACTION_DESCRIPTIONS: Record<TileTraitInteractionTag, string> = {
     'conduit:danger-recall': 'Miss Conduit near Volatile or Cursed and the nearby danger deepens recall pressure.',
     'stasis:sealed-buffer': 'Place Stasis beside Sealed to stop the Sealed miss from draining peek or deepening recall.',
     'stasis:cursed-volatile-buffer': 'Place Stasis near a Cursed and Volatile cluster to buffer the extra recall danger on a miss.',
-    'cursed:volatile-danger': 'Miss Cursed beside Volatile and the greedy cluster adds recall pressure.'
+    'cursed:volatile-danger': 'Miss Cursed beside Volatile and the greedy cluster adds recall pressure.',
+    'chapter-compass:conduit-map': 'Draft Chapter Compass to make Conduit clusters pay extra peek value and score.',
+    'catalyst-thread:sealed-engine': 'Draft Catalyst Thread to make Sealed matches stronger, with capped shards converting to score.',
+    'row-compass:drift-routing': 'Draft Row Compass to make Drift matches generate extra row/swap routing value.',
+    'warden-sigil:mirror-ward': 'Draft Warden Sigil to make Mirror matches produce stronger guard or capped-guard score.',
+    'wager-surety:cursed-buffer': 'Draft Wager Surety to soften Cursed plus Volatile miss tries while keeping recall pressure visible.',
+    'reward-perk:echo-conduit-double': 'Claim Echo Conduit Lens so Echo beside Conduit doubles its peek and adjacent Sealed shard payoff.',
+    'reward-perk:trait-streak-flash': 'Claim Trait Streak Lens so the third clean trait match creates a flash-pair charge.',
+    'reward-perk:cursed-opener-greed': 'Claim Cursed Opener Contract so the first Cursed match each floor becomes a gold and score play.'
 };
 
 export const getTileTraitCodexRows = (): TileTraitCodexRow[] =>

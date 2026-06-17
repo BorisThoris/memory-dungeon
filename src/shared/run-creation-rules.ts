@@ -8,6 +8,7 @@ import {
     type MutatorId,
     type RelicId,
     type RunState,
+    type StartingLoadoutId,
     type Tile,
     type WeakerShuffleMode
 } from './contracts';
@@ -24,6 +25,7 @@ import { getMemorizeDurationForRun } from './scoring-rules';
 import { createSessionStats } from './session-stats-rules';
 import { createTimerState } from './run-timer-rules';
 import { buildBoard } from './board-build-rules';
+import { applyStartingLoadout } from './starting-loadouts';
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 
@@ -55,6 +57,8 @@ export interface CreateRunOptions {
     onboardingSafeFirstFloor?: boolean;
     /** Copied from save: +1 relic pick at each milestone when meta unlock is active. */
     metaRelicDraftExtraPerMilestone?: number;
+    /** Optional starting archetype/loadout for early run identity. */
+    startingLoadoutId?: StartingLoadoutId | null;
 }
 
 const randomRunSeed = (): number => Math.floor(Math.random() * 0x7fffffff);
@@ -123,9 +127,11 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         runSeed,
         runRulesVersion: rulesVersion,
         gameMode,
+        startingLoadoutId: options.startingLoadoutId ?? null,
         shuffleNonce: 0,
         activeMutators,
         relicIds: [...(options.initialRelicIds ?? [])],
+        rewardPerkIds: [],
         relicTiersClaimed: 0,
         bonusRelicPicksNextOffer: 0,
         favorBonusRelicPicksNextOffer: 0,
@@ -231,7 +237,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         enemyHazardsDefeatedThisFloor: 0
     };
 
-    let runWithRelics = run;
+    let runWithRelics = applyStartingLoadout(run, options.startingLoadoutId ?? null);
     for (const relicId of runWithRelics.relicIds) {
         runWithRelics = applyRelicImmediate(runWithRelics, relicId);
     }
@@ -241,7 +247,9 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
     return {
         ...runWithRelics,
         freeShuffleThisFloor: runWithRelics.relicIds.includes('first_shuffle_free_per_floor'),
-        regionShuffleFreeThisFloor: runWithRelics.relicIds.includes('region_shuffle_free_first'),
+        regionShuffleFreeThisFloor:
+            runWithRelics.relicIds.includes('region_shuffle_free_first') ||
+            (runWithRelics.rewardPerkIds ?? []).includes('free_first_swap_per_floor'),
         timerState: createTimerState({ memorizeRemainingMs: memorizeMs })
     };
 };

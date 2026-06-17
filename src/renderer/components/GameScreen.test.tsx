@@ -935,7 +935,7 @@ describe('GameScreen (OVR-014)', () => {
             },
             relicOffer: {
                 tier: 1,
-                options: ['extra_shuffle_charge', 'memorize_bonus_ms', 'destroy_bank_plus_one'],
+                options: ['chapter_compass', 'memorize_bonus_ms', 'destroy_bank_plus_one'],
                 picksRemaining: 2,
                 pickRound: 0,
                 favorBonusPicks: 1
@@ -955,7 +955,8 @@ describe('GameScreen (OVR-014)', () => {
         expect(getByText('Pick 1 of 2 this visit')).toBeTruthy();
         expect(getByText(/Featured-objective favor/)).toBeTruthy();
         expect(getByText(/Scholar contract/)).toBeTruthy();
-        expect(getByText(/The Saboteur: disarm, delete, reroute./)).toBeTruthy();
+        expect(getByText('Trait build: Conduit Cartographer')).toBeTruthy();
+        expect(getByText(/The Saboteur \/ The Slayer: disarm, delete, reroute./)).toBeTruthy();
         expect(getByText(/The Warden \/ The Seer: guard, absorb, stabilize./)).toBeTruthy();
         expect(gameSfxMocks.playRelicOfferOpenSfx).toHaveBeenCalledTimes(1);
     });

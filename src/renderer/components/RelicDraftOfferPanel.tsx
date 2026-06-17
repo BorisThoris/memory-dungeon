@@ -15,6 +15,7 @@ import {
     type RelicOfferServiceAction,
     type RelicDraftRarity
 } from '../../shared/relics';
+import { getTraitBuildDraftHintForRelic } from '../../shared/trait-build-rewards';
 import { relicDraftRoundAdvancedAnnouncement } from '../copy/relicDraftOffer';
 import styles from './RelicDraftOffer.module.css';
 
@@ -171,13 +172,14 @@ const RelicDraftOfferPanel = ({
                     const reason = reasonById?.[id];
                     const archetypes = getRelicArchetypeLabels(id);
                     const impactCopy = getRelicDecisionImpactCopy(id);
+                    const traitBuildHint = getTraitBuildDraftHintForRelic(id);
                     const ariaTier = relicDraftRarityLabel(row.rarity);
                     const staggerStyle: CSSProperties = {
                         '--relic-card-stagger': index
                     } as CSSProperties;
                     return (
                         <button
-                            aria-label={`${ariaTier} relic: ${desc}. ${impactCopy}${reason ? `. ${reason}` : ''}`}
+                            aria-label={`${ariaTier} relic: ${desc}. ${impactCopy}${traitBuildHint ? `. ${traitBuildHint}` : ''}${reason ? `. ${reason}` : ''}`}
                             className={`${styles.card} ${rarityClass(row.rarity)}`}
                             data-testid="relic-offer-card"
                             key={`${id}-${pickRound}`}
@@ -189,6 +191,7 @@ const RelicDraftOfferPanel = ({
                             {reason ? <span className={styles.reason}>{reason}</span> : null}
                             <span className={styles.archetypes}>{archetypes.join(' · ')}</span>
                             <span className={styles.impact}>{impactCopy}</span>
+                            {traitBuildHint ? <span className={styles.impact}>{traitBuildHint}</span> : null}
                             <p className={styles.body}>{desc}</p>
                         </button>
                     );

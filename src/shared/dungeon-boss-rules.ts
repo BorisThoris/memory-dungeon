@@ -1,4 +1,4 @@
-import type { DungeonBossId, DungeonRunNodeKind, EnemyHazardKind, EnemyHazardPattern } from './contracts';
+import type { DungeonBossId, DungeonRunNodeKind, EnemyHazardKind, EnemyHazardPattern, RunShopItemId } from './contracts';
 
 export const DUNGEON_BOSS_DEFEAT_SCORE = 70;
 
@@ -27,6 +27,14 @@ export interface DungeonBossDefinition {
     cardCopy: string;
     visualAudioPlaceholders: string[];
     reward: DungeonBossRewardHook;
+}
+
+export interface DungeonBossPressureRule {
+    bossId: DungeonBossId;
+    memorizeMsDelta: number;
+    mismatchTriesDelta: number;
+    shopPriorityItemId: RunShopItemId;
+    pressureCopy: string;
 }
 
 export const DUNGEON_BOSS_DEFINITIONS: Record<DungeonBossId, DungeonBossDefinition> = {
@@ -118,6 +126,51 @@ export const DUNGEON_BOSS_DEFINITIONS: Record<DungeonBossId, DungeonBossDefiniti
 
 export const getDungeonBossDefinition = (bossId: DungeonBossId | null | undefined): DungeonBossDefinition | null =>
     bossId ? DUNGEON_BOSS_DEFINITIONS[bossId] : null;
+
+export const DUNGEON_BOSS_PRESSURE_RULES: Record<DungeonBossId, DungeonBossPressureRule> = {
+    trap_warden: {
+        bossId: 'trap_warden',
+        memorizeMsDelta: 140,
+        mismatchTriesDelta: 0,
+        shopPriorityItemId: 'destroy_charge',
+        pressureCopy: 'Trap Warden pressure extends study time but rewards bringing trap control.'
+    },
+    rush_sentinel: {
+        bossId: 'rush_sentinel',
+        memorizeMsDelta: -120,
+        mismatchTriesDelta: 0,
+        shopPriorityItemId: 'region_shuffle_charge',
+        pressureCopy: 'Rush Sentinel shortens study time; board movement is the clean counterplay.'
+    },
+    treasure_keeper: {
+        bossId: 'treasure_keeper',
+        memorizeMsDelta: 0,
+        mismatchTriesDelta: 0,
+        shopPriorityItemId: 'iron_key',
+        pressureCopy: 'Gilded Keeper pressures locks and treasure routing; keys are favored before the fight.'
+    },
+    spire_observer: {
+        bossId: 'spire_observer',
+        memorizeMsDelta: 80,
+        mismatchTriesDelta: 1,
+        shopPriorityItemId: 'peek_charge',
+        pressureCopy: 'Mnemonist Observer gives a longer study, then punishes mismatches with extra recall pressure.'
+    }
+};
+
+export const getDungeonBossPressureRule = (
+    bossId: DungeonBossId | null | undefined
+): DungeonBossPressureRule | null => (bossId ? DUNGEON_BOSS_PRESSURE_RULES[bossId] ?? null : null);
+
+export const getActiveDungeonBossPressureRule = (
+    board: { dungeonBossId?: DungeonBossId | null; floorTag?: string | null; enemyHazards?: readonly { bossId?: DungeonBossId | null; state?: string | null }[] } | null | undefined
+): DungeonBossPressureRule | null => {
+    const bossId =
+        board?.dungeonBossId ??
+        board?.enemyHazards?.find((hazard) => hazard.bossId != null && hazard.state !== 'defeated')?.bossId ??
+        null;
+    return getDungeonBossPressureRule(bossId);
+};
 
 export interface DungeonEliteEncounterRules {
     nodeKind: 'elite';

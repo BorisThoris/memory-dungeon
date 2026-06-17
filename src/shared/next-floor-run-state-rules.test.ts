@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type RelicId } from './contracts';
+import { type RelicId, type RewardPerkId } from './contracts';
 import { createNewRun } from './game';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { createRunShopOffers } from './shop-rules';
@@ -98,5 +98,41 @@ describe('createNextFloorRunState', () => {
 
         expect(next.freeShuffleThisFloor).toBe(true);
         expect(next.regionShuffleFreeThisFloor).toBe(true);
+    });
+
+    it('restores durable reward perk floor benefits without bypassing contracts', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 16 }),
+            rewardPerkIds: ['free_first_swap_per_floor', 'hazard_banish_per_floor'] satisfies RewardPerkId[],
+            regionShuffleFreeThisFloor: false,
+            destroyPairCharges: 0
+        };
+        const noDestroyRun = {
+            ...run,
+            activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
+        };
+
+        const next = createNextFloorRunState(run, {
+            lives: run.lives,
+            activeMutators: run.activeMutators,
+            dungeonRun: run.dungeonRun,
+            board: run.board!,
+            parasiteFloors: run.parasiteFloors,
+            parasiteWardRemaining: run.parasiteWardRemaining,
+            memorizeRemainingMs: 1000
+        });
+        const noDestroyNext = createNextFloorRunState(noDestroyRun, {
+            lives: noDestroyRun.lives,
+            activeMutators: noDestroyRun.activeMutators,
+            dungeonRun: noDestroyRun.dungeonRun,
+            board: noDestroyRun.board!,
+            parasiteFloors: noDestroyRun.parasiteFloors,
+            parasiteWardRemaining: noDestroyRun.parasiteWardRemaining,
+            memorizeRemainingMs: 1000
+        });
+
+        expect(next.regionShuffleFreeThisFloor).toBe(true);
+        expect(next.destroyPairCharges).toBe(1);
+        expect(noDestroyNext.destroyPairCharges).toBe(0);
     });
 });

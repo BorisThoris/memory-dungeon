@@ -26,6 +26,27 @@ describe('scoring-rules', () => {
         expect(getMemorizeDurationForRun(meditation, 1)).toBe(Math.floor(1300 * 1.55));
     });
 
+    it('applies boss identity pressure to boss-floor memorize time', () => {
+        const base = createNewRun(0, { runSeed: 9_100 });
+        const rush = {
+            ...base,
+            board: base.board && { ...base.board, floorTag: 'boss' as const, dungeonBossId: 'rush_sentinel' as const }
+        };
+        const spire = {
+            ...base,
+            board: base.board && { ...base.board, floorTag: 'boss' as const, dungeonBossId: 'spire_observer' as const }
+        };
+
+        expect(getMemorizeDurationForRun(rush, 1)).toBe(getMemorizeDuration(1) - 120);
+        expect(getMemorizeDurationForRun(spire, 1)).toBe(getMemorizeDuration(1) + 80);
+        expect(
+            getMemorizeDurationForRun(
+                { ...base, board: base.board && { ...base.board, floorTag: 'normal' as const, dungeonBossId: 'rush_sentinel' } },
+                1
+            )
+        ).toBe(getMemorizeDuration(1));
+    });
+
     it('calculates ratings and score bonuses', () => {
         expect(calculateRating(0)).toBe('S++');
         expect(calculateRating(1)).toBe('S');

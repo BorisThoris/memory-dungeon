@@ -5,6 +5,7 @@ import {
     createBonusRewardLedger,
     previewBonusRewardClaim,
     resolveBonusRewardRoomByInstanceId,
+    rollBonusRewardDraft,
     rollBonusRewardRoom,
     getBonusRewardRows
 } from './bonus-rewards';
@@ -160,7 +161,7 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
             }
         });
 
-        expect(room.id).toBe('supply_cache');
+        expect(room.id).toBe('trait_toolkit');
         expect(room.eligible).toBe(true);
         expect(room.unavailableReason).toBeNull();
     });
@@ -205,6 +206,80 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.run.destroyPairCharges).toBe(1);
         expect(result.run.peekCharges).toBe(1);
         expect(result.feedback.gained).toEqual(expect.arrayContaining(['+1 destroy charge', '+1 peek charge', '+10 score']));
+    });
+
+    it('rolls deterministic reward drafts with build-defining trait, key, and hazard options', () => {
+        const draft = rollBonusRewardDraft({
+            runSeed: 75_102,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 6,
+            routeKind: 'treasure'
+        });
+
+        expect(draft).toHaveLength(3);
+        expect(rollBonusRewardDraft({
+            runSeed: 75_102,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 6,
+            routeKind: 'treasure'
+        }).map((reward) => reward.instanceId)).toEqual(draft.map((reward) => reward.instanceId));
+        expect(draft.map((reward) => reward.id)).toEqual(
+            expect.arrayContaining(['trait_toolkit', 'key_insurance'])
+        );
+        expect(getBonusRewardRows().find((reward) => reward.id === 'trait_toolkit')).toMatchObject({
+            label: 'Trait toolkit',
+            summaryText: '+1 row/swap charge, +1 peek charge, and +10 score.'
+        });
+    });
+
+    it('claims new reward draft rows through the same capped inventory feedback path', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_107,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 6,
+                routeKind: 'treasure'
+            }),
+            ...BONUS_REWARD_CATALOG.trait_toolkit,
+            eligible: true,
+            unavailableReason: null
+        };
+        const result = claimBonusReward(makeRun(room.runSeed, room.rulesVersion), createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.regionShuffleCharges).toBe(1);
+        expect(result.run.peekCharges).toBe(1);
+        expect(result.feedback.gained).toEqual(
+            expect.arrayContaining(['+1 row/swap charge', '+1 peek charge', '+10 score'])
+        );
+    });
+
+    it('unlocks durable reward perks from build-defining draft rows without duplicating them', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_108,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 6,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.echo_conduit_lens,
+            eligible: true,
+            unavailableReason: null
+        };
+        const run = makeRun(room.runSeed, room.rulesVersion);
+        const result = claimBonusReward(run, createBonusRewardLedger(), room);
+        const duplicate = claimBonusReward(
+            { ...run, rewardPerkIds: ['echo_conduit_double'] },
+            createBonusRewardLedger(),
+            room
+        );
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.rewardPerkIds).toContain('echo_conduit_double');
+        expect(result.feedback.gained).toEqual(
+            expect.arrayContaining(['Unlock Echo doubles beside Conduit', '+1 peek charge'])
+        );
+        expect(duplicate.feedback.gained).not.toContain('Unlock Echo doubles beside Conduit');
     });
 
     it('resolves a saved reward instance even when the current route roll picks another candidate', () => {

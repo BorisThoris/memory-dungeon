@@ -2,6 +2,7 @@ import {
     type BonusRewardId,
     type BonusRewardLedger,
     MAX_COMBO_SHARDS,
+    type RewardPerkId,
     type RunState
 } from './contracts';
 import { hashStringToSeed } from './rng';
@@ -16,6 +17,7 @@ export interface BonusRewardPayout {
     relicFavorProgress?: number;
     score?: number;
     inventoryItems?: Partial<Record<RunInventoryItemId, number>>;
+    rewardPerks?: RewardPerkId[];
 }
 
 export interface BonusRewardDefinition {
@@ -87,6 +89,94 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         antiGrindLimit: { scope: 'per_run', maxClaims: 2 },
         payout: { score: 10, inventoryItems: { destroy_charge: 1, peek_charge: 1 } },
         summaryText: '+1 destroy charge, +1 peek charge, and +10 score.'
+    },
+    trait_toolkit: {
+        id: 'trait_toolkit',
+        roomKind: 'bonus_cache',
+        label: 'Trait toolkit',
+        trigger: 'Route reward draft after trait-heavy or cache-adjacent floors.',
+        discoverability: 'Shown as a board-shaping reward choice before the next floor.',
+        eligibility: 'Floor 2+ and fewer than two trait-toolkit claims this run.',
+        antiGrindLimit: { scope: 'per_run', maxClaims: 2 },
+        payout: { score: 10, inventoryItems: { region_shuffle_charge: 1, peek_charge: 1 } },
+        summaryText: '+1 row/swap charge, +1 peek charge, and +10 score.'
+    },
+    key_insurance: {
+        id: 'key_insurance',
+        roomKind: 'bonus_cache',
+        label: 'Key insurance',
+        trigger: 'Safe, treasure, or shop-adjacent route reward draft before locked exits can spike.',
+        discoverability: 'Shown as a lock-safety reward choice before the next floor.',
+        eligibility: 'Floor 2+ and fewer than two key-insurance claims this run.',
+        antiGrindLimit: { scope: 'per_run', maxClaims: 2 },
+        payout: { shopGold: 1, score: 10, inventoryItems: { iron_key: 1 } },
+        summaryText: '+1 dungeon key, +1 shop gold, and +10 score.'
+    },
+    hazard_ward: {
+        id: 'hazard_ward',
+        roomKind: 'bonus_cache',
+        label: 'Hazard ward',
+        trigger: 'Trap, event, or mystery route reward draft before pressure-heavy floors.',
+        discoverability: 'Shown as a defensive reward choice before the next floor.',
+        eligibility: 'Floor 2+ and fewer than two hazard-ward claims this run.',
+        antiGrindLimit: { scope: 'per_run', maxClaims: 2 },
+        payout: { score: 10, inventoryItems: { destroy_charge: 1, guard_token: 1 } },
+        summaryText: '+1 destroy charge, +1 guard token, and +10 score.'
+    },
+    free_swap_floor: {
+        id: 'free_swap_floor',
+        roomKind: 'bonus_cache',
+        label: 'Free swap discipline',
+        trigger: 'Build reward draft on shop, rest, or tool-heavy route nodes.',
+        discoverability: 'Shown as a durable board-control reward before the next floor.',
+        eligibility: 'Floor 2+ and one free-swap-discipline claim this run.',
+        antiGrindLimit: { scope: 'per_run', maxClaims: 1 },
+        payout: { rewardPerks: ['free_first_swap_per_floor'], score: 15 },
+        summaryText: 'First row/swap use each floor is free, plus +15 score.'
+    },
+    echo_conduit_lens: {
+        id: 'echo_conduit_lens',
+        roomKind: 'bonus_cache',
+        label: 'Echo conduit lens',
+        trigger: 'Build reward draft after safe or mystery trait-routing floors.',
+        discoverability: 'Shown as a durable Echo/Conduit interaction reward.',
+        eligibility: 'Floor 2+ and one Echo conduit lens claim this run.',
+        antiGrindLimit: { scope: 'per_run', maxClaims: 1 },
+        payout: { rewardPerks: ['echo_conduit_double'], inventoryItems: { peek_charge: 1 } },
+        summaryText: 'Echo effects trigger twice beside Conduit, plus +1 peek charge.'
+    },
+    trait_streak_lens: {
+        id: 'trait_streak_lens',
+        roomKind: 'bonus_cache',
+        label: 'Trait streak lens',
+        trigger: 'Build reward draft after trait-heavy floors.',
+        discoverability: 'Shown as a durable clean-trait-streak reward.',
+        eligibility: 'Floor 2+ and one trait streak lens claim this run.',
+        antiGrindLimit: { scope: 'per_run', maxClaims: 1 },
+        payout: { rewardPerks: ['trait_streak_toolkit'], score: 10 },
+        summaryText: 'Every third clean trait match creates +1 flash pair, plus +10 score.'
+    },
+    cursed_opener_contract: {
+        id: 'cursed_opener_contract',
+        roomKind: 'bonus_cache',
+        label: 'Cursed opener contract',
+        trigger: 'Greed reward draft after risky route pressure.',
+        discoverability: 'Shown as a durable high-risk opener reward.',
+        eligibility: 'Floor 2+ and one cursed opener contract claim this run.',
+        antiGrindLimit: { scope: 'per_run', maxClaims: 1 },
+        payout: { rewardPerks: ['cursed_opener_greed'], shopGold: 1 },
+        summaryText: 'First clean Cursed match each floor gains extra gold and score, plus +1 shop gold.'
+    },
+    hazard_banisher: {
+        id: 'hazard_banisher',
+        roomKind: 'bonus_cache',
+        label: 'Hazard banisher',
+        trigger: 'Trap, mystery, or boss-prep reward draft.',
+        discoverability: 'Shown as a durable pressure-control reward.',
+        eligibility: 'Floor 2+ and one hazard banisher claim this run.',
+        antiGrindLimit: { scope: 'per_run', maxClaims: 1 },
+        payout: { rewardPerks: ['hazard_banish_per_floor'], inventoryItems: { destroy_charge: 1 } },
+        summaryText: 'Gain +1 destroy charge now and at each new floor.'
     }
 };
 
@@ -122,12 +212,18 @@ const normalizeBonusRewardLedger = (ledger: BonusRewardLedger): BonusRewardLedge
 
 const rewardIdsForRouteKind = (routeKind: RunMapNodeKind | 'unknown'): BonusRewardId[] => {
     if (routeKind === 'treasure') {
-        return ['chest_gold', 'supply_cache', 'secret_favor', 'bonus_shards'];
+        return ['chest_gold', 'trait_toolkit', 'key_insurance', 'free_swap_floor', 'supply_cache', 'secret_favor', 'bonus_shards'];
     }
     if (routeKind === 'event') {
-        return ['secret_favor', 'bonus_shards', 'supply_cache', 'chest_gold'];
+        return ['secret_favor', 'hazard_ward', 'trait_streak_lens', 'echo_conduit_lens', 'bonus_shards', 'supply_cache', 'chest_gold'];
     }
-    return ['bonus_shards', 'supply_cache', 'chest_gold', 'secret_favor'];
+    if (routeKind === 'shop') {
+        return ['trait_toolkit', 'free_swap_floor', 'key_insurance', 'hazard_banisher', 'supply_cache', 'chest_gold', 'secret_favor', 'bonus_shards'];
+    }
+    if (routeKind === 'rest') {
+        return ['key_insurance', 'free_swap_floor', 'bonus_shards', 'trait_toolkit', 'supply_cache', 'secret_favor'];
+    }
+    return ['bonus_shards', 'trait_toolkit', 'trait_streak_lens', 'echo_conduit_lens', 'hazard_ward', 'hazard_banisher', 'supply_cache', 'key_insurance', 'chest_gold', 'secret_favor'];
 };
 
 const nonNegativeLedgerCount = (value: unknown): number =>
@@ -200,6 +296,39 @@ export const rollBonusRewardRoom = ({
         eligible: unavailableReason === null,
         unavailableReason
     };
+};
+
+export const rollBonusRewardDraft = ({
+    runSeed,
+    rulesVersion,
+    floor,
+    routeKind = 'unknown',
+    ledger = createBonusRewardLedger(),
+    count = 3
+}: {
+    runSeed: number;
+    rulesVersion: number;
+    floor: number;
+    routeKind?: RunMapNodeKind | 'unknown';
+    ledger?: BonusRewardLedger;
+    count?: number;
+}): BonusRewardInstance[] => {
+    const safeLedger = normalizeBonusRewardLedger(ledger);
+    const candidates = rewardIdsForRouteKind(routeKind);
+    const seed = hashStringToSeed(`bonusRewardDraft:${rulesVersion}:${runSeed}:${floor}:${routeKind}`);
+    const ordered = rotateRewardCandidates(candidates, Math.abs(seed) % candidates.length);
+    const selected: BonusRewardInstance[] = [];
+    for (const id of ordered) {
+        const definition = BONUS_REWARD_CATALOG[id];
+        const instance = bonusRewardInstanceForDefinition(definition, runSeed, rulesVersion, floor, safeLedger);
+        if (instance.eligible || selected.length === 0) {
+            selected.push(instance);
+        }
+        if (selected.length >= Math.max(1, Math.min(3, Math.floor(count)))) {
+            break;
+        }
+    }
+    return selected;
 };
 
 const bonusRewardInstanceForDefinition = (
@@ -305,6 +434,29 @@ const nonNegativeFiniteAmount = (value: unknown): number =>
 const formatRewardUnit = (amount: number, singular: string, plural = `${singular}s`): string =>
     amount === 1 ? singular : plural;
 
+const REWARD_PERK_LABELS: Record<RewardPerkId, string> = {
+    free_first_swap_per_floor: 'free first row/swap each floor',
+    echo_conduit_double: 'Echo doubles beside Conduit',
+    trait_streak_toolkit: 'trait streak flash pair',
+    cursed_opener_greed: 'Cursed opener greed',
+    hazard_banish_per_floor: 'hazard banish charge each floor'
+};
+
+const REWARD_PERK_DETAILS: Record<RewardPerkId, string> = {
+    free_first_swap_per_floor: 'First row shuffle or tile swap each floor is free.',
+    echo_conduit_double: 'Echo beside Conduit grants an extra peek and repeats adjacent Sealed shard value.',
+    trait_streak_toolkit: 'Every third clean trait match banks a flash-pair charge.',
+    cursed_opener_greed: 'The first Cursed match each floor grants extra shop gold and score.',
+    hazard_banish_per_floor: 'Each new floor grants a destroy charge unless a no-destroy contract blocks it.'
+};
+
+export const getRewardPerkRows = (run: Pick<RunState, 'rewardPerkIds'>) =>
+    (run.rewardPerkIds ?? []).map((id) => ({
+        id,
+        label: REWARD_PERK_LABELS[id],
+        detail: REWARD_PERK_DETAILS[id]
+    }));
+
 const applyBonusRewardPayout = (
     run: RunState,
     payout: BonusRewardPayout
@@ -348,6 +500,13 @@ const applyBonusRewardPayout = (
     if (favorProgressGain > 0) {
         nextRun = gainFavor(nextRun, favorProgressGain);
         gained.push(`+${favorProgressGain} relic Favor progress`);
+    }
+    for (const perkId of payout.rewardPerks ?? []) {
+        if ((nextRun.rewardPerkIds ?? []).includes(perkId)) {
+            continue;
+        }
+        nextRun = { ...nextRun, rewardPerkIds: [...(nextRun.rewardPerkIds ?? []), perkId] };
+        gained.push(`Unlock ${REWARD_PERK_LABELS[perkId]}`);
     }
     for (const [itemId, amount] of Object.entries(payout.inventoryItems ?? {}) as [RunInventoryItemId, number][]) {
         const safeAmount = nonNegativeFiniteAmount(amount);

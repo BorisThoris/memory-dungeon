@@ -168,7 +168,41 @@ describe('dungeon board status', () => {
             lifecycleSource: 'moving_patrol',
             phase: 'bloodied',
             hp: 1,
-            maxHp: 3
+            maxHp: 3,
+            pressureCopy: 'Rush Sentinel shortens study time; board movement is the clean counterplay.'
+        });
+    });
+
+    it('surfaces boss pressure copy in presentation alerts', () => {
+        const board = {
+            floorTag: 'boss',
+            dungeonBossId: 'spire_observer',
+            dungeonObjectiveId: 'defeat_boss',
+            tiles: [
+                tile({
+                    id: 'boss-a',
+                    pairKey: 'boss',
+                    dungeonBossId: 'spire_observer',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardState: 'revealed',
+                    dungeonCardHp: 3,
+                    dungeonCardMaxHp: 3
+                }),
+                tile({
+                    id: 'boss-b',
+                    pairKey: 'boss',
+                    dungeonBossId: 'spire_observer',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardState: 'revealed',
+                    dungeonCardHp: 3,
+                    dungeonCardMaxHp: 3
+                })
+            ]
+        } as BoardState;
+
+        expect(getDungeonBoardPresentation(run(board))).toMatchObject({
+            bossText: 'Mnemonist Observer',
+            alertText: 'Mnemonist Observer gives a longer study, then punishes mismatches with extra recall pressure.'
         });
     });
 });

@@ -3,6 +3,7 @@ import {
     claimBonusReward,
     previewBonusRewardClaim,
     resolveBonusRewardRoomByInstanceId,
+    rollBonusRewardDraft,
     rollBonusRewardRoom
 } from './bonus-rewards';
 import { createRestShrineServices } from './rest-shrine';
@@ -38,6 +39,26 @@ const buildBonusSideRoom = (
     const rewardPreview = reward.eligible
         ? previewBonusRewardClaim(run, reward).feedback.summary
         : (reward.unavailableReason ?? 'No reward available.');
+    const draft = rollBonusRewardDraft({
+        runSeed: run.runSeed,
+        rulesVersion: run.runRulesVersion,
+        floor,
+        routeKind: nodeKind,
+        ledger: run.bonusRewardLedger,
+        count: 3
+    });
+    const primaryInstanceId = draft.some((option) => option.instanceId === reward.instanceId)
+        ? reward.instanceId
+        : draft[0]?.instanceId;
+    const choices = draft.map((option) => ({
+        id: option.instanceId,
+        label: option.label,
+        detail: option.eligible
+            ? previewBonusRewardClaim(run, option).feedback.summary || option.summaryText
+            : (option.unavailableReason ?? option.summaryText),
+        primary: option.instanceId === primaryInstanceId
+    }));
+    const primaryChoice = choices.find((choice) => choice.primary);
     return {
         id: `${reward.instanceId}:side`,
         kind: 'bonus_reward',
@@ -48,9 +69,10 @@ const buildBonusSideRoom = (
         body: reward.eligible
             ? `${reward.trigger} ${reward.discoverability}`
             : `${reward.label} is exhausted for this run.`,
-        primaryLabel: reward.eligible ? `Claim ${reward.label}` : 'Continue',
-        primaryDetail: rewardPreview,
+        primaryLabel: primaryChoice?.label ?? (reward.eligible ? `Claim ${reward.label}` : 'Continue'),
+        primaryDetail: primaryChoice?.detail ?? rewardPreview,
         skipLabel: reward.eligible ? 'Leave it' : 'Continue',
+        choices: choices.length > 1 ? choices : undefined,
         payload: { kind: 'bonus_reward', instanceId: reward.instanceId }
     };
 };
@@ -160,7 +182,7 @@ export const claimRouteSideRoomChoice = (run: RunState, choiceId?: string): RunS
         floor: sideRoom.floor,
         routeKind: sideRoom.nodeKind,
         ledger: run.bonusRewardLedger,
-        instanceId: sideRoom.payload.instanceId
+        instanceId: choiceId ?? sideRoom.payload.instanceId
     });
     if (!reward) {
         return clearedRun;

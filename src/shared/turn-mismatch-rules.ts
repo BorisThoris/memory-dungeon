@@ -1,5 +1,6 @@
 import { type BoardState, type RunState, type RunStatus, type Tile } from './contracts';
 import { applyDungeonEnemyAttack } from './dungeon-enemy-card-rules';
+import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { advanceEnemyHazardsOnBoard } from './dungeon-enemy-hazard-rules';
 import { springArmedDungeonTraps } from './dungeon-trap-rules';
 import {
@@ -93,7 +94,12 @@ export const resolveMismatchTurnTransition = ({
     decoyTouched
 }: MismatchTurnTransitionInput): RunState => {
     const traitPenalty = calculateTileTraitMismatchPenalty(run, sourceTiles, board);
-    const penalty = calculateMismatchPenalty(run, board, triesDelta + traitPenalty.triesDelta);
+    const bossPressure = board.floorTag === 'boss' ? getActiveDungeonBossPressureRule(board) : null;
+    const penalty = calculateMismatchPenalty(
+        run,
+        board,
+        triesDelta + traitPenalty.triesDelta + (bossPressure?.mismatchTriesDelta ?? 0)
+    );
     let lives = penalty.lives;
     const hiddenBoard = createHiddenMismatchBoard(board, tileIds);
     let pendingMemorizeBonusMs = penalty.pendingMemorizeBonusMs;

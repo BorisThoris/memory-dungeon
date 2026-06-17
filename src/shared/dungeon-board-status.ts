@@ -10,6 +10,7 @@ import type {
 } from './contracts';
 import {
     getDungeonBossDefinition,
+    getDungeonBossPressureRule,
     type DungeonBossLifecycleSource,
     type DungeonBossPhase
 } from './dungeon-boss-rules';
@@ -65,6 +66,7 @@ export interface DungeonBossReadModel {
     rewardHook: string;
     cardCopy: string;
     visualAudioPlaceholders: string[];
+    pressureCopy: string | null;
     bossCardPairCount: number;
     activeBossCardPairCount: number;
     movingPatrolCount: number;
@@ -338,6 +340,7 @@ export const getDungeonBossReadModel = (
     if (!definition) {
         return null;
     }
+    const pressure = getDungeonBossPressureRule(definition.id);
 
     const bossTiles = board?.tiles.filter((tile) => tile.dungeonBossId === definition.id) ?? [];
     const activeBossTiles = bossTiles.filter((tile) => tile.state !== 'matched' && tile.state !== 'removed');
@@ -373,6 +376,7 @@ export const getDungeonBossReadModel = (
         rewardHook: definition.rewardHook,
         cardCopy: definition.cardCopy,
         visualAudioPlaceholders: [...definition.visualAudioPlaceholders],
+        pressureCopy: pressure?.pressureCopy ?? null,
         bossCardPairCount: countDungeonPairs(bossTiles, () => true),
         activeBossCardPairCount: countDungeonPairs(activeBossTiles, () => true),
         movingPatrolCount: bossHazards.length,
@@ -689,6 +693,7 @@ export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresenta
         chips.push(dungeonHudChip('exit', 'Exit', activeExitText, exit.canActivate ? 'success' : exit.revealed ? 'warning' : 'neutral', 30));
     }
     const bossText = status.bossHazardLabel ?? status.bossReadModel?.label ?? dungeonBossLabel(status.bossId);
+    const bossPressureCopy = status.bossReadModel?.pressureCopy ?? null;
     if (bossText) {
         const bossValue = status.bossReadModel
             ? `${status.bossReadModel.hp}/${status.bossReadModel.maxHp} HP`
@@ -728,7 +733,9 @@ export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresenta
     const alertText =
         status.armedTrapCount > 0
             ? `${status.armedTrapCount} armed ${status.armedTrapCount === 1 ? 'trap card' : 'trap cards'} will spring on mismatches.`
-            : status.revealedEnemyHazardCount > 0
+            : bossPressureCopy
+              ? bossPressureCopy
+              : status.revealedEnemyHazardCount > 0
               ? `${status.revealedEnemyHazardCount}/${status.enemyHazardCount} moving enemy ${patrolNoun} revealed. Safe matches damage revealed patrols; occupied cards still cost guard or life.`
             : status.enemyHazardCount > 0
               ? `${status.enemyHazardCount} moving enemy ${patrolNoun} moving after each action. Avoid occupied cards.`

@@ -173,4 +173,16 @@ describe('runStartState', () => {
         expect(endless.activeContract).toBeNull();
         expect(endless.wildMenuRun).toBe(false);
     });
+
+    it('preserves starting loadout identity on ordinary restarts', () => {
+        const saveData = createDefaultSaveData();
+        const previous = createNewRun(0, { startingLoadoutId: 'route_tactician' });
+        const restarted = createRestartRun(previous, saveData);
+
+        expect(restarted.startingLoadoutId).toBe('route_tactician');
+        expect(restarted.rewardPerkIds).toContain('free_first_swap_per_floor');
+        expect(createRunStartTelemetryPayload(restarted)).toMatchObject({
+            startingLoadout: 'route_tactician'
+        });
+    });
 });

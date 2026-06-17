@@ -33,11 +33,15 @@ export const createRunStartStatePatch = (run: RunState, saveData: SaveData): Run
 export const createRunStartTelemetryPayload = (
     run: RunState,
     extra: RunStartTelemetryExtra = {}
-): RunStartTelemetryExtra => ({
-    mode: run.gameMode,
-    practice: run.practiceMode,
-    ...extra
-});
+): RunStartTelemetryExtra => {
+    const startingLoadout = run.startingLoadoutId ? { startingLoadout: run.startingLoadoutId } : {};
+    return {
+        mode: run.gameMode,
+        practice: run.practiceMode,
+        ...startingLoadout,
+        ...extra
+    };
+};
 
 const metaRelicOptionsForSave = (saveData: SaveData) => ({
     metaRelicDraftExtraPerMilestone: metaRelicDraftExtraPerMilestoneFromSave(saveData)
@@ -154,6 +158,7 @@ export const isDungeonShowcaseRestartRun = (run: RunState | null): boolean =>
 export const createRestartRun = (previousRun: RunState | null, saveData: SaveData): RunState => {
     const bestScore = saveData.bestScore;
     const meta = metaRelicOptionsForSave(saveData);
+    const startingLoadoutId = previousRun?.startingLoadoutId ?? null;
 
     if (isDungeonShowcaseRestartRun(previousRun)) {
         return createDungeonShowcaseRun(bestScore, meta);
@@ -181,7 +186,7 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
     }
 
     if (previousRun?.activeContract?.maxPinsTotalRun != null) {
-        return createNewRun(bestScore, { ...meta, activeContract: previousRun.activeContract });
+        return createNewRun(bestScore, { ...meta, activeContract: previousRun.activeContract, startingLoadoutId });
     }
 
     if (previousRun?.wildMenuRun) {
@@ -189,18 +194,20 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
     }
 
     if (previousRun?.practiceMode) {
-        return createNewRun(bestScore, { practiceMode: true, ...meta });
+        return createNewRun(bestScore, { practiceMode: true, ...meta, startingLoadoutId });
     }
 
     if (previousRun?.activeContract?.noShuffle && previousRun.activeContract.noDestroy) {
         return createNewRun(bestScore, {
             ...meta,
-            activeContract: previousRun.activeContract
+            activeContract: previousRun.activeContract,
+            startingLoadoutId
         });
     }
 
     return createNewRun(bestScore, {
         ...meta,
+        startingLoadoutId,
         onboardingSafeFirstFloor: !saveData.onboardingDismissed
     });
 };

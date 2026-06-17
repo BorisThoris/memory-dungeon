@@ -1,11 +1,15 @@
 import {
     FLOOR_CLEAR_GOLD_BASE,
     MAX_LIVES,
+    type BoardState,
     type RouteNodeType,
     type RunShopItemId,
     type RunShopOfferState,
-    type RunState
+    type RunState,
+    type Tile,
+    type TileTraitKind
 } from './contracts';
+import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { gainRunInventoryItem } from './run-inventory';
 
 export const SHOP_ITEM_CATALOG: Record<
@@ -36,6 +40,18 @@ export const SHOP_ITEM_CATALOG: Record<
         maxStock: 1,
         stackLimit: null
     },
+    region_shuffle_charge: {
+        itemId: 'region_shuffle_charge',
+        label: 'Row/swap charge',
+        description: 'Add 1 row shuffle or tile swap charge for trait routing.',
+        category: 'service',
+        compatibleWhen: 'owned',
+        baseCost: 2,
+        cost: 2,
+        stock: 1,
+        maxStock: 1,
+        stackLimit: null
+    },
     destroy_charge: {
         itemId: 'destroy_charge',
         label: 'Destroy charge',
@@ -44,6 +60,18 @@ export const SHOP_ITEM_CATALOG: Record<
         compatibleWhen: 'owned',
         baseCost: 3,
         cost: 3,
+        stock: 1,
+        maxStock: 1,
+        stackLimit: null
+    },
+    trait_cleanse: {
+        itemId: 'trait_cleanse',
+        label: 'Trait cleanse',
+        description: 'Immediately softens one hidden Cursed or Volatile trait pair into a safer routing trait.',
+        category: 'service',
+        compatibleWhen: 'owned',
+        baseCost: 2,
+        cost: 2,
         stock: 1,
         maxStock: 1,
         stackLimit: null
@@ -104,23 +132,71 @@ export interface RunShopReadModel {
     previewCopy: string;
 }
 
+const uniqueItemIds = (itemIds: readonly RunShopItemId[]): RunShopItemId[] => [...new Set(itemIds)];
+
+const boardHasLockedExitPressure = (board: BoardState | null): boolean =>
+    board?.dungeonExitLockKind != null && board.dungeonExitLockKind !== 'none' && board.dungeonExitLockKind !== 'lever';
+
+const boardHasDangerousTraitPair = (board: BoardState | null): boolean =>
+    (board?.tiles ?? []).some((tile) =>
+        tile.state === 'hidden' && (tile.tileTraitKind === 'cursed' || tile.tileTraitKind === 'volatile')
+    );
+
+const routeStockTemplate = (
+    routeType: RouteNodeType | null,
+    source: RunShopSource,
+    rerollRound: number
+): RunShopItemId[] => {
+    const baseline: RunShopItemId[] =
+        routeType === 'safe'
+            ? ['heal_life', 'peek_charge', 'iron_key', 'region_shuffle_charge', 'trait_cleanse', 'destroy_charge']
+            : routeType === 'greed'
+              ? ['iron_key', 'region_shuffle_charge', 'destroy_charge', 'trait_cleanse', 'peek_charge']
+              : routeType === 'mystery'
+                ? ['peek_charge', 'trait_cleanse', 'region_shuffle_charge', 'iron_key', 'destroy_charge']
+                : ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key'];
+    if (rerollRound <= 0) {
+        return baseline;
+    }
+    const alternate: RunShopItemId[] =
+        routeType === 'safe'
+            ? ['peek_charge', 'trait_cleanse', 'heal_life', 'iron_key', 'region_shuffle_charge', 'destroy_charge']
+            : routeType === 'greed'
+              ? ['destroy_charge', 'iron_key', 'master_key', 'region_shuffle_charge', 'trait_cleanse']
+              : routeType === 'mystery'
+                ? ['trait_cleanse', 'peek_charge', 'destroy_charge', 'region_shuffle_charge', 'iron_key']
+                : ['trait_cleanse', 'iron_key', 'peek_charge', 'region_shuffle_charge', 'destroy_charge'];
+    return source === 'board_shop' ? uniqueItemIds(['master_key', ...alternate]) : alternate;
+};
+
 export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     const level = run.board?.level ?? run.stats.highestLevel;
     const source: RunShopSource = run.board?.dungeonShopTileId ? 'board_shop' : 'floor_clear_shop';
     const routeType = run.board?.routeWorldProfile?.routeType ?? run.pendingRouteCardPlan?.routeType ?? null;
-    const itemIds: RunShopItemId[] = ['heal_life', 'peek_charge', 'destroy_charge', 'iron_key'];
+    const itemIds: RunShopItemId[] = routeStockTemplate(routeType, source, run.shopRerolls);
+    const bossPressure = run.board?.floorTag === 'boss' ? getActiveDungeonBossPressureRule(run.board) : null;
+    if (bossPressure) {
+        itemIds.unshift(bossPressure.shopPriorityItemId);
+    }
+    if (boardHasLockedExitPressure(run.board)) {
+        itemIds.unshift('iron_key');
+    }
     if (level >= 5 || source === 'board_shop') {
         itemIds.push('master_key');
     }
+    if (boardHasDangerousTraitPair(run.board)) {
+        itemIds.unshift('trait_cleanse');
+    }
+    const finalItemIds = uniqueItemIds(itemIds).slice(0, source === 'board_shop' || itemIds.includes('trait_cleanse') ? 6 : 5);
     const previewCopy =
         source === 'board_shop'
-            ? `Board vendor: ${itemIds.length} deterministic services, reroll ${getShopRerollCostForFloor(level)} shop gold.`
-            : `Floor-clear vendor: ${itemIds.length} deterministic services, reroll ${getShopRerollCostForFloor(level)} shop gold.`;
+            ? `Board vendor: ${finalItemIds.length} deterministic route-aware services, reroll ${getShopRerollCostForFloor(level)} shop gold.`
+            : `Floor-clear vendor: ${finalItemIds.length} deterministic route-aware services, reroll ${getShopRerollCostForFloor(level)} shop gold.`;
     return {
         source,
         level,
         routeType,
-        itemIds,
+        itemIds: finalItemIds,
         rerollCost: getShopRerollCostForFloor(level),
         previewCopy
     };
@@ -163,7 +239,37 @@ const getShopOfferCompatibility = (
     if (itemId === 'destroy_charge' && run.activeContract?.noDestroy) {
         return { compatible: false, unavailableReason: 'No-destroy contract locks this item.' };
     }
+    if (itemId === 'region_shuffle_charge' && run.activeContract?.noShuffle) {
+        return { compatible: false, unavailableReason: 'No-shuffle contract locks this item.' };
+    }
+    if (itemId === 'trait_cleanse' && !boardHasDangerousTraitPair(run.board)) {
+        return { compatible: false, unavailableReason: 'No Cursed or Volatile hidden trait pair to cleanse.' };
+    }
     return { compatible: true, unavailableReason: null };
+};
+
+const CLEANSE_TRAIT_REPLACEMENTS: Record<Extract<TileTraitKind, 'cursed' | 'volatile'>, TileTraitKind> = {
+    cursed: 'stasis',
+    volatile: 'echo'
+};
+
+const cleanseDangerousTraitPair = (board: BoardState | null): BoardState | null => {
+    if (!board) {
+        return board;
+    }
+    const target = board.tiles.find((tile) =>
+        tile.state === 'hidden' && (tile.tileTraitKind === 'cursed' || tile.tileTraitKind === 'volatile')
+    );
+    if (!target || target.tileTraitKind !== 'cursed' && target.tileTraitKind !== 'volatile') {
+        return board;
+    }
+    const nextTrait = CLEANSE_TRAIT_REPLACEMENTS[target.tileTraitKind];
+    const tiles: Tile[] = board.tiles.map((tile) =>
+        tile.pairKey === target.pairKey && tile.tileTraitKind === target.tileTraitKind
+            ? { ...tile, tileTraitKind: nextTrait }
+            : tile
+    );
+    return { ...board, tiles };
 };
 
 export const createRunShopOffers = (run: RunState): RunShopOfferState[] => {
@@ -237,8 +343,14 @@ export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
         case 'peek_charge':
             next = gainRunInventoryItem(next, 'peek_charge');
             break;
+        case 'region_shuffle_charge':
+            next = gainRunInventoryItem(next, 'region_shuffle_charge');
+            break;
         case 'destroy_charge':
             next = gainRunInventoryItem(next, 'destroy_charge');
+            break;
+        case 'trait_cleanse':
+            next = { ...next, board: cleanseDangerousTraitPair(next.board) };
             break;
         case 'iron_key':
             next = gainRunInventoryItem(next, 'iron_key');

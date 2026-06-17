@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { GAME_MODE_CODEX, MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
+import { getRewardPerkRows } from '../../shared/bonus-rewards';
 import { getCosmeticCollectionRows } from '../../shared/cosmetics';
 import { getInventoryPrepRows } from '../../shared/inventory-prep';
 import { getInventoryRewardSignal } from '../../shared/meta-reward-signals';
@@ -8,6 +9,8 @@ import { getRunInventoryRows, getRunLoadoutSummary } from '../../shared/run-inve
 import { getRunEconomyRows } from '../../shared/run-economy';
 import { getPerfectMemoryAttribution } from '../../shared/long-run-feedback';
 import { getRunBuildProfile, getRelicDecisionImpactCopy } from '../../shared/relics';
+import { getRunStartingLoadoutRow } from '../../shared/starting-loadouts';
+import { getTraitBuildRewardRows } from '../../shared/trait-build-rewards';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { inventoryScreenCopy } from '../copy/inventoryScreen';
@@ -87,6 +90,11 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     const perfectMemoryAttribution = run ? getPerfectMemoryAttribution(run) : null;
     const prepRows = getInventoryPrepRows(run);
     const buildProfile = getRunBuildProfile(run);
+    const startingLoadoutRow = getRunStartingLoadoutRow(run);
+    const activeTraitBuildRows = getTraitBuildRewardRows().filter((row) =>
+        row.relicIds.some((relicId) => run.relicIds.includes(relicId))
+    );
+    const rewardPerkRows = getRewardPerkRows(run);
     const equippedCosmetic = getCosmeticCollectionRows(useAppStore.getState().saveData).find((row) => row.equipped);
 
     return (
@@ -240,6 +248,36 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                             ) : (
                                 <p className={styles.empty}>{buildProfile.summary}. Draft a relic to start shaping a build.</p>
                             )}
+                            {startingLoadoutRow ? (
+                                <div className={metaStyles.archiveCatalogGrid} data-testid="inventory-starting-loadout">
+                                    <div className={metaStyles.archiveCatalogRow}>
+                                        <p className={metaStyles.archiveCatalogRowTitle}>{startingLoadoutRow.label}</p>
+                                        <p className={metaStyles.subtitle}>{startingLoadoutRow.summary}</p>
+                                        <span className={styles.cosmeticNote}>{startingLoadoutRow.firstFloorDecision}</span>
+                                    </div>
+                                </div>
+                            ) : null}
+                            {activeTraitBuildRows.length > 0 ? (
+                                <div className={metaStyles.archiveCatalogGrid} data-testid="inventory-trait-builds">
+                                    {activeTraitBuildRows.slice(0, 4).map((row) => (
+                                        <div className={metaStyles.archiveCatalogRow} key={row.id}>
+                                            <p className={metaStyles.archiveCatalogRowTitle}>{row.label}</p>
+                                            <p className={metaStyles.subtitle}>{row.decision}</p>
+                                            <span className={styles.cosmeticNote}>{row.payoff}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : null}
+                            {rewardPerkRows.length > 0 ? (
+                                <div className={metaStyles.archiveCatalogGrid} data-testid="inventory-reward-perks">
+                                    {rewardPerkRows.map((row) => (
+                                        <div className={metaStyles.archiveCatalogRow} key={row.id}>
+                                            <p className={metaStyles.archiveCatalogRowTitle}>{row.label}</p>
+                                            <p className={metaStyles.subtitle}>{row.detail}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : null}
                         </div>
                     </Panel>
                 </MetaFrame>

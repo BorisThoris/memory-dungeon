@@ -3,8 +3,11 @@ import { describe, expect, it } from 'vitest';
 import {
     DUNGEON_BOSS_DEFEAT_SCORE,
     DUNGEON_BOSS_DEFINITIONS,
+    DUNGEON_BOSS_PRESSURE_RULES,
     DUNGEON_ELITE_ENCOUNTER_RULES,
+    getActiveDungeonBossPressureRule,
     getDungeonBossDefinition,
+    getDungeonBossPressureRule,
     getDungeonEliteEncounterRules
 } from './dungeon-boss-rules';
 
@@ -28,6 +31,26 @@ describe('dungeon boss rules', () => {
     it('returns null for missing boss ids', () => {
         expect(getDungeonBossDefinition(null)).toBeNull();
         expect(getDungeonBossDefinition(undefined)).toBeNull();
+        expect(getDungeonBossPressureRule(null)).toBeNull();
+    });
+
+    it('defines gameplay pressure hooks for every boss identity', () => {
+        expect(Object.keys(DUNGEON_BOSS_PRESSURE_RULES).sort()).toEqual(Object.keys(DUNGEON_BOSS_DEFINITIONS).sort());
+        expect(DUNGEON_BOSS_PRESSURE_RULES.rush_sentinel).toMatchObject({
+            memorizeMsDelta: -120,
+            shopPriorityItemId: 'region_shuffle_charge'
+        });
+        expect(DUNGEON_BOSS_PRESSURE_RULES.spire_observer).toMatchObject({
+            mismatchTriesDelta: 1,
+            shopPriorityItemId: 'peek_charge'
+        });
+        expect(getActiveDungeonBossPressureRule({ dungeonBossId: 'treasure_keeper' })?.shopPriorityItemId).toBe('iron_key');
+        expect(
+            getActiveDungeonBossPressureRule({
+                dungeonBossId: null,
+                enemyHazards: [{ bossId: 'trap_warden', state: 'revealed' }]
+            })?.shopPriorityItemId
+        ).toBe('destroy_charge');
     });
 
     it('keeps the rush sentinel combo-shard reward distinct from baseline boss rewards', () => {

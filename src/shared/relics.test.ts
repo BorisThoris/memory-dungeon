@@ -392,6 +392,39 @@ describe('rollRelicOptions', () => {
         );
     });
 
+    it('uses active floor traits as deterministic relic draft build context', () => {
+        const base = levelCompleteRun(3, 0, {
+            board: {
+                ...createNewRun(12).board!,
+                level: 3,
+                floorArchetypeId: 'survey_hall',
+                featuredObjectiveId: 'scholar_style',
+                tiles: createNewRun(12).board!.tiles.map((tile, index) =>
+                    index < 2 ? { ...tile, tileTraitKind: 'conduit' as const } : tile
+                )
+            }
+        });
+        const neutralRun = levelCompleteRun(3, 0, {
+            board: {
+                ...createNewRun(13).board!,
+                level: 3,
+                floorArchetypeId: 'survey_hall',
+                featuredObjectiveId: 'scholar_style',
+                tiles: createNewRun(13).board!.tiles.map((tile) => ({ ...tile, tileTraitKind: undefined }))
+            }
+        });
+        const neutral = getRelicDraftContext(neutralRun, 3);
+        const traitContext = getRelicDraftContext(base, 3);
+
+        expect(traitContext.activeTraitKinds).toEqual(expect.arrayContaining(['conduit']));
+        expect(getRelicDraftOptionReasons(base, 3, ['peek_charge_plus_one'])).toEqual({
+            peek_charge_plus_one: 'Supports Conduit Cartographer'
+        });
+        expect(getContextualRelicDraftWeight('peek_charge_plus_one', traitContext, 0)).toBeGreaterThan(
+            getContextualRelicDraftWeight('peek_charge_plus_one', neutral, 0)
+        );
+    });
+
     it('keeps route-only relic context as weights, not a guaranteed spotlight slot', () => {
         let foundDraftWithoutRouteReason = false;
         for (let seed = 9_000; seed < 9_120; seed += 1) {

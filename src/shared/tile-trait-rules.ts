@@ -68,6 +68,7 @@ export const TILE_TRAIT_MATCH_SCORE_BONUS: Partial<Record<TileTraitKind, number>
 export interface TileTraitEffectResult {
     comboShardGain: number;
     guardTokenGain: number;
+    flashPairChargeGain: number;
     interactionTags: TileTraitInteractionTag[];
     peekChargeGain: number;
     recallFocusGain: number;
@@ -106,7 +107,15 @@ export const TILE_TRAIT_INTERACTION_TEXT = {
     'conduit:danger-recall': 'Conduit near danger: recall pressure',
     'stasis:sealed-buffer': 'Stasis buffered Sealed',
     'stasis:cursed-volatile-buffer': 'Stasis buffered Cursed + Volatile',
-    'cursed:volatile-danger': 'Cursed + Volatile: recall pressure'
+    'cursed:volatile-danger': 'Cursed + Volatile: recall pressure',
+    'chapter-compass:conduit-map': 'Chapter Compass + Conduit: mapped charge',
+    'catalyst-thread:sealed-engine': 'Catalyst Thread + Sealed: shard engine',
+    'row-compass:drift-routing': 'Row Compass + Drift: extra route charge',
+    'warden-sigil:mirror-ward': 'Warden Sigil + Mirror: warded reflection',
+    'wager-surety:cursed-buffer': 'Wager Surety buffered cursed risk',
+    'reward-perk:echo-conduit-double': 'Echo Conduit Lens: doubled Echo',
+    'reward-perk:trait-streak-flash': 'Trait Streak Lens: flash pair',
+    'reward-perk:cursed-opener-greed': 'Cursed Opener: first-pair greed'
 } as const;
 
 export type TileTraitInteractionTag = keyof typeof TILE_TRAIT_INTERACTION_TEXT;
@@ -266,6 +275,7 @@ export const getTileSwapTraitPreviewLines = (
 const createEmptyTraitEffectResult = (): TileTraitEffectResult => ({
     comboShardGain: 0,
     guardTokenGain: 0,
+    flashPairChargeGain: 0,
     interactionTags: [],
     peekChargeGain: 0,
     recallFocusGain: 0,
@@ -300,6 +310,9 @@ const tileCanShuffleFromVolatileMiss = (tile: Tile, blockedPairKeys: ReadonlySet
     tile.routeSpecialKind == null &&
     tile.findableKind == null &&
     tile.tileHazardKind == null;
+
+const hasRewardPerk = (run: RunState, id: NonNullable<RunState['rewardPerkIds']>[number]): boolean =>
+    (run.rewardPerkIds ?? []).includes(id);
 
 const TILE_TRAIT_COLORS: Record<TileTraitKind, string> = {
     echo: '#62d6d1',
@@ -626,6 +639,14 @@ export const resolveTileTraitEffects = ({
             result.interactionTags.push('echo:sealed-combo');
         }
 
+        if (hasTrait('echo') && adjacentTraitKinds.has('conduit') && hasRewardPerk(run, 'echo_conduit_double')) {
+            result.peekChargeGain += 1;
+            if (adjacentTraitKinds.has('sealed') && run.stats.comboShards + result.comboShardGain < MAX_COMBO_SHARDS) {
+                result.comboShardGain += 1;
+            }
+            result.interactionTags.push('reward-perk:echo-conduit-double');
+        }
+
         if (hasTrait('echo') && adjacentTraitKinds.has('mirror') && run.recallFocus < RECALL_FOCUS_MAX) {
             result.recallFocusGain += 1;
             result.interactionTags.push('echo:mirror-focus');
@@ -646,6 +667,12 @@ export const resolveTileTraitEffects = ({
             result.shopGoldGain += 1;
             result.scoreBonus += 20;
             result.interactionTags.push('cursed:volatile-greed');
+        }
+
+        if (hasTrait('cursed') && run.matchResolutionsThisFloor === 0 && hasRewardPerk(run, 'cursed_opener_greed')) {
+            result.shopGoldGain += 1;
+            result.scoreBonus += 25;
+            result.interactionTags.push('reward-perk:cursed-opener-greed');
         }
 
         if (hasTrait('volatile') && adjacentTraitKinds.has('heavy')) {
@@ -673,6 +700,11 @@ export const resolveTileTraitEffects = ({
                 result.peekChargeGain += 1;
                 result.interactionTags.push('conduit:echo-peek');
             }
+            if (run.relicIds.includes('chapter_compass')) {
+                result.peekChargeGain += 1;
+                result.scoreBonus += 10;
+                result.interactionTags.push('chapter-compass:conduit-map');
+            }
         }
 
         if (hasTrait('stasis') && board) {
@@ -681,6 +713,36 @@ export const resolveTileTraitEffects = ({
                 result.scoreBonus += 10;
                 result.interactionTags.push('stasis:nearby-block');
             }
+        }
+
+        if (traits.size > 0 && run.stats.currentStreak >= 2 && hasRewardPerk(run, 'trait_streak_toolkit')) {
+            result.flashPairChargeGain += 1;
+            result.interactionTags.push('reward-perk:trait-streak-flash');
+        }
+
+        if (hasTrait('sealed') && run.relicIds.includes('combo_shard_plus_step')) {
+            const acceptedShardGain = Math.max(0, MAX_COMBO_SHARDS - (run.stats.comboShards + result.comboShardGain));
+            if (acceptedShardGain > 0) {
+                result.comboShardGain += 1;
+            } else {
+                result.scoreBonus += 18;
+            }
+            result.interactionTags.push('catalyst-thread:sealed-engine');
+        }
+
+        if (hasTrait('drift') && run.relicIds.includes('region_shuffle_free_first')) {
+            result.regionShuffleChargeGain += 1;
+            result.scoreBonus += 10;
+            result.interactionTags.push('row-compass:drift-routing');
+        }
+
+        if (hasTrait('mirror') && run.relicIds.includes('guard_token_plus_one')) {
+            if (run.stats.guardTokens + result.guardTokenGain < MAX_GUARD_TOKENS) {
+                result.guardTokenGain += 1;
+            } else {
+                result.scoreBonus += 20;
+            }
+            result.interactionTags.push('warden-sigil:mirror-ward');
         }
 
         return result;
@@ -706,6 +768,10 @@ export const resolveTileTraitEffects = ({
         result.interactionTags.push(
             adjacentTraitKinds.has('stasis') ? 'stasis:cursed-volatile-buffer' : 'cursed:volatile-danger'
         );
+    }
+    if (run.relicIds.includes('wager_surety') && hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
+        result.triesDelta = Math.max(0, result.triesDelta - 1);
+        result.interactionTags.push('wager-surety:cursed-buffer');
     }
     return result;
 };

@@ -1026,12 +1026,15 @@ describe('REG-017 route choices', () => {
         expect(greedRoom.sideRoom).toMatchObject({ kind: 'bonus_reward', routeType: 'greed' });
         expect(greedSkipped.sideRoom).toBeNull();
         expect(greedSkipped.shopGold).toBe(greedRoom.shopGold);
+        const greedPrimaryRewardInstanceId =
+            greedRoom.sideRoom!.choices?.find((choice) => choice.primary)?.id ??
+            (greedRoom.sideRoom!.payload as { kind: 'bonus_reward'; instanceId: string }).instanceId;
         const duplicateRewardRoom = {
             ...greedRoom,
             bonusRewardLedger: {
                 claimedInstanceIds: [
-                    (greedRoom.sideRoom!.payload as { kind: 'bonus_reward'; instanceId: string }).instanceId,
-                    (greedRoom.sideRoom!.payload as { kind: 'bonus_reward'; instanceId: string }).instanceId,
+                    greedPrimaryRewardInstanceId,
+                    greedPrimaryRewardInstanceId,
                     42
                 ],
                 claimedRewardIds: { supply_cache: Number.NaN },
@@ -1042,7 +1045,7 @@ describe('REG-017 route choices', () => {
         const duplicateRewardClaim = claimRouteSideRoomPrimary(duplicateRewardRoom);
         expect(duplicateRewardClaim.sideRoom).toBeNull();
         expect(duplicateRewardClaim.bonusRewardLedger).toMatchObject({
-            claimedInstanceIds: [(greedRoom.sideRoom!.payload as { kind: 'bonus_reward'; instanceId: string }).instanceId],
+            claimedInstanceIds: [greedPrimaryRewardInstanceId],
             claimedRewardIds: {},
             discoveredSecretRooms: 0,
             openedTreasureRooms: 0
@@ -4588,11 +4591,11 @@ describe('dungeon cards', () => {
 
         expect(getRunShopStockPlan(floorShopRun)).toMatchObject({
             source: 'floor_clear_shop',
-            itemIds: ['heal_life', 'peek_charge', 'destroy_charge', 'iron_key']
+            itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key']
         });
         expect(getRunShopStockPlan(boardRun)).toMatchObject({
             source: 'board_shop',
-            itemIds: ['heal_life', 'peek_charge', 'destroy_charge', 'iron_key', 'master_key']
+            itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key', 'master_key']
         });
         expect(getRunShopReadModel(floorShopRun)).toMatchObject({
             source: 'floor_clear_shop',
@@ -5846,7 +5849,9 @@ describe('REG-015 run shop wallet', () => {
             'destroy_charge',
             'heal_life',
             'iron_key',
-            'peek_charge'
+            'peek_charge',
+            'region_shuffle_charge',
+            'trait_cleanse'
         ]);
 
         const peekOffer = shopRun.shopOffers.find((offer) => offer.itemId === 'peek_charge')!;

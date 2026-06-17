@@ -8,6 +8,7 @@ import {
     type RunState,
     type Tile
 } from './contracts';
+import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { hasMutator } from './mutators';
 import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
 
@@ -52,6 +53,10 @@ export const getMemorizeDurationForRun = (run: RunState, level: number): number 
     }
     if (run.gameMode === 'meditation') {
         ms = Math.floor(ms * 1.55);
+    }
+    const bossPressure = getActiveDungeonBossPressureRule(run.board);
+    if (bossPressure && run.board?.floorTag === 'boss') {
+        ms = Math.max(MEMORIZE_MIN_MS, ms + bossPressure.memorizeMsDelta);
     }
     return ms;
 };
