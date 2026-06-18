@@ -22,14 +22,40 @@ export interface CreateNextFloorRunStateOptions {
     memorizeRemainingMs: number;
 }
 
+const banishOneHazardPair = (board: BoardState): { board: BoardState; banished: boolean } => {
+    const target = board.tiles.find((tile) =>
+        tile.tileHazardKind != null &&
+        tile.state !== 'matched' &&
+        tile.state !== 'removed'
+    );
+    if (!target) {
+        return { board, banished: false };
+    }
+
+    return {
+        board: {
+            ...board,
+            tiles: board.tiles.map((tile) =>
+                tile.pairKey === target.pairKey && tile.tileHazardKind === target.tileHazardKind
+                    ? { ...tile, tileHazardKind: undefined }
+                    : tile
+            )
+        },
+        banished: true
+    };
+};
+
 export const createNextFloorRunState = (
     run: RunState,
     options: CreateNextFloorRunStateOptions
 ): RunState => {
-    const nextBoard = options.board;
-
     const hasRewardPerk = (id: NonNullable<RunState['rewardPerkIds']>[number]): boolean =>
         (run.rewardPerkIds ?? []).includes(id);
+    const canUseHazardBanisher = hasRewardPerk('hazard_banish_per_floor') && !run.activeContract?.noDestroy;
+    const hazardBanish = canUseHazardBanisher
+        ? banishOneHazardPair(options.board)
+        : { board: options.board, banished: false };
+    const nextBoard = hazardBanish.board;
 
     return {
         ...run,
@@ -44,7 +70,7 @@ export const createNextFloorRunState = (
         pendingMemorizeBonusMs: 0,
         pinnedTileIds: [],
         destroyPairCharges:
-            run.destroyPairCharges + (hasRewardPerk('hazard_banish_per_floor') && !run.activeContract?.noDestroy ? 1 : 0),
+            run.destroyPairCharges + (canUseHazardBanisher && !hazardBanish.banished ? 1 : 0),
         parasiteFloors: options.parasiteFloors,
         parasiteWardRemaining: options.parasiteWardRemaining,
         stickyBlockIndex: null,

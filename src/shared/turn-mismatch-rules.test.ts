@@ -166,6 +166,38 @@ describe('turn mismatch rules', () => {
         expect(resolved.stats.volatileTraitShuffles).toBe(1);
     });
 
+    it('lets Stasis absorb snare mismatches without negative ward charges', () => {
+        const b = board([
+            tile('snare-a', 'flipped', {
+                pairKey: 'snare',
+                tileHazardKind: 'shuffle_snare',
+                tileTraitKind: 'stasis'
+            }),
+            tile('safe-a', 'flipped', { pairKey: 'safe' }),
+            tile('safe-b', 'hidden', { pairKey: 'safe' }),
+            tile('extra-a', 'hidden', { pairKey: 'extra' }),
+            tile('extra-b', 'hidden', { pairKey: 'extra' })
+        ]);
+        const base = run(b, {
+            safeHazardWardChargesThisFloor: 0,
+            safeHazardWardsUsedThisFloor: 0
+        });
+
+        const resolved = resolveMismatchTurnTransition({
+            run: base,
+            board: b,
+            tileIds: ['snare-a', 'safe-a'],
+            sourceTiles: [b.tiles[0]!, b.tiles[1]!],
+            triesDelta: 1,
+            decoyTouched: false
+        });
+
+        expect(resolved.safeHazardWardChargesThisFloor).toBe(0);
+        expect(resolved.safeHazardWardsUsedThisFloor).toBe(1);
+        expect(resolved.hazardShuffleSnaresThisFloor).toBe(0);
+        expect(resolved.hazardTileTriggersThisFloor).toBe(0);
+    });
+
     it('springs revealed trap mismatches through the transition', () => {
         const b = board([
             tile('trap-a', 'flipped', {

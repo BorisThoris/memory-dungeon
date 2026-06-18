@@ -110,6 +110,49 @@ describe('SideRoomScreen', () => {
         expect(feedback.querySelectorAll("[data-reward-feedback-kind='capped']")).toHaveLength(1);
     });
 
+    it('shows trait build archetype tags on bonus reward choices', () => {
+        const saveData = createDefaultSaveData();
+        const run = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 50 });
+        useAppStore.setState({
+            hydrated: true,
+            hydrating: false,
+            view: 'sideRoom',
+            saveData,
+            settings: saveData.settings,
+            run: {
+                ...run,
+                status: 'levelComplete',
+                sideRoom: {
+                    id: 'bonus-trait-tags-test',
+                    kind: 'bonus_reward',
+                    routeType: 'greed',
+                    nodeKind: 'treasure',
+                    floor: 3,
+                    title: 'Greed Trait toolkit',
+                    body: 'Trait-routing rewards should name the builds they support.',
+                    primaryLabel: 'Trait toolkit',
+                    primaryDetail: '+1 row/swap charge; +1 peek charge',
+                    skipLabel: 'Leave it',
+                    choices: [
+                        {
+                            id: 'choice-trait-toolkit',
+                            label: 'Trait toolkit',
+                            detail: '+1 row/swap charge; +1 peek charge',
+                            primary: true,
+                            traitBuildLabels: ['Drift Routing', 'Conduit Cartographer']
+                        }
+                    ],
+                    payload: { kind: 'bonus_reward', instanceId: 'choice-trait-toolkit' }
+                }
+            }
+        });
+
+        render(<SideRoomScreen />);
+
+        expect(screen.getByLabelText('Trait build archetypes')).toHaveTextContent('Drift Routing');
+        expect(screen.getByLabelText('Trait build archetypes')).toHaveTextContent('Conduit Cartographer');
+    });
+
     it('collapses exhausted bonus rewards to one continue action', () => {
         const saveData = createDefaultSaveData();
         const run = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 49 });

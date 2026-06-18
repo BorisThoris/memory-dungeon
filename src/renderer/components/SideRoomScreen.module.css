@@ -121,6 +121,26 @@
     line-height: 1.4;
 }
 
+.traitBuildTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 1px;
+}
+
+.traitBuildTags span {
+    min-width: 0;
+    border: 1px solid color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 38%, transparent);
+    border-radius: var(--ui-radius-sm);
+    padding: 3px 7px;
+    background: color-mix(in srgb, var(--theme-surface-control) 74%, transparent);
+    color: color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 82%, white);
+    font-size: 0.74rem;
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
 .actions {
     margin-top: 22px;
 }

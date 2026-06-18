@@ -15,6 +15,9 @@ const tileIsSafeHazardEffectTarget = (tile: Tile): boolean =>
     tile.findableKind == null &&
     tile.tileHazardKind == null;
 
+const sourceTilesHaveStasisWard = (sourceTiles: readonly Tile[]): boolean =>
+    sourceTiles.some((tile) => tile.tileTraitKind === 'stasis');
+
 export const applyShuffleSnareHazard = (board: BoardState, run: RunState): { board: BoardState; triggered: boolean } => {
     const hiddenIndices: number[] = [];
     board.tiles.forEach((tile, index) => {
@@ -113,13 +116,18 @@ export const applySafeHazardWardMismatch = (
     fragileBreak: { board: BoardState; brokenCount: number };
     snareHazard: { board: BoardState; triggered: boolean };
     wardUsed: boolean;
+    wardChargeSpent: boolean;
+    traitWardUsed: boolean;
 } => {
     const hasWardCharge = (run.safeHazardWardChargesThisFloor ?? 0) > 0;
-    const blocksSnare = hasWardCharge && mismatchHazards.has('shuffle_snare');
+    const hasStasisWard = !hasWardCharge && sourceTilesHaveStasisWard(sourceTiles);
+    const canWardHazard = hasWardCharge || hasStasisWard;
+    const blocksSnare = canWardHazard && mismatchHazards.has('shuffle_snare');
     const blocksFragile =
-        hasWardCharge &&
+        canWardHazard &&
         !blocksSnare &&
         sourceTiles.some((tile) => tile.tileHazardKind === 'fragile_cache');
+    const wardUsed = blocksSnare || blocksFragile;
     const fragileBreak = blocksFragile
         ? { board, brokenCount: 0 }
         : breakFragileCacheHazards(board, sourceTiles);
@@ -132,7 +140,9 @@ export const applySafeHazardWardMismatch = (
         board: snareHazard.board,
         fragileBreak,
         snareHazard,
-        wardUsed: blocksSnare || blocksFragile
+        wardUsed,
+        wardChargeSpent: hasWardCharge && wardUsed,
+        traitWardUsed: hasStasisWard && wardUsed
     };
 };
 

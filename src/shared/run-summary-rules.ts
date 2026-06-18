@@ -20,6 +20,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
         dailyDateKeyUtc: run.dailyDateKeyUtc ?? undefined,
         activeMutators: [...run.activeMutators],
         relicIds: [...run.relicIds],
+        startingLoadoutId: run.startingLoadoutId ?? null,
         practiceMode: run.practiceMode,
         wildMenuRun: run.wildMenuRun,
         dungeonShowcaseRun: run.dungeonShowcaseRun,

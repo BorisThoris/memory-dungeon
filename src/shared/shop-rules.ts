@@ -11,6 +11,7 @@ import {
 } from './contracts';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { gainRunInventoryItem } from './run-inventory';
+import { getTileTraitInteractionPreviewLines } from './tile-trait-rules';
 
 export const SHOP_ITEM_CATALOG: Record<
     RunShopItemId,
@@ -72,6 +73,18 @@ export const SHOP_ITEM_CATALOG: Record<
         compatibleWhen: 'owned',
         baseCost: 2,
         cost: 2,
+        stock: 1,
+        maxStock: 1,
+        stackLimit: null
+    },
+    trait_routing_kit: {
+        itemId: 'trait_routing_kit',
+        label: 'Trait routing kit',
+        description: 'Adds 1 peek charge and 1 row/swap charge when this floor has actionable trait adjacency.',
+        category: 'service',
+        compatibleWhen: 'owned',
+        baseCost: 3,
+        cost: 3,
         stock: 1,
         maxStock: 1,
         stackLimit: null
@@ -142,6 +155,21 @@ const boardHasDangerousTraitPair = (board: BoardState | null): boolean =>
         tile.state === 'hidden' && (tile.tileTraitKind === 'cursed' || tile.tileTraitKind === 'volatile')
     );
 
+const boardHasTraitComboOpportunity = (board: BoardState | null): boolean => {
+    if (!board) {
+        return false;
+    }
+    return board.tiles.some((tile) => {
+        if (!tile.tileTraitKind) {
+            return false;
+        }
+        return (
+            getTileTraitInteractionPreviewLines(board, [tile.id], 'match').length > 0 ||
+            getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch').length > 0
+        );
+    });
+};
+
 const routeStockTemplate = (
     routeType: RouteNodeType | null,
     source: RunShopSource,
@@ -169,11 +197,27 @@ const routeStockTemplate = (
     return source === 'board_shop' ? uniqueItemIds(['master_key', ...alternate]) : alternate;
 };
 
+const loadoutStockBias = (run: RunState): RunShopItemId[] => {
+    switch (run.startingLoadoutId) {
+        case 'memory_scout':
+            return ['peek_charge'];
+        case 'route_tactician':
+            return ['region_shuffle_charge'];
+        case 'cursebreaker':
+            return ['destroy_charge', 'trait_cleanse'];
+        case 'vaultbreaker':
+            return ['iron_key'];
+        default:
+            return [];
+    }
+};
+
 export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     const level = run.board?.level ?? run.stats.highestLevel;
     const source: RunShopSource = run.board?.dungeonShopTileId ? 'board_shop' : 'floor_clear_shop';
     const routeType = run.board?.routeWorldProfile?.routeType ?? run.pendingRouteCardPlan?.routeType ?? null;
     const itemIds: RunShopItemId[] = routeStockTemplate(routeType, source, run.shopRerolls);
+    itemIds.unshift(...loadoutStockBias(run));
     const bossPressure = run.board?.floorTag === 'boss' ? getActiveDungeonBossPressureRule(run.board) : null;
     if (bossPressure) {
         itemIds.unshift(bossPressure.shopPriorityItemId);
@@ -181,13 +225,22 @@ export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     if (boardHasLockedExitPressure(run.board)) {
         itemIds.unshift('iron_key');
     }
-    if (level >= 5 || source === 'board_shop') {
+    const needsMasterKey = level >= 5 || source === 'board_shop';
+    if (needsMasterKey) {
         itemIds.push('master_key');
     }
     if (boardHasDangerousTraitPair(run.board)) {
         itemIds.unshift('trait_cleanse');
     }
-    const finalItemIds = uniqueItemIds(itemIds).slice(0, source === 'board_shop' || itemIds.includes('trait_cleanse') ? 6 : 5);
+    if (boardHasTraitComboOpportunity(run.board)) {
+        itemIds.unshift('trait_routing_kit');
+    }
+    const stockLimit = source === 'board_shop' || itemIds.includes('trait_cleanse') ? 6 : 5;
+    const uniqueStock = uniqueItemIds(itemIds);
+    const finalItemIds: RunShopItemId[] =
+        needsMasterKey && uniqueStock.indexOf('master_key') >= stockLimit
+            ? [...uniqueStock.filter((itemId) => itemId !== 'master_key').slice(0, stockLimit - 1), 'master_key']
+            : uniqueStock.slice(0, stockLimit);
     const previewCopy =
         source === 'board_shop'
             ? `Board vendor: ${finalItemIds.length} deterministic route-aware services, reroll ${getShopRerollCostForFloor(level)} shop gold.`
@@ -244,6 +297,9 @@ const getShopOfferCompatibility = (
     }
     if (itemId === 'trait_cleanse' && !boardHasDangerousTraitPair(run.board)) {
         return { compatible: false, unavailableReason: 'No Cursed or Volatile hidden trait pair to cleanse.' };
+    }
+    if (itemId === 'trait_routing_kit' && !boardHasTraitComboOpportunity(run.board)) {
+        return { compatible: false, unavailableReason: 'No actionable trait adjacency to route around.' };
     }
     return { compatible: true, unavailableReason: null };
 };
@@ -351,6 +407,9 @@ export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
             break;
         case 'trait_cleanse':
             next = { ...next, board: cleanseDangerousTraitPair(next.board) };
+            break;
+        case 'trait_routing_kit':
+            next = gainRunInventoryItem(gainRunInventoryItem(next, 'peek_charge'), 'region_shuffle_charge');
             break;
         case 'iron_key':
             next = gainRunInventoryItem(next, 'iron_key');

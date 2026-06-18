@@ -4381,10 +4381,21 @@ describe('dungeon cards', () => {
             phase: 'bloodied'
         });
 
-        const patrolOnly = getDungeonBossReadModel({
-            ...board,
-            tiles: board.tiles.map((tile) => ({ ...tile, state: 'matched' as const, dungeonCardState: 'resolved' as const, dungeonCardHp: 0 }))
-        })!;
+        const patrolOnlyBoard: BoardState = {
+            ...createBoard([
+                ...board.tiles.map((tile) => ({
+                    ...tile,
+                    state: 'matched' as const,
+                    dungeonCardState: 'resolved' as const,
+                    dungeonCardHp: 0
+                })),
+                createTile('open-a', 'open-pair', 'O'),
+                createTile('open-b', 'open-pair', 'O')
+            ]),
+            dungeonBossId: 'spire_observer',
+            enemyHazards: board.enemyHazards
+        };
+        const patrolOnly = getDungeonBossReadModel(patrolOnlyBoard)!;
         expect(patrolOnly).toMatchObject({
             lifecycleSource: 'moving_patrol',
             activeBossCardPairCount: 0,

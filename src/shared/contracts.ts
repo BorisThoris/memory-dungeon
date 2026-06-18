@@ -247,6 +247,7 @@ export type RunShopItemId =
     | 'region_shuffle_charge'
     | 'destroy_charge'
     | 'trait_cleanse'
+    | 'trait_routing_kit'
     | 'iron_key'
     | 'master_key';
 export type RunShopItemCategory = 'consumable' | 'service';
@@ -791,6 +792,7 @@ export interface RouteSideRoomChoiceState {
     label: string;
     detail: string;
     primary?: boolean;
+    traitBuildLabels?: string[];
 }
 
 export interface RouteSideRoomState {
@@ -827,6 +829,7 @@ export interface RunSummary {
     dailyDateKeyUtc?: string;
     activeMutators?: MutatorId[];
     relicIds?: RelicId[];
+    startingLoadoutId?: StartingLoadoutId | null;
     practiceMode?: boolean;
     wildMenuRun?: boolean;
     dungeonShowcaseRun?: boolean;

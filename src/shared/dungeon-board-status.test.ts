@@ -205,4 +205,56 @@ describe('dungeon board status', () => {
             alertText: 'Mnemonist Observer gives a longer study, then punishes mismatches with extra recall pressure.'
         });
     });
+
+    it('does not let stale boss patrol overlays block a fully matched boss floor', () => {
+        const board = {
+            floorTag: 'boss',
+            dungeonBossId: 'trap_warden',
+            dungeonObjectiveId: 'defeat_boss',
+            dungeonExitTileId: 'exit',
+            tiles: [
+                tile({ id: 'a1', pairKey: 'a', state: 'matched' }),
+                tile({ id: 'a2', pairKey: 'a', state: 'matched' }),
+                tile({
+                    id: 'exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'none'
+                })
+            ],
+            matchedPairs: 1,
+            pairCount: 1,
+            enemyHazards: [
+                {
+                    id: 'boss-hazard',
+                    bossId: 'trap_warden',
+                    kind: 'warden',
+                    label: 'Latch Warden',
+                    pattern: 'guard',
+                    state: 'revealed',
+                    currentTileId: 'a1',
+                    nextTileId: 'a2',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 3
+                }
+            ]
+        } as BoardState;
+        const staleRun = run(board);
+
+        expect(getDungeonObjectiveStatus(staleRun)).toMatchObject({
+            objectiveId: 'defeat_boss',
+            completed: true,
+            progress: 3,
+            required: 3
+        });
+        expect(getDungeonExitStatus(staleRun).lockedReason).toBeNull();
+        expect(getDungeonBossReadModel(staleRun)).toMatchObject({
+            lifecycleSource: 'none',
+            phase: 'defeated',
+            activeMovingPatrolCount: 0
+        });
+        expect(getDungeonBoardPresentation(staleRun).combatForecastText).toBeNull();
+    });
 });

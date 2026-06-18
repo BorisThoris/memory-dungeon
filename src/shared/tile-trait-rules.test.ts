@@ -112,6 +112,23 @@ describe('tile trait rules', () => {
         expect(hasAdjacentTraitPair(greedTiles, 'drift', 'volatile')).toBe(true);
     });
 
+    it('biases generated trait interaction pairs toward starting loadout identity', () => {
+        const baseTiles = Array.from({ length: 8 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
+
+        const scoutTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'greed', [], 'memory_scout');
+        const tacticianTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'safe', [], 'route_tactician');
+        const cursebreakerTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'safe', [], 'cursebreaker');
+        const vaultbreakerTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'mystery', [], 'vaultbreaker');
+
+        expect(hasAdjacentTraitPair(scoutTiles, 'conduit', 'echo')).toBe(true);
+        expect(hasAdjacentTraitPair(tacticianTiles, 'drift', 'volatile')).toBe(true);
+        expect(hasAdjacentTraitPair(cursebreakerTiles, 'mirror', 'stasis')).toBe(true);
+        expect(hasAdjacentTraitPair(vaultbreakerTiles, 'cursed', 'volatile')).toBe(true);
+        expect(assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'safe', [], 'route_tactician')).toEqual(
+            tacticianTiles
+        );
+    });
+
     it('does not hard-cap trait count on larger eligible boards', () => {
         const baseTiles = Array.from({ length: 18 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
         const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 12, null);
@@ -590,6 +607,17 @@ describe('tile trait rules', () => {
 
         expect(withPeek).toMatchObject({ peekChargeLoss: 1, recallMistakesDelta: 0 });
         expect(withoutPeek).toMatchObject({ peekChargeLoss: 0, recallMistakesDelta: 1 });
+    });
+
+    it('makes Heavy misses cost extra tries without draining peek value', () => {
+        const [a1] = makePair('a', 'A');
+        const [b1] = makePair('b', 'B');
+        const penalty = calculateTileTraitMismatchPenalty(makeRun([], { peekCharges: 1 }), [
+            { ...a1, tileTraitKind: 'heavy' },
+            b1
+        ]);
+
+        expect(penalty).toMatchObject({ triesDelta: 1, recallMistakesDelta: 0, peekChargeLoss: 0 });
     });
 
     it('deepens conduit mismatch recall pressure near cursed or volatile traits', () => {

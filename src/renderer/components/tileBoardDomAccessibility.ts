@@ -1,4 +1,5 @@
 import type { BoardState, RunStatus, Tile } from '../../shared/contracts';
+import { activeEnemyHazardsForBoard } from '../../shared/enemy-hazard-board-rules';
 import { getDungeonCardKnowledge } from '../../shared/dungeon-cards';
 import { getDungeonCardCopy } from '../../shared/dungeon-rules';
 import { getFindableRewardText } from '../../shared/findables';
@@ -25,12 +26,13 @@ export const getDungeonCardText = (tile: Tile): string => {
 };
 
 export const getEnemyHazardText = (board: BoardState, tileId: string): string => {
-    const hazard = board.enemyHazards?.find((candidate) => candidate.currentTileId === tileId && candidate.state !== 'defeated');
+    const hazards = activeEnemyHazardsForBoard(board);
+    const hazard = hazards.find((candidate) => candidate.currentTileId === tileId);
     if (hazard) {
         const revealed = hazard.state === 'revealed' ? 'revealed ' : 'hidden ';
         return ` Occupied by ${revealed}moving enemy patrol ${hazard.label}, ${hazard.hp}/${hazard.maxHp} HP, ${hazard.damage} damage.`;
     }
-    const nextHazard = board.enemyHazards?.find((candidate) => candidate.nextTileId === tileId && candidate.state !== 'defeated');
+    const nextHazard = hazards.find((candidate) => candidate.nextTileId === tileId);
     return nextHazard
         ? ` Next target of moving enemy patrol ${nextHazard.label}, ${nextHazard.hp}/${nextHazard.maxHp} HP, ${nextHazard.damage} damage.`
         : '';

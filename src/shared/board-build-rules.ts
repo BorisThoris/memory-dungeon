@@ -10,6 +10,7 @@ import {
     type RelicId,
     type RouteCardPlan,
     type RouteWorldProfile,
+    type StartingLoadoutId,
     type Tile
 } from './contracts';
 import { getChapterActBiomeForCycleFloor } from './floor-mutator-schedule';
@@ -66,6 +67,7 @@ export interface BuildBoardOptions {
     gameMode?: GameMode;
     suppressFindables?: boolean;
     relicIds?: readonly RelicId[];
+    startingLoadoutId?: StartingLoadoutId | null;
 }
 
 export const buildBoard = (level: number, options: BuildBoardOptions = {}): BoardState => {
@@ -244,7 +246,8 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         rulesVersion,
         level,
         routeWorldProfile?.intensity,
-        options.relicIds ?? []
+        options.relicIds ?? [],
+        options.startingLoadoutId ?? null
     );
     const tiles = applyDungeonLayoutPlan(
         traitTiles,

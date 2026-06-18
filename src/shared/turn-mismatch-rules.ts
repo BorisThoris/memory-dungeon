@@ -156,7 +156,7 @@ export const resolveMismatchTurnTransition = ({
         hazardMirrorDecoysThisFloor: run.hazardMirrorDecoysThisFloor + (mirrorTriggered ? 1 : 0),
         hazardFragileCacheBreaksThisFloor: run.hazardFragileCacheBreaksThisFloor + fragileBreak.brokenCount,
         safeHazardWardChargesThisFloor:
-            (run.safeHazardWardChargesThisFloor ?? 0) - (wardedHazards.wardUsed ? 1 : 0),
+            (run.safeHazardWardChargesThisFloor ?? 0) - (wardedHazards.wardChargeSpent ? 1 : 0),
         safeHazardWardsUsedThisFloor:
             (run.safeHazardWardsUsedThisFloor ?? 0) + (wardedHazards.wardUsed ? 1 : 0),
         pendingMemorizeBonusMs,

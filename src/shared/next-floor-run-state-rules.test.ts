@@ -107,12 +107,29 @@ describe('createNextFloorRunState', () => {
             regionShuffleFreeThisFloor: false,
             destroyPairCharges: 0
         };
+        const hazardBoard = {
+            ...run.board!,
+            tiles: run.board!.tiles.map((tile, index) =>
+                index < 2
+                    ? { ...tile, pairKey: 'hazard-pair', tileHazardKind: 'shuffle_snare' as const }
+                    : tile
+            )
+        };
         const noDestroyRun = {
             ...run,
             activeContract: { noShuffle: false, noDestroy: true, maxMismatches: null }
         };
 
         const next = createNextFloorRunState(run, {
+            lives: run.lives,
+            activeMutators: run.activeMutators,
+            dungeonRun: run.dungeonRun,
+            board: hazardBoard,
+            parasiteFloors: run.parasiteFloors,
+            parasiteWardRemaining: run.parasiteWardRemaining,
+            memorizeRemainingMs: 1000
+        });
+        const fallbackNext = createNextFloorRunState(run, {
             lives: run.lives,
             activeMutators: run.activeMutators,
             dungeonRun: run.dungeonRun,
@@ -125,14 +142,23 @@ describe('createNextFloorRunState', () => {
             lives: noDestroyRun.lives,
             activeMutators: noDestroyRun.activeMutators,
             dungeonRun: noDestroyRun.dungeonRun,
-            board: noDestroyRun.board!,
+            board: hazardBoard,
             parasiteFloors: noDestroyRun.parasiteFloors,
             parasiteWardRemaining: noDestroyRun.parasiteWardRemaining,
             memorizeRemainingMs: 1000
         });
 
         expect(next.regionShuffleFreeThisFloor).toBe(true);
-        expect(next.destroyPairCharges).toBe(1);
+        expect(next.destroyPairCharges).toBe(0);
+        expect(next.board!.tiles.filter((tile) => tile.pairKey === 'hazard-pair').map((tile) => tile.tileHazardKind)).toEqual([
+            undefined,
+            undefined
+        ]);
+        expect(fallbackNext.destroyPairCharges).toBe(1);
         expect(noDestroyNext.destroyPairCharges).toBe(0);
+        expect(noDestroyNext.board!.tiles.filter((tile) => tile.pairKey === 'hazard-pair').map((tile) => tile.tileHazardKind)).toEqual([
+            'shuffle_snare',
+            'shuffle_snare'
+        ]);
     });
 });

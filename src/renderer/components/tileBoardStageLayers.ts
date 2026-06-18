@@ -1,4 +1,5 @@
-import type { EnemyHazardState, GraphicsQualityPreset } from '../../shared/contracts';
+import type { EnemyHazardState, GraphicsQualityPreset, Tile } from '../../shared/contracts';
+import { getDungeonUtilityReadabilityKind } from './tileBoardReadability';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 
 export const DUNGEON_BOARD_STAGE_LAYER_POLICY = {
@@ -95,7 +96,15 @@ export const DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET = {
     maxActiveEnemyHazards: 6,
     maxMovingThreatDrawCalls: 36,
     maxMovingThreatMaterialSlots: 36,
+    maxStaticReadabilityMarkerDrawCalls: 72,
     sharedEnemyMarkerGeometryCount: 10,
+    utilityCardExtraDrawCalls: {
+        exit: 2,
+        lever: 2,
+        lock: 3,
+        shop: 1
+    },
+    traitRailExtraDrawCalls: 2,
     trapCardExtraDrawCallsPerPair: 0,
     contextLossRecovery: 'remount_canvas_on_restore'
 } as const;
@@ -179,23 +188,41 @@ const movingThreatMeshCountFor = (
     return 4 + secondaryMeshCount + (hasNextTelegraph ? 1 : 0);
 };
 
+const staticReadabilityMeshCountFor = (
+    tile: Pick<Tile, 'dungeonCardKind' | 'dungeonExitLockKind' | 'tileTraitKind'>
+): number => {
+    const utilityKind = getDungeonUtilityReadabilityKind(tile);
+    const utilityCount = utilityKind ? DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.utilityCardExtraDrawCalls[utilityKind] : 0;
+    const traitCount = tile.tileTraitKind ? DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.traitRailExtraDrawCalls : 0;
+    return utilityCount + traitCount;
+};
+
 export const estimateDungeonBoardStagePerformanceCost = (input: {
     hazards: readonly Pick<EnemyHazardState, 'bossId' | 'kind' | 'nextTileId' | 'state'>[];
     graphicsQuality: GraphicsQualityPreset;
     reduceMotion: boolean;
+    readabilityMarkerTiles?: readonly Pick<Tile, 'dungeonCardKind' | 'dungeonExitLockKind' | 'tileTraitKind'>[];
 }): {
     activeHazardCount: number;
     contextLossRecovery: typeof DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.contextLossRecovery;
     estimatedMovingThreatDrawCalls: number;
     estimatedMovingThreatMaterialSlots: number;
+    estimatedStaticReadabilityDrawCalls: number;
     lowOrReducedQualityReadable: boolean;
+    maxStaticReadabilityMarkerDrawCalls: number;
     sharedEnemyMarkerGeometryCount: number;
+    traitRailExtraDrawCalls: number;
     trapCardExtraDrawCallsPerPair: number;
+    utilityCardExtraDrawCalls: typeof DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.utilityCardExtraDrawCalls;
     withinBudget: boolean;
 } => {
     const activeHazards = input.hazards.filter((hazard) => hazard.state !== 'defeated');
     const estimatedMovingThreatDrawCalls = activeHazards.reduce(
         (sum, hazard) => sum + movingThreatMeshCountFor(hazard, Boolean(hazard.nextTileId)),
+        0
+    );
+    const estimatedStaticReadabilityDrawCalls = (input.readabilityMarkerTiles ?? []).reduce(
+        (sum, tile) => sum + staticReadabilityMeshCountFor(tile),
         0
     );
     const lod = getDungeonBoardStageLod(input.graphicsQuality, input.reduceMotion);
@@ -205,16 +232,21 @@ export const estimateDungeonBoardStagePerformanceCost = (input: {
         contextLossRecovery: DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.contextLossRecovery,
         estimatedMovingThreatDrawCalls,
         estimatedMovingThreatMaterialSlots: estimatedMovingThreatDrawCalls,
+        estimatedStaticReadabilityDrawCalls,
         lowOrReducedQualityReadable:
             lod.currentMarkerOpacity >= 0.88 &&
             lod.nextTelegraphOpacity >= 0.3 &&
             (input.graphicsQuality !== 'low' || lod.strongEffectBudget === 'critical-only') &&
             (!input.reduceMotion || !lod.markerMotionEnabled),
+        maxStaticReadabilityMarkerDrawCalls: DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxStaticReadabilityMarkerDrawCalls,
         sharedEnemyMarkerGeometryCount: DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.sharedEnemyMarkerGeometryCount,
+        traitRailExtraDrawCalls: DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.traitRailExtraDrawCalls,
         trapCardExtraDrawCallsPerPair: DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.trapCardExtraDrawCallsPerPair,
+        utilityCardExtraDrawCalls: DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.utilityCardExtraDrawCalls,
         withinBudget:
             activeHazards.length <= DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxActiveEnemyHazards &&
             estimatedMovingThreatDrawCalls <= DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxMovingThreatDrawCalls &&
-            estimatedMovingThreatDrawCalls <= DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxMovingThreatMaterialSlots
+            estimatedMovingThreatDrawCalls <= DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxMovingThreatMaterialSlots &&
+            estimatedStaticReadabilityDrawCalls <= DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxStaticReadabilityMarkerDrawCalls
     };
 };

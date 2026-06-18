@@ -192,6 +192,65 @@ describe('TileBoard touch and click controls', () => {
         expect(frame.getAttribute('data-card-feedback-last-resolution')).toContain('match:2');
     });
 
+    it('announces resolved trap cards with a generic trap status and specific card label', async () => {
+        const resolvedTrapTiles: BoardState['tiles'] = [
+            {
+                id: 'trap-1',
+                pairKey: 'trap',
+                symbol: '!',
+                label: 'Mimic Bounty',
+                state: 'hidden',
+                dungeonCardKind: 'trap',
+                dungeonCardState: 'resolved'
+            },
+            {
+                id: 'trap-2',
+                pairKey: 'trap',
+                symbol: '!',
+                label: 'Mimic Bounty',
+                state: 'hidden',
+                dungeonCardKind: 'trap',
+                dungeonCardState: 'resolved'
+            },
+            board.tiles[2]!,
+            board.tiles[3]!
+        ];
+        const rendered = renderBoard({
+            board,
+            debugPeekActive: false,
+            interactive: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: true
+        });
+
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <TileBoard
+                    board={{ ...board, tiles: resolvedTrapTiles }}
+                    debugPeekActive={false}
+                    interactive
+                    mobileCameraMode={false}
+                    onTileSelect={vi.fn()}
+                    previewActive={false}
+                    reduceMotion
+                    runStatus="playing"
+                    viewportResetToken={0}
+                />
+            </PlatformTiltProvider>
+        );
+
+        await waitFor(() =>
+            expect(screen.getByTestId('trap-resolution-feedback')).toHaveTextContent(
+                'Trap resolved: Mimic Bounty. Effect applied; next tile ready.'
+            )
+        );
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
+            'data-dungeon-trap-resolution-message',
+            'Trap resolved: Mimic Bounty. Effect applied; next tile ready.'
+        );
+    });
+
     it('arms deal-in motion on mount when motion is enabled', async () => {
         renderBoard({
             board,
@@ -293,6 +352,7 @@ describe('TileBoard touch and click controls', () => {
 
         await waitFor(() => expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Trait combo'));
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Echo + Sealed: combo shard');
+        expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('trait-combo:1');
     });
 
     it('shows a visible swap preview when the focused target would create a trait interaction', async () => {
@@ -771,16 +831,44 @@ describe('TileBoard touch and click controls', () => {
             { kind: 'observer' as const, bossId: 'spire_observer' as const, nextTileId: 'b1', state: 'revealed' as const }
         ];
 
-        const high = estimateDungeonBoardStagePerformanceCost({ hazards, graphicsQuality: 'high', reduceMotion: false });
-        const reduced = estimateDungeonBoardStagePerformanceCost({ hazards, graphicsQuality: 'high', reduceMotion: true });
-        const low = estimateDungeonBoardStagePerformanceCost({ hazards, graphicsQuality: 'low', reduceMotion: false });
+        const readabilityMarkerTiles = [
+            { dungeonCardKind: 'exit' as const, dungeonExitLockKind: 'iron' as const, tileTraitKind: 'echo' as const },
+            { dungeonCardKind: 'lock' as const, dungeonExitLockKind: undefined, tileTraitKind: undefined },
+            { dungeonCardKind: 'lever' as const, dungeonExitLockKind: undefined, tileTraitKind: undefined },
+            { dungeonCardKind: 'shop' as const, dungeonExitLockKind: undefined, tileTraitKind: 'conduit' as const }
+        ];
+
+        const high = estimateDungeonBoardStagePerformanceCost({
+            hazards,
+            graphicsQuality: 'high',
+            readabilityMarkerTiles,
+            reduceMotion: false
+        });
+        const reduced = estimateDungeonBoardStagePerformanceCost({
+            hazards,
+            graphicsQuality: 'high',
+            readabilityMarkerTiles,
+            reduceMotion: true
+        });
+        const low = estimateDungeonBoardStagePerformanceCost({
+            hazards,
+            graphicsQuality: 'low',
+            readabilityMarkerTiles,
+            reduceMotion: false
+        });
 
         expect(high.activeHazardCount).toBe(DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxActiveEnemyHazards);
         expect(high.estimatedMovingThreatDrawCalls).toBeLessThanOrEqual(
             DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxMovingThreatDrawCalls
         );
         expect(high.estimatedMovingThreatMaterialSlots).toBe(high.estimatedMovingThreatDrawCalls);
+        expect(high.estimatedStaticReadabilityDrawCalls).toBe(12);
+        expect(high.estimatedStaticReadabilityDrawCalls).toBeLessThanOrEqual(
+            DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.maxStaticReadabilityMarkerDrawCalls
+        );
         expect(high.sharedEnemyMarkerGeometryCount).toBe(DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.sharedEnemyMarkerGeometryCount);
+        expect(high.traitRailExtraDrawCalls).toBe(DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.traitRailExtraDrawCalls);
+        expect(high.utilityCardExtraDrawCalls).toBe(DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET.utilityCardExtraDrawCalls);
         expect(high.trapCardExtraDrawCallsPerPair).toBe(0);
         expect(high.contextLossRecovery).toBe('remount_canvas_on_restore');
         expect(high.withinBudget).toBe(true);

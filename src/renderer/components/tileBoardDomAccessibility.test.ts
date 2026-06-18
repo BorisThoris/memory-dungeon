@@ -74,6 +74,32 @@ describe('tile board DOM accessibility helpers', () => {
         expect(getEnemyHazardText(labelledBoard, 'b1')).toContain('Next target of moving enemy patrol Sentinel');
     });
 
+    it('does not announce stale moving enemy patrols on cleared boards', () => {
+        const clearedBoard: BoardState = {
+            ...board,
+            matchedPairs: 2,
+            enemyHazards: [
+                {
+                    id: 'stale-warden',
+                    kind: 'warden',
+                    label: 'Warden',
+                    currentTileId: 'a1',
+                    nextTileId: 'a2',
+                    pattern: 'guard',
+                    state: 'revealed',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 2,
+                    bossId: 'trap_warden'
+                }
+            ],
+            tiles: board.tiles.map((tile) => ({ ...tile, state: 'matched' }))
+        };
+
+        expect(getEnemyHazardText(clearedBoard, 'a1')).toBe('');
+        expect(getEnemyHazardText(clearedBoard, 'a2')).toBe('');
+    });
+
     it('describes board power target validity', () => {
         const hidden = board.tiles[0]!;
         expect(

@@ -100,7 +100,8 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         routeCardPlan: run.pendingRouteCardPlan,
         dungeonNodeKind: selectedDungeonNode?.kind,
         gameMode: run.gameMode,
-        relicIds: run.relicIds
+        relicIds: run.relicIds,
+        startingLoadoutId: run.startingLoadoutId
     });
     const runForNextMemorize: RunState = { ...run, activeMutators: nextActiveMutators, board: nextBoard };
     const baseMemorizeMs = getMemorizeDurationForRun(runForNextMemorize, nextBoard.level);

@@ -57,9 +57,46 @@ describe('hazard tile effect rules', () => {
 
         expect(result).toMatchObject({
             wardUsed: true,
+            wardChargeSpent: true,
+            traitWardUsed: false,
             snareHazard: { triggered: false },
             fragileBreak: { brokenCount: 1 }
         });
+    });
+
+    it('lets Stasis absorb one snare mismatch without spending ward charges', () => {
+        const run = { ...createNewRun(0), safeHazardWardChargesThisFloor: 0 };
+        const board = boardWith([
+            tile('snare-a', 'snare-a', { tileHazardKind: 'shuffle_snare', tileTraitKind: 'stasis' }),
+            tile('safe-a', 'safe-a'),
+            tile('safe-b', 'safe-b')
+        ]);
+        const result = applySafeHazardWardMismatch(run, board, [board.tiles[0]!], new Set(['shuffle_snare']));
+
+        expect(result).toMatchObject({
+            wardUsed: true,
+            wardChargeSpent: false,
+            traitWardUsed: true,
+            snareHazard: { triggered: false }
+        });
+        expect(result.board).toBe(board);
+    });
+
+    it('lets Stasis absorb one fragile cache mismatch without breaking the cache', () => {
+        const run = { ...createNewRun(0), safeHazardWardChargesThisFloor: 0 };
+        const board = boardWith([
+            tile('fragile-a', 'fragile-a', { tileHazardKind: 'fragile_cache', tileTraitKind: 'stasis' }),
+            tile('safe-a', 'safe-a')
+        ]);
+        const result = applySafeHazardWardMismatch(run, board, board.tiles, new Set(['fragile_cache']));
+
+        expect(result).toMatchObject({
+            wardUsed: true,
+            wardChargeSpent: false,
+            traitWardUsed: true,
+            fragileBreak: { brokenCount: 0 }
+        });
+        expect(result.board.tiles[0]?.tileHazardKind).toBe('fragile_cache');
     });
 
     it('collects hazard kinds by tile id', () => {

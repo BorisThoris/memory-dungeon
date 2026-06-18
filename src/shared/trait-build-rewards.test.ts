@@ -3,6 +3,7 @@ import type { TileTraitKind } from './contracts';
 import {
     getTraitBuildDraftHintForRelic,
     getTraitBuildRewardRows,
+    getTraitBuildRewardRowsForLoadout,
     getTraitBuildRewardRowsForRelic,
     getTraitBuildRewardRowsForTrait,
     TRAIT_BUILD_REWARD_ROWS
@@ -55,5 +56,25 @@ describe('trait build reward rows', () => {
         expect(getTraitBuildDraftHintForRelic('chapter_compass')).toBe('Trait build: Conduit Cartographer');
         expect(getTraitBuildDraftHintForRelic('wager_surety')).toBe('Trait build: Cursed Greed');
         expect(getTraitBuildDraftHintForRelic('stray_charge_plus_one')).toBeNull();
+    });
+
+    it('maps starting loadouts to early trait-build guidance', () => {
+        expect(getTraitBuildRewardRowsForLoadout('memory_scout').map((row) => row.id)).toEqual([
+            'conduit_cartographer',
+            'sealed_catalyst'
+        ]);
+        expect(getTraitBuildRewardRowsForLoadout('route_tactician').map((row) => row.id)).toEqual([
+            'conduit_cartographer',
+            'drift_routing'
+        ]);
+        expect(getTraitBuildRewardRowsForLoadout('cursebreaker').map((row) => row.id)).toEqual([
+            'mirror_warden',
+            'cursed_greed'
+        ]);
+        expect(getTraitBuildRewardRowsForLoadout('vaultbreaker').map((row) => row.id)).toEqual([
+            'sealed_catalyst',
+            'cursed_greed'
+        ]);
+        expect(getTraitBuildRewardRowsForLoadout(null)).toEqual([]);
     });
 });

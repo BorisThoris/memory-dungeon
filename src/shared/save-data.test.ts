@@ -368,7 +368,8 @@ describe('save normalization', () => {
                 runRulesVersion: GAME_RULES_VERSION,
                 gameMode: 'endless',
                 activeMutators: ['short_memorize', 'short_memorize', 'wide_recall'],
-                relicIds: ['extra_shuffle_charge', 'extra_shuffle_charge', 'guard_token_plus_one']
+                relicIds: ['extra_shuffle_charge', 'extra_shuffle_charge', 'guard_token_plus_one'],
+                startingLoadoutId: 'route_tactician'
             }
         });
 
@@ -376,6 +377,13 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary?.unlockedAchievements).toEqual(['ACH_FIRST_CLEAR']);
         expect(normalized.lastRunSummary?.activeMutators).toEqual(['short_memorize', 'wide_recall']);
         expect(normalized.lastRunSummary?.relicIds).toEqual(['extra_shuffle_charge', 'guard_token_plus_one']);
+        expect(normalized.lastRunSummary?.startingLoadoutId).toBe('route_tactician');
+        expect(normalizeSaveData({
+            lastRunSummary: {
+                ...normalized.lastRunSummary!,
+                startingLoadoutId: 'missing_loadout' as unknown as RunSummary['startingLoadoutId']
+            }
+        }).lastRunSummary?.startingLoadoutId).toBeUndefined();
     });
 
     it('DNG-073 drops summaries from future save schemas instead of trusting obsolete active-run data', () => {

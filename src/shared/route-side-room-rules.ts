@@ -45,7 +45,8 @@ const buildBonusSideRoom = (
         floor,
         routeKind: nodeKind,
         ledger: run.bonusRewardLedger,
-        count: 3
+        count: 3,
+        startingLoadoutId: run.startingLoadoutId
     });
     const primaryInstanceId = draft.some((option) => option.instanceId === reward.instanceId)
         ? reward.instanceId
@@ -56,7 +57,8 @@ const buildBonusSideRoom = (
         detail: option.eligible
             ? previewBonusRewardClaim(run, option).feedback.summary || option.summaryText
             : (option.unavailableReason ?? option.summaryText),
-        primary: option.instanceId === primaryInstanceId
+        primary: option.instanceId === primaryInstanceId,
+        traitBuildLabels: [...(option.traitBuildLabels ?? [])]
     }));
     const primaryChoice = choices.find((choice) => choice.primary);
     return {

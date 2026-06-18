@@ -7,6 +7,7 @@ import {
     type FindableKind,
     type MutatorId,
     type RouteNodeType,
+    type BoardState,
     type TileTraitKind,
     type Tile
 } from './contracts';
@@ -14,6 +15,7 @@ import { buildBoard, countFindablePairs } from './board-generation';
 import { getShopGoldRewardForFloor, SHOP_ITEM_CATALOG } from './shop-rules';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { RELIC_DRAFT, RELIC_POOL, type RelicDraftRarity } from './relics';
+import { getTileTraitInteractionPreviewLines } from './tile-trait-rules';
 
 export interface BalanceSimulationInput {
     seeds?: readonly number[];
@@ -44,6 +46,7 @@ export interface BalanceSimulationReport {
         findablePickupPairs: number;
         findableKindCounts: Record<FindableKind, number>;
         tileTraitPairs: number;
+        traitComboOpportunityPairs: number;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         floorTag: string;
         dungeonNodeKind: DungeonRunNodeKind;
@@ -75,6 +78,7 @@ export interface BalanceSimulationReport {
         findablePickupPairs: number;
         findableKindCounts: Record<FindableKind, number>;
         tileTraitPairs: number;
+        traitComboOpportunityPairs: number;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         bossFloors: number;
         breatherFloors: number;
@@ -313,6 +317,23 @@ const countTileTraitKinds = (tiles: readonly Tile[]): Record<TileTraitKind, numb
     return counts;
 };
 
+const countTraitComboOpportunityPairs = (board: BoardState): number => {
+    const seenPairs = new Set<string>();
+    for (const tile of board.tiles) {
+        if (!tile.tileTraitKind || seenPairs.has(tile.pairKey)) {
+            continue;
+        }
+        const previewLines = [
+            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
+            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
+        ];
+        if (previewLines.length > 0) {
+            seenPairs.add(tile.pairKey);
+        }
+    }
+    return seenPairs.size;
+};
+
 const sumFindableKindCounts = (
     counts: readonly Record<FindableKind, number>[]
 ): Record<FindableKind, number> =>
@@ -490,6 +511,7 @@ export const runBalanceSimulation = ({
             const findableKindCounts = countFindableKinds(board.tiles);
             const tileTraitKindCounts = countTileTraitKinds(board.tiles);
             const tileTraitPairs = Object.values(tileTraitKindCounts).reduce((sum, count) => sum + count, 0);
+            const traitComboOpportunityPairs = countTraitComboOpportunityPairs(board);
             const shopGoldInflowPotential =
                 getShopGoldRewardForFloor(floor) +
                 treasureRewardPairs +
@@ -517,6 +539,7 @@ export const runBalanceSimulation = ({
                 findablePickupPairs: countFindablePairs(board.tiles),
                 findableKindCounts,
                 tileTraitPairs,
+                traitComboOpportunityPairs,
                 tileTraitKindCounts,
                 floorTag: schedule.floorTag,
                 dungeonNodeKind,
@@ -553,6 +576,7 @@ export const runBalanceSimulation = ({
     const aggregateFindableKindCounts = sumFindableKindCounts(samples.map((sample) => sample.findableKindCounts));
     const findableKindShares = getFindableKindShares(aggregateFindableKindCounts);
     const tileTraitCounts = samples.map((sample) => sample.tileTraitPairs);
+    const traitComboOpportunityCounts = samples.map((sample) => sample.traitComboOpportunityPairs);
     const aggregateTileTraitKindCounts = sumTileTraitKindCounts(samples.map((sample) => sample.tileTraitKindCounts));
     const tileTraitKindShares = getTileTraitKindShares(aggregateTileTraitKindCounts);
     const totalFindableWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
@@ -613,7 +637,7 @@ export const runBalanceSimulation = ({
             'Shop sink total per simulated shop visit',
             shopSinkPerVisit * shopVisits,
             shopVisits * 6,
-            shopVisits * 16,
+            shopVisits * 24,
             'SHOP_ITEM_CATALOG baseCost'
         ),
         row(
@@ -631,6 +655,14 @@ export const runBalanceSimulation = ({
             0.45,
             2.6,
             'assignTileTraitsToGeneratedBoard'
+        ),
+        row(
+            'avg_trait_combo_opportunity_pairs_per_floor',
+            'Average trait pairs with previewable adjacency combos per floor',
+            Number(average(traitComboOpportunityCounts).toFixed(2)),
+            0.25,
+            2.2,
+            'getTileTraitInteractionPreviewLines'
         ),
         ...TILE_TRAIT_KINDS.map((kind) =>
             row(
@@ -842,6 +874,7 @@ export const runBalanceSimulation = ({
             findablePickupPairs: samples.reduce((sum, sample) => sum + sample.findablePickupPairs, 0),
             findableKindCounts: aggregateFindableKindCounts,
             tileTraitPairs: samples.reduce((sum, sample) => sum + sample.tileTraitPairs, 0),
+            traitComboOpportunityPairs: samples.reduce((sum, sample) => sum + sample.traitComboOpportunityPairs, 0),
             tileTraitKindCounts: aggregateTileTraitKindCounts,
             bossFloors: samples.filter((sample) => sample.floorTag === 'boss').length,
             breatherFloors: samples.filter((sample) => sample.floorTag === 'breather').length,
@@ -888,7 +921,7 @@ export const BALANCE_SIMULATION_BASELINE = {
     findablePickupPairs: { min: 12, max: 24 },
     bossFloors: { min: 2, max: 2 },
     breatherFloors: { min: 3, max: 3 },
-    shopSinkBudget: { min: 72, max: 72 }
+    shopSinkBudget: { min: 84, max: 84 }
 } as const;
 
 export const assertBalanceSimulationWithinBaseline = (

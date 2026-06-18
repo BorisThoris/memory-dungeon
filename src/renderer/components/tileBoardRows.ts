@@ -1,4 +1,5 @@
 import type { BoardState, EnemyHazardState, HazardTileKind, RunStatus, Tile } from '../../shared/contracts';
+import { activeEnemyHazardsForBoard } from '../../shared/enemy-hazard-board-rules';
 import { getTileFieldAmplification } from './tileFieldTilt';
 import { isTilePickable } from './tileBoardPick';
 import { isTileBoardFlipLocked } from './tileBoardFlipLock';
@@ -93,9 +94,7 @@ export interface BuildTileBoardRowsInput {
 
 export const getEnemyOccupiedTileIds = (board: BoardState): Set<string> =>
     new Set(
-        (board.enemyHazards ?? [])
-            .filter((hazard) => hazard.state !== 'defeated')
-            .map((hazard) => hazard.currentTileId)
+        activeEnemyHazardsForBoard(board).map((hazard) => hazard.currentTileId)
     );
 
 export const buildTileBoardRows = ({
@@ -276,8 +275,7 @@ export const buildTileBoardEnemyHazardRows = (
 ): TileBoardEnemyHazardRow[] => {
     const byTileId = new Map(rows.map((row) => [row.tile.id, row.transform]));
 
-    return (board.enemyHazards ?? [])
-        .filter((hazard) => hazard.state !== 'defeated')
+    return activeEnemyHazardsForBoard(board)
         .map((hazard) => {
             const currentTransform = byTileId.get(hazard.currentTileId) ?? null;
             if (!currentTransform) {

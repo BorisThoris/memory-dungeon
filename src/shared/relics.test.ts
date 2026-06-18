@@ -160,11 +160,14 @@ describe('rollRelicOptions', () => {
         expect(summaries.find((summary) => summary.id === 'trap_control')?.relicIds).toEqual(
             expect.arrayContaining(['extra_shuffle_charge', 'destroy_bank_plus_one'])
         );
-        expect(summaries.find((summary) => summary.id === 'treasure_greed')?.deferredHooks.join(' ')).toContain(
-            'treasure-cache'
+        expect(summaries.find((summary) => summary.id === 'treasure_greed')?.supportHooks.join(' ')).toContain(
+            'first treasure chest Favor echo'
         );
         expect(summaries.find((summary) => summary.id === 'boss_hunter')?.relicIds).toEqual(
             expect.arrayContaining(['chapter_compass', 'wager_surety'])
+        );
+        expect(summaries.find((summary) => summary.id === 'boss_hunter')?.supportHooks.join(' ')).toContain(
+            'boss trophy cache score bonus'
         );
         expect(summaries.find((summary) => summary.id === 'route_gambler')?.relicIds).toEqual(
             expect.arrayContaining(['shrine_echo', 'wager_surety'])
@@ -422,6 +425,32 @@ describe('rollRelicOptions', () => {
         });
         expect(getContextualRelicDraftWeight('peek_charge_plus_one', traitContext, 0)).toBeGreaterThan(
             getContextualRelicDraftWeight('peek_charge_plus_one', neutral, 0)
+        );
+    });
+
+    it('uses starting loadout as early relic draft build context before matching traits appear', () => {
+        const traitlessBoard = {
+            ...createNewRun(14).board!,
+            level: 3,
+            floorArchetypeId: 'survey_hall',
+            featuredObjectiveId: 'scholar_style',
+            tiles: createNewRun(14).board!.tiles.map((tile) => ({ ...tile, tileTraitKind: undefined }))
+        } as RunState['board'];
+        const neutralRun = levelCompleteRun(3, 0, { board: traitlessBoard });
+        const tacticianRun = levelCompleteRun(3, 0, { board: traitlessBoard, startingLoadoutId: 'route_tactician' });
+        const neutral = getRelicDraftContext(neutralRun, 3);
+        const tactician = getRelicDraftContext(tacticianRun, 3);
+
+        expect(tactician.startingLoadoutId).toBe('route_tactician');
+        expect(tactician.activeTraitKinds).toEqual(neutral.activeTraitKinds);
+        expect(getRelicDraftOptionReasons(tacticianRun, 3, ['peek_charge_plus_one'])).toEqual({
+            peek_charge_plus_one: 'Supports Conduit Cartographer'
+        });
+        expect(getContextualRelicDraftWeight('peek_charge_plus_one', tactician, 0)).toBeGreaterThan(
+            getContextualRelicDraftWeight('peek_charge_plus_one', neutral, 0)
+        );
+        expect(getContextualRelicDraftWeight('guard_token_plus_one', tactician, 0)).toBe(
+            getContextualRelicDraftWeight('guard_token_plus_one', neutral, 0)
         );
     });
 

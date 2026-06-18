@@ -213,6 +213,40 @@ describe('tileBoardRows', () => {
         expect(hazardRows[0]!.nextTransform).toBe(rowModel[1]!.transform);
     });
 
+    it('does not render stale enemy hazards once all real pairs are cleared', () => {
+        const b = board(
+            [
+                tile('a1', 'a', 'matched'),
+                tile('a2', 'a', 'matched'),
+                tile('b1', 'b', 'matched'),
+                tile('b2', 'b', 'matched')
+            ],
+            {
+                matchedPairs: 2,
+                enemyHazards: [
+                    {
+                        id: 'stale-warden',
+                        kind: 'warden',
+                        label: 'Warden',
+                        currentTileId: 'a1',
+                        nextTileId: 'a2',
+                        pattern: 'guard',
+                        state: 'revealed',
+                        damage: 1,
+                        hp: 1,
+                        maxHp: 2,
+                        bossId: 'trap_warden'
+                    }
+                ]
+            }
+        );
+        const rowModel = rows({ board: b });
+
+        expect([...getEnemyOccupiedTileIds(b)]).toEqual([]);
+        expect(rowModel.map((row) => row.enemyOccupiedBack)).toEqual([false, false, false, false]);
+        expect(buildTileBoardEnemyHazardRows(b, rowModel)).toEqual([]);
+    });
+
     it('collects overlay prewarm pair keys from face-up, resolving, and pickable rows', () => {
         const b = board(
             [

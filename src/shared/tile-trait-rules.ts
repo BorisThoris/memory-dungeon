@@ -6,6 +6,7 @@ import {
     type RelicId,
     type RouteNodeType,
     type RunState,
+    type StartingLoadoutId,
     type Tile,
     type TileTraitKind
 } from './contracts';
@@ -41,7 +42,7 @@ export const TILE_TRAIT_COPY: Record<TileTraitKind, { label: string; match: stri
     heavy: {
         label: 'Heavy',
         match: 'Clean match grants +35 score; adjacency improves Sealed and Volatile rewards.',
-        mismatch: 'Mismatch has no extra penalty, but the pair still costs a normal miss.'
+        mismatch: 'Mismatch costs +1 extra try but never drains peek charges.'
     },
     drift: {
         label: 'Drift',
@@ -342,10 +343,37 @@ const calculateCoreTraitCount = (eligiblePairCount: number, level: number): numb
     return Math.min(Math.max(densityCount, floorBandMinimum), eligiblePairCount);
 };
 
+const LOADOUT_TRAIT_PLANS: Record<
+    StartingLoadoutId,
+    { interactionSeed: readonly [TileTraitKind, TileTraitKind]; pool: readonly TileTraitKind[] }
+> = {
+    memory_scout: {
+        interactionSeed: ['conduit', 'echo'],
+        pool: ['echo', 'conduit', 'mirror', 'sealed', 'heavy']
+    },
+    route_tactician: {
+        interactionSeed: ['drift', 'volatile'],
+        pool: ['drift', 'volatile', 'conduit', 'echo', 'stasis']
+    },
+    cursebreaker: {
+        interactionSeed: ['mirror', 'stasis'],
+        pool: ['mirror', 'stasis', 'cursed', 'sealed', 'volatile']
+    },
+    vaultbreaker: {
+        interactionSeed: ['cursed', 'volatile'],
+        pool: ['cursed', 'volatile', 'drift', 'sealed', 'heavy']
+    }
+};
+
 const routeInteractionSeed = (
     intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    relicIds: readonly RelicId[]
+    relicIds: readonly RelicId[],
+    startingLoadoutId: StartingLoadoutId | null | undefined
 ): readonly [TileTraitKind, TileTraitKind] => {
+    const loadoutPlan = startingLoadoutId ? LOADOUT_TRAIT_PLANS[startingLoadoutId] : null;
+    if (loadoutPlan) {
+        return loadoutPlan.interactionSeed;
+    }
     if (intensity === 'greed') {
         return ['drift', 'volatile'];
     }
@@ -353,6 +381,36 @@ const routeInteractionSeed = (
         return relicIds.includes('parasite_ledger') ? ['stasis', 'cursed'] : ['stasis', 'conduit'];
     }
     return relicIds.includes('chapter_compass') ? ['conduit', 'mirror'] : ['conduit', 'echo'];
+};
+
+const traitPoolForContext = (
+    level: number,
+    intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
+    relicIds: readonly RelicId[],
+    startingLoadoutId: StartingLoadoutId | null | undefined
+): TileTraitKind[] => {
+    const loadoutPool = startingLoadoutId ? LOADOUT_TRAIT_PLANS[startingLoadoutId]?.pool : null;
+    const hasChapterCompass = relicIds.includes('chapter_compass');
+    const hasWagerSurety = relicIds.includes('wager_surety');
+    const hasParasiteLedger = relicIds.includes('parasite_ledger');
+    const routePool: TileTraitKind[] =
+        level <= 1
+            ? ['echo', 'mirror', 'heavy']
+            : intensity === 'safe'
+            ? hasChapterCompass
+                ? ['echo', 'echo', 'mirror', 'sealed', 'conduit']
+                : ['echo', 'mirror', 'echo', 'heavy', 'conduit']
+            : intensity === 'greed'
+              ? hasWagerSurety
+                  ? ['volatile', 'cursed', 'echo', 'heavy', 'drift']
+                  : ['volatile', 'cursed', 'volatile', 'heavy', 'drift']
+              : intensity === 'mystery'
+                ? hasParasiteLedger
+                    ? ['mirror', 'sealed', 'cursed', 'echo', 'conduit', 'stasis']
+                    : ['mirror', 'sealed', 'volatile', 'echo', 'conduit', 'stasis']
+                : ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy', 'drift', 'conduit', 'stasis'];
+
+    return loadoutPool ? [...loadoutPool, ...routePool] : routePool;
 };
 
 const collectAdjacentEligiblePairKeys = (
@@ -440,7 +498,8 @@ export const assignTileTraitsToGeneratedBoard = (
     rulesVersion: number,
     level: number,
     intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
-    relicIds: readonly RelicId[] = []
+    relicIds: readonly RelicId[] = [],
+    startingLoadoutId: StartingLoadoutId | null | undefined = null
 ): Tile[] => {
     const eligiblePairKeys = [
         ...new Set(tiles.filter(tileCanReceiveTrait).map((tile) => tile.pairKey))
@@ -449,34 +508,19 @@ export const assignTileTraitsToGeneratedBoard = (
         return tiles.map((tile) => ({ ...tile }));
     }
 
-    const rng = createMulberry32(hashStringToSeed(`tileTraits:${rulesVersion}:${runSeed}:${level}:${intensity ?? 'none'}`));
+    const traitSeedKey = startingLoadoutId
+        ? `tileTraits:${rulesVersion}:${runSeed}:${level}:${intensity ?? 'none'}:${startingLoadoutId}`
+        : `tileTraits:${rulesVersion}:${runSeed}:${level}:${intensity ?? 'none'}`;
+    const rng = createMulberry32(hashStringToSeed(traitSeedKey));
     const traitCount = calculateCoreTraitCount(eligiblePairKeys.length, level);
-    const hasChapterCompass = relicIds.includes('chapter_compass');
-    const hasWagerSurety = relicIds.includes('wager_surety');
-    const hasParasiteLedger = relicIds.includes('parasite_ledger');
-    const pool: TileTraitKind[] =
-        level <= 1
-            ? ['echo', 'mirror', 'heavy']
-            : intensity === 'safe'
-            ? hasChapterCompass
-                ? ['echo', 'echo', 'mirror', 'sealed', 'conduit']
-                : ['echo', 'mirror', 'echo', 'heavy', 'conduit']
-            : intensity === 'greed'
-              ? hasWagerSurety
-                  ? ['volatile', 'cursed', 'echo', 'heavy', 'drift']
-                  : ['volatile', 'cursed', 'volatile', 'heavy', 'drift']
-              : intensity === 'mystery'
-                ? hasParasiteLedger
-                    ? ['mirror', 'sealed', 'cursed', 'echo', 'conduit', 'stasis']
-                    : ['mirror', 'sealed', 'volatile', 'echo', 'conduit', 'stasis']
-                : ['echo', 'volatile', 'mirror', 'cursed', 'sealed', 'heavy', 'drift', 'conduit', 'stasis'];
+    const pool = traitPoolForContext(level, intensity, relicIds, startingLoadoutId);
     const shuffledPairKeys = shuffleWithRng(() => rng(), eligiblePairKeys);
     const traitByPairKey = new Map<string, TileTraitKind>();
     if (traitCount >= 2) {
         const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys);
         const [firstPairKey, secondPairKey] = shuffleWithRng(() => rng(), adjacentPairs)[0] ?? [];
         if (firstPairKey && secondPairKey) {
-            const [firstTrait, secondTrait] = routeInteractionSeed(intensity, relicIds);
+            const [firstTrait, secondTrait] = routeInteractionSeed(intensity, relicIds, startingLoadoutId);
             traitByPairKey.set(firstPairKey, firstTrait);
             traitByPairKey.set(secondPairKey, secondTrait);
         }
@@ -757,7 +801,7 @@ export const resolveTileTraitEffects = ({
         (hasTrait('sealed') && sealedPeekLoss === 0 && !stasisBuffersSealed ? 1 : 0) +
         (hasTrait('conduit') && (adjacentTraitKinds.has('volatile') || adjacentTraitKinds.has('cursed')) ? 1 : 0) +
         (hasTrait('cursed') && adjacentTraitKinds.has('volatile') && !adjacentTraitKinds.has('stasis') ? 1 : 0);
-    result.triesDelta = (hasTrait('mirror') ? 1 : 0) + (hasTrait('cursed') ? 1 : 0);
+    result.triesDelta = (hasTrait('mirror') ? 1 : 0) + (hasTrait('cursed') ? 1 : 0) + (hasTrait('heavy') ? 1 : 0);
     if (hasTrait('conduit') && (adjacentTraitKinds.has('volatile') || adjacentTraitKinds.has('cursed'))) {
         result.interactionTags.push('conduit:danger-recall');
     }

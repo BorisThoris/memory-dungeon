@@ -11,6 +11,9 @@ import {
 import { buildBoard, type BuildBoardOptions } from './board-build-rules';
 import { inspectBoardFairness, type BoardFairnessIssue } from './board-inspection';
 import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
+import { createNewRun } from './run-creation-rules';
+import { getRunShopStockPlan } from './shop-rules';
+import { defeatEnemyHazardsOnClearedTiles } from './enemy-hazard-board-rules';
 
 export type SoftlockContractCoverageKey =
     | 'locks'
@@ -37,14 +40,16 @@ export interface SoftlockGeneratorFailure {
     scenarioLabel: string;
     seed: number;
     floor: number;
-    projection: 'generated' | 'final_pair';
+    projection: 'generated' | 'final_pair' | 'cleared_board' | 'shop_stock';
     issueCodes: string[];
+    issueDetails: string[];
     issues: BoardFairnessIssue[];
     boardSummary: string;
 }
 
 export interface SoftlockGeneratorContractResult {
     checkedBoards: number;
+    checkedShopPlans: number;
     failures: SoftlockGeneratorFailure[];
     coverage: Record<SoftlockContractCoverageKey, number>;
 }
@@ -78,6 +83,17 @@ const boardSummary = (board: BoardState): string =>
         `boss=${board.dungeonBossId ?? 'none'}`,
         `hazards=${board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated').length ?? 0}`
     ].join(' ');
+
+const formatIssueDetail = (issue: BoardFairnessIssue): string => {
+    const parts = [`${issue.code}: ${issue.message}`];
+    if (issue.pairKey) {
+        parts.push(`pair=${issue.pairKey}`);
+    }
+    if (issue.tileIds && issue.tileIds.length > 0) {
+        parts.push(`tiles=${issue.tileIds.join(',')}`);
+    }
+    return parts.join(' ');
+};
 
 const realPairKeys = (board: BoardState): string[] => [
     ...new Set(board.tiles.filter((tile) => !isSingletonUtilityPairKey(tile.pairKey)).map((tile) => tile.pairKey))
@@ -132,7 +148,31 @@ export const createFinalPairFairnessProjection = (board: BoardState): BoardState
     };
 };
 
-const addCoverage = (coverage: Record<SoftlockContractCoverageKey, number>, board: BoardState, projection: 'generated' | 'final_pair'): void => {
+export const createClearedBoardFairnessProjection = (board: BoardState): BoardState => {
+    const tiles = board.tiles.map((tile) =>
+        isSingletonUtilityPairKey(tile.pairKey) ? { ...tile } : { ...tile, state: 'matched' as const }
+    );
+    const exitLockKind = board.dungeonExitLockKind ?? 'none';
+    const needsKey = exitLockKind !== 'none' && exitLockKind !== 'lever';
+    const needsLever = exitLockKind === 'lever';
+    return defeatEnemyHazardsOnClearedTiles({
+        ...board,
+        tiles,
+        flippedTileIds: [],
+        matchedPairs: countMatchedPairs(tiles),
+        dungeonExitActivated: board.dungeonExitTileId != null ? true : board.dungeonExitActivated,
+        dungeonKeysHeld: needsKey ? Math.max(board.dungeonKeysHeld ?? 0, 1) : board.dungeonKeysHeld,
+        dungeonLeverCount: needsLever
+            ? Math.max(board.dungeonLeverCount ?? 0, board.dungeonExitRequiredLeverCount ?? 0)
+            : board.dungeonLeverCount
+    });
+};
+
+const addCoverage = (
+    coverage: Record<SoftlockContractCoverageKey, number>,
+    board: BoardState,
+    projection: 'generated' | 'final_pair' | 'cleared_board'
+): void => {
     const lockKind = board.dungeonExitLockKind ?? 'none';
     if (lockKind !== 'none') coverage.locks += 1;
     if (board.dungeonShopTileId || board.tiles.some((tile) => tile.dungeonCardKind === 'shop')) coverage.shops += 1;
@@ -152,15 +192,20 @@ const addCoverage = (coverage: Record<SoftlockContractCoverageKey, number>, boar
         coverage.enemies += 1;
     }
     if (board.dungeonBossId != null || board.tiles.some((tile) => tile.dungeonBossId != null)) coverage.bosses += 1;
-    if (projection === 'final_pair') coverage.finalPairStates += 1;
+    if (projection === 'final_pair' || projection === 'cleared_board') coverage.finalPairStates += 1;
 };
+
+const boardNeedsKeyInsurance = (board: BoardState): boolean =>
+    board.dungeonExitLockKind != null &&
+    board.dungeonExitLockKind !== 'none' &&
+    board.dungeonExitLockKind !== 'lever';
 
 const recordInspection = (
     result: SoftlockGeneratorContractResult,
     scenario: SoftlockGeneratorScenario,
     seed: number,
     floor: number,
-    projection: 'generated' | 'final_pair',
+    projection: 'generated' | 'final_pair' | 'cleared_board',
     board: BoardState
 ): void => {
     result.checkedBoards += 1;
@@ -174,10 +219,54 @@ const recordInspection = (
             floor,
             projection,
             issueCodes: report.issues.map((issue) => issue.code),
+            issueDetails: report.issues.map(formatIssueDetail),
             issues: report.issues,
             boardSummary: boardSummary(board)
         });
     }
+};
+
+const recordShopStockInspection = (
+    result: SoftlockGeneratorContractResult,
+    scenario: SoftlockGeneratorScenario,
+    seed: number,
+    floor: number,
+    board: BoardState
+): void => {
+    if (!boardNeedsKeyInsurance(board)) {
+        return;
+    }
+    result.checkedShopPlans += 1;
+    const plan = getRunShopStockPlan({
+        ...createNewRun(0, { runSeed: seed }),
+        board,
+        status: 'playing',
+        shopRerolls: 0,
+        stats: {
+            ...createNewRun(0, { runSeed: seed }).stats,
+            highestLevel: Math.max(1, board.level)
+        }
+    });
+    if (plan.itemIds.includes('iron_key') || plan.itemIds.includes('master_key')) {
+        return;
+    }
+
+    const issue: BoardFairnessIssue = {
+        code: 'exit_lock_unreachable',
+        message: `Locked exit shop stock lacks key insurance; stock=${plan.itemIds.join(',') || 'empty'}.`,
+        tileIds: board.dungeonExitTileId ? [board.dungeonExitTileId] : undefined
+    };
+    result.failures.push({
+        scenarioId: scenario.id,
+        scenarioLabel: scenario.label,
+        seed,
+        floor,
+        projection: 'shop_stock',
+        issueCodes: [issue.code],
+        issueDetails: [formatIssueDetail(issue)],
+        issues: [issue],
+        boardSummary: boardSummary(board)
+    });
 };
 
 const scenarioOptions = (
@@ -267,6 +356,40 @@ export const DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS: readonly SoftlockGeneratorSce
                 dungeonNodeKind: floor === 5 ? 'elite' : floor === 7 ? 'boss' : 'combat',
                 relicIds: ['region_shuffle_free_first', 'peek_charge_plus_one']
             })
+    },
+    {
+        id: 'locked_exit_economy',
+        label: 'Locked exit economy insurance',
+        seeds: [130_011],
+        floors: [6],
+        optionsForFloor: ({ seed, floor }) =>
+            scenarioOptions(seed, floor, {
+                fixedTilesMode: 'exact',
+                fixedTiles: [
+                    { id: 'key-a', pairKey: 'key', symbol: 'K', label: 'Iron key', state: 'hidden', dungeonCardKind: 'key', dungeonKeyKind: 'iron' },
+                    { id: 'key-b', pairKey: 'key', symbol: 'K', label: 'Iron key', state: 'hidden', dungeonCardKind: 'key', dungeonKeyKind: 'iron' },
+                    { id: 'a1', pairKey: 'a', symbol: 'A', label: 'A', state: 'hidden' },
+                    { id: 'a2', pairKey: 'a', symbol: 'A', label: 'A', state: 'hidden' },
+                    {
+                        id: 'exit',
+                        pairKey: EXIT_PAIR_KEY,
+                        symbol: 'E',
+                        label: 'Iron exit',
+                        state: 'hidden',
+                        dungeonCardKind: 'exit',
+                        dungeonExitLockKind: 'iron'
+                    },
+                    {
+                        id: 'shop',
+                        pairKey: '__shop__',
+                        symbol: '$',
+                        label: 'Shop',
+                        state: 'hidden',
+                        dungeonCardKind: 'shop',
+                        dungeonCardEffectId: 'shop_vendor'
+                    }
+                ]
+            })
     }
 ];
 
@@ -275,6 +398,7 @@ export const runSoftlockGeneratorContract = (
 ): SoftlockGeneratorContractResult => {
     const result: SoftlockGeneratorContractResult = {
         checkedBoards: 0,
+        checkedShopPlans: 0,
         failures: [],
         coverage: coverageTemplate()
     };
@@ -284,9 +408,20 @@ export const runSoftlockGeneratorContract = (
             for (const floor of scenario.floors) {
                 const board = buildBoard(floor, scenario.optionsForFloor({ seed, floor }));
                 recordInspection(result, scenario, seed, floor, 'generated', board);
+                recordShopStockInspection(result, scenario, seed, floor, board);
                 const finalPair = createFinalPairFairnessProjection(board);
                 if (finalPair) {
                     recordInspection(result, scenario, seed, floor, 'final_pair', finalPair);
+                }
+                if ((board.enemyHazards?.length ?? 0) > 0 || board.dungeonBossId != null) {
+                    recordInspection(
+                        result,
+                        scenario,
+                        seed,
+                        floor,
+                        'cleared_board',
+                        createClearedBoardFairnessProjection(board)
+                    );
                 }
             }
         }
@@ -302,5 +437,5 @@ export const formatSoftlockGeneratorFailure = (failure: SoftlockGeneratorFailure
         `floor=${failure.floor}`,
         `projection=${failure.projection}`,
         failure.boardSummary,
-        `issues=${failure.issueCodes.join(',') || 'completion_route_missing'}`
+        `issues=${failure.issueDetails.length > 0 ? failure.issueDetails.join('; ') : failure.issueCodes.join(',') || 'completion_route_missing'}`
     ].join(' | ');

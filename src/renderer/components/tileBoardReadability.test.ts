@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Tile } from '../../shared/contracts';
-import { getTileBoardReadabilityState } from './tileBoardReadability';
+import { getDungeonUtilityReadabilityKind, getTileBoardReadabilityState } from './tileBoardReadability';
 
 const tile = (overrides: Partial<Tile> = {}): Tile => ({
     id: 'a1',
@@ -29,6 +29,15 @@ const state = (overrides: Partial<Parameters<typeof getTileBoardReadabilityState
     });
 
 describe('tileBoardReadability', () => {
+    it('classifies dungeon utility readability markers with stable precedence', () => {
+        expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'exit', dungeonExitLockKind: 'iron' }))).toBe('exit');
+        expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'lever' }))).toBe('lever');
+        expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'shop' }))).toBe('shop');
+        expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'lock' }))).toBe('lock');
+        expect(getDungeonUtilityReadabilityKind(tile({ dungeonExitLockKind: 'iron' }))).toBe('lock');
+        expect(getDungeonUtilityReadabilityKind(tile({ dungeonExitLockKind: 'none' }))).toBeNull();
+    });
+
     it('shows hidden readability markers for hidden special backs only', () => {
         expect(state().showHiddenReadabilityMarkers).toBe(false);
         expect(state({ powerBackAccent: 'peek' }).showHiddenReadabilityMarkers).toBe(true);
@@ -36,7 +45,7 @@ describe('tileBoardReadability', () => {
         expect(state({ faceUp: true, powerBackAccent: 'peek' }).showHiddenReadabilityMarkers).toBe(false);
     });
 
-    it('prioritizes hidden accent colors by enemy, hazard, boss, trap, objective, route, and powers', () => {
+    it('prioritizes hidden accent colors by enemy, hazard, boss, dungeon utility, trap, objective, route, and powers', () => {
         expect(state({ enemyOccupiedBack: true, hazardBackAccent: 'fuse_cache' }).hiddenReadabilityAccentColor).toBe(
             '#ff9f86'
         );
@@ -44,6 +53,10 @@ describe('tileBoardReadability', () => {
             '#ff9f86'
         );
         expect(state({ tile: tile({ dungeonBossId: 'trap_warden' }) }).hiddenReadabilityAccentColor).toBe('#ffcf66');
+        expect(state({ tile: tile({ dungeonCardKind: 'exit' }) }).hiddenReadabilityAccentColor).toBe('#7bd88f');
+        expect(state({ tile: tile({ dungeonCardKind: 'lock' }) }).hiddenReadabilityAccentColor).toBe('#f2d39d');
+        expect(state({ tile: tile({ dungeonCardKind: 'lever' }) }).hiddenReadabilityAccentColor).toBe('#d4a03d');
+        expect(state({ tile: tile({ dungeonCardKind: 'shop' }) }).hiddenReadabilityAccentColor).toBe('#5ee0c8');
         expect(state({ tile: tile({ dungeonCardKind: 'trap', dungeonCardState: 'resolved' }) }).hiddenReadabilityAccentColor).toBe(
             '#7bd88f'
         );
@@ -58,6 +71,15 @@ describe('tileBoardReadability', () => {
 
     it('marks front readability for face-up special cards that are not matched', () => {
         expect(state({ faceUp: true, tile: tile({ state: 'flipped', routeCardKind: 'safe_ward' }) }).showFaceReadabilityMarker).toBe(
+            true
+        );
+        expect(state({ faceUp: true, tile: tile({ state: 'flipped', dungeonCardKind: 'exit' }) }).showFaceReadabilityMarker).toBe(
+            true
+        );
+        expect(state({ faceUp: true, tile: tile({ state: 'flipped', dungeonCardKind: 'lever' }) }).showFaceReadabilityMarker).toBe(
+            true
+        );
+        expect(state({ faceUp: true, tile: tile({ state: 'flipped', dungeonCardKind: 'shop' }) }).showFaceReadabilityMarker).toBe(
             true
         );
         expect(state({ faceUp: true, tile: tile({ state: 'matched', routeCardKind: 'safe_ward' }) }).showFaceReadabilityMarker).toBe(
@@ -85,10 +107,34 @@ describe('tileBoardReadability', () => {
 
         expect(result.isArmedTrap).toBe(false);
         expect(result.isBossCard).toBe(true);
+        expect(result.isExitCard).toBe(false);
+        expect(result.isLeverCard).toBe(false);
+        expect(result.isLockCard).toBe(false);
         expect(result.isRelicCard).toBe(true);
         expect(result.isRevealedTrap).toBe(true);
+        expect(result.isShopCard).toBe(false);
         expect(result.isSelectedCard).toBe(true);
         expect(result.trapReadabilityColor).toBe('#ffcf66');
         expect(result.faceReadabilityAccentColor).toBe('#ffcf66');
+    });
+
+    it('reports dungeon utility flags used by spatial marker meshes', () => {
+        expect(state({ tile: tile({ dungeonCardKind: 'exit' }) })).toMatchObject({
+            isExitCard: true,
+            isLockCard: false,
+            showHiddenReadabilityMarkers: true
+        });
+        expect(state({ tile: tile({ dungeonCardKind: 'lever' }) })).toMatchObject({
+            isLeverCard: true,
+            showHiddenReadabilityMarkers: true
+        });
+        expect(state({ tile: tile({ dungeonCardKind: 'shop' }) })).toMatchObject({
+            isShopCard: true,
+            showHiddenReadabilityMarkers: true
+        });
+        expect(state({ tile: tile({ dungeonExitLockKind: 'iron' }) })).toMatchObject({
+            isLockCard: true,
+            showHiddenReadabilityMarkers: true
+        });
     });
 });

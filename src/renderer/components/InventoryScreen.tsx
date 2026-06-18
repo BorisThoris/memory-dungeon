@@ -10,7 +10,10 @@ import { getRunEconomyRows } from '../../shared/run-economy';
 import { getPerfectMemoryAttribution } from '../../shared/long-run-feedback';
 import { getRunBuildProfile, getRelicDecisionImpactCopy } from '../../shared/relics';
 import { getRunStartingLoadoutRow } from '../../shared/starting-loadouts';
-import { getTraitBuildRewardRows } from '../../shared/trait-build-rewards';
+import {
+    getTraitBuildRewardRows,
+    getTraitBuildRewardRowsForLoadout
+} from '../../shared/trait-build-rewards';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { inventoryScreenCopy } from '../copy/inventoryScreen';
@@ -91,8 +94,11 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     const prepRows = getInventoryPrepRows(run);
     const buildProfile = getRunBuildProfile(run);
     const startingLoadoutRow = getRunStartingLoadoutRow(run);
-    const activeTraitBuildRows = getTraitBuildRewardRows().filter((row) =>
+    const relicTraitBuildRows = getTraitBuildRewardRows().filter((row) =>
         row.relicIds.some((relicId) => run.relicIds.includes(relicId))
+    );
+    const activeTraitBuildRows = [...getTraitBuildRewardRowsForLoadout(run.startingLoadoutId), ...relicTraitBuildRows].filter(
+        (row, index, rows) => rows.findIndex((candidate) => candidate.id === row.id) === index
     );
     const rewardPerkRows = getRewardPerkRows(run);
     const equippedCosmetic = getCosmeticCollectionRows(useAppStore.getState().saveData).find((row) => row.equipped);

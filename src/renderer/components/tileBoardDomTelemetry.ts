@@ -1,6 +1,9 @@
 import type { BoardState, RunStatus } from '../../shared/contracts';
+import { activeEnemyHazardsForBoard } from '../../shared/enemy-hazard-board-rules';
+import { getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
 import { getResolvingSelectionState } from './tileResolvingSelection';
 import { getPickableTileIds, getTilePosition } from './tileBoardDomAccessibility';
+import { getDungeonUtilityReadabilityKind } from './tileBoardReadability';
 
 const slotListFor = (
     board: BoardState,
@@ -85,9 +88,7 @@ export const getCardFeedbackStatesAttr = ({
 }): string => {
     const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
     const enemyOccupied = new Set(
-        (board.enemyHazards ?? [])
-            .filter((hazard) => hazard.state !== 'defeated')
-            .map((hazard) => hazard.currentTileId)
+        activeEnemyHazardsForBoard(board).map((hazard) => hazard.currentTileId)
     );
     const counts = new Map<string, number>();
     const add = (key: string): void => {
@@ -129,6 +130,16 @@ export const getCardFeedbackStatesAttr = ({
         if (tile.tileHazardKind) {
             add('hazard');
         }
+        if (tile.tileTraitKind) {
+            add('trait');
+            const traitPreviewLines = [
+                ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
+                ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
+            ];
+            if (traitPreviewLines.length > 0) {
+                add('trait-combo');
+            }
+        }
         if (tile.dungeonCardKind === 'trap') {
             add(
                 tile.dungeonCardState === 'resolved'
@@ -143,6 +154,10 @@ export const getCardFeedbackStatesAttr = ({
         }
         if (tile.dungeonCardKind === 'enemy') {
             add('enemy-card');
+        }
+        const dungeonUtilityKind = getDungeonUtilityReadabilityKind(tile);
+        if (dungeonUtilityKind) {
+            add(dungeonUtilityKind);
         }
         if (enemyOccupied.has(tile.id)) {
             add('enemy-occupied');

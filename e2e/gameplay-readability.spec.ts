@@ -67,7 +67,7 @@ test.describe('Gameplay readability hardening', () => {
         const frame = page.getByTestId('tile-board-frame');
         await expect(frame).toHaveAttribute(
             'data-card-feedback-marker-contract',
-            /hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective/
+            /hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait trait-combo/
         );
 
         const states = await readCardFeedbackStates(page);

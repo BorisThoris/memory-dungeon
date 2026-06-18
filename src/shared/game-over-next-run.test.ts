@@ -43,6 +43,22 @@ describe('REG-096 game over next-run loop', () => {
         expect(row?.value).toBe('2 relic(s) / 2 mutator(s)');
     });
 
+    it('summarizes starting loadout identity in the build recap', () => {
+        const summarized = createRunSummary(
+            {
+                ...finishMemorizePhase(createNewRun(0, { startingLoadoutId: 'cursebreaker' })),
+                status: 'gameOver',
+                lives: 0
+            },
+            []
+        );
+        const row = getGameOverNextRunRows(summarized).find((entry) => entry.id === 'build_recap');
+
+        expect(summarized.lastRunSummary?.startingLoadoutId).toBe('cursebreaker');
+        expect(row?.value).toContain('Cursebreaker');
+        expect(row?.detail).toContain('hazard-control toolkit');
+    });
+
     it('uses save-backed meta progression feedback for the next-goal row when available', () => {
         const save = createDefaultSaveData();
         save.playerStats = {

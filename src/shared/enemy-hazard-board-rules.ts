@@ -19,6 +19,30 @@ const unclearedRealPairKeys = (tiles: readonly Tile[]): string[] => [
     ...new Set(enemyHazardEligibleTiles(tiles).map((tile) => tile.pairKey))
 ];
 
+const tileIsCleared = (tile: Tile | undefined): boolean =>
+    tile != null && (tile.state === 'matched' || tile.state === 'removed');
+
+export const allRealBoardPairsCleared = (board: BoardState): boolean =>
+    board.tiles
+        .filter((tile) => !isSingletonUtilityPairKey(tile.pairKey))
+        .every((tile) => tile.state === 'matched' || tile.state === 'removed');
+
+export const enemyHazardReferencesOnlyClearedTiles = (
+    board: BoardState,
+    hazard: NonNullable<BoardState['enemyHazards']>[number]
+): boolean => {
+    if (!allRealBoardPairsCleared(board)) {
+        return false;
+    }
+    const tileById = new Map(board.tiles.map((tile) => [tile.id, tile]));
+    return [hazard.currentTileId, hazard.nextTileId].every((tileId) => tileIsCleared(tileById.get(tileId)));
+};
+
+export const activeEnemyHazardsForBoard = (board: BoardState | null | undefined): NonNullable<BoardState['enemyHazards']> =>
+    board?.enemyHazards?.filter(
+        (hazard) => hazard.state !== 'defeated' && !enemyHazardReferencesOnlyClearedTiles(board, hazard)
+    ) ?? [];
+
 export const collectEnemyHazardsOccupyingFinalPair = (board: BoardState): EnemyHazardState[] => {
     const activeHazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
     if (activeHazards.length === 0) {
@@ -64,18 +88,53 @@ export const defeatEnemyHazardOccupationOnFinalPair = (board: BoardState): Board
     };
 };
 
+export const defeatEnemyHazardsOnClearedTiles = (board: BoardState): BoardState => {
+    if (!allRealBoardPairsCleared(board)) {
+        return board;
+    }
+    const activeHazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    if (activeHazards.length === 0) {
+        return board;
+    }
+    const tileById = new Map(board.tiles.map((tile) => [tile.id, tile]));
+    const hazardsToClear = activeHazards.filter((hazard) =>
+        [hazard.currentTileId, hazard.nextTileId].every((tileId) => {
+            const tile = tileById.get(tileId);
+            return tile != null && (tile.state === 'matched' || tile.state === 'removed');
+        })
+    );
+    if (hazardsToClear.length === 0) {
+        return board;
+    }
+    const ids = new Set(hazardsToClear.map((hazard) => hazard.id));
+    return {
+        ...board,
+        enemyHazards: board.enemyHazards?.map((hazard) =>
+            ids.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
+        )
+    };
+};
+
 export const clearFinalPairEnemyHazardOccupationForRun = (run: RunState): RunState => {
     if (!run.board) {
         return run;
     }
-    const hazardsToClear = collectEnemyHazardsOccupyingFinalPair(run.board);
-    if (hazardsToClear.length === 0) {
+    const finalPairHazards = collectEnemyHazardsOccupyingFinalPair(run.board);
+    const boardAfterFinalPair = defeatEnemyHazardOccupationOnFinalPair(run.board);
+    const boardAfterClearedTiles = defeatEnemyHazardsOnClearedTiles(boardAfterFinalPair);
+    const finalPairIds = new Set(finalPairHazards.map((hazard) => hazard.id));
+    const clearedTileHazards = (boardAfterFinalPair.enemyHazards ?? []).filter((hazard) => {
+        const updated = boardAfterClearedTiles.enemyHazards?.find((candidate) => candidate.id === hazard.id);
+        return !finalPairIds.has(hazard.id) && hazard.state !== 'defeated' && updated?.state === 'defeated';
+    });
+    const hazardsToClear = [...finalPairHazards, ...clearedTileHazards];
+    if (hazardsToClear.length === 0 || boardAfterClearedTiles === run.board) {
         return run;
     }
     const bossHazardsToClear = hazardsToClear.filter((hazard) => hazard.bossId != null).length;
     return {
         ...run,
-        board: defeatEnemyHazardOccupationOnFinalPair(run.board),
+        board: boardAfterClearedTiles,
         dungeonEnemiesDefeated: run.dungeonEnemiesDefeated + bossHazardsToClear,
         dungeonEnemiesDefeatedThisFloor: (run.dungeonEnemiesDefeatedThisFloor ?? 0) + bossHazardsToClear,
         enemyHazardsDefeatedThisFloor: (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardsToClear.length

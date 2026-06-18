@@ -71,6 +71,25 @@ describe('shop rules', () => {
         expect(getRunShopStockPlan(lockedBoardRun).itemIds[0]).toBe('iron_key');
     });
 
+    it('biases shop stock by starting loadout without overriding locked-exit insurance', () => {
+        const run = makePlayingRun();
+
+        expect(getRunShopStockPlan({ ...run, startingLoadoutId: 'memory_scout' }).itemIds[0]).toBe('peek_charge');
+        expect(getRunShopStockPlan({ ...run, startingLoadoutId: 'route_tactician' }).itemIds[0]).toBe('region_shuffle_charge');
+        expect(getRunShopStockPlan({ ...run, startingLoadoutId: 'cursebreaker' }).itemIds.slice(0, 2)).toEqual([
+            'destroy_charge',
+            'trait_cleanse'
+        ]);
+        expect(getRunShopStockPlan({ ...run, startingLoadoutId: 'vaultbreaker' }).itemIds[0]).toBe('iron_key');
+        expect(
+            getRunShopStockPlan({
+                ...run,
+                startingLoadoutId: 'route_tactician',
+                board: run.board ? { ...run.board, dungeonExitLockKind: 'iron' as const } : run.board
+            }).itemIds[0]
+        ).toBe('iron_key');
+    });
+
     it('biases boss-floor shop stock toward the boss counterplay item', () => {
         const run = makePlayingRun();
         const bossRun = {
@@ -152,6 +171,46 @@ describe('shop rules', () => {
             'stasis'
         ]);
         expect(purchaseShopOffer({ ...withShop, board }, cleanse.id)).toMatchObject({ board });
+    });
+
+    it('sells a trait routing kit only when trait adjacency can be exploited', () => {
+        const board = buildBoard(4, { runSeed: 4242, runRulesVersion: makePlayingRun().runRulesVersion });
+        const comboBoard = {
+            ...board,
+            columns: 2,
+            tiles: board.tiles.map((tile, index) =>
+                index === 0
+                    ? { ...tile, pairKey: 'echo', tileTraitKind: 'echo' as const }
+                    : index === 1
+                      ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                      : tile
+            )
+        };
+        const run = {
+            ...makePlayingRun(),
+            board: comboBoard,
+            peekCharges: 0,
+            regionShuffleCharges: 0,
+            shopGold: 10
+        };
+        const withShop = { ...run, shopOffers: createRunShopOffers(run) };
+        const kit = withShop.shopOffers.find((offer) => offer.itemId === 'trait_routing_kit')!;
+        const routed = purchaseShopOffer(withShop, kit.id);
+
+        expect(kit.compatible).toBe(true);
+        expect(routed.shopGold).toBe(withShop.shopGold - kit.cost);
+        expect(routed.peekCharges).toBe(1);
+        expect(routed.regionShuffleCharges).toBe(1);
+
+        const traitlessBoard = {
+            ...board,
+            tiles: board.tiles.map((tile) => ({ ...tile, tileTraitKind: undefined }))
+        };
+        const staleKit = withShop.shopOffers.find((offer) => offer.itemId === 'trait_routing_kit')!;
+        const plainRun = { ...run, board: traitlessBoard, shopOffers: [staleKit] };
+        const plainKit = plainRun.shopOffers[0]!;
+        expect(plainKit.compatible).toBe(true);
+        expect(purchaseShopOffer(plainRun, plainKit.id)).toBe(plainRun);
     });
 
     it('rechecks compatibility when run state changes after offers were created', () => {

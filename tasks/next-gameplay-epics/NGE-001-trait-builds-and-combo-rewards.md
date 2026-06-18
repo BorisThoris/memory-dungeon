@@ -24,8 +24,9 @@ Make tile traits feel like a third core mechanic: players should route matches a
   - `wager_surety` keeps Volatile/Cursed pressure playable.
   - `parasite_ledger` keeps Cursed greed builds profitable.
 
-## Follow Ups
+## Implemented Coverage
 
-- Add trait-focused shop services.
-- Add trait archetype labels to reward draft UI.
-- Add a balance simulation row for trait-combo reward value per floor.
+- Balance simulation now tracks `traitComboOpportunityPairs` and the `avg_trait_combo_opportunity_pairs_per_floor` guardrail row, so generated floors are checked for actionable trait adjacency instead of raw trait presence only.
+- Shops now offer a trait-focused `trait_routing_kit` service when a floor has actionable trait adjacency; it grants existing peek and row/swap tools without save-schema churn.
+- Route side-room reward drafts now expose trait build archetype tags such as Drift Routing, Conduit Cartographer, and Cursed Greed on relevant durable rewards.
+- Starting loadouts now bias generated trait interaction pairs toward their intended build paths, making trait routing a run-defining board mechanic instead of only a later reward layer.

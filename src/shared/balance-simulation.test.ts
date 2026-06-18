@@ -23,6 +23,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             result.aggregate.findablePickupPairs
         );
         expect(result.aggregate.tileTraitPairs).toBeGreaterThan(0);
+        expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
+        expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(result.aggregate.tileTraitPairs);
         expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
             result.aggregate.tileTraitPairs
         );
@@ -74,6 +76,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'avg_key_inflow_potential_per_floor',
                 'avg_power_charge_inflow_per_floor',
                 'avg_tile_trait_pairs_per_floor',
+                'avg_trait_combo_opportunity_pairs_per_floor',
                 'tile_trait_share_echo',
                 'tile_trait_share_volatile',
                 'tile_trait_share_mirror',
@@ -106,7 +109,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'avg_event_room_reward_potential_per_floor',
             'avg_key_inflow_potential_per_floor',
             'avg_power_charge_inflow_per_floor',
-            'avg_tile_trait_pairs_per_floor'
+            'avg_tile_trait_pairs_per_floor',
+            'avg_trait_combo_opportunity_pairs_per_floor'
         ]);
         expect(result.rows.filter((row) => newRewardRows.has(row.key) && row.status !== 'within_range')).toEqual([]);
         expect(result.samples.some((sample) => sample.dungeonNodeKind === 'elite' && sample.enemyThreatPairs >= 2)).toBe(
@@ -270,6 +274,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
 
         expect(total).toBeGreaterThan(0);
         expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
+        expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
+        expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(total);
 
         const shares = getTileTraitKindShares(result.aggregate.tileTraitKindCounts);
         const bounds: Record<TileTraitKind, { min: number; max: number }> = {

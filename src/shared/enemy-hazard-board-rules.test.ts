@@ -3,9 +3,11 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, EnemyHazardState, Tile } from './contracts';
 import { createNewRun } from './game-core';
 import {
+    activeEnemyHazardsForBoard,
     clearFinalPairEnemyHazardOccupationForRun,
     collectEnemyHazardsOccupyingFinalPair,
     defeatEnemyHazardOccupationOnFinalPair,
+    defeatEnemyHazardsOnClearedTiles,
     enemyHazardEligibleTiles
 } from './enemy-hazard-board-rules';
 import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
@@ -54,6 +56,22 @@ describe('enemy hazard board rules', () => {
             dungeonEnemiesDefeatedThisFloor: 2,
             enemyHazardsDefeatedThisFloor: 4
         });
+    });
+
+    it('hides and defeats stale hazards that only reference cleared board tiles', () => {
+        const board = boardWith([
+            tile('a', 'pair-a', { state: 'matched' }),
+            tile('b', 'pair-a', { state: 'matched' }),
+            tile('c', 'pair-b', { state: 'removed' }),
+            tile('d', 'pair-b', { state: 'matched' })
+        ], [
+            hazard('warden', 'a', 'b', { bossId: 'trap_warden', kind: 'warden', pattern: 'guard' })
+        ]);
+
+        expect(activeEnemyHazardsForBoard(board)).toEqual([]);
+        expect(defeatEnemyHazardsOnClearedTiles(board).enemyHazards).toMatchObject([
+            { id: 'warden', hp: 0, state: 'defeated' }
+        ]);
     });
 });
 

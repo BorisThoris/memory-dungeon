@@ -30,6 +30,9 @@ describe('starting loadouts', () => {
         expect(cursebreaker.stats.guardTokens).toBe(base.stats.guardTokens + 1);
         expect(vaultbreaker.dungeonKeys.iron).toBe(1);
         expect(vaultbreaker.shopGold).toBe(base.shopGold + 1);
+        expect(tactician.board?.tiles.map((tile) => tile.tileTraitKind ?? null)).not.toEqual(
+            base.board?.tiles.map((tile) => tile.tileTraitKind ?? null)
+        );
     });
 
     it('returns player-facing rows for active loadouts only', () => {

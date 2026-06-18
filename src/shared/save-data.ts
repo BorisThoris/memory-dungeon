@@ -15,6 +15,7 @@ import {
     type RunState,
     type SaveData,
     type Settings,
+    type StartingLoadoutId,
     type WeakerShuffleMode
 } from './contracts';
 import { z } from 'zod';
@@ -92,6 +93,12 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
 
 const RELIC_ID_SET = new Set<RelicId>(RELIC_POOL);
 const GAME_MODE_SET = new Set<GameMode>(['endless', 'daily', 'puzzle', 'gauntlet', 'meditation']);
+const STARTING_LOADOUT_ID_SET = new Set<StartingLoadoutId>([
+    'memory_scout',
+    'route_tactician',
+    'cursebreaker',
+    'vaultbreaker'
+]);
 
 const finiteNonNegativeInteger = (value: unknown, fallback: number): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : fallback;
@@ -200,6 +207,11 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
     const relicIds = Array.isArray(source.relicIds)
         ? [...new Set(source.relicIds.filter((value): value is RelicId => RELIC_ID_SET.has(value as RelicId)))]
         : undefined;
+    const startingLoadoutId = STARTING_LOADOUT_ID_SET.has(source.startingLoadoutId as StartingLoadoutId)
+        ? (source.startingLoadoutId as StartingLoadoutId)
+        : source.startingLoadoutId === null
+          ? null
+          : undefined;
 
     return {
         totalScore,
@@ -218,6 +230,7 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         ...(typeof source.dailyDateKeyUtc === 'string' ? { dailyDateKeyUtc: source.dailyDateKeyUtc } : {}),
         ...(activeMutators ? { activeMutators } : {}),
         ...(relicIds ? { relicIds } : {}),
+        ...(startingLoadoutId !== undefined ? { startingLoadoutId } : {}),
         ...(typeof source.practiceMode === 'boolean' ? { practiceMode: source.practiceMode } : {}),
         ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {}),
         ...(typeof source.dungeonShowcaseRun === 'boolean' ? { dungeonShowcaseRun: source.dungeonShowcaseRun } : {})

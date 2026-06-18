@@ -19,6 +19,7 @@ import {
     finishMemorizePhase
 } from './game-core';
 import { flipTile, resolveBoardTurn } from './game';
+import { clearFinalPairEnemyHazardOccupationForRun } from './enemy-hazard-board-rules';
 import {
     applyStrayRemove,
     applyRegionShuffle,
@@ -565,6 +566,39 @@ describe('REG-087 board fairness inspection', () => {
         expect(afterFlip.board?.enemyHazards?.[0]).toMatchObject({ state: 'defeated', hp: 0 });
         expect(afterFlip.dungeonEnemiesDefeated).toBe(run.dungeonEnemiesDefeated + 1);
         expect(issueCodes(afterFlip.board!)).not.toContain('enemy_hazard_on_cleared_tile');
+    });
+
+    it('defeats stale boss hazards that only reference already matched cards', () => {
+        const board = boardFromTiles(
+            [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched')],
+            {
+                level: 7,
+                floorTag: 'boss',
+                dungeonObjectiveId: 'defeat_boss',
+                dungeonBossId: 'trap_warden',
+                matchedPairs: 1,
+                enemyHazards: [
+                    enemyHazard({
+                        id: '7:boss:trap_warden',
+                        kind: 'warden',
+                        label: 'Latch Warden',
+                        currentTileId: 'a1',
+                        nextTileId: 'a2',
+                        bossId: 'trap_warden',
+                        hp: 1,
+                        maxHp: 3
+                    })
+                ]
+            }
+        );
+        const run: RunState = { ...playableRun(createNewRun(0, { runSeed: 87_504 })), board };
+
+        const cleaned = clearFinalPairEnemyHazardOccupationForRun(run);
+
+        expect(cleaned.board?.enemyHazards?.[0]).toMatchObject({ state: 'defeated', hp: 0 });
+        expect(cleaned.dungeonEnemiesDefeated).toBe(run.dungeonEnemiesDefeated + 1);
+        expect(cleaned.enemyHazardsDefeatedThisFloor).toBe((run.enemyHazardsDefeatedThisFloor ?? 0) + 1);
+        expect(cleaned.board ? isBoardComplete(cleaned.board) : false).toBe(true);
     });
 
     it('keeps a trap final pair solvable when an enemy hazard occupies it', () => {

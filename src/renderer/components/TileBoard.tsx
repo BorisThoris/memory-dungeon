@@ -169,7 +169,7 @@ interface MouseDragSnapshot {
 const MOUSE_PAN_DRAG_THRESHOLD_PX = 8;
 const EMPTY_TILE_IDS: ReadonlySet<string> = new Set();
 const BOARD_MARKER_READABILITY_CONTRACT =
-    'hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective';
+    'hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait trait-combo';
 
 const PRELOAD_READY_TIMEOUT_MS = 320;
 
@@ -356,7 +356,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 ?.label ?? 'Trap';
         const message =
             trapCount === 1
-                ? `${trapLabel} resolved. Effect applied; next tile ready.`
+                ? `Trap resolved${trapLabel === 'Trap' ? '' : `: ${trapLabel}`}. Effect applied; next tile ready.`
                 : `${trapCount} traps resolved. Effects applied; next tile ready.`;
         queueMicrotask(() => setTrapResolutionMessage(message));
         return undefined;

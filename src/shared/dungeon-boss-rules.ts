@@ -1,4 +1,5 @@
-import type { DungeonBossId, DungeonRunNodeKind, EnemyHazardKind, EnemyHazardPattern, RunShopItemId } from './contracts';
+import type { BoardState, DungeonBossId, DungeonRunNodeKind, EnemyHazardKind, EnemyHazardPattern, RunShopItemId } from './contracts';
+import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 
 export const DUNGEON_BOSS_DEFEAT_SCORE = 70;
 
@@ -163,11 +164,19 @@ export const getDungeonBossPressureRule = (
 ): DungeonBossPressureRule | null => (bossId ? DUNGEON_BOSS_PRESSURE_RULES[bossId] ?? null : null);
 
 export const getActiveDungeonBossPressureRule = (
-    board: { dungeonBossId?: DungeonBossId | null; floorTag?: string | null; enemyHazards?: readonly { bossId?: DungeonBossId | null; state?: string | null }[] } | null | undefined
+    board:
+        | BoardState
+        | { dungeonBossId?: DungeonBossId | null; floorTag?: string | null; enemyHazards?: readonly { bossId?: DungeonBossId | null; state?: string | null }[] }
+        | null
+        | undefined
 ): DungeonBossPressureRule | null => {
+    const activeHazardBossId =
+        board && 'tiles' in board
+            ? activeEnemyHazardsForBoard(board).find((hazard) => hazard.bossId != null)?.bossId
+            : board?.enemyHazards?.find((hazard) => hazard.bossId != null && hazard.state !== 'defeated')?.bossId;
     const bossId =
         board?.dungeonBossId ??
-        board?.enemyHazards?.find((hazard) => hazard.bossId != null && hazard.state !== 'defeated')?.bossId ??
+        activeHazardBossId ??
         null;
     return getDungeonBossPressureRule(bossId);
 };

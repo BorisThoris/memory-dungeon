@@ -67,6 +67,19 @@ describe('InventoryScreen REG-079 run inventory model', () => {
         expect(screen.getByTestId('inventory-trait-builds')).toHaveTextContent('Drift Routing');
     });
 
+    it('shows trait-build guidance from the selected starting loadout before relic drafts', () => {
+        currentRun = {
+            ...createNewRun(0, { startingLoadoutId: 'route_tactician' }),
+            dungeonKeys: { iron: 1 },
+            dungeonMasterKeys: 1,
+            relicIds: []
+        };
+        render(<InventoryScreen />);
+
+        expect(screen.getByTestId('inventory-trait-builds')).toHaveTextContent('Drift Routing');
+        expect(screen.getByTestId('inventory-trait-builds')).toHaveTextContent('Conduit Cartographer');
+    });
+
     it('shows active durable reward perks claimed from route drafts', () => {
         currentRun = {
             ...currentRun,
@@ -75,7 +88,7 @@ describe('InventoryScreen REG-079 run inventory model', () => {
         render(<InventoryScreen />);
 
         expect(screen.getByTestId('inventory-reward-perks')).toHaveTextContent('Echo doubles beside Conduit');
-        expect(screen.getByTestId('inventory-reward-perks')).toHaveTextContent('hazard banish charge each floor');
+        expect(screen.getByTestId('inventory-reward-perks')).toHaveTextContent('hazard banish each floor');
     });
 
     it('shows the selected starting loadout identity when present', () => {

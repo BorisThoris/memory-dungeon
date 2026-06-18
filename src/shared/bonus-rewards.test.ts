@@ -7,7 +7,8 @@ import {
     resolveBonusRewardRoomByInstanceId,
     rollBonusRewardDraft,
     rollBonusRewardRoom,
-    getBonusRewardRows
+    getBonusRewardRows,
+    getRewardPerkRows
 } from './bonus-rewards';
 import { GAME_RULES_VERSION, MAX_COMBO_SHARDS, MAX_GUARD_TOKENS, type RunState } from './contracts';
 
@@ -83,6 +84,39 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.run.stats.comboShards).toBeGreaterThanOrEqual(0);
         expect(result.feedback.gained.length).toBeGreaterThan(0);
         expect(claimBonusReward(result.run, result.ledger, room).claimed).toBe(false);
+    });
+
+    it('lets Shrine Echo convert the first treasure chest into bounded Favor progress', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_014,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 9,
+                routeKind: 'treasure'
+            }),
+            ...BONUS_REWARD_CATALOG.chest_gold,
+            eligible: true,
+            unavailableReason: null
+        };
+        const run: RunState = {
+            ...makeRun(room.runSeed, room.rulesVersion),
+            relicFavorProgress: 0,
+            relicIds: ['shrine_echo']
+        };
+        const firstClaim = claimBonusReward(run, createBonusRewardLedger(), room);
+        const laterLedger = { ...createBonusRewardLedger(), openedTreasureRooms: 1 };
+        const laterClaim = claimBonusReward(run, laterLedger, {
+            ...room,
+            instanceId: `${room.rulesVersion}:${room.runSeed}:10:chest_gold`,
+            floor: 10
+        });
+
+        expect(firstClaim.claimed).toBe(true);
+        expect(firstClaim.run.relicFavorProgress).toBe(1);
+        expect(firstClaim.feedback.gained).toContain('Shrine Echo: +1 relic Favor progress');
+        expect(laterClaim.claimed).toBe(true);
+        expect(laterClaim.run.relicFavorProgress).toBe(0);
+        expect(laterClaim.feedback.gained).not.toContain('Shrine Echo: +1 relic Favor progress');
     });
 
     it('rechecks reward limits at claim time for stale saved reward instances', () => {
@@ -228,8 +262,41 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         );
         expect(getBonusRewardRows().find((reward) => reward.id === 'trait_toolkit')).toMatchObject({
             label: 'Trait toolkit',
-            summaryText: '+1 row/swap charge, +1 peek charge, and +10 score.'
+            summaryText: '+1 row/swap charge, +1 peek charge, and +10 score.',
+            traitBuildLabels: ['Drift Routing', 'Conduit Cartographer']
         });
+        expect(BONUS_REWARD_CATALOG.echo_conduit_lens.traitBuildLabels).toEqual([
+            'Conduit Cartographer',
+            'Sealed Catalyst'
+        ]);
+    });
+
+    it('biases reward drafts toward starting loadout identity without breaking determinism', () => {
+        const base = {
+            runSeed: 75_120,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 6,
+            routeKind: 'unknown' as const
+        };
+
+        expect(rollBonusRewardDraft({ ...base, startingLoadoutId: 'route_tactician' }).map((reward) => reward.id)[0]).toBe(
+            'trait_toolkit'
+        );
+        expect(
+            rollBonusRewardDraft({ ...base, routeKind: 'shop', startingLoadoutId: 'route_tactician' }).map((reward) => reward.id)[0]
+        ).toBe('free_swap_floor');
+        expect(rollBonusRewardDraft({ ...base, startingLoadoutId: 'cursebreaker' }).map((reward) => reward.id)[0]).toBe(
+            'hazard_banisher'
+        );
+        expect(rollBonusRewardDraft({ ...base, startingLoadoutId: 'vaultbreaker' }).map((reward) => reward.id)[0]).toBe(
+            'key_insurance'
+        );
+        expect(rollBonusRewardDraft({ ...base, startingLoadoutId: 'memory_scout' }).map((reward) => reward.id)[0]).toBe(
+            'echo_conduit_lens'
+        );
+        expect(
+            rollBonusRewardDraft({ ...base, startingLoadoutId: 'route_tactician' }).map((reward) => reward.instanceId)
+        ).toEqual(rollBonusRewardDraft({ ...base, startingLoadoutId: 'route_tactician' }).map((reward) => reward.instanceId));
     });
 
     it('claims new reward draft rows through the same capped inventory feedback path', () => {
@@ -280,6 +347,11 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
             expect.arrayContaining(['Unlock Echo doubles beside Conduit', '+1 peek charge'])
         );
         expect(duplicate.feedback.gained).not.toContain('Unlock Echo doubles beside Conduit');
+        expect(getRewardPerkRows({ rewardPerkIds: ['hazard_banish_per_floor'] })[0]).toMatchObject({
+            label: 'hazard banish each floor',
+            detail: 'Each new floor clears one hazard marker before play; if none exists, it grants a destroy charge.'
+        });
+        expect(BONUS_REWARD_CATALOG.hazard_banisher.summaryText).toContain('banishes one hazard marker');
     });
 
     it('resolves a saved reward instance even when the current route roll picks another candidate', () => {

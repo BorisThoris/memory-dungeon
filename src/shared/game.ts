@@ -825,11 +825,13 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             },
             timerState: clearResolveState(run)
         };
-        return nextRun.status === 'gameOver'
-            ? nextRun
-            : isBoardComplete(spunG.board)
-              ? finalizeLevel(nextRun, spunG.board)
-              : nextRun;
+        const cleanedNextRun = clearFinalPairEnemyHazardOccupationForRun(nextRun);
+        const completionBoard = cleanedNextRun.board ?? spunG.board;
+        return cleanedNextRun.status === 'gameOver'
+            ? cleanedNextRun
+            : isBoardComplete(completionBoard)
+              ? finalizeLevel(cleanedNextRun, completionBoard)
+              : cleanedNextRun;
     }
 
     const gambitDecoy =
@@ -1063,11 +1065,13 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             timerState: clearResolveState(run)
         };
 
-        return nextRun.status === 'gameOver'
-            ? nextRun
-            : isBoardComplete(spun.board)
-              ? finalizeLevel(nextRun, spun.board)
-              : nextRun;
+        const cleanedNextRun = clearFinalPairEnemyHazardOccupationForRun(nextRun);
+        const completionBoard = cleanedNextRun.board ?? spun.board;
+        return cleanedNextRun.status === 'gameOver'
+            ? cleanedNextRun
+            : isBoardComplete(completionBoard)
+              ? finalizeLevel(cleanedNextRun, completionBoard)
+              : cleanedNextRun;
     }
 
     const decoyTouch =

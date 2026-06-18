@@ -3,6 +3,42 @@ import { hazardTileColor } from './tileBoardThreatColors';
 import { tileTraitColor } from '../../shared/tile-trait-rules';
 import type { TileBoardPowerBackAccent } from './tileBoardRows';
 
+export type DungeonUtilityReadabilityKind = 'exit' | 'lever' | 'lock' | 'shop';
+
+export const getDungeonUtilityReadabilityKind = (
+    tile: Pick<Tile, 'dungeonCardKind' | 'dungeonExitLockKind'>
+): DungeonUtilityReadabilityKind | null => {
+    if (tile.dungeonCardKind === 'exit') {
+        return 'exit';
+    }
+    if (tile.dungeonCardKind === 'lever') {
+        return 'lever';
+    }
+    if (tile.dungeonCardKind === 'shop') {
+        return 'shop';
+    }
+    if (
+        tile.dungeonCardKind === 'lock' ||
+        (tile.dungeonExitLockKind != null && tile.dungeonExitLockKind !== 'none')
+    ) {
+        return 'lock';
+    }
+    return null;
+};
+
+const dungeonUtilityReadabilityColor = (kind: DungeonUtilityReadabilityKind): string => {
+    if (kind === 'exit') {
+        return '#7bd88f';
+    }
+    if (kind === 'lever') {
+        return '#d4a03d';
+    }
+    if (kind === 'shop') {
+        return '#5ee0c8';
+    }
+    return '#f2d39d';
+};
+
 export interface TileBoardReadabilityInput {
     destroyBlockedDecoyBack: boolean;
     enemyOccupiedBack: boolean;
@@ -24,9 +60,13 @@ export interface TileBoardReadabilityState {
     hiddenReadabilityAccentColor: string;
     isArmedTrap: boolean;
     isBossCard: boolean;
+    isExitCard: boolean;
+    isLeverCard: boolean;
+    isLockCard: boolean;
     isRelicCard: boolean;
     isResolvedTrap: boolean;
     isRevealedTrap: boolean;
+    isShopCard: boolean;
     isSelectedCard: boolean;
     isTrapCard: boolean;
     showFaceReadabilityMarker: boolean;
@@ -54,50 +94,59 @@ export const getTileBoardReadabilityState = ({
     const isRevealedTrap = isTrapCard && tile.dungeonCardState === 'revealed';
     const isArmedTrap = isTrapCard && !isResolvedTrap && !isRevealedTrap;
     const isBossCard = tile.dungeonBossId != null;
+    const dungeonUtilityKind = getDungeonUtilityReadabilityKind(tile);
+    const isExitCard = dungeonUtilityKind === 'exit';
+    const isLeverCard = dungeonUtilityKind === 'lever';
+    const isLockCard = dungeonUtilityKind === 'lock';
+    const isShopCard = dungeonUtilityKind === 'shop';
     const isRelicCard = tile.findableKind != null;
     const isSelectedCard = faceUp && tile.state === 'flipped';
     const enemyOccupiedColor = '#ff9f86';
     const trapReadabilityColor = isResolvedTrap ? '#7bd88f' : isRevealedTrap ? '#ffcf66' : '#ff7a6a';
     const faceReadabilityAccentColor = isBossCard
         ? '#ffcf66'
-        : isTrapCard
-          ? trapReadabilityColor
-          : isRelicCard
-            ? '#5ee0c8'
-            : tile.routeSpecialKind || tile.routeCardKind
-              ? '#59b4d9'
-              : tile.tileHazardKind
-                ? hazardTileColor(tile.tileHazardKind)
-                : tile.tileTraitKind
-                  ? tileTraitColor(tile.tileTraitKind)
-                : '#f2d39d';
+        : dungeonUtilityKind
+          ? dungeonUtilityReadabilityColor(dungeonUtilityKind)
+          : isTrapCard
+            ? trapReadabilityColor
+            : isRelicCard
+              ? '#5ee0c8'
+              : tile.routeSpecialKind || tile.routeCardKind
+                ? '#59b4d9'
+                : tile.tileHazardKind
+                  ? hazardTileColor(tile.tileHazardKind)
+                  : tile.tileTraitKind
+                    ? tileTraitColor(tile.tileTraitKind)
+                    : '#f2d39d';
     const hiddenReadabilityAccentColor = enemyOccupiedBack
         ? enemyOccupiedColor
         : hazardBackAccent
           ? hazardTileColor(hazardBackAccent)
           : isBossCard
             ? '#ffcf66'
-            : isTrapCard
-              ? trapReadabilityColor
-              : objectiveBackAccent
-                ? '#f2d39d'
-                : routeBackAccent
-                  ? '#59b4d9'
-                  : tile.tileTraitKind
-                    ? tileTraitColor(tile.tileTraitKind)
-                  : powerBackAccent === 'destroy'
-                    ? '#d94848'
-                    : powerBackAccent === 'peek'
-                      ? '#59b4d9'
-                      : powerBackAccent === 'stray'
-                        ? '#d4a03d'
-                        : powerBackAccent === 'pin'
-                          ? '#e8c878'
-                          : powerBackAccent === 'swap'
-                            ? '#5dd6ff'
-                            : powerBackAccent === 'swapOrigin'
-                              ? '#f2f9ff'
-                          : '#b6a4bd';
+            : dungeonUtilityKind
+              ? dungeonUtilityReadabilityColor(dungeonUtilityKind)
+              : isTrapCard
+                ? trapReadabilityColor
+                : objectiveBackAccent
+                  ? '#f2d39d'
+                  : routeBackAccent
+                    ? '#59b4d9'
+                    : tile.tileTraitKind
+                      ? tileTraitColor(tile.tileTraitKind)
+                      : powerBackAccent === 'destroy'
+                        ? '#d94848'
+                        : powerBackAccent === 'peek'
+                          ? '#59b4d9'
+                          : powerBackAccent === 'stray'
+                            ? '#d4a03d'
+                            : powerBackAccent === 'pin'
+                              ? '#e8c878'
+                              : powerBackAccent === 'swap'
+                                ? '#5dd6ff'
+                                : powerBackAccent === 'swapOrigin'
+                                  ? '#f2f9ff'
+                                  : '#b6a4bd';
     const showHiddenReadabilityRing =
         !faceUp &&
         tile.state === 'hidden' &&
@@ -110,6 +159,10 @@ export const getTileBoardReadabilityState = ({
             objectiveBackAccent ||
             enemyOccupiedBack ||
             nonPickableBack ||
+            isExitCard ||
+            isLockCard ||
+            isLeverCard ||
+            isShopCard ||
             isTrapCard ||
             isBossCard ||
             isRelicCard ||
@@ -119,6 +172,10 @@ export const getTileBoardReadabilityState = ({
         faceUp &&
         tile.state !== 'matched' &&
         (isBossCard ||
+            isExitCard ||
+            isLockCard ||
+            isLeverCard ||
+            isShopCard ||
             isTrapCard ||
             isRelicCard ||
             tile.routeSpecialKind != null ||
@@ -132,9 +189,13 @@ export const getTileBoardReadabilityState = ({
         hiddenReadabilityAccentColor,
         isArmedTrap,
         isBossCard,
+        isExitCard,
+        isLeverCard,
+        isLockCard,
         isRelicCard,
         isResolvedTrap,
         isRevealedTrap,
+        isShopCard,
         isSelectedCard,
         isTrapCard,
         showFaceReadabilityMarker,

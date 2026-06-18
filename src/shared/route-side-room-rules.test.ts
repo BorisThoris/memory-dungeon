@@ -90,4 +90,48 @@ describe('route side-room rules', () => {
                 (claimed.rewardPerkIds?.length ?? 0) > (bonusRun.rewardPerkIds?.length ?? 0)
         ).toBe(true);
     });
+
+    it('preserves trait build labels on bonus side-room reward draft choices', () => {
+        const labeledRun = Array.from({ length: 40 }, (_, index) => {
+            const run = createNewRun(index + 1);
+            return openRouteSideRoom({
+                ...run,
+                status: 'levelComplete',
+                pendingRouteCardPlan: {
+                    choiceId: 'greed',
+                    routeType: 'greed',
+                    sourceLevel: 3,
+                    targetLevel: 4
+                }
+            });
+        }).find((run) => run.sideRoom?.choices?.some((choice) => (choice.traitBuildLabels ?? []).length > 0));
+
+        expect(labeledRun?.sideRoom?.choices).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    traitBuildLabels: expect.arrayContaining([expect.any(String)])
+                })
+            ])
+        );
+    });
+
+    it('biases bonus side-room reward drafts by starting loadout', () => {
+        const run = createNewRun(210_501, { startingLoadoutId: 'route_tactician' });
+        const opened = openRouteSideRoom({
+            ...run,
+            status: 'levelComplete',
+            pendingRouteCardPlan: {
+                choiceId: 'greed',
+                routeType: 'greed',
+                sourceLevel: 3,
+                targetLevel: 4
+            }
+        });
+
+        expect(opened.sideRoom).toMatchObject({ kind: 'bonus_reward' });
+        expect(opened.sideRoom?.choices?.[0]).toMatchObject({
+            label: 'Free swap discipline',
+            traitBuildLabels: expect.arrayContaining(['Drift Routing'])
+        });
+    });
 });

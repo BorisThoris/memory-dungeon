@@ -14,11 +14,12 @@ import type {
     RelicOfferServiceState,
     RouteNodeType,
     RunState,
+    StartingLoadoutId,
     TileTraitKind
 } from './contracts';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { hashStringToSeed } from './rng';
-import { getTraitBuildRewardRowsForRelic } from './trait-build-rewards';
+import { getTraitBuildRewardRowsForLoadout, getTraitBuildRewardRowsForRelic } from './trait-build-rewards';
 import { pickWeightedWithoutReplacement } from './weightedPick';
 
 /** First floor (after clear) that can trigger a relic offer. */
@@ -65,6 +66,7 @@ export interface RelicDraftContext {
     routeType: RouteNodeType | null;
     routePressure: 'none' | RouteNodeType;
     routeReasonSource: 'pending_route' | 'active_board' | null;
+    startingLoadoutId: StartingLoadoutId | null;
     activeTraitKinds: TileTraitKind[];
     activeOrAcceptedRiskWager: boolean;
     favorNearRelicPick: boolean;
@@ -118,8 +120,11 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
         decisionVerbs: ['unlock', 'extract', 'bank'],
         summary: 'Lean into Greed routes, keys, caches, and bonus shrine picks while keeping treasure extraction bounded.',
         dungeonInteractions: ['treasure rooms', 'Greed routes', 'Relic Favor', 'shop gold pressure'],
-        supportHooks: ['Greed route contextual draft weighting', 'shrine_echo one-shot extra relic selection'],
-        deferredHooks: ['Direct treasure-cache payout relics are deferred until the bonus-reward tuning pass.']
+        supportHooks: [
+            'Greed route contextual draft weighting',
+            'shrine_echo one-shot extra relic selection',
+            'shrine_echo first treasure chest Favor echo'
+        ]
     },
     boss_hunter: {
         id: 'boss_hunter',
@@ -128,8 +133,12 @@ export const RELIC_BUILD_ARCHETYPE_DEFINITIONS: Record<RelicBuildArchetype, Reli
         decisionVerbs: ['prepare', 'focus', 'finish'],
         summary: 'Prepare for boss floors with chapter-aware draft pressure, route wagers, and bounded Favor conversion.',
         dungeonInteractions: ['boss floors', 'boss prep', 'Relic Favor', 'chapter schedule'],
-        supportHooks: ['chapter_compass immediate peek plus future chapter answer weighting', 'wager_surety immediate guard plus bounded Favor bonus'],
-        deferredHooks: ['Direct boss-damage or boss-ward relics are deferred to boss presentation/tuning tickets.']
+        supportHooks: [
+            'chapter_compass immediate peek plus future chapter answer weighting',
+            'chapter_compass claimed boss trophy cache score bonus',
+            'wager_surety immediate guard plus bounded Favor bonus'
+        ],
+        deferredHooks: ['Direct boss-damage or boss-ward relics remain deferred to boss presentation/tuning tickets.']
     },
     route_gambler: {
         id: 'route_gambler',
@@ -495,6 +504,7 @@ export const getRelicDraftContext = (run: RunState, clearedFloor: number): Relic
                 : isScheduledEndless && activeRouteType
                   ? 'active_board'
                   : null,
+        startingLoadoutId: run.startingLoadoutId ?? null,
         activeTraitKinds: getActiveTraitKinds(run),
         activeOrAcceptedRiskWager: isScheduledEndless && run.endlessRiskWager != null,
         favorNearRelicPick: isScheduledEndless && run.relicFavorProgress >= 2,
@@ -567,14 +577,22 @@ const getRouteRelicDraftReason = (id: RelicId, context: RelicDraftContext): stri
 };
 
 const getTraitBuildRelicDraftReason = (id: RelicId, context: RelicDraftContext): string | null => {
-    if (!context.isScheduledEndless || context.activeTraitKinds.length === 0) {
+    if (!context.isScheduledEndless) {
         return null;
     }
-    const activeTraits = new Set(context.activeTraitKinds);
-    const row = getTraitBuildRewardRowsForRelic(id).find((candidate) =>
-        candidate.traitKinds.some((traitKind) => activeTraits.has(traitKind))
+    if (context.activeTraitKinds.length > 0) {
+        const activeTraits = new Set(context.activeTraitKinds);
+        const row = getTraitBuildRewardRowsForRelic(id).find((candidate) =>
+            candidate.traitKinds.some((traitKind) => activeTraits.has(traitKind))
+        );
+        if (row) {
+            return `Supports ${row.label}`;
+        }
+    }
+    const loadoutRow = getTraitBuildRewardRowsForLoadout(context.startingLoadoutId).find((row) =>
+        row.relicIds.includes(id)
     );
-    return row ? `Supports ${row.label}` : null;
+    return loadoutRow ? `Supports ${loadoutRow.label}` : null;
 };
 
 export const getRelicDraftReason = (id: RelicId, context: RelicDraftContext): string | null =>
@@ -641,6 +659,12 @@ export const getContextualRelicDraftWeight = (
         if (traitBuildMatches > 0) {
             multiplier *= 1 + Math.min(0.7, traitBuildMatches * 0.22);
         }
+    }
+    const loadoutTraitBuildMatches = getTraitBuildRewardRowsForLoadout(context.startingLoadoutId).filter((row) =>
+        row.relicIds.includes(id)
+    ).length;
+    if (loadoutTraitBuildMatches > 0) {
+        multiplier *= 1 + Math.min(0.55, loadoutTraitBuildMatches * 0.2);
     }
     if (id === 'chapter_compass' && getRelicDraftReason(id, context) != null) {
         multiplier *= 1.45;

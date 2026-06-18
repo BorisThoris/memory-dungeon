@@ -3,7 +3,8 @@ import {
     type BonusRewardLedger,
     MAX_COMBO_SHARDS,
     type RewardPerkId,
-    type RunState
+    type RunState,
+    type StartingLoadoutId
 } from './contracts';
 import { hashStringToSeed } from './rng';
 import type { RunMapNodeKind } from './run-map';
@@ -24,6 +25,7 @@ export interface BonusRewardDefinition {
     id: BonusRewardId;
     roomKind: BonusRewardRoomKind;
     label: string;
+    traitBuildLabels?: string[];
     trigger: string;
     discoverability: string;
     eligibility: string;
@@ -94,6 +96,7 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         id: 'trait_toolkit',
         roomKind: 'bonus_cache',
         label: 'Trait toolkit',
+        traitBuildLabels: ['Drift Routing', 'Conduit Cartographer'],
         trigger: 'Route reward draft after trait-heavy or cache-adjacent floors.',
         discoverability: 'Shown as a board-shaping reward choice before the next floor.',
         eligibility: 'Floor 2+ and fewer than two trait-toolkit claims this run.',
@@ -127,6 +130,7 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         id: 'free_swap_floor',
         roomKind: 'bonus_cache',
         label: 'Free swap discipline',
+        traitBuildLabels: ['Drift Routing', 'Mirror Warden'],
         trigger: 'Build reward draft on shop, rest, or tool-heavy route nodes.',
         discoverability: 'Shown as a durable board-control reward before the next floor.',
         eligibility: 'Floor 2+ and one free-swap-discipline claim this run.',
@@ -138,6 +142,7 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         id: 'echo_conduit_lens',
         roomKind: 'bonus_cache',
         label: 'Echo conduit lens',
+        traitBuildLabels: ['Conduit Cartographer', 'Sealed Catalyst'],
         trigger: 'Build reward draft after safe or mystery trait-routing floors.',
         discoverability: 'Shown as a durable Echo/Conduit interaction reward.',
         eligibility: 'Floor 2+ and one Echo conduit lens claim this run.',
@@ -149,6 +154,7 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         id: 'trait_streak_lens',
         roomKind: 'bonus_cache',
         label: 'Trait streak lens',
+        traitBuildLabels: ['Mirror Warden', 'Sealed Catalyst'],
         trigger: 'Build reward draft after trait-heavy floors.',
         discoverability: 'Shown as a durable clean-trait-streak reward.',
         eligibility: 'Floor 2+ and one trait streak lens claim this run.',
@@ -160,6 +166,7 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         id: 'cursed_opener_contract',
         roomKind: 'bonus_cache',
         label: 'Cursed opener contract',
+        traitBuildLabels: ['Cursed Greed'],
         trigger: 'Greed reward draft after risky route pressure.',
         discoverability: 'Shown as a durable high-risk opener reward.',
         eligibility: 'Floor 2+ and one cursed opener contract claim this run.',
@@ -176,7 +183,7 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         eligibility: 'Floor 2+ and one hazard banisher claim this run.',
         antiGrindLimit: { scope: 'per_run', maxClaims: 1 },
         payout: { rewardPerks: ['hazard_banish_per_floor'], inventoryItems: { destroy_charge: 1 } },
-        summaryText: 'Gain +1 destroy charge now and at each new floor.'
+        summaryText: 'Gain +1 destroy charge now; each new floor banishes one hazard marker or grants +1 destroy charge.'
     }
 };
 
@@ -256,6 +263,29 @@ const rotateRewardCandidates = (candidates: BonusRewardId[], startIndex: number)
     return [...candidates.slice(normalizedStart), ...candidates.slice(0, normalizedStart)];
 };
 
+const LOADOUT_REWARD_BIAS: Record<StartingLoadoutId, BonusRewardId[]> = {
+    memory_scout: ['echo_conduit_lens', 'trait_streak_lens', 'secret_favor'],
+    route_tactician: ['free_swap_floor', 'trait_toolkit'],
+    cursebreaker: ['hazard_banisher', 'hazard_ward', 'cursed_opener_contract'],
+    vaultbreaker: ['key_insurance', 'chest_gold']
+};
+
+const uniqueBonusRewardIds = (ids: readonly BonusRewardId[]): BonusRewardId[] => [...new Set(ids)];
+
+const applyLoadoutRewardBias = (
+    candidates: BonusRewardId[],
+    startingLoadoutId: StartingLoadoutId | null | undefined
+): BonusRewardId[] => {
+    if (!startingLoadoutId) {
+        return candidates;
+    }
+    const preferred = LOADOUT_REWARD_BIAS[startingLoadoutId] ?? [];
+    return uniqueBonusRewardIds([
+        ...preferred.filter((id) => candidates.includes(id)),
+        ...candidates
+    ]);
+};
+
 const selectBonusRewardDefinition = (
     candidates: BonusRewardId[],
     preferredIndex: number,
@@ -304,7 +334,8 @@ export const rollBonusRewardDraft = ({
     floor,
     routeKind = 'unknown',
     ledger = createBonusRewardLedger(),
-    count = 3
+    count = 3,
+    startingLoadoutId = null
 }: {
     runSeed: number;
     rulesVersion: number;
@@ -312,11 +343,15 @@ export const rollBonusRewardDraft = ({
     routeKind?: RunMapNodeKind | 'unknown';
     ledger?: BonusRewardLedger;
     count?: number;
+    startingLoadoutId?: StartingLoadoutId | null;
 }): BonusRewardInstance[] => {
     const safeLedger = normalizeBonusRewardLedger(ledger);
     const candidates = rewardIdsForRouteKind(routeKind);
     const seed = hashStringToSeed(`bonusRewardDraft:${rulesVersion}:${runSeed}:${floor}:${routeKind}`);
-    const ordered = rotateRewardCandidates(candidates, Math.abs(seed) % candidates.length);
+    const ordered = applyLoadoutRewardBias(
+        rotateRewardCandidates(candidates, Math.abs(seed) % candidates.length),
+        startingLoadoutId
+    );
     const selected: BonusRewardInstance[] = [];
     for (const id of ordered) {
         const definition = BONUS_REWARD_CATALOG[id];
@@ -392,6 +427,15 @@ const gainFavor = (run: RunState, progress: number): RunState => {
     };
 };
 
+const shouldApplyShrineEchoTreasurePayout = (
+    run: RunState,
+    ledger: BonusRewardLedger,
+    reward: BonusRewardInstance
+): boolean =>
+    (run.relicIds ?? []).includes('shrine_echo') &&
+    reward.roomKind === 'treasure_chest' &&
+    ledger.openedTreasureRooms === 0;
+
 export interface BonusRewardClaimResult {
     run: RunState;
     ledger: BonusRewardLedger;
@@ -439,7 +483,7 @@ const REWARD_PERK_LABELS: Record<RewardPerkId, string> = {
     echo_conduit_double: 'Echo doubles beside Conduit',
     trait_streak_toolkit: 'trait streak flash pair',
     cursed_opener_greed: 'Cursed opener greed',
-    hazard_banish_per_floor: 'hazard banish charge each floor'
+    hazard_banish_per_floor: 'hazard banish each floor'
 };
 
 const REWARD_PERK_DETAILS: Record<RewardPerkId, string> = {
@@ -447,7 +491,7 @@ const REWARD_PERK_DETAILS: Record<RewardPerkId, string> = {
     echo_conduit_double: 'Echo beside Conduit grants an extra peek and repeats adjacent Sealed shard value.',
     trait_streak_toolkit: 'Every third clean trait match banks a flash-pair charge.',
     cursed_opener_greed: 'The first Cursed match each floor grants extra shop gold and score.',
-    hazard_banish_per_floor: 'Each new floor grants a destroy charge unless a no-destroy contract blocks it.'
+    hazard_banish_per_floor: 'Each new floor clears one hazard marker before play; if none exists, it grants a destroy charge.'
 };
 
 export const getRewardPerkRows = (run: Pick<RunState, 'rewardPerkIds'>) =>
@@ -615,7 +659,14 @@ export const claimBonusReward = (
         };
     }
 
-    const { run: nextRun, feedback } = previewBonusRewardClaim(run, reward);
+    let { run: nextRun, feedback } = previewBonusRewardClaim(run, reward);
+    if (shouldApplyShrineEchoTreasurePayout(run, safeLedger, reward)) {
+        nextRun = gainFavor(nextRun, 1);
+        feedback = {
+            ...feedback,
+            gained: [...feedback.gained, 'Shrine Echo: +1 relic Favor progress']
+        };
+    }
 
     return {
         run: nextRun,
@@ -644,5 +695,6 @@ export const getBonusRewardRows = () =>
         trigger: reward.trigger,
         eligibility: reward.eligibility,
         antiGrindLimit: `${reward.antiGrindLimit.maxClaims} per run`,
-        summaryText: reward.summaryText
+        summaryText: reward.summaryText,
+        traitBuildLabels: [...(reward.traitBuildLabels ?? [])]
     }));
