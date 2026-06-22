@@ -297,4 +297,17 @@ describe('tileBoardRows', () => {
         expect(result[3]!.spotlightBountyOnBack).toBe(true);
         expect(result[3]!.objectiveBackAccent).toBe(true);
     });
+
+    it('marks hidden cards that have actionable trait combo routes', () => {
+        const b = board([
+            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('plain-a', 'plain')
+        ]);
+
+        const result = rows({ board: b });
+
+        expect(result.map((row) => row.traitComboBack)).toEqual([true, true, false]);
+        expect(result[0]!.traitInteractionPreviewLines).toContain('Echo + Sealed: combo shard');
+    });
 });

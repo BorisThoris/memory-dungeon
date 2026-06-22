@@ -8,6 +8,7 @@ import {
 } from './bonus-rewards';
 import { createRestShrineServices } from './rest-shrine';
 import { applyRunEventChoice, rollRunEventRoom } from './run-events';
+import { getTraitOpportunitySummary } from './trait-opportunities';
 
 export const routeNodeKindForSideRoom = (
     routeType: RouteNodeType,
@@ -46,11 +47,13 @@ const buildBonusSideRoom = (
         routeKind: nodeKind,
         ledger: run.bonusRewardLedger,
         count: 3,
-        startingLoadoutId: run.startingLoadoutId
+        startingLoadoutId: run.startingLoadoutId,
+        board: run.board
     });
     const primaryInstanceId = draft.some((option) => option.instanceId === reward.instanceId)
         ? reward.instanceId
         : draft[0]?.instanceId;
+    const traitOpportunity = getTraitOpportunitySummary(run.board);
     const choices = draft.map((option) => ({
         id: option.instanceId,
         label: option.label,
@@ -58,7 +61,11 @@ const buildBonusSideRoom = (
             ? previewBonusRewardClaim(run, option).feedback.summary || option.summaryText
             : (option.unavailableReason ?? option.summaryText),
         primary: option.instanceId === primaryInstanceId,
-        traitBuildLabels: [...(option.traitBuildLabels ?? [])]
+        traitBuildLabels: [...(option.traitBuildLabels ?? [])],
+        traitBuildReason:
+            option.traitBuildLabels?.some((label) => traitOpportunity.buildLabels.includes(label))
+                ? traitOpportunity.reason ?? undefined
+                : undefined
     }));
     const primaryChoice = choices.find((choice) => choice.primary);
     return {

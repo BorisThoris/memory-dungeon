@@ -1,4 +1,5 @@
-import type { RelicId, RunShopItemId, StartingLoadoutId, TileTraitKind } from './contracts';
+import type { BoardState, RelicId, RunShopItemId, StartingLoadoutId, TileTraitKind } from './contracts';
+import { getBoardTraitInteractionPreviewLines } from './tile-trait-rules';
 
 export interface TraitBuildRewardRow {
     id: string;
@@ -9,6 +10,12 @@ export interface TraitBuildRewardRow {
     decision: string;
     payoff: string;
     regressionHook: string;
+}
+
+export interface TraitBuildBoardHint {
+    traitKinds: TileTraitKind[];
+    interactionLines: string[];
+    buildLabels: string[];
 }
 
 export const TRAIT_BUILD_REWARD_ROWS: readonly TraitBuildRewardRow[] = [
@@ -93,6 +100,67 @@ export const getTraitBuildRewardRowsForLoadout = (
     }
     const ids = LOADOUT_TRAIT_BUILD_IDS[startingLoadoutId] ?? [];
     return getTraitBuildRewardRows().filter((row) => ids.includes(row.id));
+};
+
+export const getTraitBuildRewardRowsForBoard = (board: BoardState | null | undefined): TraitBuildRewardRow[] => {
+    if (!board) {
+        return [];
+    }
+    const traitKinds = [
+        ...new Set(
+            board.tiles
+                .filter((tile) => tile.state !== 'matched' && tile.state !== 'removed')
+                .map((tile) => tile.tileTraitKind)
+                .filter((traitKind): traitKind is TileTraitKind => traitKind != null)
+        )
+    ];
+    if (traitKinds.length === 0 || getBoardTraitInteractionPreviewLines(board).length === 0) {
+        return [];
+    }
+
+    return getTraitBuildRewardRows()
+        .map((row, index) => ({
+            row,
+            index,
+            overlap: row.traitKinds.filter((traitKind) => traitKinds.includes(traitKind)).length
+        }))
+        .filter((entry) => entry.overlap > 0)
+        .sort((a, b) => b.overlap - a.overlap || a.index - b.index)
+        .map((entry) => entry.row);
+};
+
+export const getTraitBuildBoardHint = (board: BoardState | null | undefined): TraitBuildBoardHint | null => {
+    if (!board) {
+        return null;
+    }
+    const interactionLines = getBoardTraitInteractionPreviewLines(board);
+    if (interactionLines.length === 0) {
+        return null;
+    }
+    const traitKinds = [
+        ...new Set(
+            board.tiles
+                .filter((tile) => tile.state !== 'matched' && tile.state !== 'removed')
+                .map((tile) => tile.tileTraitKind)
+                .filter((traitKind): traitKind is TileTraitKind => traitKind != null)
+        )
+    ];
+    const buildLabels = getTraitBuildRewardRowsForBoard(board)
+        .map((row) => row.label)
+        .slice(0, 2);
+    return {
+        traitKinds,
+        interactionLines: interactionLines.slice(0, 4),
+        buildLabels
+    };
+};
+
+export const getTraitBuildDraftHintForBoard = (board: BoardState | null | undefined): string | null => {
+    const hint = getTraitBuildBoardHint(board);
+    if (!hint || hint.buildLabels.length === 0) {
+        return null;
+    }
+    return `Trait build: ${hint.buildLabels.join(' / ')}`;
 };
 
 export const getTraitBuildDraftHintForRelic = (relicId: RelicId): string | null => {

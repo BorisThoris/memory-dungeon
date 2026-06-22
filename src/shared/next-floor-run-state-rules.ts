@@ -11,6 +11,7 @@ import {
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
+import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 
 export interface CreateNextFloorRunStateOptions {
     lives: number;
@@ -56,6 +57,7 @@ export const createNextFloorRunState = (
         ? banishOneHazardPair(options.board)
         : { board: options.board, banished: false };
     const nextBoard = hazardBanish.board;
+    const traitRouteObjective = getTraitRouteObjectiveSeed(nextBoard);
 
     return {
         ...run,
@@ -120,6 +122,12 @@ export const createNextFloorRunState = (
         flashPairRevealedTileIds: [],
         regionShuffleRowArmed: null,
         regionShuffleCharges: INITIAL_REGION_SHUFFLE_CHARGES,
+        traitRouteObjectiveProgressThisFloor: 0,
+        traitRouteObjectiveRequiredThisFloor: traitRouteObjective?.required ?? 0,
+        traitRouteObjectiveCompletedThisFloor: false,
+        traitRouteObjectiveRewardClaimedThisFloor: false,
+        traitRouteObjectiveRewardTextThisFloor: null,
+        traitRouteObjectiveTriggeredTagsThisFloor: [],
         shopOffers: [],
         shopRerolls: 0,
         dungeonEnemiesDefeatedThisFloor: 0,

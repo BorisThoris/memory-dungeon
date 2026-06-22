@@ -7,6 +7,7 @@ import {
     calculateTileTraitMatchRewards,
     calculateTileTraitMismatchPenalty,
     formatTileTraitInteractionTags,
+    getBoardTraitInteractionPreviewLines,
     getTileSwapTraitPreviewLines,
     getTileTraitInteractionPreviewLines,
     TILE_TRAIT_INTERACTION_TAGS,
@@ -87,7 +88,12 @@ describe('tile trait rules', () => {
 
         const traitTiles = tiles.filter((tile) => tile.tileTraitKind != null);
         expect(traitTiles.length).toBeGreaterThan(0);
-        expect(traitTiles.every((tile) => tile.tileHazardKind == null && tile.dungeonCardKind == null)).toBe(true);
+        expect(
+            traitTiles.every(
+                (tile) =>
+                    !['exit', 'shop', 'room'].includes(tile.dungeonCardKind ?? '')
+            )
+        ).toBe(true);
         expect(assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'greed').map((tile) => tile.tileTraitKind ?? null)).toEqual(
             tiles.map((tile) => tile.tileTraitKind ?? null)
         );
@@ -105,11 +111,15 @@ describe('tile trait rules', () => {
 
         const safeTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'safe');
         const greedTiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 4, 'greed');
+        const safeBoard = makeBoard(safeTiles, { columns: 4, rows: 4 });
+        const greedBoard = makeBoard(greedTiles, { columns: 4, rows: 4 });
 
         expect(uniqueTraitPairCount(safeTiles)).toBe(4);
         expect(hasAdjacentTraitPair(safeTiles, 'conduit', 'echo')).toBe(true);
+        expect(getBoardTraitInteractionPreviewLines(safeBoard, 'match').length).toBeGreaterThanOrEqual(2);
         expect(uniqueTraitPairCount(greedTiles)).toBe(4);
         expect(hasAdjacentTraitPair(greedTiles, 'drift', 'volatile')).toBe(true);
+        expect(getBoardTraitInteractionPreviewLines(greedBoard, 'match').length).toBeGreaterThanOrEqual(2);
     });
 
     it('biases generated trait interaction pairs toward starting loadout identity', () => {
@@ -269,6 +279,57 @@ describe('tile trait rules', () => {
         expect(effect.scoreBonus).toBe(24);
         expect(effect.guardTokenGain).toBe(1);
         expect(effect.peekChargeGain).toBe(1);
+    });
+
+    it('turns second-order trait adjacencies into additional board-control payoffs', () => {
+        const board = makeBoard(
+            [
+                makeTile('c1', 'conduit', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
+                makeTile('c2', 'conduit', 'C', { tileTraitKind: 'conduit', state: 'flipped' }),
+                makeTile('s1', 'stasis', 'T', { tileTraitKind: 'stasis' }),
+                makeTile('x1', 'x', 'X'),
+                makeTile('sealed1', 'sealed', 'S', { tileTraitKind: 'sealed', state: 'flipped' }),
+                makeTile('sealed2', 'sealed', 'S', { tileTraitKind: 'sealed', state: 'flipped' }),
+                makeTile('conduit-near', 'conduit-near', 'C', { tileTraitKind: 'conduit' }),
+                makeTile('x2', 'x2', 'X'),
+                makeTile('h1', 'heavy', 'H', { tileTraitKind: 'heavy', state: 'flipped' }),
+                makeTile('h2', 'heavy', 'H', { tileTraitKind: 'heavy', state: 'flipped' }),
+                makeTile('m1', 'mirror', 'M', { tileTraitKind: 'mirror' }),
+                makeTile('y1', 'y', 'Y'),
+                makeTile('y2', 'y', 'Y'),
+                makeTile('z1', 'z', 'Z'),
+                makeTile('z2', 'z', 'Z')
+            ],
+            { columns: 4, rows: 3 }
+        );
+        const run = makeRun(board.tiles, { board });
+
+        const conduitEffect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[0]!, board.tiles[1]!],
+            source: 'match'
+        });
+        const sealedEffect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[4]!, board.tiles[5]!],
+            source: 'match'
+        });
+        const heavyEffect = resolveTileTraitEffects({
+            run,
+            board,
+            sourceTiles: [board.tiles[8]!, board.tiles[9]!],
+            source: 'match'
+        });
+
+        expect(conduitEffect.stickyBlockIndex).toBe(2);
+        expect(conduitEffect.interactionTags).toContain('conduit:stasis-lock');
+        expect(sealedEffect.comboShardGain).toBe(2);
+        expect(sealedEffect.interactionTags).toContain('sealed:conduit-spark');
+        expect(heavyEffect.guardTokenGain).toBe(1);
+        expect(heavyEffect.scoreBonus).toBe(50);
+        expect(heavyEffect.interactionTags).toContain('heavy:mirror-guard');
     });
 
     it('lets reward perks turn Echo, trait streaks, and Cursed openers into build engines', () => {

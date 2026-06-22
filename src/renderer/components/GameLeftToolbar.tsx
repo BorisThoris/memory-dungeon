@@ -420,7 +420,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                                     ? 'Tap the destination tile'
                                     : 'Tap the first tile'
                                 : 'Arm swap, then tap two hidden tiles'
-                        }.`}
+                        }. ${tileSwapTitle}.`}
                         aria-pressed={tileSwapArmed}
                         className={`${styles.iconAction} ${styles.iconActionWithBadge} ${tileSwapArmed ? styles.iconActionActive : ''}`}
                         disabled={tileSwapDisabled}

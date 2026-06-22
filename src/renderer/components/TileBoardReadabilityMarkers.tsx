@@ -24,6 +24,7 @@ const BOARD_READABILITY_DISABLED_SLASH_GEOMETRY = new PlaneGeometry(0.46, 0.024,
 const BOARD_READABILITY_ENEMY_OCCUPIED_GEOMETRY = new PlaneGeometry(0.22, 0.06, 1, 1);
 const BOARD_READABILITY_STATE_RAIL_GEOMETRY = new PlaneGeometry(0.26, 0.026, 1, 1);
 const BOARD_READABILITY_STATE_NOTCH_GEOMETRY = new PlaneGeometry(0.04, 0.13, 1, 1);
+const BOARD_READABILITY_TRAIT_COMBO_GEOMETRY = new PlaneGeometry(0.36, 0.045, 1, 1);
 const NON_PICKABLE_RAIL_GEOMETRY = new PlaneGeometry(CARD_WIDTH, HOVER_GOLD_RIM_STRIP, 1, 1);
 
 interface TileBoardReadabilityMarkersProps {
@@ -42,6 +43,7 @@ interface TileBoardReadabilityMarkersProps {
     spotlightWardOnBack: boolean;
     stickyFingerSlotMark: boolean;
     tile: Tile;
+    traitComboBack: boolean;
 }
 
 interface ReadabilityMaterialMeshProps {
@@ -98,7 +100,8 @@ export const TileBoardReadabilityMarkers = ({
     spotlightBountyOnBack,
     spotlightWardOnBack,
     stickyFingerSlotMark,
-    tile
+    tile,
+    traitComboBack
 }: TileBoardReadabilityMarkersProps) => {
     const {
         enemyOccupiedColor,
@@ -660,6 +663,23 @@ export const TileBoardReadabilityMarkers = ({
                                     transparent
                                 />
                             </mesh>
+                        </group>
+                    ) : null}
+                    {traitComboBack ? (
+                        <group position={[0, -CARD_HEIGHT * 0.305, 0.00061]}>
+                            <ReadabilityMaterialMesh
+                                color="#f7f1c2"
+                                geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
+                                opacity={0.9}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 2}
+                            />
+                            <ReadabilityMaterialMesh
+                                color={tile.tileTraitKind ? tileTraitColor(tile.tileTraitKind) : '#5ee0c8'}
+                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                opacity={0.96}
+                                position={[0, 0.001, 0.00004]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 3}
+                            />
                         </group>
                     ) : null}
                     {objectiveBackAccent ? (

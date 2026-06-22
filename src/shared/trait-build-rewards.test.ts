@@ -1,8 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { TileTraitKind } from './contracts';
+import { buildBoard } from './board-build-rules';
 import {
+    getTraitBuildBoardHint,
+    getTraitBuildDraftHintForBoard,
     getTraitBuildDraftHintForRelic,
     getTraitBuildRewardRows,
+    getTraitBuildRewardRowsForBoard,
     getTraitBuildRewardRowsForLoadout,
     getTraitBuildRewardRowsForRelic,
     getTraitBuildRewardRowsForTrait,
@@ -56,6 +60,32 @@ describe('trait build reward rows', () => {
         expect(getTraitBuildDraftHintForRelic('chapter_compass')).toBe('Trait build: Conduit Cartographer');
         expect(getTraitBuildDraftHintForRelic('wager_surety')).toBe('Trait build: Cursed Greed');
         expect(getTraitBuildDraftHintForRelic('stray_charge_plus_one')).toBeNull();
+    });
+
+    it('derives build guidance from the board trait interactions that are actually present', () => {
+        const board = buildBoard(4, { runSeed: 86_001, runRulesVersion: 1 });
+        const comboBoard = {
+            ...board,
+            columns: 2,
+            tiles: board.tiles.map((tile, index) =>
+                index === 0
+                    ? { ...tile, pairKey: 'echo', tileTraitKind: 'echo' as const }
+                    : index === 1
+                      ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                      : { ...tile, tileTraitKind: undefined }
+            )
+        };
+
+        expect(getTraitBuildRewardRowsForBoard(comboBoard).map((row) => row.id)[0]).toBe('sealed_catalyst');
+        expect(getTraitBuildBoardHint(comboBoard)?.traitKinds).toEqual(['echo', 'sealed']);
+        expect(getTraitBuildBoardHint(comboBoard)?.buildLabels[0]).toBe('Sealed Catalyst');
+        expect(getTraitBuildDraftHintForBoard(comboBoard)).toBe('Trait build: Sealed Catalyst / Conduit Cartographer');
+        expect(
+            getTraitBuildRewardRowsForBoard({
+                ...comboBoard,
+                tiles: comboBoard.tiles.map((tile) => ({ ...tile, tileTraitKind: undefined }))
+            })
+        ).toEqual([]);
     });
 
     it('maps starting loadouts to early trait-build guidance', () => {

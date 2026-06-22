@@ -5,6 +5,7 @@ import {
     getDungeonLevelResultTags,
     getLevelResultTagDefinitions,
     getSecondaryObjectiveProgress,
+    getSecondaryObjectiveStatusRows,
     getVisibleLevelResultTags,
     LEVEL_RESULT_TAG_DEFINITIONS
 } from './secondary-objectives';
@@ -104,5 +105,27 @@ describe('REG-048 secondary objective clarity', () => {
         ]);
 
         expect(visible.map((tag) => tag.id)).toEqual(['traps_disarmed', 'treasure_claimed', 'boss_floor']);
+    });
+
+    it('includes active trait route objectives in secondary objective rows', () => {
+        const run = {
+            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
+            traitRouteObjectiveProgressThisFloor: 1,
+            traitRouteObjectiveRequiredThisFloor: 2,
+            traitRouteObjectiveCompletedThisFloor: false,
+            traitRouteObjectiveRewardClaimedThisFloor: false,
+            traitRouteObjectiveRewardTextThisFloor: null
+        };
+
+        expect(getSecondaryObjectiveStatusRows(run)).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    id: 'trait_route_objective',
+                    label: 'Trait routes',
+                    condition: 'Trigger 2 trait routes.',
+                    reward: '+1 combo shard'
+                })
+            ])
+        );
     });
 });

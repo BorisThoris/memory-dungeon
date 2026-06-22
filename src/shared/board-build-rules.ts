@@ -240,17 +240,8 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         level,
         options.gameMode
     );
-    const traitTiles = assignTileTraitsToGeneratedBoard(
+    const layoutTiles = applyDungeonLayoutPlan(
         hazardTiles,
-        runSeed,
-        rulesVersion,
-        level,
-        routeWorldProfile?.intensity,
-        options.relicIds ?? [],
-        options.startingLoadoutId ?? null
-    );
-    const tiles = applyDungeonLayoutPlan(
-        traitTiles,
         runSeed,
         rulesVersion,
         level,
@@ -258,6 +249,7 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         floorArchetypeId,
         options.gameMode
     );
+    const tiles = layoutTiles;
     const tileCount = tiles.length;
     const columns = clamp(Math.ceil(Math.sqrt(tileCount)), 2, 8);
     const rows = Math.ceil(tileCount / columns);
@@ -309,15 +301,27 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
         enemyHazards,
         enemyHazardTurn: 0
     });
+    const traitBoard: BoardState = {
+        ...baseBoard,
+        tiles: assignTileTraitsToGeneratedBoard(
+            baseBoard.tiles,
+            runSeed,
+            rulesVersion,
+            level,
+            routeWorldProfile?.intensity,
+            options.relicIds ?? [],
+            options.startingLoadoutId ?? null
+        )
+    };
     if (!mutators.includes('shifting_spotlight')) {
-        return { ...baseBoard, wardPairKey: null, bountyPairKey: null };
+        return { ...traitBoard, wardPairKey: null, bountyPairKey: null };
     }
     const { wardPairKey, bountyPairKey } = pickShiftingSpotlightKeys(
-        baseBoard,
+        traitBoard,
         runSeed,
         rulesVersion,
         level,
         'init'
     );
-    return { ...baseBoard, wardPairKey, bountyPairKey };
+    return { ...traitBoard, wardPairKey, bountyPairKey };
 };

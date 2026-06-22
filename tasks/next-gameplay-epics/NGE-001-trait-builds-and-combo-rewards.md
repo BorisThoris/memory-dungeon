@@ -30,3 +30,10 @@ Make tile traits feel like a third core mechanic: players should route matches a
 - Shops now offer a trait-focused `trait_routing_kit` service when a floor has actionable trait adjacency; it grants existing peek and row/swap tools without save-schema churn.
 - Route side-room reward drafts now expose trait build archetype tags such as Drift Routing, Conduit Cartographer, and Cursed Greed on relevant durable rewards.
 - Starting loadouts now bias generated trait interaction pairs toward their intended build paths, making trait routing a run-defining board mechanic instead of only a later reward layer.
+- Generated boards now assign traits after final dungeon repair/layout and can layer traits onto findables, hazards, keys, locks, levers, enemies, traps, and treasures, avoiding only singleton utility cards such as exits, shops, and rooms.
+- Trait generation now repairs isolated placements into an adjacent interaction pair when possible, and larger boards seed multiple route/loadout combo adjacencies instead of a single decorative trait pair.
+- Added second-order combo payoffs for `Conduit + Stasis`, `Sealed + Conduit`, and `Heavy + Mirror`, including board-control, shard, guard, and score outcomes.
+- The HUD now surfaces active trait routes as a primary floor mechanic with route count/objective progress, first route text, build label, and routing tools.
+- Board readability and accessibility now mark every combo-ready route card, including support-side trait cards, so the visible marker, telemetry, and screen-reader copy agree.
+- Trait routing tools now expose proactive swap setup hints when no adjacency exists yet, so row/swap charges can be used to create combo routes instead of only repairing mistakes.
+- Balance simulation now tracks floors where a one-swap move can create a match-triggerable trait route, keeping the swap-routing loop visible in generated-board guardrails.

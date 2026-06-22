@@ -138,11 +138,25 @@ describe('tile board DOM accessibility helpers', () => {
 
         expect(getTileTraitPreviewText(traitBoard, traitBoard.tiles[0]!)).toContain('Echo + Sealed: combo shard');
         expect(getTileAriaLabel(traitBoard, traitBoard.tiles[0]!, true, 1, 1)).toContain(
-            'Nearby trait interaction: Echo + Sealed: combo shard.'
+            'Nearby trait interaction: Echo + Sealed: combo shard'
         );
+        expect(getTileTraitPreviewText(traitBoard, traitBoard.tiles[1]!)).toContain('Echo + Sealed: combo shard');
+        expect(getTileAriaLabel(traitBoard, traitBoard.tiles[1]!, true, 1, 2)).toContain(
+            'Echo + Sealed: combo shard'
+        );
+        const swapBoard: BoardState = {
+            ...board,
+            tiles: [
+                { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+                { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
+                { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
+                { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
+            ]
+        };
+
         expect(
             getPowerTargetAriaText(
-                traitBoard.tiles[1]!,
+                swapBoard.tiles[0]!,
                 false,
                 new Set(),
                 false,
@@ -150,11 +164,11 @@ describe('tile board DOM accessibility helpers', () => {
                 false,
                 new Set(),
                 true,
-                new Set(['a2']),
-                'b1',
-                traitBoard
+                new Set(['s1']),
+                'x1',
+                swapBoard
             )
-        ).toContain('Swap preview: Sealed + Heavy: score surge.');
+        ).toContain('Swap preview: Creates trait route: Sealed + Heavy: score surge; Sealed + Heavy: score surge.');
     });
 
     it('collects pickable tiles and moves keyboard focus across available grid slots', () => {

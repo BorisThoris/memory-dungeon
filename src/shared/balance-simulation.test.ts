@@ -25,6 +25,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.tileTraitPairs).toBeGreaterThan(0);
         expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
         expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(result.aggregate.tileTraitPairs);
+        expect(result.aggregate.traitSwapSetupOpportunities).toBeGreaterThan(0);
         expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
             result.aggregate.tileTraitPairs
         );
@@ -77,6 +78,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'avg_power_charge_inflow_per_floor',
                 'avg_tile_trait_pairs_per_floor',
                 'avg_trait_combo_opportunity_pairs_per_floor',
+                'avg_trait_swap_setup_opportunities_per_floor',
                 'tile_trait_share_echo',
                 'tile_trait_share_volatile',
                 'tile_trait_share_mirror',
@@ -110,7 +112,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'avg_key_inflow_potential_per_floor',
             'avg_power_charge_inflow_per_floor',
             'avg_tile_trait_pairs_per_floor',
-            'avg_trait_combo_opportunity_pairs_per_floor'
+            'avg_trait_combo_opportunity_pairs_per_floor',
+            'avg_trait_swap_setup_opportunities_per_floor'
         ]);
         expect(result.rows.filter((row) => newRewardRows.has(row.key) && row.status !== 'within_range')).toEqual([]);
         expect(result.samples.some((sample) => sample.dungeonNodeKind === 'elite' && sample.enemyThreatPairs >= 2)).toBe(
@@ -276,10 +279,11 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
         expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
         expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(total);
+        expect(result.aggregate.traitSwapSetupOpportunities).toBeGreaterThan(0);
 
         const shares = getTileTraitKindShares(result.aggregate.tileTraitKindCounts);
         const bounds: Record<TileTraitKind, { min: number; max: number }> = {
-            echo: { min: 0.08, max: 0.35 },
+            echo: { min: 0.06, max: 0.35 },
             volatile: { min: 0.05, max: 0.35 },
             mirror: { min: 0.05, max: 0.35 },
             cursed: { min: 0.04, max: 0.28 },

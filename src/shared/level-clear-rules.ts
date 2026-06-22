@@ -170,6 +170,10 @@ export interface CreateFloorClearLevelResultInput {
     routeChoices: LevelResult['routeChoices'];
     run: RunState;
     scoreGained: number;
+    traitRouteObjectiveCompleted?: boolean;
+    traitRouteObjectiveProgress?: number;
+    traitRouteObjectiveRequired?: number;
+    traitRouteObjectiveReward?: string | undefined;
 }
 
 export const createFloorClearLevelResult = ({
@@ -194,7 +198,11 @@ export const createFloorClearLevelResult = ({
     relicFavorGained,
     routeChoices,
     run,
-    scoreGained
+    scoreGained,
+    traitRouteObjectiveCompleted = false,
+    traitRouteObjectiveProgress = 0,
+    traitRouteObjectiveRequired = 0,
+    traitRouteObjectiveReward
 }: CreateFloorClearLevelResultInput): LevelResult => ({
     level,
     scoreGained,
@@ -222,6 +230,13 @@ export const createFloorClearLevelResult = ({
     endlessRiskWagerStreakLost,
     bossTrophyCacheOutcome,
     bossTrophyCacheScore: bossTrophyCacheScore > 0 ? bossTrophyCacheScore : undefined,
+    traitRouteObjectiveCompleted: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveCompleted : undefined,
+    traitRouteObjectiveProgress: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveProgress : undefined,
+    traitRouteObjectiveRequired: traitRouteObjectiveRequired > 0 ? traitRouteObjectiveRequired : undefined,
+    traitRouteObjectiveReward:
+        traitRouteObjectiveRequired > 0 && traitRouteObjectiveCompleted
+            ? traitRouteObjectiveReward
+            : undefined,
     ...getFloorClearStatLevelResultFields(run),
     routeChoices
 });

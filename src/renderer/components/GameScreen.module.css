@@ -4868,6 +4868,48 @@
     }
 }
 
+.hudTraitRoutePill {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 58%),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+}
+
+.hudTraitRoutePrimary {
+    min-width: 0;
+    max-width: 12.5rem;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-text-muted) 92%, var(--theme-cyan-bright));
+    font-size: 0.66rem;
+    line-height: 1.15;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hudTraitRouteDetails {
+    display: grid;
+    gap: 0.22rem;
+    min-width: min(100%, 18rem);
+    padding: 0.48rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    border-radius: var(--ui-radius-md);
+    background: color-mix(in srgb, var(--theme-void) 38%, transparent);
+    color: var(--theme-text-muted);
+}
+
+.hudTraitRouteDetails strong {
+    color: var(--theme-text);
+    font-size: 0.82rem;
+}
+
+.hudTraitRouteDetails span,
+.hudTraitRouteDetails small {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 0.74rem;
+    line-height: 1.25;
+}
+
 .toast,
 .scorePop {
     box-shadow:

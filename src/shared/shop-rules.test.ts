@@ -170,7 +170,11 @@ describe('shop rules', () => {
             'stasis',
             'stasis'
         ]);
-        expect(purchaseShopOffer({ ...withShop, board }, cleanse.id)).toMatchObject({ board });
+        const safeBoard = {
+            ...board,
+            tiles: board.tiles.map((tile) => ({ ...tile, tileTraitKind: undefined }))
+        };
+        expect(purchaseShopOffer({ ...withShop, board: safeBoard }, cleanse.id)).toMatchObject({ board: safeBoard });
     });
 
     it('sells a trait routing kit only when trait adjacency can be exploited', () => {
@@ -198,6 +202,7 @@ describe('shop rules', () => {
         const routed = purchaseShopOffer(withShop, kit.id);
 
         expect(kit.compatible).toBe(true);
+        expect(getRunShopStockPlan(run).previewCopy).toContain('Trait build: Sealed Catalyst');
         expect(routed.shopGold).toBe(withShop.shopGold - kit.cost);
         expect(routed.peekCharges).toBe(1);
         expect(routed.regionShuffleCharges).toBe(1);

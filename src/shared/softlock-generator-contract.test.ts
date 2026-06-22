@@ -27,6 +27,8 @@ describe('softlock generator contract', () => {
             hazards: expect.any(Number),
             enemies: expect.any(Number),
             bosses: expect.any(Number),
+            traitInteractions: expect.any(Number),
+            traitRouteObjectives: expect.any(Number),
             finalPairStates: expect.any(Number)
         });
         for (const [key, count] of Object.entries(result.coverage)) {

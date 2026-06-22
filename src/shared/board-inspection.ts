@@ -86,6 +86,8 @@ export type BoardFairnessIssueCode =
     | 'dungeon_card_pair_mismatch'
     | 'dungeon_card_hp_mismatch'
     | 'dungeon_objective_unreachable'
+    | 'trait_interaction_missing'
+    | 'trait_route_objective_unreachable'
     | 'run_has_no_board'
     | 'run_terminal_incomplete_board'
     | 'run_resolving_without_flipped_tiles';

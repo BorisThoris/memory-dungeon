@@ -14,6 +14,8 @@ import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { createNewRun } from './run-creation-rules';
 import { getRunShopStockPlan } from './shop-rules';
 import { defeatEnemyHazardsOnClearedTiles } from './enemy-hazard-board-rules';
+import { getBoardTraitInteractionPreviewLines } from './tile-trait-rules';
+import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 
 export type SoftlockContractCoverageKey =
     | 'locks'
@@ -25,6 +27,8 @@ export type SoftlockContractCoverageKey =
     | 'hazards'
     | 'enemies'
     | 'bosses'
+    | 'traitInteractions'
+    | 'traitRouteObjectives'
     | 'finalPairStates';
 
 export interface SoftlockGeneratorScenario {
@@ -64,6 +68,8 @@ const COVERAGE_KEYS: readonly SoftlockContractCoverageKey[] = [
     'hazards',
     'enemies',
     'bosses',
+    'traitInteractions',
+    'traitRouteObjectives',
     'finalPairStates'
 ];
 
@@ -192,6 +198,8 @@ const addCoverage = (
         coverage.enemies += 1;
     }
     if (board.dungeonBossId != null || board.tiles.some((tile) => tile.dungeonBossId != null)) coverage.bosses += 1;
+    if (getBoardTraitInteractionPreviewLines(board).length > 0) coverage.traitInteractions += 1;
+    if (getTraitRouteObjectiveSeed(board) != null) coverage.traitRouteObjectives += 1;
     if (projection === 'final_pair' || projection === 'cleared_board') coverage.finalPairStates += 1;
 };
 
@@ -211,16 +219,44 @@ const recordInspection = (
     result.checkedBoards += 1;
     addCoverage(result.coverage, board, projection);
     const report = inspectBoardFairness(board);
-    if (report.issues.length > 0 || !report.hasCompletionRoute) {
+    const traitPairCount = new Set(
+        board.tiles
+            .filter((tile) => tile.tileTraitKind != null && tile.state !== 'matched' && tile.state !== 'removed')
+            .map((tile) => tile.pairKey)
+    ).size;
+    const generatedTraitInteractionIssues: BoardFairnessIssue[] =
+        projection === 'generated' && traitPairCount >= 2 && getBoardTraitInteractionPreviewLines(board).length === 0
+            ? [
+                  {
+                      code: 'trait_interaction_missing',
+                      message: `Generated trait board has ${traitPairCount} trait pair(s), but no adjacent trait interaction preview.`
+                  }
+              ]
+            : [];
+    const traitRouteObjective = projection === 'generated' ? getTraitRouteObjectiveSeed(board) : null;
+    const matchTraitInteractionLines = traitRouteObjective
+        ? getBoardTraitInteractionPreviewLines(board, 'match')
+        : [];
+    const traitRouteObjectiveIssues: BoardFairnessIssue[] =
+        traitRouteObjective && traitRouteObjective.required > matchTraitInteractionLines.length
+            ? [
+                  {
+                      code: 'trait_route_objective_unreachable',
+                      message: `Trait route objective requires ${traitRouteObjective.required} match interaction(s), but only ${matchTraitInteractionLines.length} are triggerable.`
+                  }
+              ]
+            : [];
+    const issues = [...report.issues, ...generatedTraitInteractionIssues, ...traitRouteObjectiveIssues];
+    if (issues.length > 0 || !report.hasCompletionRoute) {
         result.failures.push({
             scenarioId: scenario.id,
             scenarioLabel: scenario.label,
             seed,
             floor,
             projection,
-            issueCodes: report.issues.map((issue) => issue.code),
-            issueDetails: report.issues.map(formatIssueDetail),
-            issues: report.issues,
+            issueCodes: issues.map((issue) => issue.code),
+            issueDetails: issues.map(formatIssueDetail),
+            issues,
             boardSummary: boardSummary(board)
         });
     }

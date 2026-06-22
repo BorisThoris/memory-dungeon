@@ -537,6 +537,10 @@ export interface LevelResult {
     recallBonusScore?: number;
     /** REG-017: deterministic local route options for the next floor; UI-only until map/shop nodes land. */
     routeChoices?: RouteChoice[];
+    traitRouteObjectiveCompleted?: boolean;
+    traitRouteObjectiveProgress?: number;
+    traitRouteObjectiveRequired?: number;
+    traitRouteObjectiveReward?: string;
 }
 
 export type RouteNodeType = 'safe' | 'greed' | 'mystery';
@@ -793,6 +797,7 @@ export interface RouteSideRoomChoiceState {
     detail: string;
     primary?: boolean;
     traitBuildLabels?: string[];
+    traitBuildReason?: string;
 }
 
 export interface RouteSideRoomState {
@@ -905,6 +910,13 @@ export interface RunState {
     dungeonRun: DungeonRunMapState;
     /** Anti-grind ledger for route side-room bonus rewards. */
     bonusRewardLedger: BonusRewardLedger;
+    /** Floor-local trait-route objective progress. Active when required > 0. */
+    traitRouteObjectiveProgressThisFloor: number;
+    traitRouteObjectiveRequiredThisFloor: number;
+    traitRouteObjectiveCompletedThisFloor: boolean;
+    traitRouteObjectiveRewardClaimedThisFloor: boolean;
+    traitRouteObjectiveRewardTextThisFloor: string | null;
+    traitRouteObjectiveTriggeredTagsThisFloor: string[];
     /** Durable perks claimed from route reward drafts; optional for old run snapshots/tests. */
     rewardPerkIds?: RewardPerkId[];
     /**

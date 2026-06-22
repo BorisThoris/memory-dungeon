@@ -1,6 +1,6 @@
 import type { BoardState, RunStatus } from '../../shared/contracts';
 import { activeEnemyHazardsForBoard } from '../../shared/enemy-hazard-board-rules';
-import { getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
+import { getTraitOpportunityTileIds } from '../../shared/trait-opportunities';
 import { getResolvingSelectionState } from './tileResolvingSelection';
 import { getPickableTileIds, getTilePosition } from './tileBoardDomAccessibility';
 import { getDungeonUtilityReadabilityKind } from './tileBoardReadability';
@@ -90,6 +90,7 @@ export const getCardFeedbackStatesAttr = ({
     const enemyOccupied = new Set(
         activeEnemyHazardsForBoard(board).map((hazard) => hazard.currentTileId)
     );
+    const traitOpportunityTileIds = getTraitOpportunityTileIds(board);
     const counts = new Map<string, number>();
     const add = (key: string): void => {
         counts.set(key, (counts.get(key) ?? 0) + 1);
@@ -132,11 +133,7 @@ export const getCardFeedbackStatesAttr = ({
         }
         if (tile.tileTraitKind) {
             add('trait');
-            const traitPreviewLines = [
-                ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
-                ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
-            ];
-            if (traitPreviewLines.length > 0) {
+            if (traitOpportunityTileIds.has(tile.id)) {
                 add('trait-combo');
             }
         }

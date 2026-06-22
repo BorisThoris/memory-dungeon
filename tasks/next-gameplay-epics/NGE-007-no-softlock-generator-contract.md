@@ -17,3 +17,5 @@ Make "never softlocked" a generator contract instead of a bug-by-bug patch cycle
 - Boss and enemy patrol overlays that only reference already matched/removed cards are now defeated/ignored before completion checks, preventing cleared Warden floors from staying blocked by stale enemy markers.
 - Moving enemy hazard activity is now a shared board selector used by status, renderer rows, ARIA text, and DOM telemetry, so stale cleared-board patrol records do not remain visible or announced.
 - Softlock generator coverage now adds cleaned cleared-board projections for boss and moving-hazard boards, catching stale-overlay completion states across seeded scenarios.
+- Softlock generator coverage now tracks trait-interaction boards and fails generated trait-heavy boards that have trait pairs but no adjacent player-facing interaction preview.
+- Trait route objective coverage now checks match-triggerable trait interactions, so floor goals cannot ask for progress that the match resolver cannot award.

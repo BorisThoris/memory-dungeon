@@ -67,6 +67,12 @@ export const getVisualHudAnnouncementFollowup = ({
         return 'Next: extra life secured; spend it only on controlled risks.';
     }
 
+    if (normalizedAnnouncement.includes('trait routes')) {
+        return normalizedAnnouncement.includes('complete')
+            ? 'Next: route reward claimed; spend the resource when the board gets risky.'
+            : 'Next: line up another trait interaction before the floor ends.';
+    }
+
     if (normalizedAnnouncement.includes('match resolved')) {
         return `Next: ${remainingPairCount} ${remainingPairCount === 1 ? 'pair' : 'pairs'} left.`;
     }

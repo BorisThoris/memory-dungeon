@@ -18,6 +18,8 @@ import {
     canOfferEndlessRiskWager
 } from '../../shared/objective-rules';
 import { getRouteChoiceAvailability } from '../../shared/route-rules';
+import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
+import { getTraitSwapRouteHints } from '../../shared/trait-opportunities';
 import {
     canRegionShuffle,
     canRegionShuffleRow,
@@ -851,6 +853,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             ? `Objective bonuses: +${run.lastLevelResult.objectiveBonusScore!.toLocaleString()}`
             : null;
     const bonusTagsLine = run.lastLevelResult ? formatBonusTagsLine(run.lastLevelResult.bonusTags) : null;
+    const traitRouteObjectiveLine =
+        run.lastLevelResult?.traitRouteObjectiveRequired != null
+            ? run.lastLevelResult.traitRouteObjectiveCompleted
+                ? `Trait routes: Complete (${run.lastLevelResult.traitRouteObjectiveReward ?? 'reward claimed'})`
+                : `Trait routes: ${run.lastLevelResult.traitRouteObjectiveProgress ?? 0}/${run.lastLevelResult.traitRouteObjectiveRequired}`
+            : null;
     const endlessChapterActive =
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
     const currentArchetype = getFloorArchetypeDefinition(run.board?.floorArchetypeId ?? null);
@@ -993,6 +1001,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const dungeonPresentation = getDungeonBoardPresentation(run);
     const activeDungeonPanel = run.status !== 'levelComplete' && dungeonPresentation.visible ? dungeonPresentation : null;
     const activeDungeonObjectiveStatus = activeDungeonPanel ? getDungeonObjectiveStatus(run) : null;
+    const traitRouteObjectiveStatus = getTraitRouteObjectiveStatus(run);
+    const liveObjectiveStatus = activeDungeonObjectiveStatus ?? traitRouteObjectiveStatus;
     const dungeonCombatLogRows = activeDungeonPanel ? getDungeonCombatLogRows(run) : [];
     const nextFloorPreview =
         endlessChapterActive && run.lastLevelResult
@@ -1065,9 +1075,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         tileTraitMatches: run.stats.tileTraitMatches,
         tileTraitMismatches: run.stats.tileTraitMismatches,
         volatileTraitShuffles: run.stats.volatileTraitShuffles,
-        objectiveProgress: activeDungeonObjectiveStatus?.progress,
-        objectiveRequired: activeDungeonObjectiveStatus?.required,
-        objectiveLabel: activeDungeonObjectiveStatus?.label,
+        objectiveProgress: liveObjectiveStatus?.progress,
+        objectiveRequired: liveObjectiveStatus?.required,
+        objectiveLabel: liveObjectiveStatus?.label,
         recallFocus: run.recallFocus,
         recallFocusMax: RECALL_FOCUS_MAX,
         recallMatchesThisFloor: run.recallMatchesThisFloor,
@@ -1229,6 +1239,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         hiddenTileCount < 2 ||
         (run.regionShuffleCharges < 1 &&
             !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first')));
+    const traitSwapHint = !tileSwapDisabled ? getTraitSwapRouteHints(run.board, 1)[0] ?? null : null;
     const tileSwapTitle = run.activeContract?.noShuffle
         ? 'Scholar contract: tile swap disabled'
         : run.board.flippedTileIds.length > 0
@@ -1242,7 +1253,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 ? tileSwapFirstTileId
                     ? 'Tap a second hidden tile to swap positions'
                     : 'Tap the first hidden tile to move'
-                : 'Swap two hidden tiles (uses 1 row/swap charge)';
+                : traitSwapHint
+                  ? `Swap two hidden tiles (uses 1 row/swap charge). ${traitSwapHint.text}`
+                  : 'Swap two hidden tiles (uses 1 row/swap charge)';
     const tileSwapPowerVisualActive = run.status === 'playing' && tileSwapArmed && !tileSwapDisabled;
     const tileSwapEligibleTileIds = (() => {
         if (!tileSwapPowerVisualActive) {
@@ -1873,6 +1886,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             {favorBankedLine ? <p className={styles.modalNote}>{favorBankedLine}</p> : null}
                             {firstClearOnboardingLine ? <p className={styles.modalNote}>{firstClearOnboardingLine}</p> : null}
                             {objectiveBonusLine ? <p className={styles.modalNote}>{objectiveBonusLine}</p> : null}
+                            {traitRouteObjectiveLine ? <p className={styles.modalNote}>{traitRouteObjectiveLine}</p> : null}
                             {bonusTagsLine ? <p className={styles.modalNote}>{bonusTagsLine}</p> : null}
                             {nextFloorPreviewLine ? <p className={styles.modalNote}>{nextFloorPreviewLine}</p> : null}
                             {nextFloorPreviewIdentityLine ? <p className={styles.modalNote}>{nextFloorPreviewIdentityLine}</p> : null}

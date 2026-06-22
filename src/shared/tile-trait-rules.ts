@@ -103,7 +103,10 @@ export const TILE_TRAIT_INTERACTION_TEXT = {
     'conduit:adjacent-score': 'Conduit: adjacent trait charge',
     'conduit:mirror-guard': 'Conduit + Mirror: guard spark',
     'conduit:echo-peek': 'Conduit + Echo: peek spark',
+    'conduit:stasis-lock': 'Conduit + Stasis: lock pulse',
+    'sealed:conduit-spark': 'Sealed + Conduit: shard spark',
     'echo:mirror-focus': 'Echo + Mirror: recall focus',
+    'heavy:mirror-guard': 'Heavy + Mirror: braced guard',
     'stasis:nearby-block': 'Stasis: nearby trait blocked',
     'conduit:danger-recall': 'Conduit near danger: recall pressure',
     'stasis:sealed-buffer': 'Stasis buffered Sealed',
@@ -169,11 +172,17 @@ const collectTileTraitInteractionTags = ({
         if (hasTrait('sealed') && adjacentTraitKinds.has('heavy')) {
             tags.push('sealed:heavy-score');
         }
+        if (hasTrait('sealed') && adjacentTraitKinds.has('conduit')) {
+            tags.push('sealed:conduit-spark');
+        }
         if (hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
             tags.push('cursed:volatile-greed');
         }
         if (hasTrait('volatile') && adjacentTraitKinds.has('heavy')) {
             tags.push('volatile:heavy-guard');
+        }
+        if (hasTrait('heavy') && adjacentTraitKinds.has('mirror')) {
+            tags.push('heavy:mirror-guard');
         }
         if (hasTrait('drift')) {
             tags.push('drift:row-shuffle');
@@ -188,6 +197,9 @@ const collectTileTraitInteractionTags = ({
             }
             if (adjacentTraitKinds.has('echo')) {
                 tags.push('conduit:echo-peek');
+            }
+            if (board && adjacentTraitKinds.has('stasis')) {
+                tags.push('conduit:stasis-lock');
             }
         }
         if (hasTrait('stasis') && board && selectStasisBlockIndex(board, sourceTiles) !== null) {
@@ -273,6 +285,25 @@ export const getTileSwapTraitPreviewLines = (
     ];
 };
 
+export const getBoardTraitInteractionPreviewLines = (
+    board: BoardState,
+    source: 'match' | 'mismatch' | 'both' = 'both'
+): string[] => {
+    const lines = new Set<string>();
+    for (const tile of board.tiles) {
+        if (tile.tileTraitKind == null || tile.state === 'matched' || tile.state === 'removed') {
+            continue;
+        }
+        const sources: readonly ('match' | 'mismatch')[] = source === 'both' ? ['match', 'mismatch'] : [source];
+        for (const previewSource of sources) {
+            for (const line of getTileTraitInteractionPreviewLines(board, [tile.id], previewSource)) {
+                lines.add(line);
+            }
+        }
+    }
+    return [...lines];
+};
+
 const createEmptyTraitEffectResult = (): TileTraitEffectResult => ({
     comboShardGain: 0,
     guardTokenGain: 0,
@@ -295,11 +326,9 @@ const createEmptyTraitEffectResult = (): TileTraitEffectResult => ({
 const tileCanReceiveTrait = (tile: Tile): boolean =>
     tile.state === 'hidden' &&
     !isSingletonUtilityPairKey(tile.pairKey) &&
-    tile.findableKind == null &&
     tile.routeCardKind == null &&
     tile.routeSpecialKind == null &&
-    tile.dungeonCardKind == null &&
-    tile.tileHazardKind == null &&
+    !['exit', 'shop', 'room'].includes(tile.dungeonCardKind ?? '') &&
     tile.tileTraitKind == null;
 
 const tileCanShuffleFromVolatileMiss = (tile: Tile, blockedPairKeys: ReadonlySet<string>): boolean =>
@@ -381,6 +410,37 @@ const routeInteractionSeed = (
         return relicIds.includes('parasite_ledger') ? ['stasis', 'cursed'] : ['stasis', 'conduit'];
     }
     return relicIds.includes('chapter_compass') ? ['conduit', 'mirror'] : ['conduit', 'echo'];
+};
+
+const routeInteractionSeeds = (
+    intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
+    relicIds: readonly RelicId[],
+    startingLoadoutId: StartingLoadoutId | null | undefined
+): readonly (readonly [TileTraitKind, TileTraitKind])[] => {
+    const primary = routeInteractionSeed(intensity, relicIds, startingLoadoutId);
+    const loadoutExtra: Partial<Record<StartingLoadoutId, readonly (readonly [TileTraitKind, TileTraitKind])[]>> = {
+        memory_scout: [['echo', 'mirror'], ['sealed', 'conduit']],
+        route_tactician: [['drift', 'volatile'], ['volatile', 'heavy']],
+        cursebreaker: [['mirror', 'stasis'], ['sealed', 'stasis']],
+        vaultbreaker: [['cursed', 'volatile'], ['sealed', 'heavy']]
+    };
+    const routeExtra: readonly (readonly [TileTraitKind, TileTraitKind])[] =
+        intensity === 'safe'
+            ? [['echo', 'mirror'], ['sealed', 'conduit'], ['sealed', 'heavy']]
+            : intensity === 'greed'
+              ? [['cursed', 'volatile'], ['volatile', 'heavy'], ['heavy', 'mirror']]
+              : intensity === 'mystery'
+                ? [['stasis', 'conduit'], ['mirror', 'stasis'], ['sealed', 'conduit'], ['echo', 'mirror']]
+                : [
+                      ['echo', 'mirror'],
+                      ['sealed', 'conduit'],
+                      ['cursed', 'volatile'],
+                      ['heavy', 'mirror'],
+                      ['drift', 'volatile'],
+                      ['stasis', 'conduit']
+                  ];
+    const seeded = startingLoadoutId ? loadoutExtra[startingLoadoutId] ?? [] : [];
+    return [primary, ...seeded, ...routeExtra];
 };
 
 const traitPoolForContext = (
@@ -518,11 +578,20 @@ export const assignTileTraitsToGeneratedBoard = (
     const traitByPairKey = new Map<string, TileTraitKind>();
     if (traitCount >= 2) {
         const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys);
-        const [firstPairKey, secondPairKey] = shuffleWithRng(() => rng(), adjacentPairs)[0] ?? [];
-        if (firstPairKey && secondPairKey) {
-            const [firstTrait, secondTrait] = routeInteractionSeed(intensity, relicIds, startingLoadoutId);
+        const shuffledAdjacentPairs = shuffleWithRng(() => rng(), adjacentPairs);
+        const seeds = routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
+        let seedIndex = intensity == null && !startingLoadoutId ? Math.floor(rng() * seeds.length) : 0;
+        for (const [firstPairKey, secondPairKey] of shuffledAdjacentPairs) {
+            if (traitByPairKey.size + 2 > traitCount) {
+                break;
+            }
+            if (traitByPairKey.has(firstPairKey) || traitByPairKey.has(secondPairKey)) {
+                continue;
+            }
+            const [firstTrait, secondTrait] = seeds[seedIndex % seeds.length]!;
             traitByPairKey.set(firstPairKey, firstTrait);
             traitByPairKey.set(secondPairKey, secondTrait);
+            seedIndex += 1;
         }
     }
     shuffledPairKeys.forEach((pairKey, index) => {
@@ -533,10 +602,38 @@ export const assignTileTraitsToGeneratedBoard = (
         traitByPairKey.set(pairKey, trait);
     });
 
-    return tiles.map((tile) => {
+    const assignedTiles = tiles.map((tile) => {
         const trait = traitByPairKey.get(tile.pairKey);
         return trait ? { ...tile, tileTraitKind: trait } : { ...tile };
     });
+    if (traitByPairKey.size >= 2 && getBoardTraitInteractionPreviewLines({ ...({} as BoardState), tiles: assignedTiles, columns: columnsForTileCount(assignedTiles.length) }).length === 0) {
+        const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys);
+        const [firstPairKey, secondPairKey] = adjacentPairs.find(
+            ([first, second]) => traitByPairKey.has(first) || traitByPairKey.has(second)
+        ) ?? adjacentPairs[0] ?? [];
+        if (firstPairKey && secondPairKey) {
+            const repairSeeds = routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
+            const repairSeedIndex = intensity == null && !startingLoadoutId ? Math.floor(rng() * repairSeeds.length) : 0;
+            const [firstTrait, secondTrait] = repairSeeds[repairSeedIndex]!;
+            const repairedTraitByPairKey = new Map<string, TileTraitKind>([
+                [firstPairKey, firstTrait],
+                [secondPairKey, secondTrait]
+            ]);
+            for (const [pairKey, trait] of traitByPairKey.entries()) {
+                if (repairedTraitByPairKey.size >= traitCount) {
+                    break;
+                }
+                if (!repairedTraitByPairKey.has(pairKey)) {
+                    repairedTraitByPairKey.set(pairKey, trait);
+                }
+            }
+            return tiles.map((tile) => {
+                const trait = repairedTraitByPairKey.get(tile.pairKey);
+                return trait ? { ...tile, tileTraitKind: trait } : { ...tile };
+            });
+        }
+    }
+    return assignedTiles;
 };
 
 export const applyVolatileMismatchTrait = (
@@ -707,6 +804,16 @@ export const resolveTileTraitEffects = ({
             result.interactionTags.push('sealed:heavy-score');
         }
 
+        if (hasTrait('sealed') && adjacentTraitKinds.has('conduit')) {
+            if (run.stats.comboShards + result.comboShardGain < MAX_COMBO_SHARDS) {
+                result.comboShardGain += 1;
+            } else {
+                result.scoreBonus += 18;
+            }
+            result.scoreBonus += 10;
+            result.interactionTags.push('sealed:conduit-spark');
+        }
+
         if (hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
             result.shopGoldGain += 1;
             result.scoreBonus += 20;
@@ -722,6 +829,12 @@ export const resolveTileTraitEffects = ({
         if (hasTrait('volatile') && adjacentTraitKinds.has('heavy')) {
             result.guardTokenGain += 1;
             result.interactionTags.push('volatile:heavy-guard');
+        }
+
+        if (hasTrait('heavy') && adjacentTraitKinds.has('mirror')) {
+            result.guardTokenGain += 1;
+            result.scoreBonus += 15;
+            result.interactionTags.push('heavy:mirror-guard');
         }
 
         if (hasTrait('drift')) {
@@ -743,6 +856,14 @@ export const resolveTileTraitEffects = ({
             if (adjacentTraitKinds.has('echo')) {
                 result.peekChargeGain += 1;
                 result.interactionTags.push('conduit:echo-peek');
+            }
+            if (adjacentTraitKinds.has('stasis') && board) {
+                const blockIndex = selectStasisBlockIndex(board, sourceTiles);
+                if (blockIndex !== null) {
+                    result.stickyBlockIndex = blockIndex;
+                    result.scoreBonus += 10;
+                }
+                result.interactionTags.push('conduit:stasis-lock');
             }
             if (run.relicIds.includes('chapter_compass')) {
                 result.peekChargeGain += 1;

@@ -139,7 +139,8 @@ describe('SideRoomScreen', () => {
                             label: 'Trait toolkit',
                             detail: '+1 row/swap charge; +1 peek charge',
                             primary: true,
-                            traitBuildLabels: ['Drift Routing', 'Conduit Cartographer']
+                            traitBuildLabels: ['Drift Routing', 'Conduit Cartographer'],
+                            traitBuildReason: 'Offered for Drift Routing: Drift + Volatile: routing burst'
                         }
                     ],
                     payload: { kind: 'bonus_reward', instanceId: 'choice-trait-toolkit' }
@@ -151,6 +152,7 @@ describe('SideRoomScreen', () => {
 
         expect(screen.getByLabelText('Trait build archetypes')).toHaveTextContent('Drift Routing');
         expect(screen.getByLabelText('Trait build archetypes')).toHaveTextContent('Conduit Cartographer');
+        expect(screen.getByText('Offered for Drift Routing: Drift + Volatile: routing burst')).toBeInTheDocument();
     });
 
     it('collapses exhausted bonus rewards to one continue action', () => {

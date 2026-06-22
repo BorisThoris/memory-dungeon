@@ -1,6 +1,7 @@
 import {
     GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS,
     MATCH_DELAY_MS,
+    MAX_COMBO_SHARDS,
     MAX_GUARD_TOKENS,
     MAX_LIVES,
     RECALL_FOCUS_MAX,
@@ -9,6 +10,9 @@ import {
     type RunState
 } from './contracts';
 import { getDungeonLevelResultTags } from './secondary-objectives';
+import {
+    applyTraitRouteObjectiveProgress
+} from './trait-route-objectives';
 export {
     applyRelicOfferServiceToRun,
     computeRelicOfferPickBudget,
@@ -481,6 +485,9 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     const clearLifeGained = clearLifeReason !== 'none' && run.lives < MAX_LIVES ? 1 : 0;
     const floorClearObjective = getFloorClearObjectiveResult(run, board);
     const bonusTags: string[] = [...floorClearObjective.bonusTags];
+    if (run.traitRouteObjectiveCompletedThisFloor) {
+        bonusTags.push('trait_route_objective');
+    }
     const objectiveBonus = floorClearObjective.objectiveBonus;
     const featuredObjectiveId = floorClearObjective.featuredObjectiveId;
     const featuredObjectiveCompleted = floorClearObjective.featuredObjectiveCompleted;
@@ -541,7 +548,11 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
         relicFavorGained: totalRelicFavorGained,
         routeChoices,
         run,
-        scoreGained
+        scoreGained,
+        traitRouteObjectiveCompleted: run.traitRouteObjectiveCompletedThisFloor,
+        traitRouteObjectiveProgress: run.traitRouteObjectiveProgressThisFloor,
+        traitRouteObjectiveRequired: run.traitRouteObjectiveRequiredThisFloor,
+        traitRouteObjectiveReward: run.traitRouteObjectiveRewardTextThisFloor ?? undefined
     });
 
     return {
@@ -715,6 +726,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             routeCardReward,
             run
         });
+        const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
         const lives = survivalReward.lives;
         const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
         const wildMatchesRemaining = usedWild ? 0 : run.wildMatchesRemaining;
@@ -809,18 +821,19 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
             stickyBlockIndex: traitReward.stickyBlockIndex ?? boardCleanup.stickyBlockIndex,
+            ...traitRouteObjective.runPatch,
             ...progress,
             stats: {
                 ...run.stats,
-                totalScore: scoring.totalScore,
-                currentLevelScore: scoring.currentLevelScore,
-                bestScore: scoring.bestScore,
+                totalScore: scoring.totalScore + traitRouteObjective.scoreBonus,
+                currentLevelScore: scoring.currentLevelScore + traitRouteObjective.scoreBonus,
+                bestScore: Math.max(scoring.bestScore, scoring.totalScore + traitRouteObjective.scoreBonus),
                 matchesFound: run.stats.matchesFound + 1,
                 currentStreak: scoring.currentStreak,
                 bestStreak: Math.max(run.stats.bestStreak, scoring.currentStreak),
                 highestLevel: Math.max(run.stats.highestLevel, board.level),
                 guardTokens: Math.min(MAX_GUARD_TOKENS, survivalReward.guardTokens + traitReward.guardTokenGain),
-                comboShards: survivalReward.comboShards,
+                comboShards: Math.min(MAX_COMBO_SHARDS, survivalReward.comboShards + traitRouteObjective.comboShardGain),
                 tileTraitMatches: addTileTraitCountStats(run.stats.tileTraitMatches, [tileMatchA, tileMatchB])
             },
             timerState: clearResolveState(run)
@@ -955,6 +968,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             routeCardReward,
             run
         });
+        const traitRouteObjective = applyTraitRouteObjectiveProgress(run, traitReward.interactionTags);
         const lives = survivalReward.lives;
         const routeFavor = gainRelicFavor(run, routeCardReward.relicFavor + dungeonReward.relicFavor + traitReward.relicFavorGain);
 
@@ -1048,18 +1062,19 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             recallBonusScoreThisFloor: boardCleanup.recallBonusScoreThisFloor,
             forgottenTileIdsThisFloor: boardCleanup.forgottenTileIdsThisFloor,
             stickyBlockIndex: traitReward.stickyBlockIndex ?? boardCleanup.stickyBlockIndex,
+            ...traitRouteObjective.runPatch,
             ...progress,
             stats: {
                 ...run.stats,
-                totalScore: scoring.totalScore,
-                currentLevelScore: scoring.currentLevelScore,
-                bestScore: scoring.bestScore,
+                totalScore: scoring.totalScore + traitRouteObjective.scoreBonus,
+                currentLevelScore: scoring.currentLevelScore + traitRouteObjective.scoreBonus,
+                bestScore: Math.max(scoring.bestScore, scoring.totalScore + traitRouteObjective.scoreBonus),
                 matchesFound: run.stats.matchesFound + 1,
                 currentStreak: scoring.currentStreak,
                 bestStreak: Math.max(run.stats.bestStreak, scoring.currentStreak),
                 highestLevel: Math.max(run.stats.highestLevel, board.level),
                 guardTokens: Math.min(MAX_GUARD_TOKENS, survivalReward.guardTokens + traitReward.guardTokenGain),
-                comboShards: survivalReward.comboShards,
+                comboShards: Math.min(MAX_COMBO_SHARDS, survivalReward.comboShards + traitRouteObjective.comboShardGain),
                 tileTraitMatches: addTileTraitCountStats(run.stats.tileTraitMatches, [firstTile, secondTile])
             },
             timerState: clearResolveState(run)

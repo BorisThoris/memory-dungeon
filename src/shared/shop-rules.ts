@@ -12,6 +12,7 @@ import {
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { gainRunInventoryItem } from './run-inventory';
 import { getTileTraitInteractionPreviewLines } from './tile-trait-rules';
+import { getTraitBuildDraftHintForBoard } from './trait-build-rewards';
 
 export const SHOP_ITEM_CATALOG: Record<
     RunShopItemId,
@@ -241,10 +242,14 @@ export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
         needsMasterKey && uniqueStock.indexOf('master_key') >= stockLimit
             ? [...uniqueStock.filter((itemId) => itemId !== 'master_key').slice(0, stockLimit - 1), 'master_key']
             : uniqueStock.slice(0, stockLimit);
-    const previewCopy =
+    const basePreviewCopy =
         source === 'board_shop'
             ? `Board vendor: ${finalItemIds.length} deterministic route-aware services, reroll ${getShopRerollCostForFloor(level)} shop gold.`
             : `Floor-clear vendor: ${finalItemIds.length} deterministic route-aware services, reroll ${getShopRerollCostForFloor(level)} shop gold.`;
+    const traitBuildHint = finalItemIds.includes('trait_routing_kit')
+        ? getTraitBuildDraftHintForBoard(run.board)
+        : null;
+    const previewCopy = traitBuildHint ? `${basePreviewCopy} ${traitBuildHint}.` : basePreviewCopy;
     return {
         source,
         level,

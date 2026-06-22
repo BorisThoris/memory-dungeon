@@ -541,6 +541,28 @@ describe('GameScreen (OVR-014)', () => {
         ).toBe('Next: take the third flip only if the wager is worth it.');
     });
 
+    it('adds next-step lines for trait route objective feedback', () => {
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Match resolved. 1/4 pairs cleared. Trait routes: 1/2.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 3,
+                lives: 3
+            })
+        ).toBe('Next: line up another trait interaction before the floor ends.');
+
+        expect(
+            getVisualHudAnnouncementFollowup({
+                announcement: 'Match resolved. 2/4 pairs cleared. Trait routes: 2/2 complete. Combo shard gained. 1 available.',
+                priority: 'info',
+                runStatus: 'playing',
+                remainingPairCount: 2,
+                lives: 3
+            })
+        ).toBe('Next: route reward claimed; spend the resource when the board gets risky.');
+    });
+
     it('keyboard shortcuts overlay lists board navigation and Gambit tip after F1', () => {
         const playing = finishMemorizePhase(createNewRun(0));
         render(
@@ -1118,6 +1140,10 @@ describe('GameScreen (OVR-014)', () => {
                 featuredObjectiveStreak: 2,
                 featuredObjectiveStreakBonus: 10,
                 objectiveBonusScore: 30,
+                traitRouteObjectiveCompleted: true,
+                traitRouteObjectiveProgress: 1,
+                traitRouteObjectiveRequired: 1,
+                traitRouteObjectiveReward: '+1 combo shard',
                 bonusTags: ['flip_par', 'objective_streak']
                 ,
                 routeChoices: [
@@ -1152,6 +1178,7 @@ describe('GameScreen (OVR-014)', () => {
         );
 
         expect(getByText(/Flip par: Complete/)).toBeTruthy();
+        expect(getByText('Trait routes: Complete (+1 combo shard)')).toBeTruthy();
         expect(getByText('Objective streak: x2 (+10)')).toBeTruthy();
         expect(getByText('Favor gained: +1')).toBeTruthy();
         expect(getByText(/Extra relic pick banked/)).toBeTruthy();

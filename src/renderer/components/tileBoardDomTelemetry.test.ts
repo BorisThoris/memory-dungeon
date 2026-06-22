@@ -203,7 +203,7 @@ describe('tile board DOM telemetry helpers', () => {
         });
 
         expect(states).toContain('trait:2');
-        expect(states).toContain('trait-combo:1');
+        expect(states).toContain('trait-combo:2');
     });
 
     it('serializes dev pair positions only when enough pairs are available', () => {

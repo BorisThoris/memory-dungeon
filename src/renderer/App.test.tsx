@@ -70,8 +70,7 @@ const chooseClassicRun = async (user: ReturnType<typeof userEvent.setup>): Promi
     await user.click(await screen.findByRole('button', { name: /start run/i }));
 };
 
-const findLevelOneHeading = async (): Promise<HTMLElement> =>
-    screen.findByRole('heading', { name: /level 1/i }, { timeout: 5000 });
+const findGameplayBoardStage = async (): Promise<HTMLElement> => screen.findByTestId('board-stage', undefined, { timeout: 10_000 });
 
 describe('desktop app flow', () => {
     beforeEach(() => {
@@ -110,7 +109,7 @@ describe('desktop app flow', () => {
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
 
-        expect(await findLevelOneHeading()).toBeInTheDocument();
+        expect(await findGameplayBoardStage()).toBeInTheDocument();
         expect(screen.getByRole('group', { name: /run stats/i })).toBeInTheDocument();
         expect(screen.getByText(/^shards$/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /rule tips/i })).toBeInTheDocument();
@@ -127,7 +126,7 @@ describe('desktop app flow', () => {
         expect(container.firstElementChild).toHaveAttribute('data-ambient-grid', 'off');
 
         await chooseClassicRun(user);
-        await findLevelOneHeading();
+        await findGameplayBoardStage();
         expect(container.firstElementChild).toHaveAttribute('data-view', 'playing');
         expect(container.firstElementChild).toHaveAttribute('data-ambient-grid', 'off');
     });
@@ -304,7 +303,7 @@ describe('desktop app flow', () => {
 
         renderApp();
 
-        expect(await findLevelOneHeading()).toBeInTheDocument();
+        expect(await findGameplayBoardStage()).toBeInTheDocument();
         expect(screen.queryByText(/first miss each floor is free/i)).not.toBeInTheDocument();
     });
 
@@ -543,7 +542,7 @@ describe('desktop app flow', () => {
 
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
-        expect(await findLevelOneHeading()).toBeInTheDocument();
+        expect(await findGameplayBoardStage()).toBeInTheDocument();
 
         await user.keyboard('p');
         const modalTitle = await screen.findByRole('heading', { name: /run paused/i });
@@ -570,7 +569,7 @@ describe('desktop app flow', () => {
 
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
-        expect(await findLevelOneHeading()).toBeInTheDocument();
+        expect(await findGameplayBoardStage()).toBeInTheDocument();
 
         await user.click(screen.getByRole('button', { name: /settings/i }));
 
@@ -734,12 +733,12 @@ describe('desktop app flow', () => {
         await user.click(screen.getByTestId('game-toolbar-inventory'));
         expect(await screen.findByRole('region', { name: /inventory/i })).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: /^back$/i }));
-        expect(await findLevelOneHeading()).toBeInTheDocument();
+        expect(await findGameplayBoardStage()).toBeInTheDocument();
 
         await user.click(screen.getByTestId('game-toolbar-codex'));
         expect(await screen.findByRole('region', { name: /codex/i })).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: /^back$/i }));
-        expect(await findLevelOneHeading()).toBeInTheDocument();
+        expect(await findGameplayBoardStage()).toBeInTheDocument();
     });
 
     it('resets settings to defaults from the About tab', async () => {

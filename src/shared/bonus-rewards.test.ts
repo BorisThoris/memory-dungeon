@@ -10,7 +10,9 @@ import {
     getBonusRewardRows,
     getRewardPerkRows
 } from './bonus-rewards';
+import { buildBoard } from './board-build-rules';
 import { GAME_RULES_VERSION, MAX_COMBO_SHARDS, MAX_GUARD_TOKENS, type RunState } from './contracts';
+import { getTraitBuildRewardRowsForBoard } from './trait-build-rewards';
 
 const makeRun = (runSeed = 75_000, runRulesVersion = GAME_RULES_VERSION): RunState =>
     ({
@@ -297,6 +299,39 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(
             rollBonusRewardDraft({ ...base, startingLoadoutId: 'route_tactician' }).map((reward) => reward.instanceId)
         ).toEqual(rollBonusRewardDraft({ ...base, startingLoadoutId: 'route_tactician' }).map((reward) => reward.instanceId));
+    });
+
+    it('biases reward drafts toward the current board trait build when interactions are present', () => {
+        const board = buildBoard(4, { runSeed: 75_121, runRulesVersion: GAME_RULES_VERSION });
+        const comboBoard = {
+            ...board,
+            columns: 2,
+            tiles: board.tiles.map((tile, index) =>
+                index === 0
+                    ? { ...tile, pairKey: 'echo', tileTraitKind: 'echo' as const }
+                    : index === 1
+                      ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                      : { ...tile, tileTraitKind: undefined }
+            )
+        };
+        const boardBuildLabels = getTraitBuildRewardRowsForBoard(comboBoard).map((row) => row.label);
+        const draft = rollBonusRewardDraft({
+            runSeed: 75_121,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 6,
+            routeKind: 'unknown',
+            board: comboBoard
+        });
+
+        expect(draft).toHaveLength(3);
+        expect(draft[0]!.traitBuildLabels?.some((label) => boardBuildLabels.includes(label))).toBe(true);
+        expect(rollBonusRewardDraft({
+            runSeed: 75_121,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 6,
+            routeKind: 'unknown',
+            board: comboBoard
+        }).map((reward) => reward.instanceId)).toEqual(draft.map((reward) => reward.instanceId));
     });
 
     it('claims new reward draft rows through the same capped inventory feedback path', () => {

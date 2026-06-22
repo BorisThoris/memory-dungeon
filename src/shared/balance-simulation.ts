@@ -15,7 +15,10 @@ import { buildBoard, countFindablePairs } from './board-generation';
 import { getShopGoldRewardForFloor, SHOP_ITEM_CATALOG } from './shop-rules';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { RELIC_DRAFT, RELIC_POOL, type RelicDraftRarity } from './relics';
-import { getTileTraitInteractionPreviewLines } from './tile-trait-rules';
+import {
+    getBoardTraitInteractionPreviewLines,
+    getTileTraitInteractionPreviewLines
+} from './tile-trait-rules';
 
 export interface BalanceSimulationInput {
     seeds?: readonly number[];
@@ -47,6 +50,7 @@ export interface BalanceSimulationReport {
         findableKindCounts: Record<FindableKind, number>;
         tileTraitPairs: number;
         traitComboOpportunityPairs: number;
+        traitSwapSetupOpportunities: number;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         floorTag: string;
         dungeonNodeKind: DungeonRunNodeKind;
@@ -79,6 +83,7 @@ export interface BalanceSimulationReport {
         findableKindCounts: Record<FindableKind, number>;
         tileTraitPairs: number;
         traitComboOpportunityPairs: number;
+        traitSwapSetupOpportunities: number;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         bossFloors: number;
         breatherFloors: number;
@@ -334,6 +339,30 @@ const countTraitComboOpportunityPairs = (board: BoardState): number => {
     return seenPairs.size;
 };
 
+const hasTraitSwapSetupOpportunity = (board: BoardState): number => {
+    const hiddenTiles = board.tiles.filter((tile) => tile.state === 'hidden');
+    const beforeMatchLines = new Set(getBoardTraitInteractionPreviewLines(board, 'match'));
+    for (let i = 0; i < hiddenTiles.length; i += 1) {
+        for (let j = i + 1; j < hiddenTiles.length; j += 1) {
+            const first = hiddenTiles[i]!;
+            const second = hiddenTiles[j]!;
+            const firstIndex = board.tiles.findIndex((tile) => tile.id === first.id);
+            const secondIndex = board.tiles.findIndex((tile) => tile.id === second.id);
+            if (firstIndex < 0 || secondIndex < 0) {
+                continue;
+            }
+            const tiles = [...board.tiles];
+            tiles[firstIndex] = second;
+            tiles[secondIndex] = first;
+            const afterMatchLines = getBoardTraitInteractionPreviewLines({ ...board, tiles }, 'match');
+            if (afterMatchLines.some((line) => !beforeMatchLines.has(line))) {
+                return 1;
+            }
+        }
+    }
+    return 0;
+};
+
 const sumFindableKindCounts = (
     counts: readonly Record<FindableKind, number>[]
 ): Record<FindableKind, number> =>
@@ -512,6 +541,7 @@ export const runBalanceSimulation = ({
             const tileTraitKindCounts = countTileTraitKinds(board.tiles);
             const tileTraitPairs = Object.values(tileTraitKindCounts).reduce((sum, count) => sum + count, 0);
             const traitComboOpportunityPairs = countTraitComboOpportunityPairs(board);
+            const traitSwapSetupOpportunities = hasTraitSwapSetupOpportunity(board);
             const shopGoldInflowPotential =
                 getShopGoldRewardForFloor(floor) +
                 treasureRewardPairs +
@@ -540,6 +570,7 @@ export const runBalanceSimulation = ({
                 findableKindCounts,
                 tileTraitPairs,
                 traitComboOpportunityPairs,
+                traitSwapSetupOpportunities,
                 tileTraitKindCounts,
                 floorTag: schedule.floorTag,
                 dungeonNodeKind,
@@ -577,6 +608,7 @@ export const runBalanceSimulation = ({
     const findableKindShares = getFindableKindShares(aggregateFindableKindCounts);
     const tileTraitCounts = samples.map((sample) => sample.tileTraitPairs);
     const traitComboOpportunityCounts = samples.map((sample) => sample.traitComboOpportunityPairs);
+    const traitSwapSetupOpportunityCounts = samples.map((sample) => sample.traitSwapSetupOpportunities);
     const aggregateTileTraitKindCounts = sumTileTraitKindCounts(samples.map((sample) => sample.tileTraitKindCounts));
     const tileTraitKindShares = getTileTraitKindShares(aggregateTileTraitKindCounts);
     const totalFindableWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
@@ -652,17 +684,25 @@ export const runBalanceSimulation = ({
             'avg_tile_trait_pairs_per_floor',
             'Average trait-marked pairs per floor',
             Number(average(tileTraitCounts).toFixed(2)),
-            0.45,
-            2.6,
+            3,
+            14,
             'assignTileTraitsToGeneratedBoard'
         ),
         row(
             'avg_trait_combo_opportunity_pairs_per_floor',
             'Average trait pairs with previewable adjacency combos per floor',
             Number(average(traitComboOpportunityCounts).toFixed(2)),
-            0.25,
-            2.2,
+            1,
+            10,
             'getTileTraitInteractionPreviewLines'
+        ),
+        row(
+            'avg_trait_swap_setup_opportunities_per_floor',
+            'Share of floors with at least one one-swap trait route setup',
+            Number(average(traitSwapSetupOpportunityCounts).toFixed(2)),
+            0.1,
+            1,
+            'getBoardTraitInteractionPreviewLines'
         ),
         ...TILE_TRAIT_KINDS.map((kind) =>
             row(
@@ -875,6 +915,7 @@ export const runBalanceSimulation = ({
             findableKindCounts: aggregateFindableKindCounts,
             tileTraitPairs: samples.reduce((sum, sample) => sum + sample.tileTraitPairs, 0),
             traitComboOpportunityPairs: samples.reduce((sum, sample) => sum + sample.traitComboOpportunityPairs, 0),
+            traitSwapSetupOpportunities: samples.reduce((sum, sample) => sum + sample.traitSwapSetupOpportunities, 0),
             tileTraitKindCounts: aggregateTileTraitKindCounts,
             bossFloors: samples.filter((sample) => sample.floorTag === 'boss').length,
             breatherFloors: samples.filter((sample) => sample.floorTag === 'breather').length,

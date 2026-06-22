@@ -152,6 +152,9 @@ const SideRoomScreen = () => {
                                             ))}
                                         </div>
                                     ) : null}
+                                    {choice.traitBuildReason ? (
+                                        <p className={styles.traitBuildReason}>{choice.traitBuildReason}</p>
+                                    ) : null}
                                     <p>{choice.detail}</p>
                                 </div>
                             ))}

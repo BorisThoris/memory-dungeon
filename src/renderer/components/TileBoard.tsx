@@ -15,6 +15,7 @@ import { flushSync } from 'react-dom';
 import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
 import { resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
 import { getTileSwapTraitPreviewLines, getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
+import { getTraitSwapOpportunityPreview } from '../../shared/trait-opportunities';
 import { isNarrowShortLandscapeForMenuStack, VIEWPORT_MOBILE_MAX } from '../breakpoints';
 import { useCoarsePointer } from '../hooks/useCoarsePointer';
 import { useViewportSize } from '../hooks/useViewportSize';
@@ -563,7 +564,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             return [];
         }
         if (tileSwapPowerVisualActive && tileSwapFirstTileId && focusedTileId !== tileSwapFirstTileId) {
-            return getTileSwapTraitPreviewLines(board, tileSwapFirstTileId, focusedTileId).slice(0, 2);
+            const routePreview = getTraitSwapOpportunityPreview(board, tileSwapFirstTileId, focusedTileId).routeText;
+            return [
+                ...new Set([
+                    ...(routePreview ? [routePreview] : []),
+                    ...getTileSwapTraitPreviewLines(board, tileSwapFirstTileId, focusedTileId)
+                ])
+            ].slice(0, 2);
         }
         return [
             ...new Set([

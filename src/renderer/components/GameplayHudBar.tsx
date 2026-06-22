@@ -12,6 +12,8 @@ import { getDefaultDifficultyProfile } from '../../shared/difficulty-profile';
 import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
 import { getFindableRows } from '../../shared/findables';
 import { getHazardTileBoardSummary } from '../../shared/hazard-tiles';
+import { getTraitOpportunityHudModel, getTraitOpportunitySummary } from '../../shared/trait-opportunities';
+import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
     getInRunCauseRows,
     getPerfectMemoryAttribution,
@@ -225,6 +227,18 @@ const GameplayHudBar = ({
     const secondaryObjectiveRows = getSecondaryObjectiveStatusRows(run);
     const buildProfile = getRunBuildProfile(run);
     const hazardTileSummary = getHazardTileBoardSummary(board);
+    const traitOpportunitySummary = getTraitOpportunitySummary(board);
+    const traitOpportunityHud = getTraitOpportunityHudModel(board, run);
+    const traitOpportunityCardLine = traitOpportunitySummary.tiles.length > 0
+        ? traitOpportunitySummary.tiles
+              .slice(0, 5)
+              .map((tile) => `${tile.label} (${tile.traitKind})`)
+              .join(', ')
+        : null;
+    const traitRouteObjectiveStatus = getTraitRouteObjectiveStatus(run);
+    const traitRouteProgressLabel = traitRouteObjectiveStatus
+        ? `${traitRouteObjectiveStatus.progress}/${traitRouteObjectiveStatus.required}`
+        : traitOpportunityHud.routeCountLabel;
     const inRunCauseRows = getInRunCauseRows(run).slice(0, 3);
     const touchHudDetailRows = getTouchHudDetailRows(run);
     const encounterIdentity = getBossEncounterIdentityForFloor(board.floorTag ?? 'normal', {
@@ -669,6 +683,18 @@ const GameplayHudBar = ({
                                         <span className={styles.statVal}>{hazardTileSummary.totalHazardTiles}</span>
                                     </div>
                                 ) : null}
+                                {traitOpportunityHud.active ? (
+                                    <div
+                                        className={`${styles.statPillCompact} ${styles.hudTraitRoutePill}`}
+                                        data-testid="hud-trait-route-panel"
+                                        title={traitOpportunityHud.title}
+                                    >
+                                        <span className={styles.statKey}>Trait routes</span>
+                                        <span className={styles.statVal}>{traitRouteProgressLabel}</span>
+                                        <span className={styles.statSubline}>{traitOpportunityHud.buildLabel}</span>
+                                        <small className={styles.hudTraitRoutePrimary}>{traitOpportunityHud.primaryLine}</small>
+                                    </div>
+                                ) : null}
                                 {run.status === 'playing' && run.stats.currentStreak > 0 ? (
                                     <div
                                         key={`hud-chain-${board.level}-${run.stats.currentStreak}`}
@@ -772,6 +798,31 @@ const GameplayHudBar = ({
                                         <div className={styles.statPillCompact}>
                                             <span className={styles.statKey}>Contract</span>
                                             <span className={styles.statVal}>Scholar</span>
+                                        </div>
+                                    ) : null}
+                                    {traitOpportunityHud.active ? (
+                                        <div
+                                            className={styles.hudTraitRouteDetails}
+                                            data-testid="hud-trait-route-details"
+                                        >
+                                            <span className={styles.statKey}>Trait Route Panel</span>
+                                            <strong>
+                                                {traitOpportunitySummary.buildLabels.length > 0
+                                                    ? traitOpportunitySummary.buildLabels.join(' / ')
+                                                    : traitOpportunityHud.buildLabel}
+                                            </strong>
+                                            {traitOpportunityCardLine ? (
+                                                <span>Cards: {traitOpportunityCardLine}</span>
+                                            ) : null}
+                                            {traitOpportunitySummary.interactionLines.slice(0, 3).map((line) => (
+                                                <span key={line}>{line}</span>
+                                            ))}
+                                            {traitOpportunityHud.swapHint ? (
+                                                <span>{traitOpportunityHud.swapHint.text}</span>
+                                            ) : null}
+                                            <small>
+                                                {traitOpportunityHud.toolLine}
+                                            </small>
                                         </div>
                                     ) : null}
                                     {run.activeContract?.maxPinsTotalRun != null ? (

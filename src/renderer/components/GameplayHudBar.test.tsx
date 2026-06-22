@@ -280,6 +280,118 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-hazard-tiles').getAttribute('title')).toContain('reshuffles safe hidden tiles');
     });
 
+    it('shows active trait routes, build labels, and routing tools in the HUD context', () => {
+        const baseRun = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
+        const run = {
+            ...baseRun,
+            regionShuffleCharges: 2,
+            peekCharges: 1,
+            board: {
+                ...baseRun.board!,
+                columns: 2,
+                tiles: baseRun.board!.tiles.map((tile, index) =>
+                    index === 0
+                        ? { ...tile, pairKey: 'echo', tileTraitKind: 'echo' as const }
+                        : index === 1
+                          ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                          : { ...tile, tileTraitKind: undefined }
+                )
+            }
+        } as RunState;
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement=""
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Trait routes');
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('1 route');
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Sealed Catalyst');
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Echo + Sealed: combo shard');
+        expect(screen.getByTestId('hud-trait-route-panel').getAttribute('title')).toContain('Echo + Sealed: combo shard');
+        expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Trait Route Panel');
+        expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Cards:');
+        expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('(echo)');
+        expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('(sealed)');
+        expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Tools: row/swap 2, peek 1');
+    });
+
+    it('prioritizes active trait-route objective progress over raw route count', () => {
+        const baseRun = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
+        const run = {
+            ...baseRun,
+            traitRouteObjectiveProgressThisFloor: 1,
+            traitRouteObjectiveRequiredThisFloor: 2,
+            traitRouteObjectiveCompletedThisFloor: false,
+            traitRouteObjectiveRewardClaimedThisFloor: false,
+            traitRouteObjectiveRewardTextThisFloor: null,
+            traitRouteObjectiveTriggeredTagsThisFloor: ['echo:sealed-combo'],
+            board: {
+                ...baseRun.board!,
+                columns: 2,
+                tiles: baseRun.board!.tiles.map((tile, index) =>
+                    index === 0
+                        ? { ...tile, pairKey: 'echo', tileTraitKind: 'echo' as const }
+                        : index === 1
+                          ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                          : { ...tile, tileTraitKind: undefined }
+                )
+            }
+        } as RunState;
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement=""
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('1/2');
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Sealed Catalyst');
+    });
+
+    it('surfaces a swap setup hint before trait adjacency exists', () => {
+        const baseRun = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
+        const run = {
+            ...baseRun,
+            regionShuffleCharges: 1,
+            board: {
+                ...baseRun.board!,
+                columns: 2,
+                tiles: [
+                    { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' as const },
+                    { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
+                    { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
+                    { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' as const }
+                ]
+            }
+        } as RunState;
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement=""
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Route setup');
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('setup');
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent(
+            'Swap Sealed with Filler: Sealed + Heavy: score surge'
+        );
+        expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent(
+            'Swap Sealed with Filler: Sealed + Heavy: score surge'
+        );
+    });
+
     it('shows Perfect Memory eligible when achievements track and no assist power was used', () => {
         const run = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
 

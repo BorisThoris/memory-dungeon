@@ -352,7 +352,7 @@ describe('TileBoard touch and click controls', () => {
 
         await waitFor(() => expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Trait combo'));
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Echo + Sealed: combo shard');
-        expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('trait-combo:1');
+        expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('trait-combo:2');
     });
 
     it('shows a visible swap preview when the focused target would create a trait interaction', async () => {
@@ -379,6 +379,7 @@ describe('TileBoard touch and click controls', () => {
         fireEvent.focus(screen.getByTestId('tile-board-application'));
 
         await waitFor(() => expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Swap preview'));
+        expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Creates trait route');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Sealed + Heavy: score surge');
     });
 

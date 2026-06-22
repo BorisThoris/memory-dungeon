@@ -426,6 +426,38 @@ describe('Recall Focus memory loop', () => {
         expect(finishMemorizePhase(mystery).recallFocus).toBe(2);
         expect(finishMemorizePhase(greedAfterMistake).recallFocus).toBe(0);
     });
+
+    it('advances and pays floor-local trait route objectives from real match interactions', () => {
+        const traitRun = createRun([
+            createTile('echo-a', 'echo', 'E', { tileTraitKind: 'echo' }),
+            createTile('sealed-a', 'sealed', 'S', { tileTraitKind: 'sealed' }),
+            createTile('echo-b', 'echo', 'E', { tileTraitKind: 'echo' }),
+            createTile('sealed-b', 'sealed', 'S', { tileTraitKind: 'sealed' })
+        ]);
+        const run = {
+            ...traitRun,
+            board: {
+                ...traitRun.board!,
+                columns: 2,
+                rows: 2
+            },
+            traitRouteObjectiveProgressThisFloor: 0,
+            traitRouteObjectiveRequiredThisFloor: 1,
+            traitRouteObjectiveCompletedThisFloor: false,
+            traitRouteObjectiveRewardClaimedThisFloor: false,
+            traitRouteObjectiveRewardTextThisFloor: null,
+            traitRouteObjectiveTriggeredTagsThisFloor: []
+        };
+
+        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'echo-a'), 'echo-b'));
+
+        expect(resolved.traitRouteObjectiveProgressThisFloor).toBe(1);
+        expect(resolved.traitRouteObjectiveCompletedThisFloor).toBe(true);
+        expect(resolved.traitRouteObjectiveRewardClaimedThisFloor).toBe(true);
+        expect(resolved.traitRouteObjectiveRewardTextThisFloor).toBe('+1 combo shard');
+        expect(resolved.traitRouteObjectiveTriggeredTagsThisFloor).toContain('echo:sealed-combo');
+        expect(resolved.stats.comboShards).toBeGreaterThan(run.stats.comboShards);
+    });
 });
 
 const pairTileIds = (board: BoardState): string[][] => {
@@ -4606,7 +4638,7 @@ describe('dungeon cards', () => {
         });
         expect(getRunShopStockPlan(boardRun)).toMatchObject({
             source: 'board_shop',
-            itemIds: ['heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'iron_key', 'master_key']
+            itemIds: ['trait_routing_kit', 'heal_life', 'peek_charge', 'region_shuffle_charge', 'destroy_charge', 'master_key']
         });
         expect(getRunShopReadModel(floorShopRun)).toMatchObject({
             source: 'floor_clear_shop',

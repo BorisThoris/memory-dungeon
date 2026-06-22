@@ -1,6 +1,7 @@
 import {
     type BonusRewardId,
     type BonusRewardLedger,
+    type BoardState,
     MAX_COMBO_SHARDS,
     type RewardPerkId,
     type RunState,
@@ -9,6 +10,7 @@ import {
 import { hashStringToSeed } from './rng';
 import type { RunMapNodeKind } from './run-map';
 import { gainRunInventoryItem, getRunInventoryGainFeedback, type RunInventoryItemId } from './run-inventory';
+import { getTraitBuildRewardRowsForBoard } from './trait-build-rewards';
 
 export type BonusRewardRoomKind = 'treasure_chest' | 'secret_room' | 'bonus_cache';
 
@@ -286,6 +288,20 @@ const applyLoadoutRewardBias = (
     ]);
 };
 
+const applyBoardTraitRewardBias = (
+    candidates: BonusRewardId[],
+    board: BoardState | null | undefined
+): BonusRewardId[] => {
+    const buildLabels = new Set(getTraitBuildRewardRowsForBoard(board).map((row) => row.label));
+    if (buildLabels.size === 0) {
+        return candidates;
+    }
+    const preferred = candidates.filter((id) =>
+        (BONUS_REWARD_CATALOG[id].traitBuildLabels ?? []).some((label) => buildLabels.has(label))
+    );
+    return uniqueBonusRewardIds([...preferred, ...candidates]);
+};
+
 const selectBonusRewardDefinition = (
     candidates: BonusRewardId[],
     preferredIndex: number,
@@ -335,7 +351,8 @@ export const rollBonusRewardDraft = ({
     routeKind = 'unknown',
     ledger = createBonusRewardLedger(),
     count = 3,
-    startingLoadoutId = null
+    startingLoadoutId = null,
+    board = null
 }: {
     runSeed: number;
     rulesVersion: number;
@@ -344,13 +361,17 @@ export const rollBonusRewardDraft = ({
     ledger?: BonusRewardLedger;
     count?: number;
     startingLoadoutId?: StartingLoadoutId | null;
+    board?: BoardState | null;
 }): BonusRewardInstance[] => {
     const safeLedger = normalizeBonusRewardLedger(ledger);
     const candidates = rewardIdsForRouteKind(routeKind);
     const seed = hashStringToSeed(`bonusRewardDraft:${rulesVersion}:${runSeed}:${floor}:${routeKind}`);
-    const ordered = applyLoadoutRewardBias(
-        rotateRewardCandidates(candidates, Math.abs(seed) % candidates.length),
-        startingLoadoutId
+    const ordered = applyBoardTraitRewardBias(
+        applyLoadoutRewardBias(
+            rotateRewardCandidates(candidates, Math.abs(seed) % candidates.length),
+            startingLoadoutId
+        ),
+        board
     );
     const selected: BonusRewardInstance[] = [];
     for (const id of ordered) {

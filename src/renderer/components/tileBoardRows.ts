@@ -1,5 +1,6 @@
 import type { BoardState, EnemyHazardState, HazardTileKind, RunStatus, Tile } from '../../shared/contracts';
 import { activeEnemyHazardsForBoard } from '../../shared/enemy-hazard-board-rules';
+import { getTraitOpportunitySummary } from '../../shared/trait-opportunities';
 import { getTileFieldAmplification } from './tileFieldTilt';
 import { isTilePickable } from './tileBoardPick';
 import { isTileBoardFlipLocked } from './tileBoardFlipLock';
@@ -47,6 +48,8 @@ export interface TileBoardRow {
     spotlightWardOnBack: boolean;
     stickyFingerSlotMark: boolean;
     tile: Tile;
+    traitComboBack: boolean;
+    traitInteractionPreviewLines: string[];
     transform: TileTransform;
     tutorialPairOrdinal: number | null;
 }
@@ -137,8 +140,12 @@ export const buildTileBoardRows = ({
     const flipLocked = isTileBoardFlipLocked({ allowGambitThirdFlip, flippedTileCount: flippedN });
     const enemyOccupiedTileIds = getEnemyOccupiedTileIds(board);
     const tutorialPairOrdinalByKey = getTutorialPairOrdinalByKey(board, showTutorialPairMarkers);
+    const traitOpportunityByTileId = new Map(
+        getTraitOpportunitySummary(board).tiles.map((opportunity) => [opportunity.tileId, opportunity])
+    );
 
     return board.tiles.map((tile, index) => {
+        const traitOpportunity = traitOpportunityByTileId.get(tile.id) ?? null;
         const faceUp = isTileBoardFaceUp({ debugPeekActive, peekRevealedTileIds, previewActive, tile });
         const memorizeCurseHighlight = isMemorizeCurseHighlighted({
             cursedPairKey,
@@ -234,6 +241,8 @@ export const buildTileBoardRows = ({
             spotlightWardOnBack,
             stickyFingerSlotMark,
             tile,
+            traitComboBack: Boolean(traitOpportunity && !faceUp),
+            traitInteractionPreviewLines: traitOpportunity?.previewLines ?? [],
             transform: getTileTransform(tile, index, totalColumns, totalRows, compact, faceUp, reduceMotion),
             tutorialPairOrdinal
         };

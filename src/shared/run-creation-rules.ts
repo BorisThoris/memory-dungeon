@@ -13,6 +13,7 @@ import {
     type WeakerShuffleMode
 } from './contracts';
 import { createBonusRewardLedger } from './bonus-rewards';
+import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { DAILY_MUTATOR_TABLE } from './mutators';
 import { applyRelicImmediate } from './relic-immediate-rules';
@@ -109,6 +110,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         });
     const dungeonRun = createDungeonRunMapState(runSeed, rulesVersion, 1);
 
+    const traitRouteObjective = getTraitRouteObjectiveSeed(board);
     const run: RunState = {
         status: 'memorize',
         lives: INITIAL_LIVES,
@@ -146,6 +148,12 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         sideRoom: null,
         dungeonRun,
         bonusRewardLedger: createBonusRewardLedger(),
+        traitRouteObjectiveProgressThisFloor: 0,
+        traitRouteObjectiveRequiredThisFloor: traitRouteObjective?.required ?? 0,
+        traitRouteObjectiveCompletedThisFloor: false,
+        traitRouteObjectiveRewardClaimedThisFloor: false,
+        traitRouteObjectiveRewardTextThisFloor: null,
+        traitRouteObjectiveTriggeredTagsThisFloor: [],
         metaRelicDraftExtraPerMilestone: options.metaRelicDraftExtraPerMilestone ?? 0,
         relicOffer: null,
         activeContract: options.activeContract ?? null,

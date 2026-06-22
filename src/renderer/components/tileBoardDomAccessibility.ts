@@ -12,6 +12,7 @@ import {
     getTileTraitInteractionPreviewLines,
     getTileTraitText
 } from '../../shared/tile-trait-rules';
+import { getTraitOpportunitySummary, getTraitSwapOpportunityPreview } from '../../shared/trait-opportunities';
 import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import { isTilePickable } from './tileBoardPick';
 
@@ -46,7 +47,8 @@ export const getHazardTileText = (tile: Tile): string => {
 };
 
 export const getTileTraitPreviewText = (board: BoardState, tile: Tile): string => {
-    const lines = [
+    const opportunity = getTraitOpportunitySummary(board).tiles.find((entry) => entry.tileId === tile.id);
+    const lines = opportunity?.previewLines ?? [
         ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
         ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
     ];
@@ -144,7 +146,12 @@ export const getPowerTargetAriaText = (
         }
         const swapTraitPreview =
             board && tileSwapEligibleTileIds.has(tile.id)
-                ? getTileSwapTraitPreviewLines(board, tileSwapFirstTileId, tile.id)
+                ? [
+                      ...new Set([
+                          getTraitSwapOpportunityPreview(board, tileSwapFirstTileId, tile.id).routeText,
+                          ...getTileSwapTraitPreviewLines(board, tileSwapFirstTileId, tile.id)
+                      ].filter((line): line is string => Boolean(line)))
+                  ]
                 : [];
         return tileSwapEligibleTileIds.has(tile.id)
             ? ` Swap target: valid. Select two hidden tiles to exchange their positions.${

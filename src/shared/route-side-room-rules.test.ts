@@ -115,6 +115,41 @@ describe('route side-room rules', () => {
         );
     });
 
+    it('explains board-driven trait reward choices from current trait opportunities', () => {
+        const run = createNewRun(210_502);
+        const board = run.board!;
+        const opened = openRouteSideRoom({
+            ...run,
+            board: {
+                ...board,
+                columns: 2,
+                tiles: board.tiles.map((tile, index) =>
+                    index === 0
+                        ? { ...tile, pairKey: 'echo', tileTraitKind: 'echo' as const }
+                        : index === 1
+                          ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                          : { ...tile, tileTraitKind: undefined }
+                )
+            },
+            status: 'levelComplete',
+            pendingRouteCardPlan: {
+                choiceId: 'greed',
+                routeType: 'greed',
+                sourceLevel: 3,
+                targetLevel: 4
+            }
+        });
+
+        expect(opened.sideRoom).toMatchObject({ kind: 'bonus_reward' });
+        expect(opened.sideRoom?.choices).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    traitBuildReason: expect.stringContaining('Echo + Sealed: combo shard')
+                })
+            ])
+        );
+    });
+
     it('biases bonus side-room reward drafts by starting loadout', () => {
         const run = createNewRun(210_501, { startingLoadoutId: 'route_tactician' });
         const opened = openRouteSideRoom({
