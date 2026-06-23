@@ -166,7 +166,7 @@ const buildGameplayDiagram = (repoRoot) => {
                 'P1',
                 'Gameplay Resolution',
                 'Use a focused action-loop gate for match changes',
-                'Match, enemy, hazard, board-power, and trait changes should run the shared gameplay slice before full-suite handoff.',
+                'Match, enemy, hazard, board-power, and trait changes should run `yarn gate:action-loop` before full-suite handoff.',
                 'A change in one resolver branch cannot silently regress another branch of the same turn loop.',
                 softlockEvidence
             )
@@ -314,7 +314,7 @@ const buildTraitDiagram = (repoRoot) => {
                 'P1',
                 'Trait Systems',
                 'Keep traits visible as a third mechanic',
-                'New trait interactions should update simulation visibility metrics, first-run HUD smoke, and at least one board-power interaction case.',
+                'New trait interactions should update simulation visibility metrics, first-run HUD smoke, and at least one `yarn gate:action-loop` board-power interaction case.',
                 'Trait routes stay present early and interact with movement/shuffle tools instead of becoming rare flavor.',
                 traitEvidence
             )

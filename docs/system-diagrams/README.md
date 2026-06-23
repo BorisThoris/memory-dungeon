@@ -17,7 +17,7 @@ These are the current system gaps or guardrails surfaced by the diagrams.
 - **P2 Keep route contracts authoritative** (Navigation Flow): When adding any route, overlay, or shell chrome state, add or update a navigation contract plus a focused renderer/store regression.
   Verifies: Route action cannot bypass App shell state or strand the player on a stale screen.
   Evidence: `src/renderer/App.tsx`, `src/renderer/store/useAppStore.ts`, `src/renderer/store/navigationModel.ts`, `docs/new_design/NAVIGATION_MODEL.md`
-- **P1 Use a focused action-loop gate for match changes** (Gameplay Resolution): Match, enemy, hazard, board-power, and trait changes should run the shared gameplay slice before full-suite handoff.
+- **P1 Use a focused action-loop gate for match changes** (Gameplay Resolution): Match, enemy, hazard, board-power, and trait changes should run `yarn gate:action-loop` before full-suite handoff.
   Verifies: A change in one resolver branch cannot silently regress another branch of the same turn loop.
   Evidence: `src/shared/game.ts`, `src/shared/softlock-fairness.test.ts`, `src/shared/board-power-actions.ts`, `src/shared/hazard-tiles.ts`
 - **P0 Extend the softlock matrix for every new blocker** (Board Generation): New locks, trait blockers, enemies, objectives, or exit states must add a softlock-fairness or softlock-generator-contract case that proves a completion path exists after generation and repair.
@@ -26,7 +26,7 @@ These are the current system gaps or guardrails surfaced by the diagrams.
 - **P1 Lock reward priority slots before adding fun offers** (Rewards And Economy): Any new shop or reward offer must prove it does not displace required keys, boss access, loadout recovery, or trait-route starter support.
   Verifies: Progression-critical offers remain reachable while optional trait tools still appear.
   Evidence: `src/shared/bonus-rewards.ts`, `src/shared/shop-rules.ts`, `src/shared/relics.ts`, `src/shared/economy-ledger.ts`, `src/shared/balance-simulation.ts`
-- **P1 Keep traits visible as a third mechanic** (Trait Systems): New trait interactions should update simulation visibility metrics, first-run HUD smoke, and at least one board-power interaction case.
+- **P1 Keep traits visible as a third mechanic** (Trait Systems): New trait interactions should update simulation visibility metrics, first-run HUD smoke, and at least one `yarn gate:action-loop` board-power interaction case.
   Verifies: Trait routes stay present early and interact with movement/shuffle tools instead of becoming rare flavor.
   Evidence: `src/shared/tile-trait-rules.ts`, `src/shared/tile-trait-rules.test.ts`, `src/shared/board-power-actions.ts`, `src/shared/balance-simulation.ts`, `src/renderer/components/GameplayHudBar.tsx`
 

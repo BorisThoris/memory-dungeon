@@ -8,6 +8,7 @@ type SystemDiagramPayload = {
         priority: string;
         system: string;
         title: string;
+        detail: string;
         verifies: string;
     }[];
     diagrams: {
@@ -62,6 +63,7 @@ describe('system diagram generator', () => {
         expect(payload.stats.diagramCount).toBe(5);
         expect(payload.stats.actionCount).toBe(5);
         expect(payload.actions.map((item) => item.id)).toContain('softlock-generation-matrix');
+        expect(payload.actions.find((item) => item.id === 'resolution-slice-gate')?.detail).toContain('yarn gate:action-loop');
         expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')?.verifies).toContain('Generated boards');
         expect(payload.stats.importGraph.fileCount).toBe(0);
         expect(payload.stats.importGraph.edgeCount).toBe(0);
@@ -87,6 +89,7 @@ describe('system diagram generator', () => {
         expect(markdown).toContain('# System Diagrams');
         expect(markdown).toContain('## Audit Actions');
         expect(markdown).toContain('P0 Extend the softlock matrix for every new blocker');
+        expect(markdown).toContain('yarn gate:action-loop');
         expect(markdown).toContain('```mermaid');
         expect(markdown).toContain('flowchart LR');
         expect(markdown).toContain('## Trait Systems');
