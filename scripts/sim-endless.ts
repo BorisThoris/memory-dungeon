@@ -20,6 +20,22 @@ export interface EndlessSimulationCsvInput {
     rulesVersion?: number;
 }
 
+export interface EndlessSimulationHealthReport {
+    ok: boolean;
+    issues: string[];
+    metrics: {
+        deadTraitFloors: number;
+        exitlessFloors: number;
+        exitLockTypes: number;
+        findableTotal: number;
+        objectiveKinds: number;
+        rewardKinds: number;
+        routeKinds: number;
+        traitFloorShare: number;
+        traitInteractionLines: number;
+    };
+}
+
 const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     shard_spark: 0,
     score_glint: 0,
@@ -157,17 +173,60 @@ const parseCsvCounts = (csv: string): Record<string, Record<string, number>> => 
 const sumCounts = (counts: Record<string, number> | undefined): number =>
     Object.values(counts ?? {}).reduce((sum, value) => sum + value, 0);
 
-export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string => {
+const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): EndlessSimulationHealthReport['metrics'] => {
     const csv = buildEndlessSimulationCsv(input);
     const counts = parseCsvCounts(csv);
+    const floors = Math.max(1, Math.floor(input.floors));
     const routeKinds = Object.keys(counts.floorArchetype ?? {}).filter((key) => key !== 'none').length;
     const objectiveKinds = Object.keys(counts.dungeonObjective ?? {}).filter((key) => key !== 'none').length;
-    const exitLocks = Object.keys(counts.dungeonExitLock ?? {}).filter((key) => key !== 'none').length;
+    const exitLockTypes = Object.keys(counts.dungeonExitLock ?? {}).filter((key) => key !== 'none').length;
     const findableTotal = sumCounts(counts.findableKind);
     const rewardKinds = Object.keys(counts.findableKind ?? {}).filter((key) => (counts.findableKind?.[key] ?? 0) > 0).length;
     const traitFloors = counts.traitMetric?.traitFloors ?? 0;
     const deadTraitFloors = counts.traitMetric?.deadTraitFloors ?? 0;
     const traitInteractionLines = counts.traitMetric?.traitInteractionLines ?? 0;
+    return {
+        deadTraitFloors,
+        exitlessFloors: counts.dungeonExitCount?.['0'] ?? 0,
+        exitLockTypes,
+        findableTotal,
+        objectiveKinds,
+        rewardKinds,
+        routeKinds,
+        traitFloorShare: traitFloors / floors,
+        traitInteractionLines
+    };
+};
+
+export const analyzeEndlessSimulationHealth = (input: EndlessSimulationCsvInput): EndlessSimulationHealthReport => {
+    const metrics = readEndlessSimulationMetrics(input);
+    const floors = Math.max(1, Math.floor(input.floors));
+    const expectedRewardKinds = Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length;
+    const issues = [
+        metrics.routeKinds < 8 ? `Expected at least 8 floor archetypes, saw ${metrics.routeKinds}.` : null,
+        metrics.objectiveKinds < 4 ? `Expected at least 4 dungeon objectives, saw ${metrics.objectiveKinds}.` : null,
+        metrics.exitLockTypes < 2 ? `Expected at least 2 nontrivial exit lock types, saw ${metrics.exitLockTypes}.` : null,
+        metrics.exitlessFloors > 0 ? `Expected every sampled floor to have an exit, saw ${metrics.exitlessFloors} exitless floors.` : null,
+        metrics.rewardKinds < expectedRewardKinds
+            ? `Expected all ${expectedRewardKinds} findable reward kinds, saw ${metrics.rewardKinds}.`
+            : null,
+        metrics.findableTotal < Math.floor(floors * 0.5)
+            ? `Expected at least one findable reward per two floors, saw ${metrics.findableTotal} across ${floors} floors.`
+            : null,
+        metrics.traitFloorShare < 0.8
+            ? `Expected trait floors on at least 80.0% of floors, saw ${(metrics.traitFloorShare * 100).toFixed(1)}%.`
+            : null,
+        metrics.deadTraitFloors > 0 ? `Expected 0 dead trait floors, saw ${metrics.deadTraitFloors}.` : null,
+        metrics.traitInteractionLines < floors
+            ? `Expected at least ${floors} trait interaction preview lines, saw ${metrics.traitInteractionLines}.`
+            : null
+    ].filter((issue): issue is string => issue != null);
+
+    return { ok: issues.length === 0, issues, metrics };
+};
+
+export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string => {
+    const metrics = readEndlessSimulationMetrics(input);
     const floors = Math.max(1, Math.floor(input.floors));
     const pct = (value: number) => `${((value / floors) * 100).toFixed(1)}%`;
 
@@ -177,9 +236,9 @@ export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput):
         `- Floors sampled: ${floors}`,
         `- Seed: ${Math.floor(input.runSeed)}`,
         `- Rules version: ${input.rulesVersion ?? GAME_RULES_VERSION}`,
-        `- Route gates: ${routeKinds} floor archetypes, ${objectiveKinds} objectives, ${exitLocks} exit lock types.`,
-        `- Reward gates: ${findableTotal} findable rewards across ${rewardKinds} active reward kinds.`,
-        `- Trait gates: ${traitFloors} trait floors (${pct(traitFloors)}), ${traitInteractionLines} interaction lines, ${deadTraitFloors} dead trait floors.`,
+        `- Route gates: ${metrics.routeKinds} floor archetypes, ${metrics.objectiveKinds} objectives, ${metrics.exitLockTypes} exit lock types, ${metrics.exitlessFloors} exitless floors.`,
+        `- Reward gates: ${metrics.findableTotal} findable rewards across ${metrics.rewardKinds} active reward kinds.`,
+        `- Trait gates: ${Math.round(metrics.traitFloorShare * floors)} trait floors (${pct(metrics.traitFloorShare * floors)}), ${metrics.traitInteractionLines} interaction lines, ${metrics.deadTraitFloors} dead trait floors.`,
         ''
     ].join('\n');
 };
@@ -189,8 +248,18 @@ const runCli = (argv: readonly string[]): void => {
     const runSeed = Math.floor(numArg(argv, 'seed', 42_001));
     const input = { floors, runSeed };
     const summaryMode = argv.includes('--summary');
-    const output = summaryMode ? buildEndlessSimulationSummary(input) : buildEndlessSimulationCsv(input);
+    const checkMode = argv.includes('--check');
+    const output = summaryMode || checkMode ? buildEndlessSimulationSummary(input) : buildEndlessSimulationCsv(input);
     process.stdout.write(output);
+    if (checkMode) {
+        const health = analyzeEndlessSimulationHealth(input);
+        if (health.ok) {
+            process.stdout.write('Endless simulation health check passed\n');
+        } else {
+            process.stderr.write(`Endless simulation health check failed:\n${health.issues.map((issue) => `- ${issue}`).join('\n')}\n`);
+            process.exitCode = 1;
+        }
+    }
 
     const out = argv.find((a) => a.startsWith('--out='))?.split('=')[1];
     if (out) {

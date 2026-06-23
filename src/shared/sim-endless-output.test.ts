@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { buildEndlessSimulationCsv, buildEndlessSimulationSummary } from '../../scripts/sim-endless';
+import {
+    analyzeEndlessSimulationHealth,
+    buildEndlessSimulationCsv,
+    buildEndlessSimulationSummary
+} from '../../scripts/sim-endless';
 import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from './contracts';
 
 describe('sim-endless CSV output', () => {
@@ -32,6 +36,26 @@ describe('sim-endless CSV output', () => {
         expect(summary).toContain('- Route gates:');
         expect(summary).toContain('- Reward gates:');
         expect(summary).toContain('- Trait gates:');
+        expect(summary).toContain('exitless floors.');
         expect(summary).toContain('dead trait floors.');
+    });
+
+    it('turns endless route, reward, and trait health into a gateable report', () => {
+        const health = analyzeEndlessSimulationHealth({
+            floors: 1000,
+            runSeed: 42_001,
+            rulesVersion: GAME_RULES_VERSION
+        });
+
+        expect(health.ok).toBe(true);
+        expect(health.issues).toEqual([]);
+        expect(health.metrics).toMatchObject({
+            deadTraitFloors: 0,
+            exitlessFloors: 0,
+            rewardKinds: Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length
+        });
+        expect(health.metrics.routeKinds).toBeGreaterThanOrEqual(8);
+        expect(health.metrics.objectiveKinds).toBeGreaterThanOrEqual(4);
+        expect(health.metrics.traitFloorShare).toBeGreaterThanOrEqual(0.8);
     });
 });
