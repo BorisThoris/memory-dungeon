@@ -52,7 +52,7 @@
             "system": "Persistence Save Flow",
             "title": "Gate save changes through cross-process tests",
             "status": "done",
-            "command": "yarn vitest run src/main/persistence.test.ts src/main/persistence-write-error.test.ts && yarn typecheck",
+            "command": "yarn gate:persistence",
             "minimumEvidence": 4
         },
         {
@@ -61,7 +61,7 @@
             "system": "Renderer Input Flow",
             "title": "Keep tile input paths behaviorally equivalent",
             "status": "done",
-            "command": "yarn vitest run src/renderer/components/tileBoardDomAccessibility.test.ts src/renderer/components/tileBoardPointerPick.test.ts src/renderer/components/tileBoardWebglBoundary.test.tsx src/renderer/store/useAppStore.test.ts",
+            "command": "yarn gate:renderer-input",
             "minimumEvidence": 4
         },
         {
@@ -70,7 +70,7 @@
             "system": "Audio Feedback Pipeline",
             "title": "Add feedback coverage for new action outcomes",
             "status": "done",
-            "command": "yarn vitest run src/renderer/audio/audioInteractionCoverage.test.ts src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts src/renderer/components/GameScreen.test.tsx",
+            "command": "yarn gate:audio-feedback",
             "minimumEvidence": 4
         },
         {
@@ -79,7 +79,7 @@
             "system": "Asset Card Rendering",
             "title": "Run rendering gates for asset or card-face edits",
             "status": "done",
-            "command": "yarn vitest run src/renderer/cardFace/cardIllustrationDraw.test.ts src/renderer/components/tileTextures.test.ts src/renderer/components/tileBoardReadability.test.ts src/renderer/components/tileBoardRows.test.ts",
+            "command": "yarn gate:asset-rendering",
             "minimumEvidence": 4
         },
         {

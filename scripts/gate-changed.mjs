@@ -7,13 +7,10 @@ const GATES = {
     navigation: 'yarn gate:navigation',
     systems: 'yarn gate:systems',
     simHealth: 'yarn gate:sim-health',
-    rendererInput:
-        'yarn vitest run src/renderer/components/tileBoardDomAccessibility.test.ts src/renderer/components/tileBoardPointerPick.test.ts src/renderer/components/tileBoardWebglBoundary.test.tsx src/renderer/store/useAppStore.test.ts',
-    audioFeedback:
-        'yarn vitest run src/renderer/audio/audioInteractionCoverage.test.ts src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts src/renderer/components/GameScreen.test.tsx',
-    assetRendering:
-        'yarn vitest run src/renderer/cardFace/cardIllustrationDraw.test.ts src/renderer/components/tileTextures.test.ts src/renderer/components/tileBoardReadability.test.ts src/renderer/components/tileBoardRows.test.ts',
-    persistence: 'yarn vitest run src/main/persistence.test.ts src/main/persistence-write-error.test.ts && yarn typecheck'
+    rendererInput: 'yarn gate:renderer-input',
+    audioFeedback: 'yarn gate:audio-feedback',
+    assetRendering: 'yarn gate:asset-rendering',
+    persistence: 'yarn gate:persistence'
 };
 
 const normalize = (file) => file.replaceAll('\\', '/').replace(/^\.\//, '');

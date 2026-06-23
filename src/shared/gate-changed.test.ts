@@ -60,6 +60,14 @@ describe('gate:changed selector', () => {
         expect(payload.gates.map((gate) => gate.id)).toEqual(
             expect.arrayContaining(['rendererInput', 'audioFeedback', 'assetRendering', 'persistence'])
         );
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([
+                { id: 'rendererInput', command: 'yarn gate:renderer-input' },
+                { id: 'audioFeedback', command: 'yarn gate:audio-feedback' },
+                { id: 'assetRendering', command: 'yarn gate:asset-rendering' },
+                { id: 'persistence', command: 'yarn gate:persistence' }
+            ])
+        );
     });
 
     it('normalizes Windows paths and falls back to systems for unmapped files', () => {

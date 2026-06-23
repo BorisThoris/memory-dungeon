@@ -76,6 +76,14 @@ describe('system diagram generator', () => {
         expect(payload.actions.map((item) => item.command)).toEqual(
             expect.arrayContaining(['yarn gate:action-loop', 'yarn gate:rewards-economy', 'yarn gate:navigation', 'yarn gate:systems'])
         );
+        expect(payload.actions.map((item) => item.command)).toEqual(
+            expect.arrayContaining([
+                'yarn gate:persistence',
+                'yarn gate:renderer-input',
+                'yarn gate:audio-feedback',
+                'yarn gate:asset-rendering'
+            ])
+        );
         expect(payload.actions.every((item) => item.command != null && item.command.length > 0)).toBe(true);
         expect(payload.actions.every((item) => item.evidence.length >= (item.minimumEvidence ?? 1))).toBe(true);
         expect(payload.actions.find((item) => item.id === 'resolution-slice-gate')?.detail).toContain('yarn gate:action-loop');
