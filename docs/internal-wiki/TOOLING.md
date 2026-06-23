@@ -27,6 +27,7 @@
 | `yarn knip:exports` | Knip unused **exports/types** mode (`--exports`; [`ignoreIssues`](../../knip.json) narrows intentional barrels — run before widening default `yarn knip` scope) |
 | `yarn knip:production` | Knip with `--production` — dependency/file issues along production entry paths (triage carefully vs tests) |
 | `yarn audit:renderer-assets` | `scripts/audit-renderer-assets.mjs` — lists `src/renderer/assets/**` files whose basename has no TS/CSS/markdown reference under `src/`, `scripts/`, `e2e/`, `public/` (manual triage; not a delete pass) |
+| `yarn audit:summary` | `scripts/audit-summary.mjs` — condenses `yarn audit --json` into severity totals, unique advisory groups, patched ranges, and sample dependency paths |
 | `yarn test` | Vitest run |
 | `yarn test:watch` | Vitest watch |
 | `yarn test:e2e` | Full Playwright suite |
