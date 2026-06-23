@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { clickHiddenTileRowCol, readFrameHiddenTileCount, waitForBoardPlayPhase } from './tileBoardGameFlow';
+import { dismissStartupIntro } from './startupIntroHelpers';
+import { mainMenuPlayButton } from './visualScreenHelpers';
 
 const blockingConsoleTypes = new Set(['error']);
 
@@ -63,6 +65,7 @@ async function openFromCleanBrowserState(page: Page) {
     });
 
     await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await dismissStartupIntro(page);
 }
 
 async function expectAudioHooksInitialized(page: Page) {
@@ -83,11 +86,11 @@ async function expectAudioHooksInitialized(page: Page) {
 
 async function expectMainMenu(page: Page) {
     await expect(page.locator('h1').filter({ hasText: /memory dungeon/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: /^play$/i })).toBeVisible();
+    await expect(mainMenuPlayButton(page)).toBeVisible();
 }
 
 async function startPortfolioRun(page: Page) {
-    await page.getByRole('button', { name: /^play$/i }).click();
+    await mainMenuPlayButton(page).click();
     await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible({ timeout: 20_000 });
     await page.getByRole('button', { name: /^start run$/i }).click();
 }
