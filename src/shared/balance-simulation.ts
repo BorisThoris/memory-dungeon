@@ -52,6 +52,10 @@ export interface BalanceSimulationReport {
         traitComboOpportunityPairs: number;
         traitMatchRouteFloors: number;
         traitSwapSetupOpportunities: number;
+        traitInteractionLines: number;
+        traitRewardPickupFloors: number;
+        traitBoardPowerInteractionOpportunities: number;
+        deadTraitFloors: number;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         floorTag: string;
         dungeonNodeKind: DungeonRunNodeKind;
@@ -86,6 +90,11 @@ export interface BalanceSimulationReport {
         traitComboOpportunityPairs: number;
         traitMatchRouteFloors: number;
         traitSwapSetupOpportunities: number;
+        traitInteractionLines: number;
+        traitRewardPickupFloors: number;
+        traitBoardPowerInteractionOpportunities: number;
+        deadTraitFloors: number;
+        deadTraitFloorsByBand: Record<'early' | 'mid' | 'late', number>;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         bossFloors: number;
         breatherFloors: number;
@@ -365,6 +374,32 @@ const hasTraitSwapSetupOpportunity = (board: BoardState): number => {
     return 0;
 };
 
+const countTraitInteractionLines = (board: BoardState): number =>
+    getBoardTraitInteractionPreviewLines(board).length;
+
+const hasTraitRewardPickupFloor = (board: BoardState): number => {
+    for (const line of getBoardTraitInteractionPreviewLines(board, 'match')) {
+        if (
+            line.includes('combo shard') ||
+            line.includes('guard') ||
+            line.includes('peek') ||
+            line.includes('charge') ||
+            line.includes('score') ||
+            line.includes('gold') ||
+            line.includes('Favor')
+        ) {
+            return 1;
+        }
+    }
+    return 0;
+};
+
+const hasTraitBoardPowerInteractionOpportunity = (board: BoardState, traitSwapSetupOpportunities: number): number =>
+    traitSwapSetupOpportunities > 0 ||
+    board.tiles.some((tile) => tile.tileTraitKind === 'drift' || tile.tileTraitKind === 'stasis')
+        ? 1
+        : 0;
+
 const sumFindableKindCounts = (
     counts: readonly Record<FindableKind, number>[]
 ): Record<FindableKind, number> =>
@@ -545,6 +580,13 @@ export const runBalanceSimulation = ({
             const traitComboOpportunityPairs = countTraitComboOpportunityPairs(board);
             const traitMatchRouteFloors = traitComboOpportunityPairs > 0 ? 1 : 0;
             const traitSwapSetupOpportunities = hasTraitSwapSetupOpportunity(board);
+            const traitInteractionLines = countTraitInteractionLines(board);
+            const traitRewardPickupFloors = hasTraitRewardPickupFloor(board);
+            const traitBoardPowerInteractionOpportunities = hasTraitBoardPowerInteractionOpportunity(
+                board,
+                traitSwapSetupOpportunities
+            );
+            const deadTraitFloors = tileTraitPairs > 0 && traitInteractionLines === 0 ? 1 : 0;
             const shopGoldInflowPotential =
                 getShopGoldRewardForFloor(floor) +
                 treasureRewardPairs +
@@ -575,6 +617,10 @@ export const runBalanceSimulation = ({
                 traitComboOpportunityPairs,
                 traitMatchRouteFloors,
                 traitSwapSetupOpportunities,
+                traitInteractionLines,
+                traitRewardPickupFloors,
+                traitBoardPowerInteractionOpportunities,
+                deadTraitFloors,
                 tileTraitKindCounts,
                 floorTag: schedule.floorTag,
                 dungeonNodeKind,
@@ -614,6 +660,14 @@ export const runBalanceSimulation = ({
     const traitComboOpportunityCounts = samples.map((sample) => sample.traitComboOpportunityPairs);
     const traitMatchRouteFloorCounts = samples.map((sample) => sample.traitMatchRouteFloors);
     const traitSwapSetupOpportunityCounts = samples.map((sample) => sample.traitSwapSetupOpportunities);
+    const traitInteractionLineCounts = samples.map((sample) => sample.traitInteractionLines);
+    const traitRewardPickupFloorCounts = samples.map((sample) => sample.traitRewardPickupFloors);
+    const traitBoardPowerInteractionOpportunityCounts = samples.map((sample) => sample.traitBoardPowerInteractionOpportunities);
+    const deadTraitFloorCounts = samples.map((sample) => sample.deadTraitFloors);
+    const deadTraitFloorsByBand = samples.reduce<Record<'early' | 'mid' | 'late', number>>(
+        (counts, sample) => ({ ...counts, [sample.floorBand]: counts[sample.floorBand] + sample.deadTraitFloors }),
+        { early: 0, mid: 0, late: 0 }
+    );
     const aggregateTileTraitKindCounts = sumTileTraitKindCounts(samples.map((sample) => sample.tileTraitKindCounts));
     const tileTraitKindShares = getTileTraitKindShares(aggregateTileTraitKindCounts);
     const totalFindableWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
@@ -715,6 +769,38 @@ export const runBalanceSimulation = ({
             Number(average(traitSwapSetupOpportunityCounts).toFixed(2)),
             0.1,
             1,
+            'getBoardTraitInteractionPreviewLines'
+        ),
+        row(
+            'avg_trait_interaction_lines_per_floor',
+            'Average readable trait interaction preview lines per floor',
+            Number(average(traitInteractionLineCounts).toFixed(2)),
+            1,
+            12,
+            'getBoardTraitInteractionPreviewLines'
+        ),
+        row(
+            'trait_reward_pickup_floor_share',
+            'Share of floors where traits can produce a reward pickup or resource',
+            Number(average(traitRewardPickupFloorCounts).toFixed(2)),
+            0.7,
+            1,
+            'getBoardTraitInteractionPreviewLines'
+        ),
+        row(
+            'trait_board_power_interaction_floor_share',
+            'Share of floors where traits can interact with shuffle, swap, or block tools',
+            Number(average(traitBoardPowerInteractionOpportunityCounts).toFixed(2)),
+            0.5,
+            1,
+            'hasTraitSwapSetupOpportunity'
+        ),
+        row(
+            'dead_trait_floor_share',
+            'Share of trait floors without any readable trait interaction',
+            Number(average(deadTraitFloorCounts).toFixed(2)),
+            0,
+            0,
             'getBoardTraitInteractionPreviewLines'
         ),
         ...TILE_TRAIT_KINDS.map((kind) =>
@@ -930,6 +1016,14 @@ export const runBalanceSimulation = ({
             traitComboOpportunityPairs: samples.reduce((sum, sample) => sum + sample.traitComboOpportunityPairs, 0),
             traitMatchRouteFloors: samples.reduce((sum, sample) => sum + sample.traitMatchRouteFloors, 0),
             traitSwapSetupOpportunities: samples.reduce((sum, sample) => sum + sample.traitSwapSetupOpportunities, 0),
+            traitInteractionLines: samples.reduce((sum, sample) => sum + sample.traitInteractionLines, 0),
+            traitRewardPickupFloors: samples.reduce((sum, sample) => sum + sample.traitRewardPickupFloors, 0),
+            traitBoardPowerInteractionOpportunities: samples.reduce(
+                (sum, sample) => sum + sample.traitBoardPowerInteractionOpportunities,
+                0
+            ),
+            deadTraitFloors: samples.reduce((sum, sample) => sum + sample.deadTraitFloors, 0),
+            deadTraitFloorsByBand,
             tileTraitKindCounts: aggregateTileTraitKindCounts,
             bossFloors: samples.filter((sample) => sample.floorTag === 'boss').length,
             breatherFloors: samples.filter((sample) => sample.floorTag === 'breather').length,

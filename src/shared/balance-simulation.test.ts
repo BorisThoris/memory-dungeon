@@ -27,6 +27,11 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(result.aggregate.tileTraitPairs);
         expect(result.aggregate.traitMatchRouteFloors).toBeGreaterThan(0);
         expect(result.aggregate.traitSwapSetupOpportunities).toBeGreaterThan(0);
+        expect(result.aggregate.traitInteractionLines).toBeGreaterThan(0);
+        expect(result.aggregate.traitRewardPickupFloors).toBeGreaterThan(0);
+        expect(result.aggregate.traitBoardPowerInteractionOpportunities).toBeGreaterThan(0);
+        expect(result.aggregate.deadTraitFloors).toBe(0);
+        expect(result.aggregate.deadTraitFloorsByBand).toEqual({ early: 0, mid: 0, late: 0 });
         expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
             result.aggregate.tileTraitPairs
         );
@@ -81,6 +86,10 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'avg_trait_combo_opportunity_pairs_per_floor',
                 'trait_match_route_floor_share',
                 'avg_trait_swap_setup_opportunities_per_floor',
+                'avg_trait_interaction_lines_per_floor',
+                'trait_reward_pickup_floor_share',
+                'trait_board_power_interaction_floor_share',
+                'dead_trait_floor_share',
                 'tile_trait_share_echo',
                 'tile_trait_share_volatile',
                 'tile_trait_share_mirror',
@@ -116,7 +125,11 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'avg_tile_trait_pairs_per_floor',
             'avg_trait_combo_opportunity_pairs_per_floor',
             'trait_match_route_floor_share',
-            'avg_trait_swap_setup_opportunities_per_floor'
+            'avg_trait_swap_setup_opportunities_per_floor',
+            'avg_trait_interaction_lines_per_floor',
+            'trait_reward_pickup_floor_share',
+            'trait_board_power_interaction_floor_share',
+            'dead_trait_floor_share'
         ]);
         expect(result.rows.filter((row) => newRewardRows.has(row.key) && row.status !== 'within_range')).toEqual([]);
         expect(result.samples.some((sample) => sample.dungeonNodeKind === 'elite' && sample.enemyThreatPairs >= 2)).toBe(

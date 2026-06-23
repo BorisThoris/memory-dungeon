@@ -6,6 +6,7 @@ type SystemDiagramPayload = {
     actions: {
         id: string;
         priority: string;
+        status: string;
         system: string;
         title: string;
         detail: string;
@@ -63,6 +64,7 @@ describe('system diagram generator', () => {
         expect(payload.stats.diagramCount).toBe(5);
         expect(payload.stats.actionCount).toBe(5);
         expect(payload.actions.map((item) => item.id)).toContain('softlock-generation-matrix');
+        expect(payload.actions.every((item) => item.status === 'open')).toBe(true);
         expect(payload.actions.find((item) => item.id === 'resolution-slice-gate')?.detail).toContain('yarn gate:action-loop');
         expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')?.verifies).toContain('Generated boards');
         expect(payload.stats.importGraph.fileCount).toBe(0);

@@ -33,6 +33,7 @@ type SystemDiagramPayload = {
     actions: {
         id: string;
         priority: string;
+        status: 'open' | 'done' | string;
         system: string;
         title: string;
         detail: string;
@@ -88,6 +89,8 @@ function BlueprintGraphInner(): ReactElement {
     const [loadErr, setLoadErr] = useState<string | null>(null);
     const [mode, setMode] = useState<ExplorerMode>('systems');
     const [selectedDiagramId, setSelectedDiagramId] = useState('navigation-flow');
+    const [actionPriorityFilter, setActionPriorityFilter] = useState('all');
+    const [showOnlyOpenActions, setShowOnlyOpenActions] = useState(true);
     const [filterLayer, setFilterLayer] = useState<Layer>('all');
     const [search, setSearch] = useState('');
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
@@ -272,8 +275,20 @@ function BlueprintGraphInner(): ReactElement {
         if (!systemRaw || !selectedDiagram) {
             return [];
         }
-        return systemRaw.actions.filter((item) => item.system === selectedDiagram.title);
-    }, [systemRaw, selectedDiagram]);
+        return systemRaw.actions.filter(
+            (item) =>
+                item.system === selectedDiagram.title &&
+                (actionPriorityFilter === 'all' || item.priority === actionPriorityFilter) &&
+                (!showOnlyOpenActions || item.status === 'open')
+        );
+    }, [systemRaw, selectedDiagram, actionPriorityFilter, showOnlyOpenActions]);
+
+    const actionPriorities = useMemo(() => {
+        if (!systemRaw) {
+            return [];
+        }
+        return [...new Set(systemRaw.actions.map((item) => item.priority))].sort();
+    }, [systemRaw]);
 
     const stats = useMemo(() => {
         if (mode === 'systems') {
@@ -392,6 +407,30 @@ function BlueprintGraphInner(): ReactElement {
                                 </option>
                             ))}
                         </select>
+                        <label className={styles.label} htmlFor="bp-action-priority">
+                            Priority
+                        </label>
+                        <select
+                            className={styles.filter}
+                            id="bp-action-priority"
+                            value={actionPriorityFilter}
+                            onChange={(e) => setActionPriorityFilter(e.target.value)}
+                        >
+                            <option value="all">all</option>
+                            {actionPriorities.map((priority) => (
+                                <option key={priority} value={priority}>
+                                    {priority}
+                                </option>
+                            ))}
+                        </select>
+                        <label className={styles.checkboxLabel}>
+                            <input
+                                type="checkbox"
+                                checked={showOnlyOpenActions}
+                                onChange={(e) => setShowOnlyOpenActions(e.target.checked)}
+                            />
+                            open actions
+                        </label>
                     </>
                 ) : (
                     <>
@@ -458,6 +497,7 @@ function BlueprintGraphInner(): ReactElement {
                                     <strong>
                                         {item.priority} {item.title}
                                     </strong>
+                                    <p className={styles.evidence}>Status: {item.status}</p>
                                     <p>{item.detail}</p>
                                     <p className={styles.evidence}>Verifies: {item.verifies}</p>
                                 </div>

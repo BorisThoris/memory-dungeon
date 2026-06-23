@@ -47,6 +47,15 @@
     border-radius: 4px;
 }
 
+.checkboxLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    opacity: 0.82;
+    white-space: nowrap;
+}
+
 .flow {
     flex: 1 1 auto;
     min-height: 0;
