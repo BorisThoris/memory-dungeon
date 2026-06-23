@@ -30,8 +30,9 @@ test.describe('Expanded playable interludes and post-run loop', () => {
 
         const floorClear = page.getByRole('dialog', { name: /floor cleared/i });
         await expect(floorClear).toBeVisible();
-        await expect(page.getByTestId('floor-clear-result-stack')).toBeVisible();
+        await expect(page.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'true');
         await expect(page.getByTestId('route-choice-panel')).toBeVisible();
+        await expect(page.getByTestId('route-choice-panel')).toHaveAttribute('data-decision-state', 'required');
         await expect(page.getByTestId('route-choice-safe')).toContainText(/safe/i);
         await expect(page.getByTestId('route-choice-greed')).toContainText(/greed/i);
         await expect(page.getByTestId('route-choice-mystery')).toContainText(/mystery/i);
@@ -99,8 +100,9 @@ test.describe('Expanded playable interludes and post-run loop', () => {
 
         await openPlayablePathFixture(page, 'sideRoomChoice');
         await expectStampedSideRoom(page, 'mystery', 'run_event', 'event', /mirror bargain/i);
-        await expect(page.locator('[data-testid^="side-room-choice-"][data-choice-primary="true"]').first()).toContainText(/accept favor/i);
-        await page.getByTestId('side-room-action-dock').getByRole('button', { name: /accept favor/i }).click();
+        await expect(page.getByTestId('side-room-choice-accept_favor')).toContainText(/accept the echo/i);
+        await expect(page.getByTestId('side-room-choice-accept_favor')).toContainText(/favor progress/i);
+        await page.getByTestId('side-room-action-dock').getByRole('button', { name: /accept the echo/i }).click();
         await expectGameplayReady(page);
         await expect(page.getByTestId('side-room-screen')).toBeHidden();
 
