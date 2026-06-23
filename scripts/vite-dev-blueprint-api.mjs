@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { Project, SyntaxKind } from 'ts-morph';
 import { buildProjectGraphData } from './graph-project.mjs';
 import { runBlueprintCodegen } from './blueprint-codegen.mjs';
+import { buildSystemDiagramData } from './system-diagrams.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -46,6 +47,15 @@ export function viteDevBlueprintApi() {
                 if (req.method === 'GET' && pathname(req.url) === '/__api/project-graph') {
                     try {
                         const data = buildProjectGraphData(repoRoot);
+                        sendJson(res, 200, data);
+                    } catch (e) {
+                        sendJson(res, 500, { error: String((e).message || e) });
+                    }
+                    return;
+                }
+                if (req.method === 'GET' && pathname(req.url) === '/__api/system-diagrams') {
+                    try {
+                        const data = buildSystemDiagramData(repoRoot);
                         sendJson(res, 200, data);
                     } catch (e) {
                         sendJson(res, 500, { error: String((e).message || e) });

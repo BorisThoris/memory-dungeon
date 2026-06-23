@@ -365,7 +365,7 @@ const calculateCoreTraitCount = (eligiblePairCount: number, level: number): numb
         return 0;
     }
     if (level <= 1) {
-        return 1;
+        return Math.min(2, eligiblePairCount);
     }
     const densityCount = Math.ceil(eligiblePairCount * (level >= 8 ? 0.5 : 0.42));
     const floorBandMinimum = level >= 8 ? 4 : level >= 4 ? 3 : 2;
@@ -441,6 +441,25 @@ const routeInteractionSeeds = (
                   ];
     const seeded = startingLoadoutId ? loadoutExtra[startingLoadoutId] ?? [] : [];
     return [primary, ...seeded, ...routeExtra];
+};
+
+const openerInteractionSeeds = (
+    startingLoadoutId: StartingLoadoutId | null | undefined
+): readonly (readonly [TileTraitKind, TileTraitKind])[] => {
+    if (startingLoadoutId === 'route_tactician') {
+        return [['drift', 'volatile'], ['conduit', 'echo']];
+    }
+    if (startingLoadoutId === 'cursebreaker') {
+        return [['mirror', 'stasis'], ['sealed', 'heavy']];
+    }
+    if (startingLoadoutId === 'vaultbreaker') {
+        return [['sealed', 'heavy'], ['cursed', 'volatile']];
+    }
+    return [
+        ['conduit', 'echo'],
+        ['echo', 'mirror'],
+        ['sealed', 'heavy']
+    ];
 };
 
 const traitPoolForContext = (
@@ -579,7 +598,9 @@ export const assignTileTraitsToGeneratedBoard = (
     if (traitCount >= 2) {
         const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys);
         const shuffledAdjacentPairs = shuffleWithRng(() => rng(), adjacentPairs);
-        const seeds = routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
+        const seeds = level <= 1
+            ? openerInteractionSeeds(startingLoadoutId)
+            : routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
         let seedIndex = intensity == null && !startingLoadoutId ? Math.floor(rng() * seeds.length) : 0;
         for (const [firstPairKey, secondPairKey] of shuffledAdjacentPairs) {
             if (traitByPairKey.size + 2 > traitCount) {
@@ -606,13 +627,21 @@ export const assignTileTraitsToGeneratedBoard = (
         const trait = traitByPairKey.get(tile.pairKey);
         return trait ? { ...tile, tileTraitKind: trait } : { ...tile };
     });
-    if (traitByPairKey.size >= 2 && getBoardTraitInteractionPreviewLines({ ...({} as BoardState), tiles: assignedTiles, columns: columnsForTileCount(assignedTiles.length) }).length === 0) {
+    if (
+        traitByPairKey.size >= 2 &&
+        getBoardTraitInteractionPreviewLines(
+            { ...({} as BoardState), tiles: assignedTiles, columns: columnsForTileCount(assignedTiles.length) },
+            'match'
+        ).length === 0
+    ) {
         const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys);
         const [firstPairKey, secondPairKey] = adjacentPairs.find(
             ([first, second]) => traitByPairKey.has(first) || traitByPairKey.has(second)
         ) ?? adjacentPairs[0] ?? [];
         if (firstPairKey && secondPairKey) {
-            const repairSeeds = routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
+            const repairSeeds = level <= 1
+                ? openerInteractionSeeds(startingLoadoutId)
+                : routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
             const repairSeedIndex = intensity == null && !startingLoadoutId ? Math.floor(rng() * repairSeeds.length) : 0;
             const [firstTrait, secondTrait] = repairSeeds[repairSeedIndex]!;
             const repairedTraitByPairKey = new Map<string, TileTraitKind>([

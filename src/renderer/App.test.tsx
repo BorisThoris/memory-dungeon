@@ -111,6 +111,7 @@ describe('desktop app flow', () => {
 
         expect(await findGameplayBoardStage()).toBeInTheDocument();
         expect(screen.getByRole('group', { name: /run stats/i })).toBeInTheDocument();
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Trait routes');
         expect(screen.getByText(/^shards$/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /rule tips/i })).toBeInTheDocument();
     }, 15_000);

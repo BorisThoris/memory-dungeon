@@ -299,7 +299,10 @@ const applyBoardTraitRewardBias = (
     const preferred = candidates.filter((id) =>
         (BONUS_REWARD_CATALOG[id].traitBuildLabels ?? []).some((label) => buildLabels.has(label))
     );
-    return uniqueBonusRewardIds([...preferred, ...candidates]);
+    const matchingCatalogRewards = (Object.keys(BONUS_REWARD_CATALOG) as BonusRewardId[]).filter((id) =>
+        (BONUS_REWARD_CATALOG[id].traitBuildLabels ?? []).some((label) => buildLabels.has(label))
+    );
+    return uniqueBonusRewardIds([...preferred, ...matchingCatalogRewards, ...candidates]);
 };
 
 const selectBonusRewardDefinition = (
@@ -366,12 +369,12 @@ export const rollBonusRewardDraft = ({
     const safeLedger = normalizeBonusRewardLedger(ledger);
     const candidates = rewardIdsForRouteKind(routeKind);
     const seed = hashStringToSeed(`bonusRewardDraft:${rulesVersion}:${runSeed}:${floor}:${routeKind}`);
-    const ordered = applyBoardTraitRewardBias(
-        applyLoadoutRewardBias(
+    const ordered = applyLoadoutRewardBias(
+        applyBoardTraitRewardBias(
             rotateRewardCandidates(candidates, Math.abs(seed) % candidates.length),
-            startingLoadoutId
+            board
         ),
-        board
+        startingLoadoutId
     );
     const selected: BonusRewardInstance[] = [];
     for (const id of ordered) {

@@ -309,7 +309,7 @@ describe('GameplayHudBar', () => {
         );
 
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Trait routes');
-        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('1 route');
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('0/1');
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Sealed Catalyst');
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Echo + Sealed: combo shard');
         expect(screen.getByTestId('hud-trait-route-panel').getAttribute('title')).toContain('Echo + Sealed: combo shard');

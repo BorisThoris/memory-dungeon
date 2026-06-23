@@ -334,6 +334,32 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         }).map((reward) => reward.instanceId)).toEqual(draft.map((reward) => reward.instanceId));
     });
 
+    it('pulls build-compatible rewards into drafts even when the route room pool would not normally show them', () => {
+        const board = buildBoard(4, { runSeed: 75_122, runRulesVersion: GAME_RULES_VERSION });
+        const cursedBoard = {
+            ...board,
+            columns: 2,
+            tiles: board.tiles.map((tile, index) =>
+                index === 0
+                    ? { ...tile, pairKey: 'cursed', tileTraitKind: 'cursed' as const }
+                    : index === 1
+                      ? { ...tile, pairKey: 'volatile', tileTraitKind: 'volatile' as const }
+                      : { ...tile, tileTraitKind: undefined }
+            )
+        };
+        const draft = rollBonusRewardDraft({
+            runSeed: 75_122,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 6,
+            routeKind: 'rest',
+            board: cursedBoard
+        });
+
+        expect(getTraitBuildRewardRowsForBoard(cursedBoard).map((row) => row.label)).toContain('Cursed Greed');
+        expect(draft.map((reward) => reward.id)).toContain('cursed_opener_contract');
+        expect(draft.find((reward) => reward.id === 'cursed_opener_contract')?.traitBuildLabels).toContain('Cursed Greed');
+    });
+
     it('claims new reward draft rows through the same capped inventory feedback path', () => {
         const room = {
             ...rollBonusRewardRoom({

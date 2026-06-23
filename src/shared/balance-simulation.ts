@@ -50,6 +50,7 @@ export interface BalanceSimulationReport {
         findableKindCounts: Record<FindableKind, number>;
         tileTraitPairs: number;
         traitComboOpportunityPairs: number;
+        traitMatchRouteFloors: number;
         traitSwapSetupOpportunities: number;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         floorTag: string;
@@ -83,6 +84,7 @@ export interface BalanceSimulationReport {
         findableKindCounts: Record<FindableKind, number>;
         tileTraitPairs: number;
         traitComboOpportunityPairs: number;
+        traitMatchRouteFloors: number;
         traitSwapSetupOpportunities: number;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         bossFloors: number;
@@ -541,6 +543,7 @@ export const runBalanceSimulation = ({
             const tileTraitKindCounts = countTileTraitKinds(board.tiles);
             const tileTraitPairs = Object.values(tileTraitKindCounts).reduce((sum, count) => sum + count, 0);
             const traitComboOpportunityPairs = countTraitComboOpportunityPairs(board);
+            const traitMatchRouteFloors = traitComboOpportunityPairs > 0 ? 1 : 0;
             const traitSwapSetupOpportunities = hasTraitSwapSetupOpportunity(board);
             const shopGoldInflowPotential =
                 getShopGoldRewardForFloor(floor) +
@@ -570,6 +573,7 @@ export const runBalanceSimulation = ({
                 findableKindCounts,
                 tileTraitPairs,
                 traitComboOpportunityPairs,
+                traitMatchRouteFloors,
                 traitSwapSetupOpportunities,
                 tileTraitKindCounts,
                 floorTag: schedule.floorTag,
@@ -608,6 +612,7 @@ export const runBalanceSimulation = ({
     const findableKindShares = getFindableKindShares(aggregateFindableKindCounts);
     const tileTraitCounts = samples.map((sample) => sample.tileTraitPairs);
     const traitComboOpportunityCounts = samples.map((sample) => sample.traitComboOpportunityPairs);
+    const traitMatchRouteFloorCounts = samples.map((sample) => sample.traitMatchRouteFloors);
     const traitSwapSetupOpportunityCounts = samples.map((sample) => sample.traitSwapSetupOpportunities);
     const aggregateTileTraitKindCounts = sumTileTraitKindCounts(samples.map((sample) => sample.tileTraitKindCounts));
     const tileTraitKindShares = getTileTraitKindShares(aggregateTileTraitKindCounts);
@@ -695,6 +700,14 @@ export const runBalanceSimulation = ({
             1,
             10,
             'getTileTraitInteractionPreviewLines'
+        ),
+        row(
+            'trait_match_route_floor_share',
+            'Share of floors with at least one match-triggerable trait route',
+            Number(average(traitMatchRouteFloorCounts).toFixed(2)),
+            0.75,
+            1,
+            'getBoardTraitInteractionPreviewLines'
         ),
         row(
             'avg_trait_swap_setup_opportunities_per_floor',
@@ -915,6 +928,7 @@ export const runBalanceSimulation = ({
             findableKindCounts: aggregateFindableKindCounts,
             tileTraitPairs: samples.reduce((sum, sample) => sum + sample.tileTraitPairs, 0),
             traitComboOpportunityPairs: samples.reduce((sum, sample) => sum + sample.traitComboOpportunityPairs, 0),
+            traitMatchRouteFloors: samples.reduce((sum, sample) => sum + sample.traitMatchRouteFloors, 0),
             traitSwapSetupOpportunities: samples.reduce((sum, sample) => sum + sample.traitSwapSetupOpportunities, 0),
             tileTraitKindCounts: aggregateTileTraitKindCounts,
             bossFloors: samples.filter((sample) => sample.floorTag === 'boss').length,

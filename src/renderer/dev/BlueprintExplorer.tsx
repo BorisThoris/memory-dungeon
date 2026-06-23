@@ -26,6 +26,28 @@ type ProjectGraphPayload = {
     stats: { fileCount: number; edgeCount: number };
 };
 
+type ExplorerMode = 'project' | 'systems';
+
+type SystemDiagramPayload = {
+    rulesVersion: number | null;
+    diagrams: {
+        id: string;
+        title: string;
+        summary: string;
+        nodes: { id: string; label: string; kind: string; layer: string; detail: string; evidence: string[] }[];
+        edges: { id: string; source: string; target: string; label: string; kind: string }[];
+        findings: { id: string; severity: 'info' | 'warning' | 'risk'; title: string; detail: string; evidence: string[] }[];
+        stats: { nodeCount: number; edgeCount: number; findingCount: number };
+    }[];
+    stats: {
+        diagramCount: number;
+        nodeCount: number;
+        edgeCount: number;
+        findingCount: number;
+        importGraph: { fileCount: number; edgeCount: number; layers: Record<string, number> };
+    };
+};
+
 const GRID_X = 200;
 const GRID_Y = 80;
 const COLS = 14;
@@ -52,7 +74,10 @@ function GraphAutoFit(): null {
 
 function BlueprintGraphInner(): ReactElement {
     const [raw, setRaw] = useState<ProjectGraphPayload | null>(null);
+    const [systemRaw, setSystemRaw] = useState<SystemDiagramPayload | null>(null);
     const [loadErr, setLoadErr] = useState<string | null>(null);
+    const [mode, setMode] = useState<ExplorerMode>('systems');
+    const [selectedDiagramId, setSelectedDiagramId] = useState('navigation-flow');
     const [filterLayer, setFilterLayer] = useState<Layer>('all');
     const [search, setSearch] = useState('');
     const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
@@ -100,6 +125,42 @@ function BlueprintGraphInner(): ReactElement {
         []
     );
 
+    const applySystemDiagram = useCallback(
+        (data: SystemDiagramPayload, diagramId: string, q: string) => {
+            const diagram = data.diagrams.find((candidate) => candidate.id === diagramId) ?? data.diagrams[0];
+            if (!diagram) {
+                return { nOut: [] as Node[], eOut: [] as Edge[] };
+            }
+            const ql = q.trim().toLowerCase();
+            const bySearch = (n: (typeof diagram.nodes)[0]) => {
+                if (!ql) {
+                    return true;
+                }
+                return (
+                    n.id.toLowerCase().includes(ql) ||
+                    n.label.toLowerCase().includes(ql) ||
+                    n.kind.toLowerCase().includes(ql) ||
+                    n.detail.toLowerCase().includes(ql) ||
+                    n.evidence.some((p) => p.toLowerCase().includes(ql))
+                );
+            };
+            const vis = new Set(diagram.nodes.filter(bySearch).map((n) => n.id));
+            const nOut: Node[] = diagram.nodes
+                .filter((n) => vis.has(n.id))
+                .map((n, i) => ({
+                    id: n.id,
+                    position: layout(i),
+                    data: { label: `${n.label}\n${n.kind}`, path: n.evidence[0] ?? n.id, layer: n.layer, detail: n.detail },
+                    type: 'default'
+                }));
+            const eOut: Edge[] = diagram.edges
+                .filter((e) => vis.has(e.source) && vis.has(e.target))
+                .map((e) => ({ id: e.id, source: e.source, target: e.target, label: e.label, animated: e.kind !== 'flow' }));
+            return { nOut, eOut };
+        },
+        []
+    );
+
     useEffect(() => {
         if (!import.meta.env.DEV) {
             return;
@@ -134,6 +195,30 @@ function BlueprintGraphInner(): ReactElement {
         }
         void (async () => {
             try {
+                const r = await fetch('/__api/system-diagrams');
+                if (!r.ok) {
+                    throw new Error(`HTTP ${r.status}`);
+                }
+                const j = (await r.json()) as SystemDiagramPayload;
+                if (!j || !Array.isArray(j.diagrams) || j.stats == null) {
+                    throw new Error('Invalid /__api/system-diagrams payload (missing diagrams or stats).');
+                }
+                setSystemRaw(j);
+                if (j.diagrams[0]) {
+                    setSelectedDiagramId((current) => j.diagrams.some((diagram) => diagram.id === current) ? current : j.diagrams[0].id);
+                }
+            } catch (e) {
+                setLoadErr((e as Error).message);
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        if (!import.meta.env.DEV) {
+            return;
+        }
+        void (async () => {
+            try {
                 const r = await fetch('/__api/ast-allowlist');
                 if (r.ok) {
                     const j = (await r.json()) as { files: string[] };
@@ -149,20 +234,42 @@ function BlueprintGraphInner(): ReactElement {
     }, []);
 
     useEffect(() => {
+        if (mode === 'systems') {
+            if (!systemRaw) {
+                return;
+            }
+            const { nOut, eOut } = applySystemDiagram(systemRaw, selectedDiagramId, search);
+            setNodes(nOut);
+            setEdges(eOut);
+            return;
+        }
         if (!raw) {
             return;
         }
         const { nOut, eOut } = applyFilter(raw, filterLayer, search);
         setNodes(nOut);
         setEdges(eOut);
-    }, [raw, filterLayer, search, applyFilter, setNodes, setEdges]);
+    }, [raw, systemRaw, mode, selectedDiagramId, filterLayer, search, applyFilter, applySystemDiagram, setNodes, setEdges]);
+
+    const selectedDiagram = useMemo(() => {
+        if (!systemRaw) {
+            return null;
+        }
+        return systemRaw.diagrams.find((diagram) => diagram.id === selectedDiagramId) ?? systemRaw.diagrams[0] ?? null;
+    }, [systemRaw, selectedDiagramId]);
 
     const stats = useMemo(() => {
+        if (mode === 'systems') {
+            if (!systemRaw || !selectedDiagram) {
+                return null;
+            }
+            return `Diagrams: ${systemRaw.stats.diagramCount} | Selected: ${selectedDiagram.stats.nodeCount} nodes, ${selectedDiagram.stats.edgeCount} edges | Findings: ${selectedDiagram.stats.findingCount} | Visible: ${nodes.length} | ${edges.length}`;
+        }
         if (!raw) {
             return null;
         }
         return `Files: ${raw.stats.fileCount} | Edges: ${raw.stats.edgeCount} | Visible: ${nodes.length} | ${edges.length}`;
-    }, [raw, nodes.length, edges.length]);
+    }, [mode, raw, systemRaw, selectedDiagram, nodes.length, edges.length]);
 
     const runAstPreview = useCallback(() => {
         setAstMsg(null);
@@ -240,10 +347,37 @@ function BlueprintGraphInner(): ReactElement {
     return (
         <div className={styles.root} data-e2e-blueprint-dev="1">
             <header className={styles.header}>
-                <h1 className={styles.label}>Project graph (import edges in src/)</h1>
+                <h1 className={styles.label}>{mode === 'systems' ? 'System diagrams' : 'Project graph (import edges in src/)'}</h1>
                 {raw == null ? <p className={styles.stats}>Loading project graph from /__api/project-graph…</p> : null}
                 {stats ? <p className={styles.stats}>{stats}</p> : null}
-                <span className={styles.label}>(Vite dev APIs: /__api/project-graph)</span>
+                <span className={styles.label}>(Vite dev APIs: /__api/project-graph, /__api/system-diagrams)</span>
+                <label className={styles.label} htmlFor="bp-mode">
+                    View
+                </label>
+                <select className={styles.filter} id="bp-mode" value={mode} onChange={(e) => setMode(e.target.value as ExplorerMode)}>
+                    <option value="systems">system diagrams</option>
+                    <option value="project">import graph</option>
+                </select>
+                {mode === 'systems' ? (
+                    <>
+                        <label className={styles.label} htmlFor="bp-system-diagram">
+                            Diagram
+                        </label>
+                        <select
+                            className={styles.filter}
+                            id="bp-system-diagram"
+                            value={selectedDiagramId}
+                            onChange={(e) => setSelectedDiagramId(e.target.value)}
+                        >
+                            {(systemRaw?.diagrams ?? []).map((diagram) => (
+                                <option key={diagram.id} value={diagram.id}>
+                                    {diagram.title}
+                                </option>
+                            ))}
+                        </select>
+                    </>
+                ) : (
+                    <>
                 <label className={styles.label} htmlFor="bp-layer">
                     Layer
                 </label>
@@ -259,6 +393,8 @@ function BlueprintGraphInner(): ReactElement {
                     <option value="renderer">renderer</option>
                     <option value="other">other</option>
                 </select>
+                    </>
+                )}
                 <input
                     className={styles.search}
                     type="search"
@@ -286,6 +422,23 @@ function BlueprintGraphInner(): ReactElement {
                 </ReactFlow>
             </div>
             <div className={styles.panels}>
+                {mode === 'systems' && selectedDiagram ? (
+                    <div className={styles.subPanel}>
+                        <h3>{selectedDiagram.title}</h3>
+                        <p className={styles.label}>{selectedDiagram.summary}</p>
+                        <div className={styles.findings}>
+                            {selectedDiagram.findings.map((item) => (
+                                <div key={item.id} className={`${styles.finding} ${styles[`finding_${item.severity}`]}`}>
+                                    <strong>{item.title}</strong>
+                                    <p>{item.detail}</p>
+                                    {item.evidence.length > 0 ? (
+                                        <p className={styles.evidence}>Evidence: {item.evidence.join(', ')}</p>
+                                    ) : null}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : null}
                 <div className={styles.subPanel}>
                     <h3>Codegen (glossary → TS)</h3>
                     <p className={styles.label}>

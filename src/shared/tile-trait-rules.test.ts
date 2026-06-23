@@ -106,6 +106,18 @@ describe('tile trait rules', () => {
         expect(tiles.every((tile) => ['echo', 'mirror', 'heavy'].includes(tile.tileTraitKind ?? ''))).toBe(true);
     });
 
+    it('introduces a match-triggerable trait route on normal opener boards', () => {
+        const baseTiles = Array.from({ length: 4 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
+        const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 1, 30, 1, 'safe');
+        const board = makeBoard(tiles, { columns: 3, rows: 3 });
+        const openerTraits = tiles.map((tile) => tile.tileTraitKind).filter(Boolean);
+
+        expect(uniqueTraitPairCount(tiles)).toBe(2);
+        expect(openerTraits).not.toContain('cursed');
+        expect(openerTraits).not.toContain('volatile');
+        expect(getBoardTraitInteractionPreviewLines(board, 'match').length).toBeGreaterThan(0);
+    });
+
     it('scales trait density into a normal board layer and seeds route combo adjacency', () => {
         const baseTiles = Array.from({ length: 8 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
 
@@ -161,6 +173,21 @@ describe('tile trait rules', () => {
         );
 
         expect([...seen]).toEqual(expect.arrayContaining(['drift', 'conduit', 'stasis']));
+    });
+
+    it('guarantees generated trait boards have match-triggerable routes when enough trait pairs exist', () => {
+        const baseTiles = Array.from({ length: 10 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
+        const intensities: readonly (null | 'safe' | 'greed' | 'mystery')[] = [null, 'safe', 'greed', 'mystery'];
+
+        for (const intensity of intensities) {
+            for (let seed = 1; seed <= 80; seed += 1) {
+                const tiles = assignTileTraitsToGeneratedBoard(baseTiles, seed, 30, 7, intensity);
+                const board = makeBoard(tiles, { columns: 5, rows: 4 });
+
+                expect(uniqueTraitPairCount(tiles)).toBeGreaterThanOrEqual(2);
+                expect(getBoardTraitInteractionPreviewLines(board, 'match').length).toBeGreaterThan(0);
+            }
+        }
     });
 
     it('turns echo and mirror clean matches into resource rewards', () => {

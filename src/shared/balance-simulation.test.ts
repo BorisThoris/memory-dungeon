@@ -25,6 +25,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.tileTraitPairs).toBeGreaterThan(0);
         expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
         expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(result.aggregate.tileTraitPairs);
+        expect(result.aggregate.traitMatchRouteFloors).toBeGreaterThan(0);
         expect(result.aggregate.traitSwapSetupOpportunities).toBeGreaterThan(0);
         expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
             result.aggregate.tileTraitPairs
@@ -78,6 +79,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'avg_power_charge_inflow_per_floor',
                 'avg_tile_trait_pairs_per_floor',
                 'avg_trait_combo_opportunity_pairs_per_floor',
+                'trait_match_route_floor_share',
                 'avg_trait_swap_setup_opportunities_per_floor',
                 'tile_trait_share_echo',
                 'tile_trait_share_volatile',
@@ -113,6 +115,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'avg_power_charge_inflow_per_floor',
             'avg_tile_trait_pairs_per_floor',
             'avg_trait_combo_opportunity_pairs_per_floor',
+            'trait_match_route_floor_share',
             'avg_trait_swap_setup_opportunities_per_floor'
         ]);
         expect(result.rows.filter((row) => newRewardRows.has(row.key) && row.status !== 'within_range')).toEqual([]);
@@ -279,6 +282,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
         expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
         expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(total);
+        expect(result.aggregate.traitMatchRouteFloors).toBeGreaterThanOrEqual(result.floors * result.seeds.length * 0.75);
         expect(result.aggregate.traitSwapSetupOpportunities).toBeGreaterThan(0);
 
         const shares = getTileTraitKindShares(result.aggregate.tileTraitKindCounts);

@@ -233,7 +233,7 @@ export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     if (boardHasDangerousTraitPair(run.board)) {
         itemIds.unshift('trait_cleanse');
     }
-    if (boardHasTraitComboOpportunity(run.board)) {
+    if ((level >= 2 || source === 'board_shop') && boardHasTraitComboOpportunity(run.board)) {
         itemIds.unshift('trait_routing_kit');
     }
     const stockLimit = source === 'board_shop' || itemIds.includes('trait_cleanse') ? 6 : 5;

@@ -2232,6 +2232,7 @@ describe('useAppStore timers', () => {
             for (const ids of [...pairGroups.values()].filter((group) => group.length === 2)) {
                 useAppStore.getState().pressTile(ids[0]!);
                 useAppStore.getState().pressTile(ids[1]!);
+                await vi.advanceTimersByTimeAsync(1400);
             }
 
             run = useAppStore.getState().run;
