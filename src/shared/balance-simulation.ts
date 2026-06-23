@@ -7,7 +7,6 @@ import {
     type FindableKind,
     type MutatorId,
     type RouteNodeType,
-    type BoardState,
     type TileTraitKind,
     type Tile
 } from './contracts';
@@ -16,8 +15,11 @@ import { getShopGoldRewardForFloor, SHOP_ITEM_CATALOG } from './shop-rules';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { RELIC_DRAFT, RELIC_POOL, type RelicDraftRarity } from './relics';
 import {
-    getBoardTraitInteractionPreviewLines,
-    getTileTraitInteractionPreviewLines
+    countTraitComboOpportunityPairs,
+    countTraitInteractionLines,
+    hasTraitBoardPowerInteractionOpportunity,
+    hasTraitRewardInteractionFloor,
+    hasTraitSwapSetupOpportunity
 } from './tile-trait-rules';
 
 export interface BalanceSimulationInput {
@@ -333,73 +335,6 @@ const countTileTraitKinds = (tiles: readonly Tile[]): Record<TileTraitKind, numb
     return counts;
 };
 
-const countTraitComboOpportunityPairs = (board: BoardState): number => {
-    const seenPairs = new Set<string>();
-    for (const tile of board.tiles) {
-        if (!tile.tileTraitKind || seenPairs.has(tile.pairKey)) {
-            continue;
-        }
-        const previewLines = [
-            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
-            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
-        ];
-        if (previewLines.length > 0) {
-            seenPairs.add(tile.pairKey);
-        }
-    }
-    return seenPairs.size;
-};
-
-const hasTraitSwapSetupOpportunity = (board: BoardState): number => {
-    const hiddenTiles = board.tiles.filter((tile) => tile.state === 'hidden');
-    const beforeMatchLines = new Set(getBoardTraitInteractionPreviewLines(board, 'match'));
-    for (let i = 0; i < hiddenTiles.length; i += 1) {
-        for (let j = i + 1; j < hiddenTiles.length; j += 1) {
-            const first = hiddenTiles[i]!;
-            const second = hiddenTiles[j]!;
-            const firstIndex = board.tiles.findIndex((tile) => tile.id === first.id);
-            const secondIndex = board.tiles.findIndex((tile) => tile.id === second.id);
-            if (firstIndex < 0 || secondIndex < 0) {
-                continue;
-            }
-            const tiles = [...board.tiles];
-            tiles[firstIndex] = second;
-            tiles[secondIndex] = first;
-            const afterMatchLines = getBoardTraitInteractionPreviewLines({ ...board, tiles }, 'match');
-            if (afterMatchLines.some((line) => !beforeMatchLines.has(line))) {
-                return 1;
-            }
-        }
-    }
-    return 0;
-};
-
-const countTraitInteractionLines = (board: BoardState): number =>
-    getBoardTraitInteractionPreviewLines(board).length;
-
-const hasTraitRewardPickupFloor = (board: BoardState): number => {
-    for (const line of getBoardTraitInteractionPreviewLines(board, 'match')) {
-        if (
-            line.includes('combo shard') ||
-            line.includes('guard') ||
-            line.includes('peek') ||
-            line.includes('charge') ||
-            line.includes('score') ||
-            line.includes('gold') ||
-            line.includes('Favor')
-        ) {
-            return 1;
-        }
-    }
-    return 0;
-};
-
-const hasTraitBoardPowerInteractionOpportunity = (board: BoardState, traitSwapSetupOpportunities: number): number =>
-    traitSwapSetupOpportunities > 0 ||
-    board.tiles.some((tile) => tile.tileTraitKind === 'drift' || tile.tileTraitKind === 'stasis')
-        ? 1
-        : 0;
-
 const sumFindableKindCounts = (
     counts: readonly Record<FindableKind, number>[]
 ): Record<FindableKind, number> =>
@@ -579,13 +514,15 @@ export const runBalanceSimulation = ({
             const tileTraitPairs = Object.values(tileTraitKindCounts).reduce((sum, count) => sum + count, 0);
             const traitComboOpportunityPairs = countTraitComboOpportunityPairs(board);
             const traitMatchRouteFloors = traitComboOpportunityPairs > 0 ? 1 : 0;
-            const traitSwapSetupOpportunities = hasTraitSwapSetupOpportunity(board);
+            const traitSwapSetupOpportunities = hasTraitSwapSetupOpportunity(board) ? 1 : 0;
             const traitInteractionLines = countTraitInteractionLines(board);
-            const traitRewardPickupFloors = hasTraitRewardPickupFloor(board);
+            const traitRewardPickupFloors = hasTraitRewardInteractionFloor(board) ? 1 : 0;
             const traitBoardPowerInteractionOpportunities = hasTraitBoardPowerInteractionOpportunity(
                 board,
-                traitSwapSetupOpportunities
-            );
+                traitSwapSetupOpportunities > 0
+            )
+                ? 1
+                : 0;
             const deadTraitFloors = tileTraitPairs > 0 && traitInteractionLines === 0 ? 1 : 0;
             const shopGoldInflowPotential =
                 getShopGoldRewardForFloor(floor) +

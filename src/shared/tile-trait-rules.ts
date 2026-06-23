@@ -304,6 +304,61 @@ export const getBoardTraitInteractionPreviewLines = (
     return [...lines];
 };
 
+export const countTraitComboOpportunityPairs = (board: BoardState): number => {
+    const seenPairs = new Set<string>();
+    for (const tile of board.tiles) {
+        if (!tile.tileTraitKind || seenPairs.has(tile.pairKey)) {
+            continue;
+        }
+        const previewLines = [
+            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
+            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
+        ];
+        if (previewLines.length > 0) {
+            seenPairs.add(tile.pairKey);
+        }
+    }
+    return seenPairs.size;
+};
+
+export const hasTraitSwapSetupOpportunity = (board: BoardState): boolean => {
+    const hiddenTiles = board.tiles.filter((tile) => tile.state === 'hidden');
+    const beforeMatchLines = new Set(getBoardTraitInteractionPreviewLines(board, 'match'));
+    for (let i = 0; i < hiddenTiles.length; i += 1) {
+        for (let j = i + 1; j < hiddenTiles.length; j += 1) {
+            const first = hiddenTiles[i]!;
+            const second = hiddenTiles[j]!;
+            const swapped = createBoardWithSwappedTiles(board, first.id, second.id);
+            if (!swapped) {
+                continue;
+            }
+            const afterMatchLines = getBoardTraitInteractionPreviewLines(swapped, 'match');
+            if (afterMatchLines.some((line) => !beforeMatchLines.has(line))) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+
+export const countTraitInteractionLines = (board: BoardState): number =>
+    getBoardTraitInteractionPreviewLines(board).length;
+
+export const hasTraitRewardInteractionFloor = (board: BoardState): boolean =>
+    getBoardTraitInteractionPreviewLines(board, 'match').some(
+        (line) =>
+            line.includes('combo shard') ||
+            line.includes('guard') ||
+            line.includes('peek') ||
+            line.includes('charge') ||
+            line.includes('score') ||
+            line.includes('gold') ||
+            line.includes('Favor')
+    );
+
+export const hasTraitBoardPowerInteractionOpportunity = (board: BoardState, hasSwapSetup: boolean): boolean =>
+    hasSwapSetup || board.tiles.some((tile) => tile.tileTraitKind === 'drift' || tile.tileTraitKind === 'stasis');
+
 const createEmptyTraitEffectResult = (): TileTraitEffectResult => ({
     comboShardGain: 0,
     guardTokenGain: 0,

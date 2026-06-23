@@ -4,10 +4,20 @@
  */
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from '../src/shared/contracts';
+import {
+    FINDABLE_KIND_SPAWN_WEIGHTS,
+    GAME_RULES_VERSION,
+    type FindableKind
+} from '../src/shared/contracts';
 import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
-import { getBoardTraitInteractionPreviewLines } from '../src/shared/tile-trait-rules';
+import {
+    countTraitComboOpportunityPairs,
+    getBoardTraitInteractionPreviewLines,
+    hasTraitBoardPowerInteractionOpportunity,
+    hasTraitRewardInteractionFloor,
+    hasTraitSwapSetupOpportunity
+} from '../src/shared/tile-trait-rules';
 
 const numArg = (argv: readonly string[], name: string, def: number): number => {
     const raw = argv.find((a) => a.startsWith(`--${name}=`))?.split('=')[1];
@@ -30,9 +40,13 @@ export interface EndlessSimulationHealthReport {
         findableTotal: number;
         objectiveKinds: number;
         rewardKinds: number;
+        traitBoardPowerInteractionFloorShare: number;
+        traitMatchRouteFloorShare: number;
         routeKinds: number;
         traitFloorShare: number;
         traitInteractionLines: number;
+        traitRewardFloorShare: number;
+        traitSwapSetupFloorShare: number;
     };
 }
 
@@ -63,6 +77,10 @@ export const buildEndlessSimulationCsv = ({
     const traitMetricCounts: Record<string, number> = {
         traitFloors: 0,
         traitInteractionLines: 0,
+        traitMatchRouteFloors: 0,
+        traitSwapSetupFloors: 0,
+        traitRewardFloors: 0,
+        traitBoardPowerInteractionFloors: 0,
         deadTraitFloors: 0
     };
     const findableKindCounts = emptyFindableKindCounts();
@@ -115,9 +133,17 @@ export const buildEndlessSimulationCsv = ({
             dungeonCardKindCounts[tile.dungeonCardKind] = (dungeonCardKindCounts[tile.dungeonCardKind] ?? 0) + 1;
         }
         const traitInteractionLines = getBoardTraitInteractionPreviewLines(board).length;
+        const traitComboOpportunityPairs = countTraitComboOpportunityPairs(board);
+        const hasSwapSetup = hasTraitSwapSetupOpportunity(board);
         if (traitPairKeys.size > 0) {
             traitMetricCounts.traitFloors += 1;
             traitMetricCounts.traitInteractionLines += traitInteractionLines;
+            traitMetricCounts.traitMatchRouteFloors += traitComboOpportunityPairs > 0 ? 1 : 0;
+            traitMetricCounts.traitSwapSetupFloors += hasSwapSetup ? 1 : 0;
+            traitMetricCounts.traitRewardFloors += hasTraitRewardInteractionFloor(board) ? 1 : 0;
+            traitMetricCounts.traitBoardPowerInteractionFloors += hasTraitBoardPowerInteractionOpportunity(board, hasSwapSetup)
+                ? 1
+                : 0;
             if (traitInteractionLines === 0) {
                 traitMetricCounts.deadTraitFloors += 1;
             }
@@ -187,6 +213,7 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
     const traitFloors = counts.traitMetric?.traitFloors ?? 0;
     const deadTraitFloors = counts.traitMetric?.deadTraitFloors ?? 0;
     const traitInteractionLines = counts.traitMetric?.traitInteractionLines ?? 0;
+    const traitDenominator = Math.max(1, traitFloors);
     return {
         deadTraitFloors,
         exitlessFloors: counts.dungeonExitCount?.['0'] ?? 0,
@@ -194,9 +221,14 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
         findableTotal,
         objectiveKinds,
         rewardKinds,
+        traitBoardPowerInteractionFloorShare:
+            (counts.traitMetric?.traitBoardPowerInteractionFloors ?? 0) / traitDenominator,
+        traitMatchRouteFloorShare: (counts.traitMetric?.traitMatchRouteFloors ?? 0) / traitDenominator,
         routeKinds,
         traitFloorShare: traitFloors / floors,
-        traitInteractionLines
+        traitInteractionLines,
+        traitRewardFloorShare: (counts.traitMetric?.traitRewardFloors ?? 0) / traitDenominator,
+        traitSwapSetupFloorShare: (counts.traitMetric?.traitSwapSetupFloors ?? 0) / traitDenominator
     };
 };
 
@@ -219,6 +251,18 @@ export const evaluateEndlessSimulationHealth = (
             : null,
         metrics.traitFloorShare < 0.8
             ? `Expected trait floors on at least 80.0% of floors, saw ${(metrics.traitFloorShare * 100).toFixed(1)}%.`
+            : null,
+        metrics.traitMatchRouteFloorShare < 0.95
+            ? `Expected match-triggerable trait routes on at least 95.0% of trait floors, saw ${(metrics.traitMatchRouteFloorShare * 100).toFixed(1)}%.`
+            : null,
+        metrics.traitRewardFloorShare < 0.8
+            ? `Expected reward-producing trait interactions on at least 80.0% of trait floors, saw ${(metrics.traitRewardFloorShare * 100).toFixed(1)}%.`
+            : null,
+        metrics.traitBoardPowerInteractionFloorShare < 0.7
+            ? `Expected board-power trait interactions on at least 70.0% of trait floors, saw ${(metrics.traitBoardPowerInteractionFloorShare * 100).toFixed(1)}%.`
+            : null,
+        metrics.traitSwapSetupFloorShare < 0.1
+            ? `Expected one-swap trait setup opportunities on at least 10.0% of trait floors, saw ${(metrics.traitSwapSetupFloorShare * 100).toFixed(1)}%.`
             : null,
         metrics.deadTraitFloors > 0 ? `Expected 0 dead trait floors, saw ${metrics.deadTraitFloors}.` : null,
         metrics.traitInteractionLines < safeFloors
@@ -249,6 +293,7 @@ export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput):
         `- Route gates: ${metrics.routeKinds} floor archetypes, ${metrics.objectiveKinds} objectives, ${metrics.exitLockTypes} exit lock types, ${metrics.exitlessFloors} exitless floors.`,
         `- Reward gates: ${metrics.findableTotal} findable rewards across ${metrics.rewardKinds} active reward kinds.`,
         `- Trait gates: ${Math.round(metrics.traitFloorShare * floors)} trait floors (${pct(metrics.traitFloorShare * floors)}), ${metrics.traitInteractionLines} interaction lines, ${metrics.deadTraitFloors} dead trait floors.`,
+        `- Trait mechanic gates: ${(metrics.traitMatchRouteFloorShare * 100).toFixed(1)}% match-route floors, ${(metrics.traitRewardFloorShare * 100).toFixed(1)}% reward floors, ${(metrics.traitBoardPowerInteractionFloorShare * 100).toFixed(1)}% board-power floors, ${(metrics.traitSwapSetupFloorShare * 100).toFixed(1)}% one-swap setup floors.`,
         ''
     ].join('\n');
 };
