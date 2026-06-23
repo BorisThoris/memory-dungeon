@@ -3,12 +3,16 @@ import { dismissStartupIntro } from './startupIntroHelpers';
 import {
     clickCanvasTile,
     defaultE2eGameSaveJson,
-    navigateToLevel1PlayPhase,
     readFrameHiddenTileCount,
     STORAGE_KEY,
     waitForBoardPlayPhase
 } from './tileBoardGameFlow';
-import { completeLevel1Play, startClassicRunFromModeSelect } from './visualScreenHelpers';
+import {
+    completeLevel1Play,
+    openLevel1Play,
+    startClassicRunFromModeSelect,
+    waitLevel1PlayReady
+} from './visualScreenHelpers';
 
 async function readBoardViewport(page: Page): Promise<{ panX: number; panY: number; zoom: number }> {
     return page.getByTestId('tile-board-frame').evaluate((element) => ({
@@ -164,7 +168,8 @@ test.describe('Tile board interaction', () => {
     test('continuing to the next level preserves the chosen zoom framing', async ({ page }) => {
         test.setTimeout(180_000);
         await page.setViewportSize({ width: 1440, height: 900 });
-        await navigateToLevel1PlayPhase(page);
+        await openLevel1Play(page);
+        const pairs = await waitLevel1PlayReady(page);
 
         const stageShell = page.getByTestId('tile-board-stage-shell');
         await expect(stageShell).toBeVisible();
@@ -189,7 +194,7 @@ test.describe('Tile board interaction', () => {
             })
             .toBe('false');
 
-        await completeLevel1Play(page, null);
+        await completeLevel1Play(page, pairs);
         await page.getByRole('dialog', { name: /floor cleared/i }).getByRole('button', { name: /^continue/i }).click();
 
         await expect(page.getByRole('heading', { name: /level 2/i })).toBeVisible({ timeout: 15000 });

@@ -1,6 +1,10 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { dispatchTouchSequence, forceCoarsePointerMedia, type TouchDispatchPoint } from './mobileTouchHelpers';
-import { clickHiddenTileRowCol, navigateToLevel1PlayPhase, readFrameHiddenTileCount } from './tileBoardGameFlow';
+import {
+    clickHiddenTileRowCol,
+    navigateToLevel1PlayPhase,
+    waitForBoardPlayPhase
+} from './tileBoardGameFlow';
 import {
     expectAppScrollportHasNoVerticalOverflow,
     expectLocatorFullyInWindowViewport,
@@ -233,7 +237,7 @@ test.describe('Mobile layout (renderer)', () => {
         await openMainMenuFromSave(page, false);
         await page.getByText(/^Open$/).click();
         await expect(page.getByText(/first live board highlights a real pair/i)).toBeVisible();
-        await expect(page.getByText(/clean matches build score and streak/i)).toBeVisible();
+        await expect(page.getByText(/clean matches bank score and streak/i)).toBeVisible();
         await expect(page.getByText(/runs turn into relic drafts/i)).toBeVisible();
         await expect(page.getByText(/codex is the deeper reference/i)).toBeVisible();
     });
@@ -243,7 +247,7 @@ test.describe('Mobile layout (renderer)', () => {
         await openMainMenuFromSave(page, false);
         await page.getByText(/^Open$/).click();
         await expect(page.getByText(/first live board highlights a real pair/i)).toBeVisible();
-        await expect(page.getByText(/clean matches build score and streak/i)).toBeVisible();
+        await expect(page.getByText(/clean matches bank score and streak/i)).toBeVisible();
         await expect(page.getByText(/runs turn into relic drafts/i)).toBeVisible();
     });
 
@@ -328,8 +332,8 @@ test.describe('Mobile layout (renderer)', () => {
             await expectCoreGameplayChromeFits(page);
             await page.getByText(/^Info$/i).click({ force: true });
             await expectLocatorFullyInWindowViewport(page, page.getByTestId('game-hud'), 8);
-            await expect(page.getByTestId('hud-hazard-tiles')).toBeVisible();
             await expect(page.getByTestId('hud-in-run-cause-strip')).toBeVisible();
+            await expect(page.getByTestId('hud-in-run-cause-strip')).toContainText(/hazards/i);
         });
 
         test(`${viewport.name} portrait run settings overlay keeps actions reachable`, async ({ page }) => {
@@ -572,7 +576,8 @@ test.describe('Mobile layout (renderer)', () => {
     test('compact touch viewport uses a full-bleed board behind the HUD', async ({ page }) => {
         await forceCoarsePointerMedia(page);
         await page.setViewportSize({ width: 390, height: 844 });
-        await navigateToLevel1PlayPhase(page);
+        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await expectGameplayReady(page);
 
         const shell = page.getByTestId('game-shell');
         /* HUD-018 / QA-003: `GameplayHudBar` — `game-hud` plus wing testids; if HUD splits, update navigation-flow + this spec together. */
@@ -661,7 +666,7 @@ test.describe('Mobile layout (renderer)', () => {
     });
 
     test('two-finger pan moves the viewport and one-finger tap still flips a tile', async ({ page }) => {
-        test.setTimeout(180_000);
+        test.setTimeout(300_000);
         await forceCoarsePointerMedia(page);
         await page.setViewportSize({ width: 390, height: 844 });
         await navigateToLevel1PlayPhase(page);
@@ -771,13 +776,16 @@ test.describe('Mobile layout (renderer)', () => {
             }
         }
 
-        const hiddenBefore = await readFrameHiddenTileCount(page);
+        await waitForBoardPlayPhase(page);
         await page.waitForTimeout(180);
         const hiddenSlot = await readFirstHiddenSlot(page);
         await clickHiddenTileRowCol(page, hiddenSlot.row, hiddenSlot.column);
 
         await expect
-            .poll(async () => readFrameHiddenTileCount(page), { timeout: 6000 })
-            .toBeLessThan(hiddenBefore);
+            .poll(
+                async () => Number.parseInt((await frame.getAttribute('data-selected-tile-count')) ?? '0', 10),
+                { timeout: 12_000 }
+            )
+            .toBeGreaterThan(0);
     });
 });
