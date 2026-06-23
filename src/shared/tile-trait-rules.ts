@@ -322,17 +322,21 @@ export const countTraitComboOpportunityPairs = (board: BoardState): number => {
 };
 
 export const hasTraitSwapSetupOpportunity = (board: BoardState): boolean => {
-    const hiddenTiles = board.tiles.filter((tile) => tile.state === 'hidden');
+    const hiddenTiles = board.tiles
+        .map((tile, index) => ({ index, tile }))
+        .filter(({ tile }) => tile.state === 'hidden');
     const beforeMatchLines = new Set(getBoardTraitInteractionPreviewLines(board, 'match'));
     for (let i = 0; i < hiddenTiles.length; i += 1) {
         for (let j = i + 1; j < hiddenTiles.length; j += 1) {
             const first = hiddenTiles[i]!;
             const second = hiddenTiles[j]!;
-            const swapped = createBoardWithSwappedTiles(board, first.id, second.id);
-            if (!swapped) {
+            if (!first.tile.tileTraitKind && !second.tile.tileTraitKind) {
                 continue;
             }
-            const afterMatchLines = getBoardTraitInteractionPreviewLines(swapped, 'match');
+            const tiles = [...board.tiles];
+            tiles[first.index] = second.tile;
+            tiles[second.index] = first.tile;
+            const afterMatchLines = getBoardTraitInteractionPreviewLines({ ...board, tiles }, 'match');
             if (afterMatchLines.some((line) => !beforeMatchLines.has(line))) {
                 return true;
             }
