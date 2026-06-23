@@ -1,6 +1,7 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type MutableRefObject, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppStore } from '../store/useAppStore';
+import { PlatformTiltContext, type PlatformTiltContextValue } from './PlatformTiltContext';
 import {
     dampTilt,
     degreeTiltToProcessed,
@@ -12,24 +13,6 @@ import type { MotionPermissionState, TiltVector } from './platformTiltTypes';
 import { useParallaxMotionSuppressed } from './useParallaxMotionSuppressed';
 
 const GYRO_DAMP = 14;
-
-interface PlatformTiltContextValue {
-    gyroTiltRef: MutableRefObject<TiltVector>;
-    permission: MotionPermissionState;
-    requestMotionPermission: () => Promise<void>;
-}
-
-const PlatformTiltContext = createContext<PlatformTiltContextValue | null>(null);
-
-export const usePlatformTiltContext = (): PlatformTiltContextValue => {
-    const ctx = useContext(PlatformTiltContext);
-
-    if (!ctx) {
-        throw new Error('usePlatformTiltContext must be used within PlatformTiltProvider');
-    }
-
-    return ctx;
-};
 
 const getScreenAngleDeg = (): number => {
     if (typeof window === 'undefined') {

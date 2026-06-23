@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, type MutableRefObject, type RefObject } from 'react';
 import { applyDeadzoneTilt, dampTilt, zeroTilt } from './platformTiltMotion';
-import { usePlatformTiltContext } from './PlatformTiltProvider';
+import { usePlatformTiltContext } from './PlatformTiltContext';
 import type { MotionPermissionState, TiltSource, TiltVector } from './platformTiltTypes';
 import { useParallaxMotionSuppressed } from './useParallaxMotionSuppressed';
 
