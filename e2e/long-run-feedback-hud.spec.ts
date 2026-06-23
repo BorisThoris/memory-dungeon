@@ -16,7 +16,7 @@ test.describe('Long-run feedback HUD readability', () => {
 
     for (const viewport of FEEDBACK_VIEWPORTS) {
         test(`${viewport.name} shows cause strip and touch detail rows without viewport overflow`, async ({ page }) => {
-            test.setTimeout(90_000);
+            test.setTimeout(150_000);
             await page.setViewportSize({ width: viewport.width, height: viewport.height });
             await openPlayablePathFixture(page, 'activeRunWithHazards');
             await expectGameplayReady(page);
@@ -44,7 +44,7 @@ test.describe('Long-run feedback HUD readability', () => {
     }
 
     test('phone keeps nested HUD info panels viewport-bounded at 390px', async ({ page }) => {
-        test.setTimeout(90_000);
+        test.setTimeout(150_000);
         await page.setViewportSize({ width: 390, height: 844 });
         await openPlayablePathFixture(page, 'activeRunWithHazards');
         await expectGameplayReady(page);

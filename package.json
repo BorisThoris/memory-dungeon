@@ -76,6 +76,7 @@
         "test:e2e:playable-path:audit": "playwright test e2e/playable-path-navigation.spec.ts --workers=1",
         "test:e2e:playable-path:readability": "playwright test e2e/gameplay-readability.spec.ts --workers=1",
         "test:e2e:board-3d-value": "playwright test e2e/dungeon-board-3d-value.spec.ts --workers=1",
+        "test:e2e:browser-smoke": "yarn test:e2e:demo-readiness && yarn test:e2e:playable-path:full && yarn test:e2e:board-3d-value && playwright test e2e/long-run-feedback-hud.spec.ts --workers=1",
         "test:e2e:playable-path:full": "playwright test e2e/playable-path-navigation.spec.ts e2e/playable-path-mode-matrix.spec.ts e2e/playable-path-interludes.spec.ts e2e/gameplay-readability.spec.ts --workers=1",
         "test:e2e:renderer-qa": "yarn test:e2e:renderer-qa:full",
         "test:e2e:renderer-qa:full": "playwright test e2e/mobile-layout.spec.ts e2e/navigation-flow.spec.ts e2e/playable-path-navigation.spec.ts e2e/playable-path-mode-matrix.spec.ts e2e/playable-path-interludes.spec.ts e2e/gameplay-readability.spec.ts e2e/dungeon-board-3d-value.spec.ts e2e/long-run-feedback-hud.spec.ts e2e/scholar-contract.spec.ts e2e/wild-run.spec.ts e2e/tile-card-face-dom.spec.ts e2e/tile-card-face-webgl.spec.ts e2e/tile-board-raycast.spec.ts --workers=1",

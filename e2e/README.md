@@ -17,13 +17,14 @@ Use the named package scripts from the repo root so local and CI runs share the 
 - `yarn test:e2e:playable-path:audit` runs the fast playable-path navigation audit. Use it for quick local checks and light PR coverage when a change could affect menu, mode shell, in-run pause/settings, floor-clear navigation, or compact classic-start flow.
 - `yarn test:e2e:playable-path:readability` runs the focused gameplay HUD/board/action-dock bounds suite across phone, short landscape, tablet, and desktop viewports.
 - `yarn test:e2e:playable-path:full` runs the full playable-path sweep: navigation, mode matrix, interlude/post-run coverage, and gameplay readability. Use it before merging changes that affect mode starts, floor-clear decisions, shop/route/side-room interludes, game-over actions, first-run onboarding, or active gameplay layout.
+- `yarn test:e2e:browser-smoke` runs the release-smoke browser path: clean demo startup on desktop/mobile, full playable-path sweep, 3D board nonblank/bounds smoke, and long-run HUD readability. Use it when local server contention is low and a change needs live renderer proof without the full renderer QA surface.
 - `yarn test:e2e:renderer-qa` remains the curated full renderer QA entry point for CI and release-candidate checks. It currently aliases `yarn test:e2e:renderer-qa:full`, which includes the full playable-path sweep plus the renderer layout, navigation, long-run feedback HUD, scholar, wild-run, tile face, and raycast contracts.
 - Renderer layout coverage includes the 844x390 short-height settings page and run-settings modal path; keep that viewport in `e2e/mobile-layout.spec.ts` when changing settings chrome.
 
 CI guidance:
 
 - For fast PR feedback, run `yarn test:e2e:playable-path:audit` alongside type/lint/unit checks when the touched area is renderer navigation or gameplay shell behavior.
-- For renderer-gated PRs and pre-release verification, run `yarn test:e2e:renderer-qa`; existing jobs using this command do not need to change.
+- For renderer-gated PRs and pre-release verification, run `yarn test:e2e:browser-smoke` for a live gameplay smoke and `yarn test:e2e:renderer-qa` for the complete renderer contract surface; existing jobs using `renderer-qa` do not need to change.
 - Keep visual captures on their dedicated visual scripts instead of folding them into renderer QA.
 
 Known PPI-010 note: playable-path specs carry one retry at the describe level to absorb current animation/first-floor timing variance; treat repeated retry passes as a signal to inspect the attached trace/video. Route, shop, side-room, relic draft, game over, fresh-profile, and active-run readability paths now use deterministic dev fixtures where appropriate.
