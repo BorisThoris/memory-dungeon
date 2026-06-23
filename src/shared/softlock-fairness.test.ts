@@ -527,7 +527,29 @@ describe('REG-087 board fairness inspection', () => {
         });
         expect(issueCodes(missingRef)).toContain('enemy_hazard_tile_reference_missing');
 
-        const clearedRef = boardFromTiles([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched')], {
+        const clearedRef = boardFromTiles(
+            [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), tile('b1', 'b'), tile('b2', 'b')],
+            {
+                matchedPairs: 1,
+                enemyHazards: [
+                    {
+                        id: 'hazard-2',
+                        kind: 'sentinel',
+                        label: 'Sentinel',
+                        currentTileId: 'a1',
+                        nextTileId: 'b1',
+                        pattern: 'patrol',
+                        state: 'revealed',
+                        damage: 1,
+                        hp: 1,
+                        maxHp: 1
+                    }
+                ]
+            }
+        );
+        expect(issueCodes(clearedRef)).toContain('enemy_hazard_on_cleared_tile');
+
+        const clearedFloorOverlay = boardFromTiles([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched')], {
             matchedPairs: 1,
             enemyHazards: [
                 {
@@ -544,7 +566,7 @@ describe('REG-087 board fairness inspection', () => {
                 }
             ]
         });
-        expect(issueCodes(clearedRef)).toContain('enemy_hazard_on_cleared_tile');
+        expect(issueCodes(clearedFloorOverlay)).not.toContain('enemy_hazard_on_cleared_tile');
     });
 
     it('defeats normal enemy hazards occupying the last unmatched pair before the flip resolves', () => {

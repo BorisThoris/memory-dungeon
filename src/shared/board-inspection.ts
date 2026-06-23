@@ -5,6 +5,7 @@ import type {
     RunStatus,
     Tile
 } from './contracts';
+import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { isSprungTrapTile } from './tile-state-rules';
 import {
     DECOY_PAIR_KEY,
@@ -420,10 +421,8 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
     }
 
     const tileById = new Map(board.tiles.map((tile) => [tile.id, tile]));
-    for (const hazard of board.enemyHazards ?? []) {
-        if (hazard.state === 'defeated') {
-            continue;
-        }
+    const activeEnemyHazards = activeEnemyHazardsForBoard(board);
+    for (const hazard of activeEnemyHazards) {
         for (const tileId of [hazard.currentTileId, hazard.nextTileId]) {
             const tile = tileById.get(tileId);
             if (!tile) {
@@ -448,7 +447,7 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
         const hasBossRoute =
             board.dungeonBossId != null ||
             board.tiles.some((tile) => !tileIsClearedForFairness(tile) && tile.dungeonBossId != null) ||
-            (board.enemyHazards ?? []).some((hazard) => hazard.bossId != null && hazard.state !== 'defeated');
+            activeEnemyHazards.some((hazard) => hazard.bossId != null);
         if (!hasBossRoute) {
             structurallyClearable = false;
             issues.push({
