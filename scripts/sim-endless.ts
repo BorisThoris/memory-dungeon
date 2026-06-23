@@ -36,6 +36,8 @@ export interface EndlessSimulationHealthReport {
     };
 }
 
+type EndlessSimulationHealthMetrics = EndlessSimulationHealthReport['metrics'];
+
 const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     shard_spark: 0,
     score_glint: 0,
@@ -173,7 +175,7 @@ const parseCsvCounts = (csv: string): Record<string, Record<string, number>> => 
 const sumCounts = (counts: Record<string, number> | undefined): number =>
     Object.values(counts ?? {}).reduce((sum, value) => sum + value, 0);
 
-const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): EndlessSimulationHealthReport['metrics'] => {
+const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): EndlessSimulationHealthMetrics => {
     const csv = buildEndlessSimulationCsv(input);
     const counts = parseCsvCounts(csv);
     const floors = Math.max(1, Math.floor(input.floors));
@@ -198,10 +200,12 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
     };
 };
 
-export const analyzeEndlessSimulationHealth = (input: EndlessSimulationCsvInput): EndlessSimulationHealthReport => {
-    const metrics = readEndlessSimulationMetrics(input);
-    const floors = Math.max(1, Math.floor(input.floors));
-    const expectedRewardKinds = Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length;
+export const evaluateEndlessSimulationHealth = (
+    metrics: EndlessSimulationHealthMetrics,
+    floors: number,
+    expectedRewardKinds = Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length
+): EndlessSimulationHealthReport => {
+    const safeFloors = Math.max(1, Math.floor(floors));
     const issues = [
         metrics.routeKinds < 8 ? `Expected at least 8 floor archetypes, saw ${metrics.routeKinds}.` : null,
         metrics.objectiveKinds < 4 ? `Expected at least 4 dungeon objectives, saw ${metrics.objectiveKinds}.` : null,
@@ -210,19 +214,25 @@ export const analyzeEndlessSimulationHealth = (input: EndlessSimulationCsvInput)
         metrics.rewardKinds < expectedRewardKinds
             ? `Expected all ${expectedRewardKinds} findable reward kinds, saw ${metrics.rewardKinds}.`
             : null,
-        metrics.findableTotal < Math.floor(floors * 0.5)
-            ? `Expected at least one findable reward per two floors, saw ${metrics.findableTotal} across ${floors} floors.`
+        metrics.findableTotal < Math.floor(safeFloors * 0.5)
+            ? `Expected at least one findable reward per two floors, saw ${metrics.findableTotal} across ${safeFloors} floors.`
             : null,
         metrics.traitFloorShare < 0.8
             ? `Expected trait floors on at least 80.0% of floors, saw ${(metrics.traitFloorShare * 100).toFixed(1)}%.`
             : null,
         metrics.deadTraitFloors > 0 ? `Expected 0 dead trait floors, saw ${metrics.deadTraitFloors}.` : null,
-        metrics.traitInteractionLines < floors
-            ? `Expected at least ${floors} trait interaction preview lines, saw ${metrics.traitInteractionLines}.`
+        metrics.traitInteractionLines < safeFloors
+            ? `Expected at least ${safeFloors} trait interaction preview lines, saw ${metrics.traitInteractionLines}.`
             : null
     ].filter((issue): issue is string => issue != null);
 
     return { ok: issues.length === 0, issues, metrics };
+};
+
+export const analyzeEndlessSimulationHealth = (input: EndlessSimulationCsvInput): EndlessSimulationHealthReport => {
+    const metrics = readEndlessSimulationMetrics(input);
+    const floors = Math.max(1, Math.floor(input.floors));
+    return evaluateEndlessSimulationHealth(metrics, floors);
 };
 
 export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string => {

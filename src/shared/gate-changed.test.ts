@@ -28,10 +28,25 @@ describe('gate:changed selector', () => {
         );
 
         expect(payload.gates.map((gate) => gate.id)).toEqual(
-            expect.arrayContaining(['actionLoop', 'rewardsEconomy', 'navigation', 'systems'])
+            expect.arrayContaining(['actionLoop', 'rewardsEconomy', 'navigation', 'systems', 'simHealth'])
         );
         expect(payload.gates.find((gate) => gate.id === 'actionLoop')?.command).toBe('yarn gate:action-loop');
+        expect(payload.gates.find((gate) => gate.id === 'simHealth')?.command).toBe('yarn gate:sim-health');
         expect(payload.reasons.some((reason) => reason.file === 'docs/system-diagrams/actions.json')).toBe(true);
+    });
+
+    it('selects sim health for endless schedule, generation, trait, reward, and contract changes', () => {
+        const payload = runGateChanged(
+            'scripts/sim-endless.ts',
+            'src/shared/floor-mutator-schedule.ts',
+            'src/shared/board-generation.ts',
+            'src/shared/bonus-rewards.ts',
+            'src/shared/contracts.ts'
+        );
+
+        expect(payload.gates.map((gate) => gate.id)).toContain('simHealth');
+        expect(payload.gates.map((gate) => gate.id)).toContain('systems');
+        expect(payload.reasons.filter((reason) => reason.gateId === 'simHealth')).toHaveLength(5);
     });
 
     it('selects renderer, audio, asset, and persistence focused gates', () => {

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
     analyzeEndlessSimulationHealth,
     buildEndlessSimulationCsv,
-    buildEndlessSimulationSummary
+    buildEndlessSimulationSummary,
+    evaluateEndlessSimulationHealth
 } from '../../scripts/sim-endless';
 import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from './contracts';
 
@@ -57,5 +58,32 @@ describe('sim-endless CSV output', () => {
         expect(health.metrics.routeKinds).toBeGreaterThanOrEqual(8);
         expect(health.metrics.objectiveKinds).toBeGreaterThanOrEqual(4);
         expect(health.metrics.traitFloorShare).toBeGreaterThanOrEqual(0.8);
+    });
+
+    it('reports actionable failures when endless health metrics regress', () => {
+        const health = evaluateEndlessSimulationHealth(
+            {
+                deadTraitFloors: 2,
+                exitlessFloors: 1,
+                exitLockTypes: 0,
+                findableTotal: 2,
+                objectiveKinds: 1,
+                rewardKinds: 1,
+                routeKinds: 2,
+                traitFloorShare: 0.25,
+                traitInteractionLines: 3
+            },
+            20,
+            Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length
+        );
+
+        expect(health.ok).toBe(false);
+        expect(health.issues).toEqual(
+            expect.arrayContaining([
+                'Expected at least 8 floor archetypes, saw 2.',
+                'Expected every sampled floor to have an exit, saw 1 exitless floors.',
+                'Expected 0 dead trait floors, saw 2.'
+            ])
+        );
     });
 });

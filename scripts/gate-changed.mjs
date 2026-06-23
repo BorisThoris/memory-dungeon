@@ -6,6 +6,7 @@ const GATES = {
     rewardsEconomy: 'yarn gate:rewards-economy',
     navigation: 'yarn gate:navigation',
     systems: 'yarn gate:systems',
+    simHealth: 'yarn gate:sim-health',
     rendererInput:
         'yarn vitest run src/renderer/components/tileBoardDomAccessibility.test.ts src/renderer/components/tileBoardPointerPick.test.ts src/renderer/components/tileBoardWebglBoundary.test.tsx src/renderer/store/useAppStore.test.ts',
     audioFeedback:
@@ -54,8 +55,28 @@ export const selectGatesForChangedPaths = (paths) => {
     };
 
     for (const file of normalized) {
-        if (file === 'package.json' || file.startsWith('scripts/system-diagrams') || file.startsWith('docs/system-diagrams/')) {
+        if (
+            file === 'package.json' ||
+            file === 'src/shared/contracts.ts' ||
+            file.startsWith('scripts/system-diagrams') ||
+            file.startsWith('scripts/gate-changed') ||
+            file.startsWith('docs/system-diagrams/')
+        ) {
             add('systems', file, 'system diagram, audit registry, or package gate metadata changed');
+        }
+        if (
+            file === 'scripts/sim-endless.ts' ||
+            file.startsWith('src/shared/floor-mutator-schedule') ||
+            file.startsWith('src/shared/board-generation') ||
+            file.startsWith('src/shared/board-build') ||
+            file.startsWith('src/shared/board-tile-generation-rules') ||
+            file.startsWith('src/shared/tile-trait') ||
+            file.startsWith('src/shared/bonus-rewards') ||
+            file.startsWith('src/shared/findables') ||
+            file.startsWith('src/shared/objective-rules') ||
+            file === 'src/shared/contracts.ts'
+        ) {
+            add('simHealth', file, 'endless route, reward, trait, objective, or generation health can change');
         }
         if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || file.startsWith('src/shared/game') || file.startsWith('src/shared/turn-resolution') || file.startsWith('src/shared/hazard') || file.startsWith('src/shared/enemy')) {
             add('actionLoop', file, 'core turn, trait, hazard, enemy, or board-power rules changed');
