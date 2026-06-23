@@ -3090,7 +3090,7 @@
     opacity: 0.32;
 }
 
-/* FX-015: extra DOM glow under the board when post-FX bloom is on + High quality (see PERFORMANCE_BUDGET.md). */
+/* FX-015: extra DOM glow under the board when board bloom is on + High quality (see PERFORMANCE_BUDGET.md). */
 .boardStageCssBloom .boardGlow {
     inset: 4% 7% 8%;
     opacity: 1;

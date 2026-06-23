@@ -653,6 +653,46 @@ describe('REG-087 board fairness inspection', () => {
         expect(cleaned.board ? isBoardComplete(cleaned.board) : false).toBe(true);
     });
 
+    it('defeats boss hazards parked on an exit after all matchable pairs are cleared', () => {
+        const exitTile: Tile = {
+            ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'none'
+        };
+        const board = boardFromTiles(
+            [tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), exitTile],
+            {
+                level: 7,
+                floorTag: 'boss',
+                dungeonObjectiveId: 'defeat_boss',
+                dungeonBossId: 'trap_warden',
+                dungeonExitTileId: 'exit',
+                matchedPairs: 1,
+                pairCount: 1,
+                enemyHazards: [
+                    enemyHazard({
+                        id: '7:boss:trap_warden',
+                        kind: 'warden',
+                        label: 'Latch Warden',
+                        currentTileId: 'exit',
+                        nextTileId: 'exit',
+                        bossId: 'trap_warden',
+                        hp: 1,
+                        maxHp: 3
+                    })
+                ]
+            }
+        );
+        const run: RunState = { ...playableRun(createNewRun(0, { runSeed: 87_505 })), board };
+
+        const cleaned = clearFinalPairEnemyHazardOccupationForRun(run);
+
+        expect(cleaned.board?.enemyHazards?.[0]).toMatchObject({ state: 'defeated', hp: 0 });
+        expect(cleaned.dungeonEnemiesDefeated).toBe(run.dungeonEnemiesDefeated + 1);
+        expect(cleaned.enemyHazardsDefeatedThisFloor).toBe((run.enemyHazardsDefeatedThisFloor ?? 0) + 1);
+        expect(issueCodes(cleaned.board!)).not.toContain('enemy_hazard_on_cleared_tile');
+    });
+
     it('keeps a trap final pair solvable when an enemy hazard occupies it', () => {
         const trapA: Tile = {
             ...tile('trap-a', 'trap'),

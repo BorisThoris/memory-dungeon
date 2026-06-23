@@ -315,12 +315,13 @@ export type BoardPresentationMode = 'standard' | 'spaghetti' | 'breathing';
 export type CameraViewportModePreference = 'auto' | 'always' | 'never';
 
 /**
- * WebGL board edge smoothing (PERF-002). `auto` preserves legacy: SMAA when motion is on, MSAA when Reduce Motion is on.
- * Override lets users decouple AA from the motion setting.
+ * WebGL board edge smoothing (PERF-002). `auto` keeps the old motion preference shape:
+ * native framebuffer AA unless Reduce Motion explicitly prefers MSAA. `smaa` is retained as
+ * a saved setting value, but currently resolves to native framebuffer AA because post-FX is disabled.
  */
 export type BoardScreenSpaceAA = 'auto' | 'smaa' | 'msaa' | 'off';
 
-/** PERF-001: bundled caps for board DPR, menu Pixi resolution, and optional bloom tier. */
+/** PERF-001: bundled caps for board DPR, menu Pixi resolution, and optional board glow tier. */
 export type GraphicsQualityPreset = 'low' | 'medium' | 'high';
 
 export interface Settings {
@@ -334,8 +335,8 @@ export interface Settings {
     graphicsQuality: GraphicsQualityPreset;
     boardScreenSpaceAA: BoardScreenSpaceAA;
     /**
-     * FX-015: optional tile-board **Bloom** post-pass (`TileBoardPostFx`); default off in save data.
-     * Ignored on `low` quality (PERF-001). On `high` with this on, `GameScreen` adds a light CSS rim under the board.
+     * FX-015: optional board-stage glow. Default off in save data. Ignored on `low` quality.
+     * On `high` with this on, `GameScreen` adds a light CSS rim under the board.
      */
     boardBloomEnabled: boolean;
     debugFlags: DebugFlags;

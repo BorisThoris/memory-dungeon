@@ -20,6 +20,15 @@
             "minimumEvidence": 4
         },
         {
+            "id": "gameplay-interaction-graph-gate",
+            "priority": "P0",
+            "system": "Gameplay Interaction Graph",
+            "title": "Keep cross-feature mechanics in the executable graph",
+            "status": "done",
+            "command": "yarn vitest run src/shared/gameplay-interaction-graph.test.ts",
+            "minimumEvidence": 5
+        },
+        {
             "id": "softlock-generation-matrix",
             "priority": "P0",
             "system": "Board Generation",

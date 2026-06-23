@@ -23,7 +23,6 @@ import { getMotionPermissionButtonLabels, shouldOfferDeviceMotionPermission } fr
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import styles from './TileBoard.module.css';
 import { playShuffleSfx, resumeAudioContext } from '../audio/gameSfx';
-import TileBoardPostFx from './TileBoardPostFx';
 import TileBoardScene, { type TileBoardSceneHandle, type TileHoverTiltState } from './TileBoardScene';
 import { getResolvingSelectionState } from './tileResolvingSelection';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY, DUNGEON_BOARD_STAGE_PERFORMANCE_BUDGET } from './tileBoardStageLayers';
@@ -97,7 +96,7 @@ interface TileBoardProps {
     pinnedTileIds?: string[];
     previewActive: boolean;
     reduceMotion: boolean;
-    /** When `auto`, matches legacy: SMAA when motion is on, MSAA when Reduce Motion is on. */
+    /** When `auto`, follows the legacy motion preference; `smaa` currently falls back to native AA. */
     boardScreenSpaceAA?: BoardScreenSpaceAA;
     graphicsQuality?: GraphicsQualityPreset;
     boardBloomEnabled?: boolean;
@@ -186,7 +185,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         reduceMotion,
         boardScreenSpaceAA = 'auto',
         graphicsQuality = 'medium',
-        boardBloomEnabled = false,
         viewportResetToken,
         frameStyle,
         dimmedTileIds,
@@ -678,7 +676,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     );
     const adaptive = resolveAdaptiveBoardRenderQuality({
         activeTileCount,
-        boardBloomEnabled: boardBloomEnabled ?? true,
         boardHeavyMotion: boardMotionAnimating,
         boardScreenSpaceAA: boardScreenSpaceAA ?? 'auto',
         compact,
@@ -687,10 +684,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     });
     /** Cap DPR for GPU cost (PERF-001 + internal adaptive motion tier). */
     const dpr = Math.min(deviceDpr, adaptive.dprCap);
-    const bloomEffective = adaptive.bloomPostEnabled;
     const resolvedBoardAa = adaptive.resolvedAa;
-    /** MSAA on the default framebuffer; off when using SMAA post-pass or AA off. */
-    const glAntialias = resolvedBoardAa === 'msaa';
+    /** Native framebuffer antialias; the legacy `smaa` setting falls back here now that post-FX is disabled. */
+    const glAntialias = resolvedBoardAa !== 'off';
     const boardWorldWidth = useMemo(
         () => (board.columns - 1) * TILE_SPACING + 1 + 2 * BOARD_LAYOUT_VIEWPORT_PADDING,
         [board.columns]
@@ -1523,11 +1519,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 <div className={styles.webglRequired} data-testid="tile-board-webgl-required">
                     This game requires WebGL. Enable hardware acceleration or update your browser, then reload.
                 </div>
-            ) : gpuSurfaceLost ? (
-                <div className={styles.webglSceneError} data-testid="tile-board-gpu-lost" role="alert">
-                    WebGL context was lost — the board will try to rebuild when the GPU restores it. If you still see
-                    this, reload the page or update GPU drivers.
-                </div>
             ) : (
                 <div
                     aria-label={DNG065_BOARD_APPLICATION_LABEL}
@@ -1547,6 +1538,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                         ref={stageRef}
                         style={{ touchAction: REG103_BOARD_TOUCH_ACTION }}
                     >
+                        {gpuSurfaceLost ? (
+                            <div className={styles.webglSceneError} data-testid="tile-board-gpu-lost" role="alert">
+                                WebGL context was lost. The board will rebuild when the GPU restores it. If this
+                                stays visible, reload the page or update GPU drivers.
+                            </div>
+                        ) : null}
                         {boardPreStage === 'loading' && baselineWebGl && !gpuSurfaceLost ? (
                             <div
                                 aria-hidden
@@ -1654,11 +1651,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         tileSwapEligibleTileIds={tileSwapEligibleTileIds}
                                         tileSwapFirstTileId={tileSwapFirstTileId}
                                         pinModeBoardHintActive={pinModeBoardHintActive}
-                                    />
-                                    <TileBoardPostFx
-                                        bloomEnabled={bloomEffective}
-                                        graphicsQuality={graphicsQuality}
-                                        smaaEnabled={resolvedBoardAa === 'smaa'}
                                     />
                                 </Canvas>
                             </div>

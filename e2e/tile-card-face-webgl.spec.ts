@@ -4,8 +4,10 @@ import {
     defaultE2eGameSaveJson,
     navigateToLevel1PlayPhase,
     clickHiddenTileRowCol,
-    readFrameHiddenTileCount
+    readFrameHiddenTileCount,
+    waitForBoardPlayPhase
 } from './tileBoardGameFlow';
+import { expectGameplayReady, openPlayablePathFixture } from './playablePathHelpers';
 
 /** Locator screenshots wait for layout stability; GL + camera layout can stay “unstable” — clip from the live box instead. */
 async function screenshotStageShellPng(page: Page, stageLocator: ReturnType<Page['getByTestId']>): Promise<Buffer> {
@@ -29,6 +31,28 @@ async function screenshotStageShellPng(page: Page, stageLocator: ReturnType<Page
 }
 
 test.describe('Tile card face (WebGL)', () => {
+    test('keeps the board mounted while WebGL context recovery is pending', async ({ page }) => {
+        test.setTimeout(120_000);
+        await page.setViewportSize({ width: 1280, height: 720 });
+        await openPlayablePathFixture(page, 'activeRunWithHazards');
+        await expectGameplayReady(page);
+        await waitForBoardPlayPhase(page);
+
+        const application = page.getByTestId('tile-board-application');
+        const stageShell = page.getByTestId('tile-board-stage-shell');
+        const canvasLocator = page.getByTestId('tile-board-stage').locator('canvas');
+        await expect(canvasLocator).toBeVisible();
+
+        await canvasLocator.evaluate((canvas) => {
+            canvas.dispatchEvent(new Event('webglcontextlost', { cancelable: true }));
+        });
+
+        await expect(page.getByTestId('tile-board-gpu-lost')).toBeVisible();
+        await expect(application).toBeVisible();
+        await expect(stageShell).toBeVisible();
+        await expect(canvasLocator).toBeAttached();
+    });
+
     test('canvas differs only slightly after one flip (split back/face bitmaps + text overlay)', async ({ page }, testInfo) => {
         test.setTimeout(120_000);
         await page.setViewportSize({ width: 1280, height: 720 });

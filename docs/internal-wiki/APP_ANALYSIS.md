@@ -48,7 +48,7 @@ Bump **`GAME_RULES_VERSION`** when pair generation, scoring, or player-facing ru
 |--------|-----------------|--------------|
 | Game rules | `src/shared/game.ts`, `contracts.ts` | [GAMEPLAY_MECHANICS_CATALOG.md](../gameplay/GAMEPLAY_MECHANICS_CATALOG.md), epics |
 | Shell / nav | `App.tsx`, `useAppStore.ts` | [NAVIGATION_MODEL.md](../new_design/NAVIGATION_MODEL.md), [SCREEN_SPEC_GAMEPLAY.md](../new_design/SCREEN_SPEC_GAMEPLAY.md) |
-| Board WebGL | `TileBoard.tsx`, `TileBoardScene.tsx`, `TileBoardPostFx.tsx`, `tileBoardViewport.ts` | [FX_REDUCE_MOTION_MATRIX.md](../new_design/FX_REDUCE_MOTION_MATRIX.md), [TILE_BOARD_WEBGL_FX_V2_AUDIT.md](../reference-comparison/TILE_BOARD_WEBGL_FX_V2_AUDIT.md) |
+| Board WebGL | `TileBoard.tsx`, `TileBoardScene.tsx`, `tileBoardViewport.ts` | [FX_REDUCE_MOTION_MATRIX.md](../new_design/FX_REDUCE_MOTION_MATRIX.md), [TILE_BOARD_WEBGL_FX_V2_AUDIT.md](../reference-comparison/TILE_BOARD_WEBGL_FX_V2_AUDIT.md) |
 | Matched rim FX tunables | `gameplayVisualConfig.ts`, rim shader/material/geometry | Same + sandbox `?devSandbox=1&fx=matchedRimFire` |
 | Procedural overlay illustration | `cardFace/proceduralIllustration/` (`ILLUSTRATION_GEN_SCHEMA_VERSION` in `illustrationSchemaVersion.ts`), `cardIllustrationDraw.ts`, `tileTextures.ts`, `gameplayVisualConfig.ts` (`GAMEPLAY_CARD_VISUALS.textureVersion`), dev gallery + regression keys (`ProceduralIllustrationGallerySandbox`, `illustrationRegressionPairKeys`) | [SOURCE_MAP.md](./SOURCE_MAP.md) cardFace + dev rows; [visualization-work/ARCHITECTURE.md](../visualization-work/ARCHITECTURE.md) “When to bump what”; E2E `tile-card-face-illustration-*.spec.ts` |
 | Electron I/O | `main/`, `preload/`, `desktop-client.ts` | This wiki: ARCHITECTURE, SOURCE_MAP |

@@ -60,6 +60,7 @@ describe('system diagram generator', () => {
         expect(payload.diagrams.map((diagram) => diagram.id)).toEqual([
             'navigation-flow',
             'gameplay-resolution',
+            'gameplay-interaction-graph',
             'board-generation',
             'rewards-economy',
             'trait-systems',
@@ -69,8 +70,8 @@ describe('system diagram generator', () => {
             'asset-card-rendering',
             'test-gate-architecture'
         ]);
-        expect(payload.stats.diagramCount).toBe(10);
-        expect(payload.stats.actionCount).toBe(10);
+        expect(payload.stats.diagramCount).toBe(11);
+        expect(payload.stats.actionCount).toBe(11);
         expect(payload.actions.map((item) => item.id)).toContain('softlock-generation-matrix');
         expect(payload.actions.every((item) => item.status === 'done')).toBe(true);
         expect(payload.actions.map((item) => item.command)).toEqual(
@@ -117,6 +118,8 @@ describe('system diagram generator', () => {
         expect(markdown).toContain('yarn gate:navigation');
         expect(markdown).toContain('## Renderer Input Flow');
         expect(markdown).toContain('## Test Gate Architecture');
+        expect(markdown).toContain('## Gameplay Interaction Graph');
+        expect(markdown).toContain('Cross-feature logic now has an executable graph');
         expect(markdown).toContain('```mermaid');
         expect(markdown).toContain('flowchart LR');
         expect(markdown).toContain('## Trait Systems');

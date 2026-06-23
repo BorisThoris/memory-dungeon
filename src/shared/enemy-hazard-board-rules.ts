@@ -23,6 +23,7 @@ const tileIsCleared = (tile: Tile | undefined): boolean =>
     tile != null && (tile.state === 'matched' || tile.state === 'removed');
 
 export const allRealBoardPairsCleared = (board: BoardState): boolean =>
+    board.tiles.some((tile) => !isSingletonUtilityPairKey(tile.pairKey)) &&
     board.tiles
         .filter((tile) => !isSingletonUtilityPairKey(tile.pairKey))
         .every((tile) => tile.state === 'matched' || tile.state === 'removed');
@@ -33,6 +34,9 @@ export const enemyHazardReferencesOnlyClearedTiles = (
 ): boolean => {
     if (!allRealBoardPairsCleared(board)) {
         return false;
+    }
+    if (hazard.state !== 'defeated') {
+        return true;
     }
     const tileById = new Map(board.tiles.map((tile) => [tile.id, tile]));
     return [hazard.currentTileId, hazard.nextTileId].every((tileId) => tileIsCleared(tileById.get(tileId)));
@@ -96,17 +100,7 @@ export const defeatEnemyHazardsOnClearedTiles = (board: BoardState): BoardState 
     if (activeHazards.length === 0) {
         return board;
     }
-    const tileById = new Map(board.tiles.map((tile) => [tile.id, tile]));
-    const hazardsToClear = activeHazards.filter((hazard) =>
-        [hazard.currentTileId, hazard.nextTileId].every((tileId) => {
-            const tile = tileById.get(tileId);
-            return tile != null && (tile.state === 'matched' || tile.state === 'removed');
-        })
-    );
-    if (hazardsToClear.length === 0) {
-        return board;
-    }
-    const ids = new Set(hazardsToClear.map((hazard) => hazard.id));
+    const ids = new Set(activeHazards.map((hazard) => hazard.id));
     return {
         ...board,
         enemyHazards: board.enemyHazards?.map((hazard) =>

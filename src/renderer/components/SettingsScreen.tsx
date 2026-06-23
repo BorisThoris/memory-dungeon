@@ -758,7 +758,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     <ToggleRow
                                                         checked={draft.boardBloomEnabled}
                                                         disabled={draft.graphicsQuality === 'low'}
-                                                        hint="Soft bloom on the tile board. Disabled on Low quality for performance."
+                                                        hint="Soft board-stage glow. Disabled on Low quality for performance."
                                                         label="Board bloom"
                                                         onChange={(next) => patchSettings('boardBloomEnabled', next)}
                                                     />
@@ -769,7 +769,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     onChange={(next) => patchSettings('boardScreenSpaceAA', next)}
                                                     options={[
                                                         { label: 'Auto', value: 'auto' },
-                                                        { label: 'SMAA', value: 'smaa' },
+                                                        { label: 'Native', value: 'smaa' },
                                                         { label: 'MSAA', value: 'msaa' },
                                                         { label: 'Off', value: 'off' }
                                                     ]}

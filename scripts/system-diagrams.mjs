@@ -13,6 +13,7 @@ const defaultRepoRoot = path.resolve(__dirname, '..');
 const DIAGRAM_IDS = [
     'navigation-flow',
     'gameplay-resolution',
+    'gameplay-interaction-graph',
     'board-generation',
     'rewards-economy',
     'trait-systems',
@@ -82,6 +83,19 @@ const action = (id, priority, system, title, detail, verifies, evidencePaths) =>
 });
 
 const hasText = (repoRoot, rel, needle) => readText(repoRoot, rel).includes(needle);
+
+const loadGameplayInteractionGraph = (repoRoot) => {
+    const rel = 'src/shared/gameplay-interaction-graph-data.json';
+    const abs = path.join(repoRoot, rel);
+    if (!fs.existsSync(abs)) {
+        throw new Error(`${rel} is missing. Add the executable gameplay interaction graph before generating diagrams.`);
+    }
+    const parsed = JSON.parse(fs.readFileSync(abs, 'utf8'));
+    if (!Array.isArray(parsed.mechanics) || !Array.isArray(parsed.edges)) {
+        throw new Error(`${rel} must contain mechanics and edges arrays.`);
+    }
+    return parsed;
+};
 
 const loadActionRegistry = (repoRoot) => {
     const rel = 'docs/system-diagrams/actions.json';
@@ -230,6 +244,71 @@ const buildGameplayDiagram = (repoRoot) => {
                 softlockEvidence,
                 'done',
                 'yarn gate:action-loop'
+            )
+        ]
+    };
+};
+
+const buildGameplayInteractionGraphDiagram = (repoRoot) => {
+    const graph = loadGameplayInteractionGraph(repoRoot);
+    const graphEvidence = evidence(repoRoot, [
+        'src/shared/gameplay-interaction-graph-data.json',
+        'src/shared/gameplay-interaction-graph.ts',
+        'src/shared/gameplay-interaction-graph.test.ts',
+        'src/shared/softlock-fairness.test.ts',
+        'src/shared/tile-trait-rules.ts',
+        'src/shared/enemy-hazard-board-rules.ts'
+    ]);
+    const mechanicsByKind = countBy(graph.mechanics, (mechanic) => mechanic.kind);
+    const blockers = graph.mechanics.filter((mechanic) => Array.isArray(mechanic.blocks) && mechanic.blocks.length > 0);
+    const traitMechanics = graph.mechanics.filter((mechanic) => mechanic.kind === 'trait');
+    const graphNodes = [
+        node('traits', 'Trait Layer', 'domain', 'shared', `${mechanicsByKind.trait ?? 0} trait mechanics with synergy, risk, and counterplay edges.`, evidence(repoRoot, ['src/shared/tile-trait-rules.ts', 'src/shared/trait-opportunities.ts'])),
+        node('powers', 'Board Powers', 'domain', 'shared', `${mechanicsByKind.power ?? 0} routing/removal tools connect player agency to trait layouts.`, evidence(repoRoot, ['src/shared/board-power-actions.ts', 'src/shared/board-power-availability.ts'])),
+        node('hazards_bosses', 'Hazards And Bosses', 'domain', 'shared', 'Moving hazards and boss patrols must connect to defeat and safety routes.', evidence(repoRoot, ['src/shared/dungeon-enemy-hazard-rules.ts', 'src/shared/enemy-hazard-board-rules.ts', 'src/shared/dungeon-boss-rules.ts'])),
+        node('exits_locks', 'Exits And Locks', 'domain', 'shared', 'Exit and lock blockers require reachable sources or repair routes.', evidence(repoRoot, ['src/shared/dungeon-exit-rules.ts', 'src/shared/dungeon-key-rules.ts', 'src/shared/board-inspection.ts'])),
+        node('objectives', 'Objectives', 'domain', 'shared', 'Objectives must connect to exit activation or floor clear.', evidence(repoRoot, ['src/shared/dungeon-board-status.ts', 'src/shared/level-clear-rules.ts'])),
+        node('safety_graph', 'Interaction Graph Gate', 'safety', 'shared', 'Typed graph validation fails disconnected mechanics, unguarded blockers, and unwired outputs.', graphEvidence)
+    ];
+    const graphEdges = [
+        edge('traits', 'powers', 'repositioned by', 'counterplay'),
+        edge('powers', 'traits', 'creates combos', 'flow'),
+        edge('hazards_bosses', 'safety_graph', 'guarded by', 'safety'),
+        edge('exits_locks', 'safety_graph', 'guarded by', 'safety'),
+        edge('objectives', 'exits_locks', 'unblocks', 'flow'),
+        edge('safety_graph', 'objectives', 'proves completion', 'safety')
+    ];
+    return {
+        id: 'gameplay-interaction-graph',
+        title: 'Gameplay Interaction Graph',
+        summary: `Executable registry covers ${graph.mechanics.length} mechanics, ${graph.edges.length} edges, ${traitMechanics.length} tile traits, and ${blockers.length} blockers.`,
+        nodes: graphNodes,
+        edges: graphEdges,
+        findings: [
+            finding(
+                'interaction-graph-is-executable',
+                'info',
+                'Cross-feature logic now has an executable graph',
+                'Mechanics declare reads, writes, blockers, counterplay, softlock guards, evidence, and tests. Keep this registry current whenever adding traits, hazards, objectives, locks, powers, shops, or boss logic.',
+                graphEvidence
+            ),
+            finding(
+                'blockers-need-guards',
+                'warning',
+                'Every blocker needs counterplay or a softlock guard',
+                `The graph currently tracks ${blockers.length} blocking mechanics. New blockers should fail validation unless they declare counterplay edges, tests, and softlock guards.`,
+                graphEvidence
+            )
+        ],
+        actions: [
+            action(
+                'gameplay-interaction-graph-gate',
+                'P0',
+                'Gameplay Interaction Graph',
+                'Keep cross-feature mechanics in the executable graph',
+                'Any new trait, hazard, boss, exit lock, objective, board power, shop service, or reward sink must update the gameplay interaction graph and keep its validation test passing.',
+                'Disconnected mechanics, unguarded blockers, missing counterplay, and unwired state outputs fail before they can become softlocks.',
+                graphEvidence
             )
         ]
     };
@@ -647,6 +726,7 @@ export function buildSystemDiagramData(repoRoot = defaultRepoRoot) {
     const rawDiagrams = [
         buildNavigationDiagram(repoRoot),
         buildGameplayDiagram(repoRoot),
+        buildGameplayInteractionGraphDiagram(repoRoot),
         buildBoardGenerationDiagram(repoRoot),
         buildRewardsEconomyDiagram(repoRoot),
         buildTraitDiagram(repoRoot),

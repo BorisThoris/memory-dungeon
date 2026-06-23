@@ -45,16 +45,15 @@ describe('graphicsQuality caps', () => {
             expect(snap.menuPixiResolutionCap).toBe(getMenuPixiResolutionCap(q));
             expect(snap.menuAtmosphereParticleCountDesktop).toBe(getMenuAtmosphereParticleCount(1280, 720, q));
             expect(snap.boardAnisotropyCap).toBe(getBoardAnisotropyCap(q));
-            expect(snap.tileBoardBloomPostPath).toBe(q !== 'low');
+            expect(snap.tileBoardCssBloomEligible).toBe(q !== 'low');
             expect(typeof GAMEPLAY_BOARD_VISUALS.faceUpHoverRimOpacityMul[q]).toBe('number');
         }
         expect(Object.keys(GAMEPLAY_BOARD_VISUALS.faceUpHoverRimOpacityMul).sort()).toEqual(['high', 'low', 'medium']);
     });
 
-    it('resolveAdaptiveBoardRenderQuality caps DPR and disables bloom/SMAA during heavy motion on large boards', () => {
+    it('resolveAdaptiveBoardRenderQuality caps DPR and avoids SMAA during heavy motion on large boards', () => {
         const idle = resolveAdaptiveBoardRenderQuality({
             activeTileCount: ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD,
-            boardBloomEnabled: true,
             boardHeavyMotion: false,
             boardScreenSpaceAA: 'auto',
             compact: false,
@@ -62,12 +61,10 @@ describe('graphicsQuality caps', () => {
             savedGraphicsQuality: 'high'
         });
         expect(idle.dprCap).toBe(getBoardDprCap('high', false));
-        expect(idle.bloomPostEnabled).toBe(true);
         expect(idle.resolvedAa).toBe('smaa');
 
         const heavy = resolveAdaptiveBoardRenderQuality({
             activeTileCount: ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD,
-            boardBloomEnabled: true,
             boardHeavyMotion: true,
             boardScreenSpaceAA: 'auto',
             compact: false,
@@ -75,14 +72,12 @@ describe('graphicsQuality caps', () => {
             savedGraphicsQuality: 'high'
         });
         expect(heavy.dprCap).toBeLessThan(idle.dprCap);
-        expect(heavy.bloomPostEnabled).toBe(false);
         expect(heavy.resolvedAa).toBe('msaa');
     });
 
     it('resolveAdaptiveBoardRenderQuality leaves low tier unchanged during motion', () => {
         const r = resolveAdaptiveBoardRenderQuality({
             activeTileCount: 99,
-            boardBloomEnabled: true,
             boardHeavyMotion: true,
             boardScreenSpaceAA: 'smaa',
             compact: true,
@@ -90,7 +85,6 @@ describe('graphicsQuality caps', () => {
             savedGraphicsQuality: 'low'
         });
         expect(r.dprCap).toBe(getBoardDprCap('low', true));
-        expect(r.bloomPostEnabled).toBe(false);
         expect(r.resolvedAa).toBe('smaa');
     });
 });

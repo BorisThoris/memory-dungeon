@@ -1232,15 +1232,6 @@
     use-sync-external-store "^1.4.0"
     zustand "^5.0.3"
 
-"@react-three/postprocessing@^3.0.4":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@react-three/postprocessing/-/postprocessing-3.0.4.tgz#e2379eb0b953d1cc0c4b8ac94dc76256f4c07062"
-  integrity sha512-e4+F5xtudDYvhxx3y0NtWXpZbwvQ0x1zdOXWTbXMK6fFLVDd4qucN90YaaStanZGS4Bd5siQm0lGL/5ogf8iDQ==
-  dependencies:
-    maath "^0.6.0"
-    n8ao "^1.9.4"
-    postprocessing "^6.36.6"
-
 "@rolldown/binding-android-arm64@1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@rolldown/binding-android-arm64/-/binding-android-arm64-1.0.3.tgz#54ce8f8382213f4a314a0c2f7ba83f81ffeae592"
@@ -4528,11 +4519,6 @@ lz-string@^1.5.0:
   resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.5.0.tgz#c1ab50f77887b712621201ba9fd4e3a6ed099941"
   integrity sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==
 
-maath@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/maath/-/maath-0.6.0.tgz#7841d0fb95bbb37d19b08b7c5458ef70190950d2"
-  integrity sha512-dSb2xQuP7vDnaYqfoKzlApeRcR2xtN8/f7WV/TMAkBC8552TwTLtOO0JTcSygkYMjNDPoo6V01jTw/aPi4JrMw==
-
 magic-string@^0.30.17, magic-string@^0.30.21:
   version "0.30.21"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.21.tgz#56763ec09a0fa8091df27879fd94d19078c00d91"
@@ -4785,11 +4771,6 @@ mz@^2.7.0:
     any-promise "^1.0.0"
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
-
-n8ao@^1.9.4:
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/n8ao/-/n8ao-1.10.1.tgz#7a704cf8a7d02a96db1b3715bd6fbf0a97bb2cce"
-  integrity sha512-hhI1pC+BfOZBV1KMwynBrVlIm8wqLxj/abAWhF2nZ0qQKyzTSQa1QtLVS2veRiuoBQXojxobcnp0oe+PUoxf/w==
 
 nanoid@^3.3.12:
   version "3.3.15"
@@ -5231,11 +5212,6 @@ postcss@8.5.15, postcss@^8.5.15, postcss@^8.5.3, postcss@^8.5.8:
     nanoid "^3.3.12"
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
-
-postprocessing@^6.36.6:
-  version "6.39.0"
-  resolved "https://registry.yarnpkg.com/postprocessing/-/postprocessing-6.39.0.tgz#168841ed60eb4228332e42303cb61ea192a1dd52"
-  integrity sha512-/G6JY8hs426lcto/pBZlnFSkyEo1fHsh4gy7FPJtq1SaSUOzJgDW6f6f1K/+aMOYzK/eQEefyOb3++jPPIUeDA==
 
 powershell-utils@^0.1.0:
   version "0.1.0"

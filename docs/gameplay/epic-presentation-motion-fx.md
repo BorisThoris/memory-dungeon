@@ -2,14 +2,14 @@
 
 ## Scope
 
-Non-rule **feel**: CSS board framing, post-processing, shuffle motion, flip pop, match pulse, platform tilt, reduce-motion behavior.
+Non-rule **feel**: CSS board framing, shuffle motion, flip pop, match pulse, platform tilt, reduce-motion behavior.
 
 ## Implementation status
 
 | System | Status | Notes |
 |--------|--------|--------|
 | `boardPresentation` | **Functional** | `'standard' \| 'spaghetti' \| 'breathing'` — applies CSS classes on **board stage** in `GameScreen` (`boardStageSpaghetti`, `boardStageBreathing` pattern). **Wave G** experiment; not a rules change. |
-| Bloom / AA | **Shippable** | `boardBloomEnabled`, `boardScreenSpaceAA`; `TileBoardPostFx`; low quality disables bloom. |
+| Bloom / AA | **Shippable** | `boardBloomEnabled`, `boardScreenSpaceAA`; board glow is CSS-only and low quality disables bloom. |
 | Shuffle stagger (3D) | **Shippable** | `shuffleFlipAnimation.ts` — `computeShuffleMotionBudgetMs`, `computeStaggeredShuffleDealZ`; `TileBoard` passes deadline/budget/stagger count into `TileBoardScene`. |
 | DOM FLIP shuffle (legacy utility) | **Functional** | Motion helpers in `shuffleFlipAnimation.ts` are WebGL-primary timing utilities; legacy wrappers are retained for focused tests and narrow callers. |
 | Flip pop / match pulse | **Shippable** | `advanceTileBezelFrame` in `TileBoardScene` — short scale/Z pop on face-up edge; match pulse scaling. |

@@ -1,6 +1,6 @@
 import type { BoardScreenSpaceAA, GraphicsQualityPreset } from './contracts';
 
-/** Tile count at/above which internal adaptive quality may cap DPR and post-FX during heavy board motion. */
+/** Tile count at/above which internal adaptive quality may cap DPR and AA during heavy board motion. */
 export const ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD = 40;
 
 /**
@@ -14,8 +14,8 @@ export type GraphicsQualityTierSnapshot = {
     menuPixiResolutionCap: number;
     menuAtmosphereParticleCountDesktop: number;
     boardAnisotropyCap: number;
-    /** Same rule as `TileBoard`: bloom post path only when not low. */
-    tileBoardBloomPostPath: boolean;
+    /** Same rule as `GameScreen`: the CSS board glow is only eligible above low. */
+    tileBoardCssBloomEligible: boolean;
 };
 
 /** WebGL tile board: effective device pixel ratio cap (PERF-001). */
@@ -69,11 +69,11 @@ export const getGraphicsQualityTierSnapshot = (quality: GraphicsQualityPreset): 
     menuPixiResolutionCap: getMenuPixiResolutionCap(quality),
     menuAtmosphereParticleCountDesktop: getMenuAtmosphereParticleCount(1280, 720, quality),
     boardAnisotropyCap: getBoardAnisotropyCap(quality),
-    tileBoardBloomPostPath: quality !== 'low'
+    tileBoardCssBloomEligible: quality !== 'low'
 });
 
 /**
- * Internal-only: during shuffle, entrance, or prestage loading on large boards, cap DPR and disable bloom + SMAA
+ * Internal-only: during shuffle, entrance, or prestage loading on large boards, cap DPR and avoid SMAA
  * to keep frame time predictable. Restores saved-tier behavior when motion clears.
  */
 export const resolveAdaptiveBoardRenderQuality = (input: {
@@ -82,10 +82,9 @@ export const resolveAdaptiveBoardRenderQuality = (input: {
     boardHeavyMotion: boolean;
     activeTileCount: number;
     compact: boolean;
-    boardBloomEnabled: boolean;
     boardScreenSpaceAA: BoardScreenSpaceAA;
     reduceMotion: boolean;
-}): { dprCap: number; bloomPostEnabled: boolean; resolvedAa: 'smaa' | 'msaa' | 'off' } => {
+}): { dprCap: number; resolvedAa: 'smaa' | 'msaa' | 'off' } => {
     const baseDpr = getBoardDprCap(input.savedGraphicsQuality, input.compact);
     const largeBoard = input.activeTileCount >= ADAPTIVE_BOARD_QUALITY_LARGE_TILE_THRESHOLD;
     const adapt = input.boardHeavyMotion && largeBoard && input.savedGraphicsQuality !== 'low';
@@ -100,9 +99,6 @@ export const resolveAdaptiveBoardRenderQuality = (input: {
         }
     }
 
-    const bloomPostEnabled =
-        input.boardBloomEnabled && input.savedGraphicsQuality !== 'low' && !adapt;
-
     let resolvedAa: 'smaa' | 'msaa' | 'off' =
         input.boardScreenSpaceAA === 'auto'
             ? input.reduceMotion
@@ -114,5 +110,5 @@ export const resolveAdaptiveBoardRenderQuality = (input: {
         resolvedAa = 'msaa';
     }
 
-    return { dprCap, bloomPostEnabled, resolvedAa };
+    return { dprCap, resolvedAa };
 };
