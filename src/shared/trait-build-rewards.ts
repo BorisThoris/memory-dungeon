@@ -60,6 +60,16 @@ export const TRAIT_BUILD_REWARD_ROWS: readonly TraitBuildRewardRow[] = [
         regressionHook: 'trait-build:mirror-warden'
     },
     {
+        id: 'stasis_locksmith',
+        label: 'Stasis Locksmith',
+        traitKinds: ['stasis', 'conduit', 'sealed'],
+        relicIds: ['guard_token_plus_one', 'combo_shard_plus_step', 'chapter_compass'],
+        shopItemIds: ['region_shuffle_charge', 'trait_routing_kit', 'peek_charge'],
+        decision: 'Move Stasis beside Conduit or Sealed when a temporary lock can create a safer next opener.',
+        payoff: 'Safer openings, shard sparks, mapping score, and more value from row/swap routing.',
+        regressionHook: 'trait-build:stasis-locksmith'
+    },
+    {
         id: 'cursed_greed',
         label: 'Cursed Greed',
         traitKinds: ['cursed', 'volatile', 'stasis'],
@@ -88,7 +98,7 @@ export const getTraitBuildRewardRowsForRelic = (relicId: RelicId): TraitBuildRew
 const LOADOUT_TRAIT_BUILD_IDS: Record<StartingLoadoutId, string[]> = {
     memory_scout: ['conduit_cartographer', 'sealed_catalyst'],
     route_tactician: ['drift_routing', 'conduit_cartographer'],
-    cursebreaker: ['mirror_warden', 'cursed_greed'],
+    cursebreaker: ['mirror_warden', 'stasis_locksmith', 'cursed_greed'],
     vaultbreaker: ['cursed_greed', 'sealed_catalyst']
 };
 

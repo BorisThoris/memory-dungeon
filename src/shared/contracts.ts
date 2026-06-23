@@ -771,9 +771,10 @@ export type BonusRewardId =
     | 'hazard_ward'
     | 'free_swap_floor'
     | 'echo_conduit_lens'
-    | 'trait_streak_lens'
-    | 'cursed_opener_contract'
-    | 'hazard_banisher';
+     | 'trait_streak_lens'
+     | 'cursed_opener_contract'
+     | 'stasis_lockbox'
+     | 'hazard_banisher';
 
 export type RewardPerkId =
     | 'free_first_swap_per_floor'

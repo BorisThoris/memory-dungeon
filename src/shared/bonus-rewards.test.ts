@@ -271,6 +271,11 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
             'Conduit Cartographer',
             'Sealed Catalyst'
         ]);
+        expect(getBonusRewardRows().find((reward) => reward.id === 'stasis_lockbox')).toMatchObject({
+            label: 'Stasis lockbox',
+            summaryText: '+1 row/swap charge, +1 guard token, and +15 score.',
+            traitBuildLabels: ['Stasis Locksmith', 'Mirror Warden']
+        });
     });
 
     it('biases reward drafts toward starting loadout identity without breaking determinism', () => {
@@ -360,6 +365,33 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(draft.find((reward) => reward.id === 'cursed_opener_contract')?.traitBuildLabels).toContain('Cursed Greed');
     });
 
+    it('pulls Stasis Locksmith support into drafts for lockable trait clusters', () => {
+        const board = buildBoard(4, { runSeed: 75_123, runRulesVersion: GAME_RULES_VERSION });
+        const stasisBoard = {
+            ...board,
+            columns: 2,
+            tiles: board.tiles.map((tile, index) =>
+                index === 0
+                    ? { ...tile, pairKey: 'stasis', tileTraitKind: 'stasis' as const }
+                    : index === 1
+                      ? { ...tile, pairKey: 'conduit', tileTraitKind: 'conduit' as const }
+                      : index === 2
+                        ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                        : { ...tile, tileTraitKind: undefined }
+            )
+        };
+        const draft = rollBonusRewardDraft({
+            runSeed: 75_123,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 6,
+            routeKind: 'unknown',
+            board: stasisBoard
+        });
+
+        expect(getTraitBuildRewardRowsForBoard(stasisBoard).map((row) => row.label)).toContain('Stasis Locksmith');
+        expect(draft.map((reward) => reward.id)).toContain('stasis_lockbox');
+    });
+
     it('claims new reward draft rows through the same capped inventory feedback path', () => {
         const room = {
             ...rollBonusRewardRoom({
@@ -379,6 +411,28 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.run.peekCharges).toBe(1);
         expect(result.feedback.gained).toEqual(
             expect.arrayContaining(['+1 row/swap charge', '+1 peek charge', '+10 score'])
+        );
+    });
+
+    it('claims the Stasis lockbox as a board-control reward', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_124,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 6,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.stasis_lockbox,
+            eligible: true,
+            unavailableReason: null
+        };
+        const result = claimBonusReward(makeRun(room.runSeed, room.rulesVersion), createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.regionShuffleCharges).toBe(1);
+        expect(result.run.stats.guardTokens).toBe(1);
+        expect(result.feedback.gained).toEqual(
+            expect.arrayContaining(['+1 row/swap charge', '+1 guard token', '+15 score'])
         );
     });
 

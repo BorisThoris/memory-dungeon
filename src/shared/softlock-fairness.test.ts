@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type BoardState, type MutatorId, type RunState, type Tile } from './contracts';
+import { GAME_RULES_VERSION, type BoardState, type MutatorId, type RouteNodeType, type RunState, type Tile } from './contracts';
 import { BUILTIN_PUZZLES } from './builtin-puzzles';
 import {
     buildBoard,
@@ -35,6 +35,7 @@ import {
     WILD_PAIR_KEY
 } from './tile-identity';
 import { DAILY_MUTATOR_TABLE } from './mutators';
+import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 
 const DECOY_PAIR_KEY = '__decoy__';
 const EXIT_PAIR_KEY = '__exit__';
@@ -157,6 +158,35 @@ describe('REG-087 board fairness inspection', () => {
                     gameMode: 'endless'
                 });
                 expectBoardFair(advancedBoard);
+            }
+        }
+    });
+
+    it('accepts scheduled endless boss and route floors across multiple cycles', () => {
+        const routeTypes: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
+        for (const runSeed of [101, 42_001, 90_123]) {
+            for (const level of [1, 4, 7, 9, 12, 13, 16, 19, 21, 24]) {
+                const entry = pickFloorScheduleEntry(runSeed, GAME_RULES_VERSION, level, 'endless');
+                for (const routeType of routeTypes) {
+                    const board = buildBoard(level, {
+                        runSeed,
+                        runRulesVersion: GAME_RULES_VERSION,
+                        activeMutators: entry.mutators,
+                        floorTag: entry.floorTag,
+                        floorArchetypeId: entry.floorArchetypeId,
+                        featuredObjectiveId: entry.featuredObjectiveId,
+                        cycleFloor: entry.cycleFloor,
+                        gameMode: 'endless',
+                        routeCardPlan: {
+                            choiceId: `fixture:${routeType}:${level}`,
+                            routeType,
+                            sourceLevel: Math.max(1, level - 1),
+                            targetLevel: level
+                        }
+                    });
+
+                    expectBoardFair(board);
+                }
             }
         }
     });
@@ -770,5 +800,39 @@ describe('REG-087 action eligibility edge cases', () => {
         expect(afterTileSwap).not.toBe(tileSwapRun);
         expectRunFair(afterTileSwap);
         expect(afterTileSwap.regionShuffleRowArmed).toBeNull();
+    });
+
+    it('preserves completion routes across generated board-power permutations', () => {
+        for (const runSeed of [90_870, 90_871, 90_872, 90_873]) {
+            const baseRun = playableRun(
+                createNewRun(0, {
+                    runSeed,
+                    initialRelicIds: ['region_shuffle_free_first'],
+                    initialStrayRemoveCharges: 1
+                })
+            );
+            expectRunFair(baseRun);
+
+            if (canShuffleBoard(baseRun)) {
+                expectRunFair(applyShuffle(baseRun));
+            }
+
+            const row = Array.from({ length: baseRun.board?.rows ?? 0 }, (_, index) => index).find((candidate) =>
+                canRegionShuffleRow(baseRun, candidate)
+            );
+            if (row != null) {
+                expectRunFair(applyRegionShuffle(baseRun, row));
+            }
+
+            const hiddenTiles = baseRun.board?.tiles.filter((candidate) => candidate.state === 'hidden') ?? [];
+            if (hiddenTiles.length >= 2) {
+                expectRunFair(applyTileSwap(baseRun, hiddenTiles[0]!.id, hiddenTiles[1]!.id));
+            }
+
+            const strayTile = hiddenTiles.find((candidate) => tileIsStrayEligiblePreview(baseRun.board!, candidate.id));
+            if (strayTile) {
+                expectRunFair(applyStrayRemove({ ...baseRun, strayRemoveArmed: true }, strayTile.id));
+            }
+        }
     });
 });

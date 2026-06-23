@@ -176,6 +176,18 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         payout: { rewardPerks: ['cursed_opener_greed'], shopGold: 1 },
         summaryText: 'First clean Cursed match each floor gains extra gold and score, plus +1 shop gold.'
     },
+    stasis_lockbox: {
+        id: 'stasis_lockbox',
+        roomKind: 'bonus_cache',
+        label: 'Stasis lockbox',
+        traitBuildLabels: ['Stasis Locksmith', 'Mirror Warden'],
+        trigger: 'Build reward draft after Stasis, Sealed, or Conduit interaction floors.',
+        discoverability: 'Shown as a board-control reward before floors with lockable trait clusters.',
+        eligibility: 'Floor 2+ and one stasis-lockbox claim this run.',
+        antiGrindLimit: { scope: 'per_run', maxClaims: 1 },
+        payout: { score: 15, inventoryItems: { region_shuffle_charge: 1, guard_token: 1 } },
+        summaryText: '+1 row/swap charge, +1 guard token, and +15 score.'
+    },
     hazard_banisher: {
         id: 'hazard_banisher',
         roomKind: 'bonus_cache',
@@ -292,17 +304,23 @@ const applyBoardTraitRewardBias = (
     candidates: BonusRewardId[],
     board: BoardState | null | undefined
 ): BonusRewardId[] => {
-    const buildLabels = new Set(getTraitBuildRewardRowsForBoard(board).map((row) => row.label));
+    const buildRows = getTraitBuildRewardRowsForBoard(board);
+    const buildLabels = new Set(buildRows.map((row) => row.label));
     if (buildLabels.size === 0) {
         return candidates;
     }
-    const preferred = candidates.filter((id) =>
-        (BONUS_REWARD_CATALOG[id].traitBuildLabels ?? []).some((label) => buildLabels.has(label))
-    );
-    const matchingCatalogRewards = (Object.keys(BONUS_REWARD_CATALOG) as BonusRewardId[]).filter((id) =>
-        (BONUS_REWARD_CATALOG[id].traitBuildLabels ?? []).some((label) => buildLabels.has(label))
-    );
-    return uniqueBonusRewardIds([...preferred, ...matchingCatalogRewards, ...candidates]);
+    const rankByBuildLabel = (id: BonusRewardId): number => {
+        const labels = BONUS_REWARD_CATALOG[id].traitBuildLabels ?? [];
+        const rank = buildRows.findIndex((row) => labels.includes(row.label));
+        return rank < 0 ? Number.MAX_SAFE_INTEGER : rank;
+    };
+    const matchingCatalogRewards = (Object.keys(BONUS_REWARD_CATALOG) as BonusRewardId[])
+        .filter((id) => (BONUS_REWARD_CATALOG[id].traitBuildLabels ?? []).some((label) => buildLabels.has(label)))
+        .sort((a, b) => rankByBuildLabel(a) - rankByBuildLabel(b));
+    const preferred = candidates
+        .filter((id) => (BONUS_REWARD_CATALOG[id].traitBuildLabels ?? []).some((label) => buildLabels.has(label)))
+        .sort((a, b) => rankByBuildLabel(a) - rankByBuildLabel(b));
+    return uniqueBonusRewardIds([...matchingCatalogRewards, ...preferred, ...candidates]);
 };
 
 const selectBonusRewardDefinition = (

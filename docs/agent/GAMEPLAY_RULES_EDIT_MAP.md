@@ -17,6 +17,9 @@ Use focused gameplay rule modules for new work. Avoid importing from `src/shared
 Default final gate for gameplay rule work:
 
 ```powershell
+yarn gate:changed
 yarn gate:systems
 yarn sim:endless --floors=1000 --seed=42001
 ```
+
+Use `yarn gate:changed --json <path...>` when reviewing a known file list, or run `yarn gate:changed` with no paths to select gates from the current Git diff.

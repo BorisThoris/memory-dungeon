@@ -57,7 +57,8 @@ describe('trait build reward rows', () => {
 
     it('summarizes relic-driven trait build hints for reward drafts', () => {
         expect(getTraitBuildRewardRowsForRelic('chapter_compass').map((row) => row.id)).toContain('conduit_cartographer');
-        expect(getTraitBuildDraftHintForRelic('chapter_compass')).toBe('Trait build: Conduit Cartographer');
+        expect(getTraitBuildRewardRowsForRelic('chapter_compass').map((row) => row.id)).toContain('stasis_locksmith');
+        expect(getTraitBuildDraftHintForRelic('chapter_compass')).toBe('Trait build: Conduit Cartographer / Stasis Locksmith');
         expect(getTraitBuildDraftHintForRelic('wager_surety')).toBe('Trait build: Cursed Greed');
         expect(getTraitBuildDraftHintForRelic('stray_charge_plus_one')).toBeNull();
     });
@@ -99,6 +100,7 @@ describe('trait build reward rows', () => {
         ]);
         expect(getTraitBuildRewardRowsForLoadout('cursebreaker').map((row) => row.id)).toEqual([
             'mirror_warden',
+            'stasis_locksmith',
             'cursed_greed'
         ]);
         expect(getTraitBuildRewardRowsForLoadout('vaultbreaker').map((row) => row.id)).toEqual([
@@ -106,5 +108,25 @@ describe('trait build reward rows', () => {
             'cursed_greed'
         ]);
         expect(getTraitBuildRewardRowsForLoadout(null)).toEqual([]);
+    });
+
+    it('surfaces Stasis Locksmith when lockable trait clusters are present', () => {
+        const board = buildBoard(4, { runSeed: 86_002, runRulesVersion: 1 });
+        const stasisBoard = {
+            ...board,
+            columns: 2,
+            tiles: board.tiles.map((tile, index) =>
+                index === 0
+                    ? { ...tile, pairKey: 'stasis', tileTraitKind: 'stasis' as const }
+                    : index === 1
+                      ? { ...tile, pairKey: 'conduit', tileTraitKind: 'conduit' as const }
+                      : index === 2
+                        ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                        : { ...tile, tileTraitKind: undefined }
+            )
+        };
+
+        expect(getTraitBuildRewardRowsForBoard(stasisBoard).map((row) => row.id)).toContain('stasis_locksmith');
+        expect(getTraitBuildDraftHintForBoard(stasisBoard)).toContain('Stasis Locksmith');
     });
 });
