@@ -3,6 +3,13 @@ import path from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 type SystemDiagramPayload = {
+    actions: {
+        id: string;
+        priority: string;
+        system: string;
+        title: string;
+        verifies: string;
+    }[];
     diagrams: {
         id: string;
         title: string;
@@ -12,6 +19,7 @@ type SystemDiagramPayload = {
     }[];
     stats: {
         diagramCount: number;
+        actionCount: number;
         importGraph: { fileCount: number; edgeCount: number };
     };
 };
@@ -52,6 +60,9 @@ describe('system diagram generator', () => {
             'trait-systems'
         ]);
         expect(payload.stats.diagramCount).toBe(5);
+        expect(payload.stats.actionCount).toBe(5);
+        expect(payload.actions.map((item) => item.id)).toContain('softlock-generation-matrix');
+        expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')?.verifies).toContain('Generated boards');
         expect(payload.stats.importGraph.fileCount).toBe(0);
         expect(payload.stats.importGraph.edgeCount).toBe(0);
     });
@@ -67,12 +78,15 @@ describe('system diagram generator', () => {
             label: 'validated by'
         }));
         expect(navigation?.findings[0]?.evidence).toContain('src/renderer/store/navigationModel.ts');
+        expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')?.system).toBe('Board Generation');
         expect(traits?.findings[0]?.detail).toContain('trait-match-route floor share');
         expect(traits?.nodes.flatMap((node) => node.evidence)).toContain('src/shared/tile-trait-rules.ts');
     });
 
     it('renders Mermaid markdown for docs and reviews', () => {
         expect(markdown).toContain('# System Diagrams');
+        expect(markdown).toContain('## Audit Actions');
+        expect(markdown).toContain('P0 Extend the softlock matrix for every new blocker');
         expect(markdown).toContain('```mermaid');
         expect(markdown).toContain('flowchart LR');
         expect(markdown).toContain('## Trait Systems');

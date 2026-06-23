@@ -30,6 +30,15 @@ type ExplorerMode = 'project' | 'systems';
 
 type SystemDiagramPayload = {
     rulesVersion: number | null;
+    actions: {
+        id: string;
+        priority: string;
+        system: string;
+        title: string;
+        detail: string;
+        verifies: string;
+        evidence: string[];
+    }[];
     diagrams: {
         id: string;
         title: string;
@@ -44,6 +53,7 @@ type SystemDiagramPayload = {
         nodeCount: number;
         edgeCount: number;
         findingCount: number;
+        actionCount: number;
         importGraph: { fileCount: number; edgeCount: number; layers: Record<string, number> };
     };
 };
@@ -258,18 +268,25 @@ function BlueprintGraphInner(): ReactElement {
         return systemRaw.diagrams.find((diagram) => diagram.id === selectedDiagramId) ?? systemRaw.diagrams[0] ?? null;
     }, [systemRaw, selectedDiagramId]);
 
+    const selectedActions = useMemo(() => {
+        if (!systemRaw || !selectedDiagram) {
+            return [];
+        }
+        return systemRaw.actions.filter((item) => item.system === selectedDiagram.title);
+    }, [systemRaw, selectedDiagram]);
+
     const stats = useMemo(() => {
         if (mode === 'systems') {
             if (!systemRaw || !selectedDiagram) {
                 return null;
             }
-            return `Diagrams: ${systemRaw.stats.diagramCount} | Selected: ${selectedDiagram.stats.nodeCount} nodes, ${selectedDiagram.stats.edgeCount} edges | Findings: ${selectedDiagram.stats.findingCount} | Visible: ${nodes.length} | ${edges.length}`;
+            return `Diagrams: ${systemRaw.stats.diagramCount} | Selected: ${selectedDiagram.stats.nodeCount} nodes, ${selectedDiagram.stats.edgeCount} edges | Findings: ${selectedDiagram.stats.findingCount} | Actions: ${selectedActions.length} | Visible: ${nodes.length} | ${edges.length}`;
         }
         if (!raw) {
             return null;
         }
         return `Files: ${raw.stats.fileCount} | Edges: ${raw.stats.edgeCount} | Visible: ${nodes.length} | ${edges.length}`;
-    }, [mode, raw, systemRaw, selectedDiagram, nodes.length, edges.length]);
+    }, [mode, raw, systemRaw, selectedDiagram, selectedActions.length, nodes.length, edges.length]);
 
     const runAstPreview = useCallback(() => {
         setAstMsg(null);
@@ -434,6 +451,15 @@ function BlueprintGraphInner(): ReactElement {
                                     {item.evidence.length > 0 ? (
                                         <p className={styles.evidence}>Evidence: {item.evidence.join(', ')}</p>
                                     ) : null}
+                                </div>
+                            ))}
+                            {selectedActions.map((item) => (
+                                <div key={item.id} className={`${styles.finding} ${styles.finding_action}`}>
+                                    <strong>
+                                        {item.priority} {item.title}
+                                    </strong>
+                                    <p>{item.detail}</p>
+                                    <p className={styles.evidence}>Verifies: {item.verifies}</p>
                                 </div>
                             ))}
                         </div>

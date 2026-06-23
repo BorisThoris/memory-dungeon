@@ -66,6 +66,16 @@ const finding = (id, severity, title, detail, evidencePaths) => ({
     evidence: evidencePaths
 });
 
+const action = (id, priority, system, title, detail, verifies, evidencePaths) => ({
+    id,
+    priority,
+    system,
+    title,
+    detail,
+    verifies,
+    evidence: evidencePaths
+});
+
 const hasText = (repoRoot, rel, needle) => readText(repoRoot, rel).includes(needle);
 
 const buildNavigationDiagram = (repoRoot) => {
@@ -99,6 +109,17 @@ const buildNavigationDiagram = (repoRoot) => {
                 hasContracts
                     ? 'Keep new overlays, route actions, and shell chrome behavior registered in navigationModel so diagram and tests remain aligned.'
                     : 'Add or restore explicit route contracts before expanding navigation; otherwise route drift is hard to audit.',
+                navEvidence
+            )
+        ],
+        actions: [
+            action(
+                'nav-contract-drift-guard',
+                'P2',
+                'Navigation Flow',
+                'Keep route contracts authoritative',
+                'When adding any route, overlay, or shell chrome state, add or update a navigation contract plus a focused renderer/store regression.',
+                'Route action cannot bypass App shell state or strand the player on a stale screen.',
                 navEvidence
             )
         ]
@@ -138,6 +159,17 @@ const buildGameplayDiagram = (repoRoot) => {
                 'Changes to match resolution should keep focused tests around softlocks, powers, enemies, traits, HUD route copy, and progression because these systems share the same action loop.',
                 softlockEvidence
             )
+        ],
+        actions: [
+            action(
+                'resolution-slice-gate',
+                'P1',
+                'Gameplay Resolution',
+                'Use a focused action-loop gate for match changes',
+                'Match, enemy, hazard, board-power, and trait changes should run the shared gameplay slice before full-suite handoff.',
+                'A change in one resolver branch cannot silently regress another branch of the same turn loop.',
+                softlockEvidence
+            )
         ]
     };
 };
@@ -147,6 +179,8 @@ const buildBoardGenerationDiagram = (repoRoot) => {
         'src/shared/board-generation.ts',
         'src/shared/board-build-rules.ts',
         'src/shared/softlock-fairness.test.ts',
+        'src/shared/softlock-generator-contract.ts',
+        'src/shared/softlock-generator-contract.test.ts',
         'src/shared/board-tile-generation-rules.ts',
         'src/shared/objective-rules.ts'
     ]);
@@ -173,6 +207,17 @@ const buildBoardGenerationDiagram = (repoRoot) => {
                 'warning',
                 'Softlock repair is part of the generation contract',
                 'Treat repair as required generation behavior, not a cleanup detail. New locks, blockers, objectives, or trait blockers need property tests that prove at least one completion route remains.',
+                boardEvidence
+            )
+        ],
+        actions: [
+            action(
+                'softlock-generation-matrix',
+                'P0',
+                'Board Generation',
+                'Extend the softlock matrix for every new blocker',
+                'New locks, trait blockers, enemies, objectives, or exit states must add a softlock-fairness or softlock-generator-contract case that proves a completion path exists after generation and repair.',
+                'Generated boards remain completable even when repair has to intervene.',
                 boardEvidence
             )
         ]
@@ -213,6 +258,17 @@ const buildRewardsEconomyDiagram = (repoRoot) => {
                 'Key, boss, loadout, trait-routing, and shop-service offers compete for limited slots. Keep tests around priority ordering so fun trait tools do not hide required progression items.',
                 rewardEvidence
             )
+        ],
+        actions: [
+            action(
+                'reward-priority-gate',
+                'P1',
+                'Rewards And Economy',
+                'Lock reward priority slots before adding fun offers',
+                'Any new shop or reward offer must prove it does not displace required keys, boss access, loadout recovery, or trait-route starter support.',
+                'Progression-critical offers remain reachable while optional trait tools still appear.',
+                rewardEvidence
+            )
         ]
     };
 };
@@ -251,6 +307,17 @@ const buildTraitDiagram = (repoRoot) => {
                 'Keep trait opportunities visible from early floors and track trait-match-route floor share in simulation whenever adding new interactions or blockers.',
                 traitEvidence
             )
+        ],
+        actions: [
+            action(
+                'trait-route-visibility-gate',
+                'P1',
+                'Trait Systems',
+                'Keep traits visible as a third mechanic',
+                'New trait interactions should update simulation visibility metrics, first-run HUD smoke, and at least one board-power interaction case.',
+                'Trait routes stay present early and interact with movement/shuffle tools instead of becoming rare flavor.',
+                traitEvidence
+            )
         ]
     };
 };
@@ -275,16 +342,19 @@ export function buildSystemDiagramData(repoRoot = defaultRepoRoot) {
         buildRewardsEconomyDiagram(repoRoot),
         buildTraitDiagram(repoRoot)
     ].map((diagram) => ({ ...diagram, stats: diagramStats(diagram) }));
+    const actions = diagrams.flatMap((diagram) => diagram.actions);
     const layerCounts = countBy(importGraph.nodes, (n) => n.layer);
     return {
         generatedAt: new Date(0).toISOString(),
         rulesVersion: extractRulesVersion(repoRoot),
         diagrams,
+        actions,
         stats: {
             diagramCount: diagrams.length,
             nodeCount: diagrams.reduce((sum, diagram) => sum + diagram.stats.nodeCount, 0),
             edgeCount: diagrams.reduce((sum, diagram) => sum + diagram.stats.edgeCount, 0),
             findingCount: diagrams.reduce((sum, diagram) => sum + diagram.stats.findingCount, 0),
+            actionCount: actions.length,
             importGraph: {
                 fileCount: importGraph.stats.fileCount,
                 edgeCount: importGraph.stats.edgeCount,
@@ -322,10 +392,23 @@ export function renderSystemDiagramsMarkdown(payload) {
         `- System nodes: ${payload.stats.nodeCount}`,
         `- System edges: ${payload.stats.edgeCount}`,
         `- Findings: ${payload.stats.findingCount}`,
+        `- Audit actions: ${payload.stats.actionCount}`,
         `- Import graph: ${payload.stats.importGraph.fileCount} files, ${payload.stats.importGraph.edgeCount} edges`,
         payload.rulesVersion == null ? '- Rules version: unknown' : `- Rules version: ${payload.rulesVersion}`,
+        '',
+        '## Audit Actions',
+        '',
+        'These are the current system gaps or guardrails surfaced by the diagrams.',
         ''
     ];
+    for (const item of payload.actions) {
+        lines.push(`- **${item.priority} ${item.title}** (${item.system}): ${item.detail}`);
+        lines.push(`  Verifies: ${item.verifies}`);
+        if (item.evidence.length > 0) {
+            lines.push(`  Evidence: ${item.evidence.map((p) => `\`${p}\``).join(', ')}`);
+        }
+    }
+    lines.push('');
     for (const diagram of payload.diagrams) {
         lines.push(`## ${diagram.title}`, '', diagram.summary, '', renderDiagramMermaid(diagram), '');
         lines.push('### Findings', '');
@@ -349,6 +432,18 @@ const main = () => {
     const payload = buildSystemDiagramData(defaultRepoRoot);
     if (process.argv.includes('--markdown')) {
         process.stdout.write(renderSystemDiagramsMarkdown(payload));
+        return;
+    }
+    if (process.argv.includes('--check-docs')) {
+        const outFile = path.join(defaultRepoRoot, 'docs', 'system-diagrams', 'README.md');
+        const expected = renderSystemDiagramsMarkdown(payload);
+        const actual = fs.existsSync(outFile) ? fs.readFileSync(outFile, 'utf8') : '';
+        if (actual !== expected) {
+            process.stderr.write('docs/system-diagrams/README.md is stale. Run yarn docs:system-diagrams.\n');
+            process.exitCode = 1;
+            return;
+        }
+        process.stdout.write('docs/system-diagrams/README.md is current\n');
         return;
     }
     if (process.argv.includes('--write-docs')) {

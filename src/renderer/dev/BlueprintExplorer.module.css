@@ -129,6 +129,10 @@
     border-left-color: #ef7d7d;
 }
 
+.finding_action {
+    border-left-color: #8ee0c3;
+}
+
 .evidence {
     color: #9bb7d8;
     word-break: break-word;
