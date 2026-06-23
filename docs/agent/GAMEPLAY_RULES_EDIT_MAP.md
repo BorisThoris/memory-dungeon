@@ -17,9 +17,6 @@ Use focused gameplay rule modules for new work. Avoid importing from `src/shared
 Default final gate for gameplay rule work:
 
 ```powershell
-yarn gate:action-loop
-yarn gate:rewards-economy
-yarn gate:navigation
+yarn gate:systems
 yarn sim:endless --floors=1000 --seed=42001
-yarn docs:system-diagrams:check
 ```

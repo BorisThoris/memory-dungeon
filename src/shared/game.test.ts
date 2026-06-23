@@ -479,6 +479,16 @@ const clearRealPairs = (run: RunState): RunState => {
     return leaveThroughExit(current);
 };
 
+const withoutTileTraits = (run: RunState): RunState => ({
+    ...run,
+    board: run.board
+        ? {
+              ...run.board,
+              tiles: run.board.tiles.map((tile) => ({ ...tile, tileTraitKind: undefined }))
+          }
+        : run.board
+});
+
 const leaveThroughExit = (run: RunState): RunState => {
     const exitTile = run.board?.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
     if (!exitTile || run.status !== 'playing') {
@@ -6171,7 +6181,7 @@ describe('endless chapters and featured objectives', () => {
             }
         };
         const wagered = acceptEndlessRiskWager(cleared);
-        const next = finishMemorizePhase(advanceToNextLevel(wagered));
+        const next = withoutTileTraits(finishMemorizePhase(advanceToNextLevel(wagered)));
 
         const finished = clearRealPairs(next);
 

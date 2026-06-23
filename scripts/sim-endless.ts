@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from '../src/shared/contracts';
 import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
+import { getBoardTraitInteractionPreviewLines } from '../src/shared/tile-trait-rules';
 
 const numArg = (argv: readonly string[], name: string, def: number): number => {
     const raw = argv.find((a) => a.startsWith(`--${name}=`))?.split('=')[1];
@@ -41,6 +42,11 @@ export const buildEndlessSimulationCsv = ({
     const dungeonCardKindCounts: Record<string, number> = {};
     const dungeonExitLockCounts: Record<string, number> = {};
     const dungeonExitCounts: Record<string, number> = {};
+    const traitMetricCounts: Record<string, number> = {
+        traitFloors: 0,
+        traitInteractionLines: 0,
+        deadTraitFloors: 0
+    };
     const findableKindCounts = emptyFindableKindCounts();
 
     for (let level = 1; level <= safeFloors; level++) {
@@ -75,7 +81,11 @@ export const buildEndlessSimulationCsv = ({
         }
         const seenFindablePairs = new Set<string>();
         const seenDungeonPairs = new Set<string>();
+        const traitPairKeys = new Set<string>();
         for (const tile of board.tiles) {
+            if (tile.tileTraitKind) {
+                traitPairKeys.add(tile.pairKey);
+            }
             if (tile.findableKind && !seenFindablePairs.has(tile.pairKey)) {
                 seenFindablePairs.add(tile.pairKey);
                 findableKindCounts[tile.findableKind] += 1;
@@ -85,6 +95,14 @@ export const buildEndlessSimulationCsv = ({
             }
             seenDungeonPairs.add(tile.pairKey);
             dungeonCardKindCounts[tile.dungeonCardKind] = (dungeonCardKindCounts[tile.dungeonCardKind] ?? 0) + 1;
+        }
+        const traitInteractionLines = getBoardTraitInteractionPreviewLines(board).length;
+        if (traitPairKeys.size > 0) {
+            traitMetricCounts.traitFloors += 1;
+            traitMetricCounts.traitInteractionLines += traitInteractionLines;
+            if (traitInteractionLines === 0) {
+                traitMetricCounts.deadTraitFloors += 1;
+            }
         }
     }
 
@@ -100,6 +118,9 @@ export const buildEndlessSimulationCsv = ({
         ...Object.entries(findableKindCounts)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `findableKind,${k},${v}`),
+        ...Object.entries(traitMetricCounts)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([k, v]) => `traitMetric,${k},${v}`),
         ...Object.entries(FINDABLE_KIND_SPAWN_WEIGHTS)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `findableTargetWeight,${k},${v}`),

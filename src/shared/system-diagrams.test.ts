@@ -7,6 +7,7 @@ type SystemDiagramPayload = {
         id: string;
         priority: string;
         status: string;
+        command: string | null;
         system: string;
         title: string;
         detail: string;
@@ -64,7 +65,10 @@ describe('system diagram generator', () => {
         expect(payload.stats.diagramCount).toBe(5);
         expect(payload.stats.actionCount).toBe(5);
         expect(payload.actions.map((item) => item.id)).toContain('softlock-generation-matrix');
-        expect(payload.actions.every((item) => item.status === 'open')).toBe(true);
+        expect(payload.actions.every((item) => item.status === 'done')).toBe(true);
+        expect(payload.actions.map((item) => item.command)).toEqual(
+            expect.arrayContaining(['yarn gate:action-loop', 'yarn gate:rewards-economy', 'yarn gate:navigation'])
+        );
         expect(payload.actions.find((item) => item.id === 'resolution-slice-gate')?.detail).toContain('yarn gate:action-loop');
         expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')?.verifies).toContain('Generated boards');
         expect(payload.stats.importGraph.fileCount).toBe(0);
@@ -92,6 +96,8 @@ describe('system diagram generator', () => {
         expect(markdown).toContain('## Audit Actions');
         expect(markdown).toContain('P0 Extend the softlock matrix for every new blocker');
         expect(markdown).toContain('yarn gate:action-loop');
+        expect(markdown).toContain('yarn gate:rewards-economy');
+        expect(markdown).toContain('yarn gate:navigation');
         expect(markdown).toContain('```mermaid');
         expect(markdown).toContain('flowchart LR');
         expect(markdown).toContain('## Trait Systems');

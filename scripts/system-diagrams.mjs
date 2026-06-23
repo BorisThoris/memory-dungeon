@@ -66,10 +66,11 @@ const finding = (id, severity, title, detail, evidencePaths) => ({
     evidence: evidencePaths
 });
 
-const action = (id, priority, system, title, detail, verifies, evidencePaths, status = 'open') => ({
+const action = (id, priority, system, title, detail, verifies, evidencePaths, status = 'open', command = null) => ({
     id,
     priority,
     status,
+    command,
     system,
     title,
     detail,
@@ -121,7 +122,9 @@ const buildNavigationDiagram = (repoRoot) => {
                 'Keep route contracts authoritative',
                 'When adding any route, overlay, or shell chrome state, add or update a navigation contract plus a focused renderer/store regression.',
                 'Route action cannot bypass App shell state or strand the player on a stale screen.',
-                navEvidence
+                navEvidence,
+                'done',
+                'yarn gate:navigation'
             )
         ]
     };
@@ -169,7 +172,9 @@ const buildGameplayDiagram = (repoRoot) => {
                 'Use a focused action-loop gate for match changes',
                 'Match, enemy, hazard, board-power, and trait changes should run `yarn gate:action-loop` before full-suite handoff.',
                 'A change in one resolver branch cannot silently regress another branch of the same turn loop.',
-                softlockEvidence
+                softlockEvidence,
+                'done',
+                'yarn gate:action-loop'
             )
         ]
     };
@@ -219,7 +224,9 @@ const buildBoardGenerationDiagram = (repoRoot) => {
                 'Extend the softlock matrix for every new blocker',
                 'New locks, trait blockers, enemies, objectives, or exit states must add a softlock-fairness or softlock-generator-contract case that proves a completion path exists after generation and repair.',
                 'Generated boards remain completable even when repair has to intervene.',
-                boardEvidence
+                boardEvidence,
+                'done',
+                'yarn gate:action-loop'
             )
         ]
     };
@@ -268,7 +275,9 @@ const buildRewardsEconomyDiagram = (repoRoot) => {
                 'Lock reward priority slots before adding fun offers',
                 'Any new shop or reward offer must prove it does not displace required keys, boss access, loadout recovery, or trait-route starter support.',
                 'Progression-critical offers remain reachable while optional trait tools still appear.',
-                rewardEvidence
+                rewardEvidence,
+                'done',
+                'yarn gate:rewards-economy'
             )
         ]
     };
@@ -317,7 +326,9 @@ const buildTraitDiagram = (repoRoot) => {
                 'Keep traits visible as a third mechanic',
                 'New trait interactions should update simulation visibility metrics, first-run HUD smoke, and at least one `yarn gate:action-loop` board-power interaction case.',
                 'Trait routes stay present early and interact with movement/shuffle tools instead of becoming rare flavor.',
-                traitEvidence
+                traitEvidence,
+                'done',
+                'yarn gate:action-loop'
             )
         ]
     };
@@ -403,7 +414,8 @@ export function renderSystemDiagramsMarkdown(payload) {
         ''
     ];
     for (const item of payload.actions) {
-        lines.push(`- **${item.priority} ${item.title}** (${item.system}): ${item.detail}`);
+        const commandText = item.command ? ` Command: \`${item.command}\`.` : '';
+        lines.push(`- **${item.priority} ${item.title}** (${item.system}, ${item.status}): ${item.detail}${commandText}`);
         lines.push(`  Verifies: ${item.verifies}`);
         if (item.evidence.length > 0) {
             lines.push(`  Evidence: ${item.evidence.map((p) => `\`${p}\``).join(', ')}`);
@@ -451,6 +463,9 @@ export function renderSystemAuditMarkdown(payload) {
         lines.push(`- System: ${item.system}`);
         lines.push(`- Detail: ${item.detail}`);
         lines.push(`- Verifies: ${item.verifies}`);
+        if (item.command) {
+            lines.push(`- Command: \`${item.command}\``);
+        }
         if (item.evidence.length > 0) {
             lines.push(`- Evidence: ${item.evidence.map((p) => `\`${p}\``).join(', ')}`);
         }

@@ -22,7 +22,9 @@ describe('gameplay rules edit map drift', () => {
 
     it('points high-blast-radius gameplay work at system gates', () => {
         expect(editMap).toContain('yarn gate:action-loop');
+        expect(editMap).toContain('yarn gate:rewards-economy');
+        expect(editMap).toContain('yarn gate:navigation');
+        expect(editMap).toContain('yarn gate:systems');
         expect(editMap).toContain('softlock-generator-contract.test.ts');
-        expect(editMap).toContain('yarn docs:system-diagrams:check');
     });
 });

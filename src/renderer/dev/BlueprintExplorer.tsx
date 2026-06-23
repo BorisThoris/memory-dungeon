@@ -34,6 +34,7 @@ type SystemDiagramPayload = {
         id: string;
         priority: string;
         status: 'open' | 'done' | string;
+        command: string | null;
         system: string;
         title: string;
         detail: string;
@@ -498,6 +499,7 @@ function BlueprintGraphInner(): ReactElement {
                                         {item.priority} {item.title}
                                     </strong>
                                     <p className={styles.evidence}>Status: {item.status}</p>
+                                    {item.command ? <p className={styles.evidence}>Command: {item.command}</p> : null}
                                     <p>{item.detail}</p>
                                     <p className={styles.evidence}>Verifies: {item.verifies}</p>
                                 </div>
