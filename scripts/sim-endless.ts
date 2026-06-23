@@ -144,15 +144,57 @@ export const buildEndlessSimulationCsv = ({
     return lines.join('\n') + '\n';
 };
 
+const parseCsvCounts = (csv: string): Record<string, Record<string, number>> => {
+    const counts: Record<string, Record<string, number>> = {};
+    for (const line of csv.trim().split('\n').slice(1)) {
+        const [kind, key, count] = line.split(',');
+        counts[kind] ??= {};
+        counts[kind][key] = Number(count);
+    }
+    return counts;
+};
+
+const sumCounts = (counts: Record<string, number> | undefined): number =>
+    Object.values(counts ?? {}).reduce((sum, value) => sum + value, 0);
+
+export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string => {
+    const csv = buildEndlessSimulationCsv(input);
+    const counts = parseCsvCounts(csv);
+    const routeKinds = Object.keys(counts.floorArchetype ?? {}).filter((key) => key !== 'none').length;
+    const objectiveKinds = Object.keys(counts.dungeonObjective ?? {}).filter((key) => key !== 'none').length;
+    const exitLocks = Object.keys(counts.dungeonExitLock ?? {}).filter((key) => key !== 'none').length;
+    const findableTotal = sumCounts(counts.findableKind);
+    const rewardKinds = Object.keys(counts.findableKind ?? {}).filter((key) => (counts.findableKind?.[key] ?? 0) > 0).length;
+    const traitFloors = counts.traitMetric?.traitFloors ?? 0;
+    const deadTraitFloors = counts.traitMetric?.deadTraitFloors ?? 0;
+    const traitInteractionLines = counts.traitMetric?.traitInteractionLines ?? 0;
+    const floors = Math.max(1, Math.floor(input.floors));
+    const pct = (value: number) => `${((value / floors) * 100).toFixed(1)}%`;
+
+    return [
+        '# Endless Simulation Gate Summary',
+        '',
+        `- Floors sampled: ${floors}`,
+        `- Seed: ${Math.floor(input.runSeed)}`,
+        `- Rules version: ${input.rulesVersion ?? GAME_RULES_VERSION}`,
+        `- Route gates: ${routeKinds} floor archetypes, ${objectiveKinds} objectives, ${exitLocks} exit lock types.`,
+        `- Reward gates: ${findableTotal} findable rewards across ${rewardKinds} active reward kinds.`,
+        `- Trait gates: ${traitFloors} trait floors (${pct(traitFloors)}), ${traitInteractionLines} interaction lines, ${deadTraitFloors} dead trait floors.`,
+        ''
+    ].join('\n');
+};
+
 const runCli = (argv: readonly string[]): void => {
     const floors = Math.max(1, Math.floor(numArg(argv, 'floors', 10_000)));
     const runSeed = Math.floor(numArg(argv, 'seed', 42_001));
-    const csv = buildEndlessSimulationCsv({ floors, runSeed });
-    process.stdout.write(csv);
+    const input = { floors, runSeed };
+    const summaryMode = argv.includes('--summary');
+    const output = summaryMode ? buildEndlessSimulationSummary(input) : buildEndlessSimulationCsv(input);
+    process.stdout.write(output);
 
     const out = argv.find((a) => a.startsWith('--out='))?.split('=')[1];
     if (out) {
-        writeFileSync(out, csv, 'utf8');
+        writeFileSync(out, output, 'utf8');
     }
 };
 

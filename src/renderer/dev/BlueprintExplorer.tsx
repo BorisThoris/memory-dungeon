@@ -40,6 +40,7 @@ type SystemDiagramPayload = {
         detail: string;
         verifies: string;
         evidence: string[];
+        minimumEvidence?: number;
     }[];
     diagrams: {
         id: string;
@@ -101,6 +102,7 @@ function BlueprintGraphInner(): ReactElement {
     const [astDiff, setAstDiff] = useState<string | null>(null);
     const [astMsg, setAstMsg] = useState<string | null>(null);
     const [codegenOut, setCodegenOut] = useState<string | null>(null);
+    const [copyMsg, setCopyMsg] = useState<string | null>(null);
 
     const applyFilter = useCallback(
         (data: ProjectGraphPayload, layer: Layer, q: string) => {
@@ -365,6 +367,13 @@ function BlueprintGraphInner(): ReactElement {
         })();
     }, []);
 
+    const copyActionCommand = useCallback((command: string) => {
+        setCopyMsg(null);
+        void navigator.clipboard.writeText(command)
+            .then(() => setCopyMsg(`Copied ${command}`))
+            .catch((e: unknown) => setCopyMsg((e as Error).message));
+    }, []);
+
     if (!import.meta.env.DEV) {
         return <p>Blueprint Explorer is only available in development.</p>;
     }
@@ -483,6 +492,7 @@ function BlueprintGraphInner(): ReactElement {
                     <div className={styles.subPanel}>
                         <h3>{selectedDiagram.title}</h3>
                         <p className={styles.label}>{selectedDiagram.summary}</p>
+                        {copyMsg ? <p className={styles.label}>{copyMsg}</p> : null}
                         <div className={styles.findings}>
                             {selectedDiagram.findings.map((item) => (
                                 <div key={item.id} className={`${styles.finding} ${styles[`finding_${item.severity}`]}`}>
@@ -499,9 +509,17 @@ function BlueprintGraphInner(): ReactElement {
                                         {item.priority} {item.title}
                                     </strong>
                                     <p className={styles.evidence}>Status: {item.status}</p>
-                                    {item.command ? <p className={styles.evidence}>Command: {item.command}</p> : null}
+                                    {item.command ? (
+                                        <p className={styles.evidence}>
+                                            Command: <code>{item.command}</code>{' '}
+                                            <button type="button" className={styles.inlineBtn} onClick={() => copyActionCommand(item.command!)}>
+                                                Copy
+                                            </button>
+                                        </p>
+                                    ) : null}
                                     <p>{item.detail}</p>
                                     <p className={styles.evidence}>Verifies: {item.verifies}</p>
+                                    {item.minimumEvidence ? <p className={styles.evidence}>Minimum evidence paths: {item.minimumEvidence}</p> : null}
                                 </div>
                             ))}
                         </div>

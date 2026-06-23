@@ -12,6 +12,8 @@ type SystemDiagramPayload = {
         title: string;
         detail: string;
         verifies: string;
+        evidence: string[];
+        minimumEvidence?: number;
     }[];
     diagrams: {
         id: string;
@@ -60,15 +62,22 @@ describe('system diagram generator', () => {
             'gameplay-resolution',
             'board-generation',
             'rewards-economy',
-            'trait-systems'
+            'trait-systems',
+            'persistence-save-flow',
+            'renderer-input-flow',
+            'audio-feedback-pipeline',
+            'asset-card-rendering',
+            'test-gate-architecture'
         ]);
-        expect(payload.stats.diagramCount).toBe(5);
-        expect(payload.stats.actionCount).toBe(5);
+        expect(payload.stats.diagramCount).toBe(10);
+        expect(payload.stats.actionCount).toBe(10);
         expect(payload.actions.map((item) => item.id)).toContain('softlock-generation-matrix');
         expect(payload.actions.every((item) => item.status === 'done')).toBe(true);
         expect(payload.actions.map((item) => item.command)).toEqual(
-            expect.arrayContaining(['yarn gate:action-loop', 'yarn gate:rewards-economy', 'yarn gate:navigation'])
+            expect.arrayContaining(['yarn gate:action-loop', 'yarn gate:rewards-economy', 'yarn gate:navigation', 'yarn gate:systems'])
         );
+        expect(payload.actions.every((item) => item.command != null && item.command.length > 0)).toBe(true);
+        expect(payload.actions.every((item) => item.evidence.length >= (item.minimumEvidence ?? 1))).toBe(true);
         expect(payload.actions.find((item) => item.id === 'resolution-slice-gate')?.detail).toContain('yarn gate:action-loop');
         expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')?.verifies).toContain('Generated boards');
         expect(payload.stats.importGraph.fileCount).toBe(0);
@@ -98,6 +107,8 @@ describe('system diagram generator', () => {
         expect(markdown).toContain('yarn gate:action-loop');
         expect(markdown).toContain('yarn gate:rewards-economy');
         expect(markdown).toContain('yarn gate:navigation');
+        expect(markdown).toContain('## Renderer Input Flow');
+        expect(markdown).toContain('## Test Gate Architecture');
         expect(markdown).toContain('```mermaid');
         expect(markdown).toContain('flowchart LR');
         expect(markdown).toContain('## Trait Systems');

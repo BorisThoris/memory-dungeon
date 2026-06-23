@@ -15,7 +15,12 @@ const DIAGRAM_IDS = [
     'gameplay-resolution',
     'board-generation',
     'rewards-economy',
-    'trait-systems'
+    'trait-systems',
+    'persistence-save-flow',
+    'renderer-input-flow',
+    'audio-feedback-pipeline',
+    'asset-card-rendering',
+    'test-gate-architecture'
 ];
 
 const evidence = (repoRoot, candidates) =>
@@ -66,11 +71,9 @@ const finding = (id, severity, title, detail, evidencePaths) => ({
     evidence: evidencePaths
 });
 
-const action = (id, priority, system, title, detail, verifies, evidencePaths, status = 'open', command = null) => ({
+const action = (id, priority, system, title, detail, verifies, evidencePaths) => ({
     id,
     priority,
-    status,
-    command,
     system,
     title,
     detail,
@@ -79,6 +82,58 @@ const action = (id, priority, system, title, detail, verifies, evidencePaths, st
 });
 
 const hasText = (repoRoot, rel, needle) => readText(repoRoot, rel).includes(needle);
+
+const loadActionRegistry = (repoRoot) => {
+    const rel = 'docs/system-diagrams/actions.json';
+    const abs = path.join(repoRoot, rel);
+    if (!fs.existsSync(abs)) {
+        throw new Error(`${rel} is missing. Add action status/command metadata before generating system diagrams.`);
+    }
+    const parsed = JSON.parse(fs.readFileSync(abs, 'utf8'));
+    if (!Array.isArray(parsed.actions)) {
+        throw new Error(`${rel} must contain an actions array.`);
+    }
+    return parsed.actions;
+};
+
+const mergeActionRegistry = (repoRoot, diagrams) => {
+    const registry = loadActionRegistry(repoRoot);
+    const registryById = new Map(registry.map((item) => [item.id, item]));
+    const seen = new Set();
+    const mergedDiagrams = diagrams.map((diagram) => ({
+        ...diagram,
+        actions: diagram.actions.map((item) => {
+            const registered = registryById.get(item.id);
+            if (!registered) {
+                throw new Error(`Action ${item.id} is missing from docs/system-diagrams/actions.json.`);
+            }
+            seen.add(item.id);
+            for (const key of ['priority', 'system', 'title']) {
+                if (registered[key] !== item[key]) {
+                    throw new Error(`Action ${item.id} registry ${key}=${registered[key]} does not match diagram ${key}=${item[key]}.`);
+                }
+            }
+            const minimumEvidence = Math.max(1, Number(registered.minimumEvidence ?? 1));
+            if (item.evidence.length < minimumEvidence) {
+                throw new Error(`Action ${item.id} has ${item.evidence.length} evidence paths; registry requires ${minimumEvidence}.`);
+            }
+            if (!registered.status || !registered.command) {
+                throw new Error(`Action ${item.id} registry entry must include status and command.`);
+            }
+            return {
+                ...item,
+                status: registered.status,
+                command: registered.command,
+                minimumEvidence
+            };
+        })
+    }));
+    const unused = registry.filter((item) => !seen.has(item.id));
+    if (unused.length > 0) {
+        throw new Error(`Unused action registry entries: ${unused.map((item) => item.id).join(', ')}`);
+    }
+    return mergedDiagrams;
+};
 
 const buildNavigationDiagram = (repoRoot) => {
     const navEvidence = evidence(repoRoot, [
@@ -334,6 +389,248 @@ const buildTraitDiagram = (repoRoot) => {
     };
 };
 
+const buildPersistenceDiagram = (repoRoot) => {
+    const persistenceEvidence = evidence(repoRoot, [
+        'src/main/persistence.ts',
+        'src/main/persistence.test.ts',
+        'src/main/persistence-write-error.test.ts',
+        'src/shared/contracts.ts',
+        'src/renderer/store/useAppStore.ts'
+    ]);
+    return {
+        id: 'persistence-save-flow',
+        title: 'Persistence Save Flow',
+        summary: 'Main-process persistence, preload contracts, and renderer state decide how runs and settings survive app restarts.',
+        nodes: [
+            node('renderer_store', 'Renderer Store', 'state', 'renderer', 'Runtime state requests save, load, reset, and migration behavior.', evidence(repoRoot, ['src/renderer/store/useAppStore.ts'])),
+            node('preload_contract', 'Preload Contract', 'contract', 'renderer', 'Typed IPC boundary exposes persistence calls to renderer code.', evidence(repoRoot, ['src/preload', 'src/shared/contracts.ts'])),
+            node('main_persistence', 'Main Persistence', 'service', 'main', 'Disk-backed store reads, writes, and reports persistence errors.', evidence(repoRoot, ['src/main/persistence.ts'])),
+            node('save_schema', 'Save Schema', 'contract', 'shared', 'Shared contracts define serializable save fields and rules version.', evidence(repoRoot, ['src/shared/contracts.ts'])),
+            node('persistence_tests', 'Persistence Tests', 'gate', 'main', 'Regression tests cover normal writes and write-error handling.', persistenceEvidence)
+        ],
+        edges: [
+            edge('renderer_store', 'preload_contract', 'calls through'),
+            edge('preload_contract', 'main_persistence', 'bridges IPC'),
+            edge('main_persistence', 'save_schema', 'serializes'),
+            edge('main_persistence', 'persistence_tests', 'guarded by')
+        ],
+        findings: [
+            finding(
+                'save-contract-surface',
+                'warning',
+                'Save changes cross process boundaries',
+                'Persistence changes need contract, main-process, and renderer-state checks together because a green domain test can still miss an IPC or serialization drift.',
+                persistenceEvidence
+            )
+        ],
+        actions: [
+            action(
+                'persistence-save-contract-gate',
+                'P1',
+                'Persistence Save Flow',
+                'Gate save changes through cross-process tests',
+                'Any save shape, rules version, or write-error change should run persistence tests plus typecheck before handoff.',
+                'Save data remains serializable, loadable, and failure-tolerant across renderer and main process boundaries.',
+                persistenceEvidence
+            )
+        ]
+    };
+};
+
+const buildRendererInputDiagram = (repoRoot) => {
+    const inputEvidence = evidence(repoRoot, [
+        'src/renderer/components/TileBoard.tsx',
+        'src/renderer/components/tileBoardDomAccessibility.ts',
+        'src/renderer/components/tileBoardPointerPick.ts',
+        'src/renderer/components/tileBoardWebglBoundary.tsx',
+        'src/renderer/store/useAppStore.ts'
+    ]);
+    return {
+        id: 'renderer-input-flow',
+        title: 'Renderer Input Flow',
+        summary: 'DOM accessibility, pointer picking, WebGL boundaries, and store actions translate player intent into legal game actions.',
+        nodes: [
+            node('dom_accessibility', 'DOM Accessibility Layer', 'interaction', 'renderer', 'Keyboard, labels, and fallback surface expose playable tile actions.', evidence(repoRoot, ['src/renderer/components/tileBoardDomAccessibility.ts'])),
+            node('pointer_pick', 'Pointer Pick', 'interaction', 'renderer', 'Pointer and raycast helpers identify the intended tile or board target.', evidence(repoRoot, ['src/renderer/components/tileBoardPointerPick.ts', 'src/renderer/components/tileBoardPick.ts'])),
+            node('webgl_boundary', 'WebGL Boundary', 'render', 'renderer', 'Renderer chooses WebGL or DOM fallback without changing legal action semantics.', evidence(repoRoot, ['src/renderer/components/tileBoardWebglBoundary.tsx'])),
+            node('store_dispatch', 'Store Dispatch', 'state', 'renderer', 'useAppStore applies input actions to the shared game state.', evidence(repoRoot, ['src/renderer/store/useAppStore.ts'])),
+            node('input_tests', 'Input Tests', 'gate', 'renderer', 'Focused tests keep DOM, pointer, WebGL, and store paths equivalent.', inputEvidence)
+        ],
+        edges: [
+            edge('dom_accessibility', 'store_dispatch', 'dispatches'),
+            edge('pointer_pick', 'store_dispatch', 'dispatches'),
+            edge('webgl_boundary', 'pointer_pick', 'routes pointer state'),
+            edge('store_dispatch', 'input_tests', 'guarded by')
+        ],
+        findings: [
+            finding(
+                'input-parity-risk',
+                'warning',
+                'Input has multiple equivalent entry points',
+                'Tile interaction changes should prove DOM fallback, keyboard, pointer, WebGL boundary, and store dispatch still agree on the same legal action.',
+                inputEvidence
+            )
+        ],
+        actions: [
+            action(
+                'renderer-input-contract-gate',
+                'P1',
+                'Renderer Input Flow',
+                'Keep tile input paths behaviorally equivalent',
+                'Any TileBoard or store input change should run renderer input tests that cover DOM accessibility, WebGL fallback, pointer picking, and store dispatch.',
+                'Players can perform the same legal move through every supported input/rendering path.',
+                inputEvidence
+            )
+        ]
+    };
+};
+
+const buildAudioFeedbackDiagram = (repoRoot) => {
+    const audioEvidence = evidence(repoRoot, [
+        'src/renderer/audio/uiSfx.ts',
+        'src/renderer/audio/audioInteractionCoverage.ts',
+        'src/renderer/audio/audioInteractionCoverage.test.ts',
+        'src/renderer/hooks/useHudPoliteLiveAnnouncement.ts',
+        'src/renderer/components/gameScreenFeedback.ts',
+        'docs/AUDIO_ASSET_INVENTORY.md'
+    ]);
+    return {
+        id: 'audio-feedback-pipeline',
+        title: 'Audio Feedback Pipeline',
+        summary: 'Gameplay events become audio cues, HUD announcements, and visible feedback so core actions are legible.',
+        nodes: [
+            node('feedback_events', 'Feedback Events', 'domain', 'renderer', 'Game screen feedback maps action results into player-facing cues.', evidence(repoRoot, ['src/renderer/components/gameScreenFeedback.ts'])),
+            node('ui_sfx', 'UI SFX', 'service', 'renderer', 'Audio service triggers short cues for interactions and state changes.', evidence(repoRoot, ['src/renderer/audio/uiSfx.ts'])),
+            node('live_announcements', 'Live Announcements', 'accessibility', 'renderer', 'HUD polite live regions mirror important state changes in text.', evidence(repoRoot, ['src/renderer/hooks/useHudPoliteLiveAnnouncement.ts'])),
+            node('asset_inventory', 'Audio Inventory', 'asset', 'docs', 'Inventory documents available and placeholder audio coverage.', evidence(repoRoot, ['docs/AUDIO_ASSET_INVENTORY.md'])),
+            node('coverage_gate', 'Coverage Gate', 'gate', 'renderer', 'Coverage tests prove important interactions have cue coverage.', audioEvidence)
+        ],
+        edges: [
+            edge('feedback_events', 'ui_sfx', 'triggers'),
+            edge('feedback_events', 'live_announcements', 'announces'),
+            edge('asset_inventory', 'ui_sfx', 'supplies assets'),
+            edge('ui_sfx', 'coverage_gate', 'guarded by')
+        ],
+        findings: [
+            finding(
+                'feedback-coverage-risk',
+                'info',
+                'Feedback coverage should move with gameplay systems',
+                'New actions, rewards, hazards, and blockers should include audio and announcement coverage so mechanics stay readable without relying only on visuals.',
+                audioEvidence
+            )
+        ],
+        actions: [
+            action(
+                'audio-feedback-coverage-gate',
+                'P2',
+                'Audio Feedback Pipeline',
+                'Add feedback coverage for new action outcomes',
+                'When introducing a new visible gameplay outcome, add or update audio interaction coverage and HUD announcement tests.',
+                'Important gameplay outcomes have both audible and textual feedback coverage.',
+                audioEvidence
+            )
+        ]
+    };
+};
+
+const buildAssetCardRenderingDiagram = (repoRoot) => {
+    const assetEvidence = evidence(repoRoot, [
+        'src/renderer/cardFace/cardIllustrationDraw.ts',
+        'src/renderer/cardFace/cardIllustrationDraw.test.ts',
+        'src/renderer/components/tileTextures.ts',
+        'src/renderer/components/TileBezel.tsx',
+        'scripts/build-card-illustration-manifest.mjs'
+    ]);
+    return {
+        id: 'asset-card-rendering',
+        title: 'Asset Card Rendering',
+        summary: 'Card-face illustrations, generated manifests, textures, bezels, and board readability tests define the card presentation pipeline.',
+        nodes: [
+            node('illustration_manifest', 'Illustration Manifest', 'asset', 'scripts', 'Build script emits available card-face illustration metadata.', evidence(repoRoot, ['scripts/build-card-illustration-manifest.mjs'])),
+            node('card_draw', 'Card Draw Pipeline', 'render', 'renderer', 'Card-face drawing turns tile identity into readable illustrations.', evidence(repoRoot, ['src/renderer/cardFace/cardIllustrationDraw.ts'])),
+            node('tile_textures', 'Tile Textures', 'render', 'renderer', 'Texture helpers and revisions feed the board rendering layers.', evidence(repoRoot, ['src/renderer/components/tileTextures.ts', 'src/renderer/components/tileBoardTextureRevision.ts'])),
+            node('bezel_frame', 'Bezel Frame', 'render', 'renderer', 'Tile bezel/frame components provide readable framing and state accents.', evidence(repoRoot, ['src/renderer/components/TileBezel.tsx', 'src/renderer/components/tileBoardFrameVisualState.ts'])),
+            node('render_tests', 'Rendering Tests', 'gate', 'renderer', 'Illustration and readability tests catch card-face regressions.', assetEvidence)
+        ],
+        edges: [
+            edge('illustration_manifest', 'card_draw', 'feeds'),
+            edge('card_draw', 'tile_textures', 'composed with'),
+            edge('tile_textures', 'bezel_frame', 'rendered inside'),
+            edge('bezel_frame', 'render_tests', 'guarded by')
+        ],
+        findings: [
+            finding(
+                'card-rendering-contract',
+                'warning',
+                'Card rendering is an asset and code contract',
+                'Asset pipeline changes should run both illustration and renderer readability tests because generated manifests can drift independently from TypeScript render code.',
+                assetEvidence
+            )
+        ],
+        actions: [
+            action(
+                'asset-rendering-regression-gate',
+                'P2',
+                'Asset Card Rendering',
+                'Run rendering gates for asset or card-face edits',
+                'Any card art, manifest, texture, bezel, or board readability change should run focused renderer card tests before fullcheck.',
+                'Card faces remain legible and the asset manifest stays aligned with renderer expectations.',
+                assetEvidence
+            )
+        ]
+    };
+};
+
+const buildTestGateArchitectureDiagram = (repoRoot) => {
+    const gateEvidence = evidence(repoRoot, [
+        'package.json',
+        'scripts/system-diagrams.mjs',
+        'src/shared/system-diagrams.test.ts',
+        'docs/agent/GAMEPLAY_RULES_EDIT_MAP.md',
+        'docs/system-diagrams/AUDIT.md'
+    ]);
+    return {
+        id: 'test-gate-architecture',
+        title: 'Test Gate Architecture',
+        summary: 'Package scripts, system diagrams, edit maps, and focused tests define which gates should run for each system change.',
+        nodes: [
+            node('package_scripts', 'Package Scripts', 'gate', 'root', 'Yarn scripts compose lint, typecheck, focused gates, fullcheck, and CI.', evidence(repoRoot, ['package.json'])),
+            node('system_diagrams', 'System Diagrams', 'analysis', 'scripts', 'Diagram generator maps system surfaces, evidence, findings, and audit actions.', evidence(repoRoot, ['scripts/system-diagrams.mjs'])),
+            node('diagram_tests', 'Diagram Tests', 'gate', 'shared', 'Tests assert diagram payload shape, evidence links, and markdown output.', evidence(repoRoot, ['src/shared/system-diagrams.test.ts'])),
+            node('edit_map', 'Gameplay Edit Map', 'docs', 'docs', 'Agent-facing map routes gameplay edits to matching rules and tests.', evidence(repoRoot, ['docs/agent/GAMEPLAY_RULES_EDIT_MAP.md'])),
+            node('audit_docs', 'Audit Docs', 'docs', 'docs', 'Generated audit report exposes action status, commands, and evidence.', evidence(repoRoot, ['docs/system-diagrams/AUDIT.md']))
+        ],
+        edges: [
+            edge('system_diagrams', 'audit_docs', 'generates'),
+            edge('system_diagrams', 'diagram_tests', 'covered by'),
+            edge('package_scripts', 'diagram_tests', 'runs'),
+            edge('edit_map', 'package_scripts', 'routes to'),
+            edge('audit_docs', 'package_scripts', 'names commands')
+        ],
+        findings: [
+            finding(
+                'gates-need-single-register',
+                'info',
+                'System gates need a checked action register',
+                'Action status and commands should stay in one validated registry so docs, UI, and CI fail together when an audit action drifts.',
+                gateEvidence
+            )
+        ],
+        actions: [
+            action(
+                'systems-gate-registry',
+                'P0',
+                'Test Gate Architecture',
+                'Keep system actions registered and CI-visible',
+                'New diagrams or audit actions must update the action registry and keep `yarn gate:systems` passing.',
+                'System diagram docs, audit actions, and CI gate commands remain synchronized.',
+                gateEvidence
+            )
+        ]
+    };
+};
+
 const extractRulesVersion = (repoRoot) => {
     const contracts = readText(repoRoot, 'src/shared/contracts.ts');
     const match = contracts.match(/GAME_RULES_VERSION\s*=\s*(\d+)/);
@@ -347,13 +644,19 @@ export function buildSystemDiagramData(repoRoot = defaultRepoRoot) {
     const importGraph = process.env.SYSTEM_DIAGRAMS_SKIP_IMPORT_GRAPH === '1'
         ? { nodes: [], edges: [], stats: { fileCount: 0, edgeCount: 0 } }
         : buildProjectGraphData(repoRoot);
-    const diagrams = [
+    const rawDiagrams = [
         buildNavigationDiagram(repoRoot),
         buildGameplayDiagram(repoRoot),
         buildBoardGenerationDiagram(repoRoot),
         buildRewardsEconomyDiagram(repoRoot),
-        buildTraitDiagram(repoRoot)
-    ].map((diagram) => ({ ...diagram, stats: diagramStats(diagram) }));
+        buildTraitDiagram(repoRoot),
+        buildPersistenceDiagram(repoRoot),
+        buildRendererInputDiagram(repoRoot),
+        buildAudioFeedbackDiagram(repoRoot),
+        buildAssetCardRenderingDiagram(repoRoot),
+        buildTestGateArchitectureDiagram(repoRoot)
+    ];
+    const diagrams = mergeActionRegistry(repoRoot, rawDiagrams).map((diagram) => ({ ...diagram, stats: diagramStats(diagram) }));
     const actions = diagrams.flatMap((diagram) => diagram.actions);
     const layerCounts = countBy(importGraph.nodes, (n) => n.layer);
     return {

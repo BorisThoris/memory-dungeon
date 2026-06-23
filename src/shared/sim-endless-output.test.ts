@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildEndlessSimulationCsv } from '../../scripts/sim-endless';
+import { buildEndlessSimulationCsv, buildEndlessSimulationSummary } from '../../scripts/sim-endless';
 import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from './contracts';
 
 describe('sim-endless CSV output', () => {
@@ -19,5 +19,19 @@ describe('sim-endless CSV output', () => {
         expect(lines.some((line) => line.startsWith('traitMetric,traitFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('traitMetric,traitInteractionLines,'))).toBe(true);
         expect(lines).toContain('traitMetric,deadTraitFloors,0');
+    });
+
+    it('summarizes route, reward, and trait gates for human review', () => {
+        const summary = buildEndlessSimulationSummary({
+            floors: 24,
+            runSeed: 42_001,
+            rulesVersion: GAME_RULES_VERSION
+        });
+
+        expect(summary).toContain('# Endless Simulation Gate Summary');
+        expect(summary).toContain('- Route gates:');
+        expect(summary).toContain('- Reward gates:');
+        expect(summary).toContain('- Trait gates:');
+        expect(summary).toContain('dead trait floors.');
     });
 });

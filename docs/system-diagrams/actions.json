@@ -1,0 +1,95 @@
+{
+    "version": 1,
+    "actions": [
+        {
+            "id": "nav-contract-drift-guard",
+            "priority": "P2",
+            "system": "Navigation Flow",
+            "title": "Keep route contracts authoritative",
+            "status": "done",
+            "command": "yarn gate:navigation",
+            "minimumEvidence": 3
+        },
+        {
+            "id": "resolution-slice-gate",
+            "priority": "P1",
+            "system": "Gameplay Resolution",
+            "title": "Use a focused action-loop gate for match changes",
+            "status": "done",
+            "command": "yarn gate:action-loop",
+            "minimumEvidence": 4
+        },
+        {
+            "id": "softlock-generation-matrix",
+            "priority": "P0",
+            "system": "Board Generation",
+            "title": "Extend the softlock matrix for every new blocker",
+            "status": "done",
+            "command": "yarn gate:action-loop",
+            "minimumEvidence": 5
+        },
+        {
+            "id": "reward-priority-gate",
+            "priority": "P1",
+            "system": "Rewards And Economy",
+            "title": "Lock reward priority slots before adding fun offers",
+            "status": "done",
+            "command": "yarn gate:rewards-economy",
+            "minimumEvidence": 4
+        },
+        {
+            "id": "trait-route-visibility-gate",
+            "priority": "P1",
+            "system": "Trait Systems",
+            "title": "Keep traits visible as a third mechanic",
+            "status": "done",
+            "command": "yarn gate:action-loop",
+            "minimumEvidence": 4
+        },
+        {
+            "id": "persistence-save-contract-gate",
+            "priority": "P1",
+            "system": "Persistence Save Flow",
+            "title": "Gate save changes through cross-process tests",
+            "status": "done",
+            "command": "yarn vitest run src/main/persistence.test.ts src/main/persistence-write-error.test.ts && yarn typecheck",
+            "minimumEvidence": 4
+        },
+        {
+            "id": "renderer-input-contract-gate",
+            "priority": "P1",
+            "system": "Renderer Input Flow",
+            "title": "Keep tile input paths behaviorally equivalent",
+            "status": "done",
+            "command": "yarn vitest run src/renderer/components/tileBoardDomAccessibility.test.ts src/renderer/components/tileBoardPointerPick.test.ts src/renderer/components/tileBoardWebglBoundary.test.tsx src/renderer/store/useAppStore.test.ts",
+            "minimumEvidence": 4
+        },
+        {
+            "id": "audio-feedback-coverage-gate",
+            "priority": "P2",
+            "system": "Audio Feedback Pipeline",
+            "title": "Add feedback coverage for new action outcomes",
+            "status": "done",
+            "command": "yarn vitest run src/renderer/audio/audioInteractionCoverage.test.ts src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts src/renderer/components/GameScreen.test.tsx",
+            "minimumEvidence": 4
+        },
+        {
+            "id": "asset-rendering-regression-gate",
+            "priority": "P2",
+            "system": "Asset Card Rendering",
+            "title": "Run rendering gates for asset or card-face edits",
+            "status": "done",
+            "command": "yarn vitest run src/renderer/cardFace/cardIllustrationDraw.test.ts src/renderer/components/tileTextures.test.ts src/renderer/components/tileBoardReadability.test.ts src/renderer/components/tileBoardRows.test.ts",
+            "minimumEvidence": 4
+        },
+        {
+            "id": "systems-gate-registry",
+            "priority": "P0",
+            "system": "Test Gate Architecture",
+            "title": "Keep system actions registered and CI-visible",
+            "status": "done",
+            "command": "yarn gate:systems",
+            "minimumEvidence": 5
+        }
+    ]
+}
