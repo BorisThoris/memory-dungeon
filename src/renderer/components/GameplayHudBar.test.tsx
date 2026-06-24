@@ -52,6 +52,7 @@ describe('GameplayHudBar', () => {
             gameMode: 'endless' as const,
             board: {
                 ...baseRun.board!,
+                dungeonBossId: 'rush_sentinel',
                 floorTag: 'boss' as const,
                 floorArchetypeId: 'rush_recall' as FloorArchetypeId,
                 featuredObjectiveId: 'flip_par' as FeaturedObjectiveId
@@ -71,8 +72,9 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-encounter-identity').textContent).toContain('Boss');
         expect(screen.getByTestId('hud-encounter-identity').getAttribute('title')).toContain('Boss pressure');
         expect(screen.getByTestId('hud-encounter-identity').getAttribute('title')).toContain('Keystone Pair route anchor');
-        expect(screen.getByTestId('hud-floor-identity-reminder')).toHaveTextContent('Boss trophy');
-        expect(screen.getByTestId('hud-floor-identity-reminder').getAttribute('title')).toContain('Study the first reveal');
+        expect(screen.getByTestId('hud-encounter-identity').getAttribute('title')).toContain('Counter: Row/swap charge');
+        expect(screen.getByTestId('hud-floor-identity-reminder')).toHaveTextContent('Boss trophy - Counter: Row/swap charge');
+        expect(screen.getByTestId('hud-floor-identity-reminder').getAttribute('title')).toContain('Rush Sentinel shortens study time');
     });
 
     it('does not show favor UI on non-endless runs', () => {

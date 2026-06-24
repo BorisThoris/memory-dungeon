@@ -102,6 +102,36 @@ describe('shop rules', () => {
         expect(getRunShopStockPlan(bossRun).itemIds[0]).toBe('region_shuffle_charge');
     });
 
+    it('keeps locked-exit and boss counterplay ahead of optional trait services', () => {
+        const run = makePlayingRun();
+        const board = buildBoard(6, { runSeed: 4242, runRulesVersion: run.runRulesVersion });
+        const pressuredBoard = {
+            ...board,
+            columns: 2,
+            floorTag: 'boss' as const,
+            dungeonBossId: 'rush_sentinel' as const,
+            dungeonExitLockKind: 'iron' as const,
+            tiles: board.tiles.map((tile, index) =>
+                index === 0
+                    ? { ...tile, pairKey: 'echo', tileTraitKind: 'echo' as const }
+                    : index === 1
+                      ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                      : index === 2
+                        ? { ...tile, pairKey: 'danger', tileTraitKind: 'cursed' as const }
+                        : index === 3
+                          ? { ...tile, pairKey: 'danger', tileTraitKind: 'cursed' as const }
+                          : tile
+            )
+        };
+
+        expect(getRunShopStockPlan({ ...run, board: pressuredBoard }).itemIds.slice(0, 4)).toEqual([
+            'iron_key',
+            'region_shuffle_charge',
+            'trait_cleanse',
+            'trait_routing_kit'
+        ]);
+    });
+
     it('builds read models from current compatibility and wallet state', () => {
         const fullLifeRun = { ...makePlayingRun(), lives: MAX_LIVES, shopGold: 10 };
         const run = { ...fullLifeRun, shopOffers: createRunShopOffers(fullLifeRun) };
@@ -216,6 +246,41 @@ describe('shop rules', () => {
         const plainKit = plainRun.shopOffers[0]!;
         expect(plainKit.compatible).toBe(true);
         expect(purchaseShopOffer(plainRun, plainKit.id)).toBe(plainRun);
+    });
+
+    it('sells a trait routing kit when a tile swap would create a trait route', () => {
+        const board = buildBoard(4, { runSeed: 4242, runRulesVersion: makePlayingRun().runRulesVersion });
+        const swapSetupBoard = {
+            ...board,
+            level: 4,
+            columns: 2,
+            tiles: board.tiles.map((tile, index) =>
+                index === 0
+                    ? { ...tile, pairKey: 'sealed', tileTraitKind: 'sealed' as const }
+                    : index === 1
+                      ? { ...tile, pairKey: 'plain-a', tileTraitKind: undefined }
+                      : index === 2
+                        ? { ...tile, pairKey: 'plain-b', tileTraitKind: undefined }
+                        : index === 3
+                          ? { ...tile, pairKey: 'heavy', tileTraitKind: 'heavy' as const }
+                          : { ...tile, tileTraitKind: undefined }
+            )
+        };
+        const run = {
+            ...makePlayingRun(),
+            board: swapSetupBoard,
+            peekCharges: 0,
+            regionShuffleCharges: 0,
+            shopGold: 10
+        };
+        const withShop = { ...run, shopOffers: createRunShopOffers(run) };
+        const kit = withShop.shopOffers.find((offer) => offer.itemId === 'trait_routing_kit')!;
+        const routed = purchaseShopOffer(withShop, kit.id);
+
+        expect(kit.compatible).toBe(true);
+        expect(getRunShopStockPlan(run).previewCopy).toContain('Trait routing: swap setup available');
+        expect(routed.peekCharges).toBe(1);
+        expect(routed.regionShuffleCharges).toBe(1);
     });
 
     it('rechecks compatibility when run state changes after offers were created', () => {

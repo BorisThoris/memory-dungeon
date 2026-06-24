@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    auditGameplayInteractionGraph,
     gameplayInteractionGraph,
     getGameplayInteractionEdgesForMechanic,
     validateGameplayInteractionGraph
@@ -60,6 +61,27 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'lock.iron_key', target: 'exit.primary' }),
                 expect.objectContaining({ source: 'exit.primary', target: 'objective.floor_clear' }),
                 expect.objectContaining({ source: 'safety.softlock_fairness', target: 'objective.floor_clear' })
+            ])
+        );
+    });
+
+    it('surfaces graph-driven gameplay priorities for audit passes', () => {
+        const audit = auditGameplayInteractionGraph();
+
+        expect(audit).toMatchObject({
+            mechanicCount: gameplayInteractionGraph.mechanics.length,
+            edgeCount: gameplayInteractionGraph.edges.length,
+            traitCount: TILE_TRAIT_KINDS.length
+        });
+        expect(audit.blockerCount).toBeGreaterThanOrEqual(6);
+        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(8);
+        expect(audit.highLeverageMechanicIds).toEqual(
+            expect.arrayContaining(['trait.stasis', 'boss.moving_patrol', 'lock.iron_key', 'objective.defeat_boss'])
+        );
+        expect(audit.recommendations).toEqual(
+            expect.arrayContaining([
+                'Keep trait routing tools available when the graph shows swap-created trait routes.',
+                'Keep boss and lock counterplay ahead of optional rewards in shop priority.'
             ])
         );
     });

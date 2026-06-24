@@ -71,6 +71,16 @@ export interface GameplayInteractionGraphIssue {
     detail: string;
 }
 
+export interface GameplayInteractionGraphAudit {
+    mechanicCount: number;
+    edgeCount: number;
+    blockerCount: number;
+    traitCount: number;
+    counterplayEdgeCount: number;
+    highLeverageMechanicIds: string[];
+    recommendations: string[];
+}
+
 export const gameplayInteractionGraph = graphData as GameplayInteractionGraph;
 
 export const getGameplayInteractionMechanicById = (id: string): GameplayInteractionMechanic | null =>
@@ -197,4 +207,37 @@ export const validateGameplayInteractionGraph = (
     }
 
     return issues;
+};
+
+export const auditGameplayInteractionGraph = (
+    graph: GameplayInteractionGraph = gameplayInteractionGraph
+): GameplayInteractionGraphAudit => {
+    const blockers = graph.mechanics.filter((mechanic) => mechanic.blocks.length > 0);
+    const traits = graph.mechanics.filter((mechanic) => mechanic.kind === 'trait');
+    const counterplayEdges = graph.edges.filter(
+        (edge) => edge.kind === 'counterplay' || edge.kind === 'guarded_by' || edge.kind === 'unblocks'
+    );
+    const edgeCountByMechanic = new Map<string, number>();
+    for (const edge of graph.edges) {
+        edgeCountByMechanic.set(edge.source, (edgeCountByMechanic.get(edge.source) ?? 0) + 1);
+        edgeCountByMechanic.set(edge.target, (edgeCountByMechanic.get(edge.target) ?? 0) + 1);
+    }
+    const highLeverageMechanicIds = graph.mechanics
+        .filter((mechanic) => (edgeCountByMechanic.get(mechanic.id) ?? 0) >= 3 || mechanic.blocks.length > 0)
+        .map((mechanic) => mechanic.id);
+    const recommendations: string[] = [
+        'Keep trait routing tools available when the graph shows swap-created trait routes.',
+        'Keep boss and lock counterplay ahead of optional rewards in shop priority.',
+        'Add a softlock-fairness or generator-contract case for every new blocking edge.',
+        'Add renderer/HUD feedback evidence when a mechanic writes player-visible state.'
+    ];
+    return {
+        mechanicCount: graph.mechanics.length,
+        edgeCount: graph.edges.length,
+        blockerCount: blockers.length,
+        traitCount: traits.length,
+        counterplayEdgeCount: counterplayEdges.length,
+        highLeverageMechanicIds,
+        recommendations
+    };
 };

@@ -11,7 +11,10 @@ import {
 } from './contracts';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { gainRunInventoryItem } from './run-inventory';
-import { getTileTraitInteractionPreviewLines } from './tile-trait-rules';
+import {
+    getTileTraitInteractionPreviewLines,
+    hasTraitSwapSetupOpportunity
+} from './tile-trait-rules';
 import { getTraitBuildDraftHintForBoard } from './trait-build-rewards';
 
 export const SHOP_ITEM_CATALOG: Record<
@@ -171,6 +174,9 @@ const boardHasTraitComboOpportunity = (board: BoardState | null): boolean => {
     });
 };
 
+const boardHasTraitRoutingOpportunity = (board: BoardState | null): boolean =>
+    Boolean(board && (boardHasTraitComboOpportunity(board) || hasTraitSwapSetupOpportunity(board)));
+
 const routeStockTemplate = (
     routeType: RouteNodeType | null,
     source: RunShopSource,
@@ -233,11 +239,21 @@ export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     if (boardHasDangerousTraitPair(run.board)) {
         itemIds.unshift('trait_cleanse');
     }
-    if ((level >= 2 || source === 'board_shop') && boardHasTraitComboOpportunity(run.board)) {
+    if ((level >= 2 || source === 'board_shop') && boardHasTraitRoutingOpportunity(run.board)) {
         itemIds.unshift('trait_routing_kit');
     }
     const stockLimit = source === 'board_shop' || itemIds.includes('trait_cleanse') ? 6 : 5;
-    const uniqueStock = uniqueItemIds(itemIds);
+    const priorityFor = (itemId: RunShopItemId): number => {
+        if (boardHasLockedExitPressure(run.board) && itemId === 'iron_key') return 0;
+        if (bossPressure?.shopPriorityItemId === itemId) return 1;
+        if (boardHasDangerousTraitPair(run.board) && itemId === 'trait_cleanse') return 2;
+        if (boardHasTraitRoutingOpportunity(run.board) && itemId === 'trait_routing_kit') return 3;
+        return 10;
+    };
+    const uniqueStock = uniqueItemIds(itemIds)
+        .map((itemId, index) => ({ itemId, index, priority: priorityFor(itemId) }))
+        .sort((a, b) => a.priority - b.priority || a.index - b.index)
+        .map((item) => item.itemId);
     const finalItemIds: RunShopItemId[] =
         needsMasterKey && uniqueStock.indexOf('master_key') >= stockLimit
             ? [...uniqueStock.filter((itemId) => itemId !== 'master_key').slice(0, stockLimit - 1), 'master_key']
@@ -249,7 +265,15 @@ export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     const traitBuildHint = finalItemIds.includes('trait_routing_kit')
         ? getTraitBuildDraftHintForBoard(run.board)
         : null;
-    const previewCopy = traitBuildHint ? `${basePreviewCopy} ${traitBuildHint}.` : basePreviewCopy;
+    const traitRoutingFallback =
+        !traitBuildHint && finalItemIds.includes('trait_routing_kit') && boardHasTraitRoutingOpportunity(run.board)
+            ? 'Trait routing: swap setup available.'
+            : null;
+    const previewCopy = traitBuildHint
+        ? `${basePreviewCopy} ${traitBuildHint}.`
+        : traitRoutingFallback
+          ? `${basePreviewCopy} ${traitRoutingFallback}`
+          : basePreviewCopy;
     return {
         source,
         level,
@@ -303,7 +327,7 @@ const getShopOfferCompatibility = (
     if (itemId === 'trait_cleanse' && !boardHasDangerousTraitPair(run.board)) {
         return { compatible: false, unavailableReason: 'No Cursed or Volatile hidden trait pair to cleanse.' };
     }
-    if (itemId === 'trait_routing_kit' && !boardHasTraitComboOpportunity(run.board)) {
+    if (itemId === 'trait_routing_kit' && !boardHasTraitRoutingOpportunity(run.board)) {
         return { compatible: false, unavailableReason: 'No actionable trait adjacency to route around.' };
     }
     return { compatible: true, unavailableReason: null };

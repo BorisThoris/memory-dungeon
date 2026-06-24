@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from 'react';
 import { getBossEncounterIdentityForFloor, getFloorIdentityContract } from '../../shared/boss-encounters';
 import { MAX_LIVES, type MutatorId, type RunState } from '../../shared/contracts';
+import { getActiveDungeonBossPressureRule } from '../../shared/dungeon-boss-rules';
 import {
     getFeaturedObjectiveHudTooltip,
     getFeaturedObjectiveLabel,
@@ -21,6 +22,7 @@ import {
 } from '../../shared/long-run-feedback';
 import { getRunEconomyEntry } from '../../shared/run-economy';
 import { getRunBuildProfile } from '../../shared/relics';
+import { SHOP_ITEM_CATALOG } from '../../shared/shop-rules';
 import codexBookUrl from '../assets/ui/icons/icon-codex-book-v1.svg?url';
 import scoreParasiteCrystalUrl from '../assets/ui/icons/icon-score-parasite-crystal.svg?url';
 import shuffleIconUrl from '../assets/ui/icons/icon-shuffle-v1.svg?url';
@@ -246,6 +248,24 @@ const GameplayHudBar = ({
         mutators: run.activeMutators,
         riskProfile: archetype?.riskProfile ?? null
     });
+    const bossPressureRule = board.floorTag === 'boss' ? getActiveDungeonBossPressureRule(board) : null;
+    const bossCounterplayItem = bossPressureRule ? SHOP_ITEM_CATALOG[bossPressureRule.shopPriorityItemId] : null;
+    const bossCounterplayLabel = bossCounterplayItem ? `Counter: ${bossCounterplayItem.label}` : null;
+    const bossCounterplayTitle = [
+        encounterIdentity?.payoffCopy ?? 'Keystone Warden scoring',
+        bossPressureRule?.pressureCopy,
+        bossCounterplayLabel
+    ]
+        .filter(Boolean)
+        .join(' ');
+    const bossReminderTitle = [
+        'Study the first reveal, then finish the boss objective before leaving.',
+        bossPressureRule?.pressureCopy,
+        bossCounterplayLabel
+    ]
+        .filter(Boolean)
+        .join(' ');
+    const bossReminderText = bossCounterplayLabel ? `Boss trophy - ${bossCounterplayLabel}` : 'Boss trophy';
     const contextChips: { className: string; key: string; label: string; testId: string; title: string; glyph: ReactNode }[] = [];
     if (run.gameMode === 'gauntlet') {
         contextChips.push({
@@ -360,7 +380,7 @@ const GameplayHudBar = ({
                                 <span className={styles.floorLabel}>Floor</span>
                                 <span className={styles.floorValue}>{board.level}</span>
                                 {board.floorTag === 'boss' ? (
-                                    <span className={styles.floorTagPill} data-testid="hud-encounter-identity" title={encounterIdentity?.payoffCopy ?? 'Keystone Warden scoring'}>
+                                    <span className={styles.floorTagPill} data-testid="hud-encounter-identity" title={bossCounterplayTitle}>
                                         {encounterIdentity?.label ? `Boss: ${encounterIdentity.label}` : 'Boss'}
                                     </span>
                                 ) : board.floorTag === 'breather' ? (
@@ -542,11 +562,11 @@ const GameplayHudBar = ({
                                         data-testid="hud-floor-identity-reminder"
                                         title={
                                             board.floorTag === 'boss'
-                                                ? 'Study the first reveal, then finish the boss objective before leaving.'
+                                                ? bossReminderTitle
                                                 : floorIdentity.counterplaySentence
                                         }
                                     >
-                                        {board.floorTag === 'boss' ? 'Boss trophy' : floorIdentity.activeReminder}
+                                        {board.floorTag === 'boss' ? bossReminderText : floorIdentity.activeReminder}
                                     </span>
                                 ) : null}
                                 {nBackLabel ? <span className={styles.statSubline}>{nBackLabel}</span> : null}
