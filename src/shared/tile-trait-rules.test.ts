@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { buildBoard } from './board-generation';
+import { GAME_RULES_VERSION } from './contracts';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 import { makeBoard, makePair, makeRun, makeTile } from './test/game-fixtures';
+import { getTraitOpportunityHudModel, getTraitOpportunitySummary } from './trait-opportunities';
 import {
     applyVolatileMismatchTrait,
     assignTileTraitsToGeneratedBoard,
@@ -156,6 +159,39 @@ describe('tile trait rules', () => {
         const tiles = assignTileTraitsToGeneratedBoard(baseTiles, 123, 30, 12, null);
 
         expect(uniqueTraitPairCount(tiles)).toBe(9);
+    });
+
+    it('keeps generated post-opener trait floors from becoming isolated flavor', () => {
+        const levels = [2, 4, 7, 9, 12] as const;
+        const seeds = [11, 42_001, 91_337] as const;
+
+        for (const runSeed of seeds) {
+            for (const level of levels) {
+                const board = buildBoard(level, {
+                    runSeed,
+                    runRulesVersion: GAME_RULES_VERSION,
+                    gameMode: 'endless',
+                    floorTag: level === 7 || level === 9 ? 'boss' : 'normal',
+                    floorArchetypeId: level === 7 ? 'trap_hall' : level === 9 ? 'rush_recall' : null,
+                    activeMutators: level === 9 ? ['short_memorize', 'wide_recall'] : []
+                });
+                const traitPairs = uniqueTraitPairCount(board.tiles);
+                const summary = getTraitOpportunitySummary(board);
+                const hud = getTraitOpportunityHudModel(board, {
+                    peekCharges: 0,
+                    regionShuffleCharges: 1,
+                    regionShuffleFreeThisFloor: false,
+                    shuffleCharges: 0
+                });
+
+                expect(traitPairs, `seed ${runSeed} level ${level}`).toBeGreaterThanOrEqual(2);
+                expect(hud.active, `seed ${runSeed} level ${level}`).toBe(true);
+                expect(
+                    summary.interactionLines.length + (hud.swapHint ? 1 : 0),
+                    `seed ${runSeed} level ${level}`
+                ).toBeGreaterThan(0);
+            }
+        }
     });
 
     it('surfaces the newer interaction traits through seeded route pools', () => {

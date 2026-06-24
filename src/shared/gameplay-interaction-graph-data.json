@@ -356,6 +356,7 @@
     { "source": "trait.conduit", "target": "trait.mirror", "kind": "synergy", "label": "guard spark" },
     { "source": "trait.conduit", "target": "trait.stasis", "kind": "risk", "label": "lock pulse" },
     { "source": "trait.drift", "target": "power.region_shuffle", "kind": "enables", "label": "grants routing charge" },
+    { "source": "trait.stasis", "target": "trait.sealed", "kind": "counterplay", "label": "buffers sealed drain" },
     { "source": "power.tile_swap", "target": "trait.conduit", "kind": "counterplay", "label": "sets adjacency" },
     { "source": "power.region_shuffle", "target": "trait.drift", "kind": "counterplay", "label": "repositions route" },
     { "source": "power.destroy_pair", "target": "objective.floor_clear", "kind": "counterplay", "label": "removes pair safely" },

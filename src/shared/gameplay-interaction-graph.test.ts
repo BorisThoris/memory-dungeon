@@ -53,6 +53,23 @@ describe('gameplay interaction graph', () => {
         expect(blockers.every((mechanic) => mechanic.softlockGuards.length > 0)).toBe(true);
     });
 
+    it('connects every blocking mechanic to an explicit graph counterplay or guard edge', () => {
+        const blockers = gameplayInteractionGraph.mechanics.filter((mechanic) => mechanic.blocks.length > 0);
+        const protectiveEdgeKinds = new Set(['counterplay', 'guarded_by', 'unblocks', 'priority_guard']);
+        const blockersWithoutProtectiveEdges = blockers
+            .filter(
+                (mechanic) =>
+                    !gameplayInteractionGraph.edges.some(
+                        (edge) =>
+                            (edge.source === mechanic.id || edge.target === mechanic.id) &&
+                            protectiveEdgeKinds.has(edge.kind)
+                    )
+            )
+            .map((mechanic) => mechanic.id);
+
+        expect(blockersWithoutProtectiveEdges).toEqual([]);
+    });
+
     it('connects boss, exit, lock, and floor-clear mechanics through safety edges', () => {
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([

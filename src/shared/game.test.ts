@@ -1894,6 +1894,66 @@ describe('REG-017 route choices', () => {
         expect(getDungeonObjectiveStatus(run)).toMatchObject({ completed: true, progress: boss.maxHp, required: boss.maxHp });
     });
 
+    it('does not leave generated boss floors stuck after every normal pair is matched', () => {
+        const scenarios = [
+            { level: 7, runSeed: 172_707, floorArchetypeId: 'trap_hall' as FloorArchetypeId },
+            { level: 9, runSeed: 182_009, floorArchetypeId: 'rush_recall' as FloorArchetypeId },
+            { level: 12, runSeed: 192_012, floorArchetypeId: null }
+        ];
+
+        for (const scenario of scenarios) {
+            const board = buildBoard(scenario.level, {
+                runSeed: scenario.runSeed,
+                runRulesVersion: GAME_RULES_VERSION,
+                floorTag: 'boss',
+                floorArchetypeId: scenario.floorArchetypeId,
+                gameMode: 'endless',
+                activeMutators: scenario.floorArchetypeId === 'rush_recall' ? ['short_memorize', 'wide_recall'] : []
+            });
+            const base = finishMemorizePhase(
+                createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: scenario.runSeed })
+            );
+            let run: RunState = {
+                ...base,
+                board,
+                status: 'playing',
+                findablesTotalThisFloor: countFindablePairs(board.tiles)
+            };
+            const matchablePairs = [...new Set(board.tiles.map((tile) => tile.pairKey))]
+                .map((pairKey) => board.tiles.filter((tile) => tile.pairKey === pairKey))
+                .filter(
+                    (tiles) =>
+                        tiles.length === 2 &&
+                        ![EXIT_PAIR_KEY, SHOP_PAIR_KEY, ROOM_PAIR_KEY, WILD_PAIR_KEY].includes(tiles[0]!.pairKey)
+                );
+
+            for (const pair of matchablePairs) {
+                const currentTiles = pair
+                    .map((tile) => run.board?.tiles.find((candidate) => candidate.id === tile.id))
+                    .filter((tile): tile is Tile => tile != null && tile.state === 'hidden');
+                if (currentTiles.length !== 2 || run.status !== 'playing') {
+                    continue;
+                }
+                run = resolveBoardTurn(flipTile(flipTile(run, currentTiles[0]!.id), currentTiles[1]!.id));
+            }
+
+            expect(getDungeonObjectiveStatus(run), `seed ${scenario.runSeed} level ${scenario.level}`).toMatchObject({
+                objectiveId: 'defeat_boss',
+                completed: true
+            });
+            expect(getDungeonBossReadModel(run), `seed ${scenario.runSeed} level ${scenario.level}`).toMatchObject({
+                phase: 'defeated',
+                activeMovingPatrolCount: 0
+            });
+            expect(getDungeonExitStatus(run).lockedReason, `seed ${scenario.runSeed} level ${scenario.level}`).not.toMatch(
+                /defeat/i
+            );
+            const exitId = run.board!.dungeonExitTileId!;
+            const exited = activateDungeonExit(revealDungeonExit(run, exitId), 'none');
+            expect(exited.status, `seed ${scenario.runSeed} level ${scenario.level}`).toBe('levelComplete');
+        }
+    });
+
     it('removes generated enemies defeated by active chip damage from the board', () => {
         const board = buildBoard(5, {
             runSeed: 172_700,
