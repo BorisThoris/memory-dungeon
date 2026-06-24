@@ -112,6 +112,7 @@ export const TileBoardSceneBoardGroup = ({
                 stickyFingerSlotMark,
                 tile,
                 traitComboBack,
+                traitRouteTargetBack,
                 transform,
                 tutorialPairOrdinal
             }) => (
@@ -131,6 +132,7 @@ export const TileBoardSceneBoardGroup = ({
                     nonPickableBack={nonPickableBack}
                     stickyFingerSlotMark={stickyFingerSlotMark}
                     traitComboBack={traitComboBack}
+                    traitRouteTargetBack={traitRouteTargetBack}
                     hostConsolidatesTileFrames={hostConsolidatesTileFrames}
                     hoverTiltRef={hoverTiltRef}
                     keyboardFocused={focusedTileId === tile.id}

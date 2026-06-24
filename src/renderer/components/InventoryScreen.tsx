@@ -1,19 +1,7 @@
 import { useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { GAME_MODE_CODEX, MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
-import { getRewardPerkRows } from '../../shared/bonus-rewards';
-import { getCosmeticCollectionRows } from '../../shared/cosmetics';
-import { getInventoryPrepRows } from '../../shared/inventory-prep';
-import { getInventoryRewardSignal } from '../../shared/meta-reward-signals';
-import { getRunInventoryRows, getRunLoadoutSummary } from '../../shared/run-inventory';
-import { getRunEconomyRows } from '../../shared/run-economy';
-import { getPerfectMemoryAttribution } from '../../shared/long-run-feedback';
-import { getRunBuildProfile, getRelicDecisionImpactCopy } from '../../shared/relics';
-import { getRunStartingLoadoutRow } from '../../shared/starting-loadouts';
-import {
-    getTraitBuildRewardRows,
-    getTraitBuildRewardRowsForLoadout
-} from '../../shared/trait-build-rewards';
+import { MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
+import { getRelicDecisionImpactCopy } from '../../shared/relics';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { inventoryScreenCopy } from '../copy/inventoryScreen';
@@ -23,10 +11,8 @@ import inRunFramedPanel from '../ui/metaInRunFramedPanel.module.css';
 import metaStyles from './MetaScreen.module.css';
 import { getMetaSubscreenLayout } from './metaStackedShellLayout';
 import { handleMetaBodyTocLinkClick } from './metaScreenTocNav';
+import { createInventoryScreenModel, modeTitle } from './inventoryScreenModel';
 import styles from './InventoryScreen.module.css';
-
-const modeTitle = (gameMode: string): string =>
-    GAME_MODE_CODEX.find((m) => m.id === gameMode)?.title ?? gameMode;
 
 interface InventoryScreenProps {
     /** When true, shell title is `h2` so `GameScreen`'s level `h1` stays the sole document `h1`. */
@@ -35,10 +21,11 @@ interface InventoryScreenProps {
 
 const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) => {
     const bodyScrollRef = useRef<HTMLDivElement | null>(null);
-    const { closeSubscreen, run, settings } = useAppStore(
+    const { closeSubscreen, run, saveData, settings } = useAppStore(
         useShallow((state) => ({
             closeSubscreen: state.closeSubscreen,
             run: state.run,
+            saveData: state.saveData,
             settings: state.settings
         }))
     );
@@ -85,23 +72,20 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     }
 
     const contract = run.activeContract;
-    const economyRows = getRunEconomyRows(run);
-    const inventoryRows = getRunInventoryRows(run);
-    const inventoryQuantityById = new Map(inventoryRows.map((row) => [row.id, row.quantity]));
-    const loadoutSummary = getRunLoadoutSummary(run);
-    const rewardSignal = getInventoryRewardSignal(run);
-    const perfectMemoryAttribution = run ? getPerfectMemoryAttribution(run) : null;
-    const prepRows = getInventoryPrepRows(run);
-    const buildProfile = getRunBuildProfile(run);
-    const startingLoadoutRow = getRunStartingLoadoutRow(run);
-    const relicTraitBuildRows = getTraitBuildRewardRows().filter((row) =>
-        row.relicIds.some((relicId) => run.relicIds.includes(relicId))
-    );
-    const activeTraitBuildRows = [...getTraitBuildRewardRowsForLoadout(run.startingLoadoutId), ...relicTraitBuildRows].filter(
-        (row, index, rows) => rows.findIndex((candidate) => candidate.id === row.id) === index
-    );
-    const rewardPerkRows = getRewardPerkRows(run);
-    const equippedCosmetic = getCosmeticCollectionRows(useAppStore.getState().saveData).find((row) => row.equipped);
+    const {
+        activeTraitBuildRows,
+        buildProfile,
+        economyRows,
+        equippedCosmetic,
+        inventoryQuantityById,
+        inventoryRows,
+        loadoutSummary,
+        perfectMemoryAttribution,
+        prepRows,
+        rewardPerkRows,
+        rewardSignal,
+        startingLoadoutRow
+    } = createInventoryScreenModel(run, saveData);
 
     return (
         <section aria-label="Inventory" className={shellClassName} role="region">

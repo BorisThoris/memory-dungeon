@@ -72,13 +72,17 @@ export interface GameplayInteractionGraphIssue {
 }
 
 export interface GameplayInteractionGraphAudit {
+    blockerWithoutProtectiveEdgeIds: string[];
     mechanicCount: number;
     edgeCount: number;
     blockerCount: number;
     traitCount: number;
     counterplayEdgeCount: number;
+    generatedFloorCoverageGapIds: string[];
     highLeverageMechanicIds: string[];
+    playerVisibleWriteWithoutHudIds: string[];
     recommendations: string[];
+    shopCounterplayWithoutPriorityGuardIds: string[];
 }
 
 export const gameplayInteractionGraph = graphData as GameplayInteractionGraph;
@@ -225,6 +229,80 @@ export const auditGameplayInteractionGraph = (
     const highLeverageMechanicIds = graph.mechanics
         .filter((mechanic) => (edgeCountByMechanic.get(mechanic.id) ?? 0) >= 3 || mechanic.blocks.length > 0)
         .map((mechanic) => mechanic.id);
+    const protectiveEdgeKinds = new Set<GameplayInteractionEdgeKind>(['counterplay', 'guarded_by', 'unblocks', 'priority_guard']);
+    const blockerWithoutProtectiveEdgeIds = blockers
+        .filter(
+            (mechanic) =>
+                !graph.edges.some(
+                    (edge) =>
+                        (edge.source === mechanic.id || edge.target === mechanic.id) &&
+                        protectiveEdgeKinds.has(edge.kind)
+                )
+        )
+        .map((mechanic) => mechanic.id);
+    const playerVisibleWrites = new Set([
+        'achievementProgress',
+        'bossTrophyCacheOutcome',
+        'comboShards',
+        'currentLevelScore',
+        'dungeonEnemiesDefeatedThisFloor',
+        'enemyHazardsDefeatedThisFloor',
+        'feedbackLines',
+        'guardTokens',
+        'interactionTags',
+        'lastLevelResult',
+        'lives',
+        'nextFloor',
+        'objectiveCompleted',
+        'peekCharges',
+        'recallFocus',
+        'regionShuffleCharges',
+        'relicFavorProgress',
+        'relicOffer',
+        'routeChoices',
+        'score',
+        'sessionStats',
+        'shopGold',
+        'totalScore',
+        'triesDelta'
+    ]);
+    const playerVisibleWriteWithoutHudIds = graph.mechanics
+        .filter((mechanic) => mechanic.writes.some((write) => playerVisibleWrites.has(write)))
+        .filter(
+            (mechanic) =>
+                mechanic.id !== 'feedback.gameplay_hud' &&
+                !graph.edges.some(
+                    (edge) =>
+                        (edge.source === mechanic.id && edge.target === 'feedback.gameplay_hud') ||
+                        (edge.target === mechanic.id && edge.source === 'feedback.gameplay_hud')
+                ) &&
+                !mechanic.evidence.some((path) => path.includes('GameplayHudBar') || path.includes('gameScreenFeedback'))
+        )
+        .map((mechanic) => mechanic.id);
+    const shopCounterplayWithoutPriorityGuardIds = graph.mechanics
+        .filter((mechanic) => mechanic.kind === 'shop' && mechanic.role.includes('counterplay'))
+        .filter(
+            (mechanic) =>
+                !graph.edges.some(
+                    (edge) =>
+                        edge.source === mechanic.id &&
+                        edge.kind === 'priority_guard' &&
+                        (edge.target === 'lock.iron_key' || edge.target === 'boss.moving_patrol')
+                )
+        )
+        .map((mechanic) => mechanic.id);
+    const generatedFloorCoverageGapIds = graph.mechanics
+        .filter((mechanic) => ['boss', 'exit', 'hazard', 'lock', 'objective', 'trait'].includes(mechanic.kind))
+        .filter(
+            (mechanic) =>
+                !mechanic.tests.some(
+                    (testPath) =>
+                        testPath.includes('softlock-generator-contract') ||
+                        testPath.includes('softlock-fairness') ||
+                        testPath.includes('game.test')
+                )
+        )
+        .map((mechanic) => mechanic.id);
     const recommendations: string[] = [
         'Keep trait routing tools available when the graph shows swap-created trait routes.',
         'Keep boss and lock counterplay ahead of optional rewards in shop priority.',
@@ -232,12 +310,16 @@ export const auditGameplayInteractionGraph = (
         'Add renderer/HUD feedback evidence when a mechanic writes player-visible state.'
     ];
     return {
+        blockerWithoutProtectiveEdgeIds,
         mechanicCount: graph.mechanics.length,
         edgeCount: graph.edges.length,
         blockerCount: blockers.length,
         traitCount: traits.length,
         counterplayEdgeCount: counterplayEdges.length,
+        generatedFloorCoverageGapIds,
         highLeverageMechanicIds,
-        recommendations
+        playerVisibleWriteWithoutHudIds,
+        recommendations,
+        shopCounterplayWithoutPriorityGuardIds
     };
 };

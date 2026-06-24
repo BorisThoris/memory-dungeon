@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
     type BoardPresentationMode,
@@ -21,8 +21,7 @@ import {
     VIEWPORT_LANDSCAPE_STACK_MAX_WIDTH,
     VIEWPORT_MOBILE_MAX
 } from '../breakpoints';
-import { focusFirstTabbableOrContainer, handleTabFocusTrapEvent } from '../a11y/focusables';
-import { popModalFocusSnapshot, pushModalFocusSnapshot } from '../a11y/modalFocusReturnStack';
+import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { useViewportSize } from '../hooks/useViewportSize';
 import {
     playUiBackSfx,
@@ -38,228 +37,19 @@ import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import packageJson from '../../../package.json';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import OverlayModal from './OverlayModal';
+import { PlaceholderControl, SegmentedControl, SettingsSection, SliderRow, ToggleRow } from './SettingsControls';
+import {
+    DEFAULT_SUBSECTION_BY_CATEGORY,
+    SETTINGS_CATEGORIES,
+    SETTINGS_SUBSECTIONS,
+    type SettingsCategory,
+    type SettingsSubsection
+} from './settingsNavigationModel';
 import styles from './SettingsScreen.module.css';
 
 interface SettingsScreenProps {
     presentation?: 'page' | 'modal';
 }
-
-type SettingsCategory = 'gameplay' | 'audio' | 'video' | 'accessibility' | 'controls' | 'about';
-type SettingsSubsection =
-    | 'board'
-    | 'timing'
-    | 'assist'
-    | 'reference'
-    | 'input'
-    | 'tuning'
-    | 'volume'
-    | 'display'
-    | 'graphics'
-    | 'accessibility'
-    | 'build'
-    | 'reset';
-
-const SETTINGS_CATEGORIES: ReadonlyArray<{ id: SettingsCategory; label: string; note: string }> = [
-    { id: 'gameplay', label: 'Gameplay', note: 'Run rules, board flow, and helper systems.' },
-    { id: 'controls', label: 'Controls', note: 'Input reference and future tuning (UI-only).' },
-    { id: 'audio', label: 'Audio', note: 'Master, music, and effect mix.' },
-    { id: 'video', label: 'Video', note: 'Display mode and interface scale.' },
-    { id: 'accessibility', label: 'Accessibility', note: 'Motion, clarity, and tutorial support.' },
-    { id: 'about', label: 'About', note: 'Build info, credits, and reset.' }
-];
-
-const SETTINGS_SUBSECTIONS: Record<
-    SettingsCategory,
-    ReadonlyArray<{ id: SettingsSubsection; label: string }>
-> = {
-    gameplay: [
-        { id: 'board', label: 'Board' },
-        { id: 'timing', label: 'Timing' },
-        { id: 'assist', label: 'Assist' },
-        { id: 'reference', label: 'Gameplay reference' }
-    ],
-    controls: [
-        { id: 'input', label: 'Input' },
-        { id: 'tuning', label: 'Tuning' }
-    ],
-    audio: [{ id: 'volume', label: 'Volume' }],
-    video: [
-        { id: 'display', label: 'Display' },
-        { id: 'graphics', label: 'Graphics' }
-    ],
-    accessibility: [{ id: 'accessibility', label: 'Accessibility' }],
-    about: [
-        { id: 'build', label: 'Build' },
-        { id: 'reset', label: 'Reset' }
-    ]
-};
-
-const DEFAULT_SUBSECTION_BY_CATEGORY: Record<SettingsCategory, SettingsSubsection> = {
-    gameplay: 'board',
-    controls: 'input',
-    audio: 'volume',
-    video: 'display',
-    accessibility: 'accessibility',
-    about: 'build'
-};
-
-interface ToggleRowProps {
-    label: string;
-    hint: string;
-    checked: boolean;
-    disabled?: boolean;
-    onChange: (next: boolean) => void;
-}
-
-const ToggleRow = ({ label, hint, checked, disabled = false, onChange }: ToggleRowProps) => (
-    <label className={`${styles.toggleRow} ${disabled ? styles.toggleRowDisabled : ''}`.trim()}>
-        <div className={styles.fieldText}>
-            <strong>{label}</strong>
-            <span>{hint}</span>
-        </div>
-        <span className={styles.toggleShell}>
-            <input
-                aria-disabled={disabled ? true : undefined}
-                checked={checked}
-                disabled={disabled}
-                onChange={(event) => onChange(event.currentTarget.checked)}
-                type="checkbox"
-            />
-            <span className={styles.toggleTrack} />
-        </span>
-    </label>
-);
-
-interface SliderRowProps {
-    label: string;
-    hint: string;
-    valueLabel: string;
-    min: number;
-    max: number;
-    step: number;
-    value: number;
-    onChange: (next: number) => void;
-}
-
-const SliderRow = ({ label, hint, valueLabel, min, max, step, value, onChange }: SliderRowProps) => (
-    <div className={styles.fieldCard}>
-        <div className={styles.fieldText}>
-            <strong>{label}</strong>
-            <span>{hint}</span>
-        </div>
-        <div className={styles.sliderField}>
-            <div className={styles.sliderValue}>{valueLabel}</div>
-            <input
-                aria-label={label}
-                className={styles.rangeInput}
-                max={String(max)}
-                min={String(min)}
-                onChange={(event) => onChange(Number(event.currentTarget.value))}
-                step={String(step)}
-                type="range"
-                value={value}
-            />
-        </div>
-    </div>
-);
-
-interface SegmentOption<T extends string> {
-    label: string;
-    value: T;
-}
-
-interface SegmentedControlProps<T extends string> {
-    label: string;
-    hint: string;
-    value: T;
-    options: ReadonlyArray<SegmentOption<T>>;
-    onChange: (next: T) => void;
-}
-
-const SegmentedControl = <T extends string,>({
-    label,
-    hint,
-    value,
-    options,
-    onChange
-}: SegmentedControlProps<T>) => (
-    <div className={styles.fieldCard}>
-        <div className={styles.fieldText}>
-            <strong>{label}</strong>
-            <span>{hint}</span>
-        </div>
-        <div className={styles.segmented}>
-            {options.map((option) => (
-                <button
-                    aria-pressed={value === option.value}
-                    className={`${styles.segmentButton} ${value === option.value ? styles.segmentButtonActive : ''}`.trim()}
-                    key={option.value}
-                    onClick={() => onChange(option.value)}
-                    type="button"
-                >
-                    {option.label}
-                </button>
-            ))}
-        </div>
-    </div>
-);
-
-interface PlaceholderControlProps {
-    label: string;
-    hint: string;
-    options: string[];
-    /** Reference-only: visible “Coming soon” + Steam demo scope (no save keys). */
-    honestFuturePlaceholder?: boolean;
-}
-
-const PlaceholderControl = ({
-    label,
-    hint,
-    options,
-    honestFuturePlaceholder = false
-}: PlaceholderControlProps) => (
-    <div className={`${styles.fieldCard} ${styles.placeholderField}`}>
-        <div className={styles.fieldText}>
-            {honestFuturePlaceholder ? (
-                <div className={styles.placeholderLabelRow}>
-                    <strong>{label}</strong>
-                    <span className={styles.futurePill}>Coming soon</span>
-                </div>
-            ) : (
-                <strong>{label}</strong>
-            )}
-            <span>{hint}</span>
-            {honestFuturePlaceholder ? <span className={styles.demoScopeNote}>Not in Steam demo.</span> : null}
-        </div>
-        <div className={styles.segmented}>
-            {options.map((option) => (
-                <button
-                    aria-disabled="true"
-                    className={styles.segmentButtonDisabled}
-                    disabled
-                    key={option}
-                    type="button"
-                >
-                    {option}
-                </button>
-            ))}
-        </div>
-    </div>
-);
-
-interface SettingsSectionProps {
-    title: string;
-    children: ReactNode;
-}
-
-const SettingsSection = ({ title, children }: SettingsSectionProps) => (
-    <Panel className={styles.section} padding="none" variant="muted">
-        <ScreenTitle as="h3" className={styles.sectionHeading} role="section">
-            {title}
-        </ScreenTitle>
-        {children}
-    </Panel>
-);
 
 const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     const {
@@ -348,38 +138,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
         setActiveSubsection(DEFAULT_SUBSECTION_BY_CATEGORY[activeCategory]);
     }, [activeCategory, compactDisclosure, wideShortDesktopShell]);
 
-    /* OVR-010: matches OverlayModal — rAF initial focus, document capture Tab trap, restore on unmount. */
-    useEffect(() => {
-        if (!isModal) {
-            return;
-        }
-
-        pushModalFocusSnapshot();
-        const frame = window.requestAnimationFrame(() => {
-            focusFirstTabbableOrContainer(modalShellRef.current);
-        });
-
-        return () => {
-            window.cancelAnimationFrame(frame);
-            popModalFocusSnapshot();
-        };
-    }, [isModal]);
-
-    useEffect(() => {
-        if (!isModal) {
-            return;
-        }
-
-        const onDocumentKeyDown = (event: KeyboardEvent): void => {
-            handleTabFocusTrapEvent(event, modalShellRef.current);
-        };
-
-        document.addEventListener('keydown', onDocumentKeyDown, true);
-
-        return () => {
-            document.removeEventListener('keydown', onDocumentKeyDown, true);
-        };
-    }, [isModal]);
+    useModalFocusTrap({ active: isModal, containerRef: modalShellRef });
 
     const patchSettings = <Key extends keyof Settings>(key: Key, value: Settings[Key]): void => {
         if (draft[key] === value) {

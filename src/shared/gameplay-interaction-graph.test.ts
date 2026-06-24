@@ -92,6 +92,10 @@ describe('gameplay interaction graph', () => {
         });
         expect(audit.blockerCount).toBeGreaterThanOrEqual(6);
         expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(8);
+        expect(audit.blockerWithoutProtectiveEdgeIds).toEqual([]);
+        expect(audit.shopCounterplayWithoutPriorityGuardIds).toEqual([]);
+        expect(audit.generatedFloorCoverageGapIds).toEqual(expect.arrayContaining(['trait.echo']));
+        expect(audit.playerVisibleWriteWithoutHudIds).toEqual(expect.arrayContaining(['trait.echo']));
         expect(audit.highLeverageMechanicIds).toEqual(
             expect.arrayContaining(['trait.stasis', 'boss.moving_patrol', 'lock.iron_key', 'objective.defeat_boss'])
         );

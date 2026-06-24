@@ -50,6 +50,7 @@ const renderBoard = (props: {
     tileSwapPowerVisualActive?: boolean;
     tileSwapEligibleTileIds?: ReadonlySet<string>;
     tileSwapFirstTileId?: string | null;
+    traitRouteTargetTileIds?: readonly string[];
 }): ReturnType<typeof render> =>
     {
         const {
@@ -381,6 +382,33 @@ describe('TileBoard touch and click controls', () => {
         await waitFor(() => expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Swap preview'));
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Creates trait route');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Sealed + Heavy: score surge');
+    });
+
+    it('marks HUD swap-hint route targets on the board feedback contract', () => {
+        renderBoard({
+            board: {
+                ...board,
+                tiles: [
+                    { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+                    { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
+                    { id: 'x1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
+                    { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' }
+                ]
+            },
+            debugPeekActive: false,
+            interactive: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false,
+            traitRouteTargetTileIds: ['s1', 'f1']
+        });
+
+        expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-marker-contract')).toContain(
+            'trait-route-target'
+        );
+        expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain(
+            'trait-route-target:2'
+        );
     });
 
     it('announces decoy trap language for face-up decoy tiles', async () => {

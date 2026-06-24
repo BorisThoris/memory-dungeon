@@ -257,4 +257,52 @@ describe('dungeon board status', () => {
         });
         expect(getDungeonBoardPresentation(staleRun).combatForecastText).toBeNull();
     });
+
+    it('separates defeated boss state from the remaining hidden-exit step', () => {
+        const board = {
+            floorTag: 'boss',
+            dungeonBossId: 'rush_sentinel',
+            dungeonObjectiveId: 'defeat_boss',
+            dungeonExitTileId: 'exit',
+            tiles: [
+                tile({ id: 'a1', pairKey: 'a', state: 'matched' }),
+                tile({ id: 'a2', pairKey: 'a', state: 'matched' }),
+                tile({
+                    id: 'exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    state: 'hidden',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'none'
+                })
+            ],
+            matchedPairs: 1,
+            pairCount: 1,
+            enemyHazards: [
+                {
+                    id: 'boss-hazard',
+                    bossId: 'rush_sentinel',
+                    kind: 'sentinel',
+                    label: 'Bell-Rush Sentinel',
+                    pattern: 'patrol',
+                    state: 'defeated',
+                    currentTileId: 'a1',
+                    nextTileId: 'a2',
+                    damage: 1,
+                    hp: 0,
+                    maxHp: 3
+                }
+            ]
+        } as BoardState;
+        const presentation = getDungeonBoardPresentation(run(board));
+
+        expect(presentation).toMatchObject({
+            objectiveText: 'Defeat the boss 3/3 complete',
+            exitText: 'Boss defeated - reveal exit',
+            alertText: 'Boss defeated. Reveal the exit card, then activate it to leave.'
+        });
+        expect(presentation.chips.find((chip) => chip.id === 'exit')).toMatchObject({
+            value: 'Boss defeated - reveal exit',
+            tone: 'neutral'
+        });
+    });
 });

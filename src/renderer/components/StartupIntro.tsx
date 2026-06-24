@@ -7,8 +7,7 @@ import {
     useState,
     type CSSProperties,
     type MutableRefObject,
-    type PointerEvent as ReactPointerEvent,
-    type RefObject
+    type PointerEvent as ReactPointerEvent
 } from 'react';
 import {
     AdditiveBlending,
@@ -28,6 +27,7 @@ import { getMotionPermissionButtonLabels, shouldOfferDeviceMotionPermission } fr
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { playIntroStingSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
+import { useElementSize, type ElementFootprint } from '../hooks/useElementSize';
 import { useAppStore } from '../store/useAppStore';
 import { RENDERER_THEME } from '../styles/theme';
 import {
@@ -62,11 +62,6 @@ interface ParticleDefinition {
     phase: number;
     speed: number;
     z: number;
-}
-
-interface IntroFootprint {
-    height: number;
-    width: number;
 }
 
 interface SurfaceProfile {
@@ -192,75 +187,6 @@ const getSurfaceProfile = (preset: IntroPreset, palette: ReturnType<typeof getPr
     }
 };
 
-const useElementSize = <T extends HTMLElement>(): [RefObject<T | null>, IntroFootprint | null] => {
-    const elementRef = useRef<T | null>(null);
-    const [size, setSize] = useState<IntroFootprint | null>(null);
-
-    useEffect(() => {
-        const element = elementRef.current;
-
-        if (!element) {
-            return;
-        }
-
-        let frameId = 0;
-        const updateSize = (): void => {
-            frameId = 0;
-            const nextRect = element.getBoundingClientRect();
-
-            if (nextRect.width < 1 || nextRect.height < 1) {
-                return;
-            }
-
-            setSize((previousSize) => {
-                const nextSize = {
-                    height: nextRect.height,
-                    width: nextRect.width
-                };
-
-                if (
-                    previousSize &&
-                    Math.abs(previousSize.width - nextSize.width) < 0.5 &&
-                    Math.abs(previousSize.height - nextSize.height) < 0.5
-                ) {
-                    return previousSize;
-                }
-
-                return nextSize;
-            });
-        };
-        const scheduleUpdate = (): void => {
-            if (frameId) {
-                window.cancelAnimationFrame(frameId);
-            }
-
-            frameId = window.requestAnimationFrame(updateSize);
-        };
-        const resizeObserver =
-            typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => scheduleUpdate());
-
-        resizeObserver?.observe(element);
-
-        if (element.parentElement) {
-            resizeObserver?.observe(element.parentElement);
-        }
-
-        scheduleUpdate();
-        window.addEventListener('resize', scheduleUpdate);
-
-        return () => {
-            if (frameId) {
-                window.cancelAnimationFrame(frameId);
-            }
-
-            resizeObserver?.disconnect();
-            window.removeEventListener('resize', scheduleUpdate);
-        };
-    }, []);
-
-    return [elementRef, size];
-};
-
 const ParticleField = ({
     preset,
     reduceMotion,
@@ -356,7 +282,7 @@ const RelicMedallion = ({
     preset: IntroPreset;
     reduceMotion: boolean;
     sessionSeed: number;
-    targetFootprint: IntroFootprint | null;
+    targetFootprint: ElementFootprint | null;
 }) => {
     const motionRef = useRef<Group | null>(null);
     const artworkRef = useRef<Group | null>(null);
@@ -559,7 +485,7 @@ const RelicIntroScene = ({
     preset: IntroPreset;
     reduceMotion: boolean;
     sessionSeed: number;
-    targetFootprint: IntroFootprint | null;
+    targetFootprint: ElementFootprint | null;
 }) => {
     const palette = getPresetPalette(preset);
     const dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 1.75);

@@ -1,10 +1,6 @@
-import Store from 'electron-store';
 import type { AchievementId, SaveData, Settings } from '../shared/contracts';
 import { normalizeSaveData, normalizeUnknownSaveData, normalizeUnknownSettings } from '../shared/save-data';
-
-interface StoreShape {
-    saveData: SaveData;
-}
+import { ElectronStoreSaveRepository, type SaveRepository } from './saveRepository';
 
 type PersistenceWriteErrorCode = 'quota' | 'permission' | 'busy' | 'unknown';
 
@@ -35,16 +31,11 @@ const mapNodeErrorToCode = (err: unknown): PersistenceWriteErrorCode => {
 };
 
 export class PersistenceService {
-    private readonly store = new Store<StoreShape>({
-        name: 'memory-dungeon-save',
-        defaults: {
-            saveData: normalizeSaveData()
-        }
-    });
+    constructor(private readonly repository: SaveRepository = new ElectronStoreSaveRepository()) {}
 
     private commitSaveData(nextSave: SaveData): void {
         try {
-            this.store.set('saveData', nextSave);
+            this.repository.setSaveData(nextSave);
         } catch (error) {
             const code = mapNodeErrorToCode(error);
             console.error('[persistence] store.set failed', code, error);
@@ -53,7 +44,7 @@ export class PersistenceService {
     }
 
     getSaveData(): SaveData {
-        return normalizeUnknownSaveData(this.store.get('saveData'));
+        return normalizeUnknownSaveData(this.repository.getSaveData());
     }
 
     getSettings(): Settings {

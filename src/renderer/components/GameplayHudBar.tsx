@@ -28,23 +28,9 @@ import scoreParasiteCrystalUrl from '../assets/ui/icons/icon-score-parasite-crys
 import shuffleIconUrl from '../assets/ui/icons/icon-shuffle-v1.svg?url';
 import { PERFECT_MEMORY_BASE_RULES, perfectMemoryHudKind } from '../copy/perfectMemory';
 import { REG106_HUD_IA } from '../gameplay/regPhase4PlayContract';
-import { formatHudActionFeedbackText } from '../hooks/useHudPoliteLiveAnnouncement';
+import { formatHudActionFeedbackText } from '../copy/hudActionFeedback';
+import { MUTATOR_HUD_LABELS } from './gameplayHudMutatorLabels';
 import styles from './GameScreen.module.css';
-
-const MUTATOR_HUD_LABELS: Record<MutatorId, string> = {
-    glass_floor: 'Glass floor',
-    sticky_fingers: 'Sticky fingers',
-    score_parasite: 'Score parasite',
-    category_letters: 'Letters',
-    short_memorize: 'Short memorize',
-    wide_recall: 'Wide recall',
-    silhouette_twist: 'Silhouette',
-    n_back_anchor: 'N-back',
-    distraction_channel: 'Distraction',
-    findables_floor: 'Dense pickups',
-    shifting_spotlight: 'Shifting spotlight',
-    generous_shrine: 'Generous shrine'
-};
 
 const getMutatorChipTitle = (id: MutatorId): string => {
     if (id === 'sticky_fingers') {

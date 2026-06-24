@@ -131,6 +131,7 @@ interface TileBoardSceneProps {
     tileSwapEligibleTileIds?: ReadonlySet<string>;
     tileSwapFirstTileId?: string | null;
     pinModeBoardHintActive?: boolean;
+    traitRouteTargetTileIds?: readonly string[];
     /** `sticky_fingers`: tile id at `stickyBlockIndex` while the next opening flip is restricted. */
     stickyBlockedTileId?: string | null;
 }
@@ -186,6 +187,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     tileSwapEligibleTileIds = EMPTY_TILE_IDS,
     tileSwapFirstTileId = null,
     pinModeBoardHintActive = false,
+    traitRouteTargetTileIds = [],
     stickyBlockedTileId = null
 }: TileBoardSceneProps, ref) => {
     const { camera, gl, viewport } = useThree();
@@ -247,6 +249,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             tileSwapEligibleTileIds,
             tileSwapFirstTileId,
             tileSwapPowerVisualActive,
+            traitRouteTargetTileIds: new Set(traitRouteTargetTileIds),
             tileSpacing: TILE_SPACING,
             wardPairKey,
             wideRecallInPlay
@@ -283,6 +286,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         tileSwapEligibleTileIds,
         tileSwapFirstTileId,
         tileSwapPowerVisualActive,
+        traitRouteTargetTileIds,
         wardPairKey,
         wideRecallInPlay
     ]);

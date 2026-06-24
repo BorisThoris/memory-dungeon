@@ -1954,6 +1954,69 @@ describe('REG-017 route choices', () => {
         }
     });
 
+    it('solves generated floors across seeds after exhausting legal pair matches and activating the exit', () => {
+        const scenarios = [2, 4, 7, 9, 12] as const;
+        const seeds = [42_001, 172_707, 182_009] as const;
+
+        for (const runSeed of seeds) {
+            for (const level of scenarios) {
+                const floorTag = level === 7 || level === 9 ? 'boss' : 'normal';
+                const floorArchetypeId =
+                    level === 4
+                        ? 'shadow_read'
+                        : level === 7
+                          ? 'trap_hall'
+                          : level === 9
+                            ? 'rush_recall'
+                            : null;
+                const board = buildBoard(level, {
+                    runSeed,
+                    runRulesVersion: GAME_RULES_VERSION,
+                    floorTag,
+                    floorArchetypeId,
+                    gameMode: 'endless',
+                    activeMutators: level === 9 ? ['short_memorize', 'wide_recall'] : []
+                });
+                const base = finishMemorizePhase(
+                    createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed })
+                );
+                let run: RunState = {
+                    ...base,
+                    board,
+                    status: 'playing',
+                    findablesTotalThisFloor: countFindablePairs(board.tiles)
+                };
+                const pairKeys = [...new Set(board.tiles.map((tile) => tile.pairKey))];
+                for (const pairKey of pairKeys) {
+                    const currentPair = run.board!.tiles.filter(
+                        (tile) =>
+                            tile.pairKey === pairKey &&
+                            tile.state === 'hidden' &&
+                            ![EXIT_PAIR_KEY, SHOP_PAIR_KEY, ROOM_PAIR_KEY, WILD_PAIR_KEY].includes(tile.pairKey)
+                    );
+                    if (currentPair.length !== 2 || run.status !== 'playing') {
+                        continue;
+                    }
+                    run = resolveBoardTurn(flipTile(flipTile(run, currentPair[0]!.id), currentPair[1]!.id));
+                }
+
+                const exitId = run.board!.dungeonExitTileId;
+                expect(exitId, `seed ${runSeed} level ${level}`).toBeTruthy();
+                run = revealDungeonExit(run, exitId!);
+                const exitStatus = getDungeonExitStatus(run);
+                const activation =
+                    exitStatus.canActivateWithMasterKey
+                        ? 'master_key'
+                        : exitStatus.canActivateWithKey
+                          ? 'key'
+                          : 'none';
+                run = activateDungeonExit(run, activation);
+
+                expect(run.status, `seed ${runSeed} level ${level}`).toBe('levelComplete');
+            }
+        }
+    });
+
     it('removes generated enemies defeated by active chip damage from the board', () => {
         const board = buildBoard(5, {
             runSeed: 172_700,

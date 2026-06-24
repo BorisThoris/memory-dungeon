@@ -29,7 +29,8 @@ export const buildTileBoardDomSurfaceModel = ({
     interactive,
     peekRevealedTileIds,
     previewActive,
-    runStatus
+    runStatus,
+    traitRouteTargetTileIds = []
 }: {
     allowGambitThirdFlip: boolean;
     board: BoardState;
@@ -41,6 +42,7 @@ export const buildTileBoardDomSurfaceModel = ({
     peekRevealedTileIds: ReadonlySet<string>;
     previewActive: boolean;
     runStatus: RunStatus;
+    traitRouteTargetTileIds?: readonly string[];
 }): TileBoardDomSurfaceModel => ({
     cardFeedbackStatesAttr: getCardFeedbackStatesAttr({
         allowGambitThirdFlip,
@@ -51,7 +53,8 @@ export const buildTileBoardDomSurfaceModel = ({
         interactive,
         peekRevealedTileIds,
         previewActive,
-        runStatus
+        runStatus,
+        traitRouteTargetTileIds
     }),
     hiddenSlotsAttr: getHiddenSlotsAttr(board),
     hiddenTileCount: getHiddenTileCount(board),

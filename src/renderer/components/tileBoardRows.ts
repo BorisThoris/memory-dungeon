@@ -49,6 +49,7 @@ export interface TileBoardRow {
     stickyFingerSlotMark: boolean;
     tile: Tile;
     traitComboBack: boolean;
+    traitRouteTargetBack: boolean;
     traitInteractionPreviewLines: string[];
     transform: TileTransform;
     tutorialPairOrdinal: number | null;
@@ -91,6 +92,7 @@ export interface BuildTileBoardRowsInput {
     tileSwapEligibleTileIds: ReadonlySet<string>;
     tileSwapFirstTileId: string | null;
     tileSwapPowerVisualActive: boolean;
+    traitRouteTargetTileIds?: ReadonlySet<string>;
     wardPairKey: string | null;
     wideRecallInPlay: boolean;
 }
@@ -131,6 +133,7 @@ export const buildTileBoardRows = ({
     tileSwapEligibleTileIds,
     tileSwapFirstTileId,
     tileSwapPowerVisualActive,
+    traitRouteTargetTileIds = new Set(),
     wardPairKey,
     wideRecallInPlay
 }: BuildTileBoardRowsInput): TileBoardRow[] => {
@@ -242,6 +245,7 @@ export const buildTileBoardRows = ({
             stickyFingerSlotMark,
             tile,
             traitComboBack: Boolean(traitOpportunity && !faceUp),
+            traitRouteTargetBack: traitRouteTargetTileIds.has(tile.id) && !faceUp,
             traitInteractionPreviewLines: traitOpportunity?.previewLines ?? [],
             transform: getTileTransform(tile, index, totalColumns, totalRows, compact, faceUp, reduceMotion),
             tutorialPairOrdinal

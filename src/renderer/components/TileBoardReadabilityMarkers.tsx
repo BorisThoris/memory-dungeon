@@ -44,6 +44,7 @@ interface TileBoardReadabilityMarkersProps {
     stickyFingerSlotMark: boolean;
     tile: Tile;
     traitComboBack: boolean;
+    traitRouteTargetBack: boolean;
 }
 
 interface ReadabilityMaterialMeshProps {
@@ -101,7 +102,8 @@ export const TileBoardReadabilityMarkers = ({
     spotlightWardOnBack,
     stickyFingerSlotMark,
     tile,
-    traitComboBack
+    traitComboBack,
+    traitRouteTargetBack
 }: TileBoardReadabilityMarkersProps) => {
     const {
         enemyOccupiedColor,
@@ -677,6 +679,23 @@ export const TileBoardReadabilityMarkers = ({
                                 color={tile.tileTraitKind ? tileTraitColor(tile.tileTraitKind) : '#5ee0c8'}
                                 geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
                                 opacity={0.96}
+                                position={[0, 0.001, 0.00004]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 3}
+                            />
+                        </group>
+                    ) : null}
+                    {traitRouteTargetBack ? (
+                        <group position={[0, CARD_HEIGHT * 0.305, 0.00062]}>
+                            <ReadabilityMaterialMesh
+                                color="#142733"
+                                geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
+                                opacity={0.86}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 2}
+                            />
+                            <ReadabilityMaterialMesh
+                                color="#5dd6ff"
+                                geometry={BOARD_READABILITY_BAR_GEOMETRY}
+                                opacity={0.94}
                                 position={[0, 0.001, 0.00004]}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 3}
                             />

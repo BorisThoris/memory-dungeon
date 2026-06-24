@@ -74,7 +74,8 @@ export const getCardFeedbackStatesAttr = ({
     interactive,
     peekRevealedTileIds,
     previewActive,
-    runStatus
+    runStatus,
+    traitRouteTargetTileIds = []
 }: {
     allowGambitThirdFlip: boolean;
     board: BoardState;
@@ -85,12 +86,14 @@ export const getCardFeedbackStatesAttr = ({
     peekRevealedTileIds: ReadonlySet<string>;
     previewActive: boolean;
     runStatus: RunStatus;
+    traitRouteTargetTileIds?: readonly string[];
 }): string => {
     const pickable = new Set(getPickableTileIds(board, interactive, allowGambitThirdFlip));
     const enemyOccupied = new Set(
         activeEnemyHazardsForBoard(board).map((hazard) => hazard.currentTileId)
     );
     const traitOpportunityTileIds = getTraitOpportunityTileIds(board);
+    const traitRouteTargetTileIdSet = new Set(traitRouteTargetTileIds);
     const counts = new Map<string, number>();
     const add = (key: string): void => {
         counts.set(key, (counts.get(key) ?? 0) + 1);
@@ -136,6 +139,9 @@ export const getCardFeedbackStatesAttr = ({
             if (traitOpportunityTileIds.has(tile.id)) {
                 add('trait-combo');
             }
+        }
+        if (traitRouteTargetTileIdSet.has(tile.id)) {
+            add('trait-route-target');
         }
         if (tile.dungeonCardKind === 'trap') {
             add(

@@ -19,14 +19,10 @@ import {
 } from '../../shared/objective-rules';
 import { getRouteChoiceAvailability } from '../../shared/route-rules';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
-import { getTraitSwapRouteHints } from '../../shared/trait-opportunities';
 import {
     canRegionShuffle,
     canRegionShuffleRow,
-    canShuffleBoard,
-    collectDestroyEligibleTileIds,
-    collectPeekEligibleTileIds,
-    tileIsStrayEligiblePreview
+    canShuffleBoard
 } from '../../shared/board-powers';
 import {
     getDungeonBoardPresentation,
@@ -51,6 +47,7 @@ import {
 } from '../../shared/floor-mutator-schedule';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import { useDistractionChannelTick } from '../hooks/useDistractionChannelTick';
+import { useLatestRef } from '../hooks/useLatestRef';
 import {
     detectClaimedFindableKind,
     formatHudActionFeedbackText,
@@ -71,6 +68,10 @@ import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { StatTile } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import GameLeftToolbar from './GameLeftToolbar';
+import { GameScreenActionFeedbackRail } from './GameScreenActionFeedbackRail';
+import { GameScreenDungeonRunStrip } from './GameScreenDungeonRunStrip';
+import { GameScreenDungeonStatusPanel } from './GameScreenDungeonStatusPanel';
+import { GameScreenEndlessChapterBanner } from './GameScreenEndlessChapterBanner';
 import GameplayHudBar from './GameplayHudBar';
 import MainMenuBackground from './MainMenuBackground';
 import OverlayModal from './OverlayModal';
@@ -102,6 +103,8 @@ import {
     matchScoreFloatDurationMs
 } from './matchScoreFloaterTiming';
 import { getStickyBlockedTileId } from '../gameplay/stickyFingersBlockedTileId';
+import { useGameScreenPowerTileHints } from './useGameScreenPowerTileHints';
+import { useGameScreenTraitRouteTargets } from './useGameScreenTraitRouteTargets';
 
 const subscribeOsPrefersReducedMotion = (onStoreChange: () => void): (() => void) => {
     if (typeof window === 'undefined') {
@@ -124,7 +127,6 @@ import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-wo
 /** OVR-007 / HUD-020: decoy readout for `distraction_channel` — not gameplay state; hidden when reduce motion or assist toggle is off. */
 const DISTRACTION_CHANNEL_LABEL = 'Chaff';
 
-const EMPTY_TILE_ID_SET: ReadonlySet<string> = new Set();
 const DESKTOP_FULL_BLEED_TILE_BOARD_FRAME_STYLE: CSSProperties = {
     height: '100%',
     inset: 0,
@@ -593,6 +595,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         playMenuOpen();
         setAbandonRunConfirmOpen(true);
     }, [playMenuOpen]);
+    const pauseShortcutStateRef = useLatestRef({
+        abandonRunConfirmOpen,
+        lastLevelResult: run.lastLevelResult,
+        pause,
+        relicOffer: run.relicOffer,
+        resume,
+        runStatus: run.status,
+        shortcutsHelpOpen
+    });
+    const shortcutsHelpStateRef = useLatestRef({
+        playMenuOpen,
+        playUiBack,
+        shortcutsHelpOpen
+    });
 
     useEffect(() => {
         const relicOfferOpen = Boolean(run.relicOffer);
@@ -624,40 +640,32 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     return;
                 }
             }
-            if (shortcutsHelpOpen) {
+            const state = pauseShortcutStateRef.current;
+            if (state.shortcutsHelpOpen) {
                 return;
             }
-            if (abandonRunConfirmOpen) {
+            if (state.abandonRunConfirmOpen) {
                 return;
             }
-            if (run.relicOffer) {
+            if (state.relicOffer) {
                 return;
             }
-            if (run.status === 'levelComplete' && run.lastLevelResult && !run.relicOffer) {
+            if (state.runStatus === 'levelComplete' && state.lastLevelResult && !state.relicOffer) {
                 return;
             }
-            if (run.status === 'paused') {
+            if (state.runStatus === 'paused') {
                 event.preventDefault();
-                resume();
+                state.resume();
                 return;
             }
-            if (run.status === 'playing' || run.status === 'memorize' || run.status === 'resolving') {
+            if (state.runStatus === 'playing' || state.runStatus === 'memorize' || state.runStatus === 'resolving') {
                 event.preventDefault();
-                pause();
+                state.pause();
             }
         };
         document.addEventListener('keydown', onKeyDown, true);
         return () => document.removeEventListener('keydown', onKeyDown, true);
-    }, [
-        abandonRunConfirmOpen,
-        pause,
-        resume,
-        shortcutsHelpOpen,
-        run.lastLevelResult,
-        run.relicOffer,
-        run.status,
-        suppressStatusOverlays
-    ]);
+    }, [pauseShortcutStateRef, suppressStatusOverlays]);
 
     /** ? / F1: shortcuts overlay; Escape closes (REF-096). */
     useEffect(() => {
@@ -677,24 +685,25 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     return;
                 }
             }
-            if (event.key === 'Escape' && shortcutsHelpOpen) {
+            const state = shortcutsHelpStateRef.current;
+            if (event.key === 'Escape' && state.shortcutsHelpOpen) {
                 event.preventDefault();
-                playUiBack();
+                state.playUiBack();
                 setShortcutsHelpOpen(false);
                 return;
             }
-            if (shortcutsHelpOpen) {
+            if (state.shortcutsHelpOpen) {
                 return;
             }
             if (event.code === 'F1' || event.key === '?') {
                 event.preventDefault();
-                playMenuOpen();
+                state.playMenuOpen();
                 setShortcutsHelpOpen(true);
             }
         };
         document.addEventListener('keydown', onKeyDown, true);
         return () => document.removeEventListener('keydown', onKeyDown, true);
-    }, [playMenuOpen, playUiBack, shortcutsHelpOpen, suppressStatusOverlays, uiGain]);
+    }, [shortcutsHelpStateRef, suppressStatusOverlays]);
 
     useEffect(() => {
         const floorClearedModalBlocksToasts =
@@ -1127,73 +1136,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         lives: run.lives
     });
 
-    const shiftingSpotlightActive = useMemo(
-        () => run.activeMutators.includes('shifting_spotlight'),
-        [run.activeMutators]
-    );
-
-    const destroyPowerVisualActive = useMemo(
-        () =>
-            Boolean(run.board) &&
-            run.status === 'playing' &&
-            destroyPairArmed &&
-            run.destroyPairCharges > 0 &&
-            !run.activeContract?.noDestroy &&
-            run.board!.flippedTileIds.length === 0,
-        [run.board, run.status, destroyPairArmed, run.destroyPairCharges, run.activeContract?.noDestroy]
-    );
-
-    const peekPowerVisualActive = useMemo(
-        () =>
-            Boolean(run.board) &&
-            run.status === 'playing' &&
-            peekModeArmed &&
-            run.peekCharges > 0 &&
-            run.board!.flippedTileIds.length === 0,
-        [run.board, run.status, peekModeArmed, run.peekCharges]
-    );
-
-    const strayPowerVisualActive = useMemo(
-        () =>
-            Boolean(run.board) &&
-            run.status === 'playing' &&
-            run.strayRemoveArmed &&
-            run.strayRemoveCharges > 0 &&
-            run.board!.flippedTileIds.length === 0,
-        [run.board, run.status, run.strayRemoveArmed, run.strayRemoveCharges]
-    );
-
-    const pinModeBoardHintActive = useMemo(
-        () => boardPinMode && run.status === 'playing',
-        [boardPinMode, run.status]
-    );
-
-    const destroyEligibleTileIds = useMemo(() => {
-        if (!run.board || !destroyPowerVisualActive) {
-            return EMPTY_TILE_ID_SET;
-        }
-        return collectDestroyEligibleTileIds(run.board);
-    }, [run.board, destroyPowerVisualActive]);
-
-    const peekEligibleTileIds = useMemo(() => {
-        if (!run.board || !peekPowerVisualActive) {
-            return EMPTY_TILE_ID_SET;
-        }
-        return collectPeekEligibleTileIds(run.board, mergedPeekTileIds);
-    }, [run.board, peekPowerVisualActive, mergedPeekTileIds]);
-
-    const strayEligibleTileIds = useMemo(() => {
-        if (!run.board || !strayPowerVisualActive) {
-            return EMPTY_TILE_ID_SET;
-        }
-        const next = new Set<string>();
-        for (const t of run.board.tiles) {
-            if (tileIsStrayEligiblePreview(run.board, t.id)) {
-                next.add(t.id);
-            }
-        }
-        return next;
-    }, [run.board, strayPowerVisualActive]);
+    const { hint: traitSwapRouteHint, tileIds: traitRouteTargetTileIds } = useGameScreenTraitRouteTargets(run);
+    const handleTileSelect = useCallback((tileId: string): void => {
+        useAppStore.getState().pressTile(tileId);
+    }, []);
 
     const showForgivenessHint = Boolean(
         run.board &&
@@ -1209,6 +1155,35 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             });
         }
     }, [compactTouchChrome, showForgivenessHint, showTutorialPairMarkers]);
+
+    const hiddenTileCount = run.board?.tiles.filter((tile) => tile.state === 'hidden').length ?? 0;
+    const tileSwapDisabled = Boolean(
+        run.activeContract?.noShuffle ||
+            !run.board ||
+            run.board.flippedTileIds.length > 0 ||
+            hiddenTileCount < 2 ||
+            (run.regionShuffleCharges < 1 &&
+                !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first')))
+    );
+    const tileSwapPowerVisualActive = run.status === 'playing' && tileSwapArmed && !tileSwapDisabled;
+    const {
+        destroyEligibleTileIds,
+        destroyPowerVisualActive,
+        peekEligibleTileIds,
+        peekPowerVisualActive,
+        pinModeBoardHintActive,
+        shiftingSpotlightActive,
+        strayEligibleTileIds,
+        strayPowerVisualActive,
+        tileSwapEligibleTileIds
+    } = useGameScreenPowerTileHints({
+        boardPinMode,
+        destroyPairArmed,
+        mergedPeekTileIds,
+        peekModeArmed,
+        run,
+        tileSwapPowerVisualActive
+    });
 
     if (!run.board) {
         return null;
@@ -1232,14 +1207,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
               ? 'Finish the current flip first'
               : 'Need at least one hidden pair on the board'
           : 'Shuffle hidden tiles within one row (uses 1 row/swap charge)';
-    const hiddenTileCount = run.board.tiles.filter((tile) => tile.state === 'hidden').length;
-    const tileSwapDisabled =
-        run.activeContract?.noShuffle ||
-        run.board.flippedTileIds.length > 0 ||
-        hiddenTileCount < 2 ||
-        (run.regionShuffleCharges < 1 &&
-            !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first')));
-    const traitSwapHint = !tileSwapDisabled ? getTraitSwapRouteHints(run.board, 1)[0] ?? null : null;
+    const traitSwapHint = !tileSwapDisabled ? traitSwapRouteHint : null;
     const tileSwapTitle = run.activeContract?.noShuffle
         ? 'Scholar contract: tile swap disabled'
         : run.board.flippedTileIds.length > 0
@@ -1256,19 +1224,6 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 : traitSwapHint
                   ? `Swap two hidden tiles (uses 1 row/swap charge). ${traitSwapHint.text}`
                   : 'Swap two hidden tiles (uses 1 row/swap charge)';
-    const tileSwapPowerVisualActive = run.status === 'playing' && tileSwapArmed && !tileSwapDisabled;
-    const tileSwapEligibleTileIds = (() => {
-        if (!tileSwapPowerVisualActive) {
-            return EMPTY_TILE_ID_SET;
-        }
-        const next = new Set<string>();
-        for (const tile of run.board.tiles) {
-            if (tile.state === 'hidden') {
-                next.add(tile.id);
-            }
-        }
-        return next;
-    })();
     const showFlashPairPower = (run.practiceMode || run.wildMenuRun) && run.status === 'playing';
     const flashPairDisabled =
         !showFlashPairPower ||
@@ -1382,51 +1337,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         ) : null}
 
                         {showEndlessChapterBanner ? (
-                            <div
-                                className={styles.endlessChapterBanner}
-                                data-chapter-theme={currentArchetype!.theme}
-                                data-testid="endless-chapter-banner"
-                            >
-                                <strong className={styles.endlessChapterTitle}>{currentArchetype!.title}</strong>
-                                <span className={styles.endlessChapterHint}>
-                                    {currentFloorIdentity?.teachingSentence ?? currentArchetype!.hint}
-                                </span>
-                                <span className={styles.endlessChapterRisk}>
-                                    {currentArchetype!.theme}: {currentFloorIdentity?.counterplaySentence ?? currentArchetype!.riskProfile}
-                                </span>
-                                <span className={styles.endlessChapterObjective}>
-                                    Objective: {currentFeaturedObjectiveLabel!}
-                                </span>
-                            </div>
+                            <GameScreenEndlessChapterBanner
+                                archetype={currentArchetype}
+                                featuredObjectiveLabel={currentFeaturedObjectiveLabel}
+                                floorIdentity={currentFloorIdentity}
+                            />
                         ) : null}
 
                         {currentDungeonRoom ? (
-                            <section className={styles.dungeonRunStrip} data-testid="dungeon-run-strip">
-                                <div className={styles.dungeonRunCurrent} data-tone={currentDungeonRoom.tone}>
-                                    <span className={styles.dungeonRunGlyph}>{currentDungeonRoom.glyph}</span>
-                                    <div>
-                                        <span>{currentDungeonRoom.eyebrow}</span>
-                                        <strong>{currentDungeonRoom.label}</strong>
-                                    </div>
-                                </div>
-                                <div className={styles.dungeonRunNodeRail} aria-label="Dungeon route">
-                                    {visibleDungeonMapNodes.slice(-7).map((node) => (
-                                        <span
-                                            className={styles.dungeonRunNode}
-                                            data-status={node.status}
-                                            data-tone={node.tone}
-                                            key={node.id}
-                                            title={`${node.label}: ${node.mechanic}`}
-                                        >
-                                            {node.glyph}
-                                        </span>
-                                    ))}
-                                </div>
-                                <div className={styles.dungeonRunIntel}>
-                                    <strong>Boss in {dungeonMapPresentation.bossDistance}</strong>
-                                    <span>{currentDungeonRoom.mechanic}</span>
-                                </div>
-                            </section>
+                            <GameScreenDungeonRunStrip
+                                bossDistance={dungeonMapPresentation.bossDistance}
+                                currentRoom={currentDungeonRoom}
+                                visibleNodes={visibleDungeonMapNodes}
+                            />
                         ) : null}
 
                         <div
@@ -1443,76 +1366,18 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 </div>
                             ) : null}
                             {activeDungeonPanel ? (
-                                <div
-                                    aria-label="Dungeon combat status"
-                                    aria-live="polite"
-                                    className={styles.dungeonStatusPanel}
-                                    data-testid="dungeon-status-panel"
-                                    role="status"
-                                >
-                                    <div className={styles.dungeonStatusHeader}>
-                                        <strong>{activeDungeonPanel.title}</strong>
-                                        {activeDungeonPanel.bossText ? <span>{activeDungeonPanel.bossText}</span> : null}
-                                    </div>
-                                    {activeDungeonPanel.objectiveText ? (
-                                        <div className={styles.dungeonStatusObjective}>
-                                            <span>{activeDungeonPanel.objectiveText}</span>
-                                            {activeDungeonPanel.objectiveDetail ? (
-                                                <small>{activeDungeonPanel.objectiveDetail}</small>
-                                            ) : null}
-                                        </div>
-                                    ) : null}
-                                    {activeDungeonPanel.chips.length > 0 ? (
-                                        <div className={styles.dungeonStatusChips} aria-label="Dungeon status">
-                                            {activeDungeonPanel.chips.map((chip) => (
-                                                <span
-                                                    className={styles.dungeonStatusChip}
-                                                    data-priority={chip.priority}
-                                                    data-tone={chip.tone}
-                                                    key={chip.id}
-                                                >
-                                                    <span>{chip.label}</span>
-                                                    <strong>{chip.value}</strong>
-                                                </span>
-                                            ))}
-                                        </div>
-                                    ) : null}
-                                    {activeDungeonPanel.alertText ? (
-                                        <div className={styles.dungeonStatusAlert}>{activeDungeonPanel.alertText}</div>
-                                    ) : null}
-                                    {dungeonCombatLogRows.length > 0 ? (
-                                        <div
-                                            aria-label="This floor combat log"
-                                            className={styles.dungeonCombatLog}
-                                            data-testid="dungeon-combat-log"
-                                        >
-                                            {dungeonCombatLogRows.map((row) => (
-                                                <span
-                                                    className={styles.dungeonCombatLogRow}
-                                                    data-tone={row.tone}
-                                                    key={row.id}
-                                                >
-                                                    <strong>{row.label}</strong>
-                                                    <small>{row.detail}</small>
-                                                </span>
-                                            ))}
-                                        </div>
-                                    ) : null}
-                                </div>
+                                <GameScreenDungeonStatusPanel
+                                    combatLogRows={dungeonCombatLogRows}
+                                    panel={activeDungeonPanel}
+                                />
                             ) : null}
                             {visualHudAnnouncement ? (
-                                <div
-                                    aria-hidden="true"
-                                    className={styles.actionFeedbackRail}
-                                    data-testid="action-feedback-rail"
-                                    data-tone={politeHudAnnouncementPriority}
-                                >
-                                    <span>{visualHudAnnouncementLabel}</span>
-                                    <strong>{visualHudAnnouncement}</strong>
-                                    {visualHudAnnouncementFollowup ? (
-                                        <small>{visualHudAnnouncementFollowup}</small>
-                                    ) : null}
-                                </div>
+                                <GameScreenActionFeedbackRail
+                                    followup={visualHudAnnouncementFollowup}
+                                    label={visualHudAnnouncementLabel}
+                                    message={visualHudAnnouncement}
+                                    tone={politeHudAnnouncementPriority}
+                                />
                             ) : null}
                             <MemoTileBoard
                                 ref={tileBoardRef}
@@ -1524,15 +1389,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 debugPeekActive={run.debugPeekActive}
                                 dimmedTileIds={focusDimmedTileIds}
                                 guidedTargetTileIds={onboardingBoardTargetIds}
+                                traitRouteTargetTileIds={traitRouteTargetTileIds}
                                 interactive={run.status === 'playing' || gambitThirdPickActive}
                                 mobileCameraMode={cameraViewportMode}
                                 nBackAnchorPairKey={run.nBackAnchorPairKey}
                                 nBackMutatorActive={nBackMutatorActive}
                                 peekRevealedTileIds={mergedPeekTileIds}
                                 pinnedTileIds={run.pinnedTileIds}
-                                onTileSelect={(tileId) => {
-                                    useAppStore.getState().pressTile(tileId);
-                                }}
+                                onTileSelect={handleTileSelect}
                                 onMemorizeBoardReady={gameScreenActions.notifyMemorizeBoardReady}
                                 pairProximityHintsEnabled={settingsPairProximityHintsEnabled}
                                 previewActive={run.status === 'memorize'}

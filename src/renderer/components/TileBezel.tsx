@@ -123,6 +123,7 @@ interface TileBezelProps {
     focusDimmed?: boolean;
     stickyFingerSlotMark?: boolean;
     traitComboBack?: boolean;
+    traitRouteTargetBack?: boolean;
     hostConsolidatesTileFrames?: boolean;
     keyboardFocused?: boolean;
     pairProximityDistance?: number | null;
@@ -212,6 +213,7 @@ const TileBezelInner = ({
     focusDimmed = false,
     stickyFingerSlotMark = false,
     traitComboBack = false,
+    traitRouteTargetBack = false,
     hostConsolidatesTileFrames = true,
     keyboardFocused = false,
     pairProximityDistance = null,
@@ -777,6 +779,7 @@ const TileBezelInner = ({
                         stickyFingerSlotMark={stickyFingerSlotMark}
                         tile={tile}
                         traitComboBack={traitComboBack}
+                        traitRouteTargetBack={traitRouteTargetBack}
                     />
                     <TileBoardHoverChrome
                         arcaneGlowGeometry={arcaneGlowGeometry}

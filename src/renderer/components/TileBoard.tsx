@@ -66,6 +66,8 @@ import { getDevE2ePairPositionsJson } from './tileBoardDomTelemetry';
 import { buildTileBoardDomSurfaceModel } from './tileBoardDomSurfaceModel';
 import { TileBoardErrorBoundary } from './tileBoardWebglBoundary';
 import { canUseWebGL } from './tileBoardWebglSupport';
+import { TileBoardPrestageOverlay } from './TileBoardPrestageOverlay';
+import { useTileBoardWebglContextRecovery } from './useTileBoardWebglContextRecovery';
 
 /** Minimum time the pre-board “gather / release” motif stays visible while GPU warm-up runs in parallel. */
 const BOARD_PRESTAGE_DWELL_MS = 360;
@@ -106,6 +108,8 @@ interface TileBoardProps {
     dimmedTileIds?: ReadonlySet<string>;
     /** REG-026: optional guided first-run target ids; keyboard focus/picking starts with these tiles. */
     guidedTargetTileIds?: readonly string[];
+    /** Trait-route setup ids from the HUD model; marks swap-created route cards before the swap tool is armed. */
+    traitRouteTargetTileIds?: readonly string[];
     peekRevealedTileIds?: string[];
     allowGambitThirdFlip?: boolean;
     wideRecallInPlay?: boolean;
@@ -169,7 +173,7 @@ interface MouseDragSnapshot {
 const MOUSE_PAN_DRAG_THRESHOLD_PX = 8;
 const EMPTY_TILE_IDS: ReadonlySet<string> = new Set();
 const BOARD_MARKER_READABILITY_CONTRACT =
-    'hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait trait-combo';
+    'hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait trait-combo trait-route-target';
 
 const PRELOAD_READY_TIMEOUT_MS = 320;
 
@@ -189,6 +193,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         frameStyle,
         dimmedTileIds,
         guidedTargetTileIds = [],
+        traitRouteTargetTileIds = [],
         peekRevealedTileIds = [],
         allowGambitThirdFlip = false,
         wideRecallInPlay = false,
@@ -225,10 +230,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         width <= VIEWPORT_MOBILE_MAX || isNarrowShortLandscapeForMenuStack(width, height);
     const touchPrimary = useCoarsePointer();
     const baselineWebGl = useMemo(() => canUseWebGL(), []);
-    const [gpuSurfaceLost, setGpuSurfaceLost] = useState(false);
-    /** Bumped after `webglcontextrestored` so Canvas/scene remounts with a fresh GL context (REF-078). */
-    const [webglCanvasRemountKey, setWebglCanvasRemountKey] = useState(0);
-    const webglContextListenersCleanupRef = useRef<(() => void) | null>(null);
+    const [boardLiveMessage, setBoardLiveMessage] = useState('');
+    const announceBoardLiveMessage = useCallback((message: string): void => {
+        setBoardLiveMessage(message);
+    }, []);
+    const {
+        gpuSurfaceLost,
+        handleCanvasCreated,
+        webglCanvasRemountKey
+    } = useTileBoardWebglContextRecovery({ announce: announceBoardLiveMessage });
     const boardGraphicsOk = baselineWebGl && !gpuSurfaceLost;
     const cameraViewportMode = mobileCameraMode && boardGraphicsOk;
     const touchGestureMode = cameraViewportMode && touchPrimary;
@@ -267,18 +277,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [focusedTileId, setFocusedTileId] = useState<string | null>(null);
     /** When false, no tile should show the keyboard focus ring (avoids a permanent “hover” on first pickable tile). */
     const [boardApplicationFocused, setBoardApplicationFocused] = useState(false);
-    const [boardLiveMessage, setBoardLiveMessage] = useState('');
     const [trapResolutionMessage, setTrapResolutionMessage] = useState('');
     const [lastResolutionFeedback, setLastResolutionFeedback] = useState('');
     const previousResolvedTrapTileCountRef = useRef<number | null>(null);
 
-    useEffect(
-        () => () => {
-            webglContextListenersCleanupRef.current?.();
-            webglContextListenersCleanupRef.current = null;
-        },
-        []
-    );
     const { tiltRef: fieldTiltRef, motionParallaxSuppressed, permission, requestMotionPermission } = usePlatformTiltField({
         enabled: true,
         reduceMotion,
@@ -328,7 +330,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             interactive,
             peekRevealedTileIds: peekSet,
             previewActive,
-            runStatus
+            runStatus,
+            traitRouteTargetTileIds
         });
     }, [
         allowGambitThirdFlip,
@@ -340,7 +343,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         interactive,
         peekSet,
         previewActive,
-        runStatus
+        runStatus,
+        traitRouteTargetTileIds
     ]);
     useEffect(() => {
         const previous = previousResolvedTrapTileCountRef.current;
@@ -1545,26 +1549,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             </div>
                         ) : null}
                         {boardPreStage === 'loading' && baselineWebGl && !gpuSurfaceLost ? (
-                            <div
-                                aria-hidden
-                                className={styles.prestageOverlay}
-                                data-testid="tile-board-prestage-overlay"
-                            >
-                                <div
-                                    className={styles.prestageDeck}
-                                    style={{ '--prestage-cards': PRESTAGE_CARD_COUNT } as CSSProperties}
-                                >
-                                    <div className={styles.prestageStack}>
-                                        {Array.from({ length: PRESTAGE_CARD_COUNT }, (_, deckI) => (
-                                            <span
-                                                className={styles.prestageCard}
-                                                key={deckI}
-                                                style={{ '--deck-i': deckI } as CSSProperties}
-                                            />
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
+                            <TileBoardPrestageOverlay cardCount={PRESTAGE_CARD_COUNT} />
                         ) : null}
                         <TileBoardErrorBoundary fallback={sceneErrorFallback}>
                             <div className={styles.scene} data-testid="tile-board-stage">
@@ -1580,24 +1565,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         premultipliedAlpha: false
                                     }}
                                     onCreated={({ gl }) => {
-                                        webglContextListenersCleanupRef.current?.();
-                                        const canvas = gl.domElement as HTMLCanvasElement;
-                                        const onLost = (event: Event): void => {
-                                            event.preventDefault();
-                                            setGpuSurfaceLost(true);
-                                        };
-                                        const onRestored = (): void => {
-                                            setGpuSurfaceLost(false);
-                                            setWebglCanvasRemountKey((key) => key + 1);
-                                            setBoardLiveMessage('Graphics context restored. Board rebuilt.');
-                                            window.setTimeout(() => setBoardLiveMessage(''), 3200);
-                                        };
-                                        canvas.addEventListener('webglcontextlost', onLost);
-                                        canvas.addEventListener('webglcontextrestored', onRestored);
-                                        webglContextListenersCleanupRef.current = (): void => {
-                                            canvas.removeEventListener('webglcontextlost', onLost);
-                                            canvas.removeEventListener('webglcontextrestored', onRestored);
-                                        };
+                                        handleCanvasCreated(gl.domElement as HTMLCanvasElement);
                                     }}
                                     shadows={false}
                                     camera={{ fov: 42, near: 0.1, far: 100, position: [0, 0, 10.5] }}
@@ -1650,6 +1618,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         tileSwapPowerVisualActive={tileSwapPowerVisualActive}
                                         tileSwapEligibleTileIds={tileSwapEligibleTileIds}
                                         tileSwapFirstTileId={tileSwapFirstTileId}
+                                        traitRouteTargetTileIds={traitRouteTargetTileIds}
                                         pinModeBoardHintActive={pinModeBoardHintActive}
                                     />
                                 </Canvas>

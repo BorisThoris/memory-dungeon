@@ -9,16 +9,10 @@ import {
     ENCYCLOPEDIA_POWER_TOPICS,
     ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS,
     ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS,
-    ENCYCLOPEDIA_VERSION,
-    GAME_MODE_CODEX,
-    MUTATOR_CATALOG,
-    RELIC_CATALOG,
-    VISUAL_ENDLESS_MODE_LOCKED
+    ENCYCLOPEDIA_VERSION
 } from '../../shared/game-catalog';
 import { getCodexKnowledgeBaseRows } from '../../shared/codex-knowledge-base';
-import type { MutatorId, RelicId } from '../../shared/contracts';
 import { getCodexRewardSignal } from '../../shared/meta-reward-signals';
-import { getRelicBuildArchetypeSummaries } from '../../shared/relics';
 import { getTileTraitCodexRows, getTileTraitInteractionCodexRows } from '../../shared/tile-trait-codex';
 import { getUiStateCopy } from '../../shared/ui-state-copy';
 import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
@@ -33,54 +27,23 @@ import inRunFramedPanel from '../ui/metaInRunFramedPanel.module.css';
 import metaStyles from './MetaScreen.module.css';
 import { getMetaSubscreenLayout } from './metaStackedShellLayout';
 import { handleMetaBodyTocLinkClick } from './metaScreenTocNav';
+import {
+    buildCodexBuildRows,
+    buildCodexModeRows,
+    buildCodexMutatorRows,
+    buildCodexRelicRows,
+    codexTabAllows,
+    CODEX_TOC,
+    filterTopics,
+    hasCodexFilterMatch,
+    tocVisible,
+    type CodexTab
+} from './codexScreenModel';
 import styles from './CodexScreen.module.css';
 
 interface CodexScreenProps {
     /** When true, shell title is `h2` so `GameScreen`'s level `h1` stays the sole document `h1`. */
     stackedOnGameplay?: boolean;
-}
-
-type TextTopic = { title: string; description: string };
-
-/** META-005: browse by article guides vs ID tables (rel/relic/mut/ach). */
-type CodexTab = 'all' | 'guides' | 'tables';
-
-type TocKind = 'guide' | 'table';
-
-const TOC: { href: string; label: string; kind: TocKind }[] = [
-    { href: '#codex-core', label: 'Core', kind: 'guide' },
-    { href: '#codex-powers', label: 'Powers', kind: 'guide' },
-    { href: '#codex-scoring', label: 'Scoring', kind: 'guide' },
-    { href: '#codex-settings', label: 'Settings', kind: 'guide' },
-    { href: '#codex-pickups', label: 'Pickups', kind: 'guide' },
-    { href: '#codex-traits', label: 'Traits', kind: 'guide' },
-    { href: '#codex-contracts', label: 'Contracts', kind: 'guide' },
-    { href: '#codex-featured-runs', label: 'Featured', kind: 'guide' },
-    { href: '#codex-builds', label: 'Builds', kind: 'guide' },
-    { href: '#codex-modes', label: 'Modes', kind: 'guide' },
-    { href: '#codex-achievements', label: 'Achievements', kind: 'table' },
-    { href: '#codex-relics', label: 'Relics', kind: 'table' },
-    { href: '#codex-mutators', label: 'Mutators', kind: 'table' }
-];
-
-function filterTopics<T extends TextTopic>(topics: readonly T[], query: string): T[] {
-    const q = query.trim().toLowerCase();
-    if (!q) {
-        return [...topics];
-    }
-    return topics.filter(
-        (t) => t.title.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
-    );
-}
-
-function tocVisible(tab: CodexTab, kind: TocKind): boolean {
-    if (tab === 'all') {
-        return true;
-    }
-    if (tab === 'guides') {
-        return kind === 'guide';
-    }
-    return kind === 'table';
 }
 
 const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
@@ -131,77 +94,37 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     const traitsFiltered = filterTopics(traitRows, debouncedFilterQuery);
     const contractsFiltered = filterTopics(ENCYCLOPEDIA_CONTRACT_TOPICS, debouncedFilterQuery);
     const featuredFiltered = filterTopics(ENCYCLOPEDIA_FEATURED_RUN_TOPICS, debouncedFilterQuery);
-    const buildRows = useMemo(
-        () =>
-            getRelicBuildArchetypeSummaries().map((row) => ({
-                id: row.id,
-                title: row.label,
-                description: `${row.fantasy} ${row.summary} Decisions: ${row.decisionVerbs.join(', ')}. Relics: ${row.relicIds
-                    .map((id) => RELIC_CATALOG[id]?.title ?? id)
-                    .join(', ')}.`
-            })),
-        []
-    );
+    const buildRows = useMemo(() => buildCodexBuildRows(), []);
     const buildRowsFiltered = filterTopics(buildRows, debouncedFilterQuery);
 
-    const relicList = useMemo(
-        () => (Object.keys(RELIC_CATALOG) as RelicId[]).map((id) => RELIC_CATALOG[id]),
-        []
-    );
-    const mutatorList = useMemo(
-        () => (Object.keys(MUTATOR_CATALOG) as MutatorId[]).map((id) => MUTATOR_CATALOG[id]),
-        []
-    );
+    const relicList = useMemo(() => buildCodexRelicRows(), []);
+    const mutatorList = useMemo(() => buildCodexMutatorRows(), []);
 
     const filteredRelics = filterTopics(relicList, debouncedFilterQuery);
     const filteredMutators = filterTopics(mutatorList, debouncedFilterQuery);
     const filteredAchievements = filterTopics(ACHIEVEMENTS, debouncedFilterQuery);
 
-    const modeRows = useMemo(
-        () => [
-            ...GAME_MODE_CODEX.map((m) => ({ id: m.id, title: m.title, description: m.description })),
-            {
-                id: 'visual_endless_locked',
-                title: VISUAL_ENDLESS_MODE_LOCKED.title,
-                description: VISUAL_ENDLESS_MODE_LOCKED.description
-            }
-        ],
-        []
-    );
+    const modeRows = useMemo(() => buildCodexModeRows(), []);
     const filteredModes = filterTopics(modeRows, debouncedFilterQuery);
 
-    const tabAllows = (kind: 'guide' | 'table'): boolean => {
-        if (codexTab === 'all') {
-            return true;
-        }
-        if (codexTab === 'guides') {
-            return kind === 'guide';
-        }
-        return kind === 'table';
-    };
+    const tabAllows = (kind: 'guide' | 'table'): boolean => codexTabAllows(codexTab, kind);
 
-    const anyFilterMatch = (() => {
-        const q = debouncedFilterQuery.trim();
-        const row = [
-            tabAllows('guide') ? coreFiltered.length : 0,
-            tabAllows('guide') ? powersFiltered.length : 0,
-            tabAllows('guide') ? scoringFiltered.length : 0,
-            tabAllows('guide') ? settingsFiltered.length : 0,
-            tabAllows('guide') ? pickupsFiltered.length : 0,
-            tabAllows('guide') ? traitsFiltered.length : 0,
-            tabAllows('guide') ? contractsFiltered.length : 0,
-            tabAllows('guide') ? featuredFiltered.length : 0,
-            tabAllows('guide') ? buildRowsFiltered.length : 0,
-            tabAllows('guide') ? filteredModes.length : 0,
-            tabAllows('table') ? filteredAchievements.length : 0,
-            tabAllows('table') ? filteredRelics.length : 0,
-            tabAllows('table') ? filteredMutators.length : 0
-        ];
-        if (!q) {
-            return row.some((n) => n > 0);
-        }
-        return row.some((n) => n > 0);
-    })();
+    const anyFilterMatch = hasCodexFilterMatch({
+        guideCounts: [
+            coreFiltered.length,
+            powersFiltered.length,
+            scoringFiltered.length,
+            settingsFiltered.length,
+            pickupsFiltered.length,
+            traitsFiltered.length,
+            contractsFiltered.length,
+            featuredFiltered.length,
+            buildRowsFiltered.length,
+            filteredModes.length
+        ],
+        tableCounts: [filteredAchievements.length, filteredRelics.length, filteredMutators.length],
+        tab: codexTab
+    });
 
     const showWhenFiltered = (count: number): boolean => !debouncedFilterQuery.trim() || count > 0;
 
@@ -271,7 +194,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                 </div>
 
                 <nav aria-label="Codex sections" className={metaStyles.inPageToc}>
-                    {TOC.filter((item) => tocVisible(codexTab, item.kind)).map((item) => (
+                    {CODEX_TOC.filter((item) => tocVisible(codexTab, item.kind)).map((item) => (
                         <a
                             href={item.href}
                             key={item.href}

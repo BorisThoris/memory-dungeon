@@ -610,11 +610,14 @@ const dungeonBossLabel = (bossId: BoardState['dungeonBossId']): string | null =>
     return getDungeonBossDefinition(bossId)?.label ?? null;
 };
 
-const dungeonLockSummary = (status: DungeonExitStatus): string | null => {
+const dungeonLockSummary = (status: DungeonExitStatus, objective?: DungeonObjectiveStatus): string | null => {
     if (!status.exitTile) {
         return null;
     }
     if (!status.revealed) {
+        if (objective?.objectiveId === 'defeat_boss' && objective.completed) {
+            return 'Boss defeated - reveal exit';
+        }
         return 'Exit hidden';
     }
     if (status.lockKind === 'none') {
@@ -689,7 +692,7 @@ export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresenta
     }
 
     const hiddenCount = status.hiddenDungeonCardCount;
-    const activeExitText = dungeonLockSummary(exit);
+    const activeExitText = dungeonLockSummary(exit, objective);
     const keyText = `${status.keyCount} ${status.keyCount === 1 ? 'key' : 'keys'}`;
     const patrolNoun = status.enemyHazardCount === 1 ? 'patrol is' : 'patrols are';
     const chips: DungeonBoardPresentationChip[] = [];
@@ -734,9 +737,13 @@ export const getDungeonBoardPresentation = (run: RunState): DungeonBoardPresenta
         chips.push(dungeonHudChip('shop', 'Shop', 'available', 'info', 80));
     }
 
+    const bossDoneExitHidden =
+        objective.objectiveId === 'defeat_boss' && objective.completed && exit.exitTile != null && !exit.revealed;
     const alertText =
         status.armedTrapCount > 0
             ? `${status.armedTrapCount} armed ${status.armedTrapCount === 1 ? 'trap card' : 'trap cards'} will spring on mismatches.`
+            : bossDoneExitHidden
+              ? 'Boss defeated. Reveal the exit card, then activate it to leave.'
             : bossPressureCopy
               ? bossPressureCopy
               : status.revealedEnemyHazardCount > 0

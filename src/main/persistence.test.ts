@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from 'vitest';
 import type { SaveData, Settings } from '../shared/contracts';
 import { ACHIEVEMENT_IDS, createDefaultSaveData, normalizeSaveData } from '../shared/save-data';
 
+import type { SaveRepository } from './saveRepository';
+
 vi.mock('electron-store', () => {
     return {
         default: class MockElectronStore {
@@ -20,6 +22,18 @@ vi.mock('electron-store', () => {
 });
 
 import { PersistenceService } from './persistence';
+
+class MemorySaveRepository implements SaveRepository {
+    constructor(private saveData: unknown = normalizeSaveData()) {}
+
+    getSaveData(): unknown {
+        return this.saveData;
+    }
+
+    setSaveData(saveData: SaveData): void {
+        this.saveData = saveData;
+    }
+}
 
 describe('PersistenceService', () => {
     it('returns defaults aligned with normalizeSaveData / createDefaultSaveData', () => {
@@ -41,6 +55,18 @@ describe('PersistenceService', () => {
         const roundTrip = p.getSaveData();
         expect(roundTrip.settings.displayMode).toBe('fullscreen');
         expect(roundTrip.settings.weakerShuffleMode).toBe('rows_only');
+    });
+
+    it('persists through an injected save repository', () => {
+        const repository = new MemorySaveRepository();
+        const p = new PersistenceService(repository);
+
+        p.saveSettings({
+            ...createDefaultSaveData().settings,
+            reduceMotion: true
+        });
+
+        expect((repository.getSaveData() as SaveData).settings.reduceMotion).toBe(true);
     });
 
     it('saveSettings normalizes malformed runtime settings payloads', () => {

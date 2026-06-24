@@ -1,9 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import type { RouteCardKind, RouteNodeType, RunShopOfferState } from '../../shared/contracts';
 import { canRerollShopOffers, getShopRerollCostForFloor } from '../../shared/shop-rules';
-import { focusFirstTabbableOrContainer, handleTabFocusTrapEvent } from '../a11y/focusables';
-import { popModalFocusSnapshot, pushModalFocusSnapshot } from '../a11y/modalFocusReturnStack';
 import {
     playUiBackSfx,
     playUiClickSfx,
@@ -11,6 +9,7 @@ import {
     resumeUiSfxContext,
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
+import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { OverlayActionDock } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
@@ -84,31 +83,19 @@ const ShopScreen = () => {
     );
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
 
-    useEffect(() => {
-        pushModalFocusSnapshot();
-        const frame = window.requestAnimationFrame(() => {
-            focusFirstTabbableOrContainer(rootRef.current);
-        });
-        return () => {
-            window.cancelAnimationFrame(frame);
-            popModalFocusSnapshot();
-        };
-    }, []);
-
-    useEffect(() => {
-        const onKeyDown = (event: KeyboardEvent): void => {
+    useModalFocusTrap({
+        containerRef: rootRef,
+        onDocumentKeyDown: (event) => {
             if (event.key === 'Escape') {
                 event.preventDefault();
                 resumeUiSfxContext();
                 playUiBackSfx(uiGain);
                 closeShopToFloorSummary();
-                return;
+                return true;
             }
-            handleTabFocusTrapEvent(event, rootRef.current);
-        };
-        document.addEventListener('keydown', onKeyDown, true);
-        return () => document.removeEventListener('keydown', onKeyDown, true);
-    }, [closeShopToFloorSummary, uiGain]);
+            return false;
+        }
+    });
 
     if (!run || (run.status !== 'levelComplete' && shopReturnMode !== 'floor')) {
         return null;

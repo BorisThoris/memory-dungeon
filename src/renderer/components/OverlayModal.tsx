@@ -1,8 +1,7 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
-import { focusFirstTabbableOrContainer, handleTabFocusTrapEvent } from '../a11y/focusables';
-import { popModalFocusSnapshot, pushModalFocusSnapshot } from '../a11y/modalFocusReturnStack';
 import { popVerticalToolbarRovingPause, pushVerticalToolbarRovingPause } from '../a11y/toolbarRoving';
 import { getOverlayDecisionPolicyRow } from '../../shared/overlay-decision-policy';
+import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { MetaFrame, OverlayActionDock, ScreenTitle } from '../ui';
 import type { OverlayActionPlacement } from '../ui';
 import styles from './OverlayModal.module.css';
@@ -163,26 +162,13 @@ const OverlayModal = ({
     const decisionPolicy = getOverlayDecisionPolicyRow(modalKind);
     const resolvedActionPlacement = resolveActionPlacement(actionPlacement, actions, Boolean(children));
 
-    /* OVR-010: initial focus + restore — same lifecycle pattern as Settings modal (`presentation="modal"`). */
-    useEffect(() => {
-        pushModalFocusSnapshot();
-        pushVerticalToolbarRovingPause();
-
-        const focusInitialElement = window.requestAnimationFrame(() => {
-            focusFirstTabbableOrContainer(modalRef.current);
-        });
-
-        return () => {
-            window.cancelAnimationFrame(focusInitialElement);
-            popVerticalToolbarRovingPause();
-            popModalFocusSnapshot();
-        };
-    }, []);
-
-    useEffect(() => {
-        const onDocumentKeyDown = (event: KeyboardEvent): void => {
-            handleTabFocusTrapEvent(event, modalRef.current);
-
+    useModalFocusTrap({
+        containerRef: modalRef,
+        onActivate: () => {
+            pushVerticalToolbarRovingPause();
+            return popVerticalToolbarRovingPause;
+        },
+        onDocumentKeyDown: (event) => {
             if (
                 onEscape &&
                 event.key === 'Escape' &&
@@ -195,15 +181,12 @@ const OverlayModal = ({
             ) {
                 event.preventDefault();
                 onEscape();
+                return true;
             }
-        };
 
-        document.addEventListener('keydown', onDocumentKeyDown, true);
-
-        return () => {
-            document.removeEventListener('keydown', onDocumentKeyDown, true);
-        };
-    }, [onEscape]);
+            return false;
+        }
+    });
 
     useEffect(() => {
         document.body.dataset.overlayModalOpen = 'true';

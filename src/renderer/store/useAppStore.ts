@@ -2,30 +2,18 @@ import { create } from 'zustand/react';
 import type {
     AchievementId,
     AchievementUnlockResult,
-    MutatorId,
-    RelicId,
-    RelicOfferServiceId,
     RunState,
     SaveData,
-    Settings,
-    SubscreenReturnView,
-    ViewState
+    SubscreenReturnView
 } from '../../shared/contracts';
-import {
-    isGauntletExpired,
-} from '../../shared/game-core';
-import {
-    cancelResolvingWithUndo,
-} from '../../shared/board-powers';
+import { isGauntletExpired } from '../../shared/game-core';
+import { cancelResolvingWithUndo } from '../../shared/board-powers';
 import {
     claimRouteSideRoomChoice,
     claimRouteSideRoomPrimary,
     skipRouteSideRoom
 } from '../../shared/route-rules';
-import {
-    activateDungeonExit,
-    type DungeonExitActivationSpend
-} from '../../shared/dungeon-rules';
+import { activateDungeonExit } from '../../shared/dungeon-rules';
 import { trackEvent } from '../../shared/telemetry';
 import { executeRunStartRequest } from './runStartExecutor';
 import type { RunStartRequest } from './runStartState';
@@ -41,8 +29,6 @@ import {
     createShopPurchaseSurfaceResult,
     createShopRerollSurfaceResult
 } from './shopSurfaceState';
-import { createDefaultSaveData } from '../../shared/save-data';
-import type { MetaProgressionUnlockResult } from '../../shared/meta-progression';
 import { desktopClient } from '../desktop-client';
 import { createRunResolutionController } from './runResolutionController';
 import { createRunTimerController } from './runTimerController';
@@ -53,11 +39,6 @@ import {
     persistenceNoticeForConsecutiveFailures,
     registerPersistenceWriteFailureHandler
 } from './persistBridge';
-import {
-    BOARD_FLOATER_POP_CLEAR,
-    type MatchScorePop,
-    type MismatchScorePop
-} from './matchScorePop';
 import {
     createBoardPinModeToggleResult,
     createDestroyPairArmedToggleResult,
@@ -72,9 +53,7 @@ import {
     createTileSwapToggleResult,
     createRunWithPeekDisarmedPatch
 } from './runSurfaceState';
-import {
-    createPlayingTilePressSurfaceResult,
-} from './tilePressController';
+import { createPlayingTilePressSurfaceResult } from './tilePressController';
 import { playTilePressAudioCues } from './tilePressAudioCues';
 import {
     applyPlayingTilePressSurfaceResult
@@ -129,102 +108,8 @@ import {
 import type { StoreNavigationAction } from './navigationModel';
 import { createHydratedAppStatePatch } from './hydrationController';
 import { createRunLifecycleController } from './runLifecycleController';
-
-interface AppState {
-    hydrated: boolean;
-    hydrating: boolean;
-    steamConnected: boolean;
-    view: ViewState;
-    settingsReturnView: SubscreenReturnView;
-    subscreenReturnView: SubscreenReturnView;
-    saveData: SaveData;
-    settings: Settings;
-    run: RunState | null;
-    runStartSaveData: SaveData | null;
-    newlyUnlockedAchievements: AchievementId[];
-    /** Non-blocking copy when Steam achievement sync fails (local save still applied). */
-    achievementBridgeNotice: string | null;
-    clearAchievementBridgeNotice: () => void;
-    /** Disk / localStorage save failures (autosave or settings write). */
-    persistenceWriteNotice: string | null;
-    clearPersistenceWriteNotice: () => void;
-    /** Save read failures during boot/hydration; blocks autosave so corrupt storage is not overwritten by defaults. */
-    saveReadFailureNotice: string | null;
-    saveWritesBlockedByReadFailure: boolean;
-    clearSaveReadFailureNotice: () => void;
-    boardPinMode: boolean;
-    destroyPairArmed: boolean;
-    peekModeArmed: boolean;
-    tileSwapArmed: boolean;
-    tileSwapFirstTileId: string | null;
-    dungeonExitPromptOpen: boolean;
-    shopReturnMode: 'floor' | 'summary' | null;
-    /** Transient floating +score near matched tiles (Gameplay column). */
-    matchScorePop: MatchScorePop | null;
-    dismissMatchScorePop: () => void;
-    /** Transient miss floater after mismatch resolve (same anchor as match floater). */
-    mismatchScorePop: MismatchScorePop | null;
-    dismissMismatchScorePop: () => void;
-    hydrate: () => Promise<void>;
-    startRun: () => void;
-    startDungeonShowcaseRun: () => void;
-    startDailyRun: () => void;
-    startGauntletRun: (durationMs?: number) => void;
-    startPuzzleRun: (puzzleId: string) => void;
-    startPracticeRun: () => void;
-    startScholarContractRun: () => void;
-    startMeditationRun: () => void;
-    startMeditationRunWithMutators: (mutators: MutatorId[]) => void;
-    startPinVowRun: () => void;
-    startWildRun: () => void;
-    pickRelic: (relicId: RelicId) => void;
-    applyRelicOfferService: (serviceId: RelicOfferServiceId, targetRelicId?: RelicId) => void;
-    dismissPowersFtue: () => Promise<void>;
-    goToMenu: () => void;
-    openModeSelect: () => void;
-    openCollection: () => void;
-    openProfile: () => void;
-    openInventoryFromMenu: () => void;
-    openCodexFromMenu: () => void;
-    openInventoryFromPlaying: () => void;
-    openCodexFromPlaying: () => void;
-    openShopFromLevelComplete: () => void;
-    closeShopToFloorSummary: () => void;
-    continueFromShop: () => void;
-    closeSubscreen: () => void;
-    openSettings: (returnView?: SubscreenReturnView) => void;
-    closeSettings: () => void;
-    updateSettings: (settings: Settings) => Promise<void>;
-    dismissHowToPlay: () => Promise<void>;
-    claimMetaProgressionReward: (rowId: string) => MetaProgressionUnlockResult;
-    pressTile: (tileId: string) => void;
-    closeDungeonExitPrompt: () => void;
-    activateDungeonExitFromPrompt: (spend?: DungeonExitActivationSpend) => void;
-    togglePeekMode: () => void;
-    toggleTileSwapArmed: () => void;
-    undoResolvingFlip: () => void;
-    toggleStrayArm: () => void;
-    shuffleBoard: () => void;
-    armRegionShuffleRowPick: (row: number | null) => void;
-    shuffleRegionRow: (row: number) => void;
-    notifyMemorizeBoardReady: (boardKey: string) => void;
-    applyFlashPairPower: () => void;
-    toggleBoardPinMode: () => void;
-    toggleDestroyPairArmed: () => void;
-    pause: () => void;
-    resume: () => void;
-    acceptEndlessRiskWager: () => void;
-    purchaseShopOffer: (offerId: string) => void;
-    rerollShopOffers: () => void;
-    continueToNextLevel: () => void;
-    chooseRouteAndContinue: (choiceId: string) => void;
-    claimSideRoomPrimary: () => void;
-    claimSideRoomChoice: (choiceId: string) => void;
-    skipSideRoom: () => void;
-    restartRun: () => void;
-    endRun: () => void;
-    triggerDebugReveal: () => void;
-}
+import { createAppStoreInitialState } from './appStoreInitialState';
+import type { AppState } from './appStoreTypes';
 
 const RUN_SURFACE_RESET = createRunSurfaceReset();
 
@@ -367,38 +252,16 @@ const executeStoreMetaOverlayClose = (
 };
 
 export const useAppStore = create<AppState>((set, get) => ({
-    hydrated: false,
-    hydrating: false,
-    steamConnected: false,
-    view: 'boot',
-    settingsReturnView: 'menu',
-    subscreenReturnView: 'menu',
-    saveData: createDefaultSaveData(),
-    settings: createDefaultSaveData().settings,
-    run: null,
-    runStartSaveData: null,
-    newlyUnlockedAchievements: [],
-    achievementBridgeNotice: null,
+    ...createAppStoreInitialState(),
     clearAchievementBridgeNotice: () => {
         set({ achievementBridgeNotice: null });
     },
-    persistenceWriteNotice: null,
     clearPersistenceWriteNotice: () => {
         set({ persistenceWriteNotice: null });
     },
-    saveReadFailureNotice: null,
-    saveWritesBlockedByReadFailure: false,
     clearSaveReadFailureNotice: () => {
         set({ saveReadFailureNotice: null });
     },
-    boardPinMode: false,
-    destroyPairArmed: false,
-    peekModeArmed: false,
-    tileSwapArmed: false,
-    tileSwapFirstTileId: null,
-    dungeonExitPromptOpen: false,
-    shopReturnMode: null,
-    ...BOARD_FLOATER_POP_CLEAR,
     dismissMatchScorePop: () => {
         set({ matchScorePop: null });
     },
