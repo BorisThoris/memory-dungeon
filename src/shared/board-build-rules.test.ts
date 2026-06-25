@@ -2,6 +2,12 @@ import { describe, expect, it } from 'vitest';
 
 import { GAME_RULES_VERSION, type DungeonExitLockKind, type Tile } from './contracts';
 import { buildBoard } from './board-build-rules';
+import {
+    countReachableExitKeySources,
+    countReachableExitLeverSources,
+    getEffectivePrimaryExitLock,
+    inspectBoardFairness
+} from './board-inspection';
 import { EXIT_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string): Tile => ({
@@ -62,27 +68,20 @@ describe('board build rules', () => {
                 const primaryExit = board.tiles.find((candidate) => candidate.id === board.dungeonExitTileId);
                 expect(primaryExit, `seed ${runSeed} level ${level} primary exit`).toBeTruthy();
 
-                const lockKind = (primaryExit?.dungeonExitLockKind ?? 'none') as DungeonExitLockKind;
+                expect(inspectBoardFairness(board).issues, `seed ${runSeed} level ${level} fairness`).toEqual([]);
+
+                const lock = getEffectivePrimaryExitLock({ board });
+                const lockKind = lock.lockKind as DungeonExitLockKind;
                 if (lockKind === 'lever') {
-                    const leverPairs = new Set(
-                        board.tiles
-                            .filter((candidate) => candidate.dungeonCardKind === 'lever' && candidate.dungeonCardEffectId === 'lever_floor')
-                            .map((candidate) => candidate.pairKey)
-                    );
                     expect(
-                        leverPairs.size,
-                        `seed ${runSeed} level ${level} lever exit needs ${primaryExit?.dungeonExitRequiredLeverCount ?? 0}`
-                    ).toBeGreaterThanOrEqual(primaryExit?.dungeonExitRequiredLeverCount ?? 0);
+                        countReachableExitLeverSources(board),
+                        `seed ${runSeed} level ${level} lever exit needs ${lock.requiredLeverCount}`
+                    ).toBeGreaterThanOrEqual(lock.requiredLeverCount);
                 } else if (lockKind !== 'none') {
-                    const hasMatchingKeyPair = board.tiles.some(
-                        (candidate) => candidate.dungeonCardKind === 'key' && candidate.dungeonKeyKind === lockKind
-                    );
-                    const hasKeyRoom = board.tiles.some((candidate) => candidate.dungeonCardEffectId === 'room_key_cache');
-                    const hasShop = board.dungeonShopTileId != null;
                     expect(
-                        hasMatchingKeyPair || hasKeyRoom || hasShop,
+                        countReachableExitKeySources(board, lockKind),
                         `seed ${runSeed} level ${level} ${lockKind} exit has no key source`
-                    ).toBe(true);
+                    ).toBeGreaterThan(0);
                 }
             }
         }

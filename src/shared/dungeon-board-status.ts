@@ -14,6 +14,11 @@ import {
     type DungeonBossLifecycleSource,
     type DungeonBossPhase
 } from './dungeon-boss-rules';
+import {
+    boardHasActionableProgressionPair,
+    countReachableExitKeySources,
+    getEffectivePrimaryExitLock
+} from './board-inspection';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 export interface DungeonExitStatus {
@@ -22,6 +27,8 @@ export interface DungeonExitStatus {
     lockKind: DungeonExitLockKind;
     requiredLeverCount: number;
     leverCount: number;
+    terminalKeySoftlockFallback: boolean;
+    keyFallbackPending: boolean;
     hasMatchingKey: boolean;
     hasMasterKey: boolean;
     canActivateWithoutSpend: boolean;
@@ -145,16 +152,43 @@ export const getDungeonExitStatus = (run: RunState): DungeonExitStatus => {
     const primaryExit = exits.find((tile) => tile.id === board?.dungeonExitTileId) ?? null;
     const undefeatedBossHazard = activeEnemyHazardsForBoard(board).find((hazard) => hazard.bossId) ?? null;
     const activeBossCard = board?.tiles.find(
-        (tile) => tile.dungeonBossId != null && tile.state !== 'matched' && tile.state !== 'removed'
+        (tile) =>
+            tile.dungeonBossId != null &&
+            tile.state !== 'matched' &&
+            tile.state !== 'removed' &&
+            tile.dungeonCardState !== 'resolved'
     ) ?? null;
     const unresolvedBossObjective =
         board?.dungeonObjectiveId === 'defeat_boss' &&
         (undefeatedBossHazard != null || activeBossCard != null) &&
         !getDungeonObjectiveStatus(run).completed;
     const bossBlocksExit = unresolvedBossObjective;
+    const effectivePrimaryExitLock = board
+        ? getEffectivePrimaryExitLock({
+              board,
+              dungeonKeys: run.dungeonKeys,
+              dungeonMasterKeys: run.dungeonMasterKeys
+          })
+        : null;
+    const effectiveExitLock = (
+        tile: Tile | null
+    ): { lockKind: DungeonExitLockKind; requiredLeverCount: number; terminalKeySoftlockFallback: boolean } => {
+        const rawLockKind = tile?.dungeonExitLockKind ?? board?.dungeonExitLockKind ?? 'none';
+        const rawRequiredLeverCount = tile?.dungeonExitRequiredLeverCount ?? board?.dungeonExitRequiredLeverCount ?? 0;
+        const primaryExitId = effectivePrimaryExitLock?.exitTile?.id ?? board?.dungeonExitTileId ?? primaryExit?.id ?? null;
+        const isPrimaryExit = tile != null && primaryExitId != null && tile.id === primaryExitId;
+
+        if (!isPrimaryExit || !effectivePrimaryExitLock) {
+            return { lockKind: rawLockKind, requiredLeverCount: rawRequiredLeverCount, terminalKeySoftlockFallback: false };
+        }
+        return {
+            lockKind: effectivePrimaryExitLock.lockKind,
+            requiredLeverCount: effectivePrimaryExitLock.requiredLeverCount,
+            terminalKeySoftlockFallback: effectivePrimaryExitLock.terminalKeySoftlockFallback
+        };
+    };
     const tileCanActivate = (tile: Tile): boolean => {
-        const candidateLockKind = tile.dungeonExitLockKind ?? board?.dungeonExitLockKind ?? 'none';
-        const candidateRequiredLevers = tile.dungeonExitRequiredLeverCount ?? board?.dungeonExitRequiredLeverCount ?? 0;
+        const { lockKind: candidateLockKind, requiredLeverCount: candidateRequiredLevers } = effectiveExitLock(tile);
         const candidateLeverSatisfied =
             candidateLockKind !== 'lever' || (board?.dungeonLeverCount ?? 0) >= candidateRequiredLevers;
         const candidateHasKey =
@@ -176,11 +210,18 @@ export const getDungeonExitStatus = (run: RunState): DungeonExitStatus => {
         exits.find((tile) => tile.state !== 'hidden') ??
         exits[0] ??
         null;
-    const lockKind = exitTile?.dungeonExitLockKind ?? board?.dungeonExitLockKind ?? 'none';
-    const requiredLeverCount = exitTile?.dungeonExitRequiredLeverCount ?? board?.dungeonExitRequiredLeverCount ?? 0;
+    const { lockKind, requiredLeverCount, terminalKeySoftlockFallback } = effectiveExitLock(exitTile);
     const leverCount = board?.dungeonLeverCount ?? 0;
     const hasMatchingKey = lockKind !== 'none' && lockKind !== 'lever' && (run.dungeonKeys[lockKind] ?? 0) > 0;
     const hasMasterKey = run.dungeonMasterKeys > 0;
+    const keyFallbackPending =
+        Boolean(board) &&
+        lockKind !== 'none' &&
+        lockKind !== 'lever' &&
+        !hasMatchingKey &&
+        !hasMasterKey &&
+        countReachableExitKeySources(board!, lockKind) <= 0 &&
+        boardHasActionableProgressionPair(board!);
     const revealed = Boolean(exitTile && exitTile.state !== 'hidden');
     const leverSatisfied = lockKind !== 'lever' || leverCount >= requiredLeverCount;
     const canActivateWithoutSpend = revealed && lockKind === 'none' && !bossBlocksExit;
@@ -200,6 +241,8 @@ export const getDungeonExitStatus = (run: RunState): DungeonExitStatus => {
         lockedReason = `Defeat ${undefeatedBossHazard?.label ?? activeBossCard?.label ?? dungeonBossLabel(board?.dungeonBossId) ?? 'the boss'} before using the exit.`;
     } else if (lockKind === 'lever' && !leverSatisfied) {
         lockedReason = `Find ${Math.max(requiredLeverCount - leverCount, 0)} more lever pair(s).`;
+    } else if (keyFallbackPending) {
+        lockedReason = 'No key source remains; clear the remaining pairs to force the exit open.';
     } else if (lockKind !== 'none' && lockKind !== 'lever' && !hasMatchingKey && !hasMasterKey) {
         lockedReason = `Needs a ${lockKind} key or master key.`;
     }
@@ -209,6 +252,8 @@ export const getDungeonExitStatus = (run: RunState): DungeonExitStatus => {
         lockKind,
         requiredLeverCount,
         leverCount,
+        terminalKeySoftlockFallback,
+        keyFallbackPending,
         hasMatchingKey,
         hasMasterKey,
         canActivateWithoutSpend,
@@ -244,7 +289,13 @@ const countResolvedDungeonPairs = (tiles: readonly Tile[], predicate: (tile: Til
 
 export const getDungeonThreatStatus = (board: BoardState | null | undefined): DungeonThreatStatus => {
     const activeTiles =
-        board?.tiles.filter((tile) => tile.state !== 'matched' && tile.state !== 'removed' && tile.dungeonCardKind != null) ?? [];
+        board?.tiles.filter(
+            (tile) =>
+                tile.state !== 'matched' &&
+                tile.state !== 'removed' &&
+                tile.dungeonCardState !== 'resolved' &&
+                tile.dungeonCardKind != null
+        ) ?? [];
     const movingEnemyHazards = activeEnemyHazardsForBoard(board);
 
     return {
@@ -278,7 +329,13 @@ export const getDungeonEnemyLifecycleStatus = (runOrBoard: RunState | BoardState
     const board = runOrBoard && 'tiles' in runOrBoard ? runOrBoard : runOrBoard?.board;
     const defeatedEnemyCounter = runOrBoard && 'board' in runOrBoard ? (runOrBoard.dungeonEnemiesDefeatedThisFloor ?? 0) : 0;
     const activeTiles =
-        board?.tiles.filter((tile) => tile.state !== 'matched' && tile.state !== 'removed' && tile.dungeonCardKind != null) ?? [];
+        board?.tiles.filter(
+            (tile) =>
+                tile.state !== 'matched' &&
+                tile.state !== 'removed' &&
+                tile.dungeonCardState !== 'resolved' &&
+                tile.dungeonCardKind != null
+        ) ?? [];
     const resolvedEnemyPairs = countResolvedDungeonPairs(board?.tiles ?? [], (tile) => tile.dungeonCardKind === 'enemy');
     const counterOnlyDefeated = Math.max(0, defeatedEnemyCounter - resolvedEnemyPairs);
     const movingHazards = board?.enemyHazards ?? [];
@@ -343,7 +400,9 @@ export const getDungeonBossReadModel = (
     const pressure = getDungeonBossPressureRule(definition.id);
 
     const bossTiles = board?.tiles.filter((tile) => tile.dungeonBossId === definition.id) ?? [];
-    const activeBossTiles = bossTiles.filter((tile) => tile.state !== 'matched' && tile.state !== 'removed');
+    const activeBossTiles = bossTiles.filter(
+        (tile) => tile.state !== 'matched' && tile.state !== 'removed' && tile.dungeonCardState !== 'resolved'
+    );
     const bossHazards = board?.enemyHazards?.filter((hazard) => hazard.bossId === definition.id) ?? [];
     const activeBossHazards = activeEnemyHazardsForBoard(board).filter((hazard) => hazard.bossId === definition.id);
     const lifecycleSource: DungeonBossLifecycleSource =
@@ -449,13 +508,16 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
         const activeEnemyPairs = countDungeonPairs(board.tiles, (tile) => tile.dungeonCardKind === 'enemy');
         const resolvedEnemyPairs = countResolvedDungeonPairs(board.tiles, (tile) => tile.dungeonCardKind === 'enemy');
         const movingEnemyHazards = board.enemyHazards ?? [];
-        const defeatedMovingEnemyHazards = movingEnemyHazards.filter((hazard) => hazard.state === 'defeated').length;
+        const activeMovingEnemyHazardIds = new Set(activeEnemyHazardsForBoard(board).map((hazard) => hazard.id));
+        const resolvedMovingEnemyHazards = movingEnemyHazards.filter(
+            (hazard) => hazard.state === 'defeated' || !activeMovingEnemyHazardIds.has(hazard.id)
+        ).length;
         const counterOnlyDefeated = Math.max(
             0,
-            (run.dungeonEnemiesDefeatedThisFloor ?? 0) - resolvedEnemyPairs - defeatedMovingEnemyHazards
+            (run.dungeonEnemiesDefeatedThisFloor ?? 0) - resolvedEnemyPairs - resolvedMovingEnemyHazards
         );
-        const progress = resolvedEnemyPairs + defeatedMovingEnemyHazards + counterOnlyDefeated;
-        const required = Math.max(1, activeEnemyPairs + defeatedMovingEnemyHazards + counterOnlyDefeated);
+        const progress = resolvedEnemyPairs + resolvedMovingEnemyHazards + counterOnlyDefeated;
+        const required = Math.max(1, activeEnemyPairs + resolvedMovingEnemyHazards + counterOnlyDefeated);
         return {
             objectiveId,
             completed: progress >= required,
@@ -563,13 +625,20 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
 export const getDungeonBoardStatus = (run: RunState): DungeonBoardStatus => {
     const board = run.board;
     const activeTiles =
-        board?.tiles.filter((tile) => tile.state !== 'matched' && tile.state !== 'removed' && tile.dungeonCardKind != null) ?? [];
+        board?.tiles.filter(
+            (tile) =>
+                tile.state !== 'matched' &&
+                tile.state !== 'removed' &&
+                tile.dungeonCardState !== 'resolved' &&
+                tile.dungeonCardKind != null
+        ) ?? [];
     const objective = getDungeonObjectiveStatus(run);
     const activeEnemyHazards = activeEnemyHazardsForBoard(board);
     const bossHazard = activeEnemyHazards.find((hazard) => hazard.bossId);
     const threatStatus = getDungeonThreatStatus(board);
     const enemyLifecycleStatus = getDungeonEnemyLifecycleStatus(run);
     const bossReadModel = getDungeonBossReadModel(run);
+    const exitStatus = getDungeonExitStatus(run);
     return {
         exitCount: board?.tiles.filter((tile) => tile.pairKey === EXIT_PAIR_KEY).length ?? 0,
         revealedExitCount: board?.tiles.filter((tile) => tile.pairKey === EXIT_PAIR_KEY && tile.state !== 'hidden').length ?? 0,
@@ -583,7 +652,7 @@ export const getDungeonBoardStatus = (run: RunState): DungeonBoardStatus => {
             activeTiles.filter((tile) => tile.dungeonCardState === 'hidden').map((tile) => tile.pairKey)
         ).size,
         leverCount: board?.dungeonLeverCount ?? 0,
-        requiredLeverCount: board?.dungeonExitRequiredLeverCount ?? 0,
+        requiredLeverCount: exitStatus.requiredLeverCount,
         keyCount: Object.values(run.dungeonKeys).reduce((sum, count) => sum + (count ?? 0), 0) + run.dungeonMasterKeys,
         shopAvailable: Boolean(
             board?.tiles.some((tile) => tile.pairKey === SHOP_PAIR_KEY && tile.dungeonCardState !== 'resolved')
@@ -625,6 +694,9 @@ const dungeonLockSummary = (status: DungeonExitStatus, objective?: DungeonObject
     }
     if (status.lockKind === 'lever') {
         return `Levers ${status.leverCount}/${status.requiredLeverCount}`;
+    }
+    if (status.keyFallbackPending) {
+        return 'Clear pairs to open';
     }
     return status.canActivate ? `${status.lockKind} key ready` : `Needs ${status.lockKind} key`;
 };

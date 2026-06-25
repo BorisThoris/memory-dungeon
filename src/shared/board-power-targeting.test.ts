@@ -14,6 +14,7 @@ import {
 } from './board-power-targeting';
 import {
     DECOY_PAIR_KEY,
+    EXIT_PAIR_KEY,
     ROOM_PAIR_KEY,
     SHOP_PAIR_KEY,
     WILD_PAIR_KEY
@@ -59,6 +60,43 @@ describe('board power targeting rules', () => {
         expect(tileIsDestroyEligiblePreview(state, 'b1')).toBe(false);
         expect(tileIsDestroyEligiblePreview(state, 'd1')).toBe(false);
         expect(collectDestroyEligibleTileIds(state)).toEqual(new Set(['a1', 'a2']));
+    });
+
+    it('allows destroy on redundant key and lever sources while protecting the last exit source', () => {
+        const keyBoard = {
+            ...board([
+                { ...tile('key-a', 'key-a'), dungeonCardKind: 'key' as const, dungeonKeyKind: 'iron' as const },
+                { ...tile('key-b', 'key-a'), dungeonCardKind: 'key' as const, dungeonKeyKind: 'iron' as const },
+                { ...tile('spare-key-a', 'key-b'), dungeonCardKind: 'key' as const, dungeonKeyKind: 'iron' as const },
+                { ...tile('spare-key-b', 'key-b'), dungeonCardKind: 'key' as const, dungeonKeyKind: 'iron' as const },
+                { ...tile('exit', EXIT_PAIR_KEY), dungeonCardKind: 'exit' as const, dungeonExitLockKind: 'iron' as const }
+            ]),
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron' as const
+        };
+        const leverBoard = {
+            ...board([
+                { ...tile('lever-a', 'lever-a'), dungeonCardKind: 'lever' as const, dungeonCardEffectId: 'lever_floor' as const },
+                { ...tile('lever-b', 'lever-a'), dungeonCardKind: 'lever' as const, dungeonCardEffectId: 'lever_floor' as const },
+                { ...tile('spare-lever-a', 'lever-b'), dungeonCardKind: 'lever' as const, dungeonCardEffectId: 'lever_floor' as const },
+                { ...tile('spare-lever-b', 'lever-b'), dungeonCardKind: 'lever' as const, dungeonCardEffectId: 'lever_floor' as const },
+                { ...tile('exit', EXIT_PAIR_KEY), dungeonCardKind: 'exit' as const, dungeonExitLockKind: 'lever' as const, dungeonExitRequiredLeverCount: 1 }
+            ]),
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'lever' as const,
+            dungeonExitRequiredLeverCount: 1
+        };
+
+        expect(tileIsDestroyEligiblePreview(keyBoard, 'key-a')).toBe(true);
+        expect(tileIsDestroyEligiblePreview({
+            ...keyBoard,
+            tiles: keyBoard.tiles.filter((candidate) => candidate.pairKey !== 'key-b')
+        }, 'key-a')).toBe(false);
+        expect(tileIsDestroyEligiblePreview(leverBoard, 'lever-a')).toBe(true);
+        expect(tileIsDestroyEligiblePreview({
+            ...leverBoard,
+            tiles: leverBoard.tiles.filter((candidate) => candidate.pairKey !== 'lever-b')
+        }, 'lever-a')).toBe(false);
     });
 
     it('allows peek targeting hidden tiles that have not already been revealed by peek', () => {

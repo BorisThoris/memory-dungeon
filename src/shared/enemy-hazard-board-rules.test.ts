@@ -73,6 +73,66 @@ describe('enemy hazard board rules', () => {
             { id: 'warden', hp: 0, state: 'defeated' }
         ]);
     });
+
+    it('hides stale boss hazards once their referenced tiles are cleared even before the floor is complete', () => {
+        const board = boardWith([
+            tile('boss-a', 'boss', { state: 'matched' }),
+            tile('boss-b', 'boss', { state: 'matched' }),
+            tile('open-a', 'open'),
+            tile('open-b', 'open')
+        ], [
+            hazard('boss-hazard', 'boss-a', 'boss-b', {
+                bossId: 'trap_warden',
+                kind: 'warden',
+                pattern: 'guard',
+                hp: 2,
+                maxHp: 3
+            })
+        ]);
+
+        expect(activeEnemyHazardsForBoard(board)).toEqual([]);
+    });
+
+    it('keeps hazards active when at least one referenced tile is still uncleared', () => {
+        const board = boardWith([
+            tile('boss-a', 'boss', { state: 'matched' }),
+            tile('boss-b', 'boss', { state: 'matched' }),
+            tile('open-a', 'open'),
+            tile('open-b', 'open')
+        ], [
+            hazard('boss-hazard', 'boss-a', 'open-a', {
+                bossId: 'trap_warden',
+                kind: 'warden',
+                pattern: 'guard',
+                hp: 2,
+                maxHp: 3
+            })
+        ]);
+
+        expect(activeEnemyHazardsForBoard(board).map((candidate) => candidate.id)).toEqual(['boss-hazard']);
+    });
+
+    it('updates run defeat counters when clearing stale boss hazards after all real pairs are matched', () => {
+        const run = {
+            ...createNewRun(0),
+            board: boardWith([
+                tile('a', 'pair-a', { state: 'matched' }),
+                tile('b', 'pair-a', { state: 'matched' })
+            ], [
+                hazard('warden', 'a', 'b', { bossId: 'trap_warden', kind: 'warden', pattern: 'guard' })
+            ]),
+            dungeonEnemiesDefeated: 1,
+            dungeonEnemiesDefeatedThisFloor: 0,
+            enemyHazardsDefeatedThisFloor: 2
+        };
+
+        const cleaned = clearFinalPairEnemyHazardOccupationForRun(run);
+
+        expect(cleaned.board?.enemyHazards).toMatchObject([{ id: 'warden', hp: 0, state: 'defeated' }]);
+        expect(cleaned.dungeonEnemiesDefeated).toBe(2);
+        expect(cleaned.dungeonEnemiesDefeatedThisFloor).toBe(1);
+        expect(cleaned.enemyHazardsDefeatedThisFloor).toBe(3);
+    });
 });
 
 const boardWith = (tiles: Tile[], enemyHazards: EnemyHazardState[] = []): BoardState => ({

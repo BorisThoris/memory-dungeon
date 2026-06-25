@@ -1,5 +1,7 @@
-import type { DungeonBossId, DungeonRunNode, RunState, SaveData, RunSummary } from './contracts';
+import type { DungeonBossId, DungeonRunMapState, DungeonRunNode, RunState, SaveData, RunSummary } from './contracts';
+import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { getRunBuildProfile } from './relics';
+import { getRepairedSelectedDungeonNode, repairDungeonRunMapProgression } from './run-map';
 
 export type RunHistoryPersistence = 'persisted_summary' | 'ephemeral_run' | 'derived_export';
 
@@ -62,15 +64,8 @@ const contractLabel = (run: Pick<RunState, 'activeContract' | 'practiceMode'>): 
 const idLabel = (id: string | null | undefined): string | null =>
     id ? id.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()) : null;
 
-const currentDungeonNode = (run: RunState): DungeonRunNode | null =>
-    run.dungeonRun.nodes.find((node) => node.id === run.dungeonRun.currentNodeId) ?? null;
-
-const selectedDungeonNode = (run: RunState): DungeonRunNode | null =>
-    run.pendingRouteCardPlan
-        ? run.dungeonRun.nodes.find((node) => node.id === run.pendingRouteCardPlan?.choiceId) ?? null
-        : run.dungeonRun.selectedNodeId
-          ? run.dungeonRun.nodes.find((node) => node.id === run.dungeonRun.selectedNodeId) ?? null
-          : null;
+const currentDungeonNode = (dungeonRun: DungeonRunMapState): DungeonRunNode | null =>
+    dungeonRun.nodes.find((node) => node.id === dungeonRun.currentNodeId) ?? null;
 
 const routeLabelForNode = (node: DungeonRunNode, routeType: string | null): string =>
     node.routeApproachLabel ?? routeType ?? node.routeApproachType ?? node.routeType;
@@ -78,7 +73,7 @@ const routeLabelForNode = (node: DungeonRunNode, routeType: string | null): stri
 const bossIdForRun = (run: RunState): DungeonBossId | null =>
     run.board?.dungeonBossId ??
     run.board?.tiles.find((tile) => tile.dungeonBossId != null)?.dungeonBossId ??
-    run.board?.enemyHazards?.find((hazard) => hazard.bossId != null)?.bossId ??
+    activeEnemyHazardsForBoard(run.board).find((hazard) => hazard.bossId != null)?.bossId ??
     null;
 
 export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] => {
@@ -86,12 +81,13 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         return [];
     }
 
+    const dungeonRun = repairDungeonRunMapProgression(run.dungeonRun);
     const rows: RunHistoryJournalRow[] = [];
-    const currentNode = currentDungeonNode(run);
-    const selectedNode = selectedDungeonNode(run);
-    const clearedNodes = run.dungeonRun.nodes.filter((node) => node.status === 'cleared').length;
-    const skippedNodes = run.dungeonRun.nodes.filter((node) => node.status === 'skipped').length;
-    const revealedNodes = run.dungeonRun.nodes.filter((node) => node.status === 'revealed').length;
+    const currentNode = currentDungeonNode(dungeonRun);
+    const selectedNode = getRepairedSelectedDungeonNode(dungeonRun);
+    const clearedNodes = dungeonRun.nodes.filter((node) => node.status === 'cleared').length;
+    const skippedNodes = dungeonRun.nodes.filter((node) => node.status === 'skipped').length;
+    const revealedNodes = dungeonRun.nodes.filter((node) => node.status === 'revealed').length;
     const bossId = bossIdForRun(run);
     const objectiveId = run.board?.dungeonObjectiveId ?? null;
     const featuredObjectiveId = run.lastLevelResult?.featuredObjectiveId ?? run.board?.featuredObjectiveId ?? null;
@@ -107,8 +103,8 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         label: 'Dungeon node',
         value: currentNode
             ? `${currentNode.label} (${currentNode.kind}) on floor ${currentNode.floor}`
-            : `Floor ${run.dungeonRun.currentFloor}`,
-        detail: `${clearedNodes} cleared, ${revealedNodes} revealed, ${skippedNodes} skipped in act ${run.dungeonRun.act}.`,
+            : `Floor ${dungeonRun.currentFloor}`,
+        detail: `${clearedNodes} cleared, ${revealedNodes} revealed, ${skippedNodes} skipped in act ${dungeonRun.act}.`,
         persistence: 'derived_export',
         exportSafe: true,
         offlineOnly: true

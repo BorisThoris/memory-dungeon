@@ -13,8 +13,9 @@ import {
     floorTagForDungeonNode
 } from './dungeon-encounter-context-rules';
 import {
+    createDungeonRunMapState,
     enterSelectedDungeonNode,
-    getSelectedDungeonNode
+    getCurrentDungeonNode
 } from './run-map';
 import { getRunDungeonMapState } from './dungeon-run-state-rules';
 import { createTimerState } from './run-timer-rules';
@@ -49,7 +50,13 @@ export const advanceToNextLevel = (run: RunState): RunState => {
 
     const nextLevelNum = run.board.level + 1;
     const currentDungeonRun = getRunDungeonMapState(run);
-    const selectedDungeonNode = getSelectedDungeonNode(currentDungeonRun);
+    const enteredDungeonRun = enterSelectedDungeonNode(currentDungeonRun);
+    const nextDungeonRun =
+        enteredDungeonRun.currentFloor === nextLevelNum
+            ? enteredDungeonRun
+            : createDungeonRunMapState(run.runSeed, run.runRulesVersion, nextLevelNum);
+    const enteredDungeonNode = getCurrentDungeonNode(enteredDungeonRun);
+    const selectedDungeonNode = enteredDungeonRun.currentFloor === nextLevelNum ? enteredDungeonNode : null;
     let nextActiveMutators = [...run.activeMutators];
     let nextFloorTag: FloorTag = 'normal';
     let nextFloorArchetypeId: FloorArchetypeId | null = null;
@@ -110,7 +117,7 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     return createNextFloorRunState(run, {
         lives,
         activeMutators: nextActiveMutators,
-        dungeonRun: enterSelectedDungeonNode(currentDungeonRun),
+        dungeonRun: nextDungeonRun,
         board: nextBoard,
         parasiteFloors,
         parasiteWardRemaining: nextParasiteWard,

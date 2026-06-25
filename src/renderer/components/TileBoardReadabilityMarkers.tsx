@@ -1,5 +1,5 @@
 import { CircleGeometry, DoubleSide, PlaneGeometry, type BufferGeometry } from 'three';
-import type { HazardTileKind, Tile } from '../../shared/contracts';
+import type { BoardState, HazardTileKind, Tile } from '../../shared/contracts';
 import { noopMeshRaycast } from './tileBoardPick';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY } from './tileBoardStageLayers';
@@ -43,6 +43,7 @@ interface TileBoardReadabilityMarkersProps {
     spotlightWardOnBack: boolean;
     stickyFingerSlotMark: boolean;
     tile: Tile;
+    board?: BoardState;
     traitComboBack: boolean;
     traitRouteTargetBack: boolean;
 }
@@ -101,6 +102,7 @@ export const TileBoardReadabilityMarkers = ({
     spotlightBountyOnBack,
     spotlightWardOnBack,
     stickyFingerSlotMark,
+    board,
     tile,
     traitComboBack,
     traitRouteTargetBack
@@ -135,6 +137,7 @@ export const TileBoardReadabilityMarkers = ({
         spotlightBountyOnBack,
         spotlightWardOnBack,
         stickyFingerSlotMark,
+        board,
         tile
     });
 

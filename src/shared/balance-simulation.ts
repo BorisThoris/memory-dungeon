@@ -11,6 +11,8 @@ import {
     type Tile
 } from './contracts';
 import { buildBoard, countFindablePairs } from './board-generation';
+import { countReachableExitKeySources, getEffectivePrimaryExitLock, inspectBoardFairness } from './board-inspection';
+import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { getShopGoldRewardForFloor, SHOP_ITEM_CATALOG } from './shop-rules';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { RELIC_DRAFT, RELIC_POOL, type RelicDraftRarity } from './relics';
@@ -78,6 +80,7 @@ export interface BalanceSimulationReport {
         eventRewardPotential: number;
         roomRewardPotential: number;
         keyInflowPotential: number;
+        boardFairnessIssueCount: number;
         shopGoldInflowPotential: number;
         destroyChargeInflowPotential: number;
         peekChargeInflowPotential: number;
@@ -117,6 +120,7 @@ export interface BalanceSimulationReport {
         eventRewardPotential: number;
         roomRewardPotential: number;
         keyInflowPotential: number;
+        boardFairnessIssueCount: number;
         shopGoldInflowPotential: number;
         destroyChargeInflowPotential: number;
         peekChargeInflowPotential: number;
@@ -483,7 +487,7 @@ export const runBalanceSimulation = ({
                 gameMode: 'endless',
                 activeMutators: scheduleMutatorsFor(sampleSeed, rulesVersion, floor)
             });
-            const activeHazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+            const activeHazards = activeEnemyHazardsForBoard(board);
             const hazardTileCount = board.tiles.filter((tile) => tile.tileHazardKind != null).length;
             const enemyThreatPairs = new Set(
                 board.tiles
@@ -508,7 +512,12 @@ export const runBalanceSimulation = ({
                 .filter((id): id is NonNullable<typeof id> => id != null && id.startsWith('room_'));
             const eventRewardPotential = floor % 7 === 0 ? 2 : 0;
             const roomRewardPotential = roomEffectIds.length > 0 || dungeonNodeKind === 'rest' ? 1 : 0;
-            const keyInflowPotential = keyPairs + (board.dungeonExitLockKind === 'iron' ? 1 : 0);
+            const primaryExitLock = getEffectivePrimaryExitLock({ board });
+            const boardFairnessIssueCount = inspectBoardFairness(board).issues.length;
+            const keyInflowPotential = Math.max(
+                keyPairs,
+                primaryExitLock.lockKind === 'iron' ? countReachableExitKeySources(board, 'iron') : 0
+            );
             const findableKindCounts = countFindableKinds(board.tiles);
             const tileTraitKindCounts = countTileTraitKinds(board.tiles);
             const tileTraitPairs = Object.values(tileTraitKindCounts).reduce((sum, count) => sum + count, 0);
@@ -578,6 +587,7 @@ export const runBalanceSimulation = ({
                 eventRewardPotential,
                 roomRewardPotential,
                 keyInflowPotential,
+                boardFairnessIssueCount,
                 shopGoldInflowPotential,
                 destroyChargeInflowPotential,
                 peekChargeInflowPotential,
@@ -898,6 +908,14 @@ export const runBalanceSimulation = ({
             'floor-band reward totals'
         ),
         row(
+            'board_fairness_issue_floor_share',
+            'Share of sampled floors with generated board fairness issues',
+            Number((samples.filter((sample) => sample.boardFairnessIssueCount > 0).length / samples.length).toFixed(2)),
+            0,
+            0,
+            'board fairness inspection'
+        ),
+        row(
             'avg_live_shop_gold_inflow_per_floor',
             'Average live shop-gold inflow estimate per floor',
             Number(average(samples.map((sample) => sample.shopGoldInflowPotential)).toFixed(2)),
@@ -981,6 +999,7 @@ export const runBalanceSimulation = ({
             eventRewardPotential: samples.reduce((sum, sample) => sum + sample.eventRewardPotential, 0),
             roomRewardPotential: samples.reduce((sum, sample) => sum + sample.roomRewardPotential, 0),
             keyInflowPotential: samples.reduce((sum, sample) => sum + sample.keyInflowPotential, 0),
+            boardFairnessIssueCount: samples.reduce((sum, sample) => sum + sample.boardFairnessIssueCount, 0),
             shopGoldInflowPotential: samples.reduce((sum, sample) => sum + sample.shopGoldInflowPotential, 0),
             destroyChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.destroyChargeInflowPotential, 0),
             peekChargeInflowPotential: samples.reduce((sum, sample) => sum + sample.peekChargeInflowPotential, 0),

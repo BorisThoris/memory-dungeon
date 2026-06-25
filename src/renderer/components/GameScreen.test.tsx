@@ -2,12 +2,12 @@ import { NotificationHost, useNotificationStore } from '@cross-repo-libs/notific
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { forwardRef, useImperativeHandle } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { RunState, Tile } from '../../shared/contracts';
+import type { BoardState, RunState, Tile } from '../../shared/contracts';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import { applyEnemyHazardClick } from '../../shared/turn-resolution';
 import { getPlayableOnboardingStep } from '../../shared/playable-onboarding';
-import { createDungeonRunMapState } from '../../shared/run-map';
+import { createDungeonRunMapState, revealDungeonChoices, selectDungeonNode } from '../../shared/run-map';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { GAMBIT_KEYBOARD_HELP_TIP } from '../copy/gameplayHints';
 import { PlatformTiltProvider } from '../platformTilt/PlatformTiltProvider';
@@ -174,6 +174,7 @@ describe('GameScreen (OVR-014)', () => {
                 boardPinMode: false,
                 destroyPairArmed: false,
                 peekModeArmed: false,
+                dungeonExitPromptOpen: false,
                 ...BOARD_FLOATER_POP_CLEAR
             });
         });
@@ -1278,6 +1279,69 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByRole('button', { name: /continue to greedy route floor/i })).toBeTruthy();
     });
 
+    it('does not show stale skipped dungeon node copy for corrupted pending route state', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
+        const routeChoices = [
+            {
+                id: '17:1:2:safe',
+                routeType: 'safe' as const,
+                label: 'Safe passage',
+                detail: 'Controlled path.'
+            },
+            {
+                id: '17:1:2:greed',
+                routeType: 'greed' as const,
+                label: 'Greedy route',
+                detail: 'Higher pressure route hook for future shop, elite, or bonus rewards.'
+            }
+        ];
+        const revealedDungeonRun = revealDungeonChoices(baseRun.dungeonRun, 1, routeChoices);
+        const greedNode = revealedDungeonRun.nodes.find((node) => node.choiceId === '17:1:2:greed');
+        const safeNode = revealedDungeonRun.nodes.find((node) => node.choiceId === '17:1:2:safe');
+        expect(greedNode).toBeTruthy();
+        expect(safeNode).toBeTruthy();
+        const selectedDungeonRun = selectDungeonNode(revealedDungeonRun, greedNode!.id);
+        const corruptedDungeonRun = {
+            ...selectedDungeonRun,
+            selectedNodeId: safeNode!.id
+        };
+        const run: RunState = {
+            ...baseRun,
+            status: 'levelComplete',
+            relicOffer: null,
+            dungeonRun: corruptedDungeonRun,
+            pendingRouteCardPlan: {
+                choiceId: '17:1:2:safe',
+                routeType: 'safe',
+                sourceLevel: 1,
+                targetLevel: 2
+            },
+            lastLevelResult: {
+                level: 1,
+                scoreGained: 120,
+                rating: 'S++',
+                livesRemaining: 5,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'perfect',
+                clearLifeGained: 1,
+                routeChoices
+            }
+        };
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.queryByTestId('route-choice-panel')).toBeNull();
+        expect(screen.getByText(/Safe route selected: next floor adds defensive ward support/i)).toBeTruthy();
+        expect(screen.queryByText(/Dungeon node armed:/i)).toBeNull();
+    });
+
     it('keeps boss-route approach labels visible when room choices converge', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 66_006 });
         const run: RunState = {
@@ -1438,6 +1502,108 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('dungeon-run-strip')).toHaveTextContent('Threshold Archive');
     });
 
+    it('shows a free proceed action for terminal key-lock fallback exits', () => {
+        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
+        const exitTile: Tile = {
+            id: 'exit',
+            pairKey: EXIT_PAIR_KEY,
+            state: 'flipped',
+            symbol: '^',
+            label: 'Iron Exit',
+            dungeonCardKind: 'exit',
+            dungeonCardState: 'revealed',
+            dungeonCardEffectId: 'exit_safe',
+            dungeonExitLockKind: 'iron'
+        };
+        const board: BoardState = {
+            ...baseRun.board!,
+            tiles: [
+                { ...baseRun.board!.tiles[0]!, state: 'matched' },
+                { ...baseRun.board!.tiles[1]!, state: 'matched' },
+                exitTile
+            ],
+            pairCount: 1,
+            matchedPairs: 1,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron'
+        };
+        const run: RunState = {
+            ...baseRun,
+            board,
+            dungeonKeys: {},
+            dungeonMasterKeys: 0,
+            status: 'playing'
+        };
+        act(() => {
+            useAppStore.setState({ dungeonExitPromptOpen: true });
+        });
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.getByTestId('dungeon-exit-overlay')).toHaveTextContent('Unlocked exit');
+        expect(screen.getByRole('button', { name: 'Proceed' })).toBeEnabled();
+        expect(screen.queryByRole('button', { name: 'Use key' })).toBeNull();
+        expect(screen.queryByText(/Needs a iron key/i)).toBeNull();
+    });
+
+    it('labels pending key fallback exits as pair-clear gates instead of key shopping tasks', () => {
+        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
+        const exitTile: Tile = {
+            id: 'exit',
+            pairKey: EXIT_PAIR_KEY,
+            state: 'flipped',
+            symbol: '^',
+            label: 'Iron Exit',
+            dungeonCardKind: 'exit',
+            dungeonCardState: 'revealed',
+            dungeonCardEffectId: 'exit_safe',
+            dungeonExitLockKind: 'iron'
+        };
+        const board: BoardState = {
+            ...baseRun.board!,
+            tiles: [
+                { ...baseRun.board!.tiles[0]!, id: 'a1', pairKey: 'a', state: 'hidden' },
+                { ...baseRun.board!.tiles[1]!, id: 'a2', pairKey: 'a', state: 'hidden' },
+                exitTile
+            ],
+            pairCount: 1,
+            matchedPairs: 0,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron'
+        };
+        const run: RunState = {
+            ...baseRun,
+            board,
+            dungeonKeys: {},
+            dungeonMasterKeys: 0,
+            status: 'playing'
+        };
+        act(() => {
+            useAppStore.setState({ dungeonExitPromptOpen: true });
+        });
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        const overlay = screen.getByTestId('dungeon-exit-overlay');
+        expect(overlay).toHaveTextContent('Key fallback pending');
+        expect(overlay).toHaveTextContent('No key source remains; clear the remaining pairs to force this exit open.');
+        expect(screen.queryByRole('button', { name: 'Proceed' })).toBeNull();
+        expect(screen.queryByRole('button', { name: 'Use key' })).toBeNull();
+        expect(screen.getByRole('button', { name: 'Stay' })).toBeEnabled();
+    });
+
     it('renders crowded dungeon status chips in priority order with one alert', () => {
         const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' }));
         const exitTile: Tile = {
@@ -1557,7 +1723,7 @@ describe('GameScreen (OVR-014)', () => {
             'Patrols1/1',
             'Boss2/4 HP',
             'Enemies2',
-            'ExitNeeds iron key',
+            'ExitClear pairs to open',
             'Keys0 keys'
         ]);
         expect(panel).toHaveTextContent(/armed trap/i);

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_LIVES } from './contracts';
+import { MAX_LIVES, type BoardState, type Tile } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { buildBoard } from './board-build-rules';
+import { EXIT_PAIR_KEY } from './tile-identity';
 import {
     canRerollShopOffers,
     createRunShopOffers,
@@ -16,6 +17,14 @@ import {
 } from './shop-rules';
 
 const makePlayingRun = () => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 4242 }));
+
+const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
+    id,
+    pairKey,
+    symbol: id,
+    label: id,
+    state
+});
 
 describe('shop rules', () => {
     it('defines deterministic floor rewards, reroll cost, and stock plans', () => {
@@ -50,7 +59,17 @@ describe('shop rules', () => {
         };
         const lockedBoardRun = {
             ...run,
-            board: run.board ? { ...run.board, dungeonExitLockKind: 'iron' as const } : run.board
+            board: run.board
+                ? {
+                      ...run.board,
+                      dungeonExitLockKind: 'iron' as const,
+                      tiles: run.board.tiles.map((candidate) =>
+                          candidate.pairKey === EXIT_PAIR_KEY
+                              ? { ...candidate, dungeonExitLockKind: 'iron' as const }
+                              : candidate
+                      )
+                  }
+                : run.board
         };
 
         expect(getRunShopStockPlan(greedRun).itemIds.slice(0, 3)).toEqual([
@@ -71,6 +90,78 @@ describe('shop rules', () => {
         expect(getRunShopStockPlan(lockedBoardRun).itemIds[0]).toBe('iron_key');
     });
 
+    it('does not prioritize key insurance for a terminal key lock fallback', () => {
+        const run = makePlayingRun();
+        const terminalBoard: BoardState = {
+            ...run.board!,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            matchedPairs: 1,
+            pairCount: 1,
+            tiles: [
+                tile('a1', 'a', 'matched'),
+                tile('a2', 'a', 'matched'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ]
+        };
+        const activeLockBoard: BoardState = {
+            ...terminalBoard,
+            matchedPairs: 0,
+            tiles: [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                terminalBoard.tiles[2]!
+            ]
+        };
+
+        expect(getRunShopStockPlan({ ...run, board: terminalBoard }).itemIds[0]).not.toBe('iron_key');
+        expect(getRunShopStockPlan({ ...run, board: activeLockBoard }).itemIds[0]).toBe('iron_key');
+    });
+
+    it('does not force key insurance ahead of stock when the key route already exists', () => {
+        const run = makePlayingRun();
+        const lockedBoard: BoardState = {
+            ...run.board!,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            tiles: [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ]
+        };
+        const boardWithKeyPair: BoardState = {
+            ...lockedBoard,
+            tiles: [
+                {
+                    ...tile('key-a', 'key'),
+                    dungeonCardKind: 'key',
+                    dungeonKeyKind: 'iron'
+                },
+                {
+                    ...tile('key-b', 'key'),
+                    dungeonCardKind: 'key',
+                    dungeonKeyKind: 'iron'
+                },
+                lockedBoard.tiles[2]!
+            ]
+        };
+
+        expect(getRunShopStockPlan({ ...run, board: lockedBoard, dungeonKeys: { iron: 1 } }).itemIds[0]).not.toBe(
+            'iron_key'
+        );
+        expect(getRunShopStockPlan({ ...run, board: boardWithKeyPair }).itemIds[0]).not.toBe('iron_key');
+        expect(getRunShopStockPlan({ ...run, board: lockedBoard }).itemIds[0]).toBe('iron_key');
+    });
+
     it('biases shop stock by starting loadout without overriding locked-exit insurance', () => {
         const run = makePlayingRun();
 
@@ -85,7 +176,17 @@ describe('shop rules', () => {
             getRunShopStockPlan({
                 ...run,
                 startingLoadoutId: 'route_tactician',
-                board: run.board ? { ...run.board, dungeonExitLockKind: 'iron' as const } : run.board
+                board: run.board
+                    ? {
+                          ...run.board,
+                          dungeonExitLockKind: 'iron' as const,
+                          tiles: run.board.tiles.map((candidate) =>
+                              candidate.pairKey === EXIT_PAIR_KEY
+                                  ? { ...candidate, dungeonExitLockKind: 'iron' as const }
+                                  : candidate
+                          )
+                      }
+                    : run.board
             }).itemIds[0]
         ).toBe('iron_key');
     });

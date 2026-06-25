@@ -148,8 +148,9 @@ export {
     revealDungeonExit,
     revealDungeonShop
 } from './dungeon-reveal-rules';
-export type {
-    DungeonExitActivationSpend
+export {
+    chooseDungeonExitActivationSpend,
+    type DungeonExitActivationSpend
 } from './dungeon-exit-rules';
 export {
     collectDestroyEligibleTileIds,

@@ -2,13 +2,15 @@ import { describe, expect, it } from 'vitest';
 
 import type { BoardState, RunState, Tile } from './contracts';
 import {
+    getDungeonBoardStatus,
     getDungeonBoardPresentation,
     getDungeonBossReadModel,
+    getDungeonEnemyLifecycleStatus,
     getDungeonExitStatus,
     getDungeonObjectiveStatus,
     getDungeonThreatStatus
 } from './dungeon-board-status';
-import { EXIT_PAIR_KEY, ROOM_PAIR_KEY } from './tile-identity';
+import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 
 const tile = (overrides: Partial<Tile>): Tile =>
     ({
@@ -65,8 +67,10 @@ describe('dungeon board status', () => {
             )
         ).toMatchObject({
             revealed: true,
-            canActivate: false,
-            lockedReason: 'Needs a iron key or master key.'
+            lockKind: 'none',
+            terminalKeySoftlockFallback: true,
+            canActivate: true,
+            lockedReason: null
         });
         expect(
             getDungeonExitStatus(
@@ -82,6 +86,138 @@ describe('dungeon board status', () => {
             canActivate: true,
             canActivateWithKey: true,
             lockedReason: null
+        });
+    });
+
+    it('treats an unreachable primary key lock as open instead of softlocking progression', () => {
+        const board = {
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            dungeonKeysHeld: 0,
+            tiles: [
+                tile({
+                    id: 'exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    label: 'Iron Exit',
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }),
+                tile({ id: 'a1', pairKey: 'a', state: 'matched' }),
+                tile({ id: 'a2', pairKey: 'a', state: 'matched' })
+            ]
+        } as BoardState;
+
+        expect(getDungeonExitStatus(run(board))).toMatchObject({
+            lockKind: 'none',
+            terminalKeySoftlockFallback: true,
+            canActivate: true,
+            canActivateWithoutSpend: true,
+            lockedReason: null
+        });
+        expect(getDungeonBoardStatus(run({ ...board, dungeonExitRequiredLeverCount: 3 }))).toMatchObject({
+            requiredLeverCount: 0
+        });
+    });
+
+    it('treats resolved trap cards as settled when deciding terminal key-lock fallback', () => {
+        const board = {
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            dungeonKeysHeld: 0,
+            tiles: [
+                tile({
+                    id: 'exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    label: 'Iron Exit',
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }),
+                tile({
+                    id: 'trap-a',
+                    pairKey: 'trap',
+                    state: 'flipped',
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'resolved'
+                }),
+                tile({
+                    id: 'trap-b',
+                    pairKey: 'trap',
+                    state: 'flipped',
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'resolved'
+                })
+            ]
+        } as BoardState;
+
+        expect(getDungeonExitStatus(run(board))).toMatchObject({
+            lockKind: 'none',
+            terminalKeySoftlockFallback: true,
+            canActivate: true,
+            lockedReason: null
+        });
+    });
+
+    it('keeps a primary key lock while there are still real pairs that can contain progression', () => {
+        const board = {
+            dungeonExitTileId: 'primary-exit',
+            dungeonExitLockKind: 'iron',
+            dungeonKeysHeld: 0,
+            tiles: [
+                tile({
+                    id: 'primary-exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    label: 'Primary Exit',
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }),
+                tile({ id: 'a1', pairKey: 'a', state: 'hidden' }),
+                tile({ id: 'a2', pairKey: 'a', state: 'hidden' })
+            ]
+        } as BoardState;
+
+        expect(getDungeonExitStatus(run(board))).toMatchObject({
+            exitTile: expect.objectContaining({ id: 'primary-exit' }),
+            lockKind: 'iron',
+            terminalKeySoftlockFallback: false,
+            keyFallbackPending: true,
+            canActivate: false,
+            lockedReason: 'No key source remains; clear the remaining pairs to force the exit open.'
+        });
+        expect(getDungeonBoardPresentation(run(board))).toMatchObject({
+            exitText: 'Clear pairs to open',
+            alertText: 'No key source remains; clear the remaining pairs to force the exit open.'
+        });
+    });
+
+    it('keeps a primary key lock while a wild-card completion route remains', () => {
+        const board = {
+            dungeonExitTileId: 'primary-exit',
+            dungeonExitLockKind: 'iron',
+            dungeonKeysHeld: 0,
+            tiles: [
+                tile({
+                    id: 'primary-exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    label: 'Primary Exit',
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }),
+                tile({ id: 'single-real', pairKey: 'a', state: 'hidden' }),
+                tile({ id: 'wild', pairKey: WILD_PAIR_KEY, state: 'hidden' })
+            ]
+        } as BoardState;
+
+        expect(getDungeonExitStatus(run(board))).toMatchObject({
+            exitTile: expect.objectContaining({ id: 'primary-exit' }),
+            lockKind: 'iron',
+            terminalKeySoftlockFallback: false,
+            keyFallbackPending: true,
+            canActivate: false,
+            lockedReason: 'No key source remains; clear the remaining pairs to force the exit open.'
         });
     });
 
@@ -206,6 +342,66 @@ describe('dungeon board status', () => {
         });
     });
 
+    it('does not treat resolved visible enemy and boss cards as active threats', () => {
+        const board = {
+            floorTag: 'boss',
+            dungeonBossId: 'spire_observer',
+            dungeonObjectiveId: 'defeat_boss',
+            tiles: [
+                tile({
+                    id: 'boss-a',
+                    pairKey: 'boss',
+                    state: 'flipped',
+                    dungeonBossId: 'spire_observer',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardState: 'resolved',
+                    dungeonCardHp: 0,
+                    dungeonCardMaxHp: 3
+                }),
+                tile({
+                    id: 'boss-b',
+                    pairKey: 'boss',
+                    state: 'flipped',
+                    dungeonBossId: 'spire_observer',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardState: 'resolved',
+                    dungeonCardHp: 0,
+                    dungeonCardMaxHp: 3
+                }),
+                tile({
+                    id: 'exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'revealed',
+                    dungeonExitLockKind: 'none'
+                })
+            ],
+            dungeonExitTileId: 'exit',
+            matchedPairs: 1,
+            pairCount: 1
+        } as BoardState;
+
+        expect(getDungeonEnemyLifecycleStatus(run(board))).toMatchObject({
+            awakeEnemyCardPairCount: 0,
+            defeatedEnemyCardPairCount: 1,
+            activeBossEnemyCount: 0
+        });
+        expect(getDungeonBoardStatus(run(board))).toMatchObject({
+            awakeEnemyCount: 0,
+            hiddenDungeonCardCount: 0
+        });
+        expect(getDungeonExitStatus(run(board))).toMatchObject({
+            canActivate: true,
+            lockedReason: null
+        });
+        expect(getDungeonBossReadModel(run(board))).toMatchObject({
+            lifecycleSource: 'none',
+            phase: 'defeated',
+            hp: 0
+        });
+    });
+
     it('does not let stale boss patrol overlays block a fully matched boss floor', () => {
         const board = {
             floorTag: 'boss',
@@ -256,6 +452,39 @@ describe('dungeon board status', () => {
             activeMovingPatrolCount: 0
         });
         expect(getDungeonBoardPresentation(staleRun).combatForecastText).toBeNull();
+    });
+
+    it('counts stale patrol overlays as resolved for fully matched pacify floors', () => {
+        const board = {
+            dungeonObjectiveId: 'pacify_floor',
+            tiles: [
+                tile({ id: 'a1', pairKey: 'a', state: 'matched' }),
+                tile({ id: 'a2', pairKey: 'a', state: 'matched' })
+            ],
+            matchedPairs: 1,
+            pairCount: 1,
+            enemyHazards: [
+                {
+                    id: 'patrol',
+                    kind: 'sentinel',
+                    label: 'Patrol',
+                    pattern: 'patrol',
+                    state: 'revealed',
+                    currentTileId: 'a1',
+                    nextTileId: 'a2',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 1
+                }
+            ]
+        } as BoardState;
+
+        expect(getDungeonObjectiveStatus(run(board))).toMatchObject({
+            objectiveId: 'pacify_floor',
+            completed: true,
+            progress: 1,
+            required: 1
+        });
     });
 
     it('separates defeated boss state from the remaining hidden-exit step', () => {

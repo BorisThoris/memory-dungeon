@@ -25,7 +25,7 @@ export const createApplyDestroyPair = ({ finalizeLevel }: FloorCompletionTransit
     };
 
 export const createActivateDungeonExit = ({ finalizeLevel }: FloorCompletionTransitionDeps) =>
-    (run: RunState, spend: DungeonExitActivationSpend = 'none'): RunState => {
+    (run: RunState, spend?: DungeonExitActivationSpend): RunState => {
         const transition = createDungeonExitActivationTransition(run, spend);
         if (!transition) {
             return run;

@@ -15,6 +15,10 @@ import {
     getTileTraitInteractionPreviewLines,
     hasTraitSwapSetupOpportunity
 } from './tile-trait-rules';
+import {
+    countReachableExitKeySources,
+    getEffectivePrimaryExitLock
+} from './board-inspection';
 import { getTraitBuildDraftHintForBoard } from './trait-build-rewards';
 
 export const SHOP_ITEM_CATALOG: Record<
@@ -151,8 +155,23 @@ export interface RunShopReadModel {
 
 const uniqueItemIds = (itemIds: readonly RunShopItemId[]): RunShopItemId[] => [...new Set(itemIds)];
 
-const boardHasLockedExitPressure = (board: BoardState | null): boolean =>
-    board?.dungeonExitLockKind != null && board.dungeonExitLockKind !== 'none' && board.dungeonExitLockKind !== 'lever';
+const runNeedsLockedExitShopInsurance = (run: RunState): boolean => {
+    const board = run.board;
+    if (!board) {
+        return false;
+    }
+    const lock = getEffectivePrimaryExitLock({
+        board,
+        dungeonKeys: run.dungeonKeys,
+        dungeonMasterKeys: run.dungeonMasterKeys
+    });
+    if (lock.lockKind === 'none' || lock.lockKind === 'lever') {
+        return false;
+    }
+    const hasRunKey = (run.dungeonKeys[lock.lockKind] ?? 0) > 0 || run.dungeonMasterKeys > 0;
+    const hasReachableKeySource = countReachableExitKeySources(board, lock.lockKind) > 0;
+    return !hasRunKey && !hasReachableKeySource;
+};
 
 const boardHasDangerousTraitPair = (board: BoardState | null): boolean =>
     (board?.tiles ?? []).some((tile) =>
@@ -229,7 +248,7 @@ export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     if (bossPressure) {
         itemIds.unshift(bossPressure.shopPriorityItemId);
     }
-    if (boardHasLockedExitPressure(run.board)) {
+    if (runNeedsLockedExitShopInsurance(run)) {
         itemIds.unshift('iron_key');
     }
     const needsMasterKey = level >= 5 || source === 'board_shop';
@@ -244,7 +263,7 @@ export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     }
     const stockLimit = source === 'board_shop' || itemIds.includes('trait_cleanse') ? 6 : 5;
     const priorityFor = (itemId: RunShopItemId): number => {
-        if (boardHasLockedExitPressure(run.board) && itemId === 'iron_key') return 0;
+        if (runNeedsLockedExitShopInsurance(run) && itemId === 'iron_key') return 0;
         if (bossPressure?.shopPriorityItemId === itemId) return 1;
         if (boardHasDangerousTraitPair(run.board) && itemId === 'trait_cleanse') return 2;
         if (boardHasTraitRoutingOpportunity(run.board) && itemId === 'trait_routing_kit') return 3;

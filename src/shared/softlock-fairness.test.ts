@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, type BoardState, type MutatorId, type RouteNodeType, type RunState, type Tile } from './contracts';
 import { BUILTIN_PUZZLES } from './builtin-puzzles';
 import {
+    boardHasActionableProgressionPair,
     buildBoard,
     countFullyHiddenPairs,
+    getEffectivePrimaryExitLock,
     inspectBoardFairness,
     inspectRunFairness,
     isBoardComplete,
@@ -362,7 +364,44 @@ describe('REG-087 board fairness inspection', () => {
         expect(inspectBoardFairness(board).hasCompletionRoute).toBe(false);
     });
 
-    it('flags key-locked exits when no matching key route exists', () => {
+    it('does not count resolved visible lever cards as reachable exit lever sources', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                {
+                    ...tile('lever-a', 'lever', 'flipped'),
+                    dungeonCardKind: 'lever',
+                    dungeonCardState: 'resolved',
+                    dungeonCardEffectId: 'lever_floor'
+                },
+                {
+                    ...tile('lever-b', 'lever', 'flipped'),
+                    dungeonCardKind: 'lever',
+                    dungeonCardState: 'resolved',
+                    dungeonCardEffectId: 'lever_floor'
+                },
+                {
+                    ...tile('exit', EXIT_PAIR_KEY),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'lever',
+                    dungeonExitRequiredLeverCount: 1
+                }
+            ],
+            {
+                pairCount: 2,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'lever',
+                dungeonExitRequiredLeverCount: 1,
+                dungeonLeverCount: 0
+            }
+        );
+
+        expect(issueCodes(board)).toContain('exit_lock_unreachable');
+        expect(inspectBoardFairness(board).hasCompletionRoute).toBe(false);
+    });
+
+    it('treats key-locked exits without a matching key route as pending fallback while pairs remain', () => {
         const board = boardFromTiles(
             [
                 tile('a1', 'a'),
@@ -380,7 +419,33 @@ describe('REG-087 board fairness inspection', () => {
             }
         );
 
-        expect(issueCodes(board)).toContain('exit_lock_unreachable');
+        expect(issueCodes(board)).not.toContain('exit_lock_unreachable');
+        expect(inspectBoardFairness(board).hasCompletionRoute).toBe(true);
+        expect(getEffectivePrimaryExitLock({ board })).toMatchObject({
+            lockKind: 'iron',
+            terminalKeySoftlockFallback: false
+        });
+    });
+
+    it('flags primary exit lock metadata that diverges from board metadata', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'treasure'
+                }
+            ],
+            {
+                pairCount: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron'
+            }
+        );
+
+        expect(issueCodes(board)).toContain('exit_lock_metadata_mismatch');
         expect(inspectBoardFairness(board).hasCompletionRoute).toBe(false);
     });
 
@@ -413,6 +478,104 @@ describe('REG-087 board fairness inspection', () => {
         expect(repaired.dungeonExitLockKind).toBe('none');
         expect(repaired.tiles.find((candidate) => candidate.id === 'exit')?.dungeonExitLockKind).toBe('none');
         expect(inspectBoardFairness(repaired).issues).toEqual([]);
+    });
+
+    it('does not report a stale terminal primary key lock as a live softlock', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a', 'matched'),
+                tile('a2', 'a', 'matched'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ],
+            {
+                pairCount: 1,
+                matchedPairs: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron',
+                dungeonKeysHeld: 0
+            }
+        );
+        const report = inspectBoardFairness(board);
+
+        expect(report.issues.map((issue) => issue.code)).not.toContain('exit_lock_unreachable');
+        expect(report.hasCompletionRoute).toBe(true);
+        expect(getEffectivePrimaryExitLock({ board })).toMatchObject({
+            lockKind: 'none',
+            requiredLeverCount: 0,
+            terminalKeySoftlockFallback: true
+        });
+    });
+
+    it('does not report pending key fallback boards as unreachable while clearable pairs remain', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a', 'hidden'),
+                tile('a2', 'a', 'hidden'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ],
+            {
+                pairCount: 1,
+                matchedPairs: 0,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron',
+                dungeonKeysHeld: 0
+            }
+        );
+        const report = inspectBoardFairness(board);
+
+        expect(boardHasActionableProgressionPair(board)).toBe(true);
+        expect(report.issues.map((issue) => issue.code)).not.toContain('exit_lock_unreachable');
+        expect(report.hasCompletionRoute).toBe(true);
+        expect(getEffectivePrimaryExitLock({ board })).toMatchObject({
+            lockKind: 'iron',
+            terminalKeySoftlockFallback: false
+        });
+    });
+
+    it('does not keep terminal key locks alive because only resolved trap cards remain', () => {
+        const board = boardFromTiles(
+            [
+                {
+                    ...tile('trap-a', 'trap', 'flipped'),
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'resolved'
+                },
+                {
+                    ...tile('trap-b', 'trap', 'flipped'),
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'resolved'
+                },
+                {
+                    ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ],
+            {
+                pairCount: 1,
+                matchedPairs: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron',
+                dungeonKeysHeld: 0
+            }
+        );
+        const report = inspectBoardFairness(board);
+
+        expect(boardHasActionableProgressionPair(board)).toBe(false);
+        expect(report.issues.map((issue) => issue.code)).not.toContain('exit_lock_unreachable');
+        expect(report.hasCompletionRoute).toBe(true);
+        expect(getEffectivePrimaryExitLock({ board })).toMatchObject({
+            lockKind: 'none',
+            terminalKeySoftlockFallback: true
+        });
     });
 
     it('preserves key-locked exits when a guaranteed key source exists', () => {
@@ -461,6 +624,30 @@ describe('REG-087 board fairness inspection', () => {
         expect(inspectBoardFairness(withKeyPair).issues).toEqual([]);
         expect(repairDungeonExitSoftlocks(withKeyCacheRoom).dungeonExitLockKind).toBe('iron');
         expect(inspectBoardFairness(withKeyCacheRoom).issues).toEqual([]);
+    });
+
+    it('preserves key-locked exits when runtime inventory already carries a matching key', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a', 'matched'),
+                tile('a2', 'a', 'matched'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ],
+            {
+                pairCount: 1,
+                matchedPairs: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron'
+            }
+        );
+
+        expect(repairDungeonExitSoftlocks(board, { dungeonKeys: { iron: 1 } }).dungeonExitLockKind).toBe('iron');
+        expect(repairDungeonExitSoftlocks(board, { dungeonMasterKeys: 1 }).dungeonExitLockKind).toBe('iron');
+        expect(repairDungeonExitSoftlocks(board).dungeonExitLockKind).toBe('none');
     });
 
     it('caps impossible lever requirements to reachable lever count', () => {
@@ -767,6 +954,36 @@ describe('REG-087 run-start fairness coverage', () => {
         expect(report.hasCompletionRoute).toBe(true);
     });
 
+    it('keeps carried run keys compatible with locked-exit run-level fairness', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ],
+            {
+                pairCount: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron',
+                dungeonKeysHeld: 0
+            }
+        );
+        const run: RunState = {
+            ...playableRun(createNewRun(0, { runSeed: 16 })),
+            board,
+            dungeonKeys: { iron: 1, treasure: 0, boss: 0 },
+            dungeonMasterKeys: 0
+        };
+
+        expect(inspectBoardFairness(board).issues.map((issue) => issue.code)).not.toContain('exit_lock_unreachable');
+        expect(inspectRunFairness(run).issues.map((issue) => issue.code)).not.toContain('exit_lock_unreachable');
+        expect(inspectRunFairness(run).hasCompletionRoute).toBe(true);
+    });
+
     it('flags terminal incomplete runs', () => {
         const run = {
             ...playableRun(createNewRun(0, { runSeed: 16 })),
@@ -814,13 +1031,37 @@ describe('REG-087 action eligibility edge cases', () => {
         expectRunFair(after);
     });
 
-    it('flags a stranded wild singleton once no real or removal route remains', () => {
+    it('accepts a leftover wild singleton once real board completion is already satisfied', () => {
         const board = boardFromTiles([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), tile('wild', WILD_PAIR_KEY)], {
             matchedPairs: 1
         });
 
-        expect(issueCodes(board)).toContain('wild_singleton_unmatched_without_route');
-        expect(inspectBoardFairness(board).hasCompletionRoute).toBe(false);
+        expect(issueCodes(board)).not.toContain('wild_singleton_unmatched_without_route');
+        expect(inspectBoardFairness(board).hasCompletionRoute).toBe(true);
+    });
+
+    it('accepts a leftover wild singleton while a revealed exit can still complete the floor', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a', 'matched'),
+                tile('a2', 'a', 'matched'),
+                tile('wild', WILD_PAIR_KEY),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'none'
+                }
+            ],
+            {
+                pairCount: 1,
+                matchedPairs: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'none'
+            }
+        );
+
+        expect(issueCodes(board)).not.toContain('wild_singleton_unmatched_without_route');
+        expect(inspectBoardFairness(board).hasCompletionRoute).toBe(true);
     });
 
     it('preserves completion routes after full shuffle, row shuffle, and tile swap assists', () => {

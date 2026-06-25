@@ -7,6 +7,7 @@ const GATES = {
     navigation: 'yarn gate:navigation',
     systems: 'yarn gate:systems',
     simHealth: 'yarn gate:sim-health',
+    simSoftlockSeeds: 'yarn gate:sim-softlock-seeds',
     rendererInput: 'yarn gate:renderer-input',
     audioFeedback: 'yarn gate:audio-feedback',
     assetRendering: 'yarn gate:asset-rendering',
@@ -50,11 +51,17 @@ export const selectGatesForChangedPaths = (paths) => {
         gateIds.add(gateId);
         reasons.push({ gateId, file, reason });
     };
+    const isCoreGameRuleFile = (file) =>
+        file === 'src/shared/game.ts' ||
+        file === 'src/shared/game.test.ts' ||
+        file.startsWith('src/shared/game-core') ||
+        file.startsWith('src/shared/floor-completion');
 
     for (const file of normalized) {
         if (
             file === 'package.json' ||
             file === 'src/shared/contracts.ts' ||
+            file === 'docs/agent/GAMEPLAY_RULES_EDIT_MAP.md' ||
             file.startsWith('scripts/system-diagrams') ||
             file.startsWith('scripts/gate-changed') ||
             file.startsWith('docs/system-diagrams/')
@@ -63,23 +70,45 @@ export const selectGatesForChangedPaths = (paths) => {
         }
         if (
             file === 'scripts/sim-endless.ts' ||
+            file === 'scripts/gate-softlock-seeds.ts' ||
             file.startsWith('src/shared/floor-mutator-schedule') ||
             file.startsWith('src/shared/board-generation') ||
             file.startsWith('src/shared/board-build') ||
+            file.startsWith('src/shared/board-inspection') ||
             file.startsWith('src/shared/board-tile-generation-rules') ||
+            file.startsWith('src/shared/dungeon-board-status') ||
             file.startsWith('src/shared/tile-trait') ||
             file.startsWith('src/shared/bonus-rewards') ||
             file.startsWith('src/shared/findables') ||
             file.startsWith('src/shared/objective-rules') ||
+            file.startsWith('src/shared/playthrough-solver') ||
+            file.startsWith('src/shared/run-progression-repair') ||
             file === 'src/shared/contracts.ts'
         ) {
             add('simHealth', file, 'endless route, reward, trait, objective, or generation health can change');
         }
-        if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || file.startsWith('src/shared/game') || file.startsWith('src/shared/turn-resolution') || file.startsWith('src/shared/hazard') || file.startsWith('src/shared/enemy')) {
+        if (
+            file === 'scripts/sim-endless.ts' ||
+            file === 'scripts/gate-softlock-seeds.ts' ||
+            file.startsWith('src/shared/playthrough-solver') ||
+            file.startsWith('src/shared/run-progression-repair') ||
+            file.startsWith('src/shared/softlock') ||
+            file.startsWith('src/shared/board-generation') ||
+            file.startsWith('src/shared/board-build') ||
+            file.startsWith('src/shared/board-inspection') ||
+            file.startsWith('src/shared/dungeon-board-status') ||
+            file.startsWith('src/shared/dungeon-exit') ||
+            file.startsWith('src/shared/dungeon-enemy') ||
+            file.startsWith('src/shared/enemy-hazard') ||
+            isCoreGameRuleFile(file)
+        ) {
+            add('simSoftlockSeeds', file, 'multi-seed executable softlock coverage can change');
+        }
+        if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || isCoreGameRuleFile(file) || file.startsWith('src/shared/playthrough-solver') || file.startsWith('src/shared/run-progression-repair') || file.startsWith('src/shared/turn-resolution') || file.startsWith('src/shared/hazard') || file.startsWith('src/shared/enemy')) {
             add('actionLoop', file, 'core turn, trait, hazard, enemy, or board-power rules changed');
         }
-        if (file.startsWith('src/shared/board-generation') || file.startsWith('src/shared/board-build') || file.startsWith('src/shared/softlock') || file.startsWith('src/shared/objective-rules')) {
-            add('actionLoop', file, 'generation, objective, or softlock rules changed');
+        if (file.startsWith('src/shared/board-generation') || file.startsWith('src/shared/board-build') || file.startsWith('src/shared/board-inspection') || file.startsWith('src/shared/softlock') || file.startsWith('src/shared/objective-rules')) {
+            add('actionLoop', file, 'generation, objective, fairness, or softlock rules changed');
         }
         if (file.startsWith('src/shared/bonus-rewards') || file.startsWith('src/shared/shop') || file.startsWith('src/shared/relic') || file.startsWith('src/shared/economy') || file.startsWith('src/shared/run-economy') || file.startsWith('src/shared/balance-simulation')) {
             add('rewardsEconomy', file, 'reward, shop, relic, economy, or balance rules changed');
@@ -87,7 +116,7 @@ export const selectGatesForChangedPaths = (paths) => {
         if (file.startsWith('src/shared/run-map') || file.startsWith('src/shared/route') || file.startsWith('src/renderer/store/navigationModel') || file.startsWith('src/renderer/components/ChooseYourPath') || file.startsWith('src/renderer/components/SideRoom') || file === 'src/renderer/App.tsx') {
             add('navigation', file, 'route, map, shell, or navigation UI changed');
         }
-        if (file.startsWith('src/renderer/components/tileBoard') || file === 'src/renderer/components/TileBoard.tsx' || file.startsWith('src/renderer/store/useAppStore')) {
+        if (file.startsWith('src/renderer/components/tileBoard') || file === 'src/renderer/components/TileBoard.tsx' || file.startsWith('src/renderer/store/levelCompleteSurfaceState') || file.startsWith('src/renderer/store/runResolutionController') || file.startsWith('src/renderer/store/useAppStore')) {
             add('rendererInput', file, 'tile input, WebGL fallback, pointer, DOM, or store dispatch changed');
         }
         if (file.startsWith('src/renderer/audio/') || file.startsWith('src/renderer/hooks/useHudPoliteLiveAnnouncement') || file.startsWith('src/renderer/components/gameScreenFeedback') || file === 'docs/AUDIO_ASSET_INVENTORY.md') {

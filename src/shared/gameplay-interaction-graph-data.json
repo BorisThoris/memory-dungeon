@@ -180,7 +180,7 @@
       "writes": ["dungeonEnemiesDefeated", "dungeonEnemiesDefeatedThisFloor", "enemyHazardsDefeatedThisFloor"],
       "enables": ["objective.defeat_boss", "exit.primary"],
       "blocks": ["exit_activation"],
-      "softlockGuards": ["final-pair-hazard-clear", "all-real-pairs-cleared-clear", "boss-exit-status-check"],
+      "softlockGuards": ["final-pair-hazard-clear", "all-real-pairs-cleared-clear", "stale-boss-overlay-clear", "boss-exit-status-check"],
       "tests": ["src/shared/dungeon-board-status.test.ts", "src/shared/softlock-fairness.test.ts", "src/shared/game.test.ts"]
     },
     {
@@ -193,7 +193,7 @@
       "writes": ["levelComplete", "dungeonExitActivated"],
       "enables": ["objective.floor_clear"],
       "blocks": ["next_floor"],
-      "softlockGuards": ["exit-lock-repair", "boss-exit-status-check"],
+      "softlockGuards": ["exit-lock-repair", "terminal-key-lock-fallback", "boss-exit-status-check"],
       "tests": ["src/shared/dungeon-exit-rules.test.ts", "src/shared/softlock-fairness.test.ts"]
     },
     {
@@ -206,7 +206,7 @@
       "writes": ["dungeonKeys", "dungeonExitActivated"],
       "enables": ["exit.primary", "shop.iron_key"],
       "blocks": ["exit_activation"],
-      "softlockGuards": ["reachable-key-source", "exit-lock-repair", "shop-priority-key"],
+      "softlockGuards": ["reachable-key-source", "exit-lock-repair", "terminal-key-lock-fallback", "shop-priority-key"],
       "tests": ["src/shared/dungeon-key-rules.test.ts", "src/shared/softlock-fairness.test.ts", "src/shared/shop-rules.test.ts"]
     },
     {
@@ -271,7 +271,7 @@
       "writes": ["fairnessReport", "repairPlan"],
       "enables": ["objective.floor_clear", "exit.primary", "boss.moving_patrol"],
       "blocks": ["invalid_generation"],
-      "softlockGuards": ["inspectBoardFairness", "repairDungeonExitSoftlocks"],
+      "softlockGuards": ["inspectBoardFairness", "repairDungeonExitSoftlocks", "terminal-key-lock-fallback", "stale-boss-overlay-clear"],
       "tests": ["src/shared/softlock-fairness.test.ts", "src/shared/softlock-generator-contract.test.ts"]
     },
     {
@@ -366,7 +366,7 @@
     { "source": "shop.trait_routing_kit", "target": "trait.conduit", "kind": "synergy", "label": "creates adjacency" },
     { "source": "shop.trait_routing_kit", "target": "trait.drift", "kind": "synergy", "label": "creates route" },
     { "source": "hazard.enemy_patrol", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "final pair clear" },
-    { "source": "boss.moving_patrol", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "boss clear route" },
+    { "source": "boss.moving_patrol", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "stale overlay clear" },
     { "source": "boss.moving_patrol", "target": "objective.defeat_boss", "kind": "enables", "label": "defeat progress" },
     { "source": "objective.defeat_boss", "target": "exit.primary", "kind": "unblocks", "label": "allows exit" },
     { "source": "lock.iron_key", "target": "exit.primary", "kind": "blocks", "label": "requires key" },
@@ -374,7 +374,7 @@
     { "source": "shop.trait_routing_kit", "target": "lock.iron_key", "kind": "priority_guard", "label": "does not displace keys" },
     { "source": "shop.trait_routing_kit", "target": "boss.moving_patrol", "kind": "priority_guard", "label": "does not displace boss counterplay" },
     { "source": "exit.primary", "target": "objective.floor_clear", "kind": "enables", "label": "activates floor clear" },
-    { "source": "safety.softlock_fairness", "target": "lock.iron_key", "kind": "guarded_by", "label": "reachable source" },
+    { "source": "safety.softlock_fairness", "target": "lock.iron_key", "kind": "guarded_by", "label": "terminal fallback or reachable source" },
     { "source": "safety.softlock_fairness", "target": "objective.floor_clear", "kind": "guarded_by", "label": "completion route" },
     { "source": "board.cleanup", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "sanitizes state" },
     { "source": "economy.score_and_rewards", "target": "feedback.gameplay_hud", "kind": "enables", "label": "reward copy" },

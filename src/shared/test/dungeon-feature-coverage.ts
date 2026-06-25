@@ -8,7 +8,7 @@ import type {
     RouteNodeType
 } from '../contracts';
 import { GAME_RULES_VERSION } from '../contracts';
-import { buildBoard } from '../board-generation';
+import { buildBoard, getEffectivePrimaryExitLock } from '../board-generation';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../dungeon-rules';
 
 export const EXPECTED_GAMEPLAY_NODE_KINDS: DungeonRunNodeKind[] = [
@@ -149,7 +149,7 @@ export const collectDungeonFeatureCoverage = (): DungeonFeatureCoverage => {
         coverage.hasExit ||= sample.board.tiles.some((tile) => tile.pairKey === EXIT_PAIR_KEY);
         coverage.hasShopTile ||= sample.board.tiles.some((tile) => tile.pairKey === SHOP_PAIR_KEY);
         coverage.hasRoomTile ||= sample.board.tiles.some((tile) => tile.pairKey === ROOM_PAIR_KEY);
-        coverage.hasLockedExit ||= sample.board.dungeonExitLockKind !== 'none';
+        coverage.hasLockedExit ||= getEffectivePrimaryExitLock({ board: sample.board }).lockKind !== 'none';
 
         for (const tile of sample.board.tiles) {
             if (tile.dungeonCardKind) {

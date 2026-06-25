@@ -1,17 +1,36 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import { GAME_RULES_VERSION, type BoardState, type LevelResult, type RunState, type Tile } from './contracts';
+import {
+    GAME_RULES_VERSION,
+    type BoardState,
+    type DungeonRunNodeKind,
+    type FloorArchetypeId,
+    type FloorTag,
+    type LevelResult,
+    type MutatorId,
+    type RouteNodeType,
+    type RunState,
+    type Tile
+} from './contracts';
 import { inspectBoardFairness, inspectRunFairness } from './board-inspection';
 import { canRegionShuffleRow, canShuffleBoard, canSwapHiddenTiles } from './board-power-availability';
 import { applyFlashPair, applyPeek, applyRegionShuffle, applyShuffle, applyStrayRemove, applyTileSwap } from './board-power-actions';
 import { buildBoard } from './board-build-rules';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { advanceToNextLevel } from './next-floor-transition-rules';
+import { solveRunByExhaustingPlayablePairs } from './playthrough-solver';
 import { grantBonusRelicPickNextOffer } from './relic-immediate-rules';
 import { computeRelicOfferPickBudget, openRelicOffer } from './relic-offer-rules';
 import { completeRelicPickAndAdvance } from './relic-pick-advance-rules';
 import { applyRouteChoiceOutcome, generateRouteChoices } from './route-rules';
-import { DECOY_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
+import { getDungeonExitStatus } from './dungeon-board-status';
+import {
+    chooseDungeonExitActivationSpend,
+    createDungeonExitActivationTransition
+} from './dungeon-exit-rules';
+import { revealDungeonExit } from './dungeon-reveal-rules';
+import { createGeneratedBoardSolverRun } from './softlock-generator-contract';
+import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 
 const propertyRuns = Number(process.env.GAMEPLAY_PROPERTY_RUNS ?? 80);
@@ -20,6 +39,41 @@ const generatedRun = fc.record({
     level: fc.integer({ min: 1, max: 24 }),
     runSeed: fc.integer({ min: 1, max: 0x7fffffff }),
     rulesVersion: fc.integer({ min: 1, max: GAME_RULES_VERSION })
+});
+
+const floorContext = fc.record({
+    floorTag: fc.constantFrom<FloorTag>('normal', 'breather', 'boss'),
+    floorArchetypeId: fc.constantFrom<FloorArchetypeId | null>(
+        null,
+        'trap_hall',
+        'rush_recall',
+        'treasure_gallery',
+        'script_room',
+        'spotlight_hunt',
+        'breather'
+    ),
+    dungeonNodeKind: fc.constantFrom<DungeonRunNodeKind | null>(
+        null,
+        'combat',
+        'elite',
+        'trap',
+        'treasure',
+        'shop',
+        'event',
+        'boss'
+    ),
+    routeType: fc.option(fc.constantFrom<RouteNodeType>('safe', 'greed', 'mystery'), { nil: null }),
+    activeMutators: fc.array(
+        fc.constantFrom<MutatorId>(
+            'glass_floor',
+            'sticky_fingers',
+            'short_memorize',
+            'wide_recall',
+            'findables_floor',
+            'shifting_spotlight'
+        ),
+        { maxLength: 3 }
+    )
 });
 
 const sortedTileIds = (tiles: readonly Tile[]): string[] => tiles.map((tile) => tile.id).sort();
@@ -282,6 +336,143 @@ describe('gameplay property invariants', () => {
         );
     });
 
+    it('generated playable floors can be exhausted through pair play and exit activation', () => {
+        fc.assert(
+            fc.property(generatedRun, ({ level, runSeed, rulesVersion }) => {
+                const board = buildBoard(level, {
+                    gameMode: 'endless',
+                    runSeed,
+                    runRulesVersion: rulesVersion
+                });
+                const run = createGeneratedBoardSolverRun(board, runSeed, rulesVersion);
+                const solved = solveRunByExhaustingPlayablePairs(run);
+
+                expect(run.board?.level).toBe(level);
+                expect(run.dungeonRun.currentFloor).toBe(level);
+                expectRunResourceBounds(solved);
+                expectFlippedTileReferencesExist(solved);
+                expect(solved.status).not.toBe('gameOver');
+                expect(inspectRunFairness(solved).issues).toEqual([]);
+                expect(solved.status).toBe('levelComplete');
+            }),
+            { numRuns: propertyRuns }
+        );
+    });
+
+    it('generated contextual dungeon floors can be exhausted through primary exit activation', () => {
+        fc.assert(
+            fc.property(generatedRun, floorContext, ({ level, runSeed, rulesVersion }, context) => {
+                const board = buildBoard(level, {
+                    gameMode: 'endless',
+                    runSeed,
+                    runRulesVersion: rulesVersion,
+                    floorTag: context.floorTag,
+                    floorArchetypeId: context.floorArchetypeId,
+                    dungeonNodeKind: context.dungeonNodeKind,
+                    activeMutators: [...new Set(context.activeMutators)],
+                    routeCardPlan: context.routeType
+                        ? {
+                              choiceId: `property:${context.routeType}:${runSeed}:${level}`,
+                              routeType: context.routeType,
+                              sourceLevel: Math.max(1, level - 1),
+                              targetLevel: level
+                          }
+                        : undefined
+                });
+                const run = createGeneratedBoardSolverRun(board, runSeed, rulesVersion);
+                const solved = solveRunByExhaustingPlayablePairs(run);
+
+                expect(run.board?.level).toBe(level);
+                expect(run.dungeonRun.currentFloor).toBe(level);
+                expectRunResourceBounds(solved);
+                expectFlippedTileReferencesExist(solved);
+                expect(solved.status).not.toBe('gameOver');
+                expect(inspectRunFairness(solved).issues).toEqual([]);
+                expect(solved.status).toBe('levelComplete');
+            }),
+            { numRuns: Math.max(20, Math.floor(propertyRuns / 2)) }
+        );
+    });
+
+    it('exhausts elite mystery floors when lever pairs are partially exposed before exit activation', () => {
+        const level = 5;
+        const runSeed = 438154985;
+        const board = buildBoard(level, {
+            gameMode: 'endless',
+            runSeed,
+            runRulesVersion: GAME_RULES_VERSION,
+            floorTag: 'normal',
+            floorArchetypeId: null,
+            dungeonNodeKind: 'elite',
+            activeMutators: [],
+            routeCardPlan: {
+                choiceId: `property:mystery:${runSeed}:${level}`,
+                routeType: 'mystery',
+                sourceLevel: level - 1,
+                targetLevel: level
+            }
+        });
+        const run = createGeneratedBoardSolverRun(board, runSeed, GAME_RULES_VERSION);
+
+        const solved = solveRunByExhaustingPlayablePairs(run);
+
+        expect(run.board?.level).toBe(level);
+        expect(run.dungeonRun.currentFloor).toBe(level);
+        expectRunResourceBounds(solved);
+        expectFlippedTileReferencesExist(solved);
+        expect(inspectRunFairness(solved).issues).toEqual([]);
+        expect(solved.status).toBe('levelComplete');
+    });
+
+    it('omitted dungeon exit spend matches the explicit valid spend choice', () => {
+        fc.assert(
+            fc.property(
+                generatedRun,
+                fc.record({
+                    ironKeys: fc.integer({ min: 0, max: 2 }),
+                    treasureKeys: fc.integer({ min: 0, max: 2 }),
+                    bossKeys: fc.integer({ min: 0, max: 2 }),
+                    masterKeys: fc.integer({ min: 0, max: 1 })
+                }),
+                ({ runSeed, rulesVersion }, keys) => {
+                    const run = finishMemorizePhase(createNewRun(0, {
+                        echoFeedbackEnabled: false,
+                        runRulesVersionOverride: rulesVersion,
+                        runSeed
+                    }));
+                    const exitTile = run.board?.dungeonExitTileId
+                        ? run.board.tiles.find((tile) => tile.id === run.board?.dungeonExitTileId)
+                        : run.board?.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
+                    if (!exitTile) {
+                        return;
+                    }
+                    const revealed = revealDungeonExit({
+                        ...run,
+                        dungeonKeys: {
+                            iron: keys.ironKeys,
+                            treasure: keys.treasureKeys,
+                            boss: keys.bossKeys
+                        },
+                        dungeonMasterKeys: keys.masterKeys
+                    }, exitTile.id);
+                    const spend = chooseDungeonExitActivationSpend(getDungeonExitStatus(revealed));
+
+                    const implicit = createDungeonExitActivationTransition(revealed);
+                    const explicit = createDungeonExitActivationTransition(revealed, spend);
+
+                    expect(Boolean(implicit)).toBe(Boolean(explicit));
+                    if (!implicit || !explicit) {
+                        return;
+                    }
+                    expect(implicit.run.dungeonKeys).toEqual(explicit.run.dungeonKeys);
+                    expect(implicit.run.dungeonMasterKeys).toBe(explicit.run.dungeonMasterKeys);
+                    expect(implicit.board.dungeonExitActivated).toBe(explicit.board.dungeonExitActivated);
+                }
+            ),
+            { numRuns: propertyRuns }
+        );
+    });
+
     it('next-floor advancement either stays guarded or returns a valid terminal/memorize run', () => {
         fc.assert(
             fc.property(generatedRun, ({ runSeed, rulesVersion }) => {
@@ -309,6 +500,7 @@ describe('gameplay property invariants', () => {
 
                 if (next.status === 'memorize') {
                     expect(next.board?.level).toBe((run.board?.level ?? 0) + 1);
+                    expect(next.dungeonRun.currentFloor).toBe(next.board?.level);
                     expect(next.timerState.memorizeRemainingMs).toBeGreaterThan(0);
                     expect(inspectRunFairness(next).issues).toEqual([]);
                 } else {

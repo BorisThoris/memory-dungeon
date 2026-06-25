@@ -10,6 +10,7 @@ import {
     createEnemyHazardsForBoard,
     damageFirstRevealedEnemyHazard,
     defeatEnemyHazardsBlockingLastPair,
+    defeatEnemyHazardsForFloorClear,
     getEnemyHazardMovementCandidateIds
 } from './dungeon-enemy-hazard-rules';
 
@@ -105,6 +106,43 @@ describe('dungeon enemy hazard rules', () => {
         expect(advanced.enemyHazards![0]!.currentTileId).toBe('b');
     });
 
+    it('does not advance stale hazards that only occupy cleared tiles', () => {
+        const board = boardWith(
+            [tile('a', 'done', { state: 'matched' }), tile('b', 'done', { state: 'matched' })],
+            [hazard('h1', 'a', 'b', { state: 'revealed', hp: 1 })]
+        );
+
+        expect(advanceEnemyHazardsOnBoard(board)).toBe(board);
+    });
+
+    it('does not damage stale revealed hazards that only occupy cleared tiles', () => {
+        const board = boardWith(
+            [tile('a', 'done', { state: 'matched' }), tile('b', 'done', { state: 'matched' })],
+            [hazard('h1', 'a', 'b', { state: 'revealed', hp: 1 })]
+        );
+
+        expect(damageFirstRevealedEnemyHazard(board, 1)).toEqual({
+            board,
+            defeated: 0,
+            bossDefeated: 0,
+            score: 0
+        });
+    });
+
+    it('does not apply contact damage from stale cleared-tile hazards', () => {
+        const board = boardWith(
+            [tile('a', 'done', { state: 'matched' }), tile('b', 'done', { state: 'matched' })],
+            [hazard('h1', 'a', 'b', { state: 'revealed', hp: 1 })]
+        );
+        const run = runWithBoard(board);
+
+        const next = applyEnemyHazardClick(run, 'a', { advanceHazards: false });
+
+        expect(next.lives).toBe(run.lives);
+        expect(next.enemyHazardHitsThisFloor).toBe(0);
+        expect(next.board!.enemyHazards![0]).toMatchObject({ hp: 0, state: 'defeated' });
+    });
+
     it('clicking an occupied hidden card deals contact damage without flipping it', () => {
         const board = boardWith(
             [tile('a', 'a'), tile('b', 'b'), tile('c', 'c')],
@@ -139,6 +177,46 @@ describe('dungeon enemy hazard rules', () => {
             dungeonEnemiesDefeatedThisFloor: 1,
             enemyHazardsDefeatedThisFloor: 1
         });
+    });
+
+    it('ignores resolved dungeon pairs when detecting the final unresolved real pair', () => {
+        const board = boardWith(
+            [
+                tile('a', 'final'),
+                tile('b', 'final'),
+                tile('lever-a', 'lever', {
+                    state: 'flipped',
+                    dungeonCardKind: 'lever',
+                    dungeonCardState: 'resolved'
+                }),
+                tile('lever-b', 'lever', {
+                    state: 'flipped',
+                    dungeonCardKind: 'lever',
+                    dungeonCardState: 'resolved'
+                })
+            ],
+            [hazard('h1', 'a', 'b')]
+        );
+
+        const cleared = defeatEnemyHazardsBlockingLastPair(board);
+
+        expect(cleared).toMatchObject({ defeated: 1, bossesDefeated: 0 });
+        expect(cleared.board.enemyHazards![0]).toMatchObject({ hp: 0, state: 'defeated' });
+    });
+
+    it('sweeps stale cleared-tile hazards on floor clear', () => {
+        const board = boardWith(
+            [tile('a', 'done', { state: 'matched' }), tile('b', 'done', { state: 'matched' })],
+            [hazard('h1', 'a', 'b', { bossId: 'rush_sentinel', state: 'revealed', hp: 1 })]
+        );
+
+        const result = defeatEnemyHazardsForFloorClear(board);
+
+        expect(result).toMatchObject({
+            defeated: 1,
+            bossesDefeated: 1
+        });
+        expect(result.board.enemyHazards![0]).toMatchObject({ hp: 0, state: 'defeated' });
     });
 });
 

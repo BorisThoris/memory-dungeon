@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { type BoardState, type RunState, type Tile } from './contracts';
+import { type BoardState, type EnemyHazardState, type RunState, type Tile } from './contracts';
 import { createNewRun } from './game';
 import {
     DUNGEON_OBJECTIVE_SCORE_REWARD,
     applyDungeonExitObjectiveReward,
+    chooseDungeonExitActivationSpend,
     createDungeonExitActivationTransition,
     resolveDungeonExitActivationSpend,
     sealBoardForDungeonExit
@@ -30,6 +31,21 @@ const createBoard = (tiles: Tile[]): BoardState => ({
     tiles
 });
 
+const hazard = (overrides: Partial<EnemyHazardState> = {}): EnemyHazardState => ({
+    id: 'boss-hazard',
+    kind: 'warden',
+    label: 'Warden',
+    currentTileId: 'a1',
+    nextTileId: 'a2',
+    pattern: 'guard',
+    state: 'revealed',
+    damage: 1,
+    hp: 2,
+    maxHp: 2,
+    bossId: 'trap_warden',
+    ...overrides
+});
+
 const lockedExitStatus = {
     canActivate: false,
     canActivateWithKey: false,
@@ -37,6 +53,26 @@ const lockedExitStatus = {
     canActivateWithoutSpend: false,
     lockKind: 'none' as const
 };
+
+describe('chooseDungeonExitActivationSpend', () => {
+    it('prefers free activation before spending typed or master keys', () => {
+        expect(chooseDungeonExitActivationSpend({
+            canActivateWithoutSpend: true,
+            canActivateWithKey: true,
+            canActivateWithMasterKey: true
+        })).toBe('none');
+        expect(chooseDungeonExitActivationSpend({
+            canActivateWithoutSpend: false,
+            canActivateWithKey: true,
+            canActivateWithMasterKey: true
+        })).toBe('key');
+        expect(chooseDungeonExitActivationSpend({
+            canActivateWithoutSpend: false,
+            canActivateWithKey: false,
+            canActivateWithMasterKey: true
+        })).toBe('master_key');
+    });
+});
 
 describe('resolveDungeonExitActivationSpend', () => {
     it('opens exits that need no spend', () => {
@@ -210,6 +246,144 @@ describe('createDungeonExitActivationTransition', () => {
         expect(transition?.run.dungeonKeys.iron).toBe(0);
         expect(transition?.run.dungeonGatewaysUsed).toBe(1);
         expect(transition?.run.pendingRouteCardPlan?.routeType).toBe('safe');
+    });
+
+    it('auto-selects the valid spend when opening a revealed keyed exit without an explicit spend', () => {
+        const base = createNewRun(0, { runSeed: 2401 });
+        const board = createBoard([
+            tile('exit', EXIT_PAIR_KEY, {
+                state: 'flipped',
+                dungeonCardState: 'revealed',
+                dungeonExitLockKind: 'iron'
+            }),
+            tile('a1', 'a', { state: 'matched' }),
+            tile('a2', 'a', { state: 'matched' })
+        ]);
+        const run: RunState = {
+            ...base,
+            status: 'playing',
+            board,
+            dungeonKeys: { iron: 1 },
+            dungeonMasterKeys: 0,
+            dungeonGatewaysUsed: 0
+        };
+
+        const transition = createDungeonExitActivationTransition(run);
+
+        expect(transition).not.toBeNull();
+        expect(transition?.run.dungeonKeys.iron).toBe(0);
+        expect(transition?.board.dungeonExitActivated).toBe(true);
+    });
+
+    it('opens terminal key-lock fallback exits without spending a key', () => {
+        const base = createNewRun(0, { runSeed: 2404 });
+        const board = {
+            ...createBoard([
+                tile('exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'revealed',
+                    dungeonExitLockKind: 'iron'
+                }),
+                tile('a1', 'a', { state: 'matched' }),
+                tile('a2', 'a', { state: 'matched' })
+            ]),
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron' as const,
+            matchedPairs: 1,
+            pairCount: 1
+        };
+        const run: RunState = {
+            ...base,
+            status: 'playing',
+            board,
+            dungeonKeys: { iron: 0 },
+            dungeonMasterKeys: 0
+        };
+
+        expect(getDungeonExitStatus(run)).toMatchObject({
+            lockKind: 'none',
+            terminalKeySoftlockFallback: true,
+            canActivateWithoutSpend: true
+        });
+
+        const transition = createDungeonExitActivationTransition(run);
+
+        expect(transition).not.toBeNull();
+        expect(transition?.board.dungeonExitActivated).toBe(true);
+        expect(transition?.run.dungeonKeys.iron ?? 0).toBe(0);
+        expect(transition?.run.dungeonMasterKeys).toBe(0);
+    });
+
+    it('defeats remaining moving boss hazards when the exit seals the floor', () => {
+        const base = createNewRun(0, { runSeed: 2402 });
+        const board = {
+            ...createBoard([
+                tile('exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardState: 'revealed'
+                }),
+                tile('a1', 'a'),
+                tile('a2', 'a')
+            ]),
+            enemyHazards: [hazard()]
+        };
+        const run: RunState = {
+            ...base,
+            status: 'playing',
+            board,
+            dungeonEnemiesDefeated: 1,
+            dungeonEnemiesDefeatedThisFloor: 0,
+            enemyHazardsDefeatedThisFloor: 2
+        };
+
+        const transition = createDungeonExitActivationTransition(run);
+
+        expect(transition).not.toBeNull();
+        expect(transition?.board.enemyHazards).toMatchObject([{ id: 'boss-hazard', hp: 0, state: 'defeated' }]);
+        expect(transition?.run.dungeonEnemiesDefeated).toBe(2);
+        expect(transition?.run.dungeonEnemiesDefeatedThisFloor).toBe(1);
+        expect(transition?.run.enemyHazardsDefeatedThisFloor).toBe(3);
+    });
+
+    it('allows a cleared boss floor to exit when only a stale boss patrol overlay remains', () => {
+        const base = createNewRun(0, { runSeed: 2403 });
+        const board = {
+            ...createBoard([
+                tile('exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'revealed'
+                }),
+                tile('a1', 'a', { state: 'matched' }),
+                tile('a2', 'a', { state: 'matched' })
+            ]),
+            dungeonExitTileId: 'exit',
+            dungeonObjectiveId: 'defeat_boss' as const,
+            dungeonBossId: 'trap_warden' as const,
+            matchedPairs: 1,
+            pairCount: 1,
+            enemyHazards: [hazard({ currentTileId: 'a1', nextTileId: 'a2' })]
+        };
+        const run: RunState = {
+            ...base,
+            status: 'playing',
+            board,
+            dungeonEnemiesDefeated: 0,
+            dungeonEnemiesDefeatedThisFloor: 0,
+            enemyHazardsDefeatedThisFloor: 0
+        };
+
+        expect(getDungeonExitStatus(run)).toMatchObject({
+            canActivate: true,
+            lockedReason: null
+        });
+
+        const transition = createDungeonExitActivationTransition(run);
+
+        expect(transition).not.toBeNull();
+        expect(transition?.board.enemyHazards).toMatchObject([{ id: 'boss-hazard', hp: 0, state: 'defeated' }]);
+        expect(transition?.run.status).toBe('playing');
     });
 });
 

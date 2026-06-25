@@ -1,5 +1,6 @@
 import type {
     BoardState,
+    DungeonExitLockKind,
     DungeonKeyKind,
     RunState,
     RunStatus,
@@ -81,12 +82,14 @@ export type BoardFairnessIssueCode =
     | 'exit_card_missing'
     | 'exit_tile_reference_missing'
     | 'exit_card_mismatch'
+    | 'exit_lock_metadata_mismatch'
     | 'exit_lock_unreachable'
     | 'enemy_hazard_tile_reference_missing'
     | 'enemy_hazard_on_cleared_tile'
     | 'dungeon_card_pair_mismatch'
     | 'dungeon_card_hp_mismatch'
     | 'dungeon_objective_unreachable'
+    | 'completion_route_missing'
     | 'trait_interaction_missing'
     | 'trait_route_objective_unreachable'
     | 'run_has_no_board'
@@ -111,13 +114,21 @@ export interface BoardFairnessReport {
     hasCompletionRoute: boolean;
 }
 
+export interface BoardFairnessInspectionOptions {
+    dungeonKeys?: RunState['dungeonKeys'];
+    dungeonMasterKeys?: number;
+}
+
 const tileIsActionableForCompletion = (tile: Tile): boolean =>
     tile.state === 'hidden' || (tile.state === 'flipped' && !isSprungTrapTile(tile));
 
-const pairIsCleared = (tiles: readonly Tile[]): boolean =>
-    tiles.every((tile) => tile.state === 'matched' || tile.state === 'removed');
+const tileIsResolvedDungeonCard = (tile: Tile): boolean => tile.dungeonCardState === 'resolved';
 
-const tileIsClearedForFairness = (tile: Tile): boolean => tile.state === 'matched' || tile.state === 'removed';
+const pairIsCleared = (tiles: readonly Tile[]): boolean =>
+    tiles.every((tile) => tile.state === 'matched' || tile.state === 'removed' || tileIsResolvedDungeonCard(tile));
+
+const tileIsClearedForFairness = (tile: Tile): boolean =>
+    tile.state === 'matched' || tile.state === 'removed' || tileIsResolvedDungeonCard(tile);
 
 const countUnclearedDungeonPairs = (tiles: readonly Tile[], predicate: (tile: Tile) => boolean): number => {
     const pairKeys = new Set<string>();
@@ -148,7 +159,77 @@ export const countReachableExitKeySources = (board: BoardState, keyKind: Dungeon
     return (board.dungeonKeysHeld ?? 0) + matchingKeyPairCount + roomKeyCacheCount;
 };
 
-export const repairDungeonExitSoftlocks = (board: BoardState): BoardState => {
+export const boardHasActionableProgressionPair = (board: BoardState): boolean => {
+    const actionableTilesByPairKey = new Map<string, number>();
+    let hasActionableWildTile = false;
+    let hasActionableRealTile = false;
+    for (const tile of board.tiles) {
+        if (!tileIsActionableForCompletion(tile)) {
+            continue;
+        }
+        if (tile.pairKey === WILD_PAIR_KEY) {
+            hasActionableWildTile = true;
+            continue;
+        }
+        if (isSingletonUtilityPairKey(tile.pairKey)) {
+            continue;
+        }
+        hasActionableRealTile = true;
+        actionableTilesByPairKey.set(tile.pairKey, (actionableTilesByPairKey.get(tile.pairKey) ?? 0) + 1);
+    }
+    return [...actionableTilesByPairKey.values()].some((count) => count >= 2) || (hasActionableWildTile && hasActionableRealTile);
+};
+
+export interface EffectivePrimaryExitLockInput {
+    board: BoardState;
+    dungeonKeys?: RunState['dungeonKeys'];
+    dungeonMasterKeys?: number;
+}
+
+export interface EffectivePrimaryExitLock {
+    exitTile: Tile | null;
+    lockKind: DungeonExitLockKind;
+    requiredLeverCount: number;
+    terminalKeySoftlockFallback: boolean;
+}
+
+export const getEffectivePrimaryExitLock = ({
+    board,
+    dungeonKeys = {},
+    dungeonMasterKeys = 0
+}: EffectivePrimaryExitLockInput): EffectivePrimaryExitLock => {
+    const primaryExit = board.dungeonExitTileId
+        ? board.tiles.find((tile) => tile.id === board.dungeonExitTileId) ?? null
+        : board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY) ?? null;
+    const rawLockKind = primaryExit?.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
+    const rawRequiredLeverCount = primaryExit?.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount ?? 0;
+
+    if (!primaryExit || rawLockKind === 'none' || rawLockKind === 'lever') {
+        return {
+            exitTile: primaryExit,
+            lockKind: rawLockKind,
+            requiredLeverCount: rawRequiredLeverCount,
+            terminalKeySoftlockFallback: false
+        };
+    }
+
+    const hasRunKey = (dungeonKeys[rawLockKind] ?? 0) > 0 || dungeonMasterKeys > 0;
+    const hasReachableKeySource = countReachableExitKeySources(board, rawLockKind as DungeonKeyKind) > 0;
+    const terminalKeySoftlockFallback =
+        !boardHasActionableProgressionPair(board) && !hasRunKey && !hasReachableKeySource;
+
+    return {
+        exitTile: primaryExit,
+        lockKind: terminalKeySoftlockFallback ? 'none' : rawLockKind,
+        requiredLeverCount: terminalKeySoftlockFallback ? 0 : rawRequiredLeverCount,
+        terminalKeySoftlockFallback
+    };
+};
+
+export const repairDungeonExitSoftlocks = (
+    board: BoardState,
+    options: BoardFairnessInspectionOptions = {}
+): BoardState => {
     if (!board.dungeonExitTileId) {
         return board;
     }
@@ -169,9 +250,13 @@ export const repairDungeonExitSoftlocks = (board: BoardState): BoardState => {
         } else if (reachableLevers < requiredLeverCount) {
             repairedLeverCount = reachableLevers;
         }
-    } else if (exitLockKind !== 'none' && countReachableExitKeySources(board, exitLockKind as DungeonKeyKind) < 1) {
-        repairedLockKind = 'none';
-        repairedLeverCount = 0;
+    } else if (exitLockKind !== 'none') {
+        const requiredKeyKind = exitLockKind as DungeonKeyKind;
+        const hasRunKey = (options.dungeonKeys?.[requiredKeyKind] ?? 0) > 0 || (options.dungeonMasterKeys ?? 0) > 0;
+        if (!hasRunKey && countReachableExitKeySources(board, requiredKeyKind) < 1) {
+            repairedLockKind = 'none';
+            repairedLeverCount = 0;
+        }
     }
 
     if (repairedLockKind === exitLockKind && repairedLeverCount === requiredLeverCount) {
@@ -202,7 +287,10 @@ export const repairDungeonExitSoftlocks = (board: BoardState): BoardState => {
  * a legal path to finish. Decoys are allowed as hidden singleton traps; wild tiles are allowed only while at least one
  * real actionable tile or stray-removal route remains.
  */
-export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => {
+export const inspectBoardFairness = (
+    board: BoardState,
+    options: BoardFairnessInspectionOptions = {}
+): BoardFairnessReport => {
     const issues: BoardFairnessIssue[] = [];
     const groups = new Map<string, Tile[]>();
     for (const tile of board.tiles) {
@@ -294,15 +382,28 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
                 pairKey: declaredExit.pairKey,
                 tileIds: [declaredExit.id]
             });
+        } else if (
+            board.dungeonExitLockKind != null &&
+            declaredExit.dungeonExitLockKind != null &&
+            (board.dungeonExitLockKind !== declaredExit.dungeonExitLockKind ||
+                (board.dungeonExitRequiredLeverCount ?? 0) !== (declaredExit.dungeonExitRequiredLeverCount ?? 0))
+        ) {
+            structurallyClearable = false;
+            issues.push({
+                code: 'exit_lock_metadata_mismatch',
+                message: `Declared exit tile "${declaredExit.id}" has lock metadata that disagrees with the board lock metadata.`,
+                tileIds: [declaredExit.id]
+            });
         }
     }
 
-    const primaryExit = board.dungeonExitTileId
-        ? board.tiles.find((tile) => tile.id === board.dungeonExitTileId)
-        : exitTiles[0];
-    const exitLockKind = primaryExit?.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
-    const requiredLeverCount =
-        primaryExit?.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount ?? 0;
+    const effectivePrimaryExitLock = getEffectivePrimaryExitLock({
+        board,
+        dungeonKeys: options.dungeonKeys,
+        dungeonMasterKeys: options.dungeonMasterKeys
+    });
+    const exitLockKind = effectivePrimaryExitLock.lockKind;
+    const requiredLeverCount = effectivePrimaryExitLock.requiredLeverCount;
     if (exitLockKind === 'lever' && (board.dungeonLeverCount ?? 0) < requiredLeverCount) {
         const reachableLevers = countReachableExitLeverSources(board);
         if (reachableLevers < requiredLeverCount) {
@@ -317,7 +418,12 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
     }
     if (exitLockKind !== 'none' && exitLockKind !== 'lever') {
         const requiredKeyKind = exitLockKind as DungeonKeyKind;
-        if (countReachableExitKeySources(board, requiredKeyKind) < 1) {
+        const hasRunKey = (options.dungeonKeys?.[requiredKeyKind] ?? 0) > 0 || (options.dungeonMasterKeys ?? 0) > 0;
+        if (
+            !hasRunKey &&
+            countReachableExitKeySources(board, requiredKeyKind) < 1 &&
+            !boardHasActionableProgressionPair(board)
+        ) {
             structurallyClearable = false;
             issues.push({
                 code: 'exit_lock_unreachable',
@@ -353,17 +459,6 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
     const hiddenRealTileExists = board.tiles.some(
         (tile) => !isSingletonUtilityPairKey(tile.pairKey) && tile.state === 'hidden'
     );
-    for (const wild of wildTiles) {
-        if (tileIsActionableForCompletion(wild) && !actionableRealTileExists && !hiddenRealTileExists) {
-            structurallyClearable = false;
-            issues.push({
-                code: 'wild_singleton_unmatched_without_route',
-                message: 'Wild singleton is still actionable, but no real hidden tile or removal route remains.',
-                pairKey: WILD_PAIR_KEY,
-                tileIds: [wild.id]
-            });
-        }
-    }
 
     for (const flippedId of board.flippedTileIds) {
         if (!board.tiles.some((tile) => tile.id === flippedId && tile.state === 'flipped')) {
@@ -457,7 +552,42 @@ export const inspectBoardFairness = (board: BoardState): BoardFairnessReport => 
         }
     }
 
-    const hasCompletionRoute = structurallyClearable && (isBoardComplete(board) || actionableRealPairKeys.length > 0);
+    const hasExitCompletionRoute = (() => {
+        if (!effectivePrimaryExitLock.exitTile) {
+            return false;
+        }
+        if (effectivePrimaryExitLock.lockKind === 'none') {
+            return true;
+        }
+        if (effectivePrimaryExitLock.lockKind === 'lever') {
+            return (board.dungeonLeverCount ?? 0) >= effectivePrimaryExitLock.requiredLeverCount;
+        }
+        const requiredKeyKind = effectivePrimaryExitLock.lockKind as DungeonKeyKind;
+        return (
+            (options.dungeonKeys?.[requiredKeyKind] ?? 0) > 0 ||
+            (options.dungeonMasterKeys ?? 0) > 0 ||
+            countReachableExitKeySources(board, requiredKeyKind) > 0
+        );
+    })();
+    for (const wild of wildTiles) {
+        if (
+            tileIsActionableForCompletion(wild) &&
+            !actionableRealTileExists &&
+            !hiddenRealTileExists &&
+            !isBoardComplete(board) &&
+            !hasExitCompletionRoute
+        ) {
+            structurallyClearable = false;
+            issues.push({
+                code: 'wild_singleton_unmatched_without_route',
+                message: 'Wild singleton is still actionable, but no real hidden tile, removal route, or exit route remains.',
+                pairKey: WILD_PAIR_KEY,
+                tileIds: [wild.id]
+            });
+        }
+    }
+    const hasCompletionRoute =
+        structurallyClearable && (isBoardComplete(board) || actionableRealPairKeys.length > 0 || hasExitCompletionRoute);
 
     return {
         complete: isBoardComplete(board),
@@ -498,7 +628,10 @@ export const inspectRunFairness = (run: RunState): RunFairnessReport => {
         };
     }
 
-    const boardReport = inspectBoardFairness(run.board);
+    const boardReport = inspectBoardFairness(run.board, {
+        dungeonKeys: run.dungeonKeys,
+        dungeonMasterKeys: run.dungeonMasterKeys
+    });
     const issues = [...boardReport.issues];
     const intentionalBlockers: string[] = [];
 

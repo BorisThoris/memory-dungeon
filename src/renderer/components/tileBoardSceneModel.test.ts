@@ -129,4 +129,29 @@ describe('tileBoardSceneModel', () => {
         expect(result.enemyHazardRows[0]!.hazard.id).toBe('hazard');
         expect(result.enemyHazardRows[0]!.nextTransform).not.toBeNull();
     });
+
+    it('omits stale enemy hazards once their referenced tiles are cleared', () => {
+        const result = model({
+            board: board([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched')], {
+                matchedPairs: 1,
+                pairCount: 1,
+                enemyHazards: [
+                    {
+                        currentTileId: 'a1',
+                        damage: 1,
+                        hp: 1,
+                        id: 'stale',
+                        kind: 'warden',
+                        label: 'Warden',
+                        maxHp: 1,
+                        nextTileId: 'a2',
+                        pattern: 'guard',
+                        state: 'revealed'
+                    }
+                ]
+            })
+        });
+
+        expect(result.enemyHazardRows).toEqual([]);
+    });
 });

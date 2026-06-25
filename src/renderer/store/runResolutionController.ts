@@ -17,6 +17,7 @@ import {
     normalizeSaveData
 } from '../../shared/save-data';
 import { disableDebugPeek } from '../../shared/run-timer-rules';
+import { repairRunProgressionSoftlocks } from '../../shared/run-progression-repair';
 import { resolveBoardTurn } from '../../shared/turn-resolution';
 import { trackEvent } from '../../shared/telemetry';
 import { playFloorClearSfx, playResolveSfx, resumeAudioContext } from '../audio/gameSfx';
@@ -80,6 +81,7 @@ export const createRunResolutionController = ({
     setState
 }: RunResolutionControllerOptions): RunResolutionController => {
     const applyResolvedRun = (resolvedRun: RunState): void => {
+        resolvedRun = repairRunProgressionSoftlocks(resolvedRun);
         const state = getState();
         const prevStatus = state.run?.status;
         if (resolvedRun.status === 'levelComplete' && prevStatus !== 'levelComplete') {

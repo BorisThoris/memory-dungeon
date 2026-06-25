@@ -1,4 +1,9 @@
-import type { DungeonCardEffectId, Tile, RunState } from './contracts';
+import type { BoardState, DungeonCardEffectId, DungeonExitLockKind, Tile, RunState } from './contracts';
+import {
+    boardHasActionableProgressionPair,
+    countReachableExitKeySources,
+    getEffectivePrimaryExitLock
+} from './board-inspection';
 import { getDungeonBossDefinition } from './dungeon-boss-rules';
 import { getDungeonCardKindDefinition } from './dungeon-cards';
 
@@ -295,17 +300,67 @@ export const getDungeonTreasureReadModel = (tile: Tile): DungeonTreasureReadMode
     };
 };
 
-export const getDungeonCardCopy = (tile: Tile): string => {
+export interface DungeonCardCopyOptions {
+    board?: BoardState | null;
+    run?: Pick<RunState, 'dungeonKeys' | 'dungeonMasterKeys'> | null;
+}
+
+const effectiveExitLockForTile = (
+    tile: Tile,
+    options: DungeonCardCopyOptions | undefined
+): { lockKind: DungeonExitLockKind; requiredLeverCount: number; keyFallbackPending: boolean } => {
+    if (!options?.board) {
+        return {
+            lockKind: tile.dungeonExitLockKind ?? 'none',
+            requiredLeverCount: tile.dungeonExitRequiredLeverCount ?? 0,
+            keyFallbackPending: false
+        };
+    }
+    const effectivePrimaryExitLock = getEffectivePrimaryExitLock({
+        board: options.board,
+        dungeonKeys: options.run?.dungeonKeys,
+        dungeonMasterKeys: options.run?.dungeonMasterKeys
+    });
+    const hasRunKey =
+        effectivePrimaryExitLock.lockKind !== 'none' &&
+        effectivePrimaryExitLock.lockKind !== 'lever' &&
+        ((options.run?.dungeonKeys?.[effectivePrimaryExitLock.lockKind] ?? 0) > 0 ||
+            (options.run?.dungeonMasterKeys ?? 0) > 0);
+    const keyFallbackPending =
+        effectivePrimaryExitLock.exitTile?.id === tile.id &&
+        effectivePrimaryExitLock.lockKind !== 'none' &&
+        effectivePrimaryExitLock.lockKind !== 'lever' &&
+        !hasRunKey &&
+        countReachableExitKeySources(options.board, effectivePrimaryExitLock.lockKind) <= 0 &&
+        boardHasActionableProgressionPair(options.board);
+    if (effectivePrimaryExitLock.exitTile?.id !== tile.id) {
+        return {
+            lockKind: tile.dungeonExitLockKind ?? options.board.dungeonExitLockKind ?? 'none',
+            requiredLeverCount: tile.dungeonExitRequiredLeverCount ?? options.board.dungeonExitRequiredLeverCount ?? 0,
+            keyFallbackPending: false
+        };
+    }
+    return {
+        lockKind: effectivePrimaryExitLock.lockKind,
+        requiredLeverCount: effectivePrimaryExitLock.requiredLeverCount,
+        keyFallbackPending
+    };
+};
+
+export const getDungeonCardCopy = (tile: Tile, options?: DungeonCardCopyOptions): string => {
     if (!tile.dungeonCardKind) {
         return '';
     }
     if (tile.dungeonCardKind === 'exit') {
+        const { lockKind, requiredLeverCount, keyFallbackPending } = effectiveExitLockForTile(tile, options);
         const lock =
-            tile.dungeonExitLockKind && tile.dungeonExitLockKind !== 'none'
+            keyFallbackPending
+                ? ' No key source remains; clear remaining pairs to force this exit open.'
+                : lockKind !== 'none'
                 ? ` Requires ${
-                      tile.dungeonExitLockKind === 'lever'
-                          ? `${tile.dungeonExitRequiredLeverCount ?? 1} lever(s)`
-                          : `${tile.dungeonExitLockKind} key`
+                      lockKind === 'lever'
+                          ? `${requiredLeverCount || 1} lever(s)`
+                          : `${lockKind} key`
                   }.`
                 : ' Can be opened once revealed.';
         const route = tile.dungeonRouteType ? ` Leads to a ${tile.dungeonRouteType} route.` : '';

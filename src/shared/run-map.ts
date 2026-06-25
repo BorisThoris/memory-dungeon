@@ -900,12 +900,22 @@ export const repairDungeonRunMapProgression = (state: DungeonRunMapState): Dunge
         return node;
     });
 
+    const selectedForRepair = state.selectedNodeId
+        ? sourceNodes.find((node) => node.id === state.selectedNodeId) ?? null
+        : null;
     const repairedState = {
         ...state,
         act: actForFloor(current.floor),
         currentFloor: current.floor,
         currentNodeId: current.id,
-        selectedNodeId: state.selectedNodeId && edgeIds.has(state.selectedNodeId) ? state.selectedNodeId : null,
+        selectedNodeId:
+            state.selectedNodeId &&
+            edgeIds.has(state.selectedNodeId) &&
+            selectedForRepair &&
+            selectedForRepair.floor === current.floor + 1 &&
+            nodeCanBeEntered(selectedForRepair)
+                ? state.selectedNodeId
+                : null,
         nodes: repairedNodes
     };
     const report = inspectDungeonRunMapProgression(repairedState);
@@ -1084,6 +1094,11 @@ export const getCurrentDungeonNode = (state: DungeonRunMapState): DungeonRunNode
 
 export const getSelectedDungeonNode = (state: DungeonRunMapState): DungeonRunNode | null =>
     state.selectedNodeId ? state.nodes.find((node) => node.id === state.selectedNodeId) ?? null : null;
+
+export const getRepairedSelectedDungeonNode = (state: DungeonRunMapState): DungeonRunNode | null => {
+    const repaired = repairDungeonRunMapProgression(state);
+    return getSelectedDungeonNode(repaired);
+};
 
 export const getRevealedDungeonNodes = (state: DungeonRunMapState): DungeonRunNode[] =>
     state.nodes

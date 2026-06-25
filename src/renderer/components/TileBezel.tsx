@@ -20,7 +20,7 @@ import {
     type MeshStandardMaterial,
     type ShaderMaterial
 } from 'three';
-import type { GraphicsQualityPreset, HazardTileKind, Tile } from '../../shared/contracts';
+import type { BoardState, GraphicsQualityPreset, HazardTileKind, Tile } from '../../shared/contracts';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import { createCardArcaneGlowMaterial } from './cardArcaneGlowMaterial';
@@ -111,6 +111,7 @@ interface TileBezelProps {
     boardEntranceStaggerTileCount: number;
     boardRows: number;
     boardColumns: number;
+    board: BoardState;
     textureRevision: number;
     tile: Tile;
     transform: TileTransform;
@@ -193,6 +194,7 @@ const TileBezelInner = ({
     boardEntranceStaggerTileCount,
     boardRows,
     boardColumns,
+    board,
     textureRevision,
     tile,
     transform,
@@ -777,6 +779,7 @@ const TileBezelInner = ({
                         spotlightBountyOnBack={spotlightBountyOnBack}
                         spotlightWardOnBack={spotlightWardOnBack}
                         stickyFingerSlotMark={stickyFingerSlotMark}
+                        board={board}
                         tile={tile}
                         traitComboBack={traitComboBack}
                         traitRouteTargetBack={traitRouteTargetBack}

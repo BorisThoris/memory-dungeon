@@ -1,8 +1,9 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import type { BoardState, RunState, SaveData, Tile } from '../../shared/contracts';
 import { buildBoard, countFindablePairs } from '../../shared/board-generation';
-import { ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
+import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from '../../shared/dungeon-rules';
 import { createDailyRun, createNewRun, createPuzzleRun, createRunSummary } from '../../shared/game-core';
+import { createPlayablePathFixture, type PlayablePathFixtureId } from '../../shared/playable-path-fixtures';
 import { generateRouteChoices } from '../../shared/route-rules';
 import { rollRunEventRoom } from '../../shared/run-events';
 import { createDungeonRunMapState, revealDungeonChoices } from '../../shared/run-map';
@@ -104,6 +105,74 @@ const normalPairGroups = (board: BoardState): Tile[][] => {
     return [...groups.values()].filter((group) => group.length === 2);
 };
 
+const installPlayablePathFixture = (id: PlayablePathFixtureId): void => {
+    const fixture = createPlayablePathFixture(id);
+
+    useAppStore.setState({
+        run: fixture.run,
+        saveData: fixture.saveData,
+        settings: fixture.saveData.settings,
+        shopReturnMode: fixture.shopReturnMode ?? null,
+        view: fixture.view
+    });
+};
+
+const visibleProgressionSignature = (): string => {
+    const { run, shopReturnMode, view } = useAppStore.getState();
+    return [
+        view,
+        shopReturnMode ?? 'no-shop-return',
+        run?.status ?? 'no-run',
+        run?.board?.level ?? 'no-board',
+        run?.sideRoom?.id ?? 'no-side-room',
+        run?.relicOffer?.picksRemaining ?? 'no-relic-picks',
+        run?.relicOffer?.options.join(',') ?? 'no-relic-options',
+        run?.relicIds.join(',') ?? 'no-relics',
+        run?.pendingRouteCardPlan?.routeType ?? 'no-route-plan',
+        run?.lastLevelResult?.routeChoices?.map((choice) => choice.id).join(',') ?? 'no-route-choices'
+    ].join('|');
+};
+
+const driveOneVisibleProgressionStep = (): boolean => {
+    const { run, shopReturnMode, view } = useAppStore.getState();
+    if (!run) {
+        return false;
+    }
+
+    if (view === 'shop') {
+        useAppStore.getState().continueFromShop();
+        return true;
+    }
+
+    if (view === 'sideRoom') {
+        useAppStore.getState().claimSideRoomPrimary();
+        return true;
+    }
+
+    if (view !== 'playing' || run.status !== 'levelComplete') {
+        return false;
+    }
+
+    if (run.relicOffer?.options[0]) {
+        useAppStore.getState().pickRelic(run.relicOffer.options[0]);
+        return true;
+    }
+
+    const routeChoice = run.lastLevelResult?.routeChoices?.[0];
+    if (routeChoice && !run.pendingRouteCardPlan) {
+        useAppStore.getState().chooseRouteAndContinue(routeChoice.id);
+        return true;
+    }
+
+    if (run.shopOffers.length > 0 && shopReturnMode !== 'summary') {
+        useAppStore.getState().openShopFromLevelComplete();
+        return true;
+    }
+
+    useAppStore.getState().continueToNextLevel();
+    return true;
+};
+
 describe('useAppStore timers', () => {
     beforeEach(() => {
         window.localStorage.clear();
@@ -116,6 +185,46 @@ describe('useAppStore timers', () => {
         vi.useRealTimers();
         vi.clearAllMocks();
     });
+
+    it.each([
+        'floorClearWithRouteChoices',
+        'floorClearWithShop',
+        'floorClearWithShopLowGold',
+        'sideRoomPrimary',
+        'sideRoomChoice',
+        'sideRoomSkip',
+        'sideRoomThenShop',
+        'relicDraft'
+    ] satisfies PlayablePathFixtureId[])(
+        'drives the %s playable interlude fixture to the next playable state',
+        (fixtureId) => {
+            installPlayablePathFixture(fixtureId);
+
+            for (let step = 0; step < 6; step += 1) {
+                const { run, shopReturnMode, view } = useAppStore.getState();
+                if (
+                    view === 'playing' &&
+                    run?.status !== 'levelComplete' &&
+                    !run?.sideRoom &&
+                    !run?.relicOffer &&
+                    shopReturnMode === null
+                ) {
+                    break;
+                }
+
+                const before = visibleProgressionSignature();
+                expect(driveOneVisibleProgressionStep()).toBe(true);
+                expect(visibleProgressionSignature()).not.toBe(before);
+            }
+
+            const { run, shopReturnMode, view } = useAppStore.getState();
+            expect(view).toBe('playing');
+            expect(shopReturnMode).toBeNull();
+            expect(run?.status).not.toBe('levelComplete');
+            expect(run?.sideRoom).toBeNull();
+            expect(run?.relicOffer).toBeNull();
+        }
+    );
 
     it('starts the memorize countdown only after the current board reports ready', async () => {
         useAppStore.getState().startRun();
@@ -1998,6 +2107,141 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().boardPinMode).toBe(false);
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
         expect(gameSfxMocks.playPowerArmSfx).not.toHaveBeenCalled();
+    });
+
+    it('auto-selects a valid dungeon exit spend when the prompt action omits one', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_404 });
+        const exitTile = baseRun.board!.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)!;
+        const board: BoardState = {
+            ...baseRun.board!,
+            dungeonExitTileId: exitTile.id,
+            dungeonExitLockKind: 'iron',
+            matchedPairs: baseRun.board!.pairCount,
+            tiles: baseRun.board!.tiles.map((tile) =>
+                tile.id === exitTile.id
+                    ? {
+                          ...tile,
+                          state: 'flipped',
+                          dungeonCardKind: 'exit',
+                          dungeonCardState: 'revealed',
+                          dungeonExitLockKind: 'iron'
+                      }
+                    : {
+                          ...tile,
+                          state: 'matched'
+                      }
+            )
+        };
+        useAppStore.setState({
+            view: 'playing',
+            run: {
+                ...baseRun,
+                board,
+                status: 'playing',
+                dungeonKeys: { iron: 1 },
+                dungeonMasterKeys: 0
+            },
+            dungeonExitPromptOpen: true
+        });
+
+        useAppStore.getState().activateDungeonExitFromPrompt();
+
+        expect(useAppStore.getState().run?.status).toBe('levelComplete');
+        expect(useAppStore.getState().run?.dungeonKeys.iron).toBe(0);
+        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
+    });
+
+    it('keeps the dungeon exit prompt open when activation is refused', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_406 });
+        const exitTile = baseRun.board!.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)!;
+        const unmatchedPair = baseRun.board!.tiles.find((tile) => tile.pairKey !== EXIT_PAIR_KEY)!;
+        const board: BoardState = {
+            ...baseRun.board!,
+            dungeonExitTileId: exitTile.id,
+            dungeonExitLockKind: 'iron',
+            matchedPairs: Math.max(0, baseRun.board!.pairCount - 1),
+            tiles: baseRun.board!.tiles.map((tile) =>
+                tile.id === exitTile.id
+                    ? {
+                          ...tile,
+                          state: 'flipped',
+                          dungeonCardKind: 'exit',
+                          dungeonCardState: 'revealed',
+                          dungeonExitLockKind: 'iron'
+                      }
+                    : tile.pairKey === unmatchedPair.pairKey
+                      ? {
+                            ...tile,
+                            state: 'hidden'
+                        }
+                      : {
+                            ...tile,
+                            state: 'matched'
+                        }
+            )
+        };
+        const run: RunState = {
+            ...baseRun,
+            board,
+            status: 'playing',
+            dungeonKeys: {},
+            dungeonMasterKeys: 0
+        };
+        useAppStore.setState({
+            view: 'playing',
+            run,
+            dungeonExitPromptOpen: true
+        });
+
+        useAppStore.getState().activateDungeonExitFromPrompt('none');
+
+        expect(useAppStore.getState().run).toBe(run);
+        expect(useAppStore.getState().run?.status).toBe('playing');
+        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(true);
+    });
+
+    it('auto-opens terminal key-lock fallback exits from the prompt without keys', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 81_405 });
+        const exitTile = baseRun.board!.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY)!;
+        const board: BoardState = {
+            ...baseRun.board!,
+            dungeonExitTileId: exitTile.id,
+            dungeonExitLockKind: 'iron',
+            matchedPairs: baseRun.board!.pairCount,
+            tiles: baseRun.board!.tiles.map((tile) =>
+                tile.id === exitTile.id
+                    ? {
+                          ...tile,
+                          state: 'flipped',
+                          dungeonCardKind: 'exit',
+                          dungeonCardState: 'revealed',
+                          dungeonExitLockKind: 'iron'
+                      }
+                    : {
+                          ...tile,
+                          state: 'matched'
+                      }
+            )
+        };
+        useAppStore.setState({
+            view: 'playing',
+            run: {
+                ...baseRun,
+                board,
+                status: 'playing',
+                dungeonKeys: {},
+                dungeonMasterKeys: 0
+            },
+            dungeonExitPromptOpen: true
+        });
+
+        useAppStore.getState().activateDungeonExitFromPrompt();
+
+        expect(useAppStore.getState().run?.status).toBe('levelComplete');
+        expect(useAppStore.getState().run?.dungeonKeys.iron ?? 0).toBe(0);
+        expect(useAppStore.getState().run?.dungeonMasterKeys).toBe(0);
+        expect(useAppStore.getState().run?.board?.dungeonExitActivated).toBe(true);
+        expect(useAppStore.getState().dungeonExitPromptOpen).toBe(false);
     });
 
     it('clears stale in-run prompts and return modes when leaving or replacing a run', () => {

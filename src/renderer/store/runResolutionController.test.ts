@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { AchievementId, RunState, SaveData, Settings, ViewState } from '../../shared/contracts';
+import type { AchievementId, BoardState, RunState, SaveData, Settings, Tile, ViewState } from '../../shared/contracts';
 import { createNewRun } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
+import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
 import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
 import { createRunResolutionController } from './runResolutionController';
 
@@ -93,6 +94,27 @@ const createHarness = (run: RunState | null = null): Harness => {
         state
     };
 };
+
+const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
+    id,
+    label: id,
+    pairKey,
+    state,
+    symbol: id
+});
+
+const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState => ({
+    columns: 2,
+    featuredObjectiveId: null,
+    flippedTileIds: [],
+    floorArchetypeId: null,
+    level: 1,
+    matchedPairs: 0,
+    pairCount: Math.max(0, Math.floor(tiles.filter((candidate) => candidate.pairKey !== EXIT_PAIR_KEY).length / 2)),
+    rows: Math.ceil(tiles.length / 2),
+    tiles,
+    ...overrides
+});
 
 describe('runResolutionController', () => {
     it('applies level-complete runs, updates save data, and persists without achievement bridge work when no unlocks fire', () => {
@@ -196,6 +218,102 @@ describe('runResolutionController', () => {
         expect(harness.state.achievementBridgeNotice).toBe(
             'Some achievements could not sync with Steam. Your unlocks are saved in this build.'
         );
+    });
+
+    it('repairs impossible primary exit locks before storing a resolved run', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+        const harness = createHarness(baseRun);
+        const exitTile: Tile = {
+            ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'iron'
+        };
+        const lockedBoard = board([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), exitTile], {
+            dungeonExitLockKind: 'iron',
+            dungeonExitTileId: 'exit',
+            matchedPairs: 1,
+            pairCount: 1
+        });
+
+        harness.controller.applyResolvedRun({
+            ...baseRun,
+            board: lockedBoard,
+            status: 'playing'
+        });
+
+        expect(harness.state.run?.board?.dungeonExitLockKind).toBe('none');
+        expect(harness.state.run?.board?.tiles.find((candidate) => candidate.id === 'exit')?.dungeonExitLockKind).toBe(
+            'none'
+        );
+    });
+
+    it('keeps primary exit locks when the run already carries the required key', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+        const harness = createHarness(baseRun);
+        const exitTile: Tile = {
+            ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'iron'
+        };
+        const lockedBoard = board([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched'), exitTile], {
+            dungeonExitLockKind: 'iron',
+            dungeonExitTileId: 'exit',
+            matchedPairs: 1,
+            pairCount: 1
+        });
+
+        harness.controller.applyResolvedRun({
+            ...baseRun,
+            board: lockedBoard,
+            dungeonKeys: { iron: 1 },
+            status: 'playing'
+        });
+
+        expect(harness.state.run?.board?.dungeonExitLockKind).toBe('iron');
+        expect(harness.state.run?.board?.tiles.find((candidate) => candidate.id === 'exit')?.dungeonExitLockKind).toBe(
+            'iron'
+        );
+    });
+
+    it('defeats stale boss hazards before storing a resolved run', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+        const harness = createHarness(baseRun);
+        const clearedBossBoard = board([tile('a1', 'a', 'matched'), tile('a2', 'a', 'matched')], {
+            dungeonBossId: 'trap_warden',
+            dungeonObjectiveId: 'defeat_boss',
+            enemyHazards: [
+                {
+                    bossId: 'trap_warden',
+                    currentTileId: 'a1',
+                    damage: 1,
+                    hp: 1,
+                    id: 'stale-warden',
+                    kind: 'warden',
+                    label: 'Stale Warden',
+                    maxHp: 1,
+                    nextTileId: 'a2',
+                    pattern: 'guard',
+                    state: 'revealed'
+                }
+            ],
+            floorTag: 'boss',
+            matchedPairs: 1,
+            pairCount: 1
+        });
+
+        harness.controller.applyResolvedRun({
+            ...baseRun,
+            board: clearedBossBoard,
+            dungeonEnemiesDefeated: 0,
+            dungeonEnemiesDefeatedThisFloor: 0,
+            enemyHazardsDefeatedThisFloor: 0,
+            status: 'playing'
+        });
+
+        expect(harness.state.run?.board?.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
+        expect(harness.state.run?.dungeonEnemiesDefeated).toBe(1);
+        expect(harness.state.run?.dungeonEnemiesDefeatedThisFloor).toBe(1);
+        expect(harness.state.run?.enemyHazardsDefeatedThisFloor).toBe(1);
     });
 
     it('applies immediate game-over reset after resolved-run processing', () => {

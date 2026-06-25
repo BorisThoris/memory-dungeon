@@ -15,6 +15,7 @@ import { DUNGEON_BOSS_DEFEAT_SCORE } from './dungeon-boss-rules';
 import { enemyHazardProfileForBoss } from './dungeon-encounter-context-rules';
 import { DUNGEON_ENEMY_DEFEAT_SCORE } from './dungeon-match-reward-rules';
 import {
+    activeEnemyHazardsForBoard,
     clearFinalPairEnemyHazardOccupationForRun,
     defeatEnemyHazardOccupationOnFinalPair,
     enemyHazardEligibleTiles
@@ -239,14 +240,15 @@ export const createEnemyHazardsForBoard = ({
 };
 
 export const advanceEnemyHazardsOnBoard = (board: BoardState, steps: number = 1): BoardState => {
-    const hazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    const hazards = activeEnemyHazardsForBoard(board);
     if (hazards.length === 0 || steps <= 0) {
         return board;
     }
+    const activeIds = new Set(hazards.map((hazard) => hazard.id));
     const nextTurn = (board.enemyHazardTurn ?? 0) + steps;
     const occupied = new Set<string>();
     const nextHazards = board.enemyHazards!.map((hazard, index) => {
-        if (hazard.state === 'defeated') {
+        if (!activeIds.has(hazard.id)) {
             return hazard;
         }
         const currentTileId =
@@ -264,7 +266,7 @@ export const damageFirstRevealedEnemyHazard = (
     board: BoardState,
     amount: number
 ): { board: BoardState; defeated: number; bossDefeated: number; score: number } => {
-    const target = board.enemyHazards?.find((hazard) => hazard.state === 'revealed' && hazard.hp > 0);
+    const target = activeEnemyHazardsForBoard(board).find((hazard) => hazard.state === 'revealed' && hazard.hp > 0);
     if (!target || amount <= 0) {
         return { board, defeated: 0, bossDefeated: 0, score: 0 };
     }
@@ -297,7 +299,7 @@ export const applyEnemyHazardClick = (
 ): RunState => {
     const cleanedRun = clearFinalPairEnemyHazardOccupationForRun(run);
     const board = cleanedRun.board;
-    const hazard = board?.enemyHazards?.find((candidate) => candidate.currentTileId === tileId && candidate.state !== 'defeated');
+    const hazard = activeEnemyHazardsForBoard(board).find((candidate) => candidate.currentTileId === tileId);
     const tile = board?.tiles.find((candidate) => candidate.id === tileId) ?? null;
     const canApplyContact =
         cleanedRun.status === 'playing' ||
@@ -361,7 +363,13 @@ export const defeatEnemyHazardsForFloorClear = (
 const getLastUnmatchedRealPairTileIds = (board: BoardState): string[] | null => {
     const unresolvedByPairKey = new Map<string, string[]>();
     for (const tile of board.tiles) {
-        if (isSingletonUtilityPairKey(tile.pairKey) || tile.state === 'matched' || tile.state === 'removed' || isSprungTrapTile(tile)) {
+        if (
+            isSingletonUtilityPairKey(tile.pairKey) ||
+            tile.state === 'matched' ||
+            tile.state === 'removed' ||
+            tile.dungeonCardState === 'resolved' ||
+            isSprungTrapTile(tile)
+        ) {
             continue;
         }
         unresolvedByPairKey.set(tile.pairKey, [...(unresolvedByPairKey.get(tile.pairKey) ?? []), tile.id]);

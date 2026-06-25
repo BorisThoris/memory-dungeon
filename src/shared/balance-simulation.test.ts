@@ -54,6 +54,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.eventRewardPotential).toBeGreaterThan(0);
         expect(result.aggregate.roomRewardPotential).toBeGreaterThan(0);
         expect(result.aggregate.keyInflowPotential).toBeGreaterThan(0);
+        expect(result.aggregate.boardFairnessIssueCount).toBe(0);
         expect(result.aggregate.shopGoldInflowPotential).toBeGreaterThan(result.aggregate.totalShopGoldEarned);
         expect(result.aggregate.destroyChargeInflowPotential).toBeGreaterThan(0);
         expect(result.aggregate.peekChargeInflowPotential).toBeGreaterThan(0);
@@ -77,6 +78,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'avg_consumable_reward_potential_per_floor',
                 'avg_treasure_reward_pairs_per_floor',
                 'reward_band_spread',
+                'board_fairness_issue_floor_share',
                 'avg_live_shop_gold_inflow_per_floor',
                 'avg_route_reward_pairs_per_floor',
                 'avg_event_room_reward_potential_per_floor',
@@ -117,6 +119,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             'avg_consumable_reward_potential_per_floor',
             'avg_treasure_reward_pairs_per_floor',
             'reward_band_spread',
+            'board_fairness_issue_floor_share',
             'avg_live_shop_gold_inflow_per_floor',
             'avg_route_reward_pairs_per_floor',
             'avg_event_room_reward_potential_per_floor',

@@ -41,17 +41,89 @@ describe('gate:changed selector', () => {
             'src/shared/floor-mutator-schedule.ts',
             'src/shared/board-generation.ts',
             'src/shared/bonus-rewards.ts',
+            'src/shared/playthrough-solver.ts',
             'src/shared/contracts.ts'
         );
 
         expect(payload.gates.map((gate) => gate.id)).toContain('simHealth');
+        expect(payload.gates.map((gate) => gate.id)).toContain('simSoftlockSeeds');
+        expect(payload.gates.map((gate) => gate.id)).toContain('actionLoop');
         expect(payload.gates.map((gate) => gate.id)).toContain('systems');
-        expect(payload.reasons.filter((reason) => reason.gateId === 'simHealth')).toHaveLength(5);
+        expect(payload.gates.find((gate) => gate.id === 'simSoftlockSeeds')?.command).toBe(
+            'yarn gate:sim-softlock-seeds'
+        );
+        expect(payload.reasons.filter((reason) => reason.gateId === 'simHealth')).toHaveLength(6);
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'actionLoop' && reason.file === 'src/shared/playthrough-solver.ts'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/playthrough-solver.ts'
+            )
+        ).toBe(true);
+    });
+
+    it('selects the multi-seed softlock gate for dungeon exit rule changes', () => {
+        const payload = runGateChanged('src/shared/dungeon-exit-rules.ts');
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([{ id: 'simSoftlockSeeds', command: 'yarn gate:sim-softlock-seeds' }])
+        );
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/dungeon-exit-rules.ts'
+            )
+        ).toBe(true);
+    });
+
+    it('selects expensive softlock gates for fairness inspector and dungeon status changes', () => {
+        const payload = runGateChanged('src/shared/board-inspection.ts', 'src/shared/dungeon-board-status.ts');
+        const gateIds = payload.gates.map((gate) => gate.id);
+
+        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds']));
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/board-inspection.ts'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/dungeon-board-status.ts'
+            )
+        ).toBe(true);
+    });
+
+    it('selects expensive softlock gates for runtime progression repair changes', () => {
+        const payload = runGateChanged('src/shared/run-progression-repair.ts');
+        const gateIds = payload.gates.map((gate) => gate.id);
+
+        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds']));
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/run-progression-repair.ts'
+            )
+        ).toBe(true);
+    });
+
+    it('keeps core game rules on expensive gates without matching gameplay support files', () => {
+        const corePayload = runGateChanged('src/shared/game.ts');
+        expect(corePayload.gates.map((gate) => gate.id)).toEqual(
+            expect.arrayContaining(['actionLoop', 'simSoftlockSeeds'])
+        );
+
+        const supportPayload = runGateChanged('src/shared/gameplay-rules-edit-map.test.ts');
+        expect(supportPayload.gates.map((gate) => gate.id)).not.toContain('actionLoop');
+        expect(supportPayload.gates.map((gate) => gate.id)).not.toContain('simSoftlockSeeds');
+        expect(supportPayload.gates).toEqual([{ id: 'systems', command: 'yarn gate:systems' }]);
     });
 
     it('selects renderer, audio, asset, and persistence focused gates', () => {
         const payload = runGateChanged(
             'src/renderer/components/tileBoardPointerPick.ts',
+            'src/renderer/store/levelCompleteSurfaceState.ts',
+            'src/renderer/store/runResolutionController.ts',
             'src/renderer/audio/uiSfx.ts',
             'src/renderer/cardFace/cardIllustrationDraw.ts',
             'src/main/persistence.ts'
@@ -68,6 +140,13 @@ describe('gate:changed selector', () => {
                 { id: 'persistence', command: 'yarn gate:persistence' }
             ])
         );
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'rendererInput' &&
+                    reason.file === 'src/renderer/store/levelCompleteSurfaceState.ts'
+            )
+        ).toBe(true);
     });
 
     it('normalizes Windows paths and falls back to systems for unmapped files', () => {
@@ -75,5 +154,24 @@ describe('gate:changed selector', () => {
 
         expect(payload.paths).toEqual(['docs/notes/new-idea.md']);
         expect(payload.gates).toEqual([{ id: 'systems', command: 'yarn gate:systems' }]);
+    });
+
+    it('keeps gameplay edit-map doc changes on the systems gate even with code changes', () => {
+        const payload = runGateChanged(
+            'docs/agent/GAMEPLAY_RULES_EDIT_MAP.md',
+            'src/renderer/store/useAppStore.test.ts'
+        );
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([
+                { id: 'systems', command: 'yarn gate:systems' },
+                { id: 'rendererInput', command: 'yarn gate:renderer-input' }
+            ])
+        );
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'systems' && reason.file === 'docs/agent/GAMEPLAY_RULES_EDIT_MAP.md'
+            )
+        ).toBe(true);
     });
 });

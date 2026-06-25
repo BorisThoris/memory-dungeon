@@ -32,14 +32,14 @@ export const enemyHazardReferencesOnlyClearedTiles = (
     board: BoardState,
     hazard: NonNullable<BoardState['enemyHazards']>[number]
 ): boolean => {
-    if (!allRealBoardPairsCleared(board)) {
-        return false;
-    }
-    if (hazard.state !== 'defeated') {
+    const tileById = new Map(board.tiles.map((tile) => [tile.id, tile]));
+    const referencesOnlyClearedTiles = [hazard.currentTileId, hazard.nextTileId].every((tileId) =>
+        tileIsCleared(tileById.get(tileId))
+    );
+    if (referencesOnlyClearedTiles) {
         return true;
     }
-    const tileById = new Map(board.tiles.map((tile) => [tile.id, tile]));
-    return [hazard.currentTileId, hazard.nextTileId].every((tileId) => tileIsCleared(tileById.get(tileId)));
+    return allRealBoardPairsCleared(board) && hazard.state !== 'defeated';
 };
 
 export const activeEnemyHazardsForBoard = (board: BoardState | null | undefined): NonNullable<BoardState['enemyHazards']> =>

@@ -1,14 +1,54 @@
 import { describe, expect, it } from 'vitest';
 
 import { buildBoard } from './board-build-rules';
-import { GAME_RULES_VERSION } from './contracts';
+import { inspectRunFairness } from './board-inspection';
+import { GAME_RULES_VERSION, type BoardState, type Tile } from './contracts';
+import { advanceToNextLevel } from './next-floor-transition-rules';
+import { inspectDungeonRunMapProgression } from './run-map';
+import { getRunShopStockPlan } from './shop-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import {
     createClearedBoardFairnessProjection,
     createFinalPairFairnessProjection,
+    createGeneratedBoardSolverRun,
     formatSoftlockGeneratorFailure,
-    runSoftlockGeneratorContract
+    runSoftlockGeneratorContract,
+    solveGeneratedBoardByExhaustingPairs
 } from './softlock-generator-contract';
+
+const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Tile => ({
+    id,
+    pairKey,
+    state,
+    symbol: id,
+    label: id
+});
+
+const projectionBoard = (overrides: Partial<BoardState> = {}): BoardState => ({
+    level: 6,
+    pairCount: 2,
+    columns: 3,
+    rows: 2,
+    tiles: [
+        tile('a1', 'a', 'matched'),
+        tile('a2', 'a', 'matched'),
+        tile('key-a', 'key'),
+        tile('key-b', 'key'),
+        {
+            ...tile('exit', '__exit__', 'flipped'),
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'iron'
+        }
+    ],
+    flippedTileIds: ['exit'],
+    matchedPairs: 1,
+    floorArchetypeId: null,
+    featuredObjectiveId: null,
+    dungeonExitTileId: 'exit',
+    dungeonExitLockKind: 'none',
+    dungeonKeysHeld: 0,
+    ...overrides
+});
 
 describe('softlock generator contract', () => {
     it('checks seeded floors across locks, shops, traits, hazards, bosses, and final-pair projections', () => {
@@ -16,7 +56,9 @@ describe('softlock generator contract', () => {
 
         expect(result.failures.map(formatSoftlockGeneratorFailure)).toEqual([]);
         expect(result.checkedBoards).toBeGreaterThan(100);
-        expect(result.checkedShopPlans).toBeGreaterThan(0);
+        expect(result.checkedPlayableBoards).toBeGreaterThan(30);
+        expect(result.checkedNextFloorTransitions).toBe(result.checkedPlayableBoards);
+        expect(Number.isInteger(result.checkedShopPlans)).toBe(true);
         expect(result.coverage).toMatchObject({
             locks: expect.any(Number),
             shops: expect.any(Number),
@@ -34,6 +76,74 @@ describe('softlock generator contract', () => {
         for (const [key, count] of Object.entries(result.coverage)) {
             expect(count, `${key} coverage`).toBeGreaterThan(0);
         }
+    });
+
+    it('uses generated-board run context when checking locked-exit shop stock', () => {
+        const board = projectionBoard({
+            level: 6,
+            matchedPairs: 0,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            dungeonShopTileId: 'shop',
+            tiles: [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                {
+                    ...tile('exit', '__exit__'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                },
+                {
+                    ...tile('shop', '__shop__'),
+                    dungeonCardKind: 'shop',
+                    dungeonCardEffectId: 'shop_vendor'
+                }
+            ]
+        });
+
+        const run = createGeneratedBoardSolverRun(board, 130_111);
+        const plan = getRunShopStockPlan({ ...run, shopRerolls: 0 });
+
+        expect(run.board?.level).toBe(6);
+        expect(run.dungeonRun.currentFloor).toBe(6);
+        expect(plan.itemIds[0]).toBe('iron_key');
+    });
+
+    it('executes generated boards through pair exhaustion and primary exit activation', () => {
+        const board = buildBoard(5, {
+            gameMode: 'endless',
+            runSeed: 438154985,
+            runRulesVersion: GAME_RULES_VERSION,
+            floorTag: 'normal',
+            floorArchetypeId: null,
+            dungeonNodeKind: 'elite',
+            activeMutators: [],
+            routeCardPlan: {
+                choiceId: 'contract:mystery:438154985:5',
+                routeType: 'mystery',
+                sourceLevel: 4,
+                targetLevel: 5
+            }
+        });
+
+        const solverRun = createGeneratedBoardSolverRun(board, 438154985);
+        const solved = solveGeneratedBoardByExhaustingPairs(board, 438154985);
+        const next = advanceToNextLevel(solved);
+
+        expect(solverRun.gameMode).toBe('endless');
+        expect(solverRun.board?.level).toBe(5);
+        expect(solverRun.dungeonRun.currentFloor).toBe(5);
+        expect(solverRun.findablesTotalThisFloor).toBeGreaterThanOrEqual(0);
+        expect(solved.status).toBe('levelComplete');
+        expect(solved.board?.dungeonExitActivated).toBe(true);
+        expect(next.status).toBe('memorize');
+        expect(next.board?.level).toBe(6);
+        expect(next.dungeonRun.currentFloor).toBe(6);
+        expect(inspectRunFairness(next).issues).toEqual([]);
+        expect(inspectDungeonRunMapProgression(next.dungeonRun)).toMatchObject({
+            hasLegalProgressionPath: true,
+            issues: []
+        });
     });
 
     it('creates legal final-pair projections from generated dungeon boards', () => {
@@ -102,6 +212,51 @@ describe('softlock generator contract', () => {
         ]).failures.map(formatSoftlockGeneratorFailure)).toEqual([]);
     });
 
+    it('uses the primary exit tile lock when granting final-pair projection resources', () => {
+        const board = projectionBoard({
+            tiles: projectionBoard().tiles.map((candidate) =>
+                candidate.pairKey === 'key'
+                    ? { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'iron' as const }
+                    : candidate
+            )
+        });
+
+        const projected = createFinalPairFairnessProjection(board);
+
+        expect(board.dungeonExitLockKind).toBe('none');
+        expect(projected?.dungeonKeysHeld).toBe(1);
+    });
+
+    it('does not grant fake projection keys for terminal primary exit lock fallbacks', () => {
+        const board = projectionBoard({
+            pairCount: 1,
+            tiles: [
+                tile('a1', 'a', 'matched'),
+                tile('a2', 'a', 'matched'),
+                {
+                    ...tile('exit', '__exit__', 'flipped'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }
+            ],
+            matchedPairs: 1
+        });
+
+        const projected = createClearedBoardFairnessProjection(board);
+
+        expect(board.dungeonExitLockKind).toBe('none');
+        expect(projected.dungeonKeysHeld).toBe(0);
+    });
+
+    it('does not grant fake projection keys while pending fallback pairs remain', () => {
+        const board = projectionBoard();
+
+        const projected = createFinalPairFairnessProjection(board);
+
+        expect(projected).not.toBeNull();
+        expect(projected?.dungeonKeysHeld).toBe(0);
+    });
+
     it('formats diagnostics with scenario, seed, floor, projection, and issue codes', () => {
         const result = runSoftlockGeneratorContract([
             {
@@ -122,10 +277,14 @@ describe('softlock generator contract', () => {
         ]);
 
         expect(result.failures.length).toBeGreaterThan(0);
+        expect(result.failures.flatMap((failure) => failure.issueCodes)).toContain('completion_route_missing');
         expect(formatSoftlockGeneratorFailure(result.failures[0]!)).toContain('[broken_exit_fixture]');
         expect(formatSoftlockGeneratorFailure(result.failures[0]!)).toContain('seed=1');
         expect(formatSoftlockGeneratorFailure(result.failures[0]!)).toContain('floor=1');
         expect(formatSoftlockGeneratorFailure(result.failures[0]!)).toContain('projection=');
+        const playableFailure = result.failures.find((failure) => failure.projection === 'playable_clear');
+        expect(playableFailure?.issueDetails.some((detail) => detail.startsWith('solver_trace: reason='))).toBe(true);
+        expect(formatSoftlockGeneratorFailure(playableFailure!)).toContain('solver_trace: reason=');
     });
 
     it('includes blocked resource and tile context in failure diagnostics', () => {

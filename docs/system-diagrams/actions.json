@@ -34,7 +34,7 @@
             "system": "Board Generation",
             "title": "Extend the softlock matrix for every new blocker",
             "status": "done",
-            "command": "yarn gate:action-loop",
+            "command": "yarn gate:sim-softlock-seeds",
             "minimumEvidence": 5
         },
         {

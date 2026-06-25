@@ -1,5 +1,6 @@
 export {
     activateDungeonExit,
+    chooseDungeonExitActivationSpend,
     EXIT_PAIR_KEY,
     revealDungeonRoom,
     ROOM_PAIR_KEY,

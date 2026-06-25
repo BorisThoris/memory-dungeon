@@ -7,7 +7,9 @@ export {
 } from './board-tile-generation-rules';
 export {
     boardHasGlassDecoy,
+    boardHasActionableProgressionPair,
     countFullyHiddenPairs,
+    getEffectivePrimaryExitLock,
     getWildTileIdFromBoard,
     inspectBoardFairness,
     inspectRunFairness,

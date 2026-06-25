@@ -5,11 +5,11 @@ import type {
 } from './contracts';
 import {
     countReachableExitKeySources,
-    countReachableExitLeverSources
+    countReachableExitLeverSources,
+    getEffectivePrimaryExitLock
 } from './board-inspection';
 import {
     DECOY_PAIR_KEY,
-    EXIT_PAIR_KEY,
     ROOM_PAIR_KEY,
     SHOP_PAIR_KEY,
     WILD_PAIR_KEY
@@ -31,10 +31,8 @@ export const PEEK_REVEALED_ROUTE_SPECIALS = new Set<RouteSpecialKind>([
 ]);
 
 const pairIsExitCriticalDestroyTarget = (board: BoardState, pairTiles: readonly BoardState['tiles'][number][]): boolean => {
-    const primaryExit = board.dungeonExitTileId
-        ? board.tiles.find((tile) => tile.id === board.dungeonExitTileId)
-        : board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
-    const lockKind = primaryExit?.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
+    const primaryExitLock = getEffectivePrimaryExitLock({ board });
+    const lockKind = primaryExitLock.lockKind;
     if (lockKind === 'none') {
         return false;
     }
@@ -42,8 +40,7 @@ const pairIsExitCriticalDestroyTarget = (board: BoardState, pairTiles: readonly 
         lockKind === 'lever' &&
         pairTiles.some((tile) => tile.dungeonCardKind === 'lever' && tile.dungeonCardEffectId === 'lever_floor')
     ) {
-        const requiredLeverCount = primaryExit?.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount ?? 0;
-        return countReachableExitLeverSources(board) - 1 < requiredLeverCount;
+        return countReachableExitLeverSources(board) - 1 < primaryExitLock.requiredLeverCount;
     }
     if (lockKind !== 'lever') {
         const keyKind = lockKind as DungeonKeyKind;

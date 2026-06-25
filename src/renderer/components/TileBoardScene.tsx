@@ -374,6 +374,7 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             <TileBoardSceneLights colors={colors} compact={compact} renderQuality={sceneRenderQuality} />
 
             <TileBoardSceneBoardGroup
+                board={board}
                 boardColumns={totalColumns}
                 boardEntranceMotionBudgetMs={boardEntranceMotionBudgetMs}
                 boardEntranceMotionDeadlineMs={boardEntranceMotionDeadlineMs}

@@ -158,7 +158,7 @@ export const getCardFeedbackStatesAttr = ({
         if (tile.dungeonCardKind === 'enemy') {
             add('enemy-card');
         }
-        const dungeonUtilityKind = getDungeonUtilityReadabilityKind(tile);
+        const dungeonUtilityKind = getDungeonUtilityReadabilityKind(tile, board);
         if (dungeonUtilityKind) {
             add(dungeonUtilityKind);
         }

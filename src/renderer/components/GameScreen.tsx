@@ -30,7 +30,7 @@ import {
     getDungeonObjectiveStatus
 } from '../../shared/dungeon-rules';
 import { getMemoryRecallFeedback } from '../../shared/memory-recall-feedback';
-import { getDungeonMapPresentation, getDungeonRouteDecisionPresentation } from '../../shared/run-map';
+import { getDungeonMapPresentation, getDungeonRouteDecisionPresentation, getRepairedSelectedDungeonNode } from '../../shared/run-map';
 import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
@@ -188,6 +188,22 @@ const dungeonExitLockLabel = (lockKind: ReturnType<typeof getDungeonExitStatus>[
         return 'Lever-sealed exit';
     }
     return `${lockKind.charAt(0).toUpperCase()}${lockKind.slice(1)} key exit`;
+};
+
+const dungeonExitPromptTitle = (status: ReturnType<typeof getDungeonExitStatus>): string =>
+    status.keyFallbackPending ? 'Key fallback pending' : dungeonExitLockLabel(status.lockKind);
+
+const dungeonExitPromptLockLine = (status: ReturnType<typeof getDungeonExitStatus>, run: RunState): string => {
+    if (status.keyFallbackPending) {
+        return 'No key source remains; clear the remaining pairs to force this exit open.';
+    }
+    if (status.lockKind === 'lever') {
+        return `${status.leverCount}/${status.requiredLeverCount} floor levers ready.`;
+    }
+    if (status.lockKind === 'none') {
+        return 'No key required.';
+    }
+    return `Keys: ${run.dungeonKeys[status.lockKind] ?? 0} matching, ${run.dungeonMasterKeys} master.`;
 };
 
 const getClearLifeBonusLabel = (result: NonNullable<RunState['lastLevelResult']>): string | null => {
@@ -973,21 +989,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         : 'next floor adds deterministic mystery veils.'
               }`
             : null;
-    const pendingDungeonNode = run.pendingRouteCardPlan
-        ? run.dungeonRun?.nodes.find((node) => node.id === run.pendingRouteCardPlan?.choiceId) ?? null
-        : null;
+    const pendingDungeonNode = run.pendingRouteCardPlan ? getRepairedSelectedDungeonNode(run.dungeonRun) : null;
     const dungeonExitStatus = getDungeonExitStatus(run);
     const dungeonExitRouteLine = dungeonExitStatus.routeType
         ? `${routeTypeLabel(dungeonExitStatus.routeType)} beyond this door.`
         : 'This stair leaves the current floor.';
-    const dungeonExitLockLine =
-        dungeonExitStatus.lockKind === 'lever'
-            ? `${dungeonExitStatus.leverCount}/${dungeonExitStatus.requiredLeverCount} floor levers ready.`
-            : dungeonExitStatus.lockKind === 'none'
-              ? 'No key required.'
-              : `Keys: ${run.dungeonKeys[dungeonExitStatus.lockKind] ?? 0} matching, ${
-                    run.dungeonMasterKeys
-                } master.`;
+    const dungeonExitLockLine = dungeonExitPromptLockLine(dungeonExitStatus, run);
     const activeRouteTiles = run.board?.tiles ?? [];
     const activeRouteSpecialKinds = activeRouteTiles
         .filter(
@@ -1610,7 +1617,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         ornamentalHeaderPlate
                         subtitle={`${dungeonExitRouteLine} ${dungeonExitLockLine}`}
                         testId="dungeon-exit-overlay"
-                        title={dungeonExitLockLabel(dungeonExitStatus.lockKind)}
+                        title={dungeonExitPromptTitle(dungeonExitStatus)}
                     >
                         {dungeonExitStatus.lockedReason ? (
                             <p className={styles.modalNote}>{dungeonExitStatus.lockedReason}</p>

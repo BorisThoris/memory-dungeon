@@ -12,7 +12,6 @@ import { flipTile, resolveBoardTurn } from './turn-resolution';
 import {
     activateDungeonExit,
     EXIT_PAIR_KEY,
-    getDungeonExitStatus,
     revealDungeonExit
 } from './dungeon-rules';
 import {
@@ -168,19 +167,14 @@ const pairTileIds = (board: BoardState): string[][] => {
 };
 
 const leaveThroughExit = (run: RunState): RunState => {
-    const exitTile = run.board?.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
+    const exitTile = run.board?.dungeonExitTileId
+        ? run.board.tiles.find((tile) => tile.id === run.board?.dungeonExitTileId)
+        : run.board?.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
     if (!exitTile || run.status !== 'playing') {
         return run;
     }
     const revealed = revealDungeonExit(run, exitTile.id);
-    const exitStatus = getDungeonExitStatus(revealed);
-    if (exitStatus.canActivateWithKey) {
-        return activateDungeonExit(revealed, 'key');
-    }
-    if (exitStatus.canActivateWithMasterKey) {
-        return activateDungeonExit(revealed, 'master_key');
-    }
-    return activateDungeonExit(revealed, 'none');
+    return activateDungeonExit(revealed);
 };
 
 const clearPlayableFloor = (run: RunState): RunState => {

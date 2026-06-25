@@ -193,6 +193,48 @@ describe('getMemoryRecallFeedback', () => {
         ]);
     });
 
+    it('ignores stale patrol overlays on fully cleared boards for memory pressure', () => {
+        const run = makeRun(
+            [
+                makeTile('a1', 'A', 'A', { state: 'matched' }),
+                makeTile('a2', 'A', 'A', { state: 'matched' })
+            ],
+            {
+                board: {
+                    ...makeRun([]).board!,
+                    level: 3,
+                    pairCount: 1,
+                    columns: 2,
+                    rows: 1,
+                    matchedPairs: 1,
+                    tiles: [
+                        makeTile('a1', 'A', 'A', { state: 'matched' }),
+                        makeTile('a2', 'A', 'A', { state: 'matched' })
+                    ],
+                    enemyHazards: [
+                        {
+                            id: 'sentinel-stale',
+                            kind: 'sentinel',
+                            label: 'Sentinel',
+                            currentTileId: 'a1',
+                            nextTileId: 'a2',
+                            pattern: 'patrol',
+                            state: 'revealed',
+                            damage: 1,
+                            hp: 1,
+                            maxHp: 1
+                        }
+                    ]
+                }
+            } satisfies Partial<RunState>
+        );
+
+        const feedback = getMemoryRecallFeedback(run);
+
+        expect(feedback.pressure).toBe('clear');
+        expect(feedback.enemies.map((line) => line.id)).not.toContain('enemy-hazard-memory');
+    });
+
     it('includes path memory from route-world boards and dungeon map state', () => {
         const dungeonRun = createDungeonRunMapState(7, 1, 2);
         const run = makeRun(

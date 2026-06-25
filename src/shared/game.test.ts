@@ -161,6 +161,10 @@ import {
     formatDungeonCoverageFailure,
     missingCoverage
 } from './test/dungeon-feature-coverage';
+import {
+    DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
+    getScheduledSoftlockFloorOptions
+} from './softlock-generator-contract';
 
 const isSprungTrapForTest = (tile: Tile): boolean =>
     tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved' && tile.state === 'flipped';
@@ -490,20 +494,79 @@ const withoutTileTraits = (run: RunState): RunState => ({
 });
 
 const leaveThroughExit = (run: RunState): RunState => {
-    const exitTile = run.board?.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
+    const exitTile = run.board?.dungeonExitTileId
+        ? run.board.tiles.find((tile) => tile.id === run.board?.dungeonExitTileId)
+        : run.board?.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY);
     if (!exitTile || run.status !== 'playing') {
         return run;
     }
-    let current = revealDungeonExit(run, exitTile.id);
-    const exitStatus = getDungeonExitStatus(current);
-    if (exitStatus.canActivateWithKey) {
-        current = activateDungeonExit(current, 'key');
-    } else if (exitStatus.canActivateWithMasterKey) {
-        current = activateDungeonExit(current, 'master_key');
-    } else {
-        current = activateDungeonExit(current, 'none');
+    const current = revealDungeonExit(run, exitTile.id);
+    return activateDungeonExit(current);
+};
+
+const SOLVER_IGNORED_PAIR_KEYS = new Set([EXIT_PAIR_KEY, SHOP_PAIR_KEY, ROOM_PAIR_KEY, WILD_PAIR_KEY, DECOY_PAIR_KEY]);
+
+const solveBoardByExhaustingPairs = (board: BoardState, runSeed: number, activateExit = true): RunState => {
+    const base = finishMemorizePhase(
+        createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed })
+    );
+    let run: RunState = {
+        ...base,
+        board,
+        status: 'playing',
+        findablesTotalThisFloor: countFindablePairs(board.tiles)
+    };
+
+    for (let pass = 0; pass < board.pairCount + 4 && run.status === 'playing'; pass += 1) {
+        const nextPair = [...new Set(run.board!.tiles.map((tile) => tile.pairKey))]
+            .filter((pairKey) => !SOLVER_IGNORED_PAIR_KEYS.has(pairKey))
+            .map((pairKey) => run.board!.tiles.filter((tile) => tile.pairKey === pairKey && tile.state === 'hidden'))
+            .find((tiles) => tiles.length === 2);
+        if (!nextPair) {
+            break;
+        }
+        run = resolveBoardTurn(flipTile(flipTile(run, nextPair[0]!.id), nextPair[1]!.id));
     }
-    return current;
+
+    if (!activateExit) {
+        return run;
+    }
+
+    const exitId = run.board!.dungeonExitTileId;
+    if (exitId) {
+        run = activateDungeonExit(revealDungeonExit(run, exitId));
+    }
+    return run;
+};
+
+const solveGeneratedFloorByExhaustingPairs = (input: {
+    level: number;
+    runSeed: number;
+    floorTag?: 'normal' | 'boss' | 'breather';
+    floorArchetypeId?: FloorArchetypeId | null;
+    activeMutators?: MutatorId[];
+    dungeonNodeKind?: DungeonRunNodeKind | null;
+    routeType?: RouteNodeType;
+    activateExit?: boolean;
+}): RunState => {
+    const board = buildBoard(input.level, {
+        runSeed: input.runSeed,
+        runRulesVersion: GAME_RULES_VERSION,
+        floorTag: input.floorTag ?? 'normal',
+        floorArchetypeId: input.floorArchetypeId ?? null,
+        gameMode: 'endless',
+        activeMutators: input.activeMutators ?? [],
+        dungeonNodeKind: input.dungeonNodeKind ?? null,
+        routeCardPlan: input.routeType
+            ? {
+                  choiceId: `solver:${input.routeType}:${input.runSeed}:${input.level}`,
+                  routeType: input.routeType,
+                  sourceLevel: Math.max(1, input.level - 1),
+                  targetLevel: input.level
+            }
+            : undefined
+    });
+    return solveBoardByExhaustingPairs(board, input.runSeed, input.activateExit !== false);
 };
 
 const makeEnemyHazard = (
@@ -1192,6 +1255,55 @@ describe('REG-017 route choices', () => {
         expect(next.dungeonRun.nodes.filter((node) => node.status === 'skipped')).toHaveLength(2);
         expect(next.board!.floorArchetypeId).toBe('rush_recall');
         expect(next.board!.dungeonObjectiveId).toBe('pacify_floor');
+    });
+
+    it('does not let stale selected route nodes shape the next generated board', () => {
+        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_214 }), 1);
+        const greedId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'greed')!.id;
+        const chosen = applyRouteChoiceOutcome(cleared, greedId).run;
+        const staleSibling = chosen.dungeonRun.nodes.find(
+            (node) => node.floor === 2 && node.id !== greedId && node.status === 'skipped'
+        )!;
+        const staleSelected = {
+            ...chosen,
+            dungeonRun: {
+                ...chosen.dungeonRun,
+                selectedNodeId: staleSibling.id,
+                nodes: chosen.dungeonRun.nodes.map((node) =>
+                    node.id === staleSibling.id ? { ...node, kind: 'boss' as const } : node
+                )
+            }
+        };
+
+        const next = advanceToNextLevel(staleSelected);
+
+        expect(next.dungeonRun.currentNodeId).not.toBe(staleSibling.id);
+        expect(next.dungeonRun.selectedNodeId).toBeNull();
+        expect(next.board!.floorTag).not.toBe('boss');
+        expect(next.board!.dungeonObjectiveId).not.toBe('defeat_boss');
+    });
+
+    it('does not enter selected route nodes that skip beyond the next board floor', () => {
+        const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 17_215 }), 1);
+        const greedId = cleared.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'greed')!.id;
+        const chosen = applyRouteChoiceOutcome(cleared, greedId).run;
+        const futureGreed = {
+            ...chosen,
+            dungeonRun: {
+                ...chosen.dungeonRun,
+                nodes: chosen.dungeonRun.nodes.map((node) =>
+                    node.id === greedId ? { ...node, floor: 3, depth: 3, kind: 'boss' as const } : node
+                )
+            }
+        };
+
+        const next = advanceToNextLevel(futureGreed);
+
+        expect(next.board!.level).toBe(2);
+        expect(next.dungeonRun.currentFloor).toBe(next.board!.level);
+        expect(next.dungeonRun.currentNodeId).not.toBe(greedId);
+        expect(next.board!.floorTag).not.toBe('boss');
+        expect(next.board!.dungeonObjectiveId).not.toBe('defeat_boss');
     });
 
     it('makes dungeon node kinds visibly alter encounter board shape', () => {
@@ -1894,126 +2006,100 @@ describe('REG-017 route choices', () => {
         expect(getDungeonObjectiveStatus(run)).toMatchObject({ completed: true, progress: boss.maxHp, required: boss.maxHp });
     });
 
-    it('does not leave generated boss floors stuck after every normal pair is matched', () => {
-        const scenarios = [
-            { level: 7, runSeed: 172_707, floorArchetypeId: 'trap_hall' as FloorArchetypeId },
-            { level: 9, runSeed: 182_009, floorArchetypeId: 'rush_recall' as FloorArchetypeId },
-            { level: 12, runSeed: 192_012, floorArchetypeId: null }
-        ];
+    it('solves generated scheduled floors after exhausting legal pair matches and activating the exit', () => {
+        const seeds = [42_001, 172_707, 182_009, 192_012] as const;
 
-        for (const scenario of scenarios) {
-            const board = buildBoard(scenario.level, {
-                runSeed: scenario.runSeed,
-                runRulesVersion: GAME_RULES_VERSION,
-                floorTag: 'boss',
-                floorArchetypeId: scenario.floorArchetypeId,
-                gameMode: 'endless',
-                activeMutators: scenario.floorArchetypeId === 'rush_recall' ? ['short_memorize', 'wide_recall'] : []
-            });
-            const base = finishMemorizePhase(
-                createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed: scenario.runSeed })
-            );
-            let run: RunState = {
-                ...base,
-                board,
-                status: 'playing',
-                findablesTotalThisFloor: countFindablePairs(board.tiles)
-            };
-            const matchablePairs = [...new Set(board.tiles.map((tile) => tile.pairKey))]
-                .map((pairKey) => board.tiles.filter((tile) => tile.pairKey === pairKey))
-                .filter(
-                    (tiles) =>
-                        tiles.length === 2 &&
-                        ![EXIT_PAIR_KEY, SHOP_PAIR_KEY, ROOM_PAIR_KEY, WILD_PAIR_KEY].includes(tiles[0]!.pairKey)
-                );
+        for (const runSeed of seeds) {
+            for (let level = 1; level <= 12; level += 1) {
+                const run = solveGeneratedFloorByExhaustingPairs({
+                    level,
+                    runSeed,
+                    ...getScheduledSoftlockFloorOptions(level)
+                });
 
-            for (const pair of matchablePairs) {
-                const currentTiles = pair
-                    .map((tile) => run.board?.tiles.find((candidate) => candidate.id === tile.id))
-                    .filter((tile): tile is Tile => tile != null && tile.state === 'hidden');
-                if (currentTiles.length !== 2 || run.status !== 'playing') {
-                    continue;
-                }
-                run = resolveBoardTurn(flipTile(flipTile(run, currentTiles[0]!.id), currentTiles[1]!.id));
+                expect(run.status, `seed ${runSeed} level ${level}`).toBe('levelComplete');
+                expect(
+                    run.board!.enemyHazards?.filter((hazard) => hazard.bossId != null && hazard.state !== 'defeated') ?? [],
+                    `seed ${runSeed} level ${level}`
+                ).toEqual([]);
             }
-
-            expect(getDungeonObjectiveStatus(run), `seed ${scenario.runSeed} level ${scenario.level}`).toMatchObject({
-                objectiveId: 'defeat_boss',
-                completed: true
-            });
-            expect(getDungeonBossReadModel(run), `seed ${scenario.runSeed} level ${scenario.level}`).toMatchObject({
-                phase: 'defeated',
-                activeMovingPatrolCount: 0
-            });
-            expect(getDungeonExitStatus(run).lockedReason, `seed ${scenario.runSeed} level ${scenario.level}`).not.toMatch(
-                /defeat/i
-            );
-            const exitId = run.board!.dungeonExitTileId!;
-            const exited = activateDungeonExit(revealDungeonExit(run, exitId), 'none');
-            expect(exited.status, `seed ${scenario.runSeed} level ${scenario.level}`).toBe('levelComplete');
         }
     });
 
-    it('solves generated floors across seeds after exhausting legal pair matches and activating the exit', () => {
-        const scenarios = [2, 4, 7, 9, 12] as const;
-        const seeds = [42_001, 172_707, 182_009] as const;
+    it('solves generated route-pressure floors after exhausting legal pair matches and activating the exit', () => {
+        const seeds = [70_101, 70_202] as const;
+        const routeTypes: RouteNodeType[] = ['safe', 'greed', 'mystery'];
 
         for (const runSeed of seeds) {
-            for (const level of scenarios) {
-                const floorTag = level === 7 || level === 9 ? 'boss' : 'normal';
-                const floorArchetypeId =
-                    level === 4
-                        ? 'shadow_read'
-                        : level === 7
-                          ? 'trap_hall'
-                          : level === 9
-                            ? 'rush_recall'
-                            : null;
-                const board = buildBoard(level, {
-                    runSeed,
-                    runRulesVersion: GAME_RULES_VERSION,
-                    floorTag,
-                    floorArchetypeId,
-                    gameMode: 'endless',
-                    activeMutators: level === 9 ? ['short_memorize', 'wide_recall'] : []
-                });
-                const base = finishMemorizePhase(
-                    createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless', runSeed })
-                );
-                let run: RunState = {
-                    ...base,
-                    board,
-                    status: 'playing',
-                    findablesTotalThisFloor: countFindablePairs(board.tiles)
-                };
-                const pairKeys = [...new Set(board.tiles.map((tile) => tile.pairKey))];
-                for (const pairKey of pairKeys) {
-                    const currentPair = run.board!.tiles.filter(
-                        (tile) =>
-                            tile.pairKey === pairKey &&
-                            tile.state === 'hidden' &&
-                            ![EXIT_PAIR_KEY, SHOP_PAIR_KEY, ROOM_PAIR_KEY, WILD_PAIR_KEY].includes(tile.pairKey)
-                    );
-                    if (currentPair.length !== 2 || run.status !== 'playing') {
-                        continue;
-                    }
-                    run = resolveBoardTurn(flipTile(flipTile(run, currentPair[0]!.id), currentPair[1]!.id));
+            for (const level of [2, 4, 6, 8] as const) {
+                for (const routeType of routeTypes) {
+                    const run = solveGeneratedFloorByExhaustingPairs({ level, runSeed, routeType });
+
+                    expect(run.status, `seed ${runSeed} level ${level} route ${routeType}`).toBe('levelComplete');
+                    expect(
+                        run.board!.enemyHazards?.filter((hazard) => hazard.bossId != null && hazard.state !== 'defeated') ?? [],
+                        `seed ${runSeed} level ${level} route ${routeType}`
+                    ).toEqual([]);
                 }
-
-                const exitId = run.board!.dungeonExitTileId;
-                expect(exitId, `seed ${runSeed} level ${level}`).toBeTruthy();
-                run = revealDungeonExit(run, exitId!);
-                const exitStatus = getDungeonExitStatus(run);
-                const activation =
-                    exitStatus.canActivateWithMasterKey
-                        ? 'master_key'
-                        : exitStatus.canActivateWithKey
-                          ? 'key'
-                          : 'none';
-                run = activateDungeonExit(run, activation);
-
-                expect(run.status, `seed ${runSeed} level ${level}`).toBe('levelComplete');
             }
+        }
+    });
+
+    it('solves the default softlock contract scenario matrix through dynamic pair play', () => {
+        for (const scenario of DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS) {
+            for (const runSeed of scenario.seeds) {
+                for (const level of scenario.floors) {
+                    const board = buildBoard(level, scenario.optionsForFloor({ seed: runSeed, floor: level }));
+                    const run = solveBoardByExhaustingPairs(board, runSeed);
+
+                    expect(
+                        run.status,
+                        `${scenario.id} seed ${runSeed} level ${level} ${run.board?.floorArchetypeId ?? 'none'}`
+                    ).toBe('levelComplete');
+                    expect(
+                        run.board!.enemyHazards?.filter((hazard) => hazard.bossId != null && hazard.state !== 'defeated') ?? [],
+                        `${scenario.id} seed ${runSeed} level ${level}`
+                    ).toEqual([]);
+                }
+            }
+        }
+    });
+
+    it('solves generated boss floors without leaving stale boss locks or undefeated overlays', () => {
+        const scenarios = [
+            { level: 7, runSeed: 172_707, floorArchetypeId: 'trap_hall' as FloorArchetypeId, activeMutators: ['glass_floor', 'sticky_fingers'] as MutatorId[] },
+            { level: 9, runSeed: 182_009, floorArchetypeId: 'rush_recall' as FloorArchetypeId, activeMutators: ['short_memorize', 'wide_recall'] as MutatorId[] },
+            { level: 12, runSeed: 192_012, floorArchetypeId: null, activeMutators: [] as MutatorId[] }
+        ];
+
+        for (const scenario of scenarios) {
+            const exhausted = solveGeneratedFloorByExhaustingPairs({
+                ...scenario,
+                floorTag: 'boss',
+                dungeonNodeKind: 'boss',
+                activateExit: false
+            });
+
+            expect(exhausted.status, `seed ${scenario.runSeed} level ${scenario.level}`).toBe('playing');
+            expect(getDungeonObjectiveStatus(exhausted), `seed ${scenario.runSeed} level ${scenario.level}`).toMatchObject({
+                objectiveId: 'defeat_boss',
+                completed: true
+            });
+            expect(getDungeonBossReadModel(exhausted), `seed ${scenario.runSeed} level ${scenario.level}`).toMatchObject({
+                phase: 'defeated',
+                activeMovingPatrolCount: 0
+            });
+            expect(
+                exhausted.board!.enemyHazards?.filter((hazard) => hazard.bossId != null && hazard.state !== 'defeated') ?? [],
+                `seed ${scenario.runSeed} level ${scenario.level}`
+            ).toEqual([]);
+            expect(getDungeonExitStatus(exhausted).lockedReason, `seed ${scenario.runSeed} level ${scenario.level}`).not.toMatch(
+                /defeat/i
+            );
+
+            const exitId = exhausted.board!.dungeonExitTileId!;
+            const exited = activateDungeonExit(revealDungeonExit(exhausted, exitId));
+            expect(exited.status, `seed ${scenario.runSeed} level ${scenario.level}`).toBe('levelComplete');
         }
     });
 
@@ -4558,7 +4644,11 @@ describe('dungeon cards', () => {
                 createTile('open-b', 'open-pair', 'O')
             ]),
             dungeonBossId: 'spire_observer',
-            enemyHazards: board.enemyHazards
+            enemyHazards: board.enemyHazards?.map((hazard) => ({
+                ...hazard,
+                currentTileId: 'open-a',
+                nextTileId: 'open-b'
+            }))
         };
         const patrolOnly = getDungeonBossReadModel(patrolOnlyBoard)!;
         expect(patrolOnly).toMatchObject({
@@ -5175,6 +5265,45 @@ describe('dungeon cards', () => {
         expect(masterCleared.dungeonMasterKeys).toBe(0);
     });
 
+    it('activates a terminal primary key lock fallback without spending keys', () => {
+        const exit: Tile = {
+            ...createTile('exit', EXIT_PAIR_KEY, '^'),
+            label: 'Iron Exit',
+            dungeonCardKind: 'exit',
+            dungeonCardState: 'revealed',
+            dungeonExitLockKind: 'iron',
+            state: 'flipped'
+        };
+        const matchedA = createTile('a1', 'a', 'A', { state: 'matched' });
+        const matchedB = createTile('a2', 'a', 'A', { state: 'matched' });
+        const board = createBoard([matchedA, matchedB, exit], {
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            matchedPairs: 1,
+            pairCount: 1
+        });
+        const run: RunState = {
+            ...createRun([matchedA, matchedB, exit]),
+            board,
+            dungeonKeys: {},
+            dungeonMasterKeys: 0,
+            status: 'playing'
+        };
+
+        expect(getDungeonExitStatus(run)).toMatchObject({
+            lockKind: 'none',
+            canActivate: true,
+            canActivateWithoutSpend: true
+        });
+
+        const cleared = activateDungeonExit(run, 'none');
+
+        expect(cleared.status).toBe('levelComplete');
+        expect(cleared.dungeonKeys.iron ?? 0).toBe(0);
+        expect(cleared.dungeonMasterKeys).toBe(0);
+        expect(cleared.board!.dungeonExitActivated).toBe(true);
+    });
+
     it('blocks defeat-boss exits while a boss card pair is still active', () => {
         const bossA: Tile = {
             ...createTile('boss-a', 'boss', 'B'),
@@ -5226,6 +5355,65 @@ describe('dungeon cards', () => {
             }
         };
         expect(getDungeonExitStatus(defeated).canActivate).toBe(true);
+    });
+
+    it('opens terminal boss exits when only a stale boss hazard and raw key lock remain', () => {
+        const matchedA: Tile = { ...createTile('a1', 'a', 'A'), state: 'matched' };
+        const matchedB: Tile = { ...createTile('a2', 'a', 'A'), state: 'matched' };
+        const exit: Tile = {
+            ...createTile('boss-exit', EXIT_PAIR_KEY, '^'),
+            label: 'Boss Exit',
+            dungeonCardKind: 'exit',
+            dungeonCardState: 'revealed',
+            dungeonCardEffectId: 'exit_boss',
+            dungeonExitLockKind: 'iron',
+            dungeonExitActivated: false,
+            state: 'flipped'
+        };
+        const board = {
+            ...createBoard([matchedA, matchedB, exit]),
+            matchedPairs: 1,
+            pairCount: 1,
+            dungeonObjectiveId: 'defeat_boss' as const,
+            dungeonBossId: 'trap_warden' as const,
+            dungeonExitTileId: exit.id,
+            dungeonExitLockKind: 'iron' as const,
+            enemyHazards: [
+                {
+                    id: 'stale-warden',
+                    label: 'Trap Warden',
+                    kind: 'warden' as const,
+                    pattern: 'guard' as const,
+                    state: 'revealed' as const,
+                    currentTileId: exit.id,
+                    nextTileId: exit.id,
+                    hp: 2,
+                    maxHp: 2,
+                    damage: 1,
+                    bossId: 'trap_warden' as const
+                }
+            ]
+        };
+        const run: RunState = {
+            ...createRun([matchedA, matchedB, exit]),
+            board,
+            dungeonKeys: {},
+            dungeonMasterKeys: 0,
+            status: 'playing'
+        };
+
+        expect(getDungeonExitStatus(run)).toMatchObject({
+            lockKind: 'none',
+            terminalKeySoftlockFallback: true,
+            canActivate: true,
+            lockedReason: null
+        });
+
+        const cleared = activateDungeonExit(run, 'none');
+
+        expect(cleared.status).toBe('levelComplete');
+        expect(cleared.board!.dungeonExitActivated).toBe(true);
+        expect(cleared.board!.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
     });
 
     it('selects the next route by matching a gateway pair on the board', () => {

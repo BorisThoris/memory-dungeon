@@ -6,6 +6,7 @@ import {
 } from './dungeon-board-status';
 import { addRunDungeonKey } from './dungeon-key-rules';
 import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
+import { defeatEnemyHazardsForFloorClear } from './dungeon-enemy-hazard-rules';
 import { gainRelicFavor } from './relic-favor-rules';
 import { createRouteCardPlanForRoute } from './route-card-plan-rules';
 import {
@@ -34,6 +35,24 @@ export interface DungeonExitActivationTransition {
     board: BoardState;
     run: RunState;
 }
+
+export const chooseDungeonExitActivationSpend = (
+    status: Pick<
+        DungeonExitStatus,
+        'canActivateWithoutSpend' | 'canActivateWithKey' | 'canActivateWithMasterKey'
+    >
+): DungeonExitActivationSpend => {
+    if (status.canActivateWithoutSpend) {
+        return 'none';
+    }
+    if (status.canActivateWithKey) {
+        return 'key';
+    }
+    if (status.canActivateWithMasterKey) {
+        return 'master_key';
+    }
+    return 'none';
+};
 
 export const resolveDungeonExitActivationSpend = (
     status: Pick<
@@ -124,7 +143,7 @@ export const applyDungeonExitObjectiveReward = (
 
 export const createDungeonExitActivationTransition = (
     run: RunState,
-    spend: DungeonExitActivationSpend = 'none'
+    spend?: DungeonExitActivationSpend
 ): DungeonExitActivationTransition | null => {
     if (run.status !== 'playing' || !run.board) {
         return null;
@@ -133,7 +152,7 @@ export const createDungeonExitActivationTransition = (
     if (!status.exitTile || !status.revealed) {
         return null;
     }
-    const activationSpend = resolveDungeonExitActivationSpend(status, spend);
+    const activationSpend = resolveDungeonExitActivationSpend(status, spend ?? chooseDungeonExitActivationSpend(status));
     if (!activationSpend.canOpen) {
         return null;
     }
@@ -141,7 +160,8 @@ export const createDungeonExitActivationTransition = (
         ? addRunDungeonKey(run.dungeonKeys, activationSpend.keyKind, -1)
         : run.dungeonKeys;
     const objectiveReward = applyDungeonExitObjectiveReward(run, status);
-    const openedBoard = sealBoardForDungeonExit(run.board);
+    const floorClearHazards = defeatEnemyHazardsForFloorClear(sealBoardForDungeonExit(run.board));
+    const openedBoard = floorClearHazards.board;
     const routeType = status.routeType;
 
     return {
@@ -152,6 +172,12 @@ export const createDungeonExitActivationTransition = (
             dungeonMasterKeys: activationSpend.spendsMasterKey
                 ? Math.max(0, run.dungeonMasterKeys - 1)
                 : run.dungeonMasterKeys,
+            dungeonEnemiesDefeated:
+                objectiveReward.run.dungeonEnemiesDefeated + floorClearHazards.bossesDefeated,
+            dungeonEnemiesDefeatedThisFloor:
+                (objectiveReward.run.dungeonEnemiesDefeatedThisFloor ?? 0) + floorClearHazards.bossesDefeated,
+            enemyHazardsDefeatedThisFloor:
+                (objectiveReward.run.enemyHazardsDefeatedThisFloor ?? 0) + floorClearHazards.defeated,
             dungeonGatewaysUsed: run.dungeonGatewaysUsed + 1,
             pendingRouteCardPlan:
                 run.pendingRouteCardPlan == null && routeType

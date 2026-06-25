@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { RunState, Tile } from './contracts';
+import type { BoardState, RunState, Tile } from './contracts';
 import { DUNGEON_CARD_EFFECT_DEFINITIONS } from './dungeon-cards';
 import {
     DUNGEON_ROOM_EFFECT_DEFINITIONS,
@@ -148,5 +148,75 @@ describe('dungeon card read models', () => {
                 dungeonRouteType: 'greed'
             } as Tile)
         ).toContain('Selects greed route');
+    });
+
+    it('uses effective primary exit locks for terminal fallback copy when board context is available', () => {
+        const exit = {
+            id: 'exit',
+            pairKey: '__exit__',
+            label: 'Iron Gate',
+            state: 'flipped',
+            symbol: 'E',
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'iron'
+        } as Tile;
+        const board: BoardState = {
+            level: 1,
+            pairCount: 1,
+            columns: 2,
+            rows: 2,
+            tiles: [
+                { id: 'a1', pairKey: 'a', label: 'A', symbol: 'A', state: 'matched' },
+                { id: 'a2', pairKey: 'a', label: 'A', symbol: 'A', state: 'matched' },
+                exit
+            ],
+            flippedTileIds: ['exit'],
+            matchedPairs: 1,
+            floorArchetypeId: null,
+            featuredObjectiveId: null,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            dungeonKeysHeld: 0
+        };
+
+        expect(getDungeonCardCopy(exit)).toContain('Requires iron key');
+        expect(getDungeonCardCopy(exit, { board })).toContain('Can be opened once revealed');
+        expect(getDungeonCardCopy(exit, { board })).not.toContain('Requires iron key');
+    });
+
+    it('explains pending key-lock fallback when no key source remains but pairs are still clearable', () => {
+        const exit = {
+            id: 'exit',
+            pairKey: '__exit__',
+            label: 'Iron Gate',
+            state: 'flipped',
+            symbol: 'E',
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'iron'
+        } as Tile;
+        const board: BoardState = {
+            level: 1,
+            pairCount: 2,
+            columns: 2,
+            rows: 2,
+            tiles: [
+                { id: 'a1', pairKey: 'a', label: 'A', symbol: 'A', state: 'hidden' },
+                { id: 'a2', pairKey: 'a', label: 'A', symbol: 'A', state: 'hidden' },
+                exit
+            ],
+            flippedTileIds: ['exit'],
+            matchedPairs: 0,
+            floorArchetypeId: null,
+            featuredObjectiveId: null,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            dungeonKeysHeld: 0
+        };
+
+        const copy = getDungeonCardCopy(exit, { board, run: { dungeonKeys: {}, dungeonMasterKeys: 0 } });
+
+        expect(copy).toContain('No key source remains');
+        expect(copy).toContain('clear remaining pairs');
+        expect(copy).not.toContain('Requires iron key');
     });
 });

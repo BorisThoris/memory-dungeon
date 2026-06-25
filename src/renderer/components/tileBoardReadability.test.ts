@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { Tile } from '../../shared/contracts';
+import type { BoardState, Tile } from '../../shared/contracts';
+import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
 import { getDungeonUtilityReadabilityKind, getTileBoardReadabilityState } from './tileBoardReadability';
 
 const tile = (overrides: Partial<Tile> = {}): Tile => ({
@@ -28,6 +29,30 @@ const state = (overrides: Partial<Parameters<typeof getTileBoardReadabilityState
         ...overrides
     });
 
+const terminalLockedExitBoard = (): BoardState => ({
+    level: 1,
+    pairCount: 1,
+    columns: 2,
+    rows: 2,
+    matchedPairs: 1,
+    flippedTileIds: [],
+    floorArchetypeId: null,
+    featuredObjectiveId: null,
+    dungeonExitTileId: 'exit',
+    dungeonExitLockKind: 'iron',
+    dungeonExitActivated: false,
+    tiles: [
+        tile({ id: 'a1', state: 'matched' }),
+        tile({ id: 'a2', state: 'matched' }),
+        tile({
+            id: 'exit',
+            pairKey: EXIT_PAIR_KEY,
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'iron'
+        })
+    ]
+});
+
 describe('tileBoardReadability', () => {
     it('classifies dungeon utility readability markers with stable precedence', () => {
         expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'exit', dungeonExitLockKind: 'iron' }))).toBe('exit');
@@ -36,6 +61,23 @@ describe('tileBoardReadability', () => {
         expect(getDungeonUtilityReadabilityKind(tile({ dungeonCardKind: 'lock' }))).toBe('lock');
         expect(getDungeonUtilityReadabilityKind(tile({ dungeonExitLockKind: 'iron' }))).toBe('lock');
         expect(getDungeonUtilityReadabilityKind(tile({ dungeonExitLockKind: 'none' }))).toBeNull();
+    });
+
+    it('uses effective exit lock state for primary exit lock markers when board context is available', () => {
+        const board = terminalLockedExitBoard();
+        const exitTile = board.tiles.find((candidate) => candidate.id === 'exit')!;
+
+        expect(getDungeonUtilityReadabilityKind(exitTile, board)).toBe('exit');
+        expect(
+            getDungeonUtilityReadabilityKind(
+                tile({ id: 'stray-lock-copy', dungeonExitLockKind: 'iron' }),
+                board
+            )
+        ).toBe('lock');
+        expect(state({ tile: exitTile, board })).toMatchObject({
+            isExitCard: true,
+            isLockCard: false
+        });
     });
 
     it('shows hidden readability markers for hidden special backs only', () => {

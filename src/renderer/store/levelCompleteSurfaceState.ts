@@ -1,6 +1,7 @@
 import type { RunState } from '../../shared/contracts';
 import { advanceToNextLevel, openRelicOffer } from '../../shared/game-core';
 import { needsRelicPick } from '../../shared/relics';
+import { repairRunProgressionSoftlocks } from '../../shared/run-progression-repair';
 import { createRunWithBoardInteractionClearedPatch, type RunSurfaceState } from './runSurfaceState';
 
 export type LevelCompleteContinuationSurfaceResult =
@@ -90,6 +91,8 @@ export const createLevelCompleteContinuationSurfaceResult = (
     run: RunState,
     { includeSummaryShop }: LevelCompleteContinuationSurfaceOptions
 ): LevelCompleteContinuationSurfaceResult => {
+    run = repairRunProgressionSoftlocks(run);
+
     if (run.sideRoom) {
         return {
             kind: 'sideRoom',

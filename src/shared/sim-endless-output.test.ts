@@ -1,13 +1,19 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
     analyzeEndlessSimulationHealth,
     buildEndlessSimulationCsv,
     buildEndlessSimulationSummary,
+    countUndefeatedEnemyHazardsForPlayableGate,
     evaluateEndlessSimulationHealth
 } from '../../scripts/sim-endless';
+import { runSoftlockSeedGate } from '../../scripts/gate-softlock-seeds';
 import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from './contracts';
 
 describe('sim-endless CSV output', () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
     it('reports findable kind diagnostics and target weights', () => {
         const csv = buildEndlessSimulationCsv({
             floors: 24,
@@ -28,6 +34,11 @@ describe('sim-endless CSV output', () => {
         expect(lines.some((line) => line.startsWith('traitMetric,traitBoardPowerInteractionFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('traitMetric,traitSwapSetupFloors,'))).toBe(true);
         expect(lines).toContain('traitMetric,deadTraitFloors,0');
+        expect(lines.some((line) => line.startsWith('fairnessIssue,'))).toBe(false);
+        expect(lines.some((line) => line.startsWith('playableMetric,checkedFloors,'))).toBe(true);
+        expect(lines.some((line) => line.startsWith('playableMetric,lockedExitFloors,'))).toBe(true);
+        expect(lines.some((line) => line.startsWith('playableIssue,'))).toBe(false);
+        expect(lines.some((line) => line.startsWith('playableFailure,'))).toBe(false);
     });
 
     it('summarizes route, reward, and trait gates for human review', () => {
@@ -39,6 +50,11 @@ describe('sim-endless CSV output', () => {
 
         expect(summary).toContain('# Endless Simulation Gate Summary');
         expect(summary).toContain('- Route gates:');
+        expect(summary).toContain('- Fairness gates:');
+        expect(summary).toContain('issue types (none).');
+        expect(summary).toContain('- Playable gates:');
+        expect(summary).toContain('locked-exit floors');
+        expect(summary).toContain('issue floors (none).');
         expect(summary).toContain('- Reward gates:');
         expect(summary).toContain('- Trait gates:');
         expect(summary).toContain('- Trait mechanic gates:');
@@ -59,8 +75,17 @@ describe('sim-endless CSV output', () => {
         expect(health.metrics).toMatchObject({
             deadTraitFloors: 0,
             exitlessFloors: 0,
+            fairnessIssueCodes: [],
+            fairnessIssueFloors: 0,
+            fairnessIssueTypes: 0,
+            playableFailureDetails: [],
+            playableIssueFloors: 0,
+            playableIssueReasons: [],
+            playableLockedExitFloors: expect.any(Number),
             rewardKinds: Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length
         });
+        expect(health.metrics.playableCheckedFloors).toBeGreaterThan(500);
+        expect(health.metrics.playableLockedExitFloors).toBeGreaterThan(0);
         expect(health.metrics.routeKinds).toBeGreaterThanOrEqual(8);
         expect(health.metrics.objectiveKinds).toBeGreaterThanOrEqual(4);
         expect(health.metrics.traitFloorShare).toBeGreaterThanOrEqual(0.8);
@@ -70,14 +95,57 @@ describe('sim-endless CSV output', () => {
         expect(health.metrics.traitSwapSetupFloorShare).toBeGreaterThanOrEqual(0.1);
     }, 45_000);
 
+    it('counts raw undefeated hazard state for playable gates even when the hazard is no longer active', () => {
+        expect(
+            countUndefeatedEnemyHazardsForPlayableGate({
+                enemyHazards: [
+                    {
+                        currentTileId: 'matched-a',
+                        damage: 1,
+                        hp: 1,
+                        id: 'raw-leftover',
+                        kind: 'warden',
+                        label: 'Raw Leftover',
+                        maxHp: 1,
+                        nextTileId: 'matched-b',
+                        pattern: 'guard',
+                        state: 'revealed'
+                    },
+                    {
+                        currentTileId: 'done-a',
+                        damage: 1,
+                        hp: 0,
+                        id: 'done',
+                        kind: 'sentinel',
+                        label: 'Done',
+                        maxHp: 1,
+                        nextTileId: 'done-b',
+                        pattern: 'patrol',
+                        state: 'defeated'
+                    }
+                ]
+            } as Parameters<typeof countUndefeatedEnemyHazardsForPlayableGate>[0])
+        ).toBe(1);
+    });
+
     it('reports actionable failures when endless health metrics regress', () => {
         const health = evaluateEndlessSimulationHealth(
             {
                 deadTraitFloors: 2,
                 exitlessFloors: 1,
+                fairnessIssueCodes: ['exit_lock_unreachable', 'completion_route_missing'],
+                fairnessIssueFloors: 3,
+                fairnessIssueTypes: 2,
                 exitLockTypes: 0,
                 findableTotal: 2,
                 objectiveKinds: 1,
+                playableCheckedFloors: 0,
+                playableFailureDetails: [
+                    'floor=7|reason=exit_attempted|status=playing|turns=12|lastPair=__exit__|lastTiles=exit|activeStaleHazards=0|undefeatedStaleHazards=0|archetype=trap_hall|objective=defeat_boss'
+                ],
+                playableIssueFloors: 4,
+                playableIssueReasons: ['exit_attempted'],
+                playableLockedExitFloors: 0,
                 rewardKinds: 1,
                 traitBoardPowerInteractionFloorShare: 0.2,
                 traitMatchRouteFloorShare: 0.4,
@@ -96,6 +164,10 @@ describe('sim-endless CSV output', () => {
             expect.arrayContaining([
                 'Expected at least 8 floor archetypes, saw 2.',
                 'Expected every sampled floor to have an exit, saw 1 exitless floors.',
+                'Expected generated boards to pass fairness inspection, saw 3 floor(s) with 2 issue type(s): exit_lock_unreachable, completion_route_missing.',
+                'Expected executable playable solver sampling to inspect at least one floor.',
+                'Expected playable solver sample to clear every checked floor, saw 4 issue floor(s): exit_attempted. Details: floor=7|reason=exit_attempted|status=playing|turns=12|lastPair=__exit__|lastTiles=exit|activeStaleHazards=0|undefeatedStaleHazards=0|archetype=trap_hall|objective=defeat_boss.',
+                'Expected executable playable solver sampling to include at least one live locked-exit floor.',
                 'Expected match-triggerable trait routes on at least 95.0% of trait floors, saw 40.0%.',
                 'Expected reward-producing trait interactions on at least 80.0% of trait floors, saw 30.0%.',
                 'Expected board-power trait interactions on at least 70.0% of trait floors, saw 20.0%.',
@@ -104,4 +176,25 @@ describe('sim-endless CSV output', () => {
             ])
         );
     });
+
+    it('runs the multi-seed softlock gate and reports malformed seed lists with defaults', () => {
+        const stdout = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
+        const stderr = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
+
+        expect(runSoftlockSeedGate(['--floors=120', '--seeds=42001,42002'])).toBe(0);
+        expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('seed=42001,playable='))).toBe(true);
+        expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('seed=42002,playable='))).toBe(true);
+        expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('lockedExits='))).toBe(true);
+
+        stdout.mockClear();
+        stderr.mockClear();
+
+        expect(runSoftlockSeedGate(['--floors=5', '--seeds=,'])).toBe(1);
+        expect(
+            stdout.mock.calls.some(([chunk]) =>
+                String(chunk).includes('Seeds: 42001, 42002, 42077, 77707, 130011, 172707, 182009, 192012')
+            )
+        ).toBe(true);
+        expect(stderr.mock.calls.some(([chunk]) => String(chunk).includes('Softlock seed gate failed'))).toBe(true);
+    }, 20_000);
 });

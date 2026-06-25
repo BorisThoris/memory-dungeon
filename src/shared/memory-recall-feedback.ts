@@ -8,6 +8,7 @@ import {
     type RelicId,
     type Tile
 } from './contracts';
+import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
 import { getCurrentDungeonNode } from './run-map';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -655,7 +656,7 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             .filter((tile) => forgottenSet.has(tile.id))
             .map(tileMemoryLabel)
     ).slice(0, 6);
-    const activeEnemyHazards = board?.enemyHazards?.filter((enemy) => enemy.state !== 'defeated') ?? [];
+    const activeEnemyHazards = activeEnemyHazardsForBoard(board);
     const revealedEnemyTiles = tiles.filter(
         (tile) => tile.dungeonCardKind === 'enemy' && tile.dungeonCardState === 'revealed'
     );

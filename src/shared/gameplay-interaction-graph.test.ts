@@ -73,12 +73,31 @@ describe('gameplay interaction graph', () => {
     it('connects boss, exit, lock, and floor-clear mechanics through safety edges', () => {
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
-                expect.objectContaining({ source: 'boss.moving_patrol', target: 'safety.softlock_fairness' }),
+                expect.objectContaining({
+                    source: 'boss.moving_patrol',
+                    target: 'safety.softlock_fairness',
+                    label: 'stale overlay clear'
+                }),
                 expect.objectContaining({ source: 'objective.defeat_boss', target: 'exit.primary' }),
                 expect.objectContaining({ source: 'lock.iron_key', target: 'exit.primary' }),
                 expect.objectContaining({ source: 'exit.primary', target: 'objective.floor_clear' }),
                 expect.objectContaining({ source: 'safety.softlock_fairness', target: 'objective.floor_clear' })
             ])
+        );
+    });
+
+    it('names terminal key fallback and stale boss overlay guards in the executable graph', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+
+        expect(byId.get('lock.iron_key')?.softlockGuards).toEqual(
+            expect.arrayContaining(['reachable-key-source', 'terminal-key-lock-fallback'])
+        );
+        expect(byId.get('exit.primary')?.softlockGuards).toEqual(expect.arrayContaining(['terminal-key-lock-fallback']));
+        expect(byId.get('boss.moving_patrol')?.softlockGuards).toEqual(
+            expect.arrayContaining(['stale-boss-overlay-clear', 'all-real-pairs-cleared-clear'])
+        );
+        expect(byId.get('safety.softlock_fairness')?.softlockGuards).toEqual(
+            expect.arrayContaining(['terminal-key-lock-fallback', 'stale-boss-overlay-clear'])
         );
     });
 

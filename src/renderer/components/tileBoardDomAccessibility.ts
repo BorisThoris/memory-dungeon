@@ -21,8 +21,8 @@ export const getTilePosition = (index: number, columns: number): { row: number; 
     column: (index % columns) + 1
 });
 
-export const getDungeonCardText = (tile: Tile): string => {
-    const copy = getDungeonCardCopy(tile);
+export const getDungeonCardText = (tile: Tile, board?: BoardState): string => {
+    const copy = getDungeonCardCopy(tile, { board });
     return copy ? ` ${copy}` : '';
 };
 
@@ -102,7 +102,7 @@ export const getTileAriaLabel = (
               }`
             : '';
     const dungeonKnowledge = getDungeonCardKnowledge(tile, faceUp);
-    const dungeonNote = dungeonKnowledge.familyKnown ? getDungeonCardText(tile) : '';
+    const dungeonNote = dungeonKnowledge.familyKnown ? getDungeonCardText(tile, board) : '';
     const passiveScoutNote = scoutSourceNote && !routeNote.includes(scoutSourceNote.trim()) ? scoutSourceNote : '';
     return `${base}${findableNote}${routeNote}${dungeonNote}${getHazardTileText(tile)}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${passiveScoutNote}${getEnemyHazardText(board, tile.id)}`;
 };

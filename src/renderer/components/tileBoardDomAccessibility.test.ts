@@ -100,6 +100,66 @@ describe('tile board DOM accessibility helpers', () => {
         expect(getEnemyHazardText(clearedBoard, 'a2')).toBe('');
     });
 
+    it('announces terminal fallback primary exits as open instead of still key locked', () => {
+        const exitTile = {
+            id: 'exit',
+            pairKey: '__exit__',
+            symbol: 'E',
+            label: 'Iron Gate',
+            state: 'flipped' as const,
+            dungeonCardKind: 'exit' as const,
+            dungeonExitLockKind: 'iron' as const
+        };
+        const exitBoard: BoardState = {
+            ...board,
+            pairCount: 1,
+            matchedPairs: 1,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            dungeonKeysHeld: 0,
+            tiles: [
+                { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'matched' },
+                { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'matched' },
+                exitTile
+            ]
+        };
+
+        const label = getTileAriaLabel(exitBoard, exitTile, true, 2, 1);
+
+        expect(label).toContain('Can be opened once revealed');
+        expect(label).not.toContain('Requires iron key');
+    });
+
+    it('announces pending key fallback primary exits as pair-clear gates', () => {
+        const exitTile = {
+            id: 'exit',
+            pairKey: '__exit__',
+            symbol: 'E',
+            label: 'Iron Gate',
+            state: 'flipped' as const,
+            dungeonCardKind: 'exit' as const,
+            dungeonExitLockKind: 'iron' as const
+        };
+        const exitBoard: BoardState = {
+            ...board,
+            pairCount: 1,
+            matchedPairs: 0,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            dungeonKeysHeld: 0,
+            tiles: [
+                { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
+                { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
+                exitTile
+            ]
+        };
+
+        const label = getTileAriaLabel(exitBoard, exitTile, true, 2, 1);
+
+        expect(label).toContain('No key source remains; clear remaining pairs to force this exit open.');
+        expect(label).not.toContain('Requires iron key');
+    });
+
     it('describes board power target validity', () => {
         const hidden = board.tiles[0]!;
         expect(

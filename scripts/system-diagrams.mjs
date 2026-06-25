@@ -360,7 +360,7 @@ const buildBoardGenerationDiagram = (repoRoot) => {
                 'Generated boards remain completable even when repair has to intervene.',
                 boardEvidence,
                 'done',
-                'yarn gate:action-loop'
+                'yarn gate:sim-softlock-seeds'
             )
         ]
     };

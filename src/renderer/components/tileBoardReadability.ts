@@ -1,4 +1,6 @@
-import type { HazardTileKind, Tile } from '../../shared/contracts';
+import type { BoardState, HazardTileKind, Tile } from '../../shared/contracts';
+import { getEffectivePrimaryExitLock } from '../../shared/board-inspection';
+import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
 import { hazardTileColor } from './tileBoardThreatColors';
 import { tileTraitColor } from '../../shared/tile-trait-rules';
 import type { TileBoardPowerBackAccent } from './tileBoardRows';
@@ -6,9 +8,11 @@ import type { TileBoardPowerBackAccent } from './tileBoardRows';
 export type DungeonUtilityReadabilityKind = 'exit' | 'lever' | 'lock' | 'shop';
 
 export const getDungeonUtilityReadabilityKind = (
-    tile: Pick<Tile, 'dungeonCardKind' | 'dungeonExitLockKind'>
+    tile: Pick<Tile, 'dungeonCardKind' | 'dungeonExitLockKind'> & Partial<Pick<Tile, 'id' | 'pairKey'>>,
+    board?: BoardState
 ): DungeonUtilityReadabilityKind | null => {
-    if (tile.dungeonCardKind === 'exit') {
+    const isPrimaryExitTile = tile.id != null && tile.id === board?.dungeonExitTileId;
+    if (tile.dungeonCardKind === 'exit' || tile.pairKey === EXIT_PAIR_KEY || isPrimaryExitTile) {
         return 'exit';
     }
     if (tile.dungeonCardKind === 'lever') {
@@ -17,9 +21,13 @@ export const getDungeonUtilityReadabilityKind = (
     if (tile.dungeonCardKind === 'shop') {
         return 'shop';
     }
+    const lockKind =
+        board && tile.id === board.dungeonExitTileId
+            ? getEffectivePrimaryExitLock({ board }).lockKind
+            : tile.dungeonExitLockKind;
     if (
         tile.dungeonCardKind === 'lock' ||
-        (tile.dungeonExitLockKind != null && tile.dungeonExitLockKind !== 'none')
+        (lockKind != null && lockKind !== 'none')
     ) {
         return 'lock';
     }
@@ -52,6 +60,7 @@ export interface TileBoardReadabilityInput {
     spotlightWardOnBack: boolean;
     stickyFingerSlotMark: boolean;
     tile: Tile;
+    board?: BoardState;
 }
 
 export interface TileBoardReadabilityState {
@@ -87,14 +96,15 @@ export const getTileBoardReadabilityState = ({
     spotlightBountyOnBack,
     spotlightWardOnBack,
     stickyFingerSlotMark,
-    tile
+    tile,
+    board
 }: TileBoardReadabilityInput): TileBoardReadabilityState => {
     const isTrapCard = tile.dungeonCardKind === 'trap';
     const isResolvedTrap = isTrapCard && tile.dungeonCardState === 'resolved';
     const isRevealedTrap = isTrapCard && tile.dungeonCardState === 'revealed';
     const isArmedTrap = isTrapCard && !isResolvedTrap && !isRevealedTrap;
     const isBossCard = tile.dungeonBossId != null;
-    const dungeonUtilityKind = getDungeonUtilityReadabilityKind(tile);
+    const dungeonUtilityKind = getDungeonUtilityReadabilityKind(tile, board);
     const isExitCard = dungeonUtilityKind === 'exit';
     const isLeverCard = dungeonUtilityKind === 'lever';
     const isLockCard = dungeonUtilityKind === 'lock';

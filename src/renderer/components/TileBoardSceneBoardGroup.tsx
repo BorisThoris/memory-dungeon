@@ -1,6 +1,6 @@
 import type { MutableRefObject, RefObject } from 'react';
 import type { BufferGeometry, Group, PlaneGeometry, ShaderMaterial } from 'three';
-import type { GraphicsQualityPreset } from '../../shared/contracts';
+import type { BoardState, GraphicsQualityPreset } from '../../shared/contracts';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import { TileBezel, type TileHoverTiltState } from './TileBezel';
@@ -10,6 +10,7 @@ import type { TileBoardEnemyHazardRow, TileBoardRow } from './tileBoardRows';
 import type { TileBoardRuneFieldMetrics } from './tileBoardRuneField';
 
 interface TileBoardSceneBoardGroupProps {
+    board: BoardState;
     boardColumns: number;
     boardEntranceMotionBudgetMs: number;
     boardEntranceMotionDeadlineMs: number;
@@ -43,6 +44,7 @@ interface TileBoardSceneBoardGroupProps {
 }
 
 export const TileBoardSceneBoardGroup = ({
+    board,
     boardColumns,
     boardEntranceMotionBudgetMs,
     boardEntranceMotionDeadlineMs,
@@ -163,6 +165,7 @@ export const TileBoardSceneBoardGroup = ({
                     boardEntranceStaggerTileCount={boardEntranceStaggerTileCount}
                     boardRows={boardRows}
                     boardColumns={boardColumns}
+                    board={board}
                     sharedCardBackLayers={sharedCardBackLayers}
                     sharedCardFrontGeometry={sharedCardFrontGeometry}
                     textureRevision={textureRevision}

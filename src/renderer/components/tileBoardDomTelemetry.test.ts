@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState } from '../../shared/contracts';
+import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
 import {
     getCardFeedbackStatesAttr,
     getDevE2ePairPositionsJson,
@@ -177,6 +178,44 @@ describe('tile board DOM telemetry helpers', () => {
 
         expect(states).toContain('lever:1');
         expect(states).toContain('lock:1');
+    });
+
+    it('classifies primary exit metadata as exit instead of raw lock in feedback states', () => {
+        const terminalExitBoard: BoardState = {
+            ...board,
+            pairCount: 1,
+            matchedPairs: 1,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron',
+            dungeonExitActivated: false,
+            tiles: [
+                { ...board.tiles[0]!, state: 'matched' },
+                { ...board.tiles[1]!, state: 'matched' },
+                {
+                    id: 'exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    symbol: 'E',
+                    label: 'Exit',
+                    state: 'hidden',
+                    dungeonExitLockKind: 'iron'
+                }
+            ]
+        };
+
+        const states = getCardFeedbackStatesAttr({
+            allowGambitThirdFlip: false,
+            board: terminalExitBoard,
+            boardApplicationFocused: false,
+            debugPeekActive: false,
+            focusedTileId: null,
+            interactive: true,
+            peekRevealedTileIds: new Set(),
+            previewActive: false,
+            runStatus: 'playing'
+        });
+
+        expect(states).toContain('exit:1');
+        expect(states).not.toContain('lock:1');
     });
 
     it('tracks previewable trait combo opportunities separately from raw trait count', () => {

@@ -13,7 +13,9 @@ import {
     claimRouteSideRoomPrimary,
     skipRouteSideRoom
 } from '../../shared/route-rules';
-import { activateDungeonExit } from '../../shared/dungeon-rules';
+import {
+    activateDungeonExit
+} from '../../shared/dungeon-rules';
 import { trackEvent } from '../../shared/telemetry';
 import { executeRunStartRequest } from './runStartExecutor';
 import type { RunStartRequest } from './runStartState';
@@ -572,16 +574,18 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({ dungeonExitPromptOpen: false });
     },
 
-    activateDungeonExitFromPrompt: (spend = 'none') => {
+    activateDungeonExitFromPrompt: (spend) => {
         const { run, view } = get();
         if (!run || view !== 'playing') {
             return;
         }
         const nextRun = activateDungeonExit(run, spend);
-        set({ dungeonExitPromptOpen: false });
-        if (nextRun !== run) {
-            applyResolvedRun(nextRun);
+        if (nextRun === run) {
+            set({ dungeonExitPromptOpen: true });
+            return;
         }
+        set({ dungeonExitPromptOpen: false });
+        applyResolvedRun(nextRun);
     },
 
     togglePeekMode: () => {

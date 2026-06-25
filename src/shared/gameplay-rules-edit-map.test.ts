@@ -25,6 +25,6 @@ describe('gameplay rules edit map drift', () => {
         expect(editMap).toContain('yarn gate:rewards-economy');
         expect(editMap).toContain('yarn gate:navigation');
         expect(editMap).toContain('yarn gate:systems');
-        expect(editMap).toContain('softlock-generator-contract.test.ts');
+        expect(editMap).toContain('yarn gate:sim-softlock-seeds');
     });
 });

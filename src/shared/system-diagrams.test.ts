@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import fs from 'node:fs';
 import path from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 
@@ -30,6 +31,9 @@ type SystemDiagramPayload = {
 };
 
 const scriptPath = path.join(process.cwd(), 'scripts', 'system-diagrams.mjs');
+const packageJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8')) as {
+    scripts: Record<string, string>;
+};
 
 const runJson = (): SystemDiagramPayload =>
     JSON.parse(
@@ -46,6 +50,17 @@ const runMarkdown = (): string =>
         encoding: 'utf8',
         env: { ...process.env, SYSTEM_DIAGRAMS_SKIP_IMPORT_GRAPH: '1' }
     });
+
+const referencedYarnScripts = (commands: readonly (string | null)[]): string[] =>
+    [
+        ...new Set(
+            commands.flatMap((command) =>
+                [...(command ?? '').matchAll(/\byarn\s+([A-Za-z0-9:_-]+)/g)]
+                    .map((match) => match[1]!)
+                    .filter((script) => script !== 'vitest')
+            )
+        )
+    ];
 
 describe('system diagram generator', () => {
     let payload: SystemDiagramPayload;
@@ -88,7 +103,10 @@ describe('system diagram generator', () => {
         expect(payload.actions.every((item) => item.command != null && item.command.length > 0)).toBe(true);
         expect(payload.actions.every((item) => item.evidence.length >= (item.minimumEvidence ?? 1))).toBe(true);
         expect(payload.actions.find((item) => item.id === 'resolution-slice-gate')?.detail).toContain('yarn gate:action-loop');
-        expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')?.verifies).toContain('Generated boards');
+        expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')).toMatchObject({
+            command: 'yarn gate:sim-softlock-seeds',
+            verifies: expect.stringContaining('Generated boards')
+        });
         expect(payload.stats.importGraph.fileCount).toBe(0);
         expect(payload.stats.importGraph.edgeCount).toBe(0);
     });
@@ -109,11 +127,20 @@ describe('system diagram generator', () => {
         expect(traits?.nodes.flatMap((node) => node.evidence)).toContain('src/shared/tile-trait-rules.ts');
     });
 
+    it('references package scripts that exist in audit action commands', () => {
+        const missing = referencedYarnScripts(payload.actions.map((action) => action.command)).filter(
+            (script) => packageJson.scripts[script] == null
+        );
+
+        expect(missing).toEqual([]);
+    });
+
     it('renders Mermaid markdown for docs and reviews', () => {
         expect(markdown).toContain('# System Diagrams');
         expect(markdown).toContain('## Audit Actions');
         expect(markdown).toContain('P0 Extend the softlock matrix for every new blocker');
         expect(markdown).toContain('yarn gate:action-loop');
+        expect(markdown).toContain('yarn gate:sim-softlock-seeds');
         expect(markdown).toContain('yarn gate:rewards-economy');
         expect(markdown).toContain('yarn gate:navigation');
         expect(markdown).toContain('## Renderer Input Flow');

@@ -142,6 +142,43 @@ describe('REG-085 run history, share keys, and journal', () => {
         expect(buildRunHistoryExportString(run)).not.toMatch(/token|email|path/i);
     });
 
+    it('does not derive a dungeon journal boss row from stale cleared-tile hazards', () => {
+        const base = completedRun();
+        const run: RunState = {
+            ...base,
+            gameMode: 'endless',
+            board: base.board
+                ? {
+                      ...base.board,
+                      dungeonBossId: null,
+                      tiles: [
+                          { ...base.board.tiles[0]!, id: 'a1', pairKey: 'done', state: 'matched', dungeonBossId: undefined },
+                          { ...base.board.tiles[1]!, id: 'a2', pairKey: 'done', state: 'matched', dungeonBossId: undefined }
+                      ],
+                      matchedPairs: 1,
+                      pairCount: 1,
+                      enemyHazards: [
+                          {
+                              id: 'stale-boss',
+                              bossId: 'trap_warden',
+                              kind: 'warden',
+                              label: 'Latch Warden',
+                              currentTileId: 'a1',
+                              nextTileId: 'a2',
+                              pattern: 'guard',
+                              state: 'revealed',
+                              damage: 1,
+                              hp: 1,
+                              maxHp: 3
+                          }
+                      ]
+                  }
+                : base.board
+        };
+
+        expect(buildDungeonJournalRows(run).map((row) => row.id)).not.toContain('dungeon_boss');
+    });
+
     it('keeps converged boss route approach labels in the dungeon journal', () => {
         const dungeonRun = selectDungeonNode(
             revealDungeonChoices(createDungeonRunMapState(85_002, 1, 5), 5, [
@@ -166,6 +203,28 @@ describe('REG-085 run history, share keys, and journal', () => {
         expect(buildDungeonJournalRows(run).find((row) => row.id === 'dungeon_route')?.value).toBe(
             'Keeper Chamber via Mystery route'
         );
+    });
+
+    it('does not journal stale skipped selected route nodes', () => {
+        const dungeonRun = selectDungeonNode(
+            revealDungeonChoices(createDungeonRunMapState(85_003, 1, 5), 5, [
+                { id: 'route-safe', routeType: 'safe', label: 'Safe passage', detail: 'Controlled route.' },
+                { id: 'route-greed', routeType: 'greed', label: 'Greedy route', detail: 'Risky route.' },
+                { id: 'route-mystery', routeType: 'mystery', label: 'Mystery route', detail: 'Omen route.' }
+            ]),
+            'route-greed'
+        );
+        const run: RunState = {
+            ...completedRun(),
+            gameMode: 'endless',
+            dungeonRun: {
+                ...dungeonRun,
+                selectedNodeId: 'route-safe'
+            },
+            pendingRouteCardPlan: null
+        };
+
+        expect(buildDungeonJournalRows(run).find((row) => row.id === 'dungeon_route')).toBeUndefined();
     });
 
     it('uses primary build archetype in journal recap when relics exist', () => {
