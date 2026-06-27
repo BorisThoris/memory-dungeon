@@ -13,7 +13,7 @@ interface SideRoomActionControllerDeps<TState extends SideRoomActionControllerSt
     setState: (patch: Partial<TState>) => void;
 }
 
-export interface SideRoomActionController {
+interface SideRoomActionController {
     applySideRoomAction: (applyAction: (run: RunState) => RunState) => void;
 }
 

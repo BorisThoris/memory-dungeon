@@ -7,7 +7,7 @@ import {
     computeShuffleMotionTransform
 } from './shuffleFlipAnimation';
 
-export interface TileBoardLayoutMotionTransform {
+interface TileBoardLayoutMotionTransform {
     rotX: number;
     rotY: number;
     rotZ: number;
@@ -16,7 +16,7 @@ export interface TileBoardLayoutMotionTransform {
     rz: number;
 }
 
-export interface TileBoardLayoutMotionState {
+interface TileBoardLayoutMotionState {
     entranceLayoutActive: boolean;
     entranceMotion: TileBoardLayoutMotionTransform;
     layoutMotionActive: boolean;
@@ -25,13 +25,13 @@ export interface TileBoardLayoutMotionState {
     shuffleMotion: TileBoardLayoutMotionTransform;
 }
 
-export interface TileBoardCardGroupMotionTarget {
+interface TileBoardCardGroupMotionTarget {
     position: { x: number; y: number; z: number };
     rotation: { x: number; y: number; z: number };
     scale: { x: number; y: number; z: number };
 }
 
-export interface TileBoardCardGroupMotionState {
+interface TileBoardCardGroupMotionState {
     layoutMotionActive: boolean;
     posLambda: number;
     positionXTarget: number;
@@ -45,7 +45,7 @@ export interface TileBoardCardGroupMotionState {
     scaleTarget: number;
 }
 
-export interface TileBoardCardGroupMotionStateInput {
+interface TileBoardCardGroupMotionStateInput {
     entranceMotion: TileBoardLayoutMotionTransform;
     fieldDepth: number;
     fieldLift: number;

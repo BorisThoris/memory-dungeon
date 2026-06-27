@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+    assetDropInCategoryById,
+    assetDropInReadinessComplete,
     assetDropInReadinessSummary,
     ASSET_DROP_IN_CATEGORIES,
     getAssetDropInCategories,
@@ -32,7 +34,12 @@ describe('REG-059 asset drop-in readiness', () => {
         expect(summary.verificationCommands).toContain('yarn audit:renderer-assets');
     });
 
+    it('exposes lookup and completeness checks for drop-in asset tooling', () => {
+        expect(assetDropInCategoryById('audio_sfx')?.authoritativePath).toBe('src/renderer/assets/audio/');
+        expect(assetDropInReadinessComplete()).toBe(true);
+    });
+
     it('REG-113 re-exports the same placeholder inventory for bot/marketing handoff', () => {
-        expect(REG113_PLACEHOLDER_INVENTORY).toBe(ASSET_DROP_IN_CATEGORIES);
+        expect(REG113_PLACEHOLDER_INVENTORY).toEqual(ASSET_DROP_IN_CATEGORIES);
     });
 });

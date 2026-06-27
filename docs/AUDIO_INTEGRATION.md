@@ -2,11 +2,11 @@
 
 Ultra-deep table of every shipped sound (style, duration, references, coupling): [AUDIO_ASSET_INVENTORY.md](./AUDIO_ASSET_INVENTORY.md).
 
-**Status:** Volume sliders persist via `Settings` / `save-data.ts`. **Gameplay SFX** uses **Web Audio**: procedural oscillators by default, with optional sampled OGG/WAV one-shots from [`src/renderer/assets/audio/sfx/`](../src/renderer/assets/audio/sfx/README.md) when files are present. Effective gain is `masterVolume * sfxVolume`.
+**Status:** Volume sliders persist via `Settings` / `save-data.ts`. **Gameplay SFX** uses **Web Audio**: sampled OGG one-shots from [`src/renderer/assets/audio/sfx/`](../src/renderer/assets/audio/sfx/README.md) when files are present, with procedural oscillators as decode/missing-asset fallback. Effective gain is `masterVolume * sfxVolume`.
 
 **UI/menu SFX** uses the same shared renderer `AudioContext` through [`uiSfx.ts`](../src/renderer/audio/uiSfx.ts). It covers focused navigation and confirmation cues: click, confirm, back, counter, menu-open, and run-start.
 
-**Background music** uses an `HTMLAudioElement` loop ([`gameplayMusic.ts`](../src/renderer/audio/gameplayMusic.ts)): gain is `masterVolume * musicVolume`. Playback runs while `visualView` is `menu` or `playing`. Menu uses `menu-loop.wav`; gameplay uses `run-loop.wav`. Other views pause the track. Browser autoplay rules still apply, so the hook retries after the first `pointerdown`.
+**Background music** uses an `HTMLAudioElement` loop ([`gameplayMusic.ts`](../src/renderer/audio/gameplayMusic.ts)): gain is `masterVolume * musicVolume`. Playback runs while `visualView` is `menu` or `playing`. Release playback uses OGG loops (`menu-loop.ogg`, `run-loop.ogg`) while WAV masters remain in the asset folder for regeneration/reference. Other views pause the track. Browser autoplay rules still apply, so the hook retries after the first `pointerdown`.
 
 ## Current wiring
 
@@ -29,15 +29,15 @@ Ultra-deep table of every shipped sound (style, duration, references, coupling):
 - `src/renderer/audio/gameplayMusic.ts` - menu/run background loop selection + volume + view gating
 - `src/renderer/assets/audio/sfx/manifest.json` - gameplay keys to filenames + match tier ranges
 - `src/renderer/assets/audio/ui/manifest.json` - UI/menu keys to filenames
-- `src/renderer/assets/audio/music/` - `menu-loop.wav` and `run-loop.wav`
+- `src/renderer/assets/audio/music/` - runtime `menu-loop.ogg` / `run-loop.ogg` plus WAV masters
 
 ## Asset Set
 
-Gameplay SFX: `flip`, `gambit-commit`, `match-tier-low`, `match-tier-mid`, `match-tier-high`, `mismatch`, `power-arm`, `destroy-pair`, `peek-power`, `stray-power`, `shuffle-full`, `shuffle-quick`, and `floor-clear`.
+Gameplay SFX: `flip`, `gambit-commit`, `match-tier-low`, `match-tier-mid`, `match-tier-high`, `mismatch`, `power-arm`, `destroy-pair`, `peek-power`, `stray-power`, `shuffle-full`, `shuffle-quick`, `floor-clear`, `relic-offer-open`, `relic-pick`, `wager-arm`, and `countdown-pressure`.
 
-UI/menu SFX: `ui-click`, `ui-confirm`, `ui-back`, `ui-counter`, `menu-open`, and `run-start`.
+UI/menu SFX: `ui-click`, `ui-confirm`, `ui-back`, `ui-counter`, `menu-open`, `run-start`, `intro-sting`, `pause-open`, `pause-resume`, `game-over-open`, and `ui-copy`.
 
-Music: `menu-loop.wav` and `run-loop.wav`.
+Music: `menu-loop.ogg` and `run-loop.ogg` for runtime playback; `menu-loop.wav` and `run-loop.wav` are retained as source masters.
 
 ## Offline generation
 
@@ -47,7 +47,7 @@ Use `scripts/audio-pipeline/jobs.memory-dungeon-app-audio.json` for the full app
 - `src/renderer/assets/audio/ui/`
 - `src/renderer/assets/audio/music/`
 
-Regenerate checked-in procedural placeholders after manifest edits with `yarn audio:placeholders`.
+Regenerate checked-in procedural WAV masters after manifest edits with `yarn audio:placeholders`, then export runtime OGG files before shipping.
 
 ## QA
 

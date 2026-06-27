@@ -1,6 +1,6 @@
 import type { Tile } from '../../shared/contracts';
 
-export interface TileBoardSpotlightState {
+interface TileBoardSpotlightState {
     spotlightBountyHighlight: boolean;
     spotlightBountyOnBack: boolean;
     spotlightWardHighlight: boolean;

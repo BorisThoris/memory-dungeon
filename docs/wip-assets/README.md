@@ -1,6 +1,6 @@
 # WIP assets (non-shipped / reference)
 
-Material in this tree is for **design iteration, QA captures, and import sources**. Shipped game art lives under `src/renderer/assets/` and `public/` (served URLs).
+Material in this tree is for **design iteration, QA captures, and import sources**. Shipped game art lives under `src/renderer/assets/` and runtime-safe `public/` URLs. `public/wip-assets/` mirrors design-review SVGs for local previews only; production builds prune it unless `VITE_KEEP_WIP_PUBLIC_ASSETS=1` is set.
 
 | Path | Purpose |
 |------|---------|

@@ -157,7 +157,7 @@ describe('useGameplayMusic', () => {
         );
 
         const audio = MockAudioElement.instances[0];
-        expect(audio?.src).toContain('menu-loop.wav');
+        expect(audio?.src).toContain('menu-loop.ogg');
         expect(audio?.loop).toBe(true);
         expect(audio?.preload).toBe('auto');
         expect(audio?.volume).toBe(0.4);
@@ -201,12 +201,12 @@ describe('useGameplayMusic', () => {
             { initialProps: { track: 'menu' as MusicTrack } }
         );
 
-        expect(MockAudioElement.instances[0]?.src).toContain('menu-loop.wav');
+        expect(MockAudioElement.instances[0]?.src).toContain('menu-loop.ogg');
 
         rerender({ track: 'run' });
 
         expect(MockAudioElement.instances[0]?.pause).toHaveBeenCalled();
-        expect(MockAudioElement.instances[1]?.src).toMatch(/demo-ambience-loop\.wav|run-loop\.wav/);
+        expect(MockAudioElement.instances[1]?.src).toMatch(/demo-ambience-loop\.ogg|run-loop\.ogg/);
         await waitFor(() => expect(MockAudioElement.instances[1]?.play).toHaveBeenCalled());
     });
 

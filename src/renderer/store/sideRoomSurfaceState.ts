@@ -2,7 +2,7 @@ import type { RunState, ViewState } from '../../shared/contracts';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
 
-export type SideRoomResultSurfacePatch =
+type SideRoomResultSurfacePatch =
     | {
           run: RunState;
           view: 'playing';
@@ -37,7 +37,7 @@ export const createSideRoomResultSurfacePatch = (run: RunState): SideRoomResultS
 export const shouldContinueAfterSideRoomResult = (patch: SideRoomResultSurfacePatch): boolean =>
     patch.view === 'playing';
 
-export type SideRoomActionSurfaceResult =
+type SideRoomActionSurfaceResult =
     | {
           kind: 'ignored';
       }

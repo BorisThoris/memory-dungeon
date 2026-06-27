@@ -10,9 +10,9 @@ export type MetaOverlayStatePatch = {
     subscreenReturnView?: SubscreenReturnView;
 };
 
-export type MetaOverlayPointerResetPatch = Pick<MetaOverlayStatePatch, MetaOverlayReturnPointer>;
+type MetaOverlayPointerResetPatch = Pick<MetaOverlayStatePatch, MetaOverlayReturnPointer>;
 
-export type MetaOverlayCloseSurfaceResult =
+type MetaOverlayCloseSurfaceResult =
     | {
           kind: 'gameOver';
           patch: MetaOverlayPointerResetPatch;
@@ -27,7 +27,7 @@ export type MetaOverlayCloseSurfaceResult =
           patch: MetaOverlayStatePatch;
       };
 
-export type MetaOverlayOpenSurfaceResult =
+type MetaOverlayOpenSurfaceResult =
     | {
           kind: 'freeze';
           patch: MetaOverlayStatePatch;

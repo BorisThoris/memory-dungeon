@@ -35,6 +35,77 @@ describe('gate:changed selector', () => {
         expect(payload.reasons.some((reason) => reason.file === 'docs/system-diagrams/actions.json')).toBe(true);
     });
 
+    it('selects the blueprint browser smoke for system diagram explorer changes', () => {
+        const payload = runGateChanged(
+            'scripts/system-diagrams.mjs',
+            'scripts/vite-dev-blueprint-api.mjs',
+            'src/renderer/dev/BlueprintExplorer.tsx',
+            'e2e/blueprint-explorer.spec.ts'
+        );
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([{ id: 'blueprintE2e', command: 'yarn test:e2e:blueprint' }])
+        );
+        expect(payload.reasons.filter((reason) => reason.gateId === 'blueprintE2e')).toHaveLength(4);
+    });
+
+    it('selects the security gate for dependency and audit tooling changes', () => {
+        const payload = runGateChanged('package.json', 'yarn.lock', 'scripts/audit-summary.mjs');
+        const gateIds = payload.gates.map((gate) => gate.id);
+
+        expect(gateIds).toEqual(
+            expect.arrayContaining(['security', 'packageHygiene', 'systems', 'buildOutput', 'desktopBuild', 'blueprintE2e'])
+        );
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([{ id: 'security', command: 'yarn gate:security' }])
+        );
+        expect(payload.reasons.filter((reason) => reason.gateId === 'security')).toHaveLength(3);
+    });
+
+    it('selects package hygiene for dependency and unused-export tooling changes', () => {
+        const payload = runGateChanged(
+            'package.json',
+            'knip.json',
+            '.depcheckrc.json',
+            'scripts/check-depcheck-clean.mjs',
+            'src/shared/check-depcheck-clean-script.test.ts'
+        );
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([{ id: 'packageHygiene', command: 'yarn gate:package-hygiene' }])
+        );
+        expect(payload.reasons.filter((reason) => reason.gateId === 'packageHygiene')).toHaveLength(5);
+    });
+
+    it('selects the desktop build gate for Electron shell and bridge changes', () => {
+        const payload = runGateChanged(
+            'tsup.config.ts',
+            'src/main/index.ts',
+            'src/preload/index.ts',
+            'src/renderer/desktop-client.ts',
+            'src/shared/desktop-api-boundary.ts'
+        );
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([{ id: 'desktopBuild', command: 'yarn gate:desktop-build' }])
+        );
+        expect(payload.reasons.filter((reason) => reason.gateId === 'desktopBuild')).toHaveLength(5);
+    });
+
+    it('selects the build output gate for renderer build and bundle budget changes', () => {
+        const payload = runGateChanged(
+            'vite.config.mts',
+            'scripts/check-renderer-bundle-budget.mjs',
+            'src/shared/renderer-bundle-budget-script.test.ts',
+            'src/renderer/assets/bg-main-menu-cathedral-v1.png'
+        );
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([{ id: 'buildOutput', command: 'yarn gate:build-output' }])
+        );
+        expect(payload.reasons.filter((reason) => reason.gateId === 'buildOutput')).toHaveLength(4);
+    });
+
     it('selects sim health for endless schedule, generation, trait, reward, and contract changes', () => {
         const payload = runGateChanged(
             'scripts/sim-endless.ts',
@@ -71,6 +142,9 @@ describe('gate:changed selector', () => {
         expect(payload.gates).toEqual(
             expect.arrayContaining([{ id: 'simSoftlockSeeds', command: 'yarn gate:sim-softlock-seeds' }])
         );
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([{ id: 'simSoftlockStress', command: 'yarn gate:sim-softlock-stress' }])
+        );
         expect(
             payload.reasons.some(
                 (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/dungeon-exit-rules.ts'
@@ -82,7 +156,7 @@ describe('gate:changed selector', () => {
         const payload = runGateChanged('src/shared/board-inspection.ts', 'src/shared/dungeon-board-status.ts');
         const gateIds = payload.gates.map((gate) => gate.id);
 
-        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds']));
+        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds', 'simSoftlockStress']));
         expect(
             payload.reasons.some(
                 (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/board-inspection.ts'
@@ -99,7 +173,7 @@ describe('gate:changed selector', () => {
         const payload = runGateChanged('src/shared/run-progression-repair.ts');
         const gateIds = payload.gates.map((gate) => gate.id);
 
-        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds']));
+        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds', 'simSoftlockStress']));
         expect(
             payload.reasons.some(
                 (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/run-progression-repair.ts'
@@ -110,7 +184,7 @@ describe('gate:changed selector', () => {
     it('keeps core game rules on expensive gates without matching gameplay support files', () => {
         const corePayload = runGateChanged('src/shared/game.ts');
         expect(corePayload.gates.map((gate) => gate.id)).toEqual(
-            expect.arrayContaining(['actionLoop', 'simSoftlockSeeds'])
+            expect.arrayContaining(['actionLoop', 'simSoftlockSeeds', 'simSoftlockStress'])
         );
 
         const supportPayload = runGateChanged('src/shared/gameplay-rules-edit-map.test.ts');
@@ -125,19 +199,28 @@ describe('gate:changed selector', () => {
             'src/renderer/store/levelCompleteSurfaceState.ts',
             'src/renderer/store/runResolutionController.ts',
             'src/renderer/audio/uiSfx.ts',
+            'src/renderer/assets/audio/music/menu-loop.ogg',
+            'scripts/audio-pipeline/export-runtime-ogg.mjs',
+            'scripts/audio-pipeline/generate-portfolio-feedback-pack.mjs',
             'src/renderer/cardFace/cardIllustrationDraw.ts',
+            'scripts/card-pipeline/export-face-panel-webp.mjs',
+            'scripts/card-pipeline/export-ui-background-webp.mjs',
+            'scripts/card-pipeline/export-card-normal-webp.mjs',
+            'scripts/audit-renderer-assets.mjs',
+            'docs/AUDIO_INTEGRATION.md',
             'src/main/persistence.ts'
         );
 
         expect(payload.gates.map((gate) => gate.id)).toEqual(
-            expect.arrayContaining(['rendererInput', 'audioFeedback', 'assetRendering', 'persistence'])
+            expect.arrayContaining(['rendererInput', 'audioFeedback', 'assetRendering', 'persistence', 'buildOutput'])
         );
         expect(payload.gates).toEqual(
             expect.arrayContaining([
                 { id: 'rendererInput', command: 'yarn gate:renderer-input' },
                 { id: 'audioFeedback', command: 'yarn gate:audio-feedback' },
                 { id: 'assetRendering', command: 'yarn gate:asset-rendering' },
-                { id: 'persistence', command: 'yarn gate:persistence' }
+                { id: 'persistence', command: 'yarn gate:persistence' },
+                { id: 'buildOutput', command: 'yarn gate:build-output' }
             ])
         );
         expect(
@@ -145,6 +228,106 @@ describe('gate:changed selector', () => {
                 (reason) =>
                     reason.gateId === 'rendererInput' &&
                     reason.file === 'src/renderer/store/levelCompleteSurfaceState.ts'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'assetRendering' &&
+                    reason.file === 'scripts/audit-renderer-assets.mjs'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'assetRendering' &&
+                    reason.file === 'scripts/card-pipeline/export-face-panel-webp.mjs'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'assetRendering' &&
+                    reason.file === 'scripts/card-pipeline/export-ui-background-webp.mjs'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'assetRendering' &&
+                    reason.file === 'scripts/card-pipeline/export-card-normal-webp.mjs'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'audioFeedback' &&
+                    reason.file === 'src/renderer/assets/audio/music/menu-loop.ogg'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'audioFeedback' &&
+                    reason.file === 'scripts/audio-pipeline/export-runtime-ogg.mjs'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'audioFeedback' &&
+                    reason.file === 'scripts/audio-pipeline/generate-portfolio-feedback-pack.mjs'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'audioFeedback' && reason.file === 'docs/AUDIO_INTEGRATION.md'
+            )
+        ).toBe(true);
+    });
+
+    it('selects renderer QA shards for live browser layout, navigation, interlude, and 3D changes', () => {
+        const payload = runGateChanged(
+            'e2e/mobile-layout.spec.ts',
+            'e2e/playable-path-mode-matrix.spec.ts',
+            'e2e/playable-path-interludes.spec.ts',
+            'e2e/tile-card-face-webgl.spec.ts',
+            'src/renderer/components/GameScreen.tsx',
+            'src/renderer/components/ChooseYourPathScreen.tsx',
+            'src/renderer/components/ShopScreen.tsx',
+            'src/renderer/components/TileBoard.tsx'
+        );
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([
+                { id: 'rendererQaLayout', command: 'yarn test:e2e:renderer-qa:layout' },
+                { id: 'rendererQaNavigation', command: 'yarn test:e2e:renderer-qa:navigation' },
+                { id: 'rendererQaInterludes', command: 'yarn test:e2e:renderer-qa:interludes' },
+                { id: 'rendererQa3d', command: 'yarn test:e2e:renderer-qa:3d' }
+            ])
+        );
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'rendererQaLayout' && reason.file === 'e2e/mobile-layout.spec.ts'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'rendererQaNavigation' &&
+                    reason.file === 'e2e/playable-path-mode-matrix.spec.ts'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'rendererQaInterludes' &&
+                    reason.file === 'e2e/playable-path-interludes.spec.ts'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'rendererQa3d' && reason.file === 'e2e/tile-card-face-webgl.spec.ts'
             )
         ).toBe(true);
     });

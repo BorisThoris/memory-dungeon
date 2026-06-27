@@ -1,16 +1,16 @@
 import type { IntroPlaybackState } from './startupIntroConfig';
 
-export type StartupIntroAssetState = 'loading' | 'ready' | 'fallback';
-export type StartupIntroSkipState = 'idle' | 'requested';
-export type StartupIntroHydrationState = 'hydrating' | 'menu-ready' | 'non-menu-view';
+type StartupIntroAssetState = 'loading' | 'ready' | 'fallback';
+type StartupIntroSkipState = 'idle' | 'requested';
+type StartupIntroHydrationState = 'hydrating' | 'menu-ready' | 'non-menu-view';
 
-export interface StartupIntroAppContractInput {
+interface StartupIntroAppContractInput {
     hydrated: boolean;
     introPlayback: Exclude<IntroPlaybackState, 'playing'>;
     view: string;
 }
 
-export interface StartupIntroAppContract {
+interface StartupIntroAppContract {
     hydrationState: StartupIntroHydrationState;
     menuAriaHidden: boolean;
     menuPointerState: 'blocked' | 'interactive';
@@ -19,13 +19,13 @@ export interface StartupIntroAppContract {
     returnFocusTestId: 'main-menu-focus-root';
 }
 
-export interface StartupIntroOverlayContractInput {
+interface StartupIntroOverlayContractInput {
     assetsReady: boolean;
     renderMode: 'three' | 'fallback';
     skipPending: boolean;
 }
 
-export interface StartupIntroOverlayContract {
+interface StartupIntroOverlayContract {
     assetState: StartupIntroAssetState;
     loadingLabel: string | null;
     skipState: StartupIntroSkipState;

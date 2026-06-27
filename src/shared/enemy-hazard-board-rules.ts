@@ -5,14 +5,18 @@ import {
     isSingletonUtilityPairKey
 } from './tile-identity';
 
+const isEnemyHazardRelevantPairTile = (tile: Tile): boolean =>
+    !isSingletonUtilityPairKey(tile.pairKey) &&
+    tile.pairKey !== DECOY_PAIR_KEY &&
+    tile.pairKey !== WILD_PAIR_KEY;
+
 export const enemyHazardEligibleTiles = (tiles: readonly Tile[]): Tile[] =>
     tiles.filter(
         (tile) =>
             tile.state !== 'matched' &&
             tile.state !== 'removed' &&
-            !isSingletonUtilityPairKey(tile.pairKey) &&
-            tile.pairKey !== DECOY_PAIR_KEY &&
-            tile.pairKey !== WILD_PAIR_KEY
+            tile.dungeonCardState !== 'resolved' &&
+            isEnemyHazardRelevantPairTile(tile)
     );
 
 const unclearedRealPairKeys = (tiles: readonly Tile[]): string[] => [
@@ -20,13 +24,13 @@ const unclearedRealPairKeys = (tiles: readonly Tile[]): string[] => [
 ];
 
 const tileIsCleared = (tile: Tile | undefined): boolean =>
-    tile != null && (tile.state === 'matched' || tile.state === 'removed');
+    tile != null && (tile.state === 'matched' || tile.state === 'removed' || tile.dungeonCardState === 'resolved');
 
 export const allRealBoardPairsCleared = (board: BoardState): boolean =>
-    board.tiles.some((tile) => !isSingletonUtilityPairKey(tile.pairKey)) &&
+    board.tiles.some(isEnemyHazardRelevantPairTile) &&
     board.tiles
-        .filter((tile) => !isSingletonUtilityPairKey(tile.pairKey))
-        .every((tile) => tile.state === 'matched' || tile.state === 'removed');
+        .filter(isEnemyHazardRelevantPairTile)
+        .every((tile) => tileIsCleared(tile));
 
 export const enemyHazardReferencesOnlyClearedTiles = (
     board: BoardState,

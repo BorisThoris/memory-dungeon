@@ -424,6 +424,36 @@ describe('gameplay property invariants', () => {
         expect(solved.status).toBe('levelComplete');
     });
 
+    it('exhausts trap boss floors when stale boss hazards clear before decoys', () => {
+        const level = 4;
+        const runSeed = 387641732;
+        const board = buildBoard(level, {
+            gameMode: 'endless',
+            runSeed,
+            runRulesVersion: 1,
+            floorTag: 'boss',
+            floorArchetypeId: null,
+            dungeonNodeKind: 'trap',
+            activeMutators: [],
+            routeCardPlan: {
+                choiceId: `property:mystery:${runSeed}:${level}`,
+                routeType: 'mystery',
+                sourceLevel: level - 1,
+                targetLevel: level
+            }
+        });
+        const run = createGeneratedBoardSolverRun(board, runSeed, 1);
+
+        const solved = solveRunByExhaustingPlayablePairs(run);
+
+        expect(run.board?.level).toBe(level);
+        expect(run.dungeonRun.currentFloor).toBe(level);
+        expectRunResourceBounds(solved);
+        expectFlippedTileReferencesExist(solved);
+        expect(inspectRunFairness(solved).issues).toEqual([]);
+        expect(solved.status).toBe('levelComplete');
+    });
+
     it('omitted dungeon exit spend matches the explicit valid spend choice', () => {
         fc.assert(
             fc.property(

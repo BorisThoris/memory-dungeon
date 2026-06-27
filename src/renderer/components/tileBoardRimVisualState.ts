@@ -10,7 +10,7 @@ import type { ResolvingSelectionState } from './tileResolvingSelection';
 
 export type ResolvingRimColorRole = 'cyanBright' | 'danger' | 'emeraldBright';
 
-export interface ResolvingRimVisualInput {
+interface ResolvingRimVisualInput {
     faceUp: boolean;
     graphicsQuality: GraphicsQualityPreset;
     isPinned: boolean;
@@ -36,7 +36,7 @@ export interface RimMaterialTarget {
     opacity: number;
 }
 
-export interface FocusRimOpacityInput {
+interface FocusRimOpacityInput {
     keyboardFocused: boolean;
     pickable: boolean;
     reduceMotion: boolean;
@@ -44,7 +44,7 @@ export interface FocusRimOpacityInput {
     time: number;
 }
 
-export interface MatchedVictoryFlameVisualInput {
+interface MatchedVictoryFlameVisualInput {
     graphicsQuality: GraphicsQualityPreset;
     matchedVictoryBurst: number;
     matchedVictoryPersistent: boolean;
@@ -61,7 +61,7 @@ export interface MatchedVictoryFlameVisualState {
     visible: boolean;
 }
 
-export interface ApplyMatchedVictoryFlameVisualStateInput {
+interface ApplyMatchedVictoryFlameVisualStateInput {
     elapsedTime: number;
     mat: ShaderMaterial | null;
     mesh: Mesh | null;
@@ -69,12 +69,12 @@ export interface ApplyMatchedVictoryFlameVisualStateInput {
     state: MatchedVictoryFlameVisualState;
 }
 
-export interface ApplyResolvingRimVisualStateInput {
+interface ApplyResolvingRimVisualStateInput {
     material: RimMaterialTarget | null;
     state: ResolvingRimVisualState;
 }
 
-export interface ApplyFocusRimOpacityInput {
+interface ApplyFocusRimOpacityInput {
     material: RimMaterialTarget | null;
     opacity: number;
 }

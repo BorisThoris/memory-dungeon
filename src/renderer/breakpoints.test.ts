@@ -9,8 +9,12 @@ import {
 } from './breakpoints';
 import {
     HIGH_TRAFFIC_VIEWPORT_MATRIX,
+    RESPONSIVE_VIEWPORT_MATRIX,
     RESPONSIVE_SCREEN_ROUTES,
+    classifyResponsiveViewport,
+    getFinalDeviceGridSummary,
     getViewportRegressionExpectations,
+    responsiveViewportIdsForScreen,
     responsiveMatrixFinalDeviceGridSummary
 } from './viewportMatrix';
 
@@ -81,6 +85,9 @@ describe('REG-028 high-traffic viewport regression matrix', () => {
             'short_wide_1366x640',
             'desktop_1440x900'
         ]);
+        expect(RESPONSIVE_VIEWPORT_MATRIX.map((entry) => entry.id)).toEqual(
+            HIGH_TRAFFIC_VIEWPORT_MATRIX.map((entry) => entry.id)
+        );
         expect(HIGH_TRAFFIC_VIEWPORT_MATRIX.every((entry) => entry.mustShowPrimaryAction)).toBe(true);
     });
 
@@ -104,11 +111,18 @@ describe('REG-028 high-traffic viewport regression matrix', () => {
 describe('REG-102 final responsive device grid', () => {
     it('covers every high-traffic shell screen with at least one phone and desktop route', () => {
         const summary = responsiveMatrixFinalDeviceGridSummary();
+        expect(getFinalDeviceGridSummary()).toEqual(summary);
         expect(summary.viewportCount).toBe(8);
         expect(summary.screenCount).toBeGreaterThanOrEqual(7);
         expect(summary.hasPhoneCoverage).toBe(true);
         expect(summary.hasDesktopCoverage).toBe(true);
         expect(summary.allScreensHavePrimarySelectors).toBe(true);
         expect(RESPONSIVE_SCREEN_ROUTES.every((route) => route.requiredViewportIds.length > 0)).toBe(true);
+    });
+
+    it('classifies and resolves viewport route coverage helpers used by visual QA', () => {
+        expect(classifyResponsiveViewport(390, 844)).toBe('phone_portrait');
+        expect(classifyResponsiveViewport(1366, 640)).toBe('short_desktop');
+        expect(responsiveViewportIdsForScreen('gameplay')).toContain('phone_360x740');
     });
 });

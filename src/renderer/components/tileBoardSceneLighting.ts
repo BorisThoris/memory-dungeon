@@ -3,7 +3,7 @@ import type { GameplayRenderQualityProfile } from './gameplayRenderProfile';
 
 type RendererThemeColors = typeof RENDERER_THEME.colors;
 
-export interface TileBoardSceneLightProps {
+interface TileBoardSceneLightProps {
     ambient: {
         color: string;
         intensity: number;

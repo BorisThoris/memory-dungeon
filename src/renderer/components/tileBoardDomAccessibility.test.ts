@@ -1,13 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState } from '../../shared/contracts';
 import {
+    getDungeonCardText,
     getEnemyHazardText,
     getFocusedTileLiveLabel,
+    getHazardTileText,
+    getPairProximityLabel,
     getPickableTileIds,
     getPowerTargetAriaText,
     getTileAriaLabel,
     getTilePosition,
     getTileTraitPreviewText,
+    gridIndexFromTileId,
     moveFocusInGrid
 } from './tileBoardDomAccessibility';
 
@@ -246,6 +250,28 @@ describe('tile board DOM accessibility helpers', () => {
         expect(moveFocusInGrid(blockedBoard, 'a1', 'right', true, false)).toBe('a1');
         expect(moveFocusInGrid(blockedBoard, 'a1', 'down', true, false)).toBe('b1');
         expect(moveFocusInGrid(blockedBoard, 'b1', 'right', true, false)).toBe('b2');
+    });
+
+    it('exposes leaf text helpers used by keyboard and DOM board renderers', () => {
+        const dungeonTile = {
+            ...board.tiles[0]!,
+            state: 'flipped' as const,
+            dungeonCardKind: 'exit' as const,
+            dungeonExitLockKind: 'none' as const
+        };
+        const hazardTile = { ...board.tiles[1]!, tileHazardKind: 'shuffle_snare' as const };
+        const proximityBoard: BoardState = {
+            ...board,
+            flippedTileIds: ['a1'],
+            tiles: [{ ...board.tiles[0]!, state: 'flipped' }, ...board.tiles.slice(1)]
+        };
+
+        expect(getDungeonCardText(dungeonTile, board)).toContain('Can be opened once revealed');
+        expect(getHazardTileText(hazardTile)).toContain('Hazard tile:');
+        expect(gridIndexFromTileId(board, 'b2')).toBe(3);
+        expect(gridIndexFromTileId(board, 'missing')).toBe(0);
+        expect(getPairProximityLabel(proximityBoard, proximityBoard.tiles[0]!, true, true)).toBe('1');
+        expect(getPairProximityLabel(proximityBoard, proximityBoard.tiles[0]!, false, true)).toBeNull();
     });
 
     it('builds the focused tile live label with power targeting and pair proximity copy', () => {

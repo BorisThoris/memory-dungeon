@@ -1,9 +1,10 @@
 import path from 'node:path';
+import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 import { visualizer } from 'rollup-plugin-visualizer';
-/* Plain ESM helper (`.mjs`); no `allowJs` typings — Vite load-time only. */
+/* Plain ESM helper (`.mjs`); no `allowJs` typings -- Vite load-time only. */
 // @ts-expect-error TS7016
 import { viteDevBlueprintApi } from './scripts/vite-dev-blueprint-api.mjs';
 
@@ -15,9 +16,18 @@ const rendererOutDir = (process.env.VITE_OUT_DIR ?? 'dist').trim() || 'dist';
 const boardWebglPerfSample = path.resolve(__dirname, 'src/renderer/dev/boardWebglPerfSample.ts');
 const boardWebglPerfSampleStub = path.resolve(__dirname, 'src/renderer/dev/boardWebglPerfSample.stub.ts');
 
+const pruneWipPublicAssetsFromBuild = () => ({
+    name: 'memory-dungeon-prune-wip-public-assets',
+    closeBundle(): void {
+        if (process.env.VITE_KEEP_WIP_PUBLIC_ASSETS === '1') return;
+        fs.rmSync(path.resolve(__dirname, rendererOutDir, 'wip-assets'), { recursive: true, force: true });
+    }
+});
+
 export default defineConfig(({ mode }) => ({
     plugins: [
         viteDevBlueprintApi(),
+        pruneWipPublicAssetsFromBuild(),
         react(),
         process.env.VITE_BUNDLE_ANALYZE === '1'
             ? visualizer({
@@ -73,7 +83,8 @@ export default defineConfig(({ mode }) => ({
     },
     build: {
         outDir: rendererOutDir,
-        sourcemap: true,
+        sourcemap: process.env.VITE_SOURCEMAP === '1',
+        chunkSizeWarningLimit: 1300,
         /**
          * Windows: locked files under `dist` cause EPERM on clean or on writing the same asset name.
          * Use `yarn build:renderer:alt-out` (writes to `dist-build`), or set `VITE_SKIP_EMPTY_OUT_DIR=1`

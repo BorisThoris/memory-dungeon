@@ -1,8 +1,8 @@
 import metaStyles from './MetaScreen.module.css';
 
-export type MetaSubscreenTitleLevel = 'h1' | 'h2';
+type MetaSubscreenTitleLevel = 'h1' | 'h2';
 
-export interface MetaInRunFramedPanelClasses {
+interface MetaInRunFramedPanelClasses {
     readonly panel: string;
     readonly hero: string;
 }

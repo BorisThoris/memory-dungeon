@@ -49,7 +49,9 @@ describe('preloadStartupCriticalAssets', () => {
             didTimeout: false,
             timeRemaining: () => 50
         } as IdleDeadline);
-        await Promise.resolve();
+        for (let i = 0; i < 5; i += 1) {
+            await Promise.resolve();
+        }
     };
 
     beforeEach(() => {
@@ -133,5 +135,36 @@ describe('preloadStartupCriticalAssets', () => {
             await runIdleCallback(1);
         }
         expect(requestedRasterUrls.length).toBeGreaterThan(criticalUiUrls.size);
+    }, 15000);
+
+    it('exposes direct raster preload and background warmup helpers for shell orchestration', async () => {
+        const {
+            preloadModePosterRasterImages,
+            preloadUiRasterImages,
+            resetStartupAssetPreloadStateForTests,
+            warmCardIllustrationsInBackground,
+            warmModePosterRasterImagesInBackground
+        } = await import('./preloadStartupAssets');
+        const { MODE_CARD_ART, UI_ART } = await import('./ui');
+        resetStartupAssetPreloadStateForTests();
+
+        await preloadUiRasterImages();
+        expect(requestedRasterUrls).toEqual([...new Set(Object.values(UI_ART))]);
+
+        requestedRasterUrls = [];
+        await preloadModePosterRasterImages();
+        expect(requestedRasterUrls).toEqual([...new Set([...Object.values(MODE_CARD_ART), MODE_CARD_ART.fallback])]);
+
+        requestedRasterUrls = [];
+        warmCardIllustrationsInBackground();
+        warmCardIllustrationsInBackground();
+        warmModePosterRasterImagesInBackground();
+        warmModePosterRasterImagesInBackground();
+
+        expect(idleCallbacks.filter(Boolean)).toHaveLength(2);
+        await runIdleCallback(0);
+        await runIdleCallback(1);
+        expect(preloadCardIllustrationImages).toHaveBeenCalledTimes(1);
+        expect(requestedRasterUrls).toEqual([...new Set([...Object.values(MODE_CARD_ART), MODE_CARD_ART.fallback])]);
     }, 15000);
 });

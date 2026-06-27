@@ -449,6 +449,44 @@ describe('REG-087 board fairness inspection', () => {
         expect(inspectBoardFairness(board).hasCompletionRoute).toBe(false);
     });
 
+    it('flags boards where multiple exit cards claim the activation', () => {
+        const board = boardFromTiles(
+            [
+                tile('a1', 'a', 'matched'),
+                tile('a2', 'a', 'matched'),
+                {
+                    ...tile('exit-safe', EXIT_PAIR_KEY, 'matched'),
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'resolved',
+                    dungeonExitActivated: true,
+                    dungeonRouteType: 'safe'
+                },
+                {
+                    ...tile('exit-greed', EXIT_PAIR_KEY, 'matched'),
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'resolved',
+                    dungeonExitActivated: true,
+                    dungeonRouteType: 'greed'
+                }
+            ],
+            {
+                pairCount: 1,
+                matchedPairs: 1,
+                dungeonExitTileId: 'exit-safe',
+                dungeonExitActivated: true
+            }
+        );
+        const report = inspectBoardFairness(board);
+
+        expect(report.issues).toEqual([
+            expect.objectContaining({
+                code: 'exit_activation_mismatch',
+                tileIds: ['exit-safe', 'exit-greed']
+            })
+        ]);
+        expect(report.hasCompletionRoute).toBe(false);
+    });
+
     it('repairs impossible generated primary exit locks instead of trusting shop access', () => {
         const board = boardFromTiles(
             [

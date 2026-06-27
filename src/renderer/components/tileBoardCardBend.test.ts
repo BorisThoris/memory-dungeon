@@ -3,13 +3,18 @@ import { PlaneGeometry } from 'three';
 import type { BufferAttribute, CanvasTexture } from 'three';
 
 import {
+    BEND_BUILDUP_MAX,
+    BEND_BUILDUP_PER_PRESS,
+    BEND_UV_SAME_SPOT,
     CARD_BEND_MAX_DEPTH,
+    WEAR_TEX_SIZE,
     addPersistentBendStamp,
     applyCardWearTextureAnisotropy,
     applyLiveCardBend,
     bendFalloffAtUv,
     cloneBasePositions,
     commitPersistentCardBend,
+    createWearTextureAndContext,
     computeCardBendSyncDecision,
     computeCardBendSyncState,
     computeCardClickState,
@@ -24,6 +29,7 @@ import {
     computeLiveCardBendState,
     composeCardPositions,
     disposeCardWearAssetSet,
+    drawWearStamp,
     hitUvToCanonicalBendUv,
     nextBendBuildupForHit,
     planeVertexToUv,
@@ -191,6 +197,8 @@ describe('tileBoardCardBend', () => {
     });
 
     it('builds repeated-press depth only near the previous bend hit', () => {
+        expect(BEND_BUILDUP_PER_PRESS).toBe(0.5);
+        expect(BEND_UV_SAME_SPOT).toBeGreaterThan(0);
         expect(
             nextBendBuildupForHit({
                 currentBuildup: 1,
@@ -229,7 +237,7 @@ describe('tileBoardCardBend', () => {
                 previousU: 0.5,
                 previousV: 0.5
             })
-        ).toBe(2.75);
+        ).toBe(BEND_BUILDUP_MAX);
     });
 
     it('maps pointer UVs into clamped hover tilt coordinates', () => {
@@ -679,6 +687,36 @@ describe('tileBoardCardBend', () => {
         expect(() => disposeCardWearAssetSet(null)).not.toThrow();
     });
 
+    it('creates configured wear texture assets from a canvas context', () => {
+        const context = {
+            fillRect: vi.fn(),
+            imageSmoothingEnabled: false,
+            imageSmoothingQuality: 'low'
+        } as unknown as CanvasRenderingContext2D;
+        const canvas = {
+            getContext: vi.fn(() => context),
+            height: 0,
+            width: 0
+        } as unknown as HTMLCanvasElement;
+        const createElement = vi.spyOn(document, 'createElement').mockImplementation(((tagName: string) => {
+            expect(tagName).toBe('canvas');
+            return canvas;
+        }) as typeof document.createElement);
+
+        const assets = createWearTextureAndContext();
+
+        expect(createElement).toHaveBeenCalledWith('canvas');
+        expect(assets.canvas.width).toBe(WEAR_TEX_SIZE);
+        expect(assets.canvas.height).toBe(WEAR_TEX_SIZE);
+        expect(assets.context).toBe(context);
+        expect(context.fillRect).toHaveBeenCalledWith(0, 0, WEAR_TEX_SIZE, WEAR_TEX_SIZE);
+        expect(assets.texture.generateMipmaps).toBe(false);
+        expect(assets.texture.premultiplyAlpha).toBe(true);
+
+        createElement.mockRestore();
+        assets.texture.dispose();
+    });
+
     it('applies live card bend to front, back, and overlay plane targets', () => {
         const front = new PlaneGeometry(2, 2, 2, 2);
         const back = new PlaneGeometry(2, 2, 2, 2);
@@ -896,5 +934,27 @@ describe('tileBoardCardBend', () => {
         expect(calls.filter((call) => call === 'fillRect')).toHaveLength(1);
 
         geometry.dispose();
+    });
+
+    it('draws wear stamps with the shared wear texture resolution', () => {
+        const gradient = { addColorStop: vi.fn() } as unknown as CanvasGradient;
+        const context = {
+            createRadialGradient: vi.fn(() => gradient),
+            fillRect: vi.fn(),
+            restore: vi.fn(),
+            save: vi.fn(),
+            set fillStyle(_value: string | CanvasGradient) {
+                return;
+            },
+            set globalCompositeOperation(_value: GlobalCompositeOperation) {
+                return;
+            }
+        } as unknown as CanvasRenderingContext2D;
+
+        drawWearStamp(context, 0.25, 0.75, 2);
+
+        expect(context.createRadialGradient).toHaveBeenCalledWith(WEAR_TEX_SIZE * 0.25, WEAR_TEX_SIZE * 0.25, 0, WEAR_TEX_SIZE * 0.25, WEAR_TEX_SIZE * 0.25, WEAR_TEX_SIZE * 0.14);
+        expect(gradient.addColorStop).toHaveBeenCalledTimes(3);
+        expect(context.fillRect).toHaveBeenCalledWith(0, 0, WEAR_TEX_SIZE, WEAR_TEX_SIZE);
     });
 });

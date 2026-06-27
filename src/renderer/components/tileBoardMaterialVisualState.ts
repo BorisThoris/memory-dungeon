@@ -4,14 +4,14 @@ import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
 import { RENDERER_THEME } from '../styles/theme';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 
-export type CardMaterialEmissiveRole = 'hoverGold' | 'matchVictory' | 'mismatch' | 'none';
+type CardMaterialEmissiveRole = 'hoverGold' | 'matchVictory' | 'mismatch' | 'none';
 
-export interface CardMaterialEmissiveState {
+interface CardMaterialEmissiveState {
     intensity: number;
     role: CardMaterialEmissiveRole;
 }
 
-export interface CardMaterialVisualInput {
+interface CardMaterialVisualInput {
     faceUp: boolean;
     focusDimBlend: number;
     graphicsQuality: GraphicsQualityPreset;
@@ -22,7 +22,7 @@ export interface CardMaterialVisualInput {
     time: number;
 }
 
-export interface CardFocusDimBlendInput {
+interface CardFocusDimBlendInput {
     current: number;
     delta: number;
     faceUp: boolean;
@@ -31,14 +31,14 @@ export interface CardFocusDimBlendInput {
     tileState: Tile['state'];
 }
 
-export interface CardMaterialVisualState {
+interface CardMaterialVisualState {
     dimBrightness: number;
     dimOpacity: number;
     frontEmissive: CardMaterialEmissiveState;
     backEmissive: CardMaterialEmissiveState;
 }
 
-export interface ApplyCardMaterialVisualStateInput {
+interface ApplyCardMaterialVisualStateInput {
     backMaterial: MeshStandardMaterial | null;
     frontMaterial: MeshStandardMaterial | null;
     state: CardMaterialVisualState;

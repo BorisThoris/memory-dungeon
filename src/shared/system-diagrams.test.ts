@@ -86,7 +86,7 @@ describe('system diagram generator', () => {
             'test-gate-architecture'
         ]);
         expect(payload.stats.diagramCount).toBe(11);
-        expect(payload.stats.actionCount).toBe(11);
+        expect(payload.stats.actionCount).toBe(18);
         expect(payload.actions.map((item) => item.id)).toContain('softlock-generation-matrix');
         expect(payload.actions.every((item) => item.status === 'done')).toBe(true);
         expect(payload.actions.map((item) => item.command)).toEqual(
@@ -97,7 +97,14 @@ describe('system diagram generator', () => {
                 'yarn gate:persistence',
                 'yarn gate:renderer-input',
                 'yarn gate:audio-feedback',
-                'yarn gate:asset-rendering'
+                'yarn gate:asset-rendering',
+                'yarn gate:security',
+                'yarn gate:package-hygiene',
+                'yarn gate:build-output',
+                'yarn gate:desktop-build',
+                'yarn gate:sim-softlock-stress',
+                'yarn test:e2e:browser-smoke',
+                'yarn test:e2e:renderer-qa:3d'
             ])
         );
         expect(payload.actions.every((item) => item.command != null && item.command.length > 0)).toBe(true);
@@ -141,8 +148,15 @@ describe('system diagram generator', () => {
         expect(markdown).toContain('P0 Extend the softlock matrix for every new blocker');
         expect(markdown).toContain('yarn gate:action-loop');
         expect(markdown).toContain('yarn gate:sim-softlock-seeds');
+        expect(markdown).toContain('yarn gate:sim-softlock-stress');
         expect(markdown).toContain('yarn gate:rewards-economy');
         expect(markdown).toContain('yarn gate:navigation');
+        expect(markdown).toContain('yarn gate:security');
+        expect(markdown).toContain('yarn gate:package-hygiene');
+        expect(markdown).toContain('yarn gate:build-output');
+        expect(markdown).toContain('yarn gate:desktop-build');
+        expect(markdown).toContain('yarn test:e2e:browser-smoke');
+        expect(markdown).toContain('yarn test:e2e:renderer-qa:3d');
         expect(markdown).toContain('## Renderer Input Flow');
         expect(markdown).toContain('## Test Gate Architecture');
         expect(markdown).toContain('## Gameplay Interaction Graph');

@@ -26,7 +26,9 @@ export const syncToolbarTabIndices = (root: HTMLElement | null, active?: HTMLEle
     });
 };
 
-export const syncVerticalToolbarTabIndices = syncToolbarTabIndices;
+export const syncVerticalToolbarTabIndices = (root: HTMLElement | null, active?: HTMLElement | null): void => {
+    syncToolbarTabIndices(root, active);
+};
 
 /** While >0, vertical toolbars are removed from the tab order (e.g. modal focus trap). */
 let verticalToolbarRovingPauseDepth = 0;

@@ -10,7 +10,7 @@ export type Reg114DuckId =
     | 'run_critical_sfx' /** match, floor clear — keep music slightly under SFX */
     | 'ui_click';
 
-export interface Reg114DuckRow {
+interface Reg114DuckRow {
     id: Reg114DuckId;
     musicVolumeMultiplier: number;
     reason: string;

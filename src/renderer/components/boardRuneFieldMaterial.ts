@@ -26,7 +26,7 @@ const hexToVec3 = (hex: string): Vector3 => {
     return new Vector3(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
 };
 
-export type BoardRuneFieldUniforms = {
+type BoardRuneFieldUniforms = {
     uTime: { value: number };
     uIntensity: { value: number };
     uMotion: { value: number };

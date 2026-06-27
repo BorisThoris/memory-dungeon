@@ -36,7 +36,7 @@ export interface TileBoardPinchGestureSnapshot {
     startZoom: number;
 }
 
-export interface TileBoardMouseDragSnapshot {
+interface TileBoardMouseDragSnapshot {
     startPanX: number;
     startPanY: number;
     startWorldX: number;
@@ -51,7 +51,7 @@ export const MOBILE_CAMERA_FIT_MARGIN = 0.76;
 export const COMPACT_BOARD_FIT_MARGIN = 0.72;
 /** REG-002: desktop stage should feel dense and board-forward without the mobile bleed margin. */
 export const DESKTOP_STAGE_FIT_MARGIN = 0.94;
-export const ROOMY_BOARD_FIT_MARGIN = DESKTOP_STAGE_FIT_MARGIN;
+export const ROOMY_BOARD_FIT_MARGIN = 0.94;
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
 

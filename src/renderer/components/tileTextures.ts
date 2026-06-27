@@ -12,9 +12,9 @@ import type { GraphicsQualityPreset, Tile } from '../../shared/contracts';
 import { RENDERER_THEME } from '../styles/theme';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import referenceBackTextureUrl from '../assets/textures/cards/authored-card-back.svg?url';
-import cardBackNormalTextureUrl from '../assets/textures/cards/back-normal.png';
+import cardBackNormalTextureUrl from '../assets/textures/cards/back-normal.webp';
 import cardFaceTextureUrl from '../assets/textures/cards/front.svg?url';
-import cardFaceNormalTextureUrl from '../assets/textures/cards/front-normal.png';
+import cardFaceNormalTextureUrl from '../assets/textures/cards/front-normal.webp';
 import edgeTextureUrl from '../assets/textures/cards/edge.png';
 import panelRoughnessTextureUrl from '../assets/textures/cards/panel-roughness.png';
 import edgeRoughnessTextureUrl from '../assets/textures/cards/edge-roughness.png';
@@ -273,9 +273,9 @@ const textureImageUrls = {
     cardReference: referenceBackTextureUrl,
     /** Face-up panel raster (WebGL front plane, DOM .cardFaceFront); calmer center vs back. */
     cardFace: cardFaceTextureUrl,
-    /** Tangent-space normal for WebGL face-up raster plane (`front-normal.png`). */
+    /** Tangent-space normal for WebGL face-up raster plane (`front-normal.webp`). */
     cardFaceNormal: cardFaceNormalTextureUrl,
-    /** Tangent-space normal for WebGL hidden-side raster plane (`back-normal.png`). */
+    /** Tangent-space normal for WebGL hidden-side raster plane (`back-normal.webp`). */
     cardBackNormal: cardBackNormalTextureUrl,
     edge: edgeTextureUrl,
     panelRoughness: panelRoughnessTextureUrl,

@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from './contracts';
-import { boardHasGlassDecoy, getWildTileIdFromBoard, inspectBoardFairness, isBoardComplete } from './board-inspection';
-import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import {
+    boardHasGlassDecoy,
+    getWildTileIdFromBoard,
+    inspectBoardFairness,
+    isBoardComplete,
+    repairDungeonExitSoftlocks
+} from './board-inspection';
+import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, extra: Partial<Tile> = {}): Tile => ({
     id,
@@ -46,6 +52,44 @@ describe('board-inspection', () => {
 
         expect(isBoardComplete({ ...withExit, dungeonExitTileId: 'exit', dungeonExitActivated: false })).toBe(false);
         expect(isBoardComplete({ ...withExit, dungeonExitTileId: 'exit', dungeonExitActivated: true })).toBe(true);
+    });
+
+    it('normalizes stale board-level exit lock metadata to the primary exit tile during repair', () => {
+        const stale = {
+            ...board([
+                tile('lever-a', 'lever', {
+                    dungeonCardKind: 'lever',
+                    dungeonCardEffectId: 'lever_floor'
+                }),
+                tile('lever-b', 'lever', {
+                    dungeonCardKind: 'lever',
+                    dungeonCardEffectId: 'lever_floor'
+                }),
+                tile('exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'lever',
+                    dungeonExitRequiredLeverCount: 1
+                })
+            ]),
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'iron' as const,
+            dungeonExitRequiredLeverCount: 0,
+            dungeonLeverCount: 0,
+            pairCount: 1
+        } satisfies BoardState;
+
+        const repaired = repairDungeonExitSoftlocks(stale);
+
+        expect(repaired.dungeonExitLockKind).toBe('lever');
+        expect(repaired.dungeonExitRequiredLeverCount).toBe(1);
+        expect(repaired.tiles.find((candidate) => candidate.id === 'exit')).toMatchObject({
+            dungeonExitLockKind: 'lever',
+            dungeonExitRequiredLeverCount: 1
+        });
+        expect(inspectBoardFairness(repaired).issues.map((issue) => issue.code)).not.toContain(
+            'exit_lock_metadata_mismatch'
+        );
     });
 
     it('allows hidden glass decoys and flipped mirror decoys after real tiles clear', () => {
@@ -137,5 +181,59 @@ describe('board-inspection', () => {
         expect(inspected.complete).toBe(false);
         expect(inspected.issues.map((issue) => issue.code)).toContain('enemy_hazard_on_cleared_tile');
         expect(inspected.hasCompletionRoute).toBe(false);
+    });
+
+    it('treats resolved boss cards and stale defeated boss hazards as complete after exit activation', () => {
+        const inspected = inspectBoardFairness({
+            ...board([
+                tile('boss-a', 'boss', {
+                    state: 'flipped',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardState: 'resolved',
+                    dungeonBossId: 'trap_warden',
+                    dungeonCardHp: 0,
+                    dungeonCardMaxHp: 3
+                }),
+                tile('boss-b', 'boss', {
+                    state: 'flipped',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardState: 'resolved',
+                    dungeonBossId: 'trap_warden',
+                    dungeonCardHp: 0,
+                    dungeonCardMaxHp: 3
+                }),
+                tile('exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'revealed',
+                    dungeonExitLockKind: 'none'
+                })
+            ]),
+            dungeonBossId: 'trap_warden',
+            dungeonObjectiveId: 'defeat_boss',
+            dungeonExitTileId: 'exit',
+            dungeonExitActivated: true,
+            matchedPairs: 1,
+            pairCount: 1,
+            enemyHazards: [
+                {
+                    id: 'warden',
+                    kind: 'warden',
+                    label: 'Latch Warden',
+                    currentTileId: 'boss-a',
+                    nextTileId: 'boss-b',
+                    pattern: 'guard',
+                    state: 'defeated',
+                    damage: 1,
+                    hp: 0,
+                    maxHp: 3,
+                    bossId: 'trap_warden'
+                }
+            ]
+        });
+
+        expect(inspected.complete).toBe(true);
+        expect(inspected.hasCompletionRoute).toBe(true);
+        expect(inspected.issues).toEqual([]);
     });
 });

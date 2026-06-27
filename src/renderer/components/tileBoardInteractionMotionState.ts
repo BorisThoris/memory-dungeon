@@ -7,7 +7,7 @@ interface MotionVector {
     y: number;
 }
 
-export interface TileBoardInteractionMotionStateInput {
+interface TileBoardInteractionMotionStateInput {
     faceUp: boolean;
     fieldAmp: number;
     fieldTilt: MotionVector;
@@ -22,7 +22,7 @@ export interface TileBoardInteractionMotionStateInput {
     time: number;
 }
 
-export interface TileBoardInteractionMotionState {
+interface TileBoardInteractionMotionState {
     baseDepthFull: number;
     baseLiftFull: number;
     fieldDepth: number;
@@ -41,7 +41,7 @@ export interface TileBoardInteractionMotionState {
     settle: number;
 }
 
-export interface TileBoardLiftSmoothInput {
+interface TileBoardLiftSmoothInput {
     current: number;
     delta: number;
     liftLambda: number;

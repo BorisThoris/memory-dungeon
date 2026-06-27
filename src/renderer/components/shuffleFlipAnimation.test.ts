@@ -4,6 +4,7 @@ import {
     STAGGER_MS,
     computeBoardEntranceMotionBudgetMs,
     computeBoardEntranceMotionTransform,
+    computeBoardEntranceRemainderXY,
     computeShuffleMotionBudgetMs,
     computeShuffleMotionTransform,
     computeStaggeredShuffleDealZ
@@ -126,5 +127,19 @@ describe('premium board motion transforms', () => {
         expect(Math.hypot(entrance.rx, entrance.ry)).toBeGreaterThan(0);
         expect(Math.hypot(entrance.rx, entrance.ry)).toBeLessThan(2.5);
         expect(Math.abs(entrance.rotY)).toBeGreaterThan(0);
+    });
+
+    it('keeps the legacy entrance XY wrapper aligned with the full transform', () => {
+        const budget = computeBoardEntranceMotionBudgetMs(9);
+        const start = 60_000;
+        const deadline = start + budget;
+        const sampleTime = start + 180;
+
+        const transform = computeBoardEntranceMotionTransform(sampleTime, deadline, budget, 2, 9, 3, 3);
+
+        expect(computeBoardEntranceRemainderXY(sampleTime, deadline, budget, 2, 9, 3, 3)).toEqual({
+            rx: transform.rx,
+            ry: transform.ry
+        });
     });
 });

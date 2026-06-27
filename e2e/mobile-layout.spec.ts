@@ -471,7 +471,7 @@ test.describe('Mobile layout (renderer)', () => {
 
     test('short-height landscape run settings modal collapses to one column with full-width actions', async ({ page }) => {
         await page.setViewportSize({ width: 844, height: 390 });
-        await navigateToLevel1PlayPhase(page);
+        await openPlayablePathFixture(page, 'activeRunWithHazards');
         await page.getByRole('button', { name: /run settings \(toolbar\)/i }).evaluate((element) => {
             (element as HTMLButtonElement).click();
         });

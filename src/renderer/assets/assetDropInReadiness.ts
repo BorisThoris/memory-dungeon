@@ -1,7 +1,7 @@
-export type AssetRightsStatus = 'authored' | 'ai_generated_project' | 'generated_pipeline' | 'placeholder' | 'licensed_required';
-export type AssetDropInRisk = 'low' | 'medium' | 'high';
+type AssetRightsStatus = 'authored' | 'ai_generated_project' | 'generated_pipeline' | 'placeholder' | 'licensed_required';
+type AssetDropInRisk = 'low' | 'medium' | 'high';
 
-export interface AssetDropInCategory {
+interface AssetDropInCategory {
     id: 'ui_scenes' | 'mode_posters' | 'logo_emblems' | 'card_textures' | 'audio_sfx' | 'store_media';
     label: string;
     authoritativePath: string;
@@ -34,7 +34,7 @@ export const ASSET_DROP_IN_CATEGORIES: readonly AssetDropInCategory[] = [
         acceptedFormats: ['png', 'webp'],
         namingExample: 'bg-mode-gauntlet-v1.webp',
         manifestOrBarrel: 'src/renderer/assets/ui/modeArt.ts MODE_CARD_ART',
-        fallbackBehavior: 'Unknown or unfinished poster keys resolve to bg-mode-placeholder-v1.png and show fallback badges.',
+        fallbackBehavior: 'Unknown or unfinished poster keys resolve to bg-mode-placeholder-v1.webp and show fallback badges.',
         rightsStatus: 'placeholder',
         dropInRisk: 'low',
         verification: ['yarn vitest run src/renderer/assets/ui/modeArt.test.ts']
@@ -68,7 +68,7 @@ export const ASSET_DROP_IN_CATEGORIES: readonly AssetDropInCategory[] = [
         label: 'SFX, UI cues, and music loops',
         authoritativePath: 'src/renderer/assets/audio/',
         acceptedFormats: ['wav', 'ogg', 'json'],
-        namingExample: 'sfx/flip.wav',
+        namingExample: 'sfx/flip.ogg',
         manifestOrBarrel: 'src/renderer/assets/audio/**/manifest.json',
         fallbackBehavior: 'sampledSfx/uiSfx fall back to procedural Web Audio when files are missing or decode fails.',
         rightsStatus: 'generated_pipeline',
@@ -92,7 +92,7 @@ export const ASSET_DROP_IN_CATEGORIES: readonly AssetDropInCategory[] = [
 export const getAssetDropInCategories = (): readonly AssetDropInCategory[] => ASSET_DROP_IN_CATEGORIES;
 
 /** REG-113: single inventory handle for third-wave/ship placeholder slots (alias of the readiness table). */
-export const REG113_PLACEHOLDER_INVENTORY: readonly AssetDropInCategory[] = ASSET_DROP_IN_CATEGORIES;
+export const REG113_PLACEHOLDER_INVENTORY: readonly AssetDropInCategory[] = [...ASSET_DROP_IN_CATEGORIES];
 
 export const assetDropInCategoryById = (id: AssetDropInCategory['id']): AssetDropInCategory | null =>
     ASSET_DROP_IN_CATEGORIES.find((category) => category.id === id) ?? null;

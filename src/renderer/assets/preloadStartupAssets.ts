@@ -113,12 +113,12 @@ export const resetStartupAssetPreloadStateForTests = (): void => {
     modePosterPreloadStarted = false;
 };
 
-export interface PreloadStartupCriticalAssetsOptions {
+interface PreloadStartupCriticalAssetsOptions {
     relicSvgUrl: string;
     webgl: boolean;
 }
 
-export interface PreloadStartupCriticalAssetsResult {
+interface PreloadStartupCriticalAssetsResult {
     relicTextureSet: RelicTextureSet | null;
 }
 

@@ -38,6 +38,15 @@
             "minimumEvidence": 5
         },
         {
+            "id": "softlock-stress-sweep",
+            "priority": "P1",
+            "system": "Board Generation",
+            "title": "Stress sweep generated seeds after progression changes",
+            "status": "done",
+            "command": "yarn gate:sim-softlock-stress",
+            "minimumEvidence": 5
+        },
+        {
             "id": "reward-priority-gate",
             "priority": "P1",
             "system": "Rewards And Economy",
@@ -98,6 +107,60 @@
             "title": "Keep system actions registered and CI-visible",
             "status": "done",
             "command": "yarn gate:systems",
+            "minimumEvidence": 5
+        },
+        {
+            "id": "dependency-audit-gate",
+            "priority": "P0",
+            "system": "Test Gate Architecture",
+            "title": "Keep dependency advisories at zero",
+            "status": "done",
+            "command": "yarn gate:security",
+            "minimumEvidence": 3
+        },
+        {
+            "id": "package-hygiene-gate",
+            "priority": "P1",
+            "system": "Test Gate Architecture",
+            "title": "Keep package hygiene checks green",
+            "status": "done",
+            "command": "yarn gate:package-hygiene",
+            "minimumEvidence": 4
+        },
+        {
+            "id": "renderer-bundle-budget-gate",
+            "priority": "P2",
+            "system": "Test Gate Architecture",
+            "title": "Keep renderer bundle output budgeted",
+            "status": "done",
+            "command": "yarn gate:build-output",
+            "minimumEvidence": 3
+        },
+        {
+            "id": "desktop-build-gate",
+            "priority": "P1",
+            "system": "Test Gate Architecture",
+            "title": "Keep Electron desktop entrypoints compiling",
+            "status": "done",
+            "command": "yarn gate:desktop-build",
+            "minimumEvidence": 4
+        },
+        {
+            "id": "browser-smoke-gate",
+            "priority": "P1",
+            "system": "Test Gate Architecture",
+            "title": "Keep live browser smoke runnable",
+            "status": "done",
+            "command": "yarn test:e2e:browser-smoke",
+            "minimumEvidence": 5
+        },
+        {
+            "id": "renderer-qa-shards",
+            "priority": "P1",
+            "system": "Test Gate Architecture",
+            "title": "Keep renderer QA shards runnable",
+            "status": "done",
+            "command": "yarn test:e2e:renderer-qa:3d",
             "minimumEvidence": 5
         }
     ]

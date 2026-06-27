@@ -3,13 +3,13 @@ import { useEffect, useRef } from 'react';
 import type { RunState, ViewState } from '../../shared/contracts';
 import { lifecycleStateFromSurface } from '../../shared/run-lifecycle-machine';
 
-const musicUrls = import.meta.glob<string>('../assets/audio/music/*.{ogg,wav,mp3}', {
+const musicUrls = import.meta.glob<string>('../assets/audio/music/*.{ogg,mp3}', {
     eager: true,
     query: '?url',
     import: 'default'
 });
 
-const portfolioMusicUrls = import.meta.glob<string>('../../../assets/audio/portfolio-feedback-pack/*.{ogg,wav,mp3}', {
+const portfolioMusicUrls = import.meta.glob<string>('../../../assets/audio/portfolio-feedback-pack/*.{ogg,mp3}', {
     eager: true,
     query: '?url',
     import: 'default'
@@ -20,18 +20,18 @@ const resolvePortfolioMusicUrl = (filename: string): string | undefined =>
     portfolioMusicUrls[`../../../assets/audio/portfolio-feedback-pack/${filename}`];
 const resolveTrackUrl = (track: 'menu' | 'run'): string | undefined => {
     if (track === 'run') {
-        return resolvePortfolioMusicUrl('demo-ambience-loop.wav') ?? resolveMusicUrl('run-loop.wav');
+        return resolvePortfolioMusicUrl('demo-ambience-loop.ogg') ?? resolveMusicUrl('run-loop.ogg');
     }
-    return resolveMusicUrl('menu-loop.wav');
+    return resolveMusicUrl('menu-loop.ogg');
 };
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
 
-/** Effective linear gain from settings (0–1 each), matching SFX stacking. */
+/** Effective linear gain from settings (0-1 each), matching SFX stacking. */
 export const musicGainFromSettings = (masterVolume: number, musicVolume: number): number =>
     clamp01(masterVolume) * clamp01(musicVolume);
 
-export interface GameplayMusicParams {
+interface GameplayMusicParams {
     /** When false, playback is paused (e.g. settings, codex, game over). */
     active: boolean;
     track: 'menu' | 'run';
@@ -41,15 +41,15 @@ export interface GameplayMusicParams {
     suppressed?: boolean;
 }
 
-export type AdaptiveMusicLayer = 'menu_calm' | 'run_focus' | 'run_pressure' | 'run_release' | 'silent';
+type AdaptiveMusicLayer = 'menu_calm' | 'run_focus' | 'run_pressure' | 'run_release' | 'silent';
 
-export interface AdaptiveMusicInput {
+interface AdaptiveMusicInput {
     hidden?: boolean;
     run: RunState | null;
     view: ViewState;
 }
 
-export interface AdaptiveMusicState {
+interface AdaptiveMusicState {
     active: boolean;
     layer: AdaptiveMusicLayer;
     suppressed: boolean;
@@ -135,7 +135,7 @@ export const getAdaptiveMusicState = ({
 };
 
 /**
- * Looped background music via `HTMLAudioElement`. Volume follows **`masterVolume` × `musicVolume`**.
+ * Looped background music via `HTMLAudioElement`. Volume follows **`masterVolume` x `musicVolume`**.
  * HTMLMediaElement autoplay rules apply: first successful `play()` may require a user gesture; we retry on the first `pointerdown`.
  */
 export function useGameplayMusic({ active, track, masterVolume, musicVolume, suppressed = false }: GameplayMusicParams): void {

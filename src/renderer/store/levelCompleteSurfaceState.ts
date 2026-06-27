@@ -83,7 +83,7 @@ export type LevelCompleteContinuationSurfaceResult =
           run: RunState;
       };
 
-export interface LevelCompleteContinuationSurfaceOptions {
+interface LevelCompleteContinuationSurfaceOptions {
     includeSummaryShop: boolean;
 }
 

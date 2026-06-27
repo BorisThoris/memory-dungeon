@@ -17,7 +17,7 @@ export const DUNGEON_BOARD_STAGE_LAYER_POLICY = {
     matchCelebration: { renderOrder: 18 }
 } as const;
 
-export type DungeonEnemyMarkerAnchorTransform = {
+type DungeonEnemyMarkerAnchorTransform = {
     baseX: number;
     baseY: number;
     imperfectionX: number;

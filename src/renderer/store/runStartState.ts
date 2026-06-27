@@ -60,7 +60,7 @@ export type RunStartRequest =
     | { kind: 'scholarContract' }
     | { kind: 'wild' };
 
-export interface RunStartPlan {
+interface RunStartPlan {
     patch: RunStartStatePatch;
     run: RunState;
     telemetry: RunStartTelemetryExtra;

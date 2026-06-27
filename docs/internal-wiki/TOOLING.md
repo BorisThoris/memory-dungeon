@@ -8,6 +8,7 @@
 |--------|----------------|
 | `yarn dev` | Concurrently: Vite renderer, tsup watch for main/preload, Electron against dev server |
 | `yarn dev:renderer` | Vite only (`http://127.0.0.1:5173`) |
+| Dev `/__blueprint` | Vite-only browser explorer for project/system diagrams plus allowlisted AST/codegen experiments; smoke with `yarn test:e2e:blueprint` |
 | `yarn demo:browser` | Browser-only portfolio demo server (`http://127.0.0.1:4102`; see [Portfolio Demo Evidence](../PORTFOLIO_DEMO.md)) |
 | `yarn dev:electron:watch` | tsup watch for Electron bundles |
 | `yarn dev:electron` | Waits for Vite + built `dist-electron`, runs electronmon |
@@ -16,16 +17,17 @@
 
 | Script | What it does |
 |--------|----------------|
-| `yarn ci` | Same as **`yarn fullcheck`** (`eslint` + test extension guard + `tsc` + Vitest) — primary automation entrypoint. |
+| `yarn ci` | Same as **`yarn fullcheck`** (`lint` + security + desktop build + renderer budget + systems/softlock gates + `verify`) — primary automation entrypoint. |
 | `yarn verify` | `yarn typecheck` + `yarn test` |
-| `yarn fullcheck` | `yarn lint` + `yarn verify` — includes ESLint + test file extension guard |
+| `yarn fullcheck` | `yarn lint` + `gate:security` + `gate:desktop-build` + `gate:build-output` + `gate:systems` + `yarn verify` |
 | `yarn typecheck` | `tsc --noEmit` (full `src/` + root configs) |
 | `yarn typecheck:shared` | `tsc -p tsconfig.shared.json --noEmit` — optional narrow check for `src/shared` only (no `composite` split; see TypeScript note below) |
 | `yarn lint` | ESLint + `scripts/check-test-file-extensions.mjs` (REF-093: no JSX in `.test.ts`) |
 | `yarn depcheck` | Unused/missing dependency scan ([`.depcheckrc.json`](../../.depcheckrc.json); ignores CSS-imported fonts + script runner bins) |
 | `yarn knip` | Unused files / dependency issues ([`knip.json`](../../knip.json); scopes `files`, `dependencies`, `unlisted`, `unresolved`; sets `NODE_OPTIONS=--experimental-require-module` for Knip on Node 22) |
 | `yarn knip:exports` | Knip unused **exports/types** mode (`--exports`; [`ignoreIssues`](../../knip.json) narrows intentional barrels — run before widening default `yarn knip` scope) |
-| `yarn knip:production` | Knip with `--production` — dependency/file issues along production entry paths (triage carefully vs tests) |
+| `yarn knip:production` | Knip with `--production --use-tsconfig-files` for dependency/file issues along production entry paths; the tsconfig file set keeps Vite/Electron renderer dependencies visible to Knip. |
+| `yarn gate:package-hygiene` | Combined dependency, unused-file, production-entry, and unused-export scan (concise `depcheck` wrapper, `knip`, `knip:production`, `knip:exports`) selected by `gate:changed` for package/tooling edits. |
 | `yarn audit:renderer-assets` | `scripts/audit-renderer-assets.mjs` — lists `src/renderer/assets/**` files whose basename has no TS/CSS/markdown reference under `src/`, `scripts/`, `e2e/`, `public/` (manual triage; not a delete pass) |
 | `yarn audit:summary` | `scripts/audit-summary.mjs` — condenses `yarn audit --json` into severity totals, unique advisory groups, patched ranges, and sample dependency paths |
 | `yarn test` | Vitest run |
@@ -35,7 +37,10 @@
 | `yarn regenerate:illustration-regression` | Updates illustration fixtures (`UPDATE_ILLUSTRATION_FIXTURES`) — use intentionally |
 | `yarn benchmark:illustration-regression` | Illustration perf sample (`RUN_ILLUSTRATION_BENCHMARK`) |
 | `yarn test:e2e:a11y` | Scoped axe on main menu, settings, in-run shell (`e2e/a11y-scoped-routes.spec.ts`) |
+| `yarn test:e2e:blueprint` | Dev-only `/__blueprint` system diagram explorer smoke |
 | `yarn sim:endless` | `tsx scripts/sim-endless.ts` — endless schedule CSV sampler (REF-098) |
+| `yarn gate:sim-softlock-seeds` | Deterministic multi-seed softlock/progression gate used by `gate:systems` |
+| `yarn gate:sim-softlock-stress` | Broader deterministic stress seed sweep for lock, boss, exit, objective, shop, and repair-rule changes |
 
 **Refinement backlog (REF-100):** [REF-100](../refinement-tasks/REF-100.md) is **Done** (INDEX acceptance met). Notes live in [refinement-tasks/README.md](../refinement-tasks/README.md) and [COMPLETION.md](../refinement-tasks/COMPLETION.md) (2026-04-17); optional INDEX re-triage is process only.
 
@@ -85,7 +90,10 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | `yarn face-panels:local:dry` | Same with `--dry-run` |
 | `yarn audio:ace-step:batch` | `py -3 scripts/audio-pipeline/batch_ace_step.py` — local **ACE-Step 1.5** batch (Python 3.11+ venv; see `scripts/audio-pipeline/README.md`; outputs under `tmp/audio/ace-step/`) |
 | `yarn audio:ace-step:batch:dry` | Same with `--dry-run` (no torch) |
-| `yarn gen:face-panel-raster-urls` | Rebuild `facePanelRasterUrls.ts` after adding/removing `face-panel-NN.png` |
+| `yarn face-panels:export-runtime-webp` | Export checked-in `face-panel-NN.png` masters to runtime WebP and rebuild `facePanelRasterUrls.ts` |
+| `yarn gen:face-panel-raster-urls` | Rebuild `facePanelRasterUrls.ts` after adding/removing `face-panel-NN.webp` runtime files |
+| `yarn card-normals:export-runtime-webp` | Export checked-in card normal-map PNG masters to smaller runtime WebP maps |
+| `yarn assets:ui-backgrounds:export-runtime-webp` | Export checked-in UI background PNG masters to runtime WebP files |
 | `yarn card-texture:ideal` / `card-texture:ai-brief` | Print ideal texture spec / AI brief |
 | `yarn capture:ui-vs-assets` | Compare UI vs asset renders |
 | `yarn png:trim-bbox` | Trim PNG bounding boxes |
@@ -95,7 +103,7 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | Script | What it does |
 |--------|----------------|
 | `yarn build` | Clean + renderer build + Electron tsup bundle |
-| `yarn build:renderer` | Vite production build → `dist/` |
+| `yarn build:renderer` | Vite production build → `dist/`; prunes `public/wip-assets/` design-reference files unless `VITE_KEEP_WIP_PUBLIC_ASSETS=1` |
 | `yarn build:electron` | tsup → `dist-electron/` |
 | `yarn clean` | Removes `dist`, `dist-electron`, `release` |
 | `yarn package:dir` | Build + electron-builder `--dir` |
@@ -118,6 +126,7 @@ The repo uses a **single** root `tsconfig.json` for `tsc --noEmit` so CSS module
 | Path | Role |
 |------|------|
 | `audit-renderer-assets.mjs` | Basename audit for orphaned renderer asset files (`yarn audit:renderer-assets`) |
+| `check-depcheck-clean.mjs` | Concise depcheck JSON wrapper for `yarn gate:package-hygiene` |
 | `postinstall.cjs` | Runs `electron-builder install-app-deps` (skipped on Cloudflare Pages) so native Electron deps match the platform |
 | `run-mechanics-appendix.ts` | Writes mechanics catalog machine snapshot (versions + counts) |
 | `generate-visual-inventory-md.mjs` | Builds visual inventory markdown |

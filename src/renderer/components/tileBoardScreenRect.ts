@@ -1,7 +1,7 @@
 import { Box3, Vector3, type Camera, type Object3D } from 'three';
 import type { ClientRectLike } from './tileBoardPointerPick';
 
-export interface ProjectedNdcPoint {
+interface ProjectedNdcPoint {
     x: number;
     y: number;
 }

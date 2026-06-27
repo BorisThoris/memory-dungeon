@@ -7,7 +7,7 @@ Use focused gameplay rule modules for new work. Avoid importing from `src/shared
 | Add or tune a dungeon card, exit, room, trap, boss, objective | `src/shared/dungeon-rules.ts` | `yarn vitest run src/shared/game.test.ts -t "dungeon cards"` |
 | Add or tune a board power | `src/shared/board-powers.ts` | `yarn gate:action-loop` |
 | Change flip/match/mismatch resolution | `src/shared/turn-resolution.ts` | `yarn gate:action-loop` |
-| Change board generation, findables, fairness, completion | `src/shared/board-generation.ts` | `yarn gate:sim-softlock-seeds` plus focused fairness tests |
+| Change board generation, findables, fairness, completion | `src/shared/board-generation.ts` | `yarn gate:sim-softlock-seeds`, `yarn gate:sim-softlock-stress`, plus focused fairness tests |
 | Change trait placement, rewards, blockers, or interactions | `src/shared/tile-trait-rules.ts` | `yarn gate:action-loop` |
 | Change route choices, gateways, side rooms | `src/shared/route-rules.ts` | `yarn gate:navigation` |
 | Change shop offers, pricing, rerolls, purchases | `src/shared/shop-rules.ts` | `yarn gate:rewards-economy` |
@@ -20,6 +20,7 @@ Default final gate for gameplay rule work:
 yarn gate:changed
 yarn gate:systems
 yarn gate:sim-softlock-seeds
+yarn gate:sim-softlock-stress
 ```
 
 Use `yarn gate:changed --json <path...>` when reviewing a known file list, or run `yarn gate:changed` with no paths to select gates from the current Git diff.

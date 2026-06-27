@@ -1,7 +1,7 @@
 import type { AchievementId, RunState, SaveData, SubscreenReturnView, ViewState } from '../../shared/contracts';
 import { createRunSurfaceReset, type RunSurfaceState } from './runSurfaceState';
 
-export interface MenuSurfacePatch extends RunSurfaceState {
+interface MenuSurfacePatch extends RunSurfaceState {
     achievementBridgeNotice: string | null;
     newlyUnlockedAchievements: AchievementId[];
     run: RunState | null;

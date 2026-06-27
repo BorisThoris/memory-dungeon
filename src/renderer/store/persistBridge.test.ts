@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     createSaveHealthSnapshot,
+    getSaveHealthSnapshot,
     persistenceNoticeForConsecutiveFailures,
     saveHealthCopyForSnapshot
 } from './persistBridge';
@@ -30,5 +31,14 @@ describe('REG-040 persistence health copy', () => {
             ]
         });
         expect(persistenceNoticeForConsecutiveFailures(3)).toContain('setting changes may not persist');
+    });
+
+    it('reports a healthy snapshot before write failures occur', () => {
+        expect(getSaveHealthSnapshot()).toEqual({
+            status: 'ok',
+            consecutiveFailures: 0,
+            operation: null,
+            recoveryActions: []
+        });
     });
 });

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
     DESKTOP_STAGE_FIT_MARGIN,
+    clampBoardZoom,
     clampBoardViewport,
     createPinchBoardGestureSnapshot,
     createRafCoalescedViewportNotifier,
@@ -8,6 +9,7 @@ import {
     getGestureCentroid,
     getGestureDistance,
     MOBILE_CAMERA_FIT_MARGIN,
+    resolveAnchoredBoardViewport,
     resolveDraggedBoardViewport,
     resolvePinchBoardViewport,
     resolveWheelBoardViewport,
@@ -112,6 +114,25 @@ describe('tileBoardViewport', () => {
 
         expect(viewport.panX).toBe(250);
         expect(viewport.panY).toBe(250);
+    });
+
+    it('clamps raw zoom values and anchored zoom resolutions', () => {
+        expect(clampBoardZoom(-1)).toBeGreaterThan(0);
+        expect(clampBoardZoom(99)).toBeLessThan(3);
+
+        const next = resolveAnchoredBoardViewport({
+            boardHeight: 400,
+            boardWidth: 400,
+            currentViewport: { fitZoom: 1, panX: 0, panY: 0, zoom: 1 },
+            nextZoom: 99,
+            pointerWorld: { panX: 50, panY: -25 },
+            viewportHeight: 300,
+            viewportWidth: 300
+        });
+
+        expect(next.zoom).toBe(clampBoardZoom(99));
+        expect(next.panX).toBeLessThanOrEqual(400 * next.zoom);
+        expect(next.panY).toBeGreaterThanOrEqual(-400 * next.zoom);
     });
 
     it('creates pinch snapshots around the board-space anchor under the gesture centroid', () => {

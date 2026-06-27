@@ -1,6 +1,6 @@
 import type { CardBackSvgLayerName } from './cardSvgPlaneGeometry';
 
-export interface CardBackLayerVisualState {
+interface CardBackLayerVisualState {
     emissiveIntensity: number;
     opacity: number;
     rotationZ: number;
@@ -10,7 +10,7 @@ export interface CardBackLayerVisualState {
     z: number;
 }
 
-export interface CardBackLayerVisualStateInput {
+interface CardBackLayerVisualStateInput {
     index: number;
     layerName: CardBackSvgLayerName;
     reduceMotion: boolean;

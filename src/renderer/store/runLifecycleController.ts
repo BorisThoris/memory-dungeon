@@ -24,7 +24,7 @@ interface RunLifecycleControllerDeps<TState extends RunLifecycleControllerState>
     setState: (patch: Partial<TState>) => void;
 }
 
-export interface RunLifecycleController {
+interface RunLifecycleController {
     endRun: () => void;
     restartRun: () => void;
     triggerDebugReveal: () => void;

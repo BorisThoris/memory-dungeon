@@ -3,6 +3,7 @@ import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
 import {
     CARD_FACE_UP_SURFACE_SECONDS,
     CARD_FLIP_POP_SECONDS,
+    MATCH_PULSE_DECAY_PER_SECOND,
     computeTileBoardFaceUpStructState,
     computeTileBoardFramePulseTransitionState,
     computeTileBoardFlipPopStart,
@@ -179,6 +180,7 @@ describe('tileBoardFramePulseState', () => {
     });
 
     it('decays match pulse after triggering on a match transition', () => {
+        expect(MATCH_PULSE_DECAY_PER_SECOND).toBeGreaterThan(0);
         const state = computeTileBoardMatchPulseState({
             currentPulse: 0.2,
             delta: 0.1,
@@ -188,7 +190,7 @@ describe('tileBoardFramePulseState', () => {
         });
 
         expect(state.prevResolvingSelection).toBe('match');
-        expect(state.pulse).toBeCloseTo(0.72);
+        expect(state.pulse).toBeCloseTo(1 - 0.1 * MATCH_PULSE_DECAY_PER_SECOND);
     });
 
     it('does not trigger match pulse for reduced motion or continuing match state', () => {

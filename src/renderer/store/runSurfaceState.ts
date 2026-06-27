@@ -34,7 +34,7 @@ export interface RunSurfaceState {
     mismatchScorePop: MismatchScorePop | null;
 }
 
-export type RunSurfaceToggleResult =
+type RunSurfaceToggleResult =
     | { kind: 'ignored' }
     | {
           kind: 'applied';
@@ -44,7 +44,7 @@ export type RunSurfaceToggleResult =
           playArmSfx: boolean;
       };
 
-export type RunSurfaceRunPatchResult =
+type RunSurfaceRunPatchResult =
     | { kind: 'ignored' }
     | {
           kind: 'applied';
@@ -52,7 +52,7 @@ export type RunSurfaceRunPatchResult =
           playArmSfx: boolean;
       };
 
-export type ArmedBoardPowerPressResult =
+type ArmedBoardPowerPressResult =
     | { kind: 'notArmed' }
     | { kind: 'handled' }
     | { kind: 'persistEnemyContact'; run: RunState }
@@ -63,7 +63,7 @@ export type ArmedBoardPowerPressResult =
     | { kind: 'tileSwapApplied'; run: RunState }
     | { kind: 'destroyApplied'; run: RunState; resolvesRun: boolean };
 
-export type OrdinaryTileFlipResult =
+type OrdinaryTileFlipResult =
     | { kind: 'unchanged'; clearBoardInteraction: boolean; run: RunState }
     | {
           kind: 'flipped';
@@ -74,12 +74,12 @@ export type OrdinaryTileFlipResult =
           resolveDelayMs: number | null;
       };
 
-export interface EnemyHazardContactResult {
+interface EnemyHazardContactResult {
     fromRun: RunState;
     toRun: RunState;
 }
 
-export type GambitThirdPickPressResult =
+type GambitThirdPickPressResult =
     | { kind: 'unchanged'; hazardContact: EnemyHazardContactResult | null }
     | {
           kind: 'hazardGameOver';

@@ -83,7 +83,7 @@ export const resolveDungeonExitActivationSpend = (
     };
 };
 
-export const sealBoardForDungeonExit = (board: BoardState): BoardState => {
+export const sealBoardForDungeonExit = (board: BoardState, activatedExitTileId?: string): BoardState => {
     const realPairKeys = new Set(
         board.tiles
             .map((tile) => tile.pairKey)
@@ -100,7 +100,7 @@ export const sealBoardForDungeonExit = (board: BoardState): BoardState => {
                     ...tile,
                     state: 'matched' as const,
                     dungeonCardState: 'resolved' as const,
-                    dungeonExitActivated: true
+                    dungeonExitActivated: activatedExitTileId == null || tile.id === activatedExitTileId
                 };
             }
             if (isSingletonUtilityPairKey(tile.pairKey)) {
@@ -160,7 +160,7 @@ export const createDungeonExitActivationTransition = (
         ? addRunDungeonKey(run.dungeonKeys, activationSpend.keyKind, -1)
         : run.dungeonKeys;
     const objectiveReward = applyDungeonExitObjectiveReward(run, status);
-    const floorClearHazards = defeatEnemyHazardsForFloorClear(sealBoardForDungeonExit(run.board));
+    const floorClearHazards = defeatEnemyHazardsForFloorClear(sealBoardForDungeonExit(run.board, status.exitTile.id));
     const openedBoard = floorClearHazards.board;
     const routeType = status.routeType;
 

@@ -21,7 +21,7 @@ export type GameplayRenderQualityProfile = {
     stagePointLight: number;
 };
 
-export type GameplayRenderProfile = {
+type GameplayRenderProfile = {
     id: 'arcane-workshop-v2';
     description: string;
     cacheSalt: string;

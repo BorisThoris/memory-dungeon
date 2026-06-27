@@ -1,7 +1,7 @@
 const fallbackPosterUrl =
     'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1280"%3E%3Cdefs%3E%3ClinearGradient id="g" x1="0" y1="0" x2="1" y2="1"%3E%3Cstop stop-color="%23240f1f"/%3E%3Cstop offset=".55" stop-color="%23153632"/%3E%3Cstop offset="1" stop-color="%23c08a35"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="960" height="1280" fill="url(%23g)"/%3E%3Cpath d="M480 196 736 352v300c0 214-146 370-256 430-110-60-256-216-256-430V352l256-156Z" fill="none" stroke="%23f5d28a" stroke-width="34" opacity=".8"/%3E%3Ccircle cx="480" cy="582" r="144" fill="%230b1215" opacity=".38"/%3E%3Cpath d="M480 438v288M336 582h288" stroke="%23f5d28a" stroke-width="42" stroke-linecap="round" opacity=".82"/%3E%3C/svg%3E';
 
-const backgroundUrls = import.meta.glob<string>('./backgrounds/*.{png,jpg,jpeg,webp}', {
+const backgroundUrls = import.meta.glob<string>('./backgrounds/*.webp', {
     eager: true,
     query: '?url',
     import: 'default'
@@ -10,7 +10,7 @@ const backgroundUrls = import.meta.glob<string>('./backgrounds/*.{png,jpg,jpeg,w
 export const resolveUiBackgroundUrl = (filename: string, fallback = fallbackPosterUrl): string =>
     backgroundUrls[`./backgrounds/${filename}`] ?? fallback;
 
-const modePlaceholderUrl = resolveUiBackgroundUrl('bg-mode-placeholder-v1.png');
+const modePlaceholderUrl = resolveUiBackgroundUrl('bg-mode-placeholder-v1.webp');
 
 export const MODE_POSTER_FALLBACK_KEY = 'fallback' as const;
 
@@ -21,19 +21,19 @@ export const MODE_POSTER_FALLBACK_COPY = {
 
 /** Per-mode poster rasters for Choose Your Path (TASK-018). */
 export const MODE_CARD_ART = {
-    classic: resolveUiBackgroundUrl('bg-mode-classic-v1.png', modePlaceholderUrl),
-    daily: resolveUiBackgroundUrl('bg-mode-daily-v1.png', modePlaceholderUrl),
-    dungeon_showcase: resolveUiBackgroundUrl('mode-dungeon-showcase.png', modePlaceholderUrl),
-    endless: resolveUiBackgroundUrl('bg-mode-endless-v1.png', modePlaceholderUrl),
+    classic: resolveUiBackgroundUrl('bg-mode-classic-v1.webp', modePlaceholderUrl),
+    daily: resolveUiBackgroundUrl('bg-mode-daily-v1.webp', modePlaceholderUrl),
+    dungeon_showcase: resolveUiBackgroundUrl('mode-dungeon-showcase.webp', modePlaceholderUrl),
+    endless: resolveUiBackgroundUrl('bg-mode-endless-v1.webp', modePlaceholderUrl),
     fallback: modePlaceholderUrl,
-    gauntlet: resolveUiBackgroundUrl('bg-mode-gauntlet-v1.png', modePlaceholderUrl),
-    puzzle: resolveUiBackgroundUrl('bg-mode-puzzle-v1.png', modePlaceholderUrl),
-    mirror_puzzle: resolveUiBackgroundUrl('bg-mode-mirror-puzzle-v1.png', modePlaceholderUrl),
-    wild: resolveUiBackgroundUrl('bg-mode-wild-v1.png', modePlaceholderUrl),
-    practice: resolveUiBackgroundUrl('bg-mode-practice-v1.png', modePlaceholderUrl),
-    scholar: resolveUiBackgroundUrl('bg-mode-scholar-v1.png', modePlaceholderUrl),
-    pin_vow: resolveUiBackgroundUrl('bg-mode-pin-vow-v1.png', modePlaceholderUrl),
-    meditation: resolveUiBackgroundUrl('bg-mode-meditation-v1.png', modePlaceholderUrl)
+    gauntlet: resolveUiBackgroundUrl('bg-mode-gauntlet-v1.webp', modePlaceholderUrl),
+    puzzle: resolveUiBackgroundUrl('bg-mode-puzzle-v1.webp', modePlaceholderUrl),
+    mirror_puzzle: resolveUiBackgroundUrl('bg-mode-mirror-puzzle-v1.webp', modePlaceholderUrl),
+    wild: resolveUiBackgroundUrl('bg-mode-wild-v1.webp', modePlaceholderUrl),
+    practice: resolveUiBackgroundUrl('bg-mode-practice-v1.webp', modePlaceholderUrl),
+    scholar: resolveUiBackgroundUrl('bg-mode-scholar-v1.webp', modePlaceholderUrl),
+    pin_vow: resolveUiBackgroundUrl('bg-mode-pin-vow-v1.webp', modePlaceholderUrl),
+    meditation: resolveUiBackgroundUrl('bg-mode-meditation-v1.webp', modePlaceholderUrl)
 } as const;
 
 export type ModePosterKey = keyof typeof MODE_CARD_ART;

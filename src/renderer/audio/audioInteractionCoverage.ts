@@ -2,8 +2,8 @@ import sfxManifest from '../assets/audio/sfx/manifest.json';
 import type { SfxSampleKey } from './sampledSfx';
 import type { UiSfxCue } from './uiSfx';
 
-export type AudioCoverageDomain = 'startup' | 'menu' | 'settings' | 'gameplay' | 'overlay' | 'meta';
-export type AudioCoverageDecision = 'sampled_with_fallback' | 'procedural_only' | 'silent';
+type AudioCoverageDomain = 'startup' | 'menu' | 'settings' | 'gameplay' | 'overlay' | 'meta';
+type AudioCoverageDecision = 'sampled_with_fallback' | 'procedural_only' | 'silent';
 export type AudioSemanticMoment =
     | 'arm'
     | 'commit'
@@ -36,7 +36,7 @@ const UI_CUES = new Set<string>([
     'copy'
 ]);
 
-export interface AudioInteractionCoverageRow {
+interface AudioInteractionCoverageRow {
     id: string;
     domain: AudioCoverageDomain;
     interaction: string;

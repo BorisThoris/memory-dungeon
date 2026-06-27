@@ -3,7 +3,7 @@ import type { MotionPermissionState } from './platformTiltTypes';
 type MotionPermissionCopyContext = 'board' | 'intro';
 type PlatformMotionCapability = 'desktop_pointer' | 'touch_motion' | 'unsupported';
 
-export interface PlatformPolishPolicy {
+interface PlatformPolishPolicy {
     motionCapability: PlatformMotionCapability;
     hapticsCapability: 'no_op_v1';
     permissionGate: 'user_initiated_only';

@@ -1,4 +1,4 @@
-export interface PreloadAudioBuffersOptions<Key extends string> {
+interface PreloadAudioBuffersOptions<Key extends string> {
     concurrency?: number;
     decode: (arrayBuffer: ArrayBuffer) => Promise<AudioBuffer>;
     fetchArrayBuffer?: (url: string) => Promise<ArrayBuffer | null>;

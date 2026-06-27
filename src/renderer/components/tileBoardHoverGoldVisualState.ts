@@ -16,7 +16,7 @@ export interface HoverGoldVisualState {
     shaderGlowEnabled: boolean;
 }
 
-export interface HoverGoldVisualStateInput {
+interface HoverGoldVisualStateInput {
     graphicsQuality: GraphicsQualityPreset;
     hoverDomParity: boolean;
     hoverFaceUpPickable: boolean;

@@ -6,36 +6,36 @@ export const CARD_FACE_UP_SURFACE_SECONDS = 0.2;
 export const CARD_FLIP_POP_SECONDS = 0.22;
 export const MATCH_PULSE_DECAY_PER_SECOND = 2.8;
 
-export interface TileBoardFaceUpStructState {
+interface TileBoardFaceUpStructState {
     blend: number;
     startedAt: number | null;
 }
 
-export interface TileBoardMatchPulseState {
+interface TileBoardMatchPulseState {
     pulse: number;
     prevResolvingSelection: ResolvingSelectionState | null;
 }
 
-export interface TileBoardMatchedBurstState {
+interface TileBoardMatchedBurstState {
     burst: number;
     startedAt: number | null;
     wasMatched: boolean;
 }
 
-export interface TileBoardResolvingWaveFrameState {
+interface TileBoardResolvingWaveFrameState {
     flipPopStartedAt: number | null;
     lastResolvingWaveKey: string | null;
     matchPulse: number;
     prevResolvingSelection: ResolvingSelectionState | null;
 }
 
-export interface TileBoardFlipPopVisualState {
+interface TileBoardFlipPopVisualState {
     scaleMultiplier: number;
     startedAt: number | null;
     z: number;
 }
 
-export interface TileBoardFramePulseRefsState {
+interface TileBoardFramePulseRefsState {
     faceUpStructBlend: number;
     faceUpStructStartedAt: number | null;
     flipPopStartedAt: number | null;
@@ -47,7 +47,7 @@ export interface TileBoardFramePulseRefsState {
     wasMatched: boolean;
 }
 
-export interface TileBoardFramePulseTransitionInput {
+interface TileBoardFramePulseTransitionInput {
     current: TileBoardFramePulseRefsState;
     delta: number;
     faceUp: boolean;
@@ -58,7 +58,7 @@ export interface TileBoardFramePulseTransitionInput {
     time: number;
 }
 
-export interface TileBoardFramePulseTransitionState {
+interface TileBoardFramePulseTransitionState {
     flipPopScaleMultiplier: number;
     flipPopZ: number;
     matchedVictoryBurst: number;

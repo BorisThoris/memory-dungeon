@@ -1,9 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const parsedWorkers = Number.parseInt(process.env.PLAYWRIGHT_WORKERS ?? '', 10);
+const workers = Number.isFinite(parsedWorkers) && parsedWorkers > 0 ? parsedWorkers : 1;
+
 /** REF-079: fresh browser context per test is Playwright default; block SWs to avoid cross-test cache bleed. */
 export default defineConfig({
     testDir: './e2e',
-    fullyParallel: true,
+    /*
+     * The app is a single strict-port Vite/WebGL target; broad parallel Playwright runs overload
+     * startup, WebGL contexts, and route fixtures. Shards may opt into more workers through env.
+     */
+    fullyParallel: process.env.PLAYWRIGHT_FULLY_PARALLEL === '1',
+    workers,
     forbidOnly: Boolean(process.env.CI),
     retries: process.env.CI ? 2 : 0,
     reporter: 'list',

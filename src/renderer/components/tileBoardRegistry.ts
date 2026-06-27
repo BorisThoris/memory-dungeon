@@ -5,17 +5,17 @@ export interface TileBoardItemRegistry<TItem> {
     unregister(id: string): void;
 }
 
-export interface TileBoardItemRegistryOptions<TItem> {
+interface TileBoardItemRegistryOptions<TItem> {
     onRegister?: (id: string, item: TItem) => void;
     onUnregister?: (id: string) => void;
 }
 
-export interface TileBoardItemRegistryStorage<TItem> {
+interface TileBoardItemRegistryStorage<TItem> {
     delete(id: string): void;
     set(id: string, item: TItem): void;
 }
 
-export interface TileBoardRefItemRegistryOptions {
+interface TileBoardRefItemRegistryOptions {
     clearOnRegister?: MutableRefObject<Map<string, unknown>>;
     clearOnUnregister?: MutableRefObject<Map<string, unknown>>;
 }

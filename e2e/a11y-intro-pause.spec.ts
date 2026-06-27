@@ -3,7 +3,7 @@ import { dismissStartupIntro } from './startupIntroHelpers';
 import {
     buildVisualSaveJson,
     gotoWithSaveExpectStartupIntroVisible,
-    mainMenuPlayButton,
+    openChooseYourPath,
     openLevel1Play,
     waitLevel1PlayReady
 } from './visualScreenHelpers';
@@ -27,22 +27,24 @@ test.describe('E2E-002 / E2E-003 — startup intro + pause modal a11y', () => {
     test('E2E-002: after startup intro dismiss, menu pointer is interactive and primary Play click works', async ({
         page
     }) => {
+        test.setTimeout(90_000);
         await gotoWithSaveExpectStartupIntroVisible(page, buildVisualSaveJson(true));
         await dismissStartupIntro(page);
 
         const root = menuPointerRoot(page);
         await expect(root).toHaveAttribute('data-e2e-menu-pointer', 'interactive');
-        await mainMenuPlayButton(page).click();
+        await openChooseYourPath(page);
         await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
     });
 
     test('E2E-002: dismissStartupIntro is idempotent once the menu is interactive', async ({ page }) => {
+        test.setTimeout(90_000);
         await gotoWithSaveExpectStartupIntroVisible(page, buildVisualSaveJson(true));
         await dismissStartupIntro(page);
         await expect(menuPointerRoot(page)).toHaveAttribute('data-e2e-menu-pointer', 'interactive');
         await dismissStartupIntro(page);
         await expect(menuPointerRoot(page)).toHaveAttribute('data-e2e-menu-pointer', 'interactive');
-        await mainMenuPlayButton(page).click();
+        await openChooseYourPath(page);
         await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
     });
 

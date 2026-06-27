@@ -1,6 +1,6 @@
 import type { RunStatus, Tile } from '../../shared/contracts';
 
-export interface TileBoardPresentationState {
+interface TileBoardPresentationState {
     presentationNBackAnchor: boolean;
     presentationSilhouette: boolean;
     presentationWideRecall: boolean;

@@ -14,7 +14,7 @@ export interface CardGlowVisualState {
     secondary: CardGlowColorRole;
 }
 
-export interface CardGlowVisualInput {
+interface CardGlowVisualInput {
     cardGlowIntensity: number;
     focusActive: boolean;
     hoverDomParity: boolean;
@@ -35,7 +35,7 @@ export interface CardGlowVisualStates {
     resolving: CardGlowVisualState;
 }
 
-export interface ApplyCardGlowVisualStateInput {
+interface ApplyCardGlowVisualStateInput {
     elapsedTime: number;
     glow: CardGlowVisualState;
     mat: ShaderMaterial | null;

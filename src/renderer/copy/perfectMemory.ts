@@ -20,7 +20,7 @@ export const perfectMemoryInventoryHint = (
 };
 
 /** HUD pill: hidden when achievements are off for this run. */
-export type PerfectMemoryHudKind = 'hidden' | 'eligible' | 'locked';
+type PerfectMemoryHudKind = 'hidden' | 'eligible' | 'locked';
 
 export const perfectMemoryHudKind = (
     achievementsEnabled: boolean,

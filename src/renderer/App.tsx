@@ -34,6 +34,7 @@ import { getNavigationShellChromeContract } from './store/navigationModel';
 export const APP_MAIN_LANDMARK_ID = 'app-main';
 
 const GameScreen = lazy(() => import('./components/GameScreen'));
+const DevBlueprintExplorer = import.meta.env.DEV ? lazy(() => import('./dev/BlueprintExplorer')) : null;
 
 const focusAppMainLandmark = (): void => {
     document.getElementById(APP_MAIN_LANDMARK_ID)?.focus({ preventScroll: true });
@@ -114,6 +115,7 @@ const App = () => {
     const inGameSideRoomOverlay = hydrated && view === 'sideRoom' && shellChromeContract.shellChrome === 'gameplay_modal';
     const visualView = shellChromeContract.visualView;
     const suppressGameplayStatusOverlays = shellChromeContract.shellChrome === 'gameplay_modal';
+    const showDevBlueprintExplorer = import.meta.env.DEV && window.location.pathname === '/__blueprint';
 
     const musicState = resolveAdaptiveMusicState({ run, view: visualView });
     const musicShellActive = hydrated && (visualView === 'menu' || visualView === 'playing');
@@ -289,96 +291,103 @@ const App = () => {
             </a>
             <div className={styles.ambientGlow} />
             <main className={styles.content} data-app-scrollport id={APP_MAIN_LANDMARK_ID} tabIndex={-1}>
-                {showMenuShell && (
-                    <div
-                        aria-hidden={introOverlayVisible}
-                        className={`${styles.menuLayer} ${menuShellBlurred ? styles.menuLayerIntro : ''}`}
-                        data-e2e-menu-pointer={startupIntroContract.menuPointerState}
-                        data-startup-hydration={startupIntroContract.hydrationState}
-                        data-startup-return-focus={startupIntroContract.returnFocusTestId}
-                        data-testid="main-menu-focus-root"
-                        tabIndex={-1}
-                    >
-                        {showMainMenu ? (
-                            <MainMenu
-                                saveData={saveData}
-                                reduceMotion={settings.reduceMotion}
-                                suppressMenuBackgroundFallback={introOverlayVisible}
-                                onDismissHowToPlay={dismissHowToPlay}
-                                onOpenSettings={() => openSettings('menu')}
-                                onOpenProfile={openProfile}
-                                onOpenCollection={openCollection}
-                                onOpenCodex={openCodexFromMenu}
-                                onOpenInventory={openInventoryFromMenu}
-                                onPlay={openModeSelect}
-                                onStartDungeonShowcase={startDungeonShowcaseRun}
-                                showHowToPlay={!saveData.firstRunHelpDismissed && !saveData.onboardingDismissed}
-                            />
-                        ) : null}
-                    </div>
-                )}
-
-                {introOverlayVisible &&
-                    createPortal(
-                        <StartupIntro
-                            graphicsQuality={hydrated ? settings.graphicsQuality : undefined}
-                            onComplete={() => setIntroPlayback('done')}
-                            reduceMotion={settings.reduceMotion}
-                        />,
-                        document.body
-                    )}
-
-                {hydrated && view === 'modeSelect' && <ChooseYourPathScreen />}
-
-                {hydrated && view === 'collection' && <CollectionScreen />}
-
-                {hydrated && view === 'profile' && <ProfileScreen />}
-
-                {hydrated && view === 'inventory' && subscreenReturnView === 'menu' && <InventoryScreen />}
-
-                {hydrated && view === 'codex' && subscreenReturnView === 'menu' && <CodexScreen />}
-
-                {hydrated && view === 'settings' && !inGameSettingsOverlay && <SettingsScreen />}
-
-                {hydrated &&
-                    (view === 'playing' ||
-                        shellChromeContract.boardMounted) &&
-                    run && (
-                    <Suspense fallback={<div role="status">Loading run...</div>}>
-                        <GameScreen
-                            achievements={newlyUnlockedAchievements}
-                            run={run}
-                            suppressStatusOverlays={suppressGameplayStatusOverlays}
-                        />
+                {showDevBlueprintExplorer && DevBlueprintExplorer ? (
+                    <Suspense fallback={<div role="status">Loading blueprint explorer...</div>}>
+                        <DevBlueprintExplorer />
                     </Suspense>
-                )}
+                ) : (
+                    <>
+                        {showMenuShell && (
+                            <div
+                                aria-hidden={introOverlayVisible}
+                                className={`${styles.menuLayer} ${menuShellBlurred ? styles.menuLayerIntro : ''}`}
+                                data-e2e-menu-pointer={startupIntroContract.menuPointerState}
+                                data-startup-hydration={startupIntroContract.hydrationState}
+                                data-startup-return-focus={startupIntroContract.returnFocusTestId}
+                                data-testid="main-menu-focus-root"
+                                tabIndex={-1}
+                            >
+                                {showMainMenu ? (
+                                    <MainMenu
+                                        saveData={saveData}
+                                        reduceMotion={settings.reduceMotion}
+                                        suppressMenuBackgroundFallback={introOverlayVisible}
+                                        onDismissHowToPlay={dismissHowToPlay}
+                                        onOpenSettings={() => openSettings('menu')}
+                                        onOpenProfile={openProfile}
+                                        onOpenCollection={openCollection}
+                                        onOpenCodex={openCodexFromMenu}
+                                        onOpenInventory={openInventoryFromMenu}
+                                        onPlay={openModeSelect}
+                                        onStartDungeonShowcase={startDungeonShowcaseRun}
+                                        showHowToPlay={!saveData.firstRunHelpDismissed && !saveData.onboardingDismissed}
+                                    />
+                                ) : null}
+                            </div>
+                        )}
+
+                        {introOverlayVisible &&
+                            createPortal(
+                                <StartupIntro
+                                    graphicsQuality={hydrated ? settings.graphicsQuality : undefined}
+                                    onComplete={() => setIntroPlayback('done')}
+                                    reduceMotion={settings.reduceMotion}
+                                />,
+                                document.body
+                            )}
+
+                        {hydrated && view === 'modeSelect' && <ChooseYourPathScreen />}
+
+                        {hydrated && view === 'collection' && <CollectionScreen />}
+
+                        {hydrated && view === 'profile' && <ProfileScreen />}
+
+                        {hydrated && view === 'inventory' && subscreenReturnView === 'menu' && <InventoryScreen />}
+
+                        {hydrated && view === 'codex' && subscreenReturnView === 'menu' && <CodexScreen />}
+
+                        {hydrated && view === 'settings' && !inGameSettingsOverlay && <SettingsScreen />}
+
+                        {hydrated &&
+                            (view === 'playing' || shellChromeContract.boardMounted) &&
+                            run && (
+                                <Suspense fallback={<div role="status">Loading run...</div>}>
+                                    <GameScreen
+                                        achievements={newlyUnlockedAchievements}
+                                        run={run}
+                                        suppressStatusOverlays={suppressGameplayStatusOverlays}
+                                    />
+                                </Suspense>
+                            )}
 
                 {/* Portal: `main` uses CSS `zoom` for UI scale; fixed overlays inside it become positioned
                     relative to the zoomed box and can inflate `data-app-scrollport` scrollHeight (mobile-layout). */}
-                {inGameSettingsOverlay &&
-                    createPortal(<SettingsScreen presentation="modal" />, document.body)}
+                        {inGameSettingsOverlay &&
+                            createPortal(<SettingsScreen presentation="modal" />, document.body)}
 
-                {inGameShellOverlay ? (
-                    <div
-                        className={`${metaScreenStyles.modalOverlay} ${metaScreenStyles.modalOverlayDesk}`}
-                        data-in-run-meta-shell="desk"
-                        style={GAMEPLAY_VISUAL_CSS_VARS}
-                    >
-                        <div className={`${metaScreenStyles.modalInner} ${metaScreenStyles.modalInnerDesk}`}>
-                            {view === 'inventory' ? (
-                                <InventoryScreen stackedOnGameplay />
-                            ) : (
-                                <CodexScreen stackedOnGameplay />
-                            )}
-                        </div>
-                    </div>
-                ) : null}
+                        {inGameShellOverlay ? (
+                            <div
+                                className={`${metaScreenStyles.modalOverlay} ${metaScreenStyles.modalOverlayDesk}`}
+                                data-in-run-meta-shell="desk"
+                                style={GAMEPLAY_VISUAL_CSS_VARS}
+                            >
+                                <div className={`${metaScreenStyles.modalInner} ${metaScreenStyles.modalInnerDesk}`}>
+                                    {view === 'inventory' ? (
+                                        <InventoryScreen stackedOnGameplay />
+                                    ) : (
+                                        <CodexScreen stackedOnGameplay />
+                                    )}
+                                </div>
+                            </div>
+                        ) : null}
 
-                {inGameShopOverlay ? <ShopScreen /> : null}
+                        {inGameShopOverlay ? <ShopScreen /> : null}
 
-                {inGameSideRoomOverlay ? <SideRoomScreen /> : null}
+                        {inGameSideRoomOverlay ? <SideRoomScreen /> : null}
 
-                {hydrated && view === 'gameOver' && run?.lastRunSummary && <GameOverScreen run={run} />}
+                        {hydrated && view === 'gameOver' && run?.lastRunSummary && <GameOverScreen run={run} />}
+                    </>
+                )}
             </main>
         </div>
     );

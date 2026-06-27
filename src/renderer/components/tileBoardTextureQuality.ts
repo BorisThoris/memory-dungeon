@@ -1,6 +1,6 @@
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 
-export interface TileBoardTextureQualitySyncInput {
+interface TileBoardTextureQualitySyncInput {
     applyAnisotropy: (anisotropy: number) => void;
     getAnisotropyCap: (quality: GraphicsQualityPreset) => number;
     getMaxAnisotropy: () => number;
@@ -9,7 +9,7 @@ export interface TileBoardTextureQualitySyncInput {
     setSamplingQuality: (quality: GraphicsQualityPreset) => void;
 }
 
-export interface TileBoardTextureQualitySyncResult {
+interface TileBoardTextureQualitySyncResult {
     appliedAnisotropy: number;
     deviceAnisotropyCap: number;
     qualityAnisotropyCap: number;

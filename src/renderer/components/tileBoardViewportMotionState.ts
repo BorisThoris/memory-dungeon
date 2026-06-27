@@ -6,7 +6,7 @@ export const BOARD_VIEWPORT_ACTIVE_DAMPING = 7.4;
 export const BOARD_VIEWPORT_IDLE_SCALE_DAMPING = 4.8;
 export const BOARD_VIEWPORT_ACTIVE_SCALE_DAMPING = 6.8;
 
-export interface TileBoardViewportMotionState {
+interface TileBoardViewportMotionState {
     instant: boolean;
     panDamping: number;
     scaleDamping: number;

@@ -5,7 +5,7 @@ import { hazardTileColor } from './tileBoardThreatColors';
 import { tileTraitColor } from '../../shared/tile-trait-rules';
 import type { TileBoardPowerBackAccent } from './tileBoardRows';
 
-export type DungeonUtilityReadabilityKind = 'exit' | 'lever' | 'lock' | 'shop';
+type DungeonUtilityReadabilityKind = 'exit' | 'lever' | 'lock' | 'shop';
 
 export const getDungeonUtilityReadabilityKind = (
     tile: Pick<Tile, 'dungeonCardKind' | 'dungeonExitLockKind'> & Partial<Pick<Tile, 'id' | 'pairKey'>>,
@@ -47,7 +47,7 @@ const dungeonUtilityReadabilityColor = (kind: DungeonUtilityReadabilityKind): st
     return '#f2d39d';
 };
 
-export interface TileBoardReadabilityInput {
+interface TileBoardReadabilityInput {
     destroyBlockedDecoyBack: boolean;
     enemyOccupiedBack: boolean;
     faceUp: boolean;
@@ -63,7 +63,7 @@ export interface TileBoardReadabilityInput {
     board?: BoardState;
 }
 
-export interface TileBoardReadabilityState {
+interface TileBoardReadabilityState {
     enemyOccupiedColor: string;
     faceReadabilityAccentColor: string;
     hiddenReadabilityAccentColor: string;

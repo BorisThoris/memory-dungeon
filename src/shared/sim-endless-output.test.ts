@@ -189,10 +189,24 @@ describe('sim-endless CSV output', () => {
         stdout.mockClear();
         stderr.mockClear();
 
+        expect(runSoftlockSeedGate(['--floors=120', '--seeds=42001 42002'])).toBe(0);
+        expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('Seeds: 42001, 42002'))).toBe(true);
+
+        stdout.mockClear();
+        stderr.mockClear();
+
+        expect(runSoftlockSeedGate(['--floors=25', '--stressSeeds=3', '--stressSeedBase=42001'])).toBe(0);
+        expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('Seeds: 432012, 425003, 878670'))).toBe(true);
+
+        stdout.mockClear();
+        stderr.mockClear();
+
         expect(runSoftlockSeedGate(['--floors=5', '--seeds=,'])).toBe(1);
         expect(
             stdout.mock.calls.some(([chunk]) =>
-                String(chunk).includes('Seeds: 42001, 42002, 42077, 77707, 130011, 172707, 182009, 192012')
+                String(chunk).includes(
+                    'Seeds: 42001, 42002, 42077, 77707, 130011, 172707, 182009, 192012, 210008, 240017, 310021, 420113, 530017, 610019, 720031, 880037'
+                )
             )
         ).toBe(true);
         expect(stderr.mock.calls.some(([chunk]) => String(chunk).includes('Softlock seed gate failed'))).toBe(true);

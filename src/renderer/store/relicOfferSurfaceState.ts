@@ -4,7 +4,7 @@ import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { mergeRelicPickStat, normalizeSaveData } from '../../shared/save-data';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
 
-export type RelicPickSurfaceResult =
+type RelicPickSurfaceResult =
     | { kind: 'ignored' }
     | {
           kind: 'accepted';
@@ -19,7 +19,7 @@ export type RelicPickSurfaceResult =
           };
       };
 
-export type RelicOfferServiceSurfaceResult =
+type RelicOfferServiceSurfaceResult =
     | { kind: 'ignored' }
     | {
           kind: 'applied';

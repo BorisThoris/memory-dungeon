@@ -9,7 +9,7 @@ import {
     getResolvedTrapTileCount
 } from './tileBoardDomTelemetry';
 
-export interface TileBoardDomSurfaceModel {
+interface TileBoardDomSurfaceModel {
     cardFeedbackStatesAttr: string | undefined;
     hiddenSlotsAttr: string;
     hiddenTileCount: number;

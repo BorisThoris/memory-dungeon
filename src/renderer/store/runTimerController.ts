@@ -24,7 +24,7 @@ interface RunTimerControllerOptions {
     setRun: (run: RunState) => void;
 }
 
-export interface RunTimerController {
+interface RunTimerController {
     clearAllTimers: () => void;
     clearResolveTimer: () => void;
     freezeRun: (run: RunState) => RunState;

@@ -123,7 +123,7 @@ Hero uses **`cardGrid`** (`auto-fit`, `minmax(240px, 1fr)`), so Featured cards g
 | [`src/shared/run-mode-catalog.ts`](../../src/shared/run-mode-catalog.ts) | Single ordered `RUN_MODE_CATALOG` with stable `id`, `group`, `availability`, `posterKey`, `testId?`, discriminated **`RunModeAction`**. |
 | `CHOOSE_PATH_HERO_MODE_IDS` | `classic`, `daily`, `endless`. |
 | `choosePathHeroModes()` / `choosePathLibraryModes()` | UI split: three featured cards vs all other entries (Gauntlet, puzzles, training, utilities). |
-| [`modeArt.ts`](../../src/renderer/assets/ui/modeArt.ts) | `MODE_CARD_ART`, `resolveModePosterUrl()`; fallback `bg-mode-placeholder-v1.png`. See [`ASSET_SOURCES.md`](../../src/renderer/assets/ASSET_SOURCES.md). |
+| [`modeArt.ts`](../../src/renderer/assets/ui/modeArt.ts) | `MODE_CARD_ART`, `resolveModePosterUrl()`; fallback `bg-mode-placeholder-v1.webp`. See [`ASSET_SOURCES.md`](../../src/renderer/assets/ASSET_SOURCES.md). |
 
 ---
 

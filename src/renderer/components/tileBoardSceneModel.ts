@@ -7,7 +7,7 @@ import {
 import { isTileBoardFlipLocked } from './tileBoardFlipLock';
 import { computeTileBoardRuneFieldMetrics, type TileBoardRuneFieldMetrics } from './tileBoardRuneField';
 
-export interface TileBoardSceneModel {
+interface TileBoardSceneModel {
     boardRuneFieldMetrics: TileBoardRuneFieldMetrics;
     enemyHazardRows: TileBoardEnemyHazardRow[];
     flipLocked: boolean;
@@ -15,7 +15,7 @@ export interface TileBoardSceneModel {
     tileBezelRows: TileBoardRow[];
 }
 
-export interface BuildTileBoardSceneModelInput
+interface BuildTileBoardSceneModelInput
     extends Omit<BuildTileBoardRowsInput, 'peekRevealedTileIds' | 'pinnedTileIds'> {
     cardHeight: number;
     cardWidth: number;

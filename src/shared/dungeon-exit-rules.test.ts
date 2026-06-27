@@ -434,4 +434,65 @@ describe('getDungeonExitStatus softlock prevention', () => {
         expect(status.canActivate).toBe(true);
         expect(status.lockedReason).toBeNull();
     });
+
+    it('activates the primary lever exit instead of softlocking on a revealed alternate key exit', () => {
+        const base = createNewRun(0, { runSeed: 26 });
+        const board = {
+            ...createBoard([
+                tile('alternate-exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'revealed',
+                    dungeonExitLockKind: 'iron',
+                    dungeonRouteType: 'greed'
+                }),
+                tile('primary-exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonCardState: 'revealed',
+                    dungeonExitLockKind: 'lever',
+                    dungeonExitRequiredLeverCount: 1,
+                    dungeonRouteType: 'safe'
+                }),
+                tile('lever-a', 'lever', {
+                    state: 'matched',
+                    dungeonCardKind: 'lever',
+                    dungeonCardState: 'resolved',
+                    dungeonCardEffectId: 'lever_floor'
+                }),
+                tile('lever-b', 'lever', {
+                    state: 'matched',
+                    dungeonCardKind: 'lever',
+                    dungeonCardState: 'resolved',
+                    dungeonCardEffectId: 'lever_floor'
+                })
+            ]),
+            dungeonExitTileId: 'primary-exit',
+            dungeonExitLockKind: 'lever' as const,
+            dungeonExitRequiredLeverCount: 1,
+            dungeonLeverCount: 1
+        };
+        const run: RunState = {
+            ...base,
+            status: 'playing',
+            board,
+            dungeonKeys: { iron: 0, treasure: 0, boss: 0 },
+            dungeonMasterKeys: 0,
+            dungeonGatewaysUsed: 0,
+            pendingRouteCardPlan: null
+        };
+
+        const transition = createDungeonExitActivationTransition(run);
+
+        expect(transition).not.toBeNull();
+        expect(transition?.board.tiles.find((candidate) => candidate.id === 'primary-exit')).toMatchObject({
+            dungeonExitActivated: true,
+            dungeonRouteType: 'safe'
+        });
+        expect(transition?.board.tiles.find((candidate) => candidate.id === 'alternate-exit')).not.toMatchObject({
+            dungeonExitActivated: true
+        });
+        expect(transition?.run.dungeonKeys.iron ?? 0).toBe(0);
+        expect(transition?.run.pendingRouteCardPlan?.routeType).toBe('safe');
+    });
 });

@@ -8,10 +8,20 @@ const GATES = {
     systems: 'yarn gate:systems',
     simHealth: 'yarn gate:sim-health',
     simSoftlockSeeds: 'yarn gate:sim-softlock-seeds',
+    simSoftlockStress: 'yarn gate:sim-softlock-stress',
     rendererInput: 'yarn gate:renderer-input',
     audioFeedback: 'yarn gate:audio-feedback',
     assetRendering: 'yarn gate:asset-rendering',
-    persistence: 'yarn gate:persistence'
+    persistence: 'yarn gate:persistence',
+    packageHygiene: 'yarn gate:package-hygiene',
+    security: 'yarn gate:security',
+    buildOutput: 'yarn gate:build-output',
+    desktopBuild: 'yarn gate:desktop-build',
+    blueprintE2e: 'yarn test:e2e:blueprint',
+    rendererQaLayout: 'yarn test:e2e:renderer-qa:layout',
+    rendererQaNavigation: 'yarn test:e2e:renderer-qa:navigation',
+    rendererQaInterludes: 'yarn test:e2e:renderer-qa:interludes',
+    rendererQa3d: 'yarn test:e2e:renderer-qa:3d'
 };
 
 const normalize = (file) => file.replaceAll('\\', '/').replace(/^\.\//, '');
@@ -60,6 +70,8 @@ export const selectGatesForChangedPaths = (paths) => {
     for (const file of normalized) {
         if (
             file === 'package.json' ||
+            file === 'yarn.lock' ||
+            file === 'scripts/audit-summary.mjs' ||
             file === 'src/shared/contracts.ts' ||
             file === 'docs/agent/GAMEPLAY_RULES_EDIT_MAP.md' ||
             file.startsWith('scripts/system-diagrams') ||
@@ -67,6 +79,61 @@ export const selectGatesForChangedPaths = (paths) => {
             file.startsWith('docs/system-diagrams/')
         ) {
             add('systems', file, 'system diagram, audit registry, or package gate metadata changed');
+        }
+        if (
+            file === 'package.json' ||
+            file === 'vite.config.mts' ||
+            file === 'e2e/blueprint-explorer.spec.ts' ||
+            file === 'src/renderer/App.tsx' ||
+            file.startsWith('src/renderer/dev/BlueprintExplorer') ||
+            file.startsWith('scripts/system-diagrams') ||
+            file.startsWith('scripts/vite-dev-blueprint-api') ||
+            file.startsWith('docs/system-diagrams/')
+        ) {
+            add('blueprintE2e', file, 'dev blueprint explorer or system diagram browser route changed');
+        }
+        if (file === 'package.json' || file === 'yarn.lock' || file === 'scripts/audit-summary.mjs') {
+            add('security', file, 'dependency, lockfile, or audit tooling changed');
+        }
+        if (
+            file === 'package.json' ||
+            file === 'yarn.lock' ||
+            file === 'knip.json' ||
+            file === '.depcheckrc.json' ||
+            file === 'scripts/audit-summary.mjs' ||
+            file === 'src/shared/check-depcheck-clean-script.test.ts' ||
+            file.startsWith('scripts/audit-renderer-assets') ||
+            file.startsWith('scripts/check-depcheck-clean') ||
+            file.startsWith('scripts/check-test-file-extensions') ||
+            file.startsWith('scripts/postinstall')
+        ) {
+            add('packageHygiene', file, 'dependency, export, unused-file, or package tooling hygiene can change');
+        }
+        if (
+            file === 'package.json' ||
+            file === 'tsup.config.ts' ||
+            file.startsWith('src/main/') ||
+            file.startsWith('src/preload/') ||
+            file === 'src/renderer/desktop-client.ts' ||
+            file === 'src/renderer/desktop.d.ts' ||
+            file.startsWith('src/shared/desktop-api-boundary')
+        ) {
+            add('desktopBuild', file, 'Electron main, preload, desktop bridge, or package build metadata changed');
+        }
+        if (
+            file === 'package.json' ||
+            file === 'vite.config.mts' ||
+            file === 'index.html' ||
+            file === 'scripts/check-renderer-bundle-budget.mjs' ||
+            file === 'src/shared/renderer-bundle-budget-script.test.ts' ||
+            file.startsWith('src/renderer/assets/') ||
+            file.startsWith('src/renderer/components/') ||
+            file.startsWith('src/renderer/hooks/') ||
+            file.startsWith('src/renderer/store/') ||
+            file.startsWith('src/renderer/styles/') ||
+            file.startsWith('src/renderer/cardFace/')
+        ) {
+            add('buildOutput', file, 'renderer build output, assets, or bundle budget can change');
         }
         if (
             file === 'scripts/sim-endless.ts' ||
@@ -104,6 +171,21 @@ export const selectGatesForChangedPaths = (paths) => {
         ) {
             add('simSoftlockSeeds', file, 'multi-seed executable softlock coverage can change');
         }
+        if (
+            file === 'scripts/gate-softlock-seeds.ts' ||
+            file.startsWith('src/shared/playthrough-solver') ||
+            file.startsWith('src/shared/run-progression-repair') ||
+            file.startsWith('src/shared/softlock') ||
+            file.startsWith('src/shared/board-generation') ||
+            file.startsWith('src/shared/board-build') ||
+            file.startsWith('src/shared/board-inspection') ||
+            file.startsWith('src/shared/dungeon-exit') ||
+            file.startsWith('src/shared/dungeon-enemy') ||
+            file.startsWith('src/shared/enemy-hazard') ||
+            isCoreGameRuleFile(file)
+        ) {
+            add('simSoftlockStress', file, 'deterministic stress seed sweep can expose rare progression interactions');
+        }
         if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || isCoreGameRuleFile(file) || file.startsWith('src/shared/playthrough-solver') || file.startsWith('src/shared/run-progression-repair') || file.startsWith('src/shared/turn-resolution') || file.startsWith('src/shared/hazard') || file.startsWith('src/shared/enemy')) {
             add('actionLoop', file, 'core turn, trait, hazard, enemy, or board-power rules changed');
         }
@@ -116,13 +198,71 @@ export const selectGatesForChangedPaths = (paths) => {
         if (file.startsWith('src/shared/run-map') || file.startsWith('src/shared/route') || file.startsWith('src/renderer/store/navigationModel') || file.startsWith('src/renderer/components/ChooseYourPath') || file.startsWith('src/renderer/components/SideRoom') || file === 'src/renderer/App.tsx') {
             add('navigation', file, 'route, map, shell, or navigation UI changed');
         }
+        if (
+            file === 'e2e/mobile-layout.spec.ts' ||
+            file === 'e2e/gameplay-readability.spec.ts' ||
+            file === 'e2e/long-run-feedback-hud.spec.ts' ||
+            file.startsWith('src/renderer/components/GameplayHud') ||
+            file === 'src/renderer/components/GameScreen.tsx' ||
+            file === 'src/renderer/components/GameScreen.module.css'
+        ) {
+            add('rendererQaLayout', file, 'live renderer layout, HUD bounds, or mobile viewport coverage can change');
+        }
+        if (
+            file === 'e2e/navigation-flow.spec.ts' ||
+            file === 'e2e/playable-path-navigation.spec.ts' ||
+            file === 'e2e/playable-path-mode-matrix.spec.ts' ||
+            file.startsWith('src/shared/run-map') ||
+            file.startsWith('src/shared/route') ||
+            file.startsWith('src/renderer/store/navigationModel') ||
+            file.startsWith('src/renderer/components/ChooseYourPath') ||
+            file === 'src/renderer/components/MainMenu.tsx' ||
+            file === 'src/renderer/App.tsx'
+        ) {
+            add('rendererQaNavigation', file, 'live renderer shell navigation, playable-path navigation, or mode start coverage can change');
+        }
+        if (
+            file === 'e2e/playable-path-interludes.spec.ts' ||
+            file === 'e2e/scholar-contract.spec.ts' ||
+            file === 'e2e/wild-run.spec.ts' ||
+            file.startsWith('src/renderer/components/ShopScreen') ||
+            file.startsWith('src/renderer/components/SideRoom') ||
+            file.startsWith('src/renderer/components/RelicDraftOffer') ||
+            file.startsWith('src/shared/shop') ||
+            file.startsWith('src/shared/relic') ||
+            file.startsWith('src/shared/route-side-room')
+        ) {
+            add('rendererQaInterludes', file, 'live renderer shop, route interlude, relic, Scholar, or Wild coverage can change');
+        }
+        if (
+            file === 'e2e/dungeon-board-3d-value.spec.ts' ||
+            file === 'e2e/tile-card-face-dom.spec.ts' ||
+            file === 'e2e/tile-card-face-webgl.spec.ts' ||
+            file === 'e2e/tile-board-raycast.spec.ts' ||
+            file.startsWith('src/renderer/components/tileBoard') ||
+            file === 'src/renderer/components/TileBoard.tsx' ||
+            file === 'src/renderer/components/TileBoardScene.tsx' ||
+            file.startsWith('src/renderer/cardFace/') ||
+            file.startsWith('src/renderer/components/tileTextures')
+        ) {
+            add('rendererQa3d', file, 'live 3D board, WebGL recovery, tile face, or raycast coverage can change');
+        }
         if (file.startsWith('src/renderer/components/tileBoard') || file === 'src/renderer/components/TileBoard.tsx' || file.startsWith('src/renderer/store/levelCompleteSurfaceState') || file.startsWith('src/renderer/store/runResolutionController') || file.startsWith('src/renderer/store/useAppStore')) {
             add('rendererInput', file, 'tile input, WebGL fallback, pointer, DOM, or store dispatch changed');
         }
-        if (file.startsWith('src/renderer/audio/') || file.startsWith('src/renderer/hooks/useHudPoliteLiveAnnouncement') || file.startsWith('src/renderer/components/gameScreenFeedback') || file === 'docs/AUDIO_ASSET_INVENTORY.md') {
+        if (
+            file.startsWith('src/renderer/audio/') ||
+            file.startsWith('src/renderer/assets/audio/') ||
+            file === 'scripts/audio-pipeline/export-runtime-ogg.mjs' ||
+            file === 'scripts/audio-pipeline/generate-portfolio-feedback-pack.mjs' ||
+            file.startsWith('src/renderer/hooks/useHudPoliteLiveAnnouncement') ||
+            file.startsWith('src/renderer/components/gameScreenFeedback') ||
+            file === 'docs/AUDIO_ASSET_INVENTORY.md' ||
+            file === 'docs/AUDIO_INTEGRATION.md'
+        ) {
             add('audioFeedback', file, 'audio, announcement, or feedback coverage changed');
         }
-        if (file.startsWith('src/renderer/cardFace/') || file.startsWith('src/renderer/components/tileTextures') || file === 'src/renderer/components/TileBezel.tsx' || file.startsWith('scripts/build-card-illustration-manifest')) {
+        if (file.startsWith('src/renderer/cardFace/') || file.startsWith('src/renderer/components/tileTextures') || file === 'src/renderer/components/TileBezel.tsx' || file.startsWith('scripts/build-card-illustration-manifest') || file === 'scripts/card-pipeline/export-face-panel-webp.mjs' || file === 'scripts/card-pipeline/export-ui-background-webp.mjs' || file === 'scripts/card-pipeline/export-card-normal-webp.mjs' || file === 'scripts/audit-renderer-assets.mjs') {
             add('assetRendering', file, 'card face, texture, bezel, or asset manifest changed');
         }
         if (file.startsWith('src/main/persistence') || file.startsWith('src/preload/') || file === 'src/shared/contracts.ts') {

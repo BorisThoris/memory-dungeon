@@ -5,8 +5,8 @@ import {
     VIEWPORT_TABLET_MAX
 } from './breakpoints';
 
-export type ResponsiveViewportKind = 'phone_portrait' | 'phone_landscape' | 'tablet' | 'short_desktop' | 'desktop';
-export type ResponsiveSmokeScreen =
+type ResponsiveViewportKind = 'phone_portrait' | 'phone_landscape' | 'tablet' | 'short_desktop' | 'desktop';
+type ResponsiveSmokeScreen =
     | 'main_menu'
     | 'choose_path'
     | 'collection'
@@ -19,7 +19,7 @@ export type ResponsiveSmokeScreen =
     | 'run_settings_modal'
     | 'game_over';
 
-export interface ResponsiveViewportCase {
+interface ResponsiveViewportCase {
     id: string;
     width: number;
     height: number;
@@ -28,7 +28,7 @@ export interface ResponsiveViewportCase {
     primaryAssertions: string[];
 }
 
-export interface ResponsiveScreenRoute {
+interface ResponsiveScreenRoute {
     screen: ResponsiveSmokeScreen;
     requiredViewportIds: string[];
     primaryActionSelector: string;
@@ -37,7 +37,7 @@ export interface ResponsiveScreenRoute {
     mustAvoidHorizontalScroll: true;
 }
 
-export interface FinalDeviceGridSummary {
+interface FinalDeviceGridSummary {
     screenCount: number;
     viewportCount: number;
     hasPhoneCoverage?: boolean;
@@ -116,7 +116,7 @@ export const HIGH_TRAFFIC_VIEWPORT_MATRIX: readonly ResponsiveViewportCase[] = [
     }
 ] as const;
 
-export const RESPONSIVE_VIEWPORT_MATRIX = HIGH_TRAFFIC_VIEWPORT_MATRIX;
+export const RESPONSIVE_VIEWPORT_MATRIX: readonly ResponsiveViewportCase[] = [...HIGH_TRAFFIC_VIEWPORT_MATRIX];
 
 export const RESPONSIVE_SCREEN_ROUTES: readonly ResponsiveScreenRoute[] = [
     {
@@ -255,7 +255,7 @@ export const getFinalDeviceGridSummary = (): FinalDeviceGridSummary => {
     };
 };
 
-export const responsiveMatrixFinalDeviceGridSummary = getFinalDeviceGridSummary;
+export const responsiveMatrixFinalDeviceGridSummary = (): FinalDeviceGridSummary => getFinalDeviceGridSummary();
 
 export const getViewportRegressionExpectations = (
     id: string

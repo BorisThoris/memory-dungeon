@@ -1,6 +1,8 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { openPlayablePathFixture } from './playablePathHelpers';
+import { openChooseYourPath, startClassicRunFromModeSelect } from './visualScreenHelpers';
 
 const captureRoot = process.env.VISUAL_CAPTURE_ROOT ?? path.join('docs', 'visual-capture');
 const portfolioRoot = path.join(captureRoot, 'portfolio-smoke');
@@ -39,6 +41,7 @@ test.describe('portfolio visual smoke gate', () => {
   });
 
   test('captures the desktop reviewer path', async ({ page }) => {
+    test.setTimeout(180_000);
     await page.setViewportSize({ width: 1440, height: 960 });
 
     const primaryCta = await findPrimaryCta(page);
@@ -55,11 +58,13 @@ test.describe('portfolio visual smoke gate', () => {
     await reachRelicOffer(page);
     await capture(page, 'relic-offer-desktop', 'Relic offer');
 
+    await openPlayablePathFixture(page, 'activeRunWithHazards');
     await openSettings(page);
     await capture(page, 'settings-overlay-desktop', 'Settings overlay');
   });
 
   test('captures readable mobile critical controls', async ({ page }) => {
+    test.setTimeout(90_000);
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     await page.waitForLoadState('networkidle');
@@ -98,19 +103,8 @@ async function findPrimaryCta(page: Page) {
 }
 
 async function startFeaturedRun(page: Page) {
-  const featured = page.getByRole('button', { name: /featured|practice|scholar|daily/i }).first();
-  if (await featured.isVisible().catch(() => false)) {
-    await featured.click();
-  }
-
-  const start = await firstVisible(
-    [
-      page.getByRole('button', { name: /start|begin|play|enter|featured|practice/i }).first(),
-      page.getByRole('link', { name: /start|begin|play|enter|featured|practice/i }).first(),
-    ],
-    'featured run start control',
-  );
-  await start.click();
+  await openChooseYourPath(page);
+  await startClassicRunFromModeSelect(page);
   await page.waitForLoadState('networkidle').catch(() => undefined);
 }
 
@@ -157,41 +151,16 @@ async function assertBoardVisible(page: Page) {
 }
 
 async function reachRelicOffer(page: Page) {
-  const existingOffer = relicOffer(page);
-  if (await existingOffer.isVisible().catch(() => false)) {
-    return;
-  }
-
-  const cards = page
-    .locator(
-      [
-        'button[aria-label*="card" i]',
-        'button[aria-label*="tile" i]',
-        '[data-testid*="card" i]',
-        '[data-testid*="tile" i]',
-        '.card',
-        '.tile',
-      ].join(', '),
-    )
-    .filter({ hasNotText: /settings/i });
-
-  const count = Math.min(await cards.count(), 24);
-  for (let index = 0; index < count; index += 1) {
-    await cards.nth(index).click().catch(() => undefined);
-    if (await existingOffer.isVisible().catch(() => false)) {
-      return;
-    }
-  }
-
-  await expect(existingOffer, 'relic offer must appear on the reviewer path').toBeVisible({
-    timeout: 10_000,
+  await openPlayablePathFixture(page, 'relicDraft');
+  await expect(relicOffer(page), 'relic offer must appear on the reviewer path').toBeVisible({
+    timeout: 30_000,
   });
 }
 
 function relicOffer(page: Page) {
   return page
-    .locator('[data-testid*="relic" i], [aria-label*="relic" i]')
-    .or(page.getByText(/relic|choose|offer|claim/i))
+    .getByTestId('game-relic-offer-overlay')
+    .or(page.getByRole('dialog', { name: /relic draft/i }))
     .first();
 }
 

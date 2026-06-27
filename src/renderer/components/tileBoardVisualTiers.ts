@@ -1,12 +1,12 @@
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
 
-export type HoverGoldQualityScales = {
+type HoverGoldQualityScales = {
     emissiveIntensity: number;
     rimOpacity: number;
 };
 
-export type MatchedEdgeEffectTier =
+type MatchedEdgeEffectTier =
     (typeof GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.tiers)[keyof typeof GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.tiers];
 
 export const getHoverGoldQualityScales = (quality: GraphicsQualityPreset): HoverGoldQualityScales =>

@@ -4,7 +4,7 @@ import { isTilePickable } from './tileBoardPick';
 
 export type TileBoardPowerBackAccent = 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin';
 
-export interface TileBoardHiddenBackAccents {
+interface TileBoardHiddenBackAccents {
     destroyBlockedDecoyBack: boolean;
     hazardBackAccent: HazardTileKind | null;
     nonPickableBack: boolean;

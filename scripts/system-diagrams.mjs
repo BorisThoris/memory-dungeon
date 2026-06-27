@@ -361,6 +361,17 @@ const buildBoardGenerationDiagram = (repoRoot) => {
                 boardEvidence,
                 'done',
                 'yarn gate:sim-softlock-seeds'
+            ),
+            action(
+                'softlock-stress-sweep',
+                'P1',
+                'Board Generation',
+                'Stress sweep generated seeds after progression changes',
+                'Run a broader deterministic seed sweep when touching locks, bosses, exits, objectives, shops, or repair rules so rare schedule interactions are exercised before browser QA.',
+                'Generated stress seeds clear without fairness issues, stale bosses, dead traits, or locked-exit regressions.',
+                boardEvidence,
+                'done',
+                'yarn gate:sim-softlock-stress'
             )
         ]
     };
@@ -619,18 +630,19 @@ const buildAssetCardRenderingDiagram = (repoRoot) => {
         'src/renderer/cardFace/cardIllustrationDraw.test.ts',
         'src/renderer/components/tileTextures.ts',
         'src/renderer/components/TileBezel.tsx',
+        'scripts/audit-renderer-assets.mjs',
         'scripts/build-card-illustration-manifest.mjs'
     ]);
     return {
         id: 'asset-card-rendering',
         title: 'Asset Card Rendering',
-        summary: 'Card-face illustrations, generated manifests, textures, bezels, and board readability tests define the card presentation pipeline.',
+        summary: 'Card-face illustrations, generated manifests, texture assets, bezels, asset audits, and board readability tests define the card presentation pipeline.',
         nodes: [
             node('illustration_manifest', 'Illustration Manifest', 'asset', 'scripts', 'Build script emits available card-face illustration metadata.', evidence(repoRoot, ['scripts/build-card-illustration-manifest.mjs'])),
             node('card_draw', 'Card Draw Pipeline', 'render', 'renderer', 'Card-face drawing turns tile identity into readable illustrations.', evidence(repoRoot, ['src/renderer/cardFace/cardIllustrationDraw.ts'])),
             node('tile_textures', 'Tile Textures', 'render', 'renderer', 'Texture helpers and revisions feed the board rendering layers.', evidence(repoRoot, ['src/renderer/components/tileTextures.ts', 'src/renderer/components/tileBoardTextureRevision.ts'])),
             node('bezel_frame', 'Bezel Frame', 'render', 'renderer', 'Tile bezel/frame components provide readable framing and state accents.', evidence(repoRoot, ['src/renderer/components/TileBezel.tsx', 'src/renderer/components/tileBoardFrameVisualState.ts'])),
-            node('render_tests', 'Rendering Tests', 'gate', 'renderer', 'Illustration and readability tests catch card-face regressions.', assetEvidence)
+            node('render_tests', 'Rendering And Asset Tests', 'gate', 'renderer', 'Asset audits, illustration tests, and readability tests catch card-face regressions.', assetEvidence)
         ],
         edges: [
             edge('illustration_manifest', 'card_draw', 'feeds'),
@@ -643,7 +655,7 @@ const buildAssetCardRenderingDiagram = (repoRoot) => {
                 'card-rendering-contract',
                 'warning',
                 'Card rendering is an asset and code contract',
-                'Asset pipeline changes should run both illustration and renderer readability tests because generated manifests can drift independently from TypeScript render code.',
+                'Asset pipeline changes should run the renderer asset audit plus illustration and readability tests because generated manifests and dropped files can drift independently from TypeScript render code.',
                 assetEvidence
             )
         ],
@@ -653,8 +665,8 @@ const buildAssetCardRenderingDiagram = (repoRoot) => {
                 'P2',
                 'Asset Card Rendering',
                 'Run rendering gates for asset or card-face edits',
-                'Any card art, manifest, texture, bezel, or board readability change should run focused renderer card tests before fullcheck.',
-                'Card faces remain legible and the asset manifest stays aligned with renderer expectations.',
+                'Any card art, manifest, texture, bezel, renderer asset, or board readability change should run the renderer asset audit plus focused card tests before fullcheck.',
+                'Card faces remain legible, dropped assets stay referenced, and the asset manifest stays aligned with renderer expectations.',
                 assetEvidence
             )
         ]
@@ -669,12 +681,62 @@ const buildTestGateArchitectureDiagram = (repoRoot) => {
         'docs/agent/GAMEPLAY_RULES_EDIT_MAP.md',
         'docs/system-diagrams/AUDIT.md'
     ]);
+    const securityEvidence = evidence(repoRoot, [
+        'package.json',
+        'yarn.lock',
+        'scripts/audit-summary.mjs',
+        'scripts/gate-changed.mjs'
+    ]);
+    const packageHygieneEvidence = evidence(repoRoot, [
+        'package.json',
+        'knip.json',
+        '.depcheckrc.json',
+        'scripts/check-depcheck-clean.mjs',
+        'scripts/gate-changed.mjs'
+    ]);
+    const buildOutputEvidence = evidence(repoRoot, [
+        'package.json',
+        'vite.config.mts',
+        'scripts/check-renderer-bundle-budget.mjs',
+        'src/shared/renderer-bundle-budget-script.test.ts',
+        'scripts/gate-changed.mjs'
+    ]);
+    const desktopBuildEvidence = evidence(repoRoot, [
+        'package.json',
+        'tsup.config.ts',
+        'src/main/index.ts',
+        'src/preload/index.ts',
+        'scripts/gate-changed.mjs'
+    ]);
+    const browserSmokeEvidence = evidence(repoRoot, [
+        'package.json',
+        'playwright.config.ts',
+        'e2e/README.md',
+        'e2e/demo-readiness.spec.ts',
+        'e2e/playable-path-navigation.spec.ts',
+        'e2e/dungeon-board-3d-value.spec.ts'
+    ]);
+    const rendererQaEvidence = evidence(repoRoot, [
+        'package.json',
+        'playwright.config.ts',
+        'e2e/README.md',
+        'e2e/mobile-layout.spec.ts',
+        'e2e/navigation-flow.spec.ts',
+        'e2e/playable-path-interludes.spec.ts',
+        'e2e/tile-card-face-webgl.spec.ts'
+    ]);
     return {
         id: 'test-gate-architecture',
         title: 'Test Gate Architecture',
-        summary: 'Package scripts, system diagrams, edit maps, and focused tests define which gates should run for each system change.',
+        summary: 'Package scripts, system diagrams, package hygiene, security audit tooling, renderer build budgets, desktop build checks, browser smoke, edit maps, and focused tests define which gates should run for each system change.',
         nodes: [
             node('package_scripts', 'Package Scripts', 'gate', 'root', 'Yarn scripts compose lint, typecheck, focused gates, fullcheck, and CI.', evidence(repoRoot, ['package.json'])),
+            node('package_hygiene', 'Package Hygiene', 'gate', 'scripts', 'Depcheck and Knip keep dependency metadata, unused files, production entrypoints, and exported APIs intentional.', packageHygieneEvidence),
+            node('security_audit', 'Security Audit', 'gate', 'scripts', 'Dependency advisories are summarized and fail the security gate before fullcheck continues.', securityEvidence),
+            node('build_output_budget', 'Build Output Budget', 'gate', 'scripts', 'Renderer builds run against explicit JS, CSS, asset, and total output budgets.', buildOutputEvidence),
+            node('desktop_build', 'Desktop Build', 'gate', 'scripts', 'Electron main and preload bundles compile through tsup for packaged desktop entrypoints.', desktopBuildEvidence),
+            node('browser_smoke', 'Live Browser Smoke', 'gate', 'e2e', 'Playwright smoke proves demo startup, core navigation, and nonblank 3D board rendering in a real browser.', browserSmokeEvidence),
+            node('renderer_qa_shards', 'Renderer QA Shards', 'gate', 'e2e', 'Split Playwright shards cover layout, navigation, interludes, and 3D/WebGL paths without one oversized runner.', rendererQaEvidence),
             node('system_diagrams', 'System Diagrams', 'analysis', 'scripts', 'Diagram generator maps system surfaces, evidence, findings, and audit actions.', evidence(repoRoot, ['scripts/system-diagrams.mjs'])),
             node('diagram_tests', 'Diagram Tests', 'gate', 'shared', 'Tests assert diagram payload shape, evidence links, and markdown output.', evidence(repoRoot, ['src/shared/system-diagrams.test.ts'])),
             node('edit_map', 'Gameplay Edit Map', 'docs', 'docs', 'Agent-facing map routes gameplay edits to matching rules and tests.', evidence(repoRoot, ['docs/agent/GAMEPLAY_RULES_EDIT_MAP.md'])),
@@ -684,6 +746,12 @@ const buildTestGateArchitectureDiagram = (repoRoot) => {
             edge('system_diagrams', 'audit_docs', 'generates'),
             edge('system_diagrams', 'diagram_tests', 'covered by'),
             edge('package_scripts', 'diagram_tests', 'runs'),
+            edge('package_hygiene', 'package_scripts', 'guards metadata through'),
+            edge('security_audit', 'package_scripts', 'fails fullcheck through'),
+            edge('build_output_budget', 'package_scripts', 'guards renderer builds through'),
+            edge('desktop_build', 'package_scripts', 'guards desktop entrypoints through'),
+            edge('browser_smoke', 'package_scripts', 'proves live renderer through'),
+            edge('renderer_qa_shards', 'package_scripts', 'proves renderer contracts through'),
             edge('edit_map', 'package_scripts', 'routes to'),
             edge('audit_docs', 'package_scripts', 'names commands')
         ],
@@ -705,6 +773,60 @@ const buildTestGateArchitectureDiagram = (repoRoot) => {
                 'New diagrams or audit actions must update the action registry and keep `yarn gate:systems` passing.',
                 'System diagram docs, audit actions, and CI gate commands remain synchronized.',
                 gateEvidence
+            ),
+            action(
+                'dependency-audit-gate',
+                'P0',
+                'Test Gate Architecture',
+                'Keep dependency advisories at zero',
+                'Dependency, lockfile, and audit-tooling changes should run `yarn gate:security` before broader handoff.',
+                'Yarn audit advisories fail fast instead of being hidden by dependency-only audit scopes.',
+                securityEvidence
+            ),
+            action(
+                'package-hygiene-gate',
+                'P1',
+                'Test Gate Architecture',
+                'Keep package hygiene checks green',
+                'Package metadata, Knip config, depcheck config, and package-tooling edits should run `yarn gate:package-hygiene` before broader handoff.',
+                'Dependency usage, unused files, production entrypoints, and exported APIs stay intentional as the app surface grows.',
+                packageHygieneEvidence
+            ),
+            action(
+                'renderer-bundle-budget-gate',
+                'P2',
+                'Test Gate Architecture',
+                'Keep renderer bundle output budgeted',
+                'Renderer build, asset, Vite config, and bundle-budget changes should run `yarn gate:build-output` before broader handoff.',
+                'Renderer JS chunks, CSS, large assets, and total output size stay inside explicit budgets.',
+                buildOutputEvidence
+            ),
+            action(
+                'desktop-build-gate',
+                'P1',
+                'Test Gate Architecture',
+                'Keep Electron desktop entrypoints compiling',
+                'Main-process, preload, desktop bridge, package metadata, and tsup config changes should run `yarn gate:desktop-build` before broader handoff.',
+                'Packaged desktop entrypoints continue to compile independently from renderer-only validation.',
+                desktopBuildEvidence
+            ),
+            action(
+                'browser-smoke-gate',
+                'P1',
+                'Test Gate Architecture',
+                'Keep live browser smoke runnable',
+                'Renderer route, asset, WebGL, or Playwright script changes should keep `yarn test:e2e:browser-smoke` green and the slower full smoke shard available.',
+                'Demo startup, core navigation, and the bounded 3D board render path work in a real browser instead of only unit/build checks.',
+                browserSmokeEvidence
+            ),
+            action(
+                'renderer-qa-shards',
+                'P1',
+                'Test Gate Architecture',
+                'Keep renderer QA shards runnable',
+                'Renderer layout, navigation, interlude, tile face, or WebGL changes should run the matching `yarn test:e2e:renderer-qa:*` shard before broader handoff.',
+                'Long renderer QA remains resumable by shard while still covering the full live-browser contract surface.',
+                rendererQaEvidence
             )
         ]
     };

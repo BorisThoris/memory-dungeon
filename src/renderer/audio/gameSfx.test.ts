@@ -20,6 +20,7 @@ import {
     playWagerArmSfx,
     sfxGainFromSettings
 } from './gameSfx';
+import { preloadSampledSfx } from './sampledSfx';
 
 describe('gameSfx', () => {
     const oscillators: { addEventListener: ReturnType<typeof vi.fn>; stop: ReturnType<typeof vi.fn> }[] = [];
@@ -64,6 +65,14 @@ describe('gameSfx', () => {
         expect(createOscillator).not.toHaveBeenCalled();
         playGambitCommitSfx(sfxGainFromSettings(1, 0));
         expect(createOscillator).not.toHaveBeenCalled();
+    });
+
+    it('keeps sampled SFX preload safe in test mode', async () => {
+        await expect(preloadSampledSfx()).resolves.toBeUndefined();
+    });
+
+    it('keeps sampled SFX preload safe in test mode', async () => {
+        await expect(preloadSampledSfx()).resolves.toBeUndefined();
     });
 
     it('steals oldest match voice when polyphony is exceeded', () => {
@@ -290,6 +299,7 @@ describe('gameSfx', () => {
         }
 
         for (const [key, entry] of Object.entries(sfxManifest.entries)) {
+            expect(entry.file, `manifest key ${key} should use runtime OGG`).toMatch(/\.ogg$/);
             const assetPath = path.join(sfxAssetDir, entry.file);
             expect(fs.existsSync(assetPath), `manifest key ${key} points to missing file ${entry.file}`).toBe(true);
         }
@@ -300,7 +310,7 @@ describe('gameSfx', () => {
         const manifestEntry = sfxManifest.entries['countdown-pressure'];
 
         expect(coverageRow?.cue).toBe('countdown-pressure');
-        expect(manifestEntry.file).toBe('countdown-pressure.wav');
+        expect(manifestEntry.file).toBe('countdown-pressure.ogg');
         expect(
             fs.existsSync(path.resolve(process.cwd(), 'src/renderer/assets/audio/sfx', manifestEntry.file))
         ).toBe(true);

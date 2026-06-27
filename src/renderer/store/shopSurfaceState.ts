@@ -6,15 +6,15 @@ import {
 import type { StoreNavigationTransition } from './navigationModel';
 import type { RunSurfaceState } from './runSurfaceState';
 
-export type ShopReturnMode = RunSurfaceState['shopReturnMode'];
+type ShopReturnMode = RunSurfaceState['shopReturnMode'];
 
-export interface ShopCloseSurfacePatch {
+interface ShopCloseSurfacePatch {
     run: RunState | null;
     shopReturnMode: null;
     view: ViewState;
 }
 
-export interface ShopReturnModeResetPatch {
+interface ShopReturnModeResetPatch {
     shopReturnMode: null;
 }
 
@@ -23,7 +23,7 @@ export interface ShopOpenSurfacePatch {
     view: ViewState;
 }
 
-export type ShopCloseSurfaceResult =
+type ShopCloseSurfaceResult =
     | {
           kind: 'gameOver';
           patch: ShopReturnModeResetPatch;
@@ -34,7 +34,7 @@ export type ShopCloseSurfaceResult =
           patch: ShopCloseSurfacePatch;
       };
 
-export type ShopActionSurfaceResult =
+type ShopActionSurfaceResult =
     | { kind: 'ignored' }
     | {
           kind: 'applied';

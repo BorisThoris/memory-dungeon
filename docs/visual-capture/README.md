@@ -19,4 +19,4 @@ Each `<device>/<orientation>/` holds PNGs plus `AUDIT.md`. Device names match Pl
 
 **Screenshot-derived task queue:** [`improvement-workqueue/README.md`](./improvement-workqueue/README.md) (`UI-*` IDs and status).
 
-**Game-over captures:** `yarn capture:ui-audit` sets `E2E_USE_SANDBOX_GAMEOVER=1` so the device grid finishes reliably (`08-game-over` uses the dev sandbox shell). Omit that variable when invoking `visual-inventory-capture.spec.ts` manually if you need the live mismatch harness (see [`e2e/README.md`](../../e2e/README.md)).
+**Game-over captures:** `08-game-over` uses the deterministic `gameOver` playable-path fixture so capture grids stay focused on rendering/layout. Keep live mismatch-burning coverage in gameplay specs instead (see [`e2e/README.md`](../../e2e/README.md)).

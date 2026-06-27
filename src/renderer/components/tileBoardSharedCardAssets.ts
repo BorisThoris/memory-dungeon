@@ -1,12 +1,12 @@
 import type { BufferGeometry } from 'three';
 import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
 
-export interface TileBoardSharedCardSvgAssets {
+interface TileBoardSharedCardSvgAssets {
     backLayers: CardBackSvgLayerGeometry[];
     frontGeometry: BufferGeometry;
 }
 
-export interface LoadTileBoardSharedCardSvgAssetsInput {
+interface LoadTileBoardSharedCardSvgAssetsInput {
     backUrl: string;
     frontUrl: string;
     loadBackLayers: (url: string) => Promise<CardBackSvgLayerGeometry[] | null>;

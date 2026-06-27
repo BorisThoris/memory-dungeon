@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GAMEPLAY_BOARD_VISUALS, GAMEPLAY_CARD_VISUALS } from './gameplayVisualConfig';
+import { CARD_INTERACTION_FEEDBACK, GAMEPLAY_BOARD_VISUALS, GAMEPLAY_CARD_VISUALS } from './gameplayVisualConfig';
 import { GAMEPLAY_RENDER_PROFILE, gameplayRenderQualityProfile } from './gameplayRenderProfile';
 
 describe('REG-012 card materials and interaction FX tokens', () => {
@@ -12,6 +12,22 @@ describe('REG-012 card materials and interaction FX tokens', () => {
             new Set(Object.values(GAMEPLAY_BOARD_VISUALS.interactionFeedback).map((entry) => entry.material)).size
         ).toBe(4);
         expect(Object.values(GAMEPLAY_BOARD_VISUALS.interactionFeedback).every((entry) => entry.reducedMotion.length > 0)).toBe(true);
+    });
+
+    it('keeps card interaction feedback tokens complete for visual and audio QA', () => {
+        expect(Object.keys(CARD_INTERACTION_FEEDBACK)).toEqual([
+            'hidden',
+            'hover',
+            'flip',
+            'match',
+            'mismatch',
+            'combo',
+            'invalid',
+            'disabled'
+        ]);
+        expect(CARD_INTERACTION_FEEDBACK.flip.audioCue).toBe('flip');
+        expect(CARD_INTERACTION_FEEDBACK.match.visualCue).toContain('score floater');
+        expect(Object.values(CARD_INTERACTION_FEEDBACK).every((entry) => entry.reducedMotionCue.length > 0)).toBe(true);
     });
 });
 

@@ -66,7 +66,7 @@ interface RunResolutionControllerOptions {
     setState: (patch: RunResolutionPatch) => void;
 }
 
-export interface RunResolutionController {
+interface RunResolutionController {
     applyImmediateGameOverFromTilePress: (resolvedRun: RunState) => void;
     applyResolveBoardTurn: (run: RunState) => void;
     applyResolvedRun: (resolvedRun: RunState) => void;

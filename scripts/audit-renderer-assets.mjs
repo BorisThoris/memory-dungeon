@@ -26,7 +26,16 @@ const root = path.join(__dirname, '..');
 const ASSET_ROOT = path.join(root, 'src', 'renderer', 'assets');
 const RENDERER_SFX_DIR = path.join(ASSET_ROOT, 'audio', 'sfx');
 const RENDERER_SFX_MANIFEST = path.join(RENDERER_SFX_DIR, 'manifest.json');
+const RENDERER_UI_AUDIO_DIR = path.join(ASSET_ROOT, 'audio', 'ui');
+const RENDERER_UI_AUDIO_MANIFEST = path.join(RENDERER_UI_AUDIO_DIR, 'manifest.json');
 const SEARCH_DIRS = ['src', 'scripts', 'e2e', 'public'];
+const SHELF_STOCK_DIRS = new Set([
+    'src/renderer/assets/audio/dont_modify'
+]);
+const isRuntimeSourceMasterAsset = (rel) =>
+    (rel.startsWith('src/renderer/assets/ui/backgrounds/') && rel.toLowerCase().endsWith('.png')) ||
+    rel === 'src/renderer/assets/textures/cards/back-normal.png' ||
+    rel === 'src/renderer/assets/textures/cards/front-normal.png';
 const TEXT_EXTS = new Set([
     '.ts',
     '.tsx',
@@ -130,8 +139,11 @@ const walkAllAssets = (dir) => {
             continue;
         }
         if (/\.(png|svg|jpe?g|webp|woff2|ogg|wav|mp3)$/i.test(e.name)) {
-            allAssetPaths.push(p);
             const rel = path.relative(root, p).replace(/\\/g, '/');
+            if ([...SHELF_STOCK_DIRS].some((prefix) => rel.startsWith(`${prefix}/`)) || isRuntimeSourceMasterAsset(rel)) {
+                continue;
+            }
+            allAssetPaths.push(p);
             const arr = basenamePaths.get(e.name) ?? [];
             arr.push(rel);
             basenamePaths.set(e.name, arr);
@@ -143,48 +155,64 @@ walkAllAssets(ASSET_ROOT);
 const duplicateGroups = [...basenamePaths.values()].filter((g) => g.length > 1);
 const fatalAssetErrors = [];
 
-const auditRendererSfxManifestFiles = () => {
-    if (!fs.existsSync(RENDERER_SFX_MANIFEST)) {
-        fatalAssetErrors.push('Renderer SFX manifest is missing: src/renderer/assets/audio/sfx/manifest.json');
+const auditRendererAudioManifestFiles = ({ label, manifestPath, assetDir, requireOgg }) => {
+    const manifestRel = path.relative(root, manifestPath).replace(/\\/g, '/');
+    if (!fs.existsSync(manifestPath)) {
+        fatalAssetErrors.push(`${label} manifest is missing: ${manifestRel}`);
         return;
     }
 
     let manifest;
     try {
-        manifest = JSON.parse(fs.readFileSync(RENDERER_SFX_MANIFEST, 'utf8'));
+        manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
     } catch (error) {
-        fatalAssetErrors.push(`Renderer SFX manifest is not valid JSON: ${error.message}`);
+        fatalAssetErrors.push(`${label} manifest is not valid JSON: ${error.message}`);
         return;
     }
 
     const entries = manifest?.entries;
     if (!entries || typeof entries !== 'object' || Array.isArray(entries)) {
-        fatalAssetErrors.push('Renderer SFX manifest must contain an object at entries.');
+        fatalAssetErrors.push(`${label} manifest must contain an object at entries.`);
         return;
     }
 
     for (const [key, entry] of Object.entries(entries)) {
         const file = entry?.file;
         if (typeof file !== 'string' || file.length === 0) {
-            fatalAssetErrors.push(`Renderer SFX manifest key "${key}" is missing a non-empty file field.`);
+            fatalAssetErrors.push(`${label} manifest key "${key}" is missing a non-empty file field.`);
             continue;
         }
         if (file.includes('/') || file.includes('\\')) {
-            fatalAssetErrors.push(`Renderer SFX manifest key "${key}" must use a basename, got "${file}".`);
+            fatalAssetErrors.push(`${label} manifest key "${key}" must use a basename, got "${file}".`);
             continue;
         }
-        const abs = path.join(RENDERER_SFX_DIR, file);
+        if (requireOgg && !file.toLowerCase().endsWith('.ogg')) {
+            fatalAssetErrors.push(`${label} manifest key "${key}" must point at a runtime OGG file, got "${file}".`);
+            continue;
+        }
+        const abs = path.join(assetDir, file);
         if (!fs.existsSync(abs)) {
-            fatalAssetErrors.push(`Renderer SFX manifest key "${key}" points to missing file: ${file}`);
+            fatalAssetErrors.push(`${label} manifest key "${key}" points to missing file: ${file}`);
             continue;
         }
         if (!fs.statSync(abs).isFile()) {
-            fatalAssetErrors.push(`Renderer SFX manifest key "${key}" does not point to a file: ${file}`);
+            fatalAssetErrors.push(`${label} manifest key "${key}" does not point to a file: ${file}`);
         }
     }
 };
 
-auditRendererSfxManifestFiles();
+auditRendererAudioManifestFiles({
+    label: 'Renderer SFX',
+    manifestPath: RENDERER_SFX_MANIFEST,
+    assetDir: RENDERER_SFX_DIR,
+    requireOgg: true
+});
+auditRendererAudioManifestFiles({
+    label: 'Renderer UI audio',
+    manifestPath: RENDERER_UI_AUDIO_MANIFEST,
+    assetDir: RENDERER_UI_AUDIO_DIR,
+    requireOgg: true
+});
 
 const orphans = [];
 
@@ -207,7 +235,7 @@ for (const assetAbs of allAssetPaths) {
 console.log(`Audited ${allAssetPaths.length} asset files under src/renderer/assets/`);
 console.log(`Search roots: ${SEARCH_DIRS.join(', ')} (basename substring)\n`);
 console.log(
-    'Fallback expectations: optional generated art may be absent if UI code supplies visible inline fallbacks; renderer SFX manifest entries must point to existing files even though runtime playback has procedural fallbacks.\n'
+    `Fallback expectations: optional generated art may be absent if UI code supplies visible inline fallbacks; renderer audio manifest entries must point to existing OGG files even though runtime playback has procedural fallbacks. Intentional pipeline reference packs and runtime source masters are skipped: ${[...SHELF_STOCK_DIRS].join(', ')}, src/renderer/assets/ui/backgrounds/*.png, card normal-map PNG masters.\n`
 );
 
 if (fatalAssetErrors.length > 0) {

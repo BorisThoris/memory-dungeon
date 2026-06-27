@@ -25,7 +25,7 @@ import {
 } from './tileBoardHoverGoldVisualState';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 
-export interface TileBoardFrameVisualStateInput {
+interface TileBoardFrameVisualStateInput {
     faceUp: boolean;
     graphicsQuality: GraphicsQualityPreset;
     hoverDomParity: boolean;
@@ -40,7 +40,7 @@ export interface TileBoardFrameVisualStateInput {
     time: number;
 }
 
-export interface TileBoardFrameVisualState {
+interface TileBoardFrameVisualState {
     cardGlowStates: CardGlowVisualStates;
     flameState: MatchedVictoryFlameVisualState;
     focusRimOpacity: number;
@@ -49,12 +49,12 @@ export interface TileBoardFrameVisualState {
     resolvingRimState: ResolvingRimVisualState;
 }
 
-export interface TileBoardFrameVisualGlowTarget {
+interface TileBoardFrameVisualGlowTarget {
     mat: ShaderMaterial | null;
     mesh: Mesh | null;
 }
 
-export interface ApplyTileBoardFrameVisualStateInput {
+interface ApplyTileBoardFrameVisualStateInput {
     elapsedTime: number;
     matchedVictoryBurst: number;
     reduceMotion: boolean;

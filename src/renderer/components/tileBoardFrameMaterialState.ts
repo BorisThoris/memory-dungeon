@@ -11,7 +11,7 @@ import {
 } from './tileBoardMaterialVisualState';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 
-export interface TileBoardFrameMaterialStateInput {
+interface TileBoardFrameMaterialStateInput {
     cardTint: TileBoardCardTintInput;
     currentFocusDimBlend: number;
     delta: number;
@@ -25,7 +25,7 @@ export interface TileBoardFrameMaterialStateInput {
     time: number;
 }
 
-export interface ApplyTileBoardFrameMaterialStateInput {
+interface ApplyTileBoardFrameMaterialStateInput {
     backMaterial: MeshStandardMaterial | null;
     frontMaterial: MeshStandardMaterial | null;
     scratchColor: Color;
@@ -33,7 +33,7 @@ export interface ApplyTileBoardFrameMaterialStateInput {
     tint: Color;
 }
 
-export interface ApplyTileBoardFrameMaterialStateResult {
+interface ApplyTileBoardFrameMaterialStateResult {
     focusDimBlend: number;
 }
 

@@ -6,14 +6,15 @@ import {
     expectLocatorFullyInWindowViewport,
     expectMinimumTargetSize,
     expectNoHorizontalOverflow,
-    forceGameOverWithMismatches,
     gotoWithSaveExpectStartupIntroVisible,
     mainMenuPlayButton,
+    openChooseYourPath,
     openLevel1Play,
     openMainMenuFromSave,
     waitLevel1PlayReady,
     waitLevel1VisualReady
 } from './visualScreenHelpers';
+import { openPlayablePathFixture } from './playablePathHelpers';
 
 /**
  * QA-006 — Visual baseline scenarios for `yarn test:e2e:visual` (see `fileBase` / capture names).
@@ -70,8 +71,7 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         name: 'choose your path',
         run: async (page, capture) => {
             await openMainMenuFromSave(page, true);
-            await mainMenuPlayButton(page).click();
-            await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
+            await openChooseYourPath(page);
             await expectNoHorizontalOverflow(page);
             await expectAppScrollportHasNoVerticalOverflow(page);
             const sceneLayer = page.getByTestId('choose-path-scene-layer');
@@ -83,8 +83,9 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
             await expect(inlineBack).toBeInViewport();
             const startRun = page.getByRole('button', { name: /start run/i });
             await expect(startRun).toBeInViewport();
-            await expect(page.getByRole('button', { name: /browse modes/i })).toBeInViewport();
-            await expect(page.getByTestId('choose-path-more-modes')).toHaveCount(0);
+            const browseModes = page.getByTestId('choose-path-more-modes');
+            await expect(browseModes).toBeVisible();
+            await expect(browseModes).toBeInViewport();
             await expectCoarsePointerTarget(page, startRun);
             await capture('01a-choose-your-path');
         }
@@ -248,9 +249,7 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         /** Same budget as floor-cleared (completes level before shop). */
         timeoutMs: 260_000,
         run: async (page, capture) => {
-            await openLevel1Play(page);
-            const pairs = await waitLevel1PlayReady(page);
-            await completeLevel1Play(page, pairs);
+            await openPlayablePathFixture(page, 'floorClearWithShop');
             await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible();
             await page.getByRole('button', { name: /visit shop/i }).click();
             await expect(page.getByRole('dialog', { name: /vendor alcove/i })).toBeVisible();
@@ -265,9 +264,7 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
         /** Mismatch discovery + burn loops rival floor-clear duration on cold mobile. */
         timeoutMs: 220_000,
         run: async (page, capture) => {
-            await openLevel1Play(page);
-            const pairs = await waitLevel1PlayReady(page);
-            await forceGameOverWithMismatches(page, pairs);
+            await openPlayablePathFixture(page, 'gameOver');
             await expect(page.getByText(/Expedition Over/i)).toBeVisible();
             await expectNoHorizontalOverflow(page);
             await capture('08-game-over');

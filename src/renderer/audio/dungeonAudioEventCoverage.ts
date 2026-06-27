@@ -16,7 +16,7 @@ export type DungeonAudioEventId =
 
 type DungeonAudioCue = SfxSampleKey | UiSfxCue;
 
-export interface DungeonAudioEventCoverageRow {
+interface DungeonAudioEventCoverageRow {
     id: DungeonAudioEventId;
     label: string;
     cue: DungeonAudioCue;

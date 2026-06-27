@@ -17,7 +17,7 @@ import {
 import type { GameplayRenderQualityProfile } from './gameplayRenderProfile';
 import type { TileBezelFrameBag } from './tileBoardFrameBag';
 
-export interface TileBoardSceneFrameResult {
+interface TileBoardSceneFrameResult {
     tileFrames: AdvanceScheduledTileBezelFramesResult | null;
     tileStepMs: number;
     viewportMs: number;

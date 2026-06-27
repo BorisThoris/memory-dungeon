@@ -19,7 +19,8 @@ describe('enemy hazard board rules', () => {
             tile('b', EXIT_PAIR_KEY),
             tile('c', DECOY_PAIR_KEY),
             tile('d', WILD_PAIR_KEY),
-            tile('e', 'matched-a', { state: 'matched' })
+            tile('e', 'matched-a', { state: 'matched' }),
+            tile('f', 'resolved-a', { dungeonCardState: 'resolved' })
         ];
 
         expect(enemyHazardEligibleTiles(tiles).map((candidate) => candidate.id)).toEqual(['a']);
@@ -64,6 +65,22 @@ describe('enemy hazard board rules', () => {
             tile('b', 'pair-a', { state: 'matched' }),
             tile('c', 'pair-b', { state: 'removed' }),
             tile('d', 'pair-b', { state: 'matched' })
+        ], [
+            hazard('warden', 'a', 'b', { bossId: 'trap_warden', kind: 'warden', pattern: 'guard' })
+        ]);
+
+        expect(activeEnemyHazardsForBoard(board)).toEqual([]);
+        expect(defeatEnemyHazardsOnClearedTiles(board).enemyHazards).toMatchObject([
+            { id: 'warden', hp: 0, state: 'defeated' }
+        ]);
+    });
+
+    it('treats hidden decoys and wilds as non-blocking when clearing stale hazards', () => {
+        const board = boardWith([
+            tile('a', 'pair-a', { state: 'matched' }),
+            tile('b', 'pair-a', { state: 'matched' }),
+            tile('decoy', DECOY_PAIR_KEY),
+            tile('wild', WILD_PAIR_KEY)
         ], [
             hazard('warden', 'a', 'b', { bossId: 'trap_warden', kind: 'warden', pattern: 'guard' })
         ]);

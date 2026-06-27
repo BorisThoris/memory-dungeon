@@ -5,8 +5,8 @@ Use this when final art is ready. Swap files **or** update imports in `src/rende
 ## Menu and gameplay scenes ([TASK-009](TASKS/TASK-009-final-menu-and-gameplay-illustrations.md); playing stage parity **PLAY-006** in [`PLAYING_ENDPRODUCT/04-environment-stage.md`](TASKS/PLAYING_ENDPRODUCT/04-environment-stage.md))
 | Role | Typical import / usage |
 |------|-------------------------|
-| Menu hero layer | `UI_ART.menuScene` — `src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v1.png` (see [`ui/index.ts`](../../src/renderer/assets/ui/index.ts)) |
-| Gameplay stage | `UI_ART.gameplayScene` — `src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v1.png` |
+| Menu hero layer | `UI_ART.menuScene` — runtime `src/renderer/assets/ui/backgrounds/bg-main-menu-cathedral-v1.webp` (`.png` master retained; see [`ui/index.ts`](../../src/renderer/assets/ui/index.ts)) |
+| Gameplay stage | `UI_ART.gameplayScene` — runtime `src/renderer/assets/ui/backgrounds/bg-gameplay-dungeon-ring-v1.webp` (`.png` master retained) |
 | Stage ring (optional) | `UI_ART.stageRing` |
 | Ambient field | `MainMenuBackground.tsx` — procedural; optional texture pass |
 

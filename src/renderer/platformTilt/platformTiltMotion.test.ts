@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    HAPTICS_POLICY,
     MAX_TILT_DEG,
     TILT_DEADZONE,
     applyDeadzoneNormalized,
@@ -105,6 +106,12 @@ describe('applyDeadzoneTilt', () => {
 
 describe('REG-067 haptic policy', () => {
     it('keeps haptics optional and non-essential', () => {
+        expect(HAPTICS_POLICY).toMatchObject({
+            essentialFeedback: false,
+            persistenceRequired: false,
+            runtime: 'optional_navigator_vibrate',
+            unsupportedBehavior: 'silent_noop'
+        });
         expect(hapticFeedbackIsNonEssential({ hapticsAvailable: true, reduceMotion: false })).toBe(true);
         expect(hapticFeedbackIsNonEssential({ hapticsAvailable: false, reduceMotion: false })).toBe(true);
         expect(hapticFeedbackIsNonEssential({ hapticsAvailable: true, reduceMotion: true })).toBe(true);

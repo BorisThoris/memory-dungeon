@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     getMotionPermissionButtonLabels,
     getPlatformMotionCapabilityRows,
+    getPlatformPolishPolicy,
     motionHapticsCarryEssentialFeedback,
     shouldOfferDeviceMotionPermission
 } from './platformTiltPermissionUi';
@@ -77,6 +78,25 @@ describe('getMotionPermissionButtonLabels', () => {
 
 describe('REG-067 platform motion/haptics policy', () => {
     it('documents optional platform support and no essential haptics', () => {
+        expect(
+            getPlatformPolishPolicy({
+                hasDeviceOrientationRequest: true,
+                reduceMotion: false,
+                touchPrimary: true
+            })
+        ).toMatchObject({
+            motionCapability: 'touch_motion',
+            hapticsCapability: 'no_op_v1',
+            permissionGate: 'user_initiated_only',
+            essentialFeedbackPolicy: 'visual_audio_first_haptics_optional'
+        });
+        expect(
+            getPlatformPolishPolicy({
+                hasDeviceOrientationRequest: false,
+                reduceMotion: true,
+                touchPrimary: false
+            }).motionCapability
+        ).toBe('desktop_pointer');
         const rows = getPlatformMotionCapabilityRows();
         expect(rows.find((row) => row.id === 'touch_motion')?.permissionModel).toBe('user_initiated');
         expect(rows.find((row) => row.id === 'haptics')?.supported).toBe(false);

@@ -4,10 +4,10 @@ import { desktopClient } from '../desktop-client';
 
 let consecutiveWriteFailures = 0;
 
-export type PersistenceWriteOperation = 'game' | 'settings';
-export type SaveHealthStatus = 'ok' | 'transient_write_failed' | 'repeated_write_failed';
+type PersistenceWriteOperation = 'game' | 'settings';
+type SaveHealthStatus = 'ok' | 'transient_write_failed' | 'repeated_write_failed';
 
-export interface SaveHealthSnapshot {
+interface SaveHealthSnapshot {
     status: SaveHealthStatus;
     consecutiveFailures: number;
     operation: PersistenceWriteOperation | null;

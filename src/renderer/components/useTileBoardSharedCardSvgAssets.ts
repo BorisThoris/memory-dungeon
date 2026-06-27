@@ -14,7 +14,7 @@ import {
     loadTileBoardSharedCardSvgAssets
 } from './tileBoardSharedCardAssets';
 
-export interface TileBoardSharedCardSvgAssetState {
+interface TileBoardSharedCardSvgAssetState {
     sharedCardBackLayers: readonly CardBackSvgLayerGeometry[] | null;
     sharedCardFrontGeometry: BufferGeometry | null;
 }

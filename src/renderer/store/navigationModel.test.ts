@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
     getNavigationRouteContract,
     getNavigationShellChromeRows,
+    isInRunMetaView,
+    isInRunOverlayView,
+    isMenuDestinationView,
+    isRunStatusResumableAfterMetaOverlay,
     NAVIGATION_ROUTE_CONTRACTS,
     resolveNavigationTransition,
     resolveSettingsCloseTarget,
@@ -121,5 +125,16 @@ describe('navigationModel', () => {
         expect(rows.every((row) => row.localOnly)).toBe(true);
         expect(rows.find((row) => row.id === 'null_run_recovery')?.chrome).toMatch(/menu/i);
         expect(rows.find((row) => row.id === 'in_run_meta')?.chrome).toMatch(/Gameplay remains mounted/i);
+    });
+
+    it('classifies menu and in-run destinations for shell chrome decisions', () => {
+        expect(isMenuDestinationView('collection')).toBe(true);
+        expect(isMenuDestinationView('playing')).toBe(false);
+        expect(isInRunMetaView('codex')).toBe(true);
+        expect(isInRunMetaView('shop')).toBe(false);
+        expect(isInRunOverlayView('shop')).toBe(true);
+        expect(isInRunOverlayView('gameOver')).toBe(false);
+        expect(isRunStatusResumableAfterMetaOverlay('memorize')).toBe(true);
+        expect(isRunStatusResumableAfterMetaOverlay('levelComplete')).toBe(false);
     });
 });

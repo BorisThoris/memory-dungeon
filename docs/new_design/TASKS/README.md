@@ -27,7 +27,7 @@ Use this whenever gameplay HUD, sidebar, or tile chrome changes, or before a rel
 | Step | Command | Output / gate |
 |------|---------|----------------|
 | 1 — HUD + board crops | `yarn playwright test e2e/hud-inspect.spec.ts e2e/visual-endproduct-parity.spec.ts --workers=1` | `test-results/endproduct-parity/` (`hud-element.png`, `hud-metrics.json`, `hud-fragment.html`, tile crops). Override dir: `cross-env VISUAL_CAPTURE_ROOT=<dir> ...` |
-| 2 — Full scenario stills | `cross-env VISUAL_CAPTURE_ROOT=docs/reference-comparison/captures yarn playwright test e2e/visual-screens.standard.spec.ts --workers=1` (Windows: `npx cross-env …` or PowerShell `$env:VISUAL_CAPTURE_ROOT=…`) | Desktop + tablet captures for `CURRENT_VS_ENDPRODUCT.md` map; may need retries if Vite drops or **`08-game-over`** flakes — see `CURRENT_VS_ENDPRODUCT.md` §6 |
+| 2 — Full scenario stills | `cross-env VISUAL_CAPTURE_ROOT=docs/reference-comparison/captures yarn playwright test e2e/visual-screens.standard.spec.ts --workers=1` (Windows: `npx cross-env …` or PowerShell `$env:VISUAL_CAPTURE_ROOT=…`) | Desktop + tablet captures for `CURRENT_VS_ENDPRODUCT.md` map; `08-game-over` uses the deterministic game-over fixture. |
 | 3 — Doc sync | Edit `docs/reference-comparison/CURRENT_VS_ENDPRODUCT.md` if §4 rows are stale; link artifacts in PR | **`QA-001`** satisfied when baselines match team policy (`VISUAL_REVIEW.md` § Recorded default) |
 
 **Owner:** whoever merges the visual change (author runs steps 1–2 locally; CI may run subset). **Frequency:** every PR touching `GameScreen`, `GameLeftToolbar`, or `TileBoard` / WebGL tile FX; at minimum before parity milestone tags.

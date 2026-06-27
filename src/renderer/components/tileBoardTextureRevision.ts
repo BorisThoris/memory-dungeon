@@ -1,4 +1,4 @@
-export interface TileBoardTextureRevisionSubscriptions {
+interface TileBoardTextureRevisionSubscriptions {
     subscribeCardRankFontLoaded: (listener: () => void) => () => void;
     subscribeTextureImageUpdates: (listener: () => void) => () => void;
 }

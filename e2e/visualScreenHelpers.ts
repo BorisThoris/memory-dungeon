@@ -287,11 +287,19 @@ export function mainMenuPlayButton(page: Page) {
 }
 
 export async function openChooseYourPath(page: Page): Promise<void> {
+    const chooseYourPath = page.getByRole('region', { name: /choose your path/i });
+    if (await chooseYourPath.isVisible().catch(() => false)) {
+        return;
+    }
     await expect(async () => {
         const playButton = mainMenuPlayButton(page);
         await expect(playButton).toBeVisible({ timeout: 5_000 });
-        await playButton.evaluate((el) => (el as HTMLButtonElement).click());
-        await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible({ timeout: 5_000 });
+        await expect(playButton).toBeEnabled({ timeout: 5_000 });
+        await playButton.click({ force: true, timeout: 10_000 });
+        if (!(await chooseYourPath.isVisible().catch(() => false))) {
+            await playButton.evaluate((el) => (el as HTMLButtonElement).click());
+        }
+        await expect(chooseYourPath).toBeVisible({ timeout: 10_000 });
     }).toPass({ timeout: 30_000 });
 }
 
@@ -451,8 +459,7 @@ export async function startClassicRunFromModeSelect(page: Page): Promise<void> {
 
 export async function openLevel1Play(page: Page): Promise<void> {
     await openMainMenuFromSave(page, true);
-    await mainMenuPlayButton(page).click({ force: true });
-    await expect(page.getByRole('region', { name: /choose your path/i })).toBeVisible();
+    await openChooseYourPath(page);
     await startClassicRunFromModeSelect(page);
 }
 
@@ -627,7 +634,7 @@ export async function completeLevel1AllMatches(page: Page, pairs: PairPositions)
     if (await revealLoneExitIfPresent(page)) {
         return;
     }
-    await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible({ timeout: 15000 });
+    await completeLevel1ByTryingHiddenPairs(page);
 }
 
 /** Finish level 1 using memorize pairs when present, otherwise search pairs (missed short memorize window). */

@@ -64,6 +64,7 @@ Earlier sections of this log listed **`PLAY-*`** IDs as completed during impleme
 |-----------|-----|--------|
 | **Process** | `QA-001`, **HUD-019** (checklist) | `CURRENT_VS_ENDPRODUCT.md` §2/§4/§6 sync; **`VISUAL_REVIEW.md`** HUD-019 / release checklist; ongoing capture gates align with **`PLAY-010`** in [`PLAYING_ENDPRODUCT/01-evidence-and-working-comps.md`](./PLAYING_ENDPRODUCT/01-evidence-and-working-comps.md) |
 | **E2E harness** | `visual-screens` reliability | `E2E_USE_SANDBOX_GAMEOVER` + `discoverMismatchPair` / `forceGameOverWithMismatches` settlement polling (`visualScreenHelpers.ts`, `visualScenarioSteps.ts`, `e2e/README.md`) |
+| **E2E harness** | `visual-screens` reliability follow-up | Supersedes the game-over sandbox note above: visual smoke now opens deterministic `floorClearWithShop` and `gameOver` fixtures for the shop and game-over captures; live mismatch coverage remains in gameplay-focused specs. |
 | **OVR** | `OVR-013`, `OVR-014` | `e2e/overlay-smoke.spec.ts`; achievement toasts after floor-cleared (`GameScreen.tsx`) |
 | **META** | `META-010`, `META-012` | In-run inventory/codex desk shell (`App.tsx`, `MetaScreen.module.css`); main menu meta strip `MetaFrame` plaques (`MainMenu.tsx`) |
 | **A11Y** | `A11Y-008` (doc) | [`I18N_FOUNDATION.md`](../I18N_FOUNDATION.md) — deferred stack; pointer from `TASKS_A11Y_I18N_E2E.md` |

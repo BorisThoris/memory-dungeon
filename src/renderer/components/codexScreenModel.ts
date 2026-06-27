@@ -7,7 +7,7 @@ import {
 } from '../../shared/game-catalog';
 import { getRelicBuildArchetypeSummaries } from '../../shared/relics';
 
-export type TextTopic = { title: string; description: string };
+type TextTopic = { title: string; description: string };
 
 /** META-005: browse by article guides vs ID tables (rel/relic/mut/ach). */
 export type CodexTab = 'all' | 'guides' | 'tables';
@@ -50,7 +50,7 @@ export const codexTabAllows = (tab: CodexTab, kind: TocKind): boolean => {
     return kind === 'table';
 };
 
-export const tocVisible = codexTabAllows;
+export const tocVisible = (tab: CodexTab, kind: TocKind): boolean => codexTabAllows(tab, kind);
 
 export const hasCodexFilterMatch = ({
     guideCounts,

@@ -1,16 +1,16 @@
 {
     "version": 1,
     "entries": {
-        "ui-click": { "file": "ui-click.wav", "category": "ui" },
-        "ui-confirm": { "file": "ui-confirm.wav", "category": "ui" },
-        "ui-back": { "file": "ui-back.wav", "category": "ui" },
-        "ui-counter": { "file": "ui-counter.wav", "category": "ui" },
-        "menu-open": { "file": "menu-open.wav", "category": "menu" },
-        "run-start": { "file": "run-start.wav", "category": "menu" },
-        "intro-sting": { "file": "intro-sting.wav", "category": "menu" },
-        "pause-open": { "file": "pause-open.wav", "category": "menu" },
-        "pause-resume": { "file": "pause-resume.wav", "category": "menu" },
-        "game-over-open": { "file": "game-over-open.wav", "category": "menu" },
-        "ui-copy": { "file": "ui-copy.wav", "category": "ui" }
+        "ui-click": { "file": "ui-click.ogg", "category": "ui" },
+        "ui-confirm": { "file": "ui-confirm.ogg", "category": "ui" },
+        "ui-back": { "file": "ui-back.ogg", "category": "ui" },
+        "ui-counter": { "file": "ui-counter.ogg", "category": "ui" },
+        "menu-open": { "file": "menu-open.ogg", "category": "menu" },
+        "run-start": { "file": "run-start.ogg", "category": "menu" },
+        "intro-sting": { "file": "intro-sting.ogg", "category": "menu" },
+        "pause-open": { "file": "pause-open.ogg", "category": "menu" },
+        "pause-resume": { "file": "pause-resume.ogg", "category": "menu" },
+        "game-over-open": { "file": "game-over-open.ogg", "category": "menu" },
+        "ui-copy": { "file": "ui-copy.ogg", "category": "ui" }
     }
 }

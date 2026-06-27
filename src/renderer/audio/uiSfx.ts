@@ -1,5 +1,5 @@
 /**
- * Focused UI/menu one-shots. Uses optional WAV samples with procedural fallback,
+ * Focused UI/menu one-shots. Uses runtime OGG samples with procedural fallback,
  * sharing the same AudioContext and SFX gain semantics as gameplay audio.
  */
 
@@ -14,14 +14,14 @@ import {
 type UiSfxCategory = 'ui' | 'menu';
 type ManifestEntry = { file: string; category: UiSfxCategory };
 
-export type UiSfxSampleKey = keyof typeof uiSfxManifest.entries;
+type UiSfxSampleKey = keyof typeof uiSfxManifest.entries;
 
 const manifest = uiSfxManifest as {
     version: number;
     entries: Record<UiSfxSampleKey, ManifestEntry>;
 };
 
-const globUrls = import.meta.glob<string>('../assets/audio/ui/*.{ogg,wav}', {
+const globUrls = import.meta.glob<string>('../assets/audio/ui/*.ogg', {
     eager: true,
     query: '?url',
     import: 'default'

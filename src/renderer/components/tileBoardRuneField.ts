@@ -8,7 +8,7 @@ export interface TileBoardRuneFieldMetrics {
     width: number;
 }
 
-export interface TileBoardRuneFieldUniformState {
+interface TileBoardRuneFieldUniformState {
     gridHeight: number;
     gridWidth: number;
     intensity: number;
@@ -23,7 +23,7 @@ export interface TileBoardRuneFieldUniformTarget {
     uTime: { value: number };
 }
 
-export interface ComputeTileBoardRuneFieldMetricsInput {
+interface ComputeTileBoardRuneFieldMetricsInput {
     cardHeight: number;
     cardWidth: number;
     tileSpacing: number;

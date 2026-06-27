@@ -6,7 +6,7 @@ import { createDefaultSaveData, normalizeUnknownSaveData } from '../../shared/sa
 export const SAVE_READ_FAILURE_NOTICE =
     'Save read failed. Started a temporary in-memory profile and paused autosave to avoid overwriting recoverable data.';
 
-export interface HydratedAppStatePatch {
+interface HydratedAppStatePatch {
     hydrated: true;
     hydrating: false;
     saveData: SaveData;
@@ -17,7 +17,7 @@ export interface HydratedAppStatePatch {
     view: 'menu';
 }
 
-export interface CreateHydratedAppStatePatchInput {
+interface CreateHydratedAppStatePatchInput {
     desktop: Pick<DesktopApi, 'getSaveData' | 'isSteamConnected'>;
     persistSaveData: (saveData: SaveData) => Promise<SaveData> | SaveData;
 }

@@ -9,7 +9,7 @@ export default defineConfig({
     format: ['cjs'],
     target: 'node20',
     platform: 'node',
-    sourcemap: true,
+    sourcemap: process.env.ELECTRON_SOURCEMAP === '1',
     clean: true,
     splitting: false,
     dts: false,

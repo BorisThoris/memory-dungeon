@@ -12,7 +12,7 @@ const ENTRANCE_STAGGER_MS = 12;
 const ENTRANCE_SETTLE_TAIL_MS = 80;
 const ENTRANCE_MAX_BUDGET_MS = 680;
 
-export interface BoardMotionTransform {
+interface BoardMotionTransform {
     rx: number;
     ry: number;
     rz: number;

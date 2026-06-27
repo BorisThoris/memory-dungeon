@@ -6,30 +6,30 @@ Per [docs/new_design/ASSET_AND_ART_PIPELINE.md](../../docs/new_design/ASSET_AND_
 
 [`ui/index.ts`](ui/index.ts) exports **`UI_ART`** (shell / meta backgrounds and chrome). [`ui/modeArt.ts`](ui/modeArt.ts) exports **`MODE_CARD_ART`** (Choose Your Path posters; also re-exported from `index.ts`).
 
-**Authoritative menu / gameplay scenes:** `UI_ART.menuScene`, `UI_ART.choosePathScene`, and `UI_ART.gameplayScene` in `index.ts` point at **`ui/backgrounds/*.png`**. Legacy SVGs on disk (below) are not wired into the build.
+**Authoritative menu / gameplay scenes:** `UI_ART.menuScene`, `UI_ART.choosePathScene`, and `UI_ART.gameplayScene` in `index.ts` point at runtime **`ui/backgrounds/*.webp`** files. PNG files in the same folder are source masters. Legacy SVGs on disk (below) are not wired into the build.
 
 ## Asset inventory
 
 | Path | Role | Source / tool | Notes |
 |------|------|---------------|-------|
-| `ui/backgrounds/bg-main-menu-cathedral-v1.png` | Main menu hero layer | AI-generated (Cursor image tool, project batch) | Fantasy vault; central negative space for title. **`GameOverScreen`** composites the same raster via `UI_ART.menuScene` behind the scrim (**META-002** shell parity). |
-| `ui/backgrounds/bg-gameplay-dungeon-ring-v1.png` | Gameplay stage under board | AI-generated | Memory ring / arena; board-safe center |
-| `ui/backgrounds/bg-gameplay-arcane-workshop-v1.png` | Gameplay stage under board | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Arcane workshop backdrop; dark center reserved for board readability. |
-| `ui/backgrounds/bg-board-arcane-table-v1.png` | Gameplay board-stage workbench texture | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Etched table / rune projection layer behind the tile board. |
-| `ui/backgrounds/bg-mode-classic-v1.png` | Mode card poster | AI-generated | Classic / blue-silver gate |
-| `ui/backgrounds/bg-mode-daily-v1.png` | Mode card poster | AI-generated | Daily / purple crystal featured |
-| `ui/backgrounds/bg-mode-endless-v1.png` | Mode card poster (locked) | AI-generated | Endless / ember gate, darker |
-| `ui/backgrounds/bg-mode-gauntlet-v1.png` | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Clock mechanism / timed pressure |
-| `ui/backgrounds/bg-mode-puzzle-v1.png` | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Ordered puzzle grid |
-| `ui/backgrounds/bg-mode-mirror-puzzle-v1.png` | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Mirrored tile board |
-| `ui/backgrounds/bg-mode-wild-v1.png` | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Volatile wildcard tile |
-| `ui/backgrounds/bg-mode-practice-v1.png` | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Calm training table |
-| `ui/backgrounds/bg-mode-scholar-v1.png` | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Disciplined study grid |
-| `ui/backgrounds/bg-mode-pin-vow-v1.png` | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Sparse pin planning map |
-| `ui/backgrounds/bg-mode-meditation-v1.png` | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation | Floating calm tile shrine |
-| `ui/backgrounds/bg-mode-placeholder-v1.png` | Mode card poster (fallback) | Copy of `bg-mode-endless-v1.png` | Only the explicit `fallback` poster key uses this shared placeholder; live catalog keys point at dedicated rasters. |
-| `ui/backgrounds/bg-choose-path-stage-ambient-v2.png` | Choose Your Path hero layer (**shipped**) | AI / external (`image_gen.mjs`); path wired from [`ui/index.ts`](ui/index.ts) | `ChooseYourPathScreen` soft-light layer over gameplay base. |
-| `ui/backgrounds/bg-choose-path-stage-v1.png` | Choose Your Path procedural **preview** (optional) | `node scripts/generate-choose-path-background.mjs` | Mid-res procedural plate (~800×500); **not** imported by default — swap into `UI_ART.choosePathScene` or replace `ambient-v2` when iterating. |
+| `ui/backgrounds/bg-main-menu-cathedral-v1.webp` (`.png` master) | Main menu hero layer | AI-generated (Cursor image tool, project batch), then `yarn assets:ui-backgrounds:export-runtime-webp` | Fantasy vault; central negative space for title. **`GameOverScreen`** composites the same raster via `UI_ART.menuScene` behind the scrim (**META-002** shell parity). |
+| `ui/backgrounds/bg-gameplay-dungeon-ring-v1.webp` (`.png` master) | Gameplay stage under board | AI-generated, then `yarn assets:ui-backgrounds:export-runtime-webp` | Memory ring / arena; board-safe center |
+| `ui/backgrounds/bg-gameplay-arcane-workshop-v1.webp` (`.png` master) | Gameplay stage under board | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Arcane workshop backdrop; dark center reserved for board readability. |
+| `ui/backgrounds/bg-board-arcane-table-v1.webp` (`.png` master) | Gameplay board-stage workbench texture | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Etched table / rune projection layer behind the tile board. |
+| `ui/backgrounds/bg-mode-classic-v1.webp` (`.png` master) | Mode card poster | AI-generated, then WebP export | Classic / blue-silver gate |
+| `ui/backgrounds/bg-mode-daily-v1.webp` (`.png` master) | Mode card poster | AI-generated, then WebP export | Daily / purple crystal featured |
+| `ui/backgrounds/bg-mode-endless-v1.webp` (`.png` master) | Mode card poster (locked) | AI-generated, then WebP export | Endless / ember gate, darker |
+| `ui/backgrounds/bg-mode-gauntlet-v1.webp` (`.png` master) | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Clock mechanism / timed pressure |
+| `ui/backgrounds/bg-mode-puzzle-v1.webp` (`.png` master) | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Ordered puzzle grid |
+| `ui/backgrounds/bg-mode-mirror-puzzle-v1.webp` (`.png` master) | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Mirrored tile board |
+| `ui/backgrounds/bg-mode-wild-v1.webp` (`.png` master) | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Volatile wildcard tile |
+| `ui/backgrounds/bg-mode-practice-v1.webp` (`.png` master) | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Calm training table |
+| `ui/backgrounds/bg-mode-scholar-v1.webp` (`.png` master) | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Disciplined study grid |
+| `ui/backgrounds/bg-mode-pin-vow-v1.webp` (`.png` master) | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Sparse pin planning map |
+| `ui/backgrounds/bg-mode-meditation-v1.webp` (`.png` master) | Mode card poster | Procedural local raster (Pillow), after OpenAI image API billing limit blocked live generation; then WebP export | Floating calm tile shrine |
+| `ui/backgrounds/bg-mode-placeholder-v1.webp` (`.png` master) | Mode card poster (fallback) | Copy of `bg-mode-endless-v1.png`, then WebP export | Only the explicit `fallback` poster key uses this shared placeholder; live catalog keys point at dedicated rasters. |
+| `ui/backgrounds/bg-choose-path-stage-ambient-v2.webp` (`.png` master) | Choose Your Path hero layer (**shipped**) | AI / external (`image_gen.mjs`); path wired from [`ui/index.ts`](ui/index.ts), then WebP export | `ChooseYourPathScreen` soft-light layer over gameplay base. |
+| `ui/backgrounds/bg-choose-path-stage-v1.webp` (`.png` master) | Choose Your Path procedural preview/runtime scene | `node scripts/generate-choose-path-background.mjs`, then WebP export | Mid-res procedural plate (~800×500); imported by `UI_ART.choosePathScene`. |
 | `ui/brand-crest.svg` | Menu crest | Authored SVG | Crystal sigil in gold frame; reused on **GameOver** hero lockup (**META-002**). |
 | `ui/menu-emblem.svg` | Secondary emblem | Authored SVG | Ring + tome motif |
 | `ui/divider-ornament.svg` | Hero divider | Authored SVG | Gold gradient + center gem + side flourishes |
@@ -56,9 +56,10 @@ Per [docs/new_design/ASSET_AND_ART_PIPELINE.md](../../docs/new_design/ASSET_AND_
 | `textures/cards/edge.png` | Card edge map | `scripts/card-pipeline/generate-card-textures.ps1` | Pairs with `tileTextures.ts` |
 | `textures/cards/panel-roughness.png` | Panel roughness | `scripts/card-pipeline/generate-card-textures.ps1` | |
 | `textures/cards/edge-roughness.png` | Edge roughness | `scripts/card-pipeline/generate-card-textures.ps1` | |
+| `textures/cards/back-normal.webp`, `front-normal.webp` (`.png` masters retained) | Runtime card normal maps | `yarn card-normals:export-runtime-webp` from generated PNG normal maps | Imported by `tileTextures.ts`; PNG masters are retained for regeneration/reference. |
 | `textures/cards/reference-back.png` | Card-back **pipeline source** (normalize / PS1 raster steps) | Authored / AI → normalize | Default input for [`generate-card-textures.ps1`](../../../scripts/card-pipeline/generate-card-textures.ps1); **not** the runtime `authored-card-back.svg` URL in `tileTextures.ts`. |
 | `textures/cards/front-face.png` | Card-face **pipeline output** / plate reference | Same PS1 pipeline from `reference-back.png` | Runtime faces still use `front.svg` + illustration mats unless you replace imports. |
-| `cards/illustrations/face-panel-01.png` … `face-panel-80.png` | Tarot illustration **mat** rasters (center panel), tiered common/uncommon/rare | `yarn face-panels:local` → [`batch_local_face_panels.py`](../../../scripts/card-pipeline/batch_local_face_panels.py); URL barrel [`facePanelRasterUrls.ts`](../cardFace/facePanelRasterUrls.ts) | Weighted fallback in [`weightedFacePanelPool.ts`](../cardFace/weightedFacePanelPool.ts). Legacy `deck-01..06.svg` stay referenced for `yarn build:card-illustration-manifest`. |
+| `cards/illustrations/face-panel-01.webp` … `face-panel-80.webp` (`.png` masters retained) | Tarot illustration **mat** runtime rasters (center panel), tiered common/uncommon/rare | `yarn face-panels:local` → [`batch_local_face_panels.py`](../../../scripts/card-pipeline/batch_local_face_panels.py), then `yarn face-panels:export-runtime-webp`; URL barrel [`facePanelRasterUrls.ts`](../cardFace/facePanelRasterUrls.ts) | Weighted fallback in [`weightedFacePanelPool.ts`](../cardFace/weightedFacePanelPool.ts). Legacy `deck-01..06.svg` stay referenced for `yarn build:card-illustration-manifest`. |
 | _(not in repo)_ `tmp/face-panels/` | Local SDXL batch staging | Same | Gitignored until copied into `cards/illustrations/`. |
 
 ### Card faces: atomic SVG vs overlay FX

@@ -28,7 +28,8 @@
         "e2e/tile-card-face-illustration-regression.spec.ts",
         "e2e/tile-card-face-illustration-benchmark.spec.ts",
         "e2e/tile-card-face-overlay-regression.spec.ts",
-        "scripts/bake-procedural-illustration-set.ts"
+        "scripts/bake-procedural-illustration-set.ts",
+        "src/shared/blueprintAstPoc.ts"
     ],
     "ignoreIssues": {
         "src/shared/**": ["exports", "types", "nsExports", "nsTypes", "enumMembers", "namespaceMembers", "duplicates"],

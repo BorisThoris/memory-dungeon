@@ -32,20 +32,20 @@ export interface CardWearAssetSet {
     front: CardWearTextureAssets;
 }
 
-export interface CardBendBaseGeometryState {
+interface CardBendBaseGeometryState {
     backBase: Float32Array;
     frontBase: Float32Array;
     overlayBase: Float32Array;
 }
 
-export type CardBendPointerEventType = 'click' | 'pointerdown' | 'pointermove' | 'pointerup' | string;
+type CardBendPointerEventType = 'click' | 'pointerdown' | 'pointermove' | 'pointerup' | string;
 
-export interface CardBendSyncDecision {
+interface CardBendSyncDecision {
     u: number;
     v: number;
 }
 
-export interface CardBendSyncStateInput {
+interface CardBendSyncStateInput {
     bumpRepeat: boolean;
     currentBuildup: number;
     eventType: CardBendPointerEventType;
@@ -59,7 +59,7 @@ export interface CardBendSyncStateInput {
     uv: { x: number; y: number } | null | undefined;
 }
 
-export interface CardBendSyncState {
+interface CardBendSyncState {
     bendU: number;
     bendV: number;
     buildup: number;
@@ -67,18 +67,18 @@ export interface CardBendSyncState {
     lastBumpV: number | null;
 }
 
-export type CardHoverTiltDecision =
+type CardHoverTiltDecision =
     | { kind: 'clear' }
     | { kind: 'set'; x: number; y: number }
     | { kind: 'unchanged' };
 
-export interface CardHoverTiltState {
+interface CardHoverTiltState {
     tileId: string | null;
     x: number;
     y: number;
 }
 
-export interface CardHoverTiltStateInput {
+interface CardHoverTiltStateInput {
     current: CardHoverTiltState;
     pointerType: string | null;
     reduceMotion: boolean;
@@ -86,34 +86,34 @@ export interface CardHoverTiltStateInput {
     uv: { x: number; y: number } | null | undefined;
 }
 
-export interface CardPointerUpDecision {
+interface CardPointerUpDecision {
     commitBend: boolean;
     pickTile: boolean;
     syncBend: boolean;
 }
 
-export interface CardPointerDownState {
+interface CardPointerDownState {
     pressingOnCard: boolean;
     syncBend: boolean;
 }
 
-export interface CardClickStateInput {
+interface CardClickStateInput {
     pickable: boolean;
     reduceMotion: boolean;
 }
 
-export interface CardClickState {
+interface CardClickState {
     syncBend: boolean;
 }
 
-export type CardPointerMoveStateInput = CardHoverTiltStateInput;
+type CardPointerMoveStateInput = CardHoverTiltStateInput;
 
-export interface CardPointerMoveState {
+interface CardPointerMoveState {
     hoverTilt: CardHoverTiltState;
     syncBend: boolean;
 }
 
-export interface CardPointerUpStateInput {
+interface CardPointerUpStateInput {
     button: number;
     pickable: boolean;
     pointerType: string;
@@ -121,16 +121,16 @@ export interface CardPointerUpStateInput {
     reduceMotion: boolean;
 }
 
-export interface CardPointerUpState extends CardPointerUpDecision {
+interface CardPointerUpState extends CardPointerUpDecision {
     pressingOnCard: boolean;
 }
 
-export interface CardPointerOutDecision {
+interface CardPointerOutDecision {
     clearHoverTilt: boolean;
     commitBend: boolean;
 }
 
-export interface CardPointerOutStateInput {
+interface CardPointerOutStateInput {
     hoverTilt: CardHoverTiltState;
     pickable: boolean;
     pressingOnCard: boolean;
@@ -138,19 +138,19 @@ export interface CardPointerOutStateInput {
     tileId: string;
 }
 
-export interface CardPointerOutState {
+interface CardPointerOutState {
     commitBend: boolean;
     hoverTilt: CardHoverTiltState;
     pressingOnCard: boolean;
 }
 
-export interface CardBendPlaneTarget {
+interface CardBendPlaneTarget {
     base: Float32Array;
     persistent: Float32Array;
     positions: BufferAttribute;
 }
 
-export interface ApplyLiveCardBendInput {
+interface ApplyLiveCardBendInput {
     back: CardBendPlaneTarget | null;
     bendU: number;
     bendV: number;
@@ -164,7 +164,7 @@ export interface ApplyLiveCardBendInput {
     useSvgMeshFront: boolean;
 }
 
-export interface LiveCardBendStateInput {
+interface LiveCardBendStateInput {
     bendBuildup: number;
     bendOverlay: boolean;
     pickable: boolean;
@@ -172,29 +172,29 @@ export interface LiveCardBendStateInput {
     reduceMotion: boolean;
 }
 
-export interface LiveCardBendState {
+interface LiveCardBendState {
     liveDepthScale: number;
     liveOverlayDepthScale: number;
 }
 
-export interface CardBendPersistentTarget {
+interface CardBendPersistentTarget {
     base: Float32Array;
     persistent: Float32Array;
 }
 
-export interface CardWearStampTarget {
+interface CardWearStampTarget {
     context: CanvasRenderingContext2D;
     texture: {
         needsUpdate: boolean;
     };
 }
 
-export interface CardWearStampTargets {
+interface CardWearStampTargets {
     back: CardWearStampTarget;
     front: CardWearStampTarget;
 }
 
-export interface CommitPersistentCardBendInput {
+interface CommitPersistentCardBendInput {
     back: CardBendPersistentTarget | null;
     bendOverlay: boolean;
     bendU: number;

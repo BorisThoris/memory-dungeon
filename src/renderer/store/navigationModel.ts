@@ -1,7 +1,7 @@
 import type { RunStatus, SubscreenReturnView, ViewState } from '../../shared/contracts';
 import { isResumableLifecycleState, lifecycleStateFromRunStatus } from '../../shared/run-lifecycle-machine';
 
-export type NavigationSurface =
+type NavigationSurface =
     | 'boot'
     | 'menu'
     | 'modeSelect'
@@ -15,7 +15,7 @@ export type NavigationSurface =
     | 'playing'
     | 'gameOver';
 
-export type NavigationAction =
+type NavigationAction =
     | 'back'
     | 'close'
     | 'escape'
@@ -23,9 +23,9 @@ export type NavigationAction =
     | 'pause-toggle'
     | 'return';
 
-export type NavigationPresentation = 'page' | 'in-run-overlay' | 'status-overlay';
+type NavigationPresentation = 'page' | 'in-run-overlay' | 'status-overlay';
 
-export interface NavigationShellChromeContract {
+interface NavigationShellChromeContract {
     visualView: ViewState;
     shellChrome: 'menu_hub' | 'meta_page' | 'gameplay' | 'gameplay_modal' | 'post_run' | 'boot';
     boardMounted: boolean;
@@ -33,7 +33,7 @@ export interface NavigationShellChromeContract {
     reason: string;
 }
 
-export interface NavigationRouteContract {
+interface NavigationRouteContract {
     action: NavigationAction;
     from: NavigationSurface;
     preservesRun: boolean;
@@ -42,7 +42,7 @@ export interface NavigationRouteContract {
     to: NavigationSurface;
 }
 
-export interface NavigationShellChromeRow {
+interface NavigationShellChromeRow {
     id: 'page_back' | 'in_run_meta' | 'null_run_recovery' | 'game_over_return';
     label: string;
     route: string;

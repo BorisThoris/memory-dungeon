@@ -13,7 +13,7 @@ import {
 } from './webAudioContext';
 
 /**
- * Gameplay SFX: optional sampled OGG/WAV (`assets/audio/sfx/`) with procedural Web Audio fallback.
+ * Gameplay SFX: sampled OGG (`assets/audio/sfx/`) with procedural Web Audio fallback.
  * Call `resumeAudioContext()` once after a user gesture if the browser suspended the context.
  *
  * Resolve tones (`playResolveSfx`) fire when **`applyResolveBoardTurn` runs** (after `resolveRemainingMs`, or

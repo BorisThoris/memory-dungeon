@@ -42,6 +42,8 @@ export const countFullyHiddenPairs = (board: BoardState): number => {
     return fullPairs;
 };
 
+const tileIsResolvedDungeonCard = (tile: Tile): boolean => tile.dungeonCardState === 'resolved';
+
 /**
  * Floor completion ignores singleton utility tiles, treats sprung traps as settled, and allows a glass decoy
  * to stay hidden after every real tile has been cleared.
@@ -52,7 +54,7 @@ export const isBoardComplete = (board: BoardState): boolean =>
         if (isSingletonUtilityPairKey(tile.pairKey) && tile.pairKey !== DECOY_PAIR_KEY) {
             return true;
         }
-        if (tile.state === 'matched' || tile.state === 'removed' || isSprungTrapTile(tile)) {
+        if (tile.state === 'matched' || tile.state === 'removed' || isSprungTrapTile(tile) || tileIsResolvedDungeonCard(tile)) {
             return true;
         }
         if (
@@ -65,7 +67,8 @@ export const isBoardComplete = (board: BoardState): boolean =>
                     (candidate) =>
                         candidate.state === 'matched' ||
                         candidate.state === 'removed' ||
-                        isSprungTrapTile(candidate)
+                        isSprungTrapTile(candidate) ||
+                        tileIsResolvedDungeonCard(candidate)
                 );
         }
         return false;
@@ -82,6 +85,7 @@ export type BoardFairnessIssueCode =
     | 'exit_card_missing'
     | 'exit_tile_reference_missing'
     | 'exit_card_mismatch'
+    | 'exit_activation_mismatch'
     | 'exit_lock_metadata_mismatch'
     | 'exit_lock_unreachable'
     | 'enemy_hazard_tile_reference_missing'
@@ -121,8 +125,6 @@ export interface BoardFairnessInspectionOptions {
 
 const tileIsActionableForCompletion = (tile: Tile): boolean =>
     tile.state === 'hidden' || (tile.state === 'flipped' && !isSprungTrapTile(tile));
-
-const tileIsResolvedDungeonCard = (tile: Tile): boolean => tile.dungeonCardState === 'resolved';
 
 const pairIsCleared = (tiles: readonly Tile[]): boolean =>
     tiles.every((tile) => tile.state === 'matched' || tile.state === 'removed' || tileIsResolvedDungeonCard(tile));
@@ -259,7 +261,12 @@ export const repairDungeonExitSoftlocks = (
         }
     }
 
-    if (repairedLockKind === exitLockKind && repairedLeverCount === requiredLeverCount) {
+    if (
+        repairedLockKind === exitLockKind &&
+        repairedLeverCount === requiredLeverCount &&
+        (board.dungeonExitLockKind ?? 'none') === repairedLockKind &&
+        (board.dungeonExitRequiredLeverCount ?? 0) === repairedLeverCount
+    ) {
         return board;
     }
 
@@ -395,6 +402,15 @@ export const inspectBoardFairness = (
                 tileIds: [declaredExit.id]
             });
         }
+    }
+    const activatedExitTiles = exitTiles.filter((tile) => tile.dungeonExitActivated === true);
+    if (activatedExitTiles.length > 1) {
+        structurallyClearable = false;
+        issues.push({
+            code: 'exit_activation_mismatch',
+            message: `Board has ${activatedExitTiles.length} activated exit cards; exactly one exit can own floor activation.`,
+            tileIds: activatedExitTiles.map((tile) => tile.id)
+        });
     }
 
     const effectivePrimaryExitLock = getEffectivePrimaryExitLock({

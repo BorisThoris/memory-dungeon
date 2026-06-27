@@ -64,12 +64,12 @@ export type TileBezelActivityBag = {
 const POS_EPS = 0.00028;
 const ROT_EPS = 0.0004;
 
-export interface TileFrameActivitySchedule {
+interface TileFrameActivitySchedule {
     nextIdleStreak: number;
     runFrame: boolean;
 }
 
-export interface AdvanceScheduledTileBezelFramesInput<TBag extends TileBezelActivityBag> {
+interface AdvanceScheduledTileBezelFramesInput<TBag extends TileBezelActivityBag> {
     advanceFrame: (bag: TBag) => void;
     bags: Iterable<[string, TBag]>;
     clockElapsedTime: number;

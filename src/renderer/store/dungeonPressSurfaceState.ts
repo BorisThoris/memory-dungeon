@@ -8,7 +8,7 @@ import {
     SHOP_PAIR_KEY
 } from '../../shared/dungeon-rules';
 
-export type DungeonTilePressSurfaceResult =
+type DungeonTilePressSurfaceResult =
     | { kind: 'notDungeonTile' }
     | { kind: 'ignored' }
     | {

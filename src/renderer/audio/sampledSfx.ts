@@ -1,5 +1,5 @@
 /**
- * Optional OGG/WAV one-shots under `assets/audio/sfx/` (see manifest.json).
+ * Runtime OGG one-shots under `assets/audio/sfx/` (see manifest.json).
  * When files are absent or decode fails, `gameSfx` procedural tones run unchanged.
  */
 
@@ -19,7 +19,7 @@ const manifest = sfxManifest as {
     matchTierDepthRanges: Record<'match-tier-low' | 'match-tier-mid' | 'match-tier-high', [number, number]>;
 };
 
-const globUrls = import.meta.glob<string>('../assets/audio/sfx/*.{ogg,wav}', {
+const globUrls = import.meta.glob<string>('../assets/audio/sfx/*.ogg', {
     eager: true,
     query: '?url',
     import: 'default'

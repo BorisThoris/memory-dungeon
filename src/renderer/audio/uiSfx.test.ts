@@ -1,14 +1,21 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import uiSfxManifest from '../assets/audio/ui/manifest.json';
 import {
     __resetUiSfxEngineForTests,
+    maybePreloadUiSfx,
     playGameOverOpenSfx,
     playUiClickSfx,
+    playUiCue,
     playUiCopySfx,
     playUiConfirmSfx,
     playPauseOpenSfx,
     playPauseResumeSfx,
     playIntroStingSfx,
+    preloadUiSfx,
     resumeUiSfxContext,
+    silenceAllUiSampleVoices,
     uiSfxGainFromSettings,
     uiSfxSampleKeyForCue
 } from './uiSfx';
@@ -38,6 +45,16 @@ describe('uiSfx', () => {
         expect(uiSfxSampleKeyForCue('pauseResume')).toBe('pause-resume');
         expect(uiSfxSampleKeyForCue('gameOverOpen')).toBe('game-over-open');
         expect(uiSfxSampleKeyForCue('copy')).toBe('ui-copy');
+    });
+
+    it('keeps sampled UI coverage backed by runtime OGG files', () => {
+        const uiAssetDir = path.resolve(process.cwd(), 'src/renderer/assets/audio/ui');
+
+        for (const [key, entry] of Object.entries(uiSfxManifest.entries)) {
+            expect(entry.file, `manifest key ${key} should use runtime OGG`).toMatch(/\.ogg$/);
+            const assetPath = path.join(uiAssetDir, entry.file);
+            expect(fs.existsSync(assetPath), `manifest key ${key} points to missing file ${entry.file}`).toBe(true);
+        }
     });
 
     it('respects mute without scheduling nodes', () => {
@@ -85,6 +102,43 @@ describe('uiSfx', () => {
 
         expect(createOscillator).toHaveBeenCalledTimes(1);
         expect(createGain).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps UI sampled preload helpers safe in test mode', async () => {
+        maybePreloadUiSfx();
+        silenceAllUiSampleVoices();
+        await expect(preloadUiSfx()).resolves.toBeUndefined();
+    });
+
+    it('exposes the generic UI cue primitive used by wrappers', () => {
+        const createOscillator = vi.fn(() => ({
+            type: 'sine' as OscillatorType,
+            frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn(),
+            disconnect: vi.fn(),
+            start: vi.fn(),
+            stop: vi.fn()
+        }));
+        const createGain = vi.fn(() => ({
+            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn(),
+            disconnect: vi.fn()
+        }));
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                createOscillator = createOscillator;
+                createGain = createGain;
+                close = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        resumeUiSfxContext();
+        playUiCue('click', uiSfxGainFromSettings(1, 1), { frequency: 620, durationSec: 0.04, type: 'sine' });
+
+        expect(createOscillator).toHaveBeenCalledTimes(1);
     });
 
     it('supports the expanded cue wrappers', () => {
