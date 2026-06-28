@@ -67,6 +67,39 @@ describe('dungeon tile augmentation rules', () => {
         );
     });
 
+    it('uses the floor typed exit lock for locked cache room key gates', () => {
+        const { tiles } = addDungeonRoomTile([], {
+            ...blueprint,
+            roomEffectIds: ['room_locked_cache'],
+            exitSpecs: [
+                {
+                    ...blueprint.exitSpecs[0]!,
+                    lockKind: 'treasure',
+                    requiredLeverCount: 0
+                }
+            ]
+        });
+
+        expect(tiles[0]).toMatchObject({
+            dungeonCardKind: 'room',
+            dungeonCardEffectId: 'room_locked_cache',
+            dungeonKeyKind: 'treasure'
+        });
+    });
+
+    it('falls locked cache room key gates back to iron on lever-only floors', () => {
+        const { tiles } = addDungeonRoomTile([], {
+            ...blueprint,
+            roomEffectIds: ['room_locked_cache']
+        });
+
+        expect(tiles[0]).toMatchObject({
+            dungeonCardKind: 'room',
+            dungeonCardEffectId: 'room_locked_cache',
+            dungeonKeyKind: 'iron'
+        });
+    });
+
     it('assigns paired dungeon card specs to eligible non-special pairs', () => {
         const tiles = [tile('a1', 'a'), tile('a2', 'a'), tile('b1', '__wild__'), tile('b2', '__wild__')];
         const assigned = assignDungeonCardsToTiles(
@@ -90,6 +123,54 @@ describe('dungeon tile augmentation rules', () => {
             expect.objectContaining({ dungeonCardKind: 'key', dungeonKeyKind: 'iron' })
         ]);
         expect(assigned.filter((candidate) => candidate.pairKey === '__wild__').every((candidate) => candidate.dungeonCardKind == null)).toBe(true);
+    });
+
+    it('preserves typed key assignments from blueprint card specs', () => {
+        const tiles = [tile('a1', 'a'), tile('a2', 'a')];
+        const assigned = assignDungeonCardsToTiles(
+            tiles,
+            1,
+            1,
+            4,
+            'normal',
+            'treasure_gallery',
+            'endless',
+            {
+                ...blueprint,
+                pairedCardSpecs: [
+                    { kind: 'key', effectId: 'key_iron', symbol: 'T', label: 'Treasure Memory Key', keyKind: 'treasure' }
+                ]
+            }
+        );
+
+        expect(assigned).toEqual([
+            expect.objectContaining({ dungeonCardKind: 'key', dungeonKeyKind: 'treasure' }),
+            expect.objectContaining({ dungeonCardKind: 'key', dungeonKeyKind: 'treasure' })
+        ]);
+    });
+
+    it('preserves typed lock assignments from blueprint card specs', () => {
+        const tiles = [tile('a1', 'a'), tile('a2', 'a')];
+        const assigned = assignDungeonCardsToTiles(
+            tiles,
+            1,
+            1,
+            4,
+            'normal',
+            'treasure_gallery',
+            'endless',
+            {
+                ...blueprint,
+                pairedCardSpecs: [
+                    { kind: 'lock', effectId: 'lock_cache', symbol: 'L', label: 'Treasure Cache Lock', keyKind: 'treasure' }
+                ]
+            }
+        );
+
+        expect(assigned).toEqual([
+            expect.objectContaining({ dungeonCardKind: 'lock', dungeonKeyKind: 'treasure' }),
+            expect.objectContaining({ dungeonCardKind: 'lock', dungeonKeyKind: 'treasure' })
+        ]);
     });
 
     it('adds deterministic filler supplies for treasure nodes only to empty eligible pairs', () => {

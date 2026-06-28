@@ -445,7 +445,7 @@ describe('save normalization', () => {
         const policies = getDungeonSaveMigrationFieldPolicies();
         const fields = policies.map((policy) => policy.field);
 
-        expect(DUNGEON_SAVE_MIGRATION_POLICY_VERSION).toBe('dng-073-v1');
+        expect(DUNGEON_SAVE_MIGRATION_POLICY_VERSION).toBe('dng-073-v2');
         expect(fields).toEqual(expect.arrayContaining([
             'lastRunSummary.runSeed',
             'lastRunSummary.runRulesVersion',
@@ -460,13 +460,19 @@ describe('save normalization', () => {
             'bonusRewardLedger',
             'dungeonKeys',
             'dungeonMasterKeys',
+            'board.dungeonKeysHeld',
+            'board.dungeonKeysHeldByKind',
             'board.dungeonExitTileId',
+            'board.dungeonExitLockKind',
+            'tile.dungeonExitLockKind',
+            'tile.dungeonKeyKind',
             'board.enemyHazards',
             'board.dungeonBossId'
         ]));
-        expect(policies.filter((policy) => policy.scope === 'run_local_recoverable')).toHaveLength(9);
+        expect(policies.filter((policy) => policy.scope === 'run_local_recoverable')).toHaveLength(14);
         expect(shouldDungeonSaveFieldRequireMigration('playerStats.relicPickCounts')).toBe(true);
         expect(shouldDungeonSaveFieldRequireMigration('dungeonKeys')).toBe(false);
+        expect(shouldDungeonSaveFieldRequireMigration('board.dungeonKeysHeldByKind')).toBe(false);
     });
 });
 

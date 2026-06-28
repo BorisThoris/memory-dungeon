@@ -27,7 +27,14 @@ describe('dungeon floor blueprint rules', () => {
             shopTileId: '5-shop'
         });
         expect(blueprint.exitSpecs.length).toBeGreaterThan(0);
+        expect(blueprint.exitSpecs).toEqual(expect.arrayContaining([expect.objectContaining({ lockKind: 'treasure' })]));
         expect(blueprint.pairedCardSpecs.some((card) => card.kind === 'treasure')).toBe(true);
+        expect(blueprint.pairedCardSpecs).toEqual(
+            expect.arrayContaining([expect.objectContaining({ kind: 'key', keyKind: 'treasure' })])
+        );
+        expect(blueprint.pairedCardSpecs).toEqual(
+            expect.arrayContaining([expect.objectContaining({ kind: 'lock', keyKind: 'treasure' })])
+        );
         expect(blueprint.roomEffectIds.length).toBeGreaterThan(0);
     });
 

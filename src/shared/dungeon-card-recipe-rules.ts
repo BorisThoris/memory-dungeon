@@ -1,7 +1,9 @@
 import type {
     DungeonCardEffectId,
     DungeonCardKind,
+    DungeonExitLockKind,
     DungeonFloorBlueprint,
+    DungeonKeyKind,
     FloorArchetypeId,
     FloorTag,
     GameMode,
@@ -20,6 +22,7 @@ export interface DungeonCardAssignment {
     effectId: DungeonCardEffectId;
     symbol: string;
     label: string;
+    keyKind?: DungeonKeyKind;
     hp?: number;
     routeType?: RouteNodeType;
     bossId?: NonNullable<DungeonFloorBlueprint['bossId']>;
@@ -28,7 +31,9 @@ export interface DungeonCardAssignment {
 export type DungeonCardRecipeBudgets = Pick<
     DungeonFloorBlueprint,
     'threatBudget' | 'rewardBudget' | 'utilityBudget' | 'lockBudget' | 'gatewayBudget' | 'bossId'
->;
+> & {
+    exitLockKinds?: DungeonExitLockKind[];
+};
 
 export const capDungeonCardRecipeForBudget = (
     cards: DungeonCardAssignment[],
@@ -57,7 +62,8 @@ export const capDungeonCardRecipeForBudget = (
         take((card) => card.kind === 'trap' || card.effectId === 'rune_seal');
     }
     if (objectiveId === 'loot_cache') {
-        take((card) => card.kind === 'treasure' || card.kind === 'lock' || card.kind === 'key');
+        take((card) => card.kind === 'treasure' || card.kind === 'lock');
+        take((card) => card.kind === 'key');
     }
     take(() => true);
 
@@ -128,8 +134,22 @@ const treasureCard = (level: number, floorArchetypeId: FloorArchetypeId | null):
     label: floorArchetypeId === 'treasure_gallery' || level >= 5 ? 'Gallery Cache' : 'Coin Memory'
 });
 
-const lockCard = (): DungeonCardAssignment => ({ kind: 'lock', effectId: 'lock_cache', symbol: 'L', label: 'Sealed Cache' });
-const keyCard = (): DungeonCardAssignment => ({ kind: 'key', effectId: 'key_iron', symbol: 'K', label: 'Iron Memory Key' });
+const lockCard = (keyKind: DungeonKeyKind = 'iron'): DungeonCardAssignment => ({
+    kind: 'lock',
+    effectId: 'lock_cache',
+    symbol: 'L',
+    label: keyKind === 'iron' ? 'Sealed Cache' : `${keyKind[0]!.toUpperCase()}${keyKind.slice(1)} Cache Lock`,
+    keyKind
+});
+const keyLabelForKind = (keyKind: DungeonKeyKind): string =>
+    keyKind === 'iron' ? 'Iron Memory Key' : `${keyKind[0]!.toUpperCase()}${keyKind.slice(1)} Memory Key`;
+const keyCard = (keyKind: DungeonKeyKind = 'iron'): DungeonCardAssignment => ({
+    kind: 'key',
+    effectId: 'key_iron',
+    symbol: keyKind === 'iron' ? 'K' : keyKind[0]!.toUpperCase(),
+    label: keyLabelForKind(keyKind),
+    keyKind
+});
 const shrineCard = (): DungeonCardAssignment => ({ kind: 'shrine', effectId: 'shrine_guard', symbol: '+', label: 'Guard Shrine' });
 const gatewayCard = (routeType: RouteNodeType = 'greed'): DungeonCardAssignment => ({
     kind: 'gateway',
@@ -158,6 +178,10 @@ export const dungeonCardRecipeForFloor = (
         bossId: dungeonBossForFloor(floorTag, floorArchetypeId)
     };
     const cards: DungeonCardAssignment[] = [];
+    const neededKeyKinds = [...new Set((budgets.exitLockKinds ?? []).filter(
+        (lockKind): lockKind is DungeonKeyKind => lockKind !== 'none' && lockKind !== 'lever'
+    ))];
+    const preferredKeyKind = neededKeyKinds[0] ?? 'iron';
     const exitLockKind = primaryExitLockKindForFloor(level, floorArchetypeId);
     const leverCount = requiredLeverCountForFloor(level, exitLockKind);
     for (let i = 0; i < leverCount; i++) {
@@ -216,12 +240,12 @@ export const dungeonCardRecipeForFloor = (
         } else if (floorArchetypeId === 'script_room' || floorArchetypeId === 'spotlight_hunt' || floorArchetypeId === 'parasite_tithe') {
             cards.push(shrineCard());
         } else if (level >= 3 && floorArchetypeId !== 'breather') {
-            cards.push(keyCard());
+            cards.push(keyCard(preferredKeyKind));
         }
     }
 
     for (let i = 0; i < budgets.lockBudget; i++) {
-        cards.push(i % 2 === 0 && level >= 3 ? keyCard() : lockCard());
+        cards.push(i % 2 === 0 && level >= 3 ? keyCard(preferredKeyKind) : lockCard(preferredKeyKind));
     }
 
     for (let i = 0; i < budgets.gatewayBudget; i++) {

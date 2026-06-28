@@ -17,6 +17,7 @@ import {
     getWildTileIdFromBoard,
     inspectBoardFairness,
     inspectRunFairness,
+    boardHasActionableProgressionPair,
     boardHasGlassDecoy,
     type BoardFairnessIssue
 } from './board-inspection';
@@ -28,8 +29,14 @@ import {
 import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { createNewRun } from './run-creation-rules';
 import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run-map';
-import { getRunShopStockPlan } from './shop-rules';
+import { getRunShopStockPlan, SHOP_KEY_ITEM_BY_KIND } from './shop-rules';
 import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles } from './enemy-hazard-board-rules';
+import {
+    formatDungeonBoardTopologyIssue,
+    formatDungeonRunMapTopologyIssue,
+    inspectDungeonBoardTopology,
+    inspectDungeonRunMapTopology
+} from './dungeon-topology';
 import { getBoardTraitInteractionPreviewLines } from './tile-trait-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 
@@ -45,6 +52,7 @@ export type SoftlockContractCoverageKey =
     | 'bosses'
     | 'traitInteractions'
     | 'traitRouteObjectives'
+    | 'topology'
     | 'finalPairStates';
 
 export interface SoftlockGeneratorScenario {
@@ -88,6 +96,7 @@ const COVERAGE_KEYS: readonly SoftlockContractCoverageKey[] = [
     'bosses',
     'traitInteractions',
     'traitRouteObjectives',
+    'topology',
     'finalPairStates'
 ];
 
@@ -175,15 +184,24 @@ const pickFinalPairKey = (board: BoardState): string | null => {
 
 const projectionExitResourceState = (
     board: BoardState
-): Pick<BoardState, 'dungeonKeysHeld' | 'dungeonLeverCount'> => {
+): Pick<BoardState, 'dungeonKeysHeld' | 'dungeonKeysHeldByKind' | 'dungeonLeverCount'> => {
     const lock = getEffectivePrimaryExitLock({ board });
     const needsKey =
         lock.lockKind !== 'none' &&
         lock.lockKind !== 'lever' &&
         countReachableExitKeySources(board, lock.lockKind) > 0;
     const needsLever = lock.lockKind === 'lever';
+    const dungeonKeysHeld = needsKey ? Math.max(board.dungeonKeysHeld ?? 0, 1) : board.dungeonKeysHeld;
+    const dungeonKeysHeldByKind =
+        needsKey && lock.lockKind !== 'none' && lock.lockKind !== 'lever'
+            ? {
+                  ...(board.dungeonKeysHeldByKind ?? {}),
+                  [lock.lockKind]: Math.max(board.dungeonKeysHeldByKind?.[lock.lockKind] ?? 0, 1)
+              }
+            : board.dungeonKeysHeldByKind;
     return {
-        dungeonKeysHeld: needsKey ? Math.max(board.dungeonKeysHeld ?? 0, 1) : board.dungeonKeysHeld,
+        dungeonKeysHeld,
+        dungeonKeysHeldByKind,
         dungeonLeverCount: needsLever
             ? Math.max(board.dungeonLeverCount ?? 0, lock.requiredLeverCount)
             : board.dungeonLeverCount
@@ -234,14 +252,16 @@ export const createClearedBoardFairnessProjection = (board: BoardState): BoardSt
 const addCoverage = (
     coverage: Record<SoftlockContractCoverageKey, number>,
     board: BoardState,
-    projection: 'generated' | 'final_pair' | 'cleared_board'
+    projection: 'generated' | 'final_pair' | 'cleared_board',
+    topologyReport: ReturnType<typeof inspectDungeonBoardTopology>
 ): void => {
     const lockKind = getEffectivePrimaryExitLock({ board }).lockKind;
     if (lockKind !== 'none') coverage.locks += 1;
     if (board.dungeonShopTileId || board.tiles.some((tile) => tile.dungeonCardKind === 'shop')) coverage.shops += 1;
     if (
         board.tiles.some((tile) => tile.dungeonCardKind === 'key' || tile.dungeonCardEffectId === 'room_key_cache') ||
-        (board.dungeonKeysHeld ?? 0) > 0
+        (board.dungeonKeysHeld ?? 0) > 0 ||
+        Object.values(board.dungeonKeysHeldByKind ?? {}).some((count) => (count ?? 0) > 0)
     ) {
         coverage.keys += 1;
     }
@@ -257,6 +277,7 @@ const addCoverage = (
     if (board.dungeonBossId != null || board.tiles.some((tile) => tile.dungeonBossId != null)) coverage.bosses += 1;
     if (getBoardTraitInteractionPreviewLines(board).length > 0) coverage.traitInteractions += 1;
     if (getTraitRouteObjectiveSeed(board) != null) coverage.traitRouteObjectives += 1;
+    if (topologyReport.graph.order > 0) coverage.topology += 1;
     if (projection === 'final_pair' || projection === 'cleared_board') coverage.finalPairStates += 1;
 };
 
@@ -270,6 +291,11 @@ const boardNeedsKeyInsurance = (board: BoardState): boolean =>
         );
     })();
 
+const requiredShopInsuranceItemForBoard = (board: BoardState) => {
+    const lock = getEffectivePrimaryExitLock({ board });
+    return lock.lockKind !== 'none' && lock.lockKind !== 'lever' ? SHOP_KEY_ITEM_BY_KIND[lock.lockKind] : null;
+};
+
 const recordInspection = (
     result: SoftlockGeneratorContractResult,
     scenario: SoftlockGeneratorScenario,
@@ -279,8 +305,9 @@ const recordInspection = (
     board: BoardState
 ): void => {
     result.checkedBoards += 1;
-    addCoverage(result.coverage, board, projection);
     const report = inspectBoardFairness(board);
+    const topologyReport = inspectDungeonBoardTopology(board);
+    addCoverage(result.coverage, board, projection, topologyReport);
     const traitPairCount = new Set(
         board.tiles
             .filter((tile) => tile.tileTraitKind != null && tile.state !== 'matched' && tile.state !== 'removed')
@@ -316,9 +343,28 @@ const recordInspection = (
                   message: 'Board has no structural completion route.'
               }
           ];
+    const topologyIssues: BoardFairnessIssue[] = topologyReport.issues
+        .filter((issue) => {
+            if (issue.code === 'topology_exit_lock_source_missing' || issue.code === 'topology_completion_route_missing') {
+                return !boardHasActionableProgressionPair(board);
+            }
+            if (issue.code === 'topology_boss_source_missing') {
+                return projection === 'generated';
+            }
+            return true;
+        })
+        .map((issue) => ({
+            code:
+                issue.code === 'topology_boss_source_missing'
+                    ? ('dungeon_objective_unreachable' as const)
+                    : ('exit_lock_unreachable' as const),
+            message: `Topology validation: ${formatDungeonBoardTopologyIssue(issue, topologyReport)}`,
+            tileIds: issue.tileIds
+        }));
     const issues = [
         ...report.issues,
         ...completionRouteIssues,
+        ...topologyIssues,
         ...generatedTraitInteractionIssues,
         ...traitRouteObjectiveIssues
     ];
@@ -358,13 +404,16 @@ const recordShopStockInspection = (
             highestLevel: Math.max(1, board.level)
         }
     });
-    if (plan.itemIds.includes('iron_key') || plan.itemIds.includes('master_key')) {
+    const requiredKeyItem = requiredShopInsuranceItemForBoard(board);
+    if ((requiredKeyItem && plan.itemIds.includes(requiredKeyItem)) || plan.itemIds.includes('master_key')) {
         return;
     }
 
     const issue: BoardFairnessIssue = {
         code: 'exit_lock_unreachable',
-        message: `Locked exit shop stock lacks key insurance; stock=${plan.itemIds.join(',') || 'empty'}.`,
+        message: `Locked exit shop stock lacks ${requiredKeyItem ?? 'matching_key'} or master key insurance; stock=${
+            plan.itemIds.join(',') || 'empty'
+        }.`,
         tileIds: board.dungeonExitTileId ? [board.dungeonExitTileId] : undefined
     };
     result.failures.push({
@@ -390,26 +439,46 @@ const recordPlayableClearInspection = (
     result.checkedPlayableBoards += 1;
     const trace = solveGeneratedBoardByExhaustingPairsWithTrace(board, seed);
     const solved = trace.run;
-    const report = inspectBoardFairness(solved.board ?? board, {
+    const solvedBoard = solved.board ?? board;
+    const report = inspectBoardFairness(solvedBoard, {
         dungeonKeys: solved.dungeonKeys,
         dungeonMasterKeys: solved.dungeonMasterKeys
     });
+    const topologyReport = inspectDungeonBoardTopology(solvedBoard, {
+        dungeonKeys: solved.dungeonKeys,
+        dungeonMasterKeys: solved.dungeonMasterKeys
+    });
+    const topologyIssues: BoardFairnessIssue[] = topologyReport.issues.map((issue) => ({
+        code:
+            issue.code === 'topology_boss_source_missing'
+                ? ('dungeon_objective_unreachable' as const)
+                : ('exit_lock_unreachable' as const),
+        message: `Solved-run topology validation: ${formatDungeonBoardTopologyIssue(issue, topologyReport)}`,
+        tileIds: issue.tileIds
+    }));
     const staleEnemyHazards =
         solved.status === 'levelComplete'
             ? solved.board?.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? []
             : [];
-    if (solved.status === 'levelComplete' && report.issues.length === 0 && staleEnemyHazards.length === 0) {
+    if (
+        solved.status === 'levelComplete' &&
+        report.issues.length === 0 &&
+        topologyIssues.length === 0 &&
+        staleEnemyHazards.length === 0
+    ) {
         result.checkedNextFloorTransitions += 1;
         const next = advanceToNextLevel(solved);
         const nextReport = inspectRunFairness(next);
         const routeReport = inspectDungeonRunMapProgression(next.dungeonRun);
+        const routeTopologyReport = inspectDungeonRunMapTopology(next.dungeonRun);
         if (
             next.status === 'memorize' &&
             next.board?.level === floor + 1 &&
             next.dungeonRun.currentFloor === next.board.level &&
             nextReport.issues.length === 0 &&
             routeReport.hasLegalProgressionPath &&
-            routeReport.issues.length === 0
+            routeReport.issues.length === 0 &&
+            routeTopologyReport.issues.length === 0
         ) {
             return;
         }
@@ -423,6 +492,11 @@ const recordPlayableClearInspection = (
             message: `${issue.code}: ${issue.detail}`,
             tileIds: issue.nodeId ? [issue.nodeId] : undefined
         }));
+        const routeTopologyIssues: BoardFairnessIssue[] = routeTopologyReport.issues.map((issue) => ({
+            code: 'completion_route_missing',
+            message: formatDungeonRunMapTopologyIssue(issue, routeTopologyReport),
+            tileIds: issue.nodeId ? [issue.nodeId] : undefined
+        }));
         result.failures.push({
             scenarioId: scenario.id,
             scenarioLabel: scenario.label,
@@ -432,14 +506,16 @@ const recordPlayableClearInspection = (
             issueCodes: [
                 nextIssue.code,
                 ...nextReport.issues.map((candidate) => candidate.code),
-                ...routeIssues.map((candidate) => candidate.code)
+                ...routeIssues.map((candidate) => candidate.code),
+                ...routeTopologyIssues.map((candidate) => candidate.code)
             ],
             issueDetails: [
                 formatIssueDetail(nextIssue),
                 ...nextReport.issues.map(formatIssueDetail),
-                ...routeIssues.map(formatIssueDetail)
+                ...routeIssues.map(formatIssueDetail),
+                ...routeTopologyIssues.map(formatIssueDetail)
             ],
-            issues: [nextIssue, ...nextReport.issues, ...routeIssues],
+            issues: [nextIssue, ...nextReport.issues, ...routeIssues, ...routeTopologyIssues],
             boardSummary: boardSummary(next.board ?? solved.board ?? board)
         });
         return;
@@ -466,16 +542,18 @@ const recordPlayableClearInspection = (
         issueCodes: [
             issue.code,
             ...staleEnemyIssues.map((candidate) => candidate.code),
-            ...report.issues.map((candidate) => candidate.code)
+            ...report.issues.map((candidate) => candidate.code),
+            ...topologyIssues.map((candidate) => candidate.code)
         ],
         issueDetails: [
             formatIssueDetail(issue),
             `solver_trace: reason=${trace.stopReason} turns=${trace.turns} lastPair=${trace.lastPairKey ?? 'none'} lastTiles=${trace.lastTileIds.join(',') || 'none'}`,
             ...staleEnemyIssues.map(formatIssueDetail),
-            ...report.issues.map(formatIssueDetail)
+            ...report.issues.map(formatIssueDetail),
+            ...topologyIssues.map(formatIssueDetail)
         ],
-        issues: [issue, ...staleEnemyIssues, ...report.issues],
-        boardSummary: boardSummary(solved.board ?? board)
+        issues: [issue, ...staleEnemyIssues, ...report.issues, ...topologyIssues],
+        boardSummary: boardSummary(solvedBoard)
     });
 };
 

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from './contracts';
 import {
     boardHasGlassDecoy,
+    countReachableExitKeySources,
     getWildTileIdFromBoard,
     inspectBoardFairness,
     isBoardComplete,
@@ -52,6 +53,31 @@ describe('board-inspection', () => {
 
         expect(isBoardComplete({ ...withExit, dungeonExitTileId: 'exit', dungeonExitActivated: false })).toBe(false);
         expect(isBoardComplete({ ...withExit, dungeonExitTileId: 'exit', dungeonExitActivated: true })).toBe(true);
+    });
+
+    it('treats legacy floor-held dungeon keys as iron only', () => {
+        const inspected = {
+            ...board([tile('exit', EXIT_PAIR_KEY, { dungeonCardKind: 'exit', dungeonExitLockKind: 'treasure' })]),
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'treasure' as const,
+            dungeonKeysHeld: 1
+        } satisfies BoardState;
+
+        expect(countReachableExitKeySources(inspected, 'iron')).toBe(1);
+        expect(countReachableExitKeySources(inspected, 'treasure')).toBe(0);
+    });
+
+    it('uses typed floor-held dungeon keys when available', () => {
+        const inspected = {
+            ...board([tile('exit', EXIT_PAIR_KEY, { dungeonCardKind: 'exit', dungeonExitLockKind: 'treasure' })]),
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'treasure' as const,
+            dungeonKeysHeld: 1,
+            dungeonKeysHeldByKind: { treasure: 1 }
+        } satisfies BoardState;
+
+        expect(countReachableExitKeySources(inspected, 'iron')).toBe(0);
+        expect(countReachableExitKeySources(inspected, 'treasure')).toBe(1);
     });
 
     it('normalizes stale board-level exit lock metadata to the primary exit tile during repair', () => {

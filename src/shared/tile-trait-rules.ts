@@ -509,10 +509,11 @@ const traitPoolForContext = (
 
 const collectAdjacentEligiblePairKeys = (
     tiles: readonly Tile[],
-    eligiblePairKeys: readonly string[]
+    eligiblePairKeys: readonly string[],
+    boardColumns: number = columnsForTileCount(tiles.length)
 ): [string, string][] => {
     const eligible = new Set(eligiblePairKeys);
-    const columns = columnsForTileCount(tiles.length);
+    const columns = boardColumns;
     const pairs: [string, string][] = [];
     const seen = new Set<string>();
     tiles.forEach((tile, index) => {
@@ -593,7 +594,8 @@ export const assignTileTraitsToGeneratedBoard = (
     level: number,
     intensity: 'safe' | 'greed' | 'mystery' | null | undefined,
     relicIds: readonly RelicId[] = [],
-    startingLoadoutId: StartingLoadoutId | null | undefined = null
+    startingLoadoutId: StartingLoadoutId | null | undefined = null,
+    boardColumns: number = columnsForTileCount(tiles.length)
 ): Tile[] => {
     const eligiblePairKeys = [
         ...new Set(tiles.filter(tileCanReceiveTrait).map((tile) => tile.pairKey))
@@ -611,7 +613,7 @@ export const assignTileTraitsToGeneratedBoard = (
     const shuffledPairKeys = shuffleWithRng(() => rng(), eligiblePairKeys);
     const traitByPairKey = new Map<string, TileTraitKind>();
     if (traitCount >= 2) {
-        const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys);
+        const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys, boardColumns);
         const shuffledAdjacentPairs = shuffleWithRng(() => rng(), adjacentPairs);
         const seeds = level <= 1
             ? openerInteractionSeeds(startingLoadoutId)
@@ -645,14 +647,26 @@ export const assignTileTraitsToGeneratedBoard = (
     if (
         traitByPairKey.size >= 2 &&
         getBoardTraitInteractionPreviewLines(
-            { ...({} as BoardState), tiles: assignedTiles, columns: columnsForTileCount(assignedTiles.length) },
+            { ...({} as BoardState), tiles: assignedTiles, columns: boardColumns },
             'match'
         ).length === 0
     ) {
-        const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys);
+        const adjacentPairs = collectAdjacentEligiblePairKeys(tiles, eligiblePairKeys, boardColumns);
         const [firstPairKey, secondPairKey] = adjacentPairs.find(
             ([first, second]) => traitByPairKey.has(first) || traitByPairKey.has(second)
         ) ?? adjacentPairs[0] ?? [];
+        if (!firstPairKey || !secondPairKey) {
+            const fallbackPairKey = [...traitByPairKey.keys()][0] ?? eligiblePairKeys[0];
+            if (fallbackPairKey) {
+                const repairedTraitByPairKey = new Map(traitByPairKey);
+                repairedTraitByPairKey.set(fallbackPairKey, 'drift');
+                return tiles.map((tile) =>
+                    repairedTraitByPairKey.has(tile.pairKey)
+                        ? { ...tile, tileTraitKind: repairedTraitByPairKey.get(tile.pairKey)! }
+                        : { ...tile }
+                );
+            }
+        }
         if (firstPairKey && secondPairKey) {
             const repairSeeds = level <= 1
                 ? openerInteractionSeeds(startingLoadoutId)

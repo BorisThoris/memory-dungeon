@@ -1,6 +1,7 @@
 import {
     MAX_GUARD_TOKENS,
     MAX_LIVES,
+    type DungeonKeyKind,
     type RunState
 } from './contracts';
 import {
@@ -130,11 +131,12 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
             }
         };
     } else if (effectId === 'room_locked_cache') {
-        if ((run.dungeonKeys.iron ?? 0) > 0) {
+        const keyKind: DungeonKeyKind = tile.dungeonKeyKind ?? 'iron';
+        if ((run.dungeonKeys[keyKind] ?? 0) > 0) {
             openedLockedCache = true;
             nextRun = {
                 ...run,
-                dungeonKeys: addRunDungeonKey(run.dungeonKeys, 'iron', -1),
+                dungeonKeys: addRunDungeonKey(run.dungeonKeys, keyKind, -1),
                 shopGold: run.shopGold + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD,
                 stats: {
                     ...run.stats,

@@ -53,10 +53,12 @@ export const createDungeonFloorBlueprint = ({
     const bossId = dungeonBossForFloor(floorTag, floorArchetypeId);
     const objectiveId = eliteRules?.objectiveId ?? dungeonObjectiveForFloor(level, floorTag, floorArchetypeId);
     const pairedCardCapacity = pairCapacityForDungeonEncounter(level, floorTag, floorArchetypeId, dungeonNodeKind);
+    const exitSpecs = exitSpecsForFloor(level, floorTag, floorArchetypeId);
     const pairedCardSpecs = capDungeonCardRecipeForBudget(
         dungeonCardRecipeForFloor(level, floorTag, floorArchetypeId, gameMode, {
             ...budgets,
-            bossId
+            bossId,
+            exitLockKinds: exitSpecs.map((exit) => exit.lockKind)
         }),
         pairedCardCapacity,
         objectiveId
@@ -68,7 +70,7 @@ export const createDungeonFloorBlueprint = ({
         bossId,
         objectiveId,
         ...budgets,
-        exitSpecs: exitSpecsForFloor(level, floorTag, floorArchetypeId),
+        exitSpecs,
         pairedCardSpecs,
         roomEffectIds: chooseRoomEffectsForFloor(runSeed, rulesVersion, level, floorTag, floorArchetypeId, gameMode, dungeonNodeKind),
         shopTileId: shouldAddDungeonShopTile(runSeed, rulesVersion, level, floorTag, floorArchetypeId, gameMode, dungeonNodeKind)

@@ -17,6 +17,7 @@ import {
     routeChoiceToMapNode,
     selectDungeonNode
 } from './run-map';
+import { inspectDungeonRunMapTopology } from './dungeon-topology';
 
 describe('REG-069 run map route nodes', () => {
     it('generates deterministic local route choices with shop hooks', () => {
@@ -27,6 +28,7 @@ describe('REG-069 run map route nodes', () => {
         expect(a.map((node) => node.kind).sort()).toEqual(['combat', 'event', 'shop']);
         expect(a.find((node) => node.kind === 'shop')).toMatchObject({
             label: 'Candle Vendor',
+            routeType: 'greed',
             offlineOnly: true,
             unlocksSystems: ['REG-015', 'REG-070', 'REG-071']
         });
@@ -51,6 +53,19 @@ describe('REG-069 run map route nodes', () => {
             unlocksSystems: ['REG-017', 'REG-069', 'REG-075']
         });
         expect(secret.find((node) => node.kind === 'event')?.detail).toContain('archive oddity');
+    });
+
+    it('keeps generated route kinds aligned with node type contracts', () => {
+        const choices = Array.from({ length: 12 }, (_, index) =>
+            generateRunMapChoices({ runSeed: 69_003, rulesVersion: GAME_RULES_VERSION, currentFloor: index + 1 })
+        ).flat();
+
+        expect(new Set(choices.map((node) => node.kind))).toEqual(
+            new Set(['boss', 'combat', 'elite', 'event', 'rest', 'shop', 'trap', 'treasure'])
+        );
+        for (const node of choices) {
+            expect(node.routeType).toBe(getDungeonNodeTypeContract(node.kind).routeType);
+        }
     });
 
     it('promotes route choices into a persistent dungeon graph', () => {
@@ -128,11 +143,15 @@ describe('REG-069 run map route nodes', () => {
         };
 
         expect(inspectDungeonRunMapProgression(damaged).hasLegalProgressionPath).toBe(false);
+        expect(inspectDungeonRunMapTopology(damaged).issues.map((issue) => issue.code)).toEqual(
+            expect.arrayContaining(['topology_edge_target_missing', 'topology_legal_target_missing'])
+        );
 
         const repaired = repairDungeonRunMapProgression(damaged);
         const report = inspectDungeonRunMapProgression(repaired);
 
         expect(report.issues).toEqual([]);
+        expect(inspectDungeonRunMapTopology(repaired).issues).toEqual([]);
         expect(report.legalTargetIds).toHaveLength(3);
         expect(repaired.nodes.filter((node) => node.floor === 3 && node.status === 'revealed')).toHaveLength(3);
     });
@@ -191,11 +210,15 @@ describe('REG-069 run map route nodes', () => {
         expect(inspectDungeonRunMapProgression(damaged).issues.map((issue) => issue.code)).toEqual(
             expect.arrayContaining(['route_stale_revealed_backtrack', 'route_orphan_revealed_future'])
         );
+        expect(inspectDungeonRunMapTopology(damaged).issues.map((issue) => issue.code)).toContain(
+            'topology_revealed_future_unreachable'
+        );
 
         const repaired = repairDungeonRunMapProgression(damaged);
         const report = inspectDungeonRunMapProgression(repaired);
 
         expect(report.issues).toEqual([]);
+        expect(inspectDungeonRunMapTopology(repaired).issues).toEqual([]);
         expect(repaired.nodes.find((node) => node.id === 'stale:backtrack')?.status).toBe('skipped');
         expect(repaired.nodes.find((node) => node.id === 'stale:future')?.status).toBe('hidden');
     });
@@ -410,7 +433,8 @@ describe('REG-069 run map route nodes', () => {
         expect(getDungeonNodeTypeContract('shop')).toMatchObject({
             floorTag: 'breather',
             floorArchetypeId: 'breather',
-            defaultObjectiveId: 'find_exit'
+            defaultObjectiveId: 'find_exit',
+            routeType: 'greed'
         });
         expect(getDungeonNodeTypeContract('trap').cardFamilyBounds.trap).toEqual({ min: 1, max: 4 });
         expect(getDungeonNodeTypeContract('treasure').cardFamilyBounds.treasure).toEqual({ min: 1, max: 4 });

@@ -1,4 +1,4 @@
-import type { RouteNodeType, RunState, Tile } from './contracts';
+import type { DungeonKeyKind, RouteNodeType, RunState, Tile } from './contracts';
 import {
     DUNGEON_BOSS_DEFEAT_SCORE,
     getDungeonBossDefinition
@@ -22,6 +22,7 @@ export interface DungeonMatchReward {
     comboShards: number;
     relicFavor: number;
     keysHeldDelta: number;
+    masterKeysHeldDelta: number;
     keysSpent: number;
     gatewayRouteType: RouteNodeType | null;
     enemiesDefeated: number;
@@ -36,6 +37,7 @@ export const emptyDungeonMatchReward = (): DungeonMatchReward => ({
     comboShards: 0,
     relicFavor: 0,
     keysHeldDelta: 0,
+    masterKeysHeldDelta: 0,
     keysSpent: 0,
     gatewayRouteType: null,
     enemiesDefeated: 0,
@@ -133,11 +135,17 @@ export const getDungeonMatchReward = (run: RunState, first: Tile, second: Tile):
         };
     }
     if (kind === 'lock') {
-        const hasKey = (run.dungeonKeys.iron ?? 0) > 0 || run.dungeonMasterKeys > 0 || (run.board?.dungeonKeysHeld ?? 0) > 0;
-        return hasKey
+        const lockKeyKind: DungeonKeyKind = first.dungeonKeyKind ?? second.dungeonKeyKind ?? 'iron';
+        const floorHeldKeyCount =
+            (run.board?.dungeonKeysHeldByKind?.[lockKeyKind] ?? 0) +
+            (run.board?.dungeonKeysHeldByKind == null && lockKeyKind === 'iron' ? (run.board?.dungeonKeysHeld ?? 0) : 0);
+        const hasTypedKey = (run.dungeonKeys[lockKeyKind] ?? 0) > 0 || floorHeldKeyCount > 0;
+        const hasMasterKey = run.dungeonMasterKeys > 0;
+        return hasTypedKey || hasMasterKey
             ? {
                   ...emptyDungeonMatchReward(),
-                  keysHeldDelta: -1,
+                  keysHeldDelta: hasTypedKey ? -1 : 0,
+                  masterKeysHeldDelta: hasTypedKey ? 0 : -1,
                   keysSpent: 1,
                   shopGold: 3,
                   score: DUNGEON_LOCK_SCORE_REWARD,

@@ -70,8 +70,22 @@ describe('REG-089 local version gate', () => {
         );
     });
 
+    it('routes active board progression-state changes to game rules, not save schema', () => {
+        const decision = assessVersionGate({
+            kinds: ['gameplay_rules'],
+            touchedContracts: ['BoardState', 'RunState'],
+            playerVisibleRuleChange: true
+        });
+
+        expect(decision.requiredBumps).toEqual(['game_rules']);
+        expect(decision.migrationRequired).toBe(false);
+        expect(decision.reasons).toContain(
+            'Player-visible run rules, catalogs, or generated board identity changed; bump GAME_RULES_VERSION.'
+        );
+    });
+
     it('covers the current findable weighting rules under the game-rules gate', () => {
-        expect(GAME_RULES_VERSION).toBe(32);
+        expect(GAME_RULES_VERSION).toBe(33);
         expect(FINDABLE_KIND_SPAWN_WEIGHTS).toEqual({
             shard_spark: 35,
             score_glint: 35,

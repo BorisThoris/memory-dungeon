@@ -35,8 +35,11 @@ describe('sim-endless CSV output', () => {
         expect(lines.some((line) => line.startsWith('traitMetric,traitSwapSetupFloors,'))).toBe(true);
         expect(lines).toContain('traitMetric,deadTraitFloors,0');
         expect(lines.some((line) => line.startsWith('fairnessIssue,'))).toBe(false);
+        expect(lines.some((line) => line.startsWith('topologyIssue,'))).toBe(false);
         expect(lines.some((line) => line.startsWith('playableMetric,checkedFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('playableMetric,lockedExitFloors,'))).toBe(true);
+        expect(lines.some((line) => line.startsWith('dungeonMetric,lockedCacheRoomFloors,'))).toBe(true);
+        expect(lines.some((line) => line.startsWith('dungeonMetric,typedLockedCacheRoomFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('playableIssue,'))).toBe(false);
         expect(lines.some((line) => line.startsWith('playableFailure,'))).toBe(false);
     });
@@ -51,10 +54,13 @@ describe('sim-endless CSV output', () => {
         expect(summary).toContain('# Endless Simulation Gate Summary');
         expect(summary).toContain('- Route gates:');
         expect(summary).toContain('- Fairness gates:');
+        expect(summary).toContain('- Topology gates:');
         expect(summary).toContain('issue types (none).');
         expect(summary).toContain('- Playable gates:');
         expect(summary).toContain('locked-exit floors');
         expect(summary).toContain('issue floors (none).');
+        expect(summary).toContain('- Dungeon room gates:');
+        expect(summary).toContain('typed locked cache room floors.');
         expect(summary).toContain('- Reward gates:');
         expect(summary).toContain('- Trait gates:');
         expect(summary).toContain('- Trait mechanic gates:');
@@ -78,12 +84,19 @@ describe('sim-endless CSV output', () => {
             fairnessIssueCodes: [],
             fairnessIssueFloors: 0,
             fairnessIssueTypes: 0,
+            topologyIssueCodes: [],
+            topologyIssueFloors: 0,
+            topologyIssueTypes: 0,
+            lockedCacheRoomFloors: expect.any(Number),
             playableFailureDetails: [],
             playableIssueFloors: 0,
             playableIssueReasons: [],
             playableLockedExitFloors: expect.any(Number),
-            rewardKinds: Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length
+            rewardKinds: Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length,
+            typedLockedCacheRoomFloors: expect.any(Number)
         });
+        expect(health.metrics.lockedCacheRoomFloors).toBeGreaterThan(0);
+        expect(health.metrics.typedLockedCacheRoomFloors).toBeGreaterThan(0);
         expect(health.metrics.playableCheckedFloors).toBeGreaterThan(500);
         expect(health.metrics.playableLockedExitFloors).toBeGreaterThan(0);
         expect(health.metrics.routeKinds).toBeGreaterThanOrEqual(8);
@@ -136,8 +149,12 @@ describe('sim-endless CSV output', () => {
                 fairnessIssueCodes: ['exit_lock_unreachable', 'completion_route_missing'],
                 fairnessIssueFloors: 3,
                 fairnessIssueTypes: 2,
+                topologyIssueCodes: ['topology_exit_lock_source_missing'],
+                topologyIssueFloors: 5,
+                topologyIssueTypes: 1,
                 exitLockTypes: 0,
                 findableTotal: 2,
+                lockedCacheRoomFloors: 0,
                 objectiveKinds: 1,
                 playableCheckedFloors: 0,
                 playableFailureDetails: [
@@ -147,6 +164,7 @@ describe('sim-endless CSV output', () => {
                 playableIssueReasons: ['exit_attempted'],
                 playableLockedExitFloors: 0,
                 rewardKinds: 1,
+                typedLockedCacheRoomFloors: 0,
                 traitBoardPowerInteractionFloorShare: 0.2,
                 traitMatchRouteFloorShare: 0.4,
                 routeKinds: 2,
@@ -165,6 +183,7 @@ describe('sim-endless CSV output', () => {
                 'Expected at least 8 floor archetypes, saw 2.',
                 'Expected every sampled floor to have an exit, saw 1 exitless floors.',
                 'Expected generated boards to pass fairness inspection, saw 3 floor(s) with 2 issue type(s): exit_lock_unreachable, completion_route_missing.',
+                'Expected generated boards to pass topology inspection, saw 5 floor(s) with 1 issue type(s): topology_exit_lock_source_missing.',
                 'Expected executable playable solver sampling to inspect at least one floor.',
                 'Expected playable solver sample to clear every checked floor, saw 4 issue floor(s): exit_attempted. Details: floor=7|reason=exit_attempted|status=playing|turns=12|lastPair=__exit__|lastTiles=exit|activeStaleHazards=0|undefeatedStaleHazards=0|archetype=trap_hall|objective=defeat_boss.',
                 'Expected executable playable solver sampling to include at least one live locked-exit floor.',
@@ -185,6 +204,8 @@ describe('sim-endless CSV output', () => {
         expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('seed=42001,playable='))).toBe(true);
         expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('seed=42002,playable='))).toBe(true);
         expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('lockedExits='))).toBe(true);
+        expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('playableIssues=none'))).toBe(true);
+        expect(stdout.mock.calls.some(([chunk]) => String(chunk).includes('topologyIssues=0'))).toBe(true);
 
         stdout.mockClear();
         stderr.mockClear();

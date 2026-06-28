@@ -8,7 +8,7 @@
  */
 export const SAVE_SCHEMA_VERSION = 5;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
-export const GAME_RULES_VERSION = 32;
+export const GAME_RULES_VERSION = 33;
 export const INITIAL_LIVES = 4;
 /** Hard cap on life total during a run; HUD renders this many heart slots (PLAY-004 — honest max, not mock’s three). */
 export const MAX_LIVES = 5;
@@ -249,6 +249,10 @@ export type RunShopItemId =
     | 'trait_cleanse'
     | 'trait_routing_kit'
     | 'iron_key'
+    | 'treasure_key'
+    | 'shrine_key'
+    | 'boss_key'
+    | 'trap_key'
     | 'master_key';
 export type RunShopItemCategory = 'consumable' | 'service';
 export type RunShopOfferAvailability = 'available' | 'sold_out' | 'insufficient_funds' | 'incompatible';
@@ -456,6 +460,8 @@ export interface BoardState {
     selectedGatewayRouteType?: RouteNodeType | null;
     /** Floor-local key count for dungeon locks. */
     dungeonKeysHeld?: number;
+    /** Typed floor-local key counts; legacy `dungeonKeysHeld` is treated as iron when this is absent. */
+    dungeonKeysHeldByKind?: Partial<Record<DungeonKeyKind, number>>;
     dungeonExitTileId?: string | null;
     dungeonExitActivated?: boolean;
     dungeonExitLockKind?: DungeonExitLockKind;
@@ -640,6 +646,7 @@ export interface DungeonFloorBlueprint {
         effectId: DungeonCardEffectId;
         symbol: string;
         label: string;
+        keyKind?: DungeonKeyKind;
         hp?: number;
         routeType?: RouteNodeType;
         bossId?: DungeonBossId;

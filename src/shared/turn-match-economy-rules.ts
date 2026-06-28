@@ -11,12 +11,15 @@ import { addRunDungeonKey } from './dungeon-key-rules';
 export interface TurnMatchEconomyResult {
     shopGold: number;
     dungeonKeys: RunState['dungeonKeys'];
+    dungeonMasterKeys: number;
 }
 
 export interface TurnMatchEconomyInput {
     run: RunState;
     routeCardShopGold: number;
     dungeonShopGold: number;
+    dungeonKeysDelta: number;
+    dungeonMasterKeysDelta: number;
     tollCacheClaimed: boolean;
     fuseCacheClaimed: boolean;
     fuseCacheFresh: boolean;
@@ -28,6 +31,8 @@ export const resolveTurnMatchEconomy = ({
     run,
     routeCardShopGold,
     dungeonShopGold,
+    dungeonKeysDelta,
+    dungeonMasterKeysDelta,
     tollCacheClaimed,
     fuseCacheClaimed,
     fuseCacheFresh,
@@ -45,5 +50,8 @@ export const resolveTurnMatchEconomy = ({
                 : FUSE_CACHE_EXPIRED_SHOP_GOLD_REWARD
             : 0),
     dungeonKeys:
-        matchedDungeonKind === 'key' ? addRunDungeonKey(run.dungeonKeys, matchedDungeonKeyKind, 1) : run.dungeonKeys
+        dungeonKeysDelta !== 0 || matchedDungeonKind === 'key'
+            ? addRunDungeonKey(run.dungeonKeys, matchedDungeonKeyKind, dungeonKeysDelta)
+            : run.dungeonKeys,
+    dungeonMasterKeys: Math.max(0, run.dungeonMasterKeys + dungeonMasterKeysDelta)
 });

@@ -321,6 +321,10 @@ const buildBoardGenerationDiagram = (repoRoot) => {
         'src/shared/softlock-fairness.test.ts',
         'src/shared/softlock-generator-contract.ts',
         'src/shared/softlock-generator-contract.test.ts',
+        'src/shared/dungeon-topology.ts',
+        'src/shared/dungeon-topology.test.ts',
+        'src/shared/dungeon-topology-audit-script.test.ts',
+        'scripts/audit-dungeon-topology.ts',
         'src/shared/board-tile-generation-rules.ts',
         'src/shared/objective-rules.ts'
     ]);
@@ -332,13 +336,15 @@ const buildBoardGenerationDiagram = (repoRoot) => {
             node('room_context', 'Room Context', 'domain', 'shared', 'Floor, route, lock, objective, mutator, and seed inputs.', evidence(repoRoot, ['src/shared/run-map.ts', 'src/shared/contracts.ts'])),
             node('tile_pool', 'Tile Pool', 'domain', 'shared', 'Base pairs, enemies, hazards, findables, locks, and supports.', evidence(repoRoot, ['src/shared/board-tile-generation-rules.ts'])),
             node('trait_overlay', 'Trait Overlay', 'domain', 'shared', 'Trait-aware generation places comboable and reactive tile traits.', evidence(repoRoot, ['src/shared/tile-trait-rules.ts'])),
+            node('topology_graph', 'Topology Graph', 'safety', 'shared', 'Graphology-backed board and route topology proves reachable keys, levers, bosses, exits, route targets, route-generated boards, and audited route-state walks with archetype/objective/mutator coverage.', evidence(repoRoot, ['src/shared/dungeon-topology.ts', 'src/shared/dungeon-topology.test.ts', 'src/shared/dungeon-topology-audit-script.test.ts', 'scripts/audit-dungeon-topology.ts'])),
             node('softlock_repair', 'Softlock Repair', 'safety', 'shared', 'Post-generation pass repairs missing keys, exits, and completion routes.', boardEvidence),
             node('board_state', 'Board State', 'state', 'shared', 'Serializable board consumed by renderer and resolution rules.', evidence(repoRoot, ['src/shared/contracts.ts', 'src/shared/board-generation.ts']))
         ],
         edges: [
             edge('room_context', 'tile_pool', 'selects pool'),
             edge('tile_pool', 'trait_overlay', 'adds traits'),
-            edge('trait_overlay', 'softlock_repair', 'validated by'),
+            edge('trait_overlay', 'topology_graph', 'projects to'),
+            edge('topology_graph', 'softlock_repair', 'validates blockers'),
             edge('softlock_repair', 'board_state', 'emits')
         ],
         findings: [
@@ -346,7 +352,7 @@ const buildBoardGenerationDiagram = (repoRoot) => {
                 'repair-is-contract',
                 'warning',
                 'Softlock repair is part of the generation contract',
-                'Treat repair as required generation behavior, not a cleanup detail. New locks, blockers, objectives, or trait blockers need property tests that prove at least one completion route remains.',
+                'Treat repair as required generation behavior, not a cleanup detail. New locks, blockers, objectives, or trait blockers need topology or property tests that prove at least one completion route remains.',
                 boardEvidence
             )
         ],
@@ -356,22 +362,22 @@ const buildBoardGenerationDiagram = (repoRoot) => {
                 'P0',
                 'Board Generation',
                 'Extend the softlock matrix for every new blocker',
-                'New locks, trait blockers, enemies, objectives, or exit states must add a softlock-fairness or softlock-generator-contract case that proves a completion path exists after generation and repair.',
+                'New locks, trait blockers, enemies, objectives, or exit states must add a topology, softlock-fairness, or softlock-generator-contract case that proves a completion path exists after generation and repair. Use the JSON topology audit when automation needs structured issue counts and archetype/objective/mutator coverage.',
                 'Generated boards remain completable even when repair has to intervene.',
                 boardEvidence,
                 'done',
-                'yarn gate:sim-softlock-seeds'
+                'yarn audit:dungeon-topology:json && yarn gate:sim-softlock-seeds'
             ),
             action(
                 'softlock-stress-sweep',
                 'P1',
                 'Board Generation',
                 'Stress sweep generated seeds after progression changes',
-                'Run a broader deterministic seed sweep when touching locks, bosses, exits, objectives, shops, or repair rules so rare schedule interactions are exercised before browser QA.',
+                'Run a broader deterministic seed sweep plus the topology stress audit when touching locks, bosses, exits, objectives, shops, or repair rules so rare schedule and route-target board interactions are exercised before browser QA.',
                 'Generated stress seeds clear without fairness issues, stale bosses, dead traits, or locked-exit regressions.',
                 boardEvidence,
                 'done',
-                'yarn gate:sim-softlock-stress'
+                'yarn gate:softlock-full'
             )
         ]
     };

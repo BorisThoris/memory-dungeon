@@ -1549,7 +1549,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('dungeon-exit-overlay')).toHaveTextContent('Unlocked exit');
         expect(screen.getByRole('button', { name: 'Proceed' })).toBeEnabled();
         expect(screen.queryByRole('button', { name: 'Use key' })).toBeNull();
-        expect(screen.queryByText(/Needs a iron key/i)).toBeNull();
+        expect(screen.queryByText(/Needs an iron key/i)).toBeNull();
     });
 
     it('labels pending key fallback exits as pair-clear gates instead of key shopping tasks', () => {

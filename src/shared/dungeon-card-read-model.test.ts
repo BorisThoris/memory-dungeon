@@ -6,6 +6,7 @@ import {
     DUNGEON_ROOM_EFFECT_DEFINITIONS,
     getDungeonCardCopy,
     getDungeonRoomReadModel,
+    getDungeonTreasureRewardDefinition,
     getDungeonTreasureReadModel
 } from './dungeon-card-read-model';
 
@@ -71,7 +72,44 @@ describe('dungeon card read models', () => {
         });
     });
 
+    it('uses the room tile key kind when reading locked cache availability and copy', () => {
+        const tile = roomTile('room_locked_cache', {
+            label: 'Treasure Cache Cell',
+            dungeonKeyKind: 'treasure'
+        });
+
+        expect(
+            getDungeonRoomReadModel(tile, {
+                dungeonKeys: { iron: 1, treasure: 0 },
+                dungeonMasterKeys: 0
+            } as RunState)
+        ).toMatchObject({
+            canUse: false,
+            blockedText: 'Needs a treasure key or master key.',
+            costText: 'Costs a treasure key or master key to claim.'
+        });
+
+        const treasureKeyModel = getDungeonRoomReadModel(tile, {
+            dungeonKeys: { iron: 0, treasure: 1 },
+            dungeonMasterKeys: 0
+        } as RunState);
+
+        expect(treasureKeyModel).toMatchObject({
+            canUse: true,
+            blockedText: null,
+            costText: 'Costs a treasure key or master key to claim.'
+        });
+        expect(treasureKeyModel?.copy).toContain('Costs a treasure key or master key');
+    });
+
     it('builds treasure read models for dungeon cards, rooms, and route specials', () => {
+        expect(getDungeonTreasureRewardDefinition('lock_cache').gateText).toBe(
+            'Can spend a matching key or master key for full value.'
+        );
+        expect(getDungeonTreasureRewardDefinition('room_locked_cache').gateText).toBe(
+            'Requires a matching key or master key.'
+        );
+
         expect(
             getDungeonTreasureReadModel({
                 id: 'treasure',
@@ -92,6 +130,33 @@ describe('dungeon card read models', () => {
             rewardId: 'room_locked_cache',
             source: 'room',
             available: true
+        });
+
+        expect(
+            getDungeonTreasureReadModel(
+                roomTile('room_locked_cache', {
+                    dungeonKeyKind: 'treasure'
+                })
+            )
+        ).toMatchObject({
+            rewardId: 'room_locked_cache',
+            gateText: 'Can spend a treasure key or master key for full value.'
+        });
+
+        expect(
+            getDungeonTreasureReadModel({
+                id: 'lock',
+                pairKey: 'lock',
+                label: 'Treasure Lock',
+                state: 'hidden',
+                symbol: 'L',
+                dungeonCardKind: 'lock',
+                dungeonCardEffectId: 'lock_cache',
+                dungeonKeyKind: 'treasure'
+            } as Tile)
+        ).toMatchObject({
+            rewardId: 'lock_cache',
+            gateText: 'Can spend a treasure key or master key for full value.'
         });
 
         expect(
@@ -150,6 +215,62 @@ describe('dungeon card read models', () => {
         ).toContain('Selects greed route');
     });
 
+    it('uses tile key kind in key and lock card copy', () => {
+        expect(
+            getDungeonCardCopy({
+                id: 'key',
+                pairKey: 'key',
+                label: 'Treasure Memory Key',
+                state: 'hidden',
+                symbol: 'T',
+                dungeonCardKind: 'key',
+                dungeonKeyKind: 'treasure'
+            } as Tile)
+        ).toContain('banks a treasure key');
+
+        const lockCopy = getDungeonCardCopy({
+            id: 'lock',
+            pairKey: 'lock',
+            label: 'Treasure Lock',
+            state: 'hidden',
+            symbol: 'L',
+            dungeonCardKind: 'lock',
+            dungeonCardEffectId: 'lock_cache',
+            dungeonKeyKind: 'treasure'
+        } as Tile);
+
+        expect(lockCopy).toContain('treasure key or master key');
+        expect(lockCopy).not.toContain('iron/master');
+    });
+
+    it('uses run inventory in locked room card copy', () => {
+        const tile = roomTile('room_locked_cache', {
+            label: 'Treasure Cache Cell',
+            dungeonKeyKind: 'treasure'
+        });
+
+        expect(
+            getDungeonCardCopy(tile, {
+                run: {
+                    dungeonKeys: { iron: 1, treasure: 0 },
+                    dungeonMasterKeys: 0,
+                    shopGold: 0
+                }
+            })
+        ).toContain('Needs a treasure key or master key.');
+
+        const copy = getDungeonCardCopy(tile, {
+            run: {
+                dungeonKeys: { iron: 0, treasure: 1 },
+                dungeonMasterKeys: 0,
+                shopGold: 0
+            }
+        });
+
+        expect(copy).toContain('Costs a treasure key or master key');
+        expect(copy).not.toContain('Needs a treasure key');
+    });
+
     it('uses effective primary exit locks for terminal fallback copy when board context is available', () => {
         const exit = {
             id: 'exit',
@@ -179,9 +300,9 @@ describe('dungeon card read models', () => {
             dungeonKeysHeld: 0
         };
 
-        expect(getDungeonCardCopy(exit)).toContain('Requires iron key');
+        expect(getDungeonCardCopy(exit)).toContain('Requires an iron key');
         expect(getDungeonCardCopy(exit, { board })).toContain('Can be opened once revealed');
-        expect(getDungeonCardCopy(exit, { board })).not.toContain('Requires iron key');
+        expect(getDungeonCardCopy(exit, { board })).not.toContain('Requires an iron key');
     });
 
     it('explains pending key-lock fallback when no key source remains but pairs are still clearable', () => {
@@ -217,6 +338,20 @@ describe('dungeon card read models', () => {
 
         expect(copy).toContain('No key source remains');
         expect(copy).toContain('clear remaining pairs');
-        expect(copy).not.toContain('Requires iron key');
+        expect(copy).not.toContain('Requires an iron key');
+    });
+
+    it('uses typed key labels in exit lock copy', () => {
+        const exit = {
+            id: 'exit',
+            pairKey: '__exit__',
+            label: 'Treasure Gate',
+            state: 'flipped',
+            symbol: 'E',
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'treasure'
+        } as Tile;
+
+        expect(getDungeonCardCopy(exit)).toContain('Requires a treasure key');
     });
 });

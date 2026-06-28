@@ -96,6 +96,11 @@ describe('DNG-020 dungeon card taxonomy', () => {
         }
     });
 
+    it('describes locked cache rooms as matching-key gates instead of iron-only gates', () => {
+        expect(getDungeonCardEffectDefinition('room_locked_cache').helpText).toContain('matching key or a master key');
+        expect(getDungeonCardEffectDefinition('room_locked_cache').helpText).not.toContain('iron or master');
+    });
+
     it('keeps singleton utility cards separate from card-pair dungeon content and moving hazards', () => {
         expect(getDungeonCardKindDefinition('exit').usesCardPair).toBe(false);
         expect(getDungeonCardKindDefinition('shop').usesCardPair).toBe(false);

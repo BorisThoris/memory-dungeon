@@ -8,7 +8,7 @@ export interface DungeonSaveMigrationFieldPolicy {
     recoveryPolicy: string;
 }
 
-export const DUNGEON_SAVE_MIGRATION_POLICY_VERSION = 'dng-073-v1';
+export const DUNGEON_SAVE_MIGRATION_POLICY_VERSION = 'dng-073-v2';
 
 const DUNGEON_SAVE_MIGRATION_FIELD_POLICIES: readonly DungeonSaveMigrationFieldPolicy[] = [
     {
@@ -103,11 +103,46 @@ const DUNGEON_SAVE_MIGRATION_FIELD_POLICIES: readonly DungeonSaveMigrationFieldP
         recoveryPolicy: 'Master keys are run-only and absent from SaveData migrations.'
     },
     {
+        field: 'board.dungeonKeysHeld',
+        scope: 'run_local_recoverable',
+        owner: 'BoardState',
+        migrationRequiredWhenChanged: false,
+        recoveryPolicy: 'Floor-local legacy key count is recovered from active run repair and is treated as iron only when typed counts are absent.'
+    },
+    {
+        field: 'board.dungeonKeysHeldByKind',
+        scope: 'run_local_recoverable',
+        owner: 'BoardState',
+        migrationRequiredWhenChanged: false,
+        recoveryPolicy: 'Typed floor-local key counts are run-only and are rebuilt by active board generation or abandoned with invalid active runs.'
+    },
+    {
         field: 'board.dungeonExitTileId',
         scope: 'run_local_recoverable',
         owner: 'BoardState',
         migrationRequiredWhenChanged: false,
         recoveryPolicy: 'Board exit references are regenerated with the board and never trusted from SaveData.'
+    },
+    {
+        field: 'board.dungeonExitLockKind',
+        scope: 'run_local_recoverable',
+        owner: 'BoardState',
+        migrationRequiredWhenChanged: false,
+        recoveryPolicy: 'Board-level exit locks are reconciled from the primary exit tile by active run progression repair.'
+    },
+    {
+        field: 'tile.dungeonExitLockKind',
+        scope: 'run_local_recoverable',
+        owner: 'BoardState',
+        migrationRequiredWhenChanged: false,
+        recoveryPolicy: 'Exit-tile lock metadata is board-local and repaired with softlock fallback rules for active runs.'
+    },
+    {
+        field: 'tile.dungeonKeyKind',
+        scope: 'run_local_recoverable',
+        owner: 'BoardState',
+        migrationRequiredWhenChanged: false,
+        recoveryPolicy: 'Typed key and lock card metadata is regenerated with the board and guarded by topology audits rather than persisted save migrations.'
     },
     {
         field: 'board.enemyHazards',

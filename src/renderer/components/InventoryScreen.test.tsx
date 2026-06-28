@@ -11,7 +11,7 @@ vi.mock('zustand/react/shallow', () => ({
 const closeSubscreen = vi.fn();
 let currentRun = {
     ...createNewRun(0),
-    dungeonKeys: { iron: 1 },
+    dungeonKeys: { iron: 1, treasure: 0 },
     dungeonMasterKeys: 1,
     relicIds: ['peek_charge_plus_one', 'pin_cap_plus_one', 'stray_charge_plus_one']
 };
@@ -19,7 +19,7 @@ let currentRun = {
 beforeEach(() => {
     currentRun = {
         ...createNewRun(0),
-        dungeonKeys: { iron: 1 },
+        dungeonKeys: { iron: 1, treasure: 0 },
         dungeonMasterKeys: 1,
         relicIds: ['peek_charge_plus_one', 'pin_cap_plus_one', 'stray_charge_plus_one']
     };
@@ -70,7 +70,7 @@ describe('InventoryScreen REG-079 run inventory model', () => {
     it('shows trait-build guidance from the selected starting loadout before relic drafts', () => {
         currentRun = {
             ...createNewRun(0, { startingLoadoutId: 'route_tactician' }),
-            dungeonKeys: { iron: 1 },
+            dungeonKeys: { iron: 1, treasure: 0 },
             dungeonMasterKeys: 1,
             relicIds: []
         };
@@ -103,12 +103,16 @@ describe('InventoryScreen REG-079 run inventory model', () => {
     });
 
     it('shows run-scoped loadout and consumable stack rules', () => {
+        currentRun = {
+            ...currentRun,
+            dungeonKeys: { iron: 1, treasure: 1 }
+        };
         render(<InventoryScreen />);
 
         expect(screen.getByRole('heading', { name: 'Run consumables and loadout' })).toBeInTheDocument();
         expect(screen.getByText(/Mid-run mutable/)).toBeInTheDocument();
         expect(screen.getByText(/Shuffle charge:/)).toBeInTheDocument();
-        expect(screen.getByText(/Dungeon key:/)).toBeInTheDocument();
+        expect(screen.getByText(/Dungeon key:/)).toHaveTextContent('2 (iron 1, treasure 1)');
         expect(screen.getByText(/Master key:/)).toBeInTheDocument();
         expect(screen.getByText(/Loadout slots/)).toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'Consumables' })).toHaveAttribute('href', '#inventory-consumables');
@@ -117,7 +121,7 @@ describe('InventoryScreen REG-079 run inventory model', () => {
     });
 
     it('does not invent a build identity before the first relic', () => {
-        currentRun = { ...createNewRun(0), dungeonKeys: { iron: 1 }, dungeonMasterKeys: 1 };
+        currentRun = { ...createNewRun(0), dungeonKeys: { iron: 1, treasure: 0 }, dungeonMasterKeys: 1 };
         render(<InventoryScreen />);
 
         expect(screen.getByTestId('inventory-meta-frame-build')).toHaveTextContent('First relic still ahead');

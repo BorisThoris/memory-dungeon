@@ -125,30 +125,45 @@ export const createMatchedPairClaimBoard = ({
     firstTileId: string;
     secondTileId: string;
     thirdTileId?: string;
-}): BoardState => ({
-    ...board,
-    flippedTileIds: [],
-    matchedPairs: board.matchedPairs + 1,
-    tiles: board.tiles.map((tile) => {
-        if (tile.id === firstTileId || tile.id === secondTileId) {
-            return clearDungeonCardFields({
-                ...tile,
-                state: 'matched' as const,
-                findableKind: undefined,
-                routeCardKind: undefined,
-                routeSpecialKind: undefined,
-                routeSpecialRevealed: undefined,
-                routeSpecialRevealSource: undefined,
-                lanternScouted: undefined,
-                scoutRevealSource: undefined
-            });
+}): BoardState => {
+    const nextKeysHeld = Math.max(0, (board.dungeonKeysHeld ?? 0) + context.dungeonReward.keysHeldDelta);
+    const nextKeysHeldByKind = (() => {
+        if (context.dungeonReward.keysHeldDelta === 0) {
+            return board.dungeonKeysHeldByKind;
         }
-        if (thirdTileId != null && tile.id === thirdTileId) {
-            return hiddenUnlessSprungTrap(tile);
-        }
-        return tile;
-    }),
-    selectedGatewayRouteType: board.selectedGatewayRouteType ?? context.dungeonReward.gatewayRouteType ?? null,
-    dungeonKeysHeld: Math.max(0, (board.dungeonKeysHeld ?? 0) + context.dungeonReward.keysHeldDelta),
-    dungeonLeverCount: (board.dungeonLeverCount ?? 0) + (context.matchedDungeonKind === 'lever' ? 1 : 0)
-});
+        const current = board.dungeonKeysHeldByKind?.[context.matchedDungeonKeyKind] ?? 0;
+        const next = Math.max(0, current + context.dungeonReward.keysHeldDelta);
+        return {
+            ...(board.dungeonKeysHeldByKind ?? {}),
+            [context.matchedDungeonKeyKind]: next
+        };
+    })();
+    return {
+        ...board,
+        flippedTileIds: [],
+        matchedPairs: board.matchedPairs + 1,
+        tiles: board.tiles.map((tile) => {
+            if (tile.id === firstTileId || tile.id === secondTileId) {
+                return clearDungeonCardFields({
+                    ...tile,
+                    state: 'matched' as const,
+                    findableKind: undefined,
+                    routeCardKind: undefined,
+                    routeSpecialKind: undefined,
+                    routeSpecialRevealed: undefined,
+                    routeSpecialRevealSource: undefined,
+                    lanternScouted: undefined,
+                    scoutRevealSource: undefined
+                });
+            }
+            if (thirdTileId != null && tile.id === thirdTileId) {
+                return hiddenUnlessSprungTrap(tile);
+            }
+            return tile;
+        }),
+        selectedGatewayRouteType: board.selectedGatewayRouteType ?? context.dungeonReward.gatewayRouteType ?? null,
+        dungeonKeysHeld: nextKeysHeld,
+        dungeonKeysHeldByKind: nextKeysHeldByKind,
+        dungeonLeverCount: (board.dungeonLeverCount ?? 0) + (context.matchedDungeonKind === 'lever' ? 1 : 0)
+    };
+};

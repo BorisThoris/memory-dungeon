@@ -132,6 +132,53 @@ describe('match claim rules', () => {
         expect(keyContext.matchedDungeonKind).toBe('key');
         expect(keyContext.matchedDungeonKeyKind).toBe('treasure');
         expect(keyContext.dungeonReward.keysHeldDelta).toBe(1);
+
+        const nextKeyBoard = createMatchedPairClaimBoard({
+            board: keyRun.board!,
+            context: keyContext,
+            firstTileId: keyA.id,
+            secondTileId: keyB.id
+        });
+        expect(nextKeyBoard.dungeonKeysHeld).toBe(1);
+        expect(nextKeyBoard.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
+    });
+
+    it('decrements typed floor-held keys when a typed lock spends one', () => {
+        const lockA = tile('lock-a', 'L', {
+            dungeonCardEffectId: 'lock_cache',
+            dungeonCardKind: 'lock',
+            dungeonKeyKind: 'treasure'
+        });
+        const lockB = tile('lock-b', 'L', {
+            dungeonCardEffectId: 'lock_cache',
+            dungeonCardKind: 'lock',
+            dungeonKeyKind: 'treasure'
+        });
+        const run = runWith([lockA, lockB], {
+            board: {
+                ...boardWith([lockA, lockB]),
+                dungeonKeysHeld: 1,
+                dungeonKeysHeldByKind: { treasure: 1 }
+            }
+        });
+        const context = deriveMatchClaimContext({
+            firstTile: lockA,
+            firstTileId: lockA.id,
+            run,
+            secondTile: lockB,
+            secondTileId: lockB.id
+        });
+
+        const nextBoard = createMatchedPairClaimBoard({
+            board: run.board!,
+            context,
+            firstTileId: lockA.id,
+            secondTileId: lockB.id
+        });
+
+        expect(context.dungeonReward.keysHeldDelta).toBe(-1);
+        expect(nextBoard.dungeonKeysHeld).toBe(0);
+        expect(nextBoard.dungeonKeysHeldByKind).toEqual({ treasure: 0 });
     });
 
     it('requires both matched tiles to be pinned before granting pin lattice reward', () => {

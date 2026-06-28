@@ -102,7 +102,7 @@ describe('system diagram generator', () => {
                 'yarn gate:package-hygiene',
                 'yarn gate:build-output',
                 'yarn gate:desktop-build',
-                'yarn gate:sim-softlock-stress',
+                'yarn gate:softlock-full',
                 'yarn test:e2e:browser-smoke',
                 'yarn test:e2e:renderer-qa:3d'
             ])
@@ -111,7 +111,7 @@ describe('system diagram generator', () => {
         expect(payload.actions.every((item) => item.evidence.length >= (item.minimumEvidence ?? 1))).toBe(true);
         expect(payload.actions.find((item) => item.id === 'resolution-slice-gate')?.detail).toContain('yarn gate:action-loop');
         expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')).toMatchObject({
-            command: 'yarn gate:sim-softlock-seeds',
+            command: 'yarn audit:dungeon-topology:json && yarn gate:sim-softlock-seeds',
             verifies: expect.stringContaining('Generated boards')
         });
         expect(payload.stats.importGraph.fileCount).toBe(0);
@@ -121,6 +121,7 @@ describe('system diagram generator', () => {
     it('links navigation and trait diagrams to concrete implementation evidence', () => {
         const navigation = payload.diagrams.find((diagram) => diagram.id === 'navigation-flow');
         const traits = payload.diagrams.find((diagram) => diagram.id === 'trait-systems');
+        const boardGeneration = payload.diagrams.find((diagram) => diagram.id === 'board-generation');
 
         expect(navigation?.nodes.some((node) => node.id === 'route_contracts')).toBe(true);
         expect(navigation?.edges).toContainEqual(expect.objectContaining({
@@ -130,6 +131,12 @@ describe('system diagram generator', () => {
         }));
         expect(navigation?.findings[0]?.evidence).toContain('src/renderer/store/navigationModel.ts');
         expect(payload.actions.find((item) => item.id === 'softlock-generation-matrix')?.system).toBe('Board Generation');
+        expect(boardGeneration?.nodes.some((node) => node.id === 'topology_graph')).toBe(true);
+        expect(boardGeneration?.edges).toContainEqual(expect.objectContaining({
+            source: 'topology_graph',
+            target: 'softlock_repair',
+            label: 'validates blockers'
+        }));
         expect(traits?.findings[0]?.detail).toContain('trait-match-route floor share');
         expect(traits?.nodes.flatMap((node) => node.evidence)).toContain('src/shared/tile-trait-rules.ts');
     });
@@ -147,8 +154,9 @@ describe('system diagram generator', () => {
         expect(markdown).toContain('## Audit Actions');
         expect(markdown).toContain('P0 Extend the softlock matrix for every new blocker');
         expect(markdown).toContain('yarn gate:action-loop');
+        expect(markdown).toContain('yarn audit:dungeon-topology');
         expect(markdown).toContain('yarn gate:sim-softlock-seeds');
-        expect(markdown).toContain('yarn gate:sim-softlock-stress');
+        expect(markdown).toContain('yarn gate:softlock-full');
         expect(markdown).toContain('yarn gate:rewards-economy');
         expect(markdown).toContain('yarn gate:navigation');
         expect(markdown).toContain('yarn gate:security');
@@ -165,5 +173,6 @@ describe('system diagram generator', () => {
         expect(markdown).toContain('flowchart LR');
         expect(markdown).toContain('## Trait Systems');
         expect(markdown).toContain('Softlock repair is part of the generation contract');
+        expect(markdown).toContain('Topology Graph');
     });
 });

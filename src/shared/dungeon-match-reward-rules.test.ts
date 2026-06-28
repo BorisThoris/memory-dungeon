@@ -53,6 +53,43 @@ describe('dungeon match reward rules', () => {
                 treasuresOpened: 1
             });
     });
+
+    it('requires the matching key kind for typed locked caches', () => {
+        const ironRun = { ...createNewRun(0), dungeonKeys: { iron: 1 } };
+        const treasureRun = { ...createNewRun(0), dungeonKeys: { treasure: 1 } };
+        const treasureLock = tile({
+            dungeonCardKind: 'lock',
+            dungeonCardEffectId: 'lock_cache',
+            dungeonKeyKind: 'treasure'
+        });
+
+        expect(getDungeonMatchReward(ironRun, treasureLock, tile())).toMatchObject({
+            keysSpent: 0,
+            score: 5
+        });
+        expect(getDungeonMatchReward(treasureRun, treasureLock, tile())).toMatchObject({
+            keysHeldDelta: -1,
+            masterKeysHeldDelta: 0,
+            keysSpent: 1,
+            score: DUNGEON_LOCK_SCORE_REWARD
+        });
+    });
+
+    it('spends a master key for locked caches only when no matching typed key is available', () => {
+        const masterRun = { ...createNewRun(0), dungeonKeys: {}, dungeonMasterKeys: 1 };
+        const treasureLock = tile({
+            dungeonCardKind: 'lock',
+            dungeonCardEffectId: 'lock_cache',
+            dungeonKeyKind: 'treasure'
+        });
+
+        expect(getDungeonMatchReward(masterRun, treasureLock, tile())).toMatchObject({
+            keysHeldDelta: 0,
+            masterKeysHeldDelta: -1,
+            keysSpent: 1,
+            score: DUNGEON_LOCK_SCORE_REWARD
+        });
+    });
 });
 
 const tile = (extra: Partial<Tile> = {}): Tile => ({

@@ -2,6 +2,7 @@ import type {
     DungeonCardEffectId,
     DungeonExitLockKind,
     DungeonFloorBlueprint,
+    DungeonKeyKind,
     DungeonRunNodeKind,
     FloorArchetypeId,
     FloorTag,
@@ -27,6 +28,9 @@ import {
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey
 } from './tile-identity';
+
+const isDungeonKeyKind = (lockKind: DungeonExitLockKind): lockKind is DungeonKeyKind =>
+    lockKind !== 'none' && lockKind !== 'lever';
 
 export const addDungeonExitTile = (
     tiles: Tile[],
@@ -154,6 +158,10 @@ export const addDungeonRoomTile = (
                             : effectId === 'room_omen_archive'
                               ? 'O'
                               : 'G';
+    const dungeonKeyKind =
+        effectId === 'room_locked_cache'
+            ? blueprint.exitSpecs.map((spec) => spec.lockKind).find(isDungeonKeyKind) ?? 'iron'
+            : undefined;
     return {
         tiles: [
             ...tiles,
@@ -167,6 +175,7 @@ export const addDungeonRoomTile = (
                 dungeonCardKind: 'room',
                 dungeonCardState: 'hidden',
                 dungeonCardEffectId: effectId,
+                dungeonKeyKind,
                 dungeonRoomUsed: false
             }
         ],
@@ -236,7 +245,10 @@ export const assignDungeonCardsToTiles = (
             dungeonCardMaxHp: assignment.hp,
             dungeonRouteType: assignment.routeType,
             dungeonBossId: assignment.bossId ?? undefined,
-            dungeonKeyKind: assignment.kind === 'key' ? 'iron' : undefined
+            dungeonKeyKind:
+                assignment.kind === 'key' || assignment.kind === 'lock'
+                    ? (assignment.keyKind ?? 'iron')
+                    : undefined
         };
     });
 };

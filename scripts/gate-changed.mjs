@@ -6,9 +6,11 @@ const GATES = {
     rewardsEconomy: 'yarn gate:rewards-economy',
     navigation: 'yarn gate:navigation',
     systems: 'yarn gate:systems',
+    longRun: 'yarn gate:long-run',
+    dungeonTopologyAudit: 'yarn audit:dungeon-topology:json',
     simHealth: 'yarn gate:sim-health',
     simSoftlockSeeds: 'yarn gate:sim-softlock-seeds',
-    simSoftlockStress: 'yarn gate:sim-softlock-stress',
+    softlockFull: 'yarn gate:softlock-full',
     rendererInput: 'yarn gate:renderer-input',
     audioFeedback: 'yarn gate:audio-feedback',
     assetRendering: 'yarn gate:asset-rendering',
@@ -57,8 +59,12 @@ export const selectGatesForChangedPaths = (paths) => {
     const normalized = [...new Set(paths.map(normalize).filter(Boolean))];
     const gateIds = new Set();
     const reasons = [];
+    const reasonIds = new Set();
     const add = (gateId, file, reason) => {
         gateIds.add(gateId);
+        const reasonId = `${gateId}:${file}:${reason}`;
+        if (reasonIds.has(reasonId)) return;
+        reasonIds.add(reasonId);
         reasons.push({ gateId, file, reason });
     };
     const isCoreGameRuleFile = (file) =>
@@ -75,6 +81,7 @@ export const selectGatesForChangedPaths = (paths) => {
             file === 'src/shared/contracts.ts' ||
             file === 'docs/agent/GAMEPLAY_RULES_EDIT_MAP.md' ||
             file.startsWith('scripts/system-diagrams') ||
+            file.startsWith('scripts/audit-dungeon-topology') ||
             file.startsWith('scripts/gate-changed') ||
             file.startsWith('docs/system-diagrams/')
         ) {
@@ -137,11 +144,28 @@ export const selectGatesForChangedPaths = (paths) => {
         }
         if (
             file === 'scripts/sim-endless.ts' ||
+            file === 'scripts/gate-long-run.ts' ||
+            file.startsWith('src/shared/long-run-depth') ||
+            file.startsWith('src/shared/boss-encounters') ||
+            file.startsWith('src/shared/run-map') ||
+            file.startsWith('src/shared/route') ||
+            file.startsWith('src/shared/relic') ||
+            file.startsWith('src/shared/balance-simulation') ||
+            file.startsWith('src/shared/economy-ledger') ||
+            file.startsWith('src/shared/floor-mutator-schedule') ||
+            file === 'src/shared/contracts.ts'
+        ) {
+            add('longRun', file, 'long-run route pacing, relic, economy, or balance soak can change');
+        }
+        if (
+            file === 'scripts/sim-endless.ts' ||
             file === 'scripts/gate-softlock-seeds.ts' ||
+            file === 'scripts/audit-dungeon-topology.ts' ||
             file.startsWith('src/shared/floor-mutator-schedule') ||
             file.startsWith('src/shared/board-generation') ||
             file.startsWith('src/shared/board-build') ||
             file.startsWith('src/shared/board-inspection') ||
+            file.startsWith('src/shared/dungeon-topology') ||
             file.startsWith('src/shared/board-tile-generation-rules') ||
             file.startsWith('src/shared/dungeon-board-status') ||
             file.startsWith('src/shared/tile-trait') ||
@@ -155,11 +179,8 @@ export const selectGatesForChangedPaths = (paths) => {
             add('simHealth', file, 'endless route, reward, trait, objective, or generation health can change');
         }
         if (
-            file === 'scripts/sim-endless.ts' ||
-            file === 'scripts/gate-softlock-seeds.ts' ||
-            file.startsWith('src/shared/playthrough-solver') ||
-            file.startsWith('src/shared/run-progression-repair') ||
-            file.startsWith('src/shared/softlock') ||
+            file === 'scripts/audit-dungeon-topology.ts' ||
+            file.startsWith('src/shared/dungeon-topology') ||
             file.startsWith('src/shared/board-generation') ||
             file.startsWith('src/shared/board-build') ||
             file.startsWith('src/shared/board-inspection') ||
@@ -167,29 +188,69 @@ export const selectGatesForChangedPaths = (paths) => {
             file.startsWith('src/shared/dungeon-exit') ||
             file.startsWith('src/shared/dungeon-enemy') ||
             file.startsWith('src/shared/enemy-hazard') ||
+            file.startsWith('src/shared/floor-mutator-schedule') ||
+            file.startsWith('src/shared/run-map') ||
             isCoreGameRuleFile(file)
         ) {
-            add('simSoftlockSeeds', file, 'multi-seed executable softlock coverage can change');
+            add('dungeonTopologyAudit', file, 'graph-backed board or route topology diagnostics can change');
         }
         if (
-            file === 'scripts/gate-softlock-seeds.ts' ||
-            file.startsWith('src/shared/playthrough-solver') ||
-            file.startsWith('src/shared/run-progression-repair') ||
-            file.startsWith('src/shared/softlock') ||
+            file === 'scripts/audit-dungeon-topology.ts' ||
+            file.startsWith('src/shared/dungeon-topology') ||
             file.startsWith('src/shared/board-generation') ||
             file.startsWith('src/shared/board-build') ||
             file.startsWith('src/shared/board-inspection') ||
             file.startsWith('src/shared/dungeon-exit') ||
             file.startsWith('src/shared/dungeon-enemy') ||
             file.startsWith('src/shared/enemy-hazard') ||
+            file.startsWith('src/shared/floor-mutator-schedule') ||
+            file.startsWith('src/shared/run-map') ||
             isCoreGameRuleFile(file)
         ) {
-            add('simSoftlockStress', file, 'deterministic stress seed sweep can expose rare progression interactions');
+            add('softlockFull', file, 'combined topology and executable softlock stress can expose rare progression interactions');
+        }
+        if (
+            file === 'scripts/sim-endless.ts' ||
+            file === 'scripts/gate-softlock-seeds.ts' ||
+            file === 'scripts/audit-dungeon-topology.ts' ||
+            file.startsWith('src/shared/playthrough-solver') ||
+            file.startsWith('src/shared/run-progression-repair') ||
+            file.startsWith('src/shared/softlock') ||
+            file.startsWith('src/shared/board-generation') ||
+            file.startsWith('src/shared/board-build') ||
+            file.startsWith('src/shared/board-inspection') ||
+            file.startsWith('src/shared/dungeon-topology') ||
+            file.startsWith('src/shared/dungeon-board-status') ||
+            file.startsWith('src/shared/dungeon-exit') ||
+            file.startsWith('src/shared/dungeon-enemy') ||
+            file.startsWith('src/shared/enemy-hazard') ||
+            file.startsWith('src/shared/run-map') ||
+            isCoreGameRuleFile(file)
+        ) {
+            add('simSoftlockSeeds', file, 'multi-seed executable softlock coverage can change');
+        }
+        if (
+            file === 'scripts/gate-softlock-seeds.ts' ||
+            file === 'scripts/audit-dungeon-topology.ts' ||
+            file.startsWith('src/shared/playthrough-solver') ||
+            file.startsWith('src/shared/run-progression-repair') ||
+            file.startsWith('src/shared/softlock') ||
+            file.startsWith('src/shared/board-generation') ||
+            file.startsWith('src/shared/board-build') ||
+            file.startsWith('src/shared/board-inspection') ||
+            file.startsWith('src/shared/dungeon-topology') ||
+            file.startsWith('src/shared/dungeon-exit') ||
+            file.startsWith('src/shared/dungeon-enemy') ||
+            file.startsWith('src/shared/enemy-hazard') ||
+            file.startsWith('src/shared/run-map') ||
+            isCoreGameRuleFile(file)
+        ) {
+            add('softlockFull', file, 'combined topology and executable softlock stress can expose rare progression interactions');
         }
         if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || isCoreGameRuleFile(file) || file.startsWith('src/shared/playthrough-solver') || file.startsWith('src/shared/run-progression-repair') || file.startsWith('src/shared/turn-resolution') || file.startsWith('src/shared/hazard') || file.startsWith('src/shared/enemy')) {
             add('actionLoop', file, 'core turn, trait, hazard, enemy, or board-power rules changed');
         }
-        if (file.startsWith('src/shared/board-generation') || file.startsWith('src/shared/board-build') || file.startsWith('src/shared/board-inspection') || file.startsWith('src/shared/softlock') || file.startsWith('src/shared/objective-rules')) {
+        if (file.startsWith('src/shared/board-generation') || file.startsWith('src/shared/board-build') || file.startsWith('src/shared/board-inspection') || file.startsWith('src/shared/dungeon-topology') || file.startsWith('src/shared/softlock') || file.startsWith('src/shared/objective-rules')) {
             add('actionLoop', file, 'generation, objective, fairness, or softlock rules changed');
         }
         if (file.startsWith('src/shared/bonus-rewards') || file.startsWith('src/shared/shop') || file.startsWith('src/shared/relic') || file.startsWith('src/shared/economy') || file.startsWith('src/shared/run-economy') || file.startsWith('src/shared/balance-simulation')) {

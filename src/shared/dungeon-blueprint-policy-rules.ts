@@ -164,7 +164,7 @@ export const exitSpecsForFloor = (
             id: `${level}-exit-alt`,
             routeType: alternateRouteType,
             effectId: alternateRouteType === 'greed' ? 'exit_greed' : 'exit_safe',
-            lockKind: level >= 6 ? 'iron' : floorArchetypeId === 'treasure_gallery' ? 'treasure' : 'none',
+            lockKind: floorArchetypeId === 'treasure_gallery' ? 'treasure' : level >= 6 ? 'iron' : 'none',
             requiredLeverCount: 0,
             labelPrefix: 'Alternate'
         });
@@ -240,7 +240,9 @@ export const roomEffectForFloor = (
     const options: DungeonCardEffectId[] =
         floorArchetypeId === 'script_room'
             ? ['room_map', 'room_omen_archive', 'room_forge', 'room_fountain', 'room_scrying_lens']
-            : floorTag === 'breather'
+            : floorArchetypeId === 'treasure_gallery'
+              ? ['room_key_cache', 'room_forge', 'room_armory', 'room_locked_cache', 'room_scrying_lens']
+              : floorTag === 'breather'
               ? [
                     'room_campfire',
                     'room_fountain',
@@ -251,9 +253,7 @@ export const roomEffectForFloor = (
                     'room_armory',
                     'room_key_cache'
                 ]
-              : floorArchetypeId === 'treasure_gallery'
-                ? ['room_key_cache', 'room_forge', 'room_armory', 'room_locked_cache', 'room_scrying_lens']
-                : floorArchetypeId === 'trap_hall'
+              : floorArchetypeId === 'trap_hall'
                   ? ['room_trap_workshop', 'room_scrying_lens', 'room_armory', 'room_fountain']
                   : floorArchetypeId === 'shadow_read'
                     ? ['room_omen_archive', 'room_map', 'room_scrying_lens', 'room_shrine']

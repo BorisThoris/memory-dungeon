@@ -180,7 +180,7 @@
       "writes": ["dungeonEnemiesDefeated", "dungeonEnemiesDefeatedThisFloor", "enemyHazardsDefeatedThisFloor"],
       "enables": ["objective.defeat_boss", "exit.primary"],
       "blocks": ["exit_activation"],
-      "softlockGuards": ["final-pair-hazard-clear", "all-real-pairs-cleared-clear", "stale-boss-overlay-clear", "boss-exit-status-check"],
+      "softlockGuards": ["final-pair-hazard-clear", "all-real-pairs-cleared-clear", "stale-boss-overlay-clear", "boss-exit-status-check", "dungeon-topology-boss-route"],
       "tests": ["src/shared/dungeon-board-status.test.ts", "src/shared/softlock-fairness.test.ts", "src/shared/game.test.ts"]
     },
     {
@@ -193,7 +193,7 @@
       "writes": ["levelComplete", "dungeonExitActivated"],
       "enables": ["objective.floor_clear"],
       "blocks": ["next_floor"],
-      "softlockGuards": ["exit-lock-repair", "terminal-key-lock-fallback", "boss-exit-status-check"],
+      "softlockGuards": ["exit-lock-repair", "terminal-key-lock-fallback", "boss-exit-status-check", "dungeon-topology-exit-route"],
       "tests": ["src/shared/dungeon-exit-rules.test.ts", "src/shared/softlock-fairness.test.ts"]
     },
     {
@@ -206,8 +206,47 @@
       "writes": ["dungeonKeys", "dungeonExitActivated"],
       "enables": ["exit.primary", "shop.iron_key"],
       "blocks": ["exit_activation"],
-      "softlockGuards": ["reachable-key-source", "exit-lock-repair", "terminal-key-lock-fallback", "shop-priority-key"],
+      "softlockGuards": ["reachable-key-source", "exit-lock-repair", "terminal-key-lock-fallback", "shop-priority-key", "dungeon-topology-key-route"],
       "tests": ["src/shared/dungeon-key-rules.test.ts", "src/shared/softlock-fairness.test.ts", "src/shared/shop-rules.test.ts"]
+    },
+    {
+      "id": "lock.typed_key",
+      "label": "Typed Key Lock",
+      "kind": "lock",
+      "role": "typed_resource_gate",
+      "evidence": ["src/shared/dungeon-key-rules.ts", "src/shared/board-inspection.ts", "src/shared/shop-rules.ts", "src/shared/dungeon-topology.ts"],
+      "reads": ["dungeonKeys", "dungeonMasterKeys", "dungeonExitLockKind", "dungeonKeyKind"],
+      "writes": ["dungeonKeys", "dungeonExitActivated"],
+      "enables": ["exit.primary", "shop.typed_key"],
+      "blocks": ["exit_activation"],
+      "softlockGuards": ["matching-key-kind", "reachable-key-source", "exit-lock-repair", "terminal-key-lock-fallback", "typed-shop-key-insurance", "dungeon-topology-key-route"],
+      "tests": ["src/shared/dungeon-match-reward-rules.test.ts", "src/shared/dungeon-topology.test.ts", "src/shared/shop-rules.test.ts", "src/shared/softlock-generator-contract.test.ts"]
+    },
+    {
+      "id": "room.locked_cache",
+      "label": "Locked Cache Room",
+      "kind": "lock",
+      "role": "optional_resource_gate",
+      "evidence": ["src/shared/dungeon-room-rules.ts", "src/shared/dungeon-card-read-model.ts"],
+      "reads": ["dungeonKeys", "dungeonMasterKeys", "dungeonKeyKind", "dungeonRoomUsed"],
+      "writes": ["dungeonKeys", "dungeonMasterKeys", "shopGold", "score", "dungeonRoomUsed"],
+      "enables": ["economy.score_and_rewards", "feedback.gameplay_hud"],
+      "blocks": ["optional_cache_claim"],
+      "softlockGuards": ["matching-key-kind", "optional-cache-never-required", "room-copy-matches-key-kind"],
+      "tests": ["src/shared/dungeon-room-rules.test.ts", "src/shared/dungeon-card-read-model.test.ts"]
+    },
+    {
+      "id": "shop.typed_key",
+      "label": "Typed Shop Key",
+      "kind": "shop",
+      "role": "lock_counterplay",
+      "evidence": ["src/shared/shop-rules.ts", "src/shared/shop-rules.test.ts"],
+      "reads": ["shopGold", "dungeonExitLockKind", "dungeonKeys", "dungeonMasterKeys"],
+      "writes": ["shopGold", "dungeonKeys"],
+      "enables": ["lock.typed_key", "exit.primary"],
+      "blocks": [],
+      "softlockGuards": ["shop-priority-key", "matching-key-kind", "balance-key-slot-is-alternative"],
+      "tests": ["src/shared/shop-rules.test.ts", "src/shared/balance-simulation.test.ts"]
     },
     {
       "id": "shop.trait_cleanse",
@@ -245,7 +284,7 @@
       "writes": ["bossTrophyCacheOutcome", "objectiveCompleted"],
       "enables": ["exit.primary", "objective.floor_clear"],
       "blocks": ["exit_activation"],
-      "softlockGuards": ["boss-route-present", "boss-clear-route"],
+      "softlockGuards": ["boss-route-present", "boss-clear-route", "dungeon-topology-boss-route"],
       "tests": ["src/shared/dungeon-board-status.test.ts", "src/shared/dungeon-boss-clear-rules.test.ts"]
     },
     {
@@ -258,7 +297,7 @@
       "writes": ["levelComplete", "lastLevelResult", "routeChoices"],
       "enables": ["next_floor"],
       "blocks": [],
-      "softlockGuards": ["isBoardComplete", "inspectBoardFairness", "softlock-generator-contract"],
+      "softlockGuards": ["isBoardComplete", "inspectBoardFairness", "softlock-generator-contract", "dungeon-topology-completion-route"],
       "tests": ["src/shared/board-inspection.test.ts", "src/shared/softlock-generator-contract.test.ts", "src/shared/game.test.ts"]
     },
     {
@@ -271,8 +310,21 @@
       "writes": ["fairnessReport", "repairPlan"],
       "enables": ["objective.floor_clear", "exit.primary", "boss.moving_patrol"],
       "blocks": ["invalid_generation"],
-      "softlockGuards": ["inspectBoardFairness", "repairDungeonExitSoftlocks", "terminal-key-lock-fallback", "stale-boss-overlay-clear"],
+      "softlockGuards": ["inspectBoardFairness", "repairDungeonExitSoftlocks", "terminal-key-lock-fallback", "stale-boss-overlay-clear", "dungeon-topology-audit"],
       "tests": ["src/shared/softlock-fairness.test.ts", "src/shared/softlock-generator-contract.test.ts"]
+    },
+    {
+      "id": "safety.dungeon_topology",
+      "label": "Dungeon Topology Audit",
+      "kind": "safety",
+      "role": "graph_invariant_gate",
+      "evidence": ["src/shared/dungeon-topology.ts", "src/shared/run-map.ts", "scripts/audit-dungeon-topology.ts", "scripts/sim-endless.ts"],
+      "reads": ["tileStates", "dungeonExitLockKind", "dungeonKeys", "dungeonLeverCount", "dungeonObjectiveId", "enemyHazards", "dungeonRun"],
+      "writes": ["topologyReport", "coverageReport"],
+      "enables": ["safety.softlock_fairness", "objective.floor_clear", "progression.run_flow"],
+      "blocks": ["invalid_generation", "route_softlock"],
+      "softlockGuards": ["reachable-key-source", "reachable-lever-source", "boss-route-present", "completion-route-present", "route-target-board-audit"],
+      "tests": ["src/shared/dungeon-topology.test.ts", "src/shared/dungeon-topology-audit-script.test.ts", "src/shared/dungeon-topology-runtime-boundary.test.ts"]
     },
     {
       "id": "feedback.gameplay_hud",
@@ -366,16 +418,33 @@
     { "source": "shop.trait_routing_kit", "target": "trait.conduit", "kind": "synergy", "label": "creates adjacency" },
     { "source": "shop.trait_routing_kit", "target": "trait.drift", "kind": "synergy", "label": "creates route" },
     { "source": "hazard.enemy_patrol", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "final pair clear" },
+    { "source": "hazard.enemy_patrol", "target": "safety.dungeon_topology", "kind": "guarded_by", "label": "hazard route audit" },
     { "source": "boss.moving_patrol", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "stale overlay clear" },
+    { "source": "boss.moving_patrol", "target": "safety.dungeon_topology", "kind": "guarded_by", "label": "boss route audit" },
     { "source": "boss.moving_patrol", "target": "objective.defeat_boss", "kind": "enables", "label": "defeat progress" },
     { "source": "objective.defeat_boss", "target": "exit.primary", "kind": "unblocks", "label": "allows exit" },
     { "source": "lock.iron_key", "target": "exit.primary", "kind": "blocks", "label": "requires key" },
+    { "source": "lock.iron_key", "target": "safety.dungeon_topology", "kind": "guarded_by", "label": "key source audit" },
+    { "source": "lock.typed_key", "target": "exit.primary", "kind": "blocks", "label": "requires matching key kind" },
+    { "source": "lock.typed_key", "target": "safety.dungeon_topology", "kind": "guarded_by", "label": "typed key source audit" },
+    { "source": "shop.typed_key", "target": "lock.typed_key", "kind": "counterplay", "label": "sells matching lock key" },
+    { "source": "shop.typed_key", "target": "lock.typed_key", "kind": "priority_guard", "label": "typed lock insurance first" },
+    { "source": "lock.typed_key", "target": "room.locked_cache", "kind": "enables", "label": "matching typed key opens room cache" },
+    { "source": "room.locked_cache", "target": "economy.score_and_rewards", "kind": "enables", "label": "pays cache reward" },
+    { "source": "room.locked_cache", "target": "feedback.gameplay_hud", "kind": "enables", "label": "shows room reward and key spend" },
+    { "source": "room.locked_cache", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "optional cache cannot block clear" },
     { "source": "shop.trait_cleanse", "target": "lock.iron_key", "kind": "priority_guard", "label": "does not displace keys" },
+    { "source": "shop.trait_cleanse", "target": "lock.typed_key", "kind": "priority_guard", "label": "does not displace typed keys" },
     { "source": "shop.trait_routing_kit", "target": "lock.iron_key", "kind": "priority_guard", "label": "does not displace keys" },
+    { "source": "shop.trait_routing_kit", "target": "lock.typed_key", "kind": "priority_guard", "label": "does not displace typed keys" },
     { "source": "shop.trait_routing_kit", "target": "boss.moving_patrol", "kind": "priority_guard", "label": "does not displace boss counterplay" },
     { "source": "exit.primary", "target": "objective.floor_clear", "kind": "enables", "label": "activates floor clear" },
+    { "source": "exit.primary", "target": "safety.dungeon_topology", "kind": "guarded_by", "label": "exit route audit" },
     { "source": "safety.softlock_fairness", "target": "lock.iron_key", "kind": "guarded_by", "label": "terminal fallback or reachable source" },
+    { "source": "safety.softlock_fairness", "target": "lock.typed_key", "kind": "guarded_by", "label": "typed terminal fallback or matching source" },
     { "source": "safety.softlock_fairness", "target": "objective.floor_clear", "kind": "guarded_by", "label": "completion route" },
+    { "source": "safety.dungeon_topology", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "graph diagnostics" },
+    { "source": "safety.dungeon_topology", "target": "progression.run_flow", "kind": "guarded_by", "label": "route target audit" },
     { "source": "board.cleanup", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "sanitizes state" },
     { "source": "economy.score_and_rewards", "target": "feedback.gameplay_hud", "kind": "enables", "label": "reward copy" },
     { "source": "objective.floor_clear", "target": "progression.run_flow", "kind": "enables", "label": "next flow" },
@@ -386,6 +455,6 @@
     "tileTraits": ["echo", "volatile", "mirror", "cursed", "sealed", "heavy", "drift", "conduit", "stasis"],
     "blockingKinds": ["trait", "hazard", "boss", "exit", "lock", "objective", "power"],
     "requiredObjectives": ["objective.defeat_boss", "objective.floor_clear"],
-    "requiredSafetyNodes": ["safety.softlock_fairness"]
+    "requiredSafetyNodes": ["safety.softlock_fairness", "safety.dungeon_topology"]
   }
 }

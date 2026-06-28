@@ -34,7 +34,7 @@
             "system": "Board Generation",
             "title": "Extend the softlock matrix for every new blocker",
             "status": "done",
-            "command": "yarn gate:sim-softlock-seeds",
+            "command": "yarn audit:dungeon-topology:json && yarn gate:sim-softlock-seeds",
             "minimumEvidence": 5
         },
         {
@@ -43,7 +43,7 @@
             "system": "Board Generation",
             "title": "Stress sweep generated seeds after progression changes",
             "status": "done",
-            "command": "yarn gate:sim-softlock-stress",
+            "command": "yarn gate:softlock-full",
             "minimumEvidence": 5
         },
         {

@@ -192,6 +192,49 @@ describe('dungeon board status', () => {
         });
     });
 
+    it('uses typed key labels in locked exit copy', () => {
+        const board = {
+            dungeonExitTileId: 'primary-exit',
+            dungeonExitLockKind: 'treasure',
+            dungeonKeysHeld: 0,
+            tiles: [
+                tile({
+                    id: 'primary-exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    label: 'Treasure Exit',
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'treasure'
+                }),
+                tile({
+                    id: 'key-a',
+                    pairKey: 'key',
+                    state: 'hidden',
+                    dungeonCardKind: 'key',
+                    dungeonKeyKind: 'treasure'
+                }),
+                tile({
+                    id: 'key-b',
+                    pairKey: 'key',
+                    state: 'hidden',
+                    dungeonCardKind: 'key',
+                    dungeonKeyKind: 'treasure'
+                })
+            ]
+        } as BoardState;
+
+        expect(getDungeonExitStatus(run(board))).toMatchObject({
+            lockKind: 'treasure',
+            keyFallbackPending: false,
+            canActivate: false,
+            lockedReason: 'Needs a treasure key or master key.'
+        });
+        expect(getDungeonBoardPresentation(run(board))).toMatchObject({
+            exitText: 'Needs treasure key',
+            alertText: 'Needs a treasure key or master key.'
+        });
+    });
+
     it('keeps a primary key lock while a wild-card completion route remains', () => {
         const board = {
             dungeonExitTileId: 'primary-exit',

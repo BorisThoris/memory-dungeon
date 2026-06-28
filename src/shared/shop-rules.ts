@@ -2,6 +2,7 @@ import {
     FLOOR_CLEAR_GOLD_BASE,
     MAX_LIVES,
     type BoardState,
+    type DungeonKeyKind,
     type RouteNodeType,
     type RunShopItemId,
     type RunShopOfferState,
@@ -20,6 +21,15 @@ import {
     getEffectivePrimaryExitLock
 } from './board-inspection';
 import { getTraitBuildDraftHintForBoard } from './trait-build-rewards';
+import { addRunDungeonKey } from './dungeon-key-rules';
+
+export const SHOP_KEY_ITEM_BY_KIND: Record<DungeonKeyKind, RunShopItemId> = {
+    iron: 'iron_key',
+    treasure: 'treasure_key',
+    shrine: 'shrine_key',
+    boss: 'boss_key',
+    trap: 'trap_key'
+};
 
 export const SHOP_ITEM_CATALOG: Record<
     RunShopItemId,
@@ -109,6 +119,54 @@ export const SHOP_ITEM_CATALOG: Record<
         maxStock: 1,
         stackLimit: null
     },
+    treasure_key: {
+        itemId: 'treasure_key',
+        label: 'Treasure key',
+        description: 'Adds one run-local key for treasure locks.',
+        category: 'consumable',
+        compatibleWhen: 'owned',
+        baseCost: 3,
+        cost: 3,
+        stock: 1,
+        maxStock: 1,
+        stackLimit: null
+    },
+    shrine_key: {
+        itemId: 'shrine_key',
+        label: 'Shrine key',
+        description: 'Adds one run-local key for shrine locks.',
+        category: 'consumable',
+        compatibleWhen: 'owned',
+        baseCost: 3,
+        cost: 3,
+        stock: 1,
+        maxStock: 1,
+        stackLimit: null
+    },
+    boss_key: {
+        itemId: 'boss_key',
+        label: 'Boss key',
+        description: 'Adds one run-local key for boss locks.',
+        category: 'consumable',
+        compatibleWhen: 'owned',
+        baseCost: 4,
+        cost: 4,
+        stock: 1,
+        maxStock: 1,
+        stackLimit: null
+    },
+    trap_key: {
+        itemId: 'trap_key',
+        label: 'Trap key',
+        description: 'Adds one run-local key for trap locks.',
+        category: 'consumable',
+        compatibleWhen: 'owned',
+        baseCost: 3,
+        cost: 3,
+        stock: 1,
+        maxStock: 1,
+        stackLimit: null
+    },
     master_key: {
         itemId: 'master_key',
         label: 'Master key',
@@ -171,6 +229,18 @@ const runNeedsLockedExitShopInsurance = (run: RunState): boolean => {
     const hasRunKey = (run.dungeonKeys[lock.lockKind] ?? 0) > 0 || run.dungeonMasterKeys > 0;
     const hasReachableKeySource = countReachableExitKeySources(board, lock.lockKind) > 0;
     return !hasRunKey && !hasReachableKeySource;
+};
+
+const lockedExitShopInsuranceItem = (run: RunState): RunShopItemId | null => {
+    if (!runNeedsLockedExitShopInsurance(run) || !run.board) {
+        return null;
+    }
+    const lock = getEffectivePrimaryExitLock({
+        board: run.board,
+        dungeonKeys: run.dungeonKeys,
+        dungeonMasterKeys: run.dungeonMasterKeys
+    });
+    return lock.lockKind !== 'none' && lock.lockKind !== 'lever' ? SHOP_KEY_ITEM_BY_KIND[lock.lockKind] : null;
 };
 
 const boardHasDangerousTraitPair = (board: BoardState | null): boolean =>
@@ -248,8 +318,9 @@ export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     if (bossPressure) {
         itemIds.unshift(bossPressure.shopPriorityItemId);
     }
-    if (runNeedsLockedExitShopInsurance(run)) {
-        itemIds.unshift('iron_key');
+    const insuranceItemId = lockedExitShopInsuranceItem(run);
+    if (insuranceItemId) {
+        itemIds.unshift(insuranceItemId);
     }
     const needsMasterKey = level >= 5 || source === 'board_shop';
     if (needsMasterKey) {
@@ -263,7 +334,7 @@ export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
     }
     const stockLimit = source === 'board_shop' || itemIds.includes('trait_cleanse') ? 6 : 5;
     const priorityFor = (itemId: RunShopItemId): number => {
-        if (runNeedsLockedExitShopInsurance(run) && itemId === 'iron_key') return 0;
+        if (insuranceItemId && itemId === insuranceItemId) return 0;
         if (bossPressure?.shopPriorityItemId === itemId) return 1;
         if (boardHasDangerousTraitPair(run.board) && itemId === 'trait_cleanse') return 2;
         if (boardHasTraitRoutingOpportunity(run.board) && itemId === 'trait_routing_kit') return 3;
@@ -460,7 +531,19 @@ export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
             next = gainRunInventoryItem(gainRunInventoryItem(next, 'peek_charge'), 'region_shuffle_charge');
             break;
         case 'iron_key':
-            next = gainRunInventoryItem(next, 'iron_key');
+            next = { ...next, dungeonKeys: addRunDungeonKey(next.dungeonKeys, 'iron', 1) };
+            break;
+        case 'treasure_key':
+            next = { ...next, dungeonKeys: addRunDungeonKey(next.dungeonKeys, 'treasure', 1) };
+            break;
+        case 'shrine_key':
+            next = { ...next, dungeonKeys: addRunDungeonKey(next.dungeonKeys, 'shrine', 1) };
+            break;
+        case 'boss_key':
+            next = { ...next, dungeonKeys: addRunDungeonKey(next.dungeonKeys, 'boss', 1) };
+            break;
+        case 'trap_key':
+            next = { ...next, dungeonKeys: addRunDungeonKey(next.dungeonKeys, 'trap', 1) };
             break;
         case 'master_key':
             next = gainRunInventoryItem(next, 'master_key');

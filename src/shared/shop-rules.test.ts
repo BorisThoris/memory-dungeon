@@ -162,6 +162,45 @@ describe('shop rules', () => {
         expect(getRunShopStockPlan({ ...run, board: lockedBoard }).itemIds[0]).toBe('iron_key');
     });
 
+    it('stocks typed key insurance for typed locked exits', () => {
+        const run = makePlayingRun();
+        const treasureLockedBoard: BoardState = {
+            ...run.board!,
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'treasure',
+            tiles: [
+                tile('a1', 'a'),
+                tile('a2', 'a'),
+                {
+                    ...tile('exit', EXIT_PAIR_KEY, 'flipped'),
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'treasure'
+                }
+            ]
+        };
+
+        expect(getRunShopStockPlan({ ...run, board: treasureLockedBoard }).itemIds[0]).toBe('treasure_key');
+        expect(
+            getRunShopStockPlan({ ...run, board: treasureLockedBoard, dungeonKeys: { treasure: 1 } }).itemIds[0]
+        ).not.toBe('treasure_key');
+
+        const withOffers = {
+            ...run,
+            board: treasureLockedBoard,
+            shopOffers: createRunShopOffers({ ...run, board: treasureLockedBoard })
+        };
+
+        expect(withOffers.shopOffers[0]).toMatchObject({
+            itemId: 'treasure_key',
+            label: 'Treasure key',
+            compatible: true
+        });
+        expect(getRunShopReadModel(withOffers)).toMatchObject({
+            offerCount: withOffers.shopOffers.length,
+            availableOfferCount: expect.any(Number)
+        });
+    });
+
     it('biases shop stock by starting loadout without overriding locked-exit insurance', () => {
         const run = makePlayingRun();
 
@@ -278,6 +317,22 @@ describe('shop rules', () => {
         expect(rerollShopOffers(rerolled)).toBe(rerolled);
     });
 
+    it('purchases typed key offers into matching run key inventory', () => {
+        const run = { ...makePlayingRun(), shopGold: 10 };
+        const offer = {
+            ...SHOP_ITEM_CATALOG.treasure_key,
+            id: 'typed-key-offer',
+            purchased: false,
+            compatible: true,
+            unavailableReason: null
+        };
+        const purchased = purchaseShopOffer({ ...run, shopOffers: [offer] }, offer.id);
+
+        expect(purchased.shopGold).toBe(run.shopGold - offer.cost);
+        expect(purchased.dungeonKeys).toMatchObject({ treasure: 1 });
+        expect(purchased.dungeonKeys.iron ?? 0).toBe(0);
+    });
+
     it('cleanses one hidden dangerous trait pair immediately from shop stock', () => {
         const board = buildBoard(4, { runSeed: 4242, runRulesVersion: makePlayingRun().runRulesVersion });
         const dangerousBoard = {
@@ -333,7 +388,7 @@ describe('shop rules', () => {
         const routed = purchaseShopOffer(withShop, kit.id);
 
         expect(kit.compatible).toBe(true);
-        expect(getRunShopStockPlan(run).previewCopy).toContain('Trait build: Sealed Catalyst');
+        expect(getRunShopStockPlan(run).previewCopy).toContain('Sealed Catalyst');
         expect(routed.shopGold).toBe(withShop.shopGold - kit.cost);
         expect(routed.peekCharges).toBe(1);
         expect(routed.regionShuffleCharges).toBe(1);

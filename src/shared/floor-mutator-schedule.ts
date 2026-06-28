@@ -458,7 +458,8 @@ const progressionRowForEntry = (entry: FloorScheduleEntry): FloorArchetypeProgre
         role,
         routeAffinity: routeAffinityForArchetype(entry),
         budgetExpectation: budgetExpectationForRole(role),
-        softlockInvariant: 'inspectBoardFairness must report a completion route for generated samples.',
+        softlockInvariant:
+            'inspectBoardFairness and inspectDungeonBoardTopology must report completion, lock, and objective routes for generated samples.',
         actId: entry.actId,
         actTitle: entry.actTitle,
         biomeId: entry.biomeId,

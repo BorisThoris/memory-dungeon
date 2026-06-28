@@ -47,6 +47,8 @@ describe('gameplay interaction graph', () => {
                 'boss.moving_patrol',
                 'exit.primary',
                 'lock.iron_key',
+                'lock.typed_key',
+                'room.locked_cache',
                 'objective.defeat_boss'
             ])
         );
@@ -78,26 +80,60 @@ describe('gameplay interaction graph', () => {
                     target: 'safety.softlock_fairness',
                     label: 'stale overlay clear'
                 }),
+                expect.objectContaining({
+                    source: 'boss.moving_patrol',
+                    target: 'safety.dungeon_topology',
+                    label: 'boss route audit'
+                }),
                 expect.objectContaining({ source: 'objective.defeat_boss', target: 'exit.primary' }),
                 expect.objectContaining({ source: 'lock.iron_key', target: 'exit.primary' }),
+                expect.objectContaining({ source: 'lock.iron_key', target: 'safety.dungeon_topology' }),
+                expect.objectContaining({ source: 'lock.typed_key', target: 'exit.primary' }),
+                expect.objectContaining({ source: 'lock.typed_key', target: 'safety.dungeon_topology' }),
+                expect.objectContaining({ source: 'shop.typed_key', target: 'lock.typed_key', kind: 'counterplay' }),
+                expect.objectContaining({ source: 'lock.typed_key', target: 'room.locked_cache' }),
+                expect.objectContaining({ source: 'room.locked_cache', target: 'safety.softlock_fairness' }),
+                expect.objectContaining({ source: 'room.locked_cache', target: 'feedback.gameplay_hud' }),
                 expect.objectContaining({ source: 'exit.primary', target: 'objective.floor_clear' }),
-                expect.objectContaining({ source: 'safety.softlock_fairness', target: 'objective.floor_clear' })
+                expect.objectContaining({ source: 'exit.primary', target: 'safety.dungeon_topology' }),
+                expect.objectContaining({ source: 'safety.softlock_fairness', target: 'objective.floor_clear' }),
+                expect.objectContaining({ source: 'safety.dungeon_topology', target: 'progression.run_flow' })
             ])
         );
     });
 
-    it('names terminal key fallback and stale boss overlay guards in the executable graph', () => {
+    it('names topology, terminal key fallback, and stale boss overlay guards in the executable graph', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
 
         expect(byId.get('lock.iron_key')?.softlockGuards).toEqual(
-            expect.arrayContaining(['reachable-key-source', 'terminal-key-lock-fallback'])
+            expect.arrayContaining(['reachable-key-source', 'terminal-key-lock-fallback', 'dungeon-topology-key-route'])
         );
-        expect(byId.get('exit.primary')?.softlockGuards).toEqual(expect.arrayContaining(['terminal-key-lock-fallback']));
+        expect(byId.get('lock.typed_key')?.softlockGuards).toEqual(
+            expect.arrayContaining(['matching-key-kind', 'typed-shop-key-insurance', 'dungeon-topology-key-route'])
+        );
+        expect(byId.get('shop.typed_key')?.softlockGuards).toEqual(
+            expect.arrayContaining(['shop-priority-key', 'matching-key-kind', 'balance-key-slot-is-alternative'])
+        );
+        expect(byId.get('room.locked_cache')?.softlockGuards).toEqual(
+            expect.arrayContaining(['matching-key-kind', 'optional-cache-never-required', 'room-copy-matches-key-kind'])
+        );
+        expect(byId.get('exit.primary')?.softlockGuards).toEqual(
+            expect.arrayContaining(['terminal-key-lock-fallback', 'dungeon-topology-exit-route'])
+        );
         expect(byId.get('boss.moving_patrol')?.softlockGuards).toEqual(
-            expect.arrayContaining(['stale-boss-overlay-clear', 'all-real-pairs-cleared-clear'])
+            expect.arrayContaining(['stale-boss-overlay-clear', 'all-real-pairs-cleared-clear', 'dungeon-topology-boss-route'])
         );
         expect(byId.get('safety.softlock_fairness')?.softlockGuards).toEqual(
-            expect.arrayContaining(['terminal-key-lock-fallback', 'stale-boss-overlay-clear'])
+            expect.arrayContaining(['terminal-key-lock-fallback', 'stale-boss-overlay-clear', 'dungeon-topology-audit'])
+        );
+        expect(byId.get('safety.dungeon_topology')).toMatchObject({
+            kind: 'safety',
+            role: 'graph_invariant_gate',
+            evidence: expect.arrayContaining(['src/shared/run-map.ts']),
+            tests: expect.arrayContaining(['src/shared/dungeon-topology.test.ts'])
+        });
+        expect(gameplayInteractionGraph.coverage.requiredSafetyNodes).toEqual(
+            expect.arrayContaining(['safety.softlock_fairness', 'safety.dungeon_topology'])
         );
     });
 
@@ -110,18 +146,27 @@ describe('gameplay interaction graph', () => {
             traitCount: TILE_TRAIT_KINDS.length
         });
         expect(audit.blockerCount).toBeGreaterThanOrEqual(6);
-        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(8);
+        expect(audit.counterplayEdgeCount).toBeGreaterThanOrEqual(12);
         expect(audit.blockerWithoutProtectiveEdgeIds).toEqual([]);
         expect(audit.shopCounterplayWithoutPriorityGuardIds).toEqual([]);
         expect(audit.generatedFloorCoverageGapIds).toEqual(expect.arrayContaining(['trait.echo']));
         expect(audit.playerVisibleWriteWithoutHudIds).toEqual(expect.arrayContaining(['trait.echo']));
         expect(audit.highLeverageMechanicIds).toEqual(
-            expect.arrayContaining(['trait.stasis', 'boss.moving_patrol', 'lock.iron_key', 'objective.defeat_boss'])
+            expect.arrayContaining([
+                'trait.stasis',
+                'boss.moving_patrol',
+                'lock.iron_key',
+                'lock.typed_key',
+                'room.locked_cache',
+                'objective.defeat_boss',
+                'safety.dungeon_topology'
+            ])
         );
         expect(audit.recommendations).toEqual(
             expect.arrayContaining([
                 'Keep trait routing tools available when the graph shows swap-created trait routes.',
-                'Keep boss and lock counterplay ahead of optional rewards in shop priority.'
+                'Keep boss and lock counterplay ahead of optional rewards in shop priority.',
+                'Add a topology, softlock-fairness, or generator-contract case for every new blocking edge.'
             ])
         );
     });

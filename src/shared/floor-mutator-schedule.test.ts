@@ -258,6 +258,9 @@ describe('floor archetype progression contract', () => {
             expect(row.mutators.length).toBeGreaterThanOrEqual(0);
             expect(row.budgetExpectation.length).toBeGreaterThan(12);
             expect(row.softlockInvariant).toContain('inspectBoardFairness');
+            expect(row.softlockInvariant).toContain('inspectDungeonBoardTopology');
+            expect(row.softlockInvariant).toContain('lock');
+            expect(row.softlockInvariant).toContain('objective');
             expect(row.actTitle.length).toBeGreaterThan(0);
             expect(row.biomeTitle.length).toBeGreaterThan(0);
         }

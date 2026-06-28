@@ -28,11 +28,34 @@ describe('gate:changed selector', () => {
         );
 
         expect(payload.gates.map((gate) => gate.id)).toEqual(
-            expect.arrayContaining(['actionLoop', 'rewardsEconomy', 'navigation', 'systems', 'simHealth'])
+            expect.arrayContaining([
+                'actionLoop',
+                'rewardsEconomy',
+                'navigation',
+                'systems',
+                'simHealth',
+                'simSoftlockSeeds',
+                'softlockFull',
+                'longRun'
+            ])
         );
         expect(payload.gates.find((gate) => gate.id === 'actionLoop')?.command).toBe('yarn gate:action-loop');
         expect(payload.gates.find((gate) => gate.id === 'simHealth')?.command).toBe('yarn gate:sim-health');
+        expect(payload.gates.find((gate) => gate.id === 'longRun')?.command).toBe('yarn gate:long-run');
         expect(payload.reasons.some((reason) => reason.file === 'docs/system-diagrams/actions.json')).toBe(true);
+    });
+
+    it('selects the long-run soak gate for pacing, relic, and balance changes', () => {
+        const payload = runGateChanged(
+            'scripts/gate-long-run.ts',
+            'src/shared/long-run-depth.ts',
+            'src/shared/boss-encounters.ts',
+            'src/shared/relics.ts',
+            'src/shared/balance-simulation.ts'
+        );
+
+        expect(payload.gates).toEqual(expect.arrayContaining([{ id: 'longRun', command: 'yarn gate:long-run' }]));
+        expect(payload.reasons.filter((reason) => reason.gateId === 'longRun')).toHaveLength(5);
     });
 
     it('selects the blueprint browser smoke for system diagram explorer changes', () => {
@@ -118,6 +141,8 @@ describe('gate:changed selector', () => {
 
         expect(payload.gates.map((gate) => gate.id)).toContain('simHealth');
         expect(payload.gates.map((gate) => gate.id)).toContain('simSoftlockSeeds');
+        expect(payload.gates.map((gate) => gate.id)).toContain('dungeonTopologyAudit');
+        expect(payload.gates.map((gate) => gate.id)).toContain('softlockFull');
         expect(payload.gates.map((gate) => gate.id)).toContain('actionLoop');
         expect(payload.gates.map((gate) => gate.id)).toContain('systems');
         expect(payload.gates.find((gate) => gate.id === 'simSoftlockSeeds')?.command).toBe(
@@ -143,7 +168,10 @@ describe('gate:changed selector', () => {
             expect.arrayContaining([{ id: 'simSoftlockSeeds', command: 'yarn gate:sim-softlock-seeds' }])
         );
         expect(payload.gates).toEqual(
-            expect.arrayContaining([{ id: 'simSoftlockStress', command: 'yarn gate:sim-softlock-stress' }])
+            expect.arrayContaining([{ id: 'softlockFull', command: 'yarn gate:softlock-full' }])
+        );
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([{ id: 'dungeonTopologyAudit', command: 'yarn audit:dungeon-topology:json' }])
         );
         expect(
             payload.reasons.some(
@@ -152,11 +180,40 @@ describe('gate:changed selector', () => {
         ).toBe(true);
     });
 
+    it('selects route softlock stress for run map changes', () => {
+        const payload = runGateChanged('src/shared/run-map.ts');
+        const gateIds = payload.gates.map((gate) => gate.id);
+
+        expect(gateIds).toEqual(
+            expect.arrayContaining([
+                'longRun',
+                'navigation',
+                'dungeonTopologyAudit',
+                'simSoftlockSeeds',
+                'softlockFull'
+            ])
+        );
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([
+                { id: 'longRun', command: 'yarn gate:long-run' },
+                { id: 'softlockFull', command: 'yarn gate:softlock-full' }
+            ])
+        );
+    });
+
     it('selects expensive softlock gates for fairness inspector and dungeon status changes', () => {
         const payload = runGateChanged('src/shared/board-inspection.ts', 'src/shared/dungeon-board-status.ts');
         const gateIds = payload.gates.map((gate) => gate.id);
 
-        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds', 'simSoftlockStress']));
+        expect(gateIds).toEqual(
+            expect.arrayContaining([
+                'actionLoop',
+                'simHealth',
+                'simSoftlockSeeds',
+                'dungeonTopologyAudit',
+                'softlockFull'
+            ])
+        );
         expect(
             payload.reasons.some(
                 (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/board-inspection.ts'
@@ -169,11 +226,68 @@ describe('gate:changed selector', () => {
         ).toBe(true);
     });
 
+    it('selects expensive softlock gates for dungeon topology graph changes', () => {
+        const payload = runGateChanged('src/shared/dungeon-topology.ts');
+        const gateIds = payload.gates.map((gate) => gate.id);
+
+        expect(gateIds).toEqual(
+            expect.arrayContaining([
+                'actionLoop',
+                'simHealth',
+                'simSoftlockSeeds',
+                'dungeonTopologyAudit',
+                'softlockFull'
+            ])
+        );
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([
+                { id: 'dungeonTopologyAudit', command: 'yarn audit:dungeon-topology:json' },
+                { id: 'softlockFull', command: 'yarn gate:softlock-full' }
+            ])
+        );
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/dungeon-topology.ts'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'softlockFull' && reason.file === 'src/shared/dungeon-topology.ts'
+            )
+        ).toBe(true);
+    });
+
+    it('selects expensive softlock gates for dungeon topology audit script changes', () => {
+        const payload = runGateChanged('scripts/audit-dungeon-topology.ts');
+        const gateIds = payload.gates.map((gate) => gate.id);
+
+        expect(gateIds).toEqual(
+            expect.arrayContaining([
+                'systems',
+                'simHealth',
+                'simSoftlockSeeds',
+                'dungeonTopologyAudit',
+                'softlockFull'
+            ])
+        );
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'scripts/audit-dungeon-topology.ts'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) =>
+                    reason.gateId === 'dungeonTopologyAudit' && reason.file === 'scripts/audit-dungeon-topology.ts'
+            )
+        ).toBe(true);
+    });
+
     it('selects expensive softlock gates for runtime progression repair changes', () => {
         const payload = runGateChanged('src/shared/run-progression-repair.ts');
         const gateIds = payload.gates.map((gate) => gate.id);
 
-        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds', 'simSoftlockStress']));
+        expect(gateIds).toEqual(expect.arrayContaining(['actionLoop', 'simHealth', 'simSoftlockSeeds', 'softlockFull']));
         expect(
             payload.reasons.some(
                 (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/run-progression-repair.ts'
@@ -184,7 +298,7 @@ describe('gate:changed selector', () => {
     it('keeps core game rules on expensive gates without matching gameplay support files', () => {
         const corePayload = runGateChanged('src/shared/game.ts');
         expect(corePayload.gates.map((gate) => gate.id)).toEqual(
-            expect.arrayContaining(['actionLoop', 'simSoftlockSeeds', 'simSoftlockStress'])
+            expect.arrayContaining(['actionLoop', 'simSoftlockSeeds', 'softlockFull'])
         );
 
         const supportPayload = runGateChanged('src/shared/gameplay-rules-edit-map.test.ts');

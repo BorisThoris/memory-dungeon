@@ -246,7 +246,7 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
 
     it('rolls deterministic reward drafts with build-defining trait, key, and hazard options', () => {
         const draft = rollBonusRewardDraft({
-            runSeed: 75_102,
+            runSeed: 75_002,
             rulesVersion: GAME_RULES_VERSION,
             floor: 6,
             routeKind: 'treasure'
@@ -254,7 +254,7 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
 
         expect(draft).toHaveLength(3);
         expect(rollBonusRewardDraft({
-            runSeed: 75_102,
+            runSeed: 75_002,
             rulesVersion: GAME_RULES_VERSION,
             floor: 6,
             routeKind: 'treasure'

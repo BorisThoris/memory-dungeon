@@ -287,7 +287,9 @@ export const auditGameplayInteractionGraph = (
                     (edge) =>
                         edge.source === mechanic.id &&
                         edge.kind === 'priority_guard' &&
-                        (edge.target === 'lock.iron_key' || edge.target === 'boss.moving_patrol')
+                        (edge.target === 'lock.iron_key' ||
+                            edge.target === 'lock.typed_key' ||
+                            edge.target === 'boss.moving_patrol')
                 )
         )
         .map((mechanic) => mechanic.id);
@@ -306,7 +308,7 @@ export const auditGameplayInteractionGraph = (
     const recommendations: string[] = [
         'Keep trait routing tools available when the graph shows swap-created trait routes.',
         'Keep boss and lock counterplay ahead of optional rewards in shop priority.',
-        'Add a softlock-fairness or generator-contract case for every new blocking edge.',
+        'Add a topology, softlock-fairness, or generator-contract case for every new blocking edge.',
         'Add renderer/HUD feedback evidence when a mechanic writes player-visible state.'
     ];
     return {

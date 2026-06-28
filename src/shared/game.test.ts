@@ -6050,6 +6050,46 @@ describe('dungeon cards', () => {
         expect(getDungeonCardCopy(treasureTiles[3]!)).toMatch(/key/i);
     });
 
+    it('spends the matching run key when a typed locked cache pair is claimed', () => {
+        const lockTiles: Tile[] = [
+            {
+                ...createTile('lock-a', 'L', 'L'),
+                label: 'Treasure Lock',
+                dungeonCardKind: 'lock',
+                dungeonCardState: 'hidden',
+                dungeonCardEffectId: 'lock_cache',
+                dungeonKeyKind: 'treasure'
+            },
+            {
+                ...createTile('lock-b', 'L', 'L'),
+                label: 'Treasure Lock',
+                dungeonCardKind: 'lock',
+                dungeonCardState: 'hidden',
+                dungeonCardEffectId: 'lock_cache',
+                dungeonKeyKind: 'treasure'
+            }
+        ];
+        const run = {
+            ...createRun(lockTiles),
+            dungeonKeys: { iron: 1, treasure: 1 }
+        };
+
+        const claimed = resolveBoardTurn(flipTile(flipTile(run, 'lock-a'), 'lock-b'));
+
+        expect(claimed.dungeonKeys).toEqual({ iron: 1, treasure: 0 });
+        expect(claimed.dungeonTreasuresOpened).toBe(1);
+
+        const masterRun = {
+            ...createRun(lockTiles),
+            dungeonKeys: { iron: 1 },
+            dungeonMasterKeys: 1
+        };
+        const masterClaimed = resolveBoardTurn(flipTile(flipTile(masterRun, 'lock-a'), 'lock-b'));
+        expect(masterClaimed.dungeonKeys).toEqual({ iron: 1 });
+        expect(masterClaimed.dungeonMasterKeys).toBe(0);
+        expect(masterClaimed.dungeonTreasuresOpened).toBe(1);
+    });
+
     it('runs new singleton room cards and lets locked caches be reopened after finding keys', () => {
         const roomTile = (id: string, effectId: NonNullable<Tile['dungeonCardEffectId']>, label: string): Tile => ({
             ...createTile(id, ROOM_PAIR_KEY, label.charAt(0)),

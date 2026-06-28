@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { GAME_RULES_VERSION } from './contracts';
 
 import {
     budgetForFloor,
@@ -39,6 +40,12 @@ describe('dungeon blueprint policy rules', () => {
             expect.objectContaining({ id: '4-exit', routeType: 'mystery', effectId: 'exit_mystery' }),
             expect.objectContaining({ id: '4-exit-alt', routeType: 'greed', effectId: 'exit_greed' })
         ]);
+        expect(exitSpecsForFloor(10, 'breather', 'treasure_gallery')).toEqual(
+            expect.arrayContaining([expect.objectContaining({ id: '10-exit-alt', lockKind: 'treasure' })])
+        );
+        expect(exitSpecsForFloor(8, 'normal', null)).toEqual(
+            expect.arrayContaining([expect.objectContaining({ id: '8-exit-alt', lockKind: 'iron' })])
+        );
     });
 
     it('chooses shop and room effects from deterministic floor policy', () => {
@@ -47,6 +54,12 @@ describe('dungeon blueprint policy rules', () => {
         expect(shouldAddDungeonShopTile(1, 1, 3, 'normal', null, 'endless', 'rest')).toBe(false);
         expect(chooseRoomEffectsForFloor(1, 1, 3, 'normal', null, 'endless', 'trap')).toEqual(['room_trap_workshop']);
         expect(chooseRoomEffectsForFloor(1, 1, 3, 'normal', null, 'puzzle')).toEqual([]);
+    });
+
+    it('lets treasure-gallery room policy override generic breather rooms', () => {
+        expect(chooseRoomEffectsForFloor(8, GAME_RULES_VERSION, 8, 'breather', 'treasure_gallery', 'endless')).toEqual(
+            ['room_locked_cache']
+        );
     });
 
     it('adjusts pair capacity by encounter pressure', () => {

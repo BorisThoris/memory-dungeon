@@ -43,6 +43,25 @@ describe('dungeon card recipe rules', () => {
         );
     });
 
+    it('biases generated key cards toward non-iron exit locks', () => {
+        const cards = dungeonCardRecipeForFloor(4, 'normal', 'treasure_gallery', 'endless', {
+            threatBudget: 0,
+            rewardBudget: 0,
+            utilityBudget: 1,
+            lockBudget: 2,
+            gatewayBudget: 0,
+            bossId: null,
+            exitLockKinds: ['treasure']
+        });
+
+        expect(cards).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ kind: 'key', keyKind: 'treasure', label: 'Treasure Memory Key' }),
+                expect.objectContaining({ kind: 'lock', keyKind: 'treasure', label: 'Treasure Cache Lock' })
+            ])
+        );
+    });
+
     it('uses archetype pressure for threats and gateway route cards', () => {
         const cards = dungeonCardRecipeForFloor(4, 'normal', 'trap_hall', 'endless', {
             threatBudget: 3,

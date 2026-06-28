@@ -6,6 +6,7 @@ import {
 } from './board-inspection';
 import { getDungeonBossDefinition } from './dungeon-boss-rules';
 import { getDungeonCardKindDefinition } from './dungeon-cards';
+import { dungeonKeyKindArticleLabel, dungeonKeyKindLabel } from './dungeon-key-copy';
 
 export type DungeonRoomEffectId = Extract<DungeonCardEffectId, `room_${string}`>;
 export type DungeonRoomTrigger = 'reveal' | 'reveal_or_reuse';
@@ -111,10 +112,10 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
         effectId: 'room_locked_cache',
         label: 'Sealed Cache Cell',
         trigger: 'reveal_or_reuse',
-        costText: 'Costs one iron or master key to claim.',
+        costText: 'Costs a matching key or master key to claim.',
         rewardText: 'Pays a large score and gold cache.',
         resolvedState: 'key_gated_until_paid',
-        blockedText: 'Needs an iron key or master key.'
+        blockedText: 'Needs a matching key or master key.'
     },
     room_trap_workshop: {
         effectId: 'room_trap_workshop',
@@ -145,7 +146,7 @@ export const getDungeonRoomEffectDefinition = (
 
 export const getDungeonRoomReadModel = (
     tile: Tile,
-    run?: RunState | null
+    run?: (Pick<RunState, 'dungeonKeys' | 'dungeonMasterKeys'> & Partial<Pick<RunState, 'shopGold'>>) | null
 ): DungeonRoomReadModel | null => {
     if (tile.dungeonCardKind !== 'room') {
         return null;
@@ -154,21 +155,31 @@ export const getDungeonRoomReadModel = (
     if (!definition) {
         return null;
     }
+    const roomKeyKind = tile.dungeonKeyKind ?? 'iron';
+    const roomKeyArticleLabel = dungeonKeyKindArticleLabel(roomKeyKind);
     const used = tile.dungeonRoomUsed === true || tile.dungeonCardState === 'resolved';
-    const hasIronKey = (run?.dungeonKeys?.iron ?? 0) > 0;
+    const hasMatchingKey = (run?.dungeonKeys?.[roomKeyKind] ?? 0) > 0;
     const hasMasterKey = (run?.dungeonMasterKeys ?? 0) > 0;
     const forgeCanPay = (run?.shopGold ?? 0) >= 2;
+    const effectiveDefinition =
+        definition.effectId === 'room_locked_cache'
+            ? {
+                  ...definition,
+                  costText: `Costs ${roomKeyArticleLabel} or master key to claim.`,
+                  blockedText: `Needs ${roomKeyArticleLabel} or master key.`
+              }
+            : definition;
     const canUse =
         definition.effectId === 'room_forge'
             ? forgeCanPay
             : definition.effectId === 'room_locked_cache'
-              ? hasIronKey || hasMasterKey
+              ? hasMatchingKey || hasMasterKey
               : !used;
-    const blockedText = canUse ? null : used ? 'Room already used.' : definition.blockedText;
+    const blockedText = canUse ? null : used ? 'Room already used.' : effectiveDefinition.blockedText;
     const stateCopy =
-        definition.resolvedState === 'reusable_revealed'
+        effectiveDefinition.resolvedState === 'reusable_revealed'
             ? 'Reusable room.'
-            : definition.resolvedState === 'key_gated_until_paid'
+            : effectiveDefinition.resolvedState === 'key_gated_until_paid'
               ? used
                   ? 'Resolved after key spend.'
                   : 'Reveals first and stays available until paid.'
@@ -176,15 +187,15 @@ export const getDungeonRoomReadModel = (
 
     return {
         effectId: definition.effectId,
-        label: definition.label,
-        trigger: definition.trigger,
-        costText: definition.costText,
-        rewardText: definition.rewardText,
-        resolvedState: definition.resolvedState,
+        label: effectiveDefinition.label,
+        trigger: effectiveDefinition.trigger,
+        costText: effectiveDefinition.costText,
+        rewardText: effectiveDefinition.rewardText,
+        resolvedState: effectiveDefinition.resolvedState,
         used,
         canUse,
         blockedText,
-        copy: `Dungeon room: ${tile.label}. ${definition.rewardText} ${definition.costText} ${stateCopy}${
+        copy: `Dungeon room: ${tile.label}. ${effectiveDefinition.rewardText} ${effectiveDefinition.costText} ${stateCopy}${
             blockedText ? ` ${blockedText}` : ''
         }`
     };
@@ -243,7 +254,7 @@ export const DUNGEON_TREASURE_REWARD_DEFINITIONS: Record<DungeonTreasureRewardId
         rewardId: 'lock_cache',
         label: 'Sealed Cache',
         tier: 'cache',
-        gateText: 'Can spend an iron/master key for full value.',
+        gateText: 'Can spend a matching key or master key for full value.',
         payoutText: 'Pays cache score and treasure progress, or a small consolation when matched.',
         claimCondition: 'Spend a key on activation or match the lock pair.'
     },
@@ -251,7 +262,7 @@ export const DUNGEON_TREASURE_REWARD_DEFINITIONS: Record<DungeonTreasureRewardId
         rewardId: 'room_locked_cache',
         label: 'Sealed Cache Cell',
         tier: 'cache',
-        gateText: 'Requires an iron key or master key.',
+        gateText: 'Requires a matching key or master key.',
         payoutText: 'Pays shop gold and score.',
         claimCondition: 'Reveal the room, then reopen it after finding a key.'
     },
@@ -285,6 +296,13 @@ export const getDungeonTreasureReadModel = (tile: Tile): DungeonTreasureReadMode
         return null;
     }
     const definition = getDungeonTreasureRewardDefinition(rewardId);
+    const tileSpecificDefinition: DungeonTreasureRewardDefinition =
+        rewardId === 'lock_cache' || rewardId === 'room_locked_cache'
+            ? {
+                  ...definition,
+                  gateText: `Can spend ${dungeonKeyKindArticleLabel(tile.dungeonKeyKind ?? 'iron')} or master key for full value.`
+              }
+            : definition;
     const source =
         tile.routeSpecialKind === 'secret_door'
             ? 'route_special'
@@ -293,16 +311,16 @@ export const getDungeonTreasureReadModel = (tile: Tile): DungeonTreasureReadMode
               : 'dungeon_card';
     const available = tile.state !== 'matched' && tile.state !== 'removed' && tile.dungeonCardState !== 'resolved';
     return {
-        ...definition,
+        ...tileSpecificDefinition,
         source,
         available,
-        copy: `${definition.label}: ${definition.payoutText} ${definition.gateText} ${definition.claimCondition}`
+        copy: `${tileSpecificDefinition.label}: ${tileSpecificDefinition.payoutText} ${tileSpecificDefinition.gateText} ${tileSpecificDefinition.claimCondition}`
     };
 };
 
 export interface DungeonCardCopyOptions {
     board?: BoardState | null;
-    run?: Pick<RunState, 'dungeonKeys' | 'dungeonMasterKeys'> | null;
+    run?: (Pick<RunState, 'dungeonKeys' | 'dungeonMasterKeys'> & Partial<Pick<RunState, 'shopGold'>>) | null;
 }
 
 const effectiveExitLockForTile = (
@@ -360,7 +378,7 @@ export const getDungeonCardCopy = (tile: Tile, options?: DungeonCardCopyOptions)
                 ? ` Requires ${
                       lockKind === 'lever'
                           ? `${requiredLeverCount || 1} lever(s)`
-                          : `${lockKind} key`
+                          : dungeonKeyKindArticleLabel(lockKind)
                   }.`
                 : ' Can be opened once revealed.';
         const route = tile.dungeonRouteType ? ` Leads to a ${tile.dungeonRouteType} route.` : '';
@@ -385,18 +403,21 @@ export const getDungeonCardCopy = (tile: Tile, options?: DungeonCardCopyOptions)
         return `Armed trap: ${tile.label}. Match its pair to disarm before the room remembers your mistake.`;
     }
     if (tile.dungeonCardKind === 'room') {
-        return getDungeonRoomReadModel(tile)?.copy ?? `Dungeon room: ${tile.label}.`;
+        return getDungeonRoomReadModel(tile, options?.run)?.copy ?? `Dungeon room: ${tile.label}.`;
     }
     if (tile.dungeonCardKind === 'shop') {
         return `Dungeon shop: ${tile.label}. Opens the vendor alcove and can be revisited on this floor.`;
     }
     if (tile.dungeonCardKind === 'key') {
-        return `Dungeon key: ${tile.label}. Matching it banks an iron key for sealed caches, locked rooms, or bonus exits.`;
+        const keyKind = tile.dungeonKeyKind ?? 'iron';
+        return `Dungeon key: ${tile.label}. Matching it banks ${dungeonKeyKindArticleLabel(keyKind)} for sealed caches, locked rooms, or bonus exits.`;
     }
     if (tile.dungeonCardKind === 'lock') {
         const treasure = getDungeonTreasureReadModel(tile);
+        const keyKind = tile.dungeonKeyKind ?? 'iron';
+        const gateText = `Can spend a ${dungeonKeyKindLabel(keyKind)} or master key for full value.`;
         return treasure
-            ? `Dungeon lock: ${tile.label}. ${treasure.payoutText} ${treasure.gateText}`
+            ? `Dungeon lock: ${tile.label}. ${treasure.payoutText} ${gateText}`
             : `Dungeon lock: ${tile.label}. Spend a key to open the remembered cache, or match it for a small consolation.`;
     }
     if (tile.dungeonCardKind === 'lever') {

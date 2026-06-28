@@ -260,6 +260,9 @@ const scheduleMutatorsFor = (seed: number, rulesVersion: number, level: number):
 const average = (values: readonly number[]): number =>
     values.length === 0 ? 0 : values.reduce((sum, value) => sum + value, 0) / values.length;
 
+// Typed lock keys are alternatives to the same shop insurance slot, not extra services sold every visit.
+const ALTERNATE_LOCK_KEY_SHOP_ITEMS = new Set(['treasure_key', 'shrine_key', 'boss_key', 'trap_key']);
+
 const relicRarityShare = (rarity: RelicDraftRarity): number => {
     const total = RELIC_POOL.reduce((sum, id) => sum + RELIC_DRAFT[id].weight, 0);
     const rarityTotal = RELIC_POOL
@@ -473,7 +476,9 @@ export const runBalanceSimulation = ({
     const safeFloors = Math.max(1, Math.floor(floors));
     const safeSeeds = seeds && seeds.length > 0 ? [...seeds] : [seed ?? 0];
     const floorNumbers = Array.from({ length: safeFloors }, (_, index) => index + 1);
-    const shopSinkPerVisit = Object.values(SHOP_ITEM_CATALOG).reduce((sum, item) => sum + item.baseCost, 0);
+    const shopSinkPerVisit = Object.values(SHOP_ITEM_CATALOG)
+        .filter((item) => !ALTERNATE_LOCK_KEY_SHOP_ITEMS.has(item.itemId))
+        .reduce((sum, item) => sum + item.baseCost, 0);
     const samples = safeSeeds.flatMap((sampleSeed) =>
         floorNumbers.map((floor) => {
             const schedule = pickFloorScheduleEntry(sampleSeed, rulesVersion, floor, 'endless');
@@ -514,9 +519,13 @@ export const runBalanceSimulation = ({
             const roomRewardPotential = roomEffectIds.length > 0 || dungeonNodeKind === 'rest' ? 1 : 0;
             const primaryExitLock = getEffectivePrimaryExitLock({ board });
             const boardFairnessIssueCount = inspectBoardFairness(board).issues.length;
+            const lockedExitKeySourceCount =
+                primaryExitLock.lockKind !== 'none' && primaryExitLock.lockKind !== 'lever'
+                    ? countReachableExitKeySources(board, primaryExitLock.lockKind)
+                    : 0;
             const keyInflowPotential = Math.max(
                 keyPairs,
-                primaryExitLock.lockKind === 'iron' ? countReachableExitKeySources(board, 'iron') : 0
+                lockedExitKeySourceCount
             );
             const findableKindCounts = countFindableKinds(board.tiles);
             const tileTraitKindCounts = countTileTraitKinds(board.tiles);

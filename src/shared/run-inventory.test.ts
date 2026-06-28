@@ -180,6 +180,24 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         expect(gainRunInventoryItem(run, 'guard_token').stats.guardTokens).toBe(1);
     });
 
+    it('shows typed dungeon key breakdowns on the shared key row', () => {
+        const run = {
+            ...createNewRun(0),
+            dungeonKeys: { iron: 1, treasure: 2, boss: 1 }
+        };
+
+        expect(buildRunInventory(run).consumables.find((row) => row.id === 'iron_key')).toMatchObject({
+            quantity: 4,
+            quantityLabel: '4 (iron 1, treasure 2, boss 1)'
+        });
+        expect(
+            buildRunInventory({ ...run, dungeonKeys: { treasure: 1 } }).consumables.find((row) => row.id === 'iron_key')
+        ).toMatchObject({
+            quantity: 1,
+            quantityLabel: '1 (treasure 1)'
+        });
+    });
+
     it('ignores malformed reward amounts before they can poison inventory counters', () => {
         const run = { ...createNewRun(0), peekCharges: 2 };
 

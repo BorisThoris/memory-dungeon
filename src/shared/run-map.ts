@@ -381,7 +381,7 @@ const systemsForKind = (kind: DungeonRunNodeKind): string[] =>
             : ['REG-017', 'REG-069'];
 
 const routeTypeForKind = (kind: DungeonRunNodeKind): RouteNodeType => {
-    if (kind === 'elite' || kind === 'trap' || kind === 'boss') {
+    if (kind === 'elite' || kind === 'trap' || kind === 'shop' || kind === 'boss') {
         return 'greed';
     }
     if (kind === 'event' || kind === 'treasure') {
@@ -1214,10 +1214,11 @@ export const generateRunMapChoices = ({
     const base = `${rulesVersion}:${runSeed}:${nextFloor}`;
     const boss = nextFloor > 0 && nextFloor % DUNGEON_ACT_LENGTH === 0;
     const rng = createMulberry32(hashStringToSeed(`dungeonMap:${rulesVersion}:${runSeed}:${currentFloor}`));
-    const middleKind = nextFloor % 3 === 0 ? 'shop' : nextFloor % 5 === 0 ? 'trap' : 'elite';
-    const mysteryKind = nextFloor % 4 === 0 ? 'treasure' : 'event';
+    const safeKind = kindFromRouteType('safe', nextFloor);
+    const middleKind = kindFromRouteType('greed', nextFloor);
+    const mysteryKind = kindFromRouteType('mystery', nextFloor);
     const nodes = [
-        createNode({ floor: nextFloor, depth: nextFloor, lane: -1, kind: boss ? 'boss' : 'combat', status: 'revealed' }),
+        createNode({ floor: nextFloor, depth: nextFloor, lane: -1, kind: boss ? 'boss' : safeKind, status: 'revealed' }),
         createNode({ floor: nextFloor, depth: nextFloor, lane: 0, kind: boss ? 'boss' : middleKind, status: 'revealed' }),
         createNode({ floor: nextFloor, depth: nextFloor, lane: 1, kind: boss ? 'boss' : mysteryKind, status: 'revealed' })
     ].map((node, index) => {

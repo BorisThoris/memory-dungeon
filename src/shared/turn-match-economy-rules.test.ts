@@ -15,6 +15,8 @@ describe('resolveTurnMatchEconomy', () => {
             run,
             routeCardShopGold: 2,
             dungeonShopGold: 3,
+            dungeonKeysDelta: 0,
+            dungeonMasterKeysDelta: 0,
             tollCacheClaimed: true,
             fuseCacheClaimed: true,
             fuseCacheFresh: true,
@@ -33,6 +35,8 @@ describe('resolveTurnMatchEconomy', () => {
             run,
             routeCardShopGold: 0,
             dungeonShopGold: 0,
+            dungeonKeysDelta: 0,
+            dungeonMasterKeysDelta: 0,
             tollCacheClaimed: false,
             fuseCacheClaimed: true,
             fuseCacheFresh: false,
@@ -50,6 +54,8 @@ describe('resolveTurnMatchEconomy', () => {
             run,
             routeCardShopGold: 0,
             dungeonShopGold: 0,
+            dungeonKeysDelta: 1,
+            dungeonMasterKeysDelta: 0,
             tollCacheClaimed: false,
             fuseCacheClaimed: false,
             fuseCacheFresh: false,
@@ -60,6 +66,8 @@ describe('resolveTurnMatchEconomy', () => {
             run,
             routeCardShopGold: 0,
             dungeonShopGold: 0,
+            dungeonKeysDelta: 0,
+            dungeonMasterKeysDelta: 0,
             tollCacheClaimed: false,
             fuseCacheClaimed: false,
             fuseCacheFresh: false,
@@ -69,5 +77,44 @@ describe('resolveTurnMatchEconomy', () => {
 
         expect(keyResult.dungeonKeys).toEqual({ treasure: 2 });
         expect(trapResult.dungeonKeys).toBe(run.dungeonKeys);
+    });
+
+    it('spends the matched key kind when a dungeon reward consumes a key', () => {
+        const run = { ...createNewRun(0), dungeonKeys: { treasure: 1, iron: 1 } };
+
+        const result = resolveTurnMatchEconomy({
+            run,
+            routeCardShopGold: 0,
+            dungeonShopGold: 0,
+            dungeonKeysDelta: -1,
+            dungeonMasterKeysDelta: 0,
+            tollCacheClaimed: false,
+            fuseCacheClaimed: false,
+            fuseCacheFresh: false,
+            matchedDungeonKind: 'lock',
+            matchedDungeonKeyKind: 'treasure'
+        });
+
+        expect(result.dungeonKeys).toEqual({ treasure: 0, iron: 1 });
+    });
+
+    it('spends master keys when a dungeon reward consumes one', () => {
+        const run = { ...createNewRun(0), dungeonKeys: {}, dungeonMasterKeys: 1 };
+
+        const result = resolveTurnMatchEconomy({
+            run,
+            routeCardShopGold: 0,
+            dungeonShopGold: 0,
+            dungeonKeysDelta: 0,
+            dungeonMasterKeysDelta: -1,
+            tollCacheClaimed: false,
+            fuseCacheClaimed: false,
+            fuseCacheFresh: false,
+            matchedDungeonKind: 'lock',
+            matchedDungeonKeyKind: 'treasure'
+        });
+
+        expect(result.dungeonKeys).toBe(run.dungeonKeys);
+        expect(result.dungeonMasterKeys).toBe(0);
     });
 });

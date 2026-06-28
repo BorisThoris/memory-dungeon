@@ -2,6 +2,7 @@ import type {
     BoardState,
     DungeonBossId,
     DungeonExitLockKind,
+    DungeonKeyKind,
     EnemyHazardKind,
     EnemyHazardPattern,
     RouteNodeType,
@@ -20,6 +21,7 @@ import {
     getEffectivePrimaryExitLock
 } from './board-inspection';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
+import { dungeonKeyKindArticleLabel, dungeonKeyKindLabel } from './dungeon-key-copy';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 export interface DungeonExitStatus {
     exitTile: Tile | null;
@@ -244,7 +246,7 @@ export const getDungeonExitStatus = (run: RunState): DungeonExitStatus => {
     } else if (keyFallbackPending) {
         lockedReason = 'No key source remains; clear the remaining pairs to force the exit open.';
     } else if (lockKind !== 'none' && lockKind !== 'lever' && !hasMatchingKey && !hasMasterKey) {
-        lockedReason = `Needs a ${lockKind} key or master key.`;
+        lockedReason = `Needs ${dungeonKeyKindArticleLabel(lockKind as DungeonKeyKind)} or master key.`;
     }
     return {
         exitTile,
@@ -698,7 +700,8 @@ const dungeonLockSummary = (status: DungeonExitStatus, objective?: DungeonObject
     if (status.keyFallbackPending) {
         return 'Clear pairs to open';
     }
-    return status.canActivate ? `${status.lockKind} key ready` : `Needs ${status.lockKind} key`;
+    const keyLabel = dungeonKeyKindLabel(status.lockKind as DungeonKeyKind);
+    return status.canActivate ? `${keyLabel} ready` : `Needs ${keyLabel}`;
 };
 
 const DUNGEON_HUD_CHIP_LIMIT = 6;

@@ -9,7 +9,8 @@ export const repairRunProgressionSoftlocks = (run: RunState): RunState => {
 
     const repairedBoard = repairDungeonExitSoftlocks(run.board, {
         dungeonKeys: run.dungeonKeys,
-        dungeonMasterKeys: run.dungeonMasterKeys
+        dungeonMasterKeys: run.dungeonMasterKeys,
+        preservePendingKeyFallback: true
     });
     const repairedRun = repairedBoard === run.board ? run : { ...run, board: repairedBoard };
     return clearFinalPairEnemyHazardOccupationForRun(repairedRun);

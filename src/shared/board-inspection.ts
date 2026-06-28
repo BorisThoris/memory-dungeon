@@ -121,6 +121,7 @@ export interface BoardFairnessReport {
 export interface BoardFairnessInspectionOptions {
     dungeonKeys?: RunState['dungeonKeys'];
     dungeonMasterKeys?: number;
+    preservePendingKeyFallback?: boolean;
 }
 
 const tileIsActionableForCompletion = (tile: Tile): boolean =>
@@ -154,11 +155,14 @@ export const countReachableExitKeySources = (board: BoardState, keyKind: Dungeon
         board.tiles,
         (tile) => tile.dungeonCardKind === 'key' && (tile.dungeonKeyKind ?? 'iron') === keyKind
     );
+    const floorHeldKeyCount =
+        (board.dungeonKeysHeldByKind?.[keyKind] ?? 0) +
+        (board.dungeonKeysHeldByKind == null && keyKind === 'iron' ? (board.dungeonKeysHeld ?? 0) : 0);
     const roomKeyCacheCount =
         keyKind === 'iron'
             ? board.tiles.filter((tile) => !tileIsClearedForFairness(tile) && tile.dungeonCardEffectId === 'room_key_cache').length
             : 0;
-    return (board.dungeonKeysHeld ?? 0) + matchingKeyPairCount + roomKeyCacheCount;
+    return floorHeldKeyCount + matchingKeyPairCount + roomKeyCacheCount;
 };
 
 export const boardHasActionableProgressionPair = (board: BoardState): boolean => {
@@ -255,7 +259,9 @@ export const repairDungeonExitSoftlocks = (
     } else if (exitLockKind !== 'none') {
         const requiredKeyKind = exitLockKind as DungeonKeyKind;
         const hasRunKey = (options.dungeonKeys?.[requiredKeyKind] ?? 0) > 0 || (options.dungeonMasterKeys ?? 0) > 0;
-        if (!hasRunKey && countReachableExitKeySources(board, requiredKeyKind) < 1) {
+        const pendingFallback =
+            options.preservePendingKeyFallback === true && boardHasActionableProgressionPair(board);
+        if (!hasRunKey && countReachableExitKeySources(board, requiredKeyKind) < 1 && !pendingFallback) {
             repairedLockKind = 'none';
             repairedLeverCount = 0;
         }

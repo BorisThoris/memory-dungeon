@@ -212,6 +212,11 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
     }
 };
 
+const KEY_SPEND_ORDER: DungeonKeyKind[] = ['iron', 'treasure', 'shrine', 'boss', 'trap'];
+
+const nonNegativeQuantity = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemId): number => {
     switch (id) {
         case 'shuffle_charge':
@@ -267,6 +272,16 @@ const unavailableReasonFor = (run: RunState, id: RunInventoryItemId, quantity: n
 const quantityLabelFor = (definition: RunInventoryDefinition, quantity: number): string =>
     definition.stackLimit == null ? String(quantity) : `${quantity}/${definition.stackLimit}`;
 
+const dungeonKeyQuantityLabelFor = (run: RunState, quantity: number): string => {
+    const parts = KEY_SPEND_ORDER
+        .map((kind) => [kind, nonNegativeQuantity(run.dungeonKeys[kind])] as const)
+        .filter(([, count]) => count > 0);
+    if (parts.length === 0 || (parts.length === 1 && parts[0]?.[0] === 'iron')) {
+        return String(quantity);
+    }
+    return `${quantity} (${parts.map(([kind, count]) => `${kind} ${count}`).join(', ')})`;
+};
+
 const maxStackFor = (definition: RunInventoryDefinition, quantity: number): number =>
     definition.stackLimit ?? Math.max(1, quantity);
 
@@ -294,7 +309,7 @@ export const getRunInventoryRows = (run: RunState): RunInventoryRow[] =>
         return {
             ...definition,
             quantity,
-            quantityLabel: quantityLabelFor(definition, quantity),
+            quantityLabel: id === 'iron_key' ? dungeonKeyQuantityLabelFor(run, quantity) : quantityLabelFor(definition, quantity),
             maxStack: maxStackFor(definition, quantity),
             remainingCapacity,
             atStackLimit: remainingCapacity === 0,
@@ -374,11 +389,6 @@ export interface RunInventoryGainFeedback extends RunInventoryGainPreview {
     cappedLabel: string | null;
     noPickupLabel: string | null;
 }
-
-const KEY_SPEND_ORDER: DungeonKeyKind[] = ['iron', 'treasure', 'shrine', 'boss', 'trap'];
-
-const nonNegativeQuantity = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const nonNegativeFiniteAmount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;

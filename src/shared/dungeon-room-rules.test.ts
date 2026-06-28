@@ -119,6 +119,54 @@ describe('revealDungeonRoom', () => {
         });
     });
 
+    it('opens typed locked cache rooms with their matching key kind', () => {
+        const run = createRun(
+            [
+                roomTile('cache', 'room_locked_cache', {
+                    dungeonKeyKind: 'treasure'
+                })
+            ],
+            {
+                dungeonKeys: { iron: 1, treasure: 1 },
+                shopGold: 3
+            }
+        );
+
+        const resolved = revealDungeonRoom(run, 'cache');
+
+        expect(resolved.dungeonKeys.treasure).toBe(0);
+        expect(resolved.dungeonKeys.iron).toBe(1);
+        expect(resolved.shopGold).toBe(3 + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD);
+        expect(resolved.board!.tiles[0]).toMatchObject({
+            dungeonCardState: 'resolved',
+            dungeonRoomUsed: true
+        });
+    });
+
+    it('does not spend iron keys on non-iron locked cache rooms', () => {
+        const run = createRun(
+            [
+                roomTile('cache', 'room_locked_cache', {
+                    dungeonKeyKind: 'treasure'
+                })
+            ],
+            {
+                dungeonKeys: { iron: 1, treasure: 0 },
+                dungeonMasterKeys: 0,
+                shopGold: 3
+            }
+        );
+
+        const revealed = revealDungeonRoom(run, 'cache');
+
+        expect(revealed.dungeonKeys.iron).toBe(1);
+        expect(revealed.shopGold).toBe(3);
+        expect(revealed.board!.tiles[0]).toMatchObject({
+            dungeonCardState: 'revealed',
+            dungeonRoomUsed: undefined
+        });
+    });
+
     it('reveals one hidden dungeon card pair with scrying lens', () => {
         const run = createRun([
             roomTile('lens', 'room_scrying_lens'),

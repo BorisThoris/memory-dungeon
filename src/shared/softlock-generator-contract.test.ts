@@ -71,6 +71,7 @@ describe('softlock generator contract', () => {
             bosses: expect.any(Number),
             traitInteractions: expect.any(Number),
             traitRouteObjectives: expect.any(Number),
+            topology: expect.any(Number),
             finalPairStates: expect.any(Number)
         });
         for (const [key, count] of Object.entries(result.coverage)) {
@@ -227,6 +228,25 @@ describe('softlock generator contract', () => {
         expect(projected?.dungeonKeysHeld).toBe(1);
     });
 
+    it('preserves key kind when granting final-pair projection resources', () => {
+        const board = projectionBoard({
+            tiles: projectionBoard().tiles.map((candidate) => {
+                if (candidate.pairKey === 'key') {
+                    return { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'treasure' as const };
+                }
+                if (candidate.pairKey === '__exit__') {
+                    return { ...candidate, dungeonExitLockKind: 'treasure' as const };
+                }
+                return candidate;
+            })
+        });
+
+        const projected = createFinalPairFairnessProjection(board);
+
+        expect(projected?.dungeonKeysHeld).toBe(1);
+        expect(projected?.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
+    });
+
     it('does not grant fake projection keys for terminal primary exit lock fallbacks', () => {
         const board = projectionBoard({
             pairCount: 1,
@@ -312,5 +332,31 @@ describe('softlock generator contract', () => {
         expect(diagnostic).toContain('exit_lock_unreachable');
         expect(diagnostic).toContain('no reachable key route');
         expect(diagnostic).toContain('tiles=exit');
+    });
+
+    it('preserves topology graph diagnostics in formatted locked-exit failures', () => {
+        const diagnostic = formatSoftlockGeneratorFailure({
+            scenarioId: 'topology_missing_key_fixture',
+            scenarioLabel: 'Topology missing key fixture',
+            seed: 7,
+            floor: 1,
+            projection: 'generated',
+            issueCodes: ['exit_lock_unreachable'],
+            issueDetails: [
+                'exit_lock_unreachable: Topology validation: topology_exit_lock_source_missing: Exit needs an iron key. nodes=2 edges=1 reachable=1 keys=none levers=0 bossRoute=false exitRoute=false exits=exit:exit[lock=iron levers=0] bosses=none'
+            ],
+            issues: [
+                {
+                    code: 'exit_lock_unreachable',
+                    message: 'Topology validation: topology_exit_lock_source_missing: Exit needs an iron key.'
+                }
+            ],
+            boardSummary: 'level=1 pairs=0 floorTag=normal archetype=none objective=find_exit exitLock=iron boss=none hazards=0'
+        });
+
+        expect(diagnostic).toContain('Topology validation: topology_exit_lock_source_missing');
+        expect(diagnostic).toContain('nodes=');
+        expect(diagnostic).toContain('keys=none');
+        expect(diagnostic).toContain('exitRoute=false');
     });
 });

@@ -102,6 +102,26 @@ describe('tile trait rules', () => {
         );
     });
 
+    it('uses final board columns when repairing generated trait interaction layouts', () => {
+        const seed = 70_202;
+        const floor = 4;
+        const routeType = 'safe';
+        const board = buildBoard(floor, {
+            runSeed: seed,
+            runRulesVersion: GAME_RULES_VERSION,
+            gameMode: 'endless',
+            routeCardPlan: {
+                choiceId: `contract:${routeType}:${seed}:${floor}`,
+                routeType,
+                sourceLevel: floor - 1,
+                targetLevel: floor
+            }
+        });
+
+        expect(uniqueTraitPairCount(board.tiles)).toBeGreaterThanOrEqual(2);
+        expect(getBoardTraitInteractionPreviewLines(board).length).toBeGreaterThan(0);
+    });
+
     it('keeps the opener readable while still introducing traits as a core mechanic', () => {
         const [a1, a2] = makePair('a', 'A');
         const tiles = assignTileTraitsToGeneratedBoard([a1, a2], 1, 30, 1, 'mystery');

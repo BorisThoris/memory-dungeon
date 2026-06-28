@@ -310,7 +310,8 @@ export const buildBoard = (level: number, options: BuildBoardOptions = {}): Boar
             level,
             routeWorldProfile?.intensity,
             options.relicIds ?? [],
-            options.startingLoadoutId ?? null
+            options.startingLoadoutId ?? null,
+            baseBoard.columns
         )
     };
     if (!mutators.includes('shifting_spotlight')) {

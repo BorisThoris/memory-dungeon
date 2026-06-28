@@ -477,7 +477,7 @@ export const DUNGEON_CARD_EFFECT_DEFINITIONS: Record<DungeonCardEffectId, Dungeo
         kind: 'room',
         label: 'Sealed Cache Cell',
         rulesRole: 'Room key-gated loot service.',
-        helpText: 'Stays revealed until an iron or master key is spent for the full cache reward.'
+        helpText: 'Stays revealed until its matching key or a master key is spent for the full cache reward.'
     },
     room_key_cache: {
         effectId: 'room_key_cache',

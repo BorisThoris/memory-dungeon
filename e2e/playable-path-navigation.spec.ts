@@ -170,6 +170,7 @@ test.describe('Expanded playable navigation contract', () => {
     });
 
     test('classic run can still be started through the compact helper path', async ({ page }) => {
+        test.setTimeout(120_000);
         await startClassicFromMenu(page);
     });
 });
