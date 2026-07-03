@@ -589,6 +589,35 @@
     transform-origin: left center;
 }
 
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(110deg, transparent 0 28%, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent) 40%, transparent 56%),
+        radial-gradient(ellipse 120% 170% at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), transparent 68%),
+        linear-gradient(135deg, rgba(42, 18, 9, 0.96), rgba(14, 22, 28, 0.88)),
+        var(--theme-panel-solid);
+    background-size: 220% 100%, auto, auto, auto;
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.3),
+        0 0 28px color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+    animation: boardOpportunityPulse 0.96s ease-in-out infinite, boardOpportunityShimmer 2.2s ease-in-out infinite;
+}
+
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityCue {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityPriority {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityPriority::after {
+    background: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
+    box-shadow: 0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+}
+
 .chainOpportunityEyebrow {
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
     font-size: 0.62rem;
@@ -3211,6 +3240,12 @@
         display: none;
     }
 
+    .opportunityCompass[data-opportunity-compass-hot='cashout']:not(:hover, :focus-within) .opportunityPayoffStack,
+    .opportunityCompass[data-opportunity-compass-hot='ready']:not(:hover, :focus-within) .opportunityPayoffStack,
+    .opportunityCompass[data-opportunity-compass-surge='true']:not(:hover, :focus-within) .opportunityPayoffStack {
+        display: grid;
+    }
+
     .opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow {
         flex: 0 1 auto;
         max-width: min(17rem, 24vw);
@@ -3238,6 +3273,27 @@
         box-shadow:
             0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent),
             0 0 34px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+    }
+
+    .opportunityCompass[data-opportunity-compass-hot='cashout'] .opportunityPayoffStack {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 16%);
+        box-shadow:
+            0 0 18px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+    }
+
+    .opportunityCompass[data-opportunity-compass-hot='ready'] .opportunityPayoffStack {
+        border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 18%);
+        box-shadow:
+            0 0 16px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+    }
+
+    .opportunityCompass[data-opportunity-compass-surge='true'] .opportunityPayoffStack {
+        border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 22%);
+        box-shadow:
+            0 0 18px color-mix(in srgb, var(--theme-gold-bright) 12%, transparent),
             inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
     }
 }
