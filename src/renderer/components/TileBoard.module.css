@@ -462,6 +462,26 @@
     opacity: 0.54;
 }
 
+.frame[data-chain-opportunity-hot-band='cashout'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 66%, var(--theme-cyan-bright) 10%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 24%, transparent),
+        inset 0 0 42px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        0 0 30px color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+    opacity: 0.98;
+    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
+}
+
+.frame[data-chain-opportunity-hot-band='ready'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-gold-bright) 16%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent),
+        inset 0 0 34px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent),
+        0 0 24px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    opacity: 0.76;
+    animation: boardOpportunityPrimePulse 1.3s ease-in-out infinite;
+}
+
 .stageMobileCamera {
     inset: 0;
 }
@@ -2630,6 +2650,102 @@
     font: inherit;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.chainOpportunityHotBand {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.06rem 0.2rem;
+    min-width: 0;
+    max-width: min(18rem, 58vi);
+    overflow: hidden;
+    padding: 0.1rem 0.28rem 0.12rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 58%, transparent);
+    border-radius: 0.3rem;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+}
+
+.chainOpportunityHotBand small,
+.chainOpportunityHotBand b,
+.chainOpportunityHotBand em {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chainOpportunityHotBand small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: 0.48rem;
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.chainOpportunityHotBand b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    font-size: 0.6rem;
+    font-weight: 980;
+}
+
+.chainOpportunityHotBand em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    font-size: 0.48rem;
+    font-style: normal;
+    font-weight: 880;
+}
+
+.chainOpportunityHotBand i {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 82%, var(--theme-gold-bright));
+    font-size: 0.46rem;
+    font-style: normal;
+    font-weight: 840;
+}
+
+.chainOpportunityHotBandBeatPips {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: 0.09rem;
+    min-height: 0.2rem;
+}
+
+.chainOpportunityHotBandBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-gold-bright) 80%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    animation: chainOpportunityBeatPulse 0.82s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-tone='ready'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-tone='ready'] b {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-tone='ready'] em {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-tone='ready'] i {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-tone='ready'] .chainOpportunityHotBandBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
 }
 
 .chainOpportunityPayoffBurst {

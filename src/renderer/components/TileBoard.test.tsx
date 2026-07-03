@@ -549,6 +549,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('x4 streak');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('1 match to reward');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-tone', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Hot lane');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Reward hot');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('One-away cashout');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAccessibleName(
+            /Chain hot band.*Reward hot.*Next reward x6 \+1 shard in 1 match.*One-away cashout/i
+        );
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-hot="true"]')).toHaveTextContent(
             'Next reward x6 +1 shard in 1 match'
         );
@@ -1516,6 +1524,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Streak reward');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Any match');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Cashout ready');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-tone', 'ready');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Streak lane');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Cashout ready');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('One-away cashout');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAccessibleName(
+            /Chain hot band.*Cashout ready.*Next reward x6 \+1 shard in 1 match.*One-away cashout/i
+        );
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Chain cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Streak reward');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('x6 +1 shard in 1 match');

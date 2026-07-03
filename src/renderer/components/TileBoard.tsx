@@ -2612,6 +2612,30 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         'Trait interaction lanes',
         boardTraitInteractionLaneMap
     );
+    const boardChainHotBand = boardChainOpportunity.rewardHot
+        ? {
+              cue: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Cash out now',
+              detail: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Cash out now',
+              label: 'Hot lane',
+              tone: 'cashout' as const,
+              value: 'Reward hot'
+          }
+        : boardChainOpportunity.streakCashoutReady
+          ? {
+                cue: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Keep the streak paying',
+                detail: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Any clean match pays',
+                label: 'Streak lane',
+                tone: 'ready' as const,
+                value: 'Cashout ready'
+            }
+          : null;
+    const boardChainHotBandLabel = boardChainHotBand
+        ? formatBoardFeedbackLabel('Chain hot band', [
+              boardChainHotBand.value,
+              boardChainHotBand.detail,
+              boardChainHotBand.cue
+          ])
+        : undefined;
     const activePowerBoardChipLabel = activePowerBoardChip
         ? formatBoardFeedbackLabel('Active board power', [
               activePowerBoardChip.label,
@@ -3618,6 +3642,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-chain-opportunity-reward-urgency={boardChainOpportunity.rewardUrgencyLabel ?? 'none'}
             data-chain-opportunity-reward-urgency-tier={boardChainOpportunity.rewardUrgencyTier ?? 'none'}
             data-chain-opportunity-reward-hot={boardChainOpportunity.rewardHot ? 'true' : 'false'}
+            data-chain-opportunity-hot-band={boardChainHotBand?.tone ?? 'none'}
             data-chain-reward-ladder={boardRewardLadderAttr}
             data-chain-reward-ladder-actions={boardRewardLadderActionAttr}
             data-chain-reward-ladder-count={boardRewardLadder.length}
@@ -4384,6 +4409,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         {boardChainOpportunity.rewardHot ? <small>Payoff</small> : null}
                                         <b>{boardChainOpportunity.rewardCue}</b>
+                                    </span>
+                                ) : null}
+                                {boardChainHotBand ? (
+                                    <span
+                                        aria-label={boardChainHotBandLabel}
+                                        className={styles.chainOpportunityHotBand}
+                                        data-chain-hot-band-tone={boardChainHotBand.tone}
+                                        data-testid="chain-opportunity-hot-band"
+                                        role="status"
+                                    >
+                                        <small>{boardChainHotBand.label}</small>
+                                        <b>{boardChainHotBand.value}</b>
+                                        <em>{boardChainHotBand.detail}</em>
+                                        <i>{boardChainHotBand.cue}</i>
+                                        <span aria-hidden="true" className={styles.chainOpportunityHotBandBeatPips}>
+                                            {Array.from({ length: boardChainHotBand.tone === 'cashout' ? 5 : 3 }, (_, index) => (
+                                                <i data-chain-hot-band-beat={index + 1} key={index} />
+                                            ))}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.momentumLabel || boardChainOpportunity.chaseLabel ? (
