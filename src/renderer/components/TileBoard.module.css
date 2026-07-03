@@ -567,6 +567,21 @@
         display: none;
     }
 
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
+    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
+    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
+    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
+    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
+        display: inline-grid;
+    }
+
     .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityArcadeCallout {
         max-width: min(11rem, 30vi);
         min-height: 0;

@@ -1398,6 +1398,7 @@ describe('TileBoard touch and click controls', () => {
             /Best play\. Stack cashout\. Combo route: 1 route ready\. Cash out: Match lit route for reward.*One-away cashout.*Next reward x6 \+1 shard in 1 match/i
         );
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toBeVisible();
+        expect(screen.getByTestId('chain-opportunity-reward-ladder')).toBeVisible();
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack cashout');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-tone', 'cashout');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-heat', 'cashout');
