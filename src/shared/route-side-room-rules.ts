@@ -1,6 +1,7 @@
 import { MAX_LIVES, type RouteNodeType, type RouteSideRoomState, type RunState } from './contracts';
 import {
     claimBonusReward,
+    getRewardPerkRows,
     previewBonusRewardClaim,
     resolveBonusRewardRoomByInstanceId,
     rollBonusRewardDraft,
@@ -9,6 +10,70 @@ import {
 import { createRestShrineServices } from './rest-shrine';
 import { applyRunEventChoice, rollRunEventRoom } from './run-events';
 import { getTraitOpportunitySummary } from './trait-opportunities';
+
+const BONUS_REWARD_NEXT_CUES = {
+    chest_gold: 'Use the key to keep locked exits from stalling the route.',
+    secret_favor: 'Spend the peek before a hidden route pair or shrine threshold.',
+    bonus_shards: 'Cash the shard into safer chain momentum.',
+    supply_cache: 'Peek first, then break a blocker before the chain collapses.',
+    trait_toolkit: 'Move traits into adjacency, then peek the payoff pair.',
+    key_insurance: 'Keep the iron key for the next locked entrance.',
+    hazard_ward: 'Destroy or guard the first pressure card you expose.',
+    free_swap_floor: 'Use Swap or row shuffle to connect trait routes.',
+    echo_conduit_lens: 'Match Echo touching Conduit before cashing adjacent Sealed.',
+    trait_streak_lens: 'Keep the clean chain alive; cash a trait match at x3+ for a tool.',
+    cursed_opener_contract: 'Open the floor with Cursed when the board is already readable.',
+    stasis_lockbox: 'Route Stasis clusters with swap and guard buffer.',
+    hazard_banisher: 'Check the first board beat; hazard pressure should already be reduced.'
+} as const;
+
+const bonusRewardChoiceImpact = (
+    option: ReturnType<typeof rollBonusRewardDraft>[number],
+    nextCue: string,
+    traitBuildReason?: string,
+    perkCue?: string
+): Pick<
+    NonNullable<RouteSideRoomState['choices']>[number],
+    'rewardImpactBeats' | 'rewardImpactCue' | 'rewardImpactDetail' | 'rewardImpactKind'
+> => {
+    if (traitBuildReason) {
+        return {
+            rewardImpactBeats: 4,
+            rewardImpactCue: 'Best fit',
+            rewardImpactDetail: traitBuildReason,
+            rewardImpactKind: 'build'
+        };
+    }
+    if (perkCue || (option.payout.rewardPerks?.length ?? 0) > 0) {
+        return {
+            rewardImpactBeats: 4,
+            rewardImpactCue: 'Perk online',
+            rewardImpactDetail: perkCue ?? nextCue,
+            rewardImpactKind: 'unlock'
+        };
+    }
+    if (!option.eligible) {
+        return {
+            rewardImpactBeats: 3,
+            rewardImpactCue: 'Blocked',
+            rewardImpactDetail: option.unavailableReason ?? 'Reward unavailable.',
+            rewardImpactKind: 'risk'
+        };
+    }
+    const resourceLaneCount = [
+        option.payout.shopGold,
+        option.payout.comboShards,
+        option.payout.relicFavorProgress,
+        option.payout.score,
+        option.payout.inventoryItems ? Object.keys(option.payout.inventoryItems).length : 0
+    ].filter((value) => Number(value ?? 0) > 0).length;
+    return {
+        rewardImpactBeats: resourceLaneCount > 1 ? 4 : 2,
+        rewardImpactCue: resourceLaneCount > 1 ? 'Reward burst' : 'Resource',
+        rewardImpactDetail: nextCue,
+        rewardImpactKind: 'resource'
+    };
+};
 
 export const routeNodeKindForSideRoom = (
     routeType: RouteNodeType,
@@ -54,19 +119,27 @@ const buildBonusSideRoom = (
         ? reward.instanceId
         : draft[0]?.instanceId;
     const traitOpportunity = getTraitOpportunitySummary(run.board);
-    const choices = draft.map((option) => ({
-        id: option.instanceId,
-        label: option.label,
-        detail: option.eligible
-            ? previewBonusRewardClaim(run, option).feedback.summary || option.summaryText
-            : (option.unavailableReason ?? option.summaryText),
-        primary: option.instanceId === primaryInstanceId,
-        traitBuildLabels: [...(option.traitBuildLabels ?? [])],
-        traitBuildReason:
-            option.traitBuildLabels?.some((label) => traitOpportunity.buildLabels.includes(label))
-                ? traitOpportunity.reason ?? undefined
-                : undefined
-    }));
+    const choices = draft.map((option) => {
+        const perkCue = getRewardPerkRows({ rewardPerkIds: option.payout.rewardPerks ?? [] })[0]?.nextCue;
+        const nextCue = perkCue ?? BONUS_REWARD_NEXT_CUES[option.id];
+        const traitBuildReason = option.traitBuildLabels?.some((label) => traitOpportunity.buildLabels.includes(label))
+            ? traitOpportunity.reason ?? undefined
+            : undefined;
+        const rewardImpact = bonusRewardChoiceImpact(option, nextCue, traitBuildReason, perkCue);
+        return {
+            id: option.instanceId,
+            label: option.label,
+            detail: option.eligible
+                ? previewBonusRewardClaim(run, option).feedback.summary || option.summaryText
+                : (option.unavailableReason ?? option.summaryText),
+            primary: option.instanceId === primaryInstanceId,
+            traitBuildLabels: [...(option.traitBuildLabels ?? [])],
+            traitBuildReason,
+            rewardPerkNextCue: perkCue,
+            nextCue,
+            ...rewardImpact
+        };
+    });
     const primaryChoice = choices.find((choice) => choice.primary);
     return {
         id: `${reward.instanceId}:side`,

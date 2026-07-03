@@ -16,6 +16,98 @@ export interface MetaRewardSignalRow {
     progress?: { current: number; target: number };
 }
 
+export type MetaProgressionRunImpactTone = 'ready' | 'owned' | 'locked' | 'cosmetic' | 'deferred';
+
+export interface MetaProgressionRunImpactRow {
+    id: string;
+    title: string;
+    lane: string;
+    impact: string;
+    boardMoment: string;
+    nextAction: string;
+    tone: MetaProgressionRunImpactTone;
+}
+
+const metaRowTone = (row: ReturnType<typeof getMetaProgressionBoard>['rows'][number]): MetaProgressionRunImpactTone => {
+    if (row.modeRule === 'cosmetic_only') {
+        return 'cosmetic';
+    }
+    if (row.gate.toLowerCase().startsWith('deferred:')) {
+        return 'deferred';
+    }
+    if (row.status === 'available') {
+        return 'ready';
+    }
+    if (row.status === 'owned') {
+        return 'owned';
+    }
+    return 'locked';
+};
+
+const metaRowImpact = (row: ReturnType<typeof getMetaProgressionBoard>['rows'][number]): { lane: string; impact: string } => {
+    if (row.id === 'upgrade_relic_shrine_extra_pick') {
+        return {
+            lane: 'Relic draft',
+            impact: row.status === 'owned' ? '+1 milestone pick active' : '+1 pick when unlocked'
+        };
+    }
+    if (row.id === 'upgrade_scholar_prep_slot') {
+        return {
+            lane: 'Run setup',
+            impact: 'future pre-run assist slot'
+        };
+    }
+    return {
+        lane: 'Identity',
+        impact: row.reward
+    };
+};
+
+const metaRowNextAction = (row: ReturnType<typeof getMetaProgressionBoard>['rows'][number]): string => {
+    if (row.gate.toLowerCase().startsWith('deferred:')) {
+        return 'Visible for planning';
+    }
+    if (row.status === 'owned') {
+        return row.gameplayAffecting ? 'Active in Classic runs' : 'Owned cosmetic';
+    }
+    if (row.status === 'available') {
+        return 'Claim now';
+    }
+    return `${row.progress.current}/${row.progress.target} from ${row.source}`;
+};
+
+const metaRowBoardMoment = (row: ReturnType<typeof getMetaProgressionBoard>['rows'][number]): string => {
+    if (row.id === 'upgrade_relic_shrine_extra_pick') {
+        return row.status === 'owned' ? 'Choose deeper relic synergy' : 'More relic choice at milestone floors';
+    }
+    if (row.id === 'upgrade_scholar_prep_slot') {
+        return 'Plan a future pre-run assist';
+    }
+    if (row.modeRule === 'cosmetic_only') {
+        return 'Style changes, board rules stay stable';
+    }
+    if (row.gate.toLowerCase().startsWith('deferred:')) {
+        return 'Preview future run-shaping systems';
+    }
+    return row.gameplayAffecting ? 'Changes a future board decision' : 'Archive identity reward';
+};
+
+export const getMetaProgressionRunImpactRows = (save: SaveData): MetaProgressionRunImpactRow[] => {
+    const board = getMetaProgressionBoard(save);
+    return board.rows.slice(0, 6).map((row) => {
+        const impact = metaRowImpact(row);
+        return {
+            id: row.id,
+            title: row.title,
+            lane: impact.lane,
+            impact: impact.impact,
+            boardMoment: metaRowBoardMoment(row),
+            nextAction: metaRowNextAction(row),
+            tone: metaRowTone(row)
+        };
+    });
+};
+
 export const getCollectionRewardSignals = (save: SaveData): MetaRewardSignalRow[] => {
     const board = getMetaProgressionBoard(save);
     const progression = getMetaProgressionFeedback(save);

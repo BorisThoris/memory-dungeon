@@ -34,13 +34,13 @@ export const DUNGEON_AUDIO_EVENT_COVERAGE: readonly DungeonAudioEventCoverageRow
         id: 'dungeon_contact',
         label: 'Enemy contact resolves',
         cue: 'mismatch',
-        callsite: 'useAppStore.pressTile enemy contact branch -> playResolveSfx placeholder',
+        callsite: 'useAppStore.pressTile enemy contact branch -> mismatch/danger resolve feedback',
         semanticMoment: 'fail',
         gainMultiplier: 0.95,
         ducking: 'run_critical_sfx',
         mergePolicy: 'contact suppresses reveal tick in the same resolution step',
         respectsSettingsGain: true,
-        finalAssetStatus: 'placeholder_mapping'
+        finalAssetStatus: 'existing_sample_or_procedural_fallback'
     },
     {
         id: 'dungeon_reveal',
@@ -57,14 +57,14 @@ export const DUNGEON_AUDIO_EVENT_COVERAGE: readonly DungeonAudioEventCoverageRow
     {
         id: 'dungeon_trap_trigger',
         label: 'Trap card triggers',
-        cue: 'stray-power',
-        callsite: 'dungeon trap resolution inventory row',
+        cue: 'mismatch',
+        callsite: 'runSurfaceState trap delta -> tilePressAudioCues -> playTrapSfx',
         semanticMoment: 'fail',
         gainMultiplier: 0.9,
         ducking: 'run_critical_sfx',
         mergePolicy: 'trap trigger wins over generic mismatch when both occur',
         respectsSettingsGain: true,
-        finalAssetStatus: 'placeholder_mapping'
+        finalAssetStatus: 'existing_sample_or_procedural_fallback'
     },
     {
         id: 'dungeon_enemy_defeat',
@@ -118,13 +118,13 @@ export const DUNGEON_AUDIO_EVENT_COVERAGE: readonly DungeonAudioEventCoverageRow
         id: 'dungeon_exit_open',
         label: 'Exit opens or lock resolves',
         cue: 'power-arm',
-        callsite: 'exit activation / lock resolution inventory row',
+        callsite: 'exit activation / lock resolution power-arm feedback',
         semanticMoment: 'lock',
         gainMultiplier: 0.84,
         ducking: 'run_critical_sfx',
         mergePolicy: 'exit open takes priority over reveal tick',
         respectsSettingsGain: true,
-        finalAssetStatus: 'placeholder_mapping'
+        finalAssetStatus: 'existing_sample_or_procedural_fallback'
     },
     {
         id: 'dungeon_route_choice',

@@ -46,6 +46,9 @@ interface CodexScreenProps {
     stackedOnGameplay?: boolean;
 }
 
+const formatCodexRewardSignalLabel = (signal: { body: string; cta: string; title: string }): string =>
+    `Codex reward signal. ${signal.title}. ${signal.body} Next: ${signal.cta}.`;
+
 const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
     const { closeSubscreen, saveData, settings } = useAppStore(
         useShallow((state) => ({
@@ -219,7 +222,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                     </Panel>
                 </MetaFrame>
 
-                <MetaFrame data-testid="codex-reward-signal">
+                <MetaFrame aria-label={formatCodexRewardSignalLabel(codexRewardSignal)} data-testid="codex-reward-signal">
                     <Panel className={panelClassName} padding="md" variant="default">
                         <strong>{codexRewardSignal.title}</strong>
                         <p className={metaStyles.subtitle}>{codexRewardSignal.body}</p>

@@ -1,7 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from '../../shared/contracts';
 import { EXIT_PAIR_KEY } from '../../shared/tile-identity';
-import { getDungeonUtilityReadabilityKind, getTileBoardReadabilityState } from './tileBoardReadability';
+import {
+    getDungeonUtilityReadabilityKind,
+    getTileBoardReadabilityState,
+    getTraitLaneReadabilityColor,
+    getTraitLaneReadabilityPattern,
+    getTraitRouteCadenceAction,
+    getTraitRouteReadabilityBeatCount,
+    getTraitRouteReadabilityBeatTier,
+    getTraitRouteReadabilityCadence,
+    getTraitRouteReadabilityGlyph
+} from './tileBoardReadability';
 
 const tile = (overrides: Partial<Tile> = {}): Tile => ({
     id: 'a1',
@@ -25,6 +35,10 @@ const state = (overrides: Partial<Parameters<typeof getTileBoardReadabilityState
         spotlightBountyOnBack: false,
         spotlightWardOnBack: false,
         stickyFingerSlotMark: false,
+        traitComboBack: false,
+        traitComboSurgeBack: false,
+        traitRewardHotBack: false,
+        traitRouteTargetBack: false,
         tile: tile(),
         ...overrides
     });
@@ -84,6 +98,7 @@ describe('tileBoardReadability', () => {
         expect(state().showHiddenReadabilityMarkers).toBe(false);
         expect(state({ powerBackAccent: 'peek' }).showHiddenReadabilityMarkers).toBe(true);
         expect(state({ tile: tile({ dungeonCardKind: 'trap' }) }).showHiddenReadabilityMarkers).toBe(true);
+        expect(state({ traitRouteTargetBack: true }).showHiddenReadabilityMarkers).toBe(true);
         expect(state({ faceUp: true, powerBackAccent: 'peek' }).showHiddenReadabilityMarkers).toBe(false);
     });
 
@@ -104,6 +119,11 @@ describe('tileBoardReadability', () => {
         );
         expect(state({ objectiveBackAccent: true }).hiddenReadabilityAccentColor).toBe('#f2d39d');
         expect(state({ routeBackAccent: true }).hiddenReadabilityAccentColor).toBe('#59b4d9');
+        expect(state({ traitRewardHotBack: true }).hiddenReadabilityAccentColor).toBe('#ffe48a');
+        expect(state({ traitComboSurgeBack: true }).hiddenReadabilityAccentColor).toBe('#ffd166');
+        expect(state({ traitComboBack: true }).hiddenReadabilityAccentColor).toBe('#f7f1c2');
+        expect(state({ traitComboBack: true, traitLaneBack: 'guard' }).hiddenReadabilityAccentColor).toBe('#8edb9b');
+        expect(state({ traitRouteTargetBack: true }).hiddenReadabilityAccentColor).toBe('#5dd6ff');
         expect(state({ tile: tile({ tileTraitKind: 'mirror' }) }).hiddenReadabilityAccentColor).toBe('#b890ff');
         expect(state({ powerBackAccent: 'destroy' }).hiddenReadabilityAccentColor).toBe('#d94848');
         expect(state({ powerBackAccent: 'stray' }).hiddenReadabilityAccentColor).toBe('#d4a03d');
@@ -177,6 +197,160 @@ describe('tileBoardReadability', () => {
         expect(state({ tile: tile({ dungeonExitLockKind: 'iron' }) })).toMatchObject({
             isLockCard: true,
             showHiddenReadabilityMarkers: true
+        });
+    });
+
+    it('reports chain-ready and chain-setup back states for mesh rendering', () => {
+        expect(state({ traitComboBack: true, tile: tile({ tileTraitKind: 'echo' }) })).toMatchObject({
+            isTraitComboBack: true,
+            isTraitPayoffStackBack: false,
+            isTraitRewardHotBack: false,
+            isTraitRouteTargetBack: false,
+            showHiddenReadabilityMarkers: true,
+            traitRouteReadabilityIntensity: 'ready',
+            traitRouteReadabilityTier: 'combo'
+        });
+        expect(state({ traitRewardHotBack: true, tile: tile({ tileTraitKind: 'echo' }) })).toMatchObject({
+            isTraitComboBack: false,
+            isTraitPayoffStackBack: false,
+            isTraitRewardHotBack: true,
+            isTraitRouteTargetBack: false,
+            showHiddenReadabilityMarkers: true,
+            traitRouteReadabilityIntensity: 'cashout',
+            traitRouteReadabilityTier: 'reward-hot'
+        });
+        expect(state({ traitComboBack: true, traitRewardHotBack: true, tile: tile({ tileTraitKind: 'echo' }) })).toMatchObject({
+            isTraitComboBack: true,
+            isTraitComboSurgeBack: false,
+            isTraitPayoffStackBack: true,
+            isTraitRewardHotBack: true,
+            isTraitRouteTargetBack: false,
+            showHiddenReadabilityMarkers: true,
+            traitRouteReadabilityIntensity: 'stack',
+            traitRouteReadabilityTier: 'payoff-stack'
+        });
+        expect(state({ traitComboSurgeBack: true, tile: tile({ tileTraitKind: 'echo' }) })).toMatchObject({
+            isTraitComboBack: false,
+            isTraitComboSurgeBack: true,
+            isTraitPayoffStackBack: false,
+            isTraitRewardHotBack: false,
+            isTraitRouteTargetBack: false,
+            showHiddenReadabilityMarkers: true,
+            traitRouteReadabilityIntensity: 'surge',
+            traitRouteReadabilityTier: 'surge'
+        });
+        expect(state({ traitRouteTargetBack: true })).toMatchObject({
+            isTraitComboBack: false,
+            isTraitComboSurgeBack: false,
+            isTraitPayoffStackBack: false,
+            isTraitRewardHotBack: false,
+            isTraitRouteTargetBack: true,
+            showHiddenReadabilityMarkers: true,
+            traitRouteReadabilityIntensity: 'setup',
+            traitRouteReadabilityTier: 'route-target'
+        });
+        expect(state({ perkArmedBack: true })).toMatchObject({
+            isPerkArmedBack: true,
+            traitRouteReadabilityIntensity: 'setup',
+            traitRouteReadabilityTier: 'perk-armed'
+        });
+        expect(state({ selectedTraitFollowupBack: true })).toMatchObject({
+            isSelectedTraitFollowupBack: true,
+            traitRouteReadabilityIntensity: 'ready',
+            traitRouteReadabilityTier: 'selected-followup'
+        });
+        expect(state({ faceUp: true, traitComboBack: true, traitRewardHotBack: true, traitRouteTargetBack: true })).toMatchObject({
+            isTraitComboBack: false,
+            isTraitComboSurgeBack: false,
+            isTraitPayoffStackBack: false,
+            isTraitRewardHotBack: false,
+            isTraitRouteTargetBack: false,
+            traitRouteReadabilityIntensity: 'none',
+            traitRouteReadabilityTier: 'none'
+        });
+    });
+
+    it('maps trait route tiers to arcade beat tiers used by board feedback', () => {
+        expect(getTraitRouteReadabilityBeatTier('payoff-stack')).toBe('cashout');
+        expect(getTraitRouteReadabilityBeatTier('reward-hot')).toBe('cashout');
+        expect(getTraitRouteReadabilityBeatTier('surge')).toBe('surge');
+        expect(getTraitRouteReadabilityBeatTier('selected-followup')).toBe('follow-up');
+        expect(getTraitRouteReadabilityBeatTier('combo')).toBe('route');
+        expect(getTraitRouteReadabilityBeatTier('route-target')).toBe('setup');
+        expect(getTraitRouteReadabilityBeatTier('perk-armed')).toBe('setup');
+        expect(getTraitRouteReadabilityBeatTier('none')).toBeNull();
+
+        expect(getTraitRouteReadabilityBeatCount('cashout')).toBe(5);
+        expect(getTraitRouteReadabilityBeatCount('surge')).toBe(4);
+        expect(getTraitRouteReadabilityBeatCount('follow-up')).toBe(3);
+        expect(getTraitRouteReadabilityBeatCount('route')).toBe(3);
+        expect(getTraitRouteReadabilityBeatCount('setup')).toBe(2);
+        expect(getTraitRouteReadabilityBeatCount(null)).toBe(0);
+    });
+
+    it('maps trait route tiers to distinct card glyphs for hidden-back readability', () => {
+        expect(getTraitRouteReadabilityGlyph('payoff-stack')).toBe('payoff-stack');
+        expect(getTraitRouteReadabilityGlyph('reward-hot')).toBe('cashout-crown');
+        expect(getTraitRouteReadabilityGlyph('surge')).toBe('surge-burst');
+        expect(getTraitRouteReadabilityGlyph('selected-followup')).toBe('next-tap');
+        expect(getTraitRouteReadabilityGlyph('combo')).toBe('linked-route');
+        expect(getTraitRouteReadabilityGlyph('route-target')).toBe('prime-cross');
+        expect(getTraitRouteReadabilityGlyph('perk-armed')).toBe('prime-cross');
+        expect(getTraitRouteReadabilityGlyph('none')).toBe('none');
+    });
+
+    it('maps trait route tiers to cadence actions for board readability pulses', () => {
+        expect(getTraitRouteReadabilityCadence('payoff-stack')).toBe('cashout');
+        expect(getTraitRouteReadabilityCadence('reward-hot')).toBe('cashout');
+        expect(getTraitRouteReadabilityCadence('surge')).toBe('surge');
+        expect(getTraitRouteReadabilityCadence('selected-followup')).toBe('follow-up');
+        expect(getTraitRouteReadabilityCadence('combo')).toBe('route');
+        expect(getTraitRouteReadabilityCadence('route-target')).toBe('prime');
+        expect(getTraitRouteReadabilityCadence('perk-armed')).toBe('prime');
+        expect(getTraitRouteReadabilityCadence('none')).toBe('none');
+
+        expect(getTraitRouteCadenceAction('cashout')).toBe('Cash now');
+        expect(getTraitRouteCadenceAction('surge')).toBe('Route surge');
+        expect(getTraitRouteCadenceAction('follow-up')).toBe('Next tap');
+        expect(getTraitRouteCadenceAction('route')).toBe('Match route');
+        expect(getTraitRouteCadenceAction('prime')).toBe('Prime payoff');
+        expect(getTraitRouteCadenceAction('none')).toBe('None');
+    });
+
+    it('reports trait lane readability colors for hidden card lane markers', () => {
+        expect(getTraitLaneReadabilityColor('shard')).toBe('#ffe48a');
+        expect(getTraitLaneReadabilityColor('guard')).toBe('#8edb9b');
+        expect(getTraitLaneReadabilityColor('tool')).toBe('#5dd6ff');
+        expect(getTraitLaneReadabilityColor('risk')).toBe('#ff8f70');
+        expect(getTraitLaneReadabilityColor('block')).toBe('#b890ff');
+        expect(getTraitLaneReadabilityColor('recall')).toBe('#8de6ff');
+        expect(getTraitLaneReadabilityColor('score')).toBe('#f2d39d');
+        expect(getTraitLaneReadabilityPattern('shard')).toBe('cash-pip');
+        expect(getTraitLaneReadabilityPattern('guard')).toBe('guard-ward');
+        expect(getTraitLaneReadabilityPattern('tool')).toBe('tool-cross');
+        expect(getTraitLaneReadabilityPattern('risk')).toBe('risk-slash');
+        expect(getTraitLaneReadabilityPattern('block')).toBe('block-bars');
+        expect(getTraitLaneReadabilityPattern('recall')).toBe('recall-pair');
+        expect(getTraitLaneReadabilityPattern('score')).toBe('score-pip');
+
+        expect(state({ traitComboBack: true, traitLaneBack: 'shard', tile: tile({ tileTraitKind: 'echo' }) })).toMatchObject({
+            hiddenReadabilityAccentColor: '#ffe48a',
+            traitLaneReadabilityAction: 'Cash shard',
+            traitLaneReadabilityColor: '#ffe48a',
+            traitLaneReadabilityId: 'shard',
+            traitLaneReadabilityLabel: 'Shard',
+            traitLaneReadabilityPattern: 'cash-pip',
+            traitRouteReadabilityIntensity: 'ready',
+            traitRouteReadabilityTier: 'combo'
+        });
+        expect(state({ faceUp: true, traitComboBack: true, traitLaneBack: 'shard' })).toMatchObject({
+            traitLaneReadabilityAction: null,
+            traitLaneReadabilityColor: null,
+            traitLaneReadabilityId: null,
+            traitLaneReadabilityLabel: null,
+            traitLaneReadabilityPattern: null,
+            traitRouteReadabilityIntensity: 'none',
+            traitRouteReadabilityTier: 'none'
         });
     });
 });

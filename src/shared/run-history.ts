@@ -48,6 +48,37 @@ export interface RunHistoryEntry {
 
 export const MAX_DUNGEON_JOURNAL_ROWS = 8;
 
+const getPersistedSummaryPayoffStack = (
+    summary: RunSummary | null
+): { label: 'Combo burst' | 'Payoff burst' | 'Payoff stack' | 'Super stack'; lanes: number } | null => {
+    if (!summary) {
+        return null;
+    }
+    const hasChainPayoff = summary.bestStreak >= 4;
+    const hasComboPayoff = summary.bestStreak >= 10;
+    const payoffLanes = [
+        hasChainPayoff,
+        summary.payoffRoutePaid === true,
+        (summary.payoffPickupTotal ?? 0) > 0,
+        summary.perfectClears > 0,
+        (summary.relicIds?.length ?? 0) + (summary.payoffRewardPerkCount ?? 0) > 0
+    ].filter(Boolean).length;
+    if (payoffLanes < 3) {
+        return null;
+    }
+    return {
+        label:
+            payoffLanes >= 4
+                ? 'Super stack'
+                : hasComboPayoff
+                  ? 'Combo burst'
+                  : hasChainPayoff
+                    ? 'Payoff burst'
+                    : 'Payoff stack',
+        lanes: payoffLanes
+    };
+};
+
 const contractLabel = (run: Pick<RunState, 'activeContract' | 'practiceMode'>): string => {
     if (run.activeContract?.noShuffle && run.activeContract?.noDestroy) {
         return 'Scholar contract';
@@ -292,6 +323,7 @@ export const buildRunJournalEntry = (run: RunState): {
 
 export const buildRunJournalRowsFromSave = (save: SaveData): RunHistoryJournalRow[] => {
     const summary = save.lastRunSummary;
+    const payoffStack = getPersistedSummaryPayoffStack(summary);
     return [
         {
             id: 'last_summary',
@@ -302,6 +334,18 @@ export const buildRunJournalRowsFromSave = (save: SaveData): RunHistoryJournalRo
             persistence: 'persisted_summary',
             exportSafe: true
         },
+        ...(payoffStack
+            ? [
+                  {
+                      id: 'last_payoff_stack',
+                      label: 'Last payoff stack',
+                      value: `${payoffStack.label} · ${payoffStack.lanes} payoffs`,
+                      detail: 'Persisted chain, route, pickup, clean-floor, relic, and perk payoff routes.',
+                      persistence: 'persisted_summary' as const,
+                      exportSafe: true
+                  }
+              ]
+            : []),
         {
             id: 'encore_pairs',
             label: 'Encore pair keys',

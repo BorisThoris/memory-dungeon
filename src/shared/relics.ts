@@ -443,6 +443,16 @@ export interface RelicRoleAuditRow {
     rescueDirection: 'clear' | 'copy_rescue' | 'mechanical_rescue' | 'deprioritize';
 }
 
+const RELIC_DECISION_IMPACT_LABELS: Record<RelicDecisionImpact, string> = {
+    action_economy: 'Action',
+    route_risk: 'Risk',
+    information_scope: 'Info',
+    protection: 'Guard',
+    extraction: 'Cashout',
+    engine_momentum: 'Momentum',
+    draft_shaping: 'Draft'
+};
+
 const decisionImpactForRelic = (id: RelicId): RelicDecisionImpact[] => {
     const row = getRelicDraftRow(id);
     const impacts = new Set<RelicDecisionImpact>();
@@ -478,6 +488,11 @@ export const getRelicRoleAuditRows = (): RelicRoleAuditRow[] =>
 
 export const getRelicDecisionImpactCopy = (id: RelicId): string =>
     getRelicRoleAuditRows().find((row) => row.relicId === id)?.impactCopy ?? getRelicArchetypeSummary(id);
+
+export const getRelicDecisionImpactLabels = (id: RelicId): string[] =>
+    (getRelicRoleAuditRows().find((row) => row.relicId === id)?.decisionImpact ?? []).map(
+        (impact) => RELIC_DECISION_IMPACT_LABELS[impact]
+    );
 
 export const getRelicDraftContext = (run: RunState, clearedFloor: number): RelicDraftContext => {
     const isScheduledEndless = isScheduledEndlessDraftRun(run);

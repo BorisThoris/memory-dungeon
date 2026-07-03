@@ -100,12 +100,14 @@ export const TileBoardSceneBoardGroup = ({
                 nonPickableBack,
                 objectiveBackAccent,
                 pairProximityDistance,
+                perkArmedBack,
                 powerBackAccent,
                 presentationNBackAnchor,
                 presentationSilhouette,
                 presentationWideRecall,
                 resolvingSelection,
                 routeBackAccent,
+                selectedTraitFollowupBack,
                 shuffleBoardOrderIndex,
                 spotlightBountyHighlight,
                 spotlightBountyOnBack,
@@ -114,6 +116,9 @@ export const TileBoardSceneBoardGroup = ({
                 stickyFingerSlotMark,
                 tile,
                 traitComboBack,
+                traitComboSurgeBack,
+                traitLaneBack,
+                traitRewardHotBack,
                 traitRouteTargetBack,
                 transform,
                 tutorialPairOrdinal
@@ -130,10 +135,15 @@ export const TileBoardSceneBoardGroup = ({
                     focusDimmed={focusDimmed}
                     hazardBackAccent={hazardBackAccent}
                     routeBackAccent={routeBackAccent}
+                    selectedTraitFollowupBack={selectedTraitFollowupBack}
                     objectiveBackAccent={objectiveBackAccent}
+                    perkArmedBack={perkArmedBack}
                     nonPickableBack={nonPickableBack}
                     stickyFingerSlotMark={stickyFingerSlotMark}
                     traitComboBack={traitComboBack}
+                    traitComboSurgeBack={traitComboSurgeBack}
+                    traitLaneBack={traitLaneBack}
+                    traitRewardHotBack={traitRewardHotBack}
                     traitRouteTargetBack={traitRouteTargetBack}
                     hostConsolidatesTileFrames={hostConsolidatesTileFrames}
                     hoverTiltRef={hoverTiltRef}

@@ -6,7 +6,7 @@
 
 | Constant / count | Value |
 | --- | --- |
-| `GAME_RULES_VERSION` | 32 |
+| `GAME_RULES_VERSION` | 33 |
 | `ENCYCLOPEDIA_VERSION` | 16 |
 | Relic entries (`RELIC_CATALOG`) | 16 |
 | Mutator entries (`MUTATOR_CATALOG`) | 12 |

@@ -7,8 +7,10 @@ import {
     buildRunHistoryEntry,
     buildRunHistoryExportString,
     buildRunJournalRows,
+    buildRunJournalRowsFromSave,
     buildRunShareKey
 } from './run-history';
+import { createDefaultSaveData } from './save-data';
 import { createDungeonRunMapState, revealDungeonChoices, selectDungeonNode } from './run-map';
 
 const completedRun = (): RunState => {
@@ -233,5 +235,35 @@ describe('REG-085 run history, share keys, and journal', () => {
 
         expect(entry.journalRows.find((row) => row.id === 'build')?.value).toContain('The Slayer');
         expect(journal.find((row) => row.id === 'build')?.value).toContain('The Slayer');
+    });
+
+    it('carries persisted payoff stacks into save-derived journal rows', () => {
+        const save = createDefaultSaveData();
+        save.lastRunSummary = {
+            totalScore: 24680,
+            bestScore: 24680,
+            levelsCleared: 5,
+            highestLevel: 6,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: 13,
+            perfectClears: 2,
+            relicIds: ['extra_shuffle_charge'],
+            payoffPickupClaimed: 2,
+            payoffPickupTotal: 2,
+            payoffRewardPerkCount: 1,
+            payoffRoutePaid: true,
+            payoffRouteRewardText: '+1 combo shard',
+            gameMode: 'endless'
+        };
+
+        const rows = buildRunJournalRowsFromSave(save);
+
+        expect(rows.find((row) => row.id === 'last_payoff_stack')).toMatchObject({
+            label: 'Last payoff stack',
+            value: 'Super stack · 5 payoffs',
+            persistence: 'persisted_summary',
+            exportSafe: true
+        });
     });
 });

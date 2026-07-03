@@ -18,6 +18,7 @@ const gameSfxMocks = vi.hoisted(() => ({
     playFlipSfx: vi.fn(),
     playFloorClearSfx: vi.fn(),
     playGambitCommitSfx: vi.fn(),
+    playMatchPayoffSfx: vi.fn(),
     playPeekPowerSfx: vi.fn(),
     playPowerArmSfx: vi.fn(),
     playRelicPickSfx: vi.fn(),

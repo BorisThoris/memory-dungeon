@@ -12,6 +12,9 @@ export const useGameScreenTraitRouteTargets = (run: RunState): GameScreenTraitRo
         if (
             !run.board ||
             run.status !== 'playing' ||
+            run.activeContract?.noShuffle ||
+            run.board.flippedTileIds.length > 0 ||
+            run.board.tiles.filter((tile) => tile.state === 'hidden').length < 2 ||
             (run.regionShuffleCharges <= 0 && !run.regionShuffleFreeThisFloor)
         ) {
             return { hint: null, tileIds: [] };
@@ -21,4 +24,4 @@ export const useGameScreenTraitRouteTargets = (run: RunState): GameScreenTraitRo
             hint,
             tileIds: hint ? [hint.firstTileId, hint.secondTileId] : []
         };
-    }, [run.board, run.regionShuffleCharges, run.regionShuffleFreeThisFloor, run.status]);
+    }, [run.activeContract?.noShuffle, run.board, run.regionShuffleCharges, run.regionShuffleFreeThisFloor, run.status]);

@@ -45,7 +45,7 @@ const INTERACTION_DESCRIPTIONS: Record<TileTraitInteractionTag, string> = {
     'warden-sigil:mirror-ward': 'Draft Warden Sigil to make Mirror matches produce stronger guard or capped-guard score.',
     'wager-surety:cursed-buffer': 'Draft Wager Surety to soften Cursed plus Volatile miss tries while keeping recall pressure visible.',
     'reward-perk:echo-conduit-double': 'Claim Echo Conduit Lens so Echo beside Conduit doubles its peek and adjacent Sealed shard payoff.',
-    'reward-perk:trait-streak-flash': 'Claim Trait Streak Lens so the third clean trait match creates a flash-pair charge.',
+    'reward-perk:trait-streak-flash': 'Claim Trait Streak Lens so a trait match at x3+ clean streak creates a flash-pair charge.',
     'reward-perk:cursed-opener-greed': 'Claim Cursed Opener Contract so the first Cursed match each floor becomes a gold and score play.'
 };
 

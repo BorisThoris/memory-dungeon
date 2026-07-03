@@ -8,6 +8,7 @@ import { createRunResolutionController } from './runResolutionController';
 
 const gameSfxMocks = vi.hoisted(() => ({
     playFloorClearSfx: vi.fn(),
+    playMatchPayoffSfx: vi.fn(),
     playResolveSfx: vi.fn(),
     resumeAudioContext: vi.fn()
 }));
@@ -314,6 +315,54 @@ describe('runResolutionController', () => {
         expect(harness.state.run?.dungeonEnemiesDefeated).toBe(1);
         expect(harness.state.run?.dungeonEnemiesDefeatedThisFloor).toBe(1);
         expect(harness.state.run?.enemyHazardsDefeatedThisFloor).toBe(1);
+    });
+
+    it('plays a payoff cue from the match pop payload when a board resolve creates match feedback', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+        const matchBoard = board([tile('a1', 'a', 'flipped'), tile('a2', 'a', 'flipped')], {
+            flippedTileIds: ['a1', 'a2']
+        });
+        const run: RunState = {
+            ...baseRun,
+            board: matchBoard,
+            stats: {
+                ...baseRun.stats,
+                currentStreak: 2,
+                matchesFound: 2,
+                tries: 2
+            }
+        };
+        const harness = createHarness(run);
+
+        harness.controller.applyResolveBoardTurn(run);
+
+        expect(harness.state.matchScorePop).not.toBeNull();
+        expect(gameSfxMocks.playResolveSfx).toHaveBeenCalledWith(run, expect.any(Object), 0.5);
+        expect(gameSfxMocks.playMatchPayoffSfx).toHaveBeenCalledWith(0.5, harness.state.matchScorePop);
+    });
+
+    it('does not play a payoff cue for mismatch-only board resolves', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+        const mismatchBoard = board([tile('a1', 'a', 'flipped'), tile('b1', 'b', 'flipped')], {
+            flippedTileIds: ['a1', 'b1']
+        });
+        const run: RunState = {
+            ...baseRun,
+            board: mismatchBoard,
+            stats: {
+                ...baseRun.stats,
+                currentStreak: 3,
+                matchesFound: 3,
+                tries: 3
+            }
+        };
+        const harness = createHarness(run);
+
+        harness.controller.applyResolveBoardTurn(run);
+
+        expect(harness.state.mismatchScorePop).not.toBeNull();
+        expect(gameSfxMocks.playResolveSfx).toHaveBeenCalledWith(run, expect.any(Object), 0.5);
+        expect(gameSfxMocks.playMatchPayoffSfx).not.toHaveBeenCalled();
     });
 
     it('applies immediate game-over reset after resolved-run processing', () => {

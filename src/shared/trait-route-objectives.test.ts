@@ -88,10 +88,37 @@ describe('trait route objectives', () => {
         expect(result.scoreBonus).toBe(TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD);
         expect(result.runPatch.traitRouteObjectiveRewardTextThisFloor).toBe(`+${TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD} score`);
         expect(getTraitRouteObjectiveStatus(next)).toMatchObject({
+            actionLabel: 'Route paid',
             completed: true,
             progress: 1,
+            remaining: 0,
             required: 1,
-            reward: 'Reward claimed'
+            reward: `+${TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD} score`,
+            stateLabel: 'Cashout claimed',
+            urgency: 'paid'
+        });
+    });
+
+    it('exposes arcade action cues for active trait route objective states', () => {
+        expect(getTraitRouteObjectiveStatus(runWithObjective())!).toMatchObject({
+            actionLabel: 'Cash next route',
+            remaining: 1,
+            stateLabel: 'One route to cashout',
+            urgency: 'next'
+        });
+
+        expect(
+            getTraitRouteObjectiveStatus(
+                runWithObjective({
+                    traitRouteObjectiveProgressThisFloor: 1,
+                    traitRouteObjectiveRequiredThisFloor: 3
+                })
+            )!
+        ).toMatchObject({
+            actionLabel: 'Keep routing',
+            remaining: 2,
+            stateLabel: '2 routes to cashout',
+            urgency: 'building'
         });
     });
 });

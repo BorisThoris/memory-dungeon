@@ -144,6 +144,9 @@ describe('route side-room rules', () => {
         expect(opened.sideRoom?.choices).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({
+                    rewardImpactBeats: 4,
+                    rewardImpactCue: 'Best fit',
+                    rewardImpactKind: 'build',
                     traitBuildReason: expect.stringContaining('Echo + Sealed: combo shard')
                 })
             ])
@@ -166,7 +169,39 @@ describe('route side-room rules', () => {
         expect(opened.sideRoom).toMatchObject({ kind: 'bonus_reward' });
         expect(opened.sideRoom?.choices?.[0]).toMatchObject({
             label: 'Free swap discipline',
-            traitBuildLabels: expect.arrayContaining(['Drift Routing'])
+            rewardImpactBeats: 4,
+            rewardImpactCue: 'Best fit',
+            rewardImpactKind: 'build',
+            traitBuildLabels: expect.arrayContaining(['Drift Routing']),
+            rewardPerkNextCue: 'Use Swap or row shuffle to connect trait routes.',
+            nextCue: 'Use Swap or row shuffle to connect trait routes.'
         });
+    });
+
+    it('attaches next-floor cues to consumable bonus reward choices', () => {
+        const run = createNewRun(210_503, { startingLoadoutId: 'vaultbreaker' });
+        const opened = openRouteSideRoom({
+            ...run,
+            status: 'levelComplete',
+            pendingRouteCardPlan: {
+                choiceId: 'greed',
+                routeType: 'greed',
+                sourceLevel: 3,
+                targetLevel: 4
+            }
+        });
+
+        expect(opened.sideRoom).toMatchObject({ kind: 'bonus_reward' });
+        expect(opened.sideRoom?.choices).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    label: 'Key insurance',
+                    rewardImpactBeats: 4,
+                    rewardImpactCue: 'Reward burst',
+                    rewardImpactKind: 'resource',
+                    nextCue: 'Keep the iron key for the next locked entrance.'
+                })
+            ])
+        );
     });
 });

@@ -212,6 +212,14 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         : source.startingLoadoutId === null
           ? null
           : undefined;
+    const payoffPickupClaimed =
+        source.payoffPickupClaimed === undefined ? undefined : finiteNonNegativeInteger(source.payoffPickupClaimed, Number.NaN);
+    const payoffPickupTotal =
+        source.payoffPickupTotal === undefined ? undefined : finiteNonNegativeInteger(source.payoffPickupTotal, Number.NaN);
+    const payoffPressureExtra =
+        source.payoffPressureExtra === undefined ? undefined : finiteNonNegativeInteger(source.payoffPressureExtra, Number.NaN);
+    const payoffRewardPerkCount =
+        source.payoffRewardPerkCount === undefined ? undefined : finiteNonNegativeInteger(source.payoffRewardPerkCount, Number.NaN);
 
     return {
         totalScore,
@@ -230,6 +238,14 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         ...(typeof source.dailyDateKeyUtc === 'string' ? { dailyDateKeyUtc: source.dailyDateKeyUtc } : {}),
         ...(activeMutators ? { activeMutators } : {}),
         ...(relicIds ? { relicIds } : {}),
+        ...(Number.isFinite(payoffPickupClaimed) ? { payoffPickupClaimed } : {}),
+        ...(Number.isFinite(payoffPickupTotal) ? { payoffPickupTotal } : {}),
+        ...(Number.isFinite(payoffPressureExtra) ? { payoffPressureExtra } : {}),
+        ...(Number.isFinite(payoffRewardPerkCount) ? { payoffRewardPerkCount } : {}),
+        ...(typeof source.payoffRoutePaid === 'boolean' ? { payoffRoutePaid: source.payoffRoutePaid } : {}),
+        ...(typeof source.payoffRouteRewardText === 'string' || source.payoffRouteRewardText === null
+            ? { payoffRouteRewardText: source.payoffRouteRewardText }
+            : {}),
         ...(startingLoadoutId !== undefined ? { startingLoadoutId } : {}),
         ...(typeof source.practiceMode === 'boolean' ? { practiceMode: source.practiceMode } : {}),
         ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {}),

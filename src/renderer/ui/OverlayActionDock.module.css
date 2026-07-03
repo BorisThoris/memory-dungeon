@@ -69,6 +69,26 @@
     min-width: 10.5rem !important;
 }
 
+.actionContent {
+    display: grid;
+    gap: 0.1rem;
+    min-width: 0;
+    text-align: center;
+}
+
+.actionContent span,
+.actionContent small {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.actionContent small {
+    color: color-mix(in srgb, currentColor 72%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 760;
+    line-height: 1.12;
+}
+
 .dock .primaryGroup .actionButton {
     width: 100%;
     min-width: 12rem !important;

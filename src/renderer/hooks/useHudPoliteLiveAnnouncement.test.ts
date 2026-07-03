@@ -2,6 +2,7 @@ import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import type { Tile } from '../../shared/contracts';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
+import { getHudActionFeedbackProfile } from '../copy/hudActionFeedback';
 import { formatHudActionFeedbackText, useHudPoliteLiveAnnouncement } from './useHudPoliteLiveAnnouncement';
 
 const base = {
@@ -107,6 +108,65 @@ describe('useHudPoliteLiveAnnouncement', () => {
         ).toBe('Memory aid used with an unusually long explanation that...');
     });
 
+    it('classifies compact visual action feedback by gameplay impact', () => {
+        expect(getHudActionFeedbackProfile('Shard spark claimed: +1 combo shard.')).toEqual({
+            label: 'Reward burst',
+            tone: 'reward'
+        });
+        expect(getHudActionFeedbackProfile('Echo and Stasis trait resolved.')).toEqual({
+            label: 'Trait play',
+            tone: 'trait'
+        });
+        expect(getHudActionFeedbackProfile('Trait combo surge: Drift and Stasis resolved.')).toEqual({
+            label: 'Trait surge',
+            tone: 'trait'
+        });
+        expect(getHudActionFeedbackProfile('Shop gold gained. 4 available.')).toEqual({
+            label: 'Reward burst',
+            tone: 'reward'
+        });
+        expect(getHudActionFeedbackProfile('Pickup cashout: Shard spark +1 combo shard.')).toEqual({
+            label: 'Reward burst',
+            tone: 'reward'
+        });
+        expect(
+            getHudActionFeedbackProfile(
+                'Trait combo surge: Echo and Stasis resolved. Combo shard gained. Payoff stack: 4 payoffs cashed. Cash stack now.'
+            )
+        ).toEqual({
+            label: 'Payoff stack',
+            tone: 'reward'
+        });
+        expect(getHudActionFeedbackProfile('Cashout hit: 2 payoffs paid together. Keep the chain live.')).toEqual({
+            label: 'Cashout hit',
+            tone: 'reward'
+        });
+        expect(getHudActionFeedbackProfile('Reward cashout: 2 payoffs paid together.')).toEqual({
+            label: 'Reward cashout',
+            tone: 'reward'
+        });
+        expect(getHudActionFeedbackProfile('Chain times five - keep the chain for bigger match payouts.')).toEqual({
+            label: 'Chain',
+            tone: 'chain'
+        });
+        expect(getHudActionFeedbackProfile('Surge hit: x6. Surge tier live. Next reward: Combo prime: x8 +1 shard in 2 matches.')).toEqual({
+            label: 'Chain',
+            tone: 'chain'
+        });
+        expect(getHudActionFeedbackProfile('Chain x5 broken - recover with a remembered pair.')).toEqual({
+            label: 'Chain break',
+            tone: 'danger'
+        });
+        expect(getHudActionFeedbackProfile('No match. Recover with a safe match. Chain reset.')).toEqual({
+            label: 'Miss',
+            tone: 'danger'
+        });
+        expect(getHudActionFeedbackProfile('Life lost. 1 life remains.', 'error')).toEqual({
+            label: 'Critical',
+            tone: 'danger'
+        });
+    });
+
     it('announces when gauntlet crosses the sixty-second bucket', async () => {
         const { result, rerender } = renderHook(
             (p: { ms: number }) =>
@@ -183,7 +243,56 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe('Score parasite drain absorbed by ward.');
     });
 
-    it('announces match chain milestones while playing', async () => {
+    it('announces match chain milestones with arcade payoff copy while playing', async () => {
+        const { result, rerender } = renderHook(
+            (p: { streak: number; shards?: number }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 3,
+                    chainAnnounceActive: true,
+                    comboShards: p.shards ?? base.comboShards,
+                    chainMatchStreak: p.streak
+                }),
+            { initialProps: { streak: 2, shards: 0 } }
+        );
+
+        await act(async () => {
+            rerender({ streak: 3, shards: 0 });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe(
+            'Chain started: x3. Reward loop online. Next reward: Double cashout: x4 +1 shard in 1 match.'
+        );
+
+    });
+
+    it('announces surge chain milestones with the next reward target', async () => {
+        const { result, rerender } = renderHook(
+            (p: { streak: number; shards: number }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 3,
+                    chainAnnounceActive: true,
+                    comboShards: p.shards,
+                    chainMatchStreak: p.streak
+                }),
+            { initialProps: { streak: 5, shards: 1 } }
+        );
+
+        await flushRaf();
+
+        await act(async () => {
+            rerender({ streak: 6, shards: 1 });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe(
+            'Surge hit: x6. Surge tier live. Next reward: Triple prime: x8 +1 shard in 2 matches.'
+        );
+    });
+
+    it('announces when a meaningful match chain breaks', async () => {
         const { result, rerender } = renderHook(
             (p: { streak: number }) =>
                 useHudPoliteLiveAnnouncement({
@@ -192,17 +301,15 @@ describe('useHudPoliteLiveAnnouncement', () => {
                     chainAnnounceActive: true,
                     chainMatchStreak: p.streak
                 }),
-            { initialProps: { streak: 2 } }
+            { initialProps: { streak: 5 } }
         );
 
         await act(async () => {
-            rerender({ streak: 3 });
+            rerender({ streak: 0 });
         });
         await flushRaf();
 
-        expect(result.current.message).toBe(
-            'Chain times three - consecutive matches boost your score.'
-        );
+        expect(result.current.message).toBe('Chain x5 broken - recover with a remembered pair.');
     });
 
     it('announces pickup claims with reward-specific copy', async () => {
@@ -261,6 +368,46 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.priority).toBe('info');
     });
 
+    it('summarizes stacked reward cashouts in the live-region action summary', async () => {
+        const { result, rerender } = renderHook(
+            (p: { pairs: number; shards: number; guards: number; gold: number; echoMatches: number; stasisMatches: number }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 2,
+                    pairCount: 4,
+                    matchedPairs: p.pairs,
+                    chainMatchStreak: 4,
+                    comboShards: p.shards,
+                    guardTokens: p.guards,
+                    shopGold: p.gold,
+                    tileTraitMatches: {
+                        ...base.tileTraitMatches,
+                        echo: p.echoMatches,
+                        stasis: p.stasisMatches
+                    }
+                }),
+            {
+                initialProps: {
+                    pairs: 0,
+                    shards: 0,
+                    guards: 0,
+                    gold: 0,
+                    echoMatches: 0,
+                    stasisMatches: 0
+                }
+            }
+        );
+
+        await act(async () => {
+            rerender({ pairs: 1, shards: 1, guards: 1, gold: 2, echoMatches: 1, stasisMatches: 1 });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe(
+            '1 guard token gained. 1 available. Match resolved. 1/4 pairs cleared. Trait combo surge: Echo and Stasis resolved. Combo shard gained. 1 available. 2 shop gold gained. 2 available. Payoff stack: 4 payoffs cashed. Cash stack now.'
+        );
+    });
+
     it('announces matched tile trait effects with the resolved match', async () => {
         const { result, rerender } = renderHook(
             (p: { pairs: number; echoMatches: number }) =>
@@ -317,7 +464,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'Match resolved. 1/4 pairs cleared. Drift and Stasis trait resolved. 1 row/swap charge gained. 1 full shuffle charge gained. Stasis blocked a nearby trait tile from opening first next turn.'
+            'Match resolved. 1/4 pairs cleared. Trait combo surge: Drift and Stasis resolved. 1 row/swap charge gained. 1 full shuffle charge gained. Stasis blocked a nearby trait tile from opening first next turn.'
         );
     });
 
@@ -340,7 +487,33 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'No match. Cards will turn back. Mirror trait penalty applied. Volatile trait shuffled hidden cards.'
+            'No match. Recover with a safe match. Chain reset. Mirror trait penalty applied. Volatile trait shuffled hidden cards.'
+        );
+    });
+
+    it('announces multi-trait mismatch penalties as a trait surge', async () => {
+        const { result, rerender } = renderHook(
+            (p: { mismatches: number; mirrorMisses: number; volatileMisses: number }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 2,
+                    mismatches: p.mismatches,
+                    tileTraitMismatches: {
+                        ...base.tileTraitMismatches,
+                        mirror: p.mirrorMisses,
+                        volatile: p.volatileMisses
+                    }
+                }),
+            { initialProps: { mismatches: 0, mirrorMisses: 0, volatileMisses: 0 } }
+        );
+
+        await act(async () => {
+            rerender({ mismatches: 1, mirrorMisses: 1, volatileMisses: 1 });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe(
+            'No match. Recover with a safe match. Chain reset. Trait surge: 2 penalties applied: Volatile and Mirror.'
         );
     });
 
@@ -441,7 +614,7 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe(
-            'No match. Cards will turn back. Recall broken. 2 tile memories are unstable.'
+            'No match. Recover with a safe match. Chain reset. Recall broken. 2 tile memories are unstable.'
         );
     });
 

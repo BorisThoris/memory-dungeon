@@ -67,7 +67,7 @@ const dismissStartupIntro = async (user: ReturnType<typeof userEvent.setup>): Pr
 
 const chooseClassicRun = async (user: ReturnType<typeof userEvent.setup>): Promise<void> => {
     await user.click(await screen.findByRole('button', { name: /^play$/i }));
-    await user.click(await screen.findByRole('button', { name: /start run/i }));
+    await user.click(await screen.findByRole('button', { name: /start classic run/i }));
 };
 
 const findGameplayBoardStage = async (): Promise<HTMLElement> => screen.findByTestId('board-stage', undefined, { timeout: 10_000 });

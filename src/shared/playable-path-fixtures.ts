@@ -1,4 +1,12 @@
-import { GAME_RULES_VERSION, type BoardState, type RunState, type SaveData, type ViewState } from './contracts';
+import {
+    GAME_RULES_VERSION,
+    MAX_COMBO_SHARDS,
+    MAX_LIVES,
+    type BoardState,
+    type RunState,
+    type SaveData,
+    type ViewState
+} from './contracts';
 import { createDefaultSaveData, normalizeSaveData } from './save-data';
 import {
     advanceToNextLevel,
@@ -23,6 +31,8 @@ import { createRunShopOffers } from './shop-rules';
 export type PlayablePathFixtureId =
     | 'freshProfile'
     | 'activeRunWithHazards'
+    | 'activeRunWithPickupCashout'
+    | 'activeRunWithTraitRouteSetup'
     | 'activeRunWithTrapCard'
     | 'floorClearWithRouteChoices'
     | 'floorClearWithShop'
@@ -52,6 +62,8 @@ const HAZARD_PATH_SEED = 81_004;
 export const PLAYABLE_PATH_FIXTURE_IDS: readonly PlayablePathFixtureId[] = [
     'freshProfile',
     'activeRunWithHazards',
+    'activeRunWithPickupCashout',
+    'activeRunWithTraitRouteSetup',
     'activeRunWithTrapCard',
     'floorClearWithRouteChoices',
     'floorClearWithShop',
@@ -94,6 +106,10 @@ export const createPlayablePathFixture = (
                 saveData,
                 shopReturnMode: null
             };
+        case 'activeRunWithPickupCashout':
+            return { id, view: 'playing', run: activeRunWithPickupCashout(), saveData, shopReturnMode: null };
+        case 'activeRunWithTraitRouteSetup':
+            return { id, view: 'playing', run: activeRunWithTraitRouteSetup(), saveData, shopReturnMode: null };
         case 'activeRunWithTrapCard':
             return { id, view: 'playing', run: activeRunWithTrapCard(), saveData, shopReturnMode: null };
         case 'floorClearWithRouteChoices':
@@ -132,6 +148,83 @@ const baseEndlessRun = (): RunState =>
         gameMode: 'endless',
         runSeed: PLAYABLE_PATH_SEED
     });
+
+const activeRunWithTraitRouteSetup = (): RunState => {
+    const base = finishMemorizePhase(
+        createNewRun(0, {
+            echoFeedbackEnabled: false,
+            gameMode: 'endless',
+            runSeed: 172_651
+        })
+    );
+    const board: BoardState = {
+        ...base.board!,
+        columns: 3,
+        rows: 3,
+        pairCount: 4,
+        matchedPairs: 0,
+        flippedTileIds: [],
+        tiles: [
+            { id: 's1', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden', tileTraitKind: 'sealed' },
+            { id: 'f1', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
+            { id: 'f2', pairKey: 'filler', symbol: 'F', label: 'Filler', state: 'hidden' },
+            { id: 'o1', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
+            { id: 'h1', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden', tileTraitKind: 'heavy' },
+            { id: 'o2', pairKey: 'origin', symbol: 'O', label: 'Origin', state: 'hidden' },
+            { id: 's2', pairKey: 'sealed', symbol: 'S', label: 'Sealed', state: 'hidden' },
+            { id: 'h2', pairKey: 'heavy', symbol: 'H', label: 'Heavy', state: 'hidden' }
+        ]
+    };
+    return {
+        ...base,
+        board,
+        findablesTotalThisFloor: 0,
+        matchResolutionsThisFloor: 1,
+        regionShuffleCharges: 1,
+        rewardPerkIds: ['free_first_swap_per_floor', 'trait_streak_toolkit'],
+        shuffleCharges: 0,
+        stats: {
+            ...base.stats,
+            currentStreak: 2
+        }
+    };
+};
+
+const activeRunWithPickupCashout = (): RunState => {
+    const base = finishMemorizePhase(
+        createNewRun(0, {
+            echoFeedbackEnabled: false,
+            gameMode: 'endless',
+            runSeed: 172_671
+        })
+    );
+    const board: BoardState = {
+        ...base.board!,
+        columns: 2,
+        rows: 2,
+        pairCount: 2,
+        matchedPairs: 0,
+        flippedTileIds: [],
+        tiles: [
+            { id: 'p1', pairKey: 'pickup', symbol: 'P', label: 'Pickup', state: 'hidden', findableKind: 'shard_spark' },
+            { id: 'p2', pairKey: 'pickup', symbol: 'P', label: 'Pickup', state: 'hidden', findableKind: 'shard_spark' },
+            { id: 'a1', pairKey: 'anchor', symbol: 'A', label: 'Anchor', state: 'hidden' },
+            { id: 'a2', pairKey: 'anchor', symbol: 'A', label: 'Anchor', state: 'hidden' }
+        ]
+    };
+    return {
+        ...base,
+        board,
+        findablesClaimedThisFloor: 0,
+        findablesTotalThisFloor: 1,
+        lives: MAX_LIVES,
+        stats: {
+            ...base.stats,
+            comboShards: MAX_COMBO_SHARDS,
+            currentStreak: 0
+        }
+    };
+};
 
 const activeRunWithTrapCard = (): RunState => {
     const base = finishMemorizePhase(

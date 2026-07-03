@@ -30,7 +30,7 @@ test.describe('Dungeon board 3D value', () => {
 
             await expect(frame).toHaveAttribute(
                 'data-card-feedback-marker-contract',
-                /enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait trait-combo/
+                /enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait chain-ready chain-setup trait-combo trait-route-target/
             );
             const markerStates = await readMarkerStates(page);
             expect(markerStates.get('objective') ?? 0, `${viewport.name} objective markers`).toBeGreaterThan(0);

@@ -23,9 +23,9 @@ export const TILE_TRAIT_INTERACTION_TEXT = {
     'row-compass:drift-routing': 'Row Compass + Drift: extra route charge',
     'warden-sigil:mirror-ward': 'Warden Sigil + Mirror: warded reflection',
     'wager-surety:cursed-buffer': 'Wager Surety buffered cursed risk',
-    'reward-perk:echo-conduit-double': 'Echo Conduit Lens: doubled Echo',
-    'reward-perk:trait-streak-flash': 'Trait Streak Lens: flash pair',
-    'reward-perk:cursed-opener-greed': 'Cursed Opener: first-pair greed'
+    'reward-perk:echo-conduit-double': 'Perk pop: Echo Conduit Lens doubles the route',
+    'reward-perk:trait-streak-flash': 'Perk pop: Trait Streak Lens flashes a pair',
+    'reward-perk:cursed-opener-greed': 'Perk pop: Cursed Opener pays gold'
 } as const;
 
 export type TileTraitInteractionTag = keyof typeof TILE_TRAIT_INTERACTION_TEXT;

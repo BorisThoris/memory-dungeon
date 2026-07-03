@@ -66,10 +66,917 @@
     color: var(--theme-text);
 }
 
+.payoffEngineSignal {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1.3fr);
+    align-items: center;
+    gap: 0.34rem 0.55rem;
+    min-width: 0;
+    padding: 0.58rem 0.68rem;
+    border-radius: var(--ui-radius-md);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-divider-hairline));
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold) 15%, transparent), transparent 58%),
+        color-mix(in srgb, var(--theme-surface-control) 82%, transparent);
+    box-shadow: var(--theme-elevation-soft);
+}
+
+.payoffEngineSignal small,
+.payoffEngineSignal strong,
+.payoffEngineSignal span,
+.payoffEngineSignal b {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.payoffEngineSignal small {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    font-size: 0.64rem;
+    font-weight: 950;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.payoffEngineSignal strong {
+    color: color-mix(in srgb, var(--theme-text) 92%, white);
+    font-size: 0.96rem;
+    font-weight: 940;
+    line-height: 1.05;
+}
+
+.payoffEngineSignal span {
+    color: color-mix(in srgb, var(--theme-text-muted) 90%, white);
+    font-size: 0.78rem;
+    font-weight: 750;
+    line-height: 1.15;
+}
+
+.payoffEngineSignal b {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: 0.76rem;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.payoffEngineSignalBeatPips {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.16rem;
+    align-items: center;
+    height: 0.2rem;
+    color: color-mix(in srgb, var(--theme-gold-bright) 72%, white);
+}
+
+.payoffEngineSignalBeatPips i {
+    height: 0.16rem;
+    border-radius: var(--ui-radius-pill);
+    animation: inventoryBeatPulse 0.86s ease-in-out infinite;
+    background: currentColor;
+    box-shadow: 0 0 0.4rem color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.payoffEngineSignalBeatPips i:nth-child(2),
+.runLoopSignalBeatPips i:nth-child(2),
+.rewardPerkSignalBeatPips i:nth-child(2),
+.rewardPerkLaneBeatPips i:nth-child(2),
+.loadoutImpactSignalBeatPips i:nth-child(2) {
+    animation-delay: 0.07s;
+}
+
+.payoffEngineSignalBeatPips i:nth-child(3),
+.runLoopSignalBeatPips i:nth-child(3),
+.rewardPerkSignalBeatPips i:nth-child(3),
+.rewardPerkLaneBeatPips i:nth-child(3),
+.loadoutImpactSignalBeatPips i:nth-child(3) {
+    animation-delay: 0.14s;
+}
+
+.payoffEngineSignalBeatPips i:nth-child(4),
+.runLoopSignalBeatPips i:nth-child(4),
+.rewardPerkSignalBeatPips i:nth-child(4),
+.rewardPerkLaneBeatPips i:nth-child(4),
+.loadoutImpactSignalBeatPips i:nth-child(4) {
+    animation-delay: 0.21s;
+}
+
+.payoffEngineSignalBeatPips i:nth-child(5) {
+    animation-delay: 0.28s;
+}
+
+.payoffEngineSignal[data-inventory-payoff-engine-tone='setup'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 26%, var(--theme-divider-hairline));
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 58%),
+        color-mix(in srgb, var(--theme-surface-control) 80%, transparent);
+}
+
+.payoffEngineSignal[data-inventory-payoff-engine-tone='setup'] small,
+.payoffEngineSignal[data-inventory-payoff-engine-tone='setup'] b {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.payoffEngineSignal[data-inventory-payoff-engine-tone='setup'] .payoffEngineSignalBeatPips {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 70%, white);
+}
+
+.payoffEngineSignal[data-inventory-payoff-engine-tone='burst'] .payoffEngineSignalBeatPips {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 38%);
+}
+
+.payoffEngineSignal[data-inventory-payoff-engine-tone='super'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 22%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 84%, transparent);
+    box-shadow:
+        var(--theme-elevation-soft),
+        0 0 1.1rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.payoffEngineSignal[data-inventory-payoff-engine-tone='super'] small,
+.payoffEngineSignal[data-inventory-payoff-engine-tone='super'] b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+}
+
+.payoffEngineSignal[data-inventory-payoff-engine-tone='super'] .payoffEngineSignalBeatPips {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
+.payoffEngineSignal[data-inventory-payoff-engine-screen-cue='burst'],
+.payoffEngineSignal[data-inventory-payoff-engine-screen-cue='super'] {
+    box-shadow:
+        var(--theme-elevation-soft),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.payoffEngineSignal[data-inventory-payoff-engine-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.runLoopSignalRows {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.2rem), 1fr));
+    gap: 0.32rem;
+}
+
+.runLoopSignalRows span {
+    display: grid;
+    gap: 0.08rem;
+    min-width: 0;
+    padding: 0.42rem 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 20%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+}
+
+.runLoopSignalRows small,
+.runLoopSignalRows strong,
+.runLoopSignalRows b,
+.runLoopSignalRows i,
+.runLoopSignalRows em {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.runLoopSignalRows small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: 0.6rem;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.runLoopSignalRows strong {
+    color: color-mix(in srgb, var(--theme-text) 92%, white);
+    font-size: 0.86rem;
+    font-weight: 880;
+    line-height: 1.1;
+}
+
+.runLoopSignalRows b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    font-size: 0.72rem;
+    font-weight: 920;
+    line-height: 1.08;
+}
+
+.runLoopSignalRows i {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
+    font-size: 0.58rem;
+    font-style: normal;
+    font-weight: 930;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.runLoopSignalRows em {
+    display: -webkit-box;
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: 0.74rem;
+    font-style: normal;
+    font-weight: 650;
+    line-height: 1.18;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.runLoopSignalBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.07rem;
+    color: color-mix(in srgb, var(--theme-text-muted) 72%, white);
+}
+
+.runLoopSignalBeatPips i {
+    display: block;
+    width: 0.18rem;
+    height: 0.18rem;
+    border-radius: 999px;
+    animation: inventoryBeatPulse 0.86s ease-in-out infinite;
+    background: currentColor;
+    opacity: 0.72;
+    box-shadow: 0 0 0.3rem color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.runLoopSignalRows span[data-run-loop-beats='3'] .runLoopSignalBeatPips i {
+    opacity: 0.84;
+}
+
+.runLoopSignalRows span[data-run-loop-beats='4'] .runLoopSignalBeatPips i {
+    width: 0.21rem;
+    height: 0.21rem;
+    opacity: 0.94;
+}
+
+.runLoopSignalRows span[data-run-loop-signal='chain'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='chain'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='chain'] b {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='chain'] .runLoopSignalBeatPips {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='reward'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+    background: color-mix(in srgb, var(--theme-gold) 9%, transparent);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='reward'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='reward'] .runLoopSignalBeatPips {
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='resource'] {
+    border-color: color-mix(in srgb, var(--theme-success) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-success) 8%, transparent);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='resource'] strong {
+    color: color-mix(in srgb, var(--theme-success) 80%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='resource'] b {
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='resource'] .runLoopSignalBeatPips {
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='trait'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-violet-bright) 9%, transparent);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='trait'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='trait'] b {
+    color: color-mix(in srgb, var(--theme-violet-bright) 86%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-signal='trait'] .runLoopSignalBeatPips {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.runLoopSignalRows span[data-run-loop-screen-cue='burst'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.runLoopSignalRows span[data-run-loop-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.runLoopSignalRows span[data-run-loop-screen-cue='snap'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+}
+
 .inventoryRowNote {
     color: var(--theme-text-subtle);
     font-size: 0.84rem;
     font-weight: 650;
+}
+
+.inventoryActionCue {
+    display: inline-grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.24rem 0.38rem;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0.08rem 0 0.1rem;
+    padding: 0.28rem 0.44rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-gold-deep) 10%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, white 4%, transparent);
+    line-height: 1.14;
+}
+
+.inventoryActionCue small {
+    color: var(--theme-text-subtle);
+    font-size: 0.56rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.inventoryActionCue strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.72rem;
+    font-weight: 850;
+    white-space: nowrap;
+}
+
+.inventoryActionCue em {
+    min-width: 0;
+    color: var(--theme-text-muted);
+    font-size: 0.72rem;
+    font-style: normal;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+
+.inventoryActionCue[data-inventory-action-tone='chain'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
+}
+
+.inventoryActionCue[data-inventory-action-tone='chain'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.inventoryActionCue[data-inventory-action-tone='route'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-violet-bright) 9%, transparent);
+}
+
+.inventoryActionCue[data-inventory-action-tone='route'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+}
+
+.inventoryActionCue[data-inventory-action-tone='recovery'] {
+    border-color: color-mix(in srgb, var(--theme-success) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-success) 9%, transparent);
+}
+
+.inventoryActionCue[data-inventory-action-tone='recovery'] strong {
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.inventoryActionCue[data-inventory-action-tone='key'] {
+    border-color: color-mix(in srgb, var(--theme-amber) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-amber) 10%, transparent);
+}
+
+.inventoryActionCue[data-inventory-action-tone='key'] strong {
+    color: color-mix(in srgb, var(--theme-amber) 82%, white);
+}
+
+.rewardPerkSignalRows {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+    gap: 0.32rem;
+}
+
+.rewardPerkSignalRows span {
+    display: grid;
+    gap: 0.08rem;
+    min-width: 0;
+    padding: 0.36rem 0.44rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-surface-control) 76%, transparent);
+}
+
+.rewardPerkSignalRows small,
+.rewardPerkSignalRows strong,
+.rewardPerkSignalRows b {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rewardPerkSignalRows small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: 0.62rem;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.rewardPerkSignalRows strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    font-size: 0.78rem;
+    font-weight: 850;
+    line-height: 1.16;
+}
+
+.rewardPerkSignalRows b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.54rem;
+    font-weight: 930;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.rewardPerkSignalBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.06rem;
+    color: currentColor;
+}
+
+.rewardPerkSignalBeatPips i {
+    display: block;
+    width: 0.17rem;
+    height: 0.17rem;
+    border-radius: 999px;
+    animation: inventoryBeatPulse 0.86s ease-in-out infinite;
+    background: currentColor;
+    box-shadow: 0 0 0.32rem color-mix(in srgb, currentColor 30%, transparent);
+    opacity: 0.68;
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal-beats='3'] .rewardPerkSignalBeatPips i {
+    opacity: 0.82;
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal-beats='4'] .rewardPerkSignalBeatPips i {
+    width: 0.21rem;
+    height: 0.21rem;
+    opacity: 0.94;
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal='payoff'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-gold) 9%, transparent);
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal='payoff'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal='moment'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-violet-bright) 9%, transparent);
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal='moment'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal='next'] {
+    border-color: color-mix(in srgb, var(--theme-success) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-success) 9%, transparent);
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal='next'] strong {
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal-screen-cue='burst'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.rewardPerkSignalRows span[data-reward-perk-signal-screen-cue='snap'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+}
+
+.loadoutImpactSignals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+    gap: 0.32rem;
+}
+
+.loadoutImpactSignals span {
+    display: grid;
+    gap: 0.08rem;
+    min-width: 0;
+    padding: 0.36rem 0.44rem;
+    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 20%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+}
+
+.loadoutImpactSignals small,
+.loadoutImpactSignals strong,
+.loadoutImpactSignals b {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.loadoutImpactSignals small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: 0.6rem;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.loadoutImpactSignals strong {
+    color: color-mix(in srgb, var(--theme-text) 90%, white);
+    font-size: 0.78rem;
+    font-weight: 850;
+    line-height: 1.16;
+}
+
+.loadoutImpactSignals b {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
+    font-size: 0.54rem;
+    font-weight: 930;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.loadoutImpactSignalBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.06rem;
+    color: currentColor;
+}
+
+.loadoutImpactSignalBeatPips i {
+    display: block;
+    width: 0.18rem;
+    height: 0.18rem;
+    border-radius: 999px;
+    animation: inventoryBeatPulse 0.86s ease-in-out infinite;
+    background: currentColor;
+    opacity: 0.76;
+    box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.loadoutImpactSignals span[data-loadout-impact-beats='4'] .loadoutImpactSignalBeatPips i {
+    width: 0.21rem;
+    height: 0.21rem;
+    opacity: 0.92;
+}
+
+.loadoutImpactSignals span[data-loadout-impact-tone='resource'] {
+    border-color: color-mix(in srgb, var(--theme-success) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-success) 8%, transparent);
+}
+
+.loadoutImpactSignals span[data-loadout-impact-tone='resource'] strong {
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.loadoutImpactSignals span[data-loadout-impact-tone='build'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-violet-bright) 9%, transparent);
+}
+
+.loadoutImpactSignals span[data-loadout-impact-tone='build'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.loadoutImpactSignals span[data-loadout-impact-tone='payoff'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-gold) 9%, transparent);
+}
+
+.loadoutImpactSignals span[data-loadout-impact-tone='payoff'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.loadoutImpactSignals span[data-loadout-impact-screen-cue='burst'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.loadoutImpactSignals span[data-loadout-impact-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.loadoutImpactSignals span[data-loadout-impact-screen-cue='snap'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+}
+
+.rewardPerkLaneMap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.32rem;
+    padding: 0.44rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 26%, var(--theme-gold-bright) 16%);
+    border-radius: var(--ui-radius-md);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+}
+
+.rewardPerkLaneMap span {
+    display: inline-grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.1rem 0.22rem;
+    min-width: min(10rem, 100%);
+    padding: 0.28rem 0.38rem;
+    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
+}
+
+.rewardPerkPrimaryLaneCue {
+    flex-basis: 100%;
+    grid-template-columns: auto minmax(0, 0.85fr) minmax(0, 1.1fr) auto;
+    padding: 0.42rem 0.5rem;
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 22%);
+    border-radius: calc(var(--ui-radius-md) - 0.02rem);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-surface-raised) 78%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.86rem color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+}
+
+.rewardPerkLaneMap .rewardPerkPrimaryLaneCue strong {
+    display: block;
+    place-items: initial;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: transparent;
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    font-size: 0.74rem;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.rewardPerkLaneMap .rewardPerkPrimaryLaneCue b {
+    color: color-mix(in srgb, var(--theme-text) 96%, white);
+    font-size: 0.72rem;
+}
+
+.rewardPerkLaneMap .rewardPerkPrimaryLaneCue em {
+    grid-column: auto;
+    justify-self: end;
+    color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+    text-align: right;
+}
+
+.rewardPerkPrimaryLaneBeatPips {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    justify-self: center;
+    align-items: center;
+    gap: 0.08rem;
+}
+
+.rewardPerkPrimaryLaneBeatPips i {
+    display: block;
+    width: 0.21rem;
+    height: 0.21rem;
+    border-radius: 999px;
+    animation: inventoryBeatPulse 0.76s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 86%, white 6%);
+    box-shadow: 0 0 0.42rem color-mix(in srgb, currentColor 32%, transparent);
+}
+
+.rewardPerkPrimaryLaneBeatPips i:nth-child(2) {
+    animation-delay: 0.07s;
+}
+
+.rewardPerkPrimaryLaneBeatPips i:nth-child(3) {
+    animation-delay: 0.14s;
+}
+
+.rewardPerkPrimaryLaneBeatPips i:nth-child(4) {
+    animation-delay: 0.21s;
+}
+
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='burst'] .rewardPerkPrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 64%, var(--theme-cyan-bright) 22%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent)),
+        color-mix(in srgb, var(--theme-surface-raised) 82%, transparent);
+}
+
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='chain'] .rewardPerkPrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='guard'] .rewardPerkPrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-success) 52%, var(--theme-cyan-bright) 16%);
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='unlock'] .rewardPerkPrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 50%, var(--theme-gold-bright) 20%);
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+}
+
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='pulse'] .rewardPerkPrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 32%, var(--theme-cyan-bright) 18%);
+}
+
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='burst'] .rewardPerkPrimaryLaneBeatPips i {
+    width: 0.25rem;
+    height: 0.25rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white 8%);
+}
+
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='guard'] .rewardPerkPrimaryLaneBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 84%, white 8%);
+}
+
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='unlock'] .rewardPerkPrimaryLaneBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 82%, white 10%);
+}
+
+.rewardPerkLaneMap small,
+.rewardPerkLaneMap strong,
+.rewardPerkLaneMap b,
+.rewardPerkLaneMap em {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rewardPerkLaneMap small {
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.58rem;
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.rewardPerkLaneMap strong {
+    display: grid;
+    place-items: center;
+    width: 1.14rem;
+    height: 1.14rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--theme-text) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    font-size: 0.62rem;
+    font-weight: 950;
+}
+
+.rewardPerkLaneMap b {
+    color: color-mix(in srgb, var(--theme-text) 94%, white);
+    font-size: 0.64rem;
+    font-weight: 950;
+}
+
+.rewardPerkLaneMap em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+    font-size: 0.64rem;
+    font-style: normal;
+    font-weight: 760;
+}
+
+.rewardPerkLaneBeatPips {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    justify-self: center;
+    align-items: center;
+    gap: 0.06rem;
+    color: currentColor;
+}
+
+.rewardPerkLaneBeatPips i {
+    display: block;
+    width: 0.17rem;
+    height: 0.17rem;
+    border-radius: 999px;
+    animation: inventoryBeatPulse 0.86s ease-in-out infinite;
+    background: currentColor;
+    box-shadow: 0 0 0.3rem color-mix(in srgb, currentColor 28%, transparent);
+    opacity: 0.68;
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-beats='3'] .rewardPerkLaneBeatPips i {
+    opacity: 0.82;
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-beats='4'] .rewardPerkLaneBeatPips i {
+    width: 0.2rem;
+    height: 0.2rem;
+    opacity: 0.94;
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 18%);
+    background:
+        radial-gradient(ellipse 120% 130% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), transparent 66%),
+        color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-screen-cue='chain'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-screen-cue='guard'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success) 20%, transparent);
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-screen-cue='unlock'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-text-muted) 16%, transparent);
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-kind='trait-combo'],
+.rewardPerkLaneMap span[data-reward-perk-lane-kind='chain-reward'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-kind='hazard-control'] {
+    border-color: color-mix(in srgb, var(--theme-success) 30%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+@keyframes inventoryBeatPulse {
+    0%,
+    100% {
+        opacity: 0.62;
+        transform: scale(0.82);
+    }
+
+    44% {
+        opacity: 1;
+        transform: scale(1.12);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .payoffEngineSignalBeatPips i,
+    .runLoopSignalBeatPips i,
+    .rewardPerkSignalBeatPips i,
+    .rewardPerkPrimaryLaneBeatPips i,
+    .rewardPerkLaneBeatPips i,
+    .loadoutImpactSignalBeatPips i {
+        animation: none;
+    }
+}
+
+:global([data-reduce-motion='true']) .payoffEngineSignalBeatPips i,
+:global([data-reduce-motion='true']) .runLoopSignalBeatPips i,
+:global([data-reduce-motion='true']) .rewardPerkSignalBeatPips i,
+:global([data-reduce-motion='true']) .rewardPerkPrimaryLaneBeatPips i,
+:global([data-reduce-motion='true']) .rewardPerkLaneBeatPips i,
+:global([data-reduce-motion='true']) .loadoutImpactSignalBeatPips i {
+    animation: none;
 }
 
 .inRunInventoryShell .loadoutBoard,
@@ -130,5 +1037,9 @@
     .kvRow {
         gap: 0.28rem 0.75rem;
         font-size: 0.84rem;
+    }
+
+    .payoffEngineSignal {
+        grid-template-columns: 1fr;
     }
 }

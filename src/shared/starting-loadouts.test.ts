@@ -11,6 +11,10 @@ describe('starting loadouts', () => {
             'vaultbreaker'
         ]);
         expect(new Set(Object.values(STARTING_LOADOUTS).map((row) => row.firstFloorDecision)).size).toBe(4);
+        for (const row of Object.values(STARTING_LOADOUTS)) {
+            expect(row.impactSignals.map((signal) => signal.tone)).toEqual(['resource', 'build', 'payoff']);
+            expect(row.impactSignals.every((signal) => signal.label.length > 0 && signal.value.length > 0)).toBe(true);
+        }
     });
 
     it('applies deterministic starting resources without changing default runs', () => {
@@ -40,7 +44,11 @@ describe('starting loadouts', () => {
 
         expect(getRunStartingLoadoutRow(run)).toMatchObject({
             id: 'vaultbreaker',
-            label: 'Vaultbreaker'
+            label: 'Vaultbreaker',
+            impactSignals: expect.arrayContaining([
+                expect.objectContaining({ label: 'Starts', value: '+1 iron key, +1 gold' }),
+                expect.objectContaining({ label: 'Payoff', value: 'Greed routes earlier' })
+            ])
         });
         expect(getRunStartingLoadoutRow(createNewRun(0))).toBeNull();
     });

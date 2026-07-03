@@ -21,6 +21,7 @@ import {
     type ShaderMaterial
 } from 'three';
 import type { BoardState, GraphicsQualityPreset, HazardTileKind, Tile } from '../../shared/contracts';
+import type { TraitInteractionLaneId } from '../copy/traitInteractionLaneMap';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import { createCardArcaneGlowMaterial } from './cardArcaneGlowMaterial';
@@ -124,6 +125,9 @@ interface TileBezelProps {
     focusDimmed?: boolean;
     stickyFingerSlotMark?: boolean;
     traitComboBack?: boolean;
+    traitLaneBack?: TraitInteractionLaneId | null;
+    perkArmedBack?: boolean;
+    traitRewardHotBack?: boolean;
     traitRouteTargetBack?: boolean;
     hostConsolidatesTileFrames?: boolean;
     keyboardFocused?: boolean;
@@ -138,10 +142,12 @@ interface TileBezelProps {
     powerBackAccent?: 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | null;
     hazardBackAccent?: HazardTileKind | null;
     routeBackAccent?: boolean;
+    selectedTraitFollowupBack?: boolean;
     objectiveBackAccent?: boolean;
     enemyOccupiedBack?: boolean;
     nonPickableBack?: boolean;
     destroyBlockedDecoyBack?: boolean;
+    traitComboSurgeBack?: boolean;
 }
 
 export interface TileHoverTiltState {
@@ -208,6 +214,7 @@ const TileBezelInner = ({
     powerBackAccent = null,
     hazardBackAccent = null,
     routeBackAccent = false,
+    selectedTraitFollowupBack = false,
     objectiveBackAccent = false,
     enemyOccupiedBack = false,
     nonPickableBack = false,
@@ -215,6 +222,10 @@ const TileBezelInner = ({
     focusDimmed = false,
     stickyFingerSlotMark = false,
     traitComboBack = false,
+    traitComboSurgeBack = false,
+    traitLaneBack = null,
+    perkArmedBack = false,
+    traitRewardHotBack = false,
     traitRouteTargetBack = false,
     hostConsolidatesTileFrames = true,
     keyboardFocused = false,
@@ -774,14 +785,19 @@ const TileBezelInner = ({
                         matchedEdgeGeometry={matchedEdgeGeometry}
                         nonPickableBack={nonPickableBack}
                         objectiveBackAccent={objectiveBackAccent}
+                        perkArmedBack={perkArmedBack}
                         powerBackAccent={powerBackAccent}
                         routeBackAccent={routeBackAccent}
+                        selectedTraitFollowupBack={selectedTraitFollowupBack}
                         spotlightBountyOnBack={spotlightBountyOnBack}
                         spotlightWardOnBack={spotlightWardOnBack}
                         stickyFingerSlotMark={stickyFingerSlotMark}
                         board={board}
                         tile={tile}
                         traitComboBack={traitComboBack}
+                        traitComboSurgeBack={traitComboSurgeBack}
+                        traitLaneBack={traitLaneBack}
+                        traitRewardHotBack={traitRewardHotBack}
                         traitRouteTargetBack={traitRouteTargetBack}
                     />
                     <TileBoardHoverChrome

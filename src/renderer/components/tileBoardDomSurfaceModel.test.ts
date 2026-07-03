@@ -55,6 +55,79 @@ describe('tileBoardDomSurfaceModel', () => {
         expect(result.pickableHiddenSlotsAttr).toContain('1,1');
         expect(result.cardFeedbackStatesAttr).toContain('hidden:2');
         expect(result.cardFeedbackStatesAttr).toContain('focused:1');
+        expect(result.cardFeedbackPrimaryActionAttr).toBe('none');
+        expect(result.cardFeedbackActionPriorityAttr).toBe('');
+        expect(result.cardFeedbackBeatCountsAttr).toBe('');
+        expect(result.cardFeedbackBeatTiersAttr).toBe('');
+        expect(result.cardFeedbackTraitLaneActionsAttr).toBe('');
+        expect(result.cardFeedbackTraitLaneBeatsAttr).toBe('');
+        expect(result.cardFeedbackTraitLaneCuesAttr).toBe('');
+        expect(result.cardFeedbackTraitLanePrimaryActionAttr).toBe('none');
+    });
+
+    it('surfaces primary card action priority for reward-hot trait routes', () => {
+        const result = buildTileBoardDomSurfaceModel({
+            allowGambitThirdFlip: false,
+            board: board([
+                tile('echo', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+                tile('sealed', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+                tile('x1', 'x', 'hidden'),
+                tile('x2', 'x', 'hidden')
+            ]),
+            boardApplicationFocused: false,
+            debugPeekActive: false,
+            focusedTileId: null,
+            includeDevAttributes: true,
+            interactive: true,
+            peekRevealedTileIds: new Set(),
+            previewActive: false,
+            runStatus: 'playing',
+            traitRewardHotTileIds: ['echo', 'sealed']
+        });
+
+        expect(result.cardFeedbackActionCuesAttr).toBe('cash-now:2');
+        expect(result.cardFeedbackActionPriorityAttr).toBe('cash-now:2');
+        expect(result.cardFeedbackBeatCountsAttr).toBe('5:2');
+        expect(result.cardFeedbackBeatTiersAttr).toBe('cashout:2');
+        expect(result.cardFeedbackPrimaryActionAttr).toBe('cash-now');
+        expect(result.cardFeedbackRouteGlyphsAttr).toBe('payoff-stack:2');
+        expect(result.cardFeedbackTraitLaneActionsAttr).toBe('shard:Cash shard:1');
+        expect(result.cardFeedbackTraitLaneBeatsAttr).toBe('shard:4');
+        expect(result.cardFeedbackTraitLaneCuesAttr).toBe('shard:1');
+        expect(result.cardFeedbackTraitLanePrimaryActionAttr).toBe('shard:Cash shard:1');
+        expect(result.cardFeedbackTraitRouteIntensitiesAttr).toBe('stack:2');
+        expect(result.cardFeedbackTraitRouteTiersAttr).toBe('payoff-stack:2');
+    });
+
+    it('surfaces card-level beat tiers for setup and follow-up route cards', () => {
+        const result = buildTileBoardDomSurfaceModel({
+            allowGambitThirdFlip: false,
+            board: board([
+                tile('echo-a', 'echo', 'flipped', { tileTraitKind: 'echo' }),
+                tile('sealed-a', 'sealed', 'matched', { tileTraitKind: 'sealed' }),
+                tile('echo-b', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+                tile('plain', 'plain', 'hidden')
+            ], {
+                flippedTileIds: ['echo-a']
+            }),
+            boardApplicationFocused: false,
+            debugPeekActive: false,
+            focusedTileId: null,
+            includeDevAttributes: true,
+            interactive: true,
+            peekRevealedTileIds: new Set(),
+            previewActive: false,
+            runStatus: 'playing',
+            selectedTraitFollowupTileIds: ['echo-b'],
+            traitRouteTargetTileIds: ['plain']
+        });
+
+        expect(result.cardFeedbackActionCuesAttr).toBe('follow-up:1;route-setup:1');
+        expect(result.cardFeedbackBeatCountsAttr).toBe('3:1>2:1');
+        expect(result.cardFeedbackBeatTiersAttr).toBe('follow-up:1>setup:1');
+        expect(result.cardFeedbackRouteGlyphsAttr).toBe('next-tap:1;prime-cross:1');
+        expect(result.cardFeedbackTraitRouteTiersAttr).toContain('selected-followup:1');
+        expect(result.cardFeedbackTraitRouteTiersAttr).toContain('route-target:1');
     });
 
     it('tracks resolved trap slots and counts', () => {

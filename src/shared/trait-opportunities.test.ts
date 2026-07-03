@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from './contracts';
 import {
+    getTraitComboSurgeTileIds,
+    getTraitOpportunityHighlight,
     getTraitOpportunityHudModel,
+    getSelectedTraitFollowupTileIds,
     getTraitOpportunitySummary,
     getTraitOpportunityTileIds,
     getTraitSwapRouteHints,
@@ -46,6 +49,37 @@ describe('trait opportunities', () => {
         expect(summary.buildLabels[0]).toBe('Sealed Catalyst');
         expect(summary.reason).toContain('Offered for Sealed Catalyst');
         expect([...getTraitOpportunityTileIds(b)]).toEqual(['echo-a', 'sealed-a']);
+        expect([...getTraitComboSurgeTileIds(b)]).toEqual([]);
+        expect(getTraitOpportunityHighlight(b)).toMatchObject({
+            active: true,
+            buildLabel: 'Sealed Catalyst',
+            headline: 'Chain route ready',
+            primaryLine: 'Echo + Sealed: combo shard',
+            secondaryLine: null,
+            tileIds: ['echo-a', 'sealed-a'],
+            tone: 'ready'
+        });
+    });
+
+    it('marks trait opportunities as combo-surge cards when multiple route interactions are live', () => {
+        const b = board([
+            tile('echo-a', 'echo', { tileTraitKind: 'echo' }),
+            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
+            tile('mirror-a', 'mirror', { tileTraitKind: 'mirror' }),
+            tile('conduit-a', 'conduit', { tileTraitKind: 'conduit' })
+        ]);
+
+        expect(getTraitOpportunitySummary(b).interactionLines).toEqual(
+            expect.arrayContaining(['Echo + Sealed: combo shard', 'Sealed + Conduit: shard spark'])
+        );
+        expect([...getTraitComboSurgeTileIds(b)]).toEqual(['echo-a', 'sealed-a', 'mirror-a', 'conduit-a']);
+        expect(getTraitOpportunityHighlight(b)).toMatchObject({
+            active: true,
+            headline: 'Combo surge ready',
+            primaryLine: 'Echo + Sealed: combo shard',
+            secondaryLine: 'Echo + Mirror: recall focus',
+            tone: 'surge'
+        });
     });
 
     it('builds a compact HUD model with route count, first route, and routing tools', () => {
@@ -101,11 +135,46 @@ describe('trait opportunities', () => {
             })
         ).toMatchObject({
             active: true,
-            buildLabel: 'Route setup',
+            buildLabel: 'Route prime',
             primaryLine: 'Swap sealed-a with plain-a: Sealed + Heavy: score surge',
             routeCountLabel: 'setup',
             title: expect.stringContaining('Swap hint: Swap sealed-a with plain-a: Sealed + Heavy: score surge.')
         });
+        expect(getTraitOpportunityHighlight(b)).toMatchObject({
+            active: true,
+            buildLabel: 'Route prime',
+            headline: 'One swap primes route',
+            primaryLine: 'Swap sealed-a with plain-a: Sealed + Heavy: score surge',
+            secondaryLine: null,
+            tileIds: ['sealed-a', 'plain-a'],
+            tone: 'setup'
+        });
+    });
+
+    it('does not advertise swap-created setup routes when a no-shuffle contract locks row/swap tools', () => {
+        const b = board([
+            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
+            tile('plain-a', 'plain'),
+            tile('origin-a', 'origin'),
+            tile('heavy-a', 'heavy', { tileTraitKind: 'heavy' })
+        ]);
+
+        const model = getTraitOpportunityHudModel(b, {
+            activeContract: { maxMismatches: null, noDestroy: false, noShuffle: true },
+            peekCharges: 0,
+            regionShuffleCharges: 1,
+            regionShuffleFreeThisFloor: true,
+            shuffleCharges: 0
+        });
+
+        expect(model).toMatchObject({
+            active: false,
+            primaryLine: 'No trait route primed yet',
+            routeCountLabel: '0 routes',
+            swapHint: null,
+            toolLine: 'Tools: row/swap locked, peek 0, shuffle 0'
+        });
+        expect(model.title).not.toContain('Swap hint:');
     });
 
     it('ignores matched and removed trait cards so stale combos do not drive rewards', () => {
@@ -120,6 +189,31 @@ describe('trait opportunities', () => {
             buildLabels: [],
             reason: null
         });
+        expect(getTraitOpportunityHighlight(b)).toMatchObject({
+            active: false,
+            headline: 'No chain route lit',
+            tileIds: [],
+            tone: 'idle'
+        });
+    });
+
+    it('marks hidden mate cards as selected trait followups after one comboable trait card is flipped', () => {
+        const b = board([
+            tile('echo-a', 'echo', { state: 'flipped', tileTraitKind: 'echo' }),
+            tile('sealed-a', 'sealed', { tileTraitKind: 'sealed' }),
+            tile('echo-b', 'echo', { tileTraitKind: 'echo' }),
+            tile('plain-a', 'plain')
+        ]);
+
+        expect([...getSelectedTraitFollowupTileIds({ ...b, flippedTileIds: ['echo-a'] })]).toEqual(['echo-b']);
+        expect([...getSelectedTraitFollowupTileIds({ ...b, flippedTileIds: [] })]).toEqual([]);
+        expect([
+            ...getSelectedTraitFollowupTileIds({
+                ...b,
+                flippedTileIds: ['plain-a'],
+                tiles: b.tiles.map((row) => (row.id === 'plain-a' ? { ...row, state: 'flipped' as const } : row))
+            })
+        ]).toEqual([]);
     });
 
     it('explains whether a tile swap creates or breaks a trait route', () => {

@@ -807,6 +807,12 @@ export interface RouteSideRoomChoiceState {
     primary?: boolean;
     traitBuildLabels?: string[];
     traitBuildReason?: string;
+    rewardPerkNextCue?: string;
+    nextCue?: string;
+    rewardImpactKind?: 'build' | 'resource' | 'risk' | 'unlock';
+    rewardImpactCue?: string;
+    rewardImpactDetail?: string;
+    rewardImpactBeats?: 2 | 3 | 4;
 }
 
 export interface RouteSideRoomState {
@@ -843,6 +849,13 @@ export interface RunSummary {
     dailyDateKeyUtc?: string;
     activeMutators?: MutatorId[];
     relicIds?: RelicId[];
+    /** Archive-safe payoff lanes copied from the final run state for Profile / Collection recap surfaces. */
+    payoffPickupClaimed?: number;
+    payoffPickupTotal?: number;
+    payoffPressureExtra?: number;
+    payoffRewardPerkCount?: number;
+    payoffRoutePaid?: boolean;
+    payoffRouteRewardText?: string | null;
     startingLoadoutId?: StartingLoadoutId | null;
     practiceMode?: boolean;
     wildMenuRun?: boolean;

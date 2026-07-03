@@ -13,4 +13,46 @@ describe('matchScoreFloaterTiming', () => {
         expect(MATCH_SCORE_FLOAT_MS_REDUCED).toBeLessThan(MATCH_SCORE_FLOAT_MS_FULL);
         expect(MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS).toBeGreaterThan(0);
     });
+
+    it('holds richer reward floaters longer without slowing simple score or miss pops', () => {
+        expect(matchScoreFloatDurationMs(false, { kind: 'match', crescendo: { tier: 'score' } })).toBe(
+            MATCH_SCORE_FLOAT_MS_FULL
+        );
+        expect(matchScoreFloatDurationMs(false, { kind: 'miss' })).toBe(MATCH_SCORE_FLOAT_MS_FULL);
+        expect(
+            matchScoreFloatDurationMs(false, {
+                chainMilestone: {},
+                crescendo: { tier: 'stack' },
+                kind: 'match',
+                payoffLaneMap: [{}, {}],
+                rewardBurst: {}
+            })
+        ).toBeGreaterThan(MATCH_SCORE_FLOAT_MS_FULL + 600);
+        expect(
+            matchScoreFloatDurationMs(false, {
+                crescendo: { tier: 'super' },
+                kind: 'match',
+                payoffLaneMap: [{}, {}, {}, {}],
+                rewardBurst: {}
+            })
+        ).toBeGreaterThan(matchScoreFloatDurationMs(false, { crescendo: { tier: 'cashout' }, kind: 'match' }));
+    });
+
+    it('scales reward hold bonuses down for reduced motion', () => {
+        const full = matchScoreFloatDurationMs(false, {
+            crescendo: { tier: 'super' },
+            kind: 'match',
+            payoffLaneMap: [{}, {}, {}],
+            rewardBurst: {}
+        });
+        const reduced = matchScoreFloatDurationMs(true, {
+            crescendo: { tier: 'super' },
+            kind: 'match',
+            payoffLaneMap: [{}, {}, {}],
+            rewardBurst: {}
+        });
+
+        expect(reduced).toBeGreaterThan(MATCH_SCORE_FLOAT_MS_REDUCED);
+        expect(reduced).toBeLessThan(full);
+    });
 });

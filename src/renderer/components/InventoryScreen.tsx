@@ -19,6 +19,327 @@ interface InventoryScreenProps {
     stackedOnGameplay?: boolean;
 }
 
+const formatInventorySignalLabel = (
+    label: string,
+    rows: readonly { detail?: string; label?: string; value?: string; lane?: string; payoff?: string; nextCue?: string }[]
+): string => {
+    const rowCopy = rows
+        .map((row) =>
+            [
+                row.label ?? row.lane,
+                row.value ?? row.payoff,
+                row.nextCue,
+                row.detail
+            ].filter(Boolean).join(': ')
+        )
+        .join('. ');
+    return rowCopy ? `${label}. ${rowCopy}.` : label;
+};
+
+type InventoryRewardPerkLaneMapEntry = {
+    action: string;
+    count: number;
+    lane: string;
+    payoff: string;
+    slug: string;
+};
+
+const inventoryRewardPerkLaneSlug = (lane: string): string =>
+    lane.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'lane';
+
+const inventoryRewardPerkLaneAction = (lane: string, slug = inventoryRewardPerkLaneSlug(lane)): string => {
+    if (slug.includes('trait') || slug.includes('combo')) {
+        return 'Set combo';
+    }
+    if (slug.includes('hazard') || slug.includes('control')) {
+        return 'Pre-clear hazard';
+    }
+    if (slug.includes('chain')) {
+        return 'Push chain';
+    }
+    if (slug.includes('key') || slug.includes('lock')) {
+        return 'Open lock';
+    }
+    return 'Use perk';
+};
+
+const buildInventoryRewardPerkLaneMap = (
+    rows: readonly { lane: string; payoff: string }[]
+): InventoryRewardPerkLaneMapEntry[] => {
+    const state = new Map<string, InventoryRewardPerkLaneMapEntry>();
+    rows.forEach((row) => {
+        const slug = inventoryRewardPerkLaneSlug(row.lane);
+        const existing = state.get(slug);
+        if (existing) {
+            existing.count += 1;
+            return;
+        }
+        state.set(slug, {
+            action: inventoryRewardPerkLaneAction(row.lane, slug),
+            count: 1,
+            lane: row.lane,
+            payoff: row.payoff,
+            slug
+        });
+    });
+    return [...state.values()];
+};
+
+const inventoryRewardPerkLaneMapAttr = (laneMap: readonly InventoryRewardPerkLaneMapEntry[]): string =>
+    laneMap.length > 0 ? laneMap.map((lane) => `${lane.slug}:${lane.count}`).join('>') : 'none';
+
+const inventoryRewardPerkLaneActionMapAttr = (laneMap: readonly InventoryRewardPerkLaneMapEntry[]): string =>
+    laneMap.length > 0 ? laneMap.map((lane) => `${lane.slug}:${lane.action}:${lane.count}`).join('>') : 'none';
+
+const inventoryRewardPerkLaneMapLabel = (laneMap: readonly InventoryRewardPerkLaneMapEntry[]): string =>
+    laneMap.length > 0
+        ? `Inventory reward perk lane map. ${laneMap.map((lane) => `${lane.lane}: ${lane.count}. ${lane.action}. ${lane.payoff}.`).join(' ')}`
+        : 'Inventory reward perk lane map';
+
+const inventoryRewardPerkLaneBeatCount = (lane: Pick<InventoryRewardPerkLaneMapEntry, 'count' | 'slug'>): 2 | 3 | 4 => {
+    if (lane.count > 1 || lane.slug.includes('trait') || lane.slug.includes('chain')) {
+        return 4;
+    }
+    if (lane.slug.includes('hazard') || lane.slug.includes('control') || lane.slug.includes('key')) {
+        return 3;
+    }
+    return 2;
+};
+
+const inventoryRewardPerkLaneAudioCue = (
+    lane: Pick<InventoryRewardPerkLaneMapEntry, 'slug'>
+): 'reward-perk-lane-combo' | 'reward-perk-lane-chain' | 'reward-perk-lane-guard' | 'reward-perk-lane-key' | 'reward-perk-lane-setup' => {
+    if (lane.slug.includes('trait') || lane.slug.includes('combo')) {
+        return 'reward-perk-lane-combo';
+    }
+    if (lane.slug.includes('chain')) {
+        return 'reward-perk-lane-chain';
+    }
+    if (lane.slug.includes('hazard') || lane.slug.includes('control')) {
+        return 'reward-perk-lane-guard';
+    }
+    if (lane.slug.includes('key') || lane.slug.includes('lock')) {
+        return 'reward-perk-lane-key';
+    }
+    return 'reward-perk-lane-setup';
+};
+
+const inventoryRewardPerkLaneScreenCue = (
+    lane: Pick<InventoryRewardPerkLaneMapEntry, 'count' | 'slug'>
+): 'burst' | 'chain' | 'guard' | 'unlock' | 'pulse' => {
+    if (lane.count > 1 || lane.slug.includes('trait') || lane.slug.includes('combo')) {
+        return 'burst';
+    }
+    if (lane.slug.includes('chain')) {
+        return 'chain';
+    }
+    if (lane.slug.includes('hazard') || lane.slug.includes('control')) {
+        return 'guard';
+    }
+    if (lane.slug.includes('key') || lane.slug.includes('lock')) {
+        return 'unlock';
+    }
+    return 'pulse';
+};
+
+type RewardPerkSignalId = 'lane' | 'payoff' | 'moment' | 'next';
+
+const rewardPerkSignalBeatCount = (signal: RewardPerkSignalId): 1 | 2 | 3 | 4 => {
+    if (signal === 'payoff') {
+        return 4;
+    }
+    if (signal === 'next') {
+        return 3;
+    }
+    if (signal === 'moment') {
+        return 2;
+    }
+    return 1;
+};
+
+type InventoryPayoffEngineTone = ReturnType<typeof createInventoryScreenModel>['payoffEngineSignal']['tone'];
+type InventoryRunLoopSignal = ReturnType<typeof createInventoryScreenModel>['runLoopSignals'][number];
+type InventoryLoadoutImpactSignal = NonNullable<ReturnType<typeof createInventoryScreenModel>['startingLoadoutRow']>['impactSignals'][number];
+
+const inventoryPayoffEngineBeatCount = (tone: InventoryPayoffEngineTone): 2 | 4 | 5 => {
+    if (tone === 'super') {
+        return 5;
+    }
+    if (tone === 'burst') {
+        return 4;
+    }
+    return 2;
+};
+
+const inventoryPayoffEngineAction = (tone: InventoryPayoffEngineTone): 'Push reward stack' | 'Prime payoff route' | 'Start loop' => {
+    if (tone === 'super') {
+        return 'Push reward stack';
+    }
+    if (tone === 'burst') {
+        return 'Prime payoff route';
+    }
+    return 'Start loop';
+};
+
+const inventoryPayoffEngineAudioCue = (
+    tone: InventoryPayoffEngineTone
+): 'inventory-payoff-super' | 'inventory-payoff-burst' | 'inventory-payoff-setup' => {
+    if (tone === 'super') {
+        return 'inventory-payoff-super';
+    }
+    if (tone === 'burst') {
+        return 'inventory-payoff-burst';
+    }
+    return 'inventory-payoff-setup';
+};
+
+const inventoryPayoffEngineScreenCue = (tone: InventoryPayoffEngineTone): 'super' | 'burst' | 'pulse' => {
+    if (tone === 'super') {
+        return 'super';
+    }
+    if (tone === 'burst') {
+        return 'burst';
+    }
+    return 'pulse';
+};
+
+const inventoryRunLoopSignalBeatCount = (signal: InventoryRunLoopSignal): 2 | 3 | 4 => {
+    if (signal.id === 'chain' && signal.value !== 'ready') {
+        return 4;
+    }
+    if (signal.id === 'resource' && signal.nextCue.toLowerCase().includes('primed')) {
+        return 4;
+    }
+    if (signal.id === 'trait' && signal.value !== 'scout') {
+        return 4;
+    }
+    if (signal.id === 'pickup' && signal.value !== '0') {
+        return 3;
+    }
+    return 2;
+};
+
+const inventoryRunLoopSignalAction = (signal: InventoryRunLoopSignal): 'Push chain' | 'Claim pickup' | 'Bank resource' | 'Cash trait' | 'Read loop' => {
+    if (signal.id === 'chain') {
+        return 'Push chain';
+    }
+    if (signal.id === 'pickup') {
+        return 'Claim pickup';
+    }
+    if (signal.id === 'resource') {
+        return 'Bank resource';
+    }
+    if (signal.id === 'trait') {
+        return 'Cash trait';
+    }
+    return 'Read loop';
+};
+
+const inventoryRunLoopSignalAudioCue = (
+    signal: InventoryRunLoopSignal
+): 'inventory-loop-chain' | 'inventory-loop-pickup' | 'inventory-loop-resource' | 'inventory-loop-trait' | 'inventory-loop-neutral' => {
+    if (signal.id === 'chain') {
+        return 'inventory-loop-chain';
+    }
+    if (signal.id === 'pickup') {
+        return 'inventory-loop-pickup';
+    }
+    if (signal.id === 'resource') {
+        return 'inventory-loop-resource';
+    }
+    if (signal.id === 'trait') {
+        return 'inventory-loop-trait';
+    }
+    return 'inventory-loop-neutral';
+};
+
+const inventoryRunLoopSignalScreenCue = (signal: InventoryRunLoopSignal): 'burst' | 'snap' | 'pulse' => {
+    if (inventoryRunLoopSignalBeatCount(signal) >= 4) {
+        return 'burst';
+    }
+    if (inventoryRunLoopSignalBeatCount(signal) === 3) {
+        return 'snap';
+    }
+    return 'pulse';
+};
+
+const inventoryLoadoutImpactSignalBeatCount = (signal: InventoryLoadoutImpactSignal): 3 | 4 => {
+    if (signal.tone === 'payoff') {
+        return 4;
+    }
+    return 3;
+};
+
+const inventoryLoadoutImpactSignalAction = (signal: InventoryLoadoutImpactSignal): 'Bank resource' | 'Prime build' | 'Chase payoff' => {
+    if (signal.tone === 'resource') {
+        return 'Bank resource';
+    }
+    if (signal.tone === 'build') {
+        return 'Prime build';
+    }
+    return 'Chase payoff';
+};
+
+const inventoryLoadoutImpactSignalAudioCue = (
+    signal: InventoryLoadoutImpactSignal
+): 'inventory-loadout-resource' | 'inventory-loadout-build' | 'inventory-loadout-payoff' => {
+    if (signal.tone === 'resource') {
+        return 'inventory-loadout-resource';
+    }
+    if (signal.tone === 'build') {
+        return 'inventory-loadout-build';
+    }
+    return 'inventory-loadout-payoff';
+};
+
+const inventoryLoadoutImpactSignalScreenCue = (signal: InventoryLoadoutImpactSignal): 'pulse' | 'snap' | 'burst' => {
+    if (signal.tone === 'payoff') {
+        return 'burst';
+    }
+    if (signal.tone === 'build') {
+        return 'snap';
+    }
+    return 'pulse';
+};
+
+const rewardPerkSignalAction = (signal: RewardPerkSignalId): 'Read lane' | 'Claim payoff' | 'Watch moment' | 'Play next' => {
+    if (signal === 'payoff') {
+        return 'Claim payoff';
+    }
+    if (signal === 'moment') {
+        return 'Watch moment';
+    }
+    if (signal === 'next') {
+        return 'Play next';
+    }
+    return 'Read lane';
+};
+
+const rewardPerkSignalAudioCue = (
+    signal: RewardPerkSignalId
+): 'reward-perk-lane' | 'reward-perk-payoff' | 'reward-perk-moment' | 'reward-perk-next' => {
+    if (signal === 'payoff') {
+        return 'reward-perk-payoff';
+    }
+    if (signal === 'moment') {
+        return 'reward-perk-moment';
+    }
+    if (signal === 'next') {
+        return 'reward-perk-next';
+    }
+    return 'reward-perk-lane';
+};
+
+const rewardPerkSignalScreenCue = (signal: RewardPerkSignalId): 'pulse' | 'burst' | 'snap' => {
+    if (signal === 'payoff') {
+        return 'burst';
+    }
+    if (signal === 'next') {
+        return 'snap';
+    }
+    return 'pulse';
+};
+
 const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) => {
     const bodyScrollRef = useRef<HTMLDivElement | null>(null);
     const { closeSubscreen, run, saveData, settings } = useAppStore(
@@ -80,12 +401,40 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
         inventoryQuantityById,
         inventoryRows,
         loadoutSummary,
+        payoffEngineSignal,
         perfectMemoryAttribution,
         prepRows,
         rewardPerkRows,
         rewardSignal,
+        runLoopSignals,
         startingLoadoutRow
     } = createInventoryScreenModel(run, saveData);
+    const runLoopSignalsLabel = formatInventorySignalLabel('Inventory run loop signals', runLoopSignals);
+    const payoffEngineSignalLabel = formatInventorySignalLabel('Inventory payoff engine', [
+        {
+            label: payoffEngineSignal.label,
+            nextCue: payoffEngineSignal.nextCue,
+            value: `${inventoryPayoffEngineAction(payoffEngineSignal.tone)}. ${payoffEngineSignal.value}. ${payoffEngineSignal.detail}`
+        }
+    ]);
+    const rewardPerkRowsLabel = formatInventorySignalLabel(
+        'Inventory durable reward perks',
+        rewardPerkRows.map((row) => ({
+            detail: row.label,
+            label: row.lane,
+            nextCue: row.nextCue,
+            value: `${row.payoff}. Moment: ${row.moment}`
+        }))
+    );
+    const rewardPerkLaneMap = buildInventoryRewardPerkLaneMap(rewardPerkRows);
+    const primaryRewardPerkLane = rewardPerkLaneMap[0] ?? null;
+    const rewardPerkLaneMapAttr = inventoryRewardPerkLaneMapAttr(rewardPerkLaneMap);
+    const rewardPerkLaneActionMapAttr = inventoryRewardPerkLaneActionMapAttr(rewardPerkLaneMap);
+    const rewardPerkLaneMapLabel = inventoryRewardPerkLaneMapLabel(rewardPerkLaneMap);
+    const payoffEngineBeatCount = inventoryPayoffEngineBeatCount(payoffEngineSignal.tone);
+    const payoffEngineAction = inventoryPayoffEngineAction(payoffEngineSignal.tone);
+    const payoffEngineAudio = inventoryPayoffEngineAudioCue(payoffEngineSignal.tone);
+    const payoffEngineScreenCue = inventoryPayoffEngineScreenCue(payoffEngineSignal.tone);
 
     return (
         <section aria-label="Inventory" className={shellClassName} role="region">
@@ -139,6 +488,53 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                     <p className={metaStyles.subtitle}>{rewardSignal.body}</p>
                                     <span className={styles.cosmeticNote}>{rewardSignal.cta}</span>
                                 </div>
+                            </div>
+                            <div
+                                aria-label={payoffEngineSignalLabel}
+                                className={styles.payoffEngineSignal}
+                                data-inventory-payoff-engine-action={payoffEngineAction}
+                                data-inventory-payoff-engine-audio={payoffEngineAudio}
+                                data-inventory-payoff-engine-beats={payoffEngineBeatCount}
+                                data-inventory-payoff-engine-screen-cue={payoffEngineScreenCue}
+                                data-inventory-payoff-engine-tone={payoffEngineSignal.tone}
+                                data-testid="inventory-payoff-engine"
+                            >
+                                <small>{payoffEngineSignal.label}</small>
+                                <strong>{payoffEngineSignal.value}</strong>
+                                <span>{payoffEngineSignal.detail}</span>
+                                <b>{payoffEngineSignal.nextCue}</b>
+                                <span aria-hidden="true" className={styles.payoffEngineSignalBeatPips}>
+                                    {Array.from({ length: payoffEngineBeatCount }, (_, beatIndex) => (
+                                        <i data-inventory-payoff-engine-beat={beatIndex + 1} key={beatIndex} />
+                                    ))}
+                                </span>
+                            </div>
+                            <div
+                                aria-label={runLoopSignalsLabel}
+                                className={styles.runLoopSignalRows}
+                                data-testid="inventory-run-loop-signals"
+                            >
+                                {runLoopSignals.map((signal) => (
+                                    <span
+                                        data-run-loop-action={inventoryRunLoopSignalAction(signal)}
+                                        data-run-loop-audio={inventoryRunLoopSignalAudioCue(signal)}
+                                        data-run-loop-beats={inventoryRunLoopSignalBeatCount(signal)}
+                                        data-run-loop-screen-cue={inventoryRunLoopSignalScreenCue(signal)}
+                                        data-run-loop-signal={signal.tone}
+                                        key={signal.id}
+                                    >
+                                        <small>{signal.label}</small>
+                                        <strong>{signal.value}</strong>
+                                        <b>{signal.nextCue}</b>
+                                        <i>{inventoryRunLoopSignalAction(signal)}</i>
+                                        <em>{signal.detail}</em>
+                                        <span aria-hidden="true" className={styles.runLoopSignalBeatPips}>
+                                            {Array.from({ length: inventoryRunLoopSignalBeatCount(signal) }, (_, beatIndex) => (
+                                                <i data-run-loop-signal-beat={beatIndex + 1} key={beatIndex} />
+                                            ))}
+                                        </span>
+                                    </span>
+                                ))}
                             </div>
                             <div className={styles.prepGrid} data-testid="inventory-prep-strip">
                                 {prepRows.map((row) => (
@@ -243,6 +639,36 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                     <div className={metaStyles.archiveCatalogRow}>
                                         <p className={metaStyles.archiveCatalogRowTitle}>{startingLoadoutRow.label}</p>
                                         <p className={metaStyles.subtitle}>{startingLoadoutRow.summary}</p>
+                                        <div
+                                            aria-label={`${startingLoadoutRow.label} impact: ${startingLoadoutRow.impactSignals
+                                                .map((signal) => `${signal.label}: ${signal.value}`)
+                                                .join('. ')}`}
+                                            className={styles.loadoutImpactSignals}
+                                            data-testid="inventory-starting-loadout-signals"
+                                        >
+                                            {startingLoadoutRow.impactSignals.map((signal) => (
+                                                <span
+                                                    data-loadout-impact-action={inventoryLoadoutImpactSignalAction(signal)}
+                                                    data-loadout-impact-audio={inventoryLoadoutImpactSignalAudioCue(signal)}
+                                                    data-loadout-impact-beats={inventoryLoadoutImpactSignalBeatCount(signal)}
+                                                    data-loadout-impact-screen-cue={inventoryLoadoutImpactSignalScreenCue(signal)}
+                                                    data-loadout-impact-tone={signal.tone}
+                                                    key={signal.label}
+                                                >
+                                                    <small>{signal.label}</small>
+                                                    <strong>{signal.value}</strong>
+                                                    <b>{inventoryLoadoutImpactSignalAction(signal)}</b>
+                                                    <span aria-hidden="true" className={styles.loadoutImpactSignalBeatPips}>
+                                                        {Array.from(
+                                                            { length: inventoryLoadoutImpactSignalBeatCount(signal) },
+                                                            (_, beatIndex) => (
+                                                                <i data-loadout-impact-signal-beat={beatIndex + 1} key={beatIndex} />
+                                                            )
+                                                        )}
+                                                    </span>
+                                                </span>
+                                            ))}
+                                        </div>
                                         <span className={styles.cosmeticNote}>{startingLoadoutRow.firstFloorDecision}</span>
                                     </div>
                                 </div>
@@ -259,10 +685,121 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                 </div>
                             ) : null}
                             {rewardPerkRows.length > 0 ? (
-                                <div className={metaStyles.archiveCatalogGrid} data-testid="inventory-reward-perks">
+                                <div
+                                    aria-label={rewardPerkRowsLabel}
+                                    className={metaStyles.archiveCatalogGrid}
+                                    data-reward-perk-lane-actions={rewardPerkLaneActionMapAttr}
+                                    data-reward-perk-lane-map={rewardPerkLaneMapAttr}
+                                    data-testid="inventory-reward-perks"
+                                >
+                                    {rewardPerkLaneMap.length > 1 ? (
+                                        <div
+                                            aria-label={rewardPerkLaneMapLabel}
+                                            className={styles.rewardPerkLaneMap}
+                                            data-reward-perk-lane-actions={rewardPerkLaneActionMapAttr}
+                                            data-reward-perk-lane-map={rewardPerkLaneMapAttr}
+                                            data-reward-perk-primary-lane={primaryRewardPerkLane?.slug ?? 'none'}
+                                            data-reward-perk-primary-lane-action={primaryRewardPerkLane?.action ?? 'none'}
+                                            data-reward-perk-primary-lane-audio={
+                                                primaryRewardPerkLane ? inventoryRewardPerkLaneAudioCue(primaryRewardPerkLane) : 'none'
+                                            }
+                                            data-reward-perk-primary-lane-beats={
+                                                primaryRewardPerkLane ? inventoryRewardPerkLaneBeatCount(primaryRewardPerkLane) : 0
+                                            }
+                                            data-reward-perk-primary-lane-payoff={primaryRewardPerkLane?.payoff ?? 'none'}
+                                            data-reward-perk-primary-lane-screen-cue={
+                                                primaryRewardPerkLane ? inventoryRewardPerkLaneScreenCue(primaryRewardPerkLane) : 'none'
+                                            }
+                                            data-testid="inventory-reward-perk-lane-map"
+                                        >
+                                            {primaryRewardPerkLane ? (
+                                                <span
+                                                    aria-label={`Primary inventory perk lane. ${primaryRewardPerkLane.lane}: ${primaryRewardPerkLane.action}. ${primaryRewardPerkLane.payoff}. ${inventoryRewardPerkLaneBeatCount(primaryRewardPerkLane)} beats.`}
+                                                    className={styles.rewardPerkPrimaryLaneCue}
+                                                    data-reward-perk-primary-lane={primaryRewardPerkLane.slug}
+                                                    data-reward-perk-primary-lane-action={primaryRewardPerkLane.action}
+                                                    data-reward-perk-primary-lane-audio={inventoryRewardPerkLaneAudioCue(primaryRewardPerkLane)}
+                                                    data-reward-perk-primary-lane-beats={inventoryRewardPerkLaneBeatCount(primaryRewardPerkLane)}
+                                                    data-reward-perk-primary-lane-payoff={primaryRewardPerkLane.payoff}
+                                                    data-reward-perk-primary-lane-screen-cue={inventoryRewardPerkLaneScreenCue(primaryRewardPerkLane)}
+                                                    data-testid="inventory-reward-perk-primary-lane"
+                                                >
+                                                    <small>Best perk lane</small>
+                                                    <strong>{primaryRewardPerkLane.lane}</strong>
+                                                    <b>{primaryRewardPerkLane.action}</b>
+                                                    <em>{primaryRewardPerkLane.payoff}</em>
+                                                    <span aria-hidden="true" className={styles.rewardPerkPrimaryLaneBeatPips}>
+                                                        {Array.from(
+                                                            { length: inventoryRewardPerkLaneBeatCount(primaryRewardPerkLane) },
+                                                            (_, beatIndex) => (
+                                                                <i data-reward-perk-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                            )
+                                                        )}
+                                                    </span>
+                                                </span>
+                                            ) : null}
+                                            {rewardPerkLaneMap.map((lane) => (
+                                                <span
+                                                    data-reward-perk-lane-action={lane.action}
+                                                    data-reward-perk-lane-audio={inventoryRewardPerkLaneAudioCue(lane)}
+                                                    data-reward-perk-lane-beats={inventoryRewardPerkLaneBeatCount(lane)}
+                                                    data-reward-perk-lane-count={lane.count}
+                                                    data-reward-perk-lane-kind={lane.slug}
+                                                    data-reward-perk-lane-screen-cue={inventoryRewardPerkLaneScreenCue(lane)}
+                                                    key={lane.slug}
+                                                >
+                                                    <small>{lane.lane}</small>
+                                                    <strong>{lane.count}</strong>
+                                                    <b>{lane.action}</b>
+                                                    <em>{lane.payoff}</em>
+                                                    <span aria-hidden="true" className={styles.rewardPerkLaneBeatPips}>
+                                                        {Array.from(
+                                                            { length: inventoryRewardPerkLaneBeatCount(lane) },
+                                                            (_, beatIndex) => (
+                                                                <i data-reward-perk-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                            )
+                                                        )}
+                                                    </span>
+                                                </span>
+                                            ))}
+                                        </div>
+                                    ) : null}
                                     {rewardPerkRows.map((row) => (
-                                        <div className={metaStyles.archiveCatalogRow} key={row.id}>
+                                        <div
+                                            aria-label={`${row.label}. Lane: ${row.lane}. Payoff: ${row.payoff}. Moment: ${row.moment}. Next: ${row.nextCue}. ${row.detail}`}
+                                            className={metaStyles.archiveCatalogRow}
+                                            key={row.id}
+                                        >
                                             <p className={metaStyles.archiveCatalogRowTitle}>{row.label}</p>
+                                            <div
+                                                aria-label={`${row.label}. Lane: ${row.lane}. Payoff: ${row.payoff}. Moment: ${row.moment}. Next: ${row.nextCue}. ${row.detail}`}
+                                                className={styles.rewardPerkSignalRows}
+                                            >
+                                                {([
+                                                    ['lane', 'Lane', row.lane],
+                                                    ['payoff', 'Payoff', row.payoff],
+                                                    ['moment', 'Moment', row.moment],
+                                                    ['next', 'Next', row.nextCue]
+                                                ] as const).map(([signal, label, value]) => (
+                                                    <span
+                                                        data-reward-perk-signal-action={rewardPerkSignalAction(signal)}
+                                                        data-reward-perk-signal-audio={rewardPerkSignalAudioCue(signal)}
+                                                        data-reward-perk-signal={signal}
+                                                        data-reward-perk-signal-beats={rewardPerkSignalBeatCount(signal)}
+                                                        data-reward-perk-signal-screen-cue={rewardPerkSignalScreenCue(signal)}
+                                                        key={signal}
+                                                    >
+                                                        <small>{label}</small>
+                                                        <strong>{value}</strong>
+                                                        <b>{rewardPerkSignalAction(signal)}</b>
+                                                        <span aria-hidden="true" className={styles.rewardPerkSignalBeatPips}>
+                                                            {Array.from({ length: rewardPerkSignalBeatCount(signal) }, (_, beatIndex) => (
+                                                                <i data-reward-perk-signal-beat={beatIndex + 1} key={beatIndex} />
+                                                            ))}
+                                                        </span>
+                                                    </span>
+                                                ))}
+                                            </div>
                                             <p className={metaStyles.subtitle}>{row.detail}</p>
                                         </div>
                                     ))}
@@ -282,6 +819,16 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                         <p className={metaStyles.archiveCatalogRowTitle}>
                                             {row.label}: {row.quantityLabel}
                                         </p>
+                                        <span
+                                            aria-label={`${row.label} action cue. ${row.actionCue.label}: ${row.actionCue.detail}`}
+                                            className={styles.inventoryActionCue}
+                                            data-inventory-action-cue={row.actionCue.label}
+                                            data-inventory-action-tone={row.actionCue.tone}
+                                        >
+                                            <small>Action</small>
+                                            <strong>{row.actionCue.label}</strong>
+                                            <em>{row.actionCue.detail}</em>
+                                        </span>
                                         <p className={metaStyles.subtitle}>
                                             {row.mutability}. {row.source} {'\u2192'} {row.useWindow}. {row.effectPreview}
                                         </p>

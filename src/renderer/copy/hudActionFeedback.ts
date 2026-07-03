@@ -89,6 +89,54 @@ export const formatHudActionFeedbackText = (
     return `${clipped}...`;
 };
 
+export type HudActionFeedbackTone = 'info' | 'reward' | 'trait' | 'chain' | 'danger';
+
+export interface HudActionFeedbackProfile {
+    label: string;
+    tone: HudActionFeedbackTone;
+}
+
+export const getHudActionFeedbackProfile = (
+    text: string,
+    priority: 'info' | 'error' = 'info'
+): HudActionFeedbackProfile => {
+    const normalized = text.toLowerCase();
+    if (priority === 'error' || /\b(life lost|contact|bit)\b/.test(normalized)) {
+        return { label: 'Critical', tone: 'danger' };
+    }
+    if (/\bchain\s+x?\d+\s+broken\b/.test(normalized)) {
+        return { label: 'Chain break', tone: 'danger' };
+    }
+    if (/\b(no match|broken|penalty|expired)\b/.test(normalized)) {
+        return { label: 'Miss', tone: 'danger' };
+    }
+    if (/\bpayoff stack\b/.test(normalized)) {
+        return { label: 'Payoff stack', tone: 'reward' };
+    }
+    if (/\bcashout hit\b/.test(normalized)) {
+        return { label: 'Cashout hit', tone: 'reward' };
+    }
+    if (/\breward cashout\b/.test(normalized)) {
+        return { label: 'Reward cashout', tone: 'reward' };
+    }
+    if (/\btrait combo surge\b/.test(normalized)) {
+        return { label: 'Trait surge', tone: 'trait' };
+    }
+    if (/\b(chain times|chain started|surge hit|combo hit|surge)\b/.test(normalized)) {
+        return { label: 'Chain', tone: 'chain' };
+    }
+    if (/\b(trait|stasis|volatile|row\/swap|shuffle charge)\b/.test(normalized)) {
+        return { label: 'Trait play', tone: 'trait' };
+    }
+    if (/\bcashout armed\b/.test(normalized)) {
+        return { label: 'Cashout armed', tone: 'reward' };
+    }
+    if (/\b(cashout|claimed|gained|reward|gold|shard|life restored|cache|favor)\b/.test(normalized)) {
+        return { label: 'Reward burst', tone: 'reward' };
+    }
+    return { label: 'Action result', tone: 'info' };
+};
+
 export const countTileTraitTotal = (counts: Partial<Record<TileTraitKind, number>> | undefined): number =>
     TILE_TRAIT_COUNT_KINDS.reduce((sum, kind) => sum + (counts?.[kind] ?? 0), 0);
 

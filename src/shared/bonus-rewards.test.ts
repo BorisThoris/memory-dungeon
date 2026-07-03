@@ -8,6 +8,8 @@ import {
     rollBonusRewardDraft,
     rollBonusRewardRoom,
     getBonusRewardRows,
+    getPrimaryRewardPerkReadinessRow,
+    getRewardPerkReadinessRows,
     getRewardPerkRows
 } from './bonus-rewards';
 import { buildBoard } from './board-build-rules';
@@ -459,14 +461,94 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.claimed).toBe(true);
         expect(result.run.rewardPerkIds).toContain('echo_conduit_double');
         expect(result.feedback.gained).toEqual(
-            expect.arrayContaining(['Unlock Echo doubles beside Conduit', '+1 peek charge'])
+            expect.arrayContaining([
+                'Unlock Echo Conduit Double',
+                'Perk next: Match Echo touching Conduit before cashing adjacent Sealed.',
+                '+1 peek charge'
+            ])
         );
-        expect(duplicate.feedback.gained).not.toContain('Unlock Echo doubles beside Conduit');
+        expect(duplicate.feedback.gained).not.toContain('Unlock Echo Conduit Double');
+        expect(duplicate.feedback.gained).not.toContain(
+            'Perk next: Match Echo touching Conduit before cashing adjacent Sealed.'
+        );
         expect(getRewardPerkRows({ rewardPerkIds: ['hazard_banish_per_floor'] })[0]).toMatchObject({
-            label: 'hazard banish each floor',
-            detail: 'Each new floor clears one hazard marker before play; if none exists, it grants a destroy charge.'
+            label: 'Hazard Banish',
+            detail: 'Each new floor clears one hazard marker before play; if none exists, it grants a destroy charge.',
+            arcadeCue: 'Trap erased',
+            lane: 'Hazard control',
+            moment: 'Floor start',
+            payoff: 'Hazard erased before flip',
+            nextCue: 'Check the first board beat; hazard pressure should already be reduced.'
         });
         expect(BONUS_REWARD_CATALOG.hazard_banisher.summaryText).toContain('banishes one hazard marker');
+    });
+
+    it('reports durable reward perk readiness so active payoff lanes can be highlighted', () => {
+        const armed = getRewardPerkReadinessRows({
+            ...makeRun(),
+            activeContract: null,
+            matchResolutionsThisFloor: 0,
+            regionShuffleCharges: 0,
+            regionShuffleFreeThisFloor: false,
+            rewardPerkIds: ['free_first_swap_per_floor', 'trait_streak_toolkit', 'cursed_opener_greed'],
+            stats: { ...makeRun().stats, currentStreak: 2 }
+        });
+
+        expect(armed.find((row) => row.id === 'free_first_swap_per_floor')).toMatchObject({
+            meterPercent: 100,
+            readiness: 'spent',
+            readinessLabel: 'Prime spent'
+        });
+        expect(armed.find((row) => row.id === 'trait_streak_toolkit')).toMatchObject({
+            meterPercent: 100,
+            readiness: 'armed',
+            readinessLabel: 'Trait cashout armed'
+        });
+        expect(armed.find((row) => row.id === 'cursed_opener_greed')).toMatchObject({
+            meterPercent: 100,
+            readiness: 'armed',
+            readinessLabel: 'Opening greed armed'
+        });
+
+        expect(
+            getRewardPerkReadinessRows({
+                ...makeRun(),
+                activeContract: null,
+                matchResolutionsThisFloor: 1,
+                regionShuffleCharges: 1,
+                regionShuffleFreeThisFloor: false,
+                rewardPerkIds: ['trait_streak_toolkit', 'cursed_opener_greed'],
+                stats: { ...makeRun().stats, currentStreak: 1 }
+            })
+        ).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    id: 'trait_streak_toolkit',
+                    meterPercent: 50,
+                    readiness: 'soon',
+                    readinessLabel: '1/2 chain'
+                }),
+                expect.objectContaining({
+                    id: 'cursed_opener_greed',
+                    readiness: 'spent',
+                    readinessLabel: 'Opener spent'
+                })
+            ])
+        );
+        expect(
+            getPrimaryRewardPerkReadinessRow({
+                ...makeRun(),
+                activeContract: null,
+                matchResolutionsThisFloor: 0,
+                regionShuffleCharges: 1,
+                regionShuffleFreeThisFloor: true,
+                rewardPerkIds: ['free_first_swap_per_floor', 'cursed_opener_greed', 'trait_streak_toolkit'],
+                stats: { ...makeRun().stats, currentStreak: 2 }
+            })
+        ).toMatchObject({
+            id: 'trait_streak_toolkit',
+            readinessLabel: 'Trait cashout armed'
+        });
     });
 
     it('resolves a saved reward instance even when the current route roll picks another candidate', () => {

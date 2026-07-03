@@ -1,17 +1,41 @@
 import type { RunState, RunSummary, SaveData } from './contracts';
+import { getChainTargetFeedback } from './chain-targets';
 import { buildMetaProgressionRunDelta } from './meta-progression-delta';
 import { getMetaProgressionFeedback } from './meta-progression';
 import { buildRunHistoryExportString } from './run-history';
 import { getStartingLoadoutDefinition } from './starting-loadouts';
 
 export interface GameOverNextRunRow {
-    id: 'run_it_back' | 'build_recap' | 'local_share' | 'next_goal';
+    id: 'run_it_back' | 'chain_target' | 'build_recap' | 'local_share' | 'next_goal';
     title: string;
     value: string;
     detail: string;
     actionHint: string;
     localOnly: true;
 }
+
+const runItBackDetail = (summary: RunSummary | null, run: RunState): string => {
+    if (!summary) {
+        return 'Complete a run to unlock a restart recommendation.';
+    }
+    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
+    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
+    const pickupCopy = pickupTotal > 0 ? ` / pickups ${pickupClaimed}/${pickupTotal}` : '';
+    const chainCopy = summary.bestStreak > 0 ? ` / best chain x${summary.bestStreak}` : ' / chain not started';
+    return `${summary.totalScore.toLocaleString()} score / floor ${summary.highestLevel} / ${summary.levelsCleared} clear(s)${chainCopy}${pickupCopy}`;
+};
+
+const getChainTargetRow = (summary: RunSummary | null): GameOverNextRunRow => {
+    const target = getChainTargetFeedback(summary?.bestStreak);
+    return {
+        id: 'chain_target',
+        title: 'Chain target',
+        value: target.value,
+        detail: target.detail,
+        actionHint: target.actionHint,
+        localOnly: true
+    };
+};
 
 const modeLabel = (summary: RunSummary): string => {
     if (summary.activeContract?.noShuffle) {
@@ -89,7 +113,9 @@ export const getGameOverNextRunRows = (run: RunState, save?: SaveData, previousS
     const activeContract = summary?.activeContract ?? run.activeContract;
     const startingLoadout = getStartingLoadoutDefinition(summary?.startingLoadoutId ?? run.startingLoadoutId);
     const buildDetail = startingLoadout
-        ? `${startingLoadout.label}: ${startingLoadout.summary}`
+        ? `${startingLoadout.label}: ${startingLoadout.summary} ${startingLoadout.impactSignals
+              .map((signal) => `${signal.label}: ${signal.value}`)
+              .join('; ')}.`
         : activeContract
           ? 'Contract rules shaped this run.'
           : 'No contract constraints on this run.';
@@ -98,12 +124,11 @@ export const getGameOverNextRunRows = (run: RunState, save?: SaveData, previousS
             id: 'run_it_back',
             title: 'Run it back',
             value: runLabel,
-            detail: summary
-                ? `${summary.totalScore.toLocaleString()} score / floor ${summary.highestLevel} / ${summary.levelsCleared} clear(s)`
-                : 'Complete a run to unlock a restart recommendation.',
+            detail: runItBackDetail(summary, run),
             actionHint: 'Play Again restarts the current mode locally; Main Menu returns to the hub.',
             localOnly: true
         },
+        getChainTargetRow(summary),
         {
             id: 'build_recap',
             title: 'Build recap',

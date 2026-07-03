@@ -40,9 +40,21 @@ describe('DNG-063 dungeon audio event coverage', () => {
 
     it('keeps high-priority resolution events on the run-critical ducking lane', () => {
         expect(getDungeonAudioEventRow('dungeon_contact')?.ducking).toBe('run_critical_sfx');
+        expect(getDungeonAudioEventRow('dungeon_contact')?.cue).toBe('mismatch');
+        expect(getDungeonAudioEventRow('dungeon_contact')?.finalAssetStatus).toBe(
+            'existing_sample_or_procedural_fallback'
+        );
+        expect(getDungeonAudioEventRow('dungeon_trap_trigger')?.cue).toBe('mismatch');
         expect(getDungeonAudioEventRow('dungeon_trap_trigger')?.mergePolicy).toMatch(/wins/i);
+        expect(getDungeonAudioEventRow('dungeon_trap_trigger')?.callsite).toMatch(/playTrapSfx/i);
+        expect(getDungeonAudioEventRow('dungeon_trap_trigger')?.finalAssetStatus).toBe(
+            'existing_sample_or_procedural_fallback'
+        );
         expect(getDungeonAudioEventRow('dungeon_route_choice')?.semanticMoment).toBe('route_choice');
         expect(getDungeonAudioEventRow('dungeon_boss_defeat')?.mergePolicy).toMatch(/suppresses/i);
         expect(getDungeonAudioEventRow('dungeon_shop_purchase')?.ducking).toBe('ui_click');
+        expect(getDungeonAudioEventRow('dungeon_exit_open')?.finalAssetStatus).toBe(
+            'existing_sample_or_procedural_fallback'
+        );
     });
 });

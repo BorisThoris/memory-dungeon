@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { ACHIEVEMENTS } from '../../shared/achievements';
+import { getRewardPerkRows } from '../../shared/bonus-rewards';
 import { MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
 import type { MutatorId, RelicId, RunState } from '../../shared/contracts';
 import { buildDailyResultsLoopRows } from '../../shared/daily-archive';
@@ -9,6 +10,24 @@ import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
 import { playGameOverOpenSfx, playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { gameOverScreenCopy } from '../copy/gameOverScreen';
+import {
+    formatRunPayoffLaneMapAttr,
+    formatRunPayoffLaneActionMapAttr,
+    formatRunPayoffLaneMapLabel,
+    formatRunPayoffBurstSignalLabel,
+    formatRunPayoffCrescendoSignalLabel,
+    formatRunPayoffSequenceSignalLabel,
+    formatRunPayoffSignalsLabel,
+    getRunPayoffLaneMap,
+    getRunPayoffLaneAudioCue,
+    getRunPayoffLaneBeatCount,
+    getRunPayoffLaneScreenCue,
+    getRunPayoffBurstSignal,
+    getRunPayoffCrescendoSignal,
+    getRunPayoffSequenceSignal,
+    getRunPayoffSignalBeatCount,
+    getRunPayoffSignals
+} from '../copy/runPayoffSignals';
 import { useViewportSize } from '../hooks/useViewportSize';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
@@ -84,6 +103,119 @@ const runModeHeading = (summary: NonNullable<RunState['lastRunSummary']>): strin
     }
 };
 
+const runMomentumRecapRows = (
+    run: RunState,
+    summary: NonNullable<RunState['lastRunSummary']>
+): { id: string; label: string; value: string; detail: string; tone: 'chain' | 'reward' | 'build' | 'risk' }[] => {
+    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
+    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
+    const traitRouteComplete =
+        run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor);
+    const perkCount = run.rewardPerkIds?.length ?? 0;
+    const topPerkCue = getRewardPerkRows(run)[0]?.nextCue;
+    const buildDetail = traitRouteComplete
+        ? `Trait route paid: ${run.traitRouteObjectiveRewardTextThisFloor ?? 'trait route cashout'}.`
+        : 'Drafted relics and perks define the next build attempt.';
+    const buildDetailWithPerk = topPerkCue ? `${buildDetail} Perk next: ${topPerkCue}` : buildDetail;
+    const pressureCount =
+        Math.max(0, summary.activeMutators?.length ?? 0) +
+        Math.max(0, run.stats.mismatches) +
+        Math.max(0, run.stats.volatileTraitShuffles);
+    const nextFocus =
+        summary.bestStreak < 4
+            ? {
+                  value: 'Rebuild chain',
+                  detail: 'Aim for x4+ before chasing side rewards.',
+                  tone: 'chain' as const
+              }
+            : pickupTotal > 0 && pickupClaimed < pickupTotal
+              ? {
+                    value: 'Claim pickups',
+                    detail: 'Prioritize visible reward pairs before the floor ends.',
+                    tone: 'reward' as const
+                }
+              : (summary.relicIds?.length ?? 0) === 0 && perkCount === 0
+                ? {
+                      value: 'Draft engine',
+                      detail: 'Take a relic or perk that changes the next route plan.',
+                      tone: 'build' as const
+                  }
+                : pressureCount >= 4
+                  ? {
+                        value: 'Reduce pressure',
+                        detail: 'Use guard, peek, or control tools before risky flips.',
+                        tone: 'risk' as const
+                    }
+                  : {
+                        value: 'Push rewards',
+                        detail: 'Chain and build tools are ready for greedier routes.',
+                        tone: 'reward' as const
+                    };
+
+    return [
+        {
+            id: 'chain',
+            label: 'Chain engine',
+            value: summary.bestStreak > 0 ? `x${summary.bestStreak}` : 'not started',
+            detail:
+                summary.bestStreak >= 10
+                    ? 'Combo-tier streak reached.'
+                    : summary.bestStreak >= 4
+                      ? 'Reward thresholds were in reach.'
+                      : 'Short chains left reward momentum on the table.',
+            tone: 'chain'
+        },
+        {
+            id: 'pickup',
+            label: 'Reward grabs',
+            value: pickupTotal > 0 ? `${pickupClaimed}/${pickupTotal}` : `${pickupClaimed}`,
+            detail: pickupTotal > 0 ? 'Findable reward pairs claimed this floor.' : 'No active pickup route at the end.',
+            tone: 'reward'
+        },
+        {
+            id: 'build',
+            label: 'Build engines',
+            value: `${summary.relicIds?.length ?? 0} relics / ${perkCount} perks`,
+            detail: buildDetailWithPerk,
+            tone: 'build'
+        },
+        {
+            id: 'pressure',
+            label: 'Pressure read',
+            value: pressureCount > 0 ? `${pressureCount} signals` : 'stable',
+            detail:
+                pressureCount > 0
+                    ? 'Mutators, misses, and volatile shuffles shaped the run.'
+                    : 'Low-pressure run state; push route rewards harder next time.',
+            tone: 'risk'
+        },
+        {
+            id: 'next-focus',
+            label: 'Next focus',
+            value: nextFocus.value,
+            detail: nextFocus.detail,
+            tone: nextFocus.tone
+        }
+    ];
+};
+
+const formatGameOverFeedbackRowsLabel = (
+    label: string,
+    rows: readonly { actionHint?: string; detail?: string; label?: string; title?: string; value: string }[]
+): string => {
+    const rowCopy = rows
+        .map((row) =>
+            [
+                row.label ?? row.title,
+                row.value,
+                row.detail,
+                row.actionHint
+            ].filter(Boolean).join(': ')
+        )
+        .join('. ');
+    return rowCopy ? `${label}. ${rowCopy}.` : label;
+};
+
 const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const shellRef = useRef<HTMLElement | null>(null);
     const { height, width } = useViewportSize();
@@ -136,6 +268,55 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         ...(summary.activeMutators?.map((id) => ({ kind: 'mutator' as const, label: mutatorLabel(id) })) ?? []),
         ...(summary.relicIds?.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) })) ?? [])
     ];
+    const outcomeSignals = [
+        { kind: 'score', label: 'Score', value: summary.totalScore.toLocaleString() },
+        { kind: 'chain', label: 'Best chain', value: `x${summary.bestStreak}` },
+        { kind: 'perfect', label: 'Perfect clears', value: `${summary.perfectClears}` },
+        summary.relicIds && summary.relicIds.length > 0
+            ? { kind: 'build', label: 'Prime', value: `${summary.relicIds.length} relic${summary.relicIds.length === 1 ? '' : 's'}` }
+            : null,
+        summary.activeMutators && summary.activeMutators.length > 0
+            ? {
+                  kind: 'pressure',
+                  label: 'Pressure',
+                  value: `${summary.activeMutators.length} mutator${summary.activeMutators.length === 1 ? '' : 's'}`
+              }
+            : null
+    ].filter((row): row is { kind: string; label: string; value: string } => row != null);
+    const payoffBurstRows = getRunPayoffSignals(summary, {
+        pickupClaimed: run.findablesClaimedThisFloor,
+        pickupTotal: run.findablesTotalThisFloor,
+        pressureExtra: Math.max(0, run.stats.mismatches) + Math.max(0, run.stats.volatileTraitShuffles),
+        rewardPerkCount: run.rewardPerkIds?.length ?? 0,
+        routePaid: run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor),
+        routeRewardText: run.traitRouteObjectiveRewardTextThisFloor
+    });
+    const payoffLaneMap = getRunPayoffLaneMap(payoffBurstRows);
+    const primaryPayoffLane = payoffLaneMap[0] ?? null;
+    const payoffLaneMapAttr = formatRunPayoffLaneMapAttr(payoffLaneMap);
+    const payoffLaneActionMapAttr = formatRunPayoffLaneActionMapAttr(payoffLaneMap);
+    const payoffLaneMapLabel = formatRunPayoffLaneMapLabel('Run payoff lanes', payoffLaneMap);
+    const payoffBurstSignal = getRunPayoffBurstSignal(payoffBurstRows);
+    const payoffCrescendoSignal = getRunPayoffCrescendoSignal(payoffBurstRows, payoffBurstSignal);
+    const payoffStackPlan = getRunPayoffSequenceSignal(payoffBurstRows);
+    const momentumRecapRows = runMomentumRecapRows(run, summary);
+    const dungeonJournalRows = journalEntry.rows
+        .filter((row) => row.id.startsWith('dungeon_'))
+        .slice(0, 6);
+    const outcomeSignalsLabel = formatGameOverFeedbackRowsLabel('Game over outcome signals', outcomeSignals);
+    const payoffBurstRowsLabel = formatRunPayoffSignalsLabel('Run payoff burst', payoffBurstRows);
+    const payoffBurstSignalLabel = formatRunPayoffBurstSignalLabel('Run payoff stack', payoffBurstSignal);
+    const payoffCrescendoSignalLabel = formatRunPayoffCrescendoSignalLabel('Run payoff crescendo', payoffCrescendoSignal);
+    const payoffStackPlanLabel = formatRunPayoffSequenceSignalLabel('Run payoff sequence', payoffStackPlan);
+    const momentumRecapRowsLabel = formatGameOverFeedbackRowsLabel('Game over momentum recap', momentumRecapRows);
+    const nextRunRowsLabel = formatGameOverFeedbackRowsLabel('Next run loop signals', nextRunRows);
+    const dungeonJournalRowsLabel = formatGameOverFeedbackRowsLabel('Dungeon journal signals', dungeonJournalRows);
+    const playAgainActionCue =
+        nextRunRows.find((row) => row.id === 'chain_target')?.actionHint ??
+        nextRunRows.find((row) => row.id === 'run_it_back')?.actionHint;
+    const mainMenuActionCue =
+        nextRunRows.find((row) => row.id === 'next_goal')?.actionHint ??
+        nextRunRows.find((row) => row.id === 'build_recap')?.actionHint;
 
     return (
         <section className={styles.shell} ref={shellRef}>
@@ -175,15 +356,20 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     <UiButton
                         fullWidth
                         aria-label="Mobile Play Again - start a new run after this expedition"
+                        data-next-run-button-cue={playAgainActionCue}
                         size="lg"
                         variant="primary"
                         onClick={restartRun}
                     >
-                        {gameOverScreenCopy.playAgainLabel}
+                        <span className={styles.actionButtonContent}>
+                            <span>{gameOverScreenCopy.playAgainLabel}</span>
+                            {playAgainActionCue ? <small>{playAgainActionCue}</small> : null}
+                        </span>
                     </UiButton>
                     <UiButton
                         fullWidth
                         aria-label="Mobile return to the main menu"
+                        data-next-run-button-cue={mainMenuActionCue}
                         size="lg"
                         variant="secondary"
                         onClick={() => {
@@ -192,7 +378,10 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             goToMenu();
                         }}
                     >
-                        {gameOverScreenCopy.mainMenuLabel}
+                        <span className={styles.actionButtonContent}>
+                            <span>{gameOverScreenCopy.mainMenuLabel}</span>
+                            {mainMenuActionCue ? <small>{mainMenuActionCue}</small> : null}
+                        </span>
                     </UiButton>
                 </section>
 
@@ -211,6 +400,173 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         >
                             <span className={styles.scoreHeroLabel}>{gameOverScreenCopy.scoreLabel}</span>
                             <span className={styles.scoreHeroValue}>{summary.totalScore.toLocaleString()}</span>
+                        </div>
+                        <div
+                            aria-label={outcomeSignalsLabel}
+                            className={styles.outcomeSignalStrip}
+                            data-testid="game-over-outcome-signals"
+                        >
+                            {outcomeSignals.map((signal) => (
+                                <span data-outcome-signal={signal.kind} key={signal.kind}>
+                                    <small>{signal.label}</small>
+                                    <strong>{signal.value}</strong>
+                                </span>
+                            ))}
+                        </div>
+                        <div
+                            aria-label={payoffBurstRowsLabel}
+                            className={styles.payoffBurstStrip}
+                            data-payoff-lane-actions={payoffLaneActionMapAttr}
+                            data-payoff-lane-map={payoffLaneMapAttr}
+                            data-testid="game-over-payoff-burst"
+                        >
+                            {payoffLaneMap.length > 1 ? (
+                                <span
+                                    aria-label={payoffLaneMapLabel}
+                                    data-payoff-lane-actions={payoffLaneActionMapAttr}
+                                    data-payoff-lane-map={payoffLaneMapAttr}
+                                    data-payoff-primary-lane={primaryPayoffLane?.id ?? 'none'}
+                                    data-payoff-primary-lane-action={primaryPayoffLane?.action ?? 'none'}
+                                    data-payoff-primary-lane-audio={
+                                        primaryPayoffLane ? getRunPayoffLaneAudioCue(primaryPayoffLane) : 'none'
+                                    }
+                                    data-payoff-primary-lane-beats={
+                                        primaryPayoffLane ? getRunPayoffLaneBeatCount(primaryPayoffLane) : 0
+                                    }
+                                    data-payoff-primary-lane-cue={primaryPayoffLane?.cue ?? 'none'}
+                                    data-payoff-primary-lane-screen-cue={
+                                        primaryPayoffLane ? getRunPayoffLaneScreenCue(primaryPayoffLane) : 'none'
+                                    }
+                                    data-testid="game-over-payoff-lane-map"
+                                >
+                                    {primaryPayoffLane ? (
+                                        <i
+                                            aria-label={`Primary run payoff lane. ${primaryPayoffLane.label}: ${primaryPayoffLane.action}. ${primaryPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryPayoffLane)} beats.`}
+                                            className={styles.payoffPrimaryLaneCue}
+                                            data-payoff-primary-lane={primaryPayoffLane.id}
+                                            data-payoff-primary-lane-action={primaryPayoffLane.action}
+                                            data-payoff-primary-lane-audio={getRunPayoffLaneAudioCue(primaryPayoffLane)}
+                                            data-payoff-primary-lane-beats={getRunPayoffLaneBeatCount(primaryPayoffLane)}
+                                            data-payoff-primary-lane-cue={primaryPayoffLane.cue}
+                                            data-payoff-primary-lane-screen-cue={getRunPayoffLaneScreenCue(primaryPayoffLane)}
+                                            data-testid="game-over-primary-payoff-lane"
+                                        >
+                                            <small>Top chase</small>
+                                            <strong>{primaryPayoffLane.label}</strong>
+                                            <b>{primaryPayoffLane.action}</b>
+                                            <em>{primaryPayoffLane.cue}</em>
+                                            <span aria-hidden="true" className={styles.payoffPrimaryLaneBeatPips}>
+                                                {Array.from({ length: getRunPayoffLaneBeatCount(primaryPayoffLane) }, (_, index) => (
+                                                    <s data-payoff-primary-lane-beat key={index} />
+                                                ))}
+                                            </span>
+                                        </i>
+                                    ) : null}
+                                    {payoffLaneMap.map((lane) => (
+                                        <i
+                                            data-payoff-lane={lane.id}
+                                            data-payoff-lane-action={lane.action}
+                                            data-payoff-lane-audio={getRunPayoffLaneAudioCue(lane)}
+                                            data-payoff-lane-beats={getRunPayoffLaneBeatCount(lane)}
+                                            data-payoff-lane-count={lane.count}
+                                            data-payoff-lane-screen-cue={getRunPayoffLaneScreenCue(lane)}
+                                            key={lane.id}
+                                        >
+                                            <small>{lane.label}</small>
+                                            <strong>{lane.count}</strong>
+                                            <b>{lane.action}</b>
+                                            <em>{lane.cue}</em>
+                                            <span aria-hidden="true" className={styles.payoffLaneBeatPips}>
+                                                {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
+                                                    <s data-payoff-lane-beat key={index} />
+                                                ))}
+                                            </span>
+                                        </i>
+                                    ))}
+                                </span>
+                            ) : null}
+                            {payoffBurstSignal ? (
+                                <span
+                                    aria-label={payoffBurstSignalLabel}
+                                    data-payoff-burst-stack-action={payoffBurstSignal.action}
+                                    data-payoff-burst-stack-tone={payoffBurstSignal.tone}
+                                    data-testid="game-over-payoff-burst-stack"
+                                >
+                                    <small>{payoffBurstSignal.label}</small>
+                                    <b>{payoffBurstSignal.action}</b>
+                                    <strong>{payoffBurstSignal.value}</strong>
+                                </span>
+                            ) : null}
+                            {payoffCrescendoSignal ? (
+                                <span
+                                    aria-label={payoffCrescendoSignalLabel}
+                                    data-payoff-crescendo-audio={payoffCrescendoSignal.audioCue}
+                                    data-payoff-crescendo-beats={payoffCrescendoSignal.beatCount}
+                                    data-payoff-crescendo-cue={payoffCrescendoSignal.screenCue}
+                                    data-payoff-crescendo-screen-cue={payoffCrescendoSignal.screenCue}
+                                    data-payoff-crescendo-tier={payoffCrescendoSignal.tier}
+                                    data-testid="game-over-payoff-crescendo"
+                                >
+                                    <small>{payoffCrescendoSignal.label}</small>
+                                    <b>{payoffCrescendoSignal.detail}</b>
+                                    <strong>
+                                        {Array.from({ length: payoffCrescendoSignal.beatCount }, (_, index) => (
+                                            <i aria-hidden="true" key={index} />
+                                        ))}
+                                    </strong>
+                                </span>
+                            ) : null}
+                            {payoffStackPlan ? (
+                                <span
+                                    aria-label={payoffStackPlanLabel}
+                                    data-payoff-sequence-first={payoffStackPlan.first}
+                                    data-payoff-sequence-keep={payoffStackPlan.keep}
+                                    data-payoff-sequence-then={payoffStackPlan.then}
+                                    data-payoff-sequence-tone={payoffStackPlan.tone}
+                                    data-testid="game-over-payoff-sequence"
+                                >
+                                    <small>First</small>
+                                    <strong>{payoffStackPlan.first}</strong>
+                                    <small>Then</small>
+                                    <strong>{payoffStackPlan.then}</strong>
+                                    <small>Keep</small>
+                                    <strong>{payoffStackPlan.keep}</strong>
+                                </span>
+                            ) : null}
+                            {payoffBurstRows.map((row) => (
+                                <span
+                                    data-payoff-burst-action={row.action}
+                                    data-payoff-burst-audio={row.audioCue}
+                                    data-payoff-burst-beats={getRunPayoffSignalBeatCount(row)}
+                                    data-payoff-burst-screen-cue={row.screenCue}
+                                    data-payoff-burst-tone={row.tone}
+                                    key={row.id}
+                                >
+                                    <b>{row.arcadeCue}</b>
+                                    <small>{row.label}</small>
+                                    <strong>{row.value}</strong>
+                                    <i>{row.action}</i>
+                                    <span aria-hidden="true" className={styles.payoffBurstBeatPips}>
+                                        {Array.from({ length: getRunPayoffSignalBeatCount(row) }, (_, index) => (
+                                            <i data-payoff-burst-beat key={index} />
+                                        ))}
+                                    </span>
+                                    {row.nextCue ? <em>{row.nextCue}</em> : null}
+                                </span>
+                            ))}
+                        </div>
+                        <div
+                            aria-label={momentumRecapRowsLabel}
+                            className={styles.momentumRecapGrid}
+                            data-testid="game-over-momentum-recap"
+                        >
+                            {momentumRecapRows.map((row) => (
+                                <span data-momentum-recap-tone={row.tone} key={row.id}>
+                                    <small>{row.label}</small>
+                                    <strong>{row.value}</strong>
+                                    <em>{row.detail}</em>
+                                </span>
+                            ))}
                         </div>
                         <img alt="" className={styles.divider} src={UI_ART.dividerOrnament} />
                         <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summary.highestLevel)}</p>
@@ -277,16 +633,21 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 <UiButton
                                     fullWidth
                                     aria-label={gameOverScreenCopy.playAgainAriaLabel}
+                                    data-next-run-button-cue={playAgainActionCue}
                                     size="lg"
                                     variant="primary"
                                     className={styles.desktopActionButton}
                                     onClick={restartRun}
                                 >
-                                    {gameOverScreenCopy.playAgainLabel}
+                                    <span className={styles.actionButtonContent}>
+                                        <span>{gameOverScreenCopy.playAgainLabel}</span>
+                                        {playAgainActionCue ? <small>{playAgainActionCue}</small> : null}
+                                    </span>
                                 </UiButton>
                                 <UiButton
                                     fullWidth
                                     aria-label={gameOverScreenCopy.mainMenuAriaLabel}
+                                    data-next-run-button-cue={mainMenuActionCue}
                                     size="lg"
                                     variant="secondary"
                                     className={styles.desktopActionButton}
@@ -296,14 +657,27 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                         goToMenu();
                                     }}
                                 >
-                                    {gameOverScreenCopy.mainMenuLabel}
+                                    <span className={styles.actionButtonContent}>
+                                        <span>{gameOverScreenCopy.mainMenuLabel}</span>
+                                        {mainMenuActionCue ? <small>{mainMenuActionCue}</small> : null}
+                                    </span>
                                 </UiButton>
                             </div>
-                            <div className={styles.nextRunGrid} data-testid="game-over-next-run-loop">
+                            <div
+                                aria-label={nextRunRowsLabel}
+                                className={styles.nextRunGrid}
+                                data-testid="game-over-next-run-loop"
+                            >
                                 {nextRunRows.map((row) => (
-                                    <div className={styles.nextRunCard} key={row.id}>
+                                    <div
+                                        className={styles.nextRunCard}
+                                        data-next-run-action-cue={row.actionHint}
+                                        data-next-run-row={row.id}
+                                        key={row.id}
+                                    >
                                         <strong>{row.title}</strong>
                                         <span>{row.value}</span>
+                                        <small className={styles.nextRunActionCue}>{row.actionHint}</small>
                                         <p>{row.detail}</p>
                                     </div>
                                 ))}
@@ -327,11 +701,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             <p className={styles.panelCopy}>
                                 Journal {journalEntry.journalId}: {journalEntry.buildSummary} / {journalEntry.shareLabel}
                             </p>
-                            <div className={styles.journalRows} data-testid="game-over-dungeon-journal">
-                                {journalEntry.rows
-                                    .filter((row) => row.id.startsWith('dungeon_'))
-                                    .slice(0, 6)
-                                    .map((row) => (
+                            <div
+                                aria-label={dungeonJournalRowsLabel}
+                                className={styles.journalRows}
+                                data-testid="game-over-dungeon-journal"
+                            >
+                                {dungeonJournalRows.map((row) => (
                                         <div className={styles.journalRow} key={row.id}>
                                             <strong>{row.label}</strong>
                                             <span>{row.value}</span>

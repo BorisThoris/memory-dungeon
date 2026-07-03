@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { createNewRun } from './game-core';
-import { getCodexRewardSignal, getCollectionRewardSignal, getInventoryRewardSignal } from './meta-reward-signals';
+import {
+    getCodexRewardSignal,
+    getCollectionRewardSignal,
+    getInventoryRewardSignal,
+    getMetaProgressionRunImpactRows
+} from './meta-reward-signals';
 import { createDefaultSaveData } from './save-data';
 
 describe('REG-011 meta reward signals', () => {
@@ -24,5 +29,22 @@ describe('REG-011 meta reward signals', () => {
         const codex = getCodexRewardSignal();
         expect(codex.id).toBe('codex_learning_goal');
         expect(codex.cta).toMatch(/Guides|Tables/i);
+    });
+
+    it('translates permanent profile unlocks into next-run impact rows', () => {
+        const save = createDefaultSaveData();
+        save.playerStats = { ...save.playerStats!, dailiesCompleted: 7 };
+
+        const rows = getMetaProgressionRunImpactRows(save);
+        expect(rows[0]).toMatchObject({
+            id: 'upgrade_relic_shrine_extra_pick',
+            lane: 'Relic draft',
+            impact: '+1 pick when unlocked',
+            boardMoment: 'More relic choice at milestone floors',
+            nextAction: 'Claim now',
+            tone: 'ready'
+        });
+        expect(rows.some((row) => row.tone === 'deferred')).toBe(true);
+        expect(rows.some((row) => row.tone === 'cosmetic')).toBe(true);
     });
 });

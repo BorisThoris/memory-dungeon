@@ -124,6 +124,767 @@
     font-variant-numeric: tabular-nums;
 }
 
+.outcomeSignalStrip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 7.2rem), 1fr));
+    gap: 0.42rem;
+    width: 100%;
+    margin-top: 0.72rem;
+}
+
+.outcomeSignalStrip span {
+    display: grid;
+    gap: 0.08rem;
+    min-height: 3rem;
+    padding: 0.38rem 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--theme-card-border-polished) 70%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        radial-gradient(ellipse 110% 150% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 68%),
+        var(--theme-surface-control);
+}
+
+.outcomeSignalStrip small {
+    color: var(--theme-text-subtle);
+    font-size: 0.58rem;
+    font-weight: 850;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.outcomeSignalStrip strong {
+    color: var(--theme-gold-bright);
+    font-size: clamp(0.92rem, 1.8vw, 1.08rem);
+    font-weight: 900;
+    line-height: 1.08;
+}
+
+.outcomeSignalStrip span[data-outcome-signal='chain'],
+.outcomeSignalStrip span[data-outcome-signal='build'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+    background:
+        radial-gradient(ellipse 110% 150% at 50% 0%, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 68%),
+        var(--theme-surface-control);
+}
+
+.outcomeSignalStrip span[data-outcome-signal='chain'] strong,
+.outcomeSignalStrip span[data-outcome-signal='build'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.outcomeSignalStrip span[data-outcome-signal='pressure'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
+    background:
+        radial-gradient(ellipse 110% 150% at 50% 0%, color-mix(in srgb, var(--theme-violet-bright) 11%, transparent), transparent 68%),
+        var(--theme-surface-control);
+}
+
+.outcomeSignalStrip span[data-outcome-signal='pressure'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+}
+
+.payoffBurstStrip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.42rem;
+    width: 100%;
+    margin-top: 0.58rem;
+}
+
+.payoffBurstStrip span {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    align-items: baseline;
+    gap: 0.36rem;
+    min-height: 2.12rem;
+    max-width: 100%;
+    padding: 0.38rem 0.54rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    border-radius: 999px;
+    background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 62%),
+        color-mix(in srgb, var(--theme-surface-control) 88%, transparent);
+    box-shadow:
+        0 0 16px color-mix(in srgb, var(--theme-gold-bright) 10%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
+    animation: payoffBurstPop 420ms var(--ease-out, ease-out) both;
+}
+
+.payoffBurstStrip span:nth-child(2) {
+    animation-delay: 45ms;
+}
+
+.payoffBurstStrip span:nth-child(3) {
+    animation-delay: 90ms;
+}
+
+.payoffBurstStrip span:nth-child(4) {
+    animation-delay: 135ms;
+}
+
+.payoffBurstStrip span:nth-child(5) {
+    animation-delay: 180ms;
+}
+
+.payoffBurstStrip small,
+.payoffBurstStrip b,
+.payoffBurstStrip strong,
+.payoffBurstStrip i,
+.payoffBurstStrip em {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.payoffBurstStrip small,
+.payoffBurstStrip b,
+.payoffBurstStrip strong {
+    white-space: nowrap;
+}
+
+.payoffBurstStrip b {
+    grid-column: 1 / -1;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.08rem 0.3rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    font-size: 0.52rem;
+    font-weight: 950;
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+}
+
+.payoffBurstStrip i {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+    font-size: 0.5rem;
+    font-style: normal;
+    font-weight: 930;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.payoffBurstStrip small {
+    color: color-mix(in srgb, var(--theme-text-subtle) 86%, white);
+    font-size: 0.56rem;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.payoffBurstStrip strong {
+    color: var(--theme-gold-bright);
+    font-size: 0.88rem;
+    font-weight: 950;
+    line-height: 1;
+}
+
+.payoffBurstStrip em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+    font-size: 0.66rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.payoffBurstBeatPips {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-auto-columns: minmax(0.42rem, 1fr);
+    grid-auto-flow: column;
+    gap: 0.16rem;
+    width: min(4.8rem, 100%);
+}
+
+.payoffBurstBeatPips i {
+    height: 0.2rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-gold-bright) 68%, white);
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+    animation: payoffBeatPulse 0.92s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.payoffBurstBeatPips i:nth-child(2),
+.payoffLaneBeatPips s:nth-child(2),
+.payoffBurstStrip span[data-payoff-crescendo-tier] strong i:nth-child(2) {
+    animation-delay: 95ms;
+}
+
+.payoffBurstBeatPips i:nth-child(3),
+.payoffLaneBeatPips s:nth-child(3),
+.payoffBurstStrip span[data-payoff-crescendo-tier] strong i:nth-child(3) {
+    animation-delay: 190ms;
+}
+
+.payoffBurstBeatPips i:nth-child(4),
+.payoffLaneBeatPips s:nth-child(4),
+.payoffBurstStrip span[data-payoff-crescendo-tier] strong i:nth-child(4) {
+    animation-delay: 285ms;
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='chain'] .payoffBurstBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='reward'] .payoffBurstBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 72%, white);
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-success) 22%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='risk'] .payoffBurstBeatPips i {
+    background: color-mix(in srgb, var(--theme-ember) 72%, white);
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-ember) 22%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='chain'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
+    background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent), transparent 62%),
+        color-mix(in srgb, var(--theme-surface-control) 88%, transparent);
+    box-shadow:
+        0 0 16px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='chain'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='reward'] {
+    border-color: color-mix(in srgb, var(--theme-success) 38%, transparent);
+    background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--theme-success) 16%, transparent), transparent 62%),
+        color-mix(in srgb, var(--theme-surface-control) 88%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='reward'] strong {
+    color: color-mix(in srgb, var(--theme-success) 86%, white);
+}
+
+.payoffBurstStrip span[data-payoff-burst-screen-cue='burst'],
+.payoffBurstStrip span[data-payoff-burst-screen-cue='super'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 0.82rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-screen-cue='pulse'],
+.payoffBurstStrip span[data-payoff-burst-screen-cue='snap'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-screen-cue='guard'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-ember) 22%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-stack-tone] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 24%);
+    background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), transparent 62%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 90%, transparent);
+    box-shadow:
+        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-stack-tone] b {
+    padding: 0.08rem 0.3rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 18%);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.payoffBurstStrip span[data-payoff-burst-stack-tone='chain'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
+.payoffBurstStrip span[data-payoff-burst-stack-tone='reward'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+}
+
+.payoffBurstStrip span[data-payoff-burst-stack-tone='super'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 66%, var(--theme-violet-bright) 24%);
+    background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--theme-gold-bright) 26%, transparent), transparent 62%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-violet-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 92%, transparent);
+    box-shadow:
+        0 0 22px color-mix(in srgb, var(--theme-gold-bright) 22%, transparent),
+        0 0 34px color-mix(in srgb, var(--theme-violet-bright) 12%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 14%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-stack-tone='super'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier] {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    min-width: min(15rem, 100%);
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 30%);
+    border-radius: 10px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent), color-mix(in srgb, var(--theme-gold-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 90%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier] b {
+    white-space: normal;
+    line-height: 1.12;
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier] strong {
+    display: grid;
+    grid-auto-columns: minmax(0.72rem, 1fr);
+    grid-auto-flow: column;
+    gap: 0.18rem;
+    color: inherit;
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier] strong i {
+    height: 0.32rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
+    box-shadow: 0 0 0.52rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    animation: payoffBeatPulse 0.92s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier='cashout'] strong i {
+    background: color-mix(in srgb, var(--theme-success) 74%, white);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 50%, var(--theme-gold-bright) 14%);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-screen-cue='snap'] {
+    border-color: color-mix(in srgb, var(--theme-success) 48%, var(--theme-gold-bright) 20%);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-screen-cue='burst'],
+.payoffBurstStrip span[data-payoff-crescendo-screen-cue='super'] {
+    box-shadow:
+        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier='stack'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 56%, var(--theme-cyan-bright) 24%);
+    box-shadow:
+        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier='stack'] strong i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 76%, white);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier='super'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 68%, var(--theme-violet-bright) 30%);
+    background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--theme-gold-bright) 24%, transparent), transparent 64%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-violet-bright) 11%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 92%, transparent);
+    box-shadow:
+        0 0 22px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+        0 0 34px color-mix(in srgb, var(--theme-violet-bright) 12%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 14%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier='super'] strong i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.payoffBurstStrip span[data-payoff-sequence-tone] {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.12rem 0.34rem;
+    min-width: min(18rem, 100%);
+    border-radius: 10px;
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 20%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 90%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-sequence-tone] small {
+    color: color-mix(in srgb, var(--theme-text-subtle) 88%, white);
+}
+
+.payoffBurstStrip span[data-payoff-sequence-tone] strong {
+    color: color-mix(in srgb, var(--theme-text) 92%, white);
+    font-size: 0.66rem;
+    line-height: 1.05;
+}
+
+.payoffBurstStrip span[data-payoff-sequence-tone='chain'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-sequence-tone='reward'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-gold-bright) 16%);
+}
+
+.payoffBurstStrip span[data-payoff-sequence-tone='super'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-violet-bright) 22%);
+    box-shadow:
+        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] {
+    display: flex;
+    flex: 1 0 100%;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 32%, var(--theme-gold-bright) 20%);
+    border-radius: 10px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 90%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i {
+    display: inline-grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.2rem;
+    min-width: min(7.4rem, 100%);
+    font-style: normal;
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] .payoffPrimaryLaneCue {
+    flex-basis: 100%;
+    grid-template-columns: auto minmax(0, 0.85fr) minmax(0, 1.15fr) auto;
+    padding: 0.42rem 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 50%, var(--theme-cyan-bright) 22%);
+    border-radius: 9px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-surface-raised) 78%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.86rem color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] .payoffPrimaryLaneCue strong {
+    display: block;
+    place-items: initial;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: transparent;
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    font-size: 0.74rem;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] .payoffPrimaryLaneCue b {
+    color: color-mix(in srgb, var(--theme-text) 96%, white);
+    font-size: 0.72rem;
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] .payoffPrimaryLaneCue em {
+    justify-self: end;
+    color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+    text-align: right;
+}
+
+.payoffPrimaryLaneBeatPips {
+    grid-column: 1 / -1;
+    display: inline-flex;
+    justify-self: center;
+    align-items: center;
+    gap: 0.08rem;
+}
+
+.payoffPrimaryLaneBeatPips s {
+    display: block;
+    width: 0.21rem;
+    height: 0.21rem;
+    border-radius: 999px;
+    animation: payoffBeatPulse 0.76s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 86%, white 6%);
+    box-shadow: 0 0 0.42rem color-mix(in srgb, currentColor 32%, transparent);
+    text-decoration: none;
+}
+
+.payoffPrimaryLaneBeatPips s:nth-child(2) {
+    animation-delay: 0.07s;
+}
+
+.payoffPrimaryLaneBeatPips s:nth-child(3) {
+    animation-delay: 0.14s;
+}
+
+.payoffPrimaryLaneBeatPips s:nth-child(4) {
+    animation-delay: 0.21s;
+}
+
+.payoffBurstStrip span[data-payoff-primary-lane-screen-cue='burst'] .payoffPrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
+}
+
+.payoffBurstStrip span[data-payoff-primary-lane-screen-cue='cashout'] .payoffPrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-success) 56%, var(--theme-gold-bright) 18%);
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
+.payoffBurstStrip span[data-payoff-primary-lane-screen-cue='build'] .payoffPrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 16%);
+}
+
+.payoffBurstStrip span[data-payoff-primary-lane-screen-cue='risk'] .payoffPrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-ember) 54%, var(--theme-danger) 16%);
+    color: color-mix(in srgb, var(--theme-ember) 84%, white);
+}
+
+.payoffBurstStrip span[data-payoff-primary-lane-screen-cue='cashout'] .payoffPrimaryLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-success) 82%, white 8%);
+}
+
+.payoffBurstStrip span[data-payoff-primary-lane-screen-cue='risk'] .payoffPrimaryLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-ember) 82%, white 8%);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane-screen-cue='burst'] {
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane-screen-cue='cashout'] {
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success) 22%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane-screen-cue='build'] {
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane-screen-cue='risk'] {
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-ember) 24%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i strong {
+    display: grid;
+    place-items: center;
+    width: 1.18rem;
+    height: 1.18rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--theme-text) 12%, transparent);
+    font-size: 0.64rem;
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i b {
+    min-width: 0;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-text) 92%, white);
+    font-size: 0.66rem;
+    font-style: normal;
+    font-weight: 920;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.payoffLaneBeatPips {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-auto-columns: minmax(0.38rem, 1fr);
+    grid-auto-flow: column;
+    gap: 0.14rem;
+    width: min(4.2rem, 100%);
+}
+
+.payoffLaneBeatPips s {
+    height: 0.18rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-text-subtle) 54%, white);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-text-subtle) 16%, transparent);
+    animation: payoffBeatPulse 0.92s ease-in-out infinite;
+    transform-origin: center;
+    text-decoration: none;
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane='chain'] .payoffLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 70%, white);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane='cash'] .payoffLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-success) 70%, white);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane='build'] .payoffLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-gold-bright) 70%, white);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane='risk'] .payoffLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-ember) 70%, white);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane='chain'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane='cash'] strong {
+    color: color-mix(in srgb, var(--theme-success) 88%, white);
+}
+
+.payoffBurstStrip span[data-payoff-lane-map] i[data-payoff-lane='risk'] strong {
+    color: color-mix(in srgb, var(--theme-ember) 88%, white);
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='build'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='risk'] {
+    border-color: color-mix(in srgb, var(--theme-ember) 38%, transparent);
+    background:
+        radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--theme-ember) 16%, transparent), transparent 62%),
+        color-mix(in srgb, var(--theme-surface-control) 88%, transparent);
+}
+
+.payoffBurstStrip span[data-payoff-burst-tone='risk'] strong {
+    color: color-mix(in srgb, var(--theme-ember) 86%, white);
+}
+
+@keyframes payoffBurstPop {
+    from {
+        opacity: 0;
+        transform: translateY(0.32rem) scale(0.94);
+    }
+
+    70% {
+        opacity: 1;
+        transform: translateY(-0.04rem) scale(1.02);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes payoffBeatPulse {
+    0%,
+    100% {
+        opacity: 0.58;
+        transform: scaleX(0.74);
+    }
+
+    46% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+:global([data-reduce-motion='true']) .payoffBurstStrip span,
+:global([data-reduce-motion='true']) .payoffBurstBeatPips i,
+:global([data-reduce-motion='true']) .payoffPrimaryLaneBeatPips s,
+:global([data-reduce-motion='true']) .payoffLaneBeatPips s,
+:global([data-reduce-motion='true']) .payoffBurstStrip span[data-payoff-crescendo-tier] strong i {
+    animation: none;
+}
+
+.momentumRecapGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    gap: 0.46rem;
+    width: 100%;
+    margin-top: 0.56rem;
+}
+
+.momentumRecapGrid span {
+    display: grid;
+    gap: 0.12rem;
+    min-width: 0;
+    min-height: 4.15rem;
+    padding: 0.48rem 0.58rem;
+    border: 1px solid color-mix(in srgb, var(--theme-card-border-polished) 70%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 5%, transparent), transparent 50%),
+        var(--theme-surface-control);
+}
+
+.momentumRecapGrid small,
+.momentumRecapGrid strong,
+.momentumRecapGrid em {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.momentumRecapGrid small {
+    color: color-mix(in srgb, var(--theme-text-subtle) 90%, white);
+    font-size: 0.56rem;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.momentumRecapGrid strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    font-size: 0.96rem;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.momentumRecapGrid em {
+    color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+    font-size: 0.72rem;
+    font-style: normal;
+    font-weight: 650;
+    line-height: 1.25;
+}
+
+.momentumRecapGrid span[data-momentum-recap-tone='chain'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+    background:
+        radial-gradient(ellipse 110% 130% at 50% 0%, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 66%),
+        var(--theme-surface-control);
+}
+
+.momentumRecapGrid span[data-momentum-recap-tone='chain'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.momentumRecapGrid span[data-momentum-recap-tone='reward'] {
+    border-color: color-mix(in srgb, var(--theme-success) 32%, transparent);
+}
+
+.momentumRecapGrid span[data-momentum-recap-tone='reward'] strong {
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
+.momentumRecapGrid span[data-momentum-recap-tone='build'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+}
+
+.momentumRecapGrid span[data-momentum-recap-tone='risk'] {
+    border-color: color-mix(in srgb, var(--theme-ember) 34%, transparent);
+}
+
+.momentumRecapGrid span[data-momentum-recap-tone='risk'] strong {
+    color: color-mix(in srgb, var(--theme-ember) 84%, white);
+}
+
 .divider {
     width: min(100%, 18rem);
     height: auto;
@@ -229,6 +990,27 @@
         var(--gameplay-overlay-actions-surface, var(--theme-surface-control));
 }
 
+.actionButtonContent {
+    display: grid;
+    justify-items: center;
+    gap: 0.14rem;
+    min-width: 0;
+    line-height: 1.08;
+}
+
+.actionButtonContent span {
+    font-weight: 850;
+}
+
+.actionButtonContent small {
+    max-width: min(22rem, 100%);
+    color: color-mix(in srgb, currentColor 76%, var(--theme-text-muted));
+    font-size: 0.64rem;
+    font-weight: 750;
+    line-height: 1.16;
+    overflow-wrap: anywhere;
+}
+
 .nextRunLoop,
 .nextRunGrid {
     margin-top: 1rem;
@@ -266,6 +1048,45 @@
     color: var(--theme-text-subtle);
     font-size: 0.76rem;
     line-height: 1.36;
+}
+
+.nextRunActionCue {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 1.28rem;
+    margin-top: 0.1rem;
+    padding: 0.12rem 0.38rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-gold-deep) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.62rem;
+    font-weight: 850;
+    line-height: 1.12;
+    overflow-wrap: anywhere;
+}
+
+.nextRunCard[data-next-run-row='chain_target'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
+    background:
+        radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), transparent 64%),
+        var(--theme-surface-glass);
+}
+
+.nextRunCard[data-next-run-row='chain_target'] span {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    font-weight: 850;
+}
+
+.nextRunCard[data-next-run-row='chain_target'] .nextRunActionCue {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
 }
 
 .journalRows {

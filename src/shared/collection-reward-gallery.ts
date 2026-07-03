@@ -16,6 +16,7 @@ export interface CollectionRewardGalleryRow {
     progressLabel: string;
     unlockHint: string;
     nextAction: string;
+    gameplayImpact: string;
     icon: string;
     tone: CollectionRewardGalleryTone;
     localOnly: true;
@@ -61,6 +62,7 @@ export const getCollectionRewardGalleryRows = (save: SaveData): CollectionReward
             progressLabel: `${achievements.filter(Boolean).length}/${achievements.length} lit`,
             unlockHint: 'Clear floors, protect lives, and chase score milestones.',
             nextAction: 'Clear floors, protect lives, and chase score milestones.',
+            gameplayImpact: 'Mastery goals push clean chains, safer clears, and higher-score routes.',
             icon: '★',
             tone: 'Gold',
             localOnly: true
@@ -77,6 +79,9 @@ export const getCollectionRewardGalleryRows = (save: SaveData): CollectionReward
                 : `${meta.summary.owned} owned`,
             unlockHint: meta.nextReward?.gate ?? 'Keep playing local modes to build mastery.',
             nextAction: meta.nextReward?.gate ?? 'Keep playing local modes to build mastery.',
+            gameplayImpact: meta.nextReward?.gameplayAffecting
+                ? 'Permanent upgrade changes a future board or draft decision.'
+                : 'Archive reward changes identity without adding run power.',
             icon: '◆',
             tone: 'Violet',
             localOnly: true
@@ -91,6 +96,7 @@ export const getCollectionRewardGalleryRows = (save: SaveData): CollectionReward
             progressLabel: `${cosmeticsOwned}/${cosmeticsTotal} owned`,
             unlockHint: 'Earned from honors and local progress; never pay-to-win.',
             nextAction: 'Earned from honors and local progress; never pay-to-win.',
+            gameplayImpact: 'Visual-only rewards keep gameplay power readable and fair.',
             icon: '◇',
             tone: 'Cyan',
             localOnly: true
@@ -105,6 +111,7 @@ export const getCollectionRewardGalleryRows = (save: SaveData): CollectionReward
             progressLabel: `${Math.min(relicPickTotal, 10)}/10 discovery marks`,
             unlockHint: 'Reach milestone floors and draft relics.',
             nextAction: 'Reach milestone floors and draft relics.',
+            gameplayImpact: 'Relic discovery teaches which builds create stronger chain tools.',
             icon: '✦',
             tone: relicPickTotal > 0 ? 'Gold' : 'Muted',
             localOnly: true
@@ -119,6 +126,9 @@ export const getCollectionRewardGalleryRows = (save: SaveData): CollectionReward
             progressLabel: `${save.lastRunSummary ? 1 : 0}/${historyRows.length} summary`,
             unlockHint: save.lastRunSummary ? 'Review your latest descent.' : 'Finish a run to add a journal summary.',
             nextAction: save.lastRunSummary ? 'Review your latest descent.' : 'Finish a run to add a journal summary.',
+            gameplayImpact: save.lastRunSummary
+                ? 'Recent run recap shows which chain and reward payoffs fired.'
+                : 'Finish a run to reveal chain, reward, and build takeaways.',
             icon: '☰',
             tone: save.lastRunSummary ? 'Cyan' : 'Muted',
             localOnly: true

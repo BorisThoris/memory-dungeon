@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { HazardTileKind, Tile, TileTraitKind } from '../../shared/contracts';
 import { getHazardTileLiveCopy } from '../../shared/hazard-tiles';
+import { getChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
+import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import {
     GAUNTLET_WARN_SECS,
@@ -33,6 +35,45 @@ const POLITE_HUD_THROTTLE_MS = 400;
 type HudAnnouncePriority = 'info' | 'error';
 
 const PRIORITY_RANK: Record<HudAnnouncePriority, number> = { error: 2, info: 1 };
+
+const chainRewardAnnouncementLine = (streak: number, comboShards: number, lives: number): string => {
+    const cue = getChainRewardForecastCues(streak, comboShards, lives)[0];
+    return cue ? ` Next reward: ${getChainRewardUrgencyCopy(cue)}: ${cue.label} in ${cue.distanceLabel}.` : '';
+};
+
+const payoffIntensityAnnouncementLine = ({
+    chainMatchStreak,
+    comboShardDelta,
+    guardTokenDelta,
+    lifeDelta,
+    shopGoldDelta,
+    traitMatchCount
+}: {
+    chainMatchStreak: number;
+    comboShardDelta: number;
+    guardTokenDelta: number;
+    lifeDelta: number;
+    shopGoldDelta: number;
+    traitMatchCount: number;
+}): string | null => {
+    const lanes = [
+        comboShardDelta > 0 ? 'combo shard' : null,
+        guardTokenDelta > 0 ? 'guard token' : null,
+        lifeDelta > 0 ? 'life' : null,
+        shopGoldDelta > 0 ? 'shop gold' : null,
+        traitMatchCount >= 2 ? 'trait surge' : null
+    ].filter((lane): lane is string => lane !== null);
+    if (lanes.length < 2) {
+        return null;
+    }
+    if (lanes.length >= 4) {
+        return `Payoff stack: ${lanes.length} payoffs cashed. Cash stack now.`;
+    }
+    if (chainMatchStreak >= 3) {
+        return `Cashout hit: ${lanes.length} payoffs paid together. Keep the chain live.`;
+    }
+    return `Reward cashout: ${lanes.length} payoffs paid together.`;
+};
 
 interface HudPoliteLiveAnnouncementInput {
     gauntletRemainingMs: number | null;
@@ -121,7 +162,7 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): number
  * Batches concurrent announcements on `requestAnimationFrame`, dedupes by key, prefers higher priority,
  * and throttles display cadence so screen readers get summaries, not chatter.
  */
-const CHAIN_MILESTONE_THRESHOLDS = [3, 5, 8] as const;
+const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
 const HAZARD_ANNOUNCEMENT_ORDER = ['shuffle_snare', 'cascade_cache', 'mirror_decoy', 'fragile_cache', 'toll_cache', 'fuse_cache'] as const satisfies readonly HazardTileKind[];
 
 export const useHudPoliteLiveAnnouncement = ({
@@ -531,7 +572,7 @@ export const useHudPoliteLiveAnnouncement = ({
         }
 
         if (mismatchDelta > 0 && lifeDelta >= 0 && guardDelta >= 0) {
-            lines.push('No match. Cards will turn back.');
+            lines.push('No match. Recover with a safe match. Chain reset.');
         }
 
         if (enemyHazardHitDelta > 0) {
@@ -562,7 +603,11 @@ export const useHudPoliteLiveAnnouncement = ({
             const pairTotal = Math.max(pairCount, matchedPairs, snap.pairCount);
             lines.push(`Match resolved. ${matchedPairs}/${pairTotal} pairs cleared.`);
             if (traitMatchLabels.length > 0) {
-                lines.push(`${joinReadableList(traitMatchLabels)} trait resolved.`);
+                lines.push(
+                    traitMatchLabels.length >= 2
+                        ? `Trait combo surge: ${joinReadableList(traitMatchLabels)} resolved.`
+                        : `${joinReadableList(traitMatchLabels)} trait resolved.`
+                );
             }
             if (regionShuffleChargeDelta > 0) {
                 lines.push(`${pluralize(regionShuffleChargeDelta, 'row/swap charge')} gained.`);
@@ -603,7 +648,11 @@ export const useHudPoliteLiveAnnouncement = ({
         }
 
         if (traitMismatchLabels.length > 0) {
-            lines.push(`${joinReadableList(traitMismatchLabels)} trait penalty applied.`);
+            lines.push(
+                traitMismatchLabels.length >= 2
+                    ? `Trait surge: ${traitMismatchLabels.length} penalties applied: ${joinReadableList(traitMismatchLabels)}.`
+                    : `${joinReadableList(traitMismatchLabels)} trait penalty applied.`
+            );
         }
 
         if (volatileTraitShuffleDelta > 0) {
@@ -635,6 +684,20 @@ export const useHudPoliteLiveAnnouncement = ({
             lines.push(`${resourceDeltaCopy(goldDelta, 'Shop gold', 'shop gold', 'spent', 'shop gold')}. ${shopGold} available.`);
         }
 
+        if (matchDelta > 0) {
+            const payoffIntensityLine = payoffIntensityAnnouncementLine({
+                chainMatchStreak,
+                comboShardDelta: shardDelta,
+                guardTokenDelta: guardDelta,
+                lifeDelta,
+                shopGoldDelta: goldDelta,
+                traitMatchCount: traitMatchLabels.length
+            });
+            if (payoffIntensityLine) {
+                lines.push(payoffIntensityLine);
+            }
+        }
+
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
                 dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocus}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${countTileTraitTotal(tileTraitMatches)}:${countTileTraitTotal(tileTraitMismatches)}:${volatileTraitShuffles}`,
@@ -645,6 +708,7 @@ export const useHudPoliteLiveAnnouncement = ({
         actionSnapRef.current = nextSnap;
     }, [
         boardLevel,
+        chainMatchStreak,
         comboShards,
         dungeonEnemiesDefeatedThisFloor,
         guardTokens,
@@ -688,19 +752,26 @@ export const useHudPoliteLiveAnnouncement = ({
         if (chainMatchStreak > prev) {
             for (const m of CHAIN_MILESTONE_THRESHOLDS) {
                 if (prev < m && chainMatchStreak >= m) {
+                    const milestone = getChainMilestoneFeedback(prev, chainMatchStreak);
+                    const rewardLine = chainRewardAnnouncementLine(chainMatchStreak, comboShards, lives);
                     queuePoliteAnnouncement(
-                        m === 3
-                            ? 'Chain times three - consecutive matches boost your score.'
-                            : `Chain times ${m} - keep the chain for bigger match payouts.`,
+                        milestone
+                            ? `${milestone.label}: ${milestone.target}. ${milestone.value}.${rewardLine}`
+                            : `Chain times ${m} - keep the chain for bigger match payouts.${rewardLine}`,
                         { dedupeKey: `chain:${boardLevel}:${m}`, priority: 'info' }
                     );
                     break;
                 }
             }
+        } else if (prev >= 3 && chainMatchStreak < prev) {
+            queuePoliteAnnouncement(
+                `Chain x${prev} broken - recover with a remembered pair.`,
+                { dedupeKey: `chain-break:${boardLevel}:${prev}`, priority: 'info' }
+            );
         }
 
         chainSnapRef.current = { level: boardLevel, streak: chainMatchStreak };
-    }, [boardLevel, chainAnnounceActive, chainMatchStreak, queuePoliteAnnouncement]);
+    }, [boardLevel, chainAnnounceActive, chainMatchStreak, comboShards, lives, queuePoliteAnnouncement]);
 
     useEffect(() => {
         if (boardLevel === null) {

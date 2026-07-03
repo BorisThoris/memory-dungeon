@@ -42,6 +42,16 @@ export interface TraitOpportunityHudModel {
     toolLine: string;
 }
 
+export interface TraitOpportunityHighlight {
+    active: boolean;
+    buildLabel: string;
+    headline: string;
+    primaryLine: string;
+    secondaryLine: string | null;
+    tileIds: string[];
+    tone: 'surge' | 'ready' | 'setup' | 'idle';
+}
+
 export interface TraitSwapRouteHint {
     firstTileId: string;
     secondTileId: string;
@@ -148,6 +158,82 @@ export const getTraitOpportunitySummary = (board: BoardState | null | undefined)
 export const getTraitOpportunityTileIds = (board: BoardState | null | undefined): Set<string> =>
     new Set(getTraitOpportunitySummary(board).tiles.map((tile) => tile.tileId));
 
+export const getSelectedTraitFollowupTileIds = (board: BoardState | null | undefined): Set<string> => {
+    if (!board || board.flippedTileIds.length !== 1) {
+        return new Set();
+    }
+
+    const selectedTile = board.tiles.find((tile) => tile.id === board.flippedTileIds[0]);
+    if (!selectedTile || selectedTile.tileTraitKind == null || selectedTile.state !== 'flipped') {
+        return new Set();
+    }
+
+    const selectedPreviewLines = [
+        ...getTileTraitInteractionPreviewLines(board, [selectedTile.id], 'match'),
+        ...getTileTraitInteractionPreviewLines(board, [selectedTile.id], 'mismatch')
+    ];
+    if (selectedPreviewLines.length === 0) {
+        return new Set();
+    }
+
+    return new Set(
+        board.tiles
+            .filter((tile) => tile.state === 'hidden' && tile.pairKey === selectedTile.pairKey)
+            .map((tile) => tile.id)
+    );
+};
+
+export const getTraitComboSurgeTileIds = (board: BoardState | null | undefined): Set<string> => {
+    const summary = getTraitOpportunitySummary(board);
+    if (summary.interactionLines.length < 2) {
+        return new Set();
+    }
+    return new Set(summary.tiles.map((tile) => tile.tileId));
+};
+
+export const getTraitOpportunityHighlight = (board: BoardState | null | undefined): TraitOpportunityHighlight => {
+    const summary = getTraitOpportunitySummary(board);
+    const surgeTileIds = getTraitComboSurgeTileIds(board);
+    if (summary.interactionLines.length > 0) {
+        const tone = surgeTileIds.size > 0 ? 'surge' : 'ready';
+        const buildLabel =
+            summary.buildLabels[0] ??
+            (summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Trait route');
+        return {
+            active: true,
+            buildLabel,
+            headline: tone === 'surge' ? 'Combo surge ready' : 'Chain route ready',
+            primaryLine: summary.interactionLines[0]!,
+            secondaryLine: summary.interactionLines[1] ?? null,
+            tileIds: summary.tiles.map((tile) => tile.tileId),
+            tone
+        };
+    }
+
+    const setupHint = getTraitSwapRouteHints(board, 1)[0] ?? null;
+    if (setupHint) {
+        return {
+            active: true,
+            buildLabel: 'Route prime',
+            headline: 'One swap primes route',
+            primaryLine: setupHint.text,
+            secondaryLine: setupHint.matchCreatedLines[1] ?? null,
+            tileIds: [setupHint.firstTileId, setupHint.secondTileId],
+            tone: 'setup'
+        };
+    }
+
+    return {
+        active: false,
+        buildLabel: 'No route',
+        headline: 'No chain route lit',
+        primaryLine: 'Match or move traits together to light a route.',
+        secondaryLine: null,
+        tileIds: [],
+        tone: 'idle'
+    };
+};
+
 export const getTraitSwapRouteHints = (
     board: BoardState | null | undefined,
     limit = 3
@@ -214,21 +300,26 @@ export const getTraitSwapRouteHints = (
 
 export const getTraitOpportunityHudModel = (
     board: BoardState | null | undefined,
-    runTools: Pick<RunState, 'peekCharges' | 'regionShuffleCharges' | 'regionShuffleFreeThisFloor' | 'shuffleCharges'>
+    runTools: Pick<RunState, 'peekCharges' | 'regionShuffleCharges' | 'regionShuffleFreeThisFloor' | 'shuffleCharges'> &
+        Partial<Pick<RunState, 'activeContract'>>
 ): TraitOpportunityHudModel => {
     const summary = getTraitOpportunitySummary(board);
     const routeCount = summary.interactionLines.length;
-    const swapHint = runTools.regionShuffleCharges > 0 || runTools.regionShuffleFreeThisFloor
+    const swapToolsAvailable =
+        !runTools.activeContract?.noShuffle &&
+        (runTools.regionShuffleCharges > 0 || runTools.regionShuffleFreeThisFloor);
+    const swapHint = swapToolsAvailable
         ? getTraitSwapRouteHints(board, 1)[0] ?? null
         : null;
     const active = routeCount > 0 || swapHint != null;
     const buildLabel =
         summary.buildLabels[0] ??
-        (summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Route setup');
-    const primaryLine = summary.interactionLines[0] ?? swapHint?.text ?? 'No adjacent trait route yet';
-    const toolLine = `Tools: row/swap ${runTools.regionShuffleCharges}${
-        runTools.regionShuffleFreeThisFloor ? ' + free' : ''
-    }, peek ${runTools.peekCharges}, shuffle ${runTools.shuffleCharges}`;
+        (summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Route prime');
+    const primaryLine = summary.interactionLines[0] ?? swapHint?.text ?? 'No trait route primed yet';
+    const rowSwapLine = runTools.activeContract?.noShuffle
+        ? 'locked'
+        : `${runTools.regionShuffleCharges}${runTools.regionShuffleFreeThisFloor ? ' + free' : ''}`;
+    const toolLine = `Tools: row/swap ${rowSwapLine}, peek ${runTools.peekCharges}, shuffle ${runTools.shuffleCharges}`;
     const routeCountLabel = routeCount === 0 && swapHint
         ? 'setup'
         : routeCount === 1

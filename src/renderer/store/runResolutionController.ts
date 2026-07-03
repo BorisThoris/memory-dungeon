@@ -20,7 +20,7 @@ import { disableDebugPeek } from '../../shared/run-timer-rules';
 import { repairRunProgressionSoftlocks } from '../../shared/run-progression-repair';
 import { resolveBoardTurn } from '../../shared/turn-resolution';
 import { trackEvent } from '../../shared/telemetry';
-import { playFloorClearSfx, playResolveSfx, resumeAudioContext } from '../audio/gameSfx';
+import { playFloorClearSfx, playMatchPayoffSfx, playResolveSfx, resumeAudioContext } from '../audio/gameSfx';
 import {
     BOARD_FLOATER_POP_CLEAR,
     buildMatchScorePopPayload,
@@ -215,7 +215,11 @@ export const createRunResolutionController = ({
             setState({ ...BOARD_FLOATER_POP_CLEAR });
         }
         void resumeAudioContext();
-        playResolveSfx(run, next, getSfxGain());
+        const gain = getSfxGain();
+        playResolveSfx(run, next, gain);
+        if (pop) {
+            playMatchPayoffSfx(gain, pop);
+        }
         applyResolvedRun(next);
     };
 

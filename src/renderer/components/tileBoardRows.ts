@@ -1,6 +1,16 @@
 import type { BoardState, EnemyHazardState, HazardTileKind, RunStatus, Tile } from '../../shared/contracts';
 import { activeEnemyHazardsForBoard } from '../../shared/enemy-hazard-board-rules';
-import { getTraitOpportunitySummary } from '../../shared/trait-opportunities';
+import {
+    getSelectedTraitFollowupTileIds,
+    getTraitComboSurgeTileIds,
+    getTraitOpportunitySummary
+} from '../../shared/trait-opportunities';
+import {
+    buildTraitInteractionLaneMap,
+    getTraitInteractionLaneAction,
+    TRAIT_INTERACTION_LANE_LABELS,
+    type TraitInteractionLaneId
+} from '../copy/traitInteractionLaneMap';
 import { getTileFieldAmplification } from './tileFieldTilt';
 import { isTilePickable } from './tileBoardPick';
 import { isTileBoardFlipLocked } from './tileBoardFlipLock';
@@ -9,6 +19,7 @@ import {
     getTileBoardHiddenBackAccents,
     type TileBoardPowerBackAccent
 } from './tileBoardHiddenBackAccents';
+import { getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
 import { getTileBoardPairProximityDistance } from './tileBoardPairProximityState';
 import { getTileBoardPresentationState } from './tileBoardPresentationState';
 import { isMemorizeCurseHighlighted, isStickyFingerSlotMarked } from './tileBoardRowMarkers';
@@ -19,6 +30,14 @@ import {
 } from './tileBoardTutorialMarkers';
 import { getResolvingSelectionState, type ResolvingSelectionState } from './tileResolvingSelection';
 import { getTileTransform, type TileTransform } from './tileBoardTransform';
+import {
+    getTraitRouteCadenceAction,
+    getTraitRouteReadabilityCadence,
+    getTraitRouteReadabilityBeatTier,
+    getTraitRouteReadabilityTier,
+    type TileTraitRouteCadence,
+    type TileTraitRouteBeatTier
+} from './tileBoardReadability';
 
 export type { TileBoardPowerBackAccent } from './tileBoardHiddenBackAccents';
 export { getTutorialPairOrdinalByKey } from './tileBoardTutorialMarkers';
@@ -36,11 +55,13 @@ export interface TileBoardRow {
     objectiveBackAccent: boolean;
     pairProximityDistance: number | null;
     powerBackAccent: TileBoardPowerBackAccent | null;
+    perkArmedBack: boolean;
     presentationNBackAnchor: boolean;
     presentationSilhouette: boolean;
     presentationWideRecall: boolean;
     resolvingSelection: ResolvingSelectionState;
     routeBackAccent: boolean;
+    selectedTraitFollowupBack: boolean;
     shuffleBoardOrderIndex: number;
     spotlightBountyHighlight: boolean;
     spotlightBountyOnBack: boolean;
@@ -49,6 +70,14 @@ export interface TileBoardRow {
     stickyFingerSlotMark: boolean;
     tile: Tile;
     traitComboBack: boolean;
+    traitComboSurgeBack: boolean;
+    traitLaneAction: string | null;
+    traitLaneBack: TraitInteractionLaneId | null;
+    traitLaneLabel: string | null;
+    traitRouteBeatTier: TileTraitRouteBeatTier | null;
+    traitRouteCadence: TileTraitRouteCadence;
+    traitRouteCadenceAction: string | null;
+    traitRewardHotBack: boolean;
     traitRouteTargetBack: boolean;
     traitInteractionPreviewLines: string[];
     transform: TileTransform;
@@ -92,6 +121,9 @@ export interface BuildTileBoardRowsInput {
     tileSwapEligibleTileIds: ReadonlySet<string>;
     tileSwapFirstTileId: string | null;
     tileSwapPowerVisualActive: boolean;
+    perkArmedTileIds?: ReadonlySet<string>;
+    selectedTraitFollowupTileIds?: ReadonlySet<string>;
+    traitRewardHotTileIds?: ReadonlySet<string>;
     traitRouteTargetTileIds?: ReadonlySet<string>;
     wardPairKey: string | null;
     wideRecallInPlay: boolean;
@@ -133,6 +165,9 @@ export const buildTileBoardRows = ({
     tileSwapEligibleTileIds,
     tileSwapFirstTileId,
     tileSwapPowerVisualActive,
+    perkArmedTileIds = new Set(),
+    selectedTraitFollowupTileIds,
+    traitRewardHotTileIds = new Set(),
     traitRouteTargetTileIds = new Set(),
     wardPairKey,
     wideRecallInPlay
@@ -146,6 +181,8 @@ export const buildTileBoardRows = ({
     const traitOpportunityByTileId = new Map(
         getTraitOpportunitySummary(board).tiles.map((opportunity) => [opportunity.tileId, opportunity])
     );
+    const traitComboSurgeTileIds = getTraitComboSurgeTileIds(board);
+    const selectedTraitFollowupTileIdSet = selectedTraitFollowupTileIds ?? getSelectedTraitFollowupTileIds(board);
 
     return board.tiles.map((tile, index) => {
         const traitOpportunity = traitOpportunityByTileId.get(tile.id) ?? null;
@@ -219,6 +256,27 @@ export const buildTileBoardRows = ({
             tile
         });
 
+        const traitInteractionPreviewLines = traitOpportunity?.previewLines ?? [];
+        const traitLanePreviewLines = !faceUp ? getTileTraitInteractionPreviewLines(board, [tile.id], 'match') : [];
+        const traitLaneBack = buildTraitInteractionLaneMap(traitLanePreviewLines)[0]?.id ?? null;
+        const perkArmedBack = perkArmedTileIds.has(tile.id) && !faceUp;
+        const selectedTraitFollowupBack = selectedTraitFollowupTileIdSet.has(tile.id) && !faceUp;
+        const traitComboBack = Boolean(traitOpportunity && !faceUp);
+        const traitComboSurgeBack = traitComboSurgeTileIds.has(tile.id) && !faceUp;
+        const traitRewardHotBack = traitRewardHotTileIds.has(tile.id) && !faceUp;
+        const traitRouteTargetBack = traitRouteTargetTileIds.has(tile.id) && !faceUp;
+        const traitRouteReadabilityTier = getTraitRouteReadabilityTier({
+            isPerkArmedBack: perkArmedBack,
+            isSelectedTraitFollowupBack: selectedTraitFollowupBack,
+            isTraitComboBack: traitComboBack,
+            isTraitComboSurgeBack: traitComboSurgeBack,
+            isTraitPayoffStackBack: traitComboBack && traitRewardHotBack,
+            isTraitRewardHotBack: traitRewardHotBack,
+            isTraitRouteTargetBack: traitRouteTargetBack
+        });
+        const traitRouteBeatTier = getTraitRouteReadabilityBeatTier(traitRouteReadabilityTier);
+        const traitRouteCadence = getTraitRouteReadabilityCadence(traitRouteReadabilityTier);
+
         return {
             destroyBlockedDecoyBack,
             enemyOccupiedBack: enemyOccupiedTileIds.has(tile.id),
@@ -231,12 +289,14 @@ export const buildTileBoardRows = ({
             nonPickableBack,
             objectiveBackAccent,
             pairProximityDistance,
+            perkArmedBack,
             powerBackAccent,
             presentationNBackAnchor,
             presentationSilhouette,
             presentationWideRecall,
             resolvingSelection: getResolvingSelectionState(board, runStatus, tile.id),
             routeBackAccent,
+            selectedTraitFollowupBack,
             shuffleBoardOrderIndex: index,
             spotlightBountyHighlight,
             spotlightBountyOnBack,
@@ -244,9 +304,17 @@ export const buildTileBoardRows = ({
             spotlightWardOnBack,
             stickyFingerSlotMark,
             tile,
-            traitComboBack: Boolean(traitOpportunity && !faceUp),
-            traitRouteTargetBack: traitRouteTargetTileIds.has(tile.id) && !faceUp,
-            traitInteractionPreviewLines: traitOpportunity?.previewLines ?? [],
+            traitComboBack,
+            traitComboSurgeBack,
+            traitLaneAction: traitLaneBack ? getTraitInteractionLaneAction(traitLaneBack) : null,
+            traitLaneBack,
+            traitLaneLabel: traitLaneBack ? TRAIT_INTERACTION_LANE_LABELS[traitLaneBack] : null,
+            traitRouteBeatTier,
+            traitRouteCadence,
+            traitRouteCadenceAction: traitRouteCadence === 'none' ? null : getTraitRouteCadenceAction(traitRouteCadence),
+            traitRewardHotBack,
+            traitRouteTargetBack,
+            traitInteractionPreviewLines,
             transform: getTileTransform(tile, index, totalColumns, totalRows, compact, faceUp, reduceMotion),
             tutorialPairOrdinal
         };

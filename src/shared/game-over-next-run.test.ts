@@ -5,14 +5,50 @@ import { createDefaultSaveData } from './save-data';
 
 describe('REG-096 game over next-run loop', () => {
     it('derives run-it-back, build recap, and local share rows from run summary', () => {
-        const run = createRunSummary({ ...finishMemorizePhase(createNewRun(0)), status: 'gameOver', lives: 0 }, []);
+        const source = finishMemorizePhase(createNewRun(0));
+        const run = createRunSummary({
+            ...source,
+            findablesClaimedThisFloor: 1,
+            findablesTotalThisFloor: 2,
+            stats: { ...source.stats, bestStreak: 5 },
+            status: 'gameOver',
+            lives: 0
+        }, []);
         const rows = getGameOverNextRunRows(run);
 
-        expect(rows.map((row) => row.id)).toEqual(['run_it_back', 'build_recap', 'local_share', 'next_goal']);
+        expect(rows.map((row) => row.id)).toEqual(['run_it_back', 'chain_target', 'build_recap', 'local_share', 'next_goal']);
         expect(rows.every((row) => row.localOnly)).toBe(true);
         expect(rows.find((row) => row.id === 'run_it_back')?.actionHint).toMatch(/again/i);
         expect(rows.find((row) => row.id === 'run_it_back')?.detail).toMatch(/score \/ floor \d+ \/ \d+ clear/);
+        expect(rows.find((row) => row.id === 'run_it_back')?.detail).toContain('best chain x5');
+        expect(rows.find((row) => row.id === 'run_it_back')?.detail).toContain('pickups 1/2');
+        expect(rows.find((row) => row.id === 'chain_target')).toMatchObject({
+            title: 'Chain target',
+            value: 'Push x6 reward',
+            detail: 'Best chain x5; extend the x3 reward loop before chasing greedy pickups.',
+            actionHint: 'Open with confirmed pairs, then convert tools into one longer streak.'
+        });
         expect(rows.find((row) => row.id === 'local_share')?.detail).toMatch(/online rank/i);
+    });
+
+    it('turns high streaks into a concrete combo-tier next-run target', () => {
+        const source = finishMemorizePhase(createNewRun(0));
+        const run = createRunSummary(
+            {
+                ...source,
+                stats: { ...source.stats, bestStreak: 8 },
+                status: 'gameOver',
+                lives: 0
+            },
+            []
+        );
+
+        const row = getGameOverNextRunRows(run).find((entry) => entry.id === 'chain_target');
+
+        expect(row).toMatchObject({
+            value: 'Break into x10',
+            detail: 'Best chain x8; one cleaner floor can turn reward-threshold chains into a combo-tier burst.'
+        });
     });
 
     it('labels explicit dungeon showcase summaries for run-it-back', () => {
@@ -57,6 +93,9 @@ describe('REG-096 game over next-run loop', () => {
         expect(summarized.lastRunSummary?.startingLoadoutId).toBe('cursebreaker');
         expect(row?.value).toContain('Cursebreaker');
         expect(row?.detail).toContain('hazard-control toolkit');
+        expect(row?.detail).toContain('Starts: +1 guard, +1 destroy');
+        expect(row?.detail).toContain('Build bias: Cursed + Stasis');
+        expect(row?.detail).toContain('Payoff: Hazard control');
     });
 
     it('uses save-backed meta progression feedback for the next-goal row when available', () => {

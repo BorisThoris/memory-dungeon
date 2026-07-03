@@ -32,6 +32,10 @@ describe('CodexScreen REG-095 knowledge base', () => {
         expect(summary).toHaveTextContent(/Table depth/);
         expect(summary).toHaveTextContent(/Deep links/);
         expect(summary).toHaveTextContent(/Filter recovery/);
+
+        expect(screen.getByTestId('codex-reward-signal')).toHaveAccessibleName(
+            /Codex reward signal.*Next:/i
+        );
     });
 
     it('documents relic build archetypes as the player-facing build language', () => {

@@ -6,15 +6,40 @@ import { getMetaProgressionBoard, getMetaProgressionMilestones } from '../../sha
 import { getDailyStreakEthicsRow } from '../../shared/daily-archive';
 import { getObjectiveBoardItems } from '../../shared/objective-board';
 import { buildProfileSaveShellSummary, getProfileSummaryRows, getSaveTrustRows } from '../../shared/profile-summary';
+import { getMetaProgressionRunImpactRows } from '../../shared/meta-reward-signals';
 import { formatNextUtcReset } from '../../shared/utc-countdown';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
+import {
+    formatRunPayoffLaneMapAttr,
+    formatRunPayoffLaneActionMapAttr,
+    formatRunPayoffLaneMapLabel,
+    formatRunPayoffBurstSignalLabel,
+    formatRunPayoffSignalsLabel,
+    getRunPayoffLaneAudioCue,
+    getRunPayoffLaneBeatCount,
+    getRunPayoffLaneMap,
+    getRunPayoffLaneScreenCue,
+    getRunPayoffBurstSignal,
+    getRunPayoffSignalBeatCount,
+    getRunPayoffSignals
+} from '../copy/runPayoffSignals';
 import { Eyebrow, Panel, ScreenTitle, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import metaStyles from './MetaScreen.module.css';
 import styles from './ProfileScreen.module.css';
+
+const formatProgressionImpactLabel = (
+    label: string,
+    rows: readonly { boardMoment: string; impact: string; lane: string; nextAction: string; title: string }[]
+): string => {
+    const rowCopy = rows
+        .map((row) => `${row.lane}: ${row.impact}. Moment: ${row.boardMoment}. Next: ${row.nextAction}. ${row.title}`)
+        .join('. ');
+    return rowCopy ? `${label}. ${rowCopy}.` : label;
+};
 
 const ProfileScreen = () => {
     const [nowMs, setNowMs] = useState(() => Date.now());
@@ -34,6 +59,18 @@ const ProfileScreen = () => {
     const lastRunLabel = lastRunSummary
         ? `${lastRunSummary.totalScore.toLocaleString()} score / Floor ${lastRunSummary.highestLevel} / ${lastRunSummary.bestStreak} streak`
         : 'No descent recorded yet.';
+    const recentRunSignalRows = lastRunSummary ? getRunPayoffSignals(lastRunSummary, { includeChainTarget: true }).slice(0, 4) : [];
+    const recentRunPayoffLaneMap = getRunPayoffLaneMap(recentRunSignalRows);
+    const primaryRecentRunPayoffLane = recentRunPayoffLaneMap[0] ?? null;
+    const recentRunPayoffLaneMapAttr = formatRunPayoffLaneMapAttr(recentRunPayoffLaneMap);
+    const recentRunPayoffLaneActionMapAttr = formatRunPayoffLaneActionMapAttr(recentRunPayoffLaneMap);
+    const recentRunPayoffLaneMapLabel = formatRunPayoffLaneMapLabel('Profile recent run payoff lanes', recentRunPayoffLaneMap);
+    const recentRunPayoffBurst = getRunPayoffBurstSignal(recentRunSignalRows);
+    const recentRunPayoffBurstLabel = formatRunPayoffBurstSignalLabel('Profile recent run payoff burst', recentRunPayoffBurst);
+    const recentRunSignalLabel =
+        recentRunSignalRows.length > 0
+            ? formatRunPayoffSignalsLabel('Recent run payoff signals', recentRunSignalRows)
+            : lastRunLabel;
     const dailyCountdown = formatNextUtcReset(nowMs);
     const dailyStreakEthics = getDailyStreakEthicsRow(saveData, nowMs);
     const objectiveBoard = getObjectiveBoardItems(saveData);
@@ -41,6 +78,8 @@ const ProfileScreen = () => {
     const trustShell = buildProfileSaveShellSummary(saveData);
     const progressionBoard = getMetaProgressionBoard(saveData);
     const progressionMilestones = getMetaProgressionMilestones(saveData);
+    const progressionImpactRows = getMetaProgressionRunImpactRows(saveData);
+    const progressionImpactLabel = formatProgressionImpactLabel('Profile progression impact signals', progressionImpactRows);
     const readyProgressionReward = progressionBoard.nextReward?.status === 'available' ? progressionBoard.nextReward : null;
     const saveTrustRows = getSaveTrustRows(saveData);
     const profileTitle = getEquippedCosmeticId(saveData, 'title') === 'title_ascendant_v' ? 'Ascendant V' : 'Seeker';
@@ -126,13 +165,19 @@ const ProfileScreen = () => {
                         <p>{trustShell.nextMilestoneProgressCopy}</p>
                         {readyProgressionReward ? (
                             <UiButton
+                                aria-label={`Claim ${readyProgressionReward.title}. Reward: ${readyProgressionReward.reward}. ${readyProgressionReward.description}`}
                                 className={styles.progressionClaimButton}
                                 size="sm"
                                 variant="primary"
                                 onClick={handleClaimProgressionReward}
                                 type="button"
+                                data-profile-claim-payoff={readyProgressionReward.reward}
                             >
-                                Claim {readyProgressionReward.title}
+                                <span className={styles.progressionClaimContent}>
+                                    <span>Claim {readyProgressionReward.title}</span>
+                                    <small>{readyProgressionReward.reward}</small>
+                                    <em>{readyProgressionReward.description}</em>
+                                </span>
                             </UiButton>
                         ) : null}
                     </div>
@@ -146,6 +191,25 @@ const ProfileScreen = () => {
                                         ? `${milestone.marksRemaining} honor marks`
                                         : milestone.status}
                                 </span>
+                            </div>
+                        ))}
+                    </div>
+                    <div
+                        aria-label={progressionImpactLabel}
+                        className={styles.progressionImpactGrid}
+                        data-testid="profile-progression-impact-grid"
+                    >
+                        {progressionImpactRows.map((row) => (
+                            <div
+                                aria-label={`${row.title}. ${row.lane}: ${row.impact}. Moment: ${row.boardMoment}. Next: ${row.nextAction}.`}
+                                className={styles.progressionImpactCard}
+                                data-impact-tone={row.tone}
+                                key={row.id}
+                            >
+                                <span>{row.lane}</span>
+                                <strong>{row.impact}</strong>
+                                <em>{row.boardMoment}</em>
+                                <small>{row.nextAction}</small>
                             </div>
                         ))}
                     </div>
@@ -206,6 +270,117 @@ const ProfileScreen = () => {
                             </div>
                         </div>
                         <p className={styles.panelBody}>{lastRunLabel}</p>
+                        {recentRunSignalRows.length > 0 ? (
+                            <div
+                                aria-label={recentRunSignalLabel}
+                                className={styles.recentRunSignals}
+                                data-recent-run-lane-actions={recentRunPayoffLaneActionMapAttr}
+                                data-recent-run-lane-map={recentRunPayoffLaneMapAttr}
+                                data-testid="profile-recent-run-signals"
+                            >
+                                {recentRunPayoffLaneMap.length > 1 ? (
+                                    <span
+                                        aria-label={recentRunPayoffLaneMapLabel}
+                                        data-recent-run-lane-actions={recentRunPayoffLaneActionMapAttr}
+                                        data-recent-run-lane-map={recentRunPayoffLaneMapAttr}
+                                        data-recent-run-primary-lane={primaryRecentRunPayoffLane?.id ?? 'none'}
+                                        data-recent-run-primary-lane-action={primaryRecentRunPayoffLane?.action ?? 'none'}
+                                        data-recent-run-primary-lane-audio={
+                                            primaryRecentRunPayoffLane ? getRunPayoffLaneAudioCue(primaryRecentRunPayoffLane) : 'none'
+                                        }
+                                        data-recent-run-primary-lane-beats={
+                                            primaryRecentRunPayoffLane ? getRunPayoffLaneBeatCount(primaryRecentRunPayoffLane) : 0
+                                        }
+                                        data-recent-run-primary-lane-cue={primaryRecentRunPayoffLane?.cue ?? 'none'}
+                                        data-recent-run-primary-lane-screen-cue={
+                                            primaryRecentRunPayoffLane ? getRunPayoffLaneScreenCue(primaryRecentRunPayoffLane) : 'none'
+                                        }
+                                        data-testid="profile-recent-run-lane-map"
+                                    >
+                                        {primaryRecentRunPayoffLane ? (
+                                            <i
+                                                aria-label={`Primary recent run payoff lane. ${primaryRecentRunPayoffLane.label}: ${primaryRecentRunPayoffLane.action}. ${primaryRecentRunPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryRecentRunPayoffLane)} beats.`}
+                                                className={styles.recentRunPrimaryLaneCue}
+                                                data-recent-run-primary-lane={primaryRecentRunPayoffLane.id}
+                                                data-recent-run-primary-lane-action={primaryRecentRunPayoffLane.action}
+                                                data-recent-run-primary-lane-audio={getRunPayoffLaneAudioCue(primaryRecentRunPayoffLane)}
+                                                data-recent-run-primary-lane-beats={getRunPayoffLaneBeatCount(primaryRecentRunPayoffLane)}
+                                                data-recent-run-primary-lane-cue={primaryRecentRunPayoffLane.cue}
+                                                data-recent-run-primary-lane-screen-cue={getRunPayoffLaneScreenCue(primaryRecentRunPayoffLane)}
+                                                data-testid="profile-recent-run-primary-payoff-lane"
+                                            >
+                                                <small>Replay chase</small>
+                                                <strong>{primaryRecentRunPayoffLane.label}</strong>
+                                                <b>{primaryRecentRunPayoffLane.action}</b>
+                                                <em>{primaryRecentRunPayoffLane.cue}</em>
+                                                <span aria-hidden="true" className={styles.recentRunPrimaryLaneBeatPips}>
+                                                    {Array.from(
+                                                        { length: getRunPayoffLaneBeatCount(primaryRecentRunPayoffLane) },
+                                                        (_, index) => (
+                                                            <s data-recent-run-primary-lane-beat key={index} />
+                                                        )
+                                                    )}
+                                                </span>
+                                            </i>
+                                        ) : null}
+                                        {recentRunPayoffLaneMap.map((lane) => (
+                                            <i
+                                                data-recent-run-lane={lane.id}
+                                                data-recent-run-lane-action={lane.action}
+                                                data-recent-run-lane-audio={getRunPayoffLaneAudioCue(lane)}
+                                                data-recent-run-lane-beats={getRunPayoffLaneBeatCount(lane)}
+                                                data-recent-run-lane-count={lane.count}
+                                                data-recent-run-lane-screen-cue={getRunPayoffLaneScreenCue(lane)}
+                                                key={lane.id}
+                                            >
+                                                <small>{lane.label}</small>
+                                                <strong>{lane.count}</strong>
+                                                <b>{lane.action}</b>
+                                                <em>{lane.cue}</em>
+                                                <span aria-hidden="true" className={styles.recentRunLaneBeatPips}>
+                                                    {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
+                                                        <s data-recent-run-lane-beat key={index} />
+                                                    ))}
+                                                </span>
+                                            </i>
+                                        ))}
+                                    </span>
+                                ) : null}
+                                {recentRunPayoffBurst ? (
+                                    <span
+                                        aria-label={recentRunPayoffBurstLabel}
+                                        data-recent-run-burst-action={recentRunPayoffBurst.action}
+                                        data-recent-run-burst-tone={recentRunPayoffBurst.tone}
+                                        data-testid="profile-recent-run-payoff-burst"
+                                    >
+                                        <small>{recentRunPayoffBurst.label}</small>
+                                        <b>{recentRunPayoffBurst.action}</b>
+                                        <strong>{recentRunPayoffBurst.value}</strong>
+                                    </span>
+                                ) : null}
+                                {recentRunSignalRows.map((row) => (
+                                    <span
+                                        data-recent-run-signal-action={row.action}
+                                        data-recent-run-signal-audio={row.audioCue}
+                                        data-recent-run-signal-beats={getRunPayoffSignalBeatCount(row)}
+                                        data-recent-run-signal-screen-cue={row.screenCue}
+                                        data-recent-run-signal-tone={row.tone}
+                                        key={row.id}
+                                    >
+                                        <b>{row.arcadeCue}</b>
+                                        <small>{row.label}</small>
+                                        <strong>{row.value}</strong>
+                                        <i>{row.action}</i>
+                                        <span aria-hidden="true" className={styles.recentRunBeatPips}>
+                                            {Array.from({ length: getRunPayoffSignalBeatCount(row) }, (_, index) => (
+                                                <i data-recent-run-signal-beat key={index} />
+                                            ))}
+                                        </span>
+                                        {row.nextCue ? <em>{row.nextCue}</em> : null}
+                                    </span>
+                                ))}
+                            </div>
+                        ) : null}
                     </Panel>
                 </div>
 

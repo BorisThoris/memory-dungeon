@@ -22,7 +22,7 @@ import {
     getMetaProgressionFeedback,
     getPermanentUpgradeRows
 } from '../../shared/meta-progression';
-import { getCollectionRewardSignals } from '../../shared/meta-reward-signals';
+import { getCollectionRewardSignals, getMetaProgressionRunImpactRows } from '../../shared/meta-reward-signals';
 import { ACHIEVEMENT_IDS } from '../../shared/save-data';
 import {
     CALLSIGN_SYMBOLS,
@@ -31,11 +31,56 @@ import {
     SYMBOL_BAND_READABILITY_PROFILES
 } from '../../shared/tile-symbol-catalog';
 import { playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
+import {
+    formatRunPayoffLaneMapAttr,
+    formatRunPayoffLaneActionMapAttr,
+    formatRunPayoffLaneMapLabel,
+    formatRunPayoffBurstSignalLabel,
+    formatRunPayoffCrescendoSignalLabel,
+    formatRunPayoffSequenceSignalLabel,
+    formatRunPayoffSignalsLabel,
+    getRunPayoffLaneAudioCue,
+    getRunPayoffLaneBeatCount,
+    getRunPayoffLaneMap,
+    getRunPayoffLaneScreenCue,
+    getRunPayoffBurstSignal,
+    getRunPayoffCrescendoSignal,
+    getRunPayoffSequenceSignal,
+    getRunPayoffSignalBeatCount,
+    getRunPayoffSignals
+} from '../copy/runPayoffSignals';
 import { Eyebrow, MetaFrame, Panel, ScreenTitle, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
 import metaStyles from './MetaScreen.module.css';
 import { handleMetaBodyTocLinkClick } from './metaScreenTocNav';
 import styles from './CollectionScreen.module.css';
+
+const formatProgressionImpactLabel = (
+    label: string,
+    rows: readonly { boardMoment: string; impact: string; lane: string; nextAction: string; title: string }[]
+): string => {
+    const rowCopy = rows
+        .map((row) => `${row.lane}: ${row.impact}. Moment: ${row.boardMoment}. Next: ${row.nextAction}. ${row.title}`)
+        .join('. ');
+    return rowCopy ? `${label}. ${rowCopy}.` : label;
+};
+
+const formatRewardSignalLabel = (
+    label: string,
+    rows: readonly { body?: string; cta?: string; status?: string; title: string; total?: number; owned?: number; nextAction?: string }[]
+): string => {
+    const rowCopy = rows
+        .map((row) => {
+            const progress = row.owned != null && row.total != null ? ` ${row.owned}/${row.total}.` : '';
+            const status = row.status ? ` ${row.status.replace('_', ' ')}.` : '';
+            const body = row.body ? ` ${row.body}` : '';
+            const cta = row.cta ? ` Next: ${row.cta}.` : '';
+            const nextAction = row.nextAction ? ` Next: ${row.nextAction}.` : '';
+            return `${row.title}.${status}${progress}${body}${cta}${nextAction}`;
+        })
+        .join(' ');
+    return rowCopy ? `${label}. ${rowCopy}` : label;
+};
 
 const CollectionScreen = () => {
     const bodyScrollRef = useRef<HTMLDivElement | null>(null);
@@ -52,7 +97,30 @@ const CollectionScreen = () => {
     const metaProgressionBoard = getMetaProgressionBoard(saveData);
     const metaProgressionFeedback = getMetaProgressionFeedback(saveData);
     const rewardSignals = getCollectionRewardSignals(saveData);
+    const progressionImpactRows = getMetaProgressionRunImpactRows(saveData);
+    const progressionImpactLabel = formatProgressionImpactLabel('Collection progression impact signals', progressionImpactRows);
     const rewardGalleryRows = getCollectionGalleryRows(saveData);
+    const rewardSignalsLabel = formatRewardSignalLabel('Collection reward signals', rewardSignals);
+    const rewardGalleryLabel = formatRewardSignalLabel('Collection reward gallery', rewardGalleryRows);
+    const lastRunPayoffRows = summary ? getRunPayoffSignals(summary, { includeChainTarget: true }).slice(0, 4) : [];
+    const lastRunPayoffRowsLabel = formatRunPayoffSignalsLabel('Collection last run payoff signals', lastRunPayoffRows);
+    const lastRunPayoffLaneMap = getRunPayoffLaneMap(lastRunPayoffRows);
+    const primaryLastRunPayoffLane = lastRunPayoffLaneMap[0] ?? null;
+    const lastRunPayoffLaneMapAttr = formatRunPayoffLaneMapAttr(lastRunPayoffLaneMap);
+    const lastRunPayoffLaneActionMapAttr = formatRunPayoffLaneActionMapAttr(lastRunPayoffLaneMap);
+    const lastRunPayoffLaneMapLabel = formatRunPayoffLaneMapLabel('Collection last run payoff lanes', lastRunPayoffLaneMap);
+    const lastRunPayoffBurst = getRunPayoffBurstSignal(lastRunPayoffRows);
+    const lastRunPayoffBurstLabel = formatRunPayoffBurstSignalLabel('Collection last run payoff burst', lastRunPayoffBurst);
+    const lastRunPayoffCrescendo = getRunPayoffCrescendoSignal(lastRunPayoffRows, lastRunPayoffBurst);
+    const lastRunPayoffCrescendoLabel = formatRunPayoffCrescendoSignalLabel(
+        'Collection last run payoff crescendo',
+        lastRunPayoffCrescendo
+    );
+    const lastRunPayoffSequence = getRunPayoffSequenceSignal(lastRunPayoffRows);
+    const lastRunPayoffSequenceLabel = formatRunPayoffSequenceSignalLabel(
+        'Collection last run payoff sequence',
+        lastRunPayoffSequence
+    );
     const permanentUpgradeRows = getPermanentUpgradeRows(saveData);
     const cosmeticTrackRows = getMetaCosmeticTrackRows(saveData);
     const dailyArchiveRows = getDailyArchiveRows(saveData);
@@ -170,9 +238,17 @@ const CollectionScreen = () => {
                             <p className={metaStyles.subtitle}>
                                 Runs feed durable local progress: next goal, recent reward, and missing discovery are shown here.
                             </p>
-                            <div className={metaStyles.archiveCatalogGrid}>
+                            <div
+                                aria-label={rewardSignalsLabel}
+                                className={metaStyles.archiveCatalogGrid}
+                                data-testid="collection-reward-signals"
+                            >
                                 {rewardSignals.map((signal) => (
-                                    <div className={metaStyles.archiveCatalogRow} key={signal.id}>
+                                    <div
+                                        aria-label={`${signal.title}. ${signal.body} Next: ${signal.cta}.`}
+                                        className={metaStyles.archiveCatalogRow}
+                                        key={signal.id}
+                                    >
                                         <p className={metaStyles.archiveCatalogRowTitle}>{signal.title}</p>
                                         <p className={metaStyles.subtitle}>{signal.body}</p>
                                         <span className={styles.symbolMeta}>{signal.cta}</span>
@@ -190,13 +266,27 @@ const CollectionScreen = () => {
                             <p className={metaStyles.subtitle}>
                                 Final hub gallery rows show owned, in-progress, and missing rewards from the local save.
                             </p>
-                            <div className={`${styles.galleryGrid} ${metaStyles.metaLongList}`} data-testid="collection-reward-gallery">
+                            <div
+                                aria-label={rewardGalleryLabel}
+                                className={`${styles.galleryGrid} ${metaStyles.metaLongList}`}
+                                data-testid="collection-reward-gallery"
+                            >
                                 {rewardGalleryRows.map((row) => {
                                     return (
-                                    <div className={styles.galleryCard} data-status={row.status} key={row.id}>
+                                    <div
+                                        aria-label={`${row.title}. ${row.status.replace('_', ' ')}. ${row.owned}/${row.total}. Impact: ${row.gameplayImpact}. Next: ${row.nextAction}.`}
+                                        className={styles.galleryCard}
+                                        data-status={row.status}
+                                        data-gallery-impact={row.id}
+                                        key={row.id}
+                                    >
                                         <span className={styles.galleryBadge}>{row.status.replace('_', ' ')}</span>
                                         <strong>{row.title}</strong>
                                         <p className={metaStyles.subtitle}>{row.description}</p>
+                                        <span className={styles.galleryImpactCue}>
+                                            <small>Impact</small>
+                                            <b>{row.gameplayImpact}</b>
+                                        </span>
                                         <span className={styles.symbolMeta}>{row.owned}/{row.total}</span>
                                         <span className={styles.symbolMeta}>{row.nextAction}</span>
                                     </div>
@@ -223,10 +313,10 @@ const CollectionScreen = () => {
                                             className={`${styles.achievementCard} ${owned ? styles.achievementUnlocked : styles.achievementLocked}`}
                                             key={cosmetic.id}
                                         >
-                                            <strong>{cosmetic.title}</strong>
+                                            <strong>{cosmetic.title ?? cosmetic.label}</strong>
                                             <p className={metaStyles.subtitle}>{cosmetic.description}</p>
                                             <span className={styles.symbolMeta}>
-                                                {equipped ? 'Equipped' : owned ? 'Owned' : `Locked · ${cosmetic.unlockHint}`}
+                                                {equipped ? 'Equipped' : owned ? 'Owned' : `Locked · ${cosmetic.unlockHint ?? cosmetic.unlockSource}`}
                                             </span>
                                             <span className={styles.symbolMeta}>{cosmeticUnlockTag(cosmetic.id)}</span>
                                         </div>
@@ -268,6 +358,25 @@ const CollectionScreen = () => {
                                     <p className={metaStyles.archiveCatalogRowTitle}>Long-term goal</p>
                                     <span>{metaProgressionBoard.longTermGoal ? `${metaProgressionBoard.longTermGoal.title} · ${metaProgressionBoard.longTermGoal.gate}` : 'No open local goals'}</span>
                                 </div>
+                            </div>
+                            <div
+                                aria-label={progressionImpactLabel}
+                                className={styles.progressionImpactGrid}
+                                data-testid="collection-progression-impact-grid"
+                            >
+                                {progressionImpactRows.map((row) => (
+                                    <div
+                                        aria-label={`${row.title}. ${row.lane}: ${row.impact}. Moment: ${row.boardMoment}. Next: ${row.nextAction}.`}
+                                        className={styles.progressionImpactCard}
+                                        data-impact-tone={row.tone}
+                                        key={row.id}
+                                    >
+                                        <span>{row.lane}</span>
+                                        <strong>{row.impact}</strong>
+                                        <em>{row.boardMoment}</em>
+                                        <small>{row.nextAction}</small>
+                                    </div>
+                                ))}
                             </div>
                             <div className={`${styles.grid} ${metaStyles.metaLongList}`}>
                                 {permanentUpgradeRows.map((row) => (
@@ -340,10 +449,157 @@ const CollectionScreen = () => {
                             </span>
                         </div>
                         {summary ? (
+                            <>
                             <p className={metaStyles.subtitle}>
                                 Last run: {summary.totalScore.toLocaleString()} pts · Floor {summary.highestLevel} ·{' '}
                                 {summary.levelsCleared} clears · Streak {summary.bestStreak}
                             </p>
+                            <div
+                                aria-label={lastRunPayoffRowsLabel}
+                                className={styles.runPayoffStrip}
+                                data-run-payoff-lane-actions={lastRunPayoffLaneActionMapAttr}
+                                data-run-payoff-lane-map={lastRunPayoffLaneMapAttr}
+                                data-testid="collection-last-run-payoff-signals"
+                            >
+                                {lastRunPayoffLaneMap.length > 1 ? (
+                                    <span
+                                        aria-label={lastRunPayoffLaneMapLabel}
+                                        data-run-payoff-lane-actions={lastRunPayoffLaneActionMapAttr}
+                                        data-run-payoff-lane-map={lastRunPayoffLaneMapAttr}
+                                        data-run-payoff-primary-lane={primaryLastRunPayoffLane?.id ?? 'none'}
+                                        data-run-payoff-primary-lane-action={primaryLastRunPayoffLane?.action ?? 'none'}
+                                        data-run-payoff-primary-lane-audio={
+                                            primaryLastRunPayoffLane ? getRunPayoffLaneAudioCue(primaryLastRunPayoffLane) : 'none'
+                                        }
+                                        data-run-payoff-primary-lane-beats={
+                                            primaryLastRunPayoffLane ? getRunPayoffLaneBeatCount(primaryLastRunPayoffLane) : 0
+                                        }
+                                        data-run-payoff-primary-lane-cue={primaryLastRunPayoffLane?.cue ?? 'none'}
+                                        data-run-payoff-primary-lane-screen-cue={
+                                            primaryLastRunPayoffLane ? getRunPayoffLaneScreenCue(primaryLastRunPayoffLane) : 'none'
+                                        }
+                                        data-testid="collection-last-run-payoff-lane-map"
+                                    >
+                                        {primaryLastRunPayoffLane ? (
+                                            <i
+                                                aria-label={`Primary archived payoff lane. ${primaryLastRunPayoffLane.label}: ${primaryLastRunPayoffLane.action}. ${primaryLastRunPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryLastRunPayoffLane)} beats.`}
+                                                className={styles.runPayoffPrimaryLaneCue}
+                                                data-run-payoff-primary-lane={primaryLastRunPayoffLane.id}
+                                                data-run-payoff-primary-lane-action={primaryLastRunPayoffLane.action}
+                                                data-run-payoff-primary-lane-audio={getRunPayoffLaneAudioCue(primaryLastRunPayoffLane)}
+                                                data-run-payoff-primary-lane-beats={getRunPayoffLaneBeatCount(primaryLastRunPayoffLane)}
+                                                data-run-payoff-primary-lane-cue={primaryLastRunPayoffLane.cue}
+                                                data-run-payoff-primary-lane-screen-cue={getRunPayoffLaneScreenCue(primaryLastRunPayoffLane)}
+                                                data-testid="collection-last-run-primary-payoff-lane"
+                                            >
+                                                <small>Archive chase</small>
+                                                <strong>{primaryLastRunPayoffLane.label}</strong>
+                                                <b>{primaryLastRunPayoffLane.action}</b>
+                                                <em>{primaryLastRunPayoffLane.cue}</em>
+                                                <span aria-hidden="true" className={styles.runPayoffPrimaryLaneBeatPips}>
+                                                    {Array.from(
+                                                        { length: getRunPayoffLaneBeatCount(primaryLastRunPayoffLane) },
+                                                        (_, index) => (
+                                                            <s data-run-payoff-primary-lane-beat key={index} />
+                                                        )
+                                                    )}
+                                                </span>
+                                            </i>
+                                        ) : null}
+                                        {lastRunPayoffLaneMap.map((lane) => (
+                                            <i
+                                                data-run-payoff-lane={lane.id}
+                                                data-run-payoff-lane-action={lane.action}
+                                                data-run-payoff-lane-audio={getRunPayoffLaneAudioCue(lane)}
+                                                data-run-payoff-lane-beats={getRunPayoffLaneBeatCount(lane)}
+                                                data-run-payoff-lane-count={lane.count}
+                                                data-run-payoff-lane-screen-cue={getRunPayoffLaneScreenCue(lane)}
+                                                key={lane.id}
+                                            >
+                                                <small>{lane.label}</small>
+                                                <strong>{lane.count}</strong>
+                                                <b>{lane.action}</b>
+                                                <em>{lane.cue}</em>
+                                                <span aria-hidden="true" className={styles.runPayoffLaneBeatPips}>
+                                                    {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
+                                                        <s data-run-payoff-lane-beat key={index} />
+                                                    ))}
+                                                </span>
+                                            </i>
+                                        ))}
+                                    </span>
+                                ) : null}
+                                {lastRunPayoffBurst ? (
+                                    <span
+                                        aria-label={lastRunPayoffBurstLabel}
+                                        data-run-payoff-burst-action={lastRunPayoffBurst.action}
+                                        data-run-payoff-burst-tone={lastRunPayoffBurst.tone}
+                                        data-testid="collection-last-run-payoff-burst"
+                                    >
+                                        <small>{lastRunPayoffBurst.label}</small>
+                                        <b>{lastRunPayoffBurst.action}</b>
+                                        <strong>{lastRunPayoffBurst.value}</strong>
+                                    </span>
+                                ) : null}
+                                {lastRunPayoffCrescendo ? (
+                                    <span
+                                        aria-label={lastRunPayoffCrescendoLabel}
+                                        data-run-payoff-crescendo-audio={lastRunPayoffCrescendo.audioCue}
+                                        data-run-payoff-crescendo-beats={lastRunPayoffCrescendo.beatCount}
+                                        data-run-payoff-crescendo-cue={lastRunPayoffCrescendo.screenCue}
+                                        data-run-payoff-crescendo-screen-cue={lastRunPayoffCrescendo.screenCue}
+                                        data-run-payoff-crescendo-tier={lastRunPayoffCrescendo.tier}
+                                        data-testid="collection-last-run-payoff-crescendo"
+                                    >
+                                        <small>{lastRunPayoffCrescendo.label}</small>
+                                        <b>{lastRunPayoffCrescendo.detail}</b>
+                                        <strong>
+                                            {Array.from({ length: lastRunPayoffCrescendo.beatCount }, (_, index) => (
+                                                <i aria-hidden="true" key={index} />
+                                            ))}
+                                        </strong>
+                                    </span>
+                                ) : null}
+                                {lastRunPayoffSequence ? (
+                                    <span
+                                        aria-label={lastRunPayoffSequenceLabel}
+                                        data-run-payoff-sequence-first={lastRunPayoffSequence.first}
+                                        data-run-payoff-sequence-keep={lastRunPayoffSequence.keep}
+                                        data-run-payoff-sequence-then={lastRunPayoffSequence.then}
+                                        data-run-payoff-sequence-tone={lastRunPayoffSequence.tone}
+                                        data-testid="collection-last-run-payoff-sequence"
+                                    >
+                                        <small>First</small>
+                                        <strong>{lastRunPayoffSequence.first}</strong>
+                                        <small>Then</small>
+                                        <strong>{lastRunPayoffSequence.then}</strong>
+                                        <small>Keep</small>
+                                        <strong>{lastRunPayoffSequence.keep}</strong>
+                                    </span>
+                                ) : null}
+                                {lastRunPayoffRows.map((row) => (
+                                    <span
+                                        data-run-payoff-action={row.action}
+                                        data-run-payoff-audio={row.audioCue}
+                                        data-run-payoff-beats={getRunPayoffSignalBeatCount(row)}
+                                        data-run-payoff-screen-cue={row.screenCue}
+                                        data-run-payoff-tone={row.tone}
+                                        key={row.id}
+                                    >
+                                        <b>{row.arcadeCue}</b>
+                                        <small>{row.label}</small>
+                                        <strong>{row.value}</strong>
+                                        <i>{row.action}</i>
+                                        <span aria-hidden="true" className={styles.runPayoffBeatPips}>
+                                            {Array.from({ length: getRunPayoffSignalBeatCount(row) }, (_, index) => (
+                                                <i data-run-payoff-beat key={index} />
+                                            ))}
+                                        </span>
+                                        {row.nextCue ? <em>{row.nextCue}</em> : null}
+                                    </span>
+                                ))}
+                            </div>
+                            </>
                         ) : (
                             <p className={metaStyles.subtitle}>No completed run summary stored yet.</p>
                         )}

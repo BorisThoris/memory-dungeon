@@ -28,6 +28,20 @@ export interface TraitRouteObjectiveApplyResult {
     feedback: string | null;
 }
 
+export interface TraitRouteObjectiveStatus {
+    actionLabel: string;
+    active: boolean;
+    completed: boolean;
+    detail: string;
+    label: string;
+    progress: number;
+    remaining: number;
+    required: number;
+    reward: string;
+    stateLabel: string;
+    urgency: 'idle' | 'building' | 'next' | 'paid';
+}
+
 export const getTraitRouteObjectiveSeed = (board: BoardState | null | undefined): TraitRouteObjectiveSeed | null => {
     const summary = getTraitOpportunitySummary(board);
     if (!board) {
@@ -108,28 +122,49 @@ export const applyTraitRouteObjectiveProgress = (
     };
 };
 
-export const getTraitRouteObjectiveStatus = (run: RunState): {
-    active: boolean;
-    completed: boolean;
-    detail: string;
-    label: string;
-    progress: number;
-    required: number;
-    reward: string;
-} | null => {
+export const getTraitRouteObjectiveStatus = (run: RunState): TraitRouteObjectiveStatus | null => {
     if (run.traitRouteObjectiveRequiredThisFloor <= 0) {
         return null;
     }
     const progress = Math.min(run.traitRouteObjectiveProgressThisFloor, run.traitRouteObjectiveRequiredThisFloor);
+    const completed = run.traitRouteObjectiveCompletedThisFloor;
+    const remaining = Math.max(0, run.traitRouteObjectiveRequiredThisFloor - progress);
+    const urgency: TraitRouteObjectiveStatus['urgency'] = completed
+        ? 'paid'
+        : remaining <= 1
+          ? 'next'
+          : progress > 0
+            ? 'building'
+            : 'idle';
+    const actionLabel =
+        urgency === 'paid'
+            ? 'Route paid'
+            : urgency === 'next'
+              ? 'Cash next route'
+              : urgency === 'building'
+                ? 'Keep routing'
+                : 'Start route';
+    const stateLabel =
+        urgency === 'paid'
+            ? 'Cashout claimed'
+            : urgency === 'next'
+              ? 'One route to cashout'
+              : urgency === 'building'
+                ? `${remaining} routes to cashout`
+                : 'Find trait route';
     return {
+        actionLabel,
         active: true,
-        completed: run.traitRouteObjectiveCompletedThisFloor,
+        completed,
         detail: `Trigger trait routes (${progress}/${run.traitRouteObjectiveRequiredThisFloor}).`,
         label: 'Trait routes',
         progress,
+        remaining,
         required: run.traitRouteObjectiveRequiredThisFloor,
         reward: run.traitRouteObjectiveRewardClaimedThisFloor
-            ? 'Reward claimed'
-            : getTraitRouteObjectiveRewardText(run)
+            ? run.traitRouteObjectiveRewardTextThisFloor ?? 'Trait route cashout'
+            : getTraitRouteObjectiveRewardText(run),
+        stateLabel,
+        urgency
     };
 };

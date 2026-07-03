@@ -24,6 +24,8 @@ describe('playable path fixtures', () => {
     it.each([
         ['freshProfile', 'menu', null],
         ['activeRunWithHazards', 'playing', 'playing'],
+        ['activeRunWithPickupCashout', 'playing', 'playing'],
+        ['activeRunWithTraitRouteSetup', 'playing', 'playing'],
         ['floorClearWithRouteChoices', 'playing', 'levelComplete'],
         ['floorClearWithShop', 'playing', 'levelComplete'],
         ['floorClearWithShopLowGold', 'playing', 'levelComplete'],
@@ -74,6 +76,12 @@ describe('playable path fixtures', () => {
 
         const gameOverFixture = createPlayablePathFixture('gameOver');
         expect(gameOverFixture.run?.lastRunSummary).not.toBeNull();
+
+        const pickupFixture = createPlayablePathFixture('activeRunWithPickupCashout');
+        expect(pickupFixture.run?.findablesTotalThisFloor).toBe(1);
+        expect(pickupFixture.run?.board?.tiles.filter((tile) => tile.findableKind === 'shard_spark')).toHaveLength(2);
+        expect(pickupFixture.run?.stats.currentStreak).toBe(0);
+        expect(pickupFixture.run?.stats.comboShards).toBeGreaterThan(0);
     });
 
     it.each([

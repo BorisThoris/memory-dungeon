@@ -131,6 +131,9 @@ interface TileBoardSceneProps {
     tileSwapEligibleTileIds?: ReadonlySet<string>;
     tileSwapFirstTileId?: string | null;
     pinModeBoardHintActive?: boolean;
+    perkArmedTileIds?: readonly string[];
+    selectedTraitFollowupTileIds?: readonly string[];
+    traitRewardHotTileIds?: readonly string[];
     traitRouteTargetTileIds?: readonly string[];
     /** `sticky_fingers`: tile id at `stickyBlockIndex` while the next opening flip is restricted. */
     stickyBlockedTileId?: string | null;
@@ -187,6 +190,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
     tileSwapEligibleTileIds = EMPTY_TILE_IDS,
     tileSwapFirstTileId = null,
     pinModeBoardHintActive = false,
+    perkArmedTileIds = [],
+    selectedTraitFollowupTileIds = [],
+    traitRewardHotTileIds = [],
     traitRouteTargetTileIds = [],
     stickyBlockedTileId = null
 }: TileBoardSceneProps, ref) => {
@@ -249,6 +255,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             tileSwapEligibleTileIds,
             tileSwapFirstTileId,
             tileSwapPowerVisualActive,
+            perkArmedTileIds: new Set(perkArmedTileIds),
+            selectedTraitFollowupTileIds: new Set(selectedTraitFollowupTileIds),
+            traitRewardHotTileIds: new Set(traitRewardHotTileIds),
             traitRouteTargetTileIds: new Set(traitRouteTargetTileIds),
             tileSpacing: TILE_SPACING,
             wardPairKey,
@@ -286,6 +295,9 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         tileSwapEligibleTileIds,
         tileSwapFirstTileId,
         tileSwapPowerVisualActive,
+        perkArmedTileIds,
+        selectedTraitFollowupTileIds,
+        traitRewardHotTileIds,
         traitRouteTargetTileIds,
         wardPairKey,
         wideRecallInPlay

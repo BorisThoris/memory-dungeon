@@ -18,6 +18,411 @@
     border: 0;
 }
 
+.payoffEngineStrip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.36rem;
+    margin-bottom: 0.5rem;
+    padding: 0.46rem;
+    border-radius: calc(var(--ui-radius-lg) - 0.08rem);
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 11%, transparent), transparent 68%),
+        color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.payoffEngineStrip span {
+    display: grid;
+    gap: 0.06rem;
+    min-width: 0;
+    padding: 0.32rem 0.42rem;
+    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-surface-control) 62%, transparent);
+}
+
+.payoffEngineBeatPips {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.16rem;
+    align-items: center;
+    height: 0.2rem;
+    padding-inline: 0.1rem;
+}
+
+.payoffEngineBeatPips i {
+    height: 0.16rem;
+    border-radius: var(--ui-radius-pill);
+    animation: relicBeatPulse 0.86s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 76%, white 6%);
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.payoffEngineBeatPips i:nth-child(2),
+.draftLaneBeatPips i:nth-child(2),
+.impactChipBeatPips i:nth-child(2),
+.buildFitSignalBeatPips i:nth-child(2),
+.comboRouteBeatPips i:nth-child(2) {
+    animation-delay: 0.07s;
+}
+
+.payoffEngineBeatPips i:nth-child(3),
+.draftLaneBeatPips i:nth-child(3),
+.impactChipBeatPips i:nth-child(3),
+.buildFitSignalBeatPips i:nth-child(3),
+.comboRouteBeatPips i:nth-child(3) {
+    animation-delay: 0.14s;
+}
+
+.payoffEngineBeatPips i:nth-child(4),
+.draftLaneBeatPips i:nth-child(4),
+.impactChipBeatPips i:nth-child(4),
+.buildFitSignalBeatPips i:nth-child(4),
+.comboRouteBeatPips i:nth-child(4) {
+    animation-delay: 0.21s;
+}
+
+.payoffEngineBeatPips i:nth-child(5),
+.comboRouteBeatPips i:nth-child(5) {
+    animation-delay: 0.28s;
+}
+
+.payoffEngineStrip small,
+.payoffEngineStrip strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.payoffEngineStrip small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.payoffEngineStrip strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1.12;
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-tone='setup'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 68%),
+        color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-tone='setup'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-tone='setup'] .payoffEngineBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 70%, white 5%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-tone='burst'] .payoffEngineBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 56%, var(--theme-gold-bright) 36%);
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-tone='super'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 56%, var(--theme-violet-bright) 22%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-violet-bright) 11%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 48%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 1.1rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        0 0 1.8rem color-mix(in srgb, var(--theme-violet-bright) 10%, transparent);
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-tone='super'] span:first-child {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-tone='super'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-tone='super'] .payoffEngineBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white 8%);
+    box-shadow: 0 0 0.58rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-screen-cue='burst'],
+.payoffEngineStrip[data-relic-payoff-engine-screen-cue='super'] {
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.payoffEngineStrip[data-relic-payoff-engine-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.draftLaneMap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-bottom: 0.5rem;
+    padding: 0.42rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 26%, var(--theme-gold-bright) 18%);
+    border-radius: calc(var(--ui-radius-lg) - 0.08rem);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.draftLaneMap span {
+    display: inline-grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.2rem;
+    min-width: min(8rem, 100%);
+    padding: 0.22rem 0.36rem;
+    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-surface-control) 62%, transparent);
+}
+
+.draftLanePrimaryCue {
+    flex-basis: 100%;
+    grid-template-columns: auto minmax(0, 0.8fr) minmax(0, 1.1fr) auto;
+    padding: 0.4rem 0.5rem;
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 22%);
+    border-radius: calc(var(--ui-radius-lg) - 0.14rem);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent)),
+        color-mix(in srgb, var(--theme-surface-raised) 78%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 0.75rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.draftLaneMap .draftLanePrimaryCue strong {
+    display: block;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background: transparent;
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    font-size: 0.72rem;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.draftLaneMap .draftLanePrimaryCue b {
+    color: color-mix(in srgb, var(--theme-text) 98%, white);
+    font-size: 0.75rem;
+}
+
+.draftLaneMap .draftLanePrimaryCue em {
+    grid-column: auto;
+    justify-self: end;
+    color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+    text-align: right;
+}
+
+.draftLanePrimaryBeatPips {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    justify-self: center;
+    align-items: center;
+    gap: 0.08rem;
+}
+
+.draftLanePrimaryBeatPips i {
+    display: block;
+    width: 0.22rem;
+    height: 0.22rem;
+    border-radius: 999px;
+    animation: relicBeatPulse 0.74s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 86%, white 6%);
+    box-shadow: 0 0 0.44rem color-mix(in srgb, currentColor 34%, transparent);
+}
+
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='burst'] .draftLanePrimaryCue {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 66%, var(--theme-cyan-bright) 20%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-surface-raised) 82%, transparent);
+}
+
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='cashout'] .draftLanePrimaryCue {
+    border-color: color-mix(in srgb, var(--theme-success) 54%, var(--theme-gold-bright) 18%);
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='guard'] .draftLanePrimaryCue {
+    border-color: color-mix(in srgb, var(--theme-success) 50%, var(--theme-cyan-bright) 16%);
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='chain'] .draftLanePrimaryCue,
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='route'] .draftLanePrimaryCue {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 56%, var(--theme-gold-bright) 14%);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='rare'] .draftLanePrimaryCue {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 54%, var(--theme-gold-bright) 18%);
+    color: color-mix(in srgb, var(--theme-violet-bright) 86%, white);
+}
+
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='pulse'] .draftLanePrimaryCue {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 32%, var(--theme-cyan-bright) 18%);
+}
+
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='burst'] .draftLanePrimaryBeatPips i {
+    width: 0.25rem;
+    height: 0.25rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white 8%);
+}
+
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='cashout'] .draftLanePrimaryBeatPips i,
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='guard'] .draftLanePrimaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 84%, white 8%);
+}
+
+.draftLaneMap[data-relic-draft-primary-lane-screen-cue='rare'] .draftLanePrimaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 84%, white 8%);
+}
+
+.draftLaneMap small,
+.draftLaneMap strong,
+.draftLaneMap b,
+.draftLaneMap em {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.draftLaneMap small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.draftLaneMap strong {
+    display: grid;
+    place-items: center;
+    width: 1.14rem;
+    height: 1.14rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--theme-text) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+    font-size: 0.62rem;
+    font-weight: 950;
+}
+
+.draftLaneMap b {
+    color: color-mix(in srgb, var(--theme-text) 94%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+}
+
+.draftLaneMap em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+    font-size: var(--ui-font-caption);
+    font-style: normal;
+    font-weight: 850;
+}
+
+.draftLaneBeatPips {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    justify-self: center;
+    align-items: center;
+    gap: 0.06rem;
+    color: currentColor;
+}
+
+.draftLaneBeatPips i {
+    display: block;
+    width: 0.17rem;
+    height: 0.17rem;
+    border-radius: 999px;
+    animation: relicBeatPulse 0.86s ease-in-out infinite;
+    background: currentColor;
+    box-shadow: 0 0 0.3rem color-mix(in srgb, currentColor 28%, transparent);
+    opacity: 0.68;
+}
+
+.draftLaneMap span[data-relic-draft-lane-beats='3'] .draftLaneBeatPips i {
+    opacity: 0.82;
+}
+
+.draftLaneMap span[data-relic-draft-lane-beats='4'] .draftLaneBeatPips i {
+    width: 0.2rem;
+    height: 0.2rem;
+    opacity: 0.94;
+}
+
+.draftLaneMap span[data-relic-draft-lane-screen-cue='burst'] {
+    background:
+        radial-gradient(ellipse 120% 130% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), transparent 66%),
+        color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.draftLaneMap span[data-relic-draft-lane-screen-cue='cashout'],
+.draftLaneMap span[data-relic-draft-lane-screen-cue='guard'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success) 20%, transparent);
+}
+
+.draftLaneMap span[data-relic-draft-lane-screen-cue='chain'],
+.draftLaneMap span[data-relic-draft-lane-screen-cue='route'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.draftLaneMap span[data-relic-draft-lane-screen-cue='rare'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
+}
+
+.draftLaneMap span[data-relic-draft-lane-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-text-muted) 16%, transparent);
+}
+
+.draftLaneMap span[data-relic-draft-lane='stack'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 18%);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.draftLaneMap span[data-relic-draft-lane='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-success) 40%, var(--theme-gold-bright) 16%);
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.draftLaneMap span[data-relic-draft-lane='guard'] {
+    border-color: color-mix(in srgb, var(--theme-success) 36%, var(--theme-cyan-bright) 14%);
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.draftLaneMap span[data-relic-draft-lane='chain'],
+.draftLaneMap span[data-relic-draft-lane='route'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.draftLaneMap span[data-relic-draft-lane='rare'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, var(--theme-gold-bright) 14%);
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 11.25rem), 1fr));
@@ -95,6 +500,117 @@
     margin-top: 0.12rem;
     font-size: var(--ui-font-caption);
     color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+}
+
+.serviceSignalRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.22rem;
+    align-items: center;
+}
+
+.serviceCost,
+.serviceEffect {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 1.15rem;
+    padding: 0.08rem 0.32rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-gold) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 850;
+    line-height: 1;
+}
+
+.serviceEffect {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+    background: color-mix(in srgb, var(--theme-cyan) 9%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.serviceEffect[data-service-effect='ban_option'] {
+    border-color: color-mix(in srgb, var(--theme-ember) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-ember) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-ember) 84%, white);
+}
+
+.serviceEffect[data-service-effect='upgrade_offer'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-violet) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.serviceCue {
+    display: grid;
+    gap: 0.07rem;
+    min-width: 0;
+    margin-top: 0.08rem;
+    padding: 0.3rem 0.38rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 76%),
+        color-mix(in srgb, var(--theme-surface-control) 62%, transparent);
+}
+
+.serviceCue small,
+.serviceCue strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.serviceCue small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.serviceCue strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 900;
+    line-height: 1.16;
+}
+
+.serviceCue[data-service-cue-tone='ban'] {
+    border-color: color-mix(in srgb, var(--theme-ember) 32%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-ember) 10%, transparent), transparent 76%),
+        color-mix(in srgb, var(--theme-surface-control) 62%, transparent);
+}
+
+.serviceCue[data-service-cue-tone='ban'] strong {
+    color: color-mix(in srgb, var(--theme-ember) 84%, white);
+}
+
+.serviceCue[data-service-cue-tone='upgrade'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 32%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 10%, transparent), transparent 76%),
+        color-mix(in srgb, var(--theme-surface-control) 62%, transparent);
+}
+
+.serviceCue[data-service-cue-tone='upgrade'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.serviceCue[data-service-cue-tone='blocked'] {
+    border-color: color-mix(in srgb, var(--theme-warning) 34%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-warning) 10%, transparent), transparent 76%),
+        color-mix(in srgb, var(--theme-surface-control) 62%, transparent);
+}
+
+.serviceCue[data-service-cue-tone='blocked'] strong {
+    color: color-mix(in srgb, var(--theme-warning) 86%, white);
 }
 
 .card {
@@ -215,6 +731,687 @@
     background: color-mix(in srgb, var(--theme-amber) 10%, transparent);
 }
 
+.pickAction {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.16rem 0.42rem;
+    min-width: 0;
+    padding: 0.38rem 0.46rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), transparent 74%),
+        color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, rgba(255, 255, 255, 0.08) 72%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--theme-cyan) 12%, transparent);
+}
+
+.pickAction small,
+.pickAction strong,
+.pickAction em {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.pickAction small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.pickAction strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 90%, white);
+    font-size: var(--ui-font-body-sm);
+    font-weight: 950;
+    line-height: 1.08;
+}
+
+.pickAction em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text) 88%, white);
+    font-size: var(--ui-font-caption);
+    font-style: normal;
+    font-weight: 760;
+    line-height: 1.16;
+}
+
+.pickAction[data-pick-action-tone='stack'],
+.pickAction[data-pick-action-tone='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+}
+
+.pickAction[data-pick-action-tone='stack'] strong,
+.pickAction[data-pick-action-tone='cashout'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+}
+
+.pickAction[data-pick-action-tone='guard'] {
+    border-color: color-mix(in srgb, var(--theme-emerald-bright) 42%, transparent);
+}
+
+.pickAction[data-pick-action-tone='guard'] strong {
+    color: color-mix(in srgb, var(--theme-emerald-bright) 88%, white);
+}
+
+.pickAction[data-pick-action-tone='rare'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 16%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-surface-control) 72%, transparent);
+}
+
+.pickAction[data-pick-action-tone='rare'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 88%, white);
+}
+
+.pickPlan {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.14rem;
+    max-width: 100%;
+    margin-top: -0.1rem;
+}
+
+.pickPlan span {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 0.1rem 0.34rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-panel-solid) 54%, transparent);
+    color: color-mix(in srgb, var(--theme-text-muted) 90%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 890;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pickPlan[data-pick-plan-tone='stack'] span,
+.pickPlan[data-pick-plan-tone='cashout'] span,
+.pickPlan[data-pick-plan-tone='chain'] span {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 52%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.pickPlan[data-pick-plan-tone='guard'] span {
+    border-color: color-mix(in srgb, var(--theme-success) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-success) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.pickPlan[data-pick-plan-tone='route'] span,
+.pickPlan[data-pick-plan-tone='new'] span {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.pickPlan[data-pick-plan-tone='rare'] span {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 40%, var(--theme-gold-bright) 18%);
+    background: color-mix(in srgb, var(--theme-violet-bright) 11%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+}
+
+.engineRecipe {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.18rem;
+    margin-top: -0.08rem;
+    padding: 0.34rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-cyan-bright) 16%);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 48%, transparent);
+}
+
+.engineRecipe span {
+    display: grid;
+    gap: 0.06rem;
+    min-width: 0;
+    padding: 0.22rem 0.28rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+    border-radius: 0.28rem;
+    background: color-mix(in srgb, var(--theme-surface-control) 58%, transparent);
+}
+
+.engineRecipe small,
+.engineRecipe strong {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.engineRecipe small {
+    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.engineRecipe strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+}
+
+.engineRecipe span[data-engine-recipe-tone='stack'],
+.engineRecipe span[data-engine-recipe-tone='cashout'],
+.engineRecipe span[data-engine-recipe-step='pick'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, transparent);
+}
+
+.engineRecipe span[data-engine-recipe-tone='stack'] strong,
+.engineRecipe span[data-engine-recipe-tone='cashout'] strong,
+.engineRecipe span[data-engine-recipe-step='pick'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.engineRecipe span[data-engine-recipe-tone='keep'] strong {
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.recommendation {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: 0.24rem;
+    padding: 0.13rem 0.38rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
+    border-radius: 999px;
+    background:
+        radial-gradient(ellipse 95% 140% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent), transparent 70%),
+        color-mix(in srgb, var(--theme-gold-deep) 14%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--theme-gold-bright) 15%, transparent);
+}
+
+.recommendation small,
+.recommendation strong {
+    font-size: var(--ui-font-caption);
+    line-height: 1;
+}
+
+.recommendation small {
+    font-weight: 950;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.recommendation strong {
+    font-weight: 950;
+}
+
+.choiceHeat {
+    display: grid;
+    gap: 0.06rem;
+    max-width: 100%;
+    padding: 0.32rem 0.46rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 74%),
+        color-mix(in srgb, var(--theme-panel-solid) 48%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}
+
+.choiceHeat small,
+.choiceHeat strong,
+.choiceHeat em {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.choiceHeat small {
+    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.choiceHeat strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.choiceHeat em {
+    color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+    font-size: var(--ui-font-caption);
+    font-style: normal;
+    font-weight: 760;
+    line-height: 1.18;
+}
+
+.choiceHeat[data-choice-heat-tier='hot'],
+.choiceHeat[data-choice-heat-tier='live'] {
+    animation: relicPayoffPulse 1.8s ease-in-out infinite;
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 24%);
+    background:
+        radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent), transparent 70%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 50%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 9%, transparent),
+        0 0 16px color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+}
+
+.choiceHeat[data-choice-heat-tier='hot'] strong,
+.choiceHeat[data-choice-heat-tier='live'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
+.choiceHeat[data-choice-heat-tier='rare'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-gold-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 13%, transparent), color-mix(in srgb, var(--theme-gold-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 50%, transparent);
+}
+
+.choiceHeat[data-choice-heat-tier='rare'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.choiceCrescendo {
+    display: grid;
+    grid-template-columns: auto minmax(2.6rem, 0.42fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 0.2rem;
+    max-width: 100%;
+    padding: 0.18rem 0.42rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 32%, var(--theme-gold-bright) 18%);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
+}
+
+.choiceCrescendo small,
+.choiceCrescendo strong,
+.choiceCrescendo em,
+.choiceCrescendo b {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.choiceCrescendo small {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.choiceCrescendo strong {
+    display: grid;
+    grid-auto-columns: minmax(0.48rem, 1fr);
+    grid-auto-flow: column;
+    gap: 0.1rem;
+}
+
+.choiceCrescendo strong i {
+    height: 0.24rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+    box-shadow: 0 0 0.38rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.choiceCrescendo em {
+    color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+    font-size: var(--ui-font-caption);
+    font-style: normal;
+    font-weight: 780;
+}
+
+.choiceCrescendo b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.choiceCrescendo[data-choice-crescendo-tier='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-success) 40%, var(--theme-gold-bright) 18%);
+}
+
+.card[data-relic-choice-crescendo-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.card[data-relic-choice-crescendo-screen-cue='burst'],
+.card[data-relic-choice-crescendo-screen-cue='super'],
+.choiceCrescendo[data-choice-crescendo-screen-cue='burst'],
+.choiceCrescendo[data-choice-crescendo-screen-cue='super'] {
+    box-shadow: 0 0 0.92rem color-mix(in srgb, var(--theme-gold-bright) 15%, transparent);
+}
+
+.choiceCrescendo[data-choice-crescendo-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 12%);
+}
+
+.choiceCrescendo[data-choice-crescendo-screen-cue='snap'] {
+    border-color: color-mix(in srgb, var(--theme-success) 44%, var(--theme-gold-bright) 18%);
+}
+
+.choiceCrescendo[data-choice-crescendo-tier='cashout'] small {
+    color: color-mix(in srgb, var(--theme-success) 86%, white);
+}
+
+.choiceCrescendo[data-choice-crescendo-tier='cashout'] strong i {
+    background: color-mix(in srgb, var(--theme-success) 76%, white);
+}
+
+.choiceCrescendo[data-choice-crescendo-tier='stack'],
+.choiceCrescendo[data-choice-crescendo-tier='rare'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 20%);
+    box-shadow: 0 0 0.82rem color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+}
+
+.choiceCrescendo[data-choice-crescendo-tier='stack'] small {
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+}
+
+.choiceCrescendo[data-choice-crescendo-tier='stack'] strong i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+}
+
+.choiceCrescendo[data-choice-crescendo-tier='rare'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 50%, var(--theme-gold-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 11%, transparent), color-mix(in srgb, var(--theme-gold-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
+}
+
+.choiceCrescendo[data-choice-crescendo-tier='rare'] small {
+    color: color-mix(in srgb, var(--theme-violet-bright) 86%, white);
+}
+
+.choiceCrescendo[data-choice-crescendo-tier='rare'] strong i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 76%, white);
+}
+
+.payoffBurst {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    align-self: flex-start;
+    gap: 0.22rem;
+    max-width: 100%;
+    margin-top: -0.12rem;
+    padding: 0.16rem 0.42rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 38%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 14px color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.payoffBurst small,
+.payoffBurst strong {
+    overflow: hidden;
+    font-size: var(--ui-font-caption);
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.payoffBurst small {
+    font-weight: 950;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.payoffBurst strong {
+    color: color-mix(in srgb, var(--theme-text) 94%, white);
+    font-weight: 950;
+}
+
+.payoffBurst[data-relic-payoff-tier='stack'] {
+    animation: relicPayoffPulse 1.85s ease-in-out infinite;
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 26%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
+}
+
+.payoffBurst[data-relic-payoff-tier='rare'] {
+    animation: relicPayoffPulse 1.95s ease-in-out infinite;
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-gold-bright) 28%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 14%, transparent), color-mix(in srgb, var(--theme-gold-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
+}
+
+.nextFloorCue {
+    display: inline-grid;
+    grid-template-columns: auto minmax(0, auto);
+    align-items: center;
+    align-self: flex-start;
+    gap: 0.22rem;
+    max-width: 100%;
+    margin-top: -0.14rem;
+    padding: 0.15rem 0.42rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 74%),
+        color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.nextFloorCue small,
+.nextFloorCue strong {
+    min-width: 0;
+    overflow: hidden;
+    font-size: var(--ui-font-caption);
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nextFloorCue small {
+    font-weight: 950;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.nextFloorCue strong {
+    color: color-mix(in srgb, var(--theme-text) 94%, white);
+    font-weight: 950;
+}
+
+.nextFloorCue[data-relic-next-floor-tone='stack'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 44%, transparent);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
+.nextFloorCue[data-relic-next-floor-tone='route'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 40%, var(--theme-gold-bright) 14%);
+}
+
+.nextFloorCue[data-relic-next-floor-tone='rare'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-gold-bright) 26%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 14%, transparent), color-mix(in srgb, var(--theme-gold-bright) 11%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 44%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+}
+
+.boardMomentCue {
+    justify-self: start;
+    display: grid;
+    gap: 0.06rem;
+    max-width: 100%;
+    padding: 0.24rem 0.42rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 70%),
+        color-mix(in srgb, var(--theme-panel-solid) 46%, transparent);
+}
+
+.boardMomentCue small,
+.boardMomentCue strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.boardMomentCue small {
+    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 920;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.boardMomentCue strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1.1;
+}
+
+.boardMomentCue[data-board-moment-tone='chain'],
+.boardMomentCue[data-board-moment-tone='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, var(--theme-cyan-bright) 20%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), transparent 70%),
+        color-mix(in srgb, var(--theme-panel-solid) 48%, transparent);
+}
+
+.boardMomentCue[data-board-moment-tone='chain'] strong,
+.boardMomentCue[data-board-moment-tone='cashout'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.boardMomentCue[data-board-moment-tone='guard'] {
+    border-color: color-mix(in srgb, var(--theme-success) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-success) 10%, transparent);
+}
+
+.boardMomentCue[data-board-moment-tone='guard'] strong {
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.pickPulse {
+    display: grid;
+    gap: 0.07rem;
+    max-width: 100%;
+    padding: 0.3rem 0.42rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 76%),
+        color-mix(in srgb, var(--theme-panel-solid) 50%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.pickPulse small,
+.pickPulse strong,
+.pickPulse em {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pickPulse small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.pickPulse strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1.12;
+    white-space: nowrap;
+}
+
+.pickPulse em {
+    color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+    font-size: var(--ui-font-caption);
+    font-style: normal;
+    font-weight: 760;
+    line-height: 1.18;
+}
+
+.pickPulse[data-pick-pulse-tone='stack'],
+.pickPulse[data-pick-pulse-tone='chain'],
+.pickPulse[data-pick-pulse-tone='cashout'] {
+    animation: relicPayoffPulse 1.8s ease-in-out infinite;
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 22%);
+    background:
+        radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), transparent 72%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 11%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 52%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
+        0 0 14px color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+}
+
+.pickPulse[data-pick-pulse-tone='stack'] strong,
+.pickPulse[data-pick-pulse-tone='chain'] strong,
+.pickPulse[data-pick-pulse-tone='cashout'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.pickPulse[data-pick-pulse-tone='route'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 18%);
+}
+
+.pickPulse[data-pick-pulse-tone='guard'] {
+    border-color: color-mix(in srgb, var(--theme-success) 36%, transparent);
+    background: color-mix(in srgb, var(--theme-success) 10%, transparent);
+}
+
+.pickPulse[data-pick-pulse-tone='guard'] strong {
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
+.pickPulse[data-pick-pulse-tone='rare'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-gold-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 13%, transparent), color-mix(in srgb, var(--theme-gold-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 52%, transparent);
+}
+
+.pickPulse[data-pick-pulse-tone='rare'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
 .archetypes {
     align-self: flex-start;
     margin-top: -0.12rem;
@@ -225,6 +1422,426 @@
     font-weight: 700;
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
     background: color-mix(in srgb, var(--theme-cyan) 8%, transparent);
+}
+
+.impactChips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.22rem;
+    margin-top: -0.08rem;
+}
+
+.impactChips span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.16rem;
+    min-height: 1.1rem;
+    padding: 0.08rem 0.28rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-gold) 9%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1;
+}
+
+.impactChipBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.055rem;
+    color: currentColor;
+}
+
+.impactChipBeatPips i {
+    display: block;
+    width: 0.16rem;
+    height: 0.16rem;
+    border-radius: 999px;
+    animation: relicBeatPulse 0.86s ease-in-out infinite;
+    background: currentColor;
+    box-shadow: 0 0 0.3rem color-mix(in srgb, currentColor 30%, transparent);
+    opacity: 0.68;
+}
+
+.impactChips span[data-impact-beats='3'] .impactChipBeatPips i {
+    opacity: 0.82;
+}
+
+.impactChips span[data-impact-beats='4'] .impactChipBeatPips i {
+    width: 0.2rem;
+    height: 0.2rem;
+    opacity: 0.94;
+}
+
+.impactChips span[data-impact-tone='action'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-cyan) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.impactChips span[data-impact-tone='info'],
+.impactChips span[data-impact-tone='draft'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-violet) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.impactChips span[data-impact-tone='guard'] {
+    border-color: color-mix(in srgb, var(--theme-success) 36%, transparent);
+    background: color-mix(in srgb, var(--theme-success) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.impactChips span[data-impact-tone='risk'] {
+    border-color: color-mix(in srgb, var(--theme-ember) 38%, transparent);
+    background: color-mix(in srgb, var(--theme-ember) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-ember) 84%, white);
+}
+
+.impactChips span[data-impact-tone='cashout'],
+.impactChips span[data-impact-tone='momentum'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+    background: color-mix(in srgb, var(--theme-gold) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.buildPulse {
+    display: grid;
+    gap: 0.06rem;
+    margin-top: -0.06rem;
+    padding: 0.28rem 0.38rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan) 9%, transparent), transparent 70%),
+        color-mix(in srgb, var(--theme-panel-solid) 30%, transparent);
+}
+
+.buildPulse strong {
+    color: color-mix(in srgb, var(--theme-text) 94%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 900;
+    line-height: 1.15;
+}
+
+.buildPulse small {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 800;
+    line-height: 1.15;
+    text-transform: uppercase;
+}
+
+.buildPulse:not([data-build-lane-count='1']) {
+    animation: relicPayoffPulse 1.9s ease-in-out infinite;
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-cyan-bright) 22%);
+    background:
+        radial-gradient(ellipse 95% 140% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 68%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan) 11%, transparent), transparent 70%),
+        color-mix(in srgb, var(--theme-panel-solid) 30%, transparent);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.buildPulse:not([data-build-lane-count='1']) small {
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.buildFitSignals {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.22rem;
+}
+
+.buildFitSignals > span {
+    display: grid;
+    gap: 0.04rem;
+    min-width: 0;
+    min-height: 2rem;
+    align-content: center;
+    padding: 0.2rem 0.28rem;
+    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 20%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-panel-solid) 56%, transparent);
+}
+
+.buildFitSignals small {
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 920;
+    line-height: 1;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.buildFitSignals strong {
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-text) 90%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 930;
+    letter-spacing: 0;
+    line-height: 1.05;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.buildFitSignals b {
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 930;
+    line-height: 1;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.buildFitSignalBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.06rem;
+    color: currentColor;
+}
+
+.buildFitSignalBeatPips i {
+    display: block;
+    width: 0.17rem;
+    height: 0.17rem;
+    border-radius: 999px;
+    animation: relicBeatPulse 0.86s ease-in-out infinite;
+    background: currentColor;
+    opacity: 0.72;
+    box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.buildFitSignals span[data-build-fit-beats='3'] .buildFitSignalBeatPips i {
+    opacity: 0.84;
+}
+
+.buildFitSignals span[data-build-fit-beats='4'] .buildFitSignalBeatPips i {
+    width: 0.2rem;
+    height: 0.2rem;
+    opacity: 0.92;
+}
+
+.buildFitSignals span[data-build-fit-tone='stack'],
+.buildFitSignals span[data-build-fit-tone='route'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
+}
+
+.buildFitSignals span[data-build-fit-tone='stack'] strong,
+.buildFitSignals span[data-build-fit-tone='route'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.buildFitSignals span[data-build-fit-tone='new'],
+.buildFitSignals span[data-build-fit-tone='play'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-deep) 13%, transparent);
+}
+
+.buildFitSignals span[data-build-fit-tone='new'] strong,
+.buildFitSignals span[data-build-fit-tone='play'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.buildFitSignals span[data-build-fit-screen-cue='burst'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.buildFitSignals span[data-build-fit-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.buildFitSignals span[data-build-fit-screen-cue='snap'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+}
+
+.comboRoutes {
+    display: grid;
+    gap: 0.26rem;
+}
+
+.comboRoutes > span {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.12rem 0.28rem;
+    min-width: 0;
+    padding: 0.34rem 0.42rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 32%, var(--theme-gold-bright) 18%);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 46%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}
+
+.comboRoutes small,
+.comboRoutes strong,
+.comboRoutes em,
+.comboRoutes u {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.comboRoutes small {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 950;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.comboRoutes strong {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.12rem;
+    grid-column: 1 / -1;
+    align-items: center;
+    color: color-mix(in srgb, var(--theme-text) 94%, white);
+}
+
+.comboRoutes b {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.12rem;
+    min-height: 1.12rem;
+    padding: 0.08rem 0.28rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 930;
+    line-height: 1;
+}
+
+.comboRoutes b i {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    font-style: normal;
+    font-weight: 950;
+}
+
+.comboRoutes em,
+.comboRoutes u {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 94%, white);
+    font-size: var(--ui-font-caption);
+    font-style: normal;
+    font-weight: 760;
+    line-height: 1.18;
+}
+
+.comboRoutes u {
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-weight: 850;
+    text-decoration: none;
+}
+
+.comboRouteBeatPips {
+    display: inline-flex;
+    justify-self: end;
+    align-items: center;
+    gap: 0.06rem;
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.comboRouteBeatPips i {
+    display: block;
+    width: 0.17rem;
+    height: 0.17rem;
+    border-radius: 999px;
+    animation: relicBeatPulse 0.86s ease-in-out infinite;
+    background: currentColor;
+    box-shadow: 0 0 0.3rem color-mix(in srgb, currentColor 26%, transparent);
+    opacity: 0.74;
+}
+
+.comboRoutes span[data-combo-route-beats='4'] .comboRouteBeatPips i {
+    width: 0.2rem;
+    height: 0.2rem;
+    opacity: 0.94;
+}
+
+.comboRoutes span[data-combo-route-tone='risk'] {
+    border-color: color-mix(in srgb, var(--theme-ember) 42%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-ember) 11%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 46%, transparent);
+}
+
+.comboRoutes span[data-combo-route-tone='risk'] small,
+.comboRoutes span[data-combo-route-tone='risk'] b {
+    color: color-mix(in srgb, var(--theme-ember) 84%, white);
+}
+
+.comboRoutes span[data-combo-route-tone='guard'],
+.comboRoutes span[data-combo-route-tone='control'] {
+    border-color: color-mix(in srgb, var(--theme-success) 38%, var(--theme-cyan-bright) 16%);
+}
+
+.comboRoutes span[data-combo-route-tone='guard'] small,
+.comboRoutes span[data-combo-route-tone='control'] small,
+.comboRoutes span[data-combo-route-tone='guard'] b,
+.comboRoutes span[data-combo-route-tone='control'] b {
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
+.buildPlanRows {
+    display: grid;
+    gap: 0.24rem;
+}
+
+.buildPlanRows > span {
+    display: grid;
+    gap: 0.08rem;
+    min-width: 0;
+    padding: 0.3rem 0.38rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold) 9%, transparent), transparent 76%),
+        color-mix(in srgb, var(--theme-panel-solid) 28%, transparent);
+}
+
+.buildPlanRows small,
+.buildPlanRows strong,
+.buildPlanRows em {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.buildPlanRows small {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.buildPlanRows strong {
+    color: color-mix(in srgb, var(--theme-text) 96%, white);
+    font-size: var(--ui-font-caption);
+    font-weight: 850;
+    line-height: 1.2;
+}
+
+.buildPlanRows em {
+    color: color-mix(in srgb, var(--theme-text-muted) 92%, white);
+    font-size: var(--ui-font-caption);
+    font-style: normal;
+    font-weight: 650;
+    line-height: 1.2;
 }
 
 .impact {
@@ -262,6 +1879,32 @@
     }
 }
 
+@keyframes relicPayoffPulse {
+    0%,
+    100% {
+        filter: saturate(1);
+        transform: translateY(0) scale(1);
+    }
+
+    48% {
+        filter: saturate(1.24);
+        transform: translateY(-1px) scale(1.025);
+    }
+}
+
+@keyframes relicBeatPulse {
+    0%,
+    100% {
+        opacity: 0.62;
+        transform: scale(0.82);
+    }
+
+    44% {
+        opacity: 1;
+        transform: scale(1.12);
+    }
+}
+
 :global([data-reduce-motion='true']) .card_rare::after {
     display: none;
 }
@@ -287,8 +1930,39 @@
     animation: none;
 }
 
+:global([data-reduce-motion='true']) .choiceHeat[data-choice-heat-tier='hot'],
+:global([data-reduce-motion='true']) .choiceHeat[data-choice-heat-tier='live'],
+:global([data-reduce-motion='true']) .payoffBurst[data-relic-payoff-tier='stack'],
+:global([data-reduce-motion='true']) .payoffBurst[data-relic-payoff-tier='rare'],
+:global([data-reduce-motion='true']) .pickPulse[data-pick-pulse-tone='stack'],
+:global([data-reduce-motion='true']) .pickPulse[data-pick-pulse-tone='chain'],
+:global([data-reduce-motion='true']) .pickPulse[data-pick-pulse-tone='cashout'],
+:global([data-reduce-motion='true']) .buildPulse:not([data-build-lane-count='1']),
+:global([data-reduce-motion='true']) .payoffEngineBeatPips i,
+:global([data-reduce-motion='true']) .draftLanePrimaryBeatPips i,
+:global([data-reduce-motion='true']) .draftLaneBeatPips i,
+:global([data-reduce-motion='true']) .impactChipBeatPips i,
+:global([data-reduce-motion='true']) .buildFitSignalBeatPips i,
+:global([data-reduce-motion='true']) .comboRouteBeatPips i {
+    animation: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .card {
+    .card,
+    .choiceHeat[data-choice-heat-tier='hot'],
+    .choiceHeat[data-choice-heat-tier='live'],
+    .payoffBurst[data-relic-payoff-tier='stack'],
+    .payoffBurst[data-relic-payoff-tier='rare'],
+    .pickPulse[data-pick-pulse-tone='stack'],
+    .pickPulse[data-pick-pulse-tone='chain'],
+    .pickPulse[data-pick-pulse-tone='cashout'],
+    .buildPulse:not([data-build-lane-count='1']),
+    .payoffEngineBeatPips i,
+    .draftLanePrimaryBeatPips i,
+    .draftLaneBeatPips i,
+    .impactChipBeatPips i,
+    .buildFitSignalBeatPips i,
+    .comboRouteBeatPips i {
         animation: none !important;
     }
 }
@@ -304,6 +1978,10 @@
         margin-top: 0.25rem;
     }
 
+    .payoffEngineStrip {
+        grid-template-columns: 1fr;
+    }
+
     .card {
         min-height: 5.85rem;
         gap: 0.32rem;
@@ -317,7 +1995,8 @@
 
     .reason,
     .archetypes,
-    .impact {
+    .impact,
+    .impactChips span {
         font-size: 0.68rem;
     }
 

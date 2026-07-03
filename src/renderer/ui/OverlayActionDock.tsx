@@ -6,6 +6,8 @@ export type OverlayActionPlacement = 'rail' | 'dock';
 
 export interface OverlayAction {
     label: string;
+    description?: string;
+    ariaLabel?: string;
     onClick: () => void;
     variant?: Extract<UiButtonVariant, 'primary' | 'secondary' | 'danger'>;
     disabled?: boolean;
@@ -37,6 +39,7 @@ const OverlayActionDock = ({
 
     const renderAction = (action: OverlayAction, index: number) => (
         <UiButton
+            aria-label={action.ariaLabel}
             className={`${styles.actionButton} ${actionClassName}`.trim()}
             disabled={action.disabled}
             key={`${action.label}:${index}`}
@@ -44,7 +47,14 @@ const OverlayActionDock = ({
             size={size}
             variant={action.variant ?? 'primary'}
         >
-            {action.label}
+            {action.description ? (
+                <span className={styles.actionContent}>
+                    <span>{action.label}</span>
+                    <small>{action.description}</small>
+                </span>
+            ) : (
+                action.label
+            )}
         </UiButton>
     );
 

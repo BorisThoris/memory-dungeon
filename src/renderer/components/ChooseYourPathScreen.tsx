@@ -43,6 +43,374 @@ const MEDITATION_PICK_MUTATOR_IDS = (Object.keys(MUTATOR_CATALOG) as MutatorId[]
     MUTATOR_CATALOG[a]!.title.localeCompare(MUTATOR_CATALOG[b]!.title)
 );
 
+type ModeChoiceSignalTone = 'pace' | 'payoff' | 'pressure' | 'constraint' | 'practice' | 'locked';
+type ModeLoopCueTone = 'chain' | 'route' | 'build' | 'pressure' | 'practice' | 'locked';
+
+interface ModeChoiceSignal {
+    label: string;
+    value: string;
+    tone: ModeChoiceSignalTone;
+}
+
+interface ModeLoopCue {
+    detail: string;
+    headline: string;
+    tone: ModeLoopCueTone;
+}
+
+type ModeChoiceLaneId = 'chain' | 'reward' | 'pressure' | 'practice' | 'locked';
+
+interface ModeChoiceLaneMapEntry {
+    id: ModeChoiceLaneId;
+    label: string;
+    count: number;
+    cue: string;
+}
+
+const MODE_CHOICE_LANE_ORDER: readonly ModeChoiceLaneId[] = ['chain', 'reward', 'pressure', 'practice', 'locked'];
+
+const MODE_CHOICE_LANE_LABEL: Record<ModeChoiceLaneId, string> = {
+    chain: 'Chain',
+    reward: 'Reward',
+    pressure: 'Pressure',
+    practice: 'Practice',
+    locked: 'Locked'
+};
+
+const MODE_CHOICE_SIGNALS: Record<string, readonly ModeChoiceSignal[]> = {
+    classic: [
+        { label: 'Pace', value: 'Escalating floors', tone: 'pace' },
+        { label: 'Payoff', value: 'Shops + relics', tone: 'payoff' },
+        { label: 'Pressure', value: 'Route choices', tone: 'pressure' }
+    ],
+    daily: [
+        { label: 'Pace', value: 'UTC seed', tone: 'pace' },
+        { label: 'Payoff', value: 'Fair compare', tone: 'payoff' },
+        { label: 'Pressure', value: 'Daily mutators', tone: 'pressure' }
+    ],
+    dungeon_showcase: [
+        { label: 'Pace', value: 'Immediate dungeon', tone: 'pace' },
+        { label: 'Payoff', value: 'Dungeon systems', tone: 'payoff' },
+        { label: 'Pressure', value: 'Boss + locks', tone: 'pressure' }
+    ],
+    endless: [
+        { label: 'Status', value: 'Future mode', tone: 'locked' },
+        { label: 'Focus', value: 'Fatigue tuning', tone: 'constraint' },
+        { label: 'Payoff', value: 'Not live yet', tone: 'locked' }
+    ],
+    gauntlet: [
+        { label: 'Pace', value: 'Timer', tone: 'pressure' },
+        { label: 'Payoff', value: 'Timed clears', tone: 'payoff' },
+        { label: 'Pressure', value: 'Countdown', tone: 'pressure' }
+    ],
+    puzzle_starter: [
+        { label: 'Pace', value: 'Fixed board', tone: 'practice' },
+        { label: 'Payoff', value: 'Solve route', tone: 'payoff' },
+        { label: 'Pressure', value: 'No sprawl', tone: 'practice' }
+    ],
+    puzzle_mirror: [
+        { label: 'Pace', value: 'Mirror layout', tone: 'practice' },
+        { label: 'Payoff', value: 'Pattern read', tone: 'payoff' },
+        { label: 'Pressure', value: 'Intermediate', tone: 'pressure' }
+    ],
+    puzzle_glyph_cross: [
+        { label: 'Pace', value: '4x2 glyphs', tone: 'practice' },
+        { label: 'Payoff', value: 'Route proof', tone: 'payoff' },
+        { label: 'Pressure', value: 'Advanced', tone: 'pressure' }
+    ],
+    wild: [
+        { label: 'Pace', value: 'Fast chaos', tone: 'pressure' },
+        { label: 'Payoff', value: 'Power discovery', tone: 'payoff' },
+        { label: 'Pressure', value: 'Swingy floors', tone: 'pressure' }
+    ],
+    practice: [
+        { label: 'Pace', value: 'Low pressure', tone: 'practice' },
+        { label: 'Payoff', value: 'Learn tools', tone: 'payoff' },
+        { label: 'Pressure', value: 'No mastery chase', tone: 'practice' }
+    ],
+    scholar: [
+        { label: 'Pace', value: 'Pure recall', tone: 'constraint' },
+        { label: 'Payoff', value: 'Extra relic choice', tone: 'payoff' },
+        { label: 'Constraint', value: 'No rescue tools', tone: 'constraint' }
+    ],
+    pin_vow: [
+        { label: 'Pace', value: 'Mark budget', tone: 'constraint' },
+        { label: 'Payoff', value: 'Clean planning', tone: 'payoff' },
+        { label: 'Constraint', value: '10 pins', tone: 'constraint' }
+    ],
+    meditation: [
+        { label: 'Pace', value: 'Calm study', tone: 'practice' },
+        { label: 'Payoff', value: 'Longer memorize', tone: 'payoff' },
+        { label: 'Pressure', value: 'Optional mutators', tone: 'practice' }
+    ]
+};
+
+const fallbackModeChoiceSignals = (def: RunModeDefinition): readonly ModeChoiceSignal[] => [
+    { label: 'Pace', value: RUN_MODE_GROUP_LABEL[def.group], tone: 'pace' },
+    { label: 'Payoff', value: def.identityTag ?? 'Mode rules', tone: 'payoff' },
+    {
+        label: def.availability === 'available' ? 'Pressure' : 'Status',
+        value: def.availability === 'available' ? 'Unique loop' : 'Unavailable',
+        tone: def.availability === 'available' ? 'pressure' : 'locked'
+    }
+];
+
+const getModeChoiceSignals = (def: RunModeDefinition): readonly ModeChoiceSignal[] =>
+    MODE_CHOICE_SIGNALS[def.id] ?? fallbackModeChoiceSignals(def);
+
+const modeChoiceSignalAria = (signals: readonly ModeChoiceSignal[]): string =>
+    signals.map((signal) => `${signal.label}: ${signal.value}`).join('. ');
+
+const modeChoiceSignalBeatCount = (signal: ModeChoiceSignal): 2 | 3 | 4 => {
+    if (signal.tone === 'payoff') {
+        return 4;
+    }
+    if (signal.tone === 'pressure' || signal.tone === 'constraint') {
+        return 3;
+    }
+    return 2;
+};
+
+const modeChoiceSignalAction = (
+    signal: ModeChoiceSignal
+): 'Build chain' | 'Chase reward' | 'Read pressure' | 'Practice route' | 'Preview lock' => {
+    if (signal.tone === 'payoff') {
+        return 'Chase reward';
+    }
+    if (signal.tone === 'pressure' || signal.tone === 'constraint') {
+        return 'Read pressure';
+    }
+    if (signal.tone === 'practice') {
+        return 'Practice route';
+    }
+    if (signal.tone === 'locked') {
+        return 'Preview lock';
+    }
+    return 'Build chain';
+};
+
+const modeChoiceSignalAudioCue = (
+    signal: ModeChoiceSignal
+): 'mode-signal-chain' | 'mode-signal-reward' | 'mode-signal-pressure' | 'mode-signal-practice' | 'mode-signal-locked' => {
+    if (signal.tone === 'payoff') {
+        return 'mode-signal-reward';
+    }
+    if (signal.tone === 'pressure' || signal.tone === 'constraint') {
+        return 'mode-signal-pressure';
+    }
+    if (signal.tone === 'practice') {
+        return 'mode-signal-practice';
+    }
+    if (signal.tone === 'locked') {
+        return 'mode-signal-locked';
+    }
+    return 'mode-signal-chain';
+};
+
+const modeChoiceSignalScreenCue = (signal: ModeChoiceSignal): 'pulse' | 'burst' | 'guard' | 'snap' | 'locked' => {
+    if (signal.tone === 'payoff') {
+        return 'burst';
+    }
+    if (signal.tone === 'pressure' || signal.tone === 'constraint') {
+        return 'guard';
+    }
+    if (signal.tone === 'practice') {
+        return 'snap';
+    }
+    if (signal.tone === 'locked') {
+        return 'locked';
+    }
+    return 'pulse';
+};
+
+const modeChoiceLaneId = (signal: ModeChoiceSignal): ModeChoiceLaneId => {
+    if (signal.tone === 'payoff') {
+        return 'reward';
+    }
+    if (signal.tone === 'pressure' || signal.tone === 'constraint') {
+        return 'pressure';
+    }
+    if (signal.tone === 'practice') {
+        return 'practice';
+    }
+    if (signal.tone === 'locked') {
+        return 'locked';
+    }
+    return 'chain';
+};
+
+const buildModeChoiceLaneMap = (signals: readonly ModeChoiceSignal[]): ModeChoiceLaneMapEntry[] => {
+    const lanes = new Map<ModeChoiceLaneId, { count: number; cue: string }>();
+    for (const signal of signals) {
+        const lane = modeChoiceLaneId(signal);
+        const existing = lanes.get(lane);
+        lanes.set(lane, {
+            count: (existing?.count ?? 0) + 1,
+            cue: existing?.cue ?? signal.value
+        });
+    }
+    return MODE_CHOICE_LANE_ORDER.flatMap((id) => {
+        const lane = lanes.get(id);
+        return lane ? [{ id, label: MODE_CHOICE_LANE_LABEL[id], count: lane.count, cue: lane.cue }] : [];
+    });
+};
+
+const modeChoiceLaneMapAttr = (laneMap: readonly ModeChoiceLaneMapEntry[]): string =>
+    laneMap.map((entry) => `${entry.id}:${entry.count}`).join('>');
+
+const modeChoiceLaneAction = (lane: ModeChoiceLaneMapEntry): string => {
+    switch (lane.id) {
+        case 'chain':
+            return 'Build chain';
+        case 'reward':
+            return 'Chase reward';
+        case 'pressure':
+            return 'Read pressure';
+        case 'practice':
+            return 'Practice route';
+        case 'locked':
+            return 'Preview lock';
+        default:
+            return 'Read mode';
+    }
+};
+
+const modeChoiceLaneBeatCount = (lane: ModeChoiceLaneMapEntry): 1 | 2 | 3 | 4 => {
+    switch (lane.id) {
+        case 'chain':
+        case 'reward':
+            return 4;
+        case 'pressure':
+            return 3;
+        case 'practice':
+            return 2;
+        case 'locked':
+            return 1;
+        default:
+            return 2;
+    }
+};
+
+const modeChoiceLaneAudioCue = (
+    lane: ModeChoiceLaneMapEntry
+): 'mode-lane-chain' | 'mode-lane-reward' | 'mode-lane-pressure' | 'mode-lane-practice' | 'mode-lane-locked' => {
+    switch (lane.id) {
+        case 'reward':
+            return 'mode-lane-reward';
+        case 'pressure':
+            return 'mode-lane-pressure';
+        case 'practice':
+            return 'mode-lane-practice';
+        case 'locked':
+            return 'mode-lane-locked';
+        default:
+            return 'mode-lane-chain';
+    }
+};
+
+const modeChoiceLaneScreenCue = (lane: ModeChoiceLaneMapEntry): 'burst' | 'reward' | 'guard' | 'snap' | 'locked' => {
+    switch (lane.id) {
+        case 'reward':
+            return 'reward';
+        case 'pressure':
+            return 'guard';
+        case 'practice':
+            return 'snap';
+        case 'locked':
+            return 'locked';
+        default:
+            return 'burst';
+    }
+};
+
+const modeChoiceLaneActionMapAttr = (laneMap: readonly ModeChoiceLaneMapEntry[]): string =>
+    laneMap.map((entry) => `${entry.id}:${modeChoiceLaneAction(entry)}:${entry.count}`).join('>');
+
+const modeChoiceLaneMapLabel = (
+    def: RunModeDefinition,
+    placement: 'launch' | 'tile' | 'detail',
+    laneMap: readonly ModeChoiceLaneMapEntry[]
+): string => {
+    const rows = laneMap.map((entry) => `${entry.label}: ${entry.count}. ${modeChoiceLaneAction(entry)}. ${entry.cue}`).join('. ');
+    return rows ? `${def.title} ${placement} lane map. ${rows}.` : `${def.title} ${placement} lane map.`;
+};
+
+const MODE_LOOP_CUES: Record<string, ModeLoopCue> = {
+    classic: {
+        headline: 'Chain into route rewards',
+        detail: 'Clear clean pairs, pick the next room, then turn shops and relic milestones into a stronger board plan.',
+        tone: 'build'
+    },
+    daily: {
+        headline: 'One seed, clean proof',
+        detail: 'Every decision is comparable: build streaks, preserve resources, and post a fair local score.',
+        tone: 'chain'
+    },
+    dungeon_showcase: {
+        headline: 'Read locks before pressure spikes',
+        detail: 'Practice enemies, keys, traps, shops, and bosses with the dungeon vocabulary visible from the first floor.',
+        tone: 'route'
+    },
+    endless: {
+        headline: 'Long-form balance lab',
+        detail: 'Reserved for fatigue, reward, and scaling passes after Classic proves the core run loop.',
+        tone: 'locked'
+    },
+    gauntlet: {
+        headline: 'Timed streak sprint',
+        detail: 'Fast matches matter more than perfect routing; every chain is racing the clock.',
+        tone: 'pressure'
+    },
+    puzzle_starter: {
+        headline: 'Solve the visible pattern',
+        detail: 'A fixed board turns the loop into proof: read, match, and finish without procedural noise.',
+        tone: 'practice'
+    },
+    puzzle_mirror: {
+        headline: 'Mirror the route in memory',
+        detail: 'Use symmetry to compress the board and prove the intermediate pattern.',
+        tone: 'practice'
+    },
+    puzzle_glyph_cross: {
+        headline: 'Advanced pattern route',
+        detail: 'Small board, higher precision: plan the glyph sequence before committing matches.',
+        tone: 'practice'
+    },
+    wild: {
+        headline: 'Power spikes every floor',
+        detail: 'Jokers, pickups, and volatile rules make route payoff loud and swingy.',
+        tone: 'build'
+    },
+    practice: {
+        headline: 'Rehearse without stakes',
+        detail: 'Try tools, traits, and routes without achievement pressure or mastery pollution.',
+        tone: 'practice'
+    },
+    scholar: {
+        headline: 'Pure recall contract',
+        detail: 'No rescue tools: the payoff is clean memory, clean routes, and fewer excuses.',
+        tone: 'chain'
+    },
+    pin_vow: {
+        headline: 'Mark only what matters',
+        detail: 'Limited pins make every safe match and every route prime a deliberate commitment.',
+        tone: 'route'
+    },
+    meditation: {
+        headline: 'Slow-read build lab',
+        detail: 'Longer memorize windows let you study traits, mutators, and board routes before pressure returns.',
+        tone: 'practice'
+    }
+};
+
+const fallbackModeLoopCue = (def: RunModeDefinition): ModeLoopCue => ({
+    headline: def.availability === 'available' ? def.identityTag ?? 'Unique run loop' : 'Not available yet',
+    detail: def.promise ?? def.outcomeSummary ?? def.shortDescription,
+    tone: def.availability === 'available' ? 'route' : 'locked'
+});
+
+const getModeLoopCue = (def: RunModeDefinition): ModeLoopCue => MODE_LOOP_CUES[def.id] ?? fallbackModeLoopCue(def);
+
 function cardsPerPageFromWidth(widthPx: number): number {
     if (widthPx <= 0) {
         return 1;
@@ -356,10 +724,118 @@ const ChooseYourPathScreen = () => {
         return styles.cardMode;
     };
 
+    const renderModeSignalStrip = (
+        def: RunModeDefinition,
+        placement: 'launch' | 'tile' | 'detail'
+    ): ReactElement => {
+        const signals = getModeChoiceSignals(def);
+        const signalText = modeChoiceSignalAria(signals);
+        const laneMap = buildModeChoiceLaneMap(signals);
+        const primaryModeLane = laneMap[0] ?? null;
+        const laneMapAttr = modeChoiceLaneMapAttr(laneMap);
+        return (
+            <span
+                aria-label={`${def.title} ${placement} signals. ${signalText}`}
+                className={`${styles.modeSignalStrip} ${styles[`modeSignalStrip_${placement}`]}`}
+                data-mode-lane-actions={modeChoiceLaneActionMapAttr(laneMap)}
+                data-mode-lane-map={laneMapAttr}
+                data-testid={`choose-path-mode-signals-${def.id}`}
+            >
+                {laneMap.length > 1 ? (
+                    <span
+                        aria-label={modeChoiceLaneMapLabel(def, placement, laneMap)}
+                        className={styles.modeLaneMap}
+                        data-mode-lane-actions={modeChoiceLaneActionMapAttr(laneMap)}
+                        data-mode-lane-map={laneMapAttr}
+                        data-mode-primary-lane={primaryModeLane?.id ?? 'none'}
+                        data-mode-primary-lane-action={primaryModeLane ? modeChoiceLaneAction(primaryModeLane) : 'none'}
+                        data-mode-primary-lane-audio={primaryModeLane ? modeChoiceLaneAudioCue(primaryModeLane) : 'none'}
+                        data-mode-primary-lane-beats={primaryModeLane ? modeChoiceLaneBeatCount(primaryModeLane) : 0}
+                        data-mode-primary-lane-cue={primaryModeLane?.cue ?? 'none'}
+                        data-mode-primary-lane-screen-cue={primaryModeLane ? modeChoiceLaneScreenCue(primaryModeLane) : 'none'}
+                        data-testid={`choose-path-mode-lane-map-${def.id}-${placement}`}
+                    >
+                        {primaryModeLane ? (
+                            <i
+                                aria-label={`Primary mode lane. ${primaryModeLane.label}: ${modeChoiceLaneAction(primaryModeLane)}. ${primaryModeLane.cue}. ${modeChoiceLaneBeatCount(primaryModeLane)} beats.`}
+                                className={styles.modePrimaryLaneCue}
+                                data-mode-primary-lane={primaryModeLane.id}
+                                data-mode-primary-lane-action={modeChoiceLaneAction(primaryModeLane)}
+                                data-mode-primary-lane-audio={modeChoiceLaneAudioCue(primaryModeLane)}
+                                data-mode-primary-lane-beats={modeChoiceLaneBeatCount(primaryModeLane)}
+                                data-mode-primary-lane-cue={primaryModeLane.cue}
+                                data-mode-primary-lane-screen-cue={modeChoiceLaneScreenCue(primaryModeLane)}
+                                data-testid={`choose-path-mode-primary-lane-${def.id}-${placement}`}
+                            >
+                                <small>Launch loop</small>
+                                <strong>{primaryModeLane.label}</strong>
+                                <b>{modeChoiceLaneAction(primaryModeLane)}</b>
+                                <em>{primaryModeLane.cue}</em>
+                                <span aria-hidden="true" className={styles.modePrimaryLaneBeatPips}>
+                                    {Array.from({ length: modeChoiceLaneBeatCount(primaryModeLane) }, (_, beatIndex) => (
+                                        <s data-mode-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                    ))}
+                                </span>
+                            </i>
+                        ) : null}
+                        {laneMap.map((lane) => (
+                            <i data-mode-lane={lane.id} data-mode-lane-action={modeChoiceLaneAction(lane)} key={lane.id}>
+                                <small>{lane.label}</small>
+                                <strong>{lane.count}</strong>
+                                <b>{modeChoiceLaneAction(lane)}</b>
+                                <em>{lane.cue}</em>
+                            </i>
+                        ))}
+                    </span>
+                ) : null}
+                {signals.map((signal) => {
+                    const beatCount = modeChoiceSignalBeatCount(signal);
+                    return (
+                        <span
+                            data-mode-signal-action={modeChoiceSignalAction(signal)}
+                            data-mode-signal-audio={modeChoiceSignalAudioCue(signal)}
+                            data-mode-signal-beats={beatCount}
+                            data-mode-signal-screen-cue={modeChoiceSignalScreenCue(signal)}
+                            data-mode-signal-tone={signal.tone}
+                            key={`${def.id}-${signal.label}-${signal.value}`}
+                        >
+                            <small>{signal.label}</small>
+                            <strong>{signal.value}</strong>
+                            <b>{modeChoiceSignalAction(signal)}</b>
+                            <span aria-hidden="true" className={styles.modeSignalBeatPips}>
+                                {Array.from({ length: beatCount }, (_, beatIndex) => (
+                                    <i data-mode-signal-beat={beatIndex + 1} key={beatIndex} />
+                                ))}
+                            </span>
+                        </span>
+                    );
+                })}
+            </span>
+        );
+    };
+
+    const renderModeLoopCue = (def: RunModeDefinition, placement: 'launch' | 'detail'): ReactElement => {
+        const cue = getModeLoopCue(def);
+        return (
+            <div
+                aria-label={`${def.title} gameplay loop. ${cue.headline}. ${cue.detail}`}
+                className={`${styles.modeLoopCue} ${styles[`modeLoopCue_${placement}`]}`}
+                data-loop-cue-tone={cue.tone}
+                data-testid={`choose-path-mode-loop-${def.id}`}
+            >
+                <small>Run loop</small>
+                <strong>{cue.headline}</strong>
+                <span>{cue.detail}</span>
+            </div>
+        );
+    };
+
     const renderLaunchPanel = (def: RunModeDefinition): ReactElement => {
         const poster = resolveModePosterUrl(def.posterKey);
         const canStart = def.availability === 'available' && def.action.type !== 'gauntlet';
         const freshClassicLaunch = def.id === 'classic' && !saveData.onboardingDismissed;
+        const signalText = modeChoiceSignalAria(getModeChoiceSignals(def));
+        const startActionCue = getModeLoopCue(def);
         const summary =
             freshClassicLaunch
                 ? 'Start with a guided first room: match the marked pair, clear the floor, then choose what the next room changes.'
@@ -381,6 +857,8 @@ const ChooseYourPathScreen = () => {
                             {def.title}
                         </ScreenTitle>
                         <p className={styles.launchSummary}>{summary}</p>
+                        {renderModeLoopCue(def, 'launch')}
+                        {renderModeSignalStrip(def, 'launch')}
                         {freshClassicLaunch ? (
                             <ol className={styles.launchFirstRunBeats} data-testid="choose-path-first-run-beats">
                                 <li>Match the marked pair.</li>
@@ -395,9 +873,15 @@ const ChooseYourPathScreen = () => {
                                 size={pathTouchCompact ? 'md' : 'lg'}
                                 type="button"
                                 variant="primary"
+                                aria-label={`Start ${def.title}. ${signalText}.`}
+                                data-start-action-cue={startActionCue.headline}
+                                data-start-action-tone={startActionCue.tone}
                                 onClick={() => runModeAction(def)}
                             >
-                                Start run
+                                <span className={styles.launchButtonContent}>
+                                    <span>Start run</span>
+                                    <small>{startActionCue.headline}</small>
+                                </span>
                             </UiButton>
                             <UiButton
                                 aria-controls="choose-path-more-modes"
@@ -422,9 +906,10 @@ const ChooseYourPathScreen = () => {
         const variant = cardVariantClass(def);
         const groupLabel = RUN_MODE_GROUP_LABEL[def.group];
         const isSelected = def.id === selectedMode?.id;
+        const signalText = modeChoiceSignalAria(getModeChoiceSignals(def));
         return (
             <button
-                aria-label={`${def.title}. Open details.`}
+                aria-label={`${def.title}. ${signalText}. Open details.`}
                 className={`${styles.card} ${styles.libraryTileCard} ${variant}`}
                 data-selected-mode={isSelected ? 'true' : undefined}
                 data-testid={def.testId}
@@ -448,6 +933,7 @@ const ChooseYourPathScreen = () => {
                     </span>
                     {def.availability === 'locked' ? <span className={styles.libraryTileState}>Locked</span> : null}
                     <span className={`${styles.cardTitle} ${styles.libraryTileTitle}`}>{def.title}</span>
+                    {renderModeSignalStrip(def, 'tile')}
                     <p className={`${styles.cardBody} ${styles.libraryTileBody}`}>{def.shortDescription}</p>
                 </span>
             </button>
@@ -737,6 +1223,10 @@ const ChooseYourPathScreen = () => {
                     title={libraryDetailMode.title}
                 >
                     <p className={styles.libraryDetailDescription}>{libraryDetailMode.shortDescription}</p>
+                    {renderModeLoopCue(libraryDetailMode, 'detail')}
+                    <div className={styles.libraryDetailSignals}>
+                        {renderModeSignalStrip(libraryDetailMode, 'detail')}
+                    </div>
                     {libraryDetailMode.startContract ? (
                         <p
                             className={styles.libraryDetailIdentity}

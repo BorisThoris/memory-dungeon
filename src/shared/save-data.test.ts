@@ -369,6 +369,12 @@ describe('save normalization', () => {
                 gameMode: 'endless',
                 activeMutators: ['short_memorize', 'short_memorize', 'wide_recall'],
                 relicIds: ['extra_shuffle_charge', 'extra_shuffle_charge', 'guard_token_plus_one'],
+                payoffPickupClaimed: 2.9,
+                payoffPickupTotal: 3,
+                payoffPressureExtra: Number.POSITIVE_INFINITY,
+                payoffRewardPerkCount: 1,
+                payoffRoutePaid: true,
+                payoffRouteRewardText: '+1 combo shard',
                 startingLoadoutId: 'route_tactician'
             }
         });
@@ -377,6 +383,12 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary?.unlockedAchievements).toEqual(['ACH_FIRST_CLEAR']);
         expect(normalized.lastRunSummary?.activeMutators).toEqual(['short_memorize', 'wide_recall']);
         expect(normalized.lastRunSummary?.relicIds).toEqual(['extra_shuffle_charge', 'guard_token_plus_one']);
+        expect(normalized.lastRunSummary?.payoffPickupClaimed).toBe(2);
+        expect(normalized.lastRunSummary?.payoffPickupTotal).toBe(3);
+        expect(normalized.lastRunSummary?.payoffPressureExtra).toBeUndefined();
+        expect(normalized.lastRunSummary?.payoffRewardPerkCount).toBe(1);
+        expect(normalized.lastRunSummary?.payoffRoutePaid).toBe(true);
+        expect(normalized.lastRunSummary?.payoffRouteRewardText).toBe('+1 combo shard');
         expect(normalized.lastRunSummary?.startingLoadoutId).toBe('route_tactician');
         expect(normalizeSaveData({
             lastRunSummary: {

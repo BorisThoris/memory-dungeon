@@ -333,6 +333,465 @@
     text-wrap: balance;
 }
 
+.modeSignalStrip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.32rem;
+    min-width: 0;
+}
+
+.modeSignalStrip span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0.24rem 0.42rem;
+    border-radius: var(--ui-radius-sm);
+    border: 1px solid color-mix(in srgb, var(--theme-card-border-polished) 70%, transparent);
+    background: color-mix(in srgb, var(--theme-panel-solid) 54%, transparent);
+    color: color-mix(in srgb, var(--theme-text) 86%, var(--theme-text-muted) 14%);
+    line-height: 1.1;
+}
+
+.modeSignalStrip small {
+    flex: 0 0 auto;
+    font-size: 0.56rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--theme-text-subtle) 82%, var(--theme-gold-bright) 18%);
+}
+
+.modeSignalStrip strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+.modeSignalStrip b {
+    min-width: 0;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
+    font-size: 0.56rem;
+    font-weight: 900;
+    line-height: 1;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.modeSignalBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.06rem;
+    color: currentColor;
+}
+
+.modeSignalBeatPips i {
+    display: block;
+    width: 0.17rem;
+    height: 0.17rem;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.68;
+    box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 22%, transparent);
+    animation: modeSignalBeatPulse 0.92s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.modeSignalBeatPips i:nth-child(2) {
+    animation-delay: 95ms;
+}
+
+.modeSignalBeatPips i:nth-child(3) {
+    animation-delay: 190ms;
+}
+
+.modeSignalBeatPips i:nth-child(4) {
+    animation-delay: 285ms;
+}
+
+.modeSignalStrip [data-mode-signal-beats='3'] .modeSignalBeatPips i {
+    opacity: 0.82;
+}
+
+.modeSignalStrip [data-mode-signal-beats='4'] .modeSignalBeatPips i {
+    width: 0.2rem;
+    height: 0.2rem;
+    opacity: 0.94;
+}
+
+.modeSignalStrip [data-mode-signal-tone='payoff'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-deep) 16%, var(--theme-panel-solid) 44%);
+}
+
+.modeSignalStrip [data-mode-signal-tone='pressure'] {
+    border-color: color-mix(in srgb, var(--theme-amber) 26%, transparent);
+    background: color-mix(in srgb, var(--theme-amber) 12%, var(--theme-panel-solid) 46%);
+}
+
+.modeSignalStrip [data-mode-signal-tone='constraint'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 26%, transparent);
+    background: color-mix(in srgb, var(--theme-violet) 12%, var(--theme-panel-solid) 48%);
+}
+
+.modeSignalStrip [data-mode-signal-tone='practice'] {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-border-cyan) 10%, var(--theme-panel-solid) 48%);
+}
+
+.modeSignalStrip [data-mode-signal-tone='locked'] {
+    opacity: 0.86;
+    border-color: color-mix(in srgb, var(--theme-text-subtle) 28%, transparent);
+}
+
+.modeSignalStrip [data-mode-signal-screen-cue='burst'],
+.modeSignalStrip [data-mode-signal-screen-cue='reward'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.modeSignalStrip [data-mode-signal-screen-cue='guard'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success) 18%, transparent);
+}
+
+.modeSignalStrip [data-mode-signal-screen-cue='snap'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+}
+
+.modeSignalStrip [data-mode-signal-screen-cue='locked'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-text-subtle) 18%, transparent);
+}
+
+@keyframes modeSignalBeatPulse {
+    0%,
+    100% {
+        opacity: 0.56;
+        transform: scale(0.74);
+    }
+
+    46% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modeSignalStrip .modeLaneMap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 5.8rem), 1fr));
+    flex: 1 1 100%;
+    gap: 0.28rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.modeSignalStrip .modeLaneMap i {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.12rem 0.32rem;
+    min-width: 0;
+    padding: 0.26rem 0.38rem;
+    border: 1px solid color-mix(in srgb, var(--theme-card-border-polished) 74%, transparent);
+    border-radius: var(--ui-radius-sm);
+    background: color-mix(in srgb, var(--theme-panel-solid) 58%, transparent);
+    font-style: normal;
+}
+
+.modeSignalStrip .modeLaneMap .modePrimaryLaneCue {
+    grid-column: 1 / -1;
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 0.36rem 0.46rem;
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 62%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, white 5%, transparent);
+}
+
+.modeSignalStrip .modeLaneMap .modePrimaryLaneCue small {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+}
+
+.modeSignalStrip .modeLaneMap .modePrimaryLaneCue strong {
+    justify-self: start;
+}
+
+.modeSignalStrip .modeLaneMap[data-mode-primary-lane-screen-cue='burst'] .modePrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent), color-mix(in srgb, var(--theme-gold-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 66%, transparent);
+}
+
+.modeSignalStrip .modeLaneMap[data-mode-primary-lane-screen-cue='reward'] .modePrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 14%);
+}
+
+.modeSignalStrip .modeLaneMap[data-mode-primary-lane-screen-cue='guard'] .modePrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-amber) 52%, var(--theme-gold-bright) 16%);
+}
+
+.modeSignalStrip .modeLaneMap[data-mode-primary-lane-screen-cue='snap'] .modePrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-success) 48%, var(--theme-cyan-bright) 16%);
+}
+
+.modeSignalStrip .modeLaneMap[data-mode-primary-lane-screen-cue='locked'] .modePrimaryLaneCue {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 42%, transparent);
+    opacity: 0.76;
+}
+
+.modePrimaryLaneBeatPips {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-auto-columns: minmax(0.46rem, 1fr);
+    grid-auto-flow: column;
+    gap: 0.12rem;
+    width: min(5rem, 100%);
+}
+
+.modePrimaryLaneBeatPips s {
+    height: 0.18rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
+    animation: modeSignalPulse 0.82s ease-in-out infinite;
+    transform-origin: center;
+    text-decoration: none;
+}
+
+.modeSignalStrip .modeLaneMap[data-mode-primary-lane-screen-cue='burst'] .modePrimaryLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+}
+
+.modeSignalStrip .modeLaneMap[data-mode-primary-lane-screen-cue='reward'] .modePrimaryLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white 8%);
+}
+
+.modeSignalStrip .modeLaneMap[data-mode-primary-lane-screen-cue='guard'] .modePrimaryLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-amber) 82%, white 8%);
+}
+
+.modeSignalStrip .modeLaneMap[data-mode-primary-lane-screen-cue='snap'] .modePrimaryLaneBeatPips s {
+    background: color-mix(in srgb, var(--theme-success) 78%, white 8%);
+}
+
+.modeSignalStrip .modeLaneMap small,
+.modeSignalStrip .modeLaneMap strong,
+.modeSignalStrip .modeLaneMap b,
+.modeSignalStrip .modeLaneMap em {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+}
+
+.modeSignalStrip .modeLaneMap small {
+    font-size: 0.5rem;
+    letter-spacing: 0.07em;
+}
+
+.modeSignalStrip .modeLaneMap strong {
+    justify-self: end;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    font-size: 0.64rem;
+}
+
+.modeSignalStrip .modeLaneMap b {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.52rem;
+    font-weight: 920;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.modeSignalStrip .modeLaneMap em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.58rem;
+    font-style: normal;
+    font-weight: 760;
+    white-space: nowrap;
+}
+
+.modeSignalStrip .modeLaneMap i[data-mode-lane='reward'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-deep) 16%, var(--theme-panel-solid) 44%);
+}
+
+.modeSignalStrip .modeLaneMap i[data-mode-lane='reward'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
+.modeSignalStrip .modeLaneMap i[data-mode-lane='reward'] b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
+.modeSignalStrip .modeLaneMap i[data-mode-lane='pressure'] {
+    border-color: color-mix(in srgb, var(--theme-amber) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-amber) 12%, var(--theme-panel-solid) 46%);
+}
+
+.modeSignalStrip .modeLaneMap i[data-mode-lane='pressure'] strong {
+    color: color-mix(in srgb, var(--theme-amber) 86%, white);
+}
+
+.modeSignalStrip .modeLaneMap i[data-mode-lane='pressure'] b {
+    color: color-mix(in srgb, var(--theme-amber) 86%, white);
+}
+
+.modeSignalStrip .modeLaneMap i[data-mode-lane='practice'] {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-border-cyan) 10%, var(--theme-panel-solid) 48%);
+}
+
+.modeSignalStrip .modeLaneMap i[data-mode-lane='locked'] {
+    opacity: 0.86;
+}
+
+.modeSignalStrip_launch {
+    max-width: 30rem;
+}
+
+.modeSignalStrip_tile {
+    max-height: 3.1rem;
+    overflow: hidden;
+}
+
+.modeSignalStrip_tile span {
+    flex: 1 1 calc(50% - 0.32rem);
+    padding: 0.2rem 0.34rem;
+}
+
+.modeSignalStrip_tile .modeLaneMap {
+    flex-basis: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 0;
+}
+
+.modeSignalStrip_tile .modeLaneMap i {
+    padding: 0.18rem 0.28rem;
+}
+
+.modeSignalStrip_tile .modeLaneMap em {
+    display: none;
+}
+
+.modeSignalStrip_tile small {
+    font-size: 0.5rem;
+}
+
+.modeSignalStrip_tile strong {
+    font-size: 0.6rem;
+}
+
+.modeSignalStrip_detail {
+    margin-bottom: var(--theme-space-sm);
+}
+
+.modeLoopCue {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.2rem 0.48rem;
+    width: min(32rem, 100%);
+    box-sizing: border-box;
+    padding: 0.58rem 0.68rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    border-radius: var(--ui-radius-md);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--theme-gold-deep) 16%, transparent), transparent 54%),
+        color-mix(in srgb, var(--theme-panel-solid) 64%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, white 4%, transparent);
+    color: var(--theme-text);
+}
+
+.modeLoopCue small,
+.modeLoopCue strong,
+.modeLoopCue span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modeLoopCue small {
+    align-self: center;
+    padding: 0.16rem 0.34rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+    border-radius: 999px;
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.56rem;
+    font-weight: 900;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.modeLoopCue strong {
+    align-self: center;
+    color: color-mix(in srgb, var(--theme-text) 88%, var(--theme-gold-bright) 12%);
+    font-size: 0.88rem;
+    font-weight: 900;
+    line-height: 1.08;
+    white-space: nowrap;
+}
+
+.modeLoopCue span {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 82%, var(--theme-text) 18%);
+    font-size: 0.74rem;
+    font-weight: 650;
+    line-height: 1.32;
+}
+
+.modeLoopCue[data-loop-cue-tone='chain'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), transparent 54%),
+        color-mix(in srgb, var(--theme-panel-solid) 64%, transparent);
+}
+
+.modeLoopCue[data-loop-cue-tone='chain'] small,
+.modeLoopCue[data-loop-cue-tone='chain'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.modeLoopCue[data-loop-cue-tone='route'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), transparent 54%),
+        color-mix(in srgb, var(--theme-panel-solid) 64%, transparent);
+}
+
+.modeLoopCue[data-loop-cue-tone='pressure'] {
+    border-color: color-mix(in srgb, var(--theme-amber) 36%, transparent);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--theme-amber) 14%, transparent), transparent 54%),
+        color-mix(in srgb, var(--theme-panel-solid) 64%, transparent);
+}
+
+.modeLoopCue[data-loop-cue-tone='practice'] {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 34%, transparent);
+}
+
+.modeLoopCue[data-loop-cue-tone='locked'] {
+    opacity: 0.88;
+    border-color: color-mix(in srgb, var(--theme-text-subtle) 32%, transparent);
+}
+
+.modeLoopCue_detail {
+    width: 100%;
+    margin-bottom: var(--theme-space-sm);
+}
+
 .launchFirstRunBeats {
     display: grid;
     gap: 0.35rem;
@@ -371,6 +830,27 @@
 
 .launchPrimaryButton {
     min-width: 11rem;
+}
+
+.launchButtonContent {
+    display: grid;
+    justify-items: center;
+    gap: 0.14rem;
+    min-width: 0;
+    line-height: 1.06;
+}
+
+.launchButtonContent span {
+    font-weight: 850;
+}
+
+.launchButtonContent small {
+    max-width: min(17rem, 100%);
+    color: color-mix(in srgb, currentColor 72%, var(--theme-text-muted));
+    font-size: 0.64rem;
+    font-weight: 750;
+    line-height: 1.14;
+    overflow-wrap: anywhere;
 }
 
 .launchSecondaryButton {
@@ -739,6 +1219,10 @@
     font-size: 0.95rem;
     line-height: 1.5;
     color: var(--theme-text-muted);
+}
+
+.libraryDetailSignals {
+    margin: 0 0 var(--theme-space-sm);
 }
 
 .libraryDetailIdentityList {
@@ -1412,6 +1896,14 @@
 
 :global([data-reduce-motion='true']) .libraryCardCell .card.libraryTileCard:hover:not(:disabled) {
     transform: none;
+}
+
+:global([data-reduce-motion='true']) .modeSignalBeatPips i {
+    animation: none;
+}
+
+:global([data-reduce-motion='true']) .modePrimaryLaneBeatPips s {
+    animation: none;
 }
 
 .meditationMutatorList {

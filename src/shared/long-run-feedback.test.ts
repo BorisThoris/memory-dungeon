@@ -130,11 +130,15 @@ describe('GLD-FB long-run feedback read models', () => {
             pairKey: 'weighted-a',
             findableKind: 'ward_spark' as const
         }));
+        const restWithoutFindables = base.board!.tiles.slice(2).map((tile) => ({
+            ...tile,
+            findableKind: undefined
+        }));
         const run = {
             ...base,
             board: {
                 ...base.board!,
-                tiles: [...firstPair, ...base.board!.tiles.slice(2)]
+                tiles: [...firstPair, ...restWithoutFindables]
             }
         };
 

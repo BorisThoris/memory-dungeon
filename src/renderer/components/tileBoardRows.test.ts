@@ -308,6 +308,161 @@ describe('tileBoardRows', () => {
         const result = rows({ board: b });
 
         expect(result.map((row) => row.traitComboBack)).toEqual([true, true, false]);
+        expect(result.map((row) => row.traitComboSurgeBack)).toEqual([false, false, false]);
+        expect(result.map((row) => row.traitRouteBeatTier)).toEqual(['route', 'route', null]);
+        expect(result.map((row) => row.traitRouteCadence)).toEqual(['route', 'route', 'none']);
+        expect(result.map((row) => row.traitRouteCadenceAction)).toEqual(['Match route', 'Match route', null]);
         expect(result[0]!.traitInteractionPreviewLines).toContain('Echo + Sealed: combo shard');
+        expect(result[0]!.traitLaneBack).toBe('shard');
+        expect(result[1]!.traitLaneBack).toBeNull();
+        expect(result[2]!.traitLaneBack).toBeNull();
+    });
+
+    it('marks hidden trait cards as combo surge cards when multiple trait routes are live', () => {
+        const b = board([
+            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('mirror-a', 'mirror', 'hidden', { tileTraitKind: 'mirror' }),
+            tile('conduit-a', 'conduit', 'hidden', { tileTraitKind: 'conduit' })
+        ]);
+
+        const result = rows({ board: b });
+
+        expect(result.map((row) => row.traitComboBack)).toEqual([true, true, true, true]);
+        expect(result.map((row) => row.traitComboSurgeBack)).toEqual([true, true, true, true]);
+        expect(result.map((row) => row.traitRouteBeatTier)).toEqual(['surge', 'surge', 'surge', 'surge']);
+        expect(result.map((row) => row.traitRouteCadence)).toEqual(['surge', 'surge', 'surge', 'surge']);
+        expect(result.map((row) => row.traitRouteCadenceAction)).toEqual([
+            'Route surge',
+            'Route surge',
+            'Route surge',
+            'Route surge'
+        ]);
+        expect(result.map((row) => row.traitLaneBack)).toEqual(['shard', 'shard', null, 'shard']);
+    });
+
+    it('derives guard lane markers from per-card mirror and stasis interaction previews', () => {
+        const b = board([
+            tile('mirror-a', 'mirror', 'hidden', { tileTraitKind: 'mirror' }),
+            tile('stasis-a', 'stasis', 'hidden', { tileTraitKind: 'stasis' }),
+            tile('plain-a', 'plain')
+        ]);
+
+        const result = rows({ board: b });
+
+        expect(result.map((row) => row.traitComboBack)).toEqual([true, true, false]);
+        expect(result.map((row) => row.traitLaneBack)).toEqual(['guard', null, null]);
+    });
+
+    it('marks ready trait cards as chain reward hot when the board model supplies hot ids', () => {
+        const b = board([
+            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('plain-a', 'plain')
+        ]);
+
+        const result = rows({
+            board: b,
+            traitRewardHotTileIds: new Set(['echo-a', 'sealed-a'])
+        });
+
+        expect(result.map((row) => row.traitRewardHotBack)).toEqual([true, true, false]);
+        expect(result.map((row) => row.traitRouteBeatTier)).toEqual(['cashout', 'cashout', null]);
+        expect(result.map((row) => row.traitRouteCadence)).toEqual(['cashout', 'cashout', 'none']);
+        expect(result.map((row) => row.traitRouteCadenceAction)).toEqual(['Cash now', 'Cash now', null]);
+    });
+
+    it('marks setup and follow-up card beat tiers without needing HUD aggregation', () => {
+        const b = board(
+            [
+                tile('echo-a', 'echo', 'flipped', { tileTraitKind: 'echo' }),
+                tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+                tile('route-a', 'route', 'hidden'),
+                tile('perk-a', 'perk', 'hidden')
+            ],
+            { flippedTileIds: ['echo-a'] }
+        );
+
+        const result = rows({
+            board: b,
+            perkArmedTileIds: new Set(['perk-a']),
+            selectedTraitFollowupTileIds: new Set(['sealed-a']),
+            traitRouteTargetTileIds: new Set(['route-a'])
+        });
+
+        expect(result.map((row) => row.traitRouteBeatTier)).toEqual([null, 'follow-up', 'setup', 'setup']);
+        expect(result.map((row) => row.traitRouteCadence)).toEqual(['none', 'follow-up', 'prime', 'prime']);
+        expect(result.map((row) => row.traitRouteCadenceAction)).toEqual([null, 'Next tap', 'Prime payoff', 'Prime payoff']);
+    });
+
+    it('marks hidden cards targeted by an armed reward perk payoff', () => {
+        const b = board([
+            tile('cursed-a', 'cursed', 'hidden', { tileTraitKind: 'cursed' }),
+            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+            tile('plain-a', 'plain')
+        ]);
+
+        const result = rows({
+            board: b,
+            perkArmedTileIds: new Set(['cursed-a'])
+        });
+
+        expect(result.map((row) => row.perkArmedBack)).toEqual([true, false, false]);
+    });
+
+    it('marks the hidden matching mate as a selected trait followup after one combo trait card is flipped', () => {
+        const b = board([
+            tile('echo-a', 'echo', 'flipped', { tileTraitKind: 'echo' }),
+            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('echo-b', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+            tile('plain-a', 'plain')
+        ]);
+
+        const result = rows({ board: { ...b, flippedTileIds: ['echo-a'] } });
+
+        expect(result.map((row) => row.selectedTraitFollowupBack)).toEqual([false, false, true, false]);
+    });
+
+    it('carries semantic trait lane labels and actions for hidden payoff routes', () => {
+        const b = board([
+            tile('echo-a', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('plain-a', 'plain')
+        ]);
+
+        const result = rows({ board: b });
+
+        expect(result[0]).toMatchObject({
+            traitLaneAction: 'Cash shard',
+            traitLaneBack: 'shard',
+            traitLaneLabel: 'Shard'
+        });
+        expect(result[1]).toMatchObject({
+            traitLaneAction: null,
+            traitLaneBack: null,
+            traitLaneLabel: null
+        });
+        expect(result[2]).toMatchObject({
+            traitLaneAction: null,
+            traitLaneBack: null,
+            traitLaneLabel: null
+        });
+    });
+
+    it('marks plain hidden cards that are swap targets for trait chain setup', () => {
+        const b = board([
+            tile('sealed-a', 'sealed', 'hidden', { tileTraitKind: 'sealed' }),
+            tile('plain-a', 'plain'),
+            tile('origin-a', 'origin'),
+            tile('heavy-a', 'heavy', 'hidden', { tileTraitKind: 'heavy' })
+        ]);
+
+        const result = rows({
+            board: b,
+            traitRouteTargetTileIds: new Set(['sealed-a', 'plain-a'])
+        });
+
+        expect(result.map((row) => row.traitRouteTargetBack)).toEqual([true, true, false, false]);
+        expect(result[1]!.tile.tileTraitKind).toBeUndefined();
     });
 });

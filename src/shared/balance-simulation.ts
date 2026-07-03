@@ -721,7 +721,7 @@ export const runBalanceSimulation = ({
         ),
         row(
             'avg_trait_swap_setup_opportunities_per_floor',
-            'Share of floors with at least one one-swap trait route setup',
+            'Share of floors with at least one one-swap trait route prime',
             Number(average(traitSwapSetupOpportunityCounts).toFixed(2)),
             0.1,
             1,

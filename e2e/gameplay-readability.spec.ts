@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 import {
     expectAppScrollportHasNoVerticalOverflow,
     expectLocatorFullyInWindowViewport,
@@ -58,6 +58,40 @@ test.describe('Gameplay readability hardening', () => {
         await expectBoardKeepsPriority(page);
     });
 
+    test('mobile floor clear keeps payoff stack and route choices readable', async ({ page }) => {
+        test.setTimeout(120_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await openPlayablePathFixture(page, 'floorClearWithRouteChoices');
+
+        await expect(page.getByRole('dialog', { name: /floor cleared/i })).toBeVisible();
+        await expect(page.getByTestId('floor-clear-payoff-stack')).toBeVisible();
+        await expect(page.getByTestId('floor-clear-payoff-stack')).toContainText(/Floor payoff stack/i);
+        await expect(page.getByTestId('route-choice-panel')).toBeVisible();
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('floor-clear-payoff-stack'), 8);
+        await expectLocatorStartsWithinWindowViewport(page, page.getByTestId('route-choice-panel'), 8);
+        await expect(page.getByTestId('route-choice-safe')).toBeVisible();
+        await expect(page.getByTestId('route-choice-safe')).toHaveAttribute(
+            'data-route-next-action',
+            'Stabilize route'
+        );
+        await expect(page.getByTestId('route-choice-safe-action-cue')).toContainText('Do next');
+        await expect(page.getByTestId('route-choice-safe-action-cue')).toContainText('Stabilize route');
+        await expect(page.getByTestId('route-choice-safe')).toHaveAttribute('data-route-beat-tier', 'guard');
+        await expect(page.getByTestId('route-choice-safe-beat-cue')).toContainText('Guard beat');
+        await expect(page.getByTestId('route-choice-greed')).toHaveAttribute('data-route-next-action', 'Cash greed');
+        await expect(page.getByTestId('route-choice-greed-action-cue')).toContainText('Cash greed');
+        await expect(page.getByTestId('route-choice-greed')).toHaveAttribute('data-route-beat-tier', 'cashout');
+        await expect(page.getByTestId('route-choice-greed-beat-cue')).toContainText('Cashout beat');
+        await expect(page.getByTestId('route-choice-mystery')).toHaveAttribute(
+            'data-route-next-action',
+            'Prime mystery'
+        );
+        await expect(page.getByTestId('route-choice-mystery-action-cue')).toContainText('Prime mystery');
+        await expect(page.getByTestId('route-choice-mystery')).toHaveAttribute('data-route-beat-tier', 'prime');
+        await expect(page.getByTestId('route-choice-mystery-beat-cue')).toContainText('Prime beat');
+        await expectNoHorizontalOverflow(page);
+    });
+
     test('board marker contract and live hazard states are exposed for readability audits', async ({ page }) => {
         test.setTimeout(90_000);
         await page.setViewportSize({ width: 390, height: 844 });
@@ -67,7 +101,11 @@ test.describe('Gameplay readability hardening', () => {
         const frame = page.getByTestId('tile-board-frame');
         await expect(frame).toHaveAttribute(
             'data-card-feedback-marker-contract',
-            /hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait trait-combo/
+            /hidden selected matched disabled enemy-occupied boss-marked trap-armed trap-resolved relic objective exit lock lever shop trait chain-ready chain-surge chain-reward-hot chain-setup trait-combo trait-combo-surge trait-payoff-stack trait-route-target/
+        );
+        await expect(frame).toHaveAttribute(
+            'data-card-feedback-marker-shape-contract',
+            'linked-route combo-surge payoff-bar payoff-stack swap-target-crossbar perk-armed-bar followup-target'
         );
 
         const states = await readCardFeedbackStates(page);
@@ -75,6 +113,176 @@ test.describe('Gameplay readability hardening', () => {
             expect(states.get(expected) ?? 0, `${expected} marker count`).toBeGreaterThan(0);
         }
         expect((states.get('hazard') ?? 0) + (states.get('relic') ?? 0) + (states.get('objective') ?? 0)).toBeGreaterThan(0);
+    });
+
+    test('standalone pickup rewards read as pickup cashouts on the board', async ({ page }) => {
+        test.setTimeout(90_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await openPlayablePathFixture(page, 'activeRunWithPickupCashout');
+        await expectGameplayReady(page);
+        await waitForBoardPlayPhase(page);
+
+        const frame = page.getByTestId('tile-board-frame');
+        await expect(frame).toHaveAttribute('data-pickup-opportunity-count', '1');
+        await expect(page.getByTestId('pickup-opportunity-chip')).toContainText('Pickup rewards');
+        await expect(page.getByTestId('pickup-opportunity-chip')).toContainText('Claim before exit');
+        await expect(page.getByTestId('board-opportunity-pickup')).toHaveAttribute(
+            'data-opportunity-impact-cue',
+            'Pickup cashout'
+        );
+        await expect(page.getByTestId('board-opportunity-pickup')).toContainText('Pickup cashout');
+        await expect(page.getByTestId('board-opportunity-pickup')).toContainText('Shard spark pickup');
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('board-opportunity-pickup'), 8);
+    });
+
+    test('trait-route setup fixture makes the swap action obvious', async ({ page }) => {
+        test.setTimeout(120_000);
+        await page.setViewportSize({ width: 390, height: 844 });
+        await openPlayablePathFixture(page, 'activeRunWithTraitRouteSetup');
+        await expectGameplayReady(page);
+        await waitForBoardPlayPhase(page);
+
+        const frame = page.getByTestId('tile-board-frame');
+        await expect(frame).toHaveAttribute('data-chain-opportunity-setup-count', '2');
+        await expect(frame).toHaveAttribute('data-chain-opportunity-next-action', 'prime-route');
+        await expect(frame).toHaveAttribute('data-chain-opportunity-next-action-label', 'Do next: prime route');
+        await expect(frame).toHaveAttribute('data-chain-opportunity-next-action-detail', /Swap Sealed with Filler/);
+        await expect(frame).toHaveAttribute('data-chain-opportunity-next-action-tone', 'setup');
+        await expect(frame).toHaveAttribute('data-chain-opportunity-beat-count', '2');
+        await expect(frame).toHaveAttribute('data-chain-opportunity-beat-cue', 'pulse');
+        await expect(frame).toHaveAttribute('data-chain-opportunity-beat-tier', 'setup');
+        await expect(frame).toHaveAttribute('data-chain-opportunity-beat-label', 'Prime beat');
+        await expect(frame).toHaveAttribute('data-card-feedback-beat-tiers', 'setup:2');
+        await expect(frame).toHaveAttribute('data-card-feedback-beat-counts', '2:2');
+        await expect(frame).toHaveAttribute('data-card-feedback-beat-tier-contract', 'cashout surge follow-up route setup');
+        await expect(frame).toHaveAttribute('data-chain-accessibility-tone', 'setup');
+        await expect(frame).toHaveAttribute('data-chain-accessibility-ready-count', '0');
+        await expect(frame).toHaveAttribute('data-chain-accessibility-setup-count', '2');
+        await expect(frame).toHaveAttribute(
+            'data-chain-accessibility-primary-line',
+            /Swap Sealed with Filler: Sealed \+ Heavy: score surge/
+        );
+        await expect(frame).toHaveAttribute('data-chain-accessibility-secondary-line', 'none');
+        await expect(frame).toHaveAttribute('data-opportunity-best-id', 'chain');
+        await expect(frame).toHaveAttribute('data-opportunity-best-action', 'Use swap');
+        await expect(frame).toHaveAttribute('data-opportunity-best-label', 'Route prime');
+        await expect(frame).toHaveAttribute('data-opportunity-best-value', '2 primed');
+        await expect(frame).toHaveAttribute('data-opportunity-best-tone', 'setup');
+        await expect(frame).toHaveAttribute('data-opportunity-best-impact-cue', 'Stack prime');
+        await expect(frame).toHaveAttribute('data-trait-mode-tone', 'setup');
+        await expect(frame).toHaveAttribute('data-trait-mode-value', 'Prime route');
+        await expect(frame).toHaveAttribute('data-trait-mode-detail', /Swap Sealed with Filler/);
+        await expect(frame).toHaveAttribute('data-card-feedback-trait-route-tiers', /route-target:2/);
+        await expect(frame).toHaveAttribute('data-card-feedback-trait-route-intensities', /setup:2/);
+        await expect(frame).toHaveAttribute('data-card-feedback-shot-map', 'route-setup:2');
+        await expect(frame).toHaveAttribute('data-opportunity-best-detail', /Use swap to connect route/);
+        await expect(page.getByTestId('trait-mode-cue')).toContainText('Trait mode');
+        await expect(page.getByTestId('trait-mode-cue')).toContainText('Prime route');
+        await expect(page.getByTestId('trait-mode-cue')).toContainText('Swap Sealed with Filler');
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('trait-mode-cue'), 8);
+        await expect(page.getByTestId('chain-opportunity-chip')).toContainText('Use swap');
+        await expect(page.getByTestId('chain-opportunity-beat')).toContainText('Prime beat');
+        await expect(page.getByTestId('chain-opportunity-beat')).toContainText('Use swap');
+        await expect(page.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'setup');
+        await expect(page.getByTestId('chain-opportunity-beat')).toHaveAccessibleName(
+            'Prime beat: Prime route. 2 beats. Use swap.'
+        );
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('chain-opportunity-beat'), 8);
+        await expect(page.getByTestId('chain-opportunity-next-action')).toHaveAttribute(
+            'data-chain-next-action',
+            'prime-route'
+        );
+        await expect(page.getByTestId('chain-opportunity-next-action')).toHaveAttribute(
+            'data-chain-next-action-tone',
+            'setup'
+        );
+        await expect(page.getByTestId('chain-opportunity-next-action')).toContainText('Do next: prime route');
+        await expect(page.getByTestId('chain-opportunity-next-action')).toContainText('Swap Sealed with Filler');
+        await expect(page.getByTestId('chain-opportunity-shot-map')).toHaveAttribute(
+            'data-chain-shot-map-primary',
+            'route-setup'
+        );
+        await expect(page.getByTestId('chain-opportunity-shot-map')).toContainText('Shot map');
+        await expect(page.getByTestId('chain-opportunity-shot-map')).toContainText('Set');
+        await expect(page.getByTestId('chain-opportunity-shot-map')).toContainText('Setup lane');
+        await expect(page.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary', 'setup');
+        await expect(page.getByTestId('chain-opportunity-beat-map')).toHaveAttribute(
+            'aria-label',
+            'Card beat map. Prime: 2. 2-beat set route.'
+        );
+        await expect(page.getByTestId('chain-opportunity-beat-map')).toContainText('Beat map');
+        await expect(page.getByTestId('chain-opportunity-beat-map')).toContainText('Prime');
+        await expect(page.getByTestId('chain-opportunity-beat-map')).toContainText('2-beat set route');
+        await expect(
+            page.getByTestId('chain-opportunity-beat-map').locator('[data-card-beat-tier="setup"] [data-card-beat-pip]')
+        ).toHaveCount(2);
+        await expect(page.getByTestId('chain-opportunity-beat-map')).toContainText('set route');
+        await expectLocatorFullyInWindowViewport(page, page.getByTestId('chain-opportunity-beat-map'), 8);
+        await page.getByTestId('tile-board-application').focus();
+        await expect(page.getByTestId('tile-board-live-region')).toContainText('Beat: prime.');
+        await expect(page.getByTestId('tile-board-live-region')).toContainText('Set this route up.');
+        await expect(page.getByTestId('tile-board-live-region')).toContainText('Swap Sealed with Filler');
+        await expect(frame).toHaveAttribute('data-chain-sequence-tone', 'setup');
+        await expect(frame).toHaveAttribute('data-chain-sequence-first', /Swap Sealed with Filler/);
+        await expect(frame).toHaveAttribute('data-chain-sequence-then', 'Match lit route');
+        await expect(frame).toHaveAttribute('data-chain-sequence-keep', 'x4 +1 shard in 1 match');
+        await expect(page.getByTestId('chain-opportunity-sequence-cue')).toContainText('First');
+        await expect(page.getByTestId('chain-opportunity-sequence-cue')).toContainText('Match lit route');
+        await expect(page.getByTestId('chain-opportunity-sequence-cue')).toContainText('x4 +1 shard in 1 match');
+        await expect(page.getByTestId('chain-opportunity-marker-key')).toContainText('Prime');
+        await expect(page.getByTestId('chain-opportunity-marker-key')).toHaveAttribute(
+            'data-chain-marker-intensity',
+            'setup'
+        );
+        await expect(page.getByTestId('chain-marker-intensity')).toContainText('Prime');
+        await expect(page.getByTestId('chain-marker-intensity')).toContainText('Prime payoff');
+        await expect(page.getByTestId('chain-opportunity-meter')).toHaveAttribute('data-chain-meter-tone', 'setup');
+        await expect(page.getByTestId('chain-opportunity-meter')).toContainText('Prime');
+        await expect(page.getByTestId('chain-opportunity-meter')).toContainText('2');
+        await expect(page.getByTestId('chain-opportunity-meter')).toContainText('Prime');
+        await expect(page.getByTestId('chain-opportunity-meter')).toContainText('Swap Sealed with Filler');
+        await expect(page.getByTestId('chain-opportunity-meter')).toHaveAttribute(
+            'aria-label',
+            /Chain board: 2 prime targets.*Swap Sealed with Filler/i
+        );
+        await expect(page.getByTestId('board-opportunity-chain')).toContainText('Use swap');
+        await expect(page.getByTestId('board-opportunity-chain')).toContainText('Stack prime');
+        await expect(page.getByTestId('hud-trait-route-best-tool')).toContainText('Best tool: Swap');
+        await expect(page.getByTestId('hud-match-chain')).toHaveAttribute('data-chain-lane-cue', 'Route chain');
+        await expect(page.getByTestId('hud-match-chain')).toHaveAttribute('data-chain-lane-tone', 'route');
+        await expect(page.getByTestId('hud-chain-lane-cue')).toContainText('Route chain');
+        await expect(page.getByTestId('hud-reward-perk-strip')).toHaveAttribute(
+            'data-reward-perk-focus-action',
+            'Cash perk'
+        );
+        await expect(page.getByTestId('hud-reward-perk-strip')).toHaveAttribute(
+            'data-reward-perk-focus-id',
+            'trait_streak_toolkit'
+        );
+        await expect(page.getByTestId('hud-reward-perk-strip')).toHaveAttribute(
+            'data-reward-perk-beat-tier',
+            'cashout'
+        );
+        await expect(page.getByTestId('hud-reward-perk-focus')).toHaveAttribute(
+            'data-reward-perk-focus-tone',
+            'armed'
+        );
+        await expect(page.getByTestId('hud-reward-perk-focus')).toContainText('Cash perk');
+        await expect(page.getByTestId('hud-reward-perk-focus')).toContainText('Trait cash');
+        await expect(page.getByTestId('hud-reward-perk-focus')).toContainText('Trait cashout armed');
+        await expect(page.getByTestId('hud-reward-perk-beat')).toContainText('Cashout beat');
+        await expect(page.getByTestId('tile-swap-setup-badge')).toContainText('Best tool');
+        await expect(page.getByTestId('tile-swap-intent-chip')).toContainText('Best tool');
+        await expect(page.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Route cashout');
+        await expect(page.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Route cashout');
+        await expect(page.getByTestId('tile-swap-payoff-chip')).toContainText('Create route');
+        await expect(page.getByLabel(/Swap two hidden tiles/i)).toHaveAccessibleName(/Impact cue: Route cashout/i);
+
+        const states = await readCardFeedbackStates(page);
+        expect(states.get('chain-setup') ?? 0, 'chain setup marker count').toBeGreaterThanOrEqual(2);
+        expect(states.get('trait-route-target') ?? 0, 'trait route target marker count').toBeGreaterThanOrEqual(2);
+        const markerShapes = await readCardFeedbackMarkerShapes(page);
+        expect(markerShapes.get('swap-target-crossbar') ?? 0, 'swap target marker shape count').toBeGreaterThanOrEqual(2);
     });
 
     for (const viewport of [
@@ -150,8 +358,35 @@ async function expectBoardKeepsPriority(page: Page): Promise<void> {
     ).toBeGreaterThanOrEqual(0.45);
 }
 
+async function expectLocatorStartsWithinWindowViewport(page: Page, locator: Locator, epsilon = 6): Promise<void> {
+    const box = await locator.evaluate((element, eps) => {
+        const r = element.getBoundingClientRect();
+        return {
+            eps,
+            left: r.left,
+            right: r.right,
+            top: r.top,
+            vh: window.innerHeight,
+            vw: window.innerWidth
+        };
+    }, epsilon);
+    expect(
+        box.top >= -box.eps && box.top <= box.vh + box.eps && box.left >= -box.eps && box.right <= box.vw + box.eps,
+        `expected locator to start in viewport; got top=${box.top} left=${box.left} right=${box.right} for ${box.vw}x${box.vh}`
+    ).toBeTruthy();
+}
+
 async function readCardFeedbackStates(page: Page): Promise<Map<string, number>> {
     const raw = (await page.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')) ?? '';
+    return parseCountAttr(raw);
+}
+
+async function readCardFeedbackMarkerShapes(page: Page): Promise<Map<string, number>> {
+    const raw = (await page.getByTestId('tile-board-frame').getAttribute('data-card-feedback-marker-shapes')) ?? '';
+    return parseCountAttr(raw);
+}
+
+function parseCountAttr(raw: string): Map<string, number> {
     const states = new Map<string, number>();
     for (const entry of raw.split(';').filter(Boolean)) {
         const [key, count] = entry.split(':');

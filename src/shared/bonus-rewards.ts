@@ -162,7 +162,7 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
         eligibility: 'Floor 2+ and one trait streak lens claim this run.',
         antiGrindLimit: { scope: 'per_run', maxClaims: 1 },
         payout: { rewardPerks: ['trait_streak_toolkit'], score: 10 },
-        summaryText: 'Every third clean trait match creates +1 flash pair, plus +10 score.'
+        summaryText: 'A trait match at x3+ clean streak creates +1 flash pair, plus +10 score.'
     },
     cursed_opener_contract: {
         id: 'cursed_opener_contract',
@@ -521,27 +521,200 @@ const formatRewardUnit = (amount: number, singular: string, plural = `${singular
     amount === 1 ? singular : plural;
 
 const REWARD_PERK_LABELS: Record<RewardPerkId, string> = {
-    free_first_swap_per_floor: 'free first row/swap each floor',
-    echo_conduit_double: 'Echo doubles beside Conduit',
-    trait_streak_toolkit: 'trait streak flash pair',
-    cursed_opener_greed: 'Cursed opener greed',
-    hazard_banish_per_floor: 'hazard banish each floor'
+    free_first_swap_per_floor: 'Free Route Link',
+    echo_conduit_double: 'Echo Conduit Double',
+    trait_streak_toolkit: 'Trait Streak Flash',
+    cursed_opener_greed: 'Cursed Opener Greed',
+    hazard_banish_per_floor: 'Hazard Banish'
 };
 
 const REWARD_PERK_DETAILS: Record<RewardPerkId, string> = {
     free_first_swap_per_floor: 'First row shuffle or tile swap each floor is free.',
     echo_conduit_double: 'Echo beside Conduit grants an extra peek and repeats adjacent Sealed shard value.',
-    trait_streak_toolkit: 'Every third clean trait match banks a flash-pair charge.',
+    trait_streak_toolkit: 'A trait match at x3+ clean streak banks a flash-pair charge.',
     cursed_opener_greed: 'The first Cursed match each floor grants extra shop gold and score.',
     hazard_banish_per_floor: 'Each new floor clears one hazard marker before play; if none exists, it grants a destroy charge.'
+};
+
+const REWARD_PERK_LANES: Record<RewardPerkId, string> = {
+    free_first_swap_per_floor: 'Route prime',
+    echo_conduit_double: 'Trait combo',
+    trait_streak_toolkit: 'Chain reward',
+    cursed_opener_greed: 'Greed opener',
+    hazard_banish_per_floor: 'Hazard control'
+};
+
+const REWARD_PERK_PAYOFFS: Record<RewardPerkId, string> = {
+    free_first_swap_per_floor: 'Free route link',
+    echo_conduit_double: 'Double Echo payoff',
+    trait_streak_toolkit: 'x3 trait flash',
+    cursed_opener_greed: 'Cursed gold opener',
+    hazard_banish_per_floor: 'Hazard erased before flip'
+};
+
+const REWARD_PERK_MOMENTS: Record<RewardPerkId, string> = {
+    free_first_swap_per_floor: 'First prime move',
+    echo_conduit_double: 'Echo next to Conduit',
+    trait_streak_toolkit: 'Trait match at x3+',
+    cursed_opener_greed: 'First Cursed opener',
+    hazard_banish_per_floor: 'Floor start'
+};
+
+const REWARD_PERK_NEXT_CUES: Record<RewardPerkId, string> = {
+    free_first_swap_per_floor: 'Use Swap or row shuffle to connect trait routes.',
+    echo_conduit_double: 'Match Echo touching Conduit before cashing adjacent Sealed.',
+    trait_streak_toolkit: 'Keep the clean chain alive; cash a trait match at x3+ for a tool.',
+    cursed_opener_greed: 'Open the floor with Cursed when the board is already readable.',
+    hazard_banish_per_floor: 'Check the first board beat; hazard pressure should already be reduced.'
+};
+
+const REWARD_PERK_ARCADE_CUES: Record<RewardPerkId, string> = {
+    free_first_swap_per_floor: 'Free prime',
+    echo_conduit_double: 'Double pop',
+    trait_streak_toolkit: 'Trait cash',
+    cursed_opener_greed: 'Open greed',
+    hazard_banish_per_floor: 'Trap erased'
 };
 
 export const getRewardPerkRows = (run: Pick<RunState, 'rewardPerkIds'>) =>
     (run.rewardPerkIds ?? []).map((id) => ({
         id,
         label: REWARD_PERK_LABELS[id],
-        detail: REWARD_PERK_DETAILS[id]
+        detail: REWARD_PERK_DETAILS[id],
+        arcadeCue: REWARD_PERK_ARCADE_CUES[id],
+        lane: REWARD_PERK_LANES[id],
+        moment: REWARD_PERK_MOMENTS[id],
+        payoff: REWARD_PERK_PAYOFFS[id],
+        nextCue: REWARD_PERK_NEXT_CUES[id]
     }));
+
+export type RewardPerkReadinessState = 'armed' | 'soon' | 'spent' | 'passive';
+
+export interface RewardPerkReadinessRow {
+    id: RewardPerkId;
+    label: string;
+    detail: string;
+    arcadeCue: string;
+    lane: string;
+    moment: string;
+    payoff: string;
+    nextCue: string;
+    readiness: RewardPerkReadinessState;
+    readinessLabel: string;
+    readinessDetail: string;
+    meterPercent: number;
+}
+
+const clampPercent = (value: number): number => Math.max(0, Math.min(100, Math.round(value)));
+
+const rewardPerkReadiness = (
+    id: RewardPerkId,
+    run: Pick<
+        RunState,
+        | 'activeContract'
+        | 'matchResolutionsThisFloor'
+        | 'regionShuffleCharges'
+        | 'regionShuffleFreeThisFloor'
+        | 'stats'
+    >
+): Pick<RewardPerkReadinessRow, 'meterPercent' | 'readiness' | 'readinessDetail' | 'readinessLabel'> => {
+    switch (id) {
+        case 'free_first_swap_per_floor': {
+            const freeSetupAvailable = run.regionShuffleFreeThisFloor || run.regionShuffleCharges > 0;
+            return freeSetupAvailable
+                ? {
+                      meterPercent: 100,
+                      readiness: 'armed',
+                      readinessDetail: 'Use row shuffle or tile swap to prime combo traits together.',
+                      readinessLabel: 'Free prime armed'
+                  }
+                : {
+                      meterPercent: 100,
+                      readiness: 'spent',
+                      readinessDetail: 'The prime move has been used this floor.',
+                      readinessLabel: 'Prime spent'
+                  };
+        }
+        case 'echo_conduit_double':
+            return {
+                meterPercent: 66,
+                readiness: 'soon',
+                readinessDetail: 'Look for Echo touching Conduit before resolving the pair.',
+                readinessLabel: 'Needs Echo + Conduit'
+            };
+        case 'trait_streak_toolkit': {
+            const streak = Math.max(0, Math.floor(run.stats.currentStreak ?? 0));
+            const progress = Math.min(2, streak);
+            return progress >= 2
+                ? {
+                      meterPercent: 100,
+                      readiness: 'armed',
+                      readinessDetail: 'The next trait match in this clean chain creates a flash-pair charge.',
+                      readinessLabel: 'Trait cashout armed'
+                  }
+                : {
+                      meterPercent: clampPercent((progress / 2) * 100),
+                      readiness: 'soon',
+                      readinessDetail: `${2 - progress} clean match${2 - progress === 1 ? '' : 'es'} until a trait match can cash this perk.`,
+                      readinessLabel: `${progress}/2 chain`
+                  };
+        }
+        case 'cursed_opener_greed':
+            return run.matchResolutionsThisFloor === 0
+                ? {
+                      meterPercent: 100,
+                      readiness: 'armed',
+                      readinessDetail: 'Your first resolved match can cash the Cursed opener.',
+                      readinessLabel: 'Opening greed armed'
+                  }
+                : {
+                      meterPercent: 100,
+                      readiness: 'spent',
+                      readinessDetail: 'The opener window has closed for this floor.',
+                      readinessLabel: 'Opener spent'
+                  };
+        case 'hazard_banish_per_floor':
+            return {
+                meterPercent: run.activeContract?.noDestroy ? 0 : 100,
+                readiness: run.activeContract?.noDestroy ? 'spent' : 'passive',
+                readinessDetail: run.activeContract?.noDestroy
+                    ? 'Destroy-locked contract prevents hazard banish recovery.'
+                    : 'Floor-start hazard control resolves automatically.',
+                readinessLabel: run.activeContract?.noDestroy ? 'Blocked' : 'Auto floor start'
+            };
+    }
+};
+
+export const getRewardPerkReadinessRows = (
+    run: Pick<
+        RunState,
+        | 'activeContract'
+        | 'matchResolutionsThisFloor'
+        | 'regionShuffleCharges'
+        | 'regionShuffleFreeThisFloor'
+        | 'rewardPerkIds'
+        | 'stats'
+    >
+): RewardPerkReadinessRow[] =>
+    getRewardPerkRows(run).map((row) => ({
+        ...row,
+        ...rewardPerkReadiness(row.id, run)
+    }));
+
+const REWARD_PERK_BOARD_CUE_PRIORITY: Record<RewardPerkId, number> = {
+    trait_streak_toolkit: 5,
+    cursed_opener_greed: 4,
+    echo_conduit_double: 3,
+    free_first_swap_per_floor: 2,
+    hazard_banish_per_floor: 1
+};
+
+export const getPrimaryRewardPerkReadinessRow = (
+    run: Parameters<typeof getRewardPerkReadinessRows>[0]
+): RewardPerkReadinessRow | null =>
+    getRewardPerkReadinessRows(run)
+        .filter((row) => row.readiness === 'armed')
+        .sort((a, b) => REWARD_PERK_BOARD_CUE_PRIORITY[b.id] - REWARD_PERK_BOARD_CUE_PRIORITY[a.id])[0] ?? null;
 
 const applyBonusRewardPayout = (
     run: RunState,
@@ -593,6 +766,7 @@ const applyBonusRewardPayout = (
         }
         nextRun = { ...nextRun, rewardPerkIds: [...(nextRun.rewardPerkIds ?? []), perkId] };
         gained.push(`Unlock ${REWARD_PERK_LABELS[perkId]}`);
+        gained.push(`Perk next: ${REWARD_PERK_NEXT_CUES[perkId]}`);
     }
     for (const [itemId, amount] of Object.entries(payout.inventoryItems ?? {}) as [RunInventoryItemId, number][]) {
         const safeAmount = nonNegativeFiniteAmount(amount);
