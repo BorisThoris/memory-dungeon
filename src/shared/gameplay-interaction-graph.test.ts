@@ -150,7 +150,7 @@ describe('gameplay interaction graph', () => {
         expect(audit.blockerWithoutProtectiveEdgeIds).toEqual([]);
         expect(audit.shopCounterplayWithoutPriorityGuardIds).toEqual([]);
         expect(audit.generatedFloorCoverageGapIds).toEqual(expect.arrayContaining(['trait.echo']));
-        expect(audit.playerVisibleWriteWithoutHudIds).toEqual(expect.arrayContaining(['trait.echo']));
+        expect(audit.playerVisibleWriteWithoutHudIds).toEqual([]);
         expect(audit.highLeverageMechanicIds).toEqual(
             expect.arrayContaining([
                 'trait.stasis',
