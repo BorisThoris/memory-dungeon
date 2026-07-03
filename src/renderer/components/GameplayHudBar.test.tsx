@@ -1055,6 +1055,9 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveAccessibleName(
             'Chain reward hot band. Reward hot. x4 +1 shard. 1 match left.'
         );
+        expect(screen.getByTestId('hud-combo-shards')).toHaveAttribute('data-primary-reward-hot', 'true');
+        expect(screen.getByTestId('hud-combo-shards')).toHaveTextContent('Shards');
+        expect(screen.getByTestId('hud-combo-shards')).toHaveTextContent('1');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveAttribute(
             'data-chain-reward-forecast-hot',
             'true'

@@ -7086,6 +7086,21 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
+.hudShardsSegment[data-primary-reward-hot='true'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(110deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 72%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
+        0 0 1.1rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    animation: hudRewardPulse 1.1s ease-in-out infinite;
+}
+
+.hudShardsSegment[data-primary-reward-hot='true'] .hudShardsValue {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
 .hudChainStackedPayoffBadge {
     display: inline-flex;
     align-items: center;

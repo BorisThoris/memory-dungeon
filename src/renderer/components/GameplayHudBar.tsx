@@ -1751,6 +1751,7 @@ const GameplayHudBar = ({
                         <div className={styles.hudStripDivider} aria-hidden="true" />
                         <div
                             className={`${styles.hudSegment} ${styles.statPill} ${styles.hudShardsSegment}`}
+                            data-primary-reward-hot={primaryRewardHot ? 'true' : 'false'}
                             data-testid="hud-combo-shards"
                             title={resourceSegmentTitle}
                         >
