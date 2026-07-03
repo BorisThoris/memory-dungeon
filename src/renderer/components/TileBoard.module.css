@@ -2773,6 +2773,84 @@
     box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
 }
 
+.chainOpportunitySurgeBand {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.06rem 0.2rem;
+    min-width: 0;
+    max-width: min(18rem, 58vi);
+    overflow: hidden;
+    padding: 0.1rem 0.28rem 0.12rem;
+    border: 1px solid color-mix(in srgb, var(--theme-violet-bright) 56%, var(--theme-cyan-bright) 18%);
+    border-radius: 0.3rem;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 20%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 12%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 88%, white);
+    animation: boardOpportunityPulse 1.2s ease-in-out infinite;
+}
+
+.chainOpportunitySurgeBand small,
+.chainOpportunitySurgeBand b,
+.chainOpportunitySurgeBand em,
+.chainOpportunitySurgeBand i {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chainOpportunitySurgeBand small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: 0.48rem;
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.chainOpportunitySurgeBand b {
+    color: color-mix(in srgb, var(--theme-violet-bright) 92%, white);
+    font-size: 0.6rem;
+    font-weight: 980;
+}
+
+.chainOpportunitySurgeBand em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+    font-size: 0.46rem;
+    font-style: normal;
+    font-weight: 880;
+}
+
+.chainOpportunitySurgeBand i {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.46rem;
+    font-style: normal;
+    font-weight: 840;
+}
+
+.chainOpportunitySurgeBandBeatPips {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: 0.09rem;
+    min-height: 0.2rem;
+}
+
+.chainOpportunitySurgeBandBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-violet-bright) 28%, transparent);
+    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
+    transform-origin: center;
+}
+
 .chainOpportunityPayoffBurst {
     display: inline-flex;
     align-items: center;

@@ -2636,6 +2636,29 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
               boardChainHotBand.cue
           ])
         : undefined;
+    const boardChainSurgeBand = boardChainOpportunity.comboSurgeLabel
+        ? {
+              cue: boardChainOpportunity.cue || 'Route prime',
+              detail:
+                  boardChainOpportunity.chainReadyCount === 1
+                      ? '1 route ready'
+                      : `${boardChainOpportunity.chainReadyCount} routes ready`,
+              label: 'Combo surge',
+              tone: 'surge' as const,
+              value:
+                  boardChainOpportunity.chainReadyTileCount === 1
+                      ? '1 card lit'
+                      : `${boardChainOpportunity.chainReadyTileCount} cards lit`
+          }
+        : null;
+    const boardChainSurgeBandLabel = boardChainSurgeBand
+        ? formatBoardFeedbackLabel('Chain surge band', [
+              boardChainSurgeBand.label,
+              boardChainSurgeBand.value,
+              boardChainSurgeBand.detail,
+              boardChainSurgeBand.cue
+          ])
+        : undefined;
     const activePowerBoardChipLabel = activePowerBoardChip
         ? formatBoardFeedbackLabel('Active board power', [
               activePowerBoardChip.label,
@@ -3642,6 +3665,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-chain-opportunity-reward-urgency={boardChainOpportunity.rewardUrgencyLabel ?? 'none'}
             data-chain-opportunity-reward-urgency-tier={boardChainOpportunity.rewardUrgencyTier ?? 'none'}
             data-chain-opportunity-reward-hot={boardChainOpportunity.rewardHot ? 'true' : 'false'}
+            data-chain-opportunity-combo-surge={boardChainOpportunity.comboSurgeLabel ? 'true' : 'false'}
             data-chain-opportunity-hot-band={boardChainHotBand?.tone ?? 'none'}
             data-chain-reward-ladder={boardRewardLadderAttr}
             data-chain-reward-ladder-actions={boardRewardLadderActionAttr}
@@ -4427,6 +4451,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <span aria-hidden="true" className={styles.chainOpportunityHotBandBeatPips}>
                                             {Array.from({ length: boardChainHotBand.tone === 'cashout' ? 5 : 3 }, (_, index) => (
                                                 <i data-chain-hot-band-beat={index + 1} key={index} />
+                                            ))}
+                                        </span>
+                                    </span>
+                                ) : null}
+                                {boardChainSurgeBand ? (
+                                    <span
+                                        aria-label={boardChainSurgeBandLabel}
+                                        className={styles.chainOpportunitySurgeBand}
+                                        data-chain-surge-band-tone={boardChainSurgeBand.tone}
+                                        data-testid="chain-opportunity-surge-band"
+                                        role="status"
+                                    >
+                                        <small>{boardChainSurgeBand.label}</small>
+                                        <b>{boardChainSurgeBand.value}</b>
+                                        <em>{boardChainSurgeBand.detail}</em>
+                                        <i>{boardChainSurgeBand.cue}</i>
+                                        <span aria-hidden="true" className={styles.chainOpportunitySurgeBandBeatPips}>
+                                            {Array.from({ length: 4 }, (_, index) => (
+                                                <i data-chain-surge-band-beat={index + 1} key={index} />
                                             ))}
                                         </span>
                                     </span>

@@ -1658,10 +1658,22 @@ describe('TileBoard touch and click controls', () => {
         });
 
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Combo surge');
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAttribute(
+            'data-chain-surge-band-tone',
+            'surge'
+        );
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('Combo surge');
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('4 cards lit');
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('5 routes ready');
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('Match now');
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAccessibleName(
+            /Chain surge band\. Combo surge\. 4 cards lit\. 5 routes ready\. Match now\./
+        );
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveAccessibleName(
             /Board chain opportunity.*Surge chain: 4 cards lit.*Combo surge/i
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-callout', 'Surge chain');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-combo-surge', 'true');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-chain-opportunity-callout-value',
             '4 cards lit'
