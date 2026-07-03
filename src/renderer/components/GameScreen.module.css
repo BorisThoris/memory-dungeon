@@ -7143,6 +7143,18 @@
     max-width: 100%;
 }
 
+.hudChainRewardForecast[data-chain-reward-forecast-hot='true'] {
+    padding: 0.12rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 18%);
+    border-radius: 0.42rem;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 22%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+}
+
 .hudChainRewardForecast > span {
     display: inline-flex;
     align-items: center;

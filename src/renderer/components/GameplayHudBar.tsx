@@ -2488,6 +2488,7 @@ const GameplayHudBar = ({
                                             <span
                                                 aria-label={chainRewardForecastLabel}
                                                 className={styles.hudChainRewardForecast}
+                                                data-chain-reward-forecast-hot={primaryRewardHot ? 'true' : 'false'}
                                                 data-chain-reward-lane-actions={chainRewardLaneActionMapAttr}
                                                 data-chain-reward-lane-map={chainRewardLaneMapAttr}
                                                 data-testid="hud-chain-reward-forecast"
