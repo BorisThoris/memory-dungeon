@@ -1471,6 +1471,22 @@ const GameplayHudBar = ({
                 : 'Then: keep streak alive';
     const chainNextKeepCue = `Keep: ${chainLaneCue.label.toLowerCase()}`;
     const primaryChainRewardProgress = getChainRewardProgress(run.stats.currentStreak, primaryResourceRewardCue);
+    const primaryRewardHotBand =
+        primaryRewardHot && primaryResourceRewardCue
+            ? {
+                  cue: primaryResourceRewardCue,
+                  detail:
+                      primaryChainRewardProgress?.remainingLabel ??
+                      primaryResourceRewardCue.chaseLabel ??
+                      'One match left',
+                  label: 'Reward hot',
+                  tone: 'cashout' as const,
+                  value: primaryResourceRewardCue.label
+              }
+            : null;
+    const primaryRewardHotBandLabel = primaryRewardHotBand
+        ? `Chain reward hot band. ${primaryRewardHotBand.label}. ${primaryRewardHotBand.value}. ${primaryRewardHotBand.detail}.`
+        : undefined;
     const findableProgressState = getFindableProgressState(
         run.findablesClaimedThisFloor,
         run.findablesTotalThisFloor
@@ -2436,6 +2452,24 @@ const GameplayHudBar = ({
                                             >
                                                 <small>Reward hot</small>
                                                 <b>{primaryResourceRewardCue.label}</b>
+                                            </span>
+                                        ) : null}
+                                        {primaryRewardHotBand ? (
+                                            <span
+                                                aria-label={primaryRewardHotBandLabel}
+                                                className={styles.hudChainRewardHotBand}
+                                                data-chain-reward-hot-band-tone={primaryRewardHotBand.tone}
+                                                data-testid="hud-chain-reward-hot-band"
+                                            >
+                                                <small>{primaryRewardHotBand.label}</small>
+                                                <b>{primaryRewardHotBand.value}</b>
+                                                <em>{primaryRewardHotBand.detail}</em>
+                                                <i>{primaryResourceRewardCue?.chaseLabel ?? 'Hit now'}</i>
+                                                <span aria-hidden="true" className={styles.hudChainRewardHotBandBeatPips}>
+                                                    {Array.from({ length: primaryResourceRewardBeatCount }, (_, beatIndex) => (
+                                                        <i data-chain-reward-hot-band-beat={beatIndex + 1} key={beatIndex} />
+                                                    ))}
+                                                </span>
                                             </span>
                                         ) : null}
                                         {stackedChainRewardHot.length > 0 ? (

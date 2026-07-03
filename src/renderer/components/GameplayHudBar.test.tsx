@@ -1044,6 +1044,17 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-hot')).toHaveAccessibleName(
             'Chain reward hot: x4 +1 shard. Hit now.'
         );
+        expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveAttribute(
+            'data-chain-reward-hot-band-tone',
+            'cashout'
+        );
+        expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveTextContent('Reward hot');
+        expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveTextContent('x4 +1 shard');
+        expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveTextContent('1 match left');
+        expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveTextContent('Hit now');
+        expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveAccessibleName(
+            'Chain reward hot band. Reward hot. x4 +1 shard. 1 match left.'
+        );
         expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-action', 'Cash next');
         expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-distance', '1');
         expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-progress', '1/2');

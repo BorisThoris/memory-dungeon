@@ -6995,6 +6995,97 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
 }
 
+.hudChainRewardHotBand {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.06rem 0.18rem;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0.11rem 0.32rem 0.13rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 16%);
+    border-radius: var(--ui-radius-pill);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-gold) 12%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 17%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+    font-size: 0.48rem;
+    font-weight: 980;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    animation: hudRewardPulse 1.02s ease-in-out infinite;
+}
+
+.hudChainRewardHotBand small,
+.hudChainRewardHotBand b,
+.hudChainRewardHotBand em,
+.hudChainRewardHotBand i {
+    min-width: 0;
+    overflow: hidden;
+    font: inherit;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hudChainRewardHotBand small {
+    padding: 0.07rem 0.18rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.hudChainRewardHotBand b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.hudChainRewardHotBand em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.46rem;
+    font-style: normal;
+    font-weight: 880;
+}
+
+.hudChainRewardHotBand i {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    font-size: 0.46rem;
+    font-style: normal;
+    font-weight: 840;
+}
+
+.hudChainRewardHotBandBeatPips {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: 0.09rem;
+    min-height: 0.2rem;
+}
+
+.hudChainRewardHotBandBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    animation: gameplayBeatPipPulse 0.86s ease-in-out infinite;
+    transform-origin: center;
+}
+
+.hudChainRewardHotBand[data-chain-reward-hot-band-tone='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 68%, var(--theme-cyan-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 24%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-gold) 12%, transparent);
+}
+
+.hudChainRewardHotBand[data-chain-reward-hot-band-tone='cashout'] .hudChainRewardHotBandBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
 .hudChainStackedPayoffBadge {
     display: inline-flex;
     align-items: center;
