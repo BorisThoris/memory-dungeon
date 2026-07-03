@@ -912,6 +912,33 @@ describe('TileBoard touch and click controls', () => {
         );
     });
 
+    it('keeps the board trait lane map visible when only one trait lane is live', () => {
+        renderBoard({
+            board: {
+                ...board,
+                tiles: [
+                    { ...board.tiles[0]!, pairKey: 'echo', label: 'Echo', tileTraitKind: 'echo' },
+                    { ...board.tiles[1]!, pairKey: 'sealed', label: 'Sealed', tileTraitKind: 'sealed' },
+                    { ...board.tiles[2]!, state: 'matched' },
+                    { ...board.tiles[3]!, state: 'matched' }
+                ]
+            },
+            debugPeekActive: false,
+            interactive: true,
+            chainContext: { comboShards: 0, currentStreak: 2, lives: 4 },
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false
+        });
+
+        const laneMap = screen.getByTestId('chain-opportunity-trait-lane-map');
+        expect(laneMap).toHaveAttribute('data-trait-interaction-lane-map', 'shard:1');
+        expect(laneMap).toHaveTextContent('Shard');
+        expect(laneMap).toHaveTextContent('Cash shard');
+        expect(laneMap).toHaveTextContent('Echo + Sealed: combo shard');
+        expect(laneMap).toHaveAccessibleName('Trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard.');
+    });
+
     it('surfaces selected trait follow-up markers after the first comboable trait card is flipped', () => {
         renderBoard({
             board: {

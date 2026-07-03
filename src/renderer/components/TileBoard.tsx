@@ -4050,7 +4050,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         ))}
                                     </span>
                                 ) : null}
-                                {boardTraitInteractionLaneMap.length > 1 ? (
+                                {boardTraitInteractionLaneMap.length > 0 ? (
                                     <span
                                         aria-label={boardTraitInteractionLaneMapAccessibleLabel}
                                         className={styles.chainOpportunityTraitLaneMap}
