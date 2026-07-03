@@ -1341,10 +1341,22 @@ describe('GameplayHudBar', () => {
             'Trait stack cue. Trait super stack: Cash trait super stack. 1 route + x4 +1 shard.'
         );
         expect(screen.getByTestId('hud-trait-route-panel').getAttribute('title')).toContain('Echo + Sealed: combo shard');
+        expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('Shard');
+        expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('Cash shard');
+        expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('combo shard');
+        expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAttribute('data-trait-interaction-lane-map', 'shard:1');
+        expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAttribute(
+            'data-trait-interaction-lane-actions',
+            'shard:Cash shard:1'
+        );
+        expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAccessibleName(
+            'Trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard.'
+        );
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Trait Route Panel');
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Cards:');
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('(echo)');
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('(sealed)');
+        expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Trait lanes');
         expect(screen.getByTestId('hud-trait-route-details-action')).toHaveTextContent('Now: Cash next route.');
         expect(screen.getByTestId('hud-trait-route-details-stack')).toHaveTextContent(
             'Stack: Cash trait super stack. 1 route + x4 +1 shard.'

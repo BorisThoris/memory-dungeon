@@ -28,6 +28,13 @@ import { SHOP_ITEM_CATALOG } from '../../shared/shop-rules';
 import codexBookUrl from '../assets/ui/icons/icon-codex-book-v1.svg?url';
 import scoreParasiteCrystalUrl from '../assets/ui/icons/icon-score-parasite-crystal.svg?url';
 import shuffleIconUrl from '../assets/ui/icons/icon-shuffle-v1.svg?url';
+import {
+    buildTraitInteractionLaneMap,
+    formatTraitInteractionLaneMapLabel,
+    getTraitInteractionLaneAction,
+    traitInteractionLaneActionMapAttr,
+    traitInteractionLaneMapAttr
+} from '../copy/traitInteractionLaneMap';
 import { PERFECT_MEMORY_BASE_RULES, perfectMemoryHudKind } from '../copy/perfectMemory';
 import { REG106_HUD_IA } from '../gameplay/regPhase4PlayContract';
 import {
@@ -1367,6 +1374,17 @@ const GameplayHudBar = ({
               .map((tile) => `${tile.label} (${tile.traitKind})`)
               .join(', ')
         : null;
+    const traitOpportunityLaneLines =
+        traitOpportunitySummary.interactionLines.length > 0
+            ? traitOpportunitySummary.interactionLines
+            : traitOpportunityHud.swapHint?.matchCreatedLines ?? [];
+    const traitOpportunityLaneMap = buildTraitInteractionLaneMap(traitOpportunityLaneLines);
+    const traitOpportunityLaneMapAttr = traitInteractionLaneMapAttr(traitOpportunityLaneMap);
+    const traitOpportunityLaneActionMapAttr = traitInteractionLaneActionMapAttr(traitOpportunityLaneMap);
+    const traitOpportunityLaneMapLabel = formatTraitInteractionLaneMapLabel(
+        'Trait interaction lanes',
+        traitOpportunityLaneMap
+    );
     const traitRouteObjectiveStatus = getTraitRouteObjectiveStatus(run);
     const traitRouteActionBeatCount = traitRouteObjectiveStatus
         ? hudTraitRouteActionBeatCount(traitRouteObjectiveStatus.urgency)
@@ -2260,6 +2278,26 @@ const GameplayHudBar = ({
                                         <span className={styles.statVal}>{traitRouteProgressLabel}</span>
                                         <span className={styles.statSubline}>{traitOpportunityHud.buildLabel}</span>
                                         <small className={styles.hudTraitRoutePrimary}>{traitOpportunityHud.primaryLine}</small>
+                                        <span className={styles.hudTraitRouteLaneMapLabel}>Trait lanes</span>
+                                        {traitOpportunityLaneMap.length > 0 ? (
+                                            <div
+                                                aria-label={traitOpportunityLaneMapLabel}
+                                                className={styles.hudTraitRouteLaneMap}
+                                                data-testid="hud-trait-route-lane-map"
+                                                data-trait-interaction-lane-actions={traitOpportunityLaneActionMapAttr}
+                                                data-trait-interaction-lane-map={traitOpportunityLaneMapAttr}
+                                            >
+                                                {traitOpportunityLaneMap.map((lane) => (
+                                                    <span data-trait-interaction-lane={lane.id} key={lane.id}>
+                                                        <small>{lane.label}</small>
+                                                        <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
+                                                        <em>
+                                                            {lane.count} {lane.count === 1 ? 'line' : 'lines'} · {lane.cue}
+                                                        </em>
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ) : null}
                                         {traitRouteObjectiveStatus ? (
                                             <small
                                                 aria-label={`Trait route action cue. ${traitRouteObjectiveStatus.actionLabel}: ${traitRouteObjectiveStatus.stateLabel}. Reward: ${traitRouteObjectiveStatus.reward}.`}
@@ -2863,14 +2901,39 @@ const GameplayHudBar = ({
                                             {traitOpportunitySummary.interactionLines.slice(0, 3).map((line) => (
                                                 <span key={line}>{line}</span>
                                             ))}
-                                            {traitOpportunityHud.swapHint ? (
-                                                <span>{traitOpportunityHud.swapHint.text}</span>
-                                            ) : null}
-                                            {traitRouteObjectiveStatus ? (
-                                                <small
-                                                    data-testid="hud-trait-route-details-action"
-                                                    data-trait-route-urgency={traitRouteObjectiveStatus.urgency}
-                                                >
+                                        {traitOpportunityHud.swapHint ? (
+                                            <span>{traitOpportunityHud.swapHint.text}</span>
+                                        ) : null}
+                                        {traitOpportunityLaneMap.length > 0 ? (
+                                            <>
+                                                <span className={styles.hudTraitRouteLaneMapLabel}>Trait lanes</span>
+                                            <div
+                                                aria-label={traitOpportunityLaneMapLabel}
+                                                className={styles.hudTraitRouteLaneMap}
+                                                data-testid="hud-trait-route-lane-map-details"
+                                                data-trait-interaction-lane-actions={traitOpportunityLaneActionMapAttr}
+                                                data-trait-interaction-lane-map={traitOpportunityLaneMapAttr}
+                                            >
+                                                {traitOpportunityLaneMap.map((lane) => (
+                                                    <span
+                                                        data-trait-interaction-lane={lane.id}
+                                                        key={lane.id}
+                                                    >
+                                                        <small>{lane.label}</small>
+                                                        <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
+                                                        <em>
+                                                            {lane.count} {lane.count === 1 ? 'line' : 'lines'} · {lane.cue}
+                                                        </em>
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            </>
+                                        ) : null}
+                                        {traitRouteObjectiveStatus ? (
+                                            <small
+                                                data-testid="hud-trait-route-details-action"
+                                                data-trait-route-urgency={traitRouteObjectiveStatus.urgency}
+                                            >
                                                     Now: {traitRouteObjectiveStatus.actionLabel}. {traitRouteObjectiveStatus.stateLabel}. Reward: {traitRouteObjectiveStatus.reward}.
                                                 </small>
                                             ) : null}

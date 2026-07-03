@@ -15231,6 +15231,110 @@
     line-height: 1.25;
 }
 
+.hudTraitRouteLaneMapLabel {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: 0.5rem;
+    font-weight: 920;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.hudTraitRouteLaneMap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.14rem;
+    min-width: 0;
+}
+
+.hudTraitRouteLaneMap > span {
+    display: inline-grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.05rem 0.18rem;
+    min-width: 0;
+    max-width: min(100%, 9.2rem);
+    padding: 0.14rem 0.26rem;
+    border: 1px solid color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
+    border-radius: 7px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
+}
+
+.hudTraitRouteLaneMap small,
+.hudTraitRouteLaneMap strong,
+.hudTraitRouteLaneMap em {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hudTraitRouteLaneMap small {
+    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
+    font-size: 0.48rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.hudTraitRouteLaneMap strong {
+    display: grid;
+    place-items: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--theme-text) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    font-size: 0.54rem;
+    font-weight: 950;
+}
+
+.hudTraitRouteLaneMap em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.5rem;
+    font-style: normal;
+    font-weight: 780;
+}
+
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='shard'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, transparent);
+}
+
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='guard'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
+}
+
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='tool'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 36%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 8%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
+}
+
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='risk'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 34%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 8%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
+}
+
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='block'] {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 26%, transparent);
+}
+
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='recall'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 24%, var(--theme-gold-bright) 12%);
+}
+
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='score'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, var(--theme-cyan-bright) 10%);
+}
+
 .toast,
 .scorePop {
     box-shadow:
