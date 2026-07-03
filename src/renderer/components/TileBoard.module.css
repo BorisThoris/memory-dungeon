@@ -2603,6 +2603,31 @@
     box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
 }
 
+.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='cashout'] > span {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 14px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='cashout'] > span[data-board-chain-reward-urgency='next'] {
+    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
+}
+
+.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='ready'] > span {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+}
+
+.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='ready'] > span[data-board-chain-reward-urgency='next'] {
+    animation: boardOpportunityPrimePulse 1.25s ease-in-out infinite;
+}
+
 .chainOpportunityLines {
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
     font-size: clamp(0.68rem, 1.35vmin, 0.78rem);

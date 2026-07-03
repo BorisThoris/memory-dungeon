@@ -2623,7 +2623,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         : boardChainOpportunity.streakCashoutReady
           ? {
                 cue: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Keep the streak paying',
-                detail: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Any clean match pays',
+                detail: boardChainOpportunity.nextTarget ?? boardChainOpportunity.rewardCue ?? 'Any clean match pays',
                 label: 'Streak lane',
                 tone: 'ready' as const,
                 value: 'Cashout ready'
@@ -4292,6 +4292,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityRewardLadder}
                                         data-board-chain-reward-ladder-actions={boardRewardLadderActionAttr}
                                         data-board-chain-reward-ladder={boardRewardLadderAttr}
+                                        data-board-chain-reward-hot-band={boardChainHotBand?.tone ?? 'none'}
                                         data-testid="chain-opportunity-reward-ladder"
                                     >
                                         {boardRewardLadder.map((entry) => (
