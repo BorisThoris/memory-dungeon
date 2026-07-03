@@ -1536,6 +1536,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAccessibleName(
             /Chain hot band.*Cashout ready.*Any clean match pays.*One-away cashout/i
         );
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-hot', 'ready');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Chain cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Streak reward');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('x6 +1 shard in 1 match');
@@ -1675,6 +1676,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-surge')).toHaveAttribute('data-chain-opportunity-surge', 'true');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-callout', 'Surge chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-combo-surge', 'true');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-hot', 'none');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-surge', 'true');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-chain-opportunity-callout-value',

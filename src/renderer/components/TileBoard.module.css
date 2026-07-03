@@ -3175,6 +3175,26 @@
         inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
 }
 
+.opportunityCompass[data-opportunity-compass-hot='cashout'] {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 11%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 80%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 34px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+}
+
+.opportunityCompass[data-opportunity-compass-hot='ready'] {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), color-mix(in srgb, var(--theme-gold-bright) 5%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 80%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent),
+        0 0 30px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+}
+
 @media (hover: hover) and (pointer: fine) {
     .opportunityCompass {
         left: calc(var(--gameplay-html-edge-pad, 0.75rem) + min(18rem, 23vw) + 0.75rem);
@@ -3204,6 +3224,20 @@
         box-shadow:
             0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 28%, transparent),
             0 0 30px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+    }
+
+    .opportunityCompass[data-opportunity-compass-hot='cashout'] {
+        box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 40%, transparent),
+            0 0 38px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+    }
+
+    .opportunityCompass[data-opportunity-compass-hot='ready'] {
+        box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent),
+            0 0 34px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent),
             inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
     }
 }
