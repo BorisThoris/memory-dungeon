@@ -1250,6 +1250,10 @@
     text-overflow: ellipsis;
     text-transform: uppercase;
     white-space: nowrap;
+    box-shadow:
+        0 0 16px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 7%, transparent);
+    animation: boardOpportunityPulse 1.35s ease-in-out infinite;
 }
 
 .chainOpportunityFollowup {
@@ -3160,6 +3164,17 @@
     pointer-events: none;
 }
 
+.opportunityCompass[data-opportunity-compass-surge='true'] {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 80%, transparent);
+    border-radius: 0.9rem;
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 24%, transparent),
+        0 0 26px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+}
+
 @media (hover: hover) and (pointer: fine) {
     .opportunityCompass {
         left: calc(var(--gameplay-html-edge-pad, 0.75rem) + min(18rem, 23vw) + 0.75rem);
@@ -3183,6 +3198,13 @@
 
     .opportunityCompass:not(:hover, :focus-within) .opportunityCompassRow em {
         max-width: min(10rem, 14vw);
+    }
+
+    .opportunityCompass[data-opportunity-compass-surge='true'] {
+        box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 28%, transparent),
+            0 0 30px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
+            inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
     }
 }
 
@@ -4354,6 +4376,7 @@
 }
 
 :global([data-reduce-motion='true']) .chainOpportunityChip[data-chain-opportunity-tone='ready'],
+:global([data-reduce-motion='true']) .chainOpportunitySurge,
 :global([data-reduce-motion='true']) .pickupOpportunityChip,
 :global([data-reduce-motion='true']) .opportunityPayoffStack[data-payoff-stack-tone='cashout'],
 :global([data-reduce-motion='true']) .opportunityPayoffStack[data-payoff-stack-heat='prime'],

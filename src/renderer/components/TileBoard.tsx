@@ -4381,7 +4381,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.comboSurgeLabel ? (
-                                    <span className={styles.chainOpportunitySurge}>{boardChainOpportunity.comboSurgeLabel}</span>
+                                    <span
+                                        className={styles.chainOpportunitySurge}
+                                        data-chain-opportunity-surge="true"
+                                        data-testid="chain-opportunity-surge"
+                                    >
+                                        {boardChainOpportunity.comboSurgeLabel}
+                                    </span>
                                 ) : null}
                                 {boardChainOpportunity.selectedFollowupLabel ? (
                                     <span
