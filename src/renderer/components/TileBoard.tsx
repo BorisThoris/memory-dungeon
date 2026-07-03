@@ -4554,6 +4554,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             <div
                                 aria-label={boardOpportunityCompassLabel}
                                 className={styles.opportunityCompass}
+                                data-opportunity-compass-surge={boardChainOpportunity.comboSurgeLabel ? 'true' : 'false'}
                                 data-testid="board-opportunity-compass"
                                 role="group"
                             >
