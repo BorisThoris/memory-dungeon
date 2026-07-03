@@ -1231,6 +1231,43 @@ describe('GameplayHudBar', () => {
         );
     });
 
+    it('surfaces a combo surge band when multiple trait routes are live', () => {
+        const baseRun = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
+        const run = {
+            ...baseRun,
+            board: {
+                ...baseRun.board!,
+                tiles: [
+                    { ...baseRun.board!.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                    { ...baseRun.board!.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
+                    { ...baseRun.board!.tiles[2]!, pairKey: 'mirror', tileTraitKind: 'mirror' },
+                    { ...baseRun.board!.tiles[3]!, pairKey: 'conduit', tileTraitKind: 'conduit' }
+                ]
+            }
+        } as RunState;
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement=""
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-combo-shards')).toHaveAttribute('data-hud-combo-surge', 'true');
+        expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveAttribute(
+            'data-chain-combo-surge-band-tone',
+            'surge'
+        );
+        expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveTextContent('Combo surge');
+        expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveTextContent('routes');
+        expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveTextContent('Echo + Sealed');
+        expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveAccessibleName(
+            /Chain combo surge band\. Combo surge\..*routes\..*Echo \+ Sealed/i
+        );
+    });
+
     it('marks critical live action copy with the error tone', () => {
         const run = {
             ...finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false })),

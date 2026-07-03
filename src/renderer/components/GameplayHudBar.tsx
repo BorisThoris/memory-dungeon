@@ -1487,6 +1487,19 @@ const GameplayHudBar = ({
     const primaryRewardHotBandLabel = primaryRewardHotBand
         ? `Chain reward hot band. ${primaryRewardHotBand.label}. ${primaryRewardHotBand.value}. ${primaryRewardHotBand.detail}.`
         : undefined;
+    const chainComboSurgeBand =
+        traitOpportunityHud.active && traitOpportunityHud.routeCountLabel !== '1 route' && traitOpportunityHud.routeCountLabel !== 'setup'
+            ? {
+                  cue: traitOpportunityHud.primaryLine,
+                  detail: traitOpportunityHud.routeCountLabel,
+                  label: 'Combo surge',
+                  tone: 'surge' as const,
+                  value: traitOpportunityHud.buildLabel
+              }
+            : null;
+    const chainComboSurgeBandLabel = chainComboSurgeBand
+        ? `Chain combo surge band. ${chainComboSurgeBand.label}. ${chainComboSurgeBand.value}. ${chainComboSurgeBand.detail}. ${chainComboSurgeBand.cue}.`
+        : undefined;
     const findableProgressState = getFindableProgressState(
         run.findablesClaimedThisFloor,
         run.findablesTotalThisFloor
@@ -1752,6 +1765,7 @@ const GameplayHudBar = ({
                         <div
                             className={`${styles.hudSegment} ${styles.statPill} ${styles.hudShardsSegment}`}
                             data-primary-reward-hot={primaryRewardHot ? 'true' : 'false'}
+                            data-hud-combo-surge={chainComboSurgeBand ? 'true' : 'false'}
                             data-testid="hud-combo-shards"
                             title={resourceSegmentTitle}
                         >
@@ -2453,6 +2467,24 @@ const GameplayHudBar = ({
                                             >
                                                 <small>Reward hot</small>
                                                 <b>{primaryResourceRewardCue.label}</b>
+                                            </span>
+                                        ) : null}
+                                        {chainComboSurgeBand ? (
+                                            <span
+                                                aria-label={chainComboSurgeBandLabel}
+                                                className={styles.hudChainComboSurgeBand}
+                                                data-chain-combo-surge-band-tone={chainComboSurgeBand.tone}
+                                                data-testid="hud-chain-combo-surge-band"
+                                            >
+                                                <small>{chainComboSurgeBand.label}</small>
+                                                <b>{chainComboSurgeBand.value}</b>
+                                                <em>{chainComboSurgeBand.detail}</em>
+                                                <i>{chainComboSurgeBand.cue}</i>
+                                                <span aria-hidden="true" className={styles.hudChainComboSurgeBandBeatPips}>
+                                                    {Array.from({ length: 4 }, (_, beatIndex) => (
+                                                        <i data-chain-combo-surge-band-beat={beatIndex + 1} key={beatIndex} />
+                                                    ))}
+                                                </span>
                                             </span>
                                         ) : null}
                                         {primaryRewardHotBand ? (

@@ -7086,6 +7086,86 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
+.hudChainComboSurgeBand {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.06rem 0.2rem;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0.1rem 0.28rem 0.12rem;
+    border: 1px solid color-mix(in srgb, var(--theme-violet-bright) 54%, var(--theme-cyan-bright) 18%);
+    border-radius: var(--ui-radius-pill);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 72%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 12%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 90%, white);
+    font-size: 0.48rem;
+    font-weight: 980;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+    animation: hudRewardPulse 1.08s ease-in-out infinite;
+}
+
+.hudChainComboSurgeBand small,
+.hudChainComboSurgeBand b,
+.hudChainComboSurgeBand em,
+.hudChainComboSurgeBand i {
+    min-width: 0;
+    overflow: hidden;
+    font: inherit;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hudChainComboSurgeBand small {
+    padding: 0.07rem 0.18rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+}
+
+.hudChainComboSurgeBand b {
+    color: color-mix(in srgb, var(--theme-violet-bright) 92%, white);
+}
+
+.hudChainComboSurgeBand em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    font-size: 0.46rem;
+    font-style: normal;
+    font-weight: 880;
+}
+
+.hudChainComboSurgeBand i {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.46rem;
+    font-style: normal;
+    font-weight: 840;
+}
+
+.hudChainComboSurgeBandBeatPips {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: 0.09rem;
+    min-height: 0.2rem;
+}
+
+.hudChainComboSurgeBandBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-violet-bright) 28%, transparent);
+    animation: gameplayBeatPipPulse 0.86s ease-in-out infinite;
+    transform-origin: center;
+}
+
 .hudShardsSegment[data-primary-reward-hot='true'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-cyan-bright) 16%);
     background:
