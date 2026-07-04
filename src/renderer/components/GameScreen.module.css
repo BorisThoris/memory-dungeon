@@ -958,6 +958,18 @@
     opacity: 0.88;
 }
 
+.endlessRiskWagerPrimaryBeatPips i[data-risk-wager-primary-beat-focus='primary'] {
+    width: 0.42rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.5rem color-mix(in srgb, currentColor 50%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.endlessRiskWagerPrimaryBeatPips i[data-risk-wager-primary-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .endlessRiskWagerPrimaryCue[data-risk-wager-primary-tone='armed'] .endlessRiskWagerPrimaryBeatPips i {
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
     box-shadow: 0 0 9px color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
@@ -1030,6 +1042,18 @@
     box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
     animation: gameplayBeatPipPulse 0.92s ease-in-out infinite;
     transform-origin: center;
+}
+
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-focus='primary'] {
+    width: 0.42rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-focus='support'] {
+    opacity: 0.68;
 }
 
 .endlessRiskWagerSignals > span[data-risk-wager-signal-tone='reward'] {

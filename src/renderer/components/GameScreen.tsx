@@ -809,7 +809,11 @@ const RiskWagerPrimaryCueView = ({ cue }: { cue: RiskWagerPrimaryCue }) => (
         <strong>{cue.risk}</strong>
         <span aria-hidden="true" className={styles.endlessRiskWagerPrimaryBeatPips}>
             {Array.from({ length: cue.beatCount }, (_, index) => (
-                <i data-risk-wager-primary-beat={index + 1} key={index} />
+                <i
+                    data-risk-wager-primary-beat={index + 1}
+                    data-risk-wager-primary-beat-focus={index === 0 ? 'primary' : 'support'}
+                    key={index}
+                />
             ))}
         </span>
     </span>
@@ -837,7 +841,7 @@ const RiskWagerSignalRowsView = ({
                     <b>{row.value}</b>
                     <span aria-hidden="true" className={styles.endlessRiskWagerBeatPips}>
                         {Array.from({ length: beatCount }, (_, index) => (
-                            <i data-risk-wager-signal-beat="" key={index} />
+                            <i data-risk-wager-signal-beat={index + 1} data-risk-wager-signal-beat-focus={index === 0 ? 'primary' : 'support'} key={index} />
                         ))}
                     </span>
                 </span>

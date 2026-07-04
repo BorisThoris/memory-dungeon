@@ -5924,6 +5924,12 @@ describe('GameScreen (OVR-014)', () => {
         expect(getByTestId('endless-risk-wager-primary-cue')).toHaveTextContent('Wager available');
         expect(getByTestId('endless-risk-wager-primary-cue')).toHaveTextContent('Arm wager');
         expect(getByTestId('endless-risk-wager-primary-cue').querySelectorAll('[data-risk-wager-primary-beat]')).toHaveLength(3);
+        expect(
+            getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-focus', 'primary');
+        expect(
+            getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="2"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-focus', 'support');
         expect(getByTestId('endless-risk-wager-signals')).toHaveTextContent('x2 streak');
         expect(getByTestId('endless-risk-wager-signals')).toHaveTextContent('+2 Favor');
         expect(getByTestId('endless-risk-wager-signals')).toHaveTextContent('Next objective');
@@ -5953,6 +5959,16 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-risk-wager-signal-tone="reward"]')
                 ?.querySelectorAll('[data-risk-wager-signal-beat]')
         ).toHaveLength(4);
+        expect(
+            getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="reward"]')
+                ?.querySelector('[data-risk-wager-signal-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'primary');
+        expect(
+            getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="reward"]')
+                ?.querySelector('[data-risk-wager-signal-beat="2"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'support');
         fireEvent.click(
             getByRole('button', {
                 name: /Arm wager\. Stake: x2 streak\. Payoff: \+2 Favor\. Trigger: Next objective.*miss it and the streak breaks/i
@@ -6086,6 +6102,18 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-risk-wager-signal-tone="objective"]')
                 ?.querySelectorAll('[data-risk-wager-signal-beat]')
         ).toHaveLength(2);
+        expect(
+            screen
+                .getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="armed"]')
+                ?.querySelector('[data-risk-wager-signal-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="armed"]')
+                ?.querySelector('[data-risk-wager-signal-beat="2"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'support');
         expect(screen.getByTestId('endless-risk-wager-signals')).toHaveAttribute(
             'aria-label',
             'Risk wager decision signals. Armed: x2 streak. Payoff: +2 Favor. Trigger: Next objective.'
