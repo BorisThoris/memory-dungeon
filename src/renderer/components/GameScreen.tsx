@@ -4370,6 +4370,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 {Array.from({ length: boardFloaterJackpotCue.beatCount }, (_, index) => (
                                                     <i
                                                         data-match-jackpot-beat={index + 1}
+                                                        data-match-jackpot-beat-focus={index === 0 ? 'primary' : 'support'}
                                                         key={`match-jackpot-beat-${index + 1}`}
                                                     />
                                                 ))}
@@ -4392,6 +4393,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-match-impact-cue-beat={index + 1}
+                                                            data-match-impact-cue-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             key={`match-impact-cue-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4414,6 +4416,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     <i
                                                         aria-hidden
                                                         data-match-crescendo-beat={index + 1}
+                                                        data-match-crescendo-beat-focus={index === 0 ? 'primary' : 'support'}
                                                         key={`crescendo-beat-${index + 1}`}
                                                     />
                                                 ))}
@@ -4445,6 +4448,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-cascade-beat={index + 1}
+                                                            data-cascade-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             key={`cascade-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4475,6 +4479,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-chain-milestone-beat={index + 1}
+                                                            data-chain-milestone-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             key={`chain-milestone-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4503,6 +4508,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-reward-burst-beat={index + 1}
+                                                            data-reward-burst-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             key={`reward-burst-beat-${index + 1}`}
                                                         />
                                                     )

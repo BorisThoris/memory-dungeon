@@ -1842,6 +1842,12 @@ describe('GameScreen (OVR-014)', () => {
                 'Match crescendo Stack burst: 2 payoff lanes. 4 beats.'
             );
             expect(screen.getByTestId('match-score-floater-crescendo').querySelectorAll('[data-match-crescendo-beat]')).toHaveLength(4);
+            expect(
+                screen.getByTestId('match-score-floater-crescendo').querySelector('[data-match-crescendo-beat="1"]')
+            ).toHaveAttribute('data-match-crescendo-beat-focus', 'primary');
+            expect(
+                screen.getByTestId('match-score-floater-crescendo').querySelector('[data-match-crescendo-beat="2"]')
+            ).toHaveAttribute('data-match-crescendo-beat-focus', 'support');
             expect(screen.getByTestId('match-score-floater')).toHaveTextContent('Pickup');
             expect(screen.getByTestId('match-score-floater').querySelector('[data-floater-signal="pickup"]')).toHaveTextContent('Pickup');
             expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveTextContent('Stack cashout');
@@ -1849,12 +1855,26 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-beats', '4');
             expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-screen-cue', 'burst');
             expect(screen.getByTestId('match-score-floater-impact-cue').querySelectorAll('[data-match-impact-cue-beat]')).toHaveLength(4);
+            expect(
+                screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')
+            ).toHaveAttribute('data-match-impact-cue-beat-focus', 'primary');
+            expect(
+                screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="2"]')
+            ).toHaveAttribute('data-match-impact-cue-beat-focus', 'support');
             expect(screen.getByTestId('match-score-floater')).toHaveTextContent('+99');
             expect(screen.getByTestId('match-score-floater-cascade')).toHaveTextContent('Cascade');
             expect(screen.getByTestId('match-score-floater-cascade')).toHaveTextContent('reward cascade');
             expect(screen.getByTestId('match-score-floater-cascade')).toHaveAttribute('data-cascade-tier', 'reward');
             expect(screen.getByTestId('match-score-floater-cascade')).toHaveAttribute('data-cascade-beats', '4');
             expect(screen.getByTestId('match-score-floater-cascade').querySelectorAll('[data-cascade-beat]')).toHaveLength(4);
+            expect(screen.getByTestId('match-score-floater-cascade').querySelector('[data-cascade-beat="1"]')).toHaveAttribute(
+                'data-cascade-beat-focus',
+                'primary'
+            );
+            expect(screen.getByTestId('match-score-floater-cascade').querySelector('[data-cascade-beat="2"]')).toHaveAttribute(
+                'data-cascade-beat-focus',
+                'support'
+            );
             expect(screen.getByTestId('match-score-floater-cascade')).toHaveAccessibleName('Cascade: reward cascade');
             expect(screen.getByTestId('match-score-floater')).toHaveTextContent('x4 streak');
             expect(screen.getByTestId('match-score-floater')).toHaveTextContent('2 matches to x6');
@@ -1966,6 +1986,12 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-tier', 'stack');
             expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-beats', '4');
             expect(screen.getByTestId('match-score-floater-reward-burst').querySelectorAll('[data-reward-burst-beat]')).toHaveLength(4);
+            expect(
+                screen.getByTestId('match-score-floater-reward-burst').querySelector('[data-reward-burst-beat="1"]')
+            ).toHaveAttribute('data-reward-burst-beat-focus', 'primary');
+            expect(
+                screen.getByTestId('match-score-floater-reward-burst').querySelector('[data-reward-burst-beat="2"]')
+            ).toHaveAttribute('data-reward-burst-beat-focus', 'support');
             expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAccessibleName(
                 'Reward burst: Stack cashout: 2-way payoff'
             );
@@ -2434,6 +2460,14 @@ describe('GameScreen (OVR-014)', () => {
         expect(milestone).toHaveAttribute('data-chain-milestone-target', 'x6');
         expect(milestone).toHaveAttribute('data-chain-milestone-beats', '4');
         expect(milestone.querySelectorAll('[data-chain-milestone-beat]')).toHaveLength(4);
+        expect(milestone.querySelector('[data-chain-milestone-beat="1"]')).toHaveAttribute(
+            'data-chain-milestone-beat-focus',
+            'primary'
+        );
+        expect(milestone.querySelector('[data-chain-milestone-beat="2"]')).toHaveAttribute(
+            'data-chain-milestone-beat-focus',
+            'support'
+        );
         expect(milestone).toHaveAccessibleName('Chain milestone Surge hit: x6. Action: Push surge. Surge tier live. 4 beats.');
         expect(milestone).toHaveTextContent('Surge hit');
         expect(milestone).toHaveTextContent('x6');
@@ -2614,6 +2648,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-beats', '5');
         expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-screen-cue', 'burst');
         expect(screen.getByTestId('match-score-floater-impact-cue').querySelectorAll('[data-match-impact-cue-beat]')).toHaveLength(5);
+        expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
+            'data-match-impact-cue-beat-focus',
+            'primary'
+        );
         expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-crescendo-tier', 'super');
         expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-tier', 'super');
         expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-audio', 'match-jackpot-super');
@@ -2627,6 +2665,14 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-jackpot')).toHaveAttribute('data-match-jackpot-audio', 'match-jackpot-super');
         expect(screen.getByTestId('match-score-floater-jackpot')).toHaveAttribute('data-match-jackpot-screen-cue', 'super');
         expect(screen.getByTestId('match-score-floater-jackpot').querySelectorAll('[data-match-jackpot-beat]')).toHaveLength(5);
+        expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
+            'data-match-jackpot-beat-focus',
+            'primary'
+        );
+        expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="2"]')).toHaveAttribute(
+            'data-match-jackpot-beat-focus',
+            'support'
+        );
         expect(screen.getByTestId('match-score-floater-jackpot')).toHaveAccessibleName(
             'Super stack: Cash super stack: 4 payoffs: Route + Pickup + Trait + Chain. 5 beats.'
         );
@@ -2635,6 +2681,10 @@ describe('GameScreen (OVR-014)', () => {
             'Match crescendo Super burst: 4 payoff lanes. 5 beats.'
         );
         expect(screen.getByTestId('match-score-floater-crescendo').querySelectorAll('[data-match-crescendo-beat]')).toHaveLength(5);
+        expect(screen.getByTestId('match-score-floater-crescendo').querySelector('[data-match-crescendo-beat="1"]')).toHaveAttribute(
+            'data-match-crescendo-beat-focus',
+            'primary'
+        );
         expect(screen.getByTestId('action-feedback-rail')).toHaveAttribute('data-action-feedback-crescendo-tier', 'super');
         expect(screen.getByTestId('action-feedback-rail')).toHaveAttribute('data-action-feedback-crescendo-beats', '5');
         expect(screen.getByTestId('action-feedback-crescendo')).toHaveTextContent('Super burst');
@@ -2655,6 +2705,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-tier', 'mega');
         expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-beats', '5');
         expect(screen.getByTestId('match-score-floater-reward-burst').querySelectorAll('[data-reward-burst-beat]')).toHaveLength(5);
+        expect(screen.getByTestId('match-score-floater-reward-burst').querySelector('[data-reward-burst-beat="1"]')).toHaveAttribute(
+            'data-reward-burst-beat-focus',
+            'primary'
+        );
         expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAccessibleName(
             'Super stack: Cash super stack: 4-way payoff'
         );

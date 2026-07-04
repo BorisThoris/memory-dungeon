@@ -11800,6 +11800,24 @@
     opacity: 0.96;
 }
 
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-focus='primary'],
+.boardFloaterChainMilestoneBeatPips i[data-chain-milestone-beat-focus='primary'],
+.boardFloaterCascadeBeatPips i[data-cascade-beat-focus='primary'],
+.boardFloaterRewardBurstBeatPips i[data-reward-burst-beat-focus='primary'] {
+    min-width: 0.34rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.5rem color-mix(in srgb, currentColor 50%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-focus='support'],
+.boardFloaterChainMilestoneBeatPips i[data-chain-milestone-beat-focus='support'],
+.boardFloaterCascadeBeatPips i[data-cascade-beat-focus='support'],
+.boardFloaterRewardBurstBeatPips i[data-reward-burst-beat-focus='support'] {
+    opacity: 0.7;
+}
+
 .boardFloaterImpactCue[data-match-impact-cue-screen-cue='burst'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, white 8%);
     box-shadow:
@@ -11922,6 +11940,18 @@
     animation: gameplayBeatPipPulse 0.82s ease-in-out infinite;
 }
 
+.boardFloaterJackpotBeats i[data-match-jackpot-beat-focus='primary'] {
+    min-width: 0.4rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.62rem color-mix(in srgb, currentColor 52%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.boardFloaterJackpotBeats i[data-match-jackpot-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .boardFloaterJackpotCue[data-match-jackpot-tier='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 50%, transparent);
     background:
@@ -12011,6 +12041,18 @@
     background: currentColor;
     box-shadow: 0 0 0.45rem color-mix(in srgb, currentColor 34%, transparent);
     opacity: 0.72;
+}
+
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-focus='primary'] {
+    min-width: 0.38rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.58rem color-mix(in srgb, currentColor 50%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-focus='support'] {
+    opacity: 0.7;
 }
 
 .boardFloaterCrescendo[data-match-crescendo-tier='cashout'] {
