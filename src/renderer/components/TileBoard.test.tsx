@@ -1167,6 +1167,13 @@ describe('TileBoard touch and click controls', () => {
             'data-trait-interaction-lane-focus',
             'primary'
         );
+        expect(laneMap.querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-beats',
+            '2'
+        );
+        expect(
+            laneMap.querySelector('[data-trait-interaction-lane="shard"]')?.querySelectorAll('[data-trait-interaction-lane-beat]')
+        ).toHaveLength(2);
         expect(laneMap.querySelector('[data-trait-interaction-lane="guard"]')).toHaveAttribute(
             'data-trait-interaction-lane-focus',
             'support'
@@ -1238,6 +1245,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action', 'follow-up');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-recipes', 'Echo + Sealed');
         expect(screen.getByTestId('chain-opportunity-recipes')).toHaveTextContent('Echo + Sealed');
+        expect(screen.getByTestId('chain-opportunity-recipes').querySelectorAll('[data-chain-recipe-beat]')).toHaveLength(2);
+        expect(
+            screen.getByTestId('chain-opportunity-recipes').querySelector('[data-chain-recipe="Echo + Sealed"]')
+        ).toHaveAttribute('data-chain-recipe', 'Echo + Sealed');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAttribute(
             'data-card-action-primary',
             'follow-up'
@@ -1257,6 +1268,17 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAccessibleName(
             'Card action priority. Follow-up: 1. Route prime: 1'
         );
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
+        ).toHaveAttribute('data-chain-shot-map-count', '1');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
+                ?.querySelectorAll('[data-chain-shot-map-pip]')
+        ).toHaveLength(2);
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
+                ?.querySelector('[data-chain-shot-map-pip="1"]')
+        ).toHaveAttribute('data-chain-shot-map-pip-focus', 'primary');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-shot-map',
             'follow-up:1>build-lane:1'

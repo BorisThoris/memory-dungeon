@@ -4258,11 +4258,23 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityRecipe}
                                         data-testid="chain-opportunity-recipes"
                                     >
-                                        {boardChainRecipeChips.map((recipe) => (
-                                            <b data-chain-recipe={recipe} key={recipe}>
-                                                {recipe}
-                                            </b>
-                                        ))}
+                                        {boardChainRecipeChips.map((recipe) => {
+                                            const recipeBeatCount = Math.max(2, Math.min(5, recipe.split('+').length));
+                                            return (
+                                                <b data-chain-recipe={recipe} key={recipe}>
+                                                    {recipe}
+                                                    <span aria-hidden="true" className={styles.chainOpportunityRecipeBeatPips}>
+                                                        {Array.from({ length: recipeBeatCount }, (_, index) => (
+                                                            <i
+                                                                data-chain-recipe-beat={index + 1}
+                                                                data-chain-recipe-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                key={index}
+                                                            />
+                                                        ))}
+                                                    </span>
+                                                </b>
+                                            );
+                                        })}
                                     </span>
                                 ) : null}
                                 {boardTraitInteractionLaneMap.length > 0 ? (
@@ -4286,6 +4298,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-trait-interaction-lane={lane.id}
                                                 data-trait-interaction-lane-action={getTraitInteractionLaneAction(lane.id)}
                                                 data-trait-interaction-lane-count={lane.count}
+                                                data-trait-interaction-lane-beats={Math.max(2, Math.min(5, lane.count + 1))}
                                                 data-trait-interaction-lane-focus={
                                                     lane.id === primaryBoardTraitInteractionLane?.id
                                                         ? 'primary'
@@ -4296,6 +4309,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 <small>{lane.label}</small>
                                                 <b>{lane.count}</b>
                                                 <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
+                                                <span aria-hidden="true" className={styles.chainOpportunityTraitLaneMapBeatPips}>
+                                                    {Array.from({ length: Math.max(2, Math.min(5, lane.count + 1)) }, (_, index) => (
+                                                        <i
+                                                            data-trait-interaction-lane-beat={index + 1}
+                                                            data-trait-interaction-lane-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
+                                                    ))}
+                                                </span>
                                                 <em>{lane.cue}</em>
                                             </span>
                                         ))}
@@ -4395,7 +4417,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 <b>{row.shotLabel}</b>
                                                 <em>{row.count}</em>
                                                 <span aria-hidden="true" className={styles.chainOpportunityShotMapBeatPips}>
-                                                    {Array.from({ length: Math.max(1, Math.min(5, row.count)) }, (_, index) => (
+                                                    {Array.from({ length: Math.max(2, Math.min(5, row.count)) }, (_, index) => (
                                                         <i
                                                             data-chain-shot-map-pip={index + 1}
                                                             data-chain-shot-map-pip-focus={index === 0 ? 'primary' : 'support'}
