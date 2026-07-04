@@ -728,6 +728,18 @@
     animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
 }
 
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-focus='primary'] {
+    width: 0.42rem;
+    background: color-mix(in srgb, white 12%, currentColor 88%);
+    box-shadow:
+        0 0 0.58rem color-mix(in srgb, currentColor 52%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-focus='support'] {
+    opacity: 0.72;
+}
+
 .chainOpportunityBeat i:nth-child(2) {
     animation-delay: 0.07s;
 }

@@ -461,6 +461,13 @@ describe('TileBoard touch and click controls', () => {
             'Cashout beat: Cash out. 5 beats. Match lit route for reward.'
         );
         expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('i')).toHaveLength(5);
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('i')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-focus',
+            'primary'
+        );
+        expect(
+            screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="2"]')
+        ).toHaveAttribute('data-chain-opportunity-beat-pip-focus', 'support');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action', 'cashout');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Do next: cashout');

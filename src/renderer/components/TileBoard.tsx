@@ -4115,7 +4115,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <strong>
                                             {Array.from({ length: boardChainOpportunity.beatSignal.beatCount }).map(
                                                 (_, index) => (
-                                                    <i aria-hidden="true" key={`chain-opportunity-beat-${index}`} />
+                                                    <i
+                                                        aria-hidden="true"
+                                                        data-chain-opportunity-beat-pip={index + 1}
+                                                        data-chain-opportunity-beat-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={`chain-opportunity-beat-${index}`}
+                                                    />
                                                 )
                                             )}
                                         </strong>
