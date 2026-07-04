@@ -502,6 +502,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-marker-intensity')).toHaveTextContent('2');
         expect(screen.getByTestId('chain-marker-intensity')).toHaveTextContent('Stack');
         expect(screen.getByTestId('chain-marker-intensity')).toHaveTextContent('Cash stack');
+        expect(
+            screen.getByTestId('chain-marker-intensity').querySelectorAll('[data-chain-marker-intensity-pip]')
+        ).toHaveLength(3);
+        expect(
+            screen.getByTestId('chain-marker-intensity').querySelector('[data-chain-marker-intensity-pip="1"]')
+        ).toHaveAttribute('data-chain-marker-intensity-pip-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAccessibleName(
             'Chain marker key. Route: oo. Action: Match route. Payoff: =+. Action: Cash now. Stack: **. Action: Cash stack. Intensity: Stack 2. Action: Cash stack'
         );
@@ -2485,6 +2491,11 @@ describe('TileBoard touch and click controls', () => {
             'Swap Sealed with Filler: Sealed + Heavy: score surge'
         );
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tone', 'setup');
+        expect(screen.getByTestId('trait-mode-cue').querySelectorAll('[data-trait-mode-beat]')).toHaveLength(2);
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-focus',
+            'primary'
+        );
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Route prime');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-heat', 'prime');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-beats', '3');

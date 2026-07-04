@@ -2009,6 +2009,36 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
 }
 
+.chainOpportunityMarkerIntensityPips {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 0.05rem;
+    min-width: 0;
+    height: 0.16rem;
+}
+
+.chainOpportunityMarkerIntensityPips i {
+    display: block;
+    width: 0.13rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 76%, white);
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityMarkerIntensityPips i[data-chain-marker-intensity-pip-focus='primary'] {
+    width: 0.26rem;
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityMarkerIntensityPips i[data-chain-marker-intensity-pip-focus='support'] {
+    opacity: 0.7;
+}
+
 .chainOpportunityActionPriority {
     display: inline-flex;
     align-items: center;
@@ -5172,6 +5202,34 @@
     font-weight: 950;
     line-height: 1.08;
     white-space: nowrap;
+}
+
+.traitModeCueBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    min-width: 0;
+}
+
+.traitModeCueBeatPips i {
+    display: block;
+    width: 0.14rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.traitModeCueBeatPips i[data-trait-mode-beat-focus='primary'] {
+    width: 0.28rem;
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.traitModeCueBeatPips i[data-trait-mode-beat-focus='support'] {
+    opacity: 0.7;
 }
 
 .traitModeCue small {

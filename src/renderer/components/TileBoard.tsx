@@ -4359,6 +4359,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 <b aria-hidden="true">{chainMarkerIntensity.count}</b>
                                                 <small>{chainMarkerIntensity.label}</small>
                                                 <em>{chainMarkerIntensity.action}</em>
+                                                <span aria-hidden="true" className={styles.chainOpportunityMarkerIntensityPips}>
+                                                    {Array.from({ length: Math.max(2, Math.min(5, chainMarkerIntensity.count + 1)) }, (_, index) => (
+                                                        <i
+                                                            data-chain-marker-intensity-pip={index + 1}
+                                                            data-chain-marker-intensity-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
+                                                    ))}
+                                                </span>
                                             </span>
                                         ) : null}
                                     </span>
@@ -4892,6 +4901,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             >
                                 <span>{boardTraitModeCue.label}</span>
                                 <strong>{boardTraitModeCue.value}</strong>
+                                <span aria-hidden="true" className={styles.traitModeCueBeatPips}>
+                                    {Array.from(
+                                        {
+                                            length:
+                                                boardTraitModeCue.tone === 'cashout' || boardTraitModeCue.tone === 'surge'
+                                                    ? 5
+                                                    : boardTraitModeCue.tone === 'ready'
+                                                      ? 3
+                                                      : 2
+                                        },
+                                        (_, index) => (
+                                            <i
+                                                data-trait-mode-beat={index + 1}
+                                                data-trait-mode-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                key={index}
+                                            />
+                                        )
+                                    )}
+                                </span>
                                 <small>{boardTraitModeCue.detail}</small>
                             </div>
                         ) : null}
