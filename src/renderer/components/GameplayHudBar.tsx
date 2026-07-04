@@ -2735,6 +2735,9 @@ const GameplayHudBar = ({
                                                             {Array.from({ length: recentActionImpactBeatCount }, (_, beatIndex) => (
                                                                 <i
                                                                     data-hud-action-impact-beat={beatIndex + 1}
+                                                                    data-hud-action-impact-beat-focus={
+                                                                        beatIndex === 0 ? 'primary' : 'support'
+                                                                    }
                                                                     key={`${recentActionImpactCue}-beat-${beatIndex + 1}`}
                                                                 />
                                                             ))}
@@ -2751,6 +2754,9 @@ const GameplayHudBar = ({
                                                             {Array.from({ length: recentActionImpactBeatCount }, (_, beatIndex) => (
                                                                 <i
                                                                     data-hud-action-stack-beat={beatIndex + 1}
+                                                                    data-hud-action-stack-beat-focus={
+                                                                        beatIndex === 0 ? 'primary' : 'support'
+                                                                    }
                                                                     key={`${recentActionImpact.burstTier}-stack-beat-${beatIndex + 1}`}
                                                                 />
                                                             ))}

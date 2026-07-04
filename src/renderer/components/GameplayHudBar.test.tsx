@@ -403,6 +403,12 @@ describe('GameplayHudBar', () => {
             'data-hud-action-impact-screen-cue',
             'burst'
         );
+        expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-beat="1"]')
+        ).toHaveAttribute('data-hud-action-impact-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-beat="2"]')
+        ).toHaveAttribute('data-hud-action-impact-beat-focus', 'support');
         expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-action-feedback-detail="trait"]')).toHaveTextContent('Trait surge');
 
         rerender(
@@ -452,12 +458,18 @@ describe('GameplayHudBar', () => {
         expect(
             screen.getByTestId('hud-recent-action-impact').querySelectorAll('[data-hud-action-impact-beat]')
         ).toHaveLength(4);
+        expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-beat="1"]')
+        ).toHaveAttribute('data-hud-action-impact-beat-focus', 'primary');
         expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-stack="combo"]')).toHaveTextContent('4x combo');
         expect(screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-stack="combo"]')).toHaveAttribute(
             'data-hud-action-stack-beats',
             '4'
         );
         expect(screen.getByTestId('hud-recent-action-impact').querySelectorAll('[data-hud-action-stack-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-stack-beat="1"]')
+        ).toHaveAttribute('data-hud-action-stack-beat-focus', 'primary');
         expect(screen.getByTestId('hud-recent-action-impact')).toHaveTextContent('Chain x5');
         expect(screen.getByTestId('hud-recent-action-impact')).toHaveTextContent('Shard cashout');
         expect(screen.getByTestId('hud-recent-action-impact')).toHaveTextContent('Pickup');

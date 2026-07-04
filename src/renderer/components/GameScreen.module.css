@@ -8447,6 +8447,15 @@
     opacity: 0.76;
 }
 
+.hudRecentActionBeatPips i[data-hud-action-impact-beat-focus='primary'],
+.hudRecentActionBeatPips i[data-hud-action-stack-beat-focus='primary'] {
+    width: 0.36rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, currentColor 46%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+}
+
 .hudRecentActionImpact > span[data-hud-action-stack='combo'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 40%, var(--theme-gold-bright));
     background:
