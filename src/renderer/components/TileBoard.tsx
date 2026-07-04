@@ -5362,6 +5362,30 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         }
                                         data-testid="board-opportunity-lane-map"
                                     >
+                                        <span
+                                            className={styles.opportunityLaneMapSummary}
+                                            data-testid="board-opportunity-lane-map-summary"
+                                        >
+                                            <small>Lanes</small>
+                                            <b>
+                                                {boardOpportunityLaneMapRows.length}{' '}
+                                                {boardOpportunityLaneMapRows.length === 1 ? 'lane' : 'lanes'}
+                                            </b>
+                                            <span aria-hidden="true" className={styles.opportunityLaneMapSummaryBeatPips}>
+                                                {Array.from(
+                                                    { length: Math.max(2, Math.min(5, boardOpportunityLaneMapRows.length + 1)) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-opportunity-lane-map-summary-beat={index + 1}
+                                                            data-opportunity-lane-map-summary-beat-focus={
+                                                                index === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
                                         {primaryBoardOpportunityLane ? (
                                             <span
                                                 aria-label={`Primary opportunity lane. ${primaryBoardOpportunityLane.label}: ${primaryBoardOpportunityLane.action}. ${primaryBoardOpportunityLane.cue}. ${boardOpportunityLaneBeatCount(primaryBoardOpportunityLane)} beats.`}

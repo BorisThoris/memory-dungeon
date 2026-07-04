@@ -1643,6 +1643,16 @@ describe('TileBoard touch and click controls', () => {
             'data-opportunity-primary-lane-screen-cue',
             'pulse'
         );
+        expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveTextContent('Lanes');
+        expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveTextContent('2 lanes');
+        expect(
+            screen.getByTestId('board-opportunity-lane-map-summary').querySelectorAll('[data-opportunity-lane-map-summary-beat]')
+        ).toHaveLength(3);
+        expect(
+            screen
+                .getByTestId('board-opportunity-lane-map-summary')
+                .querySelector('[data-opportunity-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-opportunity-lane-map-summary-beat-focus', 'primary');
         expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAccessibleName(
             'Primary opportunity lane. Build: Prime build. Prime cashout. 3 beats.'
         );
@@ -3191,6 +3201,8 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Risk');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Reduce risk');
+        expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveTextContent('Lanes');
+        expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveTextContent('1 lane');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('Scout');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('Avoid penalty');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('2 hazards');
