@@ -2634,6 +2634,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             selectedTraitFollowupTileIds.length
         ]
     );
+    const focusedChainMarkerShape = useMemo(() => {
+        const markerIds = new Set(boardChainMarkerKeyRows.map((row) => row.id));
+        const preferred =
+            chainMarkerIntensity?.id === 'stack' || chainMarkerIntensity?.id === 'cashout'
+                ? ['payoff-stack', 'payoff-bar']
+                : chainMarkerIntensity?.id === 'ready'
+                  ? ['followup-target', 'linked-route']
+                  : chainMarkerIntensity?.id === 'surge'
+                    ? ['combo-surge', 'linked-route']
+                    : chainMarkerIntensity?.id === 'setup'
+                      ? ['swap-target-crossbar', 'linked-route']
+                      : ['perk-armed-bar', 'linked-route'];
+
+        return preferred.find((id) => markerIds.has(id as (typeof boardChainMarkerKeyRows)[number]['id'])) ?? 'none';
+    }, [boardChainMarkerKeyRows, chainMarkerIntensity?.id]);
     const boardChainRecipeChips = useMemo(
         () =>
             [
@@ -4198,11 +4213,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             .filter((row): row is string => row != null)
                                             .join('. ')}`}
                                         className={styles.chainOpportunityMarkerKey}
+                                        data-chain-marker-focused-shape={focusedChainMarkerShape}
                                         data-chain-marker-intensity={chainMarkerIntensity?.id ?? 'none'}
                                         data-testid="chain-opportunity-marker-key"
                                     >
                                         {boardChainMarkerKeyRows.map((row) => (
-                                            <span data-chain-marker-shape={row.id} key={row.id}>
+                                            <span
+                                                data-chain-marker-focus={row.id === focusedChainMarkerShape ? 'primary' : 'support'}
+                                                data-chain-marker-shape={row.id}
+                                                key={row.id}
+                                            >
                                                 <b aria-hidden="true">{row.glyph}</b>
                                                 <small>{row.label}</small>
                                                 <em>{row.action}</em>

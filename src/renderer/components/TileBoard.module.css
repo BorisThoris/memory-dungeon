@@ -1684,6 +1684,23 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
 }
 
+.chainOpportunityMarkerKey > span[data-chain-marker-focus='primary'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-cyan-bright) 18%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 72%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 0.66rem color-mix(in srgb, var(--theme-gold-bright) 15%, transparent);
+}
+
+.chainOpportunityMarkerKey > span[data-chain-marker-focus='primary'] b,
+.chainOpportunityMarkerKey > span[data-chain-marker-focus='primary'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-focus='primary'] em {
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] small,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] em {
