@@ -623,6 +623,29 @@
     transform-origin: left center;
 }
 
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityBeat {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 38%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+}
+
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityBeat b,
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityBeat em {
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityBeat i[data-chain-opportunity-beat-pip-focus='primary'] {
+    width: 0.44rem;
+    background: color-mix(in srgb, white 14%, currentColor 86%);
+    box-shadow:
+        0 0 0.62rem color-mix(in srgb, currentColor 58%, transparent),
+        0 0 0 1px color-mix(in srgb, white 20%, transparent);
+}
+
 .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, var(--theme-cyan-bright) 18%);
     background:
