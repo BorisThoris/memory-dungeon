@@ -582,6 +582,16 @@ describe('TileBoard touch and click controls', () => {
             'data-board-chain-reward-ladder-focus',
             'soon'
         );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('Rewards');
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('3 rewards');
+        expect(
+            screen.getByTestId('chain-opportunity-reward-ladder-summary').querySelectorAll('[data-board-chain-reward-summary-beat]')
+        ).toHaveLength(4);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-reward-ladder-summary')
+                .querySelector('[data-board-chain-reward-summary-beat="1"]')
+        ).toHaveAttribute('data-board-chain-reward-summary-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAccessibleName(
             'Board reward ladder. Prime: Prime cashout: x6 +1 shard. 0/2. 2 matches left. Hold streak: x8 +1 guard. 0/4. 4 matches left. Hold streak: x8 +1 life. 4/8. 4 matches left.'
         );

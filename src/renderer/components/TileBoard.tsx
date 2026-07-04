@@ -4719,6 +4719,33 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-board-chain-reward-hot-band={boardChainHotBand?.tone ?? 'none'}
                                         data-testid="chain-opportunity-reward-ladder"
                                     >
+                                        <span
+                                            className={styles.chainOpportunityRewardLadderSummary}
+                                            data-testid="chain-opportunity-reward-ladder-summary"
+                                        >
+                                            <small>Rewards</small>
+                                            <b>
+                                                {boardRewardLadder.length}{' '}
+                                                {boardRewardLadder.length === 1 ? 'reward' : 'rewards'}
+                                            </b>
+                                            <span
+                                                aria-hidden="true"
+                                                className={styles.chainOpportunityRewardLadderSummaryBeatPips}
+                                            >
+                                                {Array.from(
+                                                    { length: Math.max(2, Math.min(5, boardRewardLadder.length + 1)) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-board-chain-reward-summary-beat={index + 1}
+                                                            data-board-chain-reward-summary-beat-focus={
+                                                                index === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
                                         {boardRewardLadder.map((entry) => (
                                             <span
                                                 data-board-chain-reward-action={entry.action}
