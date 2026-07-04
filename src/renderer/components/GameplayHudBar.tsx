@@ -2476,6 +2476,8 @@ const GameplayHudBar = ({
                                             <span
                                                 aria-label={chainComboSurgeBandLabel}
                                                 className={styles.hudChainComboSurgeBand}
+                                                data-chain-combo-surge-band-beats={4}
+                                                data-chain-combo-surge-band-screen-cue="burst"
                                                 data-chain-combo-surge-band-tone={chainComboSurgeBand.tone}
                                                 data-testid="hud-chain-combo-surge-band"
                                             >
@@ -2485,7 +2487,13 @@ const GameplayHudBar = ({
                                                 <i>{chainComboSurgeBand.cue}</i>
                                                 <span aria-hidden="true" className={styles.hudChainComboSurgeBandBeatPips}>
                                                     {Array.from({ length: 4 }, (_, beatIndex) => (
-                                                        <i data-chain-combo-surge-band-beat={beatIndex + 1} key={beatIndex} />
+                                                        <i
+                                                            data-chain-combo-surge-band-beat={beatIndex + 1}
+                                                            data-chain-combo-surge-band-beat-focus={
+                                                                beatIndex === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={beatIndex}
+                                                        />
                                                     ))}
                                                 </span>
                                             </span>

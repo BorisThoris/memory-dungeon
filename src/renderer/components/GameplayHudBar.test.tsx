@@ -1277,9 +1277,23 @@ describe('GameplayHudBar', () => {
             'data-chain-combo-surge-band-tone',
             'surge'
         );
+        expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveAttribute(
+            'data-chain-combo-surge-band-beats',
+            '4'
+        );
+        expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveAttribute(
+            'data-chain-combo-surge-band-screen-cue',
+            'burst'
+        );
         expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveTextContent('Combo surge');
         expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveTextContent('routes');
         expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveTextContent('Echo + Sealed');
+        expect(
+            screen.getByTestId('hud-chain-combo-surge-band').querySelectorAll('[data-chain-combo-surge-band-beat]')
+        ).toHaveLength(4);
+        expect(
+            screen.getByTestId('hud-chain-combo-surge-band').querySelector('[data-chain-combo-surge-band-beat="1"]')
+        ).toHaveAttribute('data-chain-combo-surge-band-beat-focus', 'primary');
         expect(screen.getByTestId('hud-chain-combo-surge-band')).toHaveAccessibleName(
             /Chain combo surge band\. Combo surge\..*routes\..*Echo \+ Sealed/i
         );

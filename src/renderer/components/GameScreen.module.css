@@ -7185,6 +7185,21 @@
     transform-origin: center;
 }
 
+.hudChainComboSurgeBand[data-chain-combo-surge-band-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 62%, var(--theme-gold-bright) 18%);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 16%, transparent),
+        0 0 1.08rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+}
+
+.hudChainComboSurgeBandBeatPips i[data-chain-combo-surge-band-beat-focus='primary'] {
+    width: 0.42rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 78%, white 10%);
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 38%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+}
+
 .hudShardsSegment[data-primary-reward-hot='true'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-cyan-bright) 16%);
     background:
