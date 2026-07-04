@@ -2458,6 +2458,18 @@
     box-shadow: 0 0 8px color-mix(in srgb, currentColor 26%, transparent);
 }
 
+.chainOpportunityTraitLaneBeatPips i[data-card-trait-lane-beat-pip-focus='primary'] {
+    min-width: 0.34rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.46rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.chainOpportunityTraitLaneBeatPips i[data-card-trait-lane-beat-pip-focus='support'] {
+    opacity: 0.68;
+}
+
 .chainOpportunityTraitLaneBeatPips i:nth-child(2) {
     animation-delay: 0.07s;
 }

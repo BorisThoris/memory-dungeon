@@ -1029,9 +1029,21 @@ describe('TileBoard touch and click controls', () => {
         expect(
             shardLaneBeat?.querySelectorAll('[data-card-trait-lane-beat-pip]')
         ).toHaveLength(4);
+        expect(shardLaneBeat?.querySelector('[data-card-trait-lane-beat-pip="1"]')).toHaveAttribute(
+            'data-card-trait-lane-beat-pip-focus',
+            'primary'
+        );
+        expect(shardLaneBeat?.querySelector('[data-card-trait-lane-beat-pip="2"]')).toHaveAttribute(
+            'data-card-trait-lane-beat-pip-focus',
+            'support'
+        );
         expect(
             guardLaneBeat?.querySelectorAll('[data-card-trait-lane-beat-pip]')
         ).toHaveLength(3);
+        expect(guardLaneBeat?.querySelector('[data-card-trait-lane-beat-pip="1"]')).toHaveAttribute(
+            'data-card-trait-lane-beat-pip-focus',
+            'primary'
+        );
         expect(laneBeatMap).toHaveAccessibleName(
             'Trait lane beat map. Shard: 1. 4-beat Cash shard. Guard: 1. 3-beat Protect run. Recall: 1. 3-beat Set memory.'
         );
