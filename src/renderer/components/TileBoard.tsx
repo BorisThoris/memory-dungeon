@@ -5138,8 +5138,30 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         />
                                     ))}
                                 </span>
-                                <small data-active-power-step="first">First: {activePowerBoardChip.first}</small>
-                                <small data-active-power-step="then">Then: {activePowerBoardChip.then}</small>
+                                <small data-active-power-step="first">
+                                    First: {activePowerBoardChip.first}
+                                    <span aria-hidden="true" className={styles.activePowerBoardStepBeatPips}>
+                                        {Array.from({ length: 2 }, (_, index) => (
+                                            <i
+                                                data-active-power-step-beat={index + 1}
+                                                data-active-power-step-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                key={`active-power-step-first-${index + 1}`}
+                                            />
+                                        ))}
+                                    </span>
+                                </small>
+                                <small data-active-power-step="then">
+                                    Then: {activePowerBoardChip.then}
+                                    <span aria-hidden="true" className={styles.activePowerBoardStepBeatPips}>
+                                        {Array.from({ length: 2 }, (_, index) => (
+                                            <i
+                                                data-active-power-step-beat={index + 1}
+                                                data-active-power-step-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                key={`active-power-step-then-${index + 1}`}
+                                            />
+                                        ))}
+                                    </span>
+                                </small>
                             </div>
                         ) : null}
                         {boardPickupOpportunity.count > 0 ? (
