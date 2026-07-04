@@ -908,6 +908,25 @@ export const GameScreenActionFeedbackRail = ({
                     data-action-feedback-primary-lane-screen-cue={primaryLane ? actionFeedbackLaneScreenCue(primaryLane) : 'none'}
                     data-testid="action-feedback-lane-map"
                 >
+                    <span
+                        className={styles.actionFeedbackLaneMapSummary}
+                        data-action-feedback-lane-count={laneMap.length}
+                        data-testid="action-feedback-lane-map-summary"
+                    >
+                        <small>Lanes</small>
+                        <b>
+                            {laneMap.length} {laneMap.length === 1 ? 'lane' : 'lanes'}
+                        </b>
+                        <span aria-hidden="true" className={styles.actionFeedbackLaneMapSummaryBeatPips}>
+                            {Array.from({ length: Math.max(2, Math.min(5, laneMap.length + 1)) }, (_, beatIndex) => (
+                                <i
+                                    data-action-feedback-lane-map-summary-beat={beatIndex + 1}
+                                    data-action-feedback-lane-map-summary-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                    key={beatIndex}
+                                />
+                            ))}
+                        </span>
+                    </span>
                     {primaryLane ? (
                         <span
                             aria-label={`Primary feedback lane. ${primaryLane.label}: ${primaryLane.action}. ${primaryLane.cue}. ${actionFeedbackLaneBeatCount(primaryLane)} beats.`}

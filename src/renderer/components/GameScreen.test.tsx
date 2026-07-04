@@ -542,6 +542,13 @@ describe('GameScreen (OVR-014)', () => {
             'data-action-feedback-lane-actions',
             'cash:Cash now:2>route:Route next:1>chain:Protect streak:1'
         );
+        const laneMapSummary = screen.getByTestId('action-feedback-lane-map-summary');
+        expect(laneMapSummary).toHaveTextContent('Lanes');
+        expect(laneMapSummary).toHaveTextContent('3 lanes');
+        expect(laneMapSummary.querySelectorAll('[data-action-feedback-lane-map-summary-beat]')).toHaveLength(4);
+        expect(
+            laneMapSummary.querySelector('[data-action-feedback-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-action-feedback-lane-map-summary-beat-focus', 'primary');
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute('data-action-feedback-primary-lane', 'cash');
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
             'data-action-feedback-primary-lane-action',
