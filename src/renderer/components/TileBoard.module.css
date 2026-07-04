@@ -3407,6 +3407,45 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
 }
 
+.chainOpportunityMomentumBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.06rem;
+    min-width: 0;
+    margin-left: auto;
+}
+
+.chainOpportunityMomentumBeatPips i {
+    display: block;
+    width: 0.16rem;
+    height: 0.16rem;
+    border-radius: 999px;
+    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-success) 82%, white);
+    box-shadow: 0 0 0.35rem color-mix(in srgb, var(--theme-success) 24%, transparent);
+}
+
+.chainOpportunityMomentumBeatPips i[data-chain-momentum-beat-focus='primary'] {
+    width: 0.28rem;
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, currentColor 36%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityMomentumBeatPips i[data-chain-momentum-beat-focus='support'] {
+    opacity: 0.68;
+}
+
+.chainOpportunityMomentum[data-chain-momentum-beats='4'] .chainOpportunityMomentumBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+    box-shadow: 0 0 0.35rem color-mix(in srgb, var(--theme-violet-bright) 24%, transparent);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-beats='5'] .chainOpportunityMomentumBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    box-shadow: 0 0 0.35rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
 .activePowerBoardChip {
     position: absolute;
     top: var(--ui-space-xs);

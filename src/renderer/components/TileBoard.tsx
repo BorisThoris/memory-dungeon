@@ -2752,6 +2752,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
               boardChainHotBand.cue
           ])
         : undefined;
+    const boardChainMomentumBeatCount: 2 | 3 | 4 | 5 = boardChainOpportunity.rewardHot
+        ? 5
+        : boardChainOpportunity.comboSurgeLabel
+          ? 4
+          : boardChainOpportunity.selectedFollowupCount > 0
+            ? 3
+            : boardChainOpportunity.chainReadyCount > 0
+              ? 3
+              : 2;
     const boardChainSurgeBand = boardChainOpportunity.comboSurgeLabel
         ? {
               cue: boardChainOpportunity.cue || 'Route prime',
@@ -4742,9 +4751,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.momentumLabel || boardChainOpportunity.chaseLabel ? (
-                                    <span className={styles.chainOpportunityMomentum}>
+                                    <span
+                                        className={styles.chainOpportunityMomentum}
+                                        data-chain-momentum-beats={boardChainMomentumBeatCount}
+                                    >
                                         {boardChainOpportunity.momentumLabel ? <b>{boardChainOpportunity.momentumLabel}</b> : null}
                                         {boardChainOpportunity.chaseLabel ? <small>{boardChainOpportunity.chaseLabel}</small> : null}
+                                        <span aria-hidden="true" className={styles.chainOpportunityMomentumBeatPips}>
+                                            {Array.from({ length: boardChainMomentumBeatCount }, (_, index) => (
+                                                <i
+                                                    data-chain-momentum-beat={index + 1}
+                                                    data-chain-momentum-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                            ))}
+                                        </span>
                                     </span>
                                 ) : null}
                                 <span className={styles.chainOpportunityLines}>

@@ -607,6 +607,20 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('x4 streak');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('1 match to reward');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')).toHaveTextContent(
+            'x4 streak'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')).toHaveTextContent(
+            '1 match to reward'
+        );
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')
+                ?.querySelectorAll('[data-chain-momentum-beat]')
+        ).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')
+                ?.querySelector('[data-chain-momentum-beat="1"]')
+        ).toHaveAttribute('data-chain-momentum-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Hot lane');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Reward hot');
