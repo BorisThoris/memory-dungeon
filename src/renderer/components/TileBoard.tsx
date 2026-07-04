@@ -5194,9 +5194,28 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 className={styles.opportunityCompass}
                                 data-opportunity-compass-hot={boardChainHotBand?.tone ?? 'none'}
                                 data-opportunity-compass-surge={boardChainOpportunity.comboSurgeLabel ? 'true' : 'false'}
+                                data-opportunity-compass-beats={boardOpportunityCompassRows.length}
                                 data-testid="board-opportunity-compass"
                                 role="group"
                             >
+                                {boardOpportunityCompassRows.length > 1 ? (
+                                    <span className={styles.opportunityCompassSummary} data-testid="board-opportunity-compass-summary">
+                                        <small>Compass</small>
+                                        <b>{boardOpportunityCompassRows.length} plays</b>
+                                        <span aria-hidden="true" className={styles.opportunityCompassSummaryBeatPips}>
+                                            {Array.from(
+                                                { length: Math.max(2, Math.min(5, boardOpportunityCompassRows.length + 1)) },
+                                                (_, index) => (
+                                                    <i
+                                                        data-opportunity-compass-summary-beat={index + 1}
+                                                        data-opportunity-compass-summary-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                )
+                                            )}
+                                        </span>
+                                    </span>
+                                ) : null}
                                 {boardPayoffStack ? (
                                     <span
                                         aria-label={`Board payoff stack. ${boardPayoffStack.cue}. ${boardPayoffStack.action}. ${boardPayoffStack.value}. ${boardPayoffStack.detail}. Crescendo: ${boardPayoffStack.crescendo.label}. ${boardPayoffStack.crescendo.detail}. ${boardPayoffStack.crescendo.beatCount} beats. ${boardPayoffStack.nextCue}.${

@@ -1890,6 +1890,13 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-beats', '5');
         expect(screen.getByTestId('board-opportunity-chain').querySelectorAll('[data-opportunity-beat]')).toHaveLength(5);
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Super stack');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-beats', '3');
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('Compass');
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('3 plays');
+        expect(screen.getByTestId('board-opportunity-compass-summary').querySelectorAll('[data-opportunity-compass-summary-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('board-opportunity-compass-summary').querySelector('[data-opportunity-compass-summary-beat="1"]')
+        ).toHaveAttribute('data-opportunity-compass-summary-beat-focus', 'primary');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Super stack');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Cash super stack');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-audio', 'super-burst');

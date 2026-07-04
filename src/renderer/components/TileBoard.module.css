@@ -4350,6 +4350,75 @@
     pointer-events: none;
 }
 
+.opportunityCompassSummary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.12rem;
+    min-width: 0;
+    margin-right: 0.08rem;
+    padding: 0.16rem 0.36rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
+    border-radius: 0.34rem;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    font-size: 0.54rem;
+    font-weight: 940;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.opportunityCompassSummary small,
+.opportunityCompassSummary b {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.opportunityCompassSummary small {
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.48rem;
+    font-weight: 920;
+}
+
+.opportunityCompassSummary b {
+    color: currentColor;
+    font-size: 0.56rem;
+    font-weight: 980;
+}
+
+.opportunityCompassSummaryBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.04rem;
+    margin-left: 0.1rem;
+}
+
+.opportunityCompassSummaryBeatPips i {
+    display: block;
+    width: 0.1rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 70%, white);
+    box-shadow: 0 0 0.14rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-focus='primary'] {
+    width: 0.2rem;
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-focus='support'] {
+    opacity: 0.64;
+}
+
 .opportunityCompass[data-opportunity-compass-surge='true'] {
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
