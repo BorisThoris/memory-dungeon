@@ -3659,6 +3659,30 @@
     text-transform: uppercase;
 }
 
+.opportunityPayoffStack [data-payoff-stack-sequence-step='then'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='cashout'] [data-payoff-stack-sequence-step='then'],
+.opportunityPayoffStack[data-payoff-stack-crescendo-tier='super'] [data-payoff-stack-sequence-step='then'] {
+    padding: 0.1rem 0.34rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 18%);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 20%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    box-shadow: 0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.opportunityPayoffStack[data-payoff-stack-crescendo-tier='super'] [data-payoff-stack-sequence-step='then'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-violet-bright) 20%);
+    color: color-mix(in srgb, var(--theme-gold-bright) 96%, white);
+    box-shadow:
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-violet-bright) 10%, transparent);
+}
+
 .opportunityLaneMap {
     display: flex;
     flex: 1 0 100%;

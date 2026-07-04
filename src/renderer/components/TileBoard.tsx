@@ -4669,8 +4669,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </strong>
                                             <em>{boardPayoffStack.crescendo.detail}</em>
                                         </span>
-                                        <em>{boardPayoffStack.nextCue}</em>
-                                        {boardPayoffStack.sequenceCue ? <i>{boardPayoffStack.sequenceCue}</i> : null}
+                                        <em data-payoff-stack-sequence-step="first">{boardPayoffStack.nextCue}</em>
+                                        {boardPayoffStack.sequenceCue ? (
+                                            <i data-payoff-stack-sequence-step="then">{boardPayoffStack.sequenceCue}</i>
+                                        ) : null}
                                         <i data-payoff-stack-sequence-step="keep">Keep: {boardPayoffStack.sequence.keep}</i>
                                     </span>
                                 ) : null}

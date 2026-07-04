@@ -1428,6 +1428,15 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('First: Cash out combo route');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Then: Claim rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Keep: Keep chain target live');
+        expect(
+            screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="first"]')
+        ).toHaveTextContent('First: Cash out combo route');
+        expect(
+            screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="then"]')
+        ).toHaveTextContent('Then: Claim rewards');
+        expect(
+            screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="keep"]')
+        ).toHaveTextContent('Keep: Keep chain target live');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-lane-map',
             'cash:1>pickup:1'
@@ -1516,6 +1525,15 @@ describe('TileBoard touch and click controls', () => {
             'data-payoff-stack-sequence-keep',
             'Claim rewards'
         );
+        expect(
+            screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="first"]')
+        ).toHaveTextContent('First: Cash out combo route');
+        expect(
+            screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="then"]')
+        ).toHaveTextContent('Then: Cash perk payoff');
+        expect(
+            screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="keep"]')
+        ).toHaveTextContent('Keep: Claim rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Keep: Claim rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAccessibleName(
             'Board payoff stack. Super stack. Cash super stack. 3 payoffs live. Combo route + Perk payoff + Rewards. Crescendo: Super burst. Five-beat super cashout window. 5 beats. First: Cash out combo route. Then: Cash perk payoff. Keep: Claim rewards.'
