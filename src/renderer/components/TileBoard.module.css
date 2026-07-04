@@ -2134,6 +2134,27 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 12%, var(--theme-void) 35%);
 }
 
+.chainOpportunityBeatMap > span[data-card-beat-focus='primary'],
+.chainOpportunityCadenceMap > span[data-card-cadence-focus='primary'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-cyan-bright) 18%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), transparent 72%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 0.66rem color-mix(in srgb, var(--theme-gold-bright) 15%, transparent);
+}
+
+.chainOpportunityBeatMap > span[data-card-beat-focus='primary'] b,
+.chainOpportunityBeatMap > span[data-card-beat-focus='primary'] em,
+.chainOpportunityBeatMap > span[data-card-beat-focus='primary'] .chainOpportunityBeatMapPips i,
+.chainOpportunityCadenceMap > span[data-card-cadence-focus='primary'] b,
+.chainOpportunityCadenceMap > span[data-card-cadence-focus='primary'] em,
+.chainOpportunityCadenceMap > span[data-card-cadence-focus='primary'] .chainOpportunityCadencePips i {
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
 .chainOpportunityBeatMap > span[data-card-beat-tier='cashout'] b,
 .chainOpportunityBeatMap > span[data-card-beat-tier='cashout'] em,
 .chainOpportunityBeatMap > span[data-card-beat-tier='cashout'] .chainOpportunityBeatMapPips i {

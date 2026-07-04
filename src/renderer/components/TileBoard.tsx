@@ -4277,7 +4277,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>Beat map</small>
                                         {cardFeedbackBeatRows.map((row) => (
-                                            <span data-card-beat-action={row.action} data-card-beat-tier={row.id} key={row.id}>
+                                            <span
+                                                data-card-beat-action={row.action}
+                                                data-card-beat-focus={row.id === cardFeedbackBeatRows[0]?.id ? 'primary' : 'support'}
+                                                data-card-beat-tier={row.id}
+                                                key={row.id}
+                                            >
                                                 <b>{row.label}</b>
                                                 <em>{row.count}</em>
                                                 <span aria-hidden="true" className={styles.chainOpportunityBeatMapPips}>
@@ -4299,7 +4304,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>Pulse map</small>
                                         {cardFeedbackCadenceRows.map((row) => (
-                                            <span data-card-cadence={row.id} key={row.id}>
+                                            <span
+                                                data-card-cadence={row.id}
+                                                data-card-cadence-focus={row.id === cardFeedbackCadenceRows[0]?.id ? 'primary' : 'support'}
+                                                key={row.id}
+                                            >
                                                 <b>{row.label}</b>
                                                 <em>{row.count}</em>
                                                 <span aria-hidden="true" className={styles.chainOpportunityCadencePips}>
