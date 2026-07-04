@@ -1649,6 +1649,18 @@
     opacity: 0.88;
 }
 
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-focus='primary'] {
+    width: 0.42rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.48rem color-mix(in srgb, currentColor 50%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .floorClearPayoffStackBeatPips i:nth-child(2) {
     animation-delay: 0.07s;
 }

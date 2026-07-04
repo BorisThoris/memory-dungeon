@@ -5495,7 +5495,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         {Array.from(
                                             { length: getFloorClearPayoffStackBeatCount(floorClearPayoffStackSignal) },
                                             (_, index) => (
-                                                <i data-floor-payoff-stack-beat={index + 1} key={index} />
+                                                <i
+                                                    data-floor-payoff-stack-beat={index + 1}
+                                                    data-floor-payoff-stack-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             )
                                         )}
                                     </span>

@@ -4517,6 +4517,12 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveTextContent('Rebuild stack');
         expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveTextContent('Trait route + Objective + Pickup + Shard + Relic pick');
         expect(screen.getByTestId('floor-clear-payoff-stack').querySelectorAll('[data-floor-payoff-stack-beat]')).toHaveLength(5);
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="2"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-focus', 'support');
         expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAccessibleName(
             'Super stack: 5 payoffs paid. Rebuild stack. 5 beats. Trait route + Objective + Pickup + Shard + Relic pick paid on the clear; open the next floor by rebuilding the super-stack route.'
         );
@@ -4598,6 +4604,9 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-beats', '5');
         expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAttribute('data-floor-payoff-stack-screen-cue', 'super');
         expect(screen.getByTestId('floor-clear-payoff-stack').querySelectorAll('[data-floor-payoff-stack-beat]')).toHaveLength(5);
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-focus', 'primary');
         expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('chain x6 +1 shard');
         expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Chain cashout: x6 +1 shard.');
         expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Break into x10');
