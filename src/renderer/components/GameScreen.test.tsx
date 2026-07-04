@@ -4589,6 +4589,12 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"]')).toHaveAttribute('data-objective-audio', 'floor-objective-reward');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"]')).toHaveAttribute('data-objective-screen-cue', 'burst');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"]')?.querySelectorAll('[data-objective-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"] [data-objective-beat="2"]')
+        ).toHaveAttribute('data-objective-beat-focus', 'support');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"]')).toHaveAttribute('data-objective-beats', '3');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"]')).toHaveAttribute('data-objective-audio', 'floor-objective-momentum');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"]')).toHaveAttribute('data-objective-screen-cue', 'pulse');
@@ -5367,6 +5373,16 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-route-card-signal-tone="reward"]')
                 ?.querySelectorAll('[data-route-card-signal-beat]')
         ).toHaveLength(4);
+        expect(
+            screen
+                .getByTestId('route-card-board-banner-signals')
+                .querySelector('[data-route-card-signal-tone="reward"] [data-route-card-signal-beat="1"]')
+        ).toHaveAttribute('data-route-card-signal-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('route-card-board-banner-signals')
+                .querySelector('[data-route-card-signal-tone="reward"] [data-route-card-signal-beat="2"]')
+        ).toHaveAttribute('data-route-card-signal-beat-focus', 'support');
         expect(screen.getByTestId('route-card-board-banner-signals').querySelector('[data-route-card-signal-tone="risk"]')).toHaveAttribute(
             'data-route-card-signal-beats',
             '3'

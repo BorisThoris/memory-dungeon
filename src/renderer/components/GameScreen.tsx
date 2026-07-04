@@ -4086,7 +4086,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     <b>{row.value}</b>
                                                     <span aria-hidden="true" className={styles.routeCardBannerBeatPips}>
                                                         {Array.from({ length: beatCount }, (_, index) => (
-                                                            <i data-route-card-signal-beat="" key={index} />
+                                                            <i
+                                                                data-route-card-signal-beat={index + 1}
+                                                                data-route-card-signal-beat-focus={
+                                                                    index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                key={index}
+                                                            />
                                                         ))}
                                                     </span>
                                                 </span>
@@ -5594,7 +5600,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     className={styles.floorClearObjectiveBeatPips}
                                                 >
                                                     {Array.from({ length: beatCount }, (_, index) => (
-                                                        <i data-objective-beat="" key={index} />
+                                                        <i
+                                                            data-objective-beat={index + 1}
+                                                            data-objective-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
                                                     ))}
                                                 </span>
                                             </span>

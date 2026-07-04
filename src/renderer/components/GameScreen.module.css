@@ -2073,6 +2073,17 @@
     transform-origin: center;
 }
 
+.floorClearObjectiveBeatPips i[data-objective-beat-focus='primary'] {
+    width: 0.48rem;
+    height: 0.17rem;
+    filter: saturate(1.28) brightness(1.14);
+    transform: translateY(-0.01rem) scaleX(1.12);
+}
+
+.floorClearObjectiveBeatPips i[data-objective-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .floorClearObjectiveStrip span[data-objective-tone='reward'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, var(--theme-border-strong));
     background:
@@ -3782,6 +3793,17 @@
     box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
     animation: gameplayBeatPipPulse 0.92s ease-in-out infinite;
     transform-origin: center;
+}
+
+.routeCardBannerBeatPips i[data-route-card-signal-beat-focus='primary'] {
+    width: 0.42rem;
+    height: 0.15rem;
+    filter: saturate(1.28) brightness(1.14);
+    transform: translateY(-0.01rem) scaleX(1.1);
+}
+
+.routeCardBannerBeatPips i[data-route-card-signal-beat-focus='support'] {
+    opacity: 0.72;
 }
 
 .routeCardBannerSignals > span[data-route-card-signal-tone='reward'] {
