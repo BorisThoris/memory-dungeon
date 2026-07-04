@@ -7,6 +7,7 @@ import {
     type MatchedCardRimFireUniforms
 } from './matchedCardRimFireMaterial';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
+import type { TileTraitRouteReadabilityIntensity } from './tileBoardReadability';
 
 export type ResolvingRimColorRole = 'cyanBright' | 'danger' | 'emeraldBright';
 
@@ -17,6 +18,7 @@ interface ResolvingRimVisualInput {
     matchedVictoryBurst: number;
     reduceMotion: boolean;
     resolvingSelection: ResolvingSelectionState;
+    routeReadabilityIntensity?: TileTraitRouteReadabilityIntensity;
     time: number;
     tileState: Tile['state'];
 }
@@ -92,6 +94,7 @@ export const computeResolvingRimVisualState = ({
     matchedVictoryBurst,
     reduceMotion,
     resolvingSelection,
+    routeReadabilityIntensity = 'none',
     time,
     tileState
 }: ResolvingRimVisualInput): ResolvingRimVisualState => {
@@ -99,9 +102,22 @@ export const computeResolvingRimVisualState = ({
     const matchedVictoryPersistent = tileState === 'matched' && faceUp && !resolvingActive;
 
     if (matchedVictoryPersistent) {
+        const matchedRouteBoost =
+            routeReadabilityIntensity === 'stack'
+                ? 0.24
+                : routeReadabilityIntensity === 'cashout'
+                  ? 0.18
+                  : routeReadabilityIntensity === 'surge'
+                    ? 0.12
+                    : routeReadabilityIntensity === 'ready'
+                      ? 0.08
+                      : routeReadabilityIntensity === 'setup'
+                        ? 0.05
+                        : 0;
         const lowQualityOpacity = clamp(
             GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.low.rimOpacity +
-                matchedVictoryBurst * GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.low.burstBoost,
+                matchedVictoryBurst * GAMEPLAY_BOARD_VISUALS.matchedEdgeEffect.low.burstBoost +
+                matchedRouteBoost,
             0,
             1
         );
@@ -109,7 +125,7 @@ export const computeResolvingRimVisualState = ({
             colorRole: 'emeraldBright',
             crispOpacity: 0,
             matchedVictoryPersistent,
-            opacity: graphicsQuality === 'low' ? lowQualityOpacity : 0,
+            opacity: graphicsQuality === 'low' ? lowQualityOpacity : matchedRouteBoost,
             resolvingActive
         };
     }

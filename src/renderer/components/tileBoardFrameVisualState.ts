@@ -102,6 +102,7 @@ export const computeTileBoardFrameVisualState = ({
         matchedVictoryBurst,
         reduceMotion,
         resolvingSelection,
+        routeReadabilityIntensity,
         time,
         tileState
     });

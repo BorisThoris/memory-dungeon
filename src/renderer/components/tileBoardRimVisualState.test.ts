@@ -65,6 +65,23 @@ describe('tileBoardRimVisualState', () => {
         expect(high.opacity).toBe(0);
     });
 
+    it('keeps cashout stacks visibly hot on matched cards in high quality', () => {
+        const state = computeResolvingRimVisualState({
+            faceUp: true,
+            graphicsQuality: 'high',
+            isPinned: false,
+            matchedVictoryBurst: 0.5,
+            reduceMotion: false,
+            resolvingSelection: null,
+            routeReadabilityIntensity: 'stack',
+            time: 0,
+            tileState: 'matched'
+        });
+
+        expect(state.opacity).toBeGreaterThan(0);
+        expect(state.matchedVictoryPersistent).toBe(true);
+    });
+
     it('scales active resolving opacity down when shader glow is enabled', () => {
         const input = {
             faceUp: true,
