@@ -488,6 +488,14 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
         ).toHaveAttribute('data-chain-callout-beat-focus', 'primary');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-eyebrow-beat]')).toHaveLength(2);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-focus', 'primary');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-cue-beat]')).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-priority-beat]')).toHaveLength(5);
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-priority-beat="1"]')
@@ -2155,6 +2163,14 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-surge-band-beat-focus',
             'support'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-eyebrow-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-focus', 'primary');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-cue-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveAccessibleName(
             /Board chain opportunity.*Surge chain: 4 cards lit.*Combo surge/i
         );

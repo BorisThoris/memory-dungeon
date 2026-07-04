@@ -4113,6 +4113,26 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             >
                                 <span className={styles.chainOpportunityEyebrow}>
                                     {boardChainOpportunity.streakCashoutReady ? 'Streak reward' : 'Chain routes'}
+                                    <span aria-hidden="true" className={styles.chainOpportunityEyebrowBeatPips}>
+                                        {Array.from(
+                                            {
+                                                length: boardChainOpportunity.streakCashoutReady
+                                                    ? 5
+                                                    : boardChainOpportunity.comboSurgeLabel
+                                                      ? 4
+                                                      : boardChainOpportunity.selectedFollowupCount > 0
+                                                        ? 3
+                                                        : 2
+                                            },
+                                            (_, index) => (
+                                                <i
+                                                    data-chain-eyebrow-beat={index + 1}
+                                                    data-chain-eyebrow-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                            )
+                                        )}
+                                    </span>
                                 </span>
                                 {boardChainOpportunity.priorityLabel ? (
                                     <span
@@ -4148,6 +4168,27 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 <span className={styles.chainOpportunityCue}>{boardChainOpportunity.cue}</span>
+                                <span aria-hidden="true" className={styles.chainOpportunityCueBeatPips}>
+                                    {Array.from(
+                                        {
+                                            length:
+                                                boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
+                                                    ? 5
+                                                    : boardChainOpportunity.selectedFollowupCount > 0
+                                                      ? 3
+                                                      : boardChainOpportunity.comboSurgeLabel
+                                                        ? 4
+                                                        : 2
+                                        },
+                                        (_, index) => (
+                                            <i
+                                                data-chain-cue-beat={index + 1}
+                                                data-chain-cue-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                key={index}
+                                            />
+                                        )
+                                    )}
+                                </span>
                                 {primaryTraitLaneBeatRow ? (
                                     <span
                                         aria-label={`Primary trait lane action. ${primaryTraitLaneBeatRow.label}: ${primaryTraitLaneBeatRow.count}. ${primaryTraitLaneBeatRow.beatCount}-beat ${primaryTraitLaneBeatRow.action}.`}
