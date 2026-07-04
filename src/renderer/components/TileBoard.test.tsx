@@ -1806,6 +1806,16 @@ describe('TileBoard touch and click controls', () => {
             /Board chain opportunity.*Surge chain: 4 cards lit.*Combo surge/i
         );
         expect(screen.getByTestId('chain-opportunity-surge')).toHaveAttribute('data-chain-opportunity-surge', 'true');
+        expect(screen.getByTestId('chain-opportunity-surge')).toHaveAttribute('data-chain-opportunity-surge-beats', '4');
+        expect(screen.getByTestId('chain-opportunity-surge')).toHaveAttribute(
+            'data-chain-opportunity-surge-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('chain-opportunity-surge')).toHaveAttribute('data-chain-opportunity-surge-tone', 'surge');
+        expect(screen.getByTestId('chain-opportunity-surge').querySelectorAll('[data-chain-opportunity-surge-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('chain-opportunity-surge').querySelector('[data-chain-opportunity-surge-beat="1"]')
+        ).toHaveAttribute('data-chain-opportunity-surge-beat-focus', 'primary');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-callout', 'Surge chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-combo-surge', 'true');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-hot', 'none');

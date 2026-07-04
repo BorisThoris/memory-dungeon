@@ -4515,10 +4515,24 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 {boardChainOpportunity.comboSurgeLabel ? (
                                     <span
                                         className={styles.chainOpportunitySurge}
+                                        data-chain-opportunity-surge-beats={4}
+                                        data-chain-opportunity-surge-screen-cue="burst"
                                         data-chain-opportunity-surge="true"
+                                        data-chain-opportunity-surge-tone="surge"
                                         data-testid="chain-opportunity-surge"
                                     >
-                                        {boardChainOpportunity.comboSurgeLabel}
+                                        <b>{boardChainOpportunity.comboSurgeLabel}</b>
+                                        <span aria-hidden="true" className={styles.chainOpportunitySurgeBeatPips}>
+                                            {Array.from({ length: 4 }, (_, index) => (
+                                                <i
+                                                    data-chain-opportunity-surge-beat={index + 1}
+                                                    data-chain-opportunity-surge-beat-focus={
+                                                        index === 0 ? 'primary' : 'support'
+                                                    }
+                                                    key={index}
+                                                />
+                                            ))}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.selectedFollowupLabel ? (

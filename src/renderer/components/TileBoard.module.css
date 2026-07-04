@@ -1325,6 +1325,9 @@
 }
 
 .chainOpportunitySurge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.16rem;
     max-width: min(8.5rem, 26vi);
     overflow: hidden;
     padding: 0.1rem 0.34rem;
@@ -1344,6 +1347,51 @@
         0 0 16px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
         inset 0 1px 0 color-mix(in srgb, var(--theme-text) 7%, transparent);
     animation: boardOpportunityPulse 1.35s ease-in-out infinite;
+}
+
+.chainOpportunitySurge b {
+    min-width: 0;
+    overflow: hidden;
+    font: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chainOpportunitySurgeBeatPips {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 0.05rem;
+}
+
+.chainOpportunitySurgeBeatPips i {
+    display: block;
+    width: 0.15rem;
+    height: 0.15rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.78s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 10%);
+    box-shadow: 0 0 0.36rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+}
+
+.chainOpportunitySurgeBeatPips i:nth-child(2) {
+    animation-delay: 70ms;
+}
+
+.chainOpportunitySurgeBeatPips i:nth-child(3) {
+    animation-delay: 140ms;
+}
+
+.chainOpportunitySurgeBeatPips i:nth-child(4) {
+    animation-delay: 210ms;
+}
+
+.chainOpportunitySurgeBeatPips i[data-chain-opportunity-surge-beat-focus='primary'] {
+    width: 0.3rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white 8%);
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 42%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
 }
 
 .chainOpportunityFollowup {
