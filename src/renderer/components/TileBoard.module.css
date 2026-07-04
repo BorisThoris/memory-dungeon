@@ -2400,11 +2400,23 @@
         color-mix(in srgb, var(--theme-void) 35%, transparent);
 }
 
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-focus='primary'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 18%);
+    transform: translateY(-1px);
+}
+
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-screen-cue='burst']
-    > span:first-of-type {
+    > span[data-card-trait-lane-beat-focus='primary'] {
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
         0 0 14px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-focus='primary'] b,
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-focus='primary'] em,
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-focus='primary'] i,
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-focus='primary'] .chainOpportunityTraitLaneBeatPips i {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
 }
 
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-screen-cue='guard'],

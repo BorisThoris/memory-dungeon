@@ -4370,6 +4370,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <span
                                                 data-card-trait-lane-beat={row.id}
                                                 data-card-trait-lane-beat-audio={cardTraitLaneAudioCue(row.id)}
+                                                data-card-trait-lane-beat-focus={
+                                                    row.id === cardFeedbackTraitLaneBeatRows[0]?.id
+                                                        ? 'primary'
+                                                        : 'support'
+                                                }
                                                 data-card-trait-lane-beat-screen-cue={cardTraitLaneScreenCue(row.id)}
                                                 key={row.id}
                                             >

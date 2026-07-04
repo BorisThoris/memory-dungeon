@@ -918,8 +918,10 @@ describe('TileBoard touch and click controls', () => {
         const guardLaneBeat = laneBeatMap.querySelector('[data-card-trait-lane-beat="guard"]');
         expect(shardLaneBeat).toHaveTextContent('1');
         expect(shardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-audio', 'trait-lane-shard');
+        expect(shardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-focus', 'primary');
         expect(shardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-screen-cue', 'burst');
         expect(guardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-audio', 'trait-lane-guard');
+        expect(guardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-focus', 'support');
         expect(guardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-screen-cue', 'guard');
         expect(
             shardLaneBeat?.querySelectorAll('[data-card-trait-lane-beat-pip]')
