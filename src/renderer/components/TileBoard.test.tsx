@@ -2501,6 +2501,36 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-beats', '3');
         expect(screen.getByTestId('board-opportunity-chain').querySelectorAll('[data-opportunity-beat]')).toHaveLength(3);
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Route prime');
+        expect(
+            screen.getByTestId('tile-board-frame').querySelector('[data-chain-opportunity-target]')
+        ).toHaveTextContent('Swap Sealed with Filler: Sealed + Heavy: score surge');
+        expect(
+            screen
+                .getByTestId('tile-board-frame')
+                .querySelector('[data-chain-opportunity-target]')
+                ?.querySelectorAll('[data-chain-target-beat]')
+        ).toHaveLength(2);
+        expect(
+            screen
+                .getByTestId('tile-board-frame')
+                .querySelector('[data-chain-opportunity-target]')
+                ?.querySelector('[data-chain-target-beat="1"]')
+        ).toHaveAttribute('data-chain-target-beat-focus', 'primary');
+        expect(screen.getByTestId('tile-board-frame').querySelector('[data-chain-opportunity-target-plan]')).toHaveTextContent(
+            'Keep reward stack primed'
+        );
+        expect(
+            screen
+                .getByTestId('tile-board-frame')
+                .querySelector('[data-chain-opportunity-target-plan]')
+                ?.querySelectorAll('[data-chain-target-plan-beat]')
+        ).toHaveLength(3);
+        expect(
+            screen
+                .getByTestId('tile-board-frame')
+                .querySelector('[data-chain-opportunity-target-plan]')
+                ?.querySelector('[data-chain-target-plan-beat="1"]')
+        ).toHaveAttribute('data-chain-target-plan-beat-focus', 'primary');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-trait-route-tiers',
             'route-target:2'

@@ -4682,7 +4682,28 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.nextTarget ? (
-                                    <span className={styles.chainOpportunityTarget}>{boardChainOpportunity.nextTarget}</span>
+                                    <span className={styles.chainOpportunityTarget}>
+                                        {boardChainOpportunity.nextTarget}
+                                        <span aria-hidden="true" className={styles.chainOpportunityTargetBeatPips}>
+                                            {Array.from(
+                                                {
+                                                    length:
+                                                        boardChainOpportunity.nextActionId === 'cashout'
+                                                            ? 5
+                                                            : boardChainOpportunity.nextActionId === 'follow-up'
+                                                              ? 3
+                                                              : 2
+                                                },
+                                                (_, index) => (
+                                                    <i
+                                                        data-chain-target-beat={index + 1}
+                                                        data-chain-target-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                )
+                                            )}
+                                        </span>
+                                    </span>
                                 ) : null}
                                 {boardChainOpportunity.milestoneActionLabel && boardChainOpportunity.milestoneTargetLabel ? (
                                     <span
@@ -4695,7 +4716,26 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.targetPlanLabel ? (
-                                    <span className={styles.chainOpportunityTargetPlan}>{boardChainOpportunity.targetPlanLabel}</span>
+                                    <span className={styles.chainOpportunityTargetPlan}>
+                                        {boardChainOpportunity.targetPlanLabel}
+                                        <span aria-hidden="true" className={styles.chainOpportunityTargetPlanBeatPips}>
+                                            {Array.from(
+                                                {
+                                                    length:
+                                                        boardChainOpportunity.comboSurgeLabel || boardChainOpportunity.rewardHot
+                                                            ? 3
+                                                            : 2
+                                                },
+                                                (_, index) => (
+                                                    <i
+                                                        data-chain-target-plan-beat={index + 1}
+                                                        data-chain-target-plan-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                )
+                                            )}
+                                        </span>
+                                    </span>
                                 ) : null}
                                 {boardChainSequenceCue ? (
                                     <span

@@ -1256,6 +1256,38 @@
     white-space: nowrap;
 }
 
+.chainOpportunityTargetBeatPips,
+.chainOpportunityTargetPlanBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    margin-left: 0.3rem;
+}
+
+.chainOpportunityTargetBeatPips i,
+.chainOpportunityTargetPlanBeatPips i {
+    display: block;
+    width: 0.13rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.chainOpportunityTargetBeatPips i[data-chain-target-beat-focus='primary'],
+.chainOpportunityTargetPlanBeatPips i[data-chain-target-plan-beat-focus='primary'] {
+    width: 0.26rem;
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityTargetBeatPips i[data-chain-target-beat-focus='support'],
+.chainOpportunityTargetPlanBeatPips i[data-chain-target-plan-beat-focus='support'] {
+    opacity: 0.7;
+}
+
 .chainOpportunityTargetPlan {
     max-width: min(10rem, 32vi);
     overflow: hidden;
