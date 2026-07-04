@@ -711,6 +711,9 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('One-away cashout');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Push x6 reward');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Echo + Sealed: combo shard');
+        expect(
+            screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
+        ).toHaveTextContent('Echo + Sealed: combo shard');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAccessibleName(
             /Trait combo combo preview.*Cashout.*Cashout.*Next reward x6 \+1 shard in 1 match.*One-away cashout.*Push x6 reward.*Echo \+ Sealed: combo shard/i
         );
@@ -2281,6 +2284,9 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'pickup');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '4');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
+        ).toHaveTextContent('Shard spark pickup: +1 combo shard');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAccessibleName(
             /Pickup reward preview.*Claim.*Shard spark pickup: \+1 combo shard/i
         );
@@ -2589,6 +2595,9 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'hazard');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '3');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(3);
+        expect(
+            screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
+        ).toHaveTextContent('Shuffle Snare');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAccessibleName(
             /Hazard risk preview.*Scout.*Shuffle Snare.*Wrong pairs reshuffle safe hidden tiles/i
         );

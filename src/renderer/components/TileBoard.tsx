@@ -4824,8 +4824,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             Cashout / {focusedPreviewChip.rewardHotText}
                                         </span>
                                     ) : null}
-                                    {focusedPreviewChip.lines.map((line) => (
-                                        <span className={styles.traitPreviewLine} key={line}>
+                                    {focusedPreviewChip.lines.map((line, index) => (
+                                        <span
+                                            className={styles.traitPreviewLine}
+                                            data-preview-line={index + 1}
+                                            data-preview-line-focus={index === 0 ? 'primary' : 'support'}
+                                            key={line}
+                                        >
                                             {line}
                                         </span>
                                     ))}
