@@ -99,6 +99,22 @@ describe('tile board interaction motion state', () => {
         expect(state.hoverDomParity).toBe(false);
     });
 
+    it('boosts lift and damping for cashout-ready route cards', () => {
+        const baseline = computeTileBoardInteractionMotionState({
+            ...baseInput,
+            routeReadabilityIntensity: 'none'
+        });
+        const state = computeTileBoardInteractionMotionState({
+            ...baseInput,
+            routeReadabilityIntensity: 'stack'
+        });
+
+        expect(state.baseLiftFull).toBeGreaterThan(baseline.baseLiftFull);
+        expect(state.baseDepthFull).toBeGreaterThan(baseline.baseDepthFull);
+        expect(state.fieldLift).toBeGreaterThan(baseline.fieldLift);
+        expect(state.liftLambda).toBeGreaterThan(baseline.liftLambda);
+    });
+
     it('disables hover and ambient drift for reduced motion while preserving enabled field parallax', () => {
         const state = computeTileBoardInteractionMotionState({
             ...baseInput,

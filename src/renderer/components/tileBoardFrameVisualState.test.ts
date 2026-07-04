@@ -65,6 +65,12 @@ describe('tileBoardFrameVisualState', () => {
         expect(visualState({ keyboardFocused: true, tileState: 'matched' }).focusRimOpacity).toBe(0);
     });
 
+    it('highlights route-emphasis cards even without keyboard focus', () => {
+        expect(
+            visualState({ routeReadabilityIntensity: 'ready' }).focusRimOpacity
+        ).toBeGreaterThan(0);
+    });
+
     it('applies composed rim visual state to frame targets', () => {
         const state = visualState({
             faceUp: true,
