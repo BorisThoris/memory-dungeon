@@ -3070,6 +3070,17 @@
     transform-origin: center;
 }
 
+.chainOpportunityHotBandBeatPips i[data-chain-hot-band-beat-focus='primary'] {
+    width: 0.42rem;
+    box-shadow:
+        0 0 0.38rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.chainOpportunityHotBandBeatPips i[data-chain-hot-band-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .chainOpportunityHotBand[data-chain-hot-band-tone='ready'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, transparent);
     background:
@@ -3170,6 +3181,17 @@
     box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-violet-bright) 28%, transparent);
     animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
     transform-origin: center;
+}
+
+.chainOpportunitySurgeBandBeatPips i[data-chain-surge-band-beat-focus='primary'] {
+    width: 0.42rem;
+    box-shadow:
+        0 0 0.4rem color-mix(in srgb, currentColor 50%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.chainOpportunitySurgeBandBeatPips i[data-chain-surge-band-beat-focus='support'] {
+    opacity: 0.72;
 }
 
 .chainOpportunityPayoffBurst {

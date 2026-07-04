@@ -592,6 +592,15 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAccessibleName(
             /Chain hot band.*Reward hot.*Next reward x6 \+1 shard in 1 match.*One-away cashout/i
         );
+        expect(screen.getByTestId('chain-opportunity-hot-band').querySelectorAll('[data-chain-hot-band-beat]')).toHaveLength(5);
+        expect(screen.getByTestId('chain-opportunity-hot-band').querySelector('[data-chain-hot-band-beat="1"]')).toHaveAttribute(
+            'data-chain-hot-band-beat-focus',
+            'primary'
+        );
+        expect(screen.getByTestId('chain-opportunity-hot-band').querySelector('[data-chain-hot-band-beat="2"]')).toHaveAttribute(
+            'data-chain-hot-band-beat-focus',
+            'support'
+        );
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-hot="true"]')).toHaveTextContent(
             'Next reward x6 +1 shard in 1 match'
         );
@@ -1690,6 +1699,11 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAccessibleName(
             /Chain hot band.*Cashout ready.*Any clean match pays.*One-away cashout/i
         );
+        expect(screen.getByTestId('chain-opportunity-hot-band').querySelectorAll('[data-chain-hot-band-beat]')).toHaveLength(3);
+        expect(screen.getByTestId('chain-opportunity-hot-band').querySelector('[data-chain-hot-band-beat="1"]')).toHaveAttribute(
+            'data-chain-hot-band-beat-focus',
+            'primary'
+        );
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-hot', 'ready');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Chain cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Streak reward');
@@ -1823,6 +1837,15 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('Match now');
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAccessibleName(
             /Chain surge band\. Combo surge\. 4 cards lit\. 5 routes ready\. Match now\./
+        );
+        expect(screen.getByTestId('chain-opportunity-surge-band').querySelectorAll('[data-chain-surge-band-beat]')).toHaveLength(4);
+        expect(screen.getByTestId('chain-opportunity-surge-band').querySelector('[data-chain-surge-band-beat="1"]')).toHaveAttribute(
+            'data-chain-surge-band-beat-focus',
+            'primary'
+        );
+        expect(screen.getByTestId('chain-opportunity-surge-band').querySelector('[data-chain-surge-band-beat="2"]')).toHaveAttribute(
+            'data-chain-surge-band-beat-focus',
+            'support'
         );
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveAccessibleName(
             /Board chain opportunity.*Surge chain: 4 cards lit.*Combo surge/i

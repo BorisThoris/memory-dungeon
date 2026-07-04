@@ -4640,7 +4640,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <i>{boardChainHotBand.cue}</i>
                                         <span aria-hidden="true" className={styles.chainOpportunityHotBandBeatPips}>
                                             {Array.from({ length: boardChainHotBand.tone === 'cashout' ? 5 : 3 }, (_, index) => (
-                                                <i data-chain-hot-band-beat={index + 1} key={index} />
+                                                <i
+                                                    data-chain-hot-band-beat={index + 1}
+                                                    data-chain-hot-band-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                     </span>
@@ -4659,7 +4663,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <i>{boardChainSurgeBand.cue}</i>
                                         <span aria-hidden="true" className={styles.chainOpportunitySurgeBandBeatPips}>
                                             {Array.from({ length: 4 }, (_, index) => (
-                                                <i data-chain-surge-band-beat={index + 1} key={index} />
+                                                <i
+                                                    data-chain-surge-band-beat={index + 1}
+                                                    data-chain-surge-band-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                     </span>
