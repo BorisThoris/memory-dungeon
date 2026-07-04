@@ -4342,6 +4342,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         {cardFeedbackActionPriorityRows.map((row) => (
                                             <span
                                                 data-card-action-priority={row.id}
+                                                data-card-action-priority-count={row.count}
                                                 data-card-action-priority-focus={
                                                     row.id === cardFeedbackPrimaryActionAttr ? 'primary' : 'support'
                                                 }
@@ -4349,6 +4350,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             >
                                                 <b>{row.label}</b>
                                                 <em>{row.count}</em>
+                                                <span aria-hidden="true" className={styles.chainOpportunityActionPriorityPips}>
+                                                    {Array.from({ length: Math.max(1, Math.min(5, row.count)) }, (_, index) => (
+                                                        <i
+                                                            data-card-action-priority-pip={index + 1}
+                                                            data-card-action-priority-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
+                                                    ))}
+                                                </span>
                                             </span>
                                         ))}
                                     </span>
@@ -4367,10 +4377,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     row.id === cardFeedbackPrimaryActionAttr ? 'primary' : 'support'
                                                 }
                                                 data-chain-shot-map-lane={row.id}
+                                                data-chain-shot-map-count={row.count}
                                                 key={row.id}
                                             >
                                                 <b>{row.shotLabel}</b>
                                                 <em>{row.count}</em>
+                                                <span aria-hidden="true" className={styles.chainOpportunityShotMapBeatPips}>
+                                                    {Array.from({ length: Math.max(1, Math.min(5, row.count)) }, (_, index) => (
+                                                        <i
+                                                            data-chain-shot-map-pip={index + 1}
+                                                            data-chain-shot-map-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
+                                                    ))}
+                                                </span>
                                                 <i>{row.detail}</i>
                                             </span>
                                         ))}

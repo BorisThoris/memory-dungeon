@@ -1985,6 +1985,35 @@
     background: color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
 }
 
+.chainOpportunityActionPriorityPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    min-width: 0;
+    margin-left: auto;
+}
+
+.chainOpportunityActionPriorityPips i {
+    display: block;
+    width: 0.14rem;
+    height: 0.14rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityActionPriorityPips i[data-card-action-priority-pip-focus='primary'] {
+    width: 0.28rem;
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, currentColor 36%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityActionPriorityPips i[data-card-action-priority-pip-focus='support'] {
+    opacity: 0.7;
+}
+
 .chainOpportunityActionPriority b,
 .chainOpportunityActionPriority em {
     min-width: 0;
@@ -2079,6 +2108,7 @@
     display: grid;
     grid-template-areas:
         'count label'
+        'pips pips'
         'detail detail';
     grid-template-columns: auto minmax(0, 1fr);
     gap: 0.05rem 0.18rem;
@@ -2123,6 +2153,36 @@
     font-style: normal;
     font-weight: 840;
     text-transform: uppercase;
+}
+
+.chainOpportunityShotMapBeatPips {
+    display: inline-flex;
+    grid-area: pips;
+    align-items: center;
+    gap: 0.05rem;
+    min-width: 0;
+    height: 0.16rem;
+}
+
+.chainOpportunityShotMapBeatPips i {
+    display: block;
+    width: 0.14rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+}
+
+.chainOpportunityShotMapBeatPips i[data-chain-shot-map-pip-focus='primary'] {
+    width: 0.28rem;
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, currentColor 38%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityShotMapBeatPips i[data-chain-shot-map-pip-focus='support'] {
+    opacity: 0.7;
 }
 
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='cash-now'],

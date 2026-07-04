@@ -746,9 +746,39 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
         ).toHaveAttribute('data-card-action-priority-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
+        ).toHaveAttribute('data-card-action-priority-count', '2');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-action-priority')
+                .querySelector('[data-card-action-priority="cash-now"]')
+                ?.querySelectorAll('[data-card-action-priority-pip]')
+        ).toHaveLength(2);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-action-priority')
+                .querySelector('[data-card-action-priority="cash-now"]')
+                ?.querySelector('[data-card-action-priority-pip="1"]')
+        ).toHaveAttribute('data-card-action-priority-pip-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAccessibleName(
             'Card action priority. Cash now: 2'
         );
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
+        ).toHaveAttribute('data-chain-shot-map-count', '2');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-shot-map')
+                .querySelector('[data-chain-shot-map-lane="cash-now"]')
+                ?.querySelectorAll('[data-chain-shot-map-pip]')
+        ).toHaveLength(2);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-shot-map')
+                .querySelector('[data-chain-shot-map-lane="cash-now"]')
+                ?.querySelector('[data-chain-shot-map-pip="1"]')
+        ).toHaveAttribute('data-chain-shot-map-pip-focus', 'primary');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-marker-contract')).toContain('trait-payoff-stack');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-marker-shape-contract',
