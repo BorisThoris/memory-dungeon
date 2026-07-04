@@ -1963,6 +1963,22 @@
         color-mix(in srgb, var(--theme-gold-bright) 10%, var(--theme-void) 34%);
 }
 
+.chainOpportunityShotMap > span[data-chain-shot-map-focus='primary'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-cyan-bright) 18%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), transparent 72%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.chainOpportunityShotMap > span[data-chain-shot-map-focus='primary'] b,
+.chainOpportunityShotMap > span[data-chain-shot-map-focus='primary'] em {
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='cash-now'] b,
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='cash-now'] em,
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='perk-cash'] b,

@@ -796,6 +796,9 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveTextContent('Shot map');
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveTextContent('Cash');
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveTextContent('Cashout lane');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
+        ).toHaveAttribute('data-chain-shot-map-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary', 'cashout');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-actions', 'cashout:hit now:2');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAccessibleName(
@@ -1028,8 +1031,14 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
         ).toHaveTextContent('Tap');
         expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
+        ).toHaveAttribute('data-chain-shot-map-focus', 'primary');
+        expect(
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="build-lane"]')
         ).toHaveTextContent('Route lane');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="build-lane"]')
+        ).toHaveAttribute('data-chain-shot-map-focus', 'support');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-trait-route-tiers')).toContain(
             'selected-followup:1'
         );

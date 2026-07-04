@@ -4253,7 +4253,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>Shot map</small>
                                         {cardFeedbackShotMapRows.map((row) => (
-                                            <span data-chain-shot-map-lane={row.id} key={row.id}>
+                                            <span
+                                                data-chain-shot-map-focus={
+                                                    row.id === cardFeedbackPrimaryActionAttr ? 'primary' : 'support'
+                                                }
+                                                data-chain-shot-map-lane={row.id}
+                                                key={row.id}
+                                            >
                                                 <b>{row.shotLabel}</b>
                                                 <em>{row.count}</em>
                                                 <i>{row.detail}</i>
