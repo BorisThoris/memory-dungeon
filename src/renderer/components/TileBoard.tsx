@@ -4674,6 +4674,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="chain-opportunity-cadence-map"
                                     >
                                         <small>Pulse map</small>
+                                        <span className={styles.chainOpportunityCadenceMapSummary} data-testid="chain-opportunity-cadence-map-summary">
+                                            <small>Pulses</small>
+                                            <b>
+                                                {cardFeedbackCadenceRows.length}{' '}
+                                                {cardFeedbackCadenceRows.length === 1 ? 'lane' : 'lanes'}
+                                            </b>
+                                            <span aria-hidden="true" className={styles.chainOpportunityCadenceMapSummaryPips}>
+                                                {Array.from(
+                                                    { length: Math.max(2, Math.min(5, cardFeedbackCadenceRows.length + 1)) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-card-cadence-map-summary-pip={index + 1}
+                                                            data-card-cadence-map-summary-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
                                         {cardFeedbackCadenceRows.map((row) => (
                                             <span
                                                 data-card-cadence={row.id}

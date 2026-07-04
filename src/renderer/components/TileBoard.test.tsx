@@ -1115,6 +1115,11 @@ describe('TileBoard touch and click controls', () => {
             'Card pulse map. Cashout: 2. Cash now. 5-beat pulse.'
         );
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveTextContent('Pulse map');
+        expect(screen.getByTestId('chain-opportunity-cadence-map-summary')).toHaveTextContent('Pulses');
+        expect(screen.getByTestId('chain-opportunity-cadence-map-summary')).toHaveTextContent('1 lane');
+        expect(
+            screen.getByTestId('chain-opportunity-cadence-map-summary').querySelectorAll('[data-card-cadence-map-summary-pip]')
+        ).toHaveLength(2);
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveTextContent('Cashout');
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('chain-opportunity-cadence-map').querySelector('[data-card-cadence="cashout"]')).toHaveAttribute(
@@ -2622,6 +2627,8 @@ describe('TileBoard touch and click controls', () => {
             'Card pulse map. Prime: 2. Prime payoff. 2-beat pulse.'
         );
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveTextContent('Pulse map');
+        expect(screen.getByTestId('chain-opportunity-cadence-map-summary')).toHaveTextContent('Pulses');
+        expect(screen.getByTestId('chain-opportunity-cadence-map-summary')).toHaveTextContent('1 lane');
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveTextContent('Prime');
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveTextContent('Prime payoff');
         expect(screen.getByTestId('chain-opportunity-cadence-map').querySelector('[data-card-cadence="prime"]')).toHaveAttribute(
