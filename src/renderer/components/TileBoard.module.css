@@ -2888,14 +2888,18 @@
 }
 
 .chainOpportunityRewardLadder > span[data-board-chain-reward-focus='primary'] {
+    animation: boardOpportunityPrimePulse 1.36s ease-in-out infinite;
     border-color: color-mix(in srgb, var(--theme-gold-bright) 64%, var(--theme-cyan-bright) 18%);
     background:
-        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), transparent 68%),
-        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 26%, transparent), transparent 68%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
         color-mix(in srgb, var(--theme-void) 38%, transparent);
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
-        0 0 0.8rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent),
+        0 0 1.2rem color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+    transform: translateY(-1px);
+    z-index: 2;
 }
 
 .chainOpportunityRewardLadder > span[data-board-chain-reward-focus='primary'] small,
@@ -2904,6 +2908,17 @@
 .chainOpportunityRewardLadder > span[data-board-chain-reward-focus='primary'] em,
 .chainOpportunityRewardLadder > span[data-board-chain-reward-focus='primary'] i {
     color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
+.chainOpportunityRewardLadder > span[data-board-chain-reward-focus='primary'] .chainOpportunityRewardBeatPips i[data-board-chain-reward-beat-focus='primary'] {
+    width: 0.38rem;
+    box-shadow:
+        0 0 0.54rem color-mix(in srgb, currentColor 54%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+}
+
+.chainOpportunityRewardLadder > span[data-board-chain-reward-focus='primary'] .chainOpportunityRewardBeatPips i[data-board-chain-reward-beat-focus='support'] {
+    opacity: 0.7;
 }
 
 .chainOpportunityRewardLadder > span[data-board-chain-reward-tone='reward'] {
