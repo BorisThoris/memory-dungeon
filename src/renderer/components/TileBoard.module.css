@@ -4098,6 +4098,20 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
 }
 
+.opportunityLaneBeatPips i[data-opportunity-lane-beat-focus='primary'],
+.opportunityPrimaryLaneBeatPips i[data-opportunity-primary-lane-beat-focus='primary'] {
+    min-width: 0.34rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, currentColor 46%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.opportunityLaneBeatPips i[data-opportunity-lane-beat-focus='support'],
+.opportunityPrimaryLaneBeatPips i[data-opportunity-primary-lane-beat-focus='support'] {
+    opacity: 0.68;
+}
+
 .opportunityLaneBeatPips i:nth-child(2),
 .opportunityPrimaryLaneBeatPips i:nth-child(2) {
     animation-delay: 0.07s;
@@ -4316,6 +4330,17 @@
     animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
     background: color-mix(in srgb, var(--theme-text-muted) 56%, transparent);
     box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
+}
+
+.opportunityCompassBeatPips i[data-opportunity-beat-focus='primary'] {
+    width: 0.42rem;
+    box-shadow:
+        0 0 0.38rem color-mix(in srgb, currentColor 46%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.opportunityCompassBeatPips i[data-opportunity-beat-focus='support'] {
+    opacity: 0.72;
 }
 
 .opportunityCompassBeatPips i:nth-child(2) {
@@ -4775,6 +4800,17 @@
     animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
     background: color-mix(in srgb, var(--theme-border-cyan) 72%, white);
     box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-border-cyan) 24%, transparent);
+}
+
+.traitPreviewBeatPips i[data-preview-beat-focus='primary'] {
+    width: 0.42rem;
+    box-shadow:
+        0 0 0.38rem color-mix(in srgb, currentColor 46%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.traitPreviewBeatPips i[data-preview-beat-focus='support'] {
+    opacity: 0.72;
 }
 
 .traitPreviewBeatPips i:nth-child(2) {

@@ -4844,7 +4844,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     {Array.from(
                                                         { length: boardOpportunityLaneBeatCount(primaryBoardOpportunityLane) },
                                                         (_, beatIndex) => (
-                                                            <i data-opportunity-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                            <i
+                                                                data-opportunity-primary-lane-beat={beatIndex + 1}
+                                                                data-opportunity-primary-lane-beat-focus={
+                                                                    beatIndex === 0 ? 'primary' : 'support'
+                                                                }
+                                                                key={beatIndex}
+                                                            />
                                                         )
                                                     )}
                                                 </span>
@@ -4866,7 +4872,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 <em>{lane.cue}</em>
                                                 <span aria-hidden="true" className={styles.opportunityLaneBeatPips}>
                                                     {Array.from({ length: boardOpportunityLaneBeatCount(lane) }, (_, beatIndex) => (
-                                                        <i data-opportunity-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                        <i
+                                                            data-opportunity-lane-beat={beatIndex + 1}
+                                                            data-opportunity-lane-beat-focus={
+                                                                beatIndex === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={beatIndex}
+                                                        />
                                                     ))}
                                                 </span>
                                             </span>
@@ -4897,7 +4909,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <span className={styles.opportunityCompassImpact}>{row.impactCue}</span>
                                             <span aria-hidden="true" className={styles.opportunityCompassBeatPips}>
                                                 {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                                    <i data-opportunity-beat={beatIndex + 1} key={beatIndex} />
+                                                    <i
+                                                        data-opportunity-beat={beatIndex + 1}
+                                                        data-opportunity-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                        key={beatIndex}
+                                                    />
                                                 ))}
                                             </span>
                                             <b>{row.action}</b>
@@ -4937,7 +4953,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                     <span aria-hidden="true" className={styles.traitPreviewBeatPips}>
                                         {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                            <i data-preview-beat={beatIndex + 1} key={beatIndex} />
+                                            <i
+                                                data-preview-beat={beatIndex + 1}
+                                                data-preview-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                key={beatIndex}
+                                            />
                                         ))}
                                     </span>
                                     <b className={styles.traitPreviewAction}>

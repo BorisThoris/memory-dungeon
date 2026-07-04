@@ -742,6 +742,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-heat', 'cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-beats', '5');
         expect(screen.getByTestId('board-opportunity-chain').querySelectorAll('[data-opportunity-beat]')).toHaveLength(5);
+        expect(screen.getByTestId('board-opportunity-chain').querySelector('[data-opportunity-beat="1"]')).toHaveAttribute(
+            'data-opportunity-beat-focus',
+            'primary'
+        );
+        expect(screen.getByTestId('board-opportunity-chain').querySelector('[data-opportunity-beat="2"]')).toHaveAttribute(
+            'data-opportunity-beat-focus',
+            'support'
+        );
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Cash out');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Match lit route for reward');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Push x6 reward');
@@ -771,6 +779,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'cashout');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '5');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(5);
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-beat="1"]')).toHaveAttribute(
+            'data-preview-beat-focus',
+            'primary'
+        );
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-beat="2"]')).toHaveAttribute(
+            'data-preview-beat-focus',
+            'support'
+        );
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Cashout /');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('One-away cashout');
@@ -1417,6 +1433,14 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveTextContent('Board focus');
         expect(screen.getByTestId('board-opportunity-primary-lane').querySelectorAll('[data-opportunity-primary-lane-beat]')).toHaveLength(3);
+        expect(screen.getByTestId('board-opportunity-primary-lane').querySelector('[data-opportunity-primary-lane-beat="1"]')).toHaveAttribute(
+            'data-opportunity-primary-lane-beat-focus',
+            'primary'
+        );
+        expect(screen.getByTestId('board-opportunity-primary-lane').querySelector('[data-opportunity-primary-lane-beat="2"]')).toHaveAttribute(
+            'data-opportunity-primary-lane-beat-focus',
+            'support'
+        );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Build');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Pickup');
         expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="build"]')).toHaveAttribute(
@@ -1433,6 +1457,18 @@ describe('TileBoard touch and click controls', () => {
                 .querySelector('[data-opportunity-lane="build"]')
                 ?.querySelectorAll('[data-opportunity-lane-beat]')
         ).toHaveLength(3);
+        expect(
+            screen
+                .getByTestId('board-opportunity-lane-map')
+                .querySelector('[data-opportunity-lane="build"]')
+                ?.querySelector('[data-opportunity-lane-beat="1"]')
+        ).toHaveAttribute('data-opportunity-lane-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('board-opportunity-lane-map')
+                .querySelector('[data-opportunity-lane="build"]')
+                ?.querySelector('[data-opportunity-lane-beat="2"]')
+        ).toHaveAttribute('data-opportunity-lane-beat-focus', 'support');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
             'Opportunity lane map. Build: 1. Prime build. Prime cashout. Pickup: 1. Claim pickup. Pickup cashout.'
         );
