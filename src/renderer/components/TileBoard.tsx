@@ -4682,7 +4682,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.nextTarget ? (
-                                    <span className={styles.chainOpportunityTarget}>
+                                    <span
+                                        className={styles.chainOpportunityTarget}
+                                        data-chain-opportunity-target={boardChainOpportunity.nextTarget}
+                                    >
                                         {boardChainOpportunity.nextTarget}
                                         <span aria-hidden="true" className={styles.chainOpportunityTargetBeatPips}>
                                             {Array.from(
@@ -4713,10 +4716,32 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>{boardChainOpportunity.milestoneActionLabel}</small>
                                         <b>{boardChainOpportunity.milestoneTargetLabel}</b>
+                                        <span aria-hidden="true" className={styles.chainOpportunityMilestoneBeatPips}>
+                                            {Array.from(
+                                                {
+                                                    length:
+                                                        boardChainOpportunity.milestoneTone === 'combo'
+                                                            ? 4
+                                                            : boardChainOpportunity.milestoneTone === 'surge'
+                                                              ? 3
+                                                              : 2
+                                                },
+                                                (_, index) => (
+                                                    <i
+                                                        data-chain-milestone-beat={index + 1}
+                                                        data-chain-milestone-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                )
+                                            )}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.targetPlanLabel ? (
-                                    <span className={styles.chainOpportunityTargetPlan}>
+                                    <span
+                                        className={styles.chainOpportunityTargetPlan}
+                                        data-chain-opportunity-target-plan={boardChainOpportunity.targetPlanLabel}
+                                    >
                                         {boardChainOpportunity.targetPlanLabel}
                                         <span aria-hidden="true" className={styles.chainOpportunityTargetPlanBeatPips}>
                                             {Array.from(
@@ -4806,6 +4831,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         {boardChainOpportunity.armedPerkPayoff ? (
                                             <em>{boardChainOpportunity.armedPerkPayoff}</em>
                                         ) : null}
+                                        <span aria-hidden="true" className={styles.chainOpportunityArmedPerkBeatPips}>
+                                            {Array.from({ length: boardChainOpportunity.armedPerkPayoff ? 4 : 3 }, (_, index) => (
+                                                <i
+                                                    data-chain-armed-perk-beat={index + 1}
+                                                    data-chain-armed-perk-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                            ))}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.rewardUrgencyLabel ? (
@@ -4814,6 +4848,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-reward-urgency={boardChainOpportunity.rewardUrgencyTier ?? 'none'}
                                     >
                                         {boardChainOpportunity.rewardUrgencyLabel}
+                                        <span aria-hidden="true" className={styles.chainOpportunityRewardUrgencyBeatPips}>
+                                            {Array.from(
+                                                {
+                                                    length:
+                                                        boardChainOpportunity.rewardUrgencyTier === 'soon'
+                                                            ? 4
+                                                            : boardChainOpportunity.rewardUrgencyTier === 'later'
+                                                              ? 2
+                                                              : 3
+                                                },
+                                                (_, index) => (
+                                                    <i
+                                                        data-chain-reward-urgency-beat={index + 1}
+                                                        data-chain-reward-urgency-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                )
+                                            )}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.examples.length > 0 ? (

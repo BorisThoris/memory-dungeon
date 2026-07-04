@@ -713,6 +713,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-reward-urgency', 'One-away cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-reward-urgency-tier', 'next');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-reward-hot', 'true');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-reward-urgency-beat]')).toHaveLength(3);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-urgency-beat="1"]')
+        ).toHaveAttribute('data-chain-reward-urgency-beat-focus', 'primary');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-sequence-first', 'Match lit route for reward');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-sequence-then', 'Cash x6 +1 shard in 1 match');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-sequence-keep', 'Push x6 reward');
@@ -2063,6 +2067,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Perk armed');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Trait cashout armed');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('x3 trait flash');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-armed-perk-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-armed-perk-beat="1"]')
+        ).toHaveAttribute('data-chain-armed-perk-beat-focus', 'primary');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-id', 'chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue', 'Stack cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Stack cashout');
@@ -2516,36 +2524,16 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-beats', '3');
         expect(screen.getByTestId('board-opportunity-chain').querySelectorAll('[data-opportunity-beat]')).toHaveLength(3);
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Route prime');
-        expect(
-            screen.getByTestId('tile-board-frame').querySelector('[data-chain-opportunity-target]')
-        ).toHaveTextContent('Swap Sealed with Filler: Sealed + Heavy: score surge');
-        expect(
-            screen
-                .getByTestId('tile-board-frame')
-                .querySelector('[data-chain-opportunity-target]')
-                ?.querySelectorAll('[data-chain-target-beat]')
-        ).toHaveLength(2);
-        expect(
-            screen
-                .getByTestId('tile-board-frame')
-                .querySelector('[data-chain-opportunity-target]')
-                ?.querySelector('[data-chain-target-beat="1"]')
-        ).toHaveAttribute('data-chain-target-beat-focus', 'primary');
-        expect(screen.getByTestId('tile-board-frame').querySelector('[data-chain-opportunity-target-plan]')).toHaveTextContent(
-            'Keep reward stack primed'
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
+            'data-chain-opportunity-target',
+            'Use swap to connect route'
         );
+        expect(screen.getByTestId('tile-board-frame').querySelectorAll('[data-chain-target-beat]')).toHaveLength(2);
         expect(
-            screen
-                .getByTestId('tile-board-frame')
-                .querySelector('[data-chain-opportunity-target-plan]')
-                ?.querySelectorAll('[data-chain-target-plan-beat]')
-        ).toHaveLength(3);
-        expect(
-            screen
-                .getByTestId('tile-board-frame')
-                .querySelector('[data-chain-opportunity-target-plan]')
-                ?.querySelector('[data-chain-target-plan-beat="1"]')
-        ).toHaveAttribute('data-chain-target-plan-beat-focus', 'primary');
+            screen.getByTestId('tile-board-frame').querySelector('[data-chain-target-beat="1"]')
+        ).toHaveAttribute('data-chain-target-beat-focus', 'primary');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-target-plan', 'none');
+        expect(screen.getByTestId('tile-board-frame').querySelectorAll('[data-chain-target-plan-beat]')).toHaveLength(0);
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-trait-route-tiers',
             'route-target:2'
@@ -2653,6 +2641,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-milestone')).toHaveTextContent('Start chain');
         expect(screen.getByTestId('chain-opportunity-milestone')).toHaveTextContent('1 match to x3');
         expect(screen.getByTestId('chain-opportunity-milestone')).toHaveAttribute('data-chain-milestone-tone', 'building');
+        expect(screen.getByTestId('chain-opportunity-milestone').querySelectorAll('[data-chain-milestone-beat]')).toHaveLength(2);
+        expect(
+            screen.getByTestId('chain-opportunity-milestone').querySelector('[data-chain-milestone-beat="1"]')
+        ).toHaveAttribute('data-chain-milestone-beat-focus', 'primary');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Stack prime');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-heat', 'prime');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-beats', '3');

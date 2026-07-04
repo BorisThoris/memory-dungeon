@@ -1308,7 +1308,7 @@
 
 .chainOpportunityMilestone {
     display: inline-grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.2rem;
     max-width: min(12rem, 34vi);
@@ -1340,6 +1340,34 @@
     color: currentColor;
     font-size: 0.58rem;
     font-weight: 940;
+}
+
+.chainOpportunityMilestoneBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    margin-left: auto;
+}
+
+.chainOpportunityMilestoneBeatPips i {
+    display: block;
+    width: 0.13rem;
+    height: 0.13rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityMilestoneBeatPips i[data-chain-milestone-beat-focus='primary'] {
+    width: 0.26rem;
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityMilestoneBeatPips i[data-chain-milestone-beat-focus='support'] {
+    opacity: 0.7;
 }
 
 .chainOpportunityMilestone[data-chain-milestone-tone='chain'] {
@@ -1574,7 +1602,7 @@
 
 .chainOpportunityArmedPerk {
     display: inline-grid;
-    grid-template-columns: auto minmax(0, auto) minmax(0, auto);
+    grid-template-columns: auto minmax(0, auto) minmax(0, auto) auto;
     align-items: center;
     gap: 0.18rem;
     max-width: min(16rem, 48vi);
@@ -1618,7 +1646,39 @@
     font-weight: 840;
 }
 
+.chainOpportunityArmedPerkBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    margin-left: auto;
+}
+
+.chainOpportunityArmedPerkBeatPips i {
+    display: block;
+    width: 0.12rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.chainOpportunityArmedPerkBeatPips i[data-chain-armed-perk-beat-focus='primary'] {
+    width: 0.24rem;
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, currentColor 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.chainOpportunityArmedPerkBeatPips i[data-chain-armed-perk-beat-focus='support'] {
+    opacity: 0.68;
+}
+
 .chainOpportunityRewardUrgency {
+    display: inline-grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.14rem;
     max-width: min(9.5rem, 28vi);
     overflow: hidden;
     padding: 0.12rem 0.36rem;
@@ -1645,6 +1705,34 @@
         color-mix(in srgb, var(--theme-void) 42%, transparent);
     box-shadow: none;
     color: color-mix(in srgb, var(--theme-cyan-bright) 78%, var(--theme-gold-bright));
+}
+
+.chainOpportunityRewardUrgencyBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    margin-left: auto;
+}
+
+.chainOpportunityRewardUrgencyBeatPips i {
+    display: block;
+    width: 0.12rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 72%, white);
+    box-shadow: 0 0 0.16rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.chainOpportunityRewardUrgencyBeatPips i[data-chain-reward-urgency-beat-focus='primary'] {
+    width: 0.24rem;
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, currentColor 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.chainOpportunityRewardUrgencyBeatPips i[data-chain-reward-urgency-beat-focus='support'] {
+    opacity: 0.68;
 }
 
 .chainOpportunityChip[data-chain-opportunity-tone='ready'] .chainOpportunityCue {
