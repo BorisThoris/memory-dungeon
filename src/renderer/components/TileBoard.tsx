@@ -4122,10 +4122,29 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 ? 'best'
                                                 : boardChainOpportunity.selectedFollowupCount > 0
                                                   ? 'followup'
-                                                  : boardChainOpportunity.tone
+                                                : boardChainOpportunity.tone
                                         }
                                     >
                                         {boardChainOpportunity.priorityLabel}
+                                        <span aria-hidden="true" className={styles.chainOpportunityPriorityBeatPips}>
+                                            {Array.from(
+                                                {
+                                                    length:
+                                                        boardChainOpportunity.rewardHot
+                                                            ? 5
+                                                            : boardChainOpportunity.selectedFollowupCount > 0
+                                                              ? 3
+                                                              : 2
+                                                },
+                                                (_, index) => (
+                                                    <i
+                                                        data-chain-priority-beat={index + 1}
+                                                        data-chain-priority-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                )
+                                            )}
+                                        </span>
                                     </span>
                                 ) : null}
                                 <span className={styles.chainOpportunityCue}>{boardChainOpportunity.cue}</span>
@@ -4250,6 +4269,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>{boardChainOpportunity.arcadeCallout.label}</small>
                                         <b>{boardChainOpportunity.arcadeCallout.value}</b>
+                                        <span aria-hidden="true" className={styles.chainOpportunityArcadeCalloutBeatPips}>
+                                            {Array.from(
+                                                {
+                                                    length:
+                                                        boardChainOpportunity.arcadeCallout.tone === 'cashout'
+                                                            ? 5
+                                                            : boardChainOpportunity.arcadeCallout.tone === 'surge'
+                                                              ? 4
+                                                              : 2
+                                                },
+                                                (_, index) => (
+                                                    <i
+                                                        data-chain-callout-beat={index + 1}
+                                                        data-chain-callout-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                )
+                                            )}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardChainRecipeChips.length > 0 ? (

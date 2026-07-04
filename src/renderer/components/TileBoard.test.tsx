@@ -484,6 +484,14 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-arcade-callout')).toHaveTextContent('Cashout shot');
         expect(screen.getByTestId('chain-opportunity-arcade-callout')).toHaveTextContent('Match lit route for reward');
+        expect(screen.getByTestId('chain-opportunity-arcade-callout').querySelectorAll('[data-chain-callout-beat]')).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-focus', 'primary');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-priority-beat]')).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-priority-beat="1"]')
+        ).toHaveAttribute('data-chain-priority-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Route');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Payoff');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Stack');
@@ -1861,6 +1869,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAccessibleName(
             'Card action priority. Cash now: 2. Perk cash: 2'
         );
+        expect(screen.getByTestId('chain-opportunity-action-priority').querySelectorAll('[data-card-action-priority]')).toHaveLength(2);
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Perk');
         expect(screen.getByTestId('chain-opportunity-marker-key').querySelector('[data-chain-marker-shape="perk-armed-bar"]')).toHaveTextContent('+!');
         expect(screen.getByTestId('chain-opportunity-marker-key').querySelector('[data-chain-marker-shape="perk-armed-bar"]')).toHaveTextContent('Cash perk');
@@ -1901,6 +1910,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAccessibleName(
             'Board payoff stack. Super stack. Cash super stack. 3 payoffs live. Combo route + Perk payoff + Rewards. Crescendo: Super burst. Five-beat super cashout window. 5 beats. First: Cash out combo route. Then: Cash perk payoff. Keep: Claim rewards.'
         );
+        expect(screen.getByTestId('chain-opportunity-arcade-callout').querySelectorAll('[data-chain-callout-beat]')).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-focus', 'primary');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-priority-beat]')).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-priority-beat="1"]')
+        ).toHaveAttribute('data-chain-priority-beat-focus', 'primary');
     });
 
     it('surfaces plain streak rewards as cashout opportunities even without trait routes', () => {
