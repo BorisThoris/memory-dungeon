@@ -1044,14 +1044,31 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-hot')).toHaveAccessibleName(
             'Chain reward hot: x4 +1 shard. Hit now.'
         );
+        expect(screen.getByTestId('hud-chain-reward-hot')).toHaveAttribute('data-chain-reward-hot-beats', '4');
+        expect(screen.getByTestId('hud-chain-reward-hot')).toHaveAttribute('data-chain-reward-hot-screen-cue', 'super');
+        expect(screen.getByTestId('hud-chain-reward-hot')).toHaveAttribute('data-chain-reward-hot-tone', 'cashout');
         expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveAttribute(
             'data-chain-reward-hot-band-tone',
             'cashout'
+        );
+        expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveAttribute(
+            'data-chain-reward-hot-band-beats',
+            '4'
+        );
+        expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveAttribute(
+            'data-chain-reward-hot-band-screen-cue',
+            'super'
         );
         expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveTextContent('Reward hot');
         expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveTextContent('x4 +1 shard');
         expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveTextContent('1 match left');
         expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveTextContent('Hit now');
+        expect(
+            screen.getByTestId('hud-chain-reward-hot-band').querySelectorAll('[data-chain-reward-hot-band-beat]')
+        ).toHaveLength(4);
+        expect(
+            screen.getByTestId('hud-chain-reward-hot-band').querySelector('[data-chain-reward-hot-band-beat="1"]')
+        ).toHaveAttribute('data-chain-reward-hot-band-beat-focus', 'primary');
         expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveAccessibleName(
             'Chain reward hot band. Reward hot. x4 +1 shard. 1 match left.'
         );

@@ -6995,6 +6995,13 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
 }
 
+.hudChainRewardHotBadge[data-chain-reward-hot-screen-cue='super'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 68%, var(--theme-cyan-bright) 14%);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+}
+
 .hudChainRewardHotBand {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
@@ -7084,6 +7091,18 @@
 
 .hudChainRewardHotBand[data-chain-reward-hot-band-tone='cashout'] .hudChainRewardHotBandBeatPips i {
     background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.hudChainRewardHotBand[data-chain-reward-hot-band-screen-cue='super'] {
+    animation: hudRewardPulse 0.92s ease-in-out infinite;
+}
+
+.hudChainRewardHotBandBeatPips i[data-chain-reward-hot-band-beat-focus='primary'] {
+    width: 0.42rem;
+    background: color-mix(in srgb, white 12%, var(--theme-gold-bright) 88%);
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 44%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
 }
 
 .hudChainComboSurgeBand {

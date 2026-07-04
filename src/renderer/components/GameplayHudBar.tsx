@@ -2463,6 +2463,9 @@ const GameplayHudBar = ({
                                             <span
                                                 aria-label={`Chain reward hot: ${primaryResourceRewardCue.label}. ${primaryResourceRewardCue.chaseLabel}.`}
                                                 className={styles.hudChainRewardHotBadge}
+                                                data-chain-reward-hot-beats={primaryResourceRewardBeatCount}
+                                                data-chain-reward-hot-screen-cue="super"
+                                                data-chain-reward-hot-tone="cashout"
                                                 data-testid="hud-chain-reward-hot"
                                             >
                                                 <small>Reward hot</small>
@@ -2491,6 +2494,8 @@ const GameplayHudBar = ({
                                             <span
                                                 aria-label={primaryRewardHotBandLabel}
                                                 className={styles.hudChainRewardHotBand}
+                                                data-chain-reward-hot-band-beats={primaryResourceRewardBeatCount}
+                                                data-chain-reward-hot-band-screen-cue="super"
                                                 data-chain-reward-hot-band-tone={primaryRewardHotBand.tone}
                                                 data-testid="hud-chain-reward-hot-band"
                                             >
@@ -2500,7 +2505,13 @@ const GameplayHudBar = ({
                                                 <i>{primaryResourceRewardCue?.chaseLabel ?? 'Hit now'}</i>
                                                 <span aria-hidden="true" className={styles.hudChainRewardHotBandBeatPips}>
                                                     {Array.from({ length: primaryResourceRewardBeatCount }, (_, beatIndex) => (
-                                                        <i data-chain-reward-hot-band-beat={beatIndex + 1} key={beatIndex} />
+                                                        <i
+                                                            data-chain-reward-hot-band-beat={beatIndex + 1}
+                                                            data-chain-reward-hot-band-beat-focus={
+                                                                beatIndex === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={beatIndex}
+                                                        />
                                                     ))}
                                                 </span>
                                             </span>
