@@ -4763,6 +4763,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             {Array.from({ length: beatCount }, (_, index) => (
                                                                 <i
                                                                     data-chain-reward-beat={index + 1}
+                                                                    data-chain-reward-beat-focus={index === 0 ? 'primary' : 'support'}
                                                                     key={`${cue.id}-board-reward-beat-${index + 1}`}
                                                                 />
                                                             ))}
@@ -4869,7 +4870,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         {Array.from(
                                                             { length: getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane) },
                                                             (_, beatIndex) => (
-                                                                <i data-match-trait-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                                <i
+                                                                    data-match-trait-primary-lane-beat={beatIndex + 1}
+                                                                    data-match-trait-primary-lane-beat-focus={
+                                                                        beatIndex === 0 ? 'primary' : 'support'
+                                                                    }
+                                                                    key={beatIndex}
+                                                                />
                                                             )
                                                         )}
                                                     </span>
@@ -4893,6 +4900,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         {Array.from({ length: getBoardFloaterTraitLaneBeatCount(lane) }, (_, index) => (
                                                             <i
                                                                 data-match-trait-lane-beat={index + 1}
+                                                                data-match-trait-lane-beat-focus={index === 0 ? 'primary' : 'support'}
                                                                 key={`${lane.id}-trait-lane-beat-${index + 1}`}
                                                             />
                                                         ))}

@@ -2357,6 +2357,18 @@ describe('GameScreen (OVR-014)', () => {
                 'data-chain-reward-screen-cue',
                 'pulse'
             );
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-focus', 'primary');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="2"]')
+            ).toHaveAttribute('data-chain-reward-beat-focus', 'support');
             expect(screen.getByTestId('match-score-floater-payoff-chips')).toHaveTextContent('Prime cashout');
             expect(screen.getByTestId('match-score-floater-payoff-chips')).toHaveTextContent('Combo prime');
             expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-floater-heat', 'prime');
@@ -2859,6 +2871,16 @@ describe('GameScreen (OVR-014)', () => {
                 .getByTestId('match-score-floater-primary-trait-lane')
                 .querySelectorAll('[data-match-trait-primary-lane-beat]')
         ).toHaveLength(3);
+        expect(
+            screen
+                .getByTestId('match-score-floater-primary-trait-lane')
+                .querySelector('[data-match-trait-primary-lane-beat="1"]')
+        ).toHaveAttribute('data-match-trait-primary-lane-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('match-score-floater-primary-trait-lane')
+                .querySelector('[data-match-trait-primary-lane-beat="2"]')
+        ).toHaveAttribute('data-match-trait-primary-lane-beat-focus', 'support');
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveTextContent('Shard');
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveTextContent('Cash shard');
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveTextContent('Guard');
@@ -2888,6 +2910,18 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-match-trait-lane="shard"]')
                 ?.querySelectorAll('[data-match-trait-lane-beat]')
         ).toHaveLength(3);
+        expect(
+            screen
+                .getByTestId('match-score-floater-trait-lane-map')
+                .querySelector('[data-match-trait-lane="shard"]')
+                ?.querySelector('[data-match-trait-lane-beat="1"]')
+        ).toHaveAttribute('data-match-trait-lane-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('match-score-floater-trait-lane-map')
+                .querySelector('[data-match-trait-lane="shard"]')
+                ?.querySelector('[data-match-trait-lane-beat="2"]')
+        ).toHaveAttribute('data-match-trait-lane-beat-focus', 'support');
         expect(
             screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="block"]')
         ).toHaveAttribute('data-match-trait-lane-beats', '3');

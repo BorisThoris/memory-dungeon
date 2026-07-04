@@ -12759,6 +12759,8 @@
 .boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-focus='primary'],
 .boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-focus='primary'],
 .boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-focus='primary'],
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-focus='primary'],
+.boardFloaterTraitLaneBeatPips i[data-match-trait-lane-beat-focus='primary'],
 .boardFloaterChipBeats i[data-match-payoff-chip-beat-focus='primary'] {
     min-width: 0.32rem;
     opacity: 1;
@@ -12771,6 +12773,8 @@
 .boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-focus='support'],
 .boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-focus='support'],
 .boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-focus='support'],
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-focus='support'],
+.boardFloaterTraitLaneBeatPips i[data-match-trait-lane-beat-focus='support'],
 .boardFloaterChipBeats i[data-match-payoff-chip-beat-focus='support'] {
     opacity: 0.7;
 }
@@ -13453,6 +13457,18 @@
     box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
     animation: mismatchRecoveryBeatPulse 0.78s ease-in-out infinite;
     opacity: 0.76;
+}
+
+.boardFloaterPrimaryTraitLaneBeatPips i[data-match-trait-primary-lane-beat-focus='primary'] {
+    min-width: 0.34rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.5rem color-mix(in srgb, currentColor 50%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.boardFloaterPrimaryTraitLaneBeatPips i[data-match-trait-primary-lane-beat-focus='support'] {
+    opacity: 0.72;
 }
 
 .boardFloaterPrimaryTraitLaneBeatPips i:nth-child(2) {
