@@ -3395,6 +3395,17 @@
     transform-origin: center;
 }
 
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-focus='primary'] {
+    width: 0.4rem;
+    height: 0.14rem;
+    filter: saturate(1.22) brightness(1.12);
+    transform: translateY(-0.01rem) scaleX(1.08);
+}
+
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .dungeonMapRoomPrimaryPayoffBeatPips {
     display: flex;
     grid-column: 1 / -1;
@@ -3411,6 +3422,17 @@
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
     animation: gameplayBeatPipPulse 0.92s ease-in-out infinite;
     transform-origin: center;
+}
+
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-focus='primary'] {
+    width: 0.44rem;
+    height: 0.15rem;
+    filter: saturate(1.26) brightness(1.14);
+    transform: translateY(-0.01rem) scaleX(1.1);
+}
+
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-focus='support'] {
+    opacity: 0.72;
 }
 
 .dungeonMapRoomPayoffRows > span[data-route-primary-payoff-screen-cue='burst'] {
@@ -11122,6 +11144,17 @@
     box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
     animation: gameplayBeatPipPulse 0.92s ease-in-out infinite;
     transform-origin: center;
+}
+
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-focus='primary'] {
+    width: 0.4rem;
+    height: 0.14rem;
+    filter: saturate(1.22) brightness(1.12);
+    transform: translateY(-0.01rem) scaleX(1.08);
+}
+
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-focus='support'] {
+    opacity: 0.72;
 }
 
 .onboardingPromptSignals > span[data-onboarding-signal-tone='reward'],

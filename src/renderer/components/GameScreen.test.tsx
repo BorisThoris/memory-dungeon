@@ -1633,6 +1633,16 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-onboarding-signal-tone="reward"]')
                 ?.querySelectorAll('[data-onboarding-signal-beat]')
         ).toHaveLength(4);
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="reward"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="reward"] [data-onboarding-signal-beat="2"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-focus', 'support');
         expect(screen.getByTestId('playable-onboarding-signals').querySelector('[data-onboarding-signal-tone="chain"]')).toHaveAttribute(
             'data-onboarding-signal-beats',
             '3'
@@ -4870,6 +4880,12 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveTextContent('Primary payoff');
         expect(screen.getByTestId('route-choice-safe-primary-payoff')).toHaveTextContent('steady clear');
         expect(screen.getByTestId('route-choice-safe-primary-payoff').querySelectorAll('[data-route-primary-payoff-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('route-choice-safe-primary-payoff').querySelector('[data-route-primary-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-primary-payoff-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('route-choice-safe-primary-payoff').querySelector('[data-route-primary-payoff-beat="2"]')
+        ).toHaveAttribute('data-route-primary-payoff-beat-focus', 'support');
         expect(screen.getByTestId('route-choice-safe-payoffs').getAttribute('aria-label')).toContain(
             'Route choice safe payoffs. Payoff: steady clear. Risk: low pressure. Next: ward support. Recall: Safe route fits the current recall state.'
         );
@@ -4888,6 +4904,12 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"]')?.querySelectorAll('[data-route-payoff-beat]')
         ).toHaveLength(4);
+        expect(
+            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"] [data-route-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-payoff-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"] [data-route-payoff-beat="2"]')
+        ).toHaveAttribute('data-route-payoff-beat-focus', 'support');
         expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveTextContent('ward support');
         expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveAttribute(
             'data-route-payoff-beats',
