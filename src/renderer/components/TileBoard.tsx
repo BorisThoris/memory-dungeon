@@ -5153,6 +5153,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 <span>Pickup rewards</span>
                                 <strong>{boardPickupOpportunity.valueLabel}</strong>
                                 {boardPickupOpportunity.target ? <b>{boardPickupOpportunity.target}</b> : null}
+                                <span aria-hidden="true" className={styles.pickupOpportunityChipBeatPips}>
+                                    {Array.from(
+                                        {
+                                            length:
+                                                boardPickupOpportunityFocus === 'cashout'
+                                                    ? 4
+                                                    : boardPickupOpportunity.count > 1
+                                                      ? 3
+                                                      : 2
+                                        },
+                                        (_, index) => (
+                                            <i
+                                                data-pickup-chip-beat={index + 1}
+                                                data-pickup-chip-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                key={index}
+                                            />
+                                        )
+                                    )}
+                                </span>
                                 {boardPickupOpportunity.stackCue ? (
                                     <em>{boardPickupOpportunity.stackCue}</em>
                                 ) : null}

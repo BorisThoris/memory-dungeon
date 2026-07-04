@@ -4216,6 +4216,34 @@
     line-height: 1.06;
 }
 
+.pickupOpportunityChipBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    margin-left: 0.08rem;
+}
+
+.pickupOpportunityChipBeatPips i {
+    display: block;
+    width: 0.12rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 80%, white);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+}
+
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-focus='primary'] {
+    width: 0.22rem;
+    box-shadow:
+        0 0 0.26rem color-mix(in srgb, currentColor 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-focus='support'] {
+    opacity: 0.66;
+}
+
 .pickupOpportunityChip b {
     justify-self: start;
     padding: 0.1rem 0.34rem;
