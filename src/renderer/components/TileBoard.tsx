@@ -5236,6 +5236,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 data-opportunity-compass-hot={boardChainHotBand?.tone ?? 'none'}
                                 data-opportunity-compass-surge={boardChainOpportunity.comboSurgeLabel ? 'true' : 'false'}
                                 data-opportunity-compass-beats={boardOpportunityCompassRows.length}
+                                data-opportunity-compass-priority={
+                                    boardOpportunityCompassRows.length > 1 ? 'best' : 'single'
+                                }
                                 data-testid="board-opportunity-compass"
                                 role="group"
                             >

@@ -1897,6 +1897,10 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('board-opportunity-compass-summary').querySelector('[data-opportunity-compass-summary-beat="1"]')
         ).toHaveAttribute('data-opportunity-compass-summary-beat-focus', 'primary');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute(
+            'data-opportunity-compass-priority',
+            'best'
+        );
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Super stack');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Cash super stack');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-audio', 'super-burst');

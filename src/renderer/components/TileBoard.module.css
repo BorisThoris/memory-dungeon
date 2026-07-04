@@ -4406,6 +4406,10 @@
     pointer-events: none;
 }
 
+.opportunityCompass[data-opportunity-compass-priority='best'] {
+    animation: boardOpportunityPulse 1.8s ease-in-out infinite;
+}
+
 .opportunityCompassSummary {
     display: inline-flex;
     align-items: center;
