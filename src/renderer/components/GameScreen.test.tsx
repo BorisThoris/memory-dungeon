@@ -2653,6 +2653,7 @@ describe('GameScreen (OVR-014)', () => {
             'super'
         );
         expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveAttribute('data-payoff-summary-tier', 'combo');
+        expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveAttribute('data-payoff-summary-focus', 'cashout');
         expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveAttribute('data-payoff-summary-beats', '5');
         expect(screen.getByTestId('match-score-floater-payoff-summary').querySelectorAll('[data-payoff-summary-beat]')).toHaveLength(5);
         expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveAttribute(

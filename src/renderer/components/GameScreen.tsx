@@ -4500,6 +4500,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-payoff-summary-audio={getBoardFloaterPayoffSummaryAudioCue(boardFloaterPayload.payoffSummary)}
                                             data-payoff-summary-beats={getBoardFloaterPayoffSummaryBeatCount(boardFloaterPayload.payoffSummary)}
                                             data-payoff-summary-label={boardFloaterPayload.payoffSummary.label}
+                                            data-payoff-summary-focus={
+                                                boardFloaterPayload.payoffSummary.label === 'Super stack' ||
+                                                boardFloaterPayload.payoffSummary.label === 'Stack cashout'
+                                                    ? 'cashout'
+                                                    : boardFloaterPayload.payoffSummary.tier
+                                            }
                                             data-payoff-summary-screen-cue={getBoardFloaterPayoffSummaryScreenCue(boardFloaterPayload.payoffSummary)}
                                             data-payoff-summary-tier={boardFloaterPayload.payoffSummary.tier}
                                             data-testid="match-score-floater-payoff-summary"

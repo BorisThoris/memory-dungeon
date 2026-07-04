@@ -12472,6 +12472,19 @@
     box-shadow: 0 0 1.1rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
 }
 
+.boardFloaterPayoffSummary[data-payoff-summary-focus='cashout'] {
+    outline: 1px solid color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    outline-offset: 0.08rem;
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 1.05rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
+}
+
+.boardFloaterPayoffSummary[data-payoff-summary-focus='cashout'] b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
 .boardFloaterPayoffLaneMap {
     display: flex;
     flex-wrap: wrap;
