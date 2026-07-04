@@ -5783,6 +5783,9 @@
 }
 
 .traitPreviewAction {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.08rem;
     width: fit-content;
     max-width: 100%;
     padding: 0.1rem 0.36rem;
@@ -5795,6 +5798,34 @@
     line-height: 1;
     overflow-wrap: anywhere;
     text-transform: uppercase;
+}
+
+.traitPreviewActionBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.04rem;
+    margin-left: 0.08rem;
+}
+
+.traitPreviewActionBeatPips i {
+    display: block;
+    width: 0.1rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 72%, white);
+    box-shadow: 0 0 0.14rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.traitPreviewActionBeatPips i[data-preview-action-beat-focus='primary'] {
+    width: 0.2rem;
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.traitPreviewActionBeatPips i[data-preview-action-beat-focus='support'] {
+    opacity: 0.64;
 }
 
 .traitPreviewChip[data-preview-kind='pickup'] .traitPreviewSignal {
@@ -5873,6 +5904,9 @@
 }
 
 .traitPreviewCashout {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.08rem;
     width: fit-content;
     max-width: 100%;
     padding: 0.12rem 0.38rem;
@@ -5886,6 +5920,34 @@
     font-weight: 900;
     line-height: 1.08;
     overflow-wrap: anywhere;
+}
+
+.traitPreviewCashoutBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.04rem;
+    margin-left: 0.08rem;
+}
+
+.traitPreviewCashoutBeatPips i {
+    display: block;
+    width: 0.1rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 72%, white);
+    box-shadow: 0 0 0.14rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.traitPreviewCashoutBeatPips i[data-preview-cashout-beat-focus='primary'] {
+    width: 0.2rem;
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.traitPreviewCashoutBeatPips i[data-preview-cashout-beat-focus='support'] {
+    opacity: 0.64;
 }
 
 .traitPreviewLine {

@@ -5453,10 +5453,30 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                     <b className={styles.traitPreviewAction}>
                                         {focusedPreviewChip.action}
+                                        <span aria-hidden="true" className={styles.traitPreviewActionBeatPips}>
+                                            {Array.from({ length: beatCount }, (_, beatIndex) => (
+                                                <i
+                                                    data-preview-action-beat={beatIndex + 1}
+                                                    data-preview-action-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                    key={`${focusedPreviewChip.action}-beat-${beatIndex + 1}`}
+                                                />
+                                            ))}
+                                        </span>
                                     </b>
                                     {focusedPreviewChip.rewardHotText ? (
                                         <span className={styles.traitPreviewCashout}>
                                             Cashout / {focusedPreviewChip.rewardHotText}
+                                            <span aria-hidden="true" className={styles.traitPreviewCashoutBeatPips}>
+                                                {Array.from({ length: Math.max(2, beatCount - 1) }, (_, beatIndex) => (
+                                                    <i
+                                                        data-preview-cashout-beat={beatIndex + 1}
+                                                        data-preview-cashout-beat-focus={
+                                                            beatIndex === 0 ? 'primary' : 'support'
+                                                        }
+                                                        key={`${focusedPreviewChip.rewardHotText}-beat-${beatIndex + 1}`}
+                                                    />
+                                                ))}
+                                            </span>
                                         </span>
                                     ) : null}
                                     {focusedPreviewChip.lines.map((line, index) => (
