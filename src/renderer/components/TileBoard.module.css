@@ -3449,6 +3449,44 @@
     line-height: 1.1;
 }
 
+.activePowerBoardChipBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.08rem;
+    min-width: 0;
+}
+
+.activePowerBoardChipBeatPips i {
+    display: block;
+    width: 0.18rem;
+    height: 0.18rem;
+    border-radius: 999px;
+    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+}
+
+.activePowerBoardChipBeatPips i[data-active-power-beat-focus='primary'] {
+    width: 0.3rem;
+    box-shadow:
+        0 0 0.48rem color-mix(in srgb, currentColor 42%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+}
+
+.activePowerBoardChipBeatPips i[data-active-power-beat-focus='support'] {
+    opacity: 0.7;
+}
+
+.activePowerBoardChip[data-active-power-tone='control'] .activePowerBoardChipBeatPips i {
+    background: color-mix(in srgb, var(--theme-ember) 82%, white);
+    box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-ember) 26%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-tone='recall'] .activePowerBoardChipBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+    box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-violet-bright) 26%, transparent);
+}
+
 .activePowerBoardChip small {
     min-width: 0;
     overflow: hidden;

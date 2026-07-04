@@ -2076,8 +2076,13 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('First: Pick target');
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Then: Preview route payoff');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tone', 'setup');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-beats', '2');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-first', 'Pick target');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-then', 'Preview route payoff');
+        expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-beat]')).toHaveLength(2);
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-beat="1"]')
+        ).toHaveAttribute('data-active-power-beat-focus', 'primary');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
             /Active board power.*Swap armed.*Place target.*First Pick target.*Then Preview route payoff/i
         );
@@ -2104,8 +2109,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('First: Reveal one');
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Then: Lock memory route');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tone', 'recall');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-beats', '3');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-first', 'Reveal one');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-then', 'Lock memory route');
+        expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-beat]')).toHaveLength(3);
         expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
             /Active board power.*Peek armed.*Tap hidden tile.*First Reveal one.*Then Lock memory route/i
         );
@@ -2131,8 +2138,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('First: Mark pair');
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Then: Clear blocker');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tone', 'control');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-beats', '3');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-first', 'Mark pair');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-then', 'Clear blocker');
+        expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-beat]')).toHaveLength(3);
         expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
             /Active board power.*Destroy armed.*Tap hidden pair.*First Mark pair.*Then Clear blocker/i
         );

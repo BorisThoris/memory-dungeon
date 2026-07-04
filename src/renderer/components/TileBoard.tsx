@@ -2226,6 +2226,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         first: string;
         label: string;
         then: string;
+        beats: 2 | 3 | 4;
         tone: 'setup' | 'control' | 'recall';
     } | null => {
         if (runStatus !== 'playing') {
@@ -2233,20 +2234,62 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
         if (tileSwapPowerVisualActive) {
             return tileSwapFirstTileId
-                ? { label: 'Swap armed', detail: 'Place target', first: 'Pick target', then: 'Preview route payoff', tone: 'setup' }
-                : { label: 'Swap armed', detail: 'Pick first tile', first: 'Pick source', then: 'Move into combo route', tone: 'setup' };
+                ? {
+                      beats: 2,
+                      label: 'Swap armed',
+                      detail: 'Place target',
+                      first: 'Pick target',
+                      then: 'Preview route payoff',
+                      tone: 'setup'
+                  }
+                : {
+                      beats: 2,
+                      label: 'Swap armed',
+                      detail: 'Pick first tile',
+                      first: 'Pick source',
+                      then: 'Move into combo route',
+                      tone: 'setup'
+                  };
         }
         if (destroyPowerVisualActive) {
-            return { label: 'Destroy armed', detail: 'Tap hidden pair', first: 'Mark pair', then: 'Clear blocker', tone: 'control' };
+            return {
+                beats: 3,
+                label: 'Destroy armed',
+                detail: 'Tap hidden pair',
+                first: 'Mark pair',
+                then: 'Clear blocker',
+                tone: 'control'
+            };
         }
         if (peekPowerVisualActive) {
-            return { label: 'Peek armed', detail: 'Tap hidden tile', first: 'Reveal one', then: 'Lock memory route', tone: 'recall' };
+            return {
+                beats: 3,
+                label: 'Peek armed',
+                detail: 'Tap hidden tile',
+                first: 'Reveal one',
+                then: 'Lock memory route',
+                tone: 'recall'
+            };
         }
         if (strayPowerVisualActive) {
-            return { label: 'Stray armed', detail: 'Remove singleton', first: 'Find stray', then: 'Open board space', tone: 'control' };
+            return {
+                beats: 3,
+                label: 'Stray armed',
+                detail: 'Remove singleton',
+                first: 'Find stray',
+                then: 'Open board space',
+                tone: 'control'
+            };
         }
         if (pinModeBoardHintActive) {
-            return { label: 'Pin mode', detail: 'Mark memory', first: 'Pin clue', then: 'Return for pair', tone: 'recall' };
+            return {
+                beats: 3,
+                label: 'Pin mode',
+                detail: 'Mark memory',
+                first: 'Pin clue',
+                then: 'Return for pair',
+                tone: 'recall'
+            };
         }
         return null;
     }, [
@@ -4726,6 +4769,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             <div
                                 aria-label={activePowerBoardChipLabel}
                                 className={styles.activePowerBoardChip}
+                                data-active-power-beats={activePowerBoardChip.beats}
                                 data-active-power-first={activePowerBoardChip.first}
                                 data-active-power-then={activePowerBoardChip.then}
                                 data-active-power-tone={activePowerBoardChip.tone}
@@ -4734,6 +4778,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             >
                                 <span>{activePowerBoardChip.label}</span>
                                 <strong>{activePowerBoardChip.detail}</strong>
+                                <span aria-hidden="true" className={styles.activePowerBoardChipBeatPips}>
+                                    {Array.from({ length: activePowerBoardChip.beats }, (_, index) => (
+                                        <i
+                                            data-active-power-beat={index + 1}
+                                            data-active-power-beat-focus={index === 0 ? 'primary' : 'support'}
+                                            key={index}
+                                        />
+                                    ))}
+                                </span>
                                 <small data-active-power-step="first">First: {activePowerBoardChip.first}</small>
                                 <small data-active-power-step="then">Then: {activePowerBoardChip.then}</small>
                             </div>
