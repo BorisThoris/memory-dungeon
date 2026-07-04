@@ -557,10 +557,26 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-reward-ladder').querySelector('[data-board-chain-reward-tone="reward"]')
         ).toHaveAttribute('data-board-chain-reward-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-reward-ladder')
+                .querySelector('[data-board-chain-reward-tone="reward"]')
+                ?.querySelector('[data-board-chain-reward-beat="1"]')
+        ).toHaveAttribute('data-board-chain-reward-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-reward-ladder')
+                .querySelector('[data-board-chain-reward-tone="reward"]')
+                ?.querySelector('[data-board-chain-reward-beat="2"]')
+        ).toHaveAttribute('data-board-chain-reward-beat-focus', 'support');
         expect(healRewardTarget).toHaveAttribute('data-board-chain-reward-action', 'Hold streak');
         expect(healRewardTarget).toHaveAttribute('data-board-chain-reward-focus', 'support');
         expect(healRewardTarget).toHaveAttribute('data-board-chain-reward-beats', '3');
         expect(healRewardTarget?.querySelectorAll('[data-board-chain-reward-beat]')).toHaveLength(3);
+        expect(healRewardTarget?.querySelector('[data-board-chain-reward-beat="1"]')).toHaveAttribute(
+            'data-board-chain-reward-beat-focus',
+            'primary'
+        );
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Match lit route for reward');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Push x6 reward');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent('First');

@@ -4487,6 +4487,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     {Array.from({ length: boardChainRewardBeatCount(entry) }, (_, beatIndex) => (
                                                         <i
                                                             data-board-chain-reward-beat={beatIndex + 1}
+                                                            data-board-chain-reward-beat-focus={
+                                                                beatIndex === 0 ? 'primary' : 'support'
+                                                            }
                                                             key={`${entry.cue.id}-reward-beat-${beatIndex + 1}`}
                                                         />
                                                     ))}

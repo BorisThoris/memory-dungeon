@@ -2837,6 +2837,18 @@
     opacity: 0.95;
 }
 
+.chainOpportunityRewardBeatPips i[data-board-chain-reward-beat-focus='primary'] {
+    min-width: 0.36rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.46rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.chainOpportunityRewardBeatPips i[data-board-chain-reward-beat-focus='support'] {
+    opacity: 0.68;
+}
+
 .chainOpportunityRewardLadder > span[data-board-chain-reward-focus='primary'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 64%, var(--theme-cyan-bright) 18%);
     background:
