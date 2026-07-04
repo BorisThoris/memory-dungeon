@@ -104,6 +104,48 @@ const ReadabilityMaterialMesh = ({
     </mesh>
 );
 
+interface BeatPipRowProps {
+    color: string;
+    count: number;
+    keyPrefix: string;
+    opacity: number;
+    positionY: number;
+    renderOrder: number;
+    supportColor?: string;
+}
+
+const BeatPipRow = ({
+    color,
+    count,
+    keyPrefix,
+    opacity,
+    positionY,
+    renderOrder,
+    supportColor = '#fff7c4'
+}: BeatPipRowProps) => (
+    <>
+        {Array.from({ length: count }, (_, index) => {
+            const focus = index === 0 ? 'primary' : 'support';
+            const pipColor = focus === 'primary' ? color : supportColor;
+            const pipOpacity = focus === 'primary' ? opacity : Math.max(0.72, opacity - 0.12);
+            const pipScale = focus === 'primary' ? 0.72 : 0.58;
+            const x = (index - (count - 1) / 2) * 0.078;
+
+            return (
+                <ReadabilityMaterialMesh
+                    color={pipColor}
+                    geometry={BOARD_READABILITY_PIP_GEOMETRY}
+                    key={`${keyPrefix}-${index}`}
+                    opacity={pipOpacity}
+                    position={[x, positionY, 0.0001 + index * 0.00001]}
+                    renderOrder={renderOrder}
+                    scale={[pipScale, pipScale, 1]}
+                />
+            );
+        })}
+    </>
+);
+
 export const TileBoardReadabilityMarkers = ({
     destroyBlockedDecoyBack,
     enemyOccupiedBack,
@@ -1163,6 +1205,15 @@ export const TileBoardReadabilityMarkers = ({
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
                                 scale={[0.66, 0.66, 1]}
                             />
+                            <BeatPipRow
+                                color="#ffd166"
+                                count={4}
+                                keyPrefix={`trait-combo-surge-${tile.id}`}
+                                opacity={0.92}
+                                positionY={-0.046}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+                                supportColor="#fff7c4"
+                            />
                         </group>
                     ) : null}
                     {isPerkArmedBack ? (
@@ -1183,6 +1234,15 @@ export const TileBoardReadabilityMarkers = ({
                                 position={[0, 0.001, 0.00005]}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
                                 scale={[0.72, 1, 1]}
+                            />
+                            <BeatPipRow
+                                color="#ffe48a"
+                                count={2}
+                                keyPrefix={`trait-perk-${tile.id}`}
+                                opacity={0.94}
+                                positionY={-0.046}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+                                supportColor="#8de6ff"
                             />
                         </group>
                     ) : null}
@@ -1206,6 +1266,15 @@ export const TileBoardReadabilityMarkers = ({
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
                                 rotation={[0, 0, Math.PI / 2]}
                                 scale={[0.72, 1, 1]}
+                            />
+                            <BeatPipRow
+                                color="#fff7c4"
+                                count={3}
+                                keyPrefix={`trait-followup-${tile.id}`}
+                                opacity={0.96}
+                                positionY={-0.046}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+                                supportColor="#8de6ff"
                             />
                         </group>
                     ) : null}
@@ -1238,6 +1307,15 @@ export const TileBoardReadabilityMarkers = ({
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
                                 rotation={[0, 0, Math.PI / 2]}
                                 scale={[0.72, 0.78, 1]}
+                            />
+                            <BeatPipRow
+                                color="#ffe48a"
+                                count={3}
+                                keyPrefix={`trait-route-${tile.id}`}
+                                opacity={0.9}
+                                positionY={-0.048}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
+                                supportColor="#5ee0c8"
                             />
                         </group>
                     ) : null}
@@ -1279,6 +1357,15 @@ export const TileBoardReadabilityMarkers = ({
                                 rotation={[0, 0, -Math.PI / 4]}
                                 scale={[0.7, 0.86, 1]}
                             />
+                            <BeatPipRow
+                                color="#ffe48a"
+                                count={5}
+                                keyPrefix={`trait-payoff-${tile.id}`}
+                                opacity={0.98}
+                                positionY={-0.047}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
+                                supportColor="#5ee0c8"
+                            />
                         </group>
                     ) : null}
                     {isTraitRouteTargetBack ? (
@@ -1314,6 +1401,15 @@ export const TileBoardReadabilityMarkers = ({
                                 position={[0.074, 0.035, 0.00006]}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
                                 rotation={[0, 0, -Math.PI / 2.8]}
+                            />
+                            <BeatPipRow
+                                color="#5dd6ff"
+                                count={2}
+                                keyPrefix={`trait-route-target-${tile.id}`}
+                                opacity={0.94}
+                                positionY={-0.046}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
+                                supportColor="#ffe48a"
                             />
                         </group>
                     ) : null}
