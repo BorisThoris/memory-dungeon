@@ -164,7 +164,11 @@ export const GameScreenEndlessChapterBanner = ({
                 <b>{actionCue.value}</b>
                 <span aria-hidden="true" className={styles.endlessChapterBeatPips}>
                     {Array.from({ length: chapterActionBeatCount(actionCue) }, (_, index) => (
-                        <i data-chapter-action-beat key={index} />
+                        <i
+                            data-chapter-action-beat={index + 1}
+                            data-chapter-action-beat-focus={index === 0 ? 'primary' : 'support'}
+                            key={index}
+                        />
                     ))}
                 </span>
             </span>
@@ -185,7 +189,11 @@ export const GameScreenEndlessChapterBanner = ({
                         <b>{row.value}</b>
                         <span aria-hidden="true" className={styles.endlessChapterBeatPips}>
                             {Array.from({ length: chapterSignalBeatCount(row) }, (_, index) => (
-                                <i data-chapter-signal-beat key={index} />
+                                <i
+                                    data-chapter-signal-beat={index + 1}
+                                    data-chapter-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                    key={index}
+                                />
                             ))}
                         </span>
                     </span>

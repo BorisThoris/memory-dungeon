@@ -3951,7 +3951,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <b>Third flip</b>
                                         <span aria-hidden="true" className={styles.gambitOpportunityBeatPips}>
                                             {Array.from({ length: getGambitSignalBeatCount('Window') }, (_, index) => (
-                                                <i data-gambit-signal-beat="" key={index} />
+                                                <i
+                                                    data-gambit-signal-beat={index + 1}
+                                                    data-gambit-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                     </span>
@@ -3965,7 +3969,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <b>Recover pair</b>
                                         <span aria-hidden="true" className={styles.gambitOpportunityBeatPips}>
                                             {Array.from({ length: getGambitSignalBeatCount('Payoff') }, (_, index) => (
-                                                <i data-gambit-signal-beat="" key={index} />
+                                                <i
+                                                    data-gambit-signal-beat={index + 1}
+                                                    data-gambit-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                     </span>
@@ -3979,7 +3987,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <b>No perfect</b>
                                         <span aria-hidden="true" className={styles.gambitOpportunityBeatPips}>
                                             {Array.from({ length: getGambitSignalBeatCount('Cost') }, (_, index) => (
-                                                <i data-gambit-signal-beat="" key={index} />
+                                                <i
+                                                    data-gambit-signal-beat={index + 1}
+                                                    data-gambit-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                     </span>

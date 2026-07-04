@@ -4358,6 +4358,16 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-chapter-signal-tone="objective"]')
                 ?.querySelectorAll('[data-chapter-signal-beat]')
         ).toHaveLength(4);
+        expect(
+            getByTestId('endless-chapter-signals').querySelector(
+                '[data-chapter-signal-tone="objective"] [data-chapter-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-chapter-signal-beat-focus', 'primary');
+        expect(
+            getByTestId('endless-chapter-signals').querySelector(
+                '[data-chapter-signal-tone="objective"] [data-chapter-signal-beat="2"]'
+            )
+        ).toHaveAttribute('data-chapter-signal-beat-focus', 'support');
         expect(getByTestId('endless-chapter-signals').getAttribute('aria-label')).toContain(
             'Chapter gameplay signals. Pressure: Baseline descent. Counter: Read plan. Payoff: Flip par.'
         );
@@ -4371,6 +4381,14 @@ describe('GameScreen (OVR-014)', () => {
         expect(getByTestId('endless-chapter-action-cue')).toHaveAttribute('data-chapter-action-beats', '2');
         expect(getByTestId('endless-chapter-action-cue')).toHaveAttribute('data-chapter-action-screen-cue', 'snap');
         expect(getByTestId('endless-chapter-action-cue').querySelectorAll('[data-chapter-action-beat]')).toHaveLength(2);
+        expect(getByTestId('endless-chapter-action-cue').querySelector('[data-chapter-action-beat="1"]')).toHaveAttribute(
+            'data-chapter-action-beat-focus',
+            'primary'
+        );
+        expect(getByTestId('endless-chapter-action-cue').querySelector('[data-chapter-action-beat="2"]')).toHaveAttribute(
+            'data-chapter-action-beat-focus',
+            'support'
+        );
         expect(getByTestId('endless-chapter-action-cue')).toHaveAccessibleName(
             'Chapter action cue. Now: Route Flip par.'
         );
@@ -5426,6 +5444,16 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-gambit-signal="payoff"]')
                 ?.querySelectorAll('[data-gambit-signal-beat]')
         ).toHaveLength(4);
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="payoff"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="payoff"] [data-gambit-signal-beat="2"]')
+        ).toHaveAttribute('data-gambit-signal-beat-focus', 'support');
         expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="cost"]')).toHaveAttribute(
             'data-gambit-signal-beats',
             '3'

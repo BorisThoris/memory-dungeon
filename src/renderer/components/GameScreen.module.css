@@ -557,6 +557,17 @@
     transform-origin: center;
 }
 
+.gambitOpportunityBeatPips i[data-gambit-signal-beat-focus='primary'] {
+    width: 0.42rem;
+    height: 0.15rem;
+    filter: saturate(1.25) brightness(1.16);
+    transform: translateY(-0.01rem) scaleX(1.1);
+}
+
+.gambitOpportunityBeatPips i[data-gambit-signal-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .gambitOpportunitySignals > span[data-gambit-signal='window'],
 .gambitOpportunitySignals > span[data-gambit-signal='payoff'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
@@ -702,6 +713,19 @@
     box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 20%, transparent);
     animation: gameplayBeatPipPulse 0.92s ease-in-out infinite;
     transform-origin: center;
+}
+
+.endlessChapterBeatPips i[data-chapter-action-beat-focus='primary'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-focus='primary'] {
+    min-width: 0.42rem;
+    height: 0.18rem;
+    filter: saturate(1.28) brightness(1.14);
+    transform: translateY(-0.01rem) scaleX(1.12);
+}
+
+.endlessChapterBeatPips i[data-chapter-action-beat-focus='support'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-focus='support'] {
+    opacity: 0.72;
 }
 
 .endlessChapterActionCue[data-chapter-action-tone='reward'],
