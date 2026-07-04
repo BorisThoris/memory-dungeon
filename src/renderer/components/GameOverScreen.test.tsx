@@ -258,6 +258,9 @@ describe('GameOverScreen (REF-031)', () => {
         expect(screen.getByTestId('game-over-primary-payoff-lane')).toHaveTextContent('Top chase');
         expect(screen.getByTestId('game-over-primary-payoff-lane')).toHaveTextContent('Protect chain');
         expect(screen.getByTestId('game-over-primary-payoff-lane').querySelectorAll('[data-payoff-primary-lane-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('game-over-primary-payoff-lane').querySelector('[data-payoff-primary-lane-beat="1"]')
+        ).toHaveAttribute('data-payoff-primary-lane-beat-focus', 'primary');
         expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveTextContent('Cash reward');
         expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveTextContent('Reduce risk');
         expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveTextContent('Risk');
@@ -270,6 +273,10 @@ describe('GameOverScreen (REF-031)', () => {
         expect(cashLane).toHaveAttribute('data-payoff-lane-action', 'Cash reward');
         expect(cashLane).toHaveAttribute('data-payoff-lane-beats', '4');
         expect(cashLane?.querySelectorAll('[data-payoff-lane-beat]')).toHaveLength(4);
+        expect(cashLane?.querySelector('[data-payoff-lane-beat="1"]')).toHaveAttribute(
+            'data-payoff-lane-beat-focus',
+            'primary'
+        );
         expect(riskLane).toHaveAttribute('data-payoff-lane-action', 'Reduce risk');
         expect(riskLane).toHaveAttribute('data-payoff-lane-beats', '2');
         expect(riskLane?.querySelectorAll('[data-payoff-lane-beat]')).toHaveLength(2);
@@ -291,6 +298,10 @@ describe('GameOverScreen (REF-031)', () => {
         expect(payoffCrescendo).toHaveTextContent('Super burst');
         expect(payoffCrescendo).toHaveTextContent('Archive this route as a full payoff stack to rebuild next run');
         expect(payoffCrescendo.querySelectorAll('i')).toHaveLength(5);
+        expect(payoffCrescendo.querySelector('[data-payoff-crescendo-beat="1"]')).toHaveAttribute(
+            'data-payoff-crescendo-beat-focus',
+            'primary'
+        );
         expect(payoffCrescendo).toHaveAttribute('data-payoff-crescendo-audio', 'super-burst');
         expect(payoffCrescendo).toHaveAttribute('data-payoff-crescendo-beats', '5');
         expect(payoffCrescendo).toHaveAttribute('data-payoff-crescendo-cue', 'super');
@@ -333,6 +344,10 @@ describe('GameOverScreen (REF-031)', () => {
         expect(chainBurst).toHaveAttribute('data-payoff-burst-screen-cue', 'snap');
         expect(chainBurst).toHaveTextContent('Protect chain');
         expect(chainBurst?.querySelectorAll('[data-payoff-burst-beat]')).toHaveLength(4);
+        expect(chainBurst?.querySelector('[data-payoff-burst-beat="1"]')).toHaveAttribute(
+            'data-payoff-burst-beat-focus',
+            'primary'
+        );
         expect(rewardBurst).toHaveTextContent('Route paid');
         expect(rewardBurst).toHaveAttribute('data-payoff-burst-beats', '4');
         expect(rewardBurst).toHaveAttribute('data-payoff-burst-action', 'Cash reward');

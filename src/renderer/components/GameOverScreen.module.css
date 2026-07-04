@@ -461,6 +461,17 @@
     transform-origin: center;
 }
 
+.payoffBurstBeatPips i[data-payoff-burst-beat-focus='primary'],
+.payoffLaneBeatPips s[data-payoff-lane-beat-focus='primary'],
+.payoffPrimaryLaneBeatPips s[data-payoff-primary-lane-beat-focus='primary'],
+.payoffBurstStrip span[data-payoff-crescendo-tier] strong i[data-payoff-crescendo-beat-focus='primary'] {
+    width: 0.42rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, currentColor 46%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+}
+
 .payoffBurstStrip span[data-payoff-crescendo-tier='cashout'] strong i {
     background: color-mix(in srgb, var(--theme-success) 74%, white);
 }

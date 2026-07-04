@@ -457,7 +457,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                             <em>{primaryPayoffLane.cue}</em>
                                             <span aria-hidden="true" className={styles.payoffPrimaryLaneBeatPips}>
                                                 {Array.from({ length: getRunPayoffLaneBeatCount(primaryPayoffLane) }, (_, index) => (
-                                                    <s data-payoff-primary-lane-beat key={index} />
+                                                    <s
+                                                        data-payoff-primary-lane-beat={index + 1}
+                                                        data-payoff-primary-lane-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
                                                 ))}
                                             </span>
                                         </i>
@@ -478,7 +482,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                             <em>{lane.cue}</em>
                                             <span aria-hidden="true" className={styles.payoffLaneBeatPips}>
                                                 {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
-                                                    <s data-payoff-lane-beat key={index} />
+                                                    <s
+                                                        data-payoff-lane-beat={index + 1}
+                                                        data-payoff-lane-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
                                                 ))}
                                             </span>
                                         </i>
@@ -511,7 +519,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     <b>{payoffCrescendoSignal.detail}</b>
                                     <strong>
                                         {Array.from({ length: payoffCrescendoSignal.beatCount }, (_, index) => (
-                                            <i aria-hidden="true" key={index} />
+                                            <i
+                                                aria-hidden="true"
+                                                data-payoff-crescendo-beat={index + 1}
+                                                data-payoff-crescendo-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                key={index}
+                                            />
                                         ))}
                                     </strong>
                                 </span>
@@ -548,7 +561,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     <i>{row.action}</i>
                                     <span aria-hidden="true" className={styles.payoffBurstBeatPips}>
                                         {Array.from({ length: getRunPayoffSignalBeatCount(row) }, (_, index) => (
-                                            <i data-payoff-burst-beat key={index} />
+                                            <i
+                                                data-payoff-burst-beat={index + 1}
+                                                data-payoff-burst-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                key={index}
+                                            />
                                         ))}
                                     </span>
                                     {row.nextCue ? <em>{row.nextCue}</em> : null}
