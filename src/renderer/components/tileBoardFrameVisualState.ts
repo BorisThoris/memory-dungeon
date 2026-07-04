@@ -24,6 +24,7 @@ import {
     type HoverGoldVisualState
 } from './tileBoardHoverGoldVisualState';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
+import type { TileTraitRouteReadabilityIntensity } from './tileBoardReadability';
 
 interface TileBoardFrameVisualStateInput {
     faceUp: boolean;
@@ -36,6 +37,7 @@ interface TileBoardFrameVisualStateInput {
     pickable: boolean;
     reduceMotion: boolean;
     resolvingSelection: ResolvingSelectionState;
+    routeReadabilityIntensity?: TileTraitRouteReadabilityIntensity;
     tileState: Tile['state'];
     time: number;
 }
@@ -83,6 +85,7 @@ export const computeTileBoardFrameVisualState = ({
     pickable,
     reduceMotion,
     resolvingSelection,
+    routeReadabilityIntensity = 'none',
     tileState,
     time
 }: TileBoardFrameVisualStateInput): TileBoardFrameVisualState => {
@@ -102,7 +105,9 @@ export const computeTileBoardFrameVisualState = ({
         time,
         tileState
     });
-    const focusActive = keyboardFocused && pickable && tileState !== 'matched';
+    const focusActive =
+        (keyboardFocused && pickable && tileState !== 'matched') ||
+        (routeReadabilityIntensity !== 'none' && tileState !== 'matched' && !faceUp);
     const cardGlowStates = computeCardGlowVisualStates({
         cardGlowIntensity: renderQuality.cardGlowIntensity,
         focusActive,
@@ -127,7 +132,7 @@ export const computeTileBoardFrameVisualState = ({
         cardGlowStates,
         flameState,
         focusRimOpacity: computeFocusRimOpacity({
-            keyboardFocused,
+            keyboardFocused: keyboardFocused || (routeReadabilityIntensity !== 'none' && tileState !== 'matched' && !faceUp),
             pickable,
             reduceMotion,
             tileState,

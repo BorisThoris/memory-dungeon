@@ -3,6 +3,7 @@ import type { GraphicsQualityPreset, HazardTileKind, Tile } from '../../shared/c
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type { ResolvingSelectionState } from './tileResolvingSelection';
 import type { TileTransform } from './tileBoardTransform';
+import type { TileTraitRouteReadabilityIntensity } from './tileBoardReadability';
 
 export interface TileBoardFrameHoverTiltState {
     tileId: string | null;
@@ -46,6 +47,7 @@ export interface TileBezelFramePropsSnapshot {
     nonPickableBack: boolean;
     hazardBackAccent: HazardTileKind | null;
     routeBackAccent: boolean;
+    traitRouteReadabilityIntensity?: TileTraitRouteReadabilityIntensity;
     objectiveBackAccent: boolean;
     enemyOccupiedBack: boolean;
     /** Cancels match pulse / flip pop when a new resolving pair replaces the previous without a full idle frame. */

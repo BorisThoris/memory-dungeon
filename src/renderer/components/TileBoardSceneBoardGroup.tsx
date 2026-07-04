@@ -119,6 +119,7 @@ export const TileBoardSceneBoardGroup = ({
                 traitComboSurgeBack,
                 traitLaneBack,
                 traitRewardHotBack,
+                traitRouteReadabilityIntensity,
                 traitRouteTargetBack,
                 transform,
                 tutorialPairOrdinal
@@ -144,6 +145,7 @@ export const TileBoardSceneBoardGroup = ({
                     traitComboSurgeBack={traitComboSurgeBack}
                     traitLaneBack={traitLaneBack}
                     traitRewardHotBack={traitRewardHotBack}
+                    traitRouteReadabilityIntensity={traitRouteReadabilityIntensity}
                     traitRouteTargetBack={traitRouteTargetBack}
                     hostConsolidatesTileFrames={hostConsolidatesTileFrames}
                     hoverTiltRef={hoverTiltRef}

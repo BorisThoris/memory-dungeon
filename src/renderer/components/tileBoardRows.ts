@@ -34,7 +34,9 @@ import {
     getTraitRouteCadenceAction,
     getTraitRouteReadabilityCadence,
     getTraitRouteReadabilityBeatTier,
+    getTraitRouteReadabilityIntensity,
     getTraitRouteReadabilityTier,
+    type TileTraitRouteReadabilityIntensity,
     type TileTraitRouteCadence,
     type TileTraitRouteBeatTier
 } from './tileBoardReadability';
@@ -75,6 +77,7 @@ export interface TileBoardRow {
     traitLaneBack: TraitInteractionLaneId | null;
     traitLaneLabel: string | null;
     traitRouteBeatTier: TileTraitRouteBeatTier | null;
+    traitRouteReadabilityIntensity: TileTraitRouteReadabilityIntensity;
     traitRouteCadence: TileTraitRouteCadence;
     traitRouteCadenceAction: string | null;
     traitRewardHotBack: boolean;
@@ -274,6 +277,7 @@ export const buildTileBoardRows = ({
             isTraitRewardHotBack: traitRewardHotBack,
             isTraitRouteTargetBack: traitRouteTargetBack
         });
+        const traitRouteReadabilityIntensity = getTraitRouteReadabilityIntensity(traitRouteReadabilityTier);
         const traitRouteBeatTier = getTraitRouteReadabilityBeatTier(traitRouteReadabilityTier);
         const traitRouteCadence = getTraitRouteReadabilityCadence(traitRouteReadabilityTier);
 
@@ -310,6 +314,7 @@ export const buildTileBoardRows = ({
             traitLaneBack,
             traitLaneLabel: traitLaneBack ? TRAIT_INTERACTION_LANE_LABELS[traitLaneBack] : null,
             traitRouteBeatTier,
+            traitRouteReadabilityIntensity,
             traitRouteCadence,
             traitRouteCadenceAction: traitRouteCadence === 'none' ? null : getTraitRouteCadenceAction(traitRouteCadence),
             traitRewardHotBack,

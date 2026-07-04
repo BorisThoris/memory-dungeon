@@ -23,6 +23,7 @@ import {
 import type { BoardState, GraphicsQualityPreset, HazardTileKind, Tile } from '../../shared/contracts';
 import type { TraitInteractionLaneId } from '../copy/traitInteractionLaneMap';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
+import type { TileTraitRouteReadabilityIntensity } from './tileBoardReadability';
 import type { CardBackSvgLayerGeometry } from './cardSvgPlaneGeometry';
 import { createCardArcaneGlowMaterial } from './cardArcaneGlowMaterial';
 import { createMatchedCardRimFireMaterial } from './matchedCardRimFireMaterial';
@@ -142,6 +143,7 @@ interface TileBezelProps {
     powerBackAccent?: 'destroy' | 'peek' | 'stray' | 'pin' | 'swap' | 'swapOrigin' | null;
     hazardBackAccent?: HazardTileKind | null;
     routeBackAccent?: boolean;
+    traitRouteReadabilityIntensity?: TileTraitRouteReadabilityIntensity;
     selectedTraitFollowupBack?: boolean;
     objectiveBackAccent?: boolean;
     enemyOccupiedBack?: boolean;
@@ -214,6 +216,7 @@ const TileBezelInner = ({
     powerBackAccent = null,
     hazardBackAccent = null,
     routeBackAccent = false,
+    traitRouteReadabilityIntensity = 'none',
     selectedTraitFollowupBack = false,
     objectiveBackAccent = false,
     enemyOccupiedBack = false,
@@ -313,6 +316,7 @@ const TileBezelInner = ({
         resolvingMatchWaveKey,
         resolvingSelection,
         routeBackAccent,
+        traitRouteReadabilityIntensity,
         shuffleBoardOrderIndex,
         shuffleMotionBudgetMs,
         shuffleMotionDeadlineMs,
@@ -691,7 +695,7 @@ const TileBezelInner = ({
         void textureRevision;
         return getTileFaceRoughnessTexture(tile, 'back', 'hidden', 'panel');
     }, [textureRevision, tile]);
-    const cardTint = initialTileBoardCardTint({ faceUp, isPinned, resolvingSelection, tile });
+        const cardTint = initialTileBoardCardTint({ faceUp, isPinned, resolvingSelection, tile });
     const cardBackArtTexture = useSvgMeshBack ? null : getTileFaceTexture(tile, 'back', 'hidden', 'panel');
     const cardFrontArtTexture = useSvgMeshFront ? null : getCardFaceStaticTexture();
     const overlayVariant = overlayVariantForSurface(surfaceVariant);

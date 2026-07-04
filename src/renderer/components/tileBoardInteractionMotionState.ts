@@ -1,6 +1,7 @@
 import { MathUtils } from 'three';
 import type { Tile } from '../../shared/contracts';
 import { GAMEPLAY_BOARD_VISUALS } from './gameplayVisualConfig';
+import type { TileTraitRouteReadabilityIntensity } from './tileBoardReadability';
 
 interface MotionVector {
     x: number;
@@ -18,6 +19,7 @@ interface TileBoardInteractionMotionStateInput {
     seed: number;
     tileId: string;
     tileState: Tile['state'];
+    routeReadabilityIntensity?: TileTraitRouteReadabilityIntensity;
     tileFieldParallaxEnabled: boolean;
     time: number;
 }
@@ -69,6 +71,7 @@ export const computeTileBoardInteractionMotionState = ({
     tileFieldParallaxEnabled,
     tileId,
     tileState,
+    routeReadabilityIntensity = 'none',
     time
 }: TileBoardInteractionMotionStateInput): TileBoardInteractionMotionState => {
     const fieldOn = tileFieldParallaxEnabled;
@@ -84,12 +87,60 @@ export const computeTileBoardInteractionMotionState = ({
     const hoverLift = hoverDomParity ? (isMatched ? 0.0012 : GAMEPLAY_BOARD_VISUALS.hoverHiddenLift) : 0;
     const hoverDepth = hoverDomParity ? (isMatched ? 0.0018 : GAMEPLAY_BOARD_VISUALS.hoverHiddenDepth) : 0;
     const fieldMagnitude = clamp(Math.hypot(fieldTilt.x, fieldTilt.y), 0, 1);
+    const routeLiftBoost =
+        routeReadabilityIntensity === 'stack'
+            ? 0.0022
+            : routeReadabilityIntensity === 'cashout'
+              ? 0.0015
+              : routeReadabilityIntensity === 'surge'
+                ? 0.001
+                : routeReadabilityIntensity === 'ready'
+                  ? 0.0008
+                  : routeReadabilityIntensity === 'setup'
+                    ? 0.00045
+                    : 0;
+    const routeDepthBoost =
+        routeReadabilityIntensity === 'stack'
+            ? 0.0009
+            : routeReadabilityIntensity === 'cashout'
+              ? 0.00064
+              : routeReadabilityIntensity === 'surge'
+                ? 0.00042
+                : routeReadabilityIntensity === 'ready'
+                  ? 0.00028
+                  : routeReadabilityIntensity === 'setup'
+                    ? 0.00018
+                    : 0;
+    const routeDriftBoost =
+        routeReadabilityIntensity === 'stack'
+            ? 0.0003
+            : routeReadabilityIntensity === 'cashout'
+              ? 0.00024
+              : routeReadabilityIntensity === 'surge'
+                ? 0.00018
+                : routeReadabilityIntensity === 'ready'
+                  ? 0.00012
+                  : routeReadabilityIntensity === 'setup'
+                    ? 0.00008
+                    : 0;
+    const routeLambdaBoost =
+        routeReadabilityIntensity === 'stack'
+            ? 30
+            : routeReadabilityIntensity === 'cashout'
+              ? 22
+              : routeReadabilityIntensity === 'surge'
+                ? 16
+                : routeReadabilityIntensity === 'ready'
+                  ? 10
+                  : routeReadabilityIntensity === 'setup'
+                    ? 6
+                    : 0;
 
     return {
-        baseDepthFull: isMatched ? 0.0036 : faceUp ? 0.0018 : 0,
-        baseLiftFull: isMatched ? 0.0024 : faceUp ? 0.0012 : 0,
-        fieldDepth: fieldOn ? fieldMagnitude * fieldAmp * (isMatched ? 0.0005 : 0.00095) : 0,
-        fieldLift: fieldOn ? fieldMagnitude * fieldAmp * (isMatched ? 0.00035 : 0.00062) : 0,
+        baseDepthFull: (isMatched ? 0.0036 : faceUp ? 0.0018 : 0) + routeDepthBoost,
+        baseLiftFull: (isMatched ? 0.0024 : faceUp ? 0.0012 : 0) + routeLiftBoost,
+        fieldDepth: fieldOn ? fieldMagnitude * fieldAmp * (isMatched ? 0.0005 : 0.00095) + routeDepthBoost * 0.62 : 0,
+        fieldLift: fieldOn ? fieldMagnitude * fieldAmp * (isMatched ? 0.00035 : 0.00062) + routeLiftBoost * 0.55 : 0,
         fieldRotX: fieldOn ? clamp(-fieldTilt.y, -1, 1) * fieldAmp * (isMatched ? 0.042 : 0.074) : 0,
         fieldRotZ: fieldOn ? clamp(fieldTilt.x, -1, 1) * fieldAmp * (isMatched ? 0.038 : 0.068) : 0,
         hoverDepth,
@@ -98,8 +149,8 @@ export const computeTileBoardInteractionMotionState = ({
         hoverLift,
         hoverTiltX,
         hoverTiltZ,
-        idleDrift: reduceMotion ? 0 : Math.sin(time * 0.09 + seed * 0.017) * (isMatched ? 0.00038 : 0.00024),
-        liftLambda: reduceMotion ? 400 : faceUp && !isMatched ? 48 : 200,
+        idleDrift: reduceMotion ? 0 : Math.sin(time * 0.09 + seed * 0.017) * ((isMatched ? 0.00038 : 0.00024) + routeDriftBoost),
+        liftLambda: reduceMotion ? 400 : (faceUp && !isMatched ? 48 : 200) + routeLambdaBoost,
         rotationDamp: reduceMotion ? 42 : faceUp ? 18 : 16,
         settle: reduceMotion ? 0 : Math.sin(time * 0.08 + seed * 0.013) * (isMatched ? 0.00048 : 0.0003)
     };

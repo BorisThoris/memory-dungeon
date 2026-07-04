@@ -367,6 +367,7 @@ describe('tileBoardRows', () => {
         });
 
         expect(result.map((row) => row.traitRewardHotBack)).toEqual([true, true, false]);
+        expect(result.map((row) => row.traitRouteReadabilityIntensity)).toEqual(['stack', 'stack', 'none']);
         expect(result.map((row) => row.traitRouteBeatTier)).toEqual(['cashout', 'cashout', null]);
         expect(result.map((row) => row.traitRouteCadence)).toEqual(['cashout', 'cashout', 'none']);
         expect(result.map((row) => row.traitRouteCadenceAction)).toEqual(['Cash now', 'Cash now', null]);
@@ -391,6 +392,7 @@ describe('tileBoardRows', () => {
         });
 
         expect(result.map((row) => row.traitRouteBeatTier)).toEqual([null, 'follow-up', 'setup', 'setup']);
+        expect(result.map((row) => row.traitRouteReadabilityIntensity)).toEqual(['none', 'ready', 'setup', 'setup']);
         expect(result.map((row) => row.traitRouteCadence)).toEqual(['none', 'follow-up', 'prime', 'prime']);
         expect(result.map((row) => row.traitRouteCadenceAction)).toEqual([null, 'Next tap', 'Prime payoff', 'Prime payoff']);
     });
