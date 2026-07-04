@@ -4768,6 +4768,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <b>{boardPickupOpportunity.sequenceCue.then}</b>
                                         <small>Keep</small>
                                         <b>{boardPickupOpportunity.sequenceCue.keep}</b>
+                                        <span aria-hidden="true" className={styles.pickupOpportunitySequenceBeatPips}>
+                                            {Array.from({ length: 3 }, (_, index) => (
+                                                <i
+                                                    data-pickup-sequence-beat={index + 1}
+                                                    data-pickup-sequence-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                            ))}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardPickupOpportunity.examples.length > 0 ? (

@@ -3634,6 +3634,35 @@
     background: color-mix(in srgb, var(--theme-panel-solid) 62%, transparent);
 }
 
+.pickupOpportunitySequenceBeatPips {
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 0.08rem;
+    min-height: 0.18rem;
+}
+
+.pickupOpportunitySequenceBeatPips i {
+    width: 0.2rem;
+    height: 0.2rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+    animation: boardFeedbackBeatPulse 0.78s ease-in-out infinite;
+}
+
+.pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-focus='primary'] {
+    width: 0.34rem;
+    background: color-mix(in srgb, var(--theme-success) 88%, white);
+    box-shadow:
+        0 0 0.46rem color-mix(in srgb, var(--theme-success) 38%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+}
+
+.pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .pickupOpportunitySequence small,
 .pickupOpportunitySequence b {
     min-width: 0;
