@@ -3327,6 +3327,34 @@
     white-space: nowrap;
 }
 
+.chainOpportunityLinesBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    margin-left: 0.3rem;
+}
+
+.chainOpportunityLinesBeatPips i {
+    display: block;
+    width: 0.13rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 76%, white);
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.chainOpportunityLinesBeatPips i[data-chain-lines-beat-focus='primary'] {
+    width: 0.26rem;
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityLinesBeatPips i[data-chain-lines-beat-focus='support'] {
+    opacity: 0.7;
+}
+
 .chainOpportunityExamples {
     max-width: min(11rem, 36vi);
     overflow: hidden;

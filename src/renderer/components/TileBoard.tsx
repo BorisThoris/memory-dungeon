@@ -4928,6 +4928,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 <span className={styles.chainOpportunityLines}>
                                     {boardChainOpportunity.lines.join(' / ')}
+                                    <span aria-hidden="true" className={styles.chainOpportunityLinesBeatPips}>
+                                        {Array.from(
+                                            { length: Math.max(2, Math.min(5, boardChainOpportunity.lines.length + 1)) },
+                                            (_, index) => (
+                                                <i
+                                                    data-chain-lines-beat={index + 1}
+                                                    data-chain-lines-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                            )
+                                        )}
+                                    </span>
                                 </span>
                             </div>
                         ) : null}

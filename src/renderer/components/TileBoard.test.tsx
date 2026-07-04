@@ -526,6 +526,21 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="cashout"]')).toHaveTextContent(
             'Echo + Sealed: combo shard'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[class*="chainOpportunityLines"]')).toHaveTextContent(
+            '1 route ready / 2 cards lit / Reward hot'
+        );
+        expect(
+            screen
+                .getByTestId('chain-opportunity-chip')
+                .querySelector('[class*="chainOpportunityLines"]')
+                ?.querySelectorAll('[data-chain-lines-beat]')
+        ).toHaveLength(4);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-chip')
+                .querySelector('[class*="chainOpportunityLines"]')
+                ?.querySelector('[data-chain-lines-beat="1"]')
+        ).toHaveAttribute('data-chain-lines-beat-focus', 'primary');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-chain-reward-ladder',
             'reward:0/2>guard:0/4>heal:4/8'
