@@ -4602,6 +4602,31 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             }
                                             data-testid="match-score-floater-payoff-lane-map"
                                         >
+                                            <span
+                                                className={styles.boardFloaterPayoffLaneMapSummary}
+                                                data-match-payoff-lane-count={boardFloaterPayload.payoffLaneMap.length}
+                                                data-testid="match-score-floater-payoff-lane-map-summary"
+                                            >
+                                                <small>Lanes</small>
+                                                <b>
+                                                    {boardFloaterPayload.payoffLaneMap.length}{' '}
+                                                    {boardFloaterPayload.payoffLaneMap.length === 1 ? 'lane' : 'lanes'}
+                                                </b>
+                                                <span aria-hidden="true" className={styles.boardFloaterPayoffLaneMapSummaryBeatPips}>
+                                                    {Array.from(
+                                                        { length: Math.max(2, Math.min(5, boardFloaterPayload.payoffLaneMap.length + 1)) },
+                                                        (_, index) => (
+                                                            <i
+                                                                data-match-payoff-lane-map-summary-beat={index + 1}
+                                                                data-match-payoff-lane-map-summary-beat-focus={
+                                                                    index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                key={`payoff-lane-map-summary-beat-${index + 1}`}
+                                                            />
+                                                        )
+                                                    )}
+                                                </span>
+                                            </span>
                                             {boardFloaterPrimaryPayoffLane ? (
                                                 <span
                                                     aria-label={`Primary paid lane. ${matchPayoffLaneAction(boardFloaterPrimaryPayoffLane)}: ${boardFloaterPrimaryPayoffLane.label}. ${boardFloaterPrimaryPayoffLane.cue}. ${getBoardFloaterPayoffLaneBeatCount(boardFloaterPrimaryPayoffLane)} beats.`}
@@ -4874,6 +4899,31 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             }
                                             data-testid="match-score-floater-trait-lane-map"
                                         >
+                                            <span
+                                                className={styles.boardFloaterTraitLaneMapSummary}
+                                                data-match-trait-lane-count={boardFloaterTraitLaneMap.length}
+                                                data-testid="match-score-floater-trait-lane-map-summary"
+                                            >
+                                                <small>Traits</small>
+                                                <b>
+                                                    {boardFloaterTraitLaneMap.length}{' '}
+                                                    {boardFloaterTraitLaneMap.length === 1 ? 'lane' : 'lanes'}
+                                                </b>
+                                                <span aria-hidden="true" className={styles.boardFloaterTraitLaneMapSummaryBeatPips}>
+                                                    {Array.from(
+                                                        { length: Math.max(2, Math.min(5, boardFloaterTraitLaneMap.length + 1)) },
+                                                        (_, index) => (
+                                                            <i
+                                                                data-match-trait-lane-map-summary-beat={index + 1}
+                                                                data-match-trait-lane-map-summary-beat-focus={
+                                                                    index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                key={`trait-lane-map-summary-beat-${index + 1}`}
+                                                            />
+                                                        )
+                                                    )}
+                                                </span>
+                                            </span>
                                             {boardFloaterPrimaryTraitLane ? (
                                                 <span
                                                     aria-label={`Primary trait payoff lane. ${boardFloaterPrimaryTraitLane.label}: ${getTraitInteractionLaneAction(boardFloaterPrimaryTraitLane.id)}. ${boardFloaterPrimaryTraitLane.cue}. ${getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane)} beats.`}

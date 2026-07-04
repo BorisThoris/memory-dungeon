@@ -12991,6 +12991,75 @@
     max-width: min(17rem, 92vw);
 }
 
+.boardFloaterPayoffLaneMapSummary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.12rem;
+    flex: 1 0 100%;
+    min-width: 0;
+    padding: 0.06rem 0.22rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 58%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    font-size: 0.49rem;
+    font-weight: 940;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.boardFloaterPayoffLaneMapSummary small,
+.boardFloaterPayoffLaneMapSummary b {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.boardFloaterPayoffLaneMapSummary small {
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.42rem;
+    font-weight: 920;
+}
+
+.boardFloaterPayoffLaneMapSummary b {
+    color: currentColor;
+    font-size: 0.48rem;
+    font-weight: 980;
+}
+
+.boardFloaterPayoffLaneMapSummaryBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.04rem;
+    margin-left: 0.08rem;
+}
+
+.boardFloaterPayoffLaneMapSummaryBeatPips i {
+    display: block;
+    width: 0.08rem;
+    height: 0.08rem;
+    border-radius: 999px;
+    animation: matchScoreFloaterPulse 1.2s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 72%, white);
+    box-shadow: 0 0 0.12rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.boardFloaterPayoffLaneMapSummaryBeatPips i[data-match-payoff-lane-map-summary-beat-focus='primary'] {
+    width: 0.16rem;
+    box-shadow:
+        0 0 0.2rem color-mix(in srgb, currentColor 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.boardFloaterPayoffLaneMapSummaryBeatPips i[data-match-payoff-lane-map-summary-beat-focus='support'] {
+    opacity: 0.64;
+}
+
 .boardFloaterPayoffLaneMap > span {
     display: inline-grid;
     grid-template-columns: auto auto;
@@ -13808,6 +13877,75 @@
     justify-content: center;
     gap: 0.18rem;
     max-width: min(18rem, 92vw);
+}
+
+.boardFloaterTraitLaneMapSummary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.12rem;
+    flex: 1 0 100%;
+    min-width: 0;
+    padding: 0.06rem 0.22rem;
+    border: 1px solid color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 66%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 88%, white);
+    font-size: 0.49rem;
+    font-weight: 940;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.boardFloaterTraitLaneMapSummary small,
+.boardFloaterTraitLaneMapSummary b {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.boardFloaterTraitLaneMapSummary small {
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.42rem;
+    font-weight: 920;
+}
+
+.boardFloaterTraitLaneMapSummary b {
+    color: currentColor;
+    font-size: 0.48rem;
+    font-weight: 980;
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.04rem;
+    margin-left: 0.08rem;
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips i {
+    display: block;
+    width: 0.08rem;
+    height: 0.08rem;
+    border-radius: 999px;
+    animation: mismatchRecoveryBeatPulse 0.78s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 72%, white);
+    box-shadow: 0 0 0.12rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-focus='primary'] {
+    width: 0.16rem;
+    box-shadow:
+        0 0 0.2rem color-mix(in srgb, currentColor 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-focus='support'] {
+    opacity: 0.64;
 }
 
 .boardFloaterTraitLaneMap > span {
