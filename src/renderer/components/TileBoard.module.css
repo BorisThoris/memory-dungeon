@@ -1617,6 +1617,26 @@
     background: color-mix(in srgb, #fff7c4 8%, transparent);
 }
 
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-focus='primary'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, var(--theme-cyan-bright) 22%);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-panel) 78%, transparent);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, white 10%, transparent),
+        0 0.32rem 0.9rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-focus='primary'] small,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-focus='primary'] b,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-focus='primary'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-focus='primary'] em {
+    color: color-mix(in srgb, var(--theme-text) 90%, white);
+}
+
 .chainOpportunityMarkerKey {
     display: inline-flex;
     align-items: center;

@@ -2683,6 +2683,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         'Trait interaction lanes',
         boardTraitInteractionLaneMap
     );
+    const primaryBoardTraitInteractionLane = boardTraitInteractionLaneMap[0] ?? null;
     const boardChainHotBand = boardChainOpportunity.rewardHot
         ? {
               cue: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Cash out now',
@@ -4183,6 +4184,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityTraitLaneMap}
                                         data-trait-interaction-lane-actions={boardTraitInteractionLaneActionMapAttrValue}
                                         data-trait-interaction-lane-map={boardTraitInteractionLaneMapAttrValue}
+                                        data-trait-interaction-lane-primary={
+                                            primaryBoardTraitInteractionLane?.id ?? 'none'
+                                        }
+                                        data-trait-interaction-lane-primary-action={
+                                            primaryBoardTraitInteractionLane
+                                                ? getTraitInteractionLaneAction(primaryBoardTraitInteractionLane.id)
+                                                : 'none'
+                                        }
                                         data-testid="chain-opportunity-trait-lane-map"
                                     >
                                         {boardTraitInteractionLaneMap.map((lane) => (
@@ -4190,6 +4199,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-trait-interaction-lane={lane.id}
                                                 data-trait-interaction-lane-action={getTraitInteractionLaneAction(lane.id)}
                                                 data-trait-interaction-lane-count={lane.count}
+                                                data-trait-interaction-lane-focus={
+                                                    lane.id === primaryBoardTraitInteractionLane?.id
+                                                        ? 'primary'
+                                                        : 'support'
+                                                }
                                                 key={lane.id}
                                             >
                                                 <small>{lane.label}</small>

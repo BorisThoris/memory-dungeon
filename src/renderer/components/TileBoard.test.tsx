@@ -931,6 +931,8 @@ describe('TileBoard touch and click controls', () => {
             'Trait lane beat map. Shard: 1. 4-beat Cash shard. Guard: 1. 3-beat Protect run. Recall: 1. 3-beat Set memory.'
         );
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-map', 'shard:1>guard:1>block:1>recall:1');
+        expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary', 'shard');
+        expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary-action', 'Cash shard');
         expect(laneMap).toHaveAttribute(
             'data-trait-interaction-lane-actions',
             'shard:Cash shard:1>guard:Protect run:1>block:Deny match:1>recall:Set memory:1'
@@ -950,6 +952,14 @@ describe('TileBoard touch and click controls', () => {
         expect(laneMap.querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
             'data-trait-interaction-lane-action',
             'Cash shard'
+        );
+        expect(laneMap.querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-focus',
+            'primary'
+        );
+        expect(laneMap.querySelector('[data-trait-interaction-lane="guard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-focus',
+            'support'
         );
         expect(laneMap).toHaveAccessibleName(
             'Trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard. Guard: 1. Protect run. Mirror + Stasis: guard ward. Block: 1. Deny match. Stasis buffered Sealed. Recall: 1. Set memory. Echo + Mirror: recall focus.'
