@@ -12856,6 +12856,19 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
 }
 
+.boardFloaterPayoffLadder[data-match-payoff-ladder-tone='reward'] b[data-match-payoff-ladder-step='then'],
+.boardFloaterPayoffLadder[data-match-payoff-ladder-tone='combo'] b[data-match-payoff-ladder-step='then'] {
+    padding: 0.08rem 0.26rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 48%, white 8%);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 46%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
+        0 0 0.78rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
 .boardFloaterPayoffLadder[data-match-payoff-ladder-tone='reward'] .boardFloaterPayoffLadderBeatPips i,
 .boardFloaterPayoffLadder[data-match-payoff-ladder-tone='combo'] .boardFloaterPayoffLadderBeatPips i {
     background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);

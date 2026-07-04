@@ -2887,6 +2887,9 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveAccessibleName(
             'Match payoff ladder. First: Route cashout. Then: Cash super stack. Keep: Prime. Lanes: Route cashout to Pickup cashout to Trait cashout to Chain cashout.'
         );
+        expect(
+            screen.getByTestId('match-score-floater-payoff-ladder').querySelector('[data-match-payoff-ladder-step="then"]')
+        ).toHaveTextContent('Cash super stack');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Route cashout');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Pickup cashout');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Trait cashout');

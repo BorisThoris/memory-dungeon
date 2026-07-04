@@ -4631,11 +4631,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-testid="match-score-floater-payoff-ladder"
                                         >
                                             <small>First</small>
-                                            <b>{boardFloaterPayload.payoffLadder.first}</b>
+                                            <b data-match-payoff-ladder-step="first">{boardFloaterPayload.payoffLadder.first}</b>
                                             <small>Then</small>
-                                            <b>{boardFloaterPayload.payoffLadder.then}</b>
+                                            <b data-match-payoff-ladder-step="then">{boardFloaterPayload.payoffLadder.then}</b>
                                             <small>Keep</small>
-                                            <b>{boardFloaterPayload.payoffLadder.keep}</b>
+                                            <b data-match-payoff-ladder-step="keep">{boardFloaterPayload.payoffLadder.keep}</b>
                                             {boardFloaterPayload.payoffLadder.lanes?.length ? (
                                                 <span className={styles.boardFloaterPayoffLaneStrip}>
                                                     {boardFloaterPayload.payoffLadder.lanes.map((lane, index) => (
