@@ -2672,6 +2672,10 @@ describe('GameScreen (OVR-014)', () => {
             'data-match-payoff-lane-primary-action',
             'Cash route'
         );
+        expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveAttribute(
+            'data-match-payoff-lane-primary-focus',
+            'cashout'
+        );
         expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveAccessibleName(
             'Match payoff lane map. Route: 1. Cash route. Route cashout. Pickup: 1. Claim pickup. Pickup cashout. Trait: 1. Cash trait. Trait cashout. Chain: 1. Cash chain. Chain cashout.'
         );
@@ -2686,6 +2690,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-primary-payoff-lane')).toHaveAttribute(
             'data-match-payoff-primary-lane-beats',
             '3'
+        );
+        expect(screen.getByTestId('match-score-floater-primary-payoff-lane')).toHaveAttribute(
+            'data-match-payoff-primary-lane-focus',
+            'cashout'
         );
         expect(screen.getByTestId('match-score-floater-primary-payoff-lane')).toHaveAttribute(
             'data-match-payoff-primary-lane-audio',

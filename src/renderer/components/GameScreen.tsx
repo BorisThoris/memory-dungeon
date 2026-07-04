@@ -2000,6 +2000,19 @@ const getBoardFloaterPayoffLaneScreenCue = (
     return 'pulse';
 };
 
+const getBoardFloaterPayoffLaneFocus = (
+    lane: MatchScorePopPayoffLaneMapEntry
+): 'cashout' | 'route' | 'pickup' | 'trait' | 'chain' | 'reward' => {
+    const action = matchPayoffLaneAction(lane).toLowerCase();
+    const cue = lane.cue.toLowerCase();
+
+    if (action.includes('cash') || cue.includes('cashout')) {
+        return 'cashout';
+    }
+
+    return lane.tone;
+};
+
 const getBoardFloaterTraitLaneAudioCue = (
     lane: TraitInteractionLaneMapEntry
 ): 'match-trait-shard' | 'match-trait-guard' | 'match-trait-risk' | 'match-trait-score' | 'match-trait-tool' | 'match-trait-block' | 'match-trait-recall' => {
@@ -4540,6 +4553,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     ? getBoardFloaterPayoffLaneAudioCue(boardFloaterPrimaryPayoffLane)
                                                     : 'none'
                                             }
+                                            data-match-payoff-lane-primary-focus={
+                                                boardFloaterPrimaryPayoffLane
+                                                    ? getBoardFloaterPayoffLaneFocus(boardFloaterPrimaryPayoffLane)
+                                                    : 'none'
+                                            }
                                             data-match-payoff-lane-actions={matchPayoffLaneActionMapAttr(
                                                 boardFloaterPayload.payoffLaneMap
                                             )}
@@ -4562,6 +4580,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         boardFloaterPrimaryPayoffLane
                                                     )}
                                                     data-match-payoff-primary-lane-beats={getBoardFloaterPayoffLaneBeatCount(
+                                                        boardFloaterPrimaryPayoffLane
+                                                    )}
+                                                    data-match-payoff-primary-lane-focus={getBoardFloaterPayoffLaneFocus(
                                                         boardFloaterPrimaryPayoffLane
                                                     )}
                                                     data-match-payoff-primary-lane-screen-cue={getBoardFloaterPayoffLaneScreenCue(
