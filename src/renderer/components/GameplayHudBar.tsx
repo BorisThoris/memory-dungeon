@@ -2843,7 +2843,34 @@ const GameplayHudBar = ({
                                                         }
                                                         data-testid="hud-recent-action-lane-map"
                                                     >
-                                                        <small>Lane map</small>
+                                                        <span
+                                                            className={styles.hudRecentActionLaneMapSummary}
+                                                            data-hud-action-lane-count={recentActionLaneMap.length}
+                                                            data-testid="hud-recent-action-lane-map-summary"
+                                                        >
+                                                            <small>Lanes</small>
+                                                            <b>
+                                                                {recentActionLaneMap.length}{' '}
+                                                                {recentActionLaneMap.length === 1 ? 'lane' : 'lanes'}
+                                                            </b>
+                                                            <span
+                                                                aria-hidden="true"
+                                                                className={styles.hudRecentActionLaneMapSummaryBeatPips}
+                                                            >
+                                                                {Array.from(
+                                                                    { length: Math.max(2, Math.min(5, recentActionLaneMap.length + 1)) },
+                                                                    (_, beatIndex) => (
+                                                                        <u
+                                                                            data-hud-action-lane-map-summary-beat={beatIndex + 1}
+                                                                            data-hud-action-lane-map-summary-beat-focus={
+                                                                                beatIndex === 0 ? 'primary' : 'support'
+                                                                            }
+                                                                            key={beatIndex}
+                                                                        />
+                                                                    )
+                                                                )}
+                                                            </span>
+                                                        </span>
                                                         {primaryRecentActionLane ? (
                                                             <b
                                                                 aria-label={`Primary recent action lane. ${primaryRecentActionLane.label}: ${primaryRecentActionLane.action}. ${hudRecentActionLaneBeatCount(primaryRecentActionLane)} beats.`}

@@ -478,7 +478,13 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveAccessibleName(
             'Lane map. Cash: 2. Collect. Route: 1. Route next. Chain: 1. Keep streak.'
         );
-        expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveTextContent('Lane map');
+        const recentActionLaneMapSummary = screen.getByTestId('hud-recent-action-lane-map-summary');
+        expect(recentActionLaneMapSummary).toHaveTextContent('Lanes');
+        expect(recentActionLaneMapSummary).toHaveTextContent('3 lanes');
+        expect(recentActionLaneMapSummary.querySelectorAll('[data-hud-action-lane-map-summary-beat]')).toHaveLength(4);
+        expect(
+            recentActionLaneMapSummary.querySelector('[data-hud-action-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-hud-action-lane-map-summary-beat-focus', 'primary');
         expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveAttribute(
             'data-hud-action-lane-map',
             'cash:2>route:1>chain:1'
