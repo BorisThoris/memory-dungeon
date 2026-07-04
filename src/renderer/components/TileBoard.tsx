@@ -3877,7 +3877,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 <b>{trapResolutionDetails.count === 1 ? '1 trap' : `${trapResolutionDetails.count} traps`}</b>
                                 <span aria-hidden="true" className={styles.trapResolutionBeatPips}>
                                     {Array.from({ length: getTrapResolutionSignalBeatCount('resolved') }, (_, index) => (
-                                        <i data-trap-resolution-beat="" key={index} />
+                                        <i
+                                            data-trap-resolution-beat={index + 1}
+                                            data-trap-resolution-beat-focus={index === 0 ? 'primary' : 'support'}
+                                            key={index}
+                                        />
                                     ))}
                                 </span>
                             </span>
@@ -3892,7 +3896,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 <b>{trapResolutionDetails.effect}</b>
                                 <span aria-hidden="true" className={styles.trapResolutionBeatPips}>
                                     {Array.from({ length: getTrapResolutionSignalBeatCount('effect') }, (_, index) => (
-                                        <i data-trap-resolution-beat="" key={index} />
+                                        <i
+                                            data-trap-resolution-beat={index + 1}
+                                            data-trap-resolution-beat-focus={index === 0 ? 'primary' : 'support'}
+                                            key={index}
+                                        />
                                     ))}
                                 </span>
                             </span>
@@ -3907,7 +3915,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 <b>{trapResolutionDetails.next}</b>
                                 <span aria-hidden="true" className={styles.trapResolutionBeatPips}>
                                     {Array.from({ length: getTrapResolutionSignalBeatCount('continue') }, (_, index) => (
-                                        <i data-trap-resolution-beat="" key={index} />
+                                        <i
+                                            data-trap-resolution-beat={index + 1}
+                                            data-trap-resolution-beat-focus={index === 0 ? 'primary' : 'support'}
+                                            key={index}
+                                        />
                                     ))}
                                 </span>
                             </span>

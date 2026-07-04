@@ -189,6 +189,14 @@
     animation-delay: 0.21s;
 }
 
+.trapResolutionBeatPips i[data-trap-resolution-beat-focus='primary'] {
+    width: 0.38rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.38rem color-mix(in srgb, currentColor 42%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+}
+
 .trapResolutionSignals > span[data-trap-resolution-signal='resolved'] {
     border-color: color-mix(in srgb, var(--theme-ember, #f08a5d) 44%, transparent);
     background: color-mix(in srgb, var(--theme-ember, #f08a5d) 12%, transparent);

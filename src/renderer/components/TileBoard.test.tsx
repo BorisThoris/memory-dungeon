@@ -290,6 +290,18 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen
                 .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="resolved"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="resolved"]')
+                ?.querySelector('[data-trap-resolution-beat="2"]')
+        ).toHaveAttribute('data-trap-resolution-beat-focus', 'support');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
                 .querySelector('[data-trap-resolution-signal="effect"]')
                 ?.querySelectorAll('[data-trap-resolution-beat]')
         ).toHaveLength(4);
@@ -301,6 +313,12 @@ describe('TileBoard touch and click controls', () => {
             'data-trap-resolution-screen-cue',
             'burst'
         );
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="effect"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-focus', 'primary');
         expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="continue"]')).toHaveAttribute(
             'data-trap-resolution-beats',
             '2'
