@@ -2270,6 +2270,12 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('board-match-payoff-stack-cue')).toHaveTextContent('Score pop');
             expect(screen.getByTestId('board-match-payoff-stack-cue')).toHaveTextContent('One-away cashout');
             expect(screen.getByTestId('board-match-payoff-stack-cue').querySelectorAll('[data-match-payoff-stack-beat]')).toHaveLength(4);
+            expect(
+                screen.getByTestId('board-match-payoff-stack-cue').querySelector('[data-match-payoff-stack-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-stack-beat-focus', 'primary');
+            expect(
+                screen.getByTestId('board-match-payoff-stack-cue').querySelector('[data-match-payoff-stack-beat="2"]')
+            ).toHaveAttribute('data-match-payoff-stack-beat-focus', 'support');
             expect(screen.getByTestId('board-match-payoff-stack-sequence')).toHaveTextContent('First');
             expect(screen.getByTestId('board-match-payoff-stack-sequence')).toHaveTextContent('Prime cashout');
             expect(screen.getByTestId('board-match-payoff-stack-sequence')).toHaveTextContent('Then');
