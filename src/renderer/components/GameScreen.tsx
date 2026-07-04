@@ -5249,7 +5249,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     <b>{row.value}</b>
                                                     <span aria-hidden="true" className={styles.onboardingPromptBeatPips}>
                                                         {Array.from({ length: beatCount }, (_, index) => (
-                                                            <i data-onboarding-signal-beat="" key={index} />
+                                                            <i
+                                                                data-onboarding-signal-beat={index + 1}
+                                                                data-onboarding-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                key={index}
+                                                            />
                                                         ))}
                                                     </span>
                                                 </span>

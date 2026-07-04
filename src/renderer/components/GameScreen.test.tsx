@@ -1741,6 +1741,16 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('first-run-room-goal-signals')).toHaveTextContent('Clear pairs');
         expect(screen.getByTestId('first-run-room-goal-signals')).toHaveTextContent('Route choice');
         expect(screen.getByTestId('first-run-room-goal-signals')).toHaveTextContent('Clean finish');
+        expect(
+            screen
+                .getByTestId('first-run-room-goal-signals')
+                .querySelector('[data-onboarding-signal-tone="route"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('first-run-room-goal-signals')
+                .querySelector('[data-onboarding-signal-tone="route"] [data-onboarding-signal-beat="2"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-focus', 'support');
         expect(screen.getByTestId('first-run-room-goal-signals')).toHaveAttribute(
             'aria-label',
             'Room goal reward signals. Goal: Clear pairs. Reward: Route choice. Chain: Clean finish.'
