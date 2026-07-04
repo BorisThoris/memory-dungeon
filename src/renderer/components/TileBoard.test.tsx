@@ -717,6 +717,10 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-urgency-beat="1"]')
         ).toHaveAttribute('data-chain-reward-urgency-beat-focus', 'primary');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-examples-beat]')).toHaveLength(2);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-examples-beat="1"]')
+        ).toHaveAttribute('data-chain-examples-beat-focus', 'primary');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-sequence-first', 'Match lit route for reward');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-sequence-then', 'Cash x6 +1 shard in 1 match');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-sequence-keep', 'Push x6 reward');

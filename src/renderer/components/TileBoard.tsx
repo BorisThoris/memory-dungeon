@@ -4872,6 +4872,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 {boardChainOpportunity.examples.length > 0 ? (
                                     <span className={styles.chainOpportunityExamples}>
                                         {boardChainOpportunity.examples.join(' / ')}
+                                        <span aria-hidden="true" className={styles.chainOpportunityExamplesBeatPips}>
+                                            {Array.from({ length: Math.min(4, boardChainOpportunity.examples.length + 1) }, (_, index) => (
+                                                <i
+                                                    data-chain-examples-beat={index + 1}
+                                                    data-chain-examples-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                            ))}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.rewardCue ? (
