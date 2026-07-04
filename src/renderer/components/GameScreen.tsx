@@ -5683,14 +5683,18 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 >
                                     <small>{pendingRouteImpactCue.label}</small>
                                     <strong>{pendingRouteImpactCue.value}</strong>
-                                    <span aria-hidden="true" className={styles.routeSelectedBeatPips}>
-                                        {Array.from(
-                                            { length: getRouteChoiceToneBeatCount(pendingRouteImpactCue.tone) },
-                                            (_, index) => (
-                                                <i data-route-impact-cue-beat="" key={index} />
-                                            )
-                                        )}
-                                    </span>
+                                        <span aria-hidden="true" className={styles.routeSelectedBeatPips}>
+                                            {Array.from(
+                                                { length: getRouteChoiceToneBeatCount(pendingRouteImpactCue.tone) },
+                                                (_, index) => (
+                                                <i
+                                                    data-route-impact-cue-beat={index + 1}
+                                                    data-route-impact-cue-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                                )
+                                            )}
+                                        </span>
                                 </span>
                                 <span
                                     aria-label={`Selected route action cue: ${pendingRouteActionCue.label}: ${pendingRouteActionCue.value}. ${pendingRouteActionCue.detail}`}
@@ -5703,14 +5707,18 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 >
                                     <small>{pendingRouteActionCue.label}</small>
                                     <strong>{pendingRouteActionCue.value}</strong>
-                                    <span aria-hidden="true" className={styles.routeSelectedBeatPips}>
-                                        {Array.from(
-                                            { length: getRouteChoiceToneBeatCount(pendingRouteActionCue.tone) },
-                                            (_, index) => (
-                                                <i data-route-action-cue-beat="" key={index} />
-                                            )
-                                        )}
-                                    </span>
+                                        <span aria-hidden="true" className={styles.routeSelectedBeatPips}>
+                                            {Array.from(
+                                                { length: getRouteChoiceToneBeatCount(pendingRouteActionCue.tone) },
+                                                (_, index) => (
+                                                <i
+                                                    data-route-action-cue-beat={index + 1}
+                                                    data-route-action-cue-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                                )
+                                            )}
+                                        </span>
                                     <em>{pendingRouteActionCue.detail}</em>
                                 </span>
                                 <span className={styles.routeSelectedSignals}>
@@ -5723,7 +5731,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         {pendingRouteSignalLabels.reward}
                                         <span aria-hidden="true" className={styles.routeSelectedSignalBeatPips}>
                                             {Array.from({ length: 4 }, (_, index) => (
-                                                <i data-route-signal-beat="" key={index} />
+                                                <i
+                                                    data-route-signal-beat={index + 1}
+                                                    data-route-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                     </span>
@@ -5736,7 +5748,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         {pendingRouteSignalLabels.risk}
                                         <span aria-hidden="true" className={styles.routeSelectedSignalBeatPips}>
                                             {Array.from({ length: 3 }, (_, index) => (
-                                                <i data-route-signal-beat="" key={index} />
+                                                <i
+                                                    data-route-signal-beat={index + 1}
+                                                    data-route-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                     </span>
@@ -6042,7 +6058,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             {routeChoiceSignalLabels.reward}
                                                             <span aria-hidden="true" className={styles.dungeonMapRoomSignalBeatPips}>
                                                                 {Array.from({ length: 4 }, (_, index) => (
-                                                                    <i data-route-choice-signal-beat="" key={index} />
+                                                                    <i
+                                                                        data-route-choice-signal-beat={index + 1}
+                                                                        data-route-choice-signal-beat-focus={
+                                                                            index === 0 ? 'primary' : 'support'
+                                                                        }
+                                                                        key={index}
+                                                                    />
                                                                 ))}
                                                             </span>
                                                         </span>
@@ -6055,7 +6077,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             {routeChoiceSignalLabels.risk}
                                                             <span aria-hidden="true" className={styles.dungeonMapRoomSignalBeatPips}>
                                                                 {Array.from({ length: 3 }, (_, index) => (
-                                                                    <i data-route-choice-signal-beat="" key={index} />
+                                                                    <i
+                                                                        data-route-choice-signal-beat={index + 1}
+                                                                        data-route-choice-signal-beat-focus={
+                                                                            index === 0 ? 'primary' : 'support'
+                                                                        }
+                                                                        key={index}
+                                                                    />
                                                                 ))}
                                                             </span>
                                                         </span>
@@ -6075,7 +6103,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             className={styles.dungeonMapRoomBeatPips}
                                                         >
                                                             {Array.from({ length: routeChoiceBeatCue.beatCount }).map((_, beatIndex) => (
-                                                                <i key={beatIndex} />
+                                                                <i
+                                                                    data-route-beat-pip={beatIndex + 1}
+                                                                    data-route-beat-pip-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                    key={beatIndex}
+                                                                />
                                                             ))}
                                                         </span>
                                                         <strong>{routeChoiceBeatCue.action}</strong>

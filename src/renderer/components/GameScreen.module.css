@@ -1215,6 +1215,46 @@
     transform-origin: center;
 }
 
+.routeSelectedBeatPips i[data-route-beat-pip-focus='primary'] {
+    width: 0.42rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.4rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.routeSelectedBeatPips i[data-route-beat-pip-focus='support'] {
+    opacity: 0.7;
+}
+
+.routeSelectedBeatPips i[data-route-impact-cue-beat-focus='primary'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-focus='primary'],
+.routeSelectedSignalBeatPips i[data-route-signal-beat-focus='primary'] {
+    width: 0.42rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.4rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.routeSelectedBeatPips i[data-route-impact-cue-beat-focus='support'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-focus='support'],
+.routeSelectedSignalBeatPips i[data-route-signal-beat-focus='support'] {
+    opacity: 0.7;
+}
+
+.routeSelectedSignalBeatPips i[data-route-choice-signal-beat-focus='primary'] {
+    width: 0.42rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.4rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.routeSelectedSignalBeatPips i[data-route-choice-signal-beat-focus='support'] {
+    opacity: 0.7;
+}
+
 .routeSelectedImpactCue[data-route-impact-cue-tone='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 36%, var(--theme-gold-bright) 16%);
     background:

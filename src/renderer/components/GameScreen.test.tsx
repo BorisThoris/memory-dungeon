@@ -4704,6 +4704,28 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('route-choice-recommendation')).toHaveAccessibleName(
             'Recommended route. Safe passage. Stabilize route. Safe route fits the current recall state. 2 beats. Primary payoff: steady clear.'
         );
+        expect(
+            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="1"]')
+        ).toHaveAttribute('data-route-beat-pip-focus', 'primary');
+        expect(
+            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="2"]')
+        ).toHaveAttribute('data-route-beat-pip-focus', 'support');
+        expect(
+            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="1"]')
+        ).toHaveAttribute('data-route-beat-pip-focus', 'primary');
+        expect(
+            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="2"]')
+        ).toHaveAttribute('data-route-beat-pip-focus', 'support');
+        expect(
+            screen.getByTestId('route-choice-safe-signals').querySelector(
+                '[data-route-signal="reward"] [data-route-choice-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-route-choice-signal-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('route-choice-safe-signals').querySelector(
+                '[data-route-signal="reward"] [data-route-choice-signal-beat="2"]'
+            )
+        ).toHaveAttribute('data-route-choice-signal-beat-focus', 'support');
         expect(screen.getByTestId('route-memory-read-panel')).toHaveAttribute('data-pressure', 'strained');
         expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('Focus 2/3 - locked');
         expect(screen.getByTestId('route-memory-read-panel')).toHaveTextContent('Bonus +28');
