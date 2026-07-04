@@ -4420,6 +4420,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityRewardLadder}
                                         data-board-chain-reward-ladder-actions={boardRewardLadderActionAttr}
                                         data-board-chain-reward-ladder={boardRewardLadderAttr}
+                                        data-board-chain-reward-ladder-focus={boardRewardLadderFocusId ?? 'none'}
                                         data-board-chain-reward-hot-band={boardChainHotBand?.tone ?? 'none'}
                                         data-testid="chain-opportunity-reward-ladder"
                                     >
@@ -4429,6 +4430,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-board-chain-reward-audio={boardChainRewardAudioCue(entry)}
                                                 data-board-chain-reward-beats={boardChainRewardBeatCount(entry)}
                                                 data-board-chain-reward-filled={entry.filled}
+                                                data-board-chain-reward-focus={
+                                                    entry.cue.urgency === boardRewardLadderFocusId ? 'primary' : 'support'
+                                                }
                                                 data-board-chain-reward-screen-cue={boardChainRewardScreenCue(entry)}
                                                 data-board-chain-reward-tone={entry.cue.tone}
                                                 data-board-chain-reward-total={entry.total}

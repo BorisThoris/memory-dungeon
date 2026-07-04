@@ -516,6 +516,10 @@ describe('TileBoard touch and click controls', () => {
             'data-board-chain-reward-hot-band',
             'cashout'
         );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAttribute(
+            'data-board-chain-reward-ladder-focus',
+            'soon'
+        );
         expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAccessibleName(
             'Board reward ladder. Prime: Prime cashout: x6 +1 shard. 0/2. 2 matches left. Hold streak: x8 +1 guard. 0/4. 4 matches left. Hold streak: x8 +1 life. 4/8. 4 matches left.'
         );
@@ -532,7 +536,11 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-reward-ladder').querySelector('[data-board-chain-reward-tone="reward"]')
         ).toHaveAttribute('data-board-chain-reward-action', 'Prime cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-reward-ladder').querySelector('[data-board-chain-reward-tone="reward"]')
+        ).toHaveAttribute('data-board-chain-reward-focus', 'primary');
         expect(healRewardTarget).toHaveAttribute('data-board-chain-reward-action', 'Hold streak');
+        expect(healRewardTarget).toHaveAttribute('data-board-chain-reward-focus', 'support');
         expect(healRewardTarget).toHaveAttribute('data-board-chain-reward-beats', '3');
         expect(healRewardTarget?.querySelectorAll('[data-board-chain-reward-beat]')).toHaveLength(3);
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Match lit route for reward');
@@ -1446,6 +1454,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toBeVisible();
         expect(screen.getByTestId('chain-opportunity-reward-ladder')).toBeVisible();
         expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toBeVisible();
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toHaveAttribute(
+            'data-board-chain-reward-focus',
+            'primary'
+        );
         expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toHaveTextContent('Prime');
         expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toHaveTextContent('x6 +1 shard');
         expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toHaveTextContent('2 matches left');
