@@ -750,6 +750,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot-audio', 'card-shot-cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot-label', 'Cash');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot-screen-cue', 'burst');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot-focus', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-primary-shot-detail',
             'Cashout lane'
@@ -768,6 +769,7 @@ describe('TileBoard touch and click controls', () => {
             'cashout'
         );
         expect(screen.getByTestId('chain-opportunity-primary-shot')).toHaveAttribute('data-card-primary-shot-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-primary-shot')).toHaveAttribute('data-card-primary-shot-focus', 'cashout');
         expect(screen.getByTestId('chain-opportunity-primary-shot')).toHaveAccessibleName(
             'Primary combo shot. Cash: Cashout lane. 5-beat hit now. Pulse: Cash now.'
         );
@@ -1963,6 +1965,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-beat-counts', '2:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot', 'route-setup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot-label', 'Set');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot-focus', 'setup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-beat', 'setup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-beat-action', 'set route');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-cadence', 'prime');
@@ -1970,6 +1973,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-primary-shot')).toHaveAttribute('data-card-primary-shot', 'route-setup');
         expect(screen.getByTestId('chain-opportunity-primary-shot')).toHaveAttribute('data-card-primary-shot-beat', 'setup');
         expect(screen.getByTestId('chain-opportunity-primary-shot')).toHaveAttribute('data-card-primary-shot-cadence', 'prime');
+        expect(screen.getByTestId('chain-opportunity-primary-shot')).toHaveAttribute('data-card-primary-shot-focus', 'setup');
         expect(screen.getByTestId('chain-opportunity-primary-shot')).toHaveAccessibleName(
             'Primary combo shot. Set: Setup lane. 2-beat set route. Pulse: Prime payoff.'
         );

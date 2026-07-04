@@ -794,6 +794,25 @@ const cardPrimaryShotScreenCue = (
     return 'pulse';
 };
 
+const cardPrimaryShotFocus = (
+    beatId: CardFeedbackBeatId | string | 'none',
+    cadenceId: CardFeedbackCadenceId | string | 'none'
+): 'cashout' | 'surge' | 'follow-up' | 'route' | 'setup' => {
+    if (beatId === 'cashout' || cadenceId === 'cashout') {
+        return 'cashout';
+    }
+    if (beatId === 'surge' || cadenceId === 'surge') {
+        return 'surge';
+    }
+    if (beatId === 'follow-up' || cadenceId === 'follow-up') {
+        return 'follow-up';
+    }
+    if (beatId === 'route' || cadenceId === 'route') {
+        return 'route';
+    }
+    return 'setup';
+};
+
 const cardTraitLaneAudioCue = (
     laneId: TraitInteractionLaneId | string
 ):
@@ -1439,6 +1458,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         : 'none';
     const primaryCardFeedbackShotScreenCue = primaryCardFeedbackShotRow
         ? cardPrimaryShotScreenCue(
+              primaryCardFeedbackBeatRow?.id ?? 'none',
+              primaryCardFeedbackCadenceRow?.id ?? 'none'
+          )
+        : 'none';
+    const primaryCardFeedbackShotFocus = primaryCardFeedbackShotRow
+        ? cardPrimaryShotFocus(
               primaryCardFeedbackBeatRow?.id ?? 'none',
               primaryCardFeedbackCadenceRow?.id ?? 'none'
           )
@@ -3618,6 +3643,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-primary-shot={primaryCardFeedbackShotRow?.id ?? 'none'}
             data-card-feedback-primary-shot-audio={primaryCardFeedbackShotAudioCue}
             data-card-feedback-primary-shot-detail={primaryCardFeedbackShotRow?.detail ?? 'none'}
+            data-card-feedback-primary-shot-focus={primaryCardFeedbackShotFocus}
             data-card-feedback-primary-shot-label={primaryCardFeedbackShotRow?.shotLabel ?? 'none'}
             data-card-feedback-primary-shot-screen-cue={primaryCardFeedbackShotScreenCue}
             data-card-feedback-primary-beat={primaryCardFeedbackBeatRow?.id ?? 'none'}
@@ -4070,6 +4096,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-card-primary-shot-cadence={primaryCardFeedbackCadenceRow?.id ?? 'none'}
                                         data-card-primary-shot-cadence-action={primaryCardFeedbackCadenceRow?.action ?? 'none'}
                                         data-card-primary-shot-detail={primaryCardFeedbackShotRow.detail}
+                                        data-card-primary-shot-focus={primaryCardFeedbackShotFocus}
                                         data-card-primary-shot-screen-cue={primaryCardFeedbackShotScreenCue}
                                         data-testid="chain-opportunity-primary-shot"
                                     >

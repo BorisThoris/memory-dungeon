@@ -1085,6 +1085,52 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 78%, var(--theme-cyan-bright) 18%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 36%, transparent), transparent 68%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 26%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 16%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 1.24rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='cashout'] small,
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='cashout'] b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 98%, white);
+}
+
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='cashout'] em,
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='cashout'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 90%, white);
+}
+
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='cashout'] .chainOpportunityPrimaryShotBeatPips i {
+    height: 0.22rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, white 28%, transparent),
+        0 0 0.54rem color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
+    opacity: 1;
+}
+
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='surge'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 62%, var(--theme-gold-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent), color-mix(in srgb, var(--theme-gold-bright) 13%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    box-shadow: 0 0 1rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='setup'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-text-muted) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent), color-mix(in srgb, var(--theme-void) 12%, transparent)),
+        color-mix(in srgb, var(--theme-void) 48%, transparent);
+}
+
 .chainOpportunityPrimaryShot[data-card-primary-shot-screen-cue='guard'],
 .chainOpportunityPrimaryShot[data-card-primary-shot-screen-cue='pulse'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 52%, var(--theme-gold-bright) 16%);
