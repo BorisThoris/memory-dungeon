@@ -888,6 +888,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack', 'none');
         expect(screen.queryByTestId('board-opportunity-payoff-stack')).toBeNull();
         expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Combo route');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Best');
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('Compass');
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('1 play');
+        expect(screen.getByTestId('board-opportunity-compass-summary').querySelectorAll('[data-opportunity-compass-summary-beat]')).toHaveLength(2);
+        expect(
+            screen.getByTestId('board-opportunity-compass-summary').querySelector('[data-opportunity-compass-summary-beat="1"]')
+        ).toHaveAttribute('data-opportunity-compass-summary-beat-focus', 'primary');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-priority', 'best');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('1 route ready');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Route cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Route cashout');
@@ -918,7 +926,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute(
             'aria-label',
-            'Route cashout. Combo route: 1 route ready. Cash out: Match lit route for reward / Echo + Sealed: combo shard / Push x6 reward / x4 streak / 1 match to reward / One-away cashout / Next reward x6 +1 shard in 1 match'
+            'Best play. Route cashout. Combo route: 1 route ready. Cash out: Match lit route for reward / Echo + Sealed: combo shard / Push x6 reward / x4 streak / 1 match to reward / One-away cashout / Next reward x6 +1 shard in 1 match'
         );
 
         fireEvent.focus(screen.getByTestId('tile-board-application'));
@@ -2065,7 +2073,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-recovery')).toHaveTextContent('Recover');
         expect(screen.getByTestId('board-opportunity-recovery')).toHaveTextContent('Safe match');
         expect(screen.getByTestId('board-opportunity-recovery')).toHaveAccessibleName(
-            'Safe pair. Recovery: Safe match. Recover: Recover - safe match'
+            'Best play. Safe pair. Recovery: Safe match. Recover: Recover - safe match'
         );
     });
 
@@ -2807,7 +2815,7 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
         ).toHaveAttribute('data-pickup-chip-beat-focus', 'primary');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveAccessibleName(
-            'Pickup cashout. Rewards: 1 reward. Claim: Claim before exit / Shard spark pickup: +1 combo shard'
+            'Best play. Pickup cashout. Rewards: 1 reward. Claim: Claim before exit / Shard spark pickup: +1 combo shard'
         );
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveAttribute(
             'data-opportunity-impact-cue',

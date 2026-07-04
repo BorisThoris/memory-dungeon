@@ -2586,7 +2586,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             ? `Board opportunity compass. ${boardOpportunityCompassRows
                       .map(
                           (row, index) =>
-                          `${index === 0 && boardOpportunityCompassRows.length > 1 ? 'Best play. ' : ''}${row.impactCue}. ${row.label}: ${row.value}. ${row.action}: ${row.detail}`
+                          `${index === 0 ? 'Best play. ' : ''}${row.impactCue}. ${row.label}: ${row.value}. ${row.action}: ${row.detail}`
                       )
                   .join('. ')}.${boardOpportunityLaneMapRows.length > 1 ? ` ${boardOpportunityLaneMapAccessibleLabel}` : ''}`
             : 'Board opportunity compass';
@@ -5236,30 +5236,26 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 data-opportunity-compass-hot={boardChainHotBand?.tone ?? 'none'}
                                 data-opportunity-compass-surge={boardChainOpportunity.comboSurgeLabel ? 'true' : 'false'}
                                 data-opportunity-compass-beats={boardOpportunityCompassRows.length}
-                                data-opportunity-compass-priority={
-                                    boardOpportunityCompassRows.length > 1 ? 'best' : 'single'
-                                }
+                                data-opportunity-compass-priority={boardOpportunityCompassRows.length > 0 ? 'best' : 'single'}
                                 data-testid="board-opportunity-compass"
                                 role="group"
                             >
-                                {boardOpportunityCompassRows.length > 1 ? (
-                                    <span className={styles.opportunityCompassSummary} data-testid="board-opportunity-compass-summary">
-                                        <small>Compass</small>
-                                        <b>{boardOpportunityCompassRows.length} plays</b>
-                                        <span aria-hidden="true" className={styles.opportunityCompassSummaryBeatPips}>
-                                            {Array.from(
-                                                { length: Math.max(2, Math.min(5, boardOpportunityCompassRows.length + 1)) },
-                                                (_, index) => (
-                                                    <i
-                                                        data-opportunity-compass-summary-beat={index + 1}
-                                                        data-opportunity-compass-summary-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                        key={index}
-                                                    />
-                                                )
-                                            )}
-                                        </span>
+                                <span className={styles.opportunityCompassSummary} data-testid="board-opportunity-compass-summary">
+                                    <small>Compass</small>
+                                    <b>{boardOpportunityCompassRows.length} {boardOpportunityCompassRows.length === 1 ? 'play' : 'plays'}</b>
+                                    <span aria-hidden="true" className={styles.opportunityCompassSummaryBeatPips}>
+                                        {Array.from(
+                                            { length: Math.max(2, Math.min(5, boardOpportunityCompassRows.length + 1)) },
+                                            (_, index) => (
+                                                <i
+                                                    data-opportunity-compass-summary-beat={index + 1}
+                                                    data-opportunity-compass-summary-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                            )
+                                        )}
                                     </span>
-                                ) : null}
+                                </span>
                                 {boardPayoffStack ? (
                                     <span
                                         aria-label={`Board payoff stack. ${boardPayoffStack.cue}. ${boardPayoffStack.action}. ${boardPayoffStack.value}. ${boardPayoffStack.detail}. Crescendo: ${boardPayoffStack.crescendo.label}. ${boardPayoffStack.crescendo.detail}. ${boardPayoffStack.crescendo.beatCount} beats. ${boardPayoffStack.nextCue}.${
@@ -5405,21 +5401,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     const beatCount = getBoardOpportunityBeatCount(row);
                                     return (
                                         <span
-                                            aria-label={`${index === 0 && boardOpportunityCompassRows.length > 1 ? 'Best play. ' : ''}${row.impactCue}. ${row.label}: ${row.value}. ${row.action}: ${row.detail}`}
+                                            aria-label={`${index === 0 ? 'Best play. ' : ''}${row.impactCue}. ${row.label}: ${row.value}. ${row.action}: ${row.detail}`}
                                             className={styles.opportunityCompassRow}
                                             data-opportunity-audio={boardOpportunityAudioCue(row)}
                                             data-opportunity-beats={beatCount}
                                             data-opportunity-heat={getBoardOpportunityHeat(row.impactCue)}
                                             data-opportunity-impact-cue={row.impactCue}
-                                            data-opportunity-priority={
-                                                index === 0 && boardOpportunityCompassRows.length > 1 ? 'best' : 'normal'
-                                            }
+                                            data-opportunity-priority={index === 0 ? 'best' : 'normal'}
                                             data-opportunity-tone={row.tone}
                                             data-opportunity-screen-cue={boardOpportunityScreenCue(row)}
                                             data-testid={`board-opportunity-${row.id}`}
                                             key={`${row.id}:${row.value}`}
                                         >
-                                            {index === 0 && boardOpportunityCompassRows.length > 1 ? (
+                                            {index === 0 ? (
                                                 <span className={styles.opportunityCompassPriority}>Best</span>
                                             ) : null}
                                             <span className={styles.opportunityCompassImpact}>{row.impactCue}</span>
