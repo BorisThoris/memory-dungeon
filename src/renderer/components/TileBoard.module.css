@@ -4317,10 +4317,17 @@
 .opportunityCompassRow[data-opportunity-priority='best'] {
     animation: boardOpportunityPulse 1.8s ease-in-out infinite;
     border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
+    background:
+        radial-gradient(ellipse 92% 140% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 70%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 6%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 74%, transparent);
     box-shadow:
         0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent) inset,
-        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        0 0 22px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+        0 0 34px color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent),
         0 10px 26px rgba(0, 0, 0, 0.28);
+    transform: translateY(-1px);
+    z-index: 2;
 }
 
 .opportunityCompassRow[data-opportunity-heat='cashout'] {
@@ -4375,6 +4382,12 @@
     text-transform: uppercase;
 }
 
+.opportunityCompassRow[data-opportunity-priority='best'] .opportunityCompassPriority {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 64%, white);
+    background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+}
+
 .opportunityCompassImpact {
     justify-self: start;
     min-width: 0;
@@ -4415,6 +4428,13 @@
     box-shadow:
         0 0 0.38rem color-mix(in srgb, currentColor 46%, transparent),
         0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.opportunityCompassRow[data-opportunity-priority='best'] .opportunityCompassBeatPips i[data-opportunity-beat-focus='primary'] {
+    width: 0.48rem;
+    box-shadow:
+        0 0 0.5rem color-mix(in srgb, currentColor 56%, transparent),
+        0 0 0 1px color-mix(in srgb, white 22%, transparent);
 }
 
 .opportunityCompassBeatPips i[data-opportunity-beat-focus='support'] {
