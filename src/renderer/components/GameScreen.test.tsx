@@ -4641,6 +4641,12 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"]')?.querySelectorAll('[data-next-beat]')
         ).toHaveLength(4);
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"] [data-next-beat="2"]')
+        ).toHaveAttribute('data-next-beat-focus', 'support');
         expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"]')).toHaveAttribute(
             'data-next-beats',
             '3'
@@ -4653,6 +4659,12 @@ describe('GameScreen (OVR-014)', () => {
             'data-next-screen-cue',
             'guard'
         );
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"] [data-next-beat="2"]')
+        ).toHaveAttribute('data-next-beat-focus', 'support');
         expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"]')).toHaveAttribute(
             'data-next-beats',
             '4'
@@ -4665,6 +4677,12 @@ describe('GameScreen (OVR-014)', () => {
             'data-next-screen-cue',
             'burst'
         );
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"] [data-next-beat="2"]')
+        ).toHaveAttribute('data-next-beat-focus', 'support');
         expect(screen.getByTestId('floor-clear-next-signal-strip').getAttribute('aria-label')).toContain(
             'Next floor preview signals. Floor: Speed Trial'
         );

@@ -2164,6 +2164,17 @@
     transform-origin: center;
 }
 
+.floorClearNextBeatPips i[data-next-beat-focus='primary'] {
+    width: 0.48rem;
+    height: 0.17rem;
+    filter: saturate(1.28) brightness(1.14);
+    transform: translateY(-0.01rem) scaleX(1.12);
+}
+
+.floorClearNextBeatPips i[data-next-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .floorClearNextSignalStrip em {
     min-width: 0;
     overflow-wrap: anywhere;

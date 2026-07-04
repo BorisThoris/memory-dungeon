@@ -5640,7 +5640,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 <strong>{row.value}</strong>
                                                 <span aria-hidden="true" className={styles.floorClearNextBeatPips}>
                                                     {Array.from({ length: beatCount }, (_, index) => (
-                                                        <i data-next-beat="" key={index} />
+                                                        <i
+                                                            data-next-beat={index + 1}
+                                                            data-next-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
                                                     ))}
                                                 </span>
                                                 {row.detail ? <em>{row.detail}</em> : null}
