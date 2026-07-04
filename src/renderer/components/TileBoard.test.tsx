@@ -1154,7 +1154,19 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-followup-cue')).toHaveAttribute('data-chain-followup-action', 'Tap follow-up');
         expect(screen.getByTestId('chain-opportunity-followup-cue')).toHaveAttribute('data-chain-followup-beats', '3');
+        expect(screen.getByTestId('chain-opportunity-followup-cue')).toHaveAttribute('data-chain-followup-screen-cue', 'pulse');
+        expect(screen.getByTestId('chain-opportunity-followup-cue')).toHaveAttribute('data-chain-followup-tone', 'route');
         expect(screen.getByTestId('chain-opportunity-followup-cue').querySelectorAll('[data-chain-followup-beat]')).toHaveLength(3);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-followup-cue')
+                .querySelector('[data-chain-followup-beat="1"]')
+        ).toHaveAttribute('data-chain-followup-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-followup-cue')
+                .querySelector('[data-chain-followup-beat="2"]')
+        ).toHaveAttribute('data-chain-followup-beat-focus', 'support');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Follow-up route');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Follow-up route');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Follow up');

@@ -4528,13 +4528,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-followup-action="Tap follow-up"
                                         data-chain-followup-beats={3}
                                         data-chain-followup-ready="true"
+                                        data-chain-followup-screen-cue="pulse"
+                                        data-chain-followup-tone="route"
                                         data-testid="chain-opportunity-followup-cue"
                                     >
                                         <small>Next tap</small>
                                         <b>{boardChainOpportunity.selectedFollowupLabel}</b>
                                         <span aria-hidden="true" className={styles.chainOpportunityFollowupBeatPips}>
                                             {Array.from({ length: 3 }, (_, index) => (
-                                                <i data-chain-followup-beat={index + 1} key={index} />
+                                                <i
+                                                    data-chain-followup-beat={index + 1}
+                                                    data-chain-followup-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                     </span>
