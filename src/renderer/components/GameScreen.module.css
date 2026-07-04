@@ -12755,6 +12755,26 @@
     animation: mismatchRecoveryBeatPulse 0.86s ease-in-out infinite;
 }
 
+.boardFloaterPayoffSummaryBeatPips i[data-payoff-summary-beat-focus='primary'],
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-focus='primary'],
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-focus='primary'],
+.boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-focus='primary'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-focus='primary'] {
+    min-width: 0.32rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.46rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.boardFloaterPayoffSummaryBeatPips i[data-payoff-summary-beat-focus='support'],
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-focus='support'],
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-focus='support'],
+.boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-focus='support'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-focus='support'] {
+    opacity: 0.7;
+}
+
 .boardFloaterPayoffSummaryBeatPips i:nth-child(2),
 .boardFloaterPrimaryPayoffLaneBeatPips i:nth-child(2),
 .boardFloaterPayoffLaneBeatPips i:nth-child(2),

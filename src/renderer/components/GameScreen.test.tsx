@@ -2656,6 +2656,16 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveAttribute('data-payoff-summary-focus', 'cashout');
         expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveAttribute('data-payoff-summary-beats', '5');
         expect(screen.getByTestId('match-score-floater-payoff-summary').querySelectorAll('[data-payoff-summary-beat]')).toHaveLength(5);
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-summary')
+                .querySelector('[data-payoff-summary-beat="1"]')
+        ).toHaveAttribute('data-payoff-summary-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-summary')
+                .querySelector('[data-payoff-summary-beat="2"]')
+        ).toHaveAttribute('data-payoff-summary-beat-focus', 'support');
         expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveAttribute(
             'data-match-payoff-lane-map',
             'route:1>pickup:1>trait:1>chain:1'
@@ -2718,6 +2728,16 @@ describe('GameScreen (OVR-014)', () => {
                 .getByTestId('match-score-floater-primary-payoff-lane')
                 .querySelectorAll('[data-match-payoff-primary-lane-beat]')
         ).toHaveLength(3);
+        expect(
+            screen
+                .getByTestId('match-score-floater-primary-payoff-lane')
+                .querySelector('[data-match-payoff-primary-lane-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-primary-lane-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('match-score-floater-primary-payoff-lane')
+                .querySelector('[data-match-payoff-primary-lane-beat="2"]')
+        ).toHaveAttribute('data-match-payoff-primary-lane-beat-focus', 'support');
         expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveTextContent('Route');
         expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveTextContent('Pickup');
         expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveTextContent('Trait');
@@ -2744,6 +2764,18 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-match-payoff-lane="route"]')
                 ?.querySelectorAll('[data-match-payoff-lane-beat]')
         ).toHaveLength(3);
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-lane-map')
+                .querySelector('[data-match-payoff-lane="route"]')
+                ?.querySelector('[data-match-payoff-lane-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-lane-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-lane-map')
+                .querySelector('[data-match-payoff-lane="route"]')
+                ?.querySelector('[data-match-payoff-lane-beat="2"]')
+        ).toHaveAttribute('data-match-payoff-lane-beat-focus', 'support');
         expect(
             screen.getByTestId('match-score-floater-payoff-lane-map').querySelector('[data-match-payoff-lane="trait"]')
         ).toHaveAttribute('data-match-payoff-lane-tone', 'trait');
@@ -2893,6 +2925,16 @@ describe('GameScreen (OVR-014)', () => {
                 .getByTestId('match-score-floater-payoff-ladder')
                 .querySelectorAll('[data-match-payoff-ladder-beat]')
         ).toHaveLength(5);
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-ladder')
+                .querySelector('[data-match-payoff-ladder-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-ladder-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-ladder')
+                .querySelector('[data-match-payoff-ladder-beat="2"]')
+        ).toHaveAttribute('data-match-payoff-ladder-beat-focus', 'support');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveAccessibleName(
             'Match payoff ladder. First: Route cashout. Then: Cash super stack. Keep: Prime. Lanes: Route cashout to Pickup cashout to Trait cashout to Chain cashout.'
         );
@@ -2903,6 +2945,25 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Pickup cashout');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Trait cashout');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Chain cashout');
+        expect(screen.getByTestId('match-score-floater-payoff-chips')).toHaveTextContent('Route cashout');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-chips')
+                .querySelector('[data-match-payoff-id="route"]')
+                ?.querySelectorAll('[data-match-payoff-chip-beat]')
+        ).toHaveLength(4);
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-chips')
+                .querySelector('[data-match-payoff-id="route"]')
+                ?.querySelector('[data-match-payoff-chip-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-chip-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-chips')
+                .querySelector('[data-match-payoff-id="route"]')
+                ?.querySelector('[data-match-payoff-chip-beat="2"]')
+        ).toHaveAttribute('data-match-payoff-chip-beat-focus', 'support');
     });
 
     it('renders perk pop payoff chips as distinct match floater activations', () => {

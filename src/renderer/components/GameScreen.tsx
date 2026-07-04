@@ -4531,6 +4531,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-payoff-summary-beat={index + 1}
+                                                            data-payoff-summary-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             key={`payoff-summary-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4600,6 +4601,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             (_, index) => (
                                                                 <i
                                                                     data-match-payoff-primary-lane-beat={index + 1}
+                                                                    data-match-payoff-primary-lane-beat-focus={
+                                                                        index === 0 ? 'primary' : 'support'
+                                                                    }
                                                                     key={`${boardFloaterPrimaryPayoffLane.id}-primary-payoff-lane-beat-${index + 1}`}
                                                                 />
                                                             )
@@ -4626,6 +4630,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         {Array.from({ length: getBoardFloaterPayoffLaneBeatCount(lane) }, (_, index) => (
                                                             <i
                                                                 data-match-payoff-lane-beat={index + 1}
+                                                                data-match-payoff-lane-beat-focus={index === 0 ? 'primary' : 'support'}
                                                                 key={`${lane.id}-payoff-lane-beat-${index + 1}`}
                                                             />
                                                         ))}
@@ -4682,6 +4687,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-match-payoff-ladder-beat={index + 1}
+                                                            data-match-payoff-ladder-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             key={`payoff-ladder-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4793,6 +4799,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         {Array.from({ length: getMatchPayoffChipBeatCount(chip) }, (_, index) => (
                                                             <i
                                                                 data-match-payoff-chip-beat={index + 1}
+                                                                data-match-payoff-chip-beat-focus={index === 0 ? 'primary' : 'support'}
                                                                 key={`match-payoff-chip-beat-${chip.id}-${index + 1}`}
                                                             />
                                                         ))}
