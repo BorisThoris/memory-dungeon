@@ -1061,6 +1061,16 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-shot-map-primary',
             'cash-now'
         );
+        expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveTextContent('Shots');
+        expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveTextContent('1 lane');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map-summary').querySelectorAll('[data-chain-shot-map-summary-pip]')
+        ).toHaveLength(2);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-shot-map-summary')
+                .querySelector('[data-chain-shot-map-summary-pip="1"]')
+        ).toHaveAttribute('data-chain-shot-map-summary-pip-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAccessibleName(
             'Combo shot map. Cash: 2. Cashout lane.'
         );
@@ -1376,6 +1386,11 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAccessibleName(
             'Combo shot map. Tap: 1. Next tap. Build: 1. Route lane.'
         );
+        expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveTextContent('Shots');
+        expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveTextContent('2 lanes');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map-summary').querySelectorAll('[data-chain-shot-map-summary-pip]')
+        ).toHaveLength(3);
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute(
             'data-chain-shot-map-primary',
             'follow-up'

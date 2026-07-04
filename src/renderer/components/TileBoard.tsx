@@ -4571,6 +4571,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="chain-opportunity-shot-map"
                                     >
                                         <small>Shot map</small>
+                                        <span className={styles.chainOpportunityShotMapSummary} data-testid="chain-opportunity-shot-map-summary">
+                                            <small>Shots</small>
+                                            <b>
+                                                {cardFeedbackShotMapRows.length}{' '}
+                                                {cardFeedbackShotMapRows.length === 1 ? 'lane' : 'lanes'}
+                                            </b>
+                                            <span aria-hidden="true" className={styles.chainOpportunityShotMapSummaryBeatPips}>
+                                                {Array.from(
+                                                    { length: Math.max(2, Math.min(5, cardFeedbackShotMapRows.length + 1)) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-chain-shot-map-summary-pip={index + 1}
+                                                            data-chain-shot-map-summary-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
                                         {cardFeedbackShotMapRows.map((row) => (
                                             <span
                                                 data-chain-shot-map-focus={
