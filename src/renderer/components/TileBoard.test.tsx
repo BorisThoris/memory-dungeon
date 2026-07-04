@@ -1210,6 +1210,16 @@ describe('TileBoard touch and click controls', () => {
             'data-trait-interaction-lane-actions',
             'shard:Cash shard:1>guard:Protect run:1>block:Deny match:1>recall:Set memory:1'
         );
+        expect(screen.getByTestId('chain-opportunity-trait-lane-map-summary')).toHaveTextContent('Traits');
+        expect(screen.getByTestId('chain-opportunity-trait-lane-map-summary')).toHaveTextContent('4 lanes');
+        expect(
+            screen.getByTestId('chain-opportunity-trait-lane-map-summary').querySelectorAll('[data-trait-interaction-lane-summary-beat]')
+        ).toHaveLength(5);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-trait-lane-map-summary')
+                .querySelector('[data-trait-interaction-lane-summary-beat="1"]')
+        ).toHaveAttribute('data-trait-interaction-lane-summary-beat-focus', 'primary');
         expect(laneMap).toHaveTextContent('Shard');
         expect(laneMap).toHaveTextContent('Cash shard');
         expect(laneMap).toHaveTextContent('Echo + Sealed: combo shard');
@@ -1267,6 +1277,8 @@ describe('TileBoard touch and click controls', () => {
 
         const laneMap = screen.getByTestId('chain-opportunity-trait-lane-map');
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-map', 'shard:1');
+        expect(screen.getByTestId('chain-opportunity-trait-lane-map-summary')).toHaveTextContent('Traits');
+        expect(screen.getByTestId('chain-opportunity-trait-lane-map-summary')).toHaveTextContent('1 lane');
         expect(laneMap).toHaveTextContent('Shard');
         expect(laneMap).toHaveTextContent('Cash shard');
         expect(laneMap).toHaveTextContent('Echo + Sealed: combo shard');

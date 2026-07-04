@@ -4372,6 +4372,33 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         }
                                         data-testid="chain-opportunity-trait-lane-map"
                                     >
+                                        <span
+                                            className={styles.chainOpportunityTraitLaneMapSummary}
+                                            data-testid="chain-opportunity-trait-lane-map-summary"
+                                        >
+                                            <small>Traits</small>
+                                            <b>
+                                                {boardTraitInteractionLaneMap.length}{' '}
+                                                {boardTraitInteractionLaneMap.length === 1 ? 'lane' : 'lanes'}
+                                            </b>
+                                            <span
+                                                aria-hidden="true"
+                                                className={styles.chainOpportunityTraitLaneMapSummaryBeatPips}
+                                            >
+                                                {Array.from(
+                                                    { length: Math.max(2, Math.min(5, boardTraitInteractionLaneMap.length + 1)) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-trait-interaction-lane-summary-beat={index + 1}
+                                                            data-trait-interaction-lane-summary-beat-focus={
+                                                                index === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
                                         {boardTraitInteractionLaneMap.map((lane) => (
                                             <span
                                                 data-trait-interaction-lane={lane.id}
