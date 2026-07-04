@@ -1266,6 +1266,10 @@ describe('TileBoard touch and click controls', () => {
             'Prime build'
         );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
+            'data-opportunity-primary-lane-focus',
+            'build'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-primary-lane-audio',
             'board-opportunity-build'
         );
@@ -1301,6 +1305,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="build"]')).toHaveAttribute(
             'data-opportunity-lane-beats',
             '3'
+        );
+        expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAttribute(
+            'data-opportunity-primary-lane-focus',
+            'build'
         );
         expect(
             screen
@@ -2308,6 +2316,10 @@ describe('TileBoard touch and click controls', () => {
             'data-opportunity-lane-actions',
             'cash:Cash now:1>pickup:Claim pickup:1'
         );
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
+            'data-opportunity-primary-lane-focus',
+            'cashout'
+        );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Claim pickup');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
@@ -2316,6 +2328,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="cash"]')).toHaveAttribute(
             'data-opportunity-lane-action',
             'Cash now'
+        );
+        expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAttribute(
+            'data-opportunity-primary-lane-focus',
+            'cashout'
         );
         expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="pickup"]')).toHaveAttribute(
             'data-opportunity-lane-action',

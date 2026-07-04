@@ -413,6 +413,27 @@ const boardOpportunityLaneScreenCue = (
     return 'pulse';
 };
 
+const boardOpportunityLaneFocus = (
+    lane: Pick<BoardOpportunityLaneMapEntry, 'id'>
+): 'build' | 'cashout' | 'recover' | 'reward' | 'risk' | 'tool' => {
+    switch (lane.id) {
+        case 'cash':
+            return 'cashout';
+        case 'pickup':
+        case 'perk':
+            return 'reward';
+        case 'recover':
+            return 'recover';
+        case 'risk':
+            return 'risk';
+        case 'tool':
+            return 'tool';
+        case 'build':
+        default:
+            return 'build';
+    }
+};
+
 const boardOpportunityLaneMapLabel = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
     laneMap.length > 0
         ? `Opportunity lane map. ${laneMap.map((lane) => `${lane.label}: ${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
@@ -3778,6 +3799,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 primaryBoardOpportunityLane ? boardOpportunityLaneBeatCount(primaryBoardOpportunityLane) : 0
             }
             data-opportunity-primary-lane-cue={primaryBoardOpportunityLane?.cue ?? 'none'}
+            data-opportunity-primary-lane-focus={
+                primaryBoardOpportunityLane ? boardOpportunityLaneFocus(primaryBoardOpportunityLane) : 'none'
+            }
             data-opportunity-primary-lane-screen-cue={
                 primaryBoardOpportunityLane ? boardOpportunityLaneScreenCue(primaryBoardOpportunityLane) : 'none'
             }
@@ -4665,6 +4689,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             primaryBoardOpportunityLane ? boardOpportunityLaneBeatCount(primaryBoardOpportunityLane) : 0
                                         }
                                         data-opportunity-primary-lane-cue={primaryBoardOpportunityLane?.cue ?? 'none'}
+                                        data-opportunity-primary-lane-focus={
+                                            primaryBoardOpportunityLane ? boardOpportunityLaneFocus(primaryBoardOpportunityLane) : 'none'
+                                        }
                                         data-opportunity-primary-lane-screen-cue={
                                             primaryBoardOpportunityLane ? boardOpportunityLaneScreenCue(primaryBoardOpportunityLane) : 'none'
                                         }
@@ -4679,6 +4706,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-opportunity-primary-lane-audio={boardOpportunityLaneAudioCue(primaryBoardOpportunityLane)}
                                                 data-opportunity-primary-lane-beats={boardOpportunityLaneBeatCount(primaryBoardOpportunityLane)}
                                                 data-opportunity-primary-lane-cue={primaryBoardOpportunityLane.cue}
+                                                data-opportunity-primary-lane-focus={boardOpportunityLaneFocus(primaryBoardOpportunityLane)}
                                                 data-opportunity-primary-lane-screen-cue={boardOpportunityLaneScreenCue(primaryBoardOpportunityLane)}
                                                 data-testid="board-opportunity-primary-lane"
                                             >
