@@ -520,11 +520,17 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveTextContent('Next lane');
         expect(screen.getByTestId('hud-recent-action-primary-lane').querySelectorAll('[data-hud-action-primary-lane-beat]')).toHaveLength(4);
         expect(
+            screen.getByTestId('hud-recent-action-primary-lane').querySelector('[data-hud-action-primary-lane-beat="1"]')
+        ).toHaveAttribute('data-hud-action-primary-lane-beat-focus', 'primary');
+        expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="cash"]')
         ).toHaveTextContent('Cash');
         expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="cash"]')
         ).toHaveAttribute('data-hud-action-lane-action', 'Collect');
+        expect(
+            screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="cash"]')
+        ).toHaveAttribute('data-hud-action-lane-focus', 'primary');
         expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="cash"]')
         ).toHaveAttribute('data-hud-action-lane-beats', '4');
@@ -535,11 +541,20 @@ describe('GameplayHudBar', () => {
                 ?.querySelectorAll('[data-hud-action-lane-beat]')
         ).toHaveLength(4);
         expect(
+            screen
+                .getByTestId('hud-recent-action-lane-map')
+                .querySelector('[data-hud-action-lane="cash"]')
+                ?.querySelector('[data-hud-action-lane-beat="1"]')
+        ).toHaveAttribute('data-hud-action-lane-beat-focus', 'primary');
+        expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="route"]')
         ).toHaveTextContent('Route next');
         expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="route"]')
         ).toHaveAttribute('data-hud-action-lane-action', 'Route next');
+        expect(
+            screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="route"]')
+        ).toHaveAttribute('data-hud-action-lane-focus', 'support');
         expect(
             screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="chain"]')
         ).toHaveTextContent('Keep streak');

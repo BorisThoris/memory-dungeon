@@ -8633,6 +8633,22 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
 }
 
+.hudRecentActionLaneBeatPips u[data-hud-action-lane-beat-focus='primary'],
+.hudRecentActionPrimaryLaneBeatPips u[data-hud-action-primary-lane-beat-focus='primary'] {
+    width: 0.34rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.38rem color-mix(in srgb, currentColor 42%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+}
+
+.hudRecentActionImpact > span[data-hud-action-lane-map] b[data-hud-action-lane-focus='primary'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 18%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, white 9%, transparent),
+        0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
 .hudRecentActionImpact > span[data-hud-action-lane-map] b[data-hud-action-lane='cash'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
     background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);

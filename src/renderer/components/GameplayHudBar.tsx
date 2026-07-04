@@ -2805,7 +2805,13 @@ const GameplayHudBar = ({
                                                                     {Array.from(
                                                                         { length: hudRecentActionLaneBeatCount(primaryRecentActionLane) },
                                                                         (_, beatIndex) => (
-                                                                            <u data-hud-action-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                                            <u
+                                                                                data-hud-action-primary-lane-beat={beatIndex + 1}
+                                                                                data-hud-action-primary-lane-beat-focus={
+                                                                                    beatIndex === 0 ? 'primary' : 'support'
+                                                                                }
+                                                                                key={beatIndex}
+                                                                            />
                                                                         )
                                                                     )}
                                                                 </span>
@@ -2817,6 +2823,9 @@ const GameplayHudBar = ({
                                                                 data-hud-action-lane-action={lane.action}
                                                                 data-hud-action-lane-audio={hudRecentActionLaneAudioCue(lane)}
                                                                 data-hud-action-lane-beats={hudRecentActionLaneBeatCount(lane)}
+                                                                data-hud-action-lane-focus={
+                                                                    lane.id === primaryRecentActionLane?.id ? 'primary' : 'support'
+                                                                }
                                                                 data-hud-action-lane-screen-cue={hudRecentActionLaneScreenCue(lane)}
                                                                 key={lane.id}
                                                             >
@@ -2825,7 +2834,13 @@ const GameplayHudBar = ({
                                                                 <i>{lane.action}</i>
                                                                 <span aria-hidden="true" className={styles.hudRecentActionLaneBeatPips}>
                                                                     {Array.from({ length: hudRecentActionLaneBeatCount(lane) }, (_, beatIndex) => (
-                                                                        <u data-hud-action-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                                        <u
+                                                                            data-hud-action-lane-beat={beatIndex + 1}
+                                                                            data-hud-action-lane-beat-focus={
+                                                                                beatIndex === 0 ? 'primary' : 'support'
+                                                                            }
+                                                                            key={beatIndex}
+                                                                        />
                                                                     ))}
                                                                 </span>
                                                             </b>
