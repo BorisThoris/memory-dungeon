@@ -4725,7 +4725,33 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-card-trait-lane-primary-screen-cue={primaryTraitLaneScreenCue}
                                         data-testid="chain-opportunity-trait-lane-beat-map"
                                     >
-                                        <small>Lane beats</small>
+                                        <span
+                                            className={styles.chainOpportunityTraitLaneBeatMapSummary}
+                                            data-testid="chain-opportunity-trait-lane-beat-map-summary"
+                                        >
+                                            <small>Beats</small>
+                                            <b>
+                                                {cardFeedbackTraitLaneBeatRows.length}{' '}
+                                                {cardFeedbackTraitLaneBeatRows.length === 1 ? 'lane' : 'lanes'}
+                                            </b>
+                                            <span
+                                                aria-hidden="true"
+                                                className={styles.chainOpportunityTraitLaneBeatMapSummaryPips}
+                                            >
+                                                {Array.from(
+                                                    { length: Math.max(2, Math.min(5, cardFeedbackTraitLaneBeatRows.length + 1)) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-card-trait-lane-beat-map-summary-pip={index + 1}
+                                                            data-card-trait-lane-beat-map-summary-pip-focus={
+                                                                index === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
                                         {cardFeedbackTraitLaneBeatRows.map((row) => (
                                             <span
                                                 data-card-trait-lane-beat={row.id}
