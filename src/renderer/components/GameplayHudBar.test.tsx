@@ -1605,6 +1605,13 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('Re-prime perk');
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('Chain reward');
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('Cash perk');
+        const rewardPerkLaneMapSummary = screen.getByTestId('hud-reward-perk-lane-map-summary');
+        expect(rewardPerkLaneMapSummary).toHaveTextContent('Lanes');
+        expect(rewardPerkLaneMapSummary).toHaveTextContent('2 lanes');
+        expect(rewardPerkLaneMapSummary.querySelectorAll('[data-reward-perk-lane-map-summary-beat]')).toHaveLength(3);
+        expect(
+            rewardPerkLaneMapSummary.querySelector('[data-reward-perk-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-reward-perk-lane-map-summary-beat-focus', 'primary');
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveAccessibleName(
             'Reward perk lane map. Route prime: 1. Re-prime perk. Use Swap or row shuffle to connect trait routes. Chain reward: 1. Cash perk. Keep the clean chain alive; cash a trait match at x3+ for a tool.'
         );

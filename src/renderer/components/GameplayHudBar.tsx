@@ -2196,6 +2196,34 @@ const GameplayHudBar = ({
                                                 data-reward-perk-lane-map={rewardPerkLaneMapAttr}
                                                 data-testid="hud-reward-perk-lane-map"
                                             >
+                                                <span
+                                                    className={styles.hudRewardPerkLaneMapSummary}
+                                                    data-reward-perk-lane-count={rewardPerkLaneMap.length}
+                                                    data-testid="hud-reward-perk-lane-map-summary"
+                                                >
+                                                    <small>Lanes</small>
+                                                    <b>
+                                                        {rewardPerkLaneMap.length}{' '}
+                                                        {rewardPerkLaneMap.length === 1 ? 'lane' : 'lanes'}
+                                                    </b>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        className={styles.hudRewardPerkLaneMapSummaryBeatPips}
+                                                    >
+                                                        {Array.from(
+                                                            { length: Math.max(2, Math.min(5, rewardPerkLaneMap.length + 1)) },
+                                                            (_, beatIndex) => (
+                                                                <i
+                                                                    data-reward-perk-lane-map-summary-beat={beatIndex + 1}
+                                                                    data-reward-perk-lane-map-summary-beat-focus={
+                                                                        beatIndex === 0 ? 'primary' : 'support'
+                                                                    }
+                                                                    key={beatIndex}
+                                                                />
+                                                            )
+                                                        )}
+                                                    </span>
+                                                </span>
                                                 {rewardPerkLaneMap.map((lane) => (
                                                     <span
                                                         data-reward-perk-lane-action={lane.action}
