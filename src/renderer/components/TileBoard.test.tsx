@@ -503,6 +503,16 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Route');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Payoff');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Stack');
+        expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveTextContent('Markers');
+        expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveTextContent('3 shapes');
+        expect(
+            screen.getByTestId('chain-opportunity-marker-key-summary').querySelectorAll('[data-chain-marker-key-summary-beat]')
+        ).toHaveLength(4);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-marker-key-summary')
+                .querySelector('[data-chain-marker-key-summary-beat="1"]')
+        ).toHaveAttribute('data-chain-marker-key-summary-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAttribute('data-chain-marker-intensity', 'stack');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAttribute('data-chain-marker-focused-shape', 'payoff-stack');
         expect(screen.getByTestId('chain-opportunity-marker-key').querySelector('[data-chain-marker-shape="linked-route"]')).toHaveTextContent('oo');
@@ -1931,6 +1941,8 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Perk');
         expect(screen.getByTestId('chain-opportunity-marker-key').querySelector('[data-chain-marker-shape="perk-armed-bar"]')).toHaveTextContent('+!');
         expect(screen.getByTestId('chain-opportunity-marker-key').querySelector('[data-chain-marker-shape="perk-armed-bar"]')).toHaveTextContent('Cash perk');
+        expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveTextContent('Markers');
+        expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveTextContent('4 shapes');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAttribute('data-chain-marker-intensity', 'stack');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAccessibleName(
             'Chain marker key. Route: oo. Action: Match route. Payoff: =+. Action: Cash now. Stack: **. Action: Cash stack. Perk: +!. Action: Cash perk. Intensity: Stack 2. Action: Cash stack'

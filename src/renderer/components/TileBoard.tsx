@@ -4446,6 +4446,30 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-marker-intensity={chainMarkerIntensity?.id ?? 'none'}
                                         data-testid="chain-opportunity-marker-key"
                                     >
+                                        <span
+                                            className={styles.chainOpportunityMarkerKeySummary}
+                                            data-testid="chain-opportunity-marker-key-summary"
+                                        >
+                                            <small>Markers</small>
+                                            <b>{boardChainMarkerKeyRows.length} shapes</b>
+                                            <span
+                                                aria-hidden="true"
+                                                className={styles.chainOpportunityMarkerKeySummaryBeatPips}
+                                            >
+                                                {Array.from(
+                                                    { length: Math.max(2, Math.min(5, boardChainMarkerKeyRows.length + 1)) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-chain-marker-key-summary-beat={index + 1}
+                                                            data-chain-marker-key-summary-beat-focus={
+                                                                index === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
                                         {boardChainMarkerKeyRows.map((row) => (
                                             <span
                                                 data-chain-marker-focus={row.id === focusedChainMarkerShape ? 'primary' : 'support'}
