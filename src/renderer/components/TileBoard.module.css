@@ -3155,6 +3155,37 @@
     pointer-events: none;
 }
 
+.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 72%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(110deg, transparent 0 30%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent) 45%, transparent 60%),
+        radial-gradient(ellipse 110% 170% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 27%, transparent), transparent 66%),
+        linear-gradient(135deg, rgba(36, 27, 10, 0.94), rgba(12, 28, 29, 0.88)),
+        var(--theme-panel-solid);
+    box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.34),
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        0 0 1.4rem color-mix(in srgb, var(--theme-glow-gold) 34%, transparent);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] span,
+.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 96%, white);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] b,
+.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] em {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-success) 20%);
+    background: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] i {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 18%);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
 .pickupOpportunityChip span {
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
     font-size: 0.58rem;

@@ -2712,6 +2712,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         boardPickupOpportunity.stackDetail,
         ...boardPickupOpportunity.examples
     ]);
+    const boardPickupOpportunityFocus = boardPickupOpportunity.sequenceCue?.tone ?? 'none';
     const focusedPreviewChipLabel = focusedPreviewChip
         ? formatBoardFeedbackLabel(`${focusedPreviewChip.eyebrow} ${focusedPreviewChip.kind === 'pickup' ? 'reward' : focusedPreviewChip.kind === 'hazard' ? 'risk' : 'combo'} preview`, [
               focusedPreviewChip.action,
@@ -3729,6 +3730,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-trait-mode-detail={boardTraitModeCue?.detail ?? 'none'}
             data-hazard-opportunity-count={boardHazardOpportunity.count}
             data-pickup-opportunity-count={boardPickupOpportunity.count}
+            data-pickup-opportunity-focus={boardPickupOpportunityFocus}
             data-pickup-sequence-first={boardPickupOpportunity.sequenceCue?.first ?? 'none'}
             data-pickup-sequence-keep={boardPickupOpportunity.sequenceCue?.keep ?? 'none'}
             data-pickup-sequence-then={boardPickupOpportunity.sequenceCue?.then ?? 'none'}
@@ -4566,6 +4568,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             <div
                                 aria-label={boardPickupOpportunityLabel}
                                 className={styles.pickupOpportunityChip}
+                                data-pickup-opportunity-focus={boardPickupOpportunityFocus}
                                 data-testid="pickup-opportunity-chip"
                                 role="status"
                             >
