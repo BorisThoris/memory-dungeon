@@ -5796,7 +5796,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <em>{routeChoiceRecommendation.actionCue.action}</em>
                                         <span aria-hidden="true" className={styles.dungeonMapChoiceRecommendationBeatPips}>
                                             {Array.from({ length: routeChoiceRecommendation.beatCue.beatCount }, (_, index) => (
-                                                <i data-route-recommendation-beat={index + 1} key={index} />
+                                                <i
+                                                    data-route-recommendation-beat={index + 1}
+                                                    data-route-recommendation-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                         {routeChoiceRecommendation.primaryPayoff ? <b>{routeChoiceRecommendation.primaryPayoff.value}</b> : null}

@@ -2525,6 +2525,18 @@
     opacity: 0.88;
 }
 
+.dungeonMapChoiceRecommendationBeatPips i[data-route-recommendation-beat-focus='primary'] {
+    width: 0.42rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.44rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.dungeonMapChoiceRecommendationBeatPips i[data-route-recommendation-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .dungeonMapChoiceRecommendationBeatPips i:nth-child(2) {
     animation-delay: 0.07s;
 }

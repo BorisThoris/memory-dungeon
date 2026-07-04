@@ -4686,6 +4686,12 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('route-choice-recommendation')).toHaveTextContent('Stabilize route');
         expect(screen.getByTestId('route-choice-recommendation')).toHaveTextContent('steady clear');
         expect(screen.getByTestId('route-choice-recommendation').querySelectorAll('[data-route-recommendation-beat]')).toHaveLength(2);
+        expect(
+            screen.getByTestId('route-choice-recommendation').querySelector('[data-route-recommendation-beat="1"]')
+        ).toHaveAttribute('data-route-recommendation-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('route-choice-recommendation').querySelector('[data-route-recommendation-beat="2"]')
+        ).toHaveAttribute('data-route-recommendation-beat-focus', 'support');
         expect(screen.getByTestId('route-choice-recommendation')).toHaveAccessibleName(
             'Recommended route. Safe passage. Stabilize route. Safe route fits the current recall state. 2 beats. Primary payoff: steady clear.'
         );
