@@ -4162,7 +4162,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         {primaryCardFeedbackBeatRow ? (
                                             <span aria-hidden="true" className={styles.chainOpportunityPrimaryShotBeatPips}>
                                                 {Array.from({ length: primaryCardFeedbackBeatRow.beatCount }, (_, index) => (
-                                                    <i data-card-primary-shot-beat-pip={index + 1} key={index} />
+                                                    <i
+                                                        data-card-primary-shot-beat-pip={index + 1}
+                                                        data-card-primary-shot-beat-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
                                                 ))}
                                             </span>
                                         ) : null}
@@ -4335,7 +4339,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 <em>{row.count}</em>
                                                 <span aria-hidden="true" className={styles.chainOpportunityBeatMapPips}>
                                                     {Array.from({ length: row.beatCount }, (_, index) => (
-                                                        <i data-card-beat-pip={index + 1} key={index} />
+                                                        <i
+                                                            data-card-beat-pip={index + 1}
+                                                            data-card-beat-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
                                                     ))}
                                                 </span>
                                                 <i>{row.beatCount}-beat {row.action}</i>
@@ -4361,7 +4369,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 <em>{row.count}</em>
                                                 <span aria-hidden="true" className={styles.chainOpportunityCadencePips}>
                                                     {Array.from({ length: row.beatCount }, (_, index) => (
-                                                        <i data-card-cadence-pip={index + 1} key={index} />
+                                                        <i
+                                                            data-card-cadence-pip={index + 1}
+                                                            data-card-cadence-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
                                                     ))}
                                                 </span>
                                                 <i>{row.action}</i>

@@ -880,6 +880,12 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-primary-shot').querySelectorAll('[data-card-primary-shot-beat-pip]')
         ).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-primary-shot').querySelector('[data-card-primary-shot-beat-pip="1"]')
+        ).toHaveAttribute('data-card-primary-shot-beat-pip-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-primary-shot').querySelector('[data-card-primary-shot-beat-pip="2"]')
+        ).toHaveAttribute('data-card-primary-shot-beat-pip-focus', 'support');
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute(
             'data-chain-shot-map-primary',
             'cash-now'
@@ -903,6 +909,12 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-beat-map').querySelectorAll('[data-card-beat-tier="cashout"] [data-card-beat-pip]')
         ).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-beat-map').querySelector('[data-card-beat-tier="cashout"] [data-card-beat-pip="1"]')
+        ).toHaveAttribute('data-card-beat-pip-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-beat-map').querySelector('[data-card-beat-tier="cashout"] [data-card-beat-pip="2"]')
+        ).toHaveAttribute('data-card-beat-pip-focus', 'support');
         expect(screen.getByTestId('chain-opportunity-beat-map').querySelector('[data-card-beat-tier="cashout"]')).toHaveAttribute(
             'data-card-beat-action',
             'hit now'
@@ -928,6 +940,16 @@ describe('TileBoard touch and click controls', () => {
                 .getByTestId('chain-opportunity-cadence-map')
                 .querySelectorAll('[data-card-cadence="cashout"] [data-card-cadence-pip]')
         ).toHaveLength(5);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-cadence-map')
+                .querySelector('[data-card-cadence="cashout"] [data-card-cadence-pip="1"]')
+        ).toHaveAttribute('data-card-cadence-pip-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-cadence-map')
+                .querySelector('[data-card-cadence="cashout"] [data-card-cadence-pip="2"]')
+        ).toHaveAttribute('data-card-cadence-pip-focus', 'support');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-trait-route-tiers',
             'payoff-stack:2'

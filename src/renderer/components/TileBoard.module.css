@@ -1182,6 +1182,18 @@
     opacity: 0.88;
 }
 
+.chainOpportunityPrimaryShotBeatPips i[data-card-primary-shot-beat-pip-focus='primary'] {
+    min-width: 0.36rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.5rem color-mix(in srgb, currentColor 50%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.chainOpportunityPrimaryShotBeatPips i[data-card-primary-shot-beat-pip-focus='support'] {
+    opacity: 0.72;
+}
+
 .chainOpportunityPrimaryShotBeatPips i:nth-child(2) {
     animation-delay: 0.07s;
 }
@@ -2230,6 +2242,20 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
     opacity: 0.84;
     box-shadow: 0 0 8px color-mix(in srgb, currentColor 26%, transparent);
+}
+
+.chainOpportunityBeatMapPips i[data-card-beat-pip-focus='primary'],
+.chainOpportunityCadencePips i[data-card-cadence-pip-focus='primary'] {
+    min-width: 0.34rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.46rem color-mix(in srgb, currentColor 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.chainOpportunityBeatMapPips i[data-card-beat-pip-focus='support'],
+.chainOpportunityCadencePips i[data-card-cadence-pip-focus='support'] {
+    opacity: 0.68;
 }
 
 .chainOpportunityBeatMapPips i:nth-child(2),
