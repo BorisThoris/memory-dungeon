@@ -5463,10 +5463,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <span
                                             className={styles.traitPreviewLine}
                                             data-preview-line={index + 1}
+                                            data-preview-line-beats={index === 0 ? 3 : 2}
                                             data-preview-line-focus={index === 0 ? 'primary' : 'support'}
                                             key={line}
                                         >
                                             {line}
+                                            <span aria-hidden="true" className={styles.traitPreviewLineBeatPips}>
+                                                {Array.from({ length: index === 0 ? 3 : 2 }, (_, beatIndex) => (
+                                                    <i
+                                                        data-preview-line-beat={beatIndex + 1}
+                                                        data-preview-line-beat-focus={
+                                                            beatIndex === 0 ? 'primary' : 'support'
+                                                        }
+                                                        key={`${line}-beat-${beatIndex + 1}`}
+                                                    />
+                                                ))}
+                                            </span>
                                         </span>
                                     ))}
                                 </div>

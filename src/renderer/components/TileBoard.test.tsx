@@ -2815,6 +2815,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'pickup');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '4');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(4);
+        expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-line-beat]')).toHaveLength(3);
+        expect(
+            screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-beat="1"]')
+        ).toHaveAttribute('data-preview-line-beat-focus', 'primary');
         expect(
             screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
         ).toHaveTextContent('Shard spark pickup: +1 combo shard');
