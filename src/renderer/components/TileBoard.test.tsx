@@ -644,6 +644,9 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
         ).toHaveTextContent('Cash now');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
+        ).toHaveAttribute('data-card-action-priority-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAccessibleName(
             'Card action priority. Cash now: 2'
         );
@@ -999,6 +1002,9 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="follow-up"]')
         ).toHaveTextContent('Follow-up');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="follow-up"]')
+        ).toHaveAttribute('data-card-action-priority-focus', 'primary');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-source', 'selected');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-kind', 'trait');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Trait combo');
@@ -1498,6 +1504,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-action-priority', 'cash-now:2>perk-cash:2');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveTextContent('Perk cash');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
+        ).toHaveAttribute('data-card-action-priority-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="perk-cash"]')
+        ).toHaveAttribute('data-card-action-priority-focus', 'support');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAccessibleName(
             'Card action priority. Cash now: 2. Perk cash: 2'
         );

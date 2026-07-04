@@ -4231,7 +4231,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>Priority</small>
                                         {cardFeedbackActionPriorityRows.map((row) => (
-                                            <span data-card-action-priority={row.id} key={row.id}>
+                                            <span
+                                                data-card-action-priority={row.id}
+                                                data-card-action-priority-focus={
+                                                    row.id === cardFeedbackPrimaryActionAttr ? 'primary' : 'support'
+                                                }
+                                                key={row.id}
+                                            >
                                                 <b>{row.label}</b>
                                                 <em>{row.count}</em>
                                             </span>
