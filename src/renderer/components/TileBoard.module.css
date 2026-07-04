@@ -2704,6 +2704,34 @@
     font-weight: 960;
 }
 
+.chainOpportunityNextActionPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.05rem;
+    margin-left: auto;
+}
+
+.chainOpportunityNextActionPips i {
+    display: block;
+    width: 0.14rem;
+    height: 0.14rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.chainOpportunityNextActionPips i[data-chain-next-action-pip-focus='primary'] {
+    width: 0.28rem;
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, currentColor 36%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityNextActionPips i[data-chain-next-action-pip-focus='support'] {
+    opacity: 0.7;
+}
+
 .chainOpportunityNextAction[data-chain-next-action-tone='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, white 8%);
     background:
@@ -2739,10 +2767,11 @@
 .chainOpportunityMeter > span {
     display: inline-grid;
     grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
     align-items: center;
     gap: 0.14rem;
     min-width: 2.9rem;
-    min-height: 1.1rem;
+    min-height: 1.18rem;
     padding: 0.08rem 0.24rem;
     border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
     border-radius: 999px;
@@ -2776,6 +2805,36 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
     font-size: 0.54rem;
     font-weight: 980;
+}
+
+.chainOpportunityMeterPips {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 0.05rem;
+    min-width: 0;
+    height: 0.16rem;
+}
+
+.chainOpportunityMeterPips i {
+    display: block;
+    width: 0.14rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.chainOpportunityMeterPips i[data-chain-meter-pip-focus='primary'] {
+    width: 0.28rem;
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, currentColor 36%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityMeterPips i[data-chain-meter-pip-focus='support'] {
+    opacity: 0.7;
 }
 
 .chainOpportunityMeter > span[data-chain-meter-lane='surge'] {
@@ -2814,6 +2873,36 @@
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 11%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 44%, transparent);
+}
+
+.chainOpportunityNextRoutePips {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 0.05rem;
+    min-width: 0;
+    height: 0.16rem;
+}
+
+.chainOpportunityNextRoutePips i {
+    display: block;
+    width: 0.14rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 76%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+}
+
+.chainOpportunityNextRoutePips i[data-chain-next-route-pip-focus='primary'] {
+    width: 0.28rem;
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, currentColor 38%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityNextRoutePips i[data-chain-next-route-pip-focus='support'] {
+    opacity: 0.7;
 }
 
 .chainOpportunityMeter > .chainOpportunityNextRoute b {

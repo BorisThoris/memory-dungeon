@@ -4188,6 +4188,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>{boardChainOpportunity.nextActionLabel}</small>
                                         {boardChainOpportunity.nextActionDetail ? <b>{boardChainOpportunity.nextActionDetail}</b> : null}
+                                        <span aria-hidden="true" className={styles.chainOpportunityNextActionPips}>
+                                            {Array.from(
+                                                { length: boardChainOpportunity.nextActionId === 'cashout' ? 5 : boardChainOpportunity.nextActionId === 'prime-route' ? 2 : 3 },
+                                                (_, index) => (
+                                                    <i
+                                                        data-chain-next-action-pip={index + 1}
+                                                        data-chain-next-action-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                )
+                                            )}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {primaryCardFeedbackShotRow ? (
@@ -4510,24 +4522,60 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <span data-chain-meter-lane="ready">
                                                 <small>Lit</small>
                                                 <b>{boardChainAccessibilitySummary.readyCount}</b>
+                                                <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
+                                                    {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.readyCount) }, (_, index) => (
+                                                        <i
+                                                            data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={`ready-${index}`}
+                                                        />
+                                                    ))}
+                                                </span>
                                             </span>
                                         ) : null}
                                         {boardChainAccessibilitySummary.surgeCount > 0 ? (
                                             <span data-chain-meter-lane="surge">
                                                 <small>Surge</small>
                                                 <b>{boardChainAccessibilitySummary.surgeCount}</b>
+                                                <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
+                                                    {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.surgeCount) }, (_, index) => (
+                                                        <i
+                                                            data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={`surge-${index}`}
+                                                        />
+                                                    ))}
+                                                </span>
                                             </span>
                                         ) : null}
                                         {boardChainAccessibilitySummary.rewardHotCount > 0 ? (
                                             <span data-chain-meter-lane="hot">
                                                 <small>Hot</small>
                                                 <b>{boardChainAccessibilitySummary.rewardHotCount}</b>
+                                                <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
+                                                    {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.rewardHotCount) }, (_, index) => (
+                                                        <i
+                                                            data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={`hot-${index}`}
+                                                        />
+                                                    ))}
+                                                </span>
                                             </span>
                                         ) : null}
                                         {boardChainAccessibilitySummary.setupCount > 0 ? (
                                             <span data-chain-meter-lane="setup">
                                                 <small>Prime</small>
                                                 <b>{boardChainAccessibilitySummary.setupCount}</b>
+                                                <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
+                                                    {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.setupCount) }, (_, index) => (
+                                                        <i
+                                                            data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={`setup-${index}`}
+                                                        />
+                                                    ))}
+                                                </span>
                                             </span>
                                         ) : null}
                                         <span
@@ -4536,6 +4584,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         >
                                             <small>{boardChainAccessibilitySummary.tone === 'setup' ? 'Prime' : 'Next'}</small>
                                             <b>{boardChainAccessibilitySummary.primaryLine}</b>
+                                            <span aria-hidden="true" className={styles.chainOpportunityNextRoutePips}>
+                                                {Array.from({ length: boardChainAccessibilitySummary.tone === 'cashout' ? 5 : boardChainAccessibilitySummary.tone === 'ready' ? 3 : 2 }, (_, index) => (
+                                                    <i
+                                                        data-chain-next-route-pip={index + 1}
+                                                        data-chain-next-route-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={`route-${index}`}
+                                                    />
+                                                ))}
+                                            </span>
                                             {boardChainAccessibilitySummary.secondaryLine ? (
                                                 <em>{boardChainAccessibilitySummary.secondaryLine}</em>
                                             ) : null}

@@ -764,6 +764,48 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAccessibleName(
             'Card action priority. Cash now: 2'
         );
+        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Do next: cashout');
+        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Match lit route for reward');
+        expect(screen.getByTestId('chain-opportunity-next-action').querySelectorAll('[data-chain-next-action-pip]')).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-next-action').querySelector('[data-chain-next-action-pip="1"]')
+        ).toHaveAttribute('data-chain-next-action-pip-focus', 'primary');
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveTextContent(
+            'Lit'
+        );
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveTextContent(
+            '2'
+        );
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="ready"]')
+                ?.querySelectorAll('[data-chain-meter-pip]')
+        ).toHaveLength(2);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="ready"]')
+                ?.querySelector('[data-chain-meter-pip="1"]')
+        ).toHaveAttribute('data-chain-meter-pip-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="cashout"]')
+        ).toHaveTextContent('Next');
+        expect(
+            screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="cashout"]')
+        ).toHaveTextContent('Echo + Sealed: combo shard');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-route-tone="cashout"]')
+                ?.querySelectorAll('[data-chain-next-route-pip]')
+        ).toHaveLength(5);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-route-tone="cashout"]')
+                ?.querySelector('[data-chain-next-route-pip="1"]')
+        ).toHaveAttribute('data-chain-next-route-pip-focus', 'primary');
         expect(
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
         ).toHaveAttribute('data-chain-shot-map-count', '2');
