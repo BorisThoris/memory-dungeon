@@ -1399,6 +1399,10 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toBeVisible();
         expect(screen.getByTestId('chain-opportunity-reward-ladder')).toBeVisible();
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toBeVisible();
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toHaveTextContent('Prime');
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toHaveTextContent('x6 +1 shard');
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toHaveTextContent('2 matches left');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack cashout');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-tone', 'cashout');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-heat', 'cashout');

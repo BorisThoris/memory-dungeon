@@ -2662,8 +2662,18 @@
         0 0 14px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
 }
 
-.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='cashout'] > span[data-board-chain-reward-urgency='next'] {
+.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='cashout'] > span[data-board-chain-reward-urgency='next'],
+.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='cashout'] > span[data-board-chain-reward-urgency='soon'] {
     animation: boardOpportunityPulse 1.08s ease-in-out infinite;
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 64%, white 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 38%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 22px color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+    transform: translateY(-1px);
+    z-index: 1;
 }
 
 .chainOpportunityRewardLadder[data-board-chain-reward-hot-band='ready'] > span {
@@ -2673,8 +2683,18 @@
         color-mix(in srgb, var(--theme-void) 42%, transparent);
 }
 
-.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='ready'] > span[data-board-chain-reward-urgency='next'] {
+.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='ready'] > span[data-board-chain-reward-urgency='next'],
+.chainOpportunityRewardLadder[data-board-chain-reward-hot-band='ready'] > span[data-board-chain-reward-urgency='soon'] {
     animation: boardOpportunityPrimePulse 1.25s ease-in-out infinite;
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 58%, white 10%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent), color-mix(in srgb, var(--theme-gold-bright) 6%, transparent)),
+        color-mix(in srgb, var(--theme-void) 38%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 20px color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    transform: translateY(-1px);
+    z-index: 1;
 }
 
 .chainOpportunityLines {
@@ -4488,6 +4508,10 @@
 :global([data-reduce-motion='true']) .opportunityPayoffStack[data-payoff-stack-heat='prime'],
 :global([data-reduce-motion='true']) .opportunityPayoffStack:has([data-payoff-stack-cue='Super stack']),
 :global([data-reduce-motion='true']) .chainOpportunityNextAction[data-chain-next-action-tone='cashout'],
+:global([data-reduce-motion='true']) .chainOpportunityRewardLadder[data-board-chain-reward-hot-band='cashout'] > span[data-board-chain-reward-urgency='next'],
+:global([data-reduce-motion='true']) .chainOpportunityRewardLadder[data-board-chain-reward-hot-band='cashout'] > span[data-board-chain-reward-urgency='soon'],
+:global([data-reduce-motion='true']) .chainOpportunityRewardLadder[data-board-chain-reward-hot-band='ready'] > span[data-board-chain-reward-urgency='next'],
+:global([data-reduce-motion='true']) .chainOpportunityRewardLadder[data-board-chain-reward-hot-band='ready'] > span[data-board-chain-reward-urgency='soon'],
 :global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-priority='best'],
 :global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-heat='cashout'],
 :global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-heat='prime'],

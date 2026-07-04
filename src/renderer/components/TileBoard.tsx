@@ -2052,6 +2052,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         () => boardChainRewardLadderLabel(boardRewardLadder),
         [boardRewardLadder]
     );
+    const boardRewardLadderFocusId = useMemo(
+        () => {
+            if (boardRewardLadder.some((entry) => entry.cue.urgency === 'next')) {
+                return 'next';
+            }
+
+            return boardRewardLadder.some((entry) => entry.cue.urgency === 'soon') ? 'soon' : null;
+        },
+        [boardRewardLadder]
+    );
 
     const boardTraitModeCue = useMemo((): {
         detail: string;
@@ -4329,6 +4339,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-board-chain-reward-tone={entry.cue.tone}
                                                 data-board-chain-reward-total={entry.total}
                                                 data-board-chain-reward-urgency={entry.cue.urgency}
+                                                data-testid={
+                                                    entry.cue.urgency === boardRewardLadderFocusId
+                                                        ? 'chain-opportunity-reward-ladder-focus'
+                                                        : undefined
+                                                }
                                                 key={entry.cue.id}
                                                 style={{ '--board-chain-reward-fill': `${Math.round((entry.filled / entry.total) * 100)}%` } as CSSProperties}
                                             >
