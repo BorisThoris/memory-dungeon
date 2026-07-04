@@ -4709,7 +4709,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                     </span>
                                 ) : null}
-                                {boardRewardLadder.length > 1 ? (
+                                {boardRewardLadder.length > 0 ? (
                                     <span
                                         aria-label={boardRewardLadderAccessibleLabel}
                                         className={styles.chainOpportunityRewardLadder}
@@ -5312,7 +5312,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                     </span>
                                 ) : null}
-                                {boardOpportunityLaneMapRows.length > 1 ? (
+                                {boardOpportunityLaneMapRows.length > 0 ? (
                                     <span
                                         aria-label={boardOpportunityLaneMapAccessibleLabel}
                                         className={styles.opportunityLaneMap}

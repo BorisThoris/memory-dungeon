@@ -3173,6 +3173,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-compass-count', '1');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-actions', 'risk:Reduce risk:1');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Risk');
+        expect(screen.getByTestId('board-opportunity-lane-map')).toBeVisible();
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute('data-opportunity-lane-map', 'risk:1');
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
+            'data-opportunity-primary-lane',
+            'risk'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Risk');
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Reduce risk');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('Scout');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('Avoid penalty');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('2 hazards');
