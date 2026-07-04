@@ -577,6 +577,24 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-hot="true"]')).toHaveTextContent(
             'Next reward x6 +1 shard in 1 match'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-hot="true"]')).toHaveAttribute(
+            'data-chain-reward-beats',
+            '5'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-hot="true"]')).toHaveAttribute(
+            'data-chain-reward-screen-cue',
+            'super'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-hot="true"]')).toHaveAttribute(
+            'data-chain-reward-tone',
+            'cashout'
+        );
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-reward-beat]')
+        ).toHaveLength(5);
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-beat="1"]')
+        ).toHaveAttribute('data-chain-reward-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-urgency="next"]')).toHaveTextContent(
             'One-away cashout'
         );

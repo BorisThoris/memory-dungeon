@@ -3139,6 +3139,51 @@
     line-height: 1;
 }
 
+.chainOpportunityPayoffBurst[data-chain-reward-screen-cue='super'] {
+    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
+}
+
+.chainOpportunityPayoffBeatPips {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 0.06rem;
+}
+
+.chainOpportunityPayoffBeatPips i {
+    display: block;
+    width: 0.18rem;
+    height: 0.18rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.72s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white 8%);
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+}
+
+.chainOpportunityPayoffBeatPips i:nth-child(2) {
+    animation-delay: 60ms;
+}
+
+.chainOpportunityPayoffBeatPips i:nth-child(3) {
+    animation-delay: 120ms;
+}
+
+.chainOpportunityPayoffBeatPips i:nth-child(4) {
+    animation-delay: 180ms;
+}
+
+.chainOpportunityPayoffBeatPips i:nth-child(5) {
+    animation-delay: 240ms;
+}
+
+.chainOpportunityPayoffBeatPips i[data-chain-reward-beat-focus='primary'] {
+    width: 0.34rem;
+    background: color-mix(in srgb, white 12%, var(--theme-gold-bright) 88%);
+    box-shadow:
+        0 0 0.5rem color-mix(in srgb, var(--theme-gold-bright) 48%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
 .chainOpportunityMomentum {
     display: inline-flex;
     align-items: center;

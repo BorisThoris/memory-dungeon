@@ -4574,10 +4574,28 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 ? styles.chainOpportunityPayoffBurst
                                                 : styles.chainOpportunityRewardCue
                                         }
+                                        data-chain-reward-beats={boardChainOpportunity.rewardHot ? 5 : 3}
                                         data-chain-reward-hot={boardChainOpportunity.rewardHot ? 'true' : 'false'}
+                                        data-chain-reward-screen-cue={
+                                            boardChainOpportunity.rewardHot ? 'super' : 'pulse'
+                                        }
+                                        data-chain-reward-tone={
+                                            boardChainOpportunity.rewardHot ? 'cashout' : 'forecast'
+                                        }
                                     >
                                         {boardChainOpportunity.rewardHot ? <small>Payoff</small> : null}
                                         <b>{boardChainOpportunity.rewardCue}</b>
+                                        {boardChainOpportunity.rewardHot ? (
+                                            <span aria-hidden="true" className={styles.chainOpportunityPayoffBeatPips}>
+                                                {Array.from({ length: 5 }, (_, index) => (
+                                                    <i
+                                                        data-chain-reward-beat={index + 1}
+                                                        data-chain-reward-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                ))}
+                                            </span>
+                                        ) : null}
                                     </span>
                                 ) : null}
                                 {boardChainHotBand ? (
