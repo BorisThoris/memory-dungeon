@@ -4701,7 +4701,17 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     />
                                                 ))}
                                             </span>
-                                        ) : null}
+                                        ) : (
+                                            <span aria-hidden="true" className={styles.chainOpportunityRewardCueBeatPips}>
+                                                {Array.from({ length: 3 }, (_, index) => (
+                                                    <i
+                                                        data-chain-reward-beat={index + 1}
+                                                        data-chain-reward-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                ))}
+                                            </span>
+                                        )}
                                     </span>
                                 ) : null}
                                 {boardChainHotBand ? (
@@ -4912,6 +4922,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <i data-payoff-stack-sequence-step="then">{boardPayoffStack.sequenceCue}</i>
                                         ) : null}
                                         <i data-payoff-stack-sequence-step="keep">Keep: {boardPayoffStack.sequence.keep}</i>
+                                        <span aria-hidden="true" className={styles.opportunityPayoffStackBeatPips}>
+                                            {Array.from({ length: boardPayoffStack.crescendo.beatCount }, (_, index) => (
+                                                <i
+                                                    data-opportunity-payoff-beat={index + 1}
+                                                    data-opportunity-payoff-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
+                                            ))}
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardOpportunityLaneMapRows.length > 1 ? (

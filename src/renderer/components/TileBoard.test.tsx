@@ -1826,6 +1826,57 @@ describe('TileBoard touch and click controls', () => {
         );
     });
 
+    it('renders forecast rewards and payoff stacks with beat pips before the cashout gets hot', () => {
+        renderBoard({
+            board: {
+                ...board,
+                tiles: [
+                    { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                    { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
+                    board.tiles[2]!,
+                    board.tiles[3]!
+                ]
+            },
+            chainContext: { comboShards: 1, currentStreak: 1, lives: 4 },
+            debugPeekActive: false,
+            interactive: true,
+            onTileSelect: vi.fn(),
+            peekPowerVisualActive: true,
+            previewActive: false,
+            reduceMotion: false
+        });
+
+        const forecastReward = screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-hot="false"]');
+        expect(forecastReward).not.toBeNull();
+        expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Chain routes');
+        expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Next reward');
+        expect(forecastReward).toHaveAttribute('data-chain-reward-hot', 'false');
+        expect(forecastReward).toHaveAttribute('data-chain-reward-beats', '3');
+        expect(forecastReward).toHaveTextContent('Next reward');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-chip')
+                .querySelector('[data-chain-reward-hot="false"]')
+                ?.querySelectorAll('[data-chain-reward-beat]')
+        ).toHaveLength(3);
+        expect(
+            screen
+                .getByTestId('chain-opportunity-chip')
+                .querySelector('[data-chain-reward-hot="false"]')
+                ?.querySelector('[data-chain-reward-beat="1"]')
+        ).toHaveAttribute('data-chain-reward-beat-focus', 'primary');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack prime');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '2');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Keep:');
+        expect(screen.getByTestId('board-opportunity-payoff-stack').querySelectorAll('[data-opportunity-payoff-beat]')).toHaveLength(2);
+        expect(
+            screen
+                .getByTestId('board-opportunity-payoff-stack')
+                .querySelector('[data-opportunity-payoff-beat="1"]')
+        ).toHaveAttribute('data-opportunity-payoff-beat-focus', 'primary');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAccessibleName(/Board payoff stack\./i);
+    });
+
     it('keeps post-miss recovery visible as a board opportunity row', () => {
         renderBoard({
             board,

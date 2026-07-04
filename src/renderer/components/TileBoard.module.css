@@ -3098,6 +3098,36 @@
     white-space: nowrap;
 }
 
+.chainOpportunityRewardCueBeatPips {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 0.06rem;
+    margin-left: auto;
+}
+
+.chainOpportunityRewardCueBeatPips i {
+    display: block;
+    width: 0.16rem;
+    height: 0.16rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.88s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+}
+
+.chainOpportunityRewardCueBeatPips i[data-chain-reward-beat-focus='primary'] {
+    width: 0.3rem;
+    background: color-mix(in srgb, white 12%, var(--theme-gold-bright) 88%);
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 42%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.chainOpportunityRewardCueBeatPips i[data-chain-reward-beat-focus='support'] {
+    opacity: 0.7;
+}
+
 .chainOpportunityHotBand {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
@@ -4149,6 +4179,34 @@
     font-style: normal;
     font-weight: 900;
     text-transform: uppercase;
+}
+
+.opportunityPayoffStackBeatPips {
+    display: flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 0.08rem;
+    min-height: 0.2rem;
+}
+
+.opportunityPayoffStackBeatPips i {
+    width: 0.2rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    animation: boardOpportunityPulse 1.05s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-gold-bright) 80%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.opportunityPayoffStackBeatPips i[data-opportunity-payoff-beat-focus='primary'] {
+    width: 0.42rem;
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, currentColor 40%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.opportunityPayoffStackBeatPips i[data-opportunity-payoff-beat-focus='support'] {
+    opacity: 0.7;
 }
 
 .opportunityPayoffStack [data-payoff-stack-sequence-step='then'] {
