@@ -2545,6 +2545,35 @@ const GameplayHudBar = ({
                                                 data-chain-reward-lane-map={chainRewardLaneMapAttr}
                                                 data-testid="hud-chain-reward-forecast"
                                             >
+                                                <span
+                                                    className={styles.hudChainRewardForecastSummary}
+                                                    data-chain-reward-lane-count={chainRewardLaneMap.length}
+                                                    data-chain-reward-ladder-count={chainRewardLadder.length}
+                                                    data-testid="hud-chain-reward-forecast-summary"
+                                                >
+                                                    <small>Forecast</small>
+                                                    <b>
+                                                        {chainRewardLaneMap.length + chainRewardLadder.length}{' '}
+                                                        {chainRewardLaneMap.length + chainRewardLadder.length === 1 ? 'cue' : 'cues'}
+                                                    </b>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        className={styles.hudChainRewardForecastSummaryBeatPips}
+                                                    >
+                                                        {Array.from(
+                                                            { length: Math.max(2, Math.min(5, chainRewardLaneMap.length + chainRewardLadder.length)) },
+                                                            (_, beatIndex) => (
+                                                                <i
+                                                                    data-chain-reward-forecast-summary-beat={beatIndex + 1}
+                                                                    data-chain-reward-forecast-summary-beat-focus={
+                                                                        beatIndex === 0 ? 'primary' : 'support'
+                                                                    }
+                                                                    key={beatIndex}
+                                                                />
+                                                            )
+                                                        )}
+                                                    </span>
+                                                </span>
                                                 {chainRewardLaneMap.length > 1 ? (
                                                     <span
                                                         aria-label={chainRewardLaneMapAccessibleLabel}

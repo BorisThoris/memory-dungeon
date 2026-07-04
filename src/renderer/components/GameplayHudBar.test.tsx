@@ -1193,6 +1193,13 @@ describe('GameplayHudBar', () => {
             'data-chain-reward-primary-lane-screen-cue',
             'burst'
         );
+        const chainRewardForecastSummary = screen.getByTestId('hud-chain-reward-forecast-summary');
+        expect(chainRewardForecastSummary).toHaveTextContent('Forecast');
+        expect(chainRewardForecastSummary).toHaveTextContent('6 cues');
+        expect(chainRewardForecastSummary.querySelectorAll('[data-chain-reward-forecast-summary-beat]')).toHaveLength(5);
+        expect(
+            chainRewardForecastSummary.querySelector('[data-chain-reward-forecast-summary-beat="1"]')
+        ).toHaveAttribute('data-chain-reward-forecast-summary-beat-focus', 'primary');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Shard');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Guard');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Heal');

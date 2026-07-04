@@ -7463,6 +7463,75 @@
         0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
 }
 
+.hudChainRewardForecastSummary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.12rem;
+    flex: 1 0 100%;
+    min-width: 0;
+    padding: 0.06rem 0.2rem;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    font-size: 0.49rem;
+    font-weight: 940;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.hudChainRewardForecastSummary small,
+.hudChainRewardForecastSummary b {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hudChainRewardForecastSummary small {
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.42rem;
+    font-weight: 920;
+}
+
+.hudChainRewardForecastSummary b {
+    color: currentColor;
+    font-size: 0.48rem;
+    font-weight: 980;
+}
+
+.hudChainRewardForecastSummaryBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.04rem;
+    margin-left: 0.08rem;
+}
+
+.hudChainRewardForecastSummaryBeatPips i {
+    display: block;
+    width: 0.08rem;
+    height: 0.08rem;
+    border-radius: 999px;
+    animation: gameplayBeatPipPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 72%, white);
+    box-shadow: 0 0 0.12rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.hudChainRewardForecastSummaryBeatPips i[data-chain-reward-forecast-summary-beat-focus='primary'] {
+    width: 0.16rem;
+    box-shadow:
+        0 0 0.2rem color-mix(in srgb, currentColor 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.hudChainRewardForecastSummaryBeatPips i[data-chain-reward-forecast-summary-beat-focus='support'] {
+    opacity: 0.64;
+}
+
 .hudChainRewardForecast > span {
     display: inline-flex;
     align-items: center;
