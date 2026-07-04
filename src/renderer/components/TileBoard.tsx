@@ -4488,6 +4488,33 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="chain-opportunity-action-priority"
                                     >
                                         <small>Priority</small>
+                                        <span
+                                            className={styles.chainOpportunityActionPrioritySummary}
+                                            data-testid="chain-opportunity-action-priority-summary"
+                                        >
+                                            <small>Actions</small>
+                                            <b>
+                                                {cardFeedbackActionPriorityRows.length}{' '}
+                                                {cardFeedbackActionPriorityRows.length === 1 ? 'lane' : 'lanes'}
+                                            </b>
+                                            <span
+                                                aria-hidden="true"
+                                                className={styles.chainOpportunityActionPrioritySummaryBeatPips}
+                                            >
+                                                {Array.from(
+                                                    { length: Math.max(2, Math.min(5, cardFeedbackActionPriorityRows.length + 1)) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-card-action-priority-summary-pip={index + 1}
+                                                            data-card-action-priority-summary-pip-focus={
+                                                                index === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
                                         {cardFeedbackActionPriorityRows.map((row) => (
                                             <span
                                                 data-card-action-priority={row.id}

@@ -793,6 +793,11 @@ describe('TileBoard touch and click controls', () => {
             'cash-now'
         );
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveTextContent('Priority');
+        expect(screen.getByTestId('chain-opportunity-action-priority-summary')).toHaveTextContent('Actions');
+        expect(screen.getByTestId('chain-opportunity-action-priority-summary')).toHaveTextContent('1 lane');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority-summary').querySelectorAll('[data-card-action-priority-summary-pip]')
+        ).toHaveLength(2);
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveTextContent('2');
         expect(
@@ -1908,6 +1913,11 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-action-priority', 'cash-now:2>perk-cash:2');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveTextContent('Perk cash');
+        expect(screen.getByTestId('chain-opportunity-action-priority-summary')).toHaveTextContent('Actions');
+        expect(screen.getByTestId('chain-opportunity-action-priority-summary')).toHaveTextContent('2 lanes');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority-summary').querySelectorAll('[data-card-action-priority-summary-pip]')
+        ).toHaveLength(3);
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
         ).toHaveAttribute('data-card-action-priority-focus', 'primary');
