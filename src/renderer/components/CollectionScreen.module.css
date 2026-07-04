@@ -480,6 +480,17 @@
     transform-origin: center;
 }
 
+.runPayoffBeatPips i[data-run-payoff-beat-focus='primary'],
+.runPayoffLaneBeatPips s[data-run-payoff-lane-beat-focus='primary'],
+.runPayoffPrimaryLaneBeatPips s[data-run-payoff-primary-lane-beat-focus='primary'],
+.runPayoffStrip span[data-run-payoff-crescendo-tier] strong i[data-run-payoff-crescendo-beat-focus='primary'] {
+    width: 0.42rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.4rem color-mix(in srgb, currentColor 44%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+}
+
 .runPayoffStrip span[data-run-payoff-crescendo-tier='cashout'] strong i {
     background: color-mix(in srgb, var(--theme-success) 72%, white);
 }

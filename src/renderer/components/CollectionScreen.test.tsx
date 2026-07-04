@@ -167,11 +167,19 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(primaryLane).toHaveTextContent('Archive chase');
         expect(primaryLane).toHaveTextContent('Protect chain');
         expect(primaryLane.querySelectorAll('[data-run-payoff-primary-lane-beat]')).toHaveLength(4);
+        expect(primaryLane.querySelector('[data-run-payoff-primary-lane-beat="1"]')).toHaveAttribute(
+            'data-run-payoff-primary-lane-beat-focus',
+            'primary'
+        );
         const chainLane = laneMap.querySelector('[data-run-payoff-lane="chain"]');
         const riskLane = laneMap.querySelector('[data-run-payoff-lane="risk"]');
         expect(chainLane).toHaveAttribute('data-run-payoff-lane-action', 'Protect chain');
         expect(chainLane).toHaveAttribute('data-run-payoff-lane-beats', '4');
         expect(chainLane?.querySelectorAll('[data-run-payoff-lane-beat]')).toHaveLength(4);
+        expect(chainLane?.querySelector('[data-run-payoff-lane-beat="1"]')).toHaveAttribute(
+            'data-run-payoff-lane-beat-focus',
+            'primary'
+        );
         expect(riskLane).toHaveAttribute('data-run-payoff-lane-action', 'Reduce risk');
         expect(riskLane).toHaveAttribute('data-run-payoff-lane-beats', '2');
         expect(riskLane?.querySelectorAll('[data-run-payoff-lane-beat]')).toHaveLength(2);
@@ -193,6 +201,10 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(crescendo).toHaveTextContent('Stack burst');
         expect(crescendo).toHaveTextContent('Combo plus payoff lanes are ready to chase again');
         expect(crescendo.querySelectorAll('i')).toHaveLength(4);
+        expect(crescendo.querySelector('[data-run-payoff-crescendo-beat="1"]')).toHaveAttribute(
+            'data-run-payoff-crescendo-beat-focus',
+            'primary'
+        );
         expect(crescendo).toHaveAttribute('data-run-payoff-crescendo-audio', 'stack-burst');
         expect(crescendo).toHaveAttribute('data-run-payoff-crescendo-beats', '4');
         expect(crescendo).toHaveAttribute('data-run-payoff-crescendo-cue', 'burst');
@@ -213,6 +225,10 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(chainPayoff).toHaveAttribute('data-run-payoff-screen-cue', 'burst');
         expect(chainPayoff).toHaveTextContent('Protect chain');
         expect(chainPayoff?.querySelectorAll('[data-run-payoff-beat]')).toHaveLength(4);
+        expect(chainPayoff?.querySelector('[data-run-payoff-beat="1"]')).toHaveAttribute(
+            'data-run-payoff-beat-focus',
+            'primary'
+        );
         expect(buildPayoff).toHaveTextContent('1 relic');
         expect(buildPayoff).toHaveAttribute('data-run-payoff-beats', '3');
         expect(buildPayoff).toHaveAttribute('data-run-payoff-action', 'Build route');

@@ -500,7 +500,13 @@ const CollectionScreen = () => {
                                                     {Array.from(
                                                         { length: getRunPayoffLaneBeatCount(primaryLastRunPayoffLane) },
                                                         (_, index) => (
-                                                            <s data-run-payoff-primary-lane-beat key={index} />
+                                                            <s
+                                                                data-run-payoff-primary-lane-beat={index + 1}
+                                                                data-run-payoff-primary-lane-beat-focus={
+                                                                    index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                key={index}
+                                                            />
                                                         )
                                                     )}
                                                 </span>
@@ -522,7 +528,13 @@ const CollectionScreen = () => {
                                                 <em>{lane.cue}</em>
                                                 <span aria-hidden="true" className={styles.runPayoffLaneBeatPips}>
                                                     {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
-                                                        <s data-run-payoff-lane-beat key={index} />
+                                                        <s
+                                                            data-run-payoff-lane-beat={index + 1}
+                                                            data-run-payoff-lane-beat-focus={
+                                                                index === 0 ? 'primary' : 'support'
+                                                            }
+                                                            key={index}
+                                                        />
                                                     ))}
                                                 </span>
                                             </i>
@@ -555,7 +567,14 @@ const CollectionScreen = () => {
                                         <b>{lastRunPayoffCrescendo.detail}</b>
                                         <strong>
                                             {Array.from({ length: lastRunPayoffCrescendo.beatCount }, (_, index) => (
-                                                <i aria-hidden="true" key={index} />
+                                                <i
+                                                    aria-hidden="true"
+                                                    data-run-payoff-crescendo-beat={index + 1}
+                                                    data-run-payoff-crescendo-beat-focus={
+                                                        index === 0 ? 'primary' : 'support'
+                                                    }
+                                                    key={index}
+                                                />
                                             ))}
                                         </strong>
                                     </span>
@@ -592,7 +611,11 @@ const CollectionScreen = () => {
                                         <i>{row.action}</i>
                                         <span aria-hidden="true" className={styles.runPayoffBeatPips}>
                                             {Array.from({ length: getRunPayoffSignalBeatCount(row) }, (_, index) => (
-                                                <i data-run-payoff-beat key={index} />
+                                                <i
+                                                    data-run-payoff-beat={index + 1}
+                                                    data-run-payoff-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                         {row.nextCue ? <em>{row.nextCue}</em> : null}
