@@ -4809,7 +4809,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <small>{boardPayoffStack.crescendo.label}</small>
                                             <strong>
                                                 {Array.from({ length: boardPayoffStack.crescendo.beatCount }, (_, index) => (
-                                                    <i aria-hidden="true" key={index} />
+                                                    <i
+                                                        aria-hidden="true"
+                                                        data-payoff-stack-crescendo-beat={index + 1}
+                                                        data-payoff-stack-crescendo-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
                                                 ))}
                                             </strong>
                                             <em>{boardPayoffStack.crescendo.detail}</em>

@@ -1627,6 +1627,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '3');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-cue', 'snap');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-tier', 'cashout');
+        expect(
+            screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-crescendo-beat="1"]')
+        ).toHaveAttribute('data-payoff-stack-crescendo-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-crescendo-beat="2"]')
+        ).toHaveAttribute('data-payoff-stack-crescendo-beat-focus', 'support');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Hit now');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Combo route + Rewards');

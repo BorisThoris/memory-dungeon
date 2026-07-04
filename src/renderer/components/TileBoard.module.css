@@ -3930,6 +3930,19 @@
     box-shadow: 0 0 0.38rem color-mix(in srgb, currentColor 18%, transparent);
 }
 
+.opportunityPayoffStack .opportunityPayoffCrescendo strong i[data-payoff-stack-crescendo-beat-focus='primary'] {
+    width: 0.34rem;
+    background: color-mix(in srgb, white 12%, currentColor 88%);
+    box-shadow:
+        0 0 0.5rem color-mix(in srgb, currentColor 46%, transparent),
+        0 0 0 1px color-mix(in srgb, white 18%, transparent);
+}
+
+.opportunityPayoffStack .opportunityPayoffCrescendo strong i[data-payoff-stack-crescendo-beat-focus='support'] {
+    width: 0.2rem;
+    opacity: 0.78;
+}
+
 .opportunityPayoffStack .opportunityPayoffCrescendo em {
     padding: 0;
     border: 0;
