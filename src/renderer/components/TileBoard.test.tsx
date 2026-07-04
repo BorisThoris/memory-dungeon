@@ -660,6 +660,10 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-action-priority', 'cash-now:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action', 'cash-now');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
+            'data-card-feedback-primary-card-cue',
+            'cash-now:cashout:5:cashout:payoff-stack'
+        );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-route-glyphs', 'payoff-stack:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-route-glyph-contract',

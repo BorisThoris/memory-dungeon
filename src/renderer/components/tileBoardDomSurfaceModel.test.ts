@@ -56,6 +56,7 @@ describe('tileBoardDomSurfaceModel', () => {
         expect(result.cardFeedbackStatesAttr).toContain('hidden:2');
         expect(result.cardFeedbackStatesAttr).toContain('focused:1');
         expect(result.cardFeedbackPrimaryActionAttr).toBe('none');
+        expect(result.cardFeedbackPrimaryCardCueAttr).toBe('none');
         expect(result.cardFeedbackActionPriorityAttr).toBe('');
         expect(result.cardFeedbackBeatCountsAttr).toBe('');
         expect(result.cardFeedbackBeatTiersAttr).toBe('');
@@ -89,6 +90,7 @@ describe('tileBoardDomSurfaceModel', () => {
         expect(result.cardFeedbackActionPriorityAttr).toBe('cash-now:2');
         expect(result.cardFeedbackBeatCountsAttr).toBe('5:2');
         expect(result.cardFeedbackBeatTiersAttr).toBe('cashout:2');
+        expect(result.cardFeedbackPrimaryCardCueAttr).toBe('cash-now:cashout:5:cashout:payoff-stack');
         expect(result.cardFeedbackPrimaryActionAttr).toBe('cash-now');
         expect(result.cardFeedbackRouteGlyphsAttr).toBe('payoff-stack:2');
         expect(result.cardFeedbackTraitLaneActionsAttr).toBe('shard:Cash shard:1');

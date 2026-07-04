@@ -1081,6 +1081,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         cardFeedbackStatesAttr,
         cardFeedbackMarkerShapesAttr,
         cardFeedbackPrimaryActionAttr,
+        cardFeedbackPrimaryCardCueAttr,
         cardFeedbackRouteGlyphsAttr,
         cardFeedbackTraitLaneActionsAttr,
         cardFeedbackTraitLaneBeatsAttr,
@@ -3702,6 +3703,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-trait-route-intensities={cardFeedbackTraitRouteIntensitiesAttr}
             data-card-feedback-trait-route-tiers={cardFeedbackTraitRouteTiersAttr}
             data-card-feedback-primary-action={cardFeedbackPrimaryActionAttr}
+            data-card-feedback-primary-card-cue={cardFeedbackPrimaryCardCueAttr}
             data-card-feedback-marker-shape-contract={BOARD_MARKER_SHAPE_CONTRACT}
             data-card-feedback-marker-contract={BOARD_MARKER_READABILITY_CONTRACT}
             data-card-feedback-last-resolution={lastResolutionFeedback}

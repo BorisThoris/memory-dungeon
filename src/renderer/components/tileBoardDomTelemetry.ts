@@ -440,6 +440,29 @@ export const getCardFeedbackPrimaryActionAttr = (options: {
     return CARD_FEEDBACK_ACTION_PRIORITY.find((key) => counts.has(key)) ?? 'none';
 };
 
+export const getCardFeedbackPrimaryCardCueAttr = (options: {
+    board: BoardState;
+    perkArmedTileIds?: readonly string[];
+    selectedTraitFollowupTileIds?: readonly string[];
+    traitRewardHotTileIds?: readonly string[];
+    traitRouteTargetTileIds?: readonly string[];
+}): string => {
+    const action = getCardFeedbackPrimaryActionAttr(options);
+    if (action === 'none') {
+        return 'none';
+    }
+
+    const beatTier = getCardFeedbackBeatTiersAttr(options).split('>')[0]?.split(':')[0] ?? 'none';
+    const beatCount =
+        beatTier !== 'none' && CARD_FEEDBACK_BEAT_TIER_ORDER.includes(beatTier as CardFeedbackBeatTier)
+            ? getTraitRouteReadabilityBeatCount(beatTier as CardFeedbackBeatTier)
+            : 0;
+    const cadence = getCardFeedbackCadencesAttr(options).split('>')[0]?.split(':')[0] ?? 'none';
+    const glyph = getCardFeedbackRouteGlyphsAttr(options).split(';')[0]?.split(':')[0] ?? 'none';
+
+    return `${action}:${beatTier}:${beatCount}:${cadence}:${glyph}`;
+};
+
 function getTraitRouteReadabilityTierForTile({
     chainReady,
     perkArmed,
