@@ -4032,6 +4032,10 @@ describe('GameScreen (OVR-014)', () => {
                 'data-recovery-burst-tier',
                 'risk'
             );
+            expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveAttribute(
+                'data-recovery-burst-fill',
+                '60'
+            );
             expect(screen.getByTestId('mismatch-score-floater-recovery-crescendo')).toHaveTextContent('Risk beat');
             expect(screen.getByTestId('mismatch-score-floater-recovery-crescendo')).toHaveTextContent(
                 'peek or route away'
@@ -4122,6 +4126,10 @@ describe('GameScreen (OVR-014)', () => {
             );
             expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveTextContent('Trait surge');
             expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveTextContent('2 risks');
+            expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveAttribute(
+                'data-recovery-burst-fill',
+                '80'
+            );
             expect(screen.getByTestId('mismatch-score-floater-recovery-crescendo')).toHaveTextContent(
                 'Trait surge burst'
             );

@@ -2609,6 +2609,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   brokenChainRewardCue: boardFloaterPayload.brokenChainRewardCue
               })
             : null;
+    const boardFloaterMismatchRecoveryBurstFill = boardFloaterMismatchRecoveryCrescendo
+        ? Math.min(100, (boardFloaterMismatchRecoveryCrescendo.beatCount / 5) * 100)
+        : boardFloaterMismatchRecoveryBurst?.tier === 'break'
+          ? 100
+          : boardFloaterMismatchRecoveryBurst?.tier === 'risk'
+            ? 75
+            : boardFloaterMismatchRecoveryBurst?.tier === 'lost-reward'
+                ? 90
+                : 0;
     const boardFloaterMismatchNextAction =
         boardFloaterPayload?.kind === 'miss'
             ? mismatchFloaterNextAction(boardFloaterDetailLines, {
@@ -5161,10 +5170,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             aria-label={`${boardFloaterMismatchRecoveryBurst.label}: ${boardFloaterMismatchRecoveryBurst.value}`}
                                             className={styles.boardFloaterRecoveryBurst}
                                             data-recovery-burst-tier={boardFloaterMismatchRecoveryBurst.tier}
+                                            data-recovery-burst-fill={boardFloaterMismatchRecoveryBurstFill}
+                                            style={
+                                                {
+                                                    '--recovery-burst-fill': `${boardFloaterMismatchRecoveryBurstFill}%`
+                                                } as CSSProperties
+                                            }
                                             data-testid="mismatch-score-floater-recovery-burst"
                                         >
                                             <small>{boardFloaterMismatchRecoveryBurst.label}</small>
                                             <b>{boardFloaterMismatchRecoveryBurst.value}</b>
+                                            <span aria-hidden="true" className={styles.boardFloaterRecoveryBurstMeter} />
                                         </span>
                                     ) : null}
                                     {boardFloaterPayload.kind === 'miss' && boardFloaterMismatchRecoveryCrescendo ? (
