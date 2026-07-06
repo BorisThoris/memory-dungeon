@@ -789,15 +789,15 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-accessibility-secondary-line', 'none');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-tone', 'cashout');
-        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-value', 'Cashout live');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-value', 'Stack live');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-detail', 'One-away cashout');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Trait mode');
-        expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Cashout live');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Stack live');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Next reward');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('One-away cashout');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tone', 'cashout');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAccessibleName(
-            /Trait mode.*Cashout live.*Next reward.*One-away cashout/i
+            /Trait mode.*Stack live.*Next reward.*One-away cashout/i
         );
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-marker-contract')).toContain('chain-reward-hot');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(

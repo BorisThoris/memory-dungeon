@@ -2151,7 +2151,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 nextReward: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Match lit route for reward',
                 label: 'Trait mode',
                 tone: 'cashout',
-                value: 'Cashout live'
+                value: /\btrait-payoff-stack:\d+/.test(cardFeedbackStatesAttr ?? '') ? 'Stack live' : 'Cashout live'
             };
         }
         if (boardChainOpportunity.comboSurgeLabel) {
@@ -2189,7 +2189,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             };
         }
         return null;
-    }, [boardChainOpportunity, runStatus]);
+    }, [boardChainOpportunity, cardFeedbackStatesAttr, runStatus]);
     const boardChainSequenceCue = useMemo((): {
         first: string;
         keep: string;
