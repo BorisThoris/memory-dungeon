@@ -818,6 +818,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-screen-cue', 'super');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-tier', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-label', 'Cashout beat');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-reward-urgency-tier', 'next');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-beat-tiers', 'cashout:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-beat-counts', '5:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-chase', '1 match to reward');
