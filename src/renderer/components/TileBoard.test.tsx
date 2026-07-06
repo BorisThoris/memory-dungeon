@@ -991,14 +991,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByText(/Chain board: 2 chain-ready cards, 2 payoff-stack cards, 2 reward-hot cards/i)).toBeInTheDocument();
         expect(screen.getByText(/Next: Next reward x6 \+1 shard in 1 match/i)).toBeInTheDocument();
         expect(screen.getByText(/Sequence: First match lit route/i)).toBeInTheDocument();
-        expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Combo');
+        expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Stack');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('2 combo cards lit');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Cashout');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-action', 'Cashout');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'cashout');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '5');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-density', '2');
-        expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-density-tone', 'surge');
+        expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-density-tone', 'cashout');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(5);
         expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-beat="1"]')).toHaveAttribute(
             'data-preview-beat-focus',
@@ -1017,7 +1017,7 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
         ).toHaveTextContent('Echo + Sealed: combo shard');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAccessibleName(
-            /Trait combo combo preview.*Cashout.*Cashout.*Next reward x6 \+1 shard in 1 match.*One-away cashout.*Push x6 reward.*Echo \+ Sealed: combo shard/i
+            /Trait combo stack preview.*Cashout.*Cashout.*Next reward x6 \+1 shard in 1 match.*One-away cashout.*Push x6 reward.*Echo \+ Sealed: combo shard/i
         );
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('chain-ready:2');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('chain-reward-hot:2');

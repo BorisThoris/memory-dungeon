@@ -2878,11 +2878,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     ]);
     const boardPickupOpportunityFocus = boardPickupOpportunity.sequenceCue?.tone ?? 'none';
     const focusedPreviewChipLabel = focusedPreviewChip
-        ? formatBoardFeedbackLabel(`${focusedPreviewChip.eyebrow} ${focusedPreviewChip.kind === 'pickup' ? 'reward' : focusedPreviewChip.kind === 'hazard' ? 'risk' : 'combo'} preview`, [
+        ? formatBoardFeedbackLabel(
+              `${focusedPreviewChip.eyebrow} ${
+                  focusedPreviewChip.kind === 'pickup'
+                      ? 'reward'
+                      : focusedPreviewChip.kind === 'hazard'
+                        ? 'risk'
+                        : /\btrait-payoff-stack:\d+/.test(cardFeedbackStatesAttr ?? '')
+                          ? 'stack'
+                          : 'combo'
+              } preview`,
+              [
               focusedPreviewChip.action,
               ...(focusedPreviewChip.rewardHotText ? ['Cashout', focusedPreviewChip.rewardHotText] : []),
               ...focusedPreviewChip.lines
-          ])
+              ]
+          )
         : undefined;
 
     useEffect(() => {
@@ -5774,6 +5785,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                       : previewDensity === 1
                                         ? 'ready'
                                         : focusedPreviewChip.tone;
+                            const traitPreviewSummaryLabel =
+                                focusedPreviewChip.kind === 'pickup'
+                                    ? 'Reward'
+                                    : focusedPreviewChip.kind === 'hazard'
+                                      ? 'Risk'
+                                      : cardFeedbackTraitPayoffStackActive
+                                        ? 'Stack'
+                                        : 'Combo';
+                            const traitPreviewDensityTone =
+                                focusedPreviewChip.kind === 'trait' && cardFeedbackTraitPayoffStackActive
+                                    ? 'cashout'
+                                    : previewDensityTone;
                             return (
                                 <div
                                     aria-label={focusedPreviewChipLabel}
@@ -5782,7 +5805,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     data-preview-audio={getFocusedPreviewAudioCue(focusedPreviewChip)}
                                     data-preview-beats={beatCount}
                                     data-preview-density={previewDensity}
-                                    data-preview-density-tone={previewDensityTone}
+                                    data-preview-density-tone={traitPreviewDensityTone}
                                     data-preview-kind={focusedPreviewChip.kind}
                                     data-preview-screen-cue={getFocusedPreviewScreenCue(focusedPreviewChip)}
                                     data-preview-source={focusedPreviewChip.source}
@@ -5796,13 +5819,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="trait-preview-summary"
                                     >
                                         <small>Preview</small>
-                                        <b>
-                                            {focusedPreviewChip.kind === 'pickup'
-                                                ? 'Reward'
-                                                : focusedPreviewChip.kind === 'hazard'
-                                                  ? 'Risk'
-                                                  : 'Combo'}
-                                        </b>
+                                        <b>{traitPreviewSummaryLabel}</b>
                                         {previewDensity > 0 ? (
                                             <strong>
                                                 {focusedPreviewChip.kind === 'trait'
