@@ -1970,6 +1970,16 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='payoff'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-void) 44%, transparent);
+    box-shadow:
+        0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent),
+        0 0 0 1px color-mix(in srgb, white 10%, transparent);
+}
+
 .chainOpportunityArmedPerk small,
 .chainOpportunityArmedPerk b,
 .chainOpportunityArmedPerk em {
@@ -1987,6 +1997,11 @@
     text-transform: uppercase;
 }
 
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='payoff'] small {
+    background: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+    color: color-mix(in srgb, white 90%, var(--theme-gold-bright));
+}
+
 .chainOpportunityArmedPerk b {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
     font-size: 0.56rem;
@@ -1998,6 +2013,10 @@
     font-size: 0.52rem;
     font-style: normal;
     font-weight: 840;
+}
+
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='payoff'] em {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
 }
 
 .chainOpportunityArmedPerkMeter {

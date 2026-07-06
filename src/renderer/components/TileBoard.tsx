@@ -5513,9 +5513,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         className={styles.chainOpportunityArmedPerk}
                                         data-chain-armed-perk-meter-fill={boardChainOpportunity.armedPerkPayoff ? 100 : 70}
+                                        data-chain-armed-perk-tone={boardChainOpportunity.armedPerkPayoff ? 'payoff' : 'armed'}
                                         data-chain-perk-armed="true"
                                     >
-                                        <small>Perk armed</small>
+                                        <small>{boardChainOpportunity.armedPerkPayoff ? 'Payoff' : 'Ready'}</small>
                                         <b>{boardChainOpportunity.armedPerkLabel}</b>
                                         {boardChainOpportunity.armedPerkPayoff ? (
                                             <em>{boardChainOpportunity.armedPerkPayoff}</em>
