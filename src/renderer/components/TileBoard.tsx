@@ -5626,8 +5626,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                     </span>
                                 ) : null}
-                                <span className={styles.chainOpportunityLines}>
+                                <span
+                                    className={styles.chainOpportunityLines}
+                                    data-chain-lines-meter-fill={Math.round(Math.min(100, (boardChainOpportunity.lines.length / 3) * 100))}
+                                    style={
+                                        {
+                                            '--chain-lines-meter-fill': `${Math.round(
+                                                Math.min(100, (boardChainOpportunity.lines.length / 3) * 100)
+                                            )}%`
+                                        } as CSSProperties
+                                    }
+                                >
                                     {boardChainOpportunity.lines.join(' / ')}
+                                    <i aria-hidden="true" className={styles.chainOpportunityLinesMeter}>
+                                        <i aria-hidden="true" className={styles.chainOpportunityLinesMeterFill} />
+                                    </i>
                                     <span aria-hidden="true" className={styles.chainOpportunityLinesBeatPips}>
                                         {Array.from(
                                             { length: Math.max(2, Math.min(5, boardChainOpportunity.lines.length + 1)) },

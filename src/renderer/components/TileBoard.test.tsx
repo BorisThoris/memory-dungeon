@@ -560,6 +560,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[class*="chainOpportunityLines"]')).toHaveTextContent(
             '1 route ready / 2 cards lit / Reward hot'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-lines-meter-fill]')).toHaveAttribute(
+            'data-chain-lines-meter-fill',
+            '100'
+        );
         expect(
             screen
                 .getByTestId('chain-opportunity-chip')
