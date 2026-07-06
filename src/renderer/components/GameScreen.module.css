@@ -13716,6 +13716,30 @@
     white-space: nowrap;
 }
 
+.boardFloaterPayoffLaneIndexPips {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0.12rem, 1fr);
+    gap: 0.03rem;
+    margin-right: 0.18rem;
+    vertical-align: middle;
+}
+
+.boardFloaterPayoffLaneIndexPips em {
+    display: block;
+    width: 0.11rem;
+    height: 0.11rem;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 0 0.18rem color-mix(in srgb, currentColor 26%, transparent);
+    opacity: 0.84;
+    animation: matchScoreFloaterPulse 1.08s ease-in-out infinite;
+}
+
+.boardFloaterPayoffLaneIndexPips em[data-match-payoff-lane-pip-focus='support'] {
+    opacity: 0.58;
+}
+
 .boardFloaterPayoffLadderBeatPips {
     display: grid;
     grid-column: 1 / -1;

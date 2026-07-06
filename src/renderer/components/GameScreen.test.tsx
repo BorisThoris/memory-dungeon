@@ -2099,6 +2099,21 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('One-away cashout');
             expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Keep');
             expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Hit now');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-ladder')
+                    .querySelector('[data-match-payoff-lane-index="1"]')
+            ).toHaveTextContent('Pickup cashout');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-ladder')
+                    .querySelector('[data-match-payoff-lane-index="1"]')?.querySelectorAll('[data-match-payoff-lane-pip]')
+            ).toHaveLength(1);
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-ladder')
+                    .querySelector('[data-match-payoff-lane-index="2"]')?.querySelectorAll('[data-match-payoff-lane-pip]')
+            ).toHaveLength(2);
             expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveAttribute(
                 'data-match-payoff-ladder-tone',
                 'reward'
@@ -3131,6 +3146,16 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Pickup cashout');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Trait cashout');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Chain cashout');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-ladder')
+                .querySelector('[data-match-payoff-lane-index="1"]')?.querySelectorAll('[data-match-payoff-lane-pip]')
+        ).toHaveLength(1);
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-ladder')
+                .querySelector('[data-match-payoff-lane-index="4"]')?.querySelectorAll('[data-match-payoff-lane-pip]')
+        ).toHaveLength(3);
         const payoffLadderSummary = screen.getByTestId('match-score-floater-payoff-ladder-summary');
         expect(payoffLadderSummary).toHaveTextContent('Ladder');
         expect(payoffLadderSummary).toHaveTextContent('4 lanes');

@@ -4755,6 +4755,20 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 <span className={styles.boardFloaterPayoffLaneStrip}>
                                                     {boardFloaterPayload.payoffLadder.lanes.map((lane, index) => (
                                                         <i data-match-payoff-lane-index={index + 1} key={`${lane}-${index}`}>
+                                                            <span aria-hidden="true" className={styles.boardFloaterPayoffLaneIndexPips}>
+                                                                {Array.from(
+                                                                    { length: Math.min(3, index + 1) },
+                                                                    (_, pipIndex) => (
+                                                                        <em
+                                                                            data-match-payoff-lane-pip={pipIndex + 1}
+                                                                            data-match-payoff-lane-pip-focus={
+                                                                                pipIndex === 0 ? 'primary' : 'support'
+                                                                            }
+                                                                            key={`${lane}-${index}-pip-${pipIndex + 1}`}
+                                                                        />
+                                                                    )
+                                                                )}
+                                                            </span>
                                                             {lane}
                                                         </i>
                                                     ))}
