@@ -10485,6 +10485,32 @@
     font-weight: 760;
 }
 
+.toolPayoffMeter {
+    grid-column: 1 / -1;
+    display: block;
+    height: 0.22rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 22%, var(--theme-border-strong));
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+}
+
+.toolPayoffMeterFill {
+    display: block;
+    width: var(--tool-payoff-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 74%, white)
+    );
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .toolCrescendo {
     grid-column: 1 / -1;
     display: inline-flex;

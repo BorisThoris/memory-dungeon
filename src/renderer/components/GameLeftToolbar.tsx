@@ -6,6 +6,7 @@ import {
     useEffect,
     useLayoutEffect,
     useRef,
+    type CSSProperties,
     type Dispatch,
     type RefObject,
     type SetStateAction
@@ -582,6 +583,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     const toolCrescendoActionCue = toolCrescendoAction(toolCrescendo);
     const toolCrescendoAudioCueValue = toolCrescendoAudioCue(toolCrescendo);
     const toolCrescendoScreenCueValue = toolCrescendoScreenCue(toolCrescendo);
+    const toolPayoffStackMeterFill = toolCrescendo.tier === 'none' ? 0 : Math.round((toolCrescendo.beats / 4) * 100);
     const toolPayoffStackLabel = `${toolPayoffStack.label}: ${toolPayoffStack.value}. ${toolPayoffStack.laneSummary}. First: ${toolPayoffStack.first}. Then: ${toolPayoffStack.then}. Keep: ${toolPayoffStack.keep}.`;
     const toolCrescendoLabel =
         toolCrescendo.tier === 'none'
@@ -728,6 +730,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         data-tool-crescendo-cue={toolCrescendo.cue}
                         data-tool-crescendo-screen-cue={toolCrescendoScreenCueValue}
                         data-tool-crescendo-tier={toolCrescendo.tier}
+                        data-tool-payoff-meter-fill={toolPayoffStackMeterFill}
                         data-tool-payoff-first={toolPayoffStack.first}
                         data-tool-payoff-keep={toolPayoffStack.keep}
                         data-tool-payoff-then={toolPayoffStack.then}
@@ -737,6 +740,12 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         <small>{toolPayoffStack.label}</small>
                         <strong>{toolPayoffStack.value}</strong>
                         <b>{toolPayoffStack.laneSummary}</b>
+                        <span aria-hidden="true" className={styles.toolPayoffMeter} data-tool-payoff-meter-fill={toolPayoffStackMeterFill}>
+                            <i
+                                className={styles.toolPayoffMeterFill}
+                                style={{ '--tool-payoff-meter-fill': `${toolPayoffStackMeterFill}%` } as CSSProperties}
+                            />
+                        </span>
                         {toolCrescendo.tier !== 'none' ? (
                             <span
                                 className={styles.toolCrescendo}

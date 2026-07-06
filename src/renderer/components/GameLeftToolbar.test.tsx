@@ -73,6 +73,7 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Tool stack');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('3 tools live');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Route + Recall + Control');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-meter-fill', '75');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('First');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Set route before matching');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Then');
@@ -287,6 +288,7 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Tool stack');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('3 tools live');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Route + Chain + Recall');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-meter-fill', '100');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Use swap to stack cashout');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Cash stacked route');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-first', 'Use swap to stack cashout');
@@ -337,6 +339,7 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Tools empty');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('0 tools live');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('No tools charged');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-meter-fill', '0');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Recharge tools');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Find recharge reward');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Keep matching clean');
@@ -394,6 +397,7 @@ describe('GameLeftToolbar', () => {
 
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Tool setup');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Recall');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-meter-fill', '50');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Arm peek');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Use unlocked tool');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Keep memory chain');
