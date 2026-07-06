@@ -4526,8 +4526,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         aria-label={`Combo recipes. ${boardChainRecipeChips.join('. ')}`}
                                         className={styles.chainOpportunityRecipe}
+                                        data-chain-recipe-meter-fill={Math.round(
+                                            Math.min(100, (boardChainRecipeChips.length / 3) * 100)
+                                        )}
                                         data-testid="chain-opportunity-recipes"
+                                        style={
+                                            {
+                                                '--chain-recipe-meter-fill': `${Math.round(
+                                                    Math.min(100, (boardChainRecipeChips.length / 3) * 100)
+                                                )}%`
+                                            } as CSSProperties
+                                        }
                                     >
+                                        <i aria-hidden="true" className={styles.chainOpportunityRecipeMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunityRecipeMeterFill} />
+                                        </i>
                                         {boardChainRecipeChips.map((recipe) => {
                                             const recipeBeatCount = Math.max(2, Math.min(5, recipe.split('+').length));
                                             return (
