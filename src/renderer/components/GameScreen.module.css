@@ -14368,6 +14368,26 @@
     opacity: 0.64;
 }
 
+.boardFloaterTraitLaneMapSummaryMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 4.4rem;
+    height: 0.12rem;
+    margin-top: 0.01rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--trait-lane-summary-fill, 0%),
+            color-mix(in srgb, currentColor 18%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+        0 0 0.18rem color-mix(in srgb, currentColor 16%, transparent);
+    opacity: 0.92;
+}
+
 .boardFloaterTraitLaneMap > span {
     display: inline-grid;
     grid-template-columns: minmax(0, auto) auto;
@@ -14397,6 +14417,25 @@
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), color-mix(in srgb, var(--theme-violet-bright) 10%, transparent)),
         color-mix(in srgb, var(--theme-void) 70%, transparent);
+}
+
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane::after {
+    content: '';
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.12rem;
+    margin-top: 0.06rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--trait-lane-primary-fill, 0%),
+            color-mix(in srgb, currentColor 18%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+        0 0 0.24rem color-mix(in srgb, currentColor 18%, transparent);
+    opacity: 0.9;
 }
 
 .boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane small {

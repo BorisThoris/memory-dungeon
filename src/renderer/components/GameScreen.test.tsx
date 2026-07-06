@@ -3022,6 +3022,8 @@ describe('GameScreen (OVR-014)', () => {
         const traitLaneMapSummary = screen.getByTestId('match-score-floater-trait-lane-map-summary');
         expect(traitLaneMapSummary).toHaveTextContent('Traits');
         expect(traitLaneMapSummary).toHaveTextContent('4 lanes');
+        expect(traitLaneMapSummary).toHaveAttribute('data-match-trait-lane-summary-fill', '80');
+        expect(traitLaneMapSummary).toHaveAttribute('data-match-trait-lane-summary-total', '4');
         expect(traitLaneMapSummary.querySelectorAll('[data-match-trait-lane-map-summary-beat]')).toHaveLength(5);
         expect(
             traitLaneMapSummary.querySelector('[data-match-trait-lane-map-summary-beat="1"]')
@@ -3047,6 +3049,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAttribute(
             'data-match-trait-primary-lane-screen-cue',
             'burst'
+        );
+        expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAttribute(
+            'data-match-trait-primary-lane-fill',
+            '75'
         );
         expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveTextContent('Trait focus');
         expect(

@@ -2513,6 +2513,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardFloaterTraitLaneMapAttr = traitInteractionLaneMapAttr(boardFloaterTraitLaneMap);
     const boardFloaterTraitLaneActionMapAttr = traitInteractionLaneActionMapAttr(boardFloaterTraitLaneMap);
     const boardFloaterPrimaryTraitLane = boardFloaterTraitLaneMap[0] ?? null;
+    const boardFloaterTraitLaneMapSummaryFill = Math.min(100, (boardFloaterTraitLaneMap.length / 5) * 100);
+    const boardFloaterPrimaryTraitLaneFill = boardFloaterPrimaryTraitLane
+        ? Math.min(100, (getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane) / 4) * 100)
+        : 0;
     const boardFloaterChainCue =
         boardFloaterPayload?.kind === 'match' ? matchScoreFloaterChainCue(boardFloaterPayload.chainDepth) : '';
     const boardFloaterMismatchSignal =
@@ -5023,6 +5027,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             <span
                                                 className={styles.boardFloaterTraitLaneMapSummary}
                                                 data-match-trait-lane-count={boardFloaterTraitLaneMap.length}
+                                                data-match-trait-lane-summary-fill={boardFloaterTraitLaneMapSummaryFill}
+                                                data-match-trait-lane-summary-total={Math.max(1, Math.min(5, boardFloaterTraitLaneMap.length))}
+                                                style={
+                                                    {
+                                                        '--trait-lane-summary-fill': `${boardFloaterTraitLaneMapSummaryFill}%`
+                                                    } as CSSProperties
+                                                }
                                                 data-testid="match-score-floater-trait-lane-map-summary"
                                             >
                                                 <small>Traits</small>
@@ -5042,8 +5053,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                 key={`trait-lane-map-summary-beat-${index + 1}`}
                                                             />
                                                         )
-                                                    )}
+                                                )}
                                                 </span>
+                                                <span aria-hidden="true" className={styles.boardFloaterTraitLaneMapSummaryMeter} />
                                             </span>
                                             {boardFloaterPrimaryTraitLane ? (
                                                 <span
@@ -5063,6 +5075,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     data-match-trait-primary-lane-screen-cue={getBoardFloaterTraitLaneScreenCue(
                                                         boardFloaterPrimaryTraitLane
                                                     )}
+                                                    data-match-trait-primary-lane-fill={boardFloaterPrimaryTraitLaneFill}
+                                                    style={
+                                                        {
+                                                            '--trait-lane-primary-fill': `${boardFloaterPrimaryTraitLaneFill}%`
+                                                        } as CSSProperties
+                                                    }
                                                     data-testid="match-score-floater-primary-trait-lane"
                                                 >
                                                     <small>Trait focus</small>
