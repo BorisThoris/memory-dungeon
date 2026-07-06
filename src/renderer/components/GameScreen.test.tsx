@@ -3080,6 +3080,13 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Pickup cashout');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Trait cashout');
         expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveTextContent('Chain cashout');
+        const payoffLadderSummary = screen.getByTestId('match-score-floater-payoff-ladder-summary');
+        expect(payoffLadderSummary).toHaveTextContent('Ladder');
+        expect(payoffLadderSummary).toHaveTextContent('4 lanes');
+        expect(payoffLadderSummary.querySelectorAll('[data-match-payoff-ladder-summary-beat]')).toHaveLength(5);
+        expect(
+            payoffLadderSummary.querySelector('[data-match-payoff-ladder-summary-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-ladder-summary-beat-focus', 'primary');
         expect(screen.getByTestId('match-score-floater-payoff-chips')).toHaveTextContent('Route cashout');
         expect(
             screen

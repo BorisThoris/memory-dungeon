@@ -4719,6 +4719,32 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-match-payoff-ladder-tone={boardFloaterPayload.payoffLadder.tone}
                                             data-testid="match-score-floater-payoff-ladder"
                                         >
+                                            <span
+                                                className={styles.boardFloaterPayoffLadderSummary}
+                                                data-match-payoff-ladder-count={boardFloaterPayload.payoffLadder.lanes?.length ?? 0}
+                                                data-testid="match-score-floater-payoff-ladder-summary"
+                                            >
+                                                <small>Ladder</small>
+                                                <b>
+                                                    {(boardFloaterPayload.payoffLadder.lanes?.length ?? 0) > 0
+                                                        ? `${boardFloaterPayload.payoffLadder.lanes!.length} lanes`
+                                                        : 'No lanes'}
+                                                </b>
+                                                <span aria-hidden="true" className={styles.boardFloaterPayoffLadderSummaryBeatPips}>
+                                                    {Array.from(
+                                                        { length: Math.max(2, Math.min(5, (boardFloaterPayload.payoffLadder.lanes?.length ?? 0) + 1)) },
+                                                        (_, index) => (
+                                                            <i
+                                                                data-match-payoff-ladder-summary-beat={index + 1}
+                                                                data-match-payoff-ladder-summary-beat-focus={
+                                                                    index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                key={`payoff-ladder-summary-beat-${index + 1}`}
+                                                            />
+                                                        )
+                                                    )}
+                                                </span>
+                                            </span>
                                             <small>First</small>
                                             <b data-match-payoff-ladder-step="first">{boardFloaterPayload.payoffLadder.first}</b>
                                             <small>Then</small>
