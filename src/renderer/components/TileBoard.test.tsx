@@ -693,6 +693,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent('Keep');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent('Push x6 reward');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveAttribute('data-chain-sequence-tone', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-sequence-cue').querySelectorAll('[data-chain-sequence-step]')).toHaveLength(3);
+        expect(
+            screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="first"]')
+        ).toHaveAttribute('data-chain-sequence-step-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveAccessibleName(
             'Chain sequence. First: Match lit route for reward. Then: Cash x6 +1 shard in 1 match. Keep: Push x6 reward.'
         );

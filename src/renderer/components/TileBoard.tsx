@@ -5429,12 +5429,33 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-sequence-tone={boardChainSequenceCue.tone}
                                         data-testid="chain-opportunity-sequence-cue"
                                     >
-                                        <small>First</small>
-                                        <b>{boardChainSequenceCue.first}</b>
-                                        <small>Then</small>
-                                        <b>{boardChainSequenceCue.then}</b>
-                                        <small>Keep</small>
-                                        <b>{boardChainSequenceCue.keep}</b>
+                                        <span
+                                            aria-hidden="true"
+                                            className={styles.chainOpportunitySequenceStep}
+                                            data-chain-sequence-step="first"
+                                            data-chain-sequence-step-tone={boardChainSequenceCue.tone}
+                                        >
+                                            <small>First</small>
+                                            <b>{boardChainSequenceCue.first}</b>
+                                        </span>
+                                        <span
+                                            aria-hidden="true"
+                                            className={styles.chainOpportunitySequenceStep}
+                                            data-chain-sequence-step="then"
+                                            data-chain-sequence-step-tone={boardChainSequenceCue.tone}
+                                        >
+                                            <small>Then</small>
+                                            <b>{boardChainSequenceCue.then}</b>
+                                        </span>
+                                        <span
+                                            aria-hidden="true"
+                                            className={styles.chainOpportunitySequenceStep}
+                                            data-chain-sequence-step="keep"
+                                            data-chain-sequence-step-tone={boardChainSequenceCue.tone}
+                                        >
+                                            <small>Keep</small>
+                                            <b>{boardChainSequenceCue.keep}</b>
+                                        </span>
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.comboSurgeLabel ? (
