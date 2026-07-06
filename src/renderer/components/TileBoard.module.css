@@ -2313,6 +2313,32 @@
     opacity: 0.64;
 }
 
+.chainOpportunityMarkerKeyMeter {
+    display: block;
+    width: 100%;
+    height: 0.16rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityMarkerKeyMeterFill {
+    display: block;
+    width: var(--chain-marker-key-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent);

@@ -506,6 +506,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Stack');
         expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveTextContent('Markers');
         expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveTextContent('3 shapes');
+        expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveAttribute(
+            'data-chain-marker-key-meter-fill',
+            '83'
+        );
         expect(
             screen.getByTestId('chain-opportunity-marker-key-summary').querySelectorAll('[data-chain-marker-key-summary-beat]')
         ).toHaveLength(4);

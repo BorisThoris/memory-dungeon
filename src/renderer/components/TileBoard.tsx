@@ -2806,6 +2806,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
         return preferred.find((id) => markerIds.has(id as (typeof boardChainMarkerKeyRows)[number]['id'])) ?? 'none';
     }, [boardChainMarkerKeyRows, chainMarkerIntensity?.id]);
+    const boardChainMarkerKeyMeterFill = Math.round(
+        Math.min(100, ((boardChainMarkerKeyRows.length + (chainMarkerIntensity ? 2 : 0)) / 6) * 100)
+    );
     const boardChainRecipeChips = useMemo(
         () =>
             [
@@ -4613,6 +4616,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <span
                                             className={styles.chainOpportunityMarkerKeySummary}
                                             data-testid="chain-opportunity-marker-key-summary"
+                                            data-chain-marker-key-meter-fill={boardChainMarkerKeyMeterFill}
+                                            style={
+                                                {
+                                                    '--chain-marker-key-meter-fill': `${boardChainMarkerKeyMeterFill}%`
+                                                } as CSSProperties
+                                            }
                                         >
                                             <small>Markers</small>
                                             <b>{boardChainMarkerKeyRows.length} shapes</b>
@@ -4633,6 +4642,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     )
                                                 )}
                                             </span>
+                                            <i aria-hidden="true" className={styles.chainOpportunityMarkerKeyMeter}>
+                                                <i aria-hidden="true" className={styles.chainOpportunityMarkerKeyMeterFill} />
+                                            </i>
                                         </span>
                                         {boardChainMarkerKeyRows.map((row) => (
                                             <span
