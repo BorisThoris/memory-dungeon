@@ -763,9 +763,10 @@
 }
 
 .chainOpportunityCue {
-    display: inline-flex;
+    display: inline-grid;
+    grid-template-columns: minmax(0, auto);
     align-items: center;
-    gap: 0.04rem;
+    gap: 0.08rem;
     padding: 0.12rem 0.34rem;
     border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
     border-radius: 999px;
@@ -776,6 +777,32 @@
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
+}
+
+.chainOpportunityCueMeter {
+    display: block;
+    width: 100%;
+    height: 0.14rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityCueMeterFill {
+    display: block;
+    width: var(--chain-cue-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    transition: width 140ms ease-out;
 }
 
 .chainOpportunityCueBeatPips {
@@ -4819,9 +4846,10 @@
 }
 
 .chainOpportunityMomentum {
-    display: inline-flex;
+    display: inline-grid;
+    grid-template-columns: auto auto;
     align-items: center;
-    gap: 0.22rem;
+    gap: 0.08rem 0.18rem;
     max-width: min(10rem, 30vi);
     overflow: hidden;
     padding: 0.13rem 0.36rem;
@@ -4836,6 +4864,33 @@
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
+}
+
+.chainOpportunityMomentumMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.14rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-success) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityMomentumMeterFill {
+    display: block;
+    width: var(--chain-momentum-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-success) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-success) 20%, transparent);
+    transition: width 140ms ease-out;
 }
 
 .chainOpportunityMomentum b,

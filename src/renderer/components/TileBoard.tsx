@@ -4319,7 +4319,36 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                     </span>
                                 ) : null}
-                                <span className={styles.chainOpportunityCue}>{boardChainOpportunity.cue}</span>
+                                <span
+                                    className={styles.chainOpportunityCue}
+                                    data-chain-cue-meter-fill={
+                                        boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
+                                            ? 100
+                                            : boardChainOpportunity.selectedFollowupCount > 0
+                                              ? 75
+                                              : boardChainOpportunity.comboSurgeLabel
+                                                ? 60
+                                                : 40
+                                    }
+                                    style={
+                                        {
+                                            '--chain-cue-meter-fill': `${
+                                                boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
+                                                    ? 100
+                                                    : boardChainOpportunity.selectedFollowupCount > 0
+                                                      ? 75
+                                                      : boardChainOpportunity.comboSurgeLabel
+                                                        ? 60
+                                                        : 40
+                                            }%`
+                                        } as CSSProperties
+                                    }
+                                >
+                                    {boardChainOpportunity.cue}
+                                    <i aria-hidden="true" className={styles.chainOpportunityCueMeter}>
+                                        <i aria-hidden="true" className={styles.chainOpportunityCueMeterFill} />
+                                    </i>
+                                </span>
                                 <span aria-hidden="true" className={styles.chainOpportunityCueBeatPips}>
                                     {Array.from(
                                         {
@@ -5528,9 +5557,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         className={styles.chainOpportunityMomentum}
                                         data-chain-momentum-beats={boardChainMomentumBeatCount}
+                                        data-chain-momentum-meter-fill={Math.round((boardChainMomentumBeatCount / 5) * 100)}
+                                        style={
+                                            {
+                                                '--chain-momentum-meter-fill': `${Math.round(
+                                                    (boardChainMomentumBeatCount / 5) * 100
+                                                )}%`
+                                            } as CSSProperties
+                                        }
                                     >
                                         {boardChainOpportunity.momentumLabel ? <b>{boardChainOpportunity.momentumLabel}</b> : null}
                                         {boardChainOpportunity.chaseLabel ? <small>{boardChainOpportunity.chaseLabel}</small> : null}
+                                        <i aria-hidden="true" className={styles.chainOpportunityMomentumMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunityMomentumMeterFill} />
+                                        </i>
                                         <span aria-hidden="true" className={styles.chainOpportunityMomentumBeatPips}>
                                             {Array.from({ length: boardChainMomentumBeatCount }, (_, index) => (
                                                 <i
