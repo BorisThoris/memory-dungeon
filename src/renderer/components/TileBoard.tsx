@@ -1776,6 +1776,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         milestoneActionLabel: string | null;
         milestoneTargetLabel: string | null;
         milestoneTone: string | null;
+        milestoneMeterFill: number;
     } => {
         if (runStatus !== 'playing') {
             return {
@@ -1814,7 +1815,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 lines: [],
                 milestoneActionLabel: null,
                 milestoneTargetLabel: null,
-                milestoneTone: null
+                milestoneTone: null,
+                milestoneMeterFill: 0
             };
         }
 
@@ -2074,7 +2076,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             lines,
             milestoneActionLabel: milestonePreview?.actionLabel ?? null,
             milestoneTargetLabel,
-            milestoneTone: milestonePreview?.tone ?? null
+            milestoneTone: milestonePreview?.tone ?? null,
+            milestoneMeterFill: milestonePreview
+                ? Math.max(
+                      0,
+                      Math.min(
+                          100,
+                          Math.round(
+                              (((milestonePreview.tone === 'combo' ? 10 : milestonePreview.tone === 'surge' ? 6 : 3) -
+                                  milestonePreview.distance) /
+                                  (milestonePreview.tone === 'combo' ? 10 : milestonePreview.tone === 'surge' ? 6 : 3)) *
+                                  100
+                          )
+                      )
+                  )
+                : 0
         };
     }, [board, chainContext, runStatus, selectedTraitFollowupTileIds, traitRouteHintText, traitRouteTargetTileIds]);
 
@@ -5344,10 +5360,23 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         className={styles.chainOpportunityMilestone}
                                         data-chain-milestone-tone={boardChainOpportunity.milestoneTone ?? 'none'}
+                                        data-chain-milestone-meter-fill={boardChainOpportunity.milestoneMeterFill}
                                         data-testid="chain-opportunity-milestone"
+                                        style={
+                                            {
+                                                '--chain-milestone-meter-fill': `${boardChainOpportunity.milestoneMeterFill}%`
+                                            } as CSSProperties
+                                        }
                                     >
                                         <small>{boardChainOpportunity.milestoneActionLabel}</small>
                                         <b>{boardChainOpportunity.milestoneTargetLabel}</b>
+                                        <i
+                                            aria-hidden="true"
+                                            className={styles.chainOpportunityMilestoneMeter}
+                                            data-testid="chain-opportunity-milestone-meter"
+                                        >
+                                            <i aria-hidden="true" className={styles.chainOpportunityMilestoneMeterFill} />
+                                        </i>
                                         <span aria-hidden="true" className={styles.chainOpportunityMilestoneBeatPips}>
                                             {Array.from(
                                                 {

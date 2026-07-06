@@ -1543,6 +1543,33 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
 }
 
+.chainOpportunityMilestoneMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.14rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityMilestoneMeterFill {
+    display: block;
+    width: var(--chain-milestone-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-green-bright) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 76%, white)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .chainOpportunityMilestone small,
 .chainOpportunityMilestone b {
     min-width: 0;
@@ -1599,16 +1626,40 @@
     color: color-mix(in srgb, var(--theme-green-bright) 80%, white);
 }
 
+.chainOpportunityMilestone[data-chain-milestone-tone='chain'] .chainOpportunityMilestoneMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-green-bright) 84%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
+    );
+}
+
 .chainOpportunityMilestone[data-chain-milestone-tone='surge'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
 }
 
+.chainOpportunityMilestone[data-chain-milestone-tone='surge'] .chainOpportunityMilestoneMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+}
+
 .chainOpportunityMilestone[data-chain-milestone-tone='combo'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
     background: color-mix(in srgb, var(--theme-gold-deep) 16%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tone='combo'] .chainOpportunityMilestoneMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 88%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 74%, white)
+    );
 }
 
 .chainOpportunitySequenceCue {
