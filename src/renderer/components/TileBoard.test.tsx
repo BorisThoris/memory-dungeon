@@ -2252,7 +2252,7 @@ describe('TileBoard touch and click controls', () => {
         expect(forecastReward).toHaveAttribute('data-chain-reward-target', 'cashout-build');
         expect(forecastReward).toHaveAttribute('data-chain-reward-beats', '3');
         expect(forecastReward).toHaveAttribute('data-chain-reward-meter-fill', '60');
-        expect(forecastReward).toHaveTextContent('Forecast');
+        expect(forecastReward?.querySelector('small')).toHaveTextContent('Forecast');
         expect(forecastReward).toHaveTextContent('Build toward cashout');
         expect(forecastReward).toHaveTextContent('Next reward');
         expect(

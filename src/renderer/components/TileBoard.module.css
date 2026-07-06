@@ -2049,6 +2049,17 @@
     white-space: nowrap;
 }
 
+.chainOpportunityRewardUrgency > small {
+    min-width: 0;
+    overflow: hidden;
+    padding: 0.08rem 0.24rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    color: color-mix(in srgb, white 90%, var(--theme-gold-bright));
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .chainOpportunityRewardUrgency[data-chain-reward-urgency='soon'],
 .chainOpportunityRewardUrgency[data-chain-reward-urgency='later'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 24%);
@@ -2057,6 +2068,16 @@
         color-mix(in srgb, var(--theme-void) 42%, transparent);
     box-shadow: none;
     color: color-mix(in srgb, var(--theme-cyan-bright) 78%, var(--theme-gold-bright));
+}
+
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='soon'] > small {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+    color: color-mix(in srgb, white 90%, var(--theme-cyan-bright));
+}
+
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='later'] > small {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+    color: color-mix(in srgb, white 84%, var(--theme-cyan-bright));
 }
 
 .chainOpportunityRewardUrgencyMeter {
