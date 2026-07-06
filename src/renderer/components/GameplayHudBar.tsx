@@ -3080,6 +3080,7 @@ const GameplayHudBar = ({
                                     >
                                         <span className={styles.statKey}>Streak</span>
                                         <span className={styles.statVal}>x{run.featuredObjectiveStreak}</span>
+                                        <span className={styles.statSubline}>Consecutive featured clears</span>
                                     </div>
                                 ) : null}
                             </div>

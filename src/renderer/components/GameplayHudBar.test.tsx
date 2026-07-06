@@ -102,6 +102,7 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-favor-progress').textContent).toContain('1 more for a relic pick');
         expect(screen.getByTestId('hud-favor-progress').getAttribute('title')).toContain('Temporary run currency');
         expect(screen.getByTestId('hud-featured-streak').textContent).toContain('x3');
+        expect(screen.getByTestId('hud-featured-streak').textContent).toContain('Consecutive featured clears');
         expect(screen.getByTestId('hud-endless-risk-wager').textContent).toContain('+2 Favor');
         expect(screen.getByTestId('hud-endless-risk-wager')).toHaveAttribute('data-hud-risk-wager-action', 'Protect streak');
         expect(screen.getByTestId('hud-endless-risk-wager')).toHaveAttribute('data-hud-risk-wager-audio', 'risk-wager-armed');
