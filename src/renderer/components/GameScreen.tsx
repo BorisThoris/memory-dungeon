@@ -2616,8 +2616,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
           : boardFloaterMismatchRecoveryBurst?.tier === 'risk'
             ? 75
             : boardFloaterMismatchRecoveryBurst?.tier === 'lost-reward'
-                ? 90
-                : 0;
+              ? 90
+              : 0;
     const boardFloaterMismatchNextAction =
         boardFloaterPayload?.kind === 'miss'
             ? mismatchFloaterNextAction(boardFloaterDetailLines, {
@@ -2637,6 +2637,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             ? mismatchFloaterRecoveryLaneMap(boardFloaterMismatchRecoveryChips)
             : null;
     const boardFloaterPrimaryMismatchRecoveryLane = getPrimaryMismatchRecoveryLane(boardFloaterMismatchRecoveryLaneMap);
+    const boardFloaterMismatchRecoveryLaneMapFill = Math.min(
+        100,
+        ((boardFloaterMismatchRecoveryLaneMap?.length ?? 0) / 4) * 100
+    );
+    const boardFloaterPrimaryMismatchRecoveryLaneFill = boardFloaterPrimaryMismatchRecoveryLane
+        ? Math.min(100, (getMismatchRecoveryLaneBeatCount(boardFloaterPrimaryMismatchRecoveryLane) / 4) * 100)
+        : 0;
     const boardFloaterMismatchRecoveryStack =
         boardFloaterPayload?.kind === 'miss'
             ? mismatchFloaterRecoveryStack(boardFloaterDetailLines, {
@@ -5243,6 +5250,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-mismatch-recovery-lane-actions={mismatchRecoveryLaneActionMapAttr(
                                                 boardFloaterMismatchRecoveryLaneMap
                                             )}
+                                            data-mismatch-recovery-lane-map-fill={boardFloaterMismatchRecoveryLaneMapFill}
                                             data-mismatch-recovery-lane-map={mismatchRecoveryLaneMapAttr(boardFloaterMismatchRecoveryLaneMap)}
                                             data-mismatch-recovery-primary-lane={boardFloaterPrimaryMismatchRecoveryLane?.id ?? 'none'}
                                             data-mismatch-recovery-primary-lane-action={
@@ -5266,8 +5274,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     ? getMismatchRecoveryLaneScreenCue(boardFloaterPrimaryMismatchRecoveryLane)
                                                     : 'none'
                                             }
+                                            style={
+                                                {
+                                                    '--mismatch-recovery-lane-map-fill': `${boardFloaterMismatchRecoveryLaneMapFill}%`
+                                                } as CSSProperties
+                                            }
                                             data-testid="mismatch-score-floater-recovery-lane-map"
                                         >
+                                            <span aria-hidden="true" className={styles.boardFloaterRecoveryLaneMapMeter} />
                                             {boardFloaterPrimaryMismatchRecoveryLane ? (
                                                 <span
                                                     aria-label={`Primary recovery lane. ${boardFloaterPrimaryMismatchRecoveryLane.label}: ${mismatchRecoveryLaneAction(boardFloaterPrimaryMismatchRecoveryLane)}. ${boardFloaterPrimaryMismatchRecoveryLane.cue}. ${getMismatchRecoveryLaneBeatCount(boardFloaterPrimaryMismatchRecoveryLane)} beats.`}
@@ -5286,6 +5300,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     data-mismatch-recovery-primary-lane-screen-cue={getMismatchRecoveryLaneScreenCue(
                                                         boardFloaterPrimaryMismatchRecoveryLane
                                                     )}
+                                                    data-mismatch-recovery-primary-lane-fill={boardFloaterPrimaryMismatchRecoveryLaneFill}
+                                                    style={
+                                                        {
+                                                            '--mismatch-recovery-primary-lane-fill': `${boardFloaterPrimaryMismatchRecoveryLaneFill}%`
+                                                        } as CSSProperties
+                                                    }
                                                     data-testid="mismatch-score-floater-primary-recovery-lane"
                                                 >
                                                     <small>Recovery focus</small>

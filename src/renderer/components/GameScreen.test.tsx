@@ -3690,6 +3690,10 @@ describe('GameScreen (OVR-014)', () => {
                 'recover:1>lost:1>chain:2'
             );
             expect(screen.getByTestId('mismatch-score-floater-recovery-lane-map')).toHaveAttribute(
+                'data-mismatch-recovery-lane-map-fill',
+                '75'
+            );
+            expect(screen.getByTestId('mismatch-score-floater-recovery-lane-map')).toHaveAttribute(
                 'data-mismatch-recovery-lane-actions',
                 'recover:Confirm pair:1>lost:Save cashout:1>chain:Rebuild chain:2'
             );
@@ -3738,6 +3742,10 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('mismatch-score-floater-primary-recovery-lane')).toHaveAttribute(
                 'data-mismatch-recovery-primary-lane-beats',
                 '4'
+            );
+            expect(screen.getByTestId('mismatch-score-floater-primary-recovery-lane')).toHaveAttribute(
+                'data-mismatch-recovery-primary-lane-fill',
+                '100'
             );
             expect(screen.getByTestId('mismatch-score-floater-primary-recovery-lane')).toHaveAttribute(
                 'data-mismatch-recovery-primary-lane-screen-cue',

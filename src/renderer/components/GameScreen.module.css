@@ -15011,6 +15011,25 @@
     max-width: min(17rem, 92vw);
 }
 
+.boardFloaterRecoveryLaneMapMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 4.4rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--mismatch-recovery-lane-map-fill, 0%),
+            color-mix(in srgb, currentColor 18%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+    0 0 0.18rem color-mix(in srgb, currentColor 16%, transparent);
+    opacity: 0.92;
+}
+
 .boardFloaterRecoveryLaneMap > span {
     display: inline-grid;
     grid-template-columns: auto auto;
@@ -15035,6 +15054,44 @@
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), color-mix(in srgb, var(--theme-danger) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 64%, transparent);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, white 5%, transparent);
+}
+
+.boardFloaterRecoveryLaneMap > .boardFloaterRecoveryPrimaryLane::after {
+    content: '';
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.12rem;
+    margin-top: 0.06rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--mismatch-recovery-primary-lane-fill, 0%),
+            color-mix(in srgb, currentColor 18%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+        0 0 0.24rem color-mix(in srgb, currentColor 18%, transparent);
+    opacity: 0.9;
+}
+
+.boardFloaterRecoveryLaneMap > .boardFloaterRecoveryPrimaryLane::after {
+    content: '';
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.12rem;
+    margin-top: 0.06rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--mismatch-recovery-primary-lane-fill, 0%),
+            color-mix(in srgb, currentColor 18%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+        0 0 0.24rem color-mix(in srgb, currentColor 18%, transparent);
+    opacity: 0.9;
 }
 
 .boardFloaterRecoveryLaneMap > .boardFloaterRecoveryPrimaryLane small {
