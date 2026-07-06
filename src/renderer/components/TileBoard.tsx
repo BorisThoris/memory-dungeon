@@ -6240,6 +6240,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 focusedPreviewChip.kind === 'trait' && cardFeedbackTraitPayoffStackActive
                                     ? 'cashout'
                                     : previewDensityTone;
+                            const traitPreviewSignalFill = Math.min(100, Math.round((beatCount / 5) * 100));
                             const traitPreviewMeterFill = previewDensity > 0 ? Math.min(100, Math.round((previewDensity / 4) * 100)) : 0;
                             return (
                                 <div
@@ -6253,10 +6254,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     data-preview-kind={focusedPreviewChip.kind}
                                     data-preview-screen-cue={getFocusedPreviewScreenCue(focusedPreviewChip)}
                                     data-preview-source={focusedPreviewChip.source}
+                                    data-preview-signal-fill={traitPreviewSignalFill}
                                     data-preview-tone={focusedPreviewChip.tone}
                                     data-preview-meter-fill={traitPreviewMeterFill}
                                     data-testid="trait-preview-chip"
                                     role="status"
+                                    style={traitPreviewSignalFill > 0 ? ({ '--trait-preview-signal-fill': `${traitPreviewSignalFill}%` } as CSSProperties) : undefined}
                                 >
                                     <span
                                         className={styles.traitPreviewSummary}
@@ -6304,6 +6307,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             : focusedPreviewChip.kind === 'hazard'
                                               ? 'Risk'
                                               : 'Combo'}
+                                    </span>
+                                    <span aria-hidden="true" className={styles.traitPreviewSignalMeter}>
+                                        <i aria-hidden="true" className={styles.traitPreviewSignalMeterFill} />
                                     </span>
                                     <span aria-hidden="true" className={styles.traitPreviewBeatPips}>
                                         {Array.from({ length: beatCount }, (_, beatIndex) => (

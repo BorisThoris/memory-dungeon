@@ -1055,6 +1055,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '5');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-density', '2');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-density-tone', 'cashout');
+        expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-signal-fill', '100');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-meter-fill', '50');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(5);
         expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-beat="1"]')).toHaveAttribute(
@@ -1070,6 +1071,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('One-away cashout');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Push x6 reward');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Echo + Sealed: combo shard');
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[class*="traitPreviewSignalMeter"]')).toBeTruthy();
         expect(
             screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
         ).toHaveTextContent('Echo + Sealed: combo shard');
