@@ -5251,6 +5251,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         aria-label={boardRewardLeadLabel}
                                         className={styles.chainOpportunityRewardLead}
+                                        data-board-chain-reward-lead-tier={boardChainOpportunity.rewardUrgencyTier ?? 'none'}
                                         data-board-chain-reward-lead-meter-fill={
                                             boardChainOpportunity.rewardUrgencyTier === 'next'
                                                 ? 100
@@ -5279,7 +5280,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             } as CSSProperties
                                         }
                                     >
-                                        <small>Next reward</small>
+                                        <small>
+                                            {boardChainOpportunity.rewardUrgencyTier === 'next'
+                                                ? 'Now'
+                                                : boardChainOpportunity.rewardUrgencyTier === 'soon'
+                                                  ? 'Soon'
+                                                  : boardChainOpportunity.rewardUrgencyTier === 'later'
+                                                    ? 'Later'
+                                                    : 'Next'}
+                                        </small>
                                         <b>{boardRewardLeadEntry.cue.chaseLabel}</b>
                                         <strong>{boardRewardLeadEntry.action}</strong>
                                         <em>{boardRewardLeadEntry.cue.label}</em>

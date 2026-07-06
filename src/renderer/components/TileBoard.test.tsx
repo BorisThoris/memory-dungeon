@@ -606,7 +606,7 @@ describe('TileBoard touch and click controls', () => {
             'data-board-chain-reward-ladder-focus',
             'soon'
         );
-        expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveTextContent('Next reward');
+        expect(screen.getByTestId('chain-opportunity-reward-lead').querySelector('small')).toHaveTextContent('Now');
         expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveTextContent('Prime cashout');
         expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveTextContent('x6 +1 shard');
         expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveAttribute(
@@ -622,9 +622,14 @@ describe('TileBoard touch and click controls', () => {
             'pulse'
         );
         expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveAttribute(
+            'data-board-chain-reward-lead-tier',
+            'next'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveAttribute(
             'data-board-chain-reward-lead-meter-fill',
             '100'
         );
+        expect(screen.getByTestId('chain-opportunity-reward-lead').querySelector('small')).toHaveTextContent('Now');
         expect(
             screen.getByTestId('chain-opportunity-reward-lead').querySelectorAll('[data-board-chain-reward-lead-beat]')
         ).toHaveLength(3);

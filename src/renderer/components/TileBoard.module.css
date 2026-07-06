@@ -4530,6 +4530,27 @@
         0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
 }
 
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='next'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, var(--theme-cyan-bright) 16%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
+        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='soon'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-gold-bright) 18%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
+        0 0 16px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='later'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
+        0 0 12px color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+}
+
 .chainOpportunityRewardLead small,
 .chainOpportunityRewardLead b,
 .chainOpportunityRewardLead strong,
@@ -4547,6 +4568,21 @@
     font-size: 0.46rem;
     font-weight: 920;
     text-transform: uppercase;
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='next'] small {
+    background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    color: color-mix(in srgb, white 90%, var(--theme-gold-bright));
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='soon'] small {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+    color: color-mix(in srgb, white 90%, var(--theme-cyan-bright));
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='later'] small {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+    color: color-mix(in srgb, white 84%, var(--theme-cyan-bright));
 }
 
 .chainOpportunityRewardLead b {
