@@ -6385,6 +6385,29 @@
         color-mix(in srgb, var(--theme-void) 26%, transparent);
 }
 
+.traitPreviewChip[data-preview-density-tone='surge'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-border-cyan) 22%);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.3),
+        0 0 22px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.traitPreviewChip[data-preview-density-tone='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-gold-bright) 28%);
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.32),
+        0 0 28px color-mix(in srgb, var(--theme-violet-bright) 16%, transparent);
+    animation: boardOpportunityPulse 1.16s ease-in-out infinite, boardOpportunityShimmer 2.35s ease-in-out infinite;
+}
+
+.traitPreviewSummary strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    font-size: 0.46rem;
+    font-weight: 940;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
 .traitPreviewSummary small,
 .traitPreviewSummary b,
 .traitPreviewSummary em {

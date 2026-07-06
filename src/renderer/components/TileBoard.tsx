@@ -5748,6 +5748,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                         ) : null}
                         {focusedPreviewChip ? (() => {
                             const beatCount = getFocusedPreviewBeatCount(focusedPreviewChip);
+                            const previewDensity =
+                                focusedPreviewChip.kind === 'trait'
+                                    ? focusedPreviewChip.lines.length
+                                    : focusedPreviewChip.kind === 'pickup'
+                                      ? 1
+                                      : 0;
+                            const previewDensityTone =
+                                previewDensity >= 3
+                                    ? 'cashout'
+                                    : previewDensity === 2
+                                      ? 'surge'
+                                      : previewDensity === 1
+                                        ? 'ready'
+                                        : focusedPreviewChip.tone;
                             return (
                                 <div
                                     aria-label={focusedPreviewChipLabel}
@@ -5755,6 +5769,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     data-preview-action={focusedPreviewChip.action}
                                     data-preview-audio={getFocusedPreviewAudioCue(focusedPreviewChip)}
                                     data-preview-beats={beatCount}
+                                    data-preview-density={previewDensity}
+                                    data-preview-density-tone={previewDensityTone}
                                     data-preview-kind={focusedPreviewChip.kind}
                                     data-preview-screen-cue={getFocusedPreviewScreenCue(focusedPreviewChip)}
                                     data-preview-source={focusedPreviewChip.source}
@@ -5775,6 +5791,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                   ? 'Risk'
                                                   : 'Combo'}
                                         </b>
+                                        {previewDensity > 0 ? (
+                                            <strong>
+                                                {previewDensity} {previewDensity === 1 ? 'route' : 'routes'} lit
+                                            </strong>
+                                        ) : null}
                                         <em>{beatCount} beats</em>
                                         <span aria-hidden="true" className={styles.traitPreviewSummaryBeatPips}>
                                             {Array.from({ length: Math.max(2, Math.min(5, beatCount)) }, (_, beatIndex) => (
