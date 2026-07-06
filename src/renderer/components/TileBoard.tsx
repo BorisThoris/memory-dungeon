@@ -5600,7 +5600,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             } as CSSProperties
                                         }
                                     >
-                                        {boardChainOpportunity.rewardHot ? <small>Payoff</small> : null}
+                                        <small>{boardChainOpportunity.rewardHot ? 'Payoff' : 'Forecast'}</small>
                                         <b>{boardChainOpportunity.rewardCue}</b>
                                         <i aria-hidden="true" className={styles.chainOpportunityRewardMeter}>
                                             <i aria-hidden="true" className={styles.chainOpportunityRewardMeterFill} />
