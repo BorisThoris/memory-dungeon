@@ -1477,6 +1477,15 @@ describe('GameplayHudBar', () => {
             'data-trait-interaction-lane-actions',
             'shard:Cash shard:1'
         );
+        const traitRouteLaneMapSummary = screen.getByTestId('hud-trait-route-lane-map-summary');
+        expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-count', '1');
+        expect(traitRouteLaneMapSummary).toHaveTextContent('Trait lanes');
+        expect(traitRouteLaneMapSummary).toHaveTextContent('1 lane');
+        expect(traitRouteLaneMapSummary).toHaveTextContent('Shard leads');
+        expect(traitRouteLaneMapSummary.querySelectorAll('[data-trait-interaction-lane-summary-beat]')).toHaveLength(2);
+        expect(
+            traitRouteLaneMapSummary.querySelector('[data-trait-interaction-lane-summary-beat="1"]')
+        ).toHaveAttribute('data-trait-interaction-lane-summary-beat-focus', 'primary');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAccessibleName(
             'Trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard.'
         );

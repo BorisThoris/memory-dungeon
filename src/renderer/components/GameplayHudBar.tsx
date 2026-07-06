@@ -1385,6 +1385,7 @@ const GameplayHudBar = ({
         'Trait interaction lanes',
         traitOpportunityLaneMap
     );
+    const primaryTraitOpportunityLane = traitOpportunityLaneMap[0] ?? null;
     const traitRouteObjectiveStatus = getTraitRouteObjectiveStatus(run);
     const traitRouteActionBeatCount = traitRouteObjectiveStatus
         ? hudTraitRouteActionBeatCount(traitRouteObjectiveStatus.urgency)
@@ -2346,6 +2347,44 @@ const GameplayHudBar = ({
                                                 data-trait-interaction-lane-actions={traitOpportunityLaneActionMapAttr}
                                                 data-trait-interaction-lane-map={traitOpportunityLaneMapAttr}
                                             >
+                                                <span
+                                                    className={styles.hudTraitRouteLaneMapSummary}
+                                                    data-trait-interaction-lane-count={traitOpportunityLaneMap.length}
+                                                    data-testid="hud-trait-route-lane-map-summary"
+                                                >
+                                                    <small>Trait lanes</small>
+                                                    <b>
+                                                        {traitOpportunityLaneMap.length}{' '}
+                                                        {traitOpportunityLaneMap.length === 1 ? 'lane' : 'lanes'}
+                                                    </b>
+                                                    <span className={styles.hudTraitRouteLaneMapSummaryLead}>
+                                                        {primaryTraitOpportunityLane
+                                                            ? `${primaryTraitOpportunityLane.label} leads`
+                                                            : 'No lead lane'}
+                                                    </span>
+                                                    <span
+                                                        aria-hidden="true"
+                                                        className={styles.hudTraitRouteLaneMapSummaryBeatPips}
+                                                    >
+                                                        {Array.from(
+                                                            {
+                                                                length: Math.max(
+                                                                    2,
+                                                                    Math.min(5, traitOpportunityLaneMap.length + 1)
+                                                                )
+                                                            },
+                                                            (_, beatIndex) => (
+                                                                <i
+                                                                    data-trait-interaction-lane-summary-beat={beatIndex + 1}
+                                                                    data-trait-interaction-lane-summary-beat-focus={
+                                                                        beatIndex === 0 ? 'primary' : 'support'
+                                                                    }
+                                                                    key={beatIndex}
+                                                                />
+                                                            )
+                                                        )}
+                                                    </span>
+                                                </span>
                                                 {traitOpportunityLaneMap.map((lane) => (
                                                     <span data-trait-interaction-lane={lane.id} key={lane.id}>
                                                         <small>{lane.label}</small>
