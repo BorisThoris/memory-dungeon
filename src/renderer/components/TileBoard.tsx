@@ -2679,6 +2679,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardBestOpportunity = boardOpportunityCompassRows[0] ?? null;
     const boardBestOpportunityHeat = boardBestOpportunity ? getBoardOpportunityHeat(boardBestOpportunity.impactCue) : 'none';
     const boardBestOpportunityBeatCount = boardBestOpportunity ? getBoardOpportunityBeatCount(boardBestOpportunity) : 0;
+    const boardOpportunityCompassMeterFill = Math.round(
+        Math.min(100, ((boardOpportunityCompassRows.length + boardBestOpportunityBeatCount) / 10) * 100)
+    );
     const boardOpportunityCompassLabel =
         boardOpportunityCompassRows.length > 0
             ? `Board opportunity compass. ${boardOpportunityCompassRows
@@ -5636,6 +5639,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         )}
                                     </span>
                                 </span>
+                                <i
+                                    aria-hidden="true"
+                                    className={styles.opportunityCompassMeter}
+                                    data-opportunity-compass-meter-fill={boardOpportunityCompassMeterFill}
+                                    data-testid="board-opportunity-compass-meter"
+                                    style={
+                                        {
+                                            '--opportunity-compass-meter-fill': `${boardOpportunityCompassMeterFill}%`
+                                        } as CSSProperties
+                                    }
+                                >
+                                    <i aria-hidden="true" className={styles.opportunityCompassMeterFill} />
+                                </i>
                                 {boardPayoffStack ? (
                                     <span
                                         aria-label={`Board payoff stack. ${boardPayoffStack.cue}. ${boardPayoffStack.action}. ${boardPayoffStack.value}. ${boardPayoffStack.detail}. Crescendo: ${boardPayoffStack.crescendo.label}. ${boardPayoffStack.crescendo.detail}. ${boardPayoffStack.crescendo.beatCount} beats. ${boardPayoffStack.nextCue}.${

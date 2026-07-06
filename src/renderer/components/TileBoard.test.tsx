@@ -935,6 +935,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Best');
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('Compass');
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('2 plays');
+        expect(screen.getByTestId('board-opportunity-compass-meter')).toHaveAttribute('data-opportunity-compass-meter-fill', '70');
         expect(screen.getByTestId('board-opportunity-compass-summary').querySelectorAll('[data-opportunity-compass-summary-beat]')).toHaveLength(3);
         expect(
             screen.getByTestId('board-opportunity-compass-summary').querySelector('[data-opportunity-compass-summary-beat="1"]')
