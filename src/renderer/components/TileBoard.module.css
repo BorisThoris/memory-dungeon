@@ -6527,8 +6527,37 @@
     opacity: 0.7;
 }
 
+.opportunityPayoffStack [data-payoff-stack-sequence-step] {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0.08rem 0.24rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-void) 18%, transparent);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.opportunityPayoffStack [data-payoff-stack-sequence-step='first'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+}
+
 .opportunityPayoffStack [data-payoff-stack-sequence-step='then'] {
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
+.opportunityPayoffStack [data-payoff-stack-sequence-step='keep'] {
+    border-color: color-mix(in srgb, var(--theme-green-bright) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-green-bright) 8%, transparent);
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='cashout'] [data-payoff-stack-sequence-step='first'],
+.opportunityPayoffStack[data-payoff-stack-crescendo-tier='super'] [data-payoff-stack-sequence-step='first'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
 }
 
 .opportunityPayoffStack[data-payoff-stack-tone='cashout'] [data-payoff-stack-sequence-step='then'],
@@ -6549,6 +6578,12 @@
     box-shadow:
         0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
         0 0 1rem color-mix(in srgb, var(--theme-violet-bright) 10%, transparent);
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='cashout'] [data-payoff-stack-sequence-step='keep'],
+.opportunityPayoffStack[data-payoff-stack-crescendo-tier='super'] [data-payoff-stack-sequence-step='keep'] {
+    border-color: color-mix(in srgb, var(--theme-green-bright) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-green-bright) 88%, white);
 }
 
 .opportunityLaneMap {
