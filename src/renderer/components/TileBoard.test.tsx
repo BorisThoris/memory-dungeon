@@ -2311,6 +2311,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('4 cards lit');
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('5 routes ready');
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('Match now');
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAttribute(
+            'data-chain-surge-band-meter-fill',
+            '100'
+        );
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAccessibleName(
             /Chain surge band\. Combo surge\. 4 cards lit\. 5 routes ready\. Match now\./
         );

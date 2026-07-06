@@ -4552,6 +4552,33 @@
     font-weight: 840;
 }
 
+.chainOpportunitySurgeBandMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.18rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunitySurgeBandMeterFill {
+    display: block;
+    width: var(--chain-surge-band-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 84%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .chainOpportunitySurgeBandBeatPips {
     display: flex;
     grid-column: 1 / -1;

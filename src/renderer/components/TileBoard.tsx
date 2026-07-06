@@ -2891,6 +2891,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                       : `${boardChainOpportunity.chainReadyTileCount} cards lit`
           }
         : null;
+    const boardChainSurgeBandMeterFill = boardChainSurgeBand
+        ? Math.round(Math.min(100, (boardChainOpportunity.chainReadyCount / 5) * 100))
+        : 0;
     const boardChainSurgeBandLabel = boardChainSurgeBand
         ? formatBoardFeedbackLabel('Chain surge band', [
               boardChainSurgeBand.label,
@@ -5442,6 +5445,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={boardChainSurgeBandLabel}
                                         className={styles.chainOpportunitySurgeBand}
                                         data-chain-surge-band-tone={boardChainSurgeBand.tone}
+                                        data-chain-surge-band-meter-fill={boardChainSurgeBandMeterFill}
                                         data-testid="chain-opportunity-surge-band"
                                         role="status"
                                     >
@@ -5449,6 +5453,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <b>{boardChainSurgeBand.value}</b>
                                         <em>{boardChainSurgeBand.detail}</em>
                                         <i>{boardChainSurgeBand.cue}</i>
+                                        <i aria-hidden="true" className={styles.chainOpportunitySurgeBandMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunitySurgeBandMeterFill} />
+                                        </i>
                                         <span aria-hidden="true" className={styles.chainOpportunitySurgeBandBeatPips}>
                                             {Array.from({ length: 4 }, (_, index) => (
                                                 <i
