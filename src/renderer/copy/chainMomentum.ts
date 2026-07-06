@@ -128,6 +128,14 @@ export const getChainMilestonePreview = (streak: number): ChainMilestonePreview 
     };
 };
 
+export const getChainMilestoneBeatCount = (streak: number): 1 | 2 | 3 | 4 => {
+    const preview = getChainMilestonePreview(streak);
+    if (preview.tone === 'combo') {
+        return 4;
+    }
+    return Math.max(1, Math.min(4, preview.distance)) as 1 | 2 | 3 | 4;
+};
+
 const nextMultipleAfter = (streak: number, step: number): number => {
     const safeStreak = Math.max(0, Math.floor(Number.isFinite(streak) ? streak : 0));
     return Math.max(step, Math.ceil((safeStreak + 1) / step) * step);

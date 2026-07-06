@@ -26,6 +26,7 @@ import {
 } from '../../shared/trait-opportunities';
 import {
     getChainMilestonePreview,
+    getChainMilestoneBeatCount,
     getChainRewardForecastCues,
     getChainRewardLaneAction,
     getChainRewardProgress,
@@ -1777,6 +1778,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         milestoneTargetLabel: string | null;
         milestoneTone: string | null;
         milestoneMeterFill: number;
+        milestoneBeatCount: number;
     } => {
         if (runStatus !== 'playing') {
             return {
@@ -1816,7 +1818,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 milestoneActionLabel: null,
                 milestoneTargetLabel: null,
                 milestoneTone: null,
-                milestoneMeterFill: 0
+                milestoneMeterFill: 0,
+                milestoneBeatCount: 0
             };
         }
 
@@ -2077,6 +2080,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             milestoneActionLabel: milestonePreview?.actionLabel ?? null,
             milestoneTargetLabel,
             milestoneTone: milestonePreview?.tone ?? null,
+            milestoneBeatCount: chainContext ? getChainMilestoneBeatCount(chainContext.currentStreak) : 0,
             milestoneMeterFill: milestonePreview
                 ? Math.max(
                       0,
@@ -5380,12 +5384,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <span aria-hidden="true" className={styles.chainOpportunityMilestoneBeatPips}>
                                             {Array.from(
                                                 {
-                                                    length:
-                                                        boardChainOpportunity.milestoneTone === 'combo'
-                                                            ? 4
-                                                            : boardChainOpportunity.milestoneTone === 'surge'
-                                                              ? 3
-                                                              : 2
+                                                    length: boardChainOpportunity.milestoneBeatCount
                                                 },
                                                 (_, index) => (
                                                     <i

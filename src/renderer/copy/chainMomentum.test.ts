@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     getChainMilestonePreview,
+    getChainMilestoneBeatCount,
     getChainMomentumCue,
     getChainMomentumLabel,
     getChainRewardProgress,
@@ -66,6 +67,14 @@ describe('chainMomentum copy helpers', () => {
             target: 'x10',
             tone: 'combo'
         });
+    });
+
+    it('maps milestone distance into readable beat counts', () => {
+        expect(getChainMilestoneBeatCount(0)).toBe(3);
+        expect(getChainMilestoneBeatCount(2)).toBe(1);
+        expect(getChainMilestoneBeatCount(5)).toBe(1);
+        expect(getChainMilestoneBeatCount(7)).toBe(3);
+        expect(getChainMilestoneBeatCount(10)).toBe(4);
     });
 
     it('forecasts the next real chain reward thresholds', () => {

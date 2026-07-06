@@ -2964,7 +2964,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-milestone')).toHaveAttribute('data-chain-milestone-tone', 'building');
         expect(screen.getByTestId('chain-opportunity-milestone')).toHaveAttribute('data-chain-milestone-meter-fill', '67');
         expect(screen.getByTestId('chain-opportunity-milestone-meter')).toBeInTheDocument();
-        expect(screen.getByTestId('chain-opportunity-milestone').querySelectorAll('[data-chain-milestone-beat]')).toHaveLength(2);
+        expect(screen.getByTestId('chain-opportunity-milestone').querySelectorAll('[data-chain-milestone-beat]')).toHaveLength(1);
         expect(
             screen.getByTestId('chain-opportunity-milestone').querySelector('[data-chain-milestone-beat="1"]')
         ).toHaveAttribute('data-chain-milestone-beat-focus', 'primary');
