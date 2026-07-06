@@ -2322,6 +2322,15 @@ const GameplayHudBar = ({
                                     >
                                         <span className={styles.statKey}>Hazards</span>
                                         <span className={styles.statVal}>{hazardTileSummary.totalHazardTiles}</span>
+                                        <span className={styles.statSubline}>
+                                            {hazardTileSummary.rows.length > 0
+                                                ? `${hazardTileSummary.rows[0].label} x${hazardTileSummary.rows[0].count}${
+                                                      hazardTileSummary.rows.length > 1
+                                                          ? ` + ${hazardTileSummary.rows.length - 1} more`
+                                                          : ''
+                                                  }`
+                                                : hazardTileSummary.hudLabel}
+                                        </span>
                                     </div>
                                 ) : null}
                                 {traitOpportunityHud.active ? (

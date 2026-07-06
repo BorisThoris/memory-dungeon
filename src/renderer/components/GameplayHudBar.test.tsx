@@ -1384,6 +1384,7 @@ describe('GameplayHudBar', () => {
         );
 
         expect(screen.getByTestId('hud-hazard-tiles')).toHaveTextContent('2');
+        expect(screen.getByTestId('hud-hazard-tiles')).toHaveTextContent('Shuffle Snare x2');
         expect(screen.getByTestId('hud-hazard-tiles').getAttribute('title')).toContain('Shuffle Snare x2');
         expect(screen.getByTestId('hud-hazard-tiles').getAttribute('title')).toContain('reshuffles safe hidden tiles');
     });
