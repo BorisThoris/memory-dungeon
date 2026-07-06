@@ -5588,6 +5588,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-reward-beats={boardChainOpportunity.rewardHot ? 5 : 3}
                                         data-chain-reward-hot={boardChainOpportunity.rewardHot ? 'true' : 'false'}
                                         data-chain-reward-meter-fill={boardChainOpportunity.rewardHot ? 100 : 60}
+                                        data-chain-reward-target={boardChainOpportunity.rewardHot ? 'cashout-now' : 'cashout-build'}
                                         data-chain-reward-screen-cue={
                                             boardChainOpportunity.rewardHot ? 'super' : 'pulse'
                                         }
@@ -5604,6 +5605,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>{boardChainOpportunity.rewardHot ? 'Payoff' : 'Forecast'}</small>
                                         <b>{boardChainOpportunity.rewardCue}</b>
+                                        <em>{boardChainOpportunity.rewardHot ? 'Cash in now' : 'Build toward cashout'}</em>
                                         <i aria-hidden="true" className={styles.chainOpportunityRewardMeter}>
                                             <i aria-hidden="true" className={styles.chainOpportunityRewardMeterFill} />
                                         </i>

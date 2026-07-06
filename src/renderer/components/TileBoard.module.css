@@ -4785,9 +4785,29 @@
     text-transform: uppercase;
 }
 
+.chainOpportunityRewardCue em,
+.chainOpportunityPayoffBurst em {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
+    font-size: 0.44rem;
+    font-style: normal;
+    font-weight: 840;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
 .chainOpportunityRewardCue[data-chain-reward-tone='forecast'] small {
     background: color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.chainOpportunityRewardCue[data-chain-reward-tone='forecast'] em {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+}
+
+.chainOpportunityRewardCue[data-chain-reward-tone='cashout'] em,
+.chainOpportunityPayoffBurst em {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
 }
 
 .chainOpportunityRewardCueBeatPips {
