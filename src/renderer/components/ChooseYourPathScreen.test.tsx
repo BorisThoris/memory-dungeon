@@ -163,6 +163,20 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-beats', '4');
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-cue', 'Escalating floors');
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-screen-cue', 'burst');
+        const classicLaneMapSummary = screen.getByTestId('choose-path-mode-lane-map-summary-classic-launch');
+        expect(classicLaneMapSummary).toHaveAttribute('data-mode-lane-count', '3');
+        expect(classicLaneMapSummary).toHaveTextContent('Lanes');
+        expect(classicLaneMapSummary).toHaveTextContent('3 lanes');
+        expect(classicLaneMapSummary).toHaveTextContent('Chain leads');
+        expect(classicLaneMapSummary.querySelectorAll('[data-mode-lane-map-summary-beat]')).toHaveLength(4);
+        expect(classicLaneMapSummary.querySelector('[data-mode-lane-map-summary-beat="1"]')).toHaveAttribute(
+            'data-mode-lane-map-summary-beat-focus',
+            'chain'
+        );
+        expect(classicLaneMapSummary.querySelector('[data-mode-lane-map-summary-beat="2"]')).toHaveAttribute(
+            'data-mode-lane-map-summary-beat-focus',
+            'support'
+        );
         expect(classicLaneMap).toHaveTextContent('Chain');
         expect(classicLaneMap).toHaveTextContent('Build chain');
         expect(classicLaneMap).toHaveTextContent('Escalating floors');

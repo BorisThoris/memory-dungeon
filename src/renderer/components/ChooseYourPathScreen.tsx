@@ -755,6 +755,28 @@ const ChooseYourPathScreen = () => {
                         data-mode-primary-lane-screen-cue={primaryModeLane ? modeChoiceLaneScreenCue(primaryModeLane) : 'none'}
                         data-testid={`choose-path-mode-lane-map-${def.id}-${placement}`}
                     >
+                        <i
+                            className={styles.modeLaneMapSummary}
+                            data-mode-lane-count={laneMap.length}
+                            data-testid={`choose-path-mode-lane-map-summary-${def.id}-${placement}`}
+                        >
+                            <small>Lanes</small>
+                            <strong>
+                                {laneMap.length} {laneMap.length === 1 ? 'lane' : 'lanes'}
+                            </strong>
+                            <b>{primaryModeLane ? `${primaryModeLane.label} leads` : 'No lead lane'}</b>
+                            <span aria-hidden="true" className={styles.modeLaneMapSummaryBeatPips}>
+                                {Array.from({ length: Math.max(2, Math.min(5, laneMap.length + 1)) }, (_, beatIndex) => (
+                                    <s
+                                        data-mode-lane-map-summary-beat={beatIndex + 1}
+                                        data-mode-lane-map-summary-beat-focus={
+                                            beatIndex === 0 ? primaryModeLane?.id ?? 'none' : 'support'
+                                        }
+                                        key={beatIndex}
+                                    />
+                                ))}
+                            </span>
+                        </i>
                         {primaryModeLane ? (
                             <i
                                 aria-label={`Primary mode lane. ${primaryModeLane.label}: ${modeChoiceLaneAction(primaryModeLane)}. ${primaryModeLane.cue}. ${modeChoiceLaneBeatCount(primaryModeLane)} beats.`}

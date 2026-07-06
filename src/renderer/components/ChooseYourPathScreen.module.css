@@ -507,6 +507,70 @@
     font-style: normal;
 }
 
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary {
+    grid-column: 1 / -1;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    min-height: 2rem;
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 60%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary strong {
+    justify-self: start;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+    font-size: 0.64rem;
+    text-transform: uppercase;
+}
+
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary b {
+    grid-column: auto;
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    font-size: 0.54rem;
+}
+
+.modeLaneMapSummaryBeatPips {
+    display: inline-grid;
+    grid-auto-columns: minmax(0.34rem, 1fr);
+    grid-auto-flow: column;
+    gap: 0.1rem;
+    justify-self: end;
+    width: min(4rem, 100%);
+}
+
+.modeLaneMapSummaryBeatPips s {
+    height: 0.16rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 74%, white 8%);
+    animation: modeSignalPulse 0.86s ease-in-out infinite;
+    text-decoration: none;
+}
+
+.modeLaneMapSummaryBeatPips s[data-mode-lane-map-summary-beat-focus='support'] {
+    height: 0.1rem;
+    align-self: center;
+    background: color-mix(in srgb, var(--theme-gold-bright) 72%, white 8%);
+    opacity: 0.82;
+}
+
+.modeLaneMapSummaryBeatPips s:nth-child(2) {
+    animation-delay: 0.08s;
+}
+
+.modeLaneMapSummaryBeatPips s:nth-child(3) {
+    animation-delay: 0.16s;
+}
+
+.modeLaneMapSummaryBeatPips s:nth-child(4) {
+    animation-delay: 0.24s;
+}
+
+.modeLaneMapSummaryBeatPips s:nth-child(5) {
+    animation-delay: 0.32s;
+}
+
 .modeSignalStrip .modeLaneMap .modePrimaryLaneCue {
     grid-column: 1 / -1;
     grid-template-columns: auto minmax(0, 1fr);
@@ -1903,6 +1967,10 @@
 }
 
 :global([data-reduce-motion='true']) .modePrimaryLaneBeatPips s {
+    animation: none;
+}
+
+:global([data-reduce-motion='true']) .modeLaneMapSummaryBeatPips s {
     animation: none;
 }
 
