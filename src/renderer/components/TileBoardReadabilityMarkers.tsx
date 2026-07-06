@@ -1351,10 +1351,17 @@ export const TileBoardReadabilityMarkers = ({
                             scale={[traitReadabilityScale, traitReadabilityScale, 1]}
                         >
                             <ReadabilityMaterialMesh
+                                color="#332409"
+                                geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
+                                opacity={Math.max(0.74, traitReadabilityOpacity - 0.16)}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+                                scale={[1.18, 1.28, 1]}
+                            />
+                            <ReadabilityMaterialMesh
                                 color="#fff7c4"
                                 geometry={BOARD_READABILITY_BAR_GEOMETRY}
-                                opacity={Math.max(0.94, traitReadabilityOpacity)}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
+                                opacity={Math.max(0.96, traitReadabilityOpacity)}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
                                 scale={[0.72, 0.9, 1]}
                             />
                             <ReadabilityMaterialMesh
@@ -1362,7 +1369,7 @@ export const TileBoardReadabilityMarkers = ({
                                 geometry={BOARD_READABILITY_LARGE_PIP_GEOMETRY}
                                 opacity={0.98}
                                 position={[0, 0.001, 0.00006]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 11}
                                 scale={[0.72, 0.72, 1]}
                             />
                             <ReadabilityMaterialMesh
@@ -1370,7 +1377,7 @@ export const TileBoardReadabilityMarkers = ({
                                 geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
                                 opacity={0.96}
                                 position={[-0.055, 0.04, 0.00008]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 11}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
                                 rotation={[0, 0, Math.PI / 4]}
                                 scale={[0.7, 0.86, 1]}
                             />
@@ -1379,7 +1386,7 @@ export const TileBoardReadabilityMarkers = ({
                                 geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
                                 opacity={0.96}
                                 position={[0.055, 0.04, 0.00009]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 11}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
                                 rotation={[0, 0, -Math.PI / 4]}
                                 scale={[0.7, 0.86, 1]}
                             />
@@ -1389,7 +1396,7 @@ export const TileBoardReadabilityMarkers = ({
                                 keyPrefix={`trait-payoff-${tile.id}`}
                                 opacity={0.98}
                                 positionY={-0.047}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 13}
                                 supportColor="#5ee0c8"
                             />
                         </group>
