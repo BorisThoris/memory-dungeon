@@ -1288,6 +1288,12 @@ describe('GameplayHudBar', () => {
             'data-chain-reward-lane-action',
             'Hold streak'
         );
+        expect(screen.getByTestId('hud-chain-reward-lead')).toHaveTextContent('Next');
+        expect(screen.getByTestId('hud-chain-reward-lead')).toHaveTextContent('Hit now');
+        expect(screen.getByTestId('hud-chain-reward-lead')).toHaveTextContent('x4 +1 shard');
+        expect(screen.getByTestId('hud-chain-reward-lead')).toHaveAttribute('data-chain-reward-lead-tone', 'reward');
+        expect(screen.getByTestId('hud-chain-reward-lead')).toHaveAttribute('data-chain-reward-lead-action', 'Cash next');
+        expect(screen.getByTestId('hud-chain-reward-lead')).toHaveAttribute('data-chain-reward-lead-screen-cue', 'burst');
         expect(screen.getByTestId('hud-primary-reward-cue')).toHaveTextContent('x4 +1 shard');
         expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-beats', '4');
         expect(screen.getByTestId('hud-primary-reward-cue').querySelectorAll('[data-primary-reward-beat]')).toHaveLength(4);

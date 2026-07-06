@@ -1569,6 +1569,8 @@ const GameplayHudBar = ({
             };
         })
     );
+    const chainRewardLeadCue = chainRewardForecastCues[0] ?? null;
+    const chainRewardLeadStackLabel = chainRewardLeadCue ? getChainRewardStackLabel(chainRewardLeadCue) : null;
     const chainRewardLaneMap = hudChainRewardLaneMap(chainRewardForecastCues);
     const primaryChainRewardLane = chainRewardLaneMap[0] ?? null;
     const primaryChainRewardLaneCue = primaryChainRewardLane
@@ -2693,6 +2695,23 @@ const GameplayHudBar = ({
                                                         )}
                                                     </span>
                                                 </span>
+                                                {chainRewardLeadCue ? (
+                                                    <span
+                                                        data-chain-reward-lead-action={getChainRewardLaneAction(chainRewardLeadCue.urgency)}
+                                                        data-chain-reward-lead-audio={hudChainRewardAudioCue(chainRewardLeadCue)}
+                                                        data-chain-reward-lead-screen-cue={hudChainRewardScreenCue(chainRewardLeadCue)}
+                                                        data-chain-reward-lead-stack-size={chainRewardLeadCue.stackSize ?? 1}
+                                                        data-chain-reward-lead-tone={chainRewardLeadCue.tone}
+                                                        data-testid="hud-chain-reward-lead"
+                                                    >
+                                                        <small>Next reward</small>
+                                                        <strong>{chainRewardLeadCue.chaseLabel}</strong>
+                                                        <b>{getChainRewardLaneAction(chainRewardLeadCue.urgency)}</b>
+                                                        <em>{chainRewardLeadCue.label}</em>
+                                                        <small>{getChainRewardUrgencyCopy(chainRewardLeadCue)}</small>
+                                                        {chainRewardLeadStackLabel ? <i>{chainRewardLeadStackLabel}</i> : null}
+                                                    </span>
+                                                ) : null}
                                                 {chainRewardLaneMap.length > 1 ? (
                                                     <span
                                                         aria-label={chainRewardLaneMapAccessibleLabel}
