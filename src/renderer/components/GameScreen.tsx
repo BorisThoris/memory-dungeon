@@ -4798,12 +4798,26 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             data-chain-streak-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             key={`board-streak-beat-${index + 1}`}
                                                         />
-                                                    )
-                                                )}
-                                            </span>
-                                            <span>x{boardFloaterPayload.chainDepth} streak</span>
+                                                )
+                                            )}
+                                        </span>
+                                            <span className={styles.boardFloaterStreakText}>x{boardFloaterPayload.chainDepth} streak</span>
                                             {boardFloaterChainCue ? (
                                                 <span className={styles.boardFloaterStreakCue}>
+                                                    <span aria-hidden="true" className={styles.boardFloaterStreakCuePips}>
+                                                        {Array.from(
+                                                            { length: Math.min(5, Math.max(2, boardFloaterPayload.chainDepth)) },
+                                                            (_, index) => (
+                                                                <i
+                                                                    data-chain-streak-cue-beat={index + 1}
+                                                                    data-chain-streak-cue-beat-focus={
+                                                                        index === 0 ? 'primary' : 'support'
+                                                                    }
+                                                                    key={`board-streak-cue-beat-${index + 1}`}
+                                                                />
+                                                            )
+                                                        )}
+                                                    </span>
                                                     {boardFloaterChainCue}
                                                 </span>
                                             ) : null}

@@ -12653,6 +12653,10 @@
     text-transform: uppercase;
 }
 
+.boardFloaterStreakText {
+    white-space: nowrap;
+}
+
 .boardFloaterStreakPips {
     display: inline-grid;
     grid-auto-flow: column;
@@ -12678,10 +12682,37 @@
 }
 
 .boardFloaterStreakCue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.12rem;
     padding-left: 0.34rem;
     border-left: 1px solid color-mix(in srgb, currentColor 34%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
     white-space: nowrap;
+}
+
+.boardFloaterStreakCuePips {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0.14rem, 1fr);
+    gap: 0.04rem;
+    min-width: 0.72rem;
+    color: currentColor;
+}
+
+.boardFloaterStreakCuePips i {
+    display: block;
+    width: 0.12rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 0 0.2rem color-mix(in srgb, currentColor 28%, transparent);
+    animation: matchScoreFloaterPulse 0.9s ease-in-out infinite;
+    opacity: 0.88;
+}
+
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-focus='support'] {
+    opacity: 0.62;
 }
 
 .boardFloaterChainMilestone {
