@@ -8291,10 +8291,36 @@
 }
 
 .hudRewardPerkStrip {
+    position: relative;
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, var(--theme-hud-chrome-border-soft));
     background:
         radial-gradient(ellipse 88% 140% at 52% 0%, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 68%),
         color-mix(in srgb, var(--theme-void) 34%, transparent);
+}
+
+.hudRewardPerkMeter {
+    position: relative;
+    display: block;
+    grid-column: 1 / -1;
+    height: 0.22rem;
+    margin-top: 0.04rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 24%, var(--theme-border-strong));
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 44%, transparent);
+}
+
+.hudRewardPerkMeterFill {
+    display: block;
+    width: var(--reward-perk-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 82%, white), color-mix(in srgb, var(--theme-cyan-bright) 78%, white));
+    box-shadow: 0 0 0.38rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+    transition: width 140ms ease-out;
 }
 
 .hudRewardPerkRows {

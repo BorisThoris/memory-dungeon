@@ -1583,6 +1583,7 @@ describe('GameplayHudBar', () => {
         const perkStrip = screen.getByTestId('hud-reward-perk-strip');
         expect(perkStrip).toHaveTextContent('Perks');
         expect(perkStrip).toHaveTextContent('2');
+        expect(perkStrip).toHaveAttribute('data-reward-perk-meter-fill', '50');
         expect(perkStrip).toHaveAttribute('data-reward-perk-focus-action', 'Cash perk');
         expect(perkStrip).toHaveAttribute('data-reward-perk-focus-id', 'trait_streak_toolkit');
         expect(perkStrip).toHaveAttribute('data-reward-perk-focus-lane', 'Chain reward');

@@ -1363,6 +1363,14 @@ const GameplayHudBar = ({
     const rewardPerkBeatCue = getHudRewardPerkBeatCue(rewardPerkFocus);
     const rewardPerkBeatAudioCue = hudRewardPerkBeatAudioCue(rewardPerkBeatCue);
     const rewardPerkBeatScreenCue = hudRewardPerkBeatScreenCue(rewardPerkBeatCue);
+    const rewardPerkMeterFill =
+        rewardPerkRows.length > 0
+            ? Math.round(
+                  (rewardPerkRows.filter((row) => row.readiness === 'armed' || row.readiness === 'soon').length /
+                      rewardPerkRows.length) *
+                      100
+              )
+            : 0;
     const rewardPerkRowsLabel = formatHudPerkRowsLabel('Active perk payoff signals', rewardPerkRows);
     const rewardPerkLaneMap = getHudRewardPerkLaneMap(rewardPerkRows);
     const rewardPerkLaneMapAttr = formatHudRewardPerkLaneMapAttr(rewardPerkLaneMap);
@@ -2158,12 +2166,23 @@ const GameplayHudBar = ({
                                         data-reward-perk-focus-readiness={rewardPerkFocus?.tone ?? 'none'}
                                         data-reward-perk-lane-actions={rewardPerkLaneActionMapAttr}
                                         data-reward-perk-lane-map={rewardPerkLaneMapAttr}
+                                        data-reward-perk-meter-fill={rewardPerkMeterFill}
                                         data-testid="hud-reward-perk-strip"
                                         title={rewardPerkRows.map((row) => `${row.label}: ${row.nextCue}`).join(' ')}
                                     >
                                         <span className={styles.statKey}>Perks</span>
                                         <span className={styles.statVal}>{rewardPerkRows.length}</span>
                                         <span className={styles.statSubline}>{rewardPerkRows[0]?.lane}</span>
+                                        <span
+                                            aria-hidden="true"
+                                            className={styles.hudRewardPerkMeter}
+                                            data-reward-perk-meter-fill={rewardPerkMeterFill}
+                                        >
+                                            <i
+                                                className={styles.hudRewardPerkMeterFill}
+                                                style={{ '--reward-perk-meter-fill': `${rewardPerkMeterFill}%` } as CSSProperties}
+                                            />
+                                        </span>
                                         {rewardPerkFocus ? (
                                             <span
                                                 aria-label={`Primary perk payoff. ${rewardPerkFocus.action}: ${rewardPerkFocus.row.lane}. ${rewardPerkFocus.row.payoff}. ${rewardPerkFocus.row.readinessLabel}. ${sentenceWithPeriod(rewardPerkFocus.row.nextCue)}`}
