@@ -2260,6 +2260,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Perk armed');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Trait cashout armed');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('x3 trait flash');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-perk-armed="true"]')).toHaveAttribute(
+            'data-chain-armed-perk-meter-fill',
+            '100'
+        );
         expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-armed-perk-beat]')).toHaveLength(4);
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-armed-perk-beat="1"]')

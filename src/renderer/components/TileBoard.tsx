@@ -5305,12 +5305,29 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.armedPerkLabel ? (
-                                    <span className={styles.chainOpportunityArmedPerk} data-chain-perk-armed="true">
+                                    <span
+                                        className={styles.chainOpportunityArmedPerk}
+                                        data-chain-armed-perk-meter-fill={boardChainOpportunity.armedPerkPayoff ? 100 : 70}
+                                        data-chain-perk-armed="true"
+                                    >
                                         <small>Perk armed</small>
                                         <b>{boardChainOpportunity.armedPerkLabel}</b>
                                         {boardChainOpportunity.armedPerkPayoff ? (
                                             <em>{boardChainOpportunity.armedPerkPayoff}</em>
                                         ) : null}
+                                        <i
+                                            aria-hidden="true"
+                                            className={styles.chainOpportunityArmedPerkMeter}
+                                            style={
+                                                {
+                                                    '--chain-armed-perk-meter-fill': `${
+                                                        boardChainOpportunity.armedPerkPayoff ? 100 : 70
+                                                    }%`
+                                                } as CSSProperties
+                                            }
+                                        >
+                                            <i aria-hidden="true" className={styles.chainOpportunityArmedPerkMeterFill} />
+                                        </i>
                                         <span aria-hidden="true" className={styles.chainOpportunityArmedPerkBeatPips}>
                                             {Array.from({ length: boardChainOpportunity.armedPerkPayoff ? 4 : 3 }, (_, index) => (
                                                 <i
