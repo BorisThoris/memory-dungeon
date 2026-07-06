@@ -5210,23 +5210,68 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 )}
                                             </span>
                                         </span>
-                                        {boardRewardLeadEntry ? (
-                                            <span
-                                                aria-label={boardRewardLeadLabel}
-                                                data-board-chain-reward-lead-action={boardRewardLeadEntry.action}
-                                                data-board-chain-reward-lead-audio={boardChainRewardAudioCue(boardRewardLeadEntry)}
-                                                data-board-chain-reward-lead-screen-cue={boardChainRewardScreenCue(boardRewardLeadEntry)}
-                                                data-board-chain-reward-lead-tone={boardRewardLeadEntry.cue.tone}
-                                                data-testid="chain-opportunity-reward-lead"
-                                            >
-                                                <small>Next reward</small>
-                                                <b>{boardRewardLeadEntry.cue.chaseLabel}</b>
-                                                <strong>{boardRewardLeadEntry.action}</strong>
-                                                <em>{boardRewardLeadEntry.cue.label}</em>
-                                                <i>{boardRewardLeadEntry.progressLabel}</i>
-                                                <small>{boardRewardLeadEntry.remainingLabel}</small>
-                                            </span>
-                                        ) : null}
+                                {boardRewardLeadEntry ? (
+                                    <span
+                                        aria-label={boardRewardLeadLabel}
+                                        className={styles.chainOpportunityRewardLead}
+                                        data-board-chain-reward-lead-meter-fill={
+                                            boardChainOpportunity.rewardUrgencyTier === 'next'
+                                                ? 100
+                                                : boardChainOpportunity.rewardUrgencyTier === 'soon'
+                                                  ? 75
+                                                  : boardChainOpportunity.rewardUrgencyTier === 'later'
+                                                    ? 50
+                                                    : 60
+                                        }
+                                        data-board-chain-reward-lead-action={boardRewardLeadEntry.action}
+                                        data-board-chain-reward-lead-audio={boardChainRewardAudioCue(boardRewardLeadEntry)}
+                                        data-board-chain-reward-lead-screen-cue={boardChainRewardScreenCue(boardRewardLeadEntry)}
+                                        data-board-chain-reward-lead-tone={boardRewardLeadEntry.cue.tone}
+                                        data-testid="chain-opportunity-reward-lead"
+                                        style={
+                                            {
+                                                '--board-chain-reward-lead-meter-fill': `${
+                                                    boardChainOpportunity.rewardUrgencyTier === 'next'
+                                                        ? 100
+                                                        : boardChainOpportunity.rewardUrgencyTier === 'soon'
+                                                          ? 75
+                                                          : boardChainOpportunity.rewardUrgencyTier === 'later'
+                                                            ? 50
+                                                            : 60
+                                                }%`
+                                            } as CSSProperties
+                                        }
+                                    >
+                                        <small>Next reward</small>
+                                        <b>{boardRewardLeadEntry.cue.chaseLabel}</b>
+                                        <strong>{boardRewardLeadEntry.action}</strong>
+                                        <em>{boardRewardLeadEntry.cue.label}</em>
+                                        <i>{boardRewardLeadEntry.progressLabel}</i>
+                                        <small>{boardRewardLeadEntry.remainingLabel}</small>
+                                        <i aria-hidden="true" className={styles.chainOpportunityRewardLeadMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunityRewardLeadMeterFill} />
+                                        </i>
+                                        <span aria-hidden="true" className={styles.chainOpportunityRewardLeadBeatPips}>
+                                            {Array.from(
+                                                {
+                                                    length:
+                                                        boardChainOpportunity.rewardUrgencyTier === 'soon'
+                                                            ? 4
+                                                            : boardChainOpportunity.rewardUrgencyTier === 'later'
+                                                              ? 2
+                                                              : 3
+                                                },
+                                                (_, index) => (
+                                                    <i
+                                                        data-board-chain-reward-lead-beat={index + 1}
+                                                        data-board-chain-reward-lead-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        key={index}
+                                                    />
+                                                )
+                                            )}
+                                        </span>
+                                    </span>
+                                ) : null}
                                         {boardRewardLadder.map((entry) => (
                                             <span
                                                 data-board-chain-reward-action={entry.action}

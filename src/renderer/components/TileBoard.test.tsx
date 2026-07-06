@@ -621,6 +621,16 @@ describe('TileBoard touch and click controls', () => {
             'data-board-chain-reward-lead-screen-cue',
             'pulse'
         );
+        expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveAttribute(
+            'data-board-chain-reward-lead-meter-fill',
+            '100'
+        );
+        expect(
+            screen.getByTestId('chain-opportunity-reward-lead').querySelectorAll('[data-board-chain-reward-lead-beat]')
+        ).toHaveLength(3);
+        expect(
+            screen.getByTestId('chain-opportunity-reward-lead').querySelector('[data-board-chain-reward-lead-beat="1"]')
+        ).toHaveAttribute('data-board-chain-reward-lead-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('Rewards');
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('3 rewards');
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveAttribute(

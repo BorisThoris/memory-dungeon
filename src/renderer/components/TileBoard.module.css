@@ -4327,6 +4327,117 @@
     opacity: 0.64;
 }
 
+.chainOpportunityRewardLead {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.12rem 0.18rem;
+    min-width: 0;
+    padding: 0.18rem 0.34rem 0.2rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-gold-bright) 22%);
+    border-radius: 0.34rem;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
+        0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+}
+
+.chainOpportunityRewardLead small,
+.chainOpportunityRewardLead b,
+.chainOpportunityRewardLead strong,
+.chainOpportunityRewardLead em,
+.chainOpportunityRewardLead i {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chainOpportunityRewardLead small {
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.46rem;
+    font-weight: 920;
+    text-transform: uppercase;
+}
+
+.chainOpportunityRewardLead b {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: 0.52rem;
+    font-weight: 960;
+}
+
+.chainOpportunityRewardLead strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    font-size: 0.5rem;
+    font-weight: 980;
+    text-transform: uppercase;
+}
+
+.chainOpportunityRewardLead em,
+.chainOpportunityRewardLead i {
+    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
+    font-size: 0.44rem;
+    font-style: normal;
+    font-weight: 900;
+}
+
+.chainOpportunityRewardLeadMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.12rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityRewardLeadMeterFill {
+    display: block;
+    width: var(--board-chain-reward-lead-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    transition: width 140ms ease-out;
+}
+
+.chainOpportunityRewardLeadBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.04rem;
+}
+
+.chainOpportunityRewardLeadBeatPips i {
+    display: block;
+    width: 0.08rem;
+    height: 0.08rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
+    background: color-mix(in srgb, currentColor 70%, white);
+    box-shadow: 0 0 0.12rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.chainOpportunityRewardLeadBeatPips i[data-board-chain-reward-lead-beat-focus='primary'] {
+    width: 0.18rem;
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, currentColor 30%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.chainOpportunityRewardLeadBeatPips i[data-board-chain-reward-lead-beat-focus='support'] {
+    opacity: 0.64;
+}
+
 .chainOpportunityRewardLadder > span[data-board-chain-reward-focus='primary'] {
     animation: boardOpportunityPrimePulse 1.36s ease-in-out infinite;
     border-color: color-mix(in srgb, var(--theme-gold-bright) 64%, var(--theme-cyan-bright) 18%);
