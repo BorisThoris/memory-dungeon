@@ -4811,6 +4811,31 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             className={styles.boardFloaterRewardForecast}
                                             data-testid="match-score-floater-reward-forecast"
                                         >
+                                            <span
+                                                className={styles.boardFloaterRewardForecastSummary}
+                                                data-chain-reward-forecast-count={boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length}
+                                                data-testid="match-score-floater-reward-forecast-summary"
+                                            >
+                                                <small>Forecast</small>
+                                                <b>
+                                                    {boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length}{' '}
+                                                    {boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length === 1 ? 'reward' : 'rewards'}
+                                                </b>
+                                                <span aria-hidden="true" className={styles.boardFloaterRewardForecastSummaryBeatPips}>
+                                                    {Array.from(
+                                                        { length: Math.max(2, Math.min(5, boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length + 1)) },
+                                                        (_, index) => (
+                                                            <i
+                                                                data-chain-reward-forecast-summary-beat={index + 1}
+                                                                data-chain-reward-forecast-summary-beat-focus={
+                                                                    index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                key={`reward-forecast-summary-beat-${index + 1}`}
+                                                            />
+                                                        )
+                                                    )}
+                                                </span>
+                                            </span>
                                             {boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).map((cue) => {
                                                 const stackLabel = getChainRewardStackLabel(cue);
                                                 const progress = getChainRewardProgress(boardFloaterPayload.chainDepth, cue);
