@@ -5663,6 +5663,32 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     data-testid="trait-preview-chip"
                                     role="status"
                                 >
+                                    <span
+                                        className={styles.traitPreviewSummary}
+                                        data-preview-summary-kind={focusedPreviewChip.kind}
+                                        data-testid="trait-preview-summary"
+                                    >
+                                        <small>Preview</small>
+                                        <b>
+                                            {focusedPreviewChip.kind === 'pickup'
+                                                ? 'Reward'
+                                                : focusedPreviewChip.kind === 'hazard'
+                                                  ? 'Risk'
+                                                  : 'Combo'}
+                                        </b>
+                                        <em>{beatCount} beats</em>
+                                        <span aria-hidden="true" className={styles.traitPreviewSummaryBeatPips}>
+                                            {Array.from({ length: Math.max(2, Math.min(5, beatCount)) }, (_, beatIndex) => (
+                                                <i
+                                                    data-preview-summary-beat={beatIndex + 1}
+                                                    data-preview-summary-beat-focus={
+                                                        beatIndex === 0 ? 'primary' : 'support'
+                                                    }
+                                                    key={`${focusedPreviewChip.kind}-summary-beat-${beatIndex + 1}`}
+                                                />
+                                            ))}
+                                        </span>
+                                    </span>
                                     <span className={styles.traitPreviewEyebrow}>
                                         {focusedPreviewChip.eyebrow}
                                     </span>

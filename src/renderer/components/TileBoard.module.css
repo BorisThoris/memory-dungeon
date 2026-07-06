@@ -6330,6 +6330,80 @@
     pointer-events: none;
 }
 
+.traitPreviewSummary {
+    display: inline-grid;
+    grid-template-columns: auto auto auto auto;
+    align-items: center;
+    gap: 0.12rem 0.28rem;
+    width: 100%;
+    padding: 0.08rem 0.24rem 0.12rem;
+    border: 1px solid color-mix(in srgb, var(--theme-border-cyan) 28%, transparent);
+    border-radius: 0.34rem;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 10%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-void) 26%, transparent);
+}
+
+.traitPreviewSummary small,
+.traitPreviewSummary b,
+.traitPreviewSummary em {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.traitPreviewSummary small {
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.46rem;
+    font-weight: 920;
+    text-transform: uppercase;
+}
+
+.traitPreviewSummary b {
+    color: color-mix(in srgb, var(--theme-border-cyan) 84%, white);
+    font-size: 0.56rem;
+    font-weight: 950;
+    text-transform: uppercase;
+}
+
+.traitPreviewSummary em {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: 0.48rem;
+    font-style: normal;
+    font-weight: 820;
+    text-transform: uppercase;
+}
+
+.traitPreviewSummaryBeatPips {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.04rem;
+    margin-left: auto;
+}
+
+.traitPreviewSummaryBeatPips i {
+    display: block;
+    width: 0.08rem;
+    height: 0.08rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.86s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-border-cyan) 72%, white);
+    box-shadow: 0 0 0.12rem color-mix(in srgb, var(--theme-border-cyan) 18%, transparent);
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-focus='primary'] {
+    width: 0.18rem;
+    box-shadow:
+        0 0 0.18rem color-mix(in srgb, currentColor 24%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-focus='support'] {
+    opacity: 0.68;
+}
+
 .traitPreviewChip[data-preview-kind='pickup'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, transparent);
     background:
@@ -6714,6 +6788,7 @@
 :global([data-reduce-motion='true']) .trapResolutionBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityRewardBeatPips i,
 :global([data-reduce-motion='true']) .traitPreviewBeatPips i,
+:global([data-reduce-motion='true']) .traitPreviewSummaryBeatPips i,
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='hazard'],
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='pickup'],
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-screen-cue='burst'] {

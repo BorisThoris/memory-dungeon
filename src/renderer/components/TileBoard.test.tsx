@@ -2922,6 +2922,13 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'pickup');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '4');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(4);
+        expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Preview');
+        expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Reward');
+        expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('4 beats');
+        expect(screen.getByTestId('trait-preview-summary').querySelectorAll('[data-preview-summary-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('trait-preview-summary').querySelector('[data-preview-summary-beat="1"]')
+        ).toHaveAttribute('data-preview-summary-beat-focus', 'primary');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-line-beat]')).toHaveLength(3);
         expect(
             screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-beat="1"]')
@@ -3252,6 +3259,13 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'hazard');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '3');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(3);
+        expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Preview');
+        expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Risk');
+        expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('3 beats');
+        expect(screen.getByTestId('trait-preview-summary').querySelectorAll('[data-preview-summary-beat]')).toHaveLength(3);
+        expect(
+            screen.getByTestId('trait-preview-summary').querySelector('[data-preview-summary-beat="1"]')
+        ).toHaveAttribute('data-preview-summary-beat-focus', 'primary');
         expect(
             screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
         ).toHaveTextContent('Shuffle Snare');
