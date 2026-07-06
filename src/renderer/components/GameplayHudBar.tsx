@@ -1486,6 +1486,9 @@ const GameplayHudBar = ({
                 ? 'Then: convert route traits'
                 : 'Then: keep streak alive';
     const chainNextKeepCue = `Keep: ${chainLaneCue.label.toLowerCase()}`;
+    const chainNextTargetFill = chainMilestonePreview.distance <= 0
+        ? 100
+        : Math.min(100, (run.stats.currentStreak / (run.stats.currentStreak + chainMilestonePreview.distance)) * 100);
     const primaryChainRewardProgress = getChainRewardProgress(run.stats.currentStreak, primaryResourceRewardCue);
     const primaryRewardHotBand =
         primaryRewardHot && primaryResourceRewardCue
@@ -2549,6 +2552,7 @@ const GameplayHudBar = ({
                                             className={styles.hudChainNextTarget}
                                             data-chain-next-first={chainNextFirstCue}
                                             data-chain-next-keep={chainNextKeepCue}
+                                            data-chain-next-milestone-fill={chainNextTargetFill}
                                             data-chain-next-milestone-action={chainMilestonePreview.actionLabel}
                                             data-chain-next-milestone-audio={chainMilestonePreview.distance <= 1 ? 'milestone-cashout' : 'milestone-prime'}
                                             data-chain-next-milestone-label={chainMilestonePreview.label}
@@ -2556,6 +2560,7 @@ const GameplayHudBar = ({
                                             data-chain-next-milestone-target={chainMilestonePreview.target}
                                             data-chain-next-milestone-tone={chainMilestonePreview.tone}
                                             data-chain-next-then={chainNextThenCue}
+                                            style={{ '--chain-next-milestone-fill': `${chainNextTargetFill}%` } as CSSProperties}
                                             data-testid="hud-chain-next-target"
                                         >
                                             <strong>{nextChainTargetLabel}</strong>
@@ -2565,6 +2570,7 @@ const GameplayHudBar = ({
                                                 <span>{chainNextThenCue}</span>
                                                 <span>{chainNextKeepCue}</span>
                                             </small>
+                                            <span aria-hidden="true" className={styles.hudChainNextTargetMeter} />
                                         </span>
                                         {primaryChainRewardProgress ? (
                                             <span

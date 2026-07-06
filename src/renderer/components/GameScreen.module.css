@@ -6949,6 +6949,7 @@
 
 .hudChainNextTarget {
     display: inline-grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.12rem;
     width: fit-content;
     max-width: 100%;
@@ -6961,6 +6962,24 @@
     font-weight: 920;
     line-height: 1;
     text-transform: uppercase;
+}
+
+.hudChainNextTargetMeter {
+    display: block;
+    width: 100%;
+    min-width: 4.8rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--chain-next-milestone-fill, 0%),
+            color-mix(in srgb, currentColor 18%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+        0 0 0.18rem color-mix(in srgb, currentColor 16%, transparent);
+    opacity: 0.92;
 }
 
 .hudChainNextTarget strong {

@@ -830,6 +830,10 @@ describe('GameplayHudBar', () => {
         );
         expect(screen.getByTestId('hud-chain-next-target')).toHaveTextContent('Then: chase x8 +1 shard');
         expect(screen.getByTestId('hud-chain-next-target')).toHaveTextContent('Keep: prime cashout');
+        expect(screen.getByTestId('hud-chain-next-target')).toHaveAttribute(
+            'data-chain-next-milestone-fill',
+            '60'
+        );
         expect(screen.getByTestId('hud-chain-reward-pips')).toHaveAttribute('data-chain-reward-progress', '0/2');
         expect(screen.getByTestId('hud-chain-reward-pips')).toHaveAccessibleName(
             /Chain reward progress 0\/2 toward x8 \+1 shard\. 2 matches left/i
@@ -982,6 +986,10 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-lane-cue')).toHaveTextContent('Prime chain');
         expect(screen.getByTestId('hud-chain-next-target')).toHaveTextContent('3 matches to x3');
         expect(screen.getByTestId('hud-chain-next-target')).toHaveTextContent('Start chain');
+        expect(screen.getByTestId('hud-chain-next-target')).toHaveAttribute(
+            'data-chain-next-milestone-fill',
+            '0'
+        );
         expect(screen.getByTestId('hud-chain-next-target')).toHaveAttribute(
             'data-chain-next-milestone-action',
             'Start chain'
