@@ -881,6 +881,18 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('Prime cashout');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('Triple prime');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('3x stack');
+        expect(
+            screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')
+        ).toHaveAttribute('data-chain-reward-stack-size', '3');
+        expect(
+            screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')?.querySelectorAll(
+                '[data-chain-reward-forecast-stack-beat]'
+            )
+        ).toHaveLength(3);
+        expect(
+            screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')
+                ?.querySelector('[data-chain-reward-forecast-stack-beat="1"]')
+        ).toHaveAttribute('data-chain-reward-forecast-stack-beat-focus', 'primary');
         expect(screen.getByTestId('hud-chain-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
             'data-chain-reward-arcade-cue',
             'Triple prime'

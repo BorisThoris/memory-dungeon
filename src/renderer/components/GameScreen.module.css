@@ -7987,6 +7987,54 @@
     color: currentColor;
 }
 
+.hudChainRewardLadderStackPips {
+    display: inline-grid;
+    grid-column: 1 / -1;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0.16rem, 1fr);
+    gap: 0.05rem;
+    min-width: 0.88rem;
+    color: currentColor;
+}
+
+.hudChainRewardLadderStackPips i {
+    display: block;
+    height: 0.15rem;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 0 0.26rem color-mix(in srgb, currentColor 28%, transparent);
+    animation: gameplayBeatPipPulse 0.84s ease-in-out infinite;
+    opacity: 0.88;
+}
+
+.hudChainRewardLadderStackPips i[data-chain-reward-ladder-stack-beat-focus='support'] {
+    opacity: 0.68;
+}
+
+.hudChainRewardForecastStackPips {
+    display: inline-grid;
+    grid-column: 1 / -1;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0.16rem, 1fr);
+    gap: 0.05rem;
+    min-width: 0.88rem;
+    color: currentColor;
+}
+
+.hudChainRewardForecastStackPips i {
+    display: block;
+    height: 0.15rem;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 0 0.26rem color-mix(in srgb, currentColor 28%, transparent);
+    animation: gameplayBeatPipPulse 0.84s ease-in-out infinite;
+    opacity: 0.9;
+}
+
+.hudChainRewardForecastStackPips i[data-chain-reward-forecast-stack-beat-focus='support'] {
+    opacity: 0.7;
+}
+
 .hudChainRewardBeatPips i {
     display: block;
     width: 0.18rem;

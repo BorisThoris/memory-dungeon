@@ -886,6 +886,7 @@ type HudChainRewardLadderEntry = {
     remainingLabel: string;
     targetLabel: string;
     total: number;
+    stackSize: number;
 };
 
 const hudChainRewardLadder = (
@@ -903,6 +904,7 @@ const hudChainRewardLadder = (
                       progressLabel: progress.label,
                       remainingLabel: progress.remainingLabel,
                       targetLabel: progress.targetLabel,
+                      stackSize: cue.stackSize ?? 1,
                       total: progress.total
                   }
                 : null;
@@ -2831,6 +2833,19 @@ const GameplayHudBar = ({
                                                                 <b>{entry.cue.label}</b>
                                                                 <em>{entry.progressLabel}</em>
                                                                 <i>{entry.remainingLabel}</i>
+                                                                {entry.stackSize > 1 ? (
+                                                                    <span aria-hidden="true" className={styles.hudChainRewardLadderStackPips}>
+                                                                        {Array.from({ length: entry.stackSize }, (_, beatIndex) => (
+                                                                            <i
+                                                                                data-chain-reward-ladder-stack-beat={beatIndex + 1}
+                                                                                data-chain-reward-ladder-stack-beat-focus={
+                                                                                    beatIndex === 0 ? 'primary' : 'support'
+                                                                                }
+                                                                                key={`${entry.cue.id}-stack-${beatIndex + 1}`}
+                                                                            />
+                                                                        ))}
+                                                                    </span>
+                                                                ) : null}
                                                                 <span aria-hidden="true" className={styles.hudChainRewardBeatPips}>
                                                                     {Array.from({ length: hudChainRewardBeatCount(entry) }, (_, beatIndex) => (
                                                                         <i
@@ -2864,7 +2879,22 @@ const GameplayHudBar = ({
                                                             <b>{cue.label}</b>
                                                             <em>{cue.distanceLabel}</em>
                                                             <i>{getChainRewardUrgencyCopy(cue)}</i>
-                                                            {stackLabel ? <mark>{stackLabel}</mark> : null}
+                                                            {stackLabel ? (
+                                                                <>
+                                                                    <mark>{stackLabel}</mark>
+                                                                    <span aria-hidden="true" className={styles.hudChainRewardForecastStackPips}>
+                                                                        {Array.from({ length: cue.stackSize ?? 1 }, (_, beatIndex) => (
+                                                                            <i
+                                                                                data-chain-reward-forecast-stack-beat={beatIndex + 1}
+                                                                                data-chain-reward-forecast-stack-beat-focus={
+                                                                                    beatIndex === 0 ? 'primary' : 'support'
+                                                                                }
+                                                                                key={`${cue.id}-forecast-stack-${beatIndex + 1}`}
+                                                                            />
+                                                                        ))}
+                                                                    </span>
+                                                                </>
+                                                            ) : null}
                                                         </span>
                                                     );
                                                 })}
