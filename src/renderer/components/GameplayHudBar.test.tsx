@@ -1440,7 +1440,9 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('0/1');
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Sealed Catalyst');
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Echo + Sealed: combo shard');
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Visible combo cards: 2');
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveAttribute('data-trait-route-urgency', 'next');
+        expect(screen.getByTestId('hud-trait-route-panel')).toHaveAttribute('data-trait-combo-preview-count', '2');
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveAttribute('data-trait-route-action-audio', 'trait-route-cashout');
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveAttribute('data-trait-route-action-screen-cue', 'burst');
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveAttribute('data-trait-chain-stack-cue', 'Trait super stack');

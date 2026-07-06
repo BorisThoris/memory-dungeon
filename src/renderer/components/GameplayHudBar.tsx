@@ -2376,6 +2376,7 @@ const GameplayHudBar = ({
                                     <div
                                         className={`${styles.statPillCompact} ${styles.hudTraitRoutePill}`}
                                         data-trait-chain-stack-cue={traitChainStackCue?.label ?? 'none'}
+                                        data-trait-combo-preview-count={traitOpportunitySummary.tiles.length}
                                         data-trait-route-action-audio={traitRouteActionAudioCue}
                                         data-trait-route-action-screen-cue={traitRouteActionScreenCue}
                                         data-trait-route-urgency={traitRouteObjectiveStatus?.urgency ?? (traitOpportunityHud.swapHint ? 'setup' : 'ready')}
@@ -2385,6 +2386,9 @@ const GameplayHudBar = ({
                                         <span className={styles.statKey}>Trait routes</span>
                                         <span className={styles.statVal}>{traitRouteProgressLabel}</span>
                                         <span className={styles.statSubline}>{traitOpportunityHud.buildLabel}</span>
+                                        <span data-testid="hud-trait-route-combo-count">
+                                            Visible combo cards: {traitOpportunitySummary.tiles.length}
+                                        </span>
                                         <small className={styles.hudTraitRoutePrimary}>{traitOpportunityHud.primaryLine}</small>
                                         <span className={styles.hudTraitRouteLaneMapLabel}>Trait lanes</span>
                                         {traitOpportunityLaneMap.length > 0 ? (
