@@ -1992,6 +1992,9 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-tier', 'cashout');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-fill', '60');
         expect(
+            screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-crescendo-label]')
+        ).toHaveAttribute('data-payoff-stack-crescendo-fill', '60');
+        expect(
             screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-crescendo-beat="1"]')
         ).toHaveAttribute('data-payoff-stack-crescendo-beat-focus', 'primary');
         expect(

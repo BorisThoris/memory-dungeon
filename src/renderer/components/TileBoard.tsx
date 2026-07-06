@@ -5993,6 +5993,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <span
                                             className={styles.opportunityPayoffCrescendo}
                                             data-payoff-stack-crescendo-label={boardPayoffStack.crescendo.label}
+                                            data-payoff-stack-crescendo-fill={Math.round((boardPayoffStack.crescendo.beatCount / 5) * 100)}
+                                            style={
+                                                {
+                                                    '--payoff-stack-crescendo-fill': `${Math.round(
+                                                        (boardPayoffStack.crescendo.beatCount / 5) * 100
+                                                    )}%`
+                                                } as CSSProperties
+                                            }
                                         >
                                             <small>{boardPayoffStack.crescendo.label}</small>
                                             <strong>
@@ -6006,6 +6014,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 ))}
                                             </strong>
                                             <em>{boardPayoffStack.crescendo.detail}</em>
+                                            <i aria-hidden="true" className={styles.opportunityPayoffCrescendoMeter}>
+                                                <i aria-hidden="true" className={styles.opportunityPayoffCrescendoMeterFill} />
+                                            </i>
                                         </span>
                                         <em data-payoff-stack-sequence-step="first">{boardPayoffStack.nextCue}</em>
                                         {boardPayoffStack.sequenceCue ? (

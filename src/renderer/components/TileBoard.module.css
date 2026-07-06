@@ -6145,6 +6145,33 @@
     opacity: 0.78;
 }
 
+.opportunityPayoffStack .opportunityPayoffCrescendoMeter {
+    grid-column: 1 / -1;
+    display: block;
+    width: 100%;
+    height: 0.1rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 26%, transparent);
+}
+
+.opportunityPayoffStack .opportunityPayoffCrescendoMeterFill {
+    display: block;
+    width: var(--payoff-stack-crescendo-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 84%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .opportunityPayoffStack .opportunityPayoffCrescendo em {
     padding: 0;
     border: 0;
