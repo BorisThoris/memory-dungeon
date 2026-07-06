@@ -7513,6 +7513,29 @@
     font-style: normal;
 }
 
+.hudChainStackedPayoffBadgeBeatPips {
+    display: grid;
+    grid-auto-columns: minmax(0.16rem, 1fr);
+    grid-auto-flow: column;
+    gap: 0.05rem;
+    min-width: 0.92rem;
+    width: min(1.9rem, 12vw);
+}
+
+.hudChainStackedPayoffBadgeBeatPips i {
+    display: block;
+    height: 0.16rem;
+    border-radius: 999px;
+    background: currentColor;
+    animation: hudRewardPulse 0.92s ease-in-out infinite;
+    box-shadow: 0 0 7px color-mix(in srgb, currentColor 26%, transparent);
+    opacity: 0.9;
+}
+
+.hudChainStackedPayoffBadgeBeatPips i[data-chain-stack-beat-focus='support'] {
+    opacity: 0.72;
+}
+
 .hudChainRewardForecast {
     display: flex;
     flex-wrap: wrap;

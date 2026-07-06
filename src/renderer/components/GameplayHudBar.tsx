@@ -2650,11 +2650,21 @@ const GameplayHudBar = ({
                                                 aria-label={`Stacked chain payoff: Cash now. ${stackedChainRewardLabel}.`}
                                                 className={styles.hudChainStackedPayoffBadge}
                                                 data-chain-stack-action="Cash now"
+                                                data-chain-stack-beats={stackedChainRewardHot.length}
                                                 data-testid="hud-chain-stacked-payoff"
                                             >
                                                 <small>{stackedChainRewardHot.length}x payoff</small>
                                                 <em>Cash now</em>
                                                 <b>Next match</b>
+                                                <span aria-hidden="true" className={styles.hudChainStackedPayoffBadgeBeatPips}>
+                                                    {Array.from({ length: stackedChainRewardHot.length }, (_, beatIndex) => (
+                                                        <i
+                                                            data-chain-stack-beat={beatIndex + 1}
+                                                            data-chain-stack-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                            key={beatIndex}
+                                                        />
+                                                    ))}
+                                                </span>
                                             </span>
                                         ) : null}
                                         {chainRewardForecastCues.length > 0 ? (

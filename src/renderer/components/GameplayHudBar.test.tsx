@@ -1137,6 +1137,11 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-stacked-payoff')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('hud-chain-stacked-payoff')).toHaveTextContent('Next match');
         expect(screen.getByTestId('hud-chain-stacked-payoff')).toHaveAttribute('data-chain-stack-action', 'Cash now');
+        expect(screen.getByTestId('hud-chain-stacked-payoff')).toHaveAttribute('data-chain-stack-beats', '2');
+        expect(screen.getByTestId('hud-chain-stacked-payoff').querySelectorAll('[data-chain-stack-beat]')).toHaveLength(2);
+        expect(
+            screen.getByTestId('hud-chain-stacked-payoff').querySelector('[data-chain-stack-beat="1"]')
+        ).toHaveAttribute('data-chain-stack-beat-focus', 'primary');
         expect(screen.getByTestId('hud-chain-stacked-payoff')).toHaveAccessibleName(
             'Stacked chain payoff: Cash now. 2x payoff next: x4 +1 shard + x4 +1 guard.'
         );
