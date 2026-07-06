@@ -2551,6 +2551,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardPayoffStackRows = boardOpportunityCompassRows.filter((row) =>
         row.id === 'chain' || row.id === 'perk' || row.id === 'pickup' || row.id === 'recovery' || row.id === 'tool'
     );
+    const boardPayoffStackLabelForRow = (row: BoardOpportunityCompassRow): string =>
+        row.id === 'chain' ? 'Stack route' : row.label;
     const boardOpportunityLaneMapRows = boardOpportunityLaneMap(boardOpportunityCompassRows);
     const primaryBoardOpportunityLane = boardOpportunityLaneMapRows[0] ?? null;
     const boardOpportunityLaneMapAttrValue = boardOpportunityLaneMapAttr(boardOpportunityLaneMapRows);
@@ -2596,10 +2598,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                   const firstRow = boardPayoffStackRows[0] ?? null;
                   const secondRow = boardPayoffStackRows[1] ?? null;
                   const thirdRow = boardPayoffStackRows[2] ?? null;
-                  const first = firstRow ? `${firstRow.action} ${firstRow.label.toLowerCase()}` : 'Act';
-                  const then = secondRow ? `${secondRow.action} ${secondRow.label.toLowerCase()}` : 'Lock payoff route';
+                  const first = firstRow ? `${firstRow.action} ${boardPayoffStackLabelForRow(firstRow).toLowerCase()}` : 'Act';
+                  const then = secondRow ? `${secondRow.action} ${boardPayoffStackLabelForRow(secondRow).toLowerCase()}` : 'Lock payoff route';
                   const keep = thirdRow
-                      ? `${thirdRow.action} ${thirdRow.label.toLowerCase()}`
+                      ? `${thirdRow.action} ${boardPayoffStackLabelForRow(thirdRow).toLowerCase()}`
                       : tone === 'cashout'
                         ? 'Keep chain target live'
                         : tone === 'followup'
@@ -2643,7 +2645,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                       cue,
                       detail: boardPayoffStackRows
                           .slice(0, 3)
-                          .map((row) => row.label)
+                          .map((row) => boardPayoffStackLabelForRow(row))
                           .join(' + '),
                       heat:
                           tone === 'cashout'

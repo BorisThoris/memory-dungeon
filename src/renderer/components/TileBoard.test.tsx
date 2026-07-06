@@ -1595,13 +1595,13 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-tier', 'prime');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Follow-up stack');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Next tap');
-        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Combo route + Rewards');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack route + Rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Prime beat');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Two-beat payoff route is primed');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Keep: Keep route moving');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute(
             'data-payoff-stack-sequence-first',
-            'Follow up combo route'
+            'Follow up stack route'
         );
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute(
             'data-payoff-stack-sequence-then',
@@ -1612,7 +1612,7 @@ describe('TileBoard touch and click controls', () => {
             'Keep route moving'
         );
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAccessibleName(
-            'Board payoff stack. Follow-up stack. Next tap. 2 payoffs live. Combo route + Rewards. Crescendo: Prime beat. Two-beat payoff route is primed. 2 beats. First: Follow up combo route. Then: Claim rewards. Keep: Keep route moving.'
+            'Board payoff stack. Follow-up stack. Next tap. 2 payoffs live. Stack route + Rewards. Crescendo: Prime beat. Two-beat payoff route is primed. 2 beats. First: Follow up stack route. Then: Claim rewards. Keep: Keep route moving.'
         );
     });
 
@@ -1660,7 +1660,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-tone', 'build');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-opportunity-payoff-first-cue',
-            'First: Match combo route'
+            'First: Match stack route'
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-opportunity-payoff-sequence-cue',
@@ -1668,7 +1668,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-opportunity-payoff-sequence-first',
-            'Match combo route'
+            'Match stack route'
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-opportunity-payoff-sequence-then',
@@ -1690,14 +1690,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Prime');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Prime payoff');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('2 payoffs live');
-        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Combo route + Rewards');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack route + Rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Prime beat');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Two-beat payoff route is primed');
-        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('First: Match combo route');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('First: Match stack route');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Then: Claim rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Keep: Keep reward stack primed');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAccessibleName(
-            'Board payoff stack. Stack prime. Prime. 2 payoffs live. Combo route + Rewards. Crescendo: Prime beat. Two-beat payoff route is primed. 2 beats. First: Match combo route. Then: Claim rewards. Keep: Keep reward stack primed.'
+            'Board payoff stack. Stack prime. Prime. 2 payoffs live. Stack route + Rewards. Crescendo: Prime beat. Two-beat payoff route is primed. 2 beats. First: Match stack route. Then: Claim rewards. Keep: Keep reward stack primed.'
         );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-lane-map',
@@ -1833,7 +1833,7 @@ describe('TileBoard touch and click controls', () => {
                 'Decision lanes: Build 1, Prime build, Trait 1, Study traits, Pickup 1, Claim pickup.'
             );
             expect(screen.getByText(/Focus: Hidden tile, row 1, column 1/i)).toHaveTextContent(
-                'Board stack: Stack prime. Prime. 2 payoffs live. Combo route + Rewards. Prime beat. Two-beat payoff route is primed. First: Match combo route. Then: Claim rewards. Keep: Keep reward stack primed.'
+            'Board stack: Stack prime. Prime. 2 payoffs live. Stack route + Rewards. Prime beat. Two-beat payoff route is primed. First: Match stack route. Then: Claim rewards. Keep: Keep reward stack primed.'
             );
         });
     });
@@ -1909,15 +1909,15 @@ describe('TileBoard touch and click controls', () => {
         ).toHaveAttribute('data-payoff-stack-crescendo-beat-focus', 'support');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Hit now');
-        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Combo route + Rewards');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack route + Rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Cashout beat');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Three-beat cashout route is live');
-        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('First: Cash out combo route');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('First: Cash out stack route');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Then: Claim rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Keep: Keep chain target live');
         expect(
             screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="first"]')
-        ).toHaveTextContent('First: Cash out combo route');
+        ).toHaveTextContent('First: Cash out stack route');
         expect(
             screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="then"]')
         ).toHaveTextContent('Then: Claim rewards');
@@ -2029,7 +2029,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-cue', 'super');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-tier', 'super');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent(
-            'Combo route + Perk payoff + Rewards'
+            'Stack route + Perk payoff + Rewards'
         );
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Super burst');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Five-beat super cashout window');
@@ -2039,7 +2039,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(
             screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="first"]')
-        ).toHaveTextContent('First: Cash out combo route');
+        ).toHaveTextContent('First: Cash out stack route');
         expect(
             screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-sequence-step="then"]')
         ).toHaveTextContent('Then: Cash perk payoff');
@@ -2048,7 +2048,7 @@ describe('TileBoard touch and click controls', () => {
         ).toHaveTextContent('Keep: Claim rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Keep: Claim rewards');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAccessibleName(
-            'Board payoff stack. Super stack. Cash super stack. 3 payoffs live. Combo route + Perk payoff + Rewards. Crescendo: Super burst. Five-beat super cashout window. 5 beats. First: Cash out combo route. Then: Cash perk payoff. Keep: Claim rewards.'
+            'Board payoff stack. Super stack. Cash super stack. 3 payoffs live. Stack route + Perk payoff + Rewards. Crescendo: Super burst. Five-beat super cashout window. 5 beats. First: Cash out stack route. Then: Cash perk payoff. Keep: Claim rewards.'
         );
         expect(screen.getByTestId('chain-opportunity-arcade-callout').querySelectorAll('[data-chain-callout-beat]')).toHaveLength(5);
         expect(
@@ -2252,7 +2252,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-perk')).toHaveTextContent('Cash');
         expect(screen.getByTestId('board-opportunity-perk')).toHaveTextContent('Perk payoff');
         expect(screen.getByTestId('board-opportunity-perk')).toHaveTextContent('Trait cashout armed');
-        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Combo route + Perk payoff');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack route + Perk payoff');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Then: Cash perk payoff');
     });
 
