@@ -6104,12 +6104,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             className={styles.opportunityCompassRow}
                                             data-opportunity-audio={boardOpportunityAudioCue(row)}
                                             data-opportunity-beats={beatCount}
+                                            data-opportunity-row-meter-fill={Math.round((beatCount / 5) * 100)}
                                             data-opportunity-heat={getBoardOpportunityHeat(row.impactCue)}
                                             data-opportunity-impact-cue={row.impactCue}
                                             data-opportunity-priority={index === 0 ? 'best' : 'normal'}
                                             data-opportunity-tone={row.tone}
                                             data-opportunity-screen-cue={boardOpportunityScreenCue(row)}
                                             data-testid={`board-opportunity-${row.id}`}
+                                            style={
+                                                {
+                                                    '--opportunity-compass-row-meter-fill': `${Math.round((beatCount / 5) * 100)}%`
+                                                } as CSSProperties
+                                            }
                                             key={`${row.id}:${row.value}`}
                                         >
                                             {index === 0 ? (

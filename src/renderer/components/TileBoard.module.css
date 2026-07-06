@@ -6505,6 +6505,7 @@
 }
 
 .opportunityCompassRow {
+    position: relative;
     display: grid;
     grid-template-rows: auto auto auto auto 1fr;
     gap: 0.06rem;
@@ -6523,6 +6524,23 @@
         inset 0 1px 0 color-mix(in srgb, var(--theme-text) 6%, transparent);
 }
 
+.opportunityCompassRow::after {
+    content: '';
+    position: absolute;
+    right: 0.46rem;
+    bottom: 0.18rem;
+    left: 0.46rem;
+    height: 0.11rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 84%, white), color-mix(in srgb, var(--theme-gold-bright) 74%, white));
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+    transform-origin: left center;
+    transform: scaleX(var(--opportunity-compass-row-meter-fill, 0));
+    transition: transform 140ms ease-out;
+    pointer-events: none;
+}
+
 .opportunityCompassRow[data-opportunity-priority='best'] {
     animation: boardOpportunityPulse 1.8s ease-in-out infinite;
     border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
@@ -6537,6 +6555,12 @@
         0 10px 26px rgba(0, 0, 0, 0.28);
     transform: translateY(-1px);
     z-index: 2;
+}
+
+.opportunityCompassRow[data-opportunity-priority='best']::after {
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
 }
 
 .opportunityCompassRow[data-opportunity-heat='cashout'] {
@@ -6774,6 +6798,7 @@
 }
 
 .opportunityCompassRow[data-opportunity-tone='chain'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-opportunity-tone='chain']::after,
 .opportunityCompassRow[data-opportunity-heat='cashout'] .opportunityCompassBeatPips i {
     background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
     box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
@@ -6794,6 +6819,11 @@
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-success) 30%, transparent);
 }
 
+.opportunityCompassRow[data-opportunity-tone='pickup']::after {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 82%, white), color-mix(in srgb, var(--theme-gold-bright) 70%, white));
+}
+
 .opportunityCompassRow[data-opportunity-tone='perk'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 24%);
     background:
@@ -6812,6 +6842,11 @@
     box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
 }
 
+.opportunityCompassRow[data-opportunity-tone='perk']::after {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 84%, white), color-mix(in srgb, var(--theme-cyan-bright) 72%, white));
+}
+
 .opportunityCompassRow[data-opportunity-tone='hazard'] {
     border-color: color-mix(in srgb, var(--theme-danger) 40%, var(--theme-gold-bright) 12%);
     background:
@@ -6828,6 +6863,11 @@
 .opportunityCompassRow[data-opportunity-tone='hazard'] .opportunityCompassBeatPips i {
     background: color-mix(in srgb, var(--theme-danger) 76%, white);
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-danger) 30%, transparent);
+}
+
+.opportunityCompassRow[data-opportunity-tone='hazard']::after {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 80%, white), color-mix(in srgb, var(--theme-gold-bright) 70%, white));
 }
 
 .opportunityCompassRow[data-opportunity-tone='recover'] {
@@ -6892,6 +6932,13 @@
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
 }
 
+.opportunityCompassRow[data-opportunity-tone='setup']::after,
+.opportunityCompassRow[data-opportunity-tone='recall']::after,
+.opportunityCompassRow[data-opportunity-heat='prime']::after {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 82%, white), color-mix(in srgb, var(--theme-cyan-bright) 70%, white));
+}
+
 .opportunityCompassRow[data-opportunity-tone='control'] {
     border-color: color-mix(in srgb, var(--theme-danger) 36%, var(--theme-gold-bright) 14%);
 }
@@ -6905,6 +6952,11 @@
 .opportunityCompassRow[data-opportunity-tone='control'] .opportunityCompassBeatPips i {
     background: color-mix(in srgb, var(--theme-danger) 76%, white);
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-danger) 30%, transparent);
+}
+
+.opportunityCompassRow[data-opportunity-tone='control']::after {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 82%, white), color-mix(in srgb, var(--theme-gold-bright) 68%, white));
 }
 
 .opportunityCompassRow[data-opportunity-heat='surge'] .opportunityCompassBeatPips i {

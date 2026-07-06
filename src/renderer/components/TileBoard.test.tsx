@@ -985,6 +985,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-priority', 'best');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('1 route ready');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Route cashout');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-row-meter-fill', '100');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Route cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-audio', 'opportunity-cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-screen-cue', 'burst');
@@ -1006,6 +1007,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-audio', 'opportunity-prime');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-screen-cue', 'pulse');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-heat', 'surge');
+        expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-row-meter-fill', '80');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-beats', '4');
         expect(screen.getByTestId('board-opportunity-trait').querySelectorAll('[data-opportunity-beat]')).toHaveLength(4);
         expect(screen.getByTestId('board-opportunity-trait').querySelector('[data-opportunity-beat="1"]')).toHaveAttribute(
