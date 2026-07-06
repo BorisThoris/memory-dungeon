@@ -734,6 +734,10 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-reward-tone',
             'cashout'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-hot="true"]')).toHaveAttribute(
+            'data-chain-reward-meter-fill',
+            '100'
+        );
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-reward-beat]')
         ).toHaveLength(5);
@@ -1548,6 +1552,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-followup-ready="true"]')).toHaveTextContent(
             '1 follow-up marked'
         );
+        expect(screen.getByTestId('chain-opportunity-followup-cue')).toHaveAttribute(
+            'data-chain-followup-meter-fill',
+            '100'
+        );
         expect(screen.getByTestId('chain-opportunity-followup-cue')).toHaveAccessibleName(
             'Next tap follow-up. 1 follow-up marked. 3 beats.'
         );
@@ -2164,6 +2172,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Next reward');
         expect(forecastReward).toHaveAttribute('data-chain-reward-hot', 'false');
         expect(forecastReward).toHaveAttribute('data-chain-reward-beats', '3');
+        expect(forecastReward).toHaveAttribute('data-chain-reward-meter-fill', '60');
         expect(forecastReward).toHaveTextContent('Next reward');
         expect(
             screen

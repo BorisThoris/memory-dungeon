@@ -1737,6 +1737,28 @@
     font-weight: 980;
 }
 
+.chainOpportunityFollowupMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.16rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, #fff7c4 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, #fff7c4 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityFollowupMeterFill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, color-mix(in srgb, #fff7c4 84%, white), color-mix(in srgb, var(--theme-cyan-bright) 72%, white));
+    box-shadow: 0 0 0.22rem color-mix(in srgb, #fff7c4 22%, transparent);
+}
+
 .chainOpportunityFollowupBeatPips {
     display: inline-flex;
     align-items: center;
@@ -4352,9 +4374,10 @@
 }
 
 .chainOpportunityRewardCue {
-    display: inline-flex;
+    display: inline-grid;
+    grid-template-columns: minmax(0, auto) minmax(0, auto);
     align-items: center;
-    gap: 0.22rem;
+    gap: 0.1rem 0.18rem;
     max-width: min(12rem, 38vi);
     overflow: hidden;
     padding: 0.11rem 0.34rem;
@@ -4370,6 +4393,33 @@
     text-overflow: ellipsis;
     text-transform: uppercase;
     white-space: nowrap;
+}
+
+.chainOpportunityRewardMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.16rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityRewardMeterFill {
+    display: block;
+    width: var(--chain-reward-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 84%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+    transition: width 140ms ease-out;
 }
 
 .chainOpportunityRewardCue b,
@@ -4662,9 +4712,10 @@
 }
 
 .chainOpportunityPayoffBurst {
-    display: inline-flex;
+    display: inline-grid;
+    grid-template-columns: auto minmax(0, auto);
     align-items: center;
-    gap: 0.24rem;
+    gap: 0.12rem 0.22rem;
     max-width: min(14rem, 42vi);
     overflow: hidden;
     padding: 0.15rem 0.42rem;
@@ -4693,6 +4744,33 @@
     font-size: 0.52rem;
     font-weight: 980;
     line-height: 1;
+}
+
+.chainOpportunityPayoffBurstMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.16rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityPayoffBurstMeterFill {
+    display: block;
+    width: var(--chain-reward-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 84%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+    transition: width 140ms ease-out;
 }
 
 .chainOpportunityPayoffBurst[data-chain-reward-screen-cue='super'] {

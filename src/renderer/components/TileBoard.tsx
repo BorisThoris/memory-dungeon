@@ -5285,6 +5285,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={`Next tap follow-up. ${boardChainOpportunity.selectedFollowupLabel}. 3 beats.`}
                                         className={styles.chainOpportunityFollowup}
                                         data-chain-followup-action="Tap follow-up"
+                                        data-chain-followup-meter-fill="100"
                                         data-chain-followup-beats={3}
                                         data-chain-followup-ready="true"
                                         data-chain-followup-screen-cue="pulse"
@@ -5293,6 +5294,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>Next tap</small>
                                         <b>{boardChainOpportunity.selectedFollowupLabel}</b>
+                                        <i aria-hidden="true" className={styles.chainOpportunityFollowupMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunityFollowupMeterFill} />
+                                        </i>
                                         <span aria-hidden="true" className={styles.chainOpportunityFollowupBeatPips}>
                                             {Array.from({ length: 3 }, (_, index) => (
                                                 <i
@@ -5414,15 +5418,26 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         }
                                         data-chain-reward-beats={boardChainOpportunity.rewardHot ? 5 : 3}
                                         data-chain-reward-hot={boardChainOpportunity.rewardHot ? 'true' : 'false'}
+                                        data-chain-reward-meter-fill={boardChainOpportunity.rewardHot ? 100 : 60}
                                         data-chain-reward-screen-cue={
                                             boardChainOpportunity.rewardHot ? 'super' : 'pulse'
                                         }
                                         data-chain-reward-tone={
                                             boardChainOpportunity.rewardHot ? 'cashout' : 'forecast'
                                         }
+                                        style={
+                                            {
+                                                '--chain-reward-meter-fill': `${
+                                                    boardChainOpportunity.rewardHot ? 100 : 60
+                                                }%`
+                                            } as CSSProperties
+                                        }
                                     >
                                         {boardChainOpportunity.rewardHot ? <small>Payoff</small> : null}
                                         <b>{boardChainOpportunity.rewardCue}</b>
+                                        <i aria-hidden="true" className={styles.chainOpportunityRewardMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunityRewardMeterFill} />
+                                        </i>
                                         {boardChainOpportunity.rewardHot ? (
                                             <span aria-hidden="true" className={styles.chainOpportunityPayoffBeatPips}>
                                                 {Array.from({ length: 5 }, (_, index) => (
