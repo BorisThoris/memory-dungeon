@@ -592,6 +592,21 @@ describe('TileBoard touch and click controls', () => {
             'data-board-chain-reward-ladder-focus',
             'soon'
         );
+        expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveTextContent('Next reward');
+        expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveTextContent('Prime cashout');
+        expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveTextContent('x6 +1 shard');
+        expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveAttribute(
+            'data-board-chain-reward-lead-tone',
+            'reward'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveAttribute(
+            'data-board-chain-reward-lead-action',
+            'Prime cashout'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-lead')).toHaveAttribute(
+            'data-board-chain-reward-lead-screen-cue',
+            'pulse'
+        );
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('Rewards');
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('3 rewards');
         expect(

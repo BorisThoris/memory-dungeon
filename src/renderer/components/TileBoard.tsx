@@ -2111,6 +2111,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         () => boardChainRewardLadderLabel(boardRewardLadder),
         [boardRewardLadder]
     );
+    const boardRewardLeadEntry = boardRewardLadder[0] ?? null;
+    const boardRewardLeadLabel = boardRewardLeadEntry
+        ? formatBoardFeedbackLabel('Next reward', [
+              boardRewardLeadEntry.cue.chaseLabel,
+              boardRewardLeadEntry.action,
+              boardRewardLeadEntry.cue.label,
+              boardRewardLeadEntry.progressLabel,
+              boardRewardLeadEntry.remainingLabel
+          ])
+        : undefined;
     const boardRewardLadderFocusId = useMemo(
         () => {
             if (boardRewardLadder.some((entry) => entry.cue.urgency === 'next')) {
@@ -4953,6 +4963,23 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 )}
                                             </span>
                                         </span>
+                                        {boardRewardLeadEntry ? (
+                                            <span
+                                                aria-label={boardRewardLeadLabel}
+                                                data-board-chain-reward-lead-action={boardRewardLeadEntry.action}
+                                                data-board-chain-reward-lead-audio={boardChainRewardAudioCue(boardRewardLeadEntry)}
+                                                data-board-chain-reward-lead-screen-cue={boardChainRewardScreenCue(boardRewardLeadEntry)}
+                                                data-board-chain-reward-lead-tone={boardRewardLeadEntry.cue.tone}
+                                                data-testid="chain-opportunity-reward-lead"
+                                            >
+                                                <small>Next reward</small>
+                                                <b>{boardRewardLeadEntry.cue.chaseLabel}</b>
+                                                <strong>{boardRewardLeadEntry.action}</strong>
+                                                <em>{boardRewardLeadEntry.cue.label}</em>
+                                                <i>{boardRewardLeadEntry.progressLabel}</i>
+                                                <small>{boardRewardLeadEntry.remainingLabel}</small>
+                                            </span>
+                                        ) : null}
                                         {boardRewardLadder.map((entry) => (
                                             <span
                                                 data-board-chain-reward-action={entry.action}
