@@ -6487,6 +6487,32 @@
     white-space: nowrap;
 }
 
+.traitPreviewDensityMeter {
+    grid-column: 1 / -1;
+    display: block;
+    height: 0.2rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-border-cyan) 24%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.traitPreviewDensityMeterFill {
+    display: block;
+    width: var(--trait-preview-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 82%, white),
+        color-mix(in srgb, var(--theme-border-cyan) 76%, white)
+    );
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .traitPreviewSummary small,
 .traitPreviewSummary b,
 .traitPreviewSummary em {

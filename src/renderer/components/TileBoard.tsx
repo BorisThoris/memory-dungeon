@@ -5846,6 +5846,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 focusedPreviewChip.kind === 'trait' && cardFeedbackTraitPayoffStackActive
                                     ? 'cashout'
                                     : previewDensityTone;
+                            const traitPreviewMeterFill = previewDensity > 0 ? Math.min(100, Math.round((previewDensity / 4) * 100)) : 0;
                             return (
                                 <div
                                     aria-label={focusedPreviewChipLabel}
@@ -5859,6 +5860,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     data-preview-screen-cue={getFocusedPreviewScreenCue(focusedPreviewChip)}
                                     data-preview-source={focusedPreviewChip.source}
                                     data-preview-tone={focusedPreviewChip.tone}
+                                    data-preview-meter-fill={traitPreviewMeterFill}
                                     data-testid="trait-preview-chip"
                                     role="status"
                                 >
@@ -5877,6 +5879,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </strong>
                                         ) : null}
                                         <em>{beatCount} beats</em>
+                                        <span
+                                            aria-hidden="true"
+                                            className={styles.traitPreviewDensityMeter}
+                                            data-preview-meter-fill={traitPreviewMeterFill}
+                                        >
+                                            <i
+                                                className={styles.traitPreviewDensityMeterFill}
+                                                style={{ '--trait-preview-meter-fill': `${traitPreviewMeterFill}%` } as CSSProperties}
+                                            />
+                                        </span>
                                         <span aria-hidden="true" className={styles.traitPreviewSummaryBeatPips}>
                                             {Array.from({ length: Math.max(2, Math.min(5, beatCount)) }, (_, beatIndex) => (
                                                 <i
