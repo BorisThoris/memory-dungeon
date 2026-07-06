@@ -1583,6 +1583,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             traitRouteTargetTileIds
         ]
     );
+    const boardChainOpportunityMeterFill =
+        boardChainAccessibilitySummary.tone === 'idle'
+            ? 0
+            : Math.round(
+                  Math.min(
+                      100,
+                      ((boardChainAccessibilitySummary.readyCount +
+                          boardChainAccessibilitySummary.surgeCount +
+                          boardChainAccessibilitySummary.rewardHotCount +
+                          boardChainAccessibilitySummary.setupCount) /
+                          5) *
+                          100
+                  )
+              );
 
     const selectedPreviewTileId = useMemo(() => {
         if (boardApplicationFocused || board.flippedTileIds.length !== 1) {
@@ -2661,6 +2675,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                   };
               })()
             : null;
+    const boardPayoffStackFill = boardPayoffStack ? Math.round(Math.min(100, (boardPayoffStack.crescendo.beatCount / 5) * 100)) : 0;
     const boardBestOpportunity = boardOpportunityCompassRows[0] ?? null;
     const boardBestOpportunityHeat = boardBestOpportunity ? getBoardOpportunityHeat(boardBestOpportunity.impactCue) : 'none';
     const boardBestOpportunityBeatCount = boardBestOpportunity ? getBoardOpportunityBeatCount(boardBestOpportunity) : 0;
@@ -4303,6 +4318,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         )
                                     )}
                                 </span>
+                                <i
+                                    aria-hidden="true"
+                                    className={styles.chainOpportunityMeterFill}
+                                    data-chain-meter-fill={boardChainOpportunityMeterFill}
+                                    style={
+                                        {
+                                            '--chain-meter-fill': `${boardChainOpportunityMeterFill}%`
+                                        } as CSSProperties
+                                    }
+                                />
                                 {primaryTraitLaneBeatRow ? (
                                     <span
                                         aria-label={`Primary trait lane action. ${primaryTraitLaneBeatRow.label}: ${primaryTraitLaneBeatRow.count}. ${primaryTraitLaneBeatRow.beatCount}-beat ${primaryTraitLaneBeatRow.action}.`}
@@ -4900,8 +4925,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         aria-label={boardChainAccessibilitySummary.label}
                                         className={styles.chainOpportunityMeter}
+                                        data-chain-meter-fill={boardChainOpportunityMeterFill}
                                         data-chain-meter-tone={boardChainAccessibilitySummary.tone}
                                         data-testid="chain-opportunity-meter"
+                                        style={
+                                            {
+                                                '--chain-meter-fill': `${boardChainOpportunityMeterFill}%`
+                                            } as CSSProperties
+                                        }
                                     >
                                         {boardChainAccessibilitySummary.readyCount > 0 ? (
                                             <span data-chain-meter-lane="ready">
@@ -4982,6 +5013,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 <em>{boardChainAccessibilitySummary.secondaryLine}</em>
                                             ) : null}
                                         </span>
+                                        <i aria-hidden="true" className={styles.chainOpportunityMeterFill} />
                                     </span>
                                 ) : null}
                                 {boardRewardLadder.length > 0 ? (
@@ -5592,13 +5624,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-payoff-stack-sequence-keep={boardPayoffStack.sequence.keep}
                                         data-payoff-stack-sequence-then={boardPayoffStack.sequence.then}
                                         data-payoff-stack-tone={boardPayoffStack.tone}
+                                        data-payoff-stack-fill={boardPayoffStackFill}
                                         data-testid="board-opportunity-payoff-stack"
+                                        style={
+                                            {
+                                                '--payoff-stack-fill': `${boardPayoffStackFill}%`
+                                            } as CSSProperties
+                                        }
                                     >
                                         <small data-payoff-stack-cue={boardPayoffStack.cue}>{boardPayoffStack.cue}</small>
                                         <span>{boardPayoffStack.action}</span>
                                         <strong>{boardPayoffStack.value}</strong>
                                         <u>{boardPayoffStack.tone === 'cashout' ? 'Hit now' : 'Prime payoff'}</u>
                                         <b>{boardPayoffStack.detail}</b>
+                                        <i aria-hidden="true" className={styles.opportunityPayoffStackMeter} />
                                         <span
                                             className={styles.opportunityPayoffCrescendo}
                                             data-payoff-stack-crescendo-label={boardPayoffStack.crescendo.label}

@@ -450,6 +450,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveAttribute('data-chain-opportunity-tone', 'ready');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Best play');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Cash out');
+        expect(screen.getByTestId('chain-opportunity-meter')).toHaveAttribute('data-chain-meter-fill', '80');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Cashout beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Cash out');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Match lit route for reward');
@@ -1593,6 +1594,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '2');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-cue', 'pulse');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-tier', 'prime');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-fill', '40');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Follow-up stack');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Next tap');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack route + Rewards');
@@ -1687,6 +1689,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '2');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-cue', 'pulse');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-tier', 'prime');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-fill', '40');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Prime');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Prime payoff');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('2 payoffs live');
@@ -1901,6 +1904,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '3');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-cue', 'snap');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-tier', 'cashout');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-fill', '60');
         expect(
             screen.getByTestId('board-opportunity-payoff-stack').querySelector('[data-payoff-stack-crescendo-beat="1"]')
         ).toHaveAttribute('data-payoff-stack-crescendo-beat-focus', 'primary');
@@ -2028,6 +2032,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '5');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-cue', 'super');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-tier', 'super');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-fill', '100');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent(
             'Stack route + Perk payoff + Rewards'
         );
