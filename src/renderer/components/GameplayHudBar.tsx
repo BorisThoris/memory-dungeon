@@ -1774,6 +1774,7 @@ const GameplayHudBar = ({
                             <span className={styles.statKey}>Shards</span>
                             <span className={`${styles.statVal} ${styles.hudShardsValue}`}>{run.stats.comboShards}</span>
                             <span className={styles.statSubline}>Guards {run.stats.guardTokens}</span>
+                            <span className={styles.statSubline}>3 shards = +1 life</span>
                             {primaryResourceRewardCue ? (
                                 <span
                                     aria-label={primaryResourceRewardCueLabel}

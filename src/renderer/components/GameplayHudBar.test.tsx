@@ -907,6 +907,7 @@ describe('GameplayHudBar', () => {
             /Chain reward forecast.*Prime: Soon: Prime cashout: Triple prime: x8 \+1 shard: 3x stack: 2 matches/i
         );
         expect(screen.getByTestId('hud-combo-shards')).toHaveTextContent('x8 +1 shard');
+        expect(screen.getByTestId('hud-combo-shards')).toHaveTextContent('3 shards = +1 life');
         expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-tone', 'reward');
         expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-action', 'Prime cashout');
         expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-audio', 'reward-stack');
@@ -1114,6 +1115,7 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-combo-shards')).toHaveAttribute('data-primary-reward-hot', 'true');
         expect(screen.getByTestId('hud-combo-shards')).toHaveTextContent('Shards');
         expect(screen.getByTestId('hud-combo-shards')).toHaveTextContent('1');
+        expect(screen.getByTestId('hud-combo-shards')).toHaveTextContent('3 shards = +1 life');
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveAttribute(
             'data-chain-reward-forecast-hot',
             'true'
