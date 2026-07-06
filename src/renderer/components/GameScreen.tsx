@@ -4897,7 +4897,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         ) : null}
                                                         {stackLabel ? (
                                                             <>
-                                                                <mark>{stackLabel}</mark>
+                                                                <mark className={styles.boardFloaterRewardStackLabel}>{stackLabel}</mark>
                                                                 <span aria-hidden="true" className={styles.boardFloaterRewardStackPips}>
                                                                     {Array.from({ length: cue.stackSize ?? 1 }, (_, index) => (
                                                                         <i

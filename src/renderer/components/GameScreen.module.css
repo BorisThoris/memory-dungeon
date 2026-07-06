@@ -13902,6 +13902,23 @@
     line-height: 1;
 }
 
+.boardFloaterRewardStackLabel {
+    display: inline-flex;
+    align-items: center;
+    min-height: 0.76rem;
+    padding: 0.04rem 0.28rem;
+    border: 1px solid color-mix(in srgb, currentColor 34%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, currentColor 10%, transparent);
+    color: color-mix(in srgb, currentColor 88%, white);
+    font-size: 0.47rem;
+    font-weight: 950;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
 .boardFloaterRewardStackPips {
     display: inline-grid;
     grid-auto-flow: column;
