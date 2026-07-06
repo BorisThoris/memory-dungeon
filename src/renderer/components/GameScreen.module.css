@@ -3958,6 +3958,25 @@
     font-style: normal;
 }
 
+.boardMatchPayoffStackMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 4.6rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--match-payoff-stack-fill, 0%),
+            color-mix(in srgb, currentColor 16%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 10%, transparent),
+        0 0 0.18rem color-mix(in srgb, currentColor 16%, transparent);
+    opacity: 0.9;
+}
+
 .boardMatchPayoffStackCue strong {
     grid-column: 1 / -1;
     overflow: hidden;
@@ -12863,6 +12882,25 @@
     color: color-mix(in srgb, var(--theme-text) 82%, white);
 }
 
+.boardFloaterChainMilestoneMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 4.2rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--chain-milestone-fill, 0%),
+            color-mix(in srgb, currentColor 16%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+        0 0 0.18rem color-mix(in srgb, currentColor 18%, transparent);
+    opacity: 0.9;
+}
+
 .boardFloaterChainMilestoneBeatPips {
     display: inline-flex;
     grid-column: 1 / -1;
@@ -13063,6 +13101,25 @@
     font-weight: 960;
     letter-spacing: 0;
     line-height: 1;
+}
+
+.boardFloaterRewardBurstMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 4.2rem;
+    height: 0.12rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--reward-burst-fill, 0%),
+            color-mix(in srgb, currentColor 16%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+        0 0 0.18rem color-mix(in srgb, currentColor 18%, transparent);
+    opacity: 0.9;
 }
 
 .boardFloaterRewardBurst u {

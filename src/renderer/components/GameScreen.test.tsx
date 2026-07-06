@@ -2079,6 +2079,7 @@ describe('GameScreen (OVR-014)', () => {
             );
             expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-tier', 'stack');
             expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-beats', '4');
+            expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-fill', '80');
             expect(screen.getByTestId('match-score-floater-reward-burst').querySelectorAll('[data-reward-burst-beat]')).toHaveLength(4);
             expect(
                 screen.getByTestId('match-score-floater-reward-burst').querySelector('[data-reward-burst-beat="1"]')
@@ -2399,6 +2400,10 @@ describe('GameScreen (OVR-014)', () => {
                 'data-match-payoff-stack-keep',
                 'Hit now'
             );
+            expect(screen.getByTestId('board-match-payoff-stack-cue')).toHaveAttribute(
+                'data-match-payoff-stack-fill',
+                '80'
+            );
             expect(screen.getByTestId('board-match-payoff-stack-cue')).toHaveTextContent('Stack cashout');
             expect(screen.getByTestId('board-match-payoff-stack-cue')).toHaveTextContent('2 payoffs: Pickup + Chain');
             expect(screen.getByTestId('board-match-payoff-stack-cue')).toHaveTextContent('Cash stack');
@@ -2568,6 +2573,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(milestone).toHaveAttribute('data-chain-milestone-screen-cue', 'surge-live');
         expect(milestone).toHaveAttribute('data-chain-milestone-target', 'x6');
         expect(milestone).toHaveAttribute('data-chain-milestone-beats', '4');
+        expect(milestone).toHaveAttribute('data-chain-milestone-fill', '80');
         expect(milestone.querySelectorAll('[data-chain-milestone-beat]')).toHaveLength(4);
         expect(milestone.querySelector('[data-chain-milestone-beat="1"]')).toHaveAttribute(
             'data-chain-milestone-beat-focus',
@@ -2813,6 +2819,7 @@ describe('GameScreen (OVR-014)', () => {
         );
         expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-tier', 'mega');
         expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-beats', '5');
+        expect(screen.getByTestId('match-score-floater-reward-burst')).toHaveAttribute('data-reward-burst-fill', '100');
         expect(screen.getByTestId('match-score-floater-reward-burst').querySelectorAll('[data-reward-burst-beat]')).toHaveLength(5);
         expect(screen.getByTestId('match-score-floater-reward-burst').querySelector('[data-reward-burst-beat="1"]')).toHaveAttribute(
             'data-reward-burst-beat-focus',

@@ -2700,10 +2700,26 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                       'Chase next safe match'
               }
             : null;
+    const boardMatchPayoffStackFill = boardMatchPayoffStackCue
+        ? Math.round(Math.min(100, (getBoardMatchPayoffStackBeatCount(boardMatchPayoffStackCue) / 5) * 100))
+        : 0;
     const boardFloaterJackpotCue =
         boardFloaterPayload?.kind === 'match' ? getMatchFloaterJackpotCue(boardFloaterPayload) : null;
     const boardFloaterPrimaryPayoffLane =
         boardFloaterPayload?.kind === 'match' ? boardFloaterPayload.payoffLaneMap?.[0] ?? null : null;
+    const boardFloaterChainMilestoneFill =
+        boardFloaterPayload?.kind === 'match' && boardFloaterPayload.chainMilestone
+            ? Math.round(
+                  Math.min(
+                      100,
+                      (getBoardFloaterChainMilestoneBeatCount(boardFloaterPayload.chainMilestone) / 5) * 100
+                  )
+              )
+            : 0;
+    const boardFloaterRewardBurstFill =
+        boardFloaterPayload?.kind === 'match' && boardFloaterPayload.rewardBurst
+            ? Math.round(Math.min(100, (getBoardFloaterRewardBurstBeatCount(boardFloaterPayload.rewardBurst) / 5) * 100))
+            : 0;
 
     const [boardFloaterPos, setBoardFloaterPos] = useState<{ x: number; y: number } | null>(null);
 
@@ -4157,6 +4173,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     data-match-payoff-stack-action={getBoardMatchPayoffStackAction(boardMatchPayoffStackCue)}
                                     data-match-payoff-stack-audio={getBoardMatchPayoffStackAudioCue(boardMatchPayoffStackCue)}
                                     data-match-payoff-stack-beats={getBoardMatchPayoffStackBeatCount(boardMatchPayoffStackCue)}
+                                    data-match-payoff-stack-fill={boardMatchPayoffStackFill}
                                     data-match-payoff-stack-keep={boardMatchPayoffStackCue.sequenceKeepCue}
                                     data-match-payoff-stack-screen-cue={getBoardMatchPayoffStackScreenCue(boardMatchPayoffStackCue)}
                                     data-match-payoff-stack-sequence-first={boardMatchPayoffStackCue.sequenceFirstCue}
@@ -4164,12 +4181,18 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         boardMatchPayoffStackCue.nextCue ?? 'Lock payoff route'
                                     }
                                     data-match-payoff-stack-tone={boardMatchPayoffStackCue.tone}
+                                    style={
+                                        {
+                                            '--match-payoff-stack-fill': `${boardMatchPayoffStackFill}%`
+                                        } as CSSProperties
+                                    }
                                     data-testid="board-match-payoff-stack-cue"
                                     role="status"
                                 >
                                     <small>{boardMatchPayoffStackCue.label}</small>
                                     <strong>{boardMatchPayoffStackCue.value}</strong>
                                     <b>{getBoardMatchPayoffStackAction(boardMatchPayoffStackCue)}</b>
+                                    <span aria-hidden="true" className={styles.boardMatchPayoffStackMeter} />
                                     <span aria-hidden="true" className={styles.boardMatchPayoffStackBeatPips}>
                                         {Array.from({ length: getBoardMatchPayoffStackBeatCount(boardMatchPayoffStackCue) }, (_, index) => (
                                             <i
@@ -4505,16 +4528,23 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-chain-milestone-action={boardFloaterPayload.chainMilestone.action}
                                             data-chain-milestone-audio={boardFloaterPayload.chainMilestone.audioCue}
                                             data-chain-milestone-beats={getBoardFloaterChainMilestoneBeatCount(boardFloaterPayload.chainMilestone)}
+                                            data-chain-milestone-fill={boardFloaterChainMilestoneFill}
                                             data-chain-milestone-cue={boardFloaterPayload.chainMilestone.screenCue}
                                             data-chain-milestone-screen-cue={boardFloaterPayload.chainMilestone.screenCue}
                                             data-chain-milestone-target={boardFloaterPayload.chainMilestone.target}
                                             data-chain-milestone-tone={boardFloaterPayload.chainMilestone.tone}
+                                            style={
+                                                {
+                                                    '--chain-milestone-fill': `${boardFloaterChainMilestoneFill}%`
+                                                } as CSSProperties
+                                            }
                                             data-testid="match-score-floater-chain-milestone"
                                         >
                                             <small>{boardFloaterPayload.chainMilestone.label}</small>
                                             <b>{boardFloaterPayload.chainMilestone.target}</b>
                                             <strong>{boardFloaterPayload.chainMilestone.action}</strong>
                                             <em>{boardFloaterPayload.chainMilestone.value}</em>
+                                            <span aria-hidden="true" className={styles.boardFloaterChainMilestoneMeter} />
                                             <span aria-hidden="true" className={styles.boardFloaterChainMilestoneBeatPips}>
                                                 {Array.from(
                                                     { length: getBoardFloaterChainMilestoneBeatCount(boardFloaterPayload.chainMilestone) },
@@ -4536,14 +4566,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-reward-burst-action={boardFloaterPayload.rewardBurst.action}
                                             data-reward-burst-audio={getBoardFloaterRewardBurstAudioCue(boardFloaterPayload.rewardBurst)}
                                             data-reward-burst-beats={getBoardFloaterRewardBurstBeatCount(boardFloaterPayload.rewardBurst)}
+                                            data-reward-burst-fill={boardFloaterRewardBurstFill}
                                             data-reward-burst-label={boardFloaterPayload.rewardBurst.label}
                                             data-reward-burst-screen-cue={getBoardFloaterRewardBurstScreenCue(boardFloaterPayload.rewardBurst)}
                                             data-reward-burst-tier={boardFloaterPayload.rewardBurst.tier}
+                                            style={
+                                                {
+                                                    '--reward-burst-fill': `${boardFloaterRewardBurstFill}%`
+                                                } as CSSProperties
+                                            }
                                             data-testid="match-score-floater-reward-burst"
                                         >
                                             <small>{boardFloaterPayload.rewardBurst.label}</small>
                                             <u>{boardFloaterPayload.rewardBurst.action}</u>
                                             <b>{boardFloaterPayload.rewardBurst.value}</b>
+                                            <span aria-hidden="true" className={styles.boardFloaterRewardBurstMeter} />
                                             <span aria-hidden="true" className={styles.boardFloaterRewardBurstBeatPips}>
                                                 {Array.from(
                                                     { length: getBoardFloaterRewardBurstBeatCount(boardFloaterPayload.rewardBurst) },
