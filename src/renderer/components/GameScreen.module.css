@@ -16179,6 +16179,30 @@
         color-mix(in srgb, var(--theme-void) 34%, transparent);
 }
 
+.hudTraitOpportunityPill {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-cyan-bright) 14%);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-gold-bright) 8%, transparent), transparent 60%),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+}
+
+.hudTraitOpportunityRows {
+    display: grid;
+    grid-column: 1 / -1;
+    gap: 0.06rem;
+    min-width: 0;
+}
+
+.hudTraitOpportunityRows small {
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, var(--theme-gold-bright));
+    font-size: 0.57rem;
+    font-weight: 800;
+    line-height: 1.12;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .hudTraitRoutePrimary {
     min-width: 0;
     max-width: 12.5rem;

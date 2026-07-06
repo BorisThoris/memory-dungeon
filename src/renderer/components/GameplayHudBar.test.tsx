@@ -1478,6 +1478,12 @@ describe('GameplayHudBar', () => {
             'Trait stack cue. Trait super stack: Cash trait super stack. 1 route + x4 +1 shard.'
         );
         expect(screen.getByTestId('hud-trait-route-panel').getAttribute('title')).toContain('Echo + Sealed: combo shard');
+        expect(screen.getByTestId('hud-trait-opportunity-cards')).toHaveTextContent('Traits');
+        expect(screen.getByTestId('hud-trait-opportunity-cards')).toHaveTextContent('echo, sealed');
+        expect(screen.getByTestId('hud-trait-opportunity-cards').getAttribute('title')).toContain(
+            'Trait combo opportunities'
+        );
+        expect(screen.getByTestId('hud-trait-opportunity-cards').getAttribute('title')).toContain('Types: echo, sealed');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('Shard');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('Cash shard');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('combo shard');

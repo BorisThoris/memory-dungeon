@@ -1375,6 +1375,18 @@ const GameplayHudBar = ({
               .map((tile) => `${tile.label} (${tile.traitKind})`)
               .join(', ')
         : null;
+    const traitOpportunityKindLine = traitOpportunitySummary.tiles.length > 0
+        ? traitOpportunitySummary.tiles.map((tile) => tile.traitKind).join(', ')
+        : null;
+    const traitOpportunityCardCountLabel =
+        traitOpportunitySummary.tiles.length > 0
+            ? `${traitOpportunitySummary.tiles.length} combo card${traitOpportunitySummary.tiles.length === 1 ? '' : 's'}`
+            : null;
+    const traitOpportunityCardTitle = traitOpportunitySummary.reason
+        ? `Trait combo opportunities. ${traitOpportunityCardCountLabel ?? 'No combo cards'}. Types: ${traitOpportunityKindLine ?? 'none'}. ${traitOpportunitySummary.reason}.`
+        : traitOpportunityCardLine
+          ? `Trait combo opportunities. ${traitOpportunityCardCountLabel ?? 'Combo cards'}. ${traitOpportunityCardLine}.`
+          : 'Trait combo opportunities';
     const traitOpportunityLaneLines =
         traitOpportunitySummary.interactionLines.length > 0
             ? traitOpportunitySummary.interactionLines
@@ -2339,6 +2351,24 @@ const GameplayHudBar = ({
                                                           : ''
                                                   }`
                                                 : hazardTileSummary.hudLabel}
+                                        </span>
+                                    </div>
+                                ) : null}
+                                {traitOpportunitySummary.tiles.length > 0 ? (
+                                    <div
+                                        className={`${styles.statPillCompact} ${styles.hudTraitOpportunityPill}`}
+                                        data-testid="hud-trait-opportunity-cards"
+                                        title={traitOpportunityCardTitle}
+                                    >
+                                        <span className={styles.statKey}>Traits</span>
+                                        <span className={styles.statVal}>{traitOpportunitySummary.tiles.length}</span>
+                                        <span className={styles.statSubline}>
+                                            {traitOpportunityKindLine ?? traitOpportunityCardCountLabel ?? 'Combo cards'}
+                                        </span>
+                                        <span className={styles.hudTraitOpportunityRows}>
+                                            <small>
+                                                {traitOpportunityCardLine ?? traitOpportunitySummary.reason ?? 'No combo lines yet'}
+                                            </small>
                                         </span>
                                     </div>
                                 ) : null}
