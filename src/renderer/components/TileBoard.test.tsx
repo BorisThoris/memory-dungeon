@@ -1232,6 +1232,10 @@ describe('TileBoard touch and click controls', () => {
         expect(primaryTraitLane).toHaveTextContent('Next lane');
         expect(primaryTraitLane).toHaveTextContent('Cash shard');
         expect(primaryTraitLane.querySelectorAll('[data-card-trait-lane-primary-pip]')).toHaveLength(4);
+        expect(screen.getByTestId('chain-opportunity-trait-lane-map-summary')).toHaveAttribute(
+            'data-trait-interaction-lane-map-meter-fill',
+            '80'
+        );
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-primary', 'shard');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-action', 'Cash shard');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-audio', 'trait-lane-shard');

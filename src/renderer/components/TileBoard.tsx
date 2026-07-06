@@ -2835,6 +2835,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         boardTraitInteractionLaneMap
     );
     const primaryBoardTraitInteractionLane = boardTraitInteractionLaneMap[0] ?? null;
+    const boardTraitInteractionLaneMapMeterFill = Math.round(Math.min(100, (boardTraitInteractionLaneMap.length / 5) * 100));
     const boardChainHotBand = boardChainOpportunity.rewardHot
         ? {
               cue: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Cash out now',
@@ -4526,6 +4527,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <span
                                             className={styles.chainOpportunityTraitLaneMapSummary}
                                             data-testid="chain-opportunity-trait-lane-map-summary"
+                                            data-trait-interaction-lane-map-meter-fill={boardTraitInteractionLaneMapMeterFill}
+                                            style={
+                                                {
+                                                    '--trait-interaction-lane-map-meter-fill': `${boardTraitInteractionLaneMapMeterFill}%`
+                                                } as CSSProperties
+                                            }
                                         >
                                             <small>Traits</small>
                                             <b>
@@ -4549,6 +4556,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     )
                                                 )}
                                             </span>
+                                            <i aria-hidden="true" className={styles.chainOpportunityTraitLaneMapMeter}>
+                                                <i aria-hidden="true" className={styles.chainOpportunityTraitLaneMapMeterFill} />
+                                            </i>
                                         </span>
                                         {boardTraitInteractionLaneMap.map((lane) => (
                                             <span
