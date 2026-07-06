@@ -1225,6 +1225,7 @@ describe('GameplayHudBar', () => {
             'burst'
         );
         const chainRewardForecastSummary = screen.getByTestId('hud-chain-reward-forecast-summary');
+        expect(chainRewardForecastSummary).toHaveAttribute('data-chain-reward-forecast-summary-fill', '100');
         expect(chainRewardForecastSummary).toHaveTextContent('Forecast');
         expect(chainRewardForecastSummary).toHaveTextContent('6 cues');
         expect(chainRewardForecastSummary.querySelectorAll('[data-chain-reward-forecast-summary-beat]')).toHaveLength(5);

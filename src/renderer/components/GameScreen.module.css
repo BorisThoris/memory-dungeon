@@ -7557,6 +7557,7 @@
 
 .hudChainRewardForecastSummary {
     display: inline-flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 0.12rem;
     flex: 1 0 100%;
@@ -7573,6 +7574,26 @@
     line-height: 1;
     text-transform: uppercase;
     white-space: nowrap;
+}
+
+.hudChainRewardForecastSummaryMeter {
+    display: block;
+    flex: 1 0 100%;
+    width: 100%;
+    min-width: 4.6rem;
+    height: 0.12rem;
+    margin-top: 0.03rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--chain-reward-forecast-summary-fill, 0%),
+            color-mix(in srgb, currentColor 18%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+        0 0 0.18rem color-mix(in srgb, currentColor 16%, transparent);
+    opacity: 0.92;
 }
 
 .hudChainRewardForecastSummary small,

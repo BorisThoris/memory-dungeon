@@ -1587,6 +1587,7 @@ const GameplayHudBar = ({
     const chainRewardLadderAttr = hudChainRewardLadderAttr(chainRewardLadder);
     const chainRewardLadderActionAttr = hudChainRewardLadderActionAttr(chainRewardLadder);
     const chainRewardLadderAccessibleLabel = hudChainRewardLadderLabel(chainRewardLadder);
+    const chainRewardForecastSummaryFill = Math.min(100, ((chainRewardLaneMap.length + chainRewardLadder.length) / 5) * 100);
     const inRunCauseRows = getInRunCauseRows(run).slice(0, 3);
     const primaryInRunCauseRow =
         inRunCauseRows.reduce<FeedbackCauseRow | null>((primary, row) => {
@@ -2682,6 +2683,12 @@ const GameplayHudBar = ({
                                                     className={styles.hudChainRewardForecastSummary}
                                                     data-chain-reward-lane-count={chainRewardLaneMap.length}
                                                     data-chain-reward-ladder-count={chainRewardLadder.length}
+                                                    data-chain-reward-forecast-summary-fill={chainRewardForecastSummaryFill}
+                                                    style={
+                                                        {
+                                                            '--chain-reward-forecast-summary-fill': `${chainRewardForecastSummaryFill}%`
+                                                        } as CSSProperties
+                                                    }
                                                     data-testid="hud-chain-reward-forecast-summary"
                                                 >
                                                     <small>Forecast</small>
@@ -2706,6 +2713,7 @@ const GameplayHudBar = ({
                                                             )
                                                         )}
                                                     </span>
+                                                    <span aria-hidden="true" className={styles.hudChainRewardForecastSummaryMeter} />
                                                 </span>
                                                 {chainRewardLeadCue ? (
                                                     <span
