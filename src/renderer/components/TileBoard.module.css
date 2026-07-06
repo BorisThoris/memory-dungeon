@@ -2978,6 +2978,32 @@
     font-weight: 980;
 }
 
+.chainOpportunityBeatMapSummaryMeter {
+    display: block;
+    width: 100%;
+    height: 0.14rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityBeatMapSummaryMeterFill {
+    display: block;
+    width: var(--card-beat-map-summary-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .chainOpportunityBeatMapSummaryPips {
     display: inline-flex;
     align-items: center;
@@ -4359,9 +4385,10 @@
 }
 
 .chainOpportunityExamples {
-    display: inline-flex;
+    display: inline-grid;
+    grid-template-columns: minmax(0, auto);
     align-items: center;
-    gap: 0.18rem;
+    gap: 0.08rem;
     max-width: min(11rem, 36vi);
     overflow: hidden;
     color: color-mix(in srgb, var(--theme-text) 88%, var(--theme-cyan-bright));
@@ -4370,6 +4397,32 @@
     line-height: 1.12;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.chainOpportunityExamplesMeter {
+    display: block;
+    width: 100%;
+    height: 0.14rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityExamplesMeterFill {
+    display: block;
+    width: var(--chain-examples-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    transition: width 140ms ease-out;
 }
 
 .chainOpportunityExamplesBeatPips {

@@ -4833,12 +4833,28 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="chain-opportunity-beat-map"
                                     >
                                         <small>Beat map</small>
-                                        <span className={styles.chainOpportunityBeatMapSummary} data-testid="chain-opportunity-beat-map-summary">
+                                        <span
+                                            className={styles.chainOpportunityBeatMapSummary}
+                                            data-card-beat-map-summary-meter-fill={Math.round(
+                                                Math.min(100, (cardFeedbackBeatRows.length / 5) * 100)
+                                            )}
+                                            data-testid="chain-opportunity-beat-map-summary"
+                                            style={
+                                                {
+                                                    '--card-beat-map-summary-meter-fill': `${Math.round(
+                                                        Math.min(100, (cardFeedbackBeatRows.length / 5) * 100)
+                                                    )}%`
+                                                } as CSSProperties
+                                            }
+                                        >
                                             <small>Beats</small>
                                             <b>
                                                 {cardFeedbackBeatRows.length}{' '}
                                                 {cardFeedbackBeatRows.length === 1 ? 'lane' : 'lanes'}
                                             </b>
+                                            <i aria-hidden="true" className={styles.chainOpportunityBeatMapSummaryMeter}>
+                                                <i aria-hidden="true" className={styles.chainOpportunityBeatMapSummaryMeterFill} />
+                                            </i>
                                             <span aria-hidden="true" className={styles.chainOpportunityBeatMapSummaryPips}>
                                                 {Array.from(
                                                     { length: Math.max(2, Math.min(5, cardFeedbackBeatRows.length + 1)) },
@@ -5425,8 +5441,23 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 {boardChainOpportunity.examples.length > 0 ? (
-                                    <span className={styles.chainOpportunityExamples}>
+                                    <span
+                                        className={styles.chainOpportunityExamples}
+                                        data-chain-examples-meter-fill={Math.round(
+                                            Math.min(100, (boardChainOpportunity.examples.length / 4) * 100)
+                                        )}
+                                        style={
+                                            {
+                                                '--chain-examples-meter-fill': `${Math.round(
+                                                    Math.min(100, (boardChainOpportunity.examples.length / 4) * 100)
+                                                )}%`
+                                            } as CSSProperties
+                                        }
+                                    >
                                         {boardChainOpportunity.examples.join(' / ')}
+                                        <i aria-hidden="true" className={styles.chainOpportunityExamplesMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunityExamplesMeterFill} />
+                                        </i>
                                         <span aria-hidden="true" className={styles.chainOpportunityExamplesBeatPips}>
                                             {Array.from({ length: Math.min(4, boardChainOpportunity.examples.length + 1) }, (_, index) => (
                                                 <i

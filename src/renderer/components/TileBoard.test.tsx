@@ -759,6 +759,10 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-reward-urgency-meter-fill',
             '100'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-examples-meter-fill]')).toHaveAttribute(
+            'data-chain-examples-meter-fill',
+            '25'
+        );
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Echo + Sealed: combo shard');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveAccessibleName(
             /Board chain opportunity.*Best play.*Cash out.*Match lit route for reward.*Push x6 reward.*x4 streak.*1 match to reward.*One-away cashout.*1 route ready.*2 cards lit.*Reward hot.*Next reward x6 \+1 shard in 1 match.*Echo \+ Sealed: combo shard/i
@@ -1139,6 +1143,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-actions', 'cashout:hit now:2');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('Beats');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('1 lane');
+        expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveAttribute(
+            'data-card-beat-map-summary-meter-fill',
+            '20'
+        );
         expect(
             screen.getByTestId('chain-opportunity-beat-map-summary').querySelectorAll('[data-card-beat-map-summary-pip]')
         ).toHaveLength(2);
@@ -2709,6 +2717,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-actions', 'setup:set route:2');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('Beats');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('1 lane');
+        expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveAttribute(
+            'data-card-beat-map-summary-meter-fill',
+            '20'
+        );
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAccessibleName(
             'Card beat map. Prime: 2. 2-beat set route.'
         );
