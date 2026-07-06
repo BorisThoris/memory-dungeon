@@ -12653,6 +12653,30 @@
     text-transform: uppercase;
 }
 
+.boardFloaterStreakPips {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0.16rem, 1fr);
+    gap: 0.05rem;
+    min-width: 0.86rem;
+    color: currentColor;
+}
+
+.boardFloaterStreakPips i {
+    display: block;
+    width: 0.14rem;
+    height: 0.14rem;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 0 0.24rem color-mix(in srgb, currentColor 28%, transparent);
+    animation: matchScoreFloaterPulse 0.96s ease-in-out infinite;
+    opacity: 0.9;
+}
+
+.boardFloaterStreakPips i[data-chain-streak-beat-focus='support'] {
+    opacity: 0.66;
+}
+
 .boardFloaterStreakCue {
     padding-left: 0.34rem;
     border-left: 1px solid color-mix(in srgb, currentColor 34%, transparent);

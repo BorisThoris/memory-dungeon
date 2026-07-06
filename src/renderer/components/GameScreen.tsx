@@ -4785,8 +4785,23 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         </span>
                                     ) : null}
                                     {boardFloaterPayload.kind === 'match' && boardFloaterPayload.chainDepth >= 3 ? (
-                                        <span className={styles.boardFloaterStreak}>
-                                            x{boardFloaterPayload.chainDepth} streak
+                                        <span
+                                            className={styles.boardFloaterStreak}
+                                            data-chain-streak-depth={boardFloaterPayload.chainDepth}
+                                        >
+                                            <span className={styles.boardFloaterStreakPips} aria-hidden="true">
+                                                {Array.from(
+                                                    { length: Math.min(5, boardFloaterPayload.chainDepth) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-chain-streak-beat={index + 1}
+                                                            data-chain-streak-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={`board-streak-beat-${index + 1}`}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                            <span>x{boardFloaterPayload.chainDepth} streak</span>
                                             {boardFloaterChainCue ? (
                                                 <span className={styles.boardFloaterStreakCue}>
                                                     {boardFloaterChainCue}
