@@ -7250,6 +7250,20 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
+.opportunityCompassRow[data-opportunity-priority='best'] .opportunityCompassImpact {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, white);
+    background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.opportunityCompassRow[data-opportunity-priority='best'] b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.opportunityCompassRow[data-opportunity-priority='best'] em {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
 .opportunityCompassRow[data-opportunity-impact-cue='Avoid penalty'] .opportunityCompassImpact {
     border-color: color-mix(in srgb, var(--theme-danger) 36%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 10%, transparent);
