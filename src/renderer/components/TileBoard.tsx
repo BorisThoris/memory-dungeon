@@ -2866,6 +2866,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
               boardChainHotBand.cue
           ])
         : undefined;
+    const boardChainHotBandMeterFill = boardChainHotBand?.tone === 'cashout' ? 100 : boardChainHotBand ? 70 : 0;
     const boardChainMomentumBeatCount: 2 | 3 | 4 | 5 = boardChainOpportunity.rewardHot
         ? 5
         : boardChainOpportunity.comboSurgeLabel
@@ -5405,6 +5406,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={boardChainHotBandLabel}
                                         className={styles.chainOpportunityHotBand}
                                         data-chain-hot-band-tone={boardChainHotBand.tone}
+                                        data-chain-hot-band-meter-fill={boardChainHotBandMeterFill}
                                         data-testid="chain-opportunity-hot-band"
                                         role="status"
                                     >
@@ -5412,6 +5414,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <b>{boardChainHotBand.value}</b>
                                         <em>{boardChainHotBand.detail}</em>
                                         <i>{boardChainHotBand.cue}</i>
+                                        <i
+                                            aria-hidden="true"
+                                            className={styles.chainOpportunityHotBandMeter}
+                                            data-chain-hot-band-meter-fill={boardChainHotBandMeterFill}
+                                            style={
+                                                {
+                                                    '--chain-hot-band-meter-fill': `${boardChainHotBandMeterFill}%`
+                                                } as CSSProperties
+                                            }
+                                        >
+                                            <i aria-hidden="true" className={styles.chainOpportunityHotBandMeterFill} />
+                                        </i>
                                         <span aria-hidden="true" className={styles.chainOpportunityHotBandBeatPips}>
                                             {Array.from({ length: boardChainHotBand.tone === 'cashout' ? 5 : 3 }, (_, index) => (
                                                 <i

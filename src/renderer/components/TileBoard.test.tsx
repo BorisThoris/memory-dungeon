@@ -703,6 +703,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Reward hot');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('One-away cashout');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute(
+            'data-chain-hot-band-meter-fill',
+            '100'
+        );
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAccessibleName(
             /Chain hot band.*Reward hot.*Next reward x6 \+1 shard in 1 match.*One-away cashout/i
         );
@@ -2109,6 +2113,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Streak lane');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Cashout ready');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Any clean match pays');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute(
+            'data-chain-hot-band-meter-fill',
+            '70'
+        );
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAccessibleName(
             /Chain hot band.*Cashout ready.*Any clean match pays.*One-away cashout/i
         );
