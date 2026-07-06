@@ -4408,13 +4408,24 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={formatChainOpportunityBeatLabel(boardChainOpportunity.beatSignal)}
                                         className={styles.chainOpportunityBeat}
                                         data-chain-beat-action={boardChainOpportunity.beatSignal.action}
+                                        data-chain-beat-meter-fill={Math.round((boardChainOpportunity.beatSignal.beatCount / 5) * 100)}
                                         data-chain-beat-audio={boardChainOpportunity.beatSignal.audioCue}
                                         data-chain-beat-screen-cue={boardChainOpportunity.beatSignal.screenCue}
                                         data-chain-beat-tier={boardChainOpportunity.beatSignal.tier}
                                         data-testid="chain-opportunity-beat"
+                                        style={
+                                            {
+                                                '--chain-beat-meter-fill': `${Math.round(
+                                                    (boardChainOpportunity.beatSignal.beatCount / 5) * 100
+                                                )}%`
+                                            } as CSSProperties
+                                        }
                                     >
                                         <small>{boardChainOpportunity.beatSignal.label}</small>
                                         <b>{boardChainOpportunity.beatSignal.action}</b>
+                                        <i aria-hidden="true" className={styles.chainOpportunityBeatMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunityBeatMeterFill} />
+                                        </i>
                                         <strong>
                                             {Array.from({ length: boardChainOpportunity.beatSignal.beatCount }).map(
                                                 (_, index) => (

@@ -849,6 +849,33 @@
     box-shadow: inset 0 1px 0 color-mix(in srgb, white 9%, transparent);
 }
 
+.chainOpportunityBeatMeter {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    height: 0.14rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityBeatMeterFill {
+    display: block;
+    width: var(--chain-beat-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .chainOpportunityBeat small,
 .chainOpportunityBeat b,
 .chainOpportunityBeat em {

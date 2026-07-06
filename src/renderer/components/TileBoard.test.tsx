@@ -458,11 +458,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-audio', 'cashout-beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-screen-cue', 'super');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-meter-fill', '100');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAccessibleName(
             'Cashout beat: Cash out. 5 beats. Match lit route for reward.'
         );
-        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('i')).toHaveLength(5);
-        expect(screen.getByTestId('chain-opportunity-beat').querySelector('i')).toHaveAttribute(
+        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(5);
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
             'data-chain-opportunity-beat-pip-focus',
             'primary'
         );
@@ -1547,7 +1548,8 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('1 follow-up marked');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Follow-up beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('1 follow-up marked');
-        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('i')).toHaveLength(3);
+        expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-meter-fill', '60');
+        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(3);
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-cue', 'Follow up');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-target', 'Tap marked follow-up');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-sequence-first', 'Tap marked follow-up');
@@ -1878,7 +1880,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-tier', 'route');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Route beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('1 route ready');
-        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('i')).toHaveLength(3);
+        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(3);
         expect(screen.getByTestId('chain-opportunity-recipes')).toHaveTextContent('Echo + Sealed');
         expect(screen.getByTestId('chain-opportunity-recipes')).toHaveAccessibleName('Combo recipes. Echo + Sealed');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-priority', 'best');
@@ -2427,7 +2429,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-beat-counts', '4:4');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Surge beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('5 routes ready');
-        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('i')).toHaveLength(4);
+        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(4);
         expect(screen.getByTestId('chain-opportunity-arcade-callout')).toHaveAttribute(
             'data-chain-callout-tone',
             'surge'
@@ -2658,11 +2660,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Prime beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Prime route');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Use swap');
+        expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-meter-fill', '40');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action', 'Prime route');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-audio', 'setup-beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-screen-cue', 'pulse');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'setup');
-        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('i')).toHaveLength(2);
+        expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(2);
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveAttribute('data-chain-sequence-tone', 'setup');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent('First');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent(
