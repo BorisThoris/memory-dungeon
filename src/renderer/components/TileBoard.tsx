@@ -5475,12 +5475,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 data-active-power-beats={activePowerBoardChip.beats}
                                 data-active-power-first={activePowerBoardChip.first}
                                 data-active-power-then={activePowerBoardChip.then}
+                                data-active-power-meter-fill={Math.round((activePowerBoardChip.beats / 4) * 100)}
                                 data-active-power-tone={activePowerBoardChip.tone}
                                 data-testid="active-power-board-chip"
                                 role="status"
                             >
                                 <span>{activePowerBoardChip.label}</span>
                                 <strong>{activePowerBoardChip.detail}</strong>
+                                <span
+                                    aria-hidden="true"
+                                    className={styles.activePowerBoardChipMeter}
+                                    data-active-power-meter-fill={Math.round((activePowerBoardChip.beats / 4) * 100)}
+                                >
+                                    <i
+                                        className={styles.activePowerBoardChipMeterFill}
+                                        style={{
+                                            '--active-power-meter-fill': `${Math.round((activePowerBoardChip.beats / 4) * 100)}%`
+                                        } as CSSProperties}
+                                    />
+                                </span>
                                 <span aria-hidden="true" className={styles.activePowerBoardChipBeatPips}>
                                     {Array.from({ length: activePowerBoardChip.beats }, (_, index) => (
                                         <i

@@ -4669,6 +4669,32 @@
     line-height: 1.1;
 }
 
+.activePowerBoardChipMeter {
+    grid-column: 1 / -1;
+    display: block;
+    height: 0.22rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.activePowerBoardChipMeterFill {
+    display: block;
+    width: var(--active-power-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .activePowerBoardChipBeatPips {
     display: inline-flex;
     align-items: center;
