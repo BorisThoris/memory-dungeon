@@ -99,6 +99,7 @@ describe('GameplayHudBar', () => {
             'guard'
         );
         expect(screen.getByTestId('hud-favor-progress').textContent).toContain('2/3');
+        expect(screen.getByTestId('hud-favor-progress').textContent).toContain('1 more for a relic pick');
         expect(screen.getByTestId('hud-favor-progress').getAttribute('title')).toContain('Temporary run currency');
         expect(screen.getByTestId('hud-featured-streak').textContent).toContain('x3');
         expect(screen.getByTestId('hud-endless-risk-wager').textContent).toContain('+2 Favor');

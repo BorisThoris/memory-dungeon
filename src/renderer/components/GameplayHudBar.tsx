@@ -24,6 +24,7 @@ import {
 } from '../../shared/long-run-feedback';
 import { getRunEconomyEntry } from '../../shared/run-economy';
 import { getRunBuildProfile } from '../../shared/relics';
+import { RELIC_FAVOR_PER_BONUS_PICK } from '../../shared/relic-favor-rules';
 import { SHOP_ITEM_CATALOG } from '../../shared/shop-rules';
 import codexBookUrl from '../assets/ui/icons/icon-codex-book-v1.svg?url';
 import scoreParasiteCrystalUrl from '../assets/ui/icons/icon-score-parasite-crystal.svg?url';
@@ -2061,6 +2062,9 @@ const GameplayHudBar = ({
                                     >
                                         <span className={styles.statKey}>Favor</span>
                                         <span className={styles.statVal}>{run.relicFavorProgress}/3</span>
+                                        <span className={styles.statSubline}>
+                                            {RELIC_FAVOR_PER_BONUS_PICK - run.relicFavorProgress} more for a relic pick
+                                        </span>
                                     </div>
                                 ) : null}
                                 {endlessChapterActive && run.endlessRiskWager?.targetLevel === board.level ? (
