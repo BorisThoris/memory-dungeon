@@ -783,6 +783,13 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-reward-urgency-meter-fill',
             '100'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-examples-tone]')).toHaveAttribute(
+            'data-chain-examples-tone',
+            'cashout'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-examples-tone]')).toHaveTextContent(
+            'Examples'
+        );
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-examples-meter-fill]')).toHaveAttribute(
             'data-chain-examples-meter-fill',
             '25'

@@ -5553,6 +5553,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-examples-meter-fill={Math.round(
                                             Math.min(100, (boardChainOpportunity.examples.length / 4) * 100)
                                         )}
+                                        data-chain-examples-tone={boardChainOpportunity.rewardHot ? 'cashout' : 'forecast'}
                                         style={
                                             {
                                                 '--chain-examples-meter-fill': `${Math.round(
@@ -5561,6 +5562,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             } as CSSProperties
                                         }
                                     >
+                                        <small>Examples</small>
                                         {boardChainOpportunity.examples.join(' / ')}
                                         <i aria-hidden="true" className={styles.chainOpportunityExamplesMeter}>
                                             <i aria-hidden="true" className={styles.chainOpportunityExamplesMeterFill} />

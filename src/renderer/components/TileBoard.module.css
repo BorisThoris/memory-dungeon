@@ -4645,6 +4645,21 @@
     white-space: nowrap;
 }
 
+.chainOpportunityExamples small {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+    font-size: 0.44rem;
+    font-weight: 940;
+    text-transform: uppercase;
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='cashout'] small {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='forecast'] small {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
 .chainOpportunityExamplesMeter {
     display: block;
     width: 100%;
