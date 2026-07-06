@@ -2449,8 +2449,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     tone: 'trait',
                     value:
                         traitOpportunitySummary.tiles.length === 1
-                            ? '1 combo card'
-                            : `${traitOpportunitySummary.tiles.length} combo cards`
+                            ? '1 combo card lit'
+                            : `${traitOpportunitySummary.tiles.length} combo cards lit`
                 });
             }
 
