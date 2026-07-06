@@ -5750,7 +5750,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             const beatCount = getFocusedPreviewBeatCount(focusedPreviewChip);
                             const previewDensity =
                                 focusedPreviewChip.kind === 'trait'
-                                    ? focusedPreviewChip.lines.length
+                                    ? traitOpportunitySummary.tiles.length
                                     : focusedPreviewChip.kind === 'pickup'
                                       ? 1
                                       : 0;
@@ -5793,7 +5793,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </b>
                                         {previewDensity > 0 ? (
                                             <strong>
-                                                {previewDensity} {previewDensity === 1 ? 'route' : 'routes'} lit
+                                                {focusedPreviewChip.kind === 'trait'
+                                                    ? `${previewDensity} ${previewDensity === 1 ? 'combo card' : 'combo cards'} lit`
+                                                    : `${previewDensity} ${previewDensity === 1 ? 'route' : 'routes'} lit`}
                                             </strong>
                                         ) : null}
                                         <em>{beatCount} beats</em>
