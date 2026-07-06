@@ -1999,6 +1999,10 @@ const GameplayHudBar = ({
                                 >
                                     <span className={styles.statKey}>Pairs</span>
                                     <span className={styles.statVal}>{matchedPairCount}/{board.pairCount}</span>
+                                    <span className={styles.statSubline}>
+                                        {Math.max(0, board.pairCount - matchedPairCount)} pair
+                                        {Math.max(0, board.pairCount - matchedPairCount) === 1 ? '' : 's'} remain
+                                    </span>
                                 </div>
                                 {gauntletRemainingMs !== null ? (
                                     <div className={styles.statPillCompact} title="Gauntlet time left">

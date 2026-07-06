@@ -266,6 +266,7 @@ describe('GameplayHudBar', () => {
 
         expect(screen.getByTestId('hud-pair-progress')).toHaveTextContent('Pairs');
         expect(screen.getByTestId('hud-pair-progress')).toHaveTextContent('2/5');
+        expect(screen.getByTestId('hud-pair-progress')).toHaveTextContent('3 pairs remain');
         expect(screen.getByTestId('hud-pair-progress').getAttribute('title')).toContain('3 pairs remain');
     });
 
