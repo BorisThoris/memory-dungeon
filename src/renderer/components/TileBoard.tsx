@@ -5136,13 +5136,26 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <span
                                             className={styles.chainOpportunityRewardLadderSummary}
+                                            data-board-chain-reward-ladder-summary-meter-fill={Math.round(
+                                                Math.min(100, (boardRewardLadder.length / 3) * 100)
+                                            )}
                                             data-testid="chain-opportunity-reward-ladder-summary"
+                                            style={
+                                                {
+                                                    '--board-chain-reward-ladder-summary-meter-fill': `${Math.round(
+                                                        Math.min(100, (boardRewardLadder.length / 3) * 100)
+                                                    )}%`
+                                                } as CSSProperties
+                                            }
                                         >
                                             <small>Rewards</small>
                                             <b>
                                                 {boardRewardLadder.length}{' '}
                                                 {boardRewardLadder.length === 1 ? 'reward' : 'rewards'}
                                             </b>
+                                            <i aria-hidden="true" className={styles.chainOpportunityRewardLadderSummaryMeter}>
+                                                <i aria-hidden="true" className={styles.chainOpportunityRewardLadderSummaryMeterFill} />
+                                            </i>
                                             <span
                                                 aria-hidden="true"
                                                 className={styles.chainOpportunityRewardLadderSummaryBeatPips}

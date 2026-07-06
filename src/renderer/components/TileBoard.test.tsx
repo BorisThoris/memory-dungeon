@@ -618,6 +618,10 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('Rewards');
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('3 rewards');
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveAttribute(
+            'data-board-chain-reward-ladder-summary-meter-fill',
+            '100'
+        );
         expect(
             screen.getByTestId('chain-opportunity-reward-ladder-summary').querySelectorAll('[data-board-chain-reward-summary-beat]')
         ).toHaveLength(4);
