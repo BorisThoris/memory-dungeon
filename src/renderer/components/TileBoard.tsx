@@ -1540,6 +1540,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 : 'Trait lane beat map',
         [cardFeedbackTraitLaneBeatRows]
     );
+    const cardFeedbackTraitLaneBeatMapMeterFill = Math.round(
+        Math.min(100, (cardFeedbackTraitLaneBeatRows.length / 5) * 100)
+    );
     const primaryTraitLaneBeatRow = cardFeedbackTraitLaneBeatRows[0] ?? null;
     const primaryTraitLaneAudioCue = primaryTraitLaneBeatRow
         ? cardTraitLaneAudioCue(primaryTraitLaneBeatRow.id)
@@ -4889,6 +4892,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <span
                                             className={styles.chainOpportunityTraitLaneBeatMapSummary}
                                             data-testid="chain-opportunity-trait-lane-beat-map-summary"
+                                            data-card-trait-lane-beat-map-meter-fill={cardFeedbackTraitLaneBeatMapMeterFill}
+                                            style={
+                                                {
+                                                    '--card-trait-lane-beat-map-meter-fill': `${cardFeedbackTraitLaneBeatMapMeterFill}%`
+                                                } as CSSProperties
+                                            }
                                         >
                                             <small>Beats</small>
                                             <b>
@@ -4912,6 +4921,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     )
                                                 )}
                                             </span>
+                                            <i aria-hidden="true" className={styles.chainOpportunityTraitLaneBeatMapMeter}>
+                                                <i aria-hidden="true" className={styles.chainOpportunityTraitLaneBeatMapMeterFill} />
+                                            </i>
                                         </span>
                                         {cardFeedbackTraitLaneBeatRows.map((row) => (
                                             <span

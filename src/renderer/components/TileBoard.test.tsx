@@ -1243,6 +1243,7 @@ describe('TileBoard touch and click controls', () => {
         const laneBeatMapSummary = screen.getByTestId('chain-opportunity-trait-lane-beat-map-summary');
         expect(laneBeatMapSummary).toHaveTextContent('Beats');
         expect(laneBeatMapSummary).toHaveTextContent('3 lanes');
+        expect(laneBeatMapSummary).toHaveAttribute('data-card-trait-lane-beat-map-meter-fill', '60');
         expect(laneBeatMapSummary.querySelectorAll('[data-card-trait-lane-beat-map-summary-pip]')).toHaveLength(4);
         expect(
             laneBeatMapSummary.querySelector('[data-card-trait-lane-beat-map-summary-pip="1"]')
