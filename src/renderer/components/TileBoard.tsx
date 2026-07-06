@@ -6035,17 +6035,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </i>
                                         </span>
                                         {primaryBoardOpportunityLane ? (
-                                            <span
+                                        <span
                                                 aria-label={`Primary opportunity lane. ${primaryBoardOpportunityLane.label}: ${primaryBoardOpportunityLane.action}. ${primaryBoardOpportunityLane.cue}. ${boardOpportunityLaneBeatCount(primaryBoardOpportunityLane)} beats.`}
                                                 className={styles.opportunityPrimaryLane}
                                                 data-opportunity-primary-lane={primaryBoardOpportunityLane.id}
                                                 data-opportunity-primary-lane-action={primaryBoardOpportunityLane.action}
                                                 data-opportunity-primary-lane-audio={boardOpportunityLaneAudioCue(primaryBoardOpportunityLane)}
                                                 data-opportunity-primary-lane-beats={boardOpportunityLaneBeatCount(primaryBoardOpportunityLane)}
+                                                data-opportunity-primary-lane-meter-fill={Math.round((boardOpportunityLaneBeatCount(primaryBoardOpportunityLane) / 5) * 100)}
                                                 data-opportunity-primary-lane-cue={primaryBoardOpportunityLane.cue}
                                                 data-opportunity-primary-lane-focus={boardOpportunityLaneFocus(primaryBoardOpportunityLane)}
                                                 data-opportunity-primary-lane-screen-cue={boardOpportunityLaneScreenCue(primaryBoardOpportunityLane)}
                                                 data-testid="board-opportunity-primary-lane"
+                                                style={
+                                                    {
+                                                        '--opportunity-primary-lane-meter-fill': `${Math.round(
+                                                            (boardOpportunityLaneBeatCount(primaryBoardOpportunityLane) / 5) * 100
+                                                        )}%`
+                                                    } as CSSProperties
+                                                }
                                             >
                                                 <small>Board focus</small>
                                                 <b>{primaryBoardOpportunityLane.label}</b>
@@ -6074,7 +6082,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-opportunity-lane-audio={boardOpportunityLaneAudioCue(lane)}
                                                 data-opportunity-lane-beats={boardOpportunityLaneBeatCount(lane)}
                                                 data-opportunity-lane-count={lane.count}
+                                                data-opportunity-lane-meter-fill={Math.round((boardOpportunityLaneBeatCount(lane) / 5) * 100)}
                                                 data-opportunity-lane-screen-cue={boardOpportunityLaneScreenCue(lane)}
+                                                style={
+                                                    {
+                                                        '--opportunity-lane-meter-fill': `${Math.round(
+                                                            (boardOpportunityLaneBeatCount(lane) / 5) * 100
+                                                        )}%`
+                                                    } as CSSProperties
+                                                }
                                                 key={lane.id}
                                             >
                                                 <small>{lane.label}</small>

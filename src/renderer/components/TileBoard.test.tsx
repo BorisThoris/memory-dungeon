@@ -1788,6 +1788,10 @@ describe('TileBoard touch and click controls', () => {
             'board-opportunity-build'
         );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute('data-opportunity-primary-lane-beats', '3');
+        expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAttribute(
+            'data-opportunity-primary-lane-meter-fill',
+            '60'
+        );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-primary-lane-cue',
             'Prime cashout'
@@ -1837,6 +1841,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="build"]')).toHaveAttribute(
             'data-opportunity-lane-beats',
             '3'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="build"]')).toHaveAttribute(
+            'data-opportunity-lane-meter-fill',
+            '60'
         );
         expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAttribute(
             'data-opportunity-primary-lane-focus',

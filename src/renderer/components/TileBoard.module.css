@@ -6164,6 +6164,7 @@
 }
 
 .opportunityLaneMap > .opportunityPrimaryLane {
+    position: relative;
     flex: 1 0 100%;
     grid-template-columns: auto minmax(0, 1fr);
     max-width: min(15rem, 100%);
@@ -6173,6 +6174,26 @@
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
         color-mix(in srgb, var(--theme-panel-solid) 76%, transparent);
+}
+
+.opportunityLaneMap > .opportunityPrimaryLane::after {
+    content: '';
+    position: absolute;
+    right: 0.46rem;
+    bottom: 0.16rem;
+    left: 0.46rem;
+    height: 0.11rem;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 84%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    transform-origin: left center;
+    transform: scaleX(var(--opportunity-primary-lane-meter-fill, 0));
+    transition: transform 140ms ease-out;
+    pointer-events: none;
 }
 
 .opportunityLaneMap > .opportunityPrimaryLane small {
@@ -6246,6 +6267,15 @@
 .opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='recover'] {
     border-color: color-mix(in srgb, var(--theme-danger) 46%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 12%, var(--theme-panel-solid));
+}
+
+.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='risk']::after,
+.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='recover']::after {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-danger) 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
+    );
 }
 
 .opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-screen-cue='risk'] strong,
@@ -6454,9 +6484,37 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 14%, var(--theme-panel-solid) 72%);
 }
 
+.opportunityLaneMap [data-opportunity-lane] {
+    position: relative;
+}
+
+.opportunityLaneMap [data-opportunity-lane]::after {
+    content: '';
+    position: absolute;
+    right: 0.28rem;
+    bottom: 0.12rem;
+    left: 0.28rem;
+    height: 0.1rem;
+    border-radius: 999px;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+    transform-origin: left center;
+    transform: scaleX(var(--opportunity-lane-meter-fill, 0));
+    transition: transform 140ms ease-out;
+    pointer-events: none;
+}
+
 .opportunityLaneMap [data-opportunity-lane='cash'] b {
     background: color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 96%, white);
+}
+
+.opportunityLaneMap [data-opportunity-lane='cash']::after {
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
 }
 
 .opportunityLaneMap [data-opportunity-lane='build'] {
@@ -6466,6 +6524,14 @@
 .opportunityLaneMap [data-opportunity-lane='trait'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 20%);
     background: color-mix(in srgb, var(--theme-gold-bright) 10%, var(--theme-panel-solid) 74%);
+}
+
+.opportunityLaneMap [data-opportunity-lane='trait']::after {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
+    );
 }
 
 .opportunityLaneMap [data-opportunity-lane='trait'] b {
@@ -6478,16 +6544,49 @@
     border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, var(--theme-gold-bright) 20%);
 }
 
+.opportunityLaneMap [data-opportunity-lane='pickup']::after,
+.opportunityLaneMap [data-opportunity-lane='perk']::after {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 68%, white)
+    );
+}
+
 .opportunityLaneMap [data-opportunity-lane='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 44%, var(--theme-gold-bright) 12%);
+}
+
+.opportunityLaneMap [data-opportunity-lane='risk']::after {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-danger) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 68%, white)
+    );
 }
 
 .opportunityLaneMap [data-opportunity-lane='recover'] {
     border-color: color-mix(in srgb, var(--theme-success) 44%, var(--theme-cyan-bright) 14%);
 }
 
+.opportunityLaneMap [data-opportunity-lane='recover']::after {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-success) 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
+    );
+}
+
 .opportunityLaneMap [data-opportunity-lane='tool'] {
     border-color: color-mix(in srgb, var(--theme-text) 30%, var(--theme-cyan-bright) 20%);
+}
+
+.opportunityLaneMap [data-opportunity-lane='tool']::after {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-text) 84%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
 }
 
 .opportunityLaneMap [data-opportunity-lane-screen-cue='burst'] {
