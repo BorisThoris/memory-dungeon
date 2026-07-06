@@ -2134,6 +2134,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
     const boardTraitModeCue = useMemo((): {
         detail: string;
+        nextReward: string | null;
         label: 'Trait mode';
         tone: 'cashout' | 'surge' | 'ready' | 'setup';
         value: string;
@@ -2144,6 +2145,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         if (boardChainOpportunity.rewardHot) {
             return {
                 detail: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Match lit route for reward',
+                nextReward: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Match lit route for reward',
                 label: 'Trait mode',
                 tone: 'cashout',
                 value: 'Cashout live'
@@ -2155,6 +2157,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     boardChainOpportunity.chainReadyCount === 1
                         ? '1 route ready'
                         : `${boardChainOpportunity.chainReadyCount} routes ready`,
+                nextReward: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Match highlighted traits',
                 label: 'Trait mode',
                 tone: 'surge',
                 value: 'Surge live'
@@ -2167,6 +2170,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     boardChainOpportunity.examples[0] ??
                     boardChainOpportunity.nextTarget ??
                     'Match highlighted traits',
+                nextReward: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Keep the chain alive',
                 label: 'Trait mode',
                 tone: 'ready',
                 value: boardChainOpportunity.selectedFollowupCount > 0 ? 'Follow-up live' : 'Route live'
@@ -2175,6 +2179,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         if (boardChainOpportunity.setupCount > 0) {
             return {
                 detail: boardChainOpportunity.setupHint ?? boardChainOpportunity.nextTarget ?? 'Move traits together',
+                nextReward: boardChainOpportunity.nextTarget ?? 'Move traits together',
                 label: 'Trait mode',
                 tone: 'setup',
                 value: 'Prime route'
@@ -2675,7 +2680,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         ...boardChainOpportunity.examples
     ].filter((line): line is string => line != null));
     const boardTraitModeCueLabel = boardTraitModeCue
-        ? formatBoardFeedbackLabel(boardTraitModeCue.label, [boardTraitModeCue.value, boardTraitModeCue.detail])
+        ? formatBoardFeedbackLabel(boardTraitModeCue.label, [
+              boardTraitModeCue.value,
+              boardTraitModeCue.nextReward ? `Next reward: ${boardTraitModeCue.nextReward}` : null,
+              boardTraitModeCue.detail
+          ])
         : undefined;
     const boardChainMarkerKeyRows = useMemo(
         (): Array<{
@@ -5355,6 +5364,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             >
                                 <span>{boardTraitModeCue.label}</span>
                                 <strong>{boardTraitModeCue.value}</strong>
+                                {boardTraitModeCue.nextReward ? <small>{boardTraitModeCue.nextReward}</small> : null}
                                 <span aria-hidden="true" className={styles.traitModeCueBeatPips}>
                                     {Array.from(
                                         {
