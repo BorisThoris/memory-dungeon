@@ -329,6 +329,31 @@ export const getTraitRouteReadabilityCadence = (
     return 'none';
 };
 
+export const getTraitPreviewReadabilityBeatCount = (previewLineCount: number): 2 | 3 | 4 | 5 => {
+    if (previewLineCount <= 1) {
+        return 2;
+    }
+    if (previewLineCount === 2) {
+        return 3;
+    }
+    if (previewLineCount === 3) {
+        return 4;
+    }
+    return 5;
+};
+
+export const getTraitPreviewReadabilityTone = (
+    previewLineCount: number
+): 'ready' | 'surge' | 'cashout' => {
+    if (previewLineCount <= 1) {
+        return 'ready';
+    }
+    if (previewLineCount === 2) {
+        return 'surge';
+    }
+    return 'cashout';
+};
+
 export const getTraitRouteCadenceAction = (
     cadence: TileTraitRouteCadence
 ): 'Cash now' | 'Route surge' | 'Next tap' | 'Match route' | 'Prime payoff' | 'None' => {

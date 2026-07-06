@@ -6,6 +6,8 @@ import {
     getTileBoardReadabilityState,
     getTraitLaneReadabilityColor,
     getTraitLaneReadabilityPattern,
+    getTraitPreviewReadabilityBeatCount,
+    getTraitPreviewReadabilityTone,
     getTraitRouteCadenceAction,
     getTraitRouteReadabilityBeatCount,
     getTraitRouteReadabilityBeatTier,
@@ -315,6 +317,21 @@ describe('tileBoardReadability', () => {
         expect(getTraitRouteCadenceAction('route')).toBe('Match route');
         expect(getTraitRouteCadenceAction('prime')).toBe('Prime payoff');
         expect(getTraitRouteCadenceAction('none')).toBe('None');
+    });
+
+    it('scales face-up trait preview intensity from interaction line count', () => {
+        expect(getTraitPreviewReadabilityBeatCount(0)).toBe(2);
+        expect(getTraitPreviewReadabilityBeatCount(1)).toBe(2);
+        expect(getTraitPreviewReadabilityBeatCount(2)).toBe(3);
+        expect(getTraitPreviewReadabilityBeatCount(3)).toBe(4);
+        expect(getTraitPreviewReadabilityBeatCount(4)).toBe(5);
+        expect(getTraitPreviewReadabilityBeatCount(8)).toBe(5);
+
+        expect(getTraitPreviewReadabilityTone(0)).toBe('ready');
+        expect(getTraitPreviewReadabilityTone(1)).toBe('ready');
+        expect(getTraitPreviewReadabilityTone(2)).toBe('surge');
+        expect(getTraitPreviewReadabilityTone(3)).toBe('cashout');
+        expect(getTraitPreviewReadabilityTone(8)).toBe('cashout');
     });
 
     it('reports trait lane readability colors for hidden card lane markers', () => {

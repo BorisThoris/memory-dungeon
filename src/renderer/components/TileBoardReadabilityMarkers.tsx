@@ -5,6 +5,8 @@ import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from './tileShatter';
 import { DUNGEON_BOARD_STAGE_LAYER_POLICY } from './tileBoardStageLayers';
 import {
     getTileBoardReadabilityState,
+    getTraitPreviewReadabilityBeatCount,
+    getTraitPreviewReadabilityTone,
     getTraitRouteReadabilityBeatCount,
     getTraitRouteReadabilityGlyph,
     getTraitRouteReadabilityBeatTier
@@ -286,6 +288,20 @@ export const TileBoardReadabilityMarkers = ({
               ].slice(0, 3)
             : [];
     const hasFaceUpTraitPreview = faceUpTraitPreviewLines.length > 0;
+    const faceUpTraitPreviewBeatCount = hasFaceUpTraitPreview
+        ? getTraitPreviewReadabilityBeatCount(faceUpTraitPreviewLines.length)
+        : 0;
+    const faceUpTraitPreviewTone = hasFaceUpTraitPreview
+        ? getTraitPreviewReadabilityTone(faceUpTraitPreviewLines.length)
+        : 'ready';
+    const faceUpTraitPreviewAccentColor =
+        faceUpTraitPreviewTone === 'cashout'
+            ? '#ffe48a'
+            : faceUpTraitPreviewTone === 'surge'
+              ? '#ffd166'
+              : tile.tileTraitKind
+                ? tileTraitColor(tile.tileTraitKind)
+                : '#f7f1c2';
 
     return (
         <>
@@ -1553,19 +1569,25 @@ export const TileBoardReadabilityMarkers = ({
                     {hasFaceUpTraitPreview && tile.tileTraitKind ? (
                         <group position={[-CARD_WIDTH * 0.24, CARD_HEIGHT * 0.39, 0.00074]}>
                             <ReadabilityMaterialMesh
-                                color={tileTraitColor(tile.tileTraitKind)}
+                                color={faceUpTraitPreviewAccentColor}
                                 geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
-                                opacity={0.86}
+                                opacity={faceUpTraitPreviewTone === 'cashout' ? 0.98 : faceUpTraitPreviewTone === 'surge' ? 0.92 : 0.86}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
-                                scale={[0.72, 0.82, 1]}
+                                scale={
+                                    faceUpTraitPreviewTone === 'cashout'
+                                        ? [0.86, 0.94, 1]
+                                        : faceUpTraitPreviewTone === 'surge'
+                                          ? [0.8, 0.88, 1]
+                                          : [0.72, 0.82, 1]
+                                }
                             />
                             <ReadabilityMaterialMesh
-                                color="#f7f1c2"
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                opacity={0.96}
-                                position={[-0.08, 0.001, 0.00004]}
+                                color={faceUpTraitPreviewAccentColor}
+                                geometry={BOARD_READABILITY_STATE_RAIL_GEOMETRY}
+                                opacity={faceUpTraitPreviewTone === 'cashout' ? 0.94 : 0.88}
+                                position={[0, 0.033, 0.00004]}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                                scale={[0.58, 0.58, 1]}
+                                scale={[0.78, 0.68, 1]}
                             />
                             <ReadabilityMaterialMesh
                                 color="#100d14"
@@ -1575,14 +1597,21 @@ export const TileBoardReadabilityMarkers = ({
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
                                 scale={[0.46, 0.46, 1]}
                             />
-                            <ReadabilityMaterialMesh
-                                color="#f7f1c2"
-                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
-                                opacity={0.9}
-                                position={[0.08, 0.001, 0.00006]}
-                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
-                                scale={[0.58, 0.58, 1]}
-                            />
+                            {Array.from({ length: faceUpTraitPreviewBeatCount }, (_, index) => (
+                                <ReadabilityMaterialMesh
+                                    color={index === 0 ? '#f7f1c2' : '#fff7c4'}
+                                    geometry={BOARD_READABILITY_PIP_GEOMETRY}
+                                    opacity={index === 0 ? 0.98 : 0.82}
+                                    position={[
+                                        (index - (faceUpTraitPreviewBeatCount - 1) / 2) * 0.082,
+                                        -0.032,
+                                        0.00006 + index * 0.00001
+                                    ]}
+                                    renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                    scale={index === 0 ? [0.64, 0.64, 1] : [0.5, 0.5, 1]}
+                                    key={`face-up-trait-preview-${tile.id}-${index}`}
+                                />
+                            ))}
                         </group>
                     ) : null}
                     {isTrapCard ? (
