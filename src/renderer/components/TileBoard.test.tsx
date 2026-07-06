@@ -2129,6 +2129,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Streak reward');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Any match');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Cashout ready');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-meter-fill]')).toHaveAttribute(
+            'data-chain-cue-meter-fill',
+            '100'
+        );
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-tone', 'ready');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Streak lane');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Cashout ready');
@@ -2144,6 +2148,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-hot-band').querySelector('[data-chain-hot-band-beat="1"]')).toHaveAttribute(
             'data-chain-hot-band-beat-focus',
             'primary'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="2"]')).toHaveAttribute(
+            'data-chain-momentum-meter-fill',
+            '40'
         );
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-hot', 'ready');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Chain cashout');
