@@ -1801,6 +1801,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
             'Opportunity lane map. Build: 1. Prime build. Prime cashout. Trait: 1. Study traits. Trait combo surge. Pickup: 1. Claim pickup. Pickup cashout.'
         );
+        expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveAttribute(
+            'data-opportunity-lane-map-meter-fill',
+            '75'
+        );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-priority', 'Chain play');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-action-cues', 'build-lane:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-reward-hot', 'false');

@@ -2572,6 +2572,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardOpportunityLaneMapAttrValue = boardOpportunityLaneMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneActionMapAttrValue = boardOpportunityLaneActionMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneMapAccessibleLabel = boardOpportunityLaneMapLabel(boardOpportunityLaneMapRows);
+    const boardOpportunityLaneMapMeterFill = primaryBoardOpportunityLane
+        ? Math.round(
+              Math.min(100, ((boardOpportunityLaneMapRows.length + boardOpportunityLaneBeatCount(primaryBoardOpportunityLane)) / 8) * 100)
+          )
+        : 0;
     const boardOpportunityLaneMapLiveText =
         boardOpportunityLaneMapRows.length > 1
             ? ` Decision lanes: ${boardOpportunityLaneMapRows.map((lane) => `${lane.label} ${lane.count}, ${lane.action}`).join(', ')}.`
@@ -5741,6 +5746,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <span
                                             className={styles.opportunityLaneMapSummary}
                                             data-testid="board-opportunity-lane-map-summary"
+                                            data-opportunity-lane-map-meter-fill={boardOpportunityLaneMapMeterFill}
+                                            style={
+                                                {
+                                                    '--opportunity-lane-map-meter-fill': `${boardOpportunityLaneMapMeterFill}%`
+                                                } as CSSProperties
+                                            }
                                         >
                                             <small>Lanes</small>
                                             <b>
@@ -5761,6 +5772,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     )
                                                 )}
                                             </span>
+                                            <i aria-hidden="true" className={styles.opportunityLaneMapMeter}>
+                                                <i aria-hidden="true" className={styles.opportunityLaneMapMeterFill} />
+                                            </i>
                                         </span>
                                         {primaryBoardOpportunityLane ? (
                                             <span

@@ -5817,6 +5817,32 @@
     opacity: 0.64;
 }
 
+.opportunityLaneMapMeter {
+    display: block;
+    width: 100%;
+    height: 0.18rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    border-radius: 999px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.opportunityLaneMapMeterFill {
+    display: block;
+    width: var(--opportunity-lane-map-meter-fill, 0%);
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+    transition: width 140ms ease-out;
+}
+
 .opportunityLaneBeatPips,
 .opportunityPrimaryLaneBeatPips {
     display: inline-flex;
