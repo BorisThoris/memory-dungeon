@@ -582,6 +582,76 @@
     font-style: normal;
 }
 
+.runPayoffStrip span[data-run-payoff-lane-map] .runPayoffLaneMapSummary {
+    flex-basis: 100%;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    min-width: 100%;
+    margin-bottom: 0.12rem;
+    padding: 0.34rem 0.48rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 36%, var(--theme-gold-bright) 14%);
+    border-radius: 9px;
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 82%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.runPayoffStrip span[data-run-payoff-lane-map] .runPayoffLaneMapSummary strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+}
+
+.runPayoffStrip span[data-run-payoff-lane-map] .runPayoffLaneMapSummary b {
+    min-width: 0;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    font-size: 0.62rem;
+    font-weight: 920;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.runPayoffLaneMapSummaryBeatPips {
+    display: grid;
+    grid-auto-columns: minmax(0.42rem, 1fr);
+    grid-auto-flow: column;
+    gap: 0.12rem;
+    justify-self: end;
+    width: min(4.6rem, 100%);
+}
+
+.runPayoffLaneMapSummaryBeatPips s {
+    height: 0.17rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white 8%);
+    animation: runPayoffBeatPulse 0.86s ease-in-out infinite;
+    text-decoration: none;
+}
+
+.runPayoffLaneMapSummaryBeatPips s[data-run-payoff-lane-map-summary-beat-focus='support'] {
+    height: 0.11rem;
+    align-self: center;
+    background: color-mix(in srgb, var(--theme-gold-bright) 72%, white 8%);
+    opacity: 0.82;
+}
+
+.runPayoffLaneMapSummaryBeatPips s:nth-child(2) {
+    animation-delay: 0.08s;
+}
+
+.runPayoffLaneMapSummaryBeatPips s:nth-child(3) {
+    animation-delay: 0.16s;
+}
+
+.runPayoffLaneMapSummaryBeatPips s:nth-child(4) {
+    animation-delay: 0.24s;
+}
+
+.runPayoffLaneMapSummaryBeatPips s:nth-child(5) {
+    animation-delay: 0.32s;
+}
+
 .runPayoffStrip span[data-run-payoff-lane-map] .runPayoffPrimaryLaneCue {
     flex-basis: 100%;
     grid-template-columns: auto auto minmax(0, 1fr);
@@ -784,6 +854,7 @@
 
 :global([data-reduce-motion='true']) .runPayoffStrip span,
 :global([data-reduce-motion='true']) .runPayoffBeatPips i,
+:global([data-reduce-motion='true']) .runPayoffLaneMapSummaryBeatPips s,
 :global([data-reduce-motion='true']) .runPayoffLaneBeatPips s,
 :global([data-reduce-motion='true']) .runPayoffPrimaryLaneBeatPips s,
 :global([data-reduce-motion='true']) .runPayoffStrip span[data-run-payoff-crescendo-tier] strong i {

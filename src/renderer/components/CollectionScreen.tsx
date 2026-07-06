@@ -480,6 +480,36 @@ const CollectionScreen = () => {
                                         }
                                         data-testid="collection-last-run-payoff-lane-map"
                                     >
+                                        <i
+                                            className={styles.runPayoffLaneMapSummary}
+                                            data-run-payoff-lane-count={lastRunPayoffLaneMap.length}
+                                            data-testid="collection-last-run-payoff-lane-map-summary"
+                                        >
+                                            <small>Archive lanes</small>
+                                            <strong>
+                                                {lastRunPayoffLaneMap.length}{' '}
+                                                {lastRunPayoffLaneMap.length === 1 ? 'lane' : 'lanes'}
+                                            </strong>
+                                            <b>
+                                                {primaryLastRunPayoffLane
+                                                    ? `${primaryLastRunPayoffLane.label} led`
+                                                    : 'No lead lane'}
+                                            </b>
+                                            <span aria-hidden="true" className={styles.runPayoffLaneMapSummaryBeatPips}>
+                                                {Array.from(
+                                                    { length: Math.max(2, Math.min(5, lastRunPayoffLaneMap.length + 1)) },
+                                                    (_, index) => (
+                                                        <s
+                                                            data-run-payoff-lane-map-summary-beat={index + 1}
+                                                            data-run-payoff-lane-map-summary-beat-focus={
+                                                                index === 0 ? primaryLastRunPayoffLane?.id ?? 'none' : 'support'
+                                                            }
+                                                            key={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </i>
                                         {primaryLastRunPayoffLane ? (
                                             <i
                                                 aria-label={`Primary archived payoff lane. ${primaryLastRunPayoffLane.label}: ${primaryLastRunPayoffLane.action}. ${primaryLastRunPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryLastRunPayoffLane)} beats.`}

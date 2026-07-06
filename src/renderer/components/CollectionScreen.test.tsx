@@ -144,6 +144,20 @@ describe('CollectionScreen REG-093 reward gallery', () => {
             'data-run-payoff-primary-lane-cue',
             'Combo live'
         );
+        const laneMapSummary = screen.getByTestId('collection-last-run-payoff-lane-map-summary');
+        expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-count', '4');
+        expect(laneMapSummary).toHaveTextContent('Archive lanes');
+        expect(laneMapSummary).toHaveTextContent('4 lanes');
+        expect(laneMapSummary).toHaveTextContent('Chain led');
+        expect(laneMapSummary.querySelectorAll('[data-run-payoff-lane-map-summary-beat]')).toHaveLength(5);
+        expect(laneMapSummary.querySelector('[data-run-payoff-lane-map-summary-beat="1"]')).toHaveAttribute(
+            'data-run-payoff-lane-map-summary-beat-focus',
+            'chain'
+        );
+        expect(laneMapSummary.querySelector('[data-run-payoff-lane-map-summary-beat="2"]')).toHaveAttribute(
+            'data-run-payoff-lane-map-summary-beat-focus',
+            'support'
+        );
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveTextContent('Chain');
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveTextContent('Cash');
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveTextContent('Build');
