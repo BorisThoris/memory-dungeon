@@ -4475,6 +4475,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     : 60
                                         }
                                         data-chain-next-action-tone={boardChainOpportunity.nextActionTone}
+                                        data-chain-next-action-tier={
+                                            boardChainOpportunity.nextActionId === 'cashout'
+                                                ? 'now'
+                                                : boardChainOpportunity.nextActionId === 'follow-up'
+                                                  ? 'tap'
+                                                  : boardChainOpportunity.nextActionId === 'prime-route'
+                                                    ? 'prime'
+                                                    : 'setup'
+                                        }
                                         data-testid="chain-opportunity-next-action"
                                         style={
                                             {
@@ -4490,7 +4499,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             } as CSSProperties
                                         }
                                     >
-                                        <small>{boardChainOpportunity.nextActionLabel}</small>
+                                        <small>
+                                            {boardChainOpportunity.nextActionId === 'cashout'
+                                                ? 'Now'
+                                                : boardChainOpportunity.nextActionId === 'follow-up'
+                                                  ? 'Tap'
+                                                  : boardChainOpportunity.nextActionId === 'prime-route'
+                                                    ? 'Prime'
+                                                    : 'Setup'}
+                                        </small>
                                         {boardChainOpportunity.nextActionDetail ? <b>{boardChainOpportunity.nextActionDetail}</b> : null}
                                         <i aria-hidden="true" className={styles.chainOpportunityNextActionMeter}>
                                             <i aria-hidden="true" className={styles.chainOpportunityNextActionMeterFill} />

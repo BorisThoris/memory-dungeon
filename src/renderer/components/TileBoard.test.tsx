@@ -476,7 +476,7 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-next-action-meter-fill',
             '100'
         );
-        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Do next: cashout');
+        expect(screen.getByTestId('chain-opportunity-next-action').querySelector('small')).toHaveTextContent('Now');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Match lit route for reward');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-callout', 'Cashout shot');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
@@ -916,7 +916,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAccessibleName(
             'Card action priority. Cash now: 2'
         );
-        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Do next: cashout');
+        expect(screen.getByTestId('chain-opportunity-next-action').querySelector('small')).toHaveTextContent('Now');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Match lit route for reward');
         expect(screen.getByTestId('chain-opportunity-next-action').querySelectorAll('[data-chain-next-action-pip]')).toHaveLength(5);
         expect(
@@ -1570,7 +1570,7 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-next-action-meter-fill',
             '75'
         );
-        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Do next: follow-up');
+        expect(screen.getByTestId('chain-opportunity-next-action').querySelector('small')).toHaveTextContent('Tap');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('1 follow-up marked');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Follow-up beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('1 follow-up marked');
@@ -2735,7 +2735,7 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-next-action-meter-fill',
             '50'
         );
-        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Do next: prime route');
+        expect(screen.getByTestId('chain-opportunity-next-action').querySelector('small')).toHaveTextContent('Prime');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent(
             'Swap Sealed with Filler: Sealed + Heavy: score surge'
         );
