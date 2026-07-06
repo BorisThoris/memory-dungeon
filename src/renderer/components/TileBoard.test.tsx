@@ -1023,6 +1023,8 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('chain-reward-hot:2');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('trait-combo:2');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('trait-payoff-stack:2');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-trait-combo-surge', 'false');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-trait-payoff-stack', 'true');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-action-cues', 'cash-now:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-action-cue-contract',
@@ -2381,6 +2383,8 @@ describe('TileBoard touch and click controls', () => {
             'data-card-feedback-marker-shapes',
             'combo-surge:4;linked-route:4'
         );
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-trait-combo-surge', 'true');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-trait-payoff-stack', 'false');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-trait-route-tiers',
             'surge:4'

@@ -1140,6 +1140,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         traitRewardHotTileIds,
         traitRouteTargetTileIds
     ]);
+    const cardFeedbackStatesValue = cardFeedbackStatesAttr ?? '';
+    const cardFeedbackTraitPayoffStackActive = /\btrait-payoff-stack:\d+/.test(cardFeedbackStatesValue);
+    const cardFeedbackTraitComboSurgeActive = /\btrait-combo-surge:\d+/.test(cardFeedbackStatesValue);
     useEffect(() => {
         const previous = previousResolvedTrapTileCountRef.current;
         previousResolvedTrapTileCountRef.current = resolvedTrapTileCount;
@@ -3808,6 +3811,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-dungeon-mobile-board-primary={DNG065_MOBILE_BOARD_PRIORITY.boardPrimary ? 'true' : 'false'}
             data-dungeon-touch-target-min={DNG065_MOBILE_BOARD_PRIORITY.minTouchTargetPx}
             data-card-feedback-states={cardFeedbackStatesAttr}
+            data-card-feedback-trait-combo-surge={cardFeedbackTraitComboSurgeActive ? 'true' : 'false'}
             data-card-feedback-action-cues={cardFeedbackActionCuesAttr}
             data-card-feedback-action-cue-contract={BOARD_MARKER_ACTION_CUE_CONTRACT}
             data-card-feedback-action-priority={cardFeedbackActionPriorityAttr || 'none'}
@@ -3843,6 +3847,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-trait-route-tiers={cardFeedbackTraitRouteTiersAttr}
             data-card-feedback-primary-action={cardFeedbackPrimaryActionAttr}
             data-card-feedback-primary-card-cue={cardFeedbackPrimaryCardCueAttr}
+            data-card-feedback-trait-payoff-stack={cardFeedbackTraitPayoffStackActive ? 'true' : 'false'}
             data-card-feedback-marker-shape-contract={BOARD_MARKER_SHAPE_CONTRACT}
             data-card-feedback-marker-contract={BOARD_MARKER_READABILITY_CONTRACT}
             data-card-feedback-last-resolution={lastResolutionFeedback}
