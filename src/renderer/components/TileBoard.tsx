@@ -4434,11 +4434,36 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         className={styles.chainOpportunityNextAction}
                                         data-chain-next-action={boardChainOpportunity.nextActionId}
+                                        data-chain-next-action-meter-fill={
+                                            boardChainOpportunity.nextActionId === 'cashout'
+                                                ? 100
+                                                : boardChainOpportunity.nextActionId === 'follow-up'
+                                                  ? 75
+                                                  : boardChainOpportunity.nextActionId === 'prime-route'
+                                                    ? 50
+                                                    : 60
+                                        }
                                         data-chain-next-action-tone={boardChainOpportunity.nextActionTone}
                                         data-testid="chain-opportunity-next-action"
+                                        style={
+                                            {
+                                                '--chain-next-action-meter-fill': `${
+                                                    boardChainOpportunity.nextActionId === 'cashout'
+                                                        ? 100
+                                                        : boardChainOpportunity.nextActionId === 'follow-up'
+                                                          ? 75
+                                                          : boardChainOpportunity.nextActionId === 'prime-route'
+                                                            ? 50
+                                                            : 60
+                                                }%`
+                                            } as CSSProperties
+                                        }
                                     >
                                         <small>{boardChainOpportunity.nextActionLabel}</small>
                                         {boardChainOpportunity.nextActionDetail ? <b>{boardChainOpportunity.nextActionDetail}</b> : null}
+                                        <i aria-hidden="true" className={styles.chainOpportunityNextActionMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunityNextActionMeterFill} />
+                                        </i>
                                         <span aria-hidden="true" className={styles.chainOpportunityNextActionPips}>
                                             {Array.from(
                                                 { length: boardChainOpportunity.nextActionId === 'cashout' ? 5 : boardChainOpportunity.nextActionId === 'prime-route' ? 2 : 3 },

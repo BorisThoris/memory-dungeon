@@ -471,6 +471,10 @@ describe('TileBoard touch and click controls', () => {
         ).toHaveAttribute('data-chain-opportunity-beat-pip-focus', 'support');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action', 'cashout');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action-tone', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute(
+            'data-chain-next-action-meter-fill',
+            '100'
+        );
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Do next: cashout');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Match lit route for reward');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-callout', 'Cashout shot');
@@ -1535,6 +1539,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-tier', 'follow-up');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-beat-counts', '3:2');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action', 'follow-up');
+        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute(
+            'data-chain-next-action-meter-fill',
+            '75'
+        );
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Do next: follow-up');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('1 follow-up marked');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Follow-up beat');
@@ -2669,6 +2677,10 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action', 'prime-route');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action-tone', 'setup');
+        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute(
+            'data-chain-next-action-meter-fill',
+            '50'
+        );
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('Do next: prime route');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent(
             'Swap Sealed with Filler: Sealed + Heavy: score surge'
