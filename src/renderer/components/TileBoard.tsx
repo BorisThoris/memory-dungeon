@@ -6012,7 +6012,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 role="group"
                             >
                                 <span className={styles.opportunityCompassSummary} data-testid="board-opportunity-compass-summary">
-                                    <small>Compass</small>
+                                    <small>Best</small>
                                     <b>{boardOpportunityCompassRows.length} {boardOpportunityCompassRows.length === 1 ? 'play' : 'plays'}</b>
                                     <span aria-hidden="true" className={styles.opportunityCompassSummaryBeatPips}>
                                         {Array.from(
