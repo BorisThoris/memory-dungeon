@@ -148,6 +148,36 @@ const BeatPipRow = ({
     </>
 );
 
+interface SignalCapRowProps {
+    color: string;
+    count?: number;
+    keyPrefix: string;
+    opacity: number;
+    positionY: number;
+    renderOrder: number;
+    supportColor?: string;
+}
+
+const SignalCapRow = ({
+    color,
+    count = 2,
+    keyPrefix,
+    opacity,
+    positionY,
+    renderOrder,
+    supportColor = '#fff7c4'
+}: SignalCapRowProps) => (
+    <BeatPipRow
+        color={color}
+        count={count}
+        keyPrefix={`${keyPrefix}-cap`}
+        opacity={opacity}
+        positionY={positionY}
+        renderOrder={renderOrder}
+        supportColor={supportColor}
+    />
+);
+
 export const TileBoardReadabilityMarkers = ({
     destroyBlockedDecoyBack,
     enemyOccupiedBack,
@@ -1194,6 +1224,23 @@ export const TileBoardReadabilityMarkers = ({
                                 rotation={[0, 0, Math.PI / 2]}
                                 scale={[0.62, 0.86, 1]}
                             />
+                            <ReadabilityMaterialMesh
+                                color="#ffe48a"
+                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                opacity={0.88}
+                                position={[0, 0.058, 0.00009]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+                                scale={[0.54, 0.72, 1]}
+                            />
+                            <SignalCapRow
+                                color="#fff7c4"
+                                count={2}
+                                keyPrefix={`trait-reward-hot-${tile.id}`}
+                                opacity={0.9}
+                                positionY={0.05}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 10}
+                                supportColor="#ffe48a"
+                            />
                             <BeatPipRow
                                 color="#ffe48a"
                                 count={4}
@@ -1239,6 +1286,23 @@ export const TileBoardReadabilityMarkers = ({
                                 position={[0.086, 0.001, 0.00007]}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 7}
                                 scale={[0.66, 0.66, 1]}
+                            />
+                            <ReadabilityMaterialMesh
+                                color="#ffd166"
+                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                opacity={0.88}
+                                position={[0, 0.058, 0.00008]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+                                scale={[0.54, 0.72, 1]}
+                            />
+                            <SignalCapRow
+                                color="#5ee0c8"
+                                count={2}
+                                keyPrefix={`trait-combo-surge-${tile.id}`}
+                                opacity={0.88}
+                                positionY={0.05}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
+                                supportColor="#fff7c4"
                             />
                             <BeatPipRow
                                 color="#ffd166"
@@ -1302,6 +1366,15 @@ export const TileBoardReadabilityMarkers = ({
                                 rotation={[0, 0, Math.PI / 2]}
                                 scale={[0.72, 1, 1]}
                             />
+                            <SignalCapRow
+                                color="#fff7c4"
+                                count={2}
+                                keyPrefix={`trait-followup-${tile.id}`}
+                                opacity={0.88}
+                                positionY={0.05}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 8}
+                                supportColor="#8de6ff"
+                            />
                             <BeatPipRow
                                 color="#fff7c4"
                                 count={3}
@@ -1342,6 +1415,15 @@ export const TileBoardReadabilityMarkers = ({
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
                                 rotation={[0, 0, Math.PI / 2]}
                                 scale={[0.72, 0.78, 1]}
+                            />
+                            <SignalCapRow
+                                color="#ffe48a"
+                                count={3}
+                                keyPrefix={`trait-payoff-stack-${tile.id}`}
+                                opacity={0.9}
+                                positionY={0.052}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 11}
+                                supportColor="#fff7c4"
                             />
                             <BeatPipRow
                                 color="#ffe48a"
@@ -1399,6 +1481,23 @@ export const TileBoardReadabilityMarkers = ({
                                 rotation={[0, 0, -Math.PI / 4]}
                                 scale={[0.7, 0.86, 1]}
                             />
+                            <ReadabilityMaterialMesh
+                                color="#ffe48a"
+                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                opacity={0.9}
+                                position={[0, 0.088, 0.0001]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 12}
+                                scale={[0.5, 0.72, 1]}
+                            />
+                            <SignalCapRow
+                                color="#ffe48a"
+                                count={3}
+                                keyPrefix={`trait-payoff-stack-${tile.id}`}
+                                opacity={0.9}
+                                positionY={0.05}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 13}
+                                supportColor="#fff7c4"
+                            />
                             <BeatPipRow
                                 color="#ffe48a"
                                 count={5}
@@ -1439,6 +1538,14 @@ export const TileBoardReadabilityMarkers = ({
                             <ReadabilityMaterialMesh
                                 color="#d9f7ff"
                                 geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                opacity={0.88}
+                                position={[0, 0.058, 0.00005]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
+                                scale={[0.54, 0.72, 1]}
+                            />
+                            <ReadabilityMaterialMesh
+                                color="#d9f7ff"
+                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
                                 opacity={0.9}
                                 position={[-0.074, 0.035, 0.00006]}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
@@ -1451,6 +1558,15 @@ export const TileBoardReadabilityMarkers = ({
                                 position={[0.074, 0.035, 0.00006]}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 4}
                                 rotation={[0, 0, -Math.PI / 2.8]}
+                            />
+                            <SignalCapRow
+                                color="#5dd6ff"
+                                count={2}
+                                keyPrefix={`trait-route-target-${tile.id}`}
+                                opacity={0.9}
+                                positionY={0.05}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 5}
+                                supportColor="#ffe48a"
                             />
                             <BeatPipRow
                                 color="#5dd6ff"
@@ -1612,6 +1728,23 @@ export const TileBoardReadabilityMarkers = ({
                                 position={[0, 0.033, 0.00004]}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
                                 scale={[0.78, 0.68, 1]}
+                            />
+                            <ReadabilityMaterialMesh
+                                color={faceUpTraitPreviewAccentColor}
+                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                opacity={faceUpTraitPreviewTone === 'cashout' ? 0.98 : 0.9}
+                                position={[0, 0.06, 0.00005]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                scale={[0.56, 0.74, 1]}
+                            />
+                            <SignalCapRow
+                                color={faceUpTraitPreviewAccentColor}
+                                count={2}
+                                keyPrefix={`face-up-trait-preview-${tile.id}`}
+                                opacity={faceUpTraitPreviewTone === 'cashout' ? 0.96 : 0.88}
+                                positionY={0.052}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 2}
+                                supportColor="#fff7c4"
                             />
                             <ReadabilityMaterialMesh
                                 color="#100d14"
