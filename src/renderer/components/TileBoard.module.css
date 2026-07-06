@@ -5742,6 +5742,16 @@
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, transparent);
 }
 
+.opportunityLaneMap [data-opportunity-lane='trait'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 20%);
+    background: color-mix(in srgb, var(--theme-gold-bright) 10%, var(--theme-panel-solid) 74%);
+}
+
+.opportunityLaneMap [data-opportunity-lane='trait'] b {
+    background: color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
 .opportunityLaneMap [data-opportunity-lane='pickup'],
 .opportunityLaneMap [data-opportunity-lane='perk'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, var(--theme-gold-bright) 20%);

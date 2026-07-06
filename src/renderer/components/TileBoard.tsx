@@ -117,17 +117,17 @@ type BoardOpportunityHeat = 'cashout' | 'normal' | 'prime' | 'surge';
 type BoardOpportunityCompassRow = {
     action: string;
     detail: string;
-    id: 'chain' | 'hazard' | 'perk' | 'pickup' | 'recovery' | 'tool';
+    id: 'chain' | 'hazard' | 'perk' | 'pickup' | 'recovery' | 'tool' | 'trait';
     impactCue: string;
     label: string;
     tone: string;
     value: string;
 };
-type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'perk' | 'recover' | 'risk' | 'tool';
+type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'perk' | 'recover' | 'risk' | 'tool' | 'trait';
 type BoardOpportunityLaneMapEntry = {
-    action: 'Cash now' | 'Prime build' | 'Claim pickup' | 'Cash perk' | 'Recover' | 'Reduce risk' | 'Use tool';
+    action: 'Cash now' | 'Prime build' | 'Claim pickup' | 'Cash perk' | 'Recover' | 'Reduce risk' | 'Study traits' | 'Use tool';
     id: BoardOpportunityLaneId;
-    label: 'Cash' | 'Build' | 'Pickup' | 'Perk' | 'Recover' | 'Risk' | 'Tool';
+    label: 'Cash' | 'Build' | 'Pickup' | 'Perk' | 'Recover' | 'Risk' | 'Tool' | 'Trait';
     count: number;
     cue: string;
 };
@@ -277,7 +277,7 @@ const getTrapResolutionSignalScreenCue = (signal: 'continue' | 'effect' | 'resol
     return 'pulse';
 };
 
-const BOARD_OPPORTUNITY_LANE_ORDER: BoardOpportunityLaneId[] = ['cash', 'build', 'pickup', 'perk', 'recover', 'risk', 'tool'];
+const BOARD_OPPORTUNITY_LANE_ORDER: BoardOpportunityLaneId[] = ['cash', 'build', 'trait', 'pickup', 'perk', 'recover', 'risk', 'tool'];
 
 const BOARD_OPPORTUNITY_LANE_LABELS: Record<BoardOpportunityLaneId, BoardOpportunityLaneMapEntry['label']> = {
     build: 'Build',
@@ -285,6 +285,7 @@ const BOARD_OPPORTUNITY_LANE_LABELS: Record<BoardOpportunityLaneId, BoardOpportu
     perk: 'Perk',
     pickup: 'Pickup',
     recover: 'Recover',
+    trait: 'Trait',
     risk: 'Risk',
     tool: 'Tool'
 };
@@ -295,6 +296,7 @@ const BOARD_OPPORTUNITY_LANE_ACTIONS: Record<BoardOpportunityLaneId, BoardOpport
     perk: 'Cash perk',
     pickup: 'Claim pickup',
     recover: 'Recover',
+    trait: 'Study traits',
     risk: 'Reduce risk',
     tool: 'Use tool'
 };
@@ -314,6 +316,9 @@ const boardOpportunityLaneId = (row: BoardOpportunityCompassRow): BoardOpportuni
     }
     if (row.id === 'tool') {
         return 'tool';
+    }
+    if (row.id === 'trait') {
+        return 'trait';
     }
     const cue = row.impactCue.toLowerCase();
     if (cue.includes('prime') || cue.includes('follow-up')) {
@@ -389,6 +394,8 @@ const boardOpportunityLaneAudioCue = (
             return 'board-opportunity-risk';
         case 'tool':
             return 'board-opportunity-tool';
+        case 'trait':
+            return 'board-opportunity-build';
         case 'build':
         default:
             return 'board-opportunity-build';
@@ -410,6 +417,9 @@ const boardOpportunityLaneScreenCue = (
     if (lane.id === 'tool') {
         return 'guard';
     }
+    if (lane.id === 'trait') {
+        return 'pulse';
+    }
     return 'pulse';
 };
 
@@ -421,6 +431,7 @@ const boardOpportunityLaneFocus = (
             return 'cashout';
         case 'pickup':
         case 'perk':
+        case 'trait':
             return 'reward';
         case 'recover':
             return 'recover';
@@ -2301,6 +2312,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         tileSwapFirstTileId,
         tileSwapPowerVisualActive
     ]);
+    const traitOpportunitySummary = useMemo(() => getTraitOpportunitySummary(board), [board]);
 
     const boardOpportunityCompassRows = useMemo(
         (): BoardOpportunityCompassRow[] => {
@@ -2401,6 +2413,31 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 });
             }
 
+            if (traitOpportunitySummary.tiles.length > 0) {
+                rows.push({
+                    action: 'Study',
+                    detail: [
+                        traitOpportunitySummary.tiles
+                            .slice(0, 4)
+                            .map((tile) => `${tile.label} (${tile.traitKind})`)
+                            .join(' / '),
+                        traitOpportunitySummary.interactionLines[0] ?? 'Trait combo ready',
+                        traitOpportunitySummary.reason
+                    ]
+                        .filter(Boolean)
+                        .join(' / '),
+                    id: 'trait',
+                    impactCue:
+                        traitOpportunitySummary.tiles.length > 1 ? 'Trait combo surge' : 'Trait combo route',
+                    label: 'Trait combo',
+                    tone: 'trait',
+                    value:
+                        traitOpportunitySummary.tiles.length === 1
+                            ? '1 combo card'
+                            : `${traitOpportunitySummary.tiles.length} combo cards`
+                });
+            }
+
             if (boardHazardOpportunity.count > 0) {
                 rows.push({
                     action: 'Scout',
@@ -2463,9 +2500,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 });
             }
 
-            return rows.slice(0, 3);
+            return rows.slice(0, 4);
         },
-        [activePowerBoardChip, boardChainOpportunity, boardHazardOpportunity, boardPickupOpportunity, recoveryContext, runStatus]
+        [
+            activePowerBoardChip,
+            boardChainOpportunity,
+            boardHazardOpportunity,
+            boardPickupOpportunity,
+            recoveryContext,
+            runStatus,
+            traitOpportunitySummary.interactionLines,
+            traitOpportunitySummary.reason,
+            traitOpportunitySummary.tiles
+        ]
     );
     const boardPayoffStackRows = boardOpportunityCompassRows.filter((row) =>
         row.id === 'chain' || row.id === 'perk' || row.id === 'pickup' || row.id === 'recovery' || row.id === 'tool'
@@ -2697,25 +2744,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         () =>
             [
                 ...new Set(
-                    [
-                        ...boardChainOpportunity.examples,
-                        ...getTraitOpportunitySummary(board).interactionLines
-                    ]
+                    [...boardChainOpportunity.examples, ...traitOpportunitySummary.interactionLines]
                         .map((line) => line.split(':')[0]?.trim() ?? '')
                         .filter((line) => line.includes(' + '))
                 )
             ].slice(0, 3),
-        [board, boardChainOpportunity.examples]
+        [boardChainOpportunity.examples, traitOpportunitySummary.interactionLines]
     );
     const boardTraitInteractionLines = useMemo(
         () =>
             [
                 ...new Set([
                     ...boardChainOpportunity.examples,
-                    ...getTraitOpportunitySummary(board).interactionLines
+                    ...traitOpportunitySummary.interactionLines
                 ])
             ],
-        [board, boardChainOpportunity.examples]
+        [boardChainOpportunity.examples, traitOpportunitySummary.interactionLines]
     );
     const boardTraitInteractionLaneMap = useMemo(
         () => buildTraitInteractionLaneMap(boardTraitInteractionLines),
