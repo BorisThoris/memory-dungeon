@@ -15408,6 +15408,24 @@
     background: color-mix(in srgb, var(--theme-void) 58%, transparent);
 }
 
+.boardFloaterRecoveryChipMeter {
+    display: block;
+    width: 100%;
+    min-width: 3.6rem;
+    height: 0.11rem;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            90deg,
+            currentColor var(--mismatch-recovery-chip-fill, 0%),
+            color-mix(in srgb, currentColor 18%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
+        0 0 0.16rem color-mix(in srgb, currentColor 16%, transparent);
+    opacity: 0.92;
+}
+
 .boardFloaterRecoveryChips em,
 .boardFloaterRecoveryChips small,
 .boardFloaterRecoveryChips b {

@@ -5371,30 +5371,45 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             className={styles.boardFloaterRecoveryChips}
                                             data-testid="mismatch-score-floater-recovery-chips"
                                         >
-                                            {boardFloaterMismatchRecoveryChips.map((chip) => (
-                                                <span
-                                                    aria-label={`${chip.arcadeCue}: ${chip.label}: ${chip.value}`}
-                                                    data-mismatch-recovery-chip={chip.tone}
-                                                    data-mismatch-recovery-chip-audio={getMismatchRecoveryChipAudioCue(chip)}
-                                                    data-mismatch-recovery-chip-beats={getMismatchRecoveryChipBeatCount(chip)}
-                                                    data-mismatch-recovery-chip-cue={chip.arcadeCue}
-                                                    data-mismatch-recovery-chip-screen-cue={getMismatchRecoveryChipScreenCue(chip)}
-                                                    data-mismatch-recovery-urgency={chip.urgency ?? 'none'}
-                                                    key={chip.id}
-                                                >
-                                                    <em>{chip.arcadeCue}</em>
-                                                    <small>{chip.label}</small>
-                                                    <b>{chip.value}</b>
-                                                    <span className={styles.boardFloaterChipBeats} aria-hidden="true">
-                                                        {Array.from({ length: getMismatchRecoveryChipBeatCount(chip) }, (_, index) => (
-                                                            <i
-                                                                data-mismatch-recovery-chip-beat={index + 1}
-                                                                key={`mismatch-recovery-chip-beat-${chip.id}-${index + 1}`}
-                                                            />
-                                                        ))}
+                                            {boardFloaterMismatchRecoveryChips.map((chip) => {
+                                                const chipBeatCount = getMismatchRecoveryChipBeatCount(chip);
+                                                const chipFill = Math.min(100, (chipBeatCount / 4) * 100);
+
+                                                return (
+                                                    <span
+                                                        aria-label={`${chip.arcadeCue}: ${chip.label}: ${chip.value}`}
+                                                        data-mismatch-recovery-chip={chip.tone}
+                                                        data-mismatch-recovery-chip-audio={getMismatchRecoveryChipAudioCue(chip)}
+                                                        data-mismatch-recovery-chip-beats={chipBeatCount}
+                                                        data-mismatch-recovery-chip-fill={chipFill}
+                                                        data-mismatch-recovery-chip-cue={chip.arcadeCue}
+                                                        data-mismatch-recovery-chip-screen-cue={getMismatchRecoveryChipScreenCue(chip)}
+                                                        data-mismatch-recovery-urgency={chip.urgency ?? 'none'}
+                                                        key={chip.id}
+                                                        style={
+                                                            {
+                                                                '--mismatch-recovery-chip-fill': `${chipFill}%`
+                                                            } as CSSProperties
+                                                        }
+                                                    >
+                                                        <em>{chip.arcadeCue}</em>
+                                                        <small>{chip.label}</small>
+                                                        <b>{chip.value}</b>
+                                                        <span
+                                                            aria-hidden="true"
+                                                            className={styles.boardFloaterRecoveryChipMeter}
+                                                        />
+                                                        <span className={styles.boardFloaterChipBeats} aria-hidden="true">
+                                                            {Array.from({ length: chipBeatCount }, (_, index) => (
+                                                                <i
+                                                                    data-mismatch-recovery-chip-beat={index + 1}
+                                                                    key={`mismatch-recovery-chip-beat-${chip.id}-${index + 1}`}
+                                                                />
+                                                            ))}
+                                                        </span>
                                                     </span>
-                                                </span>
-                                            ))}
+                                                );
+                                            })}
                                         </span>
                                     ) : null}
                                 </div>

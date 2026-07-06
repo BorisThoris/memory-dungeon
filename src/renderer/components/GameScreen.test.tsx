@@ -4034,6 +4034,9 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('mismatch-score-floater-recovery-chips')).toHaveTextContent('Use tool');
             expect(screen.getByTestId('mismatch-score-floater-recovery-chips')).toHaveTextContent('Peek / route');
             expect(screen.getByTestId('mismatch-score-floater-recovery-chips').querySelector('[data-mismatch-recovery-chip="risk"]')).toHaveTextContent('Avoid repeat');
+            expect(
+                screen.getByTestId('mismatch-score-floater-recovery-chips').querySelector('[data-mismatch-recovery-chip="risk"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-fill', '75');
             expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveTextContent('Route risk');
             expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveTextContent('peek or route away');
             expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveAttribute(
@@ -4138,6 +4141,9 @@ describe('GameScreen (OVR-014)', () => {
                 'data-recovery-burst-fill',
                 '80'
             );
+            expect(
+                screen.getByTestId('mismatch-score-floater-recovery-chips').querySelector('[data-mismatch-recovery-chip="risk"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-fill', '75');
             expect(screen.getByTestId('mismatch-score-floater-recovery-crescendo')).toHaveTextContent(
                 'Trait surge burst'
             );
