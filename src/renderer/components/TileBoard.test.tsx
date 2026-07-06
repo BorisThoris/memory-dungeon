@@ -549,7 +549,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-meter')).toHaveAttribute('data-chain-meter-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-meter')).toHaveAccessibleName(
-            'Chain board: 2 chain-ready cards, 2 payoff-stack cards, 2 reward-hot cards. Next: Next reward x6 +1 shard in 1 match. One-away cashout. Push x6 reward. Sequence: First match lit route. Then Next reward x6 +1 shard in 1 match. Keep chain target live.'
+            'Chain board: Ready x2, Payoff x2, Hot x2. Next: Next reward x6 +1 shard in 1 match. One-away cashout. Push x6 reward. Sequence: First match lit route. Then Next reward x6 +1 shard in 1 match. Keep chain target live.'
         );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveTextContent('Lit');
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveTextContent('2');
@@ -1061,7 +1061,7 @@ describe('TileBoard touch and click controls', () => {
         fireEvent.focus(screen.getByTestId('tile-board-application'));
 
         await waitFor(() => expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Trait combo'));
-        expect(screen.getByText(/Chain board: 2 chain-ready cards, 2 payoff-stack cards, 2 reward-hot cards/i)).toBeInTheDocument();
+        expect(screen.getByText(/Chain board: Ready x2, Payoff x2, Hot x2/i)).toBeInTheDocument();
         expect(screen.getByText(/Next: Next reward x6 \+1 shard in 1 match/i)).toBeInTheDocument();
         expect(screen.getByText(/Sequence: First match lit route/i)).toBeInTheDocument();
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Stack');
@@ -1898,7 +1898,7 @@ describe('TileBoard touch and click controls', () => {
                 ?.querySelector('[data-opportunity-lane-beat="2"]')
         ).toHaveAttribute('data-opportunity-lane-beat-focus', 'support');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
-            'Opportunity lane map. Build: 1. Prime build. Prime cashout. Trait: 1. Study traits. Trait combo surge. Pickup: 1. Claim pickup. Pickup cashout.'
+            'Opportunity lane map. Build x1. Prime build. Prime cashout. Trait x1. Study traits. Trait combo surge. Pickup x1. Claim pickup. Pickup cashout.'
         );
         expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveAttribute(
             'data-opportunity-lane-map-meter-fill',
@@ -2045,7 +2045,7 @@ describe('TileBoard touch and click controls', () => {
             'cash:Cash now:1>trait:Study traits:1>pickup:Claim pickup:1'
         );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
-            'Opportunity lane map. Cash: 1. Cash now. Stack cashout. Trait: 1. Study traits. Trait stack surge. Pickup: 1. Claim pickup. Stack prime.'
+            'Opportunity lane map. Cash x1. Cash now. Stack cashout. Trait x1. Study traits. Trait stack surge. Pickup x1. Claim pickup. Stack prime.'
         );
     });
 
@@ -2503,7 +2503,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-meter')).toHaveAttribute('data-chain-meter-tone', 'surge');
         expect(screen.getByTestId('chain-opportunity-meter')).toHaveAccessibleName(
-            'Chain board: 4 chain-ready cards, 4 surge cards. Next: Combo surge ready: Echo + Sealed: combo shard.'
+            'Chain board: Ready x4, Surge x4. Next: Combo surge ready: Echo + Sealed: combo shard.'
         );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveTextContent('4');
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="surge"]')).toHaveTextContent('Surge');
@@ -3200,7 +3200,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Claim pickup');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
-            'Opportunity lane map. Cash: 1. Cash now. Stack cashout. Pickup: 1. Claim pickup. Stack prime.'
+            'Opportunity lane map. Cash x1. Cash now. Stack cashout. Pickup x1. Claim pickup. Stack prime.'
         );
         expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="cash"]')).toHaveAttribute(
             'data-opportunity-lane-action',

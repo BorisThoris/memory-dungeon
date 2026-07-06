@@ -182,12 +182,12 @@ export const getBoardChainAccessibilitySummary = (
                   ? 'setup'
                   : 'idle';
     const parts = [
-        readyCount > 0 ? `${readyCount} chain-ready card${readyCount === 1 ? '' : 's'}` : null,
-        followupCount > 0 ? `${followupCount} selected follow-up${followupCount === 1 ? '' : 's'}` : null,
-        surgeCount > 0 ? `${surgeCount} surge card${surgeCount === 1 ? '' : 's'}` : null,
-        payoffStackCount > 0 ? `${payoffStackCount} payoff-stack card${payoffStackCount === 1 ? '' : 's'}` : null,
-        rewardHotCount > 0 ? `${rewardHotCount} reward-hot card${rewardHotCount === 1 ? '' : 's'}` : null,
-        setupCount > 0 ? `${setupCount} prime target${setupCount === 1 ? '' : 's'}` : null
+        readyCount > 0 ? `Ready x${readyCount}` : null,
+        followupCount > 0 ? `Follow-up x${followupCount}` : null,
+        surgeCount > 0 ? `Surge x${surgeCount}` : null,
+        payoffStackCount > 0 ? `Payoff x${payoffStackCount}` : null,
+        rewardHotCount > 0 ? `Hot x${rewardHotCount}` : null,
+        setupCount > 0 ? `Prime x${setupCount}` : null
     ].filter((part): part is string => Boolean(part));
     const action =
         payoffStackCount > 0

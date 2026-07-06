@@ -448,7 +448,7 @@ const boardOpportunityLaneFocus = (
 
 const boardOpportunityLaneMapLabel = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
     laneMap.length > 0
-        ? `Opportunity lane map. ${laneMap.map((lane) => `${lane.label}: ${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
+        ? `Opportunity lane map. ${laneMap.map((lane) => `${lane.label} x${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
         : 'Opportunity lane map';
 
 const boardChainRewardLadder = (

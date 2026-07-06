@@ -448,7 +448,7 @@ describe('tile board DOM accessibility helpers', () => {
                 sequenceText: 'Sequence: First match lit route. Then cash reward. Keep chain target live'
             })
         ).toMatchObject({
-            label: expect.stringContaining('Chain board: 4 chain-ready cards, 4 surge cards, 2 payoff-stack cards, 2 reward-hot cards. Next: Next reward x6 +1 shard in 1 match. Sequence: First match lit route. Then cash reward. Keep chain target live.'),
+            label: expect.stringContaining('Chain board: Ready x4, Surge x4, Payoff x2, Hot x2. Next: Next reward x6 +1 shard in 1 match. Sequence: First match lit route. Then cash reward. Keep chain target live.'),
             payoffStackCount: 2,
             readyCount: 4,
             rewardHotCount: 2,
@@ -458,7 +458,7 @@ describe('tile board DOM accessibility helpers', () => {
         });
 
         expect(getBoardChainAccessibilitySummary(traitBoard)).toMatchObject({
-            label: expect.stringContaining('4 surge cards. Next: Combo surge ready: Echo + Sealed: combo shard.'),
+            label: expect.stringContaining('Surge x4. Next: Combo surge ready: Echo + Sealed: combo shard.'),
             primaryLine: 'Echo + Sealed: combo shard',
             secondaryLine: 'Echo + Mirror: recall focus',
             followupCount: 0,
@@ -482,7 +482,7 @@ describe('tile board DOM accessibility helpers', () => {
 
         expect(getBoardChainAccessibilitySummary(selectedFollowupBoard)).toMatchObject({
             label: expect.stringContaining(
-                'Chain board: 2 chain-ready cards, 1 selected follow-up. Next: follow up the marked mate: Echo + Sealed: combo shard.'
+                'Chain board: Ready x2, Follow-up x1. Next: follow up the marked mate: Echo + Sealed: combo shard.'
             ),
             primaryLine: '1 selected follow-up',
             followupCount: 1,
@@ -499,7 +499,7 @@ describe('tile board DOM accessibility helpers', () => {
                 targetTileIds: new Set(['a1', 'b2'])
             })
         ).toMatchObject({
-            label: 'Chain board: 2 prime targets. Next: Swap toward Sealed + Heavy.',
+            label: 'Chain board: Prime x2. Next: Swap toward Sealed + Heavy.',
             readyCount: 0,
             primaryLine: 'Match or move traits together to light a route.',
             rewardHotCount: 0,
@@ -519,7 +519,7 @@ describe('tile board DOM accessibility helpers', () => {
         };
 
         expect(getBoardChainAccessibilitySummary(setupBoard)).toMatchObject({
-            label: 'Chain board: 2 prime targets. Next: One swap primes route: Swap Sealed with Filler: Sealed + Heavy: score surge.',
+            label: 'Chain board: Prime x2. Next: One swap primes route: Swap Sealed with Filler: Sealed + Heavy: score surge.',
             primaryLine: 'Swap Sealed with Filler: Sealed + Heavy: score surge',
             secondaryLine: null,
             readyCount: 0,
