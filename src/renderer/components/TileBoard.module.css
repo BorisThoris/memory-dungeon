@@ -711,6 +711,15 @@
     animation: boardOpportunityPulse 0.96s ease-in-out infinite, boardOpportunityShimmer 2.2s ease-in-out infinite;
 }
 
+.frame[data-chain-opportunity-reward-hot='true'] .chainOpportunityChip {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 72%, var(--theme-cyan-bright) 12%);
+    box-shadow:
+        0 12px 34px rgba(0, 0, 0, 0.32),
+        0 0 30px color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0 1px color-mix(in srgb, white 10%, transparent);
+    animation: boardOpportunityPulse 0.82s ease-in-out infinite, boardOpportunityShimmer 1.8s ease-in-out infinite;
+}
+
 .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityCue {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, transparent);
     background: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
