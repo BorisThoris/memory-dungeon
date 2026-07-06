@@ -101,6 +101,28 @@ describe('tileBoardDomSurfaceModel', () => {
         expect(result.cardFeedbackTraitRouteTiersAttr).toBe('payoff-stack:2');
     });
 
+    it('counts visible trait cards that can show combo preview feedback', () => {
+        const result = buildTileBoardDomSurfaceModel({
+            allowGambitThirdFlip: false,
+            board: board([
+                tile('echo', 'echo', 'flipped', { tileTraitKind: 'echo' }),
+                tile('sealed', 'sealed', 'hidden', { tileTraitKind: 'sealed' })
+            ], {
+                flippedTileIds: ['echo']
+            }),
+            boardApplicationFocused: false,
+            debugPeekActive: false,
+            focusedTileId: null,
+            includeDevAttributes: true,
+            interactive: true,
+            peekRevealedTileIds: new Set(),
+            previewActive: false,
+            runStatus: 'playing'
+        });
+
+        expect(result.cardFeedbackVisibleTraitPreviewCount).toBe(1);
+    });
+
     it('surfaces card-level beat tiers for setup and follow-up route cards', () => {
         const result = buildTileBoardDomSurfaceModel({
             allowGambitThirdFlip: false,

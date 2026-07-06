@@ -1100,6 +1100,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         cardFeedbackTraitLanePrimaryActionAttr,
         cardFeedbackTraitRouteIntensitiesAttr,
         cardFeedbackTraitRouteTiersAttr,
+        cardFeedbackVisibleTraitPreviewCount,
         hiddenSlotsAttr,
         hiddenTileCount,
         hiddenTrapSlotsAttr,
@@ -3919,6 +3920,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-primary-lane-screen-cue={
                 primaryBoardOpportunityLane ? boardOpportunityLaneScreenCue(primaryBoardOpportunityLane) : 'none'
             }
+            data-card-feedback-visible-trait-preview-count={cardFeedbackVisibleTraitPreviewCount}
             data-dungeon-resolved-trap-count={resolvedTrapTileCount}
             data-dungeon-resolved-trap-slots={resolvedTrapSlotsAttr}
             data-dungeon-trap-resolution-effect={trapResolutionDetails?.effect ?? 'none'}

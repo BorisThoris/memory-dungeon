@@ -108,6 +108,59 @@ export const getResolvedTrapSlotsAttr = (board: BoardState): string =>
 export const getResolvedTrapTileCount = (board: BoardState): number =>
     board.tiles.filter((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'resolved').length;
 
+const getVisibleTileIds = ({
+    board,
+    debugPeekActive,
+    peekRevealedTileIds,
+    previewActive
+}: {
+    board: BoardState;
+    debugPeekActive: boolean;
+    peekRevealedTileIds: ReadonlySet<string>;
+    previewActive: boolean;
+}): Set<string> => {
+    const visibleTileIds = new Set<string>();
+    for (const tile of board.tiles) {
+        if (tile.state !== 'hidden' || previewActive || debugPeekActive || peekRevealedTileIds.has(tile.id)) {
+            visibleTileIds.add(tile.id);
+        }
+    }
+    return visibleTileIds;
+};
+
+export const getCardFeedbackVisibleTraitPreviewCount = ({
+    board,
+    debugPeekActive,
+    peekRevealedTileIds,
+    previewActive
+}: {
+    board: BoardState;
+    debugPeekActive: boolean;
+    peekRevealedTileIds: ReadonlySet<string>;
+    previewActive: boolean;
+}): number => {
+    const visibleTileIds = getVisibleTileIds({
+        board,
+        debugPeekActive,
+        peekRevealedTileIds,
+        previewActive
+    });
+    let count = 0;
+    for (const tile of board.tiles) {
+        if (tile.tileTraitKind == null || !visibleTileIds.has(tile.id)) {
+            continue;
+        }
+        const previewLines = [
+            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
+            ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
+        ];
+        if (previewLines.length > 0) {
+            count += 1;
+        }
+    }
+    return count;
+};
+
 export const getPickableHiddenSlotsAttr = ({
     allowGambitThirdFlip,
     board,

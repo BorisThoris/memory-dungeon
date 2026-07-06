@@ -10,7 +10,7 @@ import {
     getTraitRouteReadabilityBeatTier
 } from './tileBoardReadability';
 import { hazardTileColor } from './tileBoardThreatColors';
-import { tileTraitColor } from '../../shared/tile-trait-rules';
+import { getTileTraitInteractionPreviewLines, tileTraitColor } from '../../shared/tile-trait-rules';
 import type { TraitInteractionLaneId } from '../copy/traitInteractionLaneMap';
 
 const CARD_WIDTH = CARD_PLANE_WIDTH;
@@ -276,6 +276,16 @@ export const TileBoardReadabilityMarkers = ({
               : traitRouteReadabilityIntensity === 'surge'
                 ? 0.8
                 : 0.72;
+    const faceUpTraitPreviewLines =
+        faceUp && board && tile.tileTraitKind
+            ? [
+                  ...new Set([
+                      ...getTileTraitInteractionPreviewLines(board, [tile.id], 'match'),
+                      ...getTileTraitInteractionPreviewLines(board, [tile.id], 'mismatch')
+                  ])
+              ].slice(0, 3)
+            : [];
+    const hasFaceUpTraitPreview = faceUpTraitPreviewLines.length > 0;
 
     return (
         <>
@@ -1540,6 +1550,41 @@ export const TileBoardReadabilityMarkers = ({
                         position={[CARD_WIDTH * 0.35, CARD_HEIGHT * 0.39, 0.00072]}
                         renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
                     />
+                    {hasFaceUpTraitPreview && tile.tileTraitKind ? (
+                        <group position={[-CARD_WIDTH * 0.24, CARD_HEIGHT * 0.39, 0.00074]}>
+                            <ReadabilityMaterialMesh
+                                color={tileTraitColor(tile.tileTraitKind)}
+                                geometry={BOARD_READABILITY_TRAIT_COMBO_GEOMETRY}
+                                opacity={0.86}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder}
+                                scale={[0.72, 0.82, 1]}
+                            />
+                            <ReadabilityMaterialMesh
+                                color="#f7f1c2"
+                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
+                                opacity={0.96}
+                                position={[-0.08, 0.001, 0.00004]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                scale={[0.58, 0.58, 1]}
+                            />
+                            <ReadabilityMaterialMesh
+                                color="#100d14"
+                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
+                                opacity={0.72}
+                                position={[0.0, 0.001, 0.00005]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                scale={[0.46, 0.46, 1]}
+                            />
+                            <ReadabilityMaterialMesh
+                                color="#f7f1c2"
+                                geometry={BOARD_READABILITY_PIP_GEOMETRY}
+                                opacity={0.9}
+                                position={[0.08, 0.001, 0.00006]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 1}
+                                scale={[0.58, 0.58, 1]}
+                            />
+                        </group>
+                    ) : null}
                     {isTrapCard ? (
                         <ReadabilityMaterialMesh
                             color={trapReadabilityColor}

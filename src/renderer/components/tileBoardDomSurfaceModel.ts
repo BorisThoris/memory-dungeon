@@ -10,6 +10,7 @@ import {
     getCardFeedbackPrimaryCardCueAttr,
     getCardFeedbackRouteGlyphsAttr,
     getCardFeedbackStatesAttr,
+    getCardFeedbackVisibleTraitPreviewCount,
     getCardFeedbackTraitLaneBeatsAttr,
     getCardFeedbackTraitLaneActionsAttr,
     getCardFeedbackTraitLaneCuesAttr,
@@ -35,6 +36,7 @@ interface TileBoardDomSurfaceModel {
     cardFeedbackPrimaryCardCueAttr: string;
     cardFeedbackRouteGlyphsAttr: string;
     cardFeedbackStatesAttr: string | undefined;
+    cardFeedbackVisibleTraitPreviewCount: number;
     cardFeedbackTraitLaneBeatsAttr: string;
     cardFeedbackTraitLaneActionsAttr: string;
     cardFeedbackTraitLaneCuesAttr: string;
@@ -154,6 +156,12 @@ export const buildTileBoardDomSurfaceModel = ({
         selectedTraitFollowupTileIds,
         traitRewardHotTileIds,
         traitRouteTargetTileIds
+    }),
+    cardFeedbackVisibleTraitPreviewCount: getCardFeedbackVisibleTraitPreviewCount({
+        board,
+        debugPeekActive,
+        peekRevealedTileIds,
+        previewActive
     }),
     cardFeedbackTraitRouteTiersAttr: getCardFeedbackTraitRouteTiersAttr({
         board,
