@@ -2439,6 +2439,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     boardChainOpportunity.nextTarget ??
                     null
                 )?.replace(/^Next reward\s*/i, '');
+                const traitOpportunityLabel = cardFeedbackTraitPayoffStackActive ? 'Trait stack' : 'Trait combo';
                 rows.push({
                     action: 'Study',
                     detail: [
@@ -2454,8 +2455,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                         .join(' / '),
                     id: 'trait',
                     impactCue:
-                        traitOpportunitySummary.tiles.length > 1 ? 'Trait combo surge' : 'Trait combo route',
-                    label: 'Trait combo',
+                        cardFeedbackTraitPayoffStackActive
+                            ? traitOpportunitySummary.tiles.length > 1
+                                ? 'Trait stack surge'
+                                : 'Trait stack route'
+                            : traitOpportunitySummary.tiles.length > 1
+                              ? 'Trait combo surge'
+                              : 'Trait combo route',
+                    label: traitOpportunityLabel,
                     tone: 'trait',
                     value:
                         traitOpportunitySummary.tiles.length === 1
@@ -2535,6 +2542,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             boardPickupOpportunity,
             recoveryContext,
             runStatus,
+            cardFeedbackTraitPayoffStackActive,
             traitOpportunitySummary.interactionLines,
             traitOpportunitySummary.reason,
             traitOpportunitySummary.tiles

@@ -930,7 +930,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack', 'none');
         expect(screen.queryByTestId('board-opportunity-payoff-stack')).toBeNull();
         expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Combo route');
-        expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Trait combo');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Trait stack');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Best');
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('Compass');
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('2 plays');
@@ -955,10 +955,10 @@ describe('TileBoard touch and click controls', () => {
             'data-opportunity-beat-focus',
             'support'
         );
-        expect(screen.getByTestId('board-opportunity-trait')).toHaveTextContent('Trait combo');
+        expect(screen.getByTestId('board-opportunity-trait')).toHaveTextContent('Trait stack');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveTextContent('2 combo cards lit');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
-        expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-impact-cue', 'Trait combo surge');
+        expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-impact-cue', 'Trait stack surge');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-audio', 'opportunity-prime');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-screen-cue', 'pulse');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-heat', 'surge');
@@ -978,7 +978,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Echo + Sealed: combo shard');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-tone', 'chain');
         expect(screen.getByTestId('board-opportunity-compass').getAttribute('aria-label')).toContain(
-            'Trait combo surge. Trait combo: 2 combo cards lit. Study: A (echo) / A (sealed) / Echo + Sealed: combo shard / Next reward x6 +1 shard in 1 match'
+            'Trait stack surge. Trait stack: 2 combo cards lit. Study: A (echo) / A (sealed) / Echo + Sealed: combo shard / Next reward x6 +1 shard in 1 match'
         );
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute(
             'aria-label',
@@ -1933,7 +1933,7 @@ describe('TileBoard touch and click controls', () => {
             'cash:Cash now:1>trait:Study traits:1>pickup:Claim pickup:1'
         );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
-            'Opportunity lane map. Cash: 1. Cash now. Stack cashout. Trait: 1. Study traits. Trait combo surge. Pickup: 1. Claim pickup. Stack prime.'
+            'Opportunity lane map. Cash: 1. Cash now. Stack cashout. Trait: 1. Study traits. Trait stack surge. Pickup: 1. Claim pickup. Stack prime.'
         );
     });
 
