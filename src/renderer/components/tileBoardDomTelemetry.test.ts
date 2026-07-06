@@ -11,6 +11,7 @@ import {
     getCardFeedbackCadencesAttr,
     getCardFeedbackMarkerShapesAttr,
     getCardFeedbackPrimaryActionAttr,
+    getCardFeedbackVisibleTraitPreviewCount,
     getCardFeedbackRouteGlyphsAttr,
     getCardFeedbackStatesAttr,
     getCardFeedbackTraitLaneBeatsAttr,
@@ -248,8 +249,8 @@ describe('tile board DOM telemetry helpers', () => {
             tiles: [
                 { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
                 { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
-                board.tiles[2]!,
-                board.tiles[3]!
+                { ...board.tiles[2]!, pairKey: 'mirror', tileTraitKind: 'mirror' },
+                { ...board.tiles[3]!, pairKey: 'stasis', tileTraitKind: 'stasis' }
             ]
         };
 
@@ -265,18 +266,41 @@ describe('tile board DOM telemetry helpers', () => {
             runStatus: 'playing'
         });
 
-        expect(states).toContain('trait:2');
-        expect(states).toContain('chain-ready:2');
-        expect(states).toContain('trait-combo:2');
-        expect(states).not.toContain('trait-combo-surge');
-        expect(getCardFeedbackMarkerShapesAttr({ board: traitBoard })).toBe('linked-route:2');
-        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('shard:1');
+        expect(states).toContain('trait:4');
+        expect(states).toContain('chain-ready:4');
+        expect(states).toContain('trait-combo:4');
+        expect(states).toContain('trait-combo-surge:4');
+        expect(getCardFeedbackMarkerShapesAttr({ board: traitBoard })).toBe('combo-surge:4;linked-route:4');
+        expect(getCardFeedbackTraitLaneCuesAttr(traitBoard)).toBe('shard:1>guard:1>recall:1');
         expect(getCardFeedbackTraitLanePrimaryActionAttr(traitBoard)).toBe('shard:Cash shard:1');
-        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('shard:4');
-        expect(getCardFeedbackTraitLaneActionsAttr(traitBoard)).toBe('shard:Cash shard:1');
-        expect(getCardFeedbackTraitRouteIntensitiesAttr({ board: traitBoard })).toBe('ready:2');
-        expect(getCardFeedbackTraitRouteTiersAttr({ board: traitBoard })).toBe('combo:2');
-        expect(getCardFeedbackCadencesAttr({ board: traitBoard })).toBe('route:Match route:2');
+        expect(getCardFeedbackTraitLaneBeatsAttr(traitBoard)).toBe('shard:4>guard:3>recall:3');
+        expect(getCardFeedbackTraitLaneActionsAttr(traitBoard)).toBe(
+            'shard:Cash shard:1>guard:Protect run:1>recall:Set memory:1'
+        );
+        expect(getCardFeedbackTraitRouteIntensitiesAttr({ board: traitBoard })).toBe('surge:4');
+        expect(getCardFeedbackTraitRouteTiersAttr({ board: traitBoard })).toBe('surge:4');
+        expect(getCardFeedbackCadencesAttr({ board: traitBoard })).toBe('surge:Route surge:4');
+    });
+
+    it('counts visible trait preview cards when the board exposes combo interactions', () => {
+        const traitBoard: BoardState = {
+            ...board,
+            tiles: [
+                { ...board.tiles[0]!, pairKey: 'echo', tileTraitKind: 'echo' },
+                { ...board.tiles[1]!, pairKey: 'sealed', tileTraitKind: 'sealed' },
+                board.tiles[2]!,
+                board.tiles[3]!
+            ]
+        };
+
+        expect(
+            getCardFeedbackVisibleTraitPreviewCount({
+                board: traitBoard,
+                debugPeekActive: false,
+                peekRevealedTileIds: new Set(),
+                previewActive: true
+            })
+        ).toBe(1);
     });
 
     it('summarizes actionable trait lane cues by payoff type', () => {

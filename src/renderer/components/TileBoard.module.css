@@ -463,6 +463,37 @@
     opacity: 0.8;
 }
 
+.frame[data-card-feedback-visible-trait-preview-count='1'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent),
+        inset 0 0 28px color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent),
+        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    opacity: 0.58;
+}
+
+.frame[data-card-feedback-visible-trait-preview-count='2'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 20%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        inset 0 0 34px color-mix(in srgb, var(--theme-gold-bright) 11%, transparent),
+        0 0 24px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+    opacity: 0.72;
+}
+
+.frame[data-card-feedback-visible-trait-preview-count='3'] .stage::after,
+.frame[data-card-feedback-visible-trait-preview-count='4'] .stage::after,
+.frame[data-card-feedback-visible-trait-preview-count='5'] .stage::after,
+.frame[data-card-feedback-visible-trait-preview-count^='6'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-gold-bright) 28%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 18%, transparent),
+        inset 0 0 40px color-mix(in srgb, var(--theme-violet-bright) 14%, transparent),
+        0 0 28px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    opacity: 0.86;
+    animation: boardOpportunityPulse 1.2s ease-in-out infinite;
+}
+
 .frame[data-chain-opportunity-next-action='follow-up'] .stage::after,
 .frame[data-chain-opportunity-next-action='match-route'] .stage::after {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 20%);
