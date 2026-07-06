@@ -4866,7 +4866,22 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                 {progress.label}
                                                             </span>
                                                         ) : null}
-                                                        {stackLabel ? <mark>{stackLabel}</mark> : null}
+                                                        {stackLabel ? (
+                                                            <>
+                                                                <mark>{stackLabel}</mark>
+                                                                <span aria-hidden="true" className={styles.boardFloaterRewardStackPips}>
+                                                                    {Array.from({ length: cue.stackSize ?? 1 }, (_, index) => (
+                                                                        <i
+                                                                            data-chain-reward-stack-beat={index + 1}
+                                                                            data-chain-reward-stack-beat-focus={
+                                                                                index === 0 ? 'primary' : 'support'
+                                                                            }
+                                                                            key={`${cue.id}-board-reward-stack-${index + 1}`}
+                                                                        />
+                                                                    ))}
+                                                                </span>
+                                                            </>
+                                                        ) : null}
                                                         <span aria-hidden="true" className={styles.boardFloaterRewardBeatPips}>
                                                             {Array.from({ length: beatCount }, (_, index) => (
                                                                 <i

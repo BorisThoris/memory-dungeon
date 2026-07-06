@@ -1922,6 +1922,23 @@ describe('GameScreen (OVR-014)', () => {
             expect(
                 rewardForecastSummary.querySelector('[data-chain-reward-forecast-summary-beat="1"]')
             ).toHaveAttribute('data-chain-reward-forecast-summary-beat-focus', 'primary');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+            ).toHaveAttribute('data-chain-reward-stack-size', '2');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelectorAll('[data-chain-reward-stack-beat]')
+            ).toHaveLength(2);
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-stack-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-stack-beat-focus', 'primary');
             expect(screen.getByTestId('match-score-floater-reward-forecast')).toHaveAccessibleName(
                 /Match score floater reward forecast.*Hit now: Next: Cash next: x4 \+1 shard: 1 match: Double cashout: 2\/2: 0 matches left: 2x stack.*Hit now: Next: Cash next: x4 \+1 guard: 1 match: Double cashout: 4\/4: 0 matches left: 2x stack/i
             );
