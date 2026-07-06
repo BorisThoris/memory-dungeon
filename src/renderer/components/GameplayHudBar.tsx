@@ -1506,6 +1506,9 @@ const GameplayHudBar = ({
     const primaryRewardHotBandLabel = primaryRewardHotBand
         ? `Chain reward hot band. ${primaryRewardHotBand.label}. ${primaryRewardHotBand.value}. ${primaryRewardHotBand.detail}.`
         : undefined;
+    const primaryRewardHotBadgeFill = primaryChainRewardProgress
+        ? Math.round(Math.min(100, (primaryChainRewardProgress.filled / Math.max(1, primaryChainRewardProgress.total)) * 100))
+        : 0;
     const chainComboSurgeBand =
         traitOpportunityHud.active && traitOpportunityHud.routeCountLabel !== '1 route' && traitOpportunityHud.routeCountLabel !== 'setup'
             ? {
@@ -1519,6 +1522,9 @@ const GameplayHudBar = ({
     const chainComboSurgeBandLabel = chainComboSurgeBand
         ? `Chain combo surge band. ${chainComboSurgeBand.label}. ${chainComboSurgeBand.value}. ${chainComboSurgeBand.detail}. ${chainComboSurgeBand.cue}.`
         : undefined;
+    const stackedChainRewardFill = stackedChainRewardHot.length > 0
+        ? Math.round(Math.min(100, (stackedChainRewardHot.length / Math.max(1, chainRewardForecastCues.length)) * 100))
+        : 0;
     const findableProgressState = getFindableProgressState(
         run.findablesClaimedThisFloor,
         run.findablesTotalThisFloor
@@ -2596,10 +2602,17 @@ const GameplayHudBar = ({
                                                 data-chain-reward-hot-beats={primaryResourceRewardBeatCount}
                                                 data-chain-reward-hot-screen-cue="super"
                                                 data-chain-reward-hot-tone="cashout"
+                                                data-chain-reward-hot-fill={primaryRewardHotBadgeFill}
+                                                style={
+                                                    {
+                                                        '--chain-reward-hot-fill': `${primaryRewardHotBadgeFill}%`
+                                                    } as CSSProperties
+                                                }
                                                 data-testid="hud-chain-reward-hot"
                                             >
                                                 <small>Reward hot</small>
                                                 <b>{primaryResourceRewardCue.label}</b>
+                                                <span aria-hidden="true" className={styles.hudChainRewardHotBadgeMeter} />
                                             </span>
                                         ) : null}
                                         {chainComboSurgeBand ? (
@@ -2660,11 +2673,18 @@ const GameplayHudBar = ({
                                                 className={styles.hudChainStackedPayoffBadge}
                                                 data-chain-stack-action="Cash now"
                                                 data-chain-stack-beats={stackedChainRewardHot.length}
+                                                data-chain-stack-fill={stackedChainRewardFill}
+                                                style={
+                                                    {
+                                                        '--chain-stack-fill': `${stackedChainRewardFill}%`
+                                                    } as CSSProperties
+                                                }
                                                 data-testid="hud-chain-stacked-payoff"
                                             >
                                                 <small>{stackedChainRewardHot.length}x payoff</small>
                                                 <em>Cash now</em>
                                                 <b>Next match</b>
+                                                <span aria-hidden="true" className={styles.hudChainStackedPayoffBadgeMeter} />
                                                 <span aria-hidden="true" className={styles.hudChainStackedPayoffBadgeBeatPips}>
                                                     {Array.from({ length: stackedChainRewardHot.length }, (_, beatIndex) => (
                                                         <i

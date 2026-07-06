@@ -1107,6 +1107,7 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-hot')).toHaveAttribute('data-chain-reward-hot-beats', '4');
         expect(screen.getByTestId('hud-chain-reward-hot')).toHaveAttribute('data-chain-reward-hot-screen-cue', 'super');
         expect(screen.getByTestId('hud-chain-reward-hot')).toHaveAttribute('data-chain-reward-hot-tone', 'cashout');
+        expect(screen.getByTestId('hud-chain-reward-hot')).toHaveAttribute('data-chain-reward-hot-fill', '50');
         expect(screen.getByTestId('hud-chain-reward-hot-band')).toHaveAttribute(
             'data-chain-reward-hot-band-tone',
             'cashout'
@@ -1158,6 +1159,7 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-stacked-payoff')).toHaveTextContent('Next match');
         expect(screen.getByTestId('hud-chain-stacked-payoff')).toHaveAttribute('data-chain-stack-action', 'Cash now');
         expect(screen.getByTestId('hud-chain-stacked-payoff')).toHaveAttribute('data-chain-stack-beats', '2');
+        expect(screen.getByTestId('hud-chain-stacked-payoff')).toHaveAttribute('data-chain-stack-fill', '67');
         expect(screen.getByTestId('hud-chain-stacked-payoff').querySelectorAll('[data-chain-stack-beat]')).toHaveLength(2);
         expect(
             screen.getByTestId('hud-chain-stacked-payoff').querySelector('[data-chain-stack-beat="1"]')
