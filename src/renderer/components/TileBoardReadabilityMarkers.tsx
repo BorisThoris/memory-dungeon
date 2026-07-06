@@ -1194,6 +1194,15 @@ export const TileBoardReadabilityMarkers = ({
                                 rotation={[0, 0, Math.PI / 2]}
                                 scale={[0.62, 0.86, 1]}
                             />
+                            <BeatPipRow
+                                color="#ffe48a"
+                                count={4}
+                                keyPrefix={`trait-reward-hot-${tile.id}`}
+                                opacity={0.96}
+                                positionY={-0.046}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 9}
+                                supportColor="#fff7c4"
+                            />
                         </group>
                     ) : null}
                     {isTraitComboSurgeBack ? (
@@ -1398,6 +1407,14 @@ export const TileBoardReadabilityMarkers = ({
                                 positionY={-0.047}
                                 renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 13}
                                 supportColor="#5ee0c8"
+                            />
+                            <ReadabilityMaterialMesh
+                                color="#fff7c4"
+                                geometry={BOARD_READABILITY_SHORT_BAR_GEOMETRY}
+                                opacity={0.92}
+                                position={[0, -0.089, 0.0001]}
+                                renderOrder={DUNGEON_BOARD_STAGE_LAYER_POLICY.objectiveGlyph.renderOrder + 14}
+                                scale={[0.54, 0.72, 1]}
                             />
                         </group>
                     ) : null}
