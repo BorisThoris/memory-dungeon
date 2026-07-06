@@ -1494,6 +1494,11 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('(echo)');
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('(sealed)');
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Trait lanes');
+        const traitRouteLaneMapSummaryDetails = screen.getByTestId('hud-trait-route-lane-map-summary-details');
+        expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-count', '1');
+        expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Trait lanes');
+        expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('1 lane');
+        expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Shard leads');
         expect(screen.getByTestId('hud-trait-route-details-action')).toHaveTextContent('Now: Cash next route.');
         expect(screen.getByTestId('hud-trait-route-details-stack')).toHaveTextContent(
             'Stack: Cash trait super stack. 1 route + x4 +1 shard.'
