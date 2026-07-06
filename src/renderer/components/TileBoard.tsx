@@ -2902,6 +2902,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         ...boardPickupOpportunity.examples
     ]);
     const boardPickupOpportunityFocus = boardPickupOpportunity.sequenceCue?.tone ?? 'none';
+    const boardPickupOpportunityMeterFill =
+        boardPickupOpportunityFocus === 'cashout'
+            ? 100
+            : Math.min(100, Math.round((boardPickupOpportunity.count / 3) * 100));
     const focusedPreviewChipLabel = focusedPreviewChip
         ? formatBoardFeedbackLabel(
               `${focusedPreviewChip.eyebrow} ${
@@ -5534,12 +5538,23 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 aria-label={boardPickupOpportunityLabel}
                                 className={styles.pickupOpportunityChip}
                                 data-pickup-opportunity-focus={boardPickupOpportunityFocus}
+                                data-pickup-meter-fill={boardPickupOpportunityMeterFill}
                                 data-testid="pickup-opportunity-chip"
                                 role="status"
                             >
                                 <span>Pickup rewards</span>
                                 <strong>{boardPickupOpportunity.valueLabel}</strong>
                                 {boardPickupOpportunity.target ? <b>{boardPickupOpportunity.target}</b> : null}
+                                <span
+                                    aria-hidden="true"
+                                    className={styles.pickupOpportunityMeter}
+                                    data-pickup-meter-fill={boardPickupOpportunityMeterFill}
+                                >
+                                    <i
+                                        className={styles.pickupOpportunityMeterFill}
+                                        style={{ '--pickup-meter-fill': `${boardPickupOpportunityMeterFill}%` } as CSSProperties}
+                                    />
+                                </span>
                                 <span aria-hidden="true" className={styles.pickupOpportunityChipBeatPips}>
                                     {Array.from(
                                         {

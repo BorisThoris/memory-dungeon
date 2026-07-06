@@ -2938,6 +2938,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('Claim');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('Claim before exit');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('Shard spark pickup: +1 combo shard');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-meter-fill', '33');
         expect(screen.getByTestId('pickup-opportunity-chip').querySelectorAll('[data-pickup-chip-beat]')).toHaveLength(2);
         expect(
             screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
@@ -3070,6 +3071,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('Claim into cashout');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('Double cashout');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('x4 +1 shard in 1 match');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-meter-fill', '100');
         expect(screen.getByTestId('pickup-opportunity-chip').querySelectorAll('[data-pickup-chip-beat]')).toHaveLength(4);
         expect(
             screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
