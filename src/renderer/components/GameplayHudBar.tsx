@@ -3097,6 +3097,11 @@ const GameplayHudBar = ({
                                                 <span className={styles.statVal}>
                                                     {run.activeContract?.noShuffle ? 'Off' : run.shuffleCharges}
                                                 </span>
+                                                <span className={styles.statSubline}>
+                                                    {run.activeContract?.noShuffle
+                                                        ? 'Locked in Scholar'
+                                                        : 'Reshuffles hidden board order'}
+                                                </span>
                                             </div>
                                             <div
                                                 className={styles.statPillCompact}
@@ -3111,6 +3116,11 @@ const GameplayHudBar = ({
                                                 <span className={styles.statVal}>
                                                     {run.activeContract?.noDestroy ? 'Off' : run.destroyPairCharges}
                                                 </span>
+                                                <span className={styles.statSubline}>
+                                                    {run.activeContract?.noDestroy
+                                                        ? 'Locked in Scholar'
+                                                        : 'Forfeits pickups on that pair'}
+                                                </span>
                                             </div>
                                             <div
                                                 className={styles.statPillCompact}
@@ -3119,6 +3129,7 @@ const GameplayHudBar = ({
                                             >
                                                 <span className={styles.statKey}>Peek</span>
                                                 <span className={styles.statVal}>{run.peekCharges}</span>
+                                                <span className={styles.statSubline}>Brief reveal only</span>
                                             </div>
                                         </>
                                     ) : null}
