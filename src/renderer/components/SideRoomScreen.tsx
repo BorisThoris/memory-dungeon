@@ -1152,6 +1152,28 @@ const SideRoomScreen = () => {
                                     }
                                     data-testid="side-room-choice-lane-map"
                                 >
+                                    <span
+                                        className={styles.choiceLaneMapSummary}
+                                        data-choice-lane-count={choiceLaneMap.length}
+                                        data-testid="side-room-choice-lane-map-summary"
+                                    >
+                                        <small>Lanes</small>
+                                        <strong>
+                                            {choiceLaneMap.length} {choiceLaneMap.length === 1 ? 'lane' : 'lanes'}
+                                        </strong>
+                                        <b>{primaryChoiceLane ? `${primaryChoiceLane.label} leads` : 'No lead lane'}</b>
+                                        <span aria-hidden="true" className={styles.choiceLaneMapSummaryBeatPips}>
+                                            {Array.from({ length: Math.max(2, Math.min(5, choiceLaneMap.length + 1)) }, (_, beatIndex) => (
+                                                <i
+                                                    data-choice-lane-map-summary-beat={beatIndex + 1}
+                                                    data-choice-lane-map-summary-beat-focus={
+                                                        beatIndex === 0 ? primaryChoiceLane?.id ?? 'none' : 'support'
+                                                    }
+                                                    key={beatIndex}
+                                                />
+                                            ))}
+                                        </span>
+                                    </span>
                                     {primaryChoiceLane ? (
                                         <span
                                             aria-label={`Primary side room lane. ${primaryChoiceLane.label}: ${sideRoomChoiceLaneAction(primaryChoiceLane)}. ${primaryChoiceLane.cue}. ${sideRoomChoiceLaneBeatCount(primaryChoiceLane)} beats.`}

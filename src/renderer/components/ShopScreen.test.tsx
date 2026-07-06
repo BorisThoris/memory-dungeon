@@ -111,6 +111,18 @@ describe('ShopScreen', () => {
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-beats', '4');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-cue', 'Open greedy route');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-screen-cue', 'burst');
+        const offerLaneMapSummary = screen.getByTestId('shop-offer-lane-map-summary');
+        expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-count', '2');
+        expect(offerLaneMapSummary).toHaveTextContent('Lanes');
+        expect(offerLaneMapSummary).toHaveTextContent('2 lanes');
+        expect(offerLaneMapSummary).toHaveTextContent('Route leads');
+        expect(offerLaneMapSummary.querySelectorAll('[data-shop-offer-lane-map-summary-beat]')).toHaveLength(3);
+        expect(
+            offerLaneMapSummary.querySelector('[data-shop-offer-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-shop-offer-lane-map-summary-beat-focus', 'route');
+        expect(
+            offerLaneMapSummary.querySelector('[data-shop-offer-lane-map-summary-beat="2"]')
+        ).toHaveAttribute('data-shop-offer-lane-map-summary-beat-focus', 'support');
         const primaryOfferLane = screen.getByTestId('shop-primary-offer-lane');
         expect(primaryOfferLane).toHaveAccessibleName('Primary shop lane. Route: Open route. Open greedy route. 4 beats.');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane', 'route');

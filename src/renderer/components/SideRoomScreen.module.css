@@ -550,6 +550,70 @@
         color-mix(in srgb, var(--theme-surface-control) 78%, transparent);
 }
 
+.choiceLaneMap .choiceLaneMapSummary {
+    grid-column: 1 / -1;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    min-height: 2.45rem;
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-surface-raised) 76%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}
+
+.choiceLaneMap .choiceLaneMapSummary strong {
+    justify-self: start;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+}
+
+.choiceLaneMap .choiceLaneMapSummary b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    font-size: 0.68rem;
+    text-align: left;
+}
+
+.choiceLaneMapSummaryBeatPips {
+    display: inline-flex;
+    justify-self: end;
+    align-items: center;
+    gap: 0.1rem;
+}
+
+.choiceLaneMap .choiceLaneMapSummaryBeatPips i {
+    display: block;
+    width: 0.18rem;
+    height: 0.18rem;
+    border-radius: 999px;
+    animation: sideRoomBeatPulse 0.86s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+    box-shadow: 0 0 0.38rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
+}
+
+.choiceLaneMap .choiceLaneMapSummaryBeatPips i[data-choice-lane-map-summary-beat-focus='support'] {
+    width: 0.12rem;
+    height: 0.12rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 72%, white 8%);
+    opacity: 0.82;
+}
+
+.choiceLaneMapSummaryBeatPips i:nth-child(2) {
+    animation-delay: 0.08s;
+}
+
+.choiceLaneMapSummaryBeatPips i:nth-child(3) {
+    animation-delay: 0.16s;
+}
+
+.choiceLaneMapSummaryBeatPips i:nth-child(4) {
+    animation-delay: 0.24s;
+}
+
+.choiceLaneMapSummaryBeatPips i:nth-child(5) {
+    animation-delay: 0.32s;
+}
+
 .choiceLanePrimaryCue {
     grid-column: 1 / -1;
     grid-template-columns: auto minmax(0, 0.8fr) minmax(0, 1.1fr) auto;
@@ -1628,6 +1692,7 @@
     .choiceSignalBeatPips i,
     .choicePayoffBeatPips i,
     .choiceBuildRouteBeatPips i,
+    .choiceLaneMapSummaryBeatPips i,
     .choiceLanePrimaryBeatPips i,
     .choiceLaneBeatPips i {
         animation: none;
@@ -1645,6 +1710,7 @@
 :global([data-reduce-motion='true']) .choiceSignalBeatPips i,
 :global([data-reduce-motion='true']) .choicePayoffBeatPips i,
 :global([data-reduce-motion='true']) .choiceBuildRouteBeatPips i,
+:global([data-reduce-motion='true']) .choiceLaneMapSummaryBeatPips i,
 :global([data-reduce-motion='true']) .choiceLanePrimaryBeatPips i,
 :global([data-reduce-motion='true']) .choiceLaneBeatPips i {
     animation: none;

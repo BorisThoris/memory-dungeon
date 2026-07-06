@@ -1084,6 +1084,28 @@ const ShopScreen = () => {
                         }
                         data-testid="shop-offer-lane-map"
                     >
+                        <span
+                            className={styles.offerLaneMapSummary}
+                            data-shop-offer-lane-count={offerLaneMap.length}
+                            data-testid="shop-offer-lane-map-summary"
+                        >
+                            <small>Lanes</small>
+                            <strong>
+                                {offerLaneMap.length} {offerLaneMap.length === 1 ? 'lane' : 'lanes'}
+                            </strong>
+                            <b>{primaryOfferLane ? `${primaryOfferLane.label} leads` : 'No lead lane'}</b>
+                            <span aria-hidden="true" className={styles.offerLaneMapSummaryBeatPips}>
+                                {Array.from({ length: Math.max(2, Math.min(5, offerLaneMap.length + 1)) }, (_, beatIndex) => (
+                                    <i
+                                        data-shop-offer-lane-map-summary-beat={beatIndex + 1}
+                                        data-shop-offer-lane-map-summary-beat-focus={
+                                            beatIndex === 0 ? primaryOfferLane?.id ?? 'none' : 'support'
+                                        }
+                                        key={beatIndex}
+                                    />
+                                ))}
+                            </span>
+                        </span>
                         {primaryOfferLane ? (
                             <span
                                 aria-label={`Primary shop lane. ${primaryOfferLane.label}: ${shopOfferLaneAction(primaryOfferLane)}. ${primaryOfferLane.cue}. ${shopOfferLaneBeatCount(primaryOfferLane)} beats.`}
