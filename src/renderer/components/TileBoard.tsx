@@ -5326,8 +5326,33 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         className={styles.chainOpportunityRewardUrgency}
                                         data-chain-reward-urgency={boardChainOpportunity.rewardUrgencyTier ?? 'none'}
+                                        data-chain-reward-urgency-meter-fill={
+                                            boardChainOpportunity.rewardUrgencyTier === 'next'
+                                                ? 100
+                                                : boardChainOpportunity.rewardUrgencyTier === 'soon'
+                                                  ? 75
+                                                  : boardChainOpportunity.rewardUrgencyTier === 'later'
+                                                    ? 50
+                                                    : 60
+                                        }
+                                        style={
+                                            {
+                                                '--chain-reward-urgency-meter-fill': `${
+                                                    boardChainOpportunity.rewardUrgencyTier === 'next'
+                                                        ? 100
+                                                        : boardChainOpportunity.rewardUrgencyTier === 'soon'
+                                                          ? 75
+                                                          : boardChainOpportunity.rewardUrgencyTier === 'later'
+                                                            ? 50
+                                                            : 60
+                                                }%`
+                                            } as CSSProperties
+                                        }
                                     >
                                         {boardChainOpportunity.rewardUrgencyLabel}
+                                        <i aria-hidden="true" className={styles.chainOpportunityRewardUrgencyMeter}>
+                                            <i aria-hidden="true" className={styles.chainOpportunityRewardUrgencyMeterFill} />
+                                        </i>
                                         <span aria-hidden="true" className={styles.chainOpportunityRewardUrgencyBeatPips}>
                                             {Array.from(
                                                 {

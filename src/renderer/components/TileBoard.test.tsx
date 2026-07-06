@@ -743,6 +743,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-urgency="next"]')).toHaveTextContent(
             'One-away cashout'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-reward-urgency="next"]')).toHaveAttribute(
+            'data-chain-reward-urgency-meter-fill',
+            '100'
+        );
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Echo + Sealed: combo shard');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveAccessibleName(
             /Board chain opportunity.*Best play.*Cash out.*Match lit route for reward.*Push x6 reward.*x4 streak.*1 match to reward.*One-away cashout.*1 route ready.*2 cards lit.*Reward hot.*Next reward x6 \+1 shard in 1 match.*Echo \+ Sealed: combo shard/i
