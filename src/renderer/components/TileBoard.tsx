@@ -2890,11 +2890,27 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             const bestOpportunityLiveText = bestOpportunity
                 ? ` Best play: ${bestOpportunity.impactCue}. ${bestOpportunity.label}: ${bestOpportunity.value}. ${bestOpportunity.action}: ${bestOpportunity.detail}.`
                 : '';
+            const rewardLeadLiveText = boardRewardLeadEntry
+                ? ` Next reward: ${boardRewardLeadEntry.cue.label}. ${boardRewardLeadEntry.action}. ${boardRewardLeadEntry.progressLabel}. ${boardRewardLeadEntry.remainingLabel}.`
+                : '';
+            const traitModeLiveText = boardTraitModeCue
+                ? ` Trait mode: ${boardTraitModeCue.value}.${boardTraitModeCue.nextReward ? ` ${boardTraitModeCue.nextReward}.` : ''} ${boardTraitModeCue.detail}.`
+                : '';
             const chainLiveText =
                 boardChainAccessibilitySummary.tone === 'idle' ? '' : ` ${boardChainAccessibilitySummary.label}`;
-            setBoardLiveMessage(`Focus: ${focusedTileLabel}${bestOpportunityLiveText}${boardOpportunityLaneMapLiveText}${stackLiveText}${chainLiveText}`);
+            setBoardLiveMessage(
+                `Focus: ${focusedTileLabel}${bestOpportunityLiveText}${rewardLeadLiveText}${traitModeLiveText}${boardOpportunityLaneMapLiveText}${stackLiveText}${chainLiveText}`
+            );
         });
-    }, [boardChainAccessibilitySummary, boardOpportunityCompassRows, boardOpportunityLaneMapLiveText, boardPayoffStack, focusedTileLabel]);
+    }, [
+        boardChainAccessibilitySummary,
+        boardOpportunityCompassRows,
+        boardOpportunityLaneMapLiveText,
+        boardPayoffStack,
+        boardRewardLeadEntry,
+        boardTraitModeCue,
+        focusedTileLabel
+    ]);
 
     useImperativeHandle(ref, () => ({
         getTileClientRectAtGrid: (row: number, col: number) => {

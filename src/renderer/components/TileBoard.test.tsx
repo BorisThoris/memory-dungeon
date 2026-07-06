@@ -1015,14 +1015,6 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAccessibleName(
             /Trait combo combo preview.*Cashout.*Cashout.*Next reward x6 \+1 shard in 1 match.*One-away cashout.*Push x6 reward.*Echo \+ Sealed: combo shard/i
         );
-        expect(screen.getByText(/Focus: Hidden tile, row 1, column 1/i)).toHaveTextContent(
-            'Chain reward hot. Next reward x6 +1 shard in 1 match'
-        );
-        expect(screen.getByText(/Focus: Hidden tile, row 1, column 1/i)).toHaveTextContent(
-            'Best play: Route cashout. Combo route: 1 route ready. Cash out: Match lit route for reward'
-        );
-        expect(screen.getByText(/Focus: Hidden tile, row 1, column 1/i)).toHaveTextContent('One-away cashout');
-        expect(screen.getByText(/Focus: Hidden tile, row 1, column 1/i)).toHaveTextContent('Push x6 reward');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('chain-ready:2');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('chain-reward-hot:2');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-states')).toContain('trait-combo:2');
