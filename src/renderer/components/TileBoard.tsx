@@ -2430,6 +2430,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             }
 
             if (traitOpportunitySummary.tiles.length > 0) {
+                const traitComboRewardCue = (
+                    boardChainOpportunity.rewardCue ??
+                    boardChainOpportunity.rewardUrgencyLabel ??
+                    boardChainOpportunity.nextTarget ??
+                    null
+                )?.replace(/^Next reward\s*/i, '');
                 rows.push({
                     action: 'Study',
                     detail: [
@@ -2438,6 +2444,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             .map((tile) => `${tile.label} (${tile.traitKind})`)
                             .join(' / '),
                         traitOpportunitySummary.interactionLines[0] ?? 'Trait combo ready',
+                        traitComboRewardCue ? `Next reward ${traitComboRewardCue}` : null,
                         traitOpportunitySummary.reason
                     ]
                         .filter(Boolean)

@@ -957,6 +957,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('board-opportunity-trait')).toHaveTextContent('Trait combo');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveTextContent('2 combo cards lit');
+        expect(screen.getByTestId('board-opportunity-trait')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-impact-cue', 'Trait combo surge');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-audio', 'opportunity-prime');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-screen-cue', 'pulse');
@@ -977,7 +978,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Echo + Sealed: combo shard');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-tone', 'chain');
         expect(screen.getByTestId('board-opportunity-compass').getAttribute('aria-label')).toContain(
-            'Trait combo surge. Trait combo: 2 combo cards lit. Study: A (echo) / A (sealed) / Echo + Sealed: combo shard'
+            'Trait combo surge. Trait combo: 2 combo cards lit. Study: A (echo) / A (sealed) / Echo + Sealed: combo shard / Next reward x6 +1 shard in 1 match'
         );
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute(
             'aria-label',
