@@ -4883,6 +4883,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 const stackLabel = getChainRewardStackLabel(cue);
                                                 const progress = getChainRewardProgress(boardFloaterPayload.chainDepth, cue);
                                                 const beatCount = getBoardFloaterRewardForecastBeatCount(cue);
+                                                const progressFill = progress
+                                                    ? `${Math.max(0, Math.min(100, (progress.filled / progress.total) * 100))}%`
+                                                    : '0%';
 
                                                 return (
                                                     <span
@@ -4890,12 +4893,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         data-chain-reward-audio={getBoardFloaterRewardForecastAudioCue(cue)}
                                                         data-chain-reward-beats={beatCount}
                                                         data-chain-reward-distance={cue.distance}
+                                                        data-chain-reward-progress-filled={progress?.filled ?? 0}
+                                                        data-chain-reward-progress-total={progress?.total ?? 0}
                                                         data-chain-reward-lane-action={getChainRewardLaneAction(cue.urgency)}
                                                         data-chain-reward-progress={progress?.label ?? 'none'}
                                                         data-chain-reward-screen-cue={getBoardFloaterRewardForecastScreenCue(cue)}
                                                         data-chain-reward-stack-size={cue.stackSize ?? 1}
                                                         data-chain-reward-tone={cue.tone}
                                                         data-chain-reward-urgency={cue.urgency}
+                                                        style={
+                                                            progress
+                                                                ? ({
+                                                                      '--chain-reward-progress-fill': progressFill
+                                                                  } as CSSProperties)
+                                                                : undefined
+                                                        }
                                                         key={cue.id}
                                                     >
                                                         <strong>{cue.chaseLabel}</strong>

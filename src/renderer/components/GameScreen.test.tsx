@@ -1978,6 +1978,14 @@ describe('GameScreen (OVR-014)', () => {
                 '2/2'
             );
             expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
+                'data-chain-reward-progress-filled',
+                '2'
+            );
+            expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
+                'data-chain-reward-progress-total',
+                '2'
+            );
+            expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
                 'data-chain-reward-beats',
                 '4'
             );
@@ -2014,6 +2022,14 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveAttribute(
                 'data-chain-reward-progress',
                 '4/4'
+            );
+            expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveAttribute(
+                'data-chain-reward-progress-filled',
+                '4'
+            );
+            expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveAttribute(
+                'data-chain-reward-progress-total',
+                '4'
             );
             expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="guard"]')).toHaveAttribute(
                 'data-chain-reward-beats',
