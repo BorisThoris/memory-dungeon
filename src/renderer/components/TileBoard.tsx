@@ -158,6 +158,8 @@ type BoardChainRewardLadderEntry = {
     remainingLabel: string;
     total: number;
 };
+type BoardChainRewardLadderSummaryAction = 'cashout' | 'hold' | 'prime';
+type BoardChainRewardLadderSummaryTier = 'later' | 'next' | 'soon';
 type BoardFeedbackScreenCue = 'burst' | 'guard' | 'pulse' | 'snap' | 'tick';
 type BoardChainMilestoneTier = 'build' | 'cashout' | 'hold' | 'prime';
 type BoardHazardOpportunityAction = 'avoid' | 'claim' | 'inspect' | 'weigh';
@@ -651,6 +653,26 @@ const boardChainRewardBeatCount = (entry: BoardChainRewardLadderEntry): 2 | 3 | 
     }
     return 2;
 };
+
+const getBoardChainRewardLadderSummaryAction = (
+    entry: BoardChainRewardLadderEntry | null
+): BoardChainRewardLadderSummaryAction | null => {
+    if (!entry) {
+        return null;
+    }
+    if (entry.action.toLowerCase().includes('hold')) {
+        return 'hold';
+    }
+    if (entry.cue.urgency === 'next' || entry.remainingLabel.startsWith('0 ')) {
+        return 'cashout';
+    }
+    return 'prime';
+};
+
+const getBoardChainRewardLadderSummaryTier = (
+    focusId: ChainRewardForecastCue['urgency'] | null,
+    entry: BoardChainRewardLadderEntry | null
+): BoardChainRewardLadderSummaryTier | null => focusId ?? entry?.cue.urgency ?? null;
 
 const boardChainRewardAudioCue = (
     entry: BoardChainRewardLadderEntry
@@ -2626,6 +2648,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         },
         [boardRewardLadder]
     );
+    const boardRewardLadderSummaryAction = getBoardChainRewardLadderSummaryAction(boardRewardLeadEntry);
+    const boardRewardLadderSummaryTier = getBoardChainRewardLadderSummaryTier(boardRewardLadderFocusId, boardRewardLeadEntry);
+    const boardRewardLadderSummaryScreenCue = boardRewardLeadEntry ? boardChainRewardScreenCue(boardRewardLeadEntry) : null;
+    const boardRewardLadderSummaryBeatCount = boardRewardLeadEntry
+        ? Math.max(2, Math.min(5, boardRewardLadder.length + boardChainRewardBeatCount(boardRewardLeadEntry) - 1))
+        : 0;
+    const boardRewardLadderSummaryMeterFill = Math.round(Math.min(100, (boardRewardLadder.length / 3) * 100));
 
     const boardTraitModeCue = useMemo((): {
         action: BoardTraitModeAction;
@@ -4585,6 +4614,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-chain-reward-ladder={boardRewardLadderAttr}
             data-chain-reward-ladder-actions={boardRewardLadderActionAttr}
             data-chain-reward-ladder-count={boardRewardLadder.length}
+            data-chain-reward-ladder-summary-action={boardRewardLadderSummaryAction ?? 'none'}
+            data-chain-reward-ladder-summary-beats={boardRewardLadderSummaryBeatCount}
+            data-chain-reward-ladder-summary-screen-cue={boardRewardLadderSummaryScreenCue ?? 'none'}
+            data-chain-reward-ladder-summary-tier={boardRewardLadderSummaryTier ?? 'none'}
             data-chain-opportunity-streak-cashout-ready={boardChainOpportunity.streakCashoutReady ? 'true' : 'false'}
             data-chain-opportunity-selected-followups={boardChainOpportunity.selectedFollowupCount}
             data-chain-opportunity-selected-followup-label={boardChainOpportunity.selectedFollowupLabel ?? 'none'}
@@ -5884,19 +5917,23 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-board-chain-reward-ladder={boardRewardLadderAttr}
                                         data-board-chain-reward-ladder-focus={boardRewardLadderFocusId ?? 'none'}
                                         data-board-chain-reward-hot-band={boardChainHotBand?.tone ?? 'none'}
+                                        data-board-chain-reward-ladder-summary-action={boardRewardLadderSummaryAction ?? 'none'}
+                                        data-board-chain-reward-ladder-summary-beats={boardRewardLadderSummaryBeatCount}
+                                        data-board-chain-reward-ladder-summary-screen-cue={boardRewardLadderSummaryScreenCue ?? 'none'}
+                                        data-board-chain-reward-ladder-summary-tier={boardRewardLadderSummaryTier ?? 'none'}
                                         data-testid="chain-opportunity-reward-ladder"
                                     >
                                         <span
                                             className={styles.chainOpportunityRewardLadderSummary}
-                                            data-board-chain-reward-ladder-summary-meter-fill={Math.round(
-                                                Math.min(100, (boardRewardLadder.length / 3) * 100)
-                                            )}
+                                            data-board-chain-reward-ladder-summary-action={boardRewardLadderSummaryAction ?? 'none'}
+                                            data-board-chain-reward-ladder-summary-beats={boardRewardLadderSummaryBeatCount}
+                                            data-board-chain-reward-ladder-summary-meter-fill={boardRewardLadderSummaryMeterFill}
+                                            data-board-chain-reward-ladder-summary-screen-cue={boardRewardLadderSummaryScreenCue ?? 'none'}
+                                            data-board-chain-reward-ladder-summary-tier={boardRewardLadderSummaryTier ?? 'none'}
                                             data-testid="chain-opportunity-reward-ladder-summary"
                                             style={
                                                 {
-                                                    '--board-chain-reward-ladder-summary-meter-fill': `${Math.round(
-                                                        Math.min(100, (boardRewardLadder.length / 3) * 100)
-                                                    )}%`
+                                                    '--board-chain-reward-ladder-summary-meter-fill': `${boardRewardLadderSummaryMeterFill}%`
                                                 } as CSSProperties
                                             }
                                         >
@@ -5913,7 +5950,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 className={styles.chainOpportunityRewardLadderSummaryBeatPips}
                                             >
                                                 {Array.from(
-                                                    { length: Math.max(2, Math.min(5, boardRewardLadder.length + 1)) },
+                                                    { length: boardRewardLadderSummaryBeatCount },
                                                     (_, index) => (
                                                         <i
                                                             data-board-chain-reward-summary-beat={index + 1}

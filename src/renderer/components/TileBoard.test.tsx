@@ -596,6 +596,13 @@ describe('TileBoard touch and click controls', () => {
             'reward:Prime cashout:0/2>guard:Hold streak:0/4>heal:Hold streak:4/8'
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-reward-ladder-count', '3');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-reward-ladder-summary-action', 'prime');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-reward-ladder-summary-beats', '5');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
+            'data-chain-reward-ladder-summary-screen-cue',
+            'pulse'
+        );
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-reward-ladder-summary-tier', 'soon');
         expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAttribute(
             'data-board-chain-reward-ladder',
             'reward:0/2>guard:0/4>heal:4/8'
@@ -610,6 +617,22 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAttribute(
             'data-board-chain-reward-ladder-focus',
+            'soon'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAttribute(
+            'data-board-chain-reward-ladder-summary-action',
+            'prime'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAttribute(
+            'data-board-chain-reward-ladder-summary-beats',
+            '5'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAttribute(
+            'data-board-chain-reward-ladder-summary-screen-cue',
+            'pulse'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAttribute(
+            'data-board-chain-reward-ladder-summary-tier',
             'soon'
         );
         expect(screen.getByTestId('chain-opportunity-reward-lead').querySelector('small')).toHaveTextContent('Now');
@@ -645,12 +668,28 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('Rewards');
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveTextContent('3 rewards');
         expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveAttribute(
+            'data-board-chain-reward-ladder-summary-action',
+            'prime'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveAttribute(
+            'data-board-chain-reward-ladder-summary-beats',
+            '5'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveAttribute(
             'data-board-chain-reward-ladder-summary-meter-fill',
             '100'
         );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveAttribute(
+            'data-board-chain-reward-ladder-summary-screen-cue',
+            'pulse'
+        );
+        expect(screen.getByTestId('chain-opportunity-reward-ladder-summary')).toHaveAttribute(
+            'data-board-chain-reward-ladder-summary-tier',
+            'soon'
+        );
         expect(
             screen.getByTestId('chain-opportunity-reward-ladder-summary').querySelectorAll('[data-board-chain-reward-summary-beat]')
-        ).toHaveLength(4);
+        ).toHaveLength(5);
         expect(
             screen
                 .getByTestId('chain-opportunity-reward-ladder-summary')
