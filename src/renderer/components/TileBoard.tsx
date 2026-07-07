@@ -1079,6 +1079,8 @@ type CardFeedbackPulseTone = 'cashout' | 'followup' | 'route' | 'setup' | 'surge
 type CardFeedbackPulseScreenCue = 'burst' | 'guard' | 'pulse' | 'tick';
 type CardBeatMapSummaryAction = CardFeedbackPulseTone;
 type CardBeatMapSummaryTier = CardFeedbackBeatId;
+type CardCadenceMapSummaryAction = CardFeedbackPulseTone;
+type CardCadenceMapSummaryTier = CardFeedbackCadenceId;
 
 const cardActionPriorityRole = (id: string): CardActionPriorityRole => {
     if (id === 'bank-lane') {
@@ -1146,6 +1148,16 @@ const getCardShotMapSummaryBeatCount = (
 };
 
 const getCardBeatMapSummaryBeatCount = (
+    rows: readonly unknown[],
+    primaryRow: { beatCount: number } | null
+): 2 | 3 | 4 | 5 => {
+    if (!primaryRow) {
+        return 2;
+    }
+    return Math.max(2, Math.min(5, rows.length + primaryRow.beatCount - 1)) as 2 | 3 | 4 | 5;
+};
+
+const getCardCadenceMapSummaryBeatCount = (
     rows: readonly unknown[],
     primaryRow: { beatCount: number } | null
 ): 2 | 3 | 4 | 5 => {
@@ -1975,6 +1987,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         [cardFeedbackCadenceRows]
     );
     const primaryCardFeedbackCadenceRow = cardFeedbackCadenceRows[0] ?? null;
+    const cardCadenceMapSummaryAction: CardCadenceMapSummaryAction | null = primaryCardFeedbackCadenceRow?.tone ?? null;
+    const cardCadenceMapSummaryTier: CardCadenceMapSummaryTier | null =
+        (primaryCardFeedbackCadenceRow?.id as CardCadenceMapSummaryTier | undefined) ?? null;
+    const cardCadenceMapSummaryScreenCue = primaryCardFeedbackCadenceRow?.screenCue ?? null;
+    const cardCadenceMapSummaryBeatCount = getCardCadenceMapSummaryBeatCount(
+        cardFeedbackCadenceRows,
+        primaryCardFeedbackCadenceRow
+    );
     const primaryCardFeedbackShotAudioCue = primaryCardFeedbackShotRow
         ? cardPrimaryShotAudioCue(
               primaryCardFeedbackBeatRow?.id ?? 'none',
@@ -4596,6 +4616,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-beat-map-summary-tier={cardBeatMapSummaryTier ?? 'none'}
             data-card-feedback-primary-cadence={primaryCardFeedbackCadenceRow?.id ?? 'none'}
             data-card-feedback-primary-cadence-action={primaryCardFeedbackCadenceRow?.action ?? 'none'}
+            data-card-cadence-map-summary-action={cardCadenceMapSummaryAction ?? 'none'}
+            data-card-cadence-map-summary-beats={cardFeedbackCadenceRows.length > 0 ? cardCadenceMapSummaryBeatCount : 0}
+            data-card-cadence-map-summary-screen-cue={cardCadenceMapSummaryScreenCue ?? 'none'}
+            data-card-cadence-map-summary-tier={cardCadenceMapSummaryTier ?? 'none'}
             data-card-feedback-marker-shapes={cardFeedbackMarkerShapesAttr}
             data-card-feedback-trait-lane-beats={cardFeedbackTraitLaneBeatsAttr || 'none'}
             data-card-feedback-trait-lane-actions={cardFeedbackTraitLaneActionsAttr || 'none'}
@@ -5759,10 +5783,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-card-cadence-primary={cardFeedbackCadenceRows[0]?.id ?? 'none'}
                                         data-card-cadence-primary-screen-cue={primaryCardFeedbackCadenceRow?.screenCue ?? 'none'}
                                         data-card-cadence-primary-tone={primaryCardFeedbackCadenceRow?.tone ?? 'none'}
+                                        data-card-cadence-map-summary-action={cardCadenceMapSummaryAction ?? 'none'}
+                                        data-card-cadence-map-summary-beats={cardCadenceMapSummaryBeatCount}
+                                        data-card-cadence-map-summary-screen-cue={cardCadenceMapSummaryScreenCue ?? 'none'}
+                                        data-card-cadence-map-summary-tier={cardCadenceMapSummaryTier ?? 'none'}
                                         data-testid="chain-opportunity-cadence-map"
                                     >
                                         <small>Pulse map</small>
-                                        <span className={styles.chainOpportunityCadenceMapSummary} data-testid="chain-opportunity-cadence-map-summary">
+                                        <span
+                                            className={styles.chainOpportunityCadenceMapSummary}
+                                            data-card-cadence-map-summary-action={cardCadenceMapSummaryAction ?? 'none'}
+                                            data-card-cadence-map-summary-beats={cardCadenceMapSummaryBeatCount}
+                                            data-card-cadence-map-summary-screen-cue={cardCadenceMapSummaryScreenCue ?? 'none'}
+                                            data-card-cadence-map-summary-tier={cardCadenceMapSummaryTier ?? 'none'}
+                                            data-testid="chain-opportunity-cadence-map-summary"
+                                        >
                                             <small>Pulses</small>
                                             <b>
                                                 {cardFeedbackCadenceRows.length}{' '}
@@ -5770,7 +5805,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </b>
                                             <span aria-hidden="true" className={styles.chainOpportunityCadenceMapSummaryPips}>
                                                 {Array.from(
-                                                    { length: Math.max(2, Math.min(5, cardFeedbackCadenceRows.length + 1)) },
+                                                    { length: cardCadenceMapSummaryBeatCount },
                                                     (_, index) => (
                                                         <i
                                                             data-card-cadence-map-summary-pip={index + 1}
