@@ -4136,6 +4136,16 @@
     background: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
 }
 
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-beats='2'] .chainOpportunityActionPrioritySummaryBeatPips i {
+    width: 0.07rem;
+    height: 0.07rem;
+    opacity: 0.66;
+}
+
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-beats='3'] .chainOpportunityActionPrioritySummaryBeatPips i {
+    opacity: 0.76;
+}
+
 .chainOpportunityActionPrioritySummary[data-card-action-priority-summary-beats='4'] .chainOpportunityActionPrioritySummaryBeatPips i,
 .chainOpportunityActionPrioritySummary[data-card-action-priority-summary-beats='5'] .chainOpportunityActionPrioritySummaryBeatPips i {
     animation-duration: 0.78s;
@@ -4515,6 +4525,16 @@
     background: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
 }
 
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-beats='2'] .chainOpportunityShotMapSummaryBeatPips i {
+    width: 0.07rem;
+    height: 0.07rem;
+    opacity: 0.66;
+}
+
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-beats='3'] .chainOpportunityShotMapSummaryBeatPips i {
+    opacity: 0.76;
+}
+
 .chainOpportunityShotMapSummary[data-chain-shot-map-summary-beats='4'] .chainOpportunityShotMapSummaryBeatPips i,
 .chainOpportunityShotMapSummary[data-chain-shot-map-summary-beats='5'] .chainOpportunityShotMapSummaryBeatPips i {
     animation-duration: 0.78s;
@@ -4886,6 +4906,16 @@
 
 .chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='setup'] .chainOpportunityBeatMapSummaryPips i {
     background: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-beats='2'] .chainOpportunityBeatMapSummaryPips i {
+    width: 0.07rem;
+    height: 0.07rem;
+    opacity: 0.66;
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-beats='3'] .chainOpportunityBeatMapSummaryPips i {
+    opacity: 0.76;
 }
 
 .chainOpportunityBeatMapSummary[data-card-beat-map-summary-beats='4'] .chainOpportunityBeatMapSummaryPips i,
@@ -5350,6 +5380,16 @@
     background: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
 }
 
+.chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-beats='2'] .chainOpportunityCadenceMapSummaryPips i {
+    width: 0.07rem;
+    height: 0.07rem;
+    opacity: 0.66;
+}
+
+.chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-beats='3'] .chainOpportunityCadenceMapSummaryPips i {
+    opacity: 0.76;
+}
+
 .chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-beats='4'] .chainOpportunityCadenceMapSummaryPips i,
 .chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-beats='5'] .chainOpportunityCadenceMapSummaryPips i {
     animation-duration: 0.78s;
@@ -5473,6 +5513,14 @@
     border-color: color-mix(in srgb, var(--theme-violet-bright) 54%, var(--theme-cyan-bright) 18%);
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
     box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-violet-bright) 16%, transparent);
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-beats='2'] {
+    opacity: 0.82;
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-beats='3'] {
+    box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 10%, transparent);
 }
 
 .chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-beats='4'] {
