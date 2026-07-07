@@ -2841,6 +2841,22 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Prime route');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Prime move');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Use swap to connect route');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-examples-tone]')).toHaveAttribute(
+            'data-chain-examples-tone',
+            'setup'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-lines-action]')).toHaveAttribute(
+            'data-chain-lines-action',
+            'prime-route'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-lines-tier]')).toHaveAttribute(
+            'data-chain-lines-tier',
+            'prime'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-lines-tone]')).toHaveAttribute(
+            'data-chain-lines-tone',
+            'setup'
+        );
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Prime beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Prime route');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Use swap');

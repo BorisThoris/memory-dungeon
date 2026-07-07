@@ -968,7 +968,9 @@
     .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
     .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
     .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
-    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
+    .frame[data-chain-opportunity-next-action='prime-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityExamples,
+    .frame[data-chain-opportunity-next-action='prime-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
         display: inline-grid;
     }
 
@@ -5832,6 +5834,29 @@
     white-space: nowrap;
 }
 
+.chainOpportunityLines[data-chain-lines-tone='cashout'],
+.chainOpportunityLines[data-chain-lines-action='cashout'],
+.chainOpportunityLines[data-chain-lines-tier='now'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.chainOpportunityLines[data-chain-lines-action='follow-up'],
+.chainOpportunityLines[data-chain-lines-tier='tap'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, var(--theme-gold-bright) 18%);
+}
+
+.chainOpportunityLines[data-chain-lines-action='match-route'],
+.chainOpportunityLines[data-chain-lines-tier='route'],
+.chainOpportunityLines[data-chain-lines-tone='ready'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.chainOpportunityLines[data-chain-lines-action='prime-route'],
+.chainOpportunityLines[data-chain-lines-tier='prime'],
+.chainOpportunityLines[data-chain-lines-tone='setup'] {
+    color: color-mix(in srgb, var(--theme-violet-bright) 58%, var(--theme-cyan-bright) 42%);
+}
+
 .chainOpportunityLinesMeter {
     display: block;
     width: 100%;
@@ -5858,6 +5883,22 @@
     transition: width 140ms ease-out;
 }
 
+.chainOpportunityLines[data-chain-lines-action='prime-route'] .chainOpportunityLinesMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 32%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityLines[data-chain-lines-action='prime-route'] .chainOpportunityLinesMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 72%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+}
+
 .chainOpportunityLinesBeatPips {
     display: inline-flex;
     align-items: center;
@@ -5873,6 +5914,11 @@
     animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
     background: color-mix(in srgb, var(--theme-gold-bright) 76%, white);
     box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.chainOpportunityLines[data-chain-lines-action='prime-route'] .chainOpportunityLinesBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 66%, var(--theme-cyan-bright) 26%);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
 }
 
 .chainOpportunityLinesBeatPips i[data-chain-lines-beat-focus='primary'] {
@@ -5914,6 +5960,34 @@
 
 .chainOpportunityExamples[data-chain-examples-tone='forecast'] small {
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='setup'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 78%, var(--theme-violet-bright) 18%);
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='setup'] small {
+    color: color-mix(in srgb, var(--theme-violet-bright) 72%, white);
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='setup'] .chainOpportunityExamplesMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 30%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), transparent 84%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='setup'] .chainOpportunityExamplesMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 70%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 74%, white)
+    );
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='setup'] .chainOpportunityExamplesBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 62%, var(--theme-cyan-bright) 30%);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
 }
 
 .chainOpportunityExamplesMeter {

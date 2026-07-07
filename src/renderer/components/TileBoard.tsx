@@ -5740,7 +5740,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-examples-meter-fill={Math.round(
                                             Math.min(100, (boardChainOpportunity.examples.length / 4) * 100)
                                         )}
-                                        data-chain-examples-tone={boardChainOpportunity.rewardHot ? 'cashout' : 'forecast'}
+                                        data-chain-examples-tone={
+                                            boardChainOpportunity.nextActionId === 'prime-route'
+                                                ? 'setup'
+                                                : boardChainOpportunity.rewardHot
+                                                  ? 'cashout'
+                                                  : 'forecast'
+                                        }
                                         style={
                                             {
                                                 '--chain-examples-meter-fill': `${Math.round(
@@ -5913,7 +5919,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 <span
                                     className={styles.chainOpportunityLines}
+                                    data-chain-lines-action={boardChainOpportunity.nextActionId}
                                     data-chain-lines-meter-fill={Math.round(Math.min(100, (boardChainOpportunity.lines.length / 3) * 100))}
+                                    data-chain-lines-tier={boardChainOpportunityNextActionTier}
+                                    data-chain-lines-tone={boardChainOpportunity.nextActionTone}
                                     style={
                                         {
                                             '--chain-lines-meter-fill': `${Math.round(
