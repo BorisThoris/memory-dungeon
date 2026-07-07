@@ -5960,6 +5960,75 @@
     opacity: 0.64;
 }
 
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role-id='cashout'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.2rem;
+    height: 0.1rem;
+    animation-duration: 0.72s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 76%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role-id='protect'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.2rem;
+    animation-duration: 1.08s;
+    background: color-mix(in srgb, var(--theme-success, #8edb9b) 74%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role-id='tool'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.16rem;
+    height: 0.12rem;
+    animation-duration: 0.84s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role-id='risk'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.22rem;
+    animation-duration: 0.76s;
+    background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 76%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role-id='block'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.12rem;
+    height: 0.18rem;
+    animation-duration: 1.12s;
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role-id='recall'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.22rem;
+    height: 0.08rem;
+    animation-duration: 0.94s;
+    background: color-mix(in srgb, #fff7c4 78%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='burst'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    animation-duration: 0.68s;
+    opacity: 0.98;
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='guard'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.2rem;
+    animation-duration: 1.08s;
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='pulse'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.18rem;
+    height: 0.1rem;
+    animation-duration: 0.92s;
+    opacity: 0.88;
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='risk'] .chainOpportunityTraitLaneMapSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.22rem;
+    animation-duration: 0.76s;
+    background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 76%, white);
+}
+
 .chainOpportunityTraitLaneMapMeter {
     display: block;
     width: 100%;

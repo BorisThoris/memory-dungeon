@@ -1523,6 +1523,60 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-shot-map-summary-screen-cue='tick'[\s\S]*?\.chainOpportunityShotMapSummaryBeatPips i[\s\S]*?animation-duration:\s*1\.34s/);
     });
 
+    it('keeps trait interaction map summary role beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'trait cashout summaries should read as fast payout beats'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='cashout'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'trait protect summaries should use taller defensive beats'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='protect'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'trait tool summaries should keep utility timing'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='tool'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.84s/);
+        expect(
+            cssText,
+            'trait risk summaries should use taller caution beats'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='risk'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'trait recall summaries should stay horizontal memory beats'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='recall'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?width:\s*0\.22rem/);
+    });
+
+    it('keeps trait interaction map summary screen cues visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='burst'] .chainOpportunityTraitLaneMapSummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='guard'] .chainOpportunityTraitLaneMapSummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='pulse'] .chainOpportunityTraitLaneMapSummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='risk'] .chainOpportunityTraitLaneMapSummaryBeatPips i");
+        expect(
+            cssText,
+            'trait burst summaries should stay fastest and high-emphasis'
+        ).toMatch(/data-trait-interaction-lane-primary-screen-cue='burst'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'trait guard summaries should use taller defensive beats'
+        ).toMatch(/data-trait-interaction-lane-primary-screen-cue='guard'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'trait pulse summaries should use mid-tempo guidance'
+        ).toMatch(/data-trait-interaction-lane-primary-screen-cue='pulse'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.92s/);
+        expect(
+            cssText,
+            'trait risk summaries should use taller caution beats'
+        ).toMatch(/data-trait-interaction-lane-primary-screen-cue='risk'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.22rem/);
+    });
+
     it('keeps payoff stack tones visually distinct in board beat pips', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
