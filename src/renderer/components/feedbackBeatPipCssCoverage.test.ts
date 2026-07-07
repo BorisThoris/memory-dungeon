@@ -102,6 +102,11 @@ type ActionFeedbackLaneRoleSelectorGap = {
     role: string;
 };
 
+type OpportunityLaneRoleSelectorGap = {
+    attr: string;
+    role: string;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -260,6 +265,20 @@ const findActionFeedbackLaneRoleSelectorGaps = (): ActionFeedbackLaneRoleSelecto
     );
 };
 
+const findOpportunityLaneRoleSelectorGaps = (): OpportunityLaneRoleSelectorGap[] => {
+    const cssText = readComponentCssFiles()
+        .map(({ text }) => text)
+        .join('\n');
+    const roleAttrs = ['data-opportunity-primary-lane-role', 'data-opportunity-lane-role'];
+    const roles = ['Cashout', 'Claim', 'Perk', 'Prime', 'Recover', 'Risk', 'Study', 'Tool'];
+
+    return roleAttrs.flatMap((attr) =>
+        roles
+            .filter((role) => !cssText.includes(`[${attr}='${role}']`) && !cssText.includes(`[${attr}="${role}"]`))
+            .map((role) => ({ attr, role }))
+    );
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -357,6 +376,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findActionFeedbackLaneRoleSelectorGaps(),
             'action feedback role metadata should drive visible lane styling instead of only telemetry'
+        ).toEqual([]);
+    });
+
+    it('keeps opportunity lane roles wired to visible CSS selectors', () => {
+        expect(
+            findOpportunityLaneRoleSelectorGaps(),
+            'board opportunity role metadata should drive visible lane styling instead of only telemetry'
         ).toEqual([]);
     });
 });
