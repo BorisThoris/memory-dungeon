@@ -1174,6 +1174,23 @@ describe('feedback beat pip CSS coverage', () => {
         ).toEqual([]);
     });
 
+    it('keeps pickup opportunity 3-beat and 4-beat cues visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".pickupOpportunityChip[data-pickup-opportunity-beats='3'] .pickupOpportunityChipBeatPips i");
+        expect(cssText).toContain(".pickupOpportunityChip[data-pickup-opportunity-beats='4'] .pickupOpportunityChipBeatPips i");
+        expect(
+            cssText,
+            '3-beat pickup cues should be softer than 4-beat pickup cues'
+        ).toMatch(/data-pickup-opportunity-beats='3'[\s\S]*?opacity:\s*0\.78/);
+        expect(
+            cssText,
+            '4-beat pickup cues should read hotter than 3-beat pickup cues'
+        ).toMatch(/data-pickup-opportunity-beats='4'[\s\S]*?animation-duration:\s*0\.82s/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),

@@ -8522,9 +8522,16 @@
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-success) 22%, transparent);
 }
 
-.pickupOpportunityChip[data-pickup-opportunity-beats='3'] .pickupOpportunityChipBeatPips i,
+.pickupOpportunityChip[data-pickup-opportunity-beats='3'] .pickupOpportunityChipBeatPips i {
+    animation-duration: 0.94s;
+    opacity: 0.78;
+}
+
 .pickupOpportunityChip[data-pickup-opportunity-beats='4'] .pickupOpportunityChipBeatPips i {
-    animation-duration: 0.88s;
+    width: 0.14rem;
+    height: 0.14rem;
+    animation-duration: 0.82s;
+    opacity: 0.94;
 }
 
 .pickupOpportunityChip span {
