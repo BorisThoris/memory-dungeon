@@ -1253,6 +1253,48 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-trait-mode-tone='surge'\] strong[\s\S]*?var\(--theme-cyan-bright\)/);
     });
 
+    it('keeps chain momentum screen cues visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".chainOpportunityMomentum[data-chain-momentum-screen-cue='burst'] .chainOpportunityMomentumBeatPips i");
+        expect(cssText).toContain(".chainOpportunityMomentum[data-chain-momentum-screen-cue='guard'] .chainOpportunityMomentumBeatPips i");
+        expect(cssText).toContain(".chainOpportunityMomentum[data-chain-momentum-screen-cue='pulse'] .chainOpportunityMomentumBeatPips i");
+        expect(cssText).toContain(".chainOpportunityMomentum[data-chain-momentum-screen-cue='tick'] .chainOpportunityMomentumBeatPips i");
+        expect(
+            cssText,
+            'burst chain momentum should read as urgent cashout timing'
+        ).toMatch(/data-chain-momentum-screen-cue='burst'[\s\S]*?animation-duration:\s*0\.74s/);
+        expect(
+            cssText,
+            'guard chain momentum should use taller defensive beats'
+        ).toMatch(/data-chain-momentum-screen-cue='guard'[\s\S]*?height:\s*0\.24rem/);
+        expect(
+            cssText,
+            'pulse chain momentum should sit between burst and tick timing'
+        ).toMatch(/data-chain-momentum-screen-cue='pulse'[\s\S]*?animation-duration:\s*0\.92s/);
+        expect(
+            cssText,
+            'tick chain momentum should stay smaller and quieter'
+        ).toMatch(/data-chain-momentum-screen-cue='tick'[\s\S]*?opacity:\s*0\.58/);
+    });
+
+    it('keeps chain momentum setup and surge meter language distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'setup momentum should have its own cyan meter fill instead of inheriting ready/surge language'
+        ).toMatch(/data-chain-momentum-tone='setup'[\s\S]*?\.chainOpportunityMomentumMeterFill[\s\S]*?var\(--theme-cyan-bright\)/);
+        expect(
+            cssText,
+            'surge momentum should carry violet route-building background language'
+        ).toMatch(/data-chain-momentum-tone='surge'[\s\S]*?radial-gradient[\s\S]*?var\(--theme-violet-bright\)/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),

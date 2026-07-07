@@ -7989,12 +7989,19 @@
 .chainOpportunityMomentum[data-chain-momentum-tone='surge'],
 .chainOpportunityMomentum[data-chain-momentum-tier='primed'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-gold-bright) 22%);
+    background:
+        radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--theme-violet-bright) 14%, transparent), transparent 72%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
 }
 
 .chainOpportunityMomentum[data-chain-momentum-tone='followup'],
 .chainOpportunityMomentum[data-chain-momentum-screen-cue='pulse'] {
     border-color: color-mix(in srgb, #fff7c4 44%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, #fff7c4 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
     color: color-mix(in srgb, #fff7c4 88%, white);
 }
 
@@ -8002,6 +8009,9 @@
 .chainOpportunityMomentum[data-chain-momentum-tier='ready'],
 .chainOpportunityMomentum[data-chain-momentum-screen-cue='guard'] {
     border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
     color: color-mix(in srgb, var(--theme-success) 88%, white);
 }
 
@@ -8009,6 +8019,10 @@
 .chainOpportunityMomentum[data-chain-momentum-tier='setup'],
 .chainOpportunityMomentum[data-chain-momentum-screen-cue='tick'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-violet-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent), color-mix(in srgb, var(--theme-violet-bright) 5%, transparent)),
+        color-mix(in srgb, var(--theme-void) 44%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
 }
 
 .chainOpportunityMomentumBeatPips {
@@ -8050,6 +8064,32 @@
     box-shadow: 0 0 0.35rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
 }
 
+.chainOpportunityMomentum[data-chain-momentum-screen-cue='burst'] .chainOpportunityMomentumBeatPips i {
+    width: 0.24rem;
+    height: 0.18rem;
+    animation-duration: 0.74s;
+    opacity: 0.96;
+}
+
+.chainOpportunityMomentum[data-chain-momentum-screen-cue='guard'] .chainOpportunityMomentumBeatPips i {
+    width: 0.13rem;
+    height: 0.24rem;
+    animation-duration: 1.2s;
+    opacity: 0.86;
+}
+
+.chainOpportunityMomentum[data-chain-momentum-screen-cue='pulse'] .chainOpportunityMomentumBeatPips i {
+    width: 0.2rem;
+    animation-duration: 0.92s;
+}
+
+.chainOpportunityMomentum[data-chain-momentum-screen-cue='tick'] .chainOpportunityMomentumBeatPips i {
+    width: 0.1rem;
+    height: 0.1rem;
+    animation-duration: 1.44s;
+    opacity: 0.58;
+}
+
 .chainOpportunityMomentum[data-chain-momentum-tone='cashout'] .chainOpportunityMomentumMeterFill,
 .chainOpportunityMomentum[data-chain-momentum-tier='hot'] .chainOpportunityMomentumMeterFill,
 .chainOpportunityMomentum[data-chain-momentum-tone='cashout'] .chainOpportunityMomentumBeatPips i,
@@ -8078,6 +8118,14 @@
 .chainOpportunityMomentum[data-chain-momentum-tier='ready'] .chainOpportunityMomentumBeatPips i {
     background: color-mix(in srgb, var(--theme-success) 84%, white);
     box-shadow: 0 0 0.35rem color-mix(in srgb, var(--theme-success) 24%, transparent);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-tone='setup'] .chainOpportunityMomentumMeterFill,
+.chainOpportunityMomentum[data-chain-momentum-tier='setup'] .chainOpportunityMomentumMeterFill,
+.chainOpportunityMomentum[data-chain-momentum-tone='setup'] .chainOpportunityMomentumBeatPips i,
+.chainOpportunityMomentum[data-chain-momentum-tier='setup'] .chainOpportunityMomentumBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
 }
 
 .activePowerBoardChip {
