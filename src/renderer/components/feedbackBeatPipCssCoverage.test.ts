@@ -366,8 +366,13 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
     const visibleStateContracts: Record<string, readonly string[]> = {
         'data-board-chain-reward-focus': ['primary', 'support'],
         'data-board-chain-reward-ladder-focus': ['next', 'soon'],
+        'data-board-chain-reward-screen-cue': ['burst', 'pulse', 'tick'],
+        'data-board-chain-reward-lead-screen-cue': ['burst', 'pulse', 'tick'],
+        'data-card-feedback-trait-lane-primary-screen-cue': ['burst', 'guard', 'pulse', 'risk'],
         'data-card-feedback-primary-shot-focus': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
         'data-card-primary-shot-focus': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
+        'data-card-trait-lane-primary-screen-cue': ['burst', 'guard', 'pulse', 'risk'],
+        'data-card-trait-lane-beat-screen-cue': ['burst', 'guard', 'pulse', 'risk'],
         'data-card-action-priority-focus': ['primary', 'support'],
         'data-card-beat-focus': ['primary', 'support'],
         'data-card-cadence-focus': ['primary', 'support'],
@@ -380,6 +385,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-opportunity-payoff-crescendo-screen-cue': ['burst', 'pulse', 'snap', 'super'],
         'data-opportunity-payoff-crescendo-tier': ['cashout', 'prime', 'stack', 'super'],
         'data-opportunity-primary-lane-focus': ['build', 'cashout', 'recover', 'reward', 'risk', 'tool'],
+        'data-opportunity-primary-lane-screen-cue': ['burst', 'guard', 'pulse', 'recover', 'risk'],
+        'data-opportunity-lane-screen-cue': ['burst', 'guard', 'pulse', 'recover', 'risk'],
         'data-opportunity-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
         'data-payoff-stack-crescendo-screen-cue': ['burst', 'pulse', 'snap', 'super'],
         'data-payoff-stack-crescendo-tier': ['cashout', 'prime', 'stack', 'super'],
@@ -388,6 +395,7 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-preview-kind': ['hazard', 'pickup', 'trait'],
         'data-preview-line-focus': ['primary', 'support'],
         'data-preview-summary-kind': ['hazard', 'pickup', 'trait'],
+        'data-trap-resolution-screen-cue': ['burst', 'pulse', 'snap'],
         'data-trait-interaction-lane-focus': ['primary', 'support']
     };
 
