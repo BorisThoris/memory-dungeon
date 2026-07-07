@@ -322,6 +322,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-chain-followup-tone': ['route'],
         'data-chain-hot-band-tone': ['cashout', 'ready'],
         'data-chain-meter-tone': ['cashout', 'ready', 'setup', 'surge'],
+        'data-chain-meter-route-tone': ['cashout', 'ready', 'setup', 'surge'],
         'data-chain-milestone-tone': ['building', 'chain', 'combo', 'surge'],
         'data-chain-next-action-tone': ['cashout', 'ready', 'setup'],
         'data-chain-opportunity-tone': ['ready', 'setup'],

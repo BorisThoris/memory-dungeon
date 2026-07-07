@@ -4711,6 +4711,14 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
 }
 
+.chainOpportunityMeter > .chainOpportunityNextRoute[data-chain-meter-route-tone='ready'] b {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.chainOpportunityMeter > .chainOpportunityNextRoute[data-chain-meter-route-tone='surge'] b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, var(--theme-cyan-bright) 24%);
+}
+
 .chainOpportunityMeter > .chainOpportunityNextRoute[data-chain-meter-route-tone='cashout'] b {
     color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
 }
