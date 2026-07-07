@@ -2511,6 +2511,78 @@
     background: color-mix(in srgb, #fff7c4 8%, transparent);
 }
 
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role='Cashout'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 16%);
+}
+
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Cashout'] b,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Cashout'] strong,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Cashout'] .chainOpportunityTraitLaneMapBeatPips i {
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role='Protect'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Protect'] {
+    border-color: color-mix(in srgb, var(--theme-success, #8edb9b) 46%, var(--theme-cyan-bright) 14%);
+}
+
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Protect'] b,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Protect'] strong,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Protect'] .chainOpportunityTraitLaneMapBeatPips i {
+    color: color-mix(in srgb, var(--theme-success, #8edb9b) 88%, white);
+    background: color-mix(in srgb, var(--theme-success, #8edb9b) 80%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role='Tool'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Tool'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-gold-bright) 12%);
+}
+
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Tool'] b,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Tool'] strong,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Tool'] .chainOpportunityTraitLaneMapBeatPips i {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role='Risk'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Risk'] {
+    border-color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 48%, var(--theme-danger) 18%);
+}
+
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Risk'] b,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Risk'] strong,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Risk'] .chainOpportunityTraitLaneMapBeatPips i {
+    color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 88%, white);
+    background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 80%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role='Block'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Block'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 46%, var(--theme-cyan-bright) 12%);
+}
+
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Block'] b,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Block'] strong,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Block'] .chainOpportunityTraitLaneMapBeatPips i {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+    background: color-mix(in srgb, var(--theme-violet-bright) 76%, white);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-role='Recall'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Recall'] {
+    border-color: color-mix(in srgb, #fff7c4 46%, var(--theme-cyan-bright) 12%);
+}
+
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Recall'] b,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Recall'] strong,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-role='Recall'] .chainOpportunityTraitLaneMapBeatPips i {
+    color: color-mix(in srgb, #fff7c4 88%, white);
+    background: color-mix(in srgb, #fff7c4 80%, white);
+}
+
 .chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-focus='primary'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, var(--theme-cyan-bright) 22%);
     background:

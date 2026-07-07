@@ -107,6 +107,11 @@ type OpportunityLaneRoleSelectorGap = {
     role: string;
 };
 
+type TraitInteractionLaneRoleSelectorGap = {
+    attr: string;
+    role: string;
+};
+
 type VisibleToneSelectorGap = {
     attr: string;
     value: string;
@@ -289,6 +294,20 @@ const findOpportunityLaneRoleSelectorGaps = (): OpportunityLaneRoleSelectorGap[]
     );
 };
 
+const findTraitInteractionLaneRoleSelectorGaps = (): TraitInteractionLaneRoleSelectorGap[] => {
+    const cssText = readComponentCssFiles()
+        .map(({ text }) => text)
+        .join('\n');
+    const roleAttrs = ['data-trait-interaction-lane-primary-role', 'data-trait-interaction-lane-role'];
+    const roles = ['Block', 'Cashout', 'Protect', 'Recall', 'Risk', 'Tool'];
+
+    return roleAttrs.flatMap((attr) =>
+        roles
+            .filter((role) => !cssText.includes(`[${attr}='${role}']`) && !cssText.includes(`[${attr}="${role}"]`))
+            .map((role) => ({ attr, role }))
+    );
+};
+
 const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
     const cssText = readComponentCssFiles()
         .map(({ text }) => text)
@@ -433,6 +452,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findOpportunityLaneRoleSelectorGaps(),
             'board opportunity role metadata should drive visible lane styling instead of only telemetry'
+        ).toEqual([]);
+    });
+
+    it('keeps trait interaction lane roles wired to visible CSS selectors', () => {
+        expect(
+            findTraitInteractionLaneRoleSelectorGaps(),
+            'trait interaction role metadata should drive visible lane styling instead of only telemetry'
         ).toEqual([]);
     });
 
