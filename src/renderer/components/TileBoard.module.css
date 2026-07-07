@@ -773,12 +773,18 @@
     .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
     .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
     .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
-    .frame[data-chain-opportunity-next-action='ready'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
         display: inline-grid;
     }
 
@@ -1357,6 +1363,24 @@
         color-mix(in srgb, var(--theme-void) 36%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
     box-shadow: 0 0 0.64rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.chainOpportunityPriority[data-chain-priority='ready'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 15%, transparent), color-mix(in srgb, var(--theme-panel-solid) 18%, transparent)),
+        color-mix(in srgb, var(--theme-void) 36%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    box-shadow: 0 0 0.52rem color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent);
+}
+
+.chainOpportunityPriority[data-chain-priority='setup'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 36%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+    box-shadow: 0 0 0.5rem color-mix(in srgb, var(--theme-violet-bright) 13%, transparent);
 }
 
 .chainOpportunityPrimaryTraitLane {
