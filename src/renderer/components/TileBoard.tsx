@@ -148,6 +148,8 @@ type BoardOpportunityLaneMapEntry = {
     count: number;
     cue: string;
 };
+type BoardOpportunityLaneMapSummaryAction = 'cashout' | 'claim' | 'perk' | 'prime' | 'recover' | 'risk' | 'study' | 'tool';
+type BoardOpportunityLaneMapSummaryTier = 'build' | 'cashout' | 'recover' | 'reward' | 'risk' | 'tool';
 type BoardChainRewardLadderEntry = {
     action: ReturnType<typeof getChainRewardLaneAction>;
     cue: ChainRewardForecastCue;
@@ -549,6 +551,46 @@ const boardOpportunityLaneRole = (
             return 'Prime';
     }
 };
+
+const getBoardOpportunityLaneMapSummaryAction = (
+    lane: Pick<BoardOpportunityLaneMapEntry, 'id'> | null
+): BoardOpportunityLaneMapSummaryAction | null => {
+    if (!lane) {
+        return null;
+    }
+    switch (lane.id) {
+        case 'cash':
+            return 'cashout';
+        case 'pickup':
+            return 'claim';
+        case 'perk':
+            return 'perk';
+        case 'recover':
+            return 'recover';
+        case 'risk':
+            return 'risk';
+        case 'tool':
+            return 'tool';
+        case 'trait':
+            return 'study';
+        case 'build':
+        default:
+            return 'prime';
+    }
+};
+
+const getBoardOpportunityLaneMapSummaryTier = (
+    lane: Pick<BoardOpportunityLaneMapEntry, 'id'> | null
+): BoardOpportunityLaneMapSummaryTier | null => {
+    if (!lane) {
+        return null;
+    }
+    return boardOpportunityLaneFocus(lane);
+};
+
+const getBoardOpportunityLaneMapSummaryScreenCue = (
+    lane: Pick<BoardOpportunityLaneMapEntry, 'id'> | null
+): 'burst' | 'guard' | 'pulse' | 'recover' | 'risk' | null => (lane ? boardOpportunityLaneScreenCue(lane) : null);
 
 const boardOpportunityLaneRoleMapAttr = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
     laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${boardOpportunityLaneRole(lane)}:${lane.count}`).join('>') : 'none';
@@ -3087,6 +3129,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
               Math.min(100, ((boardOpportunityLaneMapRows.length + boardOpportunityLaneBeatCount(primaryBoardOpportunityLane)) / 8) * 100)
           )
         : 0;
+    const boardOpportunityLaneMapSummaryAction = getBoardOpportunityLaneMapSummaryAction(primaryBoardOpportunityLane);
+    const boardOpportunityLaneMapSummaryTier = getBoardOpportunityLaneMapSummaryTier(primaryBoardOpportunityLane);
+    const boardOpportunityLaneMapSummaryScreenCue = getBoardOpportunityLaneMapSummaryScreenCue(primaryBoardOpportunityLane);
+    const boardOpportunityLaneMapSummaryBeatCount = primaryBoardOpportunityLane
+        ? Math.max(2, Math.min(5, boardOpportunityLaneMapRows.length + boardOpportunityLaneBeatCount(primaryBoardOpportunityLane) - 1))
+        : 0;
     const boardOpportunityLaneMapLiveText =
         boardOpportunityLaneMapRows.length > 1
             ? ` Decision lanes: ${boardOpportunityLaneMapRows.map((lane) => `${lane.label} ${boardOpportunityLaneRole(lane)} ${lane.count}, ${lane.action}`).join(', ')}.`
@@ -4615,7 +4663,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-compass-summary-beats={boardOpportunityCompassRows.length > 0 ? boardOpportunityCompassSummaryBeatCount : 0}
             data-opportunity-compass-summary-tier={boardOpportunityCompassRows.length > 0 ? boardOpportunityCompassSummaryTier : 'none'}
             data-opportunity-lane-actions={boardOpportunityLaneActionMapAttrValue}
+            data-opportunity-lane-map-action={boardOpportunityLaneMapSummaryAction ?? 'none'}
+            data-opportunity-lane-map-beats={boardOpportunityLaneMapSummaryBeatCount}
             data-opportunity-lane-map={boardOpportunityLaneMapAttrValue}
+            data-opportunity-lane-map-screen-cue={boardOpportunityLaneMapSummaryScreenCue ?? 'none'}
+            data-opportunity-lane-map-tier={boardOpportunityLaneMapSummaryTier ?? 'none'}
             data-opportunity-lane-count={boardOpportunityLaneMapRows.length}
             data-opportunity-lane-label={boardOpportunityLaneMapRows[0]?.label ?? 'none'}
             data-opportunity-lane-roles={boardOpportunityLaneRoleMapAttrValue}
@@ -6831,7 +6883,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={boardOpportunityLaneMapAccessibleLabel}
                                         className={styles.opportunityLaneMap}
                                         data-opportunity-lane-actions={boardOpportunityLaneActionMapAttrValue}
+                                        data-opportunity-lane-map-action={boardOpportunityLaneMapSummaryAction ?? 'none'}
+                                        data-opportunity-lane-map-beats={boardOpportunityLaneMapSummaryBeatCount}
                                         data-opportunity-lane-map={boardOpportunityLaneMapAttrValue}
+                                        data-opportunity-lane-map-screen-cue={boardOpportunityLaneMapSummaryScreenCue ?? 'none'}
+                                        data-opportunity-lane-map-tier={boardOpportunityLaneMapSummaryTier ?? 'none'}
                                         data-opportunity-lane-roles={boardOpportunityLaneRoleMapAttrValue}
                                         data-opportunity-primary-lane={primaryBoardOpportunityLane?.id ?? 'none'}
                                         data-opportunity-primary-lane-action={primaryBoardOpportunityLane?.action ?? 'none'}
@@ -6855,8 +6911,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <span
                                             className={styles.opportunityLaneMapSummary}
+                                            data-opportunity-lane-map-action={boardOpportunityLaneMapSummaryAction ?? 'none'}
+                                            data-opportunity-lane-map-beats={boardOpportunityLaneMapSummaryBeatCount}
                                             data-testid="board-opportunity-lane-map-summary"
                                             data-opportunity-lane-map-meter-fill={boardOpportunityLaneMapMeterFill}
+                                            data-opportunity-lane-map-screen-cue={boardOpportunityLaneMapSummaryScreenCue ?? 'none'}
+                                            data-opportunity-lane-map-tier={boardOpportunityLaneMapSummaryTier ?? 'none'}
                                             style={
                                                 {
                                                     '--opportunity-lane-map-meter-fill': `${boardOpportunityLaneMapMeterFill}%`
@@ -6870,7 +6930,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </b>
                                             <span aria-hidden="true" className={styles.opportunityLaneMapSummaryBeatPips}>
                                                 {Array.from(
-                                                    { length: Math.max(2, Math.min(5, boardOpportunityLaneMapRows.length + 1)) },
+                                                    { length: boardOpportunityLaneMapSummaryBeatCount },
                                                     (_, index) => (
                                                         <i
                                                             data-opportunity-lane-map-summary-beat={index + 1}

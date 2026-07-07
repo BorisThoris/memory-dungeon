@@ -9098,6 +9098,97 @@
     font-weight: 980;
 }
 
+.frame[data-opportunity-lane-map-tier='cashout'] .opportunityLaneMapSummary,
+.opportunityLaneMap[data-opportunity-lane-map-tier='cashout'] .opportunityLaneMapSummary,
+.opportunityLaneMapSummary[data-opportunity-lane-map-tier='cashout'],
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+            color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.78rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+}
+
+.frame[data-opportunity-lane-map-tier='reward'] .opportunityLaneMapSummary,
+.opportunityLaneMap[data-opportunity-lane-map-tier='reward'] .opportunityLaneMapSummary,
+.opportunityLaneMapSummary[data-opportunity-lane-map-tier='reward'],
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-violet-bright) 14%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent),
+            color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.frame[data-opportunity-lane-map-tier='build'] .opportunityLaneMapSummary,
+.opportunityLaneMap[data-opportunity-lane-map-tier='build'] .opportunityLaneMapSummary,
+.opportunityLaneMapSummary[data-opportunity-lane-map-tier='build'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
+            color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+}
+
+.frame[data-opportunity-lane-map-tier='risk'] .opportunityLaneMapSummary,
+.opportunityLaneMap[data-opportunity-lane-map-tier='risk'] .opportunityLaneMapSummary,
+.opportunityLaneMapSummary[data-opportunity-lane-map-tier='risk'],
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='risk'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 50%, var(--theme-gold-bright) 12%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-danger) 18%, transparent),
+            color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-danger) 76%, white);
+}
+
+.frame[data-opportunity-lane-map-tier='recover'] .opportunityLaneMapSummary,
+.opportunityLaneMap[data-opportunity-lane-map-tier='recover'] .opportunityLaneMapSummary,
+.opportunityLaneMapSummary[data-opportunity-lane-map-tier='recover'],
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='recover'] {
+    border-color: color-mix(in srgb, var(--theme-success) 48%, var(--theme-cyan-bright) 14%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-success) 16%, transparent),
+            color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 74%, white);
+}
+
+.frame[data-opportunity-lane-map-tier='tool'] .opportunityLaneMapSummary,
+.opportunityLaneMap[data-opportunity-lane-map-tier='tool'] .opportunityLaneMapSummary,
+.opportunityLaneMapSummary[data-opportunity-lane-map-tier='tool'],
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='guard'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-violet-bright) 14%, transparent),
+            color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 72%, white);
+}
+
 .opportunityLaneMapSummaryBeatPips {
     display: inline-flex;
     align-items: center;
@@ -9124,6 +9215,35 @@
 
 .opportunityLaneMapSummaryBeatPips i[data-opportunity-lane-map-summary-beat-focus='support'] {
     opacity: 0.64;
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='cashout'] .opportunityLaneMapSummaryBeatPips i,
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='claim'] .opportunityLaneMapSummaryBeatPips i,
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='perk'] .opportunityLaneMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 74%, white);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='prime'] .opportunityLaneMapSummaryBeatPips i,
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='study'] .opportunityLaneMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 70%, white);
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='recover'] .opportunityLaneMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 66%, white);
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='risk'] .opportunityLaneMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-danger) 68%, white);
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='tool'] .opportunityLaneMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 68%, white);
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-beats='4'] .opportunityLaneMapSummaryBeatPips i,
+.opportunityLaneMapSummary[data-opportunity-lane-map-beats='5'] .opportunityLaneMapSummaryBeatPips i {
+    animation-duration: 0.82s;
 }
 
 .opportunityLaneMapMeter {

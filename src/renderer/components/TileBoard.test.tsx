@@ -2026,6 +2026,10 @@ describe('TileBoard touch and click controls', () => {
             'Prime cashout'
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-map', 'build:1>trait:1>pickup:1');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-map-action', 'prime');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-map-beats', '5');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-map-screen-cue', 'pulse');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-map-tier', 'build');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-count', '3');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-label', 'Build');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-primary-lane', 'build');
@@ -2084,6 +2088,13 @@ describe('TileBoard touch and click controls', () => {
             'data-opportunity-lane-map',
             'build:1>trait:1>pickup:1'
         );
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute('data-opportunity-lane-map-action', 'prime');
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute('data-opportunity-lane-map-beats', '5');
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
+            'data-opportunity-lane-map-screen-cue',
+            'pulse'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute('data-opportunity-lane-map-tier', 'build');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-lane-actions',
             'build:Prime build:1>trait:Study traits:1>pickup:Claim pickup:1'
@@ -2124,9 +2135,25 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveTextContent('Lanes');
         expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveTextContent('3 lanes');
+        expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveAttribute(
+            'data-opportunity-lane-map-action',
+            'prime'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveAttribute(
+            'data-opportunity-lane-map-beats',
+            '5'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveAttribute(
+            'data-opportunity-lane-map-screen-cue',
+            'pulse'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveAttribute(
+            'data-opportunity-lane-map-tier',
+            'build'
+        );
         expect(
             screen.getByTestId('board-opportunity-lane-map-summary').querySelectorAll('[data-opportunity-lane-map-summary-beat]')
-        ).toHaveLength(4);
+        ).toHaveLength(5);
         expect(
             screen
                 .getByTestId('board-opportunity-lane-map-summary')
