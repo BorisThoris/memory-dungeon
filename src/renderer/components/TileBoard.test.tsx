@@ -1346,6 +1346,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-beat', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-beat-action', 'hit now');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-beat-count', '5');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-beat-map-summary-action', 'cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-beat-map-summary-beats', '5');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-beat-map-summary-screen-cue', 'burst');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-beat-map-summary-tier', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-cadence', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-cadence-action', 'Cash now');
         expect(screen.getByTestId('chain-opportunity-primary-shot')).toHaveAttribute('data-card-primary-shot', 'cash-now');
@@ -1435,13 +1439,36 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-actions', 'cashout:hit now:2');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('Beats');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('1 lane');
+        expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-map-summary-action', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-map-summary-beats', '5');
+        expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute(
+            'data-card-beat-map-summary-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-map-summary-tier', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveAttribute(
+            'data-card-beat-map-summary-action',
+            'cashout'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveAttribute(
+            'data-card-beat-map-summary-beats',
+            '5'
+        );
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveAttribute(
             'data-card-beat-map-summary-meter-fill',
             '20'
         );
+        expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveAttribute(
+            'data-card-beat-map-summary-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveAttribute(
+            'data-card-beat-map-summary-tier',
+            'cashout'
+        );
         expect(
             screen.getByTestId('chain-opportunity-beat-map-summary').querySelectorAll('[data-card-beat-map-summary-pip]')
-        ).toHaveLength(2);
+        ).toHaveLength(5);
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAccessibleName(
             'Card beat map. Cashout: 2. 5-beat hit now.'
         );

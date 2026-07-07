@@ -1077,6 +1077,8 @@ type CardActionPrioritySummaryTier = CardActionPriorityTone;
 type CardShotMapSummaryTier = CardActionPriorityTone;
 type CardFeedbackPulseTone = 'cashout' | 'followup' | 'route' | 'setup' | 'surge';
 type CardFeedbackPulseScreenCue = 'burst' | 'guard' | 'pulse' | 'tick';
+type CardBeatMapSummaryAction = CardFeedbackPulseTone;
+type CardBeatMapSummaryTier = CardFeedbackBeatId;
 
 const cardActionPriorityRole = (id: string): CardActionPriorityRole => {
     if (id === 'bank-lane') {
@@ -1141,6 +1143,16 @@ const getCardShotMapSummaryBeatCount = (
         return 2;
     }
     return Math.max(2, Math.min(5, rows.length + Math.min(4, primaryRow.count))) as 2 | 3 | 4 | 5;
+};
+
+const getCardBeatMapSummaryBeatCount = (
+    rows: readonly unknown[],
+    primaryRow: { beatCount: number } | null
+): 2 | 3 | 4 | 5 => {
+    if (!primaryRow) {
+        return 2;
+    }
+    return Math.max(2, Math.min(5, rows.length + primaryRow.beatCount - 1)) as 2 | 3 | 4 | 5;
 };
 
 const cardFeedbackPulseTone = (id: string): CardFeedbackPulseTone => {
@@ -1921,6 +1933,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         [cardFeedbackBeatRows]
     );
     const primaryCardFeedbackBeatRow = cardFeedbackBeatRows[0] ?? null;
+    const cardBeatMapSummaryAction: CardBeatMapSummaryAction | null = primaryCardFeedbackBeatRow?.tone ?? null;
+    const cardBeatMapSummaryTier: CardBeatMapSummaryTier | null = primaryCardFeedbackBeatRow?.id ?? null;
+    const cardBeatMapSummaryScreenCue = primaryCardFeedbackBeatRow?.screenCue ?? null;
+    const cardBeatMapSummaryBeatCount = getCardBeatMapSummaryBeatCount(cardFeedbackBeatRows, primaryCardFeedbackBeatRow);
+    const cardBeatMapSummaryMeterFill = Math.round(Math.min(100, (cardFeedbackBeatRows.length / 5) * 100));
     const cardFeedbackCadenceRows = useMemo(() => {
         const rowsById = new Map(
             cardFeedbackCadencesAttr
@@ -4573,6 +4590,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-primary-beat={primaryCardFeedbackBeatRow?.id ?? 'none'}
             data-card-feedback-primary-beat-action={primaryCardFeedbackBeatRow?.action ?? 'none'}
             data-card-feedback-primary-beat-count={primaryCardFeedbackBeatRow?.beatCount ?? 0}
+            data-card-beat-map-summary-action={cardBeatMapSummaryAction ?? 'none'}
+            data-card-beat-map-summary-beats={cardFeedbackBeatRows.length > 0 ? cardBeatMapSummaryBeatCount : 0}
+            data-card-beat-map-summary-screen-cue={cardBeatMapSummaryScreenCue ?? 'none'}
+            data-card-beat-map-summary-tier={cardBeatMapSummaryTier ?? 'none'}
             data-card-feedback-primary-cadence={primaryCardFeedbackCadenceRow?.id ?? 'none'}
             data-card-feedback-primary-cadence-action={primaryCardFeedbackCadenceRow?.action ?? 'none'}
             data-card-feedback-marker-shapes={cardFeedbackMarkerShapesAttr}
@@ -5664,20 +5685,24 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-card-beat-primary={cardFeedbackBeatRows[0]?.id ?? 'none'}
                                         data-card-beat-primary-screen-cue={primaryCardFeedbackBeatRow?.screenCue ?? 'none'}
                                         data-card-beat-primary-tone={primaryCardFeedbackBeatRow?.tone ?? 'none'}
+                                        data-card-beat-map-summary-action={cardBeatMapSummaryAction ?? 'none'}
+                                        data-card-beat-map-summary-beats={cardBeatMapSummaryBeatCount}
+                                        data-card-beat-map-summary-screen-cue={cardBeatMapSummaryScreenCue ?? 'none'}
+                                        data-card-beat-map-summary-tier={cardBeatMapSummaryTier ?? 'none'}
                                         data-testid="chain-opportunity-beat-map"
                                     >
                                         <small>Beat map</small>
                                         <span
                                             className={styles.chainOpportunityBeatMapSummary}
-                                            data-card-beat-map-summary-meter-fill={Math.round(
-                                                Math.min(100, (cardFeedbackBeatRows.length / 5) * 100)
-                                            )}
+                                            data-card-beat-map-summary-action={cardBeatMapSummaryAction ?? 'none'}
+                                            data-card-beat-map-summary-beats={cardBeatMapSummaryBeatCount}
+                                            data-card-beat-map-summary-meter-fill={cardBeatMapSummaryMeterFill}
+                                            data-card-beat-map-summary-screen-cue={cardBeatMapSummaryScreenCue ?? 'none'}
+                                            data-card-beat-map-summary-tier={cardBeatMapSummaryTier ?? 'none'}
                                             data-testid="chain-opportunity-beat-map-summary"
                                             style={
                                                 {
-                                                    '--card-beat-map-summary-meter-fill': `${Math.round(
-                                                        Math.min(100, (cardFeedbackBeatRows.length / 5) * 100)
-                                                    )}%`
+                                                    '--card-beat-map-summary-meter-fill': `${cardBeatMapSummaryMeterFill}%`
                                                 } as CSSProperties
                                             }
                                         >
@@ -5691,7 +5716,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </i>
                                             <span aria-hidden="true" className={styles.chainOpportunityBeatMapSummaryPips}>
                                                 {Array.from(
-                                                    { length: Math.max(2, Math.min(5, cardFeedbackBeatRows.length + 1)) },
+                                                    { length: cardBeatMapSummaryBeatCount },
                                                     (_, index) => (
                                                         <i
                                                             data-card-beat-map-summary-pip={index + 1}
