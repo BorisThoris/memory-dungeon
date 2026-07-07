@@ -11688,6 +11688,12 @@
     background: color-mix(in srgb, var(--theme-border-cyan) 76%, white);
 }
 
+.traitPreviewSummary[data-preview-summary-kind='trait'] .traitPreviewSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.16rem;
+    animation-duration: 1.04s;
+}
+
 .traitPreviewSummary[data-preview-summary-kind='pickup'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-border-cyan) 12%);
     background:
@@ -11703,6 +11709,12 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
 }
 
+.traitPreviewSummary[data-preview-summary-kind='pickup'] .traitPreviewSummaryBeatPips i {
+    width: 0.18rem;
+    height: 0.1rem;
+    animation-duration: 0.74s;
+}
+
 .traitPreviewSummary[data-preview-summary-kind='hazard'] {
     border-color: color-mix(in srgb, var(--theme-danger) 46%, var(--theme-warning, #f2bc6b) 18%);
     background:
@@ -11715,6 +11727,12 @@
 .traitPreviewSummary[data-preview-summary-kind='hazard'] .traitPreviewSummaryBeatPips i {
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 88%, white);
     background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 80%, white);
+}
+
+.traitPreviewSummary[data-preview-summary-kind='hazard'] .traitPreviewSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.18rem;
+    animation-duration: 1.18s;
 }
 
 .traitPreviewDensityMeter {
@@ -11994,6 +12012,9 @@
 
 .traitPreviewChip[data-preview-kind='pickup'] .traitPreviewBeatPips i,
 .traitPreviewChip[data-preview-tone='cashout'] .traitPreviewBeatPips i {
+    width: 0.3rem;
+    height: 0.12rem;
+    animation-duration: 0.72s;
     background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
     box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
 }
@@ -12014,6 +12035,9 @@
 
 .traitPreviewChip[data-preview-kind='hazard'] .traitPreviewBeatPips i,
 .traitPreviewChip[data-preview-tone='hazard'] .traitPreviewBeatPips i {
+    width: 0.14rem;
+    height: 0.24rem;
+    animation-duration: 1.22s;
     background: color-mix(in srgb, var(--theme-danger) 76%, white);
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-danger) 30%, transparent);
 }
@@ -12028,6 +12052,9 @@
 
 .traitPreviewChip[data-preview-tone='setup'] .traitPreviewBeatPips i,
 .traitPreviewChip[data-preview-tone='trait'] .traitPreviewBeatPips i {
+    width: 0.18rem;
+    height: 0.14rem;
+    animation-duration: 0.98s;
     background: color-mix(in srgb, var(--theme-border-cyan) 82%, white);
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-border-cyan) 30%, transparent);
 }
@@ -12066,8 +12093,25 @@
     box-shadow: 0 0 0.62rem color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
 }
 
+.traitPreviewAction[data-preview-action-kind='pickup'] .traitPreviewActionBeatPips i {
+    width: 0.18rem;
+    animation-duration: 0.76s;
+}
+
 .traitPreviewAction[data-preview-action-kind='trait'] {
     box-shadow: 0 0 0.5rem color-mix(in srgb, var(--theme-border-cyan) 10%, transparent);
+}
+
+.traitPreviewAction[data-preview-action-kind='trait'] .traitPreviewActionBeatPips i {
+    width: 0.1rem;
+    height: 0.16rem;
+    animation-duration: 1.02s;
+}
+
+.traitPreviewAction[data-preview-action-kind='hazard'] .traitPreviewActionBeatPips i {
+    width: 0.1rem;
+    height: 0.2rem;
+    animation-duration: 1.16s;
 }
 
 .traitPreviewChip[data-preview-tone='hazard'] .traitPreviewSignalMeterFill {
@@ -12086,11 +12130,21 @@
         0 0 1.1rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
 }
 
+.traitPreviewChip[data-preview-screen-cue='burst'] .traitPreviewBeatPips i {
+    animation-duration: 0.7s;
+    opacity: 0.98;
+}
+
 .traitPreviewChip[data-preview-screen-cue='snap'] {
     box-shadow:
         0 10px 28px rgba(0, 0, 0, 0.3),
         0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
         0 0 0.82rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+}
+
+.traitPreviewChip[data-preview-screen-cue='snap'] .traitPreviewBeatPips i {
+    width: 0.26rem;
+    animation-duration: 0.78s;
 }
 
 .traitPreviewChip[data-preview-screen-cue='pulse'] {
@@ -12100,11 +12154,20 @@
         0 0 0.72rem color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
 }
 
+.traitPreviewChip[data-preview-screen-cue='pulse'] .traitPreviewBeatPips i {
+    animation-duration: 0.94s;
+}
+
 .traitPreviewChip[data-preview-screen-cue='guard'] {
     box-shadow:
         0 10px 28px rgba(0, 0, 0, 0.3),
         0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent),
         0 0 0.86rem color-mix(in srgb, var(--theme-danger) 22%, transparent);
+}
+
+.traitPreviewChip[data-preview-screen-cue='guard'] .traitPreviewBeatPips i {
+    height: 0.24rem;
+    animation-duration: 1.2s;
 }
 
 .traitPreviewCashout {

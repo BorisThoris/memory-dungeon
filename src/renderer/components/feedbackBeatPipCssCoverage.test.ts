@@ -1444,6 +1444,79 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-payoff-stack-crescendo-tier='super'[\s\S]*?\.opportunityPayoffCrescendo strong i[\s\S]*?animation-duration:\s*0\.58s/);
     });
 
+    it('keeps trait preview summary kinds visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'trait preview summary should use taller setup beats'
+        ).toMatch(/data-preview-summary-kind='trait'[\s\S]*?\.traitPreviewSummaryBeatPips i[\s\S]*?height:\s*0\.16rem/);
+        expect(
+            cssText,
+            'pickup preview summary should use fast horizontal reward beats'
+        ).toMatch(/data-preview-summary-kind='pickup'[\s\S]*?\.traitPreviewSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.74s/);
+        expect(
+            cssText,
+            'hazard preview summary should use taller caution beats'
+        ).toMatch(/data-preview-summary-kind='hazard'[\s\S]*?\.traitPreviewSummaryBeatPips i[\s\S]*?height:\s*0\.18rem/);
+    });
+
+    it('keeps trait preview kind and action beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'pickup previews should read as quick reward beats'
+        ).toMatch(/data-preview-kind='pickup'[\s\S]*?\.traitPreviewBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'hazard previews should read as taller defensive beats'
+        ).toMatch(/data-preview-kind='hazard'[\s\S]*?\.traitPreviewBeatPips i[\s\S]*?height:\s*0\.24rem/);
+        expect(
+            cssText,
+            'trait previews should read as setup beats'
+        ).toMatch(/data-preview-tone='trait'[\s\S]*?\.traitPreviewBeatPips i[\s\S]*?animation-duration:\s*0\.98s/);
+        expect(
+            cssText,
+            'pickup preview actions should carry faster action pips'
+        ).toMatch(/data-preview-action-kind='pickup'[\s\S]*?\.traitPreviewActionBeatPips i[\s\S]*?animation-duration:\s*0\.76s/);
+        expect(
+            cssText,
+            'hazard preview actions should carry taller caution pips'
+        ).toMatch(/data-preview-action-kind='hazard'[\s\S]*?\.traitPreviewActionBeatPips i[\s\S]*?height:\s*0\.2rem/);
+    });
+
+    it('keeps trait preview screen cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".traitPreviewChip[data-preview-screen-cue='burst'] .traitPreviewBeatPips i");
+        expect(cssText).toContain(".traitPreviewChip[data-preview-screen-cue='snap'] .traitPreviewBeatPips i");
+        expect(cssText).toContain(".traitPreviewChip[data-preview-screen-cue='pulse'] .traitPreviewBeatPips i");
+        expect(cssText).toContain(".traitPreviewChip[data-preview-screen-cue='guard'] .traitPreviewBeatPips i");
+        expect(
+            cssText,
+            'burst preview cues should stay fastest and high-emphasis'
+        ).toMatch(/data-preview-screen-cue='burst'[\s\S]*?animation-duration:\s*0\.7s/);
+        expect(
+            cssText,
+            'snap preview cues should use quick reward timing'
+        ).toMatch(/data-preview-screen-cue='snap'[\s\S]*?animation-duration:\s*0\.78s/);
+        expect(
+            cssText,
+            'pulse preview cues should use mid-tempo guidance'
+        ).toMatch(/data-preview-screen-cue='pulse'[\s\S]*?animation-duration:\s*0\.94s/);
+        expect(
+            cssText,
+            'guard preview cues should use taller defensive beats'
+        ).toMatch(/data-preview-screen-cue='guard'[\s\S]*?height:\s*0\.24rem/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),
