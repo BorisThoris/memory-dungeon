@@ -653,6 +653,38 @@
     opacity: 0.62;
 }
 
+.frame[data-card-feedback-action-cues*='cash-now:'],
+.frame[data-card-feedback-action-cues*='perk-cash:'] {
+    --board-action-cue-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 16%);
+}
+
+.frame[data-card-feedback-action-cues*='bank-lane:'] {
+    --board-action-cue-color: color-mix(in srgb, var(--theme-success) 40%, var(--theme-cyan-bright) 18%);
+}
+
+.frame[data-card-feedback-action-cues*='follow-up:'] {
+    --board-action-cue-color: color-mix(in srgb, #fff7c4 40%, var(--theme-cyan-bright) 18%);
+}
+
+.frame[data-card-feedback-action-cues*='build-lane:'],
+.frame[data-card-feedback-action-cues*='route-setup:'] {
+    --board-action-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, var(--theme-violet-bright) 18%);
+}
+
+.frame[data-card-feedback-action-cues*='bank-lane:'] .stage::after,
+.frame[data-card-feedback-action-cues*='build-lane:'] .stage::after,
+.frame[data-card-feedback-action-cues*='cash-now:'] .stage::after,
+.frame[data-card-feedback-action-cues*='follow-up:'] .stage::after,
+.frame[data-card-feedback-action-cues*='perk-cash:'] .stage::after,
+.frame[data-card-feedback-action-cues*='route-setup:'] .stage::after {
+    border-color: var(--board-action-cue-color);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--board-action-cue-color) 32%, transparent),
+        inset 0 0 22px color-mix(in srgb, var(--board-action-cue-color) 16%, transparent),
+        0 0 18px color-mix(in srgb, var(--board-action-cue-color) 12%, transparent);
+    opacity: 0.5;
+}
+
 .frame[data-chain-opportunity-next-action='cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='bank-lane:cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='cash-now:cashout'] .stage::after,

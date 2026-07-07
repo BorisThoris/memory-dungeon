@@ -489,6 +489,7 @@ const findVisiblePackedValueSelectorGaps = (): VisiblePackedValueSelectorGap[] =
         .map(({ text }) => text)
         .join('\n');
     const visiblePackedValueContracts: Record<string, readonly string[]> = {
+        'data-card-feedback-action-cues': ['bank-lane', 'build-lane', 'cash-now', 'follow-up', 'perk-cash', 'route-setup'],
         'data-card-feedback-route-glyphs': [
             'cashout-crown',
             'linked-route',
