@@ -1061,6 +1061,9 @@ describe('TileBoard touch and click controls', () => {
         ).toHaveAttribute('data-card-action-priority-role', 'Cashout');
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
+        ).toHaveAttribute('data-card-action-priority-role-id', 'cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
         ).toHaveAttribute('data-card-action-priority-screen-cue', 'burst');
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
@@ -1907,6 +1910,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAttribute('data-card-action-primary-role', 'Follow-up');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAttribute('data-card-action-primary-screen-cue', 'pulse');
+        expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAttribute('data-card-action-primary-role-id', 'followup');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAttribute('data-card-action-primary-tone', 'followup');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveTextContent('Follow-up');
         expect(
@@ -1920,6 +1924,9 @@ describe('TileBoard touch and click controls', () => {
         ).toHaveAttribute('data-card-action-priority-role', 'Follow-up');
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="follow-up"]')
+        ).toHaveAttribute('data-card-action-priority-role-id', 'followup');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="follow-up"]')
         ).toHaveAttribute('data-card-action-priority-screen-cue', 'pulse');
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="follow-up"]')
@@ -1927,6 +1934,9 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="build-lane"]')
         ).toHaveAttribute('data-card-action-priority-role', 'Setup');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="build-lane"]')
+        ).toHaveAttribute('data-card-action-priority-role-id', 'setup');
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="build-lane"]')
         ).toHaveAttribute('data-card-action-priority-screen-cue', 'tick');
@@ -2701,10 +2711,16 @@ describe('TileBoard touch and click controls', () => {
         ).toHaveAttribute('data-card-action-priority-role', 'Cashout');
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
+        ).toHaveAttribute('data-card-action-priority-role-id', 'cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="cash-now"]')
         ).toHaveAttribute('data-card-action-priority-tone', 'cashout');
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="perk-cash"]')
         ).toHaveAttribute('data-card-action-priority-role', 'Perk');
+        expect(
+            screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="perk-cash"]')
+        ).toHaveAttribute('data-card-action-priority-role-id', 'perk');
         expect(
             screen.getByTestId('chain-opportunity-action-priority').querySelector('[data-card-action-priority="perk-cash"]')
         ).toHaveAttribute('data-card-action-priority-screen-cue', 'burst');

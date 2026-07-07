@@ -3851,6 +3851,8 @@
 
 .chainOpportunityActionPriority[data-card-action-primary-role='Cashout'],
 .chainOpportunityActionPriority[data-card-action-primary-role='Perk'],
+.chainOpportunityActionPriority[data-card-action-primary-role-id='cashout'],
+.chainOpportunityActionPriority[data-card-action-primary-role-id='perk'],
 .chainOpportunityActionPriority[data-card-action-primary-screen-cue='burst'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 16%);
 }
@@ -3860,6 +3862,7 @@
 }
 
 .chainOpportunityActionPriority[data-card-action-primary-role='Follow-up'],
+.chainOpportunityActionPriority[data-card-action-primary-role-id='followup'],
 .chainOpportunityActionPriority[data-card-action-primary-tone='followup'] {
     border-color: color-mix(in srgb, #fff7c4 42%, var(--theme-cyan-bright) 16%);
 }
@@ -3869,6 +3872,7 @@
 }
 
 .chainOpportunityActionPriority[data-card-action-primary-role='Bank'],
+.chainOpportunityActionPriority[data-card-action-primary-role-id='bank'],
 .chainOpportunityActionPriority[data-card-action-primary-tone='bank'] {
     border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
 }
@@ -3878,6 +3882,7 @@
 }
 
 .chainOpportunityActionPriority[data-card-action-primary-role='Setup'],
+.chainOpportunityActionPriority[data-card-action-primary-role-id='setup'],
 .chainOpportunityActionPriority[data-card-action-primary-tone='setup'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-violet-bright) 16%);
 }
@@ -4125,6 +4130,8 @@
 .chainOpportunityActionPriority > span[data-card-action-priority='perk-cash'],
 .chainOpportunityActionPriority > span[data-card-action-priority-role='Cashout'],
 .chainOpportunityActionPriority > span[data-card-action-priority-role='Perk'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role-id='cashout'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role-id='perk'],
 .chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='burst'],
 .chainOpportunityActionPriority > span[data-card-action-priority-tone='cashout'],
 .chainOpportunityActionPriority > span[data-card-action-priority-tone='perk'] {
@@ -4157,6 +4164,8 @@
 .chainOpportunityActionPriority > span[data-card-action-priority='perk-cash'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-role='Cashout'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-role='Perk'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-role-id='cashout'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-role-id='perk'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-tone='cashout'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-tone='perk'] b {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
@@ -4164,6 +4173,7 @@
 
 .chainOpportunityActionPriority > span[data-card-action-priority='follow-up'],
 .chainOpportunityActionPriority > span[data-card-action-priority-role='Follow-up'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role-id='followup'],
 .chainOpportunityActionPriority > span[data-card-action-priority-tone='followup'],
 .chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='pulse'] {
     border-color: color-mix(in srgb, #fff7c4 42%, transparent);
@@ -4172,6 +4182,7 @@
 
 .chainOpportunityActionPriority > span[data-card-action-priority='follow-up'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-role='Follow-up'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-role-id='followup'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-tone='followup'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='pulse'] b {
     color: color-mix(in srgb, #fff7c4 88%, white);
@@ -4179,6 +4190,7 @@
 
 .chainOpportunityActionPriority > span[data-card-action-priority='bank-lane'],
 .chainOpportunityActionPriority > span[data-card-action-priority-role='Bank'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role-id='bank'],
 .chainOpportunityActionPriority > span[data-card-action-priority-tone='bank'],
 .chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='guard'] {
     border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
@@ -4189,6 +4201,7 @@
 
 .chainOpportunityActionPriority > span[data-card-action-priority='bank-lane'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-role='Bank'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-role-id='bank'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-tone='bank'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='guard'] b {
     color: color-mix(in srgb, var(--theme-success) 84%, white);
@@ -4197,6 +4210,7 @@
 .chainOpportunityActionPriority > span[data-card-action-priority='route-setup'],
 .chainOpportunityActionPriority > span[data-card-action-priority='build-lane'],
 .chainOpportunityActionPriority > span[data-card-action-priority-role='Setup'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role-id='setup'],
 .chainOpportunityActionPriority > span[data-card-action-priority-tone='setup'],
 .chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='tick'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent);

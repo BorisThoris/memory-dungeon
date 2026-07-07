@@ -5757,6 +5757,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityActionPriority}
                                         data-card-action-primary={cardFeedbackPrimaryActionAttr}
                                         data-card-action-primary-role={primaryCardActionPriorityRow?.role ?? 'none'}
+                                        data-card-action-primary-role-id={primaryCardActionPriorityRow?.tone ?? 'none'}
                                         data-card-action-primary-screen-cue={primaryCardActionPriorityRow?.screenCue ?? 'none'}
                                         data-card-action-primary-tone={primaryCardActionPriorityRow?.tone ?? 'none'}
                                         data-card-action-priority-summary-action={cardActionPrioritySummaryAction ?? 'none'}
@@ -5805,6 +5806,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     row.id === cardFeedbackPrimaryActionAttr ? 'primary' : 'support'
                                                 }
                                                 data-card-action-priority-role={row.role}
+                                                data-card-action-priority-role-id={row.tone}
                                                 data-card-action-priority-screen-cue={row.screenCue}
                                                 data-card-action-priority-tone={row.tone}
                                                 key={row.id}
