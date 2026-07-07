@@ -813,6 +813,8 @@ const CARD_ACTION_SHOT_DETAILS: Record<string, string> = {
 type CardActionPriorityRole = 'Bank' | 'Cashout' | 'Follow-up' | 'Perk' | 'Setup';
 type CardActionPriorityTone = 'bank' | 'cashout' | 'followup' | 'perk' | 'setup';
 type CardActionPriorityScreenCue = 'burst' | 'guard' | 'pulse' | 'tick';
+type CardFeedbackPulseTone = 'cashout' | 'followup' | 'route' | 'setup' | 'surge';
+type CardFeedbackPulseScreenCue = 'burst' | 'guard' | 'pulse' | 'tick';
 
 const cardActionPriorityRole = (id: string): CardActionPriorityRole => {
     if (id === 'bank-lane') {
@@ -855,6 +857,35 @@ const cardActionPriorityScreenCue = (id: string): CardActionPriorityScreenCue =>
     }
     if (id === 'cash-now' || id === 'perk-cash') {
         return 'burst';
+    }
+    return 'tick';
+};
+
+const cardFeedbackPulseTone = (id: string): CardFeedbackPulseTone => {
+    if (id === 'cashout') {
+        return 'cashout';
+    }
+    if (id === 'follow-up') {
+        return 'followup';
+    }
+    if (id === 'route') {
+        return 'route';
+    }
+    if (id === 'surge') {
+        return 'surge';
+    }
+    return 'setup';
+};
+
+const cardFeedbackPulseScreenCue = (id: string): CardFeedbackPulseScreenCue => {
+    if (id === 'cashout' || id === 'surge') {
+        return 'burst';
+    }
+    if (id === 'follow-up') {
+        return 'pulse';
+    }
+    if (id === 'route') {
+        return 'guard';
     }
     return 'tick';
 };
@@ -1578,7 +1609,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 beatCount: getTraitRouteReadabilityBeatCount(id),
                 count: counts.get(id) ?? 0,
                 id,
-                label: CARD_FEEDBACK_BEAT_LABELS[id]
+                label: CARD_FEEDBACK_BEAT_LABELS[id],
+                screenCue: cardFeedbackPulseScreenCue(id),
+                tone: cardFeedbackPulseTone(id)
             }));
     }, [cardFeedbackBeatTiersAttr]);
     const cardFeedbackBeatMapLabel = useMemo(
@@ -1616,7 +1649,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 return {
                     ...row,
                     beatCount: CARD_FEEDBACK_CADENCE_BEATS[id],
-                    label: CARD_FEEDBACK_CADENCE_LABELS[id]
+                    label: CARD_FEEDBACK_CADENCE_LABELS[id],
+                    screenCue: cardFeedbackPulseScreenCue(id),
+                    tone: cardFeedbackPulseTone(id)
                 };
             });
     }, [cardFeedbackCadencesAttr]);
@@ -5097,6 +5132,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityBeatMap}
                                         data-card-beat-actions={cardFeedbackBeatActionMapAttr}
                                         data-card-beat-primary={cardFeedbackBeatRows[0]?.id ?? 'none'}
+                                        data-card-beat-primary-screen-cue={primaryCardFeedbackBeatRow?.screenCue ?? 'none'}
+                                        data-card-beat-primary-tone={primaryCardFeedbackBeatRow?.tone ?? 'none'}
                                         data-testid="chain-opportunity-beat-map"
                                     >
                                         <small>Beat map</small>
@@ -5139,7 +5176,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <span
                                                 data-card-beat-action={row.action}
                                                 data-card-beat-focus={row.id === cardFeedbackBeatRows[0]?.id ? 'primary' : 'support'}
+                                                data-card-beat-screen-cue={row.screenCue}
                                                 data-card-beat-tier={row.id}
+                                                data-card-beat-tone={row.tone}
                                                 key={row.id}
                                             >
                                                 <b>{row.label}</b>
@@ -5163,6 +5202,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={cardFeedbackCadenceMapLabel}
                                         className={styles.chainOpportunityCadenceMap}
                                         data-card-cadence-primary={cardFeedbackCadenceRows[0]?.id ?? 'none'}
+                                        data-card-cadence-primary-screen-cue={primaryCardFeedbackCadenceRow?.screenCue ?? 'none'}
+                                        data-card-cadence-primary-tone={primaryCardFeedbackCadenceRow?.tone ?? 'none'}
                                         data-testid="chain-opportunity-cadence-map"
                                     >
                                         <small>Pulse map</small>
@@ -5189,6 +5230,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <span
                                                 data-card-cadence={row.id}
                                                 data-card-cadence-focus={row.id === cardFeedbackCadenceRows[0]?.id ? 'primary' : 'support'}
+                                                data-card-cadence-screen-cue={row.screenCue}
+                                                data-card-cadence-tone={row.tone}
                                                 key={row.id}
                                             >
                                                 <b>{row.label}</b>

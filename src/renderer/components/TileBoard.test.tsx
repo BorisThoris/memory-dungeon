@@ -1268,6 +1268,8 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
         ).toHaveAttribute('data-chain-shot-map-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-actions', 'cashout:hit now:2');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('Beats');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('1 lane');
@@ -1300,8 +1302,18 @@ describe('TileBoard touch and click controls', () => {
             'data-card-beat-focus',
             'primary'
         );
+        expect(screen.getByTestId('chain-opportunity-beat-map').querySelector('[data-card-beat-tier="cashout"]')).toHaveAttribute(
+            'data-card-beat-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat-map').querySelector('[data-card-beat-tier="cashout"]')).toHaveAttribute(
+            'data-card-beat-tone',
+            'cashout'
+        );
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveTextContent('hit now');
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveAttribute('data-card-cadence-primary', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveAttribute('data-card-cadence-primary-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveAttribute('data-card-cadence-primary-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveAccessibleName(
             'Card pulse map. Cashout: 2. Cash now. 5-beat pulse.'
         );
@@ -1316,6 +1328,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-cadence-map').querySelector('[data-card-cadence="cashout"]')).toHaveAttribute(
             'data-card-cadence-focus',
             'primary'
+        );
+        expect(screen.getByTestId('chain-opportunity-cadence-map').querySelector('[data-card-cadence="cashout"]')).toHaveAttribute(
+            'data-card-cadence-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('chain-opportunity-cadence-map').querySelector('[data-card-cadence="cashout"]')).toHaveAttribute(
+            'data-card-cadence-tone',
+            'cashout'
         );
         expect(
             screen
@@ -3143,6 +3163,8 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('chain-opportunity-primary-shot').querySelectorAll('[data-card-primary-shot-beat-pip]')
         ).toHaveLength(2);
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary', 'setup');
+        expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary-screen-cue', 'tick');
+        expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary-tone', 'setup');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-actions', 'setup:set route:2');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('Beats');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('1 lane');
@@ -3166,8 +3188,18 @@ describe('TileBoard touch and click controls', () => {
             'data-card-beat-focus',
             'primary'
         );
+        expect(screen.getByTestId('chain-opportunity-beat-map').querySelector('[data-card-beat-tier="setup"]')).toHaveAttribute(
+            'data-card-beat-screen-cue',
+            'tick'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat-map').querySelector('[data-card-beat-tier="setup"]')).toHaveAttribute(
+            'data-card-beat-tone',
+            'setup'
+        );
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveTextContent('set route');
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveAttribute('data-card-cadence-primary', 'prime');
+        expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveAttribute('data-card-cadence-primary-screen-cue', 'tick');
+        expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveAttribute('data-card-cadence-primary-tone', 'setup');
         expect(screen.getByTestId('chain-opportunity-cadence-map')).toHaveAccessibleName(
             'Card pulse map. Prime: 2. Prime payoff. 2-beat pulse.'
         );
@@ -3179,6 +3211,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-cadence-map').querySelector('[data-card-cadence="prime"]')).toHaveAttribute(
             'data-card-cadence-focus',
             'primary'
+        );
+        expect(screen.getByTestId('chain-opportunity-cadence-map').querySelector('[data-card-cadence="prime"]')).toHaveAttribute(
+            'data-card-cadence-screen-cue',
+            'tick'
+        );
+        expect(screen.getByTestId('chain-opportunity-cadence-map').querySelector('[data-card-cadence="prime"]')).toHaveAttribute(
+            'data-card-cadence-tone',
+            'setup'
         );
         expect(
             screen
