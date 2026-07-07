@@ -7377,6 +7377,14 @@
         0 0 0.82rem color-mix(in srgb, var(--theme-danger) 18%, transparent);
 }
 
+.hudEndlessRiskWagerPill[data-hud-risk-wager-beats='3'] .hudEndlessRiskWagerBeatPips {
+    width: min(3.2rem, 100%);
+}
+
+.hudEndlessRiskWagerPill[data-hud-risk-wager-beats='4'] .hudEndlessRiskWagerBeatPips {
+    width: min(4.2rem, 100%);
+}
+
 .hudEndlessRiskWagerBeatPips {
     display: grid;
     grid-auto-columns: minmax(0.18rem, 1fr);
@@ -10071,6 +10079,18 @@
     transform-origin: center;
 }
 
+.hudObjectiveSignals > span[data-objective-signal-beats='2'] .hudObjectiveSignalBeatPips {
+    width: min(2.2rem, 100%);
+}
+
+.hudObjectiveSignals > span[data-objective-signal-beats='3'] .hudObjectiveSignalBeatPips {
+    width: min(2.8rem, 100%);
+}
+
+.hudObjectiveSignals > span[data-objective-signal-beats='4'] .hudObjectiveSignalBeatPips {
+    width: min(3.4rem, 100%);
+}
+
 .hudObjectiveSignals > span[data-objective-signal-tone='objective'],
 .hudObjectiveSignals > span[data-objective-signal-tone='progress'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
@@ -10114,10 +10134,24 @@
     animation: hudRewardPulse 1.05s ease-in-out infinite;
 }
 
+.hudObjectiveSignals > span[data-objective-signal-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
+}
+
+.hudObjectiveSignals > span[data-objective-signal-screen-cue='snap'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-success) 12%, transparent),
+        0 0 0.54rem color-mix(in srgb, var(--theme-success) 13%, transparent);
+}
+
 .hudObjectiveSignals > span[data-objective-signal-screen-cue='guard'] {
     box-shadow:
         0 0 0 1px color-mix(in srgb, var(--theme-danger) 14%, transparent),
         0 0 0.62rem color-mix(in srgb, var(--theme-danger) 16%, transparent);
+}
+
+.hudObjectiveSignals > span[data-objective-signal-screen-cue='tick'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
 }
 
 .hudPrimaryRewardCue[data-primary-reward-screen-cue='burst'] {
