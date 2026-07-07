@@ -415,6 +415,10 @@
     animation-delay: 285ms;
 }
 
+.modeSignalStrip [data-mode-signal-beats='2'] .modeSignalBeatPips i {
+    opacity: 0.76;
+}
+
 .modeSignalStrip [data-mode-signal-beats='3'] .modeSignalBeatPips i {
     opacity: 0.82;
 }
@@ -428,6 +432,11 @@
 .modeSignalStrip [data-mode-signal-tone='payoff'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
     background: color-mix(in srgb, var(--theme-gold-deep) 16%, var(--theme-panel-solid) 44%);
+}
+
+.modeSignalStrip [data-mode-signal-tone='pace'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, var(--theme-panel-solid) 48%);
 }
 
 .modeSignalStrip [data-mode-signal-tone='pressure'] {
@@ -459,6 +468,10 @@
 
 .modeSignalStrip [data-mode-signal-screen-cue='guard'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success) 18%, transparent);
+}
+
+.modeSignalStrip [data-mode-signal-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
 }
 
 .modeSignalStrip [data-mode-signal-screen-cue='snap'] {
@@ -850,6 +863,18 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
 }
 
+.modeLoopCue[data-loop-cue-tone='build'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-cyan-bright) 12%);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), transparent 54%),
+        color-mix(in srgb, var(--theme-panel-solid) 64%, transparent);
+}
+
+.modeLoopCue[data-loop-cue-tone='build'] small,
+.modeLoopCue[data-loop-cue-tone='build'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
 .modeLoopCue[data-loop-cue-tone='route'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
     background:
@@ -916,6 +941,40 @@
 
 .launchPrimaryButton {
     min-width: 11rem;
+}
+
+.launchPrimaryButton[data-start-action-tone='build'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.launchPrimaryButton[data-start-action-tone='chain'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
+}
+
+.launchPrimaryButton[data-start-action-tone='route'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 20%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
+}
+
+.launchPrimaryButton[data-start-action-tone='pressure'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-amber) 24%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-amber) 16%, transparent);
+}
+
+.launchPrimaryButton[data-start-action-tone='practice'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-border-cyan) 20%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-border-cyan) 12%, transparent);
+}
+
+.launchPrimaryButton[data-start-action-tone='locked'] {
+    box-shadow: none;
 }
 
 .launchButtonContent {

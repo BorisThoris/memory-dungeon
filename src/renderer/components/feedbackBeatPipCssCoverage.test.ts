@@ -778,8 +778,14 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-trait-interaction-lane-focus': ['primary', 'support'],
         'data-mode-lane-role-id': ['build', 'locked', 'practice', 'pressure', 'reward'],
         'data-mode-primary-lane-role-id': ['build', 'locked', 'practice', 'pressure', 'reward'],
+        'data-loop-cue-tone': ['build', 'chain', 'locked', 'practice', 'pressure', 'route'],
+        'data-mode-signal-tone': ['constraint', 'locked', 'pace', 'payoff', 'practice', 'pressure'],
+        'data-start-action-tone': ['build', 'chain', 'locked', 'practice', 'pressure', 'route'],
         'data-power-payoff-beats': ['0', '1', '2', '3', '4'],
         'data-power-screen-cue': ['burst', 'guard', 'locked', 'none', 'pulse', 'snap'],
+        'data-mode-signal-beats': ['2', '3', '4'],
+        'data-mode-signal-screen-cue': ['burst', 'guard', 'locked', 'pulse', 'snap'],
+        'data-mode-primary-lane-screen-cue': ['burst', 'guard', 'locked', 'reward', 'snap'],
         'data-tool-crescendo-screen-cue': ['burst', 'none', 'pulse', 'snap'],
         'data-tool-crescendo-tier': ['cashout', 'none', 'prime', 'stack']
     };
