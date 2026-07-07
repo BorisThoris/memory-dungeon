@@ -7159,6 +7159,18 @@
     opacity: 0.72;
 }
 
+.pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-phase='first'] {
+    opacity: 0.82;
+}
+
+.pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-phase='then'] {
+    width: 0.28rem;
+}
+
+.pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-phase='keep'] {
+    opacity: 0.68;
+}
+
 .pickupOpportunitySequence small,
 .pickupOpportunitySequence b {
     min-width: 0;
@@ -7185,6 +7197,30 @@
     text-transform: none;
 }
 
+.pickupOpportunitySequence b[data-pickup-sequence-value-phase='first'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+}
+
+.pickupOpportunitySequence small[data-pickup-sequence-phase='first'] {
+    color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
+}
+
+.pickupOpportunitySequence small[data-pickup-sequence-phase='then'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.pickupOpportunitySequence small[data-pickup-sequence-phase='keep'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 72%, white);
+}
+
+.pickupOpportunitySequence b[data-pickup-sequence-value-phase='then'] {
+    text-shadow: 0 0 0.42rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.pickupOpportunitySequence b[data-pickup-sequence-value-phase='keep'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+}
+
 .pickupOpportunitySequence[data-pickup-sequence-tone='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-success) 18%);
     background:
@@ -7194,6 +7230,15 @@
 
 .pickupOpportunitySequence[data-pickup-sequence-tone='cashout'] b {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.pickupOpportunitySequence b[data-pickup-sequence-value-tone='cashout'][data-pickup-sequence-value-phase='then'],
+.pickupOpportunitySequence small[data-pickup-sequence-phase-tone='cashout'][data-pickup-sequence-phase='then'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.pickupOpportunitySequence b[data-pickup-sequence-value-tone='cashout'][data-pickup-sequence-value-phase='keep'] {
+    color: color-mix(in srgb, var(--theme-success) 76%, white);
 }
 
 .pickupOpportunitySequence[data-pickup-sequence-tone='cashout'] .pickupOpportunitySequenceBeatPips i {
@@ -7210,6 +7255,15 @@
 
 .pickupOpportunitySequence[data-pickup-sequence-tone='reward'] b {
     color: color-mix(in srgb, var(--theme-success) 78%, white);
+}
+
+.pickupOpportunitySequence b[data-pickup-sequence-value-tone='reward'][data-pickup-sequence-value-phase='then'],
+.pickupOpportunitySequence small[data-pickup-sequence-phase-tone='reward'][data-pickup-sequence-phase='then'] {
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.pickupOpportunitySequence b[data-pickup-sequence-value-tone='reward'][data-pickup-sequence-value-phase='keep'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
 }
 
 .pickupOpportunitySequence[data-pickup-sequence-tone='reward'] .pickupOpportunitySequenceBeatPips i {

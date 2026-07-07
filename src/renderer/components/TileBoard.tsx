@@ -6100,17 +6100,50 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-pickup-sequence-tone={boardPickupOpportunity.sequenceCue.tone}
                                         data-testid="pickup-opportunity-sequence"
                                     >
-                                        <small>First</small>
-                                        <b>{boardPickupOpportunity.sequenceCue.first}</b>
-                                        <small>Then</small>
-                                        <b>{boardPickupOpportunity.sequenceCue.then}</b>
-                                        <small>Keep</small>
-                                        <b>{boardPickupOpportunity.sequenceCue.keep}</b>
+                                        <small
+                                            data-pickup-sequence-phase="first"
+                                            data-pickup-sequence-phase-tone={boardPickupOpportunity.sequenceCue.tone}
+                                        >
+                                            First
+                                        </small>
+                                        <b
+                                            data-pickup-sequence-value-phase="first"
+                                            data-pickup-sequence-value-tone={boardPickupOpportunity.sequenceCue.tone}
+                                        >
+                                            {boardPickupOpportunity.sequenceCue.first}
+                                        </b>
+                                        <small
+                                            data-pickup-sequence-phase="then"
+                                            data-pickup-sequence-phase-tone={boardPickupOpportunity.sequenceCue.tone}
+                                        >
+                                            Then
+                                        </small>
+                                        <b
+                                            data-pickup-sequence-value-phase="then"
+                                            data-pickup-sequence-value-tone={boardPickupOpportunity.sequenceCue.tone}
+                                        >
+                                            {boardPickupOpportunity.sequenceCue.then}
+                                        </b>
+                                        <small
+                                            data-pickup-sequence-phase="keep"
+                                            data-pickup-sequence-phase-tone={boardPickupOpportunity.sequenceCue.tone}
+                                        >
+                                            Keep
+                                        </small>
+                                        <b
+                                            data-pickup-sequence-value-phase="keep"
+                                            data-pickup-sequence-value-tone={boardPickupOpportunity.sequenceCue.tone}
+                                        >
+                                            {boardPickupOpportunity.sequenceCue.keep}
+                                        </b>
                                         <span aria-hidden="true" className={styles.pickupOpportunitySequenceBeatPips}>
                                             {Array.from({ length: 3 }, (_, index) => (
                                                 <i
                                                     data-pickup-sequence-beat={index + 1}
                                                     data-pickup-sequence-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-pickup-sequence-beat-phase={
+                                                        index === 0 ? 'first' : index === 1 ? 'then' : 'keep'
+                                                    }
                                                     key={index}
                                                 />
                                             ))}

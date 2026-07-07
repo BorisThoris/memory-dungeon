@@ -3243,13 +3243,29 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveTextContent('Keep');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveTextContent('Shard spark pickup: +1 combo shard');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveAttribute('data-pickup-sequence-tone', 'reward');
+        expect(screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-phase="then"]')).toHaveAttribute(
+            'data-pickup-sequence-phase-tone',
+            'reward'
+        );
+        expect(
+            screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-value-phase="then"]')
+        ).toHaveAttribute('data-pickup-sequence-value-tone', 'reward');
+        expect(
+            screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-value-phase="keep"]')
+        ).toHaveTextContent('Shard spark pickup: +1 combo shard');
         expect(screen.getByTestId('pickup-opportunity-sequence').querySelectorAll('[data-pickup-sequence-beat]')).toHaveLength(3);
         expect(
             screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-beat="1"]')
         ).toHaveAttribute('data-pickup-sequence-beat-focus', 'primary');
         expect(
+            screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-beat="1"]')
+        ).toHaveAttribute('data-pickup-sequence-beat-phase', 'first');
+        expect(
             screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-beat="2"]')
         ).toHaveAttribute('data-pickup-sequence-beat-focus', 'support');
+        expect(
+            screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-beat="2"]')
+        ).toHaveAttribute('data-pickup-sequence-beat-phase', 'then');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveAccessibleName(
             'Pickup sequence. First: Claim before exit. Then: Bank pickup reward. Keep: Shard spark pickup: +1 combo shard.'
         );
@@ -3346,6 +3362,13 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-focus', 'cashout');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveTextContent('Cash x4 +1 shard in 1 match');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveAttribute('data-pickup-sequence-tone', 'cashout');
+        expect(screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-phase="then"]')).toHaveAttribute(
+            'data-pickup-sequence-phase-tone',
+            'cashout'
+        );
+        expect(
+            screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-value-phase="then"]')
+        ).toHaveAttribute('data-pickup-sequence-value-tone', 'cashout');
         expect(screen.getByTestId('pickup-opportunity-sequence').querySelectorAll('[data-pickup-sequence-beat]')).toHaveLength(3);
         expect(
             screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-beat="1"]')
@@ -3353,6 +3376,9 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-beat="2"]')
         ).toHaveAttribute('data-pickup-sequence-beat-focus', 'support');
+        expect(
+            screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-beat="3"]')
+        ).toHaveAttribute('data-pickup-sequence-beat-phase', 'keep');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveAccessibleName(
             'Pickup sequence. First: Claim into cashout. Then: Cash x4 +1 shard in 1 match. Keep: Shard spark pickup: +1 combo shard.'
         );
