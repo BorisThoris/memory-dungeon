@@ -682,7 +682,9 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-preview-screen-cue': ['burst', 'guard', 'pulse', 'snap'],
         'data-preview-summary-kind': ['hazard', 'pickup', 'trait'],
         'data-trap-resolution-screen-cue': ['burst', 'pulse', 'snap'],
-        'data-trait-interaction-lane-focus': ['primary', 'support']
+        'data-trait-interaction-lane-focus': ['primary', 'support'],
+        'data-mode-lane-role-id': ['build', 'locked', 'practice', 'pressure', 'reward'],
+        'data-mode-primary-lane-role-id': ['build', 'locked', 'practice', 'pressure', 'reward']
     };
 
     return Object.entries(visibleStateContracts).flatMap(([attr, values]) =>

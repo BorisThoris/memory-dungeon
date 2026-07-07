@@ -345,6 +345,25 @@ const modeChoiceLaneRole = (entry: ModeChoiceLaneMapEntry): 'Build' | 'Locked' |
 const modeChoiceLaneRoleMapAttr = (laneMap: readonly ModeChoiceLaneMapEntry[]): string =>
     laneMap.map((entry) => `${entry.id}:${modeChoiceLaneRole(entry)}:${entry.count}`).join('>');
 
+const modeChoiceLaneRoleId = (entry: ModeChoiceLaneMapEntry): 'build' | 'locked' | 'practice' | 'pressure' | 'reward' => {
+    switch (entry.id) {
+        case 'reward':
+            return 'reward';
+        case 'pressure':
+            return 'pressure';
+        case 'practice':
+            return 'practice';
+        case 'locked':
+            return 'locked';
+        case 'chain':
+        default:
+            return 'build';
+    }
+};
+
+const modeChoiceLaneRoleIdMapAttr = (laneMap: readonly ModeChoiceLaneMapEntry[]): string =>
+    laneMap.map((entry) => `${entry.id}:${modeChoiceLaneRoleId(entry)}:${entry.count}`).join('>');
+
 const modeChoiceLaneMapLabel = (
     def: RunModeDefinition,
     placement: 'launch' | 'tile' | 'detail',
@@ -755,12 +774,14 @@ const ChooseYourPathScreen = () => {
         const primaryModeLane = laneMap[0] ?? null;
         const laneMapAttr = modeChoiceLaneMapAttr(laneMap);
         const laneRoleMapAttr = modeChoiceLaneRoleMapAttr(laneMap);
+        const laneRoleIdMapAttr = modeChoiceLaneRoleIdMapAttr(laneMap);
         return (
             <span
                 aria-label={`${def.title} ${placement} signals. ${signalText}`}
                 className={`${styles.modeSignalStrip} ${styles[`modeSignalStrip_${placement}`]}`}
                 data-mode-lane-actions={modeChoiceLaneActionMapAttr(laneMap)}
                 data-mode-lane-map={laneMapAttr}
+                data-mode-lane-role-ids={laneRoleIdMapAttr}
                 data-mode-lane-roles={laneRoleMapAttr}
                 data-testid={`choose-path-mode-signals-${def.id}`}
             >
@@ -770,6 +791,7 @@ const ChooseYourPathScreen = () => {
                         className={styles.modeLaneMap}
                         data-mode-lane-actions={modeChoiceLaneActionMapAttr(laneMap)}
                         data-mode-lane-map={laneMapAttr}
+                        data-mode-lane-role-ids={laneRoleIdMapAttr}
                         data-mode-lane-roles={laneRoleMapAttr}
                         data-mode-primary-lane={primaryModeLane?.id ?? 'none'}
                         data-mode-primary-lane-action={primaryModeLane ? modeChoiceLaneAction(primaryModeLane) : 'none'}
@@ -777,6 +799,7 @@ const ChooseYourPathScreen = () => {
                         data-mode-primary-lane-beats={primaryModeLane ? modeChoiceLaneBeatCount(primaryModeLane) : 0}
                         data-mode-primary-lane-cue={primaryModeLane?.cue ?? 'none'}
                         data-mode-primary-lane-role={primaryModeLane ? modeChoiceLaneRole(primaryModeLane) : 'none'}
+                        data-mode-primary-lane-role-id={primaryModeLane ? modeChoiceLaneRoleId(primaryModeLane) : 'none'}
                         data-mode-primary-lane-screen-cue={primaryModeLane ? modeChoiceLaneScreenCue(primaryModeLane) : 'none'}
                         data-testid={`choose-path-mode-lane-map-${def.id}-${placement}`}
                     >
@@ -812,6 +835,7 @@ const ChooseYourPathScreen = () => {
                                 data-mode-primary-lane-beats={modeChoiceLaneBeatCount(primaryModeLane)}
                                 data-mode-primary-lane-cue={primaryModeLane.cue}
                                 data-mode-primary-lane-role={modeChoiceLaneRole(primaryModeLane)}
+                                data-mode-primary-lane-role-id={modeChoiceLaneRoleId(primaryModeLane)}
                                 data-mode-primary-lane-screen-cue={modeChoiceLaneScreenCue(primaryModeLane)}
                                 data-testid={`choose-path-mode-primary-lane-${def.id}-${placement}`}
                             >
@@ -831,6 +855,7 @@ const ChooseYourPathScreen = () => {
                                 data-mode-lane={lane.id}
                                 data-mode-lane-action={modeChoiceLaneAction(lane)}
                                 data-mode-lane-role={modeChoiceLaneRole(lane)}
+                                data-mode-lane-role-id={modeChoiceLaneRoleId(lane)}
                                 key={lane.id}
                             >
                                 <small>{lane.label}</small>
