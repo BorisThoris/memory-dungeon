@@ -5650,6 +5650,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                         {boardTraitInteractionLaneMap.map((lane) => (
                                             <span
+                                                aria-label={`Trait interaction lane. ${lane.label}. ${getTraitInteractionLaneRole(lane)}. ${getTraitInteractionLaneAction(lane.id)}. ${lane.count}. ${lane.cue}.`}
                                                 data-trait-interaction-lane={lane.id}
                                                 data-trait-interaction-lane-action={getTraitInteractionLaneAction(lane.id)}
                                                 data-trait-interaction-lane-audio={cardTraitLaneAudioCue(lane.id)}
@@ -7445,6 +7446,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         ) : null}
                                         {boardOpportunityLaneMapRows.map((lane) => (
                                             <span
+                                                aria-label={`Opportunity lane. ${lane.label}. ${boardOpportunityLaneRole(lane)}. ${lane.action}. ${lane.cue}. ${lane.count}. ${boardOpportunityLaneBeatCount(lane)} beats.`}
                                                 data-opportunity-lane={lane.id}
                                                 data-opportunity-lane-action={lane.action}
                                                 data-opportunity-lane-action-id={getBoardOpportunityLaneMapSummaryAction(lane) ?? 'none'}

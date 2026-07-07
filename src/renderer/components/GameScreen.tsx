@@ -4784,6 +4784,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             ) : null}
                                             {boardFloaterPayload.payoffLaneMap.map((lane) => (
                                                 <span
+                                                    aria-label={`Match payoff lane. ${lane.label}. ${matchPayoffLaneAction(lane)}. ${lane.cue}. ${lane.count}. ${getBoardFloaterPayoffLaneBeatCount(lane)} beats.`}
                                                     data-match-payoff-lane={lane.id}
                                                     data-match-payoff-lane-action={matchPayoffLaneAction(lane)}
                                                     data-match-payoff-lane-audio={getBoardFloaterPayoffLaneAudioCue(lane)}
@@ -5262,6 +5263,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             ) : null}
                                             {boardFloaterTraitLaneMap.map((lane) => (
                                                 <span
+                                                    aria-label={`Match trait lane. ${lane.label}. ${getTraitInteractionLaneRole(lane)}. ${getTraitInteractionLaneAction(lane.id)}. ${lane.count}. ${lane.cue}. ${getBoardFloaterTraitLaneBeatCount(lane)} beats.`}
                                                     data-match-trait-lane={lane.id}
                                                     data-match-trait-lane-action={getTraitInteractionLaneAction(lane.id)}
                                                     data-match-trait-lane-audio={getBoardFloaterTraitLaneAudioCue(lane)}
@@ -5482,6 +5484,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             ) : null}
                                             {boardFloaterMismatchRecoveryLaneMap.map((lane) => (
                                                 <span
+                                                    aria-label={`Mismatch recovery lane. ${lane.label}. ${mismatchRecoveryLaneAction(lane)}. ${lane.cue}. ${lane.count}. ${getMismatchRecoveryLaneBeatCount(lane)} beats.`}
                                                     data-mismatch-recovery-lane={lane.id}
                                                     data-mismatch-recovery-lane-action={mismatchRecoveryLaneAction(lane)}
                                                     data-mismatch-recovery-lane-audio={getMismatchRecoveryLaneAudioCue(lane)}

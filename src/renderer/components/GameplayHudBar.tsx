@@ -2363,6 +2363,7 @@ const GameplayHudBar = ({
                                                 </span>
                                                 {rewardPerkLaneMap.map((lane) => (
                                                     <span
+                                                        aria-label={`Reward perk lane. ${lane.lane}. ${hudRewardPerkLaneRole(lane)}. ${lane.action}. ${lane.count}. ${lane.nextCue}.`}
                                                         data-reward-perk-lane-action={lane.action}
                                                         data-reward-perk-lane-count={lane.count}
                                                         data-reward-perk-lane-kind={lane.lane}
@@ -2567,6 +2568,7 @@ const GameplayHudBar = ({
                                                 </span>
                                                 {traitOpportunityLaneMap.map((lane) => (
                                                     <span
+                                                        aria-label={`Trait interaction lane. ${lane.label}. ${getTraitInteractionLaneRole(lane)}. ${getTraitInteractionLaneAction(lane.id)}. ${lane.count} ${lane.count === 1 ? 'line' : 'lines'}. ${lane.cue}.`}
                                                         data-trait-interaction-lane={lane.id}
                                                         data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
                                                         data-trait-interaction-lane-role-id={getTraitInteractionLaneRoleId(lane) ?? 'none'}
@@ -2953,6 +2955,7 @@ const GameplayHudBar = ({
                                                         ) : null}
                                                         {chainRewardLaneMap.map((lane) => (
                                                             <u
+                                                                aria-label={`Chain reward lane. ${lane.label}. ${lane.count}. ${lane.action}. ${lane.cue}. ${hudChainRewardLaneBeatCount(lane)} beats.`}
                                                                 data-chain-reward-lane={lane.id}
                                                                 data-chain-reward-lane-action={lane.action}
                                                                 data-chain-reward-lane-audio={
@@ -2993,16 +2996,17 @@ const GameplayHudBar = ({
                                                         data-chain-reward-ladder={chainRewardLadderAttr}
                                                         data-testid="hud-chain-reward-ladder"
                                                     >
-                                                       {chainRewardLadder.map((entry) => (
+                                                        {chainRewardLadder.map((entry) => (
                                                             <u
-                                                        data-chain-reward-ladder-action={entry.action}
-                                                        data-chain-reward-ladder-audio={hudChainRewardAudioCue(entry.cue)}
-                                                        data-chain-reward-ladder-beats={hudChainRewardBeatCount(entry)}
-                                                        data-chain-reward-ladder-filled={entry.filled}
-                                                        data-chain-reward-ladder-screen-cue={hudChainRewardScreenCue(entry.cue)}
-                                                        data-chain-reward-ladder-total={entry.total}
-                                                        data-chain-reward-ladder-tone={entry.cue.tone}
-                                                        data-chain-reward-ladder-urgency={entry.cue.urgency}
+                                                                aria-label={`Chain reward ladder entry. ${entry.cue.chaseLabel}. ${entry.action}. ${entry.cue.label}. ${entry.progressLabel}. ${entry.remainingLabel}.`}
+                                                                data-chain-reward-ladder-action={entry.action}
+                                                                data-chain-reward-ladder-audio={hudChainRewardAudioCue(entry.cue)}
+                                                                data-chain-reward-ladder-beats={hudChainRewardBeatCount(entry)}
+                                                                data-chain-reward-ladder-filled={entry.filled}
+                                                                data-chain-reward-ladder-screen-cue={hudChainRewardScreenCue(entry.cue)}
+                                                                data-chain-reward-ladder-total={entry.total}
+                                                                data-chain-reward-ladder-tone={entry.cue.tone}
+                                                                data-chain-reward-ladder-urgency={entry.cue.urgency}
                                                                 key={entry.cue.id}
                                                                 style={{ '--chain-reward-ladder-fill': `${Math.round((entry.filled / entry.total) * 100)}%` } as CSSProperties}
                                                             >
@@ -3042,6 +3046,7 @@ const GameplayHudBar = ({
 
                                                     return (
                                                         <span
+                                                            aria-label={`Chain reward forecast. ${cue.chaseLabel}. ${cue.actionLabel}. ${getChainRewardLaneAction(cue.urgency)}. ${cue.label}. ${cue.distanceLabel}. ${getChainRewardUrgencyCopy(cue)}.`}
                                                             data-chain-reward-arcade-cue={getChainRewardUrgencyCopy(cue)}
                                                             data-chain-reward-audio={hudChainRewardAudioCue(cue)}
                                                             data-chain-reward-distance={cue.distance}
@@ -3242,6 +3247,7 @@ const GameplayHudBar = ({
                                                         ) : null}
                                                         {recentActionLaneMap.map((lane) => (
                                                             <b
+                                                                aria-label={`Recent action lane. ${lane.label}. ${lane.count}. ${lane.action}. ${hudRecentActionLaneBeatCount(lane)} beats.`}
                                                                 data-hud-action-lane={lane.id}
                                                                 data-hud-action-lane-action={lane.action}
                                                                 data-hud-action-lane-audio={hudRecentActionLaneAudioCue(lane)}
@@ -3511,6 +3517,7 @@ const GameplayHudBar = ({
                                                 </span>
                                                 {traitOpportunityLaneMap.map((lane) => (
                                                     <span
+                                                        aria-label={`Trait interaction lane. ${lane.label}. ${getTraitInteractionLaneRole(lane)}. ${getTraitInteractionLaneAction(lane.id)}. ${lane.count} ${lane.count === 1 ? 'line' : 'lines'}. ${lane.cue}.`}
                                                         data-trait-interaction-lane={lane.id}
                                                         data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
                                                         data-trait-interaction-lane-role-id={getTraitInteractionLaneRoleId(lane) ?? 'none'}

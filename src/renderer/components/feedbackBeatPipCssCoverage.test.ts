@@ -168,6 +168,11 @@ type CardFeedbackRowReadabilityGap = {
     lineNumber: number;
 };
 
+type PlaySurfaceLaneRowReadabilityGap = {
+    fileName: string;
+    lineNumber: number;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -950,6 +955,33 @@ const findCardFeedbackRowReadabilityGaps = (): CardFeedbackRowReadabilityGap[] =
     return gaps;
 };
 
+const findPlaySurfaceLaneRowReadabilityGaps = (): PlaySurfaceLaneRowReadabilityGap[] => {
+    const gaps: PlaySurfaceLaneRowReadabilityGap[] = [];
+    const activePlaySurfaceFiles = new Set(['GameScreen.tsx', 'GameplayHudBar.tsx', 'TileBoard.tsx']);
+    const rowAttrPattern =
+        /\bdata-(?:reward-perk-lane|chain-reward-lane|chain-reward-ladder|chain-reward-arcade|hud-action-lane|match-payoff-lane|match-trait-lane|mismatch-recovery-lane|trait-interaction-lane|opportunity-lane)(?:=|-action\b|-audio\b|-beats\b|-count\b|-role\b|-role-id\b|-screen-cue\b|-tone\b|-urgency\b|-filled\b|-total\b)/;
+    const ignoredRowPattern = /summary|primary|map|actions|roles|role-ids|pip|\baria-hidden="true"/;
+
+    for (const { fileName, text } of readComponentSourceFiles().filter(({ fileName }) => activePlaySurfaceFiles.has(fileName))) {
+        for (const match of text.matchAll(/<[A-Za-z][^<>]*>/gs)) {
+            const tag = match[0]!;
+            const hasReadableContract =
+                /\baria-label=/.test(tag) ||
+                /\baria-labelledby=/.test(tag) ||
+                /\btitle=/.test(tag);
+
+            if (rowAttrPattern.test(tag) && !ignoredRowPattern.test(tag) && !hasReadableContract) {
+                gaps.push({
+                    fileName,
+                    lineNumber: text.slice(0, match.index ?? 0).split(/\r?\n/).length
+                });
+            }
+        }
+    }
+
+    return gaps;
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -1131,6 +1163,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findCardFeedbackRowReadabilityGaps(),
             'row-level card feedback markers should expose a readable label instead of only telemetry attributes'
+        ).toEqual([]);
+    });
+
+    it('keeps active play lane and reward rows paired with readable labels', () => {
+        expect(
+            findPlaySurfaceLaneRowReadabilityGaps(),
+            'active play lane and reward rows should expose a readable label instead of only telemetry attributes'
         ).toEqual([]);
     });
 });
