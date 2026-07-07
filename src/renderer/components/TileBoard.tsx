@@ -1074,6 +1074,7 @@ type CardActionPriorityRole = 'Bank' | 'Cashout' | 'Follow-up' | 'Perk' | 'Setup
 type CardActionPriorityTone = 'bank' | 'cashout' | 'followup' | 'perk' | 'setup';
 type CardActionPriorityScreenCue = 'burst' | 'guard' | 'pulse' | 'tick';
 type CardActionPrioritySummaryTier = CardActionPriorityTone;
+type CardShotMapSummaryTier = CardActionPriorityTone;
 type CardFeedbackPulseTone = 'cashout' | 'followup' | 'route' | 'setup' | 'surge';
 type CardFeedbackPulseScreenCue = 'burst' | 'guard' | 'pulse' | 'tick';
 
@@ -1123,6 +1124,16 @@ const cardActionPriorityScreenCue = (id: string): CardActionPriorityScreenCue =>
 };
 
 const getCardActionPrioritySummaryBeatCount = (
+    rows: readonly { count: number }[],
+    primaryRow: { count: number } | null
+): 2 | 3 | 4 | 5 => {
+    if (!primaryRow) {
+        return 2;
+    }
+    return Math.max(2, Math.min(5, rows.length + Math.min(4, primaryRow.count))) as 2 | 3 | 4 | 5;
+};
+
+const getCardShotMapSummaryBeatCount = (
     rows: readonly { count: number }[],
     primaryRow: { count: number } | null
 ): 2 | 3 | 4 | 5 => {
@@ -1878,6 +1889,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         [cardFeedbackShotMapRows]
     );
     const primaryCardFeedbackShotRow = cardFeedbackShotMapRows[0] ?? null;
+    const cardShotMapSummaryAction = primaryCardFeedbackShotRow?.tone ?? null;
+    const cardShotMapSummaryTier: CardShotMapSummaryTier | null = primaryCardFeedbackShotRow?.tone ?? null;
+    const cardShotMapSummaryScreenCue = primaryCardFeedbackShotRow?.screenCue ?? null;
+    const cardShotMapSummaryBeatCount = getCardShotMapSummaryBeatCount(cardFeedbackShotMapRows, primaryCardFeedbackShotRow);
     const cardFeedbackBeatRows = useMemo(() => {
         const counts = parseCountAttribute(cardFeedbackBeatTiersAttr);
         return CARD_FEEDBACK_BEAT_PRIORITY
@@ -4551,6 +4566,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-primary-shot-focus={primaryCardFeedbackShotFocus}
             data-card-feedback-primary-shot-label={primaryCardFeedbackShotRow?.shotLabel ?? 'none'}
             data-card-feedback-primary-shot-screen-cue={primaryCardFeedbackShotScreenCue}
+            data-chain-shot-map-summary-action={cardShotMapSummaryAction ?? 'none'}
+            data-chain-shot-map-summary-beats={cardFeedbackShotMapRows.length > 0 ? cardShotMapSummaryBeatCount : 0}
+            data-chain-shot-map-summary-screen-cue={cardShotMapSummaryScreenCue ?? 'none'}
+            data-chain-shot-map-summary-tier={cardShotMapSummaryTier ?? 'none'}
             data-card-feedback-primary-beat={primaryCardFeedbackBeatRow?.id ?? 'none'}
             data-card-feedback-primary-beat-action={primaryCardFeedbackBeatRow?.action ?? 'none'}
             data-card-feedback-primary-beat-count={primaryCardFeedbackBeatRow?.beatCount ?? 0}
@@ -5576,10 +5595,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-shot-map-primary-role={primaryCardActionPriorityRow?.role ?? 'none'}
                                         data-chain-shot-map-primary-screen-cue={primaryCardActionPriorityRow?.screenCue ?? 'none'}
                                         data-chain-shot-map-primary-tone={primaryCardActionPriorityRow?.tone ?? 'none'}
+                                        data-chain-shot-map-summary-action={cardShotMapSummaryAction ?? 'none'}
+                                        data-chain-shot-map-summary-beats={cardShotMapSummaryBeatCount}
+                                        data-chain-shot-map-summary-screen-cue={cardShotMapSummaryScreenCue ?? 'none'}
+                                        data-chain-shot-map-summary-tier={cardShotMapSummaryTier ?? 'none'}
                                         data-testid="chain-opportunity-shot-map"
                                     >
                                         <small>Shot map</small>
-                                        <span className={styles.chainOpportunityShotMapSummary} data-testid="chain-opportunity-shot-map-summary">
+                                        <span
+                                            className={styles.chainOpportunityShotMapSummary}
+                                            data-chain-shot-map-summary-action={cardShotMapSummaryAction ?? 'none'}
+                                            data-chain-shot-map-summary-beats={cardShotMapSummaryBeatCount}
+                                            data-chain-shot-map-summary-screen-cue={cardShotMapSummaryScreenCue ?? 'none'}
+                                            data-chain-shot-map-summary-tier={cardShotMapSummaryTier ?? 'none'}
+                                            data-testid="chain-opportunity-shot-map-summary"
+                                        >
                                             <small>Shots</small>
                                             <b>
                                                 {cardFeedbackShotMapRows.length}{' '}
@@ -5587,7 +5617,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </b>
                                             <span aria-hidden="true" className={styles.chainOpportunityShotMapSummaryBeatPips}>
                                                 {Array.from(
-                                                    { length: Math.max(2, Math.min(5, cardFeedbackShotMapRows.length + 1)) },
+                                                    { length: cardShotMapSummaryBeatCount },
                                                     (_, index) => (
                                                         <i
                                                             data-chain-shot-map-summary-pip={index + 1}

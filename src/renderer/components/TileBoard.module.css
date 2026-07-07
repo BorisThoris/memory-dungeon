@@ -4252,6 +4252,79 @@
     font-weight: 980;
 }
 
+.frame[data-chain-shot-map-summary-tier='cashout'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMap[data-chain-shot-map-summary-tier='cashout'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-tier='cashout'],
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 56%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+            color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.frame[data-chain-shot-map-summary-tier='followup'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMap[data-chain-shot-map-summary-tier='followup'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-tier='followup'],
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-violet-bright) 12%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent),
+            color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.frame[data-chain-shot-map-summary-tier='perk'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMap[data-chain-shot-map-summary-tier='perk'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-tier='perk'] {
+    border-color: color-mix(in srgb, var(--theme-success) 46%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-success) 16%, transparent),
+            color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 74%, white);
+}
+
+.frame[data-chain-shot-map-summary-tier='bank'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMap[data-chain-shot-map-summary-tier='bank'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-tier='bank'],
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-screen-cue='guard'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-violet-bright) 12%, transparent),
+            color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 70%, white);
+}
+
+.frame[data-chain-shot-map-summary-tier='setup'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMap[data-chain-shot-map-summary-tier='setup'] .chainOpportunityShotMapSummary,
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-tier='setup'],
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-screen-cue='tick'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-violet-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 74%, white);
+}
+
 .chainOpportunityShotMapSummaryBeatPips {
     display: inline-flex;
     align-items: center;
@@ -4278,6 +4351,32 @@
 
 .chainOpportunityShotMapSummaryBeatPips i[data-chain-shot-map-summary-pip-focus='support'] {
     opacity: 0.64;
+}
+
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-action='cashout'] .chainOpportunityShotMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 76%, white);
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-action='followup'] .chainOpportunityShotMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
+}
+
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-action='perk'] .chainOpportunityShotMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 66%, white);
+}
+
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-action='bank'] .chainOpportunityShotMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 66%, white);
+}
+
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-action='setup'] .chainOpportunityShotMapSummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
+}
+
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-beats='4'] .chainOpportunityShotMapSummaryBeatPips i,
+.chainOpportunityShotMapSummary[data-chain-shot-map-summary-beats='5'] .chainOpportunityShotMapSummaryBeatPips i {
+    animation-duration: 0.78s;
 }
 
 .chainOpportunityShotMap > span {

@@ -1335,6 +1335,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot-label', 'Cash');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot-screen-cue', 'burst');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-shot-focus', 'cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-shot-map-summary-action', 'cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-shot-map-summary-beats', '3');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-shot-map-summary-screen-cue', 'burst');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-shot-map-summary-tier', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-card-feedback-primary-shot-detail',
             'Cashout lane'
@@ -1377,11 +1381,31 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-role', 'Cashout');
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-screen-cue', 'burst');
         expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-tone', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-summary-action', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-summary-beats', '3');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-summary-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-summary-tier', 'cashout');
         expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveTextContent('Shots');
         expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveTextContent('1 lane');
+        expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveAttribute(
+            'data-chain-shot-map-summary-action',
+            'cashout'
+        );
+        expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveAttribute(
+            'data-chain-shot-map-summary-beats',
+            '3'
+        );
+        expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveAttribute(
+            'data-chain-shot-map-summary-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveAttribute(
+            'data-chain-shot-map-summary-tier',
+            'cashout'
+        );
         expect(
             screen.getByTestId('chain-opportunity-shot-map-summary').querySelectorAll('[data-chain-shot-map-summary-pip]')
-        ).toHaveLength(2);
+        ).toHaveLength(3);
         expect(
             screen
                 .getByTestId('chain-opportunity-shot-map-summary')
