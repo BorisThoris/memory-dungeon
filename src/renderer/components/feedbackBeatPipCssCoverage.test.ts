@@ -590,6 +590,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-hazard-opportunity-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
         'data-hazard-opportunity-tier': ['danger', 'mixed', 'reward', 'watch'],
         'data-hazard-opportunity-trigger': ['flip', 'match', 'match_or_mismatch', 'mismatch'],
+        'data-match-trait-primary-lane-role-id': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
+        'data-match-trait-lane-role-id': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
         'data-opportunity-best-heat': ['cashout', 'normal', 'prime', 'surge'],
         'data-opportunity-best-action-id': [
             'cashout',

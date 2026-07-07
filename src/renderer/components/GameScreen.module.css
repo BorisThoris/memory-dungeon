@@ -14750,11 +14750,13 @@
     justify-self: end;
 }
 
-.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='burst'] {
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='burst'],
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-role-id='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-violet-bright) 20%);
 }
 
-.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='guard'] {
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='guard'],
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-role-id='protect'] {
     border-color: color-mix(in srgb, var(--theme-success) 52%, var(--theme-gold-bright) 16%);
 }
 
@@ -14762,15 +14764,20 @@
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 52%, var(--theme-violet-bright) 18%);
 }
 
-.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='risk'] {
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='risk'],
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-role-id='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 52%, var(--theme-gold-bright) 16%);
 }
 
-.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='control'] {
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='control'],
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-role-id='block'],
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-role-id='tool'],
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-role-id='recall'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 56%, var(--theme-cyan-bright) 16%);
 }
 
-.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='guard'] .boardFloaterPrimaryTraitLaneBeatPips i {
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='guard'] .boardFloaterPrimaryTraitLaneBeatPips i,
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-role-id='protect'] .boardFloaterPrimaryTraitLaneBeatPips i {
     background: color-mix(in srgb, var(--theme-success) 78%, white 8%);
 }
 
@@ -14778,7 +14785,8 @@
     background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
 }
 
-.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='risk'] .boardFloaterPrimaryTraitLaneBeatPips i {
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-screen-cue='risk'] .boardFloaterPrimaryTraitLaneBeatPips i,
+.boardFloaterTraitLaneMap > .boardFloaterPrimaryTraitLane[data-match-trait-primary-lane-role-id='risk'] .boardFloaterPrimaryTraitLaneBeatPips i {
     background: color-mix(in srgb, var(--theme-danger) 78%, white 8%);
 }
 
@@ -14892,30 +14900,42 @@
 .boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='burst'],
 .boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='guard'],
 .boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='risk'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='cashout'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='protect'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='risk'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='block'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='tool'],
 .boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='control'] {
     animation: matchScoreFloaterPulse 1.26s ease-in-out infinite;
 }
 
-.boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='guard'] {
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='guard'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='protect'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 54%, transparent);
 }
 
-.boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='risk'] {
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='risk'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 48%, var(--theme-gold-bright) 18%);
 }
 
-.boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='control'] {
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-screen-cue='control'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='block'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='tool'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 50%, var(--theme-cyan-bright) 18%);
 }
 
-.boardFloaterTraitLaneMap > span[data-match-trait-lane='shard'] {
+.boardFloaterTraitLaneMap > span[data-match-trait-lane='shard'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane='score'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 66%, transparent);
 }
 
-.boardFloaterTraitLaneMap > span[data-match-trait-lane='guard'] {
+.boardFloaterTraitLaneMap > span[data-match-trait-lane='guard'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='protect'] {
     border-color: color-mix(in srgb, var(--theme-success) 42%, transparent);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
@@ -14923,6 +14943,8 @@
 }
 
 .boardFloaterTraitLaneMap > span[data-match-trait-lane='tool'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='tool'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='recall'],
 .boardFloaterTraitLaneMap > span[data-match-trait-lane='recall'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
     background:
@@ -14930,14 +14952,16 @@
         color-mix(in srgb, var(--theme-void) 66%, transparent);
 }
 
-.boardFloaterTraitLaneMap > span[data-match-trait-lane='risk'] {
+.boardFloaterTraitLaneMap > span[data-match-trait-lane='risk'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 46%, transparent);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 15%, transparent), color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 66%, transparent);
 }
 
-.boardFloaterTraitLaneMap > span[data-match-trait-lane='block'] {
+.boardFloaterTraitLaneMap > span[data-match-trait-lane='block'],
+.boardFloaterTraitLaneMap > span[data-match-trait-lane-role-id='block'] {
     border-color: color-mix(in srgb, var(--theme-rune) 42%, transparent);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-rune) 14%, transparent), color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)),

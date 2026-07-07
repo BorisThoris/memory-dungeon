@@ -7,6 +7,8 @@ export interface TraitInteractionLaneMapEntry {
     cue: string;
 }
 
+export type TraitInteractionLaneRoleId = 'block' | 'cashout' | 'protect' | 'recall' | 'risk' | 'tool';
+
 const TRAIT_INTERACTION_LANE_ORDER: readonly TraitInteractionLaneId[] = [
     'shard',
     'guard',
@@ -58,6 +60,30 @@ export const getTraitInteractionLaneRole = (
         case 'shard':
         default:
             return 'Cashout';
+    }
+};
+
+export const getTraitInteractionLaneRoleId = (
+    lane: Pick<TraitInteractionLaneMapEntry, 'id'> | null
+): TraitInteractionLaneRoleId | null => {
+    if (!lane) {
+        return null;
+    }
+    switch (lane.id) {
+        case 'guard':
+            return 'protect';
+        case 'tool':
+            return 'tool';
+        case 'risk':
+            return 'risk';
+        case 'block':
+            return 'block';
+        case 'recall':
+            return 'recall';
+        case 'score':
+        case 'shard':
+        default:
+            return 'cashout';
     }
 };
 
@@ -128,6 +154,9 @@ export const traitInteractionLaneActionMapAttr = (laneMap: readonly TraitInterac
 
 export const traitInteractionLaneRoleMapAttr = (laneMap: readonly TraitInteractionLaneMapEntry[]): string =>
     laneMap.map((lane) => `${lane.id}:${getTraitInteractionLaneRole(lane)}:${lane.count}`).join('>');
+
+export const traitInteractionLaneRoleIdMapAttr = (laneMap: readonly TraitInteractionLaneMapEntry[]): string =>
+    laneMap.map((lane) => `${lane.id}:${getTraitInteractionLaneRoleId(lane)}:${lane.count}`).join('>');
 
 export const formatTraitInteractionLaneMapLabel = (
     label: string,

@@ -160,8 +160,10 @@ import {
     formatTraitInteractionLaneMapLabel,
     getTraitInteractionLaneAction,
     getTraitInteractionLaneRole,
+    getTraitInteractionLaneRoleId,
     traitInteractionLaneActionMapAttr,
     traitInteractionLaneMapAttr,
+    traitInteractionLaneRoleIdMapAttr,
     traitInteractionLaneRoleMapAttr,
     type TraitInteractionLaneMapEntry
 } from '../copy/traitInteractionLaneMap';
@@ -2554,6 +2556,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardFloaterTraitLaneMapAttr = traitInteractionLaneMapAttr(boardFloaterTraitLaneMap);
     const boardFloaterTraitLaneActionMapAttr = traitInteractionLaneActionMapAttr(boardFloaterTraitLaneMap);
     const boardFloaterTraitLaneRoleMapAttr = traitInteractionLaneRoleMapAttr(boardFloaterTraitLaneMap);
+    const boardFloaterTraitLaneRoleIdMapAttr = traitInteractionLaneRoleIdMapAttr(boardFloaterTraitLaneMap);
     const boardFloaterPrimaryTraitLane = boardFloaterTraitLaneMap[0] ?? null;
     const boardFloaterTraitLaneMapSummaryFill = Math.min(100, (boardFloaterTraitLaneMap.length / 5) * 100);
     const boardFloaterPrimaryTraitLaneFill = boardFloaterPrimaryTraitLane
@@ -4411,6 +4414,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             ? boardFloaterTraitLaneMapAttr || 'none'
                                             : 'none'
                                     }
+                                    data-match-trait-lane-role-ids={
+                                        boardFloaterPayload.kind === 'match'
+                                            ? boardFloaterTraitLaneRoleIdMapAttr || 'none'
+                                            : 'none'
+                                    }
                                     data-mismatch-floater-heat={
                                         boardFloaterPayload.kind === 'miss'
                                             ? getMismatchFloaterHeat(boardFloaterPayload)
@@ -5096,6 +5104,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-match-trait-lane-actions={boardFloaterTraitLaneActionMapAttr}
                                             data-match-trait-lane-map={boardFloaterTraitLaneMapAttr}
                                             data-match-trait-lane-roles={boardFloaterTraitLaneRoleMapAttr}
+                                            data-match-trait-lane-role-ids={boardFloaterTraitLaneRoleIdMapAttr}
                                             data-match-trait-primary-lane={boardFloaterPrimaryTraitLane?.id ?? 'none'}
                                             data-match-trait-primary-lane-action={
                                                 boardFloaterPrimaryTraitLane
@@ -5117,6 +5126,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 boardFloaterPrimaryTraitLane
                                                     ? getTraitInteractionLaneRole(boardFloaterPrimaryTraitLane)
                                                     : 'none'
+                                            }
+                                            data-match-trait-primary-lane-role-id={
+                                                getTraitInteractionLaneRoleId(boardFloaterPrimaryTraitLane) ?? 'none'
                                             }
                                             data-match-trait-primary-lane-screen-cue={
                                                 boardFloaterPrimaryTraitLane
@@ -5176,6 +5188,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     data-match-trait-primary-lane-role={getTraitInteractionLaneRole(
                                                         boardFloaterPrimaryTraitLane
                                                     )}
+                                                    data-match-trait-primary-lane-role-id={
+                                                        getTraitInteractionLaneRoleId(boardFloaterPrimaryTraitLane) ?? 'none'
+                                                    }
                                                     data-match-trait-primary-lane-screen-cue={getBoardFloaterTraitLaneScreenCue(
                                                         boardFloaterPrimaryTraitLane
                                                     )}
@@ -5215,6 +5230,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     data-match-trait-lane-beats={getBoardFloaterTraitLaneBeatCount(lane)}
                                                     data-match-trait-lane-count={lane.count}
                                                     data-match-trait-lane-role={getTraitInteractionLaneRole(lane)}
+                                                    data-match-trait-lane-role-id={getTraitInteractionLaneRoleId(lane) ?? 'none'}
                                                     data-match-trait-lane-screen-cue={getBoardFloaterTraitLaneScreenCue(lane)}
                                                     key={lane.id}
                                                 >

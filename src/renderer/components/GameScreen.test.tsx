@@ -3049,6 +3049,10 @@ describe('GameScreen (OVR-014)', () => {
             'data-match-trait-lane-map',
             'shard:1>guard:1>block:1>recall:1'
         );
+        expect(screen.getByTestId('match-score-floater')).toHaveAttribute(
+            'data-match-trait-lane-role-ids',
+            'shard:cashout:1>guard:protect:1>block:block:1>recall:recall:1'
+        );
         expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-trait-lane-count', '4');
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
             'data-match-trait-lane-map',
@@ -3061,6 +3065,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
             'data-match-trait-lane-roles',
             'shard:Cashout:1>guard:Protect:1>block:Block:1>recall:Recall:1'
+        );
+        expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
+            'data-match-trait-lane-role-ids',
+            'shard:cashout:1>guard:protect:1>block:block:1>recall:recall:1'
         );
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
             'data-match-trait-primary-lane',
@@ -3085,6 +3093,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
             'data-match-trait-primary-lane-role',
             'Cashout'
+        );
+        expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
+            'data-match-trait-primary-lane-role-id',
+            'cashout'
         );
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
             'data-match-trait-primary-lane-screen-cue',
@@ -3120,6 +3132,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAttribute(
             'data-match-trait-primary-lane-role',
             'Cashout'
+        );
+        expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAttribute(
+            'data-match-trait-primary-lane-role-id',
+            'cashout'
         );
         expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAttribute(
             'data-match-trait-primary-lane-screen-cue',
@@ -3164,6 +3180,9 @@ describe('GameScreen (OVR-014)', () => {
         ).toHaveAttribute('data-match-trait-lane-role', 'Cashout');
         expect(
             screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="shard"]')
+        ).toHaveAttribute('data-match-trait-lane-role-id', 'cashout');
+        expect(
+            screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="shard"]')
         ).toHaveAttribute('data-match-trait-lane-beats', '3');
         expect(
             screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="shard"]')
@@ -3192,6 +3211,9 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="block"]')
         ).toHaveAttribute('data-match-trait-lane-beats', '3');
+        expect(
+            screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="block"]')
+        ).toHaveAttribute('data-match-trait-lane-role-id', 'block');
         expect(
             screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="block"]')
         ).toHaveAttribute('data-match-trait-lane-audio', 'match-trait-block');
