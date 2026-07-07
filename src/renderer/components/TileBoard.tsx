@@ -159,6 +159,8 @@ type BoardFeedbackScreenCue = 'burst' | 'guard' | 'pulse' | 'snap' | 'tick';
 type BoardChainMilestoneTier = 'build' | 'cashout' | 'hold' | 'prime';
 type BoardHazardOpportunityAction = 'avoid' | 'claim' | 'inspect' | 'weigh';
 type BoardHazardOpportunityTier = 'danger' | 'mixed' | 'reward' | 'watch';
+type ActivePowerBoardAction = 'clear' | 'pin' | 'recall' | 'remove' | 'swap';
+type ActivePowerBoardTier = 'control' | 'memory' | 'route';
 type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
 type BoardPayoffStackHeat = 'cashout' | 'prime';
 type BoardPayoffStackCrescendoScreenCue = 'burst' | 'pulse' | 'snap' | 'super';
@@ -2612,11 +2614,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     }, [board, runStatus]);
 
     const activePowerBoardChip = useMemo((): {
+        action: ActivePowerBoardAction;
         detail: string;
         first: string;
         label: string;
+        screenCue: BoardFeedbackScreenCue;
         then: string;
         beats: 2 | 3 | 4;
+        tier: ActivePowerBoardTier;
         tone: 'setup' | 'control' | 'recall';
     } | null => {
         if (runStatus !== 'playing') {
@@ -2625,59 +2630,77 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         if (tileSwapPowerVisualActive) {
             return tileSwapFirstTileId
                 ? {
+                      action: 'swap',
                       beats: 2,
                       label: 'Swap armed',
                       detail: 'Place target',
                       first: 'Pick target',
+                      screenCue: 'pulse',
                       then: 'Preview route payoff',
+                      tier: 'route',
                       tone: 'setup'
                   }
                 : {
+                      action: 'swap',
                       beats: 2,
                       label: 'Swap armed',
                       detail: 'Pick first tile',
                       first: 'Pick source',
+                      screenCue: 'tick',
                       then: 'Move into combo route',
+                      tier: 'route',
                       tone: 'setup'
                   };
         }
         if (destroyPowerVisualActive) {
             return {
+                action: 'clear',
                 beats: 3,
                 label: 'Destroy armed',
                 detail: 'Tap hidden pair',
                 first: 'Mark pair',
+                screenCue: 'burst',
                 then: 'Clear blocker',
+                tier: 'control',
                 tone: 'control'
             };
         }
         if (peekPowerVisualActive) {
             return {
+                action: 'recall',
                 beats: 3,
                 label: 'Peek armed',
                 detail: 'Tap hidden tile',
                 first: 'Reveal one',
+                screenCue: 'pulse',
                 then: 'Lock memory route',
+                tier: 'memory',
                 tone: 'recall'
             };
         }
         if (strayPowerVisualActive) {
             return {
+                action: 'remove',
                 beats: 3,
                 label: 'Stray armed',
                 detail: 'Remove singleton',
                 first: 'Find stray',
+                screenCue: 'guard',
                 then: 'Open board space',
+                tier: 'control',
                 tone: 'control'
             };
         }
         if (pinModeBoardHintActive) {
             return {
+                action: 'pin',
                 beats: 3,
                 label: 'Pin mode',
                 detail: 'Mark memory',
                 first: 'Pin clue',
+                screenCue: 'pulse',
                 then: 'Return for pair',
+                tier: 'memory',
                 tone: 'recall'
             };
         }
@@ -4356,6 +4379,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-hazard-opportunity-screen-cue={boardHazardOpportunity.count > 0 ? boardHazardOpportunity.screenCue : 'none'}
             data-hazard-opportunity-tier={boardHazardOpportunity.count > 0 ? boardHazardOpportunity.tier : 'none'}
             data-hazard-opportunity-trigger={boardHazardOpportunity.trigger}
+            data-active-power-action={activePowerBoardChip?.action ?? 'none'}
+            data-active-power-screen-cue={activePowerBoardChip?.screenCue ?? 'none'}
+            data-active-power-tier={activePowerBoardChip?.tier ?? 'none'}
             data-pickup-opportunity-count={boardPickupOpportunity.count}
             data-pickup-opportunity-focus={boardPickupOpportunityFocus}
             data-pickup-sequence-first={boardPickupOpportunity.sequenceCue?.first ?? 'none'}
@@ -6287,10 +6313,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             <div
                                 aria-label={activePowerBoardChipLabel}
                                 className={styles.activePowerBoardChip}
+                                data-active-power-action={activePowerBoardChip.action}
                                 data-active-power-beats={activePowerBoardChip.beats}
                                 data-active-power-first={activePowerBoardChip.first}
+                                data-active-power-screen-cue={activePowerBoardChip.screenCue}
                                 data-active-power-then={activePowerBoardChip.then}
                                 data-active-power-meter-fill={Math.round((activePowerBoardChip.beats / 4) * 100)}
+                                data-active-power-tier={activePowerBoardChip.tier}
                                 data-active-power-tone={activePowerBoardChip.tone}
                                 data-testid="active-power-board-chip"
                                 role="status"

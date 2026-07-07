@@ -323,6 +323,9 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         .map(({ text }) => text)
         .join('\n');
     const visibleToneContracts: Record<string, readonly string[]> = {
+        'data-active-power-action': ['clear', 'pin', 'recall', 'remove', 'swap'],
+        'data-active-power-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
+        'data-active-power-tier': ['control', 'memory', 'route'],
         'data-active-power-tone': ['control', 'recall', 'setup'],
         'data-active-power-step-tone': ['control', 'recall', 'setup'],
         'data-board-chain-reward-lead-tone': ['guard', 'heal', 'reward'],

@@ -7198,6 +7198,65 @@
     box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-violet-bright) 26%, transparent);
 }
 
+.frame[data-active-power-tier='route'] .activePowerBoardChip,
+.activePowerBoardChip[data-active-power-tier='route'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-gold-bright) 18%);
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.24),
+        0 0 0.9rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.frame[data-active-power-tier='memory'] .activePowerBoardChip,
+.activePowerBoardChip[data-active-power-tier='memory'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-cyan-bright) 14%);
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.24),
+        0 0 0.9rem color-mix(in srgb, var(--theme-violet-bright) 16%, transparent);
+}
+
+.frame[data-active-power-tier='control'] .activePowerBoardChip,
+.activePowerBoardChip[data-active-power-tier='control'] {
+    border-color: color-mix(in srgb, var(--theme-ember) 46%, var(--theme-gold-bright) 12%);
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.24),
+        0 0 0.9rem color-mix(in srgb, var(--theme-ember) 16%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-screen-cue='burst'] {
+    animation: boardOpportunityPrimePulse 1.3s ease-in-out infinite;
+}
+
+.activePowerBoardChip[data-active-power-screen-cue='guard'] {
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.24),
+        0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-danger) 16%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-screen-cue='pulse'] {
+    animation: boardOpportunityPulse 1.24s ease-in-out infinite;
+}
+
+.activePowerBoardChip[data-active-power-screen-cue='tick'] {
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.2),
+        0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-action='swap'] .activePowerBoardChipBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.activePowerBoardChip[data-active-power-action='recall'] .activePowerBoardChipBeatPips i,
+.activePowerBoardChip[data-active-power-action='pin'] .activePowerBoardChipBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.activePowerBoardChip[data-active-power-action='clear'] .activePowerBoardChipBeatPips i,
+.activePowerBoardChip[data-active-power-action='remove'] .activePowerBoardChipBeatPips i {
+    background: color-mix(in srgb, var(--theme-ember) 84%, white);
+}
+
 .activePowerBoardChip small {
     min-width: 0;
     overflow: hidden;

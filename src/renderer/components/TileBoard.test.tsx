@@ -2935,6 +2935,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Place target');
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('First: Pick target');
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Then: Preview route payoff');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-active-power-action', 'swap');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-active-power-screen-cue', 'pulse');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-active-power-tier', 'route');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-action', 'swap');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-screen-cue', 'pulse');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tier', 'route');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tone', 'setup');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-beats', '2');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-meter-fill', '50');
@@ -2984,6 +2990,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Tap hidden tile');
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('First: Reveal one');
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Then: Lock memory route');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-active-power-action', 'recall');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-active-power-screen-cue', 'pulse');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-active-power-tier', 'memory');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-action', 'recall');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-screen-cue', 'pulse');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tier', 'memory');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tone', 'recall');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-beats', '3');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-meter-fill', '75');
@@ -3023,6 +3035,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Tap hidden pair');
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('First: Mark pair');
         expect(screen.getByTestId('active-power-board-chip')).toHaveTextContent('Then: Clear blocker');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-active-power-action', 'clear');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-active-power-screen-cue', 'burst');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-active-power-tier', 'control');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-action', 'clear');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-screen-cue', 'burst');
+        expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tier', 'control');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-tone', 'control');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-beats', '3');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-meter-fill', '75');
