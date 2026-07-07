@@ -3887,6 +3887,79 @@
     font-weight: 980;
 }
 
+.frame[data-card-action-priority-summary-tier='cashout'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPriority[data-card-action-priority-summary-tier='cashout'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-tier='cashout'],
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 56%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+            color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.frame[data-card-action-priority-summary-tier='followup'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPriority[data-card-action-priority-summary-tier='followup'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-tier='followup'],
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-violet-bright) 12%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent),
+            color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.frame[data-card-action-priority-summary-tier='perk'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPriority[data-card-action-priority-summary-tier='perk'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-tier='perk'] {
+    border-color: color-mix(in srgb, var(--theme-success) 46%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-success) 16%, transparent),
+            color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 74%, white);
+}
+
+.frame[data-card-action-priority-summary-tier='bank'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPriority[data-card-action-priority-summary-tier='bank'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-tier='bank'],
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-screen-cue='guard'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-violet-bright) 12%, transparent),
+            color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)
+        ),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 70%, white);
+}
+
+.frame[data-card-action-priority-summary-tier='setup'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPriority[data-card-action-priority-summary-tier='setup'] .chainOpportunityActionPrioritySummary,
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-tier='setup'],
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-screen-cue='tick'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-violet-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 74%, white);
+}
+
 .chainOpportunityActionPrioritySummaryBeatPips {
     display: inline-flex;
     align-items: center;
@@ -3913,6 +3986,32 @@
 
 .chainOpportunityActionPrioritySummaryBeatPips i[data-card-action-priority-summary-pip-focus='support'] {
     opacity: 0.64;
+}
+
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-action='cashout'] .chainOpportunityActionPrioritySummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 76%, white);
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-action='followup'] .chainOpportunityActionPrioritySummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
+}
+
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-action='perk'] .chainOpportunityActionPrioritySummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 66%, white);
+}
+
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-action='bank'] .chainOpportunityActionPrioritySummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 66%, white);
+}
+
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-action='setup'] .chainOpportunityActionPrioritySummaryBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
+}
+
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-beats='4'] .chainOpportunityActionPrioritySummaryBeatPips i,
+.chainOpportunityActionPrioritySummary[data-card-action-priority-summary-beats='5'] .chainOpportunityActionPrioritySummaryBeatPips i {
+    animation-duration: 0.78s;
 }
 
 .chainOpportunityActionPriority > span {
