@@ -2154,12 +2154,14 @@ describe('TileBoard touch and click controls', () => {
 
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack', '2 payoffs live');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-cue', 'Follow-up stack');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-cue-id', 'followup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-action', 'Next tap');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-tone', 'followup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-beats', '2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-cue', 'pulse');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-tier', 'prime');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-tone', 'followup');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-cue-id', 'followup');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '2');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-cue', 'pulse');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-tier', 'prime');
@@ -2232,6 +2234,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack', '2 payoffs live');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-action', 'Prime');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-cue', 'Stack prime');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-cue-id', 'prime');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-tone', 'build');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-opportunity-payoff-first-cue',
@@ -2258,6 +2261,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-tier', 'prime');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack prime');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-tone', 'build');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-cue-id', 'prime');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-heat', 'prime');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '2');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-cue', 'pulse');
@@ -2507,6 +2511,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack', '2 payoffs live');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-action', 'Cash now');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-cue', 'Stack cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-cue-id', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-tone', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-audio', 'cashout-pop');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-beats', '3');
@@ -2536,6 +2541,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toHaveTextContent('2 matches left');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Stack cashout');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-tone', 'cashout');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-cue-id', 'cashout');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-heat', 'cashout');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-audio', 'cashout-pop');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '3');
@@ -2617,6 +2623,7 @@ describe('TileBoard touch and click controls', () => {
             'Cash super stack'
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-cue', 'Super stack');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-cue-id', 'super');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack-tone', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-audio', 'super-burst');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-beats', '5');
@@ -2716,6 +2723,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Super stack');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveTextContent('Cash super stack');
+        expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-cue-id', 'super');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-audio', 'super-burst');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-beats', '5');
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toHaveAttribute('data-payoff-stack-crescendo-cue', 'super');

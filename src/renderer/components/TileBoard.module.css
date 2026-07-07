@@ -9059,7 +9059,8 @@
     white-space: nowrap;
 }
 
-.opportunityPayoffStack[data-payoff-stack-tone='cashout'] {
+.opportunityPayoffStack[data-payoff-stack-tone='cashout'],
+.opportunityPayoffStack[data-payoff-stack-cue-id='cashout'] {
     animation: boardOpportunityPulse 1.45s ease-in-out infinite;
     border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, var(--theme-success) 18%);
     background:
@@ -9077,7 +9078,7 @@
     outline-offset: 0.08rem;
 }
 
-.opportunityPayoffStack:has([data-payoff-stack-cue='Super stack']) {
+.opportunityPayoffStack[data-payoff-stack-cue-id='super'] {
     animation: boardOpportunityPulse 1.28s ease-in-out infinite;
     border-color: color-mix(in srgb, var(--theme-gold-bright) 66%, var(--theme-violet-bright) 22%);
     background:
@@ -9092,7 +9093,8 @@
 }
 
 .opportunityPayoffStack[data-payoff-stack-tone='setup'],
-.opportunityPayoffStack[data-payoff-stack-tone='followup'] {
+.opportunityPayoffStack[data-payoff-stack-tone='followup'],
+.opportunityPayoffStack[data-payoff-stack-cue-id='followup'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 20%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
@@ -9102,7 +9104,8 @@
         inset 0 1px 0 color-mix(in srgb, var(--theme-text) 7%, transparent);
 }
 
-.opportunityPayoffStack[data-payoff-stack-tone='build'] {
+.opportunityPayoffStack[data-payoff-stack-tone='build'],
+.opportunityPayoffStack[data-payoff-stack-cue-id='prime'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, var(--theme-cyan-bright) 18%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
@@ -9153,7 +9156,7 @@
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
 }
 
-.opportunityPayoffStack [data-payoff-stack-cue='Super stack'] {
+.opportunityPayoffStack [data-payoff-stack-cue-id='super'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 64%, white);
     background: color-mix(in srgb, var(--theme-gold-bright) 20%, var(--theme-violet-bright) 10%);
     color: color-mix(in srgb, var(--theme-gold-bright) 96%, white);
@@ -9187,16 +9190,20 @@
     outline-offset: -1px;
 }
 
-.frame[data-opportunity-payoff-stack-tone='cashout'] {
+.frame[data-opportunity-payoff-stack-tone='cashout'],
+.frame[data-opportunity-payoff-stack-cue-id='cashout'],
+.frame[data-opportunity-payoff-stack-cue-id='super'] {
     --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-gold-bright) 30%, var(--theme-success) 16%);
 }
 
 .frame[data-opportunity-payoff-stack-tone='setup'],
-.frame[data-opportunity-payoff-stack-tone='followup'] {
+.frame[data-opportunity-payoff-stack-tone='followup'],
+.frame[data-opportunity-payoff-stack-cue-id='followup'] {
     --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, var(--theme-gold-bright) 12%);
 }
 
-.frame[data-opportunity-payoff-stack-tone='build'] {
+.frame[data-opportunity-payoff-stack-tone='build'],
+.frame[data-opportunity-payoff-stack-cue-id='prime'] {
     --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-violet-bright) 26%, var(--theme-cyan-bright) 12%);
 }
 
@@ -11620,7 +11627,7 @@
 :global([data-reduce-motion='true']) .pickupOpportunityChip,
 :global([data-reduce-motion='true']) .opportunityPayoffStack[data-payoff-stack-tone='cashout'],
 :global([data-reduce-motion='true']) .opportunityPayoffStack[data-payoff-stack-heat='prime'],
-:global([data-reduce-motion='true']) .opportunityPayoffStack:has([data-payoff-stack-cue='Super stack']),
+:global([data-reduce-motion='true']) .opportunityPayoffStack[data-payoff-stack-cue-id='super'],
 :global([data-reduce-motion='true']) .chainOpportunityNextAction[data-chain-next-action-tone='cashout'],
 :global([data-reduce-motion='true']) .chainOpportunityRewardLadder[data-board-chain-reward-hot-band='cashout'] > span[data-board-chain-reward-urgency='next'],
 :global([data-reduce-motion='true']) .chainOpportunityRewardLadder[data-board-chain-reward-hot-band='cashout'] > span[data-board-chain-reward-urgency='soon'],

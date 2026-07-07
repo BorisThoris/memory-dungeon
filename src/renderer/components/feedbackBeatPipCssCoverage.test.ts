@@ -366,6 +366,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-chain-target-plan-tone': ['cashout', 'ready', 'setup'],
         'data-chain-target-tone': ['cashout', 'ready', 'setup'],
         'data-opportunity-payoff-stack-tone': ['build', 'cashout', 'followup', 'setup'],
+        'data-opportunity-payoff-stack-cue-id': ['cashout', 'followup', 'prime', 'super'],
         'data-opportunity-tone': [
             'chain',
             'control',
@@ -419,6 +420,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
             'trait'
         ],
         'data-payoff-stack-tone': ['build', 'cashout', 'followup', 'setup'],
+        'data-payoff-stack-cue-id': ['cashout', 'followup', 'prime', 'super'],
         'data-pickup-sequence-tone': ['cashout', 'reward'],
         'data-pickup-sequence-phase-tone': ['cashout', 'reward'],
         'data-pickup-sequence-value-tone': ['cashout', 'reward'],

@@ -179,6 +179,7 @@ type BoardChainMarkerKeySummaryAction = 'cashout' | 'followup' | 'perk' | 'prime
 type BoardChainMarkerKeySummaryTier = 'cashout' | 'perk' | 'ready' | 'setup' | 'stack' | 'surge';
 type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
 type BoardPayoffStackHeat = 'cashout' | 'prime';
+type BoardPayoffStackCueId = 'cashout' | 'followup' | 'prime' | 'super';
 type BoardPayoffStackCrescendoScreenCue = 'burst' | 'pulse' | 'snap' | 'super';
 type BoardPayoffStackCrescendoTier = 'cashout' | 'prime' | 'stack' | 'super';
 type BoardPayoffStack = {
@@ -191,6 +192,7 @@ type BoardPayoffStack = {
         tier: BoardPayoffStackCrescendoTier;
     };
     cue: string;
+    cueId: BoardPayoffStackCueId;
     detail: string;
     heat: BoardPayoffStackHeat;
     nextCue: string;
@@ -3331,6 +3333,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                           : tone === 'followup'
                               ? 'Next tap'
                               : 'Prime';
+                  const cueId: BoardPayoffStackCueId = impactCues.has('Super stack')
+                      ? 'super'
+                      : tone === 'cashout'
+                        ? 'cashout'
+                        : tone === 'followup'
+                          ? 'followup'
+                          : 'prime';
                   const firstRow = boardPayoffStackRows[0] ?? null;
                   const secondRow = boardPayoffStackRows[1] ?? null;
                   const thirdRow = boardPayoffStackRows[2] ?? null;
@@ -3379,6 +3388,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                       action,
                       crescendo,
                       cue,
+                      cueId,
                       detail: boardPayoffStackRows
                           .slice(0, 3)
                           .map((row) => boardPayoffStackLabelForRow(row))
@@ -4839,6 +4849,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-payoff-crescendo-screen-cue={boardPayoffStack?.crescendo.screenCue ?? 'none'}
             data-opportunity-payoff-crescendo-tier={boardPayoffStack?.crescendo.tier ?? 'none'}
             data-opportunity-payoff-stack-cue={boardPayoffStack?.cue ?? 'none'}
+            data-opportunity-payoff-stack-cue-id={boardPayoffStack?.cueId ?? 'none'}
             data-opportunity-payoff-first-cue={boardPayoffStack?.nextCue ?? 'none'}
             data-opportunity-payoff-keep-cue={boardPayoffStack?.sequence.keep ?? 'none'}
             data-opportunity-payoff-sequence-cue={boardPayoffStack?.sequenceCue ?? 'none'}
@@ -7058,6 +7069,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-payoff-stack-crescendo-cue={boardPayoffStack.crescendo.screenCue}
                                         data-payoff-stack-crescendo-screen-cue={boardPayoffStack.crescendo.screenCue}
                                         data-payoff-stack-crescendo-tier={boardPayoffStack.crescendo.tier}
+                                        data-payoff-stack-cue-id={boardPayoffStack.cueId}
                                         data-payoff-stack-heat={boardPayoffStack.heat}
                                         data-payoff-stack-sequence-first={boardPayoffStack.sequence.first}
                                         data-payoff-stack-sequence-keep={boardPayoffStack.sequence.keep}
@@ -7071,7 +7083,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             } as CSSProperties
                                         }
                                     >
-                                        <small data-payoff-stack-cue={boardPayoffStack.cue}>{boardPayoffStack.cue}</small>
+                                        <small
+                                            data-payoff-stack-cue={boardPayoffStack.cue}
+                                            data-payoff-stack-cue-id={boardPayoffStack.cueId}
+                                        >
+                                            {boardPayoffStack.cue}
+                                        </small>
                                         <span>{boardPayoffStack.action}</span>
                                         <strong>{boardPayoffStack.value}</strong>
                                         <u>{boardPayoffStack.tone === 'cashout' ? 'Hit now' : 'Prime payoff'}</u>
