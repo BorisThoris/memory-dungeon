@@ -2976,6 +2976,33 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
 }
 
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='linked-route'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 40%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent), transparent 78%),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+}
+
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='linked-route'] b,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='linked-route'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='linked-route'] em {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='combo-surge'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-gold-bright) 22%);
+    background:
+        radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), transparent 68%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+}
+
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='combo-surge'] b,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='combo-surge'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='combo-surge'] em {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
 .chainOpportunityMarkerKey > span[data-chain-marker-focus='primary'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-cyan-bright) 18%);
     background:
@@ -3141,6 +3168,12 @@
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent);
+}
+
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] b,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] em {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }
 
 .chainOpportunityMarkerKey > span[data-chain-marker-intensity-chip] {
