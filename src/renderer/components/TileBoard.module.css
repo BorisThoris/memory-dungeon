@@ -1131,6 +1131,31 @@
         color-mix(in srgb, var(--theme-panel-solid) 70%, transparent);
 }
 
+.frame[data-chain-opportunity-milestone-tier='build'] .chainOpportunityChip,
+.frame[data-chain-opportunity-milestone-screen-cue='tick'] .chainOpportunityChip {
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 7%, transparent),
+        0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+.frame[data-chain-opportunity-milestone-tier='prime'] .chainOpportunityChip,
+.frame[data-chain-opportunity-milestone-screen-cue='pulse'] .chainOpportunityChip {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-green-bright) 18%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 9%, transparent),
+        0 0 16px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.frame[data-chain-opportunity-milestone-tier='cashout'] .chainOpportunityChip,
+.frame[data-chain-opportunity-milestone-tier='hold'] .chainOpportunityChip,
+.frame[data-chain-opportunity-milestone-screen-cue='burst'] .chainOpportunityChip {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 24%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 24px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 14px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+}
+
 .frame[data-chain-opportunity-milestone-tone='surge'] .chainOpportunityChip,
 .frame[data-chain-opportunity-milestone-tone='combo'] .chainOpportunityChip {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 20%);
@@ -2279,6 +2304,48 @@
         color-mix(in srgb, var(--theme-green-bright) 84%, white),
         color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
     );
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='prime'],
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, var(--theme-green-bright) 18%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 9%, transparent),
+        0 0 0.42rem color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='cashout'],
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 18%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 0.52rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='hold'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-violet-bright) 20%);
+    background:
+        radial-gradient(circle at 14% 0%, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), transparent 68%),
+        color-mix(in srgb, var(--theme-gold-deep) 18%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 14%, transparent),
+        0 0 0.62rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='build'],
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='tick'] {
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='burst'] .chainOpportunityMilestoneBeatPips i {
+    animation-duration: 0.62s;
+}
+
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='pulse'] .chainOpportunityMilestoneBeatPips i {
+    animation-duration: 0.74s;
 }
 
 .chainOpportunityMilestone[data-chain-milestone-tone='surge'] {

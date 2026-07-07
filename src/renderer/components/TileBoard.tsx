@@ -31,6 +31,7 @@ import {
     getChainRewardLaneAction,
     getChainRewardProgress,
     getChainRewardUrgencyCopy,
+    type ChainMomentumTier,
     type ChainRewardForecastCue
 } from '../copy/chainMomentum';
 import {
@@ -155,6 +156,7 @@ type BoardChainRewardLadderEntry = {
     total: number;
 };
 type BoardFeedbackScreenCue = 'burst' | 'guard' | 'pulse' | 'snap' | 'tick';
+type BoardChainMilestoneTier = 'build' | 'cashout' | 'hold' | 'prime';
 type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
 type BoardPayoffStackHeat = 'cashout' | 'prime';
 type BoardPayoffStackCrescendoScreenCue = 'burst' | 'pulse' | 'snap' | 'super';
@@ -593,6 +595,32 @@ const boardChainRewardScreenCue = (entry: BoardChainRewardLadderEntry): BoardFee
         return 'burst';
     }
     if (entry.cue.urgency === 'soon' || entry.filled > 0) {
+        return 'pulse';
+    }
+    return 'tick';
+};
+
+const boardChainMilestoneTier = (
+    milestoneTone: ChainMomentumTier | null | undefined,
+    meterFill: number
+): BoardChainMilestoneTier => {
+    if (milestoneTone === 'combo') {
+        return 'hold';
+    }
+    if (meterFill >= 67) {
+        return 'cashout';
+    }
+    if (meterFill >= 34) {
+        return 'prime';
+    }
+    return 'build';
+};
+
+const boardChainMilestoneScreenCue = (tier: BoardChainMilestoneTier): BoardFeedbackScreenCue => {
+    if (tier === 'cashout' || tier === 'hold') {
+        return 'burst';
+    }
+    if (tier === 'prime') {
         return 'pulse';
     }
     return 'tick';
@@ -1955,7 +1983,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         lines: string[];
         milestoneActionLabel: string | null;
         milestoneTargetLabel: string | null;
-        milestoneTone: string | null;
+        milestoneTone: ChainMomentumTier | null;
+        milestoneTier: BoardChainMilestoneTier | null;
+        milestoneScreenCue: BoardFeedbackScreenCue | null;
         milestoneMeterFill: number;
         milestoneBeatCount: number;
     } => {
@@ -1997,6 +2027,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 milestoneActionLabel: null,
                 milestoneTargetLabel: null,
                 milestoneTone: null,
+                milestoneTier: null,
+                milestoneScreenCue: null,
                 milestoneMeterFill: 0,
                 milestoneBeatCount: 0
             };
@@ -2032,6 +2064,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 ? milestonePreview.distanceLabel
                 : `${milestonePreview.distanceLabel} to ${milestonePreview.target}`
             : null;
+        const milestoneMeterFill = milestonePreview
+            ? Math.max(
+                  0,
+                  Math.min(
+                      100,
+                      Math.round(
+                          (((milestonePreview.tone === 'combo' ? 10 : milestonePreview.tone === 'surge' ? 6 : 3) -
+                              milestonePreview.distance) /
+                              (milestonePreview.tone === 'combo' ? 10 : milestonePreview.tone === 'surge' ? 6 : 3)) *
+                              100
+                      )
+                  )
+              )
+            : 0;
+        const milestoneTier = milestonePreview ? boardChainMilestoneTier(milestonePreview.tone, milestoneMeterFill) : null;
+        const milestoneScreenCue = milestoneTier ? boardChainMilestoneScreenCue(milestoneTier) : null;
         const readyRouteLabel =
             chainReadyCount === 1 ? '1 route ready' : chainReadyCount > 1 ? `${chainReadyCount} routes ready` : null;
         const readyCardLabel =
@@ -2259,21 +2307,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             milestoneActionLabel: milestonePreview?.actionLabel ?? null,
             milestoneTargetLabel,
             milestoneTone: milestonePreview?.tone ?? null,
+            milestoneTier,
+            milestoneScreenCue,
             milestoneBeatCount: chainContext ? getChainMilestoneBeatCount(chainContext.currentStreak) : 0,
-            milestoneMeterFill: milestonePreview
-                ? Math.max(
-                      0,
-                      Math.min(
-                          100,
-                          Math.round(
-                              (((milestonePreview.tone === 'combo' ? 10 : milestonePreview.tone === 'surge' ? 6 : 3) -
-                                  milestonePreview.distance) /
-                                  (milestonePreview.tone === 'combo' ? 10 : milestonePreview.tone === 'surge' ? 6 : 3)) *
-                                  100
-                          )
-                      )
-                  )
-                : 0
+            milestoneMeterFill
         };
     }, [board, chainContext, runStatus, selectedTraitFollowupTileIds, traitRouteHintText, traitRouteTargetTileIds]);
 
@@ -4202,7 +4239,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-chain-opportunity-callout-tone={boardChainOpportunity.arcadeCallout?.tone ?? 'none'}
             data-chain-opportunity-chase={boardChainOpportunity.chaseLabel ?? 'none'}
             data-chain-opportunity-milestone-action={boardChainOpportunity.milestoneActionLabel ?? 'none'}
+            data-chain-opportunity-milestone-screen-cue={boardChainOpportunity.milestoneScreenCue ?? 'none'}
             data-chain-opportunity-milestone-target={boardChainOpportunity.milestoneTargetLabel ?? 'none'}
+            data-chain-opportunity-milestone-tier={boardChainOpportunity.milestoneTier ?? 'none'}
             data-chain-opportunity-milestone-tone={boardChainOpportunity.milestoneTone ?? 'none'}
             data-chain-opportunity-reward-urgency={boardChainOpportunity.rewardUrgencyLabel ?? 'none'}
             data-chain-opportunity-reward-urgency-tier={boardChainOpportunity.rewardUrgencyTier ?? 'none'}
@@ -5667,8 +5706,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 {boardChainOpportunity.milestoneActionLabel && boardChainOpportunity.milestoneTargetLabel ? (
                                     <span
                                         className={styles.chainOpportunityMilestone}
-                                        data-chain-milestone-tone={boardChainOpportunity.milestoneTone ?? 'none'}
                                         data-chain-milestone-meter-fill={boardChainOpportunity.milestoneMeterFill}
+                                        data-chain-milestone-screen-cue={boardChainOpportunity.milestoneScreenCue ?? 'none'}
+                                        data-chain-milestone-tier={boardChainOpportunity.milestoneTier ?? 'none'}
+                                        data-chain-milestone-tone={boardChainOpportunity.milestoneTone ?? 'none'}
                                         data-testid="chain-opportunity-milestone"
                                         style={
                                             {

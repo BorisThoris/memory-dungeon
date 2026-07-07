@@ -3401,13 +3401,17 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-heat', 'prime');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-beats', '3');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-milestone-action', 'Start chain');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-milestone-screen-cue', 'burst');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-milestone-target', '1 match to x3');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-milestone-tier', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-milestone-tone', 'building');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Double cashout');
         expect(screen.getByTestId('chain-opportunity-milestone')).toHaveTextContent('Start chain');
         expect(screen.getByTestId('chain-opportunity-milestone')).toHaveTextContent('1 match to x3');
-        expect(screen.getByTestId('chain-opportunity-milestone')).toHaveAttribute('data-chain-milestone-tone', 'building');
         expect(screen.getByTestId('chain-opportunity-milestone')).toHaveAttribute('data-chain-milestone-meter-fill', '67');
+        expect(screen.getByTestId('chain-opportunity-milestone')).toHaveAttribute('data-chain-milestone-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-milestone')).toHaveAttribute('data-chain-milestone-tier', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-milestone')).toHaveAttribute('data-chain-milestone-tone', 'building');
         expect(screen.getByTestId('chain-opportunity-milestone-meter')).toBeInTheDocument();
         expect(screen.getByTestId('chain-opportunity-milestone').querySelectorAll('[data-chain-milestone-beat]')).toHaveLength(1);
         expect(
