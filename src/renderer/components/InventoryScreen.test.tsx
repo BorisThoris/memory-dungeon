@@ -229,6 +229,10 @@ describe('InventoryScreen REG-079 run inventory model', () => {
             'data-reward-perk-lane-actions',
             'trait-combo:Set combo:1>hazard-control:Pre-clear hazard:1'
         );
+        expect(screen.getByTestId('inventory-reward-perks')).toHaveAttribute(
+            'data-reward-perk-lane-roles',
+            'trait-combo:Trait:1>hazard-control:Control:1'
+        );
         expect(screen.getByTestId('inventory-reward-perk-lane-map')).toHaveTextContent('Trait combo');
         expect(screen.getByTestId('inventory-reward-perk-lane-map')).toHaveTextContent('Hazard control');
         expect(screen.getByTestId('inventory-reward-perk-lane-map')).toHaveTextContent('Set combo');
@@ -240,6 +244,10 @@ describe('InventoryScreen REG-079 run inventory model', () => {
         expect(screen.getByTestId('inventory-reward-perk-lane-map')).toHaveAttribute(
             'data-reward-perk-lane-actions',
             'trait-combo:Set combo:1>hazard-control:Pre-clear hazard:1'
+        );
+        expect(screen.getByTestId('inventory-reward-perk-lane-map')).toHaveAttribute(
+            'data-reward-perk-lane-roles',
+            'trait-combo:Trait:1>hazard-control:Control:1'
         );
         expect(screen.getByTestId('inventory-reward-perk-lane-map')).toHaveAttribute(
             'data-reward-perk-primary-lane',
@@ -262,21 +270,26 @@ describe('InventoryScreen REG-079 run inventory model', () => {
             'Double Echo payoff'
         );
         expect(screen.getByTestId('inventory-reward-perk-lane-map')).toHaveAttribute(
+            'data-reward-perk-primary-lane-role',
+            'Trait'
+        );
+        expect(screen.getByTestId('inventory-reward-perk-lane-map')).toHaveAttribute(
             'data-reward-perk-primary-lane-screen-cue',
             'burst'
         );
         const primaryPerkLane = screen.getByTestId('inventory-reward-perk-primary-lane');
         expect(primaryPerkLane).toHaveAccessibleName(
-            'Primary inventory perk lane. Trait combo: Set combo. Double Echo payoff. 4 beats.'
+            'Primary inventory perk lane. Trait Trait combo: Set combo. Double Echo payoff. 4 beats.'
         );
         expect(primaryPerkLane).toHaveAttribute('data-reward-perk-primary-lane', 'trait-combo');
         expect(primaryPerkLane).toHaveAttribute('data-reward-perk-primary-lane-action', 'Set combo');
         expect(primaryPerkLane).toHaveAttribute('data-reward-perk-primary-lane-audio', 'reward-perk-lane-combo');
         expect(primaryPerkLane).toHaveAttribute('data-reward-perk-primary-lane-beats', '4');
         expect(primaryPerkLane).toHaveAttribute('data-reward-perk-primary-lane-payoff', 'Double Echo payoff');
+        expect(primaryPerkLane).toHaveAttribute('data-reward-perk-primary-lane-role', 'Trait');
         expect(primaryPerkLane).toHaveAttribute('data-reward-perk-primary-lane-screen-cue', 'burst');
         expect(primaryPerkLane).toHaveTextContent('Best perk lane');
-        expect(primaryPerkLane).toHaveTextContent('Trait combo');
+        expect(primaryPerkLane).toHaveTextContent('Trait');
         expect(primaryPerkLane).toHaveTextContent('Set combo');
         expect(primaryPerkLane.querySelectorAll('[data-reward-perk-primary-lane-beat]')).toHaveLength(4);
         expect(
@@ -293,6 +306,11 @@ describe('InventoryScreen REG-079 run inventory model', () => {
             screen
                 .getByTestId('inventory-reward-perk-lane-map')
                 .querySelector('[data-reward-perk-lane-kind="trait-combo"]')
+        ).toHaveAttribute('data-reward-perk-lane-role', 'Trait');
+        expect(
+            screen
+                .getByTestId('inventory-reward-perk-lane-map')
+                .querySelector('[data-reward-perk-lane-kind="trait-combo"]')
                 ?.querySelectorAll('[data-reward-perk-lane-beat]')
         ).toHaveLength(4);
         expect(
@@ -305,6 +323,11 @@ describe('InventoryScreen REG-079 run inventory model', () => {
                 .getByTestId('inventory-reward-perk-lane-map')
                 .querySelector('[data-reward-perk-lane-kind="hazard-control"]')
         ).toHaveAttribute('data-reward-perk-lane-action', 'Pre-clear hazard');
+        expect(
+            screen
+                .getByTestId('inventory-reward-perk-lane-map')
+                .querySelector('[data-reward-perk-lane-kind="hazard-control"]')
+        ).toHaveAttribute('data-reward-perk-lane-role', 'Control');
         expect(
             screen
                 .getByTestId('inventory-reward-perk-lane-map')

@@ -104,6 +104,9 @@ const inventoryRewardPerkLaneRole = (lane: InventoryRewardPerkLaneMapEntry): 'Co
     return 'Prime';
 };
 
+const inventoryRewardPerkLaneRoleMapAttr = (laneMap: readonly InventoryRewardPerkLaneMapEntry[]): string =>
+    laneMap.length > 0 ? laneMap.map((lane) => `${lane.slug}:${inventoryRewardPerkLaneRole(lane)}:${lane.count}`).join('>') : 'none';
+
 const inventoryRewardPerkLaneMapLabel = (laneMap: readonly InventoryRewardPerkLaneMapEntry[]): string =>
     laneMap.length > 0
         ? `Inventory reward perk lane map. ${laneMap.map((lane) => `${lane.lane} ${inventoryRewardPerkLaneRole(lane)} x${lane.count}. ${lane.action}. ${lane.payoff}.`).join(' ')}`
@@ -443,6 +446,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     const primaryRewardPerkLane = rewardPerkLaneMap[0] ?? null;
     const rewardPerkLaneMapAttr = inventoryRewardPerkLaneMapAttr(rewardPerkLaneMap);
     const rewardPerkLaneActionMapAttr = inventoryRewardPerkLaneActionMapAttr(rewardPerkLaneMap);
+    const rewardPerkLaneRoleMapAttr = inventoryRewardPerkLaneRoleMapAttr(rewardPerkLaneMap);
     const rewardPerkLaneMapLabel = inventoryRewardPerkLaneMapLabel(rewardPerkLaneMap);
     const payoffEngineBeatCount = inventoryPayoffEngineBeatCount(payoffEngineSignal.tone);
     const payoffEngineAction = inventoryPayoffEngineAction(payoffEngineSignal.tone);
@@ -703,6 +707,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                     className={metaStyles.archiveCatalogGrid}
                                     data-reward-perk-lane-actions={rewardPerkLaneActionMapAttr}
                                     data-reward-perk-lane-map={rewardPerkLaneMapAttr}
+                                    data-reward-perk-lane-roles={rewardPerkLaneRoleMapAttr}
                                     data-testid="inventory-reward-perks"
                                 >
                                     {rewardPerkLaneMap.length > 1 ? (
@@ -711,6 +716,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                             className={styles.rewardPerkLaneMap}
                                             data-reward-perk-lane-actions={rewardPerkLaneActionMapAttr}
                                             data-reward-perk-lane-map={rewardPerkLaneMapAttr}
+                                            data-reward-perk-lane-roles={rewardPerkLaneRoleMapAttr}
                                             data-reward-perk-primary-lane={primaryRewardPerkLane?.slug ?? 'none'}
                                             data-reward-perk-primary-lane-action={primaryRewardPerkLane?.action ?? 'none'}
                                             data-reward-perk-primary-lane-audio={
@@ -720,6 +726,9 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                                 primaryRewardPerkLane ? inventoryRewardPerkLaneBeatCount(primaryRewardPerkLane) : 0
                                             }
                                             data-reward-perk-primary-lane-payoff={primaryRewardPerkLane?.payoff ?? 'none'}
+                                            data-reward-perk-primary-lane-role={
+                                                primaryRewardPerkLane ? inventoryRewardPerkLaneRole(primaryRewardPerkLane) : 'none'
+                                            }
                                             data-reward-perk-primary-lane-screen-cue={
                                                 primaryRewardPerkLane ? inventoryRewardPerkLaneScreenCue(primaryRewardPerkLane) : 'none'
                                             }
@@ -727,18 +736,19 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                         >
                                             {primaryRewardPerkLane ? (
                                                 <span
-                                                    aria-label={`Primary inventory perk lane. ${primaryRewardPerkLane.lane}: ${primaryRewardPerkLane.action}. ${primaryRewardPerkLane.payoff}. ${inventoryRewardPerkLaneBeatCount(primaryRewardPerkLane)} beats.`}
+                                                    aria-label={`Primary inventory perk lane. ${inventoryRewardPerkLaneRole(primaryRewardPerkLane)} ${primaryRewardPerkLane.lane}: ${primaryRewardPerkLane.action}. ${primaryRewardPerkLane.payoff}. ${inventoryRewardPerkLaneBeatCount(primaryRewardPerkLane)} beats.`}
                                                     className={styles.rewardPerkPrimaryLaneCue}
                                                     data-reward-perk-primary-lane={primaryRewardPerkLane.slug}
                                                     data-reward-perk-primary-lane-action={primaryRewardPerkLane.action}
                                                     data-reward-perk-primary-lane-audio={inventoryRewardPerkLaneAudioCue(primaryRewardPerkLane)}
                                                     data-reward-perk-primary-lane-beats={inventoryRewardPerkLaneBeatCount(primaryRewardPerkLane)}
                                                     data-reward-perk-primary-lane-payoff={primaryRewardPerkLane.payoff}
+                                                    data-reward-perk-primary-lane-role={inventoryRewardPerkLaneRole(primaryRewardPerkLane)}
                                                     data-reward-perk-primary-lane-screen-cue={inventoryRewardPerkLaneScreenCue(primaryRewardPerkLane)}
                                                     data-testid="inventory-reward-perk-primary-lane"
                                                 >
                                                     <small>Best perk lane</small>
-                                                    <strong>{primaryRewardPerkLane.lane}</strong>
+                                                    <strong>{inventoryRewardPerkLaneRole(primaryRewardPerkLane)}</strong>
                                                     <b>{primaryRewardPerkLane.action}</b>
                                                     <em>{primaryRewardPerkLane.payoff}</em>
                                                     <span aria-hidden="true" className={styles.rewardPerkPrimaryLaneBeatPips}>
@@ -758,13 +768,16 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                                     data-reward-perk-lane-beats={inventoryRewardPerkLaneBeatCount(lane)}
                                                     data-reward-perk-lane-count={lane.count}
                                                     data-reward-perk-lane-kind={lane.slug}
+                                                    data-reward-perk-lane-role={inventoryRewardPerkLaneRole(lane)}
                                                     data-reward-perk-lane-screen-cue={inventoryRewardPerkLaneScreenCue(lane)}
                                                     key={lane.slug}
                                                 >
                                                     <small>{lane.lane}</small>
-                                                    <strong>{lane.count}</strong>
+                                                    <strong>{inventoryRewardPerkLaneRole(lane)}</strong>
                                                     <b>{lane.action}</b>
-                                                    <em>{lane.payoff}</em>
+                                                    <em>
+                                                        x{lane.count} / {lane.payoff}
+                                                    </em>
                                                     <span aria-hidden="true" className={styles.rewardPerkLaneBeatPips}>
                                                         {Array.from(
                                                             { length: inventoryRewardPerkLaneBeatCount(lane) },

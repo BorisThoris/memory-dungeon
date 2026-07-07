@@ -1603,6 +1603,10 @@ describe('GameplayHudBar', () => {
             'data-reward-perk-lane-actions',
             'Route prime:Re-prime perk:1>Chain reward:Cash perk:1'
         );
+        expect(perkStrip).toHaveAttribute(
+            'data-reward-perk-lane-roles',
+            'Route prime:Route:1>Chain reward:Cashout:1'
+        );
         expect(screen.getByTestId('hud-reward-perk-primary-cue')).toHaveAttribute(
             'data-reward-perk-primary-action',
             'Cash perk'
@@ -1677,6 +1681,10 @@ describe('GameplayHudBar', () => {
             'data-reward-perk-lane-actions',
             'Route prime:Re-prime perk:1>Chain reward:Cash perk:1'
         );
+        expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveAttribute(
+            'data-reward-perk-lane-roles',
+            'Route prime:Route:1>Chain reward:Cashout:1'
+        );
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('Route prime');
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('Re-prime perk');
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('Chain reward');
@@ -1703,6 +1711,11 @@ describe('GameplayHudBar', () => {
                 .getByTestId('hud-reward-perk-lane-map')
                 .querySelector('[data-reward-perk-lane-kind="Route prime"]')
         ).toHaveAttribute('data-reward-perk-lane-action', 'Re-prime perk');
+        expect(
+            screen
+                .getByTestId('hud-reward-perk-lane-map')
+                .querySelector('[data-reward-perk-lane-kind="Route prime"]')
+        ).toHaveAttribute('data-reward-perk-lane-role', 'Route');
         expect(perkStrip.querySelector('[data-reward-perk-lane="Chain reward"]')).toHaveAttribute(
             'data-reward-perk-readiness',
             'armed'
@@ -1712,6 +1725,11 @@ describe('GameplayHudBar', () => {
                 .getByTestId('hud-reward-perk-lane-map')
                 .querySelector('[data-reward-perk-lane-kind="Chain reward"]')
         ).toHaveAttribute('data-reward-perk-lane-action', 'Cash perk');
+        expect(
+            screen
+                .getByTestId('hud-reward-perk-lane-map')
+                .querySelector('[data-reward-perk-lane-kind="Chain reward"]')
+        ).toHaveAttribute('data-reward-perk-lane-role', 'Cashout');
         expect(perkStrip.querySelector('[data-reward-perk-meter="armed"] span')?.getAttribute('style')).toContain(
             '--hud-meter-fill: 100%'
         );
