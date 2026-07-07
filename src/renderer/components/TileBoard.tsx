@@ -684,6 +684,10 @@ const boardOpportunityLaneRole = (
     }
 };
 
+const boardOpportunityLaneRoleId = (
+    lane: Pick<BoardOpportunityLaneMapEntry, 'id'> | null
+): BoardOpportunityLaneMapSummaryAction | null => getBoardOpportunityLaneMapSummaryAction(lane);
+
 const getBoardOpportunityLaneMapSummaryAction = (
     lane: Pick<BoardOpportunityLaneMapEntry, 'id'> | null
 ): BoardOpportunityLaneMapSummaryAction | null => {
@@ -726,6 +730,9 @@ const getBoardOpportunityLaneMapSummaryScreenCue = (
 
 const boardOpportunityLaneRoleMapAttr = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
     laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${boardOpportunityLaneRole(lane)}:${lane.count}`).join('>') : 'none';
+
+const boardOpportunityLaneRoleIdMapAttr = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
+    laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${boardOpportunityLaneRoleId(lane)}:${lane.count}`).join('>') : 'none';
 
 const boardOpportunityLaneMapLabel = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
     laneMap.length > 0
@@ -3384,6 +3391,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardOpportunityLaneActionMapAttrValue = boardOpportunityLaneActionMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneActionIdMapAttrValue = boardOpportunityLaneActionIdMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneRoleMapAttrValue = boardOpportunityLaneRoleMapAttr(boardOpportunityLaneMapRows);
+    const boardOpportunityLaneRoleIdMapAttrValue = boardOpportunityLaneRoleIdMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneMapAccessibleLabel = boardOpportunityLaneMapLabel(boardOpportunityLaneMapRows);
     const boardOpportunityLaneMapMeterFill = primaryBoardOpportunityLane
         ? Math.round(
@@ -4981,6 +4989,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-lane-count={boardOpportunityLaneMapRows.length}
             data-opportunity-lane-label={boardOpportunityLaneMapRows[0]?.label ?? 'none'}
             data-opportunity-lane-roles={boardOpportunityLaneRoleMapAttrValue}
+            data-opportunity-lane-role-ids={boardOpportunityLaneRoleIdMapAttrValue}
             data-opportunity-primary-lane={primaryBoardOpportunityLane?.id ?? 'none'}
             data-opportunity-primary-lane-action={primaryBoardOpportunityLane?.action ?? 'none'}
             data-opportunity-primary-lane-action-id={boardOpportunityLaneMapSummaryAction ?? 'none'}
@@ -4997,6 +5006,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-primary-lane-role={
                 primaryBoardOpportunityLane ? boardOpportunityLaneRole(primaryBoardOpportunityLane) : 'none'
             }
+            data-opportunity-primary-lane-role-id={boardOpportunityLaneRoleId(primaryBoardOpportunityLane) ?? 'none'}
             data-opportunity-primary-lane-screen-cue={
                 primaryBoardOpportunityLane ? boardOpportunityLaneScreenCue(primaryBoardOpportunityLane) : 'none'
             }
@@ -7282,6 +7292,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-opportunity-lane-map-screen-cue={boardOpportunityLaneMapSummaryScreenCue ?? 'none'}
                                         data-opportunity-lane-map-tier={boardOpportunityLaneMapSummaryTier ?? 'none'}
                                         data-opportunity-lane-roles={boardOpportunityLaneRoleMapAttrValue}
+                                        data-opportunity-lane-role-ids={boardOpportunityLaneRoleIdMapAttrValue}
                                         data-opportunity-primary-lane={primaryBoardOpportunityLane?.id ?? 'none'}
                                         data-opportunity-primary-lane-action={primaryBoardOpportunityLane?.action ?? 'none'}
                                         data-opportunity-primary-lane-action-id={boardOpportunityLaneMapSummaryAction ?? 'none'}
@@ -7297,6 +7308,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         }
                                         data-opportunity-primary-lane-role={
                                             primaryBoardOpportunityLane ? boardOpportunityLaneRole(primaryBoardOpportunityLane) : 'none'
+                                        }
+                                        data-opportunity-primary-lane-role-id={
+                                            boardOpportunityLaneRoleId(primaryBoardOpportunityLane) ?? 'none'
                                         }
                                         data-opportunity-primary-lane-screen-cue={
                                             primaryBoardOpportunityLane ? boardOpportunityLaneScreenCue(primaryBoardOpportunityLane) : 'none'
@@ -7355,6 +7369,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-opportunity-primary-lane-cue={primaryBoardOpportunityLane.cue}
                                                 data-opportunity-primary-lane-focus={boardOpportunityLaneFocus(primaryBoardOpportunityLane)}
                                                 data-opportunity-primary-lane-role={boardOpportunityLaneRole(primaryBoardOpportunityLane)}
+                                                data-opportunity-primary-lane-role-id={
+                                                    boardOpportunityLaneRoleId(primaryBoardOpportunityLane) ?? 'none'
+                                                }
                                                 data-opportunity-primary-lane-screen-cue={boardOpportunityLaneScreenCue(primaryBoardOpportunityLane)}
                                                 data-testid="board-opportunity-primary-lane"
                                                 style={
@@ -7396,6 +7413,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-opportunity-lane-count={lane.count}
                                                 data-opportunity-lane-meter-fill={Math.round((boardOpportunityLaneBeatCount(lane) / 5) * 100)}
                                                 data-opportunity-lane-role={boardOpportunityLaneRole(lane)}
+                                                data-opportunity-lane-role-id={boardOpportunityLaneRoleId(lane) ?? 'none'}
                                                 data-opportunity-lane-screen-cue={boardOpportunityLaneScreenCue(lane)}
                                                 style={
                                                     {

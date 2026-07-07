@@ -2287,8 +2287,13 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-map-tier', 'build');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-count', '3');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-label', 'Build');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
+            'data-opportunity-lane-role-ids',
+            'build:prime:1>trait:study:1>pickup:claim:1'
+        );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-primary-lane', 'build');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-primary-lane-action', 'Prime build');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-primary-lane-role-id', 'prime');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-primary-lane-audio', 'board-opportunity-build');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-primary-lane-beats', '3');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-primary-lane-cue', 'Prime cashout');
@@ -2364,6 +2369,10 @@ describe('TileBoard touch and click controls', () => {
             'data-opportunity-lane-roles',
             'build:Prime:1>trait:Study:1>pickup:Claim:1'
         );
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
+            'data-opportunity-lane-role-ids',
+            'build:prime:1>trait:study:1>pickup:claim:1'
+        );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute('data-opportunity-primary-lane', 'build');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-primary-lane-action',
@@ -2380,6 +2389,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-primary-lane-role',
             'Prime'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
+            'data-opportunity-primary-lane-role-id',
+            'prime'
         );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-primary-lane-audio',
@@ -2469,9 +2482,25 @@ describe('TileBoard touch and click controls', () => {
             'data-opportunity-lane-role',
             'Prime'
         );
+        expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="build"]')).toHaveAttribute(
+            'data-opportunity-lane-role-id',
+            'prime'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="trait"]')).toHaveAttribute(
+            'data-opportunity-lane-role-id',
+            'study'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="pickup"]')).toHaveAttribute(
+            'data-opportunity-lane-role-id',
+            'claim'
+        );
         expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAttribute(
             'data-opportunity-primary-lane-focus',
             'build'
+        );
+        expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAttribute(
+            'data-opportunity-primary-lane-role-id',
+            'prime'
         );
         expect(
             screen

@@ -294,10 +294,14 @@ const findOpportunityLaneRoleSelectorGaps = (): OpportunityLaneRoleSelectorGap[]
     const cssText = readComponentCssFiles()
         .map(({ text }) => text)
         .join('\n');
-    const roleAttrs = ['data-opportunity-primary-lane-role', 'data-opportunity-lane-role'];
-    const roles = ['Cashout', 'Claim', 'Perk', 'Prime', 'Recover', 'Risk', 'Study', 'Tool'];
+    const roleContracts: Record<string, readonly string[]> = {
+        'data-opportunity-primary-lane-role': ['Cashout', 'Claim', 'Perk', 'Prime', 'Recover', 'Risk', 'Study', 'Tool'],
+        'data-opportunity-primary-lane-role-id': ['cashout', 'claim', 'perk', 'prime', 'recover', 'risk', 'study', 'tool'],
+        'data-opportunity-lane-role': ['Cashout', 'Claim', 'Perk', 'Prime', 'Recover', 'Risk', 'Study', 'Tool'],
+        'data-opportunity-lane-role-id': ['cashout', 'claim', 'perk', 'prime', 'recover', 'risk', 'study', 'tool']
+    };
 
-    return roleAttrs.flatMap((attr) =>
+    return Object.entries(roleContracts).flatMap(([attr, roles]) =>
         roles
             .filter((role) => !cssText.includes(`[${attr}='${role}']`) && !cssText.includes(`[${attr}="${role}"]`))
             .map((role) => ({ attr, role }))
@@ -642,10 +646,12 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-opportunity-lane-map-screen-cue': ['burst', 'guard', 'pulse', 'recover', 'risk'],
         'data-opportunity-lane-map-tier': ['build', 'cashout', 'recover', 'reward', 'risk', 'tool'],
         'data-opportunity-lane-action-id': ['cashout', 'claim', 'perk', 'prime', 'recover', 'risk', 'study', 'tool'],
+        'data-opportunity-lane-role-id': ['cashout', 'claim', 'perk', 'prime', 'recover', 'risk', 'study', 'tool'],
         'data-opportunity-payoff-crescendo-screen-cue': ['burst', 'pulse', 'snap', 'super'],
         'data-opportunity-payoff-crescendo-tier': ['cashout', 'prime', 'stack', 'super'],
         'data-opportunity-primary-lane-action-id': ['cashout', 'claim', 'perk', 'prime', 'recover', 'risk', 'study', 'tool'],
         'data-opportunity-primary-lane-focus': ['build', 'cashout', 'recover', 'reward', 'risk', 'tool'],
+        'data-opportunity-primary-lane-role-id': ['cashout', 'claim', 'perk', 'prime', 'recover', 'risk', 'study', 'tool'],
         'data-opportunity-primary-lane-screen-cue': ['burst', 'guard', 'pulse', 'recover', 'risk'],
         'data-opportunity-lane-screen-cue': ['burst', 'guard', 'pulse', 'recover', 'risk'],
         'data-opportunity-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
