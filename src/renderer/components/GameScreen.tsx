@@ -159,8 +159,10 @@ import {
     buildTraitInteractionLaneMap,
     formatTraitInteractionLaneMapLabel,
     getTraitInteractionLaneAction,
+    getTraitInteractionLaneRole,
     traitInteractionLaneActionMapAttr,
     traitInteractionLaneMapAttr,
+    traitInteractionLaneRoleMapAttr,
     type TraitInteractionLaneMapEntry
 } from '../copy/traitInteractionLaneMap';
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
@@ -2551,6 +2553,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     );
     const boardFloaterTraitLaneMapAttr = traitInteractionLaneMapAttr(boardFloaterTraitLaneMap);
     const boardFloaterTraitLaneActionMapAttr = traitInteractionLaneActionMapAttr(boardFloaterTraitLaneMap);
+    const boardFloaterTraitLaneRoleMapAttr = traitInteractionLaneRoleMapAttr(boardFloaterTraitLaneMap);
     const boardFloaterPrimaryTraitLane = boardFloaterTraitLaneMap[0] ?? null;
     const boardFloaterTraitLaneMapSummaryFill = Math.min(100, (boardFloaterTraitLaneMap.length / 5) * 100);
     const boardFloaterPrimaryTraitLaneFill = boardFloaterPrimaryTraitLane
@@ -5092,6 +5095,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             className={styles.boardFloaterTraitLaneMap}
                                             data-match-trait-lane-actions={boardFloaterTraitLaneActionMapAttr}
                                             data-match-trait-lane-map={boardFloaterTraitLaneMapAttr}
+                                            data-match-trait-lane-roles={boardFloaterTraitLaneRoleMapAttr}
                                             data-match-trait-primary-lane={boardFloaterPrimaryTraitLane?.id ?? 'none'}
                                             data-match-trait-primary-lane-action={
                                                 boardFloaterPrimaryTraitLane
@@ -5106,9 +5110,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-match-trait-primary-lane-beats={
                                                 boardFloaterPrimaryTraitLane
                                                     ? getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane)
-                                                    : 0
+                                                : 0
                                             }
                                             data-match-trait-primary-lane-cue={boardFloaterPrimaryTraitLane?.cue ?? 'none'}
+                                            data-match-trait-primary-lane-role={
+                                                boardFloaterPrimaryTraitLane
+                                                    ? getTraitInteractionLaneRole(boardFloaterPrimaryTraitLane)
+                                                    : 'none'
+                                            }
                                             data-match-trait-primary-lane-screen-cue={
                                                 boardFloaterPrimaryTraitLane
                                                     ? getBoardFloaterTraitLaneScreenCue(boardFloaterPrimaryTraitLane)
@@ -5151,7 +5160,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             </span>
                                             {boardFloaterPrimaryTraitLane ? (
                                                 <span
-                                                    aria-label={`Primary trait payoff lane. ${boardFloaterPrimaryTraitLane.label}: ${getTraitInteractionLaneAction(boardFloaterPrimaryTraitLane.id)}. ${boardFloaterPrimaryTraitLane.cue}. ${getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane)} beats.`}
+                                                    aria-label={`Primary trait payoff lane. ${getTraitInteractionLaneRole(boardFloaterPrimaryTraitLane)} ${boardFloaterPrimaryTraitLane.label}: ${getTraitInteractionLaneAction(boardFloaterPrimaryTraitLane.id)}. ${boardFloaterPrimaryTraitLane.cue}. ${getBoardFloaterTraitLaneBeatCount(boardFloaterPrimaryTraitLane)} beats.`}
                                                     className={styles.boardFloaterPrimaryTraitLane}
                                                     data-match-trait-primary-lane={boardFloaterPrimaryTraitLane.id}
                                                     data-match-trait-primary-lane-action={getTraitInteractionLaneAction(
@@ -5164,6 +5173,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         boardFloaterPrimaryTraitLane
                                                     )}
                                                     data-match-trait-primary-lane-cue={boardFloaterPrimaryTraitLane.cue}
+                                                    data-match-trait-primary-lane-role={getTraitInteractionLaneRole(
+                                                        boardFloaterPrimaryTraitLane
+                                                    )}
                                                     data-match-trait-primary-lane-screen-cue={getBoardFloaterTraitLaneScreenCue(
                                                         boardFloaterPrimaryTraitLane
                                                     )}
@@ -5176,7 +5188,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     data-testid="match-score-floater-primary-trait-lane"
                                                 >
                                                     <small>Trait focus</small>
-                                                    <b>{boardFloaterPrimaryTraitLane.label}</b>
+                                                    <b>{getTraitInteractionLaneRole(boardFloaterPrimaryTraitLane)}</b>
                                                     <strong>{getTraitInteractionLaneAction(boardFloaterPrimaryTraitLane.id)}</strong>
                                                     <em>{boardFloaterPrimaryTraitLane.cue}</em>
                                                     <span aria-hidden="true" className={styles.boardFloaterPrimaryTraitLaneBeatPips}>
@@ -5202,13 +5214,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     data-match-trait-lane-audio={getBoardFloaterTraitLaneAudioCue(lane)}
                                                     data-match-trait-lane-beats={getBoardFloaterTraitLaneBeatCount(lane)}
                                                     data-match-trait-lane-count={lane.count}
+                                                    data-match-trait-lane-role={getTraitInteractionLaneRole(lane)}
                                                     data-match-trait-lane-screen-cue={getBoardFloaterTraitLaneScreenCue(lane)}
                                                     key={lane.id}
                                                 >
                                                     <small>{lane.label}</small>
-                                                    {lane.count > 1 ? <b>x{lane.count}</b> : null}
+                                                    <b>{getTraitInteractionLaneRole(lane)}</b>
                                                     <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
-                                                    <em>{lane.cue}</em>
+                                                    <em>
+                                                        x{lane.count} / {lane.cue}
+                                                    </em>
                                                     <span aria-hidden="true" className={styles.boardFloaterTraitLaneBeatPips}>
                                                         {Array.from({ length: getBoardFloaterTraitLaneBeatCount(lane) }, (_, index) => (
                                                             <i

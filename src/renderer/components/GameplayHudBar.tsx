@@ -33,8 +33,10 @@ import {
     buildTraitInteractionLaneMap,
     formatTraitInteractionLaneMapLabel,
     getTraitInteractionLaneAction,
+    getTraitInteractionLaneRole,
     traitInteractionLaneActionMapAttr,
-    traitInteractionLaneMapAttr
+    traitInteractionLaneMapAttr,
+    traitInteractionLaneRoleMapAttr
 } from '../copy/traitInteractionLaneMap';
 import { PERFECT_MEMORY_BASE_RULES, perfectMemoryHudKind } from '../copy/perfectMemory';
 import { REG106_HUD_IA } from '../gameplay/regPhase4PlayContract';
@@ -1433,6 +1435,7 @@ const GameplayHudBar = ({
     const traitOpportunityLaneMap = buildTraitInteractionLaneMap(traitOpportunityLaneLines);
     const traitOpportunityLaneMapAttr = traitInteractionLaneMapAttr(traitOpportunityLaneMap);
     const traitOpportunityLaneActionMapAttr = traitInteractionLaneActionMapAttr(traitOpportunityLaneMap);
+    const traitOpportunityLaneRoleMapAttr = traitInteractionLaneRoleMapAttr(traitOpportunityLaneMap);
     const traitOpportunityLaneMapLabel = formatTraitInteractionLaneMapLabel(
         'Trait interaction lanes',
         traitOpportunityLaneMap
@@ -2460,6 +2463,7 @@ const GameplayHudBar = ({
                                                 data-testid="hud-trait-route-lane-map"
                                                 data-trait-interaction-lane-actions={traitOpportunityLaneActionMapAttr}
                                                 data-trait-interaction-lane-map={traitOpportunityLaneMapAttr}
+                                                data-trait-interaction-lane-roles={traitOpportunityLaneRoleMapAttr}
                                             >
                                                 <span
                                                     className={styles.hudTraitRouteLaneMapSummary}
@@ -2473,7 +2477,7 @@ const GameplayHudBar = ({
                                                     </b>
                                                     <span className={styles.hudTraitRouteLaneMapSummaryLead}>
                                                         {primaryTraitOpportunityLane
-                                                            ? `${primaryTraitOpportunityLane.label} leads`
+                                                            ? `${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
                                                             : 'No lead lane'}
                                                     </span>
                                                     <span
@@ -2500,8 +2504,13 @@ const GameplayHudBar = ({
                                                     </span>
                                                 </span>
                                                 {traitOpportunityLaneMap.map((lane) => (
-                                                    <span data-trait-interaction-lane={lane.id} key={lane.id}>
+                                                    <span
+                                                        data-trait-interaction-lane={lane.id}
+                                                        data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
+                                                        key={lane.id}
+                                                    >
                                                         <small>{lane.label}</small>
+                                                        <b>{getTraitInteractionLaneRole(lane)}</b>
                                                         <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
                                                         <em>
                                                             {lane.count} {lane.count === 1 ? 'line' : 'lines'} · {lane.cue}
@@ -3349,6 +3358,7 @@ const GameplayHudBar = ({
                                                 data-testid="hud-trait-route-lane-map-details"
                                                 data-trait-interaction-lane-actions={traitOpportunityLaneActionMapAttr}
                                                 data-trait-interaction-lane-map={traitOpportunityLaneMapAttr}
+                                                data-trait-interaction-lane-roles={traitOpportunityLaneRoleMapAttr}
                                             >
                                                 <span
                                                     className={styles.hudTraitRouteLaneMapSummary}
@@ -3362,7 +3372,7 @@ const GameplayHudBar = ({
                                                     </b>
                                                     <span className={styles.hudTraitRouteLaneMapSummaryLead}>
                                                         {primaryTraitOpportunityLane
-                                                            ? `${primaryTraitOpportunityLane.label} leads`
+                                                            ? `${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
                                                             : 'No lead lane'}
                                                     </span>
                                                     <span
@@ -3391,9 +3401,11 @@ const GameplayHudBar = ({
                                                 {traitOpportunityLaneMap.map((lane) => (
                                                     <span
                                                         data-trait-interaction-lane={lane.id}
+                                                        data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
                                                         key={lane.id}
                                                     >
                                                         <small>{lane.label}</small>
+                                                        <b>{getTraitInteractionLaneRole(lane)}</b>
                                                         <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
                                                         <em>
                                                             {lane.count} {lane.count === 1 ? 'line' : 'lines'} · {lane.cue}

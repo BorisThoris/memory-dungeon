@@ -42,9 +42,11 @@ import {
     buildTraitInteractionLaneMap,
     formatTraitInteractionLaneMapLabel,
     getTraitInteractionLaneAction,
+    getTraitInteractionLaneRole,
     TRAIT_INTERACTION_LANE_LABELS,
     traitInteractionLaneActionMapAttr,
     traitInteractionLaneMapAttr,
+    traitInteractionLaneRoleMapAttr,
     type TraitInteractionLaneId
 } from '../copy/traitInteractionLaneMap';
 import { isNarrowShortLandscapeForMenuStack, VIEWPORT_MOBILE_MAX } from '../breakpoints';
@@ -2884,6 +2886,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     );
     const boardTraitInteractionLaneMapAttrValue = traitInteractionLaneMapAttr(boardTraitInteractionLaneMap);
     const boardTraitInteractionLaneActionMapAttrValue = traitInteractionLaneActionMapAttr(boardTraitInteractionLaneMap);
+    const boardTraitInteractionLaneRoleMapAttrValue = traitInteractionLaneRoleMapAttr(boardTraitInteractionLaneMap);
     const boardTraitInteractionLaneMapAccessibleLabel = formatTraitInteractionLaneMapLabel(
         'Trait interaction lanes',
         boardTraitInteractionLaneMap
@@ -3973,6 +3976,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-chain-opportunity-recipes={boardChainRecipeChips.join('|') || 'none'}
             data-trait-interaction-lane-actions={boardTraitInteractionLaneActionMapAttrValue || 'none'}
             data-trait-interaction-lane-map={boardTraitInteractionLaneMapAttrValue || 'none'}
+            data-trait-interaction-lane-roles={boardTraitInteractionLaneRoleMapAttrValue || 'none'}
             data-trait-interaction-lane-count={boardTraitInteractionLaneMap.length}
             data-chain-opportunity-target-plan={boardChainOpportunity.targetPlanLabel ?? 'none'}
             data-chain-opportunity-beat-action={boardChainOpportunity.beatSignal?.action ?? 'none'}
@@ -4671,12 +4675,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityTraitLaneMap}
                                         data-trait-interaction-lane-actions={boardTraitInteractionLaneActionMapAttrValue}
                                         data-trait-interaction-lane-map={boardTraitInteractionLaneMapAttrValue}
+                                        data-trait-interaction-lane-roles={boardTraitInteractionLaneRoleMapAttrValue}
                                         data-trait-interaction-lane-primary={
                                             primaryBoardTraitInteractionLane?.id ?? 'none'
                                         }
                                         data-trait-interaction-lane-primary-action={
                                             primaryBoardTraitInteractionLane
                                                 ? getTraitInteractionLaneAction(primaryBoardTraitInteractionLane.id)
+                                                : 'none'
+                                        }
+                                        data-trait-interaction-lane-primary-role={
+                                            primaryBoardTraitInteractionLane
+                                                ? getTraitInteractionLaneRole(primaryBoardTraitInteractionLane)
                                                 : 'none'
                                         }
                                         data-testid="chain-opportunity-trait-lane-map"
@@ -4722,6 +4732,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-trait-interaction-lane={lane.id}
                                                 data-trait-interaction-lane-action={getTraitInteractionLaneAction(lane.id)}
                                                 data-trait-interaction-lane-count={lane.count}
+                                                data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
                                                 data-trait-interaction-lane-beats={Math.max(2, Math.min(5, lane.count + 1))}
                                                 data-trait-interaction-lane-focus={
                                                     lane.id === primaryBoardTraitInteractionLane?.id
@@ -4731,7 +4742,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 key={lane.id}
                                             >
                                                 <small>{lane.label}</small>
-                                                <b>{lane.count}</b>
+                                                <b>{getTraitInteractionLaneRole(lane)}</b>
                                                 <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
                                                 <span aria-hidden="true" className={styles.chainOpportunityTraitLaneMapBeatPips}>
                                                     {Array.from({ length: Math.max(2, Math.min(5, lane.count + 1)) }, (_, index) => (
@@ -4742,7 +4753,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                         />
                                                     ))}
                                                 </span>
-                                                <em>{lane.cue}</em>
+                                                <em>
+                                                    x{lane.count} / {lane.cue}
+                                                </em>
                                             </span>
                                         ))}
                                     </span>

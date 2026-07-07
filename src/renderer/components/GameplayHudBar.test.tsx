@@ -1528,17 +1528,21 @@ describe('GameplayHudBar', () => {
             'data-trait-interaction-lane-actions',
             'shard:Cash shard:1'
         );
+        expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAttribute(
+            'data-trait-interaction-lane-roles',
+            'shard:Cashout:1'
+        );
         const traitRouteLaneMapSummary = screen.getByTestId('hud-trait-route-lane-map-summary');
         expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-count', '1');
         expect(traitRouteLaneMapSummary).toHaveTextContent('Trait lanes');
         expect(traitRouteLaneMapSummary).toHaveTextContent('1 lane');
-        expect(traitRouteLaneMapSummary).toHaveTextContent('Shard leads');
+        expect(traitRouteLaneMapSummary).toHaveTextContent('Cashout Shard');
         expect(traitRouteLaneMapSummary.querySelectorAll('[data-trait-interaction-lane-summary-beat]')).toHaveLength(2);
         expect(
             traitRouteLaneMapSummary.querySelector('[data-trait-interaction-lane-summary-beat="1"]')
         ).toHaveAttribute('data-trait-interaction-lane-summary-beat-focus', 'primary');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAccessibleName(
-            'Trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard.'
+            'Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard.'
         );
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Trait Route Panel');
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Cards:');
@@ -1549,7 +1553,7 @@ describe('GameplayHudBar', () => {
         expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-count', '1');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Trait lanes');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('1 lane');
-        expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Shard leads');
+        expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Cashout Shard');
         expect(screen.getByTestId('hud-trait-route-details-action')).toHaveTextContent('Now: Cash next route.');
         expect(screen.getByTestId('hud-trait-route-details-stack')).toHaveTextContent(
             'Stack: Cash trait super stack. 1 route + x4 +1 shard.'

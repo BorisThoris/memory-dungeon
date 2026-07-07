@@ -3003,6 +3003,10 @@ describe('GameScreen (OVR-014)', () => {
             'shard:Cash shard:1>guard:Protect run:1>block:Deny match:1>recall:Set memory:1'
         );
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
+            'data-match-trait-lane-roles',
+            'shard:Cashout:1>guard:Protect:1>block:Block:1>recall:Recall:1'
+        );
+        expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
             'data-match-trait-primary-lane',
             'shard'
         );
@@ -3023,6 +3027,10 @@ describe('GameScreen (OVR-014)', () => {
             'Echo + Sealed: combo shard'
         );
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
+            'data-match-trait-primary-lane-role',
+            'Cashout'
+        );
+        expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAttribute(
             'data-match-trait-primary-lane-screen-cue',
             'burst'
         );
@@ -3036,10 +3044,10 @@ describe('GameScreen (OVR-014)', () => {
             traitLaneMapSummary.querySelector('[data-match-trait-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-match-trait-lane-map-summary-beat-focus', 'primary');
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAccessibleName(
-            'Match trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard. Guard: 1. Protect run. Mirror + Stasis: guard ward. Block: 1. Deny match. Stasis buffered Sealed. Recall: 1. Set memory. Echo + Mirror: recall focus.'
+            'Match trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard. Guard Protect x1. Protect run. Mirror + Stasis: guard ward. Block Block x1. Deny match. Stasis buffered Sealed. Recall Recall x1. Set memory. Echo + Mirror: recall focus.'
         );
         expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAccessibleName(
-            'Primary trait payoff lane. Shard: Cash shard. Echo + Sealed: combo shard. 3 beats.'
+            'Primary trait payoff lane. Cashout Shard: Cash shard. Echo + Sealed: combo shard. 3 beats.'
         );
         expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAttribute(
             'data-match-trait-primary-lane',
@@ -3052,6 +3060,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAttribute(
             'data-match-trait-primary-lane-audio',
             'match-trait-shard'
+        );
+        expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAttribute(
+            'data-match-trait-primary-lane-role',
+            'Cashout'
         );
         expect(screen.getByTestId('match-score-floater-primary-trait-lane')).toHaveAttribute(
             'data-match-trait-primary-lane-screen-cue',
@@ -3091,6 +3103,9 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="shard"]')
         ).toHaveAttribute('data-match-trait-lane-action', 'Cash shard');
+        expect(
+            screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="shard"]')
+        ).toHaveAttribute('data-match-trait-lane-role', 'Cashout');
         expect(
             screen.getByTestId('match-score-floater-trait-lane-map').querySelector('[data-match-trait-lane="shard"]')
         ).toHaveAttribute('data-match-trait-lane-beats', '3');

@@ -40,6 +40,27 @@ export const TRAIT_INTERACTION_LANE_ACTIONS: Record<TraitInteractionLaneId, stri
 export const getTraitInteractionLaneAction = (lane: TraitInteractionLaneId): string =>
     TRAIT_INTERACTION_LANE_ACTIONS[lane];
 
+export const getTraitInteractionLaneRole = (
+    lane: Pick<TraitInteractionLaneMapEntry, 'id'>
+): 'Block' | 'Cashout' | 'Protect' | 'Recall' | 'Risk' | 'Tool' => {
+    switch (lane.id) {
+        case 'guard':
+            return 'Protect';
+        case 'tool':
+            return 'Tool';
+        case 'risk':
+            return 'Risk';
+        case 'block':
+            return 'Block';
+        case 'recall':
+            return 'Recall';
+        case 'score':
+        case 'shard':
+        default:
+            return 'Cashout';
+    }
+};
+
 const trimTerminalPunctuation = (value: string): string => value.trim().replace(/[.!?]+$/u, '');
 
 export const getTraitInteractionLaneId = (line: string): TraitInteractionLaneId => {
@@ -105,12 +126,18 @@ export const traitInteractionLaneMapAttr = (laneMap: readonly TraitInteractionLa
 export const traitInteractionLaneActionMapAttr = (laneMap: readonly TraitInteractionLaneMapEntry[]): string =>
     laneMap.map((lane) => `${lane.id}:${getTraitInteractionLaneAction(lane.id)}:${lane.count}`).join('>');
 
+export const traitInteractionLaneRoleMapAttr = (laneMap: readonly TraitInteractionLaneMapEntry[]): string =>
+    laneMap.map((lane) => `${lane.id}:${getTraitInteractionLaneRole(lane)}:${lane.count}`).join('>');
+
 export const formatTraitInteractionLaneMapLabel = (
     label: string,
     laneMap: readonly TraitInteractionLaneMapEntry[]
 ): string => {
     const rowCopy = laneMap
-        .map((lane) => `${lane.label}: ${lane.count}. ${getTraitInteractionLaneAction(lane.id)}. ${trimTerminalPunctuation(lane.cue)}`)
+        .map(
+            (lane) =>
+                `${lane.label} ${getTraitInteractionLaneRole(lane)} x${lane.count}. ${getTraitInteractionLaneAction(lane.id)}. ${trimTerminalPunctuation(lane.cue)}`
+        )
         .join('. ');
 
     return rowCopy ? `${label}. ${rowCopy}.` : label;

@@ -1289,6 +1289,10 @@ describe('TileBoard touch and click controls', () => {
         const laneBeatMap = screen.getByTestId('chain-opportunity-trait-lane-beat-map');
         const primaryTraitLane = screen.getByTestId('chain-opportunity-primary-trait-lane');
         expect(frame).toHaveAttribute('data-trait-interaction-lane-map', 'shard:1>guard:1>block:1>recall:1');
+        expect(frame).toHaveAttribute(
+            'data-trait-interaction-lane-roles',
+            'shard:Cashout:1>guard:Protect:1>block:Block:1>recall:Recall:1'
+        );
         expect(frame).toHaveAttribute('data-trait-interaction-lane-count', '4');
         expect(frame).toHaveAttribute(
             'data-card-feedback-trait-lane-actions',
@@ -1360,9 +1364,14 @@ describe('TileBoard touch and click controls', () => {
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-map', 'shard:1>guard:1>block:1>recall:1');
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary', 'shard');
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary-action', 'Cash shard');
+        expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary-role', 'Cashout');
         expect(laneMap).toHaveAttribute(
             'data-trait-interaction-lane-actions',
             'shard:Cash shard:1>guard:Protect run:1>block:Deny match:1>recall:Set memory:1'
+        );
+        expect(laneMap).toHaveAttribute(
+            'data-trait-interaction-lane-roles',
+            'shard:Cashout:1>guard:Protect:1>block:Block:1>recall:Recall:1'
         );
         expect(screen.getByTestId('chain-opportunity-trait-lane-map-summary')).toHaveTextContent('Traits');
         expect(screen.getByTestId('chain-opportunity-trait-lane-map-summary')).toHaveTextContent('4 lanes');
@@ -1401,12 +1410,16 @@ describe('TileBoard touch and click controls', () => {
         expect(
             laneMap.querySelector('[data-trait-interaction-lane="shard"]')?.querySelectorAll('[data-trait-interaction-lane-beat]')
         ).toHaveLength(2);
+        expect(laneMap.querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-role',
+            'Cashout'
+        );
         expect(laneMap.querySelector('[data-trait-interaction-lane="guard"]')).toHaveAttribute(
             'data-trait-interaction-lane-focus',
             'support'
         );
         expect(laneMap).toHaveAccessibleName(
-            'Trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard. Guard: 1. Protect run. Mirror + Stasis: guard ward. Block: 1. Deny match. Stasis buffered Sealed. Recall: 1. Set memory. Echo + Mirror: recall focus.'
+            'Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard. Guard Protect x1. Protect run. Mirror + Stasis: guard ward. Block Block x1. Deny match. Stasis buffered Sealed. Recall Recall x1. Set memory. Echo + Mirror: recall focus.'
         );
     });
 
@@ -1431,12 +1444,13 @@ describe('TileBoard touch and click controls', () => {
 
         const laneMap = screen.getByTestId('chain-opportunity-trait-lane-map');
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-map', 'shard:1');
+        expect(laneMap).toHaveAttribute('data-trait-interaction-lane-roles', 'shard:Cashout:1');
         expect(screen.getByTestId('chain-opportunity-trait-lane-map-summary')).toHaveTextContent('Traits');
         expect(screen.getByTestId('chain-opportunity-trait-lane-map-summary')).toHaveTextContent('1 lane');
         expect(laneMap).toHaveTextContent('Shard');
         expect(laneMap).toHaveTextContent('Cash shard');
         expect(laneMap).toHaveTextContent('Echo + Sealed: combo shard');
-        expect(laneMap).toHaveAccessibleName('Trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard.');
+        expect(laneMap).toHaveAccessibleName('Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard.');
     });
 
     it('surfaces selected trait follow-up markers after the first comboable trait card is flipped', () => {

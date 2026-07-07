@@ -5,8 +5,10 @@ import {
     formatTraitInteractionLaneMapLabel,
     getTraitInteractionLaneAction,
     getTraitInteractionLaneId,
+    getTraitInteractionLaneRole,
     traitInteractionLaneActionMapAttr,
-    traitInteractionLaneMapAttr
+    traitInteractionLaneMapAttr,
+    traitInteractionLaneRoleMapAttr
 } from './traitInteractionLaneMap';
 
 describe('traitInteractionLaneMap', () => {
@@ -33,10 +35,14 @@ describe('traitInteractionLaneMap', () => {
         expect(traitInteractionLaneActionMapAttr(laneMap)).toBe(
             'shard:Cash shard:1>guard:Protect run:1>tool:Use tool:1>risk:Watch hazard:2>block:Deny match:1>recall:Set memory:1'
         );
+        expect(traitInteractionLaneRoleMapAttr(laneMap)).toBe(
+            'shard:Cashout:1>guard:Protect:1>tool:Tool:1>risk:Risk:2>block:Block:1>recall:Recall:1'
+        );
         expect(formatTraitInteractionLaneMapLabel('Trait interaction lanes', laneMap)).toBe(
-            'Trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard. Guard: 1. Protect run. Mirror + Stasis: guard ward. Tool: 1. Use tool. Shuffle charge primed. Risk: 2. Watch hazard. Volatile curse pressure. Block: 1. Deny match. Stasis buffered Sealed. Recall: 1. Set memory. Echo + Mirror: recall focus.'
+            'Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard. Guard Protect x1. Protect run. Mirror + Stasis: guard ward. Tool Tool x1. Use tool. Shuffle charge primed. Risk Risk x2. Watch hazard. Volatile curse pressure. Block Block x1. Deny match. Stasis buffered Sealed. Recall Recall x1. Set memory. Echo + Mirror: recall focus.'
         );
         expect(getTraitInteractionLaneAction('block')).toBe('Deny match');
+        expect(getTraitInteractionLaneRole({ id: 'block' })).toBe('Block');
     });
 
     it('keeps block ahead of recall for pure lockout effects', () => {
