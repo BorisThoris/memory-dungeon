@@ -7449,6 +7449,16 @@
         0 0 1.4rem color-mix(in srgb, var(--theme-glow-gold) 34%, transparent);
 }
 
+.frame[data-pickup-opportunity-tier='cashout'] .pickupOpportunityChip,
+.pickupOpportunityChip[data-pickup-opportunity-tier='cashout'],
+.pickupOpportunityChip[data-pickup-opportunity-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 20%);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.28),
+        0 0 1.16rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent);
+}
+
 .pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] span,
 .pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] strong {
     color: color-mix(in srgb, var(--theme-gold-bright) 96%, white);
@@ -7467,6 +7477,11 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }
 
+.pickupOpportunityChip[data-pickup-opportunity-action='cashout'] .pickupOpportunityChipBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+}
+
 .pickupOpportunityChip[data-pickup-opportunity-focus='reward'] {
     border-color: color-mix(in srgb, var(--theme-success) 46%, var(--theme-gold-bright) 22%);
     background:
@@ -7477,6 +7492,23 @@
     box-shadow:
         0 10px 28px rgba(0, 0, 0, 0.3),
         0 0 18px color-mix(in srgb, var(--theme-success) 18%, transparent);
+}
+
+.frame[data-pickup-opportunity-tier='multi'] .pickupOpportunityChip,
+.pickupOpportunityChip[data-pickup-opportunity-tier='multi'],
+.pickupOpportunityChip[data-pickup-opportunity-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-success) 46%, var(--theme-cyan-bright) 22%);
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.25),
+        0 0 0.92rem color-mix(in srgb, var(--theme-success) 16%, transparent);
+}
+
+.frame[data-pickup-opportunity-tier='reward'] .pickupOpportunityChip,
+.pickupOpportunityChip[data-pickup-opportunity-tier='reward'],
+.pickupOpportunityChip[data-pickup-opportunity-screen-cue='tick'] {
+    box-shadow:
+        0 9px 24px rgba(0, 0, 0, 0.23),
+        0 0 0 1px color-mix(in srgb, var(--theme-success) 12%, transparent);
 }
 
 .pickupOpportunityChip[data-pickup-opportunity-focus='reward'] span,
@@ -7494,6 +7526,17 @@
     border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, var(--theme-success) 18%);
     background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-action='bank'] .pickupOpportunityChipBeatPips i,
+.pickupOpportunityChip[data-pickup-opportunity-action='stack'] .pickupOpportunityChipBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 82%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-success) 22%, transparent);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-beats='3'] .pickupOpportunityChipBeatPips i,
+.pickupOpportunityChip[data-pickup-opportunity-beats='4'] .pickupOpportunityChipBeatPips i {
+    animation-duration: 0.88s;
 }
 
 .pickupOpportunityChip span {

@@ -3544,7 +3544,11 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveTextContent('1 reward');
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveTextContent('Claim before exit');
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveTextContent('Shard spark pickup: +1 combo shard');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-action', 'bank');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-beats', '2');
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-focus', 'reward');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-screen-cue', 'tick');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-tier', 'reward');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveTextContent('First');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveTextContent('Claim before exit');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveTextContent('Then');
@@ -3582,7 +3586,11 @@ describe('TileBoard touch and click controls', () => {
             /Board pickup opportunity.*1 reward.*Claim before exit.*Sequence: First Claim before exit.*Then Bank pickup reward.*Keep Shard spark pickup: \+1 combo shard.*Shard spark pickup: \+1 combo shard/i
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-count', '1');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-action', 'bank');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-beats', '2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-focus', 'reward');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-screen-cue', 'tick');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-tier', 'reward');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-tile-count', '2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-sequence-first', 'Claim before exit');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-sequence-then', 'Bank pickup reward');
@@ -3684,7 +3692,11 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveTextContent('Claim into cashout');
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveTextContent('Double cashout');
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveTextContent('x4 +1 shard in 1 match');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-action', 'cashout');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-beats', '4');
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-focus', 'cashout');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-screen-cue', 'burst');
+        expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-opportunity-tier', 'cashout');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveTextContent('Cash x4 +1 shard in 1 match');
         expect(screen.getByTestId('pickup-opportunity-sequence')).toHaveAttribute('data-pickup-sequence-tone', 'cashout');
         expect(screen.getByTestId('pickup-opportunity-sequence').querySelector('[data-pickup-sequence-phase="then"]')).toHaveAttribute(
@@ -3711,7 +3723,11 @@ describe('TileBoard touch and click controls', () => {
             /Board pickup opportunity.*1 reward.*Claim into cashout.*Sequence: First Claim into cashout.*Then Cash x4 \+1 shard in 1 match.*Keep Shard spark pickup: \+1 combo shard.*Double cashout.*x4 \+1 shard in 1 match.*Shard spark pickup: \+1 combo shard/i
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-sequence-first', 'Claim into cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-action', 'cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-beats', '4');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-focus', 'cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-screen-cue', 'burst');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-opportunity-tier', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-sequence-then', 'Cash x4 +1 shard in 1 match');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-sequence-keep', 'Shard spark pickup: +1 combo shard');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-pickup-sequence-tone', 'cashout');

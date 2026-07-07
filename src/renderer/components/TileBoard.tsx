@@ -164,6 +164,8 @@ type ActivePowerBoardAction = 'clear' | 'pin' | 'recall' | 'remove' | 'swap';
 type ActivePowerBoardTier = 'control' | 'memory' | 'route';
 type BoardTraitModeAction = 'cashout' | 'followup' | 'match' | 'prime' | 'surge';
 type BoardTraitModeTier = 'cashout' | 'prime' | 'route' | 'surge';
+type BoardPickupOpportunityAction = 'bank' | 'cashout' | 'stack';
+type BoardPickupOpportunityTier = 'cashout' | 'multi' | 'reward';
 type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
 type BoardPayoffStackHeat = 'cashout' | 'prime';
 type BoardPayoffStackCrescendoScreenCue = 'burst' | 'pulse' | 'snap' | 'super';
@@ -628,6 +630,37 @@ const boardChainRewardScreenCue = (entry: BoardChainRewardLadderEntry): BoardFee
         return 'pulse';
     }
     return 'tick';
+};
+
+const getBoardPickupOpportunityTier = (
+    focus: 'cashout' | 'reward' | 'none',
+    count: number
+): BoardPickupOpportunityTier => {
+    if (focus === 'cashout') {
+        return 'cashout';
+    }
+    return count > 1 ? 'multi' : 'reward';
+};
+
+const getBoardPickupOpportunityAction = (tier: BoardPickupOpportunityTier): BoardPickupOpportunityAction => {
+    if (tier === 'cashout') {
+        return 'cashout';
+    }
+    return tier === 'multi' ? 'stack' : 'bank';
+};
+
+const getBoardPickupOpportunityScreenCue = (tier: BoardPickupOpportunityTier): BoardFeedbackScreenCue => {
+    if (tier === 'cashout') {
+        return 'burst';
+    }
+    return tier === 'multi' ? 'pulse' : 'tick';
+};
+
+const getBoardPickupOpportunityBeatCount = (tier: BoardPickupOpportunityTier): 2 | 3 | 4 => {
+    if (tier === 'cashout') {
+        return 4;
+    }
+    return tier === 'multi' ? 3 : 2;
 };
 
 const boardChainMilestoneTier = (
@@ -3366,6 +3399,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         ...boardPickupOpportunity.examples
     ]);
     const boardPickupOpportunityFocus = boardPickupOpportunity.sequenceCue?.tone ?? 'none';
+    const boardPickupOpportunityTier =
+        boardPickupOpportunity.count > 0 ? getBoardPickupOpportunityTier(boardPickupOpportunityFocus, boardPickupOpportunity.count) : null;
+    const boardPickupOpportunityAction = boardPickupOpportunityTier ? getBoardPickupOpportunityAction(boardPickupOpportunityTier) : null;
+    const boardPickupOpportunityScreenCue = boardPickupOpportunityTier
+        ? getBoardPickupOpportunityScreenCue(boardPickupOpportunityTier)
+        : null;
+    const boardPickupOpportunityBeatCount = boardPickupOpportunityTier
+        ? getBoardPickupOpportunityBeatCount(boardPickupOpportunityTier)
+        : 0;
     const boardPickupOpportunityMeterFill =
         boardPickupOpportunityFocus === 'cashout'
             ? 100
@@ -4436,7 +4478,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-active-power-screen-cue={activePowerBoardChip?.screenCue ?? 'none'}
             data-active-power-tier={activePowerBoardChip?.tier ?? 'none'}
             data-pickup-opportunity-count={boardPickupOpportunity.count}
+            data-pickup-opportunity-action={boardPickupOpportunityAction ?? 'none'}
+            data-pickup-opportunity-beats={boardPickupOpportunityBeatCount}
             data-pickup-opportunity-focus={boardPickupOpportunityFocus}
+            data-pickup-opportunity-screen-cue={boardPickupOpportunityScreenCue ?? 'none'}
+            data-pickup-opportunity-tier={boardPickupOpportunityTier ?? 'none'}
             data-pickup-sequence-first={boardPickupOpportunity.sequenceCue?.first ?? 'none'}
             data-pickup-sequence-keep={boardPickupOpportunity.sequenceCue?.keep ?? 'none'}
             data-pickup-sequence-then={boardPickupOpportunity.sequenceCue?.then ?? 'none'}
@@ -6434,7 +6480,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             <div
                                 aria-label={boardPickupOpportunityLabel}
                                 className={styles.pickupOpportunityChip}
+                                data-pickup-opportunity-action={boardPickupOpportunityAction ?? 'none'}
+                                data-pickup-opportunity-beats={boardPickupOpportunityBeatCount}
                                 data-pickup-opportunity-focus={boardPickupOpportunityFocus}
+                                data-pickup-opportunity-screen-cue={boardPickupOpportunityScreenCue ?? 'none'}
+                                data-pickup-opportunity-tier={boardPickupOpportunityTier ?? 'none'}
                                 data-pickup-meter-fill={boardPickupOpportunityMeterFill}
                                 data-testid="pickup-opportunity-chip"
                                 role="status"
@@ -6455,12 +6505,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 <span aria-hidden="true" className={styles.pickupOpportunityChipBeatPips}>
                                     {Array.from(
                                         {
-                                            length:
-                                                boardPickupOpportunityFocus === 'cashout'
-                                                    ? 4
-                                                    : boardPickupOpportunity.count > 1
-                                                      ? 3
-                                                      : 2
+                                            length: boardPickupOpportunityBeatCount
                                         },
                                         (_, index) => (
                                             <i
