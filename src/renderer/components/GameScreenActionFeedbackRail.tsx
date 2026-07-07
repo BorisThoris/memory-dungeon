@@ -969,6 +969,9 @@ export const GameScreenActionFeedbackRail = ({
                     data-testid="action-feedback-lane-map"
                 >
                     <span
+                        aria-label={`Action feedback lane summary. ${laneMap.length} ${
+                            laneMap.length === 1 ? 'lane' : 'lanes'
+                        }. ${primaryLane ? `${actionFeedbackLaneRole(primaryLane)} ${primaryLane.label}` : 'No primary lane'}.`}
                         className={styles.actionFeedbackLaneMapSummary}
                         data-action-feedback-lane-count={laneMap.length}
                         data-testid="action-feedback-lane-map-summary"

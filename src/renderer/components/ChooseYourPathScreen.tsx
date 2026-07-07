@@ -804,6 +804,9 @@ const ChooseYourPathScreen = () => {
                         data-testid={`choose-path-mode-lane-map-${def.id}-${placement}`}
                     >
                         <i
+                            aria-label={`Mode lane summary. ${laneMap.length} ${
+                                laneMap.length === 1 ? 'lane' : 'lanes'
+                            }. ${primaryModeLane ? `${modeChoiceLaneRole(primaryModeLane)} ${primaryModeLane.label}` : 'No lead lane'}.`}
                             className={styles.modeLaneMapSummary}
                             data-mode-lane-count={laneMap.length}
                             data-testid={`choose-path-mode-lane-map-summary-${def.id}-${placement}`}

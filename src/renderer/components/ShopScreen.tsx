@@ -1145,6 +1145,9 @@ const ShopScreen = () => {
                         data-testid="shop-offer-lane-map"
                     >
                         <span
+                            aria-label={`Shop offer lane summary. ${offerLaneMap.length} ${
+                                offerLaneMap.length === 1 ? 'lane' : 'lanes'
+                            }. ${primaryOfferLane ? `${shopOfferLaneRole(primaryOfferLane)} ${primaryOfferLane.label}` : 'No lead lane'}.`}
                             className={styles.offerLaneMapSummary}
                             data-shop-offer-lane-count={offerLaneMap.length}
                             data-testid="shop-offer-lane-map-summary"

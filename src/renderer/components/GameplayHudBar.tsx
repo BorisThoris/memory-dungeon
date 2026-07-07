@@ -2331,6 +2331,9 @@ const GameplayHudBar = ({
                                                 data-testid="hud-reward-perk-lane-map"
                                             >
                                                 <span
+                                                    aria-label={`Reward perk lane summary. ${rewardPerkLaneMap.length} ${
+                                                        rewardPerkLaneMap.length === 1 ? 'lane' : 'lanes'
+                                                    }.`}
                                                     className={styles.hudRewardPerkLaneMapSummary}
                                                     data-reward-perk-lane-count={rewardPerkLaneMap.length}
                                                     data-testid="hud-reward-perk-lane-map-summary"
@@ -2518,6 +2521,13 @@ const GameplayHudBar = ({
                                                 data-trait-interaction-lane-role-ids={traitOpportunityLaneRoleIdMapAttr}
                                             >
                                                 <span
+                                                    aria-label={`Trait route lane summary. ${traitOpportunityLaneMap.length} ${
+                                                        traitOpportunityLaneMap.length === 1 ? 'lane' : 'lanes'
+                                                    }. ${
+                                                        primaryTraitOpportunityLane
+                                                            ? `${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
+                                                            : 'No lead lane'
+                                                    }.`}
                                                     className={styles.hudTraitRouteLaneMapSummary}
                                                     data-trait-interaction-lane-count={traitOpportunityLaneMap.length}
                                                     data-testid="hud-trait-route-lane-map-summary"
@@ -2824,6 +2834,9 @@ const GameplayHudBar = ({
                                                 data-testid="hud-chain-reward-forecast"
                                             >
                                                 <span
+                                                    aria-label={`Chain reward forecast summary. ${
+                                                        chainRewardLaneMap.length + chainRewardLadder.length
+                                                    } ${chainRewardLaneMap.length + chainRewardLadder.length === 1 ? 'cue' : 'cues'}.`}
                                                     className={styles.hudChainRewardForecastSummary}
                                                     data-chain-reward-lane-count={chainRewardLaneMap.length}
                                                     data-chain-reward-ladder-count={chainRewardLadder.length}
@@ -2861,6 +2874,11 @@ const GameplayHudBar = ({
                                                 </span>
                                                 {chainRewardLeadCue ? (
                                                     <span
+                                                        aria-label={`Next chain reward. ${chainRewardLeadCue.chaseLabel}. ${getChainRewardLaneAction(
+                                                            chainRewardLeadCue.urgency
+                                                        )}. ${chainRewardLeadCue.label}. ${getChainRewardUrgencyCopy(chainRewardLeadCue)}.${
+                                                            chainRewardLeadStackLabel ? ` ${chainRewardLeadStackLabel}.` : ''
+                                                        }`}
                                                         data-chain-reward-lead-action={getChainRewardLaneAction(chainRewardLeadCue.urgency)}
                                                         data-chain-reward-lead-audio={hudChainRewardAudioCue(chainRewardLeadCue)}
                                                         data-chain-reward-lead-screen-cue={hudChainRewardScreenCue(chainRewardLeadCue)}
@@ -3082,6 +3100,9 @@ const GameplayHudBar = ({
                                         <span className={styles.statVal}>{compactHudAnnouncement}</span>
                                         {recentActionImpact && recentActionImpact.details.length > 0 ? (
                                             <span
+                                                aria-label={`Recent action impact. ${recentActionImpactCue ?? recentActionLabel}. ${
+                                                    recentActionImpact.details.length
+                                                } ${recentActionImpact.details.length === 1 ? 'detail' : 'details'}.`}
                                                 className={styles.hudRecentActionImpact}
                                                 data-burst-tier={recentActionImpact.burstTier}
                                                 data-impact-beats={recentActionImpactBeatCount}
@@ -3155,6 +3176,13 @@ const GameplayHudBar = ({
                                                         data-testid="hud-recent-action-lane-map"
                                                     >
                                                         <span
+                                                            aria-label={`Recent action lane summary. ${recentActionLaneMap.length} ${
+                                                                recentActionLaneMap.length === 1 ? 'lane' : 'lanes'
+                                                            }. ${
+                                                                primaryRecentActionLane
+                                                                    ? `${primaryRecentActionLane.label}: ${primaryRecentActionLane.action}`
+                                                                    : 'No primary lane'
+                                                            }.`}
                                                             className={styles.hudRecentActionLaneMapSummary}
                                                             data-hud-action-lane-count={recentActionLaneMap.length}
                                                             data-testid="hud-recent-action-lane-map-summary"
@@ -3244,6 +3272,7 @@ const GameplayHudBar = ({
                                                 ) : null}
                                                 {recentActionStackSummary ? (
                                                     <span
+                                                        aria-label={`Recent action stack. ${recentActionStackSummary.label}. ${recentActionStackSummary.action}. ${recentActionStackSummary.value}. ${recentActionStackSummary.firstCue}. ${recentActionStackSummary.thenCue}. ${recentActionStackSummary.keepCue}.`}
                                                         data-hud-action-stack-action={recentActionStackSummary.action}
                                                         data-hud-action-stack-first={recentActionStackSummary.firstCue}
                                                         data-hud-action-stack-keep={recentActionStackSummary.keepCue}
@@ -3436,6 +3465,13 @@ const GameplayHudBar = ({
                                                 data-trait-interaction-lane-role-ids={traitOpportunityLaneRoleIdMapAttr}
                                             >
                                                 <span
+                                                    aria-label={`Trait route lane summary. ${traitOpportunityLaneMap.length} ${
+                                                        traitOpportunityLaneMap.length === 1 ? 'lane' : 'lanes'
+                                                    }. ${
+                                                        primaryTraitOpportunityLane
+                                                            ? `${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
+                                                            : 'No lead lane'
+                                                    }.`}
                                                     className={styles.hudTraitRouteLaneMapSummary}
                                                     data-trait-interaction-lane-count={traitOpportunityLaneMap.length}
                                                     data-testid="hud-trait-route-lane-map-summary-details"
@@ -3493,6 +3529,7 @@ const GameplayHudBar = ({
                                         ) : null}
                                         {traitRouteObjectiveStatus ? (
                                             <small
+                                                aria-label={`Trait route details action. ${traitRouteObjectiveStatus.actionLabel}. ${traitRouteObjectiveStatus.stateLabel}. Reward: ${traitRouteObjectiveStatus.reward}.`}
                                                 data-testid="hud-trait-route-details-action"
                                                 data-trait-route-urgency={traitRouteObjectiveStatus.urgency}
                                             >

@@ -5431,6 +5431,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainOpportunity.nextActionLabel ? (
                                     <span
+                                        aria-label={`Next chain action. ${boardChainOpportunityNextActionVerb}. ${
+                                            boardChainOpportunity.nextActionDetail ?? boardChainOpportunity.nextActionLabel
+                                        }.`}
                                         className={styles.chainOpportunityNextAction}
                                         data-chain-next-action={boardChainOpportunity.nextActionId}
                                         data-chain-next-action-meter-fill={boardChainOpportunityNextActionMeterFill}
@@ -5607,6 +5610,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="chain-opportunity-trait-lane-map"
                                     >
                                         <span
+                                            aria-label={`Trait lane summary. ${boardTraitInteractionLaneMap.length} ${
+                                                boardTraitInteractionLaneMap.length === 1 ? 'lane' : 'lanes'
+                                            }. ${primaryBoardTraitInteractionLane ? getTraitInteractionLaneAction(primaryBoardTraitInteractionLane.id) : 'No primary lane'}.`}
                                             className={styles.chainOpportunityTraitLaneMapSummary}
                                             data-testid="chain-opportunity-trait-lane-map-summary"
                                             data-trait-interaction-lane-map-meter-fill={boardTraitInteractionLaneMapMeterFill}
@@ -5702,6 +5708,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="chain-opportunity-marker-key"
                                     >
                                         <span
+                                            aria-label={`Chain marker summary. ${boardChainMarkerKeyRows.length} marker shapes. ${boardChainMarkerKeySummaryAction ?? 'No action'}.`}
                                             className={styles.chainOpportunityMarkerKeySummary}
                                             data-chain-marker-key-action={boardChainMarkerKeySummaryAction ?? 'none'}
                                             data-chain-marker-key-beats={boardChainMarkerKeySummaryBeatCount}
@@ -5789,6 +5796,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>Priority</small>
                                         <span
+                                            aria-label={`Action priority summary. ${cardFeedbackActionPriorityRows.length} ${
+                                                cardFeedbackActionPriorityRows.length === 1 ? 'lane' : 'lanes'
+                                            }. ${cardActionPrioritySummaryAction ?? 'No action'}.`}
                                             className={styles.chainOpportunityActionPrioritySummary}
                                             data-card-action-priority-summary-action={cardActionPrioritySummaryAction ?? 'none'}
                                             data-card-action-priority-summary-beats={cardActionPrioritySummaryBeatCount}
@@ -5864,6 +5874,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>Shot map</small>
                                         <span
+                                            aria-label={`Shot map summary. ${cardFeedbackShotMapRows.length} ${
+                                                cardFeedbackShotMapRows.length === 1 ? 'lane' : 'lanes'
+                                            }. ${cardShotMapSummaryAction ?? 'No action'}.`}
                                             className={styles.chainOpportunityShotMapSummary}
                                             data-chain-shot-map-summary-action={cardShotMapSummaryAction ?? 'none'}
                                             data-chain-shot-map-summary-beats={cardShotMapSummaryBeatCount}
@@ -5934,6 +5947,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>Beat map</small>
                                         <span
+                                            aria-label={`Beat map summary. ${cardFeedbackBeatRows.length} ${
+                                                cardFeedbackBeatRows.length === 1 ? 'lane' : 'lanes'
+                                            }. ${cardBeatMapSummaryAction ?? 'No action'}.`}
                                             className={styles.chainOpportunityBeatMapSummary}
                                             data-card-beat-map-summary-action={cardBeatMapSummaryAction ?? 'none'}
                                             data-card-beat-map-summary-beats={cardBeatMapSummaryBeatCount}
@@ -6008,6 +6024,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     >
                                         <small>Pulse map</small>
                                         <span
+                                            aria-label={`Pulse map summary. ${cardFeedbackCadenceRows.length} ${
+                                                cardFeedbackCadenceRows.length === 1 ? 'lane' : 'lanes'
+                                            }. ${cardCadenceMapSummaryAction ?? 'No action'}.`}
                                             className={styles.chainOpportunityCadenceMapSummary}
                                             data-card-cadence-map-summary-action={cardCadenceMapSummaryAction ?? 'none'}
                                             data-card-cadence-map-summary-beats={cardCadenceMapSummaryBeatCount}
@@ -6080,6 +6099,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="chain-opportunity-trait-lane-beat-map"
                                     >
                                         <span
+                                            aria-label={`Trait beat map summary. ${cardFeedbackTraitLaneBeatRows.length} ${
+                                                cardFeedbackTraitLaneBeatRows.length === 1 ? 'lane' : 'lanes'
+                                            }. ${traitLaneBeatMapSummaryAction ?? 'No action'}.`}
                                             className={styles.chainOpportunityTraitLaneBeatMapSummary}
                                             data-testid="chain-opportunity-trait-lane-beat-map-summary"
                                             data-card-trait-lane-beat-map-summary-action={traitLaneBeatMapSummaryAction ?? 'none'}
@@ -6279,6 +6301,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="chain-opportunity-reward-ladder"
                                     >
                                         <span
+                                            aria-label={`Reward ladder summary. ${boardRewardLadder.length} ${
+                                                boardRewardLadder.length === 1 ? 'reward' : 'rewards'
+                                            }. ${boardRewardLadderSummaryAction ?? 'No action'}.`}
                                             className={styles.chainOpportunityRewardLadderSummary}
                                             data-board-chain-reward-ladder-summary-action={boardRewardLadderSummaryAction ?? 'none'}
                                             data-board-chain-reward-ladder-summary-beats={boardRewardLadderSummaryBeatCount}
@@ -6391,6 +6416,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                         {boardRewardLadder.map((entry) => (
                                             <span
+                                                aria-label={`Chain reward. ${entry.cue.chaseLabel}. ${entry.action}. ${entry.cue.label}. ${entry.progressLabel}. ${entry.remainingLabel}.`}
                                                 data-board-chain-reward-action={entry.action}
                                                 data-board-chain-reward-audio={boardChainRewardAudioCue(entry)}
                                                 data-board-chain-reward-beats={boardChainRewardBeatCount(entry)}
@@ -6462,6 +6488,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainOpportunity.milestoneActionLabel && boardChainOpportunity.milestoneTargetLabel ? (
                                     <span
+                                        aria-label={`Chain milestone. ${boardChainOpportunity.milestoneActionLabel}: ${boardChainOpportunity.milestoneTargetLabel}.`}
                                         className={styles.chainOpportunityMilestone}
                                         data-chain-milestone-meter-fill={boardChainOpportunity.milestoneMeterFill}
                                         data-chain-milestone-screen-cue={boardChainOpportunity.milestoneScreenCue ?? 'none'}
@@ -7162,6 +7189,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 role="group"
                             >
                                 <span
+                                    aria-label={`Opportunity summary. ${boardOpportunityCompassRows.length} ${
+                                        boardOpportunityCompassRows.length === 1 ? 'play' : 'plays'
+                                    }. Best action: ${boardOpportunityCompassSummaryActionLabel}.`}
                                     className={styles.opportunityCompassSummary}
                                     data-opportunity-compass-summary-action={boardOpportunityCompassSummaryAction ?? 'none'}
                                     data-opportunity-compass-summary-action-label={boardOpportunityCompassSummaryActionLabel}
@@ -7320,6 +7350,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="board-opportunity-lane-map"
                                     >
                                         <span
+                                            aria-label={`Opportunity lane summary. ${boardOpportunityLaneMapRows.length} ${
+                                                boardOpportunityLaneMapRows.length === 1 ? 'lane' : 'lanes'
+                                            }. ${primaryBoardOpportunityLane ? `${primaryBoardOpportunityLane.action}: ${primaryBoardOpportunityLane.cue}` : 'No primary lane'}.`}
                                             className={styles.opportunityLaneMapSummary}
                                             data-opportunity-lane-map-action={boardOpportunityLaneMapSummaryAction ?? 'none'}
                                             data-opportunity-lane-map-beats={boardOpportunityLaneMapSummaryBeatCount}

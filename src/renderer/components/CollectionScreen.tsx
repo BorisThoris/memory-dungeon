@@ -497,6 +497,13 @@ const CollectionScreen = () => {
                                         data-testid="collection-last-run-payoff-lane-map"
                                     >
                                         <i
+                                            aria-label={`Last run payoff lane summary. ${lastRunPayoffLaneMap.length} ${
+                                                lastRunPayoffLaneMap.length === 1 ? 'lane' : 'lanes'
+                                            }. ${
+                                                primaryLastRunPayoffLane
+                                                    ? `${getRunPayoffLaneRole(primaryLastRunPayoffLane)} ${primaryLastRunPayoffLane.label}`
+                                                    : 'No lead lane'
+                                            }.`}
                                             className={styles.runPayoffLaneMapSummary}
                                             data-run-payoff-lane-count={lastRunPayoffLaneMap.length}
                                             data-testid="collection-last-run-payoff-lane-map-summary"

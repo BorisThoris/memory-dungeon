@@ -1225,6 +1225,13 @@ const SideRoomScreen = () => {
                                     data-testid="side-room-choice-lane-map"
                                 >
                                     <span
+                                        aria-label={`Side room choice lane summary. ${choiceLaneMap.length} ${
+                                            choiceLaneMap.length === 1 ? 'lane' : 'lanes'
+                                        }. ${
+                                            primaryChoiceLane
+                                                ? `${sideRoomChoiceLaneRole(primaryChoiceLane)} ${primaryChoiceLane.label}`
+                                                : 'No lead lane'
+                                        }.`}
                                         className={styles.choiceLaneMapSummary}
                                         data-choice-lane-count={choiceLaneMap.length}
                                         data-testid="side-room-choice-lane-map-summary"

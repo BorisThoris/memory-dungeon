@@ -4710,6 +4710,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-testid="match-score-floater-payoff-lane-map"
                                         >
                                             <span
+                                                aria-label={`Match payoff lane summary. ${boardFloaterPayload.payoffLaneMap.length} ${
+                                                    boardFloaterPayload.payoffLaneMap.length === 1 ? 'lane' : 'lanes'
+                                                }. ${
+                                                    boardFloaterPrimaryPayoffLane
+                                                        ? `${matchPayoffLaneAction(boardFloaterPrimaryPayoffLane)}: ${boardFloaterPrimaryPayoffLane.label}`
+                                                        : 'No primary lane'
+                                                }.`}
                                                 className={styles.boardFloaterPayoffLaneMapSummary}
                                                 data-match-payoff-lane-count={boardFloaterPayload.payoffLaneMap.length}
                                                 data-testid="match-score-floater-payoff-lane-map-summary"
@@ -4827,6 +4834,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-testid="match-score-floater-payoff-ladder"
                                         >
                                             <span
+                                                aria-label={`Match payoff ladder summary. ${
+                                                    boardFloaterPayload.payoffLadder.lanes?.length ?? 0
+                                                } ${(boardFloaterPayload.payoffLadder.lanes?.length ?? 0) === 1 ? 'lane' : 'lanes'}.`}
                                                 className={styles.boardFloaterPayoffLadderSummary}
                                                 data-match-payoff-ladder-count={boardFloaterPayload.payoffLadder.lanes?.length ?? 0}
                                                 data-testid="match-score-floater-payoff-ladder-summary"
@@ -4962,6 +4972,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-testid="match-score-floater-reward-forecast"
                                         >
                                             <span
+                                                aria-label={`Match reward forecast summary. ${
+                                                    boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length
+                                                } ${
+                                                    boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length === 1
+                                                        ? 'reward'
+                                                        : 'rewards'
+                                                }.`}
                                                 className={styles.boardFloaterRewardForecastSummary}
                                                 data-chain-reward-forecast-count={boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length}
                                                 data-testid="match-score-floater-reward-forecast-summary"
@@ -5152,6 +5169,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             data-testid="match-score-floater-trait-lane-map"
                                         >
                                             <span
+                                                aria-label={`Match trait lane summary. ${boardFloaterTraitLaneMap.length} ${
+                                                    boardFloaterTraitLaneMap.length === 1 ? 'lane' : 'lanes'
+                                                }. ${
+                                                    boardFloaterPrimaryTraitLane
+                                                        ? `${getTraitInteractionLaneRole(boardFloaterPrimaryTraitLane)} ${boardFloaterPrimaryTraitLane.label}`
+                                                        : 'No primary lane'
+                                                }.`}
                                                 className={styles.boardFloaterTraitLaneMapSummary}
                                                 data-match-trait-lane-count={boardFloaterTraitLaneMap.length}
                                                 data-match-trait-lane-summary-fill={boardFloaterTraitLaneMapSummaryFill}

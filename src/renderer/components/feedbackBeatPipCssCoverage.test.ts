@@ -150,6 +150,12 @@ type ProgressReadabilityGap = {
     lineNumber: number;
 };
 
+type FeedbackSummaryReadabilityGap = {
+    fileName: string;
+    lineNumber: number;
+    testId: string;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -842,6 +848,35 @@ const findProgressReadabilityGaps = (): ProgressReadabilityGap[] => {
     return gaps;
 };
 
+const findFeedbackSummaryReadabilityGaps = (): FeedbackSummaryReadabilityGap[] => {
+    const gaps: FeedbackSummaryReadabilityGap[] = [];
+    const feedbackSummaryElementPattern =
+        /<[A-Za-z][^<>]*\bdata-testid=(?:"([^"]*summary[^"]*)"|\{`([^`]*summary[^`]*)`\})[^<>]*>/gs;
+
+    for (const { fileName, text } of readComponentSourceFiles().filter(({ fileName }) => !fileName.includes('.test.'))) {
+        for (const match of text.matchAll(feedbackSummaryElementPattern)) {
+            const tag = match[0]!;
+            const testId = match[1] ?? match[2] ?? 'summary';
+            const carriesFeedbackState =
+                /\bdata-[A-Za-z0-9-]*(?:action|priority|urgency|heat|tier|tone|screen-cue|meter-fill|fill|count)\b/.test(tag);
+            const hasReadableContract =
+                /\baria-label=/.test(tag) ||
+                /\baria-labelledby=/.test(tag) ||
+                /\btitle=/.test(tag);
+
+            if (carriesFeedbackState && !hasReadableContract) {
+                gaps.push({
+                    fileName,
+                    lineNumber: text.slice(0, match.index ?? 0).split(/\r?\n/).length,
+                    testId
+                });
+            }
+        }
+    }
+
+    return gaps;
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -1002,6 +1037,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findProgressReadabilityGaps(),
             'progress metadata should expose a readable label or progressbar semantics instead of only visual telemetry'
+        ).toEqual([]);
+    });
+
+    it('keeps feedback summary chips paired with readable labels', () => {
+        expect(
+            findFeedbackSummaryReadabilityGaps(),
+            'feedback summary chips with state metadata should expose a readable label instead of only fragmented child text'
         ).toEqual([]);
     });
 });
