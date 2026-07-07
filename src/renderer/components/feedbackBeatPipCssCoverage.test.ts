@@ -1461,6 +1461,68 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-opportunity-lane-map-screen-cue='risk'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.22rem/);
     });
 
+    it('keeps chain planning summary action beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'card action priority cashout should read as fast payout beats'
+        ).toMatch(/data-card-action-priority-summary-action='cashout'[\s\S]*?\.chainOpportunityActionPrioritySummaryBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'card action priority followup should stay horizontal route guidance'
+        ).toMatch(/data-card-action-priority-summary-action='followup'[\s\S]*?\.chainOpportunityActionPrioritySummaryBeatPips i[\s\S]*?width:\s*0\.2rem/);
+        expect(
+            cssText,
+            'card action priority perk should use reward utility geometry'
+        ).toMatch(/data-card-action-priority-summary-action='perk'[\s\S]*?\.chainOpportunityActionPrioritySummaryBeatPips i[\s\S]*?height:\s*0\.14rem/);
+        expect(
+            cssText,
+            'card action priority bank should use taller hold beats'
+        ).toMatch(/data-card-action-priority-summary-action='bank'[\s\S]*?\.chainOpportunityActionPrioritySummaryBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'chain shot map cashout should read as fast payout beats'
+        ).toMatch(/data-chain-shot-map-summary-action='cashout'[\s\S]*?\.chainOpportunityShotMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'chain shot map setup should keep slower setup beats'
+        ).toMatch(/data-chain-shot-map-summary-action='setup'[\s\S]*?\.chainOpportunityShotMapSummaryBeatPips i[\s\S]*?animation-duration:\s*1s/);
+    });
+
+    it('keeps chain planning summary screen cues visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".chainOpportunityActionPrioritySummary[data-card-action-priority-summary-screen-cue='burst'] .chainOpportunityActionPrioritySummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityActionPrioritySummary[data-card-action-priority-summary-screen-cue='guard'] .chainOpportunityActionPrioritySummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityActionPrioritySummary[data-card-action-priority-summary-screen-cue='pulse'] .chainOpportunityActionPrioritySummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityActionPrioritySummary[data-card-action-priority-summary-screen-cue='tick'] .chainOpportunityActionPrioritySummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityShotMapSummary[data-chain-shot-map-summary-screen-cue='burst'] .chainOpportunityShotMapSummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityShotMapSummary[data-chain-shot-map-summary-screen-cue='guard'] .chainOpportunityShotMapSummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityShotMapSummary[data-chain-shot-map-summary-screen-cue='pulse'] .chainOpportunityShotMapSummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityShotMapSummary[data-chain-shot-map-summary-screen-cue='tick'] .chainOpportunityShotMapSummaryBeatPips i");
+        expect(
+            cssText,
+            'card action priority burst cues should stay fastest and high-emphasis'
+        ).toMatch(/data-card-action-priority-summary-screen-cue='burst'[\s\S]*?\.chainOpportunityActionPrioritySummaryBeatPips i[\s\S]*?animation-duration:\s*0\.66s/);
+        expect(
+            cssText,
+            'card action priority guard cues should use taller defensive beats'
+        ).toMatch(/data-card-action-priority-summary-screen-cue='guard'[\s\S]*?\.chainOpportunityActionPrioritySummaryBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'chain shot map pulse cues should use mid-tempo guidance'
+        ).toMatch(/data-chain-shot-map-summary-screen-cue='pulse'[\s\S]*?\.chainOpportunityShotMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'chain shot map tick cues should stay quiet and slow'
+        ).toMatch(/data-chain-shot-map-summary-screen-cue='tick'[\s\S]*?\.chainOpportunityShotMapSummaryBeatPips i[\s\S]*?animation-duration:\s*1\.34s/);
+    });
+
     it('keeps payoff stack tones visually distinct in board beat pips', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
