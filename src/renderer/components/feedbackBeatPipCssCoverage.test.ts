@@ -107,6 +107,11 @@ type OpportunityLaneRoleSelectorGap = {
     role: string;
 };
 
+type VisibleToneSelectorGap = {
+    attr: string;
+    value: string;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -279,6 +284,24 @@ const findOpportunityLaneRoleSelectorGaps = (): OpportunityLaneRoleSelectorGap[]
     );
 };
 
+const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
+    const cssText = readComponentCssFiles()
+        .map(({ text }) => text)
+        .join('\n');
+    const visibleToneContracts: Record<string, readonly string[]> = {
+        'data-board-chain-reward-lead-tone': ['guard', 'heal', 'reward'],
+        'data-chain-combo-surge-band-tone': ['surge'],
+        'data-chain-reward-lead-tone': ['guard', 'heal', 'reward'],
+        'data-chain-surge-band-tone': ['surge']
+    };
+
+    return Object.entries(visibleToneContracts).flatMap(([attr, values]) =>
+        values
+            .filter((value) => !cssText.includes(`[${attr}='${value}']`) && !cssText.includes(`[${attr}="${value}"]`))
+            .map((value) => ({ attr, value }))
+    );
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -383,6 +406,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findOpportunityLaneRoleSelectorGaps(),
             'board opportunity role metadata should drive visible lane styling instead of only telemetry'
+        ).toEqual([]);
+    });
+
+    it('keeps visible board and HUD tone metadata wired to CSS selectors', () => {
+        expect(
+            findVisibleToneSelectorGaps(),
+            'visible tone metadata should drive styling instead of only telemetry'
         ).toEqual([]);
     });
 });

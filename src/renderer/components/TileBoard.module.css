@@ -4601,6 +4601,23 @@
     background: color-mix(in srgb, var(--theme-void) 34%, transparent);
 }
 
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='reward'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 16%);
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='guard'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, var(--theme-gold-bright) 12%);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='heal'] {
+    border-color: color-mix(in srgb, var(--theme-success) 44%, var(--theme-cyan-bright) 12%);
+    background: color-mix(in srgb, var(--theme-success) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
 .chainOpportunityRewardLead small,
 .chainOpportunityRewardLead b,
 .chainOpportunityRewardLead strong,
@@ -5360,6 +5377,21 @@
 
 .chainOpportunitySurgeBandBeatPips i[data-chain-surge-band-beat-focus='support'] {
     opacity: 0.72;
+}
+
+.chainOpportunitySurgeBand[data-chain-surge-band-tone='surge'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 64%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 22%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 14%, transparent),
+        0 0 1.08rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+}
+
+.chainOpportunitySurgeBand[data-chain-surge-band-tone='surge'] .chainOpportunitySurgeBandBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 32%, transparent);
 }
 
 .chainOpportunityPayoffBurst {
