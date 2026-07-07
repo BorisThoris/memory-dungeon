@@ -6138,6 +6138,14 @@
     box-shadow: 0 18px 48px color-mix(in srgb, var(--theme-shadow) 34%, transparent);
 }
 
+.hudTertiaryDetails .statRailTertiary[data-hud-priority='tertiary'] {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 18%, transparent);
+}
+
+.hudTertiaryDetails .statRailTertiary[data-hud-priority='tertiary'] .statPillCompact {
+    background: color-mix(in srgb, var(--theme-void) 42%, transparent);
+}
+
 .hudDeck .statKey {
     color: var(--theme-gold-bright);
     font-family: var(--ui-font-display-family);
@@ -6913,6 +6921,14 @@
     flex-wrap: wrap;
     align-items: stretch;
     gap: var(--gameplay-hud-context-gap, 0.45rem);
+}
+
+.statRail[data-hud-priority='secondary'] {
+    align-content: flex-start;
+}
+
+.statRail[data-hud-priority='secondary'] .statPillCompact {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 12%, var(--theme-border));
 }
 
 .statPill {

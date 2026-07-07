@@ -518,6 +518,7 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-board-chain-reward-urgency': ['later', 'next', 'soon'],
         'data-active-power-step': ['first', 'then'],
         'data-active-power-step-beat-phase': ['first', 'then'],
+        'data-hud-priority': ['secondary', 'tertiary'],
         'data-card-beat-tier': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
         'data-card-beat-primary-tone': ['cashout', 'followup', 'route', 'setup', 'surge'],
         'data-card-beat-tone': ['cashout', 'followup', 'route', 'setup', 'surge'],

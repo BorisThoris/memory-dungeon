@@ -116,6 +116,8 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-endless-risk-wager')).toHaveTextContent('Protect streak');
         expect(screen.getByTestId('hud-endless-risk-wager').querySelectorAll('[data-hud-risk-wager-beat]')).toHaveLength(4);
         expect(screen.getByTestId('hud-secondary-stat-drawer')).toHaveTextContent('More');
+        expect(screen.getByTestId('hud-wing-right').querySelector('[data-hud-priority="secondary"]')).toBeTruthy();
+        expect(screen.getByTestId('hud-secondary-stat-drawer').querySelector('[data-hud-priority="tertiary"]')).toBeTruthy();
     });
 
     it('shows boss encounter identity on boss-tagged floors', () => {
