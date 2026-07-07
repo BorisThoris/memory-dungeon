@@ -685,6 +685,43 @@
     opacity: 0.5;
 }
 
+.frame[data-card-feedback-marker-shapes*='payoff-stack:'],
+.frame[data-card-feedback-marker-shapes*='payoff-bar:'] {
+    --board-marker-shape-cue-color: color-mix(in srgb, var(--theme-gold-bright) 50%, var(--theme-cyan-bright) 16%);
+}
+
+.frame[data-card-feedback-marker-shapes*='combo-surge:'] {
+    --board-marker-shape-cue-color: color-mix(in srgb, var(--theme-violet-bright) 46%, var(--theme-gold-bright) 22%);
+}
+
+.frame[data-card-feedback-marker-shapes*='linked-route:'],
+.frame[data-card-feedback-marker-shapes*='swap-target-crossbar:'] {
+    --board-marker-shape-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 40%, var(--theme-violet-bright) 16%);
+}
+
+.frame[data-card-feedback-marker-shapes*='followup-target:'] {
+    --board-marker-shape-cue-color: color-mix(in srgb, #fff7c4 40%, var(--theme-cyan-bright) 18%);
+}
+
+.frame[data-card-feedback-marker-shapes*='perk-armed-bar:'] {
+    --board-marker-shape-cue-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-gold-bright) 20%);
+}
+
+.frame[data-card-feedback-marker-shapes*='combo-surge:'] .stage::after,
+.frame[data-card-feedback-marker-shapes*='followup-target:'] .stage::after,
+.frame[data-card-feedback-marker-shapes*='linked-route:'] .stage::after,
+.frame[data-card-feedback-marker-shapes*='payoff-bar:'] .stage::after,
+.frame[data-card-feedback-marker-shapes*='payoff-stack:'] .stage::after,
+.frame[data-card-feedback-marker-shapes*='perk-armed-bar:'] .stage::after,
+.frame[data-card-feedback-marker-shapes*='swap-target-crossbar:'] .stage::after {
+    border-color: var(--board-marker-shape-cue-color);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--board-marker-shape-cue-color) 32%, transparent),
+        inset 0 0 24px color-mix(in srgb, var(--board-marker-shape-cue-color) 16%, transparent),
+        0 0 18px color-mix(in srgb, var(--board-marker-shape-cue-color) 12%, transparent);
+    opacity: 0.52;
+}
+
 .frame[data-chain-opportunity-next-action='cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='bank-lane:cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='cash-now:cashout'] .stage::after,
