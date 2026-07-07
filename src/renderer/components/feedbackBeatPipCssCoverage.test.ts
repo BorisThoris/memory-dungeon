@@ -1398,6 +1398,52 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-opportunity-compass-summary-screen-cue='tick'[\s\S]*?animation-duration:\s*1\.38s/);
     });
 
+    it('keeps payoff stack tones visually distinct in board beat pips', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout payoff stacks should read as fast horizontal payout beats'
+        ).toMatch(/data-payoff-stack-tone='cashout'[\s\S]*?\.opportunityPayoffStackBeatPips i[\s\S]*?animation-duration:\s*0\.74s/);
+        expect(
+            cssText,
+            'build payoff stacks should read as taller prime setup beats'
+        ).toMatch(/data-payoff-stack-tone='build'[\s\S]*?\.opportunityPayoffStackBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'followup payoff stacks should keep mid-tempo route timing'
+        ).toMatch(/data-payoff-stack-tone='followup'[\s\S]*?\.opportunityPayoffStackBeatPips i[\s\S]*?animation-duration:\s*0\.92s/);
+        expect(
+            cssText,
+            'super payoff stacks should read as the fastest widest payout stack'
+        ).toMatch(/data-payoff-stack-cue-id='super'[\s\S]*?\.opportunityPayoffStackBeatPips i[\s\S]*?animation-duration:\s*0\.58s/);
+    });
+
+    it('keeps payoff stack crescendo cues and tiers visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'prime crescendo should use slower setup beat timing'
+        ).toMatch(/data-payoff-stack-crescendo-tier='prime'[\s\S]*?\.opportunityPayoffCrescendo strong i[\s\S]*?animation-duration:\s*1\.08s/);
+        expect(
+            cssText,
+            'snap crescendo should use quick cashout beat timing'
+        ).toMatch(/data-payoff-stack-crescendo-screen-cue='snap'[\s\S]*?\.opportunityPayoffCrescendo strong i[\s\S]*?animation-duration:\s*0\.78s/);
+        expect(
+            cssText,
+            'stack crescendo should use wider stacked payoff beats'
+        ).toMatch(/data-payoff-stack-crescendo-tier='stack'[\s\S]*?\.opportunityPayoffCrescendo strong i[\s\S]*?width:\s*0\.26rem/);
+        expect(
+            cssText,
+            'super crescendo should use the fastest highest-emphasis beats'
+        ).toMatch(/data-payoff-stack-crescendo-tier='super'[\s\S]*?\.opportunityPayoffCrescendo strong i[\s\S]*?animation-duration:\s*0\.58s/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),

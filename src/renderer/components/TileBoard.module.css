@@ -9540,6 +9540,13 @@
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 14%);
 }
 
+.opportunityPayoffStack[data-payoff-stack-crescendo-tier='prime'] .opportunityPayoffCrescendo strong i {
+    width: 0.18rem;
+    height: 0.18rem;
+    animation-duration: 1.08s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
+}
+
 .opportunityPayoffStack small {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
     font-size: 0.54rem;
@@ -9668,9 +9675,26 @@
     border-color: color-mix(in srgb, var(--theme-success) 46%, var(--theme-gold-bright) 20%);
 }
 
+.opportunityPayoffStack[data-payoff-stack-crescendo-screen-cue='pulse'] .opportunityPayoffCrescendo strong i {
+    animation-duration: 0.96s;
+}
+
+.opportunityPayoffStack[data-payoff-stack-crescendo-screen-cue='snap'] .opportunityPayoffCrescendo strong i {
+    width: 0.28rem;
+    height: 0.16rem;
+    animation-duration: 0.78s;
+    background: color-mix(in srgb, var(--theme-success) 82%, var(--theme-gold-bright) 18%);
+}
+
 .opportunityPayoffStack[data-payoff-stack-crescendo-screen-cue='burst'] .opportunityPayoffCrescendo,
 .opportunityPayoffStack[data-payoff-stack-crescendo-screen-cue='super'] .opportunityPayoffCrescendo {
     box-shadow: 0 0 0.86rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.opportunityPayoffStack[data-payoff-stack-crescendo-screen-cue='burst'] .opportunityPayoffCrescendo strong i {
+    width: 0.3rem;
+    height: 0.18rem;
+    animation-duration: 0.72s;
 }
 
 .opportunityPayoffStack[data-payoff-stack-crescendo-tier='stack'] .opportunityPayoffCrescendo,
@@ -9679,10 +9703,27 @@
     box-shadow: 0 0 0.75rem color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
 }
 
+.opportunityPayoffStack[data-payoff-stack-crescendo-tier='stack'] .opportunityPayoffCrescendo strong i {
+    width: 0.26rem;
+    height: 0.14rem;
+    animation-duration: 0.82s;
+}
+
 .opportunityPayoffStack[data-payoff-stack-crescendo-tier='super'] .opportunityPayoffCrescendo {
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-violet-bright) 10%, transparent)),
         color-mix(in srgb, var(--theme-void) 34%, transparent);
+}
+
+.opportunityPayoffStack[data-payoff-stack-crescendo-tier='super'] .opportunityPayoffCrescendo strong i,
+.opportunityPayoffStack[data-payoff-stack-crescendo-screen-cue='super'] .opportunityPayoffCrescendo strong i {
+    width: 0.34rem;
+    height: 0.2rem;
+    animation-duration: 0.58s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, var(--theme-violet-bright) 12%);
+    box-shadow:
+        0 0 0.48rem color-mix(in srgb, var(--theme-gold-bright) 38%, transparent),
+        0 0 0.7rem color-mix(in srgb, var(--theme-violet-bright) 16%, transparent);
 }
 
 .opportunityPayoffStack .opportunityPayoffCrescendo small,
@@ -9834,6 +9875,35 @@
 
 .opportunityPayoffStackBeatPips i[data-opportunity-payoff-beat-focus='support'] {
     opacity: 0.7;
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='cashout'] .opportunityPayoffStackBeatPips i,
+.opportunityPayoffStack[data-payoff-stack-cue-id='cashout'] .opportunityPayoffStackBeatPips i {
+    width: 0.28rem;
+    height: 0.12rem;
+    animation-duration: 0.74s;
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='build'] .opportunityPayoffStackBeatPips i,
+.opportunityPayoffStack[data-payoff-stack-cue-id='prime'] .opportunityPayoffStackBeatPips i {
+    width: 0.14rem;
+    height: 0.2rem;
+    animation-duration: 1.08s;
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, var(--theme-cyan-bright) 18%);
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='followup'] .opportunityPayoffStackBeatPips i,
+.opportunityPayoffStack[data-payoff-stack-cue-id='followup'] .opportunityPayoffStackBeatPips i {
+    width: 0.22rem;
+    animation-duration: 0.92s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+}
+
+.opportunityPayoffStack[data-payoff-stack-cue-id='super'] .opportunityPayoffStackBeatPips i {
+    width: 0.34rem;
+    height: 0.16rem;
+    animation-duration: 0.58s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, var(--theme-violet-bright) 14%);
 }
 
 .opportunityPayoffStack [data-payoff-stack-sequence-step] {
