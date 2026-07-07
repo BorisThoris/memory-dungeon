@@ -130,6 +130,7 @@ type BoardOpportunityTone =
     | 'risk'
     | 'setup'
     | 'trait';
+type ChainOpportunityBeatActionId = 'cashout' | 'followup' | 'route' | 'setup' | 'surge';
 type BoardOpportunityCompassRow = {
     action: string;
     detail: string;
@@ -247,6 +248,17 @@ const getBoardOpportunityHeat = (impactCue: string): BoardOpportunityHeat => {
         return 'prime';
     }
     return 'normal';
+};
+
+const getChainOpportunityBeatActionId = (signal: ChainOpportunityBeatSignal | null): ChainOpportunityBeatActionId | null => {
+    if (!signal) {
+        return null;
+    }
+    if (signal.tier === 'cashout') return 'cashout';
+    if (signal.tier === 'surge') return 'surge';
+    if (signal.tier === 'follow-up') return 'followup';
+    if (signal.tier === 'route') return 'route';
+    return 'setup';
 };
 
 const getBoardOpportunityImpactCueId = (impactCue: string): BoardOpportunityImpactCueId => {
@@ -3480,6 +3492,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                       )
                   .join('. ')}.${boardOpportunityLaneMapRows.length > 1 ? ` ${boardOpportunityLaneMapAccessibleLabel}` : ''}`
             : 'Board opportunity compass';
+    const boardChainOpportunityBeatActionId = getChainOpportunityBeatActionId(boardChainOpportunity.beatSignal);
     const boardChainOpportunityLabel = formatBoardFeedbackLabel('Board chain opportunity', [
         boardChainOpportunity.priorityLabel,
         boardChainOpportunity.nextActionLabel,
@@ -4803,6 +4816,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-trait-interaction-lane-count={boardTraitInteractionLaneMap.length}
             data-chain-opportunity-target-plan={boardChainOpportunity.targetPlanLabel ?? 'none'}
             data-chain-opportunity-beat-action={boardChainOpportunity.beatSignal?.action ?? 'none'}
+            data-chain-opportunity-beat-action-id={boardChainOpportunityBeatActionId ?? 'none'}
             data-chain-opportunity-beat-audio={boardChainOpportunity.beatSignal?.audioCue ?? 'none'}
             data-chain-opportunity-beat-count={boardChainOpportunity.beatSignal?.beatCount ?? 0}
             data-chain-opportunity-beat-cue={boardChainOpportunity.beatSignal?.cue ?? 'none'}
@@ -5329,6 +5343,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={formatChainOpportunityBeatLabel(boardChainOpportunity.beatSignal)}
                                         className={styles.chainOpportunityBeat}
                                         data-chain-beat-action={boardChainOpportunity.beatSignal.action}
+                                        data-chain-beat-action-id={boardChainOpportunityBeatActionId ?? 'none'}
                                         data-chain-beat-meter-fill={Math.round((boardChainOpportunity.beatSignal.beatCount / 5) * 100)}
                                         data-chain-beat-audio={boardChainOpportunity.beatSignal.audioCue}
                                         data-chain-beat-screen-cue={boardChainOpportunity.beatSignal.screenCue}
@@ -5353,6 +5368,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     <i
                                                         aria-hidden="true"
                                                         data-chain-opportunity-beat-pip={index + 1}
+                                                        data-chain-opportunity-beat-pip-action={boardChainOpportunityBeatActionId ?? 'none'}
                                                         data-chain-opportunity-beat-pip-focus={index === 0 ? 'primary' : 'support'}
                                                         key={`chain-opportunity-beat-${index}`}
                                                     />

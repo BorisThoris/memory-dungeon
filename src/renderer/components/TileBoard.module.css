@@ -477,6 +477,8 @@
 .frame[data-chain-opportunity-screen-cue='super'] .stage::after,
 .frame[data-chain-opportunity-beat-screen-cue='burst'] .stage::after,
 .frame[data-chain-opportunity-beat-screen-cue='super'] .stage::after,
+.frame[data-chain-opportunity-beat-action-id='cashout'] .stage::after,
+.frame[data-chain-opportunity-beat-action-id='surge'] .stage::after,
 .frame[data-card-feedback-primary-shot-screen-cue='burst'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-role='Cashout'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-screen-cue='burst'] .stage::after {
@@ -491,6 +493,8 @@
 .frame[data-opportunity-best-screen-cue='pulse'],
 .frame[data-chain-opportunity-screen-cue='pulse'],
 .frame[data-chain-opportunity-beat-screen-cue='pulse'],
+.frame[data-chain-opportunity-beat-action-id='followup'],
+.frame[data-chain-opportunity-beat-action-id='setup'],
 .frame[data-card-feedback-primary-shot-screen-cue='pulse'],
 .frame[data-card-feedback-trait-lane-primary-role='Recall'],
 .frame[data-card-feedback-trait-lane-primary-screen-cue='pulse'] {
@@ -498,7 +502,8 @@
 }
 
 .frame[data-chain-opportunity-screen-cue='snap'],
-.frame[data-chain-opportunity-beat-screen-cue='snap'] {
+.frame[data-chain-opportunity-beat-screen-cue='snap'],
+.frame[data-chain-opportunity-beat-action-id='route'] {
     --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
 }
 
@@ -1384,6 +1389,21 @@
     opacity: 0.72;
 }
 
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-action='cashout'],
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-action='surge'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 80%, white 8%);
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+}
+
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-action='followup'],
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-action='route'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 80%, white 8%);
+}
+
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-action='setup'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white 10%);
+}
+
 .chainOpportunityBeat i:nth-child(2) {
     animation-delay: 0.07s;
 }
@@ -1407,14 +1427,17 @@
     font-weight: 820;
 }
 
-.chainOpportunityBeat[data-chain-beat-tier='setup'] {
+.chainOpportunityBeat[data-chain-beat-tier='setup'],
+.chainOpportunityBeat[data-chain-beat-action-id='setup'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, transparent);
     background: color-mix(in srgb, var(--theme-violet-bright) 10%, var(--theme-void) 38%);
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
 }
 
 .chainOpportunityBeat[data-chain-beat-tier='route'],
-.chainOpportunityBeat[data-chain-beat-tier='follow-up'] {
+.chainOpportunityBeat[data-chain-beat-tier='follow-up'],
+.chainOpportunityBeat[data-chain-beat-action-id='route'],
+.chainOpportunityBeat[data-chain-beat-action-id='followup'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 16%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 15%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
@@ -1422,7 +1445,8 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 90%, white);
 }
 
-.chainOpportunityBeat[data-chain-beat-tier='surge'] {
+.chainOpportunityBeat[data-chain-beat-tier='surge'],
+.chainOpportunityBeat[data-chain-beat-action-id='surge'] {
     border-color: color-mix(in srgb, var(--theme-success) 40%, var(--theme-gold-bright) 22%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 13%, transparent), color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)),
@@ -1430,7 +1454,8 @@
     color: color-mix(in srgb, var(--theme-success) 76%, white);
 }
 
-.chainOpportunityBeat[data-chain-beat-tier='cashout'] {
+.chainOpportunityBeat[data-chain-beat-tier='cashout'],
+.chainOpportunityBeat[data-chain-beat-action-id='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, white 10%);
     background:
         radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), transparent 68%),

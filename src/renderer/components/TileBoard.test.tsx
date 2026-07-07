@@ -455,6 +455,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Cash out');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Match lit route for reward');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action', 'Cash out');
+        expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action-id', 'cashout');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-audio', 'cashout-beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-screen-cue', 'super');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'cashout');
@@ -466,6 +467,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
             'data-chain-opportunity-beat-pip-focus',
             'primary'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-action',
+            'cashout'
         );
         expect(
             screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="2"]')
@@ -900,6 +905,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-target-plan', 'Push x6 reward');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-count', '5');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action', 'Cash out');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action-id', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-audio', 'cashout-beat');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-cue', 'super');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-screen-cue', 'super');
@@ -2018,6 +2024,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-next-action-tone', 'ready');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-count', '3');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action', 'Tap follow-up');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action-id', 'followup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-audio', 'follow-up-beat');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-cue', 'snap');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-screen-cue', 'snap');
@@ -2034,6 +2041,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveTextContent('1 follow-up marked');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Follow-up beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('1 follow-up marked');
+        expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action-id', 'followup');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-meter-fill', '60');
         expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(3);
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-cue', 'Follow up');
@@ -2447,6 +2455,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-recipes', 'Echo + Sealed');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-count', '3');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action', 'Match route');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action-id', 'route');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-audio', 'route-beat');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-cue', 'snap');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-screen-cue', 'snap');
@@ -2454,6 +2463,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-tier', 'route');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Route beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('1 route ready');
+        expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action-id', 'route');
         expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(3);
         expect(screen.getByTestId('chain-opportunity-recipes')).toHaveTextContent('Echo + Sealed');
         expect(screen.getByTestId('chain-opportunity-recipes')).toHaveAccessibleName('Combo recipes. Echo + Sealed');
@@ -3107,6 +3117,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-callout-tone', 'surge');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-count', '4');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action', 'Chain routes');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action-id', 'surge');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-audio', 'surge-beat');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-cue', 'burst');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-screen-cue', 'burst');
@@ -3116,6 +3127,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-beat-counts', '4:4');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Surge beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('5 routes ready');
+        expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action-id', 'surge');
         expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(4);
         expect(screen.getByTestId('chain-opportunity-arcade-callout')).toHaveAttribute(
             'data-chain-callout-tone',
@@ -3418,6 +3430,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('Use swap');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-meter-fill', '40');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action', 'Prime route');
+        expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action-id', 'setup');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-audio', 'setup-beat');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-screen-cue', 'pulse');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'setup');
@@ -3476,6 +3489,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-next-action-tone', 'setup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-count', '2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action', 'Prime route');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action-id', 'setup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-audio', 'setup-beat');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-cue', 'pulse');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-screen-cue', 'pulse');
