@@ -1344,6 +1344,60 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-marker-key-screen-cue='tick'[\s\S]*?animation-duration:\s*1\.34s/);
     });
 
+    it('keeps opportunity compass summary action beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout compass summary beats should read as quick payout beats'
+        ).toMatch(/data-opportunity-compass-summary-beat-action='cashout'[\s\S]*?animation-duration:\s*0\.74s/);
+        expect(
+            cssText,
+            'route compass summary beats should stay horizontal guidance'
+        ).toMatch(/data-opportunity-compass-summary-beat-action='route'[\s\S]*?width:\s*0\.2rem/);
+        expect(
+            cssText,
+            'prime compass summary beats should use a taller setup shape than route'
+        ).toMatch(/data-opportunity-compass-summary-beat-action='prime'[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'risk compass summary beats should read as defensive vertical caution'
+        ).toMatch(/data-opportunity-compass-summary-beat-action='risk'[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'tool compass summary beats should carry utility timing'
+        ).toMatch(/data-opportunity-compass-summary-beat-action='tool'[\s\S]*?animation-duration:\s*0\.84s/);
+    });
+
+    it('keeps opportunity compass summary screen cues visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='burst'] .opportunityCompassSummaryBeatPips i");
+        expect(cssText).toContain(".opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='guard'] .opportunityCompassSummaryBeatPips i");
+        expect(cssText).toContain(".opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='pulse'] .opportunityCompassSummaryBeatPips i");
+        expect(cssText).toContain(".opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='tick'] .opportunityCompassSummaryBeatPips i");
+        expect(
+            cssText,
+            'burst compass summary cues should stay high-emphasis'
+        ).toMatch(/data-opportunity-compass-summary-screen-cue='burst'[\s\S]*?opacity:\s*0\.98/);
+        expect(
+            cssText,
+            'guard compass summary cues should use taller defensive beats'
+        ).toMatch(/data-opportunity-compass-summary-screen-cue='guard'[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'pulse compass summary cues should use mid-tempo guidance'
+        ).toMatch(/data-opportunity-compass-summary-screen-cue='pulse'[\s\S]*?animation-duration:\s*0\.92s/);
+        expect(
+            cssText,
+            'tick compass summary cues should stay quiet and slow'
+        ).toMatch(/data-opportunity-compass-summary-screen-cue='tick'[\s\S]*?animation-duration:\s*1\.38s/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),

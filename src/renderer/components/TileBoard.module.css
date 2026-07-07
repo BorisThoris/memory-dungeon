@@ -9166,25 +9166,63 @@
 }
 
 .opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='cashout'] {
+    width: 0.24rem;
+    height: 0.12rem;
+    animation-duration: 0.74s;
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
-.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='prime'],
 .opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='route'] {
+    width: 0.2rem;
+    animation-duration: 0.96s;
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='prime'] {
+    width: 0.12rem;
+    height: 0.18rem;
+    animation-duration: 1.08s;
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, var(--theme-violet-bright) 18%);
 }
 
 .opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='claim'],
 .opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='recover'] {
+    width: 0.16rem;
+    animation-duration: 0.9s;
     color: color-mix(in srgb, var(--theme-success) 84%, white);
 }
 
 .opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='risk'] {
+    width: 0.12rem;
+    height: 0.22rem;
+    animation-duration: 1.18s;
     color: color-mix(in srgb, var(--theme-danger) 82%, white);
 }
 
 .opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='tool'] {
+    width: 0.18rem;
+    animation-duration: 0.84s;
     color: color-mix(in srgb, var(--theme-violet-bright) 86%, white);
+}
+
+.opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='burst'] .opportunityCompassSummaryBeatPips i {
+    opacity: 0.98;
+}
+
+.opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='guard'] .opportunityCompassSummaryBeatPips i {
+    height: 0.2rem;
+    animation-duration: 1.16s;
+}
+
+.opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='pulse'] .opportunityCompassSummaryBeatPips i {
+    animation-duration: 0.92s;
+}
+
+.opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='tick'] .opportunityCompassSummaryBeatPips i {
+    width: 0.08rem;
+    height: 0.08rem;
+    animation-duration: 1.38s;
+    opacity: 0.58;
 }
 
 .opportunityCompassMeter {
