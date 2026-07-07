@@ -9876,11 +9876,39 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
+.frame[data-trait-mode-tier='cashout'] .traitModeCue,
+.traitModeCue[data-trait-mode-tier='cashout'],
+.traitModeCue[data-trait-mode-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 22%);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.3),
+        0 0 1.18rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
+}
+
+.frame[data-trait-mode-tier='surge'] .traitModeCue,
+.traitModeCue[data-trait-mode-tier='surge'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, var(--theme-gold-bright) 30%);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.29),
+        0 0 1.05rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 9%, transparent);
+}
+
 .traitModeCue[data-trait-mode-tone='ready'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, var(--theme-cyan-bright) 24%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 11%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-panel-solid) 84%, transparent);
+}
+
+.frame[data-trait-mode-tier='route'] .traitModeCue,
+.traitModeCue[data-trait-mode-tier='route'],
+.traitModeCue[data-trait-mode-screen-cue='pulse'] {
+    box-shadow:
+        0 10px 27px rgba(0, 0, 0, 0.27),
+        0 0 0.92rem color-mix(in srgb, var(--theme-violet-bright) 16%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
 }
 
 .traitModeCue[data-trait-mode-tone='ready'] strong {
@@ -9897,6 +9925,32 @@
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 72%),
         color-mix(in srgb, var(--theme-panel-solid) 84%, transparent);
+}
+
+.frame[data-trait-mode-tier='prime'] .traitModeCue,
+.traitModeCue[data-trait-mode-tier='prime'],
+.traitModeCue[data-trait-mode-screen-cue='tick'] {
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.24),
+        0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+}
+
+.traitModeCue[data-trait-mode-action='cashout'] .traitModeCueBeatPips i,
+.traitModeCue[data-trait-mode-action='surge'] .traitModeCueBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.traitModeCue[data-trait-mode-action='followup'] .traitModeCueBeatPips i,
+.traitModeCue[data-trait-mode-action='match'] .traitModeCueBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+}
+
+.traitModeCue[data-trait-mode-action='prime'] .traitModeCueBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
 }
 
 .traitPreviewChip {

@@ -161,6 +161,8 @@ type BoardHazardOpportunityAction = 'avoid' | 'claim' | 'inspect' | 'weigh';
 type BoardHazardOpportunityTier = 'danger' | 'mixed' | 'reward' | 'watch';
 type ActivePowerBoardAction = 'clear' | 'pin' | 'recall' | 'remove' | 'swap';
 type ActivePowerBoardTier = 'control' | 'memory' | 'route';
+type BoardTraitModeAction = 'cashout' | 'followup' | 'match' | 'prime' | 'surge';
+type BoardTraitModeTier = 'cashout' | 'prime' | 'route' | 'surge';
 type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
 type BoardPayoffStackHeat = 'cashout' | 'prime';
 type BoardPayoffStackCrescendoScreenCue = 'burst' | 'pulse' | 'snap' | 'super';
@@ -2467,9 +2469,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     );
 
     const boardTraitModeCue = useMemo((): {
+        action: BoardTraitModeAction;
+        beatCount: 2 | 3 | 5;
         detail: string;
         nextReward: string | null;
         label: 'Trait mode';
+        screenCue: BoardFeedbackScreenCue;
+        tier: BoardTraitModeTier;
         tone: 'cashout' | 'surge' | 'ready' | 'setup';
         value: string;
     } | null => {
@@ -2478,27 +2484,38 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
         if (boardChainOpportunity.rewardHot) {
             return {
+                action: 'cashout',
+                beatCount: 5,
                 detail: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Match lit route for reward',
                 nextReward: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Match lit route for reward',
                 label: 'Trait mode',
+                screenCue: 'burst',
+                tier: 'cashout',
                 tone: 'cashout',
                 value: /\btrait-payoff-stack:\d+/.test(cardFeedbackStatesAttr ?? '') ? 'Stack live' : 'Cashout live'
             };
         }
         if (boardChainOpportunity.comboSurgeLabel) {
             return {
+                action: 'surge',
+                beatCount: 5,
                 detail:
                     boardChainOpportunity.chainReadyCount === 1
                         ? '1 route ready'
                         : `${boardChainOpportunity.chainReadyCount} routes ready`,
                 nextReward: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Match highlighted traits',
                 label: 'Trait mode',
+                screenCue: 'burst',
+                tier: 'surge',
                 tone: 'surge',
                 value: 'Surge live'
             };
         }
         if (boardChainOpportunity.chainReadyCount > 0 || boardChainOpportunity.selectedFollowupCount > 0) {
+            const followupLive = boardChainOpportunity.selectedFollowupCount > 0;
             return {
+                action: followupLive ? 'followup' : 'match',
+                beatCount: 3,
                 detail:
                     boardChainOpportunity.selectedFollowupLabel ??
                     boardChainOpportunity.examples[0] ??
@@ -2506,15 +2523,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     'Match highlighted traits',
                 nextReward: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Keep the chain alive',
                 label: 'Trait mode',
+                screenCue: 'pulse',
+                tier: 'route',
                 tone: 'ready',
-                value: boardChainOpportunity.selectedFollowupCount > 0 ? 'Follow-up live' : 'Route live'
+                value: followupLive ? 'Follow-up live' : 'Route live'
             };
         }
         if (boardChainOpportunity.setupCount > 0) {
             return {
+                action: 'prime',
+                beatCount: 2,
                 detail: boardChainOpportunity.setupHint ?? boardChainOpportunity.nextTarget ?? 'Move traits together',
                 nextReward: boardChainOpportunity.nextTarget ?? 'Move traits together',
                 label: 'Trait mode',
+                screenCue: 'tick',
+                tier: 'prime',
                 tone: 'setup',
                 value: 'Prime route'
             };
@@ -4373,6 +4396,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-trait-mode-tone={boardTraitModeCue?.tone ?? 'none'}
             data-trait-mode-value={boardTraitModeCue?.value ?? 'none'}
             data-trait-mode-detail={boardTraitModeCue?.detail ?? 'none'}
+            data-trait-mode-action={boardTraitModeCue?.action ?? 'none'}
+            data-trait-mode-beats={boardTraitModeCue?.beatCount ?? 0}
+            data-trait-mode-screen-cue={boardTraitModeCue?.screenCue ?? 'none'}
+            data-trait-mode-tier={boardTraitModeCue?.tier ?? 'none'}
             data-hazard-opportunity-count={boardHazardOpportunity.count}
             data-hazard-opportunity-action={boardHazardOpportunity.count > 0 ? boardHazardOpportunity.action : 'none'}
             data-hazard-opportunity-family={boardHazardOpportunity.family}
@@ -6280,6 +6307,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             <div
                                 aria-label={boardTraitModeCueLabel}
                                 className={styles.traitModeCue}
+                                data-trait-mode-action={boardTraitModeCue.action}
+                                data-trait-mode-beats={boardTraitModeCue.beatCount}
+                                data-trait-mode-screen-cue={boardTraitModeCue.screenCue}
+                                data-trait-mode-tier={boardTraitModeCue.tier}
                                 data-testid="trait-mode-cue"
                                 data-trait-mode-tone={boardTraitModeCue.tone}
                                 role="status"
@@ -6290,12 +6321,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 <span aria-hidden="true" className={styles.traitModeCueBeatPips}>
                                     {Array.from(
                                         {
-                                            length:
-                                                boardTraitModeCue.tone === 'cashout' || boardTraitModeCue.tone === 'surge'
-                                                    ? 5
-                                                    : boardTraitModeCue.tone === 'ready'
-                                                      ? 3
-                                                      : 2
+                                            length: boardTraitModeCue.beatCount
                                         },
                                         (_, index) => (
                                             <i

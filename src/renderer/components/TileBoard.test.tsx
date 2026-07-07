@@ -903,10 +903,18 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-tone', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-value', 'Stack live');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-detail', 'One-away cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-action', 'cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-beats', '5');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-screen-cue', 'burst');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-tier', 'cashout');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Trait mode');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Stack live');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Next reward');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('One-away cashout');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-action', 'cashout');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-beats', '5');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-screen-cue', 'burst');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tier', 'cashout');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tone', 'cashout');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAccessibleName(
             /Trait mode.*Stack live.*Next reward.*One-away cashout/i
@@ -2896,8 +2904,16 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-tone', 'surge');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-value', 'Surge live');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-action', 'surge');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-beats', '5');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-screen-cue', 'burst');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-tier', 'surge');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Surge live');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('5 routes ready');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-action', 'surge');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-beats', '5');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-screen-cue', 'burst');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tier', 'surge');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tone', 'surge');
     });
 
@@ -3293,10 +3309,18 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue', 'Route prime');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-tone', 'setup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-value', 'Prime route');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-action', 'prime');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-beats', '2');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-screen-cue', 'tick');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-trait-mode-tier', 'prime');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent('Prime route');
         expect(screen.getByTestId('trait-mode-cue')).toHaveTextContent(
             'Swap Sealed with Filler: Sealed + Heavy: score surge'
         );
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-action', 'prime');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-beats', '2');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-screen-cue', 'tick');
+        expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tier', 'prime');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tone', 'setup');
         expect(screen.getByTestId('trait-mode-cue').querySelectorAll('[data-trait-mode-beat]')).toHaveLength(2);
         expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
