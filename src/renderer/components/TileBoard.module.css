@@ -8214,6 +8214,13 @@
     animation: boardOpportunityPrimePulse 1.3s ease-in-out infinite;
 }
 
+.activePowerBoardChip[data-active-power-screen-cue='burst'] .activePowerBoardChipBeatPips i {
+    width: 0.24rem;
+    height: 0.2rem;
+    animation-duration: 0.78s;
+    opacity: 0.96;
+}
+
 .activePowerBoardChip[data-active-power-screen-cue='guard'] {
     box-shadow:
         0 10px 26px rgba(0, 0, 0, 0.24),
@@ -8221,14 +8228,32 @@
         0 0 1rem color-mix(in srgb, var(--theme-danger) 16%, transparent);
 }
 
+.activePowerBoardChip[data-active-power-screen-cue='guard'] .activePowerBoardChipBeatPips i {
+    width: 0.16rem;
+    height: 0.24rem;
+    animation-duration: 1.22s;
+    opacity: 0.88;
+}
+
 .activePowerBoardChip[data-active-power-screen-cue='pulse'] {
     animation: boardOpportunityPulse 1.24s ease-in-out infinite;
+}
+
+.activePowerBoardChip[data-active-power-screen-cue='pulse'] .activePowerBoardChipBeatPips i {
+    animation-duration: 0.98s;
 }
 
 .activePowerBoardChip[data-active-power-screen-cue='tick'] {
     box-shadow:
         0 10px 22px rgba(0, 0, 0, 0.2),
         0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-screen-cue='tick'] .activePowerBoardChipBeatPips i {
+    width: 0.12rem;
+    height: 0.12rem;
+    animation-duration: 1.46s;
+    opacity: 0.62;
 }
 
 .activePowerBoardChip[data-active-power-action='swap'] .activePowerBoardChipBeatPips i {
@@ -11118,18 +11143,24 @@
 
 .opportunityCompassRow[data-hazard-opportunity-screen-cue='guard'] .opportunityCompassBeatPips i,
 .opportunityCompassRow[data-hazard-opportunity-action='avoid'] .opportunityCompassBeatPips i {
+    width: 0.14rem;
+    height: 0.24rem;
+    animation-duration: 1.18s;
     background: color-mix(in srgb, var(--theme-danger) 82%, white);
     box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-danger) 32%, transparent);
 }
 
 .opportunityCompassRow[data-hazard-opportunity-action='claim'] .opportunityCompassBeatPips i,
 .opportunityCompassRow[data-hazard-opportunity-family='reward'] .opportunityCompassBeatPips i {
+    animation-duration: 0.9s;
     background: color-mix(in srgb, var(--theme-green-bright) 82%, white);
     box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-green-bright) 30%, transparent);
 }
 
 .opportunityCompassRow[data-hazard-opportunity-action='weigh'] .opportunityCompassBeatPips i,
 .opportunityCompassRow[data-hazard-opportunity-family='dual'] .opportunityCompassBeatPips i {
+    width: 0.22rem;
+    animation-duration: 1.02s;
     background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
     box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
 }
@@ -11241,9 +11272,28 @@
         inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
 }
 
+.traitModeCue[data-trait-mode-tone='cashout'] {
+    background:
+        radial-gradient(circle at 14% 0%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 72%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-green-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 84%, transparent);
+}
+
+.traitModeCue[data-trait-mode-tone='surge'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-gold-bright) 24%);
+    background:
+        radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--theme-cyan-bright) 17%, transparent), transparent 70%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent), color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 84%, transparent);
+}
+
 .traitModeCue[data-trait-mode-tone='cashout'] strong,
 .traitModeCue[data-trait-mode-tone='surge'] strong {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.traitModeCue[data-trait-mode-tone='surge'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
 }
 
 .frame[data-trait-mode-tier='cashout'] .traitModeCue,
@@ -11310,6 +11360,18 @@
 .traitModeCue[data-trait-mode-action='surge'] .traitModeCueBeatPips i {
     background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.traitModeCue[data-trait-mode-action='cashout'] .traitModeCueBeatPips i {
+    width: 0.3rem;
+    animation-duration: 0.72s;
+}
+
+.traitModeCue[data-trait-mode-action='surge'] .traitModeCueBeatPips i {
+    width: 0.2rem;
+    animation-duration: 0.58s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
 }
 
 .traitModeCue[data-trait-mode-action='followup'] .traitModeCueBeatPips i,

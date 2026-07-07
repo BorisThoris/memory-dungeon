@@ -1191,6 +1191,68 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-pickup-opportunity-beats='4'[\s\S]*?animation-duration:\s*0\.82s/);
     });
 
+    it('keeps active power screen cues visually distinct on the board chip', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".activePowerBoardChip[data-active-power-screen-cue='burst'] .activePowerBoardChipBeatPips i");
+        expect(cssText).toContain(".activePowerBoardChip[data-active-power-screen-cue='guard'] .activePowerBoardChipBeatPips i");
+        expect(cssText).toContain(".activePowerBoardChip[data-active-power-screen-cue='tick'] .activePowerBoardChipBeatPips i");
+        expect(
+            cssText,
+            'burst active power cues should read as fast payoff beats'
+        ).toMatch(/data-active-power-screen-cue='burst'[\s\S]*?animation-duration:\s*0\.78s/);
+        expect(
+            cssText,
+            'guard active power cues should read as taller defensive beats'
+        ).toMatch(/data-active-power-screen-cue='guard'[\s\S]*?height:\s*0\.24rem/);
+        expect(
+            cssText,
+            'tick active power cues should stay quiet and slower than burst cues'
+        ).toMatch(/data-active-power-screen-cue='tick'[\s\S]*?opacity:\s*0\.62/);
+    });
+
+    it('keeps hazard opportunity families visually distinct in beat pips', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'avoid hazard opportunities should read as defensive vertical beats'
+        ).toMatch(/data-hazard-opportunity-action='avoid'[\s\S]*?height:\s*0\.24rem/);
+        expect(
+            cssText,
+            'claim hazard opportunities should use quicker reward beat timing'
+        ).toMatch(/data-hazard-opportunity-action='claim'[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'weigh hazard opportunities should use wider mixed-choice beats'
+        ).toMatch(/data-hazard-opportunity-action='weigh'[\s\S]*?width:\s*0\.22rem/);
+    });
+
+    it('keeps trait cashout and surge modes visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".traitModeCue[data-trait-mode-tone='cashout']");
+        expect(cssText).toContain(".traitModeCue[data-trait-mode-tone='surge']");
+        expect(
+            cssText,
+            'cashout trait mode should preserve gold payout language'
+        ).toMatch(/data-trait-mode-action='cashout'[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'surge trait mode should shift to cyan route-building language'
+        ).toMatch(/data-trait-mode-action='surge'[\s\S]*?animation-duration:\s*0\.58s/);
+        expect(
+            cssText,
+            'surge trait mode label should not share the cashout strong color'
+        ).toMatch(/data-trait-mode-tone='surge'\] strong[\s\S]*?var\(--theme-cyan-bright\)/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),
