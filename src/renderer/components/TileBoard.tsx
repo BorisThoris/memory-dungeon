@@ -7548,7 +7548,6 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     data-preview-meter-fill={traitPreviewMeterFill}
                                     data-testid="trait-preview-chip"
                                     role="status"
-                                    style={traitPreviewSignalFill > 0 ? ({ '--trait-preview-signal-fill': `${traitPreviewSignalFill}%` } as CSSProperties) : undefined}
                                 >
                                     <span
                                         className={styles.traitPreviewSummary}
@@ -7569,11 +7568,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             aria-hidden="true"
                                             className={styles.traitPreviewDensityMeter}
                                             data-preview-meter-fill={traitPreviewMeterFill}
+                                            style={{ '--trait-preview-meter-fill': `${traitPreviewMeterFill}%` } as CSSProperties}
                                         >
-                                            <i
-                                                className={styles.traitPreviewDensityMeterFill}
-                                                style={{ '--trait-preview-meter-fill': `${traitPreviewMeterFill}%` } as CSSProperties}
-                                            />
+                                            <i className={styles.traitPreviewDensityMeterFill} />
                                         </span>
                                         <span aria-hidden="true" className={styles.traitPreviewSummaryBeatPips}>
                                             {Array.from({ length: Math.max(2, Math.min(5, beatCount)) }, (_, beatIndex) => (
@@ -7597,7 +7594,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                               ? 'Risk'
                                               : 'Combo'}
                                     </span>
-                                    <span aria-hidden="true" className={styles.traitPreviewSignalMeter}>
+                                    <span
+                                        aria-hidden="true"
+                                        className={styles.traitPreviewSignalMeter}
+                                        data-preview-signal-fill={traitPreviewSignalFill}
+                                        style={{ '--trait-preview-signal-fill': `${traitPreviewSignalFill}%` } as CSSProperties}
+                                    >
                                         <i aria-hidden="true" className={styles.traitPreviewSignalMeterFill} />
                                     </span>
                                     <span aria-hidden="true" className={styles.traitPreviewBeatPips}>

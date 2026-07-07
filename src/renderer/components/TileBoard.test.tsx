@@ -1288,6 +1288,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-density-tone', 'cashout');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-signal-fill', '100');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-meter-fill', '50');
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-meter-fill="50"]')).toHaveStyle({
+            '--trait-preview-meter-fill': '50%'
+        });
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-signal-fill="100"]')).toHaveStyle({
+            '--trait-preview-signal-fill': '100%'
+        });
         expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-action-kind]')).toHaveAttribute(
             'data-preview-action-kind',
             'trait'
