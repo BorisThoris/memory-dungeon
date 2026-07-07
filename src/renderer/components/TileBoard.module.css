@@ -674,6 +674,23 @@
     transform-origin: left center;
 }
 
+.chainOpportunityChip[data-chain-opportunity-tone='setup'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-violet-bright) 16%);
+    background:
+        radial-gradient(ellipse 110% 170% at 12% 0%, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), transparent 68%),
+        linear-gradient(135deg, rgba(13, 22, 30, 0.92), rgba(18, 16, 28, 0.84)),
+        var(--theme-panel-solid);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.26),
+        0 0 18px color-mix(in srgb, var(--theme-cyan-bright) 17%, transparent);
+}
+
+.chainOpportunityChip[data-chain-opportunity-tone='setup'] .chainOpportunityCue {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
 .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityBeat {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 18%);
     background:
