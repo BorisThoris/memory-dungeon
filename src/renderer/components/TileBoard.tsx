@@ -6119,12 +6119,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 data-opportunity-compass-hot={boardChainHotBand?.tone ?? 'none'}
                                 data-opportunity-compass-surge={boardChainOpportunity.comboSurgeLabel ? 'true' : 'false'}
                                 data-opportunity-compass-beats={boardOpportunityCompassRows.length}
-                                data-opportunity-compass-priority={boardOpportunityCompassRows.length > 0 ? 'best' : 'single'}
+                                data-opportunity-compass-priority={boardOpportunityCompassRows.length === 1 ? 'single' : 'best'}
                                 data-testid="board-opportunity-compass"
                                 role="group"
                             >
                                 <span className={styles.opportunityCompassSummary} data-testid="board-opportunity-compass-summary">
-                                    <small>Best</small>
+                                    <small>{boardOpportunityCompassRows.length === 1 ? 'Only' : 'Best'}</small>
                                     <b>{boardOpportunityCompassRows.length} {boardOpportunityCompassRows.length === 1 ? 'play' : 'plays'}</b>
                                     <span aria-hidden="true" className={styles.opportunityCompassSummaryBeatPips}>
                                         {Array.from(

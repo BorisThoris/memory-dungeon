@@ -893,6 +893,32 @@
         0 0 14px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
 }
 
+.frame[data-chain-opportunity-milestone-tone='building'] .chainOpportunityChip {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, var(--theme-cyan-bright) 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 9%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 68%, transparent);
+}
+
+.frame[data-chain-opportunity-milestone-tone='chain'] .chainOpportunityChip {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), color-mix(in srgb, var(--theme-gold-bright) 6%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 70%, transparent);
+}
+
+.frame[data-chain-opportunity-milestone-tone='surge'] .chainOpportunityChip,
+.frame[data-chain-opportunity-milestone-tone='combo'] .chainOpportunityChip {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 20%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), transparent 70%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 70%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
 .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityCue {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, transparent);
     background: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
@@ -6765,6 +6791,14 @@
 
 .opportunityCompass[data-opportunity-compass-priority='best'] {
     animation: boardOpportunityPulse 1.8s ease-in-out infinite;
+}
+
+.opportunityCompass[data-opportunity-compass-priority='single'] .opportunityCompassSummary {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), color-mix(in srgb, var(--theme-success) 6%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
 }
 
 .opportunityCompassSummary {

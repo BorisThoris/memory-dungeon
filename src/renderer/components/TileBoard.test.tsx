@@ -2317,6 +2317,9 @@ describe('TileBoard touch and click controls', () => {
             '40'
         );
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-hot', 'ready');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-priority', 'single');
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('Only');
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('1 play');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Chain cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Streak reward');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('x6 +1 shard in 1 match');
