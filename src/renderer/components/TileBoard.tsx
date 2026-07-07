@@ -6159,6 +6159,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                             <div
                                 aria-label={boardOpportunityCompassLabel}
                                 className={styles.opportunityCompass}
+                                data-opportunity-compass-best-screen-cue={
+                                    boardBestOpportunity ? boardOpportunityScreenCue(boardBestOpportunity) : 'none'
+                                }
+                                data-opportunity-compass-best-tone={boardBestOpportunity?.tone ?? 'none'}
+                                data-opportunity-compass-heat={boardBestOpportunityHeat}
                                 data-opportunity-compass-hot={boardChainHotBand?.tone ?? 'none'}
                                 data-opportunity-compass-surge={boardChainOpportunity.comboSurgeLabel ? 'true' : 'false'}
                                 data-opportunity-compass-beats={boardOpportunityCompassRows.length}
@@ -6166,7 +6171,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 data-testid="board-opportunity-compass"
                                 role="group"
                             >
-                                <span className={styles.opportunityCompassSummary} data-testid="board-opportunity-compass-summary">
+                                <span
+                                    className={styles.opportunityCompassSummary}
+                                    data-opportunity-compass-summary-screen-cue={
+                                        boardBestOpportunity ? boardOpportunityScreenCue(boardBestOpportunity) : 'none'
+                                    }
+                                    data-opportunity-compass-summary-tone={boardBestOpportunity?.tone ?? 'none'}
+                                    data-testid="board-opportunity-compass-summary"
+                                >
                                     <small>{boardOpportunityCompassRows.length === 1 ? 'Only' : 'Best'}</small>
                                     <b>{boardOpportunityCompassRows.length} {boardOpportunityCompassRows.length === 1 ? 'play' : 'plays'}</b>
                                     <span aria-hidden="true" className={styles.opportunityCompassSummaryBeatPips}>

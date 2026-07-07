@@ -1022,6 +1022,20 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Best');
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('Best');
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('2 plays');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-best-tone', 'chain');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-heat', 'cashout');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute(
+            'data-opportunity-compass-best-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveAttribute(
+            'data-opportunity-compass-summary-tone',
+            'chain'
+        );
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveAttribute(
+            'data-opportunity-compass-summary-screen-cue',
+            'burst'
+        );
         expect(screen.getByTestId('board-opportunity-compass-meter')).toHaveAttribute('data-opportunity-compass-meter-fill', '70');
         expect(screen.getByTestId('board-opportunity-compass-summary').querySelectorAll('[data-opportunity-compass-summary-beat]')).toHaveLength(3);
         expect(
@@ -2245,6 +2259,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain').querySelectorAll('[data-opportunity-beat]')).toHaveLength(5);
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Super stack');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-beats', '4');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute(
+            'data-opportunity-compass-best-tone',
+            screen.getByTestId('tile-board-frame').getAttribute('data-opportunity-best-tone')
+        );
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute(
+            'data-opportunity-compass-heat',
+            screen.getByTestId('tile-board-frame').getAttribute('data-opportunity-best-heat')
+        );
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('Best');
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('4 plays');
         expect(screen.getByTestId('board-opportunity-compass-summary').querySelectorAll('[data-opportunity-compass-summary-beat]')).toHaveLength(5);
@@ -2597,6 +2619,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-combo-surge', 'true');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-hot', 'none');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-surge', 'true');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute(
+            'data-opportunity-compass-best-tone',
+            screen.getByTestId('tile-board-frame').getAttribute('data-opportunity-best-tone')
+        );
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveAttribute(
+            'data-opportunity-compass-summary-screen-cue',
+            screen.getByTestId('tile-board-frame').getAttribute('data-opportunity-best-screen-cue')
+        );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-chain-opportunity-callout-value',
             '4 cards lit'
@@ -3678,6 +3708,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-compass-count', '1');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-actions', 'risk:Reduce risk:1');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Risk');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute(
+            'data-opportunity-compass-best-tone',
+            'hazard'
+        );
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveAttribute(
+            'data-opportunity-compass-summary-tone',
+            'hazard'
+        );
         expect(screen.getByTestId('board-opportunity-lane-map')).toBeVisible();
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute('data-opportunity-lane-map', 'risk:1');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(

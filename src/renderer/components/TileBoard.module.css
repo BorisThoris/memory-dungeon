@@ -7298,6 +7298,34 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
 }
 
+.opportunityCompass[data-opportunity-compass-heat='cashout'] {
+    filter: drop-shadow(0 0 0.62rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent));
+}
+
+.opportunityCompass[data-opportunity-compass-heat='surge'] {
+    filter: drop-shadow(0 0 0.6rem color-mix(in srgb, var(--theme-violet-bright) 16%, transparent));
+}
+
+.opportunityCompass[data-opportunity-compass-heat='prime'] {
+    filter: drop-shadow(0 0 0.52rem color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent));
+}
+
+.opportunityCompass[data-opportunity-compass-heat='normal'] {
+    filter: drop-shadow(0 0 0.38rem color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent));
+}
+
+.opportunityCompass[data-opportunity-compass-best-screen-cue='burst'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-screen-cue='guard'] .opportunityCompassSummary {
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.9rem color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.opportunityCompass[data-opportunity-compass-best-screen-cue='pulse'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-screen-cue='tick'] .opportunityCompassSummary {
+    box-shadow: 0 0 0.58rem color-mix(in srgb, currentColor 9%, transparent);
+}
+
 .opportunityCompassSummary {
     display: inline-flex;
     align-items: center;
@@ -7340,18 +7368,28 @@
 }
 
 .frame[data-opportunity-best-tone='chain'] .opportunityCompassSummary,
-.frame[data-opportunity-best-tone='perk'] .opportunityCompassSummary {
+.frame[data-opportunity-best-tone='perk'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='chain'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='perk'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='chain'],
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='perk'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 18%);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
-.frame[data-opportunity-best-tone='trait'] .opportunityCompassSummary {
+.frame[data-opportunity-best-tone='trait'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='trait'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='trait'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 48%, var(--theme-cyan-bright) 18%);
     color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
 }
 
 .frame[data-opportunity-best-tone='pickup'] .opportunityCompassSummary,
-.frame[data-opportunity-best-tone='recover'] .opportunityCompassSummary {
+.frame[data-opportunity-best-tone='recover'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='pickup'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='recover'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='pickup'],
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='recover'] {
     border-color: color-mix(in srgb, var(--theme-success) 44%, var(--theme-cyan-bright) 18%);
     color: color-mix(in srgb, var(--theme-success) 82%, white);
 }
@@ -7359,15 +7397,37 @@
 .frame[data-opportunity-best-tone='hazard'] .opportunityCompassSummary,
 .frame[data-opportunity-best-tone='risk'] .opportunityCompassSummary,
 .frame[data-opportunity-best-tone='lost-reward'] .opportunityCompassSummary,
-.frame[data-opportunity-best-tone='control'] .opportunityCompassSummary {
+.frame[data-opportunity-best-tone='control'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='hazard'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='risk'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='lost-reward'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='control'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='hazard'],
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='risk'],
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='lost-reward'],
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='control'] {
     border-color: color-mix(in srgb, var(--theme-danger) 44%, var(--theme-gold-bright) 16%);
     color: color-mix(in srgb, var(--theme-danger) 76%, white);
 }
 
 .frame[data-opportunity-best-tone='setup'] .opportunityCompassSummary,
-.frame[data-opportunity-best-tone='recall'] .opportunityCompassSummary {
+.frame[data-opportunity-best-tone='recall'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='setup'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-best-tone='recall'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='setup'],
+.opportunityCompassSummary[data-opportunity-compass-summary-tone='recall'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
+.opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='burst'],
+.opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='guard'] {
+    text-shadow: 0 0 0.5rem color-mix(in srgb, currentColor 22%, transparent);
+}
+
+.opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='pulse'],
+.opportunityCompassSummary[data-opportunity-compass-summary-screen-cue='tick'] {
+    text-shadow: 0 0 0.36rem color-mix(in srgb, currentColor 16%, transparent);
 }
 
 .opportunityCompassSummaryBeatPips {
