@@ -3890,6 +3890,32 @@
     box-shadow: inset 0 1px 0 color-mix(in srgb, white 9%, transparent);
 }
 
+.chainOpportunityShotMap[data-chain-shot-map-primary-tone='cashout'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-tone='perk'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-role='Cashout'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-role='Perk'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 16%);
+}
+
+.chainOpportunityShotMap[data-chain-shot-map-primary-tone='followup'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-role='Follow-up'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, #fff7c4 42%, var(--theme-cyan-bright) 16%);
+}
+
+.chainOpportunityShotMap[data-chain-shot-map-primary-tone='bank'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-role='Bank'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-screen-cue='guard'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
+}
+
+.chainOpportunityShotMap[data-chain-shot-map-primary-tone='setup'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-role='Setup'],
+.chainOpportunityShotMap[data-chain-shot-map-primary-screen-cue='tick'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-violet-bright) 16%);
+}
+
 .chainOpportunityShotMap > small {
     align-self: center;
     padding-inline: 0.16rem 0.28rem;
@@ -4051,7 +4077,12 @@
 }
 
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='cash-now'],
-.chainOpportunityShotMap > span[data-chain-shot-map-lane='perk-cash'] {
+.chainOpportunityShotMap > span[data-chain-shot-map-lane='perk-cash'],
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Cashout'],
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Perk'],
+.chainOpportunityShotMap > span[data-chain-shot-map-screen-cue='burst'],
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='cashout'],
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='perk'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 18%);
     background:
         radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), transparent 72%),
@@ -4085,16 +4116,30 @@
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='cash-now'] b,
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='cash-now'] em,
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='perk-cash'] b,
-.chainOpportunityShotMap > span[data-chain-shot-map-lane='perk-cash'] em {
+.chainOpportunityShotMap > span[data-chain-shot-map-lane='perk-cash'] em,
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Cashout'] b,
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Cashout'] em,
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Perk'] b,
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Perk'] em,
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='cashout'] b,
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='cashout'] em,
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='perk'] b,
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='perk'] em {
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
 }
 
-.chainOpportunityShotMap > span[data-chain-shot-map-lane='follow-up'] {
+.chainOpportunityShotMap > span[data-chain-shot-map-lane='follow-up'],
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Follow-up'],
+.chainOpportunityShotMap > span[data-chain-shot-map-screen-cue='pulse'],
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='followup'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, var(--theme-void) 34%);
 }
 
-.chainOpportunityShotMap > span[data-chain-shot-map-lane='bank-lane'] {
+.chainOpportunityShotMap > span[data-chain-shot-map-lane='bank-lane'],
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Bank'],
+.chainOpportunityShotMap > span[data-chain-shot-map-screen-cue='guard'],
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='bank'] {
     border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 11%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
@@ -4102,12 +4147,19 @@
 }
 
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='bank-lane'] b,
-.chainOpportunityShotMap > span[data-chain-shot-map-lane='bank-lane'] em {
+.chainOpportunityShotMap > span[data-chain-shot-map-lane='bank-lane'] em,
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Bank'] b,
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Bank'] em,
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='bank'] b,
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='bank'] em {
     color: color-mix(in srgb, var(--theme-success) 84%, white);
 }
 
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='build-lane'],
-.chainOpportunityShotMap > span[data-chain-shot-map-lane='route-setup'] {
+.chainOpportunityShotMap > span[data-chain-shot-map-lane='route-setup'],
+.chainOpportunityShotMap > span[data-chain-shot-map-role='Setup'],
+.chainOpportunityShotMap > span[data-chain-shot-map-screen-cue='tick'],
+.chainOpportunityShotMap > span[data-chain-shot-map-tone='setup'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, transparent);
     background: color-mix(in srgb, var(--theme-violet-bright) 9%, var(--theme-void) 34%);
 }

@@ -5038,6 +5038,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={cardFeedbackShotMapLabel}
                                         className={styles.chainOpportunityShotMap}
                                         data-chain-shot-map-primary={cardFeedbackPrimaryActionAttr}
+                                        data-chain-shot-map-primary-role={primaryCardActionPriorityRow?.role ?? 'none'}
+                                        data-chain-shot-map-primary-screen-cue={primaryCardActionPriorityRow?.screenCue ?? 'none'}
+                                        data-chain-shot-map-primary-tone={primaryCardActionPriorityRow?.tone ?? 'none'}
                                         data-testid="chain-opportunity-shot-map"
                                     >
                                         <small>Shot map</small>
@@ -5067,6 +5070,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 }
                                                 data-chain-shot-map-lane={row.id}
                                                 data-chain-shot-map-count={row.count}
+                                                data-chain-shot-map-role={row.role}
+                                                data-chain-shot-map-screen-cue={row.screenCue}
+                                                data-chain-shot-map-tone={row.tone}
                                                 key={row.id}
                                             >
                                                 <b>{row.shotLabel}</b>

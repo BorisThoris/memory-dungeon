@@ -1236,6 +1236,9 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-shot-map-primary',
             'cash-now'
         );
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-role', 'Cashout');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveTextContent('Shots');
         expect(screen.getByTestId('chain-opportunity-shot-map-summary')).toHaveTextContent('1 lane');
         expect(
@@ -1255,6 +1258,15 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
         ).toHaveAttribute('data-chain-shot-map-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
+        ).toHaveAttribute('data-chain-shot-map-role', 'Cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
+        ).toHaveAttribute('data-chain-shot-map-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
+        ).toHaveAttribute('data-chain-shot-map-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary', 'cashout');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-actions', 'cashout:hit now:2');
         expect(screen.getByTestId('chain-opportunity-beat-map-summary')).toHaveTextContent('Beats');
@@ -1671,6 +1683,9 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-shot-map-primary',
             'follow-up'
         );
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-role', 'Follow-up');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-screen-cue', 'pulse');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-tone', 'followup');
         expect(
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
         ).toHaveTextContent('Tap');
@@ -1678,11 +1693,29 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
         ).toHaveAttribute('data-chain-shot-map-focus', 'primary');
         expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
+        ).toHaveAttribute('data-chain-shot-map-role', 'Follow-up');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
+        ).toHaveAttribute('data-chain-shot-map-screen-cue', 'pulse');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="follow-up"]')
+        ).toHaveAttribute('data-chain-shot-map-tone', 'followup');
+        expect(
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="build-lane"]')
         ).toHaveTextContent('Route lane');
         expect(
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="build-lane"]')
         ).toHaveAttribute('data-chain-shot-map-focus', 'support');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="build-lane"]')
+        ).toHaveAttribute('data-chain-shot-map-role', 'Setup');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="build-lane"]')
+        ).toHaveAttribute('data-chain-shot-map-screen-cue', 'tick');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="build-lane"]')
+        ).toHaveAttribute('data-chain-shot-map-tone', 'setup');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-trait-route-tiers')).toContain(
             'selected-followup:1'
         );
@@ -2331,6 +2364,25 @@ describe('TileBoard touch and click controls', () => {
             'Card action priority. Cash now: 2. Perk cash: 2'
         );
         expect(screen.getByTestId('chain-opportunity-action-priority').querySelectorAll('[data-card-action-priority]')).toHaveLength(2);
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary', 'cash-now');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-role', 'Cashout');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-shot-map')).toHaveAttribute('data-chain-shot-map-primary-tone', 'cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
+        ).toHaveAttribute('data-chain-shot-map-role', 'Cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
+        ).toHaveAttribute('data-chain-shot-map-tone', 'cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="perk-cash"]')
+        ).toHaveAttribute('data-chain-shot-map-role', 'Perk');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="perk-cash"]')
+        ).toHaveAttribute('data-chain-shot-map-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="perk-cash"]')
+        ).toHaveAttribute('data-chain-shot-map-tone', 'perk');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Perk');
         expect(screen.getByTestId('chain-opportunity-marker-key').querySelector('[data-chain-marker-shape="perk-armed-bar"]')).toHaveTextContent('+!');
         expect(screen.getByTestId('chain-opportunity-marker-key').querySelector('[data-chain-marker-shape="perk-armed-bar"]')).toHaveTextContent('Cash perk');
