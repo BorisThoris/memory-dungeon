@@ -162,6 +162,12 @@ type NamedFeedbackCueReadabilityGap = {
     testId: string;
 };
 
+type CardFeedbackRowReadabilityGap = {
+    attrs: string[];
+    fileName: string;
+    lineNumber: number;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -913,6 +919,37 @@ const findNamedFeedbackCueReadabilityGaps = (): NamedFeedbackCueReadabilityGap[]
     return gaps;
 };
 
+const findCardFeedbackRowReadabilityGaps = (): CardFeedbackRowReadabilityGap[] => {
+    const gaps: CardFeedbackRowReadabilityGap[] = [];
+    const cardFeedbackRowElementPattern = /<[A-Za-z][^<>]*\bdata-card-[A-Za-z0-9-]+[^<>]*>/gs;
+
+    for (const { fileName, text } of readComponentSourceFiles().filter(({ fileName }) => !fileName.includes('.test.'))) {
+        for (const match of text.matchAll(cardFeedbackRowElementPattern)) {
+            const tag = match[0]!;
+            if (/\bpip\b/.test(tag) || /\baria-hidden="true"/.test(tag)) {
+                continue;
+            }
+
+            const carriesRowFeedbackState =
+                /\bdata-card-[A-Za-z0-9-]*(?:action|role|screen-cue|tone|tier|cadence|beat)\b/.test(tag);
+            const hasReadableContract =
+                /\baria-label=/.test(tag) ||
+                /\baria-labelledby=/.test(tag) ||
+                /\btitle=/.test(tag);
+
+            if (carriesRowFeedbackState && !hasReadableContract) {
+                gaps.push({
+                    attrs: [...tag.matchAll(/\bdata-card-[A-Za-z0-9-]+/g)].map((attrMatch) => attrMatch[0]!),
+                    fileName,
+                    lineNumber: text.slice(0, match.index ?? 0).split(/\r?\n/).length
+                });
+            }
+        }
+    }
+
+    return gaps;
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -1087,6 +1124,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findNamedFeedbackCueReadabilityGaps(),
             'named feedback cue chips with state metadata should expose a readable label instead of only fragmented child text'
+        ).toEqual([]);
+    });
+
+    it('keeps row-level card feedback markers paired with readable labels', () => {
+        expect(
+            findCardFeedbackRowReadabilityGaps(),
+            'row-level card feedback markers should expose a readable label instead of only telemetry attributes'
         ).toEqual([]);
     });
 });

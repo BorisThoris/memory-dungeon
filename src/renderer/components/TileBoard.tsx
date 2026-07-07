@@ -5832,6 +5832,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                         {cardFeedbackActionPriorityRows.map((row) => (
                                             <span
+                                                aria-label={`Card action priority row. ${row.label}. ${row.role}. ${row.count}.`}
                                                 data-card-action-priority={row.id}
                                                 data-card-action-priority-count={row.count}
                                                 data-card-action-priority-focus={
@@ -5987,6 +5988,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                         {cardFeedbackBeatRows.map((row) => (
                                             <span
+                                                aria-label={`Card beat row. ${row.label}. ${row.count}. ${row.beatCount}-beat ${row.action}.`}
                                                 data-card-beat-action={row.action}
                                                 data-card-beat-focus={row.id === cardFeedbackBeatRows[0]?.id ? 'primary' : 'support'}
                                                 data-card-beat-screen-cue={row.screenCue}
@@ -6055,6 +6057,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                         {cardFeedbackCadenceRows.map((row) => (
                                             <span
+                                                aria-label={`Card pulse row. ${row.label}. ${row.count}. ${row.action}. ${row.beatCount}-beat pulse.`}
                                                 data-card-cadence={row.id}
                                                 data-card-cadence-focus={row.id === cardFeedbackCadenceRows[0]?.id ? 'primary' : 'support'}
                                                 data-card-cadence-screen-cue={row.screenCue}
@@ -6147,6 +6150,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                         {cardFeedbackTraitLaneBeatRows.map((row) => (
                                             <span
+                                                aria-label={`Trait lane beat row. ${row.label}. ${row.role}. ${row.count}. ${row.beatCount}-beat ${row.action}.`}
                                                 data-card-trait-lane-beat={row.id}
                                                 data-card-trait-lane-beat-audio={cardTraitLaneAudioCue(row.id)}
                                                 data-card-trait-lane-beat-focus={
