@@ -1143,6 +1143,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-value', '1 route ready');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-tone', 'chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue', 'Route cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue-id', 'route-cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-audio', 'opportunity-cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-screen-cue', 'burst');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-heat', 'cashout');
@@ -1213,6 +1214,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Route cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-row-meter-fill', '100');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Route cashout');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue-id', 'route-cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-audio', 'opportunity-cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-screen-cue', 'burst');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-heat', 'cashout');
@@ -2215,6 +2217,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-value', '1 route ready');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-tone', 'chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue', 'Prime cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue-id', 'prime-cashout');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-opportunity-best-detail')).toContain(
             'Prime cashout'
         );
@@ -2456,6 +2459,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-recipes')).toHaveAccessibleName('Combo recipes. Echo + Sealed');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-priority', 'best');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Prime cashout');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue-id', 'prime-cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-heat', 'cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Best');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Prime cashout');
@@ -2501,6 +2505,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-id', 'chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action', 'Cash out');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue', 'Stack cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue-id', 'stack-cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-action-cues', 'cash-now:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-map', 'cash:1>trait:1>pickup:1');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
@@ -2518,6 +2523,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-cue', 'snap');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-crescendo-tier', 'cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Stack cashout');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue-id', 'stack-cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-heat', 'cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Stack cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('One-away cashout');
@@ -2617,6 +2623,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-compass-count', '4');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-id', 'chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue', 'Super stack');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue-id', 'super-stack');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-payoff-stack', '3 payoffs live');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-opportunity-payoff-stack-action',
@@ -2698,6 +2705,7 @@ describe('TileBoard touch and click controls', () => {
             'Chain marker key. Route: oo. Action: Match route. Payoff: =+. Action: Cash now. Stack: **. Action: Cash stack. Perk: +!. Action: Cash perk. Intensity: Stack 2. Action: Cash stack'
         );
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Super stack');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue-id', 'super-stack');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-heat', 'cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-beats', '5');
         expect(screen.getByTestId('board-opportunity-chain').querySelectorAll('[data-opportunity-beat]')).toHaveLength(5);

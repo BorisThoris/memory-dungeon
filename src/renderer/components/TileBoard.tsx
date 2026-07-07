@@ -139,6 +139,31 @@ type BoardOpportunityCompassRow = {
     tone: BoardOpportunityTone;
     value: string;
 };
+type BoardOpportunityImpactCueId =
+    | 'avoid-penalty'
+    | 'chain-cashout'
+    | 'combo-surge'
+    | 'control-tool'
+    | 'followup-route'
+    | 'keep-streak'
+    | 'perk-armed'
+    | 'pickup-cashout'
+    | 'prime-cashout'
+    | 'rebuild-chase'
+    | 'recall-tool'
+    | 'recover-route'
+    | 'route-cashout'
+    | 'route-prime'
+    | 'safe-pair'
+    | 'save-cashout'
+    | 'stack-cashout'
+    | 'stack-prime'
+    | 'super-stack'
+    | 'tool-route'
+    | 'trait-combo-route'
+    | 'trait-combo-surge'
+    | 'trait-stack-route'
+    | 'trait-stack-surge';
 type BoardOpportunityCompassSummaryAction = 'cashout' | 'claim' | 'prime' | 'recover' | 'risk' | 'route' | 'tool';
 type BoardOpportunityCompassSummaryTier = 'cashout' | 'prime' | 'recover' | 'risk' | 'route' | 'tool';
 type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'perk' | 'recover' | 'risk' | 'tool' | 'trait';
@@ -222,6 +247,35 @@ const getBoardOpportunityHeat = (impactCue: string): BoardOpportunityHeat => {
         return 'prime';
     }
     return 'normal';
+};
+
+const getBoardOpportunityImpactCueId = (impactCue: string): BoardOpportunityImpactCueId => {
+    const cue = impactCue.toLowerCase();
+    if (cue === 'super stack') return 'super-stack';
+    if (cue === 'stack cashout') return 'stack-cashout';
+    if (cue === 'stack prime') return 'stack-prime';
+    if (cue === 'route cashout') return 'route-cashout';
+    if (cue === 'chain cashout') return 'chain-cashout';
+    if (cue === 'pickup cashout') return 'pickup-cashout';
+    if (cue === 'reward cashout') return 'route-cashout';
+    if (cue === 'prime cashout') return 'prime-cashout';
+    if (cue === 'follow-up route') return 'followup-route';
+    if (cue === 'combo surge') return 'combo-surge';
+    if (cue === 'keep streak') return 'keep-streak';
+    if (cue === 'route prime') return 'route-prime';
+    if (cue === 'trait stack surge') return 'trait-stack-surge';
+    if (cue === 'trait stack route') return 'trait-stack-route';
+    if (cue === 'trait combo surge') return 'trait-combo-surge';
+    if (cue === 'trait combo route') return 'trait-combo-route';
+    if (cue === 'avoid penalty') return 'avoid-penalty';
+    if (cue === 'perk armed') return 'perk-armed';
+    if (cue === 'safe pair') return 'safe-pair';
+    if (cue === 'recover route') return 'recover-route';
+    if (cue === 'rebuild chase') return 'rebuild-chase';
+    if (cue === 'save cashout') return 'save-cashout';
+    if (cue === 'recall tool') return 'recall-tool';
+    if (cue === 'control tool') return 'control-tool';
+    return 'tool-route';
 };
 
 const getBoardOpportunityBeatCount = (row: BoardOpportunityCompassRow): 2 | 3 | 4 | 5 => {
@@ -3405,6 +3459,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardPayoffStackFill = boardPayoffStack ? Math.round(Math.min(100, (boardPayoffStack.crescendo.beatCount / 5) * 100)) : 0;
     const boardBestOpportunity = boardOpportunityCompassRows[0] ?? null;
     const boardBestOpportunityHeat = boardBestOpportunity ? getBoardOpportunityHeat(boardBestOpportunity.impactCue) : 'none';
+    const boardBestOpportunityImpactCueId = boardBestOpportunity ? getBoardOpportunityImpactCueId(boardBestOpportunity.impactCue) : null;
     const boardBestOpportunityBeatCount = boardBestOpportunity ? getBoardOpportunityBeatCount(boardBestOpportunity) : 0;
     const boardOpportunityCompassSummaryBeatCount = Math.max(2, Math.min(5, boardOpportunityCompassRows.length + 1)) as 2 | 3 | 4 | 5;
     const boardOpportunityCompassSummaryAction = getBoardOpportunityCompassSummaryAction(boardBestOpportunity);
@@ -4835,6 +4890,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-best-detail={boardBestOpportunity?.detail ?? 'none'}
             data-opportunity-best-tone={boardBestOpportunity?.tone ?? 'none'}
             data-opportunity-best-impact-cue={boardBestOpportunity?.impactCue ?? 'none'}
+            data-opportunity-best-impact-cue-id={boardBestOpportunityImpactCueId ?? 'none'}
             data-opportunity-best-heat={boardBestOpportunityHeat}
             data-opportunity-best-beats={boardBestOpportunityBeatCount}
             data-opportunity-best-audio={boardBestOpportunity ? boardOpportunityAudioCue(boardBestOpportunity) : 'none'}
@@ -7290,6 +7346,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardOpportunityCompassRows.map((row, index) => {
                                     const beatCount = getBoardOpportunityBeatCount(row);
+                                    const impactCueId = getBoardOpportunityImpactCueId(row.impactCue);
                                     return (
                                         <span
                                             aria-label={`${index === 0 ? 'Best play. ' : ''}${row.impactCue}. ${row.label}: ${row.value}. ${row.action}: ${row.detail}`}
@@ -7306,6 +7363,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             data-hazard-opportunity-tier={row.id === 'hazard' ? boardHazardOpportunity.tier : 'none'}
                                             data-hazard-opportunity-trigger={row.id === 'hazard' ? boardHazardOpportunity.trigger : 'none'}
                                             data-opportunity-impact-cue={row.impactCue}
+                                            data-opportunity-impact-cue-id={impactCueId}
                                             data-opportunity-priority={index === 0 ? 'best' : 'normal'}
                                             data-opportunity-tone={row.tone}
                                             data-opportunity-screen-cue={boardOpportunityScreenCue(row)}

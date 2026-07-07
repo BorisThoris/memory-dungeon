@@ -10362,13 +10362,13 @@
     animation-delay: 0.28s;
 }
 
-.opportunityCompassRow[data-opportunity-impact-cue='Prime cashout'] .opportunityCompassImpact,
-.opportunityCompassRow[data-opportunity-impact-cue='Chain cashout'] .opportunityCompassImpact,
-.opportunityCompassRow[data-opportunity-impact-cue='Pickup cashout'] .opportunityCompassImpact,
-.opportunityCompassRow[data-opportunity-impact-cue='Reward cashout'] .opportunityCompassImpact,
-.opportunityCompassRow[data-opportunity-impact-cue='Route cashout'] .opportunityCompassImpact,
-.opportunityCompassRow[data-opportunity-impact-cue='Stack cashout'] .opportunityCompassImpact,
-.opportunityCompassRow[data-opportunity-impact-cue='Stack prime'] .opportunityCompassImpact {
+.opportunityCompassRow[data-opportunity-impact-cue-id='prime-cashout'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='chain-cashout'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='pickup-cashout'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='route-cashout'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='stack-cashout'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='stack-prime'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='super-stack'] .opportunityCompassImpact {
     animation: boardOpportunityPulse 1.55s ease-in-out infinite;
     border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
     background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
@@ -10389,36 +10389,38 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
 }
 
-.opportunityCompassRow[data-opportunity-impact-cue='Avoid penalty'] .opportunityCompassImpact {
+.opportunityCompassRow[data-opportunity-impact-cue-id='avoid-penalty'] .opportunityCompassImpact {
     border-color: color-mix(in srgb, var(--theme-danger) 36%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 10%, transparent);
     color: color-mix(in srgb, var(--theme-danger) 72%, white);
 }
 
-.opportunityCompassRow[data-opportunity-impact-cue='Combo surge'] .opportunityCompassImpact {
+.opportunityCompassRow[data-opportunity-impact-cue-id='combo-surge'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='trait-combo-surge'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='trait-stack-surge'] .opportunityCompassImpact {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-cyan-bright) 22%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent));
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
 }
 
-.opportunityCompassRow[data-opportunity-impact-cue='Perk armed'] .opportunityCompassImpact {
+.opportunityCompassRow[data-opportunity-impact-cue-id='perk-armed'] .opportunityCompassImpact {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, var(--theme-cyan-bright) 18%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent));
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
-.opportunityCompassRow[data-opportunity-impact-cue='Safe pair'] .opportunityCompassImpact,
-.opportunityCompassRow[data-opportunity-impact-cue='Recover route'] .opportunityCompassImpact {
+.opportunityCompassRow[data-opportunity-impact-cue-id='safe-pair'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='recover-route'] .opportunityCompassImpact {
     border-color: color-mix(in srgb, var(--theme-success) 36%, var(--theme-cyan-bright) 16%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent));
     color: color-mix(in srgb, var(--theme-success) 78%, white);
 }
 
-.opportunityCompassRow[data-opportunity-impact-cue='Rebuild chase'] .opportunityCompassImpact,
-.opportunityCompassRow[data-opportunity-impact-cue='Save cashout'] .opportunityCompassImpact {
+.opportunityCompassRow[data-opportunity-impact-cue-id='rebuild-chase'] .opportunityCompassImpact,
+.opportunityCompassRow[data-opportunity-impact-cue-id='save-cashout'] .opportunityCompassImpact {
     border-color: color-mix(in srgb, var(--theme-danger) 34%, var(--theme-gold-bright) 24%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 11%, transparent), color-mix(in srgb, var(--theme-gold-bright) 10%, transparent));
@@ -11638,13 +11640,13 @@
 :global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-heat='prime'],
 :global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-heat='surge'],
 :global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-screen-cue='pulse'],
-:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue='Prime cashout'] .opportunityCompassImpact,
-:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue='Chain cashout'] .opportunityCompassImpact,
-:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue='Pickup cashout'] .opportunityCompassImpact,
-:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue='Reward cashout'] .opportunityCompassImpact,
-:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue='Route cashout'] .opportunityCompassImpact,
-:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue='Stack cashout'] .opportunityCompassImpact,
-:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue='Stack prime'] .opportunityCompassImpact,
+:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue-id='prime-cashout'] .opportunityCompassImpact,
+:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue-id='chain-cashout'] .opportunityCompassImpact,
+:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue-id='pickup-cashout'] .opportunityCompassImpact,
+:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue-id='route-cashout'] .opportunityCompassImpact,
+:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue-id='stack-cashout'] .opportunityCompassImpact,
+:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue-id='stack-prime'] .opportunityCompassImpact,
+:global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue-id='super-stack'] .opportunityCompassImpact,
 :global([data-reduce-motion='true']) .opportunityCompassBeatPips i,
 :global([data-reduce-motion='true']) .opportunityCompassSummaryBeatPips i,
 :global([data-reduce-motion='true']) .opportunityLaneBeatPips i,
