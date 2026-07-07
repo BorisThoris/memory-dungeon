@@ -485,6 +485,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-recent-run-primary-lane-role-id': ['build', 'cashout', 'protect', 'recover', 'stack'],
         'data-run-payoff-lane-role-id': ['build', 'cashout', 'protect', 'recover', 'stack'],
         'data-run-payoff-primary-lane-role-id': ['build', 'cashout', 'protect', 'recover', 'stack'],
+        'data-route-recommendation-tone': ['memory'],
         'data-shop-offer-lane-role-id': ['bank', 'buy', 'cashout', 'open', 'prime', 'stack'],
         'data-shop-primary-offer-lane-role-id': ['bank', 'buy', 'cashout', 'open', 'prime', 'stack'],
         'data-trait-mode-action': ['cashout', 'followup', 'match', 'prime', 'surge'],

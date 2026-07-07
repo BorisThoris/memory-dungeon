@@ -2574,6 +2574,15 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }
 
+.dungeonMapChoiceRecommendation[data-route-recommendation-tone='memory'] small {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
+.dungeonMapChoiceRecommendation[data-route-recommendation-tone='memory'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
 .dungeonMapChoiceRecommendation[data-route-recommendation-screen-cue='super'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-danger) 24%);
     background:
