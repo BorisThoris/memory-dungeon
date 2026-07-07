@@ -2678,6 +2678,14 @@
     color: color-mix(in srgb, var(--theme-text) 90%, white);
 }
 
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-focus='support'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-panel) 70%, transparent);
+    opacity: 0.78;
+}
+
 .chainOpportunityMarkerKey {
     display: inline-flex;
     align-items: center;
@@ -4186,6 +4194,14 @@
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-focus='primary'] i,
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-focus='primary'] .chainOpportunityTraitLaneBeatPips i {
     color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-focus='support'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 78%),
+        color-mix(in srgb, var(--theme-void) 32%, transparent);
+    opacity: 0.78;
 }
 
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-screen-cue='guard'],
@@ -8976,6 +8992,17 @@
     color: color-mix(in srgb, var(--theme-border-cyan) 86%, white);
     font-weight: 900;
     line-height: 1.05;
+}
+
+.traitPreviewLine[data-preview-line-focus='support'] {
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.08rem 0.28rem;
+    border: 1px solid color-mix(in srgb, var(--theme-border-cyan) 18%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-void) 14%, transparent);
+    color: color-mix(in srgb, var(--theme-text-muted) 84%, white);
+    opacity: 0.78;
 }
 
 .traitPreviewChip[data-preview-tone='cashout'] .traitPreviewLine[data-preview-line-focus='primary'],

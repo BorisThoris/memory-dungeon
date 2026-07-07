@@ -369,6 +369,7 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-card-action-priority-focus': ['primary', 'support'],
         'data-card-beat-focus': ['primary', 'support'],
         'data-card-cadence-focus': ['primary', 'support'],
+        'data-card-trait-lane-beat-focus': ['primary', 'support'],
         'data-chain-marker-focus': ['primary', 'support'],
         'data-chain-shot-map-focus': ['primary', 'support'],
         'data-opportunity-best-heat': ['cashout', 'normal', 'prime', 'surge'],
@@ -382,7 +383,9 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-payoff-stack-heat': ['cashout', 'prime'],
         'data-pickup-opportunity-focus': ['cashout', 'reward'],
         'data-preview-kind': ['hazard', 'pickup', 'trait'],
-        'data-preview-summary-kind': ['hazard', 'pickup', 'trait']
+        'data-preview-line-focus': ['primary', 'support'],
+        'data-preview-summary-kind': ['hazard', 'pickup', 'trait'],
+        'data-trait-interaction-lane-focus': ['primary', 'support']
     };
 
     return Object.entries(visibleStateContracts).flatMap(([attr, values]) =>
