@@ -3101,6 +3101,31 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             : boardChainOpportunity.chainReadyCount > 0
               ? 3
               : 2;
+    const boardChainMomentumTone: 'cashout' | 'followup' | 'ready' | 'setup' | 'surge' = boardChainOpportunity.rewardHot
+        ? 'cashout'
+        : boardChainOpportunity.comboSurgeLabel
+          ? 'surge'
+          : boardChainOpportunity.selectedFollowupCount > 0
+            ? 'followup'
+            : boardChainOpportunity.chainReadyCount > 0 || boardChainOpportunity.streakCashoutReady
+              ? 'ready'
+              : 'setup';
+    const boardChainMomentumTier: 'hot' | 'primed' | 'ready' | 'setup' =
+        boardChainMomentumTone === 'cashout'
+            ? 'hot'
+            : boardChainMomentumTone === 'surge'
+              ? 'primed'
+              : boardChainMomentumTone === 'ready' || boardChainMomentumTone === 'followup'
+                ? 'ready'
+                : 'setup';
+    const boardChainMomentumScreenCue: 'burst' | 'guard' | 'pulse' | 'tick' =
+        boardChainMomentumTone === 'cashout' || boardChainMomentumTone === 'surge'
+            ? 'burst'
+            : boardChainMomentumTone === 'followup'
+              ? 'pulse'
+              : boardChainMomentumTone === 'ready'
+                ? 'guard'
+                : 'tick';
     const boardChainSurgeBand = boardChainOpportunity.comboSurgeLabel
         ? {
               cue: boardChainOpportunity.cue || 'Route prime',
@@ -6030,6 +6055,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityMomentum}
                                         data-chain-momentum-beats={boardChainMomentumBeatCount}
                                         data-chain-momentum-meter-fill={Math.round((boardChainMomentumBeatCount / 5) * 100)}
+                                        data-chain-momentum-screen-cue={boardChainMomentumScreenCue}
+                                        data-chain-momentum-tier={boardChainMomentumTier}
+                                        data-chain-momentum-tone={boardChainMomentumTone}
                                         style={
                                             {
                                                 '--chain-momentum-meter-fill': `${Math.round(

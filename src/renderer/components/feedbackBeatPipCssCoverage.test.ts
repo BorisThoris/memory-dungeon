@@ -337,6 +337,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-chain-meter-tone': ['cashout', 'ready', 'setup', 'surge'],
         'data-chain-meter-route-tone': ['cashout', 'ready', 'setup', 'surge'],
         'data-chain-milestone-tone': ['building', 'chain', 'combo', 'surge'],
+        'data-chain-momentum-tone': ['cashout', 'followup', 'ready', 'setup', 'surge'],
         'data-chain-next-action-tone': ['cashout', 'ready', 'setup'],
         'data-chain-opportunity-milestone-tone': ['building', 'chain', 'combo', 'surge'],
         'data-chain-opportunity-tone': ['ready', 'setup'],
@@ -478,6 +479,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-chain-followup-screen-cue': ['pulse'],
         'data-chain-marker-focus': ['primary', 'support'],
         'data-chain-marker-intensity-chip': ['cashout', 'ready', 'setup', 'stack', 'surge'],
+        'data-chain-momentum-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
+        'data-chain-momentum-tier': ['hot', 'primed', 'ready', 'setup'],
         'data-chain-marker-shape': [
             'combo-surge',
             'followup-target',

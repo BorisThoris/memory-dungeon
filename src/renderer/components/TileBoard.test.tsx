@@ -725,6 +725,18 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')).toHaveTextContent(
             'x4 streak'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')).toHaveAttribute(
+            'data-chain-momentum-tone',
+            'cashout'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')).toHaveAttribute(
+            'data-chain-momentum-tier',
+            'hot'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')).toHaveAttribute(
+            'data-chain-momentum-screen-cue',
+            'burst'
+        );
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')).toHaveTextContent(
             '1 match to reward'
         );
@@ -2528,6 +2540,18 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="2"]')).toHaveAttribute(
             'data-chain-momentum-meter-fill',
             '40'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="2"]')).toHaveAttribute(
+            'data-chain-momentum-tone',
+            'ready'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="2"]')).toHaveAttribute(
+            'data-chain-momentum-tier',
+            'ready'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="2"]')).toHaveAttribute(
+            'data-chain-momentum-screen-cue',
+            'guard'
         );
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-hot', 'ready');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-priority', 'single');

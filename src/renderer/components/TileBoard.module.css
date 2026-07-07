@@ -6907,6 +6907,42 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
 }
 
+.chainOpportunityMomentum[data-chain-momentum-tone='cashout'],
+.chainOpportunityMomentum[data-chain-momentum-tier='hot'],
+.chainOpportunityMomentum[data-chain-momentum-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 16%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), transparent 72%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-tone='surge'],
+.chainOpportunityMomentum[data-chain-momentum-tier='primed'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-gold-bright) 22%);
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-tone='followup'],
+.chainOpportunityMomentum[data-chain-momentum-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, #fff7c4 44%, var(--theme-cyan-bright) 16%);
+    color: color-mix(in srgb, #fff7c4 88%, white);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-tone='ready'],
+.chainOpportunityMomentum[data-chain-momentum-tier='ready'],
+.chainOpportunityMomentum[data-chain-momentum-screen-cue='guard'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
+    color: color-mix(in srgb, var(--theme-success) 88%, white);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-tone='setup'],
+.chainOpportunityMomentum[data-chain-momentum-tier='setup'],
+.chainOpportunityMomentum[data-chain-momentum-screen-cue='tick'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-violet-bright) 16%);
+}
+
 .chainOpportunityMomentumBeatPips {
     display: inline-flex;
     align-items: center;
@@ -6944,6 +6980,36 @@
 .chainOpportunityMomentum[data-chain-momentum-beats='5'] .chainOpportunityMomentumBeatPips i {
     background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
     box-shadow: 0 0 0.35rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-tone='cashout'] .chainOpportunityMomentumMeterFill,
+.chainOpportunityMomentum[data-chain-momentum-tier='hot'] .chainOpportunityMomentumMeterFill,
+.chainOpportunityMomentum[data-chain-momentum-tone='cashout'] .chainOpportunityMomentumBeatPips i,
+.chainOpportunityMomentum[data-chain-momentum-tier='hot'] .chainOpportunityMomentumBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow: 0 0 0.35rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-tone='surge'] .chainOpportunityMomentumMeterFill,
+.chainOpportunityMomentum[data-chain-momentum-tier='primed'] .chainOpportunityMomentumMeterFill,
+.chainOpportunityMomentum[data-chain-momentum-tone='surge'] .chainOpportunityMomentumBeatPips i,
+.chainOpportunityMomentum[data-chain-momentum-tier='primed'] .chainOpportunityMomentumBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+    box-shadow: 0 0 0.35rem color-mix(in srgb, var(--theme-violet-bright) 26%, transparent);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-tone='followup'] .chainOpportunityMomentumMeterFill,
+.chainOpportunityMomentum[data-chain-momentum-tone='followup'] .chainOpportunityMomentumBeatPips i {
+    background: color-mix(in srgb, #fff7c4 84%, white);
+    box-shadow: 0 0 0.35rem color-mix(in srgb, #fff7c4 24%, transparent);
+}
+
+.chainOpportunityMomentum[data-chain-momentum-tone='ready'] .chainOpportunityMomentumMeterFill,
+.chainOpportunityMomentum[data-chain-momentum-tier='ready'] .chainOpportunityMomentumMeterFill,
+.chainOpportunityMomentum[data-chain-momentum-tone='ready'] .chainOpportunityMomentumBeatPips i,
+.chainOpportunityMomentum[data-chain-momentum-tier='ready'] .chainOpportunityMomentumBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 84%, white);
+    box-shadow: 0 0 0.35rem color-mix(in srgb, var(--theme-success) 24%, transparent);
 }
 
 .activePowerBoardChip {
