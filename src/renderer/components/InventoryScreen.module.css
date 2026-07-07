@@ -798,24 +798,28 @@
     animation-delay: 0.21s;
 }
 
-.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='burst'] .rewardPerkPrimaryLaneCue {
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='burst'] .rewardPerkPrimaryLaneCue,
+.rewardPerkLaneMap[data-reward-perk-primary-lane-role-id='trait'] .rewardPerkPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 64%, var(--theme-cyan-bright) 22%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent)),
         color-mix(in srgb, var(--theme-surface-raised) 82%, transparent);
 }
 
-.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='chain'] .rewardPerkPrimaryLaneCue {
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='chain'] .rewardPerkPrimaryLaneCue,
+.rewardPerkLaneMap[data-reward-perk-primary-lane-role-id='prime'] .rewardPerkPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }
 
-.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='guard'] .rewardPerkPrimaryLaneCue {
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='guard'] .rewardPerkPrimaryLaneCue,
+.rewardPerkLaneMap[data-reward-perk-primary-lane-role-id='control'] .rewardPerkPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-success) 52%, var(--theme-cyan-bright) 16%);
     color: color-mix(in srgb, var(--theme-success) 84%, white);
 }
 
-.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='unlock'] .rewardPerkPrimaryLaneCue {
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='unlock'] .rewardPerkPrimaryLaneCue,
+.rewardPerkLaneMap[data-reward-perk-primary-lane-role-id='key'] .rewardPerkPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 50%, var(--theme-gold-bright) 20%);
     color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
 }
@@ -824,17 +828,20 @@
     border-color: color-mix(in srgb, var(--theme-text-muted) 32%, var(--theme-cyan-bright) 18%);
 }
 
-.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='burst'] .rewardPerkPrimaryLaneBeatPips i {
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='burst'] .rewardPerkPrimaryLaneBeatPips i,
+.rewardPerkLaneMap[data-reward-perk-primary-lane-role-id='trait'] .rewardPerkPrimaryLaneBeatPips i {
     width: 0.25rem;
     height: 0.25rem;
     background: color-mix(in srgb, var(--theme-gold-bright) 88%, white 8%);
 }
 
-.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='guard'] .rewardPerkPrimaryLaneBeatPips i {
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='guard'] .rewardPerkPrimaryLaneBeatPips i,
+.rewardPerkLaneMap[data-reward-perk-primary-lane-role-id='control'] .rewardPerkPrimaryLaneBeatPips i {
     background: color-mix(in srgb, var(--theme-success) 84%, white 8%);
 }
 
-.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='unlock'] .rewardPerkPrimaryLaneBeatPips i {
+.rewardPerkLaneMap[data-reward-perk-primary-lane-screen-cue='unlock'] .rewardPerkPrimaryLaneBeatPips i,
+.rewardPerkLaneMap[data-reward-perk-primary-lane-role-id='key'] .rewardPerkPrimaryLaneBeatPips i {
     background: color-mix(in srgb, var(--theme-violet-bright) 82%, white 10%);
 }
 
@@ -936,14 +943,22 @@
 }
 
 .rewardPerkLaneMap span[data-reward-perk-lane-kind='trait-combo'],
-.rewardPerkLaneMap span[data-reward-perk-lane-kind='chain-reward'] {
+.rewardPerkLaneMap span[data-reward-perk-lane-kind='chain-reward'],
+.rewardPerkLaneMap span[data-reward-perk-lane-role-id='trait'],
+.rewardPerkLaneMap span[data-reward-perk-lane-role-id='prime'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
 }
 
-.rewardPerkLaneMap span[data-reward-perk-lane-kind='hazard-control'] {
+.rewardPerkLaneMap span[data-reward-perk-lane-kind='hazard-control'],
+.rewardPerkLaneMap span[data-reward-perk-lane-role-id='control'] {
     border-color: color-mix(in srgb, var(--theme-success) 30%, transparent);
     color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.rewardPerkLaneMap span[data-reward-perk-lane-role-id='key'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
 }
 
 @keyframes inventoryBeatPulse {
