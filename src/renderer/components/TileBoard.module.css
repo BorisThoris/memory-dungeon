@@ -6810,6 +6810,61 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
 }
 
+.activePowerBoardChip small[data-active-power-step='first'] {
+    opacity: 0.9;
+}
+
+.activePowerBoardChip small[data-active-power-step-tone='setup'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 32%, var(--theme-gold-bright) 10%);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+}
+
+.activePowerBoardChip small[data-active-power-step-tone='setup'][data-active-power-step='then'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    box-shadow: 0 0 0.5rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+}
+
+.activePowerBoardChip small[data-active-power-step-tone='control'] {
+    border-color: color-mix(in srgb, var(--theme-ember) 32%, transparent);
+    background: color-mix(in srgb, var(--theme-ember) 10%, transparent);
+}
+
+.activePowerBoardChip small[data-active-power-step-tone='control'][data-active-power-step='then'] {
+    color: color-mix(in srgb, var(--theme-ember) 82%, white);
+    box-shadow: 0 0 0.5rem color-mix(in srgb, var(--theme-ember) 12%, transparent);
+}
+
+.activePowerBoardChip small[data-active-power-step-tone='recall'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 32%, transparent);
+    background: color-mix(in srgb, var(--theme-violet-bright) 10%, transparent);
+}
+
+.activePowerBoardChip small[data-active-power-step-tone='recall'][data-active-power-step='then'] {
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+    box-shadow: 0 0 0.5rem color-mix(in srgb, var(--theme-violet-bright) 12%, transparent);
+}
+
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-phase='first'] {
+    opacity: 0.72;
+}
+
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-phase='then'] {
+    width: 0.16rem;
+    opacity: 0.9;
+}
+
+.activePowerBoardChip[data-active-power-tone='setup'] .activePowerBoardStepBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 74%, white);
+}
+
+.activePowerBoardChip[data-active-power-tone='control'] .activePowerBoardStepBeatPips i {
+    background: color-mix(in srgb, var(--theme-ember) 74%, white);
+}
+
+.activePowerBoardChip[data-active-power-tone='recall'] .activePowerBoardStepBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 74%, white);
+}
+
 .activePowerBoardChip[data-active-power-tone='setup'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
     background:

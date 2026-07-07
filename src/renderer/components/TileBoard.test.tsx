@@ -2715,6 +2715,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-meter-fill', '50');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-first', 'Pick target');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-then', 'Preview route payoff');
+        expect(screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step="first"]')).toHaveAttribute(
+            'data-active-power-step-tone',
+            'setup'
+        );
+        expect(screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step="then"]')).toHaveAttribute(
+            'data-active-power-step-tone',
+            'setup'
+        );
         expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-beat]')).toHaveLength(2);
         expect(
             screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-beat="1"]')
@@ -2723,6 +2731,9 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
         ).toHaveAttribute('data-active-power-step-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step="then"] [data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-phase', 'then');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
             /Active board power.*Swap armed.*Place target.*First Pick target.*Then Preview route payoff/i
         );
@@ -2753,6 +2764,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-meter-fill', '75');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-first', 'Reveal one');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-then', 'Lock memory route');
+        expect(screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step="first"]')).toHaveAttribute(
+            'data-active-power-step-tone',
+            'recall'
+        );
+        expect(screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step="then"]')).toHaveAttribute(
+            'data-active-power-step-tone',
+            'recall'
+        );
         expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-beat]')).toHaveLength(3);
         expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-step-beat]')).toHaveLength(4);
         expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
@@ -2784,6 +2803,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-meter-fill', '75');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-first', 'Mark pair');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAttribute('data-active-power-then', 'Clear blocker');
+        expect(screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step="first"]')).toHaveAttribute(
+            'data-active-power-step-tone',
+            'control'
+        );
+        expect(screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step="then"]')).toHaveAttribute(
+            'data-active-power-step-tone',
+            'control'
+        );
         expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-beat]')).toHaveLength(3);
         expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-step-beat]')).toHaveLength(4);
         expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(

@@ -324,6 +324,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         .join('\n');
     const visibleToneContracts: Record<string, readonly string[]> = {
         'data-active-power-tone': ['control', 'recall', 'setup'],
+        'data-active-power-step-tone': ['control', 'recall', 'setup'],
         'data-board-chain-reward-lead-tone': ['guard', 'heal', 'reward'],
         'data-chain-armed-perk-tone': ['armed', 'payoff'],
         'data-chain-callout-tone': ['cashout', 'ready', 'setup', 'surge'],
@@ -399,6 +400,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-board-chain-reward-screen-cue': ['burst', 'pulse', 'tick'],
         'data-board-chain-reward-lead-screen-cue': ['burst', 'pulse', 'tick'],
         'data-board-chain-reward-urgency': ['later', 'next', 'soon'],
+        'data-active-power-step': ['first', 'then'],
+        'data-active-power-step-beat-phase': ['first', 'then'],
         'data-card-beat-tier': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
         'data-card-cadence': ['cashout', 'follow-up', 'prime', 'route', 'surge'],
         'data-card-feedback-trait-lane-primary-screen-cue': ['burst', 'guard', 'pulse', 'risk'],

@@ -6018,25 +6018,27 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         />
                                     ))}
                                 </span>
-                                <small data-active-power-step="first">
+                                <small data-active-power-step="first" data-active-power-step-tone={activePowerBoardChip.tone}>
                                     First: {activePowerBoardChip.first}
                                     <span aria-hidden="true" className={styles.activePowerBoardStepBeatPips}>
                                         {Array.from({ length: 2 }, (_, index) => (
                                             <i
                                                 data-active-power-step-beat={index + 1}
                                                 data-active-power-step-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                data-active-power-step-beat-phase="first"
                                                 key={`active-power-step-first-${index + 1}`}
                                             />
                                         ))}
                                     </span>
                                 </small>
-                                <small data-active-power-step="then">
+                                <small data-active-power-step="then" data-active-power-step-tone={activePowerBoardChip.tone}>
                                     Then: {activePowerBoardChip.then}
                                     <span aria-hidden="true" className={styles.activePowerBoardStepBeatPips}>
                                         {Array.from({ length: 2 }, (_, index) => (
                                             <i
                                                 data-active-power-step-beat={index + 1}
                                                 data-active-power-step-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                data-active-power-step-beat-phase="then"
                                                 key={`active-power-step-then-${index + 1}`}
                                             />
                                         ))}
