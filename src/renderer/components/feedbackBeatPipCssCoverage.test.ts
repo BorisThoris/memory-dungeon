@@ -1295,6 +1295,55 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-momentum-tone='surge'[\s\S]*?radial-gradient[\s\S]*?var\(--theme-violet-bright\)/);
     });
 
+    it('keeps chain marker key action beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout marker key beats should read as quick payout beats'
+        ).toMatch(/data-chain-marker-key-action='cashout'[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'surge marker key beats should read as faster combo acceleration'
+        ).toMatch(/data-chain-marker-key-action='surge'[\s\S]*?animation-duration:\s*0\.62s/);
+        expect(
+            cssText,
+            'route marker key beats should stay horizontal route guidance'
+        ).toMatch(/data-chain-marker-key-action='route'[\s\S]*?width:\s*0\.16rem/);
+        expect(
+            cssText,
+            'prime marker key beats should use a taller setup shape than route'
+        ).toMatch(/data-chain-marker-key-action='prime'[\s\S]*?height:\s*0\.16rem/);
+        expect(
+            cssText,
+            'perk marker key beats should carry reward utility language'
+        ).toMatch(/data-chain-marker-key-action='perk'[\s\S]*?var\(--theme-success\)/);
+    });
+
+    it('keeps chain marker key screen cues visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".chainOpportunityMarkerKeySummary[data-chain-marker-key-screen-cue='burst'] .chainOpportunityMarkerKeySummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityMarkerKeySummary[data-chain-marker-key-screen-cue='pulse'] .chainOpportunityMarkerKeySummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityMarkerKeySummary[data-chain-marker-key-screen-cue='tick'] .chainOpportunityMarkerKeySummaryBeatPips i");
+        expect(
+            cssText,
+            'burst marker cues should stay high-emphasis'
+        ).toMatch(/data-chain-marker-key-screen-cue='burst'[\s\S]*?opacity:\s*0\.98/);
+        expect(
+            cssText,
+            'pulse marker cues should keep mid-tempo guidance'
+        ).toMatch(/data-chain-marker-key-screen-cue='pulse'[\s\S]*?animation-duration:\s*0\.94s/);
+        expect(
+            cssText,
+            'tick marker cues should stay quiet and slow'
+        ).toMatch(/data-chain-marker-key-screen-cue='tick'[\s\S]*?animation-duration:\s*1\.34s/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),
