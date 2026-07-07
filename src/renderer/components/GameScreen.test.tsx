@@ -530,6 +530,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(rail.querySelector('[data-action-feedback-detail="reward"]')).toHaveTextContent('Shard cashout');
         expect(rail.querySelector('[data-action-feedback-detail="trait"]')).toHaveTextContent('Route paid');
         expect(rail).toHaveAttribute('data-action-feedback-lane-map', 'cash:2>route:1>chain:1');
+        expect(rail).toHaveAttribute('data-action-feedback-lane-roles', 'cash:Cashout:2>route:Route:1>chain:Protect:1');
         expect(rail).toHaveAttribute(
             'data-action-feedback-lane-actions',
             'cash:Cash now:2>route:Route next:1>chain:Protect streak:1'
@@ -537,6 +538,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
             'data-action-feedback-lane-map',
             'cash:2>route:1>chain:1'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
+            'data-action-feedback-lane-roles',
+            'cash:Cashout:2>route:Route:1>chain:Protect:1'
         );
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
             'data-action-feedback-lane-actions',
@@ -564,6 +569,10 @@ describe('GameScreen (OVR-014)', () => {
             'Shard cashout'
         );
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
+            'data-action-feedback-primary-lane-role',
+            'Cashout'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
             'data-action-feedback-primary-lane-screen-cue',
             'burst'
         );
@@ -571,7 +580,7 @@ describe('GameScreen (OVR-014)', () => {
             'Action lane map. Cash Cashout x2. Cash now. Shard cashout. Route Route x1. Route next. Route paid. Chain Protect x1. Protect streak. Chain x5.'
         );
         expect(screen.getByTestId('action-feedback-primary-lane')).toHaveAccessibleName(
-            'Primary feedback lane. Cash: Cash now. Shard cashout. 4 beats.'
+            'Primary feedback lane. Cashout Cash: Cash now. Shard cashout. 4 beats.'
         );
         expect(screen.getByTestId('action-feedback-primary-lane')).toHaveAttribute('data-action-feedback-primary-lane', 'cash');
         expect(screen.getByTestId('action-feedback-primary-lane')).toHaveAttribute(
@@ -587,16 +596,24 @@ describe('GameScreen (OVR-014)', () => {
             'Shard cashout'
         );
         expect(screen.getByTestId('action-feedback-primary-lane')).toHaveAttribute(
+            'data-action-feedback-primary-lane-role',
+            'Cashout'
+        );
+        expect(screen.getByTestId('action-feedback-primary-lane')).toHaveAttribute(
             'data-action-feedback-primary-lane-screen-cue',
             'burst'
         );
         expect(screen.getByTestId('action-feedback-primary-lane')).toHaveTextContent('Next chase');
         expect(screen.getByTestId('action-feedback-primary-lane').querySelectorAll('[data-action-feedback-primary-lane-beat]')).toHaveLength(4);
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="cash"]')).toHaveTextContent(
-            '2'
+            'x2 / Shard cashout'
         );
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="cash"]')).toHaveTextContent(
             'Cash now'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="cash"]')).toHaveAttribute(
+            'data-action-feedback-lane-role',
+            'Cashout'
         );
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="cash"]')).toHaveAttribute(
             'data-action-feedback-lane-action',
@@ -616,7 +633,14 @@ describe('GameScreen (OVR-014)', () => {
             'Route paid'
         );
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="route"]')).toHaveTextContent(
+            'x1 / Route paid'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="route"]')).toHaveTextContent(
             'Route next'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="route"]')).toHaveAttribute(
+            'data-action-feedback-lane-role',
+            'Route'
         );
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="route"]')).toHaveAttribute(
             'data-action-feedback-lane-action',
@@ -636,7 +660,14 @@ describe('GameScreen (OVR-014)', () => {
             'Chain x5'
         );
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="chain"]')).toHaveTextContent(
+            'x1 / Chain x5'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="chain"]')).toHaveTextContent(
             'Protect streak'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="chain"]')).toHaveAttribute(
+            'data-action-feedback-lane-role',
+            'Protect'
         );
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="chain"]')).toHaveAttribute(
             'data-action-feedback-lane-beats',

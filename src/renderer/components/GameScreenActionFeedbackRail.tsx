@@ -133,6 +133,9 @@ const actionFeedbackLaneRole = (lane: ActionFeedbackLaneMapEntry): 'Cashout' | '
     return 'Route';
 };
 
+const actionFeedbackLaneRoleMapAttr = (laneMap: readonly ActionFeedbackLaneMapEntry[] | null): string =>
+    laneMap?.map((lane) => `${lane.id}:${actionFeedbackLaneRole(lane)}:${lane.count}`).join('>') ?? 'none';
+
 const actionFeedbackLaneMapLabel = (laneMap: readonly ActionFeedbackLaneMapEntry[] | null): string =>
     laneMap?.length
         ? `Action lane map. ${laneMap.map((lane) => `${lane.label} ${actionFeedbackLaneRole(lane)} x${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
@@ -784,6 +787,7 @@ export const GameScreenActionFeedbackRail = ({
             data-action-feedback-impact-screen-cue={impactScreenCue}
             data-action-feedback-lane-map={actionFeedbackLaneMapAttr(laneMap)}
             data-action-feedback-lane-actions={actionFeedbackLaneActionMapAttr(laneMap)}
+            data-action-feedback-lane-roles={actionFeedbackLaneRoleMapAttr(laneMap)}
             data-action-feedback-payoff-action={payoffIntensity.action}
             data-action-feedback-payoff-audio={payoffAudioCue}
             data-action-feedback-payoff-beats={payoffBeatCount}
@@ -916,11 +920,13 @@ export const GameScreenActionFeedbackRail = ({
                     className={styles.actionFeedbackLaneMap}
                     data-action-feedback-lane-actions={actionFeedbackLaneActionMapAttr(laneMap)}
                     data-action-feedback-lane-map={actionFeedbackLaneMapAttr(laneMap)}
+                    data-action-feedback-lane-roles={actionFeedbackLaneRoleMapAttr(laneMap)}
                     data-action-feedback-primary-lane={primaryLane?.id ?? 'none'}
                     data-action-feedback-primary-lane-action={primaryLane?.action ?? 'none'}
                     data-action-feedback-primary-lane-audio={primaryLane ? actionFeedbackLaneAudioCue(primaryLane) : 'none'}
                     data-action-feedback-primary-lane-beats={primaryLane ? actionFeedbackLaneBeatCount(primaryLane) : 0}
                     data-action-feedback-primary-lane-cue={primaryLane?.cue ?? 'none'}
+                    data-action-feedback-primary-lane-role={primaryLane ? actionFeedbackLaneRole(primaryLane) : 'none'}
                     data-action-feedback-primary-lane-screen-cue={primaryLane ? actionFeedbackLaneScreenCue(primaryLane) : 'none'}
                     data-testid="action-feedback-lane-map"
                 >
@@ -945,18 +951,19 @@ export const GameScreenActionFeedbackRail = ({
                     </span>
                     {primaryLane ? (
                         <span
-                            aria-label={`Primary feedback lane. ${primaryLane.label}: ${primaryLane.action}. ${primaryLane.cue}. ${actionFeedbackLaneBeatCount(primaryLane)} beats.`}
+                            aria-label={`Primary feedback lane. ${actionFeedbackLaneRole(primaryLane)} ${primaryLane.label}: ${primaryLane.action}. ${primaryLane.cue}. ${actionFeedbackLaneBeatCount(primaryLane)} beats.`}
                             className={styles.actionFeedbackPrimaryLaneCue}
                             data-action-feedback-primary-lane={primaryLane.id}
                             data-action-feedback-primary-lane-action={primaryLane.action}
                             data-action-feedback-primary-lane-audio={actionFeedbackLaneAudioCue(primaryLane)}
                             data-action-feedback-primary-lane-beats={actionFeedbackLaneBeatCount(primaryLane)}
                             data-action-feedback-primary-lane-cue={primaryLane.cue}
+                            data-action-feedback-primary-lane-role={actionFeedbackLaneRole(primaryLane)}
                             data-action-feedback-primary-lane-screen-cue={actionFeedbackLaneScreenCue(primaryLane)}
                             data-testid="action-feedback-primary-lane"
                         >
                             <small>Next chase</small>
-                            <b>{primaryLane.label}</b>
+                            <b>{actionFeedbackLaneRole(primaryLane)}</b>
                             <strong>{primaryLane.action}</strong>
                             <em>{primaryLane.cue}</em>
                             <span aria-hidden="true" className={styles.actionFeedbackPrimaryLaneBeatPips}>
@@ -973,13 +980,16 @@ export const GameScreenActionFeedbackRail = ({
                             data-action-feedback-lane-audio={actionFeedbackLaneAudioCue(lane)}
                             data-action-feedback-lane-beats={actionFeedbackLaneBeatCount(lane)}
                             data-action-feedback-lane-count={lane.count}
+                            data-action-feedback-lane-role={actionFeedbackLaneRole(lane)}
                             data-action-feedback-lane-screen-cue={actionFeedbackLaneScreenCue(lane)}
                             key={lane.id}
                         >
                             <small>{lane.label}</small>
-                            <b>{lane.count}</b>
+                            <b>{actionFeedbackLaneRole(lane)}</b>
                             <strong>{lane.action}</strong>
-                            <em>{lane.cue}</em>
+                            <em>
+                                x{lane.count} / {lane.cue}
+                            </em>
                             <span aria-hidden="true" className={styles.actionFeedbackLaneBeatPips}>
                                 {Array.from({ length: actionFeedbackLaneBeatCount(lane) }, (_, beatIndex) => (
                                     <i data-action-feedback-lane-beat={beatIndex + 1} key={beatIndex} />
