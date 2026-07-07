@@ -446,9 +446,36 @@ const boardOpportunityLaneFocus = (
     }
 };
 
+const boardOpportunityLaneRole = (
+    lane: Pick<BoardOpportunityLaneMapEntry, 'id'>
+): 'Cashout' | 'Claim' | 'Perk' | 'Prime' | 'Recover' | 'Risk' | 'Study' | 'Tool' => {
+    switch (lane.id) {
+        case 'cash':
+            return 'Cashout';
+        case 'pickup':
+            return 'Claim';
+        case 'perk':
+            return 'Perk';
+        case 'recover':
+            return 'Recover';
+        case 'risk':
+            return 'Risk';
+        case 'tool':
+            return 'Tool';
+        case 'trait':
+            return 'Study';
+        case 'build':
+        default:
+            return 'Prime';
+    }
+};
+
+const boardOpportunityLaneRoleMapAttr = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
+    laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${boardOpportunityLaneRole(lane)}:${lane.count}`).join('>') : 'none';
+
 const boardOpportunityLaneMapLabel = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
     laneMap.length > 0
-        ? `Opportunity lane map. ${laneMap.map((lane) => `${lane.label} x${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
+        ? `Opportunity lane map. ${laneMap.map((lane) => `${lane.label} ${boardOpportunityLaneRole(lane)} x${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
         : 'Opportunity lane map';
 
 const boardChainRewardLadder = (
@@ -2594,6 +2621,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const primaryBoardOpportunityLane = boardOpportunityLaneMapRows[0] ?? null;
     const boardOpportunityLaneMapAttrValue = boardOpportunityLaneMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneActionMapAttrValue = boardOpportunityLaneActionMapAttr(boardOpportunityLaneMapRows);
+    const boardOpportunityLaneRoleMapAttrValue = boardOpportunityLaneRoleMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneMapAccessibleLabel = boardOpportunityLaneMapLabel(boardOpportunityLaneMapRows);
     const boardOpportunityLaneMapMeterFill = primaryBoardOpportunityLane
         ? Math.round(
@@ -2602,7 +2630,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         : 0;
     const boardOpportunityLaneMapLiveText =
         boardOpportunityLaneMapRows.length > 1
-            ? ` Decision lanes: ${boardOpportunityLaneMapRows.map((lane) => `${lane.label} ${lane.count}, ${lane.action}`).join(', ')}.`
+            ? ` Decision lanes: ${boardOpportunityLaneMapRows.map((lane) => `${lane.label} ${boardOpportunityLaneRole(lane)} ${lane.count}, ${lane.action}`).join(', ')}.`
             : '';
     const boardPayoffStack =
         boardPayoffStackRows.length >= 2
@@ -4031,6 +4059,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-lane-map={boardOpportunityLaneMapAttrValue}
             data-opportunity-lane-count={boardOpportunityLaneMapRows.length}
             data-opportunity-lane-label={boardOpportunityLaneMapRows[0]?.label ?? 'none'}
+            data-opportunity-lane-roles={boardOpportunityLaneRoleMapAttrValue}
             data-opportunity-primary-lane={primaryBoardOpportunityLane?.id ?? 'none'}
             data-opportunity-primary-lane-action={primaryBoardOpportunityLane?.action ?? 'none'}
             data-opportunity-primary-lane-audio={
@@ -4042,6 +4071,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-primary-lane-cue={primaryBoardOpportunityLane?.cue ?? 'none'}
             data-opportunity-primary-lane-focus={
                 primaryBoardOpportunityLane ? boardOpportunityLaneFocus(primaryBoardOpportunityLane) : 'none'
+            }
+            data-opportunity-primary-lane-role={
+                primaryBoardOpportunityLane ? boardOpportunityLaneRole(primaryBoardOpportunityLane) : 'none'
             }
             data-opportunity-primary-lane-screen-cue={
                 primaryBoardOpportunityLane ? boardOpportunityLaneScreenCue(primaryBoardOpportunityLane) : 'none'
@@ -6120,6 +6152,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.opportunityLaneMap}
                                         data-opportunity-lane-actions={boardOpportunityLaneActionMapAttrValue}
                                         data-opportunity-lane-map={boardOpportunityLaneMapAttrValue}
+                                        data-opportunity-lane-roles={boardOpportunityLaneRoleMapAttrValue}
                                         data-opportunity-primary-lane={primaryBoardOpportunityLane?.id ?? 'none'}
                                         data-opportunity-primary-lane-action={primaryBoardOpportunityLane?.action ?? 'none'}
                                         data-opportunity-primary-lane-audio={
@@ -6131,6 +6164,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-opportunity-primary-lane-cue={primaryBoardOpportunityLane?.cue ?? 'none'}
                                         data-opportunity-primary-lane-focus={
                                             primaryBoardOpportunityLane ? boardOpportunityLaneFocus(primaryBoardOpportunityLane) : 'none'
+                                        }
+                                        data-opportunity-primary-lane-role={
+                                            primaryBoardOpportunityLane ? boardOpportunityLaneRole(primaryBoardOpportunityLane) : 'none'
                                         }
                                         data-opportunity-primary-lane-screen-cue={
                                             primaryBoardOpportunityLane ? boardOpportunityLaneScreenCue(primaryBoardOpportunityLane) : 'none'
@@ -6172,7 +6208,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                         {primaryBoardOpportunityLane ? (
                                         <span
-                                                aria-label={`Primary opportunity lane. ${primaryBoardOpportunityLane.label}: ${primaryBoardOpportunityLane.action}. ${primaryBoardOpportunityLane.cue}. ${boardOpportunityLaneBeatCount(primaryBoardOpportunityLane)} beats.`}
+                                                aria-label={`Primary opportunity lane. ${primaryBoardOpportunityLane.label} ${boardOpportunityLaneRole(primaryBoardOpportunityLane)}. ${primaryBoardOpportunityLane.action}. ${primaryBoardOpportunityLane.cue}. ${boardOpportunityLaneBeatCount(primaryBoardOpportunityLane)} beats.`}
                                                 className={styles.opportunityPrimaryLane}
                                                 data-opportunity-primary-lane={primaryBoardOpportunityLane.id}
                                                 data-opportunity-primary-lane-action={primaryBoardOpportunityLane.action}
@@ -6181,6 +6217,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-opportunity-primary-lane-meter-fill={Math.round((boardOpportunityLaneBeatCount(primaryBoardOpportunityLane) / 5) * 100)}
                                                 data-opportunity-primary-lane-cue={primaryBoardOpportunityLane.cue}
                                                 data-opportunity-primary-lane-focus={boardOpportunityLaneFocus(primaryBoardOpportunityLane)}
+                                                data-opportunity-primary-lane-role={boardOpportunityLaneRole(primaryBoardOpportunityLane)}
                                                 data-opportunity-primary-lane-screen-cue={boardOpportunityLaneScreenCue(primaryBoardOpportunityLane)}
                                                 data-testid="board-opportunity-primary-lane"
                                                 style={
@@ -6193,6 +6230,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             >
                                                 <small>Board focus</small>
                                                 <b>{primaryBoardOpportunityLane.label}</b>
+                                                <u>{boardOpportunityLaneRole(primaryBoardOpportunityLane)}</u>
                                                 <strong>{primaryBoardOpportunityLane.action}</strong>
                                                 <em>{primaryBoardOpportunityLane.cue}</em>
                                                 <span aria-hidden="true" className={styles.opportunityPrimaryLaneBeatPips}>
@@ -6219,6 +6257,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-opportunity-lane-beats={boardOpportunityLaneBeatCount(lane)}
                                                 data-opportunity-lane-count={lane.count}
                                                 data-opportunity-lane-meter-fill={Math.round((boardOpportunityLaneBeatCount(lane) / 5) * 100)}
+                                                data-opportunity-lane-role={boardOpportunityLaneRole(lane)}
                                                 data-opportunity-lane-screen-cue={boardOpportunityLaneScreenCue(lane)}
                                                 style={
                                                     {
@@ -6231,6 +6270,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             >
                                                 <small>{lane.label}</small>
                                                 <b>{lane.count}</b>
+                                                <u>{boardOpportunityLaneRole(lane)}</u>
                                                 <strong>{lane.action}</strong>
                                                 <em>{lane.cue}</em>
                                                 <span aria-hidden="true" className={styles.opportunityLaneBeatPips}>

@@ -1803,6 +1803,10 @@ describe('TileBoard touch and click controls', () => {
             'data-opportunity-lane-actions',
             'build:Prime build:1>trait:Study traits:1>pickup:Claim pickup:1'
         );
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
+            'data-opportunity-lane-roles',
+            'build:Prime:1>trait:Study:1>pickup:Claim:1'
+        );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute('data-opportunity-primary-lane', 'build');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-primary-lane-action',
@@ -1811,6 +1815,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-primary-lane-focus',
             'build'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
+            'data-opportunity-primary-lane-role',
+            'Prime'
         );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAttribute(
             'data-opportunity-primary-lane-audio',
@@ -1840,7 +1848,7 @@ describe('TileBoard touch and click controls', () => {
                 .querySelector('[data-opportunity-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-opportunity-lane-map-summary-beat-focus', 'primary');
         expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAccessibleName(
-            'Primary opportunity lane. Build: Prime build. Prime cashout. 3 beats.'
+            'Primary opportunity lane. Build Prime. Prime build. Prime cashout. 3 beats.'
         );
         expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAttribute('data-opportunity-primary-lane', 'build');
         expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAttribute(
@@ -1856,6 +1864,7 @@ describe('TileBoard touch and click controls', () => {
             'pulse'
         );
         expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveTextContent('Board focus');
+        expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveTextContent('Prime');
         expect(screen.getByTestId('board-opportunity-primary-lane').querySelectorAll('[data-opportunity-primary-lane-beat]')).toHaveLength(3);
         expect(screen.getByTestId('board-opportunity-primary-lane').querySelector('[data-opportunity-primary-lane-beat="1"]')).toHaveAttribute(
             'data-opportunity-primary-lane-beat-focus',
@@ -1874,6 +1883,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="build"]')).toHaveAttribute(
             'data-opportunity-lane-meter-fill',
             '60'
+        );
+        expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="build"]')).toHaveAttribute(
+            'data-opportunity-lane-role',
+            'Prime'
         );
         expect(screen.getByTestId('board-opportunity-primary-lane')).toHaveAttribute(
             'data-opportunity-primary-lane-focus',
@@ -1898,7 +1911,7 @@ describe('TileBoard touch and click controls', () => {
                 ?.querySelector('[data-opportunity-lane-beat="2"]')
         ).toHaveAttribute('data-opportunity-lane-beat-focus', 'support');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
-            'Opportunity lane map. Build x1. Prime build. Prime cashout. Trait x1. Study traits. Trait combo surge. Pickup x1. Claim pickup. Pickup cashout.'
+            'Opportunity lane map. Build Prime x1. Prime build. Prime cashout. Trait Study x1. Study traits. Trait combo surge. Pickup Claim x1. Claim pickup. Pickup cashout.'
         );
         expect(screen.getByTestId('board-opportunity-lane-map-summary')).toHaveAttribute(
             'data-opportunity-lane-map-meter-fill',
@@ -1938,7 +1951,7 @@ describe('TileBoard touch and click controls', () => {
                 'Best play: Prime cashout. Combo route: 1 route ready. Match: Prime cashout'
             );
             expect(screen.getByText(/Focus: Hidden tile, row 1, column 1/i)).toHaveTextContent(
-                'Decision lanes: Build 1, Prime build, Trait 1, Study traits, Pickup 1, Claim pickup.'
+                'Decision lanes: Build Prime 1, Prime build, Trait Study 1, Study traits, Pickup Claim 1, Claim pickup.'
             );
             expect(screen.getByText(/Focus: Hidden tile, row 1, column 1/i)).toHaveTextContent(
             'Board stack: Stack prime. Prime. 2 payoffs live. Stack route + Rewards. Prime beat. Two-beat payoff route is primed. First: Match stack route. Then: Claim rewards. Keep: Keep reward stack primed.'
@@ -2045,7 +2058,7 @@ describe('TileBoard touch and click controls', () => {
             'cash:Cash now:1>trait:Study traits:1>pickup:Claim pickup:1'
         );
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
-            'Opportunity lane map. Cash x1. Cash now. Stack cashout. Trait x1. Study traits. Trait stack surge. Pickup x1. Claim pickup. Stack prime.'
+            'Opportunity lane map. Cash Cashout x1. Cash now. Stack cashout. Trait Study x1. Study traits. Trait stack surge. Pickup Claim x1. Claim pickup. Stack prime.'
         );
     });
 
@@ -3200,7 +3213,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Cash now');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveTextContent('Claim pickup');
         expect(screen.getByTestId('board-opportunity-lane-map')).toHaveAccessibleName(
-            'Opportunity lane map. Cash x1. Cash now. Stack cashout. Pickup x1. Claim pickup. Stack prime.'
+            'Opportunity lane map. Cash Cashout x1. Cash now. Stack cashout. Pickup Claim x1. Claim pickup. Stack prime.'
         );
         expect(screen.getByTestId('board-opportunity-lane-map').querySelector('[data-opportunity-lane="cash"]')).toHaveAttribute(
             'data-opportunity-lane-action',
