@@ -6159,6 +6159,35 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }
 
+.pickupOpportunityChip[data-pickup-opportunity-focus='reward'] {
+    border-color: color-mix(in srgb, var(--theme-success) 46%, var(--theme-gold-bright) 22%);
+    background:
+        linear-gradient(110deg, transparent 0 34%, color-mix(in srgb, var(--theme-success) 10%, transparent) 45%, transparent 58%),
+        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-success) 14%, transparent), transparent 68%),
+        linear-gradient(135deg, rgba(18, 31, 22, 0.9), rgba(26, 22, 12, 0.84)),
+        var(--theme-panel-solid);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.3),
+        0 0 18px color-mix(in srgb, var(--theme-success) 18%, transparent);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='reward'] span,
+.pickupOpportunityChip[data-pickup-opportunity-focus='reward'] strong {
+    color: color-mix(in srgb, var(--theme-success) 86%, white);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='reward'] b {
+    border-color: color-mix(in srgb, var(--theme-success) 44%, var(--theme-gold-bright) 18%);
+    background: color-mix(in srgb, var(--theme-success) 13%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='reward'] em {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, var(--theme-success) 18%);
+    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
 .pickupOpportunityChip span {
     color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
     font-size: 0.58rem;
@@ -6343,8 +6372,36 @@
     text-transform: none;
 }
 
+.pickupOpportunitySequence[data-pickup-sequence-tone='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-success) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-success) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 64%, transparent);
+}
+
+.pickupOpportunitySequence[data-pickup-sequence-tone='cashout'] b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.pickupOpportunitySequence[data-pickup-sequence-tone='cashout'] .pickupOpportunitySequenceBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow: 0 0 0.38rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+}
+
+.pickupOpportunitySequence[data-pickup-sequence-tone='reward'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-gold-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 11%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 64%, transparent);
+}
+
 .pickupOpportunitySequence[data-pickup-sequence-tone='reward'] b {
     color: color-mix(in srgb, var(--theme-success) 78%, white);
+}
+
+.pickupOpportunitySequence[data-pickup-sequence-tone='reward'] .pickupOpportunitySequenceBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 80%, white);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-success) 28%, transparent);
 }
 
 .opportunityCompass {
