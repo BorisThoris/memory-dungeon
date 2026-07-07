@@ -1558,6 +1558,52 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-trap-resolution-screen-cue='pulse'[\s\S]*?animation-duration:\s*1s/);
     });
 
+    it('keeps chain reward urgency tiers visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'next reward urgency should read as immediate fast reward beats'
+        ).toMatch(/data-chain-reward-urgency='next'[\s\S]*?\.chainOpportunityRewardUrgencyBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'soon reward urgency should read as mid-tempo forecast beats'
+        ).toMatch(/data-chain-reward-urgency='soon'[\s\S]*?\.chainOpportunityRewardUrgencyBeatPips i[\s\S]*?animation-duration:\s*0\.96s/);
+        expect(
+            cssText,
+            'later reward urgency should stay quiet and slower'
+        ).toMatch(/data-chain-reward-urgency='later'[\s\S]*?\.chainOpportunityRewardUrgencyBeatPips i[\s\S]*?animation-duration:\s*1\.38s/);
+    });
+
+    it('keeps chain reward lead tiers and tones visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'next reward lead should use fast reward beats'
+        ).toMatch(/data-board-chain-reward-lead-tier='next'[\s\S]*?\.chainOpportunityRewardLeadBeatPips i[\s\S]*?animation-duration:\s*0\.74s/);
+        expect(
+            cssText,
+            'soon reward lead should use mid-tempo beats'
+        ).toMatch(/data-board-chain-reward-lead-tier='soon'[\s\S]*?\.chainOpportunityRewardLeadBeatPips i[\s\S]*?animation-duration:\s*0\.98s/);
+        expect(
+            cssText,
+            'later reward lead should stay smaller and slower'
+        ).toMatch(/data-board-chain-reward-lead-tier='later'[\s\S]*?\.chainOpportunityRewardLeadBeatPips i[\s\S]*?animation-duration:\s*1\.42s/);
+        expect(
+            cssText,
+            'guard reward lead should use taller defensive beats'
+        ).toMatch(/data-board-chain-reward-lead-tone='guard'[\s\S]*?\.chainOpportunityRewardLeadBeatPips i[\s\S]*?height:\s*0\.14rem/);
+        expect(
+            cssText,
+            'heal reward lead should carry success-colored beats'
+        ).toMatch(/data-board-chain-reward-lead-tone='heal'[\s\S]*?\.chainOpportunityRewardLeadBeatPips i[\s\S]*?var\(--theme-success\)/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),

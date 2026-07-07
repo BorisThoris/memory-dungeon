@@ -3101,6 +3101,33 @@
     opacity: 0.68;
 }
 
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='next'] .chainOpportunityRewardUrgencyBeatPips i,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tier='next'] .chainOpportunityRewardUrgencyBeatPips i,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-screen-cue='burst'] .chainOpportunityRewardUrgencyBeatPips i {
+    width: 0.28rem;
+    height: 0.12rem;
+    animation-duration: 0.72s;
+    opacity: 0.96;
+}
+
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='soon'] .chainOpportunityRewardUrgencyBeatPips i,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tier='soon'] .chainOpportunityRewardUrgencyBeatPips i,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-screen-cue='pulse'] .chainOpportunityRewardUrgencyBeatPips i {
+    width: 0.18rem;
+    height: 0.12rem;
+    animation-duration: 0.96s;
+    opacity: 0.82;
+}
+
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='later'] .chainOpportunityRewardUrgencyBeatPips i,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tier='later'] .chainOpportunityRewardUrgencyBeatPips i,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-screen-cue='tick'] .chainOpportunityRewardUrgencyBeatPips i {
+    width: 0.09rem;
+    height: 0.09rem;
+    animation-duration: 1.38s;
+    opacity: 0.58;
+}
+
 .chainOpportunityChip[data-chain-opportunity-tone='ready'] .chainOpportunityCue {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
     background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
@@ -7016,6 +7043,39 @@
 
 .chainOpportunityRewardLeadBeatPips i[data-board-chain-reward-lead-beat-focus='support'] {
     opacity: 0.64;
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='next'] .chainOpportunityRewardLeadBeatPips i,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='burst'] .chainOpportunityRewardLeadBeatPips i {
+    width: 0.22rem;
+    height: 0.1rem;
+    animation-duration: 0.74s;
+    opacity: 0.96;
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='soon'] .chainOpportunityRewardLeadBeatPips i,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='pulse'] .chainOpportunityRewardLeadBeatPips i {
+    width: 0.14rem;
+    height: 0.1rem;
+    animation-duration: 0.98s;
+    opacity: 0.78;
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='later'] .chainOpportunityRewardLeadBeatPips i,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='tick'] .chainOpportunityRewardLeadBeatPips i {
+    width: 0.07rem;
+    height: 0.07rem;
+    animation-duration: 1.42s;
+    opacity: 0.56;
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='guard'] .chainOpportunityRewardLeadBeatPips i {
+    height: 0.14rem;
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='heal'] .chainOpportunityRewardLeadBeatPips i {
+    background: color-mix(in srgb, var(--theme-success) 78%, white);
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-success) 20%, transparent);
 }
 
 .chainOpportunityRewardLadder > span[data-board-chain-reward-focus='primary'] {
