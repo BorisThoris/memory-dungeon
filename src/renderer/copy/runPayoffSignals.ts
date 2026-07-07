@@ -379,6 +379,24 @@ export const getRunPayoffLaneScreenCue = (lane: Pick<RunPayoffLaneMapEntry, 'id'
     return 'burst';
 };
 
+export const getRunPayoffLaneRole = (
+    lane: Pick<RunPayoffLaneMapEntry, 'count' | 'id'>
+): 'Build' | 'Cashout' | 'Protect' | 'Recover' | 'Stack' => {
+    if (lane.count > 1 && lane.id !== 'risk') {
+        return 'Stack';
+    }
+    switch (lane.id) {
+        case 'cash':
+            return 'Cashout';
+        case 'build':
+            return 'Build';
+        case 'risk':
+            return 'Recover';
+        default:
+            return 'Protect';
+    }
+};
+
 export const formatRunPayoffSignalsLabel = (
     label: string,
     rows: readonly Pick<RunPayoffSignalRow, 'arcadeCue' | 'label' | 'nextCue' | 'value'>[]
@@ -424,12 +442,16 @@ export const formatRunPayoffLaneActionMapAttr = (
     laneMap: readonly Pick<RunPayoffLaneMapEntry, 'action' | 'count' | 'id'>[]
 ): string => (laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${lane.action}:${lane.count}`).join('>') : 'none');
 
+export const formatRunPayoffLaneRoleMapAttr = (
+    laneMap: readonly Pick<RunPayoffLaneMapEntry, 'count' | 'id'>[]
+): string => (laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${getRunPayoffLaneRole(lane)}:${lane.count}`).join('>') : 'none');
+
 export const formatRunPayoffLaneMapLabel = (
     label: string,
-    laneMap: readonly Pick<RunPayoffLaneMapEntry, 'action' | 'count' | 'cue' | 'label'>[]
+    laneMap: readonly Pick<RunPayoffLaneMapEntry, 'action' | 'count' | 'cue' | 'id' | 'label'>[]
 ): string =>
     laneMap.length > 0
-        ? `${label}. ${laneMap.map((lane) => `${lane.label}: ${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
+        ? `${label}. ${laneMap.map((lane) => `${lane.label} ${getRunPayoffLaneRole(lane)} x${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
         : label;
 
 export const getRunPayoffBurstSignal = (

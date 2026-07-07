@@ -150,12 +150,17 @@ describe('ProfileScreen', () => {
             'data-recent-run-lane-actions',
             'chain:Protect chain:1>cash:Cash reward:1>build:Build route:1>risk:Reduce risk:1'
         );
+        expect(recentSignals).toHaveAttribute(
+            'data-recent-run-lane-roles',
+            'chain:Protect:1>cash:Cashout:1>build:Build:1>risk:Recover:1'
+        );
         const laneMap = screen.getByTestId('profile-recent-run-lane-map');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane', 'chain');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-action', 'Protect chain');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-audio', 'run-payoff-lane-chain');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-beats', '4');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-cue', 'Combo live');
+        expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-role', 'Protect');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-screen-cue', 'burst');
         expect(laneMap).toHaveTextContent('Chain');
         expect(laneMap).toHaveTextContent('Cash');
@@ -164,15 +169,16 @@ describe('ProfileScreen', () => {
         expect(laneMap).toHaveTextContent('Protect chain');
         expect(laneMap).toHaveTextContent('Reduce risk');
         expect(laneMap).toHaveAccessibleName(
-            'Profile recent run payoff lanes. Chain: 1. Protect chain. Combo live. Cash: 1. Cash reward. Clean floor. Build: 1. Build route. Relic online. Risk: 1. Reduce risk. Pressure read.'
+            'Profile recent run payoff lanes. Chain Protect x1. Protect chain. Combo live. Cash Cashout x1. Cash reward. Clean floor. Build Build x1. Build route. Relic online. Risk Recover x1. Reduce risk. Pressure read.'
         );
         const primaryLane = screen.getByTestId('profile-recent-run-primary-payoff-lane');
-        expect(primaryLane).toHaveAccessibleName('Primary recent run payoff lane. Chain: Protect chain. Combo live. 4 beats.');
+        expect(primaryLane).toHaveAccessibleName('Primary recent run payoff lane. Protect Chain: Protect chain. Combo live. 4 beats.');
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane', 'chain');
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-action', 'Protect chain');
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-audio', 'run-payoff-lane-chain');
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-beats', '4');
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-cue', 'Combo live');
+        expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-role', 'Protect');
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-screen-cue', 'burst');
         expect(primaryLane).toHaveTextContent('Replay chase');
         expect(primaryLane).toHaveTextContent('Protect chain');
@@ -181,9 +187,11 @@ describe('ProfileScreen', () => {
         const riskLane = laneMap.querySelector('[data-recent-run-lane="risk"]');
         expect(chainLane).toHaveAttribute('data-recent-run-lane-action', 'Protect chain');
         expect(chainLane).toHaveAttribute('data-recent-run-lane-beats', '4');
+        expect(chainLane).toHaveAttribute('data-recent-run-lane-role', 'Protect');
         expect(chainLane?.querySelectorAll('[data-recent-run-lane-beat]')).toHaveLength(4);
         expect(riskLane).toHaveAttribute('data-recent-run-lane-action', 'Reduce risk');
         expect(riskLane).toHaveAttribute('data-recent-run-lane-beats', '2');
+        expect(riskLane).toHaveAttribute('data-recent-run-lane-role', 'Recover');
         expect(riskLane?.querySelectorAll('[data-recent-run-lane-beat]')).toHaveLength(2);
         expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveTextContent('Combo burst');
         expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveTextContent('Chase again');
@@ -270,8 +278,12 @@ describe('ProfileScreen', () => {
             'data-recent-run-lane-actions',
             'chain:Protect chain:1>cash:Cash reward:3'
         );
+        expect(screen.getByTestId('profile-recent-run-signals')).toHaveAttribute(
+            'data-recent-run-lane-roles',
+            'chain:Protect:1>cash:Stack:3'
+        );
         expect(screen.getByTestId('profile-recent-run-lane-map')).toHaveAccessibleName(
-            'Profile recent run payoff lanes. Chain: 1. Protect chain. Combo live. Cash: 3. Cash reward. Route cashout.'
+            'Profile recent run payoff lanes. Chain Protect x1. Protect chain. Combo live. Cash Stack x3. Cash reward. Route cashout.'
         );
     });
 });

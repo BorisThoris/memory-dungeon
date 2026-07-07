@@ -16,11 +16,13 @@ import {
     formatRunPayoffLaneMapAttr,
     formatRunPayoffLaneActionMapAttr,
     formatRunPayoffLaneMapLabel,
+    formatRunPayoffLaneRoleMapAttr,
     formatRunPayoffBurstSignalLabel,
     formatRunPayoffSignalsLabel,
     getRunPayoffLaneAudioCue,
     getRunPayoffLaneBeatCount,
     getRunPayoffLaneMap,
+    getRunPayoffLaneRole,
     getRunPayoffLaneScreenCue,
     getRunPayoffBurstSignal,
     getRunPayoffSignalBeatCount,
@@ -64,6 +66,7 @@ const ProfileScreen = () => {
     const primaryRecentRunPayoffLane = recentRunPayoffLaneMap[0] ?? null;
     const recentRunPayoffLaneMapAttr = formatRunPayoffLaneMapAttr(recentRunPayoffLaneMap);
     const recentRunPayoffLaneActionMapAttr = formatRunPayoffLaneActionMapAttr(recentRunPayoffLaneMap);
+    const recentRunPayoffLaneRoleMapAttr = formatRunPayoffLaneRoleMapAttr(recentRunPayoffLaneMap);
     const recentRunPayoffLaneMapLabel = formatRunPayoffLaneMapLabel('Profile recent run payoff lanes', recentRunPayoffLaneMap);
     const recentRunPayoffBurst = getRunPayoffBurstSignal(recentRunSignalRows);
     const recentRunPayoffBurstLabel = formatRunPayoffBurstSignalLabel('Profile recent run payoff burst', recentRunPayoffBurst);
@@ -276,6 +279,7 @@ const ProfileScreen = () => {
                                 className={styles.recentRunSignals}
                                 data-recent-run-lane-actions={recentRunPayoffLaneActionMapAttr}
                                 data-recent-run-lane-map={recentRunPayoffLaneMapAttr}
+                                data-recent-run-lane-roles={recentRunPayoffLaneRoleMapAttr}
                                 data-testid="profile-recent-run-signals"
                             >
                                 {recentRunPayoffLaneMap.length > 1 ? (
@@ -283,6 +287,7 @@ const ProfileScreen = () => {
                                         aria-label={recentRunPayoffLaneMapLabel}
                                         data-recent-run-lane-actions={recentRunPayoffLaneActionMapAttr}
                                         data-recent-run-lane-map={recentRunPayoffLaneMapAttr}
+                                        data-recent-run-lane-roles={recentRunPayoffLaneRoleMapAttr}
                                         data-recent-run-primary-lane={primaryRecentRunPayoffLane?.id ?? 'none'}
                                         data-recent-run-primary-lane-action={primaryRecentRunPayoffLane?.action ?? 'none'}
                                         data-recent-run-primary-lane-audio={
@@ -292,6 +297,9 @@ const ProfileScreen = () => {
                                             primaryRecentRunPayoffLane ? getRunPayoffLaneBeatCount(primaryRecentRunPayoffLane) : 0
                                         }
                                         data-recent-run-primary-lane-cue={primaryRecentRunPayoffLane?.cue ?? 'none'}
+                                        data-recent-run-primary-lane-role={
+                                            primaryRecentRunPayoffLane ? getRunPayoffLaneRole(primaryRecentRunPayoffLane) : 'none'
+                                        }
                                         data-recent-run-primary-lane-screen-cue={
                                             primaryRecentRunPayoffLane ? getRunPayoffLaneScreenCue(primaryRecentRunPayoffLane) : 'none'
                                         }
@@ -299,18 +307,19 @@ const ProfileScreen = () => {
                                     >
                                         {primaryRecentRunPayoffLane ? (
                                             <i
-                                                aria-label={`Primary recent run payoff lane. ${primaryRecentRunPayoffLane.label}: ${primaryRecentRunPayoffLane.action}. ${primaryRecentRunPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryRecentRunPayoffLane)} beats.`}
+                                                aria-label={`Primary recent run payoff lane. ${getRunPayoffLaneRole(primaryRecentRunPayoffLane)} ${primaryRecentRunPayoffLane.label}: ${primaryRecentRunPayoffLane.action}. ${primaryRecentRunPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryRecentRunPayoffLane)} beats.`}
                                                 className={styles.recentRunPrimaryLaneCue}
                                                 data-recent-run-primary-lane={primaryRecentRunPayoffLane.id}
                                                 data-recent-run-primary-lane-action={primaryRecentRunPayoffLane.action}
                                                 data-recent-run-primary-lane-audio={getRunPayoffLaneAudioCue(primaryRecentRunPayoffLane)}
                                                 data-recent-run-primary-lane-beats={getRunPayoffLaneBeatCount(primaryRecentRunPayoffLane)}
                                                 data-recent-run-primary-lane-cue={primaryRecentRunPayoffLane.cue}
+                                                data-recent-run-primary-lane-role={getRunPayoffLaneRole(primaryRecentRunPayoffLane)}
                                                 data-recent-run-primary-lane-screen-cue={getRunPayoffLaneScreenCue(primaryRecentRunPayoffLane)}
                                                 data-testid="profile-recent-run-primary-payoff-lane"
                                             >
                                                 <small>Replay chase</small>
-                                                <strong>{primaryRecentRunPayoffLane.label}</strong>
+                                                <strong>{getRunPayoffLaneRole(primaryRecentRunPayoffLane)}</strong>
                                                 <b>{primaryRecentRunPayoffLane.action}</b>
                                                 <em>{primaryRecentRunPayoffLane.cue}</em>
                                                 <span aria-hidden="true" className={styles.recentRunPrimaryLaneBeatPips}>
@@ -330,13 +339,16 @@ const ProfileScreen = () => {
                                                 data-recent-run-lane-audio={getRunPayoffLaneAudioCue(lane)}
                                                 data-recent-run-lane-beats={getRunPayoffLaneBeatCount(lane)}
                                                 data-recent-run-lane-count={lane.count}
+                                                data-recent-run-lane-role={getRunPayoffLaneRole(lane)}
                                                 data-recent-run-lane-screen-cue={getRunPayoffLaneScreenCue(lane)}
                                                 key={lane.id}
                                             >
                                                 <small>{lane.label}</small>
-                                                <strong>{lane.count}</strong>
+                                                <strong>{getRunPayoffLaneRole(lane)}</strong>
                                                 <b>{lane.action}</b>
-                                                <em>{lane.cue}</em>
+                                                <em>
+                                                    x{lane.count} / {lane.cue}
+                                                </em>
                                                 <span aria-hidden="true" className={styles.recentRunLaneBeatPips}>
                                                     {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
                                                         <s data-recent-run-lane-beat key={index} />

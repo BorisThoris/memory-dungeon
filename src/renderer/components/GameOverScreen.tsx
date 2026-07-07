@@ -14,6 +14,7 @@ import {
     formatRunPayoffLaneMapAttr,
     formatRunPayoffLaneActionMapAttr,
     formatRunPayoffLaneMapLabel,
+    formatRunPayoffLaneRoleMapAttr,
     formatRunPayoffBurstSignalLabel,
     formatRunPayoffCrescendoSignalLabel,
     formatRunPayoffSequenceSignalLabel,
@@ -21,6 +22,7 @@ import {
     getRunPayoffLaneMap,
     getRunPayoffLaneAudioCue,
     getRunPayoffLaneBeatCount,
+    getRunPayoffLaneRole,
     getRunPayoffLaneScreenCue,
     getRunPayoffBurstSignal,
     getRunPayoffCrescendoSignal,
@@ -295,6 +297,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const primaryPayoffLane = payoffLaneMap[0] ?? null;
     const payoffLaneMapAttr = formatRunPayoffLaneMapAttr(payoffLaneMap);
     const payoffLaneActionMapAttr = formatRunPayoffLaneActionMapAttr(payoffLaneMap);
+    const payoffLaneRoleMapAttr = formatRunPayoffLaneRoleMapAttr(payoffLaneMap);
     const payoffLaneMapLabel = formatRunPayoffLaneMapLabel('Run payoff lanes', payoffLaneMap);
     const payoffBurstSignal = getRunPayoffBurstSignal(payoffBurstRows);
     const payoffCrescendoSignal = getRunPayoffCrescendoSignal(payoffBurstRows, payoffBurstSignal);
@@ -418,6 +421,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             className={styles.payoffBurstStrip}
                             data-payoff-lane-actions={payoffLaneActionMapAttr}
                             data-payoff-lane-map={payoffLaneMapAttr}
+                            data-payoff-lane-roles={payoffLaneRoleMapAttr}
                             data-testid="game-over-payoff-burst"
                         >
                             {payoffLaneMap.length > 1 ? (
@@ -425,6 +429,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     aria-label={payoffLaneMapLabel}
                                     data-payoff-lane-actions={payoffLaneActionMapAttr}
                                     data-payoff-lane-map={payoffLaneMapAttr}
+                                    data-payoff-lane-roles={payoffLaneRoleMapAttr}
                                     data-payoff-primary-lane={primaryPayoffLane?.id ?? 'none'}
                                     data-payoff-primary-lane-action={primaryPayoffLane?.action ?? 'none'}
                                     data-payoff-primary-lane-audio={
@@ -434,6 +439,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                         primaryPayoffLane ? getRunPayoffLaneBeatCount(primaryPayoffLane) : 0
                                     }
                                     data-payoff-primary-lane-cue={primaryPayoffLane?.cue ?? 'none'}
+                                    data-payoff-primary-lane-role={primaryPayoffLane ? getRunPayoffLaneRole(primaryPayoffLane) : 'none'}
                                     data-payoff-primary-lane-screen-cue={
                                         primaryPayoffLane ? getRunPayoffLaneScreenCue(primaryPayoffLane) : 'none'
                                     }
@@ -441,18 +447,19 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                 >
                                     {primaryPayoffLane ? (
                                         <i
-                                            aria-label={`Primary run payoff lane. ${primaryPayoffLane.label}: ${primaryPayoffLane.action}. ${primaryPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryPayoffLane)} beats.`}
+                                            aria-label={`Primary run payoff lane. ${getRunPayoffLaneRole(primaryPayoffLane)} ${primaryPayoffLane.label}: ${primaryPayoffLane.action}. ${primaryPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryPayoffLane)} beats.`}
                                             className={styles.payoffPrimaryLaneCue}
                                             data-payoff-primary-lane={primaryPayoffLane.id}
                                             data-payoff-primary-lane-action={primaryPayoffLane.action}
                                             data-payoff-primary-lane-audio={getRunPayoffLaneAudioCue(primaryPayoffLane)}
                                             data-payoff-primary-lane-beats={getRunPayoffLaneBeatCount(primaryPayoffLane)}
                                             data-payoff-primary-lane-cue={primaryPayoffLane.cue}
+                                            data-payoff-primary-lane-role={getRunPayoffLaneRole(primaryPayoffLane)}
                                             data-payoff-primary-lane-screen-cue={getRunPayoffLaneScreenCue(primaryPayoffLane)}
                                             data-testid="game-over-primary-payoff-lane"
                                         >
                                             <small>Top chase</small>
-                                            <strong>{primaryPayoffLane.label}</strong>
+                                            <strong>{getRunPayoffLaneRole(primaryPayoffLane)}</strong>
                                             <b>{primaryPayoffLane.action}</b>
                                             <em>{primaryPayoffLane.cue}</em>
                                             <span aria-hidden="true" className={styles.payoffPrimaryLaneBeatPips}>
@@ -473,13 +480,16 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                             data-payoff-lane-audio={getRunPayoffLaneAudioCue(lane)}
                                             data-payoff-lane-beats={getRunPayoffLaneBeatCount(lane)}
                                             data-payoff-lane-count={lane.count}
+                                            data-payoff-lane-role={getRunPayoffLaneRole(lane)}
                                             data-payoff-lane-screen-cue={getRunPayoffLaneScreenCue(lane)}
                                             key={lane.id}
                                         >
                                             <small>{lane.label}</small>
-                                            <strong>{lane.count}</strong>
+                                            <strong>{getRunPayoffLaneRole(lane)}</strong>
                                             <b>{lane.action}</b>
-                                            <em>{lane.cue}</em>
+                                            <em>
+                                                x{lane.count} / {lane.cue}
+                                            </em>
                                             <span aria-hidden="true" className={styles.payoffLaneBeatPips}>
                                                 {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
                                                     <s

@@ -4,6 +4,7 @@ import {
     formatRunPayoffLaneMapAttr,
     formatRunPayoffLaneActionMapAttr,
     formatRunPayoffLaneMapLabel,
+    formatRunPayoffLaneRoleMapAttr,
     formatRunPayoffBurstSignalLabel,
     formatRunPayoffCrescendoSignalLabel,
     formatRunPayoffSequenceSignalLabel,
@@ -111,8 +112,9 @@ describe('runPayoffSignals', () => {
         expect(formatRunPayoffLaneActionMapAttr(laneMap)).toBe(
             'chain:Protect chain:1>cash:Cash reward:2>build:Build route:1>risk:Reduce risk:1'
         );
+        expect(formatRunPayoffLaneRoleMapAttr(laneMap)).toBe('chain:Protect:1>cash:Stack:2>build:Build:1>risk:Recover:1');
         expect(formatRunPayoffLaneMapLabel('Collection payoff lanes', laneMap)).toBe(
-            'Collection payoff lanes. Chain: 1. Protect chain. Combo live. Cash: 2. Cash reward. Route cashout. Build: 1. Build route. Perk online. Risk: 1. Reduce risk. Left value.'
+            'Collection payoff lanes. Chain Protect x1. Protect chain. Combo live. Cash Stack x2. Cash reward. Route cashout. Build Build x1. Build route. Perk online. Risk Recover x1. Reduce risk. Left value.'
         );
         expect(getRunPayoffSignalBeatCount(rows[0])).toBe(4);
         expect(getRunPayoffSignalBeatCount(rows.find((row) => row.id === 'pickup-claim')!)).toBe(3);

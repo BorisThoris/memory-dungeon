@@ -120,6 +120,10 @@ describe('CollectionScreen REG-093 reward gallery', () => {
             'data-run-payoff-lane-actions',
             'chain:Protect chain:1>cash:Cash reward:1>build:Build route:1>risk:Reduce risk:1'
         );
+        expect(payoffSignals).toHaveAttribute(
+            'data-run-payoff-lane-roles',
+            'chain:Protect:1>cash:Cashout:1>build:Build:1>risk:Recover:1'
+        );
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
             'data-run-payoff-lane-map',
             'chain:1>cash:1>build:1>risk:1'
@@ -127,6 +131,10 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
             'data-run-payoff-lane-actions',
             'chain:Protect chain:1>cash:Cash reward:1>build:Build route:1>risk:Reduce risk:1'
+        );
+        expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
+            'data-run-payoff-lane-roles',
+            'chain:Protect:1>cash:Cashout:1>build:Build:1>risk:Recover:1'
         );
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
             'data-run-payoff-primary-lane',
@@ -144,11 +152,15 @@ describe('CollectionScreen REG-093 reward gallery', () => {
             'data-run-payoff-primary-lane-cue',
             'Combo live'
         );
+        expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
+            'data-run-payoff-primary-lane-role',
+            'Protect'
+        );
         const laneMapSummary = screen.getByTestId('collection-last-run-payoff-lane-map-summary');
         expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-count', '4');
         expect(laneMapSummary).toHaveTextContent('Archive lanes');
         expect(laneMapSummary).toHaveTextContent('4 lanes');
-        expect(laneMapSummary).toHaveTextContent('Chain led');
+        expect(laneMapSummary).toHaveTextContent('Protect Chain');
         expect(laneMapSummary.querySelectorAll('[data-run-payoff-lane-map-summary-beat]')).toHaveLength(5);
         expect(laneMapSummary.querySelector('[data-run-payoff-lane-map-summary-beat="1"]')).toHaveAttribute(
             'data-run-payoff-lane-map-summary-beat-focus',
@@ -165,18 +177,19 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveTextContent('Protect chain');
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveTextContent('Reduce risk');
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAccessibleName(
-            'Collection last run payoff lanes. Chain: 1. Protect chain. Combo live. Cash: 1. Cash reward. Clean floor. Build: 1. Build route. Relic online. Risk: 1. Reduce risk. Pressure read.'
+            'Collection last run payoff lanes. Chain Protect x1. Protect chain. Combo live. Cash Cashout x1. Cash reward. Clean floor. Build Build x1. Build route. Relic online. Risk Recover x1. Reduce risk. Pressure read.'
         );
         const laneMap = screen.getByTestId('collection-last-run-payoff-lane-map');
         expect(laneMap).toHaveAttribute('data-run-payoff-primary-lane-audio', 'run-payoff-lane-chain');
         expect(laneMap).toHaveAttribute('data-run-payoff-primary-lane-screen-cue', 'burst');
         const primaryLane = screen.getByTestId('collection-last-run-primary-payoff-lane');
-        expect(primaryLane).toHaveAccessibleName('Primary archived payoff lane. Chain: Protect chain. Combo live. 4 beats.');
+        expect(primaryLane).toHaveAccessibleName('Primary archived payoff lane. Protect Chain: Protect chain. Combo live. 4 beats.');
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane', 'chain');
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-action', 'Protect chain');
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-audio', 'run-payoff-lane-chain');
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-beats', '4');
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-cue', 'Combo live');
+        expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-role', 'Protect');
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-screen-cue', 'burst');
         expect(primaryLane).toHaveTextContent('Archive chase');
         expect(primaryLane).toHaveTextContent('Protect chain');
@@ -312,8 +325,12 @@ describe('CollectionScreen REG-093 reward gallery', () => {
             'data-run-payoff-lane-actions',
             'chain:Protect chain:1>cash:Cash reward:3'
         );
+        expect(screen.getByTestId('collection-last-run-payoff-signals')).toHaveAttribute(
+            'data-run-payoff-lane-roles',
+            'chain:Protect:1>cash:Stack:3'
+        );
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAccessibleName(
-            'Collection last run payoff lanes. Chain: 1. Protect chain. Combo live. Cash: 3. Cash reward. Route cashout.'
+            'Collection last run payoff lanes. Chain Protect x1. Protect chain. Combo live. Cash Stack x3. Cash reward. Route cashout.'
         );
 
         const sequence = screen.getByTestId('collection-last-run-payoff-sequence');

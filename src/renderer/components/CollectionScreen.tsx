@@ -35,6 +35,7 @@ import {
     formatRunPayoffLaneMapAttr,
     formatRunPayoffLaneActionMapAttr,
     formatRunPayoffLaneMapLabel,
+    formatRunPayoffLaneRoleMapAttr,
     formatRunPayoffBurstSignalLabel,
     formatRunPayoffCrescendoSignalLabel,
     formatRunPayoffSequenceSignalLabel,
@@ -42,6 +43,7 @@ import {
     getRunPayoffLaneAudioCue,
     getRunPayoffLaneBeatCount,
     getRunPayoffLaneMap,
+    getRunPayoffLaneRole,
     getRunPayoffLaneScreenCue,
     getRunPayoffBurstSignal,
     getRunPayoffCrescendoSignal,
@@ -108,6 +110,7 @@ const CollectionScreen = () => {
     const primaryLastRunPayoffLane = lastRunPayoffLaneMap[0] ?? null;
     const lastRunPayoffLaneMapAttr = formatRunPayoffLaneMapAttr(lastRunPayoffLaneMap);
     const lastRunPayoffLaneActionMapAttr = formatRunPayoffLaneActionMapAttr(lastRunPayoffLaneMap);
+    const lastRunPayoffLaneRoleMapAttr = formatRunPayoffLaneRoleMapAttr(lastRunPayoffLaneMap);
     const lastRunPayoffLaneMapLabel = formatRunPayoffLaneMapLabel('Collection last run payoff lanes', lastRunPayoffLaneMap);
     const lastRunPayoffBurst = getRunPayoffBurstSignal(lastRunPayoffRows);
     const lastRunPayoffBurstLabel = formatRunPayoffBurstSignalLabel('Collection last run payoff burst', lastRunPayoffBurst);
@@ -459,6 +462,7 @@ const CollectionScreen = () => {
                                 className={styles.runPayoffStrip}
                                 data-run-payoff-lane-actions={lastRunPayoffLaneActionMapAttr}
                                 data-run-payoff-lane-map={lastRunPayoffLaneMapAttr}
+                                data-run-payoff-lane-roles={lastRunPayoffLaneRoleMapAttr}
                                 data-testid="collection-last-run-payoff-signals"
                             >
                                 {lastRunPayoffLaneMap.length > 1 ? (
@@ -466,6 +470,7 @@ const CollectionScreen = () => {
                                         aria-label={lastRunPayoffLaneMapLabel}
                                         data-run-payoff-lane-actions={lastRunPayoffLaneActionMapAttr}
                                         data-run-payoff-lane-map={lastRunPayoffLaneMapAttr}
+                                        data-run-payoff-lane-roles={lastRunPayoffLaneRoleMapAttr}
                                         data-run-payoff-primary-lane={primaryLastRunPayoffLane?.id ?? 'none'}
                                         data-run-payoff-primary-lane-action={primaryLastRunPayoffLane?.action ?? 'none'}
                                         data-run-payoff-primary-lane-audio={
@@ -475,6 +480,9 @@ const CollectionScreen = () => {
                                             primaryLastRunPayoffLane ? getRunPayoffLaneBeatCount(primaryLastRunPayoffLane) : 0
                                         }
                                         data-run-payoff-primary-lane-cue={primaryLastRunPayoffLane?.cue ?? 'none'}
+                                        data-run-payoff-primary-lane-role={
+                                            primaryLastRunPayoffLane ? getRunPayoffLaneRole(primaryLastRunPayoffLane) : 'none'
+                                        }
                                         data-run-payoff-primary-lane-screen-cue={
                                             primaryLastRunPayoffLane ? getRunPayoffLaneScreenCue(primaryLastRunPayoffLane) : 'none'
                                         }
@@ -492,7 +500,7 @@ const CollectionScreen = () => {
                                             </strong>
                                             <b>
                                                 {primaryLastRunPayoffLane
-                                                    ? `${primaryLastRunPayoffLane.label} led`
+                                                    ? `${getRunPayoffLaneRole(primaryLastRunPayoffLane)} ${primaryLastRunPayoffLane.label}`
                                                     : 'No lead lane'}
                                             </b>
                                             <span aria-hidden="true" className={styles.runPayoffLaneMapSummaryBeatPips}>
@@ -512,18 +520,19 @@ const CollectionScreen = () => {
                                         </i>
                                         {primaryLastRunPayoffLane ? (
                                             <i
-                                                aria-label={`Primary archived payoff lane. ${primaryLastRunPayoffLane.label}: ${primaryLastRunPayoffLane.action}. ${primaryLastRunPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryLastRunPayoffLane)} beats.`}
+                                                aria-label={`Primary archived payoff lane. ${getRunPayoffLaneRole(primaryLastRunPayoffLane)} ${primaryLastRunPayoffLane.label}: ${primaryLastRunPayoffLane.action}. ${primaryLastRunPayoffLane.cue}. ${getRunPayoffLaneBeatCount(primaryLastRunPayoffLane)} beats.`}
                                                 className={styles.runPayoffPrimaryLaneCue}
                                                 data-run-payoff-primary-lane={primaryLastRunPayoffLane.id}
                                                 data-run-payoff-primary-lane-action={primaryLastRunPayoffLane.action}
                                                 data-run-payoff-primary-lane-audio={getRunPayoffLaneAudioCue(primaryLastRunPayoffLane)}
                                                 data-run-payoff-primary-lane-beats={getRunPayoffLaneBeatCount(primaryLastRunPayoffLane)}
                                                 data-run-payoff-primary-lane-cue={primaryLastRunPayoffLane.cue}
+                                                data-run-payoff-primary-lane-role={getRunPayoffLaneRole(primaryLastRunPayoffLane)}
                                                 data-run-payoff-primary-lane-screen-cue={getRunPayoffLaneScreenCue(primaryLastRunPayoffLane)}
                                                 data-testid="collection-last-run-primary-payoff-lane"
                                             >
                                                 <small>Archive chase</small>
-                                                <strong>{primaryLastRunPayoffLane.label}</strong>
+                                                <strong>{getRunPayoffLaneRole(primaryLastRunPayoffLane)}</strong>
                                                 <b>{primaryLastRunPayoffLane.action}</b>
                                                 <em>{primaryLastRunPayoffLane.cue}</em>
                                                 <span aria-hidden="true" className={styles.runPayoffPrimaryLaneBeatPips}>
@@ -549,13 +558,16 @@ const CollectionScreen = () => {
                                                 data-run-payoff-lane-audio={getRunPayoffLaneAudioCue(lane)}
                                                 data-run-payoff-lane-beats={getRunPayoffLaneBeatCount(lane)}
                                                 data-run-payoff-lane-count={lane.count}
+                                                data-run-payoff-lane-role={getRunPayoffLaneRole(lane)}
                                                 data-run-payoff-lane-screen-cue={getRunPayoffLaneScreenCue(lane)}
                                                 key={lane.id}
                                             >
                                                 <small>{lane.label}</small>
-                                                <strong>{lane.count}</strong>
+                                                <strong>{getRunPayoffLaneRole(lane)}</strong>
                                                 <b>{lane.action}</b>
-                                                <em>{lane.cue}</em>
+                                                <em>
+                                                    x{lane.count} / {lane.cue}
+                                                </em>
                                                 <span aria-hidden="true" className={styles.runPayoffLaneBeatPips}>
                                                     {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
                                                         <s
