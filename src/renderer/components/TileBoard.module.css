@@ -8163,6 +8163,47 @@
     animation: boardOpportunityPulse 1.16s ease-in-out infinite, boardOpportunityShimmer 2.35s ease-in-out infinite;
 }
 
+.traitPreviewChip[data-preview-density-tone='ready'] {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 44%, var(--theme-gold-bright) 16%);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.3),
+        0 0 18px color-mix(in srgb, var(--theme-border-cyan) 18%, transparent);
+}
+
+.traitPreviewChip[data-preview-density-tone='ready'] .traitPreviewDensityMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-border-cyan) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 66%, white)
+    );
+}
+
+.traitPreviewChip[data-preview-density-tone='hazard'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 44%, var(--theme-warning, #f2bc6b) 16%);
+}
+
+.traitPreviewChip[data-preview-density-tone='hazard'] .traitPreviewDensityMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-danger) 76%, white),
+        color-mix(in srgb, var(--theme-warning, #f2bc6b) 68%, white)
+    );
+}
+
+.traitPreviewChip[data-preview-density-tone='setup'],
+.traitPreviewChip[data-preview-density-tone='trait'] {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 36%, var(--theme-violet-bright) 16%);
+}
+
+.traitPreviewChip[data-preview-density-tone='setup'] .traitPreviewDensityMeterFill,
+.traitPreviewChip[data-preview-density-tone='trait'] .traitPreviewDensityMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-border-cyan) 78%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 62%, white)
+    );
+}
+
 .traitPreviewSummary strong {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
     font-size: 0.46rem;
@@ -8335,6 +8376,10 @@
 .traitPreviewChip[data-preview-kind='hazard'] .traitPreviewEyebrow,
 .traitPreviewChip[data-preview-kind='hazard'] .traitPreviewLine {
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 82%, white);
+}
+
+.traitPreviewChip[data-preview-kind='trait'] {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 46%, var(--theme-gold-bright) 18%);
 }
 
 .traitPreviewEyebrow {

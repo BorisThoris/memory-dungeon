@@ -329,7 +329,9 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-chain-reward-lead-tone': ['guard', 'heal', 'reward'],
         'data-chain-sequence-step-tone': ['cashout', 'followup', 'setup'],
         'data-chain-sequence-tone': ['cashout', 'followup', 'setup'],
-        'data-chain-surge-band-tone': ['surge']
+        'data-chain-surge-band-tone': ['surge'],
+        'data-preview-density-tone': ['cashout', 'hazard', 'ready', 'setup', 'surge', 'trait'],
+        'data-preview-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait']
     };
 
     return Object.entries(visibleToneContracts).flatMap(([attr, values]) =>
@@ -346,6 +348,7 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
     const visibleStateContracts: Record<string, readonly string[]> = {
         'data-board-chain-reward-focus': ['primary', 'support'],
         'data-board-chain-reward-ladder-focus': ['next', 'soon'],
+        'data-preview-kind': ['hazard', 'pickup', 'trait'],
         'data-preview-summary-kind': ['hazard', 'pickup', 'trait']
     };
 
