@@ -127,6 +127,11 @@ type VisiblePrefixSelectorGap = {
     prefix: string;
 };
 
+type VisiblePackedValueSelectorGap = {
+    attr: string;
+    value: string;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -479,6 +484,28 @@ const findVisiblePrefixSelectorGaps = (): VisiblePrefixSelectorGap[] => {
     );
 };
 
+const findVisiblePackedValueSelectorGaps = (): VisiblePackedValueSelectorGap[] => {
+    const cssText = readComponentCssFiles()
+        .map(({ text }) => text)
+        .join('\n');
+    const visiblePackedValueContracts: Record<string, readonly string[]> = {
+        'data-card-feedback-route-glyphs': [
+            'cashout-crown',
+            'linked-route',
+            'next-tap',
+            'payoff-stack',
+            'prime-cross',
+            'surge-burst'
+        ]
+    };
+
+    return Object.entries(visiblePackedValueContracts).flatMap(([attr, values]) =>
+        values
+            .filter((value) => !cssText.includes(`[${attr}*='${value}:']`) && !cssText.includes(`[${attr}*="${value}:"]`))
+            .map((value) => ({ attr, value }))
+    );
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -611,6 +638,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findVisiblePrefixSelectorGaps(),
             'packed primary card cue prefixes should drive styling instead of only telemetry'
+        ).toEqual([]);
+    });
+
+    it('keeps packed route glyph values wired to visible CSS selectors', () => {
+        expect(
+            findVisiblePackedValueSelectorGaps(),
+            'packed route glyph values should drive styling instead of only telemetry'
         ).toEqual([]);
     });
 });

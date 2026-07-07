@@ -585,6 +585,41 @@
     opacity: 0.5;
 }
 
+.frame[data-card-feedback-route-glyphs*='payoff-stack:'],
+.frame[data-card-feedback-route-glyphs*='cashout-crown:'] {
+    --board-route-glyph-cue-color: color-mix(in srgb, var(--theme-gold-bright) 50%, var(--theme-cyan-bright) 16%);
+}
+
+.frame[data-card-feedback-route-glyphs*='surge-burst:'] {
+    --board-route-glyph-cue-color: color-mix(in srgb, var(--theme-violet-bright) 46%, var(--theme-gold-bright) 24%);
+}
+
+.frame[data-card-feedback-route-glyphs*='next-tap:'] {
+    --board-route-glyph-cue-color: color-mix(in srgb, #fff7c4 42%, var(--theme-cyan-bright) 18%);
+}
+
+.frame[data-card-feedback-route-glyphs*='linked-route:'] {
+    --board-route-glyph-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
+}
+
+.frame[data-card-feedback-route-glyphs*='prime-cross:'] {
+    --board-route-glyph-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-violet-bright) 20%);
+}
+
+.frame[data-card-feedback-route-glyphs*='payoff-stack:'] .stage::after,
+.frame[data-card-feedback-route-glyphs*='cashout-crown:'] .stage::after,
+.frame[data-card-feedback-route-glyphs*='surge-burst:'] .stage::after,
+.frame[data-card-feedback-route-glyphs*='next-tap:'] .stage::after,
+.frame[data-card-feedback-route-glyphs*='linked-route:'] .stage::after,
+.frame[data-card-feedback-route-glyphs*='prime-cross:'] .stage::after {
+    border-color: var(--board-route-glyph-cue-color);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--board-route-glyph-cue-color) 34%, transparent),
+        inset 0 0 26px color-mix(in srgb, var(--board-route-glyph-cue-color) 18%, transparent),
+        0 0 20px color-mix(in srgb, var(--board-route-glyph-cue-color) 14%, transparent);
+    opacity: 0.56;
+}
+
 .frame[data-chain-opportunity-next-action='cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='bank-lane:cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='cash-now:cashout'] .stage::after,
