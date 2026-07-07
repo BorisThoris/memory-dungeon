@@ -16,7 +16,7 @@ import type { BoardScreenSpaceAA, BoardState, GraphicsQualityPreset, RewardPerkI
 import { getChainTargetFeedback } from '../../shared/chain-targets';
 import { resolveAdaptiveBoardRenderQuality } from '../../shared/graphicsQuality';
 import { getFindableRewardText } from '../../shared/findables';
-import { getHazardTileBoardSummary, getHazardTileTelegraph } from '../../shared/hazard-tiles';
+import { getHazardTileBoardSummary, getHazardTileTelegraph, type HazardTileBoardSummaryRow } from '../../shared/hazard-tiles';
 import { getTileSwapTraitPreviewLines, getTileTraitInteractionPreviewLines } from '../../shared/tile-trait-rules';
 import {
     getSelectedTraitFollowupTileIds,
@@ -157,6 +157,8 @@ type BoardChainRewardLadderEntry = {
 };
 type BoardFeedbackScreenCue = 'burst' | 'guard' | 'pulse' | 'snap' | 'tick';
 type BoardChainMilestoneTier = 'build' | 'cashout' | 'hold' | 'prime';
+type BoardHazardOpportunityAction = 'avoid' | 'claim' | 'inspect' | 'weigh';
+type BoardHazardOpportunityTier = 'danger' | 'mixed' | 'reward' | 'watch';
 type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
 type BoardPayoffStackHeat = 'cashout' | 'prime';
 type BoardPayoffStackCrescendoScreenCue = 'burst' | 'pulse' | 'snap' | 'super';
@@ -654,6 +656,51 @@ const boardOpportunityScreenCue = (row: BoardOpportunityCompassRow): BoardFeedba
     }
     if (heat === 'surge' || heat === 'prime') {
         return 'pulse';
+    }
+    return 'tick';
+};
+
+const boardHazardOpportunityTier = (
+    row: HazardTileBoardSummaryRow | null,
+    hazardCount: number
+): BoardHazardOpportunityTier => {
+    if (!row) {
+        return 'watch';
+    }
+    if (row.family === 'reward') {
+        return 'reward';
+    }
+    if (row.family === 'dual') {
+        return 'mixed';
+    }
+    if (hazardCount > 1 || row.trigger === 'mismatch' || row.trigger === 'match_or_mismatch') {
+        return 'danger';
+    }
+    return 'watch';
+};
+
+const boardHazardOpportunityAction = (tier: BoardHazardOpportunityTier): BoardHazardOpportunityAction => {
+    if (tier === 'reward') {
+        return 'claim';
+    }
+    if (tier === 'mixed') {
+        return 'weigh';
+    }
+    if (tier === 'danger') {
+        return 'avoid';
+    }
+    return 'inspect';
+};
+
+const boardHazardOpportunityScreenCue = (tier: BoardHazardOpportunityTier): BoardFeedbackScreenCue => {
+    if (tier === 'reward') {
+        return 'pulse';
+    }
+    if (tier === 'mixed') {
+        return 'burst';
+    }
+    if (tier === 'danger') {
+        return 'guard';
     }
     return 'tick';
 };
@@ -2512,23 +2559,54 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     }, [boardChainOpportunity, runStatus]);
 
     const boardHazardOpportunity = useMemo((): {
+        action: BoardHazardOpportunityAction;
         count: number;
         detail: string;
+        family: HazardTileBoardSummaryRow['family'] | 'none';
         label: string;
+        screenCue: BoardFeedbackScreenCue;
+        tier: BoardHazardOpportunityTier;
+        trigger: HazardTileBoardSummaryRow['trigger'] | 'none';
         valueLabel: string;
     } => {
         if (runStatus !== 'playing') {
-            return { count: 0, detail: '', label: '', valueLabel: '' };
+            return {
+                action: 'inspect',
+                count: 0,
+                detail: '',
+                family: 'none',
+                label: '',
+                screenCue: 'tick',
+                tier: 'watch',
+                trigger: 'none',
+                valueLabel: ''
+            };
         }
         const summary = getHazardTileBoardSummary(board);
         const first = summary.rows[0] ?? null;
         if (!first) {
-            return { count: 0, detail: '', label: '', valueLabel: '' };
+            return {
+                action: 'inspect',
+                count: 0,
+                detail: '',
+                family: 'none',
+                label: '',
+                screenCue: 'tick',
+                tier: 'watch',
+                trigger: 'none',
+                valueLabel: ''
+            };
         }
+        const tier = boardHazardOpportunityTier(first, summary.totalHazardTiles);
         return {
+            action: boardHazardOpportunityAction(tier),
             count: summary.totalHazardTiles,
             detail: first.telegraph,
+            family: first.family,
             label: first.label,
+            screenCue: boardHazardOpportunityScreenCue(tier),
+            tier,
+            trigger: first.trigger,
             valueLabel: summary.totalHazardTiles === 1 ? '1 hazard' : `${summary.totalHazardTiles} hazards`
         };
     }, [board, runStatus]);
@@ -4273,6 +4351,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-trait-mode-value={boardTraitModeCue?.value ?? 'none'}
             data-trait-mode-detail={boardTraitModeCue?.detail ?? 'none'}
             data-hazard-opportunity-count={boardHazardOpportunity.count}
+            data-hazard-opportunity-action={boardHazardOpportunity.count > 0 ? boardHazardOpportunity.action : 'none'}
+            data-hazard-opportunity-family={boardHazardOpportunity.family}
+            data-hazard-opportunity-screen-cue={boardHazardOpportunity.count > 0 ? boardHazardOpportunity.screenCue : 'none'}
+            data-hazard-opportunity-tier={boardHazardOpportunity.count > 0 ? boardHazardOpportunity.tier : 'none'}
+            data-hazard-opportunity-trigger={boardHazardOpportunity.trigger}
             data-pickup-opportunity-count={boardPickupOpportunity.count}
             data-pickup-opportunity-focus={boardPickupOpportunityFocus}
             data-pickup-sequence-first={boardPickupOpportunity.sequenceCue?.first ?? 'none'}
@@ -6650,6 +6733,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             data-opportunity-beats={beatCount}
                                             data-opportunity-row-meter-fill={Math.round((beatCount / 5) * 100)}
                                             data-opportunity-heat={getBoardOpportunityHeat(row.impactCue)}
+                                            data-hazard-opportunity-action={row.id === 'hazard' ? boardHazardOpportunity.action : 'none'}
+                                            data-hazard-opportunity-family={row.id === 'hazard' ? boardHazardOpportunity.family : 'none'}
+                                            data-hazard-opportunity-screen-cue={
+                                                row.id === 'hazard' ? boardHazardOpportunity.screenCue : 'none'
+                                            }
+                                            data-hazard-opportunity-tier={row.id === 'hazard' ? boardHazardOpportunity.tier : 'none'}
+                                            data-hazard-opportunity-trigger={row.id === 'hazard' ? boardHazardOpportunity.trigger : 'none'}
                                             data-opportunity-impact-cue={row.impactCue}
                                             data-opportunity-priority={index === 0 ? 'best' : 'normal'}
                                             data-opportunity-tone={row.tone}

@@ -3956,6 +3956,11 @@ describe('TileBoard touch and click controls', () => {
             /Hazard risk preview.*Scout.*Shuffle Snare.*Wrong pairs reshuffle safe hidden tiles/i
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-hazard-opportunity-count', '2');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-hazard-opportunity-action', 'avoid');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-hazard-opportunity-family', 'penalty');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-hazard-opportunity-screen-cue', 'guard');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-hazard-opportunity-tier', 'danger');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-hazard-opportunity-trigger', 'mismatch');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-compass-count', '1');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-lane-actions', 'risk:Reduce risk:1');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Risk');
@@ -3982,6 +3987,11 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('2 hazards');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('Warns that a wrong pair reshuffles safe hidden tiles');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-opportunity-tone', 'hazard');
+        expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-hazard-opportunity-action', 'avoid');
+        expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-hazard-opportunity-family', 'penalty');
+        expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-hazard-opportunity-screen-cue', 'guard');
+        expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-hazard-opportunity-tier', 'danger');
+        expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-hazard-opportunity-trigger', 'mismatch');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-opportunity-beats', '3');
         expect(screen.getByTestId('board-opportunity-hazard').querySelectorAll('[data-opportunity-beat]')).toHaveLength(3);
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute(

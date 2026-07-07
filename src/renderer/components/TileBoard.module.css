@@ -9654,6 +9654,67 @@
         0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
 }
 
+.frame[data-hazard-opportunity-tier='danger'] .opportunityCompass,
+.opportunityCompassRow[data-hazard-opportunity-tier='danger'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 44%, var(--theme-gold-bright) 16%);
+    box-shadow:
+        0 10px 26px rgba(0, 0, 0, 0.24),
+        0 0 0 1px color-mix(in srgb, var(--theme-danger) 22%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-danger) 18%, transparent);
+}
+
+.frame[data-hazard-opportunity-tier='mixed'] .opportunityCompass,
+.opportunityCompassRow[data-hazard-opportunity-tier='mixed'],
+.opportunityCompassRow[data-hazard-opportunity-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-danger) 20%);
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.25),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.frame[data-hazard-opportunity-tier='reward'] .opportunityCompass,
+.opportunityCompassRow[data-hazard-opportunity-tier='reward'],
+.opportunityCompassRow[data-hazard-opportunity-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-green-bright) 38%, var(--theme-cyan-bright) 18%);
+    animation: boardOpportunityPrimePulse 1.72s ease-in-out infinite;
+}
+
+.frame[data-hazard-opportunity-tier='watch'] .opportunityCompass,
+.opportunityCompassRow[data-hazard-opportunity-tier='watch'],
+.opportunityCompassRow[data-hazard-opportunity-screen-cue='tick'] {
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.2),
+        0 0 0 1px color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+}
+
+.opportunityCompassRow[data-hazard-opportunity-screen-cue='guard'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-hazard-opportunity-action='avoid'] .opportunityCompassBeatPips i {
+    background: color-mix(in srgb, var(--theme-danger) 82%, white);
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-danger) 32%, transparent);
+}
+
+.opportunityCompassRow[data-hazard-opportunity-action='claim'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-hazard-opportunity-family='reward'] .opportunityCompassBeatPips i {
+    background: color-mix(in srgb, var(--theme-green-bright) 82%, white);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-green-bright) 30%, transparent);
+}
+
+.opportunityCompassRow[data-hazard-opportunity-action='weigh'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-hazard-opportunity-family='dual'] .opportunityCompassBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+}
+
+.opportunityCompassRow[data-hazard-opportunity-action='inspect'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-hazard-opportunity-family='penalty'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-hazard-opportunity-trigger='flip'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-hazard-opportunity-trigger='match'],
+.opportunityCompassRow[data-hazard-opportunity-trigger='match_or_mismatch'],
+.opportunityCompassRow[data-hazard-opportunity-trigger='mismatch'] {
+    outline: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+    outline-offset: 2px;
+}
+
 .traitModeCue {
     position: absolute;
     left: var(--ui-space-xs);
