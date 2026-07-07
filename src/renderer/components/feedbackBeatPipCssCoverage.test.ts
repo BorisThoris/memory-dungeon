@@ -97,6 +97,11 @@ type AudioScreenCueMetadataGap = {
     lineNumber: number;
 };
 
+type ActionFeedbackLaneRoleSelectorGap = {
+    attr: string;
+    role: string;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -241,6 +246,20 @@ const findAudioScreenCueMetadataGaps = (): AudioScreenCueMetadataGap[] => {
     return gaps;
 };
 
+const findActionFeedbackLaneRoleSelectorGaps = (): ActionFeedbackLaneRoleSelectorGap[] => {
+    const cssText = readComponentCssFiles()
+        .map(({ text }) => text)
+        .join('\n');
+    const roleAttrs = ['data-action-feedback-primary-lane-role', 'data-action-feedback-lane-role'];
+    const roles = ['Cashout', 'Protect', 'Recover', 'Route', 'Trait'];
+
+    return roleAttrs.flatMap((attr) =>
+        roles
+            .filter((role) => !cssText.includes(`[${attr}='${role}']`) && !cssText.includes(`[${attr}="${role}"]`))
+            .map((role) => ({ attr, role }))
+    );
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -331,6 +350,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findHardHiddenFeedbackMaps(),
             'feedback maps should be conditionally collapsed, not globally hidden with display: none !important'
+        ).toEqual([]);
+    });
+
+    it('keeps action feedback lane roles wired to visible CSS selectors', () => {
+        expect(
+            findActionFeedbackLaneRoleSelectorGaps(),
+            'action feedback role metadata should drive visible lane styling instead of only telemetry'
         ).toEqual([]);
     });
 });

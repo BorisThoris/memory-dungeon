@@ -4684,9 +4684,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 ? getTraitInteractionLaneAction(primaryBoardTraitInteractionLane.id)
                                                 : 'none'
                                         }
+                                        data-trait-interaction-lane-primary-audio={
+                                            primaryBoardTraitInteractionLane
+                                                ? cardTraitLaneAudioCue(primaryBoardTraitInteractionLane.id)
+                                                : 'none'
+                                        }
                                         data-trait-interaction-lane-primary-role={
                                             primaryBoardTraitInteractionLane
                                                 ? getTraitInteractionLaneRole(primaryBoardTraitInteractionLane)
+                                                : 'none'
+                                        }
+                                        data-trait-interaction-lane-primary-screen-cue={
+                                            primaryBoardTraitInteractionLane
+                                                ? cardTraitLaneScreenCue(primaryBoardTraitInteractionLane.id)
                                                 : 'none'
                                         }
                                         data-testid="chain-opportunity-trait-lane-map"
@@ -4731,6 +4741,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <span
                                                 data-trait-interaction-lane={lane.id}
                                                 data-trait-interaction-lane-action={getTraitInteractionLaneAction(lane.id)}
+                                                data-trait-interaction-lane-audio={cardTraitLaneAudioCue(lane.id)}
                                                 data-trait-interaction-lane-count={lane.count}
                                                 data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
                                                 data-trait-interaction-lane-beats={Math.max(2, Math.min(5, lane.count + 1))}
@@ -4739,6 +4750,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                         ? 'primary'
                                                         : 'support'
                                                 }
+                                                data-trait-interaction-lane-screen-cue={cardTraitLaneScreenCue(lane.id)}
                                                 key={lane.id}
                                             >
                                                 <small>{lane.label}</small>

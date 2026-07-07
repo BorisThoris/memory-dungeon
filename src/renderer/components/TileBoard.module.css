@@ -1807,6 +1807,13 @@
     animation: boardOpportunityPulse 1.35s ease-in-out infinite;
 }
 
+.chainOpportunitySurge[data-chain-opportunity-surge-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 20%);
+    box-shadow:
+        0 0 18px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
+}
+
 .chainOpportunitySurge b {
     min-width: 0;
     overflow: hidden;
@@ -2368,12 +2375,24 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
 }
 
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='burst'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+}
+
 .chainOpportunityTraitLaneMap > span[data-trait-interaction-lane='shard'] b {
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
 }
 
 .chainOpportunityTraitLaneMap > span[data-trait-interaction-lane='guard'] {
     border-color: color-mix(in srgb, var(--theme-success, #8edb9b) 38%, transparent);
+    background: color-mix(in srgb, var(--theme-success, #8edb9b) 9%, transparent);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='guard'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-screen-cue='guard'] {
+    border-color: color-mix(in srgb, var(--theme-success, #8edb9b) 38%, var(--theme-cyan-bright) 16%);
     background: color-mix(in srgb, var(--theme-success, #8edb9b) 9%, transparent);
 }
 
@@ -2393,6 +2412,14 @@
         color-mix(in srgb, var(--theme-void) 38%, transparent);
 }
 
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='risk'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-screen-cue='risk'] {
+    border-color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 42%, var(--theme-danger) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-warning, #f2bc6b) 10%, transparent), color-mix(in srgb, var(--theme-danger) 6%, transparent)),
+        color-mix(in srgb, var(--theme-void) 38%, transparent);
+}
+
 .chainOpportunityTraitLaneMap > span[data-trait-interaction-lane='block'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, transparent);
     background: color-mix(in srgb, var(--theme-violet-bright) 8%, transparent);
@@ -2400,6 +2427,12 @@
 
 .chainOpportunityTraitLaneMap > span[data-trait-interaction-lane='recall'] {
     border-color: color-mix(in srgb, #fff7c4 36%, transparent);
+    background: color-mix(in srgb, #fff7c4 8%, transparent);
+}
+
+.chainOpportunityTraitLaneMap[data-trait-interaction-lane-primary-screen-cue='pulse'] .chainOpportunityTraitLaneMapSummary,
+.chainOpportunityTraitLaneMap > span[data-trait-interaction-lane-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, #fff7c4 36%, var(--theme-cyan-bright) 14%);
     background: color-mix(in srgb, #fff7c4 8%, transparent);
 }
 
@@ -4549,6 +4582,23 @@
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
         0 0 12px color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-gold-bright) 18%);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='tick'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-void) 34%, transparent);
 }
 
 .chainOpportunityRewardLead small,
@@ -8270,17 +8320,54 @@
 :global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue='Stack cashout'] .opportunityCompassImpact,
 :global([data-reduce-motion='true']) .opportunityCompassRow[data-opportunity-impact-cue='Stack prime'] .opportunityCompassImpact,
 :global([data-reduce-motion='true']) .opportunityCompassBeatPips i,
+:global([data-reduce-motion='true']) .opportunityCompassSummaryBeatPips i,
 :global([data-reduce-motion='true']) .opportunityLaneBeatPips i,
+:global([data-reduce-motion='true']) .opportunityLaneMapSummaryBeatPips i,
 :global([data-reduce-motion='true']) .opportunityPrimaryLaneBeatPips i,
+:global([data-reduce-motion='true']) .opportunityPayoffStackBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityEyebrowBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityCueBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityArcadeCalloutBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityPriorityBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityTargetBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityTargetPlanBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityMilestoneBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunitySurgeBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityArmedPerkBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityRewardUrgencyBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityRecipeBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityBeat i,
 :global([data-reduce-motion='true']) .chainOpportunityBeatMapPips i,
+:global([data-reduce-motion='true']) .chainOpportunityMarkerKeySummaryBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityActionPrioritySummaryBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityShotMapSummaryBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityShotMapBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityPrimaryShotBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityPrimaryTraitLanePips i,
 :global([data-reduce-motion='true']) .chainOpportunityTraitLaneBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityTraitLaneMapBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityTraitLaneMapSummaryBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityFollowupBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityRewardLadderSummaryBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityRewardLeadBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityLinesBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityExamplesBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityRewardCueBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityHotBandBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunitySurgeBandBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityPayoffBeatPips i,
+:global([data-reduce-motion='true']) .chainOpportunityMomentumBeatPips i,
+:global([data-reduce-motion='true']) .activePowerBoardChipBeatPips i,
+:global([data-reduce-motion='true']) .activePowerBoardStepBeatPips i,
+:global([data-reduce-motion='true']) .pickupOpportunityChipBeatPips i,
+:global([data-reduce-motion='true']) .pickupOpportunitySequenceBeatPips i,
 :global([data-reduce-motion='true']) .trapResolutionBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityRewardBeatPips i,
+:global([data-reduce-motion='true']) .traitModeCueBeatPips i,
 :global([data-reduce-motion='true']) .traitPreviewBeatPips i,
+:global([data-reduce-motion='true']) .traitPreviewActionBeatPips i,
+:global([data-reduce-motion='true']) .traitPreviewCashoutBeatPips i,
+:global([data-reduce-motion='true']) .traitPreviewLineBeatPips i,
 :global([data-reduce-motion='true']) .traitPreviewSummaryBeatPips i,
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='hazard'],
 :global([data-reduce-motion='true']) .traitPreviewChip[data-preview-kind='pickup'],

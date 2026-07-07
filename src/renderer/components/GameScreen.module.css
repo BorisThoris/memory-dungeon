@@ -5326,7 +5326,9 @@
 }
 
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='burst'],
-.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='route'] {
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='route'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Cashout'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Route'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 18%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
@@ -5336,7 +5338,11 @@
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='burst'] strong,
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='burst'] .actionFeedbackPrimaryLaneBeatPips i,
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='route'] strong,
-.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='route'] .actionFeedbackPrimaryLaneBeatPips i {
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='route'] .actionFeedbackPrimaryLaneBeatPips i,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Cashout'] strong,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Cashout'] .actionFeedbackPrimaryLaneBeatPips i,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Route'] strong,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Route'] .actionFeedbackPrimaryLaneBeatPips i {
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
     background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
 }
@@ -5346,18 +5352,23 @@
     background: color-mix(in srgb, var(--theme-cyan-bright) 11%, var(--theme-panel-solid));
 }
 
-.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='guard'] {
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='guard'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Protect'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Trait'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-cyan-bright) 16%);
     background: color-mix(in srgb, var(--theme-violet-bright) 10%, var(--theme-panel-solid));
 }
 
-.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='recover'] {
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='recover'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Recover'] {
     border-color: color-mix(in srgb, var(--theme-danger) 44%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 12%, var(--theme-panel-solid));
 }
 
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='recover'] strong,
-.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='recover'] .actionFeedbackPrimaryLaneBeatPips i {
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='recover'] .actionFeedbackPrimaryLaneBeatPips i,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Recover'] strong,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Recover'] .actionFeedbackPrimaryLaneBeatPips i {
     color: color-mix(in srgb, var(--theme-danger) 78%, white);
     background: color-mix(in srgb, var(--theme-danger) 68%, white);
 }
@@ -5465,40 +5476,55 @@
 }
 
 .actionFeedbackLaneMap > span[data-action-feedback-lane='cash'],
-.actionFeedbackLaneMap > span[data-action-feedback-lane='route'] {
+.actionFeedbackLaneMap > span[data-action-feedback-lane='route'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Cashout'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Route'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
     background: color-mix(in srgb, var(--theme-gold-deep) 16%, transparent);
 }
 
 .actionFeedbackLaneMap > span[data-action-feedback-lane='cash'] small,
-.actionFeedbackLaneMap > span[data-action-feedback-lane='route'] small {
+.actionFeedbackLaneMap > span[data-action-feedback-lane='route'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Cashout'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Cashout'] b,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Route'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Route'] b {
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
 }
 
-.actionFeedbackLaneMap > span[data-action-feedback-lane='chain'] {
+.actionFeedbackLaneMap > span[data-action-feedback-lane='chain'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Protect'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
 }
 
-.actionFeedbackLaneMap > span[data-action-feedback-lane='chain'] small {
+.actionFeedbackLaneMap > span[data-action-feedback-lane='chain'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Protect'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Protect'] b {
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
 }
 
-.actionFeedbackLaneMap > span[data-action-feedback-lane='trait'] {
+.actionFeedbackLaneMap > span[data-action-feedback-lane='trait'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Trait'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 36%, transparent);
     background: color-mix(in srgb, var(--theme-violet-bright) 10%, transparent);
 }
 
-.actionFeedbackLaneMap > span[data-action-feedback-lane='trait'] small {
+.actionFeedbackLaneMap > span[data-action-feedback-lane='trait'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Trait'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Trait'] b {
     color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
 }
 
-.actionFeedbackLaneMap > span[data-action-feedback-lane='recover'] {
+.actionFeedbackLaneMap > span[data-action-feedback-lane='recover'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Recover'] {
     border-color: color-mix(in srgb, var(--theme-danger) 40%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 12%, transparent);
 }
 
-.actionFeedbackLaneMap > span[data-action-feedback-lane='recover'] small {
+.actionFeedbackLaneMap > span[data-action-feedback-lane='recover'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Recover'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role='Recover'] b {
     color: color-mix(in srgb, var(--theme-danger) 76%, white);
 }
 
@@ -7848,6 +7874,28 @@
     box-shadow: 0 0 0.55rem color-mix(in srgb, currentColor 9%, transparent);
 }
 
+.hudChainRewardForecast > span[data-chain-reward-lead-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, white 8%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-gold) 13%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
+        0 0 0.8rem color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+}
+
+.hudChainRewardForecast > span[data-chain-reward-lead-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 70%),
+        color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent);
+}
+
+.hudChainRewardForecast > span[data-chain-reward-lead-screen-cue='tick'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-panel-solid) 44%, transparent);
+}
+
 .hudChainRewardForecast > span[data-chain-reward-tone='guard'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent);
@@ -9562,6 +9610,7 @@
     .powerPayoffChip[data-power-cue='Space clear'],
     .powerPayoffBeatPips i,
     .toolCrescendoPips i,
+    .actionFeedbackLaneMapSummaryBeatPips i,
     .routeSelectedBeatPips i,
     .routeSelectedSignalBeatPips i,
     .dungeonMapChoiceRecommendationBeatPips i,
@@ -9584,6 +9633,7 @@
     animation: none;
 }
 
+:global([data-reduce-motion='true']) .actionFeedbackLaneMapSummaryBeatPips i,
 :global([data-reduce-motion='true']) .actionFeedbackLaneBeatPips i,
 :global([data-reduce-motion='true']) .actionFeedbackPrimaryLaneBeatPips i {
     animation: none;
@@ -9600,6 +9650,16 @@
 }
 
 :global([data-reduce-motion='true']) .hudChainRewardHotBadge,
+:global([data-reduce-motion='true']) .hudChainRewardHotBandBeatPips i,
+:global([data-reduce-motion='true']) .hudChainComboSurgeBandBeatPips i,
+:global([data-reduce-motion='true']) .hudChainStackedPayoffBadgeBeatPips i,
+:global([data-reduce-motion='true']) .hudChainRewardForecastSummaryBeatPips i,
+:global([data-reduce-motion='true']) .hudRewardPerkLaneMapSummaryBeatPips i,
+:global([data-reduce-motion='true']) .hudRecentActionLaneMapSummaryBeatPips u,
+:global([data-reduce-motion='true']) .boardFloaterPayoffLaneMapSummaryBeatPips i,
+:global([data-reduce-motion='true']) .boardFloaterPayoffLadderSummaryBeatPips i,
+:global([data-reduce-motion='true']) .boardFloaterRewardForecastSummaryBeatPips i,
+:global([data-reduce-motion='true']) .boardFloaterTraitLaneMapSummaryBeatPips i,
 :global([data-reduce-motion='true']) .hudChainLaneCue[data-chain-lane-tone='stack'],
 :global([data-reduce-motion='true']) .hudChainStackedPayoffBadge,
 :global([data-reduce-motion='true']) .hudRewardPerkRows > span[data-reward-perk-readiness='armed'],
