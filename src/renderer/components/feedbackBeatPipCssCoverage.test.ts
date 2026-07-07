@@ -330,6 +330,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-chain-sequence-step-tone': ['cashout', 'followup', 'setup'],
         'data-chain-sequence-tone': ['cashout', 'followup', 'setup'],
         'data-chain-surge-band-tone': ['surge'],
+        'data-opportunity-payoff-stack-tone': ['build', 'cashout', 'followup', 'setup'],
         'data-opportunity-tone': [
             'chain',
             'control',
@@ -343,8 +344,10 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
             'setup',
             'trait'
         ],
+        'data-payoff-stack-tone': ['build', 'cashout', 'followup', 'setup'],
         'data-preview-density-tone': ['cashout', 'hazard', 'ready', 'setup', 'surge', 'trait'],
-        'data-preview-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait']
+        'data-preview-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait'],
+        'data-trait-mode-tone': ['cashout', 'ready', 'setup', 'surge']
     };
 
     return Object.entries(visibleToneContracts).flatMap(([attr, values]) =>
@@ -364,7 +367,12 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-opportunity-best-heat': ['cashout', 'normal', 'prime', 'surge'],
         'data-opportunity-best-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
         'data-opportunity-heat': ['cashout', 'normal', 'prime', 'surge'],
+        'data-opportunity-payoff-crescendo-screen-cue': ['burst', 'pulse', 'snap', 'super'],
+        'data-opportunity-payoff-crescendo-tier': ['cashout', 'prime', 'stack', 'super'],
         'data-opportunity-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
+        'data-payoff-stack-crescendo-screen-cue': ['burst', 'pulse', 'snap', 'super'],
+        'data-payoff-stack-crescendo-tier': ['cashout', 'prime', 'stack', 'super'],
+        'data-payoff-stack-heat': ['cashout', 'prime'],
         'data-preview-kind': ['hazard', 'pickup', 'trait'],
         'data-preview-summary-kind': ['hazard', 'pickup', 'trait']
     };

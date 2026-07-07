@@ -6681,10 +6681,24 @@
         inset 0 1px 0 color-mix(in srgb, var(--theme-text) 7%, transparent);
 }
 
+.opportunityPayoffStack[data-payoff-stack-tone='build'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 78%, transparent);
+    box-shadow:
+        0 0 16px color-mix(in srgb, var(--theme-violet-bright) 14%, transparent),
+        inset 0 1px 0 color-mix(in srgb, var(--theme-text) 7%, transparent);
+}
+
 .opportunityPayoffStack[data-payoff-stack-heat='prime'] {
     animation: boardOpportunityPrimePulse 1.85s ease-in-out infinite;
     outline: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
     outline-offset: 0.06rem;
+}
+
+.opportunityPayoffStack[data-payoff-stack-crescendo-tier='prime'] .opportunityPayoffCrescendo {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 14%);
 }
 
 .opportunityPayoffStack small {
@@ -6710,6 +6724,12 @@
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 18%);
     background: color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='build'] span {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, var(--theme-cyan-bright) 18%);
+    background: color-mix(in srgb, var(--theme-violet-bright) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
 }
 
 .opportunityPayoffStack [data-payoff-stack-cue='Super stack'] {
@@ -6744,6 +6764,57 @@
 .frame[data-opportunity-payoff-crescendo-screen-cue='super'] {
     outline: 1px solid color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
     outline-offset: -1px;
+}
+
+.frame[data-opportunity-payoff-stack-tone='cashout'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-gold-bright) 30%, var(--theme-success) 16%);
+}
+
+.frame[data-opportunity-payoff-stack-tone='setup'],
+.frame[data-opportunity-payoff-stack-tone='followup'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, var(--theme-gold-bright) 12%);
+}
+
+.frame[data-opportunity-payoff-stack-tone='build'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-violet-bright) 26%, var(--theme-cyan-bright) 12%);
+}
+
+.frame[data-opportunity-payoff-crescendo-screen-cue='pulse'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+}
+
+.frame[data-opportunity-payoff-crescendo-screen-cue='snap'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-success) 30%, var(--theme-gold-bright) 12%);
+}
+
+.frame[data-opportunity-payoff-crescendo-tier='prime'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-cyan-bright) 26%, var(--theme-gold-bright) 10%);
+}
+
+.frame[data-opportunity-payoff-crescendo-tier='cashout'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-success) 30%, var(--theme-gold-bright) 14%);
+}
+
+.frame[data-opportunity-payoff-crescendo-tier='stack'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-gold-bright) 30%, var(--theme-cyan-bright) 14%);
+}
+
+.frame[data-opportunity-payoff-crescendo-tier='super'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-violet-bright) 16%);
+}
+
+.frame[data-opportunity-payoff-stack-tone='cashout'] .stage::after,
+.frame[data-opportunity-payoff-stack-tone='setup'] .stage::after,
+.frame[data-opportunity-payoff-stack-tone='followup'] .stage::after,
+.frame[data-opportunity-payoff-stack-tone='build'] .stage::after,
+.frame[data-opportunity-payoff-crescendo-screen-cue='pulse'] .stage::after,
+.frame[data-opportunity-payoff-crescendo-screen-cue='snap'] .stage::after,
+.frame[data-opportunity-payoff-crescendo-tier='prime'] .stage::after,
+.frame[data-opportunity-payoff-crescendo-tier='cashout'] .stage::after,
+.frame[data-opportunity-payoff-crescendo-tier='stack'] .stage::after,
+.frame[data-opportunity-payoff-crescendo-tier='super'] .stage::after {
+    border-color: var(--board-frame-cue-outline-color);
+    opacity: 0.5;
 }
 
 .opportunityPayoffStack[data-payoff-stack-crescendo-screen-cue='pulse'] .opportunityPayoffCrescendo {
@@ -8152,6 +8223,22 @@
 .traitModeCue[data-trait-mode-tone='cashout'] strong,
 .traitModeCue[data-trait-mode-tone='surge'] strong {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.traitModeCue[data-trait-mode-tone='ready'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, var(--theme-cyan-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 11%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 84%, transparent);
+}
+
+.traitModeCue[data-trait-mode-tone='ready'] strong {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.traitModeCue[data-trait-mode-tone='ready'] .traitModeCueBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
 }
 
 .traitModeCue[data-trait-mode-tone='setup'] {

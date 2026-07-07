@@ -155,6 +155,32 @@ type BoardChainRewardLadderEntry = {
     total: number;
 };
 type BoardFeedbackScreenCue = 'burst' | 'guard' | 'pulse' | 'snap' | 'tick';
+type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
+type BoardPayoffStackHeat = 'cashout' | 'prime';
+type BoardPayoffStackCrescendoScreenCue = 'burst' | 'pulse' | 'snap' | 'super';
+type BoardPayoffStackCrescendoTier = 'cashout' | 'prime' | 'stack' | 'super';
+type BoardPayoffStack = {
+    action: string;
+    crescendo: {
+        beatCount: 2 | 3 | 4 | 5;
+        detail: string;
+        label: string;
+        screenCue: BoardPayoffStackCrescendoScreenCue;
+        tier: BoardPayoffStackCrescendoTier;
+    };
+    cue: string;
+    detail: string;
+    heat: BoardPayoffStackHeat;
+    nextCue: string;
+    sequence: {
+        first: string;
+        keep: string;
+        then: string;
+    };
+    sequenceCue: string;
+    tone: BoardPayoffStackTone;
+    value: string;
+};
 
 const getBoardOpportunityHeat = (impactCue: string): BoardOpportunityHeat => {
     const normalizedCue = impactCue.toLowerCase();
@@ -604,7 +630,9 @@ const boardOpportunityScreenCue = (row: BoardOpportunityCompassRow): BoardFeedba
     return 'tick';
 };
 
-const boardPayoffStackCrescendoAudioCue = (tier: string): 'cashout-pop' | 'prime-pop' | 'stack-burst' | 'super-burst' => {
+const boardPayoffStackCrescendoAudioCue = (
+    tier: BoardPayoffStackCrescendoTier
+): 'cashout-pop' | 'prime-pop' | 'stack-burst' | 'super-burst' => {
     if (tier === 'super') {
         return 'super-burst';
     }
@@ -2646,11 +2674,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         boardOpportunityLaneMapRows.length > 1
             ? ` Decision lanes: ${boardOpportunityLaneMapRows.map((lane) => `${lane.label} ${boardOpportunityLaneRole(lane)} ${lane.count}, ${lane.action}`).join(', ')}.`
             : '';
-    const boardPayoffStack =
+    const boardPayoffStack: BoardPayoffStack | null =
         boardPayoffStackRows.length >= 2
             ? (() => {
                   const impactCues = new Set(boardPayoffStackRows.map((row) => row.impactCue));
-                  const tone = impactCues.has('Super stack')
+                  const tone: BoardPayoffStackTone = impactCues.has('Super stack')
                       ? 'cashout'
                       : impactCues.has('Stack cashout')
                       ? 'cashout'
@@ -2691,7 +2719,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                         : tone === 'followup'
                           ? 'Keep route moving'
                           : 'Keep reward stack primed';
-                  const crescendo =
+                  const crescendo: BoardPayoffStack['crescendo'] =
                       impactCues.has('Super stack')
                           ? {
                                 beatCount: 5,
@@ -2731,12 +2759,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                           .slice(0, 3)
                           .map((row) => boardPayoffStackLabelForRow(row))
                           .join(' + '),
-                      heat:
-                          tone === 'cashout'
-                              ? 'cashout'
-                              : tone === 'setup' || tone === 'followup' || tone === 'build'
-                                ? 'prime'
-                                : 'normal',
+                      heat: tone === 'cashout' ? 'cashout' : 'prime',
                       nextCue: `First: ${first}`,
                       sequence: { first, keep, then },
                       sequenceCue: `Then: ${then}`,
