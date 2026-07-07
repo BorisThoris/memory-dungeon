@@ -629,48 +629,60 @@
     text-decoration: none;
 }
 
-.recentRunSignals span[data-recent-run-primary-lane-screen-cue='burst'] .recentRunPrimaryLaneCue {
+.recentRunSignals span[data-recent-run-primary-lane-screen-cue='burst'] .recentRunPrimaryLaneCue,
+.recentRunSignals span[data-recent-run-primary-lane-role-id='protect'] .recentRunPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
 }
 
-.recentRunSignals span[data-recent-run-primary-lane-screen-cue='cashout'] .recentRunPrimaryLaneCue {
+.recentRunSignals span[data-recent-run-primary-lane-screen-cue='cashout'] .recentRunPrimaryLaneCue,
+.recentRunSignals span[data-recent-run-primary-lane-role-id='cashout'] .recentRunPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-success) 56%, var(--theme-gold-bright) 18%);
     color: color-mix(in srgb, var(--theme-success) 84%, white);
 }
 
-.recentRunSignals span[data-recent-run-primary-lane-screen-cue='build'] .recentRunPrimaryLaneCue {
+.recentRunSignals span[data-recent-run-primary-lane-screen-cue='build'] .recentRunPrimaryLaneCue,
+.recentRunSignals span[data-recent-run-primary-lane-role-id='build'] .recentRunPrimaryLaneCue,
+.recentRunSignals span[data-recent-run-primary-lane-role-id='stack'] .recentRunPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 16%);
 }
 
-.recentRunSignals span[data-recent-run-primary-lane-screen-cue='risk'] .recentRunPrimaryLaneCue {
+.recentRunSignals span[data-recent-run-primary-lane-screen-cue='risk'] .recentRunPrimaryLaneCue,
+.recentRunSignals span[data-recent-run-primary-lane-role-id='recover'] .recentRunPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-ember) 54%, var(--theme-danger) 16%);
     color: color-mix(in srgb, var(--theme-ember) 84%, white);
 }
 
-.recentRunSignals span[data-recent-run-primary-lane-screen-cue='cashout'] .recentRunPrimaryLaneBeatPips s {
+.recentRunSignals span[data-recent-run-primary-lane-screen-cue='cashout'] .recentRunPrimaryLaneBeatPips s,
+.recentRunSignals span[data-recent-run-primary-lane-role-id='cashout'] .recentRunPrimaryLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-success) 82%, white 8%);
 }
 
-.recentRunSignals span[data-recent-run-primary-lane-screen-cue='risk'] .recentRunPrimaryLaneBeatPips s {
+.recentRunSignals span[data-recent-run-primary-lane-screen-cue='risk'] .recentRunPrimaryLaneBeatPips s,
+.recentRunSignals span[data-recent-run-primary-lane-role-id='recover'] .recentRunPrimaryLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-ember) 82%, white 8%);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-screen-cue='burst'] {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-screen-cue='burst'],
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='protect'] {
     border-radius: 999px;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-screen-cue='cashout'] {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-screen-cue='cashout'],
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='cashout'] {
     border-radius: 999px;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success) 22%, transparent);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-screen-cue='build'] {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-screen-cue='build'],
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='build'],
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='stack'] {
     border-radius: 999px;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-screen-cue='risk'] {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-screen-cue='risk'],
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='recover'] {
     border-radius: 999px;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-ember) 24%, transparent);
 }
@@ -715,31 +727,44 @@
     text-decoration: none;
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='chain'] .recentRunLaneBeatPips s {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='chain'] .recentRunLaneBeatPips s,
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='protect'] .recentRunLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-cyan-bright) 68%, white);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='cash'] .recentRunLaneBeatPips s {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='cash'] .recentRunLaneBeatPips s,
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='cashout'] .recentRunLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-success) 68%, white);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='build'] .recentRunLaneBeatPips s {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='build'] .recentRunLaneBeatPips s,
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='build'] .recentRunLaneBeatPips s,
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='stack'] .recentRunLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-gold-bright) 68%, white);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='risk'] .recentRunLaneBeatPips s {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='risk'] .recentRunLaneBeatPips s,
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='recover'] .recentRunLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-ember) 68%, white);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='chain'] strong {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='chain'] strong,
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='protect'] strong {
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='cash'] strong {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='cash'] strong,
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='cashout'] strong {
     color: color-mix(in srgb, var(--theme-success) 88%, white);
 }
 
-.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='risk'] strong {
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='build'] strong,
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='stack'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane='risk'] strong,
+.recentRunSignals span[data-recent-run-lane-map] i[data-recent-run-lane-role-id='recover'] strong {
     color: color-mix(in srgb, var(--theme-ember) 88%, white);
 }
 

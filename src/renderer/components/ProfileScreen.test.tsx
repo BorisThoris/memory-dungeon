@@ -154,13 +154,22 @@ describe('ProfileScreen', () => {
             'data-recent-run-lane-roles',
             'chain:Protect:1>cash:Cashout:1>build:Build:1>risk:Recover:1'
         );
+        expect(recentSignals).toHaveAttribute(
+            'data-recent-run-lane-role-ids',
+            'chain:protect:1>cash:cashout:1>build:build:1>risk:recover:1'
+        );
         const laneMap = screen.getByTestId('profile-recent-run-lane-map');
+        expect(laneMap).toHaveAttribute(
+            'data-recent-run-lane-role-ids',
+            'chain:protect:1>cash:cashout:1>build:build:1>risk:recover:1'
+        );
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane', 'chain');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-action', 'Protect chain');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-audio', 'run-payoff-lane-chain');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-beats', '4');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-cue', 'Combo live');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-role', 'Protect');
+        expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-role-id', 'protect');
         expect(laneMap).toHaveAttribute('data-recent-run-primary-lane-screen-cue', 'burst');
         expect(laneMap).toHaveTextContent('Chain');
         expect(laneMap).toHaveTextContent('Cash');
@@ -179,6 +188,7 @@ describe('ProfileScreen', () => {
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-beats', '4');
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-cue', 'Combo live');
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-role', 'Protect');
+        expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-role-id', 'protect');
         expect(primaryLane).toHaveAttribute('data-recent-run-primary-lane-screen-cue', 'burst');
         expect(primaryLane).toHaveTextContent('Replay chase');
         expect(primaryLane).toHaveTextContent('Protect chain');
@@ -188,10 +198,12 @@ describe('ProfileScreen', () => {
         expect(chainLane).toHaveAttribute('data-recent-run-lane-action', 'Protect chain');
         expect(chainLane).toHaveAttribute('data-recent-run-lane-beats', '4');
         expect(chainLane).toHaveAttribute('data-recent-run-lane-role', 'Protect');
+        expect(chainLane).toHaveAttribute('data-recent-run-lane-role-id', 'protect');
         expect(chainLane?.querySelectorAll('[data-recent-run-lane-beat]')).toHaveLength(4);
         expect(riskLane).toHaveAttribute('data-recent-run-lane-action', 'Reduce risk');
         expect(riskLane).toHaveAttribute('data-recent-run-lane-beats', '2');
         expect(riskLane).toHaveAttribute('data-recent-run-lane-role', 'Recover');
+        expect(riskLane).toHaveAttribute('data-recent-run-lane-role-id', 'recover');
         expect(riskLane?.querySelectorAll('[data-recent-run-lane-beat]')).toHaveLength(2);
         expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveTextContent('Combo burst');
         expect(screen.getByTestId('profile-recent-run-payoff-burst')).toHaveTextContent('Chase again');
@@ -281,6 +293,18 @@ describe('ProfileScreen', () => {
         expect(screen.getByTestId('profile-recent-run-signals')).toHaveAttribute(
             'data-recent-run-lane-roles',
             'chain:Protect:1>cash:Stack:3'
+        );
+        expect(screen.getByTestId('profile-recent-run-signals')).toHaveAttribute(
+            'data-recent-run-lane-role-ids',
+            'chain:protect:1>cash:stack:3'
+        );
+        expect(screen.getByTestId('profile-recent-run-lane-map')).toHaveAttribute(
+            'data-recent-run-lane-role-ids',
+            'chain:protect:1>cash:stack:3'
+        );
+        expect(screen.getByTestId('profile-recent-run-lane-map').querySelector('[data-recent-run-lane="cash"]')).toHaveAttribute(
+            'data-recent-run-lane-role-id',
+            'stack'
         );
         expect(screen.getByTestId('profile-recent-run-lane-map')).toHaveAccessibleName(
             'Profile recent run payoff lanes. Chain Protect x1. Protect chain. Combo live. Cash Stack x3. Cash reward. Route cashout.'
