@@ -7341,6 +7341,14 @@
         0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
 }
 
+.hudChainRewardHotBadge[data-chain-reward-hot-tone='cashout'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.hudChainRewardHotBadge[data-chain-reward-hot-tone='cashout'] small {
+    background: color-mix(in srgb, var(--theme-success) 22%, var(--theme-gold-bright) 14%);
+}
+
 .hudChainRewardHotBadgeMeter {
     display: block;
     grid-column: 1 / -1;

@@ -398,6 +398,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-chain-opportunity-milestone-tone': ['building', 'chain', 'combo', 'surge'],
         'data-chain-opportunity-tone': ['ready', 'setup'],
         'data-chain-opportunity-surge-tone': ['surge'],
+        'data-chain-reward-hot-tone': ['cashout'],
         'data-chain-reward-tone': ['cashout', 'forecast'],
         'data-chain-reward-urgency-tone': ['cashout', 'forecast'],
         'data-chain-reward-lead-tone': ['guard', 'heal', 'reward'],
