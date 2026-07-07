@@ -955,6 +955,13 @@ const cardTraitLaneScreenCue = (laneId: TraitInteractionLaneId | string): 'burst
     return 'burst';
 };
 
+const cardTraitLaneRole = (
+    laneId: TraitInteractionLaneId | string
+): 'Block' | 'Cashout' | 'Protect' | 'Recall' | 'Risk' | 'Tool' =>
+    CARD_TRAIT_LANE_ORDER_SET.has(laneId as TraitInteractionLaneId)
+        ? getTraitInteractionLaneRole({ id: laneId as TraitInteractionLaneId })
+        : 'Cashout';
+
 const parseCountAttribute = (value: string): Map<string, number> => {
     const counts = new Map<string, number>();
     for (const entry of value.split(/[;>]/u)) {
@@ -1598,7 +1605,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             id,
             label: CARD_TRAIT_LANE_ORDER_SET.has(id as TraitInteractionLaneId)
                 ? TRAIT_INTERACTION_LANE_LABELS[id as TraitInteractionLaneId]
-                : id
+                : id,
+            role: cardTraitLaneRole(id)
         }));
     }, [cardFeedbackTraitLaneActionsAttr, cardFeedbackTraitLaneBeatsAttr, cardFeedbackTraitLaneCuesAttr]);
     const cardFeedbackTraitLaneBeatMapLabel = useMemo(
@@ -4014,6 +4022,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-trait-lanes={cardFeedbackTraitLaneCuesAttr || 'none'}
             data-card-feedback-trait-lane-primary-audio={primaryTraitLaneAudioCue}
             data-card-feedback-trait-lane-primary-action={cardFeedbackTraitLanePrimaryActionAttr}
+            data-card-feedback-trait-lane-primary-role={primaryTraitLaneBeatRow?.role ?? 'none'}
             data-card-feedback-trait-lane-primary-screen-cue={primaryTraitLaneScreenCue}
             data-card-feedback-trait-lane-contract={BOARD_MARKER_TRAIT_LANE_CONTRACT}
             data-card-feedback-route-glyphs={cardFeedbackRouteGlyphsAttr || 'none'}
@@ -4509,6 +4518,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-card-trait-lane-primary-action={primaryTraitLaneBeatRow.action}
                                         data-card-trait-lane-primary-audio={primaryTraitLaneAudioCue}
                                         data-card-trait-lane-primary-beats={primaryTraitLaneBeatRow.beatCount}
+                                        data-card-trait-lane-primary-role={primaryTraitLaneBeatRow.role}
                                         data-card-trait-lane-primary-screen-cue={primaryTraitLaneScreenCue}
                                         data-testid="chain-opportunity-primary-trait-lane"
                                     >
@@ -5122,7 +5132,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityTraitLaneBeatMap}
                                         data-card-trait-lane-primary-audio={primaryTraitLaneAudioCue}
                                         data-card-trait-lane-beat-primary={cardFeedbackTraitLaneBeatRows[0]?.id ?? 'none'}
+                                        data-card-trait-lane-beat-primary-role={cardFeedbackTraitLaneBeatRows[0]?.role ?? 'none'}
                                         data-card-trait-lane-primary-action={cardFeedbackTraitLaneBeatRows[0]?.action ?? 'none'}
+                                        data-card-trait-lane-primary-role={cardFeedbackTraitLaneBeatRows[0]?.role ?? 'none'}
                                         data-card-trait-lane-primary-screen-cue={primaryTraitLaneScreenCue}
                                         data-testid="chain-opportunity-trait-lane-beat-map"
                                     >
@@ -5171,6 +5183,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                         ? 'primary'
                                                         : 'support'
                                                 }
+                                                data-card-trait-lane-beat-role={row.role}
                                                 data-card-trait-lane-beat-screen-cue={cardTraitLaneScreenCue(row.id)}
                                                 key={row.id}
                                             >
