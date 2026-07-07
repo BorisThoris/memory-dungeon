@@ -2762,6 +2762,14 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
 }
 
+.chainOpportunityMarkerKey > span[data-chain-marker-focus='support'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 78%),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+    opacity: 0.78;
+}
+
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] small,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] em {
@@ -3157,6 +3165,12 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
 }
 
+.chainOpportunityActionPriority > span[data-card-action-priority-focus='support'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    background: color-mix(in srgb, var(--theme-surface-control) 46%, transparent);
+    opacity: 0.78;
+}
+
 .chainOpportunityActionPriority > span[data-card-action-priority='cash-now'] b,
 .chainOpportunityActionPriority > span[data-card-action-priority='perk-cash'] b {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
@@ -3375,6 +3389,14 @@
 .chainOpportunityShotMap > span[data-chain-shot-map-focus='primary'] b,
 .chainOpportunityShotMap > span[data-chain-shot-map-focus='primary'] em {
     color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
+.chainOpportunityShotMap > span[data-chain-shot-map-focus='support'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 78%),
+        color-mix(in srgb, var(--theme-surface-control) 50%, transparent);
+    opacity: 0.78;
 }
 
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='cash-now'] b,
@@ -3659,6 +3681,15 @@
 .chainOpportunityCadenceMap > span[data-card-cadence-focus='primary'] em,
 .chainOpportunityCadenceMap > span[data-card-cadence-focus='primary'] .chainOpportunityCadencePips i {
     color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
+.chainOpportunityBeatMap > span[data-card-beat-focus='support'],
+.chainOpportunityCadenceMap > span[data-card-cadence-focus='support'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent), transparent 78%),
+        color-mix(in srgb, var(--theme-surface-control) 50%, transparent);
+    opacity: 0.78;
 }
 
 .chainOpportunityBeatMap > span[data-card-beat-tier='cashout'] b,

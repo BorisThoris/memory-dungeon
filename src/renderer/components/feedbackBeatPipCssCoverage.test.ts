@@ -366,6 +366,11 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
     const visibleStateContracts: Record<string, readonly string[]> = {
         'data-board-chain-reward-focus': ['primary', 'support'],
         'data-board-chain-reward-ladder-focus': ['next', 'soon'],
+        'data-card-action-priority-focus': ['primary', 'support'],
+        'data-card-beat-focus': ['primary', 'support'],
+        'data-card-cadence-focus': ['primary', 'support'],
+        'data-chain-marker-focus': ['primary', 'support'],
+        'data-chain-shot-map-focus': ['primary', 'support'],
         'data-opportunity-best-heat': ['cashout', 'normal', 'prime', 'surge'],
         'data-opportunity-best-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
         'data-opportunity-heat': ['cashout', 'normal', 'prime', 'surge'],
