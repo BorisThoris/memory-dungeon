@@ -1398,6 +1398,69 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-opportunity-compass-summary-screen-cue='tick'[\s\S]*?animation-duration:\s*1\.38s/);
     });
 
+    it('keeps opportunity lane map summary action beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout and claim lane map actions should read as quick payout beats'
+        ).toMatch(/data-opportunity-lane-map-action='cashout'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.74s/);
+        expect(
+            cssText,
+            'perk lane map actions should use reward utility geometry'
+        ).toMatch(/data-opportunity-lane-map-action='perk'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.14rem/);
+        expect(
+            cssText,
+            'prime lane map actions should use taller setup beats'
+        ).toMatch(/data-opportunity-lane-map-action='prime'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'study lane map actions should stay horizontal planning beats'
+        ).toMatch(/data-opportunity-lane-map-action='study'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?width:\s*0\.2rem/);
+        expect(
+            cssText,
+            'risk lane map actions should use taller caution beats'
+        ).toMatch(/data-opportunity-lane-map-action='risk'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'tool lane map actions should keep utility timing'
+        ).toMatch(/data-opportunity-lane-map-action='tool'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.84s/);
+    });
+
+    it('keeps opportunity lane map summary screen cues visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='burst'] .opportunityLaneMapSummaryBeatPips i");
+        expect(cssText).toContain(".opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='guard'] .opportunityLaneMapSummaryBeatPips i");
+        expect(cssText).toContain(".opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='pulse'] .opportunityLaneMapSummaryBeatPips i");
+        expect(cssText).toContain(".opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='recover'] .opportunityLaneMapSummaryBeatPips i");
+        expect(cssText).toContain(".opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='risk'] .opportunityLaneMapSummaryBeatPips i");
+        expect(
+            cssText,
+            'burst lane map cues should stay fastest and high-emphasis'
+        ).toMatch(/data-opportunity-lane-map-screen-cue='burst'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'guard lane map cues should use taller defensive beats'
+        ).toMatch(/data-opportunity-lane-map-screen-cue='guard'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'pulse lane map cues should use mid-tempo guidance'
+        ).toMatch(/data-opportunity-lane-map-screen-cue='pulse'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.92s/);
+        expect(
+            cssText,
+            'recover lane map cues should carry success-colored beats'
+        ).toMatch(/data-opportunity-lane-map-screen-cue='recover'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?var\(--theme-success\)/);
+        expect(
+            cssText,
+            'risk lane map cues should use taller caution beats'
+        ).toMatch(/data-opportunity-lane-map-screen-cue='risk'[\s\S]*?\.opportunityLaneMapSummaryBeatPips i[\s\S]*?height:\s*0\.22rem/);
+    });
+
     it('keeps payoff stack tones visually distinct in board beat pips', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

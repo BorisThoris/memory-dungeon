@@ -10435,27 +10435,91 @@
 }
 
 .opportunityLaneMapSummary[data-opportunity-lane-map-action='cashout'] .opportunityLaneMapSummaryBeatPips i,
-.opportunityLaneMapSummary[data-opportunity-lane-map-action='claim'] .opportunityLaneMapSummaryBeatPips i,
-.opportunityLaneMapSummary[data-opportunity-lane-map-action='perk'] .opportunityLaneMapSummaryBeatPips i {
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='claim'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.18rem;
+    height: 0.1rem;
+    animation-duration: 0.74s;
+    opacity: 0.94;
     background: color-mix(in srgb, var(--theme-gold-bright) 74%, white);
     box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
 }
 
-.opportunityLaneMapSummary[data-opportunity-lane-map-action='prime'] .opportunityLaneMapSummaryBeatPips i,
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='perk'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.14rem;
+    height: 0.14rem;
+    animation-duration: 0.86s;
+    background: color-mix(in srgb, var(--theme-success) 54%, var(--theme-gold-bright) 46%);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-action='prime'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.18rem;
+    animation-duration: 1.02s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 70%, white);
+}
+
 .opportunityLaneMapSummary[data-opportunity-lane-map-action='study'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.2rem;
+    height: 0.08rem;
+    animation-duration: 0.94s;
     background: color-mix(in srgb, var(--theme-cyan-bright) 70%, white);
 }
 
 .opportunityLaneMapSummary[data-opportunity-lane-map-action='recover'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.12rem;
+    height: 0.16rem;
+    animation-duration: 1s;
     background: color-mix(in srgb, var(--theme-success) 66%, white);
 }
 
 .opportunityLaneMapSummary[data-opportunity-lane-map-action='risk'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.22rem;
+    animation-duration: 0.76s;
     background: color-mix(in srgb, var(--theme-danger) 68%, white);
 }
 
 .opportunityLaneMapSummary[data-opportunity-lane-map-action='tool'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.16rem;
+    height: 0.12rem;
+    animation-duration: 0.84s;
     background: color-mix(in srgb, var(--theme-violet-bright) 68%, white);
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='burst'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.22rem;
+    height: 0.1rem;
+    animation-duration: 0.68s;
+    opacity: 0.98;
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='pulse'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.16rem;
+    height: 0.1rem;
+    animation-duration: 0.92s;
+    opacity: 0.88;
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='guard'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.2rem;
+    animation-duration: 1.08s;
+    background: color-mix(in srgb, var(--theme-violet-bright) 68%, white);
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='recover'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.12rem;
+    height: 0.16rem;
+    animation-duration: 1s;
+    background: color-mix(in srgb, var(--theme-success) 68%, white);
+}
+
+.opportunityLaneMapSummary[data-opportunity-lane-map-screen-cue='risk'] .opportunityLaneMapSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.22rem;
+    animation-duration: 0.76s;
+    background: color-mix(in srgb, var(--theme-danger) 70%, white);
 }
 
 .opportunityLaneMapSummary[data-opportunity-lane-map-beats='2'] .opportunityLaneMapSummaryBeatPips i {
