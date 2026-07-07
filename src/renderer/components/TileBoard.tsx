@@ -571,6 +571,11 @@ const boardOpportunityLaneMapAttr = (laneMap: readonly BoardOpportunityLaneMapEn
 const boardOpportunityLaneActionMapAttr = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
     laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${lane.action}:${lane.count}`).join('>') : 'none';
 
+const boardOpportunityLaneActionIdMapAttr = (laneMap: readonly BoardOpportunityLaneMapEntry[]): string =>
+    laneMap.length > 0
+        ? laneMap.map((lane) => `${lane.id}:${getBoardOpportunityLaneMapSummaryAction(lane)}:${lane.count}`).join('>')
+        : 'none';
+
 const boardOpportunityLaneBeatCount = (lane: Pick<BoardOpportunityLaneMapEntry, 'count' | 'id'>): 2 | 3 | 4 => {
     if (lane.id === 'cash' || lane.count > 1) {
         return 4;
@@ -3377,6 +3382,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const primaryBoardOpportunityLane = boardOpportunityLaneMapRows[0] ?? null;
     const boardOpportunityLaneMapAttrValue = boardOpportunityLaneMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneActionMapAttrValue = boardOpportunityLaneActionMapAttr(boardOpportunityLaneMapRows);
+    const boardOpportunityLaneActionIdMapAttrValue = boardOpportunityLaneActionIdMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneRoleMapAttrValue = boardOpportunityLaneRoleMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneMapAccessibleLabel = boardOpportunityLaneMapLabel(boardOpportunityLaneMapRows);
     const boardOpportunityLaneMapMeterFill = primaryBoardOpportunityLane
@@ -4964,6 +4970,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-compass-summary-screen-cue={boardOpportunityCompassSummaryScreenCue ?? 'none'}
             data-opportunity-compass-summary-tier={boardOpportunityCompassRows.length > 0 ? boardOpportunityCompassSummaryTier : 'none'}
             data-opportunity-lane-actions={boardOpportunityLaneActionMapAttrValue}
+            data-opportunity-lane-action-ids={boardOpportunityLaneActionIdMapAttrValue}
             data-opportunity-lane-map-action={boardOpportunityLaneMapSummaryAction ?? 'none'}
             data-opportunity-lane-map-beats={boardOpportunityLaneMapSummaryBeatCount}
             data-opportunity-lane-map={boardOpportunityLaneMapAttrValue}
@@ -4974,6 +4981,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-lane-roles={boardOpportunityLaneRoleMapAttrValue}
             data-opportunity-primary-lane={primaryBoardOpportunityLane?.id ?? 'none'}
             data-opportunity-primary-lane-action={primaryBoardOpportunityLane?.action ?? 'none'}
+            data-opportunity-primary-lane-action-id={boardOpportunityLaneMapSummaryAction ?? 'none'}
             data-opportunity-primary-lane-audio={
                 primaryBoardOpportunityLane ? boardOpportunityLaneAudioCue(primaryBoardOpportunityLane) : 'none'
             }
@@ -7245,6 +7253,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={boardOpportunityLaneMapAccessibleLabel}
                                         className={styles.opportunityLaneMap}
                                         data-opportunity-lane-actions={boardOpportunityLaneActionMapAttrValue}
+                                        data-opportunity-lane-action-ids={boardOpportunityLaneActionIdMapAttrValue}
                                         data-opportunity-lane-map-action={boardOpportunityLaneMapSummaryAction ?? 'none'}
                                         data-opportunity-lane-map-beats={boardOpportunityLaneMapSummaryBeatCount}
                                         data-opportunity-lane-map={boardOpportunityLaneMapAttrValue}
@@ -7253,6 +7262,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-opportunity-lane-roles={boardOpportunityLaneRoleMapAttrValue}
                                         data-opportunity-primary-lane={primaryBoardOpportunityLane?.id ?? 'none'}
                                         data-opportunity-primary-lane-action={primaryBoardOpportunityLane?.action ?? 'none'}
+                                        data-opportunity-primary-lane-action-id={boardOpportunityLaneMapSummaryAction ?? 'none'}
                                         data-opportunity-primary-lane-audio={
                                             primaryBoardOpportunityLane ? boardOpportunityLaneAudioCue(primaryBoardOpportunityLane) : 'none'
                                         }
@@ -7314,6 +7324,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 className={styles.opportunityPrimaryLane}
                                                 data-opportunity-primary-lane={primaryBoardOpportunityLane.id}
                                                 data-opportunity-primary-lane-action={primaryBoardOpportunityLane.action}
+                                                data-opportunity-primary-lane-action-id={
+                                                    getBoardOpportunityLaneMapSummaryAction(primaryBoardOpportunityLane) ?? 'none'
+                                                }
                                                 data-opportunity-primary-lane-audio={boardOpportunityLaneAudioCue(primaryBoardOpportunityLane)}
                                                 data-opportunity-primary-lane-beats={boardOpportunityLaneBeatCount(primaryBoardOpportunityLane)}
                                                 data-opportunity-primary-lane-meter-fill={Math.round((boardOpportunityLaneBeatCount(primaryBoardOpportunityLane) / 5) * 100)}
@@ -7355,6 +7368,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <span
                                                 data-opportunity-lane={lane.id}
                                                 data-opportunity-lane-action={lane.action}
+                                                data-opportunity-lane-action-id={getBoardOpportunityLaneMapSummaryAction(lane) ?? 'none'}
                                                 data-opportunity-lane-audio={boardOpportunityLaneAudioCue(lane)}
                                                 data-opportunity-lane-beats={boardOpportunityLaneBeatCount(lane)}
                                                 data-opportunity-lane-count={lane.count}
