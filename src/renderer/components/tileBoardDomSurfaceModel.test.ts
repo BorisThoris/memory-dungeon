@@ -101,6 +101,34 @@ describe('tileBoardDomSurfaceModel', () => {
         expect(result.cardFeedbackTraitRouteTiersAttr).toBe('payoff-stack:2');
     });
 
+    it('surfaces bank-lane priority for reward-hot trait cards that are not route-ready', () => {
+        const result = buildTileBoardDomSurfaceModel({
+            allowGambitThirdFlip: false,
+            board: board([
+                tile('echo', 'echo', 'hidden', { tileTraitKind: 'echo' }),
+                tile('x1', 'x', 'hidden'),
+                tile('x2', 'x', 'hidden'),
+                tile('plain', 'plain', 'hidden')
+            ]),
+            boardApplicationFocused: false,
+            debugPeekActive: false,
+            focusedTileId: null,
+            includeDevAttributes: true,
+            interactive: true,
+            peekRevealedTileIds: new Set(),
+            previewActive: false,
+            runStatus: 'playing',
+            traitRewardHotTileIds: ['echo']
+        });
+
+        expect(result.cardFeedbackActionCuesAttr).toBe('bank-lane:1');
+        expect(result.cardFeedbackActionPriorityAttr).toBe('bank-lane:1');
+        expect(result.cardFeedbackPrimaryActionAttr).toBe('bank-lane');
+        expect(result.cardFeedbackPrimaryCardCueAttr).toBe('bank-lane:cashout:5:cashout:cashout-crown');
+        expect(result.cardFeedbackRouteGlyphsAttr).toBe('cashout-crown:1');
+        expect(result.cardFeedbackTraitRouteTiersAttr).toBe('reward-hot:1');
+    });
+
     it('counts visible trait cards that can show combo preview feedback', () => {
         const result = buildTileBoardDomSurfaceModel({
             allowGambitThirdFlip: false,

@@ -3416,6 +3416,17 @@
     color: color-mix(in srgb, #fff7c4 88%, white);
 }
 
+.chainOpportunityActionPriority > span[data-card-action-priority='bank-lane'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-surface-control) 42%, transparent);
+}
+
+.chainOpportunityActionPriority > span[data-card-action-priority='bank-lane'] b {
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
 .chainOpportunityActionPriority > span[data-card-action-priority='route-setup'],
 .chainOpportunityActionPriority > span[data-card-action-priority='build-lane'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent);
@@ -3640,6 +3651,18 @@
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='follow-up'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, var(--theme-void) 34%);
+}
+
+.chainOpportunityShotMap > span[data-chain-shot-map-lane='bank-lane'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 11%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+}
+
+.chainOpportunityShotMap > span[data-chain-shot-map-lane='bank-lane'] b,
+.chainOpportunityShotMap > span[data-chain-shot-map-lane='bank-lane'] em {
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
 }
 
 .chainOpportunityShotMap > span[data-chain-shot-map-lane='build-lane'],
