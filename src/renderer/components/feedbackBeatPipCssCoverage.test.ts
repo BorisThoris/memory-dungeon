@@ -122,6 +122,11 @@ type VisibleStateSelectorGap = {
     value: string;
 };
 
+type VisiblePrefixSelectorGap = {
+    attr: string;
+    prefix: string;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -457,6 +462,21 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
     );
 };
 
+const findVisiblePrefixSelectorGaps = (): VisiblePrefixSelectorGap[] => {
+    const cssText = readComponentCssFiles()
+        .map(({ text }) => text)
+        .join('\n');
+    const visiblePrefixContracts: Record<string, readonly string[]> = {
+        'data-card-feedback-primary-card-cue': ['bank-lane:cashout', 'cash-now:cashout', 'perk-cash:cashout']
+    };
+
+    return Object.entries(visiblePrefixContracts).flatMap(([attr, prefixes]) =>
+        prefixes
+            .filter((prefix) => !cssText.includes(`[${attr}^='${prefix}']`) && !cssText.includes(`[${attr}^="${prefix}"]`))
+            .map((prefix) => ({ attr, prefix }))
+    );
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -582,6 +602,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findVisibleStateSelectorGaps(),
             'visible state metadata should drive styling instead of only telemetry'
+        ).toEqual([]);
+    });
+
+    it('keeps packed primary card cue prefixes wired to visible CSS selectors', () => {
+        expect(
+            findVisiblePrefixSelectorGaps(),
+            'packed primary card cue prefixes should drive styling instead of only telemetry'
         ).toEqual([]);
     });
 });

@@ -543,6 +543,7 @@
 }
 
 .frame[data-chain-opportunity-next-action='cashout'] .stage::after,
+.frame[data-card-feedback-primary-card-cue^='bank-lane:cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='cash-now:cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='perk-cash:cashout'] .stage::after {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, transparent);
