@@ -398,6 +398,8 @@
 .frame[data-opportunity-best-screen-cue='burst'] .stage::after,
 .frame[data-chain-opportunity-screen-cue='burst'] .stage::after,
 .frame[data-chain-opportunity-screen-cue='super'] .stage::after,
+.frame[data-chain-opportunity-beat-screen-cue='burst'] .stage::after,
+.frame[data-chain-opportunity-beat-screen-cue='super'] .stage::after,
 .frame[data-card-feedback-primary-shot-screen-cue='burst'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-screen-cue='burst'] .stage::after {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 18%);
@@ -414,6 +416,11 @@
 .frame[data-card-feedback-primary-shot-screen-cue='pulse'],
 .frame[data-card-feedback-trait-lane-primary-screen-cue='pulse'] {
     --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
+}
+
+.frame[data-chain-opportunity-screen-cue='snap'],
+.frame[data-chain-opportunity-beat-screen-cue='snap'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
 }
 
 .frame[data-opportunity-best-screen-cue='guard'],
@@ -439,6 +446,8 @@
 .frame[data-opportunity-best-screen-cue='pulse'] .stage::after,
 .frame[data-chain-opportunity-screen-cue='pulse'] .stage::after,
 .frame[data-chain-opportunity-beat-screen-cue='pulse'] .stage::after,
+.frame[data-chain-opportunity-screen-cue='snap'] .stage::after,
+.frame[data-chain-opportunity-beat-screen-cue='snap'] .stage::after,
 .frame[data-card-feedback-primary-shot-screen-cue='pulse'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-screen-cue='pulse'] .stage::after,
 .frame[data-opportunity-best-screen-cue='guard'] .stage::after,
@@ -1078,6 +1087,20 @@
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
         0 0 0.82rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-screen-cue='super'] {
+    animation: boardOpportunityPulse 1.08s ease-in-out infinite;
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 14%, transparent),
+        0 0 0.96rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent),
+        0 0 1.2rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-screen-cue='snap'] {
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+        0 0 0.66rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
 }
 
 .chainOpportunityBeat[data-chain-beat-screen-cue='pulse'] {
@@ -5900,6 +5923,12 @@
     animation: boardOpportunityPulse 1.08s ease-in-out infinite;
 }
 
+.chainOpportunityRewardCue[data-chain-reward-screen-cue='pulse'] {
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.7rem color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
+}
+
 .chainOpportunityPayoffBeatPips {
     display: inline-flex;
     align-items: center;
@@ -8977,6 +9006,13 @@
         0 10px 28px rgba(0, 0, 0, 0.3),
         0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
         0 0 0.82rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+}
+
+.traitPreviewChip[data-preview-screen-cue='pulse'] {
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.28),
+        0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
 }
 
 .traitPreviewChip[data-preview-screen-cue='guard'] {
