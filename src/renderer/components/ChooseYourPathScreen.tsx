@@ -326,12 +326,30 @@ const modeChoiceLaneScreenCue = (lane: ModeChoiceLaneMapEntry): 'burst' | 'rewar
 const modeChoiceLaneActionMapAttr = (laneMap: readonly ModeChoiceLaneMapEntry[]): string =>
     laneMap.map((entry) => `${entry.id}:${modeChoiceLaneAction(entry)}:${entry.count}`).join('>');
 
+const modeChoiceLaneRole = (entry: ModeChoiceLaneMapEntry): 'Build' | 'Locked' | 'Practice' | 'Pressure' | 'Reward' => {
+    switch (entry.id) {
+        case 'reward':
+            return 'Reward';
+        case 'pressure':
+            return 'Pressure';
+        case 'practice':
+            return 'Practice';
+        case 'locked':
+            return 'Locked';
+        case 'chain':
+        default:
+            return 'Build';
+    }
+};
+
 const modeChoiceLaneMapLabel = (
     def: RunModeDefinition,
     placement: 'launch' | 'tile' | 'detail',
     laneMap: readonly ModeChoiceLaneMapEntry[]
 ): string => {
-    const rows = laneMap.map((entry) => `${entry.label}: ${entry.count}. ${modeChoiceLaneAction(entry)}. ${entry.cue}`).join('. ');
+    const rows = laneMap
+        .map((entry) => `${entry.label} ${modeChoiceLaneRole(entry)} x${entry.count}. ${modeChoiceLaneAction(entry)}. ${entry.cue}`)
+        .join('. ');
     return rows ? `${def.title} ${placement} lane map. ${rows}.` : `${def.title} ${placement} lane map.`;
 };
 

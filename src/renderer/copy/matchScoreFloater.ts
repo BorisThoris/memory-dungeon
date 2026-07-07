@@ -12,6 +12,13 @@ const PAYOFF_LANE_LIVE_ACTIONS: Readonly<Record<string, string>> = {
     Chain: 'Cash chain'
 };
 
+const PAYOFF_LANE_LIVE_ROLES: Readonly<Record<string, string>> = {
+    Route: 'Route',
+    Pickup: 'Claim',
+    Trait: 'Trait',
+    Chain: 'Chain'
+};
+
 const TRAIT_LANE_LIVE_ACTIONS: Readonly<Record<string, string>> = {
     Block: 'Deny match',
     Guard: 'Protect run',
@@ -24,8 +31,15 @@ const TRAIT_LANE_LIVE_ACTIONS: Readonly<Record<string, string>> = {
 
 const enrichPayoffLaneMapLiveText = (text: string): string =>
     Object.entries(PAYOFF_LANE_LIVE_ACTIONS).reduce((current, [lane, action]) => {
-        const lanePattern = new RegExp(`(${lane}:\\s+\\d+\\.\\s+)(?!${action.replace(/\s+/gu, '\\s+')}\\.)`, 'gu');
-        return current.replace(lanePattern, `$1${action}. `);
+        const role = PAYOFF_LANE_LIVE_ROLES[lane] ?? lane;
+        const actionPattern = action.replace(/\s+/gu, '\\s+');
+        const explicitOldLanePattern = new RegExp(`\\b${lane}:\\s+(\\d+)\\.\\s+(${actionPattern}\\.)`, 'gu');
+        const oldLanePattern = new RegExp(`\\b${lane}:\\s+(\\d+)\\.\\s+(?!${actionPattern}\\.)`, 'gu');
+        const roleLanePattern = new RegExp(`\\b${lane}\\s+${role}\\s+x(\\d+)\\.\\s+(?!${actionPattern}\\.)`, 'gu');
+        return current
+            .replace(explicitOldLanePattern, `${lane} ${role} x$1. $2`)
+            .replace(oldLanePattern, `${lane} ${role} x$1. ${action}. `)
+            .replace(roleLanePattern, `${lane} ${role} x$1. ${action}. `);
     }, text);
 
 const enrichTraitLaneMapLiveText = (text: string): string =>

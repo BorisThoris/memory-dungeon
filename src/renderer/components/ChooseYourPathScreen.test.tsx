@@ -199,7 +199,7 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
             'Read pressure'
         );
         expect(classicLaneMap).toHaveAccessibleName(
-            'Classic Run launch lane map. Chain: 1. Build chain. Escalating floors. Reward: 1. Chase reward. Shops + relics. Pressure: 1. Read pressure. Route choices.'
+            'Classic Run launch lane map. Chain Build x1. Build chain. Escalating floors. Reward Reward x1. Chase reward. Shops + relics. Pressure Pressure x1. Read pressure. Route choices.'
         );
         const classicPrimaryLane = screen.getByTestId('choose-path-mode-primary-lane-classic-launch');
         expect(classicPrimaryLane).toHaveAccessibleName(
@@ -248,7 +248,7 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         expect(showcaseLaneMap).toHaveAttribute('data-mode-primary-lane-cue', 'Immediate dungeon');
         expect(showcaseLaneMap).toHaveAttribute('data-mode-primary-lane-screen-cue', 'burst');
         expect(showcaseLaneMap).toHaveAccessibleName(
-            'Dungeon Showcase tile lane map. Chain: 1. Build chain. Immediate dungeon. Reward: 1. Chase reward. Dungeon systems. Pressure: 1. Read pressure. Boss + locks.'
+            'Dungeon Showcase tile lane map. Chain Build x1. Build chain. Immediate dungeon. Reward Reward x1. Chase reward. Dungeon systems. Pressure Pressure x1. Read pressure. Boss + locks.'
         );
         const showcasePrimaryLane = screen.getByTestId('choose-path-mode-primary-lane-dungeon_showcase-tile');
         expect(showcasePrimaryLane).toHaveAccessibleName(

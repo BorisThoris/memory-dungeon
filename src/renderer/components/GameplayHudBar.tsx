@@ -270,10 +270,24 @@ const formatHudRewardPerkLaneMapAttr = (laneMap: readonly HudRewardPerkLaneMapEn
 const formatHudRewardPerkLaneActionMapAttr = (laneMap: readonly HudRewardPerkLaneMapEntry[]): string =>
     laneMap.length > 0 ? laneMap.map((lane) => `${lane.lane}:${lane.action}:${lane.count}`).join('>') : 'none';
 
+const hudRewardPerkLaneRole = (lane: HudRewardPerkLaneMapEntry): 'Cashout' | 'Control' | 'Prime' | 'Route' => {
+    const normalizedLane = lane.lane.toLowerCase();
+    if (normalizedLane.includes('chain') || lane.action === 'Cash perk') {
+        return 'Cashout';
+    }
+    if (normalizedLane.includes('hazard') || normalizedLane.includes('control')) {
+        return 'Control';
+    }
+    if (normalizedLane.includes('route')) {
+        return 'Route';
+    }
+    return 'Prime';
+};
+
 const formatHudRewardPerkLaneMapLabel = (laneMap: readonly HudRewardPerkLaneMapEntry[]): string =>
     laneMap.length > 0
         ? `Reward perk lane map. ${laneMap
-              .map((lane) => `${lane.lane}: ${lane.count}. ${lane.action}. ${sentenceWithPeriod(lane.nextCue)}`)
+              .map((lane) => `${lane.lane} ${hudRewardPerkLaneRole(lane)} x${lane.count}. ${lane.action}. ${sentenceWithPeriod(lane.nextCue)}`)
               .join(' ')}`
         : 'Reward perk lane map';
 

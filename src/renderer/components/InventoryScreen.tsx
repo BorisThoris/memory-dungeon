@@ -91,9 +91,22 @@ const inventoryRewardPerkLaneMapAttr = (laneMap: readonly InventoryRewardPerkLan
 const inventoryRewardPerkLaneActionMapAttr = (laneMap: readonly InventoryRewardPerkLaneMapEntry[]): string =>
     laneMap.length > 0 ? laneMap.map((lane) => `${lane.slug}:${lane.action}:${lane.count}`).join('>') : 'none';
 
+const inventoryRewardPerkLaneRole = (lane: InventoryRewardPerkLaneMapEntry): 'Control' | 'Key' | 'Prime' | 'Trait' => {
+    if (lane.slug.includes('hazard') || lane.slug.includes('control')) {
+        return 'Control';
+    }
+    if (lane.slug.includes('key')) {
+        return 'Key';
+    }
+    if (lane.slug.includes('trait')) {
+        return 'Trait';
+    }
+    return 'Prime';
+};
+
 const inventoryRewardPerkLaneMapLabel = (laneMap: readonly InventoryRewardPerkLaneMapEntry[]): string =>
     laneMap.length > 0
-        ? `Inventory reward perk lane map. ${laneMap.map((lane) => `${lane.lane}: ${lane.count}. ${lane.action}. ${lane.payoff}.`).join(' ')}`
+        ? `Inventory reward perk lane map. ${laneMap.map((lane) => `${lane.lane} ${inventoryRewardPerkLaneRole(lane)} x${lane.count}. ${lane.action}. ${lane.payoff}.`).join(' ')}`
         : 'Inventory reward perk lane map';
 
 const inventoryRewardPerkLaneBeatCount = (lane: Pick<InventoryRewardPerkLaneMapEntry, 'count' | 'slug'>): 2 | 3 | 4 => {

@@ -67,7 +67,7 @@ describe('mismatchFloaterLiveRegionText', () => {
                 'Recovery lane map. Recover: 1. Safe pair. Lost: 1. Lost cashout. Chain: 2. Chain lost.'
             )
         ).toBe(
-            'No match. Chain x6 broken. Lost reward target: x8 +1 shard in 2 matches. Next chase: Break into x10. Next action: Save cashout: Rebuild toward x8 +1 shard. Recovery sequence: First Safe match. Then Rebuild toward x8 +1 shard. Keep Break into x10. Recovery lane map. Recover: 1. Confirm pair. Safe pair. Lost: 1. Save cashout. Lost cashout. Chain: 2. Rebuild chain. Chain lost. Recover with a safe match. x6 lost'
+            'No match. Chain x6 broken. Lost reward target: x8 +1 shard in 2 matches. Next chase: Break into x10. Next action: Save cashout: Rebuild toward x8 +1 shard. Recovery sequence: First Safe match. Then Rebuild toward x8 +1 shard. Keep Break into x10. Recovery lane map. Recover Recover x1. Confirm pair. Safe pair. Lost Save x1. Save cashout. Lost cashout. Chain Rebuild x2. Rebuild chain. Chain lost. Recover with a safe match. x6 lost'
         );
     });
 
@@ -80,7 +80,7 @@ describe('mismatchFloaterLiveRegionText', () => {
                 'Recovery lane map. Recover: 1. Stabilize route. Recover route. Tool: 1. Trigger tool. Use tool. Risk: 1. Route away. Avoid repeat.'
             )
         ).toBe(
-            'Trait penalty. No match. Next action: Recover route: peek or route away. Recovery sequence: First peek or route away. Then Prime with tool. Keep Avoid repeat risk. Cursed + Volatile: recall pressure Recovery lane map. Recover: 1. Stabilize route. Recover route. Tool: 1. Trigger tool. Use tool. Risk: 1. Route away. Avoid repeat.'
+            'Trait penalty. No match. Next action: Recover route: peek or route away. Recovery sequence: First peek or route away. Then Prime with tool. Keep Avoid repeat risk. Cursed + Volatile: recall pressure Recovery lane map. Recover Recover x1. Stabilize route. Recover route. Tool Tool x1. Trigger tool. Use tool. Risk Risk x1. Route away. Avoid repeat.'
         );
     });
 });

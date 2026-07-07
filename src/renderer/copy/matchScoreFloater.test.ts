@@ -194,7 +194,7 @@ describe('matchScoreFloaterLiveRegionText', () => {
                 'Match payoff lane map. Route: 1. Route cashout. Pickup: 1. Pickup cashout. Chain: 1. Chain cashout.'
             )
         ).toBe(
-            'Reward. Plus 125 points. 4 match streak, 2 matches to x6. Next rewards: Prime cashout: 2 matches to x6 +1 shard. Cascade: combo cascade. Combo burst: Cash stack: 4-way payoff. Stack cashout: 4 payoffs: Route + Pickup + Trait + Chain. Impact cue: Stack cashout. Match payoff lane map. Route: 1. Cash route. Route cashout. Pickup: 1. Claim pickup. Pickup cashout. Chain: 1. Cash chain. Chain cashout. Shard spark +1 combo shard'
+            'Reward. Plus 125 points. 4 match streak, 2 matches to x6. Next rewards: Prime cashout: 2 matches to x6 +1 shard. Cascade: combo cascade. Combo burst: Cash stack: 4-way payoff. Stack cashout: 4 payoffs: Route + Pickup + Trait + Chain. Impact cue: Stack cashout. Match payoff lane map. Route Route x1. Cash route. Route cashout. Pickup Claim x1. Claim pickup. Pickup cashout. Chain Chain x1. Cash chain. Chain cashout. Shard spark +1 combo shard'
         );
     });
 
@@ -213,7 +213,7 @@ describe('matchScoreFloaterLiveRegionText', () => {
                 'Match payoff lane map. Route: 1. Cash route. Route cashout. Pickup: 1. Claim pickup. Pickup cashout.'
             )
         ).toBe(
-            'Reward. Plus 125 points. 4 match streak, 2 matches to x6. Impact cue: Stack cashout. Match payoff lane map. Route: 1. Cash route. Route cashout. Pickup: 1. Claim pickup. Pickup cashout. Shard spark +1 combo shard'
+            'Reward. Plus 125 points. 4 match streak, 2 matches to x6. Impact cue: Stack cashout. Match payoff lane map. Route Route x1. Cash route. Route cashout. Pickup Claim x1. Claim pickup. Pickup cashout. Shard spark +1 combo shard'
         );
     });
 
@@ -233,7 +233,7 @@ describe('matchScoreFloaterLiveRegionText', () => {
                 'Match trait interaction lanes. Shard: 1. Echo + Sealed: combo shard. Guard: 1. Mirror + Stasis: guard ward.'
             )
         ).toBe(
-            'Reward. Plus 125 points. 4 match streak, 2 matches to x6. Impact cue: Trait cashout. Match payoff lane map. Trait: 2. Cash trait. Trait cashout. Match trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard. Guard: 1. Protect run. Mirror + Stasis: guard ward. Echo + Sealed: combo shard. Mirror + Stasis: guard ward'
+            'Reward. Plus 125 points. 4 match streak, 2 matches to x6. Impact cue: Trait cashout. Match payoff lane map. Trait Trait x2. Cash trait. Trait cashout. Match trait interaction lanes. Shard: 1. Cash shard. Echo + Sealed: combo shard. Guard: 1. Protect run. Mirror + Stasis: guard ward. Echo + Sealed: combo shard. Mirror + Stasis: guard ward'
         );
     });
 

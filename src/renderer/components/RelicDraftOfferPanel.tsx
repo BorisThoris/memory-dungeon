@@ -639,11 +639,32 @@ const relicDraftLaneActionMapAttr = (
     laneMap: readonly Pick<RelicDraftLaneMapEntry, 'action' | 'count' | 'id'>[]
 ): string => (laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${lane.action}:${lane.count}`).join('>') : 'none');
 
+const relicDraftLaneRole = (
+    lane: Pick<RelicDraftLaneMapEntry, 'id'>
+): 'Cashout' | 'Guard' | 'New' | 'Rare' | 'Route' | 'Stack' => {
+    switch (lane.id) {
+        case 'cashout':
+            return 'Cashout';
+        case 'guard':
+            return 'Guard';
+        case 'route':
+        case 'chain':
+            return 'Route';
+        case 'rare':
+            return 'Rare';
+        case 'new':
+            return 'New';
+        case 'stack':
+        default:
+            return 'Stack';
+    }
+};
+
 const relicDraftLaneMapLabel = (
-    laneMap: readonly Pick<RelicDraftLaneMapEntry, 'action' | 'count' | 'cue' | 'label'>[]
+    laneMap: readonly Pick<RelicDraftLaneMapEntry, 'action' | 'count' | 'cue' | 'id' | 'label'>[]
 ): string =>
     laneMap.length > 0
-        ? `Relic draft lane map. ${laneMap.map((lane) => `${lane.label}: ${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
+        ? `Relic draft lane map. ${laneMap.map((lane) => `${lane.label} ${relicDraftLaneRole(lane)} x${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
         : 'Relic draft lane map';
 
 const getRelicDraftLaneBeatCount = (lane: Pick<RelicDraftLaneMapEntry, 'count' | 'id'>): 2 | 3 | 4 => {

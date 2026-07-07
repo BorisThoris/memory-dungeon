@@ -144,7 +144,7 @@ describe('RelicDraftOfferPanel', () => {
             '3'
         );
         expect(draftLaneMap).toHaveAccessibleName(
-            'Relic draft lane map. Stack: 1. Stack now. Best fit. Guard: 1. Protect run. Guard. Route: 1. Open route. Conduit Cartographer.'
+            'Relic draft lane map. Stack Stack x1. Stack now. Best fit. Guard Guard x1. Protect run. Guard. Route Route x1. Open route. Conduit Cartographer.'
         );
 
         const cards = screen.getAllByTestId('relic-offer-card');

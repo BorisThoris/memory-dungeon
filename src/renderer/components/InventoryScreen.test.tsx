@@ -312,7 +312,7 @@ describe('InventoryScreen REG-079 run inventory model', () => {
                 ?.querySelectorAll('[data-reward-perk-lane-beat]')
         ).toHaveLength(3);
         expect(screen.getByTestId('inventory-reward-perk-lane-map')).toHaveAccessibleName(
-            'Inventory reward perk lane map. Trait combo: 1. Set combo. Double Echo payoff. Hazard control: 1. Pre-clear hazard. Hazard erased before flip.'
+            'Inventory reward perk lane map. Trait combo Trait x1. Set combo. Double Echo payoff. Hazard control Control x1. Pre-clear hazard. Hazard erased before flip.'
         );
         expect(screen.getByTestId('inventory-reward-perks').getAttribute('aria-label')).toContain(
             'Inventory durable reward perks. Trait combo: Double Echo payoff. Moment: Echo next to Conduit: Match Echo touching Conduit before cashing adjacent Sealed.: Echo Conduit Double.'

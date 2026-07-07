@@ -35,21 +35,44 @@ const RECOVERY_LANE_LIVE_ACTIONS: Readonly<Record<string, string>> = {
     Risk: 'Route away'
 };
 
+const RECOVERY_LANE_LIVE_ROLES: Readonly<Record<string, string>> = {
+    Chain: 'Rebuild',
+    Lost: 'Save',
+    Recover: 'Recover',
+    Risk: 'Risk',
+    Tool: 'Tool'
+};
+
 const enrichRecoveryLaneMapLiveText = (text: string): string => {
-    const withChainActions = text.replace(/(Chain:\s+(\d+)\.\s+)(?!Reset chain\.|Rebuild chain\.)/gu, (_match, prefix, count) => {
+    const withExplicitChainRoles = text.replace(
+        /\bChain:\s+(\d+)\.\s+(Reset chain\.|Rebuild chain\.)/gu,
+        `Chain ${RECOVERY_LANE_LIVE_ROLES.Chain} x$1. $2`
+    );
+    const withChainActions = withExplicitChainRoles.replace(/\bChain:\s+(\d+)\.\s+(?!Reset chain\.|Rebuild chain\.)/gu, (_match, count) => {
         const action = Number(count) > 1 ? 'Rebuild chain' : 'Reset chain';
-        return `${prefix}${action}. `;
+        return `Chain ${RECOVERY_LANE_LIVE_ROLES.Chain} x${count}. ${action}. `;
     });
-    const withRecoverActions = withChainActions.replace(
-        /(Recover:\s+\d+\.\s+)(?!Confirm pair\.|Stabilize route\.)([^.]+)\./gu,
-        (_match, prefix, cue) => {
+    const withExplicitRecoverRoles = withChainActions.replace(
+        /\bRecover:\s+(\d+)\.\s+(Confirm pair\.|Stabilize route\.)/gu,
+        `Recover ${RECOVERY_LANE_LIVE_ROLES.Recover} x$1. $2`
+    );
+    const withRecoverActions = withExplicitRecoverRoles.replace(
+        /\bRecover:\s+(\d+)\.\s+(?!Confirm pair\.|Stabilize route\.)([^.]+)\./gu,
+        (_match, count, cue) => {
             const action = cue === 'Safe pair' ? 'Confirm pair' : 'Stabilize route';
-            return `${prefix}${action}. ${cue}.`;
+            return `Recover ${RECOVERY_LANE_LIVE_ROLES.Recover} x${count}. ${action}. ${cue}.`;
         }
     );
     return Object.entries(RECOVERY_LANE_LIVE_ACTIONS).reduce((current, [lane, action]) => {
-        const lanePattern = new RegExp(`(${lane}:\\s+\\d+\\.\\s+)(?!${action.replace(/\s+/gu, '\\s+')}\\.)`, 'gu');
-        return current.replace(lanePattern, `$1${action}. `);
+        const role = RECOVERY_LANE_LIVE_ROLES[lane] ?? lane;
+        const actionPattern = action.replace(/\s+/gu, '\\s+');
+        const explicitOldLanePattern = new RegExp(`\\b${lane}:\\s+(\\d+)\\.\\s+(${actionPattern}\\.)`, 'gu');
+        const oldLanePattern = new RegExp(`\\b${lane}:\\s+(\\d+)\\.\\s+(?!${actionPattern}\\.)`, 'gu');
+        const roleLanePattern = new RegExp(`\\b${lane}\\s+${role}\\s+x(\\d+)\\.\\s+(?!${actionPattern}\\.)`, 'gu');
+        return current
+            .replace(explicitOldLanePattern, `${lane} ${role} x$1. $2`)
+            .replace(oldLanePattern, `${lane} ${role} x$1. ${action}. `)
+            .replace(roleLanePattern, `${lane} ${role} x$1. ${action}. `);
     }, withRecoverActions);
 };
 
