@@ -1751,6 +1751,7 @@ describe('TileBoard touch and click controls', () => {
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary-action', 'Cash shard');
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary-audio', 'trait-lane-shard');
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary-role', 'Cashout');
+        expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary-role-id', 'cashout');
         expect(laneMap).toHaveAttribute('data-trait-interaction-lane-primary-screen-cue', 'burst');
         expect(laneMap).toHaveAttribute(
             'data-trait-interaction-lane-actions',
@@ -1806,6 +1807,10 @@ describe('TileBoard touch and click controls', () => {
             'Cashout'
         );
         expect(laneMap.querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-role-id',
+            'cashout'
+        );
+        expect(laneMap.querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
             'data-trait-interaction-lane-screen-cue',
             'burst'
         );
@@ -1821,6 +1826,10 @@ describe('TileBoard touch and click controls', () => {
             'data-trait-interaction-lane-screen-cue',
             'guard'
         );
+        expect(laneMap.querySelector('[data-trait-interaction-lane="guard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-role-id',
+            'protect'
+        );
         expect(laneMap.querySelector('[data-trait-interaction-lane="block"]')).toHaveAttribute(
             'data-trait-interaction-lane-audio',
             'trait-lane-block'
@@ -1829,6 +1838,10 @@ describe('TileBoard touch and click controls', () => {
             'data-trait-interaction-lane-screen-cue',
             'risk'
         );
+        expect(laneMap.querySelector('[data-trait-interaction-lane="block"]')).toHaveAttribute(
+            'data-trait-interaction-lane-role-id',
+            'block'
+        );
         expect(laneMap.querySelector('[data-trait-interaction-lane="recall"]')).toHaveAttribute(
             'data-trait-interaction-lane-audio',
             'trait-lane-recall'
@@ -1836,6 +1849,10 @@ describe('TileBoard touch and click controls', () => {
         expect(laneMap.querySelector('[data-trait-interaction-lane="recall"]')).toHaveAttribute(
             'data-trait-interaction-lane-screen-cue',
             'pulse'
+        );
+        expect(laneMap.querySelector('[data-trait-interaction-lane="recall"]')).toHaveAttribute(
+            'data-trait-interaction-lane-role-id',
+            'recall'
         );
         expect(laneMap).toHaveAccessibleName(
             'Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard. Guard Protect x1. Protect run. Mirror + Stasis: guard ward. Block Block x1. Deny match. Stasis buffered Sealed. Recall Recall x1. Set memory. Echo + Mirror: recall focus.'

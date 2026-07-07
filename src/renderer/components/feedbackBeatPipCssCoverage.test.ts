@@ -504,6 +504,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-card-trait-lane-beat-map-summary-screen-cue': ['burst', 'guard', 'pulse', 'risk'],
         'data-card-trait-lane-beat-map-summary-tier': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
         'data-card-trait-lane-beat-map-summary-pip-action': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
+        'data-trait-interaction-lane-primary-role-id': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
+        'data-trait-interaction-lane-role-id': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
         'data-card-action-priority-focus': ['primary', 'support'],
         'data-card-action-primary-role': ['Bank', 'Cashout', 'Follow-up', 'Perk', 'Setup'],
         'data-card-action-primary-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
