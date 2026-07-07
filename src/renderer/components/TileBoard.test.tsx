@@ -854,6 +854,18 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-sequence-tone', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-cue', 'Cash out');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-target', 'Match lit route for reward');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-opportunity-target]')).toHaveAttribute(
+            'data-chain-target-action',
+            'cashout'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-opportunity-target]')).toHaveAttribute(
+            'data-chain-target-tier',
+            'now'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-opportunity-target-plan]')).toHaveAttribute(
+            'data-chain-target-plan-tone',
+            'cashout'
+        );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-accessibility-tone', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-accessibility-ready-count', '2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-accessibility-surge-count', '0');
@@ -1640,6 +1652,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(3);
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-cue', 'Follow up');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-target', 'Tap marked follow-up');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-opportunity-target]')).toHaveAttribute(
+            'data-chain-target-action',
+            'follow-up'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-opportunity-target]')).toHaveAttribute(
+            'data-chain-target-tier',
+            'tap'
+        );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-sequence-first', 'Tap marked follow-up');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
             'data-chain-sequence-then',
@@ -1994,6 +2014,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-reward-hot', 'false');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-cue', 'Match now');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-target', 'Prime cashout');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-opportunity-target]')).toHaveAttribute(
+            'data-chain-target-action',
+            'match-route'
+        );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-opportunity-target]')).toHaveAttribute(
+            'data-chain-target-tier',
+            'route'
+        );
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action', 'match-route');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action-tier', 'route');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action-tone', 'ready');
@@ -2284,6 +2312,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-hot-band', 'ready');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-next-action', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-reward-hot', 'false');
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-opportunity-target]')).toHaveAttribute(
+            'data-chain-target-tone',
+            'cashout'
+        );
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action-tone', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-id', 'chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action', 'Match');

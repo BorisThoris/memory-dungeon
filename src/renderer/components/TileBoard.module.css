@@ -953,18 +953,21 @@
     .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
     .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
     .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
+    .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
     .frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
     .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
     .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
     .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
     .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
     .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
+    .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
     .frame[data-chain-opportunity-next-action='follow-up'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines,
     .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardLadder,
     .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMeter,
     .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityRewardUrgency,
     .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityPayoffBurst,
     .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityMomentum,
+    .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityTargetPlan,
     .frame[data-chain-opportunity-next-action='match-route'] .chainOpportunityChip:not(:hover, :focus-within) .chainOpportunityLines {
         display: inline-grid;
     }
@@ -1939,6 +1942,31 @@
     white-space: nowrap;
 }
 
+.chainOpportunityTarget[data-chain-target-tone='cashout'],
+.chainOpportunityTarget[data-chain-target-action='cashout'],
+.chainOpportunityTarget[data-chain-target-tier='now'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    text-shadow: 0 0 0.48rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+}
+
+.chainOpportunityTarget[data-chain-target-action='follow-up'],
+.chainOpportunityTarget[data-chain-target-tier='tap'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, var(--theme-gold-bright) 16%);
+    text-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+}
+
+.chainOpportunityTarget[data-chain-target-action='match-route'],
+.chainOpportunityTarget[data-chain-target-tier='route'],
+.chainOpportunityTarget[data-chain-target-tone='ready'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.chainOpportunityTarget[data-chain-target-action='prime-route'],
+.chainOpportunityTarget[data-chain-target-tier='prime'],
+.chainOpportunityTarget[data-chain-target-tone='setup'] {
+    color: color-mix(in srgb, var(--theme-violet-bright) 54%, var(--theme-cyan-bright) 44%);
+}
+
 .chainOpportunityTargetBeatPips,
 .chainOpportunityTargetPlanBeatPips {
     display: inline-flex;
@@ -1956,6 +1984,24 @@
     animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
     background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
     box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.chainOpportunityTarget[data-chain-target-action='cashout'] .chainOpportunityTargetBeatPips i,
+.chainOpportunityTargetPlan[data-chain-target-plan-action='cashout'] .chainOpportunityTargetPlanBeatPips i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 78%, white 10%);
+    box-shadow: 0 0 0.38rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+}
+
+.chainOpportunityTarget[data-chain-target-action='follow-up'] .chainOpportunityTargetBeatPips i,
+.chainOpportunityTargetPlan[data-chain-target-plan-action='follow-up'] .chainOpportunityTargetPlanBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, var(--theme-gold-bright) 10%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.chainOpportunityTarget[data-chain-target-action='prime-route'] .chainOpportunityTargetBeatPips i,
+.chainOpportunityTargetPlan[data-chain-target-plan-action='prime-route'] .chainOpportunityTargetPlanBeatPips i {
+    background: color-mix(in srgb, var(--theme-violet-bright) 64%, var(--theme-cyan-bright) 28%);
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-violet-bright) 28%, transparent);
 }
 
 .chainOpportunityTargetBeatPips i[data-chain-target-beat-focus='primary'],
@@ -1987,6 +2033,37 @@
     text-overflow: ellipsis;
     text-transform: uppercase;
     white-space: nowrap;
+}
+
+.chainOpportunityTargetPlan[data-chain-target-plan-tone='cashout'],
+.chainOpportunityTargetPlan[data-chain-target-plan-action='cashout'],
+.chainOpportunityTargetPlan[data-chain-target-plan-tier='now'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 14%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), transparent 68%),
+        color-mix(in srgb, var(--theme-surface-control) 76%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+    box-shadow: 0 0 0.86rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.chainOpportunityTargetPlan[data-chain-target-plan-action='follow-up'],
+.chainOpportunityTargetPlan[data-chain-target-plan-tier='tap'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 50%, var(--theme-gold-bright) 14%);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
+.chainOpportunityTargetPlan[data-chain-target-plan-action='match-route'],
+.chainOpportunityTargetPlan[data-chain-target-plan-tier='route'],
+.chainOpportunityTargetPlan[data-chain-target-plan-tone='ready'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, transparent);
+    box-shadow: 0 0 0.72rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+}
+
+.chainOpportunityTargetPlan[data-chain-target-plan-action='prime-route'],
+.chainOpportunityTargetPlan[data-chain-target-plan-tier='prime'],
+.chainOpportunityTargetPlan[data-chain-target-plan-tone='setup'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 40%, var(--theme-cyan-bright) 16%);
+    color: color-mix(in srgb, var(--theme-violet-bright) 70%, white);
 }
 
 .chainOpportunityMilestone {

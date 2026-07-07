@@ -2168,6 +2168,35 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         };
     }, [board, chainContext, runStatus, selectedTraitFollowupTileIds, traitRouteHintText, traitRouteTargetTileIds]);
 
+    const boardChainOpportunityNextActionMeterFill =
+        boardChainOpportunity.nextActionId === 'cashout'
+            ? 100
+            : boardChainOpportunity.nextActionId === 'follow-up'
+              ? 75
+              : boardChainOpportunity.nextActionId === 'prime-route'
+                ? 50
+                : 60;
+    const boardChainOpportunityNextActionTier =
+        boardChainOpportunity.nextActionId === 'cashout'
+            ? 'now'
+            : boardChainOpportunity.nextActionId === 'follow-up'
+              ? 'tap'
+              : boardChainOpportunity.nextActionId === 'match-route'
+                ? 'route'
+                : boardChainOpportunity.nextActionId === 'prime-route'
+                  ? 'prime'
+                  : 'setup';
+    const boardChainOpportunityNextActionVerb =
+        boardChainOpportunity.nextActionId === 'cashout'
+            ? 'Now'
+            : boardChainOpportunity.nextActionId === 'follow-up'
+              ? 'Tap'
+              : boardChainOpportunity.nextActionId === 'match-route'
+                ? 'Match'
+                : boardChainOpportunity.nextActionId === 'prime-route'
+                  ? 'Prime'
+                  : 'Setup';
+
     useEffect(() => {
         const beatSignal = boardChainOpportunity.beatSignal;
         if (!beatSignal || runStatus !== 'playing') {
@@ -4537,53 +4566,17 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         className={styles.chainOpportunityNextAction}
                                         data-chain-next-action={boardChainOpportunity.nextActionId}
-                                        data-chain-next-action-meter-fill={
-                                            boardChainOpportunity.nextActionId === 'cashout'
-                                                ? 100
-                                                : boardChainOpportunity.nextActionId === 'follow-up'
-                                                  ? 75
-                                                  : boardChainOpportunity.nextActionId === 'prime-route'
-                                                    ? 50
-                                                    : 60
-                                        }
+                                        data-chain-next-action-meter-fill={boardChainOpportunityNextActionMeterFill}
                                         data-chain-next-action-tone={boardChainOpportunity.nextActionTone}
-                                        data-chain-next-action-tier={
-                                            boardChainOpportunity.nextActionId === 'cashout'
-                                                ? 'now'
-                                                : boardChainOpportunity.nextActionId === 'follow-up'
-                                                  ? 'tap'
-                                                  : boardChainOpportunity.nextActionId === 'match-route'
-                                                    ? 'route'
-                                                  : boardChainOpportunity.nextActionId === 'prime-route'
-                                                    ? 'prime'
-                                                    : 'setup'
-                                        }
+                                        data-chain-next-action-tier={boardChainOpportunityNextActionTier}
                                         data-testid="chain-opportunity-next-action"
                                         style={
                                             {
-                                                '--chain-next-action-meter-fill': `${
-                                                    boardChainOpportunity.nextActionId === 'cashout'
-                                                        ? 100
-                                                        : boardChainOpportunity.nextActionId === 'follow-up'
-                                                          ? 75
-                                                          : boardChainOpportunity.nextActionId === 'prime-route'
-                                                            ? 50
-                                                            : 60
-                                                }%`
+                                                '--chain-next-action-meter-fill': `${boardChainOpportunityNextActionMeterFill}%`
                                             } as CSSProperties
                                         }
                                     >
-                                        <small>
-                                            {boardChainOpportunity.nextActionId === 'cashout'
-                                                ? 'Now'
-                                                : boardChainOpportunity.nextActionId === 'follow-up'
-                                                  ? 'Tap'
-                                                  : boardChainOpportunity.nextActionId === 'match-route'
-                                                    ? 'Match'
-                                                  : boardChainOpportunity.nextActionId === 'prime-route'
-                                                    ? 'Prime'
-                                                    : 'Setup'}
-                                        </small>
+                                        <small>{boardChainOpportunityNextActionVerb}</small>
                                         {boardChainOpportunity.nextActionDetail ? <b>{boardChainOpportunity.nextActionDetail}</b> : null}
                                         <i aria-hidden="true" className={styles.chainOpportunityNextActionMeter}>
                                             <i aria-hidden="true" className={styles.chainOpportunityNextActionMeterFill} />
@@ -5474,6 +5467,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 {boardChainOpportunity.nextTarget ? (
                                     <span
                                         className={styles.chainOpportunityTarget}
+                                        data-chain-target-action={boardChainOpportunity.nextActionId}
+                                        data-chain-target-tier={boardChainOpportunityNextActionTier}
+                                        data-chain-target-tone={boardChainOpportunity.nextActionTone}
                                         data-chain-opportunity-target={boardChainOpportunity.nextTarget}
                                     >
                                         {boardChainOpportunity.nextTarget}
@@ -5538,6 +5534,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 {boardChainOpportunity.targetPlanLabel ? (
                                     <span
                                         className={styles.chainOpportunityTargetPlan}
+                                        data-chain-target-plan-action={boardChainOpportunity.nextActionId}
+                                        data-chain-target-plan-tier={boardChainOpportunityNextActionTier}
+                                        data-chain-target-plan-tone={boardChainOpportunity.nextActionTone}
                                         data-chain-opportunity-target-plan={boardChainOpportunity.targetPlanLabel}
                                     >
                                         {boardChainOpportunity.targetPlanLabel}
