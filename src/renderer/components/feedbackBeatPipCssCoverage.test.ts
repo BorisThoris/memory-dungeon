@@ -313,6 +313,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         .map(({ text }) => text)
         .join('\n');
     const visibleToneContracts: Record<string, readonly string[]> = {
+        'data-active-power-tone': ['control', 'recall', 'setup'],
         'data-board-chain-reward-lead-tone': ['guard', 'heal', 'reward'],
         'data-chain-combo-surge-band-tone': ['surge'],
         'data-chain-meter-tone': ['cashout', 'ready', 'setup', 'surge'],

@@ -6002,6 +6002,23 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
 }
 
+.activePowerBoardChip[data-active-power-tone='setup'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
+    background:
+        radial-gradient(ellipse 100% 150% at 50% 0%, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), transparent 68%),
+        linear-gradient(135deg, rgba(14, 21, 28, 0.9), rgba(13, 24, 31, 0.86)),
+        var(--theme-panel-solid);
+}
+
+.activePowerBoardChip[data-active-power-tone='setup'] strong {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.activePowerBoardChip[data-active-power-tone='setup'] small {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
+}
+
 .activePowerBoardChip[data-active-power-tone='control'] {
     border-color: color-mix(in srgb, var(--theme-ember) 38%, transparent);
     background:
