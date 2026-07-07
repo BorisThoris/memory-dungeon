@@ -7925,6 +7925,57 @@
     text-shadow: 0 0 0.36rem color-mix(in srgb, currentColor 16%, transparent);
 }
 
+.frame[data-opportunity-compass-summary-tier='cashout'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-summary-tier='cashout'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='cashout'],
+.opportunityCompassSummary[data-opportunity-compass-summary-action='Cash out'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 24%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 1.05rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.frame[data-opportunity-compass-summary-tier='prime'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-summary-tier='prime'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='prime'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 50%, var(--theme-violet-bright) 18%);
+    box-shadow: 0 0 0.76rem color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
+}
+
+.frame[data-opportunity-compass-summary-tier='risk'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-summary-tier='risk'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='risk'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 48%, var(--theme-gold-bright) 16%);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent),
+        0 0 0.84rem color-mix(in srgb, var(--theme-danger) 16%, transparent);
+}
+
+.frame[data-opportunity-compass-summary-tier='recover'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-summary-tier='recover'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='recover'] {
+    border-color: color-mix(in srgb, var(--theme-success) 48%, var(--theme-cyan-bright) 18%);
+    box-shadow: 0 0 0.78rem color-mix(in srgb, var(--theme-success) 14%, transparent);
+}
+
+.frame[data-opportunity-compass-summary-tier='tool'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-summary-tier='tool'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='tool'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-cyan-bright) 18%);
+    box-shadow: 0 0 0.74rem color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
+}
+
+.frame[data-opportunity-compass-summary-tier='route'] .opportunityCompassSummary,
+.opportunityCompass[data-opportunity-compass-summary-tier='route'] .opportunityCompassSummary,
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='route'] {
+    box-shadow: 0 0 0.62rem color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+}
+
+.opportunityCompassSummary[data-opportunity-compass-summary-beats='4'] .opportunityCompassSummaryBeatPips i,
+.opportunityCompassSummary[data-opportunity-compass-summary-beats='5'] .opportunityCompassSummaryBeatPips i {
+    animation-duration: 0.82s;
+}
+
 .opportunityCompassSummaryBeatPips {
     display: inline-flex;
     align-items: center;

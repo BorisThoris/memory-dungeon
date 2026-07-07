@@ -1069,11 +1069,29 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-compass')).toHaveTextContent('Best');
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('Best');
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveTextContent('2 plays');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-compass-summary-action', 'Cash out');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-compass-summary-beats', '3');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-compass-summary-tier', 'cashout');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-best-tone', 'chain');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-heat', 'cashout');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-summary-action', 'Cash out');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-summary-beats', '3');
+        expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute('data-opportunity-compass-summary-tier', 'cashout');
         expect(screen.getByTestId('board-opportunity-compass')).toHaveAttribute(
             'data-opportunity-compass-best-screen-cue',
             'burst'
+        );
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveAttribute(
+            'data-opportunity-compass-summary-action',
+            'Cash out'
+        );
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveAttribute(
+            'data-opportunity-compass-summary-beats',
+            '3'
+        );
+        expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveAttribute(
+            'data-opportunity-compass-summary-tier',
+            'cashout'
         );
         expect(screen.getByTestId('board-opportunity-compass-summary')).toHaveAttribute(
             'data-opportunity-compass-summary-tone',
