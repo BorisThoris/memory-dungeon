@@ -1132,6 +1132,19 @@
     color: color-mix(in srgb, var(--theme-success) 74%, white);
 }
 
+.chainOpportunityArcadeCallout[data-chain-callout-tone='ready'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+}
+
+.chainOpportunityArcadeCallout[data-chain-callout-tone='ready'] b,
+.chainOpportunityArcadeCallout[data-chain-callout-tone='ready'] .chainOpportunityArcadeCalloutBeatPips i {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+}
+
 .chainOpportunityArcadeCallout[data-chain-callout-tone='setup'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 36%, transparent);
     background: color-mix(in srgb, var(--theme-violet-bright) 10%, var(--theme-void) 38%);
@@ -5500,6 +5513,13 @@
 
 .chainOpportunityHotBandBeatPips i[data-chain-hot-band-beat-focus='support'] {
     opacity: 0.72;
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-tone='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
 }
 
 .chainOpportunityHotBand[data-chain-hot-band-tone='ready'] {
