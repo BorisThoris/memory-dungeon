@@ -381,8 +381,10 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
     const visibleStateContracts: Record<string, readonly string[]> = {
         'data-board-chain-reward-focus': ['primary', 'support'],
         'data-board-chain-reward-ladder-focus': ['next', 'soon'],
+        'data-board-chain-reward-lead-tier': ['later', 'next', 'soon'],
         'data-board-chain-reward-screen-cue': ['burst', 'pulse', 'tick'],
         'data-board-chain-reward-lead-screen-cue': ['burst', 'pulse', 'tick'],
+        'data-board-chain-reward-urgency': ['later', 'next', 'soon'],
         'data-card-feedback-trait-lane-primary-screen-cue': ['burst', 'guard', 'pulse', 'risk'],
         'data-card-feedback-primary-shot-focus': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
         'data-card-feedback-primary-shot-screen-cue': ['burst', 'guard', 'pulse'],
@@ -399,6 +401,7 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-chain-followup-screen-cue': ['pulse'],
         'data-chain-marker-focus': ['primary', 'support'],
         'data-chain-opportunity-next-action': ['cashout', 'follow-up', 'match-route', 'prime-route'],
+        'data-chain-reward-urgency': ['later', 'next', 'soon'],
         'data-chain-opportunity-beat-screen-cue': ['burst', 'pulse', 'snap', 'super'],
         'data-chain-opportunity-screen-cue': ['burst', 'pulse', 'snap', 'super'],
         'data-chain-opportunity-surge-screen-cue': ['burst'],

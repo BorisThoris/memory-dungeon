@@ -2446,6 +2446,22 @@
     white-space: nowrap;
 }
 
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='next'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, white 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 24%, transparent), color-mix(in srgb, var(--theme-success) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
+        0 0 0.82rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='next'] > small {
+    background: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+    color: color-mix(in srgb, white 92%, var(--theme-gold-bright));
+}
+
 .chainOpportunityRewardUrgency[data-chain-reward-urgency='soon'],
 .chainOpportunityRewardUrgency[data-chain-reward-urgency='later'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 24%);
@@ -5362,6 +5378,17 @@
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
         0 0 18px color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.chainOpportunityRewardLadder > span[data-board-chain-reward-urgency='soon'] {
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 9%, transparent),
+        0 0 14px color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.chainOpportunityRewardLadder > span[data-board-chain-reward-urgency='later'] {
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 7%, transparent);
+    opacity: 0.84;
 }
 
 .chainOpportunityRewardLadder > span[data-board-chain-reward-screen-cue='burst'] {
