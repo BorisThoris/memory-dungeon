@@ -157,17 +157,22 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
             'data-mode-lane-actions',
             'chain:Build chain:1>reward:Chase reward:1>pressure:Read pressure:1'
         );
+        expect(classicLaneMap).toHaveAttribute(
+            'data-mode-lane-roles',
+            'chain:Build:1>reward:Reward:1>pressure:Pressure:1'
+        );
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane', 'chain');
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-action', 'Build chain');
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-audio', 'mode-lane-chain');
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-beats', '4');
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-cue', 'Escalating floors');
+        expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-role', 'Build');
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-screen-cue', 'burst');
         const classicLaneMapSummary = screen.getByTestId('choose-path-mode-lane-map-summary-classic-launch');
         expect(classicLaneMapSummary).toHaveAttribute('data-mode-lane-count', '3');
         expect(classicLaneMapSummary).toHaveTextContent('Lanes');
         expect(classicLaneMapSummary).toHaveTextContent('3 lanes');
-        expect(classicLaneMapSummary).toHaveTextContent('Chain leads');
+        expect(classicLaneMapSummary).toHaveTextContent('Build Chain');
         expect(classicLaneMapSummary.querySelectorAll('[data-mode-lane-map-summary-beat]')).toHaveLength(4);
         expect(classicLaneMapSummary.querySelector('[data-mode-lane-map-summary-beat="1"]')).toHaveAttribute(
             'data-mode-lane-map-summary-beat-focus',
@@ -178,40 +183,46 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
             'support'
         );
         expect(classicLaneMap).toHaveTextContent('Chain');
+        expect(classicLaneMap).toHaveTextContent('Build');
         expect(classicLaneMap).toHaveTextContent('Build chain');
-        expect(classicLaneMap).toHaveTextContent('Escalating floors');
+        expect(classicLaneMap).toHaveTextContent('x1 / Escalating floors');
         expect(classicLaneMap).toHaveTextContent('Reward');
         expect(classicLaneMap).toHaveTextContent('Chase reward');
-        expect(classicLaneMap).toHaveTextContent('Shops + relics');
+        expect(classicLaneMap).toHaveTextContent('x1 / Shops + relics');
         expect(classicLaneMap).toHaveTextContent('Pressure');
         expect(classicLaneMap).toHaveTextContent('Read pressure');
-        expect(classicLaneMap).toHaveTextContent('Route choices');
+        expect(classicLaneMap).toHaveTextContent('x1 / Route choices');
         expect(classicLaneMap.querySelector('[data-mode-lane="chain"]')).toHaveAttribute(
             'data-mode-lane-action',
             'Build chain'
         );
+        expect(classicLaneMap.querySelector('[data-mode-lane="chain"]')).toHaveAttribute('data-mode-lane-role', 'Build');
         expect(classicLaneMap.querySelector('[data-mode-lane="reward"]')).toHaveAttribute(
             'data-mode-lane-action',
             'Chase reward'
         );
+        expect(classicLaneMap.querySelector('[data-mode-lane="reward"]')).toHaveAttribute('data-mode-lane-role', 'Reward');
         expect(classicLaneMap.querySelector('[data-mode-lane="pressure"]')).toHaveAttribute(
             'data-mode-lane-action',
             'Read pressure'
         );
+        expect(classicLaneMap.querySelector('[data-mode-lane="pressure"]')).toHaveAttribute('data-mode-lane-role', 'Pressure');
         expect(classicLaneMap).toHaveAccessibleName(
             'Classic Run launch lane map. Chain Build x1. Build chain. Escalating floors. Reward Reward x1. Chase reward. Shops + relics. Pressure Pressure x1. Read pressure. Route choices.'
         );
         const classicPrimaryLane = screen.getByTestId('choose-path-mode-primary-lane-classic-launch');
         expect(classicPrimaryLane).toHaveAccessibleName(
-            'Primary mode lane. Chain: Build chain. Escalating floors. 4 beats.'
+            'Primary mode lane. Build Chain: Build chain. Escalating floors. 4 beats.'
         );
         expect(classicPrimaryLane).toHaveAttribute('data-mode-primary-lane', 'chain');
         expect(classicPrimaryLane).toHaveAttribute('data-mode-primary-lane-action', 'Build chain');
         expect(classicPrimaryLane).toHaveAttribute('data-mode-primary-lane-audio', 'mode-lane-chain');
         expect(classicPrimaryLane).toHaveAttribute('data-mode-primary-lane-beats', '4');
         expect(classicPrimaryLane).toHaveAttribute('data-mode-primary-lane-cue', 'Escalating floors');
+        expect(classicPrimaryLane).toHaveAttribute('data-mode-primary-lane-role', 'Build');
         expect(classicPrimaryLane).toHaveAttribute('data-mode-primary-lane-screen-cue', 'burst');
         expect(classicPrimaryLane).toHaveTextContent('Launch loop');
+        expect(classicPrimaryLane).toHaveTextContent('Build');
         expect(classicPrimaryLane.querySelectorAll('[data-mode-primary-lane-beat]')).toHaveLength(4);
         const startButton = screen.getByRole('button', { name: /Start Classic Run.*Payoff: Shops \+ relics/i });
         expect(startButton).toBeInTheDocument();
@@ -241,21 +252,27 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
             'data-mode-lane-actions',
             'chain:Build chain:1>reward:Chase reward:1>pressure:Read pressure:1'
         );
+        expect(showcaseLaneMap).toHaveAttribute(
+            'data-mode-lane-roles',
+            'chain:Build:1>reward:Reward:1>pressure:Pressure:1'
+        );
         expect(showcaseLaneMap).toHaveAttribute('data-mode-primary-lane', 'chain');
         expect(showcaseLaneMap).toHaveAttribute('data-mode-primary-lane-action', 'Build chain');
         expect(showcaseLaneMap).toHaveAttribute('data-mode-primary-lane-audio', 'mode-lane-chain');
         expect(showcaseLaneMap).toHaveAttribute('data-mode-primary-lane-beats', '4');
         expect(showcaseLaneMap).toHaveAttribute('data-mode-primary-lane-cue', 'Immediate dungeon');
+        expect(showcaseLaneMap).toHaveAttribute('data-mode-primary-lane-role', 'Build');
         expect(showcaseLaneMap).toHaveAttribute('data-mode-primary-lane-screen-cue', 'burst');
         expect(showcaseLaneMap).toHaveAccessibleName(
             'Dungeon Showcase tile lane map. Chain Build x1. Build chain. Immediate dungeon. Reward Reward x1. Chase reward. Dungeon systems. Pressure Pressure x1. Read pressure. Boss + locks.'
         );
         const showcasePrimaryLane = screen.getByTestId('choose-path-mode-primary-lane-dungeon_showcase-tile');
         expect(showcasePrimaryLane).toHaveAccessibleName(
-            'Primary mode lane. Chain: Build chain. Immediate dungeon. 4 beats.'
+            'Primary mode lane. Build Chain: Build chain. Immediate dungeon. 4 beats.'
         );
         expect(showcasePrimaryLane).toHaveAttribute('data-mode-primary-lane', 'chain');
         expect(showcasePrimaryLane).toHaveAttribute('data-mode-primary-lane-audio', 'mode-lane-chain');
+        expect(showcasePrimaryLane).toHaveAttribute('data-mode-primary-lane-role', 'Build');
         expect(showcasePrimaryLane).toHaveAttribute('data-mode-primary-lane-screen-cue', 'burst');
         expect(showcasePrimaryLane.querySelectorAll('[data-mode-primary-lane-beat]')).toHaveLength(4);
         const showcaseSignals = screen.getByTestId('choose-path-mode-signals-dungeon_showcase');

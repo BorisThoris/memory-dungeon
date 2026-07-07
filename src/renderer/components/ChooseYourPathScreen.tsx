@@ -342,6 +342,9 @@ const modeChoiceLaneRole = (entry: ModeChoiceLaneMapEntry): 'Build' | 'Locked' |
     }
 };
 
+const modeChoiceLaneRoleMapAttr = (laneMap: readonly ModeChoiceLaneMapEntry[]): string =>
+    laneMap.map((entry) => `${entry.id}:${modeChoiceLaneRole(entry)}:${entry.count}`).join('>');
+
 const modeChoiceLaneMapLabel = (
     def: RunModeDefinition,
     placement: 'launch' | 'tile' | 'detail',
@@ -751,12 +754,14 @@ const ChooseYourPathScreen = () => {
         const laneMap = buildModeChoiceLaneMap(signals);
         const primaryModeLane = laneMap[0] ?? null;
         const laneMapAttr = modeChoiceLaneMapAttr(laneMap);
+        const laneRoleMapAttr = modeChoiceLaneRoleMapAttr(laneMap);
         return (
             <span
                 aria-label={`${def.title} ${placement} signals. ${signalText}`}
                 className={`${styles.modeSignalStrip} ${styles[`modeSignalStrip_${placement}`]}`}
                 data-mode-lane-actions={modeChoiceLaneActionMapAttr(laneMap)}
                 data-mode-lane-map={laneMapAttr}
+                data-mode-lane-roles={laneRoleMapAttr}
                 data-testid={`choose-path-mode-signals-${def.id}`}
             >
                 {laneMap.length > 1 ? (
@@ -765,11 +770,13 @@ const ChooseYourPathScreen = () => {
                         className={styles.modeLaneMap}
                         data-mode-lane-actions={modeChoiceLaneActionMapAttr(laneMap)}
                         data-mode-lane-map={laneMapAttr}
+                        data-mode-lane-roles={laneRoleMapAttr}
                         data-mode-primary-lane={primaryModeLane?.id ?? 'none'}
                         data-mode-primary-lane-action={primaryModeLane ? modeChoiceLaneAction(primaryModeLane) : 'none'}
                         data-mode-primary-lane-audio={primaryModeLane ? modeChoiceLaneAudioCue(primaryModeLane) : 'none'}
                         data-mode-primary-lane-beats={primaryModeLane ? modeChoiceLaneBeatCount(primaryModeLane) : 0}
                         data-mode-primary-lane-cue={primaryModeLane?.cue ?? 'none'}
+                        data-mode-primary-lane-role={primaryModeLane ? modeChoiceLaneRole(primaryModeLane) : 'none'}
                         data-mode-primary-lane-screen-cue={primaryModeLane ? modeChoiceLaneScreenCue(primaryModeLane) : 'none'}
                         data-testid={`choose-path-mode-lane-map-${def.id}-${placement}`}
                     >
@@ -782,7 +789,7 @@ const ChooseYourPathScreen = () => {
                             <strong>
                                 {laneMap.length} {laneMap.length === 1 ? 'lane' : 'lanes'}
                             </strong>
-                            <b>{primaryModeLane ? `${primaryModeLane.label} leads` : 'No lead lane'}</b>
+                            <b>{primaryModeLane ? `${modeChoiceLaneRole(primaryModeLane)} ${primaryModeLane.label}` : 'No lead lane'}</b>
                             <span aria-hidden="true" className={styles.modeLaneMapSummaryBeatPips}>
                                 {Array.from({ length: Math.max(2, Math.min(5, laneMap.length + 1)) }, (_, beatIndex) => (
                                     <s
@@ -797,18 +804,19 @@ const ChooseYourPathScreen = () => {
                         </i>
                         {primaryModeLane ? (
                             <i
-                                aria-label={`Primary mode lane. ${primaryModeLane.label}: ${modeChoiceLaneAction(primaryModeLane)}. ${primaryModeLane.cue}. ${modeChoiceLaneBeatCount(primaryModeLane)} beats.`}
+                                aria-label={`Primary mode lane. ${modeChoiceLaneRole(primaryModeLane)} ${primaryModeLane.label}: ${modeChoiceLaneAction(primaryModeLane)}. ${primaryModeLane.cue}. ${modeChoiceLaneBeatCount(primaryModeLane)} beats.`}
                                 className={styles.modePrimaryLaneCue}
                                 data-mode-primary-lane={primaryModeLane.id}
                                 data-mode-primary-lane-action={modeChoiceLaneAction(primaryModeLane)}
                                 data-mode-primary-lane-audio={modeChoiceLaneAudioCue(primaryModeLane)}
                                 data-mode-primary-lane-beats={modeChoiceLaneBeatCount(primaryModeLane)}
                                 data-mode-primary-lane-cue={primaryModeLane.cue}
+                                data-mode-primary-lane-role={modeChoiceLaneRole(primaryModeLane)}
                                 data-mode-primary-lane-screen-cue={modeChoiceLaneScreenCue(primaryModeLane)}
                                 data-testid={`choose-path-mode-primary-lane-${def.id}-${placement}`}
                             >
                                 <small>Launch loop</small>
-                                <strong>{primaryModeLane.label}</strong>
+                                <strong>{modeChoiceLaneRole(primaryModeLane)}</strong>
                                 <b>{modeChoiceLaneAction(primaryModeLane)}</b>
                                 <em>{primaryModeLane.cue}</em>
                                 <span aria-hidden="true" className={styles.modePrimaryLaneBeatPips}>
@@ -819,11 +827,18 @@ const ChooseYourPathScreen = () => {
                             </i>
                         ) : null}
                         {laneMap.map((lane) => (
-                            <i data-mode-lane={lane.id} data-mode-lane-action={modeChoiceLaneAction(lane)} key={lane.id}>
+                            <i
+                                data-mode-lane={lane.id}
+                                data-mode-lane-action={modeChoiceLaneAction(lane)}
+                                data-mode-lane-role={modeChoiceLaneRole(lane)}
+                                key={lane.id}
+                            >
                                 <small>{lane.label}</small>
-                                <strong>{lane.count}</strong>
+                                <strong>{modeChoiceLaneRole(lane)}</strong>
                                 <b>{modeChoiceLaneAction(lane)}</b>
-                                <em>{lane.cue}</em>
+                                <em>
+                                    x{lane.count} / {lane.cue}
+                                </em>
                             </i>
                         ))}
                     </span>
