@@ -749,6 +749,10 @@ describe('TileBoard touch and click controls', () => {
                 ?.querySelector('[data-chain-momentum-beat="1"]')
         ).toHaveAttribute('data-chain-momentum-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-tone', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-action', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-beats', '5');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-tier', 'hot');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Hot lane');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Reward hot');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
@@ -2560,6 +2564,10 @@ describe('TileBoard touch and click controls', () => {
             '100'
         );
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-tone', 'ready');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-action', 'hold');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-beats', '3');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-screen-cue', 'guard');
+        expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveAttribute('data-chain-hot-band-tier', 'ready');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Streak lane');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Cashout ready');
         expect(screen.getByTestId('chain-opportunity-hot-band')).toHaveTextContent('Any clean match pays');
@@ -2794,6 +2802,10 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-surge-band-tone',
             'surge'
         );
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAttribute('data-chain-surge-band-action', 'surge');
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAttribute('data-chain-surge-band-beats', '4');
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAttribute('data-chain-surge-band-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAttribute('data-chain-surge-band-tier', 'combo');
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('Combo surge');
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('4 cards lit');
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveTextContent('5 routes ready');

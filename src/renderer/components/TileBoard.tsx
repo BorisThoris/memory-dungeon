@@ -166,6 +166,10 @@ type BoardTraitModeAction = 'cashout' | 'followup' | 'match' | 'prime' | 'surge'
 type BoardTraitModeTier = 'cashout' | 'prime' | 'route' | 'surge';
 type BoardPickupOpportunityAction = 'bank' | 'cashout' | 'stack';
 type BoardPickupOpportunityTier = 'cashout' | 'multi' | 'reward';
+type BoardChainHotBandAction = 'cashout' | 'hold';
+type BoardChainHotBandTier = 'hot' | 'ready';
+type BoardChainSurgeBandAction = 'surge';
+type BoardChainSurgeBandTier = 'combo';
 type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
 type BoardPayoffStackHeat = 'cashout' | 'prime';
 type BoardPayoffStackCrescendoScreenCue = 'burst' | 'pulse' | 'snap' | 'super';
@@ -3289,17 +3293,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardTraitInteractionLaneMapMeterFill = Math.round(Math.min(100, (boardTraitInteractionLaneMap.length / 5) * 100));
     const boardChainHotBand = boardChainOpportunity.rewardHot
         ? {
+              action: 'cashout' as BoardChainHotBandAction,
+              beatCount: 5 as const,
               cue: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Cash out now',
               detail: boardChainOpportunity.rewardCue ?? boardChainOpportunity.nextTarget ?? 'Cash out now',
               label: 'Hot lane',
+              screenCue: 'burst' as BoardFeedbackScreenCue,
+              tier: 'hot' as BoardChainHotBandTier,
               tone: 'cashout' as const,
               value: 'Reward hot'
           }
         : boardChainOpportunity.streakCashoutReady
           ? {
+                action: 'hold' as BoardChainHotBandAction,
+                beatCount: 3 as const,
                 cue: boardChainOpportunity.rewardUrgencyLabel ?? boardChainOpportunity.nextTarget ?? 'Keep the streak paying',
                 detail: boardChainOpportunity.nextTarget ?? boardChainOpportunity.rewardCue ?? 'Any clean match pays',
                 label: 'Streak lane',
+                screenCue: 'guard' as BoardFeedbackScreenCue,
+                tier: 'ready' as BoardChainHotBandTier,
                 tone: 'ready' as const,
                 value: 'Cashout ready'
             }
@@ -3356,12 +3368,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
               : 'tick';
     const boardChainSurgeBand = boardChainOpportunity.comboSurgeLabel
         ? {
+              action: 'surge' as BoardChainSurgeBandAction,
+              beatCount: 4 as const,
               cue: boardChainOpportunity.cue || 'Route prime',
               detail:
                   boardChainOpportunity.chainReadyCount === 1
                       ? '1 route ready'
                       : `${boardChainOpportunity.chainReadyCount} routes ready`,
               label: 'Combo surge',
+              screenCue: 'burst' as BoardFeedbackScreenCue,
+              tier: 'combo' as BoardChainSurgeBandTier,
               tone: 'surge' as const,
               value:
                   boardChainOpportunity.chainReadyTileCount === 1
@@ -4440,6 +4456,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-chain-opportunity-reward-hot={boardChainOpportunity.rewardHot ? 'true' : 'false'}
             data-chain-opportunity-combo-surge={boardChainOpportunity.comboSurgeLabel ? 'true' : 'false'}
             data-chain-opportunity-hot-band={boardChainHotBand?.tone ?? 'none'}
+            data-chain-hot-band-action={boardChainHotBand?.action ?? 'none'}
+            data-chain-hot-band-beats={boardChainHotBand?.beatCount ?? 0}
+            data-chain-hot-band-screen-cue={boardChainHotBand?.screenCue ?? 'none'}
+            data-chain-hot-band-tier={boardChainHotBand?.tier ?? 'none'}
+            data-chain-surge-band-action={boardChainSurgeBand?.action ?? 'none'}
+            data-chain-surge-band-beats={boardChainSurgeBand?.beatCount ?? 0}
+            data-chain-surge-band-screen-cue={boardChainSurgeBand?.screenCue ?? 'none'}
+            data-chain-surge-band-tier={boardChainSurgeBand?.tier ?? 'none'}
             data-chain-reward-ladder={boardRewardLadderAttr}
             data-chain-reward-ladder-actions={boardRewardLadderActionAttr}
             data-chain-reward-ladder-count={boardRewardLadder.length}
@@ -6254,6 +6278,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         aria-label={boardChainHotBandLabel}
                                         className={styles.chainOpportunityHotBand}
+                                        data-chain-hot-band-action={boardChainHotBand.action}
+                                        data-chain-hot-band-beats={boardChainHotBand.beatCount}
+                                        data-chain-hot-band-screen-cue={boardChainHotBand.screenCue}
+                                        data-chain-hot-band-tier={boardChainHotBand.tier}
                                         data-chain-hot-band-tone={boardChainHotBand.tone}
                                         data-chain-hot-band-meter-fill={boardChainHotBandMeterFill}
                                         data-testid="chain-opportunity-hot-band"
@@ -6276,7 +6304,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <i aria-hidden="true" className={styles.chainOpportunityHotBandMeterFill} />
                                         </i>
                                         <span aria-hidden="true" className={styles.chainOpportunityHotBandBeatPips}>
-                                            {Array.from({ length: boardChainHotBand.tone === 'cashout' ? 5 : 3 }, (_, index) => (
+                                            {Array.from({ length: boardChainHotBand.beatCount }, (_, index) => (
                                                 <i
                                                     data-chain-hot-band-beat={index + 1}
                                                     data-chain-hot-band-beat-focus={index === 0 ? 'primary' : 'support'}
@@ -6290,6 +6318,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         aria-label={boardChainSurgeBandLabel}
                                         className={styles.chainOpportunitySurgeBand}
+                                        data-chain-surge-band-action={boardChainSurgeBand.action}
+                                        data-chain-surge-band-beats={boardChainSurgeBand.beatCount}
+                                        data-chain-surge-band-screen-cue={boardChainSurgeBand.screenCue}
+                                        data-chain-surge-band-tier={boardChainSurgeBand.tier}
                                         data-chain-surge-band-tone={boardChainSurgeBand.tone}
                                         data-chain-surge-band-meter-fill={boardChainSurgeBandMeterFill}
                                         data-testid="chain-opportunity-surge-band"
@@ -6303,7 +6335,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <i aria-hidden="true" className={styles.chainOpportunitySurgeBandMeterFill} />
                                         </i>
                                         <span aria-hidden="true" className={styles.chainOpportunitySurgeBandBeatPips}>
-                                            {Array.from({ length: 4 }, (_, index) => (
+                                            {Array.from({ length: boardChainSurgeBand.beatCount }, (_, index) => (
                                                 <i
                                                     data-chain-surge-band-beat={index + 1}
                                                     data-chain-surge-band-beat-focus={index === 0 ? 'primary' : 'support'}
