@@ -8897,8 +8897,18 @@
         color-mix(in srgb, var(--theme-panel-solid) 44%, transparent);
 }
 
-.hudRewardPerkLaneMap > span[data-reward-perk-lane-readiness='soon'] {
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-role-id='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 18%);
+}
+
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-readiness='soon'],
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-role-id='route'],
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-role-id='prime'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
+}
+
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-role-id='control'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 40%, var(--theme-cyan-bright) 14%);
 }
 
 .hudRewardPerkLaneMap > span[data-reward-perk-lane-readiness='spent'] {

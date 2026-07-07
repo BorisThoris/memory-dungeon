@@ -437,6 +437,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-preview-cashout-tone': ['cashout'],
         'data-preview-line-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait'],
         'data-preview-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait'],
+        'data-reward-perk-lane-role-id': ['cashout', 'control', 'prime', 'route'],
         'data-trait-mode-action': ['cashout', 'followup', 'match', 'prime', 'surge'],
         'data-trait-mode-screen-cue': ['burst', 'pulse', 'tick'],
         'data-trait-mode-tier': ['cashout', 'prime', 'route', 'surge'],

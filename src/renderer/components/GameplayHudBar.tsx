@@ -288,8 +288,25 @@ const hudRewardPerkLaneRole = (lane: HudRewardPerkLaneMapEntry): 'Cashout' | 'Co
     return 'Prime';
 };
 
+const hudRewardPerkLaneRoleId = (lane: HudRewardPerkLaneMapEntry): 'cashout' | 'control' | 'prime' | 'route' => {
+    const role = hudRewardPerkLaneRole(lane);
+    if (role === 'Cashout') {
+        return 'cashout';
+    }
+    if (role === 'Control') {
+        return 'control';
+    }
+    if (role === 'Route') {
+        return 'route';
+    }
+    return 'prime';
+};
+
 const formatHudRewardPerkLaneRoleMapAttr = (laneMap: readonly HudRewardPerkLaneMapEntry[]): string =>
     laneMap.length > 0 ? laneMap.map((lane) => `${lane.lane}:${hudRewardPerkLaneRole(lane)}:${lane.count}`).join('>') : 'none';
+
+const formatHudRewardPerkLaneRoleIdMapAttr = (laneMap: readonly HudRewardPerkLaneMapEntry[]): string =>
+    laneMap.length > 0 ? laneMap.map((lane) => `${lane.lane}:${hudRewardPerkLaneRoleId(lane)}:${lane.count}`).join('>') : 'none';
 
 const formatHudRewardPerkLaneMapLabel = (laneMap: readonly HudRewardPerkLaneMapEntry[]): string =>
     laneMap.length > 0
@@ -1412,6 +1429,7 @@ const GameplayHudBar = ({
     const rewardPerkLaneMapAttr = formatHudRewardPerkLaneMapAttr(rewardPerkLaneMap);
     const rewardPerkLaneActionMapAttr = formatHudRewardPerkLaneActionMapAttr(rewardPerkLaneMap);
     const rewardPerkLaneRoleMapAttr = formatHudRewardPerkLaneRoleMapAttr(rewardPerkLaneMap);
+    const rewardPerkLaneRoleIdMapAttr = formatHudRewardPerkLaneRoleIdMapAttr(rewardPerkLaneMap);
     const rewardPerkLaneMapLabel = formatHudRewardPerkLaneMapLabel(rewardPerkLaneMap);
     const hazardTileSummary = getHazardTileBoardSummary(board);
     const traitOpportunitySummary = getTraitOpportunitySummary(board);
@@ -2206,6 +2224,7 @@ const GameplayHudBar = ({
                                         data-reward-perk-lane-actions={rewardPerkLaneActionMapAttr}
                                         data-reward-perk-lane-map={rewardPerkLaneMapAttr}
                                         data-reward-perk-lane-roles={rewardPerkLaneRoleMapAttr}
+                                        data-reward-perk-lane-role-ids={rewardPerkLaneRoleIdMapAttr}
                                         data-reward-perk-meter-fill={rewardPerkMeterFill}
                                         data-testid="hud-reward-perk-strip"
                                         title={rewardPerkRows.map((row) => `${row.label}: ${row.nextCue}`).join(' ')}
@@ -2290,6 +2309,7 @@ const GameplayHudBar = ({
                                                 data-reward-perk-lane-actions={rewardPerkLaneActionMapAttr}
                                                 data-reward-perk-lane-map={rewardPerkLaneMapAttr}
                                                 data-reward-perk-lane-roles={rewardPerkLaneRoleMapAttr}
+                                                data-reward-perk-lane-role-ids={rewardPerkLaneRoleIdMapAttr}
                                                 data-testid="hud-reward-perk-lane-map"
                                             >
                                                 <span
@@ -2327,6 +2347,7 @@ const GameplayHudBar = ({
                                                         data-reward-perk-lane-kind={lane.lane}
                                                         data-reward-perk-lane-readiness={lane.readiness}
                                                         data-reward-perk-lane-role={hudRewardPerkLaneRole(lane)}
+                                                        data-reward-perk-lane-role-id={hudRewardPerkLaneRoleId(lane)}
                                                         key={lane.lane}
                                                     >
                                                         <small>{lane.lane}</small>
