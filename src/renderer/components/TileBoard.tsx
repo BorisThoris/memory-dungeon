@@ -4817,6 +4817,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-trait-route-tiers={cardFeedbackTraitRouteTiersAttr}
             data-card-feedback-primary-action={cardFeedbackPrimaryActionAttr}
             data-card-feedback-primary-action-role={primaryCardActionPriorityRow?.role ?? 'none'}
+            data-card-feedback-primary-action-role-id={primaryCardActionPriorityRow?.tone ?? 'none'}
             data-card-feedback-primary-action-screen-cue={primaryCardActionPriorityRow?.screenCue ?? 'none'}
             data-card-feedback-primary-action-tone={primaryCardActionPriorityRow?.tone ?? 'none'}
             data-card-action-priority-summary-action={cardActionPrioritySummaryAction ?? 'none'}

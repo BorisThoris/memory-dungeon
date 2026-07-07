@@ -580,11 +580,13 @@
 .frame[data-card-feedback-primary-beat='cashout'],
 .frame[data-card-feedback-primary-cadence='cashout'],
 .frame[data-card-feedback-primary-action-role='Cashout'],
+.frame[data-card-feedback-primary-action-role-id='cashout'],
 .frame[data-card-feedback-primary-action-tone='cashout'] {
     --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-gold-bright) 48%, transparent);
 }
 
 .frame[data-card-feedback-primary-action-role='Perk'],
+.frame[data-card-feedback-primary-action-role-id='perk'],
 .frame[data-card-feedback-primary-action-tone='perk'] {
     --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-violet-bright) 18%);
 }
@@ -597,6 +599,7 @@
 .frame[data-card-feedback-primary-beat='follow-up'],
 .frame[data-card-feedback-primary-cadence='follow-up'],
 .frame[data-card-feedback-primary-action-role='Follow-up'],
+.frame[data-card-feedback-primary-action-role-id='followup'],
 .frame[data-card-feedback-primary-action-tone='followup'] {
     --board-primary-beat-cue-color: color-mix(in srgb, #fff7c4 38%, var(--theme-cyan-bright) 16%);
 }
@@ -604,6 +607,7 @@
 .frame[data-card-feedback-primary-beat='route'],
 .frame[data-card-feedback-primary-cadence='route'],
 .frame[data-card-feedback-primary-action-role='Bank'],
+.frame[data-card-feedback-primary-action-role-id='bank'],
 .frame[data-card-feedback-primary-action-tone='bank'] {
     --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 14%);
 }
@@ -611,6 +615,7 @@
 .frame[data-card-feedback-primary-beat='setup'],
 .frame[data-card-feedback-primary-cadence='prime'],
 .frame[data-card-feedback-primary-action-role='Setup'],
+.frame[data-card-feedback-primary-action-role-id='setup'],
 .frame[data-card-feedback-primary-action-tone='setup'] {
     --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, var(--theme-violet-bright) 18%);
 }
@@ -630,6 +635,11 @@
 .frame[data-card-feedback-primary-action-role='Follow-up'] .stage::after,
 .frame[data-card-feedback-primary-action-role='Perk'] .stage::after,
 .frame[data-card-feedback-primary-action-role='Setup'] .stage::after,
+.frame[data-card-feedback-primary-action-role-id='bank'] .stage::after,
+.frame[data-card-feedback-primary-action-role-id='cashout'] .stage::after,
+.frame[data-card-feedback-primary-action-role-id='followup'] .stage::after,
+.frame[data-card-feedback-primary-action-role-id='perk'] .stage::after,
+.frame[data-card-feedback-primary-action-role-id='setup'] .stage::after,
 .frame[data-card-feedback-primary-action-screen-cue='burst'] .stage::after,
 .frame[data-card-feedback-primary-action-screen-cue='guard'] .stage::after,
 .frame[data-card-feedback-primary-action-screen-cue='pulse'] .stage::after,

@@ -513,6 +513,7 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-card-action-priority-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
         'data-card-action-primary-role-id': ['bank', 'cashout', 'followup', 'perk', 'setup'],
         'data-card-feedback-primary-action-role': ['Bank', 'Cashout', 'Follow-up', 'Perk', 'Setup'],
+        'data-card-feedback-primary-action-role-id': ['bank', 'cashout', 'followup', 'perk', 'setup'],
         'data-card-feedback-primary-action-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
         'data-card-beat-focus': ['primary', 'support'],
         'data-card-beat-primary-screen-cue': ['burst', 'guard', 'pulse', 'tick'],

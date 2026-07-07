@@ -982,6 +982,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-action-priority', 'cash-now:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action', 'cash-now');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action-role', 'Cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action-role-id', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action-screen-cue', 'burst');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action-tone', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-action-priority-summary-action', 'cashout');
@@ -2688,6 +2689,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-action-cues', 'cash-now:2;perk-cash:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-action-priority', 'cash-now:2>perk-cash:2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action-role', 'Cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action-role-id', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action-screen-cue', 'burst');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-primary-action-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveTextContent('Cash now');
