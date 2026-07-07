@@ -428,6 +428,50 @@
     opacity: 0.44;
 }
 
+.frame[data-opportunity-best-tone='chain'],
+.frame[data-opportunity-best-tone='perk'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-cyan-bright) 12%);
+}
+
+.frame[data-opportunity-best-tone='trait'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-violet-bright) 34%, var(--theme-cyan-bright) 12%);
+}
+
+.frame[data-opportunity-best-tone='pickup'],
+.frame[data-opportunity-best-tone='recover'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-success) 32%, var(--theme-cyan-bright) 12%);
+}
+
+.frame[data-opportunity-best-tone='hazard'],
+.frame[data-opportunity-best-tone='risk'],
+.frame[data-opportunity-best-tone='lost-reward'],
+.frame[data-opportunity-best-tone='control'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-danger) 34%, var(--theme-gold-bright) 10%);
+}
+
+.frame[data-opportunity-best-tone='setup'],
+.frame[data-opportunity-best-tone='recall'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+}
+
+.frame[data-opportunity-best-tone='chain'] .stage::after,
+.frame[data-opportunity-best-tone='control'] .stage::after,
+.frame[data-opportunity-best-tone='hazard'] .stage::after,
+.frame[data-opportunity-best-tone='lost-reward'] .stage::after,
+.frame[data-opportunity-best-tone='perk'] .stage::after,
+.frame[data-opportunity-best-tone='pickup'] .stage::after,
+.frame[data-opportunity-best-tone='recall'] .stage::after,
+.frame[data-opportunity-best-tone='recover'] .stage::after,
+.frame[data-opportunity-best-tone='risk'] .stage::after,
+.frame[data-opportunity-best-tone='setup'] .stage::after,
+.frame[data-opportunity-best-tone='trait'] .stage::after {
+    border-color: var(--board-frame-cue-outline-color);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--board-frame-cue-outline-color) 34%, transparent),
+        inset 0 0 18px color-mix(in srgb, var(--board-frame-cue-outline-color) 22%, transparent);
+    opacity: 0.42;
+}
+
 .frame[data-opportunity-best-screen-cue='burst'] .stage::after,
 .frame[data-chain-opportunity-screen-cue='burst'] .stage::after,
 .frame[data-chain-opportunity-screen-cue='super'] .stage::after,
@@ -6682,6 +6726,37 @@
     font-weight: 980;
 }
 
+.frame[data-opportunity-best-tone='chain'] .opportunityCompassSummary,
+.frame[data-opportunity-best-tone='perk'] .opportunityCompassSummary {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 18%);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.frame[data-opportunity-best-tone='trait'] .opportunityCompassSummary {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 48%, var(--theme-cyan-bright) 18%);
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+}
+
+.frame[data-opportunity-best-tone='pickup'] .opportunityCompassSummary,
+.frame[data-opportunity-best-tone='recover'] .opportunityCompassSummary {
+    border-color: color-mix(in srgb, var(--theme-success) 44%, var(--theme-cyan-bright) 18%);
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.frame[data-opportunity-best-tone='hazard'] .opportunityCompassSummary,
+.frame[data-opportunity-best-tone='risk'] .opportunityCompassSummary,
+.frame[data-opportunity-best-tone='lost-reward'] .opportunityCompassSummary,
+.frame[data-opportunity-best-tone='control'] .opportunityCompassSummary {
+    border-color: color-mix(in srgb, var(--theme-danger) 44%, var(--theme-gold-bright) 16%);
+    color: color-mix(in srgb, var(--theme-danger) 76%, white);
+}
+
+.frame[data-opportunity-best-tone='setup'] .opportunityCompassSummary,
+.frame[data-opportunity-best-tone='recall'] .opportunityCompassSummary {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+}
+
 .opportunityCompassSummaryBeatPips {
     display: inline-flex;
     align-items: center;
@@ -6734,6 +6809,52 @@
     );
     box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
     transition: width 140ms ease-out;
+}
+
+.frame[data-opportunity-best-tone='chain'] .opportunityCompassMeterFill,
+.frame[data-opportunity-best-tone='perk'] .opportunityCompassMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 86%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 68%, white)
+    );
+}
+
+.frame[data-opportunity-best-tone='trait'] .opportunityCompassMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 68%, white)
+    );
+}
+
+.frame[data-opportunity-best-tone='pickup'] .opportunityCompassMeterFill,
+.frame[data-opportunity-best-tone='recover'] .opportunityCompassMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-success) 78%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 64%, white)
+    );
+}
+
+.frame[data-opportunity-best-tone='hazard'] .opportunityCompassMeterFill,
+.frame[data-opportunity-best-tone='risk'] .opportunityCompassMeterFill,
+.frame[data-opportunity-best-tone='lost-reward'] .opportunityCompassMeterFill,
+.frame[data-opportunity-best-tone='control'] .opportunityCompassMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-danger) 78%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 64%, white)
+    );
+}
+
+.frame[data-opportunity-best-tone='setup'] .opportunityCompassMeterFill,
+.frame[data-opportunity-best-tone='recall'] .opportunityCompassMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 80%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 58%, white)
+    );
 }
 
 .opportunityCompass[data-opportunity-compass-surge='true'] {

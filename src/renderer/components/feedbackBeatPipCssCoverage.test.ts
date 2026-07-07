@@ -347,6 +347,19 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
             'setup',
             'trait'
         ],
+        'data-opportunity-best-tone': [
+            'chain',
+            'control',
+            'hazard',
+            'lost-reward',
+            'perk',
+            'pickup',
+            'recall',
+            'recover',
+            'risk',
+            'setup',
+            'trait'
+        ],
         'data-payoff-stack-tone': ['build', 'cashout', 'followup', 'setup'],
         'data-pickup-sequence-tone': ['cashout', 'reward'],
         'data-preview-density-tone': ['cashout', 'hazard', 'ready', 'setup', 'surge', 'trait'],
