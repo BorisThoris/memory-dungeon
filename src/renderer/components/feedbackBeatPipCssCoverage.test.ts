@@ -291,7 +291,9 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
     const visibleToneContracts: Record<string, readonly string[]> = {
         'data-board-chain-reward-lead-tone': ['guard', 'heal', 'reward'],
         'data-chain-combo-surge-band-tone': ['surge'],
+        'data-chain-meter-tone': ['cashout', 'ready', 'setup', 'surge'],
         'data-chain-next-action-tone': ['cashout', 'ready', 'setup'],
+        'data-chain-opportunity-surge-tone': ['surge'],
         'data-chain-reward-lead-tone': ['guard', 'heal', 'reward'],
         'data-chain-surge-band-tone': ['surge']
     };
