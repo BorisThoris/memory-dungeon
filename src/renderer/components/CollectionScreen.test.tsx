@@ -124,6 +124,10 @@ describe('CollectionScreen REG-093 reward gallery', () => {
             'data-run-payoff-lane-roles',
             'chain:Protect:1>cash:Cashout:1>build:Build:1>risk:Recover:1'
         );
+        expect(payoffSignals).toHaveAttribute(
+            'data-run-payoff-lane-role-ids',
+            'chain:protect:1>cash:cashout:1>build:build:1>risk:recover:1'
+        );
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
             'data-run-payoff-lane-map',
             'chain:1>cash:1>build:1>risk:1'
@@ -135,6 +139,10 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
             'data-run-payoff-lane-roles',
             'chain:Protect:1>cash:Cashout:1>build:Build:1>risk:Recover:1'
+        );
+        expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
+            'data-run-payoff-lane-role-ids',
+            'chain:protect:1>cash:cashout:1>build:build:1>risk:recover:1'
         );
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
             'data-run-payoff-primary-lane',
@@ -155,6 +163,10 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
             'data-run-payoff-primary-lane-role',
             'Protect'
+        );
+        expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
+            'data-run-payoff-primary-lane-role-id',
+            'protect'
         );
         const laneMapSummary = screen.getByTestId('collection-last-run-payoff-lane-map-summary');
         expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-count', '4');
@@ -190,6 +202,7 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-beats', '4');
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-cue', 'Combo live');
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-role', 'Protect');
+        expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-role-id', 'protect');
         expect(primaryLane).toHaveAttribute('data-run-payoff-primary-lane-screen-cue', 'burst');
         expect(primaryLane).toHaveTextContent('Archive chase');
         expect(primaryLane).toHaveTextContent('Protect chain');
@@ -202,6 +215,7 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         const riskLane = laneMap.querySelector('[data-run-payoff-lane="risk"]');
         expect(chainLane).toHaveAttribute('data-run-payoff-lane-action', 'Protect chain');
         expect(chainLane).toHaveAttribute('data-run-payoff-lane-beats', '4');
+        expect(chainLane).toHaveAttribute('data-run-payoff-lane-role-id', 'protect');
         expect(chainLane?.querySelectorAll('[data-run-payoff-lane-beat]')).toHaveLength(4);
         expect(chainLane?.querySelector('[data-run-payoff-lane-beat="1"]')).toHaveAttribute(
             'data-run-payoff-lane-beat-focus',
@@ -209,6 +223,7 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         );
         expect(riskLane).toHaveAttribute('data-run-payoff-lane-action', 'Reduce risk');
         expect(riskLane).toHaveAttribute('data-run-payoff-lane-beats', '2');
+        expect(riskLane).toHaveAttribute('data-run-payoff-lane-role-id', 'recover');
         expect(riskLane?.querySelectorAll('[data-run-payoff-lane-beat]')).toHaveLength(2);
         expect(screen.getByTestId('collection-last-run-payoff-burst')).toHaveTextContent('Combo burst');
         expect(screen.getByTestId('collection-last-run-payoff-burst')).toHaveTextContent('Chase again');
@@ -329,9 +344,20 @@ describe('CollectionScreen REG-093 reward gallery', () => {
             'data-run-payoff-lane-roles',
             'chain:Protect:1>cash:Stack:3'
         );
+        expect(screen.getByTestId('collection-last-run-payoff-signals')).toHaveAttribute(
+            'data-run-payoff-lane-role-ids',
+            'chain:protect:1>cash:stack:3'
+        );
+        expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAttribute(
+            'data-run-payoff-lane-role-ids',
+            'chain:protect:1>cash:stack:3'
+        );
         expect(screen.getByTestId('collection-last-run-payoff-lane-map')).toHaveAccessibleName(
             'Collection last run payoff lanes. Chain Protect x1. Protect chain. Combo live. Cash Stack x3. Cash reward. Route cashout.'
         );
+        expect(
+            screen.getByTestId('collection-last-run-payoff-lane-map').querySelector('[data-run-payoff-lane="cash"]')
+        ).toHaveAttribute('data-run-payoff-lane-role-id', 'stack');
 
         const sequence = screen.getByTestId('collection-last-run-payoff-sequence');
         expect(sequence).toHaveTextContent('First');

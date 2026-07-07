@@ -36,6 +36,7 @@ import {
     formatRunPayoffLaneActionMapAttr,
     formatRunPayoffLaneMapLabel,
     formatRunPayoffLaneRoleMapAttr,
+    formatRunPayoffLaneRoleIdMapAttr,
     formatRunPayoffBurstSignalLabel,
     formatRunPayoffCrescendoSignalLabel,
     formatRunPayoffSequenceSignalLabel,
@@ -44,6 +45,7 @@ import {
     getRunPayoffLaneBeatCount,
     getRunPayoffLaneMap,
     getRunPayoffLaneRole,
+    getRunPayoffLaneRoleId,
     getRunPayoffLaneScreenCue,
     getRunPayoffBurstSignal,
     getRunPayoffCrescendoSignal,
@@ -111,6 +113,7 @@ const CollectionScreen = () => {
     const lastRunPayoffLaneMapAttr = formatRunPayoffLaneMapAttr(lastRunPayoffLaneMap);
     const lastRunPayoffLaneActionMapAttr = formatRunPayoffLaneActionMapAttr(lastRunPayoffLaneMap);
     const lastRunPayoffLaneRoleMapAttr = formatRunPayoffLaneRoleMapAttr(lastRunPayoffLaneMap);
+    const lastRunPayoffLaneRoleIdMapAttr = formatRunPayoffLaneRoleIdMapAttr(lastRunPayoffLaneMap);
     const lastRunPayoffLaneMapLabel = formatRunPayoffLaneMapLabel('Collection last run payoff lanes', lastRunPayoffLaneMap);
     const lastRunPayoffBurst = getRunPayoffBurstSignal(lastRunPayoffRows);
     const lastRunPayoffBurstLabel = formatRunPayoffBurstSignalLabel('Collection last run payoff burst', lastRunPayoffBurst);
@@ -462,6 +465,7 @@ const CollectionScreen = () => {
                                 className={styles.runPayoffStrip}
                                 data-run-payoff-lane-actions={lastRunPayoffLaneActionMapAttr}
                                 data-run-payoff-lane-map={lastRunPayoffLaneMapAttr}
+                                data-run-payoff-lane-role-ids={lastRunPayoffLaneRoleIdMapAttr}
                                 data-run-payoff-lane-roles={lastRunPayoffLaneRoleMapAttr}
                                 data-testid="collection-last-run-payoff-signals"
                             >
@@ -470,6 +474,7 @@ const CollectionScreen = () => {
                                         aria-label={lastRunPayoffLaneMapLabel}
                                         data-run-payoff-lane-actions={lastRunPayoffLaneActionMapAttr}
                                         data-run-payoff-lane-map={lastRunPayoffLaneMapAttr}
+                                        data-run-payoff-lane-role-ids={lastRunPayoffLaneRoleIdMapAttr}
                                         data-run-payoff-lane-roles={lastRunPayoffLaneRoleMapAttr}
                                         data-run-payoff-primary-lane={primaryLastRunPayoffLane?.id ?? 'none'}
                                         data-run-payoff-primary-lane-action={primaryLastRunPayoffLane?.action ?? 'none'}
@@ -482,6 +487,9 @@ const CollectionScreen = () => {
                                         data-run-payoff-primary-lane-cue={primaryLastRunPayoffLane?.cue ?? 'none'}
                                         data-run-payoff-primary-lane-role={
                                             primaryLastRunPayoffLane ? getRunPayoffLaneRole(primaryLastRunPayoffLane) : 'none'
+                                        }
+                                        data-run-payoff-primary-lane-role-id={
+                                            primaryLastRunPayoffLane ? getRunPayoffLaneRoleId(primaryLastRunPayoffLane) : 'none'
                                         }
                                         data-run-payoff-primary-lane-screen-cue={
                                             primaryLastRunPayoffLane ? getRunPayoffLaneScreenCue(primaryLastRunPayoffLane) : 'none'
@@ -528,6 +536,7 @@ const CollectionScreen = () => {
                                                 data-run-payoff-primary-lane-beats={getRunPayoffLaneBeatCount(primaryLastRunPayoffLane)}
                                                 data-run-payoff-primary-lane-cue={primaryLastRunPayoffLane.cue}
                                                 data-run-payoff-primary-lane-role={getRunPayoffLaneRole(primaryLastRunPayoffLane)}
+                                                data-run-payoff-primary-lane-role-id={getRunPayoffLaneRoleId(primaryLastRunPayoffLane)}
                                                 data-run-payoff-primary-lane-screen-cue={getRunPayoffLaneScreenCue(primaryLastRunPayoffLane)}
                                                 data-testid="collection-last-run-primary-payoff-lane"
                                             >
@@ -559,6 +568,7 @@ const CollectionScreen = () => {
                                                 data-run-payoff-lane-beats={getRunPayoffLaneBeatCount(lane)}
                                                 data-run-payoff-lane-count={lane.count}
                                                 data-run-payoff-lane-role={getRunPayoffLaneRole(lane)}
+                                                data-run-payoff-lane-role-id={getRunPayoffLaneRoleId(lane)}
                                                 data-run-payoff-lane-screen-cue={getRunPayoffLaneScreenCue(lane)}
                                                 key={lane.id}
                                             >

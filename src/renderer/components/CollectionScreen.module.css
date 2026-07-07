@@ -696,48 +696,60 @@
     text-decoration: none;
 }
 
-.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='burst'] .runPayoffPrimaryLaneCue {
+.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='burst'] .runPayoffPrimaryLaneCue,
+.runPayoffStrip span[data-run-payoff-primary-lane-role-id='protect'] .runPayoffPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
 }
 
-.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='cashout'] .runPayoffPrimaryLaneCue {
+.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='cashout'] .runPayoffPrimaryLaneCue,
+.runPayoffStrip span[data-run-payoff-primary-lane-role-id='cashout'] .runPayoffPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-success) 56%, var(--theme-gold-bright) 18%);
     color: color-mix(in srgb, var(--theme-success) 84%, white);
 }
 
-.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='build'] .runPayoffPrimaryLaneCue {
+.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='build'] .runPayoffPrimaryLaneCue,
+.runPayoffStrip span[data-run-payoff-primary-lane-role-id='build'] .runPayoffPrimaryLaneCue,
+.runPayoffStrip span[data-run-payoff-primary-lane-role-id='stack'] .runPayoffPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 16%);
 }
 
-.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='risk'] .runPayoffPrimaryLaneCue {
+.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='risk'] .runPayoffPrimaryLaneCue,
+.runPayoffStrip span[data-run-payoff-primary-lane-role-id='recover'] .runPayoffPrimaryLaneCue {
     border-color: color-mix(in srgb, var(--theme-ember) 54%, var(--theme-danger) 16%);
     color: color-mix(in srgb, var(--theme-ember) 84%, white);
 }
 
-.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='cashout'] .runPayoffPrimaryLaneBeatPips s {
+.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='cashout'] .runPayoffPrimaryLaneBeatPips s,
+.runPayoffStrip span[data-run-payoff-primary-lane-role-id='cashout'] .runPayoffPrimaryLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-success) 82%, white 8%);
 }
 
-.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='risk'] .runPayoffPrimaryLaneBeatPips s {
+.runPayoffStrip span[data-run-payoff-primary-lane-screen-cue='risk'] .runPayoffPrimaryLaneBeatPips s,
+.runPayoffStrip span[data-run-payoff-primary-lane-role-id='recover'] .runPayoffPrimaryLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-ember) 82%, white 8%);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-screen-cue='burst'] {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-screen-cue='burst'],
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='protect'] {
     border-radius: 999px;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-screen-cue='cashout'] {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-screen-cue='cashout'],
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='cashout'] {
     border-radius: 999px;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success) 22%, transparent);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-screen-cue='build'] {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-screen-cue='build'],
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='build'],
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='stack'] {
     border-radius: 999px;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-screen-cue='risk'] {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-screen-cue='risk'],
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='recover'] {
     border-radius: 999px;
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-ember) 24%, transparent);
 }
@@ -782,31 +794,44 @@
     text-decoration: none;
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='chain'] .runPayoffLaneBeatPips s {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='chain'] .runPayoffLaneBeatPips s,
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='protect'] .runPayoffLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-cyan-bright) 68%, white);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='cash'] .runPayoffLaneBeatPips s {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='cash'] .runPayoffLaneBeatPips s,
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='cashout'] .runPayoffLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-success) 68%, white);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='build'] .runPayoffLaneBeatPips s {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='build'] .runPayoffLaneBeatPips s,
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='build'] .runPayoffLaneBeatPips s,
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='stack'] .runPayoffLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-gold-bright) 68%, white);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='risk'] .runPayoffLaneBeatPips s {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='risk'] .runPayoffLaneBeatPips s,
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='recover'] .runPayoffLaneBeatPips s {
     background: color-mix(in srgb, var(--theme-ember) 68%, white);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='chain'] strong {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='chain'] strong,
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='protect'] strong {
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='cash'] strong {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='cash'] strong,
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='cashout'] strong {
     color: color-mix(in srgb, var(--theme-success) 88%, white);
 }
 
-.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='risk'] strong {
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='build'] strong,
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='stack'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane='risk'] strong,
+.runPayoffStrip span[data-run-payoff-lane-map] i[data-run-payoff-lane-role-id='recover'] strong {
     color: color-mix(in srgb, var(--theme-ember) 88%, white);
 }
 
