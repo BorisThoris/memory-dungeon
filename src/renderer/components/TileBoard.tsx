@@ -170,6 +170,8 @@ type BoardChainHotBandAction = 'cashout' | 'hold';
 type BoardChainHotBandTier = 'hot' | 'ready';
 type BoardChainSurgeBandAction = 'surge';
 type BoardChainSurgeBandTier = 'combo';
+type BoardChainMarkerKeySummaryAction = 'cashout' | 'followup' | 'perk' | 'prime' | 'route' | 'surge';
+type BoardChainMarkerKeySummaryTier = 'cashout' | 'perk' | 'ready' | 'setup' | 'stack' | 'surge';
 type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
 type BoardPayoffStackHeat = 'cashout' | 'prime';
 type BoardPayoffStackCrescendoScreenCue = 'burst' | 'pulse' | 'snap' | 'super';
@@ -665,6 +667,60 @@ const getBoardPickupOpportunityBeatCount = (tier: BoardPickupOpportunityTier): 2
         return 4;
     }
     return tier === 'multi' ? 3 : 2;
+};
+
+const getBoardChainMarkerKeySummaryAction = (
+    focusedShape: string,
+    intensityId: string | null | undefined
+): BoardChainMarkerKeySummaryAction => {
+    if (focusedShape === 'payoff-stack' || focusedShape === 'payoff-bar' || intensityId === 'cashout' || intensityId === 'stack') {
+        return 'cashout';
+    }
+    if (focusedShape === 'followup-target' || intensityId === 'ready') {
+        return 'followup';
+    }
+    if (focusedShape === 'combo-surge' || intensityId === 'surge') {
+        return 'surge';
+    }
+    if (focusedShape === 'swap-target-crossbar' || intensityId === 'setup') {
+        return 'prime';
+    }
+    if (focusedShape === 'perk-armed-bar') {
+        return 'perk';
+    }
+    return 'route';
+};
+
+const getBoardChainMarkerKeySummaryTier = (
+    focusedShape: string,
+    intensityId: string | null | undefined
+): BoardChainMarkerKeySummaryTier => {
+    if (focusedShape === 'payoff-stack' || intensityId === 'stack') {
+        return 'stack';
+    }
+    if (focusedShape === 'payoff-bar' || intensityId === 'cashout') {
+        return 'cashout';
+    }
+    if (focusedShape === 'combo-surge' || intensityId === 'surge') {
+        return 'surge';
+    }
+    if (focusedShape === 'swap-target-crossbar' || intensityId === 'setup') {
+        return 'setup';
+    }
+    if (focusedShape === 'perk-armed-bar') {
+        return 'perk';
+    }
+    return 'ready';
+};
+
+const getBoardChainMarkerKeySummaryScreenCue = (tier: BoardChainMarkerKeySummaryTier): BoardFeedbackScreenCue => {
+    if (tier === 'cashout' || tier === 'stack' || tier === 'surge') {
+        return 'burst';
+    }
+    if (tier === 'perk' || tier === 'ready') {
+        return 'pulse';
+    }
+    return 'tick';
 };
 
 const boardChainMilestoneTier = (
@@ -3257,6 +3313,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardChainMarkerKeyMeterFill = Math.round(
         Math.min(100, ((boardChainMarkerKeyRows.length + (chainMarkerIntensity ? 2 : 0)) / 6) * 100)
     );
+    const boardChainMarkerKeySummaryAction =
+        boardChainMarkerKeyRows.length > 0
+            ? getBoardChainMarkerKeySummaryAction(focusedChainMarkerShape, chainMarkerIntensity?.id)
+            : null;
+    const boardChainMarkerKeySummaryTier =
+        boardChainMarkerKeyRows.length > 0 ? getBoardChainMarkerKeySummaryTier(focusedChainMarkerShape, chainMarkerIntensity?.id) : null;
+    const boardChainMarkerKeySummaryScreenCue = boardChainMarkerKeySummaryTier
+        ? getBoardChainMarkerKeySummaryScreenCue(boardChainMarkerKeySummaryTier)
+        : null;
+    const boardChainMarkerKeySummaryBeatCount = Math.max(2, Math.min(5, boardChainMarkerKeyRows.length + 1)) as 2 | 3 | 4 | 5;
     const boardChainRecipeChips = useMemo(
         () =>
             [
@@ -4430,6 +4496,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-chain-opportunity-next-action-label={boardChainOpportunity.nextActionLabel ?? 'none'}
             data-chain-opportunity-next-action-tone={boardChainOpportunity.nextActionTone}
             data-chain-opportunity-recipes={boardChainRecipeChips.join('|') || 'none'}
+            data-chain-marker-key-action={boardChainMarkerKeySummaryAction ?? 'none'}
+            data-chain-marker-key-beats={boardChainMarkerKeyRows.length > 0 ? boardChainMarkerKeySummaryBeatCount : 0}
+            data-chain-marker-key-screen-cue={boardChainMarkerKeySummaryScreenCue ?? 'none'}
+            data-chain-marker-key-tier={boardChainMarkerKeySummaryTier ?? 'none'}
             data-trait-interaction-lane-actions={boardTraitInteractionLaneActionMapAttrValue || 'none'}
             data-trait-interaction-lane-map={boardTraitInteractionLaneMapAttrValue || 'none'}
             data-trait-interaction-lane-roles={boardTraitInteractionLaneRoleMapAttrValue || 'none'}
@@ -5239,14 +5309,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             .filter((row): row is string => row != null)
                                             .join('. ')}`}
                                         className={styles.chainOpportunityMarkerKey}
+                                        data-chain-marker-key-action={boardChainMarkerKeySummaryAction ?? 'none'}
+                                        data-chain-marker-key-beats={boardChainMarkerKeySummaryBeatCount}
                                         data-chain-marker-focused-shape={focusedChainMarkerShape}
                                         data-chain-marker-intensity={chainMarkerIntensity?.id ?? 'none'}
+                                        data-chain-marker-key-screen-cue={boardChainMarkerKeySummaryScreenCue ?? 'none'}
+                                        data-chain-marker-key-tier={boardChainMarkerKeySummaryTier ?? 'none'}
                                         data-testid="chain-opportunity-marker-key"
                                     >
                                         <span
                                             className={styles.chainOpportunityMarkerKeySummary}
+                                            data-chain-marker-key-action={boardChainMarkerKeySummaryAction ?? 'none'}
+                                            data-chain-marker-key-beats={boardChainMarkerKeySummaryBeatCount}
                                             data-testid="chain-opportunity-marker-key-summary"
                                             data-chain-marker-key-meter-fill={boardChainMarkerKeyMeterFill}
+                                            data-chain-marker-key-screen-cue={boardChainMarkerKeySummaryScreenCue ?? 'none'}
+                                            data-chain-marker-key-tier={boardChainMarkerKeySummaryTier ?? 'none'}
                                             style={
                                                 {
                                                     '--chain-marker-key-meter-fill': `${boardChainMarkerKeyMeterFill}%`
@@ -5260,7 +5338,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 className={styles.chainOpportunityMarkerKeySummaryBeatPips}
                                             >
                                                 {Array.from(
-                                                    { length: Math.max(2, Math.min(5, boardChainMarkerKeyRows.length + 1)) },
+                                                    { length: boardChainMarkerKeySummaryBeatCount },
                                                     (_, index) => (
                                                         <i
                                                             data-chain-marker-key-summary-beat={index + 1}

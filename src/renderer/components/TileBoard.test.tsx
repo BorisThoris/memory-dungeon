@@ -509,19 +509,25 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Route');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Payoff');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Stack');
-        expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveTextContent('Markers');
-        expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveTextContent('3 shapes');
-        expect(screen.getByTestId('chain-opportunity-marker-key-summary')).toHaveAttribute(
-            'data-chain-marker-key-meter-fill',
-            '83'
-        );
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-marker-key-action', 'cashout');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-marker-key-beats', '4');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-marker-key-screen-cue', 'burst');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-marker-key-tier', 'stack');
+        expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAttribute('data-chain-marker-key-action', 'cashout');
+        expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAttribute('data-chain-marker-key-beats', '4');
+        expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAttribute('data-chain-marker-key-screen-cue', 'burst');
+        expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAttribute('data-chain-marker-key-tier', 'stack');
+        const markerKeySummary = screen.getByTestId('chain-opportunity-marker-key-summary');
+        expect(markerKeySummary).toHaveTextContent('Markers');
+        expect(markerKeySummary).toHaveTextContent('3 shapes');
+        expect(markerKeySummary).toHaveAttribute('data-chain-marker-key-action', 'cashout');
+        expect(markerKeySummary).toHaveAttribute('data-chain-marker-key-beats', '4');
+        expect(markerKeySummary).toHaveAttribute('data-chain-marker-key-meter-fill', '83');
+        expect(markerKeySummary).toHaveAttribute('data-chain-marker-key-screen-cue', 'burst');
+        expect(markerKeySummary).toHaveAttribute('data-chain-marker-key-tier', 'stack');
+        expect(markerKeySummary.querySelectorAll('[data-chain-marker-key-summary-beat]')).toHaveLength(4);
         expect(
-            screen.getByTestId('chain-opportunity-marker-key-summary').querySelectorAll('[data-chain-marker-key-summary-beat]')
-        ).toHaveLength(4);
-        expect(
-            screen
-                .getByTestId('chain-opportunity-marker-key-summary')
-                .querySelector('[data-chain-marker-key-summary-beat="1"]')
+            markerKeySummary.querySelector('[data-chain-marker-key-summary-beat="1"]')
         ).toHaveAttribute('data-chain-marker-key-summary-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAttribute('data-chain-marker-intensity', 'stack');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveAttribute('data-chain-marker-focused-shape', 'payoff-stack');
