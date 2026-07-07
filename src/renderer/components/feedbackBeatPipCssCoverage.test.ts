@@ -145,6 +145,11 @@ type MeterFillVariableGap = {
     fileName: string;
 };
 
+type ProgressReadabilityGap = {
+    fileName: string;
+    lineNumber: number;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -812,6 +817,31 @@ const findMeterFillVariableGaps = (): MeterFillVariableGap[] => {
     return gaps;
 };
 
+const findProgressReadabilityGaps = (): ProgressReadabilityGap[] => {
+    const gaps: ProgressReadabilityGap[] = [];
+    const progressElementPattern =
+        /<[A-Za-z][^<>]*\bdata-[A-Za-z0-9-]*progress(?:-[A-Za-z0-9-]+)?\b[^<>]*>/gs;
+
+    for (const { fileName, text } of readComponentSourceFiles().filter(({ fileName }) => !fileName.includes('.test.'))) {
+        for (const match of text.matchAll(progressElementPattern)) {
+            const tag = match[0]!;
+            const hasReadableContract =
+                /\baria-label=/.test(tag) ||
+                /\baria-labelledby=/.test(tag) ||
+                /\brole=(?:"progressbar"|'progressbar')/.test(tag);
+
+            if (!hasReadableContract) {
+                gaps.push({
+                    fileName,
+                    lineNumber: text.slice(0, match.index ?? 0).split(/\r?\n/).length
+                });
+            }
+        }
+    }
+
+    return gaps;
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -965,6 +995,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findMeterFillVariableGaps(),
             'meter-fill metadata consumed by CSS should set the same-stem CSS custom property'
+        ).toEqual([]);
+    });
+
+    it('keeps progress metadata paired with readable progress semantics', () => {
+        expect(
+            findProgressReadabilityGaps(),
+            'progress metadata should expose a readable label or progressbar semantics instead of only visual telemetry'
         ).toEqual([]);
     });
 });

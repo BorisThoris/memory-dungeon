@@ -4993,9 +4993,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 const progressFill = progress
                                                     ? `${Math.max(0, Math.min(100, (progress.filled / progress.total) * 100))}%`
                                                     : '0%';
+                                                const progressLabel = progress
+                                                    ? `Chain reward progress ${progress.label} toward ${progress.targetLabel}. ${progress.remainingLabel}.`
+                                                    : 'No chain reward progress available.';
 
                                                 return (
                                                     <span
+                                                        aria-label={`${cue.chaseLabel}. ${cue.actionLabel}. ${progressLabel}`}
                                                         data-chain-reward-arcade-cue={getChainRewardUrgencyCopy(cue)}
                                                         data-chain-reward-audio={getBoardFloaterRewardForecastAudioCue(cue)}
                                                         data-chain-reward-beats={beatCount}
@@ -5024,7 +5028,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         <em>{cue.distanceLabel}</em>
                                                         <i>{getChainRewardUrgencyCopy(cue)}</i>
                                                         {progress ? (
-                                                            <span className={styles.boardFloaterRewardProgress}>
+                                                            <span
+                                                                aria-label={progressLabel}
+                                                                aria-valuemax={progress.total}
+                                                                aria-valuemin={0}
+                                                                aria-valuenow={progress.filled}
+                                                                aria-valuetext={progress.remainingLabel}
+                                                                className={styles.boardFloaterRewardProgress}
+                                                                data-chain-reward-progress-filled={progress.filled}
+                                                                data-chain-reward-progress-total={progress.total}
+                                                                role="progressbar"
+                                                            >
                                                                 {progress.label}
                                                             </span>
                                                         ) : null}

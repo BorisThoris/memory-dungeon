@@ -1888,10 +1888,15 @@ const GameplayHudBar = ({
                                     </span>
                                     {primaryChainRewardProgress ? (
                                         <span
-                                            aria-hidden="true"
+                                            aria-label={`Primary reward progress ${primaryChainRewardProgress.label} toward ${primaryChainRewardProgress.targetLabel}. ${primaryChainRewardProgress.remainingLabel}.`}
+                                            aria-valuemax={primaryChainRewardProgress.total}
+                                            aria-valuemin={0}
+                                            aria-valuenow={primaryChainRewardProgress.filled}
+                                            aria-valuetext={primaryChainRewardProgress.remainingLabel}
                                             className={styles.hudPrimaryRewardProgress}
                                             data-primary-reward-progress-filled={primaryChainRewardProgress.filled}
                                             data-primary-reward-progress-total={primaryChainRewardProgress.total}
+                                            role="progressbar"
                                         >
                                             <span
                                                 className={styles.hudPrimaryRewardProgressFill}
