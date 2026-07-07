@@ -9786,7 +9786,9 @@
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-danger) 30%, transparent);
 }
 
-.traitPreviewChip[data-preview-tone='setup'] .traitPreviewAction {
+.traitPreviewChip[data-preview-tone='setup'] .traitPreviewAction,
+.traitPreviewAction[data-preview-action-tone='setup'],
+.traitPreviewAction[data-preview-action-tone='trait'] {
     border-color: color-mix(in srgb, var(--theme-border-cyan) 44%, transparent);
     background: color-mix(in srgb, var(--theme-border-cyan) 12%, transparent);
     color: color-mix(in srgb, var(--theme-border-cyan) 84%, white);
@@ -9808,7 +9810,9 @@
 }
 
 .traitPreviewChip[data-preview-tone='pickup'] .traitPreviewAction,
-.traitPreviewChip[data-preview-tone='cashout'] .traitPreviewAction {
+.traitPreviewChip[data-preview-tone='cashout'] .traitPreviewAction,
+.traitPreviewAction[data-preview-action-tone='pickup'],
+.traitPreviewAction[data-preview-action-tone='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, transparent);
     background:
         radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), transparent 68%),
@@ -9816,12 +9820,22 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
 }
 
-.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewAction {
+.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewAction,
+.traitPreviewAction[data-preview-action-tone='hazard'],
+.traitPreviewAction[data-preview-action-kind='hazard'] {
     border-color: color-mix(in srgb, var(--theme-danger) 46%, var(--theme-gold-bright) 18%);
     background:
         radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--theme-danger) 16%, transparent), transparent 68%),
         color-mix(in srgb, var(--theme-danger) 12%, transparent);
     color: color-mix(in srgb, var(--theme-danger) 78%, white);
+}
+
+.traitPreviewAction[data-preview-action-kind='pickup'] {
+    box-shadow: 0 0 0.62rem color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+}
+
+.traitPreviewAction[data-preview-action-kind='trait'] {
+    box-shadow: 0 0 0.5rem color-mix(in srgb, var(--theme-border-cyan) 10%, transparent);
 }
 
 .traitPreviewChip[data-preview-tone='hazard'] .traitPreviewSignalMeterFill {
@@ -9908,6 +9922,11 @@
     opacity: 0.64;
 }
 
+.traitPreviewCashout[data-preview-cashout-tone='cashout'],
+.traitPreviewCashout[data-preview-cashout-kind='trait'] {
+    box-shadow: 0 0 0.62rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
 .traitPreviewLine {
     display: inline-flex;
     align-items: center;
@@ -9972,7 +9991,10 @@
 }
 
 .traitPreviewChip[data-preview-tone='cashout'] .traitPreviewLine[data-preview-line-focus='primary'],
-.traitPreviewChip[data-preview-tone='pickup'] .traitPreviewLine[data-preview-line-focus='primary'] {
+.traitPreviewChip[data-preview-tone='pickup'] .traitPreviewLine[data-preview-line-focus='primary'],
+.traitPreviewLine[data-preview-line-tone='cashout'][data-preview-line-focus='primary'],
+.traitPreviewLine[data-preview-line-tone='pickup'][data-preview-line-focus='primary'],
+.traitPreviewLine[data-preview-line-kind='pickup'][data-preview-line-focus='primary'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 16%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
@@ -9981,14 +10003,19 @@
     box-shadow: 0 0 0.62rem color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
 }
 
-.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewLine[data-preview-line-focus='primary'] {
+.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewLine[data-preview-line-focus='primary'],
+.traitPreviewLine[data-preview-line-tone='hazard'][data-preview-line-focus='primary'],
+.traitPreviewLine[data-preview-line-kind='hazard'][data-preview-line-focus='primary'] {
     border-color: color-mix(in srgb, var(--theme-danger) 42%, var(--theme-gold-bright) 14%);
     background: color-mix(in srgb, var(--theme-danger) 11%, transparent);
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 84%, white);
 }
 
 .traitPreviewChip[data-preview-tone='setup'] .traitPreviewLine[data-preview-line-focus='primary'],
-.traitPreviewChip[data-preview-tone='trait'] .traitPreviewLine[data-preview-line-focus='primary'] {
+.traitPreviewChip[data-preview-tone='trait'] .traitPreviewLine[data-preview-line-focus='primary'],
+.traitPreviewLine[data-preview-line-tone='setup'][data-preview-line-focus='primary'],
+.traitPreviewLine[data-preview-line-tone='trait'][data-preview-line-focus='primary'],
+.traitPreviewLine[data-preview-line-kind='trait'][data-preview-line-focus='primary'] {
     border-color: color-mix(in srgb, var(--theme-border-cyan) 40%, transparent);
     color: color-mix(in srgb, var(--theme-border-cyan) 88%, white);
 }

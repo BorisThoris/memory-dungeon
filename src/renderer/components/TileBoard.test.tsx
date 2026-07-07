@@ -1106,6 +1106,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-density-tone', 'cashout');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-signal-fill', '100');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-meter-fill', '50');
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-action-kind]')).toHaveAttribute(
+            'data-preview-action-kind',
+            'trait'
+        );
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-action-tone]')).toHaveAttribute(
+            'data-preview-action-tone',
+            'cashout'
+        );
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(5);
         expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-beat="1"]')).toHaveAttribute(
             'data-preview-beat-focus',
@@ -1116,6 +1124,14 @@ describe('TileBoard touch and click controls', () => {
             'support'
         );
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Cashout /');
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-cashout-kind]')).toHaveAttribute(
+            'data-preview-cashout-kind',
+            'trait'
+        );
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-cashout-tone]')).toHaveAttribute(
+            'data-preview-cashout-tone',
+            'cashout'
+        );
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('One-away cashout');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Push x6 reward');
@@ -1124,6 +1140,14 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
         ).toHaveTextContent('Echo + Sealed: combo shard');
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')).toHaveAttribute(
+            'data-preview-line-kind',
+            'trait'
+        );
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')).toHaveAttribute(
+            'data-preview-line-tone',
+            'cashout'
+        );
         expect(screen.getByTestId('trait-preview-chip')).toHaveAccessibleName(
             /Trait combo stack preview.*Cashout.*Cashout.*Next reward x6 \+1 shard in 1 match.*One-away cashout.*Push x6 reward.*Echo \+ Sealed: combo shard/i
         );
@@ -3340,6 +3364,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-screen-cue', 'snap');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'pickup');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '4');
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-action-kind]')).toHaveAttribute(
+            'data-preview-action-kind',
+            'pickup'
+        );
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-action-tone]')).toHaveAttribute(
+            'data-preview-action-tone',
+            'pickup'
+        );
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(4);
         expect(screen.getByTestId('trait-preview-summary')).toHaveAttribute('data-preview-summary-kind', 'pickup');
         expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Preview');
@@ -3360,6 +3392,14 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
         ).toHaveTextContent('Shard spark pickup: +1 combo shard');
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')).toHaveAttribute(
+            'data-preview-line-kind',
+            'pickup'
+        );
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')).toHaveAttribute(
+            'data-preview-line-tone',
+            'pickup'
+        );
         expect(screen.getByTestId('trait-preview-chip')).toHaveAccessibleName(
             /Pickup reward preview.*Claim.*Shard spark pickup: \+1 combo shard/i
         );
@@ -3689,6 +3729,14 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-screen-cue', 'guard');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'hazard');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '3');
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-action-kind]')).toHaveAttribute(
+            'data-preview-action-kind',
+            'hazard'
+        );
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-action-tone]')).toHaveAttribute(
+            'data-preview-action-tone',
+            'hazard'
+        );
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(3);
         expect(screen.getByTestId('trait-preview-summary')).toHaveAttribute('data-preview-summary-kind', 'hazard');
         expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Preview');
@@ -3701,6 +3749,14 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')
         ).toHaveTextContent('Shuffle Snare');
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')).toHaveAttribute(
+            'data-preview-line-kind',
+            'hazard'
+        );
+        expect(screen.getByTestId('trait-preview-chip').querySelector('[data-preview-line-focus="primary"]')).toHaveAttribute(
+            'data-preview-line-tone',
+            'hazard'
+        );
         expect(screen.getByTestId('trait-preview-chip')).toHaveAccessibleName(
             /Hazard risk preview.*Scout.*Shuffle Snare.*Wrong pairs reshuffle safe hidden tiles/i
         );

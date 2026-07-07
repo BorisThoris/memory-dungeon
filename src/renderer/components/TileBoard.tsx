@@ -6575,7 +6575,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             />
                                         ))}
                                     </span>
-                                    <b className={styles.traitPreviewAction}>
+                                    <b
+                                        className={styles.traitPreviewAction}
+                                        data-preview-action-kind={focusedPreviewChip.kind}
+                                        data-preview-action-tone={focusedPreviewChip.tone}
+                                    >
                                         {focusedPreviewChip.action}
                                         <span aria-hidden="true" className={styles.traitPreviewActionBeatPips}>
                                             {Array.from({ length: beatCount }, (_, beatIndex) => (
@@ -6588,7 +6592,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                     </b>
                                     {focusedPreviewChip.rewardHotText ? (
-                                        <span className={styles.traitPreviewCashout}>
+                                        <span
+                                            className={styles.traitPreviewCashout}
+                                            data-preview-cashout-kind={focusedPreviewChip.kind}
+                                            data-preview-cashout-tone={focusedPreviewChip.tone}
+                                        >
                                             Cashout / {focusedPreviewChip.rewardHotText}
                                             <span aria-hidden="true" className={styles.traitPreviewCashoutBeatPips}>
                                                 {Array.from({ length: Math.max(2, beatCount - 1) }, (_, beatIndex) => (
@@ -6609,6 +6617,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             data-preview-line={index + 1}
                                             data-preview-line-beats={index === 0 ? 3 : 2}
                                             data-preview-line-focus={index === 0 ? 'primary' : 'support'}
+                                            data-preview-line-kind={focusedPreviewChip.kind}
+                                            data-preview-line-tone={focusedPreviewChip.tone}
                                             key={line}
                                         >
                                             {line}

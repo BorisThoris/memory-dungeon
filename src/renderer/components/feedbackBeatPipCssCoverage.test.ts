@@ -406,6 +406,9 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-pickup-sequence-phase-tone': ['cashout', 'reward'],
         'data-pickup-sequence-value-tone': ['cashout', 'reward'],
         'data-preview-density-tone': ['cashout', 'hazard', 'ready', 'setup', 'surge', 'trait'],
+        'data-preview-action-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait'],
+        'data-preview-cashout-tone': ['cashout'],
+        'data-preview-line-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait'],
         'data-preview-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait'],
         'data-trait-mode-tone': ['cashout', 'ready', 'setup', 'surge']
     };
@@ -500,7 +503,10 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-pickup-sequence-beat-phase': ['first', 'keep', 'then'],
         'data-pickup-sequence-phase': ['first', 'keep', 'then'],
         'data-pickup-sequence-value-phase': ['first', 'keep', 'then'],
+        'data-preview-action-kind': ['hazard', 'pickup', 'trait'],
+        'data-preview-cashout-kind': ['trait'],
         'data-preview-kind': ['hazard', 'pickup', 'trait'],
+        'data-preview-line-kind': ['hazard', 'pickup', 'trait'],
         'data-preview-line-focus': ['primary', 'support'],
         'data-preview-screen-cue': ['burst', 'guard', 'pulse', 'snap'],
         'data-preview-summary-kind': ['hazard', 'pickup', 'trait'],
