@@ -3126,6 +3126,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
               : boardChainMomentumTone === 'ready'
                 ? 'guard'
                 : 'tick';
+    const boardChainRewardUrgencyTone: 'cashout' | 'forecast' =
+        boardChainOpportunity.rewardUrgencyTier === 'next' ? 'cashout' : 'forecast';
+    const boardChainRewardUrgencyScreenCue: 'burst' | 'pulse' | 'tick' =
+        boardChainOpportunity.rewardUrgencyTier === 'next'
+            ? 'burst'
+            : boardChainOpportunity.rewardUrgencyTier === 'soon'
+              ? 'pulse'
+              : 'tick';
     const boardChainSurgeBand = boardChainOpportunity.comboSurgeLabel
         ? {
               cue: boardChainOpportunity.cue || 'Route prime',
@@ -5857,6 +5865,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     ? 50
                                                     : 60
                                         }
+                                        data-chain-reward-urgency-screen-cue={boardChainRewardUrgencyScreenCue}
+                                        data-chain-reward-urgency-tier={boardChainOpportunity.rewardUrgencyTier ?? 'none'}
+                                        data-chain-reward-urgency-tone={boardChainRewardUrgencyTone}
                                         style={
                                             {
                                                 '--chain-reward-urgency-meter-fill': `${

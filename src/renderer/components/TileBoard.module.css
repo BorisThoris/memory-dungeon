@@ -2814,7 +2814,10 @@
     white-space: nowrap;
 }
 
-.chainOpportunityRewardUrgency[data-chain-reward-urgency='next'] {
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='next'],
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tier='next'],
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tone='cashout'],
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-screen-cue='burst'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, white 12%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 24%, transparent), color-mix(in srgb, var(--theme-success) 10%, transparent)),
@@ -2825,13 +2828,19 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
 }
 
-.chainOpportunityRewardUrgency[data-chain-reward-urgency='next'] > small {
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='next'] > small,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tier='next'] > small,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tone='cashout'] > small,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-screen-cue='burst'] > small {
     background: color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
     color: color-mix(in srgb, white 92%, var(--theme-gold-bright));
 }
 
 .chainOpportunityRewardUrgency[data-chain-reward-urgency='soon'],
-.chainOpportunityRewardUrgency[data-chain-reward-urgency='later'] {
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='later'],
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tone='forecast'],
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-screen-cue='pulse'],
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-screen-cue='tick'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 24%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 9%, transparent)),
@@ -2840,12 +2849,16 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 78%, var(--theme-gold-bright));
 }
 
-.chainOpportunityRewardUrgency[data-chain-reward-urgency='soon'] > small {
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='soon'] > small,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tier='soon'] > small,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-screen-cue='pulse'] > small {
     background: color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
     color: color-mix(in srgb, white 90%, var(--theme-cyan-bright));
 }
 
-.chainOpportunityRewardUrgency[data-chain-reward-urgency='later'] > small {
+.chainOpportunityRewardUrgency[data-chain-reward-urgency='later'] > small,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-tier='later'] > small,
+.chainOpportunityRewardUrgency[data-chain-reward-urgency-screen-cue='tick'] > small {
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
     color: color-mix(in srgb, white 84%, var(--theme-cyan-bright));
 }
