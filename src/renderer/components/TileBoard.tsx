@@ -117,13 +117,25 @@ const BOARD_PRESTAGE_DWELL_MS = 360;
 const PRESTAGE_CARD_COUNT = 8;
 
 type BoardOpportunityHeat = 'cashout' | 'normal' | 'prime' | 'surge';
+type BoardOpportunityTone =
+    | 'chain'
+    | 'control'
+    | 'hazard'
+    | 'lost-reward'
+    | 'perk'
+    | 'pickup'
+    | 'recall'
+    | 'recover'
+    | 'risk'
+    | 'setup'
+    | 'trait';
 type BoardOpportunityCompassRow = {
     action: string;
     detail: string;
     id: 'chain' | 'hazard' | 'perk' | 'pickup' | 'recovery' | 'tool' | 'trait';
     impactCue: string;
     label: string;
-    tone: string;
+    tone: BoardOpportunityTone;
     value: string;
 };
 type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'perk' | 'recover' | 'risk' | 'tool' | 'trait';
