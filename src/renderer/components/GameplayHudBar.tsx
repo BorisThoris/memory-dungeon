@@ -34,8 +34,10 @@ import {
     formatTraitInteractionLaneMapLabel,
     getTraitInteractionLaneAction,
     getTraitInteractionLaneRole,
+    getTraitInteractionLaneRoleId,
     traitInteractionLaneActionMapAttr,
     traitInteractionLaneMapAttr,
+    traitInteractionLaneRoleIdMapAttr,
     traitInteractionLaneRoleMapAttr
 } from '../copy/traitInteractionLaneMap';
 import { PERFECT_MEMORY_BASE_RULES, perfectMemoryHudKind } from '../copy/perfectMemory';
@@ -1440,6 +1442,7 @@ const GameplayHudBar = ({
     const traitOpportunityLaneMapAttr = traitInteractionLaneMapAttr(traitOpportunityLaneMap);
     const traitOpportunityLaneActionMapAttr = traitInteractionLaneActionMapAttr(traitOpportunityLaneMap);
     const traitOpportunityLaneRoleMapAttr = traitInteractionLaneRoleMapAttr(traitOpportunityLaneMap);
+    const traitOpportunityLaneRoleIdMapAttr = traitInteractionLaneRoleIdMapAttr(traitOpportunityLaneMap);
     const traitOpportunityLaneMapLabel = formatTraitInteractionLaneMapLabel(
         'Trait interaction lanes',
         traitOpportunityLaneMap
@@ -2473,6 +2476,7 @@ const GameplayHudBar = ({
                                                 data-trait-interaction-lane-actions={traitOpportunityLaneActionMapAttr}
                                                 data-trait-interaction-lane-map={traitOpportunityLaneMapAttr}
                                                 data-trait-interaction-lane-roles={traitOpportunityLaneRoleMapAttr}
+                                                data-trait-interaction-lane-role-ids={traitOpportunityLaneRoleIdMapAttr}
                                             >
                                                 <span
                                                     className={styles.hudTraitRouteLaneMapSummary}
@@ -2516,6 +2520,7 @@ const GameplayHudBar = ({
                                                     <span
                                                         data-trait-interaction-lane={lane.id}
                                                         data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
+                                                        data-trait-interaction-lane-role-id={getTraitInteractionLaneRoleId(lane) ?? 'none'}
                                                         key={lane.id}
                                                     >
                                                         <small>{lane.label}</small>
@@ -3368,6 +3373,7 @@ const GameplayHudBar = ({
                                                 data-trait-interaction-lane-actions={traitOpportunityLaneActionMapAttr}
                                                 data-trait-interaction-lane-map={traitOpportunityLaneMapAttr}
                                                 data-trait-interaction-lane-roles={traitOpportunityLaneRoleMapAttr}
+                                                data-trait-interaction-lane-role-ids={traitOpportunityLaneRoleIdMapAttr}
                                             >
                                                 <span
                                                     className={styles.hudTraitRouteLaneMapSummary}
@@ -3411,6 +3417,7 @@ const GameplayHudBar = ({
                                                     <span
                                                         data-trait-interaction-lane={lane.id}
                                                         data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
+                                                        data-trait-interaction-lane-role-id={getTraitInteractionLaneRoleId(lane) ?? 'none'}
                                                         key={lane.id}
                                                     >
                                                         <small>{lane.label}</small>

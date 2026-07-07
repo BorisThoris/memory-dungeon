@@ -1532,6 +1532,14 @@ describe('GameplayHudBar', () => {
             'data-trait-interaction-lane-roles',
             'shard:Cashout:1'
         );
+        expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAttribute(
+            'data-trait-interaction-lane-role-ids',
+            'shard:cashout:1'
+        );
+        expect(screen.getByTestId('hud-trait-route-lane-map').querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-role-id',
+            'cashout'
+        );
         const traitRouteLaneMapSummary = screen.getByTestId('hud-trait-route-lane-map-summary');
         expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-count', '1');
         expect(traitRouteLaneMapSummary).toHaveTextContent('Trait lanes');
@@ -1550,6 +1558,14 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('(sealed)');
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Trait lanes');
         const traitRouteLaneMapSummaryDetails = screen.getByTestId('hud-trait-route-lane-map-summary-details');
+        expect(screen.getByTestId('hud-trait-route-lane-map-details')).toHaveAttribute(
+            'data-trait-interaction-lane-role-ids',
+            'shard:cashout:1'
+        );
+        expect(screen.getByTestId('hud-trait-route-lane-map-details').querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-role-id',
+            'cashout'
+        );
         expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-count', '1');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Trait lanes');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('1 lane');

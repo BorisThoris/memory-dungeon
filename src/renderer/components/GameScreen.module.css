@@ -17211,36 +17211,42 @@
     font-weight: 780;
 }
 
-.hudTraitRouteLaneMap > span[data-trait-interaction-lane='shard'] {
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='shard'],
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-role-id='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, transparent);
 }
 
-.hudTraitRouteLaneMap > span[data-trait-interaction-lane='guard'] {
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='guard'],
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-role-id='protect'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 72%),
         color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
 }
 
-.hudTraitRouteLaneMap > span[data-trait-interaction-lane='tool'] {
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='tool'],
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-role-id='tool'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 36%, transparent);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 8%, transparent), transparent 72%),
         color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
 }
 
-.hudTraitRouteLaneMap > span[data-trait-interaction-lane='risk'] {
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='risk'],
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-role-id='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 34%, transparent);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 8%, transparent), transparent 72%),
         color-mix(in srgb, var(--theme-panel-solid) 40%, transparent);
 }
 
-.hudTraitRouteLaneMap > span[data-trait-interaction-lane='block'] {
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='block'],
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-role-id='block'] {
     border-color: color-mix(in srgb, var(--theme-text-muted) 26%, transparent);
 }
 
-.hudTraitRouteLaneMap > span[data-trait-interaction-lane='recall'] {
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane='recall'],
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-role-id='recall'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 24%, var(--theme-gold-bright) 12%);
 }
 
