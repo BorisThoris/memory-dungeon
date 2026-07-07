@@ -373,6 +373,8 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-chain-surge-band-tier': ['combo'],
         'data-chain-target-plan-tone': ['cashout', 'ready', 'setup'],
         'data-chain-target-tone': ['cashout', 'ready', 'setup'],
+        'data-choice-lane-role-id': ['bank', 'claim', 'prime', 'risk', 'route', 'stack'],
+        'data-choice-primary-lane-role-id': ['bank', 'claim', 'prime', 'risk', 'route', 'stack'],
         'data-opportunity-payoff-stack-tone': ['build', 'cashout', 'followup', 'setup'],
         'data-opportunity-payoff-stack-cue-id': ['cashout', 'followup', 'prime', 'super'],
         'data-opportunity-tone': [

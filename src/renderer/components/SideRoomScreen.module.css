@@ -678,47 +678,58 @@
     animation-delay: 0.21s;
 }
 
-.choiceLaneMap[data-choice-primary-lane-screen-cue='burst'] .choiceLanePrimaryCue {
+.choiceLaneMap[data-choice-primary-lane-screen-cue='burst'] .choiceLanePrimaryCue,
+.choiceLaneMap[data-choice-primary-lane-role-id='prime'] .choiceLanePrimaryCue,
+.choiceLaneMap[data-choice-primary-lane-role-id='stack'] .choiceLanePrimaryCue {
     border-color: color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 58%, var(--theme-gold-bright) 20%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 18%, transparent), color-mix(in srgb, var(--theme-gold-bright) 12%, transparent)),
         color-mix(in srgb, var(--theme-surface-raised) 84%, transparent);
 }
 
-.choiceLaneMap[data-choice-primary-lane-screen-cue='reward'] .choiceLanePrimaryCue {
+.choiceLaneMap[data-choice-primary-lane-screen-cue='reward'] .choiceLanePrimaryCue,
+.choiceLaneMap[data-choice-primary-lane-role-id='claim'] .choiceLanePrimaryCue {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 16%);
 }
 
-.choiceLaneMap[data-choice-primary-lane-screen-cue='unlock'] .choiceLanePrimaryCue {
+.choiceLaneMap[data-choice-primary-lane-screen-cue='unlock'] .choiceLanePrimaryCue,
+.choiceLaneMap[data-choice-primary-lane-role-id='bank'] .choiceLanePrimaryCue {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 54%, var(--theme-gold-bright) 18%);
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
 }
 
-.choiceLaneMap[data-choice-primary-lane-screen-cue='risk'] .choiceLanePrimaryCue {
+.choiceLaneMap[data-choice-primary-lane-screen-cue='risk'] .choiceLanePrimaryCue,
+.choiceLaneMap[data-choice-primary-lane-role-id='risk'] .choiceLanePrimaryCue {
     border-color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 58%, var(--theme-danger) 16%);
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 88%, white);
 }
 
-.choiceLaneMap[data-choice-primary-lane-screen-cue='pulse'] .choiceLanePrimaryCue {
+.choiceLaneMap[data-choice-primary-lane-screen-cue='pulse'] .choiceLanePrimaryCue,
+.choiceLaneMap[data-choice-primary-lane-role-id='route'] .choiceLanePrimaryCue {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 12%);
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
 }
 
-.choiceLaneMap[data-choice-primary-lane-screen-cue='burst'] .choiceLanePrimaryBeatPips i {
+.choiceLaneMap[data-choice-primary-lane-screen-cue='burst'] .choiceLanePrimaryBeatPips i,
+.choiceLaneMap[data-choice-primary-lane-role-id='prime'] .choiceLanePrimaryBeatPips i,
+.choiceLaneMap[data-choice-primary-lane-role-id='stack'] .choiceLanePrimaryBeatPips i {
     width: 0.25rem;
     height: 0.25rem;
     background: color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 84%, white 8%);
 }
 
-.choiceLaneMap[data-choice-primary-lane-screen-cue='reward'] .choiceLanePrimaryBeatPips i {
+.choiceLaneMap[data-choice-primary-lane-screen-cue='reward'] .choiceLanePrimaryBeatPips i,
+.choiceLaneMap[data-choice-primary-lane-role-id='claim'] .choiceLanePrimaryBeatPips i {
     background: color-mix(in srgb, var(--theme-gold-bright) 86%, white 8%);
 }
 
-.choiceLaneMap[data-choice-primary-lane-screen-cue='unlock'] .choiceLanePrimaryBeatPips i {
+.choiceLaneMap[data-choice-primary-lane-screen-cue='unlock'] .choiceLanePrimaryBeatPips i,
+.choiceLaneMap[data-choice-primary-lane-role-id='bank'] .choiceLanePrimaryBeatPips i {
     background: color-mix(in srgb, var(--theme-violet-bright) 84%, white 8%);
 }
 
-.choiceLaneMap[data-choice-primary-lane-screen-cue='risk'] .choiceLanePrimaryBeatPips i {
+.choiceLaneMap[data-choice-primary-lane-screen-cue='risk'] .choiceLanePrimaryBeatPips i,
+.choiceLaneMap[data-choice-primary-lane-role-id='risk'] .choiceLanePrimaryBeatPips i {
     background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 86%, white 8%);
 }
 
@@ -808,27 +819,35 @@
     opacity: 0.94;
 }
 
-.choiceLaneMap span[data-choice-lane-screen-cue='burst'] {
+.choiceLaneMap span[data-choice-lane-screen-cue='burst'],
+.choiceLaneMap span[data-choice-lane-role-id='prime'],
+.choiceLaneMap span[data-choice-lane-role-id='stack'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 20%, transparent);
 }
 
-.choiceLaneMap span[data-choice-lane-screen-cue='reward'] {
+.choiceLaneMap span[data-choice-lane-screen-cue='reward'],
+.choiceLaneMap span[data-choice-lane-role-id='claim'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success, #8edb9b) 20%, transparent);
 }
 
-.choiceLaneMap span[data-choice-lane-screen-cue='unlock'] {
+.choiceLaneMap span[data-choice-lane-screen-cue='unlock'],
+.choiceLaneMap span[data-choice-lane-role-id='bank'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
 }
 
-.choiceLaneMap span[data-choice-lane-screen-cue='risk'] {
+.choiceLaneMap span[data-choice-lane-screen-cue='risk'],
+.choiceLaneMap span[data-choice-lane-role-id='risk'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-warning, #f2bc6b) 24%, transparent);
 }
 
-.choiceLaneMap span[data-choice-lane-screen-cue='pulse'] {
+.choiceLaneMap span[data-choice-lane-screen-cue='pulse'],
+.choiceLaneMap span[data-choice-lane-role-id='route'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
 }
 
-.choiceLaneMap span[data-choice-lane='build'] {
+.choiceLaneMap span[data-choice-lane='build'],
+.choiceLaneMap span[data-choice-lane-role-id='prime'],
+.choiceLaneMap span[data-choice-lane-role-id='stack'] {
     border-color: color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 42%, var(--theme-gold-bright) 18%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
@@ -836,21 +855,26 @@
     color: color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 88%, white);
 }
 
-.choiceLaneMap span[data-choice-lane='build'] strong {
+.choiceLaneMap span[data-choice-lane='build'] strong,
+.choiceLaneMap span[data-choice-lane-role-id='prime'] strong,
+.choiceLaneMap span[data-choice-lane-role-id='stack'] strong {
     color: color-mix(in srgb, var(--theme-accent-blue, #78c7ff) 88%, white);
 }
 
-.choiceLaneMap span[data-choice-lane='reward'] {
+.choiceLaneMap span[data-choice-lane='reward'],
+.choiceLaneMap span[data-choice-lane-role-id='claim'] {
     border-color: color-mix(in srgb, var(--theme-success, #8edb9b) 42%, transparent);
     background: color-mix(in srgb, var(--theme-success, #8edb9b) 10%, transparent);
     color: color-mix(in srgb, var(--theme-success, #8edb9b) 88%, white);
 }
 
-.choiceLaneMap span[data-choice-lane='reward'] strong {
+.choiceLaneMap span[data-choice-lane='reward'] strong,
+.choiceLaneMap span[data-choice-lane-role-id='claim'] strong {
     color: color-mix(in srgb, var(--theme-success, #8edb9b) 88%, white);
 }
 
-.choiceLaneMap span[data-choice-lane='unlock'] {
+.choiceLaneMap span[data-choice-lane='unlock'],
+.choiceLaneMap span[data-choice-lane-role-id='bank'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
     background:
         radial-gradient(ellipse 120% 130% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 66%),
@@ -858,11 +882,13 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
-.choiceLaneMap span[data-choice-lane='unlock'] strong {
+.choiceLaneMap span[data-choice-lane='unlock'] strong,
+.choiceLaneMap span[data-choice-lane-role-id='bank'] strong {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
-.choiceLaneMap span[data-choice-lane='risk'] {
+.choiceLaneMap span[data-choice-lane='risk'],
+.choiceLaneMap span[data-choice-lane-role-id='risk'] {
     border-color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 44%, var(--theme-danger) 14%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-warning, #f2bc6b) 12%, transparent), color-mix(in srgb, var(--theme-danger) 7%, transparent)),
@@ -870,8 +896,14 @@
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 90%, white);
 }
 
-.choiceLaneMap span[data-choice-lane='risk'] strong {
+.choiceLaneMap span[data-choice-lane='risk'] strong,
+.choiceLaneMap span[data-choice-lane-role-id='risk'] strong {
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 90%, white);
+}
+
+.choiceLaneMap span[data-choice-lane-role-id='route'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }
 
 .choiceRow {

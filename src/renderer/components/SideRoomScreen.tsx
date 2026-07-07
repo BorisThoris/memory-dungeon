@@ -868,6 +868,31 @@ const sideRoomChoiceLaneActionMapAttr = (laneMap: readonly SideRoomChoiceLaneMap
 const sideRoomChoiceLaneRoleMapAttr = (laneMap: readonly SideRoomChoiceLaneMapEntry[]): string =>
     laneMap.map((entry) => `${entry.id}:${sideRoomChoiceLaneRole(entry)}:${entry.count}`).join('>');
 
+const sideRoomChoiceLaneRoleId = (
+    lane: Pick<SideRoomChoiceLaneMapEntry, 'count' | 'id'>
+): 'bank' | 'claim' | 'prime' | 'risk' | 'route' | 'stack' => {
+    const role = sideRoomChoiceLaneRole(lane);
+    if (role === 'Bank') {
+        return 'bank';
+    }
+    if (role === 'Claim') {
+        return 'claim';
+    }
+    if (role === 'Prime') {
+        return 'prime';
+    }
+    if (role === 'Risk') {
+        return 'risk';
+    }
+    if (role === 'Stack') {
+        return 'stack';
+    }
+    return 'route';
+};
+
+const sideRoomChoiceLaneRoleIdMapAttr = (laneMap: readonly SideRoomChoiceLaneMapEntry[]): string =>
+    laneMap.map((entry) => `${entry.id}:${sideRoomChoiceLaneRoleId(entry)}:${entry.count}`).join('>');
+
 const sideRoomChoiceLaneMapLabel = (laneMap: readonly SideRoomChoiceLaneMapEntry[]): string =>
     formatSideRoomSignalLabel(
         'Side room choice lanes',
@@ -1022,6 +1047,7 @@ const SideRoomScreen = () => {
     const primaryChoiceLane = choiceLaneMap[0] ?? null;
     const choiceLaneMapAttr = sideRoomChoiceLaneMapAttr(choiceLaneMap);
     const choiceLaneRoleMapAttr = sideRoomChoiceLaneRoleMapAttr(choiceLaneMap);
+    const choiceLaneRoleIdMapAttr = sideRoomChoiceLaneRoleIdMapAttr(choiceLaneMap);
     const choiceLaneMapAccessibleLabel = sideRoomChoiceLaneMapLabel(choiceLaneMap);
 
     return (
@@ -1162,6 +1188,7 @@ const SideRoomScreen = () => {
                                     className={styles.choiceLaneMap}
                                     data-choice-lane-actions={sideRoomChoiceLaneActionMapAttr(choiceLaneMap)}
                                     data-choice-lane-map={choiceLaneMapAttr}
+                                    data-choice-lane-role-ids={choiceLaneRoleIdMapAttr}
                                     data-choice-lane-roles={choiceLaneRoleMapAttr}
                                     data-choice-primary-lane={primaryChoiceLane?.id ?? 'none'}
                                     data-choice-primary-lane-action={
@@ -1176,6 +1203,9 @@ const SideRoomScreen = () => {
                                     data-choice-primary-lane-cue={primaryChoiceLane?.cue ?? 'none'}
                                     data-choice-primary-lane-role={
                                         primaryChoiceLane ? sideRoomChoiceLaneRole(primaryChoiceLane) : 'none'
+                                    }
+                                    data-choice-primary-lane-role-id={
+                                        primaryChoiceLane ? sideRoomChoiceLaneRoleId(primaryChoiceLane) : 'none'
                                     }
                                     data-choice-primary-lane-screen-cue={
                                         primaryChoiceLane ? sideRoomChoiceLaneScreenCue(primaryChoiceLane) : 'none'
@@ -1218,6 +1248,7 @@ const SideRoomScreen = () => {
                                             data-choice-primary-lane-beats={sideRoomChoiceLaneBeatCount(primaryChoiceLane)}
                                             data-choice-primary-lane-cue={primaryChoiceLane.cue}
                                             data-choice-primary-lane-role={sideRoomChoiceLaneRole(primaryChoiceLane)}
+                                            data-choice-primary-lane-role-id={sideRoomChoiceLaneRoleId(primaryChoiceLane)}
                                             data-choice-primary-lane-screen-cue={sideRoomChoiceLaneScreenCue(primaryChoiceLane)}
                                             data-testid="side-room-choice-primary-lane"
                                         >
@@ -1239,6 +1270,7 @@ const SideRoomScreen = () => {
                                             data-choice-lane-audio={sideRoomChoiceLaneAudioCue(lane)}
                                             data-choice-lane-beats={sideRoomChoiceLaneBeatCount(lane)}
                                             data-choice-lane-role={sideRoomChoiceLaneRole(lane)}
+                                            data-choice-lane-role-id={sideRoomChoiceLaneRoleId(lane)}
                                             data-choice-lane-screen-cue={sideRoomChoiceLaneScreenCue(lane)}
                                             key={lane.id}
                                         >
