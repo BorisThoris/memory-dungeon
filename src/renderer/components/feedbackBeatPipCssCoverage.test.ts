@@ -338,7 +338,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         .join('\n');
     const visibleStateContracts: Record<string, readonly string[]> = {
         'data-board-chain-reward-focus': ['primary', 'support'],
-        'data-board-chain-reward-ladder-focus': ['next', 'soon']
+        'data-board-chain-reward-ladder-focus': ['next', 'soon'],
+        'data-preview-summary-kind': ['hazard', 'pickup', 'trait']
     };
 
     return Object.entries(visibleStateContracts).flatMap(([attr, values]) =>

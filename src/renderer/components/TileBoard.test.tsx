@@ -1545,6 +1545,7 @@ describe('TileBoard touch and click controls', () => {
         ).toHaveAttribute('data-card-action-priority-focus', 'primary');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-source', 'selected');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-kind', 'trait');
+        expect(screen.getByTestId('trait-preview-summary')).toHaveAttribute('data-preview-summary-kind', 'trait');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Trait combo');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Preview');
         expect(screen.getByTestId('trait-preview-chip')).toHaveTextContent('Echo + Sealed: combo shard');
@@ -3206,6 +3207,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'pickup');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '4');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(4);
+        expect(screen.getByTestId('trait-preview-summary')).toHaveAttribute('data-preview-summary-kind', 'pickup');
         expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Preview');
         expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Reward');
         expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('4 beats');
@@ -3544,6 +3546,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-tone', 'hazard');
         expect(screen.getByTestId('trait-preview-chip')).toHaveAttribute('data-preview-beats', '3');
         expect(screen.getByTestId('trait-preview-chip').querySelectorAll('[data-preview-beat]')).toHaveLength(3);
+        expect(screen.getByTestId('trait-preview-summary')).toHaveAttribute('data-preview-summary-kind', 'hazard');
         expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Preview');
         expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('Risk');
         expect(screen.getByTestId('trait-preview-summary')).toHaveTextContent('3 beats');

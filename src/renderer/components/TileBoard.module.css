@@ -8117,6 +8117,48 @@
     white-space: nowrap;
 }
 
+.traitPreviewSummary[data-preview-summary-kind='trait'] {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 38%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 6%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+}
+
+.traitPreviewSummary[data-preview-summary-kind='trait'] b,
+.traitPreviewSummary[data-preview-summary-kind='trait'] .traitPreviewSummaryBeatPips i {
+    color: color-mix(in srgb, var(--theme-border-cyan) 88%, white);
+    background: color-mix(in srgb, var(--theme-border-cyan) 76%, white);
+}
+
+.traitPreviewSummary[data-preview-summary-kind='pickup'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-border-cyan) 12%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), transparent 68%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-border-cyan) 5%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+}
+
+.traitPreviewSummary[data-preview-summary-kind='pickup'] b,
+.traitPreviewSummary[data-preview-summary-kind='pickup'] strong,
+.traitPreviewSummary[data-preview-summary-kind='pickup'] .traitPreviewSummaryBeatPips i {
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+    background: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
+}
+
+.traitPreviewSummary[data-preview-summary-kind='hazard'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 46%, var(--theme-warning, #f2bc6b) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 12%, transparent), color-mix(in srgb, var(--theme-warning, #f2bc6b) 6%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.traitPreviewSummary[data-preview-summary-kind='hazard'] b,
+.traitPreviewSummary[data-preview-summary-kind='hazard'] strong,
+.traitPreviewSummary[data-preview-summary-kind='hazard'] .traitPreviewSummaryBeatPips i {
+    color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 88%, white);
+    background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 80%, white);
+}
+
 .traitPreviewDensityMeter {
     grid-column: 1 / -1;
     display: block;
