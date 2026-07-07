@@ -213,6 +213,10 @@ describe('GameOverScreen (REF-031)', () => {
             'chain:Protect chain:1>cash:Cash reward:2>build:Build route:1>risk:Reduce risk:1'
         );
         expect(payoffBurst).toHaveAttribute('data-payoff-lane-roles', 'chain:Protect:1>cash:Stack:2>build:Build:1>risk:Recover:1');
+        expect(payoffBurst).toHaveAttribute(
+            'data-payoff-lane-role-ids',
+            'chain:protect:1>cash:stack:2>build:build:1>risk:recover:1'
+        );
         expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveAttribute(
             'data-payoff-lane-map',
             'chain:1>cash:2>build:1>risk:1'
@@ -224,6 +228,10 @@ describe('GameOverScreen (REF-031)', () => {
         expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveAttribute(
             'data-payoff-lane-roles',
             'chain:Protect:1>cash:Stack:2>build:Build:1>risk:Recover:1'
+        );
+        expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveAttribute(
+            'data-payoff-lane-role-ids',
+            'chain:protect:1>cash:stack:2>build:build:1>risk:recover:1'
         );
         expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveAttribute('data-payoff-primary-lane', 'chain');
         expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveAttribute(
@@ -242,6 +250,10 @@ describe('GameOverScreen (REF-031)', () => {
         expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveAttribute(
             'data-payoff-primary-lane-role',
             'Protect'
+        );
+        expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveAttribute(
+            'data-payoff-primary-lane-role-id',
+            'protect'
         );
         expect(screen.getByTestId('game-over-payoff-lane-map')).toHaveAttribute(
             'data-payoff-primary-lane-screen-cue',
@@ -265,6 +277,10 @@ describe('GameOverScreen (REF-031)', () => {
             'Protect'
         );
         expect(screen.getByTestId('game-over-primary-payoff-lane')).toHaveAttribute(
+            'data-payoff-primary-lane-role-id',
+            'protect'
+        );
+        expect(screen.getByTestId('game-over-primary-payoff-lane')).toHaveAttribute(
             'data-payoff-primary-lane-screen-cue',
             'burst'
         );
@@ -286,6 +302,7 @@ describe('GameOverScreen (REF-031)', () => {
         expect(cashLane).toHaveAttribute('data-payoff-lane-action', 'Cash reward');
         expect(cashLane).toHaveAttribute('data-payoff-lane-beats', '4');
         expect(cashLane).toHaveAttribute('data-payoff-lane-role', 'Stack');
+        expect(cashLane).toHaveAttribute('data-payoff-lane-role-id', 'stack');
         expect(cashLane?.querySelectorAll('[data-payoff-lane-beat]')).toHaveLength(4);
         expect(cashLane?.querySelector('[data-payoff-lane-beat="1"]')).toHaveAttribute(
             'data-payoff-lane-beat-focus',
@@ -294,6 +311,7 @@ describe('GameOverScreen (REF-031)', () => {
         expect(riskLane).toHaveAttribute('data-payoff-lane-action', 'Reduce risk');
         expect(riskLane).toHaveAttribute('data-payoff-lane-beats', '2');
         expect(riskLane).toHaveAttribute('data-payoff-lane-role', 'Recover');
+        expect(riskLane).toHaveAttribute('data-payoff-lane-role-id', 'recover');
         expect(riskLane?.querySelectorAll('[data-payoff-lane-beat]')).toHaveLength(2);
         expect(screen.getByTestId('game-over-payoff-burst-stack')).toHaveTextContent('Super stack');
         expect(screen.getByTestId('game-over-payoff-burst-stack')).toHaveTextContent('Rebuild super stack');

@@ -15,6 +15,7 @@ import {
     formatRunPayoffLaneActionMapAttr,
     formatRunPayoffLaneMapLabel,
     formatRunPayoffLaneRoleMapAttr,
+    formatRunPayoffLaneRoleIdMapAttr,
     formatRunPayoffBurstSignalLabel,
     formatRunPayoffCrescendoSignalLabel,
     formatRunPayoffSequenceSignalLabel,
@@ -23,6 +24,7 @@ import {
     getRunPayoffLaneAudioCue,
     getRunPayoffLaneBeatCount,
     getRunPayoffLaneRole,
+    getRunPayoffLaneRoleId,
     getRunPayoffLaneScreenCue,
     getRunPayoffBurstSignal,
     getRunPayoffCrescendoSignal,
@@ -298,6 +300,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const payoffLaneMapAttr = formatRunPayoffLaneMapAttr(payoffLaneMap);
     const payoffLaneActionMapAttr = formatRunPayoffLaneActionMapAttr(payoffLaneMap);
     const payoffLaneRoleMapAttr = formatRunPayoffLaneRoleMapAttr(payoffLaneMap);
+    const payoffLaneRoleIdMapAttr = formatRunPayoffLaneRoleIdMapAttr(payoffLaneMap);
     const payoffLaneMapLabel = formatRunPayoffLaneMapLabel('Run payoff lanes', payoffLaneMap);
     const payoffBurstSignal = getRunPayoffBurstSignal(payoffBurstRows);
     const payoffCrescendoSignal = getRunPayoffCrescendoSignal(payoffBurstRows, payoffBurstSignal);
@@ -421,6 +424,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             className={styles.payoffBurstStrip}
                             data-payoff-lane-actions={payoffLaneActionMapAttr}
                             data-payoff-lane-map={payoffLaneMapAttr}
+                            data-payoff-lane-role-ids={payoffLaneRoleIdMapAttr}
                             data-payoff-lane-roles={payoffLaneRoleMapAttr}
                             data-testid="game-over-payoff-burst"
                         >
@@ -429,6 +433,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     aria-label={payoffLaneMapLabel}
                                     data-payoff-lane-actions={payoffLaneActionMapAttr}
                                     data-payoff-lane-map={payoffLaneMapAttr}
+                                    data-payoff-lane-role-ids={payoffLaneRoleIdMapAttr}
                                     data-payoff-lane-roles={payoffLaneRoleMapAttr}
                                     data-payoff-primary-lane={primaryPayoffLane?.id ?? 'none'}
                                     data-payoff-primary-lane-action={primaryPayoffLane?.action ?? 'none'}
@@ -440,6 +445,9 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                     }
                                     data-payoff-primary-lane-cue={primaryPayoffLane?.cue ?? 'none'}
                                     data-payoff-primary-lane-role={primaryPayoffLane ? getRunPayoffLaneRole(primaryPayoffLane) : 'none'}
+                                    data-payoff-primary-lane-role-id={
+                                        primaryPayoffLane ? getRunPayoffLaneRoleId(primaryPayoffLane) : 'none'
+                                    }
                                     data-payoff-primary-lane-screen-cue={
                                         primaryPayoffLane ? getRunPayoffLaneScreenCue(primaryPayoffLane) : 'none'
                                     }
@@ -455,6 +463,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                             data-payoff-primary-lane-beats={getRunPayoffLaneBeatCount(primaryPayoffLane)}
                                             data-payoff-primary-lane-cue={primaryPayoffLane.cue}
                                             data-payoff-primary-lane-role={getRunPayoffLaneRole(primaryPayoffLane)}
+                                            data-payoff-primary-lane-role-id={getRunPayoffLaneRoleId(primaryPayoffLane)}
                                             data-payoff-primary-lane-screen-cue={getRunPayoffLaneScreenCue(primaryPayoffLane)}
                                             data-testid="game-over-primary-payoff-lane"
                                         >
@@ -481,6 +490,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                             data-payoff-lane-beats={getRunPayoffLaneBeatCount(lane)}
                                             data-payoff-lane-count={lane.count}
                                             data-payoff-lane-role={getRunPayoffLaneRole(lane)}
+                                            data-payoff-lane-role-id={getRunPayoffLaneRoleId(lane)}
                                             data-payoff-lane-screen-cue={getRunPayoffLaneScreenCue(lane)}
                                             key={lane.id}
                                         >
