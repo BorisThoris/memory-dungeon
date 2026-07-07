@@ -527,6 +527,37 @@
     animation: boardOpportunityPulse 1.05s ease-in-out infinite, boardOpportunityShimmer 2.25s ease-in-out infinite;
 }
 
+.frame[data-card-feedback-primary-shot-focus='cashout'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 18%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+        inset 0 0 34px color-mix(in srgb, var(--theme-gold-bright) 12%, transparent),
+        0 0 24px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    opacity: 0.78;
+}
+
+.frame[data-card-feedback-primary-shot-focus='surge'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-gold-bright) 22%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent),
+        inset 0 0 30px color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent),
+        0 0 22px color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+    opacity: 0.7;
+}
+
+.frame[data-card-feedback-primary-shot-focus='follow-up'],
+.frame[data-card-feedback-primary-shot-focus='route'],
+.frame[data-card-feedback-primary-shot-focus='setup'] {
+    --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, var(--theme-gold-bright) 12%);
+}
+
+.frame[data-card-feedback-primary-shot-focus='follow-up'] .stage::after,
+.frame[data-card-feedback-primary-shot-focus='route'] .stage::after,
+.frame[data-card-feedback-primary-shot-focus='setup'] .stage::after {
+    border-color: var(--board-frame-cue-outline-color);
+    opacity: 0.48;
+}
+
 .frame[data-chain-opportunity-next-action='follow-up'] .stage::after,
 .frame[data-chain-opportunity-next-action='match-route'] .stage::after {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 20%);
@@ -1471,6 +1502,32 @@
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent), color-mix(in srgb, var(--theme-gold-bright) 13%, transparent)),
         color-mix(in srgb, var(--theme-void) 42%, transparent);
     box-shadow: 0 0 1rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='follow-up'] {
+    border-color: color-mix(in srgb, #fff7c4 48%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, #fff7c4 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 44%, transparent);
+}
+
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='follow-up'] b,
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='follow-up'] .chainOpportunityPrimaryShotBeatPips i {
+    color: color-mix(in srgb, #fff7c4 88%, white);
+    background: color-mix(in srgb, #fff7c4 82%, white);
+}
+
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='route'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 44%, transparent);
+}
+
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='route'] b,
+.chainOpportunityPrimaryShot[data-card-primary-shot-focus='route'] .chainOpportunityPrimaryShotBeatPips i {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
 }
 
 .chainOpportunityPrimaryShot[data-card-primary-shot-focus='setup'] {
@@ -7313,6 +7370,32 @@
     border-color: color-mix(in srgb, var(--theme-danger) 58%, var(--theme-gold-bright) 14%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 17%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 78%, transparent);
+}
+
+.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='build'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 78%, transparent);
+}
+
+.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='recover'] {
+    border-color: color-mix(in srgb, var(--theme-success) 46%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 78%, transparent);
+}
+
+.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='recover'] strong,
+.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='recover'] .opportunityPrimaryLaneBeatPips i {
+    color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.opportunityLaneMap > .opportunityPrimaryLane[data-opportunity-primary-lane-focus='tool'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-violet-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-panel-solid) 78%, transparent);
 }
 

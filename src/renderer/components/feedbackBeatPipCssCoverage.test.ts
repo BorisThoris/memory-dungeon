@@ -366,6 +366,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
     const visibleStateContracts: Record<string, readonly string[]> = {
         'data-board-chain-reward-focus': ['primary', 'support'],
         'data-board-chain-reward-ladder-focus': ['next', 'soon'],
+        'data-card-feedback-primary-shot-focus': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
+        'data-card-primary-shot-focus': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
         'data-card-action-priority-focus': ['primary', 'support'],
         'data-card-beat-focus': ['primary', 'support'],
         'data-card-cadence-focus': ['primary', 'support'],
@@ -377,6 +379,7 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-opportunity-heat': ['cashout', 'normal', 'prime', 'surge'],
         'data-opportunity-payoff-crescendo-screen-cue': ['burst', 'pulse', 'snap', 'super'],
         'data-opportunity-payoff-crescendo-tier': ['cashout', 'prime', 'stack', 'super'],
+        'data-opportunity-primary-lane-focus': ['build', 'cashout', 'recover', 'reward', 'risk', 'tool'],
         'data-opportunity-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
         'data-payoff-stack-crescendo-screen-cue': ['burst', 'pulse', 'snap', 'super'],
         'data-payoff-stack-crescendo-tier': ['cashout', 'prime', 'stack', 'super'],
