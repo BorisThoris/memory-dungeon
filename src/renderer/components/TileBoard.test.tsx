@@ -2156,6 +2156,9 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-followup-meter-fill',
             '100'
         );
+        expect(screen.getByTestId('chain-opportunity-followup-cue')).toHaveStyle({
+            '--chain-followup-meter-fill': '100%'
+        });
         expect(screen.getByTestId('chain-opportunity-followup-cue')).toHaveAccessibleName(
             'Next tap follow-up. 1 follow-up marked. 3 beats.'
         );

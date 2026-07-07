@@ -6597,6 +6597,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-followup-screen-cue="pulse"
                                         data-chain-followup-tone="route"
                                         data-testid="chain-opportunity-followup-cue"
+                                        style={{ '--chain-followup-meter-fill': '100%' } as CSSProperties}
                                     >
                                         <small>Next tap</small>
                                         <b>{boardChainOpportunity.selectedFollowupLabel}</b>

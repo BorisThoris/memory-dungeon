@@ -2739,7 +2739,7 @@
 
 .chainOpportunityFollowupMeterFill {
     display: block;
-    width: 100%;
+    width: var(--chain-followup-meter-fill, 0%);
     height: 100%;
     border-radius: inherit;
     background: linear-gradient(90deg, color-mix(in srgb, #fff7c4 84%, white), color-mix(in srgb, var(--theme-cyan-bright) 72%, white));
