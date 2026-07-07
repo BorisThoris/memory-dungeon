@@ -289,17 +289,19 @@ describe('SideRoomScreen', () => {
         const laneMap = screen.getByTestId('side-room-choice-lane-map');
         expect(laneMap).toHaveAttribute('data-choice-lane-map', 'build:1>unlock:1');
         expect(laneMap).toHaveAttribute('data-choice-lane-actions', 'build:Pick build:1>unlock:Bank unlock:1');
+        expect(laneMap).toHaveAttribute('data-choice-lane-roles', 'build:Prime:1>unlock:Bank:1');
         expect(laneMap).toHaveAttribute('data-choice-primary-lane', 'build');
         expect(laneMap).toHaveAttribute('data-choice-primary-lane-action', 'Pick build');
         expect(laneMap).toHaveAttribute('data-choice-primary-lane-audio', 'side-room-lane-build');
         expect(laneMap).toHaveAttribute('data-choice-primary-lane-beats', '4');
         expect(laneMap).toHaveAttribute('data-choice-primary-lane-cue', 'Drift Routing');
+        expect(laneMap).toHaveAttribute('data-choice-primary-lane-role', 'Prime');
         expect(laneMap).toHaveAttribute('data-choice-primary-lane-screen-cue', 'burst');
         const laneMapSummary = screen.getByTestId('side-room-choice-lane-map-summary');
         expect(laneMapSummary).toHaveAttribute('data-choice-lane-count', '2');
         expect(laneMapSummary).toHaveTextContent('Lanes');
         expect(laneMapSummary).toHaveTextContent('2 lanes');
-        expect(laneMapSummary).toHaveTextContent('Build leads');
+        expect(laneMapSummary).toHaveTextContent('Prime Build');
         expect(laneMapSummary.querySelectorAll('[data-choice-lane-map-summary-beat]')).toHaveLength(3);
         expect(laneMapSummary.querySelector('[data-choice-lane-map-summary-beat="1"]')).toHaveAttribute(
             'data-choice-lane-map-summary-beat-focus',
@@ -310,28 +312,32 @@ describe('SideRoomScreen', () => {
             'support'
         );
         const primaryLane = screen.getByTestId('side-room-choice-primary-lane');
-        expect(primaryLane).toHaveAccessibleName('Primary side room lane. Build: Pick build. Drift Routing. 4 beats.');
+        expect(primaryLane).toHaveAccessibleName('Primary side room lane. Prime Build: Pick build. Drift Routing. 4 beats.');
         expect(primaryLane).toHaveAttribute('data-choice-primary-lane', 'build');
         expect(primaryLane).toHaveAttribute('data-choice-primary-lane-action', 'Pick build');
         expect(primaryLane).toHaveAttribute('data-choice-primary-lane-audio', 'side-room-lane-build');
         expect(primaryLane).toHaveAttribute('data-choice-primary-lane-beats', '4');
         expect(primaryLane).toHaveAttribute('data-choice-primary-lane-cue', 'Drift Routing');
+        expect(primaryLane).toHaveAttribute('data-choice-primary-lane-role', 'Prime');
         expect(primaryLane).toHaveAttribute('data-choice-primary-lane-screen-cue', 'burst');
         expect(primaryLane).toHaveTextContent('Best lane');
-        expect(primaryLane).toHaveTextContent('Build');
+        expect(primaryLane).toHaveTextContent('Prime');
         expect(primaryLane).toHaveTextContent('Pick build');
         expect(primaryLane.querySelectorAll('[data-choice-primary-lane-beat]')).toHaveLength(4);
         expect(laneMap).toHaveTextContent('Build');
+        expect(laneMap).toHaveTextContent('Prime');
         expect(laneMap).toHaveTextContent('Pick build');
-        expect(laneMap).toHaveTextContent('Drift Routing');
+        expect(laneMap).toHaveTextContent('x1 / Drift Routing');
         expect(laneMap).toHaveTextContent('Unlock');
+        expect(laneMap).toHaveTextContent('Bank');
         expect(laneMap).toHaveTextContent('Bank unlock');
-        expect(laneMap).toHaveTextContent('Keep the iron key for the next locked entrance.');
+        expect(laneMap).toHaveTextContent('x1 / Keep the iron key for the next locked entrance.');
         expect(laneMap.querySelector('[data-choice-lane="build"]')).toHaveAttribute(
             'data-choice-lane-action',
             'Pick build'
         );
         expect(laneMap.querySelector('[data-choice-lane="build"]')).toHaveAttribute('data-choice-lane-beats', '4');
+        expect(laneMap.querySelector('[data-choice-lane="build"]')).toHaveAttribute('data-choice-lane-role', 'Prime');
         expect(
             laneMap.querySelector('[data-choice-lane="build"]')?.querySelectorAll('[data-choice-lane-beat]')
         ).toHaveLength(4);
@@ -340,11 +346,12 @@ describe('SideRoomScreen', () => {
             'Bank unlock'
         );
         expect(laneMap.querySelector('[data-choice-lane="unlock"]')).toHaveAttribute('data-choice-lane-beats', '3');
+        expect(laneMap.querySelector('[data-choice-lane="unlock"]')).toHaveAttribute('data-choice-lane-role', 'Bank');
         expect(
             laneMap.querySelector('[data-choice-lane="unlock"]')?.querySelectorAll('[data-choice-lane-beat]')
         ).toHaveLength(3);
         expect(laneMap).toHaveAccessibleName(
-            'Side room choice lanes. Build: 1. Pick build. Drift Routing. Unlock: 1. Bank unlock. Keep the iron key for the next locked entrance.'
+            'Side room choice lanes. Build: Prime x1. Pick build. Drift Routing. Unlock: Bank x1. Bank unlock. Keep the iron key for the next locked entrance.'
         );
         expect(screen.getByTestId('side-room-choice-choice-trait-toolkit')).toHaveAttribute(
             'data-choice-recommendation',

@@ -840,15 +840,40 @@ const sideRoomChoiceLaneAction = (lane: SideRoomChoiceLaneMapEntry): string => {
     }
 };
 
+const sideRoomChoiceLaneRole = (
+    lane: Pick<SideRoomChoiceLaneMapEntry, 'count' | 'id'>
+): 'Prime' | 'Claim' | 'Bank' | 'Risk' | 'Route' | 'Stack' => {
+    if (lane.count > 1 && (lane.id === 'build' || lane.id === 'reward')) {
+        return 'Stack';
+    }
+    switch (lane.id) {
+        case 'build':
+            return 'Prime';
+        case 'reward':
+            return 'Claim';
+        case 'unlock':
+            return 'Bank';
+        case 'risk':
+            return 'Risk';
+        case 'route':
+            return 'Route';
+        default:
+            return 'Route';
+    }
+};
+
 const sideRoomChoiceLaneActionMapAttr = (laneMap: readonly SideRoomChoiceLaneMapEntry[]): string =>
     laneMap.map((entry) => `${entry.id}:${sideRoomChoiceLaneAction(entry)}:${entry.count}`).join('>');
+
+const sideRoomChoiceLaneRoleMapAttr = (laneMap: readonly SideRoomChoiceLaneMapEntry[]): string =>
+    laneMap.map((entry) => `${entry.id}:${sideRoomChoiceLaneRole(entry)}:${entry.count}`).join('>');
 
 const sideRoomChoiceLaneMapLabel = (laneMap: readonly SideRoomChoiceLaneMapEntry[]): string =>
     formatSideRoomSignalLabel(
         'Side room choice lanes',
         laneMap.map((entry) => ({
             label: entry.label,
-            value: `${entry.count}. ${sideRoomChoiceLaneAction(entry)}. ${entry.cue.trim().replace(/[.!?]+$/, '')}`
+            value: `${sideRoomChoiceLaneRole(entry)} x${entry.count}. ${sideRoomChoiceLaneAction(entry)}. ${entry.cue.trim().replace(/[.!?]+$/, '')}`
         }))
     );
 
@@ -996,6 +1021,7 @@ const SideRoomScreen = () => {
     const choiceLaneMap = sideRoom.choices ? buildSideRoomChoiceLaneMap(sideRoom.choices) : [];
     const primaryChoiceLane = choiceLaneMap[0] ?? null;
     const choiceLaneMapAttr = sideRoomChoiceLaneMapAttr(choiceLaneMap);
+    const choiceLaneRoleMapAttr = sideRoomChoiceLaneRoleMapAttr(choiceLaneMap);
     const choiceLaneMapAccessibleLabel = sideRoomChoiceLaneMapLabel(choiceLaneMap);
 
     return (
@@ -1136,6 +1162,7 @@ const SideRoomScreen = () => {
                                     className={styles.choiceLaneMap}
                                     data-choice-lane-actions={sideRoomChoiceLaneActionMapAttr(choiceLaneMap)}
                                     data-choice-lane-map={choiceLaneMapAttr}
+                                    data-choice-lane-roles={choiceLaneRoleMapAttr}
                                     data-choice-primary-lane={primaryChoiceLane?.id ?? 'none'}
                                     data-choice-primary-lane-action={
                                         primaryChoiceLane ? sideRoomChoiceLaneAction(primaryChoiceLane) : 'none'
@@ -1147,6 +1174,9 @@ const SideRoomScreen = () => {
                                         primaryChoiceLane ? sideRoomChoiceLaneBeatCount(primaryChoiceLane) : 0
                                     }
                                     data-choice-primary-lane-cue={primaryChoiceLane?.cue ?? 'none'}
+                                    data-choice-primary-lane-role={
+                                        primaryChoiceLane ? sideRoomChoiceLaneRole(primaryChoiceLane) : 'none'
+                                    }
                                     data-choice-primary-lane-screen-cue={
                                         primaryChoiceLane ? sideRoomChoiceLaneScreenCue(primaryChoiceLane) : 'none'
                                     }
@@ -1161,7 +1191,11 @@ const SideRoomScreen = () => {
                                         <strong>
                                             {choiceLaneMap.length} {choiceLaneMap.length === 1 ? 'lane' : 'lanes'}
                                         </strong>
-                                        <b>{primaryChoiceLane ? `${primaryChoiceLane.label} leads` : 'No lead lane'}</b>
+                                        <b>
+                                            {primaryChoiceLane
+                                                ? `${sideRoomChoiceLaneRole(primaryChoiceLane)} ${primaryChoiceLane.label}`
+                                                : 'No lead lane'}
+                                        </b>
                                         <span aria-hidden="true" className={styles.choiceLaneMapSummaryBeatPips}>
                                             {Array.from({ length: Math.max(2, Math.min(5, choiceLaneMap.length + 1)) }, (_, beatIndex) => (
                                                 <i
@@ -1176,18 +1210,19 @@ const SideRoomScreen = () => {
                                     </span>
                                     {primaryChoiceLane ? (
                                         <span
-                                            aria-label={`Primary side room lane. ${primaryChoiceLane.label}: ${sideRoomChoiceLaneAction(primaryChoiceLane)}. ${primaryChoiceLane.cue}. ${sideRoomChoiceLaneBeatCount(primaryChoiceLane)} beats.`}
+                                            aria-label={`Primary side room lane. ${sideRoomChoiceLaneRole(primaryChoiceLane)} ${primaryChoiceLane.label}: ${sideRoomChoiceLaneAction(primaryChoiceLane)}. ${primaryChoiceLane.cue}. ${sideRoomChoiceLaneBeatCount(primaryChoiceLane)} beats.`}
                                             className={styles.choiceLanePrimaryCue}
                                             data-choice-primary-lane={primaryChoiceLane.id}
                                             data-choice-primary-lane-action={sideRoomChoiceLaneAction(primaryChoiceLane)}
                                             data-choice-primary-lane-audio={sideRoomChoiceLaneAudioCue(primaryChoiceLane)}
                                             data-choice-primary-lane-beats={sideRoomChoiceLaneBeatCount(primaryChoiceLane)}
                                             data-choice-primary-lane-cue={primaryChoiceLane.cue}
+                                            data-choice-primary-lane-role={sideRoomChoiceLaneRole(primaryChoiceLane)}
                                             data-choice-primary-lane-screen-cue={sideRoomChoiceLaneScreenCue(primaryChoiceLane)}
                                             data-testid="side-room-choice-primary-lane"
                                         >
                                             <small>Best lane</small>
-                                            <strong>{primaryChoiceLane.label}</strong>
+                                            <strong>{sideRoomChoiceLaneRole(primaryChoiceLane)}</strong>
                                             <b>{sideRoomChoiceLaneAction(primaryChoiceLane)}</b>
                                             <em>{primaryChoiceLane.cue}</em>
                                             <span aria-hidden="true" className={styles.choiceLanePrimaryBeatPips}>
@@ -1203,13 +1238,16 @@ const SideRoomScreen = () => {
                                             data-choice-lane-action={sideRoomChoiceLaneAction(lane)}
                                             data-choice-lane-audio={sideRoomChoiceLaneAudioCue(lane)}
                                             data-choice-lane-beats={sideRoomChoiceLaneBeatCount(lane)}
+                                            data-choice-lane-role={sideRoomChoiceLaneRole(lane)}
                                             data-choice-lane-screen-cue={sideRoomChoiceLaneScreenCue(lane)}
                                             key={lane.id}
                                         >
                                             <small>{lane.label}</small>
-                                            <strong>{lane.count}</strong>
+                                            <strong>{sideRoomChoiceLaneRole(lane)}</strong>
                                             <b>{sideRoomChoiceLaneAction(lane)}</b>
-                                            <em>{lane.cue}</em>
+                                            <em>
+                                                x{lane.count} / {lane.cue}
+                                            </em>
                                             <span aria-hidden="true" className={styles.choiceLaneBeatPips}>
                                                 {Array.from({ length: sideRoomChoiceLaneBeatCount(lane) }, (_, beatIndex) => (
                                                     <i data-choice-lane-beat={beatIndex + 1} key={beatIndex} />

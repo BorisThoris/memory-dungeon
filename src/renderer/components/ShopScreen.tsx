@@ -856,15 +856,40 @@ const shopOfferLaneAction = (lane: ShopOfferLaneMapEntry): string => {
     }
 };
 
+const shopOfferLaneRole = (
+    lane: Pick<ShopOfferLaneMapEntry, 'count' | 'id'>
+): 'Bank' | 'Buy' | 'Cashout' | 'Open' | 'Prime' | 'Stack' => {
+    if (lane.count > 1 && lane.id !== 'blocked') {
+        return 'Stack';
+    }
+    switch (lane.id) {
+        case 'route':
+            return 'Open';
+        case 'setup':
+            return 'Prime';
+        case 'payoff':
+            return 'Cashout';
+        case 'blocked':
+            return 'Bank';
+        case 'safety':
+        case 'control':
+        default:
+            return 'Buy';
+    }
+};
+
 const shopOfferLaneActionMapAttr = (laneMap: readonly ShopOfferLaneMapEntry[]): string =>
     laneMap.map((entry) => `${entry.id}:${shopOfferLaneAction(entry)}:${entry.count}`).join('>');
+
+const shopOfferLaneRoleMapAttr = (laneMap: readonly ShopOfferLaneMapEntry[]): string =>
+    laneMap.map((entry) => `${entry.id}:${shopOfferLaneRole(entry)}:${entry.count}`).join('>');
 
 const shopOfferLaneMapLabel = (laneMap: readonly ShopOfferLaneMapEntry[]): string =>
     formatShopRowsLabel(
         'Shop offer lanes',
         laneMap.map((entry) => ({
             label: entry.label,
-            value: `${entry.count}. ${shopOfferLaneAction(entry)}. ${entry.cue.trim().replace(/[.!?]+$/, '')}`
+            value: `${shopOfferLaneRole(entry)} x${entry.count}. ${shopOfferLaneAction(entry)}. ${entry.cue.trim().replace(/[.!?]+$/, '')}`
         }))
     );
 
@@ -985,6 +1010,7 @@ const ShopScreen = () => {
     const offerLaneMap = buildShopOfferLaneMap(run);
     const primaryOfferLane = offerLaneMap[0] ?? null;
     const offerLaneMapAttr = shopOfferLaneMapAttr(offerLaneMap);
+    const offerLaneRoleMapAttr = shopOfferLaneRoleMapAttr(offerLaneMap);
     const offerLaneMapAccessibleLabel = shopOfferLaneMapLabel(offerLaneMap);
 
     const onBack = (): void => {
@@ -1068,6 +1094,7 @@ const ShopScreen = () => {
                         className={styles.offerLaneMap}
                         data-shop-offer-lane-actions={shopOfferLaneActionMapAttr(offerLaneMap)}
                         data-shop-offer-lane-map={offerLaneMapAttr}
+                        data-shop-offer-lane-roles={offerLaneRoleMapAttr}
                         data-shop-primary-offer-lane={primaryOfferLane?.id ?? 'none'}
                         data-shop-primary-offer-lane-action={
                             primaryOfferLane ? shopOfferLaneAction(primaryOfferLane) : 'none'
@@ -1079,6 +1106,7 @@ const ShopScreen = () => {
                             primaryOfferLane ? shopOfferLaneBeatCount(primaryOfferLane) : 0
                         }
                         data-shop-primary-offer-lane-cue={primaryOfferLane?.cue ?? 'none'}
+                        data-shop-primary-offer-lane-role={primaryOfferLane ? shopOfferLaneRole(primaryOfferLane) : 'none'}
                         data-shop-primary-offer-lane-screen-cue={
                             primaryOfferLane ? shopOfferLaneScreenCue(primaryOfferLane) : 'none'
                         }
@@ -1093,7 +1121,7 @@ const ShopScreen = () => {
                             <strong>
                                 {offerLaneMap.length} {offerLaneMap.length === 1 ? 'lane' : 'lanes'}
                             </strong>
-                            <b>{primaryOfferLane ? `${primaryOfferLane.label} leads` : 'No lead lane'}</b>
+                            <b>{primaryOfferLane ? `${shopOfferLaneRole(primaryOfferLane)} ${primaryOfferLane.label}` : 'No lead lane'}</b>
                             <span aria-hidden="true" className={styles.offerLaneMapSummaryBeatPips}>
                                 {Array.from({ length: Math.max(2, Math.min(5, offerLaneMap.length + 1)) }, (_, beatIndex) => (
                                     <i
@@ -1108,18 +1136,19 @@ const ShopScreen = () => {
                         </span>
                         {primaryOfferLane ? (
                             <span
-                                aria-label={`Primary shop lane. ${primaryOfferLane.label}: ${shopOfferLaneAction(primaryOfferLane)}. ${primaryOfferLane.cue}. ${shopOfferLaneBeatCount(primaryOfferLane)} beats.`}
+                                aria-label={`Primary shop lane. ${shopOfferLaneRole(primaryOfferLane)} ${primaryOfferLane.label}: ${shopOfferLaneAction(primaryOfferLane)}. ${primaryOfferLane.cue}. ${shopOfferLaneBeatCount(primaryOfferLane)} beats.`}
                                 className={styles.offerLanePrimaryCue}
                                 data-shop-primary-offer-lane={primaryOfferLane.id}
                                 data-shop-primary-offer-lane-action={shopOfferLaneAction(primaryOfferLane)}
                                 data-shop-primary-offer-lane-audio={shopOfferLaneAudioCue(primaryOfferLane)}
                                 data-shop-primary-offer-lane-beats={shopOfferLaneBeatCount(primaryOfferLane)}
                                 data-shop-primary-offer-lane-cue={primaryOfferLane.cue}
+                                data-shop-primary-offer-lane-role={shopOfferLaneRole(primaryOfferLane)}
                                 data-shop-primary-offer-lane-screen-cue={shopOfferLaneScreenCue(primaryOfferLane)}
                                 data-testid="shop-primary-offer-lane"
                             >
                                 <small>Best buy lane</small>
-                                <strong>{primaryOfferLane.label}</strong>
+                                <strong>{shopOfferLaneRole(primaryOfferLane)}</strong>
                                 <b>{shopOfferLaneAction(primaryOfferLane)}</b>
                                 <em>{primaryOfferLane.cue}</em>
                                 <span aria-hidden="true" className={styles.offerLanePrimaryBeatPips}>
@@ -1135,13 +1164,16 @@ const ShopScreen = () => {
                                 data-shop-offer-lane-action={shopOfferLaneAction(lane)}
                                 data-shop-offer-lane-audio={shopOfferLaneAudioCue(lane)}
                                 data-shop-offer-lane-beats={shopOfferLaneBeatCount(lane)}
+                                data-shop-offer-lane-role={shopOfferLaneRole(lane)}
                                 data-shop-offer-lane-screen-cue={shopOfferLaneScreenCue(lane)}
                                 key={lane.id}
                             >
                                 <small>{lane.label}</small>
-                                <strong>{lane.count}</strong>
+                                <strong>{shopOfferLaneRole(lane)}</strong>
                                 <b>{shopOfferLaneAction(lane)}</b>
-                                <em>{lane.cue}</em>
+                                <em>
+                                    x{lane.count} / {lane.cue}
+                                </em>
                                 <span aria-hidden="true" className={styles.offerLaneBeatPips}>
                                     {Array.from({ length: shopOfferLaneBeatCount(lane) }, (_, beatIndex) => (
                                         <i data-shop-offer-lane-beat={beatIndex + 1} key={beatIndex} />

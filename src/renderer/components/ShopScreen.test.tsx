@@ -105,17 +105,19 @@ describe('ShopScreen', () => {
         const offerLaneMap = screen.getByTestId('shop-offer-lane-map');
         expect(offerLaneMap).toHaveAttribute('data-shop-offer-lane-map', 'route:1>blocked:2');
         expect(offerLaneMap).toHaveAttribute('data-shop-offer-lane-actions', 'route:Open route:1>blocked:Earn gold:2');
+        expect(offerLaneMap).toHaveAttribute('data-shop-offer-lane-roles', 'route:Open:1>blocked:Bank:2');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane', 'route');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-action', 'Open route');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-audio', 'shop-lane-route');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-beats', '4');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-cue', 'Open greedy route');
+        expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-role', 'Open');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-screen-cue', 'burst');
         const offerLaneMapSummary = screen.getByTestId('shop-offer-lane-map-summary');
         expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-count', '2');
         expect(offerLaneMapSummary).toHaveTextContent('Lanes');
         expect(offerLaneMapSummary).toHaveTextContent('2 lanes');
-        expect(offerLaneMapSummary).toHaveTextContent('Route leads');
+        expect(offerLaneMapSummary).toHaveTextContent('Open Route');
         expect(offerLaneMapSummary.querySelectorAll('[data-shop-offer-lane-map-summary-beat]')).toHaveLength(3);
         expect(
             offerLaneMapSummary.querySelector('[data-shop-offer-lane-map-summary-beat="1"]')
@@ -124,23 +126,26 @@ describe('ShopScreen', () => {
             offerLaneMapSummary.querySelector('[data-shop-offer-lane-map-summary-beat="2"]')
         ).toHaveAttribute('data-shop-offer-lane-map-summary-beat-focus', 'support');
         const primaryOfferLane = screen.getByTestId('shop-primary-offer-lane');
-        expect(primaryOfferLane).toHaveAccessibleName('Primary shop lane. Route: Open route. Open greedy route. 4 beats.');
+        expect(primaryOfferLane).toHaveAccessibleName('Primary shop lane. Open Route: Open route. Open greedy route. 4 beats.');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane', 'route');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-action', 'Open route');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-audio', 'shop-lane-route');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-beats', '4');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-cue', 'Open greedy route');
+        expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-role', 'Open');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-screen-cue', 'burst');
         expect(primaryOfferLane).toHaveTextContent('Best buy lane');
-        expect(primaryOfferLane).toHaveTextContent('Route');
+        expect(primaryOfferLane).toHaveTextContent('Open');
         expect(primaryOfferLane).toHaveTextContent('Open route');
         expect(primaryOfferLane.querySelectorAll('[data-shop-primary-offer-lane-beat]')).toHaveLength(4);
         expect(offerLaneMap).toHaveTextContent('Route');
+        expect(offerLaneMap).toHaveTextContent('Open');
         expect(offerLaneMap).toHaveTextContent('Open route');
-        expect(offerLaneMap).toHaveTextContent('Open greedy route');
+        expect(offerLaneMap).toHaveTextContent('x1 / Open greedy route');
         expect(offerLaneMap).toHaveTextContent('Blocked');
+        expect(offerLaneMap).toHaveTextContent('Bank');
         expect(offerLaneMap).toHaveTextContent('Earn gold');
-        expect(offerLaneMap).toHaveTextContent('Need 1g before map conduit cartographer');
+        expect(offerLaneMap).toHaveTextContent('x2 / Need 1g before map conduit cartographer');
         expect(offerLaneMap.querySelector('[data-shop-offer-lane="route"]')).toHaveAttribute(
             'data-shop-offer-lane-action',
             'Open route'
@@ -149,6 +154,7 @@ describe('ShopScreen', () => {
             'data-shop-offer-lane-beats',
             '4'
         );
+        expect(offerLaneMap.querySelector('[data-shop-offer-lane="route"]')).toHaveAttribute('data-shop-offer-lane-role', 'Open');
         expect(
             offerLaneMap.querySelector('[data-shop-offer-lane="route"]')?.querySelectorAll('[data-shop-offer-lane-beat]')
         ).toHaveLength(4);
@@ -160,13 +166,14 @@ describe('ShopScreen', () => {
             'data-shop-offer-lane-beats',
             '4'
         );
+        expect(offerLaneMap.querySelector('[data-shop-offer-lane="blocked"]')).toHaveAttribute('data-shop-offer-lane-role', 'Bank');
         expect(
             offerLaneMap
                 .querySelector('[data-shop-offer-lane="blocked"]')
                 ?.querySelectorAll('[data-shop-offer-lane-beat]')
         ).toHaveLength(4);
         expect(offerLaneMap).toHaveAccessibleName(
-            'Shop offer lanes. Route: 1. Open route. Open greedy route. Blocked: 2. Earn gold. Need 1g before map conduit cartographer.'
+            'Shop offer lanes. Route: Open x1. Open route. Open greedy route. Blocked: Bank x2. Earn gold. Need 1g before map conduit cartographer.'
         );
 
         expect(screen.getByTestId('shop-offer-trait_routing_kit-signals')).toHaveTextContent('Combo prime');
