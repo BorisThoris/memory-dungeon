@@ -810,6 +810,54 @@ const CARD_ACTION_SHOT_DETAILS: Record<string, string> = {
     'perk-cash': 'Perk lane',
     'route-setup': 'Setup lane'
 };
+type CardActionPriorityRole = 'Bank' | 'Cashout' | 'Follow-up' | 'Perk' | 'Setup';
+type CardActionPriorityTone = 'bank' | 'cashout' | 'followup' | 'perk' | 'setup';
+type CardActionPriorityScreenCue = 'burst' | 'guard' | 'pulse' | 'tick';
+
+const cardActionPriorityRole = (id: string): CardActionPriorityRole => {
+    if (id === 'bank-lane') {
+        return 'Bank';
+    }
+    if (id === 'follow-up') {
+        return 'Follow-up';
+    }
+    if (id === 'perk-cash') {
+        return 'Perk';
+    }
+    if (id === 'cash-now') {
+        return 'Cashout';
+    }
+    return 'Setup';
+};
+
+const cardActionPriorityTone = (id: string): CardActionPriorityTone => {
+    if (id === 'bank-lane') {
+        return 'bank';
+    }
+    if (id === 'follow-up') {
+        return 'followup';
+    }
+    if (id === 'perk-cash') {
+        return 'perk';
+    }
+    if (id === 'cash-now') {
+        return 'cashout';
+    }
+    return 'setup';
+};
+
+const cardActionPriorityScreenCue = (id: string): CardActionPriorityScreenCue => {
+    if (id === 'bank-lane') {
+        return 'guard';
+    }
+    if (id === 'follow-up') {
+        return 'pulse';
+    }
+    if (id === 'cash-now' || id === 'perk-cash') {
+        return 'burst';
+    }
+    return 'tick';
+};
 const TRAIT_ROUTE_INTENSITY_PRIORITY = ['stack', 'cashout', 'surge', 'ready', 'setup'] as const;
 const TRAIT_ROUTE_INTENSITY_LABELS: Record<(typeof TRAIT_ROUTE_INTENSITY_PRIORITY)[number], string> = {
     cashout: 'Cashout',
@@ -1474,12 +1522,30 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     return {
                         count,
                         id,
-                        label: CARD_ACTION_PRIORITY_LABELS[id] ?? id
+                        label: CARD_ACTION_PRIORITY_LABELS[id] ?? id,
+                        role: cardActionPriorityRole(id),
+                        screenCue: cardActionPriorityScreenCue(id),
+                        tone: cardActionPriorityTone(id)
                     };
                 })
-                .filter((row): row is { count: number; id: string; label: string } => row != null),
+                .filter(
+                    (
+                        row
+                    ): row is {
+                        count: number;
+                        id: string;
+                        label: string;
+                        role: CardActionPriorityRole;
+                        screenCue: CardActionPriorityScreenCue;
+                        tone: CardActionPriorityTone;
+                    } => row != null
+                ),
         [cardFeedbackActionPriorityAttr]
     );
+    const primaryCardActionPriorityRow =
+        cardFeedbackActionPriorityRows.find((row) => row.id === cardFeedbackPrimaryActionAttr) ??
+        cardFeedbackActionPriorityRows[0] ??
+        null;
     const cardFeedbackShotMapRows = useMemo(
         () =>
             cardFeedbackActionPriorityRows.map((row) => ({
@@ -4030,6 +4096,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-trait-route-intensities={cardFeedbackTraitRouteIntensitiesAttr}
             data-card-feedback-trait-route-tiers={cardFeedbackTraitRouteTiersAttr}
             data-card-feedback-primary-action={cardFeedbackPrimaryActionAttr}
+            data-card-feedback-primary-action-role={primaryCardActionPriorityRow?.role ?? 'none'}
+            data-card-feedback-primary-action-screen-cue={primaryCardActionPriorityRow?.screenCue ?? 'none'}
+            data-card-feedback-primary-action-tone={primaryCardActionPriorityRow?.tone ?? 'none'}
             data-card-feedback-primary-card-cue={cardFeedbackPrimaryCardCueAttr}
             data-card-feedback-trait-payoff-stack={cardFeedbackTraitPayoffStackActive ? 'true' : 'false'}
             data-card-feedback-marker-shape-contract={BOARD_MARKER_SHAPE_CONTRACT}
@@ -4904,6 +4973,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             .join('. ')}`}
                                         className={styles.chainOpportunityActionPriority}
                                         data-card-action-primary={cardFeedbackPrimaryActionAttr}
+                                        data-card-action-primary-role={primaryCardActionPriorityRow?.role ?? 'none'}
+                                        data-card-action-primary-screen-cue={primaryCardActionPriorityRow?.screenCue ?? 'none'}
+                                        data-card-action-primary-tone={primaryCardActionPriorityRow?.tone ?? 'none'}
                                         data-testid="chain-opportunity-action-priority"
                                     >
                                         <small>Priority</small>
@@ -4941,6 +5013,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 data-card-action-priority-focus={
                                                     row.id === cardFeedbackPrimaryActionAttr ? 'primary' : 'support'
                                                 }
+                                                data-card-action-priority-role={row.role}
+                                                data-card-action-priority-screen-cue={row.screenCue}
+                                                data-card-action-priority-tone={row.tone}
                                                 key={row.id}
                                             >
                                                 <b>{row.label}</b>

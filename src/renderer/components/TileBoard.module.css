@@ -554,8 +554,15 @@
 }
 
 .frame[data-card-feedback-primary-beat='cashout'],
-.frame[data-card-feedback-primary-cadence='cashout'] {
+.frame[data-card-feedback-primary-cadence='cashout'],
+.frame[data-card-feedback-primary-action-role='Cashout'],
+.frame[data-card-feedback-primary-action-tone='cashout'] {
     --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-gold-bright) 48%, transparent);
+}
+
+.frame[data-card-feedback-primary-action-role='Perk'],
+.frame[data-card-feedback-primary-action-tone='perk'] {
+    --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-violet-bright) 18%);
 }
 
 .frame[data-card-feedback-primary-beat='surge'],
@@ -564,17 +571,23 @@
 }
 
 .frame[data-card-feedback-primary-beat='follow-up'],
-.frame[data-card-feedback-primary-cadence='follow-up'] {
+.frame[data-card-feedback-primary-cadence='follow-up'],
+.frame[data-card-feedback-primary-action-role='Follow-up'],
+.frame[data-card-feedback-primary-action-tone='followup'] {
     --board-primary-beat-cue-color: color-mix(in srgb, #fff7c4 38%, var(--theme-cyan-bright) 16%);
 }
 
 .frame[data-card-feedback-primary-beat='route'],
-.frame[data-card-feedback-primary-cadence='route'] {
+.frame[data-card-feedback-primary-cadence='route'],
+.frame[data-card-feedback-primary-action-role='Bank'],
+.frame[data-card-feedback-primary-action-tone='bank'] {
     --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 14%);
 }
 
 .frame[data-card-feedback-primary-beat='setup'],
-.frame[data-card-feedback-primary-cadence='prime'] {
+.frame[data-card-feedback-primary-cadence='prime'],
+.frame[data-card-feedback-primary-action-role='Setup'],
+.frame[data-card-feedback-primary-action-tone='setup'] {
     --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, var(--theme-violet-bright) 18%);
 }
 
@@ -587,7 +600,21 @@
 .frame[data-card-feedback-primary-cadence='surge'] .stage::after,
 .frame[data-card-feedback-primary-cadence='follow-up'] .stage::after,
 .frame[data-card-feedback-primary-cadence='route'] .stage::after,
-.frame[data-card-feedback-primary-cadence='prime'] .stage::after {
+.frame[data-card-feedback-primary-cadence='prime'] .stage::after,
+.frame[data-card-feedback-primary-action-role='Bank'] .stage::after,
+.frame[data-card-feedback-primary-action-role='Cashout'] .stage::after,
+.frame[data-card-feedback-primary-action-role='Follow-up'] .stage::after,
+.frame[data-card-feedback-primary-action-role='Perk'] .stage::after,
+.frame[data-card-feedback-primary-action-role='Setup'] .stage::after,
+.frame[data-card-feedback-primary-action-screen-cue='burst'] .stage::after,
+.frame[data-card-feedback-primary-action-screen-cue='guard'] .stage::after,
+.frame[data-card-feedback-primary-action-screen-cue='pulse'] .stage::after,
+.frame[data-card-feedback-primary-action-screen-cue='tick'] .stage::after,
+.frame[data-card-feedback-primary-action-tone='bank'] .stage::after,
+.frame[data-card-feedback-primary-action-tone='cashout'] .stage::after,
+.frame[data-card-feedback-primary-action-tone='followup'] .stage::after,
+.frame[data-card-feedback-primary-action-tone='perk'] .stage::after,
+.frame[data-card-feedback-primary-action-tone='setup'] .stage::after {
     border-color: var(--board-primary-beat-cue-color);
     box-shadow:
         inset 0 0 0 1px color-mix(in srgb, var(--board-primary-beat-cue-color) 34%, transparent),
@@ -3583,6 +3610,48 @@
         color-mix(in srgb, var(--theme-void) 40%, transparent);
 }
 
+.chainOpportunityActionPriority[data-card-action-primary-tone='cashout'],
+.chainOpportunityActionPriority[data-card-action-primary-tone='perk'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 16%);
+    background:
+        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), transparent 70%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+}
+
+.chainOpportunityActionPriority[data-card-action-primary-role='Cashout'],
+.chainOpportunityActionPriority[data-card-action-primary-role='Perk'],
+.chainOpportunityActionPriority[data-card-action-primary-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 16%);
+}
+
+.chainOpportunityActionPriority[data-card-action-primary-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, #fff7c4 42%, var(--theme-cyan-bright) 16%);
+}
+
+.chainOpportunityActionPriority[data-card-action-primary-role='Follow-up'],
+.chainOpportunityActionPriority[data-card-action-primary-tone='followup'] {
+    border-color: color-mix(in srgb, #fff7c4 42%, var(--theme-cyan-bright) 16%);
+}
+
+.chainOpportunityActionPriority[data-card-action-primary-screen-cue='guard'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
+}
+
+.chainOpportunityActionPriority[data-card-action-primary-role='Bank'],
+.chainOpportunityActionPriority[data-card-action-primary-tone='bank'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
+}
+
+.chainOpportunityActionPriority[data-card-action-primary-screen-cue='tick'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-violet-bright) 16%);
+}
+
+.chainOpportunityActionPriority[data-card-action-primary-role='Setup'],
+.chainOpportunityActionPriority[data-card-action-primary-tone='setup'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-violet-bright) 16%);
+}
+
 .chainOpportunityActionPriority > small {
     flex: 0 0 auto;
     color: color-mix(in srgb, var(--theme-text-muted) 86%, white);
@@ -3724,7 +3793,12 @@
 }
 
 .chainOpportunityActionPriority > span[data-card-action-priority='cash-now'],
-.chainOpportunityActionPriority > span[data-card-action-priority='perk-cash'] {
+.chainOpportunityActionPriority > span[data-card-action-priority='perk-cash'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role='Cashout'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role='Perk'],
+.chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='burst'],
+.chainOpportunityActionPriority > span[data-card-action-priority-tone='cashout'],
+.chainOpportunityActionPriority > span[data-card-action-priority-tone='perk'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
     background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
 }
@@ -3751,32 +3825,51 @@
 }
 
 .chainOpportunityActionPriority > span[data-card-action-priority='cash-now'] b,
-.chainOpportunityActionPriority > span[data-card-action-priority='perk-cash'] b {
+.chainOpportunityActionPriority > span[data-card-action-priority='perk-cash'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-role='Cashout'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-role='Perk'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-tone='cashout'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-tone='perk'] b {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
-.chainOpportunityActionPriority > span[data-card-action-priority='follow-up'] {
+.chainOpportunityActionPriority > span[data-card-action-priority='follow-up'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role='Follow-up'],
+.chainOpportunityActionPriority > span[data-card-action-priority-tone='followup'],
+.chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='pulse'] {
     border-color: color-mix(in srgb, #fff7c4 42%, transparent);
     background: color-mix(in srgb, #fff7c4 12%, transparent);
 }
 
-.chainOpportunityActionPriority > span[data-card-action-priority='follow-up'] b {
+.chainOpportunityActionPriority > span[data-card-action-priority='follow-up'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-role='Follow-up'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-tone='followup'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='pulse'] b {
     color: color-mix(in srgb, #fff7c4 88%, white);
 }
 
-.chainOpportunityActionPriority > span[data-card-action-priority='bank-lane'] {
+.chainOpportunityActionPriority > span[data-card-action-priority='bank-lane'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role='Bank'],
+.chainOpportunityActionPriority > span[data-card-action-priority-tone='bank'],
+.chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='guard'] {
     border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 7%, transparent)),
         color-mix(in srgb, var(--theme-surface-control) 42%, transparent);
 }
 
-.chainOpportunityActionPriority > span[data-card-action-priority='bank-lane'] b {
+.chainOpportunityActionPriority > span[data-card-action-priority='bank-lane'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-role='Bank'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-tone='bank'] b,
+.chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='guard'] b {
     color: color-mix(in srgb, var(--theme-success) 84%, white);
 }
 
 .chainOpportunityActionPriority > span[data-card-action-priority='route-setup'],
-.chainOpportunityActionPriority > span[data-card-action-priority='build-lane'] {
+.chainOpportunityActionPriority > span[data-card-action-priority='build-lane'],
+.chainOpportunityActionPriority > span[data-card-action-priority-role='Setup'],
+.chainOpportunityActionPriority > span[data-card-action-priority-tone='setup'],
+.chainOpportunityActionPriority > span[data-card-action-priority-screen-cue='tick'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
 }
