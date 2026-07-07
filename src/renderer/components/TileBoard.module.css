@@ -395,6 +395,39 @@
     opacity: 0.34;
 }
 
+.frame[data-chain-accessibility-tone='cashout'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 16%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        inset 0 0 28px color-mix(in srgb, var(--theme-gold-bright) 8%, transparent),
+        0 0 16px color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+    opacity: 0.62;
+}
+
+.frame[data-chain-accessibility-tone='surge'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-violet) 40%, var(--theme-gold-bright) 18%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-violet) 14%, transparent),
+        inset 0 0 24px color-mix(in srgb, var(--theme-violet) 8%, transparent);
+    opacity: 0.56;
+}
+
+.frame[data-chain-accessibility-tone='ready'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent),
+        inset 0 0 22px color-mix(in srgb, var(--theme-cyan-bright) 6%, transparent);
+    opacity: 0.5;
+}
+
+.frame[data-chain-accessibility-tone='setup'] .stage::after {
+    border-color: color-mix(in srgb, var(--theme-success) 30%, var(--theme-cyan-bright) 10%);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-success) 10%, transparent),
+        inset 0 0 18px color-mix(in srgb, var(--theme-success) 5%, transparent);
+    opacity: 0.44;
+}
+
 .frame[data-opportunity-best-screen-cue='burst'] .stage::after,
 .frame[data-chain-opportunity-screen-cue='burst'] .stage::after,
 .frame[data-chain-opportunity-screen-cue='super'] .stage::after,
@@ -4644,6 +4677,18 @@
 .chainOpportunityMeter > span[data-chain-meter-lane='surge'] b {
     background: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.chainOpportunityMeter > span[data-chain-meter-lane='followup'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+}
+
+.chainOpportunityMeter > span[data-chain-meter-lane='followup'] b {
+    background: color-mix(in srgb, var(--theme-violet-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 88%, white);
 }
 
 .chainOpportunityMeter > span[data-chain-meter-lane='hot'] {

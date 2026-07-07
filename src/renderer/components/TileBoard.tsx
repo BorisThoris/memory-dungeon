@@ -1663,6 +1663,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                   Math.min(
                       100,
                       ((boardChainAccessibilitySummary.readyCount +
+                          boardChainAccessibilitySummary.followupCount +
                           boardChainAccessibilitySummary.surgeCount +
                           boardChainAccessibilitySummary.rewardHotCount +
                           boardChainAccessibilitySummary.setupCount) /
@@ -5217,6 +5218,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                             data-chain-meter-pip={index + 1}
                                                             data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
                                                             key={`ready-${index}`}
+                                                        />
+                                                    ))}
+                                                </span>
+                                            </span>
+                                        ) : null}
+                                        {boardChainAccessibilitySummary.followupCount > 0 ? (
+                                            <span data-chain-meter-lane="followup">
+                                                <small>Follow</small>
+                                                <b>{boardChainAccessibilitySummary.followupCount}</b>
+                                                <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
+                                                    {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.followupCount) }, (_, index) => (
+                                                        <i
+                                                            data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={`followup-${index}`}
                                                         />
                                                     ))}
                                                 </span>

@@ -1652,6 +1652,12 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-accessibility-primary-line',
             '1 selected follow-up'
         );
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="followup"]')).toHaveTextContent(
+            'Follow'
+        );
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="followup"]')).toHaveTextContent(
+            '1'
+        );
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Follow-up ready');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Follow up');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Tap marked follow-up');
