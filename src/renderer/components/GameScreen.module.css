@@ -10841,6 +10841,18 @@
     font-weight: 830;
 }
 
+.toolPayoffStack[data-tool-payoff-stack-tone='combo'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent), color-mix(in srgb, var(--theme-gold-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-panel-solid) 92%, var(--theme-void));
+}
+
+.toolPayoffStack[data-tool-payoff-stack-tone='combo'] b,
+.toolPayoffStack[data-tool-payoff-stack-tone='combo'] strong {
+    color: color-mix(in srgb, var(--theme-gold-bright) 78%, var(--theme-cyan-bright));
+}
+
 .toolPayoffStack[data-tool-payoff-stack-tone='recall'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 36%, transparent);
     background:
@@ -10877,6 +10889,34 @@
 .toolPayoffStack[data-tool-payoff-stack-tone='locked'] b,
 .toolPayoffStack[data-tool-payoff-stack-tone='empty'] b {
     color: color-mix(in srgb, var(--theme-text-muted) 78%, white);
+}
+
+.toolPayoffStack[data-tool-crescendo-tier='stack'] .toolPayoffMeterFill,
+.toolPayoffStack[data-tool-crescendo-tier='cashout'] .toolPayoffMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 88%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 78%, white)
+    );
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+}
+
+.toolPayoffStack[data-tool-crescendo-tier='prime'] .toolPayoffMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 76%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
+}
+
+.toolPayoffStack[data-tool-crescendo-tier='none'] .toolPayoffMeterFill {
+    background: color-mix(in srgb, var(--theme-text-muted) 34%, transparent);
+    box-shadow: none;
+}
+
+.toolPayoffStack[data-tool-crescendo-screen-cue='none'] {
+    box-shadow: none;
 }
 
 .powerPayoffChip {
@@ -10976,6 +11016,18 @@
     opacity: 0.94;
 }
 
+.powerPayoffChip[data-power-payoff-beats='0'] {
+    border-style: dashed;
+}
+
+.powerPayoffChip[data-power-payoff-beats='1'] .powerPayoffBeatPips i {
+    opacity: 0.72;
+}
+
+.powerPayoffChip[data-power-payoff-beats='2'] .powerPayoffBeatPips i {
+    opacity: 0.76;
+}
+
 .powerPayoffChip[data-power-payoff='combo'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, var(--theme-cyan-bright) 28%);
     color: color-mix(in srgb, var(--theme-gold-bright) 68%, var(--theme-cyan-bright));
@@ -11030,6 +11082,10 @@
 
 .powerPayoffChip[data-power-screen-cue='locked'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-danger) 20%, transparent);
+}
+
+.powerPayoffChip[data-power-screen-cue='none'] {
+    box-shadow: none;
 }
 
 .powerPayoffChip[data-power-payoff='recall'] {

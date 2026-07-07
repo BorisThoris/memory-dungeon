@@ -526,6 +526,11 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-route-recommendation-tone': ['memory'],
         'data-shop-offer-lane-role-id': ['bank', 'buy', 'cashout', 'open', 'prime', 'stack'],
         'data-shop-primary-offer-lane-role-id': ['bank', 'buy', 'cashout', 'open', 'prime', 'stack'],
+        'data-power-intent': ['combo', 'control', 'empty', 'locked', 'recall', 'reward'],
+        'data-power-payoff': ['combo', 'control', 'empty', 'locked', 'recall'],
+        'data-power-recommendation': ['best-tool', 'route-setup'],
+        'data-power-role': ['control', 'recall', 'risk', 'search'],
+        'data-tool-payoff-stack-tone': ['combo', 'control', 'empty', 'locked', 'recall'],
         'data-trait-mode-action': ['cashout', 'followup', 'match', 'prime', 'surge'],
         'data-trait-mode-screen-cue': ['burst', 'pulse', 'tick'],
         'data-trait-mode-tier': ['cashout', 'prime', 'route', 'surge'],
@@ -772,7 +777,11 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-trap-resolution-screen-cue': ['burst', 'pulse', 'snap'],
         'data-trait-interaction-lane-focus': ['primary', 'support'],
         'data-mode-lane-role-id': ['build', 'locked', 'practice', 'pressure', 'reward'],
-        'data-mode-primary-lane-role-id': ['build', 'locked', 'practice', 'pressure', 'reward']
+        'data-mode-primary-lane-role-id': ['build', 'locked', 'practice', 'pressure', 'reward'],
+        'data-power-payoff-beats': ['0', '1', '2', '3', '4'],
+        'data-power-screen-cue': ['burst', 'guard', 'locked', 'none', 'pulse', 'snap'],
+        'data-tool-crescendo-screen-cue': ['burst', 'none', 'pulse', 'snap'],
+        'data-tool-crescendo-tier': ['cashout', 'none', 'prime', 'stack']
     };
 
     return Object.entries(visibleStateContracts).flatMap(([attr, values]) =>
