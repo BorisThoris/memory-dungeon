@@ -394,6 +394,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-card-beat-tier': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
         'data-card-cadence': ['cashout', 'follow-up', 'prime', 'route', 'surge'],
         'data-card-feedback-trait-lane-primary-screen-cue': ['burst', 'guard', 'pulse', 'risk'],
+        'data-card-feedback-primary-beat': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
+        'data-card-feedback-primary-cadence': ['cashout', 'follow-up', 'prime', 'route', 'surge'],
         'data-card-feedback-primary-shot-focus': ['cashout', 'follow-up', 'route', 'setup', 'surge'],
         'data-card-feedback-primary-shot-screen-cue': ['burst', 'guard', 'pulse'],
         'data-card-primary-shot-focus': ['cashout', 'follow-up', 'route', 'setup', 'surge'],

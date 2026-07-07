@@ -542,6 +542,49 @@
     opacity: 0.56;
 }
 
+.frame[data-card-feedback-primary-beat='cashout'],
+.frame[data-card-feedback-primary-cadence='cashout'] {
+    --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-gold-bright) 48%, transparent);
+}
+
+.frame[data-card-feedback-primary-beat='surge'],
+.frame[data-card-feedback-primary-cadence='surge'] {
+    --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-violet-bright) 40%, var(--theme-gold-bright) 20%);
+}
+
+.frame[data-card-feedback-primary-beat='follow-up'],
+.frame[data-card-feedback-primary-cadence='follow-up'] {
+    --board-primary-beat-cue-color: color-mix(in srgb, #fff7c4 38%, var(--theme-cyan-bright) 16%);
+}
+
+.frame[data-card-feedback-primary-beat='route'],
+.frame[data-card-feedback-primary-cadence='route'] {
+    --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 14%);
+}
+
+.frame[data-card-feedback-primary-beat='setup'],
+.frame[data-card-feedback-primary-cadence='prime'] {
+    --board-primary-beat-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, var(--theme-violet-bright) 18%);
+}
+
+.frame[data-card-feedback-primary-beat='cashout'] .stage::after,
+.frame[data-card-feedback-primary-beat='surge'] .stage::after,
+.frame[data-card-feedback-primary-beat='follow-up'] .stage::after,
+.frame[data-card-feedback-primary-beat='route'] .stage::after,
+.frame[data-card-feedback-primary-beat='setup'] .stage::after,
+.frame[data-card-feedback-primary-cadence='cashout'] .stage::after,
+.frame[data-card-feedback-primary-cadence='surge'] .stage::after,
+.frame[data-card-feedback-primary-cadence='follow-up'] .stage::after,
+.frame[data-card-feedback-primary-cadence='route'] .stage::after,
+.frame[data-card-feedback-primary-cadence='prime'] .stage::after {
+    border-color: var(--board-primary-beat-cue-color);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--board-primary-beat-cue-color) 34%, transparent),
+        inset 0 0 24px color-mix(in srgb, var(--board-primary-beat-cue-color) 18%, transparent),
+        0 0 18px color-mix(in srgb, var(--board-primary-beat-cue-color) 14%, transparent);
+    opacity: 0.5;
+}
+
 .frame[data-chain-opportunity-next-action='cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='bank-lane:cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='cash-now:cashout'] .stage::after,
