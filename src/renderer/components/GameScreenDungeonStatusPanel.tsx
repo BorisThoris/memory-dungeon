@@ -153,6 +153,7 @@ export const GameScreenDungeonStatusPanel = ({
                     {panel.chips.map((chip) => (
                         <span
                             className={styles.dungeonStatusChip}
+                            data-dungeon-status-chip-tone={chip.tone}
                             data-priority={chip.priority}
                             data-tone={chip.tone}
                             key={chip.id}
@@ -228,6 +229,7 @@ export const GameScreenDungeonStatusPanel = ({
                     {combatLogRows.map((row) => (
                         <span
                             className={styles.dungeonCombatLogRow}
+                            data-dungeon-combat-log-tone={row.tone}
                             data-tone={row.tone}
                             key={row.id}
                         >

@@ -5843,12 +5843,27 @@ describe('GameScreen (OVR-014)', () => {
         expect(panel).toHaveTextContent('Traps');
         expect(panel).toHaveTextContent('Room');
         expect(panel).toHaveTextContent(/armed trap/i);
+        expect(panel.querySelector('[data-dungeon-status-chip-tone="danger"]')).toHaveTextContent('Traps');
+        expect(panel.querySelector('[data-dungeon-status-chip-tone="warning"]')).toHaveTextContent('Levers');
         expect(screen.getByTestId('dungeon-combat-log')).toHaveAccessibleName('This floor combat log');
+        expect(
+            screen.getByTestId('dungeon-combat-log').querySelector('[data-dungeon-combat-log-tone="danger"]')
+        ).toHaveTextContent('1 patrol contact');
+        expect(
+            screen.getByTestId('dungeon-combat-log').querySelector('[data-dungeon-combat-log-tone="success"]')
+        ).toHaveTextContent('1 patrol defeated');
         expect(screen.getByTestId('dungeon-combat-log')).toHaveTextContent('1 patrol contact');
         expect(screen.getByTestId('dungeon-combat-log')).toHaveTextContent('1 patrol defeated');
         expect(screen.getByTestId('dungeon-combat-log')).toHaveTextContent('1 hazard warded');
         expect(screen.queryByTestId('dungeon-card-board-banner')).toBeNull();
         expect(screen.getByTestId('dungeon-run-strip')).toHaveTextContent('Threshold Archive');
+        expect(screen.getByTestId('dungeon-run-strip').querySelector('[data-dungeon-current-tone]')).toHaveAttribute(
+            'data-dungeon-current-tone',
+            'safe'
+        );
+        expect(
+            screen.getByTestId('dungeon-run-strip').querySelector('[data-dungeon-node-status="current"]')
+        ).toHaveAttribute('data-dungeon-node-tone', 'safe');
     });
 
     it('shows a free proceed action for terminal key-lock fallback exits', () => {
@@ -6212,6 +6227,11 @@ describe('GameScreen (OVR-014)', () => {
                 row.textContent?.includes('Avoid contact')
             )
         ).toHaveAttribute('data-forecast-signal-screen-cue', 'pulse');
+        expect(
+            [...forecastSignals.querySelectorAll('[data-forecast-signal-tone="action"]')].find((row) =>
+                row.textContent?.includes('Avoid contact')
+            )
+        ).toHaveAttribute('data-forecast-signal-beats', '2');
         expect(
             [...forecastSignals.querySelectorAll('[data-forecast-signal-tone="risk"]')].find((row) =>
                 row.textContent?.includes('No guard')

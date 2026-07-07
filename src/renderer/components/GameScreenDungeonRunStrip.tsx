@@ -13,7 +13,11 @@ export const GameScreenDungeonRunStrip = ({
     visibleNodes
 }: GameScreenDungeonRunStripProps) => (
     <section className={styles.dungeonRunStrip} data-testid="dungeon-run-strip">
-        <div className={styles.dungeonRunCurrent} data-tone={currentRoom.tone}>
+        <div
+            className={styles.dungeonRunCurrent}
+            data-dungeon-current-tone={currentRoom.tone}
+            data-tone={currentRoom.tone}
+        >
             <span className={styles.dungeonRunGlyph}>{currentRoom.glyph}</span>
             <div>
                 <span>{currentRoom.eyebrow}</span>
@@ -24,6 +28,8 @@ export const GameScreenDungeonRunStrip = ({
             {visibleNodes.slice(-7).map((node) => (
                 <span
                     className={styles.dungeonRunNode}
+                    data-dungeon-node-status={node.status}
+                    data-dungeon-node-tone={node.tone}
                     data-status={node.status}
                     data-tone={node.tone}
                     key={node.id}

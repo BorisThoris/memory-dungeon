@@ -2327,13 +2327,34 @@
 }
 
 .dungeonRunCurrent[data-tone='danger'],
-.dungeonRunCurrent[data-tone='boss'] {
+.dungeonRunCurrent[data-tone='boss'],
+.dungeonRunCurrent[data-dungeon-current-tone='danger'],
+.dungeonRunCurrent[data-dungeon-current-tone='boss'] {
     border-color: color-mix(in srgb, var(--theme-danger) 42%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 15%, var(--theme-void));
 }
 
-.dungeonRunCurrent[data-tone='reward'] {
+.dungeonRunCurrent[data-tone='reward'],
+.dungeonRunCurrent[data-dungeon-current-tone='reward'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+}
+
+.dungeonRunCurrent[data-dungeon-current-tone='safe'] {
+    border-color: color-mix(in srgb, var(--theme-success) 34%, transparent);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-success) 7%, transparent), transparent),
+        color-mix(in srgb, var(--theme-void) 50%, transparent);
+}
+
+.dungeonRunCurrent[data-dungeon-current-tone='mystery'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 36%, transparent);
+    background:
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-violet-bright) 8%, transparent), transparent),
+        color-mix(in srgb, var(--theme-void) 50%, transparent);
+}
+
+.dungeonRunCurrent[data-dungeon-current-tone='neutral'] {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 30%, transparent);
 }
 
 .dungeonRunGlyph {
@@ -2394,23 +2415,57 @@
     font-weight: 900;
 }
 
-.dungeonRunNode[data-status='current'] {
+.dungeonRunNode[data-status='current'],
+.dungeonRunNode[data-dungeon-node-status='current'] {
     color: var(--theme-gold-bright);
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, transparent);
     background: color-mix(in srgb, var(--theme-gold-deep) 22%, transparent);
 }
 
-.dungeonRunNode[data-status='cleared'] {
+.dungeonRunNode[data-status='cleared'],
+.dungeonRunNode[data-dungeon-node-status='cleared'] {
     color: color-mix(in srgb, var(--theme-success) 78%, white);
 }
 
-.dungeonRunNode[data-status='skipped'] {
+.dungeonRunNode[data-status='skipped'],
+.dungeonRunNode[data-dungeon-node-status='skipped'] {
     opacity: 0.36;
 }
 
+.dungeonRunNode[data-dungeon-node-status='revealed'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+}
+
+.dungeonRunNode[data-dungeon-node-status='hidden'],
+.dungeonRunNode[data-dungeon-node-status='locked'] {
+    opacity: 0.48;
+    filter: saturate(0.7);
+}
+
 .dungeonRunNode[data-tone='danger'],
-.dungeonRunNode[data-tone='boss'] {
+.dungeonRunNode[data-tone='boss'],
+.dungeonRunNode[data-dungeon-node-tone='danger'],
+.dungeonRunNode[data-dungeon-node-tone='boss'] {
     border-color: color-mix(in srgb, var(--theme-danger) 54%, transparent);
+}
+
+.dungeonRunNode[data-dungeon-node-tone='reward'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.dungeonRunNode[data-dungeon-node-tone='safe'] {
+    border-color: color-mix(in srgb, var(--theme-success) 34%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 78%, white);
+}
+
+.dungeonRunNode[data-dungeon-node-tone='mystery'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
+}
+
+.dungeonRunNode[data-dungeon-node-tone='neutral'] {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 34%, transparent);
 }
 
 .dungeonRunIntel {
@@ -4318,21 +4373,29 @@
     letter-spacing: 0;
 }
 
-.dungeonStatusChip[data-tone='danger'] {
+.dungeonStatusChip[data-tone='danger'],
+.dungeonStatusChip[data-dungeon-status-chip-tone='danger'] {
     border-color: color-mix(in srgb, var(--theme-danger) 48%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 18%, var(--theme-panel-solid));
 }
 
-.dungeonStatusChip[data-tone='warning'] {
+.dungeonStatusChip[data-tone='warning'],
+.dungeonStatusChip[data-dungeon-status-chip-tone='warning'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
 }
 
-.dungeonStatusChip[data-tone='success'] {
+.dungeonStatusChip[data-tone='success'],
+.dungeonStatusChip[data-dungeon-status-chip-tone='success'] {
     border-color: color-mix(in srgb, var(--theme-success) 44%, transparent);
 }
 
-.dungeonStatusChip[data-tone='info'] {
+.dungeonStatusChip[data-tone='info'],
+.dungeonStatusChip[data-dungeon-status-chip-tone='info'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
+}
+
+.dungeonStatusChip[data-dungeon-status-chip-tone='neutral'] {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 28%, transparent);
 }
 
 .dungeonStatusForecast {
@@ -4405,6 +4468,21 @@
     transform-origin: center;
 }
 
+.dungeonStatusForecastActionCue[data-forecast-action-beats='2'] .dungeonStatusForecastBeatPips,
+.dungeonStatusForecastSignals > span[data-forecast-signal-beats='2'] .dungeonStatusForecastBeatPips {
+    width: min(2.1rem, 100%);
+}
+
+.dungeonStatusForecastActionCue[data-forecast-action-beats='3'] .dungeonStatusForecastBeatPips,
+.dungeonStatusForecastSignals > span[data-forecast-signal-beats='3'] .dungeonStatusForecastBeatPips {
+    width: min(2.75rem, 100%);
+}
+
+.dungeonStatusForecastActionCue[data-forecast-action-beats='4'] .dungeonStatusForecastBeatPips,
+.dungeonStatusForecastSignals > span[data-forecast-signal-beats='4'] .dungeonStatusForecastBeatPips {
+    width: min(3.4rem, 100%);
+}
+
 .dungeonStatusForecastActionCue[data-forecast-action-tone='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 38%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 11%, transparent);
@@ -4415,6 +4493,12 @@
     border-color: color-mix(in srgb, var(--theme-success) 34%, transparent);
     background: color-mix(in srgb, var(--theme-success) 10%, transparent);
     color: color-mix(in srgb, var(--theme-success) 80%, white);
+}
+
+.dungeonStatusForecastActionCue[data-forecast-action-tone='action'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
 }
 
 .dungeonStatusForecastActionCue[data-forecast-action-screen-cue='risk'] {
@@ -4547,11 +4631,13 @@
     white-space: nowrap;
 }
 
-.dungeonCombatLogRow[data-tone='danger'] {
+.dungeonCombatLogRow[data-tone='danger'],
+.dungeonCombatLogRow[data-dungeon-combat-log-tone='danger'] {
     border-color: color-mix(in srgb, var(--theme-danger) 42%, transparent);
 }
 
-.dungeonCombatLogRow[data-tone='success'] {
+.dungeonCombatLogRow[data-tone='success'],
+.dungeonCombatLogRow[data-dungeon-combat-log-tone='success'] {
     border-color: color-mix(in srgb, var(--theme-success) 34%, transparent);
 }
 
