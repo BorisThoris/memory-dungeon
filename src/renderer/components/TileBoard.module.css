@@ -3784,6 +3784,16 @@
     background: color-mix(in srgb, var(--theme-success) 66%, white);
 }
 
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-beats='2'] .chainOpportunityMarkerKeySummaryBeatPips i {
+    width: 0.07rem;
+    height: 0.07rem;
+    opacity: 0.66;
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-beats='3'] .chainOpportunityMarkerKeySummaryBeatPips i {
+    opacity: 0.76;
+}
+
 .chainOpportunityMarkerKeySummary[data-chain-marker-key-beats='4'] .chainOpportunityMarkerKeySummaryBeatPips i,
 .chainOpportunityMarkerKeySummary[data-chain-marker-key-beats='5'] .chainOpportunityMarkerKeySummaryBeatPips i {
     animation-duration: 0.78s;
@@ -7634,6 +7644,10 @@
 .chainOpportunityHotBand[data-chain-hot-band-tone='ready'] .chainOpportunityHotBandBeatPips i {
     background: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
     box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-beats='3'] .chainOpportunityHotBandBeatPips i {
+    opacity: 0.76;
 }
 
 .chainOpportunityHotBand[data-chain-hot-band-beats='5'] .chainOpportunityHotBandBeatPips i {
