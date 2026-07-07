@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { MAX_COMBO_SHARDS, MAX_LIVES } from '../../shared/contracts';
 import type { FloorArchetypeId, FeaturedObjectiveId, RunState } from '../../shared/contracts';
 import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
 import { createDailyRun, createDungeonShowcaseRun, createNewRun, createPuzzleRun, finishMemorizePhase } from '../../shared/game-core';
@@ -1029,6 +1030,40 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-forecast')).toHaveTextContent('Combo prime');
         expect(screen.getByTestId('hud-chain-meter')).toHaveAttribute('aria-label', 'Chain momentum meter 0 of 10');
         expect(screen.getByTestId('hud-chain-meter')).toHaveStyle({ '--hud-meter-fill': '0%' });
+    });
+
+    it('marks distant primary chain rewards as later tick cues', () => {
+        const baseRun = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));
+        const run = {
+            ...baseRun,
+            lives: MAX_LIVES,
+            stats: {
+                ...baseRun.stats,
+                comboShards: MAX_COMBO_SHARDS,
+                currentStreak: 0
+            },
+            board: {
+                ...baseRun.board!,
+                tiles: baseRun.board!.tiles.map((tile) => ({ ...tile, tileTraitKind: undefined }))
+            }
+        } as RunState;
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement=""
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-tone', 'guard');
+        expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-action', 'Hold streak');
+        expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-screen-cue', 'tick');
+        expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-beats', '2');
+        expect(screen.getByTestId('hud-primary-reward-cue')).toHaveAttribute('data-primary-reward-urgency', 'later');
+        expect(screen.getByTestId('hud-primary-reward-cue')).toHaveTextContent('x4 +1 guard');
+        expect(screen.getByTestId('hud-primary-reward-cue').querySelectorAll('[data-primary-reward-beat]')).toHaveLength(2);
     });
 
     it('names the exact single chain cashout when any clean match will pay', () => {

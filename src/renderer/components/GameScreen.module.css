@@ -6747,6 +6747,10 @@
     transform-origin: center;
 }
 
+.hudPrimaryRewardCue[data-primary-reward-beats='2'] .hudPrimaryRewardBeatPips i {
+    opacity: 0.68;
+}
+
 .hudPrimaryRewardCue[data-primary-reward-beats='3'] .hudPrimaryRewardBeatPips i {
     opacity: 0.78;
 }
@@ -6755,6 +6759,12 @@
     width: 0.18rem;
     height: 0.18rem;
     opacity: 0.94;
+}
+
+.hudPrimaryRewardCue[data-primary-reward-tone='reward'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-deep) 11%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
 }
 
 .hudPrimaryRewardCue[data-primary-reward-tone='guard'] {
@@ -6781,6 +6791,11 @@
 
 .hudPrimaryRewardCue[data-primary-reward-urgency='soon'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, var(--theme-gold-bright) 22%);
+}
+
+.hudPrimaryRewardCue[data-primary-reward-urgency='later'] {
+    border-style: dashed;
+    border-color: color-mix(in srgb, var(--theme-text-muted) 30%, var(--theme-gold-bright) 14%);
 }
 
 .hudDailySegment {
@@ -10163,6 +10178,10 @@
 
 .hudPrimaryRewardCue[data-primary-reward-screen-cue='pulse'] {
     animation: payoffChipPulse 1.7s ease-in-out infinite;
+}
+
+.hudPrimaryRewardCue[data-primary-reward-screen-cue='tick'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-text-muted) 13%, transparent);
 }
 
 /* AST-004: ornament position/size paired with hud-segment-ornament.svg viewBox; narrow breakpoints only tweak segment min-width, not this layer. */
