@@ -2105,6 +2105,16 @@
         0 0 0 1px color-mix(in srgb, white 10%, transparent);
 }
 
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='armed'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, var(--theme-gold-bright) 20%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 44%, transparent);
+    box-shadow:
+        0 0 0.54rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent),
+        0 0 0 1px color-mix(in srgb, white 7%, transparent);
+}
+
 .chainOpportunityArmedPerk small,
 .chainOpportunityArmedPerk b,
 .chainOpportunityArmedPerk em {
@@ -2127,10 +2137,19 @@
     color: color-mix(in srgb, white 90%, var(--theme-gold-bright));
 }
 
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='armed'] small {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
 .chainOpportunityArmedPerk b {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
     font-size: 0.56rem;
     font-weight: 980;
+}
+
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='armed'] b {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
 }
 
 .chainOpportunityArmedPerk em {
@@ -2142,6 +2161,19 @@
 
 .chainOpportunityArmedPerk[data-chain-armed-perk-tone='payoff'] em {
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='armed'] .chainOpportunityArmedPerkMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 70%, white)
+    );
+}
+
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='armed'] .chainOpportunityArmedPerkBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
 }
 
 .chainOpportunityArmedPerkMeter {
