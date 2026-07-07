@@ -496,7 +496,8 @@ const findVisiblePackedValueSelectorGaps = (): VisiblePackedValueSelectorGap[] =
             'payoff-stack',
             'prime-cross',
             'surge-burst'
-        ]
+        ],
+        'data-card-feedback-trait-route-intensities': ['cashout', 'ready', 'setup', 'stack', 'surge']
     };
 
     return Object.entries(visiblePackedValueContracts).flatMap(([attr, values]) =>

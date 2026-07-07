@@ -620,6 +620,39 @@
     opacity: 0.56;
 }
 
+.frame[data-card-feedback-trait-route-intensities*='stack:'] {
+    --board-route-intensity-cue-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-violet-bright) 20%);
+}
+
+.frame[data-card-feedback-trait-route-intensities*='cashout:'] {
+    --board-route-intensity-cue-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 18%);
+}
+
+.frame[data-card-feedback-trait-route-intensities*='surge:'] {
+    --board-route-intensity-cue-color: color-mix(in srgb, var(--theme-violet-bright) 48%, var(--theme-cyan-bright) 20%);
+}
+
+.frame[data-card-feedback-trait-route-intensities*='ready:'] {
+    --board-route-intensity-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, var(--theme-gold-bright) 16%);
+}
+
+.frame[data-card-feedback-trait-route-intensities*='setup:'] {
+    --board-route-intensity-cue-color: color-mix(in srgb, var(--theme-cyan-bright) 32%, var(--theme-violet-bright) 18%);
+}
+
+.frame[data-card-feedback-trait-route-intensities*='stack:'] .stage::after,
+.frame[data-card-feedback-trait-route-intensities*='cashout:'] .stage::after,
+.frame[data-card-feedback-trait-route-intensities*='surge:'] .stage::after,
+.frame[data-card-feedback-trait-route-intensities*='ready:'] .stage::after,
+.frame[data-card-feedback-trait-route-intensities*='setup:'] .stage::after {
+    border-color: var(--board-route-intensity-cue-color);
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--board-route-intensity-cue-color) 36%, transparent),
+        inset 0 0 30px color-mix(in srgb, var(--board-route-intensity-cue-color) 18%, transparent),
+        0 0 22px color-mix(in srgb, var(--board-route-intensity-cue-color) 16%, transparent);
+    opacity: 0.62;
+}
+
 .frame[data-chain-opportunity-next-action='cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='bank-lane:cashout'] .stage::after,
 .frame[data-card-feedback-primary-card-cue^='cash-now:cashout'] .stage::after,
