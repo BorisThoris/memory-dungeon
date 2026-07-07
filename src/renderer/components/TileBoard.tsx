@@ -5758,6 +5758,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         ))}
                                         {chainMarkerIntensity ? (
                                             <span
+                                                aria-label={`Chain marker intensity. ${chainMarkerIntensity.count} ${chainMarkerIntensity.label}. ${chainMarkerIntensity.action}.`}
                                                 data-chain-marker-intensity-chip={chainMarkerIntensity.id}
                                                 data-testid="chain-marker-intensity"
                                             >

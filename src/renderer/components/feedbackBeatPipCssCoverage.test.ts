@@ -156,6 +156,12 @@ type FeedbackSummaryReadabilityGap = {
     testId: string;
 };
 
+type NamedFeedbackCueReadabilityGap = {
+    fileName: string;
+    lineNumber: number;
+    testId: string;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -877,6 +883,36 @@ const findFeedbackSummaryReadabilityGaps = (): FeedbackSummaryReadabilityGap[] =
     return gaps;
 };
 
+const findNamedFeedbackCueReadabilityGaps = (): NamedFeedbackCueReadabilityGap[] => {
+    const gaps: NamedFeedbackCueReadabilityGap[] = [];
+    const namedFeedbackCueElementPattern =
+        /<[A-Za-z][^<>]*\bdata-testid=(?:"([^"]*(?:cue|impact|action|crescendo|intensity)[^"]*)"|\{`([^`]*(?:cue|impact|action|crescendo|intensity)[^`]*)`\})[^<>]*>/gs;
+
+    for (const { fileName, text } of readComponentSourceFiles().filter(({ fileName }) => !fileName.includes('.test.'))) {
+        for (const match of text.matchAll(namedFeedbackCueElementPattern)) {
+            const tag = match[0]!;
+            const testId = match[1] ?? match[2] ?? 'feedback-cue';
+            const carriesFeedbackState =
+                /\bdata-[A-Za-z0-9-]*(?:audio|screen-cue|beats|action|tone|tier|intensity)\b/.test(tag);
+            const hasReadableContract =
+                /\baria-label=/.test(tag) ||
+                /\baria-labelledby=/.test(tag) ||
+                /\btitle=/.test(tag) ||
+                /\baria-hidden="true"/.test(tag);
+
+            if (carriesFeedbackState && !hasReadableContract) {
+                gaps.push({
+                    fileName,
+                    lineNumber: text.slice(0, match.index ?? 0).split(/\r?\n/).length,
+                    testId
+                });
+            }
+        }
+    }
+
+    return gaps;
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -1044,6 +1080,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findFeedbackSummaryReadabilityGaps(),
             'feedback summary chips with state metadata should expose a readable label instead of only fragmented child text'
+        ).toEqual([]);
+    });
+
+    it('keeps named feedback cue chips paired with readable labels', () => {
+        expect(
+            findNamedFeedbackCueReadabilityGaps(),
+            'named feedback cue chips with state metadata should expose a readable label instead of only fragmented child text'
         ).toEqual([]);
     });
 });

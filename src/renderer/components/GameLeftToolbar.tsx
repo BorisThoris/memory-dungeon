@@ -752,6 +752,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         </span>
                         {toolCrescendo.tier !== 'none' ? (
                             <span
+                                aria-label={`Tool crescendo. ${toolCrescendo.beats} beat. ${toolCrescendo.label}. ${toolCrescendoActionCue}.`}
                                 className={styles.toolCrescendo}
                                 data-tool-crescendo-action={toolCrescendoActionCue}
                                 data-tool-crescendo-audio={toolCrescendoAudioCueValue}

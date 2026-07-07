@@ -853,6 +853,7 @@ export const GameScreenActionFeedbackRail = ({
                 ) : null}
                 {payoffIntensity.id !== 'none' ? (
                     <span
+                        aria-label={`Action feedback payoff intensity. ${payoffIntensity.count} ${payoffIntensity.label}. ${payoffIntensity.action}. ${payoffBeatCount} beats.`}
                         className={styles.actionFeedbackPayoffIntensity}
                         data-action-feedback-payoff-action={payoffIntensity.action}
                         data-action-feedback-payoff-audio={payoffAudioCue}
@@ -877,6 +878,7 @@ export const GameScreenActionFeedbackRail = ({
                 ) : null}
                 {displayedCrescendo ? (
                     <span
+                        aria-label={`Action feedback crescendo. ${displayedCrescendo.label}. ${displayedCrescendo.detail}. ${displayedCrescendo.beatCount} beats.`}
                         className={styles.actionFeedbackCrescendo}
                         data-action-feedback-crescendo-action={displayedCrescendo.detail}
                         data-action-feedback-crescendo-audio={displayedCrescendo.audioCue}
@@ -901,6 +903,7 @@ export const GameScreenActionFeedbackRail = ({
                     </span>
                 ) : null}
                 <span
+                    aria-label={`Action feedback impact. ${impactCue.label}. ${impactAction}.`}
                     className={styles.actionFeedbackImpactCue}
                     data-action-feedback-impact-action={impactAction}
                     data-action-feedback-impact-audio={impactAudioCue}
@@ -912,6 +915,7 @@ export const GameScreenActionFeedbackRail = ({
                     <em>{impactAction}</em>
                 </span>
                 <span
+                    aria-label={`Action feedback tempo. ${tempoCue.label}: ${tempoCue.value}. ${tempoBeat.label}. ${tempoBeat.beatCount} beats.`}
                     className={styles.actionFeedbackTempoCue}
                     data-action-feedback-tempo-action={tempoCue.value}
                     data-action-feedback-tempo-audio={tempoAudioCue}
