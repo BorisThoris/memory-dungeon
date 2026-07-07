@@ -568,7 +568,7 @@ describe('GameScreen (OVR-014)', () => {
             'burst'
         );
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAccessibleName(
-            'Action lane map. Cash: 2. Cash now. Shard cashout. Route: 1. Route next. Route paid. Chain: 1. Protect streak. Chain x5.'
+            'Action lane map. Cash Cashout x2. Cash now. Shard cashout. Route Route x1. Route next. Route paid. Chain Protect x1. Protect streak. Chain x5.'
         );
         expect(screen.getByTestId('action-feedback-primary-lane')).toHaveAccessibleName(
             'Primary feedback lane. Cash: Cash now. Shard cashout. 4 beats.'
@@ -2882,7 +2882,7 @@ describe('GameScreen (OVR-014)', () => {
             'cashout'
         );
         expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveAccessibleName(
-            'Match payoff lane map. Route: 1. Cash route. Route cashout. Pickup: 1. Claim pickup. Pickup cashout. Trait: 1. Cash trait. Trait cashout. Chain: 1. Cash chain. Chain cashout.'
+            'Match payoff lane map. Route Route x1. Cash route. Route cashout. Pickup Claim x1. Claim pickup. Pickup cashout. Trait Trait x1. Cash trait. Trait cashout. Chain Chain x1. Cash chain. Chain cashout.'
         );
         expect(screen.getByTestId('match-score-floater-primary-payoff-lane')).toHaveAttribute(
             'data-match-payoff-primary-lane',
@@ -3529,7 +3529,7 @@ describe('GameScreen (OVR-014)', () => {
             ).toHaveLength(3);
             expect(
                 screen.getByText(
-                    /No match\. Next action: Safe pair: Safe match\. Recovery sequence: First Safe match\. Then Prime x3 loop\. Keep Re-prime chain\. Recovery lane map\. Recover: 1\. Confirm pair\. Safe pair\. Chain: 1\. Reset chain\. Reset\. Recover beat: Safe match then prime x3 loop\. Recover with a safe match\. Chain reset/
+                    /No match\. Next action: Safe pair: Safe match\. Recovery sequence: First Safe match\. Then Prime x3 loop\. Keep Re-prime chain\. Recovery lane map\. Recover Recover x1\. Confirm pair\. Safe pair\. Chain Rebuild x1\. Reset chain\. Reset\. Recover beat: Safe match then prime x3 loop\. Recover with a safe match\. Chain reset/
                 )
             ).toBeInTheDocument();
             expect(screen.getByTestId('action-feedback-rail')).toHaveAttribute('data-tone', 'error');
@@ -3729,7 +3729,7 @@ describe('GameScreen (OVR-014)', () => {
                 'risk'
             );
             expect(screen.getByTestId('mismatch-score-floater-recovery-lane-map')).toHaveAccessibleName(
-                'Recovery lane map. Recover: 1. Confirm pair. Safe pair. Lost: 1. Save cashout. Lost cashout. Chain: 2. Rebuild chain. Chain lost.'
+                'Recovery lane map. Recover Recover x1. Confirm pair. Safe pair. Lost Save x1. Save cashout. Lost cashout. Chain Rebuild x2. Rebuild chain. Chain lost.'
             );
             expect(screen.getByTestId('mismatch-score-floater-primary-recovery-lane')).toHaveAccessibleName(
                 'Primary recovery lane. Lost: Save cashout. Lost cashout. 4 beats.'
@@ -3830,7 +3830,7 @@ describe('GameScreen (OVR-014)', () => {
             ).toHaveLength(4);
             expect(
                 screen.getByText(
-                    /No match\. Chain x6 broken\. Lost reward target: x8 \+1 shard in 2 matches\. Next chase: Break into x10\. Next action: Save cashout: Rebuild toward x8 \+1 shard\. Recovery sequence: First Safe match\. Then Rebuild toward x8 \+1 shard\. Keep Break into x10\. Recovery lane map\. Recover: 1\. Confirm pair\. Safe pair\. Lost: 1\. Save cashout\. Lost cashout\. Chain: 2\. Rebuild chain\. Chain lost\. Lost reward burst: Rebuild toward x8 \+1 shard\. Recover with a safe match\. x6 lost/
+                    /No match\. Chain x6 broken\. Lost reward target: x8 \+1 shard in 2 matches\. Next chase: Break into x10\. Next action: Save cashout: Rebuild toward x8 \+1 shard\. Recovery sequence: First Safe match\. Then Rebuild toward x8 \+1 shard\. Keep Break into x10\. Recovery lane map\. Recover Recover x1\. Confirm pair\. Safe pair\. Lost Save x1\. Save cashout\. Lost cashout\. Chain Rebuild x2\. Rebuild chain\. Chain lost\. Lost reward burst: Rebuild toward x8 \+1 shard\. Recover with a safe match\. x6 lost/
                 )
             ).toBeInTheDocument();
             expect(screen.getByTestId('action-feedback-rail')).toHaveAttribute('data-burst-tier', 'risk');
@@ -3942,7 +3942,7 @@ describe('GameScreen (OVR-014)', () => {
             );
             expect(
                 screen.getByText(
-                    /No match\. Chain x6 broken\. Lost reward target: x8 \+1 shard in 2 matches\. Next chase: Break into x10\. Next action: Save cashout: Rebuild toward x8 \+1 shard\. Recovery sequence: First Safe match\. Then Rebuild toward x8 \+1 shard\. Keep Break into x10\. Recovery lane map\. Recover: 1\. Confirm pair\. Safe pair\. Lost: 1\. Save cashout\. Lost cashout\. Chain: 2\. Rebuild chain\. Chain lost\. Lost reward burst: Rebuild toward x8 \+1 shard\. Recover with a safe match\. x6 lost/
+                    /No match\. Chain x6 broken\. Lost reward target: x8 \+1 shard in 2 matches\. Next chase: Break into x10\. Next action: Save cashout: Rebuild toward x8 \+1 shard\. Recovery sequence: First Safe match\. Then Rebuild toward x8 \+1 shard\. Keep Break into x10\. Recovery lane map\. Recover Recover x1\. Confirm pair\. Safe pair\. Lost Save x1\. Save cashout\. Lost cashout\. Chain Rebuild x2\. Rebuild chain\. Chain lost\. Lost reward burst: Rebuild toward x8 \+1 shard\. Recover with a safe match\. x6 lost/
                 )
             ).toBeInTheDocument();
         } finally {
@@ -4093,7 +4093,7 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('mismatch-score-floater')).toHaveAttribute('data-feedback-intensity', 'penalty');
             expect(
                 screen.getByText(
-                    /Trait penalty\. No match\. Next action: Recover route: peek or route away\. Recovery sequence: First peek or route away\. Then Prime with tool\. Keep Avoid repeat risk\. Cursed \+ Volatile: recall pressure\. Recover - peek or route away\. Recovery lane map\. Recover: 1\. Stabilize route\. Recover route\. Tool: 1\. Trigger tool\. Use tool\. Risk: 1\. Route away\. Avoid repeat\. Risk beat: peek or route away/
+                    /Trait penalty\. No match\. Next action: Recover route: peek or route away\. Recovery sequence: First peek or route away\. Then Prime with tool\. Keep Avoid repeat risk\. Cursed \+ Volatile: recall pressure\. Recover - peek or route away\. Recovery lane map\. Recover Recover x1\. Stabilize route\. Recover route\. Tool Tool x1\. Trigger tool\. Use tool\. Risk Risk x1\. Route away\. Avoid repeat\. Risk beat: peek or route away/
                 )
             ).toBeInTheDocument();
         } finally {
@@ -4178,7 +4178,7 @@ describe('GameScreen (OVR-014)', () => {
             );
             expect(
                 screen.getByText(
-                    /Trait surge: 2 risks\. No match\. Next action: Recover route: choose another opener\. Recovery sequence: First choose another opener\. Then Route away from surge\. Keep Avoid repeat risk\. Cursed \+ Volatile: recall pressure\. Stasis: nearby trait blocked\. Next - choose another opener\. Recovery lane map\. Recover: 1\. Stabilize route\. Recover route\. Tool: 1\. Trigger tool\. Use tool\. Risk: 2\. Route away\. Risk spike\. Trait surge burst: 2 trait risks; route away before chasing/
+                    /Trait surge: 2 risks\. No match\. Next action: Recover route: choose another opener\. Recovery sequence: First choose another opener\. Then Route away from surge\. Keep Avoid repeat risk\. Cursed \+ Volatile: recall pressure\. Stasis: nearby trait blocked\. Next - choose another opener\. Recovery lane map\. Recover Recover x1\. Stabilize route\. Recover route\. Tool Tool x1\. Trigger tool\. Use tool\. Risk Risk x2\. Route away\. Risk spike\. Trait surge burst: 2 trait risks; route away before chasing/
                 )
             ).toBeInTheDocument();
         } finally {

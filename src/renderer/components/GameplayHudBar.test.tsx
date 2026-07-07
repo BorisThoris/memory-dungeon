@@ -1248,7 +1248,7 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Cash next');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Hold streak');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveAccessibleName(
-            'Chain reward lane map. Shard: 1. Cash next. Double cashout. Guard: 1. Cash next. Double cashout. Heal: 1. Hold streak. Combo chase.'
+            'Chain reward lane map. Shard Cashout x1. Cash next. Double cashout. Guard Cashout x1. Cash next. Double cashout. Heal Heal x1. Hold streak. Combo chase.'
         );
         expect(screen.getByTestId('hud-chain-reward-primary-lane')).toHaveAccessibleName(
             'Primary chain reward lane. Shard: Cash next. Double cashout. 4 beats.'

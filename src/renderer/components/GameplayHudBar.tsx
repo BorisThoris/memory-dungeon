@@ -871,11 +871,26 @@ const hudChainRewardLaneBeatCount = (lane: Pick<HudChainRewardLaneMapEntry, 'act
     return 3;
 };
 
+const hudChainRewardLaneRole = (
+    lane: Pick<HudChainRewardLaneMapEntry, 'action' | 'id'>
+): 'Cashout' | 'Guard' | 'Heal' | 'Shard' => {
+    if (lane.action === 'Cash next') {
+        return 'Cashout';
+    }
+    if (lane.id === 'guard') {
+        return 'Guard';
+    }
+    if (lane.id === 'heal') {
+        return 'Heal';
+    }
+    return 'Shard';
+};
+
 const hudChainRewardLaneMapLabel = (
-    laneMap: readonly Pick<HudChainRewardLaneMapEntry, 'action' | 'count' | 'cue' | 'label'>[]
+    laneMap: readonly Pick<HudChainRewardLaneMapEntry, 'action' | 'count' | 'cue' | 'id' | 'label'>[]
 ): string =>
     laneMap.length > 0
-        ? `Chain reward lane map. ${laneMap.map((lane) => `${lane.label}: ${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
+        ? `Chain reward lane map. ${laneMap.map((lane) => `${lane.label} ${hudChainRewardLaneRole(lane)} x${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
         : 'Chain reward lane map';
 
 type HudChainRewardLadderEntry = {

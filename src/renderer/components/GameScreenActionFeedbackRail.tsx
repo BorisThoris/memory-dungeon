@@ -117,9 +117,25 @@ const actionFeedbackLaneMapAttr = (laneMap: readonly ActionFeedbackLaneMapEntry[
 const actionFeedbackLaneActionMapAttr = (laneMap: readonly ActionFeedbackLaneMapEntry[] | null): string =>
     laneMap?.map((lane) => `${lane.id}:${lane.action}:${lane.count}`).join('>') ?? 'none';
 
+const actionFeedbackLaneRole = (lane: ActionFeedbackLaneMapEntry): 'Cashout' | 'Protect' | 'Recover' | 'Route' | 'Trait' => {
+    if (lane.id === 'cash') {
+        return 'Cashout';
+    }
+    if (lane.id === 'chain') {
+        return 'Protect';
+    }
+    if (lane.id === 'recover') {
+        return 'Recover';
+    }
+    if (lane.id === 'trait') {
+        return 'Trait';
+    }
+    return 'Route';
+};
+
 const actionFeedbackLaneMapLabel = (laneMap: readonly ActionFeedbackLaneMapEntry[] | null): string =>
     laneMap?.length
-        ? `Action lane map. ${laneMap.map((lane) => `${lane.label}: ${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
+        ? `Action lane map. ${laneMap.map((lane) => `${lane.label} ${actionFeedbackLaneRole(lane)} x${lane.count}. ${lane.action}. ${lane.cue}.`).join(' ')}`
         : '';
 
 const actionFeedbackLaneBeatCount = (lane: ActionFeedbackLaneMapEntry): 2 | 3 | 4 => {

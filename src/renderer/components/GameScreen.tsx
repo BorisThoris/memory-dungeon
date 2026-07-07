@@ -205,12 +205,33 @@ const matchPayoffLaneAction = (
 const matchPayoffLaneActionMapAttr = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[] | undefined): string =>
     laneMap?.map((lane) => `${lane.id}:${matchPayoffLaneAction(lane)}:${lane.count}`).join('>') ?? 'none';
 
+const matchPayoffLaneRole = (
+    lane: MatchScorePopPayoffLaneMapEntry
+): 'Cashout' | 'Chain' | 'Claim' | 'Prime' | 'Route' | 'Trait' => {
+    if (lane.id === 'route') {
+        return 'Route';
+    }
+    if (lane.id === 'pickup') {
+        return 'Claim';
+    }
+    if (lane.id === 'trait') {
+        return 'Trait';
+    }
+    if (lane.id === 'chain') {
+        return 'Chain';
+    }
+    if (lane.id === 'build') {
+        return 'Prime';
+    }
+    return 'Cashout';
+};
+
 const matchPayoffLaneMapLabel = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[] | undefined): string => {
     if (!laneMap?.length) {
         return '';
     }
     return `Match payoff lane map. ${laneMap
-        .map((lane) => `${lane.label}: ${lane.count}. ${matchPayoffLaneAction(lane)}. ${lane.cue}.`)
+        .map((lane) => `${lane.label} ${matchPayoffLaneRole(lane)} x${lane.count}. ${matchPayoffLaneAction(lane)}. ${lane.cue}.`)
         .join(' ')}`;
 };
 
@@ -237,10 +258,28 @@ const mismatchRecoveryLaneAction = (lane: MismatchFloaterRecoveryLaneMapEntry): 
 const mismatchRecoveryLaneActionMapAttr = (laneMap: readonly MismatchFloaterRecoveryLaneMapEntry[] | null): string =>
     laneMap?.map((lane) => `${lane.id}:${mismatchRecoveryLaneAction(lane)}:${lane.count}`).join('>') ?? 'none';
 
+const mismatchRecoveryLaneRole = (
+    lane: MismatchFloaterRecoveryLaneMapEntry
+): 'Rebuild' | 'Recover' | 'Risk' | 'Save' | 'Tool' => {
+    switch (lane.id) {
+        case 'lost':
+            return 'Save';
+        case 'chain':
+            return 'Rebuild';
+        case 'tool':
+            return 'Tool';
+        case 'risk':
+            return 'Risk';
+        case 'recover':
+        default:
+            return 'Recover';
+    }
+};
+
 const mismatchRecoveryLaneMapLabel = (laneMap: readonly MismatchFloaterRecoveryLaneMapEntry[] | null): string =>
     laneMap?.length
         ? `Recovery lane map. ${laneMap
-              .map((lane) => `${lane.label}: ${lane.count}. ${mismatchRecoveryLaneAction(lane)}. ${lane.cue}.`)
+              .map((lane) => `${lane.label} ${mismatchRecoveryLaneRole(lane)} x${lane.count}. ${mismatchRecoveryLaneAction(lane)}. ${lane.cue}.`)
               .join(' ')}`
         : '';
 
