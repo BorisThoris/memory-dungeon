@@ -6848,6 +6848,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-chain-surge-band-meter-fill={boardChainSurgeBandMeterFill}
                                         data-testid="chain-opportunity-surge-band"
                                         role="status"
+                                        style={{ '--chain-surge-band-meter-fill': `${boardChainSurgeBandMeterFill}%` } as CSSProperties}
                                     >
                                         <small>{boardChainSurgeBand.label}</small>
                                         <b>{boardChainSurgeBand.value}</b>

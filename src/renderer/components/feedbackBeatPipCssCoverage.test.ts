@@ -139,6 +139,12 @@ type VisiblePackedValueSelectorGap = {
     value: string;
 };
 
+type MeterFillVariableGap = {
+    attr: string;
+    cssVariable: string;
+    fileName: string;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -783,6 +789,26 @@ const findVisiblePackedValueSelectorGaps = (): VisiblePackedValueSelectorGap[] =
     );
 };
 
+const findMeterFillVariableGaps = (): MeterFillVariableGap[] => {
+    const cssText = readComponentCssFiles()
+        .map(({ text }) => text)
+        .join('\n');
+    const gaps: MeterFillVariableGap[] = [];
+
+    for (const { fileName, text } of readComponentSourceFiles().filter(({ fileName }) => !fileName.includes('.test.'))) {
+        const attrs = new Set([...text.matchAll(/\b(data-[A-Za-z0-9-]*-meter-fill)\b/g)].map((match) => match[1]!));
+
+        for (const attr of attrs) {
+            const cssVariable = `--${attr.slice('data-'.length)}`;
+            if (cssText.includes(cssVariable) && !text.includes(cssVariable)) {
+                gaps.push({ attr, cssVariable, fileName });
+            }
+        }
+    }
+
+    return gaps;
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -929,6 +955,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findVisiblePackedValueSelectorGaps(),
             'packed route glyph values should drive styling instead of only telemetry'
+        ).toEqual([]);
+    });
+
+    it('keeps CSS-consumed meter-fill metadata wired to matching custom properties', () => {
+        expect(
+            findMeterFillVariableGaps(),
+            'meter-fill metadata consumed by CSS should set the same-stem CSS custom property'
         ).toEqual([]);
     });
 });

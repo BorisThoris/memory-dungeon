@@ -3169,6 +3169,9 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-surge-band-meter-fill',
             '100'
         );
+        expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveStyle({
+            '--chain-surge-band-meter-fill': '100%'
+        });
         expect(screen.getByTestId('chain-opportunity-surge-band')).toHaveAccessibleName(
             /Chain surge band\. Combo surge\. 4 cards lit\. 5 routes ready\. Match now\./
         );
