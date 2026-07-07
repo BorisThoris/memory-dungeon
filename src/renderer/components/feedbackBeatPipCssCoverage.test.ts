@@ -1517,6 +1517,47 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-preview-screen-cue='guard'[\s\S]*?height:\s*0\.24rem/);
     });
 
+    it('keeps trap resolution signal beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'resolved trap signals should read as quick resolved beats'
+        ).toMatch(/data-trap-resolution-signal='resolved'[\s\S]*?\.trapResolutionBeatPips i[\s\S]*?animation-duration:\s*0\.82s/);
+        expect(
+            cssText,
+            'effect trap signals should read as faster wider payout beats'
+        ).toMatch(/data-trap-resolution-signal='effect'[\s\S]*?\.trapResolutionBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'continue trap signals should read as taller next-step beats'
+        ).toMatch(/data-trap-resolution-signal='continue'[\s\S]*?\.trapResolutionBeatPips i[\s\S]*?height:\s*0\.18rem/);
+    });
+
+    it('keeps trap resolution screen cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".trapResolutionSignals > span[data-trap-resolution-screen-cue='burst'] .trapResolutionBeatPips i");
+        expect(cssText).toContain(".trapResolutionSignals > span[data-trap-resolution-screen-cue='snap'] .trapResolutionBeatPips i");
+        expect(cssText).toContain(".trapResolutionSignals > span[data-trap-resolution-screen-cue='pulse'] .trapResolutionBeatPips i");
+        expect(
+            cssText,
+            'burst trap resolution cues should stay fastest and high-emphasis'
+        ).toMatch(/data-trap-resolution-screen-cue='burst'[\s\S]*?animation-duration:\s*0\.7s/);
+        expect(
+            cssText,
+            'snap trap resolution cues should use quick reward timing'
+        ).toMatch(/data-trap-resolution-screen-cue='snap'[\s\S]*?animation-duration:\s*0\.78s/);
+        expect(
+            cssText,
+            'pulse trap resolution cues should use calmer next-step timing'
+        ).toMatch(/data-trap-resolution-screen-cue='pulse'[\s\S]*?animation-duration:\s*1s/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),

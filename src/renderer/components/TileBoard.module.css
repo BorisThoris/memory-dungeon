@@ -203,6 +203,9 @@
 }
 
 .trapResolutionSignals > span[data-trap-resolution-signal='resolved'] .trapResolutionBeatPips i {
+    width: 0.2rem;
+    height: 0.12rem;
+    animation-duration: 0.82s;
     background: color-mix(in srgb, var(--theme-ember, #f08a5d) 76%, white);
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-ember, #f08a5d) 30%, transparent);
 }
@@ -213,6 +216,9 @@
 }
 
 .trapResolutionSignals > span[data-trap-resolution-signal='effect'] .trapResolutionBeatPips i {
+    width: 0.3rem;
+    height: 0.12rem;
+    animation-duration: 0.68s;
     background: color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 82%, white);
     box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 34%, transparent);
 }
@@ -227,6 +233,9 @@
 }
 
 .trapResolutionSignals > span[data-trap-resolution-signal='continue'] .trapResolutionBeatPips i {
+    width: 0.14rem;
+    height: 0.18rem;
+    animation-duration: 1.08s;
     background: color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 78%, white);
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 28%, transparent);
 }
@@ -238,14 +247,29 @@
         0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 16%, transparent);
 }
 
+.trapResolutionSignals > span[data-trap-resolution-screen-cue='burst'] .trapResolutionBeatPips i {
+    animation-duration: 0.7s;
+    opacity: 0.98;
+}
+
 .trapResolutionSignals > span[data-trap-resolution-screen-cue='snap'] {
     box-shadow:
         0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 16%, transparent),
         0 0 0.58rem color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 18%, transparent);
 }
 
+.trapResolutionSignals > span[data-trap-resolution-screen-cue='snap'] .trapResolutionBeatPips i {
+    width: 0.26rem;
+    animation-duration: 0.78s;
+}
+
 .trapResolutionSignals > span[data-trap-resolution-screen-cue='pulse'] {
     animation: boardOpportunityPrimePulse 1.6s ease-in-out infinite;
+}
+
+.trapResolutionSignals > span[data-trap-resolution-screen-cue='pulse'] .trapResolutionBeatPips i {
+    height: 0.14rem;
+    animation-duration: 1s;
 }
 
 @keyframes trapResolutionToastIn {
