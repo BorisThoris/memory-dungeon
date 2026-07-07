@@ -18,6 +18,7 @@ interface GameScreenActionFeedbackRailProps {
 }
 
 type ActionFeedbackLaneId = 'cash' | 'route' | 'chain' | 'trait' | 'recover';
+type ActionFeedbackLaneRoleId = 'cashout' | 'protect' | 'recover' | 'route' | 'trait';
 
 type ActionFeedbackLaneMapEntry = {
     id: ActionFeedbackLaneId;
@@ -133,8 +134,30 @@ const actionFeedbackLaneRole = (lane: ActionFeedbackLaneMapEntry): 'Cashout' | '
     return 'Route';
 };
 
+const actionFeedbackLaneRoleId = (lane: ActionFeedbackLaneMapEntry | null): ActionFeedbackLaneRoleId | null => {
+    if (!lane) {
+        return null;
+    }
+    if (lane.id === 'cash') {
+        return 'cashout';
+    }
+    if (lane.id === 'chain') {
+        return 'protect';
+    }
+    if (lane.id === 'recover') {
+        return 'recover';
+    }
+    if (lane.id === 'trait') {
+        return 'trait';
+    }
+    return 'route';
+};
+
 const actionFeedbackLaneRoleMapAttr = (laneMap: readonly ActionFeedbackLaneMapEntry[] | null): string =>
     laneMap?.map((lane) => `${lane.id}:${actionFeedbackLaneRole(lane)}:${lane.count}`).join('>') ?? 'none';
+
+const actionFeedbackLaneRoleIdMapAttr = (laneMap: readonly ActionFeedbackLaneMapEntry[] | null): string =>
+    laneMap?.map((lane) => `${lane.id}:${actionFeedbackLaneRoleId(lane)}:${lane.count}`).join('>') ?? 'none';
 
 const actionFeedbackLaneMapLabel = (laneMap: readonly ActionFeedbackLaneMapEntry[] | null): string =>
     laneMap?.length
@@ -788,6 +811,7 @@ export const GameScreenActionFeedbackRail = ({
             data-action-feedback-lane-map={actionFeedbackLaneMapAttr(laneMap)}
             data-action-feedback-lane-actions={actionFeedbackLaneActionMapAttr(laneMap)}
             data-action-feedback-lane-roles={actionFeedbackLaneRoleMapAttr(laneMap)}
+            data-action-feedback-lane-role-ids={actionFeedbackLaneRoleIdMapAttr(laneMap)}
             data-action-feedback-payoff-action={payoffIntensity.action}
             data-action-feedback-payoff-audio={payoffAudioCue}
             data-action-feedback-payoff-beats={payoffBeatCount}
@@ -921,12 +945,14 @@ export const GameScreenActionFeedbackRail = ({
                     data-action-feedback-lane-actions={actionFeedbackLaneActionMapAttr(laneMap)}
                     data-action-feedback-lane-map={actionFeedbackLaneMapAttr(laneMap)}
                     data-action-feedback-lane-roles={actionFeedbackLaneRoleMapAttr(laneMap)}
+                    data-action-feedback-lane-role-ids={actionFeedbackLaneRoleIdMapAttr(laneMap)}
                     data-action-feedback-primary-lane={primaryLane?.id ?? 'none'}
                     data-action-feedback-primary-lane-action={primaryLane?.action ?? 'none'}
                     data-action-feedback-primary-lane-audio={primaryLane ? actionFeedbackLaneAudioCue(primaryLane) : 'none'}
                     data-action-feedback-primary-lane-beats={primaryLane ? actionFeedbackLaneBeatCount(primaryLane) : 0}
                     data-action-feedback-primary-lane-cue={primaryLane?.cue ?? 'none'}
                     data-action-feedback-primary-lane-role={primaryLane ? actionFeedbackLaneRole(primaryLane) : 'none'}
+                    data-action-feedback-primary-lane-role-id={actionFeedbackLaneRoleId(primaryLane) ?? 'none'}
                     data-action-feedback-primary-lane-screen-cue={primaryLane ? actionFeedbackLaneScreenCue(primaryLane) : 'none'}
                     data-testid="action-feedback-lane-map"
                 >
@@ -959,6 +985,7 @@ export const GameScreenActionFeedbackRail = ({
                             data-action-feedback-primary-lane-beats={actionFeedbackLaneBeatCount(primaryLane)}
                             data-action-feedback-primary-lane-cue={primaryLane.cue}
                             data-action-feedback-primary-lane-role={actionFeedbackLaneRole(primaryLane)}
+                            data-action-feedback-primary-lane-role-id={actionFeedbackLaneRoleId(primaryLane) ?? 'none'}
                             data-action-feedback-primary-lane-screen-cue={actionFeedbackLaneScreenCue(primaryLane)}
                             data-testid="action-feedback-primary-lane"
                         >
@@ -981,6 +1008,7 @@ export const GameScreenActionFeedbackRail = ({
                             data-action-feedback-lane-beats={actionFeedbackLaneBeatCount(lane)}
                             data-action-feedback-lane-count={lane.count}
                             data-action-feedback-lane-role={actionFeedbackLaneRole(lane)}
+                            data-action-feedback-lane-role-id={actionFeedbackLaneRoleId(lane) ?? 'none'}
                             data-action-feedback-lane-screen-cue={actionFeedbackLaneScreenCue(lane)}
                             key={lane.id}
                         >

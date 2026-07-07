@@ -531,6 +531,7 @@ describe('GameScreen (OVR-014)', () => {
         expect(rail.querySelector('[data-action-feedback-detail="trait"]')).toHaveTextContent('Route paid');
         expect(rail).toHaveAttribute('data-action-feedback-lane-map', 'cash:2>route:1>chain:1');
         expect(rail).toHaveAttribute('data-action-feedback-lane-roles', 'cash:Cashout:2>route:Route:1>chain:Protect:1');
+        expect(rail).toHaveAttribute('data-action-feedback-lane-role-ids', 'cash:cashout:2>route:route:1>chain:protect:1');
         expect(rail).toHaveAttribute(
             'data-action-feedback-lane-actions',
             'cash:Cash now:2>route:Route next:1>chain:Protect streak:1'
@@ -542,6 +543,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
             'data-action-feedback-lane-roles',
             'cash:Cashout:2>route:Route:1>chain:Protect:1'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
+            'data-action-feedback-lane-role-ids',
+            'cash:cashout:2>route:route:1>chain:protect:1'
         );
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
             'data-action-feedback-lane-actions',
@@ -573,6 +578,10 @@ describe('GameScreen (OVR-014)', () => {
             'Cashout'
         );
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
+            'data-action-feedback-primary-lane-role-id',
+            'cashout'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
             'data-action-feedback-primary-lane-screen-cue',
             'burst'
         );
@@ -600,6 +609,10 @@ describe('GameScreen (OVR-014)', () => {
             'Cashout'
         );
         expect(screen.getByTestId('action-feedback-primary-lane')).toHaveAttribute(
+            'data-action-feedback-primary-lane-role-id',
+            'cashout'
+        );
+        expect(screen.getByTestId('action-feedback-primary-lane')).toHaveAttribute(
             'data-action-feedback-primary-lane-screen-cue',
             'burst'
         );
@@ -614,6 +627,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="cash"]')).toHaveAttribute(
             'data-action-feedback-lane-role',
             'Cashout'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="cash"]')).toHaveAttribute(
+            'data-action-feedback-lane-role-id',
+            'cashout'
         );
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="cash"]')).toHaveAttribute(
             'data-action-feedback-lane-action',
@@ -643,6 +660,10 @@ describe('GameScreen (OVR-014)', () => {
             'Route'
         );
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="route"]')).toHaveAttribute(
+            'data-action-feedback-lane-role-id',
+            'route'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="route"]')).toHaveAttribute(
             'data-action-feedback-lane-action',
             'Route next'
         );
@@ -668,6 +689,10 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="chain"]')).toHaveAttribute(
             'data-action-feedback-lane-role',
             'Protect'
+        );
+        expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="chain"]')).toHaveAttribute(
+            'data-action-feedback-lane-role-id',
+            'protect'
         );
         expect(screen.getByTestId('action-feedback-lane-map').querySelector('[data-action-feedback-lane="chain"]')).toHaveAttribute(
             'data-action-feedback-lane-beats',

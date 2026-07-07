@@ -280,10 +280,14 @@ const findActionFeedbackLaneRoleSelectorGaps = (): ActionFeedbackLaneRoleSelecto
     const cssText = readComponentCssFiles()
         .map(({ text }) => text)
         .join('\n');
-    const roleAttrs = ['data-action-feedback-primary-lane-role', 'data-action-feedback-lane-role'];
-    const roles = ['Cashout', 'Protect', 'Recover', 'Route', 'Trait'];
+    const roleContracts: Record<string, readonly string[]> = {
+        'data-action-feedback-primary-lane-role': ['Cashout', 'Protect', 'Recover', 'Route', 'Trait'],
+        'data-action-feedback-primary-lane-role-id': ['cashout', 'protect', 'recover', 'route', 'trait'],
+        'data-action-feedback-lane-role': ['Cashout', 'Protect', 'Recover', 'Route', 'Trait'],
+        'data-action-feedback-lane-role-id': ['cashout', 'protect', 'recover', 'route', 'trait']
+    };
 
-    return roleAttrs.flatMap((attr) =>
+    return Object.entries(roleContracts).flatMap(([attr, roles]) =>
         roles
             .filter((role) => !cssText.includes(`[${attr}='${role}']`) && !cssText.includes(`[${attr}="${role}"]`))
             .map((role) => ({ attr, role }))

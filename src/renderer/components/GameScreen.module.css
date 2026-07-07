@@ -5328,6 +5328,8 @@
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='burst'],
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='route'],
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Cashout'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='cashout'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='route'],
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Route'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 18%);
     background:
@@ -5341,6 +5343,10 @@
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='route'] .actionFeedbackPrimaryLaneBeatPips i,
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Cashout'] strong,
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Cashout'] .actionFeedbackPrimaryLaneBeatPips i,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='cashout'] strong,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='cashout'] .actionFeedbackPrimaryLaneBeatPips i,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='route'] strong,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='route'] .actionFeedbackPrimaryLaneBeatPips i,
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Route'] strong,
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Route'] .actionFeedbackPrimaryLaneBeatPips i {
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
@@ -5354,12 +5360,15 @@
 
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='guard'],
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Protect'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='protect'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='trait'],
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Trait'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-cyan-bright) 16%);
     background: color-mix(in srgb, var(--theme-violet-bright) 10%, var(--theme-panel-solid));
 }
 
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='recover'],
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='recover'],
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Recover'] {
     border-color: color-mix(in srgb, var(--theme-danger) 44%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 12%, var(--theme-panel-solid));
@@ -5368,6 +5377,8 @@
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='recover'] strong,
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-screen-cue='recover'] .actionFeedbackPrimaryLaneBeatPips i,
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Recover'] strong,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='recover'] strong,
+.actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role-id='recover'] .actionFeedbackPrimaryLaneBeatPips i,
 .actionFeedbackLaneMap > .actionFeedbackPrimaryLaneCue[data-action-feedback-primary-lane-role='Recover'] .actionFeedbackPrimaryLaneBeatPips i {
     color: color-mix(in srgb, var(--theme-danger) 78%, white);
     background: color-mix(in srgb, var(--theme-danger) 68%, white);
@@ -5478,6 +5489,8 @@
 .actionFeedbackLaneMap > span[data-action-feedback-lane='cash'],
 .actionFeedbackLaneMap > span[data-action-feedback-lane='route'],
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Cashout'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='cashout'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='route'],
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Route'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
     background: color-mix(in srgb, var(--theme-gold-deep) 16%, transparent);
@@ -5487,12 +5500,17 @@
 .actionFeedbackLaneMap > span[data-action-feedback-lane='route'] small,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Cashout'] small,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Cashout'] b,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='cashout'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='cashout'] b,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='route'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='route'] b,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Route'] small,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Route'] b {
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
 }
 
 .actionFeedbackLaneMap > span[data-action-feedback-lane='chain'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='protect'],
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Protect'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
@@ -5500,11 +5518,14 @@
 
 .actionFeedbackLaneMap > span[data-action-feedback-lane='chain'] small,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Protect'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='protect'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='protect'] b,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Protect'] b {
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
 }
 
 .actionFeedbackLaneMap > span[data-action-feedback-lane='trait'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='trait'],
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Trait'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 36%, transparent);
     background: color-mix(in srgb, var(--theme-violet-bright) 10%, transparent);
@@ -5512,11 +5533,14 @@
 
 .actionFeedbackLaneMap > span[data-action-feedback-lane='trait'] small,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Trait'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='trait'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='trait'] b,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Trait'] b {
     color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
 }
 
 .actionFeedbackLaneMap > span[data-action-feedback-lane='recover'],
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='recover'],
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Recover'] {
     border-color: color-mix(in srgb, var(--theme-danger) 40%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 12%, transparent);
@@ -5524,6 +5548,8 @@
 
 .actionFeedbackLaneMap > span[data-action-feedback-lane='recover'] small,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Recover'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='recover'] small,
+.actionFeedbackLaneMap > span[data-action-feedback-lane-role-id='recover'] b,
 .actionFeedbackLaneMap > span[data-action-feedback-lane-role='Recover'] b {
     color: color-mix(in srgb, var(--theme-danger) 76%, white);
 }
