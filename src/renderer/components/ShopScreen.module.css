@@ -389,19 +389,24 @@
     animation-delay: 0.21s;
 }
 
-.offerLaneMap[data-shop-primary-offer-lane-screen-cue='burst'] .offerLanePrimaryCue {
+.offerLaneMap[data-shop-primary-offer-lane-screen-cue='burst'] .offerLanePrimaryCue,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='open'] .offerLanePrimaryCue,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='cashout'] .offerLanePrimaryCue,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='stack'] .offerLanePrimaryCue {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 64%, var(--theme-cyan-bright) 22%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 21%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent)),
         color-mix(in srgb, var(--theme-surface-raised) 84%, transparent);
 }
 
-.offerLaneMap[data-shop-primary-offer-lane-screen-cue='pulse'] .offerLanePrimaryCue {
+.offerLaneMap[data-shop-primary-offer-lane-screen-cue='pulse'] .offerLanePrimaryCue,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='prime'] .offerLanePrimaryCue {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 12%);
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
 }
 
-.offerLaneMap[data-shop-primary-offer-lane-screen-cue='guard'] .offerLanePrimaryCue {
+.offerLaneMap[data-shop-primary-offer-lane-screen-cue='guard'] .offerLanePrimaryCue,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='buy'] .offerLanePrimaryCue {
     border-color: color-mix(in srgb, var(--theme-success, #8edb9b) 54%, var(--theme-cyan-bright) 16%);
     color: color-mix(in srgb, var(--theme-success, #8edb9b) 86%, white);
 }
@@ -411,18 +416,23 @@
     color: color-mix(in srgb, var(--theme-violet-bright) 86%, white);
 }
 
-.offerLaneMap[data-shop-primary-offer-lane-screen-cue='blocked'] .offerLanePrimaryCue {
+.offerLaneMap[data-shop-primary-offer-lane-screen-cue='blocked'] .offerLanePrimaryCue,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='bank'] .offerLanePrimaryCue {
     border-color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 58%, var(--theme-danger) 16%);
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 88%, white);
 }
 
-.offerLaneMap[data-shop-primary-offer-lane-screen-cue='burst'] .offerLanePrimaryBeatPips i {
+.offerLaneMap[data-shop-primary-offer-lane-screen-cue='burst'] .offerLanePrimaryBeatPips i,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='open'] .offerLanePrimaryBeatPips i,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='cashout'] .offerLanePrimaryBeatPips i,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='stack'] .offerLanePrimaryBeatPips i {
     width: 0.25rem;
     height: 0.25rem;
     background: color-mix(in srgb, var(--theme-gold-bright) 88%, white 8%);
 }
 
-.offerLaneMap[data-shop-primary-offer-lane-screen-cue='guard'] .offerLanePrimaryBeatPips i {
+.offerLaneMap[data-shop-primary-offer-lane-screen-cue='guard'] .offerLanePrimaryBeatPips i,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='buy'] .offerLanePrimaryBeatPips i {
     background: color-mix(in srgb, var(--theme-success, #8edb9b) 84%, white 8%);
 }
 
@@ -430,7 +440,8 @@
     background: color-mix(in srgb, var(--theme-violet-bright) 84%, white 8%);
 }
 
-.offerLaneMap[data-shop-primary-offer-lane-screen-cue='blocked'] .offerLanePrimaryBeatPips i {
+.offerLaneMap[data-shop-primary-offer-lane-screen-cue='blocked'] .offerLanePrimaryBeatPips i,
+.offerLaneMap[data-shop-primary-offer-lane-role-id='bank'] .offerLanePrimaryBeatPips i {
     background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 86%, white 8%);
 }
 
@@ -508,15 +519,20 @@
     opacity: 0.94;
 }
 
-.offerLaneMap span[data-shop-offer-lane-screen-cue='burst'] {
+.offerLaneMap span[data-shop-offer-lane-screen-cue='burst'],
+.offerLaneMap span[data-shop-offer-lane-role-id='open'],
+.offerLaneMap span[data-shop-offer-lane-role-id='cashout'],
+.offerLaneMap span[data-shop-offer-lane-role-id='stack'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
 }
 
-.offerLaneMap span[data-shop-offer-lane-screen-cue='pulse'] {
+.offerLaneMap span[data-shop-offer-lane-screen-cue='pulse'],
+.offerLaneMap span[data-shop-offer-lane-role-id='prime'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
 }
 
-.offerLaneMap span[data-shop-offer-lane-screen-cue='guard'] {
+.offerLaneMap span[data-shop-offer-lane-screen-cue='guard'],
+.offerLaneMap span[data-shop-offer-lane-role-id='buy'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-success, #8edb9b) 20%, transparent);
 }
 
@@ -524,11 +540,15 @@
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
 }
 
-.offerLaneMap span[data-shop-offer-lane-screen-cue='blocked'] {
+.offerLaneMap span[data-shop-offer-lane-screen-cue='blocked'],
+.offerLaneMap span[data-shop-offer-lane-role-id='bank'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-warning, #f2bc6b) 24%, transparent);
 }
 
-.offerLaneMap span[data-shop-offer-lane='route'] {
+.offerLaneMap span[data-shop-offer-lane='route'],
+.offerLaneMap span[data-shop-offer-lane-role-id='open'],
+.offerLaneMap span[data-shop-offer-lane-role-id='cashout'],
+.offerLaneMap span[data-shop-offer-lane-role-id='stack'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 18%);
     background:
         radial-gradient(ellipse 120% 140% at 50% 0%, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), transparent 66%),
@@ -536,11 +556,15 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
-.offerLaneMap span[data-shop-offer-lane='route'] strong {
+.offerLaneMap span[data-shop-offer-lane='route'] strong,
+.offerLaneMap span[data-shop-offer-lane-role-id='open'] strong,
+.offerLaneMap span[data-shop-offer-lane-role-id='cashout'] strong,
+.offerLaneMap span[data-shop-offer-lane-role-id='stack'] strong {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
-.offerLaneMap span[data-shop-offer-lane='setup'] {
+.offerLaneMap span[data-shop-offer-lane='setup'],
+.offerLaneMap span[data-shop-offer-lane-role-id='prime'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 72%),
@@ -548,13 +572,15 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
 }
 
-.offerLaneMap span[data-shop-offer-lane='safety'] {
+.offerLaneMap span[data-shop-offer-lane='safety'],
+.offerLaneMap span[data-shop-offer-lane-role-id='buy'] {
     border-color: color-mix(in srgb, var(--theme-success, #8edb9b) 42%, transparent);
     background: color-mix(in srgb, var(--theme-success, #8edb9b) 10%, transparent);
     color: color-mix(in srgb, var(--theme-success, #8edb9b) 88%, white);
 }
 
-.offerLaneMap span[data-shop-offer-lane='safety'] strong {
+.offerLaneMap span[data-shop-offer-lane='safety'] strong,
+.offerLaneMap span[data-shop-offer-lane-role-id='buy'] strong {
     color: color-mix(in srgb, var(--theme-success, #8edb9b) 88%, white);
 }
 
@@ -566,7 +592,8 @@
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
 }
 
-.offerLaneMap span[data-shop-offer-lane='blocked'] {
+.offerLaneMap span[data-shop-offer-lane='blocked'],
+.offerLaneMap span[data-shop-offer-lane-role-id='bank'] {
     opacity: 0.9;
     border-color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 44%, var(--theme-danger) 16%);
     background:
@@ -575,7 +602,8 @@
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 90%, white);
 }
 
-.offerLaneMap span[data-shop-offer-lane='blocked'] strong {
+.offerLaneMap span[data-shop-offer-lane='blocked'] strong,
+.offerLaneMap span[data-shop-offer-lane-role-id='bank'] strong {
     color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 90%, white);
 }
 

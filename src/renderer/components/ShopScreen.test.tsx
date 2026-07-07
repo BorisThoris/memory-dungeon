@@ -106,12 +106,14 @@ describe('ShopScreen', () => {
         expect(offerLaneMap).toHaveAttribute('data-shop-offer-lane-map', 'route:1>blocked:2');
         expect(offerLaneMap).toHaveAttribute('data-shop-offer-lane-actions', 'route:Open route:1>blocked:Earn gold:2');
         expect(offerLaneMap).toHaveAttribute('data-shop-offer-lane-roles', 'route:Open:1>blocked:Bank:2');
+        expect(offerLaneMap).toHaveAttribute('data-shop-offer-lane-role-ids', 'route:open:1>blocked:bank:2');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane', 'route');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-action', 'Open route');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-audio', 'shop-lane-route');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-beats', '4');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-cue', 'Open greedy route');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-role', 'Open');
+        expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-role-id', 'open');
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-screen-cue', 'burst');
         const offerLaneMapSummary = screen.getByTestId('shop-offer-lane-map-summary');
         expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-count', '2');
@@ -133,6 +135,7 @@ describe('ShopScreen', () => {
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-beats', '4');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-cue', 'Open greedy route');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-role', 'Open');
+        expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-role-id', 'open');
         expect(primaryOfferLane).toHaveAttribute('data-shop-primary-offer-lane-screen-cue', 'burst');
         expect(primaryOfferLane).toHaveTextContent('Best buy lane');
         expect(primaryOfferLane).toHaveTextContent('Open');
@@ -155,6 +158,7 @@ describe('ShopScreen', () => {
             '4'
         );
         expect(offerLaneMap.querySelector('[data-shop-offer-lane="route"]')).toHaveAttribute('data-shop-offer-lane-role', 'Open');
+        expect(offerLaneMap.querySelector('[data-shop-offer-lane="route"]')).toHaveAttribute('data-shop-offer-lane-role-id', 'open');
         expect(
             offerLaneMap.querySelector('[data-shop-offer-lane="route"]')?.querySelectorAll('[data-shop-offer-lane-beat]')
         ).toHaveLength(4);
@@ -167,6 +171,10 @@ describe('ShopScreen', () => {
             '4'
         );
         expect(offerLaneMap.querySelector('[data-shop-offer-lane="blocked"]')).toHaveAttribute('data-shop-offer-lane-role', 'Bank');
+        expect(offerLaneMap.querySelector('[data-shop-offer-lane="blocked"]')).toHaveAttribute(
+            'data-shop-offer-lane-role-id',
+            'bank'
+        );
         expect(
             offerLaneMap
                 .querySelector('[data-shop-offer-lane="blocked"]')

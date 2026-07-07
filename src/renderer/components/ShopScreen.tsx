@@ -884,6 +884,31 @@ const shopOfferLaneActionMapAttr = (laneMap: readonly ShopOfferLaneMapEntry[]): 
 const shopOfferLaneRoleMapAttr = (laneMap: readonly ShopOfferLaneMapEntry[]): string =>
     laneMap.map((entry) => `${entry.id}:${shopOfferLaneRole(entry)}:${entry.count}`).join('>');
 
+const shopOfferLaneRoleId = (
+    lane: Pick<ShopOfferLaneMapEntry, 'count' | 'id'>
+): 'bank' | 'buy' | 'cashout' | 'open' | 'prime' | 'stack' => {
+    const role = shopOfferLaneRole(lane);
+    if (role === 'Bank') {
+        return 'bank';
+    }
+    if (role === 'Cashout') {
+        return 'cashout';
+    }
+    if (role === 'Open') {
+        return 'open';
+    }
+    if (role === 'Prime') {
+        return 'prime';
+    }
+    if (role === 'Stack') {
+        return 'stack';
+    }
+    return 'buy';
+};
+
+const shopOfferLaneRoleIdMapAttr = (laneMap: readonly ShopOfferLaneMapEntry[]): string =>
+    laneMap.map((entry) => `${entry.id}:${shopOfferLaneRoleId(entry)}:${entry.count}`).join('>');
+
 const shopOfferLaneMapLabel = (laneMap: readonly ShopOfferLaneMapEntry[]): string =>
     formatShopRowsLabel(
         'Shop offer lanes',
@@ -1011,6 +1036,7 @@ const ShopScreen = () => {
     const primaryOfferLane = offerLaneMap[0] ?? null;
     const offerLaneMapAttr = shopOfferLaneMapAttr(offerLaneMap);
     const offerLaneRoleMapAttr = shopOfferLaneRoleMapAttr(offerLaneMap);
+    const offerLaneRoleIdMapAttr = shopOfferLaneRoleIdMapAttr(offerLaneMap);
     const offerLaneMapAccessibleLabel = shopOfferLaneMapLabel(offerLaneMap);
 
     const onBack = (): void => {
@@ -1094,6 +1120,7 @@ const ShopScreen = () => {
                         className={styles.offerLaneMap}
                         data-shop-offer-lane-actions={shopOfferLaneActionMapAttr(offerLaneMap)}
                         data-shop-offer-lane-map={offerLaneMapAttr}
+                        data-shop-offer-lane-role-ids={offerLaneRoleIdMapAttr}
                         data-shop-offer-lane-roles={offerLaneRoleMapAttr}
                         data-shop-primary-offer-lane={primaryOfferLane?.id ?? 'none'}
                         data-shop-primary-offer-lane-action={
@@ -1107,6 +1134,7 @@ const ShopScreen = () => {
                         }
                         data-shop-primary-offer-lane-cue={primaryOfferLane?.cue ?? 'none'}
                         data-shop-primary-offer-lane-role={primaryOfferLane ? shopOfferLaneRole(primaryOfferLane) : 'none'}
+                        data-shop-primary-offer-lane-role-id={primaryOfferLane ? shopOfferLaneRoleId(primaryOfferLane) : 'none'}
                         data-shop-primary-offer-lane-screen-cue={
                             primaryOfferLane ? shopOfferLaneScreenCue(primaryOfferLane) : 'none'
                         }
@@ -1144,6 +1172,7 @@ const ShopScreen = () => {
                                 data-shop-primary-offer-lane-beats={shopOfferLaneBeatCount(primaryOfferLane)}
                                 data-shop-primary-offer-lane-cue={primaryOfferLane.cue}
                                 data-shop-primary-offer-lane-role={shopOfferLaneRole(primaryOfferLane)}
+                                data-shop-primary-offer-lane-role-id={shopOfferLaneRoleId(primaryOfferLane)}
                                 data-shop-primary-offer-lane-screen-cue={shopOfferLaneScreenCue(primaryOfferLane)}
                                 data-testid="shop-primary-offer-lane"
                             >
@@ -1165,6 +1194,7 @@ const ShopScreen = () => {
                                 data-shop-offer-lane-audio={shopOfferLaneAudioCue(lane)}
                                 data-shop-offer-lane-beats={shopOfferLaneBeatCount(lane)}
                                 data-shop-offer-lane-role={shopOfferLaneRole(lane)}
+                                data-shop-offer-lane-role-id={shopOfferLaneRoleId(lane)}
                                 data-shop-offer-lane-screen-cue={shopOfferLaneScreenCue(lane)}
                                 key={lane.id}
                             >
