@@ -395,6 +395,25 @@
     opacity: 0.34;
 }
 
+.frame[data-opportunity-best-action-id='cashout'] .stage::after,
+.frame[data-opportunity-best-action-id='match'] .stage::after,
+.frame[data-opportunity-best-action-id='prime'] .stage::after {
+    border-style: solid;
+}
+
+.frame[data-opportunity-best-action-id='followup'] .stage::after,
+.frame[data-opportunity-best-action-id='route'] .stage::after,
+.frame[data-opportunity-best-action-id='tool'] .stage::after {
+    border-style: dashed;
+}
+
+.frame[data-opportunity-best-action-id='claim'] .stage::after,
+.frame[data-opportunity-best-action-id='recover'] .stage::after,
+.frame[data-opportunity-best-action-id='risk'] .stage::after,
+.frame[data-opportunity-best-action-id='study'] .stage::after {
+    border-style: double;
+}
+
 .frame[data-chain-accessibility-tone='cashout'] .stage::after {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 16%);
     box-shadow:
@@ -10464,6 +10483,36 @@
     letter-spacing: 0;
     line-height: 1;
     text-transform: uppercase;
+}
+
+.opportunityCompassRow[data-opportunity-action-id='cashout'] b,
+.opportunityCompassRow[data-opportunity-action-id='match'] b,
+.opportunityCompassRow[data-opportunity-action-id='prime'] b {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, var(--theme-cyan-bright) 14%);
+    background: color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+}
+
+.opportunityCompassRow[data-opportunity-action-id='followup'] b,
+.opportunityCompassRow[data-opportunity-action-id='route'] b,
+.opportunityCompassRow[data-opportunity-action-id='tool'] b {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-violet-bright) 16%);
+    background: color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.opportunityCompassRow[data-opportunity-action-id='claim'] b,
+.opportunityCompassRow[data-opportunity-action-id='recover'] b,
+.opportunityCompassRow[data-opportunity-action-id='study'] b {
+    border-color: color-mix(in srgb, var(--theme-success) 34%, var(--theme-cyan-bright) 18%);
+    background: color-mix(in srgb, var(--theme-success) 10%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 80%, white);
+}
+
+.opportunityCompassRow[data-opportunity-action-id='risk'] b {
+    border-color: color-mix(in srgb, var(--theme-danger) 36%, var(--theme-gold-bright) 18%);
+    background: color-mix(in srgb, var(--theme-danger) 11%, transparent);
+    color: color-mix(in srgb, var(--theme-danger) 74%, white);
 }
 
 .opportunityCompassRow small {

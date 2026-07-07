@@ -1145,6 +1145,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-compass-count', '2');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-id', 'chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action', 'Cash out');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action-id', 'cashout');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-label', 'Combo route');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-value', '1 route ready');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-tone', 'chain');
@@ -1219,6 +1220,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('1 route ready');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Route cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-row-meter-fill', '100');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-action-id', 'cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Route cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue-id', 'route-cashout');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-audio', 'opportunity-cashout');
@@ -1238,6 +1240,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-trait')).toHaveTextContent('2 combo cards lit');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveTextContent('Next reward x6 +1 shard in 1 match');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-impact-cue', 'Trait stack surge');
+        expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-action-id', 'study');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-audio', 'opportunity-prime');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-screen-cue', 'pulse');
         expect(screen.getByTestId('board-opportunity-trait')).toHaveAttribute('data-opportunity-heat', 'surge');
@@ -2131,6 +2134,8 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('Follow up');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveTextContent('1 follow-up marked');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action', 'Follow up');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action-id', 'followup');
+        expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-action-id', 'followup');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue', 'Follow-up route');
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-opportunity-best-detail')).toContain(
             '1 follow-up marked'
@@ -2221,6 +2226,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-compass-count', '3');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-id', 'chain');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action', 'Match');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action-id', 'match');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-label', 'Combo route');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-value', '1 route ready');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-tone', 'chain');
@@ -2936,11 +2942,13 @@ describe('TileBoard touch and click controls', () => {
 
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-id', 'recovery');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action', 'Recover');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-action-id', 'recover');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-label', 'Recovery');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-value', 'Safe match');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-tone', 'recover');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-opportunity-best-impact-cue', 'Safe pair');
         expect(screen.getByTestId('board-opportunity-recovery')).toHaveAttribute('data-opportunity-tone', 'recover');
+        expect(screen.getByTestId('board-opportunity-recovery')).toHaveAttribute('data-opportunity-action-id', 'recover');
         expect(screen.getByTestId('board-opportunity-recovery')).toHaveTextContent('Safe pair');
         expect(screen.getByTestId('board-opportunity-recovery')).toHaveTextContent('Recovery');
         expect(screen.getByTestId('board-opportunity-recovery')).toHaveTextContent('Recover');
@@ -3271,6 +3279,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-tool')).toHaveTextContent('Place target');
         expect(screen.getByTestId('board-opportunity-tool')).toHaveTextContent('Use');
         expect(screen.getByTestId('board-opportunity-tool')).toHaveAttribute('data-opportunity-tone', 'setup');
+        expect(screen.getByTestId('board-opportunity-tool')).toHaveAttribute('data-opportunity-action-id', 'tool');
     });
 
     it('shows active board command chips for armed recall and control powers', () => {
@@ -3868,6 +3877,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('Pickup cashout');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('1 reward');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('Claim');
+        expect(screen.getByTestId('board-opportunity-pickup')).toHaveAttribute('data-opportunity-action-id', 'claim');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('Claim before exit');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveTextContent('Shard spark pickup: +1 combo shard');
         expect(screen.getByTestId('pickup-opportunity-chip')).toHaveAttribute('data-pickup-meter-fill', '33');
@@ -4329,6 +4339,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('2 hazards');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveTextContent('Warns that a wrong pair reshuffles safe hidden tiles');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-opportunity-tone', 'hazard');
+        expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-opportunity-action-id', 'risk');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-hazard-opportunity-action', 'avoid');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-hazard-opportunity-family', 'penalty');
         expect(screen.getByTestId('board-opportunity-hazard')).toHaveAttribute('data-hazard-opportunity-screen-cue', 'guard');

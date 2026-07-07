@@ -572,6 +572,18 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-hazard-opportunity-tier': ['danger', 'mixed', 'reward', 'watch'],
         'data-hazard-opportunity-trigger': ['flip', 'match', 'match_or_mismatch', 'mismatch'],
         'data-opportunity-best-heat': ['cashout', 'normal', 'prime', 'surge'],
+        'data-opportunity-best-action-id': [
+            'cashout',
+            'claim',
+            'followup',
+            'match',
+            'prime',
+            'recover',
+            'risk',
+            'route',
+            'study',
+            'tool'
+        ],
         'data-opportunity-best-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
         'data-opportunity-compass-best-screen-cue': ['burst', 'guard', 'pulse', 'tick'],
         'data-opportunity-compass-hot': ['cashout', 'ready'],
@@ -584,6 +596,18 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-opportunity-compass-summary-tier': ['cashout', 'prime', 'recover', 'risk', 'route', 'tool'],
         'data-opportunity-compass-surge': ['true'],
         'data-opportunity-heat': ['cashout', 'normal', 'prime', 'surge'],
+        'data-opportunity-action-id': [
+            'cashout',
+            'claim',
+            'followup',
+            'match',
+            'prime',
+            'recover',
+            'risk',
+            'route',
+            'study',
+            'tool'
+        ],
         'data-opportunity-impact-cue-id': [
             'avoid-penalty',
             'chain-cashout',

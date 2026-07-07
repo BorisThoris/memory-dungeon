@@ -165,6 +165,17 @@ type BoardOpportunityImpactCueId =
     | 'trait-combo-surge'
     | 'trait-stack-route'
     | 'trait-stack-surge';
+type BoardOpportunityActionId =
+    | 'cashout'
+    | 'claim'
+    | 'followup'
+    | 'match'
+    | 'prime'
+    | 'recover'
+    | 'risk'
+    | 'route'
+    | 'study'
+    | 'tool';
 type BoardOpportunityCompassSummaryAction = 'cashout' | 'claim' | 'prime' | 'recover' | 'risk' | 'route' | 'tool';
 type BoardOpportunityCompassSummaryTier = 'cashout' | 'prime' | 'recover' | 'risk' | 'route' | 'tool';
 type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'perk' | 'recover' | 'risk' | 'tool' | 'trait';
@@ -288,6 +299,23 @@ const getBoardOpportunityImpactCueId = (impactCue: string): BoardOpportunityImpa
     if (cue === 'recall tool') return 'recall-tool';
     if (cue === 'control tool') return 'control-tool';
     return 'tool-route';
+};
+
+const getBoardOpportunityActionId = (row: BoardOpportunityCompassRow | null): BoardOpportunityActionId | null => {
+    if (!row) {
+        return null;
+    }
+    const action = row.action.toLowerCase();
+    if (action.includes('cash')) return 'cashout';
+    if (action.includes('claim')) return 'claim';
+    if (action.includes('follow')) return 'followup';
+    if (action.includes('match')) return 'match';
+    if (action.includes('prime')) return 'prime';
+    if (action.includes('recover')) return 'recover';
+    if (action.includes('scout') || row.id === 'hazard' || row.tone === 'hazard' || row.tone === 'risk') return 'risk';
+    if (action.includes('study')) return 'study';
+    if (action.includes('use') || row.id === 'tool' || row.tone === 'control' || row.tone === 'recall') return 'tool';
+    return 'route';
 };
 
 const getBoardOpportunityBeatCount = (row: BoardOpportunityCompassRow): 2 | 3 | 4 | 5 => {
@@ -3470,6 +3498,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             : null;
     const boardPayoffStackFill = boardPayoffStack ? Math.round(Math.min(100, (boardPayoffStack.crescendo.beatCount / 5) * 100)) : 0;
     const boardBestOpportunity = boardOpportunityCompassRows[0] ?? null;
+    const boardBestOpportunityActionId = getBoardOpportunityActionId(boardBestOpportunity);
     const boardBestOpportunityHeat = boardBestOpportunity ? getBoardOpportunityHeat(boardBestOpportunity.impactCue) : 'none';
     const boardBestOpportunityImpactCueId = boardBestOpportunity ? getBoardOpportunityImpactCueId(boardBestOpportunity.impactCue) : null;
     const boardBestOpportunityBeatCount = boardBestOpportunity ? getBoardOpportunityBeatCount(boardBestOpportunity) : 0;
@@ -4899,6 +4928,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-pickup-opportunity-tile-count={boardPickupOpportunity.tileCount}
             data-opportunity-best-id={boardBestOpportunity?.id ?? 'none'}
             data-opportunity-best-action={boardBestOpportunity?.action ?? 'none'}
+            data-opportunity-best-action-id={boardBestOpportunityActionId ?? 'none'}
             data-opportunity-best-label={boardBestOpportunity?.label ?? 'none'}
             data-opportunity-best-value={boardBestOpportunity?.value ?? 'none'}
             data-opportunity-best-detail={boardBestOpportunity?.detail ?? 'none'}
@@ -7361,12 +7391,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 {boardOpportunityCompassRows.map((row, index) => {
+                                    const actionId = getBoardOpportunityActionId(row);
                                     const beatCount = getBoardOpportunityBeatCount(row);
                                     const impactCueId = getBoardOpportunityImpactCueId(row.impactCue);
                                     return (
                                         <span
                                             aria-label={`${index === 0 ? 'Best play. ' : ''}${row.impactCue}. ${row.label}: ${row.value}. ${row.action}: ${row.detail}`}
                                             className={styles.opportunityCompassRow}
+                                            data-opportunity-action-id={actionId ?? 'none'}
                                             data-opportunity-audio={boardOpportunityAudioCue(row)}
                                             data-opportunity-beats={beatCount}
                                             data-opportunity-row-meter-fill={Math.round((beatCount / 5) * 100)}
