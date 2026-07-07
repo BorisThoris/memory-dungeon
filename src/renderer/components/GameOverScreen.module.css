@@ -476,6 +476,14 @@
     background: color-mix(in srgb, var(--theme-success) 74%, white);
 }
 
+.payoffBurstStrip span[data-payoff-crescendo-tier='prime'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 50%, var(--theme-gold-bright) 16%);
+}
+
+.payoffBurstStrip span[data-payoff-crescendo-tier='prime'] strong i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+}
+
 .payoffBurstStrip span[data-payoff-crescendo-screen-cue='pulse'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 50%, var(--theme-gold-bright) 14%);
 }

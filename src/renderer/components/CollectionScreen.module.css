@@ -495,6 +495,14 @@
     background: color-mix(in srgb, var(--theme-success) 72%, white);
 }
 
+.runPayoffStrip span[data-run-payoff-crescendo-tier='prime'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 16%);
+}
+
+.runPayoffStrip span[data-run-payoff-crescendo-tier='prime'] strong i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+}
+
 .runPayoffStrip span[data-run-payoff-crescendo-screen-cue='pulse'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 14%);
 }
