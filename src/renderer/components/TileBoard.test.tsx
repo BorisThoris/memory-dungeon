@@ -1629,6 +1629,10 @@ describe('TileBoard touch and click controls', () => {
         expect(frame).toHaveAttribute('data-card-feedback-trait-lane-primary-action', 'shard:Cash shard:1');
         expect(frame).toHaveAttribute('data-card-feedback-trait-lane-primary-role', 'Cashout');
         expect(frame).toHaveAttribute('data-card-feedback-trait-lane-primary-screen-cue', 'burst');
+        expect(frame).toHaveAttribute('data-card-trait-lane-beat-map-summary-action', 'cashout');
+        expect(frame).toHaveAttribute('data-card-trait-lane-beat-map-summary-beats', '5');
+        expect(frame).toHaveAttribute('data-card-trait-lane-beat-map-summary-screen-cue', 'burst');
+        expect(frame).toHaveAttribute('data-card-trait-lane-beat-map-summary-tier', 'cashout');
         expect(frame).toHaveAttribute('data-card-feedback-trait-lane-contract', 'shard guard tool risk block recall score');
         expect(primaryTraitLane).toHaveAttribute('data-card-trait-lane-primary', 'shard');
         expect(primaryTraitLane).toHaveAttribute('data-card-trait-lane-primary-action', 'Cash shard');
@@ -1646,6 +1650,10 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-primary', 'shard');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-primary-role', 'Cashout');
+        expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-map-summary-action', 'cashout');
+        expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-map-summary-beats', '5');
+        expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-map-summary-screen-cue', 'burst');
+        expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-map-summary-tier', 'cashout');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-action', 'Cash shard');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-audio', 'trait-lane-shard');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-role', 'Cashout');
@@ -1653,11 +1661,18 @@ describe('TileBoard touch and click controls', () => {
         const laneBeatMapSummary = screen.getByTestId('chain-opportunity-trait-lane-beat-map-summary');
         expect(laneBeatMapSummary).toHaveTextContent('Beats');
         expect(laneBeatMapSummary).toHaveTextContent('3 lanes');
+        expect(laneBeatMapSummary).toHaveAttribute('data-card-trait-lane-beat-map-summary-action', 'cashout');
+        expect(laneBeatMapSummary).toHaveAttribute('data-card-trait-lane-beat-map-summary-beats', '5');
+        expect(laneBeatMapSummary).toHaveAttribute('data-card-trait-lane-beat-map-summary-screen-cue', 'burst');
+        expect(laneBeatMapSummary).toHaveAttribute('data-card-trait-lane-beat-map-summary-tier', 'cashout');
         expect(laneBeatMapSummary).toHaveAttribute('data-card-trait-lane-beat-map-meter-fill', '60');
-        expect(laneBeatMapSummary.querySelectorAll('[data-card-trait-lane-beat-map-summary-pip]')).toHaveLength(4);
+        expect(laneBeatMapSummary.querySelectorAll('[data-card-trait-lane-beat-map-summary-pip]')).toHaveLength(5);
         expect(
             laneBeatMapSummary.querySelector('[data-card-trait-lane-beat-map-summary-pip="1"]')
         ).toHaveAttribute('data-card-trait-lane-beat-map-summary-pip-focus', 'primary');
+        expect(
+            laneBeatMapSummary.querySelector('[data-card-trait-lane-beat-map-summary-pip="1"]')
+        ).toHaveAttribute('data-card-trait-lane-beat-map-summary-pip-action', 'cashout');
         expect(laneBeatMap).toHaveTextContent('Shard');
         expect(laneBeatMap).toHaveTextContent('4-beat Cash shard');
         const shardLaneBeat = laneBeatMap.querySelector('[data-card-trait-lane-beat="shard"]');

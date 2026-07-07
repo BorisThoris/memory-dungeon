@@ -1081,6 +1081,9 @@ type CardBeatMapSummaryAction = CardFeedbackPulseTone;
 type CardBeatMapSummaryTier = CardFeedbackBeatId;
 type CardCadenceMapSummaryAction = CardFeedbackPulseTone;
 type CardCadenceMapSummaryTier = CardFeedbackCadenceId;
+type CardTraitLaneRole = 'Block' | 'Cashout' | 'Protect' | 'Recall' | 'Risk' | 'Tool';
+type CardTraitLaneBeatMapSummaryAction = 'block' | 'cashout' | 'protect' | 'recall' | 'risk' | 'tool';
+type CardTraitLaneBeatMapSummaryTier = CardTraitLaneBeatMapSummaryAction;
 
 const cardActionPriorityRole = (id: string): CardActionPriorityRole => {
     if (id === 'bank-lane') {
@@ -1165,6 +1168,25 @@ const getCardCadenceMapSummaryBeatCount = (
         return 2;
     }
     return Math.max(2, Math.min(5, rows.length + primaryRow.beatCount - 1)) as 2 | 3 | 4 | 5;
+};
+
+const getCardTraitLaneBeatMapSummaryBeatCount = (
+    rows: readonly unknown[],
+    primaryRow: { beatCount: number } | null
+): 2 | 3 | 4 | 5 => {
+    if (!primaryRow) {
+        return 2;
+    }
+    return Math.max(2, Math.min(5, rows.length + primaryRow.beatCount - 1)) as 2 | 3 | 4 | 5;
+};
+
+const cardTraitLaneBeatMapSummaryAction = (
+    role: CardTraitLaneRole | null
+): CardTraitLaneBeatMapSummaryAction | null => {
+    if (!role) {
+        return null;
+    }
+    return role.toLowerCase() as CardTraitLaneBeatMapSummaryAction;
 };
 
 const cardFeedbackPulseTone = (id: string): CardFeedbackPulseTone => {
@@ -1340,9 +1362,7 @@ const cardTraitLaneScreenCue = (laneId: TraitInteractionLaneId | string): 'burst
     return 'burst';
 };
 
-const cardTraitLaneRole = (
-    laneId: TraitInteractionLaneId | string
-): 'Block' | 'Cashout' | 'Protect' | 'Recall' | 'Risk' | 'Tool' =>
+const cardTraitLaneRole = (laneId: TraitInteractionLaneId | string): CardTraitLaneRole =>
     CARD_TRAIT_LANE_ORDER_SET.has(laneId as TraitInteractionLaneId)
         ? getTraitInteractionLaneRole({ id: laneId as TraitInteractionLaneId })
         : 'Cashout';
@@ -2059,6 +2079,17 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const primaryTraitLaneScreenCue = primaryTraitLaneBeatRow
         ? cardTraitLaneScreenCue(primaryTraitLaneBeatRow.id)
         : 'none';
+    const traitLaneBeatMapSummaryAction = cardTraitLaneBeatMapSummaryAction(
+        primaryTraitLaneBeatRow?.role ?? null
+    );
+    const traitLaneBeatMapSummaryTier: CardTraitLaneBeatMapSummaryTier | null = traitLaneBeatMapSummaryAction;
+    const traitLaneBeatMapSummaryScreenCue = primaryTraitLaneBeatRow
+        ? cardTraitLaneScreenCue(primaryTraitLaneBeatRow.id)
+        : null;
+    const traitLaneBeatMapSummaryBeatCount = getCardTraitLaneBeatMapSummaryBeatCount(
+        cardFeedbackTraitLaneBeatRows,
+        primaryTraitLaneBeatRow
+    );
     const chainMarkerIntensity = useMemo(() => {
         const counts = parseCountAttribute(cardFeedbackTraitRouteIntensitiesAttr);
         const id = TRAIT_ROUTE_INTENSITY_PRIORITY.find((candidate) => counts.has(candidate));
@@ -4628,6 +4659,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-trait-lane-primary-action={cardFeedbackTraitLanePrimaryActionAttr}
             data-card-feedback-trait-lane-primary-role={primaryTraitLaneBeatRow?.role ?? 'none'}
             data-card-feedback-trait-lane-primary-screen-cue={primaryTraitLaneScreenCue}
+            data-card-trait-lane-beat-map-summary-action={traitLaneBeatMapSummaryAction ?? 'none'}
+            data-card-trait-lane-beat-map-summary-beats={cardFeedbackTraitLaneBeatRows.length > 0 ? traitLaneBeatMapSummaryBeatCount : 0}
+            data-card-trait-lane-beat-map-summary-screen-cue={traitLaneBeatMapSummaryScreenCue ?? 'none'}
+            data-card-trait-lane-beat-map-summary-tier={traitLaneBeatMapSummaryTier ?? 'none'}
             data-card-feedback-trait-lane-contract={BOARD_MARKER_TRAIT_LANE_CONTRACT}
             data-card-feedback-route-glyphs={cardFeedbackRouteGlyphsAttr || 'none'}
             data-card-feedback-route-glyph-contract={BOARD_MARKER_ROUTE_GLYPH_CONTRACT}
@@ -5847,6 +5882,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-card-trait-lane-primary-audio={primaryTraitLaneAudioCue}
                                         data-card-trait-lane-beat-primary={cardFeedbackTraitLaneBeatRows[0]?.id ?? 'none'}
                                         data-card-trait-lane-beat-primary-role={cardFeedbackTraitLaneBeatRows[0]?.role ?? 'none'}
+                                        data-card-trait-lane-beat-map-summary-action={traitLaneBeatMapSummaryAction ?? 'none'}
+                                        data-card-trait-lane-beat-map-summary-beats={traitLaneBeatMapSummaryBeatCount}
+                                        data-card-trait-lane-beat-map-summary-screen-cue={traitLaneBeatMapSummaryScreenCue ?? 'none'}
+                                        data-card-trait-lane-beat-map-summary-tier={traitLaneBeatMapSummaryTier ?? 'none'}
                                         data-card-trait-lane-primary-action={cardFeedbackTraitLaneBeatRows[0]?.action ?? 'none'}
                                         data-card-trait-lane-primary-role={cardFeedbackTraitLaneBeatRows[0]?.role ?? 'none'}
                                         data-card-trait-lane-primary-screen-cue={primaryTraitLaneScreenCue}
@@ -5855,7 +5894,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <span
                                             className={styles.chainOpportunityTraitLaneBeatMapSummary}
                                             data-testid="chain-opportunity-trait-lane-beat-map-summary"
+                                            data-card-trait-lane-beat-map-summary-action={traitLaneBeatMapSummaryAction ?? 'none'}
+                                            data-card-trait-lane-beat-map-summary-beats={traitLaneBeatMapSummaryBeatCount}
                                             data-card-trait-lane-beat-map-meter-fill={cardFeedbackTraitLaneBeatMapMeterFill}
+                                            data-card-trait-lane-beat-map-summary-screen-cue={traitLaneBeatMapSummaryScreenCue ?? 'none'}
+                                            data-card-trait-lane-beat-map-summary-tier={traitLaneBeatMapSummaryTier ?? 'none'}
                                             style={
                                                 {
                                                     '--card-trait-lane-beat-map-meter-fill': `${cardFeedbackTraitLaneBeatMapMeterFill}%`
@@ -5872,10 +5915,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 className={styles.chainOpportunityTraitLaneBeatMapSummaryPips}
                                             >
                                                 {Array.from(
-                                                    { length: Math.max(2, Math.min(5, cardFeedbackTraitLaneBeatRows.length + 1)) },
+                                                    { length: traitLaneBeatMapSummaryBeatCount },
                                                     (_, index) => (
                                                         <i
                                                             data-card-trait-lane-beat-map-summary-pip={index + 1}
+                                                            data-card-trait-lane-beat-map-summary-pip-action={
+                                                                traitLaneBeatMapSummaryAction ?? 'none'
+                                                            }
                                                             data-card-trait-lane-beat-map-summary-pip-focus={
                                                                 index === 0 ? 'primary' : 'support'
                                                             }
