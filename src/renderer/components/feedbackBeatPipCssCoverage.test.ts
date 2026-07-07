@@ -1783,6 +1783,55 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-board-chain-reward-lead-tone='heal'[\s\S]*?\.chainOpportunityRewardLeadBeatPips i[\s\S]*?var\(--theme-success\)/);
     });
 
+    it('keeps chain reward ladder summary action beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'reward ladder cashout should read as fast wide payout beats'
+        ).toMatch(/data-board-chain-reward-ladder-summary-action='cashout'[\s\S]*?\.chainOpportunityRewardLadderSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'reward ladder prime should use taller setup beats'
+        ).toMatch(/data-board-chain-reward-ladder-summary-action='prime'[\s\S]*?\.chainOpportunityRewardLadderSummaryBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'reward ladder hold should stay slower and lower-emphasis'
+        ).toMatch(/data-board-chain-reward-ladder-summary-action='hold'[\s\S]*?\.chainOpportunityRewardLadderSummaryBeatPips i[\s\S]*?animation-duration:\s*1\.28s/);
+    });
+
+    it('keeps chain reward ladder summary tiers and screen cues visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='burst'] .chainOpportunityRewardLadderSummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='pulse'] .chainOpportunityRewardLadderSummaryBeatPips i");
+        expect(cssText).toContain(".chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='tick'] .chainOpportunityRewardLadderSummaryBeatPips i");
+        expect(
+            cssText,
+            'next reward ladder summaries should use immediate fast beats'
+        ).toMatch(/data-board-chain-reward-ladder-summary-tier='next'[\s\S]*?\.chainOpportunityRewardLadderSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.7s/);
+        expect(
+            cssText,
+            'soon reward ladder summaries should use mid-tempo beats'
+        ).toMatch(/data-board-chain-reward-ladder-summary-tier='soon'[\s\S]*?\.chainOpportunityRewardLadderSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.96s/);
+        expect(
+            cssText,
+            'later reward ladder summaries should stay quiet and slow'
+        ).toMatch(/data-board-chain-reward-ladder-summary-tier='later'[\s\S]*?\.chainOpportunityRewardLadderSummaryBeatPips i[\s\S]*?animation-duration:\s*1\.4s/);
+        expect(
+            cssText,
+            'burst reward ladder cues should stay fastest and high-emphasis'
+        ).toMatch(/data-board-chain-reward-ladder-summary-screen-cue='burst'[\s\S]*?\.chainOpportunityRewardLadderSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'tick reward ladder cues should stay narrow and slow'
+        ).toMatch(/data-board-chain-reward-ladder-summary-screen-cue='tick'[\s\S]*?\.chainOpportunityRewardLadderSummaryBeatPips i[\s\S]*?animation-duration:\s*1\.34s/);
+    });
+
     it('keeps emitted audio cue metadata paired with same-stem screen cues', () => {
         expect(
             findAudioScreenCueMetadataGaps(),

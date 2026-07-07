@@ -6940,15 +6940,26 @@
 }
 
 .chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-action='cashout'] .chainOpportunityRewardLadderSummaryBeatPips i {
+    width: 0.22rem;
+    height: 0.1rem;
+    animation-duration: 0.72s;
+    opacity: 0.96;
     background: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
     box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
 }
 
 .chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-action='prime'] .chainOpportunityRewardLadderSummaryBeatPips i {
+    width: 0.1rem;
+    height: 0.18rem;
+    animation-duration: 1.02s;
     background: color-mix(in srgb, var(--theme-cyan-bright) 70%, white);
 }
 
 .chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-action='hold'] .chainOpportunityRewardLadderSummaryBeatPips i {
+    width: 0.12rem;
+    height: 0.16rem;
+    animation-duration: 1.28s;
+    opacity: 0.74;
     background: color-mix(in srgb, var(--theme-violet-bright) 62%, var(--theme-gold-bright) 18%);
 }
 
@@ -7003,6 +7014,48 @@
 }
 
 .chainOpportunityRewardLadderSummaryBeatPips i[data-board-chain-reward-summary-beat-focus='support'] {
+    opacity: 0.64;
+}
+
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-tier='next'] .chainOpportunityRewardLadderSummaryBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    animation-duration: 0.7s;
+    opacity: 0.98;
+}
+
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-tier='soon'] .chainOpportunityRewardLadderSummaryBeatPips i {
+    width: 0.16rem;
+    height: 0.1rem;
+    animation-duration: 0.96s;
+    opacity: 0.84;
+}
+
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-tier='later'] .chainOpportunityRewardLadderSummaryBeatPips i {
+    width: 0.09rem;
+    height: 0.09rem;
+    animation-duration: 1.4s;
+    opacity: 0.58;
+}
+
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='burst'] .chainOpportunityRewardLadderSummaryBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    animation-duration: 0.68s;
+    opacity: 0.98;
+}
+
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='pulse'] .chainOpportunityRewardLadderSummaryBeatPips i {
+    width: 0.16rem;
+    height: 0.1rem;
+    animation-duration: 0.94s;
+    opacity: 0.84;
+}
+
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='tick'] .chainOpportunityRewardLadderSummaryBeatPips i {
+    width: 0.08rem;
+    height: 0.12rem;
+    animation-duration: 1.34s;
     opacity: 0.64;
 }
 
