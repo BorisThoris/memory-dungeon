@@ -1600,6 +1600,7 @@
     opacity: 0.68;
 }
 
+.frame[data-chain-opportunity-callout-tone='cashout'] .chainOpportunityArcadeCallout,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 18%);
     background:
@@ -1607,10 +1608,12 @@
         color-mix(in srgb, var(--theme-gold-bright) 10%, var(--theme-void) 36%);
 }
 
+.frame[data-chain-opportunity-callout-tone='cashout'] .chainOpportunityArcadeCallout b,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='cashout'] b {
     color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
 }
 
+.frame[data-chain-opportunity-callout-tone='surge'] .chainOpportunityArcadeCallout,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='surge'] {
     border-color: color-mix(in srgb, var(--theme-success) 38%, var(--theme-gold-bright) 22%);
     background:
@@ -1618,10 +1621,12 @@
         color-mix(in srgb, var(--theme-void) 40%, transparent);
 }
 
+.frame[data-chain-opportunity-callout-tone='surge'] .chainOpportunityArcadeCallout b,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='surge'] b {
     color: color-mix(in srgb, var(--theme-success) 74%, white);
 }
 
+.frame[data-chain-opportunity-callout-tone='ready'] .chainOpportunityArcadeCallout,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='ready'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
     background:
@@ -1629,17 +1634,21 @@
         color-mix(in srgb, var(--theme-void) 40%, transparent);
 }
 
+.frame[data-chain-opportunity-callout-tone='ready'] .chainOpportunityArcadeCallout b,
+.frame[data-chain-opportunity-callout-tone='ready'] .chainOpportunityArcadeCallout .chainOpportunityArcadeCalloutBeatPips i,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='ready'] b,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='ready'] .chainOpportunityArcadeCalloutBeatPips i {
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
     background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
 }
 
+.frame[data-chain-opportunity-callout-tone='setup'] .chainOpportunityArcadeCallout,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='setup'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 36%, transparent);
     background: color-mix(in srgb, var(--theme-violet-bright) 10%, var(--theme-void) 38%);
 }
 
+.frame[data-chain-opportunity-callout-tone='setup'] .chainOpportunityArcadeCallout b,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='setup'] b {
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
 }
@@ -6084,6 +6093,7 @@
         0 0 0.56rem color-mix(in srgb, var(--theme-green-bright) 12%, transparent);
 }
 
+.frame[data-chain-opportunity-next-action-tone='cashout'] .chainOpportunityNextAction,
 .chainOpportunityNextAction[data-chain-next-action-tone='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, white 8%);
     background:
@@ -6096,11 +6106,14 @@
     animation: boardOpportunityPulse 1.2s ease-in-out infinite;
 }
 
+.frame[data-chain-opportunity-next-action-tone='cashout'] .chainOpportunityNextAction b,
+.frame[data-chain-opportunity-next-action-tone='cashout'] .chainOpportunityNextAction small,
 .chainOpportunityNextAction[data-chain-next-action-tone='cashout'] b,
 .chainOpportunityNextAction[data-chain-next-action-tone='cashout'] small {
     color: color-mix(in srgb, var(--theme-gold-bright) 91%, white);
 }
 
+.frame[data-chain-opportunity-next-action-tone='ready'] .chainOpportunityNextAction,
 .chainOpportunityNextAction[data-chain-next-action-tone='ready'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 46%, var(--theme-cyan-bright) 22%);
     background:
@@ -6111,12 +6124,16 @@
         0 0 16px color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
 }
 
+.frame[data-chain-opportunity-next-action-tone='ready'] .chainOpportunityNextAction b,
+.frame[data-chain-opportunity-next-action-tone='ready'] .chainOpportunityNextAction small,
+.frame[data-chain-opportunity-next-action-tone='ready'] .chainOpportunityNextAction .chainOpportunityNextActionPips i,
 .chainOpportunityNextAction[data-chain-next-action-tone='ready'] b,
 .chainOpportunityNextAction[data-chain-next-action-tone='ready'] small,
 .chainOpportunityNextAction[data-chain-next-action-tone='ready'] .chainOpportunityNextActionPips i {
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
 }
 
+.frame[data-chain-opportunity-next-action-tone='setup'] .chainOpportunityNextAction,
 .chainOpportunityNextAction[data-chain-next-action-tone='setup'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, transparent);
     background:
