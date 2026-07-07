@@ -749,6 +749,68 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-recent-action').getAttribute('aria-label')).toContain(
             'Then: rebuild with a safe match. Keep: stop the chain break.'
         );
+
+        rerender(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement="Chain started: x2."
+                run={run}
+            />
+        );
+        expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-impact-level', 'low');
+        expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-burst-tier', 'chain');
+        expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-impact-cue', 'Keep streak');
+        expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-impact-screen-cue', 'guard');
+        expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-impact-beats', '2');
+        expect(
+            screen.getByTestId('hud-recent-action-impact').querySelector('[data-hud-action-impact-cue="Keep streak"]')
+        ).toHaveAttribute('data-hud-action-impact-screen-cue', 'guard');
+        expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveAttribute('data-hud-action-primary-lane', 'chain');
+        expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveAttribute(
+            'data-hud-action-primary-lane-screen-cue',
+            'pulse'
+        );
+        expect(screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="chain"]')).toHaveAttribute(
+            'data-hud-action-lane-beats',
+            '3'
+        );
+
+        rerender(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement="Guard token gained. Objective complete."
+                run={run}
+            />
+        );
+        expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-burst-tier', 'reward');
+        expect(screen.getByTestId('hud-recent-action-impact')).toHaveAttribute('data-lane-map', 'utility:2');
+        expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveAttribute('data-hud-action-primary-lane', 'utility');
+        expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveAttribute(
+            'data-hud-action-primary-lane-audio',
+            'hud-action-utility'
+        );
+        expect(screen.getByTestId('hud-recent-action-primary-lane')).toHaveAttribute(
+            'data-hud-action-primary-lane-screen-cue',
+            'guard'
+        );
+        expect(screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="utility"]')).toHaveAttribute(
+            'data-hud-action-lane-screen-cue',
+            'guard'
+        );
+        expect(screen.getByTestId('hud-recent-action-lane-map').querySelector('[data-hud-action-lane="utility"]')).toHaveAttribute(
+            'data-hud-action-lane-beats',
+            '2'
+        );
+        expect(screen.getByTestId('hud-recent-action-stack-summary')).toHaveAttribute(
+            'data-hud-action-stack-summary',
+            'reward'
+        );
+        expect(screen.getByTestId('hud-recent-action-stack-summary')).toHaveAttribute(
+            'data-hud-action-stack-tone',
+            'reward'
+        );
     });
 
     it('surfaces named chain momentum tiers instead of a raw streak only', () => {
