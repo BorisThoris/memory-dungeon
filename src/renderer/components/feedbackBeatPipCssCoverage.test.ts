@@ -112,6 +112,11 @@ type VisibleToneSelectorGap = {
     value: string;
 };
 
+type VisibleStateSelectorGap = {
+    attr: string;
+    value: string;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -308,6 +313,22 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
     );
 };
 
+const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
+    const cssText = readComponentCssFiles()
+        .map(({ text }) => text)
+        .join('\n');
+    const visibleStateContracts: Record<string, readonly string[]> = {
+        'data-board-chain-reward-focus': ['primary', 'support'],
+        'data-board-chain-reward-ladder-focus': ['next', 'soon']
+    };
+
+    return Object.entries(visibleStateContracts).flatMap(([attr, values]) =>
+        values
+            .filter((value) => !cssText.includes(`[${attr}='${value}']`) && !cssText.includes(`[${attr}="${value}"]`))
+            .map((value) => ({ attr, value }))
+    );
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -419,6 +440,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findVisibleToneSelectorGaps(),
             'visible tone metadata should drive styling instead of only telemetry'
+        ).toEqual([]);
+    });
+
+    it('keeps visible board state metadata wired to CSS selectors', () => {
+        expect(
+            findVisibleStateSelectorGaps(),
+            'visible state metadata should drive styling instead of only telemetry'
         ).toEqual([]);
     });
 });

@@ -2072,6 +2072,10 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('board-opportunity-payoff-stack')).toBeVisible();
         expect(screen.getByTestId('chain-opportunity-reward-ladder')).toBeVisible();
+        expect(screen.getByTestId('chain-opportunity-reward-ladder')).toHaveAttribute(
+            'data-board-chain-reward-ladder-focus',
+            'soon'
+        );
         expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toBeVisible();
         expect(screen.getByTestId('chain-opportunity-reward-ladder-focus')).toHaveAttribute(
             'data-board-chain-reward-focus',
