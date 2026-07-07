@@ -1661,6 +1661,7 @@ describe('TileBoard touch and click controls', () => {
         expect(frame).toHaveAttribute('data-card-feedback-trait-lane-primary-audio', 'trait-lane-shard');
         expect(frame).toHaveAttribute('data-card-feedback-trait-lane-primary-action', 'shard:Cash shard:1');
         expect(frame).toHaveAttribute('data-card-feedback-trait-lane-primary-role', 'Cashout');
+        expect(frame).toHaveAttribute('data-card-feedback-trait-lane-primary-role-id', 'cashout');
         expect(frame).toHaveAttribute('data-card-feedback-trait-lane-primary-screen-cue', 'burst');
         expect(frame).toHaveAttribute('data-card-trait-lane-beat-map-summary-action', 'cashout');
         expect(frame).toHaveAttribute('data-card-trait-lane-beat-map-summary-beats', '5');
@@ -1672,6 +1673,7 @@ describe('TileBoard touch and click controls', () => {
         expect(primaryTraitLane).toHaveAttribute('data-card-trait-lane-primary-audio', 'trait-lane-shard');
         expect(primaryTraitLane).toHaveAttribute('data-card-trait-lane-primary-beats', '4');
         expect(primaryTraitLane).toHaveAttribute('data-card-trait-lane-primary-role', 'Cashout');
+        expect(primaryTraitLane).toHaveAttribute('data-card-trait-lane-primary-role-id', 'cashout');
         expect(primaryTraitLane).toHaveAttribute('data-card-trait-lane-primary-screen-cue', 'burst');
         expect(primaryTraitLane).toHaveAccessibleName('Primary trait lane action. Shard: 1. 4-beat Cash shard.');
         expect(primaryTraitLane).toHaveTextContent('Next lane');
@@ -1683,6 +1685,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-primary', 'shard');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-primary-role', 'Cashout');
+        expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-primary-role-id', 'cashout');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-map-summary-action', 'cashout');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-map-summary-beats', '5');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-beat-map-summary-screen-cue', 'burst');
@@ -1690,6 +1693,7 @@ describe('TileBoard touch and click controls', () => {
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-action', 'Cash shard');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-audio', 'trait-lane-shard');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-role', 'Cashout');
+        expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-role-id', 'cashout');
         expect(laneBeatMap).toHaveAttribute('data-card-trait-lane-primary-screen-cue', 'burst');
         const laneBeatMapSummary = screen.getByTestId('chain-opportunity-trait-lane-beat-map-summary');
         expect(laneBeatMapSummary).toHaveTextContent('Beats');
@@ -1714,10 +1718,12 @@ describe('TileBoard touch and click controls', () => {
         expect(shardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-audio', 'trait-lane-shard');
         expect(shardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-focus', 'primary');
         expect(shardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-role', 'Cashout');
+        expect(shardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-role-id', 'cashout');
         expect(shardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-screen-cue', 'burst');
         expect(guardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-audio', 'trait-lane-guard');
         expect(guardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-focus', 'support');
         expect(guardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-role', 'Protect');
+        expect(guardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-role-id', 'protect');
         expect(guardLaneBeat).toHaveAttribute('data-card-trait-lane-beat-screen-cue', 'guard');
         expect(
             shardLaneBeat?.querySelectorAll('[data-card-trait-lane-beat-pip]')

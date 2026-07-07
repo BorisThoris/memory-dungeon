@@ -500,6 +500,7 @@
 .frame[data-chain-opportunity-beat-action-id='surge'] .stage::after,
 .frame[data-card-feedback-primary-shot-screen-cue='burst'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-role='Cashout'] .stage::after,
+.frame[data-card-feedback-trait-lane-primary-role-id='cashout'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-screen-cue='burst'] .stage::after {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 18%);
     box-shadow:
@@ -516,6 +517,7 @@
 .frame[data-chain-opportunity-beat-action-id='setup'],
 .frame[data-card-feedback-primary-shot-screen-cue='pulse'],
 .frame[data-card-feedback-trait-lane-primary-role='Recall'],
+.frame[data-card-feedback-trait-lane-primary-role-id='recall'],
 .frame[data-card-feedback-trait-lane-primary-screen-cue='pulse'] {
     --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
 }
@@ -532,6 +534,8 @@
 .frame[data-card-feedback-primary-shot-screen-cue='guard'],
 .frame[data-card-feedback-trait-lane-primary-role='Protect'],
 .frame[data-card-feedback-trait-lane-primary-role='Tool'],
+.frame[data-card-feedback-trait-lane-primary-role-id='protect'],
+.frame[data-card-feedback-trait-lane-primary-role-id='tool'],
 .frame[data-card-feedback-trait-lane-primary-screen-cue='guard'] {
     --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-success) 38%, transparent);
 }
@@ -546,6 +550,8 @@
 .frame[data-card-feedback-primary-shot-screen-cue='risk'],
 .frame[data-card-feedback-trait-lane-primary-role='Block'],
 .frame[data-card-feedback-trait-lane-primary-role='Risk'],
+.frame[data-card-feedback-trait-lane-primary-role-id='block'],
+.frame[data-card-feedback-trait-lane-primary-role-id='risk'],
 .frame[data-card-feedback-trait-lane-primary-screen-cue='risk'] {
     --board-frame-cue-outline-color: color-mix(in srgb, var(--theme-danger) 38%, transparent);
 }
@@ -557,6 +563,7 @@
 .frame[data-chain-opportunity-beat-screen-cue='snap'] .stage::after,
 .frame[data-card-feedback-primary-shot-screen-cue='pulse'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-role='Recall'] .stage::after,
+.frame[data-card-feedback-trait-lane-primary-role-id='recall'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-screen-cue='pulse'] .stage::after,
 .frame[data-opportunity-best-screen-cue='guard'] .stage::after,
 .frame[data-chain-opportunity-screen-cue='guard'] .stage::after,
@@ -564,6 +571,8 @@
 .frame[data-card-feedback-primary-shot-screen-cue='guard'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-role='Protect'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-role='Tool'] .stage::after,
+.frame[data-card-feedback-trait-lane-primary-role-id='protect'] .stage::after,
+.frame[data-card-feedback-trait-lane-primary-role-id='tool'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-screen-cue='guard'] .stage::after,
 .frame[data-opportunity-best-screen-cue='tick'] .stage::after,
 .frame[data-opportunity-best-screen-cue='risk'] .stage::after,
@@ -572,6 +581,8 @@
 .frame[data-card-feedback-primary-shot-screen-cue='risk'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-role='Block'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-role='Risk'] .stage::after,
+.frame[data-card-feedback-trait-lane-primary-role-id='block'] .stage::after,
+.frame[data-card-feedback-trait-lane-primary-role-id='risk'] .stage::after,
 .frame[data-card-feedback-trait-lane-primary-screen-cue='risk'] .stage::after {
     border-color: var(--board-frame-cue-outline-color);
     opacity: 0.56;
@@ -1783,14 +1794,17 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
-.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Cashout'] {
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Cashout'],
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='cashout'] {
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
         0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
 }
 
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Cashout'] b,
-.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Cashout'] .chainOpportunityPrimaryTraitLanePips i {
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Cashout'] .chainOpportunityPrimaryTraitLanePips i,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='cashout'] b,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='cashout'] .chainOpportunityPrimaryTraitLanePips i {
     color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
     background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
@@ -1802,18 +1816,24 @@
 
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Protect'],
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Tool'],
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='protect'],
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='tool'],
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-screen-cue='guard'] .chainOpportunityPrimaryTraitLanePips i,
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-screen-cue='pulse'] .chainOpportunityPrimaryTraitLanePips i {
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }
 
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Protect'],
-.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Tool'] {
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Tool'],
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='protect'],
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='tool'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 52%, var(--theme-success) 16%);
 }
 
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Protect'] .chainOpportunityPrimaryTraitLanePips i,
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Tool'] .chainOpportunityPrimaryTraitLanePips i,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='protect'] .chainOpportunityPrimaryTraitLanePips i,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='tool'] .chainOpportunityPrimaryTraitLanePips i,
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-screen-cue='guard'] .chainOpportunityPrimaryTraitLanePips i,
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-screen-cue='pulse'] .chainOpportunityPrimaryTraitLanePips i {
     background: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
@@ -1821,6 +1841,8 @@
 
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Block'],
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Risk'],
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='block'],
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='risk'],
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-screen-cue='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 52%, transparent);
     background: color-mix(in srgb, var(--theme-danger) 12%, var(--theme-void));
@@ -1830,13 +1852,18 @@
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Block'] .chainOpportunityPrimaryTraitLanePips i,
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Risk'] b,
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Risk'] .chainOpportunityPrimaryTraitLanePips i,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='block'] b,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='block'] .chainOpportunityPrimaryTraitLanePips i,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='risk'] b,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='risk'] .chainOpportunityPrimaryTraitLanePips i,
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-screen-cue='risk'] b,
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-screen-cue='risk'] .chainOpportunityPrimaryTraitLanePips i {
     color: color-mix(in srgb, var(--theme-danger) 80%, white);
     background: color-mix(in srgb, var(--theme-danger) 74%, white);
 }
 
-.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Recall'] {
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Recall'],
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='recall'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-violet-bright) 18%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), color-mix(in srgb, var(--theme-violet-bright) 10%, transparent)),
@@ -1844,7 +1871,9 @@
 }
 
 .chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Recall'] b,
-.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Recall'] .chainOpportunityPrimaryTraitLanePips i {
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role='Recall'] .chainOpportunityPrimaryTraitLanePips i,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='recall'] b,
+.chainOpportunityPrimaryTraitLane[data-card-trait-lane-primary-role-id='recall'] .chainOpportunityPrimaryTraitLanePips i {
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
     background: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
 }
@@ -5715,7 +5744,8 @@
 
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat='shard'],
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat='score'],
-.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Cashout'] {
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Cashout'],
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role-id='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 14%);
     background: color-mix(in srgb, var(--theme-gold-bright) 12%, var(--theme-void) 35%);
 }
@@ -5728,12 +5758,16 @@
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat='score'] .chainOpportunityTraitLaneBeatPips i,
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Cashout'] b,
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Cashout'] em,
-.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Cashout'] .chainOpportunityTraitLaneBeatPips i {
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Cashout'] .chainOpportunityTraitLaneBeatPips i,
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role-id='cashout'] b,
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role-id='cashout'] em,
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role-id='cashout'] .chainOpportunityTraitLaneBeatPips i {
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
 }
 
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat='guard'],
-.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Protect'] {
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Protect'],
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role-id='protect'] {
     border-color: color-mix(in srgb, var(--theme-success) 42%, transparent);
     background: color-mix(in srgb, var(--theme-success) 10%, var(--theme-void) 34%);
 }
@@ -5741,7 +5775,9 @@
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat='risk'],
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat='block'],
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Risk'],
-.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Block'] {
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Block'],
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role-id='risk'],
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role-id='block'] {
     border-color: color-mix(in srgb, var(--theme-danger) 38%, var(--theme-violet-bright) 22%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 10%, transparent), color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)),
@@ -5751,32 +5787,46 @@
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat='recall'],
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat='tool'],
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Recall'],
-.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Tool'] {
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role='Tool'],
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role-id='recall'],
+.chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat-role-id='tool'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, var(--theme-void) 34%);
 }
 
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role='Cashout'],
-.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Cashout'] {
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Cashout'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role-id='cashout'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role-id='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 18%);
 }
 
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role='Protect'],
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Protect'],
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role='Tool'],
-.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Tool'] {
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Tool'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role-id='protect'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role-id='protect'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role-id='tool'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role-id='tool'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 40%, var(--theme-success) 14%);
 }
 
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role='Block'],
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Block'],
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role='Risk'],
-.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Risk'] {
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Risk'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role-id='block'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role-id='block'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role-id='risk'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role-id='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 38%, var(--theme-violet-bright) 18%);
 }
 
 .chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role='Recall'],
-.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Recall'] {
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role='Recall'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-primary-role-id='recall'],
+.chainOpportunityTraitLaneBeatMap[data-card-trait-lane-beat-primary-role-id='recall'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 40%, var(--theme-violet-bright) 18%);
 }
 

@@ -4805,6 +4805,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-card-feedback-trait-lane-primary-audio={primaryTraitLaneAudioCue}
             data-card-feedback-trait-lane-primary-action={cardFeedbackTraitLanePrimaryActionAttr}
             data-card-feedback-trait-lane-primary-role={primaryTraitLaneBeatRow?.role ?? 'none'}
+            data-card-feedback-trait-lane-primary-role-id={cardTraitLaneBeatMapSummaryAction(primaryTraitLaneBeatRow?.role ?? null) ?? 'none'}
             data-card-feedback-trait-lane-primary-screen-cue={primaryTraitLaneScreenCue}
             data-card-trait-lane-beat-map-summary-action={traitLaneBeatMapSummaryAction ?? 'none'}
             data-card-trait-lane-beat-map-summary-beats={cardFeedbackTraitLaneBeatRows.length > 0 ? traitLaneBeatMapSummaryBeatCount : 0}
@@ -5362,6 +5363,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-card-trait-lane-primary-audio={primaryTraitLaneAudioCue}
                                         data-card-trait-lane-primary-beats={primaryTraitLaneBeatRow.beatCount}
                                         data-card-trait-lane-primary-role={primaryTraitLaneBeatRow.role}
+                                        data-card-trait-lane-primary-role-id={cardTraitLaneBeatMapSummaryAction(primaryTraitLaneBeatRow.role) ?? 'none'}
                                         data-card-trait-lane-primary-screen-cue={primaryTraitLaneScreenCue}
                                         data-testid="chain-opportunity-primary-trait-lane"
                                     >
@@ -6044,12 +6046,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-card-trait-lane-primary-audio={primaryTraitLaneAudioCue}
                                         data-card-trait-lane-beat-primary={cardFeedbackTraitLaneBeatRows[0]?.id ?? 'none'}
                                         data-card-trait-lane-beat-primary-role={cardFeedbackTraitLaneBeatRows[0]?.role ?? 'none'}
+                                        data-card-trait-lane-beat-primary-role-id={
+                                            cardTraitLaneBeatMapSummaryAction(cardFeedbackTraitLaneBeatRows[0]?.role ?? null) ?? 'none'
+                                        }
                                         data-card-trait-lane-beat-map-summary-action={traitLaneBeatMapSummaryAction ?? 'none'}
                                         data-card-trait-lane-beat-map-summary-beats={traitLaneBeatMapSummaryBeatCount}
                                         data-card-trait-lane-beat-map-summary-screen-cue={traitLaneBeatMapSummaryScreenCue ?? 'none'}
                                         data-card-trait-lane-beat-map-summary-tier={traitLaneBeatMapSummaryTier ?? 'none'}
                                         data-card-trait-lane-primary-action={cardFeedbackTraitLaneBeatRows[0]?.action ?? 'none'}
                                         data-card-trait-lane-primary-role={cardFeedbackTraitLaneBeatRows[0]?.role ?? 'none'}
+                                        data-card-trait-lane-primary-role-id={
+                                            cardTraitLaneBeatMapSummaryAction(cardFeedbackTraitLaneBeatRows[0]?.role ?? null) ?? 'none'
+                                        }
                                         data-card-trait-lane-primary-screen-cue={primaryTraitLaneScreenCue}
                                         data-testid="chain-opportunity-trait-lane-beat-map"
                                     >
@@ -6106,6 +6114,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                         : 'support'
                                                 }
                                                 data-card-trait-lane-beat-role={row.role}
+                                                data-card-trait-lane-beat-role-id={cardTraitLaneBeatMapSummaryAction(row.role) ?? 'none'}
                                                 data-card-trait-lane-beat-screen-cue={cardTraitLaneScreenCue(row.id)}
                                                 key={row.id}
                                             >
