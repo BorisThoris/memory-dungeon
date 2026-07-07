@@ -4552,6 +4552,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 ? 'now'
                                                 : boardChainOpportunity.nextActionId === 'follow-up'
                                                   ? 'tap'
+                                                  : boardChainOpportunity.nextActionId === 'match-route'
+                                                    ? 'route'
                                                   : boardChainOpportunity.nextActionId === 'prime-route'
                                                     ? 'prime'
                                                     : 'setup'
@@ -4576,6 +4578,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 ? 'Now'
                                                 : boardChainOpportunity.nextActionId === 'follow-up'
                                                   ? 'Tap'
+                                                  : boardChainOpportunity.nextActionId === 'match-route'
+                                                    ? 'Match'
                                                   : boardChainOpportunity.nextActionId === 'prime-route'
                                                     ? 'Prime'
                                                     : 'Setup'}

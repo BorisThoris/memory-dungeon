@@ -400,6 +400,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-chain-beat-screen-cue': ['burst', 'pulse', 'snap', 'super'],
         'data-chain-followup-screen-cue': ['pulse'],
         'data-chain-marker-focus': ['primary', 'support'],
+        'data-chain-next-action': ['cashout', 'follow-up', 'match-route', 'prime-route'],
+        'data-chain-next-action-tier': ['now', 'prime', 'route', 'tap'],
         'data-chain-opportunity-next-action': ['cashout', 'follow-up', 'match-route', 'prime-route'],
         'data-chain-reward-urgency': ['later', 'next', 'soon'],
         'data-chain-opportunity-beat-screen-cue': ['burst', 'pulse', 'snap', 'super'],

@@ -1994,6 +1994,10 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-reward-hot', 'false');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-cue', 'Match now');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-target', 'Prime cashout');
+        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action', 'match-route');
+        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action-tier', 'route');
+        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action-tone', 'ready');
+        expect(screen.getByTestId('chain-opportunity-next-action').querySelector('small')).toHaveTextContent('Match');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-recipes', 'Echo + Sealed');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-count', '3');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action', 'Match route');

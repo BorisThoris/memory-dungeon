@@ -4491,6 +4491,15 @@
     color: color-mix(in srgb, white 90%, var(--theme-cyan-bright));
 }
 
+.chainOpportunityNextAction[data-chain-next-action-tier='route'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 18%);
+}
+
+.chainOpportunityNextAction[data-chain-next-action-tier='route'] > small {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 15%, transparent);
+    color: color-mix(in srgb, white 90%, var(--theme-cyan-bright));
+}
+
 .chainOpportunityNextAction[data-chain-next-action-tier='prime'] {
     border-color: color-mix(in srgb, var(--theme-green-bright) 42%, var(--theme-cyan-bright) 22%);
 }
@@ -4557,6 +4566,28 @@
 
 .chainOpportunityNextActionPips i[data-chain-next-action-pip-focus='support'] {
     opacity: 0.7;
+}
+
+.chainOpportunityNextAction[data-chain-next-action='cashout'] {
+    animation: boardOpportunityPulse 1.2s ease-in-out infinite;
+}
+
+.chainOpportunityNextAction[data-chain-next-action='follow-up'] {
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.chainOpportunityNextAction[data-chain-next-action='match-route'] {
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 9%, transparent),
+        0 0 0.64rem color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
+}
+
+.chainOpportunityNextAction[data-chain-next-action='prime-route'] {
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
+        0 0 0.56rem color-mix(in srgb, var(--theme-green-bright) 12%, transparent);
 }
 
 .chainOpportunityNextAction[data-chain-next-action-tone='cashout'] {
