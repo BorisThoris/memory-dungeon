@@ -1649,6 +1649,32 @@
     opacity: 0.7;
 }
 
+.chainOpportunityMilestone[data-chain-milestone-tone='building'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-text-muted) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent), color-mix(in srgb, var(--theme-panel-solid) 14%, transparent)),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tone='building'] .chainOpportunityMilestoneMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tone='building'] .chainOpportunityMilestoneMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 76%, white),
+        color-mix(in srgb, var(--theme-green-bright) 58%, white)
+    );
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tone='building'] .chainOpportunityMilestoneBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
 .chainOpportunityMilestone[data-chain-milestone-tone='chain'] {
     border-color: color-mix(in srgb, var(--theme-green-bright) 34%, transparent);
     background: color-mix(in srgb, var(--theme-green-bright) 10%, transparent);
