@@ -173,6 +173,11 @@ type PlaySurfaceLaneRowReadabilityGap = {
     lineNumber: number;
 };
 
+type MeterReadabilityGap = {
+    fileName: string;
+    lineNumber: number;
+};
+
 const findPrimaryCueMetadataGaps = (): PrimaryCueMetadataGap[] => {
     const gaps: PrimaryCueMetadataGap[] = [];
     const primaryCueElementPattern =
@@ -982,6 +987,32 @@ const findPlaySurfaceLaneRowReadabilityGaps = (): PlaySurfaceLaneRowReadabilityG
     return gaps;
 };
 
+const findMeterReadabilityGaps = (): MeterReadabilityGap[] => {
+    const gaps: MeterReadabilityGap[] = [];
+    const meterElementPattern = /<[A-Za-z][^<>]*\bdata-[A-Za-z0-9-]*(?:meter-fill|fill)\b[^<>]*>/gs;
+
+    for (const { fileName, text } of readComponentSourceFiles().filter(({ fileName }) => !fileName.includes('.test.'))) {
+        for (const match of text.matchAll(meterElementPattern)) {
+            const tag = match[0]!;
+            const hasReadableContract =
+                /\brole="progressbar"/.test(tag) ||
+                /\baria-label=/.test(tag) ||
+                /\baria-labelledby=/.test(tag) ||
+                /\btitle=/.test(tag) ||
+                /\baria-hidden="true"/.test(tag);
+
+            if (!hasReadableContract) {
+                gaps.push({
+                    fileName,
+                    lineNumber: text.slice(0, match.index ?? 0).split(/\r?\n/).length
+                });
+            }
+        }
+    }
+
+    return gaps;
+};
+
 const selectorHasDeclaration = (
     text: string,
     className: string,
@@ -1170,6 +1201,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findPlaySurfaceLaneRowReadabilityGaps(),
             'active play lane and reward rows should expose a readable label instead of only telemetry attributes'
+        ).toEqual([]);
+    });
+
+    it('keeps visible meter-fill feedback paired with readable semantics', () => {
+        expect(
+            findMeterReadabilityGaps(),
+            'visible meter-fill feedback should expose a readable label or progressbar semantics'
         ).toEqual([]);
     });
 });

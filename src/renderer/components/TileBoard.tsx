@@ -5304,6 +5304,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 <span
+                                    aria-label={`Chain cue meter. ${boardChainOpportunity.cue}.`}
+                                    aria-valuemax={100}
+                                    aria-valuemin={0}
+                                    aria-valuenow={
+                                        boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
+                                            ? 100
+                                            : boardChainOpportunity.selectedFollowupCount > 0
+                                              ? 75
+                                              : boardChainOpportunity.comboSurgeLabel
+                                                ? 60
+                                                : 40
+                                    }
                                     className={styles.chainOpportunityCue}
                                     data-chain-cue-meter-fill={
                                         boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
@@ -5327,6 +5339,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             }%`
                                         } as CSSProperties
                                     }
+                                    role="progressbar"
                                 >
                                     {boardChainOpportunity.cue}
                                     <i aria-hidden="true" className={styles.chainOpportunityCueMeter}>
@@ -6650,10 +6663,17 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainOpportunity.armedPerkLabel ? (
                                     <span
+                                        aria-label={`Armed perk meter. ${boardChainOpportunity.armedPerkLabel}. ${
+                                            boardChainOpportunity.armedPerkPayoff ? 'Payoff ready' : 'Ready'
+                                        }.`}
+                                        aria-valuemax={100}
+                                        aria-valuemin={0}
+                                        aria-valuenow={boardChainOpportunity.armedPerkPayoff ? 100 : 70}
                                         className={styles.chainOpportunityArmedPerk}
                                         data-chain-armed-perk-meter-fill={boardChainOpportunity.armedPerkPayoff ? 100 : 70}
                                         data-chain-armed-perk-tone={boardChainOpportunity.armedPerkPayoff ? 'payoff' : 'armed'}
                                         data-chain-perk-armed="true"
+                                        role="progressbar"
                                     >
                                         <small>{boardChainOpportunity.armedPerkPayoff ? 'Payoff' : 'Ready'}</small>
                                         <b>{boardChainOpportunity.armedPerkLabel}</b>
@@ -6686,6 +6706,18 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainOpportunity.rewardUrgencyLabel ? (
                                     <span
+                                        aria-label={`Reward urgency meter. ${boardChainOpportunity.rewardUrgencyLabel}.`}
+                                        aria-valuemax={100}
+                                        aria-valuemin={0}
+                                        aria-valuenow={
+                                            boardChainOpportunity.rewardUrgencyTier === 'next'
+                                                ? 100
+                                                : boardChainOpportunity.rewardUrgencyTier === 'soon'
+                                                  ? 75
+                                                  : boardChainOpportunity.rewardUrgencyTier === 'later'
+                                                    ? 50
+                                                    : 60
+                                        }
                                         className={styles.chainOpportunityRewardUrgency}
                                         data-chain-reward-urgency={boardChainOpportunity.rewardUrgencyTier ?? 'none'}
                                         data-chain-reward-urgency-meter-fill={
@@ -6713,6 +6745,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 }%`
                                             } as CSSProperties
                                         }
+                                        role="progressbar"
                                     >
                                         <small>{boardChainOpportunity.rewardUrgencyLabel}</small>
                                         <i aria-hidden="true" className={styles.chainOpportunityRewardUrgencyMeter}>
@@ -6741,6 +6774,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainOpportunity.examples.length > 0 ? (
                                     <span
+                                        aria-label={`Chain examples meter. ${boardChainOpportunity.examples.length} ${
+                                            boardChainOpportunity.examples.length === 1 ? 'example' : 'examples'
+                                        }.`}
+                                        aria-valuemax={100}
+                                        aria-valuemin={0}
+                                        aria-valuenow={Math.round(Math.min(100, (boardChainOpportunity.examples.length / 4) * 100))}
                                         className={styles.chainOpportunityExamples}
                                         data-chain-examples-meter-fill={Math.round(
                                             Math.min(100, (boardChainOpportunity.examples.length / 4) * 100)
@@ -6759,6 +6798,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 )}%`
                                             } as CSSProperties
                                         }
+                                        role="progressbar"
                                     >
                                         <small>Examples</small>
                                         {boardChainOpportunity.examples.join(' / ')}
@@ -6778,6 +6818,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainOpportunity.rewardCue ? (
                                     <span
+                                        aria-label={`Chain reward meter. ${boardChainOpportunity.rewardCue}. ${
+                                            boardChainOpportunity.rewardHot ? 'Cash in now' : 'Build toward cashout'
+                                        }.`}
+                                        aria-valuemax={100}
+                                        aria-valuemin={0}
+                                        aria-valuenow={boardChainOpportunity.rewardHot ? 100 : 60}
                                         className={
                                             boardChainOpportunity.rewardHot
                                                 ? styles.chainOpportunityPayoffBurst
@@ -6800,6 +6846,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 }%`
                                             } as CSSProperties
                                         }
+                                        role="progressbar"
                                     >
                                         <small>{boardChainOpportunity.rewardHot ? 'Payoff' : 'Forecast'}</small>
                                         <b>{boardChainOpportunity.rewardCue}</b>
@@ -6904,6 +6951,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainOpportunity.momentumLabel || boardChainOpportunity.chaseLabel ? (
                                     <span
+                                        aria-label={`Chain momentum meter. ${
+                                            boardChainOpportunity.momentumLabel ?? boardChainOpportunity.chaseLabel ?? 'Momentum'
+                                        }.`}
+                                        aria-valuemax={100}
+                                        aria-valuemin={0}
+                                        aria-valuenow={Math.round((boardChainMomentumBeatCount / 5) * 100)}
                                         className={styles.chainOpportunityMomentum}
                                         data-chain-momentum-beats={boardChainMomentumBeatCount}
                                         data-chain-momentum-meter-fill={Math.round((boardChainMomentumBeatCount / 5) * 100)}
@@ -6917,6 +6970,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 )}%`
                                             } as CSSProperties
                                         }
+                                        role="progressbar"
                                     >
                                         {boardChainOpportunity.momentumLabel ? <b>{boardChainOpportunity.momentumLabel}</b> : null}
                                         {boardChainOpportunity.chaseLabel ? <small>{boardChainOpportunity.chaseLabel}</small> : null}
@@ -6935,6 +6989,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     </span>
                                 ) : null}
                                 <span
+                                    aria-label={`Chain lines meter. ${boardChainOpportunity.lines.length} ${
+                                        boardChainOpportunity.lines.length === 1 ? 'line' : 'lines'
+                                    }.`}
+                                    aria-valuemax={100}
+                                    aria-valuemin={0}
+                                    aria-valuenow={Math.round(Math.min(100, (boardChainOpportunity.lines.length / 3) * 100))}
                                     className={styles.chainOpportunityLines}
                                     data-chain-lines-action={boardChainOpportunity.nextActionId}
                                     data-chain-lines-meter-fill={Math.round(Math.min(100, (boardChainOpportunity.lines.length / 3) * 100))}
@@ -6947,6 +7007,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             )}%`
                                         } as CSSProperties
                                     }
+                                    role="progressbar"
                                 >
                                     {boardChainOpportunity.lines.join(' / ')}
                                     <i aria-hidden="true" className={styles.chainOpportunityLinesMeter}>
@@ -7275,6 +7336,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <b>{boardPayoffStack.detail}</b>
                                         <i aria-hidden="true" className={styles.opportunityPayoffStackMeter} />
                                         <span
+                                            aria-label={`Payoff crescendo meter. ${boardPayoffStack.crescendo.label}. ${boardPayoffStack.crescendo.detail}. ${boardPayoffStack.crescendo.beatCount} beats.`}
+                                            aria-valuemax={100}
+                                            aria-valuemin={0}
+                                            aria-valuenow={Math.round((boardPayoffStack.crescendo.beatCount / 5) * 100)}
                                             className={styles.opportunityPayoffCrescendo}
                                             data-payoff-stack-crescendo-label={boardPayoffStack.crescendo.label}
                                             data-payoff-stack-crescendo-fill={Math.round((boardPayoffStack.crescendo.beatCount / 5) * 100)}
@@ -7285,6 +7350,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     )}%`
                                                 } as CSSProperties
                                             }
+                                            role="progressbar"
                                         >
                                             <small>{boardPayoffStack.crescendo.label}</small>
                                             <strong>
