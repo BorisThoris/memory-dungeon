@@ -8706,7 +8706,7 @@
 .frame[data-opportunity-compass-summary-tier='cashout'] .opportunityCompassSummary,
 .opportunityCompass[data-opportunity-compass-summary-tier='cashout'] .opportunityCompassSummary,
 .opportunityCompassSummary[data-opportunity-compass-summary-tier='cashout'],
-.opportunityCompassSummary[data-opportunity-compass-summary-action='Cash out'] {
+.opportunityCompassSummary[data-opportunity-compass-summary-action='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-cyan-bright) 24%);
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, white 12%, transparent),
@@ -8715,14 +8715,16 @@
 
 .frame[data-opportunity-compass-summary-tier='prime'] .opportunityCompassSummary,
 .opportunityCompass[data-opportunity-compass-summary-tier='prime'] .opportunityCompassSummary,
-.opportunityCompassSummary[data-opportunity-compass-summary-tier='prime'] {
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='prime'],
+.opportunityCompassSummary[data-opportunity-compass-summary-action='prime'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 50%, var(--theme-violet-bright) 18%);
     box-shadow: 0 0 0.76rem color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
 }
 
 .frame[data-opportunity-compass-summary-tier='risk'] .opportunityCompassSummary,
 .opportunityCompass[data-opportunity-compass-summary-tier='risk'] .opportunityCompassSummary,
-.opportunityCompassSummary[data-opportunity-compass-summary-tier='risk'] {
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='risk'],
+.opportunityCompassSummary[data-opportunity-compass-summary-action='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 48%, var(--theme-gold-bright) 16%);
     box-shadow:
         0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent),
@@ -8731,21 +8733,25 @@
 
 .frame[data-opportunity-compass-summary-tier='recover'] .opportunityCompassSummary,
 .opportunityCompass[data-opportunity-compass-summary-tier='recover'] .opportunityCompassSummary,
-.opportunityCompassSummary[data-opportunity-compass-summary-tier='recover'] {
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='recover'],
+.opportunityCompassSummary[data-opportunity-compass-summary-action='claim'],
+.opportunityCompassSummary[data-opportunity-compass-summary-action='recover'] {
     border-color: color-mix(in srgb, var(--theme-success) 48%, var(--theme-cyan-bright) 18%);
     box-shadow: 0 0 0.78rem color-mix(in srgb, var(--theme-success) 14%, transparent);
 }
 
 .frame[data-opportunity-compass-summary-tier='tool'] .opportunityCompassSummary,
 .opportunityCompass[data-opportunity-compass-summary-tier='tool'] .opportunityCompassSummary,
-.opportunityCompassSummary[data-opportunity-compass-summary-tier='tool'] {
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='tool'],
+.opportunityCompassSummary[data-opportunity-compass-summary-action='tool'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-cyan-bright) 18%);
     box-shadow: 0 0 0.74rem color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
 }
 
 .frame[data-opportunity-compass-summary-tier='route'] .opportunityCompassSummary,
 .opportunityCompass[data-opportunity-compass-summary-tier='route'] .opportunityCompassSummary,
-.opportunityCompassSummary[data-opportunity-compass-summary-tier='route'] {
+.opportunityCompassSummary[data-opportunity-compass-summary-tier='route'],
+.opportunityCompassSummary[data-opportunity-compass-summary-action='route'] {
     box-shadow: 0 0 0.62rem color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
 }
 
@@ -8780,6 +8786,28 @@
 
 .opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-focus='support'] {
     opacity: 0.64;
+}
+
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='cashout'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='prime'],
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='route'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='claim'],
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='recover'] {
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+}
+
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='risk'] {
+    color: color-mix(in srgb, var(--theme-danger) 82%, white);
+}
+
+.opportunityCompassSummaryBeatPips i[data-opportunity-compass-summary-beat-action='tool'] {
+    color: color-mix(in srgb, var(--theme-violet-bright) 86%, white);
 }
 
 .opportunityCompassMeter {

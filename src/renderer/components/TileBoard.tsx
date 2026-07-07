@@ -139,6 +139,7 @@ type BoardOpportunityCompassRow = {
     tone: BoardOpportunityTone;
     value: string;
 };
+type BoardOpportunityCompassSummaryAction = 'cashout' | 'claim' | 'prime' | 'recover' | 'risk' | 'route' | 'tool';
 type BoardOpportunityCompassSummaryTier = 'cashout' | 'prime' | 'recover' | 'risk' | 'route' | 'tool';
 type BoardOpportunityLaneId = 'cash' | 'build' | 'pickup' | 'perk' | 'recover' | 'risk' | 'tool' | 'trait';
 type BoardOpportunityLaneMapEntry = {
@@ -253,6 +254,34 @@ const getBoardOpportunityCompassSummaryTier = (row: BoardOpportunityCompassRow |
         return 'tool';
     }
     if (heat === 'prime' || heat === 'surge') {
+        return 'prime';
+    }
+    return 'route';
+};
+
+const getBoardOpportunityCompassSummaryAction = (
+    row: BoardOpportunityCompassRow | null
+): BoardOpportunityCompassSummaryAction | null => {
+    if (!row) {
+        return null;
+    }
+    const heat = getBoardOpportunityHeat(row.impactCue);
+    if (heat === 'cashout') {
+        return 'cashout';
+    }
+    if (row.id === 'hazard' || row.tone === 'hazard' || row.tone === 'risk' || row.tone === 'lost-reward' || row.tone === 'control') {
+        return 'risk';
+    }
+    if (row.id === 'pickup' || row.tone === 'pickup') {
+        return 'claim';
+    }
+    if (row.id === 'recovery' || row.tone === 'recover') {
+        return 'recover';
+    }
+    if (row.id === 'tool' || row.tone === 'recall') {
+        return 'tool';
+    }
+    if (heat === 'prime' || heat === 'surge' || row.tone === 'setup' || row.tone === 'perk') {
         return 'prime';
     }
     return 'route';
@@ -3368,6 +3397,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardBestOpportunityHeat = boardBestOpportunity ? getBoardOpportunityHeat(boardBestOpportunity.impactCue) : 'none';
     const boardBestOpportunityBeatCount = boardBestOpportunity ? getBoardOpportunityBeatCount(boardBestOpportunity) : 0;
     const boardOpportunityCompassSummaryBeatCount = Math.max(2, Math.min(5, boardOpportunityCompassRows.length + 1)) as 2 | 3 | 4 | 5;
+    const boardOpportunityCompassSummaryAction = getBoardOpportunityCompassSummaryAction(boardBestOpportunity);
+    const boardOpportunityCompassSummaryActionLabel = boardBestOpportunity?.action ?? 'none';
+    const boardOpportunityCompassSummaryScreenCue = boardBestOpportunity
+        ? boardOpportunityScreenCue(boardBestOpportunity)
+        : null;
     const boardOpportunityCompassSummaryTier = getBoardOpportunityCompassSummaryTier(boardBestOpportunity);
     const boardOpportunityCompassMeterFill = Math.round(
         Math.min(100, ((boardOpportunityCompassRows.length + boardBestOpportunityBeatCount) / 10) * 100)
@@ -4813,8 +4847,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             data-opportunity-payoff-sequence-then={boardPayoffStack?.sequence.then ?? 'none'}
             data-opportunity-payoff-stack-tone={boardPayoffStack?.tone ?? 'none'}
             data-opportunity-compass-count={boardOpportunityCompassRows.length}
-            data-opportunity-compass-summary-action={boardBestOpportunity?.action ?? 'none'}
+            data-opportunity-compass-summary-action={boardOpportunityCompassSummaryAction ?? 'none'}
+            data-opportunity-compass-summary-action-label={boardOpportunityCompassSummaryActionLabel}
             data-opportunity-compass-summary-beats={boardOpportunityCompassRows.length > 0 ? boardOpportunityCompassSummaryBeatCount : 0}
+            data-opportunity-compass-summary-screen-cue={boardOpportunityCompassSummaryScreenCue ?? 'none'}
             data-opportunity-compass-summary-tier={boardOpportunityCompassRows.length > 0 ? boardOpportunityCompassSummaryTier : 'none'}
             data-opportunity-lane-actions={boardOpportunityLaneActionMapAttrValue}
             data-opportunity-lane-map-action={boardOpportunityLaneMapSummaryAction ?? 'none'}
@@ -6962,19 +6998,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 data-opportunity-compass-surge={boardChainOpportunity.comboSurgeLabel ? 'true' : 'false'}
                                 data-opportunity-compass-beats={boardOpportunityCompassRows.length}
                                 data-opportunity-compass-priority={boardOpportunityCompassRows.length === 1 ? 'single' : 'best'}
-                                data-opportunity-compass-summary-action={boardBestOpportunity?.action ?? 'none'}
+                                data-opportunity-compass-summary-action={boardOpportunityCompassSummaryAction ?? 'none'}
+                                data-opportunity-compass-summary-action-label={boardOpportunityCompassSummaryActionLabel}
                                 data-opportunity-compass-summary-beats={boardOpportunityCompassSummaryBeatCount}
+                                data-opportunity-compass-summary-screen-cue={boardOpportunityCompassSummaryScreenCue ?? 'none'}
                                 data-opportunity-compass-summary-tier={boardOpportunityCompassSummaryTier}
                                 data-testid="board-opportunity-compass"
                                 role="group"
                             >
                                 <span
                                     className={styles.opportunityCompassSummary}
-                                    data-opportunity-compass-summary-action={boardBestOpportunity?.action ?? 'none'}
+                                    data-opportunity-compass-summary-action={boardOpportunityCompassSummaryAction ?? 'none'}
+                                    data-opportunity-compass-summary-action-label={boardOpportunityCompassSummaryActionLabel}
                                     data-opportunity-compass-summary-beats={boardOpportunityCompassSummaryBeatCount}
-                                    data-opportunity-compass-summary-screen-cue={
-                                        boardBestOpportunity ? boardOpportunityScreenCue(boardBestOpportunity) : 'none'
-                                    }
+                                    data-opportunity-compass-summary-screen-cue={boardOpportunityCompassSummaryScreenCue ?? 'none'}
                                     data-opportunity-compass-summary-tier={boardOpportunityCompassSummaryTier}
                                     data-opportunity-compass-summary-tone={boardBestOpportunity?.tone ?? 'none'}
                                     data-testid="board-opportunity-compass-summary"
@@ -6987,6 +7024,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             (_, index) => (
                                                 <i
                                                     data-opportunity-compass-summary-beat={index + 1}
+                                                    data-opportunity-compass-summary-beat-action={
+                                                        boardOpportunityCompassSummaryAction ?? 'none'
+                                                    }
                                                     data-opportunity-compass-summary-beat-focus={index === 0 ? 'primary' : 'support'}
                                                     key={index}
                                                 />
