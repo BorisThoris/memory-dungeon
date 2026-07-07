@@ -43,6 +43,45 @@
     box-shadow: var(--theme-elevation-soft);
 }
 
+.galleryCard[data-status='owned'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-divider-hairline));
+    background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--theme-success) 9%, transparent), transparent 54%),
+        var(--theme-surface-glass);
+}
+
+.galleryCard[data-status='in_progress'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-divider-hairline));
+    background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--theme-gold-bright) 10%, transparent), transparent 54%),
+        var(--theme-surface-glass);
+}
+
+.galleryCard[data-status='missing'] {
+    border-style: dashed;
+    border-color: color-mix(in srgb, var(--theme-text-muted) 28%, var(--theme-divider-hairline));
+    background: color-mix(in srgb, var(--theme-surface-glass) 88%, transparent);
+    opacity: 0.84;
+}
+
+.galleryCard[data-status='owned'] .galleryBadge {
+    border-color: color-mix(in srgb, var(--theme-success) 34%, transparent);
+    background: color-mix(in srgb, var(--theme-success) 14%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 76%, white);
+}
+
+.galleryCard[data-status='in_progress'] .galleryBadge {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+    background: color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.galleryCard[data-status='missing'] .galleryBadge {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 28%, transparent);
+    background: color-mix(in srgb, var(--theme-text-muted) 8%, transparent);
+    color: color-mix(in srgb, var(--theme-text-muted) 82%, white);
+}
+
 .galleryBadge {
     width: fit-content;
     padding: 0.12rem 0.42rem;

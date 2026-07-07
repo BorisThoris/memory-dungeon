@@ -448,6 +448,7 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-chain-target-tone': ['cashout', 'ready', 'setup'],
         'data-choice-lane-role-id': ['bank', 'claim', 'prime', 'risk', 'route', 'stack'],
         'data-choice-primary-lane-role-id': ['bank', 'claim', 'prime', 'risk', 'route', 'stack'],
+        'data-impact-tone': ['cosmetic', 'deferred', 'owned', 'ready'],
         'data-opportunity-payoff-stack-tone': ['build', 'cashout', 'followup', 'setup'],
         'data-opportunity-payoff-stack-cue-id': ['cashout', 'followup', 'prime', 'super'],
         'data-opportunity-tone': [
@@ -694,6 +695,7 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-hazard-opportunity-trigger': ['flip', 'match', 'match_or_mismatch', 'mismatch'],
         'data-match-trait-primary-lane-role-id': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
         'data-match-trait-lane-role-id': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
+        'data-status': ['in_progress', 'missing', 'owned'],
         'data-opportunity-best-heat': ['cashout', 'normal', 'prime', 'surge'],
         'data-opportunity-best-action-id': [
             'cashout',
