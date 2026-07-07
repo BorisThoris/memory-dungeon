@@ -4110,6 +4110,22 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 91%, white);
 }
 
+.chainOpportunityNextAction[data-chain-next-action-tone='ready'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 46%, var(--theme-cyan-bright) 22%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 40%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 16px color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
+}
+
+.chainOpportunityNextAction[data-chain-next-action-tone='ready'] b,
+.chainOpportunityNextAction[data-chain-next-action-tone='ready'] small,
+.chainOpportunityNextAction[data-chain-next-action-tone='ready'] .chainOpportunityNextActionPips i {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
 .chainOpportunityNextAction[data-chain-next-action-tone='setup'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, transparent);
     background:

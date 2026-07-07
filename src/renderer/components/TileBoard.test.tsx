@@ -1610,6 +1610,7 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-priority', 'Follow-up ready');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-next-action', 'follow-up');
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-next-action-tone', 'ready');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-count', '3');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-action', 'Tap follow-up');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-audio', 'follow-up-beat');
@@ -1619,6 +1620,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-beat-tier', 'follow-up');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-card-feedback-beat-counts', '3:2');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action', 'follow-up');
+        expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute('data-chain-next-action-tone', 'ready');
         expect(screen.getByTestId('chain-opportunity-next-action')).toHaveAttribute(
             'data-chain-next-action-meter-fill',
             '75'
