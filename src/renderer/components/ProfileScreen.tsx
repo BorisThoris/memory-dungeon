@@ -335,7 +335,11 @@ const ProfileScreen = () => {
                                                     {Array.from(
                                                         { length: getRunPayoffLaneBeatCount(primaryRecentRunPayoffLane) },
                                                         (_, index) => (
-                                                            <s data-recent-run-primary-lane-beat key={index} />
+                                                            <s
+                                                                data-recent-run-primary-lane-beat
+                                                                data-recent-run-primary-lane-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                key={index}
+                                                            />
                                                         )
                                                     )}
                                                 </span>
@@ -361,7 +365,11 @@ const ProfileScreen = () => {
                                                 </em>
                                                 <span aria-hidden="true" className={styles.recentRunLaneBeatPips}>
                                                     {Array.from({ length: getRunPayoffLaneBeatCount(lane) }, (_, index) => (
-                                                        <s data-recent-run-lane-beat key={index} />
+                                                        <s
+                                                            data-recent-run-lane-beat
+                                                            data-recent-run-lane-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            key={index}
+                                                        />
                                                     ))}
                                                 </span>
                                             </i>
@@ -395,7 +403,11 @@ const ProfileScreen = () => {
                                         <i>{row.action}</i>
                                         <span aria-hidden="true" className={styles.recentRunBeatPips}>
                                             {Array.from({ length: getRunPayoffSignalBeatCount(row) }, (_, index) => (
-                                                <i data-recent-run-signal-beat key={index} />
+                                                <i
+                                                    data-recent-run-signal-beat
+                                                    data-recent-run-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    key={index}
+                                                />
                                             ))}
                                         </span>
                                         {row.nextCue ? <em>{row.nextCue}</em> : null}

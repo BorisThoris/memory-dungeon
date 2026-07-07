@@ -5434,6 +5434,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             (_, beatIndex) => (
                                                                 <i
                                                                     data-mismatch-recovery-primary-lane-beat={beatIndex + 1}
+                                                                    data-mismatch-recovery-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
                                                                     key={beatIndex}
                                                                 />
                                                             )
@@ -5464,6 +5465,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             (_, beatIndex) => (
                                                                 <i
                                                                     data-mismatch-recovery-lane-beat={beatIndex + 1}
+                                                                    data-mismatch-recovery-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
                                                                     key={beatIndex}
                                                                 />
                                                             )
@@ -5510,6 +5512,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             {Array.from({ length: chipBeatCount }, (_, index) => (
                                                                 <i
                                                                     data-mismatch-recovery-chip-beat={index + 1}
+                                                                    data-mismatch-recovery-chip-beat-focus={index === 0 ? 'primary' : 'support'}
                                                                     key={`mismatch-recovery-chip-beat-${chip.id}-${index + 1}`}
                                                                 />
                                                             ))}

@@ -845,7 +845,11 @@ const ChooseYourPathScreen = () => {
                                 <em>{primaryModeLane.cue}</em>
                                 <span aria-hidden="true" className={styles.modePrimaryLaneBeatPips}>
                                     {Array.from({ length: modeChoiceLaneBeatCount(primaryModeLane) }, (_, beatIndex) => (
-                                        <s data-mode-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                        <s
+                                            data-mode-primary-lane-beat={beatIndex + 1}
+                                            data-mode-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                            key={beatIndex}
+                                        />
                                     ))}
                                 </span>
                             </i>
@@ -884,7 +888,11 @@ const ChooseYourPathScreen = () => {
                             <b>{modeChoiceSignalAction(signal)}</b>
                             <span aria-hidden="true" className={styles.modeSignalBeatPips}>
                                 {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                    <i data-mode-signal-beat={beatIndex + 1} key={beatIndex} />
+                                    <i
+                                        data-mode-signal-beat={beatIndex + 1}
+                                        data-mode-signal-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                        key={beatIndex}
+                                    />
                                 ))}
                             </span>
                         </span>

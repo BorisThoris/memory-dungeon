@@ -79,6 +79,13 @@ type BeatCueMetadataGap = {
     hasScreenCue: boolean;
 };
 
+type BeatFocusMetadataGap = {
+    attr: string;
+    expectedFocusAttr: string;
+    fileName: string;
+    lineNumber: number;
+};
+
 type HardHiddenFeedbackMap = {
     fileName: string;
     selector: string;
@@ -209,6 +216,30 @@ const findBeatCueMetadataGaps = (): BeatCueMetadataGap[] => {
                         hasScreenCue
                     });
                 }
+            }
+        }
+    }
+
+    return gaps;
+};
+
+const findBeatFocusMetadataGaps = (): BeatFocusMetadataGap[] => {
+    const gaps: BeatFocusMetadataGap[] = [];
+    const beatPipPattern = /<[isu]\b[^<>]*\b(data-[A-Za-z0-9-]*-beat)(?=[\s=>])[^<>]*>/gs;
+
+    for (const { fileName, text } of readComponentSourceFiles().filter(({ fileName }) => !fileName.includes('.test.'))) {
+        for (const match of text.matchAll(beatPipPattern)) {
+            const tag = match[0]!;
+            const attr = match[1]!;
+            const expectedFocusAttr = `${attr}-focus`;
+
+            if (!tag.includes(expectedFocusAttr)) {
+                gaps.push({
+                    attr,
+                    expectedFocusAttr,
+                    fileName,
+                    lineNumber: text.slice(0, match.index ?? 0).split(/\r?\n/).length
+                });
             }
         }
     }
@@ -821,6 +852,13 @@ describe('feedback beat pip CSS coverage', () => {
         expect(
             findBeatCueMetadataGaps(),
             'lane, payoff, and burst rows with beat metadata should expose matching audio and screen-cue metadata'
+        ).toEqual([]);
+    });
+
+    it('keeps beat pip elements marked with primary/support focus metadata', () => {
+        expect(
+            findBeatFocusMetadataGaps(),
+            'beat pip elements should expose primary/support focus metadata so CSS can emphasize the lead beat'
         ).toEqual([]);
     });
 

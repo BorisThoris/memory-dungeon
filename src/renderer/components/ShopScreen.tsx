@@ -1109,7 +1109,11 @@ const ShopScreen = () => {
                     </span>
                     <div aria-hidden="true" className={styles.payoffEngineBeatPips}>
                         {Array.from({ length: payoffEngineBeatCount }, (_, beatIndex) => (
-                            <i data-shop-payoff-engine-beat={beatIndex + 1} key={beatIndex} />
+                            <i
+                                data-shop-payoff-engine-beat={beatIndex + 1}
+                                data-shop-payoff-engine-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                key={beatIndex}
+                            />
                         ))}
                     </div>
                 </div>
@@ -1182,7 +1186,11 @@ const ShopScreen = () => {
                                 <em>{primaryOfferLane.cue}</em>
                                 <span aria-hidden="true" className={styles.offerLanePrimaryBeatPips}>
                                     {Array.from({ length: shopOfferLaneBeatCount(primaryOfferLane) }, (_, beatIndex) => (
-                                        <i data-shop-primary-offer-lane-beat={beatIndex + 1} key={beatIndex} />
+                                        <i
+                                            data-shop-primary-offer-lane-beat={beatIndex + 1}
+                                            data-shop-primary-offer-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                            key={beatIndex}
+                                        />
                                     ))}
                                 </span>
                             </span>
@@ -1206,7 +1214,11 @@ const ShopScreen = () => {
                                 </em>
                                 <span aria-hidden="true" className={styles.offerLaneBeatPips}>
                                     {Array.from({ length: shopOfferLaneBeatCount(lane) }, (_, beatIndex) => (
-                                        <i data-shop-offer-lane-beat={beatIndex + 1} key={beatIndex} />
+                                        <i
+                                            data-shop-offer-lane-beat={beatIndex + 1}
+                                            data-shop-offer-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                            key={beatIndex}
+                                        />
                                     ))}
                                 </span>
                             </span>
@@ -1287,7 +1299,11 @@ const ShopScreen = () => {
                                         <strong>{fitRows[0]!.value}</strong>
                                         <span aria-hidden="true" className={styles.stockRecommendationBeatPips}>
                                             {Array.from({ length: recommendationBeatCount }, (_, beatIndex) => (
-                                                <i data-shop-recommendation-beat={beatIndex + 1} key={beatIndex} />
+                                                <i
+                                                    data-shop-recommendation-beat={beatIndex + 1}
+                                                    data-shop-recommendation-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                    key={beatIndex}
+                                                />
                                             ))}
                                         </span>
                                     </span>
@@ -1369,7 +1385,11 @@ const ShopScreen = () => {
                                             <b>{shopOfferSignalAction(chip.tone)}</b>
                                             <span aria-hidden="true" className={styles.stockSignalBeatPips}>
                                                 {Array.from({ length: shopOfferSignalBeatCount(chip.tone) }, (_, beatIndex) => (
-                                                    <i data-shop-signal-beat={beatIndex + 1} key={beatIndex} />
+                                                    <i
+                                                        data-shop-signal-beat={beatIndex + 1}
+                                                        data-shop-signal-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                        key={beatIndex}
+                                                    />
                                                 ))}
                                             </span>
                                         </span>
@@ -1395,7 +1415,11 @@ const ShopScreen = () => {
                                             <b>{shopOfferPayoffAction(row)}</b>
                                             <span aria-hidden="true" className={styles.stockPayoffBeatPips}>
                                                 {Array.from({ length: shopOfferPayoffBeatCount(row) }, (_, beatIndex) => (
-                                                    <i data-shop-payoff-beat={beatIndex + 1} key={beatIndex} />
+                                                    <i
+                                                        data-shop-payoff-beat={beatIndex + 1}
+                                                        data-shop-payoff-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                        key={beatIndex}
+                                                    />
                                                 ))}
                                             </span>
                                         </span>

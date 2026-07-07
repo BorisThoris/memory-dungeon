@@ -1088,7 +1088,11 @@ const SideRoomScreen = () => {
                         <strong>{payoffEngineSignal.value}</strong>
                         <span aria-hidden="true" className={styles.payoffEngineBeatPips}>
                             {Array.from({ length: payoffEngineBeats }, (_, index) => (
-                                <i data-side-room-payoff-engine-beat key={index} />
+                                <i
+                                    data-side-room-payoff-engine-beat
+                                    data-side-room-payoff-engine-beat-focus={index === 0 ? 'primary' : 'support'}
+                                    key={index}
+                                />
                             ))}
                         </span>
                     </span>
@@ -1133,7 +1137,11 @@ const SideRoomScreen = () => {
                                     <strong>{signal.value}</strong>
                                     <span aria-hidden="true" className={styles.primaryActionBeatPips}>
                                         {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                            <i data-primary-action-beat={beatIndex + 1} key={beatIndex} />
+                                            <i
+                                                data-primary-action-beat={beatIndex + 1}
+                                                data-primary-action-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                key={beatIndex}
+                                            />
                                         ))}
                                     </span>
                                 </span>
@@ -1160,7 +1168,11 @@ const SideRoomScreen = () => {
                                     <b>{rewardBurstAction(row)}</b>
                                     <span aria-hidden="true" className={styles.rewardBurstBeatPips}>
                                         {Array.from({ length: rewardBurstBeatCount(row) }, (_, index) => (
-                                            <i data-reward-burst-beat key={index} />
+                                            <i
+                                                data-reward-burst-beat
+                                                data-reward-burst-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                key={index}
+                                            />
                                         ))}
                                     </span>
                                 </span>
@@ -1258,7 +1270,11 @@ const SideRoomScreen = () => {
                                             <em>{primaryChoiceLane.cue}</em>
                                             <span aria-hidden="true" className={styles.choiceLanePrimaryBeatPips}>
                                                 {Array.from({ length: sideRoomChoiceLaneBeatCount(primaryChoiceLane) }, (_, beatIndex) => (
-                                                    <i data-choice-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                    <i
+                                                        data-choice-primary-lane-beat={beatIndex + 1}
+                                                        data-choice-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                        key={beatIndex}
+                                                    />
                                                 ))}
                                             </span>
                                         </span>
@@ -1282,7 +1298,11 @@ const SideRoomScreen = () => {
                                             </em>
                                             <span aria-hidden="true" className={styles.choiceLaneBeatPips}>
                                                 {Array.from({ length: sideRoomChoiceLaneBeatCount(lane) }, (_, beatIndex) => (
-                                                    <i data-choice-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                    <i
+                                                        data-choice-lane-beat={beatIndex + 1}
+                                                        data-choice-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                        key={beatIndex}
+                                                    />
                                                 ))}
                                             </span>
                                         </span>
@@ -1412,7 +1432,11 @@ const SideRoomScreen = () => {
                                                             <b>{choiceSignalAction(chip)}</b>
                                                             <span aria-hidden="true" className={styles.choiceSignalBeatPips}>
                                                                 {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                                                    <i data-choice-signal-beat={beatIndex + 1} key={beatIndex} />
+                                                                    <i
+                                                                        data-choice-signal-beat={beatIndex + 1}
+                                                                        data-choice-signal-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                        key={beatIndex}
+                                                                    />
                                                                 ))}
                                                             </span>
                                                         </span>
@@ -1454,7 +1478,11 @@ const SideRoomScreen = () => {
                                                         <em>{route.payoff}</em>
                                                         <span aria-hidden="true" className={styles.choiceBuildRouteBeatPips}>
                                                             {Array.from({ length: route.beatCount }, (_, beatIndex) => (
-                                                                <i data-choice-build-route-beat={beatIndex + 1} key={beatIndex} />
+                                                                <i
+                                                                    data-choice-build-route-beat={beatIndex + 1}
+                                                                    data-choice-build-route-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                    key={beatIndex}
+                                                                />
                                                             ))}
                                                         </span>
                                                     </span>
@@ -1487,7 +1515,11 @@ const SideRoomScreen = () => {
                                                             <b>{choicePayoffAction(row)}</b>
                                                             <span aria-hidden="true" className={styles.choicePayoffBeatPips}>
                                                                 {Array.from({ length: beatCount }, (_, beatIndex) => (
-                                                                    <i data-choice-payoff-beat={beatIndex + 1} key={beatIndex} />
+                                                                    <i
+                                                                        data-choice-payoff-beat={beatIndex + 1}
+                                                                        data-choice-payoff-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                        key={beatIndex}
+                                                                    />
                                                                 ))}
                                                             </span>
                                                         </span>

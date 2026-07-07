@@ -381,7 +381,11 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                 {beatCount > 0 ? (
                     <span className={styles.powerPayoffBeatPips}>
                         {Array.from({ length: beatCount }, (_, beatIndex) => (
-                            <i data-power-payoff-beat={beatIndex + 1} key={beatIndex} />
+                            <i
+                                data-power-payoff-beat={beatIndex + 1}
+                                data-power-payoff-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                key={beatIndex}
+                            />
                         ))}
                     </span>
                 ) : null}
@@ -758,7 +762,11 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                                 <small>{toolCrescendo.beats} beat</small>
                                 <span aria-hidden="true" className={styles.toolCrescendoPips}>
                                     {Array.from({ length: toolCrescendo.beats }, (_, beatIndex) => (
-                                        <i data-tool-crescendo-beat={beatIndex + 1} key={beatIndex} />
+                                        <i
+                                            data-tool-crescendo-beat={beatIndex + 1}
+                                            data-tool-crescendo-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                            key={beatIndex}
+                                        />
                                     ))}
                                 </span>
                                 <em>{toolCrescendo.label}</em>

@@ -180,7 +180,11 @@ export const GameScreenDungeonStatusPanel = ({
                             <b>{forecastActionCue.value}</b>
                             <span aria-hidden="true" className={styles.dungeonStatusForecastBeatPips}>
                                 {Array.from({ length: dungeonForecastActionBeatCount(forecastActionCue) }, (_, index) => (
-                                    <i data-forecast-action-beat key={index} />
+                                    <i
+                                        data-forecast-action-beat
+                                        data-forecast-action-beat-focus={index === 0 ? 'primary' : 'support'}
+                                        key={index}
+                                    />
                                 ))}
                             </span>
                         </span>
@@ -202,7 +206,11 @@ export const GameScreenDungeonStatusPanel = ({
                                 <b>{row.value}</b>
                                 <span aria-hidden="true" className={styles.dungeonStatusForecastBeatPips}>
                                     {Array.from({ length: dungeonForecastSignalBeatCount(row) }, (_, index) => (
-                                        <i data-forecast-signal-beat key={index} />
+                                        <i
+                                            data-forecast-signal-beat
+                                            data-forecast-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                            key={index}
+                                        />
                                     ))}
                                 </span>
                             </span>

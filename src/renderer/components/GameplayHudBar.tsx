@@ -1908,6 +1908,7 @@ const GameplayHudBar = ({
                                         {Array.from({ length: primaryResourceRewardBeatCount }, (_, beatIndex) => (
                                             <i
                                                 data-primary-reward-beat={beatIndex + 1}
+                                                data-primary-reward-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
                                                 key={`${primaryResourceRewardCue.id}-primary-beat-${beatIndex + 1}`}
                                             />
                                         ))}
@@ -2131,7 +2132,11 @@ const GameplayHudBar = ({
                                                     <b>{row.value}</b>
                                                     <span aria-hidden="true" className={styles.hudObjectiveSignalBeatPips}>
                                                         {Array.from({ length: hudObjectiveSignalBeatCount(row) }, (_, index) => (
-                                                            <i data-objective-signal-beat key={index} />
+                                                            <i
+                                                                data-objective-signal-beat
+                                                                data-objective-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                key={index}
+                                                            />
                                                         ))}
                                                     </span>
                                                 </span>
@@ -2187,7 +2192,11 @@ const GameplayHudBar = ({
                                         <span className={styles.statSubline}>Protect streak</span>
                                         <span aria-hidden="true" className={styles.hudEndlessRiskWagerBeatPips}>
                                             {Array.from({ length: activeRiskWagerBeatCount }, (_, beatIndex) => (
-                                                <i data-hud-risk-wager-beat={beatIndex + 1} key={beatIndex} />
+                                                <i
+                                                    data-hud-risk-wager-beat={beatIndex + 1}
+                                                    data-hud-risk-wager-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                    key={beatIndex}
+                                                />
                                             ))}
                                         </span>
                                     </div>
@@ -2262,7 +2271,11 @@ const GameplayHudBar = ({
                                                 {rewardPerkBeatCue ? (
                                                     <span aria-hidden="true" className={styles.hudRewardPerkPrimaryBeatPips}>
                                                         {Array.from({ length: rewardPerkBeatCue.beatCount }, (_, beatIndex) => (
-                                                            <i data-reward-perk-primary-beat={beatIndex + 1} key={beatIndex} />
+                                                            <i
+                                                                data-reward-perk-primary-beat={beatIndex + 1}
+                                                                data-reward-perk-primary-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                key={beatIndex}
+                                                            />
                                                         ))}
                                                     </span>
                                                 ) : null}
@@ -2569,7 +2582,11 @@ const GameplayHudBar = ({
                                                 <span>{traitRouteObjectiveStatus.stateLabel}</span>
                                                 <span aria-hidden="true" className={styles.hudTraitRouteBeatPips}>
                                                     {Array.from({ length: traitRouteActionBeatCount }, (_, beatIndex) => (
-                                                        <i data-trait-route-action-beat={beatIndex + 1} key={beatIndex} />
+                                                        <i
+                                                            data-trait-route-action-beat={beatIndex + 1}
+                                                            data-trait-route-action-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                            key={beatIndex}
+                                                        />
                                                     ))}
                                                 </span>
                                             </small>
@@ -2589,7 +2606,11 @@ const GameplayHudBar = ({
                                                 <em>{traitChainStackCue.value}</em>
                                                 <span aria-hidden="true" className={styles.hudTraitRouteBeatPips}>
                                                     {Array.from({ length: 4 }, (_, beatIndex) => (
-                                                        <i data-trait-chain-stack-beat={beatIndex + 1} key={beatIndex} />
+                                                        <i
+                                                            data-trait-chain-stack-beat={beatIndex + 1}
+                                                            data-trait-chain-stack-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                            key={beatIndex}
+                                                        />
                                                     ))}
                                                 </span>
                                             </small>
@@ -2897,7 +2918,11 @@ const GameplayHudBar = ({
                                                                     {Array.from(
                                                                         { length: hudChainRewardLaneBeatCount(primaryChainRewardLane) },
                                                                         (_, beatIndex) => (
-                                                                            <i data-chain-reward-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                                            <i
+                                                                                data-chain-reward-primary-lane-beat={beatIndex + 1}
+                                                                                data-chain-reward-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                                key={beatIndex}
+                                                                            />
                                                                         )
                                                                     )}
                                                                 </span>
@@ -2927,7 +2952,11 @@ const GameplayHudBar = ({
                                                                 <em>{lane.cue}</em>
                                                                 <span aria-hidden="true" className={styles.hudChainRewardLaneBeatPips}>
                                                                     {Array.from({ length: hudChainRewardLaneBeatCount(lane) }, (_, beatIndex) => (
-                                                                        <i data-chain-reward-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                                        <i
+                                                                            data-chain-reward-lane-beat={beatIndex + 1}
+                                                                            data-chain-reward-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                            key={beatIndex}
+                                                                        />
                                                                     ))}
                                                                 </span>
                                                             </u>
@@ -2976,6 +3005,7 @@ const GameplayHudBar = ({
                                                                     {Array.from({ length: hudChainRewardBeatCount(entry) }, (_, beatIndex) => (
                                                                         <i
                                                                             data-chain-reward-ladder-beat={beatIndex + 1}
+                                                                            data-chain-reward-ladder-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
                                                                             key={`${entry.cue.id}-hud-reward-beat-${beatIndex + 1}`}
                                                                         />
                                                                     ))}
@@ -3270,7 +3300,11 @@ const GameplayHudBar = ({
                                                 <strong>{primaryInRunCauseRow.summary}</strong>
                                                 <span aria-hidden="true" className={styles.hudFeedbackPrimaryCauseBeatPips}>
                                                     {Array.from({ length: hudInRunCauseBeatCount(primaryInRunCauseRow) }, (_, beatIndex) => (
-                                                        <i data-hud-cause-primary-beat={beatIndex + 1} key={beatIndex} />
+                                                        <i
+                                                            data-hud-cause-primary-beat={beatIndex + 1}
+                                                            data-hud-cause-primary-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                            key={beatIndex}
+                                                        />
                                                     ))}
                                                 </span>
                                             </span>

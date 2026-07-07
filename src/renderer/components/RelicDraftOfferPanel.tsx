@@ -1141,7 +1141,11 @@ const RelicDraftOfferPanel = ({
                               </span>
                               <div aria-hidden="true" className={styles.payoffEngineBeatPips}>
                                   {Array.from({ length: payoffEngineBeatCount }, (_, beatIndex) => (
-                                      <i data-relic-payoff-engine-beat={beatIndex + 1} key={beatIndex} />
+                                      <i
+                                          data-relic-payoff-engine-beat={beatIndex + 1}
+                                          data-relic-payoff-engine-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                          key={beatIndex}
+                                      />
                                   ))}
                               </div>
                           </div>
@@ -1187,7 +1191,11 @@ const RelicDraftOfferPanel = ({
                             <em>{primaryDraftLane.cue}</em>
                             <span aria-hidden="true" className={styles.draftLanePrimaryBeatPips}>
                                 {Array.from({ length: getRelicDraftLaneBeatCount(primaryDraftLane) }, (_, beatIndex) => (
-                                    <i data-relic-draft-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                    <i
+                                        data-relic-draft-primary-lane-beat={beatIndex + 1}
+                                        data-relic-draft-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                        key={beatIndex}
+                                    />
                                 ))}
                             </span>
                         </span>
@@ -1208,7 +1216,11 @@ const RelicDraftOfferPanel = ({
                             <em>{lane.cue}</em>
                             <span aria-hidden="true" className={styles.draftLaneBeatPips}>
                                 {Array.from({ length: getRelicDraftLaneBeatCount(lane) }, (_, beatIndex) => (
-                                    <i data-relic-draft-lane-beat={beatIndex + 1} key={beatIndex} />
+                                    <i
+                                        data-relic-draft-lane-beat={beatIndex + 1}
+                                        data-relic-draft-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                        key={beatIndex}
+                                    />
                                 ))}
                             </span>
                         </span>
@@ -1528,7 +1540,11 @@ const RelicDraftOfferPanel = ({
                                             {label}
                                             <span aria-hidden="true" className={styles.impactChipBeatPips}>
                                                 {Array.from({ length: relicImpactChipBeatCount(label) }, (_, beatIndex) => (
-                                                    <i data-impact-chip-beat={beatIndex + 1} key={beatIndex} />
+                                                    <i
+                                                        data-impact-chip-beat={beatIndex + 1}
+                                                        data-impact-chip-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                        key={beatIndex}
+                                                    />
                                                 ))}
                                             </span>
                                         </span>
@@ -1569,7 +1585,11 @@ const RelicDraftOfferPanel = ({
                                             <b>{relicBuildFitSignalAction(signal.tone)}</b>
                                             <span aria-hidden="true" className={styles.buildFitSignalBeatPips}>
                                                 {Array.from({ length: relicBuildFitSignalBeatCount(signal.tone) }, (_, beatIndex) => (
-                                                    <i data-build-fit-beat={beatIndex + 1} key={beatIndex} />
+                                                    <i
+                                                        data-build-fit-beat={beatIndex + 1}
+                                                        data-build-fit-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                        key={beatIndex}
+                                                    />
                                                 ))}
                                             </span>
                                         </span>
@@ -1604,7 +1624,11 @@ const RelicDraftOfferPanel = ({
                                             <u>{comboRoute.action}</u>
                                             <span aria-hidden="true" className={styles.comboRouteBeatPips}>
                                                 {Array.from({ length: comboRoute.beatCount }, (_, beatIndex) => (
-                                                    <i data-combo-route-beat={beatIndex + 1} key={beatIndex} />
+                                                    <i
+                                                        data-combo-route-beat={beatIndex + 1}
+                                                        data-combo-route-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                        key={beatIndex}
+                                                    />
                                                 ))}
                                             </span>
                                         </span>

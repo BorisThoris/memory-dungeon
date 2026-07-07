@@ -865,7 +865,11 @@ export const GameScreenActionFeedbackRail = ({
                         <strong>{payoffIntensity.label}</strong>
                         <span aria-hidden="true" className={styles.actionFeedbackPayoffPips}>
                             {Array.from({ length: payoffBeatCount }, (_, beatIndex) => (
-                                <i data-action-feedback-payoff-beat={beatIndex + 1} key={beatIndex} />
+                                <i
+                                    data-action-feedback-payoff-beat={beatIndex + 1}
+                                    data-action-feedback-payoff-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                    key={beatIndex}
+                                />
                             ))}
                         </span>
                         <em>{payoffIntensity.action}</em>
@@ -885,7 +889,11 @@ export const GameScreenActionFeedbackRail = ({
                         <small>{displayedCrescendo.beatCount} beat</small>
                         <span aria-hidden="true" className={styles.actionFeedbackCrescendoPips}>
                             {Array.from({ length: displayedCrescendo.beatCount }, (_, beatIndex) => (
-                                <i data-action-feedback-crescendo-beat={beatIndex + 1} key={beatIndex} />
+                                <i
+                                    data-action-feedback-crescendo-beat={beatIndex + 1}
+                                    data-action-feedback-crescendo-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                    key={beatIndex}
+                                />
                             ))}
                         </span>
                         <strong>{displayedCrescendo.label}</strong>
@@ -918,7 +926,11 @@ export const GameScreenActionFeedbackRail = ({
                     <strong>{tempoCue.value}</strong>
                     <span aria-hidden="true" className={styles.actionFeedbackTempoPips}>
                         {Array.from({ length: tempoBeat.beatCount }, (_, beatIndex) => (
-                            <i data-action-feedback-tempo-beat={beatIndex + 1} key={beatIndex} />
+                            <i
+                                data-action-feedback-tempo-beat={beatIndex + 1}
+                                data-action-feedback-tempo-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                key={beatIndex}
+                            />
                         ))}
                     </span>
                     <em>{tempoBeat.label}</em>
@@ -995,7 +1007,11 @@ export const GameScreenActionFeedbackRail = ({
                             <em>{primaryLane.cue}</em>
                             <span aria-hidden="true" className={styles.actionFeedbackPrimaryLaneBeatPips}>
                                 {Array.from({ length: actionFeedbackLaneBeatCount(primaryLane) }, (_, beatIndex) => (
-                                    <i data-action-feedback-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                    <i
+                                        data-action-feedback-primary-lane-beat={beatIndex + 1}
+                                        data-action-feedback-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                        key={beatIndex}
+                                    />
                                 ))}
                             </span>
                         </span>
@@ -1020,7 +1036,11 @@ export const GameScreenActionFeedbackRail = ({
                             </em>
                             <span aria-hidden="true" className={styles.actionFeedbackLaneBeatPips}>
                                 {Array.from({ length: actionFeedbackLaneBeatCount(lane) }, (_, beatIndex) => (
-                                    <i data-action-feedback-lane-beat={beatIndex + 1} key={beatIndex} />
+                                    <i
+                                        data-action-feedback-lane-beat={beatIndex + 1}
+                                        data-action-feedback-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                        key={beatIndex}
+                                    />
                                 ))}
                             </span>
                         </span>

@@ -540,7 +540,11 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                 <b>{payoffEngineSignal.nextCue}</b>
                                 <span aria-hidden="true" className={styles.payoffEngineSignalBeatPips}>
                                     {Array.from({ length: payoffEngineBeatCount }, (_, beatIndex) => (
-                                        <i data-inventory-payoff-engine-beat={beatIndex + 1} key={beatIndex} />
+                                        <i
+                                            data-inventory-payoff-engine-beat={beatIndex + 1}
+                                            data-inventory-payoff-engine-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                            key={beatIndex}
+                                        />
                                     ))}
                                 </span>
                             </div>
@@ -565,7 +569,11 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                         <em>{signal.detail}</em>
                                         <span aria-hidden="true" className={styles.runLoopSignalBeatPips}>
                                             {Array.from({ length: inventoryRunLoopSignalBeatCount(signal) }, (_, beatIndex) => (
-                                                <i data-run-loop-signal-beat={beatIndex + 1} key={beatIndex} />
+                                                <i
+                                                    data-run-loop-signal-beat={beatIndex + 1}
+                                                    data-run-loop-signal-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                    key={beatIndex}
+                                                />
                                             ))}
                                         </span>
                                     </span>
@@ -697,7 +705,11 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                                         {Array.from(
                                                             { length: inventoryLoadoutImpactSignalBeatCount(signal) },
                                                             (_, beatIndex) => (
-                                                                <i data-loadout-impact-signal-beat={beatIndex + 1} key={beatIndex} />
+                                                                <i
+                                                                    data-loadout-impact-signal-beat={beatIndex + 1}
+                                                                    data-loadout-impact-signal-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                    key={beatIndex}
+                                                                />
                                                             )
                                                         )}
                                                     </span>
@@ -779,7 +791,11 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                                         {Array.from(
                                                             { length: inventoryRewardPerkLaneBeatCount(primaryRewardPerkLane) },
                                                             (_, beatIndex) => (
-                                                                <i data-reward-perk-primary-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                                <i
+                                                                    data-reward-perk-primary-lane-beat={beatIndex + 1}
+                                                                    data-reward-perk-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                    key={beatIndex}
+                                                                />
                                                             )
                                                         )}
                                                     </span>
@@ -807,7 +823,11 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                                         {Array.from(
                                                             { length: inventoryRewardPerkLaneBeatCount(lane) },
                                                             (_, beatIndex) => (
-                                                                <i data-reward-perk-lane-beat={beatIndex + 1} key={beatIndex} />
+                                                                <i
+                                                                    data-reward-perk-lane-beat={beatIndex + 1}
+                                                                    data-reward-perk-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                    key={beatIndex}
+                                                                />
                                                             )
                                                         )}
                                                     </span>
@@ -845,7 +865,11 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                                                         <b>{rewardPerkSignalAction(signal)}</b>
                                                         <span aria-hidden="true" className={styles.rewardPerkSignalBeatPips}>
                                                             {Array.from({ length: rewardPerkSignalBeatCount(signal) }, (_, beatIndex) => (
-                                                                <i data-reward-perk-signal-beat={beatIndex + 1} key={beatIndex} />
+                                                                <i
+                                                                    data-reward-perk-signal-beat={beatIndex + 1}
+                                                                    data-reward-perk-signal-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                    key={beatIndex}
+                                                                />
                                                             ))}
                                                         </span>
                                                     </span>
