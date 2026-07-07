@@ -702,6 +702,12 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="first"]')
         ).toHaveAttribute('data-chain-sequence-step-tone', 'cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="then"]')
+        ).toHaveAttribute('data-chain-sequence-step-tone', 'cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="keep"]')
+        ).toHaveAttribute('data-chain-sequence-step-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveAccessibleName(
             'Chain sequence. First: Match lit route for reward. Then: Cash x6 +1 shard in 1 match. Keep: Push x6 reward.'
         );
@@ -1649,6 +1655,15 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Follow up');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveTextContent('Tap marked follow-up');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveAttribute('data-chain-sequence-tone', 'followup');
+        expect(
+            screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="first"]')
+        ).toHaveAttribute('data-chain-sequence-step-tone', 'followup');
+        expect(
+            screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="then"]')
+        ).toHaveAttribute('data-chain-sequence-step-tone', 'followup');
+        expect(
+            screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="keep"]')
+        ).toHaveAttribute('data-chain-sequence-step-tone', 'followup');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent('First');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent('Tap marked follow-up');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent('Then');
@@ -2786,6 +2801,15 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'setup');
         expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(2);
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveAttribute('data-chain-sequence-tone', 'setup');
+        expect(
+            screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="first"]')
+        ).toHaveAttribute('data-chain-sequence-step-tone', 'setup');
+        expect(
+            screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="then"]')
+        ).toHaveAttribute('data-chain-sequence-step-tone', 'setup');
+        expect(
+            screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="keep"]')
+        ).toHaveAttribute('data-chain-sequence-step-tone', 'setup');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent('First');
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveTextContent(
             'Swap Sealed with Filler: Sealed + Heavy: score surge'

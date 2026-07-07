@@ -296,6 +296,8 @@ const findVisibleToneSelectorGaps = (): VisibleToneSelectorGap[] => {
         'data-chain-next-action-tone': ['cashout', 'ready', 'setup'],
         'data-chain-opportunity-surge-tone': ['surge'],
         'data-chain-reward-lead-tone': ['guard', 'heal', 'reward'],
+        'data-chain-sequence-step-tone': ['cashout', 'followup', 'setup'],
+        'data-chain-sequence-tone': ['cashout', 'followup', 'setup'],
         'data-chain-surge-band-tone': ['surge']
     };
 

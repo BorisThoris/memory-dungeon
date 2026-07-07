@@ -1784,6 +1784,37 @@
     background: color-mix(in srgb, var(--theme-green-bright) 8%, transparent);
 }
 
+.chainOpportunitySequenceCue[data-chain-sequence-tone='cashout'],
+.chainOpportunitySequenceStep[data-chain-sequence-step-tone='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 14%);
+}
+
+.chainOpportunitySequenceStep[data-chain-sequence-step-tone='cashout'] b {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.chainOpportunitySequenceStep[data-chain-sequence-step-tone='followup'] {
+    border-color: color-mix(in srgb, #fff7c4 38%, var(--theme-cyan-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, #fff7c4 10%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 5%, transparent)),
+        color-mix(in srgb, var(--theme-void) 18%, transparent);
+}
+
+.chainOpportunitySequenceStep[data-chain-sequence-step-tone='followup'] b {
+    color: color-mix(in srgb, #fff7c4 90%, white);
+}
+
+.chainOpportunitySequenceStep[data-chain-sequence-step-tone='setup'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 36%, var(--theme-violet-bright) 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent), color-mix(in srgb, var(--theme-violet-bright) 5%, transparent)),
+        color-mix(in srgb, var(--theme-void) 18%, transparent);
+}
+
+.chainOpportunitySequenceStep[data-chain-sequence-step-tone='setup'] b {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+}
+
 .chainOpportunitySequenceCue[data-chain-sequence-tone='followup'] {
     border-color: color-mix(in srgb, #fff7c4 44%, var(--theme-cyan-bright) 18%);
     background:
