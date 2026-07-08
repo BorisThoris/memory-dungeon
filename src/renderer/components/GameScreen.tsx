@@ -4681,10 +4681,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     <i
                                                         aria-hidden
                                                         data-match-crescendo-beat={index + 1}
-                                                        data-match-crescendo-beat-audio={boardFloaterPayload.crescendo.audioCue}
+                                                        data-match-crescendo-beat-audio={boardFloaterPayload.crescendo!.audioCue}
                                                         data-match-crescendo-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                        data-match-crescendo-beat-screen-cue={boardFloaterPayload.crescendo.screenCue}
-                                                        data-match-crescendo-beat-tier={boardFloaterPayload.crescendo.tier}
+                                                        data-match-crescendo-beat-screen-cue={boardFloaterPayload.crescendo!.screenCue}
+                                                        data-match-crescendo-beat-tier={boardFloaterPayload.crescendo!.tier}
                                                         key={`crescendo-beat-${index + 1}`}
                                                     />
                                                 ))}
@@ -4719,13 +4719,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         <i
                                                             data-cascade-beat={index + 1}
                                                             data-cascade-beat-audio={getBoardFloaterCascadeAudioCue(
-                                                                boardFloaterPayload.cascadeCue
+                                                                boardFloaterPayload.cascadeCue!
                                                             )}
                                                             data-cascade-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             data-cascade-beat-screen-cue={getBoardFloaterCascadeScreenCue(
-                                                                boardFloaterPayload.cascadeCue
+                                                                boardFloaterPayload.cascadeCue!
                                                             )}
-                                                            data-cascade-beat-tier={boardFloaterPayload.cascadeCue.tier}
+                                                            data-cascade-beat-tier={boardFloaterPayload.cascadeCue!.tier}
                                                             key={`cascade-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4763,11 +4763,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-chain-milestone-beat={index + 1}
-                                                            data-chain-milestone-beat-action={boardFloaterPayload.chainMilestone.action}
-                                                            data-chain-milestone-beat-audio={boardFloaterPayload.chainMilestone.audioCue}
+                                                            data-chain-milestone-beat-action={boardFloaterPayload.chainMilestone!.action}
+                                                            data-chain-milestone-beat-audio={boardFloaterPayload.chainMilestone!.audioCue}
                                                             data-chain-milestone-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                            data-chain-milestone-beat-screen-cue={boardFloaterPayload.chainMilestone.screenCue}
-                                                            data-chain-milestone-beat-tone={boardFloaterPayload.chainMilestone.tone}
+                                                            data-chain-milestone-beat-screen-cue={boardFloaterPayload.chainMilestone!.screenCue}
+                                                            data-chain-milestone-beat-tone={boardFloaterPayload.chainMilestone!.tone}
                                                             key={`chain-milestone-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4803,11 +4803,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-reward-burst-beat={index + 1}
-                                                            data-reward-burst-beat-action={boardFloaterPayload.rewardBurst.action}
-                                                            data-reward-burst-beat-audio={getBoardFloaterRewardBurstAudioCue(boardFloaterPayload.rewardBurst)}
+                                                            data-reward-burst-beat-action={boardFloaterPayload.rewardBurst!.action}
+                                                            data-reward-burst-beat-audio={getBoardFloaterRewardBurstAudioCue(boardFloaterPayload.rewardBurst!)}
                                                             data-reward-burst-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                            data-reward-burst-beat-screen-cue={getBoardFloaterRewardBurstScreenCue(boardFloaterPayload.rewardBurst)}
-                                                            data-reward-burst-beat-tier={boardFloaterPayload.rewardBurst.tier}
+                                                            data-reward-burst-beat-screen-cue={getBoardFloaterRewardBurstScreenCue(boardFloaterPayload.rewardBurst!)}
+                                                            data-reward-burst-beat-tier={boardFloaterPayload.rewardBurst!.tier}
                                                             key={`reward-burst-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4842,9 +4842,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             data-payoff-summary-beat={index + 1}
                                                             data-payoff-summary-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             data-payoff-summary-beat-screen-cue={getBoardFloaterPayoffSummaryScreenCue(
-                                                                boardFloaterPayload.payoffSummary
+                                                                boardFloaterPayload.payoffSummary!
                                                             )}
-                                                            data-payoff-summary-beat-tier={boardFloaterPayload.payoffSummary.tier}
+                                                            data-payoff-summary-beat-tier={boardFloaterPayload.payoffSummary!.tier}
                                                             key={`payoff-summary-beat-${index + 1}`}
                                                         />
                                                     )
@@ -5086,10 +5086,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                     index === 0 ? 'primary' : 'support'
                                                                 }
                                                                 data-match-payoff-ladder-summary-beat-screen-cue={getBoardFloaterPayoffLadderScreenCue(
-                                                                    boardFloaterPayload.payoffLadder
+                                                                    boardFloaterPayload.payoffLadder!
                                                                 )}
                                                                 data-match-payoff-ladder-summary-beat-tone={
-                                                                    boardFloaterPayload.payoffLadder.tone
+                                                                    boardFloaterPayload.payoffLadder!.tone
                                                                 }
                                                                 key={`payoff-ladder-summary-beat-${index + 1}`}
                                                             />
@@ -5137,13 +5137,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         <i
                                                             data-match-payoff-ladder-beat={index + 1}
                                                             data-match-payoff-ladder-beat-audio={getBoardFloaterPayoffLadderAudioCue(
-                                                                boardFloaterPayload.payoffLadder
+                                                                boardFloaterPayload.payoffLadder!
                                                             )}
                                                             data-match-payoff-ladder-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             data-match-payoff-ladder-beat-screen-cue={getBoardFloaterPayoffLadderScreenCue(
-                                                                boardFloaterPayload.payoffLadder
+                                                                boardFloaterPayload.payoffLadder!
                                                             )}
-                                                            data-match-payoff-ladder-beat-tone={boardFloaterPayload.payoffLadder.tone}
+                                                            data-match-payoff-ladder-beat-tone={boardFloaterPayload.payoffLadder!.tone}
                                                             key={`payoff-ladder-beat-${index + 1}`}
                                                         />
                                                     )

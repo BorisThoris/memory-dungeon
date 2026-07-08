@@ -214,6 +214,9 @@ type BoardChainHotBandAction = 'cashout' | 'hold';
 type BoardChainHotBandTier = 'hot' | 'ready';
 type BoardChainSurgeBandAction = 'surge';
 type BoardChainSurgeBandTier = 'combo';
+type BoardChainCueMeterState = 'cashout' | 'followup' | 'setup' | 'surge';
+type BoardChainOpportunityPriorityId = 'best' | 'followup' | 'ready' | 'setup';
+type BoardChainArcadeCalloutTone = 'cashout' | 'surge' | 'ready' | 'setup';
 type BoardChainMarkerKeySummaryAction = 'cashout' | 'followup' | 'perk' | 'prime' | 'route' | 'surge';
 type BoardChainMarkerKeySummaryTier = 'cashout' | 'perk' | 'ready' | 'setup' | 'stack' | 'surge';
 type BoardPayoffStackTone = 'build' | 'cashout' | 'followup' | 'setup';
@@ -272,6 +275,67 @@ const getChainOpportunityBeatActionId = (signal: ChainOpportunityBeatSignal | nu
     if (signal.tier === 'follow-up') return 'followup';
     if (signal.tier === 'route') return 'route';
     return 'setup';
+};
+
+const getBoardChainCueAction = (state: BoardChainCueMeterState): 'Cash now' | 'Chain routes' | 'Follow up' | 'Prime route' => {
+    if (state === 'cashout') return 'Cash now';
+    if (state === 'surge') return 'Chain routes';
+    if (state === 'followup') return 'Follow up';
+    return 'Prime route';
+};
+
+const getBoardChainCueAudioCue = (
+    state: BoardChainCueMeterState
+): 'chain-cue-cashout' | 'chain-cue-followup' | 'chain-cue-prime' | 'chain-cue-surge' => {
+    if (state === 'cashout') return 'chain-cue-cashout';
+    if (state === 'surge') return 'chain-cue-surge';
+    if (state === 'followup') return 'chain-cue-followup';
+    return 'chain-cue-prime';
+};
+
+const getBoardChainCueScreenCue = (state: BoardChainCueMeterState): BoardFeedbackScreenCue => {
+    if (state === 'cashout') return 'burst';
+    if (state === 'surge' || state === 'followup') return 'pulse';
+    return 'tick';
+};
+
+const getBoardChainPriorityAudioCue = (
+    priority: BoardChainOpportunityPriorityId
+): 'chain-priority-best' | 'chain-priority-followup' | 'chain-priority-ready' | 'chain-priority-setup' => {
+    if (priority === 'best') return 'chain-priority-best';
+    if (priority === 'followup') return 'chain-priority-followup';
+    if (priority === 'ready') return 'chain-priority-ready';
+    return 'chain-priority-setup';
+};
+
+const getBoardChainPriorityScreenCue = (priority: BoardChainOpportunityPriorityId): BoardFeedbackScreenCue => {
+    if (priority === 'best') return 'burst';
+    if (priority === 'followup' || priority === 'ready') return 'pulse';
+    return 'tick';
+};
+
+const getBoardChainCalloutAction = (
+    tone: BoardChainArcadeCalloutTone
+): 'Cash now' | 'Chain routes' | 'Match route' | 'Prime route' => {
+    if (tone === 'cashout') return 'Cash now';
+    if (tone === 'surge') return 'Chain routes';
+    if (tone === 'ready') return 'Match route';
+    return 'Prime route';
+};
+
+const getBoardChainCalloutAudioCue = (
+    tone: BoardChainArcadeCalloutTone
+): 'chain-callout-cashout' | 'chain-callout-ready' | 'chain-callout-setup' | 'chain-callout-surge' => {
+    if (tone === 'cashout') return 'chain-callout-cashout';
+    if (tone === 'surge') return 'chain-callout-surge';
+    if (tone === 'ready') return 'chain-callout-ready';
+    return 'chain-callout-setup';
+};
+
+const getBoardChainCalloutScreenCue = (tone: BoardChainArcadeCalloutTone): BoardFeedbackScreenCue => {
+    if (tone === 'cashout') return 'burst';
+    if (tone === 'surge' || tone === 'ready') return 'pulse';
+    return 'tick';
 };
 
 const getBoardOpportunityImpactCueId = (impactCue: string): BoardOpportunityImpactCueId => {
@@ -2444,7 +2508,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         streakCashoutReady: boolean;
         selectedFollowupCount: number;
         selectedFollowupLabel: string | null;
-        arcadeCallout: { label: string; tone: 'cashout' | 'surge' | 'ready' | 'setup'; value: string } | null;
+        arcadeCallout: { label: string; tone: BoardChainArcadeCalloutTone; value: string } | null;
         comboSurgeLabel: string | null;
         setupAction: string | null;
         setupCount: number;
@@ -2814,7 +2878,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 : boardChainOpportunity.nextActionId === 'prime-route'
                   ? 'Prime'
                   : 'Setup';
-    const boardChainCueMeterState: 'cashout' | 'followup' | 'setup' | 'surge' =
+    const boardChainCueMeterState: BoardChainCueMeterState =
         boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
             ? 'cashout'
             : boardChainOpportunity.selectedFollowupCount > 0
@@ -2822,6 +2886,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
               : boardChainOpportunity.comboSurgeLabel
                 ? 'surge'
                 : 'setup';
+    const boardChainOpportunityPriorityId: BoardChainOpportunityPriorityId =
+        boardChainOpportunity.rewardHot
+            ? 'best'
+            : boardChainOpportunity.selectedFollowupCount > 0
+              ? 'followup'
+              : boardChainOpportunity.tone;
     const boardChainCueMeterFill =
         boardChainCueMeterState === 'cashout'
             ? 100
@@ -5314,7 +5384,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             (_, index) => (
                                                 <i
                                                     data-chain-eyebrow-beat={index + 1}
+                                                    data-chain-eyebrow-beat-action={getBoardChainCueAction(boardChainCueMeterState)}
+                                                    data-chain-eyebrow-beat-audio={getBoardChainCueAudioCue(boardChainCueMeterState)}
                                                     data-chain-eyebrow-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-chain-eyebrow-beat-screen-cue={getBoardChainCueScreenCue(boardChainCueMeterState)}
+                                                    data-chain-eyebrow-beat-state={boardChainCueMeterState}
                                                     key={index}
                                                 />
                                             )
@@ -5324,13 +5398,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 {boardChainOpportunity.priorityLabel ? (
                                     <span
                                         className={styles.chainOpportunityPriority}
-                                        data-chain-priority={
-                                            boardChainOpportunity.rewardHot
-                                                ? 'best'
-                                                : boardChainOpportunity.selectedFollowupCount > 0
-                                                  ? 'followup'
-                                                : boardChainOpportunity.tone
-                                        }
+                                        data-chain-priority={boardChainOpportunityPriorityId}
                                     >
                                         {boardChainOpportunity.priorityLabel}
                                         <span aria-hidden="true" className={styles.chainOpportunityPriorityBeatPips}>
@@ -5346,7 +5414,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 (_, index) => (
                                                     <i
                                                         data-chain-priority-beat={index + 1}
+                                                        data-chain-priority-beat-action={boardChainOpportunityPriorityId}
+                                                        data-chain-priority-beat-audio={getBoardChainPriorityAudioCue(
+                                                            boardChainOpportunityPriorityId
+                                                        )}
                                                         data-chain-priority-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        data-chain-priority-beat-screen-cue={getBoardChainPriorityScreenCue(
+                                                            boardChainOpportunityPriorityId
+                                                        )}
                                                         key={index}
                                                     />
                                                 )
@@ -5389,7 +5464,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         (_, index) => (
                                             <i
                                                 data-chain-cue-beat={index + 1}
+                                                data-chain-cue-beat-action={getBoardChainCueAction(boardChainCueMeterState)}
+                                                data-chain-cue-beat-audio={getBoardChainCueAudioCue(boardChainCueMeterState)}
                                                 data-chain-cue-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                data-chain-cue-beat-screen-cue={getBoardChainCueScreenCue(boardChainCueMeterState)}
+                                                data-chain-cue-beat-state={boardChainCueMeterState}
                                                 key={index}
                                             />
                                         )
@@ -5569,8 +5648,17 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 (_, index) => (
                                                     <i
                                                         data-chain-callout-beat={index + 1}
+                                                        data-chain-callout-beat-action={getBoardChainCalloutAction(
+                                                            boardChainOpportunity.arcadeCallout!.tone
+                                                        )}
+                                                        data-chain-callout-beat-audio={getBoardChainCalloutAudioCue(
+                                                            boardChainOpportunity.arcadeCallout!.tone
+                                                        )}
                                                         data-chain-callout-beat-focus={index === 0 ? 'primary' : 'support'}
-                                                        data-chain-callout-beat-tone={boardChainOpportunity.arcadeCallout.tone}
+                                                        data-chain-callout-beat-screen-cue={getBoardChainCalloutScreenCue(
+                                                            boardChainOpportunity.arcadeCallout!.tone
+                                                        )}
+                                                        data-chain-callout-beat-tone={boardChainOpportunity.arcadeCallout!.tone}
                                                         key={index}
                                                     />
                                                 )

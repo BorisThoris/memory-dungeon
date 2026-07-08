@@ -1327,6 +1327,23 @@
     opacity: 0.64;
 }
 
+.chainOpportunityEyebrowBeatPips i[data-chain-eyebrow-beat-screen-cue='burst'],
+.chainOpportunityCueBeatPips i[data-chain-cue-beat-screen-cue='burst'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+}
+
+.chainOpportunityEyebrowBeatPips i[data-chain-eyebrow-beat-screen-cue='pulse'],
+.chainOpportunityCueBeatPips i[data-chain-cue-beat-screen-cue='pulse'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 70%, var(--theme-cyan-bright) 26%);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-violet-bright) 24%, transparent);
+}
+
+.chainOpportunityEyebrowBeatPips i[data-chain-eyebrow-beat-state='setup'],
+.chainOpportunityCueBeatPips i[data-chain-cue-beat-state='setup'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
+}
+
 .chainOpportunityCue {
     display: inline-grid;
     grid-template-columns: minmax(0, auto);
@@ -1857,6 +1874,20 @@
     opacity: 0.68;
 }
 
+.chainOpportunityArcadeCalloutBeatPips i[data-chain-callout-beat-screen-cue='burst'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+}
+
+.chainOpportunityArcadeCalloutBeatPips i[data-chain-callout-beat-screen-cue='pulse'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, var(--theme-cyan-bright) 24%);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 24%, transparent);
+}
+
+.chainOpportunityArcadeCalloutBeatPips i[data-chain-callout-beat-screen-cue='tick'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
+}
+
 .frame[data-chain-opportunity-callout-tone='cashout'] .chainOpportunityArcadeCallout,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 18%);
@@ -2019,6 +2050,20 @@
 
 .chainOpportunityPriorityBeatPips i[data-chain-priority-beat-focus='support'] {
     opacity: 0.66;
+}
+
+.chainOpportunityPriorityBeatPips i[data-chain-priority-beat-screen-cue='burst'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+}
+
+.chainOpportunityPriorityBeatPips i[data-chain-priority-beat-screen-cue='pulse'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
+.chainOpportunityPriorityBeatPips i[data-chain-priority-beat-screen-cue='tick'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, white);
 }
 
 .chainOpportunityPriority[data-chain-priority='best'] {

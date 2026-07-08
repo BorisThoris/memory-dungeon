@@ -573,19 +573,61 @@ describe('TileBoard touch and click controls', () => {
         ).toHaveAttribute('data-chain-callout-beat-focus', 'primary');
         expect(
             screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-action', 'Cash now');
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-audio', 'chain-callout-cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
         ).toHaveAttribute('data-chain-callout-beat-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-eyebrow-beat]')).toHaveLength(2);
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
         ).toHaveAttribute('data-chain-eyebrow-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-action', 'Cash now');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-audio', 'chain-cue-cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-state', 'cashout');
         expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-cue-beat]')).toHaveLength(5);
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
         ).toHaveAttribute('data-chain-cue-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-action', 'Cash now');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-audio', 'chain-cue-cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-state', 'cashout');
         expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-priority-beat]')).toHaveLength(5);
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-priority-beat="1"]')
         ).toHaveAttribute('data-chain-priority-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-priority-beat="1"]')
+        ).toHaveAttribute('data-chain-priority-beat-action', 'best');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-priority-beat="1"]')
+        ).toHaveAttribute('data-chain-priority-beat-audio', 'chain-priority-best');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-priority-beat="1"]')
+        ).toHaveAttribute('data-chain-priority-beat-screen-cue', 'burst');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Route');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Payoff');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Stack');
@@ -3349,6 +3391,18 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
         ).toHaveAttribute('data-chain-eyebrow-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-action', 'Chain routes');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-audio', 'chain-cue-surge');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-screen-cue', 'pulse');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
+        ).toHaveAttribute('data-chain-eyebrow-beat-state', 'surge');
         expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-cue-beat]')).toHaveLength(4);
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-meter-state]')).toHaveAttribute(
             'data-chain-cue-meter-state',
@@ -3357,6 +3411,18 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
         ).toHaveAttribute('data-chain-cue-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-action', 'Chain routes');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-audio', 'chain-cue-surge');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-screen-cue', 'pulse');
+        expect(
+            screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
+        ).toHaveAttribute('data-chain-cue-beat-state', 'surge');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveAccessibleName(
             /Board chain opportunity.*Surge chain: 4 cards lit.*Combo surge/i
         );
@@ -3408,6 +3474,15 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-arcade-callout')).toHaveTextContent('Surge chain');
         expect(screen.getByTestId('chain-opportunity-arcade-callout')).toHaveTextContent('4 cards lit');
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-action', 'Chain routes');
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-audio', 'chain-callout-surge');
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-screen-cue', 'pulse');
         expect(
             screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
         ).toHaveAttribute('data-chain-callout-beat-tone', 'surge');
