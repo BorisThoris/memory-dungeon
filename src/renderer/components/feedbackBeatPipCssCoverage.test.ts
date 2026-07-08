@@ -1746,6 +1746,52 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-target-plan-tone='setup'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?animation-duration:\s*1\.08s/);
     });
 
+    it('keeps chain hot band action and tier beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'hot band cashout should read as fast wide payoff beats'
+        ).toMatch(/data-chain-hot-band-action='cashout'[\s\S]*?\.chainOpportunityHotBandBeatPips i[\s\S]*?animation-duration:\s*0\.66s/);
+        expect(
+            cssText,
+            'hot band hold should use taller guarded beats'
+        ).toMatch(/data-chain-hot-band-action='hold'[\s\S]*?\.chainOpportunityHotBandBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'hot tier should stay fastest and high-emphasis'
+        ).toMatch(/data-chain-hot-band-tier='hot'[\s\S]*?\.chainOpportunityHotBandBeatPips i[\s\S]*?animation-duration:\s*0\.64s/);
+        expect(
+            cssText,
+            'ready tier should use guarded vertical beats'
+        ).toMatch(/data-chain-hot-band-tier='ready'[\s\S]*?\.chainOpportunityHotBandBeatPips i[\s\S]*?height:\s*0\.22rem/);
+    });
+
+    it('keeps chain surge band combo beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'surge action should use wide accelerated beats'
+        ).toMatch(/data-chain-surge-band-action='surge'[\s\S]*?\.chainOpportunitySurgeBandBeatPips i[\s\S]*?width:\s*0\.34rem/);
+        expect(
+            cssText,
+            'surge tone should speed up beyond the base surge action'
+        ).toMatch(/data-chain-surge-band-tone='surge'[\s\S]*?\.chainOpportunitySurgeBandBeatPips i[\s\S]*?animation-duration:\s*0\.7s/);
+        expect(
+            cssText,
+            'combo tier should read as the fastest surge payoff'
+        ).toMatch(/data-chain-surge-band-tier='combo'[\s\S]*?\.chainOpportunitySurgeBandBeatPips i[\s\S]*?animation-duration:\s*0\.62s/);
+        expect(
+            cssText,
+            'burst surge cues should stay high-emphasis'
+        ).toMatch(/data-chain-surge-band-screen-cue='burst'[\s\S]*?\.chainOpportunitySurgeBandBeatPips i[\s\S]*?opacity:\s*0\.98/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

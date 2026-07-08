@@ -7981,6 +7981,10 @@
 }
 
 .chainOpportunityHotBand[data-chain-hot-band-action='cashout'] .chainOpportunityHotBandBeatPips i {
+    width: 0.32rem;
+    height: 0.1rem;
+    animation-duration: 0.66s;
+    opacity: 0.98;
     background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
 }
@@ -8002,6 +8006,10 @@
 }
 
 .chainOpportunityHotBand[data-chain-hot-band-action='hold'] .chainOpportunityHotBandBeatPips i {
+    width: 0.14rem;
+    height: 0.2rem;
+    animation-duration: 1.08s;
+    opacity: 0.78;
     background: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
     box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
 }
@@ -8019,8 +8027,27 @@
 }
 
 .chainOpportunityHotBand[data-chain-hot-band-tone='ready'] .chainOpportunityHotBandBeatPips i {
+    width: 0.16rem;
+    height: 0.18rem;
+    animation-duration: 1.02s;
     background: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
     box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-tier='hot'] .chainOpportunityHotBandBeatPips i,
+.chainOpportunityHotBand[data-chain-hot-band-screen-cue='burst'] .chainOpportunityHotBandBeatPips i {
+    width: 0.34rem;
+    height: 0.1rem;
+    animation-duration: 0.64s;
+    opacity: 0.98;
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-tier='ready'] .chainOpportunityHotBandBeatPips i,
+.chainOpportunityHotBand[data-chain-hot-band-screen-cue='guard'] .chainOpportunityHotBandBeatPips i {
+    width: 0.14rem;
+    height: 0.22rem;
+    animation-duration: 1.12s;
+    opacity: 0.78;
 }
 
 .chainOpportunityHotBand[data-chain-hot-band-beats='3'] .chainOpportunityHotBandBeatPips i {
@@ -8169,12 +8196,25 @@
 
 .chainOpportunitySurgeBand[data-chain-surge-band-action='surge'] .chainOpportunitySurgeBandBeatPips i,
 .chainOpportunitySurgeBand[data-chain-surge-band-beats='4'] .chainOpportunitySurgeBandBeatPips i {
+    width: 0.34rem;
+    height: 0.1rem;
     animation-duration: 0.78s;
 }
 
 .chainOpportunitySurgeBand[data-chain-surge-band-tone='surge'] .chainOpportunitySurgeBandBeatPips i {
+    width: 0.36rem;
+    height: 0.1rem;
+    animation-duration: 0.7s;
     background: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
     box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 32%, transparent);
+}
+
+.chainOpportunitySurgeBand[data-chain-surge-band-tier='combo'] .chainOpportunitySurgeBandBeatPips i,
+.chainOpportunitySurgeBand[data-chain-surge-band-screen-cue='burst'] .chainOpportunitySurgeBandBeatPips i {
+    width: 0.38rem;
+    height: 0.1rem;
+    animation-duration: 0.62s;
+    opacity: 0.98;
 }
 
 .chainOpportunityPayoffBurst {
