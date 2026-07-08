@@ -5854,7 +5854,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         {Array.from({ length: beatCount }, (_, index) => (
                                                             <i
                                                                 data-onboarding-signal-beat={index + 1}
+                                                                data-onboarding-signal-beat-audio={getOnboardingPromptSignalAudioCue(row)}
                                                                 data-onboarding-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                data-onboarding-signal-beat-screen-cue={getOnboardingPromptSignalScreenCue(row)}
+                                                                data-onboarding-signal-beat-tone={row.tone}
                                                                 key={index}
                                                             />
                                                         ))}
@@ -5891,7 +5894,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         {Array.from({ length: beatCount }, (_, index) => (
                                                             <i
                                                                 data-onboarding-signal-beat={index + 1}
+                                                                data-onboarding-signal-beat-audio={getOnboardingPromptSignalAudioCue(row)}
                                                                 data-onboarding-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                data-onboarding-signal-beat-screen-cue={getOnboardingPromptSignalScreenCue(row)}
+                                                                data-onboarding-signal-beat-tone={row.tone}
                                                                 key={index}
                                                             />
                                                         ))}

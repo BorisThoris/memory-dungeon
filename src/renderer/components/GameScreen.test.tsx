@@ -1719,6 +1719,21 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen
                 .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="reward"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-audio', 'onboarding-reward');
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="reward"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-screen-cue', 'burst');
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="reward"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-tone', 'reward');
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
                 .querySelector('[data-onboarding-signal-tone="reward"] [data-onboarding-signal-beat="2"]')
         ).toHaveAttribute('data-onboarding-signal-beat-focus', 'support');
         expect(screen.getByTestId('playable-onboarding-signals').querySelector('[data-onboarding-signal-tone="chain"]')).toHaveAttribute(
@@ -1733,6 +1748,21 @@ describe('GameScreen (OVR-014)', () => {
             'data-onboarding-signal-screen-cue',
             'chain'
         );
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="chain"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-audio', 'onboarding-chain');
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="chain"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-screen-cue', 'chain');
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="chain"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-tone', 'chain');
         expect(screen.getByTestId('playable-onboarding-signals')).toHaveAttribute(
             'aria-label',
             'Onboarding action and reward signals. Action: Flip pair. Reward: Score pop. Chain: Start streak.'
@@ -1785,6 +1815,21 @@ describe('GameScreen (OVR-014)', () => {
             'data-onboarding-signal-screen-cue',
             'recover'
         );
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="recovery"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-audio', 'onboarding-recovery');
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="recovery"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-screen-cue', 'recover');
+        expect(
+            screen
+                .getByTestId('playable-onboarding-signals')
+                .querySelector('[data-onboarding-signal-tone="recovery"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-tone', 'recovery');
 
         const runAfterGuidedPairs = {
             ...runAfterMatch,
@@ -1824,6 +1869,21 @@ describe('GameScreen (OVR-014)', () => {
                 .getByTestId('first-run-room-goal-signals')
                 .querySelector('[data-onboarding-signal-tone="route"] [data-onboarding-signal-beat="1"]')
         ).toHaveAttribute('data-onboarding-signal-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('first-run-room-goal-signals')
+                .querySelector('[data-onboarding-signal-tone="route"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-audio', 'onboarding-route');
+        expect(
+            screen
+                .getByTestId('first-run-room-goal-signals')
+                .querySelector('[data-onboarding-signal-tone="route"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-screen-cue', 'route');
+        expect(
+            screen
+                .getByTestId('first-run-room-goal-signals')
+                .querySelector('[data-onboarding-signal-tone="route"] [data-onboarding-signal-beat="1"]')
+        ).toHaveAttribute('data-onboarding-signal-beat-tone', 'route');
         expect(
             screen
                 .getByTestId('first-run-room-goal-signals')

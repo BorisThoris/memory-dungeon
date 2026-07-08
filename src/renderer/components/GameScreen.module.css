@@ -12824,6 +12824,57 @@
     opacity: 0.72;
 }
 
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-screen-cue='action'],
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-tone='action'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 74%, white);
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent),
+        0 0 0.06rem color-mix(in srgb, white 20%, transparent);
+}
+
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-screen-cue='burst'],
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-tone='reward'] {
+    width: 0.34rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 32%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 28%, transparent);
+}
+
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-screen-cue='chain'],
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-tone='chain'] {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 80%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 62%, white)
+    );
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent),
+        0 0 0.16rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+}
+
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-screen-cue='recover'],
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-tone='recovery'] {
+    height: 0.13rem;
+    background: color-mix(in srgb, var(--theme-violet-bright) 80%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-violet-bright) 32%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 22%, transparent);
+}
+
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-screen-cue='route'],
+.onboardingPromptBeatPips i[data-onboarding-signal-beat-tone='route'] {
+    width: 0.36rem;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 78%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
+    );
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent),
+        0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
 .onboardingPromptSignals > span[data-onboarding-signal-tone='reward'],
 .onboardingPromptSignals > span[data-onboarding-signal-tone='route'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);

@@ -823,6 +823,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         ],
         'data-objective-beat-screen-cue': ['burst', 'guard', 'pulse', 'tick', 'trait'],
         'data-objective-beat-tone': ['momentum', 'neutral', 'reward', 'risk', 'trait'],
+        'data-onboarding-signal-beat-screen-cue': ['action', 'burst', 'chain', 'recover', 'route'],
+        'data-onboarding-signal-beat-tone': ['action', 'chain', 'recovery', 'reward', 'route'],
         'data-objective-signal-beats': ['2', '3', '4'],
         'data-objective-signal-screen-cue': ['burst', 'guard', 'pulse', 'snap', 'tick'],
         'data-opportunity-lane-map-action': ['cashout', 'claim', 'perk', 'prime', 'recover', 'risk', 'study', 'tool'],
