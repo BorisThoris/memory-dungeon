@@ -1895,6 +1895,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-callout-tone='setup'[\s\S]*?\.chainOpportunityArcadeCalloutBeatPips i[\s\S]*?animation-duration:\s*1\.16s/);
     });
 
+    it('keeps chain priority beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'best priority should read as fast wide payout beats'
+        ).toMatch(/data-chain-priority='best'[\s\S]*?\.chainOpportunityPriorityBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'followup priority should use mid-tempo route beats'
+        ).toMatch(/data-chain-priority='followup'[\s\S]*?\.chainOpportunityPriorityBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'ready priority should use guarded vertical beats'
+        ).toMatch(/data-chain-priority='ready'[\s\S]*?\.chainOpportunityPriorityBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'setup priority should use slower setup beats'
+        ).toMatch(/data-chain-priority='setup'[\s\S]*?\.chainOpportunityPriorityBeatPips i[\s\S]*?animation-duration:\s*1\.16s/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

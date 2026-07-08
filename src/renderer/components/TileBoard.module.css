@@ -1760,6 +1760,14 @@
     box-shadow: 0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
 }
 
+.chainOpportunityPriority[data-chain-priority='best'] .chainOpportunityPriorityBeatPips i {
+    width: 0.26rem;
+    height: 0.1rem;
+    animation-duration: 0.68s;
+    opacity: 0.96;
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
 .chainOpportunityPriority[data-chain-priority='followup'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 52%, var(--theme-gold-bright) 20%);
     background:
@@ -1767,6 +1775,13 @@
         color-mix(in srgb, var(--theme-void) 36%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
     box-shadow: 0 0 0.64rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.chainOpportunityPriority[data-chain-priority='followup'] .chainOpportunityPriorityBeatPips i {
+    width: 0.2rem;
+    height: 0.1rem;
+    animation-duration: 0.9s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
 }
 
 .chainOpportunityPriority[data-chain-priority='ready'] {
@@ -1778,6 +1793,14 @@
     box-shadow: 0 0 0.52rem color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent);
 }
 
+.chainOpportunityPriority[data-chain-priority='ready'] .chainOpportunityPriorityBeatPips i {
+    width: 0.14rem;
+    height: 0.18rem;
+    animation-duration: 1.04s;
+    opacity: 0.78;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 74%, white);
+}
+
 .chainOpportunityPriority[data-chain-priority='setup'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-cyan-bright) 16%);
     background:
@@ -1785,6 +1808,14 @@
         color-mix(in srgb, var(--theme-void) 36%, transparent);
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
     box-shadow: 0 0 0.5rem color-mix(in srgb, var(--theme-violet-bright) 13%, transparent);
+}
+
+.chainOpportunityPriority[data-chain-priority='setup'] .chainOpportunityPriorityBeatPips i {
+    width: 0.12rem;
+    height: 0.2rem;
+    animation-duration: 1.16s;
+    opacity: 0.74;
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, white);
 }
 
 .chainOpportunityPrimaryTraitLane {
