@@ -849,6 +849,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-primary-reward-beats': ['2', '3', '4'],
         'data-primary-reward-screen-cue': ['burst', 'pulse', 'tick'],
         'data-primary-reward-urgency': ['later', 'next', 'soon'],
+        'data-trap-resolution-beat-screen-cue': ['burst', 'pulse', 'snap'],
+        'data-trap-resolution-beat-signal': ['continue', 'effect', 'resolved'],
         'data-trap-resolution-screen-cue': ['burst', 'pulse', 'snap'],
         'data-trait-interaction-lane-focus': ['primary', 'support'],
         'data-run-payoff-screen-cue': ['burst', 'guard', 'pulse', 'snap'],
@@ -3150,12 +3152,24 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-trap-resolution-signal='resolved'[\s\S]*?\.trapResolutionBeatPips i[\s\S]*?animation-duration:\s*0\.82s/);
         expect(
             cssText,
+            'resolved trap beat pips should carry their own direct timing'
+        ).toMatch(/data-trap-resolution-beat-signal='resolved'[\s\S]*?animation-duration:\s*0\.82s/);
+        expect(
+            cssText,
             'effect trap signals should read as faster wider payout beats'
         ).toMatch(/data-trap-resolution-signal='effect'[\s\S]*?\.trapResolutionBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
         expect(
             cssText,
+            'effect trap beat pips should carry their own direct timing'
+        ).toMatch(/data-trap-resolution-beat-signal='effect'[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
             'continue trap signals should read as taller next-step beats'
         ).toMatch(/data-trap-resolution-signal='continue'[\s\S]*?\.trapResolutionBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'continue trap beat pips should carry their own direct geometry'
+        ).toMatch(/data-trap-resolution-beat-signal='continue'[\s\S]*?height:\s*0\.18rem/);
     });
 
     it('keeps trap resolution screen cue beats visually distinct', () => {
@@ -3166,18 +3180,33 @@ describe('feedback beat pip CSS coverage', () => {
         expect(cssText).toContain(".trapResolutionSignals > span[data-trap-resolution-screen-cue='burst'] .trapResolutionBeatPips i");
         expect(cssText).toContain(".trapResolutionSignals > span[data-trap-resolution-screen-cue='snap'] .trapResolutionBeatPips i");
         expect(cssText).toContain(".trapResolutionSignals > span[data-trap-resolution-screen-cue='pulse'] .trapResolutionBeatPips i");
+        expect(cssText).toContain(".trapResolutionBeatPips i[data-trap-resolution-beat-screen-cue='burst']");
+        expect(cssText).toContain(".trapResolutionBeatPips i[data-trap-resolution-beat-screen-cue='snap']");
+        expect(cssText).toContain(".trapResolutionBeatPips i[data-trap-resolution-beat-screen-cue='pulse']");
         expect(
             cssText,
             'burst trap resolution cues should stay fastest and high-emphasis'
         ).toMatch(/data-trap-resolution-screen-cue='burst'[\s\S]*?animation-duration:\s*0\.7s/);
         expect(
             cssText,
+            'burst trap resolution beat pips should keep direct high-emphasis timing'
+        ).toMatch(/data-trap-resolution-beat-screen-cue='burst'[\s\S]*?animation-duration:\s*0\.7s/);
+        expect(
+            cssText,
             'snap trap resolution cues should use quick reward timing'
         ).toMatch(/data-trap-resolution-screen-cue='snap'[\s\S]*?animation-duration:\s*0\.78s/);
         expect(
             cssText,
+            'snap trap resolution beat pips should use direct quick reward timing'
+        ).toMatch(/data-trap-resolution-beat-screen-cue='snap'[\s\S]*?animation-duration:\s*0\.78s/);
+        expect(
+            cssText,
             'pulse trap resolution cues should use calmer next-step timing'
         ).toMatch(/data-trap-resolution-screen-cue='pulse'[\s\S]*?animation-duration:\s*1s/);
+        expect(
+            cssText,
+            'pulse trap resolution beat pips should use direct next-step timing'
+        ).toMatch(/data-trap-resolution-beat-screen-cue='pulse'[\s\S]*?animation-duration:\s*1s/);
     });
 
     it('keeps board reward burst tier beats visually distinct', () => {

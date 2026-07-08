@@ -5106,7 +5106,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     {Array.from({ length: getTrapResolutionSignalBeatCount('resolved') }, (_, index) => (
                                         <i
                                             data-trap-resolution-beat={index + 1}
+                                            data-trap-resolution-beat-action={getTrapResolutionSignalAction('resolved')}
+                                            data-trap-resolution-beat-audio={getTrapResolutionSignalAudioCue('resolved')}
                                             data-trap-resolution-beat-focus={index === 0 ? 'primary' : 'support'}
+                                            data-trap-resolution-beat-screen-cue={getTrapResolutionSignalScreenCue('resolved')}
+                                            data-trap-resolution-beat-signal="resolved"
                                             key={index}
                                         />
                                     ))}
@@ -5125,7 +5129,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     {Array.from({ length: getTrapResolutionSignalBeatCount('effect') }, (_, index) => (
                                         <i
                                             data-trap-resolution-beat={index + 1}
+                                            data-trap-resolution-beat-action={getTrapResolutionSignalAction('effect')}
+                                            data-trap-resolution-beat-audio={getTrapResolutionSignalAudioCue('effect')}
                                             data-trap-resolution-beat-focus={index === 0 ? 'primary' : 'support'}
+                                            data-trap-resolution-beat-screen-cue={getTrapResolutionSignalScreenCue('effect')}
+                                            data-trap-resolution-beat-signal="effect"
                                             key={index}
                                         />
                                     ))}
@@ -5144,7 +5152,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     {Array.from({ length: getTrapResolutionSignalBeatCount('continue') }, (_, index) => (
                                         <i
                                             data-trap-resolution-beat={index + 1}
+                                            data-trap-resolution-beat-action={getTrapResolutionSignalAction('continue')}
+                                            data-trap-resolution-beat-audio={getTrapResolutionSignalAudioCue('continue')}
                                             data-trap-resolution-beat-focus={index === 0 ? 'primary' : 'support'}
+                                            data-trap-resolution-beat-screen-cue={getTrapResolutionSignalScreenCue('continue')}
+                                            data-trap-resolution-beat-signal="continue"
                                             key={index}
                                         />
                                     ))}

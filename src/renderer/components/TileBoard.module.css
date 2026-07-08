@@ -210,12 +210,28 @@
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-ember, #f08a5d) 30%, transparent);
 }
 
+.trapResolutionBeatPips i[data-trap-resolution-beat-signal='resolved'] {
+    width: 0.2rem;
+    height: 0.12rem;
+    animation-duration: 0.82s;
+    background: color-mix(in srgb, var(--theme-ember, #f08a5d) 76%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-ember, #f08a5d) 30%, transparent);
+}
+
 .trapResolutionSignals > span[data-trap-resolution-signal='effect'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 30%, transparent);
     background: color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 10%, transparent);
 }
 
 .trapResolutionSignals > span[data-trap-resolution-signal='effect'] .trapResolutionBeatPips i {
+    width: 0.3rem;
+    height: 0.12rem;
+    animation-duration: 0.68s;
+    background: color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 82%, white);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright, #f2d39d) 34%, transparent);
+}
+
+.trapResolutionBeatPips i[data-trap-resolution-beat-signal='effect'] {
     width: 0.3rem;
     height: 0.12rem;
     animation-duration: 0.68s;
@@ -240,6 +256,14 @@
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 28%, transparent);
 }
 
+.trapResolutionBeatPips i[data-trap-resolution-beat-signal='continue'] {
+    width: 0.14rem;
+    height: 0.18rem;
+    animation-duration: 1.08s;
+    background: color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 78%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright, #8de6ff) 28%, transparent);
+}
+
 .trapResolutionSignals > span[data-trap-resolution-screen-cue='burst'] {
     animation: boardOpportunityPulse 1.18s ease-in-out infinite;
     box-shadow:
@@ -248,6 +272,11 @@
 }
 
 .trapResolutionSignals > span[data-trap-resolution-screen-cue='burst'] .trapResolutionBeatPips i {
+    animation-duration: 0.7s;
+    opacity: 0.98;
+}
+
+.trapResolutionBeatPips i[data-trap-resolution-beat-screen-cue='burst'] {
     animation-duration: 0.7s;
     opacity: 0.98;
 }
@@ -263,11 +292,21 @@
     animation-duration: 0.78s;
 }
 
+.trapResolutionBeatPips i[data-trap-resolution-beat-screen-cue='snap'] {
+    width: 0.26rem;
+    animation-duration: 0.78s;
+}
+
 .trapResolutionSignals > span[data-trap-resolution-screen-cue='pulse'] {
     animation: boardOpportunityPrimePulse 1.6s ease-in-out infinite;
 }
 
 .trapResolutionSignals > span[data-trap-resolution-screen-cue='pulse'] .trapResolutionBeatPips i {
+    height: 0.14rem;
+    animation-duration: 1s;
+}
+
+.trapResolutionBeatPips i[data-trap-resolution-beat-screen-cue='pulse'] {
     height: 0.14rem;
     animation-duration: 1s;
 }

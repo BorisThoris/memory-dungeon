@@ -297,6 +297,30 @@ describe('TileBoard touch and click controls', () => {
             screen
                 .getByTestId('trap-resolution-signals')
                 .querySelector('[data-trap-resolution-signal="resolved"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-signal', 'resolved');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="resolved"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-action', 'Confirm trap');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="resolved"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-audio', 'trap-resolved');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="resolved"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-screen-cue', 'snap');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="resolved"]')
                 ?.querySelector('[data-trap-resolution-beat="2"]')
         ).toHaveAttribute('data-trap-resolution-beat-focus', 'support');
         expect(
@@ -319,6 +343,30 @@ describe('TileBoard touch and click controls', () => {
                 .querySelector('[data-trap-resolution-signal="effect"]')
                 ?.querySelector('[data-trap-resolution-beat="1"]')
         ).toHaveAttribute('data-trap-resolution-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="effect"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-signal', 'effect');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="effect"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-action', 'Resolve effect');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="effect"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-audio', 'trap-effect');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="effect"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-screen-cue', 'burst');
         expect(screen.getByTestId('trap-resolution-signals').querySelector('[data-trap-resolution-signal="continue"]')).toHaveAttribute(
             'data-trap-resolution-beats',
             '2'
@@ -331,6 +379,30 @@ describe('TileBoard touch and click controls', () => {
             'data-trap-resolution-audio',
             'trap-continue'
         );
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="continue"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-signal', 'continue');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="continue"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-action', 'Chase next pair');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="continue"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-audio', 'trap-continue');
+        expect(
+            screen
+                .getByTestId('trap-resolution-signals')
+                .querySelector('[data-trap-resolution-signal="continue"]')
+                ?.querySelector('[data-trap-resolution-beat="1"]')
+        ).toHaveAttribute('data-trap-resolution-beat-screen-cue', 'pulse');
         expect(screen.getByTestId('trap-resolution-signals')).toHaveAccessibleName(
             /Trap resolution signals: 1 trap resolved\. Effect: Trap effect paid\. Next: Chase next pair/i
         );
