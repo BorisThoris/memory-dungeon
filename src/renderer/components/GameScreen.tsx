@@ -6260,7 +6260,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     {Array.from({ length: beatCount }, (_, index) => (
                                                         <i
                                                             data-objective-beat={index + 1}
+                                                            data-objective-beat-audio={getFloorClearObjectiveSignalAudioCue(row)}
                                                             data-objective-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-objective-beat-screen-cue={getFloorClearObjectiveSignalScreenCue(row)}
+                                                            data-objective-beat-tone={row.tone}
                                                             key={index}
                                                         />
                                                     ))}

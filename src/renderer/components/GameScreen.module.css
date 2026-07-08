@@ -2174,6 +2174,51 @@
     opacity: 0.72;
 }
 
+.floorClearObjectiveBeatPips i[data-objective-beat-screen-cue='burst'],
+.floorClearObjectiveBeatPips i[data-objective-beat-tone='reward'] {
+    width: 0.42rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 36%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 34%, transparent);
+}
+
+.floorClearObjectiveBeatPips i[data-objective-beat-screen-cue='pulse'],
+.floorClearObjectiveBeatPips i[data-objective-beat-tone='momentum'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 24%, transparent);
+}
+
+.floorClearObjectiveBeatPips i[data-objective-beat-screen-cue='trait'],
+.floorClearObjectiveBeatPips i[data-objective-beat-tone='trait'] {
+    width: 0.38rem;
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 78%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 72%, white)
+    );
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent),
+        0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.floorClearObjectiveBeatPips i[data-objective-beat-screen-cue='guard'],
+.floorClearObjectiveBeatPips i[data-objective-beat-tone='risk'] {
+    height: 0.16rem;
+    background: color-mix(in srgb, var(--theme-danger) 80%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-danger) 34%, transparent),
+        0 0 0.08rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.floorClearObjectiveBeatPips i[data-objective-beat-screen-cue='tick'],
+.floorClearObjectiveBeatPips i[data-objective-beat-tone='neutral'] {
+    width: 0.24rem;
+    opacity: 0.62;
+}
+
 .floorClearObjectiveStrip span[data-objective-tone='reward'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, var(--theme-border-strong));
     background:

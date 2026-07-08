@@ -5551,14 +5551,41 @@ describe('GameScreen (OVR-014)', () => {
             screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"] [data-objective-beat="1"]')
         ).toHaveAttribute('data-objective-beat-focus', 'primary');
         expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-audio', 'floor-objective-reward');
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-tone', 'reward');
+        expect(
             screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="reward"] [data-objective-beat="2"]')
         ).toHaveAttribute('data-objective-beat-focus', 'support');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"]')).toHaveAttribute('data-objective-beats', '3');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"]')).toHaveAttribute('data-objective-audio', 'floor-objective-momentum');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"]')).toHaveAttribute('data-objective-screen-cue', 'pulse');
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-audio', 'floor-objective-momentum');
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-screen-cue', 'pulse');
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="momentum"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-tone', 'momentum');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"]')).toHaveAttribute('data-objective-beats', '4');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"]')).toHaveAttribute('data-objective-audio', 'floor-objective-trait');
         expect(screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"]')).toHaveAttribute('data-objective-screen-cue', 'trait');
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-audio', 'floor-objective-trait');
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-screen-cue', 'trait');
+        expect(
+            screen.getByTestId('floor-clear-objective-strip').querySelector('[data-objective-tone="trait"] [data-objective-beat="1"]')
+        ).toHaveAttribute('data-objective-beat-tone', 'trait');
         expect(screen.getByTestId('floor-clear-objective-strip').getAttribute('aria-label')).toContain(
             'Floor clear objective signals. Objective paid: +30 score. Objective streak: x2 +10. Trait route paid: +1 combo shard.'
         );
