@@ -4189,9 +4189,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         {Array.from({ length: beatCount }, (_, index) => (
                                                             <i
                                                                 data-route-card-signal-beat={index + 1}
+                                                                data-route-card-signal-beat-audio={getRouteSpecialSignalAudioCue(row)}
                                                                 data-route-card-signal-beat-focus={
                                                                     index === 0 ? 'primary' : 'support'
                                                                 }
+                                                                data-route-card-signal-beat-screen-cue={getRouteSpecialSignalScreenCue(row)}
+                                                                data-route-card-signal-beat-tone={row.tone}
                                                                 key={index}
                                                             />
                                                         ))}

@@ -5730,6 +5730,21 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen
                 .getByTestId('route-card-board-banner-signals')
+                .querySelector('[data-route-card-signal-tone="reward"] [data-route-card-signal-beat="1"]')
+        ).toHaveAttribute('data-route-card-signal-beat-audio', 'route-card-reward');
+        expect(
+            screen
+                .getByTestId('route-card-board-banner-signals')
+                .querySelector('[data-route-card-signal-tone="reward"] [data-route-card-signal-beat="1"]')
+        ).toHaveAttribute('data-route-card-signal-beat-screen-cue', 'burst');
+        expect(
+            screen
+                .getByTestId('route-card-board-banner-signals')
+                .querySelector('[data-route-card-signal-tone="reward"] [data-route-card-signal-beat="1"]')
+        ).toHaveAttribute('data-route-card-signal-beat-tone', 'reward');
+        expect(
+            screen
+                .getByTestId('route-card-board-banner-signals')
                 .querySelector('[data-route-card-signal-tone="reward"] [data-route-card-signal-beat="2"]')
         ).toHaveAttribute('data-route-card-signal-beat-focus', 'support');
         expect(screen.getByTestId('route-card-board-banner-signals').querySelector('[data-route-card-signal-tone="risk"]')).toHaveAttribute(
@@ -5744,6 +5759,21 @@ describe('GameScreen (OVR-014)', () => {
             'data-route-card-signal-screen-cue',
             'risk'
         );
+        expect(
+            screen
+                .getByTestId('route-card-board-banner-signals')
+                .querySelector('[data-route-card-signal-tone="risk"] [data-route-card-signal-beat="1"]')
+        ).toHaveAttribute('data-route-card-signal-beat-audio', 'route-card-risk');
+        expect(
+            screen
+                .getByTestId('route-card-board-banner-signals')
+                .querySelector('[data-route-card-signal-tone="risk"] [data-route-card-signal-beat="1"]')
+        ).toHaveAttribute('data-route-card-signal-beat-screen-cue', 'risk');
+        expect(
+            screen
+                .getByTestId('route-card-board-banner-signals')
+                .querySelector('[data-route-card-signal-tone="risk"] [data-route-card-signal-beat="1"]')
+        ).toHaveAttribute('data-route-card-signal-beat-tone', 'risk');
         expect(screen.getByTestId('route-card-board-banner-signals')).toHaveAttribute(
             'aria-label',
             'Route card payoff signals. Role: Payout. Payoff: Gold score. Risk: Lost if destroyed.'

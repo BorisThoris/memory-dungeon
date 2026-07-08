@@ -864,6 +864,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-run-payoff-crescendo-tier': ['cashout', 'prime', 'stack', 'super'],
         'data-run-payoff-primary-lane-screen-cue': ['burst', 'build', 'cashout', 'risk'],
         'data-run-payoff-lane-screen-cue': ['burst', 'build', 'cashout', 'risk'],
+        'data-route-card-signal-beat-screen-cue': ['build', 'burst', 'control', 'guard', 'risk'],
+        'data-route-card-signal-beat-tone': ['build', 'control', 'reward', 'risk', 'safety'],
         'data-mode-lane-role-id': ['build', 'locked', 'practice', 'pressure', 'reward'],
         'data-mode-primary-lane-role-id': ['build', 'locked', 'practice', 'pressure', 'reward'],
         'data-loop-cue-tone': ['build', 'chain', 'locked', 'practice', 'pressure', 'route'],
