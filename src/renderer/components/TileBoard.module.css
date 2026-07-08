@@ -14507,6 +14507,80 @@
     opacity: 0.68;
 }
 
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-action='stack'] {
+    width: 0.22rem;
+    height: 0.12rem;
+    animation-duration: 0.66s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, var(--theme-violet-bright) 12%);
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-action='combo'] {
+    width: 0.16rem;
+    height: 0.14rem;
+    animation-duration: 0.84s;
+    background: color-mix(in srgb, var(--theme-border-cyan) 76%, white);
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-action='reward'] {
+    width: 0.18rem;
+    height: 0.1rem;
+    animation-duration: 0.72s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 80%, white);
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-action='risk'] {
+    width: 0.1rem;
+    height: 0.2rem;
+    animation-duration: 0.78s;
+    background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 82%, white);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-danger) 24%, transparent);
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-density='cashout'] {
+    width: 0.2rem;
+    animation-duration: 0.68s;
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-density='surge'] {
+    width: 0.18rem;
+    animation-duration: 0.8s;
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-density='ready'] {
+    width: 0.14rem;
+    height: 0.12rem;
+    animation-duration: 0.9s;
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-density='hazard'] {
+    width: 0.1rem;
+    height: 0.2rem;
+    animation-duration: 0.78s;
+    background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 82%, white);
+}
+
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-density='setup'],
+.traitPreviewSummaryBeatPips i[data-preview-summary-beat-density='trait'] {
+    height: 0.16rem;
+    animation-duration: 1.04s;
+}
+
+.traitPreviewSummary[data-preview-summary-beats='2'] .traitPreviewSummaryBeatPips i {
+    width: 0.08rem;
+    height: 0.08rem;
+    opacity: 0.66;
+}
+
+.traitPreviewSummary[data-preview-summary-beats='3'] .traitPreviewSummaryBeatPips i {
+    opacity: 0.78;
+}
+
+.traitPreviewSummary[data-preview-summary-beats='4'] .traitPreviewSummaryBeatPips i,
+.traitPreviewSummary[data-preview-summary-beats='5'] .traitPreviewSummaryBeatPips i {
+    opacity: 0.9;
+}
+
 .traitPreviewChip[data-preview-kind='pickup'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, transparent);
     background:

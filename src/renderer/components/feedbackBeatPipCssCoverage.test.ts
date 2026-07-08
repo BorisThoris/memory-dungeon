@@ -823,6 +823,9 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-preview-line-focus': ['primary', 'support'],
         'data-preview-screen-cue': ['burst', 'guard', 'pulse', 'snap'],
         'data-preview-summary-action': ['combo', 'reward', 'risk', 'stack'],
+        'data-preview-summary-beat-action': ['combo', 'reward', 'risk', 'stack'],
+        'data-preview-summary-beat-density': ['cashout', 'hazard', 'ready', 'setup', 'surge', 'trait'],
+        'data-preview-summary-beats': ['2', '3', '4', '5'],
         'data-preview-summary-density-tone': ['cashout', 'hazard', 'ready', 'setup', 'surge', 'trait'],
         'data-preview-summary-kind': ['hazard', 'pickup', 'trait'],
         'data-preview-summary-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait'],
@@ -2376,6 +2379,26 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'setup and trait summary tones should stay visibly calmer than cashout'
         ).toMatch(/data-preview-summary-tone='setup'[\s\S]*?var\(--theme-violet-bright\) 18%/);
+        expect(
+            cssText,
+            'stack summary pips should read as the hottest payoff preview'
+        ).toMatch(/\.traitPreviewSummaryBeatPips i\[data-preview-summary-beat-action='stack'\][\s\S]*?animation-duration:\s*0\.66s/);
+        expect(
+            cssText,
+            'combo summary pips should keep combo setup geometry'
+        ).toMatch(/\.traitPreviewSummaryBeatPips i\[data-preview-summary-beat-action='combo'\][\s\S]*?height:\s*0\.14rem/);
+        expect(
+            cssText,
+            'risk summary pips should use taller caution beats'
+        ).toMatch(/\.traitPreviewSummaryBeatPips i\[data-preview-summary-beat-action='risk'\][\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'cashout density summary pips should remain faster than setup density'
+        ).toMatch(/\.traitPreviewSummaryBeatPips i\[data-preview-summary-beat-density='cashout'\][\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'low-beat preview summaries should stay visually quieter'
+        ).toMatch(/data-preview-summary-beats='2'[\s\S]*?\.traitPreviewSummaryBeatPips i[\s\S]*?opacity:\s*0\.66/);
     });
 
     it('keeps trait preview density meter tracks visually distinct by density tone', () => {

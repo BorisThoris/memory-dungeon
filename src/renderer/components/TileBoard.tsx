@@ -7699,6 +7699,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         aria-label={`${traitPreviewSummaryLabel} preview, ${traitPreviewDensityLabel}${beatCount} beats`}
                                         className={styles.traitPreviewSummary}
                                         data-preview-summary-action={traitPreviewSummaryAction}
+                                        data-preview-summary-beats={beatCount}
                                         data-preview-summary-density-tone={traitPreviewDensityTone}
                                         data-preview-summary-kind={focusedPreviewChip.kind}
                                         data-preview-summary-tone={focusedPreviewChip.tone}
@@ -7726,6 +7727,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             {Array.from({ length: Math.max(2, Math.min(5, beatCount)) }, (_, beatIndex) => (
                                                 <i
                                                     data-preview-summary-beat={beatIndex + 1}
+                                                    data-preview-summary-beat-action={traitPreviewSummaryAction}
+                                                    data-preview-summary-beat-density={traitPreviewDensityTone}
                                                     data-preview-summary-beat-focus={
                                                         beatIndex === 0 ? 'primary' : 'support'
                                                     }
