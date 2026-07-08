@@ -2090,6 +2090,37 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-card-trait-lane-beat-map-summary-screen-cue='pulse'[\s\S]*?\.chainOpportunityTraitLaneBeatMapMeterFill[\s\S]*?opacity:\s*0\.9/);
     });
 
+    it('keeps trait interaction map summary meters tied to primary role', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout trait-lane map meters should read as payout progress'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='cashout'[\s\S]*?\.chainOpportunityTraitLaneMapMeterFill[\s\S]*?var\(--theme-gold-bright\) 88%/);
+        expect(
+            cssText,
+            'protect trait-lane map meters should read as defensive progress'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='protect'[\s\S]*?\.chainOpportunityTraitLaneMapMeterFill[\s\S]*?var\(--theme-success, #8edb9b\) 80%/);
+        expect(
+            cssText,
+            'tool trait-lane map meters should read as utility routing'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='tool'[\s\S]*?\.chainOpportunityTraitLaneMapMeterFill[\s\S]*?var\(--theme-cyan-bright\) 84%/);
+        expect(
+            cssText,
+            'risk trait-lane map meters should carry caution colors'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='risk'[\s\S]*?\.chainOpportunityTraitLaneMapMeterFill[\s\S]*?var\(--theme-warning, #f2bc6b\) 78%/);
+        expect(
+            cssText,
+            'block trait-lane map meters should use violet control language'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='block'[\s\S]*?\.chainOpportunityTraitLaneMapMeterFill[\s\S]*?var\(--theme-violet-bright\) 76%/);
+        expect(
+            cssText,
+            'recall trait-lane map meters should stay calmer than cashout'
+        ).toMatch(/data-trait-interaction-lane-primary-role-id='recall'[\s\S]*?\.chainOpportunityTraitLaneMapMeterFill[\s\S]*?opacity:\s*0\.9/);
+    });
+
     it('keeps trait interaction map summary screen cues visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
