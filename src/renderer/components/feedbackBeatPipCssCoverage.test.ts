@@ -1918,6 +1918,60 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-priority='setup'[\s\S]*?\.chainOpportunityPriorityBeatPips i[\s\S]*?animation-duration:\s*1\.16s/);
     });
 
+    it('keeps primary trait-lane role beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout trait lanes should read as fast wide payout beats'
+        ).toMatch(/data-card-trait-lane-primary-role-id='cashout'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'protect trait lanes should use vertical defensive beats'
+        ).toMatch(/data-card-trait-lane-primary-role-id='protect'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'tool trait lanes should use mid-tempo utility beats'
+        ).toMatch(/data-card-trait-lane-primary-role-id='tool'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'block trait lanes should use guarded blocker beats'
+        ).toMatch(/data-card-trait-lane-primary-role-id='block'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?animation-duration:\s*0\.82s/);
+        expect(
+            cssText,
+            'risk trait lanes should use urgent thin risk beats'
+        ).toMatch(/data-card-trait-lane-primary-role-id='risk'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'recall trait lanes should use low route-like recall beats'
+        ).toMatch(/data-card-trait-lane-primary-role-id='recall'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?height:\s*0\.1rem/);
+    });
+
+    it('keeps primary trait-lane screen cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'burst trait-lane cues should stay fast and high-emphasis'
+        ).toMatch(/data-card-trait-lane-primary-screen-cue='burst'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?animation-duration:\s*0\.6s/);
+        expect(
+            cssText,
+            'guard trait-lane cues should use vertical defensive beats'
+        ).toMatch(/data-card-trait-lane-primary-screen-cue='guard'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'pulse trait-lane cues should use calmer readable beats'
+        ).toMatch(/data-card-trait-lane-primary-screen-cue='pulse'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'risk trait-lane cues should use urgent thin risk beats'
+        ).toMatch(/data-card-trait-lane-primary-screen-cue='risk'[\s\S]*?\.chainOpportunityPrimaryTraitLanePips i[\s\S]*?animation-duration:\s*0\.68s/);
+    });
+
     it('keeps primary shot focus beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
