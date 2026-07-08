@@ -1696,6 +1696,56 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-preview-screen-cue='guard'[\s\S]*?height:\s*0\.24rem/);
     });
 
+    it('keeps chain target plan action beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout target plans should read as immediate payout beats'
+        ).toMatch(/data-chain-target-plan-action='cashout'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'follow-up target plans should use mid-tempo tap beats'
+        ).toMatch(/data-chain-target-plan-action='follow-up'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'match-route target plans should use wide route beats'
+        ).toMatch(/data-chain-target-plan-action='match-route'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?width:\s*0\.24rem/);
+        expect(
+            cssText,
+            'prime-route target plans should use taller setup beats'
+        ).toMatch(/data-chain-target-plan-action='prime-route'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?height:\s*0\.18rem/);
+    });
+
+    it('keeps chain target plan tiers and tones visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'now target plans should stay fastest and high-emphasis'
+        ).toMatch(/data-chain-target-plan-tier='now'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'tap target plans should use mid-tempo beats'
+        ).toMatch(/data-chain-target-plan-tier='tap'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'route target plans should stay wide and readable'
+        ).toMatch(/data-chain-target-plan-tier='route'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?width:\s*0\.24rem/);
+        expect(
+            cssText,
+            'prime target plans should use taller setup beats'
+        ).toMatch(/data-chain-target-plan-tier='prime'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'setup target tone should keep slower setup timing'
+        ).toMatch(/data-chain-target-plan-tone='setup'[\s\S]*?\.chainOpportunityTargetPlanBeatPips i[\s\S]*?animation-duration:\s*1\.08s/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
