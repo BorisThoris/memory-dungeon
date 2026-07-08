@@ -1213,6 +1213,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-active-power-screen-cue='tick'[\s\S]*?opacity:\s*0\.62/);
     });
 
+    it('keeps active power step tone beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'setup active power steps should use taller slower setup beats'
+        ).toMatch(/data-active-power-tone='setup'[\s\S]*?\.activePowerBoardStepBeatPips i[\s\S]*?animation-duration:\s*1\.12s/);
+        expect(
+            cssText,
+            'control active power steps should use quicker wider control beats'
+        ).toMatch(/data-active-power-tone='control'[\s\S]*?\.activePowerBoardStepBeatPips i[\s\S]*?animation-duration:\s*0\.82s/);
+        expect(
+            cssText,
+            'recall active power steps should use low route-like recall beats'
+        ).toMatch(/data-active-power-tone='recall'[\s\S]*?\.activePowerBoardStepBeatPips i[\s\S]*?height:\s*0\.1rem/);
+    });
+
     it('keeps hazard opportunity families visually distinct in beat pips', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

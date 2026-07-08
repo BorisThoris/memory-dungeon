@@ -9216,15 +9216,27 @@
 }
 
 .activePowerBoardChip[data-active-power-tone='setup'] .activePowerBoardStepBeatPips i {
+    width: 0.14rem;
+    height: 0.18rem;
+    animation-duration: 1.12s;
     background: color-mix(in srgb, var(--theme-cyan-bright) 74%, white);
+    opacity: 0.78;
 }
 
 .activePowerBoardChip[data-active-power-tone='control'] .activePowerBoardStepBeatPips i {
+    width: 0.24rem;
+    height: 0.14rem;
+    animation-duration: 0.82s;
     background: color-mix(in srgb, var(--theme-ember) 74%, white);
+    opacity: 0.92;
 }
 
 .activePowerBoardChip[data-active-power-tone='recall'] .activePowerBoardStepBeatPips i {
+    width: 0.26rem;
+    height: 0.1rem;
+    animation-duration: 1s;
     background: color-mix(in srgb, var(--theme-violet-bright) 74%, white);
+    opacity: 0.84;
 }
 
 .activePowerBoardChip[data-active-power-tone='setup'] {
