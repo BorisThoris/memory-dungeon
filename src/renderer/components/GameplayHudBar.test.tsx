@@ -490,10 +490,20 @@ describe('GameplayHudBar', () => {
         const recentActionLaneMapSummary = screen.getByTestId('hud-recent-action-lane-map-summary');
         expect(recentActionLaneMapSummary).toHaveTextContent('Lanes');
         expect(recentActionLaneMapSummary).toHaveTextContent('3 lanes');
+        expect(recentActionLaneMapSummary).toHaveAttribute('data-hud-action-lane-summary-primary', 'cash');
+        expect(recentActionLaneMapSummary).toHaveAttribute('data-hud-action-lane-summary-primary-action', 'Collect');
+        expect(recentActionLaneMapSummary).toHaveAttribute('data-hud-action-lane-summary-primary-audio', 'hud-action-cash');
+        expect(recentActionLaneMapSummary).toHaveAttribute('data-hud-action-lane-summary-primary-screen-cue', 'burst');
         expect(recentActionLaneMapSummary.querySelectorAll('[data-hud-action-lane-map-summary-beat]')).toHaveLength(4);
         expect(
             recentActionLaneMapSummary.querySelector('[data-hud-action-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-hud-action-lane-map-summary-beat-focus', 'primary');
+        expect(
+            recentActionLaneMapSummary.querySelector('[data-hud-action-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-hud-action-lane-map-summary-beat-primary', 'cash');
+        expect(
+            recentActionLaneMapSummary.querySelector('[data-hud-action-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-hud-action-lane-map-summary-beat-screen-cue', 'burst');
         expect(screen.getByTestId('hud-recent-action-lane-map')).toHaveAttribute(
             'data-hud-action-lane-map',
             'cash:2>route:1>chain:1'
@@ -1335,12 +1345,21 @@ describe('GameplayHudBar', () => {
         );
         const chainRewardForecastSummary = screen.getByTestId('hud-chain-reward-forecast-summary');
         expect(chainRewardForecastSummary).toHaveAttribute('data-chain-reward-forecast-summary-fill', '100');
+        expect(chainRewardForecastSummary).toHaveAttribute('data-chain-reward-forecast-summary-tone', 'reward');
+        expect(chainRewardForecastSummary).toHaveAttribute('data-chain-reward-forecast-summary-urgency', 'next');
+        expect(chainRewardForecastSummary).toHaveAttribute('data-chain-reward-forecast-summary-screen-cue', 'burst');
         expect(chainRewardForecastSummary).toHaveTextContent('Forecast');
         expect(chainRewardForecastSummary).toHaveTextContent('6 cues');
         expect(chainRewardForecastSummary.querySelectorAll('[data-chain-reward-forecast-summary-beat]')).toHaveLength(5);
         expect(
             chainRewardForecastSummary.querySelector('[data-chain-reward-forecast-summary-beat="1"]')
         ).toHaveAttribute('data-chain-reward-forecast-summary-beat-focus', 'primary');
+        expect(
+            chainRewardForecastSummary.querySelector('[data-chain-reward-forecast-summary-beat="1"]')
+        ).toHaveAttribute('data-chain-reward-forecast-summary-beat-tone', 'reward');
+        expect(
+            chainRewardForecastSummary.querySelector('[data-chain-reward-forecast-summary-beat="1"]')
+        ).toHaveAttribute('data-chain-reward-forecast-summary-beat-screen-cue', 'burst');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Shard');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Guard');
         expect(screen.getByTestId('hud-chain-reward-lane-map')).toHaveTextContent('Heal');
@@ -1641,6 +1660,9 @@ describe('GameplayHudBar', () => {
         );
         const traitRouteLaneMapSummary = screen.getByTestId('hud-trait-route-lane-map-summary');
         expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-count', '1');
+        expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-summary-primary', 'shard');
+        expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-summary-role-id', 'cashout');
+        expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-summary-screen-cue', 'burst');
         expect(traitRouteLaneMapSummary).toHaveTextContent('Trait lanes');
         expect(traitRouteLaneMapSummary).toHaveTextContent('1 lane');
         expect(traitRouteLaneMapSummary).toHaveTextContent('Cashout Shard');
@@ -1648,6 +1670,12 @@ describe('GameplayHudBar', () => {
         expect(
             traitRouteLaneMapSummary.querySelector('[data-trait-interaction-lane-summary-beat="1"]')
         ).toHaveAttribute('data-trait-interaction-lane-summary-beat-focus', 'primary');
+        expect(
+            traitRouteLaneMapSummary.querySelector('[data-trait-interaction-lane-summary-beat="1"]')
+        ).toHaveAttribute('data-trait-interaction-lane-summary-beat-role-id', 'cashout');
+        expect(
+            traitRouteLaneMapSummary.querySelector('[data-trait-interaction-lane-summary-beat="1"]')
+        ).toHaveAttribute('data-trait-interaction-lane-summary-beat-screen-cue', 'burst');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAccessibleName(
             'Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard.'
         );
@@ -1666,6 +1694,9 @@ describe('GameplayHudBar', () => {
             'cashout'
         );
         expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-count', '1');
+        expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-summary-primary', 'shard');
+        expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-summary-role-id', 'cashout');
+        expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-summary-screen-cue', 'burst');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Trait lanes');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('1 lane');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Cashout Shard');
@@ -1815,10 +1846,22 @@ describe('GameplayHudBar', () => {
         const rewardPerkLaneMapSummary = screen.getByTestId('hud-reward-perk-lane-map-summary');
         expect(rewardPerkLaneMapSummary).toHaveTextContent('Lanes');
         expect(rewardPerkLaneMapSummary).toHaveTextContent('2 lanes');
+        expect(rewardPerkLaneMapSummary).toHaveAttribute('data-reward-perk-lane-summary-primary', 'Route prime');
+        expect(rewardPerkLaneMapSummary).toHaveAttribute('data-reward-perk-lane-summary-primary-action', 'Re-prime perk');
+        expect(rewardPerkLaneMapSummary).toHaveAttribute('data-reward-perk-lane-summary-primary-audio', 'reward-perk-route');
+        expect(rewardPerkLaneMapSummary).toHaveAttribute('data-reward-perk-lane-summary-primary-readiness', 'spent');
+        expect(rewardPerkLaneMapSummary).toHaveAttribute('data-reward-perk-lane-summary-primary-role-id', 'route');
+        expect(rewardPerkLaneMapSummary).toHaveAttribute('data-reward-perk-lane-summary-primary-screen-cue', 'recover');
         expect(rewardPerkLaneMapSummary.querySelectorAll('[data-reward-perk-lane-map-summary-beat]')).toHaveLength(3);
         expect(
             rewardPerkLaneMapSummary.querySelector('[data-reward-perk-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-reward-perk-lane-map-summary-beat-focus', 'primary');
+        expect(
+            rewardPerkLaneMapSummary.querySelector('[data-reward-perk-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-reward-perk-lane-map-summary-beat-role-id', 'route');
+        expect(
+            rewardPerkLaneMapSummary.querySelector('[data-reward-perk-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-reward-perk-lane-map-summary-beat-screen-cue', 'recover');
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveAccessibleName(
             'Reward perk lane map. Route prime Route x1. Re-prime perk. Use Swap or row shuffle to connect trait routes. Chain reward Cashout x1. Cash perk. Keep the clean chain alive; cash a trait match at x3+ for a tool.'
         );

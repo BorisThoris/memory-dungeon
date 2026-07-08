@@ -302,6 +302,35 @@ const hudRewardPerkLaneRoleId = (lane: HudRewardPerkLaneMapEntry): 'cashout' | '
     return 'prime';
 };
 
+const hudRewardPerkLaneAudioCue = (
+    lane: HudRewardPerkLaneMapEntry
+): 'reward-perk-cashout' | 'reward-perk-control' | 'reward-perk-prime' | 'reward-perk-route' => {
+    const roleId = hudRewardPerkLaneRoleId(lane);
+    if (roleId === 'cashout') {
+        return 'reward-perk-cashout';
+    }
+    if (roleId === 'control') {
+        return 'reward-perk-control';
+    }
+    if (roleId === 'route') {
+        return 'reward-perk-route';
+    }
+    return 'reward-perk-prime';
+};
+
+const hudRewardPerkLaneScreenCue = (lane: HudRewardPerkLaneMapEntry): 'burst' | 'pulse' | 'recover' | 'tick' => {
+    if (lane.readiness === 'armed') {
+        return 'burst';
+    }
+    if (lane.readiness === 'soon') {
+        return 'pulse';
+    }
+    if (lane.readiness === 'spent') {
+        return 'recover';
+    }
+    return 'tick';
+};
+
 const formatHudRewardPerkLaneRoleMapAttr = (laneMap: readonly HudRewardPerkLaneMapEntry[]): string =>
     laneMap.length > 0 ? laneMap.map((lane) => `${lane.lane}:${hudRewardPerkLaneRole(lane)}:${lane.count}`).join('>') : 'none';
 
@@ -1431,6 +1460,7 @@ const GameplayHudBar = ({
     const rewardPerkLaneRoleMapAttr = formatHudRewardPerkLaneRoleMapAttr(rewardPerkLaneMap);
     const rewardPerkLaneRoleIdMapAttr = formatHudRewardPerkLaneRoleIdMapAttr(rewardPerkLaneMap);
     const rewardPerkLaneMapLabel = formatHudRewardPerkLaneMapLabel(rewardPerkLaneMap);
+    const primaryRewardPerkLane = rewardPerkLaneMap[0] ?? null;
     const hazardTileSummary = getHazardTileBoardSummary(board);
     const traitOpportunitySummary = getTraitOpportunitySummary(board);
     const traitOpportunityHud = getTraitOpportunityHudModel(board, run);
@@ -2336,6 +2366,18 @@ const GameplayHudBar = ({
                                                     }.`}
                                                     className={styles.hudRewardPerkLaneMapSummary}
                                                     data-reward-perk-lane-count={rewardPerkLaneMap.length}
+                                                    data-reward-perk-lane-summary-primary={primaryRewardPerkLane?.lane ?? 'none'}
+                                                    data-reward-perk-lane-summary-primary-action={primaryRewardPerkLane?.action ?? 'none'}
+                                                    data-reward-perk-lane-summary-primary-audio={
+                                                        primaryRewardPerkLane ? hudRewardPerkLaneAudioCue(primaryRewardPerkLane) : 'none'
+                                                    }
+                                                    data-reward-perk-lane-summary-primary-readiness={primaryRewardPerkLane?.readiness ?? 'none'}
+                                                    data-reward-perk-lane-summary-primary-role-id={
+                                                        primaryRewardPerkLane ? hudRewardPerkLaneRoleId(primaryRewardPerkLane) : 'none'
+                                                    }
+                                                    data-reward-perk-lane-summary-primary-screen-cue={
+                                                        primaryRewardPerkLane ? hudRewardPerkLaneScreenCue(primaryRewardPerkLane) : 'none'
+                                                    }
                                                     data-testid="hud-reward-perk-lane-map-summary"
                                                 >
                                                     <small>Lanes</small>
@@ -2354,6 +2396,15 @@ const GameplayHudBar = ({
                                                                     data-reward-perk-lane-map-summary-beat={beatIndex + 1}
                                                                     data-reward-perk-lane-map-summary-beat-focus={
                                                                         beatIndex === 0 ? 'primary' : 'support'
+                                                                    }
+                                                                    data-reward-perk-lane-map-summary-beat-readiness={
+                                                                        primaryRewardPerkLane?.readiness ?? 'none'
+                                                                    }
+                                                                    data-reward-perk-lane-map-summary-beat-role-id={
+                                                                        primaryRewardPerkLane ? hudRewardPerkLaneRoleId(primaryRewardPerkLane) : 'none'
+                                                                    }
+                                                                    data-reward-perk-lane-map-summary-beat-screen-cue={
+                                                                        primaryRewardPerkLane ? hudRewardPerkLaneScreenCue(primaryRewardPerkLane) : 'none'
                                                                     }
                                                                     key={beatIndex}
                                                                 />
@@ -2531,6 +2582,13 @@ const GameplayHudBar = ({
                                                     }.`}
                                                     className={styles.hudTraitRouteLaneMapSummary}
                                                     data-trait-interaction-lane-count={traitOpportunityLaneMap.length}
+                                                    data-trait-interaction-lane-summary-primary={primaryTraitOpportunityLane?.id ?? 'none'}
+                                                    data-trait-interaction-lane-summary-role-id={
+                                                        primaryTraitOpportunityLane
+                                                            ? (getTraitInteractionLaneRoleId(primaryTraitOpportunityLane) ?? 'none')
+                                                            : 'none'
+                                                    }
+                                                    data-trait-interaction-lane-summary-screen-cue={traitRouteActionScreenCue}
                                                     data-testid="hud-trait-route-lane-map-summary"
                                                 >
                                                     <small>Trait lanes</small>
@@ -2560,6 +2618,12 @@ const GameplayHudBar = ({
                                                                     data-trait-interaction-lane-summary-beat-focus={
                                                                         beatIndex === 0 ? 'primary' : 'support'
                                                                     }
+                                                                    data-trait-interaction-lane-summary-beat-role-id={
+                                                                        primaryTraitOpportunityLane
+                                                                            ? (getTraitInteractionLaneRoleId(primaryTraitOpportunityLane) ?? 'none')
+                                                                            : 'none'
+                                                                    }
+                                                                    data-trait-interaction-lane-summary-beat-screen-cue={traitRouteActionScreenCue}
                                                                     key={beatIndex}
                                                                 />
                                                             )
@@ -2843,6 +2907,11 @@ const GameplayHudBar = ({
                                                     data-chain-reward-lane-count={chainRewardLaneMap.length}
                                                     data-chain-reward-ladder-count={chainRewardLadder.length}
                                                     data-chain-reward-forecast-summary-fill={chainRewardForecastSummaryFill}
+                                                    data-chain-reward-forecast-summary-screen-cue={
+                                                        chainRewardLeadCue ? hudChainRewardScreenCue(chainRewardLeadCue) : 'none'
+                                                    }
+                                                    data-chain-reward-forecast-summary-tone={chainRewardLeadCue?.tone ?? 'none'}
+                                                    data-chain-reward-forecast-summary-urgency={chainRewardLeadCue?.urgency ?? 'none'}
                                                     style={
                                                         {
                                                             '--chain-reward-forecast-summary-fill': `${chainRewardForecastSummaryFill}%`
@@ -2866,6 +2935,13 @@ const GameplayHudBar = ({
                                                                     data-chain-reward-forecast-summary-beat={beatIndex + 1}
                                                                     data-chain-reward-forecast-summary-beat-focus={
                                                                         beatIndex === 0 ? 'primary' : 'support'
+                                                                    }
+                                                                    data-chain-reward-forecast-summary-beat-screen-cue={
+                                                                        chainRewardLeadCue ? hudChainRewardScreenCue(chainRewardLeadCue) : 'none'
+                                                                    }
+                                                                    data-chain-reward-forecast-summary-beat-tone={chainRewardLeadCue?.tone ?? 'none'}
+                                                                    data-chain-reward-forecast-summary-beat-urgency={
+                                                                        chainRewardLeadCue?.urgency ?? 'none'
                                                                     }
                                                                     key={beatIndex}
                                                                 />
@@ -3190,6 +3266,20 @@ const GameplayHudBar = ({
                                                             }.`}
                                                             className={styles.hudRecentActionLaneMapSummary}
                                                             data-hud-action-lane-count={recentActionLaneMap.length}
+                                                            data-hud-action-lane-summary-primary={primaryRecentActionLane?.id ?? 'none'}
+                                                            data-hud-action-lane-summary-primary-action={
+                                                                primaryRecentActionLane?.action ?? 'none'
+                                                            }
+                                                            data-hud-action-lane-summary-primary-audio={
+                                                                primaryRecentActionLane
+                                                                    ? hudRecentActionLaneAudioCue(primaryRecentActionLane)
+                                                                    : 'none'
+                                                            }
+                                                            data-hud-action-lane-summary-primary-screen-cue={
+                                                                primaryRecentActionLane
+                                                                    ? hudRecentActionLaneScreenCue(primaryRecentActionLane)
+                                                                    : 'none'
+                                                            }
                                                             data-testid="hud-recent-action-lane-map-summary"
                                                         >
                                                             <small>Lanes</small>
@@ -3208,6 +3298,14 @@ const GameplayHudBar = ({
                                                                             data-hud-action-lane-map-summary-beat={beatIndex + 1}
                                                                             data-hud-action-lane-map-summary-beat-focus={
                                                                                 beatIndex === 0 ? 'primary' : 'support'
+                                                                            }
+                                                                            data-hud-action-lane-map-summary-beat-primary={
+                                                                                primaryRecentActionLane?.id ?? 'none'
+                                                                            }
+                                                                            data-hud-action-lane-map-summary-beat-screen-cue={
+                                                                                primaryRecentActionLane
+                                                                                    ? hudRecentActionLaneScreenCue(primaryRecentActionLane)
+                                                                                    : 'none'
                                                                             }
                                                                             key={beatIndex}
                                                                         />
@@ -3480,6 +3578,13 @@ const GameplayHudBar = ({
                                                     }.`}
                                                     className={styles.hudTraitRouteLaneMapSummary}
                                                     data-trait-interaction-lane-count={traitOpportunityLaneMap.length}
+                                                    data-trait-interaction-lane-summary-primary={primaryTraitOpportunityLane?.id ?? 'none'}
+                                                    data-trait-interaction-lane-summary-role-id={
+                                                        primaryTraitOpportunityLane
+                                                            ? (getTraitInteractionLaneRoleId(primaryTraitOpportunityLane) ?? 'none')
+                                                            : 'none'
+                                                    }
+                                                    data-trait-interaction-lane-summary-screen-cue={traitRouteActionScreenCue}
                                                     data-testid="hud-trait-route-lane-map-summary-details"
                                                 >
                                                     <small>Trait lanes</small>
@@ -3509,6 +3614,12 @@ const GameplayHudBar = ({
                                                                     data-trait-interaction-lane-summary-beat-focus={
                                                                         beatIndex === 0 ? 'primary' : 'support'
                                                                     }
+                                                                    data-trait-interaction-lane-summary-beat-role-id={
+                                                                        primaryTraitOpportunityLane
+                                                                            ? (getTraitInteractionLaneRoleId(primaryTraitOpportunityLane) ?? 'none')
+                                                                            : 'none'
+                                                                    }
+                                                                    data-trait-interaction-lane-summary-beat-screen-cue={traitRouteActionScreenCue}
                                                                     key={beatIndex}
                                                                 />
                                                             )
