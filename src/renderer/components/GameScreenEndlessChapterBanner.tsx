@@ -166,7 +166,10 @@ export const GameScreenEndlessChapterBanner = ({
                     {Array.from({ length: chapterActionBeatCount(actionCue) }, (_, index) => (
                         <i
                             data-chapter-action-beat={index + 1}
+                            data-chapter-action-beat-audio={chapterActionAudioCue(actionCue)}
                             data-chapter-action-beat-focus={index === 0 ? 'primary' : 'support'}
+                            data-chapter-action-beat-screen-cue={chapterActionScreenCue(actionCue)}
+                            data-chapter-action-beat-tone={actionCue.tone}
                             key={index}
                         />
                     ))}
@@ -191,7 +194,10 @@ export const GameScreenEndlessChapterBanner = ({
                             {Array.from({ length: chapterSignalBeatCount(row) }, (_, index) => (
                                 <i
                                     data-chapter-signal-beat={index + 1}
+                                    data-chapter-signal-beat-audio={chapterSignalAudioCue(row)}
                                     data-chapter-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                    data-chapter-signal-beat-screen-cue={chapterSignalScreenCue(row)}
+                                    data-chapter-signal-beat-tone={row.tone}
                                     key={index}
                                 />
                             ))}

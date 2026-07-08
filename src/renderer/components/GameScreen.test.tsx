@@ -5381,6 +5381,21 @@ describe('GameScreen (OVR-014)', () => {
         ).toHaveAttribute('data-chapter-signal-beat-focus', 'primary');
         expect(
             getByTestId('endless-chapter-signals').querySelector(
+                '[data-chapter-signal-tone="objective"] [data-chapter-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-chapter-signal-beat-audio', 'chapter-signal-reward');
+        expect(
+            getByTestId('endless-chapter-signals').querySelector(
+                '[data-chapter-signal-tone="objective"] [data-chapter-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-chapter-signal-beat-screen-cue', 'burst');
+        expect(
+            getByTestId('endless-chapter-signals').querySelector(
+                '[data-chapter-signal-tone="objective"] [data-chapter-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-chapter-signal-beat-tone', 'objective');
+        expect(
+            getByTestId('endless-chapter-signals').querySelector(
                 '[data-chapter-signal-tone="objective"] [data-chapter-signal-beat="2"]'
             )
         ).toHaveAttribute('data-chapter-signal-beat-focus', 'support');
@@ -5400,6 +5415,18 @@ describe('GameScreen (OVR-014)', () => {
         expect(getByTestId('endless-chapter-action-cue').querySelector('[data-chapter-action-beat="1"]')).toHaveAttribute(
             'data-chapter-action-beat-focus',
             'primary'
+        );
+        expect(getByTestId('endless-chapter-action-cue').querySelector('[data-chapter-action-beat="1"]')).toHaveAttribute(
+            'data-chapter-action-beat-audio',
+            'chapter-action-counter'
+        );
+        expect(getByTestId('endless-chapter-action-cue').querySelector('[data-chapter-action-beat="1"]')).toHaveAttribute(
+            'data-chapter-action-beat-screen-cue',
+            'snap'
+        );
+        expect(getByTestId('endless-chapter-action-cue').querySelector('[data-chapter-action-beat="1"]')).toHaveAttribute(
+            'data-chapter-action-beat-tone',
+            'counter'
         );
         expect(getByTestId('endless-chapter-action-cue').querySelector('[data-chapter-action-beat="2"]')).toHaveAttribute(
             'data-chapter-action-beat-focus',

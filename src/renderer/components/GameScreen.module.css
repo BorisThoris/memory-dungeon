@@ -742,6 +742,53 @@
     opacity: 0.72;
 }
 
+.endlessChapterBeatPips i[data-chapter-action-beat-screen-cue='burst'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-screen-cue='burst'],
+.endlessChapterBeatPips i[data-chapter-action-beat-tone='objective'],
+.endlessChapterBeatPips i[data-chapter-action-beat-tone='reward'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-tone='objective'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-tone='reward'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 24%, transparent);
+}
+
+.endlessChapterBeatPips i[data-chapter-action-beat-screen-cue='guard'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-screen-cue='guard'],
+.endlessChapterBeatPips i[data-chapter-action-beat-tone='pressure'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-tone='pressure'] {
+    height: 0.18rem;
+    background: color-mix(in srgb, var(--theme-danger) 76%, white);
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-danger) 32%, transparent),
+        0 0 0.08rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.endlessChapterBeatPips i[data-chapter-action-beat-screen-cue='pulse'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-screen-cue='pulse'],
+.endlessChapterBeatPips i[data-chapter-action-beat-tone='safe'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-tone='safe'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 20%, transparent);
+}
+
+.endlessChapterBeatPips i[data-chapter-action-beat-screen-cue='snap'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-screen-cue='snap'],
+.endlessChapterBeatPips i[data-chapter-action-beat-tone='counter'],
+.endlessChapterBeatPips i[data-chapter-signal-beat-tone='counter'] {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 76%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 58%, white)
+    );
+    box-shadow:
+        0 0 0.26rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent),
+        0 0 0.12rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+}
+
 .endlessChapterActionCue[data-chapter-action-tone='reward'],
 .endlessChapterActionCue[data-chapter-action-tone='objective'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, transparent);
