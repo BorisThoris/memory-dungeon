@@ -2041,6 +2041,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-card-primary-shot-screen-cue='pulse'[\s\S]*?\.chainOpportunityPrimaryShotBeatPips i[\s\S]*?animation-duration:\s*0\.88s/);
     });
 
+    it('keeps chain lines action beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout chain lines should read as immediate payout beats'
+        ).toMatch(/data-chain-lines-action='cashout'[\s\S]*?\.chainOpportunityLinesBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'follow-up chain lines should use mid-tempo continuation beats'
+        ).toMatch(/data-chain-lines-action='follow-up'[\s\S]*?\.chainOpportunityLinesBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'route chain lines should use low route beats'
+        ).toMatch(/data-chain-lines-action='match-route'[\s\S]*?\.chainOpportunityLinesBeatPips i[\s\S]*?height:\s*0\.1rem/);
+        expect(
+            cssText,
+            'prime-route chain lines should use taller slower setup beats'
+        ).toMatch(/data-chain-lines-action='prime-route'[\s\S]*?\.chainOpportunityLinesBeatPips i[\s\S]*?animation-duration:\s*1\.12s/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
