@@ -2581,6 +2581,74 @@
     transition: width 140ms ease-out;
 }
 
+.chainOpportunityMilestone[data-chain-milestone-tier='cashout'] .chainOpportunityMilestoneMeter,
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='burst'] .chainOpportunityMilestoneMeter,
+.chainOpportunityMilestone[data-chain-milestone-tone='combo'] .chainOpportunityMilestoneMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 50%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='cashout'] .chainOpportunityMilestoneMeterFill,
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='burst'] .chainOpportunityMilestoneMeterFill,
+.chainOpportunityMilestone[data-chain-milestone-tone='combo'] .chainOpportunityMilestoneMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 90%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 68%, var(--theme-gold-bright) 32%)
+    );
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent),
+        0 0 0 1px color-mix(in srgb, white 10%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='prime'] .chainOpportunityMilestoneMeter,
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='pulse'] .chainOpportunityMilestoneMeter,
+.chainOpportunityMilestone[data-chain-milestone-tone='surge'] .chainOpportunityMilestoneMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-green-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), color-mix(in srgb, var(--theme-green-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 27%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='prime'] .chainOpportunityMilestoneMeterFill,
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='pulse'] .chainOpportunityMilestoneMeterFill,
+.chainOpportunityMilestone[data-chain-milestone-tone='surge'] .chainOpportunityMilestoneMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-green-bright) 62%, white)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='hold'] .chainOpportunityMilestoneMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-violet-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), color-mix(in srgb, var(--theme-violet-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='hold'] .chainOpportunityMilestoneMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 76%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 52%, white)
+    );
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='build'] .chainOpportunityMilestoneMeter,
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='tick'] .chainOpportunityMilestoneMeter,
+.chainOpportunityMilestone[data-chain-milestone-tone='building'] .chainOpportunityMilestoneMeter {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 26%, var(--theme-cyan-bright) 16%);
+}
+
+.chainOpportunityMilestone[data-chain-milestone-tier='build'] .chainOpportunityMilestoneMeterFill,
+.chainOpportunityMilestone[data-chain-milestone-screen-cue='tick'] .chainOpportunityMilestoneMeterFill {
+    opacity: 0.78;
+}
+
 .chainOpportunityMilestone small,
 .chainOpportunityMilestone b {
     min-width: 0;
@@ -8554,6 +8622,48 @@
     transition: width 140ms ease-out;
 }
 
+.chainOpportunityHotBand[data-chain-hot-band-action='cashout'] .chainOpportunityHotBandMeter,
+.chainOpportunityHotBand[data-chain-hot-band-tier='hot'] .chainOpportunityHotBandMeter,
+.chainOpportunityHotBand[data-chain-hot-band-screen-cue='burst'] .chainOpportunityHotBandMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-action='cashout'] .chainOpportunityHotBandMeterFill,
+.chainOpportunityHotBand[data-chain-hot-band-tier='hot'] .chainOpportunityHotBandMeterFill,
+.chainOpportunityHotBand[data-chain-hot-band-screen-cue='burst'] .chainOpportunityHotBandMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 92%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 64%, var(--theme-gold-bright) 36%)
+    );
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-action='hold'] .chainOpportunityHotBandMeter,
+.chainOpportunityHotBand[data-chain-hot-band-tier='ready'] .chainOpportunityHotBandMeter,
+.chainOpportunityHotBand[data-chain-hot-band-screen-cue='guard'] .chainOpportunityHotBandMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 15%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+}
+
+.chainOpportunityHotBand[data-chain-hot-band-action='hold'] .chainOpportunityHotBandMeterFill,
+.chainOpportunityHotBand[data-chain-hot-band-tier='ready'] .chainOpportunityHotBandMeterFill,
+.chainOpportunityHotBand[data-chain-hot-band-screen-cue='guard'] .chainOpportunityHotBandMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 54%, white)
+    );
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
 .chainOpportunityHotBandBeatPips {
     display: flex;
     grid-column: 1 / -1;
@@ -8763,6 +8873,30 @@
     );
     box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
     transition: width 140ms ease-out;
+}
+
+.chainOpportunitySurgeBand[data-chain-surge-band-action='surge'] .chainOpportunitySurgeBandMeter,
+.chainOpportunitySurgeBand[data-chain-surge-band-tone='surge'] .chainOpportunitySurgeBandMeter,
+.chainOpportunitySurgeBand[data-chain-surge-band-tier='combo'] .chainOpportunitySurgeBandMeter,
+.chainOpportunitySurgeBand[data-chain-surge-band-screen-cue='burst'] .chainOpportunitySurgeBandMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 52%, var(--theme-gold-bright) 20%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 20%, transparent), color-mix(in srgb, var(--theme-gold-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+}
+
+.chainOpportunitySurgeBand[data-chain-surge-band-action='surge'] .chainOpportunitySurgeBandMeterFill,
+.chainOpportunitySurgeBand[data-chain-surge-band-tone='surge'] .chainOpportunitySurgeBandMeterFill,
+.chainOpportunitySurgeBand[data-chain-surge-band-tier='combo'] .chainOpportunitySurgeBandMeterFill,
+.chainOpportunitySurgeBand[data-chain-surge-band-screen-cue='burst'] .chainOpportunitySurgeBandMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 88%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 62%, var(--theme-cyan-bright) 30%)
+    );
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-violet-bright) 30%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
 }
 
 .chainOpportunitySurgeBandBeatPips {

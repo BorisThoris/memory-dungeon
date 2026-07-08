@@ -2308,6 +2308,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-hot-band-tier='ready'[\s\S]*?\.chainOpportunityHotBandBeatPips i[\s\S]*?height:\s*0\.22rem/);
     });
 
+    it('keeps chain hot band meters visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout hot-band meters should frame immediate payout'
+        ).toMatch(/data-chain-hot-band-action='cashout'[\s\S]*?\.chainOpportunityHotBandMeterFill[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'hot tier meters should keep high-emphasis payout colors'
+        ).toMatch(/data-chain-hot-band-tier='hot'[\s\S]*?\.chainOpportunityHotBandMeter[\s\S]*?var\(--theme-gold-bright\) 52%/);
+        expect(
+            cssText,
+            'hold hot-band meters should read as guarded setup'
+        ).toMatch(/data-chain-hot-band-action='hold'[\s\S]*?\.chainOpportunityHotBandMeterFill[\s\S]*?var\(--theme-cyan-bright\) 82%/);
+        expect(
+            cssText,
+            'ready hot-band meters should stay calmer than hot cashout'
+        ).toMatch(/data-chain-hot-band-tier='ready'[\s\S]*?\.chainOpportunityHotBandMeter[\s\S]*?var\(--theme-cyan-bright\) 42%/);
+    });
+
     it('keeps chain surge band combo beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
@@ -2331,6 +2354,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-surge-band-screen-cue='burst'[\s\S]*?\.chainOpportunitySurgeBandBeatPips i[\s\S]*?opacity:\s*0\.98/);
     });
 
+    it('keeps chain surge band meters visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'surge action meters should read as acceleration progress'
+        ).toMatch(/data-chain-surge-band-action='surge'[\s\S]*?\.chainOpportunitySurgeBandMeterFill[\s\S]*?var\(--theme-violet-bright\) 88%/);
+        expect(
+            cssText,
+            'combo tier surge meters should keep payoff heat'
+        ).toMatch(/data-chain-surge-band-tier='combo'[\s\S]*?\.chainOpportunitySurgeBandMeter[\s\S]*?var\(--theme-gold-bright\) 20%/);
+        expect(
+            cssText,
+            'burst surge meters should use the same high-emphasis fill'
+        ).toMatch(/data-chain-surge-band-screen-cue='burst'[\s\S]*?\.chainOpportunitySurgeBandMeterFill[\s\S]*?var\(--theme-gold-bright\) 62%/);
+    });
+
     it('keeps chain milestone tier beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
@@ -2352,6 +2394,29 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'build milestones should stay quiet and slow'
         ).toMatch(/data-chain-milestone-tier='build'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?animation-duration:\s*1\.28s/);
+    });
+
+    it('keeps chain milestone meters visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout milestone meters should read as immediate payout progress'
+        ).toMatch(/data-chain-milestone-tier='cashout'[\s\S]*?\.chainOpportunityMilestoneMeterFill[\s\S]*?var\(--theme-gold-bright\) 90%/);
+        expect(
+            cssText,
+            'prime milestone meters should read as setup progress'
+        ).toMatch(/data-chain-milestone-tier='prime'[\s\S]*?\.chainOpportunityMilestoneMeterFill[\s\S]*?var\(--theme-green-bright\) 62%/);
+        expect(
+            cssText,
+            'hold milestone meters should carry guarded hold colors'
+        ).toMatch(/data-chain-milestone-tier='hold'[\s\S]*?\.chainOpportunityMilestoneMeterFill[\s\S]*?var\(--theme-violet-bright\) 52%/);
+        expect(
+            cssText,
+            'build milestone meters should stay quieter than cashout'
+        ).toMatch(/data-chain-milestone-tier='build'[\s\S]*?\.chainOpportunityMilestoneMeterFill[\s\S]*?opacity:\s*0\.78/);
     });
 
     it('keeps chain milestone tone and screen cue beats visually distinct', () => {
