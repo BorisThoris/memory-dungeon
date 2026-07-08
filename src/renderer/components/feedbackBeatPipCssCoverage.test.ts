@@ -1305,6 +1305,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-forecast-signal-screen-cue='pulse'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?opacity:\s*0\.9/);
     });
 
+    it('keeps dungeon forecast action cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'risk forecast action cues should use urgent compact beats'
+        ).toMatch(/data-forecast-action-tone='risk'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?animation-duration:\s*0\.7s/);
+        expect(
+            cssText,
+            'defense forecast action cues should use guarded slower beats'
+        ).toMatch(/data-forecast-action-tone='defense'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'action forecast action cues should use readable active pacing'
+        ).toMatch(/data-forecast-action-tone='action'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?animation-duration:\s*0\.84s/);
+        expect(
+            cssText,
+            'guard forecast action screen cues should share defensive beats'
+        ).toMatch(/data-forecast-action-screen-cue='guard'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?animation-duration:\s*1\.06s/);
+    });
+
     it('keeps HUD objective signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
