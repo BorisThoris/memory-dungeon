@@ -40,6 +40,7 @@ import {
     traitInteractionLaneRoleIdMapAttr,
     traitInteractionLaneRoleMapAttr
 } from '../copy/traitInteractionLaneMap';
+import { getTraitMarkerCueByShape, type TraitMarkerShapeId } from '../copy/traitMarkerCueGlossary';
 import { PERFECT_MEMORY_BASE_RULES, perfectMemoryHudKind } from '../copy/perfectMemory';
 import { REG106_HUD_IA } from '../gameplay/regPhase4PlayContract';
 import {
@@ -302,6 +303,37 @@ const hudRewardPerkLaneRoleId = (lane: HudRewardPerkLaneMapEntry): 'cashout' | '
     return 'prime';
 };
 
+type HudRewardPerkLaneCue = {
+    glyph: string;
+    id: TraitMarkerShapeId | 'control-lane';
+    label: string;
+};
+
+const getHudRewardPerkLaneCue = (lane: HudRewardPerkLaneMapEntry): HudRewardPerkLaneCue => {
+    if (lane.action === 'Cash perk') {
+        const cue = getTraitMarkerCueByShape('perk-armed-bar');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    if (lane.action === 'Prime perk' || lane.action === 'Re-prime perk') {
+        const cue = getTraitMarkerCueByShape('swap-target-crossbar');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    const roleId = hudRewardPerkLaneRoleId(lane);
+    if (roleId === 'cashout') {
+        const cue = getTraitMarkerCueByShape('payoff-bar');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    if (roleId === 'route') {
+        const cue = getTraitMarkerCueByShape('linked-route');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    if (roleId === 'prime') {
+        const cue = getTraitMarkerCueByShape('swap-target-crossbar');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    return { glyph: '!!', id: 'control-lane', label: 'Control' };
+};
+
 const hudRewardPerkLaneAudioCue = (
     lane: HudRewardPerkLaneMapEntry
 ): 'reward-perk-cashout' | 'reward-perk-control' | 'reward-perk-prime' | 'reward-perk-route' => {
@@ -340,7 +372,10 @@ const formatHudRewardPerkLaneRoleIdMapAttr = (laneMap: readonly HudRewardPerkLan
 const formatHudRewardPerkLaneMapLabel = (laneMap: readonly HudRewardPerkLaneMapEntry[]): string =>
     laneMap.length > 0
         ? `Reward perk lane map. ${laneMap
-              .map((lane) => `${lane.lane} ${hudRewardPerkLaneRole(lane)} x${lane.count}. ${lane.action}. ${sentenceWithPeriod(lane.nextCue)}`)
+              .map((lane) => {
+                  const cue = getHudRewardPerkLaneCue(lane);
+                  return `${lane.lane} ${cue.label} cue ${cue.glyph}. ${hudRewardPerkLaneRole(lane)} x${lane.count}. ${lane.action}. ${sentenceWithPeriod(lane.nextCue)}`;
+              })
               .join(' ')}`
         : 'Reward perk lane map';
 
@@ -2412,25 +2447,35 @@ const GameplayHudBar = ({
                                                         )}
                                                     </span>
                                                 </span>
-                                                {rewardPerkLaneMap.map((lane) => (
-                                                    <span
-                                                        aria-label={`Reward perk lane. ${lane.lane}. ${hudRewardPerkLaneRole(lane)}. ${lane.action}. ${lane.count}. ${lane.nextCue}.`}
-                                                        data-reward-perk-lane-action={lane.action}
-                                                        data-reward-perk-lane-count={lane.count}
-                                                        data-reward-perk-lane-kind={lane.lane}
-                                                        data-reward-perk-lane-readiness={lane.readiness}
-                                                        data-reward-perk-lane-role={hudRewardPerkLaneRole(lane)}
-                                                        data-reward-perk-lane-role-id={hudRewardPerkLaneRoleId(lane)}
-                                                        key={lane.lane}
-                                                    >
-                                                        <small>{lane.lane}</small>
-                                                        <strong>{hudRewardPerkLaneRole(lane)}</strong>
-                                                        <b>{lane.action}</b>
-                                                        <em>
-                                                            x{lane.count} / {lane.nextCue}
-                                                        </em>
-                                                    </span>
-                                                ))}
+                                                {rewardPerkLaneMap.map((lane) => {
+                                                    const cue = getHudRewardPerkLaneCue(lane);
+                                                    return (
+                                                        <span
+                                                            aria-label={`Reward perk lane. ${lane.lane}. ${cue.label} cue: ${cue.glyph}. ${hudRewardPerkLaneRole(
+                                                                lane
+                                                            )}. ${lane.action}. ${lane.count} ${
+                                                                lane.count === 1 ? 'lane' : 'lanes'
+                                                            }. ${lane.nextCue}.`}
+                                                            data-reward-perk-lane-action={lane.action}
+                                                            data-reward-perk-lane-count={lane.count}
+                                                            data-reward-perk-lane-cue-id={cue.id}
+                                                            data-reward-perk-lane-kind={lane.lane}
+                                                            data-reward-perk-lane-readiness={lane.readiness}
+                                                            data-reward-perk-lane-role={hudRewardPerkLaneRole(lane)}
+                                                            data-reward-perk-lane-role-id={hudRewardPerkLaneRoleId(lane)}
+                                                            key={lane.lane}
+                                                        >
+                                                            <small>{lane.lane}</small>
+                                                            <strong aria-hidden="true">{cue.glyph}</strong>
+                                                            <b>
+                                                                {hudRewardPerkLaneRole(lane)} · {lane.action}
+                                                            </b>
+                                                            <em>
+                                                                {cue.label} cue · x{lane.count} / {lane.nextCue}
+                                                            </em>
+                                                        </span>
+                                                    );
+                                                })}
                                             </span>
                                         ) : null}
                                         <span className={styles.hudRewardPerkRows}>

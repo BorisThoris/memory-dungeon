@@ -25,6 +25,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { getChainRewardForecastCues } from '../copy/chainMomentum';
+import { getTraitMarkerCueByShape, type TraitMarkerShapeId } from '../copy/traitMarkerCueGlossary';
 import { useAppStore } from '../store/useAppStore';
 import { REG107_POWER_TEACHING_ANCHOR } from '../gameplay/regPhase4PlayContract';
 import type { TileBoardHandle } from './TileBoard';
@@ -117,6 +118,37 @@ const powerPayoffScreenCue = (tone: PowerPayoffTone, impactCue: string, nextActi
         return 'pulse';
     }
     return 'guard';
+};
+
+type PowerPayoffCueMarker = {
+    glyph: string;
+    id: TraitMarkerShapeId | 'control-board' | 'locked-board' | 'recall-route' | 'recharge-tool';
+    label: string;
+};
+
+const getPowerPayoffCueMarker = (tone: PowerPayoffTone, impactCue: string, nextAction: string): PowerPayoffCueMarker => {
+    if (tone === 'empty') {
+        return { glyph: '--', id: 'recharge-tool', label: 'Recharge' };
+    }
+    if (tone === 'locked') {
+        return { glyph: 'xx', id: 'locked-board', label: 'Locked' };
+    }
+    if (impactCue === 'Stack cashout') {
+        const cue = getTraitMarkerCueByShape('payoff-stack');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    if (impactCue === 'Route cashout' || nextAction === 'Cash now') {
+        const cue = getTraitMarkerCueByShape('payoff-bar');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    if (tone === 'combo') {
+        const cue = getTraitMarkerCueByShape('swap-target-crossbar');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    if (tone === 'recall') {
+        return { glyph: '::', id: 'recall-route', label: 'Recall' };
+    }
+    return { glyph: '!!', id: 'control-board', label: 'Control' };
 };
 
 const toolCrescendoAction = (crescendo: ToolCrescendo): 'Recharge tools' | 'Prime tool' | 'Cash route' | 'Stack cashout' => {
@@ -361,6 +393,7 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     ) => {
         const beatCount = powerPayoffBeatCount(tone, impactCue, nextAction);
         const action = powerPayoffAction(tone, impactCue, nextAction);
+        const cueMarker = getPowerPayoffCueMarker(tone, impactCue, nextAction);
         return (
             <span
                 aria-hidden="true"
@@ -368,13 +401,19 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                 data-power-action={action}
                 data-power-audio={powerPayoffAudioCue(tone, impactCue, nextAction)}
                 data-power-cue={impactCue}
+                data-power-cue-id={cueMarker.id}
                 data-power-next={nextAction}
                 data-power-payoff={tone}
                 data-power-payoff-beats={beatCount}
                 data-power-screen-cue={powerPayoffScreenCue(tone, impactCue, nextAction)}
                 data-testid={testId}
             >
-                <strong>{label}</strong>
+                <strong>
+                    <i aria-hidden="true" data-power-cue-glyph={cueMarker.id}>
+                        {cueMarker.glyph}
+                    </i>
+                    {label}
+                </strong>
                 <small>{nextAction}</small>
                 <em>{impactCue}</em>
                 <b>{action}</b>

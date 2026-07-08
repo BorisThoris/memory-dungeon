@@ -4607,7 +4607,7 @@
 
 .chainOpportunityMarkerKey > span {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.08rem 0.18rem;
     min-width: 0;
@@ -4644,6 +4644,16 @@
     white-space: nowrap;
 }
 
+.chainOpportunityMarkerKey strong {
+    justify-self: end;
+    color: color-mix(in srgb, var(--theme-text) 86%, white);
+    font-size: 0.52rem;
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 1;
+    white-space: nowrap;
+}
+
 .chainOpportunityMarkerKey em {
     grid-column: 1 / -1;
     overflow: hidden;
@@ -4671,6 +4681,7 @@
 
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='linked-route'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='linked-route'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='linked-route'] strong,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='linked-route'] em {
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
 }
@@ -4685,6 +4696,7 @@
 
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='combo-surge'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='combo-surge'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='combo-surge'] strong,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='combo-surge'] em {
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
 }
@@ -4702,6 +4714,7 @@
 
 .chainOpportunityMarkerKey > span[data-chain-marker-focus='primary'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-focus='primary'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-focus='primary'] strong,
 .chainOpportunityMarkerKey > span[data-chain-marker-focus='primary'] em {
     color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
 }
@@ -4716,6 +4729,7 @@
 
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] strong,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-bar'] em {
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
@@ -4729,6 +4743,7 @@
 
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-stack'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-stack'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-stack'] strong,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='payoff-stack'] em {
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
 }
@@ -4742,6 +4757,7 @@
 
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='perk-armed-bar'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='perk-armed-bar'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='perk-armed-bar'] strong,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='perk-armed-bar'] em {
     color: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
 }
@@ -4753,6 +4769,7 @@
 
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='followup-target'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='followup-target'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='followup-target'] strong,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='followup-target'] em {
     color: color-mix(in srgb, #fff7c4 88%, white);
 }
@@ -5118,6 +5135,7 @@
 
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] b,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] small,
+.chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] strong,
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] em {
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
 }

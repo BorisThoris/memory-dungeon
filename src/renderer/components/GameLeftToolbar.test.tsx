@@ -118,12 +118,15 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-next', 'Set route');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Route prime');
         expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Route prime');
+        expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-cue-id', 'swap-target-crossbar');
+        expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-cue-id', 'swap-target-crossbar');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-payoff', 'combo');
         expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-payoff', 'combo');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-action', 'Prime route');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-audio', 'power-payoff-combo');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-screen-cue', 'snap');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-payoff-beats', '3');
+        expect(screen.getByTestId('row-swap-payoff-chip')).toHaveTextContent('x|');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveTextContent('Prime route');
         expect(screen.getByTestId('row-swap-payoff-chip').querySelectorAll('[data-power-payoff-beat]')).toHaveLength(3);
         expect(screen.getByTestId('row-swap-intent-chip')).toHaveAttribute('data-power-intent', 'combo');
@@ -161,9 +164,11 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('peek-payoff-chip')).toHaveTextContent('Recall route');
         expect(screen.getByTestId('peek-payoff-chip')).toHaveAttribute('data-power-payoff', 'recall');
         expect(screen.getByTestId('peek-payoff-chip')).toHaveAttribute('data-power-cue', 'Recall route');
+        expect(screen.getByTestId('peek-payoff-chip')).toHaveAttribute('data-power-cue-id', 'recall-route');
         expect(screen.getByTestId('peek-payoff-chip')).toHaveAttribute('data-power-action', 'Reveal pair');
         expect(screen.getByTestId('peek-payoff-chip')).toHaveAttribute('data-power-audio', 'power-payoff-recall');
         expect(screen.getByTestId('peek-payoff-chip')).toHaveAttribute('data-power-screen-cue', 'pulse');
+        expect(screen.getByTestId('peek-payoff-chip')).toHaveTextContent('::');
         expect(screen.getByTestId('peek-intent-chip')).toHaveAttribute('data-power-intent', 'recall');
         expect(screen.getByLabelText(/Peek one hidden tile/i)).toHaveAccessibleName(/Recall setup action available/i);
         expect(screen.getByLabelText(/Peek one hidden tile/i)).toHaveAccessibleName(/Power payoff: Safe reveal/i);
@@ -254,6 +259,9 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-next', 'Create route');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Route cashout');
         expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Route cashout');
+        expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-cue-id', 'payoff-bar');
+        expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-cue-id', 'payoff-bar');
+        expect(screen.getByTestId('row-swap-payoff-chip')).toHaveTextContent('=+');
         expect(screen.getByTestId('tile-swap-intent-chip')).toHaveTextContent('Best tool');
         expect(screen.getByLabelText(/Swap two hidden tiles/i)).toHaveAccessibleName(
             /Best route prime: Swap Sealed with Filler: Sealed \+ Heavy: score surge/i
@@ -312,10 +320,12 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveTextContent('Stack cashout');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveTextContent('Stack route');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Stack cashout');
+        expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-cue-id', 'payoff-stack');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-next', 'Stack route');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-action', 'Cash now');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-audio', 'power-payoff-cashout');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-screen-cue', 'burst');
+        expect(screen.getByTestId('row-swap-payoff-chip')).toHaveTextContent('**');
         expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveTextContent('Stack cashout');
         expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveTextContent('Create stack');
         expect(screen.getByTestId('tile-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Stack cashout');

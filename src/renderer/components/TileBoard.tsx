@@ -52,6 +52,14 @@ import {
     traitInteractionLaneRoleMapAttr,
     type TraitInteractionLaneId
 } from '../copy/traitInteractionLaneMap';
+import {
+    getTraitMarkerCueByRouteGlyph,
+    getTraitMarkerCueByShape,
+    TRAIT_MARKER_ROUTE_GLYPH_PRIORITY,
+    type TraitMarkerCueAction,
+    type TraitMarkerRouteGlyphId,
+    type TraitMarkerShapeId
+} from '../copy/traitMarkerCueGlossary';
 import { isNarrowShortLandscapeForMenuStack, VIEWPORT_MOBILE_MAX } from '../breakpoints';
 import { useCoarsePointer } from '../hooks/useCoarsePointer';
 import { useViewportSize } from '../hooks/useViewportSize';
@@ -3659,65 +3667,50 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         : undefined;
     const boardChainMarkerKeyRows = useMemo(
         (): Array<{
-            action: string;
-            id:
-                | 'linked-route'
-                | 'combo-surge'
-                | 'payoff-bar'
-                | 'payoff-stack'
-                | 'swap-target-crossbar'
-                | 'perk-armed-bar'
-                | 'followup-target';
+            action: TraitMarkerCueAction;
+            count: number;
             glyph: string;
+            id: TraitMarkerRouteGlyphId | 'perk-armed-bar';
             label: string;
+            shape: TraitMarkerShapeId;
         }> => {
-            const hasPayoffStackMarker = /\bpayoff-stack:\d+/.test(cardFeedbackMarkerShapesAttr);
-            const hasPerkArmedMarker = /\bperk-armed-bar:\d+/.test(cardFeedbackMarkerShapesAttr);
-            if (boardChainOpportunity.chainReadyTileCount > 0 || boardChainOpportunity.selectedFollowupCount > 0) {
+            const routeGlyphCounts = parseCountAttribute(cardFeedbackRouteGlyphsAttr);
+            const markerShapeCounts = parseCountAttribute(cardFeedbackMarkerShapesAttr);
+            const rows = TRAIT_MARKER_ROUTE_GLYPH_PRIORITY.flatMap((id) => {
+                const count = routeGlyphCounts.get(id) ?? 0;
+                if (count <= 0) {
+                    return [];
+                }
+                const cue = getTraitMarkerCueByRouteGlyph(id);
                 return [
-                    { action: 'Match route', id: 'linked-route', glyph: 'oo', label: 'Route' },
-                    ...(selectedTraitFollowupTileIds.length > 0
-                        ? [{ action: 'Next tap', id: 'followup-target' as const, glyph: '|=', label: 'Follow-up' }]
-                        : []),
-                    ...(boardChainOpportunity.chainReadyCount > 1
-                        ? [{ action: 'Route prime', id: 'combo-surge' as const, glyph: '++', label: 'Surge' }]
-                        : []),
-                    ...(boardChainOpportunity.rewardHot
-                        ? [{ action: 'Cash now', id: 'payoff-bar' as const, glyph: '=+', label: 'Payoff' }]
-                        : []),
-                    ...(hasPayoffStackMarker
-                        ? [{ action: 'Cash stack', id: 'payoff-stack' as const, glyph: '**', label: 'Stack' }]
-                        : []),
-                    ...(hasPerkArmedMarker
-                        ? [{ action: 'Cash perk', id: 'perk-armed-bar' as const, glyph: '+!', label: 'Perk' }]
-                        : [])
+                    {
+                        action: cue.action,
+                        count,
+                        glyph: cue.glyph,
+                        id,
+                        label: cue.label,
+                        shape: cue.shape
+                    }
                 ];
+            });
+            const perkCount = markerShapeCounts.get('perk-armed-bar') ?? 0;
+            if (perkCount > 0) {
+                const cue = getTraitMarkerCueByShape('perk-armed-bar');
+                rows.push({
+                    action: cue.action,
+                    count: perkCount,
+                    glyph: cue.glyph,
+                    id: 'perk-armed-bar',
+                    label: cue.label,
+                    shape: cue.shape
+                });
             }
-            if (boardChainOpportunity.setupCount > 0) {
-                return [
-                    { action: 'Route prime', id: 'swap-target-crossbar', glyph: 'x|', label: 'Prime' },
-                    ...(hasPerkArmedMarker
-                        ? [{ action: 'Cash perk', id: 'perk-armed-bar' as const, glyph: '+!', label: 'Perk' }]
-                        : [])
-                ];
-            }
-            if (hasPerkArmedMarker) {
-                return [{ action: 'Cash perk', id: 'perk-armed-bar', glyph: '+!', label: 'Perk' }];
-            }
-            return [];
+            return rows;
         },
-        [
-            boardChainOpportunity.chainReadyCount,
-            boardChainOpportunity.chainReadyTileCount,
-            boardChainOpportunity.rewardHot,
-            boardChainOpportunity.selectedFollowupCount,
-            boardChainOpportunity.setupCount,
-            cardFeedbackMarkerShapesAttr,
-            selectedTraitFollowupTileIds.length
-        ]
+        [cardFeedbackMarkerShapesAttr, cardFeedbackRouteGlyphsAttr]
     );
     const focusedChainMarkerShape = useMemo(() => {
-        const markerIds = new Set(boardChainMarkerKeyRows.map((row) => row.id));
+        const markerIds = new Set(boardChainMarkerKeyRows.map((row) => row.shape));
         const preferred =
             chainMarkerIntensity?.id === 'stack' || chainMarkerIntensity?.id === 'cashout'
                 ? ['payoff-stack', 'payoff-bar']
@@ -3729,7 +3722,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                       ? ['swap-target-crossbar', 'linked-route']
                       : ['perk-armed-bar', 'linked-route'];
 
-        return preferred.find((id) => markerIds.has(id as (typeof boardChainMarkerKeyRows)[number]['id'])) ?? 'none';
+        return preferred.find((id) => markerIds.has(id as (typeof boardChainMarkerKeyRows)[number]['shape'])) ?? 'none';
     }, [boardChainMarkerKeyRows, chainMarkerIntensity?.id]);
     const boardChainMarkerKeyMeterFill = Math.round(
         Math.min(100, ((boardChainMarkerKeyRows.length + (chainMarkerIntensity ? 2 : 0)) / 6) * 100)
@@ -5996,9 +5989,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainMarkerKeyRows.length > 0 ? (
                                     <span
-                                        aria-label={`Chain marker key. ${[
+                                        aria-label={`Trait marker key. ${[
                                             ...boardChainMarkerKeyRows.map(
-                                                (row) => `${row.label}: ${row.glyph}. Action: ${row.action}`
+                                                (row) =>
+                                                    `${row.label}: ${row.glyph}. ${row.count} ${
+                                                        row.count === 1 ? 'card' : 'cards'
+                                                    }. Action: ${row.action}`
                                             ),
                                             chainMarkerIntensity
                                                 ? `Intensity: ${chainMarkerIntensity.label} ${chainMarkerIntensity.count}. Action: ${chainMarkerIntensity.action}`
@@ -6016,7 +6012,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         data-testid="chain-opportunity-marker-key"
                                     >
                                         <span
-                                            aria-label={`Chain marker summary. ${boardChainMarkerKeyRows.length} marker shapes. ${boardChainMarkerKeySummaryAction ?? 'No action'}.`}
+                                            aria-label={`Trait marker summary. ${boardChainMarkerKeyRows.length} marker cues. ${boardChainMarkerKeySummaryAction ?? 'No action'}.`}
                                             className={styles.chainOpportunityMarkerKeySummary}
                                             data-chain-marker-key-action={boardChainMarkerKeySummaryAction ?? 'none'}
                                             data-chain-marker-key-beats={boardChainMarkerKeySummaryBeatCount}
@@ -6030,8 +6026,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 } as CSSProperties
                                             }
                                         >
-                                            <small>Markers</small>
-                                            <b>{boardChainMarkerKeyRows.length} shapes</b>
+                                            <small>Trait glyphs</small>
+                                            <b>{boardChainMarkerKeyRows.length} cues</b>
                                             <span
                                                 aria-hidden="true"
                                                 className={styles.chainOpportunityMarkerKeySummaryBeatPips}
@@ -6055,18 +6051,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         </span>
                                         {boardChainMarkerKeyRows.map((row) => (
                                             <span
-                                                data-chain-marker-focus={row.id === focusedChainMarkerShape ? 'primary' : 'support'}
-                                                data-chain-marker-shape={row.id}
+                                                data-chain-marker-focus={row.shape === focusedChainMarkerShape ? 'primary' : 'support'}
+                                                data-chain-marker-shape={row.shape}
                                                 key={row.id}
                                             >
                                                 <b aria-hidden="true">{row.glyph}</b>
                                                 <small>{row.label}</small>
+                                                <strong>x{row.count}</strong>
                                                 <em>{row.action}</em>
                                             </span>
                                         ))}
                                         {chainMarkerIntensity ? (
                                             <span
-                                                aria-label={`Chain marker intensity. ${chainMarkerIntensity.count} ${chainMarkerIntensity.label}. ${chainMarkerIntensity.action}.`}
+                                                aria-label={`Trait marker intensity. ${chainMarkerIntensity.count} ${chainMarkerIntensity.label}. ${chainMarkerIntensity.action}.`}
                                                 data-chain-marker-intensity-chip={chainMarkerIntensity.id}
                                                 data-testid="chain-marker-intensity"
                                             >

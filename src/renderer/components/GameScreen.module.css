@@ -9826,8 +9826,10 @@
     border-radius: 50%;
     background: color-mix(in srgb, var(--theme-text) 12%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
-    font-size: 0.56rem;
+    font-size: 0.48rem;
     font-weight: 950;
+    letter-spacing: 0;
+    text-transform: uppercase;
 }
 
 .hudRewardPerkLaneMap b {
@@ -9868,6 +9870,28 @@
 
 .hudRewardPerkLaneMap > span[data-reward-perk-lane-readiness='spent'] {
     opacity: 0.72;
+}
+
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-cue-id='linked-route'] strong,
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-cue-id='swap-target-crossbar'] strong {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 90%, white);
+}
+
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-cue-id='payoff-bar'] strong,
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-cue-id='payoff-stack'] strong {
+    background: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-cue-id='perk-armed-bar'] strong {
+    background: color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 88%, white);
+}
+
+.hudRewardPerkLaneMap > span[data-reward-perk-lane-cue-id='control-lane'] strong {
+    background: color-mix(in srgb, var(--theme-danger) 15%, transparent);
+    color: color-mix(in srgb, var(--theme-danger) 84%, white 8%);
 }
 
 .hudRewardPerkRows small,
@@ -12084,7 +12108,29 @@
 }
 
 .powerPayoffChip strong {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.14rem;
     font: inherit;
+}
+
+.powerPayoffChip strong i {
+    display: inline-grid;
+    place-items: center;
+    width: 0.86rem;
+    min-width: 0.86rem;
+    height: 0.62rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    background: color-mix(in srgb, currentColor 10%, transparent);
+    color: inherit;
+    font-size: 0.31rem;
+    font-style: normal;
+    font-weight: 980;
+    letter-spacing: 0;
+    line-height: 1;
+    text-transform: uppercase;
 }
 
 .powerPayoffChip small {
@@ -12263,6 +12309,29 @@
     background: color-mix(in srgb, var(--theme-danger) 9%, var(--theme-panel-solid));
     color: color-mix(in srgb, var(--theme-danger) 78%, white);
     box-shadow: 0 0 10px color-mix(in srgb, var(--theme-danger) 10%, transparent);
+}
+
+.powerPayoffChip[data-power-cue-id='swap-target-crossbar'] strong i,
+.powerPayoffChip[data-power-cue-id='recall-route'] strong i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 90%, white);
+}
+
+.powerPayoffChip[data-power-cue-id='payoff-bar'] strong i,
+.powerPayoffChip[data-power-cue-id='payoff-stack'] strong i {
+    background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+}
+
+.powerPayoffChip[data-power-cue-id='control-board'] strong i {
+    background: color-mix(in srgb, var(--theme-danger) 15%, transparent);
+    color: color-mix(in srgb, var(--theme-danger) 84%, white 8%);
+}
+
+.powerPayoffChip[data-power-cue-id='locked-board'] strong i,
+.powerPayoffChip[data-power-cue-id='recharge-tool'] strong i {
+    background: color-mix(in srgb, currentColor 12%, transparent);
+    color: inherit;
 }
 
 .powerRoleChip {

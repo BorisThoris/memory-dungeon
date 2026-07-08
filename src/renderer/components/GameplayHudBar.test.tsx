@@ -1863,8 +1863,10 @@ describe('GameplayHudBar', () => {
             rewardPerkLaneMapSummary.querySelector('[data-reward-perk-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-reward-perk-lane-map-summary-beat-screen-cue', 'recover');
         expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveAccessibleName(
-            'Reward perk lane map. Route prime Route x1. Re-prime perk. Use Swap or row shuffle to connect trait routes. Chain reward Cashout x1. Cash perk. Keep the clean chain alive; cash a trait match at x3+ for a tool.'
+            'Reward perk lane map. Route prime Prime cue x|. Route x1. Re-prime perk. Use Swap or row shuffle to connect trait routes. Chain reward Perk cue +!. Cashout x1. Cash perk. Keep the clean chain alive; cash a trait match at x3+ for a tool.'
         );
+        expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('x|');
+        expect(screen.getByTestId('hud-reward-perk-lane-map')).toHaveTextContent('+!');
         expect(perkStrip).toHaveAccessibleName(
             /Active perk payoff signals.*Free prime: Route prime: Free route link.*State: Prime spent.*Trait cash: Chain reward: x3 trait flash.*State: Trait cashout armed/i
         );
