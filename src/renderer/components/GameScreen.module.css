@@ -13887,12 +13887,26 @@
         color-mix(in srgb, var(--theme-void) 62%, transparent);
 }
 
+.boardFloaterCascadeCue[data-cascade-tier='reward'] .boardFloaterCascadeBeatPips i {
+    width: 0.26rem;
+    height: 0.18rem;
+    animation-duration: 0.76s;
+    opacity: 0.92;
+}
+
 .boardFloaterCascadeCue[data-cascade-tier='combo'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-violet-bright) 30%);
     box-shadow:
         inset 0 1px 0 color-mix(in srgb, white 14%, transparent),
         0 0 1.2rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent),
         0 0 1.8rem color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
+}
+
+.boardFloaterCascadeCue[data-cascade-tier='combo'] .boardFloaterCascadeBeatPips i {
+    width: 0.3rem;
+    height: 0.22rem;
+    animation-duration: 0.64s;
+    opacity: 0.98;
 }
 
 .boardFloaterRewardBurst {

@@ -2427,6 +2427,21 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-reward-burst-screen-cue='super'[\s\S]*?\.boardFloaterRewardBurstBeatPips i[\s\S]*?animation-duration:\s*0\.5s/);
     });
 
+    it('keeps board cascade tier beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'reward cascade cues should use fast horizontal reward beats'
+        ).toMatch(/data-cascade-tier='reward'[\s\S]*?\.boardFloaterCascadeBeatPips i[\s\S]*?animation-duration:\s*0\.76s/);
+        expect(
+            cssText,
+            'combo cascade cues should use larger faster combo beats'
+        ).toMatch(/data-cascade-tier='combo'[\s\S]*?\.boardFloaterCascadeBeatPips i[\s\S]*?height:\s*0\.22rem/);
+    });
+
     it('keeps chain reward urgency tiers visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
