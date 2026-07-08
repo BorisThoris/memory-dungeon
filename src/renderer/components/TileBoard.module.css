@@ -1331,6 +1331,74 @@
     transition: width 140ms ease-out;
 }
 
+.chainOpportunityCue[data-chain-cue-meter-state='cashout'] .chainOpportunityCueMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 50%, var(--theme-success) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-success) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 27%, transparent);
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
+}
+
+.chainOpportunityCue[data-chain-cue-meter-state='cashout'] .chainOpportunityCueMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 92%, white),
+        color-mix(in srgb, var(--theme-success) 58%, var(--theme-gold-bright) 30%)
+    );
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent),
+        0 0 0.42rem color-mix(in srgb, var(--theme-success) 12%, transparent);
+}
+
+.chainOpportunityCue[data-chain-cue-meter-state='followup'] .chainOpportunityCueMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityCue[data-chain-cue-meter-state='followup'] .chainOpportunityCueMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 58%, white)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
+.chainOpportunityCue[data-chain-cue-meter-state='surge'] .chainOpportunityCueMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-cyan-bright) 22%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 16%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 29%, transparent);
+}
+
+.chainOpportunityCue[data-chain-cue-meter-state='surge'] .chainOpportunityCueMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 78%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
+    );
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
+}
+
+.chainOpportunityCue[data-chain-cue-meter-state='setup'] .chainOpportunityCueMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-text-muted) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 78%),
+        color-mix(in srgb, var(--theme-void) 32%, transparent);
+}
+
+.chainOpportunityCue[data-chain-cue-meter-state='setup'] .chainOpportunityCueMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 68%, white),
+        color-mix(in srgb, var(--theme-green-bright) 44%, var(--theme-cyan-bright) 30%)
+    );
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+    opacity: 0.78;
+}
+
 .chainOpportunityCueBeatPips {
     display: inline-flex;
     align-items: center;

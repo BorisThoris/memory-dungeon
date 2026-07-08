@@ -1594,6 +1594,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-opportunity-next-action='cashout'[\s\S]*?\.chainOpportunityEyebrowBeatPips i[\s\S]*?width:\s*0\.28rem/);
     });
 
+    it('keeps top chain cue meters tied to cue state', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout top cue meters should read as immediate payoff'
+        ).toMatch(/data-chain-cue-meter-state='cashout'[\s\S]*?\.chainOpportunityCueMeterFill[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'follow-up top cue meters should read as continuation progress'
+        ).toMatch(/data-chain-cue-meter-state='followup'[\s\S]*?\.chainOpportunityCueMeterFill[\s\S]*?var\(--theme-cyan-bright\) 84%/);
+        expect(
+            cssText,
+            'surge top cue meters should read as accelerated route-building'
+        ).toMatch(/data-chain-cue-meter-state='surge'[\s\S]*?\.chainOpportunityCueMeterFill[\s\S]*?var\(--theme-violet-bright\) 78%/);
+        expect(
+            cssText,
+            'setup top cue meters should stay quieter than cashout'
+        ).toMatch(/data-chain-cue-meter-state='setup'[\s\S]*?\.chainOpportunityCueMeterFill[\s\S]*?opacity:\s*0\.78/);
+    });
+
     it('keeps chain next-action meters tied to next-action language', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

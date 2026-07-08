@@ -2812,6 +2812,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 : boardChainOpportunity.nextActionId === 'prime-route'
                   ? 'Prime'
                   : 'Setup';
+    const boardChainCueMeterState: 'cashout' | 'followup' | 'setup' | 'surge' =
+        boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
+            ? 'cashout'
+            : boardChainOpportunity.selectedFollowupCount > 0
+              ? 'followup'
+              : boardChainOpportunity.comboSurgeLabel
+                ? 'surge'
+                : 'setup';
+    const boardChainCueMeterFill =
+        boardChainCueMeterState === 'cashout'
+            ? 100
+            : boardChainCueMeterState === 'followup'
+              ? 75
+              : boardChainCueMeterState === 'surge'
+                ? 60
+                : 40;
 
     useEffect(() => {
         const beatSignal = boardChainOpportunity.beatSignal;
@@ -5307,36 +5323,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     aria-label={`Chain cue meter. ${boardChainOpportunity.cue}.`}
                                     aria-valuemax={100}
                                     aria-valuemin={0}
-                                    aria-valuenow={
-                                        boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
-                                            ? 100
-                                            : boardChainOpportunity.selectedFollowupCount > 0
-                                              ? 75
-                                              : boardChainOpportunity.comboSurgeLabel
-                                                ? 60
-                                                : 40
-                                    }
+                                    aria-valuenow={boardChainCueMeterFill}
                                     className={styles.chainOpportunityCue}
-                                    data-chain-cue-meter-fill={
-                                        boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
-                                            ? 100
-                                            : boardChainOpportunity.selectedFollowupCount > 0
-                                              ? 75
-                                              : boardChainOpportunity.comboSurgeLabel
-                                                ? 60
-                                                : 40
-                                    }
+                                    data-chain-cue-meter-fill={boardChainCueMeterFill}
+                                    data-chain-cue-meter-state={boardChainCueMeterState}
                                     style={
                                         {
-                                            '--chain-cue-meter-fill': `${
-                                                boardChainOpportunity.rewardHot || boardChainOpportunity.streakCashoutReady
-                                                    ? 100
-                                                    : boardChainOpportunity.selectedFollowupCount > 0
-                                                      ? 75
-                                                      : boardChainOpportunity.comboSurgeLabel
-                                                        ? 60
-                                                        : 40
-                                            }%`
+                                            '--chain-cue-meter-fill': `${boardChainCueMeterFill}%`
                                         } as CSSProperties
                                     }
                                     role="progressbar"

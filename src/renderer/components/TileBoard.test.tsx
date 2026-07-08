@@ -847,6 +847,10 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-cue-meter-fill',
             '100'
         );
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-meter-state]')).toHaveAttribute(
+            'data-chain-cue-meter-state',
+            'cashout'
+        );
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-momentum-beats="5"]')).toHaveAttribute(
             'data-chain-momentum-meter-fill',
             '100'
@@ -3198,6 +3202,10 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
         ).toHaveAttribute('data-chain-eyebrow-beat-focus', 'primary');
         expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-cue-beat]')).toHaveLength(4);
+        expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-meter-state]')).toHaveAttribute(
+            'data-chain-cue-meter-state',
+            'surge'
+        );
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-cue-beat="1"]')
         ).toHaveAttribute('data-chain-cue-beat-focus', 'primary');
