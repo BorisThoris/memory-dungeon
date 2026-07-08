@@ -1796,6 +1796,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-payoff-stack-crescendo-tier='super'[\s\S]*?\.opportunityPayoffCrescendo strong i[\s\S]*?animation-duration:\s*0\.58s/);
     });
 
+    it('keeps HUD stacked payoff badge beats visually distinct by stack size', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            '2-stack payoff badges should read as active but not maxed'
+        ).toMatch(/data-chain-stack-beats='2'[\s\S]*?\.hudChainStackedPayoffBadgeBeatPips i[\s\S]*?animation-duration:\s*0\.86s/);
+        expect(
+            cssText,
+            '3-stack payoff badges should read hotter'
+        ).toMatch(/data-chain-stack-beats='3'[\s\S]*?\.hudChainStackedPayoffBadgeBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'maxed stack payoff badges should use the fastest payoff beat'
+        ).toMatch(/data-chain-stack-beats='4'[\s\S]*?\.hudChainStackedPayoffBadgeBeatPips i[\s\S]*?animation-duration:\s*0\.62s/);
+    });
+
     it('keeps trait preview summary kinds visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
@@ -2383,6 +2402,33 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'heal reward lead should carry success-colored beats'
         ).toMatch(/data-board-chain-reward-lead-tone='heal'[\s\S]*?\.chainOpportunityRewardLeadBeatPips i[\s\S]*?var\(--theme-success\)/);
+    });
+
+    it('keeps HUD chain reward lane beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cash-next reward lanes should read as immediate payoff'
+        ).toMatch(/data-chain-reward-lane-action='Cash next'[\s\S]*?\.hudChainRewardLaneBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'prime reward lanes should read as setup'
+        ).toMatch(/data-chain-reward-lane-action='Prime cashout'[\s\S]*?\.hudChainRewardLaneBeatPips i[\s\S]*?height:\s*0\.14rem/);
+        expect(
+            cssText,
+            'hold-streak reward lanes should read as slower future payoff'
+        ).toMatch(/data-chain-reward-lane-action='Hold streak'[\s\S]*?\.hudChainRewardLaneBeatPips i[\s\S]*?animation-duration:\s*1\.24s/);
+        expect(
+            cssText,
+            'guard reward lanes should use taller protected beats'
+        ).toMatch(/data-chain-reward-lane='guard'[\s\S]*?\.hudChainRewardLaneBeatPips i[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'heal reward lanes should keep a recovery-shaped beat'
+        ).toMatch(/data-chain-reward-lane='heal'[\s\S]*?\.hudChainRewardLaneBeatPips i[\s\S]*?animation-duration:\s*0\.96s/);
     });
 
     it('keeps chain reward ladder summary action beats visually distinct', () => {

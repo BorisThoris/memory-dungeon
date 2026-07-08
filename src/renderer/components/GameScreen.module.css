@@ -7908,6 +7908,26 @@
     opacity: 0.72;
 }
 
+.hudChainStackedPayoffBadge[data-chain-stack-beats='2'] .hudChainStackedPayoffBadgeBeatPips i {
+    width: 0.2rem;
+    animation-duration: 0.86s;
+}
+
+.hudChainStackedPayoffBadge[data-chain-stack-beats='3'] .hudChainStackedPayoffBadgeBeatPips i {
+    width: 0.24rem;
+    height: 0.18rem;
+    animation-duration: 0.72s;
+    opacity: 0.96;
+}
+
+.hudChainStackedPayoffBadge[data-chain-stack-beats='4'] .hudChainStackedPayoffBadgeBeatPips i,
+.hudChainStackedPayoffBadge[data-chain-stack-fill='100'] .hudChainStackedPayoffBadgeBeatPips i {
+    width: 0.3rem;
+    height: 0.2rem;
+    animation-duration: 0.62s;
+    opacity: 1;
+}
+
 .hudChainRewardForecast {
     display: flex;
     flex-wrap: wrap;
@@ -8318,12 +8338,47 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 80%, white);
 }
 
+.hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane-action='Cash next'] .hudChainRewardLaneBeatPips i,
+.hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane-screen-cue='burst'] .hudChainRewardLaneBeatPips i {
+    width: 0.24rem;
+    height: 0.2rem;
+    animation-duration: 0.68s;
+    opacity: 0.96;
+}
+
+.hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane-action='Prime cashout'] .hudChainRewardLaneBeatPips i,
+.hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane-screen-cue='pulse'] .hudChainRewardLaneBeatPips i {
+    width: 0.22rem;
+    height: 0.14rem;
+    animation-duration: 0.9s;
+    opacity: 0.84;
+}
+
+.hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane-action='Hold streak'] .hudChainRewardLaneBeatPips i,
+.hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane-screen-cue='tick'] .hudChainRewardLaneBeatPips i {
+    width: 0.16rem;
+    height: 0.12rem;
+    animation-duration: 1.24s;
+    opacity: 0.68;
+}
+
 .hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane='guard'] {
     color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
 }
 
+.hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane='guard'] .hudChainRewardLaneBeatPips i {
+    height: 0.22rem;
+    animation-duration: 0.82s;
+}
+
 .hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane='heal'] {
     color: color-mix(in srgb, var(--theme-success) 82%, white);
+}
+
+.hudChainRewardForecast > span[data-chain-reward-lane-map] u[data-chain-reward-lane='heal'] .hudChainRewardLaneBeatPips i {
+    width: 0.2rem;
+    height: 0.16rem;
+    animation-duration: 0.96s;
 }
 
 .hudChainRewardForecast > span[data-chain-reward-ladder] {
