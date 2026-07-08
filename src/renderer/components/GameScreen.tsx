@@ -1846,6 +1846,74 @@ const getBoardFloaterImpactCueScreenCue = (payload: MatchScorePop): 'burst' | 'p
     return 'pulse';
 };
 
+const getBoardFloaterImpactCueAction = (payload: MatchScorePop): string => {
+    switch (payload.impactCue.label) {
+        case 'Super stack':
+            return 'Cash super stack';
+        case 'Stack cashout':
+            return 'Cash stack';
+        case 'Cashout armed':
+            return 'Arm cashout';
+        case 'Cashout now':
+        case 'Route cashout':
+        case 'Pickup cashout':
+        case 'Trait cashout':
+            return 'Cash now';
+        case 'Prime chain':
+            return 'Prime chain';
+        case 'Combo hold':
+            return 'Hold combo';
+        case 'Perk pop':
+            return 'Trigger perk';
+        case 'Perk surge':
+            return 'Surge perk';
+        case 'Trait surge':
+            return 'Surge trait';
+        case 'Score pop':
+        default:
+            return 'Score pop';
+    }
+};
+
+const getBoardFloaterImpactCueAudioCue = (
+    payload: MatchScorePop
+):
+    | 'impact-score'
+    | 'impact-chain'
+    | 'impact-combo'
+    | 'impact-cashout'
+    | 'impact-route'
+    | 'impact-pickup'
+    | 'impact-trait'
+    | 'impact-stack'
+    | 'impact-super' => {
+    if (payload.impactCue.label === 'Super stack') {
+        return 'impact-super';
+    }
+    if (payload.impactCue.label === 'Stack cashout') {
+        return 'impact-stack';
+    }
+    if (payload.impactCue.tone === 'reward') {
+        return 'impact-cashout';
+    }
+    if (payload.impactCue.tone === 'route') {
+        return 'impact-route';
+    }
+    if (payload.impactCue.tone === 'pickup') {
+        return 'impact-pickup';
+    }
+    if (payload.impactCue.tone === 'trait') {
+        return 'impact-trait';
+    }
+    if (payload.impactCue.tone === 'combo') {
+        return 'impact-combo';
+    }
+    if (payload.impactCue.tone === 'chain') {
+        return 'impact-chain';
+    }
+    return 'impact-score';
+};
+
 const getBoardFloaterRewardBurstBeatCount = (
     rewardBurst: NonNullable<MatchScorePop['rewardBurst']>
 ): 3 | 4 | 5 => {
@@ -4572,6 +4640,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <span
                                             aria-label={`Match impact cue: ${boardFloaterPayload.impactCue.label}`}
                                             className={styles.boardFloaterImpactCue}
+                                            data-match-impact-cue-action={getBoardFloaterImpactCueAction(boardFloaterPayload)}
+                                            data-match-impact-cue-audio={getBoardFloaterImpactCueAudioCue(boardFloaterPayload)}
                                             data-match-impact-cue-beats={getBoardFloaterImpactCueBeatCount(boardFloaterPayload)}
                                             data-match-impact-cue-screen-cue={getBoardFloaterImpactCueScreenCue(boardFloaterPayload)}
                                             data-match-impact-cue-tone={boardFloaterPayload.impactCue.tone}
@@ -4584,6 +4654,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-match-impact-cue-beat={index + 1}
+                                                            data-match-impact-cue-beat-action={getBoardFloaterImpactCueAction(boardFloaterPayload)}
+                                                            data-match-impact-cue-beat-audio={getBoardFloaterImpactCueAudioCue(boardFloaterPayload)}
                                                             data-match-impact-cue-beat-focus={index === 0 ? 'primary' : 'support'}
                                                             data-match-impact-cue-beat-screen-cue={getBoardFloaterImpactCueScreenCue(boardFloaterPayload)}
                                                             data-match-impact-cue-beat-tone={boardFloaterPayload.impactCue.tone}

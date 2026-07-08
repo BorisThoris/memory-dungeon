@@ -2019,12 +2019,26 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('match-score-floater').querySelector('[data-floater-signal="pickup"]')).toHaveTextContent('Pickup');
             expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveTextContent('Stack cashout');
             expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-tone', 'reward');
+            expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute(
+                'data-match-impact-cue-action',
+                'Cash stack'
+            );
+            expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute(
+                'data-match-impact-cue-audio',
+                'impact-stack'
+            );
             expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-beats', '4');
             expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-screen-cue', 'burst');
             expect(screen.getByTestId('match-score-floater-impact-cue').querySelectorAll('[data-match-impact-cue-beat]')).toHaveLength(4);
             expect(
                 screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')
             ).toHaveAttribute('data-match-impact-cue-beat-focus', 'primary');
+            expect(
+                screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')
+            ).toHaveAttribute('data-match-impact-cue-beat-action', 'Cash stack');
+            expect(
+                screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')
+            ).toHaveAttribute('data-match-impact-cue-beat-audio', 'impact-stack');
             expect(
                 screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="2"]')
             ).toHaveAttribute('data-match-impact-cue-beat-focus', 'support');
@@ -3119,14 +3133,26 @@ describe('GameScreen (OVR-014)', () => {
                 'data-match-impact-cue-tone',
                 'reward'
             );
-            expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
-                'data-match-impact-cue-beat-screen-cue',
-                'burst'
+            expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute(
+                'data-match-impact-cue-action',
+                'Arm cashout'
             );
-            expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
-                'data-match-impact-cue-beat-tone',
-                'reward'
+            expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute(
+                'data-match-impact-cue-audio',
+                'impact-cashout'
             );
+            expect(
+                screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')
+            ).toHaveAttribute('data-match-impact-cue-beat-action', 'Arm cashout');
+            expect(
+                screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')
+            ).toHaveAttribute('data-match-impact-cue-beat-audio', 'impact-cashout');
+            expect(
+                screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')
+            ).toHaveAttribute('data-match-impact-cue-beat-screen-cue', 'burst');
+            expect(
+                screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')
+            ).toHaveAttribute('data-match-impact-cue-beat-tone', 'reward');
             expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveTextContent('Cashout armed');
             expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveTextContent('x6 +1 shard');
             expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveAccessibleName(
@@ -3226,11 +3252,27 @@ describe('GameScreen (OVR-014)', () => {
 
         expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveTextContent('Super stack');
         expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-beats', '5');
+        expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute(
+            'data-match-impact-cue-action',
+            'Cash super stack'
+        );
+        expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute(
+            'data-match-impact-cue-audio',
+            'impact-super'
+        );
         expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute('data-match-impact-cue-screen-cue', 'burst');
         expect(screen.getByTestId('match-score-floater-impact-cue').querySelectorAll('[data-match-impact-cue-beat]')).toHaveLength(5);
         expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
             'data-match-impact-cue-beat-focus',
             'primary'
+        );
+        expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
+            'data-match-impact-cue-beat-action',
+            'Cash super stack'
+        );
+        expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
+            'data-match-impact-cue-beat-audio',
+            'impact-super'
         );
         expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
             'data-match-impact-cue-beat-screen-cue',
