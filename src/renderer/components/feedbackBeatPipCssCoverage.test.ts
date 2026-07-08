@@ -2083,6 +2083,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-examples-tone='setup'[\s\S]*?\.chainOpportunityExamplesBeatPips i[\s\S]*?height:\s*0\.2rem/);
     });
 
+    it('keeps chain recipe density beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'single recipe density should stay quieter and slower'
+        ).toMatch(/data-chain-recipe-meter-fill='33'[\s\S]*?\.chainOpportunityRecipeBeatPips i[\s\S]*?animation-duration:\s*1\.08s/);
+        expect(
+            cssText,
+            'two recipe density should use mid-tempo readable beats'
+        ).toMatch(/data-chain-recipe-meter-fill='67'[\s\S]*?\.chainOpportunityRecipeBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'full recipe density should read as fast high-opportunity beats'
+        ).toMatch(/data-chain-recipe-meter-fill='100'[\s\S]*?\.chainOpportunityRecipeBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

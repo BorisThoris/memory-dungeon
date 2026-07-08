@@ -3537,6 +3537,28 @@
     opacity: 0.7;
 }
 
+.chainOpportunityRecipe[data-chain-recipe-meter-fill='33'] .chainOpportunityRecipeBeatPips i {
+    width: 0.14rem;
+    height: 0.1rem;
+    animation-duration: 1.08s;
+    opacity: 0.72;
+}
+
+.chainOpportunityRecipe[data-chain-recipe-meter-fill='67'] .chainOpportunityRecipeBeatPips i {
+    width: 0.22rem;
+    height: 0.13rem;
+    animation-duration: 0.9s;
+    opacity: 0.86;
+}
+
+.chainOpportunityRecipe[data-chain-recipe-meter-fill='100'] .chainOpportunityRecipeBeatPips i {
+    width: 0.3rem;
+    height: 0.18rem;
+    animation-duration: 0.68s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    opacity: 1;
+}
+
 .chainOpportunityRecipe b {
     min-width: 0;
     overflow: hidden;
