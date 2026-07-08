@@ -10805,6 +10805,58 @@
     background: color-mix(in srgb, var(--theme-ember) 84%, white);
 }
 
+.activePowerBoardChipBeatPips i[data-active-power-beat-tone='setup'],
+.activePowerBoardChipBeatPips i[data-active-power-beat-tier='route'],
+.activePowerBoardChipBeatPips i[data-active-power-beat-action='swap'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+}
+
+.activePowerBoardChipBeatPips i[data-active-power-beat-tone='recall'],
+.activePowerBoardChipBeatPips i[data-active-power-beat-tier='memory'],
+.activePowerBoardChipBeatPips i[data-active-power-beat-action='recall'],
+.activePowerBoardChipBeatPips i[data-active-power-beat-action='pin'] {
+    min-width: 0.22rem;
+    height: 0.14rem;
+    background: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+    box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-violet-bright) 26%, transparent);
+}
+
+.activePowerBoardChipBeatPips i[data-active-power-beat-tone='control'],
+.activePowerBoardChipBeatPips i[data-active-power-beat-tier='control'],
+.activePowerBoardChipBeatPips i[data-active-power-beat-action='clear'],
+.activePowerBoardChipBeatPips i[data-active-power-beat-action='remove'] {
+    min-width: 0.24rem;
+    height: 0.2rem;
+    background: color-mix(in srgb, var(--theme-ember) 84%, white);
+    box-shadow: 0 0 0.4rem color-mix(in srgb, var(--theme-ember) 26%, transparent);
+}
+
+.activePowerBoardChipBeatPips i[data-active-power-beat-screen-cue='burst'] {
+    width: 0.24rem;
+    height: 0.2rem;
+    animation-duration: 0.78s;
+    opacity: 0.96;
+}
+
+.activePowerBoardChipBeatPips i[data-active-power-beat-screen-cue='guard'] {
+    width: 0.16rem;
+    height: 0.24rem;
+    animation-duration: 1.22s;
+    opacity: 0.88;
+}
+
+.activePowerBoardChipBeatPips i[data-active-power-beat-screen-cue='pulse'] {
+    animation-duration: 0.98s;
+}
+
+.activePowerBoardChipBeatPips i[data-active-power-beat-screen-cue='tick'] {
+    width: 0.12rem;
+    height: 0.12rem;
+    animation-duration: 1.46s;
+    opacity: 0.62;
+}
+
 .activePowerBoardChip small {
     min-width: 0;
     overflow: hidden;

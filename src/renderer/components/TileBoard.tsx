@@ -7156,7 +7156,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     {Array.from({ length: activePowerBoardChip.beats }, (_, index) => (
                                         <i
                                             data-active-power-beat={index + 1}
+                                            data-active-power-beat-action={activePowerBoardChip.action}
                                             data-active-power-beat-focus={index === 0 ? 'primary' : 'support'}
+                                            data-active-power-beat-screen-cue={activePowerBoardChip.screenCue}
+                                            data-active-power-beat-tier={activePowerBoardChip.tier}
+                                            data-active-power-beat-tone={activePowerBoardChip.tone}
                                             key={index}
                                         />
                                     ))}
