@@ -6547,11 +6547,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainOpportunity.targetPlanLabel ? (
                                     <span
+                                        aria-label={`Chain target plan. ${boardChainOpportunity.targetPlanLabel}. Action: ${boardChainOpportunity.nextActionLabel}.`}
                                         className={styles.chainOpportunityTargetPlan}
                                         data-chain-target-plan-action={boardChainOpportunity.nextActionId}
                                         data-chain-target-plan-tier={boardChainOpportunityNextActionTier}
                                         data-chain-target-plan-tone={boardChainOpportunity.nextActionTone}
                                         data-chain-opportunity-target-plan={boardChainOpportunity.targetPlanLabel}
+                                        data-testid="chain-opportunity-target-plan"
                                     >
                                         {boardChainOpportunity.targetPlanLabel}
                                         <span aria-hidden="true" className={styles.chainOpportunityTargetPlanBeatPips}>
@@ -6611,6 +6613,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                 ) : null}
                                 {boardChainOpportunity.comboSurgeLabel ? (
                                     <span
+                                        aria-label={`Chain surge. ${boardChainOpportunity.comboSurgeLabel}. 4 beats.`}
                                         className={styles.chainOpportunitySurge}
                                         data-chain-opportunity-surge-beats={4}
                                         data-chain-opportunity-surge-screen-cue="burst"

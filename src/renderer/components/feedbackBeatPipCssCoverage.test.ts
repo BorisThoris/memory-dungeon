@@ -3223,4 +3223,22 @@ describe('feedback beat pip CSS coverage', () => {
             'visible meter-fill feedback should expose a readable label or progressbar semantics'
         ).toEqual([]);
     });
+
+    it('keeps stateful chain cue feedback paired with readable semantics', () => {
+        const tileBoardSource = readComponentSourceFiles()
+            .find(({ fileName }) => fileName === 'TileBoard.tsx')
+            ?.text;
+        const targetPlanTag = tileBoardSource?.match(/<span[^<>]*data-testid="chain-opportunity-target-plan"[^<>]*>/s)?.[0];
+        const surgeTag = tileBoardSource?.match(/<span[^<>]*data-testid="chain-opportunity-surge"[^<>]*>/s)?.[0];
+
+        expect(targetPlanTag, 'chain target plan should keep a stable test id for feedback coverage').toBeDefined();
+        expect(targetPlanTag, 'chain target plan should expose its action and plan text to assistive tech').toContain('aria-label=');
+        expect(targetPlanTag, 'chain target plan should keep action state visible to CSS and tests').toContain('data-chain-target-plan-action=');
+        expect(targetPlanTag, 'chain target plan should keep tier state visible to CSS and tests').toContain('data-chain-target-plan-tier=');
+        expect(targetPlanTag, 'chain target plan should keep tone state visible to CSS and tests').toContain('data-chain-target-plan-tone=');
+        expect(surgeTag, 'chain surge cue should keep a stable test id for feedback coverage').toBeDefined();
+        expect(surgeTag, 'chain surge cue should expose its payoff text to assistive tech').toContain('aria-label=');
+        expect(surgeTag, 'chain surge cue should keep screen-cue state visible to CSS and tests').toContain('data-chain-opportunity-surge-screen-cue=');
+        expect(surgeTag, 'chain surge cue should keep tone state visible to CSS and tests').toContain('data-chain-opportunity-surge-tone=');
+    });
 });
