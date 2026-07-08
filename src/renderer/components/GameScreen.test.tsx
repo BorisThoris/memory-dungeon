@@ -5843,6 +5843,15 @@ describe('GameScreen (OVR-014)', () => {
             screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="1"]')
         ).toHaveAttribute('data-route-beat-pip-focus', 'primary');
         expect(
+            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="1"]')
+        ).toHaveAttribute('data-route-beat-pip-audio', 'route-guard-beat');
+        expect(
+            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="1"]')
+        ).toHaveAttribute('data-route-beat-pip-screen-cue', 'guard');
+        expect(
+            screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="1"]')
+        ).toHaveAttribute('data-route-beat-pip-tier', 'guard');
+        expect(
             screen.getByTestId('route-choice-safe-beat-cue').querySelector('[data-route-beat-pip="2"]')
         ).toHaveAttribute('data-route-beat-pip-focus', 'support');
         expect(

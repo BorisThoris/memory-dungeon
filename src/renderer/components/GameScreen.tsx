@@ -6826,7 +6826,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             {Array.from({ length: routeChoiceBeatCue.beatCount }).map((_, beatIndex) => (
                                                                 <i
                                                                     data-route-beat-pip={beatIndex + 1}
+                                                                    data-route-beat-pip-audio={routeChoiceBeatCue.audioCue}
                                                                     data-route-beat-pip-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                    data-route-beat-pip-screen-cue={routeChoiceBeatCue.screenCue}
+                                                                    data-route-beat-pip-tier={routeChoiceBeatCue.tier}
                                                                     key={beatIndex}
                                                                 />
                                                             ))}
