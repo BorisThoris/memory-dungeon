@@ -1918,6 +1918,52 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-priority='setup'[\s\S]*?\.chainOpportunityPriorityBeatPips i[\s\S]*?animation-duration:\s*1\.16s/);
     });
 
+    it('keeps primary shot focus beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout primary shots should read as fast wide payout beats'
+        ).toMatch(/data-card-primary-shot-focus='cashout'[\s\S]*?\.chainOpportunityPrimaryShotBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'surge primary shots should use the fastest acceleration beats'
+        ).toMatch(/data-card-primary-shot-focus='surge'[\s\S]*?\.chainOpportunityPrimaryShotBeatPips i[\s\S]*?animation-duration:\s*0\.6s/);
+        expect(
+            cssText,
+            'follow-up primary shots should use mid-tempo continuation beats'
+        ).toMatch(/data-card-primary-shot-focus='follow-up'[\s\S]*?\.chainOpportunityPrimaryShotBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'route primary shots should use low route beats'
+        ).toMatch(/data-card-primary-shot-focus='route'[\s\S]*?\.chainOpportunityPrimaryShotBeatPips i[\s\S]*?height:\s*0\.1rem/);
+        expect(
+            cssText,
+            'setup primary shots should use taller slower setup beats'
+        ).toMatch(/data-card-primary-shot-focus='setup'[\s\S]*?\.chainOpportunityPrimaryShotBeatPips i[\s\S]*?animation-duration:\s*1\.12s/);
+    });
+
+    it('keeps primary shot screen cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'burst primary shot cues should stay fastest and high-emphasis'
+        ).toMatch(/data-card-primary-shot-screen-cue='burst'[\s\S]*?\.chainOpportunityPrimaryShotBeatPips i[\s\S]*?animation-duration:\s*0\.58s/);
+        expect(
+            cssText,
+            'guard primary shot cues should use vertical defensive beats'
+        ).toMatch(/data-card-primary-shot-screen-cue='guard'[\s\S]*?\.chainOpportunityPrimaryShotBeatPips i[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'pulse primary shot cues should use calmer readable beats'
+        ).toMatch(/data-card-primary-shot-screen-cue='pulse'[\s\S]*?\.chainOpportunityPrimaryShotBeatPips i[\s\S]*?animation-duration:\s*0\.88s/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
