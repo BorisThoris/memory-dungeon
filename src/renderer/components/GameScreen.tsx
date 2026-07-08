@@ -4512,7 +4512,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 {Array.from({ length: boardFloaterJackpotCue.beatCount }, (_, index) => (
                                                     <i
                                                         data-match-jackpot-beat={index + 1}
+                                                        data-match-jackpot-beat-action={boardFloaterJackpotCue.action}
+                                                        data-match-jackpot-beat-audio={getBoardFloaterJackpotAudioCue(boardFloaterJackpotCue)}
                                                         data-match-jackpot-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        data-match-jackpot-beat-screen-cue={getBoardFloaterJackpotScreenCue(boardFloaterJackpotCue)}
+                                                        data-match-jackpot-beat-tier={boardFloaterJackpotCue.tier}
                                                         key={`match-jackpot-beat-${index + 1}`}
                                                     />
                                                 ))}
@@ -4536,6 +4540,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         <i
                                                             data-match-impact-cue-beat={index + 1}
                                                             data-match-impact-cue-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-match-impact-cue-beat-screen-cue={getBoardFloaterImpactCueScreenCue(boardFloaterPayload)}
+                                                            data-match-impact-cue-beat-tone={boardFloaterPayload.impactCue.tone}
                                                             key={`match-impact-cue-beat-${index + 1}`}
                                                         />
                                                     )

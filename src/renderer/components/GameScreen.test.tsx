@@ -2750,8 +2750,32 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('match-score-floater-jackpot')).toHaveAttribute('data-match-jackpot-audio', 'match-jackpot-cashout');
             expect(screen.getByTestId('match-score-floater-jackpot')).toHaveAttribute('data-match-jackpot-screen-cue', 'cashout');
             expect(screen.getByTestId('match-score-floater-jackpot').querySelectorAll('[data-match-jackpot-beat]')).toHaveLength(3);
+            expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
+                'data-match-jackpot-beat-action',
+                'Cash now'
+            );
+            expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
+                'data-match-jackpot-beat-audio',
+                'match-jackpot-cashout'
+            );
+            expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
+                'data-match-jackpot-beat-screen-cue',
+                'cashout'
+            );
+            expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
+                'data-match-jackpot-beat-tier',
+                'cashout'
+            );
             expect(screen.getByTestId('match-score-floater-impact-cue')).toHaveAttribute(
                 'data-match-impact-cue-tone',
+                'reward'
+            );
+            expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
+                'data-match-impact-cue-beat-screen-cue',
+                'burst'
+            );
+            expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
+                'data-match-impact-cue-beat-tone',
                 'reward'
             );
             expect(screen.getByTestId('match-score-floater-payoff-summary')).toHaveTextContent('Cashout armed');
@@ -2859,6 +2883,14 @@ describe('GameScreen (OVR-014)', () => {
             'data-match-impact-cue-beat-focus',
             'primary'
         );
+        expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
+            'data-match-impact-cue-beat-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('match-score-floater-impact-cue').querySelector('[data-match-impact-cue-beat="1"]')).toHaveAttribute(
+            'data-match-impact-cue-beat-tone',
+            'reward'
+        );
         expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-crescendo-tier', 'super');
         expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-tier', 'super');
         expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-audio', 'match-jackpot-super');
@@ -2875,6 +2907,22 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
             'data-match-jackpot-beat-focus',
             'primary'
+        );
+        expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
+            'data-match-jackpot-beat-action',
+            'Cash super stack'
+        );
+        expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
+            'data-match-jackpot-beat-audio',
+            'match-jackpot-super'
+        );
+        expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
+            'data-match-jackpot-beat-screen-cue',
+            'super'
+        );
+        expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="1"]')).toHaveAttribute(
+            'data-match-jackpot-beat-tier',
+            'super'
         );
         expect(screen.getByTestId('match-score-floater-jackpot').querySelector('[data-match-jackpot-beat="2"]')).toHaveAttribute(
             'data-match-jackpot-beat-focus',

@@ -13527,6 +13527,36 @@
     opacity: 0.7;
 }
 
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-screen-cue='burst'],
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-screen-cue='route'],
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-tone='reward'],
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-tone='pickup'],
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-tone='route'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 36%, transparent);
+}
+
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-screen-cue='surge'],
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-tone='trait'] {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
+}
+
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-tone='combo'],
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-tone='chain'] {
+    color: color-mix(in srgb, var(--theme-success) 84%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-success) 32%, transparent);
+}
+
+.boardFloaterImpactBeatPips i[data-match-impact-cue-beat-screen-cue='pulse'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
 .boardFloaterImpactCue[data-match-impact-cue-screen-cue='burst'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, white 8%);
     box-shadow:
@@ -13659,6 +13689,29 @@
 
 .boardFloaterJackpotBeats i[data-match-jackpot-beat-focus='support'] {
     opacity: 0.72;
+}
+
+.boardFloaterJackpotBeats i[data-match-jackpot-beat-tier='cashout'],
+.boardFloaterJackpotBeats i[data-match-jackpot-beat-screen-cue='cashout'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.5rem color-mix(in srgb, var(--theme-gold-bright) 38%, transparent);
+}
+
+.boardFloaterJackpotBeats i[data-match-jackpot-beat-tier='stack'],
+.boardFloaterJackpotBeats i[data-match-jackpot-beat-screen-cue='burst'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, var(--theme-cyan-bright) 18%);
+    background: currentColor;
+    box-shadow: 0 0 0.58rem color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
+}
+
+.boardFloaterJackpotBeats i[data-match-jackpot-beat-tier='super'],
+.boardFloaterJackpotBeats i[data-match-jackpot-beat-screen-cue='super'] {
+    color: color-mix(in srgb, var(--theme-magenta-bright) 72%, white);
+    background: currentColor;
+    box-shadow:
+        0 0 0.62rem color-mix(in srgb, var(--theme-magenta-bright) 38%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
 }
 
 .boardFloaterJackpotCue[data-match-jackpot-tier='cashout'] {
