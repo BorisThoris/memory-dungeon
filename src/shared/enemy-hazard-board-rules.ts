@@ -26,11 +26,11 @@ const unclearedRealPairKeys = (tiles: readonly Tile[]): string[] => [
 const tileIsCleared = (tile: Tile | undefined): boolean =>
     tile != null && (tile.state === 'matched' || tile.state === 'removed' || tile.dungeonCardState === 'resolved');
 
+const areAllRealHazardPairsResolvedOrAbsent = (board: BoardState): boolean =>
+    board.tiles.every((tile) => !isEnemyHazardRelevantPairTile(tile) || tileIsCleared(tile));
+
 export const allRealBoardPairsCleared = (board: BoardState): boolean =>
-    board.tiles.some(isEnemyHazardRelevantPairTile) &&
-    board.tiles
-        .filter(isEnemyHazardRelevantPairTile)
-        .every((tile) => tileIsCleared(tile));
+    board.tiles.some(isEnemyHazardRelevantPairTile) && areAllRealHazardPairsResolvedOrAbsent(board);
 
 export const enemyHazardReferencesOnlyClearedTiles = (
     board: BoardState,
@@ -43,7 +43,7 @@ export const enemyHazardReferencesOnlyClearedTiles = (
     if (referencesOnlyClearedTiles) {
         return true;
     }
-    return allRealBoardPairsCleared(board) && hazard.state !== 'defeated';
+    return areAllRealHazardPairsResolvedOrAbsent(board) && hazard.state !== 'defeated';
 };
 
 export const activeEnemyHazardsForBoard = (board: BoardState | null | undefined): NonNullable<BoardState['enemyHazards']> =>
@@ -97,7 +97,7 @@ export const defeatEnemyHazardOccupationOnFinalPair = (board: BoardState): Board
 };
 
 export const defeatEnemyHazardsOnClearedTiles = (board: BoardState): BoardState => {
-    if (!allRealBoardPairsCleared(board)) {
+    if (!areAllRealHazardPairsResolvedOrAbsent(board)) {
         return board;
     }
     const activeHazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];

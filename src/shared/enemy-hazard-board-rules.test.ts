@@ -10,7 +10,7 @@ import {
     defeatEnemyHazardsOnClearedTiles,
     enemyHazardEligibleTiles
 } from './enemy-hazard-board-rules';
-import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
+import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, SHOP_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 
 describe('enemy hazard board rules', () => {
     it('filters hazard-eligible tiles to unresolved real pairs', () => {
@@ -108,6 +108,20 @@ describe('enemy hazard board rules', () => {
         ]);
 
         expect(activeEnemyHazardsForBoard(board)).toEqual([]);
+    });
+
+    it('clears hazards on boards that have no playable real pairs left', () => {
+        const board = boardWith(
+            [
+                tile('exit', EXIT_PAIR_KEY, { state: 'flipped' }),
+                tile('shop', SHOP_PAIR_KEY, { state: 'matched' })
+            ],
+            [hazard('warden', 'exit', 'shop', { kind: 'warden', pattern: 'guard' })]
+        );
+
+        expect(defeatEnemyHazardsOnClearedTiles(board).enemyHazards).toMatchObject([
+            { id: 'warden', hp: 0, state: 'defeated' }
+        ]);
     });
 
     it('keeps hazards active when at least one referenced tile is still uncleared', () => {

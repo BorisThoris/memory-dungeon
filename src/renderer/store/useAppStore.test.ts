@@ -1048,7 +1048,7 @@ describe('useAppStore timers', () => {
         expect(nextRun.board!.tiles.filter((tile) => tile.pairKey === 'A').every((tile) => tile.state === 'matched')).toBe(
             true
         );
-        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'revealed', currentTileId: 'b1' });
+        expect(nextRun.board!.enemyHazards![0]).toMatchObject({ state: 'defeated', currentTileId: 'b1' });
         expect(useAppStore.getState().destroyPairArmed).toBe(false);
     });
 

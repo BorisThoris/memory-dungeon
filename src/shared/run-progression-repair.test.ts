@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, RunState, Tile } from './contracts';
 import { getDungeonExitStatus } from './dungeon-board-status';
 import { repairRunProgressionSoftlocks } from './run-progression-repair';
-import { EXIT_PAIR_KEY } from './tile-identity';
+import { EXIT_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 
 const tile = (id: string, pairKey: string, overrides: Partial<Tile> = {}): Tile => ({
     id,
@@ -126,6 +126,55 @@ describe('repairRunProgressionSoftlocks', () => {
         expect(repaired.board?.enemyHazards).toMatchObject([{ id: 'warden', hp: 0, state: 'defeated' }]);
         expect(repaired.dungeonEnemiesDefeated).toBe(1);
         expect(repaired.dungeonEnemiesDefeatedThisFloor).toBe(1);
+        expect(repaired.enemyHazardsDefeatedThisFloor).toBe(1);
+    });
+
+    it('defeats stale hazards when no real pairs remain on a floor', () => {
+        const repaired = repairRunProgressionSoftlocks(
+            runWithBoard({
+                level: 1,
+                pairCount: 0,
+                columns: 2,
+                rows: 1,
+                tiles: [
+                    tile('shop', SHOP_PAIR_KEY, {
+                        state: 'hidden',
+                        dungeonCardKind: 'shop',
+                        dungeonCardEffectId: 'shop_vendor',
+                        dungeonCardState: 'resolved'
+                    }),
+                    tile('exit', EXIT_PAIR_KEY, {
+                        state: 'flipped',
+                        dungeonCardKind: 'exit',
+                        dungeonExitLockKind: 'none'
+                    })
+                    ],
+                flippedTileIds: ['exit'],
+                matchedPairs: 0,
+                floorArchetypeId: null,
+                featuredObjectiveId: null,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'none',
+                enemyHazards: [
+                    {
+                        id: 'ambient-patrol',
+                        kind: 'sentinel',
+                        label: 'Sentinel',
+                        currentTileId: 'shop',
+                        nextTileId: 'shop',
+                        pattern: 'patrol',
+                        state: 'revealed',
+                        damage: 1,
+                        hp: 2,
+                        maxHp: 2
+                    }
+                ]
+            } as BoardState)
+        );
+
+        expect(repaired.board?.enemyHazards).toMatchObject([{ id: 'ambient-patrol', hp: 0, state: 'defeated' }]);
+        expect(repaired.dungeonEnemiesDefeated).toBe(0);
+        expect(repaired.dungeonEnemiesDefeatedThisFloor).toBe(0);
         expect(repaired.enemyHazardsDefeatedThisFloor).toBe(1);
     });
 });

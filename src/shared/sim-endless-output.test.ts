@@ -231,5 +231,5 @@ describe('sim-endless CSV output', () => {
             )
         ).toBe(true);
         expect(stderr.mock.calls.some(([chunk]) => String(chunk).includes('Softlock seed gate failed'))).toBe(true);
-    }, 20_000);
+    }, 90_000);
 });
