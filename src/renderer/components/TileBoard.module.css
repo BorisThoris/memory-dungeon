@@ -5494,6 +5494,59 @@
     transition: width 140ms ease-out;
 }
 
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='cashout'] .chainOpportunityBeatMapSummaryMeter,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-tier='cashout'] .chainOpportunityBeatMapSummaryMeter,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-screen-cue='burst'] .chainOpportunityBeatMapSummaryMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 26%, transparent);
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='cashout'] .chainOpportunityBeatMapSummaryMeterFill,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-tier='cashout'] .chainOpportunityBeatMapSummaryMeterFill,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-screen-cue='burst'] .chainOpportunityBeatMapSummaryMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 88%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 66%, var(--theme-gold-bright) 34%)
+    );
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='surge'] .chainOpportunityBeatMapSummaryMeter,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-tier='surge'] .chainOpportunityBeatMapSummaryMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 38%, var(--theme-gold-bright) 18%);
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='surge'] .chainOpportunityBeatMapSummaryMeterFill,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-tier='surge'] .chainOpportunityBeatMapSummaryMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 78%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 64%, white)
+    );
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='route'] .chainOpportunityBeatMapSummaryMeter,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-tier='route'] .chainOpportunityBeatMapSummaryMeter,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-screen-cue='guard'] .chainOpportunityBeatMapSummaryMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='setup'] .chainOpportunityBeatMapSummaryMeter,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-tier='setup'] .chainOpportunityBeatMapSummaryMeter,
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-screen-cue='tick'] .chainOpportunityBeatMapSummaryMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, var(--theme-text-muted) 18%);
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-screen-cue='tick'] .chainOpportunityBeatMapSummaryMeterFill {
+    opacity: 0.78;
+}
+
 .chainOpportunityBeatMapSummaryPips {
     display: inline-flex;
     align-items: center;
@@ -6531,6 +6584,77 @@
     );
     box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
     transition: width 140ms ease-out;
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='cashout'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='cashout'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-screen-cue='burst'] .chainOpportunityTraitLaneBeatMapMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='cashout'] .chainOpportunityTraitLaneBeatMapMeterFill,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='cashout'] .chainOpportunityTraitLaneBeatMapMeterFill,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-screen-cue='burst'] .chainOpportunityTraitLaneBeatMapMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 88%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 62%, white)
+    );
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='protect'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='protect'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-screen-cue='guard'] .chainOpportunityTraitLaneBeatMapMeter {
+    border-color: color-mix(in srgb, var(--theme-success, #8edb9b) 38%, var(--theme-cyan-bright) 16%);
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='protect'] .chainOpportunityTraitLaneBeatMapMeterFill,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='protect'] .chainOpportunityTraitLaneBeatMapMeterFill,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-screen-cue='guard'] .chainOpportunityTraitLaneBeatMapMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-success, #8edb9b) 76%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 58%, white)
+    );
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='risk'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='block'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='risk'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='block'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-screen-cue='risk'] .chainOpportunityTraitLaneBeatMapMeter {
+    border-color: color-mix(in srgb, var(--theme-danger) 36%, var(--theme-violet-bright) 20%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 12%, transparent), color-mix(in srgb, var(--theme-violet-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='risk'] .chainOpportunityTraitLaneBeatMapMeterFill,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='block'] .chainOpportunityTraitLaneBeatMapMeterFill,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='risk'] .chainOpportunityTraitLaneBeatMapMeterFill,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='block'] .chainOpportunityTraitLaneBeatMapMeterFill,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-screen-cue='risk'] .chainOpportunityTraitLaneBeatMapMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-danger) 76%, white),
+        color-mix(in srgb, var(--theme-warning, #f2bc6b) 62%, white)
+    );
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='recall'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-action='tool'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='recall'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-tier='tool'] .chainOpportunityTraitLaneBeatMapMeter,
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-screen-cue='pulse'] .chainOpportunityTraitLaneBeatMapMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-violet-bright) 16%);
+}
+
+.chainOpportunityTraitLaneBeatMapSummary[data-card-trait-lane-beat-map-summary-screen-cue='pulse'] .chainOpportunityTraitLaneBeatMapMeterFill {
+    opacity: 0.9;
 }
 
 .chainOpportunityTraitLaneBeatMap > span[data-card-trait-lane-beat='shard'],

@@ -1915,6 +1915,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-shot-map-summary-screen-cue='tick'[\s\S]*?\.chainOpportunityShotMapSummaryBeatPips i[\s\S]*?animation-duration:\s*1\.34s/);
     });
 
+    it('keeps card beat map summary meters visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout beat-map summary meters should frame immediate payout progress'
+        ).toMatch(/data-card-beat-map-summary-action='cashout'[\s\S]*?\.chainOpportunityBeatMapSummaryMeterFill[\s\S]*?var\(--theme-gold-bright\) 88%/);
+        expect(
+            cssText,
+            'surge beat-map summary meters should read as acceleration'
+        ).toMatch(/data-card-beat-map-summary-action='surge'[\s\S]*?\.chainOpportunityBeatMapSummaryMeterFill[\s\S]*?var\(--theme-violet-bright\) 78%/);
+        expect(
+            cssText,
+            'route beat-map summary meters should use violet/cyan routing'
+        ).toMatch(/data-card-beat-map-summary-action='route'[\s\S]*?\.chainOpportunityBeatMapSummaryMeter[\s\S]*?var\(--theme-violet-bright\) 34%/);
+        expect(
+            cssText,
+            'quiet beat-map summary meters should stay visually calmer'
+        ).toMatch(/data-card-beat-map-summary-screen-cue='tick'[\s\S]*?\.chainOpportunityBeatMapSummaryMeterFill[\s\S]*?opacity:\s*0\.78/);
+    });
+
     it('keeps trait interaction map summary role beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
@@ -1940,6 +1963,29 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'trait recall summaries should stay horizontal memory beats'
         ).toMatch(/data-trait-interaction-lane-primary-role-id='recall'[\s\S]*?\.chainOpportunityTraitLaneMapSummaryBeatPips i[\s\S]*?width:\s*0\.22rem/);
+    });
+
+    it('keeps trait lane beat map summary meters visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout trait-lane beat meters should read as payout progress'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-action='cashout'[\s\S]*?\.chainOpportunityTraitLaneBeatMapMeterFill[\s\S]*?var\(--theme-gold-bright\) 88%/);
+        expect(
+            cssText,
+            'protect trait-lane beat meters should read as defensive progress'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-action='protect'[\s\S]*?\.chainOpportunityTraitLaneBeatMapMeterFill[\s\S]*?var\(--theme-success, #8edb9b\) 76%/);
+        expect(
+            cssText,
+            'risk and block trait-lane beat meters should carry caution language'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-action='risk'[\s\S]*?\.chainOpportunityTraitLaneBeatMapMeterFill[\s\S]*?var\(--theme-warning, #f2bc6b\) 62%/);
+        expect(
+            cssText,
+            'pulse trait-lane beat meters should stay calmer than burst'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-screen-cue='pulse'[\s\S]*?\.chainOpportunityTraitLaneBeatMapMeterFill[\s\S]*?opacity:\s*0\.9/);
     });
 
     it('keeps trait interaction map summary screen cues visually distinct', () => {
