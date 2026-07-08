@@ -555,10 +555,25 @@ describe('GameScreen (OVR-014)', () => {
         const laneMapSummary = screen.getByTestId('action-feedback-lane-map-summary');
         expect(laneMapSummary).toHaveTextContent('Lanes');
         expect(laneMapSummary).toHaveTextContent('3 lanes');
+        expect(laneMapSummary).toHaveAttribute('data-action-feedback-lane-summary-primary', 'cash');
+        expect(laneMapSummary).toHaveAttribute('data-action-feedback-lane-summary-primary-action', 'Cash now');
+        expect(laneMapSummary).toHaveAttribute('data-action-feedback-lane-summary-primary-audio', 'feedback-cash-lane');
+        expect(laneMapSummary).toHaveAttribute('data-action-feedback-lane-summary-primary-role', 'Cashout');
+        expect(laneMapSummary).toHaveAttribute('data-action-feedback-lane-summary-primary-role-id', 'cashout');
+        expect(laneMapSummary).toHaveAttribute('data-action-feedback-lane-summary-primary-screen-cue', 'burst');
         expect(laneMapSummary.querySelectorAll('[data-action-feedback-lane-map-summary-beat]')).toHaveLength(4);
         expect(
             laneMapSummary.querySelector('[data-action-feedback-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-action-feedback-lane-map-summary-beat-focus', 'primary');
+        expect(
+            laneMapSummary.querySelector('[data-action-feedback-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-action-feedback-lane-map-summary-beat-primary', 'cash');
+        expect(
+            laneMapSummary.querySelector('[data-action-feedback-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-action-feedback-lane-map-summary-beat-role-id', 'cashout');
+        expect(
+            laneMapSummary.querySelector('[data-action-feedback-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-action-feedback-lane-map-summary-beat-screen-cue', 'burst');
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute('data-action-feedback-primary-lane', 'cash');
         expect(screen.getByTestId('action-feedback-lane-map')).toHaveAttribute(
             'data-action-feedback-primary-lane-action',

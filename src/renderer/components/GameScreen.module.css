@@ -5515,6 +5515,57 @@
     opacity: 0.64;
 }
 
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-count='3'] .actionFeedbackLaneMapSummaryBeatPips i,
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-count='4'] .actionFeedbackLaneMapSummaryBeatPips i {
+    width: 0.11rem;
+    height: 0.11rem;
+    opacity: 0.84;
+}
+
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-summary-primary-screen-cue='burst'],
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-summary-primary-role-id='cashout'],
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-summary-primary-role-id='route'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 16%);
+    box-shadow: 0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+}
+
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-summary-primary-screen-cue='guard'],
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-summary-primary-role-id='protect'],
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-summary-primary-role-id='trait'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-cyan-bright) 18%);
+}
+
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-summary-primary-screen-cue='recover'],
+.actionFeedbackLaneMapSummary[data-action-feedback-lane-summary-primary-role-id='recover'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 44%, transparent);
+    box-shadow: 0 0 0.68rem color-mix(in srgb, var(--theme-danger) 12%, transparent);
+}
+
+.actionFeedbackLaneMapSummaryBeatPips i[data-action-feedback-lane-map-summary-beat-screen-cue='burst'],
+.actionFeedbackLaneMapSummaryBeatPips i[data-action-feedback-lane-map-summary-beat-screen-cue='route'] {
+    width: 0.18rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.2rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0.42rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.actionFeedbackLaneMapSummaryBeatPips i[data-action-feedback-lane-map-summary-beat-screen-cue='guard'],
+.actionFeedbackLaneMapSummaryBeatPips i[data-action-feedback-lane-map-summary-beat-role-id='protect'],
+.actionFeedbackLaneMapSummaryBeatPips i[data-action-feedback-lane-map-summary-beat-role-id='trait'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 76%, white 8%);
+}
+
+.actionFeedbackLaneMapSummaryBeatPips i[data-action-feedback-lane-map-summary-beat-screen-cue='recover'],
+.actionFeedbackLaneMapSummaryBeatPips i[data-action-feedback-lane-map-summary-beat-role-id='recover'] {
+    background: color-mix(in srgb, var(--theme-danger) 68%, white 8%);
+}
+
+.actionFeedbackLaneMapSummaryBeatPips i[data-action-feedback-lane-map-summary-beat-role-id='cashout'],
+.actionFeedbackLaneMapSummaryBeatPips i[data-action-feedback-lane-map-summary-beat-role-id='route'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
 .actionFeedbackLaneMap > span {
     display: inline-grid;
     grid-template-columns: auto auto;

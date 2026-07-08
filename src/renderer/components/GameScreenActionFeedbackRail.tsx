@@ -978,6 +978,14 @@ export const GameScreenActionFeedbackRail = ({
                         }. ${primaryLane ? `${actionFeedbackLaneRole(primaryLane)} ${primaryLane.label}` : 'No primary lane'}.`}
                         className={styles.actionFeedbackLaneMapSummary}
                         data-action-feedback-lane-count={laneMap.length}
+                        data-action-feedback-lane-summary-primary={primaryLane?.id ?? 'none'}
+                        data-action-feedback-lane-summary-primary-action={primaryLane?.action ?? 'none'}
+                        data-action-feedback-lane-summary-primary-audio={primaryLane ? actionFeedbackLaneAudioCue(primaryLane) : 'none'}
+                        data-action-feedback-lane-summary-primary-role={primaryLane ? actionFeedbackLaneRole(primaryLane) : 'none'}
+                        data-action-feedback-lane-summary-primary-role-id={actionFeedbackLaneRoleId(primaryLane) ?? 'none'}
+                        data-action-feedback-lane-summary-primary-screen-cue={
+                            primaryLane ? actionFeedbackLaneScreenCue(primaryLane) : 'none'
+                        }
                         data-testid="action-feedback-lane-map-summary"
                     >
                         <small>Lanes</small>
@@ -989,6 +997,11 @@ export const GameScreenActionFeedbackRail = ({
                                 <i
                                     data-action-feedback-lane-map-summary-beat={beatIndex + 1}
                                     data-action-feedback-lane-map-summary-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                    data-action-feedback-lane-map-summary-beat-primary={primaryLane?.id ?? 'none'}
+                                    data-action-feedback-lane-map-summary-beat-role-id={actionFeedbackLaneRoleId(primaryLane) ?? 'none'}
+                                    data-action-feedback-lane-map-summary-beat-screen-cue={
+                                        primaryLane ? actionFeedbackLaneScreenCue(primaryLane) : 'none'
+                                    }
                                     key={beatIndex}
                                 />
                             ))}
