@@ -2033,10 +2033,20 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('match-score-floater-cascade')).toHaveTextContent('reward cascade');
             expect(screen.getByTestId('match-score-floater-cascade')).toHaveAttribute('data-cascade-tier', 'reward');
             expect(screen.getByTestId('match-score-floater-cascade')).toHaveAttribute('data-cascade-beats', '4');
+            expect(screen.getByTestId('match-score-floater-cascade')).toHaveAttribute('data-cascade-audio', 'cascade-reward');
+            expect(screen.getByTestId('match-score-floater-cascade')).toHaveAttribute('data-cascade-screen-cue', 'burst');
             expect(screen.getByTestId('match-score-floater-cascade').querySelectorAll('[data-cascade-beat]')).toHaveLength(4);
             expect(screen.getByTestId('match-score-floater-cascade').querySelector('[data-cascade-beat="1"]')).toHaveAttribute(
                 'data-cascade-beat-focus',
                 'primary'
+            );
+            expect(screen.getByTestId('match-score-floater-cascade').querySelector('[data-cascade-beat="1"]')).toHaveAttribute(
+                'data-cascade-beat-audio',
+                'cascade-reward'
+            );
+            expect(screen.getByTestId('match-score-floater-cascade').querySelector('[data-cascade-beat="1"]')).toHaveAttribute(
+                'data-cascade-beat-screen-cue',
+                'burst'
             );
             expect(screen.getByTestId('match-score-floater-cascade').querySelector('[data-cascade-beat="1"]')).toHaveAttribute(
                 'data-cascade-beat-tier',

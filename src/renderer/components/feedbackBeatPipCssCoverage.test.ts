@@ -724,6 +724,7 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-chain-streak-beat-tier': ['chain', 'combo', 'surge'],
         'data-chain-streak-cue-beat-target': ['combo-live', 'x10', 'x6'],
         'data-chain-streak-cue-beat-tier': ['chain', 'combo', 'surge'],
+        'data-cascade-beat-screen-cue': ['burst', 'pulse', 'super'],
         'data-cascade-beat-tier': ['chain', 'combo', 'reward'],
         'data-chain-milestone-beat-screen-cue': ['combo-live', 'reward-loop', 'surge-live'],
         'data-chain-milestone-beat-tone': ['chain', 'combo', 'surge'],

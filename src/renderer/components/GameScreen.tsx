@@ -1894,6 +1894,30 @@ const getBoardFloaterCascadeBeatCount = (
     return 3;
 };
 
+const getBoardFloaterCascadeAudioCue = (
+    cascadeCue: NonNullable<MatchScorePop['cascadeCue']>
+): 'cascade-chain' | 'cascade-combo' | 'cascade-reward' => {
+    if (cascadeCue.tier === 'combo') {
+        return 'cascade-combo';
+    }
+    if (cascadeCue.tier === 'reward') {
+        return 'cascade-reward';
+    }
+    return 'cascade-chain';
+};
+
+const getBoardFloaterCascadeScreenCue = (
+    cascadeCue: NonNullable<MatchScorePop['cascadeCue']>
+): 'burst' | 'pulse' | 'super' => {
+    if (cascadeCue.tier === 'combo') {
+        return 'super';
+    }
+    if (cascadeCue.tier === 'reward') {
+        return 'burst';
+    }
+    return 'pulse';
+};
+
 const getBoardFloaterPayoffSummaryBeatCount = (
     payoffSummary: NonNullable<MatchScorePop['payoffSummary']>
 ): 2 | 3 | 4 | 5 => {
@@ -4608,7 +4632,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <span
                                             aria-label={`${boardFloaterPayload.cascadeCue.label}: ${boardFloaterPayload.cascadeCue.value}`}
                                             className={styles.boardFloaterCascadeCue}
+                                            data-cascade-audio={getBoardFloaterCascadeAudioCue(boardFloaterPayload.cascadeCue)}
                                             data-cascade-beats={getBoardFloaterCascadeBeatCount(boardFloaterPayload.cascadeCue)}
+                                            data-cascade-screen-cue={getBoardFloaterCascadeScreenCue(boardFloaterPayload.cascadeCue)}
                                             data-cascade-tier={boardFloaterPayload.cascadeCue.tier}
                                             data-testid="match-score-floater-cascade"
                                         >
@@ -4620,7 +4646,13 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-cascade-beat={index + 1}
+                                                            data-cascade-beat-audio={getBoardFloaterCascadeAudioCue(
+                                                                boardFloaterPayload.cascadeCue
+                                                            )}
                                                             data-cascade-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-cascade-beat-screen-cue={getBoardFloaterCascadeScreenCue(
+                                                                boardFloaterPayload.cascadeCue
+                                                            )}
                                                             data-cascade-beat-tier={boardFloaterPayload.cascadeCue.tier}
                                                             key={`cascade-beat-${index + 1}`}
                                                         />

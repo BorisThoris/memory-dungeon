@@ -14719,6 +14719,12 @@
         color-mix(in srgb, var(--theme-void) 62%, transparent);
 }
 
+.boardFloaterCascadeCue[data-cascade-screen-cue='burst'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 0.86rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
 .boardFloaterCascadeCue[data-cascade-tier='reward'] .boardFloaterCascadeBeatPips i {
     width: 0.26rem;
     height: 0.18rem;
@@ -14733,10 +14739,28 @@
     opacity: 0.92;
 }
 
+.boardFloaterCascadeBeatPips i[data-cascade-beat-screen-cue='burst'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 36%, transparent),
+        0 0 0.12rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+}
+
 .boardFloaterCascadeBeatPips i[data-cascade-beat-tier='chain'] {
     color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
     background: currentColor;
     box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+}
+
+.boardFloaterCascadeBeatPips i[data-cascade-beat-screen-cue='pulse'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 20%, transparent);
+}
+
+.boardFloaterCascadeCue[data-cascade-screen-cue='pulse'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
 }
 
 .boardFloaterCascadeCue[data-cascade-tier='combo'] {
@@ -14759,6 +14783,24 @@
     height: 0.22rem;
     animation-duration: 0.64s;
     opacity: 0.98;
+}
+
+.boardFloaterCascadeBeatPips i[data-cascade-beat-screen-cue='super'] {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 84%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 72%, white)
+    );
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 38%, transparent),
+        0 0 0.2rem color-mix(in srgb, var(--theme-violet-bright) 24%, transparent);
+}
+
+.boardFloaterCascadeCue[data-cascade-screen-cue='super'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 20%, transparent),
+        0 0 1.35rem color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
 }
 
 .boardFloaterRewardBurst {
