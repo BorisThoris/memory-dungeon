@@ -820,7 +820,10 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-preview-line-kind': ['hazard', 'pickup', 'trait'],
         'data-preview-line-focus': ['primary', 'support'],
         'data-preview-screen-cue': ['burst', 'guard', 'pulse', 'snap'],
+        'data-preview-summary-action': ['combo', 'reward', 'risk', 'stack'],
+        'data-preview-summary-density-tone': ['cashout', 'hazard', 'ready', 'setup', 'surge', 'trait'],
         'data-preview-summary-kind': ['hazard', 'pickup', 'trait'],
+        'data-preview-summary-tone': ['cashout', 'hazard', 'pickup', 'setup', 'trait'],
         'data-primary-reward-beats': ['2', '3', '4'],
         'data-primary-reward-screen-cue': ['burst', 'pulse', 'tick'],
         'data-primary-reward-urgency': ['later', 'next', 'soon'],
@@ -1663,6 +1666,45 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-opportunity-compass-priority='single'[\s\S]*?\.opportunityCompassSummary[\s\S]*?var\(--theme-cyan-bright\)/);
     });
 
+    it('keeps opportunity compass meter heat states visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout compass meters should read as immediate payoff progress'
+        ).toMatch(/data-opportunity-compass-heat='cashout'[\s\S]*?\.opportunityCompassMeterFill[\s\S]*?var\(--theme-success\) 66%/);
+        expect(
+            cssText,
+            'cashout compass tracks should frame immediate payoff progress'
+        ).toMatch(/data-opportunity-compass-heat='cashout'[\s\S]*?\.opportunityCompassMeter[\s\S]*?border-color:[\s\S]*?var\(--theme-gold-bright\) 42%/);
+        expect(
+            cssText,
+            'surge compass meters should blend gold with cyan/violet acceleration'
+        ).toMatch(/data-opportunity-compass-heat='surge'[\s\S]*?\.opportunityCompassMeterFill[\s\S]*?var\(--theme-violet-bright\) 24%/);
+        expect(
+            cssText,
+            'surge compass tracks should read as acceleration lanes'
+        ).toMatch(/data-opportunity-compass-heat='surge'[\s\S]*?\.opportunityCompassMeter[\s\S]*?var\(--theme-cyan-bright\) 38%/);
+        expect(
+            cssText,
+            'prime compass meters should use setup-progress cyan/violet'
+        ).toMatch(/data-opportunity-compass-heat='prime'[\s\S]*?\.opportunityCompassMeterFill[\s\S]*?var\(--theme-violet-bright\) 58%/);
+        expect(
+            cssText,
+            'prime compass tracks should frame setup-progress cyan/violet'
+        ).toMatch(/data-opportunity-compass-heat='prime'[\s\S]*?\.opportunityCompassMeter[\s\S]*?var\(--theme-violet-bright\) 34%/);
+        expect(
+            cssText,
+            'normal compass meters should stay quieter than cashout and surge'
+        ).toMatch(/data-opportunity-compass-heat='normal'[\s\S]*?\.opportunityCompassMeterFill[\s\S]*?opacity:\s*0\.82/);
+        expect(
+            cssText,
+            'normal compass tracks should remain visually quieter'
+        ).toMatch(/data-opportunity-compass-heat='normal'[\s\S]*?\.opportunityCompassMeter[\s\S]*?var\(--theme-text-muted\) 24%/);
+    });
+
     it('keeps opportunity compass row action beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
@@ -1975,6 +2017,22 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'hazard preview summary should use taller caution beats'
         ).toMatch(/data-preview-summary-kind='hazard'[\s\S]*?\.traitPreviewSummaryBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'stack preview summaries should read as hot cashout states'
+        ).toMatch(/data-preview-summary-action='stack'[\s\S]*?var\(--theme-violet-bright\) 44%/);
+        expect(
+            cssText,
+            'cashout density summaries should use fast horizontal payoff beats'
+        ).toMatch(/data-preview-summary-density-tone='cashout'[\s\S]*?\.traitPreviewSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'surge density summaries should read faster than setup'
+        ).toMatch(/data-preview-summary-density-tone='surge'[\s\S]*?\.traitPreviewSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.8s/);
+        expect(
+            cssText,
+            'setup and trait summary tones should stay visibly calmer than cashout'
+        ).toMatch(/data-preview-summary-tone='setup'[\s\S]*?var\(--theme-violet-bright\) 18%/);
     });
 
     it('keeps trait preview kind and action beats visually distinct', () => {

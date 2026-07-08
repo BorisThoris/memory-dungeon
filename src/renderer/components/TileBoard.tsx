@@ -7631,10 +7631,23 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                       : cardFeedbackTraitPayoffStackActive
                                         ? 'Stack'
                                         : 'Combo';
+                            const traitPreviewSummaryAction = traitPreviewSummaryLabel.toLowerCase();
                             const traitPreviewDensityTone =
                                 focusedPreviewChip.kind === 'trait' && cardFeedbackTraitPayoffStackActive
                                     ? 'cashout'
                                     : previewDensityTone;
+                            const traitPreviewDensityLabel =
+                                previewDensity > 0
+                                    ? `${previewDensity} ${
+                                          focusedPreviewChip.kind === 'trait'
+                                              ? previewDensity === 1
+                                                  ? 'combo card'
+                                                  : 'combo cards'
+                                              : previewDensity === 1
+                                                ? 'route'
+                                                : 'routes'
+                                      } lit, `
+                                    : '';
                             const traitPreviewSignalFill = Math.min(100, Math.round((beatCount / 5) * 100));
                             const traitPreviewMeterFill = previewDensity > 0 ? Math.min(100, Math.round((previewDensity / 4) * 100)) : 0;
                             return (
@@ -7656,8 +7669,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     role="status"
                                 >
                                     <span
+                                        aria-label={`${traitPreviewSummaryLabel} preview, ${traitPreviewDensityLabel}${beatCount} beats`}
                                         className={styles.traitPreviewSummary}
+                                        data-preview-summary-action={traitPreviewSummaryAction}
+                                        data-preview-summary-density-tone={traitPreviewDensityTone}
                                         data-preview-summary-kind={focusedPreviewChip.kind}
+                                        data-preview-summary-tone={focusedPreviewChip.tone}
                                         data-testid="trait-preview-summary"
                                     >
                                         <small>Preview</small>

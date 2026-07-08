@@ -10176,6 +10176,39 @@
         color-mix(in srgb, var(--theme-void) 30%, transparent);
 }
 
+.opportunityCompass[data-opportunity-compass-heat='cashout'] .opportunityCompassMeter,
+.opportunityCompass[data-opportunity-compass-summary-tier='cashout'] .opportunityCompassMeter,
+.opportunityCompass[data-opportunity-compass-summary-action='cashout'] .opportunityCompassMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-success) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+}
+
+.opportunityCompass[data-opportunity-compass-heat='surge'] .opportunityCompassMeter,
+.opportunityCompass[data-opportunity-compass-surge='true'] .opportunityCompassMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+}
+
+.opportunityCompass[data-opportunity-compass-heat='prime'] .opportunityCompassMeter,
+.opportunityCompass[data-opportunity-compass-summary-tier='prime'] .opportunityCompassMeter,
+.opportunityCompass[data-opportunity-compass-summary-action='prime'] .opportunityCompassMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 17%, transparent), color-mix(in srgb, var(--theme-violet-bright) 13%, transparent)),
+        color-mix(in srgb, var(--theme-void) 26%, transparent);
+}
+
+.opportunityCompass[data-opportunity-compass-heat='normal'] .opportunityCompassMeter {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 24%, transparent);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent), transparent 82%),
+        color-mix(in srgb, var(--theme-void) 34%, transparent);
+}
+
 .opportunityCompassMeterFill {
     display: block;
     width: var(--opportunity-compass-meter-fill, 0%);
@@ -10234,6 +10267,52 @@
         color-mix(in srgb, var(--theme-cyan-bright) 80%, white),
         color-mix(in srgb, var(--theme-violet-bright) 58%, white)
     );
+}
+
+.opportunityCompass[data-opportunity-compass-heat='cashout'] .opportunityCompassMeterFill,
+.opportunityCompass[data-opportunity-compass-summary-tier='cashout'] .opportunityCompassMeterFill,
+.opportunityCompass[data-opportunity-compass-summary-action='cashout'] .opportunityCompassMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 92%, white),
+        color-mix(in srgb, var(--theme-success) 66%, var(--theme-gold-bright) 34%)
+    );
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.opportunityCompass[data-opportunity-compass-heat='surge'] .opportunityCompassMeterFill,
+.opportunityCompass[data-opportunity-compass-surge='true'] .opportunityCompassMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 76%, var(--theme-violet-bright) 24%)
+    );
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent),
+        0 0 0.38rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.opportunityCompass[data-opportunity-compass-heat='prime'] .opportunityCompassMeterFill,
+.opportunityCompass[data-opportunity-compass-summary-tier='prime'] .opportunityCompassMeterFill,
+.opportunityCompass[data-opportunity-compass-summary-action='prime'] .opportunityCompassMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 58%, var(--theme-cyan-bright) 42%)
+    );
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
+.opportunityCompass[data-opportunity-compass-heat='normal'] .opportunityCompassMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-text-muted) 52%, var(--theme-cyan-bright) 48%),
+        color-mix(in srgb, var(--theme-cyan-bright) 48%, transparent)
+    );
+    box-shadow: 0 0 0.14rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+    opacity: 0.82;
 }
 
 .opportunityCompass[data-opportunity-compass-surge='true'] {
@@ -12852,6 +12931,84 @@
     width: 0.1rem;
     height: 0.18rem;
     animation-duration: 1.18s;
+}
+
+.traitPreviewSummary[data-preview-summary-action='stack'],
+.traitPreviewSummary[data-preview-summary-density-tone='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-gold-bright) 28%);
+    background:
+        radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--theme-violet-bright) 18%, transparent), transparent 64%),
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-border-cyan) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, white 5%, transparent);
+}
+
+.traitPreviewSummary[data-preview-summary-action='stack'] b,
+.traitPreviewSummary[data-preview-summary-density-tone='cashout'] b,
+.traitPreviewSummary[data-preview-summary-density-tone='cashout'] strong,
+.traitPreviewSummary[data-preview-summary-density-tone='cashout'] .traitPreviewSummaryBeatPips i {
+    color: color-mix(in srgb, var(--theme-gold-bright) 94%, white);
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.traitPreviewSummary[data-preview-summary-density-tone='cashout'] .traitPreviewSummaryBeatPips i {
+    width: 0.2rem;
+    height: 0.12rem;
+    animation-duration: 0.68s;
+}
+
+.traitPreviewSummary[data-preview-summary-density-tone='surge'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, var(--theme-border-cyan) 26%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 12%, transparent), color-mix(in srgb, var(--theme-border-cyan) 12%, transparent)),
+        color-mix(in srgb, var(--theme-void) 26%, transparent);
+}
+
+.traitPreviewSummary[data-preview-summary-density-tone='surge'] strong,
+.traitPreviewSummary[data-preview-summary-density-tone='surge'] .traitPreviewSummaryBeatPips i {
+    color: color-mix(in srgb, var(--theme-border-cyan) 88%, white);
+    background: color-mix(in srgb, var(--theme-border-cyan) 80%, white);
+}
+
+.traitPreviewSummary[data-preview-summary-density-tone='surge'] .traitPreviewSummaryBeatPips i {
+    width: 0.16rem;
+    height: 0.12rem;
+    animation-duration: 0.8s;
+}
+
+.traitPreviewSummary[data-preview-summary-density-tone='ready'],
+.traitPreviewSummary[data-preview-summary-density-tone='setup'],
+.traitPreviewSummary[data-preview-summary-density-tone='trait'],
+.traitPreviewSummary[data-preview-summary-tone='setup'],
+.traitPreviewSummary[data-preview-summary-tone='trait'] {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 34%, var(--theme-violet-bright) 18%);
+}
+
+.traitPreviewSummary[data-preview-summary-action='combo'] {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 11%, transparent), color-mix(in srgb, var(--theme-violet-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 27%, transparent);
+}
+
+.traitPreviewSummary[data-preview-summary-tone='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-violet-bright) 24%);
+}
+
+.traitPreviewSummary[data-preview-summary-tone='pickup'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
+}
+
+.traitPreviewSummary[data-preview-summary-tone='hazard'],
+.traitPreviewSummary[data-preview-summary-density-tone='hazard'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 46%, var(--theme-warning, #f2bc6b) 18%);
+}
+
+.traitPreviewSummary[data-preview-summary-action='reward'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, transparent);
+}
+
+.traitPreviewSummary[data-preview-summary-action='risk'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 48%, var(--theme-warning, #f2bc6b) 18%);
 }
 
 .traitPreviewDensityMeter {
