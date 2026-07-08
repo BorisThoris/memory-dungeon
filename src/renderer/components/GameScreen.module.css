@@ -994,9 +994,25 @@
     opacity: 0.72;
 }
 
+.endlessRiskWagerPrimaryBeatPips i[data-risk-wager-primary-beat-tone='offer'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow: 0 0 9px color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+}
+
 .endlessRiskWagerPrimaryCue[data-risk-wager-primary-tone='armed'] .endlessRiskWagerPrimaryBeatPips i {
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
     box-shadow: 0 0 9px color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.endlessRiskWagerPrimaryBeatPips i[data-risk-wager-primary-beat-tone='armed'],
+.endlessRiskWagerPrimaryBeatPips i[data-risk-wager-primary-beat-screen-cue='burst'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    box-shadow: 0 0 9px color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.endlessRiskWagerPrimaryBeatPips i[data-risk-wager-primary-beat-screen-cue='risk'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow: 0 0 9px color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
 }
 
 .endlessRiskWagerPrimaryBeatPips i:nth-child(2) {
@@ -1094,6 +1110,12 @@
     box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 36%, transparent);
 }
 
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-tone='reward'],
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-screen-cue='burst'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 36%, transparent);
+}
+
 .endlessRiskWagerSignals > span[data-risk-wager-signal-screen-cue='burst'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
 }
@@ -1108,6 +1130,12 @@
 }
 
 .endlessRiskWagerSignals > span[data-risk-wager-signal-tone='risk'] .endlessRiskWagerBeatPips i {
+    background: color-mix(in srgb, var(--theme-danger) 76%, white);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-danger) 30%, transparent);
+}
+
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-tone='risk'],
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-screen-cue='risk'] {
     background: color-mix(in srgb, var(--theme-danger) 76%, white);
     box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-danger) 30%, transparent);
 }
@@ -1129,6 +1157,14 @@
 
 .endlessRiskWagerSignals > span[data-risk-wager-signal-tone='armed'] .endlessRiskWagerBeatPips i,
 .endlessRiskWagerSignals > span[data-risk-wager-signal-tone='objective'] .endlessRiskWagerBeatPips i {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-tone='armed'],
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-tone='objective'],
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-screen-cue='armed'],
+.endlessRiskWagerBeatPips i[data-risk-wager-signal-beat-screen-cue='objective'] {
     background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
     box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
 }

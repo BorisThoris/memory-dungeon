@@ -6396,6 +6396,18 @@ describe('GameScreen (OVR-014)', () => {
             getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
         ).toHaveAttribute('data-risk-wager-primary-beat-focus', 'primary');
         expect(
+            getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-action', 'Arm wager');
+        expect(
+            getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-audio', 'risk-wager-offer');
+        expect(
+            getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-screen-cue', 'risk');
+        expect(
+            getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-tone', 'offer');
+        expect(
             getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="2"]')
         ).toHaveAttribute('data-risk-wager-primary-beat-focus', 'support');
         expect(getByTestId('endless-risk-wager-signals')).toHaveTextContent('x2 streak');
@@ -6432,6 +6444,21 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-risk-wager-signal-tone="reward"]')
                 ?.querySelector('[data-risk-wager-signal-beat="1"]')
         ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'primary');
+        expect(
+            getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="reward"]')
+                ?.querySelector('[data-risk-wager-signal-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-audio', 'risk-wager-signal-reward');
+        expect(
+            getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="reward"]')
+                ?.querySelector('[data-risk-wager-signal-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-screen-cue', 'burst');
+        expect(
+            getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="reward"]')
+                ?.querySelector('[data-risk-wager-signal-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-tone', 'reward');
         expect(
             getByTestId('endless-risk-wager-signals')
                 .querySelector('[data-risk-wager-signal-tone="reward"]')
@@ -6552,6 +6579,18 @@ describe('GameScreen (OVR-014)', () => {
         );
         expect(screen.getByTestId('endless-risk-wager-primary-cue')).toHaveTextContent('Protect streak');
         expect(screen.getByTestId('endless-risk-wager-primary-cue').querySelectorAll('[data-risk-wager-primary-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-action', 'Protect streak');
+        expect(
+            screen.getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-audio', 'risk-wager-armed');
+        expect(
+            screen.getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('endless-risk-wager-primary-cue').querySelector('[data-risk-wager-primary-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-primary-beat-tone', 'armed');
         expect(screen.getByTestId('endless-risk-wager-signals')).toHaveTextContent('Armed');
         expect(screen.getByTestId('endless-risk-wager-signals')).toHaveTextContent('x2 streak');
         expect(screen.getByTestId('endless-risk-wager-signals')).toHaveTextContent('+2 Favor');
@@ -6576,6 +6615,24 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-risk-wager-signal-tone="armed"]')
                 ?.querySelector('[data-risk-wager-signal-beat="1"]')
         ).toHaveAttribute('data-risk-wager-signal-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="armed"]')
+                ?.querySelector('[data-risk-wager-signal-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-audio', 'risk-wager-signal-armed');
+        expect(
+            screen
+                .getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="armed"]')
+                ?.querySelector('[data-risk-wager-signal-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-screen-cue', 'armed');
+        expect(
+            screen
+                .getByTestId('endless-risk-wager-signals')
+                .querySelector('[data-risk-wager-signal-tone="armed"]')
+                ?.querySelector('[data-risk-wager-signal-beat="1"]')
+        ).toHaveAttribute('data-risk-wager-signal-beat-tone', 'armed');
         expect(
             screen
                 .getByTestId('endless-risk-wager-signals')

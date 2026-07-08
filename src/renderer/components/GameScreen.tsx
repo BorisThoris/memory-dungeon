@@ -854,7 +854,11 @@ const RiskWagerPrimaryCueView = ({ cue }: { cue: RiskWagerPrimaryCue }) => (
             {Array.from({ length: cue.beatCount }, (_, index) => (
                 <i
                     data-risk-wager-primary-beat={index + 1}
+                    data-risk-wager-primary-beat-action={cue.action}
+                    data-risk-wager-primary-beat-audio={getRiskWagerPrimaryAudioCue(cue)}
                     data-risk-wager-primary-beat-focus={index === 0 ? 'primary' : 'support'}
+                    data-risk-wager-primary-beat-screen-cue={getRiskWagerPrimaryScreenCue(cue)}
+                    data-risk-wager-primary-beat-tone={cue.tone}
                     key={index}
                 />
             ))}
@@ -884,7 +888,14 @@ const RiskWagerSignalRowsView = ({
                     <b>{row.value}</b>
                     <span aria-hidden="true" className={styles.endlessRiskWagerBeatPips}>
                         {Array.from({ length: beatCount }, (_, index) => (
-                            <i data-risk-wager-signal-beat={index + 1} data-risk-wager-signal-beat-focus={index === 0 ? 'primary' : 'support'} key={index} />
+                            <i
+                                data-risk-wager-signal-beat={index + 1}
+                                data-risk-wager-signal-beat-audio={getRiskWagerSignalAudioCue(row)}
+                                data-risk-wager-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                data-risk-wager-signal-beat-screen-cue={getRiskWagerSignalScreenCue(row)}
+                                data-risk-wager-signal-beat-tone={row.tone}
+                                key={index}
+                            />
                         ))}
                     </span>
                 </span>
