@@ -1259,6 +1259,52 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-active-power-tone='recall'[\s\S]*?\.activePowerBoardStepBeatPips i[\s\S]*?height:\s*0\.1rem/);
     });
 
+    it('keeps toolbar power payoff screen-cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'burst power payoff cues should read as immediate high value'
+        ).toMatch(/data-power-screen-cue='burst'[\s\S]*?\.powerPayoffBeatPips i[\s\S]*?animation-duration:\s*0\.66s/);
+        expect(
+            cssText,
+            'snap power payoff cues should read as quick setup actions'
+        ).toMatch(/data-power-screen-cue='snap'[\s\S]*?\.powerPayoffBeatPips i[\s\S]*?height:\s*0\.14rem/);
+        expect(
+            cssText,
+            'pulse power payoff cues should stay readable but quieter'
+        ).toMatch(/data-power-screen-cue='pulse'[\s\S]*?\.powerPayoffBeatPips i[\s\S]*?animation-duration:\s*0\.94s/);
+        expect(
+            cssText,
+            'guard power payoff cues should use taller caution beats'
+        ).toMatch(/data-power-screen-cue='guard'[\s\S]*?\.powerPayoffBeatPips i[\s\S]*?height:\s*0\.22rem/);
+    });
+
+    it('keeps toolbar crescendo tier and screen-cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout tool crescendos should use fast payout beats'
+        ).toMatch(/data-tool-crescendo-tier='cashout'[\s\S]*?\.toolCrescendoPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'stack tool crescendos should use the fastest stacked payoff beats'
+        ).toMatch(/data-tool-crescendo-tier='stack'[\s\S]*?\.toolCrescendoPips i[\s\S]*?animation-duration:\s*0\.62s/);
+        expect(
+            cssText,
+            'prime tool crescendos should use slower setup beats'
+        ).toMatch(/data-tool-crescendo-tier='prime'[\s\S]*?\.toolCrescendoPips i[\s\S]*?animation-duration:\s*0\.98s/);
+        expect(
+            cssText,
+            'burst tool crescendos should use highest-emphasis pips'
+        ).toMatch(/data-tool-crescendo-screen-cue='burst'[\s\S]*?\.toolCrescendoPips i[\s\S]*?animation-duration:\s*0\.58s/);
+    });
+
     it('keeps hazard opportunity families visually distinct in beat pips', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

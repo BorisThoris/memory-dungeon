@@ -11195,6 +11195,39 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
 }
 
+.toolCrescendo[data-tool-crescendo-tier='cashout'] .toolCrescendoPips i {
+    height: 0.18rem;
+    animation-duration: 0.72s;
+    opacity: 0.94;
+}
+
+.toolCrescendo[data-tool-crescendo-tier='stack'] .toolCrescendoPips i {
+    height: 0.2rem;
+    animation-duration: 0.62s;
+    opacity: 1;
+}
+
+.toolCrescendo[data-tool-crescendo-tier='prime'] .toolCrescendoPips i {
+    height: 0.14rem;
+    animation-duration: 0.98s;
+    opacity: 0.78;
+}
+
+.toolCrescendo[data-tool-crescendo-screen-cue='snap'] .toolCrescendoPips i {
+    width: 0.24rem;
+    animation-duration: 0.78s;
+}
+
+.toolCrescendo[data-tool-crescendo-screen-cue='pulse'] .toolCrescendoPips i {
+    height: 0.13rem;
+    animation-duration: 0.92s;
+}
+
+.toolCrescendo[data-tool-crescendo-screen-cue='burst'] .toolCrescendoPips i {
+    width: 0.3rem;
+    animation-duration: 0.58s;
+}
+
 .toolPayoffSequence {
     grid-column: 1 / -1;
     display: grid;
@@ -11413,6 +11446,34 @@
 
 .powerPayoffChip[data-power-payoff-beats='2'] .powerPayoffBeatPips i {
     opacity: 0.76;
+}
+
+.powerPayoffChip[data-power-screen-cue='burst'] .powerPayoffBeatPips i {
+    width: 0.22rem;
+    height: 0.2rem;
+    animation-duration: 0.66s;
+    opacity: 0.98;
+}
+
+.powerPayoffChip[data-power-screen-cue='snap'] .powerPayoffBeatPips i {
+    width: 0.22rem;
+    height: 0.14rem;
+    animation-duration: 0.78s;
+    opacity: 0.86;
+}
+
+.powerPayoffChip[data-power-screen-cue='pulse'] .powerPayoffBeatPips i {
+    width: 0.18rem;
+    height: 0.12rem;
+    animation-duration: 0.94s;
+    opacity: 0.78;
+}
+
+.powerPayoffChip[data-power-screen-cue='guard'] .powerPayoffBeatPips i {
+    width: 0.14rem;
+    height: 0.22rem;
+    animation-duration: 1.08s;
+    opacity: 0.82;
 }
 
 .powerPayoffChip[data-power-payoff='combo'] {
