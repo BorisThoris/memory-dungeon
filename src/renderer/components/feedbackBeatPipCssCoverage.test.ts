@@ -1295,6 +1295,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-momentum-tone='surge'[\s\S]*?radial-gradient[\s\S]*?var\(--theme-violet-bright\)/);
     });
 
+    it('keeps top chain cue beats tied to opportunity tone', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'ready chain cues should use fast reward-toned beats'
+        ).toMatch(/data-chain-opportunity-tone='ready'[\s\S]*?\.chainOpportunityCueBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'setup chain cues should use taller slower setup beats'
+        ).toMatch(/data-chain-opportunity-tone='setup'[\s\S]*?\.chainOpportunityCueBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'cashout next actions should override top cue pips with immediate payout beats'
+        ).toMatch(/data-chain-opportunity-next-action='cashout'[\s\S]*?\.chainOpportunityCueBeatPips i[\s\S]*?animation-duration:\s*0\.66s/);
+        expect(
+            cssText,
+            'eyebrow beats should follow the same cashout next-action language'
+        ).toMatch(/data-chain-opportunity-next-action='cashout'[\s\S]*?\.chainOpportunityEyebrowBeatPips i[\s\S]*?width:\s*0\.28rem/);
+    });
+
     it('keeps chain marker key action beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

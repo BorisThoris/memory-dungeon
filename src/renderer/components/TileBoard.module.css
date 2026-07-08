@@ -1359,6 +1359,33 @@
     opacity: 0.64;
 }
 
+.chainOpportunityChip[data-chain-opportunity-tone='ready'] .chainOpportunityEyebrowBeatPips i,
+.chainOpportunityChip[data-chain-opportunity-tone='ready'] .chainOpportunityCueBeatPips i {
+    width: 0.24rem;
+    height: 0.14rem;
+    animation-duration: 0.72s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    opacity: 0.92;
+}
+
+.chainOpportunityChip[data-chain-opportunity-tone='setup'] .chainOpportunityEyebrowBeatPips i,
+.chainOpportunityChip[data-chain-opportunity-tone='setup'] .chainOpportunityCueBeatPips i {
+    width: 0.12rem;
+    height: 0.18rem;
+    animation-duration: 1.12s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white);
+    opacity: 0.74;
+}
+
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityEyebrowBeatPips i,
+.frame[data-chain-opportunity-next-action='cashout'] .chainOpportunityCueBeatPips i {
+    width: 0.28rem;
+    height: 0.18rem;
+    animation-duration: 0.66s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    opacity: 1;
+}
+
 .chainOpportunityBeat {
     display: inline-grid;
     grid-template-columns: auto auto auto minmax(0, 1fr);
