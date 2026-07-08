@@ -14861,12 +14861,38 @@
     opacity: 1;
 }
 
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-screen-cue='burst'],
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-tone='route'],
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-tone='pickup'],
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-tone='reward'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, white 30%, transparent),
+        0 0 0.48rem color-mix(in srgb, var(--theme-gold-bright) 48%, transparent);
+}
+
 .boardFloaterPayoffLaneMap > span[data-match-payoff-primary-lane-screen-cue='trait'] .boardFloaterPrimaryPayoffLaneBeatPips i {
     background: color-mix(in srgb, var(--theme-violet-bright) 78%, white 8%);
 }
 
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-screen-cue='trait'],
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-tone='trait'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white 8%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-violet-bright) 34%, transparent);
+}
+
 .boardFloaterPayoffLaneMap > span[data-match-payoff-primary-lane-screen-cue='chain'] .boardFloaterPrimaryPayoffLaneBeatPips i {
     background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+}
+
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-screen-cue='chain'],
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-tone='chain'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent);
+}
+
+.boardFloaterPrimaryPayoffLaneBeatPips i[data-match-payoff-primary-lane-beat-screen-cue='pulse'] {
+    background: color-mix(in srgb, var(--theme-text-muted) 74%, white 8%);
 }
 
 .boardFloaterPayoffLaneMap > span[data-match-payoff-primary-lane] em {
@@ -14931,6 +14957,30 @@
     background: currentColor;
     box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 30%, transparent);
     opacity: 0.66;
+}
+
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-screen-cue='burst'],
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-tone='route'],
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-tone='pickup'],
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-tone='reward'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+}
+
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-screen-cue='trait'],
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-tone='trait'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white 8%);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-violet-bright) 32%, transparent);
+}
+
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-screen-cue='chain'],
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-tone='chain'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+}
+
+.boardFloaterPayoffLaneBeatPips i[data-match-payoff-lane-beat-screen-cue='pulse'] {
+    background: color-mix(in srgb, var(--theme-text-muted) 74%, white 8%);
 }
 
 .boardFloaterPrimaryPayoffLaneBeatPips {

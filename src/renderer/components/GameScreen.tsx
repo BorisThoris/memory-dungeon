@@ -4851,9 +4851,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             (_, index) => (
                                                                 <i
                                                                     data-match-payoff-primary-lane-beat={index + 1}
+                                                                    data-match-payoff-primary-lane-beat-action={matchPayoffLaneAction(
+                                                                        boardFloaterPrimaryPayoffLane
+                                                                    )}
+                                                                    data-match-payoff-primary-lane-beat-audio={getBoardFloaterPayoffLaneAudioCue(
+                                                                        boardFloaterPrimaryPayoffLane
+                                                                    )}
                                                                     data-match-payoff-primary-lane-beat-focus={
                                                                         index === 0 ? 'primary' : 'support'
                                                                     }
+                                                                    data-match-payoff-primary-lane-beat-screen-cue={getBoardFloaterPayoffLaneScreenCue(
+                                                                        boardFloaterPrimaryPayoffLane
+                                                                    )}
+                                                                    data-match-payoff-primary-lane-beat-tone={boardFloaterPrimaryPayoffLane.tone}
                                                                     key={`${boardFloaterPrimaryPayoffLane.id}-primary-payoff-lane-beat-${index + 1}`}
                                                                 />
                                                             )
@@ -4881,7 +4891,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         {Array.from({ length: getBoardFloaterPayoffLaneBeatCount(lane) }, (_, index) => (
                                                             <i
                                                                 data-match-payoff-lane-beat={index + 1}
+                                                                data-match-payoff-lane-beat-action={matchPayoffLaneAction(lane)}
+                                                                data-match-payoff-lane-beat-audio={getBoardFloaterPayoffLaneAudioCue(lane)}
                                                                 data-match-payoff-lane-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                data-match-payoff-lane-beat-screen-cue={getBoardFloaterPayoffLaneScreenCue(lane)}
+                                                                data-match-payoff-lane-beat-tone={lane.tone}
                                                                 key={`${lane.id}-payoff-lane-beat-${index + 1}`}
                                                             />
                                                         ))}
