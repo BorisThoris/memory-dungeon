@@ -2494,6 +2494,18 @@ describe('GameScreen (OVR-014)', () => {
                 screen.getByTestId('board-match-payoff-stack-cue').querySelector('[data-match-payoff-stack-beat="1"]')
             ).toHaveAttribute('data-match-payoff-stack-beat-focus', 'primary');
             expect(
+                screen.getByTestId('board-match-payoff-stack-cue').querySelector('[data-match-payoff-stack-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-stack-beat-action', 'Cash stack');
+            expect(
+                screen.getByTestId('board-match-payoff-stack-cue').querySelector('[data-match-payoff-stack-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-stack-beat-audio', 'match-stack-cashout');
+            expect(
+                screen.getByTestId('board-match-payoff-stack-cue').querySelector('[data-match-payoff-stack-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-stack-beat-screen-cue', 'burst');
+            expect(
+                screen.getByTestId('board-match-payoff-stack-cue').querySelector('[data-match-payoff-stack-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-stack-beat-tone', 'reward');
+            expect(
                 screen.getByTestId('board-match-payoff-stack-cue').querySelector('[data-match-payoff-stack-beat="2"]')
             ).toHaveAttribute('data-match-payoff-stack-beat-focus', 'support');
             expect(screen.getByTestId('board-match-payoff-stack-sequence')).toHaveTextContent('First');

@@ -4229,6 +4229,26 @@
     opacity: 0.76;
 }
 
+.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-screen-cue='burst'],
+.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-screen-cue='super'],
+.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-tone='combo'],
+.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-tone='reward'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow: 0 0 9px color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+}
+
+.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-screen-cue='chain'],
+.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-tone='chain'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    box-shadow: 0 0 9px color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-screen-cue='pulse'],
+.boardMatchPayoffStackBeatPips i[data-match-payoff-stack-beat-tone='score'] {
+    color: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+    box-shadow: 0 0 9px color-mix(in srgb, var(--theme-violet-bright) 28%, transparent);
+}
+
 .boardMatchPayoffStackBeatPips i:nth-child(2) {
     animation-delay: 0.07s;
 }
