@@ -3126,6 +3126,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-reward-screen-cue='super'[\s\S]*?\.chainOpportunityPayoffBeatPips i[\s\S]*?height:\s*0\.2rem/);
     });
 
+    it('keeps chain reward cue and payoff burst meters visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'forecast reward cue meters should read as build-toward-cashout progress'
+        ).toMatch(/data-chain-reward-tone='forecast'[\s\S]*?\.chainOpportunityRewardMeterFill[\s\S]*?var\(--theme-cyan-bright\) 82%/);
+        expect(
+            cssText,
+            'pulse reward cue meters should stay forecast-toned'
+        ).toMatch(/data-chain-reward-screen-cue='pulse'[\s\S]*?\.chainOpportunityRewardMeter[\s\S]*?var\(--theme-cyan-bright\) 40%/);
+        expect(
+            cssText,
+            'cashout payoff meters should read as immediate payout progress'
+        ).toMatch(/data-chain-reward-tone='cashout'[\s\S]*?\.chainOpportunityRewardMeterFill[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'super payoff meters should reinforce high-emphasis success'
+        ).toMatch(/data-chain-reward-screen-cue='super'[\s\S]*?\.chainOpportunityRewardMeterFill[\s\S]*?var\(--theme-success\) 66%/);
+    });
+
     it('keeps chain reward lead tiers and tones visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

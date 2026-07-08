@@ -9222,6 +9222,45 @@
     transition: width 140ms ease-out;
 }
 
+.chainOpportunityRewardCue[data-chain-reward-tone='forecast'] .chainOpportunityRewardMeter,
+.chainOpportunityRewardCue[data-chain-reward-screen-cue='pulse'] .chainOpportunityRewardMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 40%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityRewardCue[data-chain-reward-tone='forecast'] .chainOpportunityRewardMeterFill,
+.chainOpportunityRewardCue[data-chain-reward-screen-cue='pulse'] .chainOpportunityRewardMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 32%)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
+.chainOpportunityPayoffBurst[data-chain-reward-tone='cashout'] .chainOpportunityRewardMeter,
+.chainOpportunityPayoffBurst[data-chain-reward-screen-cue='super'] .chainOpportunityRewardMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-success) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), color-mix(in srgb, var(--theme-success) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityPayoffBurst[data-chain-reward-tone='cashout'] .chainOpportunityRewardMeterFill,
+.chainOpportunityPayoffBurst[data-chain-reward-screen-cue='super'] .chainOpportunityRewardMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 92%, white),
+        color-mix(in srgb, var(--theme-success) 66%, var(--theme-gold-bright) 28%)
+    );
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 32%, transparent),
+        0 0 0.42rem color-mix(in srgb, var(--theme-success) 14%, transparent);
+}
+
 .chainOpportunityRewardCue b,
 .chainOpportunityPayoffBurst b {
     min-width: 0;
