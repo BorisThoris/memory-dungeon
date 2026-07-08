@@ -3686,6 +3686,18 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
         ).toHaveAttribute('data-active-power-step-beat-focus', 'primary');
         expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-action', 'swap');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-screen-cue', 'pulse');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-tier', 'route');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-tone', 'setup');
+        expect(
             screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step="then"] [data-active-power-step-beat="1"]')
         ).toHaveAttribute('data-active-power-step-beat-phase', 'then');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
@@ -3744,6 +3756,18 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-beat="1"]')
         ).toHaveAttribute('data-active-power-beat-tone', 'recall');
         expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-step-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-action', 'recall');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-screen-cue', 'pulse');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-tier', 'memory');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-tone', 'recall');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
             /Active board power.*Peek armed.*Tap hidden tile.*First Reveal one.*Then Lock memory route/i
         );
@@ -3801,6 +3825,18 @@ describe('TileBoard touch and click controls', () => {
             screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-beat="1"]')
         ).toHaveAttribute('data-active-power-beat-tone', 'control');
         expect(screen.getByTestId('active-power-board-chip').querySelectorAll('[data-active-power-step-beat]')).toHaveLength(4);
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-action', 'clear');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-tier', 'control');
+        expect(
+            screen.getByTestId('active-power-board-chip').querySelector('[data-active-power-step-beat="1"]')
+        ).toHaveAttribute('data-active-power-step-beat-tone', 'control');
         expect(screen.getByTestId('active-power-board-chip')).toHaveAccessibleName(
             /Active board power.*Destroy armed.*Tap hidden pair.*First Mark pair.*Then Clear blocker/i
         );

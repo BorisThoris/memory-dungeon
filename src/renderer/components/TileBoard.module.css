@@ -11059,6 +11059,30 @@
     opacity: 0.9;
 }
 
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-screen-cue='burst'],
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-tier='control'] {
+    background: color-mix(in srgb, var(--theme-ember) 82%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-ember) 28%, transparent);
+}
+
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-screen-cue='guard'] {
+    background: color-mix(in srgb, var(--theme-success) 72%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-success) 24%, transparent);
+}
+
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-screen-cue='pulse'],
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-tier='route'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-tier='memory'],
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-action='recall'],
+.activePowerBoardStepBeatPips i[data-active-power-step-beat-action='pin'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-violet-bright) 24%, transparent);
+}
+
 .activePowerBoardChip[data-active-power-tone='setup'] .activePowerBoardStepBeatPips i {
     width: 0.14rem;
     height: 0.18rem;

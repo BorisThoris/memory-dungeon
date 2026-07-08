@@ -7274,8 +7274,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         {Array.from({ length: 2 }, (_, index) => (
                                             <i
                                                 data-active-power-step-beat={index + 1}
+                                                data-active-power-step-beat-action={activePowerBoardChip.action}
                                                 data-active-power-step-beat-focus={index === 0 ? 'primary' : 'support'}
                                                 data-active-power-step-beat-phase="first"
+                                                data-active-power-step-beat-screen-cue={activePowerBoardChip.screenCue}
+                                                data-active-power-step-beat-tier={activePowerBoardChip.tier}
+                                                data-active-power-step-beat-tone={activePowerBoardChip.tone}
                                                 key={`active-power-step-first-${index + 1}`}
                                             />
                                         ))}
@@ -7287,8 +7291,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         {Array.from({ length: 2 }, (_, index) => (
                                             <i
                                                 data-active-power-step-beat={index + 1}
+                                                data-active-power-step-beat-action={activePowerBoardChip.action}
                                                 data-active-power-step-beat-focus={index === 0 ? 'primary' : 'support'}
                                                 data-active-power-step-beat-phase="then"
+                                                data-active-power-step-beat-screen-cue={activePowerBoardChip.screenCue}
+                                                data-active-power-step-beat-tier={activePowerBoardChip.tier}
+                                                data-active-power-step-beat-tone={activePowerBoardChip.tone}
                                                 key={`active-power-step-then-${index + 1}`}
                                             />
                                         ))}
