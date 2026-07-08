@@ -2442,6 +2442,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-cascade-tier='combo'[\s\S]*?\.boardFloaterCascadeBeatPips i[\s\S]*?height:\s*0\.22rem/);
     });
 
+    it('keeps mismatch next-action cues visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'recover next actions should use explicit positive recovery styling'
+        ).toMatch(/data-mismatch-next-action='recover'[\s\S]*?var\(--theme-success\)/);
+        expect(
+            cssText,
+            'risk next actions should remain caution-toned'
+        ).toMatch(/data-mismatch-next-action='risk'[\s\S]*?var\(--theme-gold-bright\)/);
+        expect(
+            cssText,
+            'lost reward next actions should remain danger-toned'
+        ).toMatch(/data-mismatch-next-action='lost-reward'[\s\S]*?var\(--theme-danger\)/);
+    });
+
     it('keeps chain reward urgency tiers visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
