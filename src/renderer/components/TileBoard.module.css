@@ -8618,6 +8618,23 @@
         0 0 0.7rem color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent);
 }
 
+.chainOpportunityRewardCue[data-chain-reward-tone='forecast'] .chainOpportunityRewardCueBeatPips i,
+.chainOpportunityRewardCue[data-chain-reward-screen-cue='pulse'] .chainOpportunityRewardCueBeatPips i {
+    width: 0.2rem;
+    height: 0.12rem;
+    animation-duration: 0.96s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    opacity: 0.84;
+}
+
+.chainOpportunityPayoffBurst[data-chain-reward-tone='cashout'] .chainOpportunityPayoffBeatPips i,
+.chainOpportunityPayoffBurst[data-chain-reward-screen-cue='super'] .chainOpportunityPayoffBeatPips i {
+    width: 0.34rem;
+    height: 0.2rem;
+    animation-duration: 0.58s;
+    opacity: 1;
+}
+
 .chainOpportunityPayoffBeatPips {
     display: inline-flex;
     align-items: center;

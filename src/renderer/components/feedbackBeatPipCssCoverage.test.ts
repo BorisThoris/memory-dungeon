@@ -2124,6 +2124,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-reward-urgency='later'[\s\S]*?\.chainOpportunityRewardUrgencyBeatPips i[\s\S]*?animation-duration:\s*1\.38s/);
     });
 
+    it('keeps chain reward cue and payoff burst beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'forecast reward cues should use calmer build-toward-cashout beats'
+        ).toMatch(/data-chain-reward-tone='forecast'[\s\S]*?\.chainOpportunityRewardCueBeatPips i[\s\S]*?animation-duration:\s*0\.96s/);
+        expect(
+            cssText,
+            'pulse reward cues should stay forecast-paced instead of payoff-fast'
+        ).toMatch(/data-chain-reward-screen-cue='pulse'[\s\S]*?\.chainOpportunityRewardCueBeatPips i[\s\S]*?height:\s*0\.12rem/);
+        expect(
+            cssText,
+            'cashout payoff bursts should use fast wide reward beats'
+        ).toMatch(/data-chain-reward-tone='cashout'[\s\S]*?\.chainOpportunityPayoffBeatPips i[\s\S]*?animation-duration:\s*0\.58s/);
+        expect(
+            cssText,
+            'super reward screen cues should keep high-emphasis payoff beats'
+        ).toMatch(/data-chain-reward-screen-cue='super'[\s\S]*?\.chainOpportunityPayoffBeatPips i[\s\S]*?height:\s*0\.2rem/);
+    });
+
     it('keeps chain reward lead tiers and tones visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
