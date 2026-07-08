@@ -809,6 +809,14 @@ const ChooseYourPathScreen = () => {
                             }. ${primaryModeLane ? `${modeChoiceLaneRole(primaryModeLane)} ${primaryModeLane.label}` : 'No lead lane'}.`}
                             className={styles.modeLaneMapSummary}
                             data-mode-lane-count={laneMap.length}
+                            data-mode-lane-summary-primary={primaryModeLane?.id ?? 'none'}
+                            data-mode-lane-summary-primary-action={primaryModeLane ? modeChoiceLaneAction(primaryModeLane) : 'none'}
+                            data-mode-lane-summary-primary-audio={primaryModeLane ? modeChoiceLaneAudioCue(primaryModeLane) : 'none'}
+                            data-mode-lane-summary-primary-role={primaryModeLane ? modeChoiceLaneRole(primaryModeLane) : 'none'}
+                            data-mode-lane-summary-primary-role-id={primaryModeLane ? modeChoiceLaneRoleId(primaryModeLane) : 'none'}
+                            data-mode-lane-summary-primary-screen-cue={
+                                primaryModeLane ? modeChoiceLaneScreenCue(primaryModeLane) : 'none'
+                            }
                             data-testid={`choose-path-mode-lane-map-summary-${def.id}-${placement}`}
                         >
                             <small>Lanes</small>
@@ -822,6 +830,12 @@ const ChooseYourPathScreen = () => {
                                         data-mode-lane-map-summary-beat={beatIndex + 1}
                                         data-mode-lane-map-summary-beat-focus={
                                             beatIndex === 0 ? primaryModeLane?.id ?? 'none' : 'support'
+                                        }
+                                        data-mode-lane-map-summary-beat-role-id={
+                                            primaryModeLane ? modeChoiceLaneRoleId(primaryModeLane) : 'none'
+                                        }
+                                        data-mode-lane-map-summary-beat-screen-cue={
+                                            primaryModeLane ? modeChoiceLaneScreenCue(primaryModeLane) : 'none'
                                         }
                                         key={beatIndex}
                                     />

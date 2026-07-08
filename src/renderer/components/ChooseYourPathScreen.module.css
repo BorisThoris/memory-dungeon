@@ -615,6 +615,50 @@
     opacity: 0.82;
 }
 
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary[data-mode-lane-summary-primary-screen-cue='burst'],
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary[data-mode-lane-summary-primary-role-id='build'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 54%, var(--theme-gold-bright) 18%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 9%, transparent),
+        0 0 0.9rem color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent);
+}
+
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary[data-mode-lane-summary-primary-screen-cue='reward'],
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary[data-mode-lane-summary-primary-role-id='reward'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 16%);
+}
+
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary[data-mode-lane-summary-primary-screen-cue='guard'],
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary[data-mode-lane-summary-primary-role-id='pressure'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 46%, var(--theme-gold-bright) 14%);
+}
+
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary[data-mode-lane-summary-primary-screen-cue='locked'],
+.modeSignalStrip .modeLaneMap .modeLaneMapSummary[data-mode-lane-summary-primary-role-id='locked'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 44%, transparent);
+}
+
+.modeLaneMapSummaryBeatPips s[data-mode-lane-map-summary-beat-screen-cue='burst'] {
+    height: 0.2rem;
+    animation-duration: 0.7s;
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
+}
+
+.modeLaneMapSummaryBeatPips s[data-mode-lane-map-summary-beat-screen-cue='reward'],
+.modeLaneMapSummaryBeatPips s[data-mode-lane-map-summary-beat-role-id='reward'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.modeLaneMapSummaryBeatPips s[data-mode-lane-map-summary-beat-screen-cue='guard'],
+.modeLaneMapSummaryBeatPips s[data-mode-lane-map-summary-beat-role-id='pressure'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 76%, white 8%);
+}
+
+.modeLaneMapSummaryBeatPips s[data-mode-lane-map-summary-beat-screen-cue='locked'],
+.modeLaneMapSummaryBeatPips s[data-mode-lane-map-summary-beat-role-id='locked'] {
+    background: color-mix(in srgb, var(--theme-danger) 68%, white 8%);
+}
+
 .modeLaneMapSummaryBeatPips s:nth-child(2) {
     animation-delay: 0.08s;
 }

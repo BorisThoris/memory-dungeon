@@ -179,6 +179,12 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         expect(classicLaneMap).toHaveAttribute('data-mode-primary-lane-screen-cue', 'burst');
         const classicLaneMapSummary = screen.getByTestId('choose-path-mode-lane-map-summary-classic-launch');
         expect(classicLaneMapSummary).toHaveAttribute('data-mode-lane-count', '3');
+        expect(classicLaneMapSummary).toHaveAttribute('data-mode-lane-summary-primary', 'chain');
+        expect(classicLaneMapSummary).toHaveAttribute('data-mode-lane-summary-primary-action', 'Build chain');
+        expect(classicLaneMapSummary).toHaveAttribute('data-mode-lane-summary-primary-audio', 'mode-lane-chain');
+        expect(classicLaneMapSummary).toHaveAttribute('data-mode-lane-summary-primary-role', 'Build');
+        expect(classicLaneMapSummary).toHaveAttribute('data-mode-lane-summary-primary-role-id', 'build');
+        expect(classicLaneMapSummary).toHaveAttribute('data-mode-lane-summary-primary-screen-cue', 'burst');
         expect(classicLaneMapSummary).toHaveTextContent('Lanes');
         expect(classicLaneMapSummary).toHaveTextContent('3 lanes');
         expect(classicLaneMapSummary).toHaveTextContent('Build Chain');
@@ -186,6 +192,14 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         expect(classicLaneMapSummary.querySelector('[data-mode-lane-map-summary-beat="1"]')).toHaveAttribute(
             'data-mode-lane-map-summary-beat-focus',
             'chain'
+        );
+        expect(classicLaneMapSummary.querySelector('[data-mode-lane-map-summary-beat="1"]')).toHaveAttribute(
+            'data-mode-lane-map-summary-beat-role-id',
+            'build'
+        );
+        expect(classicLaneMapSummary.querySelector('[data-mode-lane-map-summary-beat="1"]')).toHaveAttribute(
+            'data-mode-lane-map-summary-beat-screen-cue',
+            'burst'
         );
         expect(classicLaneMapSummary.querySelector('[data-mode-lane-map-summary-beat="2"]')).toHaveAttribute(
             'data-mode-lane-map-summary-beat-focus',

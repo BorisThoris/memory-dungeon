@@ -117,6 +117,12 @@ describe('ShopScreen', () => {
         expect(offerLaneMap).toHaveAttribute('data-shop-primary-offer-lane-screen-cue', 'burst');
         const offerLaneMapSummary = screen.getByTestId('shop-offer-lane-map-summary');
         expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-count', '2');
+        expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-summary-primary', 'route');
+        expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-summary-primary-action', 'Open route');
+        expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-summary-primary-audio', 'shop-lane-route');
+        expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-summary-primary-role', 'Open');
+        expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-summary-primary-role-id', 'open');
+        expect(offerLaneMapSummary).toHaveAttribute('data-shop-offer-lane-summary-primary-screen-cue', 'burst');
         expect(offerLaneMapSummary).toHaveTextContent('Lanes');
         expect(offerLaneMapSummary).toHaveTextContent('2 lanes');
         expect(offerLaneMapSummary).toHaveTextContent('Open Route');
@@ -124,6 +130,12 @@ describe('ShopScreen', () => {
         expect(
             offerLaneMapSummary.querySelector('[data-shop-offer-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-shop-offer-lane-map-summary-beat-focus', 'route');
+        expect(
+            offerLaneMapSummary.querySelector('[data-shop-offer-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-shop-offer-lane-map-summary-beat-role-id', 'open');
+        expect(
+            offerLaneMapSummary.querySelector('[data-shop-offer-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-shop-offer-lane-map-summary-beat-screen-cue', 'burst');
         expect(
             offerLaneMapSummary.querySelector('[data-shop-offer-lane-map-summary-beat="2"]')
         ).toHaveAttribute('data-shop-offer-lane-map-summary-beat-focus', 'support');

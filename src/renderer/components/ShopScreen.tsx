@@ -1150,6 +1150,18 @@ const ShopScreen = () => {
                             }. ${primaryOfferLane ? `${shopOfferLaneRole(primaryOfferLane)} ${primaryOfferLane.label}` : 'No lead lane'}.`}
                             className={styles.offerLaneMapSummary}
                             data-shop-offer-lane-count={offerLaneMap.length}
+                            data-shop-offer-lane-summary-primary={primaryOfferLane?.id ?? 'none'}
+                            data-shop-offer-lane-summary-primary-action={
+                                primaryOfferLane ? shopOfferLaneAction(primaryOfferLane) : 'none'
+                            }
+                            data-shop-offer-lane-summary-primary-audio={
+                                primaryOfferLane ? shopOfferLaneAudioCue(primaryOfferLane) : 'none'
+                            }
+                            data-shop-offer-lane-summary-primary-role={primaryOfferLane ? shopOfferLaneRole(primaryOfferLane) : 'none'}
+                            data-shop-offer-lane-summary-primary-role-id={primaryOfferLane ? shopOfferLaneRoleId(primaryOfferLane) : 'none'}
+                            data-shop-offer-lane-summary-primary-screen-cue={
+                                primaryOfferLane ? shopOfferLaneScreenCue(primaryOfferLane) : 'none'
+                            }
                             data-testid="shop-offer-lane-map-summary"
                         >
                             <small>Lanes</small>
@@ -1163,6 +1175,12 @@ const ShopScreen = () => {
                                         data-shop-offer-lane-map-summary-beat={beatIndex + 1}
                                         data-shop-offer-lane-map-summary-beat-focus={
                                             beatIndex === 0 ? primaryOfferLane?.id ?? 'none' : 'support'
+                                        }
+                                        data-shop-offer-lane-map-summary-beat-role-id={
+                                            primaryOfferLane ? shopOfferLaneRoleId(primaryOfferLane) : 'none'
+                                        }
+                                        data-shop-offer-lane-map-summary-beat-screen-cue={
+                                            primaryOfferLane ? shopOfferLaneScreenCue(primaryOfferLane) : 'none'
                                         }
                                         key={beatIndex}
                                     />

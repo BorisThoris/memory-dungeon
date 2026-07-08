@@ -309,6 +309,50 @@
     opacity: 0.82;
 }
 
+.offerLaneMap .offerLaneMapSummary[data-shop-offer-lane-summary-primary-screen-cue='burst'],
+.offerLaneMap .offerLaneMapSummary[data-shop-offer-lane-summary-primary-role-id='open'],
+.offerLaneMap .offerLaneMapSummary[data-shop-offer-lane-summary-primary-role-id='cashout'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 18%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.9rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.offerLaneMap .offerLaneMapSummary[data-shop-offer-lane-summary-primary-screen-cue='guard'],
+.offerLaneMap .offerLaneMapSummary[data-shop-offer-lane-summary-primary-role-id='buy'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 12%);
+}
+
+.offerLaneMap .offerLaneMapSummary[data-shop-offer-lane-summary-primary-screen-cue='locked'],
+.offerLaneMap .offerLaneMapSummary[data-shop-offer-lane-summary-primary-role-id='bank'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 44%, var(--theme-gold-bright) 14%);
+}
+
+.offerLaneMap .offerLaneMapSummaryBeatPips i[data-shop-offer-lane-map-summary-beat-screen-cue='burst'] {
+    width: 0.22rem;
+    height: 0.22rem;
+    animation-duration: 0.7s;
+    box-shadow:
+        0 0 0.26rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.52rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.offerLaneMap .offerLaneMapSummaryBeatPips i[data-shop-offer-lane-map-summary-beat-role-id='open'],
+.offerLaneMap .offerLaneMapSummaryBeatPips i[data-shop-offer-lane-map-summary-beat-role-id='cashout'],
+.offerLaneMap .offerLaneMapSummaryBeatPips i[data-shop-offer-lane-map-summary-beat-role-id='stack'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.offerLaneMap .offerLaneMapSummaryBeatPips i[data-shop-offer-lane-map-summary-beat-role-id='buy'],
+.offerLaneMap .offerLaneMapSummaryBeatPips i[data-shop-offer-lane-map-summary-beat-role-id='prime'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+}
+
+.offerLaneMap .offerLaneMapSummaryBeatPips i[data-shop-offer-lane-map-summary-beat-screen-cue='locked'],
+.offerLaneMap .offerLaneMapSummaryBeatPips i[data-shop-offer-lane-map-summary-beat-role-id='bank'] {
+    background: color-mix(in srgb, var(--theme-danger) 68%, white 8%);
+}
+
 .offerLaneMapSummaryBeatPips i:nth-child(2) {
     animation-delay: 0.08s;
 }
