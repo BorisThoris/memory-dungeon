@@ -6877,23 +6877,48 @@
 }
 
 .chainOpportunityTraitLaneBeatMapSummaryPips i[data-card-trait-lane-beat-map-summary-pip-action='cashout'] {
+    width: 0.18rem;
+    height: 0.12rem;
+    animation-duration: 0.68s;
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
 }
 
 .chainOpportunityTraitLaneBeatMapSummaryPips i[data-card-trait-lane-beat-map-summary-pip-action='protect'] {
+    width: 0.1rem;
+    height: 0.2rem;
+    animation-duration: 1.02s;
     color: color-mix(in srgb, var(--theme-success) 84%, white);
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-success) 22%, transparent);
 }
 
 .chainOpportunityTraitLaneBeatMapSummaryPips i[data-card-trait-lane-beat-map-summary-pip-action='recall'] {
+    width: 0.2rem;
+    height: 0.08rem;
+    animation-duration: 0.96s;
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
 }
 
-.chainOpportunityTraitLaneBeatMapSummaryPips i[data-card-trait-lane-beat-map-summary-pip-action='risk'],
-.chainOpportunityTraitLaneBeatMapSummaryPips i[data-card-trait-lane-beat-map-summary-pip-action='block'] {
+.chainOpportunityTraitLaneBeatMapSummaryPips i[data-card-trait-lane-beat-map-summary-pip-action='risk'] {
+    width: 0.1rem;
+    height: 0.22rem;
+    animation-duration: 0.72s;
     color: color-mix(in srgb, var(--theme-danger) 82%, white);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-danger) 26%, transparent);
+}
+
+.chainOpportunityTraitLaneBeatMapSummaryPips i[data-card-trait-lane-beat-map-summary-pip-action='block'] {
+    width: 0.14rem;
+    height: 0.18rem;
+    animation-duration: 0.88s;
+    color: color-mix(in srgb, var(--theme-violet-bright) 78%, var(--theme-warning, #f2bc6b) 18%);
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
 }
 
 .chainOpportunityTraitLaneBeatMapSummaryPips i[data-card-trait-lane-beat-map-summary-pip-action='tool'] {
+    width: 0.14rem;
+    height: 0.12rem;
+    animation-duration: 0.84s;
     color: color-mix(in srgb, var(--theme-violet-bright) 86%, white);
 }
 

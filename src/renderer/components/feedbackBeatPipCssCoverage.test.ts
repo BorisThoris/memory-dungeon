@@ -2173,6 +2173,37 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-card-trait-lane-beat-map-summary-screen-cue='pulse'[\s\S]*?\.chainOpportunityTraitLaneBeatMapMeterFill[\s\S]*?opacity:\s*0\.9/);
     });
 
+    it('keeps trait lane beat map summary pips visually distinct by lane role', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout trait-lane beat summary pips should read as fast payout beats'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-pip-action='cashout'[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'protect trait-lane beat summary pips should read as tall defensive beats'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-pip-action='protect'[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'tool trait-lane beat summary pips should keep utility timing'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-pip-action='tool'[\s\S]*?animation-duration:\s*0\.84s/);
+        expect(
+            cssText,
+            'risk trait-lane beat summary pips should use urgent caution beats'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-pip-action='risk'[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'block trait-lane beat summary pips should use guarded control beats'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-pip-action='block'[\s\S]*?animation-duration:\s*0\.88s/);
+        expect(
+            cssText,
+            'recall trait-lane beat summary pips should stay low and memory-like'
+        ).toMatch(/data-card-trait-lane-beat-map-summary-pip-action='recall'[\s\S]*?height:\s*0\.08rem/);
+    });
+
     it('keeps trait interaction map summary meters tied to primary role', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
