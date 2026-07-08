@@ -1120,6 +1120,23 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-screen-cue', 'burst');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tier', 'cashout');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tone', 'cashout');
+        expect(screen.getByTestId('trait-mode-cue').querySelectorAll('[data-trait-mode-beat]')).toHaveLength(5);
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-action',
+            'cashout'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-tier',
+            'cashout'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-tone',
+            'cashout'
+        );
         expect(screen.getByTestId('trait-mode-cue')).toHaveAccessibleName(
             /Trait mode.*Stack live.*Next reward.*One-away cashout/i
         );
@@ -3610,6 +3627,23 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-screen-cue', 'burst');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tier', 'surge');
         expect(screen.getByTestId('trait-mode-cue')).toHaveAttribute('data-trait-mode-tone', 'surge');
+        expect(screen.getByTestId('trait-mode-cue').querySelectorAll('[data-trait-mode-beat]')).toHaveLength(5);
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-action',
+            'surge'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-tier',
+            'surge'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-tone',
+            'surge'
+        );
     });
 
     it('shows a visible swap preview when the focused target would create a trait interaction', async () => {
@@ -4137,6 +4171,22 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
             'data-trait-mode-beat-focus',
             'primary'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-action',
+            'prime'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-screen-cue',
+            'tick'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-tier',
+            'prime'
+        );
+        expect(screen.getByTestId('trait-mode-cue').querySelector('[data-trait-mode-beat="1"]')).toHaveAttribute(
+            'data-trait-mode-beat-tone',
+            'setup'
         );
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Route prime');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-heat', 'prime');

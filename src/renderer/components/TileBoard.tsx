@@ -7217,7 +7217,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         (_, index) => (
                                             <i
                                                 data-trait-mode-beat={index + 1}
+                                                data-trait-mode-beat-action={boardTraitModeCue.action}
                                                 data-trait-mode-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                data-trait-mode-beat-screen-cue={boardTraitModeCue.screenCue}
+                                                data-trait-mode-beat-tier={boardTraitModeCue.tier}
+                                                data-trait-mode-beat-tone={boardTraitModeCue.tone}
                                                 key={index}
                                             />
                                         )

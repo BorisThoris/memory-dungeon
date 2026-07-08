@@ -14480,6 +14480,34 @@
     opacity: 0.7;
 }
 
+.traitModeCueBeatPips i[data-trait-mode-beat-action='cashout'],
+.traitModeCueBeatPips i[data-trait-mode-beat-tier='cashout'],
+.traitModeCueBeatPips i[data-trait-mode-beat-screen-cue='burst'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+}
+
+.traitModeCueBeatPips i[data-trait-mode-beat-action='surge'],
+.traitModeCueBeatPips i[data-trait-mode-beat-tier='surge'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
+}
+
+.traitModeCueBeatPips i[data-trait-mode-beat-action='followup'],
+.traitModeCueBeatPips i[data-trait-mode-beat-action='match'],
+.traitModeCueBeatPips i[data-trait-mode-beat-tier='route'],
+.traitModeCueBeatPips i[data-trait-mode-beat-screen-cue='pulse'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
+}
+
+.traitModeCueBeatPips i[data-trait-mode-beat-action='prime'],
+.traitModeCueBeatPips i[data-trait-mode-beat-tier='prime'],
+.traitModeCueBeatPips i[data-trait-mode-beat-screen-cue='tick'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
 .traitModeCue small {
     display: -webkit-box;
     color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
