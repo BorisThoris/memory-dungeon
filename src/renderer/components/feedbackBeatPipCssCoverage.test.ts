@@ -1792,6 +1792,55 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-surge-band-screen-cue='burst'[\s\S]*?\.chainOpportunitySurgeBandBeatPips i[\s\S]*?opacity:\s*0\.98/);
     });
 
+    it('keeps chain milestone tier beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout milestones should read as fast wide payout beats'
+        ).toMatch(/data-chain-milestone-tier='cashout'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'prime milestones should use taller setup beats'
+        ).toMatch(/data-chain-milestone-tier='prime'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'hold milestones should stay slower and guarded'
+        ).toMatch(/data-chain-milestone-tier='hold'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?animation-duration:\s*1\.18s/);
+        expect(
+            cssText,
+            'build milestones should stay quiet and slow'
+        ).toMatch(/data-chain-milestone-tier='build'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?animation-duration:\s*1\.28s/);
+    });
+
+    it('keeps chain milestone tone and screen cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".chainOpportunityMilestone[data-chain-milestone-screen-cue='burst'] .chainOpportunityMilestoneBeatPips i");
+        expect(cssText).toContain(".chainOpportunityMilestone[data-chain-milestone-screen-cue='pulse'] .chainOpportunityMilestoneBeatPips i");
+        expect(cssText).toContain(".chainOpportunityMilestone[data-chain-milestone-screen-cue='tick'] .chainOpportunityMilestoneBeatPips i");
+        expect(
+            cssText,
+            'surge milestones should use fast wide acceleration beats'
+        ).toMatch(/data-chain-milestone-tone='surge'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?animation-duration:\s*0\.7s/);
+        expect(
+            cssText,
+            'combo milestones should use fastest payoff beats'
+        ).toMatch(/data-chain-milestone-tone='combo'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?animation-duration:\s*0\.58s/);
+        expect(
+            cssText,
+            'chain milestones should use mid-tempo continuation beats'
+        ).toMatch(/data-chain-milestone-tone='chain'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'tick milestone cues should stay narrow and slow'
+        ).toMatch(/data-chain-milestone-screen-cue='tick'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?animation-duration:\s*1\.34s/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
