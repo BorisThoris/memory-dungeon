@@ -1329,6 +1329,66 @@
     opacity: 0.7;
 }
 
+.routeSelectedBeatPips i[data-route-impact-cue-beat-screen-cue='risk'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-screen-cue='risk'],
+.routeSelectedBeatPips i[data-route-impact-cue-beat-tone='risk'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-tone='risk'],
+.routeSelectedSignalBeatPips i[data-route-signal-beat-screen-cue='risk'],
+.routeSelectedSignalBeatPips i[data-route-signal-beat-signal='risk'] {
+    height: 0.13rem;
+    background: color-mix(in srgb, var(--theme-danger) 78%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-danger) 32%, transparent),
+        0 0 0.08rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.routeSelectedBeatPips i[data-route-impact-cue-beat-screen-cue='burst'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-screen-cue='burst'],
+.routeSelectedBeatPips i[data-route-impact-cue-beat-tone='reward'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-tone='reward'],
+.routeSelectedSignalBeatPips i[data-route-signal-beat-screen-cue='burst'],
+.routeSelectedSignalBeatPips i[data-route-signal-beat-signal='reward'] {
+    width: 0.34rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 28%, transparent);
+}
+
+.routeSelectedBeatPips i[data-route-impact-cue-beat-screen-cue='memory'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-screen-cue='memory'],
+.routeSelectedBeatPips i[data-route-impact-cue-beat-tone='memory'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-tone='memory'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 22%, transparent);
+}
+
+.routeSelectedBeatPips i[data-route-impact-cue-beat-screen-cue='build'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-screen-cue='build'],
+.routeSelectedBeatPips i[data-route-impact-cue-beat-tone='build'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-tone='build'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 80%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-violet-bright) 32%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 22%, transparent);
+}
+
+.routeSelectedBeatPips i[data-route-impact-cue-beat-screen-cue='pulse'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-screen-cue='pulse'],
+.routeSelectedBeatPips i[data-route-impact-cue-beat-tone='route'],
+.routeSelectedBeatPips i[data-route-action-cue-beat-tone='route'] {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 76%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 64%, white)
+    );
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent),
+        0 0 0.16rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+}
+
 .routeSelectedImpactCue[data-route-impact-cue-tone='risk'] {
     border-color: color-mix(in srgb, var(--theme-danger) 36%, var(--theme-gold-bright) 16%);
     background:

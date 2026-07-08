@@ -6265,6 +6265,18 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('route-selected-impact-cue')).toHaveAttribute('data-route-impact-cue-audio', 'route-payoff-risk');
         expect(screen.getByTestId('route-selected-impact-cue')).toHaveAttribute('data-route-impact-cue-screen-cue', 'risk');
         expect(screen.getByTestId('route-selected-impact-cue').querySelectorAll('[data-route-impact-cue-beat]')).toHaveLength(3);
+        expect(screen.getByTestId('route-selected-impact-cue').querySelector('[data-route-impact-cue-beat="1"]')).toHaveAttribute(
+            'data-route-impact-cue-beat-audio',
+            'route-payoff-risk'
+        );
+        expect(screen.getByTestId('route-selected-impact-cue').querySelector('[data-route-impact-cue-beat="1"]')).toHaveAttribute(
+            'data-route-impact-cue-beat-screen-cue',
+            'risk'
+        );
+        expect(screen.getByTestId('route-selected-impact-cue').querySelector('[data-route-impact-cue-beat="1"]')).toHaveAttribute(
+            'data-route-impact-cue-beat-tone',
+            'risk'
+        );
         expect(screen.getByTestId('route-selected-impact-cue')).toHaveAccessibleName(
             'Selected route impact cue: Greed route: Risk cashout locked.'
         );
@@ -6275,6 +6287,18 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByTestId('route-selected-action-cue')).toHaveAttribute('data-route-action-cue-audio', 'route-payoff-risk');
         expect(screen.getByTestId('route-selected-action-cue')).toHaveAttribute('data-route-action-cue-screen-cue', 'risk');
         expect(screen.getByTestId('route-selected-action-cue').querySelectorAll('[data-route-action-cue-beat]')).toHaveLength(3);
+        expect(screen.getByTestId('route-selected-action-cue').querySelector('[data-route-action-cue-beat="1"]')).toHaveAttribute(
+            'data-route-action-cue-beat-audio',
+            'route-payoff-risk'
+        );
+        expect(screen.getByTestId('route-selected-action-cue').querySelector('[data-route-action-cue-beat="1"]')).toHaveAttribute(
+            'data-route-action-cue-beat-screen-cue',
+            'risk'
+        );
+        expect(screen.getByTestId('route-selected-action-cue').querySelector('[data-route-action-cue-beat="1"]')).toHaveAttribute(
+            'data-route-action-cue-beat-tone',
+            'risk'
+        );
         expect(screen.getByTestId('route-selected-action-cue')).toHaveAccessibleName(
             'Selected route action cue: Opening tactic: Verify before cashout. Confirm recall before chasing richer caches.'
         );
@@ -6295,6 +6319,18 @@ describe('GameScreen (OVR-014)', () => {
             'data-route-signal-screen-cue',
             'burst'
         );
+        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="reward"] [data-route-signal-beat="1"]')).toHaveAttribute(
+            'data-route-signal-beat-audio',
+            'route-signal-reward'
+        );
+        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="reward"] [data-route-signal-beat="1"]')).toHaveAttribute(
+            'data-route-signal-beat-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="reward"] [data-route-signal-beat="1"]')).toHaveAttribute(
+            'data-route-signal-beat-signal',
+            'reward'
+        );
         expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
             'data-route-signal-beats',
             '3'
@@ -6305,6 +6341,18 @@ describe('GameScreen (OVR-014)', () => {
         );
         expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="risk"]')).toHaveAttribute(
             'data-route-signal-screen-cue',
+            'risk'
+        );
+        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="risk"] [data-route-signal-beat="1"]')).toHaveAttribute(
+            'data-route-signal-beat-audio',
+            'route-signal-risk'
+        );
+        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="risk"] [data-route-signal-beat="1"]')).toHaveAttribute(
+            'data-route-signal-beat-screen-cue',
+            'risk'
+        );
+        expect(screen.getByTestId('route-selected-note').querySelector('[data-route-signal="risk"] [data-route-signal-beat="1"]')).toHaveAttribute(
+            'data-route-signal-beat-signal',
             'risk'
         );
         expect(screen.getByRole('button', { name: /continue to greedy route floor/i })).toBeTruthy();

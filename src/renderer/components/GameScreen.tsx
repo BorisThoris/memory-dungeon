@@ -6385,7 +6385,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 (_, index) => (
                                                 <i
                                                     data-route-impact-cue-beat={index + 1}
+                                                    data-route-impact-cue-beat-audio={getRouteChoicePayoffAudioCue(pendingRouteImpactCue.tone)}
                                                     data-route-impact-cue-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-route-impact-cue-beat-screen-cue={getRouteChoicePayoffScreenCue(pendingRouteImpactCue.tone)}
+                                                    data-route-impact-cue-beat-tone={pendingRouteImpactCue.tone}
                                                     key={index}
                                                 />
                                                 )
@@ -6409,7 +6412,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 (_, index) => (
                                                 <i
                                                     data-route-action-cue-beat={index + 1}
+                                                    data-route-action-cue-beat-audio={getRouteChoicePayoffAudioCue(pendingRouteActionCue.tone)}
                                                     data-route-action-cue-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-route-action-cue-beat-screen-cue={getRouteChoicePayoffScreenCue(pendingRouteActionCue.tone)}
+                                                    data-route-action-cue-beat-tone={pendingRouteActionCue.tone}
                                                     key={index}
                                                 />
                                                 )
@@ -6429,7 +6435,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             {Array.from({ length: 4 }, (_, index) => (
                                                 <i
                                                     data-route-signal-beat={index + 1}
+                                                    data-route-signal-beat-audio={getRouteChoiceSignalAudioCue('reward')}
                                                     data-route-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-route-signal-beat-screen-cue={getRouteChoiceSignalScreenCue('reward')}
+                                                    data-route-signal-beat-signal="reward"
                                                     key={index}
                                                 />
                                             ))}
@@ -6446,7 +6455,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             {Array.from({ length: 3 }, (_, index) => (
                                                 <i
                                                     data-route-signal-beat={index + 1}
+                                                    data-route-signal-beat-audio={getRouteChoiceSignalAudioCue('risk')}
                                                     data-route-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-route-signal-beat-screen-cue={getRouteChoiceSignalScreenCue('risk')}
+                                                    data-route-signal-beat-signal="risk"
                                                     key={index}
                                                 />
                                             ))}
