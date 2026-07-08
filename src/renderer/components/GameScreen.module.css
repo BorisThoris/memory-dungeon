@@ -13817,6 +13817,41 @@
     opacity: 0.7;
 }
 
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-tier='cashout'],
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-screen-cue='burst'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.45rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+}
+
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-screen-cue='pulse'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-tier='prime'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.42rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-screen-cue='snap'] {
+    color: color-mix(in srgb, var(--theme-success) 80%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.44rem color-mix(in srgb, var(--theme-success) 34%, transparent);
+}
+
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-tier='stack'],
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-tier='super'],
+.boardFloaterCrescendoBeats i[data-match-crescendo-beat-screen-cue='super'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    background: currentColor;
+    box-shadow:
+        0 0 0.5rem color-mix(in srgb, var(--theme-gold-bright) 38%, transparent),
+        0 0 0.62rem color-mix(in srgb, var(--theme-magenta-bright) 18%, transparent);
+}
+
 .boardFloaterCrescendo[data-match-crescendo-tier='cashout'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
@@ -14323,7 +14358,21 @@
     opacity: 0.94;
 }
 
+.boardFloaterRewardBurstBeatPips i[data-reward-burst-beat-tier='stack'] {
+    width: 0.28rem;
+    height: 0.2rem;
+    animation-duration: 0.72s;
+    opacity: 0.94;
+}
+
 .boardFloaterRewardBurst[data-reward-burst-tier='mega'] .boardFloaterRewardBurstBeatPips i {
+    width: 0.34rem;
+    height: 0.24rem;
+    animation-duration: 0.58s;
+    opacity: 1;
+}
+
+.boardFloaterRewardBurstBeatPips i[data-reward-burst-beat-tier='mega'] {
     width: 0.34rem;
     height: 0.24rem;
     animation-duration: 0.58s;
@@ -14344,9 +14393,29 @@
     animation-duration: 0.66s;
 }
 
+.boardFloaterRewardBurstBeatPips i[data-reward-burst-beat-screen-cue='burst'] {
+    width: 0.3rem;
+    animation-duration: 0.66s;
+}
+
 .boardFloaterRewardBurst[data-reward-burst-screen-cue='super'] .boardFloaterRewardBurstBeatPips i {
     width: 0.38rem;
     animation-duration: 0.5s;
+}
+
+.boardFloaterRewardBurstBeatPips i[data-reward-burst-beat-screen-cue='super'] {
+    width: 0.38rem;
+    animation-duration: 0.5s;
+}
+
+.boardFloaterRewardBurstBeatPips i[data-reward-burst-beat-screen-cue='pulse'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    background: currentColor;
+}
+
+.boardFloaterRewardBurstBeatPips i[data-reward-burst-beat-tier='single'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    background: currentColor;
 }
 
 .boardFloaterRewardBurst[data-reward-burst-tier='mega'] {

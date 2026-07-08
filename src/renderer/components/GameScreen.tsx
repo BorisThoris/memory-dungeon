@@ -4564,7 +4564,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     <i
                                                         aria-hidden
                                                         data-match-crescendo-beat={index + 1}
+                                                        data-match-crescendo-beat-audio={boardFloaterPayload.crescendo.audioCue}
                                                         data-match-crescendo-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        data-match-crescendo-beat-screen-cue={boardFloaterPayload.crescendo.screenCue}
+                                                        data-match-crescendo-beat-tier={boardFloaterPayload.crescendo.tier}
                                                         key={`crescendo-beat-${index + 1}`}
                                                     />
                                                 ))}
@@ -4670,7 +4673,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-reward-burst-beat={index + 1}
+                                                            data-reward-burst-beat-action={boardFloaterPayload.rewardBurst.action}
+                                                            data-reward-burst-beat-audio={getBoardFloaterRewardBurstAudioCue(boardFloaterPayload.rewardBurst)}
                                                             data-reward-burst-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-reward-burst-beat-screen-cue={getBoardFloaterRewardBurstScreenCue(boardFloaterPayload.rewardBurst)}
+                                                            data-reward-burst-beat-tier={boardFloaterPayload.rewardBurst.tier}
                                                             key={`reward-burst-beat-${index + 1}`}
                                                         />
                                                     )
