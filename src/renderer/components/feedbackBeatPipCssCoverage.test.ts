@@ -864,6 +864,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-match-payoff-chip-beat-id': ['cascade', 'chainReward', 'next', 'pickup', 'route', 'score', 'streak', 'tier', 'trait'],
         'data-match-payoff-chip-beat-screen-cue': ['burst', 'chain', 'guard', 'heal', 'pulse', 'tick', 'trait'],
         'data-match-payoff-chip-beat-tone': ['chain', 'guard', 'heal', 'pickup', 'reward', 'route', 'score', 'trait'],
+        'data-next-beat-screen-cue': ['burst', 'guard', 'pulse', 'route', 'tick'],
+        'data-next-beat-tone': ['counterplay', 'neutral', 'pressure', 'reward', 'route'],
         'data-mismatch-recovery-lane-beat-role': ['Rebuild', 'Recover', 'Risk', 'Save', 'Tool'],
         'data-mismatch-recovery-lane-beat-screen-cue': ['chain', 'recover', 'risk', 'tool'],
         'data-mismatch-recovery-primary-lane-beat-role': ['Rebuild', 'Recover', 'Risk', 'Save', 'Tool'],

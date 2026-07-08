@@ -2345,6 +2345,57 @@
     opacity: 0.72;
 }
 
+.floorClearNextBeatPips i[data-next-beat-screen-cue='burst'],
+.floorClearNextBeatPips i[data-next-beat-tone='reward'] {
+    width: 0.42rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 36%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 34%, transparent);
+}
+
+.floorClearNextBeatPips i[data-next-beat-screen-cue='guard'],
+.floorClearNextBeatPips i[data-next-beat-tone='pressure'] {
+    height: 0.16rem;
+    background: color-mix(in srgb, var(--theme-danger) 80%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-danger) 34%, transparent),
+        0 0 0.08rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.floorClearNextBeatPips i[data-next-beat-screen-cue='pulse'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 24%, transparent);
+}
+
+.floorClearNextBeatPips i[data-next-beat-tone='counterplay'] {
+    width: 0.38rem;
+    background: color-mix(in srgb, var(--theme-violet-bright) 82%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-violet-bright) 34%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 24%, transparent);
+}
+
+.floorClearNextBeatPips i[data-next-beat-screen-cue='route'],
+.floorClearNextBeatPips i[data-next-beat-tone='route'] {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 78%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 66%, white)
+    );
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent),
+        0 0 0.18rem color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
+}
+
+.floorClearNextBeatPips i[data-next-beat-screen-cue='tick'],
+.floorClearNextBeatPips i[data-next-beat-tone='neutral'] {
+    width: 0.24rem;
+    opacity: 0.62;
+}
+
 .floorClearNextSignalStrip em {
     min-width: 0;
     overflow-wrap: anywhere;

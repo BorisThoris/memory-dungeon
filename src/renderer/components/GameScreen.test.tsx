@@ -5666,6 +5666,15 @@ describe('GameScreen (OVR-014)', () => {
             screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"] [data-next-beat="1"]')
         ).toHaveAttribute('data-next-beat-focus', 'primary');
         expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-audio', 'next-floor-reward');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-tone', 'reward');
+        expect(
             screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="reward"] [data-next-beat="2"]')
         ).toHaveAttribute('data-next-beat-focus', 'support');
         expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"]')).toHaveAttribute(
@@ -5684,6 +5693,15 @@ describe('GameScreen (OVR-014)', () => {
             screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"] [data-next-beat="1"]')
         ).toHaveAttribute('data-next-beat-focus', 'primary');
         expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-audio', 'next-floor-pressure');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-screen-cue', 'guard');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-tone', 'pressure');
+        expect(
             screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="pressure"] [data-next-beat="2"]')
         ).toHaveAttribute('data-next-beat-focus', 'support');
         expect(screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"]')).toHaveAttribute(
@@ -5701,6 +5719,15 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"] [data-next-beat="1"]')
         ).toHaveAttribute('data-next-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-audio', 'next-floor-counterplay');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"] [data-next-beat="1"]')
+        ).toHaveAttribute('data-next-beat-tone', 'counterplay');
         expect(
             screen.getByTestId('floor-clear-next-signal-strip').querySelector('[data-next-tone="counterplay"] [data-next-beat="2"]')
         ).toHaveAttribute('data-next-beat-focus', 'support');
