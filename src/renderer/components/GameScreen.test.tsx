@@ -3981,6 +3981,30 @@ describe('GameScreen (OVR-014)', () => {
             expect(
                 screen
                     .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Safe pair"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-audio', 'mismatch-chip-recover');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Safe pair"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-screen-cue', 'recover');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Safe pair"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-tone', 'recover');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Safe pair"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-urgency', 'none');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
                     .querySelector('[data-mismatch-recovery-chip="tempo"]')
             ).toHaveAttribute('data-mismatch-recovery-chip-beats', '2');
             expect(
@@ -3999,6 +4023,30 @@ describe('GameScreen (OVR-014)', () => {
                     .querySelector('[data-mismatch-recovery-chip="tempo"]')
                     ?.querySelectorAll('[data-mismatch-recovery-chip-beat]')
             ).toHaveLength(2);
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip="tempo"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-audio', 'mismatch-chip-tempo');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip="tempo"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-screen-cue', 'tempo');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip="tempo"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-tone', 'tempo');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip="tempo"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-urgency', 'none');
             expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveTextContent('Recover');
             expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveTextContent('Safe match');
             expect(screen.getByTestId('mismatch-score-floater-recovery-burst')).toHaveAttribute(
@@ -4221,6 +4269,30 @@ describe('GameScreen (OVR-014)', () => {
             expect(
                 screen
                     .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Lost cashout"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-audio', 'mismatch-chip-lost');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Lost cashout"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-screen-cue', 'lost');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Lost cashout"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-tone', 'risk');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Lost cashout"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-urgency', 'setup');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
                     .querySelector('[data-mismatch-recovery-chip-cue="Rebuild chase"]')
             ).toHaveTextContent('Break into x10');
             expect(
@@ -4233,6 +4305,30 @@ describe('GameScreen (OVR-014)', () => {
                     .getByTestId('mismatch-score-floater-recovery-chips')
                     .querySelector('[data-mismatch-recovery-chip-cue="Rebuild chase"]')
             ).toHaveAttribute('data-mismatch-recovery-chip-screen-cue', 'chain');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Rebuild chase"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-audio', 'mismatch-chip-chain');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Rebuild chase"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-screen-cue', 'chain');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Rebuild chase"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-tone', 'chain');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-chips')
+                    .querySelector('[data-mismatch-recovery-chip-cue="Rebuild chase"]')
+                    ?.querySelector('[data-mismatch-recovery-chip-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-chip-beat-urgency', 'none');
             expect(screen.getByTestId('mismatch-score-floater-next-action')).toHaveTextContent('Save streak');
             expect(screen.getByTestId('mismatch-score-floater-next-action')).toHaveTextContent('Save cashout');
             expect(screen.getByTestId('mismatch-score-floater-next-action')).toHaveTextContent('Rebuild toward x8 +1 shard');

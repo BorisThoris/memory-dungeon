@@ -15892,6 +15892,61 @@
     background: color-mix(in srgb, var(--theme-gold-bright) 76%, var(--theme-cyan-bright) 12%);
 }
 
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-focus='primary'] {
+    opacity: 1;
+}
+
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-focus='support'] {
+    opacity: 0.7;
+}
+
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-screen-cue='recover'],
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-tone='recover'] {
+    background: color-mix(in srgb, var(--theme-success) 82%, white 8%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-success) 34%, transparent);
+}
+
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-screen-cue='tempo'],
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-tone='tempo'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+}
+
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-screen-cue='chain'],
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-tone='chain'] {
+    width: 0.22rem;
+    height: 0.22rem;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, var(--theme-gold-bright) 10%);
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent),
+        0 0 0.48rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-screen-cue='risk'],
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-screen-cue='lost'],
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-tone='risk'] {
+    width: 0.24rem;
+    height: 0.24rem;
+    background: color-mix(in srgb, var(--theme-danger) 82%, var(--theme-gold-bright) 12%);
+    box-shadow:
+        0 0 0.36rem color-mix(in srgb, var(--theme-danger) 34%, transparent),
+        0 0 0.5rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-screen-cue='tool'],
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-tone='tool'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, var(--theme-gold-bright) 12%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-violet-bright) 32%, transparent);
+}
+
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-urgency='one-away'] {
+    animation: mismatchRecoveryBeatPulse 0.68s ease-in-out infinite;
+}
+
+.boardFloaterChipBeats i[data-mismatch-recovery-chip-beat-urgency='setup'] {
+    animation: mismatchRecoveryBeatPulse 0.94s ease-in-out infinite;
+}
+
 .boardFloaterPayoffChips > span[data-match-payoff-beats='3'] .boardFloaterChipBeats i,
 .boardFloaterRecoveryChips > span[data-mismatch-recovery-chip-beats='3'] .boardFloaterChipBeats i {
     opacity: 0.78;

@@ -5750,7 +5750,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             {Array.from({ length: chipBeatCount }, (_, index) => (
                                                                 <i
                                                                     data-mismatch-recovery-chip-beat={index + 1}
+                                                                    data-mismatch-recovery-chip-beat-audio={getMismatchRecoveryChipAudioCue(
+                                                                        chip
+                                                                    )}
                                                                     data-mismatch-recovery-chip-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                    data-mismatch-recovery-chip-beat-screen-cue={getMismatchRecoveryChipScreenCue(
+                                                                        chip
+                                                                    )}
+                                                                    data-mismatch-recovery-chip-beat-tone={chip.tone}
+                                                                    data-mismatch-recovery-chip-beat-urgency={chip.urgency ?? 'none'}
                                                                     key={`mismatch-recovery-chip-beat-${chip.id}-${index + 1}`}
                                                                 />
                                                             ))}
