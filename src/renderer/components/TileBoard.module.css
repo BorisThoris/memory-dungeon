@@ -1497,6 +1497,105 @@
     transition: width 140ms ease-out;
 }
 
+.chainOpportunityBeat[data-chain-beat-action-id='cashout'] .chainOpportunityBeatMeter,
+.chainOpportunityBeat[data-chain-beat-tier='cashout'] .chainOpportunityBeatMeter,
+.chainOpportunityBeat[data-chain-beat-screen-cue='super'] .chainOpportunityBeatMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, white 8%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 74%),
+        color-mix(in srgb, var(--theme-void) 26%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-action-id='cashout'] .chainOpportunityBeatMeterFill,
+.chainOpportunityBeat[data-chain-beat-tier='cashout'] .chainOpportunityBeatMeterFill,
+.chainOpportunityBeat[data-chain-beat-screen-cue='super'] .chainOpportunityBeatMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 90%, white),
+        color-mix(in srgb, var(--theme-success) 54%, var(--theme-gold-bright) 34%)
+    );
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-action-id='surge'] .chainOpportunityBeatMeter,
+.chainOpportunityBeat[data-chain-beat-tier='surge'] .chainOpportunityBeatMeter,
+.chainOpportunityBeat[data-chain-beat-screen-cue='burst'] .chainOpportunityBeatMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 40%, var(--theme-gold-bright) 22%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 18%, transparent), color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-action-id='surge'] .chainOpportunityBeatMeterFill,
+.chainOpportunityBeat[data-chain-beat-tier='surge'] .chainOpportunityBeatMeterFill,
+.chainOpportunityBeat[data-chain-beat-screen-cue='burst'] .chainOpportunityBeatMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 80%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 74%, white)
+    );
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 30%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-action-id='route'] .chainOpportunityBeatMeter,
+.chainOpportunityBeat[data-chain-beat-tier='route'] .chainOpportunityBeatMeter,
+.chainOpportunityBeat[data-chain-beat-screen-cue='snap'] .chainOpportunityBeatMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 32%, var(--theme-cyan-bright) 32%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-action-id='route'] .chainOpportunityBeatMeterFill,
+.chainOpportunityBeat[data-chain-beat-tier='route'] .chainOpportunityBeatMeterFill,
+.chainOpportunityBeat[data-chain-beat-screen-cue='snap'] .chainOpportunityBeatMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 64%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 86%, white)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-action-id='followup'] .chainOpportunityBeatMeter,
+.chainOpportunityBeat[data-chain-beat-tier='follow-up'] .chainOpportunityBeatMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-action-id='followup'] .chainOpportunityBeatMeterFill,
+.chainOpportunityBeat[data-chain-beat-tier='follow-up'] .chainOpportunityBeatMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 58%, white)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-action-id='setup'] .chainOpportunityBeatMeter,
+.chainOpportunityBeat[data-chain-beat-tier='setup'] .chainOpportunityBeatMeter,
+.chainOpportunityBeat[data-chain-beat-screen-cue='pulse'] .chainOpportunityBeatMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 28%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), transparent 82%),
+        color-mix(in srgb, var(--theme-void) 32%, transparent);
+}
+
+.chainOpportunityBeat[data-chain-beat-action-id='setup'] .chainOpportunityBeatMeterFill,
+.chainOpportunityBeat[data-chain-beat-tier='setup'] .chainOpportunityBeatMeterFill,
+.chainOpportunityBeat[data-chain-beat-screen-cue='pulse'] .chainOpportunityBeatMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 66%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 50%, var(--theme-violet-bright) 24%)
+    );
+    box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+    opacity: 0.78;
+}
+
 .chainOpportunityBeat small,
 .chainOpportunityBeat b,
 .chainOpportunityBeat em {

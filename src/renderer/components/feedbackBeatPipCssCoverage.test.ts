@@ -2011,6 +2011,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-card-beat-map-summary-screen-cue='tick'[\s\S]*?\.chainOpportunityBeatMapSummaryMeterFill[\s\S]*?opacity:\s*0\.78/);
     });
 
+    it('keeps chain beat meters tied to beat action language', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout beat meters should read as immediate payout progress'
+        ).toMatch(/data-chain-beat-action-id='cashout'[\s\S]*?\.chainOpportunityBeatMeterFill[\s\S]*?var\(--theme-gold-bright\) 90%/);
+        expect(
+            cssText,
+            'surge beat meters should read as acceleration'
+        ).toMatch(/data-chain-beat-action-id='surge'[\s\S]*?\.chainOpportunityBeatMeterFill[\s\S]*?var\(--theme-violet-bright\) 80%/);
+        expect(
+            cssText,
+            'route beat meters should use violet into cyan routing'
+        ).toMatch(/data-chain-beat-action-id='route'[\s\S]*?\.chainOpportunityBeatMeter[\s\S]*?var\(--theme-violet-bright\) 32%/);
+        expect(
+            cssText,
+            'follow-up beat meters should keep cyan/gold continuation language'
+        ).toMatch(/data-chain-beat-action-id='followup'[\s\S]*?\.chainOpportunityBeatMeterFill[\s\S]*?var\(--theme-cyan-bright\) 84%/);
+        expect(
+            cssText,
+            'setup beat meters should remain quieter than payoff states'
+        ).toMatch(/data-chain-beat-action-id='setup'[\s\S]*?\.chainOpportunityBeatMeterFill[\s\S]*?opacity:\s*0\.78/);
+    });
+
     it('keeps trait interaction map summary role beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
