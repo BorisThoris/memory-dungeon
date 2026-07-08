@@ -5817,6 +5817,21 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen
                 .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="payoff"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-audio', 'gambit-payoff');
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="payoff"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-screen-cue', 'burst');
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="payoff"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-signal', 'payoff');
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
                 .querySelector('[data-gambit-signal="payoff"] [data-gambit-signal-beat="2"]')
         ).toHaveAttribute('data-gambit-signal-beat-focus', 'support');
         expect(screen.getByTestId('gambit-opportunity-signals').querySelector('[data-gambit-signal="cost"]')).toHaveAttribute(
@@ -5831,6 +5846,36 @@ describe('GameScreen (OVR-014)', () => {
             'data-gambit-signal-screen-cue',
             'risk'
         );
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="window"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-audio', 'gambit-window');
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="window"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-screen-cue', 'window');
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="window"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-signal', 'window');
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="cost"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-audio', 'gambit-cost');
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="cost"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-screen-cue', 'risk');
+        expect(
+            screen
+                .getByTestId('gambit-opportunity-signals')
+                .querySelector('[data-gambit-signal="cost"] [data-gambit-signal-beat="1"]')
+        ).toHaveAttribute('data-gambit-signal-beat-signal', 'cost');
         expect(screen.getByTestId('gambit-opportunity-signals')).toHaveAttribute(
             'aria-label',
             'Gambit opportunity signals. Window: Third flip. Payoff: Recover pair. Cost: No perfect.'

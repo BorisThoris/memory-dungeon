@@ -722,6 +722,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-forecast-action-screen-cue': ['guard', 'pulse', 'risk'],
         'data-forecast-signal-beats': ['2', '3', '4'],
         'data-forecast-signal-screen-cue': ['guard', 'pulse', 'risk'],
+        'data-gambit-signal-beat-screen-cue': ['burst', 'risk', 'window'],
+        'data-gambit-signal-beat-signal': ['cost', 'payoff', 'window'],
         'data-hud-risk-wager-beats': ['3', '4'],
         'data-hud-risk-wager-screen-cue': ['guard', 'risk'],
         'data-risk-wager-primary-beat-screen-cue': ['burst', 'risk'],

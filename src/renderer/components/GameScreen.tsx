@@ -4045,7 +4045,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             {Array.from({ length: getGambitSignalBeatCount('Window') }, (_, index) => (
                                                 <i
                                                     data-gambit-signal-beat={index + 1}
+                                                    data-gambit-signal-beat-audio={getGambitSignalAudioCue('Window')}
                                                     data-gambit-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-gambit-signal-beat-screen-cue={getGambitSignalScreenCue('Window')}
+                                                    data-gambit-signal-beat-signal="window"
                                                     key={index}
                                                 />
                                             ))}
@@ -4063,7 +4066,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             {Array.from({ length: getGambitSignalBeatCount('Payoff') }, (_, index) => (
                                                 <i
                                                     data-gambit-signal-beat={index + 1}
+                                                    data-gambit-signal-beat-audio={getGambitSignalAudioCue('Payoff')}
                                                     data-gambit-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-gambit-signal-beat-screen-cue={getGambitSignalScreenCue('Payoff')}
+                                                    data-gambit-signal-beat-signal="payoff"
                                                     key={index}
                                                 />
                                             ))}
@@ -4081,7 +4087,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             {Array.from({ length: getGambitSignalBeatCount('Cost') }, (_, index) => (
                                                 <i
                                                     data-gambit-signal-beat={index + 1}
+                                                    data-gambit-signal-beat-audio={getGambitSignalAudioCue('Cost')}
                                                     data-gambit-signal-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-gambit-signal-beat-screen-cue={getGambitSignalScreenCue('Cost')}
+                                                    data-gambit-signal-beat-signal="cost"
                                                     key={index}
                                                 />
                                             ))}
