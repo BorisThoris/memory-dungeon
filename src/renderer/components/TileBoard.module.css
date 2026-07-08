@@ -9584,14 +9584,23 @@
 }
 
 .pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-phase='first'] {
+    width: 0.16rem;
+    height: 0.12rem;
+    animation-duration: 1.04s;
     opacity: 0.82;
 }
 
 .pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-phase='then'] {
     width: 0.28rem;
+    height: 0.2rem;
+    animation-duration: 0.72s;
+    opacity: 1;
 }
 
 .pickupOpportunitySequenceBeatPips i[data-pickup-sequence-beat-phase='keep'] {
+    width: 0.22rem;
+    height: 0.14rem;
+    animation-duration: 0.92s;
     opacity: 0.68;
 }
 
@@ -9666,8 +9675,11 @@
 }
 
 .pickupOpportunitySequence[data-pickup-sequence-tone='cashout'] .pickupOpportunitySequenceBeatPips i {
+    height: 0.2rem;
+    animation-duration: 0.68s;
     background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
     box-shadow: 0 0 0.38rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+    opacity: 1;
 }
 
 .pickupOpportunitySequence[data-pickup-sequence-tone='reward'] {
@@ -9691,8 +9703,11 @@
 }
 
 .pickupOpportunitySequence[data-pickup-sequence-tone='reward'] .pickupOpportunitySequenceBeatPips i {
+    height: 0.16rem;
+    animation-duration: 0.9s;
     background: color-mix(in srgb, var(--theme-success) 80%, white);
     box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-success) 28%, transparent);
+    opacity: 0.88;
 }
 
 .opportunityCompass {

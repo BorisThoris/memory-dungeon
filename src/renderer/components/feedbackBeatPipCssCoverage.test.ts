@@ -1191,6 +1191,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-pickup-opportunity-beats='4'[\s\S]*?animation-duration:\s*0\.82s/);
     });
 
+    it('keeps pickup sequence phase and tone beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'first pickup sequence beats should stay quieter and slower'
+        ).toMatch(/data-pickup-sequence-beat-phase='first'[\s\S]*?animation-duration:\s*1\.04s/);
+        expect(
+            cssText,
+            'then pickup sequence beats should read as the active step'
+        ).toMatch(/data-pickup-sequence-beat-phase='then'[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'keep pickup sequence beats should read as held reward retention'
+        ).toMatch(/data-pickup-sequence-beat-phase='keep'[\s\S]*?animation-duration:\s*0\.92s/);
+        expect(
+            cssText,
+            'cashout pickup sequence beats should be faster than reward upkeep'
+        ).toMatch(/data-pickup-sequence-tone='cashout'[\s\S]*?\.pickupOpportunitySequenceBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'reward pickup sequence beats should use calmer success pacing'
+        ).toMatch(/data-pickup-sequence-tone='reward'[\s\S]*?\.pickupOpportunitySequenceBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+    });
+
     it('keeps active power screen cues visually distinct on the board chip', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
