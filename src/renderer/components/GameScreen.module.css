@@ -15825,6 +15825,73 @@
     opacity: 0.68;
 }
 
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-focus='primary'] {
+    opacity: 1;
+}
+
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-focus='support'] {
+    opacity: 0.7;
+}
+
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-screen-cue='burst'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-tone='reward'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-id='next'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-id='chainReward'] {
+    width: 0.24rem;
+    height: 0.24rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow:
+        0 0 0.36rem color-mix(in srgb, var(--theme-gold-bright) 36%, transparent),
+        0 0 0.52rem color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+}
+
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-screen-cue='chain'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-tone='chain'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-id='streak'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-id='cascade'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-id='tier'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 80%, white 8%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+}
+
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-screen-cue='guard'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-tone='guard'] {
+    height: 0.24rem;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white 8%);
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 34%, transparent),
+        0 0 0 1px color-mix(in srgb, white 14%, transparent);
+}
+
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-screen-cue='heal'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-tone='heal'] {
+    background: color-mix(in srgb, var(--theme-success) 82%, white 8%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-success) 34%, transparent);
+}
+
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-screen-cue='trait'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-tone='trait'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-id='trait'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, var(--theme-gold-bright) 12%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-violet-bright) 32%, transparent);
+}
+
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-screen-cue='tick'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-tone='score'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-id='score'] {
+    width: 0.14rem;
+    height: 0.14rem;
+    opacity: 0.62;
+}
+
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-screen-cue='pulse'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-tone='pickup'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-tone='route'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-id='pickup'],
+.boardFloaterChipBeats i[data-match-payoff-chip-beat-id='route'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 76%, var(--theme-cyan-bright) 12%);
+}
+
 .boardFloaterPayoffChips > span[data-match-payoff-beats='3'] .boardFloaterChipBeats i,
 .boardFloaterRecoveryChips > span[data-mismatch-recovery-chip-beats='3'] .boardFloaterChipBeats i {
     opacity: 0.78;

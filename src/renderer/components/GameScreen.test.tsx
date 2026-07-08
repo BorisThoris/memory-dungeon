@@ -2367,6 +2367,30 @@ describe('GameScreen (OVR-014)', () => {
                     .querySelector('[data-match-payoff-id="score"]')
                     ?.querySelectorAll('[data-match-payoff-chip-beat]')
             ).toHaveLength(1);
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="score"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-audio', 'match-payoff-score');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="score"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-id', 'score');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="score"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-screen-cue', 'tick');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="score"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-tone', 'score');
             expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="cascade"]')).toHaveTextContent('reward cascade');
             expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="cascade"]')).toHaveAttribute(
                 'data-match-payoff-arcade-cue',
@@ -2389,6 +2413,30 @@ describe('GameScreen (OVR-014)', () => {
                 'data-match-payoff-arcade-screen-cue',
                 'burst'
             );
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="pickup"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-audio', 'match-payoff-pickup');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="pickup"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-id', 'pickup');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="pickup"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-screen-cue', 'burst');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="pickup"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-tone', 'pickup');
             expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="chainReward"]')).toHaveTextContent('+1 combo shard / +1 guard token');
             expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="chainReward"]')).toHaveAttribute(
                 'data-match-payoff-arcade-cue',
@@ -2406,6 +2454,30 @@ describe('GameScreen (OVR-014)', () => {
                 'data-match-payoff-arcade-screen-cue',
                 'burst'
             );
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="chainReward"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-audio', 'match-payoff-reward');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="chainReward"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-id', 'chainReward');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="chainReward"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-screen-cue', 'burst');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="chainReward"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-tone', 'reward');
             expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="next"]')).toHaveTextContent('Next shard');
             expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="next"]')).toHaveTextContent('x4 +1 shard');
             expect(screen.getByTestId('match-score-floater-payoff-chips').querySelector('[data-match-payoff-id="next"]')).toHaveTextContent('One-away cashout');
@@ -2435,6 +2507,30 @@ describe('GameScreen (OVR-014)', () => {
                     .querySelector('[data-match-payoff-id="next"]')
                     ?.querySelectorAll('[data-match-payoff-chip-beat]')
             ).toHaveLength(4);
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="next"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-audio', 'match-payoff-reward');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="next"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-id', 'next');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="next"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-screen-cue', 'burst');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-chips')
+                    .querySelector('[data-match-payoff-id="next"]')
+                    ?.querySelector('[data-match-payoff-chip-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-chip-beat-tone', 'reward');
             expect(screen.getByTestId('match-score-floater')).toHaveTextContent('Shard spark +1 combo shard');
             expect(screen.getByTestId('match-score-floater')).toHaveTextContent('+1 combo shard / +1 guard token');
             expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-feedback-intensity', 'mid');

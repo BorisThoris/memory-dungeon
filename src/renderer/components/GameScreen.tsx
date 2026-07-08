@@ -5268,7 +5268,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         {Array.from({ length: getMatchPayoffChipBeatCount(chip) }, (_, index) => (
                                                             <i
                                                                 data-match-payoff-chip-beat={index + 1}
+                                                                data-match-payoff-chip-beat-audio={getMatchPayoffChipAudioCue(chip)}
                                                                 data-match-payoff-chip-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                data-match-payoff-chip-beat-id={chip.id}
+                                                                data-match-payoff-chip-beat-screen-cue={getMatchPayoffChipScreenCue(chip)}
+                                                                data-match-payoff-chip-beat-tone={chip.tone}
                                                                 key={`match-payoff-chip-beat-${chip.id}-${index + 1}`}
                                                             />
                                                         ))}
