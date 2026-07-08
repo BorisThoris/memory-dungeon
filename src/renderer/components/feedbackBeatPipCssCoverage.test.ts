@@ -2064,6 +2064,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-lines-action='prime-route'[\s\S]*?\.chainOpportunityLinesBeatPips i[\s\S]*?animation-duration:\s*1\.12s/);
     });
 
+    it('keeps chain examples tone beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout examples should read as fast reward examples'
+        ).toMatch(/data-chain-examples-tone='cashout'[\s\S]*?\.chainOpportunityExamplesBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'forecast examples should use calmer build-up beats'
+        ).toMatch(/data-chain-examples-tone='forecast'[\s\S]*?\.chainOpportunityExamplesBeatPips i[\s\S]*?animation-duration:\s*0\.96s/);
+        expect(
+            cssText,
+            'setup examples should use taller slower setup beats'
+        ).toMatch(/data-chain-examples-tone='setup'[\s\S]*?\.chainOpportunityExamplesBeatPips i[\s\S]*?height:\s*0\.2rem/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

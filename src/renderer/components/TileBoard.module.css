@@ -7998,8 +7998,29 @@
 }
 
 .chainOpportunityExamples[data-chain-examples-tone='setup'] .chainOpportunityExamplesBeatPips i {
+    width: 0.16rem;
+    height: 0.2rem;
+    animation-duration: 1.12s;
     background: color-mix(in srgb, var(--theme-violet-bright) 62%, var(--theme-cyan-bright) 30%);
     box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+    opacity: 0.78;
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='cashout'] .chainOpportunityExamplesBeatPips i {
+    width: 0.3rem;
+    height: 0.18rem;
+    animation-duration: 0.68s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
+    opacity: 1;
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='forecast'] .chainOpportunityExamplesBeatPips i {
+    width: 0.22rem;
+    height: 0.12rem;
+    animation-duration: 0.96s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    opacity: 0.84;
 }
 
 .chainOpportunityExamplesMeter {
