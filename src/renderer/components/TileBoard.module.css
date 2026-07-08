@@ -8478,6 +8478,94 @@
     transition: width 140ms ease-out;
 }
 
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='next'] .chainOpportunityRewardLeadMeter,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='burst'] .chainOpportunityRewardLeadMeter,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='reward'] .chainOpportunityRewardLeadMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 46%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-success) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='next'] .chainOpportunityRewardLeadMeterFill,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='burst'] .chainOpportunityRewardLeadMeterFill,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='reward'] .chainOpportunityRewardLeadMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 88%, white),
+        color-mix(in srgb, var(--theme-success) 62%, var(--theme-gold-bright) 34%)
+    );
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='soon'] .chainOpportunityRewardLeadMeter,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='pulse'] .chainOpportunityRewardLeadMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 40%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='soon'] .chainOpportunityRewardLeadMeterFill,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='pulse'] .chainOpportunityRewardLeadMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 32%)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='later'] .chainOpportunityRewardLeadMeter,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='tick'] .chainOpportunityRewardLeadMeter {
+    border-color: color-mix(in srgb, var(--theme-text-muted) 34%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-text-muted) 12%, transparent), transparent 82%),
+        color-mix(in srgb, var(--theme-void) 32%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tier='later'] .chainOpportunityRewardLeadMeterFill,
+.chainOpportunityRewardLead[data-board-chain-reward-lead-screen-cue='tick'] .chainOpportunityRewardLeadMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-text-muted) 56%, var(--theme-cyan-bright) 36%),
+        color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent)
+    );
+    box-shadow: 0 0 0.12rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+    opacity: 0.76;
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='guard'] .chainOpportunityRewardLeadMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), color-mix(in srgb, var(--theme-gold-bright) 6%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='guard'] .chainOpportunityRewardLeadMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 80%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 34%)
+    );
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='heal'] .chainOpportunityRewardLeadMeter {
+    border-color: color-mix(in srgb, var(--theme-success) 44%, var(--theme-cyan-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 16%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityRewardLead[data-board-chain-reward-lead-tone='heal'] .chainOpportunityRewardLeadMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-success) 80%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 52%, var(--theme-success) 30%)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-success) 22%, transparent);
+}
+
 .chainOpportunityRewardLeadBeatPips {
     display: inline-flex;
     align-items: center;

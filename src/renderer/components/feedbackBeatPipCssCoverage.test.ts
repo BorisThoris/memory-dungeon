@@ -3153,6 +3153,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-board-chain-reward-lead-tone='heal'[\s\S]*?\.chainOpportunityRewardLeadBeatPips i[\s\S]*?var\(--theme-success\)/);
     });
 
+    it('keeps chain reward lead meters visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'next reward lead meters should read as immediate payout'
+        ).toMatch(/data-board-chain-reward-lead-tier='next'[\s\S]*?\.chainOpportunityRewardLeadMeterFill[\s\S]*?var\(--theme-gold-bright\) 88%/);
+        expect(
+            cssText,
+            'soon reward lead meters should read as active forecast progress'
+        ).toMatch(/data-board-chain-reward-lead-tier='soon'[\s\S]*?\.chainOpportunityRewardLeadMeterFill[\s\S]*?var\(--theme-cyan-bright\) 82%/);
+        expect(
+            cssText,
+            'later reward lead meters should stay visibly quieter'
+        ).toMatch(/data-board-chain-reward-lead-tier='later'[\s\S]*?\.chainOpportunityRewardLeadMeterFill[\s\S]*?opacity:\s*0\.76/);
+        expect(
+            cssText,
+            'guard reward lead meters should carry guarded cyan routing'
+        ).toMatch(/data-board-chain-reward-lead-tone='guard'[\s\S]*?\.chainOpportunityRewardLeadMeterFill[\s\S]*?var\(--theme-cyan-bright\) 80%/);
+        expect(
+            cssText,
+            'heal reward lead meters should carry success colors'
+        ).toMatch(/data-board-chain-reward-lead-tone='heal'[\s\S]*?\.chainOpportunityRewardLeadMeterFill[\s\S]*?var\(--theme-success\) 80%/);
+    });
+
     it('keeps HUD chain reward lane beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
