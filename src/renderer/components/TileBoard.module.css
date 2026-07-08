@@ -9753,6 +9753,23 @@
     animation: boardOpportunityPulse 1.8s ease-in-out infinite;
 }
 
+.opportunityCompass[data-opportunity-compass-priority='best'] .opportunityCompassSummary {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.opportunityCompass[data-opportunity-compass-priority='best'] .opportunityCompassSummaryBeatPips i {
+    width: 0.2rem;
+    animation-duration: 0.82s;
+    opacity: 0.94;
+}
+
 .opportunityCompass[data-opportunity-compass-priority='single'] .opportunityCompassSummary {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
     background:

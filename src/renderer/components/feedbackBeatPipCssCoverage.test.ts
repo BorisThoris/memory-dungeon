@@ -1644,6 +1644,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-opportunity-compass-summary-screen-cue='tick'[\s\S]*?animation-duration:\s*1\.38s/);
     });
 
+    it('keeps opportunity compass priority states visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'best compass summaries should read as ranked recommendations'
+        ).toMatch(/data-opportunity-compass-priority='best'[\s\S]*?\.opportunityCompassSummary[\s\S]*?var\(--theme-gold-bright\)/);
+        expect(
+            cssText,
+            'best compass beat pips should have active recommendation timing'
+        ).toMatch(/data-opportunity-compass-priority='best'[\s\S]*?\.opportunityCompassSummaryBeatPips i[\s\S]*?animation-duration:\s*0\.82s/);
+        expect(
+            cssText,
+            'single compass summaries should stay cyan and calmer'
+        ).toMatch(/data-opportunity-compass-priority='single'[\s\S]*?\.opportunityCompassSummary[\s\S]*?var\(--theme-cyan-bright\)/);
+    });
+
     it('keeps opportunity lane map summary action beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
