@@ -3931,6 +3931,85 @@
     white-space: nowrap;
 }
 
+.chainOpportunityRecipe b[data-chain-recipe-role-id='cashout'],
+.chainOpportunityRecipe b[data-chain-recipe-lane='score'],
+.chainOpportunityRecipe b[data-chain-recipe-lane='shard'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-cyan-bright) 20%);
+    background:
+        radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), transparent 64%),
+        color-mix(in srgb, var(--theme-gold-bright) 10%, var(--theme-void) 40%);
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+}
+
+.chainOpportunityRecipe b[data-chain-recipe-role-id='protect'],
+.chainOpportunityRecipe b[data-chain-recipe-role-id='block'],
+.chainOpportunityRecipe b[data-chain-recipe-lane='guard'],
+.chainOpportunityRecipe b[data-chain-recipe-lane='block'] {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 22%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-success) 78%, white);
+}
+
+.chainOpportunityRecipe b[data-chain-recipe-role-id='recall'],
+.chainOpportunityRecipe b[data-chain-recipe-role-id='tool'],
+.chainOpportunityRecipe b[data-chain-recipe-lane='recall'],
+.chainOpportunityRecipe b[data-chain-recipe-lane='tool'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 42%, var(--theme-cyan-bright) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 13%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 78%, white);
+}
+
+.chainOpportunityRecipe b[data-chain-recipe-role-id='risk'],
+.chainOpportunityRecipe b[data-chain-recipe-lane='risk'] {
+    border-color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 48%, var(--theme-danger) 20%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-warning, #f2bc6b) 14%, transparent), color-mix(in srgb, var(--theme-danger) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 42%, transparent);
+    color: color-mix(in srgb, var(--theme-warning, #f2bc6b) 88%, white);
+}
+
+.chainOpportunityRecipe b[data-chain-recipe-role-id='cashout'] .chainOpportunityRecipeBeatPips i,
+.chainOpportunityRecipe b[data-chain-recipe-lane='score'] .chainOpportunityRecipeBeatPips i,
+.chainOpportunityRecipe b[data-chain-recipe-lane='shard'] .chainOpportunityRecipeBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    animation-duration: 0.72s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    opacity: 0.96;
+}
+
+.chainOpportunityRecipe b[data-chain-recipe-role-id='protect'] .chainOpportunityRecipeBeatPips i,
+.chainOpportunityRecipe b[data-chain-recipe-role-id='block'] .chainOpportunityRecipeBeatPips i,
+.chainOpportunityRecipe b[data-chain-recipe-lane='guard'] .chainOpportunityRecipeBeatPips i,
+.chainOpportunityRecipe b[data-chain-recipe-lane='block'] .chainOpportunityRecipeBeatPips i {
+    width: 0.12rem;
+    height: 0.2rem;
+    animation-duration: 1s;
+    background: color-mix(in srgb, var(--theme-success) 72%, white);
+}
+
+.chainOpportunityRecipe b[data-chain-recipe-role-id='recall'] .chainOpportunityRecipeBeatPips i,
+.chainOpportunityRecipe b[data-chain-recipe-role-id='tool'] .chainOpportunityRecipeBeatPips i,
+.chainOpportunityRecipe b[data-chain-recipe-lane='recall'] .chainOpportunityRecipeBeatPips i,
+.chainOpportunityRecipe b[data-chain-recipe-lane='tool'] .chainOpportunityRecipeBeatPips i {
+    width: 0.2rem;
+    height: 0.12rem;
+    animation-duration: 0.9s;
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, var(--theme-cyan-bright) 18%);
+}
+
+.chainOpportunityRecipe b[data-chain-recipe-role-id='risk'] .chainOpportunityRecipeBeatPips i,
+.chainOpportunityRecipe b[data-chain-recipe-lane='risk'] .chainOpportunityRecipeBeatPips i {
+    width: 0.16rem;
+    height: 0.22rem;
+    animation-duration: 0.78s;
+    background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 78%, white);
+}
+
 .chainOpportunityTraitLaneMap {
     display: inline-grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 4.7rem), 1fr));

@@ -680,6 +680,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-chain-reward-urgency': ['later', 'next', 'soon'],
         'data-chain-reward-urgency-screen-cue': ['burst', 'pulse', 'tick'],
         'data-chain-reward-urgency-tier': ['later', 'next', 'soon'],
+        'data-chain-recipe-lane': ['block', 'guard', 'recall', 'risk', 'score', 'shard', 'tool'],
+        'data-chain-recipe-role-id': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
         'data-chain-opportunity-beat-action-id': ['cashout', 'followup', 'route', 'setup', 'surge'],
         'data-chain-beat-action-id': ['cashout', 'followup', 'route', 'setup', 'surge'],
         'data-chain-opportunity-beat-pip-action': ['cashout', 'followup', 'route', 'setup', 'surge'],
@@ -2885,6 +2887,29 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'full recipe density meters should read as cashout-ready'
         ).toMatch(/data-chain-recipe-meter-fill='100'[\s\S]*?\.chainOpportunityRecipeMeterFill[\s\S]*?var\(--theme-success\) 62%/);
+    });
+
+    it('keeps chain recipe role chips visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout recipes should keep fast payoff beats'
+        ).toMatch(/data-chain-recipe-role-id='cashout'[\s\S]*?\.chainOpportunityRecipeBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'protect/block recipes should use taller defensive beats'
+        ).toMatch(/data-chain-recipe-role-id='protect'[\s\S]*?\.chainOpportunityRecipeBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'recall/tool recipes should use violet utility beats'
+        ).toMatch(/data-chain-recipe-role-id='recall'[\s\S]*?\.chainOpportunityRecipeBeatPips i[\s\S]*?var\(--theme-violet-bright\) 72%/);
+        expect(
+            cssText,
+            'risk recipes should keep caution geometry'
+        ).toMatch(/data-chain-recipe-role-id='risk'[\s\S]*?\.chainOpportunityRecipeBeatPips i[\s\S]*?height:\s*0\.22rem/);
     });
 
     it('keeps trap resolution signal beats visually distinct', () => {

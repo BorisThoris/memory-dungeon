@@ -43,7 +43,9 @@ import {
     buildTraitInteractionLaneMap,
     formatTraitInteractionLaneMapLabel,
     getTraitInteractionLaneAction,
+    getTraitInteractionLaneId,
     getTraitInteractionLaneRole,
+    getTraitInteractionLaneRoleId,
     TRAIT_INTERACTION_LANE_LABELS,
     traitInteractionLaneActionMapAttr,
     traitInteractionLaneMapAttr,
@@ -3672,16 +3674,37 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         ? getBoardChainMarkerKeySummaryScreenCue(boardChainMarkerKeySummaryTier)
         : null;
     const boardChainMarkerKeySummaryBeatCount = Math.max(2, Math.min(5, boardChainMarkerKeyRows.length + 1)) as 2 | 3 | 4 | 5;
-    const boardChainRecipeChips = useMemo(
-        () =>
-            [
-                ...new Set(
-                    [...boardChainOpportunity.examples, ...traitOpportunitySummary.interactionLines]
-                        .map((line) => line.split(':')[0]?.trim() ?? '')
-                        .filter((line) => line.includes(' + '))
-                )
-            ].slice(0, 3),
+    const boardChainRecipeRows = useMemo(
+        () => {
+            const seenRecipes = new Set<string>();
+
+            return [...boardChainOpportunity.examples, ...traitOpportunitySummary.interactionLines].flatMap((line) => {
+                const recipe = line.split(':')[0]?.trim() ?? '';
+                if (!recipe.includes(' + ') || seenRecipes.has(recipe)) {
+                    return [];
+                }
+
+                seenRecipes.add(recipe);
+                const laneId = getTraitInteractionLaneId(line);
+                const roleId = getTraitInteractionLaneRoleId({ id: laneId }) ?? 'cashout';
+
+                return [
+                    {
+                        action: getTraitInteractionLaneAction(laneId),
+                        laneId,
+                        label: TRAIT_INTERACTION_LANE_LABELS[laneId],
+                        recipe,
+                        roleId,
+                        sourceLine: line
+                    }
+                ];
+            }).slice(0, 3);
+        },
         [boardChainOpportunity.examples, traitOpportunitySummary.interactionLines]
+    );
+    const boardChainRecipeChips = useMemo(
+        () => boardChainRecipeRows.map((row) => row.recipe),
+        [boardChainRecipeRows]
     );
     const boardTraitInteractionLines = useMemo(
         () =>
@@ -5559,11 +5582,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         <i aria-hidden="true" className={styles.chainOpportunityRecipeMeter}>
                                             <i aria-hidden="true" className={styles.chainOpportunityRecipeMeterFill} />
                                         </i>
-                                        {boardChainRecipeChips.map((recipe) => {
-                                            const recipeBeatCount = Math.max(2, Math.min(5, recipe.split('+').length));
+                                        {boardChainRecipeRows.map((row) => {
+                                            const recipeBeatCount = Math.max(2, Math.min(5, row.recipe.split('+').length));
                                             return (
-                                                <b data-chain-recipe={recipe} key={recipe}>
-                                                    {recipe}
+                                                <b
+                                                    data-chain-recipe={row.recipe}
+                                                    data-chain-recipe-action={row.action}
+                                                    data-chain-recipe-label={row.label}
+                                                    data-chain-recipe-lane={row.laneId}
+                                                    data-chain-recipe-role-id={row.roleId}
+                                                    data-chain-recipe-source={row.sourceLine}
+                                                    key={row.recipe}
+                                                >
+                                                    {row.recipe}
                                                     <span aria-hidden="true" className={styles.chainOpportunityRecipeBeatPips}>
                                                         {Array.from({ length: recipeBeatCount }, (_, index) => (
                                                             <i

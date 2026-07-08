@@ -1938,6 +1938,15 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-recipes').querySelector('[data-chain-recipe="Echo + Sealed"]')
         ).toHaveAttribute('data-chain-recipe', 'Echo + Sealed');
+        expect(
+            screen.getByTestId('chain-opportunity-recipes').querySelector('[data-chain-recipe="Echo + Sealed"]')
+        ).toHaveAttribute('data-chain-recipe-lane', 'shard');
+        expect(
+            screen.getByTestId('chain-opportunity-recipes').querySelector('[data-chain-recipe="Echo + Sealed"]')
+        ).toHaveAttribute('data-chain-recipe-role-id', 'cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-recipes').querySelector('[data-chain-recipe="Echo + Sealed"]')
+        ).toHaveAttribute('data-chain-recipe-source', 'Echo + Sealed: combo shard');
         expect(screen.getByTestId('chain-opportunity-action-priority')).toHaveAttribute(
             'data-card-action-primary',
             'follow-up'
