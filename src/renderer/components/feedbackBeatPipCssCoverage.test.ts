@@ -2701,6 +2701,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-followup-meter-fill='100'[\s\S]*?\.chainOpportunityFollowupBeatPips i[\s\S]*?height:\s*0\.18rem/);
     });
 
+    it('keeps chain follow-up cue meters visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'route follow-up meters should read as cyan continuation progress'
+        ).toMatch(/data-chain-followup-tone='route'[\s\S]*?\.chainOpportunityFollowupMeterFill[\s\S]*?var\(--theme-cyan-bright\) 84%/);
+        expect(
+            cssText,
+            'pulse follow-up meters should keep active continuation framing'
+        ).toMatch(/data-chain-followup-screen-cue='pulse'[\s\S]*?\.chainOpportunityFollowupMeter[\s\S]*?var\(--theme-cyan-bright\) 42%/);
+        expect(
+            cssText,
+            'ready follow-up meters should read as fully actionable'
+        ).toMatch(/data-chain-followup-ready='true'[\s\S]*?\.chainOpportunityFollowupMeterFill[\s\S]*?#fff7c4 88%/);
+        expect(
+            cssText,
+            'full follow-up meters should preserve the ready payoff fill'
+        ).toMatch(/data-chain-followup-meter-fill='100'[\s\S]*?\.chainOpportunityFollowupMeterFill[\s\S]*?var\(--theme-cyan-bright\) 66%/);
+    });
+
     it('keeps HUD trait route urgency states visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

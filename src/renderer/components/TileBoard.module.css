@@ -3341,6 +3341,45 @@
     box-shadow: 0 0 0.22rem color-mix(in srgb, #fff7c4 22%, transparent);
 }
 
+.chainOpportunityFollowup[data-chain-followup-tone='route'] .chainOpportunityFollowupMeter,
+.chainOpportunityFollowup[data-chain-followup-screen-cue='pulse'] .chainOpportunityFollowupMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, #fff7c4 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent), color-mix(in srgb, #fff7c4 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityFollowup[data-chain-followup-tone='route'] .chainOpportunityFollowupMeterFill,
+.chainOpportunityFollowup[data-chain-followup-screen-cue='pulse'] .chainOpportunityFollowupMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, #fff7c4 58%, var(--theme-cyan-bright) 28%)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
+.chainOpportunityFollowup[data-chain-followup-ready='true'] .chainOpportunityFollowupMeter,
+.chainOpportunityFollowup[data-chain-followup-meter-fill='100'] .chainOpportunityFollowupMeter {
+    border-color: color-mix(in srgb, #fff7c4 46%, var(--theme-cyan-bright) 20%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, #fff7c4 18%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, #fff7c4 16%, transparent);
+}
+
+.chainOpportunityFollowup[data-chain-followup-ready='true'] .chainOpportunityFollowupMeterFill,
+.chainOpportunityFollowup[data-chain-followup-meter-fill='100'] .chainOpportunityFollowupMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, #fff7c4 88%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 66%, #fff7c4 24%)
+    );
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, #fff7c4 24%, transparent),
+        0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+}
+
 .chainOpportunityFollowupBeatPips {
     display: inline-flex;
     align-items: center;
