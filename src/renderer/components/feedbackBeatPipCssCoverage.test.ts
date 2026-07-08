@@ -1328,6 +1328,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-forecast-action-screen-cue='guard'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?animation-duration:\s*1\.06s/);
     });
 
+    it('keeps run mode signal beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'payoff mode signals should use fast reward beats'
+        ).toMatch(/data-mode-signal-tone='payoff'[\s\S]*?\.modeSignalBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'pace mode signals should use active readable beats'
+        ).toMatch(/data-mode-signal-tone='pace'[\s\S]*?\.modeSignalBeatPips i[\s\S]*?animation-duration:\s*0\.86s/);
+        expect(
+            cssText,
+            'pressure mode signals should use taller guarded beats'
+        ).toMatch(/data-mode-signal-tone='pressure'[\s\S]*?\.modeSignalBeatPips i[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'constraint mode signals should use low snap beats'
+        ).toMatch(/data-mode-signal-tone='constraint'[\s\S]*?\.modeSignalBeatPips i[\s\S]*?height:\s*0\.12rem/);
+        expect(
+            cssText,
+            'locked mode signals should stay small and slow'
+        ).toMatch(/data-mode-signal-tone='locked'[\s\S]*?\.modeSignalBeatPips i[\s\S]*?animation-duration:\s*1\.34s/);
+    });
+
     it('keeps HUD objective signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

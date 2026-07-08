@@ -434,9 +434,25 @@
     background: color-mix(in srgb, var(--theme-gold-deep) 16%, var(--theme-panel-solid) 44%);
 }
 
+.modeSignalStrip [data-mode-signal-tone='payoff'] .modeSignalBeatPips i,
+.modeSignalStrip [data-mode-signal-screen-cue='burst'] .modeSignalBeatPips i {
+    width: 0.24rem;
+    height: 0.18rem;
+    animation-duration: 0.68s;
+    opacity: 1;
+}
+
 .modeSignalStrip [data-mode-signal-tone='pace'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 10%, var(--theme-panel-solid) 48%);
+}
+
+.modeSignalStrip [data-mode-signal-tone='pace'] .modeSignalBeatPips i,
+.modeSignalStrip [data-mode-signal-screen-cue='pulse'] .modeSignalBeatPips i {
+    width: 0.2rem;
+    height: 0.14rem;
+    animation-duration: 0.86s;
+    opacity: 0.88;
 }
 
 .modeSignalStrip [data-mode-signal-tone='pressure'] {
@@ -444,9 +460,25 @@
     background: color-mix(in srgb, var(--theme-amber) 12%, var(--theme-panel-solid) 46%);
 }
 
+.modeSignalStrip [data-mode-signal-tone='pressure'] .modeSignalBeatPips i,
+.modeSignalStrip [data-mode-signal-screen-cue='guard'] .modeSignalBeatPips i {
+    width: 0.16rem;
+    height: 0.22rem;
+    animation-duration: 1.08s;
+    opacity: 0.84;
+}
+
 .modeSignalStrip [data-mode-signal-tone='constraint'] {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 26%, transparent);
     background: color-mix(in srgb, var(--theme-violet) 12%, var(--theme-panel-solid) 48%);
+}
+
+.modeSignalStrip [data-mode-signal-tone='constraint'] .modeSignalBeatPips i,
+.modeSignalStrip [data-mode-signal-screen-cue='snap'] .modeSignalBeatPips i {
+    width: 0.22rem;
+    height: 0.12rem;
+    animation-duration: 0.96s;
+    opacity: 0.82;
 }
 
 .modeSignalStrip [data-mode-signal-tone='practice'] {
@@ -454,9 +486,24 @@
     background: color-mix(in srgb, var(--theme-border-cyan) 10%, var(--theme-panel-solid) 48%);
 }
 
+.modeSignalStrip [data-mode-signal-tone='practice'] .modeSignalBeatPips i {
+    width: 0.18rem;
+    height: 0.14rem;
+    animation-duration: 1s;
+    opacity: 0.78;
+}
+
 .modeSignalStrip [data-mode-signal-tone='locked'] {
     opacity: 0.86;
     border-color: color-mix(in srgb, var(--theme-text-subtle) 28%, transparent);
+}
+
+.modeSignalStrip [data-mode-signal-tone='locked'] .modeSignalBeatPips i,
+.modeSignalStrip [data-mode-signal-screen-cue='locked'] .modeSignalBeatPips i {
+    width: 0.12rem;
+    height: 0.12rem;
+    animation-duration: 1.34s;
+    opacity: 0.54;
 }
 
 .modeSignalStrip [data-mode-signal-screen-cue='burst'],
