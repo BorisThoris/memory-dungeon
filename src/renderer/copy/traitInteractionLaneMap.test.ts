@@ -4,6 +4,7 @@ import {
     buildTraitInteractionLaneMap,
     formatTraitInteractionLaneMapLabel,
     getTraitInteractionLaneAction,
+    getTraitInteractionLaneCueBadge,
     getTraitInteractionLaneId,
     getTraitInteractionLaneRole,
     getTraitInteractionLaneRoleId,
@@ -44,11 +45,14 @@ describe('traitInteractionLaneMap', () => {
             'shard:cashout:1>guard:protect:1>tool:tool:1>risk:risk:2>block:block:1>recall:recall:1'
         );
         expect(formatTraitInteractionLaneMapLabel('Trait interaction lanes', laneMap)).toBe(
-            'Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard. Guard Protect x1. Protect run. Mirror + Stasis: guard ward. Tool Tool x1. Use tool. Shuffle charge primed. Risk Risk x2. Watch hazard. Volatile curse pressure. Block Block x1. Deny match. Stasis buffered Sealed. Recall Recall x1. Set memory. Echo + Mirror: recall focus.'
+            'Trait interaction lanes. Shard Cashout cue =+. Cashout x1. Cash shard. Echo + Sealed: combo shard. Guard Protect cue []. Protect x1. Protect run. Mirror + Stasis: guard ward. Tool Prime cue x|. Tool x1. Use tool. Shuffle charge primed. Risk Risk cue !!. Risk x2. Watch hazard. Volatile curse pressure. Block Block cue ##. Block x1. Deny match. Stasis buffered Sealed. Recall Recall cue ::. Recall x1. Set memory. Echo + Mirror: recall focus.'
         );
         expect(getTraitInteractionLaneAction('block')).toBe('Deny match');
         expect(getTraitInteractionLaneRole({ id: 'block' })).toBe('Block');
         expect(getTraitInteractionLaneRoleId({ id: 'block' })).toBe('block');
+        expect(getTraitInteractionLaneCueBadge({ id: 'block' })).toEqual({ glyph: '##', id: 'block-lane', label: 'Block' });
+        expect(getTraitInteractionLaneCueBadge({ id: 'tool' })).toEqual({ glyph: 'x|', id: 'prime-cross', label: 'Prime' });
+        expect(getTraitInteractionLaneCueBadge({ id: 'shard' })).toEqual({ glyph: '=+', id: 'cashout-crown', label: 'Cashout' });
         expect(getTraitInteractionLaneRoleId({ id: 'score' })).toBe('cashout');
     });
 

@@ -1639,6 +1639,7 @@ describe('GameplayHudBar', () => {
         );
         expect(screen.getByTestId('hud-trait-opportunity-cards').getAttribute('title')).toContain('Types: echo, sealed');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('Shard');
+        expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('=+');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('Cash shard');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveTextContent('combo shard');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAttribute('data-trait-interaction-lane-map', 'shard:1');
@@ -1658,13 +1659,19 @@ describe('GameplayHudBar', () => {
             'data-trait-interaction-lane-role-id',
             'cashout'
         );
+        expect(screen.getByTestId('hud-trait-route-lane-map').querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-cue-id',
+            'cashout-crown'
+        );
         const traitRouteLaneMapSummary = screen.getByTestId('hud-trait-route-lane-map-summary');
         expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-count', '1');
+        expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-summary-cue-id', 'cashout-crown');
         expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-summary-primary', 'shard');
         expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-summary-role-id', 'cashout');
         expect(traitRouteLaneMapSummary).toHaveAttribute('data-trait-interaction-lane-summary-screen-cue', 'burst');
         expect(traitRouteLaneMapSummary).toHaveTextContent('Trait lanes');
         expect(traitRouteLaneMapSummary).toHaveTextContent('1 lane');
+        expect(traitRouteLaneMapSummary).toHaveTextContent('=+');
         expect(traitRouteLaneMapSummary).toHaveTextContent('Cashout Shard');
         expect(traitRouteLaneMapSummary.querySelectorAll('[data-trait-interaction-lane-summary-beat]')).toHaveLength(2);
         expect(
@@ -1677,7 +1684,7 @@ describe('GameplayHudBar', () => {
             traitRouteLaneMapSummary.querySelector('[data-trait-interaction-lane-summary-beat="1"]')
         ).toHaveAttribute('data-trait-interaction-lane-summary-beat-screen-cue', 'burst');
         expect(screen.getByTestId('hud-trait-route-lane-map')).toHaveAccessibleName(
-            'Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard.'
+            'Trait interaction lanes. Shard Cashout cue =+. Cashout x1. Cash shard. Echo + Sealed: combo shard.'
         );
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Trait Route Panel');
         expect(screen.getByTestId('hud-trait-route-details')).toHaveTextContent('Cards:');
@@ -1693,12 +1700,18 @@ describe('GameplayHudBar', () => {
             'data-trait-interaction-lane-role-id',
             'cashout'
         );
+        expect(screen.getByTestId('hud-trait-route-lane-map-details').querySelector('[data-trait-interaction-lane="shard"]')).toHaveAttribute(
+            'data-trait-interaction-lane-cue-id',
+            'cashout-crown'
+        );
         expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-count', '1');
+        expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-summary-cue-id', 'cashout-crown');
         expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-summary-primary', 'shard');
         expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-summary-role-id', 'cashout');
         expect(traitRouteLaneMapSummaryDetails).toHaveAttribute('data-trait-interaction-lane-summary-screen-cue', 'burst');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Trait lanes');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('1 lane');
+        expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('=+');
         expect(traitRouteLaneMapSummaryDetails).toHaveTextContent('Cashout Shard');
         expect(screen.getByTestId('hud-trait-route-details-action')).toHaveTextContent('Now: Cash next route.');
         expect(screen.getByTestId('hud-trait-route-details-stack')).toHaveTextContent(

@@ -19539,9 +19539,30 @@
 }
 
 .hudTraitRouteLaneMapSummaryLead {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.12rem;
     color: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
     font-size: 0.44rem;
     font-weight: 920;
+}
+
+.hudTraitRouteLaneMapSummaryLead i {
+    display: inline-grid;
+    place-items: center;
+    width: 0.9rem;
+    min-width: 0.9rem;
+    height: 0.56rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    background: color-mix(in srgb, currentColor 10%, transparent);
+    color: inherit;
+    font-size: 0.3rem;
+    font-style: normal;
+    font-weight: 980;
+    letter-spacing: 0;
+    line-height: 1;
+    text-transform: uppercase;
 }
 
 .hudTraitRouteLaneMapSummaryBeatPips {
@@ -19627,6 +19648,7 @@
 }
 
 .hudTraitRouteLaneMap small,
+.hudTraitRouteLaneMap b,
 .hudTraitRouteLaneMap strong,
 .hudTraitRouteLaneMap em {
     min-width: 0;
@@ -19653,6 +19675,13 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
     font-size: 0.54rem;
     font-weight: 950;
+}
+
+.hudTraitRouteLaneMap b {
+    grid-column: 1 / -1;
+    color: color-mix(in srgb, var(--theme-text) 92%, white);
+    font-size: 0.52rem;
+    font-weight: 920;
 }
 
 .hudTraitRouteLaneMap em {
@@ -19704,6 +19733,38 @@
 
 .hudTraitRouteLaneMap > span[data-trait-interaction-lane='score'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 30%, var(--theme-cyan-bright) 10%);
+}
+
+.hudTraitRouteLaneMapSummary[data-trait-interaction-lane-summary-cue-id='cashout-crown'] .hudTraitRouteLaneMapSummaryLead i,
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-cue-id='cashout-crown'] strong {
+    background: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
+.hudTraitRouteLaneMapSummary[data-trait-interaction-lane-summary-cue-id='prime-cross'] .hudTraitRouteLaneMapSummaryLead i,
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-cue-id='prime-cross'] strong {
+    background: color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 88%, white);
+}
+
+.hudTraitRouteLaneMapSummary[data-trait-interaction-lane-summary-cue-id='protect-lane'] .hudTraitRouteLaneMapSummaryLead i,
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-cue-id='protect-lane'] strong {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 90%, white);
+}
+
+.hudTraitRouteLaneMapSummary[data-trait-interaction-lane-summary-cue-id='risk-lane'] .hudTraitRouteLaneMapSummaryLead i,
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-cue-id='risk-lane'] strong,
+.hudTraitRouteLaneMapSummary[data-trait-interaction-lane-summary-cue-id='block-lane'] .hudTraitRouteLaneMapSummaryLead i,
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-cue-id='block-lane'] strong {
+    background: color-mix(in srgb, var(--theme-danger) 15%, transparent);
+    color: color-mix(in srgb, var(--theme-danger) 84%, white 8%);
+}
+
+.hudTraitRouteLaneMapSummary[data-trait-interaction-lane-summary-cue-id='recall-lane'] .hudTraitRouteLaneMapSummaryLead i,
+.hudTraitRouteLaneMap > span[data-trait-interaction-lane-cue-id='recall-lane'] strong {
+    background: color-mix(in srgb, var(--theme-violet-bright) 16%, transparent);
+    color: color-mix(in srgb, var(--theme-violet-bright) 86%, white);
 }
 
 .toast,

@@ -1487,6 +1487,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-tool-crescendo-cue-id='swap-target-crossbar'[\s\S]*?\.toolCrescendoCueBadge[\s\S]*?var\(--theme-cyan-bright\) 90%/);
     });
 
+    it('keeps trait route lane-map cue badges tied to lane families', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout trait-route lane cues should use gold payoff language'
+        ).toMatch(/data-trait-interaction-lane-cue-id='cashout-crown'[\s\S]*?strong[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'tool trait-route lane cues should use violet setup language'
+        ).toMatch(/data-trait-interaction-lane-cue-id='prime-cross'[\s\S]*?strong[\s\S]*?var\(--theme-violet-bright\) 88%/);
+        expect(
+            cssText,
+            'protect trait-route lane cues should use cyan safety language'
+        ).toMatch(/data-trait-interaction-lane-cue-id='protect-lane'[\s\S]*?strong[\s\S]*?var\(--theme-cyan-bright\) 90%/);
+        expect(
+            cssText,
+            'recall trait-route lane cues should use violet memory language'
+        ).toMatch(/data-trait-interaction-lane-cue-id='recall-lane'[\s\S]*?strong[\s\S]*?var\(--theme-violet-bright\) 86%/);
+        expect(
+            cssText,
+            'risk and block trait-route lane cues should use danger language'
+        ).toMatch(/data-trait-interaction-lane-cue-id='risk-lane'[\s\S]*?strong[\s\S]*?var\(--theme-danger\) 84%/);
+    });
+
     it('keeps action feedback crescendo tier and screen-cue beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

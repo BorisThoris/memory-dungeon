@@ -33,6 +33,7 @@ import {
     buildTraitInteractionLaneMap,
     formatTraitInteractionLaneMapLabel,
     getTraitInteractionLaneAction,
+    getTraitInteractionLaneCueBadge,
     getTraitInteractionLaneRole,
     getTraitInteractionLaneRoleId,
     traitInteractionLaneActionMapAttr,
@@ -2622,11 +2623,16 @@ const GameplayHudBar = ({
                                                         traitOpportunityLaneMap.length === 1 ? 'lane' : 'lanes'
                                                     }. ${
                                                         primaryTraitOpportunityLane
-                                                            ? `${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
+                                                            ? `${getTraitInteractionLaneCueBadge(primaryTraitOpportunityLane).label} cue ${getTraitInteractionLaneCueBadge(primaryTraitOpportunityLane).glyph}. ${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
                                                             : 'No lead lane'
                                                     }.`}
                                                     className={styles.hudTraitRouteLaneMapSummary}
                                                     data-trait-interaction-lane-count={traitOpportunityLaneMap.length}
+                                                    data-trait-interaction-lane-summary-cue-id={
+                                                        primaryTraitOpportunityLane
+                                                            ? getTraitInteractionLaneCueBadge(primaryTraitOpportunityLane).id
+                                                            : 'none'
+                                                    }
                                                     data-trait-interaction-lane-summary-primary={primaryTraitOpportunityLane?.id ?? 'none'}
                                                     data-trait-interaction-lane-summary-role-id={
                                                         primaryTraitOpportunityLane
@@ -2642,6 +2648,11 @@ const GameplayHudBar = ({
                                                         {traitOpportunityLaneMap.length === 1 ? 'lane' : 'lanes'}
                                                     </b>
                                                     <span className={styles.hudTraitRouteLaneMapSummaryLead}>
+                                                        {primaryTraitOpportunityLane ? (
+                                                            <i aria-hidden="true">
+                                                                {getTraitInteractionLaneCueBadge(primaryTraitOpportunityLane).glyph}
+                                                            </i>
+                                                        ) : null}
                                                         {primaryTraitOpportunityLane
                                                             ? `${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
                                                             : 'No lead lane'}
@@ -2677,17 +2688,19 @@ const GameplayHudBar = ({
                                                 </span>
                                                 {traitOpportunityLaneMap.map((lane) => (
                                                     <span
-                                                        aria-label={`Trait interaction lane. ${lane.label}. ${getTraitInteractionLaneRole(lane)}. ${getTraitInteractionLaneAction(lane.id)}. ${lane.count} ${lane.count === 1 ? 'line' : 'lines'}. ${lane.cue}.`}
+                                                        aria-label={`Trait interaction lane. ${lane.label}. ${getTraitInteractionLaneCueBadge(lane).label} cue: ${getTraitInteractionLaneCueBadge(lane).glyph}. ${getTraitInteractionLaneRole(lane)}. ${getTraitInteractionLaneAction(lane.id)}. ${lane.count} ${lane.count === 1 ? 'line' : 'lines'}. ${lane.cue}.`}
                                                         data-trait-interaction-lane={lane.id}
+                                                        data-trait-interaction-lane-cue-id={getTraitInteractionLaneCueBadge(lane).id}
                                                         data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
                                                         data-trait-interaction-lane-role-id={getTraitInteractionLaneRoleId(lane) ?? 'none'}
                                                         key={lane.id}
                                                     >
                                                         <small>{lane.label}</small>
-                                                        <b>{getTraitInteractionLaneRole(lane)}</b>
-                                                        <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
+                                                        <strong aria-hidden="true">{getTraitInteractionLaneCueBadge(lane).glyph}</strong>
+                                                        <b>{`${getTraitInteractionLaneRole(lane)} / ${getTraitInteractionLaneAction(lane.id)}`}</b>
                                                         <em>
-                                                            {lane.count} {lane.count === 1 ? 'line' : 'lines'} · {lane.cue}
+                                                            {getTraitInteractionLaneCueBadge(lane).label} cue / {lane.count}{' '}
+                                                            {lane.count === 1 ? 'line' : 'lines'} / {lane.cue}
                                                         </em>
                                                     </span>
                                                 ))}
@@ -3618,11 +3631,16 @@ const GameplayHudBar = ({
                                                         traitOpportunityLaneMap.length === 1 ? 'lane' : 'lanes'
                                                     }. ${
                                                         primaryTraitOpportunityLane
-                                                            ? `${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
+                                                            ? `${getTraitInteractionLaneCueBadge(primaryTraitOpportunityLane).label} cue ${getTraitInteractionLaneCueBadge(primaryTraitOpportunityLane).glyph}. ${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
                                                             : 'No lead lane'
                                                     }.`}
                                                     className={styles.hudTraitRouteLaneMapSummary}
                                                     data-trait-interaction-lane-count={traitOpportunityLaneMap.length}
+                                                    data-trait-interaction-lane-summary-cue-id={
+                                                        primaryTraitOpportunityLane
+                                                            ? getTraitInteractionLaneCueBadge(primaryTraitOpportunityLane).id
+                                                            : 'none'
+                                                    }
                                                     data-trait-interaction-lane-summary-primary={primaryTraitOpportunityLane?.id ?? 'none'}
                                                     data-trait-interaction-lane-summary-role-id={
                                                         primaryTraitOpportunityLane
@@ -3638,6 +3656,11 @@ const GameplayHudBar = ({
                                                         {traitOpportunityLaneMap.length === 1 ? 'lane' : 'lanes'}
                                                     </b>
                                                     <span className={styles.hudTraitRouteLaneMapSummaryLead}>
+                                                        {primaryTraitOpportunityLane ? (
+                                                            <i aria-hidden="true">
+                                                                {getTraitInteractionLaneCueBadge(primaryTraitOpportunityLane).glyph}
+                                                            </i>
+                                                        ) : null}
                                                         {primaryTraitOpportunityLane
                                                             ? `${getTraitInteractionLaneRole(primaryTraitOpportunityLane)} ${primaryTraitOpportunityLane.label}`
                                                             : 'No lead lane'}
@@ -3673,17 +3696,19 @@ const GameplayHudBar = ({
                                                 </span>
                                                 {traitOpportunityLaneMap.map((lane) => (
                                                     <span
-                                                        aria-label={`Trait interaction lane. ${lane.label}. ${getTraitInteractionLaneRole(lane)}. ${getTraitInteractionLaneAction(lane.id)}. ${lane.count} ${lane.count === 1 ? 'line' : 'lines'}. ${lane.cue}.`}
+                                                        aria-label={`Trait interaction lane. ${lane.label}. ${getTraitInteractionLaneCueBadge(lane).label} cue: ${getTraitInteractionLaneCueBadge(lane).glyph}. ${getTraitInteractionLaneRole(lane)}. ${getTraitInteractionLaneAction(lane.id)}. ${lane.count} ${lane.count === 1 ? 'line' : 'lines'}. ${lane.cue}.`}
                                                         data-trait-interaction-lane={lane.id}
+                                                        data-trait-interaction-lane-cue-id={getTraitInteractionLaneCueBadge(lane).id}
                                                         data-trait-interaction-lane-role={getTraitInteractionLaneRole(lane)}
                                                         data-trait-interaction-lane-role-id={getTraitInteractionLaneRoleId(lane) ?? 'none'}
                                                         key={lane.id}
                                                     >
                                                         <small>{lane.label}</small>
-                                                        <b>{getTraitInteractionLaneRole(lane)}</b>
-                                                        <strong>{getTraitInteractionLaneAction(lane.id)}</strong>
+                                                        <strong aria-hidden="true">{getTraitInteractionLaneCueBadge(lane).glyph}</strong>
+                                                        <b>{`${getTraitInteractionLaneRole(lane)} / ${getTraitInteractionLaneAction(lane.id)}`}</b>
                                                         <em>
-                                                            {lane.count} {lane.count === 1 ? 'line' : 'lines'} · {lane.cue}
+                                                            {getTraitInteractionLaneCueBadge(lane).label} cue / {lane.count}{' '}
+                                                            {lane.count === 1 ? 'line' : 'lines'} / {lane.cue}
                                                         </em>
                                                     </span>
                                                 ))}

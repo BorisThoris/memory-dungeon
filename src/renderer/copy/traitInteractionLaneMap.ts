@@ -8,6 +8,13 @@ export interface TraitInteractionLaneMapEntry {
 }
 
 export type TraitInteractionLaneRoleId = 'block' | 'cashout' | 'protect' | 'recall' | 'risk' | 'tool';
+export type TraitInteractionLaneCueBadgeId =
+    | 'block-lane'
+    | 'cashout-crown'
+    | 'prime-cross'
+    | 'protect-lane'
+    | 'recall-lane'
+    | 'risk-lane';
 
 const TRAIT_INTERACTION_LANE_ORDER: readonly TraitInteractionLaneId[] = [
     'shard',
@@ -84,6 +91,27 @@ export const getTraitInteractionLaneRoleId = (
         case 'shard':
         default:
             return 'cashout';
+    }
+};
+
+export const getTraitInteractionLaneCueBadge = (
+    lane: Pick<TraitInteractionLaneMapEntry, 'id'>
+): { glyph: string; id: TraitInteractionLaneCueBadgeId; label: string } => {
+    switch (lane.id) {
+        case 'guard':
+            return { glyph: '[]', id: 'protect-lane', label: 'Protect' };
+        case 'tool':
+            return { glyph: 'x|', id: 'prime-cross', label: 'Prime' };
+        case 'risk':
+            return { glyph: '!!', id: 'risk-lane', label: 'Risk' };
+        case 'block':
+            return { glyph: '##', id: 'block-lane', label: 'Block' };
+        case 'recall':
+            return { glyph: '::', id: 'recall-lane', label: 'Recall' };
+        case 'score':
+        case 'shard':
+        default:
+            return { glyph: '=+', id: 'cashout-crown', label: 'Cashout' };
     }
 };
 
@@ -165,7 +193,7 @@ export const formatTraitInteractionLaneMapLabel = (
     const rowCopy = laneMap
         .map(
             (lane) =>
-                `${lane.label} ${getTraitInteractionLaneRole(lane)} x${lane.count}. ${getTraitInteractionLaneAction(lane.id)}. ${trimTerminalPunctuation(lane.cue)}`
+                `${lane.label} ${getTraitInteractionLaneCueBadge(lane).label} cue ${getTraitInteractionLaneCueBadge(lane).glyph}. ${getTraitInteractionLaneRole(lane)} x${lane.count}. ${getTraitInteractionLaneAction(lane.id)}. ${trimTerminalPunctuation(lane.cue)}`
         )
         .join('. ');
 

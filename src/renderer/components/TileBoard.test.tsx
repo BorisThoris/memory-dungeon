@@ -2078,7 +2078,7 @@ describe('TileBoard touch and click controls', () => {
             'recall'
         );
         expect(laneMap).toHaveAccessibleName(
-            'Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard. Guard Protect x1. Protect run. Mirror + Stasis: guard ward. Block Block x1. Deny match. Stasis buffered Sealed. Recall Recall x1. Set memory. Echo + Mirror: recall focus.'
+            'Trait interaction lanes. Shard Cashout cue =+. Cashout x1. Cash shard. Echo + Sealed: combo shard. Guard Protect cue []. Protect x1. Protect run. Mirror + Stasis: guard ward. Block Block cue ##. Block x1. Deny match. Stasis buffered Sealed. Recall Recall cue ::. Recall x1. Set memory. Echo + Mirror: recall focus.'
         );
     });
 
@@ -2109,7 +2109,9 @@ describe('TileBoard touch and click controls', () => {
         expect(laneMap).toHaveTextContent('Shard');
         expect(laneMap).toHaveTextContent('Cash shard');
         expect(laneMap).toHaveTextContent('Echo + Sealed: combo shard');
-        expect(laneMap).toHaveAccessibleName('Trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard.');
+        expect(laneMap).toHaveAccessibleName(
+            'Trait interaction lanes. Shard Cashout cue =+. Cashout x1. Cash shard. Echo + Sealed: combo shard.'
+        );
     });
 
     it('surfaces selected trait follow-up markers after the first comboable trait card is flipped', () => {
