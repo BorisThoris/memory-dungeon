@@ -7476,6 +7476,18 @@
     opacity: 0.98;
 }
 
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-tier='next'] .chainOpportunityRewardLadderSummaryMeterFill,
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='burst'] .chainOpportunityRewardLadderSummaryMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 90%, white),
+        color-mix(in srgb, var(--theme-success) 64%, var(--theme-gold-bright) 36%)
+    );
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
 .chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-tier='soon'] .chainOpportunityRewardLadderSummaryBeatPips i {
     width: 0.16rem;
     height: 0.1rem;
@@ -7483,11 +7495,32 @@
     opacity: 0.84;
 }
 
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-tier='soon'] .chainOpportunityRewardLadderSummaryMeterFill,
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='pulse'] .chainOpportunityRewardLadderSummaryMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 80%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 64%, var(--theme-cyan-bright) 36%)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+}
+
 .chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-tier='later'] .chainOpportunityRewardLadderSummaryBeatPips i {
     width: 0.09rem;
     height: 0.09rem;
     animation-duration: 1.4s;
     opacity: 0.58;
+}
+
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-tier='later'] .chainOpportunityRewardLadderSummaryMeterFill,
+.chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='tick'] .chainOpportunityRewardLadderSummaryMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-text-muted) 52%, var(--theme-cyan-bright) 48%),
+        color-mix(in srgb, var(--theme-cyan-bright) 46%, transparent)
+    );
+    box-shadow: 0 0 0.12rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+    opacity: 0.76;
 }
 
 .chainOpportunityRewardLadderSummary[data-board-chain-reward-ladder-summary-screen-cue='burst'] .chainOpportunityRewardLadderSummaryBeatPips i {
@@ -10364,6 +10397,63 @@
         inset 0 0 0 1px color-mix(in srgb, currentColor 12%, transparent),
         0 0 0.18rem color-mix(in srgb, currentColor 18%, transparent);
     opacity: 0.9;
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='cashout'] .opportunityPayoffStackMeter,
+.opportunityPayoffStack[data-payoff-stack-heat='cashout'] .opportunityPayoffStackMeter,
+.opportunityPayoffStack[data-payoff-stack-cue-id='cashout'] .opportunityPayoffStackMeter {
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-gold-bright) 92%, white) var(--payoff-stack-fill, 0%),
+            color-mix(in srgb, var(--theme-gold-bright) 20%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, white 14%, transparent),
+        0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+    opacity: 1;
+}
+
+.opportunityPayoffStack[data-payoff-stack-cue-id='super'] .opportunityPayoffStackMeter {
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-gold-bright) 88%, white) var(--payoff-stack-fill, 0%),
+            color-mix(in srgb, var(--theme-violet-bright) 24%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, white 16%, transparent),
+        0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent),
+        0 0 0.48rem color-mix(in srgb, var(--theme-violet-bright) 16%, transparent);
+    opacity: 1;
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='setup'] .opportunityPayoffStackMeter,
+.opportunityPayoffStack[data-payoff-stack-tone='followup'] .opportunityPayoffStackMeter,
+.opportunityPayoffStack[data-payoff-stack-cue-id='followup'] .opportunityPayoffStackMeter {
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-cyan-bright) 82%, white) var(--payoff-stack-fill, 0%),
+            color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent),
+        0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+}
+
+.opportunityPayoffStack[data-payoff-stack-tone='build'] .opportunityPayoffStackMeter,
+.opportunityPayoffStack[data-payoff-stack-heat='prime'] .opportunityPayoffStackMeter,
+.opportunityPayoffStack[data-payoff-stack-cue-id='prime'] .opportunityPayoffStackMeter {
+    background:
+        linear-gradient(
+            90deg,
+            color-mix(in srgb, var(--theme-violet-bright) 72%, var(--theme-cyan-bright) 28%) var(--payoff-stack-fill, 0%),
+            color-mix(in srgb, var(--theme-violet-bright) 16%, transparent) 0
+        );
+    box-shadow:
+        inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 14%, transparent),
+        0 0 0.2rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
 }
 
 .opportunityPayoffStack small,

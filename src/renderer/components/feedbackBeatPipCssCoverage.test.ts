@@ -1898,6 +1898,22 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'super payoff stacks should read as the fastest widest payout stack'
         ).toMatch(/data-payoff-stack-cue-id='super'[\s\S]*?\.opportunityPayoffStackBeatPips i[\s\S]*?animation-duration:\s*0\.58s/);
+        expect(
+            cssText,
+            'cashout payoff stack meters should read hot even without reading copy'
+        ).toMatch(/data-payoff-stack-tone='cashout'[\s\S]*?\.opportunityPayoffStackMeter[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'super payoff stack meters should add violet stack energy'
+        ).toMatch(/data-payoff-stack-cue-id='super'[\s\S]*?\.opportunityPayoffStackMeter[\s\S]*?var\(--theme-violet-bright\) 24%/);
+        expect(
+            cssText,
+            'follow-up payoff stack meters should keep route-progress cyan'
+        ).toMatch(/data-payoff-stack-tone='followup'[\s\S]*?\.opportunityPayoffStackMeter[\s\S]*?var\(--theme-cyan-bright\) 82%/);
+        expect(
+            cssText,
+            'prime payoff stack meters should read as setup progress'
+        ).toMatch(/data-payoff-stack-heat='prime'[\s\S]*?\.opportunityPayoffStackMeter[\s\S]*?var\(--theme-violet-bright\) 72%/);
     });
 
     it('keeps payoff stack crescendo cues and tiers visually distinct', () => {
@@ -2732,6 +2748,18 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'later reward ladder summaries should stay quiet and slow'
         ).toMatch(/data-board-chain-reward-ladder-summary-tier='later'[\s\S]*?\.chainOpportunityRewardLadderSummaryBeatPips i[\s\S]*?animation-duration:\s*1\.4s/);
+        expect(
+            cssText,
+            'next reward ladder summary meters should read as cashout-ready'
+        ).toMatch(/data-board-chain-reward-ladder-summary-tier='next'[\s\S]*?\.chainOpportunityRewardLadderSummaryMeterFill[\s\S]*?var\(--theme-success\) 64%/);
+        expect(
+            cssText,
+            'soon reward ladder summary meters should read as active reward progress'
+        ).toMatch(/data-board-chain-reward-ladder-summary-tier='soon'[\s\S]*?\.chainOpportunityRewardLadderSummaryMeterFill[\s\S]*?var\(--theme-cyan-bright\) 80%/);
+        expect(
+            cssText,
+            'later reward ladder summary meters should stay quieter than cashout-ready meters'
+        ).toMatch(/data-board-chain-reward-ladder-summary-tier='later'[\s\S]*?\.chainOpportunityRewardLadderSummaryMeterFill[\s\S]*?opacity:\s*0\.76/);
         expect(
             cssText,
             'burst reward ladder cues should stay fastest and high-emphasis'
