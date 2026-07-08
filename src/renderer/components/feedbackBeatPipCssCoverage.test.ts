@@ -2408,6 +2408,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-trap-resolution-screen-cue='pulse'[\s\S]*?animation-duration:\s*1s/);
     });
 
+    it('keeps board reward burst tier beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'stack reward bursts should use wide fast payoff beats'
+        ).toMatch(/data-reward-burst-tier='stack'[\s\S]*?\.boardFloaterRewardBurstBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'mega reward bursts should use max-emphasis beat timing'
+        ).toMatch(/data-reward-burst-tier='mega'[\s\S]*?\.boardFloaterRewardBurstBeatPips i[\s\S]*?animation-duration:\s*0\.58s/);
+        expect(
+            cssText,
+            'super reward burst cues should use the fastest widest pips'
+        ).toMatch(/data-reward-burst-screen-cue='super'[\s\S]*?\.boardFloaterRewardBurstBeatPips i[\s\S]*?animation-duration:\s*0\.5s/);
+    });
+
     it('keeps chain reward urgency tiers visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

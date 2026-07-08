@@ -13999,6 +13999,20 @@
     opacity: 0.96;
 }
 
+.boardFloaterRewardBurst[data-reward-burst-tier='stack'] .boardFloaterRewardBurstBeatPips i {
+    width: 0.28rem;
+    height: 0.2rem;
+    animation-duration: 0.72s;
+    opacity: 0.94;
+}
+
+.boardFloaterRewardBurst[data-reward-burst-tier='mega'] .boardFloaterRewardBurstBeatPips i {
+    width: 0.34rem;
+    height: 0.24rem;
+    animation-duration: 0.58s;
+    opacity: 1;
+}
+
 .boardFloaterRewardBurst[data-reward-burst-screen-cue='pulse'] {
     animation: matchScoreFloaterPulse 1.28s ease-in-out infinite;
 }
@@ -14006,6 +14020,16 @@
 .boardFloaterRewardBurst[data-reward-burst-screen-cue='burst'],
 .boardFloaterRewardBurst[data-reward-burst-screen-cue='super'] {
     animation: payoffChipPulse 1.1s ease-in-out infinite;
+}
+
+.boardFloaterRewardBurst[data-reward-burst-screen-cue='burst'] .boardFloaterRewardBurstBeatPips i {
+    width: 0.3rem;
+    animation-duration: 0.66s;
+}
+
+.boardFloaterRewardBurst[data-reward-burst-screen-cue='super'] .boardFloaterRewardBurstBeatPips i {
+    width: 0.38rem;
+    animation-duration: 0.5s;
 }
 
 .boardFloaterRewardBurst[data-reward-burst-tier='mega'] {
