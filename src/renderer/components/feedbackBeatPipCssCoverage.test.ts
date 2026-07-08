@@ -1872,6 +1872,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-armed-perk-tone='payoff'[\s\S]*?\.chainOpportunityArmedPerkBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
     });
 
+    it('keeps chain arcade callout tone beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout callouts should read as quick payout beats'
+        ).toMatch(/data-chain-callout-tone='cashout'[\s\S]*?\.chainOpportunityArcadeCalloutBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'surge callouts should use fastest wide acceleration beats'
+        ).toMatch(/data-chain-callout-tone='surge'[\s\S]*?\.chainOpportunityArcadeCalloutBeatPips i[\s\S]*?animation-duration:\s*0\.62s/);
+        expect(
+            cssText,
+            'ready callouts should use guarded vertical beats'
+        ).toMatch(/data-chain-callout-tone='ready'[\s\S]*?\.chainOpportunityArcadeCalloutBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'setup callouts should use slower setup beats'
+        ).toMatch(/data-chain-callout-tone='setup'[\s\S]*?\.chainOpportunityArcadeCalloutBeatPips i[\s\S]*?animation-duration:\s*1\.16s/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

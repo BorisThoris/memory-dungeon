@@ -1637,6 +1637,15 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
 }
 
+.frame[data-chain-opportunity-callout-tone='cashout'] .chainOpportunityArcadeCallout .chainOpportunityArcadeCalloutBeatPips i,
+.chainOpportunityArcadeCallout[data-chain-callout-tone='cashout'] .chainOpportunityArcadeCalloutBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    animation-duration: 0.72s;
+    opacity: 0.96;
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
 .frame[data-chain-opportunity-callout-tone='surge'] .chainOpportunityArcadeCallout,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='surge'] {
     border-color: color-mix(in srgb, var(--theme-success) 38%, var(--theme-gold-bright) 22%);
@@ -1648,6 +1657,15 @@
 .frame[data-chain-opportunity-callout-tone='surge'] .chainOpportunityArcadeCallout b,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='surge'] b {
     color: color-mix(in srgb, var(--theme-success) 74%, white);
+}
+
+.frame[data-chain-opportunity-callout-tone='surge'] .chainOpportunityArcadeCallout .chainOpportunityArcadeCalloutBeatPips i,
+.chainOpportunityArcadeCallout[data-chain-callout-tone='surge'] .chainOpportunityArcadeCalloutBeatPips i {
+    width: 0.3rem;
+    height: 0.1rem;
+    animation-duration: 0.62s;
+    opacity: 0.98;
+    background: color-mix(in srgb, var(--theme-success) 76%, var(--theme-gold-bright) 18%);
 }
 
 .frame[data-chain-opportunity-callout-tone='ready'] .chainOpportunityArcadeCallout,
@@ -1663,6 +1681,10 @@
 .chainOpportunityArcadeCallout[data-chain-callout-tone='ready'] b,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='ready'] .chainOpportunityArcadeCalloutBeatPips i {
     color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+    width: 0.14rem;
+    height: 0.18rem;
+    animation-duration: 1.02s;
+    opacity: 0.78;
     background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
 }
 
@@ -1675,6 +1697,15 @@
 .frame[data-chain-opportunity-callout-tone='setup'] .chainOpportunityArcadeCallout b,
 .chainOpportunityArcadeCallout[data-chain-callout-tone='setup'] b {
     color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+}
+
+.frame[data-chain-opportunity-callout-tone='setup'] .chainOpportunityArcadeCallout .chainOpportunityArcadeCalloutBeatPips i,
+.chainOpportunityArcadeCallout[data-chain-callout-tone='setup'] .chainOpportunityArcadeCalloutBeatPips i {
+    width: 0.12rem;
+    height: 0.2rem;
+    animation-duration: 1.16s;
+    opacity: 0.74;
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, white);
 }
 
 .chainOpportunityPriority {
