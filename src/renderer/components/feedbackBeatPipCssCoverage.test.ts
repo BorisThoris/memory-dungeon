@@ -2442,6 +2442,18 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'full recipe density should read as fast high-opportunity beats'
         ).toMatch(/data-chain-recipe-meter-fill='100'[\s\S]*?\.chainOpportunityRecipeBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'single recipe density meters should stay visibly quieter'
+        ).toMatch(/data-chain-recipe-meter-fill='33'[\s\S]*?\.chainOpportunityRecipeMeterFill[\s\S]*?opacity:\s*0\.72/);
+        expect(
+            cssText,
+            'two recipe density meters should brighten into route progress'
+        ).toMatch(/data-chain-recipe-meter-fill='67'[\s\S]*?\.chainOpportunityRecipeMeterFill[\s\S]*?var\(--theme-gold-bright\) 62%/);
+        expect(
+            cssText,
+            'full recipe density meters should read as cashout-ready'
+        ).toMatch(/data-chain-recipe-meter-fill='100'[\s\S]*?\.chainOpportunityRecipeMeterFill[\s\S]*?var\(--theme-success\) 62%/);
     });
 
     it('keeps trap resolution signal beats visually distinct', () => {
@@ -2571,6 +2583,18 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'later reward urgency should stay quiet and slower'
         ).toMatch(/data-chain-reward-urgency='later'[\s\S]*?\.chainOpportunityRewardUrgencyBeatPips i[\s\S]*?animation-duration:\s*1\.38s/);
+        expect(
+            cssText,
+            'next reward urgency meters should reinforce immediate cashout'
+        ).toMatch(/data-chain-reward-urgency='next'[\s\S]*?\.chainOpportunityRewardUrgencyMeterFill[\s\S]*?var\(--theme-success\) 66%/);
+        expect(
+            cssText,
+            'soon reward urgency meters should reinforce active forecast progress'
+        ).toMatch(/data-chain-reward-urgency='soon'[\s\S]*?\.chainOpportunityRewardUrgencyMeterFill[\s\S]*?var\(--theme-cyan-bright\) 80%/);
+        expect(
+            cssText,
+            'later reward urgency meters should stay visibly quieter than immediate cashouts'
+        ).toMatch(/data-chain-reward-urgency='later'[\s\S]*?\.chainOpportunityRewardUrgencyMeterFill[\s\S]*?opacity:\s*0\.78/);
     });
 
     it('keeps chain reward cue and payoff burst beats visually distinct', () => {
