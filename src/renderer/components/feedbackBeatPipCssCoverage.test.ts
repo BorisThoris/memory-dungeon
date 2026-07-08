@@ -1594,6 +1594,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-opportunity-next-action='cashout'[\s\S]*?\.chainOpportunityEyebrowBeatPips i[\s\S]*?width:\s*0\.28rem/);
     });
 
+    it('keeps chain next-action meters tied to next-action language', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout next-action meters should read as immediate reward payoff'
+        ).toMatch(/data-chain-next-action='cashout'[\s\S]*?\.chainOpportunityNextActionMeterFill[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'follow-up next-action meters should keep continuation progress distinct'
+        ).toMatch(/data-chain-next-action='follow-up'[\s\S]*?\.chainOpportunityNextActionMeterFill[\s\S]*?var\(--theme-cyan-bright\) 84%/);
+        expect(
+            cssText,
+            'route next-action meters should use violet/cyan route-building language'
+        ).toMatch(/data-chain-next-action='match-route'[\s\S]*?\.chainOpportunityNextActionMeterFill[\s\S]*?var\(--theme-violet-bright\) 74%/);
+        expect(
+            cssText,
+            'prime next-action meters should stay quieter than cashout progress'
+        ).toMatch(/data-chain-next-action='prime-route'[\s\S]*?\.chainOpportunityNextActionMeterFill[\s\S]*?opacity:\s*0\.78/);
+    });
+
     it('keeps chain marker key action beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
