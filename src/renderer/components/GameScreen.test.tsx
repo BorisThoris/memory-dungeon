@@ -5958,6 +5958,15 @@ describe('GameScreen (OVR-014)', () => {
             screen.getByTestId('route-choice-safe-primary-payoff').querySelector('[data-route-primary-payoff-beat="1"]')
         ).toHaveAttribute('data-route-primary-payoff-beat-focus', 'primary');
         expect(
+            screen.getByTestId('route-choice-safe-primary-payoff').querySelector('[data-route-primary-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-primary-payoff-beat-audio', 'route-payoff-reward');
+        expect(
+            screen.getByTestId('route-choice-safe-primary-payoff').querySelector('[data-route-primary-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-primary-payoff-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('route-choice-safe-primary-payoff').querySelector('[data-route-primary-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-primary-payoff-beat-tone', 'reward');
+        expect(
             screen.getByTestId('route-choice-safe-primary-payoff').querySelector('[data-route-primary-payoff-beat="2"]')
         ).toHaveAttribute('data-route-primary-payoff-beat-focus', 'support');
         expect(screen.getByTestId('route-choice-safe-payoffs').getAttribute('aria-label')).toContain(
@@ -5982,6 +5991,15 @@ describe('GameScreen (OVR-014)', () => {
             screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"] [data-route-payoff-beat="1"]')
         ).toHaveAttribute('data-route-payoff-beat-focus', 'primary');
         expect(
+            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"] [data-route-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-payoff-beat-audio', 'route-payoff-reward');
+        expect(
+            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"] [data-route-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-payoff-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"] [data-route-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-payoff-beat-tone', 'reward');
+        expect(
             screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="reward"] [data-route-payoff-beat="2"]')
         ).toHaveAttribute('data-route-payoff-beat-focus', 'support');
         expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"]')).toHaveTextContent('ward support');
@@ -5997,6 +6015,15 @@ describe('GameScreen (OVR-014)', () => {
             'data-route-payoff-screen-cue',
             'pulse'
         );
+        expect(
+            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"] [data-route-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-payoff-beat-audio', 'route-payoff-route');
+        expect(
+            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"] [data-route-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-payoff-beat-screen-cue', 'pulse');
+        expect(
+            screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="next"] [data-route-payoff-beat="1"]')
+        ).toHaveAttribute('data-route-payoff-beat-tone', 'route');
         expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="memory"]')).toHaveTextContent('Safe route fits');
         expect(screen.getByTestId('route-choice-safe-payoffs').querySelector('[data-route-payoff-id="memory"]')).toHaveAttribute(
             'data-route-payoff-beats',

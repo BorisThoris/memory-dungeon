@@ -3773,6 +3773,62 @@
     opacity: 0.72;
 }
 
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-screen-cue='burst'],
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-tone='reward'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-screen-cue='burst'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-tone='reward'] {
+    width: 0.34rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 28%, transparent);
+}
+
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-screen-cue='risk'],
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-tone='risk'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-screen-cue='risk'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-tone='risk'] {
+    height: 0.13rem;
+    background: color-mix(in srgb, var(--theme-danger) 78%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-danger) 32%, transparent),
+        0 0 0.08rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-screen-cue='memory'],
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-tone='memory'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-screen-cue='memory'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-tone='memory'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 22%, transparent);
+}
+
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-screen-cue='build'],
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-tone='build'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-screen-cue='build'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-tone='build'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 80%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-violet-bright) 32%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 22%, transparent);
+}
+
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-screen-cue='pulse'],
+.dungeonMapRoomPrimaryPayoffBeatPips i[data-route-primary-payoff-beat-tone='route'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-screen-cue='pulse'],
+.dungeonMapRoomPayoffBeatPips i[data-route-payoff-beat-tone='route'] {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 76%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 64%, white)
+    );
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent),
+        0 0 0.16rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+}
+
 .dungeonMapRoomButton[data-route-primary-payoff-tone='reward'] .dungeonMapRoomPayoffRows > span[data-route-primary-payoff-id],
 .dungeonMapRoomPayoffRows[data-route-primary-payoff-tone='reward'] > span[data-route-primary-payoff-id],
 .dungeonMapRoomPayoffRows > span[data-route-primary-payoff-tone='reward'],

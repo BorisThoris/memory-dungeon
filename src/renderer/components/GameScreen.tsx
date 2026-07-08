@@ -6864,9 +6864,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                         (_, index) => (
                                                                             <i
                                                                                 data-route-primary-payoff-beat={index + 1}
+                                                                                data-route-primary-payoff-beat-audio={getRouteChoicePayoffAudioCue(
+                                                                                    primaryRouteChoicePayoff.tone
+                                                                                )}
                                                                                 data-route-primary-payoff-beat-focus={
                                                                                     index === 0 ? 'primary' : 'support'
                                                                                 }
+                                                                                data-route-primary-payoff-beat-screen-cue={getRouteChoicePayoffScreenCue(
+                                                                                    primaryRouteChoicePayoff.tone
+                                                                                )}
+                                                                                data-route-primary-payoff-beat-tone={primaryRouteChoicePayoff.tone}
                                                                                 key={index}
                                                                             />
                                                                         )
@@ -6894,7 +6901,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                         {Array.from({ length: beatCount }, (_, index) => (
                                                                             <i
                                                                                 data-route-payoff-beat={index + 1}
+                                                                                data-route-payoff-beat-audio={getRouteChoicePayoffAudioCue(
+                                                                                    payoff.tone
+                                                                                )}
                                                                                 data-route-payoff-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                                data-route-payoff-beat-screen-cue={getRouteChoicePayoffScreenCue(
+                                                                                    payoff.tone
+                                                                                )}
+                                                                                data-route-payoff-beat-tone={payoff.tone}
                                                                                 key={index}
                                                                             />
                                                                         ))}
