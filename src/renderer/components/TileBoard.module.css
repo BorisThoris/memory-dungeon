@@ -3138,6 +3138,30 @@
         0 0 0 1px color-mix(in srgb, white 16%, transparent);
 }
 
+.chainOpportunityFollowup[data-chain-followup-tone='route'] .chainOpportunityFollowupBeatPips i {
+    width: 0.26rem;
+    height: 0.12rem;
+    animation-duration: 0.92s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+    opacity: 0.9;
+}
+
+.chainOpportunityFollowup[data-chain-followup-screen-cue='pulse'] .chainOpportunityFollowupBeatPips i {
+    width: 0.24rem;
+    height: 0.16rem;
+    animation-duration: 0.82s;
+    opacity: 0.94;
+}
+
+.chainOpportunityFollowup[data-chain-followup-ready='true'] .chainOpportunityFollowupBeatPips i,
+.chainOpportunityFollowup[data-chain-followup-meter-fill='100'] .chainOpportunityFollowupBeatPips i {
+    width: 0.32rem;
+    height: 0.18rem;
+    animation-duration: 0.72s;
+    background: color-mix(in srgb, #fff7c4 84%, var(--theme-cyan-bright) 12%);
+    opacity: 1;
+}
+
 .chainOpportunityArmedPerk {
     display: inline-grid;
     grid-template-columns: auto minmax(0, auto) minmax(0, auto) auto;

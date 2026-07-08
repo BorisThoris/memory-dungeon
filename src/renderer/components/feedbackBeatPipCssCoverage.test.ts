@@ -1987,6 +1987,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-priority='setup'[\s\S]*?\.chainOpportunityPriorityBeatPips i[\s\S]*?animation-duration:\s*1\.16s/);
     });
 
+    it('keeps chain follow-up cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'route follow-up cues should use low route beats'
+        ).toMatch(/data-chain-followup-tone='route'[\s\S]*?\.chainOpportunityFollowupBeatPips i[\s\S]*?height:\s*0\.12rem/);
+        expect(
+            cssText,
+            'pulse follow-up cues should use quicker active beats'
+        ).toMatch(/data-chain-followup-screen-cue='pulse'[\s\S]*?\.chainOpportunityFollowupBeatPips i[\s\S]*?animation-duration:\s*0\.82s/);
+        expect(
+            cssText,
+            'ready follow-up cues should read as immediate next-tap beats'
+        ).toMatch(/data-chain-followup-ready='true'[\s\S]*?\.chainOpportunityFollowupBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'full follow-up meters should keep the same immediate beat language'
+        ).toMatch(/data-chain-followup-meter-fill='100'[\s\S]*?\.chainOpportunityFollowupBeatPips i[\s\S]*?height:\s*0\.18rem/);
+    });
+
     it('keeps primary trait-lane role beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
