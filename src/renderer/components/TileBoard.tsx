@@ -7218,7 +7218,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         (_, index) => (
                                             <i
                                                 data-pickup-chip-beat={index + 1}
+                                                data-pickup-chip-beat-action={boardPickupOpportunityAction ?? 'none'}
                                                 data-pickup-chip-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                data-pickup-chip-beat-screen-cue={boardPickupOpportunityScreenCue ?? 'none'}
+                                                data-pickup-chip-beat-tier={boardPickupOpportunityTier ?? 'none'}
                                                 key={index}
                                             />
                                         )

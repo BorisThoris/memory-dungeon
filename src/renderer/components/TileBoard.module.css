@@ -11096,6 +11096,38 @@
     opacity: 0.66;
 }
 
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-action='cashout'],
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-tier='cashout'],
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-screen-cue='burst'] {
+    width: 0.24rem;
+    height: 0.16rem;
+    animation-duration: 0.68s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.46rem color-mix(in srgb, var(--theme-success) 14%, transparent);
+    opacity: 1;
+}
+
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-action='stack'],
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-tier='multi'],
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-screen-cue='pulse'] {
+    width: 0.2rem;
+    height: 0.14rem;
+    animation-duration: 0.82s;
+    background: color-mix(in srgb, var(--theme-success) 82%, var(--theme-cyan-bright) 18%);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-success) 26%, transparent);
+    opacity: 0.92;
+}
+
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-action='bank'],
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-tier='reward'],
+.pickupOpportunityChipBeatPips i[data-pickup-chip-beat-screen-cue='tick'] {
+    background: color-mix(in srgb, var(--theme-success) 76%, var(--theme-gold-bright) 18%);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-success) 20%, transparent);
+    opacity: 0.82;
+}
+
 .pickupOpportunityChip b {
     justify-self: start;
     padding: 0.1rem 0.34rem;

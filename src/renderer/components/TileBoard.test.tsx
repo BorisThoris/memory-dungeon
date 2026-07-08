@@ -4109,6 +4109,15 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
         ).toHaveAttribute('data-pickup-chip-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
+        ).toHaveAttribute('data-pickup-chip-beat-action', 'bank');
+        expect(
+            screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
+        ).toHaveAttribute('data-pickup-chip-beat-screen-cue', 'tick');
+        expect(
+            screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
+        ).toHaveAttribute('data-pickup-chip-beat-tier', 'reward');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveAccessibleName(
             'Best play. Pickup cashout. Rewards: 1 reward. Claim: Claim before exit / Shard spark pickup: +1 combo shard'
         );
@@ -4293,6 +4302,15 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
         ).toHaveAttribute('data-pickup-chip-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
+        ).toHaveAttribute('data-pickup-chip-beat-action', 'cashout');
+        expect(
+            screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
+        ).toHaveAttribute('data-pickup-chip-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('pickup-opportunity-chip').querySelector('[data-pickup-chip-beat="1"]')
+        ).toHaveAttribute('data-pickup-chip-beat-tier', 'cashout');
         expect(screen.getByTestId('board-opportunity-pickup')).toHaveAccessibleName(
             'Stack prime. Rewards: 1 reward. Claim: Claim into cashout / Double cashout / x4 +1 shard in 1 match / Shard spark pickup: +1 combo shard'
         );
