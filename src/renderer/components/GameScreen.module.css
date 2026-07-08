@@ -10237,6 +10237,7 @@
 :global([data-reduce-motion='true']) .boardFloaterRecoveryCrescendo i,
 :global([data-reduce-motion='true']) .boardFloaterRecoveryLaneBeatPips i,
 :global([data-reduce-motion='true']) .boardFloaterRecoveryPrimaryLaneBeatPips i,
+:global([data-reduce-motion='true']) .boardFloaterChipBeats i,
 :global([data-reduce-motion='true']) .toolCrescendoPips i,
 :global([data-reduce-motion='true']) .powerPayoffChip[data-power-cue='Stack cashout'],
 :global([data-reduce-motion='true']) .powerPayoffChip[data-power-cue='Pair spark'],
@@ -16582,11 +16583,25 @@
     box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-danger) 14%, transparent), 0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
 }
 
+.boardFloaterRecoveryChips > span[data-mismatch-recovery-chip-cue='Lost cashout'][data-mismatch-recovery-urgency='one-away'] .boardFloaterChipBeats i {
+    width: 0.26rem;
+    height: 0.22rem;
+    animation: mismatchRecoveryBeatPulse 0.68s ease-in-out infinite;
+    opacity: 0.96;
+}
+
 .boardFloaterRecoveryChips > span[data-mismatch-recovery-chip-cue='Lost cashout'][data-mismatch-recovery-urgency='setup'] {
     border-color: color-mix(in srgb, var(--theme-danger) 36%, var(--theme-cyan-bright) 22%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 60%, transparent);
+}
+
+.boardFloaterRecoveryChips > span[data-mismatch-recovery-chip-cue='Lost cashout'][data-mismatch-recovery-urgency='setup'] .boardFloaterChipBeats i {
+    width: 0.2rem;
+    height: 0.16rem;
+    animation: mismatchRecoveryBeatPulse 0.94s ease-in-out infinite;
+    opacity: 0.78;
 }
 
 .boardFloaterRecoveryChips > span[data-mismatch-recovery-chip-cue='Rebuild chase'] em {

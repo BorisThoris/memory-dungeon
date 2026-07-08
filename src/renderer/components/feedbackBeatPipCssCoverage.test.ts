@@ -2461,6 +2461,22 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-mismatch-next-action='lost-reward'[\s\S]*?var\(--theme-danger\)/);
     });
 
+    it('keeps mismatch recovery urgency beats visually distinct and motion safe', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'one-away lost cashout recovery should use urgent fast beats'
+        ).toMatch(/data-mismatch-recovery-urgency='one-away'[\s\S]*?\.boardFloaterChipBeats i[\s\S]*?animation:\s*mismatchRecoveryBeatPulse 0\.68s/);
+        expect(
+            cssText,
+            'setup lost cashout recovery should use slower rebuild beats'
+        ).toMatch(/data-mismatch-recovery-urgency='setup'[\s\S]*?\.boardFloaterChipBeats i[\s\S]*?animation:\s*mismatchRecoveryBeatPulse 0\.94s/);
+        expect(cssText).toContain("[data-reduce-motion='true']) .boardFloaterChipBeats i");
+    });
+
     it('keeps chain reward urgency tiers visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
