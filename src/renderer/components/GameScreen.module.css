@@ -1775,6 +1775,46 @@
     opacity: 0.72;
 }
 
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-screen-cue='pulse'],
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-tone='setup'],
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-action='Build bigger'] {
+    width: 0.32rem;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 70%, white 8%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-cyan-bright) 26%, transparent);
+}
+
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-screen-cue='burst'],
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-tone='combo'],
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-tone='reward'],
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-action='Bank stack'] {
+    width: 0.4rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, var(--theme-cyan-bright) 14%);
+    box-shadow:
+        0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.58rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+}
+
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-screen-cue='super'],
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-tone='super'],
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-action='Rebuild stack'] {
+    width: 0.48rem;
+    height: 0.24rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, var(--theme-violet-bright) 18%);
+    box-shadow:
+        0 0 0.5rem color-mix(in srgb, var(--theme-gold-bright) 42%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-violet-bright) 22%, transparent);
+}
+
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-screen-cue='risk'],
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-tone='missed'],
+.floorClearPayoffStackBeatPips i[data-floor-payoff-stack-beat-action='Recover value'] {
+    width: 0.36rem;
+    background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 78%, var(--theme-danger) 12%);
+    box-shadow:
+        0 0 0.38rem color-mix(in srgb, var(--theme-warning, #f2bc6b) 28%, transparent),
+        0 0 0.5rem color-mix(in srgb, var(--theme-danger) 12%, transparent);
+}
+
 .floorClearPayoffStackBeatPips i:nth-child(2) {
     animation-delay: 0.07s;
 }

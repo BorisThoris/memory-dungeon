@@ -5485,6 +5485,18 @@ describe('GameScreen (OVR-014)', () => {
             screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
         ).toHaveAttribute('data-floor-payoff-stack-beat-focus', 'primary');
         expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-action', 'Rebuild stack');
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-audio', 'floor-stack-super');
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-screen-cue', 'super');
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-tone', 'super');
+        expect(
             screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="2"]')
         ).toHaveAttribute('data-floor-payoff-stack-beat-focus', 'support');
         expect(screen.getByTestId('floor-clear-payoff-stack')).toHaveAccessibleName(
@@ -5577,6 +5589,18 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
         ).toHaveAttribute('data-floor-payoff-stack-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-action', 'Rebuild stack');
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-audio', 'floor-stack-super');
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-screen-cue', 'super');
+        expect(
+            screen.getByTestId('floor-clear-payoff-stack').querySelector('[data-floor-payoff-stack-beat="1"]')
+        ).toHaveAttribute('data-floor-payoff-stack-beat-tone', 'super');
         expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('chain x6 +1 shard');
         expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Chain cashout: x6 +1 shard.');
         expect(screen.getByTestId('floor-clear-cashout-strip')).toHaveTextContent('Break into x10');

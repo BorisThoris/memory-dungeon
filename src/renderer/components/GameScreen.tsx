@@ -6163,7 +6163,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             (_, index) => (
                                                 <i
                                                     data-floor-payoff-stack-beat={index + 1}
+                                                    data-floor-payoff-stack-beat-action={getFloorClearPayoffStackAction(
+                                                        floorClearPayoffStackSignal
+                                                    )}
+                                                    data-floor-payoff-stack-beat-audio={getFloorClearPayoffStackAudioCue(
+                                                        floorClearPayoffStackSignal
+                                                    )}
                                                     data-floor-payoff-stack-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-floor-payoff-stack-beat-screen-cue={getFloorClearPayoffStackScreenCue(
+                                                        floorClearPayoffStackSignal
+                                                    )}
+                                                    data-floor-payoff-stack-beat-tone={floorClearPayoffStackSignal.tone}
                                                     key={index}
                                                 />
                                             )
