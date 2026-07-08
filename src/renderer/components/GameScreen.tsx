@@ -4671,6 +4671,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         <i
                                                             data-payoff-summary-beat={index + 1}
                                                             data-payoff-summary-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-payoff-summary-beat-screen-cue={getBoardFloaterPayoffSummaryScreenCue(
+                                                                boardFloaterPayload.payoffSummary
+                                                            )}
+                                                            data-payoff-summary-beat-tier={boardFloaterPayload.payoffSummary.tier}
                                                             key={`payoff-summary-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4719,6 +4723,28 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 }.`}
                                                 className={styles.boardFloaterPayoffLaneMapSummary}
                                                 data-match-payoff-lane-count={boardFloaterPayload.payoffLaneMap.length}
+                                                data-match-payoff-lane-map-summary-primary={boardFloaterPrimaryPayoffLane?.id ?? 'none'}
+                                                data-match-payoff-lane-map-summary-primary-action={
+                                                    boardFloaterPrimaryPayoffLane
+                                                        ? matchPayoffLaneAction(boardFloaterPrimaryPayoffLane)
+                                                        : 'none'
+                                                }
+                                                data-match-payoff-lane-map-summary-primary-audio={
+                                                    boardFloaterPrimaryPayoffLane
+                                                        ? getBoardFloaterPayoffLaneAudioCue(boardFloaterPrimaryPayoffLane)
+                                                        : 'none'
+                                                }
+                                                data-match-payoff-lane-map-summary-primary-cue={
+                                                    boardFloaterPrimaryPayoffLane
+                                                        ? getBoardFloaterPayoffLaneScreenCue(boardFloaterPrimaryPayoffLane)
+                                                        : 'none'
+                                                }
+                                                data-match-payoff-lane-map-summary-primary-screen-cue={
+                                                    boardFloaterPrimaryPayoffLane
+                                                        ? getBoardFloaterPayoffLaneScreenCue(boardFloaterPrimaryPayoffLane)
+                                                        : 'none'
+                                                }
+                                                data-match-payoff-lane-map-summary-primary-tone={boardFloaterPrimaryPayoffLane?.tone ?? 'none'}
                                                 data-testid="match-score-floater-payoff-lane-map-summary"
                                             >
                                                 <small>Lanes</small>
@@ -4734,6 +4760,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                 data-match-payoff-lane-map-summary-beat={index + 1}
                                                                 data-match-payoff-lane-map-summary-beat-focus={
                                                                     index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                data-match-payoff-lane-map-summary-beat-primary-cue={
+                                                                    boardFloaterPrimaryPayoffLane
+                                                                        ? getBoardFloaterPayoffLaneScreenCue(boardFloaterPrimaryPayoffLane)
+                                                                        : 'none'
+                                                                }
+                                                                data-match-payoff-lane-map-summary-beat-primary-tone={
+                                                                    boardFloaterPrimaryPayoffLane?.tone ?? 'none'
                                                                 }
                                                                 key={`payoff-lane-map-summary-beat-${index + 1}`}
                                                             />
@@ -4982,6 +5016,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 }.`}
                                                 className={styles.boardFloaterRewardForecastSummary}
                                                 data-chain-reward-forecast-count={boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length}
+                                                data-chain-reward-forecast-summary-screen-cue={getBoardFloaterRewardForecastScreenCue(
+                                                    boardFloaterPayload.chainRewardForecastCues!.slice(0, 3)[0]
+                                                )}
+                                                data-chain-reward-forecast-summary-tone={
+                                                    boardFloaterPayload.chainRewardForecastCues!.slice(0, 3)[0]?.tone ?? 'none'
+                                                }
+                                                data-chain-reward-forecast-summary-urgency={
+                                                    boardFloaterPayload.chainRewardForecastCues!.slice(0, 3)[0]?.urgency ?? 'none'
+                                                }
                                                 data-testid="match-score-floater-reward-forecast-summary"
                                             >
                                                 <small>Forecast</small>
@@ -4997,6 +5040,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                 data-chain-reward-forecast-summary-beat={index + 1}
                                                                 data-chain-reward-forecast-summary-beat-focus={
                                                                     index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                data-chain-reward-forecast-summary-beat-screen-cue={getBoardFloaterRewardForecastScreenCue(
+                                                                    boardFloaterPayload.chainRewardForecastCues!.slice(0, 3)[0]
+                                                                )}
+                                                                data-chain-reward-forecast-summary-beat-tone={
+                                                                    boardFloaterPayload.chainRewardForecastCues!.slice(0, 3)[0]?.tone ?? 'none'
+                                                                }
+                                                                data-chain-reward-forecast-summary-beat-urgency={
+                                                                    boardFloaterPayload.chainRewardForecastCues!.slice(0, 3)[0]?.urgency ?? 'none'
                                                                 }
                                                                 key={`reward-forecast-summary-beat-${index + 1}`}
                                                             />
@@ -5179,6 +5231,22 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 }.`}
                                                 className={styles.boardFloaterTraitLaneMapSummary}
                                                 data-match-trait-lane-count={boardFloaterTraitLaneMap.length}
+                                                data-match-trait-lane-summary-primary={boardFloaterPrimaryTraitLane?.id ?? 'none'}
+                                                data-match-trait-lane-summary-role={
+                                                    boardFloaterPrimaryTraitLane
+                                                        ? getTraitInteractionLaneRole(boardFloaterPrimaryTraitLane)
+                                                        : 'none'
+                                                }
+                                                data-match-trait-lane-summary-role-id={
+                                                    boardFloaterPrimaryTraitLane
+                                                        ? (getTraitInteractionLaneRoleId(boardFloaterPrimaryTraitLane) ?? 'none')
+                                                        : 'none'
+                                                }
+                                                data-match-trait-lane-summary-screen-cue={
+                                                    boardFloaterPrimaryTraitLane
+                                                        ? getBoardFloaterTraitLaneScreenCue(boardFloaterPrimaryTraitLane)
+                                                        : 'none'
+                                                }
                                                 data-match-trait-lane-summary-fill={boardFloaterTraitLaneMapSummaryFill}
                                                 data-match-trait-lane-summary-total={Math.max(1, Math.min(5, boardFloaterTraitLaneMap.length))}
                                                 style={
@@ -5201,6 +5269,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                 data-match-trait-lane-map-summary-beat={index + 1}
                                                                 data-match-trait-lane-map-summary-beat-focus={
                                                                     index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                data-match-trait-lane-map-summary-beat-role-id={
+                                                                    boardFloaterPrimaryTraitLane
+                                                                        ? (getTraitInteractionLaneRoleId(boardFloaterPrimaryTraitLane) ?? 'none')
+                                                                        : 'none'
+                                                                }
+                                                                data-match-trait-lane-map-summary-beat-screen-cue={
+                                                                    boardFloaterPrimaryTraitLane
+                                                                        ? getBoardFloaterTraitLaneScreenCue(boardFloaterPrimaryTraitLane)
+                                                                        : 'none'
                                                                 }
                                                                 key={`trait-lane-map-summary-beat-${index + 1}`}
                                                             />

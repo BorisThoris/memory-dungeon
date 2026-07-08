@@ -14125,6 +14125,29 @@
     opacity: 0.66;
 }
 
+.boardFloaterPayoffSummaryBeatPips i[data-payoff-summary-beat-screen-cue='burst'],
+.boardFloaterPayoffSummaryBeatPips i[data-payoff-summary-beat-screen-cue='super'] {
+    animation-duration: 0.68s;
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, currentColor 42%, transparent),
+        0 0 0.5rem color-mix(in srgb, currentColor 24%, transparent);
+}
+
+.boardFloaterPayoffSummaryBeatPips i[data-payoff-summary-beat-screen-cue='super'] {
+    width: 0.25rem;
+    height: 0.25rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.boardFloaterPayoffSummaryBeatPips i[data-payoff-summary-beat-tier='chain'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+}
+
+.boardFloaterPayoffSummaryBeatPips i[data-payoff-summary-beat-tier='combo'],
+.boardFloaterPayoffSummaryBeatPips i[data-payoff-summary-beat-tier='reward'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
 .boardFloaterPayoffSummary[data-payoff-summary-beats='3'] .boardFloaterPayoffSummaryBeatPips i {
     opacity: 0.76;
 }
@@ -14264,6 +14287,42 @@
 
 .boardFloaterPayoffLaneMapSummaryBeatPips i[data-match-payoff-lane-map-summary-beat-focus='support'] {
     opacity: 0.64;
+}
+
+.boardFloaterPayoffLaneMapSummary[data-match-payoff-lane-count='3'] .boardFloaterPayoffLaneMapSummaryBeatPips i,
+.boardFloaterPayoffLaneMapSummary[data-match-payoff-lane-count='4'] .boardFloaterPayoffLaneMapSummaryBeatPips i {
+    width: 0.11rem;
+    height: 0.11rem;
+    opacity: 0.82;
+}
+
+.boardFloaterPayoffLaneMapSummary[data-match-payoff-lane-count='4'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 50%, var(--theme-cyan-bright) 18%);
+    box-shadow: 0 0 0.74rem color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+}
+
+.boardFloaterPayoffLaneMapSummary[data-match-payoff-lane-map-summary-primary-cue='burst'] .boardFloaterPayoffLaneMapSummaryBeatPips i,
+.boardFloaterPayoffLaneMapSummary[data-match-payoff-lane-map-summary-primary-cue='super'] .boardFloaterPayoffLaneMapSummaryBeatPips i,
+.boardFloaterPayoffLaneMapSummary[data-match-payoff-lane-map-summary-primary-screen-cue='burst'] .boardFloaterPayoffLaneMapSummaryBeatPips i,
+.boardFloaterPayoffLaneMapSummary[data-match-payoff-lane-map-summary-primary-screen-cue='super'] .boardFloaterPayoffLaneMapSummaryBeatPips i {
+    animation-duration: 0.72s;
+    box-shadow:
+        0 0 0.2rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0.42rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.boardFloaterPayoffLaneMapSummaryBeatPips i[data-match-payoff-lane-map-summary-beat-primary-tone='chain'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+}
+
+.boardFloaterPayoffLaneMapSummaryBeatPips i[data-match-payoff-lane-map-summary-beat-primary-tone='trait'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 76%, white 8%);
+}
+
+.boardFloaterPayoffLaneMapSummaryBeatPips i[data-match-payoff-lane-map-summary-beat-primary-tone='pickup'],
+.boardFloaterPayoffLaneMapSummaryBeatPips i[data-match-payoff-lane-map-summary-beat-primary-tone='reward'],
+.boardFloaterPayoffLaneMapSummaryBeatPips i[data-match-payoff-lane-map-summary-beat-primary-tone='route'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
 }
 
 .boardFloaterPayoffLaneMap > span {
@@ -14908,6 +14967,50 @@
     opacity: 0.64;
 }
 
+.boardFloaterRewardForecastSummary[data-chain-reward-forecast-count='2'] .boardFloaterRewardForecastSummaryBeatPips i,
+.boardFloaterRewardForecastSummary[data-chain-reward-forecast-count='3'] .boardFloaterRewardForecastSummaryBeatPips i {
+    width: 0.11rem;
+    height: 0.11rem;
+    opacity: 0.84;
+}
+
+.boardFloaterRewardForecastSummary[data-chain-reward-forecast-summary-urgency='next'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-success) 22%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 17%, transparent), color-mix(in srgb, var(--theme-success) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 58%, transparent);
+    box-shadow: 0 0 0.82rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.boardFloaterRewardForecastSummary[data-chain-reward-forecast-summary-screen-cue='burst'] .boardFloaterRewardForecastSummaryBeatPips i,
+.boardFloaterRewardForecastSummary[data-chain-reward-forecast-summary-screen-cue='super'] .boardFloaterRewardForecastSummaryBeatPips i {
+    animation-duration: 0.72s;
+    box-shadow:
+        0 0 0.2rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0.42rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.boardFloaterRewardForecastSummaryBeatPips i[data-chain-reward-forecast-summary-beat-screen-cue='burst'] {
+    width: 0.18rem;
+    opacity: 1;
+}
+
+.boardFloaterRewardForecastSummaryBeatPips i[data-chain-reward-forecast-summary-beat-screen-cue='pulse'] {
+    opacity: 0.82;
+}
+
+.boardFloaterRewardForecastSummaryBeatPips i[data-chain-reward-forecast-summary-beat-tone='guard'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white 8%);
+}
+
+.boardFloaterRewardForecastSummaryBeatPips i[data-chain-reward-forecast-summary-beat-tone='heal'] {
+    background: color-mix(in srgb, var(--theme-success) 76%, white 8%);
+}
+
+.boardFloaterRewardForecastSummaryBeatPips i[data-chain-reward-forecast-summary-beat-tone='reward'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
 .boardFloaterRewardForecast > span {
     display: inline-flex;
     align-items: center;
@@ -15392,6 +15495,53 @@
 
 .boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-focus='support'] {
     opacity: 0.64;
+}
+
+.boardFloaterTraitLaneMapSummary[data-match-trait-lane-count='3'] .boardFloaterTraitLaneMapSummaryBeatPips i,
+.boardFloaterTraitLaneMapSummary[data-match-trait-lane-count='4'] .boardFloaterTraitLaneMapSummaryBeatPips i {
+    width: 0.11rem;
+    height: 0.11rem;
+    opacity: 0.84;
+}
+
+.boardFloaterTraitLaneMapSummary[data-match-trait-lane-summary-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 50%, var(--theme-gold-bright) 18%);
+    box-shadow: 0 0 0.76rem color-mix(in srgb, var(--theme-violet-bright) 16%, transparent);
+}
+
+.boardFloaterTraitLaneMapSummary[data-match-trait-lane-summary-screen-cue='burst'] .boardFloaterTraitLaneMapSummaryBeatPips i,
+.boardFloaterTraitLaneMapSummary[data-match-trait-lane-summary-screen-cue='chain'] .boardFloaterTraitLaneMapSummaryBeatPips i {
+    animation-duration: 0.7s;
+    box-shadow:
+        0 0 0.2rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0.42rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-screen-cue='burst'] {
+    width: 0.18rem;
+    opacity: 1;
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-screen-cue='chain'] {
+    opacity: 0.86;
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-role-id='cashout'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-role-id='block'] {
+    background: color-mix(in srgb, var(--theme-danger) 66%, white 12%);
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-role-id='protect'],
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-role-id='recall'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white 8%);
+}
+
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-role-id='risk'],
+.boardFloaterTraitLaneMapSummaryBeatPips i[data-match-trait-lane-map-summary-beat-role-id='tool'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 76%, white 8%);
 }
 
 .boardFloaterTraitLaneMapSummaryMeter {

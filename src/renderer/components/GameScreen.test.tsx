@@ -2005,6 +2005,15 @@ describe('GameScreen (OVR-014)', () => {
             expect(
                 rewardForecastSummary.querySelector('[data-chain-reward-forecast-summary-beat="1"]')
             ).toHaveAttribute('data-chain-reward-forecast-summary-beat-focus', 'primary');
+            expect(rewardForecastSummary).toHaveAttribute('data-chain-reward-forecast-summary-tone', 'reward');
+            expect(rewardForecastSummary).toHaveAttribute('data-chain-reward-forecast-summary-urgency', 'next');
+            expect(rewardForecastSummary).toHaveAttribute('data-chain-reward-forecast-summary-screen-cue', 'burst');
+            expect(
+                rewardForecastSummary.querySelector('[data-chain-reward-forecast-summary-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-forecast-summary-beat-tone', 'reward');
+            expect(
+                rewardForecastSummary.querySelector('[data-chain-reward-forecast-summary-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-forecast-summary-beat-screen-cue', 'burst');
             expect(
                 screen
                     .getByTestId('match-score-floater-reward-forecast')
@@ -2908,6 +2917,16 @@ describe('GameScreen (OVR-014)', () => {
         expect(
             screen
                 .getByTestId('match-score-floater-payoff-summary')
+                .querySelector('[data-payoff-summary-beat="1"]')
+        ).toHaveAttribute('data-payoff-summary-beat-screen-cue', 'super');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-summary')
+                .querySelector('[data-payoff-summary-beat="1"]')
+        ).toHaveAttribute('data-payoff-summary-beat-tier', 'combo');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-summary')
                 .querySelector('[data-payoff-summary-beat="2"]')
         ).toHaveAttribute('data-payoff-summary-beat-focus', 'support');
         expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveAttribute(
@@ -2921,10 +2940,25 @@ describe('GameScreen (OVR-014)', () => {
         const payoffLaneMapSummary = screen.getByTestId('match-score-floater-payoff-lane-map-summary');
         expect(payoffLaneMapSummary).toHaveTextContent('Lanes');
         expect(payoffLaneMapSummary).toHaveTextContent('4 lanes');
+        expect(payoffLaneMapSummary).toHaveAttribute('data-match-payoff-lane-map-summary-primary', 'route');
+        expect(payoffLaneMapSummary).toHaveAttribute('data-match-payoff-lane-map-summary-primary-action', 'Cash route');
+        expect(payoffLaneMapSummary).toHaveAttribute(
+            'data-match-payoff-lane-map-summary-primary-audio',
+            'match-payoff-route'
+        );
+        expect(payoffLaneMapSummary).toHaveAttribute('data-match-payoff-lane-map-summary-primary-cue', 'burst');
+        expect(payoffLaneMapSummary).toHaveAttribute('data-match-payoff-lane-map-summary-primary-screen-cue', 'burst');
+        expect(payoffLaneMapSummary).toHaveAttribute('data-match-payoff-lane-map-summary-primary-tone', 'route');
         expect(payoffLaneMapSummary.querySelectorAll('[data-match-payoff-lane-map-summary-beat]')).toHaveLength(5);
         expect(
             payoffLaneMapSummary.querySelector('[data-match-payoff-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-match-payoff-lane-map-summary-beat-focus', 'primary');
+        expect(
+            payoffLaneMapSummary.querySelector('[data-match-payoff-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-lane-map-summary-beat-primary-tone', 'route');
+        expect(
+            payoffLaneMapSummary.querySelector('[data-match-payoff-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-lane-map-summary-beat-primary-cue', 'burst');
         expect(screen.getByTestId('match-score-floater-payoff-lane-map')).toHaveAttribute(
             'data-match-payoff-lane-primary',
             'route'
@@ -3107,10 +3141,20 @@ describe('GameScreen (OVR-014)', () => {
         expect(traitLaneMapSummary).toHaveTextContent('4 lanes');
         expect(traitLaneMapSummary).toHaveAttribute('data-match-trait-lane-summary-fill', '80');
         expect(traitLaneMapSummary).toHaveAttribute('data-match-trait-lane-summary-total', '4');
+        expect(traitLaneMapSummary).toHaveAttribute('data-match-trait-lane-summary-primary', 'shard');
+        expect(traitLaneMapSummary).toHaveAttribute('data-match-trait-lane-summary-role', 'Cashout');
+        expect(traitLaneMapSummary).toHaveAttribute('data-match-trait-lane-summary-role-id', 'cashout');
+        expect(traitLaneMapSummary).toHaveAttribute('data-match-trait-lane-summary-screen-cue', 'burst');
         expect(traitLaneMapSummary.querySelectorAll('[data-match-trait-lane-map-summary-beat]')).toHaveLength(5);
         expect(
             traitLaneMapSummary.querySelector('[data-match-trait-lane-map-summary-beat="1"]')
         ).toHaveAttribute('data-match-trait-lane-map-summary-beat-focus', 'primary');
+        expect(
+            traitLaneMapSummary.querySelector('[data-match-trait-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-match-trait-lane-map-summary-beat-role-id', 'cashout');
+        expect(
+            traitLaneMapSummary.querySelector('[data-match-trait-lane-map-summary-beat="1"]')
+        ).toHaveAttribute('data-match-trait-lane-map-summary-beat-screen-cue', 'burst');
         expect(screen.getByTestId('match-score-floater-trait-lane-map')).toHaveAccessibleName(
             'Match trait interaction lanes. Shard Cashout x1. Cash shard. Echo + Sealed: combo shard. Guard Protect x1. Protect run. Mirror + Stasis: guard ward. Block Block x1. Deny match. Stasis buffered Sealed. Recall Recall x1. Set memory. Echo + Mirror: recall focus.'
         );
