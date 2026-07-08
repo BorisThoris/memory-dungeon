@@ -5526,6 +5526,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     <i
                                                         data-card-primary-shot-beat-pip={index + 1}
                                                         data-card-primary-shot-beat-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                        data-card-primary-shot-beat-pip-shot-focus={primaryCardFeedbackShotFocus}
+                                                        data-card-primary-shot-beat-pip-screen-cue={primaryCardFeedbackShotScreenCue}
                                                         key={index}
                                                     />
                                                 ))}
@@ -5556,6 +5558,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     <i
                                                         data-chain-callout-beat={index + 1}
                                                         data-chain-callout-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                        data-chain-callout-beat-tone={boardChainOpportunity.arcadeCallout.tone}
                                                         key={index}
                                                     />
                                                 )

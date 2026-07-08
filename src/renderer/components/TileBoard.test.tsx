@@ -499,6 +499,9 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
         ).toHaveAttribute('data-chain-callout-beat-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-tone', 'cashout');
         expect(screen.getByTestId('chain-opportunity-chip').querySelectorAll('[data-chain-eyebrow-beat]')).toHaveLength(2);
         expect(
             screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-eyebrow-beat="1"]')
@@ -1460,6 +1463,12 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-primary-shot').querySelector('[data-card-primary-shot-beat-pip="1"]')
         ).toHaveAttribute('data-card-primary-shot-beat-pip-focus', 'primary');
+        expect(
+            screen.getByTestId('chain-opportunity-primary-shot').querySelector('[data-card-primary-shot-beat-pip="1"]')
+        ).toHaveAttribute('data-card-primary-shot-beat-pip-shot-focus', 'cashout');
+        expect(
+            screen.getByTestId('chain-opportunity-primary-shot').querySelector('[data-card-primary-shot-beat-pip="1"]')
+        ).toHaveAttribute('data-card-primary-shot-beat-pip-screen-cue', 'burst');
         expect(
             screen.getByTestId('chain-opportunity-primary-shot').querySelector('[data-card-primary-shot-beat-pip="2"]')
         ).toHaveAttribute('data-card-primary-shot-beat-pip-focus', 'support');
@@ -3327,6 +3336,9 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-arcade-callout')).toHaveTextContent('Surge chain');
         expect(screen.getByTestId('chain-opportunity-arcade-callout')).toHaveTextContent('4 cards lit');
+        expect(
+            screen.getByTestId('chain-opportunity-arcade-callout').querySelector('[data-chain-callout-beat="1"]')
+        ).toHaveAttribute('data-chain-callout-beat-tone', 'surge');
         expect(screen.getByTestId('chain-opportunity-marker-key')).toHaveTextContent('Surge');
         expect(screen.getByTestId('chain-opportunity-marker-key').querySelector('[data-chain-marker-shape="combo-surge"]')).toHaveTextContent('++');
         expect(screen.getByTestId('chain-opportunity-marker-key').querySelector('[data-chain-marker-shape="combo-surge"]')).toHaveTextContent('Route prime');
@@ -3761,6 +3773,12 @@ describe('TileBoard touch and click controls', () => {
         expect(
             screen.getByTestId('chain-opportunity-primary-shot').querySelectorAll('[data-card-primary-shot-beat-pip]')
         ).toHaveLength(2);
+        expect(
+            screen.getByTestId('chain-opportunity-primary-shot').querySelector('[data-card-primary-shot-beat-pip="1"]')
+        ).toHaveAttribute('data-card-primary-shot-beat-pip-shot-focus', 'setup');
+        expect(
+            screen.getByTestId('chain-opportunity-primary-shot').querySelector('[data-card-primary-shot-beat-pip="1"]')
+        ).toHaveAttribute('data-card-primary-shot-beat-pip-screen-cue', 'pulse');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary', 'setup');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary-screen-cue', 'tick');
         expect(screen.getByTestId('chain-opportunity-beat-map')).toHaveAttribute('data-card-beat-primary-tone', 'setup');
