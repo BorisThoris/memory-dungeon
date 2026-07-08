@@ -10246,6 +10246,19 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
 }
 
+.hudObjectiveSignals > span[data-objective-signal-tone='objective'] .hudObjectiveSignalBeatPips i {
+    height: 0.16rem;
+    animation-duration: 0.9s;
+    opacity: 0.9;
+}
+
+.hudObjectiveSignals > span[data-objective-signal-tone='progress'] .hudObjectiveSignalBeatPips i,
+.hudObjectiveSignals > span[data-objective-signal-screen-cue='pulse'] .hudObjectiveSignalBeatPips i {
+    height: 0.12rem;
+    animation-duration: 1s;
+    opacity: 0.84;
+}
+
 .hudObjectiveSignals > span[data-objective-signal-tone='reward'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
     background: color-mix(in srgb, var(--theme-gold-deep) 12%, transparent);
@@ -10256,8 +10269,11 @@
 }
 
 .hudObjectiveSignals > span[data-objective-signal-tone='reward'] .hudObjectiveSignalBeatPips i {
+    height: 0.2rem;
+    animation-duration: 0.68s;
     background: color-mix(in srgb, var(--theme-gold-bright) 70%, white);
     box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
+    opacity: 1;
 }
 
 .hudObjectiveSignals > span[data-objective-signal-tone='risk'] {
@@ -10270,12 +10286,21 @@
 }
 
 .hudObjectiveSignals > span[data-objective-signal-tone='risk'] .hudObjectiveSignalBeatPips i {
+    height: 0.22rem;
+    animation-duration: 0.74s;
     background: color-mix(in srgb, var(--theme-danger) 66%, white);
     box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-danger) 20%, transparent);
+    opacity: 1;
 }
 
 .hudObjectiveSignals > span[data-objective-signal-screen-cue='burst'] {
     animation: hudRewardPulse 1.05s ease-in-out infinite;
+}
+
+.hudObjectiveSignals > span[data-objective-signal-screen-cue='burst'] .hudObjectiveSignalBeatPips i {
+    height: 0.2rem;
+    animation-duration: 0.66s;
+    opacity: 1;
 }
 
 .hudObjectiveSignals > span[data-objective-signal-screen-cue='pulse'] {
@@ -10288,14 +10313,32 @@
         0 0 0.54rem color-mix(in srgb, var(--theme-success) 13%, transparent);
 }
 
+.hudObjectiveSignals > span[data-objective-signal-screen-cue='snap'] .hudObjectiveSignalBeatPips i {
+    height: 0.16rem;
+    animation-duration: 0.78s;
+    opacity: 0.94;
+}
+
 .hudObjectiveSignals > span[data-objective-signal-screen-cue='guard'] {
     box-shadow:
         0 0 0 1px color-mix(in srgb, var(--theme-danger) 14%, transparent),
         0 0 0.62rem color-mix(in srgb, var(--theme-danger) 16%, transparent);
 }
 
+.hudObjectiveSignals > span[data-objective-signal-screen-cue='guard'] .hudObjectiveSignalBeatPips i {
+    height: 0.22rem;
+    animation-duration: 1.08s;
+    opacity: 0.86;
+}
+
 .hudObjectiveSignals > span[data-objective-signal-screen-cue='tick'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-text-muted) 12%, transparent);
+}
+
+.hudObjectiveSignals > span[data-objective-signal-screen-cue='tick'] .hudObjectiveSignalBeatPips i {
+    height: 0.1rem;
+    animation-duration: 1.32s;
+    opacity: 0.62;
 }
 
 .hudPrimaryRewardCue[data-primary-reward-screen-cue='burst'] {

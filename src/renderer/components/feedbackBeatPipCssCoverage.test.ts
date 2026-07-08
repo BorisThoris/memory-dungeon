@@ -1305,6 +1305,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-forecast-signal-screen-cue='pulse'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?opacity:\s*0\.9/);
     });
 
+    it('keeps HUD objective signal beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'objective signals should use steady chase-target beats'
+        ).toMatch(/data-objective-signal-tone='objective'[\s\S]*?\.hudObjectiveSignalBeatPips i[\s\S]*?animation-duration:\s*0\.9s/);
+        expect(
+            cssText,
+            'progress signals should use quieter build-up beats'
+        ).toMatch(/data-objective-signal-tone='progress'[\s\S]*?\.hudObjectiveSignalBeatPips i[\s\S]*?height:\s*0\.12rem/);
+        expect(
+            cssText,
+            'reward objective signals should use fast payoff beats'
+        ).toMatch(/data-objective-signal-tone='reward'[\s\S]*?\.hudObjectiveSignalBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'risk objective signals should use urgent taller beats'
+        ).toMatch(/data-objective-signal-tone='risk'[\s\S]*?\.hudObjectiveSignalBeatPips i[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'tick objective screen cues should stay quiet and slow'
+        ).toMatch(/data-objective-signal-screen-cue='tick'[\s\S]*?\.hudObjectiveSignalBeatPips i[\s\S]*?animation-duration:\s*1\.32s/);
+    });
+
     it('keeps trait cashout and surge modes visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
