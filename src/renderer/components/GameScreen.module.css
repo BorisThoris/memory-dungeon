@@ -14103,11 +14103,25 @@
     opacity: 0.96;
 }
 
+.boardFloaterChainMilestoneBeatPips i[data-chain-milestone-beat-tone='chain'],
+.boardFloaterChainMilestoneBeatPips i[data-chain-milestone-beat-screen-cue='reward-loop'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+}
+
 .boardFloaterChainMilestone[data-chain-milestone-tone='chain'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 56%, transparent);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent), color-mix(in srgb, var(--theme-green-bright) 14%, transparent)),
         color-mix(in srgb, var(--theme-void) 52%, transparent);
+}
+
+.boardFloaterChainMilestoneBeatPips i[data-chain-milestone-beat-tone='surge'],
+.boardFloaterChainMilestoneBeatPips i[data-chain-milestone-beat-screen-cue='surge-live'] {
+    color: color-mix(in srgb, var(--theme-magenta-bright) 82%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.38rem color-mix(in srgb, var(--theme-magenta-bright) 36%, transparent);
 }
 
 .boardFloaterChainMilestone[data-chain-milestone-tone='surge'] {
@@ -14123,6 +14137,15 @@
 .boardFloaterChainMilestone[data-chain-milestone-tone='surge'] small,
 .boardFloaterChainMilestone[data-chain-milestone-tone='surge'] b {
     color: color-mix(in srgb, var(--theme-magenta-bright) 82%, white);
+}
+
+.boardFloaterChainMilestoneBeatPips i[data-chain-milestone-beat-tone='combo'],
+.boardFloaterChainMilestoneBeatPips i[data-chain-milestone-beat-screen-cue='combo-live'] {
+    color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    background: currentColor;
+    box-shadow:
+        0 0 0.38rem color-mix(in srgb, var(--theme-gold-bright) 36%, transparent),
+        0 0 0.5rem color-mix(in srgb, var(--theme-magenta-bright) 20%, transparent);
 }
 
 .boardFloaterChainMilestone[data-chain-milestone-screen-cue='surge-live'] {
@@ -14232,6 +14255,19 @@
     opacity: 0.92;
 }
 
+.boardFloaterCascadeBeatPips i[data-cascade-beat-tier='reward'] {
+    width: 0.26rem;
+    height: 0.18rem;
+    animation-duration: 0.76s;
+    opacity: 0.92;
+}
+
+.boardFloaterCascadeBeatPips i[data-cascade-beat-tier='chain'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 84%, white);
+    background: currentColor;
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+}
+
 .boardFloaterCascadeCue[data-cascade-tier='combo'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-violet-bright) 30%);
     box-shadow:
@@ -14241,6 +14277,13 @@
 }
 
 .boardFloaterCascadeCue[data-cascade-tier='combo'] .boardFloaterCascadeBeatPips i {
+    width: 0.3rem;
+    height: 0.22rem;
+    animation-duration: 0.64s;
+    opacity: 0.98;
+}
+
+.boardFloaterCascadeBeatPips i[data-cascade-beat-tier='combo'] {
     width: 0.3rem;
     height: 0.22rem;
     animation-duration: 0.64s;

@@ -1978,6 +1978,10 @@ describe('GameScreen (OVR-014)', () => {
                 'data-cascade-beat-focus',
                 'primary'
             );
+            expect(screen.getByTestId('match-score-floater-cascade').querySelector('[data-cascade-beat="1"]')).toHaveAttribute(
+                'data-cascade-beat-tier',
+                'reward'
+            );
             expect(screen.getByTestId('match-score-floater-cascade').querySelector('[data-cascade-beat="2"]')).toHaveAttribute(
                 'data-cascade-beat-focus',
                 'support'
@@ -2691,6 +2695,22 @@ describe('GameScreen (OVR-014)', () => {
         expect(milestone.querySelector('[data-chain-milestone-beat="1"]')).toHaveAttribute(
             'data-chain-milestone-beat-focus',
             'primary'
+        );
+        expect(milestone.querySelector('[data-chain-milestone-beat="1"]')).toHaveAttribute(
+            'data-chain-milestone-beat-action',
+            'Push surge'
+        );
+        expect(milestone.querySelector('[data-chain-milestone-beat="1"]')).toHaveAttribute(
+            'data-chain-milestone-beat-audio',
+            'surge-hit-ping'
+        );
+        expect(milestone.querySelector('[data-chain-milestone-beat="1"]')).toHaveAttribute(
+            'data-chain-milestone-beat-screen-cue',
+            'surge-live'
+        );
+        expect(milestone.querySelector('[data-chain-milestone-beat="1"]')).toHaveAttribute(
+            'data-chain-milestone-beat-tone',
+            'surge'
         );
         expect(milestone.querySelector('[data-chain-milestone-beat="2"]')).toHaveAttribute(
             'data-chain-milestone-beat-focus',

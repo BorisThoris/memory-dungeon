@@ -4600,6 +4600,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                         <i
                                                             data-cascade-beat={index + 1}
                                                             data-cascade-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-cascade-beat-tier={boardFloaterPayload.cascadeCue.tier}
                                                             key={`cascade-beat-${index + 1}`}
                                                         />
                                                     )
@@ -4637,7 +4638,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-chain-milestone-beat={index + 1}
+                                                            data-chain-milestone-beat-action={boardFloaterPayload.chainMilestone.action}
+                                                            data-chain-milestone-beat-audio={boardFloaterPayload.chainMilestone.audioCue}
                                                             data-chain-milestone-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-chain-milestone-beat-screen-cue={boardFloaterPayload.chainMilestone.screenCue}
+                                                            data-chain-milestone-beat-tone={boardFloaterPayload.chainMilestone.tone}
                                                             key={`chain-milestone-beat-${index + 1}`}
                                                         />
                                                     )
