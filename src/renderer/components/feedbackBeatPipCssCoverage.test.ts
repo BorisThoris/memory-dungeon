@@ -1643,6 +1643,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-marker-key-screen-cue='tick'[\s\S]*?animation-duration:\s*1\.34s/);
     });
 
+    it('keeps chain marker key meters tied to marker action language', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout marker key meters should carry high-payoff gold fill language'
+        ).toMatch(/data-chain-marker-key-action='cashout'[\s\S]*?\.chainOpportunityMarkerKeyMeterFill[\s\S]*?var\(--theme-gold-bright\) 90%/);
+        expect(
+            cssText,
+            'surge marker key meters should use violet acceleration language'
+        ).toMatch(/data-chain-marker-key-action='surge'[\s\S]*?\.chainOpportunityMarkerKeyMeterFill[\s\S]*?var\(--theme-violet-bright\) 84%/);
+        expect(
+            cssText,
+            'route and followup marker key meters should use cyan pathing language'
+        ).toMatch(/data-chain-marker-key-action='route'[\s\S]*?\.chainOpportunityMarkerKeyMeterFill[\s\S]*?var\(--theme-cyan-bright\) 82%/);
+        expect(
+            cssText,
+            'setup marker key meters should stay quieter than ready and cashout states'
+        ).toMatch(/data-chain-marker-key-action='prime'[\s\S]*?\.chainOpportunityMarkerKeyMeterFill[\s\S]*?opacity:\s*0\.78/);
+        expect(
+            cssText,
+            'perk marker key meters should carry utility reward language'
+        ).toMatch(/data-chain-marker-key-action='perk'[\s\S]*?\.chainOpportunityMarkerKeyMeterFill[\s\S]*?var\(--theme-success\) 72%/);
+    });
+
     it('keeps opportunity compass summary action beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

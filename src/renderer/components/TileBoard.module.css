@@ -4430,6 +4430,116 @@
     transition: width 140ms ease-out;
 }
 
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='cashout'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='cashout'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='stack'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-screen-cue='burst'] .chainOpportunityMarkerKeyMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='cashout'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='cashout'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='stack'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-screen-cue='burst'] .chainOpportunityMarkerKeyMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 90%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 64%, var(--theme-gold-bright) 22%)
+    );
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent),
+        0 0 0.44rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='surge'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='surge'] .chainOpportunityMarkerKeyMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 52%, var(--theme-gold-bright) 20%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 20%, transparent), color-mix(in srgb, var(--theme-gold-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='surge'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='surge'] .chainOpportunityMarkerKeyMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 60%, white)
+    );
+    box-shadow:
+        0 0 0.26rem color-mix(in srgb, var(--theme-violet-bright) 28%, transparent),
+        0 0 0.42rem color-mix(in srgb, var(--theme-gold-bright) 12%, transparent);
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='followup'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='route'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='ready'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-screen-cue='pulse'] .chainOpportunityMarkerKeyMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 46%, var(--theme-violet-bright) 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent), color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='followup'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='route'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='ready'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-screen-cue='pulse'] .chainOpportunityMarkerKeyMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 44%, var(--theme-cyan-bright) 32%)
+    );
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='prime'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='setup'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-screen-cue='tick'] .chainOpportunityMarkerKeyMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-text-muted) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent), transparent 72%),
+        color-mix(in srgb, var(--theme-void) 32%, transparent);
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='prime'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='setup'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-screen-cue='tick'] .chainOpportunityMarkerKeyMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 68%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 26%, var(--theme-cyan-bright) 30%)
+    );
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent);
+    opacity: 0.78;
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='perk'] .chainOpportunityMarkerKeyMeter,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='perk'] .chainOpportunityMarkerKeyMeter {
+    border-color: color-mix(in srgb, var(--theme-success) 48%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 18%, transparent), color-mix(in srgb, var(--theme-gold-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-success) 18%, transparent);
+}
+
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-action='perk'] .chainOpportunityMarkerKeyMeterFill,
+.chainOpportunityMarkerKeySummary[data-chain-marker-key-tier='perk'] .chainOpportunityMarkerKeyMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-success) 72%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 50%, white)
+    );
+    box-shadow:
+        0 0 0.22rem color-mix(in srgb, var(--theme-success) 24%, transparent),
+        0 0 0.36rem color-mix(in srgb, var(--theme-gold-bright) 10%, transparent);
+}
+
 .chainOpportunityMarkerKey > span[data-chain-marker-shape='swap-target-crossbar'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, transparent);
     background: color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent);
