@@ -6526,7 +6526,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             {Array.from({ length: routeChoiceRecommendation.beatCue.beatCount }, (_, index) => (
                                                 <i
                                                     data-route-recommendation-beat={index + 1}
+                                                    data-route-recommendation-beat-audio={routeChoiceRecommendation.beatCue.audioCue}
                                                     data-route-recommendation-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                    data-route-recommendation-beat-screen-cue={routeChoiceRecommendation.beatCue.screenCue}
+                                                    data-route-recommendation-beat-tier={routeChoiceRecommendation.beatCue.tier}
                                                     key={index}
                                                 />
                                             ))}

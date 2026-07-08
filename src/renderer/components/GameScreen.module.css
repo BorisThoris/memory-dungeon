@@ -2945,6 +2945,38 @@
     opacity: 0.72;
 }
 
+.dungeonMapChoiceRecommendationBeatPips i[data-route-recommendation-beat-screen-cue='guard'],
+.dungeonMapChoiceRecommendationBeatPips i[data-route-recommendation-beat-tier='guard'] {
+    color: color-mix(in srgb, var(--theme-cyan-bright) 88%, white);
+    background: currentColor;
+    box-shadow:
+        0 0 0.38rem color-mix(in srgb, var(--theme-cyan-bright) 36%, transparent),
+        0 0 0.08rem color-mix(in srgb, white 22%, transparent);
+}
+
+.dungeonMapChoiceRecommendationBeatPips i[data-route-recommendation-beat-screen-cue='super'],
+.dungeonMapChoiceRecommendationBeatPips i[data-route-recommendation-beat-tier='cashout'] {
+    width: 0.38rem;
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    background: currentColor;
+    box-shadow:
+        0 0 0.44rem color-mix(in srgb, var(--theme-gold-bright) 42%, transparent),
+        0 0 0.16rem color-mix(in srgb, var(--theme-danger) 22%, transparent);
+}
+
+.dungeonMapChoiceRecommendationBeatPips i[data-route-recommendation-beat-screen-cue='pulse'],
+.dungeonMapChoiceRecommendationBeatPips i[data-route-recommendation-beat-tier='prime'] {
+    color: color-mix(in srgb, var(--theme-violet-bright) 84%, white);
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 84%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 70%, white)
+    );
+    box-shadow:
+        0 0 0.38rem color-mix(in srgb, var(--theme-violet-bright) 34%, transparent),
+        0 0 0.16rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+}
+
 .dungeonMapChoiceRecommendationBeatPips i:nth-child(2) {
     animation-delay: 0.07s;
 }

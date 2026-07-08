@@ -5825,6 +5825,15 @@ describe('GameScreen (OVR-014)', () => {
             screen.getByTestId('route-choice-recommendation').querySelector('[data-route-recommendation-beat="1"]')
         ).toHaveAttribute('data-route-recommendation-beat-focus', 'primary');
         expect(
+            screen.getByTestId('route-choice-recommendation').querySelector('[data-route-recommendation-beat="1"]')
+        ).toHaveAttribute('data-route-recommendation-beat-audio', 'route-guard-beat');
+        expect(
+            screen.getByTestId('route-choice-recommendation').querySelector('[data-route-recommendation-beat="1"]')
+        ).toHaveAttribute('data-route-recommendation-beat-screen-cue', 'guard');
+        expect(
+            screen.getByTestId('route-choice-recommendation').querySelector('[data-route-recommendation-beat="1"]')
+        ).toHaveAttribute('data-route-recommendation-beat-tier', 'guard');
+        expect(
             screen.getByTestId('route-choice-recommendation').querySelector('[data-route-recommendation-beat="2"]')
         ).toHaveAttribute('data-route-recommendation-beat-focus', 'support');
         expect(screen.getByTestId('route-choice-recommendation')).toHaveAccessibleName(
