@@ -14903,6 +14903,50 @@
     opacity: 0.64;
 }
 
+.boardFloaterPayoffLadderSummary[data-match-payoff-ladder-summary-tone='reward'],
+.boardFloaterPayoffLadderSummary[data-match-payoff-ladder-summary-tone='combo'],
+.boardFloaterPayoffLadderSummary[data-match-payoff-ladder-summary-screen-cue='burst'],
+.boardFloaterPayoffLadderSummary[data-match-payoff-ladder-summary-screen-cue='super'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 58%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    box-shadow: 0 0 0.76rem color-mix(in srgb, var(--theme-gold-bright) 13%, transparent);
+}
+
+.boardFloaterPayoffLadderSummary[data-match-payoff-ladder-summary-screen-cue='super'] {
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        0 0 1rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.boardFloaterPayoffLadderSummary[data-match-payoff-ladder-summary-beats='4'] .boardFloaterPayoffLadderSummaryBeatPips i,
+.boardFloaterPayoffLadderSummary[data-match-payoff-ladder-summary-beats='5'] .boardFloaterPayoffLadderSummaryBeatPips i {
+    width: 0.11rem;
+    height: 0.11rem;
+    opacity: 0.84;
+}
+
+.boardFloaterPayoffLadderSummaryBeatPips i[data-match-payoff-ladder-summary-beat-screen-cue='burst'],
+.boardFloaterPayoffLadderSummaryBeatPips i[data-match-payoff-ladder-summary-beat-screen-cue='super'] {
+    width: 0.18rem;
+    opacity: 1;
+    box-shadow:
+        0 0 0.2rem color-mix(in srgb, currentColor 34%, transparent),
+        0 0 0.42rem color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.boardFloaterPayoffLadderSummaryBeatPips i[data-match-payoff-ladder-summary-beat-screen-cue='super'] {
+    height: 0.18rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+}
+
+.boardFloaterPayoffLadderSummaryBeatPips i[data-match-payoff-ladder-summary-beat-tone='reward'],
+.boardFloaterPayoffLadderSummaryBeatPips i[data-match-payoff-ladder-summary-beat-tone='combo'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
 .boardFloaterPayoffLadder small,
 .boardFloaterPayoffLadder b {
     min-width: 0;

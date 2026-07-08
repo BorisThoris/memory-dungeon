@@ -3338,12 +3338,22 @@ describe('GameScreen (OVR-014)', () => {
                 .querySelector('[data-match-payoff-lane-index="4"]')?.querySelectorAll('[data-match-payoff-lane-pip]')
         ).toHaveLength(3);
         const payoffLadderSummary = screen.getByTestId('match-score-floater-payoff-ladder-summary');
+        expect(payoffLadderSummary).toHaveAttribute('data-match-payoff-ladder-summary-audio', 'payoff-ladder-super');
+        expect(payoffLadderSummary).toHaveAttribute('data-match-payoff-ladder-summary-beats', '5');
         expect(payoffLadderSummary).toHaveTextContent('Ladder');
         expect(payoffLadderSummary).toHaveTextContent('4 lanes');
+        expect(payoffLadderSummary).toHaveAttribute('data-match-payoff-ladder-summary-screen-cue', 'super');
+        expect(payoffLadderSummary).toHaveAttribute('data-match-payoff-ladder-summary-tone', 'combo');
         expect(payoffLadderSummary.querySelectorAll('[data-match-payoff-ladder-summary-beat]')).toHaveLength(5);
         expect(
             payoffLadderSummary.querySelector('[data-match-payoff-ladder-summary-beat="1"]')
         ).toHaveAttribute('data-match-payoff-ladder-summary-beat-focus', 'primary');
+        expect(
+            payoffLadderSummary.querySelector('[data-match-payoff-ladder-summary-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-ladder-summary-beat-screen-cue', 'super');
+        expect(
+            payoffLadderSummary.querySelector('[data-match-payoff-ladder-summary-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-ladder-summary-beat-tone', 'combo');
         expect(screen.getByTestId('match-score-floater-payoff-chips')).toHaveTextContent('Route cashout');
         expect(
             screen

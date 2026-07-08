@@ -4873,7 +4873,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     boardFloaterPayload.payoffLadder.lanes?.length ?? 0
                                                 } ${(boardFloaterPayload.payoffLadder.lanes?.length ?? 0) === 1 ? 'lane' : 'lanes'}.`}
                                                 className={styles.boardFloaterPayoffLadderSummary}
+                                                data-match-payoff-ladder-summary-audio={getBoardFloaterPayoffLadderAudioCue(
+                                                    boardFloaterPayload.payoffLadder
+                                                )}
+                                                data-match-payoff-ladder-summary-beats={getBoardFloaterPayoffLadderBeatCount(
+                                                    boardFloaterPayload.payoffLadder
+                                                )}
                                                 data-match-payoff-ladder-count={boardFloaterPayload.payoffLadder.lanes?.length ?? 0}
+                                                data-match-payoff-ladder-summary-screen-cue={getBoardFloaterPayoffLadderScreenCue(
+                                                    boardFloaterPayload.payoffLadder
+                                                )}
+                                                data-match-payoff-ladder-summary-tone={boardFloaterPayload.payoffLadder.tone}
                                                 data-testid="match-score-floater-payoff-ladder-summary"
                                             >
                                                 <small>Ladder</small>
@@ -4890,6 +4900,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                 data-match-payoff-ladder-summary-beat={index + 1}
                                                                 data-match-payoff-ladder-summary-beat-focus={
                                                                     index === 0 ? 'primary' : 'support'
+                                                                }
+                                                                data-match-payoff-ladder-summary-beat-screen-cue={getBoardFloaterPayoffLadderScreenCue(
+                                                                    boardFloaterPayload.payoffLadder
+                                                                )}
+                                                                data-match-payoff-ladder-summary-beat-tone={
+                                                                    boardFloaterPayload.payoffLadder.tone
                                                                 }
                                                                 key={`payoff-ladder-summary-beat-${index + 1}`}
                                                             />
