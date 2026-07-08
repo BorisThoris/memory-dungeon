@@ -1718,6 +1718,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-marker-key-action='perk'[\s\S]*?\.chainOpportunityMarkerKeyMeterFill[\s\S]*?var\(--theme-success\) 72%/);
     });
 
+    it('keeps chain marker intensity pips visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'setup marker intensity should stay slower and vertical'
+        ).toMatch(/data-chain-marker-intensity-chip='setup'[\s\S]*?\.chainOpportunityMarkerIntensityPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'ready marker intensity should use mid-tempo readable beats'
+        ).toMatch(/data-chain-marker-intensity-chip='ready'[\s\S]*?\.chainOpportunityMarkerIntensityPips i[\s\S]*?animation-duration:\s*0\.92s/);
+        expect(
+            cssText,
+            'surge marker intensity should carry violet acceleration'
+        ).toMatch(/data-chain-marker-intensity-chip='surge'[\s\S]*?\.chainOpportunityMarkerIntensityPips i[\s\S]*?var\(--theme-violet-bright\) 78%/);
+        expect(
+            cssText,
+            'cashout marker intensity should read as fastest payout'
+        ).toMatch(/data-chain-marker-intensity-chip='cashout'[\s\S]*?\.chainOpportunityMarkerIntensityPips i[\s\S]*?animation-duration:\s*0\.66s/);
+        expect(
+            cssText,
+            'stack marker intensity should use taller stacked payoff beats'
+        ).toMatch(/data-chain-marker-intensity-chip='stack'[\s\S]*?\.chainOpportunityMarkerIntensityPips i[\s\S]*?height:\s*0\.18rem/);
+    });
+
     it('keeps opportunity compass summary action beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
