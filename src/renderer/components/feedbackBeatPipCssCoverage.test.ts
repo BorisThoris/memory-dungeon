@@ -2889,6 +2889,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-examples-tone='setup'[\s\S]*?\.chainOpportunityExamplesBeatPips i[\s\S]*?height:\s*0\.2rem/);
     });
 
+    it('keeps chain examples tone meters visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout examples meters should read as payoff progress'
+        ).toMatch(/data-chain-examples-tone='cashout'[\s\S]*?\.chainOpportunityExamplesMeterFill[\s\S]*?var\(--theme-gold-bright\) 88%/);
+        expect(
+            cssText,
+            'forecast examples meters should read as route guidance'
+        ).toMatch(/data-chain-examples-tone='forecast'[\s\S]*?\.chainOpportunityExamplesMeterFill[\s\S]*?var\(--theme-cyan-bright\) 84%/);
+        expect(
+            cssText,
+            'setup examples meters should keep violet setup language'
+        ).toMatch(/data-chain-examples-tone='setup'[\s\S]*?\.chainOpportunityExamplesMeterFill[\s\S]*?var\(--theme-violet-bright\) 70%/);
+    });
+
     it('keeps chain recipe density beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

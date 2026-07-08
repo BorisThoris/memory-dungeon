@@ -8950,6 +8950,38 @@
     color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
 }
 
+.chainOpportunityExamples[data-chain-examples-tone='cashout'] .chainOpportunityExamplesMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 44%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 18%, transparent), color-mix(in srgb, var(--theme-success) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='cashout'] .chainOpportunityExamplesMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 88%, white),
+        color-mix(in srgb, var(--theme-success) 58%, var(--theme-gold-bright) 34%)
+    );
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='forecast'] .chainOpportunityExamplesMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 16%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityExamples[data-chain-examples-tone='forecast'] .chainOpportunityExamplesMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 50%, var(--theme-cyan-bright) 34%)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
 .chainOpportunityExamples[data-chain-examples-tone='setup'] {
     color: color-mix(in srgb, var(--theme-cyan-bright) 78%, var(--theme-violet-bright) 18%);
 }
