@@ -13176,6 +13176,42 @@
     transition: width 140ms ease-out;
 }
 
+.traitPreviewChip[data-preview-density-tone='cashout'] .traitPreviewDensityMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-violet-bright) 20%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), color-mix(in srgb, var(--theme-violet-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+}
+
+.traitPreviewChip[data-preview-density-tone='surge'] .traitPreviewDensityMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 40%, var(--theme-border-cyan) 24%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), color-mix(in srgb, var(--theme-border-cyan) 12%, transparent)),
+        color-mix(in srgb, var(--theme-void) 26%, transparent);
+}
+
+.traitPreviewChip[data-preview-density-tone='ready'] .traitPreviewDensityMeter {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 34%, var(--theme-gold-bright) 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+}
+
+.traitPreviewChip[data-preview-density-tone='hazard'] .traitPreviewDensityMeter {
+    border-color: color-mix(in srgb, var(--theme-danger) 38%, var(--theme-warning, #f2bc6b) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 13%, transparent), color-mix(in srgb, var(--theme-warning, #f2bc6b) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.traitPreviewChip[data-preview-density-tone='setup'] .traitPreviewDensityMeter,
+.traitPreviewChip[data-preview-density-tone='trait'] .traitPreviewDensityMeter {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 32%, var(--theme-violet-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 12%, transparent), color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 29%, transparent);
+}
+
 .traitPreviewSummary small,
 .traitPreviewSummary b,
 .traitPreviewSummary em {
@@ -13324,6 +13360,82 @@
     );
     box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-border-cyan) 20%, transparent);
     transition: width 140ms ease-out;
+}
+
+.traitPreviewChip[data-preview-tone='cashout'] .traitPreviewSignalMeter,
+.traitPreviewChip[data-preview-tone='pickup'] .traitPreviewSignalMeter,
+.traitPreviewChip[data-preview-kind='pickup'] .traitPreviewSignalMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 38%, var(--theme-success) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 16%, transparent), color-mix(in srgb, var(--theme-success) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+}
+
+.traitPreviewChip[data-preview-tone='cashout'] .traitPreviewSignalMeterFill,
+.traitPreviewChip[data-preview-tone='pickup'] .traitPreviewSignalMeterFill,
+.traitPreviewChip[data-preview-kind='pickup'] .traitPreviewSignalMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 88%, white),
+        color-mix(in srgb, var(--theme-success) 66%, var(--theme-gold-bright) 34%)
+    );
+    box-shadow:
+        0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent),
+        0 0 0 1px color-mix(in srgb, white 10%, transparent);
+}
+
+.traitPreviewChip[data-preview-tone='setup'] .traitPreviewSignalMeter,
+.traitPreviewChip[data-preview-tone='trait'] .traitPreviewSignalMeter,
+.traitPreviewChip[data-preview-kind='trait'] .traitPreviewSignalMeter {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 32%, var(--theme-violet-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-border-cyan) 13%, transparent), color-mix(in srgb, var(--theme-violet-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 27%, transparent);
+}
+
+.traitPreviewChip[data-preview-tone='setup'] .traitPreviewSignalMeterFill,
+.traitPreviewChip[data-preview-tone='trait'] .traitPreviewSignalMeterFill,
+.traitPreviewChip[data-preview-kind='trait'] .traitPreviewSignalMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-border-cyan) 82%, white),
+        color-mix(in srgb, var(--theme-violet-bright) 58%, white)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-border-cyan) 20%, transparent);
+}
+
+.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewSignalMeter,
+.traitPreviewChip[data-preview-kind='hazard'] .traitPreviewSignalMeter,
+.traitPreviewChip[data-preview-screen-cue='guard'] .traitPreviewSignalMeter {
+    border-color: color-mix(in srgb, var(--theme-danger) 34%, var(--theme-warning, #f2bc6b) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-danger) 13%, transparent), color-mix(in srgb, var(--theme-warning, #f2bc6b) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.traitPreviewChip[data-preview-tone='hazard'] .traitPreviewSignalMeterFill,
+.traitPreviewChip[data-preview-kind='hazard'] .traitPreviewSignalMeterFill,
+.traitPreviewChip[data-preview-screen-cue='guard'] .traitPreviewSignalMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-danger) 78%, white),
+        color-mix(in srgb, var(--theme-warning, #f2bc6b) 68%, white)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-danger) 22%, transparent);
+}
+
+.traitPreviewChip[data-preview-screen-cue='burst'] .traitPreviewSignalMeterFill {
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, currentColor 30%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.traitPreviewChip[data-preview-screen-cue='snap'] .traitPreviewSignalMeterFill {
+    opacity: 0.9;
+}
+
+.traitPreviewChip[data-preview-screen-cue='pulse'] .traitPreviewSignalMeter {
+    border-color: color-mix(in srgb, var(--theme-border-cyan) 34%, var(--theme-gold-bright) 12%);
 }
 
 .traitPreviewBeatPips {

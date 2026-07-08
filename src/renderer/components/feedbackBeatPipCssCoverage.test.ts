@@ -2085,6 +2085,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-preview-summary-tone='setup'[\s\S]*?var\(--theme-violet-bright\) 18%/);
     });
 
+    it('keeps trait preview density meter tracks visually distinct by density tone', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout density tracks should frame hot payoff previews'
+        ).toMatch(/data-preview-density-tone='cashout'[\s\S]*?\.traitPreviewDensityMeter[\s\S]*?var\(--theme-gold-bright\) 48%/);
+        expect(
+            cssText,
+            'surge density tracks should frame accelerating combo previews'
+        ).toMatch(/data-preview-density-tone='surge'[\s\S]*?\.traitPreviewDensityMeter[\s\S]*?var\(--theme-border-cyan\) 24%/);
+        expect(
+            cssText,
+            'hazard density tracks should retain caution framing'
+        ).toMatch(/data-preview-density-tone='hazard'[\s\S]*?\.traitPreviewDensityMeter[\s\S]*?var\(--theme-danger\) 38%/);
+        expect(
+            cssText,
+            'setup density tracks should stay calmer than cashout'
+        ).toMatch(/data-preview-density-tone='setup'[\s\S]*?\.traitPreviewDensityMeter[\s\S]*?var\(--theme-violet-bright\) 18%/);
+    });
+
     it('keeps trait preview kind and action beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
@@ -2110,6 +2133,33 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'hazard preview actions should carry taller caution pips'
         ).toMatch(/data-preview-action-kind='hazard'[\s\S]*?\.traitPreviewActionBeatPips i[\s\S]*?height:\s*0\.2rem/);
+    });
+
+    it('keeps trait preview signal meters visually distinct by payoff state', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'pickup and cashout signal meters should read as reward progress'
+        ).toMatch(/data-preview-tone='cashout'[\s\S]*?\.traitPreviewSignalMeterFill[\s\S]*?var\(--theme-success\) 66%/);
+        expect(
+            cssText,
+            'trait setup signal meters should read as combo setup progress'
+        ).toMatch(/data-preview-tone='setup'[\s\S]*?\.traitPreviewSignalMeterFill[\s\S]*?var\(--theme-violet-bright\) 58%/);
+        expect(
+            cssText,
+            'hazard signal meters should keep caution colors in both track and fill'
+        ).toMatch(/data-preview-tone='hazard'[\s\S]*?\.traitPreviewSignalMeter[\s\S]*?var\(--theme-danger\) 34%/);
+        expect(
+            cssText,
+            'guard signal meters should frame risky previews with caution'
+        ).toMatch(/data-preview-screen-cue='guard'[\s\S]*?\.traitPreviewSignalMeterFill[\s\S]*?var\(--theme-warning, #f2bc6b\) 68%/);
+        expect(
+            cssText,
+            'snap signal meters should stay calmer than burst previews'
+        ).toMatch(/data-preview-screen-cue='snap'[\s\S]*?\.traitPreviewSignalMeterFill[\s\S]*?opacity:\s*0\.9/);
     });
 
     it('keeps trait preview screen cue beats visually distinct', () => {
