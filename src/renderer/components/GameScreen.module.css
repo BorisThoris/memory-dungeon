@@ -4570,6 +4570,13 @@
     color: color-mix(in srgb, var(--theme-danger) 68%, white);
 }
 
+.dungeonStatusForecastSignals > span[data-forecast-signal-tone='risk'] .dungeonStatusForecastBeatPips i,
+.dungeonStatusForecastSignals > span[data-forecast-signal-screen-cue='risk'] .dungeonStatusForecastBeatPips i {
+    height: 0.22rem;
+    animation-duration: 0.72s;
+    opacity: 1;
+}
+
 .dungeonStatusForecastSignals > span[data-forecast-signal-screen-cue='risk'] {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-danger) 18%, transparent);
 }
@@ -4583,6 +4590,20 @@
 .dungeonStatusForecastSignals > span[data-forecast-signal-tone='defense'] b,
 .dungeonStatusForecastSignals > span[data-forecast-signal-tone='action'] b {
     color: color-mix(in srgb, var(--theme-cyan-bright) 80%, white);
+}
+
+.dungeonStatusForecastSignals > span[data-forecast-signal-tone='defense'] .dungeonStatusForecastBeatPips i,
+.dungeonStatusForecastSignals > span[data-forecast-signal-screen-cue='guard'] .dungeonStatusForecastBeatPips i {
+    height: 0.2rem;
+    animation-duration: 1.08s;
+    opacity: 0.82;
+}
+
+.dungeonStatusForecastSignals > span[data-forecast-signal-tone='action'] .dungeonStatusForecastBeatPips i,
+.dungeonStatusForecastSignals > span[data-forecast-signal-screen-cue='pulse'] .dungeonStatusForecastBeatPips i {
+    height: 0.14rem;
+    animation-duration: 0.86s;
+    opacity: 0.9;
 }
 
 .dungeonStatusForecastSignals > span[data-forecast-signal-screen-cue='guard'],

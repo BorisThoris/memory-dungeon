@@ -1278,6 +1278,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-hazard-opportunity-action='weigh'[\s\S]*?width:\s*0\.22rem/);
     });
 
+    it('keeps dungeon forecast signal beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'risk forecast signals should use urgent taller beats'
+        ).toMatch(/data-forecast-signal-tone='risk'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+        expect(
+            cssText,
+            'defense forecast signals should use guarded slower beats'
+        ).toMatch(/data-forecast-signal-tone='defense'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?height:\s*0\.2rem/);
+        expect(
+            cssText,
+            'action forecast signals should use readable active pacing'
+        ).toMatch(/data-forecast-signal-tone='action'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?animation-duration:\s*0\.86s/);
+        expect(
+            cssText,
+            'guard forecast screen cues should share the defensive beat language'
+        ).toMatch(/data-forecast-signal-screen-cue='guard'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?animation-duration:\s*1\.08s/);
+        expect(
+            cssText,
+            'pulse forecast screen cues should share the active beat language'
+        ).toMatch(/data-forecast-signal-screen-cue='pulse'[\s\S]*?\.dungeonStatusForecastBeatPips i[\s\S]*?opacity:\s*0\.9/);
+    });
+
     it('keeps trait cashout and surge modes visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
