@@ -13927,6 +13927,22 @@
     white-space: nowrap;
 }
 
+.boardFloaterStreak[data-chain-streak-screen-cue='pulse'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 42%, var(--theme-cyan-bright) 14%);
+}
+
+.boardFloaterStreak[data-chain-streak-screen-cue='burst'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 52%, var(--theme-gold-bright) 18%);
+    box-shadow: 0 0 0.62rem color-mix(in srgb, var(--theme-cyan-bright) 13%, transparent);
+}
+
+.boardFloaterStreak[data-chain-streak-screen-cue='super'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 60%, var(--theme-magenta-bright) 20%);
+    box-shadow:
+        0 0 0.7rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
+        0 0 0.92rem color-mix(in srgb, var(--theme-magenta-bright) 10%, transparent);
+}
+
 .boardFloaterStreakPips {
     display: inline-grid;
     grid-auto-flow: column;
@@ -13949,6 +13965,32 @@
 
 .boardFloaterStreakPips i[data-chain-streak-beat-focus='support'] {
     opacity: 0.66;
+}
+
+.boardFloaterStreakPips i[data-chain-streak-beat-screen-cue='pulse'],
+.boardFloaterStreakPips i[data-chain-streak-beat-tier='chain'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 80%, white);
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent);
+}
+
+.boardFloaterStreakPips i[data-chain-streak-beat-screen-cue='burst'],
+.boardFloaterStreakPips i[data-chain-streak-beat-tier='surge'] {
+    width: 0.17rem;
+    height: 0.17rem;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 78%, var(--theme-gold-bright) 18%);
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent),
+        0 0 0.44rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.boardFloaterStreakPips i[data-chain-streak-beat-screen-cue='super'],
+.boardFloaterStreakPips i[data-chain-streak-beat-tier='combo'] {
+    width: 0.19rem;
+    height: 0.19rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, var(--theme-magenta-bright) 18%);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.5rem color-mix(in srgb, var(--theme-magenta-bright) 20%, transparent);
 }
 
 .boardFloaterStreakCue {
@@ -13983,6 +14025,50 @@
 
 .boardFloaterStreakCuePips i[data-chain-streak-cue-beat-focus='support'] {
     opacity: 0.62;
+}
+
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-screen-cue='pulse'] {
+    animation-duration: 0.92s;
+}
+
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-screen-cue='burst'] {
+    animation-duration: 0.72s;
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent),
+        0 0 0.4rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-screen-cue='super'] {
+    animation-duration: 0.64s;
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.46rem color-mix(in srgb, var(--theme-magenta-bright) 18%, transparent);
+}
+
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-target='x6'],
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-tier='chain'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white 8%);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-target='x10'],
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-tier='surge'] {
+    width: 0.15rem;
+    height: 0.15rem;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 80%, var(--theme-gold-bright) 16%);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent),
+        0 0 0.4rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-target='combo-live'],
+.boardFloaterStreakCuePips i[data-chain-streak-cue-beat-tier='combo'] {
+    width: 0.17rem;
+    height: 0.17rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, var(--theme-magenta-bright) 18%);
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.46rem color-mix(in srgb, var(--theme-magenta-bright) 18%, transparent);
 }
 
 .boardFloaterChainMilestone {

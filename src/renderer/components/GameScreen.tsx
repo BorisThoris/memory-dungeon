@@ -136,7 +136,8 @@ import {
     getChainRewardLaneAction,
     getChainRewardProgress,
     getChainRewardStackLabel,
-    getChainRewardUrgencyCopy
+    getChainRewardUrgencyCopy,
+    getChainMomentumTier
 } from '../copy/chainMomentum';
 import { matchScoreFloaterChainCue, matchScoreFloaterLiveRegionText } from '../copy/matchScoreFloater';
 import {
@@ -2268,6 +2269,26 @@ const getMatchPayoffChipScreenCue = (
         return 'chain';
     }
     return chip.id === 'score' ? 'tick' : 'pulse';
+};
+
+const getBoardFloaterStreakTier = (depth: number): 'chain' | 'combo' | 'surge' => {
+    const tier = getChainMomentumTier(depth);
+    return tier === 'combo' || tier === 'surge' ? tier : 'chain';
+};
+
+const getBoardFloaterStreakScreenCue = (depth: number): 'burst' | 'pulse' | 'super' => {
+    const tier = getBoardFloaterStreakTier(depth);
+    if (tier === 'combo') {
+        return 'super';
+    }
+    return tier === 'surge' ? 'burst' : 'pulse';
+};
+
+const getBoardFloaterStreakCueTarget = (cue: string): 'combo-live' | 'x10' | 'x6' => {
+    if (/combo/i.test(cue)) {
+        return 'combo-live';
+    }
+    return /x10/i.test(cue) ? 'x10' : 'x6';
 };
 
 const getBoardFloaterRewardForecastBeatCount = (
@@ -5036,6 +5057,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         <span
                                             className={styles.boardFloaterStreak}
                                             data-chain-streak-depth={boardFloaterPayload.chainDepth}
+                                            data-chain-streak-screen-cue={getBoardFloaterStreakScreenCue(
+                                                boardFloaterPayload.chainDepth
+                                            )}
+                                            data-chain-streak-tier={getBoardFloaterStreakTier(boardFloaterPayload.chainDepth)}
                                         >
                                             <span className={styles.boardFloaterStreakPips} aria-hidden="true">
                                                 {Array.from(
@@ -5043,7 +5068,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-chain-streak-beat={index + 1}
+                                                            data-chain-streak-beat-depth={boardFloaterPayload.chainDepth}
                                                             data-chain-streak-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-chain-streak-beat-screen-cue={getBoardFloaterStreakScreenCue(
+                                                                boardFloaterPayload.chainDepth
+                                                            )}
+                                                            data-chain-streak-beat-tier={getBoardFloaterStreakTier(
+                                                                boardFloaterPayload.chainDepth
+                                                            )}
                                                             key={`board-streak-beat-${index + 1}`}
                                                         />
                                                 )
@@ -5058,9 +5090,21 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             (_, index) => (
                                                                 <i
                                                                     data-chain-streak-cue-beat={index + 1}
+                                                                    data-chain-streak-cue-beat-depth={
+                                                                        boardFloaterPayload.chainDepth
+                                                                    }
                                                                     data-chain-streak-cue-beat-focus={
                                                                         index === 0 ? 'primary' : 'support'
                                                                     }
+                                                                    data-chain-streak-cue-beat-screen-cue={getBoardFloaterStreakScreenCue(
+                                                                        boardFloaterPayload.chainDepth
+                                                                    )}
+                                                                    data-chain-streak-cue-beat-target={getBoardFloaterStreakCueTarget(
+                                                                        boardFloaterChainCue
+                                                                    )}
+                                                                    data-chain-streak-cue-beat-tier={getBoardFloaterStreakTier(
+                                                                        boardFloaterPayload.chainDepth
+                                                                    )}
                                                                     key={`board-streak-cue-beat-${index + 1}`}
                                                                 />
                                                             )

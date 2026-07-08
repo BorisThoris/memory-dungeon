@@ -1990,6 +1990,14 @@ describe('GameScreen (OVR-014)', () => {
             expect(screen.getByTestId('match-score-floater')).toHaveTextContent('x4 streak');
             expect(screen.getByTestId('match-score-floater')).toHaveTextContent('2 matches to x6');
             expect(screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')).toBeInTheDocument();
+            expect(screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')).toHaveAttribute(
+                'data-chain-streak-screen-cue',
+                'pulse'
+            );
+            expect(screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')).toHaveAttribute(
+                'data-chain-streak-tier',
+                'chain'
+            );
             expect(
                 screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')?.querySelectorAll(
                     '[data-chain-streak-beat]'
@@ -2000,6 +2008,21 @@ describe('GameScreen (OVR-014)', () => {
                     '[data-chain-streak-beat="1"]'
                 )
             ).toHaveAttribute('data-chain-streak-beat-focus', 'primary');
+            expect(
+                screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')?.querySelector(
+                    '[data-chain-streak-beat="1"]'
+                )
+            ).toHaveAttribute('data-chain-streak-beat-depth', '4');
+            expect(
+                screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')?.querySelector(
+                    '[data-chain-streak-beat="1"]'
+                )
+            ).toHaveAttribute('data-chain-streak-beat-screen-cue', 'pulse');
+            expect(
+                screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')?.querySelector(
+                    '[data-chain-streak-beat="1"]'
+                )
+            ).toHaveAttribute('data-chain-streak-beat-tier', 'chain');
             expect(screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')).toHaveTextContent(
                 'x4 streak'
             );
@@ -2016,6 +2039,26 @@ describe('GameScreen (OVR-014)', () => {
                     '[data-chain-streak-cue-beat="1"]'
                 )
             ).toHaveAttribute('data-chain-streak-cue-beat-focus', 'primary');
+            expect(
+                screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')?.querySelector(
+                    '[data-chain-streak-cue-beat="1"]'
+                )
+            ).toHaveAttribute('data-chain-streak-cue-beat-depth', '4');
+            expect(
+                screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')?.querySelector(
+                    '[data-chain-streak-cue-beat="1"]'
+                )
+            ).toHaveAttribute('data-chain-streak-cue-beat-screen-cue', 'pulse');
+            expect(
+                screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')?.querySelector(
+                    '[data-chain-streak-cue-beat="1"]'
+                )
+            ).toHaveAttribute('data-chain-streak-cue-beat-target', 'x6');
+            expect(
+                screen.getByTestId('match-score-floater').querySelector('[data-chain-streak-depth="4"]')?.querySelector(
+                    '[data-chain-streak-cue-beat="1"]'
+                )
+            ).toHaveAttribute('data-chain-streak-cue-beat-tier', 'chain');
             expect(screen.getByTestId('match-score-floater-reward-forecast')).toHaveTextContent('x4 +1 shard');
             expect(screen.getByTestId('match-score-floater-reward-forecast')).toHaveTextContent('x4 +1 guard');
             expect(screen.getByTestId('match-score-floater-reward-forecast')).toHaveTextContent('2x stack');
