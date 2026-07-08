@@ -1663,6 +1663,41 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-opportunity-compass-priority='single'[\s\S]*?\.opportunityCompassSummary[\s\S]*?var\(--theme-cyan-bright\)/);
     });
 
+    it('keeps opportunity compass row action beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout compass rows should read as quick horizontal payout beats'
+        ).toMatch(/data-opportunity-action-id='cashout'[\s\S]*?\.opportunityCompassBeatPips i[\s\S]*?animation-duration:\s*0\.7s/);
+        expect(
+            cssText,
+            'prime compass rows should use taller setup beats'
+        ).toMatch(/data-opportunity-action-id='prime'[\s\S]*?\.opportunityCompassBeatPips i[\s\S]*?height:\s*0\.22rem/);
+        expect(
+            cssText,
+            'route compass rows should stay horizontal route guidance'
+        ).toMatch(/data-opportunity-action-id='route'[\s\S]*?\.opportunityCompassBeatPips i[\s\S]*?animation-duration:\s*0\.88s/);
+        expect(
+            cssText,
+            'tool compass rows should keep utility beats square and mid-tempo'
+        ).toMatch(/data-opportunity-action-id='tool'[\s\S]*?\.opportunityCompassBeatPips i[\s\S]*?var\(--theme-violet-bright\)/);
+        expect(
+            cssText,
+            'claim and recover compass rows should use success payoff beats'
+        ).toMatch(/data-opportunity-action-id='claim'[\s\S]*?\.opportunityCompassBeatPips i[\s\S]*?var\(--theme-success\)/);
+        expect(
+            cssText,
+            'study compass rows should use slower planning beats'
+        ).toMatch(/data-opportunity-action-id='study'[\s\S]*?\.opportunityCompassBeatPips i[\s\S]*?animation-duration:\s*1s/);
+        expect(
+            cssText,
+            'risk compass rows should use tall caution beats'
+        ).toMatch(/data-opportunity-action-id='risk'[\s\S]*?\.opportunityCompassBeatPips i[\s\S]*?height:\s*0\.24rem/);
+    });
+
     it('keeps opportunity lane map summary action beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
@@ -2223,6 +2258,29 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'full follow-up meters should keep the same immediate beat language'
         ).toMatch(/data-chain-followup-meter-fill='100'[\s\S]*?\.chainOpportunityFollowupBeatPips i[\s\S]*?height:\s*0\.18rem/);
+    });
+
+    it('keeps HUD trait route urgency states visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'setup route urgency should read as a quieter priming state'
+        ).toMatch(/\.hudTraitRoutePill\[data-trait-route-urgency='setup'\][\s\S]*?var\(--theme-violet-bright\) 9%/);
+        expect(
+            cssText,
+            'ready and building route urgency should read as active route progress'
+        ).toMatch(/\.hudTraitRoutePill\[data-trait-route-urgency='ready'\],[\s\S]*?\.hudTraitRoutePill\[data-trait-route-urgency='building'\][\s\S]*?var\(--theme-cyan-bright\) 14%/);
+        expect(
+            cssText,
+            'next route urgency should read as an immediate cashout'
+        ).toMatch(/\.hudTraitRoutePill\[data-trait-route-urgency='next'\][\s\S]*?var\(--theme-gold-bright\) 20%/);
+        expect(
+            cssText,
+            'paid route urgency should read as a claimed success state'
+        ).toMatch(/\.hudTraitRoutePill\[data-trait-route-urgency='paid'\][\s\S]*?var\(--theme-success\) 16%/);
     });
 
     it('keeps primary trait-lane role beats visually distinct', () => {

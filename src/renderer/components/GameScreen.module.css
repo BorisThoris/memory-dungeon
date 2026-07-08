@@ -17603,6 +17603,45 @@
         color-mix(in srgb, var(--theme-void) 34%, transparent);
 }
 
+.hudTraitRoutePill[data-trait-route-urgency='setup'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 22%, var(--theme-violet-bright) 16%);
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--theme-violet-bright) 9%, transparent), transparent 54%),
+        color-mix(in srgb, var(--theme-void) 38%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent);
+}
+
+.hudTraitRoutePill[data-trait-route-urgency='ready'],
+.hudTraitRoutePill[data-trait-route-urgency='building'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-gold-bright) 18%);
+    background:
+        radial-gradient(circle at 12% 22%, color-mix(in srgb, var(--theme-cyan-bright) 14%, transparent), transparent 34%),
+        linear-gradient(180deg, color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent), transparent 62%),
+        color-mix(in srgb, var(--theme-panel-solid) 36%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+}
+
+.hudTraitRoutePill[data-trait-route-urgency='next'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 56%, var(--theme-cyan-bright) 18%);
+    background:
+        radial-gradient(circle at 12% 22%, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), transparent 36%),
+        linear-gradient(120deg, color-mix(in srgb, var(--theme-gold-bright) 15%, transparent), transparent 58%),
+        color-mix(in srgb, var(--theme-panel-solid) 42%, transparent);
+    box-shadow:
+        0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 16%, transparent),
+        0 0 0.82rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.hudTraitRoutePill[data-trait-route-urgency='paid'] {
+    border-color: color-mix(in srgb, var(--theme-success) 52%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(110deg, color-mix(in srgb, var(--theme-success) 16%, transparent), transparent 52%),
+        color-mix(in srgb, var(--theme-panel-solid) 44%, transparent);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
+        0 0 0.74rem color-mix(in srgb, var(--theme-success) 12%, transparent);
+}
+
 .hudTraitOpportunityPill {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-cyan-bright) 14%);
     background:

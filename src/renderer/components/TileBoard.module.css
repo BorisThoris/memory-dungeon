@@ -11922,12 +11922,46 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
 }
 
+.opportunityCompassRow[data-opportunity-action-id='cashout'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-opportunity-action-id='match'] .opportunityCompassBeatPips i {
+    width: 0.3rem;
+    height: 0.1rem;
+    animation-duration: 0.7s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 36%, transparent);
+}
+
+.opportunityCompassRow[data-opportunity-action-id='prime'] .opportunityCompassBeatPips i {
+    width: 0.14rem;
+    height: 0.22rem;
+    animation-duration: 0.92s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 82%, var(--theme-gold-bright) 18%);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 32%, transparent);
+}
+
 .opportunityCompassRow[data-opportunity-action-id='followup'] b,
 .opportunityCompassRow[data-opportunity-action-id='route'] b,
 .opportunityCompassRow[data-opportunity-action-id='tool'] b {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, var(--theme-violet-bright) 16%);
     background: color-mix(in srgb, var(--theme-cyan-bright) 11%, transparent);
     color: color-mix(in srgb, var(--theme-cyan-bright) 86%, white);
+}
+
+.opportunityCompassRow[data-opportunity-action-id='followup'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-opportunity-action-id='route'] .opportunityCompassBeatPips i {
+    width: 0.24rem;
+    height: 0.12rem;
+    animation-duration: 0.88s;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.opportunityCompassRow[data-opportunity-action-id='tool'] .opportunityCompassBeatPips i {
+    width: 0.16rem;
+    height: 0.16rem;
+    animation-duration: 0.84s;
+    background: color-mix(in srgb, var(--theme-violet-bright) 76%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-violet-bright) 30%, transparent);
 }
 
 .opportunityCompassRow[data-opportunity-action-id='claim'] b,
@@ -11938,10 +11972,35 @@
     color: color-mix(in srgb, var(--theme-success) 80%, white);
 }
 
+.opportunityCompassRow[data-opportunity-action-id='claim'] .opportunityCompassBeatPips i,
+.opportunityCompassRow[data-opportunity-action-id='recover'] .opportunityCompassBeatPips i {
+    width: 0.2rem;
+    height: 0.14rem;
+    animation-duration: 0.82s;
+    background: color-mix(in srgb, var(--theme-success) 80%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-success) 30%, transparent);
+}
+
+.opportunityCompassRow[data-opportunity-action-id='study'] .opportunityCompassBeatPips i {
+    width: 0.2rem;
+    height: 0.1rem;
+    animation-duration: 1s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 72%, var(--theme-cyan-bright) 28%);
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent);
+}
+
 .opportunityCompassRow[data-opportunity-action-id='risk'] b {
     border-color: color-mix(in srgb, var(--theme-danger) 36%, var(--theme-gold-bright) 18%);
     background: color-mix(in srgb, var(--theme-danger) 11%, transparent);
     color: color-mix(in srgb, var(--theme-danger) 74%, white);
+}
+
+.opportunityCompassRow[data-opportunity-action-id='risk'] .opportunityCompassBeatPips i {
+    width: 0.1rem;
+    height: 0.24rem;
+    animation-duration: 0.76s;
+    background: color-mix(in srgb, var(--theme-danger) 78%, white);
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-danger) 34%, transparent);
 }
 
 .opportunityCompassRow small {
