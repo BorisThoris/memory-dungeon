@@ -506,6 +506,20 @@ const CollectionScreen = () => {
                                             }.`}
                                             className={styles.runPayoffLaneMapSummary}
                                             data-run-payoff-lane-count={lastRunPayoffLaneMap.length}
+                                            data-run-payoff-lane-summary-primary={primaryLastRunPayoffLane?.id ?? 'none'}
+                                            data-run-payoff-lane-summary-primary-action={primaryLastRunPayoffLane?.action ?? 'none'}
+                                            data-run-payoff-lane-summary-primary-audio={
+                                                primaryLastRunPayoffLane ? getRunPayoffLaneAudioCue(primaryLastRunPayoffLane) : 'none'
+                                            }
+                                            data-run-payoff-lane-summary-primary-role={
+                                                primaryLastRunPayoffLane ? getRunPayoffLaneRole(primaryLastRunPayoffLane) : 'none'
+                                            }
+                                            data-run-payoff-lane-summary-primary-role-id={
+                                                primaryLastRunPayoffLane ? getRunPayoffLaneRoleId(primaryLastRunPayoffLane) : 'none'
+                                            }
+                                            data-run-payoff-lane-summary-primary-screen-cue={
+                                                primaryLastRunPayoffLane ? getRunPayoffLaneScreenCue(primaryLastRunPayoffLane) : 'none'
+                                            }
                                             data-testid="collection-last-run-payoff-lane-map-summary"
                                         >
                                             <small>Archive lanes</small>
@@ -526,6 +540,16 @@ const CollectionScreen = () => {
                                                             data-run-payoff-lane-map-summary-beat={index + 1}
                                                             data-run-payoff-lane-map-summary-beat-focus={
                                                                 index === 0 ? primaryLastRunPayoffLane?.id ?? 'none' : 'support'
+                                                            }
+                                                            data-run-payoff-lane-map-summary-beat-role-id={
+                                                                primaryLastRunPayoffLane
+                                                                    ? getRunPayoffLaneRoleId(primaryLastRunPayoffLane)
+                                                                    : 'none'
+                                                            }
+                                                            data-run-payoff-lane-map-summary-beat-screen-cue={
+                                                                primaryLastRunPayoffLane
+                                                                    ? getRunPayoffLaneScreenCue(primaryLastRunPayoffLane)
+                                                                    : 'none'
                                                             }
                                                             key={index}
                                                         />

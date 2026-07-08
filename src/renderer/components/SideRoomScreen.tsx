@@ -1234,6 +1234,22 @@ const SideRoomScreen = () => {
                                         }.`}
                                         className={styles.choiceLaneMapSummary}
                                         data-choice-lane-count={choiceLaneMap.length}
+                                        data-choice-lane-summary-primary={primaryChoiceLane?.id ?? 'none'}
+                                        data-choice-lane-summary-primary-action={
+                                            primaryChoiceLane ? sideRoomChoiceLaneAction(primaryChoiceLane) : 'none'
+                                        }
+                                        data-choice-lane-summary-primary-audio={
+                                            primaryChoiceLane ? sideRoomChoiceLaneAudioCue(primaryChoiceLane) : 'none'
+                                        }
+                                        data-choice-lane-summary-primary-role={
+                                            primaryChoiceLane ? sideRoomChoiceLaneRole(primaryChoiceLane) : 'none'
+                                        }
+                                        data-choice-lane-summary-primary-role-id={
+                                            primaryChoiceLane ? sideRoomChoiceLaneRoleId(primaryChoiceLane) : 'none'
+                                        }
+                                        data-choice-lane-summary-primary-screen-cue={
+                                            primaryChoiceLane ? sideRoomChoiceLaneScreenCue(primaryChoiceLane) : 'none'
+                                        }
                                         data-testid="side-room-choice-lane-map-summary"
                                     >
                                         <small>Lanes</small>
@@ -1251,6 +1267,12 @@ const SideRoomScreen = () => {
                                                     data-choice-lane-map-summary-beat={beatIndex + 1}
                                                     data-choice-lane-map-summary-beat-focus={
                                                         beatIndex === 0 ? primaryChoiceLane?.id ?? 'none' : 'support'
+                                                    }
+                                                    data-choice-lane-map-summary-beat-role-id={
+                                                        primaryChoiceLane ? sideRoomChoiceLaneRoleId(primaryChoiceLane) : 'none'
+                                                    }
+                                                    data-choice-lane-map-summary-beat-screen-cue={
+                                                        primaryChoiceLane ? sideRoomChoiceLaneScreenCue(primaryChoiceLane) : 'none'
                                                     }
                                                     key={beatIndex}
                                                 />

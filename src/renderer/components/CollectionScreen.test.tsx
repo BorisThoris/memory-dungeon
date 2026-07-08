@@ -170,6 +170,12 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         );
         const laneMapSummary = screen.getByTestId('collection-last-run-payoff-lane-map-summary');
         expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-count', '4');
+        expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-summary-primary', 'chain');
+        expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-summary-primary-action', 'Protect chain');
+        expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-summary-primary-audio', 'run-payoff-lane-chain');
+        expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-summary-primary-role', 'Protect');
+        expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-summary-primary-role-id', 'protect');
+        expect(laneMapSummary).toHaveAttribute('data-run-payoff-lane-summary-primary-screen-cue', 'burst');
         expect(laneMapSummary).toHaveTextContent('Archive lanes');
         expect(laneMapSummary).toHaveTextContent('4 lanes');
         expect(laneMapSummary).toHaveTextContent('Protect Chain');
@@ -177,6 +183,14 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(laneMapSummary.querySelector('[data-run-payoff-lane-map-summary-beat="1"]')).toHaveAttribute(
             'data-run-payoff-lane-map-summary-beat-focus',
             'chain'
+        );
+        expect(laneMapSummary.querySelector('[data-run-payoff-lane-map-summary-beat="1"]')).toHaveAttribute(
+            'data-run-payoff-lane-map-summary-beat-role-id',
+            'protect'
+        );
+        expect(laneMapSummary.querySelector('[data-run-payoff-lane-map-summary-beat="1"]')).toHaveAttribute(
+            'data-run-payoff-lane-map-summary-beat-screen-cue',
+            'burst'
         );
         expect(laneMapSummary.querySelector('[data-run-payoff-lane-map-summary-beat="2"]')).toHaveAttribute(
             'data-run-payoff-lane-map-summary-beat-focus',

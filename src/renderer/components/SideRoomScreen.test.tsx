@@ -301,6 +301,12 @@ describe('SideRoomScreen', () => {
         expect(laneMap).toHaveAttribute('data-choice-primary-lane-screen-cue', 'burst');
         const laneMapSummary = screen.getByTestId('side-room-choice-lane-map-summary');
         expect(laneMapSummary).toHaveAttribute('data-choice-lane-count', '2');
+        expect(laneMapSummary).toHaveAttribute('data-choice-lane-summary-primary', 'build');
+        expect(laneMapSummary).toHaveAttribute('data-choice-lane-summary-primary-action', 'Pick build');
+        expect(laneMapSummary).toHaveAttribute('data-choice-lane-summary-primary-audio', 'side-room-lane-build');
+        expect(laneMapSummary).toHaveAttribute('data-choice-lane-summary-primary-role', 'Prime');
+        expect(laneMapSummary).toHaveAttribute('data-choice-lane-summary-primary-role-id', 'prime');
+        expect(laneMapSummary).toHaveAttribute('data-choice-lane-summary-primary-screen-cue', 'burst');
         expect(laneMapSummary).toHaveTextContent('Lanes');
         expect(laneMapSummary).toHaveTextContent('2 lanes');
         expect(laneMapSummary).toHaveTextContent('Prime Build');
@@ -308,6 +314,14 @@ describe('SideRoomScreen', () => {
         expect(laneMapSummary.querySelector('[data-choice-lane-map-summary-beat="1"]')).toHaveAttribute(
             'data-choice-lane-map-summary-beat-focus',
             'build'
+        );
+        expect(laneMapSummary.querySelector('[data-choice-lane-map-summary-beat="1"]')).toHaveAttribute(
+            'data-choice-lane-map-summary-beat-role-id',
+            'prime'
+        );
+        expect(laneMapSummary.querySelector('[data-choice-lane-map-summary-beat="1"]')).toHaveAttribute(
+            'data-choice-lane-map-summary-beat-screen-cue',
+            'burst'
         );
         expect(laneMapSummary.querySelector('[data-choice-lane-map-summary-beat="2"]')).toHaveAttribute(
             'data-choice-lane-map-summary-beat-focus',

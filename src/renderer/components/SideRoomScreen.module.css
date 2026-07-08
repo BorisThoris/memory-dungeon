@@ -598,6 +598,54 @@
     opacity: 0.82;
 }
 
+.choiceLaneMap .choiceLaneMapSummary[data-choice-lane-summary-primary-screen-cue='burst'],
+.choiceLaneMap .choiceLaneMapSummary[data-choice-lane-summary-primary-role-id='prime'],
+.choiceLaneMap .choiceLaneMapSummary[data-choice-lane-summary-primary-role-id='stack'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-cyan-bright) 18%);
+    box-shadow:
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent),
+        0 0 0.9rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent);
+}
+
+.choiceLaneMap .choiceLaneMapSummary[data-choice-lane-summary-primary-screen-cue='reward'],
+.choiceLaneMap .choiceLaneMapSummary[data-choice-lane-summary-primary-role-id='claim'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 52%, var(--theme-success) 16%);
+}
+
+.choiceLaneMap .choiceLaneMapSummary[data-choice-lane-summary-primary-screen-cue='risk'],
+.choiceLaneMap .choiceLaneMapSummary[data-choice-lane-summary-primary-role-id='risk'] {
+    border-color: color-mix(in srgb, var(--theme-danger) 48%, var(--theme-gold-bright) 14%);
+}
+
+.choiceLaneMap .choiceLaneMapSummary[data-choice-lane-summary-primary-screen-cue='unlock'],
+.choiceLaneMap .choiceLaneMapSummary[data-choice-lane-summary-primary-role-id='bank'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 46%, var(--theme-cyan-bright) 16%);
+}
+
+.choiceLaneMap .choiceLaneMapSummaryBeatPips i[data-choice-lane-map-summary-beat-screen-cue='burst'] {
+    width: 0.22rem;
+    height: 0.22rem;
+    animation-duration: 0.7s;
+    box-shadow:
+        0 0 0.26rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.52rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.choiceLaneMap .choiceLaneMapSummaryBeatPips i[data-choice-lane-map-summary-beat-screen-cue='reward'],
+.choiceLaneMap .choiceLaneMapSummaryBeatPips i[data-choice-lane-map-summary-beat-role-id='claim'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+}
+
+.choiceLaneMap .choiceLaneMapSummaryBeatPips i[data-choice-lane-map-summary-beat-screen-cue='risk'],
+.choiceLaneMap .choiceLaneMapSummaryBeatPips i[data-choice-lane-map-summary-beat-role-id='risk'] {
+    background: color-mix(in srgb, var(--theme-danger) 68%, white 8%);
+}
+
+.choiceLaneMap .choiceLaneMapSummaryBeatPips i[data-choice-lane-map-summary-beat-screen-cue='unlock'],
+.choiceLaneMap .choiceLaneMapSummaryBeatPips i[data-choice-lane-map-summary-beat-role-id='bank'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 76%, white 8%);
+}
+
 .choiceLaneMapSummaryBeatPips i:nth-child(2) {
     animation-delay: 0.08s;
 }
