@@ -544,6 +544,18 @@ describe('TileBoard touch and click controls', () => {
             'data-chain-opportunity-beat-pip-action',
             'cashout'
         );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-audio',
+            'cashout-beat'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-screen-cue',
+            'super'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-tier',
+            'cashout'
+        );
         expect(
             screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="2"]')
         ).toHaveAttribute('data-chain-opportunity-beat-pip-focus', 'support');
@@ -2292,6 +2304,18 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action-id', 'followup');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-meter-fill', '60');
         expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(3);
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-audio',
+            'follow-up-beat'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-screen-cue',
+            'snap'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-tier',
+            'follow-up'
+        );
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-cue', 'Follow up');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-chain-opportunity-target', 'Tap marked follow-up');
         expect(screen.getByTestId('chain-opportunity-chip').querySelector('[data-chain-opportunity-target]')).toHaveAttribute(
@@ -3468,6 +3492,18 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveTextContent('5 routes ready');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-action-id', 'surge');
         expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(4);
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-audio',
+            'surge-beat'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-screen-cue',
+            'burst'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-tier',
+            'surge'
+        );
         expect(screen.getByTestId('chain-opportunity-arcade-callout')).toHaveAttribute(
             'data-chain-callout-tone',
             'surge'
@@ -3846,6 +3882,18 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-screen-cue', 'pulse');
         expect(screen.getByTestId('chain-opportunity-beat')).toHaveAttribute('data-chain-beat-tier', 'setup');
         expect(screen.getByTestId('chain-opportunity-beat').querySelectorAll('[data-chain-opportunity-beat-pip]')).toHaveLength(2);
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-audio',
+            'setup-beat'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-screen-cue',
+            'pulse'
+        );
+        expect(screen.getByTestId('chain-opportunity-beat').querySelector('[data-chain-opportunity-beat-pip="1"]')).toHaveAttribute(
+            'data-chain-opportunity-beat-pip-tier',
+            'setup'
+        );
         expect(screen.getByTestId('chain-opportunity-sequence-cue')).toHaveAttribute('data-chain-sequence-tone', 'setup');
         expect(
             screen.getByTestId('chain-opportunity-sequence-cue').querySelector('[data-chain-sequence-step="first"]')

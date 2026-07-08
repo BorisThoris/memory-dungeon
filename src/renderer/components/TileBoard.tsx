@@ -5540,7 +5540,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                         aria-hidden="true"
                                                         data-chain-opportunity-beat-pip={index + 1}
                                                         data-chain-opportunity-beat-pip-action={boardChainOpportunityBeatActionId ?? 'none'}
+                                                        data-chain-opportunity-beat-pip-audio={boardChainOpportunity.beatSignal!.audioCue}
                                                         data-chain-opportunity-beat-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                        data-chain-opportunity-beat-pip-screen-cue={boardChainOpportunity.beatSignal!.screenCue}
+                                                        data-chain-opportunity-beat-pip-tier={boardChainOpportunity.beatSignal!.tier}
                                                         key={`chain-opportunity-beat-${index}`}
                                                     />
                                                 )

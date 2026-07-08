@@ -1718,6 +1718,33 @@
     background: color-mix(in srgb, var(--theme-violet-bright) 78%, white 10%);
 }
 
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-screen-cue='super'],
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-tier='cashout'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
+    box-shadow:
+        0 0 0.4rem color-mix(in srgb, var(--theme-gold-bright) 38%, transparent),
+        0 0 0.72rem color-mix(in srgb, var(--theme-success) 14%, transparent);
+}
+
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-screen-cue='burst'],
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-tier='surge'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 72%, var(--theme-violet-bright) 24%);
+    box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-violet-bright) 28%, transparent);
+}
+
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-screen-cue='snap'],
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-tier='follow-up'],
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-tier='route'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 84%, white 6%);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 28%, transparent);
+}
+
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-screen-cue='pulse'],
+.chainOpportunityBeat i[data-chain-opportunity-beat-pip-tier='setup'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 78%, white 8%);
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-violet-bright) 24%, transparent);
+}
+
 .chainOpportunityBeat i:nth-child(2) {
     animation-delay: 0.07s;
 }
