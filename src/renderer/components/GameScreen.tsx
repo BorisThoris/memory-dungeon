@@ -5201,9 +5201,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                     {Array.from({ length: cue.stackSize ?? 1 }, (_, index) => (
                                                                         <i
                                                                             data-chain-reward-stack-beat={index + 1}
+                                                                            data-chain-reward-stack-beat-audio={getBoardFloaterRewardForecastAudioCue(
+                                                                                cue
+                                                                            )}
                                                                             data-chain-reward-stack-beat-focus={
                                                                                 index === 0 ? 'primary' : 'support'
                                                                             }
+                                                                            data-chain-reward-stack-beat-screen-cue={getBoardFloaterRewardForecastScreenCue(
+                                                                                cue
+                                                                            )}
+                                                                            data-chain-reward-stack-beat-tone={cue.tone}
+                                                                            data-chain-reward-stack-beat-urgency={cue.urgency}
                                                                             key={`${cue.id}-board-reward-stack-${index + 1}`}
                                                                         />
                                                                     ))}
@@ -5214,7 +5222,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             {Array.from({ length: beatCount }, (_, index) => (
                                                                 <i
                                                                     data-chain-reward-beat={index + 1}
+                                                                    data-chain-reward-beat-audio={getBoardFloaterRewardForecastAudioCue(
+                                                                        cue
+                                                                    )}
                                                                     data-chain-reward-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                    data-chain-reward-beat-lane-action={getChainRewardLaneAction(cue.urgency)}
+                                                                    data-chain-reward-beat-screen-cue={getBoardFloaterRewardForecastScreenCue(
+                                                                        cue
+                                                                    )}
+                                                                    data-chain-reward-beat-tone={cue.tone}
+                                                                    data-chain-reward-beat-urgency={cue.urgency}
                                                                     key={`${cue.id}-board-reward-beat-${index + 1}`}
                                                                 />
                                                             ))}

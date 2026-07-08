@@ -2059,6 +2059,30 @@ describe('GameScreen (OVR-014)', () => {
                     .querySelector('[data-chain-reward-tone="reward"]')
                     ?.querySelector('[data-chain-reward-stack-beat="1"]')
             ).toHaveAttribute('data-chain-reward-stack-beat-focus', 'primary');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-stack-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-stack-beat-audio', 'chain-reward-stack');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-stack-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-stack-beat-screen-cue', 'burst');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-stack-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-stack-beat-tone', 'reward');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-stack-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-stack-beat-urgency', 'next');
             expect(screen.getByTestId('match-score-floater-reward-forecast')).toHaveAccessibleName(
                 /Match score floater reward forecast.*Hit now: Next: Cash next: x4 \+1 shard: 1 match: Double cashout: 2\/2: 0 matches left: 2x stack.*Hit now: Next: Cash next: x4 \+1 guard: 1 match: Double cashout: 4\/4: 0 matches left: 2x stack/i
             );
@@ -2096,6 +2120,36 @@ describe('GameScreen (OVR-014)', () => {
                     .querySelector('[data-chain-reward-tone="reward"]')
                     ?.querySelectorAll('[data-chain-reward-beat]')
             ).toHaveLength(4);
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-audio', 'chain-reward-stack');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-lane-action', 'Cash next');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-screen-cue', 'burst');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-tone', 'reward');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-urgency', 'next');
             expect(screen.getByTestId('match-score-floater-reward-forecast').querySelector('[data-chain-reward-tone="reward"]')).toHaveAttribute(
                 'data-chain-reward-lane-action',
                 'Cash next'
@@ -2641,6 +2695,36 @@ describe('GameScreen (OVR-014)', () => {
                     .querySelector('[data-chain-reward-tone="reward"]')
                     ?.querySelector('[data-chain-reward-beat="1"]')
             ).toHaveAttribute('data-chain-reward-beat-focus', 'primary');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-audio', 'chain-reward-shard');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-lane-action', 'Prime cashout');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-screen-cue', 'pulse');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-tone', 'reward');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-reward-forecast')
+                    .querySelector('[data-chain-reward-tone="reward"]')
+                    ?.querySelector('[data-chain-reward-beat="1"]')
+            ).toHaveAttribute('data-chain-reward-beat-urgency', 'soon');
             expect(
                 screen
                     .getByTestId('match-score-floater-reward-forecast')

@@ -15644,6 +15644,41 @@
     opacity: 0.64;
 }
 
+.boardFloaterRewardStackPips i[data-chain-reward-stack-beat-screen-cue='burst'],
+.boardFloaterRewardStackPips i[data-chain-reward-stack-beat-urgency='next'] {
+    width: 0.17rem;
+    height: 0.17rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.42rem color-mix(in srgb, var(--theme-success) 16%, transparent);
+}
+
+.boardFloaterRewardStackPips i[data-chain-reward-stack-beat-screen-cue='pulse'],
+.boardFloaterRewardStackPips i[data-chain-reward-stack-beat-urgency='soon'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 74%, white 8%);
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+}
+
+.boardFloaterRewardStackPips i[data-chain-reward-stack-beat-screen-cue='tick'],
+.boardFloaterRewardStackPips i[data-chain-reward-stack-beat-urgency='later'] {
+    width: 0.12rem;
+    height: 0.12rem;
+    opacity: 0.72;
+}
+
+.boardFloaterRewardStackPips i[data-chain-reward-stack-beat-tone='guard'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 80%, white 8%);
+}
+
+.boardFloaterRewardStackPips i[data-chain-reward-stack-beat-tone='heal'] {
+    background: color-mix(in srgb, var(--theme-success) 78%, white 8%);
+}
+
+.boardFloaterRewardStackPips i[data-chain-reward-stack-beat-tone='reward'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+}
+
 .boardFloaterRewardBeatPips {
     display: inline-flex;
     flex: 0 0 auto;
@@ -15658,6 +15693,57 @@
     background: currentColor;
     box-shadow: 0 0 0.28rem color-mix(in srgb, currentColor 30%, transparent);
     opacity: 0.64;
+}
+
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-focus='primary'] {
+    opacity: 1;
+}
+
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-focus='support'] {
+    opacity: 0.68;
+}
+
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-screen-cue='burst'],
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-urgency='next'],
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-lane-action='Cash next'] {
+    width: 0.21rem;
+    height: 0.21rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.46rem color-mix(in srgb, var(--theme-success) 16%, transparent);
+    animation: matchScoreFloaterPulse 0.72s ease-in-out infinite;
+}
+
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-screen-cue='pulse'],
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-urgency='soon'],
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-lane-action='Prime cashout'] {
+    width: 0.18rem;
+    height: 0.18rem;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 76%, white 8%);
+    box-shadow: 0 0 0.3rem color-mix(in srgb, var(--theme-cyan-bright) 30%, transparent);
+    animation: matchScoreFloaterPulse 0.96s ease-in-out infinite;
+}
+
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-screen-cue='tick'],
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-urgency='later'],
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-lane-action='Hold streak'] {
+    width: 0.13rem;
+    height: 0.13rem;
+    opacity: 0.58;
+    animation: matchScoreFloaterPulse 1.32s ease-in-out infinite;
+}
+
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-tone='guard'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 82%, white 8%);
+}
+
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-tone='heal'] {
+    background: color-mix(in srgb, var(--theme-success) 80%, white 8%);
+}
+
+.boardFloaterRewardBeatPips i[data-chain-reward-beat-tone='reward'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
 }
 
 .boardFloaterRewardForecast > span[data-chain-reward-beats='3'] .boardFloaterRewardBeatPips i {
