@@ -4049,6 +4049,48 @@
     background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 78%, white);
 }
 
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-role-id='cashout'],
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-lane='score'],
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-lane='shard'] {
+    width: 0.24rem;
+    height: 0.1rem;
+    animation-duration: 0.72s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, white);
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
+    opacity: 0.96;
+}
+
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-role-id='protect'],
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-role-id='block'],
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-lane='guard'],
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-lane='block'] {
+    width: 0.12rem;
+    height: 0.2rem;
+    animation-duration: 1s;
+    background: color-mix(in srgb, var(--theme-success) 74%, white);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-success) 22%, transparent);
+}
+
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-role-id='recall'],
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-role-id='tool'],
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-lane='recall'],
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-lane='tool'] {
+    width: 0.2rem;
+    height: 0.12rem;
+    animation-duration: 0.9s;
+    background: color-mix(in srgb, var(--theme-violet-bright) 74%, var(--theme-cyan-bright) 18%);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+}
+
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-role-id='risk'],
+.chainOpportunityRecipeBeatPips i[data-chain-recipe-beat-lane='risk'] {
+    width: 0.16rem;
+    height: 0.22rem;
+    animation-duration: 0.78s;
+    background: color-mix(in srgb, var(--theme-warning, #f2bc6b) 80%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-warning, #f2bc6b) 24%, transparent);
+}
+
 .chainOpportunityTraitLaneMap {
     display: inline-grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 4.7rem), 1fr));

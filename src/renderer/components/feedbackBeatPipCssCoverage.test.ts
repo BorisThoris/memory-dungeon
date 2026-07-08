@@ -685,6 +685,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-chain-reward-urgency': ['later', 'next', 'soon'],
         'data-chain-reward-urgency-screen-cue': ['burst', 'pulse', 'tick'],
         'data-chain-reward-urgency-tier': ['later', 'next', 'soon'],
+        'data-chain-recipe-beat-lane': ['block', 'guard', 'recall', 'risk', 'score', 'shard', 'tool'],
+        'data-chain-recipe-beat-role-id': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
         'data-chain-recipe-lane': ['block', 'guard', 'recall', 'risk', 'score', 'shard', 'tool'],
         'data-chain-recipe-role-id': ['block', 'cashout', 'protect', 'recall', 'risk', 'tool'],
         'data-chain-opportunity-beat-action-id': ['cashout', 'followup', 'route', 'setup', 'surge'],

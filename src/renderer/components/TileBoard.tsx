@@ -5600,6 +5600,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                             <i
                                                                 data-chain-recipe-beat={index + 1}
                                                                 data-chain-recipe-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                                data-chain-recipe-beat-lane={row.laneId}
+                                                                data-chain-recipe-beat-role-id={row.roleId}
                                                                 key={index}
                                                             />
                                                         ))}
