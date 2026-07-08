@@ -1305,6 +1305,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-tool-crescendo-screen-cue='burst'[\s\S]*?\.toolCrescendoPips i[\s\S]*?animation-duration:\s*0\.58s/);
     });
 
+    it('keeps action feedback crescendo tier and screen-cue beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'prime action feedback crescendos should stay slower and quieter'
+        ).toMatch(/data-action-feedback-crescendo-tier='prime'[\s\S]*?\.actionFeedbackCrescendoPips i[\s\S]*?animation-duration:\s*0\.98s/);
+        expect(
+            cssText,
+            'cashout action feedback crescendos should read as fast reward beats'
+        ).toMatch(/data-action-feedback-crescendo-tier='cashout'[\s\S]*?\.actionFeedbackCrescendoPips i[\s\S]*?animation-duration:\s*0\.74s/);
+        expect(
+            cssText,
+            'stack action feedback crescendos should use larger payoff beats'
+        ).toMatch(/data-action-feedback-crescendo-tier='stack'[\s\S]*?\.actionFeedbackCrescendoPips i[\s\S]*?height:\s*0\.3rem/);
+        expect(
+            cssText,
+            'super action feedback crescendos should use maxed beat timing'
+        ).toMatch(/data-action-feedback-crescendo-tier='super'[\s\S]*?\.actionFeedbackCrescendoPips i[\s\S]*?animation-duration:\s*0\.54s/);
+        expect(
+            cssText,
+            'super screen cues should be the widest fastest action feedback pips'
+        ).toMatch(/data-action-feedback-crescendo-screen-cue='super'[\s\S]*?\.actionFeedbackCrescendoPips i[\s\S]*?animation-duration:\s*0\.5s/);
+    });
+
     it('keeps hazard opportunity families visually distinct in beat pips', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

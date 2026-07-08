@@ -5115,6 +5115,50 @@
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 48%, var(--theme-gold-bright) 18%);
 }
 
+.actionFeedbackCrescendo[data-action-feedback-crescendo-tier='prime'] .actionFeedbackCrescendoPips i {
+    height: 0.18rem;
+    animation-duration: 0.98s;
+    opacity: 0.76;
+}
+
+.actionFeedbackCrescendo[data-action-feedback-crescendo-tier='cashout'] .actionFeedbackCrescendoPips i {
+    height: 0.22rem;
+    animation-duration: 0.74s;
+    opacity: 0.9;
+}
+
+.actionFeedbackCrescendo[data-action-feedback-crescendo-tier='stack'] .actionFeedbackCrescendoPips i {
+    height: 0.3rem;
+    animation-duration: 0.64s;
+    opacity: 0.96;
+}
+
+.actionFeedbackCrescendo[data-action-feedback-crescendo-tier='super'] .actionFeedbackCrescendoPips i {
+    height: 0.34rem;
+    animation-duration: 0.54s;
+    opacity: 1;
+}
+
+.actionFeedbackCrescendo[data-action-feedback-crescendo-screen-cue='pulse'] .actionFeedbackCrescendoPips i {
+    width: 0.24rem;
+    animation-duration: 0.92s;
+}
+
+.actionFeedbackCrescendo[data-action-feedback-crescendo-screen-cue='snap'] .actionFeedbackCrescendoPips i {
+    width: 0.32rem;
+    animation-duration: 0.72s;
+}
+
+.actionFeedbackCrescendo[data-action-feedback-crescendo-screen-cue='burst'] .actionFeedbackCrescendoPips i {
+    width: 0.36rem;
+    animation-duration: 0.62s;
+}
+
+.actionFeedbackCrescendo[data-action-feedback-crescendo-screen-cue='super'] .actionFeedbackCrescendoPips i {
+    width: 0.42rem;
+    animation-duration: 0.5s;
+}
+
 .actionFeedbackCrescendo[data-action-feedback-crescendo-tier='super'] strong {
     color: color-mix(in srgb, var(--theme-magenta-bright) 84%, white);
 }
