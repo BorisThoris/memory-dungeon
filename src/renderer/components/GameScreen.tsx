@@ -5634,7 +5634,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             (_, beatIndex) => (
                                                                 <i
                                                                     data-mismatch-recovery-primary-lane-beat={beatIndex + 1}
+                                                                    data-mismatch-recovery-primary-lane-beat-audio={getMismatchRecoveryLaneAudioCue(
+                                                                        boardFloaterPrimaryMismatchRecoveryLane
+                                                                    )}
                                                                     data-mismatch-recovery-primary-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                    data-mismatch-recovery-primary-lane-beat-role={mismatchRecoveryLaneRole(
+                                                                        boardFloaterPrimaryMismatchRecoveryLane
+                                                                    )}
+                                                                    data-mismatch-recovery-primary-lane-beat-screen-cue={getMismatchRecoveryLaneScreenCue(
+                                                                        boardFloaterPrimaryMismatchRecoveryLane
+                                                                    )}
                                                                     key={beatIndex}
                                                                 />
                                                             )
@@ -5666,7 +5675,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                             (_, beatIndex) => (
                                                                 <i
                                                                     data-mismatch-recovery-lane-beat={beatIndex + 1}
+                                                                    data-mismatch-recovery-lane-beat-audio={getMismatchRecoveryLaneAudioCue(
+                                                                        lane
+                                                                    )}
                                                                     data-mismatch-recovery-lane-beat-focus={beatIndex === 0 ? 'primary' : 'support'}
+                                                                    data-mismatch-recovery-lane-beat-role={mismatchRecoveryLaneRole(lane)}
+                                                                    data-mismatch-recovery-lane-beat-screen-cue={getMismatchRecoveryLaneScreenCue(
+                                                                        lane
+                                                                    )}
                                                                     key={beatIndex}
                                                                 />
                                                             )

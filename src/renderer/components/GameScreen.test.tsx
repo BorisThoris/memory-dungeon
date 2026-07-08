@@ -3893,6 +3893,24 @@ describe('GameScreen (OVR-014)', () => {
             expect(
                 screen
                     .getByTestId('mismatch-score-floater-recovery-lane-map')
+                    .querySelector('[data-mismatch-recovery-lane="recover"]')
+                    ?.querySelector('[data-mismatch-recovery-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-lane-beat-audio', 'mismatch-recovery-safe');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-lane-map')
+                    .querySelector('[data-mismatch-recovery-lane="recover"]')
+                    ?.querySelector('[data-mismatch-recovery-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-lane-beat-screen-cue', 'recover');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-lane-map')
+                    .querySelector('[data-mismatch-recovery-lane="recover"]')
+                    ?.querySelector('[data-mismatch-recovery-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-lane-beat-role', 'Recover');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-lane-map')
                     .querySelector('[data-mismatch-recovery-lane="chain"]')
             ).toHaveAttribute('data-mismatch-recovery-lane-action', 'Reset chain');
             expect(
@@ -3916,6 +3934,18 @@ describe('GameScreen (OVR-014)', () => {
                     .querySelector('[data-mismatch-recovery-lane="chain"]')
                     ?.querySelectorAll('[data-mismatch-recovery-lane-beat]')
             ).toHaveLength(3);
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-lane-map')
+                    .querySelector('[data-mismatch-recovery-lane="chain"]')
+                    ?.querySelector('[data-mismatch-recovery-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-lane-beat-screen-cue', 'chain');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-lane-map')
+                    .querySelector('[data-mismatch-recovery-lane="chain"]')
+                    ?.querySelector('[data-mismatch-recovery-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-lane-beat-role', 'Rebuild');
             expect(
                 screen.getByText(
                     /No match\. Next action: Safe pair: Safe match\. Recovery sequence: First Safe match\. Then Prime x3 loop\. Keep Re-prime chain\. Recovery lane map\. Recover Recover x1\. Confirm pair\. Safe pair\. Chain Rebuild x1\. Reset chain\. Reset\. Recover beat: Safe match then prime x3 loop\. Recover with a safe match\. Chain reset/
@@ -4153,6 +4183,21 @@ describe('GameScreen (OVR-014)', () => {
                     .getByTestId('mismatch-score-floater-primary-recovery-lane')
                     .querySelectorAll('[data-mismatch-recovery-primary-lane-beat]')
             ).toHaveLength(4);
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-primary-recovery-lane')
+                    .querySelector('[data-mismatch-recovery-primary-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-primary-lane-beat-audio', 'mismatch-recovery-lost');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-primary-recovery-lane')
+                    .querySelector('[data-mismatch-recovery-primary-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-primary-lane-beat-screen-cue', 'risk');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-primary-recovery-lane')
+                    .querySelector('[data-mismatch-recovery-primary-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-primary-lane-beat-role', 'Save');
             expect(screen.getByTestId('mismatch-score-floater-recovery-lane-map')).toHaveTextContent('Recover');
             expect(screen.getByTestId('mismatch-score-floater-recovery-lane-map')).toHaveTextContent('Confirm pair');
             expect(screen.getByTestId('mismatch-score-floater-recovery-lane-map')).toHaveTextContent('Safe pair');
@@ -4191,6 +4236,24 @@ describe('GameScreen (OVR-014)', () => {
                     .querySelector('[data-mismatch-recovery-lane="lost"]')
                     ?.querySelectorAll('[data-mismatch-recovery-lane-beat]')
             ).toHaveLength(4);
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-lane-map')
+                    .querySelector('[data-mismatch-recovery-lane="lost"]')
+                    ?.querySelector('[data-mismatch-recovery-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-lane-beat-audio', 'mismatch-recovery-lost');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-lane-map')
+                    .querySelector('[data-mismatch-recovery-lane="lost"]')
+                    ?.querySelector('[data-mismatch-recovery-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-lane-beat-screen-cue', 'risk');
+            expect(
+                screen
+                    .getByTestId('mismatch-score-floater-recovery-lane-map')
+                    .querySelector('[data-mismatch-recovery-lane="lost"]')
+                    ?.querySelector('[data-mismatch-recovery-lane-beat="1"]')
+            ).toHaveAttribute('data-mismatch-recovery-lane-beat-role', 'Save');
             expect(
                 screen
                     .getByTestId('mismatch-score-floater-recovery-lane-map')
