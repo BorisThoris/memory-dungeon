@@ -2504,6 +2504,25 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-reward-lane='heal'[\s\S]*?\.hudChainRewardLaneBeatPips i[\s\S]*?animation-duration:\s*0\.96s/);
     });
 
+    it('keeps HUD chain reward ladder urgency beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'next reward ladder entries should read as immediate cashout'
+        ).toMatch(/data-chain-reward-ladder-urgency='next'[\s\S]*?\.hudChainRewardBeatPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'soon reward ladder entries should read as mid-tempo setup'
+        ).toMatch(/data-chain-reward-ladder-urgency='soon'[\s\S]*?\.hudChainRewardBeatPips i[\s\S]*?height:\s*0\.14rem/);
+        expect(
+            cssText,
+            'later reward ladder entries should stay slower and quieter'
+        ).toMatch(/data-chain-reward-ladder-urgency='later'[\s\S]*?\.hudChainRewardBeatPips i[\s\S]*?animation-duration:\s*1\.34s/);
+    });
+
     it('keeps chain reward ladder summary action beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

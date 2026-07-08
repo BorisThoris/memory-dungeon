@@ -8600,6 +8600,35 @@
     box-shadow: 0 0 0.58rem color-mix(in srgb, currentColor 12%, transparent);
 }
 
+.hudChainRewardForecast > span[data-chain-reward-ladder] u[data-chain-reward-ladder-urgency='next'] .hudChainRewardBeatPips i {
+    width: 0.24rem;
+    height: 0.2rem;
+    animation-duration: 0.68s;
+    opacity: 0.96;
+}
+
+.hudChainRewardForecast > span[data-chain-reward-ladder] u[data-chain-reward-ladder-urgency='soon'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 14%, transparent);
+}
+
+.hudChainRewardForecast > span[data-chain-reward-ladder] u[data-chain-reward-ladder-urgency='soon'] .hudChainRewardBeatPips i {
+    width: 0.2rem;
+    height: 0.14rem;
+    animation-duration: 0.92s;
+    opacity: 0.82;
+}
+
+.hudChainRewardForecast > span[data-chain-reward-ladder] u[data-chain-reward-ladder-urgency='later'] {
+    opacity: 0.86;
+}
+
+.hudChainRewardForecast > span[data-chain-reward-ladder] u[data-chain-reward-ladder-urgency='later'] .hudChainRewardBeatPips i {
+    width: 0.14rem;
+    height: 0.12rem;
+    animation-duration: 1.34s;
+    opacity: 0.62;
+}
+
 .hudChainRewardForecast > span[data-chain-reward-ladder] u[data-chain-reward-ladder-screen-cue='burst'] {
     box-shadow:
         0 0 0 1px color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
