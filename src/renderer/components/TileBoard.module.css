@@ -2763,6 +2763,13 @@
         inset 0 1px 0 color-mix(in srgb, var(--theme-text) 8%, transparent);
 }
 
+.chainOpportunitySurge[data-chain-opportunity-surge-screen-cue='burst'] .chainOpportunitySurgeBeatPips i {
+    width: 0.34rem;
+    height: 0.1rem;
+    animation-duration: 0.58s;
+    opacity: 0.98;
+}
+
 .chainOpportunitySurge[data-chain-opportunity-surge-tone='surge'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 58%, var(--theme-violet-bright) 24%);
     background:
@@ -2777,6 +2784,9 @@
 }
 
 .chainOpportunitySurge[data-chain-opportunity-surge-tone='surge'] .chainOpportunitySurgeBeatPips i {
+    width: 0.32rem;
+    height: 0.1rem;
+    animation-duration: 0.66s;
     background: color-mix(in srgb, var(--theme-gold-bright) 78%, white 8%);
     box-shadow: 0 0 0.38rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent);
 }
@@ -3021,8 +3031,21 @@
 }
 
 .chainOpportunityArmedPerk[data-chain-armed-perk-tone='armed'] .chainOpportunityArmedPerkBeatPips i {
+    width: 0.14rem;
+    height: 0.18rem;
+    animation-duration: 1.04s;
+    opacity: 0.78;
     background: color-mix(in srgb, var(--theme-cyan-bright) 78%, white);
     box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-cyan-bright) 20%, transparent);
+}
+
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='payoff'] .chainOpportunityArmedPerkBeatPips i {
+    width: 0.24rem;
+    height: 0.1rem;
+    animation-duration: 0.72s;
+    opacity: 0.96;
+    background: color-mix(in srgb, var(--theme-gold-bright) 82%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent);
 }
 
 .chainOpportunityArmedPerkMeter {

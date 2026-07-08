@@ -1841,6 +1841,37 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-milestone-screen-cue='tick'[\s\S]*?\.chainOpportunityMilestoneBeatPips i[\s\S]*?animation-duration:\s*1\.34s/);
     });
 
+    it('keeps chain surge callout beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(cssText).toContain(".chainOpportunitySurge[data-chain-opportunity-surge-screen-cue='burst'] .chainOpportunitySurgeBeatPips i");
+        expect(
+            cssText,
+            'surge callouts should use fast wide acceleration beats'
+        ).toMatch(/data-chain-opportunity-surge-tone='surge'[\s\S]*?\.chainOpportunitySurgeBeatPips i[\s\S]*?animation-duration:\s*0\.66s/);
+        expect(
+            cssText,
+            'burst surge callouts should stay fastest and high-emphasis'
+        ).toMatch(/data-chain-opportunity-surge-screen-cue='burst'[\s\S]*?\.chainOpportunitySurgeBeatPips i[\s\S]*?animation-duration:\s*0\.58s/);
+    });
+
+    it('keeps chain armed perk payoff beats visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'armed perk state should use guarded setup beats'
+        ).toMatch(/data-chain-armed-perk-tone='armed'[\s\S]*?\.chainOpportunityArmedPerkBeatPips i[\s\S]*?height:\s*0\.18rem/);
+        expect(
+            cssText,
+            'payoff perk state should use quick payout beats'
+        ).toMatch(/data-chain-armed-perk-tone='payoff'[\s\S]*?\.chainOpportunityArmedPerkBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
+    });
+
     it('keeps trap resolution signal beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
