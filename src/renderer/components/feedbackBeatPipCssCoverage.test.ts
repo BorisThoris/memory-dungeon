@@ -1460,6 +1460,33 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-tool-crescendo-screen-cue='burst'[\s\S]*?\.toolCrescendoPips i[\s\S]*?animation-duration:\s*0\.58s/);
     });
 
+    it('keeps toolbar cue badges tied to route, payoff, recall, and control language', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'tool payoff stack route cues should use cyan route language'
+        ).toMatch(/data-tool-payoff-cue-id='linked-route'[\s\S]*?strong i[\s\S]*?var\(--theme-cyan-bright\) 90%/);
+        expect(
+            cssText,
+            'tool payoff stack recall cues should use violet recall language'
+        ).toMatch(/data-tool-payoff-cue-id='recall-route'[\s\S]*?strong i[\s\S]*?var\(--theme-violet-bright\) 88%/);
+        expect(
+            cssText,
+            'tool payoff stack control cues should use danger control language'
+        ).toMatch(/data-tool-payoff-cue-id='control-board'[\s\S]*?strong i[\s\S]*?var\(--theme-danger\) 84%/);
+        expect(
+            cssText,
+            'tool crescendo cashout and stack cues should use gold payoff language'
+        ).toMatch(/data-tool-crescendo-cue-id='payoff-bar'[\s\S]*?\.toolCrescendoCueBadge[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'tool crescendo prime cues should reuse cyan setup language'
+        ).toMatch(/data-tool-crescendo-cue-id='swap-target-crossbar'[\s\S]*?\.toolCrescendoCueBadge[\s\S]*?var\(--theme-cyan-bright\) 90%/);
+    });
+
     it('keeps action feedback crescendo tier and screen-cue beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)

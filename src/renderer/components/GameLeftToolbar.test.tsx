@@ -71,9 +71,11 @@ describe('GameLeftToolbar', () => {
         renderToolbar(run);
 
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Tool stack');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('oo');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('3 tools live');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Route + Recall + Control');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-meter-fill', '75');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-cue-id', 'linked-route');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('First');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Set route before matching');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Then');
@@ -92,13 +94,15 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-crescendo-screen-cue', 'snap');
         expect(screen.getByTestId('tool-crescendo')).toHaveAttribute('data-tool-crescendo-action', 'Cash route');
         expect(screen.getByTestId('tool-crescendo')).toHaveAttribute('data-tool-crescendo-audio', 'tool-crescendo-cashout');
+        expect(screen.getByTestId('tool-crescendo')).toHaveAttribute('data-tool-crescendo-cue-id', 'payoff-bar');
         expect(screen.getByTestId('tool-crescendo')).toHaveAttribute('data-tool-crescendo-screen-cue', 'snap');
+        expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('=+');
         expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('3 beat');
         expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('Cashout beat');
         expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('Cash route');
         expect(screen.getByTestId('tool-crescendo').querySelectorAll('[data-tool-crescendo-beat]')).toHaveLength(3);
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAccessibleName(
-            'Tool stack: 3 tools live. Route + Recall + Control. First: Set route before matching. Then: Match new adjacency. Keep: Keep trait route live. Tool crescendo: Cash route. Cashout beat. 3 beats.'
+            'Tool stack: 3 tools live. Route cue: oo. Route + Recall + Control. First: Set route before matching. Then: Match new adjacency. Keep: Keep trait route live. Tool crescendo: Cashout cue: =+. Cash route. Cashout beat. 3 beats.'
         );
         expect(screen.getByLabelText(/Board powers/i)).toHaveAccessibleName(/Tool stack: 3 tools live/i);
         expect(screen.getByTestId('row-swap-setup-badge')).toHaveTextContent('Prime');
@@ -244,7 +248,9 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-first', 'Use swap to cash route');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-then', 'Match created route');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Route');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('oo');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-stack-tone', 'combo');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-cue-id', 'linked-route');
         expect(screen.getByTestId('row-swap-setup-badge')).toHaveTextContent('Route prime');
         expect(screen.getByTestId('row-swap-setup-badge')).toHaveAttribute('data-power-recommendation', 'route-setup');
         expect(screen.getByTestId('tile-swap-setup-badge')).toHaveTextContent('Best tool');
@@ -294,9 +300,11 @@ describe('GameLeftToolbar', () => {
         renderToolbar(run);
 
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Tool stack');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('oo');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('3 tools live');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Route + Chain + Recall');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-meter-fill', '100');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-cue-id', 'linked-route');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Use swap to stack cashout');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Cash stacked route');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-first', 'Use swap to stack cashout');
@@ -309,14 +317,18 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-crescendo-cue', 'burst');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-crescendo-screen-cue', 'burst');
         expect(screen.getByTestId('tool-crescendo')).toHaveAttribute('data-tool-crescendo-screen-cue', 'burst');
+        expect(screen.getByTestId('tool-crescendo')).toHaveAttribute('data-tool-crescendo-cue-id', 'payoff-stack');
+        expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('**');
         expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('4 beat');
         expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('Stack burst');
         expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('Stack cashout');
         expect(screen.getByTestId('tool-crescendo').querySelectorAll('[data-tool-crescendo-beat]')).toHaveLength(4);
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAccessibleName(
-            'Tool stack: 3 tools live. Route + Chain + Recall. First: Use swap to stack cashout. Then: Cash stacked route. Keep: Keep trait route live. Tool crescendo: Stack cashout. Stack burst. 4 beats.'
+            'Tool stack: 3 tools live. Route cue: oo. Route + Chain + Recall. First: Use swap to stack cashout. Then: Cash stacked route. Keep: Keep trait route live. Tool crescendo: Stack cue: **. Stack cashout. Stack burst. 4 beats.'
         );
-        expect(screen.getByLabelText(/Board powers/i)).toHaveAccessibleName(/Tool stack: 3 tools live\. Route \+ Chain \+ Recall/i);
+        expect(screen.getByLabelText(/Board powers/i)).toHaveAccessibleName(
+            /Tool stack: 3 tools live\. Route cue: oo\. Route \+ Chain \+ Recall/i
+        );
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveTextContent('Stack cashout');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveTextContent('Stack route');
         expect(screen.getByTestId('row-swap-payoff-chip')).toHaveAttribute('data-power-cue', 'Stack cashout');
@@ -347,9 +359,11 @@ describe('GameLeftToolbar', () => {
         renderToolbar(run);
 
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Tools empty');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('--');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('0 tools live');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('No tools charged');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-meter-fill', '0');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-cue-id', 'recharge-tool');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Recharge tools');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Find recharge reward');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Keep matching clean');
@@ -407,7 +421,9 @@ describe('GameLeftToolbar', () => {
 
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Tool setup');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('Recall');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveTextContent('::');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-meter-fill', '50');
+        expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-cue-id', 'recall-route');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Arm peek');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Use unlocked tool');
         expect(screen.getByTestId('tool-payoff-sequence')).toHaveTextContent('Keep memory chain');
@@ -417,6 +433,8 @@ describe('GameLeftToolbar', () => {
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-payoff-stack-tone', 'recall');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-crescendo-tier', 'prime');
         expect(screen.getByTestId('tool-payoff-stack')).toHaveAttribute('data-tool-crescendo-beats', '2');
+        expect(screen.getByTestId('tool-crescendo')).toHaveAttribute('data-tool-crescendo-cue-id', 'swap-target-crossbar');
+        expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('x|');
         expect(screen.getByTestId('tool-crescendo')).toHaveTextContent('Prime beat');
         expect(screen.queryByTestId('row-swap-setup-badge')).toBeNull();
         expect(screen.queryByTestId('tile-swap-setup-badge')).toBeNull();

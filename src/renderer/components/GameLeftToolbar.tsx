@@ -58,6 +58,11 @@ type ToolCrescendo = {
     label: 'No beat' | 'Prime beat' | 'Cashout beat' | 'Stack burst';
     tier: 'none' | 'prime' | 'cashout' | 'stack';
 };
+type ToolCueMarker = {
+    glyph: string;
+    id: TraitMarkerShapeId | 'control-board' | 'locked-board' | 'recall-route' | 'recharge-tool';
+    label: string;
+};
 
 const powerPayoffAction = (tone: PowerPayoffTone, impactCue: string, nextAction: string): string => {
     if (tone === 'empty') {
@@ -180,6 +185,39 @@ const toolCrescendoAudioCue = (
 };
 
 const toolCrescendoScreenCue = (crescendo: ToolCrescendo): ToolCrescendo['cue'] => crescendo.cue;
+
+const getToolPayoffStackCueMarker = (tone: ToolPayoffStackTone): ToolCueMarker => {
+    if (tone === 'combo') {
+        const cue = getTraitMarkerCueByShape('linked-route');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    if (tone === 'recall') {
+        return { glyph: '::', id: 'recall-route', label: 'Recall' };
+    }
+    if (tone === 'control') {
+        return { glyph: '!!', id: 'control-board', label: 'Control' };
+    }
+    if (tone === 'locked') {
+        return { glyph: 'xx', id: 'locked-board', label: 'Locked' };
+    }
+    return { glyph: '--', id: 'recharge-tool', label: 'Recharge' };
+};
+
+const getToolCrescendoCueMarker = (crescendo: ToolCrescendo): ToolCueMarker => {
+    if (crescendo.tier === 'stack') {
+        const cue = getTraitMarkerCueByShape('payoff-stack');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    if (crescendo.tier === 'cashout') {
+        const cue = getTraitMarkerCueByShape('payoff-bar');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    if (crescendo.tier === 'prime') {
+        const cue = getTraitMarkerCueByShape('swap-target-crossbar');
+        return { glyph: cue.glyph, id: cue.shape, label: cue.label };
+    }
+    return { glyph: '--', id: 'recharge-tool', label: 'Recharge' };
+};
 
 interface GameLeftToolbarProps {
     cameraViewportMode: boolean;
@@ -626,12 +664,14 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
     const toolCrescendoActionCue = toolCrescendoAction(toolCrescendo);
     const toolCrescendoAudioCueValue = toolCrescendoAudioCue(toolCrescendo);
     const toolCrescendoScreenCueValue = toolCrescendoScreenCue(toolCrescendo);
+    const toolPayoffStackCueMarker = getToolPayoffStackCueMarker(toolPayoffStack.tone);
+    const toolCrescendoCueMarker = getToolCrescendoCueMarker(toolCrescendo);
     const toolPayoffStackMeterFill = toolCrescendo.tier === 'none' ? 0 : Math.round((toolCrescendo.beats / 4) * 100);
-    const toolPayoffStackLabel = `${toolPayoffStack.label}: ${toolPayoffStack.value}. ${toolPayoffStack.laneSummary}. First: ${toolPayoffStack.first}. Then: ${toolPayoffStack.then}. Keep: ${toolPayoffStack.keep}.`;
+    const toolPayoffStackLabel = `${toolPayoffStack.label}: ${toolPayoffStack.value}. ${toolPayoffStackCueMarker.label} cue: ${toolPayoffStackCueMarker.glyph}. ${toolPayoffStack.laneSummary}. First: ${toolPayoffStack.first}. Then: ${toolPayoffStack.then}. Keep: ${toolPayoffStack.keep}.`;
     const toolCrescendoLabel =
         toolCrescendo.tier === 'none'
             ? 'Tool crescendo: none.'
-            : `Tool crescendo: ${toolCrescendoActionCue}. ${toolCrescendo.label}. ${toolCrescendo.beats} beats.`;
+            : `Tool crescendo: ${toolCrescendoCueMarker.label} cue: ${toolCrescendoCueMarker.glyph}. ${toolCrescendoActionCue}. ${toolCrescendo.label}. ${toolCrescendo.beats} beats.`;
 
     return (
         <aside
@@ -777,11 +817,17 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                         data-tool-payoff-first={toolPayoffStack.first}
                         data-tool-payoff-keep={toolPayoffStack.keep}
                         data-tool-payoff-then={toolPayoffStack.then}
+                        data-tool-payoff-cue-id={toolPayoffStackCueMarker.id}
                         data-tool-payoff-stack-tone={toolPayoffStack.tone}
                         data-testid="tool-payoff-stack"
                     >
                         <small>{toolPayoffStack.label}</small>
-                        <strong>{toolPayoffStack.value}</strong>
+                        <strong>
+                            <i aria-hidden="true" data-tool-payoff-cue-glyph={toolPayoffStackCueMarker.id}>
+                                {toolPayoffStackCueMarker.glyph}
+                            </i>
+                            {toolPayoffStack.value}
+                        </strong>
                         <b>{toolPayoffStack.laneSummary}</b>
                         <span aria-hidden="true" className={styles.toolPayoffMeter} data-tool-payoff-meter-fill={toolPayoffStackMeterFill}>
                             <i
@@ -795,10 +841,14 @@ const GameLeftToolbar = memo(function GameLeftToolbar({
                                 className={styles.toolCrescendo}
                                 data-tool-crescendo-action={toolCrescendoActionCue}
                                 data-tool-crescendo-audio={toolCrescendoAudioCueValue}
+                                data-tool-crescendo-cue-id={toolCrescendoCueMarker.id}
                                 data-tool-crescendo-screen-cue={toolCrescendoScreenCueValue}
                                 data-tool-crescendo-tier={toolCrescendo.tier}
                                 data-testid="tool-crescendo"
                             >
+                                <i aria-hidden="true" className={styles.toolCrescendoCueBadge}>
+                                    {toolCrescendoCueMarker.glyph}
+                                </i>
                                 <small>{toolCrescendo.beats} beat</small>
                                 <span aria-hidden="true" className={styles.toolCrescendoPips}>
                                     {Array.from({ length: toolCrescendo.beats }, (_, beatIndex) => (
