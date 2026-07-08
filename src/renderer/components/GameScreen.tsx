@@ -6771,9 +6771,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                 {Array.from({ length: 4 }, (_, index) => (
                                                                     <i
                                                                         data-route-choice-signal-beat={index + 1}
+                                                                        data-route-choice-signal-beat-audio={getRouteChoiceSignalAudioCue('reward')}
                                                                         data-route-choice-signal-beat-focus={
                                                                             index === 0 ? 'primary' : 'support'
                                                                         }
+                                                                        data-route-choice-signal-beat-screen-cue={getRouteChoiceSignalScreenCue(
+                                                                            'reward'
+                                                                        )}
+                                                                        data-route-choice-signal-beat-signal="reward"
                                                                         key={index}
                                                                     />
                                                                 ))}
@@ -6790,9 +6795,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                                 {Array.from({ length: 3 }, (_, index) => (
                                                                     <i
                                                                         data-route-choice-signal-beat={index + 1}
+                                                                        data-route-choice-signal-beat-audio={getRouteChoiceSignalAudioCue('risk')}
                                                                         data-route-choice-signal-beat-focus={
                                                                             index === 0 ? 'primary' : 'support'
                                                                         }
+                                                                        data-route-choice-signal-beat-screen-cue={getRouteChoiceSignalScreenCue(
+                                                                            'risk'
+                                                                        )}
+                                                                        data-route-choice-signal-beat-signal="risk"
                                                                         key={index}
                                                                     />
                                                                 ))}

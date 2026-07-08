@@ -917,6 +917,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-route-action-cue-beat-tone': ['build', 'memory', 'reward', 'risk', 'route'],
         'data-route-card-signal-beat-screen-cue': ['build', 'burst', 'control', 'guard', 'risk'],
         'data-route-card-signal-beat-tone': ['build', 'control', 'reward', 'risk', 'safety'],
+        'data-route-choice-signal-beat-screen-cue': ['burst', 'risk'],
+        'data-route-choice-signal-beat-signal': ['reward', 'risk'],
         'data-route-impact-cue-beat-screen-cue': ['build', 'burst', 'memory', 'pulse', 'risk'],
         'data-route-impact-cue-beat-tone': ['build', 'memory', 'reward', 'risk', 'route'],
         'data-route-payoff-beat-screen-cue': ['build', 'burst', 'memory', 'pulse', 'risk'],

@@ -3345,6 +3345,24 @@
     transform-origin: center;
 }
 
+.dungeonMapRoomSignalBeatPips i[data-route-choice-signal-beat-screen-cue='burst'],
+.dungeonMapRoomSignalBeatPips i[data-route-choice-signal-beat-signal='reward'] {
+    width: 0.24rem;
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    box-shadow:
+        0 0 0.24rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.06rem color-mix(in srgb, white 28%, transparent);
+}
+
+.dungeonMapRoomSignalBeatPips i[data-route-choice-signal-beat-screen-cue='risk'],
+.dungeonMapRoomSignalBeatPips i[data-route-choice-signal-beat-signal='risk'] {
+    height: 0.11rem;
+    background: color-mix(in srgb, var(--theme-danger) 72%, white);
+    box-shadow:
+        0 0 0.22rem color-mix(in srgb, var(--theme-danger) 32%, transparent),
+        0 0 0.06rem color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
+}
+
 .dungeonMapRoomSignalRow span[data-route-signal='reward'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 36%, transparent);
     background: color-mix(in srgb, var(--theme-gold-deep) 20%, transparent);

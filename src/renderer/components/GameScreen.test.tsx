@@ -5858,6 +5858,21 @@ describe('GameScreen (OVR-014)', () => {
         ).toHaveAttribute('data-route-choice-signal-beat-focus', 'primary');
         expect(
             screen.getByTestId('route-choice-safe-signals').querySelector(
+                '[data-route-signal="reward"] [data-route-choice-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-route-choice-signal-beat-audio', 'route-signal-reward');
+        expect(
+            screen.getByTestId('route-choice-safe-signals').querySelector(
+                '[data-route-signal="reward"] [data-route-choice-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-route-choice-signal-beat-screen-cue', 'burst');
+        expect(
+            screen.getByTestId('route-choice-safe-signals').querySelector(
+                '[data-route-signal="reward"] [data-route-choice-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-route-choice-signal-beat-signal', 'reward');
+        expect(
+            screen.getByTestId('route-choice-safe-signals').querySelector(
                 '[data-route-signal="reward"] [data-route-choice-signal-beat="2"]'
             )
         ).toHaveAttribute('data-route-choice-signal-beat-focus', 'support');
@@ -5926,6 +5941,21 @@ describe('GameScreen (OVR-014)', () => {
             'data-route-signal-screen-cue',
             'risk'
         );
+        expect(
+            screen.getByTestId('route-choice-safe-signals').querySelector(
+                '[data-route-signal="risk"] [data-route-choice-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-route-choice-signal-beat-audio', 'route-signal-risk');
+        expect(
+            screen.getByTestId('route-choice-safe-signals').querySelector(
+                '[data-route-signal="risk"] [data-route-choice-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-route-choice-signal-beat-screen-cue', 'risk');
+        expect(
+            screen.getByTestId('route-choice-safe-signals').querySelector(
+                '[data-route-signal="risk"] [data-route-choice-signal-beat="1"]'
+            )
+        ).toHaveAttribute('data-route-choice-signal-beat-signal', 'risk');
         expect(screen.getByTestId('route-choice-safe-signals')).toHaveAttribute(
             'aria-label',
             'Route choice safe signals. Reward: Stable reward. Risk: Low risk.'
