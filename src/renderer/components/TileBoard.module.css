@@ -6116,24 +6116,58 @@
 }
 
 .chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='cashout'] .chainOpportunityBeatMapSummaryPips i {
+    width: 0.18rem;
+    height: 0.12rem;
+    animation-duration: 0.68s;
     background: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
     box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
 }
 
 .chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='surge'] .chainOpportunityBeatMapSummaryPips i {
-    background: color-mix(in srgb, var(--theme-violet-bright) 72%, white);
+    width: 0.2rem;
+    height: 0.14rem;
+    animation-duration: 0.6s;
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, var(--theme-gold-bright) 18%);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-violet-bright) 26%, transparent);
 }
 
 .chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='followup'] .chainOpportunityBeatMapSummaryPips i {
+    width: 0.14rem;
+    height: 0.12rem;
+    animation-duration: 0.86s;
     background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
 }
 
 .chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='route'] .chainOpportunityBeatMapSummaryPips i {
+    width: 0.16rem;
+    height: 0.1rem;
+    animation-duration: 0.96s;
     background: color-mix(in srgb, var(--theme-violet-bright) 64%, var(--theme-cyan-bright) 20%);
 }
 
 .chainOpportunityBeatMapSummary[data-card-beat-map-summary-action='setup'] .chainOpportunityBeatMapSummaryPips i {
+    width: 0.1rem;
+    height: 0.16rem;
+    animation-duration: 1.16s;
     background: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-screen-cue='burst'] .chainOpportunityBeatMapSummaryPips i {
+    animation-duration: 0.62s;
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-screen-cue='guard'] .chainOpportunityBeatMapSummaryPips i {
+    height: 0.16rem;
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-screen-cue='pulse'] .chainOpportunityBeatMapSummaryPips i {
+    opacity: 0.86;
+}
+
+.chainOpportunityBeatMapSummary[data-card-beat-map-summary-screen-cue='tick'] .chainOpportunityBeatMapSummaryPips i {
+    width: 0.08rem;
+    animation-duration: 1.24s;
+    opacity: 0.72;
 }
 
 .chainOpportunityBeatMapSummary[data-card-beat-map-summary-beats='2'] .chainOpportunityBeatMapSummaryPips i {
@@ -6588,24 +6622,58 @@
 }
 
 .chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-action='cashout'] .chainOpportunityCadenceMapSummaryPips i {
+    width: 0.18rem;
+    height: 0.12rem;
+    animation-duration: 0.68s;
     background: color-mix(in srgb, var(--theme-gold-bright) 78%, white);
     box-shadow: 0 0 0.16rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent);
 }
 
 .chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-action='surge'] .chainOpportunityCadenceMapSummaryPips i {
-    background: color-mix(in srgb, var(--theme-violet-bright) 72%, white);
+    width: 0.2rem;
+    height: 0.14rem;
+    animation-duration: 0.6s;
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, var(--theme-gold-bright) 18%);
+    box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-violet-bright) 26%, transparent);
 }
 
 .chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-action='followup'] .chainOpportunityCadenceMapSummaryPips i {
+    width: 0.14rem;
+    height: 0.12rem;
+    animation-duration: 0.86s;
     background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
 }
 
 .chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-action='route'] .chainOpportunityCadenceMapSummaryPips i {
+    width: 0.16rem;
+    height: 0.1rem;
+    animation-duration: 0.96s;
     background: color-mix(in srgb, var(--theme-violet-bright) 64%, var(--theme-cyan-bright) 20%);
 }
 
 .chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-action='setup'] .chainOpportunityCadenceMapSummaryPips i {
+    width: 0.1rem;
+    height: 0.16rem;
+    animation-duration: 1.16s;
     background: color-mix(in srgb, var(--theme-cyan-bright) 58%, var(--theme-gold-bright) 18%);
+}
+
+.chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-screen-cue='burst'] .chainOpportunityCadenceMapSummaryPips i {
+    animation-duration: 0.62s;
+}
+
+.chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-screen-cue='guard'] .chainOpportunityCadenceMapSummaryPips i {
+    height: 0.16rem;
+}
+
+.chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-screen-cue='pulse'] .chainOpportunityCadenceMapSummaryPips i {
+    opacity: 0.86;
+}
+
+.chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-screen-cue='tick'] .chainOpportunityCadenceMapSummaryPips i {
+    width: 0.08rem;
+    animation-duration: 1.24s;
+    opacity: 0.72;
 }
 
 .chainOpportunityCadenceMapSummary[data-card-cadence-map-summary-beats='2'] .chainOpportunityCadenceMapSummaryPips i {
@@ -15033,7 +15101,9 @@
 :global([data-reduce-motion='true']) .chainOpportunityRewardUrgencyBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityRecipeBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityBeat i,
+:global([data-reduce-motion='true']) .chainOpportunityBeatMapSummaryPips i,
 :global([data-reduce-motion='true']) .chainOpportunityBeatMapPips i,
+:global([data-reduce-motion='true']) .chainOpportunityCadenceMapSummaryPips i,
 :global([data-reduce-motion='true']) .chainOpportunityMarkerKeySummaryBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityActionPrioritySummaryBeatPips i,
 :global([data-reduce-motion='true']) .chainOpportunityShotMapSummaryBeatPips i,

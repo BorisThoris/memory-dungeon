@@ -2040,6 +2040,62 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-card-beat-map-summary-screen-cue='tick'[\s\S]*?\.chainOpportunityBeatMapSummaryMeterFill[\s\S]*?opacity:\s*0\.78/);
     });
 
+    it('keeps card beat map summary pips visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout beat-map summary pips should read as immediate payout beats'
+        ).toMatch(/data-card-beat-map-summary-action='cashout'[\s\S]*?\.chainOpportunityBeatMapSummaryPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'surge beat-map summary pips should read as the fastest acceleration'
+        ).toMatch(/data-card-beat-map-summary-action='surge'[\s\S]*?\.chainOpportunityBeatMapSummaryPips i[\s\S]*?animation-duration:\s*0\.6s/);
+        expect(
+            cssText,
+            'route beat-map summary pips should stay low and path-like'
+        ).toMatch(/data-card-beat-map-summary-action='route'[\s\S]*?\.chainOpportunityBeatMapSummaryPips i[\s\S]*?height:\s*0\.1rem/);
+        expect(
+            cssText,
+            'setup beat-map summary pips should use slower taller setup beats'
+        ).toMatch(/data-card-beat-map-summary-action='setup'[\s\S]*?\.chainOpportunityBeatMapSummaryPips i[\s\S]*?animation-duration:\s*1\.16s/);
+        expect(
+            cssText,
+            'tick beat-map summary cues should stay quiet and slower'
+        ).toMatch(/data-card-beat-map-summary-screen-cue='tick'[\s\S]*?\.chainOpportunityBeatMapSummaryPips i[\s\S]*?animation-duration:\s*1\.24s/);
+        expect(cssText).toContain("[data-reduce-motion='true']) .chainOpportunityBeatMapSummaryPips i");
+    });
+
+    it('keeps card cadence map summary pips visually distinct', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout cadence-map summary pips should read as immediate payout beats'
+        ).toMatch(/data-card-cadence-map-summary-action='cashout'[\s\S]*?\.chainOpportunityCadenceMapSummaryPips i[\s\S]*?animation-duration:\s*0\.68s/);
+        expect(
+            cssText,
+            'surge cadence-map summary pips should read as the fastest acceleration'
+        ).toMatch(/data-card-cadence-map-summary-action='surge'[\s\S]*?\.chainOpportunityCadenceMapSummaryPips i[\s\S]*?animation-duration:\s*0\.6s/);
+        expect(
+            cssText,
+            'route cadence-map summary pips should stay low and path-like'
+        ).toMatch(/data-card-cadence-map-summary-action='route'[\s\S]*?\.chainOpportunityCadenceMapSummaryPips i[\s\S]*?height:\s*0\.1rem/);
+        expect(
+            cssText,
+            'setup cadence-map summary pips should use slower taller setup beats'
+        ).toMatch(/data-card-cadence-map-summary-action='setup'[\s\S]*?\.chainOpportunityCadenceMapSummaryPips i[\s\S]*?animation-duration:\s*1\.16s/);
+        expect(
+            cssText,
+            'tick cadence-map summary cues should stay quiet and slower'
+        ).toMatch(/data-card-cadence-map-summary-screen-cue='tick'[\s\S]*?\.chainOpportunityCadenceMapSummaryPips i[\s\S]*?animation-duration:\s*1\.24s/);
+        expect(cssText).toContain("[data-reduce-motion='true']) .chainOpportunityCadenceMapSummaryPips i");
+    });
+
     it('keeps chain beat meters tied to beat action language', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
