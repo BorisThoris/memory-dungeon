@@ -711,6 +711,26 @@ describe('TileBoard touch and click controls', () => {
             'cashout'
         );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="hot"]')).toHaveTextContent('2');
+        expect(screen.getByTestId('chain-opportunity-role-summary')).toHaveTextContent('Lit');
+        expect(screen.getByTestId('chain-opportunity-role-summary')).toHaveTextContent('2');
+        expect(screen.getByTestId('chain-opportunity-role-summary').querySelector('[data-chain-role-lane="lit"]')).toHaveTextContent('Lit');
+        expect(screen.getByTestId('chain-opportunity-role-summary').querySelector('[data-chain-role-lane="lit"]')).toHaveTextContent('2');
+        expect(screen.getByTestId('chain-opportunity-role-summary').querySelector('[data-chain-role-lane="lit"]')).toHaveAttribute(
+            'data-chain-role-lane-tone',
+            'ready'
+        );
+        expect(screen.getByTestId('chain-opportunity-role-summary').querySelector('[data-chain-role-lane="hot"]')).toHaveTextContent('Hot');
+        expect(screen.getByTestId('chain-opportunity-role-summary').querySelector('[data-chain-role-lane="hot"]')).toHaveTextContent('2');
+        expect(screen.getByTestId('chain-opportunity-role-summary').querySelector('[data-chain-role-lane="hot"]')).toHaveAttribute(
+            'data-chain-role-lane-tone',
+            'cashout'
+        );
+        expect(screen.getByTestId('chain-opportunity-role-summary').querySelector('[data-chain-role-lane="payoff"]')).toHaveTextContent('Payoff');
+        expect(screen.getByTestId('chain-opportunity-role-summary').querySelector('[data-chain-role-lane="payoff"]')).toHaveTextContent('2');
+        expect(screen.getByTestId('chain-opportunity-role-summary').querySelector('[data-chain-role-lane="payoff"]')).toHaveAttribute(
+            'data-chain-role-lane-action',
+            'payoff-stack'
+        );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="surge"]')).toBeNull();
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="cashout"]')).toHaveTextContent(
             'Next'

@@ -2,6 +2,7 @@ import type { BoardState, RunState } from './contracts';
 import { createDungeonExitActivationTransition, type DungeonExitActivationSpend } from './dungeon-exit-rules';
 import { isBoardComplete } from './board-inspection';
 import { applyDestroyPairTransition } from './board-power-actions';
+import { clearFinalPairEnemyHazardOccupationForRun } from './enemy-hazard-board-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 
 interface FloorCompletionTransitionDeps {
@@ -19,9 +20,11 @@ export const createApplyDestroyPair = ({ finalizeLevel }: FloorCompletionTransit
             return run;
         }
 
-        return transition.boardComplete && transition.run.board
-            ? finalizeLevel(transition.run, transition.run.board)
-            : transition.run;
+        const cleanedRun = clearFinalPairEnemyHazardOccupationForRun(transition.run);
+
+        return transition.boardComplete && cleanedRun.board
+            ? finalizeLevel(cleanedRun, cleanedRun.board)
+            : cleanedRun;
     };
 
 export const createActivateDungeonExit = ({ finalizeLevel }: FloorCompletionTransitionDeps) =>

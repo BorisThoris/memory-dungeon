@@ -690,6 +690,59 @@ describe('final-pair enemy occupation cleanup', () => {
         expect(afterFinalFlip.board?.flippedTileIds).toEqual([finalB.id]);
     });
 
+    it('clears final-pair boss hazards while destroy-pairing a prior pair', () => {
+        const [clearA, clearB] = createPair('clear', 'C');
+        const [finalA, finalB] = createPair('final', 'F');
+        const run = createRun([clearA, clearB, finalA, finalB], {
+            board: createBoard([clearA, clearB, finalA, finalB], {
+                enemyHazards: [
+                    makeEnemyHazard('7:boss:trap_warden', finalA.id, finalB.id, {
+                        kind: 'warden',
+                        bossId: 'trap_warden',
+                        label: 'Latch Warden'
+                    })
+                ],
+                level: 7,
+                floorTag: 'boss',
+                dungeonBossId: 'trap_warden',
+                dungeonObjectiveId: 'defeat_boss'
+            }),
+            destroyPairCharges: 1
+        });
+
+        const after = applyDestroyPair(run, clearA.id);
+
+        expect(after.status).toBe('playing');
+        expect(after.board?.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
+    });
+
+    it('clears final-pair boss hazards when destroy-pair ends the floor', () => {
+        const [finalA, finalB] = createPair('final', 'F');
+        const run = createRun([finalA, finalB], {
+            board: createBoard([finalA, finalB], {
+                level: 7,
+                floorTag: 'boss',
+                dungeonBossId: 'trap_warden',
+                dungeonObjectiveId: 'defeat_boss',
+                enemyHazards: [
+                    makeEnemyHazard('7:boss:trap_warden', finalA.id, finalB.id, {
+                        kind: 'warden',
+                        bossId: 'trap_warden',
+                        label: 'Latch Warden'
+                    })
+                ]
+            }),
+            destroyPairCharges: 1
+        });
+
+        const cleared = applyDestroyPair(run, finalA.id);
+
+        expect(cleared.status).toBe('levelComplete');
+        expect(cleared.board?.enemyHazards?.[0]).toMatchObject({ hp: 0, state: 'defeated' });
+        expect(cleared.lastLevelResult?.level).toBe(run.board!.level);
+        expect(cleared.dungeonEnemiesDefeated).toBe(run.dungeonEnemiesDefeated + 1);
+    });
+
     it('cleans an already occupied final pair before enemy-click damage resolves', () => {
         const [clearA, clearB] = createPair('clear', 'C');
         const [finalA, finalB] = createPair('final', 'F');

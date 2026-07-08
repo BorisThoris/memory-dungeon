@@ -5474,6 +5474,168 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         )
                                     )}
                                 </span>
+                                <span
+                                    aria-label="Chain role summary."
+                                    className={styles.chainOpportunityRoleSummary}
+                                    data-testid="chain-opportunity-role-summary"
+                                >
+                                    {boardChainAccessibilitySummary.readyCount > 0 ? (
+                                        <span
+                                            aria-hidden="true"
+                                            data-chain-role-lane="lit"
+                                            data-chain-role-lane-action="match-route"
+                                            data-chain-role-lane-tone="ready"
+                                            data-chain-role-lane-count={boardChainAccessibilitySummary.readyCount}
+                                            className={styles.chainOpportunityRoleSummaryLane}
+                                        >
+                                            <small>Lit</small>
+                                            <b>{boardChainAccessibilitySummary.readyCount}</b>
+                                            <span aria-hidden="true" className={styles.chainOpportunityRoleSummaryPips}>
+                                                {Array.from(
+                                                    { length: Math.min(4, boardChainAccessibilitySummary.readyCount) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-chain-role-lane-pip={index + 1}
+                                                            data-chain-role-lane-pip-tone="ready"
+                                                            data-chain-role-lane-pip-action="match-route"
+                                                            key={`lit-role-${index}`}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
+                                    ) : null}
+                                    {boardChainAccessibilitySummary.followupCount > 0 ? (
+                                        <span
+                                            aria-hidden="true"
+                                            data-chain-role-lane="followup"
+                                            data-chain-role-lane-action="follow-up"
+                                            data-chain-role-lane-tone="surge"
+                                            data-chain-role-lane-count={boardChainAccessibilitySummary.followupCount}
+                                            className={styles.chainOpportunityRoleSummaryLane}
+                                        >
+                                            <small>Follow</small>
+                                            <b>{boardChainAccessibilitySummary.followupCount}</b>
+                                            <span aria-hidden="true" className={styles.chainOpportunityRoleSummaryPips}>
+                                                {Array.from(
+                                                    { length: Math.min(4, boardChainAccessibilitySummary.followupCount) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-chain-role-lane-pip={index + 1}
+                                                            data-chain-role-lane-pip-tone="surge"
+                                                            data-chain-role-lane-pip-action="follow-up"
+                                                            key={`followup-role-${index}`}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
+                                    ) : null}
+                                    {boardChainAccessibilitySummary.surgeCount > 0 ? (
+                                        <span
+                                            aria-hidden="true"
+                                            data-chain-role-lane="surge"
+                                            data-chain-role-lane-action="combo-surge"
+                                            data-chain-role-lane-tone="surge"
+                                            data-chain-role-lane-count={boardChainAccessibilitySummary.surgeCount}
+                                            className={styles.chainOpportunityRoleSummaryLane}
+                                        >
+                                            <small>Surge</small>
+                                            <b>{boardChainAccessibilitySummary.surgeCount}</b>
+                                            <span aria-hidden="true" className={styles.chainOpportunityRoleSummaryPips}>
+                                                {Array.from(
+                                                    { length: Math.min(4, boardChainAccessibilitySummary.surgeCount) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-chain-role-lane-pip={index + 1}
+                                                            data-chain-role-lane-pip-tone="surge"
+                                                            data-chain-role-lane-pip-action="combo-surge"
+                                                            key={`surge-role-${index}`}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
+                                    ) : null}
+                                    {boardChainAccessibilitySummary.rewardHotCount > 0 ? (
+                                        <span
+                                            aria-hidden="true"
+                                            data-chain-role-lane="hot"
+                                            data-chain-role-lane-action="cashout"
+                                            data-chain-role-lane-tone="cashout"
+                                            data-chain-role-lane-count={boardChainAccessibilitySummary.rewardHotCount}
+                                            className={styles.chainOpportunityRoleSummaryLane}
+                                        >
+                                            <small>Hot</small>
+                                            <b>{boardChainAccessibilitySummary.rewardHotCount}</b>
+                                            <span aria-hidden="true" className={styles.chainOpportunityRoleSummaryPips}>
+                                                {Array.from(
+                                                    { length: Math.min(4, boardChainAccessibilitySummary.rewardHotCount) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-chain-role-lane-pip={index + 1}
+                                                            data-chain-role-lane-pip-tone="cashout"
+                                                            data-chain-role-lane-pip-action="cashout"
+                                                            key={`hot-role-${index}`}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
+                                    ) : null}
+                                    {boardChainAccessibilitySummary.payoffStackCount > 0 ? (
+                                        <span
+                                            aria-hidden="true"
+                                            data-chain-role-lane="payoff"
+                                            data-chain-role-lane-action="payoff-stack"
+                                            data-chain-role-lane-tone="cashout"
+                                            data-chain-role-lane-count={boardChainAccessibilitySummary.payoffStackCount}
+                                            className={styles.chainOpportunityRoleSummaryLane}
+                                        >
+                                            <small>Payoff</small>
+                                            <b>{boardChainAccessibilitySummary.payoffStackCount}</b>
+                                            <span aria-hidden="true" className={styles.chainOpportunityRoleSummaryPips}>
+                                                {Array.from(
+                                                    { length: Math.min(4, boardChainAccessibilitySummary.payoffStackCount) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-chain-role-lane-pip={index + 1}
+                                                            data-chain-role-lane-pip-tone="cashout"
+                                                            data-chain-role-lane-pip-action="payoff-stack"
+                                                            key={`payoff-role-${index}`}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
+                                    ) : null}
+                                    {boardChainAccessibilitySummary.setupCount > 0 ? (
+                                        <span
+                                            aria-hidden="true"
+                                            data-chain-role-lane="prime"
+                                            data-chain-role-lane-action="prime-route"
+                                            data-chain-role-lane-tone="setup"
+                                            data-chain-role-lane-count={boardChainAccessibilitySummary.setupCount}
+                                            className={styles.chainOpportunityRoleSummaryLane}
+                                        >
+                                            <small>Prime</small>
+                                            <b>{boardChainAccessibilitySummary.setupCount}</b>
+                                            <span aria-hidden="true" className={styles.chainOpportunityRoleSummaryPips}>
+                                                {Array.from(
+                                                    { length: Math.min(4, boardChainAccessibilitySummary.setupCount) },
+                                                    (_, index) => (
+                                                        <i
+                                                            data-chain-role-lane-pip={index + 1}
+                                                            data-chain-role-lane-pip-tone="setup"
+                                                            data-chain-role-lane-pip-action="prime-route"
+                                                            key={`prime-role-${index}`}
+                                                        />
+                                                    )
+                                                )}
+                                            </span>
+                                        </span>
+                                    ) : null}
+                                </span>
                                 <i
                                     aria-hidden="true"
                                     className={styles.chainOpportunityMeterFill}

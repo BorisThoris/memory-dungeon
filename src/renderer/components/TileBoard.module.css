@@ -8250,6 +8250,118 @@
     opacity: 0.9;
 }
 
+.chainOpportunityRoleSummary {
+    display: inline-flex;
+    align-items: stretch;
+    gap: 0.2rem;
+    flex-wrap: wrap;
+    max-width: min(22rem, 75vi);
+    color: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.chainOpportunityRoleSummaryLane {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 0.1rem 0.08rem;
+    padding: 0.06rem 0.16rem;
+    min-height: 1rem;
+    border: 1px solid color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-void) 36%, transparent);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}
+
+.chainOpportunityRoleSummaryLane[data-chain-role-lane-tone='ready'],
+.chainOpportunityRoleSummaryLane[data-chain-role-lane='lit'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
+}
+
+.chainOpportunityRoleSummaryLane[data-chain-role-lane-tone='surge'],
+.chainOpportunityRoleSummaryLane[data-chain-role-lane='followup'],
+.chainOpportunityRoleSummaryLane[data-chain-role-lane='surge'] {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 44%, transparent);
+}
+
+.chainOpportunityRoleSummaryLane[data-chain-role-lane-tone='cashout'],
+.chainOpportunityRoleSummaryLane[data-chain-role-lane='hot'],
+.chainOpportunityRoleSummaryLane[data-chain-role-lane='payoff'] {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 50%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 90%, white);
+}
+
+.chainOpportunityRoleSummaryLane[data-chain-role-lane-tone='setup'],
+.chainOpportunityRoleSummaryLane[data-chain-role-lane='prime'] {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
+}
+
+.chainOpportunityRoleSummary small {
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: color-mix(in srgb, var(--theme-text-muted) 88%, white);
+    font-size: 0.42rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.chainOpportunityRoleSummary b {
+    display: inline-grid;
+    place-items: center;
+    min-width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, currentColor 14%, transparent);
+    color: color-mix(in srgb, currentColor 86%, white);
+    font-size: 0.52rem;
+    font-weight: 980;
+}
+
+.chainOpportunityRoleSummaryPips {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    align-items: center;
+    gap: 0.04rem;
+    min-width: 0;
+    height: 0.12rem;
+}
+
+.chainOpportunityRoleSummaryPips i {
+    display: block;
+    width: 0.12rem;
+    height: 0.08rem;
+    border-radius: 999px;
+    animation: chainOpportunityBeatPulse 0.84s ease-in-out infinite;
+    background: color-mix(in srgb, var(--theme-cyan-bright) 74%, white);
+    opacity: 0.86;
+}
+
+.chainOpportunityRoleSummaryPips i[data-chain-role-lane-pip-tone='surge'],
+.chainOpportunityRoleSummaryPips i[data-chain-role-lane-pip-action='combo-surge'],
+.chainOpportunityRoleSummaryPips i[data-chain-role-lane-pip-action='follow-up'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 76%, var(--theme-cyan-bright) 24%);
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+}
+
+.chainOpportunityRoleSummaryPips i[data-chain-role-lane-pip-tone='cashout'],
+.chainOpportunityRoleSummaryPips i[data-chain-role-lane-pip-action='cashout'],
+.chainOpportunityRoleSummaryPips i[data-chain-role-lane-pip-tone='ready'],
+.chainOpportunityRoleSummaryPips i[data-chain-role-lane-pip-action='match-route'],
+.chainOpportunityRoleSummaryPips i[data-chain-role-lane-pip-tone='setup'],
+.chainOpportunityRoleSummaryPips i[data-chain-role-lane-pip-action='prime-route'] {
+    opacity: 0.96;
+}
+
+.chainOpportunityRoleSummaryLane[data-chain-role-lane-tone='cashout'] b,
+.chainOpportunityRoleSummaryLane[data-chain-role-lane='payoff'] b,
+.chainOpportunityRoleSummaryLane[data-chain-role-lane='hot'] b {
+    background: color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+    color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+}
+
 .chainOpportunityMeter > span[data-chain-meter-lane='surge'] {
     border-color: color-mix(in srgb, var(--theme-gold-bright) 34%, var(--theme-cyan-bright) 16%);
     background:
