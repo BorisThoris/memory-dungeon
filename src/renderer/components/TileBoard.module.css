@@ -8304,20 +8304,86 @@
     transition: width 140ms ease-out;
 }
 
-.chainOpportunityLines[data-chain-lines-action='prime-route'] .chainOpportunityLinesMeter {
+.chainOpportunityLines[data-chain-lines-action='cashout'] .chainOpportunityLinesMeter,
+.chainOpportunityLines[data-chain-lines-tier='now'] .chainOpportunityLinesMeter,
+.chainOpportunityLines[data-chain-lines-tone='cashout'] .chainOpportunityLinesMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 48%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+    box-shadow: 0 0 0.26rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent);
+}
+
+.chainOpportunityLines[data-chain-lines-action='cashout'] .chainOpportunityLinesMeterFill,
+.chainOpportunityLines[data-chain-lines-tier='now'] .chainOpportunityLinesMeterFill,
+.chainOpportunityLines[data-chain-lines-tone='cashout'] .chainOpportunityLinesMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 90%, white),
+        color-mix(in srgb, var(--theme-success) 58%, var(--theme-cyan-bright) 22%)
+    );
+    box-shadow:
+        0 0 0.22rem color-mix(in srgb, var(--theme-gold-bright) 26%, transparent),
+        0 0 0.36rem color-mix(in srgb, var(--theme-success) 12%, transparent);
+}
+
+.chainOpportunityLines[data-chain-lines-action='follow-up'] .chainOpportunityLinesMeter,
+.chainOpportunityLines[data-chain-lines-tier='tap'] .chainOpportunityLinesMeter {
+    border-color: color-mix(in srgb, #fff7c4 40%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, #fff7c4 14%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityLines[data-chain-lines-action='follow-up'] .chainOpportunityLinesMeterFill,
+.chainOpportunityLines[data-chain-lines-tier='tap'] .chainOpportunityLinesMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, #fff7c4 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 66%, white)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, #fff7c4 20%, transparent);
+}
+
+.chainOpportunityLines[data-chain-lines-action='match-route'] .chainOpportunityLinesMeter,
+.chainOpportunityLines[data-chain-lines-tier='route'] .chainOpportunityLinesMeter,
+.chainOpportunityLines[data-chain-lines-tone='ready'] .chainOpportunityLinesMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 44%, var(--theme-gold-bright) 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent), transparent 82%),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.chainOpportunityLines[data-chain-lines-action='match-route'] .chainOpportunityLinesMeterFill,
+.chainOpportunityLines[data-chain-lines-tier='route'] .chainOpportunityLinesMeterFill,
+.chainOpportunityLines[data-chain-lines-tone='ready'] .chainOpportunityLinesMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 82%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 36%, var(--theme-cyan-bright) 36%)
+    );
+    box-shadow: 0 0 0.2rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
+.chainOpportunityLines[data-chain-lines-action='prime-route'] .chainOpportunityLinesMeter,
+.chainOpportunityLines[data-chain-lines-tier='prime'] .chainOpportunityLinesMeter,
+.chainOpportunityLines[data-chain-lines-tone='setup'] .chainOpportunityLinesMeter {
     border-color: color-mix(in srgb, var(--theme-violet-bright) 32%, var(--theme-cyan-bright) 18%);
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), transparent 84%),
         color-mix(in srgb, var(--theme-void) 30%, transparent);
 }
 
-.chainOpportunityLines[data-chain-lines-action='prime-route'] .chainOpportunityLinesMeterFill {
+.chainOpportunityLines[data-chain-lines-action='prime-route'] .chainOpportunityLinesMeterFill,
+.chainOpportunityLines[data-chain-lines-tier='prime'] .chainOpportunityLinesMeterFill,
+.chainOpportunityLines[data-chain-lines-tone='setup'] .chainOpportunityLinesMeterFill {
     background: linear-gradient(
         90deg,
         color-mix(in srgb, var(--theme-violet-bright) 72%, white),
         color-mix(in srgb, var(--theme-cyan-bright) 72%, white)
     );
     box-shadow: 0 0 0.18rem color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+    opacity: 0.78;
 }
 
 .chainOpportunityLinesBeatPips {

@@ -2718,6 +2718,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-lines-action='prime-route'[\s\S]*?\.chainOpportunityLinesBeatPips i[\s\S]*?animation-duration:\s*1\.12s/);
     });
 
+    it('keeps chain lines meters tied to next-action language', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout chain line meters should read as payoff-ready progress'
+        ).toMatch(/data-chain-lines-action='cashout'[\s\S]*?\.chainOpportunityLinesMeterFill[\s\S]*?var\(--theme-gold-bright\) 90%/);
+        expect(
+            cssText,
+            'follow-up chain line meters should keep continuation timing distinct from cashout'
+        ).toMatch(/data-chain-lines-action='follow-up'[\s\S]*?\.chainOpportunityLinesMeterFill[\s\S]*?#fff7c4 82%/);
+        expect(
+            cssText,
+            'route chain line meters should carry cyan pathing progress'
+        ).toMatch(/data-chain-lines-action='match-route'[\s\S]*?\.chainOpportunityLinesMeterFill[\s\S]*?var\(--theme-cyan-bright\) 82%/);
+        expect(
+            cssText,
+            'prime-route chain line meters should stay quieter and setup-toned'
+        ).toMatch(/data-chain-lines-action='prime-route'[\s\S]*?\.chainOpportunityLinesMeterFill[\s\S]*?opacity:\s*0\.78/);
+    });
+
     it('keeps chain examples tone beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
