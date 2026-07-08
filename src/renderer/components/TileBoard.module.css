@@ -3314,12 +3314,42 @@
     color: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
 }
 
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='payoff'] .chainOpportunityArmedPerkMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 54%, var(--theme-success) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 22%, transparent), color-mix(in srgb, var(--theme-success) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 24%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent);
+}
+
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='payoff'] .chainOpportunityArmedPerkMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 92%, white),
+        color-mix(in srgb, var(--theme-success) 60%, var(--theme-gold-bright) 28%)
+    );
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent),
+        0 0 0.44rem color-mix(in srgb, var(--theme-success) 14%, transparent);
+}
+
+.chainOpportunityArmedPerk[data-chain-armed-perk-tone='armed'] .chainOpportunityArmedPerkMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 18%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
 .chainOpportunityArmedPerk[data-chain-armed-perk-tone='armed'] .chainOpportunityArmedPerkMeterFill {
     background: linear-gradient(
         90deg,
         color-mix(in srgb, var(--theme-cyan-bright) 84%, white),
         color-mix(in srgb, var(--theme-gold-bright) 70%, white)
     );
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+    opacity: 0.84;
 }
 
 .chainOpportunityArmedPerk[data-chain-armed-perk-tone='armed'] .chainOpportunityArmedPerkBeatPips i {

@@ -2503,6 +2503,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-chain-armed-perk-tone='payoff'[\s\S]*?\.chainOpportunityArmedPerkBeatPips i[\s\S]*?animation-duration:\s*0\.72s/);
     });
 
+    it('keeps chain armed perk meters visually distinct by payoff state', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'armed perk meters should read as ready utility setup'
+        ).toMatch(/data-chain-armed-perk-tone='armed'[\s\S]*?\.chainOpportunityArmedPerkMeterFill[\s\S]*?var\(--theme-cyan-bright\) 84%/);
+        expect(
+            cssText,
+            'armed perk meters should stay visually quieter than payoff'
+        ).toMatch(/data-chain-armed-perk-tone='armed'[\s\S]*?\.chainOpportunityArmedPerkMeterFill[\s\S]*?opacity:\s*0\.84/);
+        expect(
+            cssText,
+            'payoff perk meters should read as immediate reward payoff'
+        ).toMatch(/data-chain-armed-perk-tone='payoff'[\s\S]*?\.chainOpportunityArmedPerkMeterFill[\s\S]*?var\(--theme-gold-bright\) 92%/);
+        expect(
+            cssText,
+            'payoff perk tracks should get a stronger reward frame'
+        ).toMatch(/data-chain-armed-perk-tone='payoff'[\s\S]*?\.chainOpportunityArmedPerkMeter[\s\S]*?var\(--theme-gold-bright\) 54%/);
+    });
+
     it('keeps chain arcade callout tone beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
