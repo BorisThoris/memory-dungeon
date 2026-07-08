@@ -7894,6 +7894,11 @@
         color-mix(in srgb, var(--theme-void) 40%, transparent);
 }
 
+.chainOpportunityMeter > span[data-chain-meter-lane-tone='ready'],
+.chainOpportunityMeter > span[data-chain-meter-lane-action='match-route'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+}
+
 .chainOpportunityMeter[data-chain-meter-tone='setup'] > span {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 38%, transparent);
     background:
@@ -7996,6 +8001,13 @@
         color-mix(in srgb, var(--theme-void) 40%, transparent);
 }
 
+.chainOpportunityMeter > span[data-chain-meter-lane-tone='surge'],
+.chainOpportunityMeter > span[data-chain-meter-lane-action='combo-surge'] {
+    box-shadow:
+        0 0 0.48rem color-mix(in srgb, var(--theme-gold-bright) 14%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
+}
+
 .chainOpportunityMeter > span[data-chain-meter-lane='surge'] b {
     background: color-mix(in srgb, var(--theme-gold-bright) 16%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 88%, white);
@@ -8006,6 +8018,11 @@
     background:
         linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 12%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
         color-mix(in srgb, var(--theme-void) 40%, transparent);
+}
+
+.chainOpportunityMeter > span[data-chain-meter-lane-tone='followup'],
+.chainOpportunityMeter > span[data-chain-meter-lane-action='follow-up'] {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-violet-bright) 12%, transparent);
 }
 
 .chainOpportunityMeter > span[data-chain-meter-lane='followup'] b {
@@ -8020,6 +8037,13 @@
         color-mix(in srgb, var(--theme-void) 42%, transparent);
 }
 
+.chainOpportunityMeter > span[data-chain-meter-lane-tone='cashout'],
+.chainOpportunityMeter > span[data-chain-meter-lane-action='cashout'] {
+    box-shadow:
+        0 0 0.56rem color-mix(in srgb, var(--theme-gold-bright) 18%, transparent),
+        inset 0 1px 0 color-mix(in srgb, white 12%, transparent);
+}
+
 .chainOpportunityMeter > span[data-chain-meter-lane='hot'] b {
     background: color-mix(in srgb, var(--theme-gold-bright) 20%, transparent);
     color: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
@@ -8027,6 +8051,54 @@
 
 .chainOpportunityMeter > span[data-chain-meter-lane='setup'] {
     border-color: color-mix(in srgb, var(--theme-cyan-bright) 42%, transparent);
+}
+
+.chainOpportunityMeter > span[data-chain-meter-lane-tone='setup'],
+.chainOpportunityMeter > span[data-chain-meter-lane-action='prime-route'] {
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 8%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 38%, transparent);
+}
+
+.chainOpportunityMeterPips i[data-chain-meter-pip-tone='ready'],
+.chainOpportunityMeterPips i[data-chain-meter-pip-action='match-route'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+}
+
+.chainOpportunityMeterPips i[data-chain-meter-pip-tone='followup'],
+.chainOpportunityMeterPips i[data-chain-meter-pip-action='follow-up'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 72%, var(--theme-cyan-bright) 24%);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-violet-bright) 20%, transparent);
+}
+
+.chainOpportunityMeterPips i[data-chain-meter-pip-tone='surge'],
+.chainOpportunityMeterPips i[data-chain-meter-pip-action='combo-surge'] {
+    width: 0.2rem;
+    height: 0.14rem;
+    animation-duration: 0.68s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, var(--theme-cyan-bright) 18%);
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-gold-bright) 30%, transparent),
+        0 0 0.46rem color-mix(in srgb, var(--theme-cyan-bright) 12%, transparent);
+    opacity: 1;
+}
+
+.chainOpportunityMeterPips i[data-chain-meter-pip-tone='cashout'],
+.chainOpportunityMeterPips i[data-chain-meter-pip-action='cashout'] {
+    width: 0.24rem;
+    height: 0.16rem;
+    animation-duration: 0.72s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0 1px color-mix(in srgb, white 16%, transparent);
+    opacity: 1;
+}
+
+.chainOpportunityMeterPips i[data-chain-meter-pip-tone='setup'],
+.chainOpportunityMeterPips i[data-chain-meter-pip-action='prime-route'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 62%, var(--theme-cyan-bright) 30%);
+    opacity: 0.82;
 }
 
 .chainOpportunityMeter > .chainOpportunityNextRoute {
@@ -8067,6 +8139,39 @@
 
 .chainOpportunityNextRoutePips i[data-chain-next-route-pip-focus='support'] {
     opacity: 0.7;
+}
+
+.chainOpportunityNextRoutePips i[data-chain-next-route-pip-tone='cashout'] {
+    width: 0.24rem;
+    height: 0.16rem;
+    animation-duration: 0.68s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 92%, white);
+    box-shadow:
+        0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 32%, transparent),
+        0 0 0.48rem color-mix(in srgb, var(--theme-cyan-bright) 10%, transparent);
+    opacity: 1;
+}
+
+.chainOpportunityNextRoutePips i[data-chain-next-route-pip-tone='surge'] {
+    width: 0.22rem;
+    height: 0.15rem;
+    animation-duration: 0.64s;
+    background: color-mix(in srgb, var(--theme-gold-bright) 84%, var(--theme-violet-bright) 20%);
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent),
+        0 0 0.44rem color-mix(in srgb, var(--theme-violet-bright) 14%, transparent);
+    opacity: 1;
+}
+
+.chainOpportunityNextRoutePips i[data-chain-next-route-pip-tone='ready'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 82%, white);
+    box-shadow: 0 0 0.24rem color-mix(in srgb, var(--theme-cyan-bright) 22%, transparent);
+}
+
+.chainOpportunityNextRoutePips i[data-chain-next-route-pip-tone='setup'] {
+    background: color-mix(in srgb, var(--theme-violet-bright) 62%, var(--theme-cyan-bright) 30%);
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-violet-bright) 18%, transparent);
+    opacity: 0.86;
 }
 
 .chainOpportunityMeter > .chainOpportunityNextRoute b {

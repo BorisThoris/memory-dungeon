@@ -6233,14 +6233,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         }
                                     >
                                         {boardChainAccessibilitySummary.readyCount > 0 ? (
-                                            <span data-chain-meter-lane="ready">
+                                            <span
+                                                data-chain-meter-lane="ready"
+                                                data-chain-meter-lane-action="match-route"
+                                                data-chain-meter-lane-tone="ready"
+                                            >
                                                 <small>Lit</small>
                                                 <b>{boardChainAccessibilitySummary.readyCount}</b>
                                                 <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
                                                     {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.readyCount) }, (_, index) => (
                                                         <i
                                                             data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-action="match-route"
                                                             data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-chain-meter-pip-tone="ready"
                                                             key={`ready-${index}`}
                                                         />
                                                     ))}
@@ -6248,14 +6254,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </span>
                                         ) : null}
                                         {boardChainAccessibilitySummary.followupCount > 0 ? (
-                                            <span data-chain-meter-lane="followup">
+                                            <span
+                                                data-chain-meter-lane="followup"
+                                                data-chain-meter-lane-action="follow-up"
+                                                data-chain-meter-lane-tone="followup"
+                                            >
                                                 <small>Follow</small>
                                                 <b>{boardChainAccessibilitySummary.followupCount}</b>
                                                 <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
                                                     {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.followupCount) }, (_, index) => (
                                                         <i
                                                             data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-action="follow-up"
                                                             data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-chain-meter-pip-tone="followup"
                                                             key={`followup-${index}`}
                                                         />
                                                     ))}
@@ -6263,14 +6275,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </span>
                                         ) : null}
                                         {boardChainAccessibilitySummary.surgeCount > 0 ? (
-                                            <span data-chain-meter-lane="surge">
+                                            <span
+                                                data-chain-meter-lane="surge"
+                                                data-chain-meter-lane-action="combo-surge"
+                                                data-chain-meter-lane-tone="surge"
+                                            >
                                                 <small>Surge</small>
                                                 <b>{boardChainAccessibilitySummary.surgeCount}</b>
                                                 <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
                                                     {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.surgeCount) }, (_, index) => (
                                                         <i
                                                             data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-action="combo-surge"
                                                             data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-chain-meter-pip-tone="surge"
                                                             key={`surge-${index}`}
                                                         />
                                                     ))}
@@ -6278,14 +6296,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </span>
                                         ) : null}
                                         {boardChainAccessibilitySummary.rewardHotCount > 0 ? (
-                                            <span data-chain-meter-lane="hot">
+                                            <span
+                                                data-chain-meter-lane="hot"
+                                                data-chain-meter-lane-action="cashout"
+                                                data-chain-meter-lane-tone="cashout"
+                                            >
                                                 <small>Hot</small>
                                                 <b>{boardChainAccessibilitySummary.rewardHotCount}</b>
                                                 <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
                                                     {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.rewardHotCount) }, (_, index) => (
                                                         <i
                                                             data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-action="cashout"
                                                             data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-chain-meter-pip-tone="cashout"
                                                             key={`hot-${index}`}
                                                         />
                                                     ))}
@@ -6293,14 +6317,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             </span>
                                         ) : null}
                                         {boardChainAccessibilitySummary.setupCount > 0 ? (
-                                            <span data-chain-meter-lane="setup">
+                                            <span
+                                                data-chain-meter-lane="setup"
+                                                data-chain-meter-lane-action="prime-route"
+                                                data-chain-meter-lane-tone="setup"
+                                            >
                                                 <small>Prime</small>
                                                 <b>{boardChainAccessibilitySummary.setupCount}</b>
                                                 <span aria-hidden="true" className={styles.chainOpportunityMeterPips}>
                                                     {Array.from({ length: Math.min(5, boardChainAccessibilitySummary.setupCount) }, (_, index) => (
                                                         <i
                                                             data-chain-meter-pip={index + 1}
+                                                            data-chain-meter-pip-action="prime-route"
                                                             data-chain-meter-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-chain-meter-pip-tone="setup"
                                                             key={`setup-${index}`}
                                                         />
                                                     ))}
@@ -6318,6 +6348,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                     <i
                                                         data-chain-next-route-pip={index + 1}
                                                         data-chain-next-route-pip-focus={index === 0 ? 'primary' : 'support'}
+                                                        data-chain-next-route-pip-tone={boardChainAccessibilitySummary.tone}
                                                         key={`route-${index}`}
                                                     />
                                                 ))}

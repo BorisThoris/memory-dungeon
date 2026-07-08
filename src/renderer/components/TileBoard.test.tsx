@@ -563,8 +563,24 @@ describe('TileBoard touch and click controls', () => {
             'Chain board: Ready x2, Payoff x2, Hot x2. Next: Next reward x6 +1 shard in 1 match. One-away cashout. Push x6 reward. Sequence: First match lit route. Then Next reward x6 +1 shard in 1 match. Keep chain target live.'
         );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveTextContent('Lit');
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveAttribute(
+            'data-chain-meter-lane-action',
+            'match-route'
+        );
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveAttribute(
+            'data-chain-meter-lane-tone',
+            'ready'
+        );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveTextContent('2');
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="hot"]')).toHaveTextContent('Hot');
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="hot"]')).toHaveAttribute(
+            'data-chain-meter-lane-action',
+            'cashout'
+        );
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="hot"]')).toHaveAttribute(
+            'data-chain-meter-lane-tone',
+            'cashout'
+        );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="hot"]')).toHaveTextContent('2');
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="surge"]')).toBeNull();
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="cashout"]')).toHaveTextContent(
@@ -1113,6 +1129,30 @@ describe('TileBoard touch and click controls', () => {
                 ?.querySelector('[data-chain-meter-pip="1"]')
         ).toHaveAttribute('data-chain-meter-pip-focus', 'primary');
         expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="ready"]')
+                ?.querySelector('[data-chain-meter-pip="1"]')
+        ).toHaveAttribute('data-chain-meter-pip-action', 'match-route');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="ready"]')
+                ?.querySelector('[data-chain-meter-pip="1"]')
+        ).toHaveAttribute('data-chain-meter-pip-tone', 'ready');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="hot"]')
+                ?.querySelector('[data-chain-meter-pip="1"]')
+        ).toHaveAttribute('data-chain-meter-pip-action', 'cashout');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="hot"]')
+                ?.querySelector('[data-chain-meter-pip="1"]')
+        ).toHaveAttribute('data-chain-meter-pip-tone', 'cashout');
+        expect(
             screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="cashout"]')
         ).toHaveTextContent('Next');
         expect(
@@ -1130,6 +1170,12 @@ describe('TileBoard touch and click controls', () => {
                 .querySelector('[data-chain-meter-route-tone="cashout"]')
                 ?.querySelector('[data-chain-next-route-pip="1"]')
         ).toHaveAttribute('data-chain-next-route-pip-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-route-tone="cashout"]')
+                ?.querySelector('[data-chain-next-route-pip="1"]')
+        ).toHaveAttribute('data-chain-next-route-pip-tone', 'cashout');
         expect(
             screen.getByTestId('chain-opportunity-shot-map').querySelector('[data-chain-shot-map-lane="cash-now"]')
         ).toHaveAttribute('data-chain-shot-map-count', '2');
@@ -3284,7 +3330,27 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="ready"]')).toHaveTextContent('4');
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="surge"]')).toHaveTextContent('Surge');
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="surge"]')).toHaveAttribute(
+            'data-chain-meter-lane-action',
+            'combo-surge'
+        );
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="surge"]')).toHaveAttribute(
+            'data-chain-meter-lane-tone',
+            'surge'
+        );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="surge"]')).toHaveTextContent('4');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="surge"]')
+                ?.querySelector('[data-chain-meter-pip="1"]')
+        ).toHaveAttribute('data-chain-meter-pip-action', 'combo-surge');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="surge"]')
+                ?.querySelector('[data-chain-meter-pip="1"]')
+        ).toHaveAttribute('data-chain-meter-pip-tone', 'surge');
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="hot"]')).toBeNull();
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="surge"]')).toHaveTextContent(
             'Echo + Sealed: combo shard'
@@ -3292,6 +3358,12 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="surge"]')).toHaveTextContent(
             'Echo + Mirror: recall focus'
         );
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-route-tone="surge"]')
+                ?.querySelector('[data-chain-next-route-pip="1"]')
+        ).toHaveAttribute('data-chain-next-route-pip-tone', 'surge');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-impact-cue', 'Combo surge');
         expect(screen.getByTestId('board-opportunity-chain')).toHaveAttribute('data-opportunity-heat', 'surge');
         expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
@@ -3609,12 +3681,38 @@ describe('TileBoard touch and click controls', () => {
         );
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveAttribute('data-chain-opportunity-tone', 'setup');
         expect(screen.getByTestId('chain-opportunity-meter')).toHaveAttribute('data-chain-meter-tone', 'setup');
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="setup"]')).toHaveAttribute(
+            'data-chain-meter-lane-action',
+            'prime-route'
+        );
+        expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-lane="setup"]')).toHaveAttribute(
+            'data-chain-meter-lane-tone',
+            'setup'
+        );
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="setup"]')
+                ?.querySelector('[data-chain-meter-pip="1"]')
+        ).toHaveAttribute('data-chain-meter-pip-action', 'prime-route');
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-lane="setup"]')
+                ?.querySelector('[data-chain-meter-pip="1"]')
+        ).toHaveAttribute('data-chain-meter-pip-tone', 'setup');
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="setup"]')).toHaveTextContent(
             'Prime'
         );
         expect(screen.getByTestId('chain-opportunity-meter').querySelector('[data-chain-meter-route-tone="setup"]')).toHaveTextContent(
             'Swap Sealed with Filler: Sealed + Heavy: score surge'
         );
+        expect(
+            screen
+                .getByTestId('chain-opportunity-meter')
+                .querySelector('[data-chain-meter-route-tone="setup"]')
+                ?.querySelector('[data-chain-next-route-pip="1"]')
+        ).toHaveAttribute('data-chain-next-route-pip-tone', 'setup');
         expect(screen.getByTestId('chain-opportunity-chip')).toHaveAccessibleName(
             /Board chain opportunity.*Prime route.*Prime move.*Use swap to connect route.*2 primed.*Swap Sealed with Filler: Sealed \+ Heavy: score surge/i
         );
