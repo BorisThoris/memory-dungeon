@@ -1194,6 +1194,29 @@ describe('feedback beat pip CSS coverage', () => {
         ).toMatch(/data-pickup-opportunity-beats='4'[\s\S]*?animation-duration:\s*0\.82s/);
     });
 
+    it('keeps pickup opportunity meters visually distinct by payoff state', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'cashout pickup meters should read as immediate reward progress'
+        ).toMatch(/data-pickup-opportunity-focus='cashout'[\s\S]*?\.pickupOpportunityMeterFill[\s\S]*?var\(--theme-success\) 70%/);
+        expect(
+            cssText,
+            'multi pickup meters should read as stack-building progress'
+        ).toMatch(/data-pickup-opportunity-tier='multi'[\s\S]*?\.pickupOpportunityMeterFill[\s\S]*?var\(--theme-cyan-bright\) 58%/);
+        expect(
+            cssText,
+            'bank pickup meters should read as calmer reward progress'
+        ).toMatch(/data-pickup-opportunity-action='bank'[\s\S]*?\.pickupOpportunityMeterFill[\s\S]*?var\(--theme-gold-bright\) 56%/);
+        expect(
+            cssText,
+            'quiet pickup meter fills should stay visually calmer'
+        ).toMatch(/data-pickup-opportunity-screen-cue='tick'[\s\S]*?\.pickupOpportunityMeterFill[\s\S]*?opacity:\s*0\.82/);
+    });
+
     it('keeps pickup sequence phase and tone beats visually distinct', () => {
         const cssText = readComponentCssFiles()
             .map(({ text }) => text)
@@ -1260,6 +1283,33 @@ describe('feedback beat pip CSS coverage', () => {
             cssText,
             'recall active power steps should use low route-like recall beats'
         ).toMatch(/data-active-power-tone='recall'[\s\S]*?\.activePowerBoardStepBeatPips i[\s\S]*?height:\s*0\.1rem/);
+    });
+
+    it('keeps active power meters visually distinct by armed tool role', () => {
+        const cssText = readComponentCssFiles()
+            .map(({ text }) => text)
+            .join('\n');
+
+        expect(
+            cssText,
+            'setup active power meters should read as route-building tools'
+        ).toMatch(/data-active-power-tone='setup'[\s\S]*?\.activePowerBoardChipMeter[\s\S]*?var\(--theme-cyan-bright\) 34%/);
+        expect(
+            cssText,
+            'control active power meters should read as board-clearing tools'
+        ).toMatch(/data-active-power-tone='control'[\s\S]*?\.activePowerBoardChipMeterFill[\s\S]*?var\(--theme-ember\) 84%/);
+        expect(
+            cssText,
+            'recall active power meters should read as memory-routing tools'
+        ).toMatch(/data-active-power-tone='recall'[\s\S]*?\.activePowerBoardChipMeterFill[\s\S]*?var\(--theme-violet-bright\) 82%/);
+        expect(
+            cssText,
+            'guard active power meter tracks should carry caution framing'
+        ).toMatch(/data-active-power-screen-cue='guard'[\s\S]*?\.activePowerBoardChipMeter[\s\S]*?var\(--theme-danger\) 30%/);
+        expect(
+            cssText,
+            'quiet tick active power meters should remain calmer'
+        ).toMatch(/data-active-power-screen-cue='tick'[\s\S]*?\.activePowerBoardChipMeterFill[\s\S]*?opacity:\s*0\.78/);
     });
 
     it('keeps toolbar power payoff screen-cue beats visually distinct', () => {

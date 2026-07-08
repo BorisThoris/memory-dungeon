@@ -9125,6 +9125,79 @@
     transition: width 140ms ease-out;
 }
 
+.activePowerBoardChip[data-active-power-tone='setup'] .activePowerBoardChipMeter,
+.activePowerBoardChip[data-active-power-tier='route'] .activePowerBoardChipMeter {
+    border-color: color-mix(in srgb, var(--theme-cyan-bright) 34%, var(--theme-gold-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-cyan-bright) 15%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 26%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-tone='setup'] .activePowerBoardChipMeterFill,
+.activePowerBoardChip[data-active-power-tier='route'] .activePowerBoardChipMeterFill,
+.activePowerBoardChip[data-active-power-action='swap'] .activePowerBoardChipMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-cyan-bright) 86%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 62%, white)
+    );
+    box-shadow:
+        0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent),
+        0 0 0 1px color-mix(in srgb, white 10%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-tone='control'] .activePowerBoardChipMeter,
+.activePowerBoardChip[data-active-power-tier='control'] .activePowerBoardChipMeter {
+    border-color: color-mix(in srgb, var(--theme-ember) 34%, var(--theme-gold-bright) 12%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-ember) 15%, transparent), color-mix(in srgb, var(--theme-gold-bright) 7%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-tone='control'] .activePowerBoardChipMeterFill,
+.activePowerBoardChip[data-active-power-tier='control'] .activePowerBoardChipMeterFill,
+.activePowerBoardChip[data-active-power-action='clear'] .activePowerBoardChipMeterFill,
+.activePowerBoardChip[data-active-power-action='remove'] .activePowerBoardChipMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-ember) 84%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 56%, white)
+    );
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-ember) 24%, transparent),
+        0 0 0 1px color-mix(in srgb, white 10%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-tone='recall'] .activePowerBoardChipMeter,
+.activePowerBoardChip[data-active-power-tier='memory'] .activePowerBoardChipMeter {
+    border-color: color-mix(in srgb, var(--theme-violet-bright) 34%, var(--theme-cyan-bright) 14%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-violet-bright) 15%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 28%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-tone='recall'] .activePowerBoardChipMeterFill,
+.activePowerBoardChip[data-active-power-tier='memory'] .activePowerBoardChipMeterFill,
+.activePowerBoardChip[data-active-power-action='recall'] .activePowerBoardChipMeterFill,
+.activePowerBoardChip[data-active-power-action='pin'] .activePowerBoardChipMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-violet-bright) 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 62%, white)
+    );
+    box-shadow:
+        0 0 0.3rem color-mix(in srgb, var(--theme-violet-bright) 24%, transparent),
+        0 0 0 1px color-mix(in srgb, white 10%, transparent);
+}
+
+.activePowerBoardChip[data-active-power-screen-cue='guard'] .activePowerBoardChipMeter {
+    border-color: color-mix(in srgb, var(--theme-danger) 30%, var(--theme-ember) 20%);
+}
+
+.activePowerBoardChip[data-active-power-screen-cue='tick'] .activePowerBoardChipMeterFill {
+    opacity: 0.78;
+}
+
 .activePowerBoardChipBeatPips {
     display: inline-flex;
     align-items: center;
@@ -9587,6 +9660,72 @@
     );
     box-shadow: 0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 22%, transparent);
     transition: width 140ms ease-out;
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] .pickupOpportunityMeter,
+.pickupOpportunityChip[data-pickup-opportunity-tier='cashout'] .pickupOpportunityMeter,
+.pickupOpportunityChip[data-pickup-opportunity-action='cashout'] .pickupOpportunityMeter {
+    border-color: color-mix(in srgb, var(--theme-gold-bright) 50%, var(--theme-cyan-bright) 16%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-gold-bright) 20%, transparent), color-mix(in srgb, var(--theme-success) 10%, transparent)),
+        color-mix(in srgb, var(--theme-void) 24%, transparent);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='cashout'] .pickupOpportunityMeterFill,
+.pickupOpportunityChip[data-pickup-opportunity-tier='cashout'] .pickupOpportunityMeterFill,
+.pickupOpportunityChip[data-pickup-opportunity-action='cashout'] .pickupOpportunityMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-gold-bright) 92%, white),
+        color-mix(in srgb, var(--theme-success) 70%, var(--theme-gold-bright) 30%)
+    );
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 28%, transparent),
+        0 0 0 1px color-mix(in srgb, white 12%, transparent);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-tier='multi'] .pickupOpportunityMeter,
+.pickupOpportunityChip[data-pickup-opportunity-action='stack'] .pickupOpportunityMeter,
+.pickupOpportunityChip[data-pickup-opportunity-screen-cue='pulse'] .pickupOpportunityMeter {
+    border-color: color-mix(in srgb, var(--theme-success) 42%, var(--theme-cyan-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 16%, transparent), color-mix(in srgb, var(--theme-cyan-bright) 9%, transparent)),
+        color-mix(in srgb, var(--theme-void) 26%, transparent);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-tier='multi'] .pickupOpportunityMeterFill,
+.pickupOpportunityChip[data-pickup-opportunity-action='stack'] .pickupOpportunityMeterFill,
+.pickupOpportunityChip[data-pickup-opportunity-screen-cue='pulse'] .pickupOpportunityMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-success) 82%, white),
+        color-mix(in srgb, var(--theme-cyan-bright) 58%, white)
+    );
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-success) 24%, transparent);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='reward'] .pickupOpportunityMeter,
+.pickupOpportunityChip[data-pickup-opportunity-tier='reward'] .pickupOpportunityMeter,
+.pickupOpportunityChip[data-pickup-opportunity-action='bank'] .pickupOpportunityMeter {
+    border-color: color-mix(in srgb, var(--theme-success) 34%, var(--theme-gold-bright) 18%);
+    background:
+        linear-gradient(90deg, color-mix(in srgb, var(--theme-success) 12%, transparent), color-mix(in srgb, var(--theme-gold-bright) 8%, transparent)),
+        color-mix(in srgb, var(--theme-void) 30%, transparent);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-focus='reward'] .pickupOpportunityMeterFill,
+.pickupOpportunityChip[data-pickup-opportunity-tier='reward'] .pickupOpportunityMeterFill,
+.pickupOpportunityChip[data-pickup-opportunity-action='bank'] .pickupOpportunityMeterFill {
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--theme-success) 76%, white),
+        color-mix(in srgb, var(--theme-gold-bright) 56%, white)
+    );
+    box-shadow: 0 0 0.22rem color-mix(in srgb, var(--theme-success) 20%, transparent);
+}
+
+.pickupOpportunityChip[data-pickup-opportunity-screen-cue='tick'] .pickupOpportunityMeterFill {
+    opacity: 0.82;
 }
 
 .pickupOpportunityChipBeatPips {
