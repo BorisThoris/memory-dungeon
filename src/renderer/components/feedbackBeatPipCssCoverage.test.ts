@@ -841,6 +841,8 @@ const findVisibleStateSelectorGaps = (): VisibleStateSelectorGap[] => {
         'data-match-crescendo-beat-tier': ['cashout', 'prime', 'stack', 'super'],
         'data-match-payoff-lane-beat-screen-cue': ['burst', 'chain', 'pulse', 'trait'],
         'data-match-payoff-lane-beat-tone': ['chain', 'pickup', 'reward', 'route', 'trait'],
+        'data-match-payoff-ladder-beat-screen-cue': ['burst', 'pulse', 'super'],
+        'data-match-payoff-ladder-beat-tone': ['chain', 'combo', 'reward'],
         'data-match-payoff-primary-lane-beat-screen-cue': ['burst', 'chain', 'pulse', 'trait'],
         'data-match-payoff-primary-lane-beat-tone': ['chain', 'pickup', 'reward', 'route', 'trait'],
         'data-pickup-opportunity-focus': ['cashout', 'reward'],

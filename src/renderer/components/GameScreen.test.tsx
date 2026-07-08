@@ -2261,6 +2261,21 @@ describe('GameScreen (OVR-014)', () => {
                     .getByTestId('match-score-floater-payoff-ladder')
                     .querySelectorAll('[data-match-payoff-ladder-beat]')
             ).toHaveLength(4);
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-ladder')
+                    .querySelector('[data-match-payoff-ladder-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-ladder-beat-audio', 'payoff-ladder-reward');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-ladder')
+                    .querySelector('[data-match-payoff-ladder-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-ladder-beat-screen-cue', 'burst');
+            expect(
+                screen
+                    .getByTestId('match-score-floater-payoff-ladder')
+                    .querySelector('[data-match-payoff-ladder-beat="1"]')
+            ).toHaveAttribute('data-match-payoff-ladder-beat-tone', 'reward');
             expect(screen.getByTestId('match-score-floater-payoff-ladder')).toHaveAccessibleName(
                 'Match payoff ladder. First: Pickup cashout. Then: One-away cashout. Keep: Hit now. Lanes: Pickup cashout to Chain cashout.'
             );
@@ -3509,6 +3524,21 @@ describe('GameScreen (OVR-014)', () => {
                 .getByTestId('match-score-floater-payoff-ladder')
                 .querySelector('[data-match-payoff-ladder-beat="1"]')
         ).toHaveAttribute('data-match-payoff-ladder-beat-focus', 'primary');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-ladder')
+                .querySelector('[data-match-payoff-ladder-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-ladder-beat-audio', 'payoff-ladder-super');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-ladder')
+                .querySelector('[data-match-payoff-ladder-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-ladder-beat-screen-cue', 'super');
+        expect(
+            screen
+                .getByTestId('match-score-floater-payoff-ladder')
+                .querySelector('[data-match-payoff-ladder-beat="1"]')
+        ).toHaveAttribute('data-match-payoff-ladder-beat-tone', 'combo');
         expect(
             screen
                 .getByTestId('match-score-floater-payoff-ladder')

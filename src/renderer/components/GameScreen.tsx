@@ -5011,7 +5011,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     (_, index) => (
                                                         <i
                                                             data-match-payoff-ladder-beat={index + 1}
+                                                            data-match-payoff-ladder-beat-audio={getBoardFloaterPayoffLadderAudioCue(
+                                                                boardFloaterPayload.payoffLadder
+                                                            )}
                                                             data-match-payoff-ladder-beat-focus={index === 0 ? 'primary' : 'support'}
+                                                            data-match-payoff-ladder-beat-screen-cue={getBoardFloaterPayoffLadderScreenCue(
+                                                                boardFloaterPayload.payoffLadder
+                                                            )}
+                                                            data-match-payoff-ladder-beat-tone={boardFloaterPayload.payoffLadder.tone}
                                                             key={`payoff-ladder-beat-${index + 1}`}
                                                         />
                                                     )

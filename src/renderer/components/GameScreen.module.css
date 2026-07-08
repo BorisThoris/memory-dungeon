@@ -15352,6 +15352,26 @@
     box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
 }
 
+.boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-screen-cue='pulse'],
+.boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-tone='chain'] {
+    background: color-mix(in srgb, var(--theme-cyan-bright) 72%, white);
+    box-shadow: 0 0 0.28rem color-mix(in srgb, var(--theme-cyan-bright) 24%, transparent);
+}
+
+.boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-screen-cue='burst'],
+.boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-tone='reward'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 86%, white);
+    box-shadow: 0 0 0.32rem color-mix(in srgb, var(--theme-gold-bright) 32%, transparent);
+}
+
+.boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-screen-cue='super'],
+.boardFloaterPayoffLadderBeatPips i[data-match-payoff-ladder-beat-tone='combo'] {
+    background: color-mix(in srgb, var(--theme-gold-bright) 88%, var(--theme-magenta-bright) 22%);
+    box-shadow:
+        0 0 0.34rem color-mix(in srgb, var(--theme-gold-bright) 34%, transparent),
+        0 0 0.46rem color-mix(in srgb, var(--theme-magenta-bright) 20%, transparent);
+}
+
 .boardFloaterPayoffLadder[data-match-payoff-ladder-beats='4'] .boardFloaterPayoffLadderBeatPips,
 .boardFloaterPayoffLadder[data-match-payoff-ladder-beats='5'] .boardFloaterPayoffLadderBeatPips {
     width: min(4.4rem, 100%);
