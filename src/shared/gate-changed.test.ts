@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -10,6 +11,7 @@ type GateChangedPayload = {
 };
 
 type GateChangedModule = {
+    changedPathsFromGit: (base: string | null, cwd?: string) => string[];
     selectGatesForChangedPaths: (paths: readonly string[]) => GateChangedPayload;
 };
 
@@ -168,6 +170,70 @@ describe('gate:changed selector', () => {
                 reason: 'changed Vitest files should execute directly'
             }
         ]);
+    });
+
+    it('discovers Git paths without scheduling deleted tests', async () => {
+        const { changedPathsFromGit } = await loadGateChanged();
+        const repository = mkdtempSync(path.join(tmpdir(), 'memory-dungeon-gate-changed-'));
+        const sourceDirectory = path.join(repository, 'src');
+        mkdirSync(sourceDirectory);
+
+        try {
+            execFileSync('git', ['init', '--quiet'], { cwd: repository });
+            for (const file of ['deleted.test.ts', 'keep.test.ts', 'rename-old.test.ts']) {
+                writeFileSync(path.join(sourceDirectory, file), `export const value = '${file}';\n`, 'utf8');
+            }
+            execFileSync('git', ['add', '.'], { cwd: repository });
+            execFileSync(
+                'git',
+                [
+                    '-c',
+                    'user.name=Gate Test',
+                    '-c',
+                    'user.email=gate-test@example.com',
+                    'commit',
+                    '--quiet',
+                    '-m',
+                    'fixture'
+                ],
+                { cwd: repository }
+            );
+            const base = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repository, encoding: 'utf8' }).trim();
+
+            unlinkSync(path.join(sourceDirectory, 'deleted.test.ts'));
+            writeFileSync(path.join(sourceDirectory, 'keep.test.ts'), 'export const value = 2;\n', 'utf8');
+            execFileSync('git', ['mv', 'src/rename-old.test.ts', 'src/rename-new.test.ts'], { cwd: repository });
+            writeFileSync(path.join(sourceDirectory, 'untracked test.test.ts'), 'export const value = 3;\n', 'utf8');
+
+            expect(changedPathsFromGit(null, repository)).toEqual([
+                'src/keep.test.ts',
+                'src/rename-new.test.ts',
+                'src/untracked test.test.ts'
+            ]);
+
+            execFileSync('git', ['add', '--all'], { cwd: repository });
+            execFileSync(
+                'git',
+                [
+                    '-c',
+                    'user.name=Gate Test',
+                    '-c',
+                    'user.email=gate-test@example.com',
+                    'commit',
+                    '--quiet',
+                    '-m',
+                    'changed fixture'
+                ],
+                { cwd: repository }
+            );
+            expect(changedPathsFromGit(base, repository)).toEqual([
+                'src/keep.test.ts',
+                'src/rename-new.test.ts',
+                'src/untracked test.test.ts'
+            ]);
+        } finally {
+            rmSync(repository, { recursive: true, force: true });
+        }
     });
 
     it('includes every tracked Vitest file in the dynamic changed-test gate', async () => {

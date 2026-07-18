@@ -48,13 +48,16 @@ const parseArgs = (argv) => {
     return { base, explicitPaths, json };
 };
 
-const changedPathsFromGit = (base) => {
-    const args = base ? ['diff', '--name-only', `${base}...HEAD`] : ['diff', '--name-only', 'HEAD'];
-    const tracked = execFileSync('git', args, { encoding: 'utf8' })
-        .split(/\r?\n/)
-        .filter(Boolean);
-    const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard'], { encoding: 'utf8' })
-        .split(/\r?\n/)
+export const changedPathsFromGit = (base, cwd = process.cwd()) => {
+    const args = base
+        ? ['diff', '--name-only', '--diff-filter=ACMRTUXB', '-z', `${base}...HEAD`]
+        : ['diff', '--name-only', '--diff-filter=ACMRTUXB', '-z', 'HEAD'];
+    const tracked = execFileSync('git', args, { cwd, encoding: 'utf8' }).split('\0').filter(Boolean);
+    const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard', '-z'], {
+        cwd,
+        encoding: 'utf8'
+    })
+        .split('\0')
         .filter(Boolean);
     return [...tracked, ...untracked].map(normalize);
 };
