@@ -127,10 +127,13 @@ describe('REG-037 audio interaction coverage', () => {
             semanticMoment: 'reward'
         });
         expect(gameplay.find((row) => row.id === 'primary_feedback_lane_cues')?.callsite).toMatch(
-            /TileBoard.*GameScreen.*GameplayHudBar/i
+            /TileBoard trait interaction lanes.*GameScreen.*GameplayHudBar/i
         );
         expect(gameplay.find((row) => row.id === 'primary_feedback_lane_cues')?.mixRole).toMatch(
             /action verb.*beat count.*audio role.*screen cue/i
+        );
+        expect(gameplay.find((row) => row.id === 'primary_feedback_lane_cues')?.mixRole).toMatch(
+            /trait_route_focus.*trait_route_guard.*trait_route_reward.*trait_route_surge/i
         );
         expect(gameplay.find((row) => row.id === 'gameplay_status_action_cues')).toMatchObject({
             decision: 'procedural_only',

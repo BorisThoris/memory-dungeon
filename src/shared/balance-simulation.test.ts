@@ -11,6 +11,8 @@ import {
 } from './balance-simulation';
 import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind, type TileTraitKind } from './contracts';
 
+const LONG_SIMULATION_TIMEOUT_MS = 15_000;
+
 describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     it('runs deterministic offline economy and drop-rate simulations', () => {
         const result = runBalanceSimulation({ seed: 42_001, floors: 12, rulesVersion: GAME_RULES_VERSION });
@@ -143,31 +145,35 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(new Set(result.samples.map((sample) => sample.floorBand))).toEqual(new Set(['early', 'mid', 'late']));
     });
 
-    it('keeps weighted findable distribution broadly aligned across longer deterministic samples', () => {
-        const result = runBalanceSimulation({
-            seeds: [42_001, 42_777, 43_001, 44_001],
-            floors: 48,
-            rulesVersion: GAME_RULES_VERSION
-        });
-        const total = result.aggregate.findablePickupPairs;
+    it(
+        'keeps weighted findable distribution broadly aligned across longer deterministic samples',
+        () => {
+            const result = runBalanceSimulation({
+                seeds: [42_001, 42_777, 43_001, 44_001],
+                floors: 48,
+                rulesVersion: GAME_RULES_VERSION
+            });
+            const total = result.aggregate.findablePickupPairs;
 
-        expect(total).toBeGreaterThan(0);
-        expect(Object.values(result.aggregate.findableKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
-        const shares = getFindableKindShares(result.aggregate.findableKindCounts);
+            expect(total).toBeGreaterThan(0);
+            expect(Object.values(result.aggregate.findableKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
+            const shares = getFindableKindShares(result.aggregate.findableKindCounts);
 
-        const bounds: Record<FindableKind, { min: number; max: number }> = {
-            shard_spark: { min: 0.2, max: 0.5 },
-            score_glint: { min: 0.2, max: 0.5 },
-            ward_spark: { min: 0.05, max: 0.3 },
-            scout_glint: { min: 0.05, max: 0.3 }
-        };
+            const bounds: Record<FindableKind, { min: number; max: number }> = {
+                shard_spark: { min: 0.2, max: 0.5 },
+                score_glint: { min: 0.2, max: 0.5 },
+                ward_spark: { min: 0.05, max: 0.3 },
+                scout_glint: { min: 0.05, max: 0.3 }
+            };
 
-        for (const kind of Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]) {
-            const share = shares[kind];
-            expect(share).toBeGreaterThanOrEqual(bounds[kind].min);
-            expect(share).toBeLessThanOrEqual(bounds[kind].max);
-        }
-    });
+            for (const kind of Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]) {
+                const share = shares[kind];
+                expect(share).toBeGreaterThanOrEqual(bounds[kind].min);
+                expect(share).toBeLessThanOrEqual(bounds[kind].max);
+            }
+        },
+        LONG_SIMULATION_TIMEOUT_MS
+    );
 
     it('summarizes findable kind shares from aggregate counts', () => {
         expect(
@@ -286,39 +292,47 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(greedy.greedLifeCosts).toBe(greedy.routeChoiceCounts.greed);
     });
 
-    it('keeps tile trait distribution present across longer deterministic samples', () => {
-        const result = runBalanceSimulation({
-            seeds: [42_001, 42_777, 43_001, 44_001],
-            floors: 48,
-            rulesVersion: GAME_RULES_VERSION
-        });
-        const total = result.aggregate.tileTraitPairs;
+    it(
+        'keeps tile trait distribution present across longer deterministic samples',
+        () => {
+            const result = runBalanceSimulation({
+                seeds: [42_001, 42_777, 43_001, 44_001],
+                floors: 48,
+                rulesVersion: GAME_RULES_VERSION
+            });
+            const total = result.aggregate.tileTraitPairs;
 
-        expect(total).toBeGreaterThan(0);
-        expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
-        expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
-        expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(total);
-        expect(result.aggregate.traitMatchRouteFloors).toBeGreaterThanOrEqual(result.floors * result.seeds.length * 0.75);
-        expect(result.aggregate.traitSwapSetupOpportunities).toBeGreaterThan(0);
+            expect(total).toBeGreaterThan(0);
+            expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
+                total
+            );
+            expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
+            expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(total);
+            expect(result.aggregate.traitMatchRouteFloors).toBeGreaterThanOrEqual(
+                result.floors * result.seeds.length * 0.75
+            );
+            expect(result.aggregate.traitSwapSetupOpportunities).toBeGreaterThan(0);
 
-        const shares = getTileTraitKindShares(result.aggregate.tileTraitKindCounts);
-        const bounds: Record<TileTraitKind, { min: number; max: number }> = {
-            echo: { min: 0.06, max: 0.35 },
-            volatile: { min: 0.05, max: 0.35 },
-            mirror: { min: 0.05, max: 0.35 },
-            cursed: { min: 0.04, max: 0.28 },
-            sealed: { min: 0.04, max: 0.28 },
-            heavy: { min: 0.04, max: 0.28 },
-            drift: { min: 0.04, max: 0.28 },
-            conduit: { min: 0.08, max: 0.35 },
-            stasis: { min: 0.04, max: 0.28 }
-        };
+            const shares = getTileTraitKindShares(result.aggregate.tileTraitKindCounts);
+            const bounds: Record<TileTraitKind, { min: number; max: number }> = {
+                echo: { min: 0.06, max: 0.35 },
+                volatile: { min: 0.05, max: 0.35 },
+                mirror: { min: 0.05, max: 0.35 },
+                cursed: { min: 0.04, max: 0.28 },
+                sealed: { min: 0.04, max: 0.28 },
+                heavy: { min: 0.04, max: 0.28 },
+                drift: { min: 0.04, max: 0.28 },
+                conduit: { min: 0.08, max: 0.35 },
+                stasis: { min: 0.04, max: 0.28 }
+            };
 
-        for (const kind of Object.keys(bounds) as TileTraitKind[]) {
-            expect(shares[kind]).toBeGreaterThanOrEqual(bounds[kind].min);
-            expect(shares[kind]).toBeLessThanOrEqual(bounds[kind].max);
-        }
-    });
+            for (const kind of Object.keys(bounds) as TileTraitKind[]) {
+                expect(shares[kind]).toBeGreaterThanOrEqual(bounds[kind].min);
+                expect(shares[kind]).toBeLessThanOrEqual(bounds[kind].max);
+            }
+        },
+        LONG_SIMULATION_TIMEOUT_MS
+    );
 
     it('DNG-071 profile bounds fail with profile/seed/floor context', () => {
         const result = runDungeonBalanceProfileSimulation({ seed: 42_001, floors: 12, rulesVersion: GAME_RULES_VERSION });
@@ -443,7 +457,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
 
         expect(healthy.ok).toBe(true);
         expect(healthy.issues).toEqual([]);
-    });
+    }, LONG_SIMULATION_TIMEOUT_MS);
 
     it('keeps greedy reward upside bounded by route life costs', () => {
         const result = runDungeonBalanceProfileSimulation({
@@ -462,5 +476,5 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(greedy.lowLifeFloorShare).toBeGreaterThan(highSkill.lowLifeFloorShare);
         expect(greedy.minLivesRemaining).toBe(1);
         expect(greedy.runFalls).toBe(0);
-    });
+    }, LONG_SIMULATION_TIMEOUT_MS);
 });

@@ -249,13 +249,13 @@ export const AUDIO_INTERACTION_COVERAGE: readonly AudioInteractionCoverageRow[] 
     {
         id: 'primary_feedback_lane_cues',
         domain: 'gameplay',
-        interaction: 'Primary and expanded reward, trait, route, recovery, and opportunity lanes expose action, beat, audio, and screen-cue contracts',
+        interaction: 'Primary and expanded reward, trait, route, recovery, and opportunity lanes expose action, beat, audio, and screen-cue contracts, including board trait route focus, guard, reward, and surge roles',
         cue: 'none',
-        callsite: 'TileBoard / GameScreen / GameplayHudBar primary lane data attributes mirrored by resolve, chain, payoff, and recovery procedural layers',
+        callsite: 'TileBoard trait interaction lanes and chain opportunity surge / GameScreen / GameplayHudBar primary lane data attributes mirrored by resolve, chain, payoff, and recovery procedural layers',
         semanticMoment: 'reward',
         decision: 'procedural_only',
         cooldownPolicy: 'lane IDs are semantic cue names; audible playback remains signature-gated by the matching resolve, chain opportunity, payoff, or mismatch recovery layer',
-        mixRole: 'cross-modal lane contract: every highlighted or expanded lane has an action verb, beat count, audio role, and screen cue so Zuma-style readable payoffs stay synchronized across board, HUD, and floaters',
+        mixRole: 'cross-modal lane contract: every highlighted or expanded lane has an action verb, beat count, audio role, and screen cue so Zuma-style readable payoffs stay synchronized across board, HUD, and floaters; board trait_route_focus, trait_route_guard, trait_route_reward, and trait_route_surge cues remain semantic roles unless a signature-gated resolve layer plays them',
         reducedMotionSafe: true
     },
     {

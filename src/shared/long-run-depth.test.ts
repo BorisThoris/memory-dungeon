@@ -11,6 +11,8 @@ import {
 import { runBalanceSimulation } from './balance-simulation';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 
+const LONG_SIMULATION_TIMEOUT_MS = 15_000;
+
 describe('GLD long-run depth contracts', () => {
     it('publishes a coherent scheduled act and boss read model', () => {
         const rows = getLongRunActBossRows({ seed: 42_001, rulesVersion: GAME_RULES_VERSION, floors: 12 });
@@ -81,7 +83,7 @@ describe('GLD long-run depth contracts', () => {
             'avg_reward_inflation'
         ]);
         expect(rows.every((row) => row.status === 'within_range')).toBe(true);
-    });
+    }, LONG_SIMULATION_TIMEOUT_MS);
 
     it('runs the deterministic multi-seed long-run soak gate', () => {
         const report = runLongRunSoak({ seeds: [42_001, 42_077, 42_123], floors: 48, rulesVersion: GAME_RULES_VERSION });
@@ -93,5 +95,5 @@ describe('GLD long-run depth contracts', () => {
         expect(report.rows.map((row) => row.key)).toContain('max_profile_worst_seed_unhealed_low_life_share');
         expect(report.rows.map((row) => row.key)).toContain('max_profile_unhealed_low_life_streak');
         expect(report.economySummary.totalSources).toBeGreaterThan(0);
-    }, 15_000);
+    }, LONG_SIMULATION_TIMEOUT_MS);
 });

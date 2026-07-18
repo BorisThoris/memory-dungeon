@@ -456,8 +456,10 @@ export const analyzeEndlessSimulationHealth = (input: EndlessSimulationCsvInput)
     return evaluateEndlessSimulationHealth(metrics, floors);
 };
 
-export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string => {
-    const metrics = readEndlessSimulationMetrics(input);
+const formatEndlessSimulationSummary = (
+    input: EndlessSimulationCsvInput,
+    metrics: EndlessSimulationHealthMetrics
+): string => {
     const floors = Math.max(1, Math.floor(input.floors));
     const pct = (value: number) => `${((value / floors) * 100).toFixed(1)}%`;
 
@@ -479,16 +481,23 @@ export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput):
     ].join('\n');
 };
 
+export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string =>
+    formatEndlessSimulationSummary(input, readEndlessSimulationMetrics(input));
+
 const runCli = (argv: readonly string[]): void => {
     const floors = Math.max(1, Math.floor(numArg(argv, 'floors', 10_000)));
     const runSeed = Math.floor(numArg(argv, 'seed', 42_001));
     const input = { floors, runSeed };
     const summaryMode = argv.includes('--summary');
     const checkMode = argv.includes('--check');
-    const output = summaryMode || checkMode ? buildEndlessSimulationSummary(input) : buildEndlessSimulationCsv(input);
+    const health = checkMode ? analyzeEndlessSimulationHealth(input) : null;
+    const output = health
+        ? formatEndlessSimulationSummary(input, health.metrics)
+        : summaryMode
+          ? buildEndlessSimulationSummary(input)
+          : buildEndlessSimulationCsv(input);
     process.stdout.write(output);
-    if (checkMode) {
-        const health = analyzeEndlessSimulationHealth(input);
+    if (health) {
         if (health.ok) {
             process.stdout.write('Endless simulation health check passed\n');
         } else {

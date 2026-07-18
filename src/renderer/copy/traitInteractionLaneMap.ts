@@ -27,7 +27,7 @@ export const TRAIT_INTERACTION_LANE_LABELS: Record<TraitInteractionLaneId, Trait
     tool: 'Tool'
 };
 
-export const TRAIT_INTERACTION_LANE_ACTIONS: Record<TraitInteractionLaneId, string> = {
+const TRAIT_INTERACTION_LANE_ACTIONS: Record<TraitInteractionLaneId, string> = {
     block: 'Deny match',
     guard: 'Protect run',
     recall: 'Set memory',

@@ -89,9 +89,9 @@ export const formatHudActionFeedbackText = (
     return `${clipped}...`;
 };
 
-export type HudActionFeedbackTone = 'info' | 'reward' | 'trait' | 'chain' | 'danger';
+type HudActionFeedbackTone = 'info' | 'reward' | 'trait' | 'chain' | 'danger';
 
-export interface HudActionFeedbackProfile {
+interface HudActionFeedbackProfile {
     label: string;
     tone: HudActionFeedbackTone;
 }

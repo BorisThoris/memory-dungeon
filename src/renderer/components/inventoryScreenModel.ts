@@ -33,7 +33,7 @@ export const getActiveTraitBuildRows = (run: RunState) => {
     );
 };
 
-export type InventoryRunLoopSignal = {
+type InventoryRunLoopSignal = {
     id: 'chain' | 'pickup' | 'resource' | 'trait';
     label: string;
     value: string;
@@ -42,7 +42,7 @@ export type InventoryRunLoopSignal = {
     tone: 'chain' | 'reward' | 'resource' | 'trait';
 };
 
-export type InventoryPayoffEngineSignal = {
+type InventoryPayoffEngineSignal = {
     label: 'Super stack' | 'Payoff engine' | 'Prime payoff';
     value: string;
     detail: string;
@@ -176,9 +176,9 @@ export const getInventoryPayoffEngineSignal = (
     };
 };
 
-export type InventoryToolActionCueTone = 'chain' | 'route' | 'recovery' | 'key' | 'build';
+type InventoryToolActionCueTone = 'chain' | 'route' | 'recovery' | 'key' | 'build';
 
-export interface InventoryToolActionCue {
+interface InventoryToolActionCue {
     label: string;
     detail: string;
     tone: InventoryToolActionCueTone;
@@ -279,7 +279,7 @@ export const getInventoryToolActionCue = (row: RunInventoryRow): InventoryToolAc
     };
 };
 
-export type InventoryScreenInventoryRow = RunInventoryRow & {
+type InventoryScreenInventoryRow = RunInventoryRow & {
     actionCue: InventoryToolActionCue;
 };
 

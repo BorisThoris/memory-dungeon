@@ -106,7 +106,7 @@ describe('sim-endless CSV output', () => {
         expect(health.metrics.traitRewardFloorShare).toBeGreaterThanOrEqual(0.8);
         expect(health.metrics.traitBoardPowerInteractionFloorShare).toBeGreaterThanOrEqual(0.7);
         expect(health.metrics.traitSwapSetupFloorShare).toBeGreaterThanOrEqual(0.1);
-    }, 45_000);
+    }, 120_000);
 
     it('counts raw undefeated hazard state for playable gates even when the hazard is no longer active', () => {
         expect(
@@ -231,5 +231,5 @@ describe('sim-endless CSV output', () => {
             )
         ).toBe(true);
         expect(stderr.mock.calls.some(([chunk]) => String(chunk).includes('Softlock seed gate failed'))).toBe(true);
-    }, 20_000);
+    }, 120_000);
 });

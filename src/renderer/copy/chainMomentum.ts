@@ -6,7 +6,7 @@ import {
 } from '../../shared/contracts';
 import { COMBO_SHARDS_PER_LIFE, COMBO_SHARD_STREAK_STEP } from '../../shared/combo-shard-rules';
 
-export type ChainMomentumTier = 'building' | 'chain' | 'surge' | 'combo';
+type ChainMomentumTier = 'building' | 'chain' | 'surge' | 'combo';
 
 export interface ChainRewardForecastCue {
     actionLabel: 'Next' | 'Soon' | 'Later';
@@ -21,7 +21,7 @@ export interface ChainRewardForecastCue {
     urgency: 'next' | 'soon' | 'later';
 }
 
-export interface ChainRewardProgress {
+interface ChainRewardProgress {
     filled: number;
     label: string;
     remainingLabel: string;
@@ -29,7 +29,7 @@ export interface ChainRewardProgress {
     total: number;
 }
 
-export interface ChainMilestonePreview {
+interface ChainMilestonePreview {
     actionLabel: 'Start chain' | 'Push surge' | 'Push combo' | 'Hold combo';
     distance: number;
     distanceLabel: string;

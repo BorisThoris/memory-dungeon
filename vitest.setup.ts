@@ -76,7 +76,34 @@ const installVisualViewportPolyfill = (): void => {
     });
 };
 
+const installLocalStoragePolyfill = (): void => {
+    const values = new Map<string, string>();
+    const storage: Storage = {
+        get length(): number {
+            return values.size;
+        },
+        clear: () => {
+            values.clear();
+        },
+        getItem: (key: string) => values.get(key) ?? null,
+        key: (index: number) => [...values.keys()][index] ?? null,
+        removeItem: (key: string) => {
+            values.delete(key);
+        },
+        setItem: (key: string, value: string) => {
+            values.set(key, String(value));
+        }
+    };
+
+    Object.defineProperty(window, 'localStorage', {
+        configurable: true,
+        enumerable: true,
+        value: storage
+    });
+};
+
 installVisualViewportPolyfill();
+installLocalStoragePolyfill();
 
 /**
  * RTL cleanup runs every test; Vitest `restoreMocks`/`clearMocks` (see `vite.config.mts`) reset `vi.fn` spies.

@@ -1,9 +1,9 @@
 import type { RunSummary } from '../../shared/contracts';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
 
-export type RunPayoffSignalTone = 'chain' | 'reward' | 'build' | 'risk';
+type RunPayoffSignalTone = 'chain' | 'reward' | 'build' | 'risk';
 
-export type RunPayoffSignalRow = {
+type RunPayoffSignalRow = {
     action: RunPayoffSignalAction;
     arcadeCue: string;
     audioCue: RunPayoffSignalAudioCue;
@@ -15,7 +15,7 @@ export type RunPayoffSignalRow = {
     value: string;
 };
 
-export type RunPayoffSignalAction =
+type RunPayoffSignalAction =
     | 'Protect chain'
     | 'Chase target'
     | 'Cash reward'
@@ -25,7 +25,7 @@ export type RunPayoffSignalAction =
     | 'Reduce risk'
     | 'Bank score';
 
-export type RunPayoffSignalAudioCue =
+type RunPayoffSignalAudioCue =
     | 'run-payoff-chain'
     | 'run-payoff-target'
     | 'run-payoff-cashout'
@@ -35,16 +35,16 @@ export type RunPayoffSignalAudioCue =
     | 'run-payoff-risk'
     | 'run-payoff-score';
 
-export type RunPayoffSignalScreenCue = 'pulse' | 'snap' | 'burst' | 'guard';
+type RunPayoffSignalScreenCue = 'pulse' | 'snap' | 'burst' | 'guard';
 
-export type RunPayoffBurstSignal = {
+type RunPayoffBurstSignal = {
     action: 'Chase again' | 'Prime next' | 'Rebuild super stack';
     label: 'Combo burst' | 'Payoff burst' | 'Payoff stack' | 'Super stack';
     tone: 'chain' | 'reward' | 'super';
     value: string;
 };
 
-export type RunPayoffCrescendoSignal = {
+type RunPayoffCrescendoSignal = {
     audioCue: 'prime-pop' | 'cashout-pop' | 'stack-burst' | 'super-burst';
     beatCount: 2 | 3 | 4 | 5;
     detail: string;
@@ -53,16 +53,16 @@ export type RunPayoffCrescendoSignal = {
     tier: 'prime' | 'cashout' | 'stack' | 'super';
 };
 
-export type RunPayoffSequenceSignal = {
+type RunPayoffSequenceSignal = {
     first: string;
     keep: string;
     then: string;
     tone: 'chain' | 'reward' | 'super';
 };
 
-export type RunPayoffLaneId = 'chain' | 'cash' | 'build' | 'risk';
+type RunPayoffLaneId = 'chain' | 'cash' | 'build' | 'risk';
 
-export type RunPayoffLaneMapEntry = {
+type RunPayoffLaneMapEntry = {
     action: 'Protect chain' | 'Cash reward' | 'Build route' | 'Reduce risk';
     count: number;
     id: RunPayoffLaneId;
@@ -70,9 +70,9 @@ export type RunPayoffLaneMapEntry = {
     cue: string;
 };
 
-export type RunPayoffBeatCount = 1 | 2 | 3 | 4;
-export type RunPayoffLaneAudioCue = 'run-payoff-lane-chain' | 'run-payoff-lane-cash' | 'run-payoff-lane-build' | 'run-payoff-lane-risk';
-export type RunPayoffLaneScreenCue = 'burst' | 'cashout' | 'build' | 'risk';
+type RunPayoffBeatCount = 1 | 2 | 3 | 4;
+type RunPayoffLaneAudioCue = 'run-payoff-lane-chain' | 'run-payoff-lane-cash' | 'run-payoff-lane-build' | 'run-payoff-lane-risk';
+type RunPayoffLaneScreenCue = 'burst' | 'cashout' | 'build' | 'risk';
 
 type RunPayoffSignalOptions = {
     includeChainTarget?: boolean;

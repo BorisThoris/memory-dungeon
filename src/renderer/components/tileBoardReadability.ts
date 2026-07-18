@@ -23,7 +23,7 @@ export type TileTraitRouteReadabilityTier =
 export type TileTraitRouteReadabilityIntensity = 'none' | 'setup' | 'ready' | 'surge' | 'cashout' | 'stack';
 export type TileTraitRouteBeatTier = 'setup' | 'route' | 'follow-up' | 'surge' | 'cashout';
 export type TileTraitRouteCadence = 'none' | 'prime' | 'route' | 'follow-up' | 'surge' | 'cashout';
-export type TraitLaneReadabilityPattern =
+type TraitLaneReadabilityPattern =
     | 'cash-pip'
     | 'guard-ward'
     | 'tool-cross'
@@ -39,7 +39,7 @@ export type TileTraitRouteReadabilityGlyph =
     | 'surge-burst'
     | 'cashout-crown'
     | 'payoff-stack';
-export interface TileTraitRouteReadabilityFlags {
+interface TileTraitRouteReadabilityFlags {
     isPerkArmedBack: boolean;
     isSelectedTraitFollowupBack: boolean;
     isTraitComboBack: boolean;

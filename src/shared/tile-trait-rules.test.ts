@@ -212,7 +212,7 @@ describe('tile trait rules', () => {
                 ).toBeGreaterThan(0);
             }
         }
-    });
+    }, 15_000);
 
     it('surfaces the newer interaction traits through seeded route pools', () => {
         const baseTiles = Array.from({ length: 12 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();

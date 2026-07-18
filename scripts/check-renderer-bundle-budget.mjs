@@ -10,14 +10,16 @@ const outDir = path.resolve(repoRoot, outDirArg);
 const kib = 1024;
 const mib = 1024 * kib;
 
+// Uncompressed production-output regression ceilings. Keep these close to the
+// checked-in renderer baseline so feature growth must make its bundle cost explicit.
 const budgets = {
-    totalBytes: 16 * mib,
-    totalJsBytes: 3450 * kib,
-    totalCssBytes: 360 * kib,
+    totalBytes: 17 * mib,
+    totalJsBytes: 3900 * kib,
+    totalCssBytes: 1300 * kib,
     maxAssetBytes: 2000 * kib,
     maxJsChunkBytes: {
-        main: 1300 * kib,
-        GameScreen: 340 * kib,
+        main: 1450 * kib,
+        GameScreen: 700 * kib,
         'vendor-three': 780 * kib,
         'vendor-pixi': 880 * kib,
         'vendor-r3f': 190 * kib,

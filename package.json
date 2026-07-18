@@ -32,7 +32,7 @@
         "graph:project": "node scripts/graph-project.mjs",
         "graph:systems": "node scripts/system-diagrams.mjs",
         "blueprint:codegen": "node scripts/blueprint-codegen.mjs",
-        "lint": "eslint . && node scripts/check-test-file-extensions.mjs",
+        "lint": "cross-env NODE_OPTIONS=--max-old-space-size=4096 eslint . && node scripts/check-test-file-extensions.mjs",
         "verify": "yarn typecheck && yarn test",
         "ci": "yarn fullcheck",
         "depcheck": "depcheck",

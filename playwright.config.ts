@@ -1,10 +1,10 @@
-import { defineConfig, devices } from '@playwright/test';
+import type { PlaywrightTestConfig } from '@playwright/test';
 
 const parsedWorkers = Number.parseInt(process.env.PLAYWRIGHT_WORKERS ?? '', 10);
 const workers = Number.isFinite(parsedWorkers) && parsedWorkers > 0 ? parsedWorkers : 1;
 
 /** REF-079: fresh browser context per test is Playwright default; block SWs to avoid cross-test cache bleed. */
-export default defineConfig({
+const config: PlaywrightTestConfig = {
     testDir: './e2e',
     /*
      * The app is a single strict-port Vite/WebGL target; broad parallel Playwright runs overload
@@ -22,7 +22,17 @@ export default defineConfig({
         trace: 'retain-on-failure',
         video: 'retain-on-failure'
     },
-    projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+    projects: [
+        {
+            name: 'chromium',
+            use: {
+                browserName: 'chromium',
+                hasTouch: false,
+                isMobile: false,
+                viewport: { width: 1280, height: 720 }
+            }
+        }
+    ],
     webServer: {
         command: 'yarn vite --host 127.0.0.1 --port 5173 --strictPort',
         url: 'http://127.0.0.1:5173',
@@ -30,4 +40,6 @@ export default defineConfig({
         /** Cold caches / busy agents: avoid false failures while Vite prebundles (default 60s is tight). */
         timeout: 180_000
     }
-});
+};
+
+export default config;

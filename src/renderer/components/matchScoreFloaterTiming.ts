@@ -5,7 +5,7 @@ export const MATCH_SCORE_FLOAT_MS_REDUCED = 500;
 /** Extra cushion if `animationend` never fires (devtools, odd engines). */
 export const MATCH_SCORE_FLOAT_FALLBACK_MARGIN_MS = 120;
 
-export type MatchScoreFloatTimingProfile = {
+type MatchScoreFloatTimingProfile = {
     chainMilestone?: unknown;
     crescendo?: { tier: 'score' | 'prime' | 'cashout' | 'stack' | 'super' } | null;
     kind?: 'match' | 'miss';

@@ -885,6 +885,31 @@ const cardTraitLaneScreenCue = (laneId: TraitInteractionLaneId | string): 'burst
     return 'burst';
 };
 
+const boardTraitLaneAudioCue = (
+    laneId: TraitInteractionLaneId | string
+): 'trait_route_focus' | 'trait_route_guard' | 'trait_route_reward' => {
+    if (laneId === 'shard') {
+        return 'trait_route_reward';
+    }
+    if (laneId === 'guard') {
+        return 'trait_route_guard';
+    }
+    return 'trait_route_focus';
+};
+
+const boardTraitLaneScreenCue = (laneId: TraitInteractionLaneId | string | null | undefined): 'burst' | 'guard' | 'none' | 'pulse' => {
+    if (laneId === 'shard') {
+        return 'burst';
+    }
+    if (laneId === 'guard') {
+        return 'guard';
+    }
+    if (laneId == null) {
+        return 'none';
+    }
+    return 'pulse';
+};
+
 const parseCountAttribute = (value: string): Map<string, number> => {
     const counts = new Map<string, number>();
     for (const entry of value.split(/[;>]/u)) {
@@ -4602,6 +4627,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityTraitLaneMap}
                                         data-trait-interaction-lane-actions={boardTraitInteractionLaneActionMapAttrValue}
                                         data-trait-interaction-lane-map={boardTraitInteractionLaneMapAttrValue}
+                                        data-trait-interaction-lane-primary-audio="trait_route_focus"
                                         data-trait-interaction-lane-primary={
                                             primaryBoardTraitInteractionLane?.id ?? 'none'
                                         }
@@ -4610,6 +4636,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 ? getTraitInteractionLaneAction(primaryBoardTraitInteractionLane.id)
                                                 : 'none'
                                         }
+                                        data-trait-interaction-lane-primary-screen-cue={boardTraitLaneScreenCue(
+                                            primaryBoardTraitInteractionLane?.id
+                                        )}
                                         data-testid="chain-opportunity-trait-lane-map"
                                     >
                                         <span
@@ -4652,6 +4681,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <span
                                                 data-trait-interaction-lane={lane.id}
                                                 data-trait-interaction-lane-action={getTraitInteractionLaneAction(lane.id)}
+                                                data-trait-interaction-lane-audio={boardTraitLaneAudioCue(lane.id)}
                                                 data-trait-interaction-lane-count={lane.count}
                                                 data-trait-interaction-lane-beats={Math.max(2, Math.min(5, lane.count + 1))}
                                                 data-trait-interaction-lane-focus={
@@ -4659,6 +4689,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                         ? 'primary'
                                                         : 'support'
                                                 }
+                                                data-trait-interaction-lane-screen-cue={boardTraitLaneScreenCue(lane.id)}
                                                 key={lane.id}
                                             >
                                                 <small>{lane.label}</small>
@@ -5413,6 +5444,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         className={styles.chainOpportunitySurge}
                                         data-chain-opportunity-surge-beats={4}
+                                        data-chain-opportunity-surge-audio="trait_route_surge"
                                         data-chain-opportunity-surge-screen-cue="burst"
                                         data-chain-opportunity-surge="true"
                                         data-chain-opportunity-surge-tone="surge"

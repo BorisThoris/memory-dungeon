@@ -251,7 +251,7 @@ export const getMatchScorePopSignal = ({
     return { label: 'Score', tone: 'score' };
 };
 
-export const buildMatchScorePopRewardBurst = ({
+const buildMatchScorePopRewardBurst = ({
     chainDepth,
     chainMilestone,
     chainRewardText,
@@ -314,7 +314,7 @@ export const buildMatchScorePopRewardBurst = ({
     };
 };
 
-export const buildMatchScorePopCascadeCue = ({
+const buildMatchScorePopCascadeCue = ({
     chainDepth,
     chainRewardText,
     pickupRewardText,
@@ -349,7 +349,7 @@ export const buildMatchScorePopCascadeCue = ({
     return { label: 'Cascade', value: 'chain cascade', tier: 'chain' };
 };
 
-export const buildMatchScorePopPayoffChips = ({
+const buildMatchScorePopPayoffChips = ({
     amount,
     cascadeCue,
     chainDepth,
@@ -664,7 +664,7 @@ export const buildMatchScorePopImpactCue = ({
     return { label: 'Score pop', tone: 'score' };
 };
 
-export const buildMatchScorePopPayoffLadder = ({
+const buildMatchScorePopPayoffLadder = ({
     chainRewardForecastCues = [],
     impactCue,
     payoffChips,

@@ -44,10 +44,10 @@ export const sfxGainFromSettings = (masterVolume: number, sfxVolume: number): nu
     clamp01(masterVolume) * clamp01(sfxVolume);
 
 type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'pressure' | 'shuffle';
-export type ChainOpportunityBeatSfxTier = 'cashout' | 'follow-up' | 'route' | 'setup' | 'surge';
-export type MismatchRecoveryCrescendoSfxTier = 'break' | 'lost-reward' | 'recover' | 'risk' | 'trait-surge';
+type ChainOpportunityBeatSfxTier = 'cashout' | 'follow-up' | 'route' | 'setup' | 'surge';
+type MismatchRecoveryCrescendoSfxTier = 'break' | 'lost-reward' | 'recover' | 'risk' | 'trait-surge';
 export type RelicChoiceCrescendoSfxTier = 'cashout' | 'prime' | 'rare' | 'stack';
-export type MatchPayoffSfxPayload = {
+type MatchPayoffSfxPayload = {
     cascadeCue?: { tier: 'chain' | 'combo' | 'reward' } | null;
     impactCue?: { label: string } | null;
     payoffLaneMap?: readonly { count: number }[] | null;

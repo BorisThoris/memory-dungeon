@@ -1,6 +1,6 @@
 import { getChainTargetFeedback } from '../../shared/chain-targets';
 
-export type MismatchFloaterContext = {
+type MismatchFloaterContext = {
     brokenChainDepth?: number;
     brokenChainRewardCue?: {
         distanceLabel: string;
@@ -113,7 +113,7 @@ export function mismatchFloaterRecoveryHint(traitInteractionTexts: readonly stri
     return 'Recover - prime with tools';
 }
 
-export type MismatchFloaterSignal = {
+type MismatchFloaterSignal = {
     label: 'Miss' | 'Risk' | 'Break';
     tone: 'miss' | 'penalty' | 'break';
 };
@@ -147,27 +147,27 @@ export type MismatchFloaterRecoveryLaneMapEntry = {
     cue: string;
 };
 
-export type MismatchFloaterRecoveryBurst = {
+type MismatchFloaterRecoveryBurst = {
     label: 'Recover' | 'Chain broken' | 'Reward lost' | 'Route risk' | 'Trait surge';
     value: string;
     tier: 'recover' | 'break' | 'lost-reward' | 'risk';
 };
 
-export type MismatchFloaterNextAction = {
+type MismatchFloaterNextAction = {
     arcadeCue: 'Safe pair' | 'Recover route' | 'Rebuild chase' | 'Save cashout';
     label: 'Recover now' | 'Recover route' | 'Rebuild chain' | 'Save streak';
     value: string;
     tone: 'recover' | 'risk' | 'lost-reward';
 };
 
-export type MismatchFloaterRecoveryStack = {
+type MismatchFloaterRecoveryStack = {
     label: 'Recovery stack' | 'Risk stack' | 'Lost reward stack';
     value: string;
     detail: string;
     tone: 'recover' | 'risk' | 'lost-reward' | 'break';
 };
 
-export type MismatchFloaterRecoverySequence = {
+type MismatchFloaterRecoverySequence = {
     first: string;
     keep: string;
     label: 'Recovery sequence';
@@ -175,7 +175,7 @@ export type MismatchFloaterRecoverySequence = {
     tone: 'recover' | 'risk' | 'lost-reward' | 'break';
 };
 
-export type MismatchFloaterRecoveryCrescendo = {
+type MismatchFloaterRecoveryCrescendo = {
     beatCount: 2 | 3 | 4 | 5;
     detail: string;
     label: 'Recover beat' | 'Break beat' | 'Risk beat' | 'Lost reward burst' | 'Trait surge burst';
