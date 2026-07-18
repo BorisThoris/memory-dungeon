@@ -409,6 +409,21 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary).toBeNull();
     });
 
+    it('keeps imported puzzle ids as own dictionary keys without prototype mutation', () => {
+        const puzzleCompletions = JSON.parse(`{
+            "__proto__":{"completed":true,"bestMistakes":1,"bestScore":10},
+            "constructor":{"completed":true,"bestMistakes":2,"bestScore":20},
+            "toString":{"completed":true,"bestMistakes":3,"bestScore":30}
+        }`);
+
+        const normalized = normalizeUnknownSaveData({ playerStats: { puzzleCompletions } });
+        const completions = normalized.playerStats?.puzzleCompletions;
+
+        expect(Object.getPrototypeOf(completions)).toBeNull();
+        expect(Object.keys(completions ?? {})).toEqual(['__proto__', 'constructor', 'toString']);
+        expect(completions?.__proto__).toEqual({ completed: true, bestMistakes: 1, bestScore: 10 });
+    });
+
     it('dedupes save-loaded reward and run summary ledgers before they can replay duplicates', () => {
         const normalized = normalizeSaveData({
             playerStats: {

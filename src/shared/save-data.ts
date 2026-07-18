@@ -91,6 +91,8 @@ export const createAchievementState = (): AchievementState =>
         {} as AchievementState
     );
 
+const createPuzzleCompletionMap = (): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => Object.create(null);
+
 const defaultPlayerStats = (): PlayerStatsPersisted => ({
     bestFloorNoPowers: 0,
     dailiesCompleted: 0,
@@ -98,7 +100,7 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
     dailyStreakCosmetic: 0,
     relicPickCounts: {},
     encorePairKeysLastRun: [],
-    puzzleCompletions: {},
+    puzzleCompletions: createPuzzleCompletionMap(),
     relicShrineExtraPickUnlocked: false
 });
 
@@ -175,9 +177,9 @@ const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPi
 
 const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => {
     if (!isUnknownRecord(input)) {
-        return {};
+        return createPuzzleCompletionMap();
     }
-    const out: NonNullable<PlayerStatsPersisted['puzzleCompletions']> = {};
+    const out = createPuzzleCompletionMap();
     for (const [id, value] of Object.entries(input)) {
         if (id.length === 0 || !isUnknownRecord(value)) {
             continue;
