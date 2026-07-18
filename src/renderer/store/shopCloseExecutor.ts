@@ -18,17 +18,17 @@ export interface ShopCloseExecutorState {
     view: ViewState;
 }
 
-export interface ShopCloseExecutorDeps<State extends ShopCloseExecutorState> {
+export interface ShopCloseExecutorDeps {
     applyResolvedRun: (run: RunState) => void;
     continueToNextLevel?: () => void;
-    getState: () => State;
+    getState: () => ShopCloseExecutorState;
     resumeRunWithTimers: (run: RunState) => RunState;
-    setState: (patch: Partial<State>) => void;
+    setState: (patch: Partial<ShopCloseExecutorState>) => void;
 }
 
-export const executeShopCloseToFloorSummary = <State extends ShopCloseExecutorState>(
-    deps: ShopCloseExecutorDeps<State>
-): void => {
+export type ContinueFromShopExecutorDeps = ShopCloseExecutorDeps & { continueToNextLevel: () => void };
+
+export const executeShopCloseToFloorSummary = (deps: ShopCloseExecutorDeps): void => {
     const state = deps.getState();
     const transition = resolveNavigationTransition(state, 'closeShopToFloorSummary' satisfies StoreNavigationAction);
     const nextRun = shouldResumeShopRunOnClose(state.shopReturnMode, state.run)
@@ -38,16 +38,14 @@ export const executeShopCloseToFloorSummary = <State extends ShopCloseExecutorSt
 
     if (result.kind === 'gameOver') {
         deps.applyResolvedRun(result.run);
-        deps.setState(result.patch as Partial<State>);
+        deps.setState(result.patch);
         return;
     }
 
-    deps.setState(result.patch as Partial<State>);
+    deps.setState(result.patch);
 };
 
-export const executeContinueFromShop = <State extends ShopCloseExecutorState>(
-    deps: ShopCloseExecutorDeps<State> & { continueToNextLevel: () => void }
-): void => {
+export const executeContinueFromShop = (deps: ContinueFromShopExecutorDeps): void => {
     const state = deps.getState();
     if (state.shopReturnMode === 'floor') {
         executeShopCloseToFloorSummary(deps);
@@ -59,14 +57,14 @@ export const executeContinueFromShop = <State extends ShopCloseExecutorState>(
         const result = createShopCloseSurfaceResult(transition, state.run);
         if (result.kind === 'gameOver') {
             deps.applyResolvedRun(result.run);
-            deps.setState(result.patch as Partial<State>);
+            deps.setState(result.patch);
             return;
         }
 
-        deps.setState(result.patch as Partial<State>);
+        deps.setState(result.patch);
         return;
     }
 
-    deps.setState(createShopReturnModeResetPatch() as Partial<State>);
+    deps.setState(createShopReturnModeResetPatch());
     deps.continueToNextLevel();
 };

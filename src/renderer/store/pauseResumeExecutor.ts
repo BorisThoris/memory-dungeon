@@ -1,30 +1,30 @@
 import type { RunState } from '../../shared/contracts';
 import {
     canPauseRunSurface,
-    createPausedRunSurfacePatch
+    createPausedRunSurfacePatch,
+    type RunSurfaceState
 } from './runSurfaceState';
-
-type PauseRunPatch = ReturnType<typeof createPausedRunSurfacePatch>;
 
 export interface PauseResumeExecutorState {
     run: RunState | null;
 }
 
-export interface PauseResumeExecutorDeps<State extends PauseResumeExecutorState> {
+type PauseResumeMutableState = PauseResumeExecutorState &
+    Pick<RunSurfaceState, 'matchScorePop' | 'mismatchScorePop'>;
+
+export interface PauseResumeExecutorDeps {
     applyResolvedRun: (run: RunState) => void;
     clearAllTimers: () => void;
     freezeRun: (run: RunState) => RunState;
-    getState: () => State;
+    getState: () => PauseResumeExecutorState;
     playPauseOpenSfx: () => void;
     playPauseResumeSfx: () => void;
     resumeRunWithTimers: (run: RunState) => RunState;
     resumeUiSfxContext: () => void;
-    setState: (patch: Partial<State> | PauseRunPatch) => void;
+    setState: (patch: Partial<PauseResumeMutableState>) => void;
 }
 
-export const executePauseRun = <State extends PauseResumeExecutorState>(
-    deps: PauseResumeExecutorDeps<State>
-): void => {
+export const executePauseRun = (deps: PauseResumeExecutorDeps): void => {
     const { run } = deps.getState();
 
     if (!canPauseRunSurface(run)) {
@@ -37,9 +37,7 @@ export const executePauseRun = <State extends PauseResumeExecutorState>(
     deps.setState(createPausedRunSurfacePatch(run, deps.freezeRun));
 };
 
-export const executeResumeRun = <State extends PauseResumeExecutorState>(
-    deps: PauseResumeExecutorDeps<State>
-): void => {
+export const executeResumeRun = (deps: PauseResumeExecutorDeps): void => {
     const { run } = deps.getState();
 
     if (!run || run.status !== 'paused' || !run.timerState.pausedFromStatus) {
@@ -54,5 +52,5 @@ export const executeResumeRun = <State extends PauseResumeExecutorState>(
 
     deps.resumeUiSfxContext();
     deps.playPauseResumeSfx();
-    deps.setState({ run: nextRun } as Partial<State>);
+    deps.setState({ run: nextRun });
 };

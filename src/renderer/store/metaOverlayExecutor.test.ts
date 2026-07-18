@@ -32,7 +32,7 @@ const createState = (overrides: Partial<MetaOverlayExecutorState> = {}): MetaOve
     ...overrides
 });
 
-const createDeps = (state: MetaOverlayExecutorState): MetaOverlayExecutorDeps<MetaOverlayExecutorState> => ({
+const createDeps = (state: MetaOverlayExecutorState): MetaOverlayExecutorDeps => ({
     applyResolvedRun: vi.fn(),
     clearAllTimers: vi.fn(),
     freezeRunSnapshotForPlayingMetaOverlay: vi.fn((run) => ({ ...run, status: 'paused' })),
