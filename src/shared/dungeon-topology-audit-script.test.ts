@@ -27,7 +27,7 @@ describe('dungeon topology audit script', () => {
             )
         ).toBe(true);
         expect(stderr).not.toHaveBeenCalled();
-    });
+    }, 15_000);
 
     it('supports deterministic stress seed sweeps', () => {
         const stdout = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);

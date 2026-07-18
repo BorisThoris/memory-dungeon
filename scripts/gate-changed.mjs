@@ -6,7 +6,10 @@ const GATES = {
     rewardsEconomy: 'yarn gate:rewards-economy',
     navigation: 'yarn gate:navigation',
     systems: 'yarn gate:systems',
+    gameplay: 'yarn gate:gameplay',
     longRun: 'yarn gate:long-run',
+    readabilityLongRun: 'yarn gate:readability-long-run',
+    longRunUiFeedback: 'yarn gate:long-run-ui-feedback',
     dungeonTopologyAudit: 'yarn audit:dungeon-topology:json',
     simHealth: 'yarn gate:sim-health',
     simSoftlockSeeds: 'yarn gate:sim-softlock-seeds',
@@ -96,6 +99,17 @@ export const selectGatesForChangedPaths = (paths) => {
         file.startsWith('src/shared/floor-mutator-schedule') ||
         file.startsWith('src/shared/run-map') ||
         isCoreGameRuleFile(file);
+    const isReadabilityLongRunFile = (file) =>
+        file.startsWith('src/shared/long-run-feedback') ||
+        file.startsWith('src/shared/findables') ||
+        file.startsWith('src/shared/mechanic-feedback');
+    const isLongRunUiFeedbackFile = (file) =>
+        file.startsWith('src/shared/long-run-feedback') ||
+        file.startsWith('src/shared/findables') ||
+        file.startsWith('src/shared/mechanics-encyclopedia') ||
+        file.startsWith('src/renderer/components/GameplayHudBar') ||
+        file.startsWith('src/renderer/hooks/useHudPoliteLiveAnnouncement') ||
+        file === 'e2e/long-run-feedback-hud.spec.ts';
 
     for (const file of normalized) {
         if (
@@ -123,7 +137,12 @@ export const selectGatesForChangedPaths = (paths) => {
         ) {
             add('blueprintE2e', file, 'dev blueprint explorer or system diagram browser route changed');
         }
-        if (file === 'package.json' || file === 'yarn.lock' || file === 'scripts/audit-summary.mjs') {
+        if (
+            file === 'package.json' ||
+            file === 'yarn.lock' ||
+            file === 'scripts/audit-summary.mjs' ||
+            file === 'src/shared/audit-summary-script.test.ts'
+        ) {
             add('security', file, 'dependency, lockfile, or audit tooling changed');
         }
         if (
@@ -181,6 +200,15 @@ export const selectGatesForChangedPaths = (paths) => {
             file === 'src/shared/contracts.ts'
         ) {
             add('longRun', file, 'long-run route pacing, relic, economy, or balance soak can change');
+        }
+        if (file === 'src/shared/p2-contracts.test.ts') {
+            add('gameplay', file, 'broad gameplay contract coverage changed');
+        }
+        if (isReadabilityLongRunFile(file)) {
+            add('readabilityLongRun', file, 'long-run readability or mechanic feedback can change');
+        }
+        if (isLongRunUiFeedbackFile(file)) {
+            add('longRunUiFeedback', file, 'long-run HUD feedback or announcement coverage can change');
         }
         if (
             file === 'scripts/sim-endless.ts' ||
@@ -248,7 +276,7 @@ export const selectGatesForChangedPaths = (paths) => {
         if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || isCoreGameRuleFile(file) || file.startsWith('src/shared/playthrough-solver') || file.startsWith('src/shared/run-progression-repair') || file.startsWith('src/shared/turn-resolution') || file.startsWith('src/shared/hazard') || file.startsWith('src/shared/enemy')) {
             add('actionLoop', file, 'core turn, trait, hazard, enemy, or board-power rules changed');
         }
-        if (file.startsWith('src/shared/board-generation') || file.startsWith('src/shared/board-build') || file.startsWith('src/shared/board-inspection') || file.startsWith('src/shared/dungeon-topology') || file.startsWith('src/shared/softlock') || file.startsWith('src/shared/objective-rules')) {
+        if (file.startsWith('src/shared/board-generation') || file.startsWith('src/shared/board-build') || file.startsWith('src/shared/board-inspection') || file.startsWith('src/shared/dungeon-topology') || file.startsWith('src/shared/dungeon-board-status') || file.startsWith('src/shared/softlock') || file.startsWith('src/shared/objective-rules')) {
             add('actionLoop', file, 'generation, objective, fairness, or softlock rules changed');
         }
         if (file.startsWith('src/shared/bonus-rewards') || file.startsWith('src/shared/shop') || file.startsWith('src/shared/relic') || file.startsWith('src/shared/economy') || file.startsWith('src/shared/run-economy') || file.startsWith('src/shared/balance-simulation')) {
@@ -316,12 +344,14 @@ export const selectGatesForChangedPaths = (paths) => {
             file === 'scripts/audio-pipeline/generate-portfolio-feedback-pack.mjs' ||
             file.startsWith('src/renderer/hooks/useHudPoliteLiveAnnouncement') ||
             file.startsWith('src/renderer/components/gameScreenFeedback') ||
+            file === 'src/renderer/components/GameScreen.tsx' ||
+            file === 'src/renderer/components/GameScreen.test.tsx' ||
             file === 'docs/AUDIO_ASSET_INVENTORY.md' ||
             file === 'docs/AUDIO_INTEGRATION.md'
         ) {
             add('audioFeedback', file, 'audio, announcement, or feedback coverage changed');
         }
-        if (file.startsWith('src/renderer/cardFace/') || file.startsWith('src/renderer/components/tileTextures') || file === 'src/renderer/components/TileBezel.tsx' || file.startsWith('scripts/build-card-illustration-manifest') || file === 'scripts/card-pipeline/export-face-panel-webp.mjs' || file === 'scripts/card-pipeline/export-ui-background-webp.mjs' || file === 'scripts/card-pipeline/export-card-normal-webp.mjs' || file === 'scripts/audit-renderer-assets.mjs') {
+        if (file.startsWith('src/renderer/cardFace/') || file.startsWith('src/renderer/components/tileTextures') || file.startsWith('src/renderer/components/tileBoardReadability') || file.startsWith('src/renderer/components/tileBoardRows') || file === 'src/renderer/components/TileBezel.tsx' || file.startsWith('scripts/build-card-illustration-manifest') || file === 'scripts/card-pipeline/export-face-panel-webp.mjs' || file === 'scripts/card-pipeline/export-ui-background-webp.mjs' || file === 'scripts/card-pipeline/export-card-normal-webp.mjs' || file === 'scripts/audit-renderer-assets.mjs') {
             add('assetRendering', file, 'card face, texture, bezel, or asset manifest changed');
         }
         if (file.startsWith('src/main/persistence') || file.startsWith('src/preload/') || file === 'src/shared/contracts.ts') {

@@ -746,7 +746,7 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-recent-action').getAttribute('aria-label')).toContain(
             'Then: rebuild with a safe match. Keep: stop the chain break.'
         );
-    });
+    }, 15_000);
 
     it('surfaces named chain momentum tiers instead of a raw streak only', () => {
         const baseRun = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));

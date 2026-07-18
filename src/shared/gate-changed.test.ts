@@ -25,6 +25,25 @@ const loadGateChanged = async (): Promise<GateChangedModule> => {
     return (await import('../../scripts/gate-changed.mjs')) as GateChangedModule;
 };
 
+const referencedPackageScripts = (command: string): string[] =>
+    [...command.matchAll(/(?:^|\s)yarn\s+([\w:-]+)/gu)].map((match) => match[1]);
+
+const packageScriptClosure = (scriptName: string, visited = new Set<string>()): Set<string> => {
+    if (visited.has(scriptName) || packageScripts[scriptName] == null) {
+        return visited;
+    }
+    visited.add(scriptName);
+    for (const referencedScript of referencedPackageScripts(packageScripts[scriptName])) {
+        packageScriptClosure(referencedScript, visited);
+    }
+    return visited;
+};
+
+const testFilesRunByPackageScript = (scriptName: string): string[] =>
+    [...packageScriptClosure(scriptName)].flatMap(
+        (referencedScript) => packageScripts[referencedScript]?.match(/src\/[^\s"']+\.test\.tsx?/gu) ?? []
+    );
+
 const runGateChanged = (...paths: string[]): GateChangedPayload =>
     JSON.parse(
         execFileSync(process.execPath, [scriptPath, '--json', ...paths], {
@@ -88,6 +107,27 @@ describe('gate:changed selector', () => {
         expect(packageScripts['gate:long-run']).toContain('src/shared/gate-long-run-script.test.ts');
         expect(packageScripts['gate:long-run']).toContain('src/shared/seed-sweep-options.test.ts');
         expect(packageScripts['gate:long-run']).toContain('src/shared/sim-endless-output.test.ts');
+        expect(packageScripts['gate:gameplay']).toContain('yarn test --maxWorkers=2');
+        expect(packageScripts['gate:long-run']).toContain('--maxWorkers=1');
+        expect(packageScripts['gate:readability-long-run']).toContain('--maxWorkers=2');
+        expect(packageScripts['gate:long-run-ui-feedback']).toContain('--maxWorkers=2');
+    });
+
+    it('routes every explicitly gated test to a selected gate that executes it', async () => {
+        const { selectGatesForChangedPaths } = await loadGateChanged();
+        const gateScriptNames = Object.keys(packageScripts).filter((scriptName) => scriptName.startsWith('gate:'));
+        const explicitlyGatedTests = [...new Set(gateScriptNames.flatMap(testFilesRunByPackageScript))].sort();
+        const uncovered = explicitlyGatedTests.flatMap((file) => {
+            const selectedGates = selectGatesForChangedPaths([file]).gates;
+            const reachesTest = selectedGates.some(({ command }) => {
+                const selectedScript = command.match(/^yarn\s+([\w:-]+)$/u)?.[1];
+                return selectedScript != null && testFilesRunByPackageScript(selectedScript).includes(file);
+            });
+            return reachesTest ? [] : [{ file, selectedGateIds: selectedGates.map(({ id }) => id) }];
+        });
+
+        expect(explicitlyGatedTests.length).toBeGreaterThan(60);
+        expect(uncovered).toEqual([]);
     });
 
     it('selects every dependent simulation gate for the shared seed sweep contract', () => {
