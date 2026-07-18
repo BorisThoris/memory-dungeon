@@ -636,6 +636,7 @@ describe('gate:changed selector', () => {
             'scripts/card-pipeline/export-card-normal-webp.mjs',
             'scripts/audit-renderer-assets.mjs',
             'docs/AUDIO_INTEGRATION.md',
+            'src/shared/save-data.ts',
             'src/main/persistence.ts'
         );
 
@@ -710,6 +711,11 @@ describe('gate:changed selector', () => {
         expect(
             payload.reasons.some(
                 (reason) => reason.gateId === 'audioFeedback' && reason.file === 'docs/AUDIO_INTEGRATION.md'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'persistence' && reason.file === 'src/shared/save-data.ts'
             )
         ).toBe(true);
     });

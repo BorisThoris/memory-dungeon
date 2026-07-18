@@ -2,12 +2,7 @@ import {
     SAVE_SCHEMA_VERSION,
     type AchievementId,
     type AchievementState,
-    type BoardPresentationMode,
-    type BoardScreenSpaceAA,
-    type CameraViewportModePreference,
-    type DisplayMode,
     type GameMode,
-    type GraphicsQualityPreset,
     type MutatorId,
     type PlayerStatsPersisted,
     type RelicId,
@@ -15,8 +10,7 @@ import {
     type RunState,
     type SaveData,
     type Settings,
-    type StartingLoadoutId,
-    type WeakerShuffleMode
+    type StartingLoadoutId
 } from './contracts';
 import { z } from 'zod';
 import { utcDateKeyMinusOneDay } from './rng';
@@ -61,6 +55,21 @@ export const DEFAULT_SETTINGS: Settings = {
     pairProximityHintsEnabled: true
 };
 
+type NumericSettingsKey =
+    | 'masterVolume'
+    | 'musicVolume'
+    | 'sfxVolume'
+    | 'uiScale'
+    | 'resolveDelayMultiplier';
+
+export const SETTINGS_NUMERIC_RANGES = {
+    masterVolume: { min: 0, max: 1 },
+    musicVolume: { min: 0, max: 1 },
+    sfxVolume: { min: 0, max: 1 },
+    uiScale: { min: 0.8, max: 1.4 },
+    resolveDelayMultiplier: { min: 0.5, max: 2.5 }
+} as const satisfies Record<NumericSettingsKey, { min: number; max: number }>;
+
 export const ACHIEVEMENT_IDS: AchievementId[] = [
     'ACH_FIRST_CLEAR',
     'ACH_LEVEL_FIVE',
@@ -103,8 +112,14 @@ const STARTING_LOADOUT_ID_SET = new Set<StartingLoadoutId>([
 const finiteNonNegativeInteger = (value: unknown, fallback: number): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : fallback;
 
-const finiteNonNegativeNumber = (value: unknown, fallback: number): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : fallback;
+const finiteClampedNumber = (
+    value: unknown,
+    fallback: number,
+    range: { readonly min: number; readonly max: number }
+): number =>
+    typeof value === 'number' && Number.isFinite(value)
+        ? Math.min(range.max, Math.max(range.min, value))
+        : fallback;
 
 const stringOrNull = (value: unknown, fallback: string | null): string | null =>
     typeof value === 'string' ? value : value === null ? null : fallback;
@@ -314,6 +329,110 @@ export const saveDataBoundarySchema = objectBoundarySchema.extend({
     unlocks: z.unknown().optional()
 });
 
+type SettingsBoundary = z.output<typeof settingsBoundarySchema>;
+
+const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settings => {
+    const source = input ?? {};
+    const debugFlags =
+        source.debugFlags && typeof source.debugFlags === 'object' && !Array.isArray(source.debugFlags)
+            ? (source.debugFlags as Record<string, unknown>)
+            : {};
+    const boardScreenSpaceAA = source.boardScreenSpaceAA;
+    const graphicsQuality = source.graphicsQuality;
+    const cameraViewportModePreference = source.cameraViewportModePreference;
+    const displayMode = source.displayMode;
+    const weakerShuffleMode = source.weakerShuffleMode;
+    const boardPresentation = source.boardPresentation;
+
+    return {
+        masterVolume: finiteClampedNumber(
+            source.masterVolume,
+            DEFAULT_SETTINGS.masterVolume,
+            SETTINGS_NUMERIC_RANGES.masterVolume
+        ),
+        musicVolume: finiteClampedNumber(
+            source.musicVolume,
+            DEFAULT_SETTINGS.musicVolume,
+            SETTINGS_NUMERIC_RANGES.musicVolume
+        ),
+        sfxVolume: finiteClampedNumber(
+            source.sfxVolume,
+            DEFAULT_SETTINGS.sfxVolume,
+            SETTINGS_NUMERIC_RANGES.sfxVolume
+        ),
+        displayMode:
+            displayMode === 'windowed' || displayMode === 'fullscreen' ? displayMode : DEFAULT_SETTINGS.displayMode,
+        uiScale: finiteClampedNumber(source.uiScale, DEFAULT_SETTINGS.uiScale, SETTINGS_NUMERIC_RANGES.uiScale),
+        reduceMotion: typeof source.reduceMotion === 'boolean' ? source.reduceMotion : DEFAULT_SETTINGS.reduceMotion,
+        graphicsQuality:
+            graphicsQuality === 'low' || graphicsQuality === 'medium' || graphicsQuality === 'high'
+                ? graphicsQuality
+                : DEFAULT_SETTINGS.graphicsQuality,
+        boardScreenSpaceAA:
+            boardScreenSpaceAA === 'auto' ||
+            boardScreenSpaceAA === 'smaa' ||
+            boardScreenSpaceAA === 'msaa' ||
+            boardScreenSpaceAA === 'off'
+                ? boardScreenSpaceAA
+                : DEFAULT_SETTINGS.boardScreenSpaceAA,
+        boardBloomEnabled:
+            typeof source.boardBloomEnabled === 'boolean'
+                ? source.boardBloomEnabled
+                : DEFAULT_SETTINGS.boardBloomEnabled,
+        debugFlags: {
+            showDebugTools:
+                typeof debugFlags.showDebugTools === 'boolean'
+                    ? debugFlags.showDebugTools
+                    : DEFAULT_SETTINGS.debugFlags.showDebugTools,
+            allowBoardReveal:
+                typeof debugFlags.allowBoardReveal === 'boolean'
+                    ? debugFlags.allowBoardReveal
+                    : DEFAULT_SETTINGS.debugFlags.allowBoardReveal,
+            disableAchievementsOnDebug:
+                typeof debugFlags.disableAchievementsOnDebug === 'boolean'
+                    ? debugFlags.disableAchievementsOnDebug
+                    : DEFAULT_SETTINGS.debugFlags.disableAchievementsOnDebug
+        },
+        boardPresentation:
+            boardPresentation === 'standard' || boardPresentation === 'spaghetti' || boardPresentation === 'breathing'
+                ? boardPresentation
+                : DEFAULT_SETTINGS.boardPresentation,
+        cameraViewportModePreference:
+            cameraViewportModePreference === 'auto' ||
+            cameraViewportModePreference === 'always' ||
+            cameraViewportModePreference === 'never'
+                ? cameraViewportModePreference
+                : DEFAULT_SETTINGS.cameraViewportModePreference,
+        tileFocusAssist:
+            typeof source.tileFocusAssist === 'boolean' ? source.tileFocusAssist : DEFAULT_SETTINGS.tileFocusAssist,
+        resolveDelayMultiplier: finiteClampedNumber(
+            source.resolveDelayMultiplier,
+            DEFAULT_SETTINGS.resolveDelayMultiplier,
+            SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier
+        ),
+        weakerShuffleMode:
+            weakerShuffleMode === 'full' || weakerShuffleMode === 'rows_only'
+                ? weakerShuffleMode
+                : DEFAULT_SETTINGS.weakerShuffleMode,
+        echoFeedbackEnabled:
+            typeof source.echoFeedbackEnabled === 'boolean'
+                ? source.echoFeedbackEnabled
+                : DEFAULT_SETTINGS.echoFeedbackEnabled,
+        distractionChannelEnabled:
+            typeof source.distractionChannelEnabled === 'boolean'
+                ? source.distractionChannelEnabled
+                : DEFAULT_SETTINGS.distractionChannelEnabled,
+        shuffleScoreTaxEnabled:
+            typeof source.shuffleScoreTaxEnabled === 'boolean'
+                ? source.shuffleScoreTaxEnabled
+                : DEFAULT_SETTINGS.shuffleScoreTaxEnabled,
+        pairProximityHintsEnabled:
+            typeof source.pairProximityHintsEnabled === 'boolean'
+                ? source.pairProximityHintsEnabled
+                : DEFAULT_SETTINGS.pairProximityHintsEnabled
+    };
+};
+
 export const normalizeUnknownSaveData = (input: unknown): SaveData => {
     const parsed = saveDataBoundarySchema.safeParse(input);
     return normalizeSaveData(parsed.success ? (parsed.data as Partial<SaveData>) : null);
@@ -321,9 +440,7 @@ export const normalizeUnknownSaveData = (input: unknown): SaveData => {
 
 export const normalizeUnknownSettings = (input: unknown): Settings => {
     const parsed = settingsBoundarySchema.safeParse(input);
-    return normalizeSaveData({
-        settings: parsed.success ? (parsed.data as unknown as Settings) : undefined
-    }).settings;
+    return normalizeSettings(parsed.success ? parsed.data : undefined);
 };
 
 export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData => {
@@ -333,49 +450,6 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
         return defaults;
     }
     const migrationGate = evaluateSaveMigrationGate(input);
-
-    const mergedSettingsBase: Settings = {
-        ...defaults.settings,
-        ...(input.settings ?? {}),
-        debugFlags: {
-            ...defaults.settings.debugFlags,
-            ...(input.settings?.debugFlags ?? {})
-        }
-    };
-    const aaRaw = mergedSettingsBase.boardScreenSpaceAA as BoardScreenSpaceAA | undefined;
-    const boardScreenSpaceAA: BoardScreenSpaceAA =
-        aaRaw === 'auto' || aaRaw === 'smaa' || aaRaw === 'msaa' || aaRaw === 'off' ? aaRaw : defaults.settings.boardScreenSpaceAA;
-    const gqRaw = mergedSettingsBase.graphicsQuality as GraphicsQualityPreset | undefined;
-    const graphicsQuality: GraphicsQualityPreset =
-        gqRaw === 'low' || gqRaw === 'medium' || gqRaw === 'high' ? gqRaw : defaults.settings.graphicsQuality;
-    const boardBloomEnabled =
-        typeof mergedSettingsBase.boardBloomEnabled === 'boolean'
-            ? mergedSettingsBase.boardBloomEnabled
-            : defaults.settings.boardBloomEnabled;
-    const pairProximityHintsEnabled =
-        typeof mergedSettingsBase.pairProximityHintsEnabled === 'boolean'
-            ? mergedSettingsBase.pairProximityHintsEnabled
-            : defaults.settings.pairProximityHintsEnabled;
-    const cvRaw = mergedSettingsBase.cameraViewportModePreference as CameraViewportModePreference | undefined;
-    const cameraViewportModePreference: CameraViewportModePreference =
-        cvRaw === 'auto' || cvRaw === 'always' || cvRaw === 'never'
-            ? cvRaw
-            : defaults.settings.cameraViewportModePreference;
-    const displayModeRaw = mergedSettingsBase.displayMode as DisplayMode | undefined;
-    const displayMode: DisplayMode =
-        displayModeRaw === 'windowed' || displayModeRaw === 'fullscreen'
-            ? displayModeRaw
-            : defaults.settings.displayMode;
-    const weakerShuffleRaw = mergedSettingsBase.weakerShuffleMode as WeakerShuffleMode | undefined;
-    const weakerShuffleMode: WeakerShuffleMode =
-        weakerShuffleRaw === 'full' || weakerShuffleRaw === 'rows_only'
-            ? weakerShuffleRaw
-            : defaults.settings.weakerShuffleMode;
-    const boardPresentationRaw = mergedSettingsBase.boardPresentation as BoardPresentationMode | undefined;
-    const boardPresentation: BoardPresentationMode =
-        boardPresentationRaw === 'standard' || boardPresentationRaw === 'spaghetti' || boardPresentationRaw === 'breathing'
-            ? boardPresentationRaw
-            : defaults.settings.boardPresentation;
 
     const mergedAchievements = normalizeAchievements(input.achievements);
     const psIn: Partial<PlayerStatsPersisted> = input.playerStats ?? {};
@@ -389,59 +463,7 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
         schemaVersion: SAVE_SCHEMA_VERSION,
         bestScore: finiteNonNegativeInteger(input.bestScore, defaults.bestScore),
         achievements: mergedAchievements,
-        settings: {
-            ...mergedSettingsBase,
-            masterVolume: finiteNonNegativeNumber(mergedSettingsBase.masterVolume, defaults.settings.masterVolume),
-            musicVolume: finiteNonNegativeNumber(mergedSettingsBase.musicVolume, defaults.settings.musicVolume),
-            sfxVolume: finiteNonNegativeNumber(mergedSettingsBase.sfxVolume, defaults.settings.sfxVolume),
-            uiScale: finiteNonNegativeNumber(mergedSettingsBase.uiScale, defaults.settings.uiScale),
-            resolveDelayMultiplier: finiteNonNegativeNumber(
-                mergedSettingsBase.resolveDelayMultiplier,
-                defaults.settings.resolveDelayMultiplier
-            ),
-            reduceMotion:
-                typeof mergedSettingsBase.reduceMotion === 'boolean'
-                    ? mergedSettingsBase.reduceMotion
-                    : defaults.settings.reduceMotion,
-            boardScreenSpaceAA,
-            boardBloomEnabled,
-            graphicsQuality,
-            cameraViewportModePreference,
-            pairProximityHintsEnabled,
-            displayMode,
-            weakerShuffleMode,
-            boardPresentation,
-            tileFocusAssist:
-                typeof mergedSettingsBase.tileFocusAssist === 'boolean'
-                    ? mergedSettingsBase.tileFocusAssist
-                    : defaults.settings.tileFocusAssist,
-            echoFeedbackEnabled:
-                typeof mergedSettingsBase.echoFeedbackEnabled === 'boolean'
-                    ? mergedSettingsBase.echoFeedbackEnabled
-                    : defaults.settings.echoFeedbackEnabled,
-            distractionChannelEnabled:
-                typeof mergedSettingsBase.distractionChannelEnabled === 'boolean'
-                    ? mergedSettingsBase.distractionChannelEnabled
-                    : defaults.settings.distractionChannelEnabled,
-            shuffleScoreTaxEnabled:
-                typeof mergedSettingsBase.shuffleScoreTaxEnabled === 'boolean'
-                    ? mergedSettingsBase.shuffleScoreTaxEnabled
-                    : defaults.settings.shuffleScoreTaxEnabled,
-            debugFlags: {
-                showDebugTools:
-                    typeof mergedSettingsBase.debugFlags.showDebugTools === 'boolean'
-                        ? mergedSettingsBase.debugFlags.showDebugTools
-                        : defaults.settings.debugFlags.showDebugTools,
-                allowBoardReveal:
-                    typeof mergedSettingsBase.debugFlags.allowBoardReveal === 'boolean'
-                        ? mergedSettingsBase.debugFlags.allowBoardReveal
-                        : defaults.settings.debugFlags.allowBoardReveal,
-                disableAchievementsOnDebug:
-                    typeof mergedSettingsBase.debugFlags.disableAchievementsOnDebug === 'boolean'
-                        ? mergedSettingsBase.debugFlags.disableAchievementsOnDebug
-                        : defaults.settings.debugFlags.disableAchievementsOnDebug
-            }
-        },
+        settings: normalizeSettings(input.settings),
         onboardingDismissed: typeof input.onboardingDismissed === 'boolean' ? input.onboardingDismissed : defaults.onboardingDismissed,
         firstRunHelpDismissed:
             typeof input.firstRunHelpDismissed === 'boolean' ? input.firstRunHelpDismissed : defaults.firstRunHelpDismissed,

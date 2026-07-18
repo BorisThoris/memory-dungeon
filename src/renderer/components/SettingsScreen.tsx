@@ -14,7 +14,7 @@ import { getProfileSummaryRows, getSaveTrustRows } from '../../shared/profile-su
 import { getPremiumEconomyPolicyRows } from '../../shared/premium-economy-policy';
 import { getSettingsControlCenterRows } from '../../shared/settings-control-center';
 import { getReferenceOnlySettingsRows } from '../../shared/settings-control-model';
-import { DEFAULT_SETTINGS } from '../../shared/save-data';
+import { DEFAULT_SETTINGS, SETTINGS_NUMERIC_RANGES } from '../../shared/save-data';
 import {
     isNarrowShortLandscapeForMenuStack,
     isShortLandscapeViewport,
@@ -332,8 +332,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 <SliderRow
                                                     hint="Controls mismatch and resolve pacing for new runs."
                                                     label="Resolve Delay"
-                                                    max={2.5}
-                                                    min={0.5}
+                                                    max={SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.max}
+                                                    min={SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.min}
                                                     onChange={(next) => patchSettings('resolveDelayMultiplier', next)}
                                                     step={0.05}
                                                     value={draft.resolveDelayMultiplier}
@@ -445,8 +445,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 <SliderRow
                                                     hint="Overall mix applied across the whole run."
                                                     label="Master Volume"
-                                                    max={1}
-                                                    min={0}
+                                                    max={SETTINGS_NUMERIC_RANGES.masterVolume.max}
+                                                    min={SETTINGS_NUMERIC_RANGES.masterVolume.min}
                                                     onChange={(next) => patchSettings('masterVolume', next)}
                                                     step={0.05}
                                                     value={draft.masterVolume}
@@ -455,8 +455,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 <SliderRow
                                                     hint="Menu and ambient music level."
                                                     label="Music"
-                                                    max={1}
-                                                    min={0}
+                                                    max={SETTINGS_NUMERIC_RANGES.musicVolume.max}
+                                                    min={SETTINGS_NUMERIC_RANGES.musicVolume.min}
                                                     onChange={(next) => patchSettings('musicVolume', next)}
                                                     step={0.05}
                                                     value={draft.musicVolume}
@@ -465,8 +465,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 <SliderRow
                                                     hint="Tile flips, rewards, and hit feedback."
                                                     label="SFX"
-                                                    max={1}
-                                                    min={0}
+                                                    max={SETTINGS_NUMERIC_RANGES.sfxVolume.max}
+                                                    min={SETTINGS_NUMERIC_RANGES.sfxVolume.min}
                                                     onChange={(next) => patchSettings('sfxVolume', next)}
                                                     step={0.05}
                                                     value={draft.sfxVolume}
@@ -490,8 +490,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 <SliderRow
                                                     hint="Scales the renderer UI on desktop and tablet viewports."
                                                     label="UI Scale"
-                                                    max={1.4}
-                                                    min={0.8}
+                                                    max={SETTINGS_NUMERIC_RANGES.uiScale.max}
+                                                    min={SETTINGS_NUMERIC_RANGES.uiScale.min}
                                                     onChange={(next) => patchSettings('uiScale', next)}
                                                     step={0.05}
                                                     value={draft.uiScale}

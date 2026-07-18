@@ -18,7 +18,8 @@ import {
     normalizeUnknownSaveData,
     normalizeUnknownSettings,
     saveDataBoundarySchema,
-    settingsBoundarySchema
+    settingsBoundarySchema,
+    SETTINGS_NUMERIC_RANGES
 } from './save-data';
 import type { RunSummary, SaveData } from './contracts';
 import {
@@ -60,6 +61,43 @@ describe('save normalization', () => {
         expect(normalizeUnknownSettings('not settings')).toEqual(DEFAULT_SETTINGS);
         expect(normalizeUnknownSettings({ displayMode: 'fullscreen', debugFlags: 'bad' }).displayMode).toBe('fullscreen');
         expect(normalizeUnknownSettings({ displayMode: 'kiosk' }).displayMode).toBe(DEFAULT_SETTINGS.displayMode);
+    });
+
+    it('clamps persisted numeric settings to the live control ranges', () => {
+        expect(
+            normalizeUnknownSettings({
+                masterVolume: -1,
+                musicVolume: 2,
+                sfxVolume: Number.NaN,
+                uiScale: 0,
+                resolveDelayMultiplier: 99
+            })
+        ).toMatchObject({
+            masterVolume: SETTINGS_NUMERIC_RANGES.masterVolume.min,
+            musicVolume: SETTINGS_NUMERIC_RANGES.musicVolume.max,
+            sfxVolume: DEFAULT_SETTINGS.sfxVolume,
+            uiScale: SETTINGS_NUMERIC_RANGES.uiScale.min,
+            resolveDelayMultiplier: SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.max
+        });
+
+        expect(
+            normalizeSaveData({
+                settings: {
+                    ...DEFAULT_SETTINGS,
+                    masterVolume: 5,
+                    musicVolume: -5,
+                    sfxVolume: 5,
+                    uiScale: 5,
+                    resolveDelayMultiplier: -5
+                }
+            }).settings
+        ).toMatchObject({
+            masterVolume: SETTINGS_NUMERIC_RANGES.masterVolume.max,
+            musicVolume: SETTINGS_NUMERIC_RANGES.musicVolume.min,
+            sfxVolume: SETTINGS_NUMERIC_RANGES.sfxVolume.max,
+            uiScale: SETTINGS_NUMERIC_RANGES.uiScale.max,
+            resolveDelayMultiplier: SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.min
+        });
     });
 
     it('property-checks raw save and settings boundaries against arbitrary malformed payloads', () => {

@@ -370,7 +370,12 @@ export const selectGatesForChangedPaths = (paths) => {
         if (file.startsWith('src/renderer/cardFace/') || file.startsWith('src/renderer/components/tileTextures') || file.startsWith('src/renderer/components/tileBoardReadability') || file.startsWith('src/renderer/components/tileBoardRows') || file === 'src/renderer/components/TileBezel.tsx' || file.startsWith('scripts/build-card-illustration-manifest') || file === 'scripts/card-pipeline/export-face-panel-webp.mjs' || file === 'scripts/card-pipeline/export-ui-background-webp.mjs' || file === 'scripts/card-pipeline/export-card-normal-webp.mjs' || file === 'scripts/audit-renderer-assets.mjs') {
             add('assetRendering', file, 'card face, texture, bezel, or asset manifest changed');
         }
-        if (file.startsWith('src/main/persistence') || file.startsWith('src/preload/') || file === 'src/shared/contracts.ts') {
+        if (
+            file.startsWith('src/main/persistence') ||
+            file.startsWith('src/preload/') ||
+            file.startsWith('src/shared/save-data') ||
+            file === 'src/shared/contracts.ts'
+        ) {
             add('persistence', file, 'persistence, preload, or shared contract changed');
         }
     }
