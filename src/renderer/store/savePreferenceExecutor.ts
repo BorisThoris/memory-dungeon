@@ -15,16 +15,16 @@ export interface SavePreferenceExecutorState {
     settings: Settings;
 }
 
-export interface SavePreferenceExecutorDeps<State extends SavePreferenceExecutorState> {
-    getState: () => State;
+export interface SavePreferenceExecutorDeps {
+    getState: () => SavePreferenceExecutorState;
     persistSaveData: (saveData: SaveData) => Promise<unknown>;
     persistSaveSettings: (settings: Settings) => Promise<Settings>;
-    setState: (patch: Partial<State> | SavePreferencePatch) => void;
+    setState: (patch: Partial<SavePreferenceExecutorState> | SavePreferencePatch) => void;
 }
 
-export const executeSettingsUpdate = async <State extends SavePreferenceExecutorState>(
+export const executeSettingsUpdate = async (
     settings: Settings,
-    deps: SavePreferenceExecutorDeps<State>
+    deps: SavePreferenceExecutorDeps
 ): Promise<void> => {
     const persistedSettings = await deps.persistSaveSettings(settings);
     const nextSave = normalizeSaveData({
@@ -35,28 +35,24 @@ export const executeSettingsUpdate = async <State extends SavePreferenceExecutor
     deps.setState({
         settings: persistedSettings,
         saveData: nextSave
-    } as Partial<State>);
+    });
 };
 
-export const executePowersFtueDismiss = async <State extends SavePreferenceExecutorState>(
-    deps: SavePreferenceExecutorDeps<State>
-): Promise<void> => {
+export const executePowersFtueDismiss = async (deps: SavePreferenceExecutorDeps): Promise<void> => {
     const patch = createPowersFtueDismissPatch(deps.getState().saveData);
     deps.setState(patch);
     await deps.persistSaveData(patch.saveData);
 };
 
-export const executeHowToPlayDismiss = async <State extends SavePreferenceExecutorState>(
-    deps: SavePreferenceExecutorDeps<State>
-): Promise<void> => {
+export const executeHowToPlayDismiss = async (deps: SavePreferenceExecutorDeps): Promise<void> => {
     const patch = createHowToPlayDismissPatch(deps.getState().saveData);
     deps.setState(patch);
     await deps.persistSaveData(patch.saveData);
 };
 
-export const executeMetaProgressionRewardClaim = <State extends SavePreferenceExecutorState>(
+export const executeMetaProgressionRewardClaim = (
     rowId: string,
-    deps: SavePreferenceExecutorDeps<State>
+    deps: SavePreferenceExecutorDeps
 ): MetaProgressionUnlockResult => {
     const result = applyMetaProgressionUnlock(deps.getState().saveData, rowId);
     if (!result.applied) {
@@ -66,7 +62,7 @@ export const executeMetaProgressionRewardClaim = <State extends SavePreferenceEx
     deps.setState({
         saveData: result.save,
         settings: result.save.settings
-    } as Partial<State>);
+    });
     void deps.persistSaveData(result.save);
     return result;
 };

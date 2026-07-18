@@ -6,13 +6,12 @@ import {
     executeMetaProgressionRewardClaim,
     executePowersFtueDismiss,
     executeSettingsUpdate,
-    type SavePreferenceExecutorDeps,
-    type SavePreferenceExecutorState
+    type SavePreferenceExecutorDeps
 } from './savePreferenceExecutor';
 
 const createDeps = (
     saveData: SaveData = createDefaultSaveData()
-): SavePreferenceExecutorDeps<SavePreferenceExecutorState> => ({
+): SavePreferenceExecutorDeps => ({
     getState: vi.fn(() => ({ saveData, settings: saveData.settings })),
     persistSaveData: vi.fn(async () => undefined),
     persistSaveSettings: vi.fn(async (settings: Settings) => settings),
