@@ -118,7 +118,9 @@ describe('gate:changed selector', () => {
         expect(packageScripts['gate:long-run']).toContain('src/shared/gate-long-run-script.test.ts');
         expect(packageScripts['gate:long-run']).toContain('src/shared/seed-sweep-options.test.ts');
         expect(packageScripts['gate:long-run']).toContain('src/shared/sim-endless-output.test.ts');
-        expect(packageScripts['gate:gameplay']).toContain('yarn test --maxWorkers=2');
+        expect(packageScripts.test).toBe('vitest run --maxWorkers=2');
+        expect(packageScripts['gate:gameplay']).toContain('yarn test');
+        expect(packageScripts['gate:gameplay']).not.toContain('yarn test --maxWorkers=2');
         expect(packageScripts['gate:long-run']).toContain('--maxWorkers=1');
         expect(packageScripts['gate:readability-long-run']).toContain('--maxWorkers=2');
         expect(packageScripts['gate:long-run-ui-feedback']).toContain('--maxWorkers=2');
