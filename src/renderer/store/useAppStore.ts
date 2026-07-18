@@ -182,7 +182,7 @@ const sideRoomActionController = createSideRoomActionController<AppState>({
     setState: (patch) => useAppStore.setState(patch)
 });
 
-const runLifecycleController = createRunLifecycleController<AppState>({
+const runLifecycleController = createRunLifecycleController({
     clearAllTimers,
     getState: () => useAppStore.getState(),
     playRunStartSfx: playRunStartUiSfxFromStore,

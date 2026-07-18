@@ -1,4 +1,11 @@
-import type { RunState, SaveData, Settings } from '../../shared/contracts';
+import type {
+    AchievementId,
+    RunState,
+    SaveData,
+    Settings,
+    SubscreenReturnView,
+    ViewState
+} from '../../shared/contracts';
 import { enableDebugPeek } from '../../shared/run-timer-rules';
 import { trackEvent } from '../../shared/telemetry';
 import { patchRunFromUserSettings } from './runSettingsPatch';
@@ -7,7 +14,7 @@ import {
     createRunStartStatePatch,
     createRunStartTelemetryPayload
 } from './runStartState';
-import { createRunSurfaceReset } from './runSurfaceState';
+import { createRunSurfaceReset, type RunSurfaceState } from './runSurfaceState';
 
 interface RunLifecycleControllerState {
     run: RunState | null;
@@ -15,13 +22,22 @@ interface RunLifecycleControllerState {
     settings: Settings;
 }
 
-interface RunLifecycleControllerDeps<TState extends RunLifecycleControllerState> {
+interface RunLifecycleMutableState extends RunSurfaceState {
+    newlyUnlockedAchievements: AchievementId[];
+    run: RunState | null;
+    runStartSaveData: SaveData | null;
+    settingsReturnView: SubscreenReturnView;
+    subscreenReturnView: SubscreenReturnView;
+    view: ViewState;
+}
+
+interface RunLifecycleControllerDeps {
     clearAllTimers: () => void;
-    getState: () => TState;
+    getState: () => RunLifecycleControllerState;
     playRunStartSfx: () => void;
     prepareMemorizeTimerForBoardReady: (run: RunState) => void;
     scheduleDebugRevealTimer: (durationMs: number) => void;
-    setState: (patch: Partial<TState>) => void;
+    setState: (patch: Partial<RunLifecycleMutableState>) => void;
 }
 
 interface RunLifecycleController {
@@ -30,17 +46,17 @@ interface RunLifecycleController {
     triggerDebugReveal: () => void;
 }
 
-export const createRunLifecycleController = <TState extends RunLifecycleControllerState>({
+export const createRunLifecycleController = ({
     clearAllTimers,
     getState,
     playRunStartSfx,
     prepareMemorizeTimerForBoardReady,
     scheduleDebugRevealTimer,
     setState
-}: RunLifecycleControllerDeps<TState>): RunLifecycleController => ({
+}: RunLifecycleControllerDeps): RunLifecycleController => ({
     endRun: () => {
         clearAllTimers();
-        const patch = {
+        const patch: Partial<RunLifecycleMutableState> = {
             view: 'menu',
             run: null,
             runStartSaveData: null,
@@ -49,7 +65,7 @@ export const createRunLifecycleController = <TState extends RunLifecycleControll
             settingsReturnView: 'menu',
             ...createRunSurfaceReset()
         };
-        setState(patch as unknown as Partial<TState>);
+        setState(patch);
     },
 
     restartRun: () => {
@@ -60,7 +76,7 @@ export const createRunLifecycleController = <TState extends RunLifecycleControll
         trackEvent('run_start', createRunStartTelemetryPayload(run, { restarted: true }));
         playRunStartSfx();
 
-        setState(createRunStartStatePatch(run, saveData) as unknown as Partial<TState>);
+        setState(createRunStartStatePatch(run, saveData));
         prepareMemorizeTimerForBoardReady(run);
     },
 
@@ -73,7 +89,7 @@ export const createRunLifecycleController = <TState extends RunLifecycleControll
 
         const nextRun = enableDebugPeek(run, settings.debugFlags.disableAchievementsOnDebug);
 
-        setState({ run: nextRun } as Partial<TState>);
+        setState({ run: nextRun });
 
         if (nextRun.timerState.debugRevealRemainingMs !== null) {
             scheduleDebugRevealTimer(nextRun.timerState.debugRevealRemainingMs);
