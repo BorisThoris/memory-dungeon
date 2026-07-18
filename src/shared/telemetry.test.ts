@@ -37,6 +37,15 @@ describe('telemetry (REF-067)', () => {
         expect(fn.mock.calls[0]![1]).toEqual({ mode: 'daily' });
     });
 
+    it('preserves prototype-named fields as own telemetry keys', () => {
+        const payload = JSON.parse('{"__proto__":null,"constructor":"local","toString":true}');
+        const scrubbed = scrubTelemetryPayload(payload);
+
+        expect(Object.getPrototypeOf(scrubbed)).toBeNull();
+        expect(Object.keys(scrubbed)).toEqual(['__proto__', 'constructor', 'toString']);
+        expect(scrubbed.__proto__).toBeNull();
+    });
+
     it('classifies event policy without online competitive submissions', () => {
         expect(classifyTelemetryEvent('run_start')).toBe('balance_playtest');
         expect(classifyTelemetryEvent('save_write_failed')).toBe('local_debug');
