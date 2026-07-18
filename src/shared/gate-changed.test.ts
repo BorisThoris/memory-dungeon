@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -9,6 +10,11 @@ type GateChangedPayload = {
 };
 
 const scriptPath = path.join(process.cwd(), 'scripts', 'gate-changed.mjs');
+const packageScripts = (
+    JSON.parse(readFileSync(path.join(process.cwd(), 'package.json'), 'utf8')) as {
+        scripts: Record<string, string>;
+    }
+).scripts;
 
 const runGateChanged = (...paths: string[]): GateChangedPayload =>
     JSON.parse(
@@ -56,6 +62,23 @@ describe('gate:changed selector', () => {
 
         expect(payload.gates).toEqual(expect.arrayContaining([{ id: 'longRun', command: 'yarn gate:long-run' }]));
         expect(payload.reasons.filter((reason) => reason.gateId === 'longRun')).toHaveLength(5);
+    });
+
+    it('routes long-run CLI contract tests back through the long-run gate', () => {
+        const payload = runGateChanged(
+            'src/shared/gate-long-run-script.test.ts',
+            'src/shared/sim-endless-output.test.ts'
+        );
+
+        expect(payload.gates).toEqual([{ id: 'longRun', command: 'yarn gate:long-run' }]);
+        expect(payload.reasons.filter((reason) => reason.gateId === 'longRun')).toHaveLength(2);
+    });
+
+    it('keeps selector and simulation contract tests wired into their selected gates', () => {
+        expect(packageScripts['gate:systems']).toContain('src/shared/gate-changed.test.ts');
+        expect(packageScripts['gate:long-run']).toContain('src/shared/gate-long-run-script.test.ts');
+        expect(packageScripts['gate:long-run']).toContain('src/shared/seed-sweep-options.test.ts');
+        expect(packageScripts['gate:long-run']).toContain('src/shared/sim-endless-output.test.ts');
     });
 
     it('selects every dependent simulation gate for the shared seed sweep contract', () => {

@@ -74,6 +74,10 @@ export const selectGatesForChangedPaths = (paths) => {
         file.startsWith('src/shared/floor-completion');
     const isSeedSweepContractFile = (file) =>
         file === 'scripts/seed-sweep-options.ts' || file === 'src/shared/seed-sweep-options.test.ts';
+    const isLongRunGateContractFile = (file) =>
+        file === 'scripts/gate-long-run.ts' ||
+        file === 'src/shared/gate-long-run-script.test.ts' ||
+        file === 'src/shared/sim-endless-output.test.ts';
 
     for (const file of normalized) {
         if (
@@ -146,7 +150,7 @@ export const selectGatesForChangedPaths = (paths) => {
         }
         if (
             file === 'scripts/sim-endless.ts' ||
-            file === 'scripts/gate-long-run.ts' ||
+            isLongRunGateContractFile(file) ||
             isSeedSweepContractFile(file) ||
             file.startsWith('src/shared/long-run-depth') ||
             file.startsWith('src/shared/boss-encounters') ||
