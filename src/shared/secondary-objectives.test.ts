@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { FLIP_PAR_BONUS_SCORE } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import {
+    formatLevelResultTagLabel,
     getDungeonLevelResultTags,
     getLevelResultTagDefinitions,
     getSecondaryObjectiveProgress,
@@ -105,6 +106,11 @@ describe('REG-048 secondary objective clarity', () => {
         ]);
 
         expect(visible.map((tag) => tag.id)).toEqual(['traps_disarmed', 'treasure_claimed', 'boss_floor']);
+    });
+
+    it.each(['__proto__', 'constructor', 'toString'])('rejects prototype result tag %s', (tag) => {
+        expect(getLevelResultTagDefinitions([tag])).toEqual([]);
+        expect(formatLevelResultTagLabel(tag)).toBe(tag);
     });
 
     it('includes active trait route objectives in secondary objective rows', () => {

@@ -138,7 +138,7 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
 };
 
 const isDungeonRoomEffectId = (effectId: DungeonCardEffectId | null | undefined): effectId is DungeonRoomEffectId =>
-    Boolean(effectId && effectId in DUNGEON_ROOM_EFFECT_DEFINITIONS);
+    Boolean(effectId && Object.prototype.hasOwnProperty.call(DUNGEON_ROOM_EFFECT_DEFINITIONS, effectId));
 
 export const getDungeonRoomEffectDefinition = (
     effectId: DungeonCardEffectId | null | undefined

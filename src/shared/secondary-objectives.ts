@@ -134,7 +134,10 @@ export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultT
     }
 };
 
-const uniqueTags = (tags: readonly string[]): string[] => [...new Set(tags)];
+const uniqueTags = <Tag extends string>(tags: readonly Tag[]): Tag[] => [...new Set(tags)];
+
+const isLevelResultTagId = (value: string): value is LevelResultTagId =>
+    Object.prototype.hasOwnProperty.call(LEVEL_RESULT_TAG_DEFINITIONS, value);
 
 export const getDungeonLevelResultTags = (run: RunState, board: BoardState, perfect: boolean): LevelResultTagId[] => {
     const tags: LevelResultTagId[] = [];
@@ -158,13 +161,13 @@ export const getDungeonLevelResultTags = (run: RunState, board: BoardState, perf
     ) {
         tags.push('perfect_scout');
     }
-    return uniqueTags(tags) as LevelResultTagId[];
+    return uniqueTags(tags);
 };
 
 export const getLevelResultTagDefinitions = (tags: readonly string[] = []): LevelResultTagDefinition[] =>
     uniqueTags(tags)
-        .map((id) => LEVEL_RESULT_TAG_DEFINITIONS[id as LevelResultTagId])
-        .filter((definition): definition is LevelResultTagDefinition => definition != null)
+        .filter(isLevelResultTagId)
+        .map((id) => LEVEL_RESULT_TAG_DEFINITIONS[id])
         .sort((a, b) => b.priority - a.priority);
 
 export const getVisibleLevelResultTags = (
@@ -173,7 +176,7 @@ export const getVisibleLevelResultTags = (
 ): LevelResultTagDefinition[] => getLevelResultTagDefinitions(tags).slice(0, maxVisible);
 
 export const formatLevelResultTagLabel = (tag: string): string =>
-    LEVEL_RESULT_TAG_DEFINITIONS[tag as LevelResultTagId]?.label ?? tag;
+    isLevelResultTagId(tag) ? LEVEL_RESULT_TAG_DEFINITIONS[tag].label : tag;
 
 export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjectiveProgress | null => {
     const board = run.board;

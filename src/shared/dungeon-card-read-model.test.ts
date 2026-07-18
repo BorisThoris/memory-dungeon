@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import type { BoardState, RunState, Tile } from './contracts';
+import type { BoardState, DungeonCardEffectId, RunState, Tile } from './contracts';
 import { DUNGEON_CARD_EFFECT_DEFINITIONS } from './dungeon-cards';
 import {
     DUNGEON_ROOM_EFFECT_DEFINITIONS,
     getDungeonCardCopy,
+    getDungeonRoomEffectDefinition,
     getDungeonRoomReadModel,
     getDungeonTreasureRewardDefinition,
     getDungeonTreasureReadModel
@@ -30,6 +31,10 @@ describe('dungeon card read models', () => {
             .map((definition) => definition.effectId);
 
         expect(Object.keys(DUNGEON_ROOM_EFFECT_DEFINITIONS).sort()).toEqual([...roomEffectIds].sort());
+    });
+
+    it.each(['__proto__', 'constructor', 'toString'])('rejects prototype room effect id %s', (effectId) => {
+        expect(getDungeonRoomEffectDefinition(effectId as DungeonCardEffectId)).toBeNull();
     });
 
     it('reports reusable forge availability from run gold', () => {
