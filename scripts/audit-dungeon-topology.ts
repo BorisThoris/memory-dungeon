@@ -16,42 +16,11 @@ import {
     revealDungeonChoices,
     selectDungeonNode
 } from '../src/shared/run-map';
+import { readNumericCliArg, resolveSeedSweep } from './seed-sweep-options';
 
 const REQUIRED_ROUTE_NODE_KINDS = ['boss', 'combat', 'elite', 'event', 'rest', 'shop', 'trap', 'treasure'] as const;
 
-const numArg = (argv: readonly string[], name: string, def: number): number => {
-    const raw = argv.find((arg) => arg.startsWith(`--${name}=`))?.split('=')[1];
-    return raw != null ? Number(raw) : def;
-};
-
-const seedsArg = (argv: readonly string[], def: readonly number[]): number[] => {
-    const raw = argv.find((arg) => arg.startsWith('--seeds='))?.split('=')[1];
-    if (!raw) {
-        return [...def];
-    }
-    const parsed = raw
-        .split(/[,\s]+/)
-        .map((part) => Number(part.trim()))
-        .filter((seed) => Number.isSafeInteger(seed) && seed > 0);
-    return parsed.length > 0 ? parsed : [...def];
-};
-
-const stressSeedsArg = (argv: readonly string[]): number => {
-    const raw = argv.find((arg) => arg.startsWith('--stressSeeds='))?.split('=')[1];
-    return raw != null ? Math.max(0, Math.floor(Number(raw))) : 0;
-};
-
 const boolArg = (argv: readonly string[], name: string): boolean => argv.includes(`--${name}`);
-
-const generateStressSeeds = (count: number, baseSeed: number): number[] => {
-    const seeds: number[] = [];
-    let state = Math.max(1, Math.floor(baseSeed)) >>> 0;
-    for (let index = 0; index < count; index += 1) {
-        state = (Math.imul(state, 1_664_525) + 1_013_904_223) >>> 0;
-        seeds.push(10_000 + (state % 990_000));
-    }
-    return seeds;
-};
 
 export interface DungeonTopologyAuditFailure {
     seed: number;
@@ -105,15 +74,11 @@ export interface DungeonTopologyAuditOptions {
 }
 
 export const parseDungeonTopologyAuditOptions = (argv: readonly string[]): DungeonTopologyAuditOptions => {
-    const stressSeedCount = stressSeedsArg(argv);
     return {
-        floors: Math.max(1, Math.floor(numArg(argv, 'floors', 1000))),
-        rulesVersion: Math.max(1, Math.floor(numArg(argv, 'rulesVersion', GAME_RULES_VERSION))),
+        floors: Math.max(1, Math.floor(readNumericCliArg(argv, 'floors', 1000))),
+        rulesVersion: Math.max(1, Math.floor(readNumericCliArg(argv, 'rulesVersion', GAME_RULES_VERSION))),
         requireFullScheduleCoverage: boolArg(argv, 'requireFullScheduleCoverage'),
-        seeds:
-            stressSeedCount > 0
-                ? generateStressSeeds(stressSeedCount, Math.floor(numArg(argv, 'stressSeedBase', 42_001)))
-                : seedsArg(argv, [42_001, 42_002, 77_707, 130_011, 420_113, 880_037])
+        seeds: resolveSeedSweep(argv, [42_001, 42_002, 77_707, 130_011, 420_113, 880_037])
     };
 };
 
@@ -397,7 +362,7 @@ const formatCounts = (counts: Record<string, number>): string =>
 export const runDungeonTopologyAudit = (argv: readonly string[]): number => {
     const json = boolArg(argv, 'json');
     const quiet = boolArg(argv, 'quiet');
-    const maxFailures = Math.max(1, Math.floor(numArg(argv, 'maxFailures', 25)));
+    const maxFailures = Math.max(1, Math.floor(readNumericCliArg(argv, 'maxFailures', 25)));
     const options = parseDungeonTopologyAuditOptions(argv);
     const result = analyzeDungeonTopologyAudit(options);
 
