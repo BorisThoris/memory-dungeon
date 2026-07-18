@@ -102,15 +102,34 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
     relicShrineExtraPickUnlocked: false
 });
 
-const RELIC_ID_SET = new Set<RelicId>(RELIC_POOL);
-const MUTATOR_ID_SET = new Set<MutatorId>(MUTATOR_IDS);
-const GAME_MODE_SET = new Set<GameMode>(['endless', 'daily', 'puzzle', 'gauntlet', 'meditation']);
-const STARTING_LOADOUT_ID_SET = new Set<StartingLoadoutId>([
+const ACHIEVEMENT_ID_SET: ReadonlySet<string> = new Set(ACHIEVEMENT_IDS);
+const RELIC_ID_SET: ReadonlySet<string> = new Set(RELIC_POOL);
+const MUTATOR_ID_SET: ReadonlySet<string> = new Set(MUTATOR_IDS);
+const GAME_MODE_SET: ReadonlySet<string> = new Set(['endless', 'daily', 'puzzle', 'gauntlet', 'meditation']);
+const STARTING_LOADOUT_ID_SET: ReadonlySet<string> = new Set([
     'memory_scout',
     'route_tactician',
     'cursebreaker',
     'vaultbreaker'
 ]);
+
+const isUnknownRecord = (value: unknown): value is Record<string, unknown> =>
+    Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+
+const isAchievementId = (value: unknown): value is AchievementId =>
+    typeof value === 'string' && ACHIEVEMENT_ID_SET.has(value);
+
+const isGameMode = (value: unknown): value is GameMode =>
+    typeof value === 'string' && GAME_MODE_SET.has(value);
+
+const isMutatorId = (value: unknown): value is MutatorId =>
+    typeof value === 'string' && MUTATOR_ID_SET.has(value);
+
+const isRelicId = (value: unknown): value is RelicId =>
+    typeof value === 'string' && RELIC_ID_SET.has(value);
+
+const isStartingLoadoutId = (value: unknown): value is StartingLoadoutId =>
+    typeof value === 'string' && STARTING_LOADOUT_ID_SET.has(value);
 
 const finiteNonNegativeInteger = (value: unknown, fallback: number): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : fallback;
@@ -129,26 +148,25 @@ const stringOrNull = (value: unknown, fallback: string | null): string | null =>
 
 const normalizeAchievements = (input: unknown): AchievementState => {
     const out = createAchievementState();
-    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    if (!isUnknownRecord(input)) {
         return out;
     }
-    const source = input as Partial<Record<AchievementId, unknown>>;
     for (const id of ACHIEVEMENT_IDS) {
-        out[id] = source[id] === true;
+        out[id] = input[id] === true;
     }
     return out;
 };
 
 const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPickCounts'] => {
-    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    if (!isUnknownRecord(input)) {
         return {};
     }
     const out: PlayerStatsPersisted['relicPickCounts'] = {};
-    for (const [id, value] of Object.entries(input as Record<string, unknown>)) {
-        if (RELIC_ID_SET.has(id as RelicId)) {
+    for (const [id, value] of Object.entries(input)) {
+        if (isRelicId(id)) {
             const count = finiteNonNegativeInteger(value, 0);
             if (count > 0) {
-                out[id as RelicId] = count;
+                out[id] = count;
             }
         }
     }
@@ -156,21 +174,20 @@ const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPi
 };
 
 const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => {
-    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    if (!isUnknownRecord(input)) {
         return {};
     }
     const out: NonNullable<PlayerStatsPersisted['puzzleCompletions']> = {};
-    for (const [id, value] of Object.entries(input as Record<string, unknown>)) {
-        if (typeof id !== 'string' || id.length === 0 || !value || typeof value !== 'object' || Array.isArray(value)) {
+    for (const [id, value] of Object.entries(input)) {
+        if (id.length === 0 || !isUnknownRecord(value)) {
             continue;
         }
-        const record = value as Record<string, unknown>;
-        if (record.completed !== true) {
+        if (value.completed !== true) {
             continue;
         }
         const bestMistakes =
-            record.bestMistakes === null ? null : finiteNonNegativeInteger(record.bestMistakes, Number.NaN);
-        const bestScore = finiteNonNegativeInteger(record.bestScore, Number.NaN);
+            value.bestMistakes === null ? null : finiteNonNegativeInteger(value.bestMistakes, Number.NaN);
+        const bestScore = finiteNonNegativeInteger(value.bestScore, Number.NaN);
         if ((bestMistakes !== null && !Number.isFinite(bestMistakes)) || !Number.isFinite(bestScore)) {
             continue;
         }
@@ -201,10 +218,10 @@ const normalizeStringLedger = (input: unknown, limit: number): string[] => {
 };
 
 const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
-    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    if (!isUnknownRecord(input)) {
         return null;
     }
-    const source = input as Record<string, unknown>;
+    const source = input;
     const totalScore = finiteNonNegativeInteger(source.totalScore, Number.NaN);
     const bestScore = finiteNonNegativeInteger(source.bestScore, Number.NaN);
     const levelsCleared = finiteNonNegativeInteger(source.levelsCleared, Number.NaN);
@@ -218,22 +235,15 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
     const runSeed = source.runSeed === undefined ? undefined : finiteNonNegativeInteger(source.runSeed, Number.NaN);
     const runRulesVersion =
         source.runRulesVersion === undefined ? undefined : finiteNonNegativeInteger(source.runRulesVersion, Number.NaN);
-    const gameMode = GAME_MODE_SET.has(source.gameMode as GameMode) ? (source.gameMode as GameMode) : undefined;
+    const gameMode = isGameMode(source.gameMode) ? source.gameMode : undefined;
     const activeMutators = Array.isArray(source.activeMutators)
-        ? [
-              ...new Set(
-                  source.activeMutators.filter(
-                      (value): value is MutatorId =>
-                          typeof value === 'string' && MUTATOR_ID_SET.has(value as MutatorId)
-                  )
-              )
-          ]
+        ? [...new Set(source.activeMutators.filter(isMutatorId))]
         : undefined;
     const relicIds = Array.isArray(source.relicIds)
-        ? [...new Set(source.relicIds.filter((value): value is RelicId => RELIC_ID_SET.has(value as RelicId)))]
+        ? [...new Set(source.relicIds.filter(isRelicId))]
         : undefined;
-    const startingLoadoutId = STARTING_LOADOUT_ID_SET.has(source.startingLoadoutId as StartingLoadoutId)
-        ? (source.startingLoadoutId as StartingLoadoutId)
+    const startingLoadoutId = isStartingLoadoutId(source.startingLoadoutId)
+        ? source.startingLoadoutId
         : source.startingLoadoutId === null
           ? null
           : undefined;
@@ -253,7 +263,7 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         highestLevel,
         achievementsEnabled: source.achievementsEnabled === true,
         unlockedAchievements: Array.isArray(source.unlockedAchievements)
-            ? [...new Set(source.unlockedAchievements.filter((id): id is AchievementId => ACHIEVEMENT_IDS.includes(id as AchievementId)))]
+            ? [...new Set(source.unlockedAchievements.filter(isAchievementId))]
             : [],
         bestStreak,
         perfectClears,
@@ -356,10 +366,7 @@ type SaveDataNormalizationInput = {
 
 const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settings => {
     const source = input ?? {};
-    const debugFlags =
-        source.debugFlags && typeof source.debugFlags === 'object' && !Array.isArray(source.debugFlags)
-            ? (source.debugFlags as Record<string, unknown>)
-            : {};
+    const debugFlags = isUnknownRecord(source.debugFlags) ? source.debugFlags : {};
     const boardScreenSpaceAA = source.boardScreenSpaceAA;
     const graphicsQuality = source.graphicsQuality;
     const cameraViewportModePreference = source.cameraViewportModePreference;
@@ -476,10 +483,7 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
 
     const mergedAchievements = normalizeAchievements(input.achievements);
     const playerStatsDefaults = defaultPlayerStats();
-    const psIn =
-        input.playerStats && typeof input.playerStats === 'object' && !Array.isArray(input.playerStats)
-            ? (input.playerStats as Record<string, unknown>)
-            : {};
+    const psIn = isUnknownRecord(input.playerStats) ? input.playerStats : {};
     const dailiesCount = finiteNonNegativeInteger(psIn.dailiesCompleted, playerStatsDefaults.dailiesCompleted);
     const relicPickCounts = normalizeRelicPickCounts(psIn.relicPickCounts);
     const relicShrineExtraPickUnlocked = psIn.relicShrineExtraPickUnlocked === true;
