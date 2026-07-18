@@ -86,12 +86,15 @@ const HONOR_COSMETIC_UNLOCKS: Partial<Record<HonorUnlockId, CosmeticId>> = {
 
 export const honorUnlockTag = (id: HonorUnlockId): string => `${HONOR_UNLOCK_PREFIX}${id}`;
 
+const isHonorUnlockId = (value: string): value is HonorUnlockId =>
+    Object.prototype.hasOwnProperty.call(HONOR_UNLOCK_CATALOG, value);
+
 export const parseHonorUnlockTag = (tag: string): HonorUnlockId | null => {
     if (!tag.startsWith(HONOR_UNLOCK_PREFIX)) {
         return null;
     }
-    const id = tag.slice(HONOR_UNLOCK_PREFIX.length) as HonorUnlockId;
-    return id in HONOR_UNLOCK_CATALOG ? id : null;
+    const id = tag.slice(HONOR_UNLOCK_PREFIX.length);
+    return isHonorUnlockId(id) ? id : null;
 };
 
 export const hasHonorUnlock = (save: SaveData, id: HonorUnlockId): boolean =>

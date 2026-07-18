@@ -201,6 +201,9 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
     }
 };
 
+const isBonusRewardId = (value: string): value is BonusRewardId =>
+    Object.prototype.hasOwnProperty.call(BONUS_REWARD_CATALOG, value);
+
 export const createBonusRewardLedger = (): BonusRewardLedger => ({
     claimedInstanceIds: [],
     claimedRewardIds: {},
@@ -211,8 +214,8 @@ export const createBonusRewardLedger = (): BonusRewardLedger => ({
 const normalizeBonusRewardLedger = (ledger: BonusRewardLedger): BonusRewardLedger => {
     const claimedRewardIds: BonusRewardLedger['claimedRewardIds'] = {};
     if (ledger.claimedRewardIds && typeof ledger.claimedRewardIds === 'object' && !Array.isArray(ledger.claimedRewardIds)) {
-        for (const [id, count] of Object.entries(ledger.claimedRewardIds) as [BonusRewardId, unknown][]) {
-            if (BONUS_REWARD_CATALOG[id]) {
+        for (const [id, count] of Object.entries(ledger.claimedRewardIds)) {
+            if (isBonusRewardId(id)) {
                 const safeCount = nonNegativeLedgerCount(count);
                 if (safeCount > 0) {
                     claimedRewardIds[id] = safeCount;
@@ -453,9 +456,11 @@ export const resolveBonusRewardRoomByInstanceId = ({
     if (!instanceId.startsWith(prefix)) {
         return null;
     }
-    const rewardId = instanceId.slice(prefix.length) as BonusRewardId;
-    const definition = BONUS_REWARD_CATALOG[rewardId];
-    return definition ? bonusRewardInstanceForDefinition(definition, runSeed, rulesVersion, floor, safeLedger) : null;
+    const rewardId = instanceId.slice(prefix.length);
+    if (!isBonusRewardId(rewardId)) {
+        return null;
+    }
+    return bonusRewardInstanceForDefinition(BONUS_REWARD_CATALOG[rewardId], runSeed, rulesVersion, floor, safeLedger);
 };
 
 const gainFavor = (run: RunState, progress: number): RunState => {

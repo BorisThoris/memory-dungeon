@@ -568,6 +568,16 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         });
     });
 
+    it.each(['__proto__', 'constructor', 'toString'])('rejects prototype reward id %s', (rewardId) => {
+        expect(resolveBonusRewardRoomByInstanceId({
+            runSeed: 75_008,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 5,
+            routeKind: 'event',
+            instanceId: `${GAME_RULES_VERSION}:75008:5:${rewardId}`
+        })).toBeNull();
+    });
+
     it('reports capped pickup feedback while still applying useful inventory rewards', () => {
         const room = {
             ...rollBonusRewardRoom({

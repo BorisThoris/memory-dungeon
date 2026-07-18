@@ -4,6 +4,7 @@ import {
     HONOR_UNLOCK_ORDER,
     honorUnlockTag,
     mergeHonorUnlockTags,
+    parseHonorUnlockTag,
     totalHonorUnlocks
 } from './honorUnlocks';
 import { createDefaultSaveData } from './save-data';
@@ -43,6 +44,10 @@ describe('honorUnlocks', () => {
     it('lists expected catalog size', () => {
         expect(HONOR_UNLOCK_ORDER.length).toBe(totalHonorUnlocks);
         expect(totalHonorUnlocks).toBe(8);
+    });
+
+    it.each(['__proto__', 'constructor', 'toString'])('rejects prototype honor id %s', (honorId) => {
+        expect(parseHonorUnlockTag(`honor:${honorId}`)).toBeNull();
     });
 
     it('eligibleHonorUnlockIds respects daily streak and no-powers floor', () => {
