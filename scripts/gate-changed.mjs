@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-const GATES = {
+export const GATES = {
     actionLoop: 'yarn gate:action-loop',
     rewardsEconomy: 'yarn gate:rewards-economy',
     navigation: 'yarn gate:navigation',

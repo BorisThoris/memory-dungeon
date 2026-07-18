@@ -11,6 +11,7 @@ type GateChangedPayload = {
 };
 
 type GateChangedModule = {
+    GATES: Readonly<Record<string, string>>;
     changedPathsFromGit: (base: string | null, cwd?: string) => string[];
     selectGatesForChangedPaths: (paths: readonly string[]) => GateChangedPayload;
 };
@@ -144,6 +145,25 @@ describe('gate:changed selector', () => {
 
         expect(explicitlyGatedTests.length).toBeGreaterThan(60);
         expect(uncovered).toEqual([]);
+    });
+
+    it('keeps every static gate reachable and backed by a package script', async () => {
+        const { GATES, selectGatesForChangedPaths } = await loadGateChanged();
+        const trackedPaths = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+        const reachableGateIds = new Set(
+            trackedPaths.flatMap((file) =>
+                selectGatesForChangedPaths([file]).gates
+                    .filter(({ id }) => id !== 'changedTests')
+                    .map(({ id }) => id)
+            )
+        );
+
+        expect([...reachableGateIds].sort()).toEqual(Object.keys(GATES).sort());
+        for (const [gateId, command] of Object.entries(GATES)) {
+            const packageScript = command.match(/^yarn\s+([\w:-]+)$/u)?.[1];
+            expect(packageScript, gateId).toBeDefined();
+            expect(packageScripts[packageScript ?? ''], gateId).toBeTypeOf('string');
+        }
     });
 
     it('runs changed Vitest files directly with normalized paths and bounded workers', () => {
