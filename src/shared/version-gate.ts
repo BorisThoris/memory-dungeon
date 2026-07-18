@@ -222,7 +222,7 @@ export const formatVersionGateSummary = (manifest: VersionManifest): string =>
     ].join(' · ');
 
 export const evaluateSaveMigrationGate = (
-    input?: { schemaVersion?: number; lastRunSummary?: unknown } | null
+    input?: { schemaVersion?: unknown; lastRunSummary?: unknown } | null
 ): { keepLastRunSummary: boolean; sourceSchemaVersion: number | null; normalizedSchemaVersion: number } => {
     const sourceSchemaVersion =
         typeof input?.schemaVersion === 'number' && Number.isFinite(input.schemaVersion)
@@ -234,4 +234,3 @@ export const evaluateSaveMigrationGate = (
         keepLastRunSummary: sourceSchemaVersion === null || sourceSchemaVersion <= SAVE_SCHEMA_VERSION
     };
 };
-

@@ -54,6 +54,28 @@ describe('save normalization', () => {
         expect(normalizeUnknownSaveData({ bestScore: 42, playerStats: 'bad', settings: 'bad' }).settings).toEqual(DEFAULT_SETTINGS);
     });
 
+    it('strips unknown save, settings, and player-stat fields at the persistence boundary', () => {
+        const save = normalizeUnknownSaveData({
+            bestScore: 42,
+            injectedRoot: 'discard',
+            settings: {
+                displayMode: 'fullscreen',
+                injectedSetting: 'discard'
+            },
+            playerStats: {
+                dailiesCompleted: 3,
+                injectedStat: 'discard'
+            }
+        });
+
+        expect(save.bestScore).toBe(42);
+        expect(save.settings.displayMode).toBe('fullscreen');
+        expect(save.playerStats?.dailiesCompleted).toBe(3);
+        expect(save).not.toHaveProperty('injectedRoot');
+        expect(save.settings).not.toHaveProperty('injectedSetting');
+        expect(save.playerStats).not.toHaveProperty('injectedStat');
+    });
+
     it('uses a schema boundary for raw settings payloads before normalization', () => {
         expect(settingsBoundarySchema.safeParse({ displayMode: 'fullscreen' }).success).toBe(true);
         expect(settingsBoundarySchema.safeParse('not settings').success).toBe(false);

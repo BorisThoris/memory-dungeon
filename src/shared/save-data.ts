@@ -313,6 +313,8 @@ export const settingsBoundarySchema = z.object({
     weakerShuffleMode: z.unknown().optional()
 });
 
+type SettingsBoundary = z.output<typeof settingsBoundarySchema>;
+
 export const saveDataBoundarySchema = objectBoundarySchema.extend({
     achievements: unknownRecordBoundarySchema,
     bestScore: z.unknown().optional(),
@@ -329,7 +331,18 @@ export const saveDataBoundarySchema = objectBoundarySchema.extend({
     unlocks: z.unknown().optional()
 });
 
-type SettingsBoundary = z.output<typeof settingsBoundarySchema>;
+type SaveDataNormalizationInput = {
+    schemaVersion?: unknown;
+    bestScore?: unknown;
+    achievements?: unknown;
+    settings?: SettingsBoundary | Partial<Settings>;
+    onboardingDismissed?: unknown;
+    firstRunHelpDismissed?: unknown;
+    lastRunSummary?: unknown;
+    playerStats?: unknown;
+    unlocks?: unknown;
+    powersFtueSeen?: unknown;
+};
 
 const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settings => {
     const source = input ?? {};
@@ -435,7 +448,7 @@ const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settin
 
 export const normalizeUnknownSaveData = (input: unknown): SaveData => {
     const parsed = saveDataBoundarySchema.safeParse(input);
-    return normalizeSaveData(parsed.success ? (parsed.data as Partial<SaveData>) : null);
+    return normalizeSaveData(parsed.success ? parsed.data : null);
 };
 
 export const normalizeUnknownSettings = (input: unknown): Settings => {
@@ -443,7 +456,7 @@ export const normalizeUnknownSettings = (input: unknown): Settings => {
     return normalizeSettings(parsed.success ? parsed.data : undefined);
 };
 
-export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData => {
+export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): SaveData => {
     const defaults = createDefaultSaveData();
 
     if (!input) {
@@ -452,8 +465,12 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
     const migrationGate = evaluateSaveMigrationGate(input);
 
     const mergedAchievements = normalizeAchievements(input.achievements);
-    const psIn: Partial<PlayerStatsPersisted> = input.playerStats ?? {};
-    const dailiesCount = finiteNonNegativeInteger(psIn.dailiesCompleted, defaultPlayerStats().dailiesCompleted);
+    const playerStatsDefaults = defaultPlayerStats();
+    const psIn =
+        input.playerStats && typeof input.playerStats === 'object' && !Array.isArray(input.playerStats)
+            ? (input.playerStats as Record<string, unknown>)
+            : {};
+    const dailiesCount = finiteNonNegativeInteger(psIn.dailiesCompleted, playerStatsDefaults.dailiesCompleted);
     const relicPickCounts = normalizeRelicPickCounts(psIn.relicPickCounts);
     const relicShrineExtraPickUnlocked = psIn.relicShrineExtraPickUnlocked === true;
     const lastRunSummary =
@@ -469,19 +486,17 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
             typeof input.firstRunHelpDismissed === 'boolean' ? input.firstRunHelpDismissed : defaults.firstRunHelpDismissed,
         lastRunSummary,
         playerStats: {
-            ...defaultPlayerStats(),
-            ...(input.playerStats ?? {}),
-            bestFloorNoPowers: finiteNonNegativeInteger(psIn.bestFloorNoPowers, defaultPlayerStats().bestFloorNoPowers),
+            bestFloorNoPowers: finiteNonNegativeInteger(psIn.bestFloorNoPowers, playerStatsDefaults.bestFloorNoPowers),
             dailiesCompleted: dailiesCount,
-            lastDailyDateKeyUtc: stringOrNull(psIn.lastDailyDateKeyUtc, defaultPlayerStats().lastDailyDateKeyUtc),
+            lastDailyDateKeyUtc: stringOrNull(psIn.lastDailyDateKeyUtc, playerStatsDefaults.lastDailyDateKeyUtc),
             dailyStreakCosmetic: finiteNonNegativeInteger(
                 psIn.dailyStreakCosmetic,
-                defaultPlayerStats().dailyStreakCosmetic
+                playerStatsDefaults.dailyStreakCosmetic
             ),
-            encorePairKeysLastRun: Array.isArray(input.playerStats?.encorePairKeysLastRun)
-                ? normalizeStringLedger(input.playerStats.encorePairKeysLastRun, 80)
-                : defaultPlayerStats().encorePairKeysLastRun,
-            puzzleCompletions: normalizePuzzleCompletions(input.playerStats?.puzzleCompletions),
+            encorePairKeysLastRun: Array.isArray(psIn.encorePairKeysLastRun)
+                ? normalizeStringLedger(psIn.encorePairKeysLastRun, 80)
+                : playerStatsDefaults.encorePairKeysLastRun,
+            puzzleCompletions: normalizePuzzleCompletions(psIn.puzzleCompletions),
             relicPickCounts,
             relicShrineExtraPickUnlocked
         },
