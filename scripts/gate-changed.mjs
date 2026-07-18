@@ -78,6 +78,24 @@ export const selectGatesForChangedPaths = (paths) => {
         file === 'scripts/gate-long-run.ts' ||
         file === 'src/shared/gate-long-run-script.test.ts' ||
         file === 'src/shared/sim-endless-output.test.ts';
+    const isFullSoftlockGateFile = (file) =>
+        file === 'scripts/gate-softlock-seeds.ts' ||
+        file === 'scripts/audit-dungeon-topology.ts' ||
+        isSeedSweepContractFile(file) ||
+        file.startsWith('src/shared/playthrough-solver') ||
+        file.startsWith('src/shared/run-progression-repair') ||
+        file.startsWith('src/shared/softlock') ||
+        file.startsWith('src/shared/board-generation') ||
+        file.startsWith('src/shared/board-build') ||
+        file.startsWith('src/shared/board-inspection') ||
+        file.startsWith('src/shared/dungeon-topology') ||
+        file.startsWith('src/shared/dungeon-board-status') ||
+        file.startsWith('src/shared/dungeon-exit') ||
+        file.startsWith('src/shared/dungeon-enemy') ||
+        file.startsWith('src/shared/enemy-hazard') ||
+        file.startsWith('src/shared/floor-mutator-schedule') ||
+        file.startsWith('src/shared/run-map') ||
+        isCoreGameRuleFile(file);
 
     for (const file of normalized) {
         if (
@@ -203,20 +221,7 @@ export const selectGatesForChangedPaths = (paths) => {
         ) {
             add('dungeonTopologyAudit', file, 'graph-backed board or route topology diagnostics can change');
         }
-        if (
-            file === 'scripts/audit-dungeon-topology.ts' ||
-            isSeedSweepContractFile(file) ||
-            file.startsWith('src/shared/dungeon-topology') ||
-            file.startsWith('src/shared/board-generation') ||
-            file.startsWith('src/shared/board-build') ||
-            file.startsWith('src/shared/board-inspection') ||
-            file.startsWith('src/shared/dungeon-exit') ||
-            file.startsWith('src/shared/dungeon-enemy') ||
-            file.startsWith('src/shared/enemy-hazard') ||
-            file.startsWith('src/shared/floor-mutator-schedule') ||
-            file.startsWith('src/shared/run-map') ||
-            isCoreGameRuleFile(file)
-        ) {
+        if (isFullSoftlockGateFile(file)) {
             add('softlockFull', file, 'combined topology and executable softlock stress can expose rare progression interactions');
         }
         if (
@@ -239,24 +244,6 @@ export const selectGatesForChangedPaths = (paths) => {
             isCoreGameRuleFile(file)
         ) {
             add('simSoftlockSeeds', file, 'multi-seed executable softlock coverage can change');
-        }
-        if (
-            file === 'scripts/gate-softlock-seeds.ts' ||
-            file === 'scripts/audit-dungeon-topology.ts' ||
-            file.startsWith('src/shared/playthrough-solver') ||
-            file.startsWith('src/shared/run-progression-repair') ||
-            file.startsWith('src/shared/softlock') ||
-            file.startsWith('src/shared/board-generation') ||
-            file.startsWith('src/shared/board-build') ||
-            file.startsWith('src/shared/board-inspection') ||
-            file.startsWith('src/shared/dungeon-topology') ||
-            file.startsWith('src/shared/dungeon-exit') ||
-            file.startsWith('src/shared/dungeon-enemy') ||
-            file.startsWith('src/shared/enemy-hazard') ||
-            file.startsWith('src/shared/run-map') ||
-            isCoreGameRuleFile(file)
-        ) {
-            add('softlockFull', file, 'combined topology and executable softlock stress can expose rare progression interactions');
         }
         if (file.startsWith('src/shared/tile-trait') || file.startsWith('src/shared/board-power') || isCoreGameRuleFile(file) || file.startsWith('src/shared/playthrough-solver') || file.startsWith('src/shared/run-progression-repair') || file.startsWith('src/shared/turn-resolution') || file.startsWith('src/shared/hazard') || file.startsWith('src/shared/enemy')) {
             add('actionLoop', file, 'core turn, trait, hazard, enemy, or board-power rules changed');

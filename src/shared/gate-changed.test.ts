@@ -9,12 +9,21 @@ type GateChangedPayload = {
     reasons: { gateId: string; file: string; reason: string }[];
 };
 
+type GateChangedModule = {
+    selectGatesForChangedPaths: (paths: readonly string[]) => GateChangedPayload;
+};
+
 const scriptPath = path.join(process.cwd(), 'scripts', 'gate-changed.mjs');
 const packageScripts = (
     JSON.parse(readFileSync(path.join(process.cwd(), 'package.json'), 'utf8')) as {
         scripts: Record<string, string>;
     }
 ).scripts;
+
+const loadGateChanged = async (): Promise<GateChangedModule> => {
+    // @ts-expect-error scripts are runtime ESM modules without generated TypeScript declarations.
+    return (await import('../../scripts/gate-changed.mjs')) as GateChangedModule;
+};
 
 const runGateChanged = (...paths: string[]): GateChangedPayload =>
     JSON.parse(
@@ -262,6 +271,38 @@ describe('gate:changed selector', () => {
                 (reason) => reason.gateId === 'simSoftlockSeeds' && reason.file === 'src/shared/dungeon-board-status.ts'
             )
         ).toBe(true);
+    });
+
+    it('selects full softlock stress for every boundary path in isolation', async () => {
+        const { selectGatesForChangedPaths } = await loadGateChanged();
+        const boundaryPaths = [
+            'scripts/gate-softlock-seeds.ts',
+            'scripts/audit-dungeon-topology.ts',
+            'scripts/seed-sweep-options.ts',
+            'src/shared/playthrough-solver.ts',
+            'src/shared/run-progression-repair.ts',
+            'src/shared/softlock-fairness.ts',
+            'src/shared/board-generation.ts',
+            'src/shared/board-build-rules.ts',
+            'src/shared/board-inspection.ts',
+            'src/shared/dungeon-topology.ts',
+            'src/shared/dungeon-board-status.ts',
+            'src/shared/dungeon-exit-rules.ts',
+            'src/shared/dungeon-enemy-hazard-rules.ts',
+            'src/shared/enemy-hazard-board-rules.ts',
+            'src/shared/floor-mutator-schedule.ts',
+            'src/shared/run-map.ts',
+            'src/shared/game.ts'
+        ];
+
+        for (const file of boundaryPaths) {
+            const payload = selectGatesForChangedPaths([file]);
+            expect(payload.gates.map((gate) => gate.id), file).toContain('softlockFull');
+            expect(
+                payload.reasons.some((reason) => reason.gateId === 'softlockFull' && reason.file === file),
+                file
+            ).toBe(true);
+        }
     });
 
     it('selects expensive softlock gates for dungeon topology graph changes', () => {
