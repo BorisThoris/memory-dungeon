@@ -58,6 +58,21 @@ describe('gate:changed selector', () => {
         expect(payload.reasons.filter((reason) => reason.gateId === 'longRun')).toHaveLength(5);
     });
 
+    it('selects every dependent simulation gate for the shared seed sweep contract', () => {
+        const payload = runGateChanged('scripts/seed-sweep-options.ts');
+
+        expect(payload.gates.map((gate) => gate.id)).toEqual(
+            expect.arrayContaining([
+                'longRun',
+                'dungeonTopologyAudit',
+                'simHealth',
+                'simSoftlockSeeds',
+                'softlockFull'
+            ])
+        );
+        expect(payload.reasons.every((reason) => reason.file === 'scripts/seed-sweep-options.ts')).toBe(true);
+    });
+
     it('selects the blueprint browser smoke for system diagram explorer changes', () => {
         const payload = runGateChanged(
             'scripts/system-diagrams.mjs',

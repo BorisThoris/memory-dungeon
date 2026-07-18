@@ -72,6 +72,8 @@ export const selectGatesForChangedPaths = (paths) => {
         file === 'src/shared/game.test.ts' ||
         file.startsWith('src/shared/game-core') ||
         file.startsWith('src/shared/floor-completion');
+    const isSeedSweepContractFile = (file) =>
+        file === 'scripts/seed-sweep-options.ts' || file === 'src/shared/seed-sweep-options.test.ts';
 
     for (const file of normalized) {
         if (
@@ -145,6 +147,7 @@ export const selectGatesForChangedPaths = (paths) => {
         if (
             file === 'scripts/sim-endless.ts' ||
             file === 'scripts/gate-long-run.ts' ||
+            isSeedSweepContractFile(file) ||
             file.startsWith('src/shared/long-run-depth') ||
             file.startsWith('src/shared/boss-encounters') ||
             file.startsWith('src/shared/run-map') ||
@@ -161,6 +164,7 @@ export const selectGatesForChangedPaths = (paths) => {
             file === 'scripts/sim-endless.ts' ||
             file === 'scripts/gate-softlock-seeds.ts' ||
             file === 'scripts/audit-dungeon-topology.ts' ||
+            isSeedSweepContractFile(file) ||
             file.startsWith('src/shared/floor-mutator-schedule') ||
             file.startsWith('src/shared/board-generation') ||
             file.startsWith('src/shared/board-build') ||
@@ -180,6 +184,7 @@ export const selectGatesForChangedPaths = (paths) => {
         }
         if (
             file === 'scripts/audit-dungeon-topology.ts' ||
+            isSeedSweepContractFile(file) ||
             file.startsWith('src/shared/dungeon-topology') ||
             file.startsWith('src/shared/board-generation') ||
             file.startsWith('src/shared/board-build') ||
@@ -196,6 +201,7 @@ export const selectGatesForChangedPaths = (paths) => {
         }
         if (
             file === 'scripts/audit-dungeon-topology.ts' ||
+            isSeedSweepContractFile(file) ||
             file.startsWith('src/shared/dungeon-topology') ||
             file.startsWith('src/shared/board-generation') ||
             file.startsWith('src/shared/board-build') ||
@@ -213,6 +219,7 @@ export const selectGatesForChangedPaths = (paths) => {
             file === 'scripts/sim-endless.ts' ||
             file === 'scripts/gate-softlock-seeds.ts' ||
             file === 'scripts/audit-dungeon-topology.ts' ||
+            isSeedSweepContractFile(file) ||
             file.startsWith('src/shared/playthrough-solver') ||
             file.startsWith('src/shared/run-progression-repair') ||
             file.startsWith('src/shared/softlock') ||

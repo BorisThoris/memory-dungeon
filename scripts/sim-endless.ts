@@ -25,11 +25,7 @@ import {
     hasTraitRewardInteractionFloor,
     hasTraitSwapSetupOpportunity
 } from '../src/shared/tile-trait-rules';
-
-const numArg = (argv: readonly string[], name: string, def: number): number => {
-    const raw = argv.find((a) => a.startsWith(`--${name}=`))?.split('=')[1];
-    return raw != null ? Number(raw) : def;
-};
+import { readNumericCliArg } from './seed-sweep-options';
 
 export interface EndlessSimulationCsvInput {
     floors: number;
@@ -485,8 +481,8 @@ export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput):
     formatEndlessSimulationSummary(input, readEndlessSimulationMetrics(input));
 
 const runCli = (argv: readonly string[]): void => {
-    const floors = Math.max(1, Math.floor(numArg(argv, 'floors', 10_000)));
-    const runSeed = Math.floor(numArg(argv, 'seed', 42_001));
+    const floors = Math.max(1, Math.floor(readNumericCliArg(argv, 'floors', 10_000)));
+    const runSeed = Math.floor(readNumericCliArg(argv, 'seed', 42_001));
     const input = { floors, runSeed };
     const summaryMode = argv.includes('--summary');
     const checkMode = argv.includes('--check');

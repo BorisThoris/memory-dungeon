@@ -1,32 +1,40 @@
-import { runLongRunSoak } from '../src/shared/long-run-depth';
+import { fileURLToPath } from 'node:url';
+import { runLongRunSoak, type LongRunSoakReport } from '../src/shared/long-run-depth';
+import { readNumericCliArg, readSeedListCliArg } from './seed-sweep-options';
 
-const argv = process.argv.slice(2);
-const numArg = (name: string, fallback: number): number => {
-    const raw = argv.find((arg) => arg.startsWith(`--${name}=`))?.split('=')[1];
-    return raw == null ? fallback : Number(raw);
+const DEFAULT_LONG_RUN_SEEDS = [42_001, 42_077, 42_123] as const;
+
+export interface LongRunGateOptions {
+    floors: number;
+    seeds: number[];
+}
+
+export const parseLongRunGateOptions = (argv: readonly string[]): LongRunGateOptions => ({
+    floors: Math.max(1, Math.floor(readNumericCliArg(argv, 'floors', 48))),
+    seeds: readSeedListCliArg(argv, DEFAULT_LONG_RUN_SEEDS)
+});
+
+export const formatLongRunGateReport = (report: Pick<LongRunSoakReport, 'rows'>): string => {
+    const lines = [
+        'key,value,targetMin,targetMax,status,source',
+        ...report.rows.map((row) =>
+            [row.key, row.value, row.targetMin, row.targetMax, row.status, row.source].join(',')
+        )
+    ];
+    return `${lines.join('\n')}\n`;
 };
 
-const floors = Math.max(1, Math.floor(numArg('floors', 48)));
-const seedsArg = argv.find((arg) => arg.startsWith('--seeds='))?.split('=')[1];
-const seeds = seedsArg
-    ? seedsArg
-          .split(',')
-          .map((value) => Number(value.trim()))
-          .filter((value) => Number.isFinite(value))
-    : [42_001, 42_077, 42_123];
+export const runLongRunGate = (argv: readonly string[]): number => {
+    const report = runLongRunSoak(parseLongRunGateOptions(argv));
+    process.stdout.write(formatLongRunGateReport(report));
 
-const report = runLongRunSoak({ seeds, floors });
+    if (!report.ok) {
+        process.stderr.write(`${report.issues.join('\n')}\n`);
+        return 1;
+    }
+    return 0;
+};
 
-const lines = [
-    'key,value,targetMin,targetMax,status,source',
-    ...report.rows.map((row) =>
-        [row.key, row.value, row.targetMin, row.targetMax, row.status, row.source].join(',')
-    )
-];
-
-process.stdout.write(`${lines.join('\n')}\n`);
-
-if (!report.ok) {
-    process.stderr.write(`${report.issues.join('\n')}\n`);
-    process.exitCode = 1;
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+    process.exitCode = runLongRunGate(process.argv.slice(2));
 }
