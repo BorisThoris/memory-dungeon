@@ -30,6 +30,7 @@ const GATES = {
 };
 
 const normalize = (file) => file.replaceAll('\\', '/').replace(/^\.\//, '');
+const isVitestTestFile = (file) => /^src\/.*\.test\.tsx?$/u.test(file);
 
 const parseArgs = (argv) => {
     const explicitPaths = [];
@@ -60,6 +61,7 @@ const changedPathsFromGit = (base) => {
 
 export const selectGatesForChangedPaths = (paths) => {
     const normalized = [...new Set(paths.map(normalize).filter(Boolean))];
+    const changedTestFiles = normalized.filter(isVitestTestFile);
     const gateIds = new Set();
     const reasons = [];
     const reasonIds = new Set();
@@ -112,6 +114,9 @@ export const selectGatesForChangedPaths = (paths) => {
         file === 'e2e/long-run-feedback-hud.spec.ts';
 
     for (const file of normalized) {
+        if (isVitestTestFile(file)) {
+            add('changedTests', file, 'changed Vitest files should execute directly');
+        }
         if (
             file === 'package.json' ||
             file === 'yarn.lock' ||
@@ -366,7 +371,13 @@ export const selectGatesForChangedPaths = (paths) => {
 
     return {
         paths: normalized,
-        gates: [...gateIds].map((gateId) => ({ id: gateId, command: GATES[gateId] })),
+        gates: [...gateIds].map((gateId) => ({
+            id: gateId,
+            command:
+                gateId === 'changedTests'
+                    ? `yarn vitest run ${changedTestFiles.map((file) => JSON.stringify(file)).join(' ')} --maxWorkers=2`
+                    : GATES[gateId]
+        })),
         reasons
     };
 };

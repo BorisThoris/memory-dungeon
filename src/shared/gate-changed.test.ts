@@ -98,7 +98,16 @@ describe('gate:changed selector', () => {
             'src/shared/sim-endless-output.test.ts'
         );
 
-        expect(payload.gates).toEqual([{ id: 'longRun', command: 'yarn gate:long-run' }]);
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([
+                { id: 'longRun', command: 'yarn gate:long-run' },
+                {
+                    id: 'changedTests',
+                    command:
+                        'yarn vitest run "src/shared/gate-long-run-script.test.ts" "src/shared/sim-endless-output.test.ts" --maxWorkers=2'
+                }
+            ])
+        );
         expect(payload.reasons.filter((reason) => reason.gateId === 'longRun')).toHaveLength(2);
     });
 
@@ -119,7 +128,10 @@ describe('gate:changed selector', () => {
         const explicitlyGatedTests = [...new Set(gateScriptNames.flatMap(testFilesRunByPackageScript))].sort();
         const uncovered = explicitlyGatedTests.flatMap((file) => {
             const selectedGates = selectGatesForChangedPaths([file]).gates;
-            const reachesTest = selectedGates.some(({ command }) => {
+            const reachesTest = selectedGates.some(({ id, command }) => {
+                if (id === 'changedTests') {
+                    return command.includes(JSON.stringify(file));
+                }
                 const selectedScript = command.match(/^yarn\s+([\w:-]+)$/u)?.[1];
                 return selectedScript != null && testFilesRunByPackageScript(selectedScript).includes(file);
             });
@@ -128,6 +140,50 @@ describe('gate:changed selector', () => {
 
         expect(explicitlyGatedTests.length).toBeGreaterThan(60);
         expect(uncovered).toEqual([]);
+    });
+
+    it('runs changed Vitest files directly with normalized paths and bounded workers', () => {
+        const payload = runGateChanged(
+            './src/shared/rng.test.ts',
+            'src\\renderer\\breakpoints.test.ts',
+            'src/shared/rng.test.ts',
+            'README.md'
+        );
+        const changedTests = payload.gates.find(({ id }) => id === 'changedTests');
+
+        expect(changedTests).toEqual({
+            id: 'changedTests',
+            command:
+                'yarn vitest run "src/shared/rng.test.ts" "src/renderer/breakpoints.test.ts" --maxWorkers=2'
+        });
+        expect(payload.reasons.filter(({ gateId }) => gateId === 'changedTests')).toEqual([
+            {
+                gateId: 'changedTests',
+                file: 'src/shared/rng.test.ts',
+                reason: 'changed Vitest files should execute directly'
+            },
+            {
+                gateId: 'changedTests',
+                file: 'src/renderer/breakpoints.test.ts',
+                reason: 'changed Vitest files should execute directly'
+            }
+        ]);
+    });
+
+    it('includes every tracked Vitest file in the dynamic changed-test gate', async () => {
+        const { selectGatesForChangedPaths } = await loadGateChanged();
+        const trackedTests = execFileSync('git', ['ls-files', 'src'], { encoding: 'utf8' })
+            .split(/\r?\n/u)
+            .filter((file) => /^src\/.*\.test\.tsx?$/u.test(file));
+        const payload = selectGatesForChangedPaths(trackedTests);
+        const changedTests = payload.gates.find(({ id }) => id === 'changedTests');
+
+        expect(trackedTests.length).toBeGreaterThan(350);
+        expect(payload.reasons.filter(({ gateId }) => gateId === 'changedTests')).toHaveLength(trackedTests.length);
+        for (const file of trackedTests) {
+            expect(changedTests?.command).toContain(JSON.stringify(file));
+        }
+        expect(changedTests?.command.endsWith('--maxWorkers=2')).toBe(true);
     });
 
     it('selects every dependent simulation gate for the shared seed sweep contract', () => {
@@ -423,7 +479,12 @@ describe('gate:changed selector', () => {
         const supportPayload = runGateChanged('src/shared/gameplay-rules-edit-map.test.ts');
         expect(supportPayload.gates.map((gate) => gate.id)).not.toContain('actionLoop');
         expect(supportPayload.gates.map((gate) => gate.id)).not.toContain('simSoftlockSeeds');
-        expect(supportPayload.gates).toEqual([{ id: 'systems', command: 'yarn gate:systems' }]);
+        expect(supportPayload.gates).toEqual([
+            {
+                id: 'changedTests',
+                command: 'yarn vitest run "src/shared/gameplay-rules-edit-map.test.ts" --maxWorkers=2'
+            }
+        ]);
     });
 
     it('selects renderer, audio, asset, and persistence focused gates', () => {
