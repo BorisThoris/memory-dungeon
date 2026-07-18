@@ -182,7 +182,7 @@ describe('gate:changed selector', () => {
 
         try {
             execFileSync('git', ['init', '--quiet'], { cwd: repository });
-            for (const file of ['deleted.test.ts', 'keep.test.ts', 'rename-old.test.ts']) {
+            for (const file of ['deleted.test.ts', 'keep.test.ts', 'rename-old.test.ts', 'worktree-only.test.ts']) {
                 writeFileSync(path.join(sourceDirectory, file), `export const value = '${file}';\n`, 'utf8');
             }
             execFileSync('git', ['add', '.'], { cwd: repository });
@@ -232,6 +232,15 @@ describe('gate:changed selector', () => {
                 'src/keep.test.ts',
                 'src/rename-new.test.ts',
                 'src/untracked test.test.ts'
+            ]);
+
+            writeFileSync(path.join(sourceDirectory, 'keep.test.ts'), 'export const value = 4;\n', 'utf8');
+            writeFileSync(path.join(sourceDirectory, 'worktree-only.test.ts'), 'export const value = 5;\n', 'utf8');
+            expect(changedPathsFromGit(base, repository)).toEqual([
+                'src/keep.test.ts',
+                'src/rename-new.test.ts',
+                'src/untracked test.test.ts',
+                'src/worktree-only.test.ts'
             ]);
         } finally {
             rmSync(repository, { recursive: true, force: true });

@@ -50,17 +50,22 @@ const parseArgs = (argv) => {
 };
 
 export const changedPathsFromGit = (base, cwd = process.cwd()) => {
-    const args = base
-        ? ['diff', '--name-only', '--diff-filter=ACMRTUXB', '-z', `${base}...HEAD`]
-        : ['diff', '--name-only', '--diff-filter=ACMRTUXB', '-z', 'HEAD'];
-    const tracked = execFileSync('git', args, { cwd, encoding: 'utf8' }).split('\0').filter(Boolean);
+    const diffPaths = (range) =>
+        execFileSync('git', ['diff', '--name-only', '--diff-filter=ACMRTUXB', '-z', range], {
+            cwd,
+            encoding: 'utf8'
+        })
+            .split('\0')
+            .filter(Boolean);
+    const committed = base ? diffPaths(`${base}...HEAD`) : [];
+    const worktree = diffPaths('HEAD');
     const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard', '-z'], {
         cwd,
         encoding: 'utf8'
     })
         .split('\0')
         .filter(Boolean);
-    return [...tracked, ...untracked].map(normalize);
+    return [...new Set([...committed, ...worktree, ...untracked].map(normalize))];
 };
 
 export const selectGatesForChangedPaths = (paths) => {
