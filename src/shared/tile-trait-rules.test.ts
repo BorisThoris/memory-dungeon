@@ -51,6 +51,9 @@ describe('tile trait rules', () => {
                 'echo:sealed-combo',
                 'echo:sealed-combo',
                 'unknown',
+                '__proto__',
+                'constructor',
+                'toString',
                 'cursed:volatile-danger'
             ])
         ).toEqual(['Echo + Sealed: combo shard', 'Cursed + Volatile: recall pressure']);

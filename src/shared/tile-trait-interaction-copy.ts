@@ -32,14 +32,14 @@ export type TileTraitInteractionTag = keyof typeof TILE_TRAIT_INTERACTION_TEXT;
 
 export const TILE_TRAIT_INTERACTION_TAGS = Object.keys(TILE_TRAIT_INTERACTION_TEXT) as TileTraitInteractionTag[];
 
+const isTileTraitInteractionTag = (value: string): value is TileTraitInteractionTag =>
+    Object.prototype.hasOwnProperty.call(TILE_TRAIT_INTERACTION_TEXT, value);
+
 export const formatTileTraitInteractionTags = (tags: readonly string[]): string[] => {
     const seen = new Set<string>();
     const lines: string[] = [];
     for (const tag of tags) {
-        const line =
-            tag in TILE_TRAIT_INTERACTION_TEXT
-                ? TILE_TRAIT_INTERACTION_TEXT[tag as TileTraitInteractionTag]
-                : undefined;
+        const line = isTileTraitInteractionTag(tag) ? TILE_TRAIT_INTERACTION_TEXT[tag] : undefined;
         if (!line || seen.has(line)) {
             continue;
         }
