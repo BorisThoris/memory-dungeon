@@ -254,6 +254,43 @@ describe('gate:changed selector', () => {
         expect(changedTests?.command.endsWith('--maxWorkers=2')).toBe(true);
     });
 
+    it('gives every tracked production source file a specific gate instead of the generic fallback', async () => {
+        const { selectGatesForChangedPaths } = await loadGateChanged();
+        const productionFiles = execFileSync('git', ['ls-files', '-z', 'src'], { encoding: 'utf8' })
+            .split('\0')
+            .filter((file) => /\.(?:css|json|ts|tsx)$/u.test(file) && !/\.test\.tsx?$/u.test(file));
+
+        expect(productionFiles.length).toBeGreaterThan(400);
+        for (const file of productionFiles) {
+            const payload = selectGatesForChangedPaths([file]);
+            expect(payload.reasons.some((reason) => reason.file === file), file).toBe(true);
+            expect(
+                payload.reasons.some(
+                    (reason) =>
+                        reason.file === file &&
+                        reason.reason === 'fallback gate for changed files without a narrower mapping'
+                ),
+                file
+            ).toBe(false);
+        }
+    });
+
+    it('verifies an unmapped source file even when another changed file selects focused gates', () => {
+        const payload = runGateChanged('src/shared/achievements.ts', 'src/shared/game.ts');
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([
+                { id: 'verify', command: 'yarn verify' },
+                { id: 'actionLoop', command: 'yarn gate:action-loop' }
+            ])
+        );
+        expect(payload.reasons).toContainEqual({
+            gateId: 'verify',
+            file: 'src/shared/achievements.ts',
+            reason: 'source file without a narrower mapping requires full typecheck and unit coverage'
+        });
+    });
+
     it('selects every dependent simulation gate for the shared seed sweep contract', () => {
         const payload = runGateChanged('scripts/seed-sweep-options.ts');
 

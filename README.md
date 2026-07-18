@@ -54,7 +54,7 @@ yarn package:dir
 yarn package:win
 ```
 
-`yarn ci` runs **`yarn fullcheck`** (`eslint` + the `.test.ts`/JSX guard + `tsc --noEmit` + `vitest run`). Use **`yarn verify`** for typecheck + tests only when iterating without lint. **`yarn lint`** runs ESLint + the guard only.
+`yarn ci` runs **`yarn fullcheck`**: lint, dependency security, Electron and renderer build checks, system and softlock gates, full typecheck, and the bounded Vitest suite. Use **`yarn verify`** for typecheck + tests only when iterating without the broader release checks. **`yarn lint`** runs ESLint + the `.test.ts`/JSX guard only.
 
 Abridged scripts above; full matrix (Playwright bundles, illustration regression/benchmark, captures, card pipeline): [`docs/internal-wiki/TOOLING.md`](docs/internal-wiki/TOOLING.md).
 

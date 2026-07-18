@@ -6,6 +6,7 @@ const GATES = {
     rewardsEconomy: 'yarn gate:rewards-economy',
     navigation: 'yarn gate:navigation',
     systems: 'yarn gate:systems',
+    verify: 'yarn verify',
     gameplay: 'yarn gate:gameplay',
     longRun: 'yarn gate:long-run',
     readabilityLongRun: 'yarn gate:readability-long-run',
@@ -68,8 +69,10 @@ export const selectGatesForChangedPaths = (paths) => {
     const gateIds = new Set();
     const reasons = [];
     const reasonIds = new Set();
+    const coveredFiles = new Set();
     const add = (gateId, file, reason) => {
         gateIds.add(gateId);
+        coveredFiles.add(file);
         const reasonId = `${gateId}:${file}:${reason}`;
         if (reasonIds.has(reasonId)) return;
         reasonIds.add(reasonId);
@@ -364,6 +367,12 @@ export const selectGatesForChangedPaths = (paths) => {
         }
         if (file.startsWith('src/main/persistence') || file.startsWith('src/preload/') || file === 'src/shared/contracts.ts') {
             add('persistence', file, 'persistence, preload, or shared contract changed');
+        }
+    }
+
+    for (const file of normalized) {
+        if (file.startsWith('src/') && !coveredFiles.has(file)) {
+            add('verify', file, 'source file without a narrower mapping requires full typecheck and unit coverage');
         }
     }
 
