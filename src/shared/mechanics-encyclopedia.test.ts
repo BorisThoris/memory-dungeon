@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { AchievementId, GameMode, MutatorId, RelicId } from './contracts';
+import { MUTATOR_IDS, type AchievementId, type GameMode, type MutatorId, type RelicId } from './contracts';
 import {
     ACHIEVEMENT_CATALOG,
     CODEX_CORE_TOPICS,
@@ -89,6 +89,7 @@ describe('mechanics-encyclopedia', () => {
     });
 
     it('MUTATOR_CATALOG has an entry per MutatorId with id/title/description aligned to keys', () => {
+        expect(Object.keys(MUTATOR_CATALOG).sort()).toEqual([...MUTATOR_IDS].sort());
         for (const id of Object.keys(MUTATOR_CATALOG) as MutatorId[]) {
             assertCatalogEntry(id, MUTATOR_CATALOG[id]);
         }

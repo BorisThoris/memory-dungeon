@@ -1,4 +1,6 @@
 import {
+    MUTATOR_IDS,
+    RESOLVE_DELAY_MULTIPLIER_MIN,
     SAVE_SCHEMA_VERSION,
     type AchievementId,
     type AchievementState,
@@ -67,7 +69,7 @@ export const SETTINGS_NUMERIC_RANGES = {
     musicVolume: { min: 0, max: 1 },
     sfxVolume: { min: 0, max: 1 },
     uiScale: { min: 0.8, max: 1.4 },
-    resolveDelayMultiplier: { min: 0.5, max: 2.5 }
+    resolveDelayMultiplier: { min: RESOLVE_DELAY_MULTIPLIER_MIN, max: 2.5 }
 } as const satisfies Record<NumericSettingsKey, { min: number; max: number }>;
 
 export const ACHIEVEMENT_IDS: AchievementId[] = [
@@ -101,6 +103,7 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
 });
 
 const RELIC_ID_SET = new Set<RelicId>(RELIC_POOL);
+const MUTATOR_ID_SET = new Set<MutatorId>(MUTATOR_IDS);
 const GAME_MODE_SET = new Set<GameMode>(['endless', 'daily', 'puzzle', 'gauntlet', 'meditation']);
 const STARTING_LOADOUT_ID_SET = new Set<StartingLoadoutId>([
     'memory_scout',
@@ -217,7 +220,14 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         source.runRulesVersion === undefined ? undefined : finiteNonNegativeInteger(source.runRulesVersion, Number.NaN);
     const gameMode = GAME_MODE_SET.has(source.gameMode as GameMode) ? (source.gameMode as GameMode) : undefined;
     const activeMutators = Array.isArray(source.activeMutators)
-        ? [...new Set(source.activeMutators.filter((value): value is MutatorId => typeof value === 'string'))]
+        ? [
+              ...new Set(
+                  source.activeMutators.filter(
+                      (value): value is MutatorId =>
+                          typeof value === 'string' && MUTATOR_ID_SET.has(value as MutatorId)
+                  )
+              )
+          ]
         : undefined;
     const relicIds = Array.isArray(source.relicIds)
         ? [...new Set(source.relicIds.filter((value): value is RelicId => RELIC_ID_SET.has(value as RelicId)))]

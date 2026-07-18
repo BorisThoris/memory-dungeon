@@ -22,7 +22,7 @@ export const ENDLESS_RISK_WAGER_BONUS_FAVOR = 2;
 export const GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS = 30_000;
 /** REG-015: temporary run-only shop wallet earned on floor clear. Never persisted outside RunState. */
 export const FLOOR_CLEAR_GOLD_BASE = 2;
-/** Minimum value for Settings → Gameplay → Resolve Delay — keep in sync with `SettingsScreen` slider `min`. */
+/** Minimum value for Settings -> Gameplay -> Resolve Delay and resolve-animation timing. */
 export const RESOLVE_DELAY_MULTIPLIER_MIN = 0.5;
 export const DEBUG_REVEAL_MS = 1500;
 export const MEMORIZE_BASE_MS = 1300;
@@ -132,19 +132,21 @@ export interface BuiltinPuzzleDefinition {
     tiles: Tile[];
 }
 
-export type MutatorId =
-    | 'glass_floor'
-    | 'sticky_fingers'
-    | 'score_parasite'
-    | 'category_letters'
-    | 'short_memorize'
-    | 'wide_recall'
-    | 'silhouette_twist'
-    | 'n_back_anchor'
-    | 'distraction_channel'
-    | 'findables_floor'
-    | 'shifting_spotlight'
-    | 'generous_shrine';
+export const MUTATOR_IDS = [
+    'glass_floor',
+    'sticky_fingers',
+    'score_parasite',
+    'category_letters',
+    'short_memorize',
+    'wide_recall',
+    'silhouette_twist',
+    'n_back_anchor',
+    'distraction_channel',
+    'findables_floor',
+    'shifting_spotlight',
+    'generous_shrine'
+] as const;
+export type MutatorId = (typeof MUTATOR_IDS)[number];
 
 /** Bonus pickups attached to some pairs during eligible runs/floors. */
 export type FindableKind = 'shard_spark' | 'score_glint' | 'ward_spark' | 'scout_glint';

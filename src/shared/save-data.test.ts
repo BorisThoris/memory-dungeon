@@ -427,7 +427,7 @@ describe('save normalization', () => {
                 runSeed: 73002,
                 runRulesVersion: GAME_RULES_VERSION,
                 gameMode: 'endless',
-                activeMutators: ['short_memorize', 'short_memorize', 'wide_recall'],
+                activeMutators: ['short_memorize', 'retired_mutator', 'short_memorize', 'wide_recall'],
                 relicIds: ['extra_shuffle_charge', 'extra_shuffle_charge', 'guard_token_plus_one'],
                 payoffPickupClaimed: 2.9,
                 payoffPickupTotal: 3,
