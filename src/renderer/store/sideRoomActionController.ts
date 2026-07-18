@@ -1,28 +1,31 @@
 import type { RunState, ViewState } from '../../shared/contracts';
-import { createSideRoomActionSurfaceResult } from './sideRoomSurfaceState';
+import {
+    createSideRoomActionSurfaceResult,
+    type SideRoomActionSurfacePatch
+} from './sideRoomSurfaceState';
 
 interface SideRoomActionControllerState {
     run: RunState | null;
     view: ViewState;
 }
 
-interface SideRoomActionControllerDeps<TState extends SideRoomActionControllerState> {
+interface SideRoomActionControllerDeps {
     applyResolvedRun: (run: RunState) => void;
     continueToNextLevel: () => void;
-    getState: () => TState;
-    setState: (patch: Partial<TState>) => void;
+    getState: () => SideRoomActionControllerState;
+    setState: (patch: SideRoomActionSurfacePatch) => void;
 }
 
 interface SideRoomActionController {
     applySideRoomAction: (applyAction: (run: RunState) => RunState) => void;
 }
 
-export const createSideRoomActionController = <TState extends SideRoomActionControllerState>({
+export const createSideRoomActionController = ({
     applyResolvedRun,
     continueToNextLevel,
     getState,
     setState
-}: SideRoomActionControllerDeps<TState>): SideRoomActionController => ({
+}: SideRoomActionControllerDeps): SideRoomActionController => ({
     applySideRoomAction: (applyAction) => {
         const { run, view } = getState();
         const result = createSideRoomActionSurfaceResult(view, run, applyAction);
@@ -33,7 +36,7 @@ export const createSideRoomActionController = <TState extends SideRoomActionCont
             applyResolvedRun(result.run);
             return;
         }
-        setState(result.patch as Partial<TState>);
+        setState(result.patch);
         if (result.kind === 'applied' && result.continueAfterPatch) {
             continueToNextLevel();
         }

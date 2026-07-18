@@ -17,7 +17,7 @@ const createState = (overrides: Partial<LevelCompleteContinuationExecutorState> 
 
 const createDeps = (
     state: LevelCompleteContinuationExecutorState
-): LevelCompleteContinuationExecutorDeps<LevelCompleteContinuationExecutorState> => ({
+): LevelCompleteContinuationExecutorDeps => ({
     applyResolvedRun: vi.fn(),
     clearAllTimers: vi.fn(),
     continueToNextLevel: vi.fn(),

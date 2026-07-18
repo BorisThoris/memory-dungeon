@@ -175,7 +175,7 @@ const scheduleDebugRevealTimer = (duration: number): void => runTimerController.
 const scheduleResolveTimer = (duration: number): void => runTimerController.scheduleResolveTimer(duration);
 const syncGauntletExpiryWatch = (): void => runTimerController.syncGauntletExpiryWatch();
 
-const sideRoomActionController = createSideRoomActionController<AppState>({
+const sideRoomActionController = createSideRoomActionController({
     applyResolvedRun,
     continueToNextLevel: () => useAppStore.getState().continueToNextLevel(),
     getState: () => useAppStore.getState(),

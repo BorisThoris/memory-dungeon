@@ -63,6 +63,8 @@ type SideRoomActionSurfaceResult =
           patch: SideRoomResultSurfacePatch;
       };
 
+export type SideRoomActionSurfacePatch = Extract<SideRoomActionSurfaceResult, { patch: unknown }>['patch'];
+
 export const createDeadInterludeGameOverRun = (run: RunState): RunState | null => {
     if (run.status !== 'gameOver' && run.lives > 0) {
         return null;
