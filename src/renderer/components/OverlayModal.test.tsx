@@ -5,6 +5,26 @@ import OverlayModal from './OverlayModal';
 import { getOverlayDecisionPolicyRows } from '../../shared/overlay-decision-policy';
 
 describe('OverlayModal (REF-061)', () => {
+    it('keeps the global modal-open state until the last nested overlay closes', () => {
+        const { rerender, unmount } = render(
+            <>
+                <OverlayModal actions={[]} testId="first-modal" title="First modal" />
+                <OverlayModal actions={[]} testId="second-modal" title="Second modal" />
+            </>
+        );
+
+        expect(document.body.dataset.overlayModalOpen).toBe('true');
+
+        rerender(<OverlayModal actions={[]} testId="second-modal" title="Second modal" />);
+
+        expect(screen.queryByTestId('first-modal')).toBeNull();
+        expect(document.body.dataset.overlayModalOpen).toBe('true');
+
+        unmount();
+
+        expect(document.body.dataset.overlayModalOpen).toBeUndefined();
+    });
+
     it('Tab cycles only between modal actions while the dialog is open', async () => {
         const user = userEvent.setup();
         render(

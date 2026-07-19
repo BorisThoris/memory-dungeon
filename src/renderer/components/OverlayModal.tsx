@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { popVerticalToolbarRovingPause, pushVerticalToolbarRovingPause } from '../a11y/toolbarRoving';
+import { acquireOverlayModalBodyState } from '../a11y/overlayModalBodyState';
 import { getOverlayDecisionPolicyRow } from '../../shared/overlay-decision-policy';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { MetaFrame, OverlayActionDock, ScreenTitle } from '../ui';
@@ -189,10 +190,7 @@ const OverlayModal = ({
     });
 
     useEffect(() => {
-        document.body.dataset.overlayModalOpen = 'true';
-        return () => {
-            delete document.body.dataset.overlayModalOpen;
-        };
+        return acquireOverlayModalBodyState();
     }, []);
 
     return (
