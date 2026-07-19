@@ -421,6 +421,44 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary).toBeNull();
     });
 
+    it('bounds persisted collections and ignores oversized identifiers', () => {
+        const expectedLimits = {
+            encorePairKeys: 80,
+            entryTextLength: 128,
+            puzzleCompletions: 256,
+            unlockTags: 128
+        };
+        const unlocks = Array.from(
+            { length: expectedLimits.unlockTags + 20 },
+            (_, index) => `cosmetic:future_${index}`
+        );
+        const puzzleCompletions = Object.fromEntries(
+            Array.from({ length: expectedLimits.puzzleCompletions + 20 }, (_, index) => [
+                `puzzle_${index}`,
+                { completed: true, bestMistakes: index, bestScore: index }
+            ])
+        );
+        const oversized = 'x'.repeat(expectedLimits.entryTextLength + 1);
+
+        const normalized = normalizeSaveData({
+            unlocks: [`honor:${oversized}`, ...unlocks],
+            playerStats: {
+                ...createDefaultSaveData().playerStats!,
+                encorePairKeysLastRun: [oversized, '', ...Array.from({ length: 100 }, (_, index) => `pair_${index}`)],
+                puzzleCompletions: { [oversized]: { completed: true, bestMistakes: 0, bestScore: 1 }, ...puzzleCompletions }
+            }
+        });
+
+        expect(normalized.unlocks).toHaveLength(expectedLimits.unlockTags);
+        expect(normalized.unlocks).not.toContain(`honor:${oversized}`);
+        expect(normalized.playerStats?.encorePairKeysLastRun).toHaveLength(expectedLimits.encorePairKeys);
+        expect(normalized.playerStats?.encorePairKeysLastRun).not.toContain(oversized);
+        expect(Object.keys(normalized.playerStats?.puzzleCompletions ?? {})).toHaveLength(
+            expectedLimits.puzzleCompletions
+        );
+        expect(normalized.playerStats?.puzzleCompletions).not.toHaveProperty(oversized);
+    });
+
     it('keeps caller-supplied puzzle ids as own dictionary keys without prototype mutation', () => {
         const puzzleCompletions = JSON.parse(`{
             "__proto__":{"completed":true,"bestMistakes":1,"bestScore":10},

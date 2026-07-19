@@ -115,6 +115,14 @@ const STARTING_LOADOUT_ID_SET: ReadonlySet<string> = new Set([
     'vaultbreaker'
 ]);
 
+const PERSISTED_COLLECTION_LIMITS = {
+    encorePairKeys: 80,
+    entryTextLength: 128,
+    inspectedEntries: 1024,
+    puzzleCompletions: 256,
+    unlockTags: 128
+} as const;
+
 const isUnknownRecord = (value: unknown): value is Record<string, unknown> =>
     Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 
@@ -180,8 +188,21 @@ const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPers
         return createPuzzleCompletionMap();
     }
     const out = createPuzzleCompletionMap();
-    for (const [id, value] of Object.entries(input)) {
-        if (id.length === 0 || !isUnknownRecord(value)) {
+    let inspected = 0;
+    let retained = 0;
+    for (const id in input) {
+        if (!Object.prototype.hasOwnProperty.call(input, id)) {
+            continue;
+        }
+        if (
+            inspected >= PERSISTED_COLLECTION_LIMITS.inspectedEntries ||
+            retained >= PERSISTED_COLLECTION_LIMITS.puzzleCompletions
+        ) {
+            break;
+        }
+        inspected += 1;
+        const value = input[id];
+        if (id.length === 0 || id.length > PERSISTED_COLLECTION_LIMITS.entryTextLength || !isUnknownRecord(value)) {
             continue;
         }
         if (value.completed !== true) {
@@ -198,6 +219,7 @@ const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPers
             bestMistakes,
             bestScore
         };
+        retained += 1;
     }
     return out;
 };
@@ -207,16 +229,40 @@ const normalizeUnlocks = (input: unknown): string[] => {
         return [];
     }
     const allowedPrefixes = ['achievement:', 'cosmetic:', 'honor:'];
-    return [...new Set(input)]
-        .filter((value): value is string => typeof value === 'string')
-        .filter((value) => allowedPrefixes.some((prefix) => value.startsWith(prefix)));
+    const out = new Set<string>();
+    for (const value of input.slice(0, PERSISTED_COLLECTION_LIMITS.inspectedEntries)) {
+        if (
+            typeof value === 'string' &&
+            value.length <= PERSISTED_COLLECTION_LIMITS.entryTextLength &&
+            allowedPrefixes.some((prefix) => value.startsWith(prefix))
+        ) {
+            out.add(value);
+            if (out.size >= PERSISTED_COLLECTION_LIMITS.unlockTags) {
+                break;
+            }
+        }
+    }
+    return [...out];
 };
 
 const normalizeStringLedger = (input: unknown, limit: number): string[] => {
     if (!Array.isArray(input)) {
         return [];
     }
-    return [...new Set(input.filter((value): value is string => typeof value === 'string'))].slice(0, limit);
+    const out = new Set<string>();
+    for (const value of input.slice(0, PERSISTED_COLLECTION_LIMITS.inspectedEntries)) {
+        if (
+            typeof value === 'string' &&
+            value.length > 0 &&
+            value.length <= PERSISTED_COLLECTION_LIMITS.entryTextLength
+        ) {
+            out.add(value);
+            if (out.size >= limit) {
+                break;
+            }
+        }
+    }
+    return [...out];
 };
 
 const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
@@ -539,7 +585,7 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
                 playerStatsDefaults.dailyStreakCosmetic
             ),
             encorePairKeysLastRun: Array.isArray(psIn.encorePairKeysLastRun)
-                ? normalizeStringLedger(psIn.encorePairKeysLastRun, 80)
+                ? normalizeStringLedger(psIn.encorePairKeysLastRun, PERSISTED_COLLECTION_LIMITS.encorePairKeys)
                 : playerStatsDefaults.encorePairKeysLastRun,
             puzzleCompletions: normalizePuzzleCompletions(psIn.puzzleCompletions),
             relicPickCounts,
