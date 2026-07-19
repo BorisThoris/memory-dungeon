@@ -117,6 +117,41 @@ describe('preloadStartupCriticalAssets', () => {
         expect(preloadCardIllustrationImages).toHaveBeenCalledWith(['card-a.png', 'card-b.png']);
     }, 15000);
 
+    it('contains rejected critical raster preloads and still returns relic assets', async () => {
+        const relicTextureSet = { dispose: vi.fn() };
+        preloadTileTextureImages.mockRejectedValueOnce(new Error('tile raster unavailable'));
+        loadRelicTextures.mockResolvedValueOnce(relicTextureSet as never);
+        const { preloadStartupCriticalAssets, resetStartupAssetPreloadStateForTests } = await import('./preloadStartupAssets');
+        resetStartupAssetPreloadStateForTests();
+
+        await expect(
+            preloadStartupCriticalAssets({ relicSvgUrl: 'relic.svg', webgl: true })
+        ).resolves.toEqual({ relicTextureSet });
+
+        expect(loadRelicTextures).toHaveBeenCalledWith('relic.svg');
+    });
+
+    it('contains synchronous image-host failures during critical UI warm-up', async () => {
+        vi.stubGlobal(
+            'Image',
+            class {
+                constructor() {
+                    throw new Error('image host unavailable');
+                }
+            }
+        );
+        Object.defineProperty(window, 'Image', {
+            configurable: true,
+            value: globalThis.Image
+        });
+        const { preloadStartupCriticalAssets, resetStartupAssetPreloadStateForTests } = await import('./preloadStartupAssets');
+        resetStartupAssetPreloadStateForTests();
+
+        await expect(
+            preloadStartupCriticalAssets({ relicSvgUrl: 'relic.svg', webgl: false })
+        ).resolves.toEqual({ relicTextureSet: null });
+    });
+
     it('keeps mode poster rasters out of the startup-critical preload', async () => {
         const { preloadStartupCriticalAssets, resetStartupAssetPreloadStateForTests } = await import('./preloadStartupAssets');
         const { MODE_CARD_ART, UI_ART } = await import('./ui');
@@ -167,4 +202,21 @@ describe('preloadStartupCriticalAssets', () => {
         expect(preloadCardIllustrationImages).toHaveBeenCalledTimes(1);
         expect(requestedRasterUrls).toEqual([...new Set([...Object.values(MODE_CARD_ART), MODE_CARD_ART.fallback])]);
     }, 15000);
+
+    it('allows a rejected background illustration warm-up to be scheduled again', async () => {
+        preloadCardIllustrationImages.mockRejectedValueOnce(new Error('illustration host unavailable'));
+        const {
+            resetStartupAssetPreloadStateForTests,
+            warmCardIllustrationsInBackground
+        } = await import('./preloadStartupAssets');
+        resetStartupAssetPreloadStateForTests();
+
+        warmCardIllustrationsInBackground();
+        await runIdleCallback(0);
+        warmCardIllustrationsInBackground();
+
+        expect(idleCallbacks.filter(Boolean)).toHaveLength(1);
+        await runIdleCallback(1);
+        expect(preloadCardIllustrationImages).toHaveBeenCalledTimes(2);
+    });
 });

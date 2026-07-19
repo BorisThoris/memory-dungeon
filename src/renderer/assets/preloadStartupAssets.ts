@@ -56,6 +56,14 @@ const preloadRasterUrls = async (urls: readonly string[], concurrency = 4): Prom
     await Promise.all(Array.from({ length: workerCount }, () => worker()));
 };
 
+const settleRasterPreload = async (operation: () => Promise<void>): Promise<void> => {
+    try {
+        await operation();
+    } catch {
+        // Raster warm-up is optional; callers retain CSS/canvas fallbacks.
+    }
+};
+
 const scheduleIdleWarmup = (callback: () => void, fallbackDelayMs: number): (() => void) => {
     const idleWindow = window as IdleWindow;
 
@@ -87,7 +95,9 @@ export const warmModePosterRasterImagesInBackground = (): void => {
     modePosterPreloadStarted = true;
     cancelModePosterWarmup = scheduleIdleWarmup(() => {
         cancelModePosterWarmup = null;
-        void preloadModePosterRasterImages().catch(() => undefined);
+        void preloadModePosterRasterImages().catch(() => {
+            modePosterPreloadStarted = false;
+        });
     }, 350);
 };
 
@@ -99,7 +109,9 @@ export const warmCardIllustrationsInBackground = (): void => {
     cardIllustrationPreloadStarted = true;
     const run = (): void => {
         cancelCardIllustrationWarmup = null;
-        void preloadCardIllustrationImages(getAllCardIllustrationUrls()).catch(() => undefined);
+        void preloadCardIllustrationImages(getAllCardIllustrationUrls()).catch(() => {
+            cardIllustrationPreloadStarted = false;
+        });
     };
     cancelCardIllustrationWarmup = scheduleIdleWarmup(run, 250);
 };
@@ -134,8 +146,8 @@ export const preloadStartupCriticalAssets = async (
         : Promise.resolve(null);
 
     const [, , relicTextureSet] = await Promise.all([
-        preloadTileTextureImages(),
-        preloadUiRasterImages(),
+        settleRasterPreload(preloadTileTextureImages),
+        settleRasterPreload(preloadUiRasterImages),
         relicPromise
     ]);
 
