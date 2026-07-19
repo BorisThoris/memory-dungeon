@@ -409,7 +409,7 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary).toBeNull();
     });
 
-    it('keeps imported puzzle ids as own dictionary keys without prototype mutation', () => {
+    it('keeps caller-supplied puzzle ids as own dictionary keys without prototype mutation', () => {
         const puzzleCompletions = JSON.parse(`{
             "__proto__":{"completed":true,"bestMistakes":1,"bestScore":10},
             "constructor":{"completed":true,"bestMistakes":2,"bestScore":20},

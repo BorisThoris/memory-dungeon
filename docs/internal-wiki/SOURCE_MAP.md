@@ -31,7 +31,7 @@ Quick orientation for navigation and code review. **Rules of thumb:** `shared/` 
 | `rng.ts` | Seeded RNG utilities |
 | `utc-countdown.ts` | Daily window / UTC helpers |
 | `run-export.ts` | Import/export serialization for runs |
-| `puzzle-import.ts` | Validates user **puzzle JSON** (`title` + `tiles`) for `createPuzzleRun` |
+| `puzzle-import.ts` | Validates authored puzzle payload metadata and tile structure; no menu JSON loader is wired |
 | `graphicsQuality.ts` | Quality tier presets for renderer |
 | `cameraViewportMode.ts` | Breakpoint-derived camera / shell mode |
 | `pairProximityHint.ts` | Pair-distance hint math (shared with renderer) |

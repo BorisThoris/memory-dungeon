@@ -1,4 +1,4 @@
-import type { PuzzleDifficulty, PuzzleGoal, PuzzlePackId, Tile } from './contracts';
+import type { PuzzleDifficulty, PuzzleGoal, PuzzlePackId } from './contracts';
 import type { SaveData } from './contracts';
 import { z } from 'zod';
 import { BUILTIN_PUZZLES } from './builtin-puzzles';
@@ -7,11 +7,11 @@ import { DECOY_PAIR_KEY } from './tile-identity';
 const puzzleTileSchema = z.object({
     id: z.string().trim().min(1),
     pairKey: z.string().trim().min(1),
-    symbol: z.string(),
-    label: z.string(),
-    state: z.enum(['hidden', 'flipped', 'matched', 'removed']),
+    symbol: z.string().trim().min(1),
+    label: z.string().trim().min(1),
+    state: z.literal('hidden'),
     atomicVariant: z.number().finite().optional()
-}).passthrough();
+}).strict();
 
 export const puzzleImportPayloadSchema = z.object({
     title: z.string().trim().min(3),
@@ -26,10 +26,10 @@ const PUZZLE_TILE_VALIDATION_ERROR =
 
 /**
  * Runtime checks for hand-authored puzzle tile lists (builtins and tests):
- * count 4–64, required string fields (non-empty id/pairKey after trim), optional finite `atomicVariant`,
+ * count 4–64, layout-only fields, non-empty text, hidden initial state, optional finite `atomicVariant`,
  * unique normalized tile ids, and exactly two tiles per non-decoy `pairKey`.
  */
-export const isValidPuzzleImportTileSet = (tiles: unknown): tiles is Tile[] => {
+export const isValidPuzzleImportTileSet = (tiles: unknown): boolean => {
     const parsed = z.array(puzzleTileSchema).min(4).max(64).safeParse(tiles);
     if (!parsed.success) {
         return false;

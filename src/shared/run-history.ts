@@ -226,7 +226,7 @@ export const buildRunShareKey = (run: RunState): RunShareKey => {
         shareSupported,
         reason: shareSupported
             ? 'Local seed/rules/mode share recipe only; it does not include flip playback, route choices, or importable replay data.'
-            : 'Fixed/imported puzzle boards require their tile payload; do not invent a share key.',
+            : 'Fixed or caller-supplied puzzle boards require their tile payload; do not invent a share key.',
         seed,
         rulesVersion,
         localOnly: true,

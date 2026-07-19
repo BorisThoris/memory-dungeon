@@ -41,7 +41,7 @@
 | Item | Status | Notes | Epic |
 |------|--------|-------|------|
 | `wildTileId` on `RunState` | **Functional** | Set from the board whenever a wild tile is spawned (`getWildTileIdFromBoard`); null when absent. Simulation still keys off `pairKey` / `WILD_PAIR_KEY`. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
-| Fixed / puzzle `fixedTiles` boards | **Functional** | Built-in puzzles are layout-only tile lists unless a caller wires extra init (cursed pair, shifting spotlight seeds, etc.); see [`builtin-puzzles.ts`](../../src/shared/builtin-puzzles.ts) header and [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md). User JSON import validates pairs only. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
+| Fixed / puzzle `fixedTiles` boards | **Functional** | Built-in puzzles are layout-only tile lists unless a caller wires extra init (cursed pair, shifting spotlight seeds, etc.); see [`builtin-puzzles.ts`](../../src/shared/builtin-puzzles.ts) header and [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md). Authored payload validation enforces playable base structure. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 | Gambit vs echo timing | **Functional** | Mismatch **resolve delay** differs 2-flip vs 3-flip (echo-aware vs not)—no bug flagged; revisit if balance changes. | [epic-core-memory-loop](./epic-core-memory-loop.md) |
 
 ---
@@ -70,7 +70,7 @@
 | Item | Status | Notes | Epic |
 |------|--------|-------|------|
 | Findables vs **?** decoy | **Functional** | **Findables** = bonus on real pairs (`findableKind`, mutator `findables_floor`). **`?`** on **`glass_floor`** = **singleton decoy** (not a pickup). `isBoardComplete` treats a **hidden** decoy as OK once all other tiles are matched/removed (avoids soft-lock). See [FINDABLES.md](../FINDABLES.md). | [FINDABLES.md](../FINDABLES.md) |
-| Puzzle user import | **Functional** | **Import puzzle JSON** (main menu file picker) validates `{ title?, tiles[] }` via `parsePuzzleImportJson` / `startPuzzleRunFromImport`; session cache supports **restart** until reload. Builtins + [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md) remain the authoring pipeline for shipping puzzles. | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| Puzzle user import | **Partial** | `puzzle-import.ts` validates authored payloads, but no main-menu file picker, parser, store start action, or imported-puzzle restart cache is wired. Builtins + [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md) remain the shipping path. | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Export / import replay | **Functional** | Treat **best-effort** until restart/import paths are unified. | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | Naming: endless vs classic | **Functional** | Code “endless” vs UI “Classic Run” vs locked “Endless Mode”—onboarding hurdle; see catalog. | [epic-modes-and-runs](./epic-modes-and-runs.md), catalog |
 | Puzzle library size | **Functional** | Scope limit vs aspiration. | [epic-modes-and-runs](./epic-modes-and-runs.md) |

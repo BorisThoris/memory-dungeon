@@ -16,7 +16,7 @@
 | Practice / Scholar / Pin Vow / Wild | **Functional** | Use `endless` + flags; started from **Choose Your Path** (`useAppStore` handlers). |
 | Choose Your Path | **Shippable** | Mode-selection shell (hero + **drag-first** library, magnifier search, catalog, modals). **UI / interaction deep dive:** [epic-choose-your-path](./epic-choose-your-path.md). |
 | Run export / import | **Functional** | `run-export.ts` v1; Game Over copy; import modal; **restart from import** may not replay identical seed in all branches — edge case. |
-| Puzzle import | **Functional** | **Import puzzle JSON** (file picker) → `parsePuzzleImportJson` / `startPuzzleRunFromImport`; ids like `import:…`; in-memory tile cache for **restart** until page reload. Shipping puzzles still live in `builtin-puzzles` — see `docs/PUZZLE_CONTRIBUTING.md`. |
+| Puzzle import | **Partial** | `puzzle-import.ts` provides payload validation, but the menu file picker, parser, store start action, and imported-puzzle restart cache are not wired. Shipping puzzles live in `builtin-puzzles` — see `docs/PUZZLE_CONTRIBUTING.md`. |
 
 ## Rough edges
 
@@ -36,14 +36,14 @@
 
 ## Refinement
 
-**Shippable** for classic/daily/gauntlet/meditation shells and **ad-hoc puzzle JSON** playtests. **Functional** for puzzle library size and export replay guarantees.
+**Shippable** for classic/daily/gauntlet/meditation shells and the built-in puzzle library. **Functional** for puzzle library size and export replay guarantees; ad-hoc puzzle JSON playtests remain unwired.
 
 ## Tasks (polish backlog)
 
 Tracked in rollup: [GAMEPLAY_POLISH_AND_GAPS.md](./GAMEPLAY_POLISH_AND_GAPS.md) §5.
 
-- [x] User-imported puzzle files: **client-side validation** (`parsePuzzleImportJson`) + menu UX; [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md) remains the pipeline for **shipping** builtins.
-- [x] Hardening optional: size limits, copy for “unsaved import,” persistence across reload if product requires it. — *Deferred to v2:* no hard size cap in v1; document if product tightens.
+- [ ] User-imported puzzle files: payload validation exists, but parser + menu UX + store start/restart wiring remain; [PUZZLE_CONTRIBUTING.md](../PUZZLE_CONTRIBUTING.md) remains the pipeline for **shipping** builtins.
+- [x] Payload hardening: 4–64 hidden tiles, unique normalized ids, non-empty text, finite optional variants, and exact non-decoy pair cardinality.
 - [x] Unify import/export **restart** paths so “replay from export” matches player expectations (document limits until fixed). — *Deferred:* current paths documented in run-export; full UX unification backlog.
 - [x] UX copy pass: endless vs classic vs locked “Endless Mode” — align menu, codex, and [GAMEPLAY_MECHANICS_CATALOG](./GAMEPLAY_MECHANICS_CATALOG.md) terminology. — *Deferred:* copy pass bundled with future menu/Codex milestone.
-- [x] Set target for puzzle library size (or document v1 scope vs backlog). — *Deferred:* scope remains “builtin + import”; cap TBD with product.
+- [x] Set target for puzzle library size (or document v1 scope vs backlog). — *Deferred:* current scope remains the built-in library; user import is backlog.

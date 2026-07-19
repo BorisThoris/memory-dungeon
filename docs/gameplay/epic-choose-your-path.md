@@ -11,7 +11,7 @@
 **Choose Your Path** is the **meta screen** where the player picks how to start a run after **Play** on the main menu (`view === 'modeSelect'` in `useAppStore`). It owns:
 
 - **Presentation:** Featured hero row, **More modes** carousel (drag / swipe / snap), **optional** search behind a magnifier control, posters, header copy, responsive shell classes — tuned for **phone touch** and **desktop mouse drag** without redundant pager buttons.
-- **Wiring:** Dispatching to `useAppStore` start/import actions and local modals (meditation setup, run import, puzzle file import).
+- **Wiring:** Dispatching to `useAppStore` start/import actions and local modals (meditation setup and run import; puzzle file import is not wired).
 
 It does **not** own simulation rules (`GameMode`, `createNewRun`, mutator schedules). Those stay in [epic-modes-and-runs](./epic-modes-and-runs.md) and [GAMEPLAY_MECHANICS_CATALOG](./GAMEPLAY_MECHANICS_CATALOG.md).
 
@@ -156,7 +156,7 @@ Hero uses **`cardGrid`** (`auto-fit`, `minmax(240px, 1fr)`), so Featured cards g
 
 - **Import run:** `OverlayModal` `testId="run-import-modal"`, textarea `run-import-json`, errors `run-import-error`.
 - **Meditation:** full mutator list from `MUTATOR_CATALOG` sort order.
-- **Puzzle import:** one hidden file input; errors `puzzle-import-error`.
+- **Puzzle import:** payload validation exists in shared code, but no hidden file input or `puzzle-import-error` menu flow is wired.
 
 ---
 
@@ -227,7 +227,7 @@ Earlier desktop review items drove a **third pass (2026-04)** UI polish (density
 - [`src/shared/run-mode-catalog.ts`](../../src/shared/run-mode-catalog.ts)
 - [`src/renderer/assets/ui/modeArt.ts`](../../src/renderer/assets/ui/modeArt.ts), [`ASSET_SOURCES.md`](../../src/renderer/assets/ASSET_SOURCES.md)
 - [`src/renderer/App.tsx`](../../src/renderer/App.tsx) — `modeSelect`
-- [`src/renderer/store/useAppStore.ts`](../../src/renderer/store/useAppStore.ts) — `start*`, `importRunFromClipboard`, `startPuzzleRunFromImport`, `closeSubscreen`
+- [`src/renderer/store/useAppStore.ts`](../../src/renderer/store/useAppStore.ts) — `start*`, `importRunFromClipboard`, `closeSubscreen`
 
 ---
 

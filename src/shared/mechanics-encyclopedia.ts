@@ -499,7 +499,7 @@ export const GAME_MODE_CODEX: GameModeCodexEntry[] = [
     {
         id: 'puzzle',
         title: 'Puzzle',
-        description: 'Fixed handcrafted boards from the built-in puzzle set; optional JSON import for local playtests.'
+        description: 'Fixed handcrafted boards from the built-in puzzle set; puzzle JSON menu import is not enabled in this build.'
     },
     {
         id: 'gauntlet',

@@ -70,6 +70,25 @@ describe('isValidPuzzleImportTileSet', () => {
         expect(isValidPuzzleImportTileSet(tiles)).toBe(false);
     });
 
+    it.each([
+        ['symbol', { symbol: '   ' }],
+        ['label', { label: '' }],
+        ['state', { state: 'matched' }],
+        ['extra metadata', { tileHazardKind: 'mirror_decoy' }]
+    ])('rejects invalid initial tile %s', (_field, override) => {
+        const tiles = minimalValidTiles.map((tile, index) =>
+            index === 0 ? { ...tile, ...override } : tile
+        );
+
+        expect(isValidPuzzleImportTileSet(tiles)).toBe(false);
+        expect(validatePuzzleImportPayload({
+            title: 'Invalid tile',
+            goal: 'clear_all',
+            difficulty: 'starter',
+            tiles
+        }).ok).toBe(false);
+    });
+
     it('rejects non-finite atomicVariant', () => {
         const tiles = [
             { id: 'a1', pairKey: 'p1', symbol: 'A', label: 'a', state: 'hidden' as const, atomicVariant: Number.NaN },

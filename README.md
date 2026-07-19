@@ -85,7 +85,7 @@ This v1 desktop build is intentionally narrow on platform, but exposes several *
 - **Classic run** (internal mode: endless): procedural floors, relic offers, escalating pair counts
 - **Daily challenge**: shared UTC seed with a rotated daily mutator
 - **Gauntlet**: run-wide countdown (**5 / 10 / 15** minute presets from the main menu)
-- **Puzzle**: fixed handcrafted boards from the built-in set; optional **Import puzzle JSON** for local playtests
+- **Puzzle**: fixed handcrafted boards from the built-in set; authored payload validation exists, but puzzle JSON menu import is not wired
 - **Meditation**: calmer pacing / longer memorize windows
 - **Featured runs** from the menu include practice, scholar contract, pin vow, wild/joker, and puzzle shortcuts
 
