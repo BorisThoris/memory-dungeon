@@ -58,4 +58,35 @@ describe('useViewportSize', () => {
 
         expect(result.current).toEqual({ width: 820, height: 540 });
     });
+
+    it('removes the resize listener from the viewport object that owns it', () => {
+        const subscribedViewport = {
+            addEventListener: vi.fn(),
+            height: 700,
+            removeEventListener: vi.fn(),
+            width: 1000
+        };
+        const replacementViewport = {
+            addEventListener: vi.fn(),
+            height: 600,
+            removeEventListener: vi.fn(),
+            width: 900
+        };
+        Object.defineProperty(window, 'visualViewport', {
+            configurable: true,
+            value: subscribedViewport
+        });
+        const { unmount } = renderHook(() => useViewportSize());
+        const resizeListener = subscribedViewport.addEventListener.mock.calls[0]?.[1];
+        expect(resizeListener).toEqual(expect.any(Function));
+
+        Object.defineProperty(window, 'visualViewport', {
+            configurable: true,
+            value: replacementViewport
+        });
+        unmount();
+
+        expect(subscribedViewport.removeEventListener).toHaveBeenCalledWith('resize', resizeListener);
+        expect(replacementViewport.removeEventListener).not.toHaveBeenCalled();
+    });
 });

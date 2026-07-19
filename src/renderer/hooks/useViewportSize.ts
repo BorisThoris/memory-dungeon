@@ -23,6 +23,7 @@ export const useViewportSize = (): ViewportSize => {
 
     useEffect(() => {
         let frameId = 0;
+        const visualViewport = window.visualViewport;
 
         const commitViewportSize = (): void => {
             frameId = 0;
@@ -43,7 +44,7 @@ export const useViewportSize = (): ViewportSize => {
 
         window.addEventListener('resize', scheduleViewportSizeUpdate);
         window.addEventListener('orientationchange', scheduleViewportSizeUpdate);
-        window.visualViewport?.addEventListener('resize', scheduleViewportSizeUpdate);
+        visualViewport?.addEventListener('resize', scheduleViewportSizeUpdate);
 
         return () => {
             if (frameId !== 0) {
@@ -51,7 +52,7 @@ export const useViewportSize = (): ViewportSize => {
             }
             window.removeEventListener('resize', scheduleViewportSizeUpdate);
             window.removeEventListener('orientationchange', scheduleViewportSizeUpdate);
-            window.visualViewport?.removeEventListener('resize', scheduleViewportSizeUpdate);
+            visualViewport?.removeEventListener('resize', scheduleViewportSizeUpdate);
         };
     }, []);
 
