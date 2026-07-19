@@ -153,8 +153,20 @@ const finiteClampedNumber = (
         ? Math.min(range.max, Math.max(range.min, value))
         : fallback;
 
-const stringOrNull = (value: unknown, fallback: string | null): string | null =>
-    typeof value === 'string' ? value : value === null ? null : fallback;
+const normalizeDailyDateKeyUtc = (value: unknown): string | null => {
+    if (typeof value !== 'string') {
+        return null;
+    }
+    const compact = /^\d{8}$/.test(value) ? value : /^\d{4}-\d{2}-\d{2}$/.test(value) ? value.replaceAll('-', '') : null;
+    if (!compact) {
+        return null;
+    }
+    const year = Number(compact.slice(0, 4));
+    const month = Number(compact.slice(4, 6)) - 1;
+    const day = Number(compact.slice(6, 8));
+    const date = new Date(Date.UTC(year, month, day));
+    return date.getUTCFullYear() === year && date.getUTCMonth() === month && date.getUTCDate() === day ? compact : null;
+};
 
 const normalizeAchievements = (input: unknown): AchievementState => {
     const out = createAchievementState();
@@ -284,6 +296,7 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
     const runRulesVersion =
         source.runRulesVersion === undefined ? undefined : finiteNonNegativeInteger(source.runRulesVersion, Number.NaN);
     const gameMode = isGameMode(source.gameMode) ? source.gameMode : undefined;
+    const dailyDateKeyUtc = normalizeDailyDateKeyUtc(source.dailyDateKeyUtc);
     const activeMutators = Array.isArray(source.activeMutators)
         ? [...new Set(source.activeMutators.filter(isMutatorId))]
         : undefined;
@@ -318,7 +331,7 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         ...(Number.isFinite(runSeed) ? { runSeed } : {}),
         ...(Number.isFinite(runRulesVersion) ? { runRulesVersion } : {}),
         ...(gameMode ? { gameMode } : {}),
-        ...(typeof source.dailyDateKeyUtc === 'string' ? { dailyDateKeyUtc: source.dailyDateKeyUtc } : {}),
+        ...(dailyDateKeyUtc ? { dailyDateKeyUtc } : {}),
         ...(activeMutators ? { activeMutators } : {}),
         ...(relicIds ? { relicIds } : {}),
         ...(Number.isFinite(payoffPickupClaimed) ? { payoffPickupClaimed } : {}),
@@ -579,7 +592,7 @@ export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): Sa
         playerStats: {
             bestFloorNoPowers: finiteNonNegativeInteger(psIn.bestFloorNoPowers, playerStatsDefaults.bestFloorNoPowers),
             dailiesCompleted: dailiesCount,
-            lastDailyDateKeyUtc: stringOrNull(psIn.lastDailyDateKeyUtc, playerStatsDefaults.lastDailyDateKeyUtc),
+            lastDailyDateKeyUtc: normalizeDailyDateKeyUtc(psIn.lastDailyDateKeyUtc),
             dailyStreakCosmetic: finiteNonNegativeInteger(
                 psIn.dailyStreakCosmetic,
                 playerStatsDefaults.dailyStreakCosmetic

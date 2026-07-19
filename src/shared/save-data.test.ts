@@ -275,6 +275,45 @@ describe('save normalization', () => {
         expect(Object.keys(missedDay.playerStats ?? {})).not.toContain('streakFreezeCount');
     });
 
+    it('canonicalizes legacy daily date keys and rejects impossible persisted dates', () => {
+        expect(
+            normalizeSaveData({
+                playerStats: { ...createDefaultSaveData().playerStats!, lastDailyDateKeyUtc: '2026-04-30' },
+                lastRunSummary: {
+                    totalScore: 1,
+                    bestScore: 1,
+                    levelsCleared: 1,
+                    highestLevel: 1,
+                    achievementsEnabled: true,
+                    unlockedAchievements: [],
+                    bestStreak: 1,
+                    perfectClears: 0,
+                    dailyDateKeyUtc: '2026-04-30'
+                }
+            })
+        ).toMatchObject({
+            playerStats: { lastDailyDateKeyUtc: '20260430' },
+            lastRunSummary: { dailyDateKeyUtc: '20260430' }
+        });
+
+        const invalid = normalizeSaveData({
+            playerStats: { ...createDefaultSaveData().playerStats!, lastDailyDateKeyUtc: '20260231' },
+            lastRunSummary: {
+                totalScore: 1,
+                bestScore: 1,
+                levelsCleared: 1,
+                highestLevel: 1,
+                achievementsEnabled: true,
+                unlockedAchievements: [],
+                bestStreak: 1,
+                perfectClears: 0,
+                dailyDateKeyUtc: 'not-a-date'
+            }
+        });
+        expect(invalid.playerStats?.lastDailyDateKeyUtc).toBeNull();
+        expect(invalid.lastRunSummary?.dailyDateKeyUtc).toBeUndefined();
+    });
+
     it('table-driven legacy / partial fixtures normalize without undefined leaks (REF-065)', () => {
         const rows: { name: string; input: Partial<SaveData> | null | undefined }[] = [
             { name: 'null', input: null },
