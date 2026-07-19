@@ -18,6 +18,11 @@ interface CssTiltWrite {
     y: string;
 }
 
+const clearTiltCssVars = (node: HTMLElement | null): void => {
+    node?.style.removeProperty('--tilt-x');
+    node?.style.removeProperty('--tilt-y');
+};
+
 export const shouldUseGyroForPointerCapabilities = (
     { coarse, fine }: PointerCapabilities,
     mouseDriving: boolean
@@ -196,19 +201,13 @@ export const usePlatformTiltField = ({
     }, []);
 
     useEffect(() => {
-        const surfaceNode = surfaceRef.current;
-
         if (!enabled || motionParallaxSuppressed || suspended) {
             tiltRef.current = zeroTilt();
             sourceRef.current = 'none';
             lastFrameRef.current = null;
             lastCssTiltRef.current = null;
             lastCssNodeRef.current = null;
-
-            if (surfaceNode) {
-                surfaceNode.style.removeProperty('--tilt-x');
-                surfaceNode.style.removeProperty('--tilt-y');
-            }
+            clearTiltCssVars(surfaceRef.current);
 
             return;
         }
@@ -240,6 +239,13 @@ export const usePlatformTiltField = ({
             const sx = (tiltRef.current.x * strength).toFixed(4);
             const sy = (tiltRef.current.y * strength).toFixed(4);
             const node = surfaceRef.current;
+            const previousNode = lastCssNodeRef.current;
+
+            if (previousNode && previousNode !== node) {
+                clearTiltCssVars(previousNode);
+                lastCssTiltRef.current = null;
+                lastCssNodeRef.current = null;
+            }
 
             const nextCssTilt = { x: sx, y: sy };
             if (node && shouldCommitTiltCssVars(lastCssTiltRef.current, lastCssNodeRef.current, nextCssTilt, node)) {
@@ -256,14 +262,10 @@ export const usePlatformTiltField = ({
 
         return () => {
             window.cancelAnimationFrame(frameId);
+            clearTiltCssVars(lastCssNodeRef.current);
             lastFrameRef.current = null;
             lastCssTiltRef.current = null;
             lastCssNodeRef.current = null;
-
-            if (surfaceNode) {
-                surfaceNode.style.removeProperty('--tilt-x');
-                surfaceNode.style.removeProperty('--tilt-y');
-            }
         };
     }, [enabled, motionParallaxSuppressed, strength, surfaceRef, gyroTiltRef, suspended]);
 
