@@ -4,7 +4,7 @@
  * OVR-010 / A11Y-004 — parity contract: mount captures prior `document.activeElement`, moves initial focus to the
  * first tabbable inside the dialog surface on the next animation frame, registers `handleTabFocusTrapEvent` on
  * `document` in capture phase for Tab / Shift+Tab, and restores the prior element on unmount via
- * `modalFocusReturnStack` (LIFO for nested modals). Call sites differ only in container ref
+ * `modalFocusReturnStack` (entry-owned restoration for nested modals). Call sites differ only in container ref
  * (`OverlayModal` dialog node vs `SettingsScreen` modal shell).
  */
 

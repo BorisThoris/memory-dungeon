@@ -1,14 +1,39 @@
 import { MODAL_PROGRAMMATIC_FOCUS_OPTIONS } from './focusables';
 
-const stack: Array<HTMLElement | null> = [];
+interface ModalFocusSnapshot {
+    restoreTarget: HTMLElement | null;
+}
+
+const stack: ModalFocusSnapshot[] = [];
 
 /**
- * Call on modal open (after mount). Pairs with {@link popModalFocusSnapshot} on unmount.
- * Nested modals stack in LIFO order so each close restores the prior opener.
+ * Capture focus when a modal opens. The returned release function owns this exact snapshot, so
+ * an out-of-order or repeated teardown cannot consume another modal's restore target.
  */
-export const pushModalFocusSnapshot = (): void => {
-    const el = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    stack.push(el);
+export const acquireModalFocusSnapshot = (): (() => void) => {
+    const snapshot: ModalFocusSnapshot = {
+        restoreTarget: document.activeElement instanceof HTMLElement ? document.activeElement : null
+    };
+    stack.push(snapshot);
+    let released = false;
+
+    return () => {
+        if (released) {
+            return;
+        }
+        released = true;
+
+        const index = stack.indexOf(snapshot);
+        if (index < 0) {
+            return;
+        }
+        const wasTopSnapshot = index === stack.length - 1;
+        stack.splice(index, 1);
+
+        if (wasTopSnapshot && isSafeRestoreTarget(snapshot.restoreTarget)) {
+            snapshot.restoreTarget.focus(MODAL_PROGRAMMATIC_FOCUS_OPTIONS);
+        }
+    };
 };
 
 const isSafeRestoreTarget = (el: HTMLElement | null): el is HTMLElement => {
@@ -19,12 +44,4 @@ const isSafeRestoreTarget = (el: HTMLElement | null): el is HTMLElement => {
         return false;
     }
     return document.contains(el);
-};
-
-/** Restore focus from the last {@link pushModalFocusSnapshot} (typically in modal useEffect cleanup). */
-export const popModalFocusSnapshot = (): void => {
-    const el = stack.pop() ?? null;
-    if (isSafeRestoreTarget(el)) {
-        el.focus(MODAL_PROGRAMMATIC_FOCUS_OPTIONS);
-    }
 };

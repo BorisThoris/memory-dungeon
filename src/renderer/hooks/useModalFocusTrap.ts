@@ -1,6 +1,6 @@
 import { useEffect, type RefObject } from 'react';
 import { focusFirstTabbableOrContainer, handleTabFocusTrapEvent } from '../a11y/focusables';
-import { popModalFocusSnapshot, pushModalFocusSnapshot } from '../a11y/modalFocusReturnStack';
+import { acquireModalFocusSnapshot } from '../a11y/modalFocusReturnStack';
 import { useLatestRef } from './useLatestRef';
 
 interface ModalFocusTrapOptions {
@@ -24,16 +24,34 @@ export const useModalFocusTrap = ({
             return;
         }
 
-        pushModalFocusSnapshot();
-        const cleanupActivation = onActivateRef.current?.();
-        const frame = window.requestAnimationFrame(() => {
-            focusFirstTabbableOrContainer(containerRef.current);
-        });
+        const releaseFocusSnapshot = acquireModalFocusSnapshot();
+        let cleanupActivation: (() => void) | void = undefined;
+        let frame: number;
+
+        try {
+            cleanupActivation = onActivateRef.current?.();
+            frame = window.requestAnimationFrame(() => {
+                focusFirstTabbableOrContainer(containerRef.current);
+            });
+        } catch (error) {
+            try {
+                cleanupActivation?.();
+            } finally {
+                releaseFocusSnapshot();
+            }
+            throw error;
+        }
 
         return () => {
-            window.cancelAnimationFrame(frame);
-            cleanupActivation?.();
-            popModalFocusSnapshot();
+            try {
+                window.cancelAnimationFrame(frame);
+            } finally {
+                try {
+                    cleanupActivation?.();
+                } finally {
+                    releaseFocusSnapshot();
+                }
+            }
         };
     }, [active, containerRef, onActivateRef]);
 

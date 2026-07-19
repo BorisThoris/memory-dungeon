@@ -1,7 +1,19 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { useRef } from 'react';
+import { Component, useRef, type ReactNode } from 'react';
 import { useModalFocusTrap } from './useModalFocusTrap';
+
+class TestErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+    state = { failed: false };
+
+    static getDerivedStateFromError(): { failed: boolean } {
+        return { failed: true };
+    }
+
+    render(): ReactNode {
+        return this.state.failed ? <div role="alert">Modal failed</div> : this.props.children;
+    }
+}
 
 const FocusTrapHarness = ({
     onActivate,
@@ -84,5 +96,105 @@ describe('useModalFocusTrap', () => {
         unmount();
 
         expect(cleanup).toHaveBeenCalledTimes(1);
+    });
+
+    it('restores focus when activation setup throws', () => {
+        render(
+            <>
+                <button type="button">Opener</button>
+                <button type="button">Activation target</button>
+            </>
+        );
+        const opener = screen.getByRole('button', { name: 'Opener' });
+        const activationTarget = screen.getByRole('button', { name: 'Activation target' });
+        opener.focus();
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+        try {
+            render(
+                <TestErrorBoundary>
+                    <FocusTrapHarness
+                        onActivate={() => {
+                            activationTarget.focus();
+                            throw new Error('activation failed');
+                        }}
+                    />
+                </TestErrorBoundary>
+            );
+        } finally {
+            consoleError.mockRestore();
+        }
+
+        expect(screen.getByRole('alert')).toHaveTextContent('Modal failed');
+        expect(document.activeElement).toBe(opener);
+    });
+
+    it('rolls back activation when initial focus scheduling throws', () => {
+        render(
+            <>
+                <button type="button">Opener</button>
+                <button type="button">Scheduling target</button>
+            </>
+        );
+        const opener = screen.getByRole('button', { name: 'Opener' });
+        const schedulingTarget = screen.getByRole('button', { name: 'Scheduling target' });
+        const cleanupActivation = vi.fn();
+        opener.focus();
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => {
+            schedulingTarget.focus();
+            throw new Error('focus scheduling failed');
+        });
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+        try {
+            render(
+                <TestErrorBoundary>
+                    <FocusTrapHarness onActivate={() => cleanupActivation} />
+                </TestErrorBoundary>
+            );
+        } finally {
+            consoleError.mockRestore();
+        }
+
+        expect(screen.getByRole('alert')).toHaveTextContent('Modal failed');
+        expect(cleanupActivation).toHaveBeenCalledTimes(1);
+        expect(document.activeElement).toBe(opener);
+    });
+
+    it('restores focus when activation cleanup throws', async () => {
+        render(
+            <>
+                <button type="button">Opener</button>
+                <button type="button">Cleanup target</button>
+            </>
+        );
+        const opener = screen.getByRole('button', { name: 'Opener' });
+        const cleanupTarget = screen.getByRole('button', { name: 'Cleanup target' });
+        opener.focus();
+        const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        const modal = (
+            <TestErrorBoundary>
+                <FocusTrapHarness
+                    onActivate={() => () => {
+                        cleanupTarget.focus();
+                        throw new Error('activation cleanup failed');
+                    }}
+                />
+            </TestErrorBoundary>
+        );
+        const { rerender } = render(modal);
+
+        await waitFor(() => {
+            expect(document.activeElement).toBe(screen.getByRole('button', { name: 'First' }));
+        });
+
+        try {
+            rerender(<TestErrorBoundary>Modal closed</TestErrorBoundary>);
+        } finally {
+            consoleError.mockRestore();
+        }
+
+        expect(screen.getByRole('alert')).toHaveTextContent('Modal failed');
+        expect(document.activeElement).toBe(opener);
     });
 });
