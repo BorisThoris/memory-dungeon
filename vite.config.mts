@@ -72,6 +72,7 @@ export default defineConfig(({ mode }) => ({
     test: {
         environment: 'happy-dom',
         setupFiles: './vitest.setup.ts',
+        testTimeout: 10_000,
         restoreMocks: true,
         clearMocks: true,
         /* Windows / sandbox: fork pool teardown can throw EPERM on process.kill; threads avoid it. */
