@@ -53,6 +53,22 @@ describe('tileBoardSharedCardAssets', () => {
         expect(loadBackLayers).not.toHaveBeenCalled();
     });
 
+    it('normalizes a rejected front geometry load without starting the back load', async () => {
+        const loadBackLayers = vi.fn(async () => [fakeBackLayer('back-base')]);
+
+        await expect(
+            loadTileBoardSharedCardSvgAssets({
+                backUrl: 'back.svg',
+                frontUrl: 'front.svg',
+                loadBackLayers,
+                loadFrontGeometry: async () => {
+                    throw new Error('front parse failed');
+                }
+            })
+        ).resolves.toBeNull();
+        expect(loadBackLayers).not.toHaveBeenCalled();
+    });
+
     it('disposes front geometry when back layer loading fails', async () => {
         const frontGeometry = fakeGeometry();
 
@@ -61,6 +77,22 @@ describe('tileBoardSharedCardAssets', () => {
                 backUrl: 'back.svg',
                 frontUrl: 'front.svg',
                 loadBackLayers: async () => null,
+                loadFrontGeometry: async () => frontGeometry
+            })
+        ).resolves.toBeNull();
+        expect(frontGeometry.dispose).toHaveBeenCalledTimes(1);
+    });
+
+    it('disposes front geometry and normalizes a rejected back layer load', async () => {
+        const frontGeometry = fakeGeometry();
+
+        await expect(
+            loadTileBoardSharedCardSvgAssets({
+                backUrl: 'back.svg',
+                frontUrl: 'front.svg',
+                loadBackLayers: async () => {
+                    throw new Error('back parse failed');
+                },
                 loadFrontGeometry: async () => frontGeometry
             })
         ).resolves.toBeNull();
