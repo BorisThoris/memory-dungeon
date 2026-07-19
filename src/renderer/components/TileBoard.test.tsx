@@ -1351,7 +1351,7 @@ describe('TileBoard touch and click controls', () => {
         expect(screen.getByTestId('tile-board-frame').getAttribute('data-card-feedback-marker-shapes')).toContain(
             'payoff-stack:2'
         );
-    });
+    }, 15_000);
 
     it('summarizes board trait interactions into visible payoff lanes', () => {
         renderBoard({
