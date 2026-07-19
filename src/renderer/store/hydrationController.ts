@@ -28,15 +28,15 @@ export const createHydratedAppStatePatch = async ({
 }: CreateHydratedAppStatePatchInput): Promise<HydratedAppStatePatch> => {
     let saveReadFailed = false;
     const [rawSave, steamConnected] = await Promise.all([
-        desktop
-            .getSaveData()
+        Promise.resolve()
+            .then(() => desktop.getSaveData())
             .then(normalizeUnknownSaveData)
             .catch(() => {
                 saveReadFailed = true;
                 return createDefaultSaveData();
             }),
-        desktop
-            .isSteamConnected()
+        Promise.resolve()
+            .then(() => desktop.isSteamConnected())
             .then(normalizeUnknownSteamConnected)
             .catch(() => false)
     ]);
