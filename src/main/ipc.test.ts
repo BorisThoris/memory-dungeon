@@ -65,6 +65,24 @@ describe('registerIpcHandlers', () => {
         reportError.mockRestore();
     });
 
+    it('attempts Steam activation even when the achievement is already persisted locally', () => {
+        const persistence = {
+            unlockAchievement: vi.fn(() => createDefaultSaveData())
+        } as unknown as PersistenceService;
+        const unlockAchievement = vi.fn(() => ({ ok: true }) as const);
+
+        registerIpcHandlers(
+            () => null,
+            persistence,
+            { isConnected: () => true, unlockAchievement } satisfies SteamAdapter
+        );
+        const handler = electronMocks.handlers.get(IPC_CHANNELS.steamUnlockAchievement);
+
+        expect(handler?.({}, 'ACH_FIRST_CLEAR')).toEqual({ ok: true });
+        expect(persistence.unlockAchievement).toHaveBeenCalledWith('ACH_FIRST_CLEAR');
+        expect(unlockAchievement).toHaveBeenCalledWith('ACH_FIRST_CLEAR');
+    });
+
     it('registers every canonical and legacy desktop channel exactly once', () => {
         registerIpcHandlers(
             () => null,

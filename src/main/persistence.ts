@@ -74,6 +74,9 @@ export class PersistenceService {
 
     unlockAchievement(achievementId: AchievementId): SaveData {
         const saveData = this.getSaveData();
+        if (saveData.achievements[achievementId]) {
+            return saveData;
+        }
         const nextSave = normalizeSaveData({
             ...saveData,
             achievements: {

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDefaultSaveData } from '../../shared/save-data';
-import { persistSaveDataThenUnlockAchievements } from './achievementPersistence';
+import { persistSaveDataThenUnlockAchievements, syncPersistedAchievements } from './achievementPersistence';
 
 vi.mock('../desktop-client', () => ({
     desktopClient: {
@@ -34,6 +34,40 @@ describe('persistSaveDataThenUnlockAchievements (REF-036)', () => {
 
         expect(calls).toEqual(['save', 'unlock:ACH_FIRST_CLEAR', 'unlock:ACH_LEVEL_FIVE']);
         expect(failures).toEqual([]);
+    });
+
+    it('deduplicates repeated achievement ids before invoking the bridge', async () => {
+        await persistSaveDataThenUnlockAchievements(createDefaultSaveData(), [
+            'ACH_FIRST_CLEAR',
+            'ACH_FIRST_CLEAR',
+            'ACH_LEVEL_FIVE'
+        ]);
+
+        expect(desktopClient.unlockAchievement).toHaveBeenCalledTimes(2);
+        expect(desktopClient.unlockAchievement).toHaveBeenNthCalledWith(1, 'ACH_FIRST_CLEAR');
+        expect(desktopClient.unlockAchievement).toHaveBeenNthCalledWith(2, 'ACH_LEVEL_FIVE');
+    });
+
+    it('retries persisted local unlocks when Steam is connected', async () => {
+        const save = createDefaultSaveData();
+        save.achievements.ACH_FIRST_CLEAR = true;
+        save.achievements.ACH_SCORE_THOUSAND = true;
+
+        const { failures } = await syncPersistedAchievements(save, true);
+
+        expect(desktopClient.saveGame).not.toHaveBeenCalled();
+        expect(desktopClient.unlockAchievement).toHaveBeenCalledTimes(2);
+        expect(desktopClient.unlockAchievement).toHaveBeenNthCalledWith(1, 'ACH_FIRST_CLEAR');
+        expect(desktopClient.unlockAchievement).toHaveBeenNthCalledWith(2, 'ACH_SCORE_THOUSAND');
+        expect(failures).toEqual([]);
+    });
+
+    it('does not invoke achievement sync while Steam is offline', async () => {
+        const save = createDefaultSaveData();
+        save.achievements.ACH_FIRST_CLEAR = true;
+
+        await expect(syncPersistedAchievements(save, false)).resolves.toEqual({ failures: [] });
+        expect(desktopClient.unlockAchievement).not.toHaveBeenCalled();
     });
 
     it('normalizes malformed unlock IPC responses into structured failures', async () => {

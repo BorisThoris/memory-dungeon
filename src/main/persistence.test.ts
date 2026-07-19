@@ -133,4 +133,15 @@ describe('PersistenceService', () => {
             }
         });
     });
+
+    it('does not rewrite save data for an achievement already persisted locally', () => {
+        const saveData = createDefaultSaveData();
+        saveData.achievements.ACH_FIRST_CLEAR = true;
+        const repository = new MemorySaveRepository(saveData);
+        const write = vi.spyOn(repository, 'setSaveData');
+        const p = new PersistenceService(repository);
+
+        expect(p.unlockAchievement('ACH_FIRST_CLEAR')).toEqual(saveData);
+        expect(write).not.toHaveBeenCalled();
+    });
 });

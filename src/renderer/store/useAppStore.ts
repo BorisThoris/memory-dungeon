@@ -34,7 +34,11 @@ import {
 import { desktopClient } from '../desktop-client';
 import { createRunResolutionController } from './runResolutionController';
 import { createRunTimerController } from './runTimerController';
-import { persistSaveDataThenUnlockAchievements } from './achievementPersistence';
+import {
+    ACHIEVEMENT_SYNC_FAILURE_NOTICE,
+    persistSaveDataThenUnlockAchievements,
+    syncPersistedAchievements
+} from './achievementPersistence';
 import {
     persistSaveData,
     persistSaveSettings,
@@ -279,7 +283,15 @@ export const useAppStore = create<AppState>((set, get) => ({
 
         set({ hydrating: true });
 
-        set(await createHydratedAppStatePatch({ desktop: desktopClient, persistSaveData: persistSaveDataSafely }));
+        const patch = await createHydratedAppStatePatch({ desktop: desktopClient, persistSaveData: persistSaveDataSafely });
+        set(patch);
+        runPersistenceInBackground(() =>
+            syncPersistedAchievements(patch.saveData, patch.steamConnected).then(({ failures }) => {
+                if (failures.length > 0) {
+                    set({ achievementBridgeNotice: ACHIEVEMENT_SYNC_FAILURE_NOTICE });
+                }
+            })
+        );
     },
 
     startRun: () => {
