@@ -93,4 +93,23 @@ describe('REG-040 persistence health copy', () => {
         expect(onWriteFail).toHaveBeenCalledWith({ consecutive: 1, op: 'settings' });
         reportError.mockRestore();
     });
+
+    it('preserves the original write failure when the failure observer throws', async () => {
+        const writeError = new Error('disk unavailable');
+        const observerError = new Error('notice update failed');
+        const reportError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        registerPersistenceWriteFailureHandler(() => {
+            throw observerError;
+        });
+        vi.mocked(desktopClient.saveGame).mockRejectedValue(writeError);
+
+        await expect(persistSaveData(createDefaultSaveData())).rejects.toBe(writeError);
+        expect(getSaveHealthSnapshot()).toMatchObject({
+            status: 'transient_write_failed',
+            consecutiveFailures: 1,
+            operation: 'game'
+        });
+        expect(reportError).toHaveBeenCalledWith('[persist] write failure handler failed', observerError);
+        reportError.mockRestore();
+    });
 });

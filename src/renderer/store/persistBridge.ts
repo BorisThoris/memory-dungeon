@@ -24,6 +24,14 @@ export const registerPersistenceWriteFailureHandler = (fn: ((detail: WriteFailDe
     onWriteFail = fn;
 };
 
+const notifyWriteFailure = (detail: WriteFailDetail): void => {
+    try {
+        onWriteFail?.(detail);
+    } catch (error) {
+        console.error('[persist] write failure handler failed', error);
+    }
+};
+
 const SHORT_NOTICE =
     'Save write failed. Current progress remains in memory, but may not persist after closing until the next successful save.';
 const REPEATED_NOTICE =
@@ -70,7 +78,7 @@ export const persistSaveData = async (saveData: SaveData): Promise<SaveData> => 
         consecutiveWriteFailures += 1;
         lastFailedOperation = 'game';
         console.error('[persist] saveGame failed', error);
-        onWriteFail?.({
+        notifyWriteFailure({
             consecutive: consecutiveWriteFailures,
             op: 'game'
         });
@@ -87,7 +95,7 @@ export const persistSaveSettings = async (settings: Settings): Promise<Settings>
         consecutiveWriteFailures += 1;
         lastFailedOperation = 'settings';
         console.error('[persist] saveSettings failed', error);
-        onWriteFail?.({
+        notifyWriteFailure({
             consecutive: consecutiveWriteFailures,
             op: 'settings'
         });
