@@ -18,6 +18,7 @@ import type { IntroPlaybackState } from './components/startupIntroConfig';
 import { resolveStartupIntroAppContract } from './components/startupIntroContract';
 import { VIEWPORT_MOBILE_MAX, VIEWPORT_TABLET_MAX } from './breakpoints';
 import { useViewportSize } from './hooks/useViewportSize';
+import { useEffectiveReducedMotion } from './hooks/useEffectiveReducedMotion';
 import styles from './styles/App.module.css';
 import { buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
@@ -91,10 +92,11 @@ const App = () => {
         : width <= VIEWPORT_TABLET_MAX
           ? Math.min(settings.uiScale, 1.08)
           : Math.min(settings.uiScale, 1.15);
+    const reduceMotion = useEffectiveReducedMotion(settings.reduceMotion);
     const themeStyle = buildRendererThemeStyle(
         safeUiScale,
         isCompactViewport ? 'compact' : 'roomy',
-        settings.reduceMotion
+        reduceMotion
     );
     const activeView = hydrated ? view : 'boot';
     const [introPlayback, setIntroPlayback] = useState<Exclude<IntroPlaybackState, 'playing'>>('pending');
@@ -270,7 +272,7 @@ const App = () => {
         <div
             className={styles.app}
             data-ambient-grid={ambientGridState}
-            data-reduce-motion={settings.reduceMotion ? 'true' : 'false'}
+            data-reduce-motion={reduceMotion ? 'true' : 'false'}
             data-density={isCompactViewport ? 'compact' : 'roomy'}
             data-view={visualView}
             data-viewport={
@@ -310,7 +312,7 @@ const App = () => {
                                 {showMainMenu ? (
                                     <MainMenu
                                         saveData={saveData}
-                                        reduceMotion={settings.reduceMotion}
+                                        reduceMotion={reduceMotion}
                                         suppressMenuBackgroundFallback={introOverlayVisible}
                                         onDismissHowToPlay={dismissHowToPlay}
                                         onOpenSettings={() => openSettings('menu')}
@@ -331,7 +333,7 @@ const App = () => {
                                 <StartupIntro
                                     graphicsQuality={hydrated ? settings.graphicsQuality : undefined}
                                     onComplete={() => setIntroPlayback('done')}
-                                    reduceMotion={settings.reduceMotion}
+                                    reduceMotion={reduceMotion}
                                 />,
                                 document.body
                             )}

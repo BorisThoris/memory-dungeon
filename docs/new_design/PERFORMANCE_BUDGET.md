@@ -25,6 +25,10 @@ Targets are **guidelines** for mid-range laptops and phones; actual headroom dep
 | FX-005 match particles | Cap count; off when reduce motion |
 | FX-015 bloom | CSS board-stage glow; tier-gated (**TBF-003**) |
 
+## Reduced motion (PERF-004)
+
+Renderer motion is suppressed when either the persisted **Reduce motion** setting or the OS/browser `prefers-reduced-motion: reduce` preference is active. Both inputs are suppressive: a saved `false` does not override an OS accessibility preference.
+
 ## WebGL resilience (PERF-005)
 
 `TileBoard` listens for `webglcontextlost` / `webglcontextrestored` on the R3F canvas. Loss keeps the board shell and canvas mounted with a recovery alert until restore (or user reload), so the browser can deliver `webglcontextrestored`.

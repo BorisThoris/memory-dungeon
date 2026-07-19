@@ -29,6 +29,7 @@ import {
     getRunPayoffSignals
 } from '../copy/runPayoffSignals';
 import { useViewportSize } from '../hooks/useViewportSize';
+import { useEffectiveReducedMotion } from '../hooks/useEffectiveReducedMotion';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
@@ -228,9 +229,10 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
             settings: state.settings
         }))
     );
+    const reduceMotion = useEffectiveReducedMotion(settings.reduceMotion);
     const { tiltRef: fieldTiltRef } = usePlatformTiltField({
         enabled: true,
-        reduceMotion: settings.reduceMotion,
+        reduceMotion,
         surfaceRef: shellRef,
         strength: 1
     });
@@ -324,7 +326,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 fieldTiltRef={fieldTiltRef}
                 graphicsQuality={settings.graphicsQuality}
                 height={height}
-                reduceMotion={settings.reduceMotion}
+                reduceMotion={reduceMotion}
                 width={width}
             />
             <div

@@ -36,7 +36,7 @@ import { getMemoryRecallFeedback } from '../../shared/memory-recall-feedback';
 import { getDungeonMapPresentation, getDungeonRouteDecisionPresentation, getRepairedSelectedDungeonNode } from '../../shared/run-map';
 import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { UI_ART } from '../assets/ui';
@@ -51,6 +51,7 @@ import {
 } from '../../shared/floor-mutator-schedule';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import { useDistractionChannelTick } from '../hooks/useDistractionChannelTick';
+import { useEffectiveReducedMotion } from '../hooks/useEffectiveReducedMotion';
 import { useLatestRef } from '../hooks/useLatestRef';
 import {
     detectClaimedFindableKind,
@@ -118,19 +119,6 @@ import { useGameScreenPowerTileHints } from './useGameScreenPowerTileHints';
 import { useGameScreenTraitRouteTargets } from './useGameScreenTraitRouteTargets';
 import type { MatchScorePop, MatchScorePopPayoffLaneMapEntry, MismatchScorePop } from '../store/matchScorePop';
 
-const subscribeOsPrefersReducedMotion = (onStoreChange: () => void): (() => void) => {
-    if (typeof window === 'undefined') {
-        return () => {};
-    }
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    mq.addEventListener('change', onStoreChange);
-    return () => mq.removeEventListener('change', onStoreChange);
-};
-
-const getOsPrefersReducedMotionSnapshot = (): boolean =>
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const getOsPrefersReducedMotionServerSnapshot = (): boolean => false;
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import {
     getChainRewardForecastCues,
@@ -2465,12 +2453,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         }))
     );
     const settingsReduceMotion = useAppStore((state) => state.settings.reduceMotion);
-    const osPrefersReducedMotion = useSyncExternalStore(
-        subscribeOsPrefersReducedMotion,
-        getOsPrefersReducedMotionSnapshot,
-        getOsPrefersReducedMotionServerSnapshot
-    );
-    const boardFloaterReducedMotion = settingsReduceMotion || osPrefersReducedMotion;
+    const reduceMotion = useEffectiveReducedMotion(settingsReduceMotion);
 
     const { matchScorePop, mismatchScorePop, dismissMatchScorePop, dismissMismatchScorePop } = useAppStore(
         useShallow((state) => ({
@@ -2490,7 +2473,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   : null,
         [matchScorePop, mismatchScorePop]
     );
-    const boardFloaterDurationMs = matchScoreFloatDurationMs(boardFloaterReducedMotion, boardFloaterPayload);
+    const boardFloaterDurationMs = matchScoreFloatDurationMs(reduceMotion, boardFloaterPayload);
     const boardFloaterDetailLines = useMemo(() => {
         if (!boardFloaterPayload) {
             return [];
@@ -3055,7 +3038,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             if (ids.length === 0) {
                 return;
             }
-            const infoDuration = settingsReduceMotion ? 3500 : 5500;
+            const infoDuration = reduceMotion ? 3500 : 5500;
             const { showAchievement } = useNotificationStore.getState();
             for (const achievementId of ids) {
                 if (seenAchievementToastIdsRef.current.has(achievementId)) {
@@ -3092,7 +3075,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         run.lastLevelResult,
         run.relicOffer,
         run.status,
-        settingsReduceMotion,
+        reduceMotion,
         suppressStatusOverlays
     ]);
 
@@ -3117,7 +3100,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             const claimedKind = detectClaimedFindableKind(previousSnapshot.tiles, run.board.tiles);
             if (claimedKind != null) {
                 const { showInfo } = useNotificationStore.getState();
-                const infoDuration = settingsReduceMotion ? 2200 : 3200;
+                const infoDuration = reduceMotion ? 2200 : 3200;
                 showInfo(
                     getPickupStackToastText(
                         {
@@ -3145,7 +3128,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         run.lives,
         run.stats.comboShards,
         run.stats.currentStreak,
-        settingsReduceMotion
+        reduceMotion
     ]);
 
     /** Persist `powersFtueSeen` once the player leaves tutorial floors (pair markers no longer needed). */
@@ -3159,12 +3142,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const distractionHudOn =
         run.activeMutators.includes('distraction_channel') &&
         settingsDistractionChannelEnabled &&
-        !settingsReduceMotion &&
+        !reduceMotion &&
         run.status === 'playing';
     const distractionTick = useDistractionChannelTick(distractionHudOn);
     const { tiltRef: gameFieldTiltRef } = usePlatformTiltField({
         enabled: true,
-        reduceMotion: settingsReduceMotion,
+        reduceMotion,
         surfaceRef: shellRef,
         strength: 1
     });
@@ -3707,7 +3690,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         gambitThirdPickActive,
         gambitOpportunityFlippedIds:
             gambitThirdPickActive && run.board ? run.board.flippedTileIds : null,
-        reduceMotion: settingsReduceMotion,
+        reduceMotion,
         hazardTileTriggersThisFloor: run.hazardTileTriggersThisFloor,
         hazardShuffleSnaresThisFloor: run.hazardShuffleSnaresThisFloor,
         hazardCascadeCachesThisFloor: run.hazardCascadeCachesThisFloor,
@@ -3888,7 +3871,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardPresentationClass =
         settingsBoardPresentation === 'spaghetti'
             ? styles.boardStageSpaghetti
-            : settingsBoardPresentation === 'breathing' && !settingsReduceMotion
+            : settingsBoardPresentation === 'breathing' && !reduceMotion
               ? styles.boardStageBreathing
               : '';
     const destroyDisabled = run.destroyPairCharges < 1 && !destroyPairArmed;
@@ -3921,7 +3904,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 fieldTiltRef={gameFieldTiltRef}
                 graphicsQuality={settingsGraphicsQuality}
                 height={height}
-                reduceMotion={settingsReduceMotion}
+                reduceMotion={reduceMotion}
                 width={width}
             />
             <div
@@ -3961,7 +3944,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             gauntletRemainingMs={gauntletRemainingMs}
                             politeHudAnnouncement={politeHudAnnouncement}
                             politeHudAnnouncementPriority={politeHudAnnouncementPriority}
-                            reduceMotion={settingsReduceMotion}
+                            reduceMotion={reduceMotion}
                             run={run}
                         />
 
@@ -4262,7 +4245,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     cameraViewportMode ? undefined : DESKTOP_FULL_BLEED_TILE_BOARD_FRAME_STYLE
                                 }
                                 graphicsQuality={settingsGraphicsQuality}
-                                reduceMotion={settingsReduceMotion}
+                                reduceMotion={reduceMotion}
                                 runStatus={run.status}
                                 showTutorialPairMarkers={showTutorialPairMarkers}
                                 silhouetteDuringPlay={silhouetteDuringPlay}
@@ -4301,7 +4284,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         boardFloaterPayload.kind === 'match'
                                             ? styles.matchScoreFloater
                                             : styles.mismatchScoreFloater
-                                    } ${boardFloaterReducedMotion ? styles.matchScoreFloaterReduced : ''}`}
+                                    } ${reduceMotion ? styles.matchScoreFloaterReduced : ''}`}
                                     data-testid={
                                         boardFloaterPayload.kind === 'match'
                                             ? 'match-score-floater'
