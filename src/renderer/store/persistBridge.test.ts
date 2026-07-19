@@ -1,12 +1,32 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createDefaultSaveData } from '../../shared/save-data';
+
+vi.mock('../desktop-client', () => ({
+    desktopClient: {
+        saveGame: vi.fn(),
+        saveSettings: vi.fn()
+    }
+}));
+
 import {
     createSaveHealthSnapshot,
     getSaveHealthSnapshot,
+    persistSaveData,
+    persistSaveSettings,
     persistenceNoticeForConsecutiveFailures,
+    registerPersistenceWriteFailureHandler,
     saveHealthCopyForSnapshot
 } from './persistBridge';
+import { desktopClient } from '../desktop-client';
 
 describe('REG-040 persistence health copy', () => {
+    beforeEach(async () => {
+        const saveData = createDefaultSaveData();
+        vi.mocked(desktopClient.saveGame).mockImplementation(async (data) => data);
+        vi.mocked(desktopClient.saveSettings).mockImplementation(async (settings) => settings);
+        registerPersistenceWriteFailureHandler(null);
+        await persistSaveData(saveData);
+    });
     it('routes first and repeated failures to actionable save-health states', () => {
         const first = createSaveHealthSnapshot({ consecutive: 1, op: 'game' });
         expect(first).toEqual({
@@ -40,5 +60,37 @@ describe('REG-040 persistence health copy', () => {
             operation: null,
             recoveryActions: []
         });
+    });
+
+    it('treats malformed save acknowledgements as uncertain failed writes', async () => {
+        const onWriteFail = vi.fn();
+        const reportError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        registerPersistenceWriteFailureHandler(onWriteFail);
+        vi.mocked(desktopClient.saveGame).mockResolvedValue(['not', 'a', 'save']);
+
+        await expect(persistSaveData(createDefaultSaveData())).rejects.toThrow('recognized field');
+        expect(getSaveHealthSnapshot()).toMatchObject({
+            status: 'transient_write_failed',
+            consecutiveFailures: 1,
+            operation: 'game'
+        });
+        expect(onWriteFail).toHaveBeenCalledWith({ consecutive: 1, op: 'game' });
+        reportError.mockRestore();
+    });
+
+    it('treats malformed settings acknowledgements as uncertain failed writes', async () => {
+        const onWriteFail = vi.fn();
+        const reportError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        registerPersistenceWriteFailureHandler(onWriteFail);
+        vi.mocked(desktopClient.saveSettings).mockResolvedValue({ undocumentedSetting: true });
+
+        await expect(persistSaveSettings(createDefaultSaveData().settings)).rejects.toThrow('recognized field');
+        expect(getSaveHealthSnapshot()).toMatchObject({
+            status: 'transient_write_failed',
+            consecutiveFailures: 1,
+            operation: 'settings'
+        });
+        expect(onWriteFail).toHaveBeenCalledWith({ consecutive: 1, op: 'settings' });
+        reportError.mockRestore();
     });
 });

@@ -1,5 +1,5 @@
 import type { SaveData, Settings } from '../../shared/contracts';
-import { normalizeUnknownSaveData, normalizeUnknownSettings } from '../../shared/save-data';
+import { normalizeUnknownSaveDataOrThrow, normalizeUnknownSettingsOrThrow } from '../../shared/save-data';
 import { desktopClient } from '../desktop-client';
 
 let consecutiveWriteFailures = 0;
@@ -63,7 +63,7 @@ export const saveHealthCopyForSnapshot = (snapshot: SaveHealthSnapshot): string 
 
 export const persistSaveData = async (saveData: SaveData): Promise<SaveData> => {
     try {
-        const out = normalizeUnknownSaveData(await desktopClient.saveGame(saveData));
+        const out = normalizeUnknownSaveDataOrThrow(await desktopClient.saveGame(saveData));
         resetSaveHealth();
         return out;
     } catch (error) {
@@ -80,7 +80,7 @@ export const persistSaveData = async (saveData: SaveData): Promise<SaveData> => 
 
 export const persistSaveSettings = async (settings: Settings): Promise<Settings> => {
     try {
-        const out = normalizeUnknownSettings(await desktopClient.saveSettings(settings));
+        const out = normalizeUnknownSettingsOrThrow(await desktopClient.saveSettings(settings));
         resetSaveHealth();
         return out;
     } catch (error) {
