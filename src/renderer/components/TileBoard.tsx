@@ -105,6 +105,7 @@ import { getTraitRouteReadabilityBeatCount } from './tileBoardReadability';
 import { TileBoardErrorBoundary } from './tileBoardWebglBoundary';
 import { canUseWebGL } from './tileBoardWebglSupport';
 import { TileBoardPrestageOverlay } from './TileBoardPrestageOverlay';
+import { getTileBoardCanvasContextConfig } from './tileBoardCanvasContext';
 import { useTileBoardWebglContextRecovery } from './useTileBoardWebglContextRecovery';
 
 /** Minimum time the pre-board “gather / release” motif stays visible while GPU warm-up runs in parallel. */
@@ -3103,8 +3104,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     /** Cap DPR for GPU cost (PERF-001 + internal adaptive motion tier). */
     const dpr = Math.min(deviceDpr, adaptive.dprCap);
     const resolvedBoardAa = adaptive.resolvedAa;
-    /** Native framebuffer antialias; the legacy `smaa` setting falls back here now that post-FX is disabled. */
-    const glAntialias = resolvedBoardAa !== 'off';
+    const canvasContext = getTileBoardCanvasContextConfig(resolvedBoardAa, webglCanvasRemountKey);
     /** Avoid forcing discrete/high-power GPU contexts unless the player explicitly chose high quality. */
     const glPowerPreference: WebGLPowerPreference = graphicsQuality === 'high' ? 'high-performance' : 'default';
     const boardWorldWidth = useMemo(
@@ -4194,10 +4194,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     aria-hidden
                                     className={styles.canvas}
                                     dpr={dpr}
-                                    key={`tile-board-${webglCanvasRemountKey}-${resolvedBoardAa}`}
+                                    key={canvasContext.key}
                                     gl={{
                                         alpha: true,
-                                        antialias: glAntialias,
+                                        antialias: canvasContext.antialias,
                                         powerPreference: glPowerPreference,
                                         premultipliedAlpha: false
                                     }}

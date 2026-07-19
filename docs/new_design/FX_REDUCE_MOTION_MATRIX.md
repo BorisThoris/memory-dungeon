@@ -9,7 +9,7 @@ Runtime **`settings.reduceMotion`** is mirrored on the app root as **`data-reduc
 | Effect / system | `reduceMotion: false` | `reduceMotion: true` | Notes |
 |-----------------|----------------------|----------------------|--------|
 | **Board screen-space AA** | Default **`auto`**: native framebuffer AA (`smaa` saved value falls back here while post-FX is disabled) | Default **`auto`**: native framebuffer MSAA | Decoupled via **`settings.boardScreenSpaceAA`** (`auto` / `smaa` / `msaa` / `off`) in Video settings (`TileBoard.tsx`, PERF-002). |
-| **TileBoard `Canvas` remount key** | Changes with resolved AA mode (`tile-board-aa-*`) and context-recovery revision, not motion alone | Same | |
+| **TileBoard `Canvas` remount key** | Changes only when native framebuffer AA turns on/off or after context recovery; equivalent `smaa` / `msaa` transitions keep the context mounted | Same | Semantic AA changes that map to the same native context no longer dispose the full scene (PERF-008). |
 | **Viewport pan/zoom easing** | Damped (`TileBoardScene` `useFrame`) | Instant snap to target | `reduceMotion` prop |
 | **Shuffle FLIP + motion budget** | Animated | Immediate apply | `TileBoard` `runShuffleAnimation` |
 | **Platform tilt field** | Can drive `--tilt-*` on frame | Disabled | `usePlatformTiltField` |
