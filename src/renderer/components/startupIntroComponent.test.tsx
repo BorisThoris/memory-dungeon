@@ -127,6 +127,28 @@ describe('StartupIntro', () => {
         expect(nextOnComplete).toHaveBeenCalledTimes(1);
     });
 
+    it('preserves preload and total runtime when reduced motion changes mid-intro', async () => {
+        const onComplete = vi.fn();
+        const rendered = renderIntro(<StartupIntro onComplete={onComplete} reduceMotion={false} />);
+
+        await flushIntroPreload();
+        act(() => {
+            vi.advanceTimersByTime(1000);
+        });
+
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <StartupIntro onComplete={onComplete} reduceMotion />
+            </PlatformTiltProvider>
+        );
+        expect(mockPreloadStartupCriticalAssets).toHaveBeenCalledTimes(1);
+
+        act(() => {
+            vi.advanceTimersByTime(3200);
+        });
+        expect(onComplete).toHaveBeenCalledTimes(1);
+    });
+
     it('uses the shortened reduced-motion runtime and supports keyboard skip', async () => {
         const onComplete = vi.fn();
 

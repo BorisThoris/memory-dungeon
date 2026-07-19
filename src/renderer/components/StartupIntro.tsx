@@ -545,7 +545,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     const exitStartedRef = useRef(false);
     const assetsReadyRef = useRef(false);
     const skipRequestedRef = useRef(false);
-    const introStartMsRef = useRef(0);
+    const introStartMsRef = useRef<number | null>(null);
     const timeGateTimeoutRef = useRef<number | null>(null);
     const manualExitTimeoutRef = useRef<number | null>(null);
     const targetFootprint = sceneFrameSize;
@@ -562,6 +562,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     );
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
     const completionValuesRef = useLatestRef({ onComplete, uiGain });
+    const introTimingValuesRef = useLatestRef({ autoExitDelay, exitDurationMs });
     const completeIntro = useCallback(() => {
         if (completedRef.current) {
             return;
@@ -587,10 +588,11 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
             window.clearTimeout(manualExitTimeoutRef.current);
         }
         setPhase('exit');
+        const currentExitDurationMs = introTimingValuesRef.current.exitDurationMs;
         manualExitTimeoutRef.current = window.setTimeout(() => {
             completeIntro();
-        }, exitDurationMs);
-    }, [completeIntro, exitDurationMs]);
+        }, currentExitDurationMs);
+    }, [completeIntro, introTimingValuesRef]);
 
     const tryBeginExitWhenReady = useCallback(() => {
         if (completedRef.current || exitStartedRef.current) {
@@ -599,11 +601,13 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
         if (!assetsReadyRef.current) {
             return;
         }
-        const elapsed = performance.now() - introStartMsRef.current;
-        if (skipRequestedRef.current || elapsed >= autoExitDelay) {
+        const startMs = introStartMsRef.current ?? performance.now();
+        introStartMsRef.current = startMs;
+        const elapsed = performance.now() - startMs;
+        if (skipRequestedRef.current || elapsed >= introTimingValuesRef.current.autoExitDelay) {
             beginExit();
         }
-    }, [autoExitDelay, beginExit]);
+    }, [beginExit, introTimingValuesRef]);
 
     const requestSkip = useCallback(() => {
         skipRequestedRef.current = true;
@@ -683,10 +687,13 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     }, [enterDurationMs, phase]);
 
     useEffect(() => {
-        introStartMsRef.current = performance.now();
+        const now = performance.now();
+        const startMs = introStartMsRef.current ?? now;
+        introStartMsRef.current = startMs;
+        const remainingMs = Math.max(0, autoExitDelay - (now - startMs));
         timeGateTimeoutRef.current = window.setTimeout(() => {
             tryBeginExitWhenReady();
-        }, autoExitDelay);
+        }, remainingMs);
 
         return () => {
             if (timeGateTimeoutRef.current !== null) {
