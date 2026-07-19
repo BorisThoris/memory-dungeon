@@ -7,8 +7,29 @@ import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 const FOCUSABLE = 'button:not([disabled]):not([data-toolbar-popover])';
 
+interface PausedToolbarState {
+    preferredButton: HTMLButtonElement | null;
+}
+
+/** While >0, toolbars are removed from the tab order (e.g. modal focus trap). */
+let toolbarRovingPauseDepth = 0;
+let pausedToolbarStates: Map<HTMLElement, PausedToolbarState> | null = null;
+
 export const getToolbarButtons = (root: HTMLElement): HTMLButtonElement[] =>
     Array.from(root.querySelectorAll<HTMLButtonElement>(FOCUSABLE));
+
+const resolvePreferredButton = (
+    buttons: HTMLButtonElement[],
+    active?: HTMLElement | null
+): HTMLButtonElement | undefined =>
+    active && buttons.includes(active as HTMLButtonElement) ? (active as HTMLButtonElement) : buttons[0];
+
+const applyToolbarTabIndices = (buttons: HTMLButtonElement[], active?: HTMLElement | null): void => {
+    const preferred = resolvePreferredButton(buttons, active);
+    buttons.forEach((button) => {
+        button.tabIndex = button === preferred ? 0 : -1;
+    });
+};
 
 /** Set tabindex so only `active` (or first) is in tab order. */
 export const syncToolbarTabIndices = (root: HTMLElement | null, active?: HTMLElement | null): void => {
@@ -16,62 +37,64 @@ export const syncToolbarTabIndices = (root: HTMLElement | null, active?: HTMLEle
         return;
     }
     const buttons = getToolbarButtons(root);
-    if (buttons.length === 0) {
+    if (toolbarRovingPauseDepth > 0) {
+        pausedToolbarStates ??= new Map();
+        const priorPreferredButton = pausedToolbarStates.get(root)?.preferredButton;
+        pausedToolbarStates.set(root, {
+            preferredButton: resolvePreferredButton(
+                buttons,
+                active === undefined ? priorPreferredButton : active
+            ) ?? null
+        });
+        buttons.forEach((button) => {
+            button.tabIndex = -1;
+        });
         return;
     }
-    const preferred =
-        active && buttons.includes(active as HTMLButtonElement) ? (active as HTMLButtonElement) : buttons[0];
-    buttons.forEach((b) => {
-        b.tabIndex = b === preferred ? 0 : -1;
-    });
+    applyToolbarTabIndices(buttons, active);
 };
 
 export const syncVerticalToolbarTabIndices = (root: HTMLElement | null, active?: HTMLElement | null): void => {
     syncToolbarTabIndices(root, active);
 };
 
-/** While >0, vertical toolbars are removed from the tab order (e.g. modal focus trap). */
-let verticalToolbarRovingPauseDepth = 0;
-let pausedToolbarSnapshots: Map<HTMLElement, { buttons: HTMLButtonElement[]; tabIndices: number[] }> | null =
-    null;
-
 /**
  * Pause WAI-ARIA toolbar roving for every `[role="toolbar"]` in the document so Tab does not reach
- * toolbar buttons behind a modal. Call {@link popVerticalToolbarRovingPause} on modal unmount.
- * Nested modals: push/pop must balance.
+ * toolbar buttons behind a modal. The returned release function is idempotent for nested teardown.
  */
-export const pushVerticalToolbarRovingPause = (): void => {
-    if (verticalToolbarRovingPauseDepth === 0) {
+export const acquireToolbarRovingPause = (): (() => void) => {
+    if (toolbarRovingPauseDepth === 0) {
         const toolbars = Array.from(document.querySelectorAll<HTMLElement>('[role="toolbar"]'));
-        pausedToolbarSnapshots = new Map();
+        pausedToolbarStates = new Map();
         for (const root of toolbars) {
             const buttons = getToolbarButtons(root);
-            pausedToolbarSnapshots.set(root, {
-                buttons,
-                tabIndices: buttons.map((b) => b.tabIndex)
+            pausedToolbarStates.set(root, {
+                preferredButton: buttons.find((button) => button.tabIndex === 0) ?? buttons[0] ?? null
             });
-            buttons.forEach((b) => {
-                b.tabIndex = -1;
+            buttons.forEach((button) => {
+                button.tabIndex = -1;
             });
         }
     }
-    verticalToolbarRovingPauseDepth += 1;
-};
+    toolbarRovingPauseDepth += 1;
+    let released = false;
 
-export const popVerticalToolbarRovingPause = (): void => {
-    verticalToolbarRovingPauseDepth = Math.max(0, verticalToolbarRovingPauseDepth - 1);
-    if (verticalToolbarRovingPauseDepth !== 0 || !pausedToolbarSnapshots) {
-        return;
-    }
-    for (const [root, { buttons, tabIndices }] of pausedToolbarSnapshots) {
-        buttons.forEach((b, i) => {
-            b.tabIndex = tabIndices[i] ?? -1;
-        });
-        if (root.isConnected) {
-            syncToolbarTabIndices(root);
+    return () => {
+        if (released) {
+            return;
         }
-    }
-    pausedToolbarSnapshots = null;
+        released = true;
+        toolbarRovingPauseDepth = Math.max(0, toolbarRovingPauseDepth - 1);
+        if (toolbarRovingPauseDepth !== 0 || !pausedToolbarStates) {
+            return;
+        }
+
+        const states = pausedToolbarStates;
+        pausedToolbarStates = null;
+        for (const [root, { preferredButton }] of states) {
+            applyToolbarTabIndices(getToolbarButtons(root), preferredButton);
+        }
+    };
 };
 
 export const handleVerticalToolbarKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void => {

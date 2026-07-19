@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, type ReactNode } from 'react';
-import { popVerticalToolbarRovingPause, pushVerticalToolbarRovingPause } from '../a11y/toolbarRoving';
+import { acquireToolbarRovingPause } from '../a11y/toolbarRoving';
 import { acquireOverlayModalBodyState } from '../a11y/overlayModalBodyState';
 import { getOverlayDecisionPolicyRow } from '../../shared/overlay-decision-policy';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
@@ -165,10 +165,7 @@ const OverlayModal = ({
 
     useModalFocusTrap({
         containerRef: modalRef,
-        onActivate: () => {
-            pushVerticalToolbarRovingPause();
-            return popVerticalToolbarRovingPause;
-        },
+        onActivate: acquireToolbarRovingPause,
         onDocumentKeyDown: (event) => {
             if (
                 onEscape &&

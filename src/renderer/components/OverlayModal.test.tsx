@@ -3,8 +3,35 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import OverlayModal from './OverlayModal';
 import { getOverlayDecisionPolicyRows } from '../../shared/overlay-decision-policy';
+import { syncToolbarTabIndices } from '../a11y/toolbarRoving';
 
 describe('OverlayModal (REF-061)', () => {
+    it('keeps underlying toolbar resyncs out of the tab order until close', () => {
+        const renderTree = (showModal: boolean) => (
+            <>
+                <div aria-label="Game controls" role="toolbar">
+                    <button type="button">Inventory</button>
+                    <button type="button">Settings</button>
+                </div>
+                {showModal ? <OverlayModal actions={[]} title="Paused" /> : null}
+            </>
+        );
+        const { rerender } = render(renderTree(true));
+        const toolbar = screen.getByRole('toolbar', { name: 'Game controls' });
+        const inventory = screen.getByRole('button', { name: 'Inventory' });
+        const settings = screen.getByRole('button', { name: 'Settings' });
+
+        syncToolbarTabIndices(toolbar, settings);
+
+        expect(inventory).toHaveAttribute('tabindex', '-1');
+        expect(settings).toHaveAttribute('tabindex', '-1');
+
+        rerender(renderTree(false));
+
+        expect(inventory).toHaveAttribute('tabindex', '-1');
+        expect(settings).toHaveAttribute('tabindex', '0');
+    });
+
     it('keeps the global modal-open state until the last nested overlay closes', () => {
         const { rerender, unmount } = render(
             <>
