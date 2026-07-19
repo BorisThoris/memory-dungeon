@@ -7,26 +7,20 @@ const getBrowserStorage = (): Storage | null => {
     if (typeof window === 'undefined') {
         return null;
     }
-    try {
-        return window.localStorage ?? null;
-    } catch (error) {
-        console.warn('[desktop-client] localStorage unavailable; using in-memory defaults', error);
-        return null;
-    }
+    return window.localStorage ?? null;
 };
 
 const readLocalSave = (): SaveData => {
-    const storage = getBrowserStorage();
-    if (!storage) {
-        return createDefaultSaveData();
-    }
-
     let rawValue: string | null = null;
     try {
+        const storage = getBrowserStorage();
+        if (!storage) {
+            throw new Error('Browser storage is unavailable.');
+        }
         rawValue = storage.getItem(STORAGE_KEY);
     } catch (error) {
-        console.warn('[desktop-client] localStorage read unavailable; using in-memory defaults', error);
-        return createDefaultSaveData();
+        console.error('[desktop-client] localStorage read unavailable', error);
+        throw error;
     }
 
     if (!rawValue) {
@@ -46,9 +40,10 @@ const writeLocalSave = (saveData: SaveData): SaveData => {
 
     try {
         const storage = getBrowserStorage();
-        if (storage) {
-            storage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+        if (!storage) {
+            throw new Error('Browser storage is unavailable.');
         }
+        storage.setItem(STORAGE_KEY, JSON.stringify(normalized));
     } catch (error) {
         console.error('[desktop-client] localStorage write failed', error);
         throw error;

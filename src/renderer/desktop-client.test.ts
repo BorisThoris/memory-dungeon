@@ -26,4 +26,26 @@ describe('browser desktop client persistence', () => {
         expect(committed.settings).toMatchObject({ displayMode: 'fullscreen', reduceMotion: true });
         await expect(desktopClient.getSaveData()).resolves.toEqual(committed);
     });
+
+    it('rejects unavailable storage reads instead of returning a disposable default profile', async () => {
+        const reportError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        vi.spyOn(window.localStorage, 'getItem').mockImplementation(() => {
+            throw new Error('storage access denied');
+        });
+        const { desktopClient } = await import('./desktop-client');
+
+        await expect(desktopClient.getSaveData()).rejects.toThrow('storage access denied');
+        expect(reportError).toHaveBeenCalledWith('[desktop-client] localStorage read unavailable', expect.any(Error));
+    });
+
+    it('rejects unavailable storage writes instead of acknowledging an in-memory result', async () => {
+        const reportError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+        vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
+            throw new Error('storage quota unavailable');
+        });
+        const { desktopClient } = await import('./desktop-client');
+
+        await expect(desktopClient.saveGame(createDefaultSaveData())).rejects.toThrow('storage quota unavailable');
+        expect(reportError).toHaveBeenCalledWith('[desktop-client] localStorage write failed', expect.any(Error));
+    });
 });
