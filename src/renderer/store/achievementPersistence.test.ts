@@ -59,4 +59,32 @@ describe('persistSaveDataThenUnlockAchievements (REF-036)', () => {
         );
         warn.mockRestore();
     });
+
+    it('records a rejected unlock invoke and continues syncing later achievements', async () => {
+        const calls: string[] = [];
+        const bridgeError = new Error('IPC unavailable');
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+        vi.mocked(desktopClient.unlockAchievement).mockImplementation(async (id) => {
+            calls.push(id);
+            if (id === 'ACH_FIRST_CLEAR') {
+                throw bridgeError;
+            }
+            return { ok: true };
+        });
+
+        const { failures } = await persistSaveDataThenUnlockAchievements(createDefaultSaveData(), [
+            'ACH_FIRST_CLEAR',
+            'ACH_LEVEL_FIVE'
+        ]);
+
+        expect(calls).toEqual(['ACH_FIRST_CLEAR', 'ACH_LEVEL_FIVE']);
+        expect(failures).toEqual([
+            {
+                id: 'ACH_FIRST_CLEAR',
+                result: { ok: false, reason: 'steam_rejected', detail: 'bridge_error' }
+            }
+        ]);
+        expect(warn).toHaveBeenCalledWith('[achievements] Steam bridge invoke failed', 'ACH_FIRST_CLEAR');
+        warn.mockRestore();
+    });
 });

@@ -14,7 +14,13 @@ export const persistSaveDataThenUnlockAchievements = async (
     await persistSaveData(saveData);
     const failures: { id: AchievementId; result: AchievementUnlockResult }[] = [];
     for (const achievementId of achievementIds) {
-        const result = normalizeUnknownAchievementUnlockResult(await desktopClient.unlockAchievement(achievementId));
+        let result: AchievementUnlockResult;
+        try {
+            result = normalizeUnknownAchievementUnlockResult(await desktopClient.unlockAchievement(achievementId));
+        } catch {
+            console.warn('[achievements] Steam bridge invoke failed', achievementId);
+            result = { ok: false, reason: 'steam_rejected', detail: 'bridge_error' };
+        }
         if (!result.ok) {
             failures.push({ id: achievementId, result });
             console.warn('[achievements] Steam bridge did not report success', achievementId, result);
