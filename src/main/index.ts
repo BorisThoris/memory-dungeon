@@ -4,6 +4,7 @@ import type { DisplayMode } from '../shared/contracts';
 import { registerIpcHandlers } from './ipc';
 import { PersistenceService } from './persistence';
 import { createSteamAdapter } from './steam';
+import { resolveStartupDisplayMode } from './startup-display-mode';
 
 /** Single BrowserWindow; getter supports IPC after macOS close + activate without re-registering handlers. */
 let mainWindow: BrowserWindow | null = null;
@@ -76,7 +77,7 @@ const createOrShowMainWindow = (): void => {
         return;
     }
 
-    const displayMode = persistence?.getSettings().displayMode ?? 'windowed';
+    const displayMode = persistence ? resolveStartupDisplayMode(persistence) : 'windowed';
     mainWindow = createMainWindow(displayMode);
 };
 
