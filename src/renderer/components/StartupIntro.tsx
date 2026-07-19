@@ -710,7 +710,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
 
     useEffect(() => {
         if (graphicsQuality) {
-            preloadCardRankOpentypeFont(graphicsQuality);
+            void preloadCardRankOpentypeFont(graphicsQuality);
         }
     }, [graphicsQuality]);
 
