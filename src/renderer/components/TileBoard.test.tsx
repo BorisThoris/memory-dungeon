@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { createRef, useState, type ReactElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BoardState, RewardPerkId, RunStatus } from '../../shared/contracts';
@@ -40,6 +40,7 @@ const renderBoard = (props: {
     debugPeekActive: boolean;
     interactive: boolean;
     mobileCameraMode?: boolean;
+    onMemorizeBoardReady?: (boardKey: string) => void;
     onTileSelect: (id: string) => void;
     previewActive: boolean;
     reduceMotion: boolean;
@@ -109,6 +110,7 @@ const board: BoardState = {
 
 describe('TileBoard touch and click controls', () => {
     afterEach(() => {
+        vi.useRealTimers();
         vi.unstubAllGlobals();
         vi.restoreAllMocks();
     });
@@ -364,6 +366,102 @@ describe('TileBoard touch and click controls', () => {
             },
             { timeout: 5000 }
         );
+    });
+
+    it('cancels active deal-in motion when reduced motion is enabled', async () => {
+        vi.useFakeTimers();
+        const rendered = renderBoard({
+            board,
+            debugPeekActive: false,
+            interactive: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false
+        });
+
+        await act(async () => {
+            await vi.advanceTimersByTimeAsync(400);
+        });
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-shuffle-animating', 'true');
+
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <TileBoard
+                    board={board}
+                    debugPeekActive={false}
+                    interactive
+                    mobileCameraMode={false}
+                    onTileSelect={vi.fn()}
+                    previewActive={false}
+                    reduceMotion
+                    viewportResetToken={0}
+                />
+            </PlatformTiltProvider>
+        );
+        await act(async () => {
+            await Promise.resolve();
+        });
+
+        const frame = screen.getByTestId('tile-board-frame');
+        expect(frame).toHaveAttribute('data-board-prestage', 'idle');
+        expect(frame).toHaveAttribute('data-shuffle-animating', 'false');
+    });
+
+    it('keeps a replacement board loading when the previous deal-in timeout expires', async () => {
+        vi.useFakeTimers();
+        const onMemorizeBoardReady = vi.fn();
+        const rendered = renderBoard({
+            board,
+            debugPeekActive: false,
+            interactive: true,
+            onMemorizeBoardReady,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false
+        });
+
+        await act(async () => {
+            await vi.advanceTimersByTimeAsync(800);
+        });
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-shuffle-animating', 'true');
+
+        const replacementBoard: BoardState = {
+            ...board,
+            level: 2,
+            tiles: board.tiles.map((tile) => ({ ...tile, id: `replacement-${tile.id}` }))
+        };
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <TileBoard
+                    board={replacementBoard}
+                    debugPeekActive={false}
+                    interactive
+                    mobileCameraMode={false}
+                    onMemorizeBoardReady={onMemorizeBoardReady}
+                    onTileSelect={vi.fn()}
+                    previewActive={false}
+                    reduceMotion={false}
+                    viewportResetToken={0}
+                />
+            </PlatformTiltProvider>
+        );
+        await act(async () => {
+            await Promise.resolve();
+        });
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-board-prestage', 'loading');
+
+        await act(async () => {
+            await vi.advanceTimersByTimeAsync(200);
+        });
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-board-prestage', 'loading');
+        expect(onMemorizeBoardReady).not.toHaveBeenCalled();
+
+        await act(async () => {
+            await vi.advanceTimersByTimeAsync(900);
+        });
+        expect(screen.getByTestId('tile-board-frame')).toHaveAttribute('data-board-prestage', 'idle');
+        expect(onMemorizeBoardReady).toHaveBeenCalledTimes(1);
+        expect(onMemorizeBoardReady).toHaveBeenCalledWith(expect.stringMatching(/^2\|2x2\|replacement-/));
     });
 
     it('skips pre-board loading overlay when reduced motion is enabled', () => {

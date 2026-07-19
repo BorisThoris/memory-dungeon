@@ -1001,6 +1001,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardAppRef = useRef<HTMLDivElement>(null);
     const shuffleClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const entranceClearTimeoutRef = useRef<number | null>(null);
+    const entranceMotionKeyRef = useRef<string | null>(null);
+    const entranceReadyFrameRef = useRef<number | null>(null);
     const [shuffleAnimating, setShuffleAnimating] = useState(false);
     const [shuffleMotionDeadlineMs, setShuffleMotionDeadlineMs] = useState(0);
     /** Mirrors FLIP motion budget for WebGL FX-013 staggered deal-Z (0 = inactive). */
@@ -1012,6 +1014,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [boardEntranceAnimating, setBoardEntranceAnimating] = useState(false);
     const [boardPreStage, setBoardPreStage] = useState<'dealIn' | 'idle' | 'loading'>('idle');
     const prestageRunIdRef = useRef(0);
+    const cancelBoardEntranceWork = useCallback((): void => {
+        prestageRunIdRef.current += 1;
+        if (entranceClearTimeoutRef.current !== null) {
+            window.clearTimeout(entranceClearTimeoutRef.current);
+            entranceClearTimeoutRef.current = null;
+        }
+        if (entranceReadyFrameRef.current !== null) {
+            window.cancelAnimationFrame(entranceReadyFrameRef.current);
+            entranceReadyFrameRef.current = null;
+        }
+        entranceMotionKeyRef.current = null;
+    }, []);
+    const resetBoardEntranceMotionState = useCallback((): void => {
+        setBoardEntranceMotionDeadlineMs(0);
+        setBoardEntranceMotionBudgetMs(0);
+        setBoardEntranceStaggerTileCount(0);
+        setBoardEntranceAnimating(false);
+        setBoardPreStage('idle');
+    }, []);
     const sceneHandleRef = useRef<TileBoardSceneHandle | null>(null);
     const stageRef = useRef<HTMLDivElement>(null);
     const hoverTiltRef = useRef<TileHoverTiltState>({ tileId: null, x: 0, y: 0 });
@@ -1242,21 +1263,46 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
     useEffect(() => {
         if (reduceMotion) {
+            cancelBoardEntranceWork();
+            const runId = prestageRunIdRef.current;
             prevBoardEntranceKeyRef.current = boardEntranceKey;
             queueMicrotask(() => {
-                setBoardPreStage('idle');
-                requestAnimationFrame(() => notifyMemorizeBoardReady(boardEntranceKey));
+                if (runId !== prestageRunIdRef.current) {
+                    return;
+                }
+                resetBoardEntranceMotionState();
+                entranceReadyFrameRef.current = window.requestAnimationFrame(() => {
+                    entranceReadyFrameRef.current = null;
+                    if (
+                        runId === prestageRunIdRef.current &&
+                        prevBoardEntranceKeyRef.current === boardEntranceKey
+                    ) {
+                        notifyMemorizeBoardReady(boardEntranceKey);
+                    }
+                });
             });
-            return;
+            return () => {
+                if (runId === prestageRunIdRef.current) {
+                    cancelBoardEntranceWork();
+                }
+            };
         }
         if (prevBoardEntranceKeyRef.current === boardEntranceKey) {
             notifyMemorizeBoardReady(boardEntranceKey);
             return;
         }
 
-        prestageRunIdRef.current += 1;
+        if (entranceMotionKeyRef.current === boardEntranceKey) {
+            return;
+        }
+
+        cancelBoardEntranceWork();
         const runId = prestageRunIdRef.current;
         queueMicrotask(() => {
+            if (runId !== prestageRunIdRef.current) {
+                return;
+            }
+            resetBoardEntranceMotionState();
             setBoardPreStage('loading');
         });
 
@@ -1265,27 +1311,32 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             const motionBudgetMs = computeBoardEntranceMotionBudgetMs(tileCountForBudget);
             const deadline = performance.now() + motionBudgetMs;
 
-            if (entranceClearTimeoutRef.current) {
-                clearTimeout(entranceClearTimeoutRef.current);
-                entranceClearTimeoutRef.current = null;
-            }
-
             setBoardEntranceMotionDeadlineMs(deadline);
             setBoardEntranceMotionBudgetMs(motionBudgetMs);
             setBoardEntranceStaggerTileCount(tileCountForBudget);
             setBoardEntranceAnimating(true);
             setBoardPreStage('dealIn');
 
-            entranceClearTimeoutRef.current = window.setTimeout(() => {
-                prevBoardEntranceKeyRef.current = boardEntranceKey;
-                setBoardEntranceMotionDeadlineMs(0);
-                setBoardEntranceMotionBudgetMs(0);
-                setBoardEntranceStaggerTileCount(0);
-                setBoardEntranceAnimating(false);
-                setBoardPreStage('idle');
+            entranceMotionKeyRef.current = boardEntranceKey;
+            const timeoutId = window.setTimeout(() => {
+                if (
+                    entranceClearTimeoutRef.current !== timeoutId ||
+                    entranceMotionKeyRef.current !== boardEntranceKey
+                ) {
+                    return;
+                }
                 entranceClearTimeoutRef.current = null;
-                requestAnimationFrame(() => notifyMemorizeBoardReady(boardEntranceKey));
+                entranceMotionKeyRef.current = null;
+                prevBoardEntranceKeyRef.current = boardEntranceKey;
+                resetBoardEntranceMotionState();
+                entranceReadyFrameRef.current = window.requestAnimationFrame(() => {
+                    entranceReadyFrameRef.current = null;
+                    if (prevBoardEntranceKeyRef.current === boardEntranceKey) {
+                        notifyMemorizeBoardReady(boardEntranceKey);
+                    }
+                });
             }, motionBudgetMs + 100);
+            entranceClearTimeoutRef.current = timeoutId;
         };
 
         void (async () => {
@@ -1314,17 +1365,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         })();
 
         return () => {
-            prestageRunIdRef.current += 1;
+            if (runId === prestageRunIdRef.current) {
+                prestageRunIdRef.current += 1;
+            }
         };
-    }, [board.tiles, boardEntranceKey, notifyMemorizeBoardReady, reduceMotion]);
+    }, [
+        board.tiles,
+        boardEntranceKey,
+        cancelBoardEntranceWork,
+        notifyMemorizeBoardReady,
+        reduceMotion,
+        resetBoardEntranceMotionState
+    ]);
 
     useEffect(
-        () => () => {
-            if (entranceClearTimeoutRef.current) {
-                clearTimeout(entranceClearTimeoutRef.current);
-            }
-        },
-        []
+        () => () => cancelBoardEntranceWork(),
+        [cancelBoardEntranceWork]
     );
 
     /**
@@ -3024,16 +3080,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             sceneHandleRef.current?.getTileClientRectById(tileId) ?? null,
         runShuffleAnimation: (applyShuffle: () => void) => {
             const g = shuffleSfxGain;
-            prestageRunIdRef.current += 1;
-            setBoardPreStage('idle');
-            if (entranceClearTimeoutRef.current) {
-                clearTimeout(entranceClearTimeoutRef.current);
-                entranceClearTimeoutRef.current = null;
-            }
-            setBoardEntranceMotionDeadlineMs(0);
-            setBoardEntranceMotionBudgetMs(0);
-            setBoardEntranceStaggerTileCount(0);
-            setBoardEntranceAnimating(false);
+            cancelBoardEntranceWork();
+            resetBoardEntranceMotionState();
 
             if (reduceMotion) {
                 if (shuffleClearTimeoutRef.current) {
@@ -3078,7 +3126,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 applyShuffle();
             });
         }
-    }), [board.columns, board.rows, board.tiles, reduceMotion, shuffleSfxGain]);
+    }), [
+        board.columns,
+        board.rows,
+        board.tiles,
+        cancelBoardEntranceWork,
+        reduceMotion,
+        resetBoardEntranceMotionState,
+        shuffleSfxGain
+    ]);
 
     useEffect(
         () => () => {
