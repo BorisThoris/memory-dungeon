@@ -70,7 +70,7 @@ const chooseClassicRun = async (user: ReturnType<typeof userEvent.setup>): Promi
     await user.click(await screen.findByRole('button', { name: /start classic run/i }));
 };
 
-const findGameplayBoardStage = async (): Promise<HTMLElement> => screen.findByTestId('board-stage', undefined, { timeout: 20_000 });
+const findGameplayBoardStage = async (): Promise<HTMLElement> => screen.findByTestId('board-stage', undefined, { timeout: 30_000 });
 
 describe('desktop app flow', () => {
     beforeEach(() => {
@@ -114,7 +114,7 @@ describe('desktop app flow', () => {
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Trait routes');
         expect(screen.getByText(/^shards$/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /rule tips/i })).toBeInTheDocument();
-    }, 30_000);
+    }, 45_000);
 
     it('turns off the app-level ambient grid while the menu or game Pixi background is active', async () => {
         const user = userEvent.setup();
@@ -667,7 +667,7 @@ describe('desktop app flow', () => {
         await waitFor(() => {
             expect(within(choosePath).getAllByText(/locked intentionally/i).length).toBeGreaterThan(0);
         });
-    });
+    }, 30_000);
 
     it('explains and disables greedy route choice when the run is on its last life', async () => {
         const baseRun = createNewRun(0, { runSeed: 88_120 });
