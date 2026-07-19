@@ -41,6 +41,11 @@ interface GameplayMusicParams {
     suppressed?: boolean;
 }
 
+interface GameplayMusicPlaybackController {
+    requestPlay: () => void;
+    suspend: () => void;
+}
+
 type AdaptiveMusicLayer = 'menu_calm' | 'run_focus' | 'run_pressure' | 'run_release' | 'silent';
 
 interface AdaptiveMusicInput {
@@ -141,6 +146,9 @@ export const getAdaptiveMusicState = ({
 export function useGameplayMusic({ active, track, masterVolume, musicVolume, suppressed = false }: GameplayMusicParams): void {
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const audioUnavailableRef = useRef(false);
+    const playbackControllerRef = useRef<GameplayMusicPlaybackController | null>(null);
+    const playbackRequestedRef = useRef(false);
+    playbackRequestedRef.current = active && !suppressed;
 
     useEffect(() => {
         if (typeof Audio === 'undefined') return undefined;
@@ -157,8 +165,66 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
         el.preload = 'auto';
         audioRef.current = el;
 
+        let gestureRetryAttached = false;
+        let playAttempt = 0;
+
+        const detachGestureRetry = (): void => {
+            if (!gestureRetryAttached) {
+                return;
+            }
+            document.removeEventListener('pointerdown', onFirstPointer);
+            gestureRetryAttached = false;
+        };
+
+        const attachGestureRetry = (): void => {
+            if (gestureRetryAttached || audioUnavailableRef.current) {
+                return;
+            }
+            document.addEventListener('pointerdown', onFirstPointer);
+            gestureRetryAttached = true;
+        };
+
+        const suspend = (): void => {
+            playAttempt += 1;
+            detachGestureRetry();
+        };
+
+        const requestPlay = (): void => {
+            if (!playbackRequestedRef.current || audioUnavailableRef.current) {
+                return;
+            }
+            attachGestureRetry();
+            const attempt = ++playAttempt;
+            let result: Promise<void>;
+            try {
+                result = el.play();
+            } catch {
+                return;
+            }
+            void Promise.resolve(result).then(
+                () => {
+                    if (attempt === playAttempt) {
+                        detachGestureRetry();
+                    }
+                },
+                () => {
+                    if (attempt === playAttempt && playbackRequestedRef.current) {
+                        attachGestureRetry();
+                    }
+                }
+            );
+        };
+
+        const onFirstPointer = (): void => {
+            requestPlay();
+        };
+
+        const playbackController: GameplayMusicPlaybackController = { requestPlay, suspend };
+        playbackControllerRef.current = playbackController;
+
         const silenceUnavailableAudio = (): void => {
             audioUnavailableRef.current = true;
+            suspend();
             el.pause();
             el.removeAttribute('src');
             try {
@@ -167,18 +233,11 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
                 /* media element may already be detached */
             }
         };
-        const onFirstPointer = (): void => {
-            if (!audioUnavailableRef.current) {
-                void el.play().catch(() => {});
-            }
-            document.removeEventListener('pointerdown', onFirstPointer);
-        };
         el.addEventListener('error', silenceUnavailableAudio, { once: true });
-        document.addEventListener('pointerdown', onFirstPointer);
 
         return () => {
+            suspend();
             el.removeEventListener('error', silenceUnavailableAudio);
-            document.removeEventListener('pointerdown', onFirstPointer);
             el.pause();
             el.removeAttribute('src');
             try {
@@ -187,6 +246,9 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
                 /* media element may already be detached */
             }
             audioRef.current = null;
+            if (playbackControllerRef.current === playbackController) {
+                playbackControllerRef.current = null;
+            }
         };
     }, [track]);
 
@@ -197,10 +259,11 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
         el.volume = musicGainFromSettings(masterVolume, musicVolume);
 
         if (!active || suppressed || audioUnavailableRef.current) {
+            playbackControllerRef.current?.suspend();
             el.pause();
             return;
         }
 
-        void el.play().catch(() => {});
+        playbackControllerRef.current?.requestPlay();
     }, [active, track, masterVolume, musicVolume, suppressed]);
 }
