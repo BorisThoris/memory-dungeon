@@ -182,6 +182,29 @@ describe('MainMenuBackground', () => {
         expect(initSpy).toHaveBeenCalledWith(expect.objectContaining({ antialias: false }));
     });
 
+    it('caps high-DPR renderer resolution and reapplies the cap when quality changes', async () => {
+        vi.spyOn(window, 'devicePixelRatio', 'get').mockReturnValue(4);
+        const { rerender } = render(
+            <PlatformTiltProvider>
+                <MenuBackgroundHarness graphicsQuality="low" height={800} reduceMotion={false} width={1280} />
+            </PlatformTiltProvider>
+        );
+
+        await waitFor(() => {
+            expect(applicationInstances[0]?.renderer.resolution).toBe(1.25);
+        });
+
+        rerender(
+            <PlatformTiltProvider>
+                <MenuBackgroundHarness graphicsQuality="high" height={800} reduceMotion={false} width={1280} />
+            </PlatformTiltProvider>
+        );
+
+        await waitFor(() => {
+            expect(applicationInstances[0]?.renderer.resolution).toBe(2.5);
+        });
+    });
+
     it('rebuilds the animated scene when graphics quality changes without waiting for resize', async () => {
         const { rerender } = render(
             <PlatformTiltProvider>

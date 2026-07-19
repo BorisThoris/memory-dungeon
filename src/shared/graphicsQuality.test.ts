@@ -22,8 +22,12 @@ describe('graphicsQuality caps', () => {
         expect(getBoardDprCap('high', true)).toBeGreaterThan(0);
     });
 
-    it('getMenuPixiResolutionCap is positive', () => {
-        expect(getMenuPixiResolutionCap('medium')).toBeGreaterThan(0);
+    it('caps menu Pixi resolution by graphics tier', () => {
+        expect([
+            getMenuPixiResolutionCap('low'),
+            getMenuPixiResolutionCap('medium'),
+            getMenuPixiResolutionCap('high')
+        ]).toEqual([1.25, 2, 2.5]);
     });
 
     it('getMenuAtmosphereParticleCount scales animated menu work by preset', () => {
