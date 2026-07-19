@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
     auditGameplayInteractionGraph,
     gameplayInteractionGraph,
+    gameplayInteractionGraphSchema,
     getGameplayInteractionEdgesForMechanic,
     validateGameplayInteractionGraph
 } from './gameplay-interaction-graph';
@@ -20,6 +21,28 @@ const TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
 ];
 
 describe('gameplay interaction graph', () => {
+    it('validates the imported JSON structure before graph logic trusts it', () => {
+        expect(gameplayInteractionGraphSchema.safeParse(gameplayInteractionGraph).success).toBe(true);
+        expect(
+            gameplayInteractionGraphSchema.safeParse({
+                ...gameplayInteractionGraph,
+                mechanics: [{ ...gameplayInteractionGraph.mechanics[0], reads: undefined }]
+            }).success
+        ).toBe(false);
+        expect(
+            gameplayInteractionGraphSchema.safeParse({
+                ...gameplayInteractionGraph,
+                edges: [{ ...gameplayInteractionGraph.edges[0], kind: 'advises' }]
+            }).success
+        ).toBe(false);
+        expect(
+            gameplayInteractionGraphSchema.safeParse({
+                ...gameplayInteractionGraph,
+                coverage: { ...gameplayInteractionGraph.coverage, undocumentedLane: [] }
+            }).success
+        ).toBe(false);
+    });
+
     it('keeps the executable graph connected and guarded', () => {
         expect(validateGameplayInteractionGraph()).toEqual([]);
     });
