@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { RunState } from '../../shared/contracts';
@@ -143,6 +143,83 @@ describe('REG-038 adaptive music state', () => {
 
 describe('useGameplayMusic', () => {
     type MusicTrack = 'menu' | 'run';
+
+    it('waits for page visibility before starting active music', async () => {
+        let visibilityState: DocumentVisibilityState = 'hidden';
+        vi.spyOn(document, 'visibilityState', 'get').mockImplementation(() => visibilityState);
+        installMockAudio();
+
+        renderHook(() =>
+            useGameplayMusic({
+                active: true,
+                track: 'menu',
+                masterVolume: 1,
+                musicVolume: 1
+            })
+        );
+        const audio = MockAudioElement.instances[0];
+
+        expect(audio?.play).not.toHaveBeenCalled();
+        expect(audio?.pause).toHaveBeenCalled();
+
+        visibilityState = 'visible';
+        act(() => document.dispatchEvent(new Event('visibilitychange')));
+
+        await waitFor(() => expect(audio?.play).toHaveBeenCalledTimes(1));
+    });
+
+    it('pauses and disarms gesture retry when the page becomes hidden', async () => {
+        let visibilityState: DocumentVisibilityState = 'visible';
+        vi.spyOn(document, 'visibilityState', 'get').mockImplementation(() => visibilityState);
+        installMockAudio();
+
+        const { rerender } = renderHook(
+            ({ active }) =>
+                useGameplayMusic({
+                    active,
+                    track: 'menu',
+                    masterVolume: 1,
+                    musicVolume: 1
+                }),
+            { initialProps: { active: false } }
+        );
+        const audio = MockAudioElement.instances[0];
+        audio?.play.mockRejectedValueOnce(new Error('autoplay blocked'));
+        rerender({ active: true });
+        await waitFor(() => expect(audio?.play).toHaveBeenCalledTimes(1));
+
+        visibilityState = 'hidden';
+        act(() => document.dispatchEvent(new Event('visibilitychange')));
+        document.dispatchEvent(new Event('pointerdown'));
+
+        expect(audio?.pause).toHaveBeenCalled();
+        expect(audio?.play).toHaveBeenCalledTimes(1);
+    });
+
+    it('pauses visible playback while hidden and resumes when visible again', async () => {
+        let visibilityState: DocumentVisibilityState = 'visible';
+        vi.spyOn(document, 'visibilityState', 'get').mockImplementation(() => visibilityState);
+        installMockAudio();
+
+        renderHook(() =>
+            useGameplayMusic({
+                active: true,
+                track: 'menu',
+                masterVolume: 1,
+                musicVolume: 1
+            })
+        );
+        const audio = MockAudioElement.instances[0];
+        await waitFor(() => expect(audio?.play).toHaveBeenCalledTimes(1));
+
+        visibilityState = 'hidden';
+        act(() => document.dispatchEvent(new Event('visibilitychange')));
+        expect(audio?.pause).toHaveBeenCalled();
+
+        visibilityState = 'visible';
+        act(() => document.dispatchEvent(new Event('visibilitychange')));
+        await waitFor(() => expect(audio?.play).toHaveBeenCalledTimes(2));
+    });
 
     it('does not start playback from a pointer while inactive or suppressed', () => {
         installMockAudio();

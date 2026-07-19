@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 
 import type { RunState, ViewState } from '../../shared/contracts';
 import { lifecycleStateFromSurface } from '../../shared/run-lifecycle-machine';
@@ -26,6 +26,17 @@ const resolveTrackUrl = (track: 'menu' | 'run'): string | undefined => {
 };
 
 const clamp01 = (v: number): number => Math.max(0, Math.min(1, v));
+
+const subscribeToPageVisibility = (onStoreChange: () => void): (() => void) => {
+    if (typeof document === 'undefined') {
+        return () => undefined;
+    }
+    document.addEventListener('visibilitychange', onStoreChange);
+    return () => document.removeEventListener('visibilitychange', onStoreChange);
+};
+
+const getPageVisibilitySnapshot = (): boolean =>
+    typeof document === 'undefined' || document.visibilityState === 'visible';
 
 /** Effective linear gain from settings (0-1 each), matching SFX stacking. */
 export const musicGainFromSettings = (masterVolume: number, musicVolume: number): number =>
@@ -148,7 +159,12 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
     const audioUnavailableRef = useRef(false);
     const playbackControllerRef = useRef<GameplayMusicPlaybackController | null>(null);
     const playbackRequestedRef = useRef(false);
-    playbackRequestedRef.current = active && !suppressed;
+    const pageVisible = useSyncExternalStore(
+        subscribeToPageVisibility,
+        getPageVisibilitySnapshot,
+        getPageVisibilitySnapshot
+    );
+    playbackRequestedRef.current = active && !suppressed && pageVisible;
 
     useEffect(() => {
         if (typeof Audio === 'undefined') return undefined;
@@ -258,12 +274,12 @@ export function useGameplayMusic({ active, track, masterVolume, musicVolume, sup
 
         el.volume = musicGainFromSettings(masterVolume, musicVolume);
 
-        if (!active || suppressed || audioUnavailableRef.current) {
+        if (!active || suppressed || !pageVisible || audioUnavailableRef.current) {
             playbackControllerRef.current?.suspend();
             el.pause();
             return;
         }
 
         playbackControllerRef.current?.requestPlay();
-    }, [active, track, masterVolume, musicVolume, suppressed]);
+    }, [active, track, masterVolume, musicVolume, pageVisible, suppressed]);
 }
