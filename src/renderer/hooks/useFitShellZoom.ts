@@ -91,7 +91,8 @@ export function useFitShellZoom({
             return;
         }
 
-        let raf = 0;
+        let outerRaf = 0;
+        let innerRaf = 0;
         let delayed = 0;
         let cancelled = false;
 
@@ -133,11 +134,26 @@ export function useFitShellZoom({
             });
         };
 
+        const cancelScheduledFrames = (): void => {
+            if (outerRaf !== 0) {
+                cancelAnimationFrame(outerRaf);
+                outerRaf = 0;
+            }
+            if (innerRaf !== 0) {
+                cancelAnimationFrame(innerRaf);
+                innerRaf = 0;
+            }
+        };
+
         /** Double rAF: run after layout + fonts/paint for stable box metrics. */
         const schedule = (): void => {
-            cancelAnimationFrame(raf);
-            raf = requestAnimationFrame(() => {
-                requestAnimationFrame(recompute);
+            cancelScheduledFrames();
+            outerRaf = requestAnimationFrame(() => {
+                outerRaf = 0;
+                innerRaf = requestAnimationFrame(() => {
+                    innerRaf = 0;
+                    recompute();
+                });
             });
         };
 
@@ -157,7 +173,7 @@ export function useFitShellZoom({
 
         return () => {
             cancelled = true;
-            cancelAnimationFrame(raf);
+            cancelScheduledFrames();
             window.clearTimeout(delayed);
             void fontsDone;
         };
