@@ -27,6 +27,26 @@ describe('isValidPuzzleImportTileSet', () => {
         expect(isValidPuzzleImportTileSet(tiles)).toBe(false);
     });
 
+    it.each([
+        ['duplicate', 'a1'],
+        ['trim-colliding', ' a1 ']
+    ])('rejects %s tile ids', (_case, duplicateId) => {
+        const tiles = minimalValidTiles.map((tile, index) =>
+            index === 1 ? { ...tile, id: duplicateId } : tile
+        );
+
+        expect(isValidPuzzleImportTileSet(tiles)).toBe(false);
+        expect(validatePuzzleImportPayload({
+            title: 'Duplicate ids',
+            goal: 'clear_all',
+            difficulty: 'starter',
+            tiles
+        })).toEqual({
+            ok: false,
+            errors: ['tiles must contain 4-64 tiles with unique ids and exactly two tiles per non-decoy pairKey']
+        });
+    });
+
     it('rejects too few tiles', () => {
         const tiles = [
             { id: 'a1', pairKey: 'p1', symbol: 'A', label: 'a', state: 'hidden' as const },
@@ -75,7 +95,7 @@ describe('isValidPuzzleImportTileSet', () => {
         });
         expect(validatePuzzleImportPayload({ title: 'Broken', goal: 'clear_all', difficulty: 'starter', tiles: [] })).toEqual({
             ok: false,
-            errors: ['tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey']
+            errors: ['tiles must contain 4-64 tiles with unique ids and exactly two tiles per non-decoy pairKey']
         });
     });
 
@@ -86,7 +106,7 @@ describe('isValidPuzzleImportTileSet', () => {
                 'title must be a string with at least 3 characters',
                 'goal must be one of clear_all, perfect_clear, flip_par',
                 'difficulty must be starter, standard, or advanced',
-                'tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey'
+                'tiles must contain 4-64 tiles with unique ids and exactly two tiles per non-decoy pairKey'
             ]
         });
         expect(validatePuzzleImportPayload('not a puzzle').ok).toBe(false);

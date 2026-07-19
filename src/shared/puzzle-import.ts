@@ -21,14 +21,21 @@ export const puzzleImportPayloadSchema = z.object({
     tiles: z.array(puzzleTileSchema).min(4).max(64)
 });
 
+const PUZZLE_TILE_VALIDATION_ERROR =
+    'tiles must contain 4-64 tiles with unique ids and exactly two tiles per non-decoy pairKey';
+
 /**
  * Runtime checks for hand-authored puzzle tile lists (builtins and tests):
  * count 4–64, required string fields (non-empty id/pairKey after trim), optional finite `atomicVariant`,
- * and exactly two tiles per non-decoy `pairKey`.
+ * unique normalized tile ids, and exactly two tiles per non-decoy `pairKey`.
  */
 export const isValidPuzzleImportTileSet = (tiles: unknown): tiles is Tile[] => {
     const parsed = z.array(puzzleTileSchema).min(4).max(64).safeParse(tiles);
     if (!parsed.success) {
+        return false;
+    }
+    const tileIds = parsed.data.map((tile) => tile.id);
+    if (new Set(tileIds).size !== tileIds.length) {
         return false;
     }
     const pairKeys = parsed.data.map((x) => x.pairKey).filter((k) => k !== DECOY_PAIR_KEY);
@@ -110,7 +117,7 @@ export const validatePuzzleImportPayload = (payload: unknown): PuzzleImportResul
                 'title must be a string with at least 3 characters',
                 'goal must be one of clear_all, perfect_clear, flip_par',
                 'difficulty must be starter, standard, or advanced',
-                'tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey'
+                PUZZLE_TILE_VALIDATION_ERROR
             ]
         };
     }
@@ -134,11 +141,11 @@ export const validatePuzzleImportPayload = (payload: unknown): PuzzleImportResul
         }
         if (issuePaths.has('tiles')) {
             hasTileSchemaIssue = true;
-            errors.push('tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey');
+            errors.push(PUZZLE_TILE_VALIDATION_ERROR);
         }
     }
-    if (!hasTileSchemaIssue && Array.isArray(payload.tiles) && !isValidPuzzleImportTileSet(payload.tiles as Tile[])) {
-        errors.push('tiles must contain 4-64 tiles with exactly two tiles per non-decoy pairKey');
+    if (!hasTileSchemaIssue && Array.isArray(payload.tiles) && !isValidPuzzleImportTileSet(payload.tiles)) {
+        errors.push(PUZZLE_TILE_VALIDATION_ERROR);
     }
     return { ok: errors.length === 0, errors };
 };
