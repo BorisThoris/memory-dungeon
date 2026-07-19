@@ -97,45 +97,32 @@ export const acquireToolbarRovingPause = (): (() => void) => {
     };
 };
 
-export const handleVerticalToolbarKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void => {
-    const root = event.currentTarget;
-    const buttons = getToolbarButtons(root);
-    if (buttons.length === 0) {
-        return;
-    }
-    const key = event.key;
-    if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') {
-        return;
-    }
-    const current = document.activeElement;
-    const idx = current instanceof HTMLButtonElement ? buttons.indexOf(current) : -1;
-    let next = idx;
-    if (key === 'Home') {
-        next = 0;
-    } else if (key === 'End') {
-        next = buttons.length - 1;
-    } else if (key === 'ArrowDown') {
-        next = idx < 0 ? 0 : Math.min(buttons.length - 1, idx + 1);
-    } else {
-        next = idx < 0 ? buttons.length - 1 : Math.max(0, idx - 1);
-    }
-    if (next === idx && idx >= 0) {
-        return;
-    }
-    event.preventDefault();
-    const target = buttons[next];
-    target?.focus();
-    syncVerticalToolbarTabIndices(root, target);
+interface ToolbarNavigationKeys {
+    next: 'ArrowDown' | 'ArrowRight';
+    previous: 'ArrowLeft' | 'ArrowUp';
+}
+
+const VERTICAL_NAVIGATION_KEYS: ToolbarNavigationKeys = {
+    next: 'ArrowDown',
+    previous: 'ArrowUp'
 };
 
-export const handleHorizontalToolbarKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void => {
+const HORIZONTAL_NAVIGATION_KEYS: ToolbarNavigationKeys = {
+    next: 'ArrowRight',
+    previous: 'ArrowLeft'
+};
+
+const handleToolbarKeyDown = (
+    event: ReactKeyboardEvent<HTMLElement>,
+    navigationKeys: ToolbarNavigationKeys
+): void => {
     const root = event.currentTarget;
     const buttons = getToolbarButtons(root);
     if (buttons.length === 0) {
         return;
     }
     const key = event.key;
-    if (key !== 'ArrowRight' && key !== 'ArrowLeft' && key !== 'Home' && key !== 'End') {
+    if (key !== navigationKeys.next && key !== navigationKeys.previous && key !== 'Home' && key !== 'End') {
         return;
     }
     const current = document.activeElement;
@@ -145,7 +132,7 @@ export const handleHorizontalToolbarKeyDown = (event: ReactKeyboardEvent<HTMLEle
         next = 0;
     } else if (key === 'End') {
         next = buttons.length - 1;
-    } else if (key === 'ArrowRight') {
+    } else if (key === navigationKeys.next) {
         next = idx < 0 ? 0 : Math.min(buttons.length - 1, idx + 1);
     } else {
         next = idx < 0 ? buttons.length - 1 : Math.max(0, idx - 1);
@@ -158,3 +145,9 @@ export const handleHorizontalToolbarKeyDown = (event: ReactKeyboardEvent<HTMLEle
     target?.focus();
     syncToolbarTabIndices(root, target);
 };
+
+export const handleVerticalToolbarKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void =>
+    handleToolbarKeyDown(event, VERTICAL_NAVIGATION_KEYS);
+
+export const handleHorizontalToolbarKeyDown = (event: ReactKeyboardEvent<HTMLElement>): void =>
+    handleToolbarKeyDown(event, HORIZONTAL_NAVIGATION_KEYS);
