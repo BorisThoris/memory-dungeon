@@ -52,6 +52,23 @@ describe('OverlayModal (REF-061)', () => {
         expect(document.body.dataset.overlayModalOpen).toBeUndefined();
     });
 
+    it('routes Escape only to the topmost nested overlay', async () => {
+        const user = userEvent.setup();
+        const onFirstEscape = vi.fn();
+        const onSecondEscape = vi.fn();
+        render(
+            <>
+                <OverlayModal actions={[]} onEscape={onFirstEscape} testId="first-modal" title="First modal" />
+                <OverlayModal actions={[]} onEscape={onSecondEscape} testId="second-modal" title="Second modal" />
+            </>
+        );
+
+        await user.keyboard('{Escape}');
+
+        expect(onFirstEscape).not.toHaveBeenCalled();
+        expect(onSecondEscape).toHaveBeenCalledTimes(1);
+    });
+
     it('Tab cycles only between modal actions while the dialog is open', async () => {
         const user = userEvent.setup();
         render(

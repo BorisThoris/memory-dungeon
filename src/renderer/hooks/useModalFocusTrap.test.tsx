@@ -16,9 +16,15 @@ class TestErrorBoundary extends Component<{ children: ReactNode }, { failed: boo
 }
 
 const FocusTrapHarness = ({
+    label = 'modal',
+    firstLabel = 'First',
+    secondLabel = 'Second',
     onActivate,
     onDocumentKeyDown
 }: {
+    label?: string;
+    firstLabel?: string;
+    secondLabel?: string;
     onActivate?: () => (() => void) | void;
     onDocumentKeyDown?: (event: KeyboardEvent) => boolean | void;
 }) => {
@@ -26,9 +32,9 @@ const FocusTrapHarness = ({
     useModalFocusTrap({ containerRef, onActivate, onDocumentKeyDown });
 
     return (
-        <section aria-label="modal" ref={containerRef} tabIndex={-1}>
-            <button type="button">First</button>
-            <button type="button">Second</button>
+        <section aria-label={label} ref={containerRef} tabIndex={-1}>
+            <button type="button">{firstLabel}</button>
+            <button type="button">{secondLabel}</button>
         </section>
     );
 };
@@ -84,6 +90,62 @@ describe('useModalFocusTrap', () => {
         expect(onDocumentKeyDown).toHaveBeenCalledTimes(1);
         expect(event.defaultPrevented).toBe(false);
         expect(document.activeElement).toBe(outside);
+    });
+
+    it('gives only the top nested trap document keyboard ownership', async () => {
+        const outerKeyDown = vi.fn();
+        const innerKeyDown = vi.fn();
+        render(
+            <>
+                <button type="button">Outside</button>
+                <FocusTrapHarness
+                    firstLabel="Outer first"
+                    label="outer modal"
+                    onDocumentKeyDown={outerKeyDown}
+                    secondLabel="Outer second"
+                />
+                <FocusTrapHarness
+                    firstLabel="Inner first"
+                    label="inner modal"
+                    onDocumentKeyDown={innerKeyDown}
+                    secondLabel="Inner second"
+                />
+            </>
+        );
+
+        await waitFor(() => {
+            expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Inner first' }));
+        });
+
+        screen.getByRole('button', { name: 'Outside' }).focus();
+        const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, key: 'Tab' });
+        document.dispatchEvent(event);
+
+        expect(outerKeyDown).not.toHaveBeenCalled();
+        expect(innerKeyDown).toHaveBeenCalledTimes(1);
+        expect(event.defaultPrevented).toBe(true);
+        expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Inner first' }));
+    });
+
+    it('ignores delayed initial focus work after a newer trap becomes topmost', () => {
+        const frames: FrameRequestCallback[] = [];
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+            frames.push(callback);
+            return frames.length;
+        });
+        render(
+            <>
+                <FocusTrapHarness firstLabel="Outer first" label="outer modal" secondLabel="Outer second" />
+                <FocusTrapHarness firstLabel="Inner first" label="inner modal" secondLabel="Inner second" />
+            </>
+        );
+        expect(frames).toHaveLength(2);
+
+        frames[1]!(0);
+        expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Inner first' }));
+
+        frames[0]!(0);
+        expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Inner first' }));
     });
 
     it('runs activation cleanup on unmount', () => {

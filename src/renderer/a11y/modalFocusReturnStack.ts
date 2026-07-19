@@ -4,20 +4,25 @@ interface ModalFocusSnapshot {
     restoreTarget: HTMLElement | null;
 }
 
+export interface ModalFocusSnapshotLease {
+    isTop: () => boolean;
+    release: () => void;
+}
+
 const stack: ModalFocusSnapshot[] = [];
 
 /**
- * Capture focus when a modal opens. The returned release function owns this exact snapshot, so
- * an out-of-order or repeated teardown cannot consume another modal's restore target.
+ * Capture focus when a modal opens. The returned lease owns this exact snapshot and reports whether
+ * it is the top active modal, so delayed focus and keyboard work cannot escape a nested dialog.
  */
-export const acquireModalFocusSnapshot = (): (() => void) => {
+export const acquireModalFocusSnapshot = (): ModalFocusSnapshotLease => {
     const snapshot: ModalFocusSnapshot = {
         restoreTarget: document.activeElement instanceof HTMLElement ? document.activeElement : null
     };
     stack.push(snapshot);
     let released = false;
 
-    return () => {
+    const release = (): void => {
         if (released) {
             return;
         }
@@ -33,6 +38,11 @@ export const acquireModalFocusSnapshot = (): (() => void) => {
         if (wasTopSnapshot && isSafeRestoreTarget(snapshot.restoreTarget)) {
             snapshot.restoreTarget.focus(MODAL_PROGRAMMATIC_FOCUS_OPTIONS);
         }
+    };
+
+    return {
+        isTop: () => !released && stack[stack.length - 1] === snapshot,
+        release
     };
 };
 

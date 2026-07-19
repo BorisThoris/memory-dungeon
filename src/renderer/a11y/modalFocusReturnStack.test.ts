@@ -13,16 +13,22 @@ describe('modalFocusReturnStack', () => {
         document.body.append(outerOpener, innerOpener, modalTarget);
 
         outerOpener.focus();
-        const releaseOuter = acquireModalFocusSnapshot();
+        const outer = acquireModalFocusSnapshot();
+        expect(outer.isTop()).toBe(true);
         innerOpener.focus();
-        const releaseInner = acquireModalFocusSnapshot();
+        const inner = acquireModalFocusSnapshot();
+        expect(outer.isTop()).toBe(false);
+        expect(inner.isTop()).toBe(true);
         modalTarget.focus();
 
-        releaseInner();
+        inner.release();
         expect(document.activeElement).toBe(innerOpener);
+        expect(outer.isTop()).toBe(true);
+        expect(inner.isTop()).toBe(false);
 
-        releaseOuter();
+        outer.release();
         expect(document.activeElement).toBe(outerOpener);
+        expect(outer.isTop()).toBe(false);
     });
 
     it('does not consume another modal snapshot during repeated or out-of-order teardown', () => {
@@ -32,16 +38,19 @@ describe('modalFocusReturnStack', () => {
         document.body.append(outerOpener, innerOpener, modalTarget);
 
         outerOpener.focus();
-        const releaseOuter = acquireModalFocusSnapshot();
+        const outer = acquireModalFocusSnapshot();
         innerOpener.focus();
-        const releaseInner = acquireModalFocusSnapshot();
+        const inner = acquireModalFocusSnapshot();
         modalTarget.focus();
 
-        releaseOuter();
-        releaseOuter();
+        outer.release();
+        outer.release();
         expect(document.activeElement).toBe(modalTarget);
+        expect(outer.isTop()).toBe(false);
+        expect(inner.isTop()).toBe(true);
 
-        releaseInner();
+        inner.release();
         expect(document.activeElement).toBe(innerOpener);
+        expect(inner.isTop()).toBe(false);
     });
 });
