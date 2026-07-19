@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { app, BrowserWindow } from 'electron';
 import type { DisplayMode } from '../shared/contracts';
+import { resolveDevServerUrl } from './dev-server-url';
 import { registerIpcHandlers } from './ipc';
 import { PersistenceService } from './persistence';
 import { createSteamAdapter } from './steam';
@@ -35,7 +36,7 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
         window.show();
     });
 
-    const devServerUrl = process.env.VITE_DEV_SERVER_URL;
+    const devServerUrl = resolveDevServerUrl(process.env.VITE_DEV_SERVER_URL, app.isPackaged);
 
     if (devServerUrl) {
         void window.loadURL(devServerUrl);
