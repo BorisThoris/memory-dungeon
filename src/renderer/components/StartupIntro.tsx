@@ -28,6 +28,7 @@ import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { playIntroStingSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { useElementSize, type ElementFootprint } from '../hooks/useElementSize';
+import { useLatestRef } from '../hooks/useLatestRef';
 import { useAppStore } from '../store/useAppStore';
 import { RENDERER_THEME } from '../styles/theme';
 import {
@@ -560,16 +561,18 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
         [enterDurationMs, exitDurationMs]
     );
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
+    const completionValuesRef = useLatestRef({ onComplete, uiGain });
     const completeIntro = useCallback(() => {
         if (completedRef.current) {
             return;
         }
 
         completedRef.current = true;
+        const completionValues = completionValuesRef.current;
         resumeUiSfxContext();
-        playIntroStingSfx(uiGain);
-        onComplete();
-    }, [onComplete, uiGain]);
+        playIntroStingSfx(completionValues.uiGain);
+        completionValues.onComplete();
+    }, [completionValuesRef]);
     const beginExit = useCallback(() => {
         if (completedRef.current || exitStartedRef.current) {
             return;

@@ -86,6 +86,47 @@ describe('StartupIntro', () => {
         expect(uiSfxMocks.playIntroStingSfx).toHaveBeenCalledTimes(1);
     });
 
+    it('does not restart critical asset preload when the completion callback changes', () => {
+        mockHasWebGLSupport.mockReturnValue(true);
+        mockPreloadStartupCriticalAssets.mockImplementation(() => new Promise(() => {}));
+        const firstOnComplete = vi.fn();
+        const nextOnComplete = vi.fn();
+        const rendered = renderIntro(<StartupIntro onComplete={firstOnComplete} reduceMotion={false} />);
+
+        expect(mockPreloadStartupCriticalAssets).toHaveBeenCalledTimes(1);
+
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <StartupIntro onComplete={nextOnComplete} reduceMotion={false} />
+            </PlatformTiltProvider>
+        );
+
+        expect(mockPreloadStartupCriticalAssets).toHaveBeenCalledTimes(1);
+    });
+
+    it('preserves its completion deadline while adopting the latest callback', async () => {
+        const firstOnComplete = vi.fn();
+        const nextOnComplete = vi.fn();
+        const rendered = renderIntro(<StartupIntro onComplete={firstOnComplete} reduceMotion={false} />);
+
+        await flushIntroPreload();
+        act(() => {
+            vi.advanceTimersByTime(1000);
+        });
+
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <StartupIntro onComplete={nextOnComplete} reduceMotion={false} />
+            </PlatformTiltProvider>
+        );
+        act(() => {
+            vi.advanceTimersByTime(3200);
+        });
+
+        expect(firstOnComplete).not.toHaveBeenCalled();
+        expect(nextOnComplete).toHaveBeenCalledTimes(1);
+    });
+
     it('uses the shortened reduced-motion runtime and supports keyboard skip', async () => {
         const onComplete = vi.fn();
 
