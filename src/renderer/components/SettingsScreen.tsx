@@ -23,6 +23,7 @@ import {
 } from '../breakpoints';
 import { useModalFocusTrap } from '../hooks/useModalFocusTrap';
 import { useViewportSize } from '../hooks/useViewportSize';
+import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import {
     playUiBackSfx,
     playUiClickSfx,
@@ -157,7 +158,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
 
     const handleSave = (): void => {
         playUiConfirm();
-        void updateSettings(draft);
+        runPersistenceInBackground(() => updateSettings(draft));
     };
 
     const handleBack = (): void => {
@@ -176,7 +177,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
             debugFlags: { ...DEFAULT_SETTINGS.debugFlags }
         };
         setDraft(next);
-        void updateSettings(next);
+        runPersistenceInBackground(() => updateSettings(next));
     };
 
     return (
@@ -660,7 +661,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                             label: 'Save',
                             onClick: () => {
                                 playUiConfirm();
-                                void updateSettings(draft);
+                                runPersistenceInBackground(() => updateSettings(draft));
                                 setUnsavedBackOpen(false);
                                 closeSettings();
                             },

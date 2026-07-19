@@ -4,6 +4,7 @@ import type {
 import { applyMetaProgressionUnlock } from '../../shared/meta-progression';
 import type { SaveData, Settings } from '../../shared/contracts';
 import { normalizeSaveData } from '../../shared/save-data';
+import { runPersistenceInBackground } from './backgroundPersistence';
 import {
     createHowToPlayDismissPatch,
     createPowersFtueDismissPatch,
@@ -63,6 +64,6 @@ export const executeMetaProgressionRewardClaim = (
         saveData: result.save,
         settings: result.save.settings
     });
-    void deps.persistSaveData(result.save);
+    runPersistenceInBackground(() => deps.persistSaveData(result.save));
     return result;
 };

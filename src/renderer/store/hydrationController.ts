@@ -2,6 +2,7 @@ import type { DesktopApi, SaveData, Settings } from '../../shared/contracts';
 import { normalizeUnknownSteamConnected } from '../../shared/desktop-api-boundary';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { createDefaultSaveData, normalizeUnknownSaveData } from '../../shared/save-data';
+import { runPersistenceInBackground } from './backgroundPersistence';
 
 export const SAVE_READ_FAILURE_NOTICE =
     'Save read failed. Started a temporary in-memory profile and paused autosave to avoid overwriting recoverable data.';
@@ -43,7 +44,7 @@ export const createHydratedAppStatePatch = async ({
 
     const saveData = mergeHonorUnlockTags(rawSave);
     if (saveData !== rawSave && !saveReadFailed) {
-        void persistSaveData(saveData);
+        runPersistenceInBackground(() => persistSaveData(saveData));
     }
 
     return {

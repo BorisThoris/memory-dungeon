@@ -22,6 +22,7 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import MainMenuBackground from './MainMenuBackground';
+import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { useAppStore } from '../store/useAppStore';
 import styles from './MainMenu.module.css';
 
@@ -156,7 +157,7 @@ const MainMenu = ({
                 variant="secondary"
                 onClick={() => {
                     playUiClick();
-                    void onDismissHowToPlay();
+                    runPersistenceInBackground(onDismissHowToPlay);
                 }}
             >
                 Dismiss

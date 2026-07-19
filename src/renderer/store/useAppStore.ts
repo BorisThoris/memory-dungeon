@@ -108,6 +108,7 @@ import {
     resumeUiSfxContext
 } from '../audio/uiSfx';
 import type { StoreNavigationAction } from './navigationModel';
+import { runPersistenceInBackground } from './backgroundPersistence';
 import { createHydratedAppStatePatch } from './hydrationController';
 import { createRunLifecycleController } from './runLifecycleController';
 import { createAppStoreInitialState } from './appStoreInitialState';
@@ -339,7 +340,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         playRelicPickSfx(sfxGainFromStore());
         set(result.patch);
         prepareMemorizeTimerForBoardReady(result.patch.run);
-        void persistSaveDataSafely(result.nextSave);
+        runPersistenceInBackground(() => persistSaveDataSafely(result.nextSave));
     },
 
     applyRelicOfferService: (serviceId, targetRelicId) => {

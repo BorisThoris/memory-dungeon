@@ -38,6 +38,7 @@ import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
 import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { useShallow } from 'zustand/react/shallow';
+import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { UI_ART } from '../assets/ui';
 import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
 import { deriveCameraViewportMode, latchPhoneWidthForMobileCamera } from '../../shared/cameraViewportMode';
@@ -3151,7 +3152,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     useEffect(() => {
         const level = run.board?.level;
         if (level !== undefined && level > TUTORIAL_PAIR_MARKER_MAX_LEVEL && !saveData.powersFtueSeen) {
-            void dismissPowersFtue();
+            runPersistenceInBackground(dismissPowersFtue);
         }
     }, [dismissPowersFtue, run.board?.level, saveData.powersFtueSeen]);
 

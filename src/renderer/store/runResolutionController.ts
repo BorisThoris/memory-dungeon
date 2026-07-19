@@ -21,6 +21,7 @@ import { repairRunProgressionSoftlocks } from '../../shared/run-progression-repa
 import { resolveBoardTurn } from '../../shared/turn-resolution';
 import { trackEvent } from '../../shared/telemetry';
 import { playFloorClearSfx, playMatchPayoffSfx, playResolveSfx, resumeAudioContext } from '../audio/gameSfx';
+import { runPersistenceInBackground } from './backgroundPersistence';
 import {
     BOARD_FLOATER_POP_CLEAR,
     buildMatchScorePopPayload,
@@ -188,16 +189,18 @@ export const createRunResolutionController = ({
         }
 
         if (unlockedAchievements.length > 0) {
-            void persistSaveDataThenUnlockAchievements(nextSave, unlockedAchievements).then(({ failures }) => {
-                if (failures.length > 0) {
-                    setState({
-                        achievementBridgeNotice:
-                            'Some achievements could not sync with Steam. Your unlocks are saved in this build.'
-                    });
-                }
-            });
+            runPersistenceInBackground(() =>
+                persistSaveDataThenUnlockAchievements(nextSave, unlockedAchievements).then(({ failures }) => {
+                    if (failures.length > 0) {
+                        setState({
+                            achievementBridgeNotice:
+                                'Some achievements could not sync with Steam. Your unlocks are saved in this build.'
+                        });
+                    }
+                })
+            );
         } else {
-            void persistSaveData(nextSave);
+            runPersistenceInBackground(() => persistSaveData(nextSave));
         }
     };
 
