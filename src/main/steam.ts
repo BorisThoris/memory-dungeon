@@ -41,6 +41,9 @@ export const createSteamAdapter = (): SteamAdapter => {
     try {
         const rawAppId = process.env.STEAM_APP_ID;
         const appId = parseSteamAppId(rawAppId);
+        if (rawAppId !== undefined && appId === undefined) {
+            throw new Error('STEAM_APP_ID must be a positive decimal uint32 value.');
+        }
         const client = appId === undefined ? steamworks.init() : steamworks.init(appId);
 
         if (typeof steamworks.electronEnableSteamOverlay === 'function') {
