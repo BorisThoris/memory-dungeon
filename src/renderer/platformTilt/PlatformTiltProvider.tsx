@@ -62,6 +62,17 @@ export const PlatformTiltProvider = ({ children }: { children: ReactNode }) => {
     const baselineDegreesRef = useRef<TiltVector | null>(null);
     const lastFrameRef = useRef<number | null>(null);
     const listenerAttachedRef = useRef(false);
+    const mountedRef = useRef(false);
+    const permissionRequestIdRef = useRef(0);
+
+    useEffect(() => {
+        mountedRef.current = true;
+
+        return () => {
+            mountedRef.current = false;
+            permissionRequestIdRef.current += 1;
+        };
+    }, []);
 
     const resetBaseline = useCallback((): void => {
         baselineDegreesRef.current = null;
@@ -184,10 +195,20 @@ export const PlatformTiltProvider = ({ children }: { children: ReactNode }) => {
     }, [motionParallaxSuppressed]);
 
     const requestMotionPermission = useCallback(async (): Promise<void> => {
+        if (!mountedRef.current) {
+            return;
+        }
+
+        const requestId = permissionRequestIdRef.current + 1;
+        permissionRequestIdRef.current = requestId;
+        const requestIsCurrent = (): boolean =>
+            mountedRef.current && permissionRequestIdRef.current === requestId;
         const orientationCtor = getDeviceOrientationEventCtor();
 
         if (typeof window === 'undefined' || !orientationCtor) {
-            setPermission('unsupported');
+            if (requestIsCurrent()) {
+                setPermission('unsupported');
+            }
 
             return;
         }
@@ -200,24 +221,30 @@ export const PlatformTiltProvider = ({ children }: { children: ReactNode }) => {
             try {
                 const result = await ctor.requestPermission();
 
+                if (!requestIsCurrent()) {
+                    return;
+                }
+
                 if (result === 'granted') {
                     setPermission('granted');
                     resetBaseline();
-                    attachListener();
                 } else {
                     setPermission('denied');
                 }
             } catch {
-                setPermission('denied');
+                if (requestIsCurrent()) {
+                    setPermission('denied');
+                }
             }
 
             return;
         }
 
-        setPermission('granted');
-        resetBaseline();
-        attachListener();
-    }, [attachListener, resetBaseline]);
+        if (requestIsCurrent()) {
+            setPermission('granted');
+            resetBaseline();
+        }
+    }, [resetBaseline]);
 
     const value = useMemo<PlatformTiltContextValue>(
         () => ({
