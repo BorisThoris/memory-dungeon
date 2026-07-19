@@ -130,6 +130,7 @@ const PERSISTED_COLLECTION_LIMITS = {
     puzzleCompletions: 256,
     unlockTags: 128
 } as const;
+const PERSISTED_SUMMARY_TEXT_LIMIT = 256;
 
 const isUnknownRecord = (value: unknown): value is Record<string, unknown> =>
     Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -357,6 +358,12 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         source.payoffPressureExtra === undefined ? undefined : finiteNonNegativeInteger(source.payoffPressureExtra, Number.NaN);
     const payoffRewardPerkCount =
         source.payoffRewardPerkCount === undefined ? undefined : finiteNonNegativeInteger(source.payoffRewardPerkCount, Number.NaN);
+    const payoffRouteRewardText =
+        typeof source.payoffRouteRewardText === 'string'
+            ? source.payoffRouteRewardText.slice(0, PERSISTED_SUMMARY_TEXT_LIMIT)
+            : source.payoffRouteRewardText === null
+              ? null
+              : undefined;
 
     return {
         totalScore,
@@ -380,9 +387,7 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         ...(Number.isFinite(payoffPressureExtra) ? { payoffPressureExtra } : {}),
         ...(Number.isFinite(payoffRewardPerkCount) ? { payoffRewardPerkCount } : {}),
         ...(typeof source.payoffRoutePaid === 'boolean' ? { payoffRoutePaid: source.payoffRoutePaid } : {}),
-        ...(typeof source.payoffRouteRewardText === 'string' || source.payoffRouteRewardText === null
-            ? { payoffRouteRewardText: source.payoffRouteRewardText }
-            : {}),
+        ...(payoffRouteRewardText !== undefined ? { payoffRouteRewardText } : {}),
         ...(startingLoadoutId !== undefined ? { startingLoadoutId } : {}),
         ...(typeof source.practiceMode === 'boolean' ? { practiceMode: source.practiceMode } : {}),
         ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {}),

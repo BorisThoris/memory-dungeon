@@ -570,6 +570,14 @@ describe('save normalization', () => {
             maxPinsTotalRun: 10,
             bonusRelicDraftPick: true
         });
+        expect(
+            normalizeSaveData({
+                lastRunSummary: {
+                    ...normalized.lastRunSummary!,
+                    payoffRouteRewardText: 'x'.repeat(300)
+                }
+            }).lastRunSummary?.payoffRouteRewardText
+        ).toHaveLength(256);
         expect(normalizeSaveData({
             lastRunSummary: {
                 ...normalized.lastRunSummary!,
