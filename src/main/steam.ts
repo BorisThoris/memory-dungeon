@@ -10,6 +10,7 @@
  */
 import * as steamworks from 'steamworks.js';
 import type { AchievementId, AchievementUnlockResult } from '../shared/contracts';
+import { parseSteamAppId } from './steam-app-id';
 
 export interface SteamAdapter {
     isConnected(): boolean;
@@ -39,8 +40,8 @@ const createMockSteamAdapter = (): SteamAdapter => ({
 export const createSteamAdapter = (): SteamAdapter => {
     try {
         const rawAppId = process.env.STEAM_APP_ID;
-        const appId = rawAppId ? Number.parseInt(rawAppId, 10) : undefined;
-        const client = Number.isFinite(appId) ? steamworks.init(appId) : steamworks.init();
+        const appId = parseSteamAppId(rawAppId);
+        const client = appId === undefined ? steamworks.init() : steamworks.init(appId);
 
         if (typeof steamworks.electronEnableSteamOverlay === 'function') {
             steamworks.electronEnableSteamOverlay();
