@@ -3,6 +3,7 @@ import { pathToFileURL } from 'node:url';
 import { app, BrowserWindow, dialog } from 'electron';
 import type { DisplayMode } from '../shared/contracts';
 import { resolveDevServerUrl } from './dev-server-url';
+import { handleFatalStartupFailure, runMainProcessAction } from './fatal-startup';
 import { registerIpcHandlers } from './ipc';
 import { PersistenceService } from './persistence';
 import { loadRendererEntry } from './renderer-loader';
@@ -111,23 +112,33 @@ const createOrShowMainWindow = (): void => {
 };
 
 const gotLock = app.requestSingleInstanceLock();
+const handleFatalStartup = (error: unknown): void => {
+    handleFatalStartupFailure(error, {
+        reportError: (failure) => console.error('[startup] fatal main-process failure', failure),
+        showError: (title, message) => dialog.showErrorBox(title, message),
+        quit: () => app.quit()
+    });
+};
 
 if (!gotLock) {
     app.quit();
 } else {
     app.on('second-instance', () => {
-        createOrShowMainWindow();
+        runMainProcessAction(createOrShowMainWindow, handleFatalStartup);
     });
 
-    app.whenReady().then(() => {
-        createOrShowMainWindow();
+    void app.whenReady().then(() => {
+        const started = runMainProcessAction(createOrShowMainWindow, handleFatalStartup);
+        if (!started) {
+            return;
+        }
 
         app.on('activate', () => {
             if (BrowserWindow.getAllWindows().length === 0) {
-                createOrShowMainWindow();
+                runMainProcessAction(createOrShowMainWindow, handleFatalStartup);
             }
         });
-    });
+    }).catch(handleFatalStartup);
 }
 
 app.on('window-all-closed', () => {
