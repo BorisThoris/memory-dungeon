@@ -353,6 +353,12 @@ export const saveDataBoundarySchema = objectBoundarySchema.extend({
     unlocks: z.unknown().optional()
 });
 
+const SETTINGS_BOUNDARY_KEYS: readonly string[] = settingsBoundarySchema.keyof().options;
+const SAVE_DATA_BOUNDARY_KEYS: readonly string[] = saveDataBoundarySchema.keyof().options;
+
+const hasRecognizedOwnField = (input: unknown, keys: readonly string[]): boolean =>
+    isUnknownRecord(input) && keys.some((key) => Object.prototype.hasOwnProperty.call(input, key));
+
 type SaveDataNormalizationInput = {
     schemaVersion?: unknown;
     bestScore?: unknown;
@@ -472,8 +478,8 @@ export const normalizeUnknownSaveData = (input: unknown): SaveData => {
 
 export const normalizeUnknownSaveDataOrThrow = (input: unknown): SaveData => {
     const parsed = saveDataBoundarySchema.safeParse(input);
-    if (!parsed.success) {
-        throw new TypeError('Save data must be an object.');
+    if (!parsed.success || !hasRecognizedOwnField(input, SAVE_DATA_BOUNDARY_KEYS)) {
+        throw new TypeError('Save data must be an object with at least one recognized field.');
     }
     return normalizeSaveData(parsed.data);
 };
@@ -485,8 +491,8 @@ export const normalizeUnknownSettings = (input: unknown): Settings => {
 
 export const normalizeUnknownSettingsOrThrow = (input: unknown): Settings => {
     const parsed = settingsBoundarySchema.safeParse(input);
-    if (!parsed.success) {
-        throw new TypeError('Settings must be an object.');
+    if (!parsed.success || !hasRecognizedOwnField(input, SETTINGS_BOUNDARY_KEYS)) {
+        throw new TypeError('Settings must be an object with at least one recognized field.');
     }
     return normalizeSettings(parsed.data);
 };

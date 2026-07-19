@@ -54,7 +54,9 @@ describe('save normalization', () => {
         expect(normalizeUnknownSaveData({ bestScore: 42 }).bestScore).toBe(42);
         expect(normalizeUnknownSaveData({ bestScore: 42, playerStats: 'bad', settings: 'bad' }).bestScore).toBe(42);
         expect(normalizeUnknownSaveData({ bestScore: 42, playerStats: 'bad', settings: 'bad' }).settings).toEqual(DEFAULT_SETTINGS);
-        expect(() => normalizeUnknownSaveDataOrThrow(['not', 'a', 'save'])).toThrow('Save data must be an object.');
+        expect(() => normalizeUnknownSaveDataOrThrow(['not', 'a', 'save'])).toThrow('recognized field');
+        expect(() => normalizeUnknownSaveDataOrThrow({})).toThrow('recognized field');
+        expect(() => normalizeUnknownSaveDataOrThrow({ injectedRoot: 'discard' })).toThrow('recognized field');
         expect(normalizeUnknownSaveDataOrThrow({ bestScore: 42 }).bestScore).toBe(42);
     });
 
@@ -87,7 +89,9 @@ describe('save normalization', () => {
         expect(normalizeUnknownSettings('not settings')).toEqual(DEFAULT_SETTINGS);
         expect(normalizeUnknownSettings({ displayMode: 'fullscreen', debugFlags: 'bad' }).displayMode).toBe('fullscreen');
         expect(normalizeUnknownSettings({ displayMode: 'kiosk' }).displayMode).toBe(DEFAULT_SETTINGS.displayMode);
-        expect(() => normalizeUnknownSettingsOrThrow('not settings')).toThrow('Settings must be an object.');
+        expect(() => normalizeUnknownSettingsOrThrow('not settings')).toThrow('recognized field');
+        expect(() => normalizeUnknownSettingsOrThrow({})).toThrow('recognized field');
+        expect(() => normalizeUnknownSettingsOrThrow({ injectedSetting: true })).toThrow('recognized field');
     });
 
     it('clamps persisted numeric settings to the live control ranges', () => {

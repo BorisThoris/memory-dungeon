@@ -99,15 +99,17 @@ describe('PersistenceService', () => {
         const repository = new MemorySaveRepository({ ...createDefaultSaveData(), bestScore: 77 });
         const p = new PersistenceService(repository);
 
-        expect(() => p.saveGame(['not', 'a', 'save'])).toThrow('Save data must be an object.');
-        expect(() => p.saveSettings('not settings')).toThrow('Settings must be an object.');
+        expect(() => p.saveGame(['not', 'a', 'save'])).toThrow('recognized field');
+        expect(() => p.saveGame({ undocumentedSave: true })).toThrow('recognized field');
+        expect(() => p.saveSettings('not settings')).toThrow('recognized field');
+        expect(() => p.saveSettings({ undocumentedSetting: true })).toThrow('recognized field');
         expect((repository.getSaveData() as SaveData).bestScore).toBe(77);
     });
 
     it('rejects a non-object repository payload as a read failure', () => {
         const p = new PersistenceService(new MemorySaveRepository(['corrupt']));
 
-        expect(() => p.getSaveData()).toThrow('Save data must be an object.');
+        expect(() => p.getSaveData()).toThrow('recognized field');
     });
 
     it('unlockAchievement merges into achievements without dropping others', () => {
