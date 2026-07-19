@@ -299,6 +299,7 @@ const invalidateCachesAfterImageLoad = (id: TextureImageId): void => {
 };
 
 interface TextureImageState {
+    attempts: number;
     image: HTMLImageElement | null;
     promise?: Promise<void>;
     status: 'loading' | 'loaded' | 'error';
@@ -306,15 +307,25 @@ interface TextureImageState {
 
 const textureImages = new Map<TextureImageId, TextureImageState>();
 const TILE_TEXTURE_IMAGE_LOAD_TIMEOUT_MS = 1500;
+const TILE_TEXTURE_IMAGE_MAX_ATTEMPTS = 2;
 
 const emitTextureImageUpdate = (): void => {
-    textureImageUpdateListeners.forEach((listener) => listener());
+    for (const listener of textureImageUpdateListeners) {
+        try {
+            listener();
+        } catch {
+            // Cache observers must not interrupt image state transitions.
+        }
+    }
 };
 
-const startTextureImageLoad = (id: TextureImageId): Promise<void> => {
+const startTextureImageLoad = (id: TextureImageId, retryFailed: boolean): Promise<void> => {
     const existing = textureImages.get(id);
 
-    if (existing?.status === 'loaded' || existing?.status === 'error') {
+    if (
+        existing?.status === 'loaded' ||
+        (existing?.status === 'error' && (!retryFailed || existing.attempts >= TILE_TEXTURE_IMAGE_MAX_ATTEMPTS))
+    ) {
         return Promise.resolve();
     }
 
@@ -324,6 +335,7 @@ const startTextureImageLoad = (id: TextureImageId): Promise<void> => {
 
     const image = new Image();
     image.decoding = 'async';
+    const attempts = (existing?.attempts ?? 0) + 1;
 
     const promise = new Promise<void>((resolve) => {
         let resolved = false;
@@ -342,27 +354,33 @@ const startTextureImageLoad = (id: TextureImageId): Promise<void> => {
         };
 
         image.onload = () => {
-            textureImages.set(id, { image, status: 'loaded' });
+            if (textureImages.get(id)?.promise !== promise) {
+                resolveOnce();
+                return;
+            }
+            textureImages.set(id, { attempts, image, status: 'loaded' });
             invalidateCachesAfterImageLoad(id);
             emitTextureImageUpdate();
             resolveOnce();
         };
 
         image.onerror = () => {
-            textureImages.set(id, { image: null, status: 'error' });
+            if (textureImages.get(id)?.promise === promise) {
+                textureImages.set(id, { attempts, image: null, status: 'error' });
+            }
             resolveOnce();
         };
 
         timeoutHandle = globalThis.setTimeout(() => {
             const current = textureImages.get(id);
-            if (current?.status === 'loading') {
-                textureImages.set(id, { image: null, status: 'error' });
+            if (current?.status === 'loading' && current.promise === promise) {
+                textureImages.set(id, { attempts, image: null, status: 'error' });
             }
             resolveOnce();
         }, TILE_TEXTURE_IMAGE_LOAD_TIMEOUT_MS);
     });
 
-    textureImages.set(id, { image: null, promise, status: 'loading' });
+    textureImages.set(id, { attempts, image: null, promise, status: 'loading' });
     image.src = textureImageUrls[id];
 
     return promise;
@@ -375,7 +393,7 @@ export const preloadTileTextureImages = (): Promise<void> => {
     }
 
     const ids = Object.keys(textureImageUrls) as TextureImageId[];
-    return Promise.all(ids.map(startTextureImageLoad)).then(() => undefined);
+    return Promise.all(ids.map((id) => startTextureImageLoad(id, true))).then(() => undefined);
 };
 
 const hashString = (value: string): number => {
@@ -413,7 +431,7 @@ const getTextureImage = (imageId: TextureImageId): HTMLImageElement | null => {
     }
 
     if (!current) {
-        void startTextureImageLoad(imageId);
+        void startTextureImageLoad(imageId, false);
     }
 
     return null;
