@@ -266,6 +266,16 @@ describe('useAppStore timers', () => {
         expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('{not-valid-json');
     });
 
+    it('treats valid JSON with a non-object save root as a protected read failure', async () => {
+        window.localStorage.setItem('memory-dungeon-save-data', '["corrupt"]');
+        useAppStore.setState({ hydrated: false, hydrating: false });
+
+        await useAppStore.getState().hydrate();
+
+        expect(useAppStore.getState().saveWritesBlockedByReadFailure).toBe(true);
+        expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('["corrupt"]');
+    });
+
     it('claims a ready meta progression reward and applies it to future run starts', () => {
         const saveData = createDefaultSaveData();
         saveData.playerStats = {

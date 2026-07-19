@@ -95,6 +95,21 @@ describe('PersistenceService', () => {
         expect(read.settings.weakerShuffleMode).toBe(createDefaultSaveData().settings.weakerShuffleMode);
     });
 
+    it('rejects invalid persistence roots without replacing stored save data', () => {
+        const repository = new MemorySaveRepository({ ...createDefaultSaveData(), bestScore: 77 });
+        const p = new PersistenceService(repository);
+
+        expect(() => p.saveGame(['not', 'a', 'save'])).toThrow('Save data must be an object.');
+        expect(() => p.saveSettings('not settings')).toThrow('Settings must be an object.');
+        expect((repository.getSaveData() as SaveData).bestScore).toBe(77);
+    });
+
+    it('rejects a non-object repository payload as a read failure', () => {
+        const p = new PersistenceService(new MemorySaveRepository(['corrupt']));
+
+        expect(() => p.getSaveData()).toThrow('Save data must be an object.');
+    });
+
     it('unlockAchievement merges into achievements without dropping others', () => {
         const p = new PersistenceService();
         p.unlockAchievement('ACH_FIRST_CLEAR');

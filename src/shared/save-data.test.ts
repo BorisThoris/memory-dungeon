@@ -16,7 +16,9 @@ import {
     mergePuzzleCompletion,
     normalizeSaveData,
     normalizeUnknownSaveData,
+    normalizeUnknownSaveDataOrThrow,
     normalizeUnknownSettings,
+    normalizeUnknownSettingsOrThrow,
     saveDataBoundarySchema,
     settingsBoundarySchema,
     SETTINGS_NUMERIC_RANGES
@@ -52,6 +54,8 @@ describe('save normalization', () => {
         expect(normalizeUnknownSaveData({ bestScore: 42 }).bestScore).toBe(42);
         expect(normalizeUnknownSaveData({ bestScore: 42, playerStats: 'bad', settings: 'bad' }).bestScore).toBe(42);
         expect(normalizeUnknownSaveData({ bestScore: 42, playerStats: 'bad', settings: 'bad' }).settings).toEqual(DEFAULT_SETTINGS);
+        expect(() => normalizeUnknownSaveDataOrThrow(['not', 'a', 'save'])).toThrow('Save data must be an object.');
+        expect(normalizeUnknownSaveDataOrThrow({ bestScore: 42 }).bestScore).toBe(42);
     });
 
     it('strips unknown save, settings, and player-stat fields at the persistence boundary', () => {
@@ -83,6 +87,7 @@ describe('save normalization', () => {
         expect(normalizeUnknownSettings('not settings')).toEqual(DEFAULT_SETTINGS);
         expect(normalizeUnknownSettings({ displayMode: 'fullscreen', debugFlags: 'bad' }).displayMode).toBe('fullscreen');
         expect(normalizeUnknownSettings({ displayMode: 'kiosk' }).displayMode).toBe(DEFAULT_SETTINGS.displayMode);
+        expect(() => normalizeUnknownSettingsOrThrow('not settings')).toThrow('Settings must be an object.');
     });
 
     it('clamps persisted numeric settings to the live control ranges', () => {

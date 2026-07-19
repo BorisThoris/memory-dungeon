@@ -470,9 +470,25 @@ export const normalizeUnknownSaveData = (input: unknown): SaveData => {
     return normalizeSaveData(parsed.success ? parsed.data : null);
 };
 
+export const normalizeUnknownSaveDataOrThrow = (input: unknown): SaveData => {
+    const parsed = saveDataBoundarySchema.safeParse(input);
+    if (!parsed.success) {
+        throw new TypeError('Save data must be an object.');
+    }
+    return normalizeSaveData(parsed.data);
+};
+
 export const normalizeUnknownSettings = (input: unknown): Settings => {
     const parsed = settingsBoundarySchema.safeParse(input);
     return normalizeSettings(parsed.success ? parsed.data : undefined);
+};
+
+export const normalizeUnknownSettingsOrThrow = (input: unknown): Settings => {
+    const parsed = settingsBoundarySchema.safeParse(input);
+    if (!parsed.success) {
+        throw new TypeError('Settings must be an object.');
+    }
+    return normalizeSettings(parsed.data);
 };
 
 export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): SaveData => {
