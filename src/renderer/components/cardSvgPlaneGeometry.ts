@@ -17,9 +17,11 @@ const MAX_VERTEX_COUNT = 520_000;
  * or a bounded stream read so we never buffer a multi‑MB string just to discard it (jank + memory).
  */
 const MAX_SVG_SOURCE_BYTES_FOR_MESH = 512 * 1024;
+const MAX_TRANSIENT_SVG_LOAD_ATTEMPTS = 2;
 
 const resolvedByUrl = new Map<string, BufferGeometry | null>();
 const inflightByUrl = new Map<string, Promise<BufferGeometry | null>>();
+const failedAttemptsByUrl = new Map<string, number>();
 export const CARD_BACK_SVG_LAYER_NAMES = [
     'back-base',
     'back-rims',
@@ -39,6 +41,19 @@ export interface CardBackSvgLayerGeometry {
 const backLayerOrder = new Map<CardBackSvgLayerName, number>(CARD_BACK_SVG_LAYER_NAMES.map((name, index) => [name, index]));
 const resolvedBackLayersByUrl = new Map<string, CardBackSvgLayerGeometry[] | null>();
 const inflightBackLayersByUrl = new Map<string, Promise<CardBackSvgLayerGeometry[] | null>>();
+const failedBackLayerAttemptsByUrl = new Map<string, number>();
+
+const recordTransientSvgLoadFailure = <T>(
+    assetUrl: string,
+    failedAttempts: Map<string, number>,
+    resolved: Map<string, T | null>
+): void => {
+    const attempts = (failedAttempts.get(assetUrl) ?? 0) + 1;
+    failedAttempts.set(assetUrl, attempts);
+    if (attempts >= MAX_TRANSIENT_SVG_LOAD_ATTEMPTS) {
+        resolved.set(assetUrl, null);
+    }
+};
 
 const CARD_BACK_LAYER_FALLBACK_COLORS: Record<CardBackSvgLayerName, { fill: string; stroke: string }> = {
     'back-base': { fill: '#2d1d13', stroke: '#2d1d13' },
@@ -388,6 +403,7 @@ export function loadSharedCardSvgPlaneGeometry(assetUrl: string): Promise<Buffer
             const text = await fetchSvgTextUnderMeshByteCap(assetUrl);
 
             if (text === null) {
+                failedAttemptsByUrl.delete(assetUrl);
                 resolvedByUrl.set(assetUrl, null);
                 return null;
             }
@@ -414,15 +430,17 @@ export function loadSharedCardSvgPlaneGeometry(assetUrl: string): Promise<Buffer
 
             if (!merged) {
                 console.warn('cardSvgPlaneGeometry: no filled shapes in', assetUrl.slice(-40));
+                failedAttemptsByUrl.delete(assetUrl);
                 resolvedByUrl.set(assetUrl, null);
                 return null;
             }
 
+            failedAttemptsByUrl.delete(assetUrl);
             resolvedByUrl.set(assetUrl, merged);
             return merged;
         } catch (e) {
             console.warn('cardSvgPlaneGeometry: failed to build mesh', e);
-            resolvedByUrl.set(assetUrl, null);
+            recordTransientSvgLoadFailure(assetUrl, failedAttemptsByUrl, resolvedByUrl);
             return null;
         } finally {
             inflightByUrl.delete(assetUrl);
@@ -449,6 +467,7 @@ export function loadSharedCardBackSvgLayerGeometries(assetUrl: string): Promise<
             const text = await fetchSvgTextUnderMeshByteCap(assetUrl);
 
             if (text === null) {
+                failedBackLayerAttemptsByUrl.delete(assetUrl);
                 resolvedBackLayersByUrl.set(assetUrl, null);
                 return null;
             }
@@ -478,15 +497,17 @@ export function loadSharedCardBackSvgLayerGeometries(assetUrl: string): Promise<
 
             if (layers.length === 0) {
                 console.warn('cardSvgPlaneGeometry: no animated back layers in', assetUrl.slice(-40));
+                failedBackLayerAttemptsByUrl.delete(assetUrl);
                 resolvedBackLayersByUrl.set(assetUrl, null);
                 return null;
             }
 
+            failedBackLayerAttemptsByUrl.delete(assetUrl);
             resolvedBackLayersByUrl.set(assetUrl, layers);
             return layers;
         } catch (e) {
             console.warn('cardSvgPlaneGeometry: failed to build layered back mesh', e);
-            resolvedBackLayersByUrl.set(assetUrl, null);
+            recordTransientSvgLoadFailure(assetUrl, failedBackLayerAttemptsByUrl, resolvedBackLayersByUrl);
             return null;
         } finally {
             inflightBackLayersByUrl.delete(assetUrl);
