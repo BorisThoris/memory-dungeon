@@ -1,9 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { BrowserWindow } from 'electron';
 import { createDefaultSaveData } from '../shared/save-data';
-import { IPC_CHANNELS } from '../shared/ipc-channels';
+import {
+    DESKTOP_IPC_CHANNELS,
+    IPC_CHANNELS,
+    IPC_CHANNELS_LEGACY_DESKTOP
+} from '../shared/ipc-channels';
 
 const electronMocks = vi.hoisted(() => ({
+    handle: vi.fn((channel: string, handler: (...args: unknown[]) => unknown) => {
+        electronMocks.handlers.set(channel, handler);
+    }),
     handlers: new Map<string, (...args: unknown[]) => unknown>(),
     quit: vi.fn()
 }));
@@ -11,9 +18,7 @@ const electronMocks = vi.hoisted(() => ({
 vi.mock('electron', () => ({
     app: { quit: electronMocks.quit },
     ipcMain: {
-        handle: vi.fn((channel: string, handler: (...args: unknown[]) => unknown) => {
-            electronMocks.handlers.set(channel, handler);
-        })
+        handle: electronMocks.handle
     }
 }));
 
@@ -24,6 +29,7 @@ import type { SteamAdapter } from './steam';
 describe('registerIpcHandlers', () => {
     beforeEach(() => {
         electronMocks.handlers.clear();
+        electronMocks.handle.mockClear();
         electronMocks.quit.mockClear();
     });
 
@@ -57,5 +63,22 @@ describe('registerIpcHandlers', () => {
             expect.any(Error)
         );
         reportError.mockRestore();
+    });
+
+    it('registers every canonical and legacy desktop channel exactly once', () => {
+        registerIpcHandlers(
+            () => null,
+            {} as PersistenceService,
+            { isConnected: () => false, unlockAchievement: () => ({ ok: false, reason: 'not_connected' }) } satisfies SteamAdapter
+        );
+        const expectedChannels = [
+            ...Object.values(DESKTOP_IPC_CHANNELS),
+            ...Object.values(IPC_CHANNELS_LEGACY_DESKTOP)
+        ];
+
+        expect(new Set(expectedChannels).size).toBe(expectedChannels.length);
+        expect([...electronMocks.handlers.keys()].sort()).toEqual([...expectedChannels].sort());
+        expect(electronMocks.handle).toHaveBeenCalledTimes(expectedChannels.length);
+        expect([...electronMocks.handlers.values()].every((handler) => typeof handler === 'function')).toBe(true);
     });
 });
