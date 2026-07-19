@@ -1,10 +1,11 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog } from 'electron';
 import type { DisplayMode } from '../shared/contracts';
 import { resolveDevServerUrl } from './dev-server-url';
 import { registerIpcHandlers } from './ipc';
 import { PersistenceService } from './persistence';
+import { loadRendererEntry } from './renderer-loader';
 import {
     RENDERER_SECURITY_WEB_PREFERENCES,
     rendererNavigationIsAllowed
@@ -41,7 +42,8 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
 
     const devServerUrl = resolveDevServerUrl(process.env.VITE_DEV_SERVER_URL, app.isPackaged);
     const rendererFilePath = path.join(app.getAppPath(), 'dist', 'index.html');
-    const rendererEntryUrl = devServerUrl ?? pathToFileURL(rendererFilePath).href;
+    const rendererFileUrl = pathToFileURL(rendererFilePath).href;
+    let rendererEntryUrl = devServerUrl ?? rendererFileUrl;
 
     window.webContents.on('will-navigate', (event, targetUrl) => {
         if (!rendererNavigationIsAllowed(targetUrl, rendererEntryUrl)) {
@@ -51,11 +53,25 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
 
     if (devServerUrl) {
-        void window.loadURL(devServerUrl);
         window.webContents.openDevTools({ mode: 'detach' });
-    } else {
-        void window.loadFile(rendererFilePath);
     }
+    void loadRendererEntry({
+        developmentUrl: devServerUrl,
+        loadDevelopmentUrl: (url) => window.loadURL(url),
+        loadBundledFile: () => {
+            rendererEntryUrl = rendererFileUrl;
+            return window.loadFile(rendererFilePath);
+        },
+        reportError: (source, error) => console.error(`[startup] ${source} renderer load failed`, error)
+    }).then((source) => {
+        if (source === 'failed' && !window.isDestroyed()) {
+            dialog.showErrorBox(
+                'Memory Dungeon could not start',
+                'The renderer failed to load. Reinstall or rebuild the app, then try again.'
+            );
+            window.show();
+        }
+    });
 
     window.on('closed', () => {
         if (mainWindow === window) {
