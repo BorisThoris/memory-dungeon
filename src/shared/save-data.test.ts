@@ -539,7 +539,14 @@ describe('save normalization', () => {
                 payoffRewardPerkCount: 1,
                 payoffRoutePaid: true,
                 payoffRouteRewardText: '+1 combo shard',
-                startingLoadoutId: 'route_tactician'
+                startingLoadoutId: 'route_tactician',
+                activeContract: {
+                    noShuffle: true,
+                    noDestroy: false,
+                    maxMismatches: 2.8,
+                    maxPinsTotalRun: 10.9,
+                    bonusRelicDraftPick: true
+                }
             }
         });
 
@@ -554,12 +561,27 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary?.payoffRoutePaid).toBe(true);
         expect(normalized.lastRunSummary?.payoffRouteRewardText).toBe('+1 combo shard');
         expect(normalized.lastRunSummary?.startingLoadoutId).toBe('route_tactician');
+        expect(normalized.lastRunSummary?.activeContract).toEqual({
+            noShuffle: true,
+            noDestroy: false,
+            maxMismatches: 2,
+            maxPinsTotalRun: 10,
+            bonusRelicDraftPick: true
+        });
         expect(normalizeSaveData({
             lastRunSummary: {
                 ...normalized.lastRunSummary!,
                 startingLoadoutId: 'missing_loadout' as unknown as RunSummary['startingLoadoutId']
             }
         }).lastRunSummary?.startingLoadoutId).toBeUndefined();
+        expect(
+            normalizeSaveData({
+                lastRunSummary: {
+                    ...normalized.lastRunSummary!,
+                    activeContract: { noShuffle: 'yes' } as unknown as RunSummary['activeContract']
+                }
+            }).lastRunSummary?.activeContract
+        ).toBeUndefined();
     });
 
     it('DNG-073 drops summaries from future save schemas instead of trusting obsolete active-run data', () => {

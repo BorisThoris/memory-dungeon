@@ -4,6 +4,7 @@ import {
     SAVE_SCHEMA_VERSION,
     type AchievementId,
     type AchievementState,
+    type ContractFlags,
     type GameMode,
     type MutatorId,
     type PlayerStatsPersisted,
@@ -277,6 +278,39 @@ const normalizeStringLedger = (input: unknown, limit: number): string[] => {
     return [...out];
 };
 
+const normalizeContractFlags = (input: unknown): ContractFlags | null => {
+    if (
+        !isUnknownRecord(input) ||
+        typeof input.noShuffle !== 'boolean' ||
+        typeof input.noDestroy !== 'boolean' ||
+        (input.maxMismatches !== null &&
+            (typeof input.maxMismatches !== 'number' || !Number.isFinite(input.maxMismatches)))
+    ) {
+        return null;
+    }
+    if (
+        input.maxPinsTotalRun !== undefined &&
+        input.maxPinsTotalRun !== null &&
+        (typeof input.maxPinsTotalRun !== 'number' || !Number.isFinite(input.maxPinsTotalRun))
+    ) {
+        return null;
+    }
+    return {
+        noShuffle: input.noShuffle,
+        noDestroy: input.noDestroy,
+        maxMismatches:
+            input.maxMismatches === null ? null : finiteNonNegativeInteger(input.maxMismatches, 0),
+        ...(input.maxPinsTotalRun === null
+            ? { maxPinsTotalRun: null }
+            : typeof input.maxPinsTotalRun === 'number'
+              ? { maxPinsTotalRun: finiteNonNegativeInteger(input.maxPinsTotalRun, 0) }
+              : {}),
+        ...(typeof input.bonusRelicDraftPick === 'boolean'
+            ? { bonusRelicDraftPick: input.bonusRelicDraftPick }
+            : {})
+    };
+};
+
 const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
     if (!isUnknownRecord(input)) {
         return null;
@@ -297,6 +331,7 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         source.runRulesVersion === undefined ? undefined : finiteNonNegativeInteger(source.runRulesVersion, Number.NaN);
     const gameMode = isGameMode(source.gameMode) ? source.gameMode : undefined;
     const dailyDateKeyUtc = normalizeDailyDateKeyUtc(source.dailyDateKeyUtc);
+    const activeContract = normalizeContractFlags(source.activeContract);
     const activeMutators = Array.isArray(source.activeMutators)
         ? [...new Set(source.activeMutators.filter(isMutatorId))]
         : undefined;
@@ -345,7 +380,12 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         ...(startingLoadoutId !== undefined ? { startingLoadoutId } : {}),
         ...(typeof source.practiceMode === 'boolean' ? { practiceMode: source.practiceMode } : {}),
         ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {}),
-        ...(typeof source.dungeonShowcaseRun === 'boolean' ? { dungeonShowcaseRun: source.dungeonShowcaseRun } : {})
+        ...(typeof source.dungeonShowcaseRun === 'boolean' ? { dungeonShowcaseRun: source.dungeonShowcaseRun } : {}),
+        ...(source.activeContract === null
+            ? { activeContract: null }
+            : activeContract
+              ? { activeContract }
+              : {})
     };
 };
 
