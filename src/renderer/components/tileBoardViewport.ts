@@ -212,13 +212,13 @@ export const createRafCoalescedViewportNotifier = (
     schedule: (width: number, height: number) => void;
     cancel: () => void;
 } => {
-    let raf = 0;
+    let raf: number | null = null;
     let pendingW = 0;
     let pendingH = 0;
     let hasPending = false;
 
     const flush = (): void => {
-        raf = 0;
+        raf = null;
         if (!hasPending) {
             return;
         }
@@ -231,14 +231,14 @@ export const createRafCoalescedViewportNotifier = (
             pendingW = width;
             pendingH = height;
             hasPending = true;
-            if (raf === 0) {
+            if (raf === null) {
                 raf = requestAnimationFrame(flush);
             }
         },
         cancel(): void {
-            if (raf !== 0) {
+            if (raf !== null) {
                 cancelAnimationFrame(raf);
-                raf = 0;
+                raf = null;
             }
             hasPending = false;
         }

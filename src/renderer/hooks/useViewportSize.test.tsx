@@ -59,6 +59,23 @@ describe('useViewportSize', () => {
         expect(result.current).toEqual({ width: 820, height: 540 });
     });
 
+    it('coalesces and cancels a pending animation frame whose id is zero', () => {
+        const requestAnimationFrame = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => 0);
+        const cancelAnimationFrame = vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => undefined);
+        const { unmount } = renderHook(() => useViewportSize());
+
+        act(() => {
+            window.dispatchEvent(new Event('resize'));
+            window.dispatchEvent(new Event('orientationchange'));
+        });
+
+        expect(requestAnimationFrame).toHaveBeenCalledTimes(1);
+
+        unmount();
+
+        expect(cancelAnimationFrame).toHaveBeenCalledWith(0);
+    });
+
     it('removes the resize listener from the viewport object that owns it', () => {
         const subscribedViewport = {
             addEventListener: vi.fn(),

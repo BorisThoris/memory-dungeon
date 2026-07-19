@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
     DESKTOP_STAGE_FIT_MARGIN,
     clampBoardZoom,
@@ -16,6 +16,10 @@ import {
     screenPointToWorld,
     type TileBoardScreenPoint
 } from './tileBoardViewport';
+
+afterEach(() => {
+    vi.unstubAllGlobals();
+});
 
 describe('tileBoardViewport', () => {
     it('screenPointToWorld scales linearly with viewport dimensions (stable normalized ray)', () => {
@@ -53,8 +57,29 @@ describe('tileBoardViewport', () => {
         rafQueue[0]!(0);
 
         expect(flushed).toEqual([{ w: 300, h: 70 }]);
+    });
 
-        vi.unstubAllGlobals();
+    it('coalesces and cancels a pending animation frame whose id is zero', () => {
+        const rafQueue: FrameRequestCallback[] = [];
+        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
+            rafQueue.push(callback);
+            return 0;
+        });
+        const cancelAnimationFrame = vi.fn();
+        vi.stubGlobal('cancelAnimationFrame', cancelAnimationFrame);
+        const onFlush = vi.fn();
+        const notifier = createRafCoalescedViewportNotifier(onFlush);
+
+        notifier.schedule(100, 50);
+        notifier.schedule(200, 60);
+
+        expect(rafQueue).toHaveLength(1);
+
+        notifier.cancel();
+
+        expect(cancelAnimationFrame).toHaveBeenCalledWith(0);
+        rafQueue[0]!(0);
+        expect(onFlush).not.toHaveBeenCalled();
     });
 
     it('REG-001 keeps mobile camera fit board-first on phone portrait', () => {

@@ -113,6 +113,28 @@ const readFitZoomFromDom = (container: HTMLElement): number =>
     Number(container.querySelector('[data-testid="fit-zoom-readout"]')?.getAttribute('data-fit-zoom') ?? Number.NaN);
 
 describe('useFitShellZoom', () => {
+    it('cancels a pending outer animation frame whose id is zero', () => {
+        const requestAnimationFrame = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => 0);
+        const cancelAnimationFrame = vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => undefined);
+
+        const FitProbe = () => {
+            const measureRef = useRef<HTMLDivElement | null>(null);
+            useFitShellZoom({
+                measureRef,
+                viewportHeight: 700,
+                viewportWidth: 900
+            });
+            return <div ref={measureRef} />;
+        };
+        const { unmount } = render(<FitProbe />);
+
+        expect(requestAnimationFrame).toHaveBeenCalledTimes(1);
+
+        unmount();
+
+        expect(cancelAnimationFrame).toHaveBeenCalledWith(0);
+    });
+
     it('cancels pending inner frames when rescheduling and unmounting', () => {
         vi.useFakeTimers();
         let nextFrameId = 0;

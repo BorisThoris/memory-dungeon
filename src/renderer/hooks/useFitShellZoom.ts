@@ -91,8 +91,8 @@ export function useFitShellZoom({
             return;
         }
 
-        let outerRaf = 0;
-        let innerRaf = 0;
+        let outerRaf: number | null = null;
+        let innerRaf: number | null = null;
         let delayed = 0;
         let cancelled = false;
 
@@ -135,13 +135,13 @@ export function useFitShellZoom({
         };
 
         const cancelScheduledFrames = (): void => {
-            if (outerRaf !== 0) {
+            if (outerRaf !== null) {
                 cancelAnimationFrame(outerRaf);
-                outerRaf = 0;
+                outerRaf = null;
             }
-            if (innerRaf !== 0) {
+            if (innerRaf !== null) {
                 cancelAnimationFrame(innerRaf);
-                innerRaf = 0;
+                innerRaf = null;
             }
         };
 
@@ -149,9 +149,9 @@ export function useFitShellZoom({
         const schedule = (): void => {
             cancelScheduledFrames();
             outerRaf = requestAnimationFrame(() => {
-                outerRaf = 0;
+                outerRaf = null;
                 innerRaf = requestAnimationFrame(() => {
-                    innerRaf = 0;
+                    innerRaf = null;
                     recompute();
                 });
             });
