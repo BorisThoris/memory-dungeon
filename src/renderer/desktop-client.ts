@@ -69,7 +69,8 @@ const fallbackClient: DesktopApi = {
         return readLocalSave();
     },
     async saveGame(data: SaveData): Promise<SaveData> {
-        return writeLocalSave(data);
+        const currentSave = readLocalSave();
+        return writeLocalSave({ ...data, settings: currentSave.settings });
     },
     async unlockAchievement(): Promise<AchievementUnlockResult> {
         return { ok: false, reason: 'not_connected' };

@@ -67,7 +67,11 @@ export class PersistenceService {
     }
 
     saveGame(saveData: unknown): SaveData {
-        const nextSave = normalizeUnknownSaveDataOrThrow(saveData);
+        const normalizedSave = normalizeUnknownSaveDataOrThrow(saveData);
+        const nextSave = normalizeSaveData({
+            ...normalizedSave,
+            settings: this.getSettings()
+        });
         this.commitSaveData(nextSave);
         return nextSave;
     }

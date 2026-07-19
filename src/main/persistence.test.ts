@@ -95,6 +95,22 @@ describe('PersistenceService', () => {
         expect(read.settings.weakerShuffleMode).toBe(createDefaultSaveData().settings.weakerShuffleMode);
     });
 
+    it('does not let a stale game snapshot overwrite separately persisted settings', () => {
+        const p = new PersistenceService();
+        const staleSave = p.getSaveData();
+        p.saveSettings({
+            ...staleSave.settings,
+            displayMode: 'fullscreen',
+            reduceMotion: true
+        });
+
+        const committed = p.saveGame({ ...staleSave, bestScore: 9001 });
+
+        expect(committed.bestScore).toBe(9001);
+        expect(committed.settings).toMatchObject({ displayMode: 'fullscreen', reduceMotion: true });
+        expect(p.getSaveData()).toEqual(committed);
+    });
+
     it('rejects invalid persistence roots without replacing stored save data', () => {
         const repository = new MemorySaveRepository({ ...createDefaultSaveData(), bestScore: 77 });
         const p = new PersistenceService(repository);
