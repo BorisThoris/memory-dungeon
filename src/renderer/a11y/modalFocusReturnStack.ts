@@ -1,7 +1,7 @@
 import { MODAL_PROGRAMMATIC_FOCUS_OPTIONS } from './focusables';
 
 interface ModalFocusSnapshot {
-    restoreTarget: HTMLElement | null;
+    restoreTargets: HTMLElement[];
 }
 
 export interface ModalFocusSnapshotLease {
@@ -16,8 +16,9 @@ const stack: ModalFocusSnapshot[] = [];
  * it is the top active modal, so delayed focus and keyboard work cannot escape a nested dialog.
  */
 export const acquireModalFocusSnapshot = (): ModalFocusSnapshotLease => {
+    const activeElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const snapshot: ModalFocusSnapshot = {
-        restoreTarget: document.activeElement instanceof HTMLElement ? document.activeElement : null
+        restoreTargets: activeElement ? [activeElement] : []
     };
     stack.push(snapshot);
     let released = false;
@@ -35,8 +36,20 @@ export const acquireModalFocusSnapshot = (): ModalFocusSnapshotLease => {
         const wasTopSnapshot = index === stack.length - 1;
         stack.splice(index, 1);
 
-        if (wasTopSnapshot && isSafeRestoreTarget(snapshot.restoreTarget)) {
-            snapshot.restoreTarget.focus(MODAL_PROGRAMMATIC_FOCUS_OPTIONS);
+        if (!wasTopSnapshot) {
+            // Preserve the lower modal's opener chain for whichever modal still owns focus above it.
+            const snapshotAbove = stack[index];
+            for (const restoreTarget of snapshot.restoreTargets) {
+                if (snapshotAbove && !snapshotAbove.restoreTargets.includes(restoreTarget)) {
+                    snapshotAbove.restoreTargets.push(restoreTarget);
+                }
+            }
+            return;
+        }
+
+        const restoreTarget = snapshot.restoreTargets.find(isSafeRestoreTarget);
+        if (restoreTarget) {
+            restoreTarget.focus(MODAL_PROGRAMMATIC_FOCUS_OPTIONS);
         }
     };
 

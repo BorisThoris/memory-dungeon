@@ -53,4 +53,28 @@ describe('modalFocusReturnStack', () => {
         expect(document.activeElement).toBe(innerOpener);
         expect(inner.isTop()).toBe(false);
     });
+
+    it('falls back to the page opener when a lower modal is removed first', () => {
+        const pageOpener = document.createElement('button');
+        const outerModal = document.createElement('section');
+        const innerOpener = document.createElement('button');
+        const innerModal = document.createElement('section');
+        const innerTarget = document.createElement('button');
+        outerModal.append(innerOpener);
+        innerModal.append(innerTarget);
+        document.body.append(pageOpener, outerModal, innerModal);
+
+        pageOpener.focus();
+        const outer = acquireModalFocusSnapshot();
+        innerOpener.focus();
+        const inner = acquireModalFocusSnapshot();
+        innerTarget.focus();
+
+        outer.release();
+        outerModal.remove();
+        innerModal.remove();
+        inner.release();
+
+        expect(document.activeElement).toBe(pageOpener);
+    });
 });
