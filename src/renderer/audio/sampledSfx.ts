@@ -4,20 +4,15 @@
  */
 
 import sfxManifest from '../assets/audio/sfx/manifest.json';
+import { sfxManifestSchema } from './audioManifestBoundary';
 import { preloadAudioBuffers } from './preloadAudioBuffers';
 import { getSharedAudioContext } from './webAudioContext';
 
 type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'pressure' | 'shuffle';
 
-type ManifestEntry = { file: string; category: SfxCategory };
-
 export type SfxSampleKey = keyof typeof sfxManifest.entries;
 
-const manifest = sfxManifest as {
-    version: number;
-    entries: Record<SfxSampleKey, ManifestEntry>;
-    matchTierDepthRanges: Record<'match-tier-low' | 'match-tier-mid' | 'match-tier-high', [number, number]>;
-};
+const manifest = sfxManifestSchema.parse(sfxManifest);
 
 const globUrls = import.meta.glob<string>('../assets/audio/sfx/*.ogg', {
     eager: true,

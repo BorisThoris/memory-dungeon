@@ -4,6 +4,7 @@
  */
 
 import uiSfxManifest from '../assets/audio/ui/manifest.json';
+import { uiSfxManifestSchema } from './audioManifestBoundary';
 import { preloadAudioBuffers } from './preloadAudioBuffers';
 import {
     getSharedAudioContext,
@@ -12,14 +13,10 @@ import {
 } from './webAudioContext';
 
 type UiSfxCategory = 'ui' | 'menu';
-type ManifestEntry = { file: string; category: UiSfxCategory };
 
 type UiSfxSampleKey = keyof typeof uiSfxManifest.entries;
 
-const manifest = uiSfxManifest as {
-    version: number;
-    entries: Record<UiSfxSampleKey, ManifestEntry>;
-};
+const manifest = uiSfxManifestSchema.parse(uiSfxManifest);
 
 const globUrls = import.meta.glob<string>('../assets/audio/ui/*.ogg', {
     eager: true,
