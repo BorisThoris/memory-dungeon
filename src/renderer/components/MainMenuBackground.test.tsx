@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { useRef } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
@@ -241,6 +241,30 @@ describe('MainMenuBackground', () => {
         expect(tickerAddSpy).not.toHaveBeenCalled();
         expect(startSpy).not.toHaveBeenCalled();
         expect(renderSpy).toHaveBeenCalled();
+    });
+
+    it('keeps an initially hidden menu idle and resumes it when the tab becomes visible', async () => {
+        let visibilityState: DocumentVisibilityState = 'hidden';
+        vi.spyOn(document, 'visibilityState', 'get').mockImplementation(() => visibilityState);
+        renderMenuBackground({ height: 720, reduceMotion: false, width: 1280 });
+
+        await waitFor(() => {
+            expect(initSpy).toHaveBeenCalledTimes(1);
+        });
+        expect(tickerAddSpy).not.toHaveBeenCalled();
+        expect(startSpy).not.toHaveBeenCalled();
+
+        visibilityState = 'visible';
+        act(() => document.dispatchEvent(new Event('visibilitychange')));
+
+        expect(tickerAddSpy).toHaveBeenCalledTimes(1);
+        expect(startSpy).toHaveBeenCalledTimes(1);
+
+        visibilityState = 'hidden';
+        act(() => document.dispatchEvent(new Event('visibilitychange')));
+
+        expect(tickerRemoveSpy).toHaveBeenCalledTimes(1);
+        expect(stopSpy).toHaveBeenCalledTimes(1);
     });
 
     it('falls back to the static CSS background when Pixi initialization fails', async () => {

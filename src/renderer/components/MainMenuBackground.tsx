@@ -645,6 +645,9 @@ const MainMenuBackground = ({
                     currentGq,
                     menuFieldTiltRef
                 );
+                sceneRef.current.setPageVisibilityPaused(
+                    typeof document !== 'undefined' && document.visibilityState !== 'visible'
+                );
                 sceneRef.current.resize(currentWidth, currentHeight);
                 sceneRef.current.setReduceMotion(currentReduceMotion);
                 setRenderStatus('ready');
