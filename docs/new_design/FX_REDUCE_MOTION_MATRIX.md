@@ -15,7 +15,7 @@ Runtime **`settings.reduceMotion`** is mirrored on the app root as **`data-reduc
 | **Platform tilt field** | Can drive `--tilt-*` on frame | Disabled | `usePlatformTiltField` |
 | **Motion permission chip** | May show on touch | Hidden | `TileBoard.module.css` `.motionChip` |
 | **DOM fallback: resolve pulses / glow** | CSS animations on match/mismatch | Reduced / disabled | `TileBoard.module.css` `[data-reduce-motion]` |
-| **Match particle burst (FX-005)** | Conic “spark” ring on `.hitButtonResolvingMatch` + `.fallbackTile.resolvingMatch .tileFace` | Off (`::before` suppressed) | Pure CSS; no extra Canvas/R3F objects |
+| **Match burst (FX-005)** | Fixed pre-mounted resolving rim + glow, followed by the matched-edge shader cue | Static resolving rim + near-static matched edge | No objects are allocated per trigger; see `TileBoardEffectOverlays.tsx` and `PERFORMANCE_BUDGET.md`. |
 | **DOM face-up reveal arc (CARD-002)** | `.tileFace` `domCardFaceReveal` | Disabled | `TileBoard.module.css` |
 | **WebGL flip pop impulse (CARD-003)** | Brief uniform scale + forward Z bump on hidden→face-up | Off (timer cleared; no impulse) | `TileBoardScene` `advanceTileBezelFrame` |
 | **Matched ✓ scale/fade (FX-011)** | `.fallbackMatchedCheck` + `.hitButtonMatched::after` `matchedCheckPop` | Static (no keyframe animation) | `TileBoard.module.css` |
@@ -24,7 +24,7 @@ Runtime **`settings.reduceMotion`** is mirrored on the app root as **`data-reduc
 | **Shuffle Z stagger (FX-013)** | — | Off | Per-tile `shuffleZJitter` only while shuffle window active |
 | **Match pair pulse (FX-017)** | Hit layer + DOM pulses | Same reduced rules as other pulses | Stronger `matchPulse` scale when `resolvingSelection === 'match'` |
 | **TBF-002 / TBF-004 resolving rim stack** | Crisp inner rim + soft halo ring; rounded-rect inner on medium+ (`tileBoardRimGeometry`), circular on `low` | Same static opacities as non-reduced branch (no sine pulse on rim) | Halo segment count follows `graphicsQuality` |
-| **TBF-005 match burst v2** | Up to 3 staggered hue rings (`emeraldBright` / `goldBright` / `cyanBright`); `low` = 1 ring, `medium` = 2, `high` = 3 | Off (timers cleared; meshes hidden) | `advanceTileBezelFrame` |
+| **TBF-005 match burst v2** | One pre-mounted matched-edge shader mesh with core, ember, and glow color bands; Low uses the crisp-rim fallback | Near-static shader tier; Low keeps the static crisp rim | `TileBoardEffectOverlays`, `advanceTileBezelFrame`, `computeMatchedVictoryFlameVisualState` |
 | **TBF-006 matched ✓ glow plane** | Soft emerald plane behind ✓; subtle sine opacity | Static mid opacity | Same |
 | **Matched ember rim** | Rounded-rect edge shader: brief burst on first `matched`, then quieter persistent ember outline on medium/high | Burst still visible, but ember motion is nearly static; `low` keeps static rim + existing matched chrome | `matchedCardRimFireMaterial.ts`, `TileBoardScene.tsx` |
 | **TBF-007 keyboard focus ring** | Gold ring + slow sine opacity pulse when focused + pickable | Flat opacity (~0.68) | `advanceTileBezelFrame` |
