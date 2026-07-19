@@ -17,7 +17,8 @@ describe('createSteamAdapter configuration', () => {
     const originalAppId = process.env.STEAM_APP_ID;
 
     beforeEach(() => {
-        steamworksMocks.activate.mockClear();
+        steamworksMocks.activate.mockReset();
+        steamworksMocks.activate.mockReturnValue(true);
         steamworksMocks.electronEnableSteamOverlay.mockClear();
         steamworksMocks.init.mockClear();
         delete process.env.STEAM_APP_ID;
@@ -49,5 +50,35 @@ describe('createSteamAdapter configuration', () => {
         expect(createSteamAdapter().isConnected()).toBe(false);
         expect(steamworksMocks.init).not.toHaveBeenCalled();
     });
-});
 
+    it('returns a stable rejection code when Steam declines activation', () => {
+        steamworksMocks.activate.mockReturnValue(false);
+        const reportWarning = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+        expect(createSteamAdapter().unlockAchievement('ACH_FIRST_CLEAR')).toEqual({
+            ok: false,
+            reason: 'steam_rejected',
+            detail: 'activate_returned_false'
+        });
+        reportWarning.mockRestore();
+    });
+
+    it('keeps native exception details in main-process logs only', () => {
+        const nativeError = new Error('/private/user/path Steam token failure');
+        steamworksMocks.activate.mockImplementation(() => {
+            throw nativeError;
+        });
+        const reportWarning = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+
+        const result = createSteamAdapter().unlockAchievement('ACH_FIRST_CLEAR');
+
+        expect(result).toEqual({ ok: false, reason: 'steam_rejected', detail: 'activation_error' });
+        expect(JSON.stringify(result)).not.toContain(nativeError.message);
+        expect(reportWarning).toHaveBeenCalledWith(
+            '[steam] achievement unlock failed',
+            'ACH_FIRST_CLEAR',
+            nativeError
+        );
+        reportWarning.mockRestore();
+    });
+});

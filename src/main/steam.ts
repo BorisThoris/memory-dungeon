@@ -66,7 +66,7 @@ export const createSteamAdapter = (): SteamAdapter => {
                     return {
                         ok: false,
                         reason: 'steam_rejected',
-                        detail: error instanceof Error ? error.message : String(error)
+                        detail: 'activation_error'
                     };
                 }
             }
