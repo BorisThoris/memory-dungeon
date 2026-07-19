@@ -1,9 +1,14 @@
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { app, BrowserWindow } from 'electron';
 import type { DisplayMode } from '../shared/contracts';
 import { resolveDevServerUrl } from './dev-server-url';
 import { registerIpcHandlers } from './ipc';
 import { PersistenceService } from './persistence';
+import {
+    RENDERER_SECURITY_WEB_PREFERENCES,
+    rendererNavigationIsAllowed
+} from './renderer-security-policy';
 import { createSteamAdapter } from './steam';
 import { resolveStartupDisplayMode } from './startup-display-mode';
 
@@ -26,9 +31,7 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
         title: 'Memory Dungeon',
         webPreferences: {
             preload: path.join(__dirname, '../preload/index.js'),
-            contextIsolation: true,
-            nodeIntegration: false,
-            sandbox: false
+            ...RENDERER_SECURITY_WEB_PREFERENCES
         }
     });
 
@@ -37,12 +40,21 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
     });
 
     const devServerUrl = resolveDevServerUrl(process.env.VITE_DEV_SERVER_URL, app.isPackaged);
+    const rendererFilePath = path.join(app.getAppPath(), 'dist', 'index.html');
+    const rendererEntryUrl = devServerUrl ?? pathToFileURL(rendererFilePath).href;
+
+    window.webContents.on('will-navigate', (event, targetUrl) => {
+        if (!rendererNavigationIsAllowed(targetUrl, rendererEntryUrl)) {
+            event.preventDefault();
+        }
+    });
+    window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
 
     if (devServerUrl) {
         void window.loadURL(devServerUrl);
         window.webContents.openDevTools({ mode: 'detach' });
     } else {
-        void window.loadFile(path.join(app.getAppPath(), 'dist', 'index.html'));
+        void window.loadFile(rendererFilePath);
     }
 
     window.on('closed', () => {
