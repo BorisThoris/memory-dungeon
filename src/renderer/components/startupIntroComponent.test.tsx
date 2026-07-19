@@ -149,6 +149,59 @@ describe('StartupIntro', () => {
         expect(onComplete).toHaveBeenCalledTimes(1);
     });
 
+    it('returns focus to the menu root after the intro unmounts', () => {
+        const menuRoot = document.createElement('div');
+        menuRoot.dataset.testid = 'main-menu-focus-root';
+        menuRoot.tabIndex = -1;
+        document.body.append(menuRoot);
+
+        try {
+            menuRoot.focus();
+            const rendered = renderIntro(<StartupIntro onComplete={vi.fn()} reduceMotion={false} />);
+            act(() => {
+                vi.advanceTimersByTime(20);
+            });
+            expect(screen.getByRole('dialog', { name: /startup relic intro/i })).toHaveFocus();
+
+            rendered.unmount();
+            act(() => {
+                vi.advanceTimersByTime(20);
+            });
+
+            expect(menuRoot).toHaveFocus();
+        } finally {
+            menuRoot.remove();
+        }
+    });
+
+    it('does not override focus claimed after the intro unmounts', () => {
+        const menuRoot = document.createElement('div');
+        menuRoot.dataset.testid = 'main-menu-focus-root';
+        menuRoot.tabIndex = -1;
+        const nextSurfaceButton = document.createElement('button');
+        document.body.append(menuRoot, nextSurfaceButton);
+
+        try {
+            menuRoot.focus();
+            const rendered = renderIntro(<StartupIntro onComplete={vi.fn()} reduceMotion={false} />);
+            act(() => {
+                vi.advanceTimersByTime(20);
+            });
+            expect(screen.getByRole('dialog', { name: /startup relic intro/i })).toHaveFocus();
+
+            rendered.unmount();
+            nextSurfaceButton.focus();
+            act(() => {
+                vi.advanceTimersByTime(20);
+            });
+
+            expect(nextSurfaceButton).toHaveFocus();
+        } finally {
+            menuRoot.remove();
+            nextSurfaceButton.remove();
+        }
+    });
+
     it('uses the shortened reduced-motion runtime and supports keyboard skip', async () => {
         const onComplete = vi.fn();
 

@@ -637,6 +637,15 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
             const menuRoot = document.querySelector<HTMLElement>('[data-testid="main-menu-focus-root"]');
             const returnTarget = menuRoot ?? previousFocusRef.current;
             window.requestAnimationFrame(() => {
+                const activeElement = document.activeElement;
+                if (
+                    activeElement instanceof HTMLElement &&
+                    activeElement !== document.body &&
+                    activeElement !== document.documentElement &&
+                    document.contains(activeElement)
+                ) {
+                    return;
+                }
                 returnTarget?.focus({ preventScroll: true });
             });
         };
