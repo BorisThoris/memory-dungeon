@@ -4,19 +4,12 @@
  */
 import type { SaveData } from './contracts';
 import { cosmeticUnlockTag, type CosmeticId } from './cosmetics';
+import { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
 import { normalizeSaveData } from './save-data';
 
-export const HONOR_UNLOCK_PREFIX = 'honor:' as const;
+export { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
 
-export type HonorUnlockId =
-    | 'honor_daily_initiate'
-    | 'honor_daily_streak_3'
-    | 'honor_daily_streak_7'
-    | 'honor_ascendant_5'
-    | 'honor_ascendant_10'
-    | 'honor_score_maestro'
-    | 'honor_relic_habit'
-    | 'honor_gauntlet_proof';
+export const HONOR_UNLOCK_PREFIX = 'honor:' as const;
 
 export interface HonorUnlockDefinition {
     id: HonorUnlockId;
@@ -68,16 +61,7 @@ export const HONOR_UNLOCK_CATALOG: Record<HonorUnlockId, HonorUnlockDefinition> 
 };
 
 /** Stable display order for Collection / UI. */
-export const HONOR_UNLOCK_ORDER: HonorUnlockId[] = [
-    'honor_daily_initiate',
-    'honor_daily_streak_3',
-    'honor_daily_streak_7',
-    'honor_ascendant_5',
-    'honor_ascendant_10',
-    'honor_score_maestro',
-    'honor_relic_habit',
-    'honor_gauntlet_proof'
-];
+export const HONOR_UNLOCK_ORDER: HonorUnlockId[] = [...HONOR_UNLOCK_IDS];
 
 const HONOR_COSMETIC_UNLOCKS: Partial<Record<HonorUnlockId, CosmeticId>> = {
     honor_daily_initiate: 'crest_daily_bronze',

@@ -1,15 +1,11 @@
 import type { SaveData } from './contracts';
+import type { CosmeticId } from './cosmetic-ids';
+
+export { COSMETIC_IDS, type CosmeticId } from './cosmetic-ids';
 
 export type CosmeticSlot = 'title' | 'crest' | 'card_back';
 export type CardThemeId = 'classic_card_back';
 export type CosmeticStatus = 'owned' | 'locked';
-export type CosmeticId =
-    | 'title_seeker'
-    | 'crest_lantern'
-    | 'card_back_classic'
-    | 'crest_daily_bronze'
-    | 'title_ascendant_v';
-
 export interface CosmeticDefinition {
     id: CosmeticId;
     slot: CosmeticSlot;

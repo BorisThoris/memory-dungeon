@@ -460,17 +460,12 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary).toBeNull();
     });
 
-    it('bounds persisted collections and ignores oversized identifiers', () => {
+    it('bounds persisted collections and rejects unknown or oversized identifiers', () => {
         const expectedLimits = {
             encorePairKeys: 80,
             entryTextLength: 128,
-            puzzleCompletions: 256,
-            unlockTags: 128
+            puzzleCompletions: 256
         };
-        const unlocks = Array.from(
-            { length: expectedLimits.unlockTags + 20 },
-            (_, index) => `cosmetic:future_${index}`
-        );
         const puzzleCompletions = Object.fromEntries(
             Array.from({ length: expectedLimits.puzzleCompletions + 20 }, (_, index) => [
                 `puzzle_${index}`,
@@ -480,7 +475,14 @@ describe('save normalization', () => {
         const oversized = 'x'.repeat(expectedLimits.entryTextLength + 1);
 
         const normalized = normalizeSaveData({
-            unlocks: [`honor:${oversized}`, ...unlocks],
+            unlocks: [
+                `honor:${oversized}`,
+                'achievement:BAD_ACHIEVEMENT',
+                'cosmetic:future_cosmetic',
+                'honor:future_honor',
+                'cosmetic:crest_daily_bronze',
+                'cosmetic:crest_daily_bronze'
+            ],
             playerStats: {
                 ...createDefaultSaveData().playerStats!,
                 encorePairKeysLastRun: [oversized, '', ...Array.from({ length: 100 }, (_, index) => `pair_${index}`)],
@@ -488,7 +490,7 @@ describe('save normalization', () => {
             }
         });
 
-        expect(normalized.unlocks).toHaveLength(expectedLimits.unlockTags);
+        expect(normalized.unlocks).toEqual(['cosmetic:crest_daily_bronze']);
         expect(normalized.unlocks).not.toContain(`honor:${oversized}`);
         expect(normalized.playerStats?.encorePairKeysLastRun).toHaveLength(expectedLimits.encorePairKeys);
         expect(normalized.playerStats?.encorePairKeysLastRun).not.toContain(oversized);

@@ -16,6 +16,8 @@ import {
     type StartingLoadoutId
 } from './contracts';
 import { z } from 'zod';
+import { COSMETIC_IDS } from './cosmetic-ids';
+import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
 import { utcDateKeyMinusOneDay } from './rng';
 import { RELIC_POOL } from './relics';
 import { evaluateSaveMigrationGate } from './version-gate';
@@ -114,6 +116,11 @@ const STARTING_LOADOUT_ID_SET: ReadonlySet<string> = new Set([
     'route_tactician',
     'cursebreaker',
     'vaultbreaker'
+]);
+const VALID_UNLOCK_TAG_SET: ReadonlySet<string> = new Set([
+    ...ACHIEVEMENT_IDS.map((id) => `achievement:${id}`),
+    ...COSMETIC_IDS.map((id) => `cosmetic:${id}`),
+    ...HONOR_UNLOCK_IDS.map((id) => `honor:${id}`)
 ]);
 
 const PERSISTED_COLLECTION_LIMITS = {
@@ -241,13 +248,12 @@ const normalizeUnlocks = (input: unknown): string[] => {
     if (!Array.isArray(input)) {
         return [];
     }
-    const allowedPrefixes = ['achievement:', 'cosmetic:', 'honor:'];
     const out = new Set<string>();
     for (const value of input.slice(0, PERSISTED_COLLECTION_LIMITS.inspectedEntries)) {
         if (
             typeof value === 'string' &&
             value.length <= PERSISTED_COLLECTION_LIMITS.entryTextLength &&
-            allowedPrefixes.some((prefix) => value.startsWith(prefix))
+            VALID_UNLOCK_TAG_SET.has(value)
         ) {
             out.add(value);
             if (out.size >= PERSISTED_COLLECTION_LIMITS.unlockTags) {

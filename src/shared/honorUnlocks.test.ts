@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
     eligibleHonorUnlockIds,
+    HONOR_UNLOCK_CATALOG,
+    HONOR_UNLOCK_IDS,
     HONOR_UNLOCK_ORDER,
     honorUnlockTag,
     mergeHonorUnlockTags,
@@ -42,6 +44,7 @@ describe('honorUnlocks', () => {
     });
 
     it('lists expected catalog size', () => {
+        expect(Object.keys(HONOR_UNLOCK_CATALOG)).toEqual(HONOR_UNLOCK_IDS);
         expect(HONOR_UNLOCK_ORDER.length).toBe(totalHonorUnlocks);
         expect(totalHonorUnlocks).toBe(8);
     });
