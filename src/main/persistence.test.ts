@@ -112,6 +112,16 @@ describe('PersistenceService', () => {
         expect(() => p.getSaveData()).toThrow('recognized field');
     });
 
+    it('does not downgrade a save written by a newer app schema', () => {
+        const futureSave = { ...createDefaultSaveData(), schemaVersion: createDefaultSaveData().schemaVersion + 1 };
+        const repository = new MemorySaveRepository(futureSave);
+        const p = new PersistenceService(repository);
+
+        expect(() => p.getSaveData()).toThrow('newer unsupported schema version');
+        expect(() => p.saveGame(futureSave)).toThrow('newer unsupported schema version');
+        expect(repository.getSaveData()).toBe(futureSave);
+    });
+
     it('unlockAchievement merges into achievements without dropping others', () => {
         const p = new PersistenceService();
         p.unlockAchievement('ACH_FIRST_CLEAR');

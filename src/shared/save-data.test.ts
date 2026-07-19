@@ -58,6 +58,9 @@ describe('save normalization', () => {
         expect(() => normalizeUnknownSaveDataOrThrow({})).toThrow('recognized field');
         expect(() => normalizeUnknownSaveDataOrThrow({ injectedRoot: 'discard' })).toThrow('recognized field');
         expect(normalizeUnknownSaveDataOrThrow({ bestScore: 42 }).bestScore).toBe(42);
+        expect(() => normalizeUnknownSaveDataOrThrow({ schemaVersion: SAVE_SCHEMA_VERSION + 1 })).toThrow(
+            'newer unsupported schema version'
+        );
     });
 
     it('strips unknown save, settings, and player-stat fields at the persistence boundary', () => {

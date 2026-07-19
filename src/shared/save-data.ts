@@ -481,6 +481,13 @@ export const normalizeUnknownSaveDataOrThrow = (input: unknown): SaveData => {
     if (!parsed.success || !hasRecognizedOwnField(input, SAVE_DATA_BOUNDARY_KEYS)) {
         throw new TypeError('Save data must be an object with at least one recognized field.');
     }
+    if (
+        typeof parsed.data.schemaVersion === 'number' &&
+        Number.isFinite(parsed.data.schemaVersion) &&
+        parsed.data.schemaVersion > SAVE_SCHEMA_VERSION
+    ) {
+        throw new TypeError('Save data uses a newer unsupported schema version.');
+    }
     return normalizeSaveData(parsed.data);
 };
 

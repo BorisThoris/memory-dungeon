@@ -286,6 +286,18 @@ describe('useAppStore timers', () => {
         expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('{"undocumentedSave":true}');
     });
 
+    it('protects a browser save from a newer schema instead of downgrading it', async () => {
+        const defaultSave = createDefaultSaveData();
+        const futureSave = JSON.stringify({ ...defaultSave, schemaVersion: defaultSave.schemaVersion + 1 });
+        window.localStorage.setItem('memory-dungeon-save-data', futureSave);
+        useAppStore.setState({ hydrated: false, hydrating: false });
+
+        await useAppStore.getState().hydrate();
+
+        expect(useAppStore.getState().saveWritesBlockedByReadFailure).toBe(true);
+        expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe(futureSave);
+    });
+
     it('claims a ready meta progression reward and applies it to future run starts', () => {
         const saveData = createDefaultSaveData();
         saveData.playerStats = {
