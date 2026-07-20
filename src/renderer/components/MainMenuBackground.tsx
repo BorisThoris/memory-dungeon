@@ -608,17 +608,12 @@ const MainMenuBackground = ({
                     return;
                 }
 
-                const {
-                    graphicsQuality: currentGq,
-                    height: currentHeight,
-                    reduceMotion: currentReduceMotion,
-                    width: currentWidth
-                } = latestPropsRef.current;
+                const initialGraphicsQuality = latestPropsRef.current.graphicsQuality;
 
                 app = new pixi.Application();
 
                 await app.init({
-                    antialias: currentGq !== 'low',
+                    antialias: initialGraphicsQuality !== 'low',
                     autoDensity: true,
                     autoStart: false,
                     backgroundAlpha: 0,
@@ -631,6 +626,13 @@ const MainMenuBackground = ({
                     safelyDestroyApplication(app);
                     return;
                 }
+
+                const {
+                    graphicsQuality: currentGq,
+                    height: currentHeight,
+                    reduceMotion: currentReduceMotion,
+                    width: currentWidth
+                } = latestPropsRef.current;
 
                 app.canvas.className = styles.atmosphereCanvas;
                 app.canvas.setAttribute('aria-hidden', 'true');

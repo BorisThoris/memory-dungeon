@@ -231,6 +231,42 @@ describe('MainMenuBackground', () => {
         });
     });
 
+    it('uses the latest quality and motion props when Pixi initialization settles', async () => {
+        let resolveInit: (() => void) | null = null;
+        initSpy.mockImplementationOnce(
+            () =>
+                new Promise<void>((resolve) => {
+                    resolveInit = resolve;
+                })
+        );
+        vi.spyOn(window, 'devicePixelRatio', 'get').mockReturnValue(4);
+        const rendered = render(
+            <PlatformTiltProvider>
+                <MenuBackgroundHarness graphicsQuality="low" height={800} reduceMotion={false} width={1280} />
+            </PlatformTiltProvider>
+        );
+
+        await waitFor(() => {
+            expect(initSpy).toHaveBeenCalledTimes(1);
+            expect(resolveInit).not.toBeNull();
+        });
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <MenuBackgroundHarness graphicsQuality="high" height={600} reduceMotion width={900} />
+            </PlatformTiltProvider>
+        );
+        await act(async () => {
+            resolveInit?.();
+            await Promise.resolve();
+        });
+
+        await waitFor(() => {
+            expect(applicationInstances[0]?.renderer.resolution).toBe(2.5);
+        });
+        expect(tickerAddSpy).not.toHaveBeenCalled();
+        expect(startSpy).not.toHaveBeenCalled();
+    });
+
     it('builds a static scene when reduced motion is enabled', async () => {
         renderMenuBackground({ height: 720, reduceMotion: true, width: 1280 });
 
