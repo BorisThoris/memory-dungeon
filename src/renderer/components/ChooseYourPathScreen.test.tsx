@@ -318,6 +318,23 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         expect(screen.getByRole('button', { name: /page 1 of/i })).toBeInTheDocument();
     });
 
+    it('keeps the browse library available when ResizeObserver throws', () => {
+        vi.stubGlobal(
+            'ResizeObserver',
+            class {
+                disconnect(): void {}
+                observe(): void {
+                    throw new Error('resize observer unavailable');
+                }
+            }
+        );
+        vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(390);
+
+        render(<ChooseYourPathScreen />);
+
+        expect(screen.getByRole('button', { name: /page 1 of/i })).toBeInTheDocument();
+    });
+
     it('starts Classic Run from the fresh-profile hero launcher in one action', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);

@@ -140,14 +140,20 @@ const MetaFrame = ({ as: Tag = 'div', children, className = '', ...rest }: MetaF
             return;
         }
 
-        const ro = new ResizeObserver(() => {
-            measure();
-        });
-        ro.observe(root);
+        let ro: ResizeObserver | null = null;
+        try {
+            ro = new ResizeObserver(() => {
+                measure();
+            });
+            ro.observe(root);
+        } catch {
+            ro?.disconnect();
+            ro = null;
+        }
         measure();
 
         return () => {
-            ro.disconnect();
+            ro?.disconnect();
         };
     }, []);
 

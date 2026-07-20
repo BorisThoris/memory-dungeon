@@ -53,13 +53,22 @@ export const useElementSize = <T extends HTMLElement>(): [RefCallback<T>, Elemen
 
             frameId = window.requestAnimationFrame(updateSize);
         };
-        const resizeObserver =
-            typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => scheduleUpdate());
+        let resizeObserver: ResizeObserver | null = null;
+        try {
+            resizeObserver = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => scheduleUpdate());
+        } catch {
+            resizeObserver = null;
+        }
 
-        resizeObserver?.observe(element);
+        try {
+            resizeObserver?.observe(element);
 
-        if (element.parentElement) {
-            resizeObserver?.observe(element.parentElement);
+            if (element.parentElement) {
+                resizeObserver?.observe(element.parentElement);
+            }
+        } catch {
+            resizeObserver?.disconnect();
+            resizeObserver = null;
         }
 
         scheduleUpdate();

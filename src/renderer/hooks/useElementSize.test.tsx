@@ -131,4 +131,41 @@ describe('useElementSize', () => {
         expect(screen.getByTestId('element-size')).toHaveTextContent('unmeasured');
         expect(frames).toHaveLength(0);
     });
+
+    it('falls back to animation-frame measurement when ResizeObserver construction throws', () => {
+        vi.stubGlobal(
+            'ResizeObserver',
+            class {
+                constructor() {
+                    throw new Error('resize observer unavailable');
+                }
+            }
+        );
+
+        render(<SizeProbe height={70} present version={1} width={140} />);
+
+        expect(frames).toHaveLength(1);
+        act(() => runNextFrame(0));
+        expect(screen.getByTestId('element-size')).toHaveTextContent('140x70');
+    });
+
+    it('falls back to animation-frame measurement when ResizeObserver observe throws', () => {
+        const disconnect = vi.fn();
+        vi.stubGlobal(
+            'ResizeObserver',
+            class {
+                disconnect = disconnect;
+                observe(): void {
+                    throw new Error('resize observer observe unavailable');
+                }
+            }
+        );
+
+        render(<SizeProbe height={75} present version={1} width={145} />);
+
+        expect(disconnect).toHaveBeenCalledTimes(1);
+        expect(frames).toHaveLength(1);
+        act(() => runNextFrame(0));
+        expect(screen.getByTestId('element-size')).toHaveTextContent('145x75');
+    });
 });

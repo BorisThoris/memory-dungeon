@@ -589,14 +589,20 @@ const ChooseYourPathScreen = () => {
             syncCardsPerPage(el.clientWidth);
             return undefined;
         }
-        const ro = new ResizeObserver((entries) => {
-            const w = entries[0]?.contentRect.width ?? el.clientWidth;
-            syncCardsPerPage(w);
-        });
-        ro.observe(el);
+        let ro: ResizeObserver | null = null;
+        try {
+            ro = new ResizeObserver((entries) => {
+                const w = entries[0]?.contentRect.width ?? el.clientWidth;
+                syncCardsPerPage(w);
+            });
+            ro.observe(el);
+        } catch {
+            ro?.disconnect();
+            ro = null;
+        }
         syncCardsPerPage(el.clientWidth);
         return () => {
-            ro.disconnect();
+            ro?.disconnect();
         };
     }, [browseOpen, filteredLibraryModes.length, vpW]);
 
