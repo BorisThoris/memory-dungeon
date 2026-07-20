@@ -61,6 +61,9 @@ describe('save normalization', () => {
         expect(() => normalizeUnknownSaveDataOrThrow({ schemaVersion: SAVE_SCHEMA_VERSION + 1 })).toThrow(
             'newer unsupported schema version'
         );
+        expect(normalizeUnknownSaveDataOrThrow({ schemaVersion: SAVE_SCHEMA_VERSION + 0.5 }).schemaVersion).toBe(
+            SAVE_SCHEMA_VERSION
+        );
     });
 
     it('strips unknown save, settings, and player-stat fields at the persistence boundary', () => {

@@ -156,10 +156,18 @@ describe('REG-089 local version gate', () => {
             sourceSchemaVersion: SAVE_SCHEMA_VERSION + 1,
             normalizedSchemaVersion: SAVE_SCHEMA_VERSION
         });
-        expect(evaluateSaveMigrationGate({ schemaVersion: Number.NaN })).toEqual({
-            keepLastRunSummary: true,
-            sourceSchemaVersion: null,
-            normalizedSchemaVersion: SAVE_SCHEMA_VERSION
-        });
+        for (const schemaVersion of [
+            Number.NaN,
+            Number.POSITIVE_INFINITY,
+            Number.NEGATIVE_INFINITY,
+            SAVE_SCHEMA_VERSION + 0.5,
+            -1
+        ]) {
+            expect(evaluateSaveMigrationGate({ schemaVersion })).toEqual({
+                keepLastRunSummary: true,
+                sourceSchemaVersion: null,
+                normalizedSchemaVersion: SAVE_SCHEMA_VERSION
+            });
+        }
     });
 });
