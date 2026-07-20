@@ -31,4 +31,11 @@ describe('formatNextUtcReset', () => {
         const utcMidnight = Date.UTC(2026, 6, 4, 0, 0, 0, 0);
         expect(formatNextUtcReset(utcMidnight)).toBe('24:00:00');
     });
+
+    it.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])(
+        'formats non-finite input as a safe zero countdown',
+        (nowMs) => {
+            expect(formatNextUtcReset(nowMs)).toBe('00:00:00');
+        }
+    );
 });
