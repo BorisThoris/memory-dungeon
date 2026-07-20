@@ -64,6 +64,23 @@ describe('turn mismatch rules', () => {
         });
     });
 
+    it('normalizes malformed mismatch penalty counters before applying life and guard loss', () => {
+        const b = board([tile('a'), tile('b')]);
+        const penalty = calculateMismatchPenalty(run(b, {
+            lives: 2.9,
+            stats: { ...run(b).stats, tries: Number.NaN, guardTokens: Number.POSITIVE_INFINITY }
+        }), b, 1.9);
+
+        expect(penalty).toMatchObject({
+            consumesGuardToken: false,
+            guardTokens: 0,
+            lives: 2,
+            lostLife: false,
+            status: 'playing',
+            tries: 1
+        });
+    });
+
     it('applies first mismatch grace when eligible', () => {
         const b = board([tile('a'), tile('b')], { matchedPairs: 0 });
         const penalty = calculateMismatchPenalty(run(b, {
@@ -115,6 +132,56 @@ describe('turn mismatch rules', () => {
         expect(resolved.stats.mismatches).toBe(3);
         expect(resolved.stats.currentStreak).toBe(2);
         expect(resolved.stickyBlockIndex).toBeNull();
+    });
+
+    it('normalizes malformed persisted counters during mismatch transition bookkeeping', () => {
+        const b = board([
+            tile('sealed-a', 'flipped', { pairKey: 'sealed', tileTraitKind: 'sealed' }),
+            tile('sealed-b', 'flipped', { pairKey: 'sealed', tileTraitKind: 'sealed' })
+        ]);
+        const base = run(b, {
+            hazardTileTriggersThisFloor: Number.NaN,
+            hazardShuffleSnaresThisFloor: -2,
+            hazardMirrorDecoysThisFloor: 1.9,
+            hazardFragileCacheBreaksThisFloor: Number.POSITIVE_INFINITY,
+            safeHazardWardChargesThisFloor: 1.9,
+            safeHazardWardsUsedThisFloor: Number.NaN,
+            peekCharges: 2.9,
+            recallMistakesThisFloor: Number.NaN,
+            stats: {
+                ...run(b).stats,
+                tries: Number.NaN,
+                mismatches: Number.POSITIVE_INFINITY,
+                currentStreak: Number.POSITIVE_INFINITY,
+                highestLevel: Number.NaN,
+                guardTokens: Number.NaN,
+                volatileTraitShuffles: Number.POSITIVE_INFINITY
+            }
+        });
+
+        const resolved = resolveMismatchTurnTransition({
+            run: base,
+            board: b,
+            tileIds: ['sealed-a', 'sealed-b'],
+            sourceTiles: b.tiles,
+            triesDelta: 1.9,
+            decoyTouched: false
+        });
+
+        expect(resolved.hazardTileTriggersThisFloor).toBe(0);
+        expect(resolved.hazardShuffleSnaresThisFloor).toBe(0);
+        expect(resolved.hazardMirrorDecoysThisFloor).toBe(1);
+        expect(resolved.hazardFragileCacheBreaksThisFloor).toBe(0);
+        expect(resolved.safeHazardWardChargesThisFloor).toBe(1);
+        expect(resolved.safeHazardWardsUsedThisFloor).toBe(0);
+        expect(resolved.peekCharges).toBe(1);
+        expect(resolved.recallMistakesThisFloor).toBe(1);
+        expect(resolved.stats.tries).toBe(1);
+        expect(resolved.stats.mismatches).toBe(1);
+        expect(resolved.stats.currentStreak).toBe(0);
+        expect(resolved.stats.highestLevel).toBe(1);
+        expect(resolved.stats.guardTokens).toBe(0);
+        expect(resolved.stats.volatileTraitShuffles).toBe(0);
     });
 
     it('adds boss identity mismatch pressure on boss floors', () => {
