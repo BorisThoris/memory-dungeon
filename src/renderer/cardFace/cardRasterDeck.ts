@@ -82,7 +82,11 @@ export const isCardRasterDeckEnabled = (): boolean => {
         return true;
     }
     if (import.meta.env.DEV && typeof localStorage !== 'undefined') {
-        return localStorage.getItem('cardRasterDeck') === '1';
+        try {
+            return localStorage.getItem('cardRasterDeck') === '1';
+        } catch {
+            return false;
+        }
     }
     return false;
 };
