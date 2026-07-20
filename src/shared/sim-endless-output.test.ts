@@ -4,7 +4,8 @@ import {
     buildEndlessSimulationCsv,
     buildEndlessSimulationSummary,
     countUndefeatedEnemyHazardsForPlayableGate,
-    evaluateEndlessSimulationHealth
+    evaluateEndlessSimulationHealth,
+    parseEndlessSimulationCliOptions
 } from '../../scripts/sim-endless';
 import { runSoftlockSeedGate } from '../../scripts/gate-softlock-seeds';
 import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from './contracts';
@@ -12,6 +13,23 @@ import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } fr
 describe('sim-endless CSV output', () => {
     afterEach(() => {
         vi.restoreAllMocks();
+    });
+
+    it('parses CLI options with positive numeric guards and exact output paths', () => {
+        expect(parseEndlessSimulationCliOptions(['--floors=12', '--seed=42001', '--summary', '--out=reports/a=b.csv'])).toEqual({
+            floors: 12,
+            runSeed: 42_001,
+            summaryMode: true,
+            checkMode: false,
+            out: 'reports/a=b.csv'
+        });
+
+        expect(parseEndlessSimulationCliOptions(['--floors=0', '--seed=', '--check'])).toEqual({
+            floors: 1,
+            runSeed: 42_001,
+            summaryMode: false,
+            checkMode: true
+        });
     });
 
     it('reports findable kind diagnostics and target weights', () => {

@@ -24,6 +24,11 @@ const floorFiniteOrFallback = (value: number, fallback: number): number =>
 export const readFlooredNumericCliArg = (argv: readonly string[], name: string, fallback: number): number =>
     floorFiniteOrFallback(readNumericCliArg(argv, name, fallback), fallback);
 
+export const readPositiveFlooredNumericCliArg = (argv: readonly string[], name: string, fallback: number): number => {
+    const value = readFlooredNumericCliArg(argv, name, fallback);
+    return value > 0 ? value : fallback;
+};
+
 export const generateDeterministicStressSeeds = (count: number, baseSeed: number): number[] => {
     const seeds: number[] = [];
     let state = Math.max(1, Math.floor(baseSeed)) >>> 0;

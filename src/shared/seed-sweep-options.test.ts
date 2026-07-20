@@ -3,6 +3,7 @@ import {
     generateDeterministicStressSeeds,
     readFlooredNumericCliArg,
     readNumericCliArg,
+    readPositiveFlooredNumericCliArg,
     readSeedListCliArg,
     resolveSeedSweep
 } from '../../scripts/seed-sweep-options';
@@ -23,6 +24,14 @@ describe('seed sweep CLI options', () => {
         expect(readFlooredNumericCliArg(['--floors='], 'floors', 1000)).toBe(0);
         expect(readFlooredNumericCliArg(['--floors=invalid'], 'floors', 1000)).toBe(1000);
         expect(readFlooredNumericCliArg(['--floors=Infinity'], 'floors', 1000)).toBe(1000);
+    });
+
+    it('rejects non-positive floored numeric options when a positive value is required', () => {
+        expect(readPositiveFlooredNumericCliArg(['--seed=42002.9'], 'seed', 42_001)).toBe(42_002);
+        expect(readPositiveFlooredNumericCliArg(['--seed=0'], 'seed', 42_001)).toBe(42_001);
+        expect(readPositiveFlooredNumericCliArg(['--seed='], 'seed', 42_001)).toBe(42_001);
+        expect(readPositiveFlooredNumericCliArg(['--seed=-5'], 'seed', 42_001)).toBe(42_001);
+        expect(readPositiveFlooredNumericCliArg(['--seed=invalid'], 'seed', 42_001)).toBe(42_001);
     });
 
     it('accepts comma and whitespace seed lists and rejects invalid seeds', () => {

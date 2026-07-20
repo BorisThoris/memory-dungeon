@@ -25,12 +25,20 @@ import {
     hasTraitRewardInteractionFloor,
     hasTraitSwapSetupOpportunity
 } from '../src/shared/tile-trait-rules';
-import { readFlooredNumericCliArg } from './seed-sweep-options';
+import { readFlooredNumericCliArg, readPositiveFlooredNumericCliArg } from './seed-sweep-options';
 
 export interface EndlessSimulationCsvInput {
     floors: number;
     runSeed: number;
     rulesVersion?: number;
+}
+
+export interface EndlessSimulationCliOptions {
+    floors: number;
+    runSeed: number;
+    summaryMode: boolean;
+    checkMode: boolean;
+    out?: string;
 }
 
 export interface EndlessSimulationHealthReport {
@@ -480,12 +488,22 @@ const formatEndlessSimulationSummary = (
 export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string =>
     formatEndlessSimulationSummary(input, readEndlessSimulationMetrics(input));
 
+export const parseEndlessSimulationCliOptions = (argv: readonly string[]): EndlessSimulationCliOptions => {
+    const outPrefix = '--out=';
+    const out = argv.find((arg) => arg.startsWith(outPrefix))?.slice(outPrefix.length);
+
+    return {
+        floors: Math.max(1, readFlooredNumericCliArg(argv, 'floors', 10_000)),
+        runSeed: readPositiveFlooredNumericCliArg(argv, 'seed', 42_001),
+        summaryMode: argv.includes('--summary'),
+        checkMode: argv.includes('--check'),
+        ...(out ? { out } : {})
+    };
+};
+
 const runCli = (argv: readonly string[]): void => {
-    const floors = Math.max(1, readFlooredNumericCliArg(argv, 'floors', 10_000));
-    const runSeed = readFlooredNumericCliArg(argv, 'seed', 42_001);
+    const { floors, runSeed, summaryMode, checkMode, out } = parseEndlessSimulationCliOptions(argv);
     const input = { floors, runSeed };
-    const summaryMode = argv.includes('--summary');
-    const checkMode = argv.includes('--check');
     const health = checkMode ? analyzeEndlessSimulationHealth(input) : null;
     const output = health
         ? formatEndlessSimulationSummary(input, health.metrics)
@@ -502,7 +520,6 @@ const runCli = (argv: readonly string[]): void => {
         }
     }
 
-    const out = argv.find((a) => a.startsWith('--out='))?.split('=')[1];
     if (out) {
         writeFileSync(out, output, 'utf8');
     }
