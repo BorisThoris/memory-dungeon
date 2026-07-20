@@ -7,10 +7,13 @@ export interface ScoreParasiteFloorAdvance {
     parasiteWardRemaining: number;
 }
 
+const nonNegativeParasiteCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const advanceScoreParasiteFloor = (run: RunState): ScoreParasiteFloorAdvance => {
-    let parasiteFloors = run.parasiteFloors + 1;
-    let lives = run.lives;
-    let parasiteWardRemaining = run.parasiteWardRemaining;
+    let parasiteFloors = nonNegativeParasiteCount(run.parasiteFloors) + 1;
+    let lives = nonNegativeParasiteCount(run.lives);
+    let parasiteWardRemaining = nonNegativeParasiteCount(run.parasiteWardRemaining);
 
     if (hasMutator(run, 'score_parasite') && parasiteFloors >= 4) {
         parasiteFloors = 0;
@@ -37,8 +40,8 @@ export const getParasiteFloorsAfterFeaturedObjectiveClear = (
         run.relicIds.includes('parasite_ledger') &&
         hasMutator(run, 'score_parasite')
     ) {
-        return Math.max(0, run.parasiteFloors - 1);
+        return Math.max(0, nonNegativeParasiteCount(run.parasiteFloors) - 1);
     }
 
-    return run.parasiteFloors;
+    return nonNegativeParasiteCount(run.parasiteFloors);
 };

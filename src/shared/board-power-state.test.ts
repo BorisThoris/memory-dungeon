@@ -74,9 +74,27 @@ describe('board power state rules', () => {
         expect(togglePinnedTile(capped, 'a1')).toBe(capped);
     });
 
+    it('normalizes malformed pin placement counters before pinning', () => {
+        const pinned = togglePinnedTile(run({ pinsPlacedCountThisRun: Number.NaN }), 'a1');
+        expect(pinned.pinnedTileIds).toEqual(['a1']);
+        expect(pinned.pinsPlacedCountThisRun).toBe(1);
+
+        const capped = run({
+            activeContract: { maxPinsTotalRun: 1.9 } as RunState['activeContract'],
+            pinsPlacedCountThisRun: 1.9
+        });
+        expect(togglePinnedTile(capped, 'a1')).toBe(capped);
+    });
+
     it('toggles stray remove arming only while playing with charges', () => {
         expect(toggleStrayRemoveArmed(run()).strayRemoveArmed).toBe(true);
         expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: 0 })).strayRemoveArmed).toBe(false);
         expect(toggleStrayRemoveArmed(run({ status: 'paused' })).strayRemoveArmed).toBe(false);
+    });
+
+    it('normalizes malformed stray remove charges before arming', () => {
+        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: Number.NaN })).strayRemoveArmed).toBe(false);
+        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: Number.POSITIVE_INFINITY })).strayRemoveArmed).toBe(false);
+        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: 1.9 })).strayRemoveArmed).toBe(true);
     });
 });
