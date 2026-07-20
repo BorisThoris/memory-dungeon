@@ -9,6 +9,9 @@ import { COMBO_SHARD_STREAK_STEP, applyComboShardGain } from './combo-shard-rule
 import type { DungeonMatchReward } from './dungeon-match-reward-rules';
 import type { RouteCardReward } from './route-card-reward-rules';
 
+const nonNegativeRewardCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export interface ResolvedMatchSurvivalRewardInput {
     catalystAltarUpgraded: boolean;
     currentStreak: number;
@@ -39,35 +42,43 @@ export const calculateResolvedMatchSurvivalReward = ({
     run
 }: ResolvedMatchSurvivalRewardInput): ResolvedMatchSurvivalReward => {
     const meditation = run.gameMode === 'meditation';
+    const safeCurrentStreak = nonNegativeRewardCount(currentStreak);
+    const safeLives = nonNegativeRewardCount(run.lives);
+    const routeGuardTokens = nonNegativeRewardCount(routeCardReward.guardTokens);
+    const dungeonGuardTokens = nonNegativeRewardCount(dungeonReward.guardTokens);
+    const routeComboShards = nonNegativeRewardCount(routeCardReward.comboShards);
+    const dungeonComboShards = nonNegativeRewardCount(dungeonReward.comboShards);
+    const safeFindableComboShardGain = nonNegativeRewardCount(findableComboShardGain);
     const guardTokenGain =
-        meditation || currentStreak % COMBO_GUARD_STREAK_STEP !== 0 ? 0 : 1;
-    const guardTokensBeforeRewards = Math.max(0, run.stats.guardTokens - (mimicCacheGuardBite ? 1 : 0));
+        meditation || safeCurrentStreak <= 0 || safeCurrentStreak % COMBO_GUARD_STREAK_STEP !== 0 ? 0 : 1;
+    const guardTokensBeforeRewards =
+        Math.max(0, nonNegativeRewardCount(run.stats.guardTokens) - (mimicCacheGuardBite ? 1 : 0));
     const guardTokens = Math.min(
         MAX_GUARD_TOKENS,
-        guardTokensBeforeRewards + guardTokenGain + routeCardReward.guardTokens + dungeonReward.guardTokens
+        guardTokensBeforeRewards + guardTokenGain + routeGuardTokens + dungeonGuardTokens
     );
     const comboShardReward = meditation
         ? applyComboShardGain(
-              Math.max(0, run.stats.comboShards - (catalystAltarUpgraded ? 1 : 0)),
-              mimicCacheFatalBite ? 0 : run.lives - (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0),
-              findableComboShardGain + routeCardReward.comboShards + dungeonReward.comboShards,
+              Math.max(0, nonNegativeRewardCount(run.stats.comboShards) - (catalystAltarUpgraded ? 1 : 0)),
+              mimicCacheFatalBite ? 0 : Math.max(0, safeLives - (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0)),
+              safeFindableComboShardGain + routeComboShards + dungeonComboShards,
               false
           )
         : applyComboShardGain(
-              Math.max(0, run.stats.comboShards - (catalystAltarUpgraded ? 1 : 0)),
-              mimicCacheFatalBite ? 0 : run.lives - (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0),
-              (currentStreak % COMBO_SHARD_STREAK_STEP === 0 ? 1 : 0) +
-                  findableComboShardGain +
-                  routeCardReward.comboShards +
-                  dungeonReward.comboShards
+              Math.max(0, nonNegativeRewardCount(run.stats.comboShards) - (catalystAltarUpgraded ? 1 : 0)),
+              mimicCacheFatalBite ? 0 : Math.max(0, safeLives - (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0)),
+              (safeCurrentStreak > 0 && safeCurrentStreak % COMBO_SHARD_STREAK_STEP === 0 ? 1 : 0) +
+                  safeFindableComboShardGain +
+                  routeComboShards +
+                  dungeonComboShards
           );
     const chainHealLifeGain =
-        meditation || currentStreak % CHAIN_HEAL_STREAK_STEP !== 0 ? 0 : 1;
+        meditation || safeCurrentStreak <= 0 || safeCurrentStreak % CHAIN_HEAL_STREAK_STEP !== 0 ? 0 : 1;
     const lives = mimicCacheFatalBite
         ? 0
         : Math.min(
               MAX_LIVES,
-              run.lives -
+              safeLives -
                   (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0) +
                   chainHealLifeGain +
                   comboShardReward.lifeGain
