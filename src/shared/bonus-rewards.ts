@@ -253,6 +253,9 @@ const rewardIdsForRouteKind = (routeKind: RunMapNodeKind | 'unknown'): BonusRewa
 const nonNegativeLedgerCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const nonNegativeFiniteAmount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const rewardCount = (ledger: BonusRewardLedger, id: BonusRewardId): number =>
     nonNegativeLedgerCount(ledger.claimedRewardIds?.[id]);
 
@@ -464,12 +467,12 @@ export const resolveBonusRewardRoomByInstanceId = ({
 };
 
 const gainFavor = (run: RunState, progress: number): RunState => {
-    const total = run.relicFavorProgress + progress;
+    const total = nonNegativeFiniteAmount(run.relicFavorProgress) + nonNegativeFiniteAmount(progress);
     const bonusPicks = Math.floor(total / 3);
     return {
         ...run,
-        bonusRelicPicksNextOffer: run.bonusRelicPicksNextOffer + bonusPicks,
-        favorBonusRelicPicksNextOffer: run.favorBonusRelicPicksNextOffer + bonusPicks,
+        bonusRelicPicksNextOffer: nonNegativeFiniteAmount(run.bonusRelicPicksNextOffer) + bonusPicks,
+        favorBonusRelicPicksNextOffer: nonNegativeFiniteAmount(run.favorBonusRelicPicksNextOffer) + bonusPicks,
         relicFavorProgress: total % 3
     };
 };
@@ -518,9 +521,6 @@ const pushUnique = (labels: string[], label: string): void => {
         labels.push(label);
     }
 };
-
-const nonNegativeFiniteAmount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const formatRewardUnit = (amount: number, singular: string, plural = `${singular}s`): string =>
     amount === 1 ? singular : plural;

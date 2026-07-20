@@ -770,4 +770,32 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.run.peekCharges).toBe(0);
         expect(result.feedback.gained).toEqual(['+1 destroy charge']);
     });
+
+    it('normalizes malformed saved relic Favor counters before carrying bonus picks', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_012,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 7,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.secret_favor,
+            payout: { relicFavorProgress: 4.9 },
+            eligible: true,
+            unavailableReason: null
+        };
+        const run = {
+            ...makeRun(room.runSeed, room.rulesVersion),
+            relicFavorProgress: Number.NaN,
+            bonusRelicPicksNextOffer: Number.POSITIVE_INFINITY,
+            favorBonusRelicPicksNextOffer: Number.NaN
+        };
+        const result = claimBonusReward(run, createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.relicFavorProgress).toBe(1);
+        expect(result.run.bonusRelicPicksNextOffer).toBe(1);
+        expect(result.run.favorBonusRelicPicksNextOffer).toBe(1);
+        expect(result.feedback.gained).toContain('+4 relic Favor progress');
+    });
 });
