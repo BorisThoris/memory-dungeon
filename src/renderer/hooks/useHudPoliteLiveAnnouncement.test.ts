@@ -1029,6 +1029,68 @@ describe('useHudPoliteLiveAnnouncement', () => {
         expect(result.current.message).toBe('error-text');
     });
 
+    it('drops an older queued live-region publish when a newer delivery overtakes it', async () => {
+        const pendingFrames: FrameRequestCallback[] = [];
+        const pendingMicrotasks: VoidFunction[] = [];
+        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
+            pendingFrames.push(callback);
+            return pendingFrames.length;
+        });
+        vi.stubGlobal('cancelAnimationFrame', vi.fn());
+        vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
+            pendingMicrotasks.push(callback);
+        });
+        vi.spyOn(performance, 'now').mockReturnValue(1000);
+        const { result } = renderHook(() =>
+            useHudPoliteLiveAnnouncement({
+                ...base,
+                boardLevel: null
+            })
+        );
+        pendingMicrotasks.length = 0;
+        const flushNextFrame = async (time: number): Promise<void> => {
+            const callback = pendingFrames.shift();
+            expect(callback).toBeDefined();
+            vi.mocked(performance.now).mockReturnValue(time);
+            await act(async () => {
+                callback?.(time);
+                await Promise.resolve();
+            });
+        };
+
+        act(() => {
+            result.current.queuePoliteAnnouncement('first', { dedupeKey: 'first' });
+        });
+        await flushNextFrame(1000);
+        expect(result.current.message).toBe('');
+        const stalePublishes = pendingMicrotasks.splice(0);
+        expect(stalePublishes.length).toBeGreaterThan(0);
+
+        act(() => {
+            result.current.queuePoliteAnnouncement('second', { dedupeKey: 'second' });
+        });
+        await flushNextFrame(1500);
+        expect(result.current.message).toBe('');
+        const freshPublishes = pendingMicrotasks.splice(0);
+        expect(freshPublishes.length).toBeGreaterThan(0);
+
+        await act(async () => {
+            for (const publish of stalePublishes) {
+                publish();
+                await Promise.resolve();
+            }
+        });
+        expect(result.current.message).toBe('');
+
+        await act(async () => {
+            for (const publish of freshPublishes) {
+                publish();
+                await Promise.resolve();
+            }
+        });
+        expect(result.current.message).toBe('second');
+    });
+
     it('throttles a second delivery when the first delivery timestamp is zero', async () => {
         const pendingFrames: FrameRequestCallback[] = [];
         vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {

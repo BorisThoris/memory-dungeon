@@ -22,13 +22,6 @@ export {
     getFindableToastText
 } from '../copy/hudActionFeedback';
 
-const flushThenSet = (text: string, set: (value: string) => void): void => {
-    set('');
-    queueMicrotask(() => {
-        set(text);
-    });
-};
-
 /** Min interval between polite live-region updates (anti-spam for screen readers). */
 const POLITE_HUD_THROTTLE_MS = 400;
 
@@ -298,6 +291,18 @@ export const useHudPoliteLiveAnnouncement = ({
     const lastDisplayedAtRef = useRef<number | null>(null);
     const throttleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pendingThrottledAnnouncementRef = useRef<{ text: string; priority: HudAnnouncePriority } | null>(null);
+    const livePublishTokenRef = useRef(0);
+
+    const flushThenSetMessage = useCallback((text: string): void => {
+        const token = livePublishTokenRef.current + 1;
+        livePublishTokenRef.current = token;
+        setMessage('');
+        queueMicrotask(() => {
+            if (livePublishTokenRef.current === token) {
+                setMessage(text);
+            }
+        });
+    }, []);
 
     const tryDeliver = useCallback((text: string, priority: HudAnnouncePriority) => {
         const now = nowMs();
@@ -306,7 +311,7 @@ export const useHudPoliteLiveAnnouncement = ({
 
         const fire = (): void => {
             setMessagePriority(priority);
-            flushThenSet(text, setMessage);
+            flushThenSetMessage(text);
             lastDisplayedAtRef.current = nowMs();
             throttleTimerRef.current = null;
             pendingThrottledAnnouncementRef.current = null;
@@ -334,13 +339,13 @@ export const useHudPoliteLiveAnnouncement = ({
             const pending = pendingThrottledAnnouncementRef.current;
             if (pending) {
                 setMessagePriority(pending.priority);
-                flushThenSet(pending.text, setMessage);
+                flushThenSetMessage(pending.text);
                 lastDisplayedAtRef.current = nowMs();
             }
             throttleTimerRef.current = null;
             pendingThrottledAnnouncementRef.current = null;
         }, wait);
-    }, []);
+    }, [flushThenSetMessage]);
 
     const flushAnnouncementQueue = useCallback(() => {
         if (queueRef.current.size === 0) {
@@ -391,6 +396,7 @@ export const useHudPoliteLiveAnnouncement = ({
             if (throttleTimerRef.current) {
                 clearTimeout(throttleTimerRef.current);
             }
+            livePublishTokenRef.current += 1;
         },
         []
     );
