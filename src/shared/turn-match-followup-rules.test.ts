@@ -37,6 +37,25 @@ describe('resolveTurnMatchFollowup', () => {
         expect(result.nBackAnchorPairKey).toBe('moon:encore');
     });
 
+    it('normalizes malformed n-back counters before advancing follow-up state', () => {
+        const run = {
+            ...createNewRun(0, { activeMutators: ['n_back_anchor'] }),
+            nBackMatchCounter: Number.NaN,
+            nBackAnchorPairKey: 'previous'
+        };
+
+        const result = resolveTurnMatchFollowup({
+            run,
+            matchedPairKey: 'star',
+            encoreKey: 'star:encore',
+            loadedGatewayClaimed: false,
+            dungeonGatewayRouteType: null
+        });
+
+        expect(result.nBackMatchCounter).toBe(1);
+        expect(result.nBackAnchorPairKey).toBe('previous');
+    });
+
     it('creates a loaded gateway route plan before dungeon gateway plans', () => {
         const run = createNewRun(0, { runSeed: 1234, runRulesVersionOverride: 77 });
 

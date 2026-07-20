@@ -2,6 +2,9 @@ import type { BoardState, RunState } from './contracts';
 import { hasMutator } from './mutators';
 import { increaseRecallFocus, settleForgottenTiles } from './recall-rules';
 
+const nonNegativeCleanupCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export interface TurnMatchBoardCleanupResult {
     pinnedTileIds: string[];
     recallFocus: number;
@@ -31,8 +34,8 @@ export const resolveTurnMatchBoardCleanup = ({
     return {
         pinnedTileIds: run.pinnedTileIds.filter((id) => !matched.has(id)),
         recallFocus: increaseRecallFocus(run),
-        recallMatchesThisFloor: run.recallMatchesThisFloor + 1,
-        recallBonusScoreThisFloor: run.recallBonusScoreThisFloor + recallBonus,
+        recallMatchesThisFloor: nonNegativeCleanupCount(run.recallMatchesThisFloor) + 1,
+        recallBonusScoreThisFloor: nonNegativeCleanupCount(run.recallBonusScoreThisFloor) + nonNegativeCleanupCount(recallBonus),
         forgottenTileIdsThisFloor: settleForgottenTiles(run.forgottenTileIdsThisFloor, matchedTileIds),
         stickyBlockIndex: hasMutator(run, 'sticky_fingers')
             ? board.tiles.findIndex((tile) => tile.id === firstMatchedTileId)

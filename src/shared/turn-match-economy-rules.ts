@@ -8,6 +8,12 @@ import {
 } from './contracts';
 import { addRunDungeonKey } from './dungeon-key-rules';
 
+const nonNegativeEconomyCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const finiteEconomyDelta = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.trunc(value) : 0;
+
 export interface TurnMatchEconomyResult {
     shopGold: number;
     dungeonKeys: RunState['dungeonKeys'];
@@ -40,9 +46,9 @@ export const resolveTurnMatchEconomy = ({
     matchedDungeonKeyKind
 }: TurnMatchEconomyInput): TurnMatchEconomyResult => ({
     shopGold:
-        run.shopGold +
-        routeCardShopGold +
-        dungeonShopGold +
+        nonNegativeEconomyCount(run.shopGold) +
+        nonNegativeEconomyCount(routeCardShopGold) +
+        nonNegativeEconomyCount(dungeonShopGold) +
         (tollCacheClaimed ? TOLL_CACHE_SHOP_GOLD_REWARD : 0) +
         (fuseCacheClaimed
             ? fuseCacheFresh
@@ -50,8 +56,8 @@ export const resolveTurnMatchEconomy = ({
                 : FUSE_CACHE_EXPIRED_SHOP_GOLD_REWARD
             : 0),
     dungeonKeys:
-        dungeonKeysDelta !== 0 || matchedDungeonKind === 'key'
-            ? addRunDungeonKey(run.dungeonKeys, matchedDungeonKeyKind, dungeonKeysDelta)
+        finiteEconomyDelta(dungeonKeysDelta) !== 0 || matchedDungeonKind === 'key'
+            ? addRunDungeonKey(run.dungeonKeys, matchedDungeonKeyKind, finiteEconomyDelta(dungeonKeysDelta))
             : run.dungeonKeys,
-    dungeonMasterKeys: Math.max(0, run.dungeonMasterKeys + dungeonMasterKeysDelta)
+    dungeonMasterKeys: Math.max(0, nonNegativeEconomyCount(run.dungeonMasterKeys) + finiteEconomyDelta(dungeonMasterKeysDelta))
 });

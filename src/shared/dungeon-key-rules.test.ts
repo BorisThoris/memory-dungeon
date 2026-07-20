@@ -14,6 +14,12 @@ describe('dungeon-key-rules', () => {
         expect(addRunDungeonKey({}, 'boss', -1)).toEqual({ boss: 0 });
     });
 
+    it('normalizes malformed key counts and deltas before updating inventory', () => {
+        expect(addRunDungeonKey({ treasure: Number.NaN }, 'treasure', 2.9)).toEqual({ treasure: 2 });
+        expect(addRunDungeonKey({ boss: Number.POSITIVE_INFINITY }, 'boss', -1.9)).toEqual({ boss: 0 });
+        expect(addRunDungeonKey({ shrine: 1.9 }, 'shrine', Number.NaN)).toEqual({ shrine: 1 });
+    });
+
     it('preserves unrelated key counts', () => {
         expect(addRunDungeonKey({ iron: 2, shrine: 1 }, 'trap', 1)).toEqual({
             iron: 2,

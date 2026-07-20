@@ -45,4 +45,25 @@ describe('resolveTurnMatchBoardCleanup', () => {
 
         expect(result.stickyBlockIndex).toBe(1);
     });
+
+    it('normalizes malformed recall cleanup counters before advancing ledgers', () => {
+        const base = createNewRun(0);
+        const [first, second] = base.board!.tiles;
+        const run = {
+            ...base,
+            recallMatchesThisFloor: Number.NaN,
+            recallBonusScoreThisFloor: 2.9
+        };
+
+        const result = resolveTurnMatchBoardCleanup({
+            run,
+            board: base.board!,
+            matchedTileIds: [first.id, second.id],
+            firstMatchedTileId: first.id,
+            recallBonus: Number.POSITIVE_INFINITY
+        });
+
+        expect(result.recallMatchesThisFloor).toBe(1);
+        expect(result.recallBonusScoreThisFloor).toBe(2);
+    });
 });
