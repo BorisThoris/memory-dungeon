@@ -1207,20 +1207,33 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             trapCount === 1
                 ? `Trap resolved${trapLabel === 'Trap' ? '' : `: ${trapLabel}`}. ${trapEffect}; ${trapNext}.`
                 : `${trapCount} traps resolved. ${trapEffect}; ${trapNext}.`;
+        let active = true;
         queueMicrotask(() => {
+            if (!active) {
+                return;
+            }
             setTrapResolutionMessage(message);
             setTrapResolutionDetails({ count: trapCount, effect: trapEffect, next: trapNext });
         });
-        return undefined;
+        return () => {
+            active = false;
+        };
     }, [board.tiles, resolvedTrapTileCount]);
 
     useEffect(() => {
         if (resolvedTrapTileCount === 0 && trapResolutionMessage) {
+            let active = true;
             queueMicrotask(() => {
-                setTrapResolutionMessage('');
-                setTrapResolutionDetails(null);
+                if (active) {
+                    setTrapResolutionMessage('');
+                    setTrapResolutionDetails(null);
+                }
             });
+            return () => {
+                active = false;
+            };
         }
+        return undefined;
     }, [resolvedTrapTileCount, trapResolutionMessage]);
 
     useEffect(() => {

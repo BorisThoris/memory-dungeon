@@ -350,6 +350,94 @@ describe('TileBoard touch and click controls', () => {
         );
     });
 
+    it('drops a queued trap resolution toast when the trap count resets first', async () => {
+        const pendingMicrotasks: VoidFunction[] = [];
+        const queueMicrotaskSpy = vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
+            pendingMicrotasks.push(callback);
+        });
+        const resolvedTrapTiles: BoardState['tiles'] = [
+            {
+                id: 'trap-1',
+                pairKey: 'trap',
+                symbol: '!',
+                label: 'Mimic Bounty',
+                state: 'hidden',
+                dungeonCardKind: 'trap',
+                dungeonCardState: 'resolved'
+            },
+            {
+                id: 'trap-2',
+                pairKey: 'trap',
+                symbol: '!',
+                label: 'Mimic Bounty',
+                state: 'hidden',
+                dungeonCardKind: 'trap',
+                dungeonCardState: 'resolved'
+            },
+            board.tiles[2]!,
+            board.tiles[3]!
+        ];
+        const rendered = renderBoard({
+            board,
+            debugPeekActive: false,
+            interactive: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: true
+        });
+
+        try {
+            pendingMicrotasks.length = 0;
+            rendered.rerender(
+                <PlatformTiltProvider>
+                    <TileBoard
+                        board={{ ...board, tiles: resolvedTrapTiles }}
+                        debugPeekActive={false}
+                        interactive
+                        mobileCameraMode={false}
+                        onTileSelect={vi.fn()}
+                        previewActive={false}
+                        reduceMotion
+                        runStatus="playing"
+                        viewportResetToken={0}
+                    />
+                </PlatformTiltProvider>
+            );
+            rendered.rerender(
+                <PlatformTiltProvider>
+                    <TileBoard
+                        board={board}
+                        debugPeekActive={false}
+                        interactive
+                        mobileCameraMode={false}
+                        onTileSelect={vi.fn()}
+                        previewActive={false}
+                        reduceMotion
+                        runStatus="playing"
+                        viewportResetToken={0}
+                    />
+                </PlatformTiltProvider>
+            );
+
+            const staleCallbacks = pendingMicrotasks.splice(0);
+            await act(async () => {
+                for (const callback of staleCallbacks) {
+                    callback();
+                    await Promise.resolve();
+                }
+            });
+
+            expect(screen.queryByTestId('trap-resolution-feedback')).toBeNull();
+            expect(screen.getByTestId('tile-board-frame')).toHaveAttribute(
+                'data-dungeon-trap-resolution-message',
+                ''
+            );
+        } finally {
+            rendered.unmount();
+            queueMicrotaskSpy.mockRestore();
+        }
+    });
+
     it('arms deal-in motion on mount when motion is enabled', async () => {
         renderBoard({
             board,
