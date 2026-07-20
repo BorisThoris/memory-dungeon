@@ -1406,7 +1406,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
     useEffect(() => {
         const pickable = getPickableTileIds(board, interactive, allowGambitThirdFlip);
+        let active = true;
         queueMicrotask(() => {
+            if (!active) {
+                return;
+            }
             setFocusedTileId((cur) => {
                 if (pickable.length === 0) {
                     return null;
@@ -1417,6 +1421,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 return null;
             });
         });
+        return () => {
+            active = false;
+        };
     }, [board, interactive, allowGambitThirdFlip]);
 
     const traitRewardHotText = useMemo(() => {

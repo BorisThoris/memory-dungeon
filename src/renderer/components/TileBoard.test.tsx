@@ -649,6 +649,61 @@ describe('TileBoard touch and click controls', () => {
         }
     });
 
+    it('keeps keyboard focus when stale non-interactive reconciliation runs late', async () => {
+        const pendingMicrotasks: VoidFunction[] = [];
+        const queueMicrotaskSpy = vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
+            pendingMicrotasks.push(callback);
+        });
+        const rendered = renderBoard({
+            board,
+            debugPeekActive: false,
+            interactive: false,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false
+        });
+
+        try {
+            const staleCallbacks = pendingMicrotasks.splice(0);
+            rendered.rerender(
+                <PlatformTiltProvider>
+                    <TileBoard
+                        board={board}
+                        debugPeekActive={false}
+                        interactive
+                        mobileCameraMode={false}
+                        onTileSelect={vi.fn()}
+                        previewActive={false}
+                        reduceMotion={false}
+                        runStatus="playing"
+                        viewportResetToken={0}
+                    />
+                </PlatformTiltProvider>
+            );
+            fireEvent.focus(screen.getByTestId('tile-board-application'));
+
+            await act(async () => {
+                for (const callback of staleCallbacks) {
+                    callback();
+                    await Promise.resolve();
+                }
+            });
+            await act(async () => {
+                for (const callback of pendingMicrotasks.splice(0)) {
+                    callback();
+                    await Promise.resolve();
+                }
+            });
+
+            expect(screen.getByTestId('tile-board-live-region')).toHaveTextContent(
+                /Focus: Hidden tile, row 1, column 1/i
+            );
+        } finally {
+            rendered.unmount();
+            queueMicrotaskSpy.mockRestore();
+        }
+    });
+
     it('shows a visible trait combo preview when the focused tile has nearby trait interactions', async () => {
         renderBoard({
             board: {
