@@ -2,13 +2,34 @@ import { useSyncExternalStore } from 'react';
 
 const QUERY = '(prefers-reduced-motion: reduce)';
 
+type ReducedMotionMediaQueryList = MediaQueryList & {
+    addListener?: (listener: () => void) => void;
+    removeListener?: (listener: () => void) => void;
+};
+
+const addReducedMotionListener = (mediaQuery: ReducedMotionMediaQueryList, listener: () => void): void => {
+    if (typeof mediaQuery.addEventListener === 'function') {
+        mediaQuery.addEventListener('change', listener);
+        return;
+    }
+    mediaQuery.addListener?.(listener);
+};
+
+const removeReducedMotionListener = (mediaQuery: ReducedMotionMediaQueryList, listener: () => void): void => {
+    if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', listener);
+        return;
+    }
+    mediaQuery.removeListener?.(listener);
+};
+
 const subscribe = (onStoreChange: () => void): (() => void) => {
     if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
         return () => undefined;
     }
     const mediaQuery = window.matchMedia(QUERY);
-    mediaQuery.addEventListener('change', onStoreChange);
-    return () => mediaQuery.removeEventListener('change', onStoreChange);
+    addReducedMotionListener(mediaQuery, onStoreChange);
+    return () => removeReducedMotionListener(mediaQuery, onStoreChange);
 };
 
 const getSnapshot = (): boolean =>

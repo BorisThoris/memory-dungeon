@@ -40,4 +40,31 @@ describe('useEffectiveReducedMotion', () => {
         act(() => listeners.forEach((listener) => listener()));
         expect(result.current).toBe(true);
     });
+
+    it('supports legacy media query listener APIs', () => {
+        let osReduced = false;
+        const listeners = new Set<() => void>();
+        const addListener = vi.fn((listener: () => void) => listeners.add(listener));
+        const removeListener = vi.fn((listener: () => void) => listeners.delete(listener));
+        window.matchMedia = vi.fn(() => ({
+            matches: osReduced,
+            media: '(prefers-reduced-motion: reduce)',
+            addListener,
+            removeListener,
+            dispatchEvent: vi.fn(),
+            onchange: null
+        })) as unknown as typeof window.matchMedia;
+        const { result, unmount } = renderHook(() => useEffectiveReducedMotion(false));
+
+        expect(result.current).toBe(false);
+        expect(addListener).toHaveBeenCalledWith(expect.any(Function));
+
+        osReduced = true;
+        act(() => listeners.forEach((listener) => listener()));
+        expect(result.current).toBe(true);
+
+        unmount();
+        expect(removeListener).toHaveBeenCalledWith(addListener.mock.calls[0]?.[0]);
+        expect(listeners).toHaveLength(0);
+    });
 });
