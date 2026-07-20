@@ -9,14 +9,18 @@ export const pickWeightedIndex = (rng: () => number, weights: readonly number[])
         return 0;
     }
     let total = 0;
-    const safe = weights.map((w) => Math.max(0, w));
+    const safe = weights.map((w) => (Number.isFinite(w) ? Math.max(0, w) : 0));
     for (const w of safe) {
         total += w;
     }
+    const roll = (): number => {
+        const value = rng();
+        return Number.isFinite(value) ? Math.min(1 - Number.EPSILON, Math.max(0, value)) : 0;
+    };
     if (total <= 0) {
-        return Math.min(weights.length - 1, Math.floor(rng() * weights.length));
+        return Math.min(weights.length - 1, Math.floor(roll() * weights.length));
     }
-    let r = rng() * total;
+    let r = roll() * total;
     for (let i = 0; i < safe.length; i += 1) {
         r -= safe[i];
         if (r < 0) {
@@ -38,9 +42,12 @@ export const pickWeightedWithoutReplacement = <T>(
     if (items.length === 0 || k <= 0) {
         return [];
     }
-    const pool = items.map((x) => ({ value: x.value, weight: Math.max(0, x.weight) }));
+    const pool = items.map((x) => ({
+        value: x.value,
+        weight: Number.isFinite(x.weight) ? Math.max(0, x.weight) : 0
+    }));
     const out: T[] = [];
-    const take = Math.min(k, pool.length);
+    const take = Number.isFinite(k) ? Math.min(Math.floor(k), pool.length) : pool.length;
     for (let n = 0; n < take; n += 1) {
         const ws = pool.map((p) => p.weight);
         const idx = pickWeightedIndex(rng, ws);
