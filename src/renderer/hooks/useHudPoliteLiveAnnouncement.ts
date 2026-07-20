@@ -295,14 +295,14 @@ export const useHudPoliteLiveAnnouncement = ({
 
     const queueRef = useRef(new Map<string, { text: string; priority: HudAnnouncePriority }>());
     const rafIdRef = useRef<number | null>(null);
-    const lastDisplayedAtRef = useRef(0);
+    const lastDisplayedAtRef = useRef<number | null>(null);
     const throttleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pendingThrottledAnnouncementRef = useRef<{ text: string; priority: HudAnnouncePriority } | null>(null);
 
     const tryDeliver = useCallback((text: string, priority: HudAnnouncePriority) => {
         const now = nowMs();
         const last = lastDisplayedAtRef.current;
-        const elapsed = last === 0 ? POLITE_HUD_THROTTLE_MS : now - last;
+        const elapsed = last === null ? POLITE_HUD_THROTTLE_MS : now - last;
 
         const fire = (): void => {
             setMessagePriority(priority);
@@ -312,7 +312,7 @@ export const useHudPoliteLiveAnnouncement = ({
             pendingThrottledAnnouncementRef.current = null;
         };
 
-        if (last === 0 || elapsed >= POLITE_HUD_THROTTLE_MS) {
+        if (last === null || elapsed >= POLITE_HUD_THROTTLE_MS) {
             if (throttleTimerRef.current) {
                 clearTimeout(throttleTimerRef.current);
                 throttleTimerRef.current = null;

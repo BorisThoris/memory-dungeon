@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Tile } from '../../shared/contracts';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import { getHudActionFeedbackProfile } from '../copy/hudActionFeedback';
@@ -91,6 +91,11 @@ const flushRaf = async (): Promise<void> => {
 };
 
 describe('useHudPoliteLiveAnnouncement', () => {
+    afterEach(() => {
+        vi.unstubAllGlobals();
+        vi.restoreAllMocks();
+    });
+
     it('keeps compact visual action feedback readable for long multi-event updates', () => {
         expect(
             formatHudActionFeedbackText(
@@ -1022,6 +1027,44 @@ describe('useHudPoliteLiveAnnouncement', () => {
         await flushRaf();
 
         expect(result.current.message).toBe('error-text');
+    });
+
+    it('throttles a second delivery when the first delivery timestamp is zero', async () => {
+        const pendingFrames: FrameRequestCallback[] = [];
+        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
+            pendingFrames.push(callback);
+            return pendingFrames.length;
+        });
+        vi.stubGlobal('cancelAnimationFrame', vi.fn());
+        vi.spyOn(performance, 'now').mockReturnValue(0);
+        const { result, unmount } = renderHook(() =>
+            useHudPoliteLiveAnnouncement({
+                ...base,
+                boardLevel: null
+            })
+        );
+        const flushNextFrame = async (): Promise<void> => {
+            const callback = pendingFrames.shift();
+            expect(callback).toBeDefined();
+            await act(async () => {
+                callback?.(0);
+                await Promise.resolve();
+            });
+        };
+
+        act(() => {
+            result.current.queuePoliteAnnouncement('first', { dedupeKey: 'a' });
+        });
+        await flushNextFrame();
+        expect(result.current.message).toBe('first');
+
+        act(() => {
+            result.current.queuePoliteAnnouncement('second', { dedupeKey: 'b' });
+        });
+        await flushNextFrame();
+
+        expect(result.current.message).toBe('first');
+        unmount();
     });
 
     it(
