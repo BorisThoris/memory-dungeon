@@ -569,41 +569,41 @@ export const useRunInventoryItem = (run: RunState, itemId: RunInventoryItemId): 
         case 'shuffle_charge':
             return run.freeShuffleThisFloor
                 ? { run: { ...run, freeShuffleThisFloor: false }, itemId, applied: true }
-                : { run: { ...run, shuffleCharges: Math.max(0, run.shuffleCharges - 1) }, itemId, applied: true };
+                : { run: { ...run, shuffleCharges: Math.max(0, nonNegativeQuantity(run.shuffleCharges) - 1) }, itemId, applied: true };
         case 'region_shuffle_charge':
             return run.regionShuffleFreeThisFloor
                 ? { run: { ...run, regionShuffleFreeThisFloor: false }, itemId, applied: true }
-                : { run: { ...run, regionShuffleCharges: Math.max(0, run.regionShuffleCharges - 1) }, itemId, applied: true };
+                : { run: { ...run, regionShuffleCharges: Math.max(0, nonNegativeQuantity(run.regionShuffleCharges) - 1) }, itemId, applied: true };
         case 'destroy_charge':
-            return { run: { ...run, destroyPairCharges: Math.max(0, run.destroyPairCharges - 1) }, itemId, applied: true };
+            return { run: { ...run, destroyPairCharges: Math.max(0, nonNegativeQuantity(run.destroyPairCharges) - 1) }, itemId, applied: true };
         case 'peek_charge':
-            return { run: { ...run, peekCharges: Math.max(0, run.peekCharges - 1) }, itemId, applied: true };
+            return { run: { ...run, peekCharges: Math.max(0, nonNegativeQuantity(run.peekCharges) - 1) }, itemId, applied: true };
         case 'stray_remove_charge':
-            return { run: { ...run, strayRemoveCharges: Math.max(0, run.strayRemoveCharges - 1) }, itemId, applied: true };
+            return { run: { ...run, strayRemoveCharges: Math.max(0, nonNegativeQuantity(run.strayRemoveCharges) - 1) }, itemId, applied: true };
         case 'flash_pair_charge':
-            return { run: { ...run, flashPairCharges: Math.max(0, run.flashPairCharges - 1) }, itemId, applied: true };
+            return { run: { ...run, flashPairCharges: Math.max(0, nonNegativeQuantity(run.flashPairCharges) - 1) }, itemId, applied: true };
         case 'undo_charge':
-            return { run: { ...run, undoUsesThisFloor: Math.max(0, run.undoUsesThisFloor - 1) }, itemId, applied: true };
+            return { run: { ...run, undoUsesThisFloor: Math.max(0, nonNegativeQuantity(run.undoUsesThisFloor) - 1) }, itemId, applied: true };
         case 'gambit_token':
             return { run: { ...run, gambitAvailableThisFloor: false, gambitThirdFlipUsed: true }, itemId, applied: true };
         case 'wild_match_token':
-            return { run: { ...run, wildMatchesRemaining: Math.max(0, run.wildMatchesRemaining - 1) }, itemId, applied: true };
+            return { run: { ...run, wildMatchesRemaining: Math.max(0, nonNegativeQuantity(run.wildMatchesRemaining) - 1) }, itemId, applied: true };
         case 'iron_key': {
-            const spendKind = KEY_SPEND_ORDER.find((kind) => (run.dungeonKeys[kind] ?? 0) > 0);
+            const spendKind = KEY_SPEND_ORDER.find((kind) => nonNegativeQuantity(run.dungeonKeys[kind] ?? 0) > 0);
             if (!spendKind) {
                 return { run, itemId, applied: false, reason: 'unavailable' };
             }
             return {
                 run: {
                     ...run,
-                    dungeonKeys: { ...run.dungeonKeys, [spendKind]: Math.max(0, (run.dungeonKeys[spendKind] ?? 0) - 1) }
+                    dungeonKeys: { ...run.dungeonKeys, [spendKind]: Math.max(0, nonNegativeQuantity(run.dungeonKeys[spendKind] ?? 0) - 1) }
                 },
                 itemId,
                 applied: true
             };
         }
         case 'master_key':
-            return { run: { ...run, dungeonMasterKeys: Math.max(0, run.dungeonMasterKeys - 1) }, itemId, applied: true };
+            return { run: { ...run, dungeonMasterKeys: Math.max(0, nonNegativeQuantity(run.dungeonMasterKeys) - 1) }, itemId, applied: true };
         default:
             return { run, itemId, applied: false, reason: 'not_usable' };
     }

@@ -270,6 +270,30 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         });
     });
 
+    it('normalizes fractional spend counters before using run consumables', () => {
+        const run = {
+            ...createNewRun(0),
+            peekCharges: 2.8,
+            dungeonKeys: { iron: 1.8, treasure: 0 },
+            dungeonMasterKeys: 1.9,
+            wildMatchesRemaining: 1.9
+        };
+
+        const peeked = useRunInventoryItem(run, 'peek_charge');
+        const keyed = useRunInventoryItem(peeked.run, 'iron_key');
+        const mastered = useRunInventoryItem(keyed.run, 'master_key');
+        const wilded = useRunInventoryItem(mastered.run, 'wild_match_token');
+
+        expect(peeked.applied).toBe(true);
+        expect(peeked.run.peekCharges).toBe(1);
+        expect(keyed.applied).toBe(true);
+        expect(keyed.run.dungeonKeys.iron).toBe(0);
+        expect(mastered.applied).toBe(true);
+        expect(mastered.run.dungeonMasterKeys).toBe(0);
+        expect(wilded.applied).toBe(true);
+        expect(wilded.run.wildMatchesRemaining).toBe(0);
+    });
+
     it('separates mutable mid-run consumables from fixed loadout slots', () => {
         const run = createNewRun(0, {
             initialRelicIds: ['chapter_compass', 'wager_surety'],

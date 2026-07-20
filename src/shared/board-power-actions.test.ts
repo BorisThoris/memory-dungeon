@@ -168,6 +168,28 @@ describe('board power actions', () => {
         expect(result.boardComplete).toBe(true);
     });
 
+    it('normalizes fractional destroy charges and malformed destroy stats before spending', () => {
+        const state = run({
+            destroyPairCharges: 1.8,
+        });
+        const result = applyDestroyPairTransition({
+            ...state,
+            stats: {
+                ...state.stats,
+                matchesFound: Number.NaN,
+                pairsDestroyed: Number.POSITIVE_INFINITY
+            }
+        }, 'a1', {
+            isBoardComplete: () => false,
+            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
+        });
+
+        expect(result.changed).toBe(true);
+        expect(result.run.destroyPairCharges).toBe(0);
+        expect(result.run.stats.matchesFound).toBe(1);
+        expect(result.run.stats.pairsDestroyed).toBe(1);
+    });
+
     it('applies full-board shuffle accounting without disturbing visible matched tiles', () => {
         const state = run({
             board: board([
@@ -298,6 +320,48 @@ describe('board power actions', () => {
         expect(flashed.powersUsedThisRun).toBe(true);
         expect(flashed.shuffleNonce).toBe(1);
         expect(flashed.flashPairRevealedTileIds).toEqual(['a1', 'a2']);
+    });
+
+    it('normalizes fractional direct power charges before spending', () => {
+        const undoBoard = defaultBoard();
+        const flashed = applyFlashPair(run({
+            board: board([
+                tile('a1', 'A'),
+                tile('a2', 'A')
+            ]),
+            flashPairCharges: 1.8,
+            shuffleNonce: Number.NaN
+        }));
+        const peeked = applyPeek(run({ peekCharges: 1.8 }), 'a1');
+        const removed = applyStrayRemove(run({
+            board: board([
+                tile('w1', WILD_PAIR_KEY),
+                tile('a1', 'A')
+            ]),
+            strayRemoveCharges: 1.8,
+            strayRemoveArmed: true
+        }), 'w1');
+        const undone = cancelResolvingWithUndo(run({
+            status: 'resolving',
+            board: {
+                ...undoBoard,
+                flippedTileIds: ['a1'],
+                tiles: undoBoard.tiles.map((t) => (t.id === 'a1' ? { ...t, state: 'flipped' } : t))
+            },
+            undoUsesThisFloor: 1.8,
+            timerState: {
+                memorizeRemainingMs: null,
+                resolveRemainingMs: 100,
+                debugRevealRemainingMs: null,
+                pausedFromStatus: null
+            }
+        }));
+
+        expect(flashed.flashPairCharges).toBe(0);
+        expect(flashed.shuffleNonce).toBe(1);
+        expect(peeked.peekCharges).toBe(0);
+        expect(removed.strayRemoveCharges).toBe(0);
+        expect(undone.undoUsesThisFloor).toBe(0);
     });
 
     it('does not flash pair outside practice or wild menu runs', () => {

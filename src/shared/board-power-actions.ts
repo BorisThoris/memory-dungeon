@@ -30,6 +30,9 @@ import { hiddenUnlessSprungTrap } from './tile-state-rules';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
 
+const nonNegativePowerCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export interface DestroyPairTransitionOptions {
     isBoardComplete: (board: BoardState) => boolean;
     rotateShiftingSpotlight: (
@@ -83,7 +86,7 @@ export const applyDestroyPairTransition = (
         ...run,
         powersUsedThisRun: true,
         destroyUsedThisFloor: true,
-        destroyPairCharges: run.destroyPairCharges - 1,
+        destroyPairCharges: Math.max(0, nonNegativePowerCount(run.destroyPairCharges) - 1),
         pinnedTileIds,
         board: spunDestroy.board,
         shiftingSpotlightNonce: spunDestroy.shiftingSpotlightNonce,
@@ -92,8 +95,8 @@ export const applyDestroyPairTransition = (
         parasiteFloors: hasMutator(run, 'score_parasite') ? 0 : run.parasiteFloors,
         stats: {
             ...run.stats,
-            matchesFound: run.stats.matchesFound + 1,
-            pairsDestroyed: run.stats.pairsDestroyed + 1
+            matchesFound: nonNegativePowerCount(run.stats.matchesFound) + 1,
+            pairsDestroyed: nonNegativePowerCount(run.stats.pairsDestroyed) + 1
         }
     };
 
@@ -116,8 +119,9 @@ export const applyShuffle = (run: RunState): RunState => {
         }
     });
 
+    const shuffleNonce = nonNegativePowerCount(run.shuffleNonce);
     const shuffleRng = createMulberry32(
-        deriveShuffleRngSeed(run.runSeed, run.board.level, run.shuffleNonce, run.runRulesVersion)
+        deriveShuffleRngSeed(run.runSeed, run.board.level, shuffleNonce, run.runRulesVersion)
     );
     const cols = run.board.columns;
     const nextTiles = [...run.board.tiles];
@@ -145,7 +149,7 @@ export const applyShuffle = (run: RunState): RunState => {
         });
     }
 
-    let nextCharges = run.shuffleCharges;
+    let nextCharges = nonNegativePowerCount(run.shuffleCharges);
     let nextFree = run.freeShuffleThisFloor;
     if (nextFree && run.relicIds.includes('first_shuffle_free_per_floor')) {
         nextFree = false;
@@ -164,7 +168,7 @@ export const applyShuffle = (run: RunState): RunState => {
         powersUsedThisRun: true,
         shuffleUsedThisFloor: true,
         shuffleCharges: nextCharges,
-        shuffleNonce: run.shuffleNonce + 1,
+        shuffleNonce: shuffleNonce + 1,
         freeShuffleThisFloor: nextFree,
         matchScoreMultiplier,
         pinnedTileIds: [],
@@ -176,7 +180,7 @@ export const applyShuffle = (run: RunState): RunState => {
         },
         stats: {
             ...run.stats,
-            shufflesUsed: run.stats.shufflesUsed + 1
+            shufflesUsed: nonNegativePowerCount(run.stats.shufflesUsed) + 1
         }
     };
 };
@@ -197,7 +201,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
     }
 
     let nextFree = run.regionShuffleFreeThisFloor;
-    let nextCharges = run.regionShuffleCharges;
+    let nextCharges = nonNegativePowerCount(run.regionShuffleCharges);
     if (nextFree && run.relicIds.includes('region_shuffle_free_first')) {
         nextFree = false;
     } else if (nextCharges > 0) {
@@ -206,8 +210,9 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         return run;
     }
 
+    const shuffleNonce = nonNegativePowerCount(run.shuffleNonce);
     const shuffleRng = createMulberry32(
-        deriveShuffleRngSeed(run.runSeed, run.board.level, run.shuffleNonce, run.runRulesVersion)
+        deriveShuffleRngSeed(run.runSeed, run.board.level, shuffleNonce, run.runRulesVersion)
     );
     const nextTiles = [...run.board.tiles];
     const chunk = hiddenInRow.map((i) => nextTiles[i]!);
@@ -221,7 +226,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         ...run,
         powersUsedThisRun: true,
         shuffleUsedThisFloor: true,
-        shuffleNonce: run.shuffleNonce + 1,
+        shuffleNonce: shuffleNonce + 1,
         regionShuffleCharges: nextCharges,
         regionShuffleFreeThisFloor: nextFree,
         regionShuffleRowArmed: null,
@@ -234,7 +239,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         },
         stats: {
             ...run.stats,
-            shufflesUsed: run.stats.shufflesUsed + 1
+            shufflesUsed: nonNegativePowerCount(run.stats.shufflesUsed) + 1
         }
     };
 };
@@ -250,7 +255,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
     }
 
     let nextFree = run.regionShuffleFreeThisFloor;
-    let nextCharges = run.regionShuffleCharges;
+    let nextCharges = nonNegativePowerCount(run.regionShuffleCharges);
     if (nextFree && run.relicIds.includes('region_shuffle_free_first')) {
         nextFree = false;
     } else if (nextCharges > 0) {
@@ -268,7 +273,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
         ...run,
         powersUsedThisRun: true,
         shuffleUsedThisFloor: true,
-        shuffleNonce: run.shuffleNonce + 1,
+        shuffleNonce: nonNegativePowerCount(run.shuffleNonce) + 1,
         regionShuffleCharges: nextCharges,
         regionShuffleFreeThisFloor: nextFree,
         regionShuffleRowArmed: null,
@@ -281,13 +286,14 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
         },
         stats: {
             ...run.stats,
-            shufflesUsed: run.stats.shufflesUsed + 1
+            shufflesUsed: nonNegativePowerCount(run.stats.shufflesUsed) + 1
         }
     };
 };
 
 export const applyFlashPair = (run: RunState): RunState => {
-    if (run.status !== 'playing' || !run.board || run.flashPairCharges < 1) {
+    const flashPairCharges = nonNegativePowerCount(run.flashPairCharges);
+    if (run.status !== 'playing' || !run.board || flashPairCharges < 1) {
         return run;
     }
     if (!run.practiceMode && !run.wildMenuRun) {
@@ -309,22 +315,24 @@ export const applyFlashPair = (run: RunState): RunState => {
     if (complete.length === 0) {
         return run;
     }
+    const shuffleNonce = nonNegativePowerCount(run.shuffleNonce);
     const rng = createMulberry32(
-        hashStringToSeed(`flashPair:${run.runRulesVersion}:${run.runSeed}:${run.board.level}:${run.shuffleNonce}`)
+        hashStringToSeed(`flashPair:${run.runRulesVersion}:${run.runSeed}:${run.board.level}:${shuffleNonce}`)
     );
     const picked = complete[pickRngIndex(rng, complete.length)]!;
     const pairIds = picked.slice(0, 2);
     return {
         ...run,
-        flashPairCharges: run.flashPairCharges - 1,
+        flashPairCharges: Math.max(0, flashPairCharges - 1),
         powersUsedThisRun: true,
-        shuffleNonce: run.shuffleNonce + 1,
+        shuffleNonce: shuffleNonce + 1,
         flashPairRevealedTileIds: pairIds
     };
 };
 
 export const applyPeek = (run: RunState, tileId: string): RunState => {
-    if (run.status !== 'playing' || !run.board || run.peekCharges < 1) {
+    const peekCharges = nonNegativePowerCount(run.peekCharges);
+    if (run.status !== 'playing' || !run.board || peekCharges < 1) {
         return run;
     }
     if (run.board.flippedTileIds.length > 0) {
@@ -351,7 +359,7 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
     return {
         ...run,
         board,
-        peekCharges: run.peekCharges - 1,
+        peekCharges: Math.max(0, peekCharges - 1),
         powersUsedThisRun: true,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
@@ -360,7 +368,8 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
 };
 
 export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
-    if (!run.strayRemoveArmed || run.status !== 'playing' || !run.board || run.strayRemoveCharges < 1) {
+    const strayRemoveCharges = nonNegativePowerCount(run.strayRemoveCharges);
+    if (!run.strayRemoveArmed || run.status !== 'playing' || !run.board || strayRemoveCharges < 1) {
         return run;
     }
     if (run.board.flippedTileIds.length > 0) {
@@ -400,7 +409,7 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
     return {
         ...run,
         powersUsedThisRun: true,
-        strayRemoveCharges: run.strayRemoveCharges - 1,
+        strayRemoveCharges: Math.max(0, strayRemoveCharges - 1),
         strayRemoveArmed: false,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
@@ -409,7 +418,8 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
 };
 
 export const cancelResolvingWithUndo = (run: RunState): RunState => {
-    if (run.status !== 'resolving' || !run.board || run.undoUsesThisFloor < 1) {
+    const undoUsesThisFloor = nonNegativePowerCount(run.undoUsesThisFloor);
+    if (run.status !== 'resolving' || !run.board || undoUsesThisFloor < 1) {
         return run;
     }
     const ids = [...run.board.flippedTileIds];
@@ -422,7 +432,7 @@ export const cancelResolvingWithUndo = (run: RunState): RunState => {
         ...run,
         status: 'playing',
         board,
-        undoUsesThisFloor: run.undoUsesThisFloor - 1,
+        undoUsesThisFloor: Math.max(0, undoUsesThisFloor - 1),
         powersUsedThisRun: true,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, ids),
