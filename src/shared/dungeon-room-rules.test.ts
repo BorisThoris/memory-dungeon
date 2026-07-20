@@ -8,6 +8,7 @@ import {
 } from './contracts';
 import { createNewRun } from './game';
 import {
+    DUNGEON_KEY_CACHE_SCORE_REWARD,
     DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD,
     DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD,
     revealDungeonRoom
@@ -76,6 +77,25 @@ describe('revealDungeonRoom', () => {
 
         expect(resolved.stats.totalScore).toBe(35);
         expect(resolved.stats.currentLevelScore).toBe(20);
+        expect(resolved.stats.bestScore).toBe(35);
+    });
+
+    it('normalizes malformed room score counters before awarding score', () => {
+        const run = createRun([roomTile('campfire', 'room_campfire')], {
+            lives: MAX_LIVES,
+            stats: {
+                ...createNewRun(0).stats,
+                totalScore: Number.NaN,
+                currentLevelScore: -8.5,
+                bestScore: Number.POSITIVE_INFINITY
+            }
+        });
+
+        const resolved = revealDungeonRoom(run, 'campfire');
+
+        expect(resolved.stats.totalScore).toBe(15);
+        expect(resolved.stats.currentLevelScore).toBe(15);
+        expect(resolved.stats.bestScore).toBe(15);
     });
 
     it('keeps forge reusable and only pays when gold is available', () => {
@@ -113,10 +133,43 @@ describe('revealDungeonRoom', () => {
         expect(resolved.shopGold).toBe(3 + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD);
         expect(resolved.stats.totalScore).toBe(10 + DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD);
         expect(resolved.stats.currentLevelScore).toBe(1 + DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD);
+        expect(resolved.stats.bestScore).toBe(10 + DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD);
         expect(resolved.board!.tiles[0]).toMatchObject({
             dungeonCardState: 'resolved',
             dungeonRoomUsed: true
         });
+    });
+
+    it('normalizes malformed locked cache reward counters', () => {
+        const run = createRun([roomTile('cache', 'room_locked_cache')], {
+            dungeonKeys: { iron: 1 },
+            shopGold: Number.NEGATIVE_INFINITY,
+            stats: {
+                ...createNewRun(0).stats,
+                totalScore: Number.NaN,
+                currentLevelScore: -1,
+                bestScore: Number.POSITIVE_INFINITY
+            }
+        });
+
+        const resolved = revealDungeonRoom(run, 'cache');
+
+        expect(resolved.shopGold).toBe(DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD);
+        expect(resolved.stats.totalScore).toBe(DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD);
+        expect(resolved.stats.currentLevelScore).toBe(DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD);
+        expect(resolved.stats.bestScore).toBe(DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD);
+    });
+
+    it('advances best score when key cache rooms award score', () => {
+        const run = createRun([roomTile('key-cache', 'room_key_cache')], {
+            stats: { ...createNewRun(0).stats, totalScore: 20, currentLevelScore: 2, bestScore: 25 }
+        });
+
+        const resolved = revealDungeonRoom(run, 'key-cache');
+
+        expect(resolved.stats.totalScore).toBe(20 + DUNGEON_KEY_CACHE_SCORE_REWARD);
+        expect(resolved.stats.currentLevelScore).toBe(2 + DUNGEON_KEY_CACHE_SCORE_REWARD);
+        expect(resolved.stats.bestScore).toBe(20 + DUNGEON_KEY_CACHE_SCORE_REWARD);
     });
 
     it('opens typed locked cache rooms with their matching key kind', () => {
