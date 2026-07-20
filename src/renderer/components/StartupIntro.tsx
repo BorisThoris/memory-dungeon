@@ -691,7 +691,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     }, []);
 
     useEffect(() => {
-        if (typeof window === 'undefined') {
+        if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
             return;
         }
 
