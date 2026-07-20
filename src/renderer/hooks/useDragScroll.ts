@@ -296,6 +296,8 @@ function startLibraryCardDrag(event: ReactPointerEvent<HTMLElement>, el: HTMLEle
             el.setPointerCapture(pointerId);
             captured = true;
         } catch {
+            el.scrollLeft = startScroll - dx;
+            clickSuppressionCleanup = suppressNextScrollerClick(el);
             return;
         }
         el.addEventListener('pointermove', onElMove);

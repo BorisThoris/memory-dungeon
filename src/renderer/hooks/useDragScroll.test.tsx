@@ -116,6 +116,27 @@ describe('useDragScroll', () => {
         expect(onCardClick).toHaveBeenCalledTimes(1);
     });
 
+    it('suppresses the generated library-card click when pointer capture fails after drag slop', () => {
+        const onCardClick = vi.fn();
+        const onOutsideClick = vi.fn();
+        render(<DragScrollHarness onCardClick={onCardClick} onOutsideClick={onOutsideClick} />);
+        const scroller = screen.getByTestId('scroller');
+        scroller.scrollLeft = 20;
+        scroller.setPointerCapture = vi.fn(() => {
+            throw new Error('capture unavailable');
+        });
+
+        const card = screen.getByRole('button', { name: 'Library mode' });
+        fireEvent.pointerDown(card, { button: 0, clientX: 100, pointerId: 17 });
+        fireEvent.pointerMove(window, { clientX: 80, pointerId: 17 });
+        fireEvent.click(screen.getByRole('button', { name: 'Outside command' }));
+        fireEvent.click(card);
+
+        expect(scroller.scrollLeft).toBe(40);
+        expect(onOutsideClick).toHaveBeenCalledTimes(1);
+        expect(onCardClick).not.toHaveBeenCalled();
+    });
+
     it('expires click suppression when no generated click arrives', () => {
         vi.useFakeTimers();
         const onCardClick = vi.fn();
