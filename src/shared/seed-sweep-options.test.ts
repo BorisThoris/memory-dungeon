@@ -47,6 +47,12 @@ describe('seed sweep CLI options', () => {
         ).toEqual([432_012, 425_003, 878_670]);
     });
 
+    it('falls back to the default deterministic base when the stress base is malformed', () => {
+        expect(resolveSeedSweep(['--stressSeeds=3', '--stressSeedBase=invalid'], fallbackSeeds)).toEqual([
+            432_012, 425_003, 878_670
+        ]);
+    });
+
     it('falls back to explicit or default seeds when stress count is not positive', () => {
         expect(resolveSeedSweep(['--stressSeeds=0', '--seeds=101,202'], fallbackSeeds)).toEqual([101, 202]);
         expect(resolveSeedSweep(['--stressSeeds=invalid'], fallbackSeeds)).toEqual(fallbackSeeds);
