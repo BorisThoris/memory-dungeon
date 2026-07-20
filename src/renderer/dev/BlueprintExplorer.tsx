@@ -14,6 +14,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
+import { copyDevTextToClipboard } from './clipboard';
 import styles from './BlueprintExplorer.module.css';
 
 const POC_CONST = 'BLUEPRINT_AST_POC';
@@ -369,9 +370,7 @@ function BlueprintGraphInner(): ReactElement {
 
     const copyActionCommand = useCallback((command: string) => {
         setCopyMsg(null);
-        void navigator.clipboard.writeText(command)
-            .then(() => setCopyMsg(`Copied ${command}`))
-            .catch((e: unknown) => setCopyMsg((e as Error).message));
+        void copyDevTextToClipboard(command).then(setCopyMsg);
     }, []);
 
     if (!import.meta.env.DEV) {
