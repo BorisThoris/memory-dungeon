@@ -96,6 +96,24 @@ describe('cardSvgPlaneGeometry', () => {
         recovered?.dispose();
     });
 
+    it('rejects no-stream SVG responses whose UTF-8 byte size exceeds the mesh cap', async () => {
+        const oversizedUtf8Svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 740 1080"><!-- ${'é'.repeat(280_000)} --><rect x="40" y="40" width="660" height="1000" fill="#ffffff"/></svg>`;
+        expect(oversizedUtf8Svg.length).toBeLessThan(512 * 1024);
+        expect(new TextEncoder().encode(oversizedUtf8Svg).byteLength).toBeGreaterThan(512 * 1024);
+
+        const noStreamResponse = {
+            body: null,
+            headers: new Headers(),
+            ok: true,
+            text: async () => oversizedUtf8Svg
+        } as unknown as Response;
+
+        globalThis.fetch = vi.fn(async () => noStreamResponse) as typeof fetch;
+
+        await expect(loadSharedCardSvgPlaneGeometry('oversized-utf8-no-stream.svg')).resolves.toBeNull();
+        expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+    });
+
     it('bounds repeated layered-back SVG failures', async () => {
         globalThis.fetch = vi.fn(async () => {
             throw new Error('network unavailable');

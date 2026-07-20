@@ -18,6 +18,7 @@ const MAX_VERTEX_COUNT = 520_000;
  */
 const MAX_SVG_SOURCE_BYTES_FOR_MESH = 512 * 1024;
 const MAX_TRANSIENT_SVG_LOAD_ATTEMPTS = 2;
+const svgTextByteLength = (text: string): number => new TextEncoder().encode(text).byteLength;
 
 const resolvedByUrl = new Map<string, BufferGeometry | null>();
 const inflightByUrl = new Map<string, Promise<BufferGeometry | null>>();
@@ -105,7 +106,7 @@ async function fetchSvgTextUnderMeshByteCap(assetUrl: string): Promise<string | 
     if (!body) {
         const text = await response.text();
 
-        if (text.length > MAX_SVG_SOURCE_BYTES_FOR_MESH) {
+        if (svgTextByteLength(text) > MAX_SVG_SOURCE_BYTES_FOR_MESH) {
             return null;
         }
 
