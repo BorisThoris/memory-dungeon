@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import type { Application, Container, Sprite, Texture } from 'pixi.js';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 import { getMenuAtmosphereParticleCount, getMenuPixiResolutionCap } from '../../shared/graphicsQuality';
+import { useLatestRef } from '../hooks/useLatestRef';
 import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import type * as PixiNamespace from 'pixi.js';
 import { RENDERER_THEME } from '../styles/theme';
@@ -579,12 +580,8 @@ const MainMenuBackground = ({
 }: MainMenuBackgroundProps) => {
     const hostRef = useRef<HTMLDivElement | null>(null);
     const sceneRef = useRef<SceneController | null>(null);
-    const latestPropsRef = useRef({ graphicsQuality, height, reduceMotion, width });
+    const latestPropsRef = useLatestRef({ graphicsQuality, height, reduceMotion, width });
     const [renderStatus, setRenderStatus] = useState<'loading' | 'ready' | 'fallback'>('loading');
-
-    useEffect(() => {
-        latestPropsRef.current = { graphicsQuality, height, reduceMotion, width };
-    }, [graphicsQuality, height, reduceMotion, width]);
 
     useEffect(() => {
         sceneRef.current?.setGraphicsQuality(graphicsQuality);
@@ -671,7 +668,7 @@ const MainMenuBackground = ({
             sceneRef.current?.destroy();
             sceneRef.current = null;
         };
-    }, [menuFieldTiltRef]);
+    }, [latestPropsRef, menuFieldTiltRef]);
 
     useEffect(() => {
         sceneRef.current?.resize(width, height);
