@@ -67,7 +67,8 @@ import {
     getFloorClearObjectiveResult
 } from './secondary-objective-rules';
 import {
-    clearResolveState
+    clearResolveState,
+    extendTimerTimestampMs
 } from './run-timer-rules';
 import { getShopGoldRewardForFloor } from './shop-rules';
 import {
@@ -409,7 +410,7 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
         endlessRiskWager: featuredObjectiveClear.activeEndlessRiskWager ? null : run.endlessRiskWager,
         gauntletDeadlineMs:
             run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null
-                ? run.gauntletDeadlineMs + GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS
+                ? extendTimerTimestampMs(run.gauntletDeadlineMs, GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS)
                 : run.gauntletDeadlineMs,
         board,
         pinnedTileIds: [],

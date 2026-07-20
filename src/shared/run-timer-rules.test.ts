@@ -90,6 +90,30 @@ describe('run timer rules', () => {
         expect(resumed.timerState.gauntletPausedAtMs).toBeNull();
     });
 
+    it('normalizes malformed gauntlet timer fields while pausing and resuming', () => {
+        const playing = finishMemorizePhase(createGauntletRun(0, 60_000));
+        const malformedDeadline = pauseRun({
+            ...playing,
+            gauntletDeadlineMs: Number.POSITIVE_INFINITY
+        });
+        expect(malformedDeadline.gauntletDeadlineMs).toBeNull();
+        expect(malformedDeadline.timerState.gauntletPausedAtMs).toBeNull();
+
+        vi.useFakeTimers();
+        vi.setSystemTime(2_000);
+        const malformedPauseTime = resumeRun({
+            ...playing,
+            status: 'paused',
+            timerState: {
+                ...playing.timerState,
+                pausedFromStatus: 'playing',
+                gauntletPausedAtMs: Number.NaN
+            }
+        });
+        expect(malformedPauseTime.gauntletDeadlineMs).toBe(playing.gauntletDeadlineMs);
+        expect(malformedPauseTime.timerState.gauntletPausedAtMs).toBeNull();
+    });
+
     it('toggles debug peek timers and achievement disabling', () => {
         const run = createNewRun(0);
         const debug = enableDebugPeek(run, true);

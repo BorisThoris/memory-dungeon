@@ -24,7 +24,7 @@ import { boardHasGlassDecoy, getWildTileIdFromBoard } from './board-inspection';
 import { DECOY_PAIR_KEY } from './tile-identity';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { createSessionStats } from './session-stats-rules';
-import { createTimerState } from './run-timer-rules';
+import { createTimerState, normalizeTimerTimestampMs } from './run-timer-rules';
 import { buildBoard } from './board-build-rules';
 import { applyStartingLoadout } from './starting-loadouts';
 
@@ -337,5 +337,8 @@ export const createPuzzleRun = (
     });
 };
 
-export const isGauntletExpired = (run: RunState): boolean =>
-    run.status !== 'paused' && run.gauntletDeadlineMs !== null && Date.now() > run.gauntletDeadlineMs;
+export const isGauntletExpired = (run: RunState): boolean => {
+    const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
+    const nowMs = normalizeTimerTimestampMs(Date.now());
+    return run.status !== 'paused' && gauntletDeadlineMs !== null && nowMs !== null && nowMs > gauntletDeadlineMs;
+};

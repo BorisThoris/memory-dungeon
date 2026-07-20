@@ -8402,6 +8402,15 @@ describe('gauntlet deadline', () => {
         expect(isGauntletExpired(run)).toBe(false);
     });
 
+    it('ignores malformed gauntlet deadlines for expiry checks', () => {
+        const run: RunState = {
+            ...createNewRun(0, { gameMode: 'puzzle' }),
+            gameMode: 'gauntlet',
+            gauntletDeadlineMs: Number.NaN
+        };
+        expect(isGauntletExpired(run)).toBe(false);
+    });
+
     it('extends the deadline on each gauntlet floor clear', () => {
         const started = finishMemorizePhase(createGauntletRun(0, 60_000));
         const deadline = 1_900_000;
@@ -8409,6 +8418,14 @@ describe('gauntlet deadline', () => {
 
         expect(finished.status).toBe('levelComplete');
         expect(finished.gauntletDeadlineMs).toBe(deadline + GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS);
+    });
+
+    it('drops malformed gauntlet deadlines on floor clear instead of extending them', () => {
+        const started = finishMemorizePhase(createGauntletRun(0, 60_000));
+        const finished = clearRealPairs({ ...started, gauntletDeadlineMs: Number.POSITIVE_INFINITY });
+
+        expect(finished.status).toBe('levelComplete');
+        expect(finished.gauntletDeadlineMs).toBeNull();
     });
 
     it('does not expire while paused and extends the deadline by paused wall-clock time on resume', () => {

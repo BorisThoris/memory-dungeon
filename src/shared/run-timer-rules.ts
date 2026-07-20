@@ -14,6 +14,17 @@ export const createTimerState = (overrides?: Partial<RunState['timerState']>): R
     ...overrides
 });
 
+export const normalizeTimerTimestampMs = (value: unknown): number | null =>
+    typeof value === 'number' && Number.isFinite(value) ? value : null;
+
+export const extendTimerTimestampMs = (value: unknown, deltaMs: number): number | null => {
+    const timestamp = normalizeTimerTimestampMs(value);
+    const safeDelta = normalizeTimerTimestampMs(deltaMs);
+    return timestamp !== null && safeDelta !== null
+        ? normalizeTimerTimestampMs(timestamp + Math.max(0, safeDelta))
+        : timestamp;
+};
+
 export const clearResolveState = (run: RunState): RunState['timerState'] => ({
     ...run.timerState,
     resolveRemainingMs: null,
@@ -27,13 +38,15 @@ export const pauseRun = (run: RunState): RunState => {
     if (!isResumableStatus(run.status)) {
         return run;
     }
+    const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
     const gauntletPausedAtMs =
-        run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null
-            ? Date.now()
+        run.gameMode === 'gauntlet' && gauntletDeadlineMs !== null
+            ? normalizeTimerTimestampMs(Date.now())
             : (run.timerState.gauntletPausedAtMs ?? null);
 
     return {
         ...run,
+        gauntletDeadlineMs,
         status: 'paused',
         timerState: {
             ...run.timerState,
@@ -94,16 +107,16 @@ export const resumeRun = (run: RunState): RunState => {
             };
         }
     }
-    const gauntletPausedAtMs = run.timerState.gauntletPausedAtMs ?? null;
+    const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
+    const gauntletPausedAtMs = normalizeTimerTimestampMs(run.timerState.gauntletPausedAtMs);
     const gauntletPauseDeltaMs =
-        run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null && gauntletPausedAtMs !== null
+        run.gameMode === 'gauntlet' && gauntletDeadlineMs !== null && gauntletPausedAtMs !== null
             ? Math.max(0, Date.now() - gauntletPausedAtMs)
             : 0;
 
     return {
         ...run,
-        gauntletDeadlineMs:
-            run.gauntletDeadlineMs !== null ? run.gauntletDeadlineMs + gauntletPauseDeltaMs : run.gauntletDeadlineMs,
+        gauntletDeadlineMs: extendTimerTimestampMs(gauntletDeadlineMs, gauntletPauseDeltaMs),
         status: run.timerState.pausedFromStatus,
         timerState: {
             ...run.timerState,
