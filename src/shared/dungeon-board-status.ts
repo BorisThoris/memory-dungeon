@@ -23,6 +23,10 @@ import {
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { dungeonKeyKindArticleLabel, dungeonKeyKindLabel } from './dungeon-key-copy';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
+
+const nonNegativeDungeonStatusCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export interface DungeonExitStatus {
     exitTile: Tile | null;
     revealed: boolean;
@@ -192,11 +196,13 @@ export const getDungeonExitStatus = (run: RunState): DungeonExitStatus => {
     const tileCanActivate = (tile: Tile): boolean => {
         const { lockKind: candidateLockKind, requiredLeverCount: candidateRequiredLevers } = effectiveExitLock(tile);
         const candidateLeverSatisfied =
-            candidateLockKind !== 'lever' || (board?.dungeonLeverCount ?? 0) >= candidateRequiredLevers;
+            candidateLockKind !== 'lever' ||
+            nonNegativeDungeonStatusCount(board?.dungeonLeverCount) >= candidateRequiredLevers;
         const candidateHasKey =
             candidateLockKind !== 'none' &&
             candidateLockKind !== 'lever' &&
-            ((run.dungeonKeys[candidateLockKind] ?? 0) > 0 || run.dungeonMasterKeys > 0);
+            (nonNegativeDungeonStatusCount(run.dungeonKeys[candidateLockKind]) > 0 ||
+                nonNegativeDungeonStatusCount(run.dungeonMasterKeys) > 0);
         return (
             tile.state !== 'hidden' &&
             !bossBlocksExit &&
@@ -213,9 +219,10 @@ export const getDungeonExitStatus = (run: RunState): DungeonExitStatus => {
         exits[0] ??
         null;
     const { lockKind, requiredLeverCount, terminalKeySoftlockFallback } = effectiveExitLock(exitTile);
-    const leverCount = board?.dungeonLeverCount ?? 0;
-    const hasMatchingKey = lockKind !== 'none' && lockKind !== 'lever' && (run.dungeonKeys[lockKind] ?? 0) > 0;
-    const hasMasterKey = run.dungeonMasterKeys > 0;
+    const leverCount = nonNegativeDungeonStatusCount(board?.dungeonLeverCount);
+    const hasMatchingKey =
+        lockKind !== 'none' && lockKind !== 'lever' && nonNegativeDungeonStatusCount(run.dungeonKeys[lockKind]) > 0;
+    const hasMasterKey = nonNegativeDungeonStatusCount(run.dungeonMasterKeys) > 0;
     const keyFallbackPending =
         Boolean(board) &&
         lockKind !== 'none' &&
@@ -493,7 +500,10 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
     if (objectiveId === 'disarm_traps') {
         const activeTrapPairs = countDungeonPairs(board.tiles, (tile) => tile.dungeonCardKind === 'trap');
         const resolvedTrapPairs = countResolvedDungeonPairs(board.tiles, (tile) => tile.dungeonCardKind === 'trap');
-        const counterOnlyResolved = Math.max(0, (run.dungeonTrapsResolvedThisFloor ?? 0) - resolvedTrapPairs);
+        const counterOnlyResolved = Math.max(
+            0,
+            nonNegativeDungeonStatusCount(run.dungeonTrapsResolvedThisFloor) - resolvedTrapPairs
+        );
         const required = Math.max(1, activeTrapPairs + counterOnlyResolved);
         const progress = resolvedTrapPairs + counterOnlyResolved;
         return {
@@ -516,7 +526,9 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
         ).length;
         const counterOnlyDefeated = Math.max(
             0,
-            (run.dungeonEnemiesDefeatedThisFloor ?? 0) - resolvedEnemyPairs - resolvedMovingEnemyHazards
+            nonNegativeDungeonStatusCount(run.dungeonEnemiesDefeatedThisFloor) -
+                resolvedEnemyPairs -
+                resolvedMovingEnemyHazards
         );
         const progress = resolvedEnemyPairs + resolvedMovingEnemyHazards + counterOnlyDefeated;
         const required = Math.max(1, activeEnemyPairs + resolvedMovingEnemyHazards + counterOnlyDefeated);
@@ -535,7 +547,9 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
             (tile) => tile.dungeonCardKind === 'exit' && tile.dungeonExitActivated === true && tile.dungeonRouteType != null
         );
         const completed =
-            (run.dungeonGatewaysUsedThisFloor ?? 0) > 0 || board.selectedGatewayRouteType != null || routeExitActivated;
+            nonNegativeDungeonStatusCount(run.dungeonGatewaysUsedThisFloor) > 0 ||
+            board.selectedGatewayRouteType != null ||
+            routeExitActivated;
         return {
             objectiveId,
             completed,
@@ -572,7 +586,10 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
                 (tile) => tile.dungeonCardState === 'resolved' || tile.state === 'matched' || tile.state === 'removed'
             );
         const completed =
-            bossResolved || (bossTiles.length === 0 && board.dungeonBossId != null && run.dungeonEnemiesDefeated > 0);
+            bossResolved ||
+            (bossTiles.length === 0 &&
+                board.dungeonBossId != null &&
+                nonNegativeDungeonStatusCount(run.dungeonEnemiesDefeated) > 0);
         const progress = completed ? required : Math.max(0, required - activeHp);
         return {
             objectiveId,
@@ -595,7 +612,7 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
         const openedRooms = board.tiles.filter(
             (tile) => tile.dungeonCardEffectId === 'room_locked_cache' && tile.dungeonRoomUsed === true
         ).length;
-        const progress = Math.max(run.dungeonTreasuresOpenedThisFloor ?? 0, resolvedPairs + openedRooms);
+        const progress = Math.max(nonNegativeDungeonStatusCount(run.dungeonTreasuresOpenedThisFloor), resolvedPairs + openedRooms);
         return {
             objectiveId,
             completed: progress >= 1,
@@ -653,9 +670,11 @@ export const getDungeonBoardStatus = (run: RunState): DungeonBoardStatus => {
         hiddenDungeonCardCount: new Set(
             activeTiles.filter((tile) => tile.dungeonCardState === 'hidden').map((tile) => tile.pairKey)
         ).size,
-        leverCount: board?.dungeonLeverCount ?? 0,
+        leverCount: nonNegativeDungeonStatusCount(board?.dungeonLeverCount),
         requiredLeverCount: exitStatus.requiredLeverCount,
-        keyCount: Object.values(run.dungeonKeys).reduce((sum, count) => sum + (count ?? 0), 0) + run.dungeonMasterKeys,
+        keyCount:
+            Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeDungeonStatusCount(count), 0) +
+            nonNegativeDungeonStatusCount(run.dungeonMasterKeys),
         shopAvailable: Boolean(
             board?.tiles.some((tile) => tile.pairKey === SHOP_PAIR_KEY && tile.dungeonCardState !== 'resolved')
         ),

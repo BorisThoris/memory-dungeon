@@ -89,6 +89,37 @@ describe('dungeon board status', () => {
         });
     });
 
+    it('normalizes malformed key and lever counters before projecting exit status', () => {
+        const board = {
+            dungeonExitLockKind: 'iron',
+            dungeonLeverCount: Number.POSITIVE_INFINITY,
+            tiles: [
+                tile({
+                    id: 'exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    label: 'Iron Exit',
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                })
+            ]
+        } as BoardState;
+        const statusRun = run(board, {
+            dungeonKeys: { iron: Number.NaN },
+            dungeonMasterKeys: Number.POSITIVE_INFINITY
+        });
+
+        expect(getDungeonExitStatus(statusRun)).toMatchObject({
+            hasMatchingKey: false,
+            hasMasterKey: false,
+            canActivate: false
+        });
+        expect(getDungeonBoardStatus(statusRun)).toMatchObject({
+            keyCount: 0,
+            leverCount: 0
+        });
+    });
+
     it('treats an unreachable primary key lock as open instead of softlocking progression', () => {
         const board = {
             dungeonExitTileId: 'exit',
@@ -495,6 +526,46 @@ describe('dungeon board status', () => {
             activeMovingPatrolCount: 0
         });
         expect(getDungeonBoardPresentation(staleRun).combatForecastText).toBeNull();
+    });
+
+    it('normalizes malformed objective progress counters before projecting dungeon objectives', () => {
+        const trapBoard = {
+            dungeonObjectiveId: 'disarm_traps',
+            tiles: [
+                tile({
+                    id: 'trap-a',
+                    pairKey: 'trap',
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'hidden'
+                }),
+                tile({
+                    id: 'trap-b',
+                    pairKey: 'trap',
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'hidden'
+                })
+            ]
+        } as BoardState;
+
+        expect(getDungeonObjectiveStatus(run(trapBoard, {
+            dungeonTrapsResolvedThisFloor: Number.POSITIVE_INFINITY
+        }))).toMatchObject({
+            objectiveId: 'disarm_traps',
+            completed: false,
+            progress: 0,
+            required: 1
+        });
+
+        expect(getDungeonObjectiveStatus(run({
+            ...trapBoard,
+            dungeonObjectiveId: 'claim_route'
+        }, {
+            dungeonGatewaysUsedThisFloor: Number.POSITIVE_INFINITY
+        }))).toMatchObject({
+            objectiveId: 'claim_route',
+            completed: false,
+            progress: 0
+        });
     });
 
     it('counts stale patrol overlays as resolved for fully matched pacify floors', () => {
