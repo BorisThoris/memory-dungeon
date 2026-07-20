@@ -2,6 +2,7 @@
  * Small in-repo weighted random helpers (no npm deps). Uses an injected `rng`
  * returning values in [0, 1) so runs stay deterministic when seeded elsewhere.
  */
+import { normalizeRngRoll } from './rng';
 
 /** Pick an index 0..weights.length-1 proportional to non-negative weights. If all weights are zero, picks uniformly. */
 export const pickWeightedIndex = (rng: () => number, weights: readonly number[]): number => {
@@ -13,14 +14,10 @@ export const pickWeightedIndex = (rng: () => number, weights: readonly number[])
     for (const w of safe) {
         total += w;
     }
-    const roll = (): number => {
-        const value = rng();
-        return Number.isFinite(value) ? Math.min(1 - Number.EPSILON, Math.max(0, value)) : 0;
-    };
     if (total <= 0) {
-        return Math.min(weights.length - 1, Math.floor(roll() * weights.length));
+        return Math.min(weights.length - 1, Math.floor(normalizeRngRoll(rng()) * weights.length));
     }
-    let r = roll() * total;
+    let r = normalizeRngRoll(rng()) * total;
     for (let i = 0; i < safe.length; i += 1) {
         r -= safe[i];
         if (r < 0) {

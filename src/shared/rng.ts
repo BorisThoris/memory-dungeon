@@ -21,10 +21,13 @@ export const createMulberry32 = (seed: number): (() => number) => {
     };
 };
 
+export const normalizeRngRoll = (value: number): number =>
+    Number.isFinite(value) ? Math.min(1 - Number.EPSILON, Math.max(0, value)) : 0;
+
 export const shuffleWithRng = <T>(rng: () => number, items: T[]): T[] => {
     const next = [...items];
     for (let i = next.length - 1; i > 0; i -= 1) {
-        const j = Math.floor(rng() * (i + 1));
+        const j = Math.floor(normalizeRngRoll(rng()) * (i + 1));
         [next[i], next[j]] = [next[j], next[i]];
     }
     return next;

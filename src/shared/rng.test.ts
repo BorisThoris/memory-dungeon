@@ -60,6 +60,15 @@ describe('shuffleWithRng', () => {
         expect(spy).not.toHaveBeenCalled();
         spy.mockRestore();
     });
+
+    it('normalizes malformed rng rolls while preserving a permutation', () => {
+        const input = ['a', 'b', 'c'];
+
+        expect(shuffleWithRng(() => Number.NaN, input)).toEqual(['b', 'c', 'a']);
+        expect(shuffleWithRng(() => Number.POSITIVE_INFINITY, input)).toEqual(['b', 'c', 'a']);
+        expect(shuffleWithRng(() => 1, input)).toEqual(['a', 'b', 'c']);
+        expect(input).toEqual(['a', 'b', 'c']);
+    });
 });
 
 describe('derived seeds', () => {
