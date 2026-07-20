@@ -24,6 +24,9 @@ export const getFeaturedObjectiveBonusScore = (id: FeaturedObjectiveId): number 
 
 export const getFlipParLimit = (pairCount: number): number => Math.ceil(pairCount * 1.25) + 2;
 
+const nonNegativeObjectiveCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const isFeaturedObjectiveCompleted = (
     run: RunState,
     board: BoardState,
@@ -106,19 +109,20 @@ export const getFeaturedObjectiveClearResult = ({
     const endlessRiskWagerOutcome =
         activeEndlessRiskWager != null ? (completed ? 'won' as const : 'lost' as const) : undefined;
     const hasWagerSurety = run.relicIds.includes('wager_surety');
+    const previousFeaturedObjectiveStreak = nonNegativeObjectiveCount(run.featuredObjectiveStreak);
     const featuredObjectiveStreak =
         objectiveId != null
             ? completed
-                ? run.featuredObjectiveStreak + 1
+                ? previousFeaturedObjectiveStreak + 1
                 : activeEndlessRiskWager
                   ? hasWagerSurety
                       ? 1
                       : 0
-                  : Math.max(0, run.featuredObjectiveStreak - FEATURED_OBJECTIVE_STREAK_MISS_DECAY)
-            : run.featuredObjectiveStreak;
+                  : Math.max(0, previousFeaturedObjectiveStreak - FEATURED_OBJECTIVE_STREAK_MISS_DECAY)
+            : previousFeaturedObjectiveStreak;
     const endlessRiskWagerStreakLost =
         activeEndlessRiskWager != null && !completed
-            ? Math.max(0, activeEndlessRiskWager.streakAtRisk - featuredObjectiveStreak)
+            ? Math.max(0, nonNegativeObjectiveCount(activeEndlessRiskWager.streakAtRisk) - featuredObjectiveStreak)
             : undefined;
     const featuredObjectiveStreakBonus =
         objectiveId != null && completed
@@ -130,7 +134,7 @@ export const getFeaturedObjectiveClearResult = ({
     const relicFavorGained = objectiveId != null && completed ? (board.floorTag === 'boss' ? 2 : 1) : 0;
     const endlessRiskWagerFavorGained =
         completed && activeEndlessRiskWager
-            ? activeEndlessRiskWager.bonusFavorOnSuccess + (hasWagerSurety ? 1 : 0)
+            ? nonNegativeObjectiveCount(activeEndlessRiskWager.bonusFavorOnSuccess) + (hasWagerSurety ? 1 : 0)
             : 0;
 
     return {

@@ -38,6 +38,18 @@ describe('risk wager rules', () => {
         });
     });
 
+    it('normalizes malformed streak counters before offer and acceptance', () => {
+        const fractional = run({ featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK + 0.9 });
+        expect(canOfferEndlessRiskWager(fractional)).toBe(true);
+        expect(acceptEndlessRiskWager(fractional).endlessRiskWager?.streakAtRisk).toBe(
+            ENDLESS_RISK_WAGER_MIN_STREAK
+        );
+
+        const invalid = run({ featuredObjectiveStreak: Number.POSITIVE_INFINITY });
+        expect(canOfferEndlessRiskWager(invalid)).toBe(false);
+        expect(acceptEndlessRiskWager(invalid)).toBe(invalid);
+    });
+
     it('does not mutate runs that are not eligible', () => {
         const ineligible = run({ gameMode: 'daily' });
 

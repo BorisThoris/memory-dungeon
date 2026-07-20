@@ -5,6 +5,9 @@ import {
 } from './contracts';
 import { usesEndlessFloorSchedule } from './floor-mutator-schedule';
 
+const nonNegativeRiskWagerCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const canOfferEndlessRiskWager = (run: RunState): boolean =>
     run.status === 'levelComplete' &&
     run.relicOffer == null &&
@@ -13,7 +16,7 @@ export const canOfferEndlessRiskWager = (run: RunState): boolean =>
     run.endlessRiskWager == null &&
     run.lastLevelResult?.featuredObjectiveId != null &&
     run.lastLevelResult.featuredObjectiveCompleted === true &&
-    run.featuredObjectiveStreak >= ENDLESS_RISK_WAGER_MIN_STREAK;
+    nonNegativeRiskWagerCount(run.featuredObjectiveStreak) >= ENDLESS_RISK_WAGER_MIN_STREAK;
 
 export const acceptEndlessRiskWager = (run: RunState): RunState => {
     if (!canOfferEndlessRiskWager(run) || !run.lastLevelResult) {
@@ -25,7 +28,7 @@ export const acceptEndlessRiskWager = (run: RunState): RunState => {
         endlessRiskWager: {
             acceptedOnLevel: run.lastLevelResult.level,
             targetLevel: run.lastLevelResult.level + 1,
-            streakAtRisk: run.featuredObjectiveStreak,
+            streakAtRisk: nonNegativeRiskWagerCount(run.featuredObjectiveStreak),
             bonusFavorOnSuccess: ENDLESS_RISK_WAGER_BONUS_FAVOR
         }
     };
