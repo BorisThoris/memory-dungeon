@@ -61,7 +61,7 @@ export const applyDestroyPairTransition = (
 
     const board: BoardState = {
         ...run.board,
-        matchedPairs: run.board.matchedPairs + 1,
+        matchedPairs: nonNegativePowerCount(run.board.matchedPairs) + 1,
         tiles: run.board.tiles.map((t) =>
             pairTileIds.includes(t.id)
                 ? {
@@ -92,7 +92,7 @@ export const applyDestroyPairTransition = (
         shiftingSpotlightNonce: spunDestroy.shiftingSpotlightNonce,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, pairTileIds),
-        parasiteFloors: hasMutator(run, 'score_parasite') ? 0 : run.parasiteFloors,
+        parasiteFloors: hasMutator(run, 'score_parasite') ? 0 : nonNegativePowerCount(run.parasiteFloors),
         stats: {
             ...run.stats,
             matchesFound: nonNegativePowerCount(run.stats.matchesFound) + 1,

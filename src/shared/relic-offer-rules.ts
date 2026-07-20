@@ -103,7 +103,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
     };
     next = applyRelicImmediate(next, relicId);
 
-    const remainingAfter = offer.picksRemaining - 1;
+    const remainingAfter = Math.max(0, nonNegativeFiniteInteger(offer.picksRemaining) - 1);
 
     if (remainingAfter > 0) {
         const cleared = run.lastLevelResult!.level;
@@ -111,7 +111,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
         if (tierIndex === null) {
             return { kind: 'unchanged', run };
         }
-        const newPickRound = offer.pickRound + 1;
+        const newPickRound = nonNegativeFiniteInteger(offer.pickRound) + 1;
         const newOptions = rollRelicOptions(next, tierIndex, cleared, newPickRound);
         const contextualOptionReasons = getRelicDraftOptionReasons(next, cleared, newOptions);
         if (newOptions.length === 0) {
@@ -119,7 +119,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
                 kind: 'advanceToNextLevel',
                 run: {
                     ...next,
-                    relicTiersClaimed: run.relicTiersClaimed + 1,
+                    relicTiersClaimed: nonNegativeFiniteInteger(run.relicTiersClaimed) + 1,
                     relicOffer: null
                 }
             };
@@ -156,7 +156,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
         kind: 'advanceToNextLevel',
         run: {
             ...next,
-            relicTiersClaimed: run.relicTiersClaimed + 1,
+            relicTiersClaimed: nonNegativeFiniteInteger(run.relicTiersClaimed) + 1,
             relicOffer: null
         }
     };

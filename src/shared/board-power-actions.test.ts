@@ -171,6 +171,8 @@ describe('board power actions', () => {
     it('normalizes fractional destroy charges and malformed destroy stats before spending', () => {
         const state = run({
             destroyPairCharges: 1.8,
+            board: { ...defaultBoard(), matchedPairs: Number.NaN },
+            parasiteFloors: Number.POSITIVE_INFINITY
         });
         const result = applyDestroyPairTransition({
             ...state,
@@ -188,6 +190,8 @@ describe('board power actions', () => {
         expect(result.run.destroyPairCharges).toBe(0);
         expect(result.run.stats.matchesFound).toBe(1);
         expect(result.run.stats.pairsDestroyed).toBe(1);
+        expect(result.run.board!.matchedPairs).toBe(1);
+        expect(result.run.parasiteFloors).toBe(0);
     });
 
     it('applies full-board shuffle accounting without disturbing visible matched tiles', () => {
