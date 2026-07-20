@@ -106,4 +106,18 @@ describe('useViewportSize', () => {
         expect(subscribedViewport.removeEventListener).toHaveBeenCalledWith('resize', resizeListener);
         expect(replacementViewport.removeEventListener).not.toHaveBeenCalled();
     });
+
+    it('uses partial visualViewport dimensions without requiring listener methods', () => {
+        Object.defineProperty(window, 'visualViewport', {
+            configurable: true,
+            value: {
+                height: 680,
+                width: 960
+            }
+        });
+
+        const { result } = renderHook(() => useViewportSize());
+
+        expect(result.current).toEqual({ width: 960, height: 680 });
+    });
 });

@@ -5,6 +5,13 @@ interface ViewportSize {
     height: number;
 }
 
+type ViewportEventTarget = Pick<VisualViewport, 'addEventListener' | 'removeEventListener'>;
+
+const hasViewportEventTarget = (
+    viewport: VisualViewport | null | undefined
+): viewport is VisualViewport & ViewportEventTarget =>
+    typeof viewport?.addEventListener === 'function' && typeof viewport.removeEventListener === 'function';
+
 const readViewportSize = (): ViewportSize => {
     if (typeof window === 'undefined') {
         return { width: 1280, height: 800 };
@@ -23,7 +30,7 @@ export const useViewportSize = (): ViewportSize => {
 
     useEffect(() => {
         let frameId: number | null = null;
-        const visualViewport = window.visualViewport;
+        const visualViewport = hasViewportEventTarget(window.visualViewport) ? window.visualViewport : null;
 
         const commitViewportSize = (): void => {
             frameId = null;
