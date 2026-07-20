@@ -25,6 +25,9 @@ import { hashStringToSeed } from './rng';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { isSprungTrapTile } from './tile-state-rules';
 
+const nonNegativeEnemyHazardCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export interface EnemyHazardPatternDefinition {
     pattern: EnemyHazardPattern;
     label: string;
@@ -240,12 +243,13 @@ export const createEnemyHazardsForBoard = ({
 };
 
 export const advanceEnemyHazardsOnBoard = (board: BoardState, steps: number = 1): BoardState => {
+    const safeSteps = nonNegativeEnemyHazardCount(steps);
     const hazards = activeEnemyHazardsForBoard(board);
-    if (hazards.length === 0 || steps <= 0) {
+    if (hazards.length === 0 || safeSteps <= 0) {
         return board;
     }
     const activeIds = new Set(hazards.map((hazard) => hazard.id));
-    const nextTurn = (board.enemyHazardTurn ?? 0) + steps;
+    const nextTurn = nonNegativeEnemyHazardCount(board.enemyHazardTurn) + safeSteps;
     const occupied = new Set<string>();
     const nextHazards = board.enemyHazards!.map((hazard, index) => {
         if (!activeIds.has(hazard.id)) {
@@ -311,9 +315,12 @@ export const applyEnemyHazardClick = (
         return cleanedRun;
     }
     const advanceHazards = options.advanceHazards ?? true;
-    const consumesGuardToken = cleanedRun.stats.guardTokens > 0;
-    const lives = consumesGuardToken ? cleanedRun.lives : Math.max(0, cleanedRun.lives - hazard.damage);
-    const lostLives = Math.max(0, cleanedRun.lives - lives);
+    const guardTokens = nonNegativeEnemyHazardCount(cleanedRun.stats.guardTokens);
+    const currentLives = nonNegativeEnemyHazardCount(cleanedRun.lives);
+    const damage = nonNegativeEnemyHazardCount(hazard.damage);
+    const consumesGuardToken = guardTokens > 0;
+    const lives = consumesGuardToken ? currentLives : Math.max(0, currentLives - damage);
+    const lostLives = Math.max(0, currentLives - lives);
     const revealedBoard: BoardState = {
         ...board,
         enemyHazards: board.enemyHazards?.map((candidate) =>
@@ -331,10 +338,10 @@ export const applyEnemyHazardClick = (
         lives,
         pendingMemorizeBonusMs: addPendingMemorizeBonusForLostLives(cleanedRun.pendingMemorizeBonusMs, lostLives),
         board: advancedBoard,
-        enemyHazardHitsThisFloor: (cleanedRun.enemyHazardHitsThisFloor ?? 0) + 1,
+        enemyHazardHitsThisFloor: nonNegativeEnemyHazardCount(cleanedRun.enemyHazardHitsThisFloor) + 1,
         stats: {
             ...cleanedRun.stats,
-            guardTokens: consumesGuardToken ? cleanedRun.stats.guardTokens - 1 : cleanedRun.stats.guardTokens
+            guardTokens: consumesGuardToken ? Math.max(0, guardTokens - 1) : guardTokens
         }
     };
 };
@@ -415,10 +422,11 @@ export const clearLastPairEnemyHazardSoftlock = (run: RunState, board: BoardStat
     return {
         ...run,
         board: cleared.board,
-        dungeonEnemiesDefeated: run.dungeonEnemiesDefeated + cleared.bossesDefeated,
+        dungeonEnemiesDefeated:
+            nonNegativeEnemyHazardCount(run.dungeonEnemiesDefeated) + nonNegativeEnemyHazardCount(cleared.bossesDefeated),
         dungeonEnemiesDefeatedThisFloor:
-            (run.dungeonEnemiesDefeatedThisFloor ?? 0) + cleared.bossesDefeated,
+            nonNegativeEnemyHazardCount(run.dungeonEnemiesDefeatedThisFloor) + nonNegativeEnemyHazardCount(cleared.bossesDefeated),
         enemyHazardsDefeatedThisFloor:
-            (run.enemyHazardsDefeatedThisFloor ?? 0) + cleared.defeated
+            nonNegativeEnemyHazardCount(run.enemyHazardsDefeatedThisFloor) + nonNegativeEnemyHazardCount(cleared.defeated)
     };
 };

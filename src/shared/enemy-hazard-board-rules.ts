@@ -10,6 +10,9 @@ const isEnemyHazardRelevantPairTile = (tile: Tile): boolean =>
     tile.pairKey !== DECOY_PAIR_KEY &&
     tile.pairKey !== WILD_PAIR_KEY;
 
+const nonNegativeEnemyHazardCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const enemyHazardEligibleTiles = (tiles: readonly Tile[]): Tile[] =>
     tiles.filter(
         (tile) =>
@@ -133,8 +136,10 @@ export const clearFinalPairEnemyHazardOccupationForRun = (run: RunState): RunSta
     return {
         ...run,
         board: boardAfterClearedTiles,
-        dungeonEnemiesDefeated: run.dungeonEnemiesDefeated + bossHazardsToClear,
-        dungeonEnemiesDefeatedThisFloor: (run.dungeonEnemiesDefeatedThisFloor ?? 0) + bossHazardsToClear,
-        enemyHazardsDefeatedThisFloor: (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardsToClear.length
+        dungeonEnemiesDefeated: nonNegativeEnemyHazardCount(run.dungeonEnemiesDefeated) + bossHazardsToClear,
+        dungeonEnemiesDefeatedThisFloor:
+            nonNegativeEnemyHazardCount(run.dungeonEnemiesDefeatedThisFloor) + bossHazardsToClear,
+        enemyHazardsDefeatedThisFloor:
+            nonNegativeEnemyHazardCount(run.enemyHazardsDefeatedThisFloor) + hazardsToClear.length
     };
 };

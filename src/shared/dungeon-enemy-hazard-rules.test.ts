@@ -106,6 +106,16 @@ describe('dungeon enemy hazard rules', () => {
         expect(advanced.enemyHazards![0]!.currentTileId).toBe('b');
     });
 
+    it('normalizes malformed hazard turns and step counts before advancing hazards', () => {
+        const board = boardWith(
+            [tile('a', 'a'), tile('b', 'b'), tile('c', 'c')],
+            [hazard('h1', 'a', 'b', { state: 'revealed', hp: 1 })]
+        );
+
+        expect(advanceEnemyHazardsOnBoard({ ...board, enemyHazardTurn: Number.NaN }, 2.9).enemyHazardTurn).toBe(2);
+        expect(advanceEnemyHazardsOnBoard(board, Number.NaN)).toBe(board);
+    });
+
     it('does not advance stale hazards that only occupy cleared tiles', () => {
         const board = boardWith(
             [tile('a', 'done', { state: 'matched' }), tile('b', 'done', { state: 'matched' })],
@@ -159,6 +169,25 @@ describe('dungeon enemy hazard rules', () => {
         expect(hit.board!.enemyHazards![0]).toMatchObject({ state: 'revealed' });
     });
 
+    it('normalizes malformed contact damage counters before applying an enemy hazard click', () => {
+        const board = boardWith(
+            [tile('a', 'a'), tile('b', 'b'), tile('c', 'c')],
+            [hazard('h1', 'a', 'b', { damage: 1.9 })]
+        );
+        const run = {
+            ...runWithBoard(board),
+            lives: 3.9,
+            enemyHazardHitsThisFloor: Number.NaN,
+            stats: { ...runWithBoard(board).stats, guardTokens: Number.POSITIVE_INFINITY }
+        };
+
+        const hit = applyEnemyHazardClick(run, 'a', { advanceHazards: false });
+
+        expect(hit.lives).toBe(2);
+        expect(hit.enemyHazardHitsThisFloor).toBe(1);
+        expect(hit.stats.guardTokens).toBe(0);
+    });
+
     it('clears hidden hazards blocking the final unresolved real pair', () => {
         const board = boardWith(
             [
@@ -175,6 +204,29 @@ describe('dungeon enemy hazard rules', () => {
         expect(clearLastPairEnemyHazardSoftlock(runWithBoard(board), board)).toMatchObject({
             dungeonEnemiesDefeated: 1,
             dungeonEnemiesDefeatedThisFloor: 1,
+            enemyHazardsDefeatedThisFloor: 1
+        });
+    });
+
+    it('normalizes malformed defeat counters when clearing last-pair enemy hazards', () => {
+        const board = boardWith(
+            [
+                tile('a', 'final'),
+                tile('b', 'final'),
+                tile('c', 'done', { state: 'matched' })
+            ],
+            [hazard('h1', 'a', 'b', { bossId: 'rush_sentinel' })]
+        );
+        const run = {
+            ...runWithBoard(board),
+            dungeonEnemiesDefeated: Number.NaN,
+            dungeonEnemiesDefeatedThisFloor: 1.9,
+            enemyHazardsDefeatedThisFloor: Number.POSITIVE_INFINITY
+        };
+
+        expect(clearLastPairEnemyHazardSoftlock(run, board)).toMatchObject({
+            dungeonEnemiesDefeated: 1,
+            dungeonEnemiesDefeatedThisFloor: 2,
             enemyHazardsDefeatedThisFloor: 1
         });
     });

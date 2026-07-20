@@ -59,6 +59,22 @@ describe('enemy hazard board rules', () => {
         });
     });
 
+    it('normalizes malformed defeat counters when clearing final-pair hazards', () => {
+        const run = {
+            ...createNewRun(0),
+            board: boardWith([tile('a', 'final-a')], [hazard('boss-a', 'a', 'a', { bossId: 'rush_sentinel' })]),
+            dungeonEnemiesDefeated: Number.NaN,
+            dungeonEnemiesDefeatedThisFloor: 1.9,
+            enemyHazardsDefeatedThisFloor: Number.POSITIVE_INFINITY
+        };
+
+        expect(clearFinalPairEnemyHazardOccupationForRun(run)).toMatchObject({
+            dungeonEnemiesDefeated: 1,
+            dungeonEnemiesDefeatedThisFloor: 2,
+            enemyHazardsDefeatedThisFloor: 1
+        });
+    });
+
     it('hides and defeats stale hazards that only reference cleared board tiles', () => {
         const board = boardWith([
             tile('a', 'pair-a', { state: 'matched' }),
