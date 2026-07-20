@@ -69,6 +69,8 @@ import {
     resolveDraggedBoardViewport,
     resolvePinchBoardViewport,
     resolveWheelBoardViewport,
+    safelyReleasePointerCapture,
+    safelySetPointerCapture,
     screenPointToWorld,
     type TileBoardGesturePoint,
     type TileBoardPinchGestureSnapshot,
@@ -3830,7 +3832,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 startWorldY: startWorld.panY
             };
 
-            stageNode.setPointerCapture(event.pointerId);
+            safelySetPointerCapture(stageNode, event.pointerId);
 
             if (event.button !== 0) {
                 syncGestureActive(true);
@@ -3902,9 +3904,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             mouseDragSnapshotRef.current = null;
             syncGestureActive(false);
             syncSelectionSuppressed(false);
-            if (stageNode.hasPointerCapture(event.pointerId)) {
-                stageNode.releasePointerCapture(event.pointerId);
-            }
+            safelyReleasePointerCapture(stageNode, event.pointerId);
             stopMouseEvent(event);
 
             if (shouldPick) {

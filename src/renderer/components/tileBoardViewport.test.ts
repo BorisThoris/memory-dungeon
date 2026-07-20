@@ -13,6 +13,8 @@ import {
     resolveDraggedBoardViewport,
     resolvePinchBoardViewport,
     resolveWheelBoardViewport,
+    safelyReleasePointerCapture,
+    safelySetPointerCapture,
     screenPointToWorld,
     type TileBoardScreenPoint
 } from './tileBoardViewport';
@@ -245,5 +247,33 @@ describe('tileBoardViewport', () => {
         expect(next.panX).toBe(25);
         expect(next.panY).toBe(-30);
         expect(next.zoom).toBe(1.5);
+    });
+
+    it('contains unavailable pointer capture APIs so board gesture cleanup can continue', () => {
+        const setPointerCapture = vi.fn(() => {
+            throw new Error('pointer capture unavailable');
+        });
+        const releasePointerCapture = vi.fn(() => {
+            throw new Error('pointer release unavailable');
+        });
+        const hasPointerCapture = vi.fn(() => true);
+
+        expect(safelySetPointerCapture({ setPointerCapture }, 7)).toBe(false);
+        expect(() => safelyReleasePointerCapture({ hasPointerCapture, releasePointerCapture }, 7)).not.toThrow();
+        expect(hasPointerCapture).toHaveBeenCalledWith(7);
+        expect(releasePointerCapture).toHaveBeenCalledWith(7);
+    });
+
+    it('reports successful pointer capture and skips release when not captured', () => {
+        const setPointerCapture = vi.fn();
+        const releasePointerCapture = vi.fn();
+        const hasPointerCapture = vi.fn(() => false);
+
+        expect(safelySetPointerCapture({ setPointerCapture }, 9)).toBe(true);
+        safelyReleasePointerCapture({ hasPointerCapture, releasePointerCapture }, 9);
+
+        expect(setPointerCapture).toHaveBeenCalledWith(9);
+        expect(hasPointerCapture).toHaveBeenCalledWith(9);
+        expect(releasePointerCapture).not.toHaveBeenCalled();
     });
 });

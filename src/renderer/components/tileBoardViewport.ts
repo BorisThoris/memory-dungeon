@@ -262,6 +262,28 @@ export const screenPointToWorld = (
     };
 };
 
+export const safelySetPointerCapture = (element: Pick<HTMLElement, 'setPointerCapture'>, pointerId: number): boolean => {
+    try {
+        element.setPointerCapture(pointerId);
+        return true;
+    } catch {
+        return false;
+    }
+};
+
+export const safelyReleasePointerCapture = (
+    element: Pick<HTMLElement, 'hasPointerCapture' | 'releasePointerCapture'>,
+    pointerId: number
+): void => {
+    try {
+        if (element.hasPointerCapture(pointerId)) {
+            element.releasePointerCapture(pointerId);
+        }
+    } catch {
+        // Pointer capture cleanup is best-effort; gesture state cleanup must still complete.
+    }
+};
+
 export const getGestureCentroid = (
     first: TileBoardGesturePoint,
     second: TileBoardGesturePoint
