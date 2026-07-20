@@ -135,6 +135,9 @@ export interface RunObjectiveProgressRow {
     detail: string;
 }
 
+const nonNegativeRunObjectiveCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgressRow[] => {
     const rows: RunObjectiveProgressRow[] = [];
     if (run.board?.featuredObjectiveId) {
@@ -155,11 +158,13 @@ export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgre
         });
     }
     if (run.activeContract?.maxPinsTotalRun != null) {
+        const pinsPlacedCountThisRun = nonNegativeRunObjectiveCount(run.pinsPlacedCountThisRun);
+        const maxPinsTotalRun = nonNegativeRunObjectiveCount(run.activeContract.maxPinsTotalRun);
         rows.push({
             id: 'pin_vow',
             label: 'Pin vow',
-            state: run.pinsPlacedCountThisRun > run.activeContract.maxPinsTotalRun ? 'failed' : 'active',
-            detail: `${run.pinsPlacedCountThisRun}/${run.activeContract.maxPinsTotalRun} pins`
+            state: pinsPlacedCountThisRun > maxPinsTotalRun ? 'failed' : 'active',
+            detail: `${pinsPlacedCountThisRun}/${maxPinsTotalRun} pins`
         });
     }
     return rows;

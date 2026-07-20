@@ -60,4 +60,32 @@ describe('REG-045 power verb teaching', () => {
             'Only while playing.'
         );
     });
+
+    it('normalizes malformed saved counters before projecting power rows', () => {
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const rows = getPowerVerbRows({
+            ...run,
+            activeContract: { noDestroy: false, noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1.9 },
+            destroyPairCharges: Number.POSITIVE_INFINITY,
+            flashPairCharges: Number.NaN,
+            peekCharges: Number.NaN,
+            pinsPlacedCountThisRun: 1.9,
+            regionShuffleCharges: Number.POSITIVE_INFINITY,
+            shuffleCharges: Number.NaN,
+            strayRemoveCharges: Number.NaN,
+            undoUsesThisFloor: Number.NaN
+        });
+
+        expect(rows.find((row) => row.id === 'pin')?.disabledReason).toBe('Pin vow placement cap reached.');
+        expect(rows.find((row) => row.id === 'peek')?.cost).toBe('0 peek charge(s).');
+        expect(rows.find((row) => row.id === 'peek')?.disabledReason).toBe('No peek charges.');
+        expect(rows.find((row) => row.id === 'flash_pair')?.disabledReason).toBe('No flash charges.');
+        expect(rows.find((row) => row.id === 'shuffle')?.cost).toBe('0 full-board charge(s).');
+        expect(rows.find((row) => row.id === 'region_shuffle')?.cost).toBe(
+            '0 row/swap charge(s); relics may make the first row shuffle or tile swap free.'
+        );
+        expect(rows.find((row) => row.id === 'destroy_pair')?.cost).toBe('0 destroy charge(s).');
+        expect(rows.find((row) => row.id === 'stray_remove')?.disabledReason).toBe('No stray-remove charges.');
+        expect(rows.find((row) => row.id === 'undo_resolve')?.disabledReason).toBe('No undo uses this floor.');
+    });
 });

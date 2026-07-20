@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { createDefaultSaveData } from './save-data';
 import {
+    buildActiveQuestContractRows,
     getQuestCampaignRows,
     getQuestContractForRunSummary,
     questCampaignSummary,
     QUEST_CAMPAIGN_LADDER
 } from './quest-campaign';
+import { createNewRun } from './game-core';
 
 describe('REG-082 quest contract campaign ladder', () => {
     it('projects authored offline campaign steps from local save progress', () => {
@@ -41,5 +43,19 @@ describe('REG-082 quest contract campaign ladder', () => {
         expect(getQuestContractForRunSummary({ gameMode: 'gauntlet', levelsCleared: 1 })).toBe('gauntlet_proof');
         expect(getQuestContractForRunSummary({ gameMode: 'daily', levelsCleared: 1 })).toBe('daily_rhythm');
         expect(getQuestContractForRunSummary({ gameMode: 'endless', levelsCleared: 1 })).toBe('first_lantern');
+    });
+
+    it('normalizes malformed pin vow counters before projecting active contracts', () => {
+        const run = {
+            ...createNewRun(0),
+            activeContract: { noDestroy: false, noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1.9 },
+            pinsPlacedCountThisRun: Number.POSITIVE_INFINITY
+        };
+
+        expect(buildActiveQuestContractRows(run).find((row) => row.id === 'pin_vow')).toMatchObject({
+            status: 'active',
+            progressLabel: '0/1 pins',
+            failureReason: null
+        });
     });
 });

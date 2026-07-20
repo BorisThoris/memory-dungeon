@@ -97,6 +97,9 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
 const relicPickTotal = (save: SaveData): number =>
     Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
 
+const nonNegativeQuestCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const progressFor = (save: SaveData, id: QuestCampaignStepId): number => {
     switch (id) {
         case 'first_lantern':
@@ -168,12 +171,14 @@ export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContract
         });
     }
     if (run.activeContract?.maxPinsTotalRun != null) {
-        const failed = run.pinsPlacedCountThisRun > run.activeContract.maxPinsTotalRun;
+        const pinsPlacedCountThisRun = nonNegativeQuestCount(run.pinsPlacedCountThisRun);
+        const maxPinsTotalRun = nonNegativeQuestCount(run.activeContract.maxPinsTotalRun);
+        const failed = pinsPlacedCountThisRun > maxPinsTotalRun;
         rows.push({
             id: 'pin_vow',
             label: 'Pin Vow',
             status: failed ? 'failed' : 'active',
-            progressLabel: `${run.pinsPlacedCountThisRun}/${run.activeContract.maxPinsTotalRun} pins`,
+            progressLabel: `${pinsPlacedCountThisRun}/${maxPinsTotalRun} pins`,
             failureReason: failed ? 'Pin placement cap exceeded; retry on the next run.' : null,
             retryPolicy: 'retry_next_run',
             offlineOnly: true
