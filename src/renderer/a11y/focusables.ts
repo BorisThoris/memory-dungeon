@@ -34,6 +34,14 @@ export const getFocusableElements = (container: HTMLElement | null): HTMLElement
     }
 
     return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((element) => {
+        const explicitTabIndex = element.getAttribute('tabindex');
+        if (explicitTabIndex !== null) {
+            const tabIndex = Number.parseInt(explicitTabIndex, 10);
+            if (Number.isFinite(tabIndex) && tabIndex < 0) {
+                return false;
+            }
+        }
+
         if (element.hasAttribute('disabled') || element.getAttribute('aria-hidden') === 'true') {
             return false;
         }
