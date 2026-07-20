@@ -35,6 +35,9 @@ export interface TurnMatchScoringSummaryInput {
     tollCacheClaimed: boolean;
 }
 
+const nonNegativeScoringCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const resolveTurnMatchScoringSummary = ({
     run,
     sourceBoard,
@@ -52,7 +55,7 @@ export const resolveTurnMatchScoringSummary = ({
     pinLatticeRewarded,
     tollCacheClaimed
 }: TurnMatchScoringSummaryInput): TurnMatchScoringSummaryResult => {
-    const currentStreak = run.stats.currentStreak + 1;
+    const currentStreak = nonNegativeScoringCount(run.stats.currentStreak) + 1;
     const encoreKey = matchedPairKey;
     const cursedMatchedEarly =
         Boolean(sourceBoard.cursedPairKey && encoreKey === sourceBoard.cursedPairKey && sourceBoard.matchedPairs < sourceBoard.pairCount - 1);
@@ -78,9 +81,9 @@ export const resolveTurnMatchScoringSummary = ({
         tollCacheClaimed,
         presentationPenalty
     });
-    const totalScore = run.stats.totalScore + matchScore;
-    const currentLevelScore = run.stats.currentLevelScore + matchScore;
-    const bestScore = Math.max(run.stats.bestScore, totalScore);
+    const totalScore = nonNegativeScoringCount(run.stats.totalScore) + matchScore;
+    const currentLevelScore = nonNegativeScoringCount(run.stats.currentLevelScore) + matchScore;
+    const bestScore = Math.max(nonNegativeScoringCount(run.stats.bestScore), totalScore);
 
     return {
         currentStreak,

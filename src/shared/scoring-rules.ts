@@ -75,7 +75,12 @@ export const calculateMatchScore = (
     level: number,
     currentStreak: number,
     multiplier: number = 1
-): number => Math.floor((20 + 5 * Math.max(level - 1, 0) + 10 * Math.max(currentStreak, 0)) * multiplier);
+): number => {
+    const levelOffset = typeof level === 'number' && Number.isFinite(level) ? Math.max(level - 1, 0) : 0;
+    const streak = typeof currentStreak === 'number' && Number.isFinite(currentStreak) ? Math.max(currentStreak, 0) : 0;
+    const scoreMultiplier = typeof multiplier === 'number' && Number.isFinite(multiplier) ? Math.max(0, multiplier) : 1;
+    return Math.floor((20 + 5 * levelOffset + 10 * streak) * scoreMultiplier);
+};
 
 /** Exported for UI resolving highlights (gambit 3-flip) - keep in sync with `resolveGambitThree`. */
 export const tilesArePairMatch = (a: Tile, b: Tile): boolean => {
