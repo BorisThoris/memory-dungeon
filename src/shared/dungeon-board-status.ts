@@ -27,6 +27,11 @@ import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 const nonNegativeDungeonStatusCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const nonNegativeDungeonStatusCountWithFallback = (value: unknown, fallback: number): number =>
+    typeof value === 'number' && Number.isFinite(value)
+        ? Math.max(0, Math.floor(value))
+        : nonNegativeDungeonStatusCount(fallback);
+
 export interface DungeonExitStatus {
     exitTile: Tile | null;
     revealed: boolean;
@@ -336,7 +341,8 @@ export const getDungeonThreatStatus = (board: BoardState | null | undefined): Du
 
 export const getDungeonEnemyLifecycleStatus = (runOrBoard: RunState | BoardState | null | undefined): DungeonEnemyLifecycleStatus => {
     const board = runOrBoard && 'tiles' in runOrBoard ? runOrBoard : runOrBoard?.board;
-    const defeatedEnemyCounter = runOrBoard && 'board' in runOrBoard ? (runOrBoard.dungeonEnemiesDefeatedThisFloor ?? 0) : 0;
+    const defeatedEnemyCounter =
+        runOrBoard && 'board' in runOrBoard ? nonNegativeDungeonStatusCount(runOrBoard.dungeonEnemiesDefeatedThisFloor) : 0;
     const activeTiles =
         board?.tiles.filter(
             (tile) =>
@@ -414,6 +420,14 @@ export const getDungeonBossReadModel = (
     );
     const bossHazards = board?.enemyHazards?.filter((hazard) => hazard.bossId === definition.id) ?? [];
     const activeBossHazards = activeEnemyHazardsForBoard(board).filter((hazard) => hazard.bossId === definition.id);
+    const bossTileMaxHp = (tile: Tile): number =>
+        nonNegativeDungeonStatusCountWithFallback(tile.dungeonCardMaxHp, definition.hp);
+    const bossTileHp = (tile: Tile): number =>
+        nonNegativeDungeonStatusCountWithFallback(tile.dungeonCardHp, bossTileMaxHp(tile));
+    const bossHazardMaxHp = (hazard: { maxHp: number }): number =>
+        nonNegativeDungeonStatusCountWithFallback(hazard.maxHp, definition.hp);
+    const bossHazardHp = (hazard: { hp: number; maxHp: number }): number =>
+        nonNegativeDungeonStatusCountWithFallback(hazard.hp, bossHazardMaxHp(hazard));
     const lifecycleSource: DungeonBossLifecycleSource =
         countDungeonPairs(activeBossTiles, () => true) > 0
             ? 'boss_card_pair'
@@ -422,15 +436,15 @@ export const getDungeonBossReadModel = (
               : 'none';
     const maxHp =
         lifecycleSource === 'boss_card_pair'
-            ? Math.max(0, ...bossTiles.map((tile) => tile.dungeonCardMaxHp ?? definition.hp))
+            ? Math.max(0, ...bossTiles.map(bossTileMaxHp))
             : lifecycleSource === 'moving_patrol'
-              ? Math.max(0, ...bossHazards.map((hazard) => hazard.maxHp))
+              ? Math.max(0, ...bossHazards.map(bossHazardMaxHp))
               : definition.hp;
     const hp =
         lifecycleSource === 'boss_card_pair'
-            ? Math.max(0, ...activeBossTiles.map((tile) => tile.dungeonCardHp ?? 0))
+            ? Math.max(0, ...activeBossTiles.map(bossTileHp))
             : lifecycleSource === 'moving_patrol'
-              ? Math.max(0, ...activeBossHazards.map((hazard) => hazard.hp))
+              ? Math.max(0, ...activeBossHazards.map(bossHazardHp))
               : 0;
     const phase =
         lifecycleSource === 'none' && (bossTiles.length > 0 || bossHazards.length > 0)
@@ -564,8 +578,13 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
         const bossHazards = board.enemyHazards?.filter((hazard) => hazard.bossId) ?? [];
         const activeBossHazards = activeEnemyHazardsForBoard(board).filter((hazard) => hazard.bossId);
         if (bossHazards.length > 0) {
-            const required = Math.max(1, ...bossHazards.map((hazard) => hazard.maxHp));
-            const activeHp = Math.max(0, ...activeBossHazards.map((hazard) => hazard.hp));
+            const required = Math.max(1, ...bossHazards.map((hazard) => nonNegativeDungeonStatusCountWithFallback(hazard.maxHp, 1)));
+            const activeHp = Math.max(
+                0,
+                ...activeBossHazards.map((hazard) =>
+                    nonNegativeDungeonStatusCountWithFallback(hazard.hp, nonNegativeDungeonStatusCountWithFallback(hazard.maxHp, 1))
+                )
+            );
             const completed = activeBossHazards.length === 0;
             const progress = completed ? required : Math.max(0, required - activeHp);
             return {
@@ -578,8 +597,13 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
             };
         }
         const bossTiles = board.tiles.filter((tile) => tile.dungeonBossId != null);
-        const required = Math.max(1, ...bossTiles.map((tile) => tile.dungeonCardMaxHp ?? 1));
-        const activeHp = Math.max(0, ...bossTiles.map((tile) => tile.dungeonCardHp ?? 0));
+        const required = Math.max(1, ...bossTiles.map((tile) => nonNegativeDungeonStatusCountWithFallback(tile.dungeonCardMaxHp, 1)));
+        const activeHp = Math.max(
+            0,
+            ...bossTiles.map((tile) =>
+                nonNegativeDungeonStatusCountWithFallback(tile.dungeonCardHp, nonNegativeDungeonStatusCountWithFallback(tile.dungeonCardMaxHp, 1))
+            )
+        );
         const bossResolved =
             bossTiles.length > 0 &&
             bossTiles.every(

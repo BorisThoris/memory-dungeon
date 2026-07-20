@@ -333,7 +333,7 @@ const effectiveExitLockForTile = (
     if (!options?.board) {
         return {
             lockKind: tile.dungeonExitLockKind ?? 'none',
-            requiredLeverCount: tile.dungeonExitRequiredLeverCount ?? 0,
+            requiredLeverCount: nonNegativeDungeonCardReadCount(tile.dungeonExitRequiredLeverCount),
             keyFallbackPending: false
         };
     }
@@ -357,7 +357,9 @@ const effectiveExitLockForTile = (
     if (effectivePrimaryExitLock.exitTile?.id !== tile.id) {
         return {
             lockKind: tile.dungeonExitLockKind ?? options.board.dungeonExitLockKind ?? 'none',
-            requiredLeverCount: tile.dungeonExitRequiredLeverCount ?? options.board.dungeonExitRequiredLeverCount ?? 0,
+            requiredLeverCount: nonNegativeDungeonCardReadCount(
+                tile.dungeonExitRequiredLeverCount ?? options.board.dungeonExitRequiredLeverCount
+            ),
             keyFallbackPending: false
         };
     }
@@ -443,13 +445,13 @@ export const getDungeonCardCopy = (tile: Tile, options?: DungeonCardCopyOptions)
     }
     const bossDefinition = getDungeonBossDefinition(tile.dungeonBossId);
     if (bossDefinition) {
-        return `Dungeon boss: ${tile.label}. ${bossDefinition.cardCopy} HP ${tile.dungeonCardHp ?? 0}.`;
+        return `Dungeon boss: ${tile.label}. ${bossDefinition.cardCopy} HP ${nonNegativeDungeonCardReadCount(tile.dungeonCardHp)}.`;
     }
     if (tile.dungeonCardEffectId === 'enemy_stalker') {
-        return `Dungeon enemy: ${tile.label}. Wakes when traps spring and attacks on mismatches. HP ${tile.dungeonCardHp ?? 0}.`;
+        return `Dungeon enemy: ${tile.label}. Wakes when traps spring and attacks on mismatches. HP ${nonNegativeDungeonCardReadCount(tile.dungeonCardHp)}.`;
     }
     const kindCopy = getDungeonCardKindDefinition(tile.dungeonCardKind).copyLabel;
-    const hp = tile.dungeonCardKind === 'enemy' && tile.dungeonCardHp != null ? ` HP ${tile.dungeonCardHp}.` : '';
+    const hp = tile.dungeonCardKind === 'enemy' && tile.dungeonCardHp != null ? ` HP ${nonNegativeDungeonCardReadCount(tile.dungeonCardHp)}.` : '';
     const boss = tile.dungeonBossId ? ' Boss pair.' : '';
     return `${kindCopy}: ${tile.label}.${boss}${hp}`;
 };

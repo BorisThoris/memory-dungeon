@@ -101,6 +101,18 @@ describe('dungeon board status', () => {
                     state: 'flipped',
                     dungeonCardKind: 'exit',
                     dungeonExitLockKind: 'iron'
+                }),
+                tile({
+                    id: 'key-a',
+                    pairKey: 'iron-key',
+                    dungeonCardKind: 'key',
+                    dungeonKeyKind: 'iron'
+                }),
+                tile({
+                    id: 'key-b',
+                    pairKey: 'iron-key',
+                    dungeonCardKind: 'key',
+                    dungeonKeyKind: 'iron'
                 })
             ]
         } as BoardState;
@@ -413,6 +425,53 @@ describe('dungeon board status', () => {
         expect(getDungeonBoardPresentation(run(board))).toMatchObject({
             bossText: 'Mnemonist Observer',
             alertText: 'Mnemonist Observer gives a longer study, then punishes mismatches with extra recall pressure.'
+        });
+    });
+
+    it('normalizes malformed boss and enemy counters before projecting lifecycle status', () => {
+        const board = {
+            floorTag: 'boss',
+            dungeonBossId: 'rush_sentinel',
+            dungeonObjectiveId: 'defeat_boss',
+            tiles: [
+                tile({
+                    id: 'boss-a',
+                    pairKey: 'boss',
+                    state: 'flipped',
+                    dungeonCardKind: 'enemy',
+                    dungeonBossId: 'rush_sentinel',
+                    dungeonCardHp: Number.POSITIVE_INFINITY,
+                    dungeonCardMaxHp: 3
+                }),
+                tile({
+                    id: 'boss-b',
+                    pairKey: 'boss',
+                    state: 'hidden',
+                    dungeonCardKind: 'enemy',
+                    dungeonBossId: 'rush_sentinel',
+                    dungeonCardHp: Number.NaN,
+                    dungeonCardMaxHp: Number.POSITIVE_INFINITY
+                })
+            ]
+        } as BoardState;
+        const bossRun = run(board, {
+            dungeonEnemiesDefeatedThisFloor: Number.POSITIVE_INFINITY
+        });
+
+        expect(getDungeonEnemyLifecycleStatus(bossRun)).toMatchObject({
+            enemyCardPairCount: 1,
+            defeatedEnemyCardPairCount: 0
+        });
+        expect(getDungeonBossReadModel(bossRun)).toMatchObject({
+            hp: 3,
+            maxHp: 3,
+            phase: 'opening'
+        });
+        expect(getDungeonObjectiveStatus(bossRun)).toMatchObject({
+            objectiveId: 'defeat_boss',
+            completed: false,
+            progress: 0,
+            required: 3
         });
     });
 

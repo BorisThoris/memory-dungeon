@@ -234,6 +234,44 @@ describe('dungeon card read models', () => {
         ).toContain('Selects greed route');
     });
 
+    it('normalizes malformed dungeon card copy counters before display', () => {
+        const bossCopy = getDungeonCardCopy({
+            id: 'boss',
+            pairKey: 'boss',
+            label: 'Bell-Rush Sentinel',
+            state: 'hidden',
+            symbol: 'S',
+            dungeonCardKind: 'enemy',
+            dungeonBossId: 'rush_sentinel',
+            dungeonCardHp: Number.POSITIVE_INFINITY
+        } as Tile);
+        const enemyCopy = getDungeonCardCopy({
+            id: 'enemy',
+            pairKey: 'enemy',
+            label: 'Stalker',
+            state: 'hidden',
+            symbol: 'E',
+            dungeonCardKind: 'enemy',
+            dungeonCardEffectId: 'enemy_stalker',
+            dungeonCardHp: Number.NaN
+        } as Tile);
+        const exitCopy = getDungeonCardCopy({
+            id: 'exit',
+            pairKey: 'exit',
+            label: 'Lever Exit',
+            state: 'hidden',
+            symbol: 'X',
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'lever',
+            dungeonExitRequiredLeverCount: Number.POSITIVE_INFINITY
+        } as Tile);
+
+        expect(`${bossCopy} ${enemyCopy} ${exitCopy}`).not.toMatch(/NaN|Infinity/);
+        expect(bossCopy).toContain('HP 0');
+        expect(enemyCopy).toContain('HP 0');
+        expect(exitCopy).toContain('Requires 1 lever(s)');
+    });
+
     it('uses tile key kind in key and lock card copy', () => {
         expect(
             getDungeonCardCopy({
