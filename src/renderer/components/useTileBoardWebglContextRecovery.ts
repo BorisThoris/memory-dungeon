@@ -36,6 +36,10 @@ export const useTileBoardWebglContextRecovery = ({
             }
             cleanupRef.current?.();
             cleanupRef.current = null;
+            if (announcementTimeoutRef.current !== null) {
+                window.clearTimeout(announcementTimeoutRef.current);
+                announcementTimeoutRef.current = null;
+            }
             setGpuSurfaceLost(false);
 
             const onLost = (event: Event): void => {

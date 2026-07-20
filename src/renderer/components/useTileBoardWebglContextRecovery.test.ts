@@ -57,6 +57,27 @@ describe('useTileBoardWebglContextRecovery', () => {
         expect(result.current.gpuSurfaceLost).toBe(true);
     });
 
+    it('cancels a pending restored announcement clear when the canvas is replaced', () => {
+        vi.useFakeTimers();
+        const announce = vi.fn();
+        const oldCanvas = document.createElement('canvas');
+        const currentCanvas = document.createElement('canvas');
+        const { result } = renderHook(() => useTileBoardWebglContextRecovery({ announce }));
+
+        act(() => {
+            result.current.handleCanvasCreated(oldCanvas);
+            oldCanvas.dispatchEvent(new Event('webglcontextrestored'));
+        });
+        expect(announce).toHaveBeenCalledWith('Graphics context restored. Board rebuilt.');
+
+        act(() => {
+            result.current.handleCanvasCreated(currentCanvas);
+            vi.advanceTimersByTime(3200);
+        });
+
+        expect(announce).toHaveBeenCalledTimes(1);
+    });
+
     it('uses the latest announcer without replacing the active canvas', () => {
         const firstAnnounce = vi.fn();
         const latestAnnounce = vi.fn();
