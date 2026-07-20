@@ -18,6 +18,33 @@ const readCoarsePointer = (): boolean => {
     return coarse && !hybridTouchLaptop;
 };
 
+type PointerMediaQueryList = MediaQueryList & {
+    addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+    removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+};
+
+const addMediaQueryChangeListener = (
+    mediaQuery: PointerMediaQueryList,
+    listener: (event: MediaQueryListEvent) => void
+): void => {
+    if (typeof mediaQuery.addEventListener === 'function') {
+        mediaQuery.addEventListener('change', listener);
+        return;
+    }
+    mediaQuery.addListener?.(listener);
+};
+
+const removeMediaQueryChangeListener = (
+    mediaQuery: PointerMediaQueryList,
+    listener: (event: MediaQueryListEvent) => void
+): void => {
+    if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', listener);
+        return;
+    }
+    mediaQuery.removeListener?.(listener);
+};
+
 export const useCoarsePointer = (): boolean => {
     const [coarsePointer, setCoarsePointer] = useState(readCoarsePointer);
 
@@ -35,14 +62,14 @@ export const useCoarsePointer = (): boolean => {
         };
 
         sync();
-        coarseMq.addEventListener('change', sync);
-        fineMq.addEventListener('change', sync);
-        hoverMq.addEventListener('change', sync);
+        addMediaQueryChangeListener(coarseMq, sync);
+        addMediaQueryChangeListener(fineMq, sync);
+        addMediaQueryChangeListener(hoverMq, sync);
 
         return () => {
-            coarseMq.removeEventListener('change', sync);
-            fineMq.removeEventListener('change', sync);
-            hoverMq.removeEventListener('change', sync);
+            removeMediaQueryChangeListener(coarseMq, sync);
+            removeMediaQueryChangeListener(fineMq, sync);
+            removeMediaQueryChangeListener(hoverMq, sync);
         };
     }, []);
 
