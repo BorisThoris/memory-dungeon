@@ -5,7 +5,7 @@ import {
     type EndlessSimulationHealthReport
 } from './sim-endless';
 import { GAME_RULES_VERSION } from '../src/shared/contracts';
-import { readNumericCliArg, resolveSeedSweep } from './seed-sweep-options';
+import { readFlooredNumericCliArg, resolveSeedSweep } from './seed-sweep-options';
 
 const formatFailure = (seed: number, report: EndlessSimulationHealthReport): string =>
     [
@@ -14,8 +14,8 @@ const formatFailure = (seed: number, report: EndlessSimulationHealthReport): str
     ].join('\n');
 
 export const runSoftlockSeedGate = (argv: readonly string[]): number => {
-    const floors = Math.max(1, Math.floor(readNumericCliArg(argv, 'floors', 1000)));
-    const rulesVersion = Math.max(1, Math.floor(readNumericCliArg(argv, 'rulesVersion', GAME_RULES_VERSION)));
+    const floors = Math.max(1, readFlooredNumericCliArg(argv, 'floors', 1000));
+    const rulesVersion = Math.max(1, readFlooredNumericCliArg(argv, 'rulesVersion', GAME_RULES_VERSION));
     const defaultSeeds = [
         42_001,
         42_002,

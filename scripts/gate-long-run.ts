@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { runLongRunSoak, type LongRunSoakReport } from '../src/shared/long-run-depth';
-import { readNumericCliArg, readSeedListCliArg } from './seed-sweep-options';
+import { readFlooredNumericCliArg, readSeedListCliArg } from './seed-sweep-options';
 
 const DEFAULT_LONG_RUN_SEEDS = [42_001, 42_077, 42_123] as const;
 
@@ -10,7 +10,7 @@ export interface LongRunGateOptions {
 }
 
 export const parseLongRunGateOptions = (argv: readonly string[]): LongRunGateOptions => ({
-    floors: Math.max(1, Math.floor(readNumericCliArg(argv, 'floors', 48))),
+    floors: Math.max(1, readFlooredNumericCliArg(argv, 'floors', 48)),
     seeds: readSeedListCliArg(argv, DEFAULT_LONG_RUN_SEEDS)
 });
 

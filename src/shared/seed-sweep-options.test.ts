@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     generateDeterministicStressSeeds,
+    readFlooredNumericCliArg,
     readNumericCliArg,
     readSeedListCliArg,
     resolveSeedSweep
@@ -14,6 +15,14 @@ describe('seed sweep CLI options', () => {
         expect(readNumericCliArg([], 'floors', 1000)).toBe(1000);
         expect(readNumericCliArg(['--floors='], 'floors', 1000)).toBe(0);
         expect(readNumericCliArg(['--floors=invalid'], 'floors', 1000)).toBeNaN();
+    });
+
+    it('floors numeric options and falls back when malformed values are not finite', () => {
+        expect(readFlooredNumericCliArg(['--floors=250.9'], 'floors', 1000)).toBe(250);
+        expect(readFlooredNumericCliArg([], 'floors', 1000)).toBe(1000);
+        expect(readFlooredNumericCliArg(['--floors='], 'floors', 1000)).toBe(0);
+        expect(readFlooredNumericCliArg(['--floors=invalid'], 'floors', 1000)).toBe(1000);
+        expect(readFlooredNumericCliArg(['--floors=Infinity'], 'floors', 1000)).toBe(1000);
     });
 
     it('accepts comma and whitespace seed lists and rejects invalid seeds', () => {

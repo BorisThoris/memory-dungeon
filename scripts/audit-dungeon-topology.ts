@@ -16,7 +16,7 @@ import {
     revealDungeonChoices,
     selectDungeonNode
 } from '../src/shared/run-map';
-import { readNumericCliArg, resolveSeedSweep } from './seed-sweep-options';
+import { readFlooredNumericCliArg, resolveSeedSweep } from './seed-sweep-options';
 
 const REQUIRED_ROUTE_NODE_KINDS = ['boss', 'combat', 'elite', 'event', 'rest', 'shop', 'trap', 'treasure'] as const;
 
@@ -75,8 +75,8 @@ export interface DungeonTopologyAuditOptions {
 
 export const parseDungeonTopologyAuditOptions = (argv: readonly string[]): DungeonTopologyAuditOptions => {
     return {
-        floors: Math.max(1, Math.floor(readNumericCliArg(argv, 'floors', 1000))),
-        rulesVersion: Math.max(1, Math.floor(readNumericCliArg(argv, 'rulesVersion', GAME_RULES_VERSION))),
+        floors: Math.max(1, readFlooredNumericCliArg(argv, 'floors', 1000)),
+        rulesVersion: Math.max(1, readFlooredNumericCliArg(argv, 'rulesVersion', GAME_RULES_VERSION)),
         requireFullScheduleCoverage: boolArg(argv, 'requireFullScheduleCoverage'),
         seeds: resolveSeedSweep(argv, [42_001, 42_002, 77_707, 130_011, 420_113, 880_037])
     };
@@ -362,7 +362,7 @@ const formatCounts = (counts: Record<string, number>): string =>
 export const runDungeonTopologyAudit = (argv: readonly string[]): number => {
     const json = boolArg(argv, 'json');
     const quiet = boolArg(argv, 'quiet');
-    const maxFailures = Math.max(1, Math.floor(readNumericCliArg(argv, 'maxFailures', 25)));
+    const maxFailures = Math.max(1, readFlooredNumericCliArg(argv, 'maxFailures', 25));
     const options = parseDungeonTopologyAuditOptions(argv);
     const result = analyzeDungeonTopologyAudit(options);
 

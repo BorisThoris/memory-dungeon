@@ -16,6 +16,10 @@ describe('long-run gate script', () => {
             floors: 1,
             seeds: [42_001, 42_077, 42_123]
         });
+        expect(parseLongRunGateOptions(['--floors=invalid', '--seeds=101'])).toEqual({
+            floors: 48,
+            seeds: [101]
+        });
     });
 
     it('keeps the established defaults and returns fresh seed arrays', () => {

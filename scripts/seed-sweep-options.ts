@@ -21,6 +21,9 @@ export const readSeedListCliArg = (argv: readonly string[], fallback: readonly n
 const floorFiniteOrFallback = (value: number, fallback: number): number =>
     Number.isFinite(value) ? Math.floor(value) : fallback;
 
+export const readFlooredNumericCliArg = (argv: readonly string[], name: string, fallback: number): number =>
+    floorFiniteOrFallback(readNumericCliArg(argv, name, fallback), fallback);
+
 export const generateDeterministicStressSeeds = (count: number, baseSeed: number): number[] => {
     const seeds: number[] = [];
     let state = Math.max(1, Math.floor(baseSeed)) >>> 0;
@@ -32,9 +35,9 @@ export const generateDeterministicStressSeeds = (count: number, baseSeed: number
 };
 
 export const resolveSeedSweep = (argv: readonly string[], fallback: readonly number[]): number[] => {
-    const stressSeedCount = Math.max(0, floorFiniteOrFallback(readNumericCliArg(argv, 'stressSeeds', 0), 0));
+    const stressSeedCount = Math.max(0, readFlooredNumericCliArg(argv, 'stressSeeds', 0));
     if (stressSeedCount > 0) {
-        const baseSeed = floorFiniteOrFallback(readNumericCliArg(argv, 'stressSeedBase', 42_001), 42_001);
+        const baseSeed = readFlooredNumericCliArg(argv, 'stressSeedBase', 42_001);
         return generateDeterministicStressSeeds(stressSeedCount, baseSeed);
     }
     return readSeedListCliArg(argv, fallback);
