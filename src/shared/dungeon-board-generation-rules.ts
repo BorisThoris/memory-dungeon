@@ -9,6 +9,7 @@ import type {
 import {
     createMulberry32,
     hashStringToSeed,
+    pickRngIndex,
     shuffleWithRng
 } from './rng';
 import { getHazardTileDefinition } from './hazard-tiles';
@@ -120,9 +121,9 @@ const uniqueSlotOrder = (slots: number[], total: number): number[] => {
 const makeDungeonGraphSlots = (total: number, columns: number, rng: () => number): DungeonGraphSlots => {
     const rows = Math.max(1, Math.ceil(total / columns));
     const path: number[] = [];
-    let col = Math.min(columns - 1, Math.max(0, Math.floor(rng() * columns)));
+    let col = pickRngIndex(rng, columns);
     for (let row = 0; row < rows; row += 1) {
-        const step = Math.floor(rng() * 3) - 1;
+        const step = pickRngIndex(rng, 3) - 1;
         col = Math.min(columns - 1, Math.max(0, col + step));
         const slot = row * columns + col;
         if (slot < total) {

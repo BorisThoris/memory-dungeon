@@ -1,3 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 import {
     createMulberry32,
@@ -9,6 +12,12 @@ import {
     shuffleWithRng,
     utcDateKeyMinusOneDay
 } from './rng';
+
+const listTypeScriptFiles = (dir: string): string[] =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        const path = resolve(dir, entry.name);
+        return entry.isDirectory() ? listTypeScriptFiles(path) : [path];
+    });
 
 describe('hashStringToSeed', () => {
     it('is deterministic for the same input', () => {
@@ -79,6 +88,16 @@ describe('pickRngIndex', () => {
         expect(pickRngIndex(() => 0.5, 3.9)).toBe(1);
         expect(pickRngIndex(() => 0.5, Number.POSITIVE_INFINITY)).toBe(0);
         expect(pickRngIndex(() => 0.5, 0)).toBe(0);
+    });
+
+    it('keeps shared rule code on normalized rng index helpers', () => {
+        const sharedDir = resolve(fileURLToPath(import.meta.url), '..');
+        const offenders = listTypeScriptFiles(sharedDir)
+            .filter((file) => !file.endsWith('.test.ts') && !file.endsWith('/rng.ts'))
+            .filter((file) => /Math\.floor\(\s*rng\(\)\s*\*/u.test(readFileSync(file, 'utf8')))
+            .map((file) => file.slice(sharedDir.length + 1));
+
+        expect(offenders).toEqual([]);
     });
 });
 
