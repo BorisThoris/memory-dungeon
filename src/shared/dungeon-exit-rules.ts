@@ -17,6 +17,9 @@ import {
 export const DUNGEON_OBJECTIVE_SCORE_REWARD = 35;
 export const DUNGEON_OBJECTIVE_FAVOR_REWARD = 1;
 
+const nonNegativeDungeonExitCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export type DungeonExitActivationSpend = 'none' | 'key' | 'master_key';
 
 export interface DungeonExitActivationSpendResult {
@@ -122,6 +125,7 @@ export const applyDungeonExitObjectiveReward = (
         (objective.completed || (objective.objectiveId === 'claim_route' && status.routeType != null)) &&
         objective.objectiveId !== 'find_exit';
     const favor = gainRelicFavor(run, rewarded ? DUNGEON_OBJECTIVE_FAVOR_REWARD : 0);
+    const totalScore = nonNegativeDungeonExitCount(run.stats.totalScore) + DUNGEON_OBJECTIVE_SCORE_REWARD;
 
     return {
         rewarded,
@@ -130,8 +134,10 @@ export const applyDungeonExitObjectiveReward = (
             stats: rewarded
                 ? {
                       ...run.stats,
-                      totalScore: run.stats.totalScore + DUNGEON_OBJECTIVE_SCORE_REWARD,
-                      currentLevelScore: run.stats.currentLevelScore + DUNGEON_OBJECTIVE_SCORE_REWARD
+                      totalScore,
+                      currentLevelScore:
+                          nonNegativeDungeonExitCount(run.stats.currentLevelScore) + DUNGEON_OBJECTIVE_SCORE_REWARD,
+                      bestScore: Math.max(nonNegativeDungeonExitCount(run.stats.bestScore), totalScore)
                   }
                 : run.stats,
             bonusRelicPicksNextOffer: favor.bonusRelicPicksNextOffer,

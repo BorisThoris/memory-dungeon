@@ -192,6 +192,30 @@ describe('applyDungeonExitObjectiveReward', () => {
         expect(result.rewarded).toBe(true);
         expect(result.run.stats.totalScore).toBe(10 + DUNGEON_OBJECTIVE_SCORE_REWARD);
         expect(result.run.stats.currentLevelScore).toBe(3 + DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.bestScore).toBe(10 + DUNGEON_OBJECTIVE_SCORE_REWARD);
+    });
+
+    it('normalizes malformed score counters before rewarding exit objectives', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 24 }),
+            board: {
+                ...createNewRun(0, { runSeed: 24 }).board!,
+                dungeonObjectiveId: 'claim_route'
+            } satisfies BoardState,
+            stats: {
+                ...createNewRun(0, { runSeed: 24 }).stats,
+                totalScore: Number.NaN,
+                currentLevelScore: -4.5,
+                bestScore: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const result = applyDungeonExitObjectiveReward(run, { routeType: 'safe' });
+
+        expect(result.rewarded).toBe(true);
+        expect(result.run.stats.totalScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.currentLevelScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.bestScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
     });
 
     it('does not reward the default find-exit objective', () => {
