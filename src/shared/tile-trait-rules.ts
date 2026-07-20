@@ -73,6 +73,9 @@ export const TILE_TRAIT_MATCH_SCORE_BONUS: Partial<Record<TileTraitKind, number>
     heavy: 35
 };
 
+const nonNegativeTraitCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export interface TileTraitEffectResult {
     comboShardGain: number;
     guardTokenGain: number;
@@ -820,12 +823,18 @@ export const resolveTileTraitEffects = ({
     const adjacentTraitKinds = new Set(
         adjacentTraitTiles.map((tile) => tile.tileTraitKind).filter((kind): kind is TileTraitKind => kind != null)
     );
+    const comboShards = nonNegativeTraitCount(run.stats.comboShards);
+    const guardTokens = nonNegativeTraitCount(run.stats.guardTokens);
+    const currentStreak = nonNegativeTraitCount(run.stats.currentStreak);
+    const matchResolutionsThisFloor = nonNegativeTraitCount(run.matchResolutionsThisFloor);
+    const peekCharges = nonNegativeTraitCount(run.peekCharges);
+    const recallFocus = nonNegativeTraitCount(run.recallFocus);
 
     if (source === 'match') {
-        result.comboShardGain = hasTrait('sealed') && run.stats.comboShards < MAX_COMBO_SHARDS ? 1 : 0;
+        result.comboShardGain = hasTrait('sealed') && comboShards < MAX_COMBO_SHARDS ? 1 : 0;
         result.guardTokenGain =
             (hasTrait('mirror') ? 1 : 0) +
-            (hasTrait('volatile') && run.relicIds.includes('wager_surety') && run.stats.guardTokens < MAX_GUARD_TOKENS ? 1 : 0);
+            (hasTrait('volatile') && run.relicIds.includes('wager_surety') && guardTokens < MAX_GUARD_TOKENS ? 1 : 0);
         result.peekChargeGain = hasTrait('echo') ? 1 : 0;
         result.relicFavorGain = hasTrait('cursed') ? 1 : 0;
         result.scoreBonus =
@@ -833,20 +842,20 @@ export const resolveTileTraitEffects = ({
             (hasTrait('echo') && run.relicIds.includes('chapter_compass') ? 10 : 0);
         result.shopGoldGain = hasTrait('cursed') && run.relicIds.includes('parasite_ledger') ? 1 : 0;
 
-        if (hasTrait('echo') && adjacentTraitKinds.has('sealed') && run.stats.comboShards < MAX_COMBO_SHARDS) {
+        if (hasTrait('echo') && adjacentTraitKinds.has('sealed') && comboShards < MAX_COMBO_SHARDS) {
             result.comboShardGain += 1;
             result.interactionTags.push('echo:sealed-combo');
         }
 
         if (hasTrait('echo') && adjacentTraitKinds.has('conduit') && hasRewardPerk(run, 'echo_conduit_double')) {
             result.peekChargeGain += 1;
-            if (adjacentTraitKinds.has('sealed') && run.stats.comboShards + result.comboShardGain < MAX_COMBO_SHARDS) {
+            if (adjacentTraitKinds.has('sealed') && comboShards + result.comboShardGain < MAX_COMBO_SHARDS) {
                 result.comboShardGain += 1;
             }
             result.interactionTags.push('reward-perk:echo-conduit-double');
         }
 
-        if (hasTrait('echo') && adjacentTraitKinds.has('mirror') && run.recallFocus < RECALL_FOCUS_MAX) {
+        if (hasTrait('echo') && adjacentTraitKinds.has('mirror') && recallFocus < RECALL_FOCUS_MAX) {
             result.recallFocusGain += 1;
             result.interactionTags.push('echo:mirror-focus');
         }
@@ -863,7 +872,7 @@ export const resolveTileTraitEffects = ({
         }
 
         if (hasTrait('sealed') && adjacentTraitKinds.has('conduit')) {
-            if (run.stats.comboShards + result.comboShardGain < MAX_COMBO_SHARDS) {
+            if (comboShards + result.comboShardGain < MAX_COMBO_SHARDS) {
                 result.comboShardGain += 1;
             } else {
                 result.scoreBonus += 18;
@@ -878,7 +887,7 @@ export const resolveTileTraitEffects = ({
             result.interactionTags.push('cursed:volatile-greed');
         }
 
-        if (hasTrait('cursed') && run.matchResolutionsThisFloor === 0 && hasRewardPerk(run, 'cursed_opener_greed')) {
+        if (hasTrait('cursed') && matchResolutionsThisFloor === 0 && hasRewardPerk(run, 'cursed_opener_greed')) {
             result.shopGoldGain += 1;
             result.scoreBonus += 25;
             result.interactionTags.push('reward-perk:cursed-opener-greed');
@@ -938,13 +947,13 @@ export const resolveTileTraitEffects = ({
             }
         }
 
-        if (traits.size > 0 && run.stats.currentStreak >= 2 && hasRewardPerk(run, 'trait_streak_toolkit')) {
+        if (traits.size > 0 && currentStreak >= 2 && hasRewardPerk(run, 'trait_streak_toolkit')) {
             result.flashPairChargeGain += 1;
             result.interactionTags.push('reward-perk:trait-streak-flash');
         }
 
         if (hasTrait('sealed') && run.relicIds.includes('combo_shard_plus_step')) {
-            const acceptedShardGain = Math.max(0, MAX_COMBO_SHARDS - (run.stats.comboShards + result.comboShardGain));
+            const acceptedShardGain = Math.max(0, MAX_COMBO_SHARDS - (comboShards + result.comboShardGain));
             if (acceptedShardGain > 0) {
                 result.comboShardGain += 1;
             } else {
@@ -960,7 +969,7 @@ export const resolveTileTraitEffects = ({
         }
 
         if (hasTrait('mirror') && run.relicIds.includes('guard_token_plus_one')) {
-            if (run.stats.guardTokens + result.guardTokenGain < MAX_GUARD_TOKENS) {
+            if (guardTokens + result.guardTokenGain < MAX_GUARD_TOKENS) {
                 result.guardTokenGain += 1;
             } else {
                 result.scoreBonus += 20;
@@ -972,8 +981,8 @@ export const resolveTileTraitEffects = ({
     }
 
     const stasisBuffersSealed = hasTrait('sealed') && adjacentTraitKinds.has('stasis');
-    const sealedPeekLoss = hasTrait('sealed') && !stasisBuffersSealed && run.peekCharges > 0 ? 1 : 0;
-    result.blocksVolatileShuffle = hasTrait('volatile') && run.relicIds.includes('wager_surety') && run.stats.guardTokens > 0;
+    const sealedPeekLoss = hasTrait('sealed') && !stasisBuffersSealed && peekCharges > 0 ? 1 : 0;
+    result.blocksVolatileShuffle = hasTrait('volatile') && run.relicIds.includes('wager_surety') && guardTokens > 0;
     result.peekChargeLoss = sealedPeekLoss;
     result.recallMistakesDelta =
         (hasTrait('mirror') ? 1 : 0) +

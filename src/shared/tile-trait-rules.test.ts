@@ -287,6 +287,32 @@ describe('tile trait rules', () => {
         expect(calculateTileTraitMatchRewards(run, [{ ...heavyA, tileTraitKind: 'heavy' }, heavyB]).scoreBonus).toBe(35);
     });
 
+    it('normalizes malformed resource counters before calculating trait match rewards', () => {
+        const run = makeRun([], {
+            matchResolutionsThisFloor: Number.NaN,
+            peekCharges: Number.POSITIVE_INFINITY,
+            recallFocus: Number.POSITIVE_INFINITY,
+            relicIds: ['guard_token_plus_one'],
+            rewardPerkIds: ['trait_streak_toolkit'],
+            stats: {
+                ...makeRun([]).stats,
+                comboShards: Number.POSITIVE_INFINITY,
+                currentStreak: Number.POSITIVE_INFINITY,
+                guardTokens: Number.NaN
+            }
+        });
+        const [sealedA, sealedB] = makePair('sealed', 'S');
+        const [mirrorA, mirrorB] = makePair('mirror', 'M');
+
+        expect(calculateTileTraitMatchRewards(run, [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]).comboShardGain).toBe(1);
+        expect(resolveTileTraitEffects({
+            run,
+            source: 'match',
+            sourceTiles: [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]
+        }).flashPairChargeGain).toBe(0);
+        expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(2);
+    });
+
     it('applies echo reward through normal two-card resolution', () => {
         const run = makeRun([
             makeTile('a1', 'a', 'A', { tileTraitKind: 'echo' }),
@@ -754,6 +780,27 @@ describe('tile trait rules', () => {
 
         expect(withPeek).toMatchObject({ peekChargeLoss: 1, recallMistakesDelta: 0 });
         expect(withoutPeek).toMatchObject({ peekChargeLoss: 0, recallMistakesDelta: 1 });
+    });
+
+    it('normalizes malformed mismatch resource counters before trait penalties', () => {
+        const [sealedA] = makePair('sealed', 'S');
+        const [volatileA] = makePair('volatile', 'V');
+        const [plainA] = makePair('plain', 'P');
+
+        expect(calculateTileTraitMismatchPenalty(
+            makeRun([], { peekCharges: Number.POSITIVE_INFINITY }),
+            [{ ...sealedA, tileTraitKind: 'sealed' }, plainA]
+        )).toMatchObject({
+            peekChargeLoss: 0,
+            recallMistakesDelta: 1
+        });
+        expect(calculateTileTraitMismatchPenalty(
+            makeRun([], {
+                relicIds: ['wager_surety'],
+                stats: { ...makeRun([]).stats, guardTokens: Number.POSITIVE_INFINITY }
+            }),
+            [{ ...volatileA, tileTraitKind: 'volatile' }, plainA]
+        ).blocksVolatileShuffle).toBe(false);
     });
 
     it('makes Heavy misses cost extra tries without draining peek value', () => {
