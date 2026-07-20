@@ -226,7 +226,7 @@ const runNeedsLockedExitShopInsurance = (run: RunState): boolean => {
     if (lock.lockKind === 'none' || lock.lockKind === 'lever') {
         return false;
     }
-    const hasRunKey = (run.dungeonKeys[lock.lockKind] ?? 0) > 0 || run.dungeonMasterKeys > 0;
+    const hasRunKey = nonNegativeShopCount(run.dungeonKeys[lock.lockKind]) > 0 || nonNegativeShopCount(run.dungeonMasterKeys) > 0;
     const hasReachableKeySource = countReachableExitKeySources(board, lock.lockKind) > 0;
     return !hasRunKey && !hasReachableKeySource;
 };

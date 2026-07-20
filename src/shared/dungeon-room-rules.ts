@@ -110,8 +110,8 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
         nextRun = {
             ...run,
             dungeonTrapsResolvedThisFloor: trapWorkshopUpdates.resolved
-                ? (run.dungeonTrapsResolvedThisFloor ?? 0) + 1
-                : run.dungeonTrapsResolvedThisFloor
+                ? nonNegativeDungeonCount(run.dungeonTrapsResolvedThisFloor) + 1
+                : nonNegativeDungeonCount(run.dungeonTrapsResolvedThisFloor)
         };
     } else if (effectId === 'room_omen_archive') {
         const favor = gainRelicFavor(run, 1);
@@ -123,14 +123,14 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
         };
     } else if (effectId === 'room_locked_cache') {
         const keyKind: DungeonKeyKind = tile.dungeonKeyKind ?? 'iron';
-        if ((run.dungeonKeys[keyKind] ?? 0) > 0) {
+        if (nonNegativeDungeonCount(run.dungeonKeys[keyKind]) > 0) {
             openedLockedCache = true;
             nextRun = {
                 ...gainDungeonRoomScore(run, DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD),
                 dungeonKeys: addRunDungeonKey(run.dungeonKeys, keyKind, -1),
                 shopGold: nonNegativeDungeonCount(run.shopGold) + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD
             };
-        } else if (run.dungeonMasterKeys > 0) {
+        } else if (nonNegativeDungeonCount(run.dungeonMasterKeys) > 0) {
             openedLockedCache = true;
             nextRun = {
                 ...gainDungeonRoomScore(run, DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD),

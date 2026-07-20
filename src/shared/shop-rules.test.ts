@@ -158,6 +158,14 @@ describe('shop rules', () => {
         expect(getRunShopStockPlan({ ...run, board: lockedBoard, dungeonKeys: { iron: 1 } }).itemIds[0]).not.toBe(
             'iron_key'
         );
+        expect(
+            getRunShopStockPlan({
+                ...run,
+                board: lockedBoard,
+                dungeonKeys: { iron: Number.POSITIVE_INFINITY },
+                dungeonMasterKeys: Number.NaN
+            }).itemIds[0]
+        ).toBe('iron_key');
         expect(getRunShopStockPlan({ ...run, board: boardWithKeyPair }).itemIds[0]).not.toBe('iron_key');
         expect(getRunShopStockPlan({ ...run, board: lockedBoard }).itemIds[0]).toBe('iron_key');
     });

@@ -15,6 +15,9 @@ export const DUNGEON_TREASURE_CACHE_SCORE_REWARD = 35;
 export const DUNGEON_LOCK_SCORE_REWARD = 35;
 export const DUNGEON_ENEMY_DEFEAT_SCORE = 30;
 
+const nonNegativeDungeonMatchRewardCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export interface DungeonMatchReward {
     score: number;
     shopGold: number;
@@ -137,10 +140,12 @@ export const getDungeonMatchReward = (run: RunState, first: Tile, second: Tile):
     if (kind === 'lock') {
         const lockKeyKind: DungeonKeyKind = first.dungeonKeyKind ?? second.dungeonKeyKind ?? 'iron';
         const floorHeldKeyCount =
-            (run.board?.dungeonKeysHeldByKind?.[lockKeyKind] ?? 0) +
-            (run.board?.dungeonKeysHeldByKind == null && lockKeyKind === 'iron' ? (run.board?.dungeonKeysHeld ?? 0) : 0);
-        const hasTypedKey = (run.dungeonKeys[lockKeyKind] ?? 0) > 0 || floorHeldKeyCount > 0;
-        const hasMasterKey = run.dungeonMasterKeys > 0;
+            nonNegativeDungeonMatchRewardCount(run.board?.dungeonKeysHeldByKind?.[lockKeyKind]) +
+            (run.board?.dungeonKeysHeldByKind == null && lockKeyKind === 'iron'
+                ? nonNegativeDungeonMatchRewardCount(run.board?.dungeonKeysHeld)
+                : 0);
+        const hasTypedKey = nonNegativeDungeonMatchRewardCount(run.dungeonKeys[lockKeyKind]) > 0 || floorHeldKeyCount > 0;
+        const hasMasterKey = nonNegativeDungeonMatchRewardCount(run.dungeonMasterKeys) > 0;
         return hasTypedKey || hasMasterKey
             ? {
                   ...emptyDungeonMatchReward(),

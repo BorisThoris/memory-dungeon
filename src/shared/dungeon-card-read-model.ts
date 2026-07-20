@@ -35,6 +35,9 @@ export interface DungeonRoomReadModel {
     copy: string;
 }
 
+const nonNegativeDungeonCardReadCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, DungeonRoomEffectDefinition> = {
     room_campfire: {
         effectId: 'room_campfire',
@@ -158,9 +161,9 @@ export const getDungeonRoomReadModel = (
     const roomKeyKind = tile.dungeonKeyKind ?? 'iron';
     const roomKeyArticleLabel = dungeonKeyKindArticleLabel(roomKeyKind);
     const used = tile.dungeonRoomUsed === true || tile.dungeonCardState === 'resolved';
-    const hasMatchingKey = (run?.dungeonKeys?.[roomKeyKind] ?? 0) > 0;
-    const hasMasterKey = (run?.dungeonMasterKeys ?? 0) > 0;
-    const forgeCanPay = (run?.shopGold ?? 0) >= 2;
+    const hasMatchingKey = nonNegativeDungeonCardReadCount(run?.dungeonKeys?.[roomKeyKind]) > 0;
+    const hasMasterKey = nonNegativeDungeonCardReadCount(run?.dungeonMasterKeys) > 0;
+    const forgeCanPay = nonNegativeDungeonCardReadCount(run?.shopGold) >= 2;
     const effectiveDefinition =
         definition.effectId === 'room_locked_cache'
             ? {
@@ -342,8 +345,8 @@ const effectiveExitLockForTile = (
     const hasRunKey =
         effectivePrimaryExitLock.lockKind !== 'none' &&
         effectivePrimaryExitLock.lockKind !== 'lever' &&
-        ((options.run?.dungeonKeys?.[effectivePrimaryExitLock.lockKind] ?? 0) > 0 ||
-            (options.run?.dungeonMasterKeys ?? 0) > 0);
+        (nonNegativeDungeonCardReadCount(options.run?.dungeonKeys?.[effectivePrimaryExitLock.lockKind]) > 0 ||
+            nonNegativeDungeonCardReadCount(options.run?.dungeonMasterKeys) > 0);
     const keyFallbackPending =
         effectivePrimaryExitLock.exitTile?.id === tile.id &&
         effectivePrimaryExitLock.lockKind !== 'none' &&

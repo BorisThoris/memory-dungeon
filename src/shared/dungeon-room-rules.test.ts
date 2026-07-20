@@ -237,6 +237,43 @@ describe('revealDungeonRoom', () => {
         });
     });
 
+    it('ignores malformed keys when checking locked cache availability', () => {
+        const run = createRun([roomTile('cache', 'room_locked_cache')], {
+            dungeonKeys: { iron: Number.POSITIVE_INFINITY },
+            dungeonMasterKeys: Number.NaN,
+            shopGold: 3
+        });
+
+        const revealed = revealDungeonRoom(run, 'cache');
+
+        expect(revealed.shopGold).toBe(3);
+        expect(revealed.board!.tiles[0]).toMatchObject({
+            dungeonCardState: 'revealed',
+            dungeonRoomUsed: undefined
+        });
+    });
+
+    it('normalizes malformed trap workshop progress before resolving a trap', () => {
+        const run = createRun(
+            [
+                roomTile('workshop', 'room_trap_workshop'),
+                tile('trap-a', 'trap', { dungeonCardKind: 'trap', dungeonCardState: 'revealed' }),
+                tile('trap-b', 'trap', { dungeonCardKind: 'trap', dungeonCardState: 'revealed' })
+            ],
+            { dungeonTrapsResolvedThisFloor: Number.NaN }
+        );
+
+        const resolved = revealDungeonRoom(run, 'workshop');
+
+        expect(resolved.dungeonTrapsResolvedThisFloor).toBe(1);
+        expect(resolved.board!.tiles.find((candidate) => candidate.id === 'trap-a')).toMatchObject({
+            dungeonCardState: 'resolved'
+        });
+        expect(resolved.board!.tiles.find((candidate) => candidate.id === 'trap-b')).toMatchObject({
+            dungeonCardState: 'resolved'
+        });
+    });
+
     it('reveals one hidden dungeon card pair with scrying lens', () => {
         const run = createRun([
             roomTile('lens', 'room_scrying_lens'),

@@ -52,6 +52,11 @@ describe('dungeon card read models', () => {
             blockedText: null,
             used: false
         });
+        expect(getDungeonRoomReadModel(tile, { shopGold: Number.POSITIVE_INFINITY } as RunState)).toMatchObject({
+            effectId: 'room_forge',
+            canUse: false,
+            blockedText: 'Needs 2 shop gold.'
+        });
     });
 
     it('keeps locked cache rooms available only while a key can pay the gate', () => {
@@ -74,6 +79,15 @@ describe('dungeon card read models', () => {
         ).toMatchObject({
             canUse: true,
             blockedText: null
+        });
+        expect(
+            getDungeonRoomReadModel(tile, {
+                dungeonKeys: { iron: Number.POSITIVE_INFINITY },
+                dungeonMasterKeys: Number.NaN
+            } as RunState)
+        ).toMatchObject({
+            canUse: false,
+            blockedText: 'Needs an iron key or master key.'
         });
     });
 
