@@ -5,7 +5,8 @@ import {
     deriveDailyRunSeed,
     deriveLevelTileRngSeed,
     hashStringToSeed,
-    shuffleWithRng
+    shuffleWithRng,
+    utcDateKeyMinusOneDay
 } from './rng';
 
 describe('hashStringToSeed', () => {
@@ -74,5 +75,11 @@ describe('derived seeds', () => {
     it('deriveDailyMutatorIndex is bounded', () => {
         expect(deriveDailyMutatorIndex(123456, 8)).toBeGreaterThanOrEqual(0);
         expect(deriveDailyMutatorIndex(123456, 8)).toBeLessThan(8);
+    });
+
+    it('subtracts one UTC day only for valid compact daily keys', () => {
+        expect(utcDateKeyMinusOneDay('20260301')).toBe('20260228');
+        expect(utcDateKeyMinusOneDay('20260231')).toBe('20260231');
+        expect(utcDateKeyMinusOneDay('2026-03-01')).toBe('2026-03-01');
     });
 });

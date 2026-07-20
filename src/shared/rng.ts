@@ -52,13 +52,16 @@ export const formatDailyDateKeyUtc = (date: Date = new Date()): string => {
 };
 
 export const utcDateKeyMinusOneDay = (key: string): string => {
-    if (key.length !== 8) {
+    if (!/^\d{8}$/.test(key)) {
         return key;
     }
     const y = Number(key.slice(0, 4));
     const m = Number(key.slice(4, 6)) - 1;
     const d = Number(key.slice(6, 8));
     const dt = new Date(Date.UTC(y, m, d));
+    if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== m || dt.getUTCDate() !== d) {
+        return key;
+    }
     dt.setUTCDate(dt.getUTCDate() - 1);
     return formatDailyDateKeyUtc(dt);
 };
