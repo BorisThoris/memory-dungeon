@@ -356,6 +356,47 @@ describe('Recall Focus memory loop', () => {
         );
     });
 
+    it('normalizes malformed persisted counters when assembling a resolved match', () => {
+        const base = createRun([
+            createTile('a1', 'A', 'A'),
+            createTile('a2', 'A', 'A'),
+            createTile('b1', 'B', 'B'),
+            createTile('b2', 'B', 'B')
+        ]);
+        const run = {
+            ...base,
+            peekCharges: Number.NaN,
+            shuffleCharges: 1.9,
+            regionShuffleCharges: Number.POSITIVE_INFINITY,
+            flashPairCharges: -2,
+            shopGold: Number.NaN,
+            wildMatchesRemaining: 1.9,
+            stats: {
+                ...base.stats,
+                matchesFound: Number.NaN,
+                bestStreak: Number.POSITIVE_INFINITY,
+                highestLevel: Number.NaN,
+                guardTokens: Number.NaN,
+                comboShards: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'a2'));
+
+        expect(resolved.peekCharges).toBe(0);
+        expect(resolved.shuffleCharges).toBe(1);
+        expect(resolved.regionShuffleCharges).toBe(0);
+        expect(resolved.flashPairCharges).toBe(0);
+        expect(resolved.shopGold).toBe(0);
+        expect(resolved.wildMatchesRemaining).toBe(1);
+        expect(resolved.stats.matchesFound).toBe(1);
+        expect(resolved.stats.currentStreak).toBe(1);
+        expect(resolved.stats.bestStreak).toBe(1);
+        expect(resolved.stats.highestLevel).toBe(1);
+        expect(resolved.stats.guardTokens).toBe(0);
+        expect(resolved.stats.comboShards).toBe(0);
+    });
+
     it('degrades focus and records forgotten tiles on mismatch and shuffle', () => {
         const run = createRun([
             createTile('a1', 'A', 'A'),

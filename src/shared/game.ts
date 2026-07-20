@@ -634,12 +634,13 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             lives,
             board: spunG.board,
             shiftingSpotlightNonce: spunG.shiftingSpotlightNonce,
-            wildMatchesRemaining,
-            peekCharges: run.peekCharges + traitReward.peekChargeGain,
-            shuffleCharges: run.shuffleCharges + traitReward.shuffleChargeGain,
-            regionShuffleCharges: run.regionShuffleCharges + traitReward.regionShuffleChargeGain,
-            flashPairCharges: run.flashPairCharges + traitReward.flashPairChargeGain,
-            shopGold: economy.shopGold + traitReward.shopGoldGain,
+            wildMatchesRemaining: usedWild ? 0 : nonNegativeRunCount(wildMatchesRemaining),
+            peekCharges: nonNegativeRunCount(run.peekCharges) + nonNegativeRunCount(traitReward.peekChargeGain),
+            shuffleCharges: nonNegativeRunCount(run.shuffleCharges) + nonNegativeRunCount(traitReward.shuffleChargeGain),
+            regionShuffleCharges:
+                nonNegativeRunCount(run.regionShuffleCharges) + nonNegativeRunCount(traitReward.regionShuffleChargeGain),
+            flashPairCharges: nonNegativeRunCount(run.flashPairCharges) + nonNegativeRunCount(traitReward.flashPairChargeGain),
+            shopGold: nonNegativeRunCount(economy.shopGold) + nonNegativeRunCount(traitReward.shopGoldGain),
             dungeonKeys: economy.dungeonKeys,
             dungeonMasterKeys: economy.dungeonMasterKeys,
             bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
@@ -659,15 +660,25 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             ...progress,
             stats: {
                 ...run.stats,
-                totalScore: scoring.totalScore + traitRouteObjective.scoreBonus,
-                currentLevelScore: scoring.currentLevelScore + traitRouteObjective.scoreBonus,
-                bestScore: Math.max(scoring.bestScore, scoring.totalScore + traitRouteObjective.scoreBonus),
-                matchesFound: run.stats.matchesFound + 1,
-                currentStreak: scoring.currentStreak,
-                bestStreak: Math.max(run.stats.bestStreak, scoring.currentStreak),
-                highestLevel: Math.max(run.stats.highestLevel, board.level),
-                guardTokens: Math.min(MAX_GUARD_TOKENS, survivalReward.guardTokens + traitReward.guardTokenGain),
-                comboShards: Math.min(MAX_COMBO_SHARDS, survivalReward.comboShards + traitRouteObjective.comboShardGain),
+                totalScore: nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
+                currentLevelScore:
+                    nonNegativeRunCount(scoring.currentLevelScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
+                bestScore: Math.max(
+                    nonNegativeRunCount(scoring.bestScore),
+                    nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus)
+                ),
+                matchesFound: nonNegativeRunCount(run.stats.matchesFound) + 1,
+                currentStreak: nonNegativeRunCount(scoring.currentStreak),
+                bestStreak: Math.max(nonNegativeRunCount(run.stats.bestStreak), nonNegativeRunCount(scoring.currentStreak)),
+                highestLevel: Math.max(nonNegativeRunCount(run.stats.highestLevel), nonNegativeRunCount(board.level)),
+                guardTokens: Math.min(
+                    MAX_GUARD_TOKENS,
+                    nonNegativeRunCount(survivalReward.guardTokens) + nonNegativeRunCount(traitReward.guardTokenGain)
+                ),
+                comboShards: Math.min(
+                    MAX_COMBO_SHARDS,
+                    nonNegativeRunCount(survivalReward.comboShards) + nonNegativeRunCount(traitRouteObjective.comboShardGain)
+                ),
                 tileTraitMatches: addTileTraitCountStats(run.stats.tileTraitMatches, [tileMatchA, tileMatchB])
             },
             timerState: clearResolveState(run)
@@ -878,12 +889,13 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             board: spun.board,
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
-            wildMatchesRemaining,
-            peekCharges: run.peekCharges + traitReward.peekChargeGain,
-            shuffleCharges: run.shuffleCharges + traitReward.shuffleChargeGain,
-            regionShuffleCharges: run.regionShuffleCharges + traitReward.regionShuffleChargeGain,
-            flashPairCharges: run.flashPairCharges + traitReward.flashPairChargeGain,
-            shopGold: economy.shopGold + traitReward.shopGoldGain,
+            wildMatchesRemaining: usedWild ? 0 : nonNegativeRunCount(wildMatchesRemaining),
+            peekCharges: nonNegativeRunCount(run.peekCharges) + nonNegativeRunCount(traitReward.peekChargeGain),
+            shuffleCharges: nonNegativeRunCount(run.shuffleCharges) + nonNegativeRunCount(traitReward.shuffleChargeGain),
+            regionShuffleCharges:
+                nonNegativeRunCount(run.regionShuffleCharges) + nonNegativeRunCount(traitReward.regionShuffleChargeGain),
+            flashPairCharges: nonNegativeRunCount(run.flashPairCharges) + nonNegativeRunCount(traitReward.flashPairChargeGain),
+            shopGold: nonNegativeRunCount(economy.shopGold) + nonNegativeRunCount(traitReward.shopGoldGain),
             dungeonKeys: economy.dungeonKeys,
             dungeonMasterKeys: economy.dungeonMasterKeys,
             bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
@@ -903,15 +915,25 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             ...progress,
             stats: {
                 ...run.stats,
-                totalScore: scoring.totalScore + traitRouteObjective.scoreBonus,
-                currentLevelScore: scoring.currentLevelScore + traitRouteObjective.scoreBonus,
-                bestScore: Math.max(scoring.bestScore, scoring.totalScore + traitRouteObjective.scoreBonus),
-                matchesFound: run.stats.matchesFound + 1,
-                currentStreak: scoring.currentStreak,
-                bestStreak: Math.max(run.stats.bestStreak, scoring.currentStreak),
-                highestLevel: Math.max(run.stats.highestLevel, board.level),
-                guardTokens: Math.min(MAX_GUARD_TOKENS, survivalReward.guardTokens + traitReward.guardTokenGain),
-                comboShards: Math.min(MAX_COMBO_SHARDS, survivalReward.comboShards + traitRouteObjective.comboShardGain),
+                totalScore: nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
+                currentLevelScore:
+                    nonNegativeRunCount(scoring.currentLevelScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
+                bestScore: Math.max(
+                    nonNegativeRunCount(scoring.bestScore),
+                    nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus)
+                ),
+                matchesFound: nonNegativeRunCount(run.stats.matchesFound) + 1,
+                currentStreak: nonNegativeRunCount(scoring.currentStreak),
+                bestStreak: Math.max(nonNegativeRunCount(run.stats.bestStreak), nonNegativeRunCount(scoring.currentStreak)),
+                highestLevel: Math.max(nonNegativeRunCount(run.stats.highestLevel), nonNegativeRunCount(board.level)),
+                guardTokens: Math.min(
+                    MAX_GUARD_TOKENS,
+                    nonNegativeRunCount(survivalReward.guardTokens) + nonNegativeRunCount(traitReward.guardTokenGain)
+                ),
+                comboShards: Math.min(
+                    MAX_COMBO_SHARDS,
+                    nonNegativeRunCount(survivalReward.comboShards) + nonNegativeRunCount(traitRouteObjective.comboShardGain)
+                ),
                 tileTraitMatches: addTileTraitCountStats(run.stats.tileTraitMatches, [firstTile, secondTile])
             },
             timerState: clearResolveState(run)
