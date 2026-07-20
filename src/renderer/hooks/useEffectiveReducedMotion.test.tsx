@@ -67,4 +67,13 @@ describe('useEffectiveReducedMotion', () => {
         expect(removeListener).toHaveBeenCalledWith(addListener.mock.calls[0]?.[0]);
         expect(listeners).toHaveLength(0);
     });
+
+    it('fails closed when matchMedia throws', () => {
+        window.matchMedia = vi.fn(() => {
+            throw new Error('media query unavailable');
+        }) as typeof window.matchMedia;
+
+        const { result } = renderHook(() => useEffectiveReducedMotion(false));
+        expect(result.current).toBe(false);
+    });
 });

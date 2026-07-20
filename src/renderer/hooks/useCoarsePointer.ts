@@ -10,9 +10,17 @@ const readCoarsePointer = (): boolean => {
         return false;
     }
 
-    const coarse = window.matchMedia('(pointer: coarse)').matches;
-    const anyFine = window.matchMedia('(any-pointer: fine)').matches;
-    const canHover = window.matchMedia('(hover: hover)').matches;
+    let coarse = false;
+    let anyFine = false;
+    let canHover = false;
+    try {
+        coarse = window.matchMedia('(pointer: coarse)').matches;
+        anyFine = window.matchMedia('(any-pointer: fine)').matches;
+        canHover = window.matchMedia('(hover: hover)').matches;
+    } catch {
+        return false;
+    }
+
     const hybridTouchLaptop = coarse && anyFine && canHover;
 
     return coarse && !hybridTouchLaptop;
@@ -53,9 +61,16 @@ export const useCoarsePointer = (): boolean => {
             return;
         }
 
-        const coarseMq = window.matchMedia('(pointer: coarse)');
-        const fineMq = window.matchMedia('(any-pointer: fine)');
-        const hoverMq = window.matchMedia('(hover: hover)');
+        let coarseMq: PointerMediaQueryList;
+        let fineMq: PointerMediaQueryList;
+        let hoverMq: PointerMediaQueryList;
+        try {
+            coarseMq = window.matchMedia('(pointer: coarse)');
+            fineMq = window.matchMedia('(any-pointer: fine)');
+            hoverMq = window.matchMedia('(hover: hover)');
+        } catch {
+            return;
+        }
 
         const sync = (): void => {
             setCoarsePointer(readCoarsePointer());

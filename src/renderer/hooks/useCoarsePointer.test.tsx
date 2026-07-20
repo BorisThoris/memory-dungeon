@@ -107,4 +107,16 @@ describe('useCoarsePointer', () => {
             expect(mq.removeListener).toHaveBeenCalledWith(listener);
         }
     });
+
+    it('fails closed when matchMedia throws', () => {
+        vi.stubGlobal(
+            'matchMedia',
+            vi.fn(() => {
+                throw new Error('media query unavailable');
+            })
+        );
+
+        const { result } = renderHook(() => useCoarsePointer());
+        expect(result.current).toBe(false);
+    });
 });

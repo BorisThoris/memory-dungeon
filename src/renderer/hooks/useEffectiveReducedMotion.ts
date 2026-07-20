@@ -27,15 +27,26 @@ const subscribe = (onStoreChange: () => void): (() => void) => {
     if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
         return () => undefined;
     }
-    const mediaQuery = window.matchMedia(QUERY);
+    let mediaQuery: ReducedMotionMediaQueryList;
+    try {
+        mediaQuery = window.matchMedia(QUERY);
+    } catch {
+        return () => undefined;
+    }
     addReducedMotionListener(mediaQuery, onStoreChange);
     return () => removeReducedMotionListener(mediaQuery, onStoreChange);
 };
 
-const getSnapshot = (): boolean =>
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia(QUERY).matches;
+const getSnapshot = (): boolean => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+        return false;
+    }
+    try {
+        return window.matchMedia(QUERY).matches;
+    } catch {
+        return false;
+    }
+};
 
 const getServerSnapshot = (): boolean => false;
 
