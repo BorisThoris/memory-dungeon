@@ -73,6 +73,15 @@ const parseDateKeyUtc = (dateKey: string | null | undefined): Date | null => {
 const formatDateKey = (date: Date): string =>
     `${date.getUTCFullYear()}${String(date.getUTCMonth() + 1).padStart(2, '0')}${String(date.getUTCDate()).padStart(2, '0')}`;
 
+const dateFromTimestampMs = (timestampMs: number): Date => {
+    const date = new Date(timestampMs);
+    if (Number.isFinite(date.getTime())) {
+        return date;
+    }
+    const fallback = new Date(Date.now());
+    return Number.isFinite(fallback.getTime()) ? fallback : new Date(0);
+};
+
 const isoWeekKey = (date: Date | null): string => {
     if (!date) {
         return 'week:none';
@@ -94,7 +103,7 @@ const seasonKey = (date: Date | null): string => {
 };
 
 export const dailyArchiveDateKeyForTimestamp = (timestampMs: number): string =>
-    formatDateKey(new Date(timestampMs));
+    formatDateKey(dateFromTimestampMs(timestampMs));
 
 export const weekKeyForDaily = (dateKey: string): string => isoWeekKey(parseDateKeyUtc(dateKey));
 

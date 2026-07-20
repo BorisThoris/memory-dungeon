@@ -1,8 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createDefaultSaveData } from './save-data';
 import {
     buildDailyArchiveShareString,
     buildDailyResultsLoopRows,
+    dailyArchiveDateKeyForTimestamp,
     getDailyStreakEthicsRow,
     getDailyArchiveRows,
     getDailyArchiveSummary,
@@ -11,6 +12,10 @@ import {
 } from './daily-archive';
 
 describe('REG-083 daily weekly season archive', () => {
+    afterEach(() => {
+        vi.useRealTimers();
+    });
+
     it('derives offline daily, weekly, and season archive rows from local save data', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
@@ -96,6 +101,17 @@ describe('REG-083 daily weekly season archive', () => {
         });
         expect(summary.rows[1]?.archiveKey).toBe(weekKeyForDaily('20260228'));
         expect(summary.rows[2]?.archiveKey).toBe(seasonKeyForDaily('20260228'));
+    });
+
+    it('falls back to the current UTC date for malformed archive timestamps', () => {
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date(Date.UTC(2026, 3, 30, 12)));
+
+        expect(dailyArchiveDateKeyForTimestamp(Number.NaN)).toBe('20260430');
+
+        const summary = getDailyArchiveSummary(createDefaultSaveData(), Number.POSITIVE_INFINITY);
+        expect(summary.rows[0]?.archiveKey).toBe('20260430');
+        expect(summary.rows[0]?.comparisonString).toContain('Today 20260430');
     });
 
     it('REG-023 builds local daily and weekly results loop rows', () => {
