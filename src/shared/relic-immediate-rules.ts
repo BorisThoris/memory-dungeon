@@ -18,29 +18,29 @@ export const grantBonusRelicPickNextOffer = (run: RunState, amount: number = 1):
 export const applyRelicImmediate = (run: RunState, relicId: RelicId): RunState => {
     switch (relicId) {
         case 'extra_shuffle_charge':
-            return { ...run, shuffleCharges: run.shuffleCharges + 1 };
+            return { ...run, shuffleCharges: nonNegativeFiniteInteger(run.shuffleCharges) + 1 };
         case 'destroy_bank_plus_one':
             return {
                 ...run,
-                destroyPairCharges: run.destroyPairCharges + 1
+                destroyPairCharges: nonNegativeFiniteInteger(run.destroyPairCharges) + 1
             };
         case 'first_shuffle_free_per_floor':
             return { ...run, freeShuffleThisFloor: true };
         case 'combo_shard_plus_step':
             return {
                 ...run,
-                stats: { ...run.stats, comboShards: Math.min(MAX_COMBO_SHARDS, run.stats.comboShards + 1) }
+                stats: { ...run.stats, comboShards: Math.min(MAX_COMBO_SHARDS, nonNegativeFiniteInteger(run.stats.comboShards) + 1) }
             };
         case 'memorize_under_short_memorize':
             return run;
         case 'parasite_ward_once':
-            return { ...run, parasiteWardRemaining: run.parasiteWardRemaining + 1 };
+            return { ...run, parasiteWardRemaining: nonNegativeFiniteInteger(run.parasiteWardRemaining) + 1 };
         case 'region_shuffle_free_first':
             return run;
         case 'peek_charge_plus_one':
-            return { ...run, peekCharges: run.peekCharges + 1 };
+            return { ...run, peekCharges: nonNegativeFiniteInteger(run.peekCharges) + 1 };
         case 'stray_charge_plus_one':
-            return { ...run, strayRemoveCharges: run.strayRemoveCharges + 1 };
+            return { ...run, strayRemoveCharges: nonNegativeFiniteInteger(run.strayRemoveCharges) + 1 };
         case 'pin_cap_plus_one':
             return run;
         case 'guard_token_plus_one':
@@ -48,23 +48,23 @@ export const applyRelicImmediate = (run: RunState, relicId: RelicId): RunState =
                 ...run,
                 stats: {
                     ...run.stats,
-                    guardTokens: Math.min(MAX_GUARD_TOKENS, run.stats.guardTokens + 1)
+                    guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeFiniteInteger(run.stats.guardTokens) + 1)
                 }
             };
         case 'shrine_echo':
             return grantBonusRelicPickNextOffer(run, 1);
         case 'chapter_compass':
-            return { ...run, peekCharges: run.peekCharges + 1 };
+            return { ...run, peekCharges: nonNegativeFiniteInteger(run.peekCharges) + 1 };
         case 'wager_surety':
             return {
                 ...run,
                 stats: {
                     ...run.stats,
-                    guardTokens: Math.min(MAX_GUARD_TOKENS, run.stats.guardTokens + 1)
+                    guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeFiniteInteger(run.stats.guardTokens) + 1)
                 }
             };
         case 'parasite_ledger':
-            return { ...run, parasiteWardRemaining: run.parasiteWardRemaining + 1 };
+            return { ...run, parasiteWardRemaining: nonNegativeFiniteInteger(run.parasiteWardRemaining) + 1 };
         default:
             return run;
     }
