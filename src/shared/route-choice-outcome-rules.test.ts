@@ -143,4 +143,32 @@ describe('route choice outcome rules', () => {
         expect(result.run.stats.guardTokens).toBe(1);
         expect(result.run.shopGold).toBe(1);
     });
+
+    it('normalizes malformed lives and recall counters before applying route choices', () => {
+        const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
+        const safeChoice = run.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!;
+
+        expect(applyRouteChoiceOutcome({ ...run, lives: Number.NaN }, safeChoice.id)).toMatchObject({
+            applied: false,
+            reason: 'invalid_status'
+        });
+
+        const result = applyRouteChoiceOutcome(
+            {
+                ...run,
+                lives: 3,
+                pendingMemorizeBonusMs: Number.NaN,
+                lastLevelResult: {
+                    ...run.lastLevelResult!,
+                    recallMistakes: 1.9
+                }
+            },
+            safeChoice.id
+        );
+
+        expect(result.applied).toBe(true);
+        expect(result.summaryText).toContain('Recall stabilized');
+        expect(result.run.pendingMemorizeBonusMs).toEqual(expect.any(Number));
+        expect(Number.isFinite(result.run.pendingMemorizeBonusMs)).toBe(true);
+    });
 });

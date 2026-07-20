@@ -148,4 +148,16 @@ describe('relic-offer-rules', () => {
         expect(result.run.relicTiersClaimed).toBe(1);
         expect(result.run.relicOffer).toBeNull();
     });
+
+    it('normalizes malformed lives before opening or advancing relic offers', () => {
+        const unopened = levelCompleteRun({ lives: Number.NaN });
+
+        expect(openRelicOffer(unopened).relicOffer).toBeNull();
+
+        const opened = openRelicOffer(levelCompleteRun());
+        const relicId = opened.relicOffer!.options[0]!;
+        const result = createRelicPickAdvanceResult({ ...opened, lives: Number.POSITIVE_INFINITY }, relicId);
+
+        expect(result).toEqual({ kind: 'unchanged', run: { ...opened, lives: Number.POSITIVE_INFINITY } });
+    });
 });

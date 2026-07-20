@@ -741,14 +741,17 @@ const makeRng = (seed: number): (() => number) => {
     };
 };
 
+const nonNegativeRelicOfferCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const needsRelicPick = (run: RunState): boolean => {
     if (run.gameMode === 'puzzle') {
         return false;
     }
-    if (run.lives <= 0) {
+    if (nonNegativeRelicOfferCount(run.lives) <= 0) {
         return false;
     }
-    if (run.relicTiersClaimed >= MAX_RELIC_PICKS_PER_RUN) {
+    if (nonNegativeRelicOfferCount(run.relicTiersClaimed) >= MAX_RELIC_PICKS_PER_RUN) {
         return false;
     }
     if (run.status !== 'levelComplete' || !run.lastLevelResult) {
@@ -759,7 +762,7 @@ export const needsRelicPick = (run: RunState): boolean => {
     if (idx === null) {
         return false;
     }
-    return run.relicTiersClaimed <= idx && !run.relicOffer;
+    return nonNegativeRelicOfferCount(run.relicTiersClaimed) <= idx && !run.relicOffer;
 };
 
 export const skipRelicOfferMilestone = (run: RunState): RunState => {
@@ -774,7 +777,7 @@ export const skipRelicOfferMilestone = (run: RunState): RunState => {
         ...run,
         bonusRelicPicksNextOffer: 0,
         favorBonusRelicPicksNextOffer: 0,
-        relicTiersClaimed: Math.max(run.relicTiersClaimed, idx + 1),
+        relicTiersClaimed: Math.max(nonNegativeRelicOfferCount(run.relicTiersClaimed), idx + 1),
         relicOffer: null
     };
 };
@@ -871,9 +874,6 @@ const RELIC_OFFER_SERVICE_CATALOG: Record<
 
 const relicOfferServiceUseCount = (run: RunState, serviceId: RelicOfferServiceId): number =>
     nonNegativeRelicOfferCount(run.relicOffer?.serviceUses?.[serviceId] ?? 0);
-
-const nonNegativeRelicOfferCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const createRelicOfferServices = (run: RunState): RelicOfferServiceState[] => {
     const offer = run.relicOffer;

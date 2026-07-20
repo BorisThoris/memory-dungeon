@@ -81,12 +81,13 @@ const addRouteScore = (run: RunState, score: number): RunState => {
 };
 
 const applySafeRouteRecallStabilization = (run: RunState): { run: RunState; summarySuffix: string } => {
-    const recallLapses = run.lastLevelResult?.recallMistakes ?? 0;
+    const recallLapses = nonNegativeRouteCount(run.lastLevelResult?.recallMistakes);
     if (recallLapses <= 0) {
         return { run, summarySuffix: '' };
     }
-    const pendingMemorizeBonusMs = addPendingMemorizeBonusForLostLives(run.pendingMemorizeBonusMs, 1);
-    const gainedMs = pendingMemorizeBonusMs - run.pendingMemorizeBonusMs;
+    const pendingMemorizeBonusBefore = nonNegativeRouteCount(run.pendingMemorizeBonusMs);
+    const pendingMemorizeBonusMs = addPendingMemorizeBonusForLostLives(pendingMemorizeBonusBefore, 1);
+    const gainedMs = pendingMemorizeBonusMs - pendingMemorizeBonusBefore;
     if (gainedMs <= 0) {
         return { run, summarySuffix: '' };
     }
@@ -146,7 +147,7 @@ const applyMysteryRouteOutcome = (run: RunState): { run: RunState; summaryText: 
 };
 
 export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteChoiceOutcomeResult => {
-    if (run.status !== 'levelComplete' || run.lives <= 0) {
+    if (run.status !== 'levelComplete' || nonNegativeRouteCount(run.lives) <= 0) {
         return { run, applied: false, reason: 'invalid_status' };
     }
     const routeChoices = run.lastLevelResult?.routeChoices ?? [];

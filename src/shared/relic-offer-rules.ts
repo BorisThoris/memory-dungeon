@@ -89,7 +89,7 @@ export type RelicPickAdvanceResult =
     | { kind: 'advanceToNextLevel'; run: RunState };
 
 export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): RelicPickAdvanceResult => {
-    if (run.status !== 'levelComplete' || run.lives <= 0) {
+    if (run.status !== 'levelComplete' || nonNegativeFiniteInteger(run.lives) <= 0) {
         return { kind: 'unchanged', run };
     }
     const offer = run.relicOffer;
