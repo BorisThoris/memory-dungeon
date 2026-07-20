@@ -54,8 +54,22 @@ const hudAnnouncementMock = vi.hoisted(() => ({
     getFindableToastText: vi.fn((kind: string) => (kind === 'shard_spark' ? 'Shard spark +1 combo shard' : `${kind} reward`))
 }));
 
+const viewportSizeMock = vi.hoisted(() => ({
+    height: 800,
+    width: 1280
+}));
+
+const gameLeftToolbarMock = vi.hoisted(() => ({
+    props: null as { rulesHintsExpanded?: boolean } | null
+}));
+
 vi.mock('./MainMenuBackground', () => ({ default: () => null }));
-vi.mock('./GameLeftToolbar', () => ({ default: () => null }));
+vi.mock('./GameLeftToolbar', () => ({
+    default: (props: { rulesHintsExpanded?: boolean }) => {
+        gameLeftToolbarMock.props = props;
+        return null;
+    }
+}));
 vi.mock('./GameplayHudBar', () => ({ default: () => null }));
 vi.mock('./TileBoard', () => ({
     default: forwardRef(function TileBoardStub(
@@ -133,7 +147,7 @@ vi.mock('./TileBoard', () => ({
     })
 }));
 vi.mock('../hooks/useViewportSize', () => ({
-    useViewportSize: () => ({ width: 1280, height: 800 })
+    useViewportSize: () => viewportSizeMock
 }));
 vi.mock('../hooks/useDistractionChannelTick', () => ({
     useDistractionChannelTick: () => 0
@@ -202,6 +216,9 @@ describe('GameScreen (OVR-014)', () => {
         hudAnnouncementMock.claimedFindableKind = null;
         hudAnnouncementMock.message = '';
         hudAnnouncementMock.priority = 'info';
+        gameLeftToolbarMock.props = null;
+        viewportSizeMock.height = 800;
+        viewportSizeMock.width = 1280;
         useNotificationStore.setState({
             notifications: [],
             maxNotifications: 5,
@@ -219,6 +236,47 @@ describe('GameScreen (OVR-014)', () => {
                 ...BOARD_FLOATER_POP_CLEAR
             });
         });
+    });
+
+    it('drops queued rule-hint expansion when compact chrome takes over first', async () => {
+        const pendingMicrotasks: VoidFunction[] = [];
+        const queueMicrotaskSpy = vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
+            pendingMicrotasks.push(callback);
+        });
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
+        const view = render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        try {
+            expect(gameLeftToolbarMock.props?.rulesHintsExpanded).toBe(false);
+
+            viewportSizeMock.width = 844;
+            viewportSizeMock.height = 390;
+            view.rerender(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={run} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+
+            await act(async () => {
+                while (pendingMicrotasks.length > 0) {
+                    pendingMicrotasks.shift()?.();
+                    await Promise.resolve();
+                }
+            });
+
+            expect(gameLeftToolbarMock.props?.rulesHintsExpanded).toBe(false);
+        } finally {
+            view.unmount();
+            queueMicrotaskSpy.mockRestore();
+        }
     });
 
     it('defers achievement toasts while the floor-cleared modal is visible, then emits after leaving levelComplete', () => {

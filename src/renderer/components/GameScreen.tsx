@@ -3752,11 +3752,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             run.stats.tries === 0
     );
     useEffect(() => {
+        let active = true;
         if (showTutorialPairMarkers && showForgivenessHint && !compactTouchChrome) {
             queueMicrotask(() => {
-                setRulesHintsExpanded(true);
+                if (active) {
+                    setRulesHintsExpanded(true);
+                }
             });
         }
+        return () => {
+            active = false;
+        };
     }, [compactTouchChrome, showForgivenessHint, showTutorialPairMarkers]);
 
     const hiddenTileCount = run.board?.tiles.filter((tile) => tile.state === 'hidden').length ?? 0;
