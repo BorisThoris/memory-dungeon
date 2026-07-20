@@ -309,6 +309,15 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         );
     });
 
+    it('keeps the browse library available when ResizeObserver is missing', () => {
+        vi.stubGlobal('ResizeObserver', undefined);
+        vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(390);
+
+        render(<ChooseYourPathScreen />);
+
+        expect(screen.getByRole('button', { name: /page 1 of/i })).toBeInTheDocument();
+    });
+
     it('starts Classic Run from the fresh-profile hero launcher in one action', async () => {
         const user = userEvent.setup();
         render(<ChooseYourPathScreen />);

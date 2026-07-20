@@ -582,12 +582,19 @@ const ChooseYourPathScreen = () => {
         if (!el) {
             return undefined;
         }
+        const syncCardsPerPage = (width: number): void => {
+            setCardsPerPage(cardsPerPageFromWidth(Math.min(width, vpW)));
+        };
+        if (typeof ResizeObserver === 'undefined') {
+            syncCardsPerPage(el.clientWidth);
+            return undefined;
+        }
         const ro = new ResizeObserver((entries) => {
             const w = entries[0]?.contentRect.width ?? el.clientWidth;
-            setCardsPerPage(cardsPerPageFromWidth(Math.min(w, vpW)));
+            syncCardsPerPage(w);
         });
         ro.observe(el);
-        setCardsPerPage(cardsPerPageFromWidth(Math.min(el.clientWidth, vpW)));
+        syncCardsPerPage(el.clientWidth);
         return () => {
             ro.disconnect();
         };
