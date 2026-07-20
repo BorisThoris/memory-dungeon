@@ -317,6 +317,29 @@ describe('shop rules', () => {
         expect(rerollShopOffers(rerolled)).toBe(rerolled);
     });
 
+    it('normalizes malformed shop wallets before read models, rerolls, and purchases', () => {
+        const fullLifeRun = { ...makePlayingRun(), lives: MAX_LIVES, shopGold: Number.NaN };
+        const run = { ...fullLifeRun, shopOffers: createRunShopOffers(fullLifeRun) };
+        const peek = run.shopOffers.find((offer) => offer.itemId === 'peek_charge')!;
+
+        expect(getRunShopReadModel(run)).toMatchObject({
+            availableOfferCount: 0,
+            wallet: 0,
+            canReroll: false
+        });
+        expect(getShopWalletPacing(run).totalWallet).toBe(0);
+        expect(purchaseShopOffer(run, peek.id)).toBe(run);
+
+        const funded = { ...run, shopGold: 10.9, shopRerolls: Number.NaN };
+        const purchased = purchaseShopOffer(funded, peek.id);
+        expect(purchased.shopGold).toBe(10 - peek.cost);
+        expect(purchased.peekCharges).toBe(funded.peekCharges + 1);
+
+        const rerolled = rerollShopOffers(funded);
+        expect(rerolled.shopGold).toBe(10 - getShopRerollCostForFloor(funded.board!.level));
+        expect(rerolled.shopRerolls).toBe(1);
+    });
+
     it('purchases typed key offers into matching run key inventory', () => {
         const run = { ...makePlayingRun(), shopGold: 10 };
         const offer = {

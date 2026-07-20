@@ -383,7 +383,7 @@ export const getShopWalletPacing = (run: RunState): {
     const level = run.board?.level ?? run.stats.highestLevel;
     return {
         earnedThisFloor: getShopGoldRewardForFloor(level),
-        totalWallet: run.shopGold,
+        totalWallet: nonNegativeShopCount(run.shopGold),
         sinkCostTotal: run.shopOffers.reduce((sum, offer) => sum + offer.cost, 0),
         conversionAtRunEnd: 'unspent_shop_gold_expires'
     };
@@ -396,10 +396,13 @@ export const getRunShopWalletPacing = (run: RunState): {
     conversionAtRunEnd: 'unspent_shop_gold_expires';
 } => ({
     earnedThisFloor: getShopGoldRewardForFloor(run.board?.level ?? run.stats.highestLevel),
-    totalWallet: run.shopGold,
+    totalWallet: nonNegativeShopCount(run.shopGold),
     sinkCostTotal: run.shopOffers.reduce((sum, offer) => sum + offer.cost, 0),
     conversionAtRunEnd: 'unspent_shop_gold_expires'
 });
+
+const nonNegativeShopCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const getShopOfferCompatibility = (
     run: RunState,
@@ -462,14 +465,15 @@ export const createRunShopOffers = (run: RunState): RunShopOfferState[] => {
 
 export const canRerollShopOffers = (run: RunState): boolean =>
     run.shopOffers.length > 0 &&
-    run.shopRerolls < 1 &&
-    run.shopGold >= getShopRerollCostForFloor(run.board?.level ?? run.stats.highestLevel);
+    nonNegativeShopCount(run.shopRerolls) < 1 &&
+    nonNegativeShopCount(run.shopGold) >= getShopRerollCostForFloor(run.board?.level ?? run.stats.highestLevel);
 
 export const getRunShopReadModel = (run: RunState): RunShopReadModel => {
     const plan = getRunShopStockPlan(run);
+    const wallet = nonNegativeShopCount(run.shopGold);
     const availableOfferCount = run.shopOffers.filter((offer) => {
         const currentCompatibility = getShopOfferCompatibility(run, offer.itemId);
-        return !offer.purchased && currentCompatibility.compatible && run.shopGold >= offer.cost;
+        return !offer.purchased && currentCompatibility.compatible && wallet >= offer.cost;
     }).length;
     return {
         source: plan.source,
@@ -478,7 +482,7 @@ export const getRunShopReadModel = (run: RunState): RunShopReadModel => {
         offerCount: run.shopOffers.length,
         availableOfferCount,
         purchasedOfferCount: run.shopOffers.filter((offer) => offer.purchased).length,
-        wallet: run.shopGold,
+        wallet,
         rerollCost: plan.rerollCost,
         canReroll: canRerollShopOffers(run),
         previewCopy: plan.previewCopy
@@ -490,13 +494,14 @@ export const rerollShopOffers = (run: RunState): RunState => {
         return run;
     }
     const cost = getShopRerollCostForFloor(run.board?.level ?? run.stats.highestLevel);
-    const nextRun = { ...run, shopGold: run.shopGold - cost, shopRerolls: run.shopRerolls + 1 };
+    const nextRun = { ...run, shopGold: nonNegativeShopCount(run.shopGold) - cost, shopRerolls: nonNegativeShopCount(run.shopRerolls) + 1 };
     return { ...nextRun, shopOffers: createRunShopOffers(nextRun) };
 };
 
 export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
     const offer = run.shopOffers.find((item) => item.id === offerId);
-    if (!offer || offer.purchased || run.shopGold < offer.cost) {
+    const wallet = nonNegativeShopCount(run.shopGold);
+    if (!offer || offer.purchased || wallet < offer.cost) {
         return run;
     }
 
@@ -507,7 +512,7 @@ export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
 
     let next: RunState = {
         ...run,
-        shopGold: run.shopGold - offer.cost,
+        shopGold: wallet - offer.cost,
         shopOffers: run.shopOffers.map((item) => (item.id === offerId ? { ...item, purchased: true } : item))
     };
 

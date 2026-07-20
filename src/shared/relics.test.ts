@@ -583,6 +583,27 @@ describe('REG-078 relic offer services', () => {
         expect(banned.run.relicOffer?.options).toHaveLength(3);
     });
 
+    it('normalizes malformed relic service wallets and use counters before charging', () => {
+        const run = {
+            ...openOfferRun(),
+            shopGold: 5.9,
+            relicOffer: {
+                ...openOfferRun().relicOffer!,
+                serviceUses: {
+                    reroll_offer: Number.NaN
+                }
+            }
+        };
+
+        expect(createRelicOfferServices({ ...run, shopGold: Number.NaN }).every((row) => !row.available)).toBe(true);
+
+        const rerolled = applyRelicOfferService(run, 'reroll_offer');
+
+        expect(rerolled.applied).toBe(true);
+        expect(rerolled.run.shopGold).toBe(3);
+        expect(rerolled.run.relicOffer?.serviceUses?.reroll_offer).toBe(1);
+    });
+
     it('persists banned relic ids into subsequent reroll rounds in the same visit', () => {
         const run = openOfferRun();
         const bannedId = run.relicOffer!.options[1]!;

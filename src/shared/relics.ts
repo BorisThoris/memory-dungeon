@@ -870,10 +870,14 @@ const RELIC_OFFER_SERVICE_CATALOG: Record<
 };
 
 const relicOfferServiceUseCount = (run: RunState, serviceId: RelicOfferServiceId): number =>
-    run.relicOffer?.serviceUses?.[serviceId] ?? 0;
+    nonNegativeRelicOfferCount(run.relicOffer?.serviceUses?.[serviceId] ?? 0);
+
+const nonNegativeRelicOfferCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const createRelicOfferServices = (run: RunState): RelicOfferServiceState[] => {
     const offer = run.relicOffer;
+    const wallet = nonNegativeRelicOfferCount(run.shopGold);
     return (Object.keys(RELIC_OFFER_SERVICE_CATALOG) as RelicOfferServiceId[]).map((serviceId) => {
         const base = RELIC_OFFER_SERVICE_CATALOG[serviceId];
         let unavailableReason: string | null = null;
@@ -881,7 +885,7 @@ export const createRelicOfferServices = (run: RunState): RelicOfferServiceState[
             unavailableReason = 'No relic offer is open.';
         } else if (relicOfferServiceUseCount(run, serviceId) > 0) {
             unavailableReason = 'Already used this relic service during this visit.';
-        } else if (run.shopGold < base.cost) {
+        } else if (wallet < base.cost) {
             unavailableReason = 'Not enough shop gold.';
         } else if (offer.options.length === 0) {
             unavailableReason = 'No relic options remain.';
@@ -1009,7 +1013,7 @@ export const applyRelicOfferService = (
     let pickRound = offer.pickRound;
     let upgradedOffer = offer.upgradedOffer ?? false;
     let options = [...offer.options];
-    const paidRun: RunState = { ...run, shopGold: run.shopGold - service.cost };
+    const paidRun: RunState = { ...run, shopGold: nonNegativeRelicOfferCount(run.shopGold) - service.cost };
 
     if (serviceId === 'ban_option') {
         const banTarget = targetRelicId && options.includes(targetRelicId) ? targetRelicId : options[0]!;
@@ -1050,4 +1054,3 @@ export const applyRelicOfferService = (
         serviceId
     };
 };
-
