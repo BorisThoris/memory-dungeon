@@ -369,6 +369,35 @@ describe('StartupIntro motion CTA', () => {
         expect(onComplete).not.toHaveBeenCalled();
     });
 
+    it('supports legacy pointer media query listener APIs', async () => {
+        const listeners = new Set<() => void>();
+        const addListener = vi.fn((listener: () => void) => listeners.add(listener));
+        const removeListener = vi.fn((listener: () => void) => listeners.delete(listener));
+        window.matchMedia = vi.fn((query: string) => {
+            const coarse = query.includes('pointer: coarse');
+
+            return {
+                matches: coarse,
+                media: query,
+                addListener,
+                removeListener,
+                dispatchEvent: vi.fn(),
+                onchange: null
+            } as unknown as MediaQueryList;
+        }) as typeof window.matchMedia;
+        const { unmount } = renderIntro(<StartupIntro onComplete={vi.fn()} reduceMotion={false} />);
+
+        await flushIntroPreload();
+
+        expect(await screen.findByTestId('intro-motion-cta')).toBeInTheDocument();
+        expect(addListener).toHaveBeenCalledWith(expect.any(Function));
+
+        unmount();
+
+        expect(removeListener).toHaveBeenCalledWith(addListener.mock.calls[0]?.[0]);
+        expect(listeners).toHaveLength(0);
+    });
+
     it('lets a normal overlay pointer-down still complete the intro after exit timing', async () => {
         vi.useFakeTimers();
 

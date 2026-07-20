@@ -55,6 +55,33 @@ interface StartupIntroProps {
 type IntroRenderMode = 'three' | 'fallback';
 type IntroPhase = 'enter' | 'idle' | 'exit';
 
+type StartupIntroPointerMediaQueryList = MediaQueryList & {
+    addListener?: (listener: () => void) => void;
+    removeListener?: (listener: () => void) => void;
+};
+
+const addStartupIntroPointerListener = (
+    mediaQuery: StartupIntroPointerMediaQueryList,
+    listener: () => void
+): void => {
+    if (typeof mediaQuery.addEventListener === 'function') {
+        mediaQuery.addEventListener('change', listener);
+        return;
+    }
+    mediaQuery.addListener?.(listener);
+};
+
+const removeStartupIntroPointerListener = (
+    mediaQuery: StartupIntroPointerMediaQueryList,
+    listener: () => void
+): void => {
+    if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', listener);
+        return;
+    }
+    mediaQuery.removeListener?.(listener);
+};
+
 interface ParticleDefinition {
     baseX: number;
     baseY: number;
@@ -674,10 +701,10 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
         };
 
         sync();
-        mq.addEventListener('change', sync);
+        addStartupIntroPointerListener(mq, sync);
 
         return () => {
-            mq.removeEventListener('change', sync);
+            removeStartupIntroPointerListener(mq, sync);
         };
     }, []);
 
