@@ -317,13 +317,20 @@ export {
     grantBonusRelicPickNextOffer
 } from './relic-immediate-rules';
 
+const nonNegativeRunCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     const floorClearHazards = applyFloorClearEnemyHazardDefeats(run, board);
     run = floorClearHazards.run;
     board = floorClearHazards.board;
-    const perfect = run.stats.tries === 0;
-    const clearLifeReason = getClearLifeReason(run.stats.tries);
-    const clearLifeGained = clearLifeReason !== 'none' && run.lives < MAX_LIVES ? 1 : 0;
+    const tries = nonNegativeRunCount(run.stats.tries);
+    const livesBeforeClear = nonNegativeRunCount(run.lives);
+    const currentLevelScoreBeforeClear = nonNegativeRunCount(run.stats.currentLevelScore);
+    const totalScoreBeforeClear = nonNegativeRunCount(run.stats.totalScore);
+    const perfect = tries === 0;
+    const clearLifeReason = getClearLifeReason(tries);
+    const clearLifeGained = clearLifeReason !== 'none' && livesBeforeClear < MAX_LIVES ? 1 : 0;
     const floorClearObjective = getFloorClearObjectiveResult(run, board);
     const bonusTags: string[] = [...floorClearObjective.bonusTags];
     if (run.traitRouteObjectiveCompletedThisFloor) {
@@ -337,7 +344,7 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
 
     const clearScore = calculateFloorClearScore({
         bossTrophyCacheScore: bossTrophyCache.score,
-        currentLevelScore: run.stats.currentLevelScore,
+        currentLevelScore: currentLevelScoreBeforeClear,
         featuredObjectiveStreakBonus: featuredObjectiveClear.featuredObjectiveStreakBonus,
         floorTag: board.floorTag,
         level: board.level,
@@ -350,10 +357,11 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
         bonusTags.push(bossTrophyCache.outcome === 'claimed' ? 'boss_trophy_cache' : 'boss_trophy_forfeited');
     }
     bonusTags.push(...getDungeonLevelResultTags(run, board, perfect));
-    const totalScore = run.stats.totalScore + scoreGained - run.stats.currentLevelScore;
-    const bestScore = Math.max(run.stats.bestScore, totalScore);
-    const rating = calculateRating(run.stats.tries);
-    const lives = Math.min(MAX_LIVES, run.lives + clearLifeGained);
+    const bankedScoreBeforeClear = Math.max(0, totalScoreBeforeClear - currentLevelScoreBeforeClear);
+    const totalScore = bankedScoreBeforeClear + scoreGained;
+    const bestScore = Math.max(nonNegativeRunCount(run.stats.bestScore), totalScore);
+    const rating = calculateRating(tries);
+    const lives = Math.min(MAX_LIVES, livesBeforeClear + clearLifeGained);
     const totalRelicFavorGained =
         featuredObjectiveClear.relicFavorGained + featuredObjectiveClear.endlessRiskWagerFavorGained;
     const relicFavor = gainRelicFavor(run, totalRelicFavorGained);
@@ -382,7 +390,7 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
         featuredObjectiveStreakBonus: featuredObjectiveClear.featuredObjectiveStreakBonus,
         level: board.level,
         livesRemaining: lives,
-        mistakes: run.stats.tries,
+        mistakes: tries,
         objectiveBonusScore: objectiveBonus,
         perfect,
         rating,
@@ -403,7 +411,7 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
         bonusRelicPicksNextOffer: relicFavor.bonusRelicPicksNextOffer,
         favorBonusRelicPicksNextOffer: relicFavor.favorBonusRelicPicksNextOffer,
         relicFavorProgress: relicFavor.relicFavorProgress,
-        shopGold: run.shopGold + getShopGoldRewardForFloor(board.level),
+        shopGold: nonNegativeRunCount(run.shopGold) + getShopGoldRewardForFloor(board.level),
         shopOffers: run.shopOffers,
         parasiteFloors,
         featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
@@ -426,9 +434,11 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
             bestScore,
             currentLevelScore: scoreGained,
             rating,
-            levelsCleared: run.stats.levelsCleared + 1,
-            highestLevel: Math.max(run.stats.highestLevel, board.level),
-            perfectClears: perfect ? run.stats.perfectClears + 1 : run.stats.perfectClears
+            levelsCleared: nonNegativeRunCount(run.stats.levelsCleared) + 1,
+            highestLevel: Math.max(nonNegativeRunCount(run.stats.highestLevel), board.level),
+            perfectClears: perfect
+                ? nonNegativeRunCount(run.stats.perfectClears) + 1
+                : nonNegativeRunCount(run.stats.perfectClears)
         },
         timerState: {
             ...run.timerState,

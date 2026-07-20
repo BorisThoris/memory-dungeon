@@ -112,6 +112,21 @@ describe('level-clear-rules', () => {
         expect(result.scoreGained).toBe(result.preBossSubtotal);
     });
 
+    it('normalizes malformed floor clear score inputs before subtotaling', () => {
+        const result = calculateFloorClearScore({
+            bossTrophyCacheScore: Number.POSITIVE_INFINITY,
+            currentLevelScore: Number.NaN,
+            featuredObjectiveStreakBonus: 3.8,
+            floorTag: 'normal',
+            level: 3,
+            objectiveBonus: -12,
+            perfect: false
+        });
+
+        expect(result.preBossSubtotal).toBe(result.levelBonus + 3);
+        expect(result.scoreGained).toBe(result.preBossSubtotal);
+    });
+
     it('applies the boss floor score multiplier after boss trophy cache score', () => {
         const result = calculateFloorClearScore({
             bossTrophyCacheScore: 90,

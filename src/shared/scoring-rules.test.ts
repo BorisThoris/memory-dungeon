@@ -53,6 +53,7 @@ describe('scoring-rules', () => {
         expect(calculateRating(9)).toBe('F');
         expect(calculateMatchScore(2, 3, 1.5)).toBe(82);
         expect(calculateLevelClearBonus(4)).toBe(200);
+        expect(calculateLevelClearBonus(Number.NaN)).toBe(0);
         expect(calculatePerfectClearBonus()).toBe(25);
     });
 

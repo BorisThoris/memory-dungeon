@@ -124,6 +124,7 @@ export const computeFlipResolveDelayMs = (
     return ms;
 };
 
-export const calculateLevelClearBonus = (level: number): number => 50 * level;
+export const calculateLevelClearBonus = (level: number): number =>
+    50 * (typeof level === 'number' && Number.isFinite(level) ? Math.max(0, Math.floor(level)) : 0);
 
 export const calculatePerfectClearBonus = (): number => 25;

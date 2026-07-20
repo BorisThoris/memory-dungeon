@@ -134,6 +134,7 @@ import {
 import {
     canRerollShopOffers,
     createRunShopOffers,
+    getShopGoldRewardForFloor,
     getRunShopReadModel,
     getRunShopStockPlan,
     getShopWalletPacing,
@@ -6961,6 +6962,39 @@ describe('game rules', () => {
         expect(resolved.lastLevelResult?.mistakes).toBe(0);
         expect(resolved.lastLevelResult?.clearLifeReason).toBe('perfect');
         expect(resolved.lastLevelResult?.clearLifeGained).toBe(1);
+    });
+
+    it('normalizes malformed persisted counters when finalizing a cleared floor', () => {
+        const tiles: Tile[] = [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')];
+        const started = {
+            ...createRun(tiles),
+            lives: 3.8,
+            shopGold: Number.NaN,
+            stats: {
+                ...createRun(tiles).stats,
+                tries: Number.NaN,
+                totalScore: Number.NaN,
+                currentLevelScore: -12,
+                bestScore: Number.POSITIVE_INFINITY,
+                levelsCleared: Number.NaN,
+                highestLevel: Number.NaN,
+                perfectClears: Number.NaN
+            }
+        };
+
+        const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
+
+        expect(resolved.status).toBe('levelComplete');
+        expect(resolved.lives).toBe(4);
+        expect(resolved.shopGold).toBe(getShopGoldRewardForFloor(1));
+        expect(resolved.stats.totalScore).toBe(155);
+        expect(resolved.stats.currentLevelScore).toBe(155);
+        expect(resolved.stats.bestScore).toBe(155);
+        expect(resolved.stats.levelsCleared).toBe(1);
+        expect(resolved.stats.highestLevel).toBe(1);
+        expect(resolved.stats.perfectClears).toBe(1);
+        expect(resolved.lastLevelResult?.mistakes).toBe(0);
+        expect(resolved.lastLevelResult?.livesRemaining).toBe(4);
     });
 
     it('scales streak score within a level before the clear bonus lands', () => {

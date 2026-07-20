@@ -110,6 +110,9 @@ export interface FloorClearScoreResult {
     scoreGained: number;
 }
 
+const nonNegativeFloorScoreTerm = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const calculateFloorClearScore = ({
     bossTrophyCacheScore,
     currentLevelScore,
@@ -130,12 +133,12 @@ export const calculateFloorClearScore = ({
     const levelBonus = calculateLevelClearBonus(level);
     const perfectBonus = perfect ? calculatePerfectClearBonus() : 0;
     const preBossSubtotal =
-        currentLevelScore +
+        nonNegativeFloorScoreTerm(currentLevelScore) +
         levelBonus +
         perfectBonus +
-        objectiveBonus +
-        featuredObjectiveStreakBonus +
-        bossTrophyCacheScore;
+        nonNegativeFloorScoreTerm(objectiveBonus) +
+        nonNegativeFloorScoreTerm(featuredObjectiveStreakBonus) +
+        nonNegativeFloorScoreTerm(bossTrophyCacheScore);
     return {
         levelBonus,
         perfectBonus,
