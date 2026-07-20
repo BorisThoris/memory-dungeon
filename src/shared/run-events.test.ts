@@ -298,6 +298,34 @@ describe('REG-074 run event rooms', () => {
         expect(result.run.stats.bestScore).toBe(25);
     });
 
+    it('normalizes malformed counters before applying economy event rewards', () => {
+        const goldEvent = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_206, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_shop_gold'))!;
+        const favorEvent = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_207, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_relic_favor'))!;
+        const goldChoice = goldEvent.options.find((option) => option.effect === 'gain_shop_gold')!;
+        const favorChoice = favorEvent.options.find((option) => option.effect === 'gain_relic_favor')!;
+
+        const goldResult = applyRunEventChoice({ ...createNewRun(0), shopGold: Number.NaN }, goldEvent, goldChoice.id);
+        const favorResult = applyRunEventChoice(
+            {
+                ...createNewRun(0),
+                relicFavorProgress: Number.POSITIVE_INFINITY,
+                bonusRelicPicksNextOffer: -2,
+                favorBonusRelicPicksNextOffer: Number.NaN
+            },
+            favorEvent,
+            favorChoice.id
+        );
+
+        expect(goldResult.run.shopGold).toBe(2);
+        expect(favorResult.run.relicFavorProgress).toBe(1);
+        expect(favorResult.run.bonusRelicPicksNextOffer).toBe(0);
+        expect(favorResult.run.favorBonusRelicPicksNextOffer).toBe(0);
+    });
+
     it('builds event preview state from the active run counters before resolving a choice', () => {
         const run = {
             ...createNewRun(0),

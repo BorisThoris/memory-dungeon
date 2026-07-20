@@ -833,21 +833,21 @@ export interface RunEventPreviewState {
     guardTokens?: number;
 }
 
-const nonNegativePreviewCount = (value: unknown): number =>
+const nonNegativeEventCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const createRunEventPreviewState = (run: RunState): RunEventPreviewState => ({
-    shopGold: nonNegativePreviewCount(run.shopGold),
-    lives: nonNegativePreviewCount(run.lives),
-    relicFavorProgress: nonNegativePreviewCount(run.relicFavorProgress),
-    bonusRelicPicksNextOffer: nonNegativePreviewCount(run.bonusRelicPicksNextOffer),
-    favorBonusRelicPicksNextOffer: nonNegativePreviewCount(run.favorBonusRelicPicksNextOffer),
-    ironKeys: Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativePreviewCount(count), 0),
-    totalScore: nonNegativePreviewCount(run.stats.totalScore),
-    currentLevelScore: nonNegativePreviewCount(run.stats.currentLevelScore),
-    bestScore: nonNegativePreviewCount(run.stats.bestScore),
-    destroyPairCharges: nonNegativePreviewCount(run.destroyPairCharges),
-    guardTokens: nonNegativePreviewCount(run.stats.guardTokens)
+    shopGold: nonNegativeEventCount(run.shopGold),
+    lives: nonNegativeEventCount(run.lives),
+    relicFavorProgress: nonNegativeEventCount(run.relicFavorProgress),
+    bonusRelicPicksNextOffer: nonNegativeEventCount(run.bonusRelicPicksNextOffer),
+    favorBonusRelicPicksNextOffer: nonNegativeEventCount(run.favorBonusRelicPicksNextOffer),
+    ironKeys: Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeEventCount(count), 0),
+    totalScore: nonNegativeEventCount(run.stats.totalScore),
+    currentLevelScore: nonNegativeEventCount(run.stats.currentLevelScore),
+    bestScore: nonNegativeEventCount(run.stats.bestScore),
+    destroyPairCharges: nonNegativeEventCount(run.destroyPairCharges),
+    guardTokens: nonNegativeEventCount(run.stats.guardTokens)
 });
 
 export const chooseRunEventOption = (
@@ -870,32 +870,32 @@ export const chooseRunEventOption = (
     }
     let next = { ...state };
     if (choice.effect === 'gain_shop_gold') {
-        next = { ...next, shopGold: nonNegativePreviewCount(next.shopGold) + 2 };
+        next = { ...next, shopGold: nonNegativeEventCount(next.shopGold) + 2 };
     } else if (choice.effect === 'gain_relic_favor') {
-        const total = nonNegativePreviewCount(next.relicFavorProgress) + 1;
+        const total = nonNegativeEventCount(next.relicFavorProgress) + 1;
         const bonusPicks = Math.floor(total / 3);
         next = {
             ...next,
-            bonusRelicPicksNextOffer: nonNegativePreviewCount(next.bonusRelicPicksNextOffer) + bonusPicks,
-            favorBonusRelicPicksNextOffer: nonNegativePreviewCount(next.favorBonusRelicPicksNextOffer) + bonusPicks,
+            bonusRelicPicksNextOffer: nonNegativeEventCount(next.bonusRelicPicksNextOffer) + bonusPicks,
+            favorBonusRelicPicksNextOffer: nonNegativeEventCount(next.favorBonusRelicPicksNextOffer) + bonusPicks,
             relicFavorProgress: total % 3
         };
     } else if (choice.effect === 'heal_or_guard') {
         next =
-            nonNegativePreviewCount(next.lives) < MAX_LIVES
-                ? { ...next, lives: nonNegativePreviewCount(next.lives) + 1 }
-                : { ...next, guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativePreviewCount(next.guardTokens) + 1) };
+            nonNegativeEventCount(next.lives) < MAX_LIVES
+                ? { ...next, lives: nonNegativeEventCount(next.lives) + 1 }
+                : { ...next, guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeEventCount(next.guardTokens) + 1) };
     } else if (choice.effect === 'gain_destroy_charge') {
-        next = { ...next, destroyPairCharges: nonNegativePreviewCount(next.destroyPairCharges) + 1 };
+        next = { ...next, destroyPairCharges: nonNegativeEventCount(next.destroyPairCharges) + 1 };
     } else if (choice.effect === 'gain_iron_key') {
-        next = { ...next, ironKeys: nonNegativePreviewCount(next.ironKeys) + 1 };
+        next = { ...next, ironKeys: nonNegativeEventCount(next.ironKeys) + 1 };
     } else if (choice.effect === 'gain_score') {
-        const totalScore = nonNegativePreviewCount(next.totalScore) + 25;
+        const totalScore = nonNegativeEventCount(next.totalScore) + 25;
         next = {
             ...next,
             totalScore,
-            currentLevelScore: nonNegativePreviewCount(next.currentLevelScore) + 25,
-            bestScore: Math.max(nonNegativePreviewCount(next.bestScore), totalScore)
+            currentLevelScore: nonNegativeEventCount(next.currentLevelScore) + 25,
+            bestScore: Math.max(nonNegativeEventCount(next.bestScore), totalScore)
         };
     }
     return { applied: true, eventId: event.id, choiceId, next };
@@ -1118,25 +1118,25 @@ export const getRunEventToneAuditRows = (): RunEventToneAuditRow[] =>
     });
 
 const gainOneFavor = (run: RunState): RunState => {
-    const total = run.relicFavorProgress + 1;
+    const total = nonNegativeEventCount(run.relicFavorProgress) + 1;
     const bonusPicks = Math.floor(total / 3);
     return {
         ...run,
-        bonusRelicPicksNextOffer: run.bonusRelicPicksNextOffer + bonusPicks,
-        favorBonusRelicPicksNextOffer: run.favorBonusRelicPicksNextOffer + bonusPicks,
+        bonusRelicPicksNextOffer: nonNegativeEventCount(run.bonusRelicPicksNextOffer) + bonusPicks,
+        favorBonusRelicPicksNextOffer: nonNegativeEventCount(run.favorBonusRelicPicksNextOffer) + bonusPicks,
         relicFavorProgress: total % 3
     };
 };
 
 const gainRunScoreReward = (run: RunState): RunState => {
-    const totalScore = nonNegativePreviewCount(run.stats.totalScore) + 25;
+    const totalScore = nonNegativeEventCount(run.stats.totalScore) + 25;
     return {
         ...run,
         stats: {
             ...run.stats,
             totalScore,
-            currentLevelScore: nonNegativePreviewCount(run.stats.currentLevelScore) + 25,
-            bestScore: Math.max(nonNegativePreviewCount(run.stats.bestScore), totalScore)
+            currentLevelScore: nonNegativeEventCount(run.stats.currentLevelScore) + 25,
+            bestScore: Math.max(nonNegativeEventCount(run.stats.bestScore), totalScore)
         }
     };
 };
@@ -1155,12 +1155,12 @@ export const applyRunEventChoice = (
     }
     switch (choice.effect) {
         case 'gain_shop_gold':
-            return { run: { ...run, shopGold: run.shopGold + 2 }, applied: true };
+            return { run: { ...run, shopGold: nonNegativeEventCount(run.shopGold) + 2 }, applied: true };
         case 'gain_relic_favor':
             return { run: gainOneFavor(run), applied: true };
         case 'heal_or_guard':
-            if (run.lives < MAX_LIVES) {
-                return { run: { ...run, lives: run.lives + 1 }, applied: true };
+            if (nonNegativeEventCount(run.lives) < MAX_LIVES) {
+                return { run: { ...run, lives: nonNegativeEventCount(run.lives) + 1 }, applied: true };
             }
             return { run: gainRunInventoryItem(run, 'guard_token'), applied: true };
         case 'gain_iron_key':
