@@ -85,4 +85,33 @@ describe('honorUnlocks', () => {
         expect(ids).toContain('honor_relic_habit');
         expect(ids).toContain('honor_gauntlet_proof');
     });
+
+    it('normalizes malformed counters before granting eligible honors', () => {
+        const save = createDefaultSaveData();
+        save.bestScore = Number.POSITIVE_INFINITY;
+        save.playerStats = {
+            ...save.playerStats!,
+            dailiesCompleted: Number.POSITIVE_INFINITY,
+            dailyStreakCosmetic: Number.NaN,
+            bestFloorNoPowers: Number.POSITIVE_INFINITY,
+            relicPickCounts: {
+                guard_token_plus_one: Number.POSITIVE_INFINITY,
+                parasite_ledger: 9.9
+            }
+        };
+        save.lastRunSummary = {
+            totalScore: 100,
+            bestScore: 100,
+            levelsCleared: Number.POSITIVE_INFINITY,
+            highestLevel: 2,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: 1,
+            perfectClears: 0,
+            gameMode: 'gauntlet'
+        };
+
+        expect(eligibleHonorUnlockIds(save)).toEqual([]);
+        expect(mergeHonorUnlockTags(save)).toBe(save);
+    });
 });

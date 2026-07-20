@@ -84,14 +84,19 @@ export const parseHonorUnlockTag = (tag: string): HonorUnlockId | null => {
 export const hasHonorUnlock = (save: SaveData, id: HonorUnlockId): boolean =>
     (save.unlocks ?? []).includes(honorUnlockTag(id));
 
+const nonNegativeHonorCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 /** Which honors are earned given current save stats (independent of whether tags are already stored). */
 export const eligibleHonorUnlockIds = (save: SaveData): HonorUnlockId[] => {
     const ps = save.playerStats;
-    const dailies = ps?.dailiesCompleted ?? 0;
-    const streak = ps?.dailyStreakCosmetic ?? 0;
-    const bestNp = ps?.bestFloorNoPowers ?? 0;
-    const relicPicks = Object.values(ps?.relicPickCounts ?? {}).reduce((a, b) => a + (b ?? 0), 0);
+    const dailies = nonNegativeHonorCount(ps?.dailiesCompleted);
+    const streak = nonNegativeHonorCount(ps?.dailyStreakCosmetic);
+    const bestNp = nonNegativeHonorCount(ps?.bestFloorNoPowers);
+    const bestScore = nonNegativeHonorCount(save.bestScore);
+    const relicPicks = Object.values(ps?.relicPickCounts ?? {}).reduce((a, b) => a + nonNegativeHonorCount(b), 0);
     const last = save.lastRunSummary;
+    const lastLevelsCleared = nonNegativeHonorCount(last?.levelsCleared);
 
     const earned: HonorUnlockId[] = [];
     if (dailies >= 1) earned.push('honor_daily_initiate');
@@ -99,9 +104,9 @@ export const eligibleHonorUnlockIds = (save: SaveData): HonorUnlockId[] => {
     if (streak >= 7) earned.push('honor_daily_streak_7');
     if (bestNp >= 5) earned.push('honor_ascendant_5');
     if (bestNp >= 10) earned.push('honor_ascendant_10');
-    if (save.bestScore >= 2000) earned.push('honor_score_maestro');
+    if (bestScore >= 2000) earned.push('honor_score_maestro');
     if (relicPicks >= 10) earned.push('honor_relic_habit');
-    if (last?.gameMode === 'gauntlet' && (last.levelsCleared ?? 0) >= 1) earned.push('honor_gauntlet_proof');
+    if (last?.gameMode === 'gauntlet' && lastLevelsCleared >= 1) earned.push('honor_gauntlet_proof');
 
     return [...new Set(earned)];
 };
