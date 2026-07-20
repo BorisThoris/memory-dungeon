@@ -237,4 +237,25 @@ describe('preloadStartupCriticalAssets', () => {
 
         expect(preloadCardIllustrationImages).not.toHaveBeenCalled();
     });
+
+    it('falls back to timer warmups when requestIdleCallback throws', async () => {
+        Object.defineProperty(window, 'requestIdleCallback', {
+            configurable: true,
+            value: vi.fn(() => {
+                throw new Error('idle scheduler unavailable');
+            })
+        });
+        const {
+            resetStartupAssetPreloadStateForTests,
+            warmCardIllustrationsInBackground
+        } = await import('./preloadStartupAssets');
+        resetStartupAssetPreloadStateForTests();
+
+        warmCardIllustrationsInBackground();
+        await new Promise<void>((resolve) => {
+            window.setTimeout(resolve, 300);
+        });
+
+        expect(preloadCardIllustrationImages).toHaveBeenCalledTimes(1);
+    });
 });

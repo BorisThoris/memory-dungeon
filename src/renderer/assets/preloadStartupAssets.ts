@@ -74,11 +74,15 @@ const scheduleIdleWarmup = (callback: () => void, fallbackDelayMs: number): (() 
     };
 
     if (typeof idleWindow.requestIdleCallback === 'function') {
-        const idleHandle = idleWindow.requestIdleCallback(run, { timeout: 2500 });
-        return () => {
-            cancelled = true;
-            idleWindow.cancelIdleCallback?.(idleHandle);
-        };
+        try {
+            const idleHandle = idleWindow.requestIdleCallback(run, { timeout: 2500 });
+            return () => {
+                cancelled = true;
+                idleWindow.cancelIdleCallback?.(idleHandle);
+            };
+        } catch {
+            // Some embedded browser shells expose requestIdleCallback but reject scheduling.
+        }
     }
 
     const timerHandle = window.setTimeout(run, fallbackDelayMs);

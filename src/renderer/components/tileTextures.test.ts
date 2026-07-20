@@ -202,6 +202,30 @@ describe('tileTextures layout', () => {
         }
     });
 
+    it('falls back to timer prewarm steps when requestIdleCallback throws', async () => {
+        vi.useFakeTimers();
+        clearTileTextureCachesForDebug();
+        const previousRequestIdleCallback = window.requestIdleCallback;
+        const previousCancelIdleCallback = window.cancelIdleCallback;
+        window.requestIdleCallback = (() => {
+            throw new Error('idle scheduler unavailable');
+        }) as typeof window.requestIdleCallback;
+        window.cancelIdleCallback = (() => undefined) as typeof window.cancelIdleCallback;
+
+        try {
+            const stop = prewarmTileFaceOverlayTextures([baseTile('idle-fallback', 'pair-idle-fallback')], 'medium', 'active');
+            await vi.advanceTimersByTimeAsync(0);
+            stop();
+
+            const state = getIllustrationPipelineDebugState();
+            expect(state.overlayPrewarm.completedCount).toBe(1);
+        } finally {
+            window.requestIdleCallback = previousRequestIdleCallback;
+            window.cancelIdleCallback = previousCancelIdleCallback;
+            vi.useRealTimers();
+        }
+    });
+
     it('shares in-flight tile texture image loads across concurrent preloads', async () => {
         clearTileTextureCachesForDebug();
         const originalImage = globalThis.Image;

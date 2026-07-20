@@ -540,12 +540,16 @@ const schedulePrewarmStep = (callback: IdleRequestCallback): PrewarmScheduleHand
     const idleWindow = getIdleWindow();
     if (idleWindow?.requestIdleCallback) {
         const handle: PrewarmScheduleHandle = { cancelled: false, id: -1, type: 'idle' };
-        handle.id = idleWindow.requestIdleCallback((deadline) => {
-            if (!handle.cancelled) {
-                callback(deadline);
-            }
-        }, { timeout: 120 });
-        return handle;
+        try {
+            handle.id = idleWindow.requestIdleCallback((deadline) => {
+                if (!handle.cancelled) {
+                    callback(deadline);
+                }
+            }, { timeout: 120 });
+            return handle;
+        } catch {
+            // Fall through to the timer scheduler when the idle API is present but unusable.
+        }
     }
     const handle: PrewarmScheduleHandle = { cancelled: false, id: -1, type: 'timeout' };
     handle.id = window.setTimeout(() => {
