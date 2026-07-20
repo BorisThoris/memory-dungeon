@@ -13,6 +13,9 @@ import {
     calculatePerfectClearBonus
 } from './scoring-rules';
 
+const nonNegativeLevelClearCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const getClearLifeReason = (tries: number): ClearLifeReason => {
     if (tries === 0) return 'perfect';
     if (tries === 1) return 'clean';
@@ -40,11 +43,12 @@ export const applyFloorClearEnemyHazardDefeats = (
     return {
         run: {
             ...run,
-            dungeonEnemiesDefeated: run.dungeonEnemiesDefeated + floorClearHazards.bossesDefeated,
+            dungeonEnemiesDefeated:
+                nonNegativeLevelClearCount(run.dungeonEnemiesDefeated) + floorClearHazards.bossesDefeated,
             dungeonEnemiesDefeatedThisFloor:
-                (run.dungeonEnemiesDefeatedThisFloor ?? 0) + floorClearHazards.bossesDefeated,
+                nonNegativeLevelClearCount(run.dungeonEnemiesDefeatedThisFloor) + floorClearHazards.bossesDefeated,
             enemyHazardsDefeatedThisFloor:
-                (run.enemyHazardsDefeatedThisFloor ?? 0) + floorClearHazards.defeated
+                nonNegativeLevelClearCount(run.enemyHazardsDefeatedThisFloor) + floorClearHazards.defeated
         },
         board: finalizedBoard
     };

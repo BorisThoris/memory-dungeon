@@ -220,6 +220,23 @@ describe('revealDungeonRoom', () => {
         });
     });
 
+    it('normalizes malformed master-key counts before opening locked cache rooms', () => {
+        const run = createRun([roomTile('cache', 'room_locked_cache')], {
+            dungeonKeys: { iron: 0 },
+            dungeonMasterKeys: 1.9,
+            shopGold: 3
+        });
+
+        const resolved = revealDungeonRoom(run, 'cache');
+
+        expect(resolved.dungeonMasterKeys).toBe(0);
+        expect(resolved.shopGold).toBe(3 + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD);
+        expect(resolved.board!.tiles[0]).toMatchObject({
+            dungeonCardState: 'resolved',
+            dungeonRoomUsed: true
+        });
+    });
+
     it('reveals one hidden dungeon card pair with scrying lens', () => {
         const run = createRun([
             roomTile('lens', 'room_scrying_lens'),

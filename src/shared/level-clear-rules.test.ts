@@ -59,6 +59,28 @@ describe('level-clear-rules', () => {
         expect(result.run.enemyHazardsDefeatedThisFloor).toBe(5);
     });
 
+    it('normalizes malformed enemy hazard counters before floor-clear defeats', () => {
+        const run = {
+            ...createNewRun(0),
+            dungeonEnemiesDefeated: Number.NaN,
+            dungeonEnemiesDefeatedThisFloor: 1.9,
+            enemyHazardsDefeatedThisFloor: Number.POSITIVE_INFINITY
+        };
+        const board: BoardState = {
+            ...run.board!,
+            enemyHazards: [
+                enemyHazard('normal'),
+                enemyHazard('boss', { bossId: 'trap_warden', hp: 2, maxHp: 2 })
+            ]
+        };
+
+        const result = applyFloorClearEnemyHazardDefeats(run, board);
+
+        expect(result.run.dungeonEnemiesDefeated).toBe(1);
+        expect(result.run.dungeonEnemiesDefeatedThisFloor).toBe(2);
+        expect(result.run.enemyHazardsDefeatedThisFloor).toBe(2);
+    });
+
     it('clears flipped ids without cloning run counters when no enemy hazards are active', () => {
         const run = createNewRun(0);
         const board: BoardState = {

@@ -176,15 +176,18 @@ export const createDungeonExitActivationTransition = (
             ...objectiveReward.run,
             dungeonKeys: nextKeys,
             dungeonMasterKeys: activationSpend.spendsMasterKey
-                ? Math.max(0, run.dungeonMasterKeys - 1)
-                : run.dungeonMasterKeys,
+                ? Math.max(0, nonNegativeDungeonExitCount(run.dungeonMasterKeys) - 1)
+                : nonNegativeDungeonExitCount(run.dungeonMasterKeys),
             dungeonEnemiesDefeated:
-                objectiveReward.run.dungeonEnemiesDefeated + floorClearHazards.bossesDefeated,
+                nonNegativeDungeonExitCount(objectiveReward.run.dungeonEnemiesDefeated) +
+                floorClearHazards.bossesDefeated,
             dungeonEnemiesDefeatedThisFloor:
-                (objectiveReward.run.dungeonEnemiesDefeatedThisFloor ?? 0) + floorClearHazards.bossesDefeated,
+                nonNegativeDungeonExitCount(objectiveReward.run.dungeonEnemiesDefeatedThisFloor) +
+                floorClearHazards.bossesDefeated,
             enemyHazardsDefeatedThisFloor:
-                (objectiveReward.run.enemyHazardsDefeatedThisFloor ?? 0) + floorClearHazards.defeated,
-            dungeonGatewaysUsed: run.dungeonGatewaysUsed + 1,
+                nonNegativeDungeonExitCount(objectiveReward.run.enemyHazardsDefeatedThisFloor) +
+                floorClearHazards.defeated,
+            dungeonGatewaysUsed: nonNegativeDungeonExitCount(run.dungeonGatewaysUsed) + 1,
             pendingRouteCardPlan:
                 run.pendingRouteCardPlan == null && routeType
                     ? createRouteCardPlanForRoute(

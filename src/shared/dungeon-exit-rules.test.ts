@@ -370,6 +370,42 @@ describe('createDungeonExitActivationTransition', () => {
         expect(transition?.run.enemyHazardsDefeatedThisFloor).toBe(3);
     });
 
+    it('normalizes malformed dungeon counters when activating exits', () => {
+        const base = createNewRun(0, { runSeed: 2405 });
+        const board = {
+            ...createBoard([
+                tile('exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardState: 'revealed',
+                    dungeonExitLockKind: 'iron'
+                }),
+                tile('a1', 'a'),
+                tile('a2', 'a')
+            ]),
+            enemyHazards: [hazard()]
+        };
+        const run: RunState = {
+            ...base,
+            status: 'playing',
+            board,
+            dungeonKeys: { iron: 0 },
+            dungeonMasterKeys: 1.9,
+            dungeonGatewaysUsed: Number.NaN,
+            dungeonEnemiesDefeated: Number.POSITIVE_INFINITY,
+            dungeonEnemiesDefeatedThisFloor: 1.9,
+            enemyHazardsDefeatedThisFloor: Number.NaN
+        };
+
+        const transition = createDungeonExitActivationTransition(run, 'master_key');
+
+        expect(transition).not.toBeNull();
+        expect(transition?.run.dungeonMasterKeys).toBe(0);
+        expect(transition?.run.dungeonGatewaysUsed).toBe(1);
+        expect(transition?.run.dungeonEnemiesDefeated).toBe(1);
+        expect(transition?.run.dungeonEnemiesDefeatedThisFloor).toBe(2);
+        expect(transition?.run.enemyHazardsDefeatedThisFloor).toBe(1);
+    });
+
     it('allows a cleared boss floor to exit when only a stale boss patrol overlay remains', () => {
         const base = createNewRun(0, { runSeed: 2403 });
         const board = {

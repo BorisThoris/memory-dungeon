@@ -80,6 +80,41 @@ describe('dungeon-trap-rules', () => {
         expect(result.board.tiles.every((candidate) => candidate.dungeonCardState === 'resolved')).toBe(true);
     });
 
+    it('normalizes malformed trap counters before resolving traps', () => {
+        const base = createNewRun(0);
+        const run = {
+            ...base,
+            lives: 2.9,
+            shopGold: Number.POSITIVE_INFINITY,
+            dungeonTrapsTriggered: Number.NaN,
+            dungeonTrapsResolvedThisFloor: 1.9,
+            stats: {
+                ...base.stats,
+                guardTokens: Number.NaN,
+                currentLevelScore: Number.POSITIVE_INFINITY,
+                totalScore: 15.9
+            }
+        };
+        const board = {
+            ...createBoard([
+                tile('trap-a', 'trap', { dungeonCardKind: 'trap', dungeonCardState: 'revealed', dungeonCardEffectId: 'trap_mimic' }),
+                tile('trap-b', 'trap', { dungeonCardKind: 'trap', dungeonCardState: 'revealed', dungeonCardEffectId: 'trap_mimic' })
+            ]),
+            matchedPairs: Number.NaN
+        };
+
+        const result = springArmedDungeonTraps(run, board, ['trap']);
+
+        expect(result.run.lives).toBe(1);
+        expect(result.run.shopGold).toBe(0);
+        expect(result.run.dungeonTrapsTriggered).toBe(1);
+        expect(result.run.dungeonTrapsResolvedThisFloor).toBe(2);
+        expect(result.run.stats.guardTokens).toBe(0);
+        expect(result.run.stats.currentLevelScore).toBe(0);
+        expect(result.run.stats.totalScore).toBe(5);
+        expect(result.board.matchedPairs).toBe(1);
+    });
+
     it('spends guard tokens on ordinary traps before life loss', () => {
         const base = createNewRun(0);
         const run = {

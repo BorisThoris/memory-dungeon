@@ -134,7 +134,7 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
             openedLockedCache = true;
             nextRun = {
                 ...gainDungeonRoomScore(run, DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD),
-                dungeonMasterKeys: run.dungeonMasterKeys - 1,
+                dungeonMasterKeys: Math.max(0, nonNegativeDungeonCount(run.dungeonMasterKeys) - 1),
                 shopGold: nonNegativeDungeonCount(run.shopGold) + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD
             };
         }
