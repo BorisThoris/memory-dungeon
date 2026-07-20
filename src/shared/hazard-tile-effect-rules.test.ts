@@ -64,6 +64,23 @@ describe('hazard tile effect rules', () => {
         });
     });
 
+    it('normalizes malformed ward charges before blocking hazard effects', () => {
+        const run = { ...createNewRun(0), safeHazardWardChargesThisFloor: Number.POSITIVE_INFINITY };
+        const board = boardWith([
+            tile('snare-a', 'snare-a', { tileHazardKind: 'shuffle_snare' }),
+            tile('safe-a', 'safe-a'),
+            tile('safe-b', 'safe-b')
+        ]);
+        const result = applySafeHazardWardMismatch(run, board, [board.tiles[0]!], new Set(['shuffle_snare']));
+
+        expect(result).toMatchObject({
+            wardUsed: false,
+            wardChargeSpent: false,
+            traitWardUsed: false,
+            snareHazard: { triggered: true }
+        });
+    });
+
     it('lets Stasis absorb one snare mismatch without spending ward charges', () => {
         const run = { ...createNewRun(0), safeHazardWardChargesThisFloor: 0 };
         const board = boardWith([

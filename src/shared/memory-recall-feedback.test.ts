@@ -129,6 +129,22 @@ describe('getMemoryRecallFeedback', () => {
         ]);
     });
 
+    it('normalizes malformed scout and recovery counters before building feedback copy', () => {
+        const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
+            lanternWardScoutsThisFloor: Number.POSITIVE_INFINITY,
+            omenSealScoutsThisFloor: 1.9,
+            pendingMemorizeBonusMs: Number.POSITIVE_INFINITY
+        });
+
+        const feedback = getMemoryRecallFeedback(run);
+
+        expect([...feedback.clues, ...feedback.penalties].map((line) => line.detail).join(' ')).not.toMatch(/NaN|Infinity/);
+        expect(feedback.clues.find((line) => line.id === 'scout-sources')).toMatchObject({
+            detail: '0 Lantern Ward and 1 Omen Seal clue reads this floor.'
+        });
+        expect(feedback.penalties.find((line) => line.id === 'memorize-recovery')).toBeUndefined();
+    });
+
     it('calls out patrol and revealed enemy memory pressure', () => {
         const run = makeRun(
             [

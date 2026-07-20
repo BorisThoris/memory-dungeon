@@ -18,6 +18,9 @@ const tileIsSafeHazardEffectTarget = (tile: Tile): boolean =>
 const sourceTilesHaveStasisWard = (sourceTiles: readonly Tile[]): boolean =>
     sourceTiles.some((tile) => tile.tileTraitKind === 'stasis');
 
+const nonNegativeHazardEffectCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const applyShuffleSnareHazard = (board: BoardState, run: RunState): { board: BoardState; triggered: boolean } => {
     const hiddenIndices: number[] = [];
     board.tiles.forEach((tile, index) => {
@@ -119,7 +122,7 @@ export const applySafeHazardWardMismatch = (
     wardChargeSpent: boolean;
     traitWardUsed: boolean;
 } => {
-    const hasWardCharge = (run.safeHazardWardChargesThisFloor ?? 0) > 0;
+    const hasWardCharge = nonNegativeHazardEffectCount(run.safeHazardWardChargesThisFloor) > 0;
     const hasStasisWard = !hasWardCharge && sourceTilesHaveStasisWard(sourceTiles);
     const canWardHazard = hasWardCharge || hasStasisWard;
     const blocksSnare = canWardHazard && mismatchHazards.has('shuffle_snare');

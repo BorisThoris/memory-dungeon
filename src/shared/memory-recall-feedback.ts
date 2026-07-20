@@ -78,6 +78,9 @@ export interface MemorySymbolMap {
 
 const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
 
+const nonNegativeMemoryFeedbackCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const isMemorySolvablePair = (pairKey: string, tiles: readonly Tile[]): boolean =>
     tiles.length === 2 && !isSingletonUtilityPairKey(pairKey);
 
@@ -725,11 +728,13 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: 'reward'
         });
     }
-    if ((run.lanternWardScoutsThisFloor ?? 0) > 0 || (run.omenSealScoutsThisFloor ?? 0) > 0) {
+    const lanternWardScouts = nonNegativeMemoryFeedbackCount(run.lanternWardScoutsThisFloor);
+    const omenSealScouts = nonNegativeMemoryFeedbackCount(run.omenSealScoutsThisFloor);
+    if (lanternWardScouts > 0 || omenSealScouts > 0) {
         clues.push({
             id: 'scout-sources',
             label: 'Scout trail active',
-            detail: `${run.lanternWardScoutsThisFloor ?? 0} Lantern Ward and ${run.omenSealScoutsThisFloor ?? 0} Omen Seal clue reads this floor.`,
+            detail: `${lanternWardScouts} Lantern Ward and ${omenSealScouts} Omen Seal clue reads this floor.`,
             tone: 'stable'
         });
     }
@@ -786,11 +791,12 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: 'danger'
         });
     }
-    if (run.pendingMemorizeBonusMs > 0) {
+    const pendingMemorizeBonusMs = nonNegativeMemoryFeedbackCount(run.pendingMemorizeBonusMs);
+    if (pendingMemorizeBonusMs > 0) {
         penalties.push({
             id: 'memorize-recovery',
             label: 'Recovery memorize time banked',
-            detail: `+${Math.min(run.pendingMemorizeBonusMs, MAX_PENDING_MEMORIZE_BONUS_MS)}ms will soften the next memorization phase.`,
+            detail: `+${Math.min(pendingMemorizeBonusMs, MAX_PENDING_MEMORIZE_BONUS_MS)}ms will soften the next memorization phase.`,
             tone: 'stable'
         });
     }
