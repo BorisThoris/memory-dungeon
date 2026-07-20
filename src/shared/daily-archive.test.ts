@@ -74,6 +74,30 @@ describe('REG-083 daily weekly season archive', () => {
         expect(share).not.toMatch(/rank|leaderboard|account/i);
     });
 
+    it('rejects impossible compact UTC keys instead of rolling them into archive windows', () => {
+        expect(weekKeyForDaily('20260231')).toBe('week:none');
+        expect(seasonKeyForDaily('20261301')).toBe('season:none');
+
+        const save = createDefaultSaveData();
+        save.playerStats = {
+            ...save.playerStats!,
+            dailiesCompleted: 1,
+            dailyStreakCosmetic: 2,
+            lastDailyDateKeyUtc: '20260231'
+        };
+
+        const summary = getDailyArchiveSummary(save, Date.UTC(2026, 1, 28, 12));
+
+        expect(summary.lastDailyDateKeyUtc).toBeNull();
+        expect(summary.rows[0]).toMatchObject({
+            archiveKey: '20260228',
+            comparisonString: 'Last daily unknown · 1 local clears · streak 2',
+            key: '20260228'
+        });
+        expect(summary.rows[1]?.archiveKey).toBe(weekKeyForDaily('20260228'));
+        expect(summary.rows[2]?.archiveKey).toBe(seasonKeyForDaily('20260228'));
+    });
+
     it('REG-023 builds local daily and weekly results loop rows', () => {
         const save = createDefaultSaveData();
         save.bestScore = 1200;

@@ -64,7 +64,10 @@ const parseDateKeyUtc = (dateKey: string | null | undefined): Date | null => {
     const year = Number(dateKey.slice(0, 4));
     const month = Number(dateKey.slice(4, 6)) - 1;
     const day = Number(dateKey.slice(6, 8));
-    return new Date(Date.UTC(year, month, day));
+    const date = new Date(Date.UTC(year, month, day));
+    return date.getUTCFullYear() === year && date.getUTCMonth() === month && date.getUTCDate() === day
+        ? date
+        : null;
 };
 
 const formatDateKey = (date: Date): string =>
@@ -103,14 +106,15 @@ export const getDailyArchiveSummary = (save: SaveData, nowMs: number = Date.now(
     const streak = ps?.dailyStreakCosmetic ?? 0;
     const lastKey = ps?.lastDailyDateKeyUtc ?? null;
     const lastDate = parseDateKeyUtc(lastKey);
+    const validLastKey = lastDate ? lastKey : null;
     const todayKey = dailyArchiveDateKeyForTimestamp(nowMs);
     const effectiveDate = lastDate ?? parseDateKeyUtc(todayKey);
     const rows: DailyArchiveIdentity[] = [
         {
             scope: 'daily',
-            key: lastKey ?? todayKey,
+            key: validLastKey ?? todayKey,
             archiveType: 'daily',
-            archiveKey: lastKey ?? todayKey,
+            archiveKey: validLastKey ?? todayKey,
             status: completed > 0 ? 'completed' : 'active',
             title: 'Daily archive',
             description: 'Local UTC daily identity and completion count.',
@@ -118,7 +122,7 @@ export const getDailyArchiveSummary = (save: SaveData, nowMs: number = Date.now(
             onlineLeaderboardDeferred: true,
             comparisonString:
                 completed > 0
-                    ? `Last daily ${lastKey ?? 'unknown'} · ${completed} local clears · streak ${streak}`
+                    ? `Last daily ${validLastKey ?? 'unknown'} · ${completed} local clears · streak ${streak}`
                     : `Today ${todayKey} · no local clear recorded yet`,
             sourceFields: ['playerStats.dailiesCompleted', 'playerStats.lastDailyDateKeyUtc', 'playerStats.dailyStreakCosmetic']
         },
@@ -155,7 +159,7 @@ export const getDailyArchiveSummary = (save: SaveData, nowMs: number = Date.now(
         completedDailies: completed,
         streak,
         currentStreak: streak,
-        lastDailyDateKeyUtc: lastKey,
+        lastDailyDateKeyUtc: validLastKey,
         offlineOnly: true,
         onlineRequired: false
     };
