@@ -219,4 +219,22 @@ describe('preloadStartupCriticalAssets', () => {
         await runIdleCallback(1);
         expect(preloadCardIllustrationImages).toHaveBeenCalledTimes(2);
     });
+
+    it('drops cancelled idle warmups when cancelIdleCallback is unavailable', async () => {
+        Object.defineProperty(window, 'cancelIdleCallback', {
+            configurable: true,
+            value: undefined
+        });
+        const {
+            resetStartupAssetPreloadStateForTests,
+            warmCardIllustrationsInBackground
+        } = await import('./preloadStartupAssets');
+        resetStartupAssetPreloadStateForTests();
+
+        warmCardIllustrationsInBackground();
+        resetStartupAssetPreloadStateForTests();
+        await runIdleCallback(0);
+
+        expect(preloadCardIllustrationImages).not.toHaveBeenCalled();
+    });
 });

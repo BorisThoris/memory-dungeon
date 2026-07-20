@@ -66,14 +66,26 @@ const settleRasterPreload = async (operation: () => Promise<void>): Promise<void
 
 const scheduleIdleWarmup = (callback: () => void, fallbackDelayMs: number): (() => void) => {
     const idleWindow = window as IdleWindow;
+    let cancelled = false;
+    const run = (): void => {
+        if (!cancelled) {
+            callback();
+        }
+    };
 
     if (typeof idleWindow.requestIdleCallback === 'function') {
-        const idleHandle = idleWindow.requestIdleCallback(callback, { timeout: 2500 });
-        return () => idleWindow.cancelIdleCallback?.(idleHandle);
+        const idleHandle = idleWindow.requestIdleCallback(run, { timeout: 2500 });
+        return () => {
+            cancelled = true;
+            idleWindow.cancelIdleCallback?.(idleHandle);
+        };
     }
 
-    const timerHandle = window.setTimeout(callback, fallbackDelayMs);
-    return () => window.clearTimeout(timerHandle);
+    const timerHandle = window.setTimeout(run, fallbackDelayMs);
+    return () => {
+        cancelled = true;
+        window.clearTimeout(timerHandle);
+    };
 };
 
 /** Deduped first-screen UI rasters so MainMenu and gameplay shells decode before first paint. */
