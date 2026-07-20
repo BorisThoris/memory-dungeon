@@ -1128,6 +1128,19 @@ const gainOneFavor = (run: RunState): RunState => {
     };
 };
 
+const gainRunScoreReward = (run: RunState): RunState => {
+    const totalScore = nonNegativePreviewCount(run.stats.totalScore) + 25;
+    return {
+        ...run,
+        stats: {
+            ...run.stats,
+            totalScore,
+            currentLevelScore: nonNegativePreviewCount(run.stats.currentLevelScore) + 25,
+            bestScore: Math.max(nonNegativePreviewCount(run.stats.bestScore), totalScore)
+        }
+    };
+};
+
 export const applyRunEventChoice = (
     run: RunState,
     event: RunEventState,
@@ -1155,18 +1168,7 @@ export const applyRunEventChoice = (
         case 'gain_destroy_charge':
             return { run: gainRunInventoryItem(run, 'destroy_charge'), applied: true };
         case 'gain_score':
-            return {
-                run: {
-                    ...run,
-                    stats: {
-                        ...run.stats,
-                        totalScore: run.stats.totalScore + 25,
-                        currentLevelScore: run.stats.currentLevelScore + 25,
-                        bestScore: Math.max(run.stats.bestScore, run.stats.totalScore + 25)
-                    }
-                },
-                applied: true
-            };
+            return { run: gainRunScoreReward(run), applied: true };
         case 'skip':
         default:
             return { run, applied: true };

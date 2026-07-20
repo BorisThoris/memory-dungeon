@@ -275,6 +275,29 @@ describe('REG-074 run event rooms', () => {
         });
     });
 
+    it('normalizes malformed counters before applying score event rewards', () => {
+        const event = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_205, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_score'))!;
+        const choice = event.options.find((option) => option.effect === 'gain_score')!;
+        const run = {
+            ...createNewRun(0),
+            stats: {
+                ...createNewRun(0).stats,
+                totalScore: Number.NaN,
+                currentLevelScore: -12.5,
+                bestScore: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const result = applyRunEventChoice(run, event, choice.id);
+
+        expect(result.applied).toBe(true);
+        expect(result.run.stats.totalScore).toBe(25);
+        expect(result.run.stats.currentLevelScore).toBe(25);
+        expect(result.run.stats.bestScore).toBe(25);
+    });
+
     it('builds event preview state from the active run counters before resolving a choice', () => {
         const run = {
             ...createNewRun(0),
