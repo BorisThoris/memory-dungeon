@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from './contracts';
 import {
     boardHasGlassDecoy,
+    countReachableExitLeverSources,
     countReachableExitKeySources,
     getWildTileIdFromBoard,
     inspectBoardFairness,
@@ -78,6 +79,21 @@ describe('board-inspection', () => {
 
         expect(countReachableExitKeySources(inspected, 'iron')).toBe(0);
         expect(countReachableExitKeySources(inspected, 'treasure')).toBe(1);
+    });
+
+    it('normalizes malformed floor-held key and lever counters during source counts', () => {
+        const inspected = {
+            ...board([tile('exit', EXIT_PAIR_KEY, { dungeonCardKind: 'exit', dungeonExitLockKind: 'treasure' })]),
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'treasure' as const,
+            dungeonKeysHeld: Number.POSITIVE_INFINITY,
+            dungeonKeysHeldByKind: { treasure: Number.NaN },
+            dungeonLeverCount: Number.POSITIVE_INFINITY
+        } satisfies BoardState;
+
+        expect(countReachableExitKeySources(inspected, 'iron')).toBe(0);
+        expect(countReachableExitKeySources(inspected, 'treasure')).toBe(0);
+        expect(countReachableExitLeverSources(inspected)).toBe(0);
     });
 
     it('normalizes stale board-level exit lock metadata to the primary exit tile during repair', () => {

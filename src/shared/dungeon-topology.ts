@@ -129,9 +129,14 @@ const groupTilesByPairKey = (tiles: readonly Tile[]): Map<string, Tile[]> => {
 
 const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
 
+const nonNegativeDungeonTopologyCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const floorHeldKeyCount = (board: BoardState, keyKind: DungeonKeyKind): number =>
-    (board.dungeonKeysHeldByKind?.[keyKind] ?? 0) +
-    (board.dungeonKeysHeldByKind == null && keyKind === 'iron' ? (board.dungeonKeysHeld ?? 0) : 0);
+    nonNegativeDungeonTopologyCount(board.dungeonKeysHeldByKind?.[keyKind]) +
+    (board.dungeonKeysHeldByKind == null && keyKind === 'iron'
+        ? nonNegativeDungeonTopologyCount(board.dungeonKeysHeld)
+        : 0);
 
 const bossObjectiveAlreadySettled = (board: BoardState): boolean => {
     if (board.dungeonObjectiveId !== 'defeat_boss' || board.dungeonBossId == null) {
@@ -146,7 +151,7 @@ const bossObjectiveAlreadySettled = (board: BoardState): boolean => {
 
 const requirementForExit = (lockKind: DungeonExitLockKind, requiredLeverCount: number): DungeonTopologyRequirement => {
     if (lockKind === 'none') return { kind: 'none' };
-    if (lockKind === 'lever') return { kind: 'lever', count: requiredLeverCount };
+    if (lockKind === 'lever') return { kind: 'lever', count: nonNegativeDungeonTopologyCount(requiredLeverCount) };
     return { kind: 'key', keyKind: lockKind };
 };
 
@@ -331,7 +336,9 @@ export const createDungeonBoardTopology = (
         : board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY) ?? null;
     if (primaryExit) {
         const lockKind = primaryExit.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
-        const requiredLeverCount = primaryExit.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount ?? 0;
+        const requiredLeverCount = nonNegativeDungeonTopologyCount(
+            primaryExit.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount
+        );
         const exitNodeId = `exit:${primaryExit.id}`;
         addNodeOnce(graph, exitNodeId, {
             kind: 'exit',
@@ -353,7 +360,7 @@ export const createDungeonBoardTopology = (
     }
 
     for (const keyKind of Object.keys(options.dungeonKeys ?? {}) as DungeonKeyKind[]) {
-        if ((options.dungeonKeys?.[keyKind] ?? 0) <= 0) continue;
+        if (nonNegativeDungeonTopologyCount(options.dungeonKeys?.[keyKind]) <= 0) continue;
         const keyNodeId = `run-key:${keyKind}`;
         addNodeOnce(graph, keyNodeId, { kind: 'key', label: `${keyKind} run key`, keyKind });
         addEdgeOnce(graph, START_NODE_ID, keyNodeId, { label: 'carried key', requirement: { kind: 'none' } });
@@ -400,24 +407,26 @@ export const inspectDungeonBoardTopology = (
     const graph = createDungeonBoardTopology(board, options);
     const initialKeyKinds = new Set<DungeonKeyKind>();
     for (const keyKind of Object.keys(options.dungeonKeys ?? {}) as DungeonKeyKind[]) {
-        if ((options.dungeonKeys?.[keyKind] ?? 0) > 0) {
+        if (nonNegativeDungeonTopologyCount(options.dungeonKeys?.[keyKind]) > 0) {
             initialKeyKinds.add(keyKind);
         }
     }
+    const carriedMasterKeys = nonNegativeDungeonTopologyCount(options.dungeonMasterKeys);
+    const carriedLeverCount = nonNegativeDungeonTopologyCount(board.dungeonLeverCount);
 
     const firstPassReachable = collectReachableNodeIds(
         graph,
         START_NODE_ID,
         {
             keyKinds: initialKeyKinds,
-            masterKeys: options.dungeonMasterKeys ?? 0,
-            leverCount: board.dungeonLeverCount ?? 0,
+            masterKeys: carriedMasterKeys,
+            leverCount: carriedLeverCount,
             bossRoute: false
         }
     );
     const reachableSet = new Set(firstPassReachable);
     const obtainableKeyKinds = new Set(initialKeyKinds);
-    let reachableLeverCount = board.dungeonLeverCount ?? 0;
+    let reachableLeverCount = carriedLeverCount;
     let hasBossRoute = false;
 
     for (const nodeId of firstPassReachable) {
@@ -438,7 +447,7 @@ export const inspectDungeonBoardTopology = (
         START_NODE_ID,
         {
             keyKinds: obtainableKeyKinds,
-            masterKeys: options.dungeonMasterKeys ?? 0,
+            masterKeys: carriedMasterKeys,
             leverCount: reachableLeverCount,
             bossRoute: hasBossRoute
         }
@@ -461,16 +470,17 @@ export const inspectDungeonBoardTopology = (
     for (const exitNodeId of exitNodeIds) {
         const exit = graph.getNodeAttributes(exitNodeId);
         const lockKind = exit.lockKind ?? 'none';
-        if (lockKind === 'lever' && reachableLeverCount < (exit.requiredLeverCount ?? 0)) {
+        const requiredLeverCount = nonNegativeDungeonTopologyCount(exit.requiredLeverCount);
+        if (lockKind === 'lever' && reachableLeverCount < requiredLeverCount) {
             issues.push({
                 code: 'topology_exit_lever_source_shortage',
-                message: `Exit '${exit.label}' needs ${exit.requiredLeverCount ?? 0} lever(s), but topology can reach ${reachableLeverCount}.`,
+                message: `Exit '${exit.label}' needs ${requiredLeverCount} lever(s), but topology can reach ${reachableLeverCount}.`,
                 nodeId: exitNodeId,
                 tileIds: exit.tileIds
             });
         }
         if (lockKind !== 'none' && lockKind !== 'lever') {
-            const hasKeyRoute = (options.dungeonMasterKeys ?? 0) > 0 || obtainableKeyKinds.has(lockKind);
+            const hasKeyRoute = carriedMasterKeys > 0 || obtainableKeyKinds.has(lockKind);
             if (!hasKeyRoute) {
                 issues.push({
                     code: 'topology_exit_lock_source_missing',

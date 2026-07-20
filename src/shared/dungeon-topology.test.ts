@@ -239,6 +239,38 @@ describe('dungeon topology graph', () => {
         });
     });
 
+    it('normalizes malformed carried and floor-held resources before topology reachability', () => {
+        const source = board(
+            [
+                tile('a1', 'a', { state: 'matched' }),
+                tile('a2', 'a', { state: 'matched' }),
+                tile('exit', EXIT_PAIR_KEY, {
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'treasure'
+                })
+            ],
+            {
+                pairCount: 1,
+                matchedPairs: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'treasure',
+                dungeonKeysHeldByKind: { treasure: Number.POSITIVE_INFINITY },
+                dungeonLeverCount: Number.NaN
+            }
+        );
+
+        const report = inspectDungeonBoardTopology(source, {
+            dungeonKeys: { treasure: Number.NaN },
+            dungeonMasterKeys: Number.POSITIVE_INFINITY
+        });
+
+        expect(report.obtainableKeyKinds).toEqual([]);
+        expect(report.hasExitRoute).toBe(false);
+        expect(report.issues.map((issue) => issue.code)).toEqual(
+            expect.arrayContaining(['topology_exit_lock_source_missing'])
+        );
+    });
+
     it('treats carried run keys as typed exit resources', () => {
         const source = board(
             [

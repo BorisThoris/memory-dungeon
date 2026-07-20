@@ -247,6 +247,28 @@ describe('softlock generator contract', () => {
         expect(projected?.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
     });
 
+    it('normalizes malformed projection resource counters before granting fallbacks', () => {
+        const board = projectionBoard({
+            dungeonKeysHeld: Number.POSITIVE_INFINITY,
+            dungeonKeysHeldByKind: { treasure: Number.NaN },
+            dungeonLeverCount: Number.POSITIVE_INFINITY,
+            tiles: projectionBoard().tiles.map((candidate) => {
+                if (candidate.pairKey === 'key') {
+                    return { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'treasure' as const };
+                }
+                if (candidate.pairKey === '__exit__') {
+                    return { ...candidate, dungeonExitLockKind: 'treasure' as const };
+                }
+                return candidate;
+            })
+        });
+
+        const projected = createFinalPairFairnessProjection(board);
+
+        expect(projected?.dungeonKeysHeld).toBe(1);
+        expect(projected?.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
+    });
+
     it('does not grant fake projection keys for terminal primary exit lock fallbacks', () => {
         const board = projectionBoard({
             pairCount: 1,

@@ -181,6 +181,47 @@ describe('match claim rules', () => {
         expect(nextBoard.dungeonKeysHeldByKind).toEqual({ treasure: 0 });
     });
 
+    it('normalizes malformed board counters while claiming a matched pair', () => {
+        const keyA = tile('key-a', 'K', {
+            dungeonCardEffectId: 'key_iron',
+            dungeonCardKind: 'key',
+            dungeonKeyKind: 'treasure'
+        });
+        const keyB = tile('key-b', 'K', {
+            dungeonCardEffectId: 'key_iron',
+            dungeonCardKind: 'key',
+            dungeonKeyKind: 'treasure'
+        });
+        const run = runWith([keyA, keyB], {
+            board: {
+                ...boardWith([keyA, keyB]),
+                matchedPairs: Number.NaN,
+                dungeonKeysHeld: Number.POSITIVE_INFINITY,
+                dungeonKeysHeldByKind: { treasure: Number.NaN },
+                dungeonLeverCount: Number.NaN
+            }
+        });
+        const context = deriveMatchClaimContext({
+            firstTile: keyA,
+            firstTileId: keyA.id,
+            run,
+            secondTile: keyB,
+            secondTileId: keyB.id
+        });
+
+        const nextBoard = createMatchedPairClaimBoard({
+            board: run.board!,
+            context,
+            firstTileId: keyA.id,
+            secondTileId: keyB.id
+        });
+
+        expect(nextBoard.matchedPairs).toBe(1);
+        expect(nextBoard.dungeonKeysHeld).toBe(1);
+        expect(nextBoard.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
+        expect(nextBoard.dungeonLeverCount).toBe(0);
+    });
+
     it('requires both matched tiles to be pinned before granting pin lattice reward', () => {
         const first = tile('p1', 'P', { routeSpecialKind: 'pin_lattice' });
         const second = tile('p2', 'P');

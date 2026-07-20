@@ -15,6 +15,9 @@ import { getRouteCardReward, type RouteCardReward } from './route-card-reward-ru
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import { isWildPairKey } from './tile-identity';
 
+const nonNegativeMatchClaimCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export interface MatchClaimContext {
     anchorSealClaimed: boolean;
     catalystAltarUpgraded: boolean;
@@ -126,12 +129,12 @@ export const createMatchedPairClaimBoard = ({
     secondTileId: string;
     thirdTileId?: string;
 }): BoardState => {
-    const nextKeysHeld = Math.max(0, (board.dungeonKeysHeld ?? 0) + context.dungeonReward.keysHeldDelta);
+    const nextKeysHeld = Math.max(0, nonNegativeMatchClaimCount(board.dungeonKeysHeld) + context.dungeonReward.keysHeldDelta);
     const nextKeysHeldByKind = (() => {
         if (context.dungeonReward.keysHeldDelta === 0) {
             return board.dungeonKeysHeldByKind;
         }
-        const current = board.dungeonKeysHeldByKind?.[context.matchedDungeonKeyKind] ?? 0;
+        const current = nonNegativeMatchClaimCount(board.dungeonKeysHeldByKind?.[context.matchedDungeonKeyKind]);
         const next = Math.max(0, current + context.dungeonReward.keysHeldDelta);
         return {
             ...(board.dungeonKeysHeldByKind ?? {}),
@@ -141,7 +144,7 @@ export const createMatchedPairClaimBoard = ({
     return {
         ...board,
         flippedTileIds: [],
-        matchedPairs: board.matchedPairs + 1,
+        matchedPairs: nonNegativeMatchClaimCount(board.matchedPairs) + 1,
         tiles: board.tiles.map((tile) => {
             if (tile.id === firstTileId || tile.id === secondTileId) {
                 return clearDungeonCardFields({
@@ -164,6 +167,6 @@ export const createMatchedPairClaimBoard = ({
         selectedGatewayRouteType: board.selectedGatewayRouteType ?? context.dungeonReward.gatewayRouteType ?? null,
         dungeonKeysHeld: nextKeysHeld,
         dungeonKeysHeldByKind: nextKeysHeldByKind,
-        dungeonLeverCount: (board.dungeonLeverCount ?? 0) + (context.matchedDungeonKind === 'lever' ? 1 : 0)
+        dungeonLeverCount: nonNegativeMatchClaimCount(board.dungeonLeverCount) + (context.matchedDungeonKind === 'lever' ? 1 : 0)
     };
 };

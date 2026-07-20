@@ -182,6 +182,9 @@ const pickFinalPairKey = (board: BoardState): string | null => {
     return realPairKeys(board)[0] ?? null;
 };
 
+const nonNegativeSoftlockContractCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const projectionExitResourceState = (
     board: BoardState
 ): Pick<BoardState, 'dungeonKeysHeld' | 'dungeonKeysHeldByKind' | 'dungeonLeverCount'> => {
@@ -191,19 +194,19 @@ const projectionExitResourceState = (
         lock.lockKind !== 'lever' &&
         countReachableExitKeySources(board, lock.lockKind) > 0;
     const needsLever = lock.lockKind === 'lever';
-    const dungeonKeysHeld = needsKey ? Math.max(board.dungeonKeysHeld ?? 0, 1) : board.dungeonKeysHeld;
+    const dungeonKeysHeld = needsKey ? Math.max(nonNegativeSoftlockContractCount(board.dungeonKeysHeld), 1) : board.dungeonKeysHeld;
     const dungeonKeysHeldByKind =
         needsKey && lock.lockKind !== 'none' && lock.lockKind !== 'lever'
             ? {
                   ...(board.dungeonKeysHeldByKind ?? {}),
-                  [lock.lockKind]: Math.max(board.dungeonKeysHeldByKind?.[lock.lockKind] ?? 0, 1)
+                  [lock.lockKind]: Math.max(nonNegativeSoftlockContractCount(board.dungeonKeysHeldByKind?.[lock.lockKind]), 1)
               }
             : board.dungeonKeysHeldByKind;
     return {
         dungeonKeysHeld,
         dungeonKeysHeldByKind,
         dungeonLeverCount: needsLever
-            ? Math.max(board.dungeonLeverCount ?? 0, lock.requiredLeverCount)
+            ? Math.max(nonNegativeSoftlockContractCount(board.dungeonLeverCount), nonNegativeSoftlockContractCount(lock.requiredLeverCount))
             : board.dungeonLeverCount
     };
 };
@@ -260,12 +263,12 @@ const addCoverage = (
     if (board.dungeonShopTileId || board.tiles.some((tile) => tile.dungeonCardKind === 'shop')) coverage.shops += 1;
     if (
         board.tiles.some((tile) => tile.dungeonCardKind === 'key' || tile.dungeonCardEffectId === 'room_key_cache') ||
-        (board.dungeonKeysHeld ?? 0) > 0 ||
-        Object.values(board.dungeonKeysHeldByKind ?? {}).some((count) => (count ?? 0) > 0)
+        nonNegativeSoftlockContractCount(board.dungeonKeysHeld) > 0 ||
+        Object.values(board.dungeonKeysHeldByKind ?? {}).some((count) => nonNegativeSoftlockContractCount(count) > 0)
     ) {
         coverage.keys += 1;
     }
-    if (board.tiles.some((tile) => tile.dungeonCardKind === 'lever') || (board.dungeonLeverCount ?? 0) > 0) {
+    if (board.tiles.some((tile) => tile.dungeonCardKind === 'lever') || nonNegativeSoftlockContractCount(board.dungeonLeverCount) > 0) {
         coverage.levers += 1;
     }
     if (board.tiles.some((tile) => tile.tileTraitKind != null)) coverage.traits += 1;
