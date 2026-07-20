@@ -57,6 +57,13 @@ describe('secondary objective rules', () => {
         expect(isFeaturedObjectiveCompleted({ ...run, cursedMatchedEarlyThisFloor: true }, { ...board, cursedPairKey: 'curse' }, 'cursed_last')).toBe(false);
         expect(isFeaturedObjectiveCompleted(run, { ...board, pairCount: 4 }, 'flip_par')).toBe(true);
         expect(isFeaturedObjectiveCompleted({ ...run, matchResolutionsThisFloor: 99 }, { ...board, pairCount: 4 }, 'flip_par')).toBe(false);
+        expect(
+            isFeaturedObjectiveCompleted(
+                { ...run, matchResolutionsThisFloor: Number.POSITIVE_INFINITY },
+                { ...board, pairCount: 4 },
+                'flip_par'
+            )
+        ).toBe(true);
     });
 
     it('collects default clear objective bonuses when no featured objective is scheduled', () => {
@@ -74,6 +81,12 @@ describe('secondary objective rules', () => {
                 FLIP_PAR_BONUS_SCORE,
             bonusTags: ['scholar_style', 'glass_witness', 'cursed_last', 'flip_par']
         });
+        expect(
+            getDefaultClearObjectiveBonus(
+                { ...run, matchResolutionsThisFloor: Number.NaN },
+                board
+            ).bonusTags
+        ).toContain('flip_par');
     });
 
     it('omits default clear objective bonuses that were failed', () => {

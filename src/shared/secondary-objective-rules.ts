@@ -40,7 +40,7 @@ export const isFeaturedObjectiveCompleted = (
         case 'cursed_last':
             return Boolean(board.cursedPairKey) && !run.cursedMatchedEarlyThisFloor;
         case 'flip_par':
-            return board.pairCount >= 2 && run.matchResolutionsThisFloor <= getFlipParLimit(board.pairCount);
+            return board.pairCount >= 2 && nonNegativeObjectiveCount(run.matchResolutionsThisFloor) <= getFlipParLimit(board.pairCount);
         default:
             return false;
     }
@@ -70,7 +70,7 @@ export const getDefaultClearObjectiveBonus = (
         bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.cursed_last;
         bonusTags.push('cursed_last');
     }
-    if (board.pairCount >= 2 && run.matchResolutionsThisFloor <= getFlipParLimit(board.pairCount)) {
+    if (board.pairCount >= 2 && nonNegativeObjectiveCount(run.matchResolutionsThisFloor) <= getFlipParLimit(board.pairCount)) {
         bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.flip_par;
         bonusTags.push('flip_par');
     }

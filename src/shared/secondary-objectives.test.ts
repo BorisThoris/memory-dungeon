@@ -27,6 +27,14 @@ describe('REG-048 secondary objective clarity', () => {
         const failedRow = getSecondaryObjectiveProgress(failed);
         expect(failedRow?.status).toBe('failed');
         expect(failedRow?.failureReason).toMatch(/par exceeded/i);
+
+        const malformed = {
+            ...active,
+            matchResolutionsThisFloor: Number.POSITIVE_INFINITY
+        };
+        const malformedRow = getSecondaryObjectiveProgress(malformed);
+        expect(malformedRow?.status).toBe('active');
+        expect(malformedRow?.condition).toContain('(0/');
     });
 
     it('returns completed status from level result for floor-clear celebration', () => {
@@ -91,6 +99,20 @@ describe('REG-048 secondary objective clarity', () => {
                     dungeonGatewaysUsedThisFloor: 0
                 },
                 run.board!,
+                false
+            )
+        ).toEqual([]);
+
+        expect(
+            getDungeonLevelResultTags(
+                {
+                    ...run,
+                    dungeonEnemiesDefeatedThisFloor: Number.POSITIVE_INFINITY,
+                    dungeonTrapsResolvedThisFloor: Number.NaN,
+                    dungeonTreasuresOpenedThisFloor: Number.NEGATIVE_INFINITY,
+                    dungeonGatewaysUsedThisFloor: Number.NaN
+                },
+                { ...run.board!, floorTag: 'boss' },
                 false
             )
         ).toEqual([]);

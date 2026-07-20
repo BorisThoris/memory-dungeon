@@ -139,18 +139,21 @@ const uniqueTags = <Tag extends string>(tags: readonly Tag[]): Tag[] => [...new 
 const isLevelResultTagId = (value: string): value is LevelResultTagId =>
     Object.prototype.hasOwnProperty.call(LEVEL_RESULT_TAG_DEFINITIONS, value);
 
+const nonNegativeSecondaryObjectiveCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const getDungeonLevelResultTags = (run: RunState, board: BoardState, perfect: boolean): LevelResultTagId[] => {
     const tags: LevelResultTagId[] = [];
-    if (board.floorTag === 'boss' && (run.dungeonEnemiesDefeatedThisFloor ?? 0) > 0) {
+    if (board.floorTag === 'boss' && nonNegativeSecondaryObjectiveCount(run.dungeonEnemiesDefeatedThisFloor) > 0) {
         tags.push('boss_defeated');
     }
-    if ((run.dungeonTrapsResolvedThisFloor ?? 0) > 0) {
+    if (nonNegativeSecondaryObjectiveCount(run.dungeonTrapsResolvedThisFloor) > 0) {
         tags.push('traps_disarmed');
     }
-    if ((run.dungeonTreasuresOpenedThisFloor ?? 0) > 0) {
+    if (nonNegativeSecondaryObjectiveCount(run.dungeonTreasuresOpenedThisFloor) > 0) {
         tags.push('treasure_claimed');
     }
-    if ((run.dungeonGatewaysUsedThisFloor ?? 0) > 0 || board.selectedGatewayRouteType != null) {
+    if (nonNegativeSecondaryObjectiveCount(run.dungeonGatewaysUsedThisFloor) > 0 || board.selectedGatewayRouteType != null) {
         tags.push('route_claimed');
     }
     if (
@@ -226,13 +229,14 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
             break;
         case 'flip_par': {
             const limit = getFlipParLimit(board.pairCount);
-            state = run.matchResolutionsThisFloor > limit ? 'failed' : 'active';
-            condition = `Stay within match-resolution par (${run.matchResolutionsThisFloor}/${limit}).`;
-            failureReason = state === 'failed' ? `Match-resolution par exceeded (${run.matchResolutionsThisFloor}/${limit}).` : null;
+            const matchResolutionsThisFloor = nonNegativeSecondaryObjectiveCount(run.matchResolutionsThisFloor);
+            state = matchResolutionsThisFloor > limit ? 'failed' : 'active';
+            condition = `Stay within match-resolution par (${matchResolutionsThisFloor}/${limit}).`;
+            failureReason = state === 'failed' ? `Match-resolution par exceeded (${matchResolutionsThisFloor}/${limit}).` : null;
             detail =
                 state === 'failed'
                     ? `Failed: ${failureReason}`
-                    : `Stay within ${run.matchResolutionsThisFloor}/${limit} match resolutions.`;
+                    : `Stay within ${matchResolutionsThisFloor}/${limit} match resolutions.`;
             break;
         }
         default:

@@ -32,6 +32,17 @@ describe('route card reward rules', () => {
             guardTokens: 0,
             safeHazardWardCharges: 1
         });
+        expect(
+            getRouteCardReward(
+                { ...run, stats: { ...run.stats, guardTokens: Number.POSITIVE_INFINITY } },
+                1,
+                'a',
+                'guard_cache'
+            )
+        ).toMatchObject({
+            guardTokens: 1,
+            safeHazardWardCharges: 0
+        });
     });
 
     it('maps fixed route cache rewards', () => {
@@ -71,6 +82,19 @@ describe('route card reward rules', () => {
         });
         expect(getRouteCardReward({ ...run, parasiteFloors: 1 }, 1, 'a', 'parasite_vessel')).toMatchObject({
             relicFavor: 1
+        });
+        expect(
+            getRouteCardReward(
+                { ...run, stats: { ...run.stats, comboShards: Number.POSITIVE_INFINITY } },
+                1,
+                'a',
+                'catalyst_altar'
+            )
+        ).toMatchObject({
+            score: CATALYST_ALTAR_FALLBACK_SCORE_REWARD
+        });
+        expect(getRouteCardReward({ ...run, parasiteFloors: Number.NaN }, 1, 'a', 'parasite_vessel')).toMatchObject({
+            score: PARASITE_VESSEL_FALLBACK_SCORE_REWARD
         });
     });
 });

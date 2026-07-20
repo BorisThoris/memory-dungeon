@@ -75,6 +75,20 @@ describe('trait route objectives', () => {
         const duplicate = applyTraitRouteObjectiveProgress({ ...run, ...result.runPatch }, ['echo:sealed-combo']);
         expect(duplicate.comboShardGain).toBe(0);
         expect(duplicate.feedback).toBeNull();
+
+        const malformed = applyTraitRouteObjectiveProgress(
+            runWithObjective({
+                stats: { ...run.stats, comboShards: Number.POSITIVE_INFINITY },
+                traitRouteObjectiveProgressThisFloor: Number.NaN,
+                traitRouteObjectiveRequiredThisFloor: 1.9
+            }),
+            ['echo:sealed-combo']
+        );
+        expect(malformed).toMatchObject({
+            comboShardGain: 1,
+            scoreBonus: 0,
+            feedback: 'Trait route 1/1: Echo + Sealed: combo shard (+1 combo shard)'
+        });
     });
 
     it('falls back to score when combo shards are capped and exposes HUD status', () => {
@@ -119,6 +133,20 @@ describe('trait route objectives', () => {
             remaining: 2,
             stateLabel: '2 routes to cashout',
             urgency: 'building'
+        });
+
+        expect(
+            getTraitRouteObjectiveStatus(
+                runWithObjective({
+                    traitRouteObjectiveProgressThisFloor: Number.POSITIVE_INFINITY,
+                    traitRouteObjectiveRequiredThisFloor: 2.9
+                })
+            )!
+        ).toMatchObject({
+            progress: 0,
+            remaining: 2,
+            required: 2,
+            urgency: 'idle'
         });
     });
 });

@@ -38,6 +38,9 @@ export const emptyRouteCardReward = (): RouteCardReward => ({
     relicFavor: 0
 });
 
+const nonNegativeRouteCardRewardCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const mysteryRouteCardOutcomeFor = (run: RunState, level: number, pairKey: string): MysteryRouteCardOutcome => {
     const outcomes: MysteryRouteCardOutcome[] = ['shop_gold', 'combo_shard', 'relic_favor'];
     const seed = hashStringToSeed(`routeCardMystery:${run.runRulesVersion}:${run.runSeed}:${level}:${pairKey}`);
@@ -55,7 +58,7 @@ export const getRouteCardReward = (
         return { ...emptyRouteCardReward(), guardTokens: 1 };
     }
     if (kind === 'guard_cache') {
-        return run.stats.guardTokens >= MAX_GUARD_TOKENS
+        return nonNegativeRouteCardRewardCount(run.stats.guardTokens) >= MAX_GUARD_TOKENS
             ? { ...emptyRouteCardReward(), safeHazardWardCharges: 1 }
             : { ...emptyRouteCardReward(), guardTokens: 1 };
     }
@@ -137,13 +140,13 @@ export const getRouteCardReward = (
         return {
             ...emptyRouteCardReward(),
             score:
-                run.stats.comboShards > 0
+                nonNegativeRouteCardRewardCount(run.stats.comboShards) > 0
                     ? CATALYST_ALTAR_UPGRADED_SCORE_REWARD
                     : CATALYST_ALTAR_FALLBACK_SCORE_REWARD
         };
     }
     if (kind === 'parasite_vessel') {
-        return run.parasiteFloors > 0
+        return nonNegativeRouteCardRewardCount(run.parasiteFloors) > 0
             ? {
                   ...emptyRouteCardReward(),
                   relicFavor: 1
