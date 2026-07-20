@@ -95,10 +95,6 @@ async function fetchSvgTextUnderMeshByteCap(assetUrl: string): Promise<string | 
             await response.body?.cancel?.();
             return null;
         }
-
-        if (Number.isFinite(bytes) && bytes <= MAX_SVG_SOURCE_BYTES_FOR_MESH) {
-            return response.text();
-        }
     }
 
     const body = response.body;

@@ -114,6 +114,25 @@ describe('cardSvgPlaneGeometry', () => {
         expect(globalThis.fetch).toHaveBeenCalledTimes(1);
     });
 
+    it('uses the stream byte cap when content-length is misreported under the mesh limit', async () => {
+        const oversizedBytes = new TextEncoder().encode('x'.repeat(512 * 1024 + 1));
+        const body = new ReadableStream<Uint8Array>({
+            start(controller) {
+                controller.enqueue(oversizedBytes);
+                controller.close();
+            }
+        });
+        globalThis.fetch = vi.fn(async () =>
+            new Response(body, {
+                headers: { 'content-length': '1' },
+                status: 200
+            })
+        ) as typeof fetch;
+
+        await expect(loadSharedCardSvgPlaneGeometry('misreported-small-content-length.svg')).resolves.toBeNull();
+        expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+    });
+
     it('bounds repeated layered-back SVG failures', async () => {
         globalThis.fetch = vi.fn(async () => {
             throw new Error('network unavailable');
