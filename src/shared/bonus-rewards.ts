@@ -625,7 +625,7 @@ const rewardPerkReadiness = (
 ): Pick<RewardPerkReadinessRow, 'meterPercent' | 'readiness' | 'readinessDetail' | 'readinessLabel'> => {
     switch (id) {
         case 'free_first_swap_per_floor': {
-            const freeSetupAvailable = run.regionShuffleFreeThisFloor || run.regionShuffleCharges > 0;
+            const freeSetupAvailable = run.regionShuffleFreeThisFloor || nonNegativeFiniteAmount(run.regionShuffleCharges) > 0;
             return freeSetupAvailable
                 ? {
                       meterPercent: 100,
@@ -648,7 +648,7 @@ const rewardPerkReadiness = (
                 readinessLabel: 'Needs Echo + Conduit'
             };
         case 'trait_streak_toolkit': {
-            const streak = Math.max(0, Math.floor(run.stats.currentStreak ?? 0));
+            const streak = nonNegativeFiniteAmount(run.stats.currentStreak);
             const progress = Math.min(2, streak);
             return progress >= 2
                 ? {

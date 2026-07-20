@@ -551,6 +551,29 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         });
     });
 
+    it('normalizes malformed reward perk readiness counters before projecting rows', () => {
+        const rows = getRewardPerkReadinessRows({
+            ...makeRun(),
+            activeContract: null,
+            matchResolutionsThisFloor: 0,
+            regionShuffleCharges: Number.POSITIVE_INFINITY,
+            regionShuffleFreeThisFloor: false,
+            rewardPerkIds: ['free_first_swap_per_floor', 'trait_streak_toolkit'],
+            stats: { ...makeRun().stats, currentStreak: Number.NaN }
+        });
+
+        expect(rows.find((row) => row.id === 'free_first_swap_per_floor')).toMatchObject({
+            readiness: 'spent',
+            readinessLabel: 'Prime spent'
+        });
+        expect(rows.find((row) => row.id === 'trait_streak_toolkit')).toMatchObject({
+            meterPercent: 0,
+            readiness: 'soon',
+            readinessLabel: '0/2 chain'
+        });
+        expect(rows.map((row) => `${row.readinessLabel} ${row.readinessDetail}`).join(' ')).not.toMatch(/NaN|Infinity/);
+    });
+
     it('resolves a saved reward instance even when the current route roll picks another candidate', () => {
         const instanceId = `${GAME_RULES_VERSION}:75008:5:bonus_shards`;
         const resolved = resolveBonusRewardRoomByInstanceId({
