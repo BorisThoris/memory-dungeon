@@ -34,6 +34,9 @@ export interface ChallengeModeGateRow {
 const puzzleCompleted = (save: SaveData, puzzleId: string): boolean =>
     save.playerStats?.puzzleCompletions?.[puzzleId]?.completed === true;
 
+const nonNegativeChallengeProgressCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const gateIdForMode = (mode: RunModeDefinition): ChallengeGateId => {
     if (mode.id === 'classic') return 'classic_open';
     if (mode.id === 'daily') return 'daily_local_seed';
@@ -47,7 +50,7 @@ const gateIdForMode = (mode: RunModeDefinition): ChallengeGateId => {
 
 const rowForMode = (save: SaveData, mode: RunModeDefinition): ChallengeModeGateRow => {
     const firstClear = save.achievements.ACH_FIRST_CLEAR ? 1 : 0;
-    const dailies = save.playerStats?.dailiesCompleted ?? 0;
+    const dailies = nonNegativeChallengeProgressCount(save.playerStats?.dailiesCompleted);
     const starterPuzzleDone = puzzleCompleted(save, 'starter_pairs') ? 1 : 0;
     const gateId = gateIdForMode(mode);
 

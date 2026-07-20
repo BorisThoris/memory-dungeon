@@ -20,16 +20,19 @@ export interface ObjectiveBoardItem {
     reward: string;
 }
 
+const nonNegativeObjectiveBoardCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const relicPickTotal = (save: SaveData): number =>
-    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
+    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + nonNegativeObjectiveBoardCount(count), 0);
 
 export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => {
     const ps = save.playerStats;
     const last = save.lastRunSummary;
-    const dailies = ps?.dailiesCompleted ?? 0;
-    const bestNoPowers = ps?.bestFloorNoPowers ?? 0;
+    const dailies = nonNegativeObjectiveBoardCount(ps?.dailiesCompleted);
+    const bestNoPowers = nonNegativeObjectiveBoardCount(ps?.bestFloorNoPowers);
     const relicPicks = relicPickTotal(save);
-    const gauntletClears = last?.gameMode === 'gauntlet' ? (last.levelsCleared ?? 0) : 0;
+    const gauntletClears = last?.gameMode === 'gauntlet' ? nonNegativeObjectiveBoardCount(last.levelsCleared) : 0;
 
     return [
         {
@@ -78,8 +81,8 @@ export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => 
 export const getObjectiveBoardItems = (save: SaveData): ObjectiveBoardItem[] => {
     const ps = save.playerStats;
     const firstClear = save.achievements.ACH_FIRST_CLEAR;
-    const dailies = ps?.dailiesCompleted ?? 0;
-    const bestNoPowers = ps?.bestFloorNoPowers ?? 0;
+    const dailies = nonNegativeObjectiveBoardCount(ps?.dailiesCompleted);
+    const bestNoPowers = nonNegativeObjectiveBoardCount(ps?.bestFloorNoPowers);
     return [
         {
             id: 'first_clear',
@@ -135,9 +138,6 @@ export interface RunObjectiveProgressRow {
     detail: string;
 }
 
-const nonNegativeRunObjectiveCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgressRow[] => {
     const rows: RunObjectiveProgressRow[] = [];
     if (run.board?.featuredObjectiveId) {
@@ -158,8 +158,8 @@ export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgre
         });
     }
     if (run.activeContract?.maxPinsTotalRun != null) {
-        const pinsPlacedCountThisRun = nonNegativeRunObjectiveCount(run.pinsPlacedCountThisRun);
-        const maxPinsTotalRun = nonNegativeRunObjectiveCount(run.activeContract.maxPinsTotalRun);
+        const pinsPlacedCountThisRun = nonNegativeObjectiveBoardCount(run.pinsPlacedCountThisRun);
+        const maxPinsTotalRun = nonNegativeObjectiveBoardCount(run.activeContract.maxPinsTotalRun);
         rows.push({
             id: 'pin_vow',
             label: 'Pin vow',

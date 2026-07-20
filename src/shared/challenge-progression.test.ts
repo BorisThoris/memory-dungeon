@@ -46,6 +46,21 @@ describe('REG-081 challenge mode progression gates', () => {
         expect(gate?.lockReason).toContain('First clear');
     });
 
+    it('normalizes malformed daily counters before projecting challenge gates', () => {
+        const save = createDefaultSaveData();
+        save.playerStats = {
+            ...save.playerStats!,
+            dailiesCompleted: Number.POSITIVE_INFINITY
+        };
+
+        const daily = getChallengeModeProgressionRows(save).find((row) => row.modeId === 'daily');
+
+        expect(daily).toMatchObject({
+            status: 'unlocked',
+            progress: { current: 0, target: 1 }
+        });
+    });
+
     it('summarizes the next challenge lane from the current profile difficulty tier', () => {
         const fresh = createDefaultSaveData();
         const freshSummary = getChallengeModeMotivationSummary(fresh);

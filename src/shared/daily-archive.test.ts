@@ -79,6 +79,40 @@ describe('REG-083 daily weekly season archive', () => {
         expect(share).not.toMatch(/rank|leaderboard|account/i);
     });
 
+    it('normalizes malformed archive counters before building summaries and share strings', () => {
+        const save = createDefaultSaveData();
+        save.bestScore = Number.POSITIVE_INFINITY;
+        save.playerStats = {
+            ...save.playerStats!,
+            dailiesCompleted: Number.POSITIVE_INFINITY,
+            dailyStreakCosmetic: Number.NaN,
+            lastDailyDateKeyUtc: '20260425'
+        };
+        save.lastRunSummary = {
+            totalScore: Number.POSITIVE_INFINITY,
+            bestScore: 0,
+            levelsCleared: Number.NaN,
+            highestLevel: Number.POSITIVE_INFINITY,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: 0,
+            perfectClears: 0,
+            gameMode: 'daily',
+            dailyDateKeyUtc: '20260425'
+        };
+
+        const summary = getDailyArchiveSummary(save);
+        const share = buildDailyArchiveShareString(save);
+        const loopRows = buildDailyResultsLoopRows(save);
+
+        expect(summary.completedDailies).toBe(0);
+        expect(summary.currentStreak).toBe(0);
+        expect(share).toContain('0 pts · 0 clear(s)');
+        expect(share).not.toMatch(/NaN|Infinity/);
+        expect(loopRows[0]?.currentAttempt).toBe('0 score · floor 0 · 0 clear(s)');
+        expect(loopRows[0]?.personalBest).toBe('0 all-mode best · 0 daily clear(s)');
+    });
+
     it('rejects impossible compact UTC keys instead of rolling them into archive windows', () => {
         expect(weekKeyForDaily('20260231')).toBe('week:none');
         expect(seasonKeyForDaily('20261301')).toBe('season:none');
