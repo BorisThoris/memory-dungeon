@@ -577,6 +577,18 @@ describe('save normalization', () => {
             normalizeSaveData({
                 lastRunSummary: {
                     ...normalized.lastRunSummary!,
+                    payoffPickupClaimed: 7,
+                    payoffPickupTotal: 3
+                }
+            }).lastRunSummary
+        ).toMatchObject({
+            payoffPickupClaimed: 3,
+            payoffPickupTotal: 3
+        });
+        expect(
+            normalizeSaveData({
+                lastRunSummary: {
+                    ...normalized.lastRunSummary!,
                     payoffRouteRewardText: 'x'.repeat(300)
                 }
             }).lastRunSummary?.payoffRouteRewardText

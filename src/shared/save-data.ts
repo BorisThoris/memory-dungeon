@@ -350,10 +350,17 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         : source.startingLoadoutId === null
           ? null
           : undefined;
-    const payoffPickupClaimed =
+    const payoffPickupClaimedRaw =
         source.payoffPickupClaimed === undefined ? undefined : finiteNonNegativeInteger(source.payoffPickupClaimed, Number.NaN);
     const payoffPickupTotal =
         source.payoffPickupTotal === undefined ? undefined : finiteNonNegativeInteger(source.payoffPickupTotal, Number.NaN);
+    const payoffPickupClaimed =
+        typeof payoffPickupClaimedRaw === 'number' &&
+        typeof payoffPickupTotal === 'number' &&
+        Number.isFinite(payoffPickupClaimedRaw) &&
+        Number.isFinite(payoffPickupTotal)
+            ? Math.min(payoffPickupClaimedRaw, payoffPickupTotal)
+            : payoffPickupClaimedRaw;
     const payoffPressureExtra =
         source.payoffPressureExtra === undefined ? undefined : finiteNonNegativeInteger(source.payoffPressureExtra, Number.NaN);
     const payoffRewardPerkCount =
