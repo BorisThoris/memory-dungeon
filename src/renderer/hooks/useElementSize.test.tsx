@@ -117,4 +117,18 @@ describe('useElementSize', () => {
 
         expect(frames).toHaveLength(0);
     });
+
+    it('clears the last measurement when the target disappears', () => {
+        const { rerender } = render(
+            <SizeProbe height={50} present version={1} width={100} />
+        );
+
+        act(() => runNextFrame(0));
+        expect(screen.getByTestId('element-size')).toHaveTextContent('100x50');
+
+        rerender(<SizeProbe height={50} present={false} version={1} width={100} />);
+
+        expect(screen.getByTestId('element-size')).toHaveTextContent('unmeasured');
+        expect(frames).toHaveLength(0);
+    });
 });

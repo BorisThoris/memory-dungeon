@@ -10,6 +10,9 @@ export const useElementSize = <T extends HTMLElement>(): [RefCallback<T>, Elemen
     const [size, setSize] = useState<ElementFootprint | null>(null);
     const elementRef = useCallback((nextElement: T | null): void => {
         setElement(nextElement);
+        if (!nextElement) {
+            setSize(null);
+        }
     }, []);
 
     useEffect(() => {
