@@ -115,6 +115,39 @@ describe('floor clear causality presentation', () => {
         });
     });
 
+    it('normalizes malformed floor-result counters before building presentation copy', () => {
+        const rows = getFloorClearCausalityRows(
+            {
+                ...baseResult,
+                mistakes: Number.NaN,
+                scoreGained: Number.POSITIVE_INFINITY,
+                featuredObjectiveId: 'flip_par',
+                featuredObjectiveCompleted: true,
+                objectiveBonusScore: Number.POSITIVE_INFINITY,
+                relicFavorGained: Number.NEGATIVE_INFINITY,
+                endlessRiskWagerOutcome: 'won',
+                endlessRiskWagerFavorGained: Number.NaN,
+                bossTrophyCacheOutcome: 'claimed',
+                bossTrophyCacheScore: Number.NaN,
+                hazardTileTriggers: Number.POSITIVE_INFINITY,
+                recallMatches: Number.NaN,
+                recallMistakes: Number.POSITIVE_INFINITY,
+                recallBonusScore: Number.NaN
+            },
+            false
+        );
+
+        expect(rows.map((row) => row.detail).join(' ')).not.toMatch(/NaN|Infinity/);
+        expect(rows.find((row) => row.id === 'performance_score')?.detail).toBe('Rating S; 0 mistakes; +0 score.');
+        expect(rows.find((row) => row.id === 'featured_objective')?.detail).toBe('Completed for +0 score and +0 Favor.');
+        expect(rows.find((row) => row.id === 'risk_wager')?.detail).toBe('Won for +0 Favor.');
+        expect(rows.find((row) => row.id === 'boss_trophy_cache')?.detail).toBe(
+            'Boss objective completed; trophy cache paid +0 score.'
+        );
+        expect(rows.find((row) => row.id === 'hazard_tiles')).toBeUndefined();
+        expect(rows.find((row) => row.id === 'recall_focus')).toBeUndefined();
+    });
+
     it('summarizes hazard tile triggers by kind', () => {
         const rows = getFloorClearCausalityRows(
             {

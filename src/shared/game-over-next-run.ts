@@ -14,15 +14,24 @@ export interface GameOverNextRunRow {
     localOnly: true;
 }
 
+const nonNegativeNextRunCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const itemCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
+
 const runItBackDetail = (summary: RunSummary | null, run: RunState): string => {
     if (!summary) {
         return 'Complete a run to unlock a restart recommendation.';
     }
-    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
-    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
+    const pickupClaimed = nonNegativeNextRunCount(run.findablesClaimedThisFloor);
+    const pickupTotal = nonNegativeNextRunCount(run.findablesTotalThisFloor);
+    const totalScore = nonNegativeNextRunCount(summary.totalScore);
+    const highestLevel = nonNegativeNextRunCount(summary.highestLevel);
+    const levelsCleared = nonNegativeNextRunCount(summary.levelsCleared);
+    const bestStreak = nonNegativeNextRunCount(summary.bestStreak);
     const pickupCopy = pickupTotal > 0 ? ` / pickups ${pickupClaimed}/${pickupTotal}` : '';
-    const chainCopy = summary.bestStreak > 0 ? ` / best chain x${summary.bestStreak}` : ' / chain not started';
-    return `${summary.totalScore.toLocaleString()} score / floor ${summary.highestLevel} / ${summary.levelsCleared} clear(s)${chainCopy}${pickupCopy}`;
+    const chainCopy = bestStreak > 0 ? ` / best chain x${bestStreak}` : ' / chain not started';
+    return `${totalScore.toLocaleString()} score / floor ${highestLevel} / ${levelsCleared} clear(s)${chainCopy}${pickupCopy}`;
 };
 
 const getChainTargetRow = (summary: RunSummary | null): GameOverNextRunRow => {
@@ -70,8 +79,10 @@ const modeLabel = (summary: RunSummary): string => {
 const getFallbackNextGoalRow = (summary: RunSummary | null): GameOverNextRunRow => ({
     id: 'next_goal',
     title: 'Next goal',
-    value: summary && summary.highestLevel < 5 ? 'Reach floor 5' : 'Push a cleaner run',
-    detail: summary?.perfectClears ? `${summary.perfectClears} perfect floor(s) logged.` : 'Perfect floors and no-assist runs unlock mastery.',
+    value: summary && nonNegativeNextRunCount(summary.highestLevel) < 5 ? 'Reach floor 5' : 'Push a cleaner run',
+    detail: nonNegativeNextRunCount(summary?.perfectClears) > 0
+        ? `${nonNegativeNextRunCount(summary?.perfectClears)} perfect floor(s) logged.`
+        : 'Perfect floors and no-assist runs unlock mastery.',
     actionHint: 'Choose Classic for long-run progression or Daily for UTC archive progress.',
     localOnly: true
 });
@@ -107,8 +118,8 @@ const getMetaNextGoalRow = (save: SaveData, previousSave?: SaveData): GameOverNe
 export const getGameOverNextRunRows = (run: RunState, save?: SaveData, previousSave?: SaveData): GameOverNextRunRow[] => {
     const summary = run.lastRunSummary;
     const runLabel = summary ? modeLabel(summary) : 'No completed run';
-    const relicCount = summary?.relicIds?.length ?? run.relicIds.length;
-    const mutatorCount = summary?.activeMutators?.length ?? run.activeMutators.length;
+    const relicCount = summary ? itemCount(summary.relicIds) : itemCount(run.relicIds);
+    const mutatorCount = summary ? itemCount(summary.activeMutators) : itemCount(run.activeMutators);
     const buildCount = `${relicCount} relic(s) / ${mutatorCount} mutator(s)`;
     const activeContract = summary?.activeContract ?? run.activeContract;
     const startingLoadout = getStartingLoadoutDefinition(summary?.startingLoadoutId ?? run.startingLoadoutId);

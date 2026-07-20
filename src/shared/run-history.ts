@@ -99,6 +99,13 @@ const contractLabel = (run: Pick<RunState, 'activeContract' | 'practiceMode'>): 
 const idLabel = (id: string | null | undefined): string | null =>
     id ? id.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()) : null;
 
+const summaryScoreCopy = (summary: RunSummary): string => {
+    const totalScore = nonNegativeRunHistoryCount(summary.totalScore);
+    const highestLevel = nonNegativeRunHistoryCount(summary.highestLevel);
+    const levelsCleared = nonNegativeRunHistoryCount(summary.levelsCleared);
+    return `${totalScore} score · floor ${highestLevel} · ${levelsCleared} clears`;
+};
+
 const currentDungeonNode = (dungeonRun: DungeonRunMapState): DungeonRunNode | null =>
     dungeonRun.nodes.find((node) => node.id === dungeonRun.currentNodeId) ?? null;
 
@@ -256,9 +263,7 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
         {
             id: 'summary',
             label: 'Run summary',
-            value: summary
-                ? `${summary.totalScore} score · floor ${summary.highestLevel} · ${summary.levelsCleared} clears`
-                : 'No resolved summary yet',
+            value: summary ? summaryScoreCopy(summary) : 'No resolved summary yet',
             persistence: 'persisted_summary',
             exportSafe: true,
             offlineOnly: true
@@ -335,7 +340,7 @@ export const buildRunJournalRowsFromSave = (save: SaveData): RunHistoryJournalRo
             id: 'last_summary',
             label: 'Last run summary',
             value: summary
-                ? `${summary.gameMode ?? 'classic'} · ${summary.totalScore} score · floor ${summary.highestLevel}`
+                ? `${summary.gameMode ?? 'classic'} · ${nonNegativeRunHistoryCount(summary.totalScore)} score · floor ${nonNegativeRunHistoryCount(summary.highestLevel)}`
                 : 'No persisted run summary',
             persistence: 'persisted_summary',
             exportSafe: true
@@ -372,9 +377,11 @@ export const buildRunHistoryExportString = (run: RunState): string => {
         .filter((row) => row.id.startsWith('dungeon_') && row.exportSafe)
         .slice(0, 3)
         .map((row) => `${row.label}: ${row.value}`);
+    const highestLevel = nonNegativeRunHistoryCount(summary.highestLevel);
+    const totalScore = nonNegativeRunHistoryCount(summary.totalScore);
     return [
-        `Run ${summary.gameMode ?? 'classic'} floor ${summary.highestLevel}`,
-        `${summary.totalScore} local score`,
+        `Run ${summary.gameMode ?? 'classic'} floor ${highestLevel}`,
+        `${totalScore} local score`,
         `build ${entry.build.relicIds.length} relics/${entry.build.mutatorIds.length} mutators`,
         ...dungeonRows,
         entry.share.shareSupported ? `share ${entry.share.shareKey}` : 'share unavailable',

@@ -40,17 +40,49 @@ const clearLifeDetail = (result: LevelResult): string | null => {
 
 const withAtmosphere = (mechanicDetail: string, atmosphere: string): string => `${mechanicDetail} ${atmosphere}`;
 
+const nonNegativePresentationCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const getFloorClearCausalityRows = (
     result: LevelResult,
     powersUsedThisRun: boolean,
     floorIdentity?: FloorIdentityContract | null
 ): FloorClearCausalityRow[] => {
+    const mistakes = nonNegativePresentationCount(result.mistakes);
+    const scoreGained = nonNegativePresentationCount(result.scoreGained);
+    const objectiveBonusScore = nonNegativePresentationCount(result.objectiveBonusScore);
+    const relicFavorGained = nonNegativePresentationCount(result.relicFavorGained);
+    const endlessRiskWagerFavorGained = nonNegativePresentationCount(result.endlessRiskWagerFavorGained);
+    const endlessRiskWagerStreakLost = nonNegativePresentationCount(result.endlessRiskWagerStreakLost);
+    const bossTrophyCacheScore = nonNegativePresentationCount(result.bossTrophyCacheScore);
+    const hazardTileTriggers = nonNegativePresentationCount(result.hazardTileTriggers);
+    const hazardShuffleSnares = nonNegativePresentationCount(result.hazardShuffleSnares);
+    const hazardCascadeCaches = nonNegativePresentationCount(result.hazardCascadeCaches);
+    const hazardMirrorDecoys = nonNegativePresentationCount(result.hazardMirrorDecoys);
+    const hazardFragileCacheClaims = nonNegativePresentationCount(result.hazardFragileCacheClaims);
+    const hazardFragileCacheBreaks = nonNegativePresentationCount(result.hazardFragileCacheBreaks);
+    const hazardTollCaches = nonNegativePresentationCount(result.hazardTollCaches);
+    const hazardFuseCaches = nonNegativePresentationCount(result.hazardFuseCaches);
+    const hazardFuseCacheExpiredClaims = nonNegativePresentationCount(result.hazardFuseCacheExpiredClaims);
+    const lanternWardScouts = nonNegativePresentationCount(result.lanternWardScouts);
+    const omenSealScouts = nonNegativePresentationCount(result.omenSealScouts);
+    const mimicCacheClaims = nonNegativePresentationCount(result.mimicCacheClaims);
+    const mimicCacheBites = nonNegativePresentationCount(result.mimicCacheBites);
+    const anchorSealUses = nonNegativePresentationCount(result.anchorSealUses);
+    const loadedGatewayPlans = nonNegativePresentationCount(result.loadedGatewayPlans);
+    const catalystAltarUpgrades = nonNegativePresentationCount(result.catalystAltarUpgrades);
+    const parasiteVesselConversions = nonNegativePresentationCount(result.parasiteVesselConversions);
+    const pinLatticeRewards = nonNegativePresentationCount(result.pinLatticeRewards);
+    const safeHazardWardsUsed = nonNegativePresentationCount(result.safeHazardWardsUsed);
+    const recallMatches = nonNegativePresentationCount(result.recallMatches);
+    const recallMistakes = nonNegativePresentationCount(result.recallMistakes);
+    const recallBonusScore = nonNegativePresentationCount(result.recallBonusScore);
     const rows: FloorClearCausalityRow[] = [
         {
             id: 'performance_score',
             group: 'performance',
             label: 'Performance',
-            detail: `Rating ${result.rating}; ${result.mistakes} mistake${result.mistakes === 1 ? '' : 's'}; +${result.scoreGained.toLocaleString()} score.`,
+            detail: `Rating ${result.rating}; ${mistakes} mistake${mistakes === 1 ? '' : 's'}; +${scoreGained.toLocaleString()} score.`,
             tokens: result.perfect ? ['safe', 'reward'] : ['risk', 'reward']
         }
     ];
@@ -82,7 +114,7 @@ export const getFloorClearCausalityRows = (
             group: 'objective',
             label: objectiveLabel(result.featuredObjectiveId),
             detail: result.featuredObjectiveCompleted
-                ? `Completed for +${result.objectiveBonusScore ?? 0} score and +${result.relicFavorGained ?? 0} Favor.`
+                ? `Completed for +${objectiveBonusScore} score and +${relicFavorGained} Favor.`
                 : 'Missed this floor; streak pressure updated.',
             tokens: result.featuredObjectiveCompleted ? ['objective', 'reward', 'momentum'] : ['objective', 'forfeit', 'risk']
         });
@@ -95,8 +127,8 @@ export const getFloorClearCausalityRows = (
             label: 'Risk wager',
             detail:
                 result.endlessRiskWagerOutcome === 'won'
-                    ? `Won for +${result.endlessRiskWagerFavorGained ?? 0} Favor.`
-                    : `Lost; streak reduced by ${result.endlessRiskWagerStreakLost ?? 0}.`,
+                    ? `Won for +${endlessRiskWagerFavorGained} Favor.`
+                    : `Lost; streak reduced by ${endlessRiskWagerStreakLost}.`,
             tokens: result.endlessRiskWagerOutcome === 'won' ? ['risk', 'reward', 'momentum'] : ['risk', 'forfeit']
         });
     }
@@ -108,7 +140,7 @@ export const getFloorClearCausalityRows = (
             label: 'Boss trophy',
             detail:
                 result.bossTrophyCacheOutcome === 'claimed'
-                    ? `Boss objective completed; trophy cache paid +${result.bossTrophyCacheScore ?? 0} score.`
+                    ? `Boss objective completed; trophy cache paid +${bossTrophyCacheScore} score.`
                     : 'Boss objective unresolved; trophy cache was forfeited.',
             tokens:
                 result.bossTrophyCacheOutcome === 'claimed'
@@ -117,22 +149,22 @@ export const getFloorClearCausalityRows = (
         });
     }
 
-    if (result.hazardTileTriggers) {
+    if (hazardTileTriggers > 0) {
         const parts = [
-            result.hazardShuffleSnares ? `${result.hazardShuffleSnares} snare shuffle${result.hazardShuffleSnares === 1 ? '' : 's'}` : null,
-            result.hazardCascadeCaches ? `${result.hazardCascadeCaches} cascade clear${result.hazardCascadeCaches === 1 ? '' : 's'}` : null,
-            result.hazardMirrorDecoys ? `${result.hazardMirrorDecoys} mirror decoy read${result.hazardMirrorDecoys === 1 ? '' : 's'}` : null,
-            result.hazardFragileCacheClaims
-                ? `${result.hazardFragileCacheClaims} fragile cache claim${result.hazardFragileCacheClaims === 1 ? '' : 's'}`
+            hazardShuffleSnares > 0 ? `${hazardShuffleSnares} snare shuffle${hazardShuffleSnares === 1 ? '' : 's'}` : null,
+            hazardCascadeCaches > 0 ? `${hazardCascadeCaches} cascade clear${hazardCascadeCaches === 1 ? '' : 's'}` : null,
+            hazardMirrorDecoys > 0 ? `${hazardMirrorDecoys} mirror decoy read${hazardMirrorDecoys === 1 ? '' : 's'}` : null,
+            hazardFragileCacheClaims > 0
+                ? `${hazardFragileCacheClaims} fragile cache claim${hazardFragileCacheClaims === 1 ? '' : 's'}`
                 : null,
-            result.hazardFragileCacheBreaks
-                ? `${result.hazardFragileCacheBreaks} fragile cache break${result.hazardFragileCacheBreaks === 1 ? '' : 's'}`
+            hazardFragileCacheBreaks > 0
+                ? `${hazardFragileCacheBreaks} fragile cache break${hazardFragileCacheBreaks === 1 ? '' : 's'}`
                 : null,
-            result.hazardTollCaches ? `${result.hazardTollCaches} toll cache claim${result.hazardTollCaches === 1 ? '' : 's'}` : null,
-            result.hazardFuseCaches
-                ? `${result.hazardFuseCaches} fuse cache claim${result.hazardFuseCaches === 1 ? '' : 's'}${
-                      result.hazardFuseCacheExpiredClaims
-                          ? ` (${result.hazardFuseCacheExpiredClaims} late)`
+            hazardTollCaches > 0 ? `${hazardTollCaches} toll cache claim${hazardTollCaches === 1 ? '' : 's'}` : null,
+            hazardFuseCaches > 0
+                ? `${hazardFuseCaches} fuse cache claim${hazardFuseCaches === 1 ? '' : 's'}${
+                      hazardFuseCacheExpiredClaims > 0
+                          ? ` (${hazardFuseCacheExpiredClaims} late)`
                           : ''
                   }`
                 : null
@@ -142,129 +174,126 @@ export const getFloorClearCausalityRows = (
             group: 'hazard',
             label: 'Hazard tiles',
             detail: withAtmosphere(
-                parts.length > 0 ? parts.join('; ') + '.' : `${result.hazardTileTriggers} hazard trigger${result.hazardTileTriggers === 1 ? '' : 's'}.`,
+                parts.length > 0 ? parts.join('; ') + '.' : `${hazardTileTriggers} hazard trigger${hazardTileTriggers === 1 ? '' : 's'}.`,
                 'Hazard marks woke under the cards.'
             ),
             tokens: ['risk', 'hidden_known', 'momentum']
         });
     }
 
-    if (result.lanternWardScouts) {
+    if (lanternWardScouts > 0) {
         rows.push({
             id: 'lantern_ward_scouts',
             group: 'reward',
             label: 'Lantern Ward',
             detail: withAtmosphere(
-                `${result.lanternWardScouts} lantern scout${result.lanternWardScouts === 1 ? '' : 's'} identified hidden danger or mystery information.`,
+                `${lanternWardScouts} lantern scout${lanternWardScouts === 1 ? '' : 's'} identified hidden danger or mystery information.`,
                 'The light left a readable mark in the room log.'
             ),
             tokens: ['safe', 'hidden_known', 'reward']
         });
     }
 
-    if (result.omenSealScouts) {
+    if (omenSealScouts > 0) {
         rows.push({
             id: 'omen_seal_scouts',
             group: 'reward',
             label: 'Omen Seal',
             detail: withAtmosphere(
-                `${result.omenSealScouts} omen scout${result.omenSealScouts === 1 ? '' : 's'} revealed hidden danger or mystery information.`,
+                `${omenSealScouts} omen scout${omenSealScouts === 1 ? '' : 's'} revealed hidden danger or mystery information.`,
                 'The seal wrote the warning before the cards forgot it.'
             ),
             tokens: ['hidden_known', 'reward', 'risk']
         });
     }
 
-    if (result.mimicCacheClaims) {
+    if (mimicCacheClaims > 0) {
         rows.push({
             id: 'mimic_cache_claims',
-            group: result.mimicCacheBites ? 'hazard' : 'reward',
+            group: mimicCacheBites > 0 ? 'hazard' : 'reward',
             label: 'Mimic Cache',
-            detail: `${result.mimicCacheClaims} mimic cache claim${result.mimicCacheClaims === 1 ? '' : 's'}${
-                result.mimicCacheBites
-                    ? `; ${result.mimicCacheBites} bite${result.mimicCacheBites === 1 ? '' : 's'} triggered reduced loot`
+            detail: `${mimicCacheClaims} mimic cache claim${mimicCacheClaims === 1 ? '' : 's'}${
+                mimicCacheBites > 0
+                    ? `; ${mimicCacheBites} bite${mimicCacheBites === 1 ? '' : 's'} triggered reduced loot`
                     : '; all controlled for full loot'
             }.`,
-            tokens: result.mimicCacheBites ? ['risk', 'reward', 'forfeit'] : ['hidden_known', 'reward', 'safe']
+            tokens: mimicCacheBites > 0 ? ['risk', 'reward', 'forfeit'] : ['hidden_known', 'reward', 'safe']
         });
     }
 
-    if (result.anchorSealUses) {
+    if (anchorSealUses > 0) {
         rows.push({
             id: 'anchor_seal_uses',
             group: 'assist',
             label: 'Anchor Seal',
-            detail: `${result.anchorSealUses} pressure rotation${result.anchorSealUses === 1 ? '' : 's'} frozen.`,
+            detail: `${anchorSealUses} pressure rotation${anchorSealUses === 1 ? '' : 's'} frozen.`,
             tokens: ['safe', 'resolved', 'risk']
         });
     }
 
-    if (result.loadedGatewayPlans) {
+    if (loadedGatewayPlans > 0) {
         rows.push({
             id: 'loaded_gateway_plans',
             group: 'reward',
             label: 'Loaded Gateway',
-            detail: `${result.loadedGatewayPlans} deterministic route branch${result.loadedGatewayPlans === 1 ? '' : 'es'} loaded.`,
+            detail: `${loadedGatewayPlans} deterministic route branch${loadedGatewayPlans === 1 ? '' : 'es'} loaded.`,
             tokens: ['risk', 'reward', 'hidden_known']
         });
     }
 
-    if (result.catalystAltarUpgrades) {
+    if (catalystAltarUpgrades > 0) {
         rows.push({
             id: 'catalyst_altar_upgrades',
             group: 'reward',
             label: 'Catalyst Altar',
-            detail: `${result.catalystAltarUpgrades} shard upgrade${result.catalystAltarUpgrades === 1 ? '' : 's'} converted into reward.`,
+            detail: `${catalystAltarUpgrades} shard upgrade${catalystAltarUpgrades === 1 ? '' : 's'} converted into reward.`,
             tokens: ['cost', 'reward', 'momentum']
         });
     }
 
-    if (result.parasiteVesselConversions) {
+    if (parasiteVesselConversions > 0) {
         rows.push({
             id: 'parasite_vessel_conversions',
             group: 'assist',
             label: 'Parasite Vessel',
-            detail: `${result.parasiteVesselConversions} parasite pressure conversion${result.parasiteVesselConversions === 1 ? '' : 's'} resolved.`,
+            detail: `${parasiteVesselConversions} parasite pressure conversion${parasiteVesselConversions === 1 ? '' : 's'} resolved.`,
             tokens: ['risk', 'reward', 'momentum']
         });
     }
 
-    if (result.pinLatticeRewards) {
+    if (pinLatticeRewards > 0) {
         rows.push({
             id: 'pin_lattice_rewards',
             group: 'reward',
             label: 'Pin Lattice',
-            detail: `${result.pinLatticeRewards} deliberate pin payoff${result.pinLatticeRewards === 1 ? '' : 's'} claimed.`,
+            detail: `${pinLatticeRewards} deliberate pin payoff${pinLatticeRewards === 1 ? '' : 's'} claimed.`,
             tokens: ['hidden_known', 'momentum', 'cost']
         });
     }
 
-    if (result.safeHazardWardsUsed) {
+    if (safeHazardWardsUsed > 0) {
         rows.push({
             id: 'safe_hazard_wards',
             group: 'assist',
             label: 'Guard Cache ward',
             detail: withAtmosphere(
-                `${result.safeHazardWardsUsed} hazard ward${result.safeHazardWardsUsed === 1 ? '' : 's'} blocked a snare or fragile cache break.`,
+                `${safeHazardWardsUsed} hazard ward${safeHazardWardsUsed === 1 ? '' : 's'} blocked a snare or fragile cache break.`,
                 'The room kept one guarded memory intact.'
             ),
             tokens: ['safe', 'risk', 'hidden_known']
         });
     }
 
-    if (result.recallMatches || result.recallMistakes || result.recallBonusScore) {
-        const matchCount = result.recallMatches ?? 0;
-        const mistakeCount = result.recallMistakes ?? 0;
-        const score = result.recallBonusScore ?? 0;
+    if (recallMatches > 0 || recallMistakes > 0 || recallBonusScore > 0) {
         rows.push({
             id: 'recall_focus',
             group: 'performance',
             label: 'Recall focus',
             detail: withAtmosphere(
-                `${matchCount} remembered match${matchCount === 1 ? '' : 'es'}; ${mistakeCount} recall lapse${mistakeCount === 1 ? '' : 's'}; +${score.toLocaleString()} memory score.`,
+                `${recallMatches} remembered match${recallMatches === 1 ? '' : 'es'}; ${recallMistakes} recall lapse${recallMistakes === 1 ? '' : 's'}; +${recallBonusScore.toLocaleString()} memory score.`,
                 'Room log updated.'
             ),
-            tokens: mistakeCount > 0 ? ['momentum', 'risk', 'reward'] : ['momentum', 'safe', 'reward']
+            tokens: recallMistakes > 0 ? ['momentum', 'risk', 'reward'] : ['momentum', 'safe', 'reward']
         });
     }
 

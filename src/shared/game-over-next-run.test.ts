@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { RunSummary } from './contracts';
 import { createDungeonShowcaseRun, createNewRun, createRunSummary, finishMemorizePhase } from './game-core';
 import { getGameOverNextRunRows } from './game-over-next-run';
 import { createDefaultSaveData } from './save-data';
@@ -77,6 +78,35 @@ describe('REG-096 game over next-run loop', () => {
         const row = getGameOverNextRunRows(normalized).find((entry) => entry.id === 'build_recap');
 
         expect(row?.value).toBe('2 relic(s) / 2 mutator(s)');
+    });
+
+    it('normalizes malformed terminal summary counters before building next-run rows', () => {
+        const source = finishMemorizePhase(createNewRun(0));
+        const run = createRunSummary({ ...source, status: 'gameOver', lives: 0 }, []);
+        run.findablesClaimedThisFloor = Number.POSITIVE_INFINITY;
+        run.findablesTotalThisFloor = Number.NaN;
+        run.lastRunSummary = {
+            ...run.lastRunSummary!,
+            totalScore: Number.NaN,
+            highestLevel: Number.POSITIVE_INFINITY,
+            levelsCleared: Number.NaN,
+            bestStreak: Number.POSITIVE_INFINITY,
+            perfectClears: Number.NaN,
+            relicIds: Number.NaN,
+            activeMutators: Number.POSITIVE_INFINITY
+        } as unknown as RunSummary;
+
+        const rows = getGameOverNextRunRows(run);
+
+        expect(rows.map((row) => `${row.value} ${row.detail}`).join(' ')).not.toMatch(/NaN|Infinity/);
+        expect(rows.find((row) => row.id === 'run_it_back')?.detail).toBe(
+            '0 score / floor 0 / 0 clear(s) / chain not started'
+        );
+        expect(rows.find((row) => row.id === 'build_recap')?.value).toBe('0 relic(s) / 0 mutator(s)');
+        expect(rows.find((row) => row.id === 'next_goal')).toMatchObject({
+            value: 'Reach floor 5',
+            detail: 'Perfect floors and no-assist runs unlock mastery.'
+        });
     });
 
     it('summarizes starting loadout identity in the build recap', () => {
