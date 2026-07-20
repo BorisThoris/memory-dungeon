@@ -53,7 +53,11 @@ describe('seed sweep CLI options', () => {
 
     it('generates the established deterministic stress sequence', () => {
         expect(generateDeterministicStressSeeds(3, 42_001)).toEqual([432_012, 425_003, 878_670]);
+        expect(generateDeterministicStressSeeds(3.9, Number.POSITIVE_INFINITY)).toEqual([
+            828_748, 35_467, 583_038
+        ]);
         expect(generateDeterministicStressSeeds(0, 42_001)).toEqual([]);
+        expect(generateDeterministicStressSeeds(Number.POSITIVE_INFINITY, 42_001)).toEqual([]);
     });
 
     it('gives a positive stress sweep precedence over explicit seeds', () => {

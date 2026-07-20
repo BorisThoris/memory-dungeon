@@ -31,8 +31,9 @@ export const readPositiveFlooredNumericCliArg = (argv: readonly string[], name: 
 
 export const generateDeterministicStressSeeds = (count: number, baseSeed: number): number[] => {
     const seeds: number[] = [];
-    let state = Math.max(1, Math.floor(baseSeed)) >>> 0;
-    for (let index = 0; index < count; index += 1) {
+    const safeCount = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+    let state = (Number.isFinite(baseSeed) ? Math.max(1, Math.floor(baseSeed)) : 1) >>> 0;
+    for (let index = 0; index < safeCount; index += 1) {
         state = (Math.imul(state, 1_664_525) + 1_013_904_223) >>> 0;
         seeds.push(10_000 + (state % 990_000));
     }
