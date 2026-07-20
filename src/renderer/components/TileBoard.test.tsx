@@ -613,6 +613,42 @@ describe('TileBoard touch and click controls', () => {
         });
     });
 
+    it('drops queued keyboard focus text after the board application blurs first', async () => {
+        const pendingMicrotasks: VoidFunction[] = [];
+        const queueMicrotaskSpy = vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
+            pendingMicrotasks.push(callback);
+        });
+        const rendered = renderBoard({
+            board,
+            debugPeekActive: false,
+            interactive: true,
+            onTileSelect: vi.fn(),
+            previewActive: false,
+            reduceMotion: false
+        });
+
+        try {
+            pendingMicrotasks.length = 0;
+            const app = screen.getByTestId('tile-board-application');
+            fireEvent.focus(app);
+            const staleCallbacks = pendingMicrotasks.splice(0);
+
+            fireEvent.blur(app);
+
+            await act(async () => {
+                for (const callback of staleCallbacks) {
+                    callback();
+                    await Promise.resolve();
+                }
+            });
+
+            expect(screen.getByTestId('tile-board-live-region')).toBeEmptyDOMElement();
+        } finally {
+            rendered.unmount();
+            queueMicrotaskSpy.mockRestore();
+        }
+    });
+
     it('shows a visible trait combo preview when the focused tile has nearby trait interactions', async () => {
         renderBoard({
             board: {

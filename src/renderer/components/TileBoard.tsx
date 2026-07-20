@@ -3040,7 +3040,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         : undefined;
 
     useEffect(() => {
+        let active = true;
         queueMicrotask(() => {
+            if (!active) {
+                return;
+            }
             if (!focusedTileLabel) {
                 setBoardLiveMessage('');
                 return;
@@ -3066,6 +3070,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 `Focus: ${focusedTileLabel}${bestOpportunityLiveText}${rewardLeadLiveText}${traitModeLiveText}${boardOpportunityLaneMapLiveText}${stackLiveText}${chainLiveText}`
             );
         });
+        return () => {
+            active = false;
+        };
     }, [
         boardChainAccessibilitySummary,
         boardOpportunityCompassRows,
