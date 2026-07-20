@@ -3,7 +3,7 @@ import type {
 } from '../../shared/meta-progression';
 import { applyMetaProgressionUnlock } from '../../shared/meta-progression';
 import type { SaveData, Settings } from '../../shared/contracts';
-import { normalizeSaveData } from '../../shared/save-data';
+import { normalizeSaveData, normalizeUnknownSettings } from '../../shared/save-data';
 import { runPersistenceInBackground } from './backgroundPersistence';
 import {
     createHowToPlayDismissPatch,
@@ -27,15 +27,29 @@ export const executeSettingsUpdate = async (
     settings: Settings,
     deps: SavePreferenceExecutorDeps
 ): Promise<void> => {
-    const persistedSettings = await deps.persistSaveSettings(settings);
-    const nextSave = normalizeSaveData({
+    const optimisticSettings = normalizeUnknownSettings(settings);
+    const optimisticSave = normalizeSaveData({
         ...deps.getState().saveData,
-        settings: persistedSettings
+        settings: optimisticSettings
     });
 
     deps.setState({
-        settings: persistedSettings,
-        saveData: nextSave
+        settings: optimisticSettings,
+        saveData: optimisticSave
+    });
+
+    const persistedSettings = await deps.persistSaveSettings(optimisticSettings);
+    if (deps.getState().settings !== optimisticSettings) {
+        return;
+    }
+
+    const acknowledgedSettings = normalizeUnknownSettings(persistedSettings);
+    deps.setState({
+        settings: acknowledgedSettings,
+        saveData: normalizeSaveData({
+            ...deps.getState().saveData,
+            settings: acknowledgedSettings
+        })
     });
 };
 
