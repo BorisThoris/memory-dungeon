@@ -159,11 +159,13 @@ export function useFitShellZoom({
 
         schedule();
 
-        const fontsDone = document.fonts?.ready?.then(() => {
-            if (!cancelled) {
-                schedule();
-            }
-        });
+        const fontsDone = document.fonts?.ready
+            ?.then(() => {
+                if (!cancelled) {
+                    schedule();
+                }
+            })
+            .catch(() => undefined);
 
         delayed = window.setTimeout(() => {
             if (!cancelled) {

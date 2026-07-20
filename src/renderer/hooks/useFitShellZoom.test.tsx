@@ -3,8 +3,15 @@ import { createRef, useRef } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { computeFitShellZoomFactor, useFitShellZoom } from './useFitShellZoom';
 
+const originalDocumentFonts = document.fonts;
+
 afterEach(() => {
+    vi.restoreAllMocks();
     vi.useRealTimers();
+    Object.defineProperty(document, 'fonts', {
+        configurable: true,
+        value: originalDocumentFonts
+    });
 });
 
 /** Documents unwrap math used in `useFitShellZoom` (zoomed box → intrinsic). */
@@ -184,6 +191,47 @@ describe('useFitShellZoom', () => {
 
         unmount();
         expect(frames.size).toBe(0);
+    });
+
+    it('ignores rejected font readiness and keeps the delayed fit retry', async () => {
+        vi.useFakeTimers();
+        let nextFrameId = 0;
+        const frames = new Map<number, FrameRequestCallback>();
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+            nextFrameId += 1;
+            frames.set(nextFrameId, callback);
+            return nextFrameId;
+        });
+        vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((frameId) => {
+            frames.delete(frameId);
+        });
+        Object.defineProperty(document, 'fonts', {
+            configurable: true,
+            value: {
+                ready: Promise.reject(new Error('font readiness unavailable'))
+            }
+        });
+
+        const FitProbe = () => {
+            const measureRef = useRef<HTMLDivElement | null>(null);
+            useFitShellZoom({
+                measureRef,
+                viewportHeight: 700,
+                viewportWidth: 900
+            });
+            return <div ref={measureRef} />;
+        };
+        render(<FitProbe />);
+
+        await act(async () => {
+            await Promise.resolve();
+        });
+
+        expect(frames.size).toBe(1);
+
+        act(() => vi.advanceTimersByTime(420));
+
+        expect(frames.size).toBe(1);
     });
 
     it('resets fit zoom to 1 when disabled after a shrink', async () => {
