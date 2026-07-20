@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { createRunSummary } from './run-summary-rules';
 import { normalizeSaveData } from './save-data';
@@ -62,5 +63,42 @@ describe('createRunSummary', () => {
         const serializedSummary = JSON.parse(JSON.stringify(summary));
 
         expect(normalizeSaveData({ lastRunSummary: serializedSummary }).lastRunSummary).toEqual(serializedSummary);
+    });
+
+    it('normalizes malformed runtime counters before persisting a summary', () => {
+        const run = finishMemorizePhase(createNewRun(100, { runSeed: 0xbeef }));
+        const summarized = createRunSummary(
+            {
+                ...run,
+                status: 'gameOver',
+                findablesClaimedThisFloor: 9,
+                findablesTotalThisFloor: 2,
+                rewardPerkIds: ['trait_streak_toolkit'],
+                stats: {
+                    ...run.stats,
+                    totalScore: Number.NaN,
+                    bestScore: -10,
+                    levelsCleared: 1,
+                    highestLevel: Number.POSITIVE_INFINITY,
+                    bestStreak: 3.9,
+                    perfectClears: 5,
+                    mismatches: Number.NaN,
+                    volatileTraitShuffles: 2.8
+                }
+            } as unknown as RunState,
+            []
+        );
+
+        expect(summarized.lastRunSummary).toMatchObject({
+            totalScore: 0,
+            bestScore: 0,
+            levelsCleared: 1,
+            highestLevel: 0,
+            bestStreak: 3,
+            perfectClears: 1,
+            payoffPickupClaimed: 2,
+            payoffPickupTotal: 2,
+            payoffPressureExtra: 2
+        });
     });
 });
