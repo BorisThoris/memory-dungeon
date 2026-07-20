@@ -800,8 +800,8 @@ const applyBonusRewardPayout = (
             ...nextRun,
             stats: {
                 ...nextRun.stats,
-                totalScore: nextRun.stats.totalScore + overflowScore,
-                currentLevelScore: nextRun.stats.currentLevelScore + overflowScore
+                totalScore: nonNegativeFiniteAmount(nextRun.stats.totalScore) + overflowScore,
+                currentLevelScore: nonNegativeFiniteAmount(nextRun.stats.currentLevelScore) + overflowScore
             }
         };
         gained.push(`+${overflowScore} overflow score`);
