@@ -92,6 +92,22 @@ describe('achievement rules', () => {
         expect(evaluateAchievementUnlocks(run, saveData)).toEqual([]);
     });
 
+    it('normalizes malformed stat counters before checking threshold achievements', () => {
+        const run = {
+            ...createNewRun(0),
+            stats: {
+                ...createNewRun(0).stats,
+                totalScore: Number.POSITIVE_INFINITY,
+                levelsCleared: Number.NaN,
+                highestLevel: Number.POSITIVE_INFINITY
+            }
+        };
+        const saveData = createDefaultSaveData();
+        saveData.playerStats = { ...saveData.playerStats!, dailiesCompleted: Number.POSITIVE_INFINITY };
+
+        expect(evaluateAchievementUnlocks(run, saveData)).toEqual([]);
+    });
+
     it('unlocks ACH_ENDLESS_TEN when endless run reaches floor 10', () => {
         const base = createNewRun(0);
         const run = {

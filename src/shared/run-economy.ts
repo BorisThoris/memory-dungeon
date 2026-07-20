@@ -111,26 +111,31 @@ export const runEconomyDefinitionById = RUN_ECONOMY_DEFINITIONS.reduce<Record<st
     {}
 );
 
+const nonNegativeRunEconomyCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const dungeonKeyTotal = (run: RunState): number =>
+    Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeRunEconomyCount(count), 0);
+
 const valueFor = (run: RunState, id: string): string => {
     switch (id) {
         case 'shop_gold':
-            return String(run.shopGold);
+            return String(nonNegativeRunEconomyCount(run.shopGold));
         case 'score':
-            return String(run.stats.totalScore);
+            return String(nonNegativeRunEconomyCount(run.stats.totalScore));
         case 'combo_shards':
-            return `${run.stats.comboShards}/2`;
+            return `${nonNegativeRunEconomyCount(run.stats.comboShards)}/2`;
         case 'guard_tokens':
-            return `${run.stats.guardTokens}/2`;
+            return `${nonNegativeRunEconomyCount(run.stats.guardTokens)}/2`;
         case 'relic_favor':
-            return `${run.relicFavorProgress}/3`;
+            return `${nonNegativeRunEconomyCount(run.relicFavorProgress)}/3`;
         case 'dungeon_keys': {
-            const keyCount = Object.values(run.dungeonKeys).reduce((sum, count) => sum + (count ?? 0), 0);
-            return `${keyCount} keys · ${run.dungeonMasterKeys} master`;
+            return `${dungeonKeyTotal(run)} keys · ${nonNegativeRunEconomyCount(run.dungeonMasterKeys)} master`;
         }
         case 'findable_pickups':
-            return `${run.findablesClaimedThisFloor}/${run.findablesTotalThisFloor}`;
+            return `${nonNegativeRunEconomyCount(run.findablesClaimedThisFloor)}/${nonNegativeRunEconomyCount(run.findablesTotalThisFloor)}`;
         case 'assist_charges':
-            return `Shuffle ${run.shuffleCharges} · Row ${run.regionShuffleCharges} · Destroy ${run.destroyPairCharges} · Peek ${run.peekCharges} · Stray ${run.strayRemoveCharges}`;
+            return `Shuffle ${nonNegativeRunEconomyCount(run.shuffleCharges)} · Row ${nonNegativeRunEconomyCount(run.regionShuffleCharges)} · Destroy ${nonNegativeRunEconomyCount(run.destroyPairCharges)} · Peek ${nonNegativeRunEconomyCount(run.peekCharges)} · Stray ${nonNegativeRunEconomyCount(run.strayRemoveCharges)}`;
         default:
             return '0';
     }
@@ -139,21 +144,27 @@ const valueFor = (run: RunState, id: string): string => {
 const numericValueFor = (run: RunState, id: string): number => {
     switch (id) {
         case 'shop_gold':
-            return run.shopGold;
+            return nonNegativeRunEconomyCount(run.shopGold);
         case 'score':
-            return run.stats.totalScore;
+            return nonNegativeRunEconomyCount(run.stats.totalScore);
         case 'combo_shards':
-            return run.stats.comboShards;
+            return nonNegativeRunEconomyCount(run.stats.comboShards);
         case 'guard_tokens':
-            return run.stats.guardTokens;
+            return nonNegativeRunEconomyCount(run.stats.guardTokens);
         case 'relic_favor':
-            return run.relicFavorProgress;
+            return nonNegativeRunEconomyCount(run.relicFavorProgress);
         case 'dungeon_keys':
-            return Object.values(run.dungeonKeys).reduce((sum, count) => sum + (count ?? 0), 0) + run.dungeonMasterKeys;
+            return dungeonKeyTotal(run) + nonNegativeRunEconomyCount(run.dungeonMasterKeys);
         case 'findable_pickups':
-            return run.findablesClaimedThisFloor;
+            return nonNegativeRunEconomyCount(run.findablesClaimedThisFloor);
         case 'assist_charges':
-            return run.shuffleCharges + run.regionShuffleCharges + run.destroyPairCharges + run.peekCharges + run.strayRemoveCharges;
+            return (
+                nonNegativeRunEconomyCount(run.shuffleCharges) +
+                nonNegativeRunEconomyCount(run.regionShuffleCharges) +
+                nonNegativeRunEconomyCount(run.destroyPairCharges) +
+                nonNegativeRunEconomyCount(run.peekCharges) +
+                nonNegativeRunEconomyCount(run.strayRemoveCharges)
+            );
         default:
             return 0;
     }

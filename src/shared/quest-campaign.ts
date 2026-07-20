@@ -95,7 +95,7 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
 ] as const;
 
 const relicPickTotal = (save: SaveData): number =>
-    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
+    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + nonNegativeQuestCount(count), 0);
 
 const nonNegativeQuestCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
@@ -105,11 +105,11 @@ const progressFor = (save: SaveData, id: QuestCampaignStepId): number => {
         case 'first_lantern':
             return save.achievements.ACH_FIRST_CLEAR ? 1 : 0;
         case 'scholar_oath':
-            return save.playerStats?.bestFloorNoPowers ?? 0;
+            return nonNegativeQuestCount(save.playerStats?.bestFloorNoPowers);
         case 'gauntlet_proof':
-            return save.lastRunSummary?.gameMode === 'gauntlet' ? (save.lastRunSummary.levelsCleared ?? 0) : 0;
+            return save.lastRunSummary?.gameMode === 'gauntlet' ? nonNegativeQuestCount(save.lastRunSummary.levelsCleared) : 0;
         case 'daily_rhythm':
-            return save.playerStats?.dailiesCompleted ?? 0;
+            return nonNegativeQuestCount(save.playerStats?.dailiesCompleted);
         case 'relic_apprentice':
             return relicPickTotal(save);
         default:
@@ -185,11 +185,12 @@ export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContract
         });
     }
     if (run.gameMode === 'gauntlet') {
+        const levelsCleared = nonNegativeQuestCount(run.stats.levelsCleared);
         rows.push({
             id: 'gauntlet_proof',
             label: 'Gauntlet Proof',
-            status: run.stats.levelsCleared >= 1 ? 'completed' : 'active',
-            progressLabel: `${Math.min(run.stats.levelsCleared, 1)}/1 timed clears`,
+            status: levelsCleared >= 1 ? 'completed' : 'active',
+            progressLabel: `${Math.min(levelsCleared, 1)}/1 timed clears`,
             failureReason: run.gauntletDeadlineMs != null && Date.now() > run.gauntletDeadlineMs ? 'Timer expired; retry the same preset.' : null,
             retryPolicy: 'retry_same_mode',
             offlineOnly: true
@@ -203,13 +204,14 @@ export const getQuestCampaignRows = buildQuestCampaignRows;
 export const questCampaignSummary = getQuestCampaignSummary;
 
 export const getQuestContractForRunSummary = (summary: { gameMode?: string; levelsCleared?: number } | null): QuestCampaignStepId | null => {
-    if (summary?.gameMode === 'gauntlet' && (summary.levelsCleared ?? 0) >= 1) {
+    const levelsCleared = nonNegativeQuestCount(summary?.levelsCleared);
+    if (summary?.gameMode === 'gauntlet' && levelsCleared >= 1) {
         return 'gauntlet_proof';
     }
-    if (summary?.gameMode === 'daily' && (summary.levelsCleared ?? 0) >= 1) {
+    if (summary?.gameMode === 'daily' && levelsCleared >= 1) {
         return 'daily_rhythm';
     }
-    if ((summary?.levelsCleared ?? 0) >= 1) {
+    if (levelsCleared >= 1) {
         return 'first_lantern';
     }
     return null;

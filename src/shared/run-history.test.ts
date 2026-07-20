@@ -144,6 +144,46 @@ describe('REG-085 run history, share keys, and journal', () => {
         expect(buildRunHistoryExportString(run)).not.toMatch(/token|email|path/i);
     });
 
+    it('normalizes malformed dungeon journal counters before export', () => {
+        const base = completedRun();
+        const run: RunState = {
+            ...base,
+            status: 'gameOver',
+            lives: Number.NaN,
+            gameMode: 'endless',
+            board: base.board
+                ? {
+                      ...base.board,
+                      dungeonObjectiveId: 'defeat_boss'
+                  }
+                : base.board,
+            dungeonEnemiesDefeated: Number.POSITIVE_INFINITY,
+            dungeonEnemiesDefeatedThisFloor: Number.NaN,
+            dungeonTrapsResolvedThisFloor: Number.POSITIVE_INFINITY,
+            dungeonGatewaysUsed: Number.NaN,
+            dungeonTreasuresOpened: Number.POSITIVE_INFINITY,
+            dungeonKeys: { iron: Number.POSITIVE_INFINITY, treasure: 1.9 },
+            dungeonMasterKeys: Number.NaN,
+            enemyHazardHitsThisFloor: Number.POSITIVE_INFINITY,
+            shopGold: Number.NaN,
+            bonusRelicPicksNextOffer: Number.POSITIVE_INFINITY,
+            favorBonusRelicPicksNextOffer: 1.9,
+            stats: {
+                ...base.stats,
+                bestStreak: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const rows = buildDungeonJournalRows(run);
+        const exportText = buildRunHistoryExportString(run);
+
+        expect(rows.find((row) => row.id === 'dungeon_rewards')?.value).toBe('0 treasures, 1 keys, 0 shop gold');
+        expect(rows.find((row) => row.id === 'dungeon_rewards')?.detail).toContain('1 bonus relic picks banked');
+        expect(rows.find((row) => row.id === 'dungeon_objective')?.detail).toContain('0 traps resolved this floor; 0 gateways used this run.');
+        expect(rows.find((row) => row.id === 'dungeon_outcome')?.detail).toContain('0 enemy hazard hits this floor; 0 best streak.');
+        expect(exportText).not.toMatch(/NaN|Infinity/);
+    });
+
     it('does not derive a dungeon journal boss row from stale cleared-tile hazards', () => {
         const base = completedRun();
         const run: RunState = {

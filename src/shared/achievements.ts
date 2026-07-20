@@ -18,6 +18,9 @@ const ACHIEVEMENT_ORDER: AchievementId[] = [
 
 export const ACHIEVEMENTS: AchievementDefinition[] = ACHIEVEMENT_ORDER.map((id) => ACHIEVEMENT_BY_ID[id]);
 
+const nonNegativeAchievementCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): AchievementId[] => {
     if (!run.achievementsEnabled) {
         return [];
@@ -25,15 +28,15 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
 
     const unlocked: AchievementId[] = [];
 
-    if (run.stats.levelsCleared >= 1 && !saveData.achievements.ACH_FIRST_CLEAR) {
+    if (nonNegativeAchievementCount(run.stats.levelsCleared) >= 1 && !saveData.achievements.ACH_FIRST_CLEAR) {
         unlocked.push('ACH_FIRST_CLEAR');
     }
 
-    if (run.stats.highestLevel >= 5 && !saveData.achievements.ACH_LEVEL_FIVE) {
+    if (nonNegativeAchievementCount(run.stats.highestLevel) >= 5 && !saveData.achievements.ACH_LEVEL_FIVE) {
         unlocked.push('ACH_LEVEL_FIVE');
     }
 
-    if (run.stats.totalScore >= 1000 && !saveData.achievements.ACH_SCORE_THOUSAND) {
+    if (nonNegativeAchievementCount(run.stats.totalScore) >= 1000 && !saveData.achievements.ACH_SCORE_THOUSAND) {
         unlocked.push('ACH_SCORE_THOUSAND');
     }
 
@@ -51,13 +54,13 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
 
     if (
         run.gameMode === 'endless' &&
-        run.stats.highestLevel >= 10 &&
+        nonNegativeAchievementCount(run.stats.highestLevel) >= 10 &&
         !saveData.achievements.ACH_ENDLESS_TEN
     ) {
         unlocked.push('ACH_ENDLESS_TEN');
     }
 
-    if ((saveData.playerStats?.dailiesCompleted ?? 0) >= 7 && !saveData.achievements.ACH_SEVEN_DAILIES) {
+    if (nonNegativeAchievementCount(saveData.playerStats?.dailiesCompleted) >= 7 && !saveData.achievements.ACH_SEVEN_DAILIES) {
         unlocked.push('ACH_SEVEN_DAILIES');
     }
 

@@ -48,20 +48,24 @@ export interface RunHistoryEntry {
 
 export const MAX_DUNGEON_JOURNAL_ROWS = 8;
 
+const nonNegativeRunHistoryCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const getPersistedSummaryPayoffStack = (
     summary: RunSummary | null
 ): { label: 'Combo burst' | 'Payoff burst' | 'Payoff stack' | 'Super stack'; lanes: number } | null => {
     if (!summary) {
         return null;
     }
-    const hasChainPayoff = summary.bestStreak >= 4;
-    const hasComboPayoff = summary.bestStreak >= 10;
+    const bestStreak = nonNegativeRunHistoryCount(summary.bestStreak);
+    const hasChainPayoff = bestStreak >= 4;
+    const hasComboPayoff = bestStreak >= 10;
     const payoffLanes = [
         hasChainPayoff,
         summary.payoffRoutePaid === true,
-        (summary.payoffPickupTotal ?? 0) > 0,
-        summary.perfectClears > 0,
-        (summary.relicIds?.length ?? 0) + (summary.payoffRewardPerkCount ?? 0) > 0
+        nonNegativeRunHistoryCount(summary.payoffPickupTotal) > 0,
+        nonNegativeRunHistoryCount(summary.perfectClears) > 0,
+        (summary.relicIds?.length ?? 0) + nonNegativeRunHistoryCount(summary.payoffRewardPerkCount) > 0
     ].filter(Boolean).length;
     if (payoffLanes < 3) {
         return null;
@@ -127,7 +131,9 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         run.board?.selectedGatewayRouteType ??
         run.board?.routeWorldProfile?.routeType ??
         null;
-    const keyCount = Object.values(run.dungeonKeys).reduce((sum, count) => sum + (count ?? 0), run.dungeonMasterKeys);
+    const keyCount =
+        Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeRunHistoryCount(count), 0) +
+        nonNegativeRunHistoryCount(run.dungeonMasterKeys);
 
     rows.push({
         id: 'dungeon_node',
@@ -155,12 +161,12 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         });
     }
 
-    if (bossId || run.dungeonEnemiesDefeated > 0 || run.board?.floorTag === 'boss') {
+    if (bossId || nonNegativeRunHistoryCount(run.dungeonEnemiesDefeated) > 0 || run.board?.floorTag === 'boss') {
         rows.push({
             id: 'dungeon_boss',
             label: 'Boss pressure',
             value: bossId ? idLabel(bossId)! : 'No active boss identity',
-            detail: `${run.dungeonEnemiesDefeated} enemies defeated this run; ${run.dungeonEnemiesDefeatedThisFloor} this floor.`,
+            detail: `${nonNegativeRunHistoryCount(run.dungeonEnemiesDefeated)} enemies defeated this run; ${nonNegativeRunHistoryCount(run.dungeonEnemiesDefeatedThisFloor)} this floor.`,
             persistence: 'derived_export',
             exportSafe: true,
             offlineOnly: true
@@ -182,7 +188,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
             ]
                 .filter(Boolean)
                 .join(' / '),
-            detail: `${run.dungeonTrapsResolvedThisFloor} traps resolved this floor; ${run.dungeonGatewaysUsed} gateways used this run.`,
+            detail: `${nonNegativeRunHistoryCount(run.dungeonTrapsResolvedThisFloor)} traps resolved this floor; ${nonNegativeRunHistoryCount(run.dungeonGatewaysUsed)} gateways used this run.`,
             persistence: 'derived_export',
             exportSafe: true,
             offlineOnly: true
@@ -192,19 +198,19 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
     rows.push({
         id: 'dungeon_rewards',
         label: 'Dungeon rewards',
-        value: `${run.dungeonTreasuresOpened} treasures, ${keyCount} keys, ${run.shopGold} shop gold`,
-        detail: `${run.relicIds.length} relics carried; ${run.bonusRelicPicksNextOffer + run.favorBonusRelicPicksNextOffer} bonus relic picks banked.`,
+        value: `${nonNegativeRunHistoryCount(run.dungeonTreasuresOpened)} treasures, ${keyCount} keys, ${nonNegativeRunHistoryCount(run.shopGold)} shop gold`,
+        detail: `${run.relicIds.length} relics carried; ${nonNegativeRunHistoryCount(run.bonusRelicPicksNextOffer) + nonNegativeRunHistoryCount(run.favorBonusRelicPicksNextOffer)} bonus relic picks banked.`,
         persistence: 'derived_export',
         exportSafe: true,
         offlineOnly: true
     });
 
-    if (run.status === 'gameOver' || run.lives <= 0) {
+    if (run.status === 'gameOver' || nonNegativeRunHistoryCount(run.lives) <= 0) {
         rows.push({
             id: 'dungeon_outcome',
             label: 'Run outcome',
-            value: run.lives <= 0 ? 'Defeated in the dungeon' : 'Run ended',
-            detail: `${run.enemyHazardHitsThisFloor} enemy hazard hits this floor; ${run.stats.bestStreak} best streak.`,
+            value: nonNegativeRunHistoryCount(run.lives) <= 0 ? 'Defeated in the dungeon' : 'Run ended',
+            detail: `${nonNegativeRunHistoryCount(run.enemyHazardHitsThisFloor)} enemy hazard hits this floor; ${nonNegativeRunHistoryCount(run.stats.bestStreak)} best streak.`,
             persistence: 'persisted_summary',
             exportSafe: true,
             offlineOnly: true
