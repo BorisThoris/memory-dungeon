@@ -171,6 +171,37 @@ describe('tileTextures layout', () => {
         }
     });
 
+    it('drops cancelled demand-driven idle prewarm callbacks when cancelIdleCallback is unavailable', () => {
+        clearTileTextureCachesForDebug();
+        const previousRequestIdleCallback = window.requestIdleCallback;
+        const previousCancelIdleCallback = window.cancelIdleCallback;
+        const callbacks: IdleRequestCallback[] = [];
+        window.requestIdleCallback = ((callback: IdleRequestCallback) => {
+            callbacks.push(callback);
+            return callbacks.length - 1;
+        }) as typeof window.requestIdleCallback;
+        Object.defineProperty(window, 'cancelIdleCallback', {
+            configurable: true,
+            value: undefined
+        });
+
+        try {
+            runDemandDrivenTileFaceOverlayPrewarmSession(['pair-cancelled'], 'medium');
+            expect(callbacks).toHaveLength(1);
+
+            resetDemandDrivenOverlayPrewarmForTest();
+            callbacks[0]?.({
+                didTimeout: false,
+                timeRemaining: () => 50
+            } as IdleDeadline);
+
+            expect(getIllustrationPipelineDebugState().illustrationBitmap.entryCount).toBe(0);
+        } finally {
+            window.requestIdleCallback = previousRequestIdleCallback;
+            window.cancelIdleCallback = previousCancelIdleCallback;
+        }
+    });
+
     it('shares in-flight tile texture image loads across concurrent preloads', async () => {
         clearTileTextureCachesForDebug();
         const originalImage = globalThis.Image;

@@ -53,8 +53,8 @@ type IdleWindow = Window &
         requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
     };
 type PrewarmScheduleHandle =
-    | { id: number; type: 'idle' }
-    | { id: number; type: 'timeout' };
+    | { cancelled: boolean; id: number; type: 'idle' }
+    | { cancelled: boolean; id: number; type: 'timeout' };
 
 type OverlayTextureCacheDebugState = {
     createdCount: number;
@@ -539,23 +539,31 @@ const getIdleWindow = (): IdleWindow | null => (typeof window === 'undefined' ? 
 const schedulePrewarmStep = (callback: IdleRequestCallback): PrewarmScheduleHandle => {
     const idleWindow = getIdleWindow();
     if (idleWindow?.requestIdleCallback) {
-        return { id: idleWindow.requestIdleCallback(callback, { timeout: 120 }), type: 'idle' };
+        const handle: PrewarmScheduleHandle = { cancelled: false, id: -1, type: 'idle' };
+        handle.id = idleWindow.requestIdleCallback((deadline) => {
+            if (!handle.cancelled) {
+                callback(deadline);
+            }
+        }, { timeout: 120 });
+        return handle;
     }
-    return {
-        id: window.setTimeout(() => {
+    const handle: PrewarmScheduleHandle = { cancelled: false, id: -1, type: 'timeout' };
+    handle.id = window.setTimeout(() => {
+        if (!handle.cancelled) {
             callback({
                 didTimeout: false,
                 timeRemaining: () => 0
             } as IdleDeadline);
-        }, 0),
-        type: 'timeout'
-    };
+        }
+    }, 0);
+    return handle;
 };
 
 const cancelPrewarmStep = (handle: PrewarmScheduleHandle | null): void => {
     if (!handle) {
         return;
     }
+    handle.cancelled = true;
     if (handle.type === 'idle') {
         getIdleWindow()?.cancelIdleCallback?.(handle.id);
         return;
