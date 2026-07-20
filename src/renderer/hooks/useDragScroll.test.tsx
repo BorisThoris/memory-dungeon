@@ -53,6 +53,7 @@ const beginLibraryCardDrag = (pointerId = 7): HTMLElement => {
 
 afterEach(() => {
     vi.useRealTimers();
+    vi.unstubAllGlobals();
 });
 
 describe('useDragScroll', () => {
@@ -150,5 +151,23 @@ describe('useDragScroll', () => {
         fireEvent.click(screen.getByRole('button', { name: 'Library mode' }));
 
         expect(onCardClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('falls back to auto keyboard scroll when reduced-motion media query throws', () => {
+        vi.stubGlobal(
+            'matchMedia',
+            vi.fn(() => {
+                throw new Error('media query unavailable');
+            })
+        );
+        render(<DragScrollHarness />);
+        const scroller = screen.getByTestId('scroller');
+        Object.defineProperty(scroller, 'clientWidth', { configurable: true, value: 100 });
+        Object.defineProperty(scroller, 'scrollWidth', { configurable: true, value: 300 });
+        scroller.scrollBy = vi.fn();
+
+        fireEvent.keyDown(scroller, { key: 'ArrowRight' });
+
+        expect(scroller.scrollBy).toHaveBeenCalledWith({ left: 100, behavior: 'auto' });
     });
 });

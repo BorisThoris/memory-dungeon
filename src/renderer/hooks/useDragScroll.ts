@@ -64,6 +64,17 @@ function isModalDialogActive(): boolean {
     return document.querySelector('[role="dialog"][aria-modal="true"]') != null;
 }
 
+function shouldUseSmoothKeyboardScroll(): boolean {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+        return false;
+    }
+    try {
+        return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch {
+        return false;
+    }
+}
+
 export function useDragScroll(scrollerRef: RefObject<HTMLElement | null>): {
     onPointerDownCapture: (event: ReactPointerEvent<HTMLElement>) => void;
     /** Capture phase so Arrow keys work while focus is on nested tiles (e.g. library `<button>`s). */
@@ -119,10 +130,7 @@ export function useDragScroll(scrollerRef: RefObject<HTMLElement | null>): {
                 return;
             }
 
-            const smoothOk =
-                typeof window !== 'undefined' &&
-                typeof window.matchMedia === 'function' &&
-                !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const smoothOk = shouldUseSmoothKeyboardScroll();
             const behavior: ScrollBehavior = smoothOk ? 'smooth' : 'auto';
 
             event.preventDefault();
