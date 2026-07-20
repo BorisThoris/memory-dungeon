@@ -695,7 +695,12 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
             return;
         }
 
-        const mq = window.matchMedia('(pointer: coarse)');
+        let mq: StartupIntroPointerMediaQueryList;
+        try {
+            mq = window.matchMedia('(pointer: coarse)');
+        } catch {
+            return;
+        }
         const sync = (): void => {
             setTouchPrimary(mq.matches);
         };

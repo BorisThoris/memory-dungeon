@@ -409,6 +409,19 @@ describe('StartupIntro motion CTA', () => {
         expect(screen.queryByTestId('intro-motion-cta')).not.toBeInTheDocument();
     });
 
+    it('keeps the intro usable when pointer media queries throw', async () => {
+        window.matchMedia = vi.fn(() => {
+            throw new Error('media query unavailable');
+        }) as typeof window.matchMedia;
+
+        renderIntro(<StartupIntro onComplete={vi.fn()} reduceMotion={false} />);
+
+        await flushIntroPreload();
+
+        expect(screen.getByRole('dialog', { name: /startup relic intro/i })).toBeInTheDocument();
+        expect(screen.queryByTestId('intro-motion-cta')).not.toBeInTheDocument();
+    });
+
     it('lets a normal overlay pointer-down still complete the intro after exit timing', async () => {
         vi.useFakeTimers();
 

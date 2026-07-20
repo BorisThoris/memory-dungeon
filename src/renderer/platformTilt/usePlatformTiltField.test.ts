@@ -96,6 +96,34 @@ describe('usePlatformTiltField surface lifecycle', () => {
         }
     });
 
+    it('keeps tilt setup usable when pointer capability media queries throw', () => {
+        vi.spyOn(window, 'matchMedia').mockImplementation(() => {
+            throw new Error('media query unavailable');
+        });
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => 1);
+        vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => undefined);
+        const surfaceRef: MutableRefObject<HTMLElement | null> = { current: document.createElement('div') };
+        const contextValue = {
+            gyroTiltRef: { current: { x: 0, y: 0 } },
+            permission: 'granted' as const,
+            requestMotionPermission: vi.fn(async (): Promise<void> => undefined)
+        };
+        const wrapper = ({ children }: { children: ReactNode }) =>
+            createElement(PlatformTiltContext.Provider, { value: contextValue }, children);
+
+        expect(() =>
+            renderHook(
+                () =>
+                    usePlatformTiltField({
+                        enabled: true,
+                        reduceMotion: false,
+                        surfaceRef
+                    }),
+                { wrapper }
+            )
+        ).not.toThrow();
+    });
+
     it('clears tilt CSS from replaced surfaces and the active surface on teardown', () => {
         let nextFrameId = 0;
         const frames = new Map<number, FrameRequestCallback>();

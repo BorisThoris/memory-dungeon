@@ -201,8 +201,14 @@ export const usePlatformTiltField = ({
             return;
         }
 
-        const fineQuery = window.matchMedia('(pointer: fine)');
-        const coarseQuery = window.matchMedia('(pointer: coarse)');
+        let fineQuery: TiltPointerMediaQueryList;
+        let coarseQuery: TiltPointerMediaQueryList;
+        try {
+            fineQuery = window.matchMedia('(pointer: fine)');
+            coarseQuery = window.matchMedia('(pointer: coarse)');
+        } catch {
+            return;
+        }
 
         const updatePointerCapabilities = (): void => {
             pointerCapabilitiesRef.current = {
