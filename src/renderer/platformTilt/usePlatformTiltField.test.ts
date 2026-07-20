@@ -43,6 +43,59 @@ describe('shouldCommitTiltCssVars', () => {
 });
 
 describe('usePlatformTiltField surface lifecycle', () => {
+    it('supports legacy pointer capability media query listener APIs', () => {
+        const queries: Array<{
+            addListener: ReturnType<typeof vi.fn>;
+            removeListener: ReturnType<typeof vi.fn>;
+        }> = [];
+        vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => {
+            const mql = {
+                matches: query === '(pointer: coarse)',
+                media: query,
+                addListener: vi.fn(),
+                removeListener: vi.fn(),
+                dispatchEvent: vi.fn(),
+                onchange: null
+            } as unknown as MediaQueryList & {
+                addListener: ReturnType<typeof vi.fn>;
+                removeListener: ReturnType<typeof vi.fn>;
+            };
+            queries.push(mql);
+            return mql;
+        });
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => 1);
+        vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => undefined);
+        const surfaceRef: MutableRefObject<HTMLElement | null> = { current: document.createElement('div') };
+        const contextValue = {
+            gyroTiltRef: { current: { x: 0, y: 0 } },
+            permission: 'granted' as const,
+            requestMotionPermission: vi.fn(async (): Promise<void> => undefined)
+        };
+        const wrapper = ({ children }: { children: ReactNode }) =>
+            createElement(PlatformTiltContext.Provider, { value: contextValue }, children);
+
+        const { unmount } = renderHook(
+            () =>
+                usePlatformTiltField({
+                    enabled: true,
+                    reduceMotion: false,
+                    surfaceRef
+                }),
+            { wrapper }
+        );
+
+        const subscribedQueries = queries.filter((query) => query.addListener.mock.calls.length > 0);
+        expect(subscribedQueries.length).toBeGreaterThanOrEqual(2);
+
+        unmount();
+
+        for (const query of subscribedQueries) {
+            const listener = query.addListener.mock.calls[0]?.[0];
+            expect(listener).toEqual(expect.any(Function));
+            expect(query.removeListener).toHaveBeenCalledWith(listener);
+        }
+    });
+
     it('clears tilt CSS from replaced surfaces and the active surface on teardown', () => {
         let nextFrameId = 0;
         const frames = new Map<number, FrameRequestCallback>();

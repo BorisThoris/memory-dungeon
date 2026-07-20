@@ -13,6 +13,11 @@ interface PointerCapabilities {
     fine: boolean;
 }
 
+type TiltPointerMediaQueryList = MediaQueryList & {
+    addListener?: (listener: () => void) => void;
+    removeListener?: (listener: () => void) => void;
+};
+
 interface CssTiltWrite {
     x: string;
     y: string;
@@ -61,6 +66,22 @@ const normalizePointerInViewport = (clientX: number, clientY: number): TiltVecto
     const y = clamp((clientY / height) * 2 - 1, -1, 1);
 
     return applyDeadzoneTilt({ x, y });
+};
+
+const addTiltPointerListener = (mediaQuery: TiltPointerMediaQueryList, listener: () => void): void => {
+    if (typeof mediaQuery.addEventListener === 'function') {
+        mediaQuery.addEventListener('change', listener);
+        return;
+    }
+    mediaQuery.addListener?.(listener);
+};
+
+const removeTiltPointerListener = (mediaQuery: TiltPointerMediaQueryList, listener: () => void): void => {
+    if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', listener);
+        return;
+    }
+    mediaQuery.removeListener?.(listener);
 };
 
 interface UsePlatformTiltFieldOptions {
@@ -191,12 +212,12 @@ export const usePlatformTiltField = ({
         };
 
         updatePointerCapabilities();
-        fineQuery.addEventListener?.('change', updatePointerCapabilities);
-        coarseQuery.addEventListener?.('change', updatePointerCapabilities);
+        addTiltPointerListener(fineQuery, updatePointerCapabilities);
+        addTiltPointerListener(coarseQuery, updatePointerCapabilities);
 
         return () => {
-            fineQuery.removeEventListener?.('change', updatePointerCapabilities);
-            coarseQuery.removeEventListener?.('change', updatePointerCapabilities);
+            removeTiltPointerListener(fineQuery, updatePointerCapabilities);
+            removeTiltPointerListener(coarseQuery, updatePointerCapabilities);
         };
     }, []);
 
