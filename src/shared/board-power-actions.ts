@@ -6,6 +6,7 @@ import {
     createMulberry32,
     deriveShuffleRngSeed,
     hashStringToSeed,
+    pickRngIndex,
     shuffleWithRng
 } from './rng';
 import {
@@ -311,7 +312,7 @@ export const applyFlashPair = (run: RunState): RunState => {
     const rng = createMulberry32(
         hashStringToSeed(`flashPair:${run.runRulesVersion}:${run.runSeed}:${run.board.level}:${run.shuffleNonce}`)
     );
-    const picked = complete[Math.floor(rng() * complete.length)]!;
+    const picked = complete[pickRngIndex(rng, complete.length)]!;
     const pairIds = picked.slice(0, 2);
     return {
         ...run,

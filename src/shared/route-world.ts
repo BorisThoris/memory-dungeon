@@ -9,7 +9,7 @@ import type {
     RouteWorldProfile,
     Tile
 } from './contracts';
-import { createMulberry32, hashStringToSeed } from './rng';
+import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 
 export interface RouteWorldProfileInput {
     plan: RouteCardPlan | null | undefined;
@@ -285,7 +285,7 @@ export const assignRouteWorldSpecials = ({
     );
     const keys = [...eligibleKeys];
     for (let i = keys.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
+        const j = pickRngIndex(rng, i + 1);
         const tmp = keys[i]!;
         keys[i] = keys[j]!;
         keys[j] = tmp;

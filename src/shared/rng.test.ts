@@ -5,6 +5,7 @@ import {
     deriveDailyRunSeed,
     deriveLevelTileRngSeed,
     hashStringToSeed,
+    pickRngIndex,
     shuffleWithRng,
     utcDateKeyMinusOneDay
 } from './rng';
@@ -68,6 +69,16 @@ describe('shuffleWithRng', () => {
         expect(shuffleWithRng(() => Number.POSITIVE_INFINITY, input)).toEqual(['b', 'c', 'a']);
         expect(shuffleWithRng(() => 1, input)).toEqual(['a', 'b', 'c']);
         expect(input).toEqual(['a', 'b', 'c']);
+    });
+});
+
+describe('pickRngIndex', () => {
+    it('normalizes malformed rolls and lengths into bounded indexes', () => {
+        expect(pickRngIndex(() => Number.NaN, 3)).toBe(0);
+        expect(pickRngIndex(() => 1, 3)).toBe(2);
+        expect(pickRngIndex(() => 0.5, 3.9)).toBe(1);
+        expect(pickRngIndex(() => 0.5, Number.POSITIVE_INFINITY)).toBe(0);
+        expect(pickRngIndex(() => 0.5, 0)).toBe(0);
     });
 });
 

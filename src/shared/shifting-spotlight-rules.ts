@@ -7,7 +7,7 @@ import {
 } from './contracts';
 import { isBoardComplete } from './board-inspection';
 import { hasMutator } from './mutators';
-import { createMulberry32, hashStringToSeed } from './rng';
+import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { DECOY_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 
 export interface ShiftingSpotlightKeys {
@@ -67,7 +67,7 @@ export const pickShiftingSpotlightKeys = (
     );
     const shuffled = [...keys];
     for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
+        const j = pickRngIndex(rng, i + 1);
         const tmp = shuffled[i]!;
         shuffled[i] = shuffled[j]!;
         shuffled[j] = tmp;

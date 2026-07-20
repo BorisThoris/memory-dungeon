@@ -10,7 +10,7 @@ import {
     type Tile,
     type TileTraitKind
 } from './contracts';
-import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
+import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { isSingletonUtilityPairKey } from './tile-identity';
 export {
     formatTileTraitInteractionTags,
@@ -618,7 +618,7 @@ export const assignTileTraitsToGeneratedBoard = (
         const seeds = level <= 1
             ? openerInteractionSeeds(startingLoadoutId)
             : routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
-        let seedIndex = intensity == null && !startingLoadoutId ? Math.floor(rng() * seeds.length) : 0;
+        let seedIndex = intensity == null && !startingLoadoutId ? pickRngIndex(rng, seeds.length) : 0;
         for (const [firstPairKey, secondPairKey] of shuffledAdjacentPairs) {
             if (traitByPairKey.size + 2 > traitCount) {
                 break;
@@ -671,7 +671,7 @@ export const assignTileTraitsToGeneratedBoard = (
             const repairSeeds = level <= 1
                 ? openerInteractionSeeds(startingLoadoutId)
                 : routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
-            const repairSeedIndex = intensity == null && !startingLoadoutId ? Math.floor(rng() * repairSeeds.length) : 0;
+            const repairSeedIndex = intensity == null && !startingLoadoutId ? pickRngIndex(rng, repairSeeds.length) : 0;
             const [firstTrait, secondTrait] = repairSeeds[repairSeedIndex]!;
             const repairedTraitByPairKey = new Map<string, TileTraitKind>([
                 [firstPairKey, firstTrait],

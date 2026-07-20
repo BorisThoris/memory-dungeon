@@ -8,6 +8,7 @@ import {
     createMulberry32,
     deriveLevelTileRngSeed,
     hashStringToSeed,
+    pickRngIndex,
     shuffleWithRng
 } from './rng';
 import {
@@ -51,7 +52,7 @@ export const pickCursedPairKey = (
         return null;
     }
     const rng = createMulberry32(hashStringToSeed(`cursed:${rulesVersion}:${runSeed}:${level}`));
-    return realKeys[Math.floor(rng() * realKeys.length)]!;
+    return realKeys[pickRngIndex(rng, realKeys.length)]!;
 };
 
 export const createTiles = (
@@ -170,7 +171,7 @@ export const assignFindableKindsToTiles = (
     }
     const keys = [...eligibleKeys];
     for (let i = keys.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
+        const j = pickRngIndex(rng, i + 1);
         const tmp = keys[i]!;
         keys[i] = keys[j]!;
         keys[j] = tmp;
