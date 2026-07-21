@@ -113,6 +113,11 @@ describe('useHudPoliteLiveAnnouncement', () => {
         ).toBe('Memory aid used with an unusually long explanation that...');
     });
 
+    it('keeps blank or punctuation-only visual action feedback empty', () => {
+        expect(formatHudActionFeedbackText('   ')).toBe('');
+        expect(formatHudActionFeedbackText('?!...', { maxChars: 3 })).toBe('');
+    });
+
     it('classifies compact visual action feedback by gameplay impact', () => {
         expect(getHudActionFeedbackProfile('Shard spark claimed: +1 combo shard.')).toEqual({
             label: 'Reward burst',
