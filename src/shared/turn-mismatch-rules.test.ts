@@ -81,6 +81,21 @@ describe('turn mismatch rules', () => {
         });
     });
 
+    it('normalizes malformed stat blocks before calculating mismatch penalties', () => {
+        const b = board([tile('a'), tile('b')]);
+        const penalty = calculateMismatchPenalty(run(b, {
+            lives: 2,
+            stats: Number.NaN as unknown as RunState['stats']
+        }), b, 1);
+
+        expect(penalty).toMatchObject({
+            guardTokens: 0,
+            lives: 2,
+            status: 'playing',
+            tries: 1
+        });
+    });
+
     it('applies first mismatch grace when eligible', () => {
         const b = board([tile('a'), tile('b')], { matchedPairs: 0 });
         const penalty = calculateMismatchPenalty(run(b, {
@@ -182,6 +197,28 @@ describe('turn mismatch rules', () => {
         expect(resolved.stats.highestLevel).toBe(1);
         expect(resolved.stats.guardTokens).toBe(0);
         expect(resolved.stats.volatileTraitShuffles).toBe(0);
+    });
+
+    it('normalizes malformed stat blocks during mismatch transition bookkeeping', () => {
+        const b = board([tile('a'), tile('b')]);
+        const base = run(b, {
+            stats: Number.NaN as unknown as RunState['stats']
+        });
+
+        const resolved = resolveMismatchTurnTransition({
+            run: base,
+            board: b,
+            tileIds: ['a', 'b'],
+            sourceTiles: b.tiles,
+            triesDelta: 1,
+            decoyTouched: false
+        });
+
+        expect(resolved.stats.tries).toBe(1);
+        expect(resolved.stats.mismatches).toBe(1);
+        expect(resolved.stats.currentStreak).toBe(0);
+        expect(resolved.stats.highestLevel).toBe(1);
+        expect(resolved.stats.guardTokens).toBe(0);
     });
 
     it('adds boss identity mismatch pressure on boss floors', () => {

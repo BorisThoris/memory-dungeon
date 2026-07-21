@@ -17,7 +17,7 @@ import {
     clearResolveState
 } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
-import { addTileTraitCountStats } from './session-stats-rules';
+import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import {
@@ -57,13 +57,14 @@ export const calculateMismatchPenalty = (
     board: BoardState,
     triesDelta: number
 ): MismatchPenalty => {
-    const safeTries = nonNegativeMismatchCount(run.stats.tries);
+    const stats = normalizeSessionStats(run.stats);
+    const safeTries = nonNegativeMismatchCount(stats.tries);
     const safeTriesDelta = nonNegativeMismatchCount(triesDelta);
-    const safeGuardTokens = nonNegativeMismatchCount(run.stats.guardTokens);
+    const safeGuardTokens = nonNegativeMismatchCount(stats.guardTokens);
     const safeLives = nonNegativeMismatchCount(run.lives);
     const tries = safeTries + safeTriesDelta;
     const hasGraceMismatch = hasFirstMismatchGrace(
-        { ...run, lives: safeLives, stats: { ...run.stats, guardTokens: safeGuardTokens, tries: safeTries } },
+        { ...run, lives: safeLives, stats: { ...stats, guardTokens: safeGuardTokens, tries: safeTries } },
         board
     );
     const consumesGuardToken = !hasGraceMismatch && safeGuardTokens > 0;
@@ -103,10 +104,12 @@ export const resolveMismatchTurnTransition = ({
     triesDelta,
     decoyTouched
 }: MismatchTurnTransitionInput): RunState => {
-    const traitPenalty = calculateTileTraitMismatchPenalty(run, sourceTiles, board);
+    const stats = normalizeSessionStats(run.stats);
+    const normalizedRun = { ...run, stats };
+    const traitPenalty = calculateTileTraitMismatchPenalty(normalizedRun, sourceTiles, board);
     const bossPressure = board.floorTag === 'boss' ? getActiveDungeonBossPressureRule(board) : null;
     const penalty = calculateMismatchPenalty(
-        run,
+        normalizedRun,
         board,
         triesDelta + traitPenalty.triesDelta + (bossPressure?.mismatchTriesDelta ?? 0)
     );
@@ -115,17 +118,18 @@ export const resolveMismatchTurnTransition = ({
     let pendingMemorizeBonusMs = penalty.pendingMemorizeBonusMs;
 
     const trapSpring = springArmedDungeonTraps(
-        { ...run, lives: Math.max(lives, 0), stats: { ...run.stats, guardTokens: penalty.guardTokens, tries: penalty.tries } },
+        { ...run, lives: Math.max(lives, 0), stats: { ...stats, guardTokens: penalty.guardTokens, tries: penalty.tries } },
         hiddenBoard,
         sourceTiles
             .filter((tile) => tile.dungeonCardKind === 'trap' && tile.dungeonCardState === 'revealed')
             .map((tile) => tile.pairKey)
     );
+    const trapStats = normalizeSessionStats(trapSpring.run.stats);
     lives = trapSpring.run.lives;
     const livesBeforeEnemyAttack = lives;
     const enemyAttack = applyDungeonEnemyAttack(
         lives,
-        trapSpring.run.stats.guardTokens,
+        trapStats.guardTokens,
         trapSpring.alarmTriggered || trapSpring.enemyWoken ? hiddenBoard : trapSpring.board
     );
     lives = enemyAttack.lives;
@@ -181,16 +185,16 @@ export const resolveMismatchTurnTransition = ({
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, tileIds),
         decoyFlippedThisFloor: run.decoyFlippedThisFloor || decoyTouched,
         stats: {
-            ...trapSpring.run.stats,
+            ...trapStats,
             tries: penalty.tries,
-            mismatches: nonNegativeMismatchCount(trapSpring.run.stats.mismatches) + 1,
-            currentStreak: Math.floor(nonNegativeMismatchCount(run.stats.currentStreak) / 2),
+            mismatches: nonNegativeMismatchCount(trapStats.mismatches) + 1,
+            currentStreak: Math.floor(nonNegativeMismatchCount(stats.currentStreak) / 2),
             rating: calculateRating(penalty.tries),
-            highestLevel: Math.max(nonNegativeMismatchCount(run.stats.highestLevel), nonNegativeMismatchCount(advancedTrapBoard.level)),
+            highestLevel: Math.max(nonNegativeMismatchCount(stats.highestLevel), nonNegativeMismatchCount(advancedTrapBoard.level)),
             guardTokens: nonNegativeMismatchCount(enemyAttack.guardTokens),
-            tileTraitMismatches: addTileTraitCountStats(trapSpring.run.stats.tileTraitMismatches, sourceTiles),
+            tileTraitMismatches: addTileTraitCountStats(trapStats.tileTraitMismatches, sourceTiles),
             volatileTraitShuffles:
-                nonNegativeMismatchCount(trapSpring.run.stats.volatileTraitShuffles) + (volatileTrait.triggered ? 1 : 0)
+                nonNegativeMismatchCount(trapStats.volatileTraitShuffles) + (volatileTrait.triggered ? 1 : 0)
         },
         timerState: clearResolveState(run)
     };
