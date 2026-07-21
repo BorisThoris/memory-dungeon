@@ -21,4 +21,28 @@ export const UI_ART = {
 
 export type UiArtKey = keyof typeof UI_ART;
 
+export const UI_ART_KEYS = [
+    'brandCrest',
+    'choosePathScene',
+    'dividerOrnament',
+    'gameplayScene',
+    'gameplayWorkshopScene',
+    'gameplayWorkshopTable',
+    'menuEmblem',
+    'menuScene',
+    'menuSeal',
+    'stageRing'
+] as const satisfies readonly UiArtKey[];
+
+export interface UiArtRow {
+    key: UiArtKey;
+    assetUrl: string;
+}
+
+export const getUiArtRows = (): UiArtRow[] =>
+    UI_ART_KEYS.map((key) => ({
+        key,
+        assetUrl: UI_ART[key]
+    }));
+
 export { MODE_CARD_ART, MODE_POSTER_KEYS, resolveModePosterUrl } from './modeArt';

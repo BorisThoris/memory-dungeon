@@ -154,12 +154,12 @@ describe('preloadStartupCriticalAssets', () => {
 
     it('keeps mode poster rasters out of the startup-critical preload', async () => {
         const { preloadStartupCriticalAssets, resetStartupAssetPreloadStateForTests } = await import('./preloadStartupAssets');
-        const { MODE_CARD_ART, MODE_POSTER_KEYS, UI_ART } = await import('./ui');
+        const { getUiArtRows, MODE_CARD_ART, MODE_POSTER_KEYS } = await import('./ui');
         resetStartupAssetPreloadStateForTests();
 
         await preloadStartupCriticalAssets({ relicSvgUrl: 'relic.svg', webgl: false });
 
-        const criticalUiUrls = new Set(Object.values(UI_ART));
+        const criticalUiUrls = new Set(getUiArtRows().map((row) => row.assetUrl));
         const modePosterUrls = new Set(MODE_POSTER_KEYS.map((key) => MODE_CARD_ART[key]));
 
         const startupCriticalRequests = requestedRasterUrls.slice(0, criticalUiUrls.size);
@@ -180,11 +180,13 @@ describe('preloadStartupCriticalAssets', () => {
             warmCardIllustrationsInBackground,
             warmModePosterRasterImagesInBackground
         } = await import('./preloadStartupAssets');
-        const { MODE_CARD_ART, MODE_POSTER_KEYS, UI_ART } = await import('./ui');
+        const { getUiArtRows, MODE_CARD_ART, MODE_POSTER_KEYS, UI_ART, UI_ART_KEYS } = await import('./ui');
         resetStartupAssetPreloadStateForTests();
 
         await preloadUiRasterImages();
-        expect(requestedRasterUrls).toEqual([...new Set(Object.values(UI_ART))]);
+        expect(Object.keys(UI_ART)).toEqual([...UI_ART_KEYS]);
+        expect(getUiArtRows().map((row) => row.key)).toEqual([...UI_ART_KEYS]);
+        expect(requestedRasterUrls).toEqual([...new Set(getUiArtRows().map((row) => row.assetUrl))]);
 
         requestedRasterUrls = [];
         await preloadModePosterRasterImages();

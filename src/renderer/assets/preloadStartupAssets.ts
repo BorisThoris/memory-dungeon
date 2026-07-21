@@ -2,7 +2,7 @@ import { getAllCardIllustrationUrls } from '../cardFace/cardIllustrationRegistry
 import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImages';
 import { preloadTileTextureImages } from '../components/tileTextures';
 import { loadRelicTextures, type RelicTextureSet } from '../components/startupIntroTextures';
-import { MODE_CARD_ART, MODE_POSTER_KEYS, UI_ART } from './ui';
+import { getUiArtRows, MODE_CARD_ART, MODE_POSTER_KEYS } from './ui';
 
 type IdleWindow = Window &
     typeof globalThis & {
@@ -94,7 +94,7 @@ const scheduleIdleWarmup = (callback: () => void, fallbackDelayMs: number): (() 
 
 /** Deduped first-screen UI rasters so MainMenu and gameplay shells decode before first paint. */
 export const preloadUiRasterImages = (): Promise<void> => {
-    const urls = [...Object.values(UI_ART)];
+    const urls = getUiArtRows().map((row) => row.assetUrl);
     return preloadRasterUrls(urls, 4);
 };
 
