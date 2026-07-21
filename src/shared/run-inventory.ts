@@ -217,7 +217,14 @@ const KEY_SPEND_ORDER: DungeonKeyKind[] = ['iron', 'treasure', 'shrine', 'boss',
 const nonNegativeQuantity = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const stringArray = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+
+const dungeonKeyRecord = (value: unknown): Partial<Record<DungeonKeyKind, number>> =>
+    value != null && typeof value === 'object' ? value as Partial<Record<DungeonKeyKind, number>> : {};
+
 export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemId): number => {
+    const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
     switch (id) {
         case 'shuffle_charge':
             return nonNegativeQuantity(run.shuffleCharges) + (run.freeShuffleThisFloor ? 1 : 0);
@@ -238,7 +245,7 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
         case 'wild_match_token':
             return nonNegativeQuantity(run.wildMatchesRemaining);
         case 'iron_key':
-            return Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeQuantity(count), 0);
+            return Object.values(dungeonKeys).reduce((sum, count) => sum + nonNegativeQuantity(count), 0);
         case 'master_key':
             return nonNegativeQuantity(run.dungeonMasterKeys);
         case 'guard_token':
@@ -246,9 +253,9 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
         case 'combo_shard':
             return nonNegativeQuantity(run.stats.comboShards);
         case 'relic_loadout':
-            return run.relicIds.length;
+            return stringArray(run.relicIds).length;
         case 'mutator_loadout':
-            return run.activeMutators.length;
+            return stringArray(run.activeMutators).length;
         case 'contract_loadout':
             return run.activeContract ? 1 : 0;
         default:
@@ -273,8 +280,9 @@ const quantityLabelFor = (definition: RunInventoryDefinition, quantity: number):
     definition.stackLimit == null ? String(quantity) : `${quantity}/${definition.stackLimit}`;
 
 const dungeonKeyQuantityLabelFor = (run: RunState, quantity: number): string => {
+    const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
     const parts = KEY_SPEND_ORDER
-        .map((kind) => [kind, nonNegativeQuantity(run.dungeonKeys[kind])] as const)
+        .map((kind) => [kind, nonNegativeQuantity(dungeonKeys[kind])] as const)
         .filter(([, count]) => count > 0);
     if (parts.length === 0 || (parts.length === 1 && parts[0]?.[0] === 'iron')) {
         return String(quantity);
@@ -334,14 +342,14 @@ export const getRunLoadoutRows = (run: RunState): RunInventoryRow[] =>
 export const RUN_LOADOUT_SLOT_LIMIT = 4;
 
 export const getRunInventoryLoadoutRows = (run: RunState): RunLoadoutSlotRow[] => [
-    ...run.relicIds.map((id) => ({
+    ...stringArray(run.relicIds).map((id) => ({
         id: `relic:${id}`,
         label: id.replace(/_/g, ' '),
         source: 'relic' as const,
         mutableDuringRun: false,
         changeWindow: 'Relic draft or relic service only.'
     })),
-    ...run.activeMutators.map((id) => ({
+    ...stringArray(run.activeMutators).map((id) => ({
         id: `mutator:${id}`,
         label: id.replace(/_/g, ' '),
         source: 'mutator' as const,
@@ -542,7 +550,7 @@ export const gainRunInventoryItem = (
         case 'wild_match_token':
             return { ...run, wildMatchesRemaining: nonNegativeQuantity(run.wildMatchesRemaining) + gain };
         case 'iron_key':
-            return { ...run, dungeonKeys: { ...run.dungeonKeys, iron: nonNegativeQuantity(run.dungeonKeys.iron) + gain } };
+            return { ...run, dungeonKeys: { ...dungeonKeyRecord(run.dungeonKeys), iron: nonNegativeQuantity(dungeonKeyRecord(run.dungeonKeys).iron) + gain } };
         case 'master_key':
             return { ...run, dungeonMasterKeys: nonNegativeQuantity(run.dungeonMasterKeys) + gain };
         case 'guard_token':
@@ -589,14 +597,15 @@ export const useRunInventoryItem = (run: RunState, itemId: RunInventoryItemId): 
         case 'wild_match_token':
             return { run: { ...run, wildMatchesRemaining: Math.max(0, nonNegativeQuantity(run.wildMatchesRemaining) - 1) }, itemId, applied: true };
         case 'iron_key': {
-            const spendKind = KEY_SPEND_ORDER.find((kind) => nonNegativeQuantity(run.dungeonKeys[kind] ?? 0) > 0);
+            const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
+            const spendKind = KEY_SPEND_ORDER.find((kind) => nonNegativeQuantity(dungeonKeys[kind] ?? 0) > 0);
             if (!spendKind) {
                 return { run, itemId, applied: false, reason: 'unavailable' };
             }
             return {
                 run: {
                     ...run,
-                    dungeonKeys: { ...run.dungeonKeys, [spendKind]: Math.max(0, nonNegativeQuantity(run.dungeonKeys[spendKind] ?? 0) - 1) }
+                    dungeonKeys: { ...dungeonKeys, [spendKind]: Math.max(0, nonNegativeQuantity(dungeonKeys[spendKind] ?? 0) - 1) }
                 },
                 itemId,
                 applied: true

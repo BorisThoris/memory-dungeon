@@ -11,7 +11,7 @@ import {
     RUN_LOADOUT_SLOT_LIMIT,
     useRunInventoryItem
 } from './run-inventory';
-import { MAX_GUARD_TOKENS } from './contracts';
+import { MAX_GUARD_TOKENS, type RunState } from './contracts';
 
 describe('REG-079 run inventory, consumables, and loadout model', () => {
     it('derives run-scoped consumables from current charges and stack limits', () => {
@@ -217,6 +217,23 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         expect(gainRunInventoryItem(run, 'peek_charge', Number.POSITIVE_INFINITY)).toBe(run);
     });
 
+    it('normalizes malformed inventory arrays and key records before projecting rows', () => {
+        const run = {
+            ...createNewRun(0),
+            activeMutators: Number.NaN as unknown as [],
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys'],
+            relicIds: Number.NaN as unknown as []
+        };
+        const inventory = buildRunInventory(run);
+
+        expect(inventory.consumables.find((row) => row.id === 'iron_key')).toMatchObject({
+            quantity: 0,
+            quantityLabel: '0'
+        });
+        expect(inventory.loadout).toHaveLength(0);
+        expect(getRunInventoryLoadoutRows(run)).toEqual([]);
+    });
+
     it('treats invalid runtime inventory reward ids as rejected rewards', () => {
         const run = createNewRun(0);
         const invalidItemId = 'missing_reward' as never;
@@ -292,6 +309,19 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         expect(mastered.run.dungeonMasterKeys).toBe(0);
         expect(wilded.applied).toBe(true);
         expect(wilded.run.wildMatchesRemaining).toBe(0);
+    });
+
+    it('normalizes malformed key records before gaining or spending run inventory keys', () => {
+        const malformed = {
+            ...createNewRun(0),
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys']
+        };
+        const gained = gainRunInventoryItem(malformed, 'iron_key');
+        const spent = useRunInventoryItem({ ...gained, dungeonKeys: { iron: 1.8 } }, 'iron_key');
+
+        expect(gained.dungeonKeys.iron).toBe(1);
+        expect(spent.applied).toBe(true);
+        expect(spent.run.dungeonKeys.iron).toBe(0);
     });
 
     it('separates mutable mid-run consumables from fixed loadout slots', () => {
