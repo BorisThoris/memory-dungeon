@@ -30,6 +30,7 @@ import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { createNewRun } from './run-creation-rules';
 import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run-map';
 import { getRunShopStockPlan, SHOP_KEY_ITEM_BY_KIND } from './shop-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles } from './enemy-hazard-board-rules';
 import {
     formatDungeonBoardTopologyIssue,
@@ -168,6 +169,16 @@ export const solveGeneratedBoardByExhaustingPairs = (board: BoardState, seed: nu
     const run = createGeneratedBoardSolverRun(board, seed);
     return solveRunByExhaustingPlayablePairsWithTrace(run).run;
 };
+
+export const createShopStockInspectionRun = (run: RunState, board: BoardState): RunState => ({
+    ...run,
+    status: 'playing',
+    shopRerolls: 0,
+    stats: {
+        ...normalizeSessionStats(run.stats),
+        highestLevel: Math.max(1, board.level)
+    }
+});
 
 const solveGeneratedBoardByExhaustingPairsWithTrace = (board: BoardState, seed: number): PlaythroughSolverTrace => {
     return solveRunByExhaustingPlayablePairsWithTrace(createGeneratedBoardSolverRun(board, seed));
@@ -398,15 +409,7 @@ const recordShopStockInspection = (
     }
     result.checkedShopPlans += 1;
     const run = createGeneratedBoardSolverRun(board, seed);
-    const plan = getRunShopStockPlan({
-        ...run,
-        status: 'playing',
-        shopRerolls: 0,
-        stats: {
-            ...run.stats,
-            highestLevel: Math.max(1, board.level)
-        }
-    });
+    const plan = getRunShopStockPlan(createShopStockInspectionRun(run, board));
     const requiredKeyItem = requiredShopInsuranceItemForBoard(board);
     if ((requiredKeyItem && plan.itemIds.includes(requiredKeyItem)) || plan.itemIds.includes('master_key')) {
         return;

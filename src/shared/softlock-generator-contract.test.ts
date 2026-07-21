@@ -11,6 +11,7 @@ import {
     createClearedBoardFairnessProjection,
     createFinalPairFairnessProjection,
     createGeneratedBoardSolverRun,
+    createShopStockInspectionRun,
     formatSoftlockGeneratorFailure,
     runSoftlockGeneratorContract,
     solveGeneratedBoardByExhaustingPairs
@@ -108,6 +109,17 @@ describe('softlock generator contract', () => {
         expect(run.board?.level).toBe(6);
         expect(run.dungeonRun.currentFloor).toBe(6);
         expect(plan.itemIds[0]).toBe('iron_key');
+
+        const malformedStatsRun = createShopStockInspectionRun(
+            {
+                ...run,
+                stats: Number.NaN as unknown as typeof run.stats
+            },
+            board
+        );
+        expect(malformedStatsRun.stats.highestLevel).toBe(6);
+        expect(malformedStatsRun.stats.totalScore).toBe(0);
+        expect(getRunShopStockPlan(malformedStatsRun).itemIds[0]).toBe('iron_key');
     });
 
     it('executes generated boards through pair exhaustion and primary exit activation', () => {
