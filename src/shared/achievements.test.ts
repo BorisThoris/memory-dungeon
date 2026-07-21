@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { AchievementId, RunState } from './contracts';
 import { ACHIEVEMENT_BY_ID, ACHIEVEMENTS, evaluateAchievementUnlocks } from './achievements';
 import { createNewRun } from './game-core';
-import { createDefaultSaveData } from './save-data';
+import { ACHIEVEMENT_IDS, createDefaultSaveData, createAchievementState } from './save-data';
 
 describe('achievement catalog copy', () => {
     it('every AchievementId has non-empty title and description', () => {
@@ -15,6 +15,12 @@ describe('achievement catalog copy', () => {
             expect(a.description.trim().length).toBeGreaterThan(0);
         }
         expect(ACHIEVEMENTS.length).toBe(ids.length);
+    });
+
+    it('keeps achievement catalog, display order, and default save state aligned', () => {
+        expect(Object.keys(ACHIEVEMENT_BY_ID).sort()).toEqual([...ACHIEVEMENT_IDS].sort());
+        expect(ACHIEVEMENTS.map((row) => row.id)).toEqual([...ACHIEVEMENT_IDS]);
+        expect(Object.keys(createAchievementState()).sort()).toEqual([...ACHIEVEMENT_IDS].sort());
     });
 });
 

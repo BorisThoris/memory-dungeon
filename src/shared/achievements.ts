@@ -1,5 +1,6 @@
 import type { AchievementId, RunState, SaveData } from './contracts';
 import { ACHIEVEMENT_CATALOG, type AchievementCodexEntry } from './mechanics-encyclopedia';
+import { ACHIEVEMENT_IDS } from './save-data';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type AchievementDefinition = AchievementCodexEntry;
@@ -7,17 +8,7 @@ export type AchievementDefinition = AchievementCodexEntry;
 /** Re-export encyclopedia copy (single source of truth). */
 export const ACHIEVEMENT_BY_ID: Record<AchievementId, AchievementDefinition> = ACHIEVEMENT_CATALOG;
 
-const ACHIEVEMENT_ORDER: AchievementId[] = [
-    'ACH_FIRST_CLEAR',
-    'ACH_LEVEL_FIVE',
-    'ACH_SCORE_THOUSAND',
-    'ACH_PERFECT_CLEAR',
-    'ACH_LAST_LIFE',
-    'ACH_ENDLESS_TEN',
-    'ACH_SEVEN_DAILIES'
-];
-
-export const ACHIEVEMENTS: AchievementDefinition[] = ACHIEVEMENT_ORDER.map((id) => ACHIEVEMENT_BY_ID[id]);
+export const ACHIEVEMENTS: AchievementDefinition[] = ACHIEVEMENT_IDS.map((id) => ACHIEVEMENT_BY_ID[id]);
 
 const nonNegativeAchievementCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
