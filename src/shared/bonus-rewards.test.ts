@@ -11,7 +11,8 @@ import {
     getBonusRewardRows,
     getPrimaryRewardPerkReadinessRow,
     getRewardPerkReadinessRows,
-    getRewardPerkRows
+    getRewardPerkRows,
+    type BonusRewardPayout
 } from './bonus-rewards';
 import { buildBoard } from './board-build-rules';
 import { GAME_RULES_VERSION, MAX_COMBO_SHARDS, MAX_GUARD_TOKENS, type RunState } from './contracts';
@@ -836,6 +837,11 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
     });
 
     it('ignores malformed numeric reward payloads before they can poison run counters', () => {
+        const malformedInventoryItems = {
+            peek_charge: Number.NaN,
+            destroy_charge: 1.8,
+            missing_item: 99
+        } as BonusRewardPayout['inventoryItems'];
         const room = {
             ...rollBonusRewardRoom({
                 runSeed: 75_011,
@@ -849,7 +855,7 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
                 score: Number.POSITIVE_INFINITY,
                 comboShards: Number.NEGATIVE_INFINITY,
                 relicFavorProgress: -2,
-                inventoryItems: { peek_charge: Number.NaN, destroy_charge: 1.8 }
+                inventoryItems: malformedInventoryItems
             },
             eligible: true,
             unavailableReason: null

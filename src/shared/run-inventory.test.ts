@@ -9,6 +9,7 @@ import {
     getDungeonKeyTotal,
     getRunConsumableRows,
     getRunInventoryGainFeedback,
+    getRunInventoryItemPayoutRows,
     getRunInventoryLoadoutRows,
     previewRunInventoryItemGain,
     RUN_INVENTORY_CATALOG,
@@ -233,6 +234,21 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         });
         expect(getDungeonKeyTotal(Number.NaN)).toBe(0);
         expect(getDungeonKeyTotal([{ iron: 99 }])).toBe(0);
+    });
+
+    it('builds bounded inventory payout rows in catalog order', () => {
+        const rows = getRunInventoryItemPayoutRows({
+            peek_charge: 2.8,
+            destroy_charge: Number.NaN,
+            guard_token: -1,
+            missing_item: 99
+        });
+
+        expect(rows.map((row) => row.id)).toEqual([...RUN_INVENTORY_ITEM_IDS]);
+        expect(rows.find((row) => row.id === 'peek_charge')?.amount).toBe(2);
+        expect(rows.find((row) => row.id === 'destroy_charge')?.amount).toBe(0);
+        expect(rows.find((row) => row.id === 'guard_token')?.amount).toBe(0);
+        expect(getRunInventoryItemPayoutRows(['peek_charge']).every((row) => row.amount === 0)).toBe(true);
     });
 
     it('ignores malformed reward amounts before they can poison inventory counters', () => {

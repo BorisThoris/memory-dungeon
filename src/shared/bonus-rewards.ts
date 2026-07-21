@@ -9,7 +9,12 @@ import {
 } from './contracts';
 import { hashStringToSeed } from './rng';
 import type { RunMapNodeKind } from './run-map';
-import { gainRunInventoryItem, getRunInventoryGainFeedback, type RunInventoryItemId } from './run-inventory';
+import {
+    gainRunInventoryItem,
+    getRunInventoryGainFeedback,
+    getRunInventoryItemPayoutRows,
+    type RunInventoryItemId
+} from './run-inventory';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitBuildRewardRowsForBoard } from './trait-build-rewards';
 
@@ -791,13 +796,12 @@ const applyBonusRewardPayout = (
         gained.push(`Unlock ${REWARD_PERK_LABELS[perkId]}`);
         gained.push(`Perk next: ${REWARD_PERK_NEXT_CUES[perkId]}`);
     }
-    for (const [itemId, amount] of Object.entries(payout.inventoryItems ?? {}) as [RunInventoryItemId, number][]) {
-        const safeAmount = nonNegativeFiniteAmount(amount);
-        if (safeAmount <= 0) {
+    for (const { id: itemId, amount } of getRunInventoryItemPayoutRows(payout.inventoryItems)) {
+        if (amount <= 0) {
             continue;
         }
-        const preview = getRunInventoryGainFeedback(nextRun, itemId, safeAmount);
-        nextRun = gainRunInventoryItem(nextRun, itemId, safeAmount);
+        const preview = getRunInventoryGainFeedback(nextRun, itemId, amount);
+        nextRun = gainRunInventoryItem(nextRun, itemId, amount);
         if (preview.gainedLabel) {
             gained.push(preview.gainedLabel);
         }

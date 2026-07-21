@@ -248,6 +248,11 @@ export interface DungeonKeyQuantityRow {
     quantity: number;
 }
 
+export interface RunInventoryItemPayoutRow {
+    id: RunInventoryItemId;
+    amount: number;
+}
+
 export const getDungeonKeyQuantityRows = (value: unknown): DungeonKeyQuantityRow[] => {
     const dungeonKeys = dungeonKeyRecord(value);
     return DUNGEON_KEY_SPEND_ORDER.map((kind) => ({
@@ -258,6 +263,14 @@ export const getDungeonKeyQuantityRows = (value: unknown): DungeonKeyQuantityRow
 
 export const getDungeonKeyTotal = (value: unknown): number =>
     getDungeonKeyQuantityRows(value).reduce((sum, row) => sum + row.quantity, 0);
+
+export const getRunInventoryItemPayoutRows = (value: unknown): RunInventoryItemPayoutRow[] => {
+    const payouts = value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+    return RUN_INVENTORY_ITEM_IDS.map((id) => ({
+        id,
+        amount: nonNegativeQuantity(payouts[id])
+    }));
+};
 
 export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemId): number => {
     const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
