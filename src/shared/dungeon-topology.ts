@@ -9,6 +9,7 @@ import type {
 } from './contracts';
 import { activeEnemyHazardsForBoard, allRealBoardPairsCleared } from './enemy-hazard-board-rules';
 import { dungeonKeyKindArticleLabel } from './dungeon-key-copy';
+import { getFloorHeldDungeonKeyCount } from './dungeon-key-rules';
 import { getDungeonKeyQuantityRows } from './run-inventory';
 import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 
@@ -132,12 +133,6 @@ const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
 
 const nonNegativeDungeonTopologyCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const floorHeldKeyCount = (board: BoardState, keyKind: DungeonKeyKind): number =>
-    nonNegativeDungeonTopologyCount(board.dungeonKeysHeldByKind?.[keyKind]) +
-    (board.dungeonKeysHeldByKind == null && keyKind === 'iron'
-        ? nonNegativeDungeonTopologyCount(board.dungeonKeysHeld)
-        : 0);
 
 const bossObjectiveAlreadySettled = (board: BoardState): boolean => {
     if (board.dungeonObjectiveId !== 'defeat_boss' || board.dungeonBossId == null) {
@@ -353,7 +348,7 @@ export const createDungeonBoardTopology = (
             requirement: requirementForExit(lockKind, requiredLeverCount)
         });
 
-        if (lockKind !== 'none' && lockKind !== 'lever' && floorHeldKeyCount(board, lockKind) > 0) {
+        if (lockKind !== 'none' && lockKind !== 'lever' && getFloorHeldDungeonKeyCount(board, lockKind) > 0) {
             const heldKeyNodeId = `floor-key:${lockKind}`;
             addNodeOnce(graph, heldKeyNodeId, { kind: 'key', label: `${lockKind} floor key`, keyKind: lockKind });
             addEdgeOnce(graph, START_NODE_ID, heldKeyNodeId, { label: 'held floor key', requirement: { kind: 'none' } });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addRunDungeonKey } from './dungeon-key-rules';
+import { addRunDungeonKey, getFloorHeldDungeonKeyCount } from './dungeon-key-rules';
 
 describe('dungeon-key-rules', () => {
     it('adds keys without mutating the original inventory', () => {
@@ -26,5 +26,19 @@ describe('dungeon-key-rules', () => {
             shrine: 1,
             trap: 1
         });
+    });
+
+    it('counts typed floor-held keys with legacy iron fallback only when typed keys are absent', () => {
+        expect(getFloorHeldDungeonKeyCount({ dungeonKeysHeld: 2 }, 'iron')).toBe(2);
+        expect(getFloorHeldDungeonKeyCount({ dungeonKeysHeld: 2 }, 'treasure')).toBe(0);
+        expect(getFloorHeldDungeonKeyCount({ dungeonKeysHeld: 2, dungeonKeysHeldByKind: { treasure: 1 } }, 'iron')).toBe(0);
+        expect(getFloorHeldDungeonKeyCount({ dungeonKeysHeld: 2, dungeonKeysHeldByKind: { treasure: 1 } }, 'treasure')).toBe(1);
+    });
+
+    it('normalizes malformed floor-held key counters', () => {
+        expect(getFloorHeldDungeonKeyCount({ dungeonKeysHeld: Number.POSITIVE_INFINITY }, 'iron')).toBe(0);
+        expect(getFloorHeldDungeonKeyCount({ dungeonKeysHeldByKind: { shrine: 1.9 } }, 'shrine')).toBe(1);
+        expect(getFloorHeldDungeonKeyCount({ dungeonKeysHeldByKind: { boss: Number.NaN } }, 'boss')).toBe(0);
+        expect(getFloorHeldDungeonKeyCount(undefined, 'trap')).toBe(0);
     });
 });

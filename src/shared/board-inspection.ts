@@ -14,6 +14,7 @@ import {
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey
 } from './tile-identity';
+import { getFloorHeldDungeonKeyCount } from './dungeon-key-rules';
 
 /** When the board includes a wild joker, returns its tile id; otherwise null. */
 export const getWildTileIdFromBoard = (board: BoardState): string | null =>
@@ -158,11 +159,7 @@ export const countReachableExitKeySources = (board: BoardState, keyKind: Dungeon
         board.tiles,
         (tile) => tile.dungeonCardKind === 'key' && (tile.dungeonKeyKind ?? 'iron') === keyKind
     );
-    const floorHeldKeyCount =
-        nonNegativeBoardInspectionCount(board.dungeonKeysHeldByKind?.[keyKind]) +
-        (board.dungeonKeysHeldByKind == null && keyKind === 'iron'
-            ? nonNegativeBoardInspectionCount(board.dungeonKeysHeld)
-            : 0);
+    const floorHeldKeyCount = getFloorHeldDungeonKeyCount(board, keyKind);
     const roomKeyCacheCount =
         keyKind === 'iron'
             ? board.tiles.filter((tile) => !tileIsClearedForFairness(tile) && tile.dungeonCardEffectId === 'room_key_cache').length

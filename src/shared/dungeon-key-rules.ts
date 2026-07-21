@@ -1,4 +1,4 @@
-import type { DungeonKeyKind } from './contracts';
+import type { BoardState, DungeonKeyKind } from './contracts';
 
 export type DungeonKeyInventory = Partial<Record<DungeonKeyKind, number>>;
 
@@ -16,3 +16,12 @@ export const addRunDungeonKey = (
     ...keys,
     [kind]: Math.max(0, nonNegativeDungeonKeyCount(keys[kind] ?? 0) + finiteDungeonKeyDelta(amount))
 });
+
+export const getFloorHeldDungeonKeyCount = (
+    board: Pick<BoardState, 'dungeonKeysHeld' | 'dungeonKeysHeldByKind'> | null | undefined,
+    kind: DungeonKeyKind
+): number =>
+    nonNegativeDungeonKeyCount(board?.dungeonKeysHeldByKind?.[kind]) +
+    (board?.dungeonKeysHeldByKind == null && kind === 'iron'
+        ? nonNegativeDungeonKeyCount(board?.dungeonKeysHeld)
+        : 0);
