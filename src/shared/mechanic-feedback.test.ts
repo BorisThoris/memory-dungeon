@@ -4,7 +4,9 @@ import {
     calculateMemoryTaxReview,
     CORE_SAFE_MEMORY_TAX,
     MECHANIC_TOKEN_DEFINITIONS,
+    MEMORY_TAX_AXES,
     perfectMemoryImpactCopy,
+    type MemoryTaxAxis,
     type MechanicTokenId
 } from './mechanic-feedback';
 
@@ -23,6 +25,15 @@ const EXPECTED_TOKENS = [
     'momentum'
 ] as const satisfies readonly MechanicTokenId[];
 
+const EXPECTED_MEMORY_TAX_AXES = [
+    'informationBypass',
+    'spatialDisruption',
+    'mistakeRecovery',
+    'hiddenPunishment',
+    'boardCompletionRisk',
+    'uiComprehensionLoad'
+] as const satisfies readonly MemoryTaxAxis[];
+
 describe('gameplay mechanic feedback contract', () => {
     it('defines the full semantic token vocabulary with a11y hints', () => {
         expect(Object.keys(MECHANIC_TOKEN_DEFINITIONS).sort()).toEqual([...EXPECTED_TOKENS].sort());
@@ -37,6 +48,9 @@ describe('gameplay mechanic feedback contract', () => {
     });
 
     it('scores memory-tax bands and blocks severe hidden punishment or completion risk', () => {
+        expect(MEMORY_TAX_AXES).toEqual([...EXPECTED_MEMORY_TAX_AXES]);
+        expect(Object.keys(CORE_SAFE_MEMORY_TAX).sort()).toEqual([...EXPECTED_MEMORY_TAX_AXES].sort());
+
         expect(calculateMemoryTaxReview(CORE_SAFE_MEMORY_TAX)).toMatchObject({
             total: 0,
             band: 'core_safe',

@@ -103,6 +103,15 @@ export type MemoryTaxAxis =
     | 'boardCompletionRisk'
     | 'uiComprehensionLoad';
 
+export const MEMORY_TAX_AXES = [
+    'informationBypass',
+    'spatialDisruption',
+    'mistakeRecovery',
+    'hiddenPunishment',
+    'boardCompletionRisk',
+    'uiComprehensionLoad'
+] as const satisfies readonly MemoryTaxAxis[];
+
 export type MemoryTaxScore = Record<MemoryTaxAxis, 0 | 1 | 2 | 3>;
 
 export interface MemoryTaxReview {
@@ -113,7 +122,7 @@ export interface MemoryTaxReview {
 }
 
 export const calculateMemoryTaxReview = (score: MemoryTaxScore): MemoryTaxReview => {
-    const total = Object.values(score).reduce<number>((sum, value) => sum + value, 0);
+    const total = MEMORY_TAX_AXES.reduce<number>((sum, axis) => sum + score[axis], 0);
     const blockedByAxis = score.hiddenPunishment === 3 || score.boardCompletionRisk === 3;
     const band =
         total <= 4
