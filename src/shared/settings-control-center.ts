@@ -15,29 +15,29 @@ export interface SettingsControlCenterRow {
     localOnly: true;
 }
 
-export const getLiveSettingsControlCount = (settings: Settings = DEFAULT_SETTINGS): number => {
-    const liveEntries: Array<keyof Settings> = [
-        'masterVolume',
-        'musicVolume',
-        'sfxVolume',
-        'displayMode',
-        'uiScale',
-        'reduceMotion',
-        'graphicsQuality',
-        'boardScreenSpaceAA',
-        'boardBloomEnabled',
-        'boardPresentation',
-        'cameraViewportModePreference',
-        'tileFocusAssist',
-        'resolveDelayMultiplier',
-        'weakerShuffleMode',
-        'echoFeedbackEnabled',
-        'distractionChannelEnabled',
-        'shuffleScoreTaxEnabled',
-        'pairProximityHintsEnabled'
-    ];
+export const LIVE_SETTINGS_CONTROL_KEYS = [
+    'masterVolume',
+    'musicVolume',
+    'sfxVolume',
+    'displayMode',
+    'uiScale',
+    'reduceMotion',
+    'graphicsQuality',
+    'boardScreenSpaceAA',
+    'boardBloomEnabled',
+    'boardPresentation',
+    'cameraViewportModePreference',
+    'tileFocusAssist',
+    'resolveDelayMultiplier',
+    'weakerShuffleMode',
+    'echoFeedbackEnabled',
+    'distractionChannelEnabled',
+    'shuffleScoreTaxEnabled',
+    'pairProximityHintsEnabled'
+] as const satisfies readonly (keyof Settings)[];
 
-    return liveEntries.filter((key) => key in settings).length;
+export const getLiveSettingsControlCount = (settings: Settings = DEFAULT_SETTINGS): number => {
+    return LIVE_SETTINGS_CONTROL_KEYS.filter((key) => key in settings).length;
 };
 
 export const getSettingsControlCenterRows = (settings: Settings = DEFAULT_SETTINGS): SettingsControlCenterRow[] => [
