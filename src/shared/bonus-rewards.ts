@@ -236,12 +236,11 @@ export const createBonusRewardLedger = (): BonusRewardLedger => ({
 const normalizeBonusRewardLedger = (ledger: BonusRewardLedger): BonusRewardLedger => {
     const claimedRewardIds: BonusRewardLedger['claimedRewardIds'] = {};
     if (ledger.claimedRewardIds && typeof ledger.claimedRewardIds === 'object' && !Array.isArray(ledger.claimedRewardIds)) {
-        for (const [id, count] of Object.entries(ledger.claimedRewardIds)) {
-            if (isBonusRewardId(id)) {
-                const safeCount = nonNegativeLedgerCount(count);
-                if (safeCount > 0) {
-                    claimedRewardIds[id] = safeCount;
-                }
+        const savedRewardIds = ledger.claimedRewardIds as Partial<Record<BonusRewardId, unknown>>;
+        for (const id of BONUS_REWARD_IDS) {
+            const safeCount = nonNegativeLedgerCount(savedRewardIds[id]);
+            if (safeCount > 0) {
+                claimedRewardIds[id] = safeCount;
             }
         }
     }
