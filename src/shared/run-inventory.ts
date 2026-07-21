@@ -24,6 +24,25 @@ export type RunInventoryItemId =
     | 'mutator_loadout'
     | 'contract_loadout';
 
+export const RUN_INVENTORY_ITEM_IDS = [
+    'shuffle_charge',
+    'region_shuffle_charge',
+    'destroy_charge',
+    'peek_charge',
+    'stray_remove_charge',
+    'flash_pair_charge',
+    'undo_charge',
+    'gambit_token',
+    'wild_match_token',
+    'iron_key',
+    'master_key',
+    'guard_token',
+    'combo_shard',
+    'relic_loadout',
+    'mutator_loadout',
+    'contract_loadout'
+] as const satisfies readonly RunInventoryItemId[];
+
 export type RunInventoryItemKind = 'consumable' | 'loadout';
 export type RunInventoryMutability = 'mid_run' | 'floor_only' | 'shop_or_rest' | 'draft_only' | 'locked';
 
@@ -311,7 +330,7 @@ const fullReasonFor = (definition: RunInventoryDefinition, quantity: number): st
 };
 
 export const getRunInventoryRows = (run: RunState): RunInventoryRow[] =>
-    (Object.keys(RUN_INVENTORY_CATALOG) as RunInventoryItemId[]).map((id) => {
+    RUN_INVENTORY_ITEM_IDS.map((id) => {
         const definition = RUN_INVENTORY_CATALOG[id];
         const quantity = getRunInventoryItemQuantity(run, id);
         const unavailableReason = unavailableReasonFor(run, id, quantity);

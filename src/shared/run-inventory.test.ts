@@ -9,6 +9,8 @@ import {
     getRunInventoryGainFeedback,
     getRunInventoryLoadoutRows,
     previewRunInventoryItemGain,
+    RUN_INVENTORY_CATALOG,
+    RUN_INVENTORY_ITEM_IDS,
     RUN_LOADOUT_SLOT_LIMIT,
     useRunInventoryItem
 } from './run-inventory';
@@ -20,6 +22,10 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         const inventory = buildRunInventory(run);
 
         expect(inventory.offlineOnly).toBe(true);
+        expect(Object.keys(RUN_INVENTORY_CATALOG)).toEqual([...RUN_INVENTORY_ITEM_IDS]);
+        expect(getRunConsumableRows(run).map((row) => row.id)).toEqual(
+            RUN_INVENTORY_ITEM_IDS.filter((id) => RUN_INVENTORY_CATALOG[id].kind === 'consumable')
+        );
         expect(inventory.consumables.map((row) => row.id)).toEqual([
             'shuffle_charge',
             'region_shuffle_charge',
