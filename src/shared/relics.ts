@@ -29,6 +29,12 @@ export const RELIC_MILESTONE_STEP = 3;
 /** Cap total relic picks per run (Endless scaling safety). */
 export const MAX_RELIC_PICKS_PER_RUN = 12;
 
+export const RELIC_OFFER_SERVICE_IDS = [
+    'reroll_offer',
+    'ban_option',
+    'upgrade_offer'
+] as const satisfies readonly RelicOfferServiceId[];
+
 /** Draft rarity — affects base weight and how fast odds rise with {@link relicMilestoneIndexForFloor}. */
 export type RelicDraftRarity = 'common' | 'uncommon' | 'rare';
 export type RelicDraftTag =
@@ -865,7 +871,7 @@ export const getRelicDraftOptionReasons = (
     return Object.keys(reasons).length > 0 ? reasons : undefined;
 };
 
-const RELIC_OFFER_SERVICE_CATALOG: Record<
+export const RELIC_OFFER_SERVICE_CATALOG: Record<
     RelicOfferServiceId,
     { label: string; description: string; cost: number }
 > = {
@@ -892,7 +898,7 @@ const relicOfferServiceUseCount = (run: RunState, serviceId: RelicOfferServiceId
 export const createRelicOfferServices = (run: RunState): RelicOfferServiceState[] => {
     const offer = run.relicOffer;
     const wallet = nonNegativeRelicOfferCount(run.shopGold);
-    return (Object.keys(RELIC_OFFER_SERVICE_CATALOG) as RelicOfferServiceId[]).map((serviceId) => {
+    return RELIC_OFFER_SERVICE_IDS.map((serviceId) => {
         const base = RELIC_OFFER_SERVICE_CATALOG[serviceId];
         let unavailableReason: string | null = null;
         if (!offer) {

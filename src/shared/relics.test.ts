@@ -20,6 +20,8 @@ import {
     rollRelicOptions,
     RELIC_BUILD_ARCHETYPE_DEFINITIONS,
     RELIC_BUILD_ARCHETYPE_ORDER,
+    RELIC_OFFER_SERVICE_CATALOG,
+    RELIC_OFFER_SERVICE_IDS,
     RELIC_POOL
 } from './relics';
 
@@ -580,7 +582,8 @@ describe('REG-078 relic offer services', () => {
         const run = openOfferRun();
         const rows = createRelicOfferServices(run);
 
-        expect(rows.map((row) => row.serviceId)).toEqual(['reroll_offer', 'ban_option', 'upgrade_offer']);
+        expect(Object.keys(RELIC_OFFER_SERVICE_CATALOG)).toEqual([...RELIC_OFFER_SERVICE_IDS]);
+        expect(rows.map((row) => row.serviceId)).toEqual([...RELIC_OFFER_SERVICE_IDS]);
         expect(rows.every((row) => row.available && row.cost > 0)).toBe(true);
         expect(createRelicOfferServices({ ...run, shopGold: 0 }).every((row) => !row.available)).toBe(true);
     });
