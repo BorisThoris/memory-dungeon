@@ -114,8 +114,14 @@ export const runEconomyDefinitionById = RUN_ECONOMY_DEFINITIONS.reduce<Record<st
 const nonNegativeRunEconomyCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const dungeonKeyRecord = (value: unknown): Record<string, unknown> =>
+    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+
 const dungeonKeyTotal = (run: RunState): number =>
-    Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeRunEconomyCount(count), 0);
+    Object.values(dungeonKeyRecord(run.dungeonKeys)).reduce<number>(
+        (sum, count) => sum + nonNegativeRunEconomyCount(count),
+        0
+    );
 
 const valueFor = (run: RunState, id: string): string => {
     switch (id) {

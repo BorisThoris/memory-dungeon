@@ -117,7 +117,7 @@ describe('dungeon board status', () => {
             ]
         } as BoardState;
         const statusRun = run(board, {
-            dungeonKeys: { iron: Number.NaN },
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys'],
             dungeonMasterKeys: Number.POSITIVE_INFINITY
         });
 

@@ -27,6 +27,9 @@ import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 const nonNegativeDungeonStatusCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const dungeonStatusKeyRecord = (value: unknown): Record<string, unknown> =>
+    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+
 const nonNegativeDungeonStatusCountWithFallback = (value: unknown, fallback: number): number =>
     typeof value === 'number' && Number.isFinite(value)
         ? Math.max(0, Math.floor(value))
@@ -697,7 +700,10 @@ export const getDungeonBoardStatus = (run: RunState): DungeonBoardStatus => {
         leverCount: nonNegativeDungeonStatusCount(board?.dungeonLeverCount),
         requiredLeverCount: exitStatus.requiredLeverCount,
         keyCount:
-            Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeDungeonStatusCount(count), 0) +
+            Object.values(dungeonStatusKeyRecord(run.dungeonKeys)).reduce<number>(
+                (sum, count) => sum + nonNegativeDungeonStatusCount(count),
+                0
+            ) +
             nonNegativeDungeonStatusCount(run.dungeonMasterKeys),
         shopAvailable: Boolean(
             board?.tiles.some((tile) => tile.pairKey === SHOP_PAIR_KEY && tile.dungeonCardState !== 'resolved')

@@ -836,13 +836,19 @@ export interface RunEventPreviewState {
 const nonNegativeEventCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const eventDungeonKeyRecord = (value: unknown): Record<string, unknown> =>
+    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+
 export const createRunEventPreviewState = (run: RunState): RunEventPreviewState => ({
     shopGold: nonNegativeEventCount(run.shopGold),
     lives: nonNegativeEventCount(run.lives),
     relicFavorProgress: nonNegativeEventCount(run.relicFavorProgress),
     bonusRelicPicksNextOffer: nonNegativeEventCount(run.bonusRelicPicksNextOffer),
     favorBonusRelicPicksNextOffer: nonNegativeEventCount(run.favorBonusRelicPicksNextOffer),
-    ironKeys: Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeEventCount(count), 0),
+    ironKeys: Object.values(eventDungeonKeyRecord(run.dungeonKeys)).reduce<number>(
+        (sum, count) => sum + nonNegativeEventCount(count),
+        0
+    ),
     totalScore: nonNegativeEventCount(run.stats.totalScore),
     currentLevelScore: nonNegativeEventCount(run.stats.currentLevelScore),
     bestScore: nonNegativeEventCount(run.stats.bestScore),

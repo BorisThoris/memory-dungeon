@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import {
     RUN_ECONOMY_DEFINITIONS,
@@ -75,7 +76,7 @@ describe('REG-024 run economy taxonomy', () => {
             ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
             shopGold: Number.POSITIVE_INFINITY,
             relicFavorProgress: Number.NaN,
-            dungeonKeys: { iron: Number.POSITIVE_INFINITY, treasure: 1.9 },
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys'],
             dungeonMasterKeys: Number.NaN,
             findablesClaimedThisFloor: Number.NaN,
             findablesTotalThisFloor: Number.POSITIVE_INFINITY,
@@ -100,7 +101,7 @@ describe('REG-024 run economy taxonomy', () => {
             'combo_shards:0/2',
             'guard_tokens:1/2',
             'relic_favor:0/3',
-            'dungeon_keys:1 keys · 0 master',
+            'dungeon_keys:0 keys · 0 master',
             'findable_pickups:0/0',
             'assist_charges:Shuffle 0 · Row 1 · Destroy 0 · Peek 0 · Stray 2'
         ]);

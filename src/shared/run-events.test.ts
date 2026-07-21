@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { copyToneAllowsPlayerFacingText } from './copy-tone';
 import { createNewRun } from './game-core';
-import { GAME_RULES_VERSION } from './contracts';
+import { GAME_RULES_VERSION, type RunState } from './contracts';
 import {
     RUN_EVENT_TABLE,
     applyRunEventChoice,
@@ -364,6 +364,15 @@ describe('REG-074 run event rooms', () => {
             bonusRelicPicksNextOffer: 2,
             favorBonusRelicPicksNextOffer: 2
         });
+    });
+
+    it('normalizes malformed key records before event previews', () => {
+        const run = {
+            ...createNewRun(0),
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys']
+        };
+
+        expect(createRunEventPreviewState(run).ironKeys).toBe(0);
     });
 
     it('previews full-life recovery as guard instead of hiding the promised fallback', () => {
