@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MATCH_DELAY_MS } from './contracts';
+import { MATCH_DELAY_MS, type RelicId } from './contracts';
 import { createNewRun } from './game-core';
 import {
     calculateLevelClearBonus,
@@ -24,6 +24,15 @@ describe('scoring-rules', () => {
 
         const meditation = createNewRun(0, { gameMode: 'meditation' });
         expect(getMemorizeDurationForRun(meditation, 1)).toBe(Math.floor(1300 * 1.55));
+    });
+
+    it('ignores malformed relic ids when calculating run memorize duration', () => {
+        const run = {
+            ...createNewRun(0, { activeMutators: ['short_memorize'] }),
+            relicIds: Number.NaN as unknown as RelicId[]
+        };
+
+        expect(getMemorizeDurationForRun(run, 1)).toBe(950);
     });
 
     it('applies boss identity pressure to boss-floor memorize time', () => {

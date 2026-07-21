@@ -298,6 +298,31 @@ describe('secondary objective rules', () => {
         });
     });
 
+    it('ignores malformed relic ids before applying wager surety', () => {
+        const run = {
+            ...createNewRun(0),
+            endlessRiskWager: {
+                acceptedOnLevel: 1,
+                targetLevel: 2,
+                streakAtRisk: 4,
+                bonusFavorOnSuccess: 2
+            },
+            featuredObjectiveStreak: 4,
+            relicIds: Number.NaN as unknown as RelicId[]
+        };
+
+        expect(getFeaturedObjectiveClearResult({
+            board: { ...run.board!, level: 2 },
+            completed: false,
+            objectiveId: 'glass_witness',
+            run
+        })).toMatchObject({
+            endlessRiskWagerOutcome: 'lost',
+            endlessRiskWagerStreakLost: 4,
+            featuredObjectiveStreak: 0
+        });
+    });
+
     it('adds wager favor on featured objective wager wins', () => {
         const run = {
             ...createNewRun(0),

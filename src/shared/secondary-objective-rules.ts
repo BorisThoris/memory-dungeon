@@ -6,6 +6,7 @@ import {
     FEATURED_OBJECTIVE_STREAK_MISS_DECAY,
     FLIP_PAR_BONUS_SCORE,
     GLASS_WITNESS_BONUS_SCORE,
+    type RelicId,
     type RunState,
     SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
     type FeaturedObjectiveId
@@ -26,6 +27,9 @@ export const getFlipParLimit = (pairCount: number): number => Math.ceil(pairCoun
 
 const nonNegativeObjectiveCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
+    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
 
 export const isFeaturedObjectiveCompleted = (
     run: RunState,
@@ -108,7 +112,7 @@ export const getFeaturedObjectiveClearResult = ({
             : null;
     const endlessRiskWagerOutcome =
         activeEndlessRiskWager != null ? (completed ? 'won' as const : 'lost' as const) : undefined;
-    const hasWagerSurety = run.relicIds.includes('wager_surety');
+    const hasWagerSurety = hasRunRelic(run, 'wager_surety');
     const previousFeaturedObjectiveStreak = nonNegativeObjectiveCount(run.featuredObjectiveStreak);
     const featuredObjectiveStreak =
         objectiveId != null

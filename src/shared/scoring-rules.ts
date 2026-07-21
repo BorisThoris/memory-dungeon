@@ -4,6 +4,7 @@ import {
     MEMORIZE_DECAY_EVERY_N_LEVELS,
     MEMORIZE_MIN_MS,
     MEMORIZE_STEP_MS,
+    type RelicId,
     type Rating,
     type RunState,
     type Tile
@@ -13,6 +14,9 @@ import { hasMutator } from './mutators';
 import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
 
 const ECHO_EXTRA_RESOLVE_MS = 380;
+
+const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
+    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
 
 /** Documented in `docs/BALANCE_NOTES.md` (presentation mutator match penalties). */
 export const PRESENTATION_MUTATOR_MATCH_PENALTIES = {
@@ -45,10 +49,10 @@ export const getMemorizeDurationForRun = (run: RunState, level: number): number 
     if (hasMutator(run, 'short_memorize')) {
         ms = Math.max(MEMORIZE_MIN_MS, ms - 350);
     }
-    if (run.relicIds.includes('memorize_bonus_ms')) {
+    if (hasRunRelic(run, 'memorize_bonus_ms')) {
         ms += 280;
     }
-    if (run.relicIds.includes('memorize_under_short_memorize') && hasMutator(run, 'short_memorize')) {
+    if (hasRunRelic(run, 'memorize_under_short_memorize') && hasMutator(run, 'short_memorize')) {
         ms += 220;
     }
     if (run.gameMode === 'meditation') {

@@ -134,4 +134,15 @@ describe('getParasiteFloorsAfterFeaturedObjectiveClear', () => {
             parasiteFloors: Number.NaN
         }, true)).toBe(0);
     });
+
+    it('ignores malformed relic ids before applying featured objective clears', () => {
+        const run = {
+            ...createNewRun(0),
+            activeMutators: ['score_parasite'] satisfies MutatorId[],
+            relicIds: Number.NaN as unknown as RelicId[],
+            parasiteFloors: 3
+        };
+
+        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(3);
+    });
 });
