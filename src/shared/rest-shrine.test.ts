@@ -1,7 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { MAX_GUARD_TOKENS, MAX_LIVES, type RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
-import { createRestShrineServices, getRestShrineReadModel, purchaseRestShrineService } from './rest-shrine';
+import {
+    createRestShrineServices,
+    getRestShrineReadModel,
+    purchaseRestShrineService,
+    REST_SHRINE_SERVICE_CATALOG,
+    REST_SHRINE_SERVICE_IDS
+} from './rest-shrine';
 
 describe('REG-073 rest shrine services', () => {
     it('exposes safe heal and risk bargain services with clear failure paths', () => {
@@ -18,6 +24,9 @@ describe('REG-073 rest shrine services', () => {
         const bargain = services.find((service) => service.serviceId === 'shrine_bargain')!;
         const ward = services.find((service) => service.serviceId === 'boss_ward')!;
 
+        expect(Object.keys(REST_SHRINE_SERVICE_CATALOG)).toEqual([...REST_SHRINE_SERVICE_IDS]);
+        expect(services.map((service) => service.serviceId)).toEqual([...REST_SHRINE_SERVICE_IDS]);
+        expect(services.map((service) => service.id.split(':rest:')[1])).toEqual(['0', '1', '2', '3']);
         expect(getRestShrineReadModel(damaged, services)).toMatchObject({
             serviceCount: 4,
             availableCount: 4,

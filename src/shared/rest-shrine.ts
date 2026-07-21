@@ -4,6 +4,13 @@ import { normalizeSessionStats } from './session-stats-rules';
 export type RestShrineServiceId = 'rest_heal' | 'guard_focus' | 'shrine_bargain' | 'boss_ward';
 export type RestShrineRisk = 'safe' | 'risk';
 
+export const REST_SHRINE_SERVICE_IDS = [
+    'rest_heal',
+    'guard_focus',
+    'shrine_bargain',
+    'boss_ward'
+] as const satisfies readonly RestShrineServiceId[];
+
 export interface RestShrineServiceDefinition {
     serviceId: RestShrineServiceId;
     label: string;
@@ -67,7 +74,7 @@ const nonNegativeRestShrineCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const createRestShrineServices = (run: RunState): RestShrineServiceState[] =>
-    (Object.keys(REST_SHRINE_SERVICE_CATALOG) as RestShrineServiceId[]).map((serviceId, index) => {
+    REST_SHRINE_SERVICE_IDS.map((serviceId, index) => {
         const base = REST_SHRINE_SERVICE_CATALOG[serviceId];
         const stats = normalizeSessionStats(run.stats);
         const unavailableReason =
