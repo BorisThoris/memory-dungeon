@@ -186,6 +186,14 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
             stats: Number.NaN as unknown as RunState['stats']
         };
 
+        const consumables = getRunConsumableRows(run);
+        expect(consumables.find((row) => row.id === 'guard_token')?.quantity).toBe(0);
+        expect(consumables.find((row) => row.id === 'combo_shard')?.quantity).toBe(0);
+        expect(previewRunInventoryItemGain(run, 'guard_token', 1)).toMatchObject({
+            quantity: 0,
+            accepted: 1,
+            nextQuantity: 1
+        });
         expect(gainRunInventoryItem(run, 'guard_token').stats.guardTokens).toBe(1);
         expect(gainRunInventoryItem(run, 'combo_shard').stats.comboShards).toBe(1);
     });

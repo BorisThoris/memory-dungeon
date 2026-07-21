@@ -226,6 +226,7 @@ const dungeonKeyRecord = (value: unknown): Partial<Record<DungeonKeyKind, number
 
 export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemId): number => {
     const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
+    const stats = normalizeSessionStats(run.stats);
     switch (id) {
         case 'shuffle_charge':
             return nonNegativeQuantity(run.shuffleCharges) + (run.freeShuffleThisFloor ? 1 : 0);
@@ -250,9 +251,9 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
         case 'master_key':
             return nonNegativeQuantity(run.dungeonMasterKeys);
         case 'guard_token':
-            return nonNegativeQuantity(run.stats.guardTokens);
+            return nonNegativeQuantity(stats.guardTokens);
         case 'combo_shard':
-            return nonNegativeQuantity(run.stats.comboShards);
+            return nonNegativeQuantity(stats.comboShards);
         case 'relic_loadout':
             return stringArray(run.relicIds).length;
         case 'mutator_loadout':

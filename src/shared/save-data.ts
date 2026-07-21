@@ -20,6 +20,7 @@ import { COSMETIC_IDS } from './cosmetic-ids';
 import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
 import { utcDateKeyMinusOneDay } from './rng';
 import { RELIC_POOL } from './relics';
+import { normalizeSessionStats } from './session-stats-rules';
 import { evaluateSaveMigrationGate, isRecognizedSaveSchemaVersion } from './version-gate';
 
 export type DailyStreakFreezePolicy = 'not_supported';
@@ -720,8 +721,9 @@ export const mergePuzzleCompletion = (save: SaveData, run: RunState): SaveData =
     const ps = save.playerStats ?? defaultPlayerStats();
     const completions = ps.puzzleCompletions ?? {};
     const existing = completions[run.puzzleId];
-    const mistakes = finiteNonNegativeInteger(run.lastLevelResult?.mistakes ?? run.stats.tries, 0);
-    const score = finiteNonNegativeInteger(run.stats.totalScore, 0);
+    const stats = normalizeSessionStats(run.stats);
+    const mistakes = finiteNonNegativeInteger(run.lastLevelResult?.mistakes ?? stats.tries, 0);
+    const score = stats.totalScore;
     const existingBestMistakes =
         existing?.bestMistakes == null ? null : finiteNonNegativeInteger(existing.bestMistakes, mistakes);
     const existingBestScore = finiteNonNegativeInteger(existing?.bestScore, 0);

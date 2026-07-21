@@ -1,4 +1,5 @@
 import type { BoardState, RunState, SaveData } from './contracts';
+import { normalizeSessionStats } from './session-stats-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
 export type OnboardingStepId = 'first_match' | 'recovery' | 'handoff';
@@ -76,8 +77,9 @@ const getStepCopy = (
     run: RunState,
     step: OnboardingStepRow
 ): Pick<PlayableOnboardingPrompt, 'title' | 'prompt' | 'detail'> => {
+    const stats = normalizeSessionStats(run.stats);
     if (step.id === 'recovery') {
-        if (nonNegativeOnboardingCount(run.stats.mismatches) > 0) {
+        if (stats.mismatches > 0) {
             return {
                 title: 'Recover and continue',
                 prompt: 'Stabilize the next pair',
@@ -108,7 +110,7 @@ const getStepCopy = (
 
     const flippedCount = onboardingArrayCount(run.board?.flippedTileIds);
     if (
-        (nonNegativeOnboardingCount(run.stats.mismatches) > 0 || nonNegativeOnboardingCount(run.stats.tries) > 0) &&
+        (stats.mismatches > 0 || stats.tries > 0) &&
         nonNegativeOnboardingCount(run.board?.matchedPairs) === 0
     ) {
         return {

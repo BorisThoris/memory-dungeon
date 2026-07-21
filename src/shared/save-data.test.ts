@@ -25,7 +25,7 @@ import {
     settingsBoundarySchema,
     SETTINGS_NUMERIC_RANGES
 } from './save-data';
-import type { RunSummary, SaveData } from './contracts';
+import type { RunState, RunSummary, SaveData } from './contracts';
 import {
     CURRENT_VERSION_GATE,
     formatVersionGateSummary,
@@ -707,6 +707,17 @@ describe('save normalization', () => {
 
         const mergedPuzzle = mergePuzzleCompletion(save, puzzleRun);
         expect(mergedPuzzle.playerStats?.puzzleCompletions?.starter_pairs).toEqual({
+            completed: true,
+            bestMistakes: 0,
+            bestScore: 0
+        });
+
+        const malformedStatsRun = {
+            ...puzzleRun,
+            lastLevelResult: null,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        expect(mergePuzzleCompletion(save, malformedStatsRun).playerStats?.puzzleCompletions?.starter_pairs).toEqual({
             completed: true,
             bestMistakes: 0,
             bestScore: 0

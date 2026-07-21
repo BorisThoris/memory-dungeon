@@ -572,6 +572,19 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
             readinessLabel: '0/2 chain'
         });
         expect(rows.map((row) => `${row.readinessLabel} ${row.readinessDetail}`).join(' ')).not.toMatch(/NaN|Infinity/);
+
+        const malformedStatsRows = getRewardPerkReadinessRows({
+            ...makeRun(),
+            activeContract: null,
+            matchResolutionsThisFloor: 0,
+            rewardPerkIds: ['trait_streak_toolkit'],
+            stats: Number.NaN as unknown as RunState['stats']
+        });
+        expect(malformedStatsRows.find((row) => row.id === 'trait_streak_toolkit')).toMatchObject({
+            meterPercent: 0,
+            readiness: 'soon',
+            readinessLabel: '0/2 chain'
+        });
     });
 
     it('resolves a saved reward instance even when the current route roll picks another candidate', () => {

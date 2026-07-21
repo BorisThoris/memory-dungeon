@@ -119,6 +119,18 @@ describe('REG-026 playable onboarding', () => {
         ]);
         expect(step?.title).toBe('Make your first match');
         expect(step?.targetTileIds).toHaveLength(2);
+
+        const malformedStatsStep = getPlayableOnboardingStep(
+            {
+                ...run,
+                stats: Number.NaN as unknown as typeof run.stats
+            },
+            {
+                onboardingDismissed: false,
+                powersFtueSeen: false
+            }
+        );
+        expect(malformedStatsStep?.title).toBe('Make your first match');
     });
 
     it('turns the first reward into the final-pair route-choice setup on the safe first room', () => {

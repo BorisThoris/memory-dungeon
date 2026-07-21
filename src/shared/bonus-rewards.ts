@@ -649,7 +649,7 @@ const rewardPerkReadiness = (
                 readinessLabel: 'Needs Echo + Conduit'
             };
         case 'trait_streak_toolkit': {
-            const streak = nonNegativeFiniteAmount(run.stats.currentStreak);
+            const streak = normalizeSessionStats(run.stats).currentStreak;
             const progress = Math.min(2, streak);
             return progress >= 2
                 ? {
