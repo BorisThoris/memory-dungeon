@@ -17,4 +17,5 @@ export const DAILY_MUTATOR_TABLE: MutatorId[] = [
     'generous_shrine'
 ];
 
-export const hasMutator = (run: RunState, id: MutatorId): boolean => run.activeMutators.includes(id);
+export const hasMutator = (run: RunState, id: MutatorId): boolean =>
+    Array.isArray(run.activeMutators) && run.activeMutators.includes(id);
