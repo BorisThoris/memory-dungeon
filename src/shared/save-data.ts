@@ -720,8 +720,11 @@ export const mergePuzzleCompletion = (save: SaveData, run: RunState): SaveData =
     const ps = save.playerStats ?? defaultPlayerStats();
     const completions = ps.puzzleCompletions ?? {};
     const existing = completions[run.puzzleId];
-    const mistakes = run.lastLevelResult?.mistakes ?? run.stats.tries;
-    const score = run.stats.totalScore;
+    const mistakes = finiteNonNegativeInteger(run.lastLevelResult?.mistakes ?? run.stats.tries, 0);
+    const score = finiteNonNegativeInteger(run.stats.totalScore, 0);
+    const existingBestMistakes =
+        existing?.bestMistakes == null ? null : finiteNonNegativeInteger(existing.bestMistakes, mistakes);
+    const existingBestScore = finiteNonNegativeInteger(existing?.bestScore, 0);
 
     return normalizeSaveData({
         ...save,
@@ -732,10 +735,10 @@ export const mergePuzzleCompletion = (save: SaveData, run: RunState): SaveData =
                 [run.puzzleId]: {
                     completed: true,
                     bestMistakes:
-                        existing?.bestMistakes == null
+                        existingBestMistakes == null
                             ? mistakes
-                            : Math.min(existing.bestMistakes, mistakes),
-                    bestScore: Math.max(existing?.bestScore ?? 0, score)
+                            : Math.min(existingBestMistakes, mistakes),
+                    bestScore: Math.max(existingBestScore, score)
                 }
             }
         }
@@ -744,12 +747,14 @@ export const mergePuzzleCompletion = (save: SaveData, run: RunState): SaveData =
 
 export const mergeBestFloorNoPowers = (save: SaveData, floor: number): SaveData => {
     const ps = save.playerStats ?? defaultPlayerStats();
-    if (floor <= ps.bestFloorNoPowers) {
+    const nextFloor = finiteNonNegativeInteger(floor, 0);
+    const bestFloorNoPowers = finiteNonNegativeInteger(ps.bestFloorNoPowers, 0);
+    if (nextFloor <= bestFloorNoPowers) {
         return save;
     }
     return normalizeSaveData({
         ...save,
-        playerStats: { ...ps, bestFloorNoPowers: floor }
+        playerStats: { ...ps, bestFloorNoPowers: nextFloor }
     });
 };
 
@@ -766,7 +771,7 @@ export const mergeRelicPickStat = (save: SaveData, relicId: RelicId): SaveData =
     const ps = save.playerStats ?? defaultPlayerStats();
     const relicPickCounts: PlayerStatsPersisted['relicPickCounts'] = {
         ...ps.relicPickCounts,
-        [relicId]: (ps.relicPickCounts[relicId] ?? 0) + 1
+        [relicId]: finiteNonNegativeInteger(ps.relicPickCounts[relicId], 0) + 1
     };
     return normalizeSaveData({
         ...save,

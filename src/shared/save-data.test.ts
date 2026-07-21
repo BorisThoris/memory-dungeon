@@ -13,7 +13,9 @@ import {
     createDefaultSaveData,
     DEFAULT_SETTINGS,
     mergeDailyComplete,
+    mergeBestFloorNoPowers,
     mergePuzzleCompletion,
+    mergeRelicPickStat,
     normalizeSaveData,
     normalizeUnknownSaveData,
     normalizeUnknownSaveDataOrThrow,
@@ -661,6 +663,58 @@ describe('save normalization', () => {
             completed: true,
             bestMistakes: 0,
             bestScore: 150
+        });
+    });
+
+    it('normalizes malformed merge counters before updating persisted progress', () => {
+        const puzzle = BUILTIN_PUZZLES.starter_pairs!;
+        const save = {
+            ...createDefaultSaveData(),
+            playerStats: {
+                ...createDefaultSaveData().playerStats!,
+                bestFloorNoPowers: Number.NaN,
+                relicPickCounts: {
+                    guard_token_plus_one: Number.POSITIVE_INFINITY
+                },
+                puzzleCompletions: {
+                    starter_pairs: {
+                        completed: true,
+                        bestMistakes: Number.POSITIVE_INFINITY,
+                        bestScore: Number.NaN
+                    }
+                }
+            }
+        } as SaveData;
+        const puzzleRun = {
+            ...createPuzzleRun(0, puzzle.id, puzzle.tiles),
+            status: 'levelComplete' as const,
+            lastLevelResult: {
+                level: 1,
+                scoreGained: 0,
+                rating: 'S' as const,
+                livesRemaining: 5,
+                perfect: true,
+                mistakes: Number.POSITIVE_INFINITY,
+                clearLifeReason: 'none' as const,
+                clearLifeGained: 0
+            },
+            stats: {
+                ...createNewRun(0).stats,
+                tries: Number.NaN,
+                totalScore: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const mergedPuzzle = mergePuzzleCompletion(save, puzzleRun);
+        expect(mergedPuzzle.playerStats?.puzzleCompletions?.starter_pairs).toEqual({
+            completed: true,
+            bestMistakes: 0,
+            bestScore: 0
+        });
+        expect(mergeBestFloorNoPowers(save, Number.POSITIVE_INFINITY)).toBe(save);
+        expect(mergeBestFloorNoPowers(save, 3.9).playerStats?.bestFloorNoPowers).toBe(3);
+        expect(mergeRelicPickStat(save, 'guard_token_plus_one').playerStats?.relicPickCounts).toEqual({
+            guard_token_plus_one: 1
         });
     });
 
