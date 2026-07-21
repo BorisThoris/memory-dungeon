@@ -188,6 +188,27 @@ describe('dungeon enemy hazard rules', () => {
         expect(hit.stats.guardTokens).toBe(0);
     });
 
+    it('does not apply resolving gambit contact when flipped tile ids are malformed', () => {
+        const board = boardWith(
+            [tile('a', 'a'), tile('b', 'b'), tile('c', 'c')],
+            [hazard('h1', 'a', 'b')]
+        );
+        const run = {
+            ...runWithBoard({
+                ...board,
+                flippedTileIds: Number.NaN as unknown as string[]
+            }),
+            status: 'resolving' as const,
+            gambitAvailableThisFloor: true,
+            gambitThirdFlipUsed: false
+        };
+
+        const hit = applyEnemyHazardClick(run, 'a', { advanceHazards: false });
+
+        expect(hit.lives).toBe(run.lives);
+        expect(hit.enemyHazardHitsThisFloor).toBe(0);
+    });
+
     it('clears hidden hazards blocking the final unresolved real pair', () => {
         const board = boardWith(
             [

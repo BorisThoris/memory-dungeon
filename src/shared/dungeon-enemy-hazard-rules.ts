@@ -28,6 +28,8 @@ import { isSprungTrapTile } from './tile-state-rules';
 const nonNegativeEnemyHazardCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const flippedTileCount = (board: BoardState | null | undefined): number => (Array.isArray(board?.flippedTileIds) ? board.flippedTileIds.length : 0);
+
 export interface EnemyHazardPatternDefinition {
     pattern: EnemyHazardPattern;
     label: string;
@@ -310,7 +312,7 @@ export const applyEnemyHazardClick = (
         (cleanedRun.status === 'resolving' &&
             cleanedRun.gambitAvailableThisFloor &&
             !cleanedRun.gambitThirdFlipUsed &&
-            board?.flippedTileIds.length === 2);
+            flippedTileCount(board) === 2);
     if (!board || !hazard || !tile || tile.state !== 'hidden' || !canApplyContact) {
         return cleanedRun;
     }
