@@ -2,6 +2,7 @@ import {
     INITIAL_REGION_SHUFFLE_CHARGES,
     type BoardState,
     type MutatorId,
+    type RelicId,
     type RunState
 } from './contracts';
 import {
@@ -12,6 +13,9 @@ import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
+
+const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
+    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
 
 export interface CreateNextFloorRunStateOptions {
     lives: number;
@@ -76,9 +80,9 @@ export const createNextFloorRunState = (
         parasiteFloors: options.parasiteFloors,
         parasiteWardRemaining: options.parasiteWardRemaining,
         stickyBlockIndex: null,
-        freeShuffleThisFloor: run.relicIds.includes('first_shuffle_free_per_floor'),
+        freeShuffleThisFloor: hasRunRelic(run, 'first_shuffle_free_per_floor'),
         regionShuffleFreeThisFloor:
-            run.relicIds.includes('region_shuffle_free_first') || hasRewardPerk('free_first_swap_per_floor'),
+            hasRunRelic(run, 'region_shuffle_free_first') || hasRewardPerk('free_first_swap_per_floor'),
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,
         gambitThirdFlipUsed: false,

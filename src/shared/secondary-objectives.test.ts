@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FLIP_PAR_BONUS_SCORE } from './contracts';
+import { FLIP_PAR_BONUS_SCORE, type RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import {
     formatLevelResultTagLabel,
@@ -116,6 +116,17 @@ describe('REG-048 secondary objective clarity', () => {
                 false
             )
         ).toEqual([]);
+
+        expect(
+            getDungeonLevelResultTags(
+                {
+                    ...run,
+                    peekRevealedTileIds: Number.NaN as unknown as RunState['peekRevealedTileIds']
+                },
+                run.board!,
+                true
+            )
+        ).toEqual(['perfect_scout']);
     });
 
     it('prioritizes the top three visible result tags for floor-clear copy', () => {
