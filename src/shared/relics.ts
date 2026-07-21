@@ -252,8 +252,25 @@ export const RELIC_DRAFT: Record<RelicId, RelicDraftRow> = {
     parasite_ledger: { rarity: 'uncommon', weight: 38, tags: ['parasite'], archetypes: ['combo_shard_engine', 'boss_hunter'] }
 };
 
-/** Stable iteration order for docs / balance checks. */
-export const RELIC_POOL: RelicId[] = (Object.keys(RELIC_DRAFT) as RelicId[]).sort((a, b) => a.localeCompare(b));
+/** Stable iteration order for docs / balance checks. Keep alphabetical for compatibility with existing draft rolls. */
+export const RELIC_POOL = [
+    'chapter_compass',
+    'combo_shard_plus_step',
+    'destroy_bank_plus_one',
+    'extra_shuffle_charge',
+    'first_shuffle_free_per_floor',
+    'guard_token_plus_one',
+    'memorize_bonus_ms',
+    'memorize_under_short_memorize',
+    'parasite_ledger',
+    'parasite_ward_once',
+    'peek_charge_plus_one',
+    'pin_cap_plus_one',
+    'region_shuffle_free_first',
+    'shrine_echo',
+    'stray_charge_plus_one',
+    'wager_surety'
+] as const satisfies readonly RelicId[];
 
 const RELIC_SYNERGY_RULES_VERSION = 14;
 const ENDLESS_SYNERGY_RELICS = new Set<RelicId>(['chapter_compass', 'wager_surety', 'parasite_ledger']);

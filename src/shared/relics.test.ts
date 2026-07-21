@@ -20,6 +20,7 @@ import {
     rollRelicOptions,
     RELIC_BUILD_ARCHETYPE_DEFINITIONS,
     RELIC_BUILD_ARCHETYPE_ORDER,
+    RELIC_DRAFT,
     RELIC_OFFER_SERVICE_CATALOG,
     RELIC_OFFER_SERVICE_IDS,
     RELIC_POOL
@@ -130,6 +131,28 @@ describe('effectiveRelicDraftWeight', () => {
 });
 
 describe('rollRelicOptions', () => {
+    it('keeps the explicit relic pool aligned with draft rows', () => {
+        expect(RELIC_POOL).toEqual([
+            'chapter_compass',
+            'combo_shard_plus_step',
+            'destroy_bank_plus_one',
+            'extra_shuffle_charge',
+            'first_shuffle_free_per_floor',
+            'guard_token_plus_one',
+            'memorize_bonus_ms',
+            'memorize_under_short_memorize',
+            'parasite_ledger',
+            'parasite_ward_once',
+            'peek_charge_plus_one',
+            'pin_cap_plus_one',
+            'region_shuffle_free_first',
+            'shrine_echo',
+            'stray_charge_plus_one',
+            'wager_surety'
+        ]);
+        expect(Object.keys(RELIC_DRAFT).sort()).toEqual([...RELIC_POOL].sort());
+    });
+
     it('DNG-051 groups relics into dungeon-facing build archetypes', () => {
         const summaries = getRelicBuildArchetypeSummaries();
 
