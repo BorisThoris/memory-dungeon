@@ -4,22 +4,23 @@ import {
     getModePosterArtRows,
     MODE_CARD_ART,
     MODE_POSTER_FALLBACK_KEY,
+    MODE_POSTER_KEYS,
     modePosterHasCustomArt,
     resolveModePosterUrl,
-    resolveUiBackgroundUrl,
-    type ModePosterKey
+    resolveUiBackgroundUrl
 } from './modeArt';
 
 describe('modeArt vs run-mode-catalog', () => {
     it('every catalog posterKey resolves to bundled art (no missing keys)', () => {
-        const keys = Object.keys(MODE_CARD_ART) as ModePosterKey[];
+        expect(Object.keys(MODE_CARD_ART)).toEqual([...MODE_POSTER_KEYS]);
         for (const mode of RUN_MODE_CATALOG) {
-            expect(keys, `mode "${mode.id}" posterKey "${mode.posterKey}"`).toContain(mode.posterKey);
+            expect(MODE_POSTER_KEYS, `mode "${mode.id}" posterKey "${mode.posterKey}"`).toContain(mode.posterKey);
         }
     });
 
     it('REG-013 documents custom vs fallback poster coverage', () => {
         const rows = getModePosterArtRows();
+        expect(rows.map((row) => row.key)).toEqual([...MODE_POSTER_KEYS]);
         expect(rows.find((row) => row.key === 'classic')?.status).toBe('custom');
         expect(rows.find((row) => row.key === MODE_POSTER_FALLBACK_KEY)?.status).toBe('fallback');
         expect(rows.find((row) => row.key === 'dungeon_showcase')?.status).toBe('custom');

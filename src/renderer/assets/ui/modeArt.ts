@@ -38,6 +38,22 @@ export const MODE_CARD_ART = {
 
 export type ModePosterKey = keyof typeof MODE_CARD_ART;
 
+export const MODE_POSTER_KEYS = [
+    'classic',
+    'daily',
+    'dungeon_showcase',
+    'endless',
+    'fallback',
+    'gauntlet',
+    'puzzle',
+    'mirror_puzzle',
+    'wild',
+    'practice',
+    'scholar',
+    'pin_vow',
+    'meditation'
+] as const satisfies readonly ModePosterKey[];
+
 export const isModePosterFallback = (posterKey: string): boolean =>
     !(posterKey in MODE_CARD_ART) || MODE_CARD_ART[posterKey as ModePosterKey] === modePlaceholderUrl;
 
@@ -51,7 +67,7 @@ export interface ModePosterArtRow {
 }
 
 export const getModePosterArtRows = (): ModePosterArtRow[] =>
-    (Object.keys(MODE_CARD_ART) as ModePosterKey[]).map((key) => ({
+    MODE_POSTER_KEYS.map((key) => ({
         assetUrl: MODE_CARD_ART[key],
         key,
         status: isModePosterFallback(key) ? 'fallback' : 'custom',
