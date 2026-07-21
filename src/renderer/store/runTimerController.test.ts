@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { RunState, ViewState } from '../../shared/contracts';
-import { createNewRun } from '../../shared/game-core';
-import { pauseRun } from '../../shared/run-timer-rules';
+import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
+import { enableDebugPeek, pauseRun } from '../../shared/run-timer-rules';
 import { createRunTimerController } from './runTimerController';
 
 interface Harness {
@@ -120,6 +120,48 @@ describe('runTimerController', () => {
 
         expect(resumed.status).toBe('resolving');
         expect(harness.onResolveBoardTurn).toHaveBeenCalledWith(resumed);
+    });
+
+    it('resumes a paused memorize run with zero remaining time through the returned run state', () => {
+        vi.useFakeTimers();
+        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const memorizeRun: RunState = {
+            ...base,
+            status: 'memorize',
+            timerState: {
+                ...base.timerState,
+                memorizeRemainingMs: 0
+            }
+        };
+        const pausedRun = pauseRun(memorizeRun);
+        const harness = createHarnessWithCallbacks(pausedRun);
+
+        const resumed = harness.timer.resumeRunWithTimers(pausedRun);
+
+        expect(resumed.status).toBe('playing');
+        expect(resumed.timerState.memorizeRemainingMs).toBeNull();
+        expect(harness.setRun).not.toHaveBeenCalled();
+    });
+
+    it('resumes a paused debug reveal with zero remaining time through the returned run state', () => {
+        vi.useFakeTimers();
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const debugPeekRun = enableDebugPeek(playing, false);
+        const debugRun: RunState = {
+            ...debugPeekRun,
+            timerState: {
+                ...debugPeekRun.timerState,
+                debugRevealRemainingMs: 0
+            }
+        };
+        const pausedRun = pauseRun(debugRun);
+        const harness = createHarnessWithCallbacks(pausedRun);
+
+        const resumed = harness.timer.resumeRunWithTimers(pausedRun);
+
+        expect(resumed.debugPeekActive).toBe(false);
+        expect(resumed.timerState.debugRevealRemainingMs).toBeNull();
+        expect(harness.setRun).not.toHaveBeenCalled();
     });
 
     it('routes expired gauntlet runs through the resolved-run callback', async () => {
