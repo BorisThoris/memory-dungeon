@@ -1,21 +1,25 @@
-import type { RunState } from './contracts';
+import type { RelicId, RunState } from './contracts';
 import { countFullyHiddenPairs } from './board-inspection';
 import { tileIsDestroyEligiblePreview } from './board-power-targeting';
 
 const nonNegativePowerCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
+
+const hasRelic = (run: RunState, relicId: RelicId): boolean => Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+
 export const canShuffleBoard = (run: RunState): boolean =>
     run.status === 'playing' &&
     Boolean(run.board) &&
-    run.board!.flippedTileIds.length === 0 &&
+    hasClearFlipState(run) &&
     !run.activeContract?.noShuffle &&
     (nonNegativePowerCount(run.shuffleCharges) > 0 ||
-        (run.freeShuffleThisFloor && run.relicIds.includes('first_shuffle_free_per_floor'))) &&
+        (run.freeShuffleThisFloor && hasRelic(run, 'first_shuffle_free_per_floor'))) &&
     countFullyHiddenPairs(run.board!) >= 2;
 
 export const canDestroyPair = (run: RunState, tileId: string): boolean => {
-    if (run.status !== 'playing' || !run.board || run.board.flippedTileIds.length !== 0 || nonNegativePowerCount(run.destroyPairCharges) <= 0) {
+    if (run.status !== 'playing' || !run.board || !hasClearFlipState(run) || nonNegativePowerCount(run.destroyPairCharges) <= 0) {
         return false;
     }
 
@@ -25,10 +29,10 @@ export const canDestroyPair = (run: RunState, tileId: string): boolean => {
 export const canRegionShuffle = (run: RunState): boolean =>
     run.status === 'playing' &&
     Boolean(run.board) &&
-    run.board!.flippedTileIds.length === 0 &&
+    hasClearFlipState(run) &&
     !run.activeContract?.noShuffle &&
     (nonNegativePowerCount(run.regionShuffleCharges) > 0 ||
-        (run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'))) &&
+        (run.regionShuffleFreeThisFloor && hasRelic(run, 'region_shuffle_free_first'))) &&
     countFullyHiddenPairs(run.board!) >= 1;
 
 /** Row shuffle needs at least two hidden tiles in that row. */
@@ -50,10 +54,10 @@ export const canSwapHiddenTiles = (run: RunState, firstTileId: string, secondTil
     if (
         run.status !== 'playing' ||
         !run.board ||
-        run.board.flippedTileIds.length !== 0 ||
+        !hasClearFlipState(run) ||
         run.activeContract?.noShuffle ||
         firstTileId === secondTileId ||
-        (nonNegativePowerCount(run.regionShuffleCharges) <= 0 && !(run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first')))
+        (nonNegativePowerCount(run.regionShuffleCharges) <= 0 && !(run.regionShuffleFreeThisFloor && hasRelic(run, 'region_shuffle_free_first')))
     ) {
         return false;
     }

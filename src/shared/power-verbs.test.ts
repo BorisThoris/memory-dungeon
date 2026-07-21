@@ -66,9 +66,17 @@ describe('REG-045 power verb teaching', () => {
         const rows = getPowerVerbRows({
             ...run,
             activeContract: { noDestroy: false, noShuffle: false, maxMismatches: null, maxPinsTotalRun: 1.9 },
+            board: run.board
+                ? {
+                      ...run.board,
+                      flippedTileIds: Number.NaN as unknown as string[]
+                  }
+                : null,
             destroyPairCharges: Number.POSITIVE_INFINITY,
             flashPairCharges: Number.NaN,
             peekCharges: Number.NaN,
+            peekRevealedTileIds: Number.NaN as unknown as string[],
+            pinnedTileIds: Number.NaN as unknown as string[],
             pinsPlacedCountThisRun: 1.9,
             regionShuffleCharges: Number.POSITIVE_INFINITY,
             shuffleCharges: Number.NaN,
@@ -77,6 +85,7 @@ describe('REG-045 power verb teaching', () => {
         });
 
         expect(rows.find((row) => row.id === 'pin')?.disabledReason).toBe('Pin vow placement cap reached.');
+        expect(rows.find((row) => row.id === 'pin')?.cost).toBe('0 pinned now; pins are slot-limited.');
         expect(rows.find((row) => row.id === 'peek')?.cost).toBe('0 peek charge(s).');
         expect(rows.find((row) => row.id === 'peek')?.disabledReason).toBe('No peek charges.');
         expect(rows.find((row) => row.id === 'flash_pair')?.disabledReason).toBe('No flash charges.');
@@ -87,5 +96,28 @@ describe('REG-045 power verb teaching', () => {
         expect(rows.find((row) => row.id === 'destroy_pair')?.cost).toBe('0 destroy charge(s).');
         expect(rows.find((row) => row.id === 'stray_remove')?.disabledReason).toBe('No stray-remove charges.');
         expect(rows.find((row) => row.id === 'undo_resolve')?.disabledReason).toBe('No undo uses this floor.');
+    });
+
+    it('blocks flip-sensitive teaching rows when open-flip state is malformed', () => {
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' }));
+        const rows = getPowerVerbRows({
+            ...run,
+            board: run.board
+                ? {
+                      ...run.board,
+                      flippedTileIds: Number.NaN as unknown as string[]
+                  }
+                : null,
+            destroyPairCharges: 1,
+            peekCharges: 1,
+            regionShuffleCharges: 1,
+            shuffleCharges: 1
+        });
+
+        expect(rows.find((row) => row.id === 'peek')?.disabledReason).toBe('Resolve the current flip first.');
+        expect(rows.find((row) => row.id === 'shuffle')?.disabledReason).toBe('Resolve the current flip first.');
+        expect(rows.find((row) => row.id === 'region_shuffle')?.disabledReason).toBe('Resolve the current flip first.');
+        expect(rows.find((row) => row.id === 'tile_swap')?.disabledReason).toBe('Resolve the current flip first.');
+        expect(rows.find((row) => row.id === 'destroy_pair')?.disabledReason).toBe('Resolve the current flip first.');
     });
 });

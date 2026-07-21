@@ -50,7 +50,12 @@ const locksPerfectMemory = perfectMemoryImpactCopy('locks_perfect_memory');
 const nonNegativePowerVerbCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const hasOpenFlip = (run: RunState): boolean => (run.board?.flippedTileIds.length ?? 0) > 0;
+const powerVerbArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
+
+const powerVerbArrayIncludes = (value: unknown, item: string): boolean => Array.isArray(value) && value.includes(item);
+
+const hasOpenFlip = (run: RunState): boolean =>
+    run.board ? !Array.isArray(run.board.flippedTileIds) || run.board.flippedTileIds.length > 0 : false;
 
 const hasDestroyTarget = (run: RunState): boolean => {
     const tiles = run.board?.tiles ?? [];
@@ -63,12 +68,12 @@ const hasDestroyTarget = (run: RunState): boolean => {
 
 const hasPeekTarget = (run: RunState): boolean =>
     (run.board?.tiles ?? []).some(
-        (tile) => tile.state === 'hidden' && !run.peekRevealedTileIds.includes(tile.id)
+        (tile) => tile.state === 'hidden' && !powerVerbArrayIncludes(run.peekRevealedTileIds, tile.id)
     );
 
 const hasRowShufflePayment = (run: RunState): boolean =>
     nonNegativePowerVerbCount(run.regionShuffleCharges) > 0 ||
-    (run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'));
+    (run.regionShuffleFreeThisFloor && powerVerbArrayIncludes(run.relicIds, 'region_shuffle_free_first'));
 
 const hiddenTileCount = (run: RunState): number =>
     (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden').length;
@@ -117,7 +122,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
         mechanicClass: 'tool',
         tokens: ['hidden_known', 'build'],
         purpose: 'Mark remembered locations without revealing or changing tiles.',
-        cost: `${run.pinnedTileIds.length} pinned now; pins are slot-limited.`,
+        cost: `${powerVerbArrayCount(run.pinnedTileIds)} pinned now; pins are slot-limited.`,
         consequence: 'Records your read only; it does not reveal or solve cards.',
         perfectMemoryImpact: 'allowed',
         perfectMemoryCopy: perfectMemoryImpactCopy('allowed'),
@@ -175,7 +180,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
                 ? 'Scholar contract disables full-board shuffle.'
                 : shuffleCharges < 1
                   ? 'No shuffle charges.'
-                  : run.board?.flippedTileIds.length
+                  : hasOpenFlip(run)
                     ? 'Resolve the current flip first.'
                     : null)
     },
