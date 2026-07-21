@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildBoard } from './board-generation';
-import { GAME_RULES_VERSION } from './contracts';
+import { GAME_RULES_VERSION, type RelicId } from './contracts';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 import { makeBoard, makePair, makeRun, makeTile } from './test/game-fixtures';
 import { getTraitOpportunityHudModel, getTraitOpportunitySummary } from './trait-opportunities';
@@ -311,6 +311,20 @@ describe('tile trait rules', () => {
             sourceTiles: [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]
         }).flashPairChargeGain).toBe(0);
         expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(2);
+    });
+
+    it('ignores malformed relic ids before calculating trait match rewards', () => {
+        const run = makeRun([], {
+            relicIds: Number.NaN as unknown as RelicId[]
+        });
+        const [cursedA, cursedB] = makePair('cursed', 'C');
+        const [mirrorA, mirrorB] = makePair('mirror', 'M');
+
+        expect(calculateTileTraitMatchRewards(run, [{ ...cursedA, tileTraitKind: 'cursed' }, cursedB])).toMatchObject({
+            relicFavorGain: 1,
+            shopGoldGain: 0
+        });
+        expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(1);
     });
 
     it('applies echo reward through normal two-card resolution', () => {
@@ -803,6 +817,42 @@ describe('tile trait rules', () => {
         ).blocksVolatileShuffle).toBe(false);
     });
 
+    it('ignores malformed relic ids before trait mismatch penalties', () => {
+        const [cursedA] = makePair('cursed', 'C');
+        const [volatileA] = makePair('volatile', 'V');
+
+        const run = makeRun([], { relicIds: Number.NaN as unknown as RelicId[] });
+        const sourceTiles = [{ ...cursedA, tileTraitKind: 'cursed' as const }, { ...volatileA, tileTraitKind: 'volatile' as const }];
+        const penalty = calculateTileTraitMismatchPenalty(
+            run,
+            sourceTiles
+        );
+        const effect = resolveTileTraitEffects({
+            run,
+            source: 'mismatch',
+            sourceTiles
+        });
+
+        expect(penalty.triesDelta).toBe(1);
+        expect(penalty.blocksVolatileShuffle).toBe(false);
+        expect(effect.interactionTags).not.toContain('wager-surety:cursed-buffer');
+    });
+
+    it('normalizes malformed flip history before volatile mismatch shuffles', () => {
+        const board = makeBoard([
+            makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile', state: 'flipped' }),
+            makeTile('x1', 'x', 'X', { state: 'flipped' }),
+            makeTile('a1', 'a', 'A'),
+            makeTile('b1', 'b', 'B')
+        ]);
+        const result = applyVolatileMismatchTrait(
+            board,
+            makeRun(board.tiles, { board, flipHistory: Number.NaN as unknown as string[] }),
+            [board.tiles[0]!, board.tiles[1]!]
+        );
+
+        expect(result.triggered).toBe(true);
+    });
     it('makes Heavy misses cost extra tries without draining peek value', () => {
         const [a1] = makePair('a', 'A');
         const [b1] = makePair('b', 'B');

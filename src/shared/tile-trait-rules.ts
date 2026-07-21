@@ -76,6 +76,11 @@ export const TILE_TRAIT_MATCH_SCORE_BONUS: Partial<Record<TileTraitKind, number>
 const nonNegativeTraitCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const traitArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
+
+const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
+    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+
 export interface TileTraitEffectResult {
     comboShardGain: number;
     guardTokenGain: number;
@@ -717,7 +722,7 @@ export const applyVolatileMismatchTrait = (
     }
     const rng = createMulberry32(
         hashStringToSeed(
-            `volatileTrait:${run.runRulesVersion}:${run.runSeed}:${board.level}:${run.stats.mismatches}:${run.flipHistory.length}`
+            `volatileTrait:${run.runRulesVersion}:${run.runSeed}:${board.level}:${run.stats.mismatches}:${traitArrayCount(run.flipHistory)}`
         )
     );
     const nextTiles = [...board.tiles];
@@ -834,13 +839,13 @@ export const resolveTileTraitEffects = ({
         result.comboShardGain = hasTrait('sealed') && comboShards < MAX_COMBO_SHARDS ? 1 : 0;
         result.guardTokenGain =
             (hasTrait('mirror') ? 1 : 0) +
-            (hasTrait('volatile') && run.relicIds.includes('wager_surety') && guardTokens < MAX_GUARD_TOKENS ? 1 : 0);
+            (hasTrait('volatile') && hasRunRelic(run, 'wager_surety') && guardTokens < MAX_GUARD_TOKENS ? 1 : 0);
         result.peekChargeGain = hasTrait('echo') ? 1 : 0;
         result.relicFavorGain = hasTrait('cursed') ? 1 : 0;
         result.scoreBonus =
             [...traits].reduce((sum, trait) => sum + (TILE_TRAIT_MATCH_SCORE_BONUS[trait] ?? 0), 0) +
-            (hasTrait('echo') && run.relicIds.includes('chapter_compass') ? 10 : 0);
-        result.shopGoldGain = hasTrait('cursed') && run.relicIds.includes('parasite_ledger') ? 1 : 0;
+            (hasTrait('echo') && hasRunRelic(run, 'chapter_compass') ? 10 : 0);
+        result.shopGoldGain = hasTrait('cursed') && hasRunRelic(run, 'parasite_ledger') ? 1 : 0;
 
         if (hasTrait('echo') && adjacentTraitKinds.has('sealed') && comboShards < MAX_COMBO_SHARDS) {
             result.comboShardGain += 1;
@@ -932,7 +937,7 @@ export const resolveTileTraitEffects = ({
                 }
                 result.interactionTags.push('conduit:stasis-lock');
             }
-            if (run.relicIds.includes('chapter_compass')) {
+            if (hasRunRelic(run, 'chapter_compass')) {
                 result.peekChargeGain += 1;
                 result.scoreBonus += 10;
                 result.interactionTags.push('chapter-compass:conduit-map');
@@ -952,7 +957,7 @@ export const resolveTileTraitEffects = ({
             result.interactionTags.push('reward-perk:trait-streak-flash');
         }
 
-        if (hasTrait('sealed') && run.relicIds.includes('combo_shard_plus_step')) {
+        if (hasTrait('sealed') && hasRunRelic(run, 'combo_shard_plus_step')) {
             const acceptedShardGain = Math.max(0, MAX_COMBO_SHARDS - (comboShards + result.comboShardGain));
             if (acceptedShardGain > 0) {
                 result.comboShardGain += 1;
@@ -962,13 +967,13 @@ export const resolveTileTraitEffects = ({
             result.interactionTags.push('catalyst-thread:sealed-engine');
         }
 
-        if (hasTrait('drift') && run.relicIds.includes('region_shuffle_free_first')) {
+        if (hasTrait('drift') && hasRunRelic(run, 'region_shuffle_free_first')) {
             result.regionShuffleChargeGain += 1;
             result.scoreBonus += 10;
             result.interactionTags.push('row-compass:drift-routing');
         }
 
-        if (hasTrait('mirror') && run.relicIds.includes('guard_token_plus_one')) {
+        if (hasTrait('mirror') && hasRunRelic(run, 'guard_token_plus_one')) {
             if (guardTokens + result.guardTokenGain < MAX_GUARD_TOKENS) {
                 result.guardTokenGain += 1;
             } else {
@@ -982,7 +987,7 @@ export const resolveTileTraitEffects = ({
 
     const stasisBuffersSealed = hasTrait('sealed') && adjacentTraitKinds.has('stasis');
     const sealedPeekLoss = hasTrait('sealed') && !stasisBuffersSealed && peekCharges > 0 ? 1 : 0;
-    result.blocksVolatileShuffle = hasTrait('volatile') && run.relicIds.includes('wager_surety') && guardTokens > 0;
+    result.blocksVolatileShuffle = hasTrait('volatile') && hasRunRelic(run, 'wager_surety') && guardTokens > 0;
     result.peekChargeLoss = sealedPeekLoss;
     result.recallMistakesDelta =
         (hasTrait('mirror') ? 1 : 0) +
@@ -1001,7 +1006,7 @@ export const resolveTileTraitEffects = ({
             adjacentTraitKinds.has('stasis') ? 'stasis:cursed-volatile-buffer' : 'cursed:volatile-danger'
         );
     }
-    if (run.relicIds.includes('wager_surety') && hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
+    if (hasRunRelic(run, 'wager_surety') && hasTrait('cursed') && adjacentTraitKinds.has('volatile')) {
         result.triesDelta = Math.max(0, result.triesDelta - 1);
         result.interactionTags.push('wager-surety:cursed-buffer');
     }
