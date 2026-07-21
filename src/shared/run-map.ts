@@ -7,7 +7,8 @@ import type {
     FloorArchetypeId,
     FloorTag,
     RouteChoice,
-    RouteNodeType
+    RouteNodeType,
+    DungeonCardKind
 } from './contracts';
 import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
 
@@ -97,10 +98,13 @@ export interface DungeonNodeTypeContract {
     defaultObjectiveId: DungeonObjectiveId;
     mechanic: string;
     rewardPolicy: string;
-    cardFamilyBounds: Partial<Record<'enemy' | 'trap' | 'treasure' | 'shop' | 'room' | 'boss' | 'exit' | 'key' | 'lock' | 'shrine' | 'gateway' | 'lever', { min: number; max: number }>>;
+    cardFamilyBounds: DungeonNodeCardFamilyBounds;
     routeType: RouteNodeType;
     uiTone: DungeonRoomTone;
 }
+
+export type DungeonNodeCardFamily = DungeonCardKind | 'boss';
+export type DungeonNodeCardFamilyBounds = Partial<Record<DungeonNodeCardFamily, { min: number; max: number }>>;
 
 export interface RouteProfileBudgetRow {
     routeType: RouteNodeType;
@@ -414,16 +418,21 @@ const objectiveForKind = (kind: DungeonRunNodeKind): DungeonObjectiveId => {
     return 'find_exit';
 };
 
-const cardFamilyBoundsForKind = (kind: DungeonRunNodeKind): DungeonNodeTypeContract['cardFamilyBounds'] => {
-    if (kind === 'boss') return { boss: { min: 1, max: 1 }, enemy: { min: 1, max: 4 }, exit: { min: 1, max: 3 } };
-    if (kind === 'elite') return { enemy: { min: 1, max: 4 }, treasure: { min: 0, max: 2 }, exit: { min: 1, max: 3 } };
-    if (kind === 'trap') return { trap: { min: 1, max: 4 }, enemy: { min: 0, max: 3 }, exit: { min: 1, max: 3 } };
-    if (kind === 'treasure') return { treasure: { min: 1, max: 4 }, key: { min: 0, max: 2 }, lock: { min: 0, max: 2 }, exit: { min: 1, max: 3 } };
-    if (kind === 'shop') return { shop: { min: 1, max: 1 }, room: { min: 0, max: 2 }, exit: { min: 1, max: 3 } };
-    if (kind === 'rest') return { room: { min: 1, max: 3 }, shrine: { min: 0, max: 2 }, exit: { min: 1, max: 3 } };
-    if (kind === 'event') return { room: { min: 1, max: 3 }, gateway: { min: 0, max: 2 }, exit: { min: 1, max: 3 } };
-    return { enemy: { min: 0, max: 3 }, gateway: { min: 0, max: 3 }, exit: { min: 1, max: 3 } };
-};
+export const DUNGEON_NODE_CARD_FAMILY_BOUNDS_BY_KIND = {
+    entrance: { enemy: { min: 0, max: 3 }, gateway: { min: 0, max: 3 }, exit: { min: 1, max: 3 } },
+    combat: { enemy: { min: 0, max: 3 }, gateway: { min: 0, max: 3 }, exit: { min: 1, max: 3 } },
+    elite: { enemy: { min: 1, max: 4 }, treasure: { min: 0, max: 2 }, exit: { min: 1, max: 3 } },
+    trap: { trap: { min: 1, max: 4 }, enemy: { min: 0, max: 3 }, exit: { min: 1, max: 3 } },
+    treasure: { treasure: { min: 1, max: 4 }, key: { min: 0, max: 2 }, lock: { min: 0, max: 2 }, exit: { min: 1, max: 3 } },
+    shop: { shop: { min: 1, max: 1 }, room: { min: 0, max: 2 }, exit: { min: 1, max: 3 } },
+    rest: { room: { min: 1, max: 3 }, shrine: { min: 0, max: 2 }, exit: { min: 1, max: 3 } },
+    event: { room: { min: 1, max: 3 }, gateway: { min: 0, max: 2 }, exit: { min: 1, max: 3 } },
+    boss: { boss: { min: 1, max: 1 }, enemy: { min: 1, max: 4 }, exit: { min: 1, max: 3 } },
+    exit: { enemy: { min: 0, max: 3 }, gateway: { min: 0, max: 3 }, exit: { min: 1, max: 3 } }
+} as const satisfies Record<DungeonRunNodeKind, DungeonNodeCardFamilyBounds>;
+
+const cardFamilyBoundsForKind = (kind: DungeonRunNodeKind): DungeonNodeTypeContract['cardFamilyBounds'] =>
+    DUNGEON_NODE_CARD_FAMILY_BOUNDS_BY_KIND[kind];
 
 export const getDungeonNodeTypeContract = (kind: DungeonRunNodeKind): DungeonNodeTypeContract => ({
     kind,
