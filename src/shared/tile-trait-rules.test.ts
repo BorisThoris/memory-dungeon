@@ -61,6 +61,7 @@ describe('tile trait rules', () => {
 
     it('keeps every known interaction tag backed by player-facing copy', () => {
         expect(TILE_TRAIT_INTERACTION_TAGS.length).toBeGreaterThan(0);
+        expect(Object.keys(TILE_TRAIT_INTERACTION_TEXT)).toEqual([...TILE_TRAIT_INTERACTION_TAGS]);
         for (const tag of TILE_TRAIT_INTERACTION_TAGS) {
             expect(TILE_TRAIT_INTERACTION_TEXT[tag]).toMatch(/\S/);
         }

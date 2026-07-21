@@ -15,9 +15,11 @@ describe('tile trait codex rows', () => {
         const rows = getTileTraitInteractionCodexRows();
 
         expect(rows).toHaveLength(TILE_TRAIT_INTERACTION_TAGS.length);
+        expect(rows.map((row) => row.id)).toEqual(
+            TILE_TRAIT_INTERACTION_TAGS.map((tag) => `trait-interaction-${tag}`)
+        );
         for (const tag of TILE_TRAIT_INTERACTION_TAGS) {
             expect(rows.find((row) => row.title === TILE_TRAIT_INTERACTION_TEXT[tag])?.description).toMatch(/\S/);
         }
     });
 });
-

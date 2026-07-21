@@ -30,7 +30,35 @@ export const TILE_TRAIT_INTERACTION_TEXT = {
 
 export type TileTraitInteractionTag = keyof typeof TILE_TRAIT_INTERACTION_TEXT;
 
-export const TILE_TRAIT_INTERACTION_TAGS = Object.keys(TILE_TRAIT_INTERACTION_TEXT) as TileTraitInteractionTag[];
+export const TILE_TRAIT_INTERACTION_TAGS = [
+    'echo:sealed-combo',
+    'mirror:stasis-guard',
+    'sealed:heavy-score',
+    'cursed:volatile-greed',
+    'volatile:heavy-guard',
+    'drift:row-shuffle',
+    'drift:volatile-full-shuffle',
+    'conduit:adjacent-score',
+    'conduit:mirror-guard',
+    'conduit:echo-peek',
+    'conduit:stasis-lock',
+    'sealed:conduit-spark',
+    'echo:mirror-focus',
+    'heavy:mirror-guard',
+    'stasis:nearby-block',
+    'conduit:danger-recall',
+    'stasis:sealed-buffer',
+    'stasis:cursed-volatile-buffer',
+    'cursed:volatile-danger',
+    'chapter-compass:conduit-map',
+    'catalyst-thread:sealed-engine',
+    'row-compass:drift-routing',
+    'warden-sigil:mirror-ward',
+    'wager-surety:cursed-buffer',
+    'reward-perk:echo-conduit-double',
+    'reward-perk:trait-streak-flash',
+    'reward-perk:cursed-opener-greed'
+] as const satisfies readonly TileTraitInteractionTag[];
 
 const isTileTraitInteractionTag = (value: string): value is TileTraitInteractionTag =>
     Object.prototype.hasOwnProperty.call(TILE_TRAIT_INTERACTION_TEXT, value);
