@@ -21,4 +21,4 @@ export const UI_ART = {
 
 export type UiArtKey = keyof typeof UI_ART;
 
-export { MODE_CARD_ART, resolveModePosterUrl } from './modeArt';
+export { MODE_CARD_ART, MODE_POSTER_KEYS, resolveModePosterUrl } from './modeArt';

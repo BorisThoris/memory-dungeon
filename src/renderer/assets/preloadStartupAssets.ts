@@ -2,7 +2,7 @@ import { getAllCardIllustrationUrls } from '../cardFace/cardIllustrationRegistry
 import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImages';
 import { preloadTileTextureImages } from '../components/tileTextures';
 import { loadRelicTextures, type RelicTextureSet } from '../components/startupIntroTextures';
-import { MODE_CARD_ART, UI_ART } from './ui';
+import { MODE_CARD_ART, MODE_POSTER_KEYS, UI_ART } from './ui';
 
 type IdleWindow = Window &
     typeof globalThis & {
@@ -99,7 +99,7 @@ export const preloadUiRasterImages = (): Promise<void> => {
 };
 
 export const preloadModePosterRasterImages = (): Promise<void> => {
-    const urls = [...Object.values(MODE_CARD_ART), MODE_CARD_ART.fallback];
+    const urls = [...MODE_POSTER_KEYS.map((key) => MODE_CARD_ART[key]), MODE_CARD_ART.fallback];
     return preloadRasterUrls(urls, 3);
 };
 

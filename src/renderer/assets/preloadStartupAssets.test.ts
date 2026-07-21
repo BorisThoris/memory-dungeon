@@ -154,13 +154,13 @@ describe('preloadStartupCriticalAssets', () => {
 
     it('keeps mode poster rasters out of the startup-critical preload', async () => {
         const { preloadStartupCriticalAssets, resetStartupAssetPreloadStateForTests } = await import('./preloadStartupAssets');
-        const { MODE_CARD_ART, UI_ART } = await import('./ui');
+        const { MODE_CARD_ART, MODE_POSTER_KEYS, UI_ART } = await import('./ui');
         resetStartupAssetPreloadStateForTests();
 
         await preloadStartupCriticalAssets({ relicSvgUrl: 'relic.svg', webgl: false });
 
         const criticalUiUrls = new Set(Object.values(UI_ART));
-        const modePosterUrls = new Set(Object.values(MODE_CARD_ART));
+        const modePosterUrls = new Set(MODE_POSTER_KEYS.map((key) => MODE_CARD_ART[key]));
 
         const startupCriticalRequests = requestedRasterUrls.slice(0, criticalUiUrls.size);
         expect(startupCriticalRequests).toEqual([...criticalUiUrls]);
@@ -180,7 +180,7 @@ describe('preloadStartupCriticalAssets', () => {
             warmCardIllustrationsInBackground,
             warmModePosterRasterImagesInBackground
         } = await import('./preloadStartupAssets');
-        const { MODE_CARD_ART, UI_ART } = await import('./ui');
+        const { MODE_CARD_ART, MODE_POSTER_KEYS, UI_ART } = await import('./ui');
         resetStartupAssetPreloadStateForTests();
 
         await preloadUiRasterImages();
@@ -188,7 +188,10 @@ describe('preloadStartupCriticalAssets', () => {
 
         requestedRasterUrls = [];
         await preloadModePosterRasterImages();
-        expect(requestedRasterUrls).toEqual([...new Set([...Object.values(MODE_CARD_ART), MODE_CARD_ART.fallback])]);
+        const expectedModePosterUrls = [
+            ...new Set([...MODE_POSTER_KEYS.map((key) => MODE_CARD_ART[key]), MODE_CARD_ART.fallback])
+        ];
+        expect(requestedRasterUrls).toEqual(expectedModePosterUrls);
 
         requestedRasterUrls = [];
         warmCardIllustrationsInBackground();
@@ -200,7 +203,7 @@ describe('preloadStartupCriticalAssets', () => {
         await runIdleCallback(0);
         await runIdleCallback(1);
         expect(preloadCardIllustrationImages).toHaveBeenCalledTimes(1);
-        expect(requestedRasterUrls).toEqual([...new Set([...Object.values(MODE_CARD_ART), MODE_CARD_ART.fallback])]);
+        expect(requestedRasterUrls).toEqual(expectedModePosterUrls);
     }, 15000);
 
     it('allows a rejected background illustration warm-up to be scheduled again', async () => {
