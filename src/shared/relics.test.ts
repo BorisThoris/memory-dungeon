@@ -12,7 +12,9 @@ import {
     getRelicDraftRow,
     getRelicRoleAuditRows,
     getRelicDraftOptionReasons,
+    getRelicDraftOptionReasonRows,
     getRunBuildProfile,
+    hasRelicDraftOptionReasons,
     isRelicDraftEligible,
     effectiveRelicDraftWeight,
     relicMilestoneIndexForFloor,
@@ -314,6 +316,8 @@ describe('rollRelicOptions', () => {
         expect(a).toEqual(b);
         expect(a).toHaveLength(3);
         expect(Object.values(reasons ?? {})).toContain('Answers short memorize');
+        expect(hasRelicDraftOptionReasons(reasons)).toBe(true);
+        expect(getRelicDraftOptionReasonRows(reasons).map((row) => row.reason)).toContain('Answers short memorize');
     });
 
     it('keeps non-Endless drafts on base odds except hard filters', () => {
@@ -336,6 +340,23 @@ describe('rollRelicOptions', () => {
         expect(isRelicDraftEligible('chapter_compass', daily)).toBe(false);
         expect(isRelicDraftEligible('wager_surety', daily)).toBe(false);
         expect(isRelicDraftEligible('parasite_ledger', daily)).toBe(false);
+    });
+
+    it('reads relic draft option reasons in relic pool order', () => {
+        const reasons = {
+            unknown_relic: 'ignored',
+            wager_surety: 'Protects wager',
+            chapter_compass: 'Improves future chapter drafts'
+        } as unknown as Partial<Record<RelicId, string>>;
+
+        expect(hasRelicDraftOptionReasons(reasons)).toBe(true);
+        expect(getRelicDraftOptionReasonRows(reasons)).toEqual([
+            { id: 'chapter_compass', reason: 'Improves future chapter drafts' },
+            { id: 'wager_surety', reason: 'Protects wager' }
+        ]);
+        expect(hasRelicDraftOptionReasons({ unknown_relic: 'ignored' } as unknown as Partial<Record<RelicId, string>>)).toBe(
+            false
+        );
     });
 
     it('chapter_compass strengthens contextual spotlight weights without adding draft slots', () => {

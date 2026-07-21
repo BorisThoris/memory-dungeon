@@ -652,6 +652,18 @@ export const getRelicDraftReason = (id: RelicId, context: RelicDraftContext): st
     getRouteRelicDraftReason(id, context) ??
     getTraitBuildRelicDraftReason(id, context);
 
+export const getRelicDraftOptionReasonRows = (
+    reasons: Partial<Record<RelicId, string>> | null | undefined
+): Array<{ id: RelicId; reason: string }> =>
+    RELIC_POOL.flatMap((id) => {
+        const reason = reasons?.[id];
+        return reason ? [{ id, reason }] : [];
+    });
+
+export const hasRelicDraftOptionReasons = (
+    reasons: Partial<Record<RelicId, string>> | null | undefined
+): boolean => getRelicDraftOptionReasonRows(reasons).length > 0;
+
 export const getContextualRelicDraftWeight = (
     id: RelicId,
     context: RelicDraftContext,
@@ -885,7 +897,7 @@ export const getRelicDraftOptionReasons = (
             reasons[id] = reason;
         }
     }
-    return Object.keys(reasons).length > 0 ? reasons : undefined;
+    return hasRelicDraftOptionReasons(reasons) ? reasons : undefined;
 };
 
 export const RELIC_OFFER_SERVICE_CATALOG: Record<
