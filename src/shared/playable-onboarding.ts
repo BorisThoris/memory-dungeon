@@ -50,6 +50,11 @@ const isSafeOnboardingTile = (board: BoardState, pairKey: string, tileId: string
     );
 };
 
+const nonNegativeOnboardingCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const onboardingArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
+
 const firstUnmatchedPair = (board: BoardState | null): string[] => {
     if (!board) {
         return [];
@@ -72,14 +77,14 @@ const getStepCopy = (
     step: OnboardingStepRow
 ): Pick<PlayableOnboardingPrompt, 'title' | 'prompt' | 'detail'> => {
     if (step.id === 'recovery') {
-        if (run.stats.mismatches > 0) {
+        if (nonNegativeOnboardingCount(run.stats.mismatches) > 0) {
             return {
                 title: 'Recover and continue',
                 prompt: 'Stabilize the next pair',
                 detail: 'A miss costs tempo, not the run. Use the marked pair to rebuild streak before spending a rescue tool.'
             };
         }
-        if ((run.board?.matchedPairs ?? 0) >= (run.board?.pairCount ?? 0) - 1) {
+        if (nonNegativeOnboardingCount(run.board?.matchedPairs) >= nonNegativeOnboardingCount(run.board?.pairCount) - 1) {
             return {
                 title: 'Exit in sight',
                 prompt: 'Clear the final pair',
@@ -101,8 +106,11 @@ const getStepCopy = (
         };
     }
 
-    const flippedCount = run.board?.flippedTileIds.length ?? 0;
-    if ((run.stats.mismatches > 0 || run.stats.tries > 0) && (run.board?.matchedPairs ?? 0) === 0) {
+    const flippedCount = onboardingArrayCount(run.board?.flippedTileIds);
+    if (
+        (nonNegativeOnboardingCount(run.stats.mismatches) > 0 || nonNegativeOnboardingCount(run.stats.tries) > 0) &&
+        nonNegativeOnboardingCount(run.board?.matchedPairs) === 0
+    ) {
         return {
             title: 'Recover from the miss',
             prompt: 'Use the marked pair to stabilize',
@@ -132,7 +140,7 @@ export const getPlayableOnboardingScenario = ({
     powersFtueSeen?: boolean;
 }): OnboardingScenario => {
     const completed = onboardingDismissed;
-    const matchedPairs = board?.matchedPairs ?? 0;
+    const matchedPairs = nonNegativeOnboardingCount(board?.matchedPairs);
     const targetTileIds = firstUnmatchedPair(board);
     const activeId: OnboardingStepId = completed
         ? 'handoff'

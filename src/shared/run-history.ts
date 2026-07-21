@@ -51,6 +51,8 @@ export const MAX_DUNGEON_JOURNAL_ROWS = 8;
 const nonNegativeRunHistoryCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const runHistoryArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
+
 const getPersistedSummaryPayoffStack = (
     summary: RunSummary | null
 ): { label: 'Combo burst' | 'Payoff burst' | 'Payoff stack' | 'Super stack'; lanes: number } | null => {
@@ -65,7 +67,7 @@ const getPersistedSummaryPayoffStack = (
         summary.payoffRoutePaid === true,
         nonNegativeRunHistoryCount(summary.payoffPickupTotal) > 0,
         nonNegativeRunHistoryCount(summary.perfectClears) > 0,
-        (summary.relicIds?.length ?? 0) + nonNegativeRunHistoryCount(summary.payoffRewardPerkCount) > 0
+        runHistoryArrayCount(summary.relicIds) + nonNegativeRunHistoryCount(summary.payoffRewardPerkCount) > 0
     ].filter(Boolean).length;
     if (payoffLanes < 3) {
         return null;
@@ -360,7 +362,7 @@ export const buildRunJournalRowsFromSave = (save: SaveData): RunHistoryJournalRo
         {
             id: 'encore_pairs',
             label: 'Encore pair keys',
-            value: `${save.playerStats?.encorePairKeysLastRun.length ?? 0} pair keys remembered locally`,
+            value: `${runHistoryArrayCount(save.playerStats?.encorePairKeysLastRun)} pair keys remembered locally`,
             persistence: 'persisted_summary',
             exportSafe: false
         }

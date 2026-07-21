@@ -306,4 +306,34 @@ describe('REG-085 run history, share keys, and journal', () => {
             exportSafe: true
         });
     });
+
+    it('normalizes malformed save-derived journal counters before rendering rows', () => {
+        const save = createDefaultSaveData();
+        save.lastRunSummary = {
+            totalScore: Number.NaN,
+            bestScore: 0,
+            levelsCleared: 0,
+            highestLevel: Number.POSITIVE_INFINITY,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: 4,
+            perfectClears: 0,
+            relicIds: Number.NaN as unknown as [],
+            payoffPickupClaimed: 0,
+            payoffPickupTotal: 0,
+            payoffRewardPerkCount: Number.NaN,
+            payoffRoutePaid: false,
+            gameMode: 'endless'
+        };
+        save.playerStats = {
+            ...save.playerStats!,
+            encorePairKeysLastRun: Number.NaN as unknown as string[]
+        };
+
+        const rows = buildRunJournalRowsFromSave(save);
+
+        expect(rows.find((row) => row.id === 'last_summary')?.value).toBe('endless · 0 score · floor 0');
+        expect(rows.find((row) => row.id === 'last_payoff_stack')).toBeUndefined();
+        expect(rows.find((row) => row.id === 'encore_pairs')?.value).toBe('0 pair keys remembered locally');
+    });
 });
