@@ -54,6 +54,16 @@ export type RelicBuildArchetype =
     | 'reveal_scout'
     | 'combo_shard_engine';
 
+export const RELIC_BUILD_ARCHETYPE_ORDER = [
+    'guard_tank',
+    'trap_control',
+    'treasure_greed',
+    'boss_hunter',
+    'route_gambler',
+    'reveal_scout',
+    'combo_shard_engine'
+] as const satisfies readonly RelicBuildArchetype[];
+
 type RelicContractForbid = keyof Pick<ContractFlags, 'noShuffle' | 'noDestroy'>;
 
 export interface RelicDraftContext {
@@ -343,7 +353,7 @@ export const getRelicBuildArchetypeSummaries = (): {
     deferredHooks: string[];
     relicIds: RelicId[];
 }[] =>
-    (Object.keys(RELIC_BUILD_ARCHETYPE_DEFINITIONS) as RelicBuildArchetype[]).map((id) => {
+    RELIC_BUILD_ARCHETYPE_ORDER.map((id) => {
         const definition = getRelicBuildArchetypeDefinition(id);
         return {
             id,
@@ -373,8 +383,6 @@ export interface RunBuildProfile {
     summary: string;
     tooltip: string;
 }
-
-const RELIC_BUILD_ARCHETYPE_ORDER = Object.keys(RELIC_BUILD_ARCHETYPE_DEFINITIONS) as RelicBuildArchetype[];
 
 const relicArray = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
 

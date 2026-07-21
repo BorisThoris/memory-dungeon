@@ -18,6 +18,8 @@ import {
     relicMilestoneIndexForFloor,
     needsRelicPick,
     rollRelicOptions,
+    RELIC_BUILD_ARCHETYPE_DEFINITIONS,
+    RELIC_BUILD_ARCHETYPE_ORDER,
     RELIC_POOL
 } from './relics';
 
@@ -129,15 +131,8 @@ describe('rollRelicOptions', () => {
     it('DNG-051 groups relics into dungeon-facing build archetypes', () => {
         const summaries = getRelicBuildArchetypeSummaries();
 
-        expect(summaries.map((summary) => summary.id)).toEqual([
-            'guard_tank',
-            'trap_control',
-            'treasure_greed',
-            'boss_hunter',
-            'route_gambler',
-            'reveal_scout',
-            'combo_shard_engine'
-        ]);
+        expect(Object.keys(RELIC_BUILD_ARCHETYPE_DEFINITIONS)).toEqual([...RELIC_BUILD_ARCHETYPE_ORDER]);
+        expect(summaries.map((summary) => summary.id)).toEqual([...RELIC_BUILD_ARCHETYPE_ORDER]);
         expect(summaries.map((summary) => summary.label)).toEqual([
             'The Warden',
             'The Saboteur',
