@@ -3,8 +3,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { ACHIEVEMENT_BY_ID } from '../../shared/achievements';
 import type { RelicId } from '../../shared/contracts';
 import {
-    COSMETIC_CATALOG,
     cosmeticUnlockTag,
+    getCosmeticCatalogRows,
     getOwnedCosmeticIds,
     getEquippedCosmeticId
 } from '../../shared/cosmetics';
@@ -305,7 +305,7 @@ const CollectionScreen = () => {
                                 Cosmetic slots are visual-only. Owned/equipped state uses local unlock tags; no gameplay power is attached.
                             </p>
                             <div className={`${styles.grid} ${metaStyles.metaLongList}`}>
-                                {(Object.values(COSMETIC_CATALOG)).map((cosmetic) => {
+                                {getCosmeticCatalogRows().map((cosmetic) => {
                                     const owned = getOwnedCosmeticIds(saveData).includes(cosmetic.id);
                                     const equipped = getEquippedCosmeticId(saveData, cosmetic.slot) === cosmetic.id;
                                     return (

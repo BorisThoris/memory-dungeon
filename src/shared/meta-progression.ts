@@ -4,6 +4,7 @@ import {
     cosmeticIsOwned,
     cosmeticUnlockTag,
     deriveCosmeticStates,
+    getCosmeticCatalogRows,
     type CosmeticId
 } from './cosmetics';
 import { countEligibleHonors } from './honorUnlocks';
@@ -269,7 +270,7 @@ export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] =>
 };
 
 export const getMetaCosmeticTrackRows = (save: SaveData): MetaProgressionRow[] =>
-    (Object.values(COSMETIC_CATALOG) as Array<(typeof COSMETIC_CATALOG)[CosmeticId]>)
+    getCosmeticCatalogRows()
         .filter((cosmetic) => cosmetic.defaultOwned !== true)
         .map((cosmetic) => ({
             id: `cosmetic_track_${cosmetic.id}`,
