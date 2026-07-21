@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
     BALANCE_SIMULATION_BASELINE,
+    BALANCE_SIMULATION_FINDABLE_KINDS,
+    BALANCE_SIMULATION_TILE_TRAIT_KINDS,
     assertBalanceSimulationWithinBaseline,
     assertDungeonBalanceProfilesWithinBounds,
     DUNGEON_BALANCE_PROFILES,
@@ -14,6 +16,12 @@ import { getFindableSpawnWeightRows } from './findables';
 
 const LONG_SIMULATION_TIMEOUT_MS = 15_000;
 
+const sumFindableKindCounts = (counts: Record<FindableKind, number>) =>
+    BALANCE_SIMULATION_FINDABLE_KINDS.reduce((sum, kind) => sum + counts[kind], 0);
+
+const sumTileTraitKindCounts = (counts: Record<TileTraitKind, number>) =>
+    BALANCE_SIMULATION_TILE_TRAIT_KINDS.reduce((sum, kind) => sum + counts[kind], 0);
+
 describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     it('runs deterministic offline economy and drop-rate simulations', () => {
         const result = runBalanceSimulation({ seed: 42_001, floors: 12, rulesVersion: GAME_RULES_VERSION });
@@ -22,9 +30,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.samples).toHaveLength(12);
         expect(result.aggregate.totalShopGoldEarned).toBeGreaterThan(0);
         expect(result.aggregate.findablePickupPairs).toBeGreaterThanOrEqual(12);
-        expect(Object.values(result.aggregate.findableKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
-            result.aggregate.findablePickupPairs
-        );
+        expect(sumFindableKindCounts(result.aggregate.findableKindCounts)).toBe(result.aggregate.findablePickupPairs);
         expect(result.aggregate.tileTraitPairs).toBeGreaterThan(0);
         expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
         expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(result.aggregate.tileTraitPairs);
@@ -35,9 +41,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.traitBoardPowerInteractionOpportunities).toBeGreaterThan(0);
         expect(result.aggregate.deadTraitFloors).toBe(0);
         expect(result.aggregate.deadTraitFloorsByBand).toEqual({ early: 0, mid: 0, late: 0 });
-        expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
-            result.aggregate.tileTraitPairs
-        );
+        expect(sumTileTraitKindCounts(result.aggregate.tileTraitKindCounts)).toBe(result.aggregate.tileTraitPairs);
         expect(result.aggregate.bossFloors).toBe(2);
         expect(result.aggregate.breatherFloors).toBe(3);
         expect(result.aggregate.eliteFloors).toBeGreaterThan(0);
@@ -157,7 +161,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             const total = result.aggregate.findablePickupPairs;
 
             expect(total).toBeGreaterThan(0);
-            expect(Object.values(result.aggregate.findableKindCounts).reduce((sum, count) => sum + count, 0)).toBe(total);
+            expect(sumFindableKindCounts(result.aggregate.findableKindCounts)).toBe(total);
             const shares = getFindableKindShares(result.aggregate.findableKindCounts);
 
             const bounds: Record<FindableKind, { min: number; max: number }> = {
@@ -304,9 +308,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             const total = result.aggregate.tileTraitPairs;
 
             expect(total).toBeGreaterThan(0);
-            expect(Object.values(result.aggregate.tileTraitKindCounts).reduce((sum, count) => sum + count, 0)).toBe(
-                total
-            );
+            expect(sumTileTraitKindCounts(result.aggregate.tileTraitKindCounts)).toBe(total);
             expect(result.aggregate.traitComboOpportunityPairs).toBeGreaterThan(0);
             expect(result.aggregate.traitComboOpportunityPairs).toBeLessThanOrEqual(total);
             expect(result.aggregate.traitMatchRouteFloors).toBeGreaterThanOrEqual(
@@ -327,7 +329,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 stasis: { min: 0.04, max: 0.28 }
             };
 
-            for (const kind of Object.keys(bounds) as TileTraitKind[]) {
+            for (const kind of BALANCE_SIMULATION_TILE_TRAIT_KINDS) {
                 expect(shares[kind]).toBeGreaterThanOrEqual(bounds[kind].min);
                 expect(shares[kind]).toBeLessThanOrEqual(bounds[kind].max);
             }
