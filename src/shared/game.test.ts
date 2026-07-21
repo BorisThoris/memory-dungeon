@@ -196,6 +196,20 @@ describe('tilesArePairMatch', () => {
     });
 });
 
+describe('flipTile malformed board guards', () => {
+    it('refuses to flip when the board flip id list is malformed', () => {
+        const [a1, a2] = createPair('a', 'A');
+        const run = createRun([a1, a2], {
+            board: {
+                ...createBoard([a1, a2]),
+                flippedTileIds: Number.NaN as unknown as string[]
+            }
+        });
+
+        expect(flipTile(run, a1.id)).toBe(run);
+    });
+});
+
 describe('getMatchFloaterAnchorTileIds', () => {
     it('returns null when run has no board', () => {
         expect(getMatchFloaterAnchorTileIds(null)).toBeNull();
