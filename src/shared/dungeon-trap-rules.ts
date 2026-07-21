@@ -1,5 +1,6 @@
 import type { BoardState, RunState, Tile } from './contracts';
 import { revealOneHiddenDungeonHazardPair } from './dungeon-enemy-card-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export const DUNGEON_TRAP_SCORE_PENALTY = 10;
 export const DUNGEON_HEX_TRAP_SCORE_PENALTY = 20;
@@ -23,8 +24,9 @@ export const springArmedDungeonTraps = (
     if (keys.length === 0) {
         return { run, board, alarmTriggered: false, enemyWoken: false };
     }
+    const stats = normalizeSessionStats(run.stats);
     let lives = nonNegativeTrapCount(run.lives);
-    let guardTokens = nonNegativeTrapCount(run.stats.guardTokens);
+    let guardTokens = stats.guardTokens;
     let shopGold = nonNegativeTrapCount(run.shopGold);
     let triggered = 0;
     let alarmTriggered = false;
@@ -99,9 +101,9 @@ export const springArmedDungeonTraps = (
             dungeonTrapsTriggered: nonNegativeTrapCount(run.dungeonTrapsTriggered) + triggered,
             dungeonTrapsResolvedThisFloor: nonNegativeTrapCount(run.dungeonTrapsResolvedThisFloor) + triggered,
             stats: {
-                ...run.stats,
-                totalScore: Math.max(0, nonNegativeTrapCount(run.stats.totalScore) - scorePenalty),
-                currentLevelScore: Math.max(0, nonNegativeTrapCount(run.stats.currentLevelScore) - scorePenalty),
+                ...stats,
+                totalScore: Math.max(0, stats.totalScore - scorePenalty),
+                currentLevelScore: Math.max(0, stats.currentLevelScore - scorePenalty),
                 guardTokens
             }
         },

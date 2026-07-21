@@ -735,6 +735,34 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.feedback.gained).toEqual(['+10 overflow score']);
     });
 
+    it('normalizes malformed stat records before applying bonus reward payouts', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_016,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 7,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.bonus_shards,
+            eligible: true,
+            unavailableReason: null
+        };
+        const result = claimBonusReward(
+            {
+                ...makeRun(room.runSeed, room.rulesVersion),
+                stats: Number.NaN as unknown as RunState['stats']
+            },
+            createBonusRewardLedger(),
+            room
+        );
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.stats.comboShards).toBe(1);
+        expect(result.run.stats.guardTokens).toBe(1);
+        expect(result.run.stats.currentLevelScore).toBe(0);
+        expect(result.run.stats.totalScore).toBe(0);
+    });
+
     it('previews ineligible reward feedback without mutating the run', () => {
         const room = {
             ...rollBonusRewardRoom({

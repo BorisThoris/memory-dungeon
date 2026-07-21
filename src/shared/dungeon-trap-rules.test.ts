@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardState, Tile } from './contracts';
+import type { BoardState, RunState, Tile } from './contracts';
 import { createNewRun } from './game-core';
 import {
     DUNGEON_HEX_TRAP_SCORE_PENALTY,
@@ -113,6 +113,26 @@ describe('dungeon-trap-rules', () => {
         expect(result.run.stats.currentLevelScore).toBe(0);
         expect(result.run.stats.totalScore).toBe(5);
         expect(result.board.matchedPairs).toBe(1);
+    });
+
+    it('normalizes malformed stat records before resolving traps', () => {
+        const base = createNewRun(0);
+        const run = {
+            ...base,
+            lives: 2,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        const board = createBoard([
+            tile('trap-a', 'trap', { dungeonCardKind: 'trap', dungeonCardState: 'revealed' }),
+            tile('trap-b', 'trap', { dungeonCardKind: 'trap', dungeonCardState: 'revealed' })
+        ]);
+
+        const result = springArmedDungeonTraps(run, board, ['trap']);
+
+        expect(result.run.lives).toBe(1);
+        expect(result.run.stats.guardTokens).toBe(0);
+        expect(result.run.stats.totalScore).toBe(0);
+        expect(result.run.stats.currentLevelScore).toBe(0);
     });
 
     it('spends guard tokens on ordinary traps before life loss', () => {

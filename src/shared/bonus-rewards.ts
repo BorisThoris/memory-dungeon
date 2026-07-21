@@ -10,6 +10,7 @@ import {
 import { hashStringToSeed } from './rng';
 import type { RunMapNodeKind } from './run-map';
 import { gainRunInventoryItem, getRunInventoryGainFeedback, type RunInventoryItemId } from './run-inventory';
+import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitBuildRewardRowsForBoard } from './trait-build-rewards';
 
 export type BonusRewardRoomKind = 'treasure_chest' | 'secret_room' | 'bonus_cache';
@@ -732,7 +733,8 @@ const applyBonusRewardPayout = (
     const scoreGain = nonNegativeFiniteAmount(payout.score);
     const favorProgressGain = nonNegativeFiniteAmount(payout.relicFavorProgress);
     const comboShardGain = nonNegativeFiniteAmount(payout.comboShards);
-    const currentComboShards = nonNegativeFiniteAmount(run.stats.comboShards);
+    const stats = normalizeSessionStats(run.stats);
+    const currentComboShards = stats.comboShards;
     const nextComboShards = Math.min(MAX_COMBO_SHARDS, currentComboShards + comboShardGain);
     if (comboShardGain > 0) {
         const actual = nextComboShards - currentComboShards;
@@ -749,9 +751,9 @@ const applyBonusRewardPayout = (
         ...run,
         shopGold: nonNegativeFiniteAmount(run.shopGold) + shopGoldGain,
         stats: {
-            ...run.stats,
-            totalScore: nonNegativeFiniteAmount(run.stats.totalScore) + scoreGain,
-            currentLevelScore: nonNegativeFiniteAmount(run.stats.currentLevelScore) + scoreGain,
+            ...stats,
+            totalScore: stats.totalScore + scoreGain,
+            currentLevelScore: stats.currentLevelScore + scoreGain,
             comboShards: nextComboShards
         }
     };
