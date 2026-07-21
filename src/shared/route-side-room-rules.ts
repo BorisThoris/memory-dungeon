@@ -27,6 +27,9 @@ const BONUS_REWARD_NEXT_CUES = {
     hazard_banisher: 'Check the first board beat; hazard pressure should already be reduced.'
 } as const;
 
+const nonNegativeRouteSideRoomCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const bonusRewardChoiceImpact = (
     option: ReturnType<typeof rollBonusRewardDraft>[number],
     nextCue: string,
@@ -66,7 +69,7 @@ const bonusRewardChoiceImpact = (
         option.payout.relicFavorProgress,
         option.payout.score,
         option.payout.inventoryItems ? Object.keys(option.payout.inventoryItems).length : 0
-    ].filter((value) => Number(value ?? 0) > 0).length;
+    ].filter((value) => nonNegativeRouteSideRoomCount(value) > 0).length;
     return {
         rewardImpactBeats: resourceLaneCount > 1 ? 4 : 2,
         rewardImpactCue: resourceLaneCount > 1 ? 'Reward burst' : 'Resource',

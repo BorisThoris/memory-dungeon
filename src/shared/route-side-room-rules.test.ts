@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { BONUS_REWARD_CATALOG } from './bonus-rewards';
 import { createNewRun } from './game-core';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import {
@@ -203,5 +204,41 @@ describe('route side-room rules', () => {
                 })
             ])
         );
+    });
+
+    it('normalizes malformed payout lanes before ranking bonus reward impact', () => {
+        const originalPayout = BONUS_REWARD_CATALOG.key_insurance.payout;
+        BONUS_REWARD_CATALOG.key_insurance.payout = {
+            shopGold: Number.POSITIVE_INFINITY,
+            comboShards: Number.NaN,
+            relicFavorProgress: Number.POSITIVE_INFINITY,
+            score: Number.NaN
+        };
+        try {
+            const run = createNewRun(210_503, { startingLoadoutId: 'vaultbreaker' });
+            const opened = openRouteSideRoom({
+                ...run,
+                status: 'levelComplete',
+                pendingRouteCardPlan: {
+                    choiceId: 'greed',
+                    routeType: 'greed',
+                    sourceLevel: 3,
+                    targetLevel: 4
+                }
+            });
+
+            expect(opened.sideRoom?.choices).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        label: 'Key insurance',
+                        rewardImpactBeats: 2,
+                        rewardImpactCue: 'Resource',
+                        rewardImpactKind: 'resource'
+                    })
+                ])
+            );
+        } finally {
+            BONUS_REWARD_CATALOG.key_insurance.payout = originalPayout;
+        }
     });
 });
