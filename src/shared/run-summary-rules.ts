@@ -4,6 +4,7 @@ import {
     type RelicId,
     type RunState
 } from './contracts';
+import { normalizeSessionStats } from './session-stats-rules';
 
 const nonNegativeInteger = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
@@ -15,18 +16,19 @@ const summaryRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ? va
 export const createRunSummary = (run: RunState, unlockedAchievements: AchievementId[]): RunState => ({
     ...run,
     lastRunSummary: (() => {
-        const totalScore = nonNegativeInteger(run.stats.totalScore);
-        const levelsCleared = nonNegativeInteger(run.stats.levelsCleared);
+        const stats = normalizeSessionStats(run.stats);
+        const totalScore = stats.totalScore;
+        const levelsCleared = stats.levelsCleared;
         const payoffPickupTotal = nonNegativeInteger(run.findablesTotalThisFloor);
         return {
             totalScore,
-            bestScore: Math.max(nonNegativeInteger(run.stats.bestScore), totalScore),
+            bestScore: Math.max(stats.bestScore, totalScore),
             levelsCleared,
-            highestLevel: nonNegativeInteger(run.stats.highestLevel),
+            highestLevel: stats.highestLevel,
             achievementsEnabled: run.achievementsEnabled,
             unlockedAchievements,
-            bestStreak: nonNegativeInteger(run.stats.bestStreak),
-            perfectClears: Math.min(nonNegativeInteger(run.stats.perfectClears), levelsCleared),
+            bestStreak: stats.bestStreak,
+            perfectClears: Math.min(stats.perfectClears, levelsCleared),
             runSeed: nonNegativeInteger(run.runSeed),
             runRulesVersion: nonNegativeInteger(run.runRulesVersion),
             gameMode: run.gameMode,
@@ -35,7 +37,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             relicIds: [...summaryRelicIds(run.relicIds)],
             payoffPickupClaimed: Math.min(nonNegativeInteger(run.findablesClaimedThisFloor), payoffPickupTotal),
             payoffPickupTotal,
-            payoffPressureExtra: nonNegativeInteger(run.stats.mismatches) + nonNegativeInteger(run.stats.volatileTraitShuffles),
+            payoffPressureExtra: stats.mismatches + stats.volatileTraitShuffles,
             payoffRewardPerkCount: nonNegativeInteger(run.rewardPerkIds?.length),
             payoffRoutePaid: run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor),
             payoffRouteRewardText: run.traitRouteObjectiveRewardTextThisFloor,

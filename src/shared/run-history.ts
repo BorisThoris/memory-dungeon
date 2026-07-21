@@ -2,6 +2,7 @@ import type { DungeonBossId, DungeonRunMapState, DungeonRunNode, RunState, SaveD
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { getRunBuildProfile } from './relics';
 import { getRepairedSelectedDungeonNode, repairDungeonRunMapProgression } from './run-map';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunHistoryPersistence = 'persisted_summary' | 'ephemeral_run' | 'derived_export';
 
@@ -138,6 +139,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
 
     const dungeonRun = repairDungeonRunMapProgression(run.dungeonRun);
     const rows: RunHistoryJournalRow[] = [];
+    const stats = normalizeSessionStats(run.stats);
     const currentNode = currentDungeonNode(dungeonRun);
     const selectedNode = getRepairedSelectedDungeonNode(dungeonRun);
     const clearedNodes = dungeonRun.nodes.filter((node) => node.status === 'cleared').length;
@@ -233,7 +235,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
             id: 'dungeon_outcome',
             label: 'Run outcome',
             value: nonNegativeRunHistoryCount(run.lives) <= 0 ? 'Defeated in the dungeon' : 'Run ended',
-            detail: `${nonNegativeRunHistoryCount(run.enemyHazardHitsThisFloor)} enemy hazard hits this floor; ${nonNegativeRunHistoryCount(run.stats.bestStreak)} best streak.`,
+            detail: `${nonNegativeRunHistoryCount(run.enemyHazardHitsThisFloor)} enemy hazard hits this floor; ${stats.bestStreak} best streak.`,
             persistence: 'persisted_summary',
             exportSafe: true,
             offlineOnly: true

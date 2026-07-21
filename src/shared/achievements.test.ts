@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { AchievementId } from './contracts';
+import type { AchievementId, RunState } from './contracts';
 import { ACHIEVEMENT_BY_ID, ACHIEVEMENTS, evaluateAchievementUnlocks } from './achievements';
 import { createNewRun } from './game-core';
 import { createDefaultSaveData } from './save-data';
@@ -106,6 +106,15 @@ describe('achievement rules', () => {
         saveData.playerStats = { ...saveData.playerStats!, dailiesCompleted: Number.POSITIVE_INFINITY };
 
         expect(evaluateAchievementUnlocks(run, saveData)).toEqual([]);
+    });
+
+    it('normalizes malformed stat records before checking threshold achievements', () => {
+        const run = {
+            ...createNewRun(0),
+            stats: Number.NaN
+        };
+
+        expect(evaluateAchievementUnlocks(run as unknown as RunState, createDefaultSaveData())).toEqual([]);
     });
 
     it('unlocks ACH_ENDLESS_TEN when endless run reaches floor 10', () => {

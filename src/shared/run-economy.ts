@@ -1,4 +1,5 @@
 import type { RunState } from './contracts';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunEconomyBucket = 'score' | 'temporary_run' | 'durable_meta';
 export type RunEconomyPersistence = 'temporary_run' | 'run_summary' | 'player_stats';
@@ -124,15 +125,16 @@ const dungeonKeyTotal = (run: RunState): number =>
     );
 
 const valueFor = (run: RunState, id: string): string => {
+    const stats = normalizeSessionStats(run.stats);
     switch (id) {
         case 'shop_gold':
             return String(nonNegativeRunEconomyCount(run.shopGold));
         case 'score':
-            return String(nonNegativeRunEconomyCount(run.stats.totalScore));
+            return String(stats.totalScore);
         case 'combo_shards':
-            return `${nonNegativeRunEconomyCount(run.stats.comboShards)}/2`;
+            return `${stats.comboShards}/2`;
         case 'guard_tokens':
-            return `${nonNegativeRunEconomyCount(run.stats.guardTokens)}/2`;
+            return `${stats.guardTokens}/2`;
         case 'relic_favor':
             return `${nonNegativeRunEconomyCount(run.relicFavorProgress)}/3`;
         case 'dungeon_keys': {
@@ -148,15 +150,16 @@ const valueFor = (run: RunState, id: string): string => {
 };
 
 const numericValueFor = (run: RunState, id: string): number => {
+    const stats = normalizeSessionStats(run.stats);
     switch (id) {
         case 'shop_gold':
             return nonNegativeRunEconomyCount(run.shopGold);
         case 'score':
-            return nonNegativeRunEconomyCount(run.stats.totalScore);
+            return stats.totalScore;
         case 'combo_shards':
-            return nonNegativeRunEconomyCount(run.stats.comboShards);
+            return stats.comboShards;
         case 'guard_tokens':
-            return nonNegativeRunEconomyCount(run.stats.guardTokens);
+            return stats.guardTokens;
         case 'relic_favor':
             return nonNegativeRunEconomyCount(run.relicFavorProgress);
         case 'dungeon_keys':

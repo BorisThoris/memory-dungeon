@@ -107,4 +107,22 @@ describe('REG-024 run economy taxonomy', () => {
         ]);
         expect(rows.map((row) => row.numericValue).every(Number.isFinite)).toBe(true);
     });
+
+    it('normalizes malformed stat records before projecting economy rows', () => {
+        const run = {
+            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(getRunEconomyRows(run).map((row) => `${row.key}:${row.value}`)).toEqual([
+            'shop_gold:0',
+            'score:0',
+            'combo_shards:0/2',
+            'guard_tokens:0/2',
+            'relic_favor:0/3',
+            'dungeon_keys:0 keys · 0 master',
+            'findable_pickups:0/1',
+            'assist_charges:Shuffle 1 · Row 1 · Destroy 0 · Peek 1 · Stray 0'
+        ]);
+    });
 });

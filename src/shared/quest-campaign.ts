@@ -1,4 +1,5 @@
 import type { RunState, SaveData } from './contracts';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type QuestCampaignStepId =
     | 'first_lantern'
@@ -158,6 +159,7 @@ export interface ActiveQuestContractRow {
 
 export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContractRow[] => {
     const rows: ActiveQuestContractRow[] = [];
+    const stats = normalizeSessionStats(run.stats);
     if (run.activeContract?.noShuffle && run.activeContract.noDestroy) {
         const failed = run.shuffleUsedThisFloor || run.destroyUsedThisFloor;
         rows.push({
@@ -185,7 +187,7 @@ export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContract
         });
     }
     if (run.gameMode === 'gauntlet') {
-        const levelsCleared = nonNegativeQuestCount(run.stats.levelsCleared);
+        const levelsCleared = stats.levelsCleared;
         rows.push({
             id: 'gauntlet_proof',
             label: 'Gauntlet Proof',

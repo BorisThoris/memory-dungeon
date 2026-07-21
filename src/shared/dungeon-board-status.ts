@@ -22,6 +22,7 @@ import {
 } from './board-inspection';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { dungeonKeyKindArticleLabel, dungeonKeyKindLabel } from './dungeon-key-copy';
+import { normalizeSessionStats } from './session-stats-rules';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 
 const nonNegativeDungeonStatusCount = (value: unknown): number =>
@@ -774,9 +775,10 @@ const getDungeonCombatForecastText = (run: RunState, status: DungeonBoardStatus)
         return null;
     }
 
-    if (run.stats.guardTokens > 0) {
-        const noun = run.stats.guardTokens === 1 ? 'guard' : 'guards';
-        return `${run.stats.guardTokens} ${noun} ready: the next enemy hit spends guard before life.`;
+    const stats = normalizeSessionStats(run.stats);
+    if (stats.guardTokens > 0) {
+        const noun = stats.guardTokens === 1 ? 'guard' : 'guards';
+        return `${stats.guardTokens} ${noun} ready: the next enemy hit spends guard before life.`;
     }
 
     const forecasts: string[] = [];

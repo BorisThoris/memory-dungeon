@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { RunState } from './contracts';
 import { createDefaultSaveData } from './save-data';
 import {
     buildActiveQuestContractRows,
@@ -85,6 +86,19 @@ describe('REG-082 quest contract campaign ladder', () => {
             status: 'active',
             progressLabel: '0/1 pins',
             failureReason: null
+        });
+    });
+
+    it('normalizes malformed run stats before projecting active contracts', () => {
+        const rows = buildActiveQuestContractRows({
+            ...createNewRun(0),
+            gameMode: 'gauntlet',
+            stats: Number.NaN
+        } as unknown as RunState);
+
+        expect(rows.find((row) => row.id === 'gauntlet_proof')).toMatchObject({
+            status: 'active',
+            progressLabel: '0/1 timed clears'
         });
     });
 });

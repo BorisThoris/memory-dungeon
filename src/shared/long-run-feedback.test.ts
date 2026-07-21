@@ -49,6 +49,16 @@ describe('GLD-FB long-run feedback read models', () => {
         });
     });
 
+    it('normalizes malformed Perfect Memory stats before attribution', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 91_007, activeMutators: [] }),
+            powersUsedThisRun: true,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(getPerfectMemoryAttribution(run).firstAction).toBe('assist or wild action');
+    });
+
     it('builds shared cause rows and touch HUD detail rows from the run state', () => {
         const run = {
             ...createNewRun(0, { runSeed: 91_002, activeMutators: [] }),

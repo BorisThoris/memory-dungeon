@@ -1,5 +1,6 @@
 import type { AchievementId, RunState, SaveData } from './contracts';
 import { ACHIEVEMENT_CATALOG, type AchievementCodexEntry } from './mechanics-encyclopedia';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type AchievementDefinition = AchievementCodexEntry;
 
@@ -27,16 +28,17 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
     }
 
     const unlocked: AchievementId[] = [];
+    const stats = normalizeSessionStats(run.stats);
 
-    if (nonNegativeAchievementCount(run.stats.levelsCleared) >= 1 && !saveData.achievements.ACH_FIRST_CLEAR) {
+    if (stats.levelsCleared >= 1 && !saveData.achievements.ACH_FIRST_CLEAR) {
         unlocked.push('ACH_FIRST_CLEAR');
     }
 
-    if (nonNegativeAchievementCount(run.stats.highestLevel) >= 5 && !saveData.achievements.ACH_LEVEL_FIVE) {
+    if (stats.highestLevel >= 5 && !saveData.achievements.ACH_LEVEL_FIVE) {
         unlocked.push('ACH_LEVEL_FIVE');
     }
 
-    if (nonNegativeAchievementCount(run.stats.totalScore) >= 1000 && !saveData.achievements.ACH_SCORE_THOUSAND) {
+    if (stats.totalScore >= 1000 && !saveData.achievements.ACH_SCORE_THOUSAND) {
         unlocked.push('ACH_SCORE_THOUSAND');
     }
 
@@ -54,7 +56,7 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
 
     if (
         run.gameMode === 'endless' &&
-        nonNegativeAchievementCount(run.stats.highestLevel) >= 10 &&
+        stats.highestLevel >= 10 &&
         !saveData.achievements.ACH_ENDLESS_TEN
     ) {
         unlocked.push('ACH_ENDLESS_TEN');

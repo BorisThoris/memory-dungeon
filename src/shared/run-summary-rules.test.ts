@@ -95,7 +95,7 @@ describe('createRunSummary', () => {
             totalScore: 0,
             bestScore: 0,
             levelsCleared: 1,
-            highestLevel: 0,
+            highestLevel: 1,
             bestStreak: 3,
             perfectClears: 1,
             payoffPickupClaimed: 2,
@@ -103,6 +103,28 @@ describe('createRunSummary', () => {
             payoffPressureExtra: 2,
             activeMutators: [],
             relicIds: []
+        });
+    });
+
+    it('fails closed when persisted stats are not an object', () => {
+        const run = finishMemorizePhase(createNewRun(100, { runSeed: 0xbeef }));
+        const summarized = createRunSummary(
+            {
+                ...run,
+                status: 'gameOver',
+                stats: Number.NaN
+            } as unknown as RunState,
+            []
+        );
+
+        expect(summarized.lastRunSummary).toMatchObject({
+            totalScore: 0,
+            bestScore: 0,
+            levelsCleared: 0,
+            highestLevel: 1,
+            bestStreak: 0,
+            perfectClears: 0,
+            payoffPressureExtra: 0
         });
     });
 });

@@ -660,6 +660,53 @@ describe('dungeon board status', () => {
         });
     });
 
+    it('normalizes malformed stats before forecasting combat pressure', () => {
+        const board = {
+            tiles: [
+                tile({
+                    id: 'enemy-a',
+                    pairKey: 'enemy',
+                    state: 'flipped',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardHp: 2,
+                    dungeonCardMaxHp: 2
+                }),
+                tile({
+                    id: 'enemy-b',
+                    pairKey: 'enemy',
+                    state: 'flipped',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardHp: 2,
+                    dungeonCardMaxHp: 2
+                })
+            ],
+            matchedPairs: 0,
+            pairCount: 1,
+            enemyHazards: [
+                {
+                    id: 'patrol',
+                    kind: 'sentinel',
+                    label: 'Patrol',
+                    pattern: 'patrol',
+                    state: 'revealed',
+                    currentTileId: 'enemy-a',
+                    nextTileId: 'enemy-b',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 1
+                }
+            ]
+        } as BoardState;
+
+        expect(
+            getDungeonBoardPresentation(
+                run(board, {
+                    stats: Number.NaN as unknown as RunState['stats']
+                })
+            ).combatForecastText
+        ).toBe('No guard: patrol contact costs up to 1 life.');
+    });
+
     it('separates defeated boss state from the remaining hidden-exit step', () => {
         const board = {
             floorTag: 'boss',

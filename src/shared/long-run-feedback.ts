@@ -9,6 +9,7 @@ import {
 import type { MechanicTokenId } from './mechanic-feedback';
 import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { getRunEconomyRows } from './run-economy';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type FeedbackCauseKind =
     | 'match_reward'
@@ -99,10 +100,11 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
         };
     }
 
+    const stats = normalizeSessionStats(run.stats);
     const actions: string[] = [];
     if (run.gambitThirdFlipUsed) actions.push('gambit');
-    if (run.shuffleUsedThisFloor || run.stats.shufflesUsed > 0) actions.push('shuffle or swap');
-    if (run.stats.pairsDestroyed > 0) actions.push('destroy pair');
+    if (run.shuffleUsedThisFloor || stats.shufflesUsed > 0) actions.push('shuffle or swap');
+    if (stats.pairsDestroyed > 0) actions.push('destroy pair');
     if (runFeedbackArrayCount(run.peekRevealedTileIds) > 0) actions.push('peek');
     const firstAction = actions[0] ?? 'assist or wild action';
     const latestAction = actions[actions.length - 1] ?? firstAction;
@@ -118,6 +120,7 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
 
 export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
     const rows: FeedbackCauseRow[] = [];
+    const stats = normalizeSessionStats(run.stats);
     const objective = getDungeonObjectiveStatus(run);
     const dungeon = getDungeonBoardPresentation(run);
     const pm = getPerfectMemoryAttribution(run);
@@ -234,13 +237,13 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
         );
     }
 
-    if (run.shopGold > 0 || run.stats.comboShards > 0 || run.stats.guardTokens > 0) {
+    if (run.shopGold > 0 || stats.comboShards > 0 || stats.guardTokens > 0) {
         rows.push(
             causeRow({
                 id: 'economy',
                 kind: 'economy_delta',
                 label: 'Economy',
-                summary: `${run.shopGold} gold, ${run.stats.comboShards}/2 shards, ${run.stats.guardTokens}/2 guard`,
+                summary: `${run.shopGold} gold, ${stats.comboShards}/2 shards, ${stats.guardTokens}/2 guard`,
                 detail: 'Temporary run resources shifted as caches, route cards, shops, and pickups resolved.',
                 tokens: ['reward', 'cost'],
                 priority: 60

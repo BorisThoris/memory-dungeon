@@ -2,6 +2,7 @@ import type { RunState, SaveData } from './contracts';
 import { getDailyArchiveSummary } from './daily-archive';
 import { getMetaProgressionBoard, getMetaProgressionFeedback } from './meta-progression';
 import { getObjectiveBoardItems } from './objective-board';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type MetaScreenId = 'collection' | 'inventory' | 'codex';
 export type MetaRewardSignalKind = 'progress' | 'next_goal' | 'empty_state' | 'discovery';
@@ -157,21 +158,22 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
     }
     const relicCount = Array.isArray(run.relicIds) ? run.relicIds.length : 0;
     const mutatorCount = Array.isArray(run.activeMutators) ? run.activeMutators.length : 0;
+    const stats = normalizeSessionStats(run.stats);
     return [
         {
             id: 'inventory_build_value',
             screen: 'inventory',
             kind: relicCount > 0 ? 'discovery' : 'next_goal',
             title: relicCount > 0 ? `${relicCount} relic(s) shaping this build` : 'First relic still ahead',
-            body: `${mutatorCount} active mutator(s) | ${run.shopGold} shop gold | ${run.stats.comboShards} shard(s).`,
+            body: `${mutatorCount} active mutator(s) | ${run.shopGold} shop gold | ${stats.comboShards} shard(s).`,
             cta: relicCount > 0 ? 'Use this snapshot to plan the next floor.' : 'Clear milestone floors to draft relics.'
         },
         {
             id: 'inventory_run_progress',
             screen: 'inventory',
             kind: 'progress',
-            title: `Floor ${run.board?.level ?? run.stats.highestLevel}`,
-            body: `${run.stats.totalScore.toLocaleString()} score | ${run.lives} life/lives remaining.`,
+            title: `Floor ${run.board?.level ?? stats.highestLevel}`,
+            body: `${stats.totalScore.toLocaleString()} score | ${run.lives} life/lives remaining.`,
             cta: run.achievementsEnabled ? 'Achievements remain eligible.' : 'Practice/debug state: achievements disabled.'
         }
     ];

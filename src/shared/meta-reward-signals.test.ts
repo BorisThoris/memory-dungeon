@@ -43,6 +43,15 @@ describe('REG-011 meta reward signals', () => {
         expect(inventory.body).toContain('0 active mutator(s)');
     });
 
+    it('normalizes malformed inventory stats before building copy', () => {
+        const inventory = getInventoryRewardSignal({
+            ...createNewRun(0),
+            stats: Number.NaN as unknown as RunState['stats']
+        });
+
+        expect(inventory.body).toContain('0 shard(s)');
+    });
+
     it('translates permanent profile unlocks into next-run impact rows', () => {
         const save = createDefaultSaveData();
         save.playerStats = { ...save.playerStats!, dailiesCompleted: 7 };
