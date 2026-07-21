@@ -376,9 +376,15 @@ export interface RunBuildProfile {
 
 const RELIC_BUILD_ARCHETYPE_ORDER = Object.keys(RELIC_BUILD_ARCHETYPE_DEFINITIONS) as RelicBuildArchetype[];
 
+const relicArray = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
+
+const mutatorArray = (value: unknown): MutatorId[] => Array.isArray(value) ? value : [];
+
+const hasRunRelic = (run: Pick<RunState, 'relicIds'>, id: RelicId): boolean => relicArray(run.relicIds).includes(id);
+
 export const getRunBuildProfile = (run: Pick<RunState, 'relicIds'>): RunBuildProfile => {
     const scoreByArchetype = new Map<RelicBuildArchetype, { score: number; relicIds: RelicId[] }>();
-    for (const relicId of run.relicIds) {
+    for (const relicId of relicArray(run.relicIds)) {
         const row = RELIC_DRAFT[relicId];
         if (!row) continue;
         for (const archetype of row.archetypes) {
@@ -507,7 +513,7 @@ export const getRelicDraftContext = (run: RunState, clearedFloor: number): Relic
     return {
         isScheduledEndless,
         clearedFloor,
-        currentMutators: isScheduledEndless ? [...run.activeMutators] : [],
+        currentMutators: isScheduledEndless ? [...mutatorArray(run.activeMutators)] : [],
         nextMutators,
         pendingRouteType: isScheduledEndless ? pendingRouteType : null,
         activeRouteType: isScheduledEndless ? activeRouteType : null,
@@ -523,12 +529,12 @@ export const getRelicDraftContext = (run: RunState, clearedFloor: number): Relic
         activeTraitKinds: getActiveTraitKinds(run),
         activeOrAcceptedRiskWager: isScheduledEndless && run.endlessRiskWager != null,
         favorNearRelicPick: isScheduledEndless && run.relicFavorProgress >= 2,
-        hasChapterCompass: run.relicIds.includes('chapter_compass')
+        hasChapterCompass: hasRunRelic(run, 'chapter_compass')
     };
 };
 
 export const isRelicDraftEligible = (id: RelicId, run: RunState): boolean => {
-    if (run.relicIds.includes(id)) {
+    if (hasRunRelic(run, id)) {
         return false;
     }
     if (run.runRulesVersion < RELIC_SYNERGY_RULES_VERSION && ENDLESS_SYNERGY_RELICS.has(id)) {

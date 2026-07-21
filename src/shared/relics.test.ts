@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { RouteNodeType, RunState } from './contracts';
+import type { MutatorId, RelicId, RouteNodeType, RunState } from './contracts';
 import { createDailyRun, createNewRun } from './game-core';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import {
@@ -426,6 +426,29 @@ describe('rollRelicOptions', () => {
         expect(getContextualRelicDraftWeight('peek_charge_plus_one', traitContext, 0)).toBeGreaterThan(
             getContextualRelicDraftWeight('peek_charge_plus_one', neutral, 0)
         );
+    });
+
+    it('ignores malformed relic and mutator arrays before deriving draft context', () => {
+        const run = levelCompleteRun(3, 0, {
+            activeMutators: Number.NaN as unknown as MutatorId[],
+            relicIds: Number.NaN as unknown as RelicId[]
+        });
+        const context = getRelicDraftContext(run, 3);
+
+        expect(context.currentMutators).toEqual([]);
+        expect(context.hasChapterCompass).toBe(false);
+        expect(isRelicDraftEligible('chapter_compass', run)).toBe(true);
+    });
+
+    it('ignores malformed relic arrays before building run profiles', () => {
+        const profile = getRunBuildProfile({ relicIds: Number.NaN as unknown as RelicId[] });
+
+        expect(profile).toEqual({
+            primary: null,
+            signals: [],
+            summary: 'First relic still ahead',
+            tooltip: 'Draft a relic to begin shaping a run build.'
+        });
     });
 
     it('uses starting loadout as early relic draft build context before matching traits appear', () => {
