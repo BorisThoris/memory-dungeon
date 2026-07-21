@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, type BoardState, type MutatorId, type RouteNodeType, type RunState, type Tile } from './contracts';
-import { BUILTIN_PUZZLES } from './builtin-puzzles';
+import { BUILTIN_PUZZLE_IDS, BUILTIN_PUZZLES } from './builtin-puzzles';
 import {
     boardHasActionableProgressionPair,
     buildBoard,
@@ -969,7 +969,8 @@ describe('REG-087 run-start fairness coverage', () => {
     });
 
     it('accepts every built-in puzzle start', () => {
-        for (const puzzle of Object.values(BUILTIN_PUZZLES)) {
+        for (const id of BUILTIN_PUZZLE_IDS) {
+            const puzzle = BUILTIN_PUZZLES[id];
             expectRunFair(playableRun(createPuzzleRun(0, puzzle.id, puzzle.tiles)));
         }
     });
