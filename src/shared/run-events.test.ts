@@ -298,6 +298,26 @@ describe('REG-074 run event rooms', () => {
         expect(result.run.stats.bestScore).toBe(25);
     });
 
+    it('normalizes malformed stat records before applying score event rewards', () => {
+        const event = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_208, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_score'))!;
+        const choice = event.options.find((option) => option.effect === 'gain_score')!;
+        const result = applyRunEventChoice(
+            {
+                ...createNewRun(0),
+                stats: Number.NaN as unknown as RunState['stats']
+            },
+            event,
+            choice.id
+        );
+
+        expect(result.applied).toBe(true);
+        expect(result.run.stats.totalScore).toBe(25);
+        expect(result.run.stats.currentLevelScore).toBe(25);
+        expect(result.run.stats.bestScore).toBe(25);
+    });
+
     it('normalizes malformed counters before applying economy event rewards', () => {
         const goldEvent = Array.from({ length: 40 }, (_, floor) =>
             rollRunEventRoom({ runSeed: 74_206, rulesVersion: GAME_RULES_VERSION, floor })
@@ -373,6 +393,20 @@ describe('REG-074 run event rooms', () => {
         };
 
         expect(createRunEventPreviewState(run).ironKeys).toBe(0);
+    });
+
+    it('normalizes malformed stat records before event previews', () => {
+        const run = {
+            ...createNewRun(0),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(createRunEventPreviewState(run)).toMatchObject({
+            totalScore: 0,
+            currentLevelScore: 0,
+            bestScore: 0,
+            guardTokens: 0
+        });
     });
 
     it('previews full-life recovery as guard instead of hiding the promised fallback', () => {

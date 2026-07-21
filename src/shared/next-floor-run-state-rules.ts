@@ -12,6 +12,7 @@ import {
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
@@ -62,6 +63,7 @@ export const createNextFloorRunState = (
         : { board: options.board, banished: false };
     const nextBoard = hazardBanish.board;
     const traitRouteObjective = getTraitRouteObjectiveSeed(nextBoard);
+    const stats = normalizeSessionStats(run.stats);
 
     return {
         ...run,
@@ -145,11 +147,11 @@ export const createNextFloorRunState = (
         timerState: createTimerState({ memorizeRemainingMs: options.memorizeRemainingMs }),
         lastLevelResult: null,
         stats: {
-            ...run.stats,
+            ...stats,
             tries: 0,
             currentLevelScore: 0,
             rating: calculateRating(0),
-            highestLevel: Math.max(run.stats.highestLevel, nextBoard.level),
+            highestLevel: Math.max(stats.highestLevel, nextBoard.level),
             currentStreak: 0
         }
     };

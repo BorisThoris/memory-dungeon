@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type RelicId, type RewardPerkId } from './contracts';
+import { type RelicId, type RewardPerkId, type RunState } from './contracts';
 import { createNewRun } from './game';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { createRunShopOffers } from './shop-rules';
@@ -119,6 +119,28 @@ describe('createNextFloorRunState', () => {
 
         expect(next.freeShuffleThisFloor).toBe(false);
         expect(next.regionShuffleFreeThisFloor).toBe(false);
+    });
+
+    it('normalizes malformed stat records before resetting next-floor stats', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 17 }),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        const next = createNextFloorRunState(run, {
+            lives: run.lives,
+            activeMutators: run.activeMutators,
+            dungeonRun: run.dungeonRun,
+            board: { ...run.board!, level: 4 },
+            parasiteFloors: run.parasiteFloors,
+            parasiteWardRemaining: run.parasiteWardRemaining,
+            memorizeRemainingMs: 1000
+        });
+
+        expect(next.stats.totalScore).toBe(0);
+        expect(next.stats.currentLevelScore).toBe(0);
+        expect(next.stats.tries).toBe(0);
+        expect(next.stats.currentStreak).toBe(0);
+        expect(next.stats.highestLevel).toBe(4);
     });
 
     it('restores durable reward perk floor benefits without bypassing contracts', () => {
