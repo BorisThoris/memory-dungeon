@@ -86,6 +86,8 @@ const causeRow = (
     ariaLive: row.ariaLive ?? `${row.label}: ${row.summary}. ${row.detail}`
 });
 
+const runFeedbackArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
+
 export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribution => {
     if (!run.powersUsedThisRun) {
         return {
@@ -101,7 +103,7 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
     if (run.gambitThirdFlipUsed) actions.push('gambit');
     if (run.shuffleUsedThisFloor || run.stats.shufflesUsed > 0) actions.push('shuffle or swap');
     if (run.stats.pairsDestroyed > 0) actions.push('destroy pair');
-    if (run.peekRevealedTileIds.length > 0) actions.push('peek');
+    if (runFeedbackArrayCount(run.peekRevealedTileIds) > 0) actions.push('peek');
     const firstAction = actions[0] ?? 'assist or wild action';
     const latestAction = actions[actions.length - 1] ?? firstAction;
 
@@ -119,6 +121,8 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
     const objective = getDungeonObjectiveStatus(run);
     const dungeon = getDungeonBoardPresentation(run);
     const pm = getPerfectMemoryAttribution(run);
+    const forgottenTileCount = runFeedbackArrayCount(run.forgottenTileIdsThisFloor);
+    const matchedPairCount = runFeedbackArrayCount(run.matchedPairKeysThisRun);
 
     if (objective.progress > 0 || objective.completed) {
         rows.push(
@@ -183,7 +187,7 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
         run.recallMatchesThisFloor > 0 ||
         run.recallMistakesThisFloor > 0 ||
         run.recallBonusScoreThisFloor > 0 ||
-        run.forgottenTileIdsThisFloor.length > 0
+        forgottenTileCount > 0
     ) {
         const recall = getMemoryRecallFeedback(run);
         rows.push(
@@ -192,20 +196,20 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
                 kind: 'recall_feedback',
                 label: 'Recall',
                 summary: `Focus ${recall.focus}/${RECALL_FOCUS_MAX}, +${run.recallBonusScoreThisFloor} score`,
-                detail: `${run.recallMatchesThisFloor} remembered match(es), ${run.recallMistakesThisFloor} lapse(s), ${run.forgottenTileIdsThisFloor.length} forgotten tile marker(s) etched into the room log. ${recall.atmosphericSummary} ${recall.atmosphericBeat} Next memory move: ${recall.nextMemoryMove.label}.`,
+                detail: `${run.recallMatchesThisFloor} remembered match(es), ${run.recallMistakesThisFloor} lapse(s), ${forgottenTileCount} forgotten tile marker(s) etched into the room log. ${recall.atmosphericSummary} ${recall.atmosphericBeat} Next memory move: ${recall.nextMemoryMove.label}.`,
                 tokens: ['hidden_known', run.recallMistakesThisFloor > 0 ? 'risk' : 'momentum'],
                 priority: 35
             })
         );
     }
 
-    if (run.matchedPairKeysThisRun.length > 0) {
+    if (matchedPairCount > 0) {
         rows.push(
             causeRow({
                 id: 'latest-match-route',
                 kind: 'route_reward',
                 label: 'Route',
-                summary: `${run.matchedPairKeysThisRun.length} pair(s) resolved this run`,
+                summary: `${matchedPairCount} pair(s) resolved this run`,
                 detail:
                     run.pendingRouteCardPlan?.routeType != null
                         ? `${run.pendingRouteCardPlan.routeType} route plan is pending.`
