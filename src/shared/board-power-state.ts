@@ -1,13 +1,19 @@
 import {
     MAX_PINNED_TILES,
+    type RelicId,
     type RunState
 } from './contracts';
 
 const nonNegativePowerStateCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const powerStateTileIds = (value: unknown): string[] => Array.isArray(value) ? value : [];
+
+const hasRelic = (run: RunState, relicId: RelicId): boolean =>
+    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+
 export const maxPinnedTilesForRun = (run: RunState): number =>
-    MAX_PINNED_TILES + (run.relicIds.includes('pin_cap_plus_one') ? 1 : 0);
+    MAX_PINNED_TILES + (hasRelic(run, 'pin_cap_plus_one') ? 1 : 0);
 
 export const armRegionShuffleRow = (run: RunState, row: number | null): RunState =>
     run.status === 'playing' && run.board ? { ...run, regionShuffleRowArmed: row } : run;
@@ -22,18 +28,19 @@ export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
         return run;
     }
 
-    const isPinned = run.pinnedTileIds.includes(tileId);
+    const currentPinnedTileIds = powerStateTileIds(run.pinnedTileIds);
+    const isPinned = currentPinnedTileIds.includes(tileId);
     let pinnedTileIds: string[];
 
     if (isPinned) {
-        pinnedTileIds = run.pinnedTileIds.filter((id) => id !== tileId);
-    } else if (run.pinnedTileIds.length < maxPinnedTilesForRun(run)) {
+        pinnedTileIds = currentPinnedTileIds.filter((id) => id !== tileId);
+    } else if (currentPinnedTileIds.length < maxPinnedTilesForRun(run)) {
         const cap = run.activeContract?.maxPinsTotalRun;
         const pinsPlacedCountThisRun = nonNegativePowerStateCount(run.pinsPlacedCountThisRun);
         if (cap != null && pinsPlacedCountThisRun >= nonNegativePowerStateCount(cap)) {
             return run;
         }
-        pinnedTileIds = [...run.pinnedTileIds, tileId];
+        pinnedTileIds = [...currentPinnedTileIds, tileId];
         return {
             ...run,
             pinnedTileIds,

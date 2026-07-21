@@ -3,6 +3,8 @@ import {
     RECALL_CLUE_MATCH_SCORE,
     RECALL_FOCUS_MATCH_SCORE,
     RECALL_FOCUS_MAX,
+    type MutatorId,
+    type RelicId,
     type RouteChoice,
     type RunState
 } from './contracts';
@@ -624,6 +626,23 @@ describe('getMemoryRecallFeedback', () => {
         );
         expect(feedback.focus).toBe(1);
         expect(feedback.rememberedClueTileCount).toBe(0);
+    });
+
+    it('ignores malformed memory arrays before building feedback copy', () => {
+        const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
+            activeMutators: Number.NaN as unknown as MutatorId[],
+            relicIds: Number.NaN as unknown as RelicId[],
+            pinnedTileIds: Number.NaN as unknown as string[],
+            forgottenTileIdsThisFloor: Number.NaN as unknown as string[],
+            recallFocus: 1
+        });
+
+        const feedback = getMemoryRecallFeedback(run);
+
+        expect(feedback.penalties.map((line) => line.id)).not.toContain('memory-tax-short_memorize');
+        expect(feedback.upgrades.map((line) => line.id)).not.toContain('memorize-relic');
+        expect(feedback.symbols.map((line) => line.id)).not.toContain('pinned-symbols');
+        expect(feedback.forgottenTileCount).toBe(0);
     });
 
     it('normalizes stale recall focus before showing next-match bonus', () => {

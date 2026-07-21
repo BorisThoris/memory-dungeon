@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type {
     BoardState,
+    RelicId,
     RunState,
     Tile
 } from './contracts';
@@ -67,6 +68,7 @@ describe('board power state rules', () => {
     it('honors pin capacity from relics and contracts', () => {
         const relicRun = run({ relicIds: ['pin_cap_plus_one'] });
         expect(maxPinnedTilesForRun(relicRun)).toBe(maxPinnedTilesForRun(run()) + 1);
+        expect(maxPinnedTilesForRun(run({ relicIds: Number.NaN as unknown as RelicId[] }))).toBe(maxPinnedTilesForRun(run()));
 
         const capped = run({
             activeContract: { maxPinsTotalRun: 0 } as RunState['activeContract']
@@ -78,6 +80,12 @@ describe('board power state rules', () => {
         const pinned = togglePinnedTile(run({ pinsPlacedCountThisRun: Number.NaN }), 'a1');
         expect(pinned.pinnedTileIds).toEqual(['a1']);
         expect(pinned.pinsPlacedCountThisRun).toBe(1);
+
+        const pinnedFromMalformedIds = togglePinnedTile(
+            run({ pinnedTileIds: Number.NaN as unknown as string[] }),
+            'a1'
+        );
+        expect(pinnedFromMalformedIds.pinnedTileIds).toEqual(['a1']);
 
         const capped = run({
             activeContract: { maxPinsTotalRun: 1.9 } as RunState['activeContract'],

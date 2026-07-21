@@ -81,6 +81,16 @@ const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
 const nonNegativeMemoryFeedbackCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const runMutatorIds = (run: RunState): MutatorId[] => Array.isArray(run.activeMutators) ? run.activeMutators : [];
+
+const runRelicIds = (run: RunState): RelicId[] => Array.isArray(run.relicIds) ? run.relicIds : [];
+
+const runTileIds = (value: unknown): string[] => Array.isArray(value) ? value : [];
+
+const hasRunMutator = (run: RunState, mutatorId: MutatorId): boolean => runMutatorIds(run).includes(mutatorId);
+
+const hasRunRelic = (run: RunState, relicId: RelicId): boolean => runRelicIds(run).includes(relicId);
+
 const isMemorySolvablePair = (pairKey: string, tiles: readonly Tile[]): boolean =>
     tiles.length === 2 && !isSingletonUtilityPairKey(pairKey);
 
@@ -600,10 +610,10 @@ const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => Memor
     memorize_under_short_memorize: (run) => ({
         id: 'memory-assist-short-memorize-answer',
         label: 'Short-study answer',
-        detail: run.activeMutators.includes('short_memorize')
+        detail: hasRunMutator(run, 'short_memorize')
             ? 'This relic directly answers the active short-study tax.'
             : 'Banked for the next short-study floor so fast encoding stays fair.',
-        tone: run.activeMutators.includes('short_memorize') ? 'reward' : 'stable'
+        tone: hasRunMutator(run, 'short_memorize') ? 'reward' : 'stable'
     }),
     peek_charge_plus_one: (run) => ({
         id: 'memory-assist-peek-charge',
@@ -613,7 +623,7 @@ const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => Memor
     }),
     pin_cap_plus_one: (run) => ({
         id: 'memory-assist-pin-cap',
-        label: `Pin capacity ${run.pinnedTileIds.length}/${run.activeContract?.maxPinsTotalRun ?? 'expanded'}`,
+        label: `Pin capacity ${runTileIds(run.pinnedTileIds).length}/${run.activeContract?.maxPinsTotalRun ?? 'expanded'}`,
         detail: 'Expanded pin space lets the player author a safer path through noisy symbol bands.',
         tone: 'stable'
     }),
@@ -626,7 +636,7 @@ const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => Memor
 };
 
 const buildMemoryTaxLines = (run: RunState): MemoryFeedbackLine[] =>
-    unique(run.activeMutators)
+    unique(runMutatorIds(run))
         .flatMap((mutator) => {
             const copy = MEMORY_TAX_MUTATOR_COPY[mutator];
             return copy
@@ -641,7 +651,7 @@ const buildMemoryTaxLines = (run: RunState): MemoryFeedbackLine[] =>
         .slice(0, 4);
 
 const buildMemoryAssistLines = (run: RunState): MemoryFeedbackLine[] =>
-    unique(run.relicIds)
+    unique(runRelicIds(run))
         .flatMap((relicId) => {
             const makeLine = MEMORY_ASSIST_RELIC_COPY[relicId];
             return makeLine ? [makeLine(run)] : [];
@@ -652,7 +662,8 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const board = run.board;
     const tiles = board?.tiles ?? [];
     const rememberedClueTiles = tiles.filter(tileHasRecallClue);
-    const forgottenTileIds = run.forgottenTileIdsThisFloor ?? [];
+    const forgottenTileIds = runTileIds(run.forgottenTileIdsThisFloor);
+    const pinnedTileIds = runTileIds(run.pinnedTileIds);
     const forgottenSet = new Set(forgottenTileIds);
     const forgottenSymbols = unique(
         tiles
@@ -667,8 +678,8 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const focus = normalizeRecallFocus(run.recallFocus);
     const nextCleanMatchBonus = focus * RECALL_FOCUS_MATCH_SCORE;
     const clueBonus = rememberedClueTiles.length > 0 ? RECALL_CLUE_MATCH_SCORE : 0;
-    const symbolMap = buildSymbolMap(tiles, run.pinnedTileIds, forgottenTileIds);
-    const recallPlan = buildRecallPlan(tiles, run.pinnedTileIds, forgottenTileIds);
+    const symbolMap = buildSymbolMap(tiles, pinnedTileIds, forgottenTileIds);
+    const recallPlan = buildRecallPlan(tiles, pinnedTileIds, forgottenTileIds);
     const overloadScore =
         run.recallMistakesThisFloor +
         Math.ceil(forgottenTileIds.length / 2) +
@@ -773,10 +784,10 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: 'watch'
         });
     }
-    if (run.pinnedTileIds.length > 0) {
+    if (pinnedTileIds.length > 0) {
         symbols.push({
             id: 'pinned-symbols',
-            label: `${run.pinnedTileIds.length} pinned tile${run.pinnedTileIds.length === 1 ? '' : 's'}`,
+            label: `${pinnedTileIds.length} pinned tile${pinnedTileIds.length === 1 ? '' : 's'}`,
             detail: 'Pins preserve player-authored memory without locking Perfect Memory.',
             tone: 'stable'
         });
@@ -813,7 +824,7 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: totalNextCleanMatchBonus > 0 ? 'reward' : 'watch'
         }
     ];
-    if (run.relicIds.includes('memorize_bonus_ms')) {
+    if (hasRunRelic(run, 'memorize_bonus_ms')) {
         upgrades.push({
             id: 'memorize-relic',
             label: 'Memorize upgrade owned',
