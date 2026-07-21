@@ -18,6 +18,20 @@ type UiSfxSampleKey = keyof typeof uiSfxManifest.entries;
 
 const manifest = uiSfxManifestSchema.parse(uiSfxManifest);
 
+export const UI_SFX_SAMPLE_KEYS = [
+    'ui-click',
+    'ui-confirm',
+    'ui-back',
+    'ui-counter',
+    'menu-open',
+    'run-start',
+    'intro-sting',
+    'pause-open',
+    'pause-resume',
+    'game-over-open',
+    'ui-copy'
+] as const satisfies readonly UiSfxSampleKey[];
+
 const globUrls = import.meta.glob<string>('../assets/audio/ui/*.ogg', {
     eager: true,
     query: '?url',
@@ -203,7 +217,7 @@ export async function preloadUiSfx(): Promise<void> {
     }
     const loaded = await preloadAudioBuffers({
         decode: (arrayBuffer) => ctx.decodeAudioData(arrayBuffer),
-        keys: Object.keys(manifest.entries) as UiSfxSampleKey[],
+        keys: [...UI_SFX_SAMPLE_KEYS],
         urlForKey: (key) => {
             const file = manifest.entries[key]?.file;
             return file ? urlForFilename(file) : undefined;

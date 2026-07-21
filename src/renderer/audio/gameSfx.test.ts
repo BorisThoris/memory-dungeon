@@ -26,7 +26,7 @@ import {
     playWagerArmSfx,
     sfxGainFromSettings
 } from './gameSfx';
-import { preloadSampledSfx } from './sampledSfx';
+import { preloadSampledSfx, SFX_SAMPLE_KEYS } from './sampledSfx';
 
 describe('gameSfx', () => {
     const oscillators: {
@@ -1442,7 +1442,8 @@ describe('gameSfx', () => {
     });
 
     it('keeps sampled gameplay coverage backed by manifest entries and files', () => {
-        const manifestKeys = new Set(Object.keys(sfxManifest.entries));
+        expect(Object.keys(sfxManifest.entries)).toEqual([...SFX_SAMPLE_KEYS]);
+        const manifestKeys = new Set(SFX_SAMPLE_KEYS);
         const sfxAssetDir = path.resolve(process.cwd(), 'src/renderer/assets/audio/sfx');
 
         for (const row of AUDIO_INTERACTION_COVERAGE) {
@@ -1453,7 +1454,8 @@ describe('gameSfx', () => {
             }
         }
 
-        for (const [key, entry] of Object.entries(sfxManifest.entries)) {
+        for (const key of SFX_SAMPLE_KEYS) {
+            const entry = sfxManifest.entries[key];
             expect(entry.file, `manifest key ${key} should use runtime OGG`).toMatch(/\.ogg$/);
             const assetPath = path.join(sfxAssetDir, entry.file);
             expect(fs.existsSync(assetPath), `manifest key ${key} points to missing file ${entry.file}`).toBe(true);

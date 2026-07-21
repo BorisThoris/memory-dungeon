@@ -1,5 +1,4 @@
-import sfxManifest from '../assets/audio/sfx/manifest.json';
-import type { SfxSampleKey } from './sampledSfx';
+import { SFX_SAMPLE_KEYS, type SfxSampleKey } from './sampledSfx';
 import type { UiSfxCue } from './uiSfx';
 
 type AudioCoverageDomain = 'startup' | 'menu' | 'settings' | 'gameplay' | 'overlay' | 'meta';
@@ -20,7 +19,7 @@ export type AudioSemanticMoment =
     | 'ambient';
 type AudioCue = SfxSampleKey | UiSfxCue | 'none';
 
-const GAMEPLAY_CUES = new Set<string>(Object.keys(sfxManifest.entries));
+const GAMEPLAY_CUES = new Set<string>(SFX_SAMPLE_KEYS);
 
 const UI_CUES = new Set<string>([
     'click',

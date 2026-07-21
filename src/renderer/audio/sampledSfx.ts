@@ -14,6 +14,26 @@ export type SfxSampleKey = keyof typeof sfxManifest.entries;
 
 const manifest = sfxManifestSchema.parse(sfxManifest);
 
+export const SFX_SAMPLE_KEYS = [
+    'flip',
+    'gambitCommit',
+    'match-tier-low',
+    'match-tier-mid',
+    'match-tier-high',
+    'mismatch',
+    'power-arm',
+    'destroy-pair',
+    'peek-power',
+    'stray-power',
+    'shuffle-full',
+    'shuffle-quick',
+    'floor-clear',
+    'relic-offer-open',
+    'countdown-pressure',
+    'relic-pick',
+    'wager-arm'
+] as const satisfies readonly SfxSampleKey[];
+
 const globUrls = import.meta.glob<string>('../assets/audio/sfx/*.ogg', {
     eager: true,
     query: '?url',
@@ -171,7 +191,7 @@ export async function preloadSampledSfx(): Promise<void> {
 
     const loaded = await preloadAudioBuffers({
         decode: (arrayBuffer) => ctx.decodeAudioData(arrayBuffer),
-        keys: Object.keys(manifest.entries) as SfxSampleKey[],
+        keys: [...SFX_SAMPLE_KEYS],
         urlForKey: (key) => {
             const file = manifest.entries[key]?.file;
             return file ? urlForFilename(file) : undefined;
