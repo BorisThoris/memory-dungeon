@@ -48,8 +48,10 @@ export const pickWeightedWithoutReplacement = <T>(
     for (let n = 0; n < take; n += 1) {
         const ws = pool.map((p) => p.weight);
         const idx = pickWeightedIndex(rng, ws);
-        out.push(pool[idx]!.value);
-        pool.splice(idx, 1);
+        const [selected] = pool.splice(idx, 1);
+        if (selected !== undefined) {
+            out.push(selected.value);
+        }
     }
     return out;
 };
