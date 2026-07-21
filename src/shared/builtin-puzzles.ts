@@ -23,7 +23,11 @@ const t = (id: string, pairKey: string, symbol: string, atomicVariant?: number):
     ...(atomicVariant !== undefined ? { atomicVariant } : {})
 });
 
-export const BUILTIN_PUZZLES: Record<string, BuiltinPuzzleDefinition> = {
+export const BUILTIN_PUZZLE_IDS = ['starter_pairs', 'mirror_craft', 'glyph_cross'] as const;
+export type BuiltinPuzzleId = (typeof BUILTIN_PUZZLE_IDS)[number];
+const BUILTIN_PUZZLE_ID_SET: ReadonlySet<string> = new Set(BUILTIN_PUZZLE_IDS);
+
+export const BUILTIN_PUZZLES: Record<BuiltinPuzzleId, BuiltinPuzzleDefinition> = {
     starter_pairs: {
         id: 'starter_pairs',
         title: 'Starter 2×2',
@@ -78,10 +82,14 @@ export const BUILTIN_PUZZLES: Record<string, BuiltinPuzzleDefinition> = {
     }
 };
 
-for (const [key, puzzle] of Object.entries(BUILTIN_PUZZLES)) {
+for (const id of BUILTIN_PUZZLE_IDS) {
+    const puzzle = BUILTIN_PUZZLES[id];
     if (!isValidPuzzleImportTileSet(puzzle.tiles)) {
-        throw new Error(`BUILTIN_PUZZLES["${key}"] tiles violate puzzle-import rules`);
+        throw new Error(`BUILTIN_PUZZLES["${id}"] tiles violate puzzle-import rules`);
     }
 }
 
-export const listBuiltinPuzzleIds = (): string[] => Object.keys(BUILTIN_PUZZLES);
+export const listBuiltinPuzzleIds = (): string[] => [...BUILTIN_PUZZLE_IDS];
+
+export const getBuiltinPuzzle = (id: string): BuiltinPuzzleDefinition | undefined =>
+    BUILTIN_PUZZLE_ID_SET.has(id) ? BUILTIN_PUZZLES[id as BuiltinPuzzleId] : undefined;

@@ -11,7 +11,7 @@ import {
 } from '../../shared/floor-mutator-schedule';
 import { getSecondaryObjectiveStatusRows } from '../../shared/secondary-objectives';
 import { getDefaultDifficultyProfile } from '../../shared/difficulty-profile';
-import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
+import { getBuiltinPuzzle } from '../../shared/builtin-puzzles';
 import { getFindableRows } from '../../shared/findables';
 import { getHazardTileBoardSummary } from '../../shared/hazard-tiles';
 import { getTraitOpportunityHudModel, getTraitOpportunitySummary } from '../../shared/trait-opportunities';
@@ -1295,7 +1295,7 @@ const GameplayHudBar = ({
         run.activeMutators.includes('wide_recall') &&
         !run.wildMenuRun &&
         run.activeContract == null;
-    const puzzleModeTitle = run.puzzleId ? (BUILTIN_PUZZLES[run.puzzleId]?.title ?? run.puzzleId) : null;
+    const puzzleModeTitle = run.puzzleId ? (getBuiltinPuzzle(run.puzzleId)?.title ?? run.puzzleId) : null;
     const hudModeLabel =
         dailyDateStripKey != null
             ? 'Daily challenge'

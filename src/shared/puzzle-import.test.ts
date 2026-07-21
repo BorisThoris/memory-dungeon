@@ -1,9 +1,15 @@
 import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
-import { BUILTIN_PUZZLES } from './builtin-puzzles';
+import { BUILTIN_PUZZLE_IDS, BUILTIN_PUZZLES, getBuiltinPuzzle, listBuiltinPuzzleIds } from './builtin-puzzles';
 import type { Tile } from './contracts';
 import { createDefaultSaveData } from './save-data';
-import { getPuzzleLibraryRows, getPuzzlePackProgressRows, isValidPuzzleImportTileSet, validatePuzzleImportPayload } from './puzzle-import';
+import {
+    getPuzzleLibraryRows,
+    getPuzzlePackProgressRows,
+    getPuzzleProgressionRows,
+    isValidPuzzleImportTileSet,
+    validatePuzzleImportPayload
+} from './puzzle-import';
 
 const minimalValidTiles = [
     { id: 'a1', pairKey: 'p1', symbol: 'A', label: 'a', state: 'hidden' as const },
@@ -172,8 +178,16 @@ describe('isValidPuzzleImportTileSet', () => {
 });
 
 describe('BUILTIN_PUZZLES', () => {
+    it('exposes built-in puzzle ids through the explicit stable order', () => {
+        expect(Object.keys(BUILTIN_PUZZLES)).toEqual([...BUILTIN_PUZZLE_IDS]);
+        expect(listBuiltinPuzzleIds()).toEqual([...BUILTIN_PUZZLE_IDS]);
+        expect(getBuiltinPuzzle('starter_pairs')).toBe(BUILTIN_PUZZLES.starter_pairs);
+        expect(getBuiltinPuzzle('missing_puzzle')).toBeUndefined();
+    });
+
     it('satisfies puzzle tile validation rules', () => {
-        for (const puzzle of Object.values(BUILTIN_PUZZLES)) {
+        for (const id of BUILTIN_PUZZLE_IDS) {
+            const puzzle = BUILTIN_PUZZLES[id];
             expect(isValidPuzzleImportTileSet(puzzle.tiles)).toBe(true);
         }
     });
@@ -187,11 +201,17 @@ describe('BUILTIN_PUZZLES', () => {
             }
         };
         const rows = getPuzzleLibraryRows(save);
-        expect(rows.map((row) => row.id)).toEqual(['starter_pairs', 'mirror_craft', 'glyph_cross']);
+        expect(rows.map((row) => row.id)).toEqual([...BUILTIN_PUZZLE_IDS]);
         expect(rows.find((row) => row.id === 'starter_pairs')?.status).toBe('completed');
         expect(rows.find((row) => row.id === 'mirror_craft')?.difficulty).toBe('standard');
         expect(rows.find((row) => row.id === 'glyph_cross')?.pack).toBe('challenge');
         expect(rows.find((row) => row.id === 'glyph_cross')?.author).toBe('Memory Dungeon');
+    });
+
+    it('projects puzzle progression rows through the same built-in order', () => {
+        const rows = getPuzzleProgressionRows(createDefaultSaveData());
+
+        expect(rows.map((row) => row.id)).toEqual([...BUILTIN_PUZZLE_IDS]);
     });
 
     it('REG-084 derives pack progression medals and curation gates', () => {

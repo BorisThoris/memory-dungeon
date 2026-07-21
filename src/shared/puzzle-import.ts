@@ -1,7 +1,7 @@
 import type { PuzzleDifficulty, PuzzleGoal, PuzzlePackId } from './contracts';
 import type { SaveData } from './contracts';
 import { z } from 'zod';
-import { BUILTIN_PUZZLES } from './builtin-puzzles';
+import { BUILTIN_PUZZLE_IDS, BUILTIN_PUZZLES } from './builtin-puzzles';
 import { DECOY_PAIR_KEY } from './tile-identity';
 
 const puzzleTileSchema = z.object({
@@ -172,7 +172,8 @@ export const PUZZLE_PACKS: readonly PuzzlePackSummary[] = [
 ];
 
 export const getPuzzleLibraryRows = (save: SaveData) =>
-    Object.values(BUILTIN_PUZZLES).map((puzzle) => {
+    BUILTIN_PUZZLE_IDS.map((id) => {
+        const puzzle = BUILTIN_PUZZLES[id];
         const completion = save.playerStats?.puzzleCompletions?.[puzzle.id];
         const completed = completion?.completed === true;
         const pack = PUZZLE_PACKS.find((candidate) => candidate.puzzleIds.includes(puzzle.id));
@@ -254,7 +255,8 @@ const packForPuzzle = (puzzleId: string): PuzzlePackSummary =>
     };
 
 export const getPuzzleProgressionRows = (save: SaveData): PuzzleProgressionRow[] =>
-    Object.values(BUILTIN_PUZZLES).map((puzzle) => {
+    BUILTIN_PUZZLE_IDS.map((id) => {
+        const puzzle = BUILTIN_PUZZLES[id];
         const pack = packForPuzzle(puzzle.id);
         const completion = save.playerStats?.puzzleCompletions?.[puzzle.id];
         const medal = medalForPuzzleCompletion(completion);
