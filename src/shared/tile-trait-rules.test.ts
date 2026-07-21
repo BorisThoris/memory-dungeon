@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildBoard } from './board-generation';
-import { GAME_RULES_VERSION, type RelicId } from './contracts';
+import { GAME_RULES_VERSION, type RelicId, type RunState } from './contracts';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 import { makeBoard, makePair, makeRun, makeTile } from './test/game-fixtures';
 import { getTraitOpportunityHudModel, getTraitOpportunitySummary } from './trait-opportunities';
@@ -311,6 +311,18 @@ describe('tile trait rules', () => {
             sourceTiles: [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]
         }).flashPairChargeGain).toBe(0);
         expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(2);
+    });
+
+    it('normalizes malformed stat records before calculating trait match rewards', () => {
+        const run = {
+            ...makeRun([]),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        const [sealedA, sealedB] = makePair('sealed', 'S');
+        const [mirrorA, mirrorB] = makePair('mirror', 'M');
+
+        expect(calculateTileTraitMatchRewards(run, [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]).comboShardGain).toBe(1);
+        expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(1);
     });
 
     it('ignores malformed relic ids before calculating trait match rewards', () => {
@@ -848,6 +860,25 @@ describe('tile trait rules', () => {
         const result = applyVolatileMismatchTrait(
             board,
             makeRun(board.tiles, { board, flipHistory: Number.NaN as unknown as string[] }),
+            [board.tiles[0]!, board.tiles[1]!]
+        );
+
+        expect(result.triggered).toBe(true);
+    });
+
+    it('normalizes malformed stat records before volatile mismatch shuffles', () => {
+        const board = makeBoard([
+            makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile', state: 'flipped' }),
+            makeTile('x1', 'x', 'X', { state: 'flipped' }),
+            makeTile('a1', 'a', 'A'),
+            makeTile('b1', 'b', 'B')
+        ]);
+        const result = applyVolatileMismatchTrait(
+            board,
+            {
+                ...makeRun(board.tiles, { board }),
+                stats: Number.NaN as unknown as RunState['stats']
+            },
             [board.tiles[0]!, board.tiles[1]!]
         );
 

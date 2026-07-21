@@ -11,6 +11,7 @@ import {
     type TileTraitKind
 } from './contracts';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
+import { normalizeSessionStats } from './session-stats-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 export {
     formatTileTraitInteractionTags,
@@ -720,9 +721,10 @@ export const applyVolatileMismatchTrait = (
     if (hiddenIndices.length < 2) {
         return { board, triggered: false };
     }
+    const stats = normalizeSessionStats(run.stats);
     const rng = createMulberry32(
         hashStringToSeed(
-            `volatileTrait:${run.runRulesVersion}:${run.runSeed}:${board.level}:${run.stats.mismatches}:${traitArrayCount(run.flipHistory)}`
+            `volatileTrait:${run.runRulesVersion}:${run.runSeed}:${board.level}:${stats.mismatches}:${traitArrayCount(run.flipHistory)}`
         )
     );
     const nextTiles = [...board.tiles];
@@ -828,9 +830,10 @@ export const resolveTileTraitEffects = ({
     const adjacentTraitKinds = new Set(
         adjacentTraitTiles.map((tile) => tile.tileTraitKind).filter((kind): kind is TileTraitKind => kind != null)
     );
-    const comboShards = nonNegativeTraitCount(run.stats.comboShards);
-    const guardTokens = nonNegativeTraitCount(run.stats.guardTokens);
-    const currentStreak = nonNegativeTraitCount(run.stats.currentStreak);
+    const stats = normalizeSessionStats(run.stats);
+    const comboShards = stats.comboShards;
+    const guardTokens = stats.guardTokens;
+    const currentStreak = stats.currentStreak;
     const matchResolutionsThisFloor = nonNegativeTraitCount(run.matchResolutionsThisFloor);
     const peekCharges = nonNegativeTraitCount(run.peekCharges);
     const recallFocus = nonNegativeTraitCount(run.recallFocus);

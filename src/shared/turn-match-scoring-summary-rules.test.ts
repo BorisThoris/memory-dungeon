@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardState, Tile } from './contracts';
+import type { BoardState, RunState, Tile } from './contracts';
 import { createNewRun } from './run-creation-rules';
 import { calculateMatchScore } from './scoring-rules';
 import {
@@ -103,6 +103,39 @@ describe('resolveTurnMatchScoringSummary', () => {
         const expectedMatchScore = calculateMatchScore(run.board!.level, 1, run.matchScoreMultiplier) + 3 + 2;
         expect(result.currentStreak).toBe(1);
         expect(result.matchScore).toBe(expectedMatchScore);
+        expect(result.totalScore).toBe(expectedMatchScore);
+        expect(result.currentLevelScore).toBe(expectedMatchScore);
+        expect(result.bestScore).toBe(expectedMatchScore);
+    });
+
+    it('normalizes malformed stat records before summarizing a match', () => {
+        const base = createNewRun(42, { gameMode: 'puzzle', activeMutators: [] });
+        const run = {
+            ...base,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        const [first, second] = firstPair(run.board!);
+
+        const result = resolveTurnMatchScoringSummary({
+            run,
+            sourceBoard: run.board!,
+            resolvedBoard: run.board!,
+            matchedPairKey: first.pairKey,
+            matchedTiles: [first, second],
+            encorePairKeys: [],
+            findableScoreBonus: 0,
+            routeCardScore: 0,
+            dungeonScore: 0,
+            enemyDamageScore: 0,
+            hazardDamageScore: 0,
+            fragileCacheClaimed: false,
+            fuseCacheFresh: false,
+            pinLatticeRewarded: false,
+            tollCacheClaimed: false
+        });
+
+        const expectedMatchScore = calculateMatchScore(run.board!.level, 1, run.matchScoreMultiplier);
+        expect(result.currentStreak).toBe(1);
         expect(result.totalScore).toBe(expectedMatchScore);
         expect(result.currentLevelScore).toBe(expectedMatchScore);
         expect(result.bestScore).toBe(expectedMatchScore);
