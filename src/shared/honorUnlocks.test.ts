@@ -45,7 +45,8 @@ describe('honorUnlocks', () => {
 
     it('lists expected catalog size', () => {
         expect(Object.keys(HONOR_UNLOCK_CATALOG)).toEqual(HONOR_UNLOCK_IDS);
-        expect(HONOR_UNLOCK_ORDER.length).toBe(totalHonorUnlocks);
+        expect(HONOR_UNLOCK_ORDER).toBe(HONOR_UNLOCK_IDS);
+        expect(HONOR_UNLOCK_ORDER).toHaveLength(totalHonorUnlocks);
         expect(totalHonorUnlocks).toBe(8);
     });
 

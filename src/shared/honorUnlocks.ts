@@ -61,7 +61,7 @@ export const HONOR_UNLOCK_CATALOG: Record<HonorUnlockId, HonorUnlockDefinition> 
 };
 
 /** Stable display order for Collection / UI. */
-export const HONOR_UNLOCK_ORDER: HonorUnlockId[] = [...HONOR_UNLOCK_IDS];
+export const HONOR_UNLOCK_ORDER = HONOR_UNLOCK_IDS;
 
 const HONOR_COSMETIC_UNLOCKS: Partial<Record<HonorUnlockId, CosmeticId>> = {
     honor_daily_initiate: 'crest_daily_bronze',
