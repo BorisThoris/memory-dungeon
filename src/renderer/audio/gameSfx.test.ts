@@ -1256,7 +1256,7 @@ describe('gameSfx', () => {
                 matchesFound: 2,
                 tries: 3,
                 currentStreak: 0,
-                tileTraitMismatches: { volatile: 1, mirror: 1 }
+                tileTraitMismatches: { volatile: 1, mirror: 1, missing_trait: 99 }
             }
         } as unknown as RunState;
 
