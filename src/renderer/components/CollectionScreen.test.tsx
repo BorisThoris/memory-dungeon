@@ -362,4 +362,23 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(crescendo).toHaveAttribute('data-run-payoff-crescendo-tier', 'cashout');
         expect(payoffSignals).toHaveAccessibleName(/Chain chase: x10 next/i);
     });
+
+    it('normalizes relic pick counts before displaying relic mastery', () => {
+        const saveData = createDefaultSaveData();
+        saveData.playerStats = {
+            ...saveData.playerStats!,
+            relicPickCounts: {
+                guard_token_plus_one: 2.8,
+                extra_shuffle_charge: Number.NaN,
+                missing_relic: 99
+            } as NonNullable<SaveData['playerStats']>['relicPickCounts']
+        };
+        collectionStoreMocks.saveData = saveData;
+
+        render(<CollectionScreen />);
+
+        expect(screen.getByText('Warden Sigil').closest('div')).toHaveTextContent('Times picked: 2');
+        expect(screen.getByText('Archive Shuffle').closest('div')).toHaveTextContent('Times picked: 0');
+        expect(screen.queryByText('missing_relic')).toBeNull();
+    });
 });

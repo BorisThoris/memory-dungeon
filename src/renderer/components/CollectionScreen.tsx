@@ -22,7 +22,7 @@ import {
     getPermanentUpgradeRows
 } from '../../shared/meta-progression';
 import { getCollectionRewardSignals, getMetaProgressionRunImpactRows } from '../../shared/meta-reward-signals';
-import { ACHIEVEMENT_IDS } from '../../shared/save-data';
+import { ACHIEVEMENT_IDS, getRelicPickCountRows } from '../../shared/save-data';
 import {
     CALLSIGN_SYMBOLS,
     LETTER_SYMBOLS as LETTER_TILES,
@@ -123,6 +123,7 @@ const CollectionScreen = () => {
     const permanentUpgradeRows = getPermanentUpgradeRows(saveData);
     const cosmeticTrackRows = getMetaCosmeticTrackRows(saveData);
     const dailyArchiveRows = getDailyArchiveRows(saveData);
+    const relicPickCountById = new Map(getRelicPickCountRows(ps?.relicPickCounts).map((row) => [row.id, row.count]));
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
     const handleBack = (): void => {
         resumeUiSfxContext();
@@ -420,7 +421,7 @@ const CollectionScreen = () => {
                             <div className={`${styles.grid} ${metaStyles.metaLongList}`}>
                                 {getRelicCatalogRows().map((def) => {
                                     const id = def.id;
-                                    const picks = ps?.relicPickCounts[id] ?? 0;
+                                    const picks = relicPickCountById.get(id) ?? 0;
                                     const tierClass =
                                         picks >= 3 ? styles.relicTierForged : picks >= 1 ? styles.relicTierKnown : styles.relicTierLatent;
                                     return (
