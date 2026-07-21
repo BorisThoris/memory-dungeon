@@ -1,5 +1,4 @@
 import {
-    FINDABLE_KIND_SPAWN_WEIGHTS,
     GAME_RULES_VERSION,
     INITIAL_LIVES,
     MAX_LIVES,
@@ -14,6 +13,7 @@ import { buildBoard, countFindablePairs } from './board-generation';
 import { countReachableExitKeySources, getEffectivePrimaryExitLock, inspectBoardFairness } from './board-inspection';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { getShopGoldRewardForFloor, getShopItemCatalogRows, SHOP_ITEM_CATALOG } from './shop-rules';
+import { getFindableSpawnWeightRows } from './findables';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { RELIC_DRAFT, RELIC_POOL, type RelicDraftRarity } from './relics';
 import {
@@ -626,7 +626,8 @@ export const runBalanceSimulation = ({
     );
     const aggregateTileTraitKindCounts = sumTileTraitKindCounts(samples.map((sample) => sample.tileTraitKindCounts));
     const tileTraitKindShares = getTileTraitKindShares(aggregateTileTraitKindCounts);
-    const totalFindableWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
+    const findableSpawnWeightRows = getFindableSpawnWeightRows();
+    const totalFindableWeight = findableSpawnWeightRows.reduce((sum, weightRow) => sum + weightRow.weight, 0);
     const bossFloors = safeSeeds.flatMap((seed) =>
         floorNumbers.map((floor) => pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless').floorTag === 'boss' ? 1 : 0)
     );
@@ -769,12 +770,12 @@ export const runBalanceSimulation = ({
                 'assignTileTraitsToGeneratedBoard'
             )
         ),
-        ...(Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]).map((kind) => {
-            const targetShare = FINDABLE_KIND_SPAWN_WEIGHTS[kind] / totalFindableWeight;
+        ...findableSpawnWeightRows.map((weightRow) => {
+            const targetShare = weightRow.weight / totalFindableWeight;
             return row(
-                `findable_share_${kind}`,
-                `Findable ${kind} observed share`,
-                Number(findableKindShares[kind].toFixed(2)),
+                `findable_share_${weightRow.id}`,
+                `Findable ${weightRow.id} observed share`,
+                Number(findableKindShares[weightRow.id].toFixed(2)),
                 Math.max(0, Number((targetShare - 0.18).toFixed(2))),
                 Math.min(1, Number((targetShare + 0.18).toFixed(2))),
                 'FINDABLE_KIND_SPAWN_WEIGHTS'

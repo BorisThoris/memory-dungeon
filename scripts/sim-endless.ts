@@ -5,11 +5,11 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
-    FINDABLE_KIND_SPAWN_WEIGHTS,
     GAME_RULES_VERSION,
     type BoardState,
     type FindableKind
 } from '../src/shared/contracts';
+import { getFindableSpawnWeightRows } from '../src/shared/findables';
 import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
 import { getEffectivePrimaryExitLock, inspectBoardFairness } from '../src/shared/board-inspection';
@@ -290,9 +290,9 @@ export const buildEndlessSimulationCsv = ({
         ...Object.entries(traitMetricCounts)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `traitMetric,${k},${v}`),
-        ...Object.entries(FINDABLE_KIND_SPAWN_WEIGHTS)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([k, v]) => `findableTargetWeight,${k},${v}`),
+        ...getFindableSpawnWeightRows()
+            .sort((a, b) => a.id.localeCompare(b.id))
+            .map((row) => `findableTargetWeight,${row.id},${row.weight}`),
         ...Object.entries(objectiveCounts)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `dungeonObjective,${k},${v}`),
@@ -401,7 +401,7 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
 export const evaluateEndlessSimulationHealth = (
     metrics: EndlessSimulationHealthMetrics,
     floors: number,
-    expectedRewardKinds = Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length
+    expectedRewardKinds = getFindableSpawnWeightRows().length
 ): EndlessSimulationHealthReport => {
     const safeFloors = Math.max(1, Math.floor(floors));
     const issues = [

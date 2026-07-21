@@ -1,9 +1,5 @@
-import {
-    FINDABLE_KIND_SPAWN_WEIGHTS,
-    type FindableKind,
-    type MutatorId,
-    type Tile
-} from './contracts';
+import { type FindableKind, type MutatorId, type Tile } from './contracts';
+import { getFindableSpawnWeightRows } from './findables';
 import {
     createMulberry32,
     deriveLevelTileRngSeed,
@@ -118,18 +114,16 @@ export const countFindablePairs = (tiles: readonly Tile[]): number =>
     new Set(tiles.filter((tile) => tile.findableKind != null).map((tile) => tile.pairKey)).size;
 
 const pickFindableKind = (roll: number): FindableKind => {
-    const rows = (Object.entries(FINDABLE_KIND_SPAWN_WEIGHTS) as [FindableKind, number][]).filter(
-        ([, weight]) => weight > 0
-    );
-    const total = rows.reduce((sum, [, weight]) => sum + weight, 0);
+    const rows = getFindableSpawnWeightRows().filter((row) => row.weight > 0);
+    const total = rows.reduce((sum, row) => sum + row.weight, 0);
     let cursor = roll * total;
-    for (const [kind, weight] of rows) {
-        if (cursor < weight) {
-            return kind;
+    for (const row of rows) {
+        if (cursor < row.weight) {
+            return row.id;
         }
-        cursor -= weight;
+        cursor -= row.weight;
     }
-    return rows[rows.length - 1]?.[0] ?? 'shard_spark';
+    return rows[rows.length - 1]?.id ?? 'shard_spark';
 };
 
 export const assignFindableKindsToTiles = (

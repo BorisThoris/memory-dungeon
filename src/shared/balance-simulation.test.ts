@@ -9,7 +9,8 @@ import {
     runDungeonBalanceProfileSimulation,
     runBalanceSimulation
 } from './balance-simulation';
-import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind, type TileTraitKind } from './contracts';
+import { GAME_RULES_VERSION, type FindableKind, type TileTraitKind } from './contracts';
+import { getFindableSpawnWeightRows } from './findables';
 
 const LONG_SIMULATION_TIMEOUT_MS = 15_000;
 
@@ -166,10 +167,10 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 scout_glint: { min: 0.05, max: 0.3 }
             };
 
-            for (const kind of Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]) {
-                const share = shares[kind];
-                expect(share).toBeGreaterThanOrEqual(bounds[kind].min);
-                expect(share).toBeLessThanOrEqual(bounds[kind].max);
+            for (const row of getFindableSpawnWeightRows()) {
+                const share = shares[row.id];
+                expect(share).toBeGreaterThanOrEqual(bounds[row.id].min);
+                expect(share).toBeLessThanOrEqual(bounds[row.id].max);
             }
         },
         LONG_SIMULATION_TIMEOUT_MS

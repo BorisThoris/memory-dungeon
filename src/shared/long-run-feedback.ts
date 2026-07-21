@@ -1,5 +1,5 @@
-import { FINDABLE_KIND_SPAWN_WEIGHTS, RECALL_FOCUS_MAX, type FindableKind, type RunState } from './contracts';
-import { getFindableKindLabel, getFindableRewardCopy } from './findables';
+import { RECALL_FOCUS_MAX, type FindableKind, type RunState } from './contracts';
+import { getFindableKindLabel, getFindableRewardCopy, getFindableSpawnWeightRows } from './findables';
 import {
     getDungeonBoardPresentation,
     getDungeonBoardStatus,
@@ -323,7 +323,8 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
 };
 
 export const getFindableDistributionRows = (run: RunState): FindableDistributionRow[] => {
-    const totalWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
+    const findableSpawnWeightRows = getFindableSpawnWeightRows();
+    const totalWeight = findableSpawnWeightRows.reduce((sum, row) => sum + row.weight, 0);
     const totalKinds = new Map<FindableKind, number>();
     const tilesByPair = new Map<string, FindableKind>();
 
@@ -337,13 +338,13 @@ export const getFindableDistributionRows = (run: RunState): FindableDistribution
         totalKinds.set(kind, (totalKinds.get(kind) ?? 0) + 1);
     }
 
-    return (Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]).map((kind) => ({
-        id: kind,
-        label: getFindableKindLabel(kind),
-        spawnWeight: FINDABLE_KIND_SPAWN_WEIGHTS[kind],
-        targetShare: totalWeight > 0 ? FINDABLE_KIND_SPAWN_WEIGHTS[kind] / totalWeight : 0,
+    return findableSpawnWeightRows.map((row) => ({
+        id: row.id,
+        label: getFindableKindLabel(row.id),
+        spawnWeight: row.weight,
+        targetShare: totalWeight > 0 ? row.weight / totalWeight : 0,
         claimedTotalThisFloor: run.findablesClaimedThisFloor,
-        totalThisFloor: totalKinds.get(kind) ?? 0
+        totalThisFloor: totalKinds.get(row.id) ?? 0
     }));
 };
 

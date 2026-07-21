@@ -8,7 +8,8 @@ import {
     parseEndlessSimulationCliOptions
 } from '../../scripts/sim-endless';
 import { runSoftlockSeedGate } from '../../scripts/gate-softlock-seeds';
-import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from './contracts';
+import { GAME_RULES_VERSION } from './contracts';
+import { getFindableSpawnWeightRows } from './findables';
 
 describe('sim-endless CSV output', () => {
     afterEach(() => {
@@ -41,9 +42,9 @@ describe('sim-endless CSV output', () => {
         const lines = csv.trim().split('\n');
 
         expect(lines[0]).toBe('kind,key,count');
-        for (const kind of Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]) {
-            expect(lines).toContain(`findableTargetWeight,${kind},${FINDABLE_KIND_SPAWN_WEIGHTS[kind]}`);
-            expect(lines.some((line) => line.startsWith(`findableKind,${kind},`))).toBe(true);
+        for (const row of getFindableSpawnWeightRows()) {
+            expect(lines).toContain(`findableTargetWeight,${row.id},${row.weight}`);
+            expect(lines.some((line) => line.startsWith(`findableKind,${row.id},`))).toBe(true);
         }
         expect(lines.some((line) => line.startsWith('traitMetric,traitFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('traitMetric,traitInteractionLines,'))).toBe(true);
@@ -110,7 +111,7 @@ describe('sim-endless CSV output', () => {
             playableIssueFloors: 0,
             playableIssueReasons: [],
             playableLockedExitFloors: expect.any(Number),
-            rewardKinds: Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length,
+            rewardKinds: getFindableSpawnWeightRows().length,
             typedLockedCacheRoomFloors: expect.any(Number)
         });
         expect(health.metrics.lockedCacheRoomFloors).toBeGreaterThan(0);
@@ -192,7 +193,7 @@ describe('sim-endless CSV output', () => {
                 traitSwapSetupFloorShare: 0
             },
             20,
-            Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length
+            getFindableSpawnWeightRows().length
         );
 
         expect(health.ok).toBe(false);
