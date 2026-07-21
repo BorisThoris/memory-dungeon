@@ -29,6 +29,7 @@ import {
 import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { createNewRun } from './run-creation-rules';
 import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run-map';
+import { getDungeonKeyTotal } from './run-inventory';
 import { getRunShopStockPlan, SHOP_KEY_ITEM_BY_KIND } from './shop-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles } from './enemy-hazard-board-rules';
@@ -275,7 +276,7 @@ const addCoverage = (
     if (
         board.tiles.some((tile) => tile.dungeonCardKind === 'key' || tile.dungeonCardEffectId === 'room_key_cache') ||
         nonNegativeSoftlockContractCount(board.dungeonKeysHeld) > 0 ||
-        Object.values(board.dungeonKeysHeldByKind ?? {}).some((count) => nonNegativeSoftlockContractCount(count) > 0)
+        getDungeonKeyTotal(board.dungeonKeysHeldByKind) > 0
     ) {
         coverage.keys += 1;
     }
