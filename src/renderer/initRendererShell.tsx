@@ -33,8 +33,17 @@ const mountRendererApp = (rootElement: HTMLElement): Root => {
     return root;
 };
 
+export const getRendererRootElement = (documentRef: Document = document): HTMLElement => {
+    const rootElement = documentRef.getElementById('root');
+    if (rootElement == null) {
+        throw new Error('Missing #root element for renderer bootstrap.');
+    }
+    return rootElement;
+};
+
 /** Web entry: theme CSS variables + React root (single place for shell side effects). */
 export const bootstrapWebRenderer = (): void => {
+    const rootElement = getRendererRootElement();
     applyRendererThemeToDocument();
-    mountRendererApp(document.getElementById('root')!);
+    mountRendererApp(rootElement);
 };
