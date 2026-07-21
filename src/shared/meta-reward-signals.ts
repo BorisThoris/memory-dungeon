@@ -155,14 +155,16 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
             }
         ];
     }
+    const relicCount = Array.isArray(run.relicIds) ? run.relicIds.length : 0;
+    const mutatorCount = Array.isArray(run.activeMutators) ? run.activeMutators.length : 0;
     return [
         {
             id: 'inventory_build_value',
             screen: 'inventory',
-            kind: run.relicIds.length > 0 ? 'discovery' : 'next_goal',
-            title: run.relicIds.length > 0 ? `${run.relicIds.length} relic(s) shaping this build` : 'First relic still ahead',
-            body: `${run.activeMutators.length} active mutator(s) | ${run.shopGold} shop gold | ${run.stats.comboShards} shard(s).`,
-            cta: run.relicIds.length > 0 ? 'Use this snapshot to plan the next floor.' : 'Clear milestone floors to draft relics.'
+            kind: relicCount > 0 ? 'discovery' : 'next_goal',
+            title: relicCount > 0 ? `${relicCount} relic(s) shaping this build` : 'First relic still ahead',
+            body: `${mutatorCount} active mutator(s) | ${run.shopGold} shop gold | ${run.stats.comboShards} shard(s).`,
+            cta: relicCount > 0 ? 'Use this snapshot to plan the next floor.' : 'Clear milestone floors to draft relics.'
         },
         {
             id: 'inventory_run_progress',

@@ -1,10 +1,16 @@
 import {
     type AchievementId,
+    type MutatorId,
+    type RelicId,
     type RunState
 } from './contracts';
 
 const nonNegativeInteger = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const summaryMutatorIds = (value: unknown): MutatorId[] => Array.isArray(value) ? value : [];
+
+const summaryRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
 
 export const createRunSummary = (run: RunState, unlockedAchievements: AchievementId[]): RunState => ({
     ...run,
@@ -25,8 +31,8 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             runRulesVersion: nonNegativeInteger(run.runRulesVersion),
             gameMode: run.gameMode,
             dailyDateKeyUtc: run.dailyDateKeyUtc ?? undefined,
-            activeMutators: [...run.activeMutators],
-            relicIds: [...run.relicIds],
+            activeMutators: [...summaryMutatorIds(run.activeMutators)],
+            relicIds: [...summaryRelicIds(run.relicIds)],
             payoffPickupClaimed: Math.min(nonNegativeInteger(run.findablesClaimedThisFloor), payoffPickupTotal),
             payoffPickupTotal,
             payoffPressureExtra: nonNegativeInteger(run.stats.mismatches) + nonNegativeInteger(run.stats.volatileTraitShuffles),

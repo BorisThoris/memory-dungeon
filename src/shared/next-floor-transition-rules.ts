@@ -2,6 +2,7 @@ import {
     type FeaturedObjectiveId,
     type FloorArchetypeId,
     type FloorTag,
+    type MutatorId,
     type RunState
 } from './contracts';
 import {
@@ -23,6 +24,8 @@ import { getMemorizeDurationForRun } from './scoring-rules';
 import { advanceScoreParasiteFloor } from './score-parasite-rules';
 import { buildBoard } from './board-build-rules';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
+
+const runTransitionMutatorIds = (value: unknown): MutatorId[] => Array.isArray(value) ? value : [];
 
 export const advanceToNextLevel = (run: RunState): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
@@ -57,7 +60,7 @@ export const advanceToNextLevel = (run: RunState): RunState => {
             : createDungeonRunMapState(run.runSeed, run.runRulesVersion, nextLevelNum);
     const enteredDungeonNode = getCurrentDungeonNode(enteredDungeonRun);
     const selectedDungeonNode = enteredDungeonRun.currentFloor === nextLevelNum ? enteredDungeonNode : null;
-    let nextActiveMutators = [...run.activeMutators];
+    let nextActiveMutators = runTransitionMutatorIds(run.activeMutators);
     let nextFloorTag: FloorTag = 'normal';
     let nextFloorArchetypeId: FloorArchetypeId | null = null;
     let nextFeaturedObjectiveId: FeaturedObjectiveId | null = null;

@@ -73,6 +73,8 @@ describe('createRunSummary', () => {
                 status: 'gameOver',
                 findablesClaimedThisFloor: 9,
                 findablesTotalThisFloor: 2,
+                activeMutators: Number.NaN,
+                relicIds: Number.NaN,
                 rewardPerkIds: ['trait_streak_toolkit'],
                 stats: {
                     ...run.stats,
@@ -98,7 +100,9 @@ describe('createRunSummary', () => {
             perfectClears: 1,
             payoffPickupClaimed: 2,
             payoffPickupTotal: 2,
-            payoffPressureExtra: 2
+            payoffPressureExtra: 2,
+            activeMutators: [],
+            relicIds: []
         });
     });
 });

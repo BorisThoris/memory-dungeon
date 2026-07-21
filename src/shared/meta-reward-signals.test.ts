@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { RunState } from './contracts';
 import { createNewRun } from './game-core';
 import {
     getCodexRewardSignal,
@@ -29,6 +30,17 @@ describe('REG-011 meta reward signals', () => {
         const codex = getCodexRewardSignal();
         expect(codex.id).toBe('codex_learning_goal');
         expect(codex.cta).toMatch(/Guides|Tables/i);
+    });
+
+    it('ignores malformed inventory relic and mutator arrays before building copy', () => {
+        const inventory = getInventoryRewardSignal({
+            ...createNewRun(0),
+            relicIds: Number.NaN as unknown as RunState['relicIds'],
+            activeMutators: Number.NaN as unknown as RunState['activeMutators']
+        });
+
+        expect(inventory.title).toBe('First relic still ahead');
+        expect(inventory.body).toContain('0 active mutator(s)');
     });
 
     it('translates permanent profile unlocks into next-run impact rows', () => {

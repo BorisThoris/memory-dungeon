@@ -846,6 +846,19 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         expect(next.status).toBe('memorize');
     });
 
+    it('normalizes malformed active mutators before advancing to the next board', () => {
+        const cleared = {
+            ...playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_004 }), 1),
+            activeMutators: Number.NaN as unknown as RunState['activeMutators'],
+            wildMenuRun: true
+        };
+
+        const next = advanceToNextLevel(cleared);
+
+        expect(next.status).toBe('memorize');
+        expect(next.activeMutators).toEqual([]);
+    });
+
     it('does not build the next board when a levelComplete run is already dead', () => {
         const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_005 }), 1);
         const dead: RunState = { ...cleared, lives: 0, pendingRouteCardPlan: null };
