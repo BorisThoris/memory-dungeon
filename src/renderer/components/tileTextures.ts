@@ -284,6 +284,16 @@ const textureImageUrls = {
 
 type TextureImageId = keyof typeof textureImageUrls;
 
+export const TILE_TEXTURE_IMAGE_IDS = [
+    'cardReference',
+    'cardFace',
+    'cardFaceNormal',
+    'cardBackNormal',
+    'edge',
+    'panelRoughness',
+    'edgeRoughness'
+] as const satisfies readonly TextureImageId[];
+
 const invalidateCachesAfterImageLoad = (id: TextureImageId): void => {
     if (id === 'cardReference') {
         invalidateVersionedTileFaceTextureCaches();
@@ -392,8 +402,7 @@ export const preloadTileTextureImages = (): Promise<void> => {
         return Promise.resolve();
     }
 
-    const ids = Object.keys(textureImageUrls) as TextureImageId[];
-    return Promise.all(ids.map((id) => startTextureImageLoad(id, true))).then(() => undefined);
+    return Promise.all(TILE_TEXTURE_IMAGE_IDS.map((id) => startTextureImageLoad(id, true))).then(() => undefined);
 };
 
 const hashString = (value: string): number => {

@@ -15,7 +15,8 @@ import {
     prewarmTileFaceOverlayTextures,
     resetDemandDrivenOverlayPrewarmForTest,
     runDemandDrivenTileFaceOverlayPrewarmSession,
-    subscribeTextureImageUpdates
+    subscribeTextureImageUpdates,
+    TILE_TEXTURE_IMAGE_IDS
 } from './tileTextures';
 
 vi.mock('../cardFace/proceduralIllustration/drawProceduralTarotIllustration', () => ({
@@ -50,6 +51,18 @@ describe('tileTextures layout', () => {
         expect(aspect).toBeCloseTo(CARD_PLANE_WIDTH / CARD_PLANE_HEIGHT, 2);
         expect(width).toBeGreaterThan(2);
         expect(height).toBeGreaterThan(2);
+    });
+
+    it('keeps tile texture image preload ids in card-surface order', () => {
+        expect(TILE_TEXTURE_IMAGE_IDS).toEqual([
+            'cardReference',
+            'cardFace',
+            'cardFaceNormal',
+            'cardBackNormal',
+            'edge',
+            'panelRoughness',
+            'edgeRoughness'
+        ]);
     });
 
     it('reuses the same overlay texture after warm-up requests', () => {
@@ -255,13 +268,13 @@ describe('tileTextures layout', () => {
             const first = preloadTileTextureImages();
             const second = preloadTileTextureImages();
 
-            await vi.waitFor(() => expect(releaseQueue).toHaveLength(7));
-            expect(requestedUrls).toHaveLength(7);
+            await vi.waitFor(() => expect(releaseQueue).toHaveLength(TILE_TEXTURE_IMAGE_IDS.length));
+            expect(requestedUrls).toHaveLength(TILE_TEXTURE_IMAGE_IDS.length);
             releaseQueue.splice(0).forEach((release) => release());
             await Promise.all([first, second]);
 
             await preloadTileTextureImages();
-            expect(requestedUrls).toHaveLength(7);
+            expect(requestedUrls).toHaveLength(TILE_TEXTURE_IMAGE_IDS.length);
         } finally {
             Object.defineProperty(globalThis, 'Image', {
                 configurable: true,
@@ -304,21 +317,22 @@ describe('tileTextures layout', () => {
 
         try {
             const first = preloadTileTextureImages();
-            await vi.waitFor(() => expect(requests).toHaveLength(7));
-            requests.slice(0, 7).forEach((image) => image.onerror?.());
+            const expectedRequestCount = TILE_TEXTURE_IMAGE_IDS.length;
+            await vi.waitFor(() => expect(requests).toHaveLength(expectedRequestCount));
+            requests.slice(0, expectedRequestCount).forEach((image) => image.onerror?.());
             await first;
 
             const retry = preloadTileTextureImages();
-            await vi.waitFor(() => expect(requests).toHaveLength(14));
-            requests.slice(7, 14).forEach((image) => image.onload?.());
+            await vi.waitFor(() => expect(requests).toHaveLength(expectedRequestCount * 2));
+            requests.slice(expectedRequestCount, expectedRequestCount * 2).forEach((image) => image.onload?.());
             await retry;
 
-            requests.slice(0, 7).forEach((image) => image.onerror?.());
+            requests.slice(0, expectedRequestCount).forEach((image) => image.onerror?.());
             await preloadTileTextureImages();
 
-            expect(requests).toHaveLength(14);
-            expect(failingListener).toHaveBeenCalledTimes(7);
-            expect(healthyListener).toHaveBeenCalledTimes(7);
+            expect(requests).toHaveLength(expectedRequestCount * 2);
+            expect(failingListener).toHaveBeenCalledTimes(expectedRequestCount);
+            expect(healthyListener).toHaveBeenCalledTimes(expectedRequestCount);
         } finally {
             unsubscribeFailing();
             unsubscribeHealthy();
@@ -358,15 +372,15 @@ describe('tileTextures layout', () => {
 
             await vi.advanceTimersByTimeAsync(1500);
             await expect(preload).resolves.toBeUndefined();
-            expect(requestedCount).toBe(7);
+            expect(requestedCount).toBe(TILE_TEXTURE_IMAGE_IDS.length);
 
             const retry = preloadTileTextureImages();
-            expect(requestedCount).toBe(14);
+            expect(requestedCount).toBe(TILE_TEXTURE_IMAGE_IDS.length * 2);
             await vi.advanceTimersByTimeAsync(1500);
             await expect(retry).resolves.toBeUndefined();
 
             await preloadTileTextureImages();
-            expect(requestedCount).toBe(14);
+            expect(requestedCount).toBe(TILE_TEXTURE_IMAGE_IDS.length * 2);
         } finally {
             vi.useRealTimers();
             Object.defineProperty(globalThis, 'Image', {
