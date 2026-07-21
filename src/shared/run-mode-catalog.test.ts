@@ -1,9 +1,37 @@
 import { describe, expect, it } from 'vitest';
-import { RUN_MODE_CATALOG, getRunModeChallengeGateRows } from './run-mode-catalog';
+import {
+    CHOOSE_PATH_HERO_MODE_IDS,
+    RUN_MODE_CATALOG,
+    RUN_MODE_GROUP_ORDER,
+    choosePathHeroModes,
+    choosePathLibraryModes,
+    getRunModeChallengeGateRows,
+    getRunModeDefinition,
+    runModesByGroup
+} from './run-mode-catalog';
 import { VISUAL_ENDLESS_MODE_LOCKED } from './mechanics-encyclopedia';
 import { createDefaultSaveData } from './save-data';
 
 describe('REG-018 run mode shipping states', () => {
+    it('keeps catalog ids unique and every shipped group reachable', () => {
+        const ids = RUN_MODE_CATALOG.map((mode) => mode.id);
+        expect(new Set(ids).size).toBe(ids.length);
+        expect(RUN_MODE_GROUP_ORDER.flatMap((group) => runModesByGroup(group).map((mode) => mode.id))).toEqual(ids);
+        expect(RUN_MODE_GROUP_ORDER.every((group) => runModesByGroup(group).length > 0)).toBe(true);
+    });
+
+    it('partitions hero and library modes through catalog-backed lookup', () => {
+        const heroIds = new Set<string>(CHOOSE_PATH_HERO_MODE_IDS);
+        expect(CHOOSE_PATH_HERO_MODE_IDS.map((id) => getRunModeDefinition(id)?.id)).toEqual([
+            ...CHOOSE_PATH_HERO_MODE_IDS
+        ]);
+        expect(getRunModeDefinition('missing_mode')).toBeNull();
+        expect(choosePathHeroModes().map((mode) => mode.id)).toEqual([...CHOOSE_PATH_HERO_MODE_IDS]);
+        expect(choosePathLibraryModes().map((mode) => mode.id)).toEqual(
+            RUN_MODE_CATALOG.map((mode) => mode.id).filter((id) => !heroIds.has(id))
+        );
+    });
+
     it('keeps product Endless intentionally locked with explicit upcoming copy', () => {
         const classic = RUN_MODE_CATALOG.find((mode) => mode.id === 'classic');
         const endless = RUN_MODE_CATALOG.find((mode) => mode.id === 'endless');

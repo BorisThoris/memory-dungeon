@@ -309,6 +309,10 @@ export function runModesByGroup(group: RunModeGroup): readonly RunModeDefinition
     return RUN_MODE_CATALOG.filter((def) => def.group === group);
 }
 
+export function getRunModeDefinition(id: string): RunModeDefinition | null {
+    return RUN_MODE_CATALOG.find((mode) => mode.id === id) ?? null;
+}
+
 /** Featured hero row on Choose Your Path. Order is fixed; Dungeon Showcase is first for portfolio demos. */
 export const CHOOSE_PATH_HERO_MODE_IDS = ['dungeon_showcase', 'classic', 'daily', 'endless'] as const;
 export type ChoosePathHeroModeId = (typeof CHOOSE_PATH_HERO_MODE_IDS)[number];
@@ -317,7 +321,7 @@ const CHOOSE_PATH_HERO_ID_SET = new Set<string>(CHOOSE_PATH_HERO_MODE_IDS);
 
 export function choosePathHeroModes(): readonly RunModeDefinition[] {
     return CHOOSE_PATH_HERO_MODE_IDS.map((id) => {
-        const def = RUN_MODE_CATALOG.find((m) => m.id === id);
+        const def = getRunModeDefinition(id);
         if (!def) {
             throw new Error(`choosePathHeroModes: missing catalog entry for id "${id}"`);
         }
