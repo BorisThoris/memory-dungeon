@@ -16,7 +16,6 @@ import { useViewportSize } from '../hooks/useViewportSize';
 import { useShallow } from 'zustand/react/shallow';
 import type { MutatorId } from '../../shared/contracts';
 import { getChallengeModeGateRows } from '../../shared/challenge-progression';
-import { MUTATOR_CATALOG } from '../../shared/mutators';
 import {
     choosePathHeroModes,
     choosePathLibraryModes,
@@ -35,13 +34,10 @@ import {
     uiSfxGainFromSettings
 } from '../audio/uiSfx';
 import { useAppStore } from '../store/useAppStore';
+import { buildMeditationPickMutatorRows } from './chooseYourPathScreenModel';
 import OverlayModal from './OverlayModal';
 import metaStyles from './MetaScreen.module.css';
 import styles from './ChooseYourPathScreen.module.css';
-
-const MEDITATION_PICK_MUTATOR_IDS = (Object.keys(MUTATOR_CATALOG) as MutatorId[]).sort((a, b) =>
-    MUTATOR_CATALOG[a]!.title.localeCompare(MUTATOR_CATALOG[b]!.title)
-);
 
 type ModeChoiceSignalTone = 'pace' | 'payoff' | 'pressure' | 'constraint' | 'practice' | 'locked';
 type ModeLoopCueTone = 'chain' | 'route' | 'build' | 'pressure' | 'practice' | 'locked';
@@ -1356,8 +1352,8 @@ const ChooseYourPathScreen = () => {
                     title="Meditation setup"
                 >
                     <ul className={styles.meditationMutatorList}>
-                        {MEDITATION_PICK_MUTATOR_IDS.map((id) => {
-                            const def = MUTATOR_CATALOG[id]!;
+                        {buildMeditationPickMutatorRows().map((def) => {
+                            const id = def.id;
                             const inputId = `choose-path-meditation-mutator-${id}`;
                             return (
                                 <li className={styles.meditationMutatorRow} key={id}>

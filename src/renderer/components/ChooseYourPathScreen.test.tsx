@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { getMutatorCatalogRows } from '../../shared/game-catalog';
 import ChooseYourPathScreen from './ChooseYourPathScreen';
+import { buildMeditationPickMutatorRows } from './chooseYourPathScreenModel';
 
 const viewportSnapshot = { width: 390, height: 844 };
 const storeSpies = vi.hoisted(() => ({
@@ -307,6 +309,23 @@ describe('ChooseYourPathScreen REG-010 discoverability', () => {
         expect(loop).toHaveAccessibleName(
             /Dungeon Showcase gameplay loop\. Read locks before pressure spikes\. Practice enemies, keys, traps, shops, and bosses/i
         );
+    });
+
+    it('renders meditation mutator picks through the shared catalog rows in title order', async () => {
+        const user = userEvent.setup();
+        const expectedRows = [...getMutatorCatalogRows()].sort((a, b) => a.title.localeCompare(b.title));
+
+        expect(buildMeditationPickMutatorRows().map((row) => row.id)).toEqual(expectedRows.map((row) => row.id));
+
+        render(<ChooseYourPathScreen />);
+
+        await user.click(screen.getByRole('button', { name: /Meditation.*Open details/i }));
+        await user.click(screen.getByRole('button', { name: /Set up run/i }));
+
+        const renderedTitles = screen
+            .getAllByRole('checkbox')
+            .map((input) => input.nextElementSibling?.querySelector('strong')?.textContent);
+        expect(renderedTitles).toEqual(expectedRows.map((row) => row.title));
     });
 
     it('keeps the browse library available when ResizeObserver is missing', () => {
