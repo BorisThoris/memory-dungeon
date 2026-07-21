@@ -221,14 +221,21 @@ export const assignDungeonCardsToTiles = (
     const keys = [...eligibleKeys];
     for (let i = keys.length - 1; i > 0; i--) {
         const j = pickRngIndex(rng, i + 1);
-        const tmp = keys[i]!;
-        keys[i] = keys[j]!;
-        keys[j] = tmp;
+        const keyAtI = keys[i];
+        const keyAtJ = keys[j];
+        if (keyAtI !== undefined && keyAtJ !== undefined) {
+            keys[i] = keyAtJ;
+            keys[j] = keyAtI;
+        }
     }
     const assignmentByPairKey = new Map<string, DungeonCardAssignment>();
     const count = Math.min(assignments.length, keys.length);
     for (let i = 0; i < count; i++) {
-        assignmentByPairKey.set(keys[i]!, assignments[i]!);
+        const key = keys[i];
+        const assignment = assignments[i];
+        if (key !== undefined && assignment !== undefined) {
+            assignmentByPairKey.set(key, assignment);
+        }
     }
     return tiles.map((tile) => {
         const assignment = assignmentByPairKey.get(tile.pairKey);
