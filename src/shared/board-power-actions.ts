@@ -1,5 +1,6 @@
 import type {
     BoardState,
+    RelicId,
     RunState
 } from './contracts';
 import {
@@ -32,6 +33,12 @@ const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
 
 const nonNegativePowerCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const stringArray = (value: unknown): string[] => (Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : []);
+
+const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
+
+const hasRelic = (run: RunState, relicId: RelicId): boolean => Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
 
 export interface DestroyPairTransitionOptions {
     isBoardComplete: (board: BoardState) => boolean;
@@ -79,7 +86,7 @@ export const applyDestroyPairTransition = (
         )
     };
 
-    const pinnedTileIds = run.pinnedTileIds.filter((id) => !pairTileIds.includes(id));
+    const pinnedTileIds = stringArray(run.pinnedTileIds).filter((id) => !pairTileIds.includes(id));
     const spunDestroy = options.rotateShiftingSpotlight(run, board);
 
     const nextRun: RunState = {
@@ -151,7 +158,7 @@ export const applyShuffle = (run: RunState): RunState => {
 
     let nextCharges = nonNegativePowerCount(run.shuffleCharges);
     let nextFree = run.freeShuffleThisFloor;
-    if (nextFree && run.relicIds.includes('first_shuffle_free_per_floor')) {
+    if (nextFree && hasRelic(run, 'first_shuffle_free_per_floor')) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;
@@ -202,7 +209,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
 
     let nextFree = run.regionShuffleFreeThisFloor;
     let nextCharges = nonNegativePowerCount(run.regionShuffleCharges);
-    if (nextFree && run.relicIds.includes('region_shuffle_free_first')) {
+    if (nextFree && hasRelic(run, 'region_shuffle_free_first')) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;
@@ -256,7 +263,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
 
     let nextFree = run.regionShuffleFreeThisFloor;
     let nextCharges = nonNegativePowerCount(run.regionShuffleCharges);
-    if (nextFree && run.relicIds.includes('region_shuffle_free_first')) {
+    if (nextFree && hasRelic(run, 'region_shuffle_free_first')) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;
@@ -299,7 +306,7 @@ export const applyFlashPair = (run: RunState): RunState => {
     if (!run.practiceMode && !run.wildMenuRun) {
         return run;
     }
-    if (run.board.flippedTileIds.length > 0) {
+    if (!hasClearFlipState(run)) {
         return run;
     }
     const hiddenByKey = new Map<string, string[]>();
@@ -335,14 +342,15 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
     if (run.status !== 'playing' || !run.board || peekCharges < 1) {
         return run;
     }
-    if (run.board.flippedTileIds.length > 0) {
+    if (!hasClearFlipState(run)) {
         return run;
     }
     const tile = run.board.tiles.find((t) => t.id === tileId);
     if (!tile || tile.state !== 'hidden') {
         return run;
     }
-    if (run.peekRevealedTileIds.includes(tileId)) {
+    const peekRevealedTileIds = stringArray(run.peekRevealedTileIds);
+    if (peekRevealedTileIds.includes(tileId)) {
         return run;
     }
     const board =
@@ -363,7 +371,7 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
         powersUsedThisRun: true,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
-        peekRevealedTileIds: [...run.peekRevealedTileIds, tileId]
+        peekRevealedTileIds: [...peekRevealedTileIds, tileId]
     };
 };
 
@@ -372,7 +380,7 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
     if (!run.strayRemoveArmed || run.status !== 'playing' || !run.board || strayRemoveCharges < 1) {
         return run;
     }
-    if (run.board.flippedTileIds.length > 0) {
+    if (!hasClearFlipState(run)) {
         return run;
     }
     const tile = run.board.tiles.find((t) => t.id === tileId);
@@ -422,7 +430,10 @@ export const cancelResolvingWithUndo = (run: RunState): RunState => {
     if (run.status !== 'resolving' || !run.board || undoUsesThisFloor < 1) {
         return run;
     }
-    const ids = [...run.board.flippedTileIds];
+    if (!Array.isArray(run.board.flippedTileIds)) {
+        return run;
+    }
+    const ids = stringArray(run.board.flippedTileIds);
     const board: BoardState = {
         ...run.board,
         flippedTileIds: [],

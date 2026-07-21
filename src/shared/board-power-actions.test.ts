@@ -368,6 +368,32 @@ describe('board power actions', () => {
         expect(undone.undoUsesThisFloor).toBe(0);
     });
 
+    it('fails closed when direct power action open-flip state is malformed', () => {
+        const malformedBoard = {
+            ...defaultBoard(),
+            flippedTileIds: Number.NaN as unknown as string[]
+        };
+        const malformed = run({ board: malformedBoard });
+
+        expect(applyShuffle(malformed)).toBe(malformed);
+        expect(applyRegionShuffle(malformed, 0)).toBe(malformed);
+        expect(applyTileSwap(malformed, 'a1', 'b1')).toBe(malformed);
+        expect(applyFlashPair(malformed)).toBe(malformed);
+        expect(applyPeek(malformed, 'a1')).toBe(malformed);
+        expect(applyStrayRemove(malformed, 'a1')).toBe(malformed);
+        expect(applyDestroyPairTransition(malformed, 'a1', {
+            isBoardComplete: () => false,
+            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
+        })).toEqual({ run: malformed, boardComplete: false, changed: false });
+
+        const resolving = run({
+            status: 'resolving',
+            board: malformedBoard,
+            undoUsesThisFloor: 1
+        });
+        expect(cancelResolvingWithUndo(resolving)).toBe(resolving);
+    });
+
     it('does not flash pair outside practice or wild menu runs', () => {
         const state = run({ practiceMode: false, wildMenuRun: false });
         expect(applyFlashPair(state)).toBe(state);
