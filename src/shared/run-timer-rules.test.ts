@@ -130,6 +130,39 @@ describe('run timer rules', () => {
         expect(malformedPauseTime.timerState.gauntletPausedAtMs).toBeNull();
     });
 
+    it('normalizes malformed timer state objects at transition boundaries', () => {
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
+        const malformedTimerRun = {
+            ...playing,
+            timerState: Number.NaN as unknown as RunState['timerState']
+        };
+
+        expect(clearResolveState(malformedTimerRun)).toEqual(createTimerState());
+
+        const paused = pauseRun(malformedTimerRun);
+        expect(paused.status).toBe('paused');
+        expect(paused.timerState).toMatchObject({
+            pausedFromStatus: 'playing',
+            resolveRemainingMs: null,
+            gauntletPausedAtMs: null
+        });
+
+        const invalidPaused = {
+            ...playing,
+            status: 'paused' as const,
+            timerState: {
+                ...playing.timerState,
+                pausedFromStatus: 'invalid' as unknown as RunState['timerState']['pausedFromStatus']
+            }
+        };
+        expect(resumeRun(invalidPaused)).toBe(invalidPaused);
+
+        expect(enableDebugPeek(malformedTimerRun, true).timerState).toMatchObject({
+            debugRevealRemainingMs: DEBUG_REVEAL_MS,
+            pausedFromStatus: null
+        });
+    });
+
     it('toggles debug peek timers and achievement disabling', () => {
         const run = createNewRun(0);
         const debug = enableDebugPeek(run, true);
