@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { HazardTileKind, Tile } from './contracts';
+import type { Tile } from './contracts';
 import {
     getHazardTileBoardSummary,
     getHazardTileDefinition,
@@ -9,6 +9,7 @@ import {
     getHazardTileObjectiveBalanceRows,
     getHazardTileObjectiveImpact,
     getHazardTileTelegraph,
+    HAZARD_TILE_KINDS,
     previewHazardTileOutcome
 } from './hazard-tiles';
 import { assertTokenCoverage, calculateMemoryTaxReview } from './mechanic-feedback';
@@ -27,7 +28,7 @@ describe('hazard tiles', () => {
         const definitions = getHazardTileDefinitions();
         const kinds = definitions.map((definition) => definition.kind);
 
-        expect(kinds).toEqual(['shuffle_snare', 'cascade_cache', 'mirror_decoy', 'fragile_cache', 'toll_cache', 'fuse_cache']);
+        expect(kinds).toEqual([...HAZARD_TILE_KINDS]);
         expect(new Set(kinds).size).toBe(kinds.length);
         expect(definitions.every((definition) => definition.prototypeOnly)).toBe(false);
         expect(definitions.every((definition) => definition.enabledInNormalRuns)).toBe(true);
@@ -96,7 +97,7 @@ describe('hazard tiles', () => {
     it('maps every v1 hazard to live, reduced-motion, and focus copy', () => {
         const copies = getHazardTileLiveCopies();
 
-        expect(copies.map((copy) => copy.kind)).toEqual(['shuffle_snare', 'cascade_cache', 'mirror_decoy', 'fragile_cache', 'toll_cache', 'fuse_cache']);
+        expect(copies.map((copy) => copy.kind)).toEqual([...HAZARD_TILE_KINDS]);
         for (const copy of copies) {
             expect(copy.label.length).toBeGreaterThan(5);
             expect(copy.focusHint.length).toBeGreaterThan(20);
@@ -296,16 +297,15 @@ describe('hazard tiles', () => {
 
     it('requires any future HazardTileKind to be represented in the catalog', () => {
         const catalog = new Set(getHazardTileDefinitions().map((definition) => definition.kind));
-        const allKinds = ['shuffle_snare', 'cascade_cache', 'mirror_decoy', 'fragile_cache', 'toll_cache', 'fuse_cache'] as const satisfies readonly HazardTileKind[];
 
-        expect(allKinds.every((kind) => catalog.has(kind))).toBe(true);
+        expect(HAZARD_TILE_KINDS.every((kind) => catalog.has(kind))).toBe(true);
     });
 
     it('maps every v1 hazard to featured objective, findable, and balance impacts', () => {
         const rows = getHazardTileObjectiveBalanceRows();
         const objectiveIds = ['scholar_style', 'glass_witness', 'cursed_last', 'flip_par', 'findables'] as const;
 
-        expect(rows.map((row) => row.kind)).toEqual(['shuffle_snare', 'cascade_cache', 'mirror_decoy', 'fragile_cache', 'toll_cache', 'fuse_cache']);
+        expect(rows.map((row) => row.kind)).toEqual([...HAZARD_TILE_KINDS]);
         for (const row of rows) {
             expect(row.pressureNote.length).toBeGreaterThan(20);
             expect(row.rewardNote.length).toBeGreaterThan(20);

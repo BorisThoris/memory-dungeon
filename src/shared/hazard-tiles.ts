@@ -136,6 +136,15 @@ const hazardMemoryTax = (score: Partial<MemoryTaxScore>): MemoryTaxScore => ({
     ...score
 });
 
+export const HAZARD_TILE_KINDS = [
+    'shuffle_snare',
+    'cascade_cache',
+    'mirror_decoy',
+    'fragile_cache',
+    'toll_cache',
+    'fuse_cache'
+] as const satisfies readonly HazardTileKind[];
+
 export const HAZARD_TILE_DEFINITIONS: Record<HazardTileKind, HazardTileDefinition> = {
     shuffle_snare: {
         kind: 'shuffle_snare',
@@ -287,7 +296,8 @@ export const HAZARD_TILE_DEFINITIONS: Record<HazardTileKind, HazardTileDefinitio
     }
 };
 
-export const getHazardTileDefinitions = (): HazardTileDefinition[] => Object.values(HAZARD_TILE_DEFINITIONS);
+export const getHazardTileDefinitions = (): HazardTileDefinition[] =>
+    HAZARD_TILE_KINDS.map((kind) => HAZARD_TILE_DEFINITIONS[kind]);
 
 export const getHazardTileDefinition = (kind: HazardTileKind): HazardTileDefinition => HAZARD_TILE_DEFINITIONS[kind];
 

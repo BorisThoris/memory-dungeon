@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { HazardTileKind, Tile, TileTraitKind } from '../../shared/contracts';
-import { getHazardTileLiveCopy } from '../../shared/hazard-tiles';
+import type { Tile, TileTraitKind } from '../../shared/contracts';
+import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
 import { getChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
@@ -156,7 +156,6 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): number
  * and throttles display cadence so screen readers get summaries, not chatter.
  */
 const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
-const HAZARD_ANNOUNCEMENT_ORDER = ['shuffle_snare', 'cascade_cache', 'mirror_decoy', 'fragile_cache', 'toll_cache', 'fuse_cache'] as const satisfies readonly HazardTileKind[];
 
 export const useHudPoliteLiveAnnouncement = ({
     gauntletRemainingMs,
@@ -804,7 +803,7 @@ export const useHudPoliteLiveAnnouncement = ({
             return;
         }
 
-        const firedKinds = HAZARD_ANNOUNCEMENT_ORDER.filter((kind) => {
+        const firedKinds = HAZARD_TILE_KINDS.filter((kind) => {
             if (kind === 'shuffle_snare') return hazardShuffleSnaresThisFloor > snap.shuffleSnare;
             if (kind === 'cascade_cache') return hazardCascadeCachesThisFloor > snap.cascadeCache;
             if (kind === 'mirror_decoy') return hazardMirrorDecoysThisFloor > snap.mirrorDecoy;
