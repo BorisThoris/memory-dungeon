@@ -9,14 +9,18 @@ const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.f
 
 const hasRelic = (run: RunState, relicId: RelicId): boolean => Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
 
-export const canShuffleBoard = (run: RunState): boolean =>
-    run.status === 'playing' &&
-    Boolean(run.board) &&
-    hasClearFlipState(run) &&
-    !run.activeContract?.noShuffle &&
-    (nonNegativePowerCount(run.shuffleCharges) > 0 ||
-        (run.freeShuffleThisFloor && hasRelic(run, 'first_shuffle_free_per_floor'))) &&
-    countFullyHiddenPairs(run.board!) >= 2;
+export const canShuffleBoard = (run: RunState): boolean => {
+    const board = run.board;
+    return (
+        run.status === 'playing' &&
+        board != null &&
+        hasClearFlipState(run) &&
+        !run.activeContract?.noShuffle &&
+        (nonNegativePowerCount(run.shuffleCharges) > 0 ||
+            (run.freeShuffleThisFloor && hasRelic(run, 'first_shuffle_free_per_floor'))) &&
+        countFullyHiddenPairs(board) >= 2
+    );
+};
 
 export const canDestroyPair = (run: RunState, tileId: string): boolean => {
     if (run.status !== 'playing' || !run.board || !hasClearFlipState(run) || nonNegativePowerCount(run.destroyPairCharges) <= 0) {
@@ -26,14 +30,18 @@ export const canDestroyPair = (run: RunState, tileId: string): boolean => {
     return tileIsDestroyEligiblePreview(run.board, tileId);
 };
 
-export const canRegionShuffle = (run: RunState): boolean =>
-    run.status === 'playing' &&
-    Boolean(run.board) &&
-    hasClearFlipState(run) &&
-    !run.activeContract?.noShuffle &&
-    (nonNegativePowerCount(run.regionShuffleCharges) > 0 ||
-        (run.regionShuffleFreeThisFloor && hasRelic(run, 'region_shuffle_free_first'))) &&
-    countFullyHiddenPairs(run.board!) >= 1;
+export const canRegionShuffle = (run: RunState): boolean => {
+    const board = run.board;
+    return (
+        run.status === 'playing' &&
+        board != null &&
+        hasClearFlipState(run) &&
+        !run.activeContract?.noShuffle &&
+        (nonNegativePowerCount(run.regionShuffleCharges) > 0 ||
+            (run.regionShuffleFreeThisFloor && hasRelic(run, 'region_shuffle_free_first'))) &&
+        countFullyHiddenPairs(board) >= 1
+    );
+};
 
 /** Row shuffle needs at least two hidden tiles in that row. */
 export const canRegionShuffleRow = (run: RunState, rowIndex: number): boolean => {
