@@ -4,6 +4,7 @@
  */
 
 import uiSfxManifest from '../assets/audio/ui/manifest.json';
+import { buildAudioUrlMapByFilename } from './audioGlobUrlMap';
 import { uiSfxManifestSchema } from './audioManifestBoundary';
 import { preloadAudioBuffers } from './preloadAudioBuffers';
 import {
@@ -37,7 +38,7 @@ const globUrls = import.meta.glob<string>('../assets/audio/ui/*.ogg', {
     query: '?url',
     import: 'default'
 });
-const urlsByFilename = new Map(Object.entries(globUrls).map(([path, url]) => [path.replace(/^.*\//, ''), url]));
+const urlsByFilename = buildAudioUrlMapByFilename(globUrls);
 
 const MAX_POLYPHONY: Record<UiSfxCategory, number> = {
     ui: 5,

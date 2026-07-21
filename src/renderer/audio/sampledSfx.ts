@@ -4,6 +4,7 @@
  */
 
 import sfxManifest from '../assets/audio/sfx/manifest.json';
+import { buildAudioUrlMapByFilename } from './audioGlobUrlMap';
 import { sfxManifestSchema } from './audioManifestBoundary';
 import { preloadAudioBuffers } from './preloadAudioBuffers';
 import { getSharedAudioContext } from './webAudioContext';
@@ -45,7 +46,7 @@ const globUrls = import.meta.glob<string>('../assets/audio/sfx/*.ogg', {
     query: '?url',
     import: 'default'
 });
-const urlsByFilename = new Map(Object.entries(globUrls).map(([path, url]) => [path.replace(/^.*\//, ''), url]));
+const urlsByFilename = buildAudioUrlMapByFilename(globUrls);
 
 const MAX_POLYPHONY: Record<SfxCategory, number> = {
     flip: 5,
