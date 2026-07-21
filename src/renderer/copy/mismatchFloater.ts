@@ -29,11 +29,11 @@ const chainBreakTargetText = (context: MismatchFloaterContext = {}): string =>
         ? ` Next chase: ${getChainTargetFeedback(normalizeBrokenChainDepth(context)).value}.`
         : '';
 
-const RECOVERY_LANE_LIVE_ACTIONS: Readonly<Record<string, string>> = {
-    Lost: 'Save cashout',
-    Tool: 'Trigger tool',
-    Risk: 'Route away'
-};
+const RECOVERY_LANE_LIVE_ACTION_ROWS = [
+    { lane: 'Lost', action: 'Save cashout' },
+    { lane: 'Tool', action: 'Trigger tool' },
+    { lane: 'Risk', action: 'Route away' }
+] as const;
 
 const enrichRecoveryLaneMapLiveText = (text: string): string => {
     const withChainActions = text.replace(/(Chain:\s+(\d+)\.\s+)(?!Reset chain\.|Rebuild chain\.)/gu, (_match, prefix, count) => {
@@ -47,7 +47,7 @@ const enrichRecoveryLaneMapLiveText = (text: string): string => {
             return `${prefix}${action}. ${cue}.`;
         }
     );
-    return Object.entries(RECOVERY_LANE_LIVE_ACTIONS).reduce((current, [lane, action]) => {
+    return RECOVERY_LANE_LIVE_ACTION_ROWS.reduce((current, { lane, action }) => {
         const lanePattern = new RegExp(`(${lane}:\\s+\\d+\\.\\s+)(?!${action.replace(/\s+/gu, '\\s+')}\\.)`, 'gu');
         return current.replace(lanePattern, `$1${action}. `);
     }, withRecoverActions);
