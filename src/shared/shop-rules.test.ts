@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_LIVES, type BoardState, type Tile } from './contracts';
+import { MAX_LIVES, type BoardState, type RunState, type Tile } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { buildBoard } from './board-build-rules';
 import { EXIT_PAIR_KEY } from './tile-identity';
@@ -7,6 +7,7 @@ import {
     canRerollShopOffers,
     createRunShopOffers,
     getRunShopReadModel,
+    getRunShopWalletPacing,
     getRunShopStockPlan,
     getShopGoldRewardForFloor,
     getShopRerollCostForFloor,
@@ -294,6 +295,26 @@ describe('shop rules', () => {
             totalWallet: run.shopGold,
             conversionAtRunEnd: 'unspent_shop_gold_expires'
         });
+    });
+
+    it('normalizes malformed shop offers for reads, rerolls, pacing, and purchases', () => {
+        const run = {
+            ...makePlayingRun(),
+            shopGold: 10,
+            shopOffers: Number.NaN as unknown as RunState['shopOffers']
+        };
+
+        expect(canRerollShopOffers(run)).toBe(false);
+        expect(rerollShopOffers(run)).toBe(run);
+        expect(purchaseShopOffer(run, 'missing')).toBe(run);
+        expect(getRunShopReadModel(run)).toMatchObject({
+            offerCount: 0,
+            availableOfferCount: 0,
+            purchasedOfferCount: 0,
+            canReroll: false
+        });
+        expect(getShopWalletPacing(run).sinkCostTotal).toBe(0);
+        expect(getRunShopWalletPacing(run).sinkCostTotal).toBe(0);
     });
 
     it('prevents incompatible, unaffordable, duplicate, and second-reroll purchases', () => {
