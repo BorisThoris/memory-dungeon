@@ -194,6 +194,20 @@ describe('board power actions', () => {
         expect(result.run.parasiteFloors).toBe(0);
     });
 
+    it('normalizes malformed stat blocks before applying destroy accounting', () => {
+        const result = applyDestroyPairTransition(run({
+            stats: Number.NaN as unknown as RunState['stats']
+        }), 'a1', {
+            isBoardComplete: () => false,
+            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
+        });
+
+        expect(result.changed).toBe(true);
+        expect(result.run.stats.matchesFound).toBe(1);
+        expect(result.run.stats.pairsDestroyed).toBe(1);
+        expect(result.run.stats.highestLevel).toBe(1);
+    });
+
     it('applies full-board shuffle accounting without disturbing visible matched tiles', () => {
         const state = run({
             board: board([
@@ -219,6 +233,15 @@ describe('board power actions', () => {
         expect(shuffled.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 'a2', 'b1', 'b2']));
         expect(shuffled.stats.shufflesUsed).toBe(1);
         expect(shuffled.board!.tiles.find((t) => t.id === 'matched')?.state).toBe('matched');
+    });
+
+    it('normalizes malformed stat blocks before applying shuffle accounting', () => {
+        const shuffled = applyShuffle(run({
+            stats: Number.NaN as unknown as RunState['stats']
+        }));
+
+        expect(shuffled.stats.shufflesUsed).toBe(1);
+        expect(shuffled.stats.highestLevel).toBe(1);
     });
 
     it('uses the first-shuffle relic free charge before spending normal charges', () => {
@@ -257,6 +280,16 @@ describe('board power actions', () => {
         expect(shuffled.board!.tiles[3]?.id).toBe('b2');
     });
 
+    it('normalizes malformed stat blocks before applying row shuffle accounting', () => {
+        const shuffled = applyRegionShuffle(run({
+            regionShuffleRowArmed: 0,
+            stats: Number.NaN as unknown as RunState['stats']
+        }), 0);
+
+        expect(shuffled.stats.shufflesUsed).toBe(1);
+        expect(shuffled.stats.highestLevel).toBe(1);
+    });
+
     it('swaps two hidden tile positions using row-shuffle charge accounting', () => {
         const state = run({
             board: board([
@@ -283,6 +316,15 @@ describe('board power actions', () => {
         expect(swapped.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 'b2']));
         expect(swapped.stats.shufflesUsed).toBe(1);
         expect(swapped.board!.tiles.map((item) => item.id)).toEqual(['b2', 'a2', 'b1', 'a1']);
+    });
+
+    it('normalizes malformed stat blocks before applying tile swap accounting', () => {
+        const swapped = applyTileSwap(run({
+            stats: Number.NaN as unknown as RunState['stats']
+        }), 'a1', 'b2');
+
+        expect(swapped.stats.shufflesUsed).toBe(1);
+        expect(swapped.stats.highestLevel).toBe(1);
     });
 
     it('uses the free row-shuffle relic charge for tile swaps before spending normal charges', () => {

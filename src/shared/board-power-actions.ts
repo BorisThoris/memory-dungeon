@@ -27,6 +27,7 @@ import {
     tileIsCompletionSafeStrayTarget
 } from './board-power-targeting';
 import { clearResolveState } from './run-timer-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
@@ -88,6 +89,7 @@ export const applyDestroyPairTransition = (
 
     const pinnedTileIds = stringArray(run.pinnedTileIds).filter((id) => !pairTileIds.includes(id));
     const spunDestroy = options.rotateShiftingSpotlight(run, board);
+    const stats = normalizeSessionStats(run.stats);
 
     const nextRun: RunState = {
         ...run,
@@ -101,9 +103,9 @@ export const applyDestroyPairTransition = (
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, pairTileIds),
         parasiteFloors: hasMutator(run, 'score_parasite') ? 0 : nonNegativePowerCount(run.parasiteFloors),
         stats: {
-            ...run.stats,
-            matchesFound: nonNegativePowerCount(run.stats.matchesFound) + 1,
-            pairsDestroyed: nonNegativePowerCount(run.stats.pairsDestroyed) + 1
+            ...stats,
+            matchesFound: nonNegativePowerCount(stats.matchesFound) + 1,
+            pairsDestroyed: nonNegativePowerCount(stats.pairsDestroyed) + 1
         }
     };
 
@@ -169,6 +171,7 @@ export const applyShuffle = (run: RunState): RunState => {
         matchScoreMultiplier *= SHUFFLE_SCORE_TAX_FACTOR;
     }
     const shuffledTileIds = hiddenIndices.map((index) => run.board!.tiles[index]!.id);
+    const stats = normalizeSessionStats(run.stats);
 
     return {
         ...run,
@@ -186,8 +189,8 @@ export const applyShuffle = (run: RunState): RunState => {
             tiles: nextTiles
         },
         stats: {
-            ...run.stats,
-            shufflesUsed: nonNegativePowerCount(run.stats.shufflesUsed) + 1
+            ...stats,
+            shufflesUsed: nonNegativePowerCount(stats.shufflesUsed) + 1
         }
     };
 };
@@ -228,6 +231,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         nextTiles[cellIdx] = shuffledChunk[slot]!;
     });
     const shuffledTileIds = hiddenInRow.map((index) => run.board!.tiles[index]!.id);
+    const stats = normalizeSessionStats(run.stats);
 
     return {
         ...run,
@@ -245,8 +249,8 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
             tiles: nextTiles
         },
         stats: {
-            ...run.stats,
-            shufflesUsed: nonNegativePowerCount(run.stats.shufflesUsed) + 1
+            ...stats,
+            shufflesUsed: nonNegativePowerCount(stats.shufflesUsed) + 1
         }
     };
 };
@@ -275,6 +279,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
     const firstTile = nextTiles[firstIndex]!;
     nextTiles[firstIndex] = nextTiles[secondIndex]!;
     nextTiles[secondIndex] = firstTile;
+    const stats = normalizeSessionStats(run.stats);
 
     return {
         ...run,
@@ -292,8 +297,8 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
             tiles: nextTiles
         },
         stats: {
-            ...run.stats,
-            shufflesUsed: nonNegativePowerCount(run.stats.shufflesUsed) + 1
+            ...stats,
+            shufflesUsed: nonNegativePowerCount(stats.shufflesUsed) + 1
         }
     };
 };
