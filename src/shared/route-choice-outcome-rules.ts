@@ -21,6 +21,7 @@ import {
     revealDungeonChoices,
     selectDungeonNode
 } from './run-map';
+import { normalizeSessionStats } from './session-stats-rules';
 
 type MysteryRouteOutcome = 'shop_gold' | 'combo_shard' | 'relic_favor';
 
@@ -61,14 +62,15 @@ const nonNegativeRouteCount = (value: unknown): number =>
 
 const addRouteScore = (run: RunState, score: number): RunState => {
     const scoreGain = nonNegativeRouteCount(score);
-    const totalScore = nonNegativeRouteCount(run.stats.totalScore) + scoreGain;
-    const bestScore = Math.max(nonNegativeRouteCount(run.stats.bestScore), totalScore);
+    const stats = normalizeSessionStats(run.stats);
+    const totalScore = stats.totalScore + scoreGain;
+    const bestScore = Math.max(stats.bestScore, totalScore);
     return {
         ...run,
         stats: {
-            ...run.stats,
+            ...stats,
             totalScore,
-            currentLevelScore: nonNegativeRouteCount(run.stats.currentLevelScore) + scoreGain,
+            currentLevelScore: stats.currentLevelScore + scoreGain,
             bestScore
         },
         lastLevelResult: run.lastLevelResult
@@ -109,7 +111,8 @@ const applySafeRouteRecoveryToll = (run: RunState): { run: RunState; summarySuff
 };
 
 const applyMysteryRouteOutcome = (run: RunState): { run: RunState; summaryText: string } => {
-    const clearedFloor = run.lastLevelResult?.level ?? run.board?.level ?? run.stats.highestLevel;
+    const stats = normalizeSessionStats(run.stats);
+    const clearedFloor = run.lastLevelResult?.level ?? run.board?.level ?? stats.highestLevel;
     const outcome = mysteryRouteOutcomeFor(run, clearedFloor);
     if (outcome === 'shop_gold') {
         return {
@@ -118,13 +121,13 @@ const applyMysteryRouteOutcome = (run: RunState): { run: RunState; summaryText: 
         };
     }
     if (outcome === 'combo_shard') {
-        const comboShardsBefore = nonNegativeRouteCount(run.stats.comboShards);
+        const comboShardsBefore = stats.comboShards;
         const comboShards = Math.min(MAX_COMBO_SHARDS, comboShardsBefore + 1);
         return {
             run: {
                 ...run,
                 stats: {
-                    ...run.stats,
+                    ...stats,
                     comboShards
                 }
             },
@@ -187,7 +190,8 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
                 summaryText: `Safe route: +1 life.${tolled.summarySuffix}${nextRun.summarySuffix}`
             };
         }
-        const guardTokensBefore = nonNegativeRouteCount(run.stats.guardTokens);
+        const stats = normalizeSessionStats(run.stats);
+        const guardTokensBefore = stats.guardTokens;
         const guardTokens = Math.min(MAX_GUARD_TOKENS, guardTokensBefore + 1);
         const guardGained = guardTokens > guardTokensBefore;
         const tolled = guardGained ? applySafeRouteRecoveryToll(run) : { run, summarySuffix: '' };
@@ -197,7 +201,7 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
         const nextRun = applySafeRouteRecallStabilization({
             ...tolled.run,
             pendingRouteCardPlan,
-            stats: { ...tolled.run.stats, guardTokens }
+            stats: { ...normalizeSessionStats(tolled.run.stats), guardTokens }
         });
         return {
             run: withSelectedDungeonRoute(nextRun.run, choiceId, routeChoices),

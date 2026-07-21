@@ -9,6 +9,7 @@ import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { defeatEnemyHazardsForFloorClear } from './dungeon-enemy-hazard-rules';
 import { gainRelicFavor } from './relic-favor-rules';
 import { createRouteCardPlanForRoute } from './route-card-plan-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 import {
     EXIT_PAIR_KEY,
     isSingletonUtilityPairKey
@@ -125,7 +126,8 @@ export const applyDungeonExitObjectiveReward = (
         (objective.completed || (objective.objectiveId === 'claim_route' && status.routeType != null)) &&
         objective.objectiveId !== 'find_exit';
     const favor = gainRelicFavor(run, rewarded ? DUNGEON_OBJECTIVE_FAVOR_REWARD : 0);
-    const totalScore = nonNegativeDungeonExitCount(run.stats.totalScore) + DUNGEON_OBJECTIVE_SCORE_REWARD;
+    const stats = normalizeSessionStats(run.stats);
+    const totalScore = stats.totalScore + DUNGEON_OBJECTIVE_SCORE_REWARD;
 
     return {
         rewarded,
@@ -133,11 +135,10 @@ export const applyDungeonExitObjectiveReward = (
             ...run,
             stats: rewarded
                 ? {
-                      ...run.stats,
+                      ...stats,
                       totalScore,
-                      currentLevelScore:
-                          nonNegativeDungeonExitCount(run.stats.currentLevelScore) + DUNGEON_OBJECTIVE_SCORE_REWARD,
-                      bestScore: Math.max(nonNegativeDungeonExitCount(run.stats.bestScore), totalScore)
+                      currentLevelScore: stats.currentLevelScore + DUNGEON_OBJECTIVE_SCORE_REWARD,
+                      bestScore: Math.max(stats.bestScore, totalScore)
                   }
                 : run.stats,
             bonusRelicPicksNextOffer: favor.bonusRelicPicksNextOffer,

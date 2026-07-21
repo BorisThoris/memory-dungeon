@@ -218,6 +218,24 @@ describe('applyDungeonExitObjectiveReward', () => {
         expect(result.run.stats.bestScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
     });
 
+    it('normalizes malformed stat records before rewarding exit objectives', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 25 }),
+            board: {
+                ...createNewRun(0, { runSeed: 25 }).board!,
+                dungeonObjectiveId: 'claim_route'
+            } satisfies BoardState,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        const result = applyDungeonExitObjectiveReward(run, { routeType: 'safe' });
+
+        expect(result.rewarded).toBe(true);
+        expect(result.run.stats.totalScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.currentLevelScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.bestScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+    });
+
     it('does not reward the default find-exit objective', () => {
         const run = {
             ...createNewRun(0, { runSeed: 23 }),

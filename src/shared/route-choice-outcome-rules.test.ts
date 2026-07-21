@@ -8,7 +8,7 @@ import {
     ROUTE_MYSTERY_SHOP_GOLD_REWARD
 } from './route-choice-rules';
 import { createNewRun } from './game-core';
-import { MAX_LIVES } from './contracts';
+import { MAX_LIVES, type RunState } from './contracts';
 
 describe('route choice outcome rules', () => {
     it('rejects invalid status and missing choices without mutating the run', () => {
@@ -77,6 +77,23 @@ describe('route choice outcome rules', () => {
         expect(result.run.lastLevelResult?.scoreGained).toBe(ROUTE_GREED_SCORE_REWARD);
     });
 
+    it('normalizes malformed stat records before greedy route scoring', () => {
+        const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
+        const greedChoice = run.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'greed')!;
+        const result = applyRouteChoiceOutcome(
+            {
+                ...run,
+                stats: Number.NaN as unknown as RunState['stats']
+            },
+            greedChoice.id
+        );
+
+        expect(result.applied).toBe(true);
+        expect(result.run.stats.totalScore).toBe(ROUTE_GREED_SCORE_REWARD);
+        expect(result.run.stats.currentLevelScore).toBe(ROUTE_GREED_SCORE_REWARD);
+        expect(result.run.stats.bestScore).toBe(ROUTE_GREED_SCORE_REWARD);
+    });
+
     it('normalizes safe route recovery toll and life counters', () => {
         const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
         const safeChoice = run.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!;
@@ -135,6 +152,24 @@ describe('route choice outcome rules', () => {
                     ...createNewRun(0).stats,
                     guardTokens: Number.POSITIVE_INFINITY
                 }
+            },
+            safeChoice.id
+        );
+
+        expect(result.applied).toBe(true);
+        expect(result.run.stats.guardTokens).toBe(1);
+        expect(result.run.shopGold).toBe(1);
+    });
+
+    it('normalizes malformed stat records before full-life safe route recovery', () => {
+        const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
+        const safeChoice = run.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!;
+        const result = applyRouteChoiceOutcome(
+            {
+                ...run,
+                lives: MAX_LIVES,
+                shopGold: 2,
+                stats: Number.NaN as unknown as RunState['stats']
             },
             safeChoice.id
         );
