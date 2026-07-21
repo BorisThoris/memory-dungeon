@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ACHIEVEMENT_BY_ID } from '../../shared/achievements';
-import type { RelicId } from '../../shared/contracts';
 import {
     cosmeticUnlockTag,
     getCosmeticCatalogRows,
@@ -13,7 +12,7 @@ import {
     HONOR_UNLOCK_CATALOG,
     HONOR_UNLOCK_ORDER
 } from '../../shared/honorUnlocks';
-import { RELIC_CATALOG } from '../../shared/game-catalog';
+import { getRelicCatalogRows } from '../../shared/game-catalog';
 import { getCollectionGalleryRows } from '../../shared/collection-reward-gallery';
 import { getDailyArchiveRows } from '../../shared/daily-archive';
 import {
@@ -419,8 +418,8 @@ const CollectionScreen = () => {
                                 Tier tint reflects how often each relic has been picked across runs (cosmetic only).
                             </p>
                             <div className={`${styles.grid} ${metaStyles.metaLongList}`}>
-                                {(Object.keys(RELIC_CATALOG) as RelicId[]).map((id) => {
-                                    const def = RELIC_CATALOG[id];
+                                {getRelicCatalogRows().map((def) => {
+                                    const id = def.id;
                                     const picks = ps?.relicPickCounts[id] ?? 0;
                                     const tierClass =
                                         picks >= 3 ? styles.relicTierForged : picks >= 1 ? styles.relicTierKnown : styles.relicTierLatent;

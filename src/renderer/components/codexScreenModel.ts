@@ -1,7 +1,7 @@
-import type { MutatorId, RelicId } from '../../shared/contracts';
 import {
     GAME_MODE_CODEX,
-    MUTATOR_CATALOG,
+    getMutatorCatalogRows,
+    getRelicCatalogRows,
     RELIC_CATALOG,
     VISUAL_ENDLESS_MODE_LOCKED
 } from '../../shared/game-catalog';
@@ -77,10 +77,9 @@ export const buildCodexBuildRows = () =>
             .join(', ')}.`
     }));
 
-export const buildCodexRelicRows = () => (Object.keys(RELIC_CATALOG) as RelicId[]).map((id) => RELIC_CATALOG[id]);
+export const buildCodexRelicRows = () => getRelicCatalogRows();
 
-export const buildCodexMutatorRows = () =>
-    (Object.keys(MUTATOR_CATALOG) as MutatorId[]).map((id) => MUTATOR_CATALOG[id]);
+export const buildCodexMutatorRows = () => getMutatorCatalogRows();
 
 export const buildCodexModeRows = () => [
     ...GAME_MODE_CODEX.map((mode) => ({ id: mode.id, title: mode.title, description: mode.description })),
