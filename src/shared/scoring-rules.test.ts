@@ -93,6 +93,17 @@ describe('scoring-rules', () => {
         ).toBe(MATCH_DELAY_MS * 2 + 380);
     });
 
+    it('returns no resolve delay for malformed flipped tile ids', () => {
+        const run = createNewRun(0, { fixedBoard: null });
+
+        expect(
+            computeFlipResolveDelayMs(run, Number.NaN as unknown as string[], {
+                resolveDelayMultiplier: 2,
+                echoFeedbackEnabled: true
+            })
+        ).toBe(0);
+    });
+
     it('sums presentation mutator match penalties', () => {
         const run = createNewRun(0, { activeMutators: ['wide_recall', 'silhouette_twist', 'distraction_channel'] });
         expect(getPresentationMutatorMatchPenalty(run)).toBe(14);

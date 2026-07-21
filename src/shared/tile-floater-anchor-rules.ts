@@ -25,6 +25,9 @@ export const getMatchFloaterAnchorTileIds = (
         return null;
     }
     const ids = board.flippedTileIds;
+    if (!Array.isArray(ids)) {
+        return null;
+    }
     if (ids.length === 2) {
         return { tileIdA: ids[0], tileIdB: ids[1] };
     }
@@ -48,6 +51,9 @@ export const getMismatchFloaterAnchorTileIds = (
         return null;
     }
     const ids = board.flippedTileIds;
+    if (!Array.isArray(ids)) {
+        return null;
+    }
     if (ids.length === 2) {
         return { tileIdA: ids[0], tileIdB: ids[1] };
     }

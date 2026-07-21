@@ -320,6 +320,11 @@ export {
 const nonNegativeRunCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const flippedTileIdsForRun = (run: RunState): string[] | null =>
+    Array.isArray(run.board?.flippedTileIds)
+        ? run.board.flippedTileIds.filter((id): id is string => typeof id === 'string')
+        : null;
+
 const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     const floorClearHazards = applyFloorClearEnemyHazardDefeats(run, board);
     run = floorClearHazards.run;
@@ -456,10 +461,11 @@ export const applyDestroyPair = createApplyDestroyPair({ finalizeLevel });
 export const activateDungeonExit = createActivateDungeonExit({ finalizeLevel });
 
 const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState => {
-    if (!run.board || run.board.flippedTileIds.length !== 3) {
+    const flippedTileIds = flippedTileIdsForRun(run);
+    if (!run.board || !flippedTileIds || flippedTileIds.length !== 3) {
         return run;
     }
-    const [aId, bId, cId] = run.board.flippedTileIds;
+    const [aId, bId, cId] = flippedTileIds;
     const ta = run.board.tiles.find((t) => t.id === aId)!;
     const tb = run.board.tiles.find((t) => t.id === bId)!;
     const tc = run.board.tiles.find((t) => t.id === cId)!;
@@ -711,11 +717,12 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
 };
 
 const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunState => {
-    if (!run.board || run.board.flippedTileIds.length !== 2) {
+    const flippedTileIds = flippedTileIdsForRun(run);
+    if (!run.board || !flippedTileIds || flippedTileIds.length !== 2) {
         return run;
     }
 
-    const [firstId, secondId] = run.board.flippedTileIds;
+    const [firstId, secondId] = flippedTileIds;
     const firstTile = run.board.tiles.find((tile) => tile.id === firstId);
     const secondTile = run.board.tiles.find((tile) => tile.id === secondId);
 
@@ -967,10 +974,14 @@ export const resolveBoardTurn = (run: RunState, encorePairKeys: string[] = []): 
     if (!run.board) {
         return run;
     }
-    if (run.board.flippedTileIds.length === 3) {
+    const flippedTileIds = flippedTileIdsForRun(run);
+    if (!flippedTileIds) {
+        return run;
+    }
+    if (flippedTileIds.length === 3) {
         return resolveGambitThree(run, encorePairKeys);
     }
-    if (run.board.flippedTileIds.length !== 2) {
+    if (flippedTileIds.length !== 2) {
         return run;
     }
     return resolveTwoFlippedTiles(run, encorePairKeys);

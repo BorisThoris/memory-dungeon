@@ -208,6 +208,22 @@ describe('flipTile malformed board guards', () => {
 
         expect(flipTile(run, a1.id)).toBe(run);
     });
+
+    it('refuses to resolve when the board flip id list is malformed', () => {
+        const [a1, a2] = createPair('a', 'A');
+        const run = createRun([a1, a2], {
+            status: 'resolving',
+            board: {
+                ...createBoard([
+                    { ...a1, state: 'flipped' as const },
+                    { ...a2, state: 'flipped' as const }
+                ]),
+                flippedTileIds: Number.NaN as unknown as string[]
+            }
+        });
+
+        expect(resolveBoardTurn(run)).toBe(run);
+    });
 });
 
 describe('getMatchFloaterAnchorTileIds', () => {
@@ -242,6 +258,13 @@ describe('getMatchFloaterAnchorTileIds', () => {
         run.board!.flippedTileIds = ['a', 'b', 'c'];
         expect(getMatchFloaterAnchorTileIds(run)).toBeNull();
     });
+
+    it('returns null when floater flip ids are malformed', () => {
+        const run = createRun([createTile('a', 'p1', '1'), createTile('b', 'p1', '2')]);
+        run.board!.flippedTileIds = Number.NaN as unknown as string[];
+
+        expect(getMatchFloaterAnchorTileIds(run)).toBeNull();
+    });
 });
 
 describe('getMismatchFloaterAnchorTileIds', () => {
@@ -260,6 +283,13 @@ describe('getMismatchFloaterAnchorTileIds', () => {
             tileIdB: 'b',
             tileIdC: 'c'
         });
+    });
+
+    it('returns null when mismatch floater flip ids are malformed', () => {
+        const run = createRun([createTile('a', 'p1', '1'), createTile('b', 'p2', '2')]);
+        run.board!.flippedTileIds = Number.NaN as unknown as string[];
+
+        expect(getMismatchFloaterAnchorTileIds(run)).toBeNull();
     });
 });
 

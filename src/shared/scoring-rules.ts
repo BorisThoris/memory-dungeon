@@ -105,7 +105,7 @@ export const computeFlipResolveDelayMs = (
     flippedTileIds: string[],
     opts: { resolveDelayMultiplier: number; echoFeedbackEnabled: boolean }
 ): number => {
-    if (flippedTileIds.length !== 2 || !run.board) {
+    if (!Array.isArray(flippedTileIds) || flippedTileIds.length !== 2 || !run.board) {
         return 0;
     }
     const [firstId, secondId] = flippedTileIds;

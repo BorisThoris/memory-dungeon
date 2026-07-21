@@ -66,4 +66,11 @@ describe('tile floater anchor rules', () => {
         expect(getMismatchFloaterAnchorTileIds(null)).toBeNull();
         expect(getMatchFloaterAnchorTileIds(run)).toBeNull();
     });
+
+    it('returns null when flipped tile ids are malformed', () => {
+        const run = runWithFlippedTiles(Number.NaN as unknown as string[]);
+
+        expect(getMatchFloaterAnchorTileIds(run)).toBeNull();
+        expect(getMismatchFloaterAnchorTileIds(run)).toBeNull();
+    });
 });
