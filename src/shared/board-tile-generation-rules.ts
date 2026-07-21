@@ -48,7 +48,7 @@ export const pickCursedPairKey = (
         return null;
     }
     const rng = createMulberry32(hashStringToSeed(`cursed:${rulesVersion}:${runSeed}:${level}`));
-    return realKeys[pickRngIndex(rng, realKeys.length)]!;
+    return realKeys[pickRngIndex(rng, realKeys.length)] ?? null;
 };
 
 export const createTiles = (
@@ -166,9 +166,12 @@ export const assignFindableKindsToTiles = (
     const keys = [...eligibleKeys];
     for (let i = keys.length - 1; i > 0; i--) {
         const j = pickRngIndex(rng, i + 1);
-        const tmp = keys[i]!;
-        keys[i] = keys[j]!;
-        keys[j] = tmp;
+        const keyAtI = keys[i];
+        const keyAtJ = keys[j];
+        if (keyAtI !== undefined && keyAtJ !== undefined) {
+            keys[i] = keyAtJ;
+            keys[j] = keyAtI;
+        }
     }
     const picked = keys.slice(0, n);
     const kindByKey = new Map<string, FindableKind>();
