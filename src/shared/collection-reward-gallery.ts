@@ -2,6 +2,7 @@ import type { SaveData } from './contracts';
 import { getCosmeticRows, getOwnedCosmeticIds } from './cosmetics';
 import { getMetaProgressionBoard } from './meta-progression';
 import { buildRunJournalRowsFromSave } from './run-history';
+import { getRelicPickTotal } from './save-data';
 
 export type CollectionRewardGalleryStatus = 'owned' | 'in_progress' | 'missing';
 export type CollectionRewardGalleryTone = 'Gold' | 'Cyan' | 'Violet' | 'Muted';
@@ -28,9 +29,6 @@ const statusFor = (current: number, target: number): CollectionRewardGalleryStat
     return 'missing';
 };
 
-const nonNegativeGalleryCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const statusForMetaReward = (
     row: ReturnType<typeof getMetaProgressionBoard>['nextReward']
 ): CollectionRewardGalleryStatus => {
@@ -51,10 +49,7 @@ export const getCollectionRewardGalleryRows = (save: SaveData): CollectionReward
     const meta = getMetaProgressionBoard(save);
     const cosmeticsOwned = getOwnedCosmeticIds(save).length;
     const cosmeticsTotal = getCosmeticRows(save).length;
-    const relicPickTotal = Object.values(save.playerStats?.relicPickCounts ?? {}).reduce(
-        (sum, count) => sum + nonNegativeGalleryCount(count),
-        0
-    );
+    const relicPickTotal = getRelicPickTotal(save.playerStats?.relicPickCounts);
     const historyRows = buildRunJournalRowsFromSave(save);
 
     return [

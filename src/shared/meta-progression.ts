@@ -8,7 +8,7 @@ import {
     type CosmeticId
 } from './cosmetics';
 import { countEligibleHonors } from './honorUnlocks';
-import { normalizeSaveData } from './save-data';
+import { getRelicPickTotal, normalizeSaveData } from './save-data';
 
 export type MetaProgressionTrack = 'permanent_upgrade' | 'cosmetic';
 export type MetaProgressionStatus = 'owned' | 'available' | 'locked';
@@ -136,12 +136,6 @@ export interface MetaProgressionMilestoneRow {
 const nonNegativeMetaProgressionCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const totalRelicPicks = (save: SaveData): number =>
-    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce(
-        (sum, count) => sum + nonNegativeMetaProgressionCount(count),
-        0
-    );
-
 const META_MARKS_PER_LEVEL = 5;
 
 const META_PROGRESS_MILESTONES: Array<{
@@ -160,7 +154,7 @@ export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceR
     const achievementTotal = Object.keys(save.achievements).length;
     const dailies = Math.min(7, nonNegativeMetaProgressionCount(save.playerStats?.dailiesCompleted));
     const noPowers = Math.min(5, nonNegativeMetaProgressionCount(save.playerStats?.bestFloorNoPowers));
-    const relics = Math.min(10, totalRelicPicks(save));
+    const relics = Math.min(10, getRelicPickTotal(save.playerStats?.relicPickCounts));
     const relicsToNextMark = relics >= 10 ? null : relics % 2 === 0 ? 2 : 1;
     return [
         {

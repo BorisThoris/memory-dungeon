@@ -1,4 +1,5 @@
 import type { RunState, SaveData } from './contracts';
+import { getRelicPickTotal } from './save-data';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type QuestCampaignStepId =
@@ -95,9 +96,6 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
     }
 ] as const;
 
-const relicPickTotal = (save: SaveData): number =>
-    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + nonNegativeQuestCount(count), 0);
-
 const nonNegativeQuestCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
@@ -112,7 +110,7 @@ const progressFor = (save: SaveData, id: QuestCampaignStepId): number => {
         case 'daily_rhythm':
             return nonNegativeQuestCount(save.playerStats?.dailiesCompleted);
         case 'relic_apprentice':
-            return relicPickTotal(save);
+            return getRelicPickTotal(save.playerStats?.relicPickCounts);
         default:
             return 0;
     }

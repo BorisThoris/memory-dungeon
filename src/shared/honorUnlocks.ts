@@ -5,7 +5,7 @@
 import type { SaveData } from './contracts';
 import { cosmeticUnlockTag, type CosmeticId } from './cosmetics';
 import { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
-import { normalizeSaveData } from './save-data';
+import { getRelicPickTotal, normalizeSaveData } from './save-data';
 
 export { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
 
@@ -94,7 +94,7 @@ export const eligibleHonorUnlockIds = (save: SaveData): HonorUnlockId[] => {
     const streak = nonNegativeHonorCount(ps?.dailyStreakCosmetic);
     const bestNp = nonNegativeHonorCount(ps?.bestFloorNoPowers);
     const bestScore = nonNegativeHonorCount(save.bestScore);
-    const relicPicks = Object.values(ps?.relicPickCounts ?? {}).reduce((a, b) => a + nonNegativeHonorCount(b), 0);
+    const relicPicks = getRelicPickTotal(ps?.relicPickCounts);
     const last = save.lastRunSummary;
     const lastLevelsCleared = nonNegativeHonorCount(last?.levelsCleared);
 

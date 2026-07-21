@@ -8,10 +8,13 @@ import {
     shouldDungeonSaveFieldRequireMigration
 } from './dungeon-save-migration';
 import { createNewRun, createPuzzleRun } from './game-core';
+import { RELIC_POOL } from './relics';
 import {
     createAchievementState,
     createDefaultSaveData,
     DEFAULT_SETTINGS,
+    getRelicPickCountRows,
+    getRelicPickTotal,
     mergeDailyComplete,
     mergeBestFloorNoPowers,
     mergePuzzleCompletion,
@@ -491,6 +494,23 @@ describe('save normalization', () => {
             starter_pairs: { completed: true, bestMistakes: 0, bestScore: 120 }
         });
         expect(normalized.lastRunSummary).toBeNull();
+    });
+
+    it('builds bounded relic pick rows in catalog order', () => {
+        const counts = {
+            guard_token_plus_one: 2.8,
+            extra_shuffle_charge: -1,
+            missing_relic: 99,
+            parasite_ledger: Number.NaN
+        };
+        const rows = getRelicPickCountRows(counts);
+
+        expect(rows.map((row) => row.id)).toEqual(RELIC_POOL);
+        expect(rows.find((row) => row.id === 'guard_token_plus_one')?.count).toBe(2);
+        expect(rows.find((row) => row.id === 'extra_shuffle_charge')?.count).toBe(0);
+        expect(rows.find((row) => row.id === 'parasite_ledger')?.count).toBe(0);
+        expect(getRelicPickTotal(counts)).toBe(2);
+        expect(getRelicPickTotal(['guard_token_plus_one'])).toBe(0);
     });
 
     it('bounds persisted collections and rejects unknown or oversized identifiers', () => {

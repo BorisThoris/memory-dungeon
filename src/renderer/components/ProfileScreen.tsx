@@ -1,4 +1,3 @@
-import type { RelicId } from '../../shared/contracts';
 import { getEquippedCosmeticId } from '../../shared/cosmetics';
 import { RELIC_CATALOG } from '../../shared/game-catalog';
 import { countEligibleHonors, totalHonorUnlocks } from '../../shared/honorUnlocks';
@@ -7,6 +6,7 @@ import { getDailyStreakEthicsRow } from '../../shared/daily-archive';
 import { getObjectiveBoardItems } from '../../shared/objective-board';
 import { buildProfileSaveShellSummary, getProfileSummaryRows, getSaveTrustRows } from '../../shared/profile-summary';
 import { getMetaProgressionRunImpactRows } from '../../shared/meta-reward-signals';
+import { getRelicPickCountRows } from '../../shared/save-data';
 import { formatNextUtcReset } from '../../shared/utc-countdown';
 import { useEffect, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
@@ -84,11 +84,9 @@ const ProfileScreen = () => {
     const saveTrustRows = getSaveTrustRows(saveData);
     const profileTitle = getEquippedCosmeticId(saveData, 'title') === 'title_ascendant_v' ? 'Ascendant V' : 'Seeker';
     const profileCrest = getEquippedCosmeticId(saveData, 'crest') === 'crest_daily_bronze' ? 'Daily Bronze' : 'Lantern';
-    const relicPickEntries = saveData.playerStats
-        ? (Object.entries(saveData.playerStats.relicPickCounts) as [RelicId, number][])
-              .filter(([, count]) => count > 0)
-              .sort((left, right) => right[1] - left[1])
-        : [];
+    const relicPickEntries = getRelicPickCountRows(saveData.playerStats?.relicPickCounts)
+        .filter((row) => row.count > 0)
+        .sort((left, right) => right.count - left.count);
 
     const handleBack = (): void => {
         resumeUiSfxContext();
@@ -388,7 +386,7 @@ const ProfileScreen = () => {
                     <summary>Most-picked relics</summary>
                     {relicPickEntries.length > 0 ? (
                         <ul className={styles.relicList}>
-                            {relicPickEntries.slice(0, 5).map(([id, count]) => (
+                            {relicPickEntries.slice(0, 5).map(({ id, count }) => (
                                 <li key={id}>
                                     <span>{RELIC_CATALOG[id]?.title ?? id}</span>
                                     <strong>{count}</strong>

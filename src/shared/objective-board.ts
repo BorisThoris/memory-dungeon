@@ -1,4 +1,5 @@
 import type { RunState, SaveData } from './contracts';
+import { getRelicPickTotal } from './save-data';
 
 export type ObjectiveBoardStatus = 'active' | 'completed' | 'locked';
 
@@ -23,15 +24,12 @@ export interface ObjectiveBoardItem {
 const nonNegativeObjectiveBoardCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const relicPickTotal = (save: SaveData): number =>
-    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + nonNegativeObjectiveBoardCount(count), 0);
-
 export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => {
     const ps = save.playerStats;
     const last = save.lastRunSummary;
     const dailies = nonNegativeObjectiveBoardCount(ps?.dailiesCompleted);
     const bestNoPowers = nonNegativeObjectiveBoardCount(ps?.bestFloorNoPowers);
-    const relicPicks = relicPickTotal(save);
+    const relicPicks = getRelicPickTotal(ps?.relicPickCounts);
     const gauntletClears = last?.gameMode === 'gauntlet' ? nonNegativeObjectiveBoardCount(last.levelsCleared) : 0;
 
     return [

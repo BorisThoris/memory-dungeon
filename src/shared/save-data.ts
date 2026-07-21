@@ -216,6 +216,22 @@ const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPi
     return out;
 };
 
+export interface RelicPickCountRow {
+    id: RelicId;
+    count: number;
+}
+
+export const getRelicPickCountRows = (input: unknown): RelicPickCountRow[] => {
+    const counts = isUnknownRecord(input) ? input : {};
+    return RELIC_POOL.map((id) => ({
+        id,
+        count: finiteNonNegativeInteger(counts[id], 0)
+    }));
+};
+
+export const getRelicPickTotal = (input: unknown): number =>
+    getRelicPickCountRows(input).reduce((sum, row) => sum + row.count, 0);
+
 const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => {
     if (!isUnknownRecord(input)) {
         return createPuzzleCompletionMap();
