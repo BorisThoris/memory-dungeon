@@ -9,6 +9,7 @@ import {
 } from './bonus-rewards';
 import { createRestShrineServices } from './rest-shrine';
 import { applyRunEventChoice, rollRunEventRoom } from './run-events';
+import { getRunInventoryItemPayoutRows } from './run-inventory';
 import { getTraitOpportunitySummary } from './trait-opportunities';
 
 const BONUS_REWARD_NEXT_CUES = {
@@ -68,7 +69,7 @@ const bonusRewardChoiceImpact = (
         option.payout.comboShards,
         option.payout.relicFavorProgress,
         option.payout.score,
-        option.payout.inventoryItems ? Object.keys(option.payout.inventoryItems).length : 0
+        getRunInventoryItemPayoutRows(option.payout.inventoryItems).filter(({ amount }) => amount > 0).length
     ].filter((value) => nonNegativeRouteSideRoomCount(value) > 0).length;
     return {
         rewardImpactBeats: resourceLaneCount > 1 ? 4 : 2,

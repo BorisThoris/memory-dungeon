@@ -209,10 +209,13 @@ describe('route side-room rules', () => {
     it('normalizes malformed payout lanes before ranking bonus reward impact', () => {
         const originalPayout = BONUS_REWARD_CATALOG.key_insurance.payout;
         BONUS_REWARD_CATALOG.key_insurance.payout = {
-            shopGold: Number.POSITIVE_INFINITY,
+            shopGold: 1,
             comboShards: Number.NaN,
             relicFavorProgress: Number.POSITIVE_INFINITY,
-            score: Number.NaN
+            score: Number.NaN,
+            inventoryItems: {
+                unknown_item: 99
+            } as typeof BONUS_REWARD_CATALOG.key_insurance.payout.inventoryItems
         };
         try {
             const run = createNewRun(210_503, { startingLoadoutId: 'vaultbreaker' });
