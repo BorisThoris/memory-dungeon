@@ -200,22 +200,6 @@ const normalizeAchievements = (input: unknown): AchievementState => {
     return out;
 };
 
-const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPickCounts'] => {
-    if (!isUnknownRecord(input)) {
-        return {};
-    }
-    const out: PlayerStatsPersisted['relicPickCounts'] = {};
-    for (const [id, value] of Object.entries(input)) {
-        if (isRelicId(id)) {
-            const count = finiteNonNegativeInteger(value, 0);
-            if (count > 0) {
-                out[id] = count;
-            }
-        }
-    }
-    return out;
-};
-
 export interface RelicPickCountRow {
     id: RelicId;
     count: number;
@@ -231,6 +215,16 @@ export const getRelicPickCountRows = (input: unknown): RelicPickCountRow[] => {
 
 export const getRelicPickTotal = (input: unknown): number =>
     getRelicPickCountRows(input).reduce((sum, row) => sum + row.count, 0);
+
+const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPickCounts'] => {
+    const out: PlayerStatsPersisted['relicPickCounts'] = {};
+    for (const { id, count } of getRelicPickCountRows(input)) {
+        if (count > 0) {
+            out[id] = count;
+        }
+    }
+    return out;
+};
 
 const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => {
     if (!isUnknownRecord(input)) {
