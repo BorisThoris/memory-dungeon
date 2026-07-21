@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
     BALANCE_SIMULATION_BASELINE,
+    BALANCE_SIMULATION_BASELINE_KEYS,
     BALANCE_SIMULATION_FINDABLE_KINDS,
+    BALANCE_SIMULATION_FLOOR_BANDS,
     BALANCE_SIMULATION_TILE_TRAIT_KINDS,
     assertBalanceSimulationWithinBaseline,
     assertDungeonBalanceProfilesWithinBounds,
@@ -41,6 +43,7 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.traitBoardPowerInteractionOpportunities).toBeGreaterThan(0);
         expect(result.aggregate.deadTraitFloors).toBe(0);
         expect(result.aggregate.deadTraitFloorsByBand).toEqual({ early: 0, mid: 0, late: 0 });
+        expect(Object.keys(result.aggregate.deadTraitFloorsByBand)).toEqual([...BALANCE_SIMULATION_FLOOR_BANDS]);
         expect(sumTileTraitKindCounts(result.aggregate.tileTraitKindCounts)).toBe(result.aggregate.tileTraitPairs);
         expect(result.aggregate.bossFloors).toBe(2);
         expect(result.aggregate.breatherFloors).toBe(3);
@@ -213,6 +216,13 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         const result = runBalanceSimulation({ seed: 42_001, floors: 12, rulesVersion: GAME_RULES_VERSION });
         const drift = assertBalanceSimulationWithinBaseline(result, BALANCE_SIMULATION_BASELINE);
 
+        expect(BALANCE_SIMULATION_BASELINE_KEYS).toEqual([
+            'totalShopGoldEarned',
+            'findablePickupPairs',
+            'bossFloors',
+            'breatherFloors',
+            'shopSinkBudget'
+        ]);
         expect(drift.ok).toBe(true);
         expect(drift.issues).toEqual([]);
     });

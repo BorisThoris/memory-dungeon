@@ -230,6 +230,10 @@ export const DUNGEON_BALANCE_PROFILES: readonly DungeonBalanceProfileDefinition[
     { id: 'high_skill', riskTolerance: 0.84, rewardBias: 1.08, guardEfficiency: 0.95, shopVisitBias: 1.06 }
 ] as const;
 
+export const BALANCE_SIMULATION_FLOOR_BANDS = ['early', 'mid', 'late'] as const;
+
+type BalanceSimulationFloorBand = (typeof BALANCE_SIMULATION_FLOOR_BANDS)[number];
+
 const statusFor = (value: number, targetMin: number, targetMax: number): BalanceSimulationRow['status'] =>
     value < targetMin ? 'below_range' : value > targetMax ? 'above_range' : 'within_range';
 
@@ -279,7 +283,7 @@ const simulationNodeKindForFloor = (floor: number, floorTag: string): DungeonRun
     return 'combat';
 };
 
-const floorBandFor = (floor: number): 'early' | 'mid' | 'late' =>
+const floorBandFor = (floor: number): BalanceSimulationFloorBand =>
     floor <= 4 ? 'early' : floor <= 8 ? 'mid' : 'late';
 
 const uniquePairCount = <T>(items: readonly T[], keyFor: (item: T) => string | null): number =>
@@ -638,7 +642,7 @@ export const runBalanceSimulation = ({
     const traitRewardPickupFloorCounts = samples.map((sample) => sample.traitRewardPickupFloors);
     const traitBoardPowerInteractionOpportunityCounts = samples.map((sample) => sample.traitBoardPowerInteractionOpportunities);
     const deadTraitFloorCounts = samples.map((sample) => sample.deadTraitFloors);
-    const deadTraitFloorsByBand = samples.reduce<Record<'early' | 'mid' | 'late', number>>(
+    const deadTraitFloorsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
         (counts, sample) => ({ ...counts, [sample.floorBand]: counts[sample.floorBand] + sample.deadTraitFloors }),
         { early: 0, mid: 0, late: 0 }
     );
@@ -664,7 +668,7 @@ export const runBalanceSimulation = ({
     const pressureFloorRelief = samples
         .filter((sample) => samplePressure(sample) >= 2.5)
         .map((sample) => sample.recoveryReliefPotential);
-    const rewardTotalsByBand = samples.reduce<Record<'early' | 'mid' | 'late', number>>(
+    const rewardTotalsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
         (totals, sample) => ({
             ...totals,
             [sample.floorBand]:
@@ -681,11 +685,11 @@ export const runBalanceSimulation = ({
         }),
         { early: 0, mid: 0, late: 0 }
     );
-    const sampleCountsByBand = samples.reduce<Record<'early' | 'mid' | 'late', number>>(
+    const sampleCountsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
         (counts, sample) => ({ ...counts, [sample.floorBand]: counts[sample.floorBand] + 1 }),
         { early: 0, mid: 0, late: 0 }
     );
-    const rewardAverageByBand = (Object.keys(rewardTotalsByBand) as Array<keyof typeof rewardTotalsByBand>).map((band) =>
+    const rewardAverageByBand = BALANCE_SIMULATION_FLOOR_BANDS.map((band) =>
         sampleCountsByBand[band] === 0 ? 0 : rewardTotalsByBand[band] / sampleCountsByBand[band]
     );
 
@@ -1057,11 +1061,19 @@ export const BALANCE_SIMULATION_BASELINE = {
     shopSinkBudget: { min: 84, max: 84 }
 } as const;
 
+export const BALANCE_SIMULATION_BASELINE_KEYS = [
+    'totalShopGoldEarned',
+    'findablePickupPairs',
+    'bossFloors',
+    'breatherFloors',
+    'shopSinkBudget'
+] as const satisfies readonly (keyof typeof BALANCE_SIMULATION_BASELINE)[];
+
 export const assertBalanceSimulationWithinBaseline = (
     report: BalanceSimulationReport,
     baseline: typeof BALANCE_SIMULATION_BASELINE
 ): { ok: boolean; issues: string[] } => {
-    const issues = (Object.keys(baseline) as Array<keyof typeof baseline>).flatMap((key) => {
+    const issues = BALANCE_SIMULATION_BASELINE_KEYS.flatMap((key) => {
         const value = report.aggregate[key];
         const range = baseline[key];
         return value < range.min || value > range.max ? [`${key}:${value} outside ${range.min}-${range.max}`] : [];
