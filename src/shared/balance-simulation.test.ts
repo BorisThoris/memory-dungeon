@@ -11,7 +11,9 @@ import {
     getFindableKindShares,
     getTileTraitKindShares,
     runDungeonBalanceProfileSimulation,
-    runBalanceSimulation
+    runBalanceSimulation,
+    type BalanceSimulationFloorBand,
+    type BalanceSimulationReport
 } from './balance-simulation';
 import { GAME_RULES_VERSION, type FindableKind, type TileTraitKind } from './contracts';
 import { getFindableSpawnWeightRows } from './findables';
@@ -23,6 +25,14 @@ const sumFindableKindCounts = (counts: Record<FindableKind, number>) =>
 
 const sumTileTraitKindCounts = (counts: Record<TileTraitKind, number>) =>
     BALANCE_SIMULATION_TILE_TRAIT_KINDS.reduce((sum, kind) => sum + counts[kind], 0);
+
+const assertFloorBandReportShape = (
+    sampleBand: BalanceSimulationReport['samples'][number]['floorBand'],
+    bandTotals: BalanceSimulationReport['aggregate']['deadTraitFloorsByBand']
+): Record<BalanceSimulationFloorBand, number> => {
+    expect(BALANCE_SIMULATION_FLOOR_BANDS).toContain(sampleBand);
+    return bandTotals;
+};
 
 describe('REG-086 balance simulation economy and drop-rate tuning', () => {
     it('runs deterministic offline economy and drop-rate simulations', () => {
@@ -44,6 +54,9 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(result.aggregate.deadTraitFloors).toBe(0);
         expect(result.aggregate.deadTraitFloorsByBand).toEqual({ early: 0, mid: 0, late: 0 });
         expect(Object.keys(result.aggregate.deadTraitFloorsByBand)).toEqual([...BALANCE_SIMULATION_FLOOR_BANDS]);
+        expect(assertFloorBandReportShape(result.samples[0]!.floorBand, result.aggregate.deadTraitFloorsByBand)).toBe(
+            result.aggregate.deadTraitFloorsByBand
+        );
         expect(sumTileTraitKindCounts(result.aggregate.tileTraitKindCounts)).toBe(result.aggregate.tileTraitPairs);
         expect(result.aggregate.bossFloors).toBe(2);
         expect(result.aggregate.breatherFloors).toBe(3);

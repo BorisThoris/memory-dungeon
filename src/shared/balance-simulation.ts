@@ -69,7 +69,7 @@ export interface BalanceSimulationReport {
         bossMovingEnemyHazards: number;
         hazardTileCount: number;
         contactRisk: number;
-        floorBand: 'early' | 'mid' | 'late';
+        floorBand: BalanceSimulationFloorBand;
         relicFavorPotential: number;
         comboShardPotential: number;
         guardRewardPotential: number;
@@ -99,7 +99,7 @@ export interface BalanceSimulationReport {
         traitRewardPickupFloors: number;
         traitBoardPowerInteractionOpportunities: number;
         deadTraitFloors: number;
-        deadTraitFloorsByBand: Record<'early' | 'mid' | 'late', number>;
+        deadTraitFloorsByBand: Record<BalanceSimulationFloorBand, number>;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         bossFloors: number;
         breatherFloors: number;
@@ -232,7 +232,7 @@ export const DUNGEON_BALANCE_PROFILES: readonly DungeonBalanceProfileDefinition[
 
 export const BALANCE_SIMULATION_FLOOR_BANDS = ['early', 'mid', 'late'] as const;
 
-type BalanceSimulationFloorBand = (typeof BALANCE_SIMULATION_FLOOR_BANDS)[number];
+export type BalanceSimulationFloorBand = (typeof BALANCE_SIMULATION_FLOOR_BANDS)[number];
 
 const statusFor = (value: number, targetMin: number, targetMax: number): BalanceSimulationRow['status'] =>
     value < targetMin ? 'below_range' : value > targetMax ? 'above_range' : 'within_range';
