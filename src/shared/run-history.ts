@@ -53,6 +53,17 @@ const nonNegativeRunHistoryCount = (value: unknown): number =>
 
 const runHistoryArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
+const runHistoryArray = <T>(value: unknown): T[] => (Array.isArray(value) ? value : []);
+
+const runHistoryDungeonKeyRecord = (value: unknown): Record<string, unknown> =>
+    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+
+const runRelicIds = (run: RunState): RunState['relicIds'] => runHistoryArray(run.relicIds);
+
+const runMutatorIds = (run: RunState): RunState['activeMutators'] => runHistoryArray(run.activeMutators);
+
+const getRunHistoryBuildProfile = (run: RunState) => getRunBuildProfile({ relicIds: runRelicIds(run) });
+
 const getPersistedSummaryPayoffStack = (
     summary: RunSummary | null
 ): { label: 'Combo burst' | 'Payoff burst' | 'Payoff stack' | 'Super stack'; lanes: number } | null => {
@@ -121,7 +132,7 @@ const bossIdForRun = (run: RunState): DungeonBossId | null =>
     null;
 
 export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] => {
-    if (run.gameMode !== 'endless' || run.dungeonRun.nodes.length === 0) {
+    if (run.gameMode !== 'endless' || !Array.isArray(run.dungeonRun?.nodes) || run.dungeonRun.nodes.length === 0) {
         return [];
     }
 
@@ -141,7 +152,10 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         run.board?.routeWorldProfile?.routeType ??
         null;
     const keyCount =
-        Object.values(run.dungeonKeys).reduce((sum, count) => sum + nonNegativeRunHistoryCount(count), 0) +
+        Object.values(runHistoryDungeonKeyRecord(run.dungeonKeys)).reduce<number>(
+            (sum, count) => sum + nonNegativeRunHistoryCount(count),
+            0
+        ) +
         nonNegativeRunHistoryCount(run.dungeonMasterKeys);
 
     rows.push({
@@ -208,7 +222,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         id: 'dungeon_rewards',
         label: 'Dungeon rewards',
         value: `${nonNegativeRunHistoryCount(run.dungeonTreasuresOpened)} treasures, ${keyCount} keys, ${nonNegativeRunHistoryCount(run.shopGold)} shop gold`,
-        detail: `${run.relicIds.length} relics carried; ${nonNegativeRunHistoryCount(run.bonusRelicPicksNextOffer) + nonNegativeRunHistoryCount(run.favorBonusRelicPicksNextOffer)} bonus relic picks banked.`,
+        detail: `${runHistoryArrayCount(run.relicIds)} relics carried; ${nonNegativeRunHistoryCount(run.bonusRelicPicksNextOffer) + nonNegativeRunHistoryCount(run.favorBonusRelicPicksNextOffer)} bonus relic picks banked.`,
         persistence: 'derived_export',
         exportSafe: true,
         offlineOnly: true
@@ -253,10 +267,14 @@ export const buildRunReplayLink = buildRunShareKey;
 
 export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
     const summary = run.lastRunSummary;
-    const buildProfile = getRunBuildProfile(run);
+    const buildProfile = getRunHistoryBuildProfile(run);
+    const relicIds = runRelicIds(run);
+    const mutatorIds = runMutatorIds(run);
+    const flipHistoryCount = runHistoryArrayCount(run.flipHistory);
+    const matchedPairKeyCount = runHistoryArrayCount(run.matchedPairKeysThisRun);
     const build: RunHistoryBuildSnapshot = {
-        relicIds: [...run.relicIds],
-        mutatorIds: [...run.activeMutators],
+        relicIds: [...relicIds],
+        mutatorIds: [...mutatorIds],
         contract: contractLabel(run),
         mode: run.gameMode
     };
@@ -283,7 +301,7 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
             id: 'share',
             label: 'Share key',
             value: share.shareKey,
-            detail: `${run.flipHistory.length} flip ids are local-only; ${share.reason}`,
+            detail: `${flipHistoryCount} flip ids are local-only; ${share.reason}`,
             persistence: 'derived_export',
             exportSafe: share.shareSupported,
             offlineOnly: true
@@ -291,8 +309,8 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
         {
             id: 'encore',
             label: 'Encore keys',
-            value: `${run.flipHistory.length} tile ids kept until this run is dismissed`,
-            detail: `${run.matchedPairKeysThisRun.length} matched pair keys for local encore bonus.`,
+            value: `${flipHistoryCount} tile ids kept until this run is dismissed`,
+            detail: `${matchedPairKeyCount} matched pair keys for local encore bonus.`,
             persistence: 'ephemeral_run',
             exportSafe: false,
             offlineOnly: true
@@ -322,7 +340,7 @@ export const buildRunJournalEntry = (run: RunState): {
     localOnly: true;
 } => {
     const entry = buildRunHistoryEntry(run);
-    const buildProfile = getRunBuildProfile(run);
+    const buildProfile = getRunHistoryBuildProfile(run);
     return {
         journalId: entry.share.shareKey,
         buildSummary: buildProfile.primary

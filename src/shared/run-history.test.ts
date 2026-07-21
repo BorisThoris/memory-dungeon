@@ -162,10 +162,11 @@ describe('REG-085 run history, share keys, and journal', () => {
             dungeonTrapsResolvedThisFloor: Number.POSITIVE_INFINITY,
             dungeonGatewaysUsed: Number.NaN,
             dungeonTreasuresOpened: Number.POSITIVE_INFINITY,
-            dungeonKeys: { iron: Number.POSITIVE_INFINITY, treasure: 1.9 },
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys'],
             dungeonMasterKeys: Number.NaN,
             enemyHazardHitsThisFloor: Number.POSITIVE_INFINITY,
             shopGold: Number.NaN,
+            relicIds: Number.NaN as unknown as RunState['relicIds'],
             bonusRelicPicksNextOffer: Number.POSITIVE_INFINITY,
             favorBonusRelicPicksNextOffer: 1.9,
             stats: {
@@ -177,11 +178,30 @@ describe('REG-085 run history, share keys, and journal', () => {
         const rows = buildDungeonJournalRows(run);
         const exportText = buildRunHistoryExportString(run);
 
-        expect(rows.find((row) => row.id === 'dungeon_rewards')?.value).toBe('0 treasures, 1 keys, 0 shop gold');
+        expect(rows.find((row) => row.id === 'dungeon_rewards')?.value).toBe('0 treasures, 0 keys, 0 shop gold');
+        expect(rows.find((row) => row.id === 'dungeon_rewards')?.detail).toContain('0 relics carried');
         expect(rows.find((row) => row.id === 'dungeon_rewards')?.detail).toContain('1 bonus relic picks banked');
         expect(rows.find((row) => row.id === 'dungeon_objective')?.detail).toContain('0 traps resolved this floor; 0 gateways used this run.');
         expect(rows.find((row) => row.id === 'dungeon_outcome')?.detail).toContain('0 enemy hazard hits this floor; 0 best streak.');
         expect(exportText).not.toMatch(/NaN|Infinity/);
+    });
+
+    it('normalizes malformed run history arrays before build and playback rows', () => {
+        const run: RunState = {
+            ...completedRun(),
+            relicIds: Number.NaN as unknown as RunState['relicIds'],
+            activeMutators: Number.NaN as unknown as RunState['activeMutators'],
+            flipHistory: Number.NaN as unknown as string[],
+            matchedPairKeysThisRun: Number.NaN as unknown as string[]
+        };
+
+        const entry = buildRunHistoryEntry(run);
+
+        expect(entry.build.relicIds).toEqual([]);
+        expect(entry.build.mutatorIds).toEqual([]);
+        expect(entry.journalRows.find((row) => row.id === 'build')?.value).toContain('0 relics · 0 mutators');
+        expect(entry.journalRows.find((row) => row.id === 'share')?.detail).toContain('0 flip ids are local-only');
+        expect(entry.journalRows.find((row) => row.id === 'encore')?.detail).toContain('0 matched pair keys');
     });
 
     it('does not derive a dungeon journal boss row from stale cleared-tile hazards', () => {
