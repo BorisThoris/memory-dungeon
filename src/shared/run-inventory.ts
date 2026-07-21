@@ -213,7 +213,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
     }
 };
 
-const KEY_SPEND_ORDER: DungeonKeyKind[] = ['iron', 'treasure', 'shrine', 'boss', 'trap'];
+export const DUNGEON_KEY_SPEND_ORDER = ['iron', 'treasure', 'shrine', 'boss', 'trap'] as const satisfies readonly DungeonKeyKind[];
 
 const nonNegativeQuantity = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
@@ -283,7 +283,7 @@ const quantityLabelFor = (definition: RunInventoryDefinition, quantity: number):
 
 const dungeonKeyQuantityLabelFor = (run: RunState, quantity: number): string => {
     const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
-    const parts = KEY_SPEND_ORDER
+    const parts = DUNGEON_KEY_SPEND_ORDER
         .map((kind) => [kind, nonNegativeQuantity(dungeonKeys[kind])] as const)
         .filter(([, count]) => count > 0);
     if (parts.length === 0 || (parts.length === 1 && parts[0]?.[0] === 'iron')) {
@@ -606,7 +606,7 @@ export const useRunInventoryItem = (run: RunState, itemId: RunInventoryItemId): 
             return { run: { ...run, wildMatchesRemaining: Math.max(0, nonNegativeQuantity(run.wildMatchesRemaining) - 1) }, itemId, applied: true };
         case 'iron_key': {
             const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
-            const spendKind = KEY_SPEND_ORDER.find((kind) => nonNegativeQuantity(dungeonKeys[kind] ?? 0) > 0);
+            const spendKind = DUNGEON_KEY_SPEND_ORDER.find((kind) => nonNegativeQuantity(dungeonKeys[kind] ?? 0) > 0);
             if (!spendKind) {
                 return { run, itemId, applied: false, reason: 'unavailable' };
             }

@@ -3,6 +3,7 @@ import { createNewRun } from './game-core';
 import { createRunShopOffers, purchaseShopOffer } from './shop-rules';
 import {
     buildRunInventory,
+    DUNGEON_KEY_SPEND_ORDER,
     gainRunInventoryItem,
     getRunConsumableRows,
     getRunInventoryGainFeedback,
@@ -278,6 +279,31 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         expect(inventory.consumables.find((row) => row.id === 'iron_key')?.quantity).toBe(1);
         expect(inventory.consumables.find((row) => row.id === 'master_key')?.quantity).toBe(1);
         expect(inventory.consumables.find((row) => row.id === 'iron_key')?.source).toContain('treasure rooms');
+    });
+
+    it('spends dungeon keys in stable route priority order', () => {
+        const run = {
+            ...createNewRun(0),
+            dungeonKeys: { trap: 1, boss: 1, shrine: 1, treasure: 1, iron: 1 }
+        };
+        const inventory = buildRunInventory(run);
+
+        expect(DUNGEON_KEY_SPEND_ORDER).toEqual(['iron', 'treasure', 'shrine', 'boss', 'trap']);
+        expect(inventory.consumables.find((row) => row.id === 'iron_key')?.quantityLabel).toBe(
+            '5 (iron 1, treasure 1, shrine 1, boss 1, trap 1)'
+        );
+
+        const afterIron = useRunInventoryItem(run, 'iron_key');
+        const afterTreasure = useRunInventoryItem(afterIron.run, 'iron_key');
+        const afterShrine = useRunInventoryItem(afterTreasure.run, 'iron_key');
+        const afterBoss = useRunInventoryItem(afterShrine.run, 'iron_key');
+        const afterTrap = useRunInventoryItem(afterBoss.run, 'iron_key');
+
+        expect(afterIron.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 1, shrine: 1, boss: 1, trap: 1 });
+        expect(afterTreasure.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 0, shrine: 1, boss: 1, trap: 1 });
+        expect(afterShrine.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 0, shrine: 0, boss: 1, trap: 1 });
+        expect(afterBoss.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 0, shrine: 0, boss: 0, trap: 1 });
+        expect(afterTrap.run.dungeonKeys).toMatchObject({ iron: 0, treasure: 0, shrine: 0, boss: 0, trap: 0 });
     });
 
     it('uses deterministic run consumables without touching meta inventory', () => {
