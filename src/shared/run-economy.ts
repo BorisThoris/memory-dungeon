@@ -1,4 +1,5 @@
 import type { RunState } from './contracts';
+import { getDungeonKeyTotal } from './run-inventory';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunEconomyBucket = 'score' | 'temporary_run' | 'durable_meta';
@@ -115,15 +116,6 @@ export const runEconomyDefinitionById = RUN_ECONOMY_DEFINITIONS.reduce<Record<st
 const nonNegativeRunEconomyCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const dungeonKeyRecord = (value: unknown): Record<string, unknown> =>
-    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
-
-const dungeonKeyTotal = (run: RunState): number =>
-    Object.values(dungeonKeyRecord(run.dungeonKeys)).reduce<number>(
-        (sum, count) => sum + nonNegativeRunEconomyCount(count),
-        0
-    );
-
 const valueFor = (run: RunState, id: string): string => {
     const stats = normalizeSessionStats(run.stats);
     switch (id) {
@@ -138,7 +130,7 @@ const valueFor = (run: RunState, id: string): string => {
         case 'relic_favor':
             return `${nonNegativeRunEconomyCount(run.relicFavorProgress)}/3`;
         case 'dungeon_keys': {
-            return `${dungeonKeyTotal(run)} keys · ${nonNegativeRunEconomyCount(run.dungeonMasterKeys)} master`;
+            return `${getDungeonKeyTotal(run.dungeonKeys)} keys · ${nonNegativeRunEconomyCount(run.dungeonMasterKeys)} master`;
         }
         case 'findable_pickups':
             return `${nonNegativeRunEconomyCount(run.findablesClaimedThisFloor)}/${nonNegativeRunEconomyCount(run.findablesTotalThisFloor)}`;
@@ -163,7 +155,7 @@ const numericValueFor = (run: RunState, id: string): number => {
         case 'relic_favor':
             return nonNegativeRunEconomyCount(run.relicFavorProgress);
         case 'dungeon_keys':
-            return dungeonKeyTotal(run) + nonNegativeRunEconomyCount(run.dungeonMasterKeys);
+            return getDungeonKeyTotal(run.dungeonKeys) + nonNegativeRunEconomyCount(run.dungeonMasterKeys);
         case 'findable_pickups':
             return nonNegativeRunEconomyCount(run.findablesClaimedThisFloor);
         case 'assist_charges':

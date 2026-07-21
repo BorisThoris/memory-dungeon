@@ -1,6 +1,6 @@
 import { hashStringToSeed } from './rng';
 import { MAX_GUARD_TOKENS, MAX_LIVES, type RunState } from './contracts';
-import { gainRunInventoryItem } from './run-inventory';
+import { gainRunInventoryItem, getDungeonKeyTotal } from './run-inventory';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunEventId =
@@ -837,9 +837,6 @@ export interface RunEventPreviewState {
 const nonNegativeEventCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const eventDungeonKeyRecord = (value: unknown): Record<string, unknown> =>
-    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
-
 export const createRunEventPreviewState = (run: RunState): RunEventPreviewState => {
     const stats = normalizeSessionStats(run.stats);
     return {
@@ -848,10 +845,7 @@ export const createRunEventPreviewState = (run: RunState): RunEventPreviewState 
         relicFavorProgress: nonNegativeEventCount(run.relicFavorProgress),
         bonusRelicPicksNextOffer: nonNegativeEventCount(run.bonusRelicPicksNextOffer),
         favorBonusRelicPicksNextOffer: nonNegativeEventCount(run.favorBonusRelicPicksNextOffer),
-        ironKeys: Object.values(eventDungeonKeyRecord(run.dungeonKeys)).reduce<number>(
-            (sum, count) => sum + nonNegativeEventCount(count),
-            0
-        ),
+        ironKeys: getDungeonKeyTotal(run.dungeonKeys),
         totalScore: stats.totalScore,
         currentLevelScore: stats.currentLevelScore,
         bestScore: stats.bestScore,

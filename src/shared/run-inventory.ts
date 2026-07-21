@@ -241,7 +241,23 @@ const stringArray = (value: unknown): string[] =>
     Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
 
 const dungeonKeyRecord = (value: unknown): Partial<Record<DungeonKeyKind, number>> =>
-    value != null && typeof value === 'object' ? value as Partial<Record<DungeonKeyKind, number>> : {};
+    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Partial<Record<DungeonKeyKind, number>> : {};
+
+export interface DungeonKeyQuantityRow {
+    kind: DungeonKeyKind;
+    quantity: number;
+}
+
+export const getDungeonKeyQuantityRows = (value: unknown): DungeonKeyQuantityRow[] => {
+    const dungeonKeys = dungeonKeyRecord(value);
+    return DUNGEON_KEY_SPEND_ORDER.map((kind) => ({
+        kind,
+        quantity: nonNegativeQuantity(dungeonKeys[kind])
+    }));
+};
+
+export const getDungeonKeyTotal = (value: unknown): number =>
+    getDungeonKeyQuantityRows(value).reduce((sum, row) => sum + row.quantity, 0);
 
 export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemId): number => {
     const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
@@ -266,7 +282,7 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
         case 'wild_match_token':
             return nonNegativeQuantity(run.wildMatchesRemaining);
         case 'iron_key':
-            return Object.values(dungeonKeys).reduce((sum, count) => sum + nonNegativeQuantity(count), 0);
+            return getDungeonKeyTotal(dungeonKeys);
         case 'master_key':
             return nonNegativeQuantity(run.dungeonMasterKeys);
         case 'guard_token':
@@ -301,10 +317,9 @@ const quantityLabelFor = (definition: RunInventoryDefinition, quantity: number):
     definition.stackLimit == null ? String(quantity) : `${quantity}/${definition.stackLimit}`;
 
 const dungeonKeyQuantityLabelFor = (run: RunState, quantity: number): string => {
-    const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
-    const parts = DUNGEON_KEY_SPEND_ORDER
-        .map((kind) => [kind, nonNegativeQuantity(dungeonKeys[kind])] as const)
-        .filter(([, count]) => count > 0);
+    const parts = getDungeonKeyQuantityRows(run.dungeonKeys)
+        .map((row) => [row.kind, row.quantity] as const)
+        .filter(([, quantity]) => quantity > 0);
     if (parts.length === 0 || (parts.length === 1 && parts[0]?.[0] === 'iron')) {
         return String(quantity);
     }

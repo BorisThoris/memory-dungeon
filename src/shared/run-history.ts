@@ -1,6 +1,7 @@
 import type { DungeonBossId, DungeonRunMapState, DungeonRunNode, RunState, SaveData, RunSummary } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { getRunBuildProfile } from './relics';
+import { getDungeonKeyTotal } from './run-inventory';
 import { getRepairedSelectedDungeonNode, repairDungeonRunMapProgression } from './run-map';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -55,9 +56,6 @@ const nonNegativeRunHistoryCount = (value: unknown): number =>
 const runHistoryArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
 const runHistoryArray = <T>(value: unknown): T[] => (Array.isArray(value) ? value : []);
-
-const runHistoryDungeonKeyRecord = (value: unknown): Record<string, unknown> =>
-    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
 
 const runRelicIds = (run: RunState): RunState['relicIds'] => runHistoryArray(run.relicIds);
 
@@ -153,12 +151,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         run.board?.selectedGatewayRouteType ??
         run.board?.routeWorldProfile?.routeType ??
         null;
-    const keyCount =
-        Object.values(runHistoryDungeonKeyRecord(run.dungeonKeys)).reduce<number>(
-            (sum, count) => sum + nonNegativeRunHistoryCount(count),
-            0
-        ) +
-        nonNegativeRunHistoryCount(run.dungeonMasterKeys);
+    const keyCount = getDungeonKeyTotal(run.dungeonKeys) + nonNegativeRunHistoryCount(run.dungeonMasterKeys);
 
     rows.push({
         id: 'dungeon_node',

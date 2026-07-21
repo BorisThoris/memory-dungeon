@@ -22,14 +22,12 @@ import {
 } from './board-inspection';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { dungeonKeyKindArticleLabel, dungeonKeyKindLabel } from './dungeon-key-copy';
+import { getDungeonKeyTotal } from './run-inventory';
 import { normalizeSessionStats } from './session-stats-rules';
 import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 
 const nonNegativeDungeonStatusCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const dungeonStatusKeyRecord = (value: unknown): Record<string, unknown> =>
-    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
 
 const nonNegativeDungeonStatusCountWithFallback = (value: unknown, fallback: number): number =>
     typeof value === 'number' && Number.isFinite(value)
@@ -700,12 +698,7 @@ export const getDungeonBoardStatus = (run: RunState): DungeonBoardStatus => {
         ).size,
         leverCount: nonNegativeDungeonStatusCount(board?.dungeonLeverCount),
         requiredLeverCount: exitStatus.requiredLeverCount,
-        keyCount:
-            Object.values(dungeonStatusKeyRecord(run.dungeonKeys)).reduce<number>(
-                (sum, count) => sum + nonNegativeDungeonStatusCount(count),
-                0
-            ) +
-            nonNegativeDungeonStatusCount(run.dungeonMasterKeys),
+        keyCount: getDungeonKeyTotal(run.dungeonKeys) + nonNegativeDungeonStatusCount(run.dungeonMasterKeys),
         shopAvailable: Boolean(
             board?.tiles.some((tile) => tile.pairKey === SHOP_PAIR_KEY && tile.dungeonCardState !== 'resolved')
         ),

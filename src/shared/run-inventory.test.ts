@@ -5,6 +5,8 @@ import {
     buildRunInventory,
     DUNGEON_KEY_SPEND_ORDER,
     gainRunInventoryItem,
+    getDungeonKeyQuantityRows,
+    getDungeonKeyTotal,
     getRunConsumableRows,
     getRunInventoryGainFeedback,
     getRunInventoryLoadoutRows,
@@ -211,6 +213,14 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
             dungeonKeys: { iron: 1, treasure: 2, boss: 1 }
         };
 
+        expect(getDungeonKeyQuantityRows(run.dungeonKeys)).toEqual([
+            { kind: 'iron', quantity: 1 },
+            { kind: 'treasure', quantity: 2 },
+            { kind: 'shrine', quantity: 0 },
+            { kind: 'boss', quantity: 1 },
+            { kind: 'trap', quantity: 0 }
+        ]);
+        expect(getDungeonKeyTotal(run.dungeonKeys)).toBe(4);
         expect(buildRunInventory(run).consumables.find((row) => row.id === 'iron_key')).toMatchObject({
             quantity: 4,
             quantityLabel: '4 (iron 1, treasure 2, boss 1)'
@@ -221,6 +231,8 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
             quantity: 1,
             quantityLabel: '1 (treasure 1)'
         });
+        expect(getDungeonKeyTotal(Number.NaN)).toBe(0);
+        expect(getDungeonKeyTotal([{ iron: 99 }])).toBe(0);
     });
 
     it('ignores malformed reward amounts before they can poison inventory counters', () => {
