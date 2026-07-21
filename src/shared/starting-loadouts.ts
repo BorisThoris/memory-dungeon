@@ -13,6 +13,13 @@ export interface StartingLoadoutDefinition {
     firstFloorDecision: string;
 }
 
+export const STARTING_LOADOUT_IDS = [
+    'memory_scout',
+    'route_tactician',
+    'cursebreaker',
+    'vaultbreaker'
+] as const satisfies readonly StartingLoadoutId[];
+
 export const STARTING_LOADOUTS: Record<StartingLoadoutId, StartingLoadoutDefinition> = {
     memory_scout: {
         id: 'memory_scout',
@@ -63,6 +70,9 @@ export const STARTING_LOADOUTS: Record<StartingLoadoutId, StartingLoadoutDefinit
 export const getStartingLoadoutDefinition = (
     id: StartingLoadoutId | null | undefined
 ): StartingLoadoutDefinition | null => (id ? STARTING_LOADOUTS[id] ?? null : null);
+
+export const getStartingLoadoutRows = (): StartingLoadoutDefinition[] =>
+    STARTING_LOADOUT_IDS.map((id) => STARTING_LOADOUTS[id]);
 
 export const applyStartingLoadout = (run: RunState, id: StartingLoadoutId | null | undefined): RunState => {
     if (!id) {
