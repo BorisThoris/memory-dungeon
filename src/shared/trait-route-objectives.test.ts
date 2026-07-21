@@ -101,6 +101,18 @@ describe('trait route objectives', () => {
         expect(result.comboShardGain).toBe(1);
     });
 
+    it('normalizes malformed stat records before applying progress rewards', () => {
+        const run = {
+            ...runWithObjective(),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        const result = applyTraitRouteObjectiveProgress(run, ['echo:sealed-combo']);
+
+        expect(result.comboShardGain).toBe(1);
+        expect(result.scoreBonus).toBe(0);
+        expect(result.runPatch.traitRouteObjectiveRewardTextThisFloor).toBe('+1 combo shard');
+    });
+
     it('falls back to score when combo shards are capped and exposes HUD status', () => {
         const run = runWithObjective({
             stats: { ...runWithObjective().stats, comboShards: MAX_COMBO_SHARDS }

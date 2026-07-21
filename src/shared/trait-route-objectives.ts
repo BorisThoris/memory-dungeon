@@ -4,6 +4,7 @@ import {
     getBoardTraitInteractionPreviewLines,
     type TileTraitInteractionTag
 } from './tile-trait-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitOpportunitySummary } from './trait-opportunities';
 
 export const TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD = 25;
@@ -66,7 +67,7 @@ export const getTraitRouteObjectiveSeed = (board: BoardState | null | undefined)
 };
 
 export const getTraitRouteObjectiveRewardText = (run: Pick<RunState, 'stats'>): string =>
-    nonNegativeTraitRouteObjectiveCount(run.stats.comboShards) < MAX_COMBO_SHARDS
+    normalizeSessionStats(run.stats).comboShards < MAX_COMBO_SHARDS
         ? '+1 combo shard'
         : `+${TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD} score`;
 
@@ -76,7 +77,7 @@ export const applyTraitRouteObjectiveProgress = (
 ): TraitRouteObjectiveApplyResult => {
     const required = nonNegativeTraitRouteObjectiveCount(run.traitRouteObjectiveRequiredThisFloor);
     const currentProgress = nonNegativeTraitRouteObjectiveCount(run.traitRouteObjectiveProgressThisFloor);
-    const comboShards = nonNegativeTraitRouteObjectiveCount(run.stats.comboShards);
+    const comboShards = normalizeSessionStats(run.stats).comboShards;
     const active = required > 0;
     const triggeredTags = traitRouteTags(run.traitRouteObjectiveTriggeredTagsThisFloor);
     const newTags = [...new Set(interactionTags)].filter(

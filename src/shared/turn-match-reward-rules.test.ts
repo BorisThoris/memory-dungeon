@@ -78,6 +78,24 @@ describe('turn match reward rules', () => {
         expect(reward.lives).toBe(3);
     });
 
+    it('normalizes malformed stat records before cap and conversion checks', () => {
+        const reward = calculateResolvedMatchSurvivalReward({
+            catalystAltarUpgraded: false,
+            currentStreak: 4,
+            dungeonReward: emptyReward,
+            findableComboShardGain: 1,
+            mimicCacheBite: false,
+            mimicCacheFatalBite: false,
+            mimicCacheGuardBite: false,
+            routeCardReward: emptyReward,
+            run: run({ stats: Number.NaN as unknown as RunState['stats'] })
+        });
+
+        expect(reward.guardTokens).toBe(1);
+        expect(reward.comboShards).toBe(2);
+        expect(reward.lives).toBe(4);
+    });
+
     it('does not award streak combo or guard bonuses in meditation', () => {
         const reward = calculateResolvedMatchSurvivalReward({
             catalystAltarUpgraded: false,

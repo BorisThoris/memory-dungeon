@@ -17,6 +17,7 @@ import {
     ROUTE_CARD_GREED_SHOP_GOLD_REWARD,
     ROUTE_CARD_MYSTERY_SHOP_GOLD_REWARD
 } from './route-choice-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 
 type MysteryRouteCardOutcome = 'shop_gold' | 'combo_shard' | 'relic_favor';
 
@@ -54,11 +55,12 @@ export const getRouteCardReward = (
     kind: RouteSpecialKind | RouteCardKind | null,
     routeSpecialRevealed = false
 ): RouteCardReward => {
+    const stats = normalizeSessionStats(run.stats);
     if (kind === 'safe_ward') {
         return { ...emptyRouteCardReward(), guardTokens: 1 };
     }
     if (kind === 'guard_cache') {
-        return nonNegativeRouteCardRewardCount(run.stats.guardTokens) >= MAX_GUARD_TOKENS
+        return stats.guardTokens >= MAX_GUARD_TOKENS
             ? { ...emptyRouteCardReward(), safeHazardWardCharges: 1 }
             : { ...emptyRouteCardReward(), guardTokens: 1 };
     }
@@ -140,7 +142,7 @@ export const getRouteCardReward = (
         return {
             ...emptyRouteCardReward(),
             score:
-                nonNegativeRouteCardRewardCount(run.stats.comboShards) > 0
+                stats.comboShards > 0
                     ? CATALYST_ALTAR_UPGRADED_SCORE_REWARD
                     : CATALYST_ALTAR_FALLBACK_SCORE_REWARD
         };

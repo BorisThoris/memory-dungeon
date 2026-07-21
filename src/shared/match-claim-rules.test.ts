@@ -66,6 +66,25 @@ describe('match claim rules', () => {
         expect(context.routeCardReward.shopGold).toBe(1);
     });
 
+    it('normalizes malformed stat records before deriving route-special predicates', () => {
+        const first = tile('a1', 'A', {
+            routeSpecialKind: 'mimic_cache'
+        });
+        const second = tile('a2', 'A');
+        const base = runWith([first, second], { lives: 1 });
+        const context = deriveMatchClaimContext({
+            firstTile: first,
+            firstTileId: first.id,
+            run: { ...base, stats: Number.NaN as unknown as RunState['stats'] },
+            secondTile: second,
+            secondTileId: second.id
+        });
+
+        expect(context.mimicCacheGuardBite).toBe(false);
+        expect(context.mimicCacheFatalBite).toBe(true);
+        expect(context.catalystAltarUpgraded).toBe(false);
+    });
+
     it('uses the non-wild pair key and reports wild usage when one matched tile is wild', () => {
         const first = tile('wild', WILD_PAIR_KEY);
         const second = tile('b1', 'B', { routeSpecialKind: 'loaded_gateway' });

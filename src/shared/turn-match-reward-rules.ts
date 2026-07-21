@@ -8,6 +8,7 @@ import {
 import { COMBO_SHARD_STREAK_STEP, applyComboShardGain } from './combo-shard-rules';
 import type { DungeonMatchReward } from './dungeon-match-reward-rules';
 import type { RouteCardReward } from './route-card-reward-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 
 const nonNegativeRewardCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
@@ -49,23 +50,24 @@ export const calculateResolvedMatchSurvivalReward = ({
     const routeComboShards = nonNegativeRewardCount(routeCardReward.comboShards);
     const dungeonComboShards = nonNegativeRewardCount(dungeonReward.comboShards);
     const safeFindableComboShardGain = nonNegativeRewardCount(findableComboShardGain);
+    const stats = normalizeSessionStats(run.stats);
     const guardTokenGain =
         meditation || safeCurrentStreak <= 0 || safeCurrentStreak % COMBO_GUARD_STREAK_STEP !== 0 ? 0 : 1;
     const guardTokensBeforeRewards =
-        Math.max(0, nonNegativeRewardCount(run.stats.guardTokens) - (mimicCacheGuardBite ? 1 : 0));
+        Math.max(0, stats.guardTokens - (mimicCacheGuardBite ? 1 : 0));
     const guardTokens = Math.min(
         MAX_GUARD_TOKENS,
         guardTokensBeforeRewards + guardTokenGain + routeGuardTokens + dungeonGuardTokens
     );
     const comboShardReward = meditation
         ? applyComboShardGain(
-              Math.max(0, nonNegativeRewardCount(run.stats.comboShards) - (catalystAltarUpgraded ? 1 : 0)),
+              Math.max(0, stats.comboShards - (catalystAltarUpgraded ? 1 : 0)),
               mimicCacheFatalBite ? 0 : Math.max(0, safeLives - (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0)),
               safeFindableComboShardGain + routeComboShards + dungeonComboShards,
               false
           )
         : applyComboShardGain(
-              Math.max(0, nonNegativeRewardCount(run.stats.comboShards) - (catalystAltarUpgraded ? 1 : 0)),
+              Math.max(0, stats.comboShards - (catalystAltarUpgraded ? 1 : 0)),
               mimicCacheFatalBite ? 0 : Math.max(0, safeLives - (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0)),
               (safeCurrentStreak > 0 && safeCurrentStreak % COMBO_SHARD_STREAK_STEP === 0 ? 1 : 0) +
                   safeFindableComboShardGain +

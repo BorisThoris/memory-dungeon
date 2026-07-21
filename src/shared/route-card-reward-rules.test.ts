@@ -8,7 +8,8 @@ import {
     MIMIC_CACHE_BLIND_SHOP_GOLD_REWARD,
     MIMIC_CACHE_CONTROLLED_SCORE_REWARD,
     MIMIC_CACHE_CONTROLLED_SHOP_GOLD_REWARD,
-    PARASITE_VESSEL_FALLBACK_SCORE_REWARD
+    PARASITE_VESSEL_FALLBACK_SCORE_REWARD,
+    type RunState
 } from './contracts';
 import { createNewRun } from './game-core';
 import {
@@ -95,6 +96,21 @@ describe('route card reward rules', () => {
         });
         expect(getRouteCardReward({ ...run, parasiteFloors: Number.NaN }, 1, 'a', 'parasite_vessel')).toMatchObject({
             score: PARASITE_VESSEL_FALLBACK_SCORE_REWARD
+        });
+    });
+
+    it('normalizes malformed stat records before stateful route-card rewards', () => {
+        const run = {
+            ...createNewRun(0),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(getRouteCardReward(run, 1, 'a', 'guard_cache')).toMatchObject({
+            guardTokens: 1,
+            safeHazardWardCharges: 0
+        });
+        expect(getRouteCardReward(run, 1, 'a', 'catalyst_altar')).toMatchObject({
+            score: CATALYST_ALTAR_FALLBACK_SCORE_REWARD
         });
     });
 });

@@ -12,6 +12,7 @@ import type { BoardState } from './contracts';
 import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { getDungeonMatchReward, type DungeonMatchReward } from './dungeon-match-reward-rules';
 import { getRouteCardReward, type RouteCardReward } from './route-card-reward-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import { isWildPairKey } from './tile-identity';
 
@@ -75,15 +76,16 @@ export const deriveMatchClaimContext = ({
         claimedRouteCardKind,
         claimedRouteSpecialRevealed
     );
+    const stats = normalizeSessionStats(run.stats);
     const mimicCacheClaimed = claimedRouteCardKind === 'mimic_cache';
     const mimicCacheBite = mimicCacheClaimed && !claimedRouteSpecialRevealed;
-    const mimicCacheGuardBite = mimicCacheBite && run.stats.guardTokens > 0;
+    const mimicCacheGuardBite = mimicCacheBite && stats.guardTokens > 0;
     const matchedDungeonKind = firstTile.dungeonCardKind ?? secondTile.dungeonCardKind ?? null;
     const dungeonReward = getDungeonMatchReward(run, firstTile, secondTile);
 
     return {
         anchorSealClaimed: claimedRouteCardKind === 'anchor_seal',
-        catalystAltarUpgraded: claimedRouteCardKind === 'catalyst_altar' && run.stats.comboShards > 0,
+        catalystAltarUpgraded: claimedRouteCardKind === 'catalyst_altar' && stats.comboShards > 0,
         claimedFindableKind,
         claimedRouteCardKind,
         claimedRouteSpecialRevealed,
