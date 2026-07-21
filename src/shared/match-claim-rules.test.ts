@@ -227,6 +227,7 @@ describe('match claim rules', () => {
         const second = tile('p2', 'P');
         const unpinnedRun = runWith([first, second], { pinnedTileIds: ['p1'] });
         const pinnedRun = runWith([first, second], { pinnedTileIds: ['p1', 'p2'] });
+        const malformedRun = runWith([first, second], { pinnedTileIds: Number.NaN as unknown as string[] });
 
         expect(
             deriveMatchClaimContext({
@@ -246,6 +247,15 @@ describe('match claim rules', () => {
                 secondTileId: second.id
             }).pinLatticeRewarded
         ).toBe(true);
+        expect(
+            deriveMatchClaimContext({
+                firstTile: first,
+                firstTileId: first.id,
+                run: malformedRun,
+                secondTile: second,
+                secondTileId: second.id
+            }).pinLatticeRewarded
+        ).toBe(false);
     });
 
     it('creates the matched-pair board claim and clears claimed tile metadata', () => {

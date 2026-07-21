@@ -11,6 +11,8 @@ export const TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD = 25;
 const nonNegativeTraitRouteObjectiveCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const traitRouteTags = (value: unknown): TileTraitInteractionTag[] => Array.isArray(value) ? value : [];
+
 export interface TraitRouteObjectiveSeed {
     required: number;
     label: string;
@@ -76,8 +78,9 @@ export const applyTraitRouteObjectiveProgress = (
     const currentProgress = nonNegativeTraitRouteObjectiveCount(run.traitRouteObjectiveProgressThisFloor);
     const comboShards = nonNegativeTraitRouteObjectiveCount(run.stats.comboShards);
     const active = required > 0;
+    const triggeredTags = traitRouteTags(run.traitRouteObjectiveTriggeredTagsThisFloor);
     const newTags = [...new Set(interactionTags)].filter(
-        (tag) => !run.traitRouteObjectiveTriggeredTagsThisFloor.includes(tag)
+        (tag) => !triggeredTags.includes(tag)
     );
     if (!active || newTags.length === 0) {
         return {
@@ -86,7 +89,7 @@ export const applyTraitRouteObjectiveProgress = (
                 traitRouteObjectiveProgressThisFloor: currentProgress,
                 traitRouteObjectiveRewardClaimedThisFloor: run.traitRouteObjectiveRewardClaimedThisFloor,
                 traitRouteObjectiveRewardTextThisFloor: run.traitRouteObjectiveRewardTextThisFloor,
-                traitRouteObjectiveTriggeredTagsThisFloor: [...run.traitRouteObjectiveTriggeredTagsThisFloor]
+                traitRouteObjectiveTriggeredTagsThisFloor: [...triggeredTags]
             },
             comboShardGain: 0,
             scoreBonus: 0,
@@ -113,7 +116,7 @@ export const applyTraitRouteObjectiveProgress = (
             traitRouteObjectiveRewardClaimedThisFloor: claimReward || run.traitRouteObjectiveRewardClaimedThisFloor,
             traitRouteObjectiveRewardTextThisFloor: rewardText ?? run.traitRouteObjectiveRewardTextThisFloor,
             traitRouteObjectiveTriggeredTagsThisFloor: [
-                ...run.traitRouteObjectiveTriggeredTagsThisFloor,
+                ...triggeredTags,
                 ...newTags
             ]
         },

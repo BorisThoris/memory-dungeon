@@ -91,6 +91,16 @@ describe('trait route objectives', () => {
         });
     });
 
+    it('normalizes malformed triggered tags before applying progress', () => {
+        const run = runWithObjective({
+            traitRouteObjectiveTriggeredTagsThisFloor: Number.NaN as unknown as RunState['traitRouteObjectiveTriggeredTagsThisFloor']
+        });
+        const result = applyTraitRouteObjectiveProgress(run, ['echo:sealed-combo']);
+
+        expect(result.runPatch.traitRouteObjectiveTriggeredTagsThisFloor).toEqual(['echo:sealed-combo']);
+        expect(result.comboShardGain).toBe(1);
+    });
+
     it('falls back to score when combo shards are capped and exposes HUD status', () => {
         const run = runWithObjective({
             stats: { ...runWithObjective().stats, comboShards: MAX_COMBO_SHARDS }

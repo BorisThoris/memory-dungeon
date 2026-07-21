@@ -320,6 +320,8 @@ export {
 const nonNegativeRunCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const runStringArray = (value: unknown): string[] => Array.isArray(value) ? value : [];
+
 const flippedTileIdsForRun = (run: RunState): string[] | null =>
     Array.isArray(run.board?.flippedTileIds)
         ? run.board.flippedTileIds.filter((id): id is string => typeof id === 'string')
@@ -654,7 +656,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             relicFavorProgress: routeFavor.relicFavorProgress,
             nBackMatchCounter: followup.nBackMatchCounter,
             nBackAnchorPairKey: followup.nBackAnchorPairKey,
-            matchedPairKeysThisRun: [...run.matchedPairKeysThisRun, scoring.encoreKey],
+            matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],
             pendingRouteCardPlan: followup.pendingRouteCardPlan,
             pinnedTileIds: boardCleanup.pinnedTileIds,
             recallFocus: Math.min(RECALL_FOCUS_MAX, boardCleanup.recallFocus + traitReward.recallFocusGain),
@@ -910,7 +912,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             relicFavorProgress: routeFavor.relicFavorProgress,
             nBackMatchCounter: followup.nBackMatchCounter,
             nBackAnchorPairKey: followup.nBackAnchorPairKey,
-            matchedPairKeysThisRun: [...run.matchedPairKeysThisRun, scoring.encoreKey],
+            matchedPairKeysThisRun: [...runStringArray(run.matchedPairKeysThisRun), scoring.encoreKey],
             pendingRouteCardPlan: followup.pendingRouteCardPlan,
             pinnedTileIds: boardCleanup.pinnedTileIds,
             recallFocus: Math.min(RECALL_FOCUS_MAX, boardCleanup.recallFocus + traitReward.recallFocusGain),
