@@ -61,6 +61,17 @@ export const DEFAULT_SETTINGS: Settings = {
     pairProximityHintsEnabled: true
 };
 
+const DISPLAY_MODE_VALUES = ['windowed', 'fullscreen'] as const satisfies readonly Settings['displayMode'][];
+const GRAPHICS_QUALITY_VALUES = ['low', 'medium', 'high'] as const satisfies readonly Settings['graphicsQuality'][];
+const BOARD_SCREEN_SPACE_AA_VALUES = ['auto', 'smaa', 'msaa', 'off'] as const satisfies readonly Settings['boardScreenSpaceAA'][];
+const BOARD_PRESENTATION_VALUES = ['standard', 'spaghetti', 'breathing'] as const satisfies readonly Settings['boardPresentation'][];
+const CAMERA_VIEWPORT_MODE_PREFERENCE_VALUES = [
+    'auto',
+    'always',
+    'never'
+] as const satisfies readonly Settings['cameraViewportModePreference'][];
+const WEAKER_SHUFFLE_MODE_VALUES = ['full', 'rows_only'] as const satisfies readonly Settings['weakerShuffleMode'][];
+
 type NumericSettingsKey =
     | 'masterVolume'
     | 'musicVolume'
@@ -493,12 +504,8 @@ type SaveDataNormalizationInput = {
 const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settings => {
     const source = input ?? {};
     const debugFlags = isUnknownRecord(source.debugFlags) ? source.debugFlags : {};
-    const boardScreenSpaceAA = source.boardScreenSpaceAA;
-    const graphicsQuality = source.graphicsQuality;
-    const cameraViewportModePreference = source.cameraViewportModePreference;
-    const displayMode = source.displayMode;
-    const weakerShuffleMode = source.weakerShuffleMode;
-    const boardPresentation = source.boardPresentation;
+    const oneOf = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
+        typeof value === 'string' && (allowed as readonly string[]).includes(value) ? (value as T) : fallback;
 
     return {
         masterVolume: finiteClampedNumber(
@@ -516,21 +523,15 @@ const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settin
             DEFAULT_SETTINGS.sfxVolume,
             SETTINGS_NUMERIC_RANGES.sfxVolume
         ),
-        displayMode:
-            displayMode === 'windowed' || displayMode === 'fullscreen' ? displayMode : DEFAULT_SETTINGS.displayMode,
+        displayMode: oneOf(source.displayMode, DISPLAY_MODE_VALUES, DEFAULT_SETTINGS.displayMode),
         uiScale: finiteClampedNumber(source.uiScale, DEFAULT_SETTINGS.uiScale, SETTINGS_NUMERIC_RANGES.uiScale),
         reduceMotion: typeof source.reduceMotion === 'boolean' ? source.reduceMotion : DEFAULT_SETTINGS.reduceMotion,
-        graphicsQuality:
-            graphicsQuality === 'low' || graphicsQuality === 'medium' || graphicsQuality === 'high'
-                ? graphicsQuality
-                : DEFAULT_SETTINGS.graphicsQuality,
-        boardScreenSpaceAA:
-            boardScreenSpaceAA === 'auto' ||
-            boardScreenSpaceAA === 'smaa' ||
-            boardScreenSpaceAA === 'msaa' ||
-            boardScreenSpaceAA === 'off'
-                ? boardScreenSpaceAA
-                : DEFAULT_SETTINGS.boardScreenSpaceAA,
+        graphicsQuality: oneOf(source.graphicsQuality, GRAPHICS_QUALITY_VALUES, DEFAULT_SETTINGS.graphicsQuality),
+        boardScreenSpaceAA: oneOf(
+            source.boardScreenSpaceAA,
+            BOARD_SCREEN_SPACE_AA_VALUES,
+            DEFAULT_SETTINGS.boardScreenSpaceAA
+        ),
         boardBloomEnabled:
             typeof source.boardBloomEnabled === 'boolean'
                 ? source.boardBloomEnabled
@@ -549,16 +550,12 @@ const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settin
                     ? debugFlags.disableAchievementsOnDebug
                     : DEFAULT_SETTINGS.debugFlags.disableAchievementsOnDebug
         },
-        boardPresentation:
-            boardPresentation === 'standard' || boardPresentation === 'spaghetti' || boardPresentation === 'breathing'
-                ? boardPresentation
-                : DEFAULT_SETTINGS.boardPresentation,
-        cameraViewportModePreference:
-            cameraViewportModePreference === 'auto' ||
-            cameraViewportModePreference === 'always' ||
-            cameraViewportModePreference === 'never'
-                ? cameraViewportModePreference
-                : DEFAULT_SETTINGS.cameraViewportModePreference,
+        boardPresentation: oneOf(source.boardPresentation, BOARD_PRESENTATION_VALUES, DEFAULT_SETTINGS.boardPresentation),
+        cameraViewportModePreference: oneOf(
+            source.cameraViewportModePreference,
+            CAMERA_VIEWPORT_MODE_PREFERENCE_VALUES,
+            DEFAULT_SETTINGS.cameraViewportModePreference
+        ),
         tileFocusAssist:
             typeof source.tileFocusAssist === 'boolean' ? source.tileFocusAssist : DEFAULT_SETTINGS.tileFocusAssist,
         resolveDelayMultiplier: finiteClampedNumber(
@@ -566,10 +563,11 @@ const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settin
             DEFAULT_SETTINGS.resolveDelayMultiplier,
             SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier
         ),
-        weakerShuffleMode:
-            weakerShuffleMode === 'full' || weakerShuffleMode === 'rows_only'
-                ? weakerShuffleMode
-                : DEFAULT_SETTINGS.weakerShuffleMode,
+        weakerShuffleMode: oneOf(
+            source.weakerShuffleMode,
+            WEAKER_SHUFFLE_MODE_VALUES,
+            DEFAULT_SETTINGS.weakerShuffleMode
+        ),
         echoFeedbackEnabled:
             typeof source.echoFeedbackEnabled === 'boolean'
                 ? source.echoFeedbackEnabled

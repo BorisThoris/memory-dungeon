@@ -25,7 +25,7 @@ import {
     settingsBoundarySchema,
     SETTINGS_NUMERIC_RANGES
 } from './save-data';
-import type { RunState, RunSummary, SaveData } from './contracts';
+import type { RunState, RunSummary, SaveData, Settings } from './contracts';
 import {
     CURRENT_VERSION_GATE,
     formatVersionGateSummary,
@@ -233,6 +233,34 @@ describe('save normalization', () => {
             }
         });
         expect(saveData.settings.boardPresentation).toBe(DEFAULT_SETTINGS.boardPresentation);
+    });
+
+    it('normalizes every persisted string-union setting through the same allowlist boundary', () => {
+        const cases = [
+            { key: 'displayMode', valid: 'fullscreen', invalid: 'kiosk' },
+            { key: 'graphicsQuality', valid: 'high', invalid: 'ultra' },
+            { key: 'boardScreenSpaceAA', valid: 'msaa', invalid: 'txaa' },
+            { key: 'boardPresentation', valid: 'breathing', invalid: 'wide' },
+            { key: 'cameraViewportModePreference', valid: 'never', invalid: 'sometimes' },
+            { key: 'weakerShuffleMode', valid: 'rows_only', invalid: 'columns_only' }
+        ] as const satisfies readonly {
+            key: keyof Settings;
+            valid: string;
+            invalid: string;
+        }[];
+
+        for (const { key, valid, invalid } of cases) {
+            expect(normalizeUnknownSettings({ [key]: valid })[key], `${key} valid raw setting`).toBe(valid);
+            expect(normalizeUnknownSettings({ [key]: invalid })[key], `${key} invalid raw setting`).toBe(
+                DEFAULT_SETTINGS[key]
+            );
+            expect(
+                normalizeSaveData({
+                    settings: { ...DEFAULT_SETTINGS, [key]: invalid } as Settings
+                }).settings[key],
+                `${key} invalid save setting`
+            ).toBe(DEFAULT_SETTINGS[key]);
+        }
     });
 
     it('keeps the relic shrine upgrade claim-driven when seven-dailies progress is present', () => {
