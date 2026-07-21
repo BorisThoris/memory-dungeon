@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_GUARD_TOKENS, MAX_LIVES } from './contracts';
+import { MAX_GUARD_TOKENS, MAX_LIVES, type RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { createRestShrineServices, getRestShrineReadModel, purchaseRestShrineService } from './rest-shrine';
 
@@ -111,5 +111,20 @@ describe('REG-073 rest shrine services', () => {
         expect(favored.run.relicFavorProgress).toBe(1);
         expect(favored.run.bonusRelicPicksNextOffer).toBe(0);
         expect(favored.run.favorBonusRelicPicksNextOffer).toBe(0);
+    });
+
+    it('normalizes malformed stat records before service availability and ids', () => {
+        const run = {
+            ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
+            board: null,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        const services = createRestShrineServices(run);
+
+        expect(services.find((service) => service.serviceId === 'guard_focus')).toMatchObject({
+            available: true,
+            unavailableReason: null
+        });
+        expect(services[0]?.id).toContain(':1:rest:0');
     });
 });

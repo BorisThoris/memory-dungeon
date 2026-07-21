@@ -1,4 +1,5 @@
 import { MAX_GUARD_TOKENS, MAX_LIVES, type RunState } from './contracts';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type RestShrineServiceId = 'rest_heal' | 'guard_focus' | 'shrine_bargain' | 'boss_ward';
 export type RestShrineRisk = 'safe' | 'risk';
@@ -68,10 +69,11 @@ const nonNegativeRestShrineCount = (value: unknown): number =>
 export const createRestShrineServices = (run: RunState): RestShrineServiceState[] =>
     (Object.keys(REST_SHRINE_SERVICE_CATALOG) as RestShrineServiceId[]).map((serviceId, index) => {
         const base = REST_SHRINE_SERVICE_CATALOG[serviceId];
+        const stats = normalizeSessionStats(run.stats);
         const unavailableReason =
             serviceId === 'rest_heal' && nonNegativeRestShrineCount(run.lives) >= MAX_LIVES
                 ? 'Life already full.'
-                : serviceId === 'guard_focus' && nonNegativeRestShrineCount(run.stats.guardTokens) >= MAX_GUARD_TOKENS
+                : serviceId === 'guard_focus' && stats.guardTokens >= MAX_GUARD_TOKENS
                   ? 'Guard bank full.'
                   : serviceId === 'boss_ward' && nonNegativeRestShrineCount(run.dungeonMasterKeys) > 0
                     ? 'Master key already held.'
@@ -79,7 +81,7 @@ export const createRestShrineServices = (run: RunState): RestShrineServiceState[
         const available = unavailableReason == null;
         return {
             ...base,
-            id: `${run.runRulesVersion}:${run.runSeed}:${run.board?.level ?? run.stats.highestLevel}:rest:${index}`,
+            id: `${run.runRulesVersion}:${run.runSeed}:${run.board?.level ?? stats.highestLevel}:rest:${index}`,
             available,
             unavailableReason,
             purchased: false

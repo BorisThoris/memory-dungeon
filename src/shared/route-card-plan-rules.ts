@@ -1,11 +1,12 @@
 import type { RouteCardPlan, RouteChoice, RouteNodeType, RunState } from './contracts';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export const createRouteCardPlanForRoute = (
     run: RunState,
     routeType: RouteNodeType,
     choiceId: string
 ): RouteCardPlan => {
-    const sourceLevel = run.lastLevelResult?.level ?? run.board?.level ?? run.stats.highestLevel;
+    const sourceLevel = run.lastLevelResult?.level ?? run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
     return {
         choiceId,
         routeType,

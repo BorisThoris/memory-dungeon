@@ -12,6 +12,7 @@ import {
 } from './contracts';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { gainRunInventoryItem } from './run-inventory';
+import { normalizeSessionStats } from './session-stats-rules';
 import {
     getTileTraitInteractionPreviewLines,
     hasTraitSwapSetupOpportunity
@@ -309,7 +310,7 @@ const loadoutStockBias = (run: RunState): RunShopItemId[] => {
 };
 
 export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
-    const level = run.board?.level ?? run.stats.highestLevel;
+    const level = run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
     const source: RunShopSource = run.board?.dungeonShopTileId ? 'board_shop' : 'floor_clear_shop';
     const routeType = run.board?.routeWorldProfile?.routeType ?? run.pendingRouteCardPlan?.routeType ?? null;
     const itemIds: RunShopItemId[] = routeStockTemplate(routeType, source, run.shopRerolls);
@@ -380,7 +381,7 @@ export const getShopWalletPacing = (run: RunState): {
     sinkCostTotal: number;
     conversionAtRunEnd: 'unspent_shop_gold_expires';
 } => {
-    const level = run.board?.level ?? run.stats.highestLevel;
+    const level = run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
     return {
         earnedThisFloor: getShopGoldRewardForFloor(level),
         totalWallet: nonNegativeShopCount(run.shopGold),
@@ -395,7 +396,7 @@ export const getRunShopWalletPacing = (run: RunState): {
     sinkCostTotal: number;
     conversionAtRunEnd: 'unspent_shop_gold_expires';
 } => ({
-    earnedThisFloor: getShopGoldRewardForFloor(run.board?.level ?? run.stats.highestLevel),
+    earnedThisFloor: getShopGoldRewardForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel),
     totalWallet: nonNegativeShopCount(run.shopGold),
     sinkCostTotal: runShopOffers(run.shopOffers).reduce((sum, offer) => sum + offer.cost, 0),
     conversionAtRunEnd: 'unspent_shop_gold_expires'
@@ -468,7 +469,7 @@ export const createRunShopOffers = (run: RunState): RunShopOfferState[] => {
 export const canRerollShopOffers = (run: RunState): boolean =>
     runShopOffers(run.shopOffers).length > 0 &&
     nonNegativeShopCount(run.shopRerolls) < 1 &&
-    nonNegativeShopCount(run.shopGold) >= getShopRerollCostForFloor(run.board?.level ?? run.stats.highestLevel);
+    nonNegativeShopCount(run.shopGold) >= getShopRerollCostForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel);
 
 export const getRunShopReadModel = (run: RunState): RunShopReadModel => {
     const plan = getRunShopStockPlan(run);
@@ -496,7 +497,7 @@ export const rerollShopOffers = (run: RunState): RunState => {
     if (!canRerollShopOffers(run)) {
         return run;
     }
-    const cost = getShopRerollCostForFloor(run.board?.level ?? run.stats.highestLevel);
+    const cost = getShopRerollCostForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel);
     const nextRun = { ...run, shopGold: nonNegativeShopCount(run.shopGold) - cost, shopRerolls: nonNegativeShopCount(run.shopRerolls) + 1 };
     return { ...nextRun, shopOffers: createRunShopOffers(nextRun) };
 };

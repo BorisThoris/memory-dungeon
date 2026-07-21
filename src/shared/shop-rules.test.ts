@@ -369,6 +369,21 @@ describe('shop rules', () => {
         expect(rerolled.shopRerolls).toBe(1);
     });
 
+    it('normalizes malformed stat records before boardless shop level fallbacks', () => {
+        const run = {
+            ...makePlayingRun(),
+            board: null,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(getRunShopStockPlan(run)).toMatchObject({
+            level: 1,
+            rerollCost: getShopRerollCostForFloor(1)
+        });
+        expect(getShopWalletPacing(run).earnedThisFloor).toBe(getShopGoldRewardForFloor(1));
+        expect(getRunShopWalletPacing(run).earnedThisFloor).toBe(getShopGoldRewardForFloor(1));
+    });
+
     it('purchases typed key offers into matching run key inventory', () => {
         const run = { ...makePlayingRun(), shopGold: 10 };
         const offer = {
