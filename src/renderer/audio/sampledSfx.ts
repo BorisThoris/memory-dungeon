@@ -34,6 +34,12 @@ export const SFX_SAMPLE_KEYS = [
     'wager-arm'
 ] as const satisfies readonly SfxSampleKey[];
 
+export const MATCH_TIER_SAMPLE_KEYS = [
+    'match-tier-low',
+    'match-tier-mid',
+    'match-tier-high'
+] as const satisfies readonly SfxSampleKey[];
+
 const globUrls = import.meta.glob<string>('../assets/audio/sfx/*.ogg', {
     eager: true,
     query: '?url',
@@ -99,8 +105,8 @@ function urlForFilename(filename: string): string | undefined {
 export function resolveMatchTierSampleKey(chainDepth: number): SfxSampleKey {
     const t = Math.max(1, Math.min(chainDepth, 14));
     const ranges = manifest.matchTierDepthRanges;
-    const entries = Object.entries(ranges) as [SfxSampleKey, [number, number]][];
-    for (const [key, [lo, hi]] of entries) {
+    for (const key of MATCH_TIER_SAMPLE_KEYS) {
+        const [lo, hi] = ranges[key];
         if (t >= lo && t <= hi) {
             return key;
         }

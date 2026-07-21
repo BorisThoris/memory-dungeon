@@ -26,7 +26,7 @@ import {
     playWagerArmSfx,
     sfxGainFromSettings
 } from './gameSfx';
-import { preloadSampledSfx, SFX_SAMPLE_KEYS } from './sampledSfx';
+import { MATCH_TIER_SAMPLE_KEYS, preloadSampledSfx, resolveMatchTierSampleKey, SFX_SAMPLE_KEYS } from './sampledSfx';
 
 describe('gameSfx', () => {
     const oscillators: {
@@ -1443,6 +1443,7 @@ describe('gameSfx', () => {
 
     it('keeps sampled gameplay coverage backed by manifest entries and files', () => {
         expect(Object.keys(sfxManifest.entries)).toEqual([...SFX_SAMPLE_KEYS]);
+        expect(Object.keys(sfxManifest.matchTierDepthRanges)).toEqual([...MATCH_TIER_SAMPLE_KEYS]);
         const manifestKeys = new Set(SFX_SAMPLE_KEYS);
         const sfxAssetDir = path.resolve(process.cwd(), 'src/renderer/assets/audio/sfx');
 
@@ -1460,6 +1461,16 @@ describe('gameSfx', () => {
             const assetPath = path.join(sfxAssetDir, entry.file);
             expect(fs.existsSync(assetPath), `manifest key ${key} points to missing file ${entry.file}`).toBe(true);
         }
+    });
+
+    it('resolves sampled match tiers through the explicit tier order', () => {
+        expect(resolveMatchTierSampleKey(Number.NaN)).toBe('match-tier-low');
+        expect(resolveMatchTierSampleKey(1)).toBe('match-tier-low');
+        expect(resolveMatchTierSampleKey(5)).toBe('match-tier-low');
+        expect(resolveMatchTierSampleKey(6)).toBe('match-tier-mid');
+        expect(resolveMatchTierSampleKey(10)).toBe('match-tier-mid');
+        expect(resolveMatchTierSampleKey(11)).toBe('match-tier-high');
+        expect(resolveMatchTierSampleKey(99)).toBe('match-tier-high');
     });
 
     it('keeps the countdown pressure cue covered by first-run asset checks', () => {
