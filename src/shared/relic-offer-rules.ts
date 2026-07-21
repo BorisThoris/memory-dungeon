@@ -18,6 +18,8 @@ export const MAX_RELIC_PICKS_PER_OFFER = 3;
 const nonNegativeFiniteInteger = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const runRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
+
 const recurringRelicPickBonusCount = (run: RunState): number => {
     let n = 0;
     if (hasMutator(run, 'generous_shrine')) {
@@ -99,7 +101,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
 
     let next: RunState = {
         ...run,
-        relicIds: [...run.relicIds, relicId]
+        relicIds: [...runRelicIds(run.relicIds), relicId]
     };
     next = applyRelicImmediate(next, relicId);
 

@@ -132,6 +132,21 @@ describe('relic-offer-rules', () => {
         expect(result.run.relicOffer?.pickRound).toBe(1);
     });
 
+    it('normalizes malformed relic ids before appending selected relics', () => {
+        const opened = openRelicOffer(levelCompleteRun({
+            relicIds: Number.NaN as unknown as RunState['relicIds']
+        }));
+        const relicId = opened.relicOffer!.options[0]!;
+
+        const result = createRelicPickAdvanceResult(opened, relicId);
+
+        expect(result.kind).toBe('advanceToNextLevel');
+        if (result.kind !== 'advanceToNextLevel') {
+            return;
+        }
+        expect(result.run.relicIds).toEqual([relicId]);
+    });
+
     it('normalizes malformed claimed tier counters before finalizing an offer', () => {
         const opened = openRelicOffer(levelCompleteRun());
         const relicId = opened.relicOffer!.options[0]!;
