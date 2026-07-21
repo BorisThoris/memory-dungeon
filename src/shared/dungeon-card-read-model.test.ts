@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { BoardState, DungeonCardEffectId, RunState, Tile } from './contracts';
-import { DUNGEON_CARD_EFFECT_DEFINITIONS } from './dungeon-cards';
+import { DUNGEON_CARD_EFFECT_DEFINITIONS, DUNGEON_CARD_EFFECT_ORDER } from './dungeon-cards';
 import {
     DUNGEON_ROOM_EFFECT_DEFINITIONS,
     getDungeonCardCopy,
@@ -26,11 +26,12 @@ const roomTile = (effectId: Tile['dungeonCardEffectId'], overrides: Partial<Tile
 
 describe('dungeon card read models', () => {
     it('covers every room effect id from the dungeon card catalog', () => {
-        const roomEffectIds = Object.values(DUNGEON_CARD_EFFECT_DEFINITIONS)
+        const roomEffectIds = DUNGEON_CARD_EFFECT_ORDER
+            .map((effectId) => DUNGEON_CARD_EFFECT_DEFINITIONS[effectId])
             .filter((definition) => definition.kind === 'room')
             .map((definition) => definition.effectId);
 
-        expect(Object.keys(DUNGEON_ROOM_EFFECT_DEFINITIONS).sort()).toEqual([...roomEffectIds].sort());
+        expect(Object.keys(DUNGEON_ROOM_EFFECT_DEFINITIONS)).toEqual([...roomEffectIds]);
     });
 
     it.each(['__proto__', 'constructor', 'toString'])('rejects prototype room effect id %s', (effectId) => {

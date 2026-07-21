@@ -66,15 +66,6 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
         resolvedState: 'one_shot_resolved',
         blockedText: null
     },
-    room_armory: {
-        effectId: 'room_armory',
-        label: 'Guard Armory',
-        trigger: 'reveal',
-        costText: 'No cost.',
-        rewardText: 'Grants Guard and advances safe-hazard protection.',
-        resolvedState: 'one_shot_resolved',
-        blockedText: null
-    },
     room_forge: {
         effectId: 'room_forge',
         label: 'Memory Forge',
@@ -102,12 +93,12 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
         resolvedState: 'one_shot_resolved',
         blockedText: null
     },
-    room_key_cache: {
-        effectId: 'room_key_cache',
-        label: 'Key Cache',
+    room_armory: {
+        effectId: 'room_armory',
+        label: 'Guard Armory',
         trigger: 'reveal',
         costText: 'No cost.',
-        rewardText: 'Grants an iron key and a small score cache.',
+        rewardText: 'Grants Guard and advances safe-hazard protection.',
         resolvedState: 'one_shot_resolved',
         blockedText: null
     },
@@ -119,6 +110,15 @@ export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, Dungeo
         rewardText: 'Pays a large score and gold cache.',
         resolvedState: 'key_gated_until_paid',
         blockedText: 'Needs a matching key or master key.'
+    },
+    room_key_cache: {
+        effectId: 'room_key_cache',
+        label: 'Key Cache',
+        trigger: 'reveal',
+        costText: 'No cost.',
+        rewardText: 'Grants an iron key and a small score cache.',
+        resolvedState: 'one_shot_resolved',
+        blockedText: null
     },
     room_trap_workshop: {
         effectId: 'room_trap_workshop',
