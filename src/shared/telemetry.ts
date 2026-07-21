@@ -96,7 +96,11 @@ const looksLikeAbsolutePath = (value: string): boolean => {
 
 export const scrubTelemetryPayload = (payload: TelemetryPayload): TelemetryPayload => {
     const out: TelemetryPayload = Object.create(null);
-    for (const [key, raw] of Object.entries(payload)) {
+    for (const key in payload) {
+        if (!Object.prototype.hasOwnProperty.call(payload, key)) {
+            continue;
+        }
+        const raw = payload[key];
         if (FORBIDDEN_TELEMETRY_KEYS.has(key.toLowerCase())) {
             continue;
         }
