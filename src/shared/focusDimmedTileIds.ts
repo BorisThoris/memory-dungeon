@@ -11,7 +11,7 @@ export const computeFocusDimmedTileIds = (
     if (!board || !tileFocusAssist || runStatus !== 'playing') {
         return undefined;
     }
-    if (board.flippedTileIds.length !== 1) {
+    if (!Array.isArray(board.flippedTileIds) || board.flippedTileIds.length !== 1) {
         return undefined;
     }
     const openId = board.flippedTileIds[0];

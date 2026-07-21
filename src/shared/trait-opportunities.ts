@@ -159,7 +159,7 @@ export const getTraitOpportunityTileIds = (board: BoardState | null | undefined)
     new Set(getTraitOpportunitySummary(board).tiles.map((tile) => tile.tileId));
 
 export const getSelectedTraitFollowupTileIds = (board: BoardState | null | undefined): Set<string> => {
-    if (!board || board.flippedTileIds.length !== 1) {
+    if (!board || !Array.isArray(board.flippedTileIds) || board.flippedTileIds.length !== 1) {
         return new Set();
     }
 

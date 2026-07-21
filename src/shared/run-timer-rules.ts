@@ -94,7 +94,7 @@ export const resumeRun = (run: RunState): RunState => {
                 }
             };
         }
-        if (run.board.flippedTileIds.length < 2) {
+        if (!Array.isArray(run.board.flippedTileIds) || run.board.flippedTileIds.length < 2) {
             return {
                 ...run,
                 status: 'playing',

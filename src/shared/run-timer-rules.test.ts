@@ -77,6 +77,22 @@ describe('run timer rules', () => {
         const noFlips = resumeRun(noFlipsPause);
         expect(noFlips.status).toBe('playing');
         expect(noFlips.timerState.resolveRemainingMs).toBeNull();
+
+        const malformedFlipsPause: RunState = {
+            ...playing,
+            status: 'paused',
+            board: playing.board
+                ? { ...playing.board, flippedTileIds: Number.NaN as unknown as string[] }
+                : playing.board,
+            timerState: {
+                ...playing.timerState,
+                pausedFromStatus: 'resolving',
+                resolveRemainingMs: 120
+            }
+        };
+        const malformedFlips = resumeRun(malformedFlipsPause);
+        expect(malformedFlips.status).toBe('playing');
+        expect(malformedFlips.timerState.resolveRemainingMs).toBeNull();
     });
 
     it('extends gauntlet deadlines by paused wall-clock time', () => {

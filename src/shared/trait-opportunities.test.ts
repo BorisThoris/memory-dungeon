@@ -214,6 +214,12 @@ describe('trait opportunities', () => {
                 tiles: b.tiles.map((row) => (row.id === 'plain-a' ? { ...row, state: 'flipped' as const } : row))
             })
         ]).toEqual([]);
+        expect([
+            ...getSelectedTraitFollowupTileIds({
+                ...b,
+                flippedTileIds: Number.NaN as unknown as string[]
+            })
+        ]).toEqual([]);
     });
 
     it('explains whether a tile swap creates or breaks a trait route', () => {

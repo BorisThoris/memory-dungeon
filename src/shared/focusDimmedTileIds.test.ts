@@ -110,4 +110,25 @@ describe('computeFocusDimmedTileIds', () => {
         };
         expect(computeFocusDimmedTileIds(board, 'playing', true)).toBeUndefined();
     });
+
+    it('returns undefined when flippedTileIds is malformed', () => {
+        const board: BoardState = {
+            level: 1,
+            pairCount: 2,
+            columns: 2,
+            rows: 2,
+            tiles: [
+                tile('a', 'A', 'flipped'),
+                tile('b', 'A', 'hidden'),
+                tile('c', 'B', 'hidden'),
+                tile('d', 'B', 'hidden')
+            ],
+            flippedTileIds: Number.NaN as unknown as string[],
+            matchedPairs: 0,
+            floorArchetypeId: null,
+            featuredObjectiveId: null
+        };
+
+        expect(computeFocusDimmedTileIds(board, 'playing', true)).toBeUndefined();
+    });
 });

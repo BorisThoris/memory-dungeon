@@ -10,7 +10,7 @@ export interface GambitMatchedPairSelection {
 export const selectGambitMatchedPair = (
     board: Pick<BoardState, 'flippedTileIds' | 'tiles'>
 ): GambitMatchedPairSelection | null => {
-    if (board.flippedTileIds.length !== 3) {
+    if (!Array.isArray(board.flippedTileIds) || board.flippedTileIds.length !== 3) {
         return null;
     }
     const [aId, bId, cId] = board.flippedTileIds;
