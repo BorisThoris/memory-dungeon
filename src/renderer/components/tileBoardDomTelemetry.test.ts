@@ -571,4 +571,40 @@ describe('tile board DOM telemetry helpers', () => {
             ]
         });
     });
+
+    it('serializes only complete dev pairs in tile order', () => {
+        const mixedBoard: BoardState = {
+            ...board,
+            pairCount: 4,
+            columns: 3,
+            rows: 3,
+            tiles: [
+                { id: 'z1', pairKey: 'Z', symbol: 'Z', label: 'Z', state: 'hidden' },
+                { id: 'a1', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
+                { id: 'a2', pairKey: 'A', symbol: 'A', label: 'A', state: 'hidden' },
+                { id: 'b1', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' },
+                { id: 'b2', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' },
+                { id: 'b3', pairKey: 'B', symbol: 'B', label: 'B', state: 'hidden' },
+                { id: 'c1', pairKey: 'C', symbol: 'C', label: 'C', state: 'hidden' },
+                { id: 'c2', pairKey: 'C', symbol: 'C', label: 'C', state: 'hidden' },
+                { id: 'y1', pairKey: 'Y', symbol: 'Y', label: 'Y', state: 'hidden' }
+            ]
+        };
+        const parsed = JSON.parse(getDevE2ePairPositionsJson(mixedBoard, true) ?? '{}') as Record<
+            string,
+            { row: number; col: number }[]
+        >;
+
+        expect(Object.keys(parsed)).toEqual(['A', 'C']);
+        expect(parsed).toEqual({
+            A: [
+                { row: 1, col: 2 },
+                { row: 1, col: 3 }
+            ],
+            C: [
+                { row: 3, col: 1 },
+                { row: 3, col: 2 }
+            ]
+        });
+    });
 });
