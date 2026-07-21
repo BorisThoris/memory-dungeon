@@ -10,6 +10,32 @@ export const ACHIEVEMENT_BY_ID: Record<AchievementId, AchievementDefinition> = A
 
 export const ACHIEVEMENTS: AchievementDefinition[] = ACHIEVEMENT_IDS.map((id) => ACHIEVEMENT_BY_ID[id]);
 
+export interface AchievementProgressRow {
+    id: AchievementId;
+    earned: boolean;
+}
+
+export interface AchievementProgressSummary {
+    earned: number;
+    total: number;
+}
+
+const achievementStateRecord = (input: unknown): Record<string, unknown> =>
+    input !== null && typeof input === 'object' && !Array.isArray(input) ? input as Record<string, unknown> : {};
+
+export const getAchievementProgressRows = (input: unknown): AchievementProgressRow[] => {
+    const state = achievementStateRecord(input);
+    return ACHIEVEMENT_IDS.map((id) => ({ id, earned: state[id] === true }));
+};
+
+export const getAchievementProgressSummary = (input: unknown): AchievementProgressSummary => {
+    const rows = getAchievementProgressRows(input);
+    return {
+        earned: rows.filter((row) => row.earned).length,
+        total: rows.length
+    };
+};
+
 const nonNegativeAchievementCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 

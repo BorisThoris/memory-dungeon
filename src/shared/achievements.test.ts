@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { AchievementId, RunState } from './contracts';
-import { ACHIEVEMENT_BY_ID, ACHIEVEMENTS, evaluateAchievementUnlocks } from './achievements';
+import {
+    ACHIEVEMENT_BY_ID,
+    ACHIEVEMENTS,
+    evaluateAchievementUnlocks,
+    getAchievementProgressRows,
+    getAchievementProgressSummary
+} from './achievements';
 import { createNewRun } from './game-core';
 import { ACHIEVEMENT_IDS, createDefaultSaveData, createAchievementState } from './save-data';
 
@@ -21,6 +27,23 @@ describe('achievement catalog copy', () => {
         expect(Object.keys(ACHIEVEMENT_BY_ID).sort()).toEqual([...ACHIEVEMENT_IDS].sort());
         expect(ACHIEVEMENTS.map((row) => row.id)).toEqual([...ACHIEVEMENT_IDS]);
         expect(Object.keys(createAchievementState()).sort()).toEqual([...ACHIEVEMENT_IDS].sort());
+    });
+
+    it('builds bounded progress rows in achievement order', () => {
+        const state = {
+            ACH_FIRST_CLEAR: true,
+            ACH_LEVEL_FIVE: 'yes',
+            ACH_SCORE_THOUSAND: false,
+            BAD_ACHIEVEMENT: true
+        };
+        const rows = getAchievementProgressRows(state);
+
+        expect(rows.map((row) => row.id)).toEqual([...ACHIEVEMENT_IDS]);
+        expect(rows.find((row) => row.id === 'ACH_FIRST_CLEAR')?.earned).toBe(true);
+        expect(rows.find((row) => row.id === 'ACH_LEVEL_FIVE')?.earned).toBe(false);
+        expect(rows.find((row) => row.id === 'ACH_SCORE_THOUSAND')?.earned).toBe(false);
+        expect(getAchievementProgressSummary(state)).toEqual({ earned: 1, total: ACHIEVEMENT_IDS.length });
+        expect(getAchievementProgressSummary(['ACH_FIRST_CLEAR'])).toEqual({ earned: 0, total: ACHIEVEMENT_IDS.length });
     });
 });
 

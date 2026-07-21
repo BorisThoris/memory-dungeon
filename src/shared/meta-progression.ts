@@ -1,3 +1,4 @@
+import { getAchievementProgressSummary } from './achievements';
 import type { SaveData } from './contracts';
 import {
     COSMETIC_CATALOG,
@@ -150,8 +151,7 @@ const META_PROGRESS_MILESTONES: Array<{
 ];
 
 export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceRow[] => {
-    const achievements = Object.values(save.achievements).filter(Boolean).length;
-    const achievementTotal = Object.keys(save.achievements).length;
+    const achievementProgress = getAchievementProgressSummary(save.achievements);
     const dailies = Math.min(7, nonNegativeMetaProgressionCount(save.playerStats?.dailiesCompleted));
     const noPowers = Math.min(5, nonNegativeMetaProgressionCount(save.playerStats?.bestFloorNoPowers));
     const relics = Math.min(10, getRelicPickTotal(save.playerStats?.relicPickCounts));
@@ -160,11 +160,11 @@ export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceR
         {
             id: 'achievements',
             label: 'Achievements',
-            marks: achievements * 2,
-            cap: achievementTotal * 2,
-            progress: { current: achievements, target: achievementTotal },
-            nextMarkCopy: achievements < achievementTotal ? 'Earn one more achievement for 2 honor marks.' : null,
-            nextMarkUnitsRemaining: achievements < achievementTotal ? 1 : null
+            marks: achievementProgress.earned * 2,
+            cap: achievementProgress.total * 2,
+            progress: { current: achievementProgress.earned, target: achievementProgress.total },
+            nextMarkCopy: achievementProgress.earned < achievementProgress.total ? 'Earn one more achievement for 2 honor marks.' : null,
+            nextMarkUnitsRemaining: achievementProgress.earned < achievementProgress.total ? 1 : null
         },
         {
             id: 'daily_archive',
