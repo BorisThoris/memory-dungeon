@@ -13,7 +13,7 @@ import {
 import { buildBoard, countFindablePairs } from './board-generation';
 import { countReachableExitKeySources, getEffectivePrimaryExitLock, inspectBoardFairness } from './board-inspection';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
-import { getShopGoldRewardForFloor, SHOP_ITEM_CATALOG } from './shop-rules';
+import { getShopGoldRewardForFloor, getShopItemCatalogRows, SHOP_ITEM_CATALOG } from './shop-rules';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { RELIC_DRAFT, RELIC_POOL, type RelicDraftRarity } from './relics';
 import {
@@ -476,7 +476,7 @@ export const runBalanceSimulation = ({
     const safeFloors = Math.max(1, Math.floor(floors));
     const safeSeeds = seeds && seeds.length > 0 ? [...seeds] : [seed ?? 0];
     const floorNumbers = Array.from({ length: safeFloors }, (_, index) => index + 1);
-    const shopSinkPerVisit = Object.values(SHOP_ITEM_CATALOG)
+    const shopSinkPerVisit = getShopItemCatalogRows()
         .filter((item) => !ALTERNATE_LOCK_KEY_SHOP_ITEMS.has(item.itemId))
         .reduce((sum, item) => sum + item.baseCost, 0);
     const samples = safeSeeds.flatMap((sampleSeed) =>

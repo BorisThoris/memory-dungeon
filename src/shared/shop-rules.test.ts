@@ -10,11 +10,13 @@ import {
     getRunShopWalletPacing,
     getRunShopStockPlan,
     getShopGoldRewardForFloor,
+    getShopItemCatalogRows,
     getShopRerollCostForFloor,
     getShopWalletPacing,
     purchaseShopOffer,
     rerollShopOffers,
-    SHOP_ITEM_CATALOG
+    SHOP_ITEM_CATALOG,
+    SHOP_ITEM_IDS
 } from './shop-rules';
 
 const makePlayingRun = () => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 4242 }));
@@ -28,6 +30,11 @@ const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Til
 });
 
 describe('shop rules', () => {
+    it('keeps shop item catalog rows aligned with the shared item order', () => {
+        expect(Object.keys(SHOP_ITEM_CATALOG)).toEqual([...SHOP_ITEM_IDS]);
+        expect(getShopItemCatalogRows().map((item) => item.itemId)).toEqual([...SHOP_ITEM_IDS]);
+    });
+
     it('defines deterministic floor rewards, reroll cost, and stock plans', () => {
         expect(getShopGoldRewardForFloor(1)).toBe(2);
         expect(getShopGoldRewardForFloor(99)).toBe(8);

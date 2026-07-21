@@ -32,6 +32,21 @@ export const SHOP_KEY_ITEM_BY_KIND: Record<DungeonKeyKind, RunShopItemId> = {
     trap: 'trap_key'
 };
 
+export const SHOP_ITEM_IDS = [
+    'heal_life',
+    'peek_charge',
+    'region_shuffle_charge',
+    'destroy_charge',
+    'trait_cleanse',
+    'trait_routing_kit',
+    'iron_key',
+    'treasure_key',
+    'shrine_key',
+    'boss_key',
+    'trap_key',
+    'master_key'
+] as const satisfies readonly RunShopItemId[];
+
 export const SHOP_ITEM_CATALOG: Record<
     RunShopItemId,
     Omit<RunShopOfferState, 'id' | 'purchased' | 'compatible' | 'unavailableReason'>
@@ -181,6 +196,8 @@ export const SHOP_ITEM_CATALOG: Record<
         stackLimit: null
     }
 };
+
+export const getShopItemCatalogRows = () => SHOP_ITEM_IDS.map((itemId) => SHOP_ITEM_CATALOG[itemId]);
 
 export const getShopGoldRewardForFloor = (level: number): number =>
     Math.min(8, FLOOR_CLEAR_GOLD_BASE + Math.max(0, Math.floor(level) - 1));
