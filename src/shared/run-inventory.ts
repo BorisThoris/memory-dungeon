@@ -4,6 +4,7 @@ import {
     MAX_GUARD_TOKENS,
     type RunState
 } from './contracts';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunInventoryItemId =
     | 'shuffle_charge'
@@ -554,15 +555,21 @@ export const gainRunInventoryItem = (
         case 'master_key':
             return { ...run, dungeonMasterKeys: nonNegativeQuantity(run.dungeonMasterKeys) + gain };
         case 'guard_token':
-            return {
-                ...run,
-                stats: { ...run.stats, guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeQuantity(run.stats.guardTokens) + gain) }
-            };
+            {
+                const stats = normalizeSessionStats(run.stats);
+                return {
+                    ...run,
+                    stats: { ...stats, guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeQuantity(stats.guardTokens) + gain) }
+                };
+            }
         case 'combo_shard':
-            return {
-                ...run,
-                stats: { ...run.stats, comboShards: Math.min(MAX_COMBO_SHARDS, nonNegativeQuantity(run.stats.comboShards) + gain) }
-            };
+            {
+                const stats = normalizeSessionStats(run.stats);
+                return {
+                    ...run,
+                    stats: { ...stats, comboShards: Math.min(MAX_COMBO_SHARDS, nonNegativeQuantity(stats.comboShards) + gain) }
+                };
+            }
         default:
             return run;
     }

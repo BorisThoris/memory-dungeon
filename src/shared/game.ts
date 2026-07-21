@@ -90,7 +90,7 @@ import { resolveTurnMatchProgress } from './turn-match-progress-rules';
 import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
-import { addTileTraitCountStats } from './session-stats-rules';
+import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 export {
     completeRelicPickAndAdvance
 } from './relic-pick-advance-rules';
@@ -331,10 +331,11 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     const floorClearHazards = applyFloorClearEnemyHazardDefeats(run, board);
     run = floorClearHazards.run;
     board = floorClearHazards.board;
-    const tries = nonNegativeRunCount(run.stats.tries);
+    const stats = normalizeSessionStats(run.stats);
+    const tries = nonNegativeRunCount(stats.tries);
     const livesBeforeClear = nonNegativeRunCount(run.lives);
-    const currentLevelScoreBeforeClear = nonNegativeRunCount(run.stats.currentLevelScore);
-    const totalScoreBeforeClear = nonNegativeRunCount(run.stats.totalScore);
+    const currentLevelScoreBeforeClear = nonNegativeRunCount(stats.currentLevelScore);
+    const totalScoreBeforeClear = nonNegativeRunCount(stats.totalScore);
     const perfect = tries === 0;
     const clearLifeReason = getClearLifeReason(tries);
     const clearLifeGained = clearLifeReason !== 'none' && livesBeforeClear < MAX_LIVES ? 1 : 0;
@@ -366,7 +367,7 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     bonusTags.push(...getDungeonLevelResultTags(run, board, perfect));
     const bankedScoreBeforeClear = Math.max(0, totalScoreBeforeClear - currentLevelScoreBeforeClear);
     const totalScore = bankedScoreBeforeClear + scoreGained;
-    const bestScore = Math.max(nonNegativeRunCount(run.stats.bestScore), totalScore);
+    const bestScore = Math.max(nonNegativeRunCount(stats.bestScore), totalScore);
     const rating = calculateRating(tries);
     const lives = Math.min(MAX_LIVES, livesBeforeClear + clearLifeGained);
     const totalRelicFavorGained =
@@ -436,22 +437,18 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
         stickyBlockIndex: null,
         dungeonRun,
         stats: {
-            ...run.stats,
+            ...stats,
             totalScore,
             bestScore,
             currentLevelScore: scoreGained,
             rating,
-            levelsCleared: nonNegativeRunCount(run.stats.levelsCleared) + 1,
-            highestLevel: Math.max(nonNegativeRunCount(run.stats.highestLevel), board.level),
+            levelsCleared: nonNegativeRunCount(stats.levelsCleared) + 1,
+            highestLevel: Math.max(nonNegativeRunCount(stats.highestLevel), board.level),
             perfectClears: perfect
-                ? nonNegativeRunCount(run.stats.perfectClears) + 1
-                : nonNegativeRunCount(run.stats.perfectClears)
+                ? nonNegativeRunCount(stats.perfectClears) + 1
+                : nonNegativeRunCount(stats.perfectClears)
         },
-        timerState: {
-            ...run.timerState,
-            resolveRemainingMs: null,
-            pausedFromStatus: null
-        },
+        timerState: clearResolveState(run),
         lastLevelResult
     };
 };
@@ -632,6 +629,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             resolvedDungeonTraps: dungeonTrapResolvedDelta,
             usedDungeonGateways: dungeonReward.gatewaysUsed
         });
+        const stats = normalizeSessionStats(run.stats);
 
         const nextRun: RunState = {
             ...run,
@@ -667,7 +665,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             ...traitRouteObjective.runPatch,
             ...progress,
             stats: {
-                ...run.stats,
+                ...stats,
                 totalScore: nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
                 currentLevelScore:
                     nonNegativeRunCount(scoring.currentLevelScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
@@ -675,10 +673,10 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
                     nonNegativeRunCount(scoring.bestScore),
                     nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus)
                 ),
-                matchesFound: nonNegativeRunCount(run.stats.matchesFound) + 1,
+                matchesFound: nonNegativeRunCount(stats.matchesFound) + 1,
                 currentStreak: nonNegativeRunCount(scoring.currentStreak),
-                bestStreak: Math.max(nonNegativeRunCount(run.stats.bestStreak), nonNegativeRunCount(scoring.currentStreak)),
-                highestLevel: Math.max(nonNegativeRunCount(run.stats.highestLevel), nonNegativeRunCount(board.level)),
+                bestStreak: Math.max(nonNegativeRunCount(stats.bestStreak), nonNegativeRunCount(scoring.currentStreak)),
+                highestLevel: Math.max(nonNegativeRunCount(stats.highestLevel), nonNegativeRunCount(board.level)),
                 guardTokens: Math.min(
                     MAX_GUARD_TOKENS,
                     nonNegativeRunCount(survivalReward.guardTokens) + nonNegativeRunCount(traitReward.guardTokenGain)
@@ -687,7 +685,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
                     MAX_COMBO_SHARDS,
                     nonNegativeRunCount(survivalReward.comboShards) + nonNegativeRunCount(traitRouteObjective.comboShardGain)
                 ),
-                tileTraitMatches: addTileTraitCountStats(run.stats.tileTraitMatches, [tileMatchA, tileMatchB])
+                tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [tileMatchA, tileMatchB])
             },
             timerState: clearResolveState(run)
         };
@@ -890,6 +888,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             resolvedDungeonTraps: dungeonTrapResolvedDelta,
             usedDungeonGateways: dungeonReward.gatewaysUsed
         });
+        const stats = normalizeSessionStats(run.stats);
 
         const nextRun: RunState = {
             ...run,
@@ -923,7 +922,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             ...traitRouteObjective.runPatch,
             ...progress,
             stats: {
-                ...run.stats,
+                ...stats,
                 totalScore: nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
                 currentLevelScore:
                     nonNegativeRunCount(scoring.currentLevelScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
@@ -931,10 +930,10 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
                     nonNegativeRunCount(scoring.bestScore),
                     nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus)
                 ),
-                matchesFound: nonNegativeRunCount(run.stats.matchesFound) + 1,
+                matchesFound: nonNegativeRunCount(stats.matchesFound) + 1,
                 currentStreak: nonNegativeRunCount(scoring.currentStreak),
-                bestStreak: Math.max(nonNegativeRunCount(run.stats.bestStreak), nonNegativeRunCount(scoring.currentStreak)),
-                highestLevel: Math.max(nonNegativeRunCount(run.stats.highestLevel), nonNegativeRunCount(board.level)),
+                bestStreak: Math.max(nonNegativeRunCount(stats.bestStreak), nonNegativeRunCount(scoring.currentStreak)),
+                highestLevel: Math.max(nonNegativeRunCount(stats.highestLevel), nonNegativeRunCount(board.level)),
                 guardTokens: Math.min(
                     MAX_GUARD_TOKENS,
                     nonNegativeRunCount(survivalReward.guardTokens) + nonNegativeRunCount(traitReward.guardTokenGain)
@@ -943,7 +942,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
                     MAX_COMBO_SHARDS,
                     nonNegativeRunCount(survivalReward.comboShards) + nonNegativeRunCount(traitRouteObjective.comboShardGain)
                 ),
-                tileTraitMatches: addTileTraitCountStats(run.stats.tileTraitMatches, [firstTile, secondTile])
+                tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [firstTile, secondTile])
             },
             timerState: clearResolveState(run)
         };

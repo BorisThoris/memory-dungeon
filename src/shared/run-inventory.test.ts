@@ -180,6 +180,16 @@ describe('REG-079 run inventory, consumables, and loadout model', () => {
         expect(gainRunInventoryItem(run, 'guard_token').stats.guardTokens).toBe(1);
     });
 
+    it('normalizes malformed stat blocks before gaining stat inventory items', () => {
+        const run = {
+            ...createNewRun(0),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(gainRunInventoryItem(run, 'guard_token').stats.guardTokens).toBe(1);
+        expect(gainRunInventoryItem(run, 'combo_shard').stats.comboShards).toBe(1);
+    });
+
     it('shows typed dungeon key breakdowns on the shared key row', () => {
         const run = {
             ...createNewRun(0),

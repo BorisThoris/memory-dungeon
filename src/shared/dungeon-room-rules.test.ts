@@ -98,6 +98,17 @@ describe('revealDungeonRoom', () => {
         expect(resolved.stats.bestScore).toBe(15);
     });
 
+    it('normalizes malformed stat blocks before awarding room resources', () => {
+        const run = createRun([roomTile('fountain', 'room_fountain')], {
+            stats: Number.NaN as unknown as RunState['stats']
+        });
+
+        const resolved = revealDungeonRoom(run, 'fountain');
+
+        expect(resolved.stats.guardTokens).toBe(1);
+        expect(resolved.stats.highestLevel).toBe(1);
+    });
+
     it('keeps forge reusable and only pays when gold is available', () => {
         const run = createRun([roomTile('forge', 'room_forge')], {
             shopGold: 2,

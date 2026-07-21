@@ -878,6 +878,27 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         expect(resolved.matchedPairKeysThisRun).toEqual([first.pairKey]);
     });
 
+    it('normalizes malformed stats before resolving matched pairs', () => {
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, fixedBoard: null }));
+        const [first, second] = [...new Set(run.board!.tiles.map((tile) => tile.pairKey))]
+            .filter((pairKey) => !SOLVER_IGNORED_PAIR_KEYS.has(pairKey))
+            .map((pairKey) => run.board!.tiles.filter((tile) => tile.pairKey === pairKey && tile.state === 'hidden'))
+            .find((tiles) => tiles.length === 2)!;
+
+        const resolved = resolveBoardTurn(
+            flipTile(
+                flipTile({
+                    ...run,
+                    stats: Number.NaN as unknown as RunState['stats']
+                }, first.id),
+                second.id
+            )
+        );
+
+        expect(resolved.stats.matchesFound).toBe(1);
+        expect(resolved.stats.highestLevel).toBeGreaterThanOrEqual(1);
+    });
+
     it('does not build the next board when a levelComplete run is already dead', () => {
         const cleared = playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_005 }), 1);
         const dead: RunState = { ...cleared, lives: 0, pendingRouteCardPlan: null };

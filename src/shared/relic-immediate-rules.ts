@@ -4,6 +4,7 @@ import {
     type RelicId,
     type RunState
 } from './contracts';
+import { normalizeSessionStats } from './session-stats-rules';
 
 const nonNegativeFiniteInteger = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
@@ -16,6 +17,7 @@ export const grantBonusRelicPickNextOffer = (run: RunState, amount: number = 1):
 });
 
 export const applyRelicImmediate = (run: RunState, relicId: RelicId): RunState => {
+    const stats = normalizeSessionStats(run.stats);
     switch (relicId) {
         case 'extra_shuffle_charge':
             return { ...run, shuffleCharges: nonNegativeFiniteInteger(run.shuffleCharges) + 1 };
@@ -29,7 +31,7 @@ export const applyRelicImmediate = (run: RunState, relicId: RelicId): RunState =
         case 'combo_shard_plus_step':
             return {
                 ...run,
-                stats: { ...run.stats, comboShards: Math.min(MAX_COMBO_SHARDS, nonNegativeFiniteInteger(run.stats.comboShards) + 1) }
+                stats: { ...stats, comboShards: Math.min(MAX_COMBO_SHARDS, nonNegativeFiniteInteger(stats.comboShards) + 1) }
             };
         case 'memorize_under_short_memorize':
             return run;
@@ -47,8 +49,8 @@ export const applyRelicImmediate = (run: RunState, relicId: RelicId): RunState =
             return {
                 ...run,
                 stats: {
-                    ...run.stats,
-                    guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeFiniteInteger(run.stats.guardTokens) + 1)
+                    ...stats,
+                    guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeFiniteInteger(stats.guardTokens) + 1)
                 }
             };
         case 'shrine_echo':
@@ -59,8 +61,8 @@ export const applyRelicImmediate = (run: RunState, relicId: RelicId): RunState =
             return {
                 ...run,
                 stats: {
-                    ...run.stats,
-                    guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeFiniteInteger(run.stats.guardTokens) + 1)
+                    ...stats,
+                    guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeFiniteInteger(stats.guardTokens) + 1)
                 }
             };
         case 'parasite_ledger':

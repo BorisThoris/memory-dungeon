@@ -14,6 +14,7 @@ import {
 } from './dungeon-room-targeting-rules';
 import { addRunDungeonKey } from './dungeon-key-rules';
 import { gainRelicFavor } from './relic-favor-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 import {
     ROOM_PAIR_KEY,
     isSingletonUtilityPairKey
@@ -29,14 +30,15 @@ const nonNegativeDungeonCount = (value: unknown): number =>
 
 const gainDungeonRoomScore = (run: RunState, score: number): RunState => {
     const scoreGain = nonNegativeDungeonCount(score);
-    const totalScore = nonNegativeDungeonCount(run.stats.totalScore) + scoreGain;
+    const stats = normalizeSessionStats(run.stats);
+    const totalScore = nonNegativeDungeonCount(stats.totalScore) + scoreGain;
     return {
         ...run,
         stats: {
-            ...run.stats,
+            ...stats,
             totalScore,
-            currentLevelScore: nonNegativeDungeonCount(run.stats.currentLevelScore) + scoreGain,
-            bestScore: Math.max(nonNegativeDungeonCount(run.stats.bestScore), totalScore)
+            currentLevelScore: nonNegativeDungeonCount(stats.currentLevelScore) + scoreGain,
+            bestScore: Math.max(nonNegativeDungeonCount(stats.bestScore), totalScore)
         }
     };
 };
@@ -45,6 +47,7 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
     if (run.status !== 'playing' || !run.board) {
         return run;
     }
+    const stats = normalizeSessionStats(run.stats);
     const tile = run.board.tiles.find((candidate) => candidate.id === tileId);
     if (!tile || tile.pairKey !== ROOM_PAIR_KEY || tile.dungeonCardKind !== 'room') {
         return run;
@@ -69,7 +72,7 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
     } else if (effectId === 'room_fountain') {
         nextRun = {
             ...run,
-            stats: { ...run.stats, guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeDungeonCount(run.stats.guardTokens) + 1) }
+            stats: { ...stats, guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeDungeonCount(stats.guardTokens) + 1) }
         };
     } else if (effectId === 'room_map') {
         nextRun = run;
@@ -89,8 +92,8 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
                       ...run,
                       shopGold: nonNegativeDungeonCount(run.shopGold) - 1,
                       stats: {
-                          ...run.stats,
-                          guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeDungeonCount(run.stats.guardTokens) + 1)
+                          ...stats,
+                          guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeDungeonCount(stats.guardTokens) + 1)
                       }
                   }
                 : gainDungeonRoomScore(run, 10);

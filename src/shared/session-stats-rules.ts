@@ -1,4 +1,4 @@
-import type { SessionStats, Tile, TileTraitKind } from './contracts';
+import type { Rating, SessionStats, Tile, TileTraitKind } from './contracts';
 import { calculateRating } from './scoring-rules';
 
 export const TILE_TRAIT_COUNT_KINDS: readonly TileTraitKind[] = [
@@ -25,14 +25,29 @@ export const createTileTraitCountStats = (): Record<TileTraitKind, number> => ({
     stasis: 0
 });
 
+const nonNegativeSessionCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+    value != null && typeof value === 'object' && !Array.isArray(value);
+
+const isRating = (value: unknown): value is Rating =>
+    value === 'S++' || value === 'S' || value === 'A' || value === 'B' || value === 'C' || value === 'D';
+
+export const normalizeTileTraitCountStats = (counts: unknown): Record<TileTraitKind, number> => {
+    const source = isRecord(counts) ? counts : {};
+    const next = createTileTraitCountStats();
+    for (const kind of TILE_TRAIT_COUNT_KINDS) {
+        next[kind] = nonNegativeSessionCount(source[kind]);
+    }
+    return next;
+};
+
 export const addTileTraitCountStats = (
     counts: Partial<Record<TileTraitKind, number>> | undefined,
     tiles: readonly Tile[]
 ): Record<TileTraitKind, number> => {
-    const next = createTileTraitCountStats();
-    for (const kind of TILE_TRAIT_COUNT_KINDS) {
-        next[kind] = counts?.[kind] ?? 0;
-    }
+    const next = normalizeTileTraitCountStats(counts);
     const countedPairTraits = new Set<string>();
     for (const tile of tiles) {
         if (!tile.tileTraitKind) {
@@ -69,3 +84,29 @@ export const createSessionStats = (bestScore: number): SessionStats => ({
     shufflesUsed: 0,
     pairsDestroyed: 0
 });
+
+export const normalizeSessionStats = (stats: unknown, bestScoreFallback = 0): SessionStats => {
+    const source = isRecord(stats) ? stats : {};
+    const tries = nonNegativeSessionCount(source.tries);
+    return {
+        totalScore: nonNegativeSessionCount(source.totalScore),
+        currentLevelScore: nonNegativeSessionCount(source.currentLevelScore),
+        bestScore: nonNegativeSessionCount(source.bestScore ?? bestScoreFallback),
+        tries,
+        rating: isRating(source.rating) ? source.rating : calculateRating(tries),
+        levelsCleared: nonNegativeSessionCount(source.levelsCleared),
+        matchesFound: nonNegativeSessionCount(source.matchesFound),
+        mismatches: nonNegativeSessionCount(source.mismatches),
+        highestLevel: Math.max(1, nonNegativeSessionCount(source.highestLevel)),
+        currentStreak: nonNegativeSessionCount(source.currentStreak),
+        bestStreak: nonNegativeSessionCount(source.bestStreak),
+        perfectClears: nonNegativeSessionCount(source.perfectClears),
+        guardTokens: nonNegativeSessionCount(source.guardTokens),
+        comboShards: nonNegativeSessionCount(source.comboShards),
+        tileTraitMatches: normalizeTileTraitCountStats(source.tileTraitMatches),
+        tileTraitMismatches: normalizeTileTraitCountStats(source.tileTraitMismatches),
+        volatileTraitShuffles: nonNegativeSessionCount(source.volatileTraitShuffles),
+        shufflesUsed: nonNegativeSessionCount(source.shufflesUsed),
+        pairsDestroyed: nonNegativeSessionCount(source.pairsDestroyed)
+    };
+};

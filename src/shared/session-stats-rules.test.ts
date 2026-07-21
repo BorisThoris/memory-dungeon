@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { addTileTraitCountStats, createSessionStats, TILE_TRAIT_COUNT_KINDS } from './session-stats-rules';
+import {
+    addTileTraitCountStats,
+    createSessionStats,
+    normalizeSessionStats,
+    normalizeTileTraitCountStats,
+    TILE_TRAIT_COUNT_KINDS
+} from './session-stats-rules';
 import { makePair } from './test/game-fixtures';
 
 describe('session-stats-rules', () => {
@@ -65,5 +71,30 @@ describe('session-stats-rules', () => {
         expect(counts.drift).toBe(1);
         expect(counts.stasis).toBe(1);
         expect(counts.conduit).toBe(0);
+    });
+
+    it('normalizes malformed trait counts and session stats', () => {
+        expect(normalizeTileTraitCountStats({ echo: 2.8, drift: Number.NaN })).toMatchObject({
+            echo: 2,
+            drift: 0,
+            stasis: 0
+        });
+
+        expect(normalizeSessionStats(Number.NaN, 77)).toEqual(createSessionStats(77));
+        expect(normalizeSessionStats({
+            bestScore: 123.9,
+            comboShards: 2.6,
+            highestLevel: Number.NEGATIVE_INFINITY,
+            rating: 'bad',
+            tileTraitMatches: { sealed: 3.2 },
+            tries: 2.1
+        })).toMatchObject({
+            bestScore: 123,
+            comboShards: 2,
+            highestLevel: 1,
+            rating: 'A',
+            tileTraitMatches: expect.objectContaining({ sealed: 3 }),
+            tries: 2
+        });
     });
 });
