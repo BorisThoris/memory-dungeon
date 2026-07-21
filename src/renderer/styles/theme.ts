@@ -417,6 +417,15 @@ const RENDERER_THEME_UI_SPACE_COMPACT = {
 
 export type RendererThemeVars = typeof RENDERER_THEME.cssVars;
 
+export const forEachRendererThemeCssVar = (
+    visit: (key: keyof RendererThemeVars, value: RendererThemeVars[keyof RendererThemeVars]) => void
+): void => {
+    for (const key in RENDERER_THEME.cssVars) {
+        const cssVar = key as keyof RendererThemeVars;
+        visit(cssVar, RENDERER_THEME.cssVars[cssVar]);
+    }
+};
+
 export type RendererThemeDensity = 'compact' | 'roomy';
 
 export const buildRendererThemeStyle = (

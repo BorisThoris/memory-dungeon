@@ -4,16 +4,14 @@ import { StrictMode } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import App from './App';
 import { PlatformTiltProvider } from './platformTilt/PlatformTiltProvider';
-import { RENDERER_THEME } from './styles/theme';
+import { forEachRendererThemeCssVar } from './styles/theme';
 import './styles/global.css';
 import './styles/notificationsGame.css';
 
 /** Theme tokens on `:root` — shared by web bootstrap and any native shell that reuses the DOM theme bridge. */
 const applyRendererThemeToDocument = (): void => {
     const html = document.documentElement;
-    for (const [key, value] of Object.entries(RENDERER_THEME.cssVars)) {
-        html.style.setProperty(key, value);
-    }
+    forEachRendererThemeCssVar((key, value) => html.style.setProperty(key, value));
 };
 
 const mountRendererApp = (rootElement: HTMLElement): Root => {
