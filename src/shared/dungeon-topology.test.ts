@@ -10,7 +10,8 @@ import {
     formatDungeonRunMapTopologyDiagnostics,
     formatDungeonRunMapTopologyIssue,
     inspectDungeonBoardTopology,
-    inspectDungeonRunMapTopology
+    inspectDungeonRunMapTopology,
+    type DungeonBoardTopologyOptions
 } from './dungeon-topology';
 import { GAME_RULES_VERSION } from './contracts';
 import { EXIT_PAIR_KEY } from './tile-identity';
@@ -259,12 +260,14 @@ describe('dungeon topology graph', () => {
             }
         );
 
+        const malformedCarriedKeys = { treasure: Number.NaN, missing_key: 1 } as DungeonBoardTopologyOptions['dungeonKeys'];
         const report = inspectDungeonBoardTopology(source, {
-            dungeonKeys: { treasure: Number.NaN },
+            dungeonKeys: malformedCarriedKeys,
             dungeonMasterKeys: Number.POSITIVE_INFINITY
         });
 
         expect(report.obtainableKeyKinds).toEqual([]);
+        expect(report.graph.hasNode('run-key:missing_key')).toBe(false);
         expect(report.hasExitRoute).toBe(false);
         expect(report.issues.map((issue) => issue.code)).toEqual(
             expect.arrayContaining(['topology_exit_lock_source_missing'])

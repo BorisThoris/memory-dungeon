@@ -9,6 +9,7 @@ import type {
 } from './contracts';
 import { activeEnemyHazardsForBoard, allRealBoardPairsCleared } from './enemy-hazard-board-rules';
 import { dungeonKeyKindArticleLabel } from './dungeon-key-copy';
+import { getDungeonKeyQuantityRows } from './run-inventory';
 import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 
 /**
@@ -359,8 +360,8 @@ export const createDungeonBoardTopology = (
         }
     }
 
-    for (const keyKind of Object.keys(options.dungeonKeys ?? {}) as DungeonKeyKind[]) {
-        if (nonNegativeDungeonTopologyCount(options.dungeonKeys?.[keyKind]) <= 0) continue;
+    for (const { kind: keyKind, quantity } of getDungeonKeyQuantityRows(options.dungeonKeys)) {
+        if (quantity <= 0) continue;
         const keyNodeId = `run-key:${keyKind}`;
         addNodeOnce(graph, keyNodeId, { kind: 'key', label: `${keyKind} run key`, keyKind });
         addEdgeOnce(graph, START_NODE_ID, keyNodeId, { label: 'carried key', requirement: { kind: 'none' } });
@@ -406,8 +407,8 @@ export const inspectDungeonBoardTopology = (
 ): DungeonBoardTopologyReport => {
     const graph = createDungeonBoardTopology(board, options);
     const initialKeyKinds = new Set<DungeonKeyKind>();
-    for (const keyKind of Object.keys(options.dungeonKeys ?? {}) as DungeonKeyKind[]) {
-        if (nonNegativeDungeonTopologyCount(options.dungeonKeys?.[keyKind]) > 0) {
+    for (const { kind: keyKind, quantity } of getDungeonKeyQuantityRows(options.dungeonKeys)) {
+        if (quantity > 0) {
             initialKeyKinds.add(keyKind);
         }
     }
