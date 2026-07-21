@@ -68,7 +68,11 @@ export const assignHazardTilesToGeneratedBoard = (
             : candidateHazardKinds;
     const hazardByPairKey = new Map<string, HazardTileKind>();
     for (let i = 0; i < Math.min(hazardKinds.length, shuffledKeys.length); i += 1) {
-        hazardByPairKey.set(shuffledKeys[i]!, hazardKinds[i]!);
+        const pairKey = shuffledKeys[i];
+        const hazardKind = hazardKinds[i];
+        if (pairKey !== undefined && hazardKind !== undefined) {
+            hazardByPairKey.set(pairKey, hazardKind);
+        }
     }
 
     const assignedTiles = tiles.map((tile) => {
