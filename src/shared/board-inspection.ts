@@ -497,13 +497,20 @@ export const inspectBoardFairness = (
         (tile) => !isSingletonUtilityPairKey(tile.pairKey) && tile.state === 'hidden'
     );
 
-    for (const flippedId of board.flippedTileIds) {
-        if (!board.tiles.some((tile) => tile.id === flippedId && tile.state === 'flipped')) {
-            issues.push({
-                code: 'flipped_tile_reference_missing',
-                message: `flippedTileIds references "${flippedId}", but no matching flipped tile exists.`,
-                tileIds: [flippedId]
-            });
+    if (!Array.isArray(board.flippedTileIds)) {
+        issues.push({
+            code: 'flipped_tile_reference_missing',
+            message: 'flippedTileIds is malformed and cannot be inspected.'
+        });
+    } else {
+        for (const flippedId of board.flippedTileIds) {
+            if (!board.tiles.some((tile) => tile.id === flippedId && tile.state === 'flipped')) {
+                issues.push({
+                    code: 'flipped_tile_reference_missing',
+                    message: `flippedTileIds references "${flippedId}", but no matching flipped tile exists.`,
+                    tileIds: [flippedId]
+                });
+            }
         }
     }
 
@@ -682,7 +689,7 @@ export const inspectRunFairness = (run: RunState): RunFairnessReport => {
         intentionalBlockers.push('level_complete');
     }
     if (run.status === 'resolving') {
-        if (run.board.flippedTileIds.length >= 2) {
+        if (Array.isArray(run.board.flippedTileIds) && run.board.flippedTileIds.length >= 2) {
             intentionalBlockers.push('resolving_flips');
         } else {
             issues.push({

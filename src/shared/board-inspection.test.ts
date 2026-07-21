@@ -6,6 +6,7 @@ import {
     countReachableExitKeySources,
     getWildTileIdFromBoard,
     inspectBoardFairness,
+    inspectRunFairness,
     isBoardComplete,
     repairDungeonExitSoftlocks
 } from './board-inspection';
@@ -277,5 +278,48 @@ describe('board-inspection', () => {
         expect(inspected.complete).toBe(true);
         expect(inspected.hasCompletionRoute).toBe(true);
         expect(inspected.issues).toEqual([]);
+    });
+
+    it('reports malformed flipped tile ids instead of throwing during fairness inspection', () => {
+        const malformed = {
+            ...board([
+                tile('a1', 'a', { state: 'flipped' }),
+                tile('a2', 'a')
+            ]),
+            flippedTileIds: Number.NaN as unknown as string[]
+        };
+
+        const inspected = inspectBoardFairness(malformed);
+
+        expect(inspected.issues).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    code: 'flipped_tile_reference_missing',
+                    message: 'flippedTileIds is malformed and cannot be inspected.'
+                })
+            ])
+        );
+    });
+
+    it('reports malformed resolving flip ids as a run-level issue', () => {
+        const malformed = {
+            status: 'resolving',
+            board: {
+                ...board([
+                    tile('a1', 'a', { state: 'flipped' }),
+                    tile('a2', 'a', { state: 'flipped' })
+                ]),
+                flippedTileIds: Number.NaN as unknown as string[]
+            },
+            dungeonKeys: {},
+            dungeonMasterKeys: 0
+        } as unknown as Parameters<typeof inspectRunFairness>[0];
+
+        const inspected = inspectRunFairness(malformed);
+
+        expect(inspected.intentionalBlockers).not.toContain('resolving_flips');
+        expect(inspected.issues.map((issue) => issue.code)).toEqual(
+            expect.arrayContaining(['flipped_tile_reference_missing', 'run_resolving_without_flipped_tiles'])
+        );
     });
 });
