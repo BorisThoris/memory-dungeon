@@ -50,6 +50,22 @@ export interface BonusRewardInstance extends BonusRewardDefinition {
     unavailableReason: string | null;
 }
 
+export const BONUS_REWARD_IDS = [
+    'chest_gold',
+    'secret_favor',
+    'bonus_shards',
+    'supply_cache',
+    'trait_toolkit',
+    'key_insurance',
+    'hazard_ward',
+    'free_swap_floor',
+    'echo_conduit_lens',
+    'trait_streak_lens',
+    'cursed_opener_contract',
+    'stasis_lockbox',
+    'hazard_banisher'
+] as const satisfies readonly BonusRewardId[];
+
 export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> = {
     chest_gold: {
         id: 'chest_gold',
@@ -321,7 +337,7 @@ const applyBoardTraitRewardBias = (
         const rank = buildRows.findIndex((row) => labels.includes(row.label));
         return rank < 0 ? Number.MAX_SAFE_INTEGER : rank;
     };
-    const matchingCatalogRewards = (Object.keys(BONUS_REWARD_CATALOG) as BonusRewardId[])
+    const matchingCatalogRewards = BONUS_REWARD_IDS
         .filter((id) => (BONUS_REWARD_CATALOG[id].traitBuildLabels ?? []).some((label) => buildLabels.has(label)))
         .sort((a, b) => rankByBuildLabel(a) - rankByBuildLabel(b));
     const preferred = candidates
@@ -911,13 +927,16 @@ export const claimBonusReward = (
 };
 
 export const getBonusRewardRows = () =>
-    Object.values(BONUS_REWARD_CATALOG).map((reward) => ({
-        id: reward.id,
-        roomKind: reward.roomKind,
-        label: reward.label,
-        trigger: reward.trigger,
-        eligibility: reward.eligibility,
-        antiGrindLimit: `${reward.antiGrindLimit.maxClaims} per run`,
-        summaryText: reward.summaryText,
-        traitBuildLabels: [...(reward.traitBuildLabels ?? [])]
-    }));
+    BONUS_REWARD_IDS.map((id) => {
+        const reward = BONUS_REWARD_CATALOG[id];
+        return {
+            id: reward.id,
+            roomKind: reward.roomKind,
+            label: reward.label,
+            trigger: reward.trigger,
+            eligibility: reward.eligibility,
+            antiGrindLimit: `${reward.antiGrindLimit.maxClaims} per run`,
+            summaryText: reward.summaryText,
+            traitBuildLabels: [...(reward.traitBuildLabels ?? [])]
+        };
+    });

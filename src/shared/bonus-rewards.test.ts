@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     BONUS_REWARD_CATALOG,
+    BONUS_REWARD_IDS,
     claimBonusReward,
     createBonusRewardLedger,
     previewBonusRewardClaim,
@@ -264,6 +265,8 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(draft.map((reward) => reward.id)).toEqual(
             expect.arrayContaining(['trait_toolkit', 'key_insurance'])
         );
+        expect(Object.keys(BONUS_REWARD_CATALOG)).toEqual([...BONUS_REWARD_IDS]);
+        expect(getBonusRewardRows().map((reward) => reward.id)).toEqual([...BONUS_REWARD_IDS]);
         expect(getBonusRewardRows().find((reward) => reward.id === 'trait_toolkit')).toMatchObject({
             label: 'Trait toolkit',
             summaryText: '+1 row/swap charge, +1 peek charge, and +10 score.',
