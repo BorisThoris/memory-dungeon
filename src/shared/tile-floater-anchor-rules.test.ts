@@ -73,4 +73,14 @@ describe('tile floater anchor rules', () => {
         expect(getMatchFloaterAnchorTileIds(run)).toBeNull();
         expect(getMismatchFloaterAnchorTileIds(run)).toBeNull();
     });
+
+    it('returns null when flipped tile id entries are malformed', () => {
+        const run = runWithFlippedTiles(['a', 42] as unknown as string[]);
+        const gambitRun = runWithFlippedTiles(['a', 'b', null] as unknown as string[]);
+
+        expect(getMatchFloaterAnchorTileIds(run)).toBeNull();
+        expect(getMismatchFloaterAnchorTileIds(run)).toBeNull();
+        expect(getMatchFloaterAnchorTileIds(gambitRun)).toBeNull();
+        expect(getMismatchFloaterAnchorTileIds(gambitRun)).toBeNull();
+    });
 });
