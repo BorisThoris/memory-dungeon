@@ -12,6 +12,7 @@ import {
     ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS,
     ENCYCLOPEDIA_VERSION,
     GAME_MODE_CODEX,
+    glossaryTermById,
     MUTATOR_CATALOG,
     RELIC_CATALOG
 } from './mechanics-encyclopedia';
@@ -40,6 +41,7 @@ describe('mechanics-encyclopedia', () => {
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'shop_gold')?.preferredLabel).toBe('shop gold');
         expect(MECHANICS_GLOSSARY.find((row) => row.id === 'combo_shards')?.avoidLabels).toContain('paid shards');
         expect(MECHANICS_GLOSSARY.every((row) => row.shortDefinition.length > 0)).toBe(true);
+        expect(glossaryTermById('missing_term' as Parameters<typeof glossaryTermById>[0]).id).toBe('lives');
     });
 
     it('REG-101 glossary avoids forbidden monetization and internal labels', () => {
