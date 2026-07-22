@@ -14,6 +14,12 @@ export const clearDungeonCardFields = (tile: Tile): Tile => ({
     scoutRevealSource: undefined
 });
 
+const positiveDungeonEnemyHp = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
+
+const nonNegativeDungeonEnemyDamage = (value: number): number =>
+    Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
+
 export const activeDungeonEnemyPairKeys = (board: BoardState): string[] => [
     ...new Set(
         board.tiles
@@ -23,7 +29,7 @@ export const activeDungeonEnemyPairKeys = (board: BoardState): string[] => [
                     tile.dungeonCardState === 'revealed' &&
                     tile.state !== 'matched' &&
                     tile.state !== 'removed' &&
-                    (tile.dungeonCardHp ?? 0) > 0
+                    positiveDungeonEnemyHp(tile.dungeonCardHp) > 0
             )
             .map((tile) => tile.pairKey)
     )
@@ -33,16 +39,21 @@ export const damageFirstActiveDungeonEnemy = (
     board: BoardState,
     amount: number
 ): { board: BoardState; defeated: number; score: number } => {
-    if (amount <= 0) {
+    const damage = nonNegativeDungeonEnemyDamage(amount);
+    if (damage <= 0) {
         return { board, defeated: 0, score: 0 };
     }
     const pairKey = activeDungeonEnemyPairKeys(board)[0];
     if (!pairKey) {
         return { board, defeated: 0, score: 0 };
     }
-    const currentHp =
-        board.tiles.find((tile) => tile.pairKey === pairKey && tile.dungeonCardKind === 'enemy')?.dungeonCardHp ?? 1;
-    const nextHp = Math.max(0, currentHp - amount);
+    const currentHp = positiveDungeonEnemyHp(
+        board.tiles.find((tile) => tile.pairKey === pairKey && tile.dungeonCardKind === 'enemy')?.dungeonCardHp
+    );
+    if (currentHp <= 0) {
+        return { board, defeated: 0, score: 0 };
+    }
+    const nextHp = Math.max(0, currentHp - damage);
     const defeated = currentHp > 0 && nextHp === 0 ? 1 : 0;
     return {
         board: {

@@ -39,6 +39,22 @@ describe('dungeon enemy card rules', () => {
         });
     });
 
+    it('ignores malformed enemy damage amounts', () => {
+        const board = boardWith([enemyTile('a', 'enemy-a')]);
+
+        const result = damageFirstActiveDungeonEnemy(board, Number.NaN);
+
+        expect(result).toEqual({ board, defeated: 0, score: 0 });
+    });
+
+    it('excludes enemies with malformed hit points from active combat', () => {
+        const board = boardWith([enemyTile('a', 'enemy-a', { dungeonCardHp: Number.POSITIVE_INFINITY })]);
+
+        expect(activeDungeonEnemyPairKeys(board)).toEqual([]);
+        expect(damageFirstActiveDungeonEnemy(board, 1)).toEqual({ board, defeated: 0, score: 0 });
+        expect(applyDungeonEnemyAttack(3, 0, board)).toEqual({ lives: 3, guardTokens: 0, attacked: false });
+    });
+
     it('spends guard tokens before lives when enemies attack', () => {
         const board = boardWith([enemyTile('a', 'enemy-a')]);
 
