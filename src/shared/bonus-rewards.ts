@@ -604,8 +604,14 @@ const REWARD_PERK_ARCADE_CUES: Record<RewardPerkId, string> = {
     hazard_banish_per_floor: 'Trap erased'
 };
 
+const isRewardPerkId = (id: unknown): id is RewardPerkId =>
+    typeof id === 'string' && Object.prototype.hasOwnProperty.call(REWARD_PERK_LABELS, id);
+
+const normalizeRewardPerkIds = (value: unknown): RewardPerkId[] =>
+    Array.isArray(value) ? value.filter(isRewardPerkId) : [];
+
 export const getRewardPerkRows = (run: Pick<RunState, 'rewardPerkIds'>) =>
-    (run.rewardPerkIds ?? []).map((id) => ({
+    normalizeRewardPerkIds(run.rewardPerkIds).map((id) => ({
         id,
         label: REWARD_PERK_LABELS[id],
         detail: REWARD_PERK_DETAILS[id],
@@ -769,8 +775,10 @@ const applyBonusRewardPayout = (
         }
     }
 
+    let nextRewardPerkIds = normalizeRewardPerkIds(run.rewardPerkIds);
     let nextRun: RunState = {
         ...run,
+        rewardPerkIds: nextRewardPerkIds,
         shopGold: nonNegativeFiniteAmount(run.shopGold) + shopGoldGain,
         stats: {
             ...stats,
@@ -790,10 +798,11 @@ const applyBonusRewardPayout = (
         gained.push(`+${favorProgressGain} relic Favor progress`);
     }
     for (const perkId of payout.rewardPerks ?? []) {
-        if ((nextRun.rewardPerkIds ?? []).includes(perkId)) {
+        if (nextRewardPerkIds.includes(perkId)) {
             continue;
         }
-        nextRun = { ...nextRun, rewardPerkIds: [...(nextRun.rewardPerkIds ?? []), perkId] };
+        nextRewardPerkIds = [...nextRewardPerkIds, perkId];
+        nextRun = { ...nextRun, rewardPerkIds: nextRewardPerkIds };
         gained.push(`Unlock ${REWARD_PERK_LABELS[perkId]}`);
         gained.push(`Perk next: ${REWARD_PERK_NEXT_CUES[perkId]}`);
     }

@@ -461,6 +461,11 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
             createBonusRewardLedger(),
             room
         );
+        const malformedRunResult = claimBonusReward(
+            { ...run, rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'] },
+            createBonusRewardLedger(),
+            room
+        );
 
         expect(result.claimed).toBe(true);
         expect(result.run.rewardPerkIds).toContain('echo_conduit_double');
@@ -475,6 +480,9 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(duplicate.feedback.gained).not.toContain(
             'Perk next: Match Echo touching Conduit before cashing adjacent Sealed.'
         );
+        expect(malformedRunResult.claimed).toBe(true);
+        expect(malformedRunResult.run.rewardPerkIds).toEqual(['echo_conduit_double']);
+        expect(malformedRunResult.feedback.gained).toEqual(expect.arrayContaining(['Unlock Echo Conduit Double']));
         expect(getRewardPerkRows({ rewardPerkIds: ['hazard_banish_per_floor'] })[0]).toMatchObject({
             label: 'Hazard Banish',
             detail: 'Each new floor clears one hazard marker before play; if none exists, it grants a destroy charge.',
@@ -589,6 +597,23 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
             readiness: 'soon',
             readinessLabel: '0/2 chain'
         });
+
+        expect(getRewardPerkRows({ rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'] })).toEqual([]);
+        expect(getRewardPerkRows({
+            rewardPerkIds: [
+                'trait_streak_toolkit',
+                '__proto__',
+                'constructor',
+                Number.NaN
+            ] as unknown as RunState['rewardPerkIds']
+        }).map((row) => row.id)).toEqual(['trait_streak_toolkit']);
+        expect(getRewardPerkReadinessRows({
+            ...makeRun(),
+            activeContract: null,
+            matchResolutionsThisFloor: 0,
+            rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'],
+            stats: Number.NaN as unknown as RunState['stats']
+        })).toEqual([]);
     });
 
     it('resolves a saved reward instance even when the current route roll picks another candidate', () => {
