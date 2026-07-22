@@ -55,8 +55,9 @@ export const playPerfectFloor = (run: RunState): RunState => {
         groups.set(tile.pairKey, [...(groups.get(tile.pairKey) ?? []), tile.id]);
     }
     for (const ids of groups.values()) {
-        if (ids.length === 2) {
-            current = playPair(current, ids[0]!, ids[1]!);
+        const [firstId, secondId] = ids;
+        if (firstId && secondId && ids.length === 2) {
+            current = playPair(current, firstId, secondId);
         }
     }
     return current;

@@ -276,7 +276,10 @@ const clearPlayableFloor = (run: RunState): RunState => {
     }
     let current = run;
     for (const ids of pairTileIds(run.board)) {
-        current = resolveBoardTurn(flipTile(flipTile(current, ids[0]!), ids[1]!));
+        const [firstId, secondId] = ids;
+        if (firstId && secondId) {
+            current = resolveBoardTurn(flipTile(flipTile(current, firstId), secondId));
+        }
     }
     return leaveThroughExit(current);
 };
