@@ -286,15 +286,22 @@ export const assignRouteWorldSpecials = ({
     const keys = [...eligibleKeys];
     for (let i = keys.length - 1; i > 0; i--) {
         const j = pickRngIndex(rng, i + 1);
-        const tmp = keys[i]!;
-        keys[i] = keys[j]!;
-        keys[j] = tmp;
+        const keyAtI = keys[i];
+        const keyAtJ = keys[j];
+        if (keyAtI !== undefined && keyAtJ !== undefined) {
+            keys[i] = keyAtJ;
+            keys[j] = keyAtI;
+        }
     }
 
     const kindByPairKey = new Map<string, RouteSpecialKind>();
     const count = Math.min(profile.routeSpecialKinds.length, keys.length);
     for (let i = 0; i < count; i++) {
-        kindByPairKey.set(keys[i]!, profile.routeSpecialKinds[i]!);
+        const key = keys[i];
+        const specialKind = profile.routeSpecialKinds[i];
+        if (key !== undefined && specialKind !== undefined) {
+            kindByPairKey.set(key, specialKind);
+        }
     }
 
     return tiles.map((tile) => {
