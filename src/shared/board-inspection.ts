@@ -520,7 +520,10 @@ export const inspectBoardFairness = (
             continue;
         }
         const tileIds = tiles.map((tile) => tile.id);
-        const first = dungeonTiles[0]!;
+        const first = dungeonTiles[0];
+        if (!first) {
+            continue;
+        }
         if (
             tiles.length !== dungeonTiles.length ||
             dungeonTiles.some(

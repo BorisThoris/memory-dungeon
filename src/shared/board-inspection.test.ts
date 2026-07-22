@@ -194,6 +194,26 @@ describe('board-inspection', () => {
         expect(inspected.hasCompletionRoute).toBe(true);
     });
 
+    it('reports mismatched dungeon card metadata without assuming a primary dungeon tile', () => {
+        const inspected = inspectBoardFairness(
+            board([
+                tile('key-a', 'key', { dungeonCardKind: 'key', dungeonCardEffectId: 'key_iron' }),
+                tile('key-b', 'key', { dungeonCardKind: 'lever', dungeonCardEffectId: 'lever_floor' })
+            ])
+        );
+
+        expect(inspected.complete).toBe(false);
+        expect(inspected.issues).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    code: 'dungeon_card_pair_mismatch',
+                    pairKey: 'key',
+                    tileIds: ['key-a', 'key-b']
+                })
+            ])
+        );
+    });
+
     it('still reports active enemy hazards on cleared tiles while unresolved pairs remain', () => {
         const inspected = inspectBoardFairness({
             ...board([
