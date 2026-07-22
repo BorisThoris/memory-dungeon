@@ -55,4 +55,14 @@ describe('matchScoreFloaterTiming', () => {
         expect(reduced).toBeGreaterThan(MATCH_SCORE_FLOAT_MS_REDUCED);
         expect(reduced).toBeLessThan(full);
     });
+
+    it('ignores malformed payoff lane maps before adding lane hold time', () => {
+        expect(
+            matchScoreFloatDurationMs(false, {
+                crescendo: { tier: 'score' },
+                kind: 'match',
+                payoffLaneMap: { length: Number.POSITIVE_INFINITY } as unknown as []
+            })
+        ).toBe(MATCH_SCORE_FLOAT_MS_FULL);
+    });
 });

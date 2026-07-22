@@ -13,6 +13,8 @@ type MatchScoreFloatTimingProfile = {
     rewardBurst?: unknown;
 };
 
+const payoffLaneMapCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
+
 export function matchScoreFloatDurationMs(
     reducedMotion: boolean,
     profile?: MatchScoreFloatTimingProfile | null
@@ -33,7 +35,7 @@ export function matchScoreFloatDurationMs(
                 : tier === 'prime'
                   ? 150
                   : 0;
-    const laneBonus = Math.min(profile.payoffLaneMap?.length ?? 0, 4) * 70;
+    const laneBonus = Math.min(payoffLaneMapCount(profile.payoffLaneMap), 4) * 70;
     const milestoneBonus = profile.chainMilestone ? 120 : 0;
     const rewardBonus = profile.rewardBurst ? 120 : 0;
     const motionScale = reducedMotion ? 0.62 : 1;
