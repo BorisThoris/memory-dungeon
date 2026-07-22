@@ -188,11 +188,12 @@ const DUNGEON_ROUTE_BLOCKING_ISSUES: readonly DungeonRouteProgressionIssueCode[]
 
 const DUNGEON_ACT_LENGTH = 6;
 const DUNGEON_BRANCH_LANES = [-1, 0, 1] as const;
+const DEFAULT_DUNGEON_BRANCH_APPROACH = { label: 'Safe passage', routeType: 'safe' } as const;
 const DUNGEON_BRANCH_APPROACHES: readonly {
     label: string;
     routeType: RouteNodeType;
 }[] = [
-    { label: 'Safe passage', routeType: 'safe' },
+    DEFAULT_DUNGEON_BRANCH_APPROACH,
     { label: 'Greedy route', routeType: 'greed' },
     { label: 'Mystery route', routeType: 'mystery' }
 ];
@@ -1234,7 +1235,7 @@ export const generateRunMapChoices = ({
         if (!boss) {
             return node;
         }
-        const approach = DUNGEON_BRANCH_APPROACHES[index] ?? DUNGEON_BRANCH_APPROACHES[0]!;
+        const approach = DUNGEON_BRANCH_APPROACHES[index] ?? DEFAULT_DUNGEON_BRANCH_APPROACH;
         return {
             ...node,
             routeApproachLabel: approach.label,
