@@ -712,13 +712,13 @@ export const applyVolatileMismatchTrait = (
         return { board, triggered: false };
     }
     const blockedPairKeys = new Set(sourceTiles.map((tile) => tile.pairKey));
-    const hiddenIndices: number[] = [];
+    const hiddenEntries: { index: number; tile: Tile }[] = [];
     board.tiles.forEach((tile, index) => {
         if (tileCanShuffleFromVolatileMiss(tile, blockedPairKeys)) {
-            hiddenIndices.push(index);
+            hiddenEntries.push({ index, tile });
         }
     });
-    if (hiddenIndices.length < 2) {
+    if (hiddenEntries.length < 2) {
         return { board, triggered: false };
     }
     const stats = normalizeSessionStats(run.stats);
@@ -728,16 +728,20 @@ export const applyVolatileMismatchTrait = (
         )
     );
     const nextTiles = [...board.tiles];
-    const candidates = hiddenIndices.map((index) => board.tiles[index]!);
+    const candidates = hiddenEntries.map((entry) => entry.tile);
     const shuffled = shuffleWithRng(
         () => rng(),
         candidates
     );
     if (shuffled.every((tile, index) => tile.id === candidates[index]?.id)) {
-        shuffled.push(shuffled.shift()!);
+        const [first, ...rest] = shuffled;
+        if (!first) {
+            return { board, triggered: false };
+        }
+        shuffled.splice(0, shuffled.length, ...rest, first);
     }
-    hiddenIndices.forEach((index, slot) => {
-        nextTiles[index] = shuffled[slot]!;
+    hiddenEntries.forEach(({ index, tile }, slot) => {
+        nextTiles[index] = shuffled[slot] ?? tile;
     });
     return { board: { ...board, tiles: nextTiles }, triggered: true };
 };

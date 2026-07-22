@@ -927,5 +927,6 @@ describe('tile trait rules', () => {
         const result = applyVolatileMismatchTrait(board, run, [board.tiles[0]!, board.tiles[1]!]);
         expect(result.triggered).toBe(true);
         expect(result.board.tiles.slice(2).map((tile) => tile.id)).not.toEqual(board.tiles.slice(2).map((tile) => tile.id));
+        expect(result.board.tiles.slice(2).map((tile) => tile.id).sort()).toEqual(board.tiles.slice(2).map((tile) => tile.id).sort());
     });
 });
