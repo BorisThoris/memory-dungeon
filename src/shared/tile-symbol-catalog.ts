@@ -104,6 +104,12 @@ export const CALLSIGN_SYMBOLS: TileSymbolEntry[] = [
  * Tuning table: `docs/BALANCE_NOTES.md`.
  */
 export const TILE_SYMBOL_SETS = [NUMBER_SYMBOLS, LETTER_SYMBOLS, CALLSIGN_SYMBOLS] as const;
+const DEFAULT_SYMBOL_BAND_ID: SymbolBandId = 'numeric';
+const SYMBOL_SETS_BY_BAND_ID: Record<SymbolBandId, readonly TileSymbolEntry[]> = {
+    numeric: NUMBER_SYMBOLS,
+    letter_hybrid: LETTER_SYMBOLS,
+    callsign: CALLSIGN_SYMBOLS
+};
 
 export const ALL_TILE_SYMBOLS_FOR_GALLERY: TileSymbolEntry[] = [
     ...LETTER_SYMBOLS,
@@ -116,7 +122,7 @@ export const ALL_TILE_SYMBOLS_FOR_GALLERY: TileSymbolEntry[] = [
  * Thresholds are balance-owned; see `docs/BALANCE_NOTES.md`.
  */
 export const getSymbolSetIndexForLevel = (level: number): number => {
-    const L = Math.max(1, Math.floor(level));
+    const L = Number.isFinite(level) ? Math.max(1, Math.floor(level)) : 1;
     if (L <= SYMBOL_BAND_LAST_LEVEL_NUMERIC) {
         return 0;
     }
@@ -127,7 +133,7 @@ export const getSymbolSetIndexForLevel = (level: number): number => {
 };
 
 export const getSymbolSetForLevel = (level: number): readonly TileSymbolEntry[] =>
-    TILE_SYMBOL_SETS[getSymbolSetIndexForLevel(level)];
+    TILE_SYMBOL_SETS[getSymbolSetIndexForLevel(level)] ?? SYMBOL_SETS_BY_BAND_ID[DEFAULT_SYMBOL_BAND_ID];
 
 export const SYMBOL_BAND_READABILITY_PROFILES: readonly SymbolBandReadabilityProfile[] = [
     {
@@ -169,7 +175,6 @@ export interface SymbolBandReadabilityIssue {
     symbols: string[];
 }
 
-const BAND_IDS: readonly SymbolBandId[] = ['numeric', 'letter_hybrid', 'callsign'];
 const CONFUSABLE_SYMBOL_GROUPS: readonly (readonly string[])[] = [
     ['0', 'O'],
     ['1', 'I', 'L'],
@@ -192,9 +197,9 @@ const duplicateValues = (values: readonly string[]): string[] => {
 
 export const auditSymbolBandReadability = (): SymbolBandReadabilityIssue[] => {
     const issues: SymbolBandReadabilityIssue[] = [];
-    TILE_SYMBOL_SETS.forEach((entries, index) => {
-        const bandId = BAND_IDS[index]!;
-        const profile = SYMBOL_BAND_READABILITY_PROFILES[index]!;
+    SYMBOL_BAND_READABILITY_PROFILES.forEach((profile) => {
+        const bandId = profile.id;
+        const entries = SYMBOL_SETS_BY_BAND_ID[bandId] ?? SYMBOL_SETS_BY_BAND_ID[DEFAULT_SYMBOL_BAND_ID];
         const symbols = entries.map((entry) => entry.symbol);
         const labels = entries.map((entry) => entry.label);
         const duplicateSymbols = duplicateValues(symbols);
@@ -246,8 +251,8 @@ export const getSymbolBandReadabilityRows = (): {
     maxLabelLength: number;
     forbiddenConfusables: string[];
 }[] =>
-    SYMBOL_BAND_READABILITY_PROFILES.map((profile, index) => {
-        const entries = TILE_SYMBOL_SETS[index]!;
+    SYMBOL_BAND_READABILITY_PROFILES.map((profile) => {
+        const entries = SYMBOL_SETS_BY_BAND_ID[profile.id] ?? SYMBOL_SETS_BY_BAND_ID[DEFAULT_SYMBOL_BAND_ID];
         const warnings = auditSymbolBandReadability().filter(
             (issue) => issue.bandId === profile.id && issue.message.includes('confusable')
         );
