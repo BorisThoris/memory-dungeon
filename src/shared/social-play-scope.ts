@@ -11,17 +11,19 @@ export interface SocialPlayDecisionRow {
     onlineRequired: false;
 }
 
+const SHIPPED_SOCIAL_PLAY_DECISION: SocialPlayDecisionRow = {
+    id: 'share_strings',
+    status: 'shipped',
+    title: 'Share strings only',
+    description:
+        'v1 supports offline-safe share strings and deterministic local share keys for daily/run summaries.',
+    uiCopy: 'Share-only v1: compare local score, seed, and streak text outside the app; no account required.',
+    persistence: 'derived_share_string',
+    onlineRequired: false
+};
+
 export const SOCIAL_PLAY_DECISIONS: readonly SocialPlayDecisionRow[] = [
-    {
-        id: 'share_strings',
-        status: 'shipped',
-        title: 'Share strings only',
-        description:
-            'v1 supports offline-safe share strings and deterministic local share keys for daily/run summaries.',
-        uiCopy: 'Share-only v1: compare local score, seed, and streak text outside the app; no account required.',
-        persistence: 'derived_share_string',
-        onlineRequired: false
-    },
+    SHIPPED_SOCIAL_PLAY_DECISION,
     {
         id: 'pass_and_play',
         status: 'deferred',
@@ -54,7 +56,7 @@ export const SOCIAL_PLAY_SCOPE_DECISION = {
 } as const;
 
 export const getShippedSocialPlayDecision = (): SocialPlayDecisionRow =>
-    SOCIAL_PLAY_DECISIONS.find((row) => row.status === 'shipped') ?? SOCIAL_PLAY_DECISIONS[0]!;
+    SOCIAL_PLAY_DECISIONS.find((row) => row.status === 'shipped') ?? SHIPPED_SOCIAL_PLAY_DECISION;
 
 export const buildSocialShareCopy = ({
     mode,
