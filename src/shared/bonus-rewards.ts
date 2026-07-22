@@ -71,6 +71,8 @@ export const BONUS_REWARD_IDS = [
     'hazard_banisher'
 ] as const satisfies readonly BonusRewardId[];
 
+const DEFAULT_BONUS_REWARD_ID: BonusRewardId = 'bonus_shards';
+
 export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> = {
     chest_gold: {
         id: 'chest_gold',
@@ -358,7 +360,7 @@ const selectBonusRewardDefinition = (
 ): BonusRewardDefinition => {
     const orderedCandidates = rotateRewardCandidates(candidates, preferredIndex);
     const eligibleRewardId = orderedCandidates.find((id) => isEligible(BONUS_REWARD_CATALOG[id], floor, ledger) === null);
-    return BONUS_REWARD_CATALOG[eligibleRewardId ?? orderedCandidates[0]!];
+    return BONUS_REWARD_CATALOG[eligibleRewardId ?? orderedCandidates[0] ?? DEFAULT_BONUS_REWARD_ID];
 };
 
 export const rollBonusRewardRoom = ({
