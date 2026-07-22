@@ -151,4 +151,18 @@ describe('getPairProximityGridDistance', () => {
         );
         expect(getPairProximityGridDistance(b, 'open')).toBe(1);
     });
+
+    it('normalizes malformed board columns before measuring distance', () => {
+        const b = boardRect(
+            Number.NaN,
+            2,
+            [
+                tile('open', 'pk', 'flipped'),
+                tile('pad', 'x', 'hidden'),
+                tile('partner', 'pk', 'hidden')
+            ]
+        );
+
+        expect(getPairProximityGridDistance(b, 'open')).toBe(2);
+    });
 });
