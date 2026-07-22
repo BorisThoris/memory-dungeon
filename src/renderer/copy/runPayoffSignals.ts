@@ -120,6 +120,8 @@ const RUN_PAYOFF_LANE_BEATS_BY_ID: Record<RunPayoffLaneId, RunPayoffBeatCount> =
     risk: 2
 };
 
+const runPayoffArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
+
 const runPayoffLaneId = (row: Pick<RunPayoffSignalRow, 'id' | 'tone'>): RunPayoffLaneId => {
     if (row.tone === 'build') {
         return 'build';
@@ -203,9 +205,9 @@ export const getRunPayoffSignals = (
     const rows: (Omit<RunPayoffSignalRow, 'action' | 'audioCue' | 'screenCue'> & { priority: number })[] = [];
     const pickupClaimed = Math.max(0, options.pickupClaimed ?? summary.payoffPickupClaimed ?? 0);
     const pickupTotal = Math.max(0, options.pickupTotal ?? summary.payoffPickupTotal ?? 0);
-    const relicCount = summary.relicIds?.length ?? 0;
+    const relicCount = runPayoffArrayCount(summary.relicIds);
     const perkCount = Math.max(0, options.rewardPerkCount ?? summary.payoffRewardPerkCount ?? 0);
-    const mutatorCount = Math.max(0, summary.activeMutators?.length ?? 0);
+    const mutatorCount = runPayoffArrayCount(summary.activeMutators);
     const pressureCount = mutatorCount + Math.max(0, options.pressureExtra ?? summary.payoffPressureExtra ?? 0);
 
     if (summary.bestStreak >= 10) {

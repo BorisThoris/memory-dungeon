@@ -209,6 +209,20 @@ describe('runPayoffSignals', () => {
         });
     });
 
+    it('ignores malformed summary arrays before deriving payoff signal counts', () => {
+        const rows = getRunPayoffSignals(
+            summaryFixture({
+                activeMutators: Number.NaN as unknown as RunSummary['activeMutators'],
+                relicIds: Number.NaN as unknown as RunSummary['relicIds']
+            })
+        );
+
+        expect(rows.map((row) => row.id)).toEqual(['chain-seed', 'score-bank']);
+        expect(rows.map((row) => row.id)).not.toContain('build-engines');
+        expect(rows.map((row) => row.id)).not.toContain('pressure-burst');
+        expect(rows.map((row) => row.value).join(' ')).not.toMatch(/NaN|Infinity/);
+    });
+
     it('can add a next chain target for recent-run archive surfaces', () => {
         const rows = getRunPayoffSignals(summaryFixture({ bestStreak: 7 }), { includeChainTarget: true });
 
