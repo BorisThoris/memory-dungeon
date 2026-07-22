@@ -75,7 +75,7 @@ describe('createRunSummary', () => {
                 findablesTotalThisFloor: 2,
                 activeMutators: Number.NaN,
                 relicIds: Number.NaN,
-                rewardPerkIds: ['trait_streak_toolkit'],
+                rewardPerkIds: { length: Number.POSITIVE_INFINITY },
                 stats: {
                     ...run.stats,
                     totalScore: Number.NaN,
@@ -101,6 +101,7 @@ describe('createRunSummary', () => {
             payoffPickupClaimed: 2,
             payoffPickupTotal: 2,
             payoffPressureExtra: 2,
+            payoffRewardPerkCount: 0,
             activeMutators: [],
             relicIds: []
         });

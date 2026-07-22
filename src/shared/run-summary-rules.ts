@@ -13,6 +13,8 @@ const summaryMutatorIds = (value: unknown): MutatorId[] => Array.isArray(value) 
 
 const summaryRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
 
+const summaryArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
+
 export const createRunSummary = (run: RunState, unlockedAchievements: AchievementId[]): RunState => ({
     ...run,
     lastRunSummary: (() => {
@@ -38,7 +40,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             payoffPickupClaimed: Math.min(nonNegativeInteger(run.findablesClaimedThisFloor), payoffPickupTotal),
             payoffPickupTotal,
             payoffPressureExtra: stats.mismatches + stats.volatileTraitShuffles,
-            payoffRewardPerkCount: nonNegativeInteger(run.rewardPerkIds?.length),
+            payoffRewardPerkCount: summaryArrayCount(run.rewardPerkIds),
             payoffRoutePaid: run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor),
             payoffRouteRewardText: run.traitRouteObjectiveRewardTextThisFloor,
             startingLoadoutId: run.startingLoadoutId ?? null,
