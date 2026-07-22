@@ -23,21 +23,23 @@ export interface OverlayDecisionPolicyRow {
     finalLicensedAssetRequired: false;
 }
 
+const DEFAULT_OVERLAY_DECISION_POLICY_ROW: OverlayDecisionPolicyRow = {
+    kind: 'alert',
+    modalKind: 'alert',
+    tone: 'neutral',
+    primaryAction: 'Acknowledge',
+    secondaryAction: 'None',
+    oneHand: true,
+    oneHandPlacement: 'center sheet; action remains reachable',
+    keyboard: true,
+    keyboardPath: 'Tab trap + initial focus + focus restore',
+    backBehavior: 'Acknowledgement closes the alert.',
+    usesExistingChrome: true,
+    finalLicensedAssetRequired: false
+};
+
 export const OVERLAY_DECISION_POLICY_ROWS: readonly OverlayDecisionPolicyRow[] = [
-    {
-        kind: 'alert',
-        modalKind: 'alert',
-        tone: 'neutral',
-        primaryAction: 'Acknowledge',
-        secondaryAction: 'None',
-        oneHand: true,
-        oneHandPlacement: 'center sheet; action remains reachable',
-        keyboard: true,
-        keyboardPath: 'Tab trap + initial focus + focus restore',
-        backBehavior: 'Acknowledgement closes the alert.',
-        usesExistingChrome: true,
-        finalLicensedAssetRequired: false
-    },
+    DEFAULT_OVERLAY_DECISION_POLICY_ROW,
     {
         kind: 'decision',
         modalKind: 'decision',
@@ -75,8 +77,7 @@ export const OVERLAY_DECISION_POLICY_ROWS: readonly OverlayDecisionPolicyRow[] =
         oneHandPlacement: 'sticky action rail / mobile bottom-safe area',
         keyboard: true,
         keyboardPath: 'Tab trap + initial focus + focus restore',
-        backBehavior: 'P/Escape or Resume returns to the frozen run.'
-        ,
+        backBehavior: 'P/Escape or Resume returns to the frozen run.',
         usesExistingChrome: true,
         finalLicensedAssetRequired: false
     },
@@ -138,6 +139,6 @@ export const getOverlayDecisionPolicyRows = (): readonly OverlayDecisionPolicyRo
     OVERLAY_DECISION_POLICY_ROWS.filter((row) => row.modalKind);
 
 export const overlayDecisionPolicyForKind = (kind: OverlayDecisionKind): OverlayDecisionPolicyRow =>
-    OVERLAY_DECISION_POLICY_ROWS.find((row) => row.kind === kind) ?? OVERLAY_DECISION_POLICY_ROWS[0]!;
+    OVERLAY_DECISION_POLICY_ROWS.find((row) => row.kind === kind) ?? DEFAULT_OVERLAY_DECISION_POLICY_ROW;
 
 export const getOverlayDecisionPolicyRow = overlayDecisionPolicyForKind;
