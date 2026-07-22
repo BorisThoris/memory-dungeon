@@ -180,7 +180,11 @@ const buildRecallPlan = (tiles: readonly Tile[], pinnedTileIds: readonly string[
         const unresolvedTiles = pairTiles.filter((tile) => !tileIsCleared(tile));
         const knownUnresolved = unresolvedTiles.filter((tile) => tileIsKnownToMemory(tile, pinnedSet));
         const forgottenUnresolved = unresolvedTiles.filter((tile) => forgottenSet.has(tile.id));
-        const label = tileMemoryLabel(pairTiles[0]!);
+        const labelTile = unresolvedTiles[0] ?? pairTiles[0];
+        if (!labelTile) {
+            continue;
+        }
+        const label = tileMemoryLabel(labelTile);
 
         if (forgottenUnresolved.length > 0) {
             forgottenReads.push(label);

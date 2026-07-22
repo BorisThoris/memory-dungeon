@@ -532,6 +532,27 @@ describe('getMemoryRecallFeedback', () => {
         ]);
     });
 
+    it('labels recall plan entries from unresolved tiles when the pair lead is cleared', () => {
+        const run = makeRun(
+            [
+                makeTile('a1', 'A', 'Cleared Rune', { state: 'matched' }),
+                makeTile('a2', 'A', 'Live Rune'),
+                makeTile('b1', 'B', 'Rune B'),
+                makeTile('b2', 'B', 'Rune B')
+            ],
+            {
+                forgottenTileIdsThisFloor: ['a2']
+            }
+        );
+
+        expect(getMemoryRecallFeedback(run).recallPlan[0]).toEqual(
+            expect.objectContaining({
+                id: 'recall-plan-forget-risk',
+                label: 'Forgetting risk: Live Rune'
+            })
+        );
+    });
+
     it('keeps singleton utility cards out of pair-memory counters', () => {
         const run = makeRun([
             makeTile('a1', 'A', 'Rune A'),
