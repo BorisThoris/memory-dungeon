@@ -47,8 +47,9 @@ export const capDungeonCardRecipeForBudget = (
     const selectedIndexes = new Set<number>();
     const take = (predicate: (card: DungeonCardAssignment) => boolean): void => {
         for (let index = 0; index < cards.length && selected.length < capacity; index += 1) {
-            if (!selectedIndexes.has(index) && predicate(cards[index]!)) {
-                selected.push(cards[index]!);
+            const card = cards[index];
+            if (card !== undefined && !selectedIndexes.has(index) && predicate(card)) {
+                selected.push(card);
                 selectedIndexes.add(index);
             }
         }

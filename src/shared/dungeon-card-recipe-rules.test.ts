@@ -23,6 +23,15 @@ describe('dungeon card recipe rules', () => {
         ]);
     });
 
+    it('returns no card assignments for zero capacity', () => {
+        const cards: DungeonCardAssignment[] = [
+            { kind: 'lever', effectId: 'lever_floor', symbol: 'V', label: 'Lever' },
+            { kind: 'enemy', effectId: 'enemy_elite', symbol: 'B', label: 'Boss', bossId: 'rush_sentinel' }
+        ];
+
+        expect(capDungeonCardRecipeForBudget(cards, 0, 'find_exit')).toEqual([]);
+    });
+
     it('builds boss recipes with boss and shrine cards', () => {
         const cards = dungeonCardRecipeForFloor(5, 'boss', null, 'endless');
 
