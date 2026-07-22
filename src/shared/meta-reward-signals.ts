@@ -204,14 +204,37 @@ export const getCodexRewardSignals = (save: SaveData): MetaRewardSignalRow[] => 
 
 export const buildMetaRewardSignals = getCollectionRewardSignals;
 
-export const getCollectionRewardSignal = (save: SaveData): MetaRewardSignalRow => getCollectionRewardSignals(save)[0]!;
-export const getInventoryRewardSignal = (run: RunState | null): MetaRewardSignalRow => getInventoryRewardSignals(run)[0]!;
+const DEFAULT_COLLECTION_REWARD_SIGNAL: MetaRewardSignalRow = {
+    id: 'collection_profile_level',
+    screen: 'collection',
+    kind: 'progress',
+    title: 'Profile level 1',
+    body: '0 honor marks; 0 honors earned; 0 visible reward(s) owned.',
+    cta: 'Play Classic or Daily to create progress.',
+    progress: { current: 0, target: 1 }
+};
+
+const DEFAULT_INVENTORY_REWARD_SIGNAL: MetaRewardSignalRow = {
+    id: 'inventory_empty_run',
+    screen: 'inventory',
+    kind: 'empty_state',
+    title: 'No active expedition',
+    body: 'Relics, mutators, charges, and run economy appear here during a descent.',
+    cta: 'Start a run from Choose Your Path.'
+};
+
+const DEFAULT_CODEX_REWARD_SIGNAL: MetaRewardSignalRow = {
+    id: 'codex_learning_goal',
+    screen: 'codex',
+    kind: 'next_goal',
+    title: 'Learn toward mastery',
+    body: 'Guides explain rules while tables reveal relic, mutator, mode, and achievement value.',
+    cta: 'Use Guides for rules, Tables for discoveries.'
+};
+
+export const getCollectionRewardSignal = (save: SaveData): MetaRewardSignalRow =>
+    getCollectionRewardSignals(save)[0] ?? DEFAULT_COLLECTION_REWARD_SIGNAL;
+export const getInventoryRewardSignal = (run: RunState | null): MetaRewardSignalRow =>
+    getInventoryRewardSignals(run)[0] ?? DEFAULT_INVENTORY_REWARD_SIGNAL;
 export const getCodexRewardSignal = (save?: SaveData): MetaRewardSignalRow =>
-    save ? getCodexRewardSignals(save)[0]! : {
-        id: 'codex_learning_goal',
-        screen: 'codex',
-        kind: 'next_goal',
-        title: 'Learn toward mastery',
-        body: 'Guides explain rules while tables reveal relic, mutator, mode, and achievement value.',
-        cta: 'Use Guides for rules, Tables for discoveries.'
-    };
+    save ? getCodexRewardSignals(save)[0] ?? DEFAULT_CODEX_REWARD_SIGNAL : DEFAULT_CODEX_REWARD_SIGNAL;
