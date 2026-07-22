@@ -96,6 +96,16 @@ describe('getPairProximityGridDistance', () => {
         expect(getPairProximityGridDistance(b, 'a')).toBeNull();
     });
 
+    it('returns null when the tile id is absent from the board', () => {
+        const b = board2x2([
+            tile('a', 'p1', 'flipped'),
+            tile('b', 'p1', 'hidden'),
+            tile('c', 'p2', 'hidden'),
+            tile('d', 'p2', 'hidden')
+        ]);
+        expect(getPairProximityGridDistance(b, 'missing')).toBeNull();
+    });
+
     it('returns null when no tile can legally pair with the flipped tile (unique pair keys)', () => {
         const b = board2x2([
             tile('a', 'p1', 'flipped'),

@@ -22,7 +22,10 @@ export const getPairProximityGridDistance = (board: BoardState, tileId: string):
     if (selfIndex < 0) {
         return null;
     }
-    const tile = board.tiles[selfIndex]!;
+    const tile = board.tiles[selfIndex];
+    if (!tile) {
+        return null;
+    }
     if (tile.state !== 'flipped') {
         return null;
     }
