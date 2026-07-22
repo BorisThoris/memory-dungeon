@@ -1065,7 +1065,15 @@ export const applyRelicOfferService = (
     const paidRun: RunState = { ...run, shopGold: nonNegativeRelicOfferCount(run.shopGold) - service.cost };
 
     if (serviceId === 'ban_option') {
-        const banTarget = targetRelicId && options.includes(targetRelicId) ? targetRelicId : options[0]!;
+        const banTarget = targetRelicId && options.includes(targetRelicId) ? targetRelicId : options[0];
+        if (!banTarget) {
+            return {
+                run: { ...run, relicOffer: { ...offer, services: createRelicOfferServices(run) } },
+                applied: false,
+                serviceId,
+                reason: 'unavailable'
+            };
+        }
         bannedRelicIds.push(banTarget);
         options = options.filter((id) => id !== banTarget);
         options = fillRelicOptions(paidRun, tierIndex, cleared, pickRound + 1, options, bannedRelicIds);

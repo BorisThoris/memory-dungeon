@@ -714,11 +714,13 @@ describe('REG-078 relic offer services', () => {
             'No relic options remain.'
         ]);
 
-        const result = applyRelicOfferService(run, 'reroll_offer');
-        expect(result.applied).toBe(false);
-        expect(result.reason).toBe('unavailable');
-        expect(result.run.shopGold).toBe(run.shopGold);
-        expect(result.run.relicOffer?.options).toEqual([]);
+        for (const serviceId of RELIC_OFFER_SERVICE_IDS) {
+            const result = applyRelicOfferService(run, serviceId);
+            expect(result.applied).toBe(false);
+            expect(result.reason).toBe('unavailable');
+            expect(result.run.shopGold).toBe(run.shopGold);
+            expect(result.run.relicOffer?.options).toEqual([]);
+        }
     });
 
     it('does not charge or replace the offer when a service would exhaust the remaining pool', () => {
