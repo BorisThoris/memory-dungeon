@@ -105,7 +105,7 @@ const pickHazardTileId = (
     if (candidates.length === 0) {
         return null;
     }
-    return candidates[Math.abs(turn + offset) % candidates.length]!.id;
+    return candidates[Math.abs(turn + offset) % candidates.length]?.id ?? null;
 };
 
 const buildEnemyHazard = ({
@@ -250,10 +250,11 @@ export const advanceEnemyHazardsOnBoard = (board: BoardState, steps: number = 1)
     if (hazards.length === 0 || safeSteps <= 0) {
         return board;
     }
+    const sourceHazards = board.enemyHazards ?? [];
     const activeIds = new Set(hazards.map((hazard) => hazard.id));
     const nextTurn = nonNegativeEnemyHazardCount(board.enemyHazardTurn) + safeSteps;
     const occupied = new Set<string>();
-    const nextHazards = board.enemyHazards!.map((hazard, index) => {
+    const nextHazards = sourceHazards.map((hazard, index) => {
         if (!activeIds.has(hazard.id)) {
             return hazard;
         }
