@@ -39,6 +39,19 @@ const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState =
 });
 
 describe('dungeon topology graph', () => {
+    it('handles empty board topology without relying on tile or queue assertions', () => {
+        const source = board([], { pairCount: 0, rows: 0 });
+        const graph = createDungeonBoardTopology(source);
+        const report = inspectDungeonBoardTopology(source);
+
+        expect(graph.nodes()).toEqual(['start']);
+        expect(report).toMatchObject({
+            hasExitRoute: false,
+            reachableNodeIds: ['start'],
+            issues: []
+        });
+    });
+
     it('models board progression resources as graph nodes', () => {
         const source = board(
             [

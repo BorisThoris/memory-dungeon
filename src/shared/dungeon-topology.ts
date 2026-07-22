@@ -229,7 +229,10 @@ export const createDungeonBoardTopology = (
         }
 
         const tileIds = tiles.map((tile) => tile.id);
-        const first = tiles[0]!;
+        const first = tiles[0];
+        if (!first) {
+            continue;
+        }
         const pairNodeId = `pair:${pairKey}`;
         const actionable = tiles.some((tile) => !isTileCleared(tile) && isTileActionable(tile));
         if (!isSingletonUtilityPairKey(pairKey) && actionable) {
@@ -379,8 +382,11 @@ const collectReachableNodeIds = (
 ): string[] => {
     const reachable = new Set<string>();
     const queue = [startNodeId];
-    while (queue.length > 0) {
-        const nodeId = queue.shift()!;
+    for (let cursor = 0; cursor < queue.length; cursor += 1) {
+        const nodeId = queue[cursor];
+        if (!nodeId) {
+            continue;
+        }
         if (reachable.has(nodeId) || !graph.hasNode(nodeId)) {
             continue;
         }
