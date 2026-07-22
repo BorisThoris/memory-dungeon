@@ -41,6 +41,11 @@ const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.f
 
 const hasRelic = (run: RunState, relicId: RelicId): boolean => Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
 
+type TileEntry = {
+    index: number;
+    tile: BoardState['tiles'][number];
+};
+
 export interface DestroyPairTransitionOptions {
     isBoardComplete: (board: BoardState) => boolean;
     rotateShiftingSpotlight: (
@@ -64,7 +69,10 @@ export const applyDestroyPairTransition = (
         return { run, boardComplete: false, changed: false };
     }
 
-    const tile = run.board.tiles.find((t) => t.id === tileId)!;
+    const tile = run.board.tiles.find((t) => t.id === tileId);
+    if (!tile) {
+        return { run, boardComplete: false, changed: false };
+    }
     const pairTileIds = run.board.tiles.filter((t) => t.pairKey === tile.pairKey).map((t) => t.id);
 
     const board: BoardState = {
@@ -117,44 +125,45 @@ export const applyDestroyPairTransition = (
 };
 
 export const applyShuffle = (run: RunState): RunState => {
-    if (!canShuffleBoard(run) || !run.board) {
+    const board = run.board;
+    if (!canShuffleBoard(run) || !board) {
         return run;
     }
 
-    const hiddenIndices: number[] = [];
-    run.board.tiles.forEach((tile, index) => {
+    const hiddenEntries: TileEntry[] = [];
+    board.tiles.forEach((tile, index) => {
         if (tile.state === 'hidden') {
-            hiddenIndices.push(index);
+            hiddenEntries.push({ index, tile });
         }
     });
 
     const shuffleNonce = nonNegativePowerCount(run.shuffleNonce);
     const shuffleRng = createMulberry32(
-        deriveShuffleRngSeed(run.runSeed, run.board.level, shuffleNonce, run.runRulesVersion)
+        deriveShuffleRngSeed(run.runSeed, board.level, shuffleNonce, run.runRulesVersion)
     );
-    const cols = run.board.columns;
-    const nextTiles = [...run.board.tiles];
+    const cols = board.columns;
+    const nextTiles = [...board.tiles];
 
     if (run.weakerShuffleMode === 'rows_only') {
-        const rowToIndices = new Map<number, number[]>();
-        for (const index of hiddenIndices) {
-            const row = Math.floor(index / cols);
-            const list = rowToIndices.get(row) ?? [];
-            list.push(index);
-            rowToIndices.set(row, list);
+        const rowToEntries = new Map<number, TileEntry[]>();
+        for (const entry of hiddenEntries) {
+            const row = Math.floor(entry.index / cols);
+            const list = rowToEntries.get(row) ?? [];
+            list.push(entry);
+            rowToEntries.set(row, list);
         }
-        for (const indices of rowToIndices.values()) {
-            const chunk = indices.map((i) => nextTiles[i]!);
+        for (const entries of rowToEntries.values()) {
+            const chunk = entries.map((entry) => entry.tile);
             const shuffledChunk = shuffleWithRng(() => shuffleRng(), chunk);
-            indices.forEach((cellIdx, slot) => {
-                nextTiles[cellIdx] = shuffledChunk[slot]!;
+            entries.forEach((entry, slot) => {
+                nextTiles[entry.index] = shuffledChunk[slot] ?? entry.tile;
             });
         }
     } else {
-        const hiddenTiles = hiddenIndices.map((index) => run.board!.tiles[index]);
+        const hiddenTiles = hiddenEntries.map((entry) => entry.tile);
         const shuffled = shuffleWithRng(() => shuffleRng(), hiddenTiles);
-        hiddenIndices.forEach((index, slot) => {
-            nextTiles[index] = shuffled[slot]!;
+        hiddenEntries.forEach((entry, slot) => {
+            nextTiles[entry.index] = shuffled[slot] ?? entry.tile;
         });
     }
 
@@ -170,7 +179,7 @@ export const applyShuffle = (run: RunState): RunState => {
     if (run.shuffleScoreTaxActive) {
         matchScoreMultiplier *= SHUFFLE_SCORE_TAX_FACTOR;
     }
-    const shuffledTileIds = hiddenIndices.map((index) => run.board!.tiles[index]!.id);
+    const shuffledTileIds = hiddenEntries.map((entry) => entry.tile.id);
     const stats = normalizeSessionStats(run.stats);
 
     return {
@@ -185,7 +194,7 @@ export const applyShuffle = (run: RunState): RunState => {
         recallFocus: 0,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, shuffledTileIds),
         board: {
-            ...run.board,
+            ...board,
             tiles: nextTiles
         },
         stats: {
@@ -196,14 +205,15 @@ export const applyShuffle = (run: RunState): RunState => {
 };
 
 export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState => {
-    if (!canRegionShuffle(run) || !run.board) {
+    const board = run.board;
+    if (!canRegionShuffle(run) || !board) {
         return run;
     }
-    const cols = run.board.columns;
-    const hiddenInRow: number[] = [];
-    run.board.tiles.forEach((tile, index) => {
+    const cols = board.columns;
+    const hiddenInRow: TileEntry[] = [];
+    board.tiles.forEach((tile, index) => {
         if (tile.state === 'hidden' && Math.floor(index / cols) === rowIndex) {
-            hiddenInRow.push(index);
+            hiddenInRow.push({ index, tile });
         }
     });
     if (hiddenInRow.length < 2) {
@@ -222,15 +232,15 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
 
     const shuffleNonce = nonNegativePowerCount(run.shuffleNonce);
     const shuffleRng = createMulberry32(
-        deriveShuffleRngSeed(run.runSeed, run.board.level, shuffleNonce, run.runRulesVersion)
+        deriveShuffleRngSeed(run.runSeed, board.level, shuffleNonce, run.runRulesVersion)
     );
-    const nextTiles = [...run.board.tiles];
-    const chunk = hiddenInRow.map((i) => nextTiles[i]!);
+    const nextTiles = [...board.tiles];
+    const chunk = hiddenInRow.map((entry) => entry.tile);
     const shuffledChunk = shuffleWithRng(() => shuffleRng(), chunk);
-    hiddenInRow.forEach((cellIdx, slot) => {
-        nextTiles[cellIdx] = shuffledChunk[slot]!;
+    hiddenInRow.forEach((entry, slot) => {
+        nextTiles[entry.index] = shuffledChunk[slot] ?? entry.tile;
     });
-    const shuffledTileIds = hiddenInRow.map((index) => run.board!.tiles[index]!.id);
+    const shuffledTileIds = hiddenInRow.map((entry) => entry.tile.id);
     const stats = normalizeSessionStats(run.stats);
 
     return {
@@ -245,7 +255,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         recallFocus: 0,
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, shuffledTileIds),
         board: {
-            ...run.board,
+            ...board,
             tiles: nextTiles
         },
         stats: {
@@ -276,8 +286,12 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
     }
 
     const nextTiles = [...run.board.tiles];
-    const firstTile = nextTiles[firstIndex]!;
-    nextTiles[firstIndex] = nextTiles[secondIndex]!;
+    const firstTile = nextTiles[firstIndex];
+    const secondTile = nextTiles[secondIndex];
+    if (!firstTile || !secondTile) {
+        return run;
+    }
+    nextTiles[firstIndex] = secondTile;
     nextTiles[secondIndex] = firstTile;
     const stats = normalizeSessionStats(run.stats);
 
@@ -331,7 +345,10 @@ export const applyFlashPair = (run: RunState): RunState => {
     const rng = createMulberry32(
         hashStringToSeed(`flashPair:${run.runRulesVersion}:${run.runSeed}:${run.board.level}:${shuffleNonce}`)
     );
-    const picked = complete[pickRngIndex(rng, complete.length)]!;
+    const picked = complete[pickRngIndex(rng, complete.length)];
+    if (!picked) {
+        return run;
+    }
     const pairIds = picked.slice(0, 2);
     return {
         ...run,
