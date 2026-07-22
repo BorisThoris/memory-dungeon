@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import { getRewardPerkRows } from '../../shared/bonus-rewards';
 import { MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
-import type { MutatorId, RelicId, RunState } from '../../shared/contracts';
+import type { MutatorId, RelicId, RewardPerkId, RunState } from '../../shared/contracts';
 import { buildDailyResultsLoopRows } from '../../shared/daily-archive';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { buildRunJournalEntry } from '../../shared/run-history';
@@ -43,6 +43,24 @@ interface GameOverScreenProps {
 const mutatorLabel = (id: MutatorId): string => MUTATOR_CATALOG[id].title;
 
 const relicLabel = (id: RelicId): string => RELIC_CATALOG[id].title;
+
+const gameOverMutatorIds = (value: unknown): MutatorId[] =>
+    Array.isArray(value)
+        ? value.filter((id): id is MutatorId => typeof id === 'string' && id in MUTATOR_CATALOG)
+        : [];
+
+const gameOverRelicIds = (value: unknown): RelicId[] =>
+    Array.isArray(value)
+        ? value.filter((id): id is RelicId => typeof id === 'string' && id in RELIC_CATALOG)
+        : [];
+
+const gameOverRewardPerkIds = (value: unknown): RewardPerkId[] =>
+    Array.isArray(value)
+        ? value.filter((id): id is RewardPerkId => typeof id === 'string')
+        : [];
+
+const gameOverFlipHistory = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((id): id is string => typeof id === 'string') : [];
 
 const runModeIdentityLine = (summary: NonNullable<RunState['lastRunSummary']>): string => {
     if (summary.activeContract?.noShuffle) {
@@ -112,14 +130,17 @@ const runMomentumRecapRows = (
     const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
     const traitRouteComplete =
         run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor);
-    const perkCount = run.rewardPerkIds?.length ?? 0;
-    const topPerkCue = getRewardPerkRows(run)[0]?.nextCue;
+    const summaryActiveMutators = gameOverMutatorIds(summary.activeMutators);
+    const summaryRelicIds = gameOverRelicIds(summary.relicIds);
+    const rewardPerkIds = gameOverRewardPerkIds(run.rewardPerkIds);
+    const perkCount = rewardPerkIds.length;
+    const topPerkCue = getRewardPerkRows({ rewardPerkIds })[0]?.nextCue;
     const buildDetail = traitRouteComplete
         ? `Trait route paid: ${run.traitRouteObjectiveRewardTextThisFloor ?? 'trait route cashout'}.`
         : 'Drafted relics and perks define the next build attempt.';
     const buildDetailWithPerk = topPerkCue ? `${buildDetail} Perk next: ${topPerkCue}` : buildDetail;
     const pressureCount =
-        Math.max(0, summary.activeMutators?.length ?? 0) +
+        Math.max(0, summaryActiveMutators.length) +
         Math.max(0, run.stats.mismatches) +
         Math.max(0, run.stats.volatileTraitShuffles);
     const nextFocus =
@@ -135,7 +156,7 @@ const runMomentumRecapRows = (
                     detail: 'Prioritize visible reward pairs before the floor ends.',
                     tone: 'reward' as const
                 }
-              : (summary.relicIds?.length ?? 0) === 0 && perkCount === 0
+              : summaryRelicIds.length === 0 && perkCount === 0
                 ? {
                       value: 'Draft engine',
                       detail: 'Take a relic or perk that changes the next route plan.',
@@ -176,7 +197,7 @@ const runMomentumRecapRows = (
         {
             id: 'build',
             label: 'Build engines',
-            value: `${summary.relicIds?.length ?? 0} relics / ${perkCount} perks`,
+            value: `${summaryRelicIds.length} relics / ${perkCount} perks`,
             detail: buildDetailWithPerk,
             tone: 'build'
         },
@@ -263,25 +284,29 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         .map((achievementId) => ACHIEVEMENTS.find((achievement) => achievement.id === achievementId))
         .filter((achievement): achievement is (typeof ACHIEVEMENTS)[number] => Boolean(achievement));
 
-    const flipCount = run.flipHistory?.length ?? 0;
+    const summaryActiveMutators = gameOverMutatorIds(summary.activeMutators);
+    const summaryRelicIds = gameOverRelicIds(summary.relicIds);
+    const rewardPerkIds = gameOverRewardPerkIds(run.rewardPerkIds);
+    const flipHistory = gameOverFlipHistory(run.flipHistory);
+    const flipCount = flipHistory.length;
     const journalEntry = buildRunJournalEntry(run);
     const nextRunRows = getGameOverNextRunRows(run, saveData, runStartSaveData ?? undefined);
     const metaItems = [
-        ...(summary.activeMutators?.map((id) => ({ kind: 'mutator' as const, label: mutatorLabel(id) })) ?? []),
-        ...(summary.relicIds?.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) })) ?? [])
+        ...summaryActiveMutators.map((id) => ({ kind: 'mutator' as const, label: mutatorLabel(id) })),
+        ...summaryRelicIds.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) }))
     ];
     const outcomeSignals = [
         { kind: 'score', label: 'Score', value: summary.totalScore.toLocaleString() },
         { kind: 'chain', label: 'Best chain', value: `x${summary.bestStreak}` },
         { kind: 'perfect', label: 'Perfect clears', value: `${summary.perfectClears}` },
-        summary.relicIds && summary.relicIds.length > 0
-            ? { kind: 'build', label: 'Prime', value: `${summary.relicIds.length} relic${summary.relicIds.length === 1 ? '' : 's'}` }
+        summaryRelicIds.length > 0
+            ? { kind: 'build', label: 'Prime', value: `${summaryRelicIds.length} relic${summaryRelicIds.length === 1 ? '' : 's'}` }
             : null,
-        summary.activeMutators && summary.activeMutators.length > 0
+        summaryActiveMutators.length > 0
             ? {
                   kind: 'pressure',
                   label: 'Pressure',
-                  value: `${summary.activeMutators.length} mutator${summary.activeMutators.length === 1 ? '' : 's'}`
+                  value: `${summaryActiveMutators.length} mutator${summaryActiveMutators.length === 1 ? '' : 's'}`
               }
             : null
     ].filter((row): row is { kind: string; label: string; value: string } => row != null);
@@ -289,7 +314,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         pickupClaimed: run.findablesClaimedThisFloor,
         pickupTotal: run.findablesTotalThisFloor,
         pressureExtra: Math.max(0, run.stats.mismatches) + Math.max(0, run.stats.volatileTraitShuffles),
-        rewardPerkCount: run.rewardPerkIds?.length ?? 0,
+        rewardPerkCount: rewardPerkIds.length,
         routePaid: run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor),
         routeRewardText: run.traitRouteObjectiveRewardTextThisFloor
     });
@@ -753,12 +778,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     </Panel>
                 ) : null}
 
-                {(run.flipHistory?.length ?? 0) > 0 ? (
+                {flipHistory.length > 0 ? (
                     <Panel className={styles.detailsPanel} padding="md" variant="muted">
                         <details className={styles.timelineDetails} data-testid="game-over-detail-drawer">
                             <summary>{gameOverScreenCopy.flipTimelineSummary}</summary>
                             <ol className={styles.ghostSteps}>
-                                {run.flipHistory!.map((id, index) => (
+                                {flipHistory.map((id, index) => (
                                     <li key={`${id}-${index}`}>
                                         <span className={styles.ghostStepIndex}>{index + 1}</span>
                                         <code>{id}</code>

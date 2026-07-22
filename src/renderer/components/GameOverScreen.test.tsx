@@ -394,6 +394,31 @@ describe('GameOverScreen (REF-031)', () => {
         );
     });
 
+    it('normalizes malformed archived run arrays before rendering summary feedback', () => {
+        const run = gameOverRunFixture();
+        const malformedRun: RunState = {
+            ...run,
+            flipHistory: Number.NaN as unknown as RunState['flipHistory'],
+            rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'],
+            lastRunSummary: run.lastRunSummary
+                ? {
+                      ...run.lastRunSummary,
+                      activeMutators: Number.NaN as unknown as NonNullable<RunState['lastRunSummary']>['activeMutators'],
+                      relicIds: Number.NaN as unknown as NonNullable<RunState['lastRunSummary']>['relicIds']
+                  }
+                : null
+        };
+
+        render(<GameOverScreen run={malformedRun} />);
+
+        const signals = screen.getByTestId('game-over-outcome-signals');
+        expect(signals.querySelector('[data-outcome-signal="build"]')).toBeNull();
+        expect(signals.querySelector('[data-outcome-signal="pressure"]')).toBeNull();
+        expect(screen.getByTestId('game-over-momentum-recap')).toHaveTextContent('0 relics / 0 perks');
+        expect(screen.queryByTestId('game-over-detail-drawer')).not.toBeInTheDocument();
+        expect(screen.getByText('No flip history stored for this run.')).toBeInTheDocument();
+    });
+
     it('PPI-006 preserves contract mode identity in game-over summary', () => {
         const run = gameOverRunFixture();
         const scholarRun: RunState = {
