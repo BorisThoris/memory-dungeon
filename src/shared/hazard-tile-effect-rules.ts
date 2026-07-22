@@ -22,13 +22,13 @@ const nonNegativeHazardEffectCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const applyShuffleSnareHazard = (board: BoardState, run: RunState): { board: BoardState; triggered: boolean } => {
-    const hiddenIndices: number[] = [];
+    const hiddenEntries: { index: number; tile: Tile }[] = [];
     board.tiles.forEach((tile, index) => {
         if (tileIsSafeHazardEffectTarget(tile) && tile.pairKey !== board.cursedPairKey) {
-            hiddenIndices.push(index);
+            hiddenEntries.push({ index, tile });
         }
     });
-    if (hiddenIndices.length < 2) {
+    if (hiddenEntries.length < 2) {
         return { board, triggered: false };
     }
     const rng = createMulberry32(
@@ -39,10 +39,10 @@ export const applyShuffleSnareHazard = (board: BoardState, run: RunState): { boa
     const nextTiles = [...board.tiles];
     const shuffled = shuffleWithRng(
         () => rng(),
-        hiddenIndices.map((index) => board.tiles[index]!)
+        hiddenEntries.map((entry) => entry.tile)
     );
-    hiddenIndices.forEach((index, slot) => {
-        nextTiles[index] = shuffled[slot]!;
+    hiddenEntries.forEach(({ index, tile }, slot) => {
+        nextTiles[index] = shuffled[slot] ?? tile;
     });
     return { board: { ...board, tiles: nextTiles }, triggered: true };
 };
@@ -71,7 +71,10 @@ export const applyCascadeCacheHazard = (
             `hazardCascade:${run.runRulesVersion}:${run.runSeed}:${board.level}:${run.hazardCascadeCachesThisFloor}:${matchedPairKey}`
         )
     );
-    const targetPairKey = shuffleWithRng(() => rng(), pairKeys)[0]!;
+    const targetPairKey = shuffleWithRng(() => rng(), pairKeys)[0];
+    if (!targetPairKey) {
+        return { board, triggered: false };
+    }
     return {
         board: {
             ...board,
