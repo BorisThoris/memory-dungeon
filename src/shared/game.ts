@@ -465,15 +465,21 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         return run;
     }
     const [aId, bId, cId] = flippedTileIds;
-    const ta = run.board.tiles.find((t) => t.id === aId)!;
-    const tb = run.board.tiles.find((t) => t.id === bId)!;
-    const tc = run.board.tiles.find((t) => t.id === cId)!;
+    const ta = run.board.tiles.find((t) => t.id === aId);
+    const tb = run.board.tiles.find((t) => t.id === bId);
+    const tc = run.board.tiles.find((t) => t.id === cId);
+    if (!ta || !tb || !tc) {
+        return run;
+    }
     const selection = selectGambitMatchedPair(run.board);
 
     if (selection) {
         const { firstTileId: matchA, secondTileId: matchB, thirdTileId: thirdId } = selection;
-        const tileMatchA = run.board.tiles.find((t) => t.id === matchA)!;
-        const tileMatchB = run.board.tiles.find((t) => t.id === matchB)!;
+        const tileMatchA = run.board.tiles.find((t) => t.id === matchA);
+        const tileMatchB = run.board.tiles.find((t) => t.id === matchB);
+        if (!tileMatchA || !tileMatchB) {
+            return run;
+        }
         const matchClaimContext = deriveMatchClaimContext({
             firstTile: tileMatchA,
             firstTileId: matchA,

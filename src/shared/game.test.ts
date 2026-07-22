@@ -7984,6 +7984,25 @@ describe('gambit third flip', () => {
         expect(resolved.status).toBe('playing');
     });
 
+    it('refuses gambit resolution when a flipped tile id is stale', () => {
+        const run = createRun(twoPairTiles, {
+            status: 'resolving',
+            board: {
+                ...createBoard([
+                    { ...twoPairTiles[0], state: 'flipped' as const },
+                    { ...twoPairTiles[2], state: 'flipped' as const },
+                    twoPairTiles[1],
+                    twoPairTiles[3]
+                ]),
+                flippedTileIds: ['a1', 'b1', 'missing']
+            },
+            gambitAvailableThisFloor: true,
+            gambitThirdFlipUsed: false
+        });
+
+        expect(resolveBoardTurn(run)).toBe(run);
+    });
+
     it('gambit miss forces game over when maxMismatches would be exceeded', () => {
         const threePairTiles: Tile[] = [
             createTile('a1', 'p1', 'A'),
