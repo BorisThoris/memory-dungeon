@@ -33,10 +33,22 @@ import {
 const isDungeonKeyKind = (lockKind: DungeonExitLockKind): lockKind is DungeonKeyKind =>
     lockKind !== 'none' && lockKind !== 'lever';
 
+type DungeonExitSpec = DungeonFloorBlueprint['exitSpecs'][number];
+
+const fallbackExitSpecForBlueprint = (blueprint: DungeonFloorBlueprint): DungeonExitSpec => ({
+    id: `${blueprint.level}-exit`,
+    routeType: 'safe',
+    effectId: 'exit_safe',
+    lockKind: 'none',
+    requiredLeverCount: 0,
+    labelPrefix: 'Primary'
+});
+
 export const addDungeonExitTile = (
     tiles: Tile[],
     blueprint: DungeonFloorBlueprint
 ): { tiles: Tile[]; exitTileId: string; routeType: RouteNodeType; lockKind: DungeonExitLockKind; requiredLevers: number } => {
+    const exitSpecs = blueprint.exitSpecs.length > 0 ? blueprint.exitSpecs : [fallbackExitSpecForBlueprint(blueprint)];
     const makeExitTile = (
         id: string,
         exitRouteType: RouteNodeType,
@@ -66,10 +78,10 @@ export const addDungeonExitTile = (
         dungeonExitRequiredLeverCount: exitRequiredLevers,
         dungeonExitActivated: false
     });
-    const exitTiles = blueprint.exitSpecs.map((spec) =>
+    const exitTiles = exitSpecs.map((spec) =>
         makeExitTile(spec.id, spec.routeType, spec.effectId, spec.lockKind, spec.requiredLeverCount, spec.labelPrefix)
     );
-    const primary = blueprint.exitSpecs[0]!;
+    const primary = exitSpecs[0] ?? fallbackExitSpecForBlueprint(blueprint);
     return {
         tiles: [...tiles, ...exitTiles],
         exitTileId: primary.id,

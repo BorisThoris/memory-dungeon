@@ -18,6 +18,15 @@ const tile = (id: string, pairKey: string): Tile => ({
     atomicVariant: 0
 });
 
+const primaryExitSpec = {
+    id: '4-exit',
+    routeType: 'mystery',
+    effectId: 'exit_mystery',
+    lockKind: 'lever',
+    requiredLeverCount: 1,
+    labelPrefix: 'Primary'
+} as const satisfies DungeonFloorBlueprint['exitSpecs'][number];
+
 const blueprint: DungeonFloorBlueprint = {
     level: 4,
     floorTag: 'normal',
@@ -29,16 +38,7 @@ const blueprint: DungeonFloorBlueprint = {
     utilityBudget: 0,
     lockBudget: 0,
     gatewayBudget: 0,
-    exitSpecs: [
-        {
-            id: '4-exit',
-            routeType: 'mystery',
-            effectId: 'exit_mystery',
-            lockKind: 'lever',
-            requiredLeverCount: 1,
-            labelPrefix: 'Primary'
-        }
-    ],
+    exitSpecs: [primaryExitSpec],
     pairedCardSpecs: [],
     roomEffectIds: ['room_scrying_lens'],
     shopTileId: '4-shop'
@@ -67,13 +67,36 @@ describe('dungeon tile augmentation rules', () => {
         );
     });
 
+    it('adds a safe primary exit fallback when blueprint exit specs are missing', () => {
+        const withExit = addDungeonExitTile([], {
+            ...blueprint,
+            exitSpecs: []
+        });
+
+        expect(withExit).toMatchObject({
+            exitTileId: '4-exit',
+            routeType: 'safe',
+            lockKind: 'none',
+            requiredLevers: 0
+        });
+        expect(withExit.tiles).toEqual([
+            expect.objectContaining({
+                id: '4-exit',
+                pairKey: '__exit__',
+                dungeonCardKind: 'exit',
+                dungeonCardEffectId: 'exit_safe',
+                symbol: '^'
+            })
+        ]);
+    });
+
     it('uses the floor typed exit lock for locked cache room key gates', () => {
         const { tiles } = addDungeonRoomTile([], {
             ...blueprint,
             roomEffectIds: ['room_locked_cache'],
             exitSpecs: [
                 {
-                    ...blueprint.exitSpecs[0]!,
+                    ...primaryExitSpec,
                     lockKind: 'treasure',
                     requiredLeverCount: 0
                 }
