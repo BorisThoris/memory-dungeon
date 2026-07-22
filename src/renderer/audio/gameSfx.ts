@@ -582,7 +582,13 @@ const playRewardPerkPopSfx = (gain: number, perkProcCount: number): void => {
 };
 
 const countPayoffLanesFromPayload = (payload: MatchPayoffSfxPayload): number => {
-    const explicitLaneCount = payload.payoffLaneMap?.reduce((sum, lane) => sum + Math.max(0, lane.count), 0) ?? 0;
+    const explicitLaneCount = Array.isArray(payload.payoffLaneMap)
+        ? payload.payoffLaneMap.reduce(
+              (sum, lane) =>
+                  sum + (typeof lane.count === 'number' && Number.isFinite(lane.count) ? Math.max(0, Math.floor(lane.count)) : 0),
+              0
+          )
+        : 0;
     if (explicitLaneCount > 0) {
         return explicitLaneCount;
     }

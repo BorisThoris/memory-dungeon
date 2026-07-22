@@ -894,6 +894,28 @@ describe('buildMatchScorePopPayload', () => {
         });
     });
 
+    it('ignores malformed payoff lane counts before classifying match pop crescendo tiers', () => {
+        expect(
+            buildMatchScorePopCrescendo({
+                chainDepth: 1,
+                impactCue: { label: 'Score pop', tone: 'score' },
+                payoffLaneMap: [
+                    { id: 'route', label: 'Route', count: Number.NaN, tone: 'route', cue: 'Route cashout' },
+                    { id: 'pickup', label: 'Pickup', count: Number.POSITIVE_INFINITY, tone: 'pickup', cue: 'Pickup cashout' },
+                    { id: 'trait', label: 'Trait', count: -2, tone: 'trait', cue: 'Trait cashout' }
+                ],
+                payoffSummary: { label: 'Score hit', value: '+15', tier: 'score' }
+            })
+        ).toEqual({
+            audioCue: 'score-pop',
+            beatCount: 1,
+            detail: '+15',
+            label: 'Score pop',
+            screenCue: 'tick',
+            tier: 'score'
+        });
+    });
+
     it('classifies match feedback intensity by streak and trait interaction count', () => {
         expect(getMatchScorePopFeedbackProfile(1, 0)).toEqual({
             feedbackHeadline: 'Score pop',

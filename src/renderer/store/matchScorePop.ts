@@ -709,6 +709,15 @@ const buildMatchScorePopPayoffLadder = ({
     };
 };
 
+const matchScorePopLaneCount = (payoffLaneMap: readonly MatchScorePopPayoffLaneMapEntry[] | undefined): number =>
+    Array.isArray(payoffLaneMap)
+        ? payoffLaneMap.reduce(
+              (total, lane) =>
+                  total + (typeof lane.count === 'number' && Number.isFinite(lane.count) ? Math.max(0, Math.floor(lane.count)) : 0),
+              0
+          )
+        : 0;
+
 export const buildMatchScorePopCrescendo = ({
     chainDepth,
     impactCue,
@@ -722,7 +731,7 @@ export const buildMatchScorePopCrescendo = ({
     payoffSummary: MatchScorePopPayoffSummary;
     rewardBurst?: MatchScorePopRewardBurst;
 }): MatchScorePopCrescendo => {
-    const laneCount = payoffLaneMap?.reduce((total, lane) => total + lane.count, 0) ?? 0;
+    const laneCount = matchScorePopLaneCount(payoffLaneMap);
 
     if (impactCue.label === 'Super stack' || rewardBurst?.label === 'Super stack' || laneCount >= 4) {
         return {
