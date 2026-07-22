@@ -54,7 +54,7 @@ const withSelectedDungeonRoute = (
 const mysteryRouteOutcomeFor = (run: RunState, clearedFloor: number): MysteryRouteOutcome => {
     const outcomes: MysteryRouteOutcome[] = ['shop_gold', 'combo_shard', 'relic_favor'];
     const seed = hashStringToSeed(`routeMystery:${run.runRulesVersion}:${run.runSeed}:${clearedFloor}`);
-    return outcomes[Math.abs(seed) % outcomes.length]!;
+    return outcomes[Math.abs(seed) % outcomes.length] ?? 'relic_favor';
 };
 
 const nonNegativeRouteCount = (value: unknown): number =>

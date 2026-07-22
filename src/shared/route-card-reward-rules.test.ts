@@ -14,7 +14,8 @@ import {
 import { createNewRun } from './game-core';
 import {
     ROUTE_CARD_GREED_SCORE_REWARD,
-    ROUTE_CARD_GREED_SHOP_GOLD_REWARD
+    ROUTE_CARD_GREED_SHOP_GOLD_REWARD,
+    ROUTE_CARD_MYSTERY_SHOP_GOLD_REWARD
 } from './route-choice-rules';
 import { emptyRouteCardReward, getRouteCardReward } from './route-card-reward-rules';
 
@@ -112,5 +113,24 @@ describe('route card reward rules', () => {
         expect(getRouteCardReward(run, 1, 'a', 'catalyst_altar')).toMatchObject({
             score: CATALYST_ALTAR_FALLBACK_SCORE_REWARD
         });
+    });
+
+    it('selects each deterministic mystery veil reward lane', () => {
+        const seen = new Set<string>();
+
+        for (let seed = 0; seed < 100 && seen.size < 3; seed += 1) {
+            const reward = getRouteCardReward({ ...createNewRun(0), runSeed: seed }, 3, `pair-${seed}`, 'mystery_veil');
+            if (reward.shopGold === ROUTE_CARD_MYSTERY_SHOP_GOLD_REWARD) {
+                seen.add('shop_gold');
+            }
+            if (reward.comboShards === 1) {
+                seen.add('combo_shard');
+            }
+            if (reward.relicFavor === 1) {
+                seen.add('relic_favor');
+            }
+        }
+
+        expect(seen).toEqual(new Set(['shop_gold', 'combo_shard', 'relic_favor']));
     });
 });

@@ -45,7 +45,7 @@ const nonNegativeRouteCardRewardCount = (value: unknown): number =>
 const mysteryRouteCardOutcomeFor = (run: RunState, level: number, pairKey: string): MysteryRouteCardOutcome => {
     const outcomes: MysteryRouteCardOutcome[] = ['shop_gold', 'combo_shard', 'relic_favor'];
     const seed = hashStringToSeed(`routeCardMystery:${run.runRulesVersion}:${run.runSeed}:${level}:${pairKey}`);
-    return outcomes[Math.abs(seed) % outcomes.length]!;
+    return outcomes[Math.abs(seed) % outcomes.length] ?? 'relic_favor';
 };
 
 export const getRouteCardReward = (
