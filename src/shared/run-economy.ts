@@ -22,6 +22,16 @@ export interface RunEconomyRow extends RunEconomyDefinition {
     numericValue: number;
 }
 
+const SCORE_RUN_ECONOMY_DEFINITION = {
+    id: 'score',
+    label: 'Score',
+    bucket: 'score',
+    purpose: 'Score is performance value only; it is never spendable.',
+    source: 'matches, floor clears, findables, objective bonuses',
+    sink: 'local best-score comparison and run summary; never spendable',
+    persistence: 'run_summary'
+} as const satisfies RunEconomyDefinition;
+
 export const RUN_ECONOMY_DEFINITIONS = [
     {
         id: 'shop_gold',
@@ -32,15 +42,7 @@ export const RUN_ECONOMY_DEFINITIONS = [
         sink: 'buy local vendor services; resets at run end',
         persistence: 'temporary_run'
     },
-    {
-        id: 'score',
-        label: 'Score',
-        bucket: 'score',
-        purpose: 'Score is performance value only; it is never spendable.',
-        source: 'matches, floor clears, findables, objective bonuses',
-        sink: 'local best-score comparison and run summary; never spendable',
-        persistence: 'run_summary'
-    },
+    SCORE_RUN_ECONOMY_DEFINITION,
     {
         id: 'combo_shards',
         label: 'Combo shards',
@@ -171,13 +173,15 @@ const numericValueFor = (run: RunState, id: string): number => {
     }
 };
 
+const buildRunEconomyRow = (run: RunState, definition: RunEconomyDefinition): RunEconomyRow => ({
+    ...definition,
+    key: definition.id,
+    value: valueFor(run, definition.id),
+    numericValue: numericValueFor(run, definition.id)
+});
+
 export const getRunEconomyRows = (run: RunState): RunEconomyRow[] =>
-    RUN_ECONOMY_DEFINITIONS.map((definition) => ({
-        ...definition,
-        key: definition.id,
-        value: valueFor(run, definition.id),
-        numericValue: numericValueFor(run, definition.id)
-    }));
+    RUN_ECONOMY_DEFINITIONS.map((definition) => buildRunEconomyRow(run, definition));
 
 export const getRunEconomySnapshot = (run: RunState): {
     score: RunEconomyRow;
@@ -186,7 +190,7 @@ export const getRunEconomySnapshot = (run: RunState): {
 } => {
     const rows = getRunEconomyRows(run);
     return {
-        score: rows.find((row) => row.id === 'score')!,
+        score: rows.find((row) => row.id === 'score') ?? buildRunEconomyRow(run, SCORE_RUN_ECONOMY_DEFINITION),
         temporaryRunCurrencies: rows.filter((row) => row.bucket === 'temporary_run'),
         durableMeta: rows.filter((row) => row.bucket === 'durable_meta')
     };
