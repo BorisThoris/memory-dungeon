@@ -339,4 +339,17 @@ describe('hazard tiles', () => {
             impact: 'preserves'
         });
     });
+
+    it('falls back safely for stale hazard objective lookup ids', () => {
+        expect(getHazardTileObjectiveImpact('stale_hazard' as typeof HAZARD_TILE_KINDS[number], 'findables')).toMatchObject({
+            objectiveId: 'findables',
+            impact: 'preserves',
+            tokens: ['safe', 'objective']
+        });
+        expect(getHazardTileObjectiveImpact('cascade_cache', 'stale_objective' as 'findables')).toMatchObject({
+            objectiveId: 'stale_objective',
+            impact: 'preserves',
+            tokens: ['safe', 'objective']
+        });
+    });
 });

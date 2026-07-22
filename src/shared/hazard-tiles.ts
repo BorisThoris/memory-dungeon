@@ -326,6 +326,16 @@ const objectiveImpact = (
     tokens: MechanicTokenId[]
 ): HazardTileObjectiveImpactRow => ({ objectiveId, impact, copy, tokens });
 
+const fallbackObjectiveImpact = (
+    objectiveId: HazardTileObjectiveImpactRow['objectiveId']
+): HazardTileObjectiveImpactRow =>
+    objectiveImpact(
+        objectiveId,
+        'preserves',
+        'No authored hazard-objective edge case is available, so the hazard is treated as preserving objective state.',
+        ['safe', 'objective']
+    );
+
 export const HAZARD_TILE_OBJECTIVE_BALANCE_ROWS: readonly HazardTileObjectiveBalanceRow[] = [
     {
         kind: 'shuffle_snare',
@@ -440,8 +450,9 @@ export const getHazardTileObjectiveImpact = (
     objectiveId: HazardTileObjectiveImpactRow['objectiveId']
 ): HazardTileObjectiveImpactRow =>
     HAZARD_TILE_OBJECTIVE_BALANCE_ROWS
-        .find((row) => row.kind === kind)!
-        .objectiveImpacts.find((impact) => impact.objectiveId === objectiveId)!;
+        .find((row) => row.kind === kind)
+        ?.objectiveImpacts.find((impact) => impact.objectiveId === objectiveId) ??
+    fallbackObjectiveImpact(objectiveId);
 
 export const getHazardTileBoardSummary = (board: BoardState | null | undefined): HazardTileBoardSummary => {
     if (!board) {
