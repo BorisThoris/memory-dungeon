@@ -286,7 +286,8 @@ export const createWildRun = (bestScore: number, extra: Partial<CreateRunOptions
 export const createDailyRun = (bestScore: number, extra: Partial<CreateRunOptions> = {}): RunState => {
     const runSeed = deriveDailyRunSeed(GAME_RULES_VERSION);
     const mutIndex = deriveDailyMutatorIndex(runSeed, DAILY_MUTATOR_TABLE.length);
-    const activeMutators = [DAILY_MUTATOR_TABLE[mutIndex]!];
+    const dailyMutator = DAILY_MUTATOR_TABLE[mutIndex] ?? DAILY_MUTATOR_TABLE[0];
+    const activeMutators = dailyMutator ? [dailyMutator] : [];
 
     return createNewRun(bestScore, {
         runSeed,

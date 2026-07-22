@@ -66,6 +66,7 @@ describe('run creation rules', () => {
 
         expect(daily.gameMode).toBe('daily');
         expect(daily.dailyDateKeyUtc).not.toBeNull();
+        expect(daily.activeMutators).toHaveLength(1);
         expect(gauntlet.gameMode).toBe('gauntlet');
         expect(gauntlet.gauntletSessionDurationMs).toBe(60_000);
     });
