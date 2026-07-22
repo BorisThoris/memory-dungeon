@@ -182,13 +182,14 @@ export const getDailyArchiveRows = (save: SaveData, nowMs: number = Date.now()):
 
 export const buildDailyArchiveShareString = (save: SaveData): string => {
     const summary = getDailyArchiveSummary(save);
-    const daily = summary.rows[0]!;
+    const dailyKey =
+        summary.rows.find((row) => row.scope === 'daily')?.key ?? dailyArchiveDateKeyForTimestamp(Date.now());
     const last = save.lastRunSummary;
     const score =
         last?.gameMode === 'daily'
             ? ` · ${nonNegativeDailyArchiveCount(last.totalScore)} pts · ${nonNegativeDailyArchiveCount(last.levelsCleared)} clear(s)`
             : '';
-    return `Daily ${daily.key}${score} · ${summary.dailiesCompleted} local-only daily clear(s) · streak ${summary.streak}`;
+    return `Daily ${dailyKey}${score} · ${summary.dailiesCompleted} local-only daily clear(s) · streak ${summary.streak}`;
 };
 
 export const buildDailyResultsShareString = (
@@ -200,8 +201,9 @@ export const buildDailyResultsShareString = (
         return buildDailyArchiveShareString(save);
     }
     const summary = getDailyArchiveSummary(save, nowMs);
-    const weekly = summary.rows.find((row) => row.scope === 'weekly')!;
-    return `Weekly ${weekly.key} · ${summary.dailiesCompleted} local daily clear(s) · streak ${summary.streak}`;
+    const weeklyKey =
+        summary.rows.find((row) => row.scope === 'weekly')?.key ?? weekKeyForDaily(dailyArchiveDateKeyForTimestamp(nowMs));
+    return `Weekly ${weeklyKey} · ${summary.dailiesCompleted} local daily clear(s) · streak ${summary.streak}`;
 };
 
 export const buildDailyResultsLoopRows = (save: SaveData, nowMs: number = Date.now()): DailyResultsLoopRow[] => {
