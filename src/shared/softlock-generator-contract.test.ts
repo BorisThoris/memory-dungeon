@@ -12,6 +12,7 @@ import {
     createFinalPairFairnessProjection,
     createGeneratedBoardSolverRun,
     createShopStockInspectionRun,
+    DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
     formatSoftlockGeneratorFailure,
     runSoftlockGeneratorContract,
     solveGeneratedBoardByExhaustingPairs
@@ -52,6 +53,17 @@ const projectionBoard = (overrides: Partial<BoardState> = {}): BoardState => ({
 });
 
 describe('softlock generator contract', () => {
+    it('keeps route-pressure scenarios cycling through authored route types', () => {
+        const routePressure = DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS.find((scenario) => scenario.id === 'route_pressure');
+
+        expect(routePressure).toBeTruthy();
+        expect(
+            routePressure?.seeds.flatMap((seed) =>
+                routePressure.floors.map((floor) => routePressure.optionsForFloor({ seed, floor }).routeCardPlan?.routeType)
+            )
+        ).toEqual(expect.arrayContaining(['safe', 'greed', 'mystery']));
+    });
+
     it('checks seeded floors across locks, shops, traits, hazards, bosses, and final-pair projections', () => {
         const result = runSoftlockGeneratorContract();
 
