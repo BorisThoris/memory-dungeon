@@ -130,6 +130,9 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
                 'findable_share_scout_glint'
             ])
         );
+        const pressureStepUp = result.rows.find((row) => row.key === 'max_pressure_step_up');
+        expect(pressureStepUp?.value).toBeGreaterThanOrEqual(0);
+        expect(Number.isFinite(pressureStepUp?.value)).toBe(true);
         const newRewardRows = new Set([
             'opener_hazard_tiles_per_seed',
             'max_pressure_step_up',

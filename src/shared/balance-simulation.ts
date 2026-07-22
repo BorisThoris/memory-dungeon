@@ -659,7 +659,15 @@ export const runBalanceSimulation = ({
     const openerHazardCounts = samples.filter((sample) => sample.floor === 1).map((sample) => sample.hazardTileCount);
     const pressureStepUps = safeSeeds.flatMap((sampleSeed) => {
         const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
-        return seedSamples.slice(1).map((sample, index) => samplePressure(sample) - samplePressure(seedSamples[index]!));
+        const stepUps: number[] = [];
+        for (let index = 1; index < seedSamples.length; index += 1) {
+            const previous = seedSamples[index - 1];
+            const sample = seedSamples[index];
+            if (previous && sample) {
+                stepUps.push(samplePressure(sample) - samplePressure(previous));
+            }
+        }
+        return stepUps;
     });
     const recoveryDebtStreaks = safeSeeds.map((sampleSeed) => {
         const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
