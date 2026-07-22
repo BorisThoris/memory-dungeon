@@ -208,6 +208,7 @@ describe('route side-room rules', () => {
 
     it('normalizes malformed payout lanes before ranking bonus reward impact', () => {
         const originalPayout = BONUS_REWARD_CATALOG.key_insurance.payout;
+        const originalTraitBuildLabels = BONUS_REWARD_CATALOG.key_insurance.traitBuildLabels;
         BONUS_REWARD_CATALOG.key_insurance.payout = {
             shopGold: 1,
             comboShards: Number.NaN,
@@ -215,8 +216,13 @@ describe('route side-room rules', () => {
             score: Number.NaN,
             inventoryItems: {
                 unknown_item: 99
-            } as typeof BONUS_REWARD_CATALOG.key_insurance.payout.inventoryItems
+            } as typeof BONUS_REWARD_CATALOG.key_insurance.payout.inventoryItems,
+            rewardPerks: Number.NaN as unknown as typeof BONUS_REWARD_CATALOG.key_insurance.payout.rewardPerks
         };
+        BONUS_REWARD_CATALOG.key_insurance.traitBuildLabels = [
+            Number.NaN,
+            '__proto__'
+        ] as unknown as typeof BONUS_REWARD_CATALOG.key_insurance.traitBuildLabels;
         try {
             const run = createNewRun(210_503, { startingLoadoutId: 'vaultbreaker' });
             const opened = openRouteSideRoom({
@@ -234,14 +240,18 @@ describe('route side-room rules', () => {
                 expect.arrayContaining([
                     expect.objectContaining({
                         label: 'Key insurance',
+                        nextCue: 'Keep the iron key for the next locked entrance.',
+                        rewardPerkNextCue: undefined,
                         rewardImpactBeats: 2,
                         rewardImpactCue: 'Resource',
-                        rewardImpactKind: 'resource'
+                        rewardImpactKind: 'resource',
+                        traitBuildLabels: []
                     })
                 ])
             );
         } finally {
             BONUS_REWARD_CATALOG.key_insurance.payout = originalPayout;
+            BONUS_REWARD_CATALOG.key_insurance.traitBuildLabels = originalTraitBuildLabels;
         }
     });
 });

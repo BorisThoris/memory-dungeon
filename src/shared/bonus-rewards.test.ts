@@ -897,6 +897,38 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.run.destroyPairCharges).toBe(1);
         expect(result.run.peekCharges).toBe(0);
         expect(result.feedback.gained).toEqual(['+1 destroy charge']);
+
+        const malformedPerks = claimBonusReward(
+            run,
+            createBonusRewardLedger(),
+            {
+                ...room,
+                payout: {
+                    rewardPerks: Number.NaN as unknown as BonusRewardPayout['rewardPerks']
+                }
+            }
+        );
+        expect(malformedPerks.claimed).toBe(true);
+        expect(malformedPerks.run.rewardPerkIds).toEqual([]);
+        expect(malformedPerks.feedback.gained).toEqual([]);
+
+        const mixedPerks = claimBonusReward(
+            run,
+            createBonusRewardLedger(),
+            {
+                ...room,
+                payout: {
+                    rewardPerks: [
+                        'trait_streak_toolkit',
+                        '__proto__',
+                        Number.NaN
+                    ] as unknown as BonusRewardPayout['rewardPerks']
+                }
+            }
+        );
+        expect(mixedPerks.claimed).toBe(true);
+        expect(mixedPerks.run.rewardPerkIds).toEqual(['trait_streak_toolkit']);
+        expect(mixedPerks.feedback.gained).toEqual(expect.arrayContaining(['Unlock Trait Streak Flash']));
     });
 
     it('normalizes malformed saved relic Favor counters before carrying bonus picks', () => {

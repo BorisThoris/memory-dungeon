@@ -1,5 +1,6 @@
 import { MAX_LIVES, type RouteNodeType, type RouteSideRoomState, type RunState } from './contracts';
 import {
+    type BonusRewardPayout,
     claimBonusReward,
     getRewardPerkRows,
     previewBonusRewardClaim,
@@ -31,11 +32,23 @@ const BONUS_REWARD_NEXT_CUES = {
 const nonNegativeRouteSideRoomCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const bonusRewardPerks = (value: unknown): NonNullable<BonusRewardPayout['rewardPerks']> =>
+    Array.isArray(value)
+        ? value.filter((item): item is NonNullable<BonusRewardPayout['rewardPerks']>[number] => typeof item === 'string')
+        : [];
+
+const safeTraitBuildLabel = (value: unknown): value is string =>
+    typeof value === 'string' && value !== '__proto__' && value !== 'constructor' && value !== 'prototype';
+
+const traitBuildLabels = (value: unknown): NonNullable<ReturnType<typeof rollBonusRewardDraft>[number]['traitBuildLabels']> =>
+    Array.isArray(value) ? value.filter(safeTraitBuildLabel) : [];
+
 const bonusRewardChoiceImpact = (
     option: ReturnType<typeof rollBonusRewardDraft>[number],
     nextCue: string,
     traitBuildReason?: string,
-    perkCue?: string
+    perkCue?: string,
+    rewardPerkCount = 0
 ): Pick<
     NonNullable<RouteSideRoomState['choices']>[number],
     'rewardImpactBeats' | 'rewardImpactCue' | 'rewardImpactDetail' | 'rewardImpactKind'
@@ -48,7 +61,7 @@ const bonusRewardChoiceImpact = (
             rewardImpactKind: 'build'
         };
     }
-    if (perkCue || (option.payout.rewardPerks?.length ?? 0) > 0) {
+    if (perkCue || rewardPerkCount > 0) {
         return {
             rewardImpactBeats: 4,
             rewardImpactCue: 'Perk online',
@@ -124,12 +137,14 @@ const buildBonusSideRoom = (
         : draft[0]?.instanceId;
     const traitOpportunity = getTraitOpportunitySummary(run.board);
     const choices = draft.map((option) => {
-        const perkCue = getRewardPerkRows({ rewardPerkIds: option.payout.rewardPerks ?? [] })[0]?.nextCue;
+        const rewardPerks = bonusRewardPerks(option.payout.rewardPerks);
+        const optionTraitBuildLabels = traitBuildLabels(option.traitBuildLabels);
+        const perkCue = getRewardPerkRows({ rewardPerkIds: rewardPerks })[0]?.nextCue;
         const nextCue = perkCue ?? BONUS_REWARD_NEXT_CUES[option.id];
-        const traitBuildReason = option.traitBuildLabels?.some((label) => traitOpportunity.buildLabels.includes(label))
+        const traitBuildReason = optionTraitBuildLabels.some((label) => traitOpportunity.buildLabels.includes(label))
             ? traitOpportunity.reason ?? undefined
             : undefined;
-        const rewardImpact = bonusRewardChoiceImpact(option, nextCue, traitBuildReason, perkCue);
+        const rewardImpact = bonusRewardChoiceImpact(option, nextCue, traitBuildReason, perkCue, rewardPerks.length);
         return {
             id: option.instanceId,
             label: option.label,
@@ -137,7 +152,7 @@ const buildBonusSideRoom = (
                 ? previewBonusRewardClaim(run, option).feedback.summary || option.summaryText
                 : (option.unavailableReason ?? option.summaryText),
             primary: option.instanceId === primaryInstanceId,
-            traitBuildLabels: [...(option.traitBuildLabels ?? [])],
+            traitBuildLabels: optionTraitBuildLabels,
             traitBuildReason,
             rewardPerkNextCue: perkCue,
             nextCue,

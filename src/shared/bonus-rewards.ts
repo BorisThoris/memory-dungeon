@@ -797,7 +797,7 @@ const applyBonusRewardPayout = (
         nextRun = gainFavor(nextRun, favorProgressGain);
         gained.push(`+${favorProgressGain} relic Favor progress`);
     }
-    for (const perkId of payout.rewardPerks ?? []) {
+    for (const perkId of normalizeRewardPerkIds(payout.rewardPerks)) {
         if (nextRewardPerkIds.includes(perkId)) {
             continue;
         }
