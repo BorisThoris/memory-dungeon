@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { buildBoard } from './board-build-rules';
 import { inspectRunFairness } from './board-inspection';
-import { GAME_RULES_VERSION, type BoardState, type Tile } from './contracts';
+import { GAME_RULES_VERSION, type BoardState, type EnemyHazardState, type Tile } from './contracts';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { inspectDungeonRunMapProgression } from './run-map';
 import { getRunShopStockPlan } from './shop-rules';
@@ -24,6 +24,19 @@ const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Til
     state,
     symbol: id,
     label: id
+});
+
+const hazard = (id: string, currentTileId: string, nextTileId: string): EnemyHazardState => ({
+    id,
+    kind: 'sentinel',
+    label: id,
+    currentTileId,
+    nextTileId,
+    pattern: 'patrol',
+    state: 'revealed',
+    damage: 1,
+    hp: 1,
+    maxHp: 1
 });
 
 const projectionBoard = (overrides: Partial<BoardState> = {}): BoardState => ({
@@ -235,6 +248,40 @@ describe('softlock generator contract', () => {
                 })
             }
         ]).failures.map(formatSoftlockGeneratorFailure)).toEqual([]);
+    });
+
+    it('normalizes malformed projection enemy hazards before contract checks', () => {
+        const board = projectionBoard({
+            enemyHazards: Number.NaN as unknown as BoardState['enemyHazards']
+        });
+
+        const finalPairProjection = createFinalPairFairnessProjection(board);
+        const clearedProjection = createClearedBoardFairnessProjection(board);
+
+        expect(finalPairProjection?.enemyHazards).toEqual([]);
+        expect(clearedProjection.enemyHazards).toEqual([]);
+        expect(createGeneratedBoardSolverRun(finalPairProjection!, 130_112).board?.enemyHazards).toEqual([]);
+    });
+
+    it('keeps only final-pair enemy hazards active in final-pair projections', () => {
+        const board = projectionBoard({
+            tiles: projectionBoard().tiles.map((candidate) =>
+                candidate.pairKey === 'key'
+                    ? { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'iron' as const }
+                    : candidate
+            ),
+            enemyHazards: [
+                hazard('on-final', 'key-a', 'key-b'),
+                hazard('off-final', 'a1', 'a2')
+            ]
+        });
+
+        const projected = createFinalPairFairnessProjection(board);
+
+        expect(projected?.enemyHazards).toMatchObject([
+            { id: 'on-final', state: 'revealed', hp: 1 },
+            { id: 'off-final', state: 'defeated', hp: 0 }
+        ]);
     });
 
     it('uses the primary exit tile lock when granting final-pair projection resources', () => {
