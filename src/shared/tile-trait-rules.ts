@@ -222,8 +222,12 @@ const createBoardWithSwappedTiles = (board: BoardState, firstTileId: string, sec
         return null;
     }
     const tiles = [...board.tiles];
-    const first = tiles[firstIndex]!;
-    tiles[firstIndex] = tiles[secondIndex]!;
+    const first = tiles[firstIndex];
+    const second = tiles[secondIndex];
+    if (!first || !second) {
+        return null;
+    }
+    tiles[firstIndex] = second;
     tiles[secondIndex] = first;
     return { ...board, tiles };
 };
@@ -293,8 +297,11 @@ export const hasTraitSwapSetupOpportunity = (board: BoardState): boolean => {
     const beforeMatchLines = new Set(getBoardTraitInteractionPreviewLines(board, 'match'));
     for (let i = 0; i < hiddenTiles.length; i += 1) {
         for (let j = i + 1; j < hiddenTiles.length; j += 1) {
-            const first = hiddenTiles[i]!;
-            const second = hiddenTiles[j]!;
+            const first = hiddenTiles[i];
+            const second = hiddenTiles[j];
+            if (!first || !second) {
+                continue;
+            }
             if (!first.tile.tileTraitKind && !second.tile.tileTraitKind) {
                 continue;
             }
@@ -367,6 +374,8 @@ const tileCanShuffleFromVolatileMiss = (tile: Tile, blockedPairKeys: ReadonlySet
 
 const hasRewardPerk = (run: RunState, id: NonNullable<RunState['rewardPerkIds']>[number]): boolean =>
     (run.rewardPerkIds ?? []).includes(id);
+
+const DEFAULT_TRAIT_INTERACTION_SEED: readonly [TileTraitKind, TileTraitKind] = ['conduit', 'echo'];
 
 const TILE_TRAIT_COLORS: Record<TileTraitKind, string> = {
     echo: '#62d6d1',
@@ -540,7 +549,10 @@ const collectAdjacentEligiblePairKeys = (
             return true;
         });
         for (const neighborIndex of neighborIndexes) {
-            const neighbor = tiles[neighborIndex]!;
+            const neighbor = tiles[neighborIndex];
+            if (!neighbor) {
+                continue;
+            }
             if (!eligible.has(neighbor.pairKey) || neighbor.pairKey === tile.pairKey) {
                 continue;
             }
@@ -635,7 +647,7 @@ export const assignTileTraitsToGeneratedBoard = (
             if (traitByPairKey.has(firstPairKey) || traitByPairKey.has(secondPairKey)) {
                 continue;
             }
-            const [firstTrait, secondTrait] = seeds[seedIndex % seeds.length]!;
+            const [firstTrait, secondTrait] = seeds[seedIndex % seeds.length] ?? seeds[0] ?? DEFAULT_TRAIT_INTERACTION_SEED;
             traitByPairKey.set(firstPairKey, firstTrait);
             traitByPairKey.set(secondPairKey, secondTrait);
             seedIndex += 1;
@@ -645,7 +657,8 @@ export const assignTileTraitsToGeneratedBoard = (
         if (traitByPairKey.size >= traitCount || traitByPairKey.has(pairKey)) {
             return;
         }
-        const trait = shuffleWithRng(() => rng(), pool)[index % pool.length]!;
+        const shuffledPool = shuffleWithRng(() => rng(), pool);
+        const trait = shuffledPool[index % pool.length] ?? shuffledPool[0] ?? pool[0] ?? DEFAULT_TRAIT_INTERACTION_SEED[0];
         traitByPairKey.set(pairKey, trait);
     });
 
@@ -669,11 +682,10 @@ export const assignTileTraitsToGeneratedBoard = (
             if (fallbackPairKey) {
                 const repairedTraitByPairKey = new Map(traitByPairKey);
                 repairedTraitByPairKey.set(fallbackPairKey, 'drift');
-                return tiles.map((tile) =>
-                    repairedTraitByPairKey.has(tile.pairKey)
-                        ? { ...tile, tileTraitKind: repairedTraitByPairKey.get(tile.pairKey)! }
-                        : { ...tile }
-                );
+                return tiles.map((tile) => {
+                    const trait = repairedTraitByPairKey.get(tile.pairKey);
+                    return trait ? { ...tile, tileTraitKind: trait } : { ...tile };
+                });
             }
         }
         if (firstPairKey && secondPairKey) {
@@ -681,7 +693,8 @@ export const assignTileTraitsToGeneratedBoard = (
                 ? openerInteractionSeeds(startingLoadoutId)
                 : routeInteractionSeeds(intensity, relicIds, startingLoadoutId);
             const repairSeedIndex = intensity == null && !startingLoadoutId ? pickRngIndex(rng, repairSeeds.length) : 0;
-            const [firstTrait, secondTrait] = repairSeeds[repairSeedIndex]!;
+            const [firstTrait, secondTrait] =
+                repairSeeds[repairSeedIndex] ?? repairSeeds[0] ?? DEFAULT_TRAIT_INTERACTION_SEED;
             const repairedTraitByPairKey = new Map<string, TileTraitKind>([
                 [firstPairKey, firstTrait],
                 [secondPairKey, secondTrait]
