@@ -433,6 +433,7 @@ describe('dungeon board status', () => {
             floorTag: 'boss',
             dungeonBossId: 'rush_sentinel',
             dungeonObjectiveId: 'defeat_boss',
+            enemyHazards: Number.NaN as unknown as BoardState['enemyHazards'],
             tiles: [
                 tile({
                     id: 'boss-a',
@@ -460,12 +461,16 @@ describe('dungeon board status', () => {
 
         expect(getDungeonEnemyLifecycleStatus(bossRun)).toMatchObject({
             enemyCardPairCount: 1,
-            defeatedEnemyCardPairCount: 0
+            defeatedEnemyCardPairCount: 0,
+            movingEnemyHazardCount: 0,
+            defeatedMovingEnemyHazardCount: 0
         });
         expect(getDungeonBossReadModel(bossRun)).toMatchObject({
             hp: 3,
             maxHp: 3,
-            phase: 'opening'
+            phase: 'opening',
+            movingPatrolCount: 0,
+            activeMovingPatrolCount: 0
         });
         expect(getDungeonObjectiveStatus(bossRun)).toMatchObject({
             objectiveId: 'defeat_boss',
