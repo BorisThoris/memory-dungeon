@@ -107,6 +107,20 @@ describe('enemy hazard board rules', () => {
         ]);
     });
 
+    it('ignores malformed enemy hazard arrays before board cleanup', () => {
+        const board = {
+            ...boardWith([tile('a', 'pair-a'), tile('b', 'pair-a')]),
+            enemyHazards: Number.NaN as unknown as BoardState['enemyHazards']
+        };
+        const run = { ...createNewRun(0), board };
+
+        expect(activeEnemyHazardsForBoard(board)).toEqual([]);
+        expect(collectEnemyHazardsOccupyingFinalPair(board)).toEqual([]);
+        expect(defeatEnemyHazardOccupationOnFinalPair(board)).toBe(board);
+        expect(defeatEnemyHazardsOnClearedTiles(board)).toBe(board);
+        expect(clearFinalPairEnemyHazardOccupationForRun(run)).toBe(run);
+    });
+
     it('hides stale boss hazards once their referenced tiles are cleared even before the floor is complete', () => {
         const board = boardWith([
             tile('boss-a', 'boss', { state: 'matched' }),
