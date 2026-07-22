@@ -196,7 +196,10 @@ export const openRouteSideRoom = (run: RunState): RunState => {
 
     if (routeType === 'mystery' && nodeKind === 'event') {
         const event = rollRunEventRoom({ runSeed: run.runSeed, rulesVersion: run.runRulesVersion, floor });
-        const choice = event.options.find((option) => option.effect !== 'skip') ?? event.options[0]!;
+        const choice = event.options.find((option) => option.effect !== 'skip') ?? event.options[0];
+        if (!choice) {
+            return run;
+        }
         return {
             ...run,
             sideRoom: {

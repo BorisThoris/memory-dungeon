@@ -806,7 +806,10 @@ export const generateRunEvent = ({
     rulesVersion: number;
     floor: number;
 }): RunEventState => {
-    const def = RUN_EVENT_TABLE[eventIndexFor(runSeed, rulesVersion, floor)]!;
+    const def = RUN_EVENT_TABLE[eventIndexFor(runSeed, rulesVersion, floor)];
+    if (!def) {
+        throw new Error('Run event table must contain at least one event.');
+    }
     return {
         ...def,
         options: def.choices.map((choice) => ({ ...choice, resultText: choice.resultText ?? choice.detail })),
