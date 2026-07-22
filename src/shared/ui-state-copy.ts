@@ -22,17 +22,19 @@ export interface UiStateCopyRow {
     onlineAssumption: false;
 }
 
+const DEFAULT_UI_STATE_COPY_ROW: UiStateCopyRow = {
+    id: 'inventory_no_run',
+    kind: 'empty',
+    title: 'No active expedition',
+    body: 'Loadout appears here once a descent is in progress. Return to the hub, pick a mode, and jump in to see relics, mutators, and charges.',
+    actionLabel: 'Start a run',
+    action: 'Start a run from Choose Your Path',
+    localOnly: true,
+    onlineAssumption: false
+};
+
 export const UI_STATE_COPY_ROWS: readonly UiStateCopyRow[] = [
-    {
-        id: 'inventory_no_run',
-        kind: 'empty',
-        title: 'No active expedition',
-        body: 'Loadout appears here once a descent is in progress. Return to the hub, pick a mode, and jump in to see relics, mutators, and charges.',
-        actionLabel: 'Start a run',
-        action: 'Start a run from Choose Your Path',
-        localOnly: true,
-        onlineAssumption: false
-    },
+    DEFAULT_UI_STATE_COPY_ROW,
     {
         id: 'inventory_no_relics',
         kind: 'empty',
@@ -118,7 +120,7 @@ export const UI_STATE_COPY_ROWS: readonly UiStateCopyRow[] = [
 export const getUiStateCopyRows = (): readonly UiStateCopyRow[] => UI_STATE_COPY_ROWS;
 
 export const getUiStateCopyRow = (id: UiStateCopyRow['id']): UiStateCopyRow => {
-    const row = UI_STATE_COPY_ROWS.find((entry) => entry.id === id)!;
+    const row = UI_STATE_COPY_ROWS.find((entry) => entry.id === id) ?? DEFAULT_UI_STATE_COPY_ROW;
     return { ...row, state: row.kind };
 };
 

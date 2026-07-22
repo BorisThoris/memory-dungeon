@@ -19,5 +19,9 @@ describe('REG-100 UI state copy', () => {
         expect(rows.every((row) => row.localOnly)).toBe(true);
         expect(rows.every((row) => row.onlineAssumption === false)).toBe(true);
         expect(getUiStateCopy('choose_path_locked').state).toBe('locked');
+        expect(getUiStateCopy('missing_copy' as Parameters<typeof getUiStateCopy>[0])).toMatchObject({
+            id: 'inventory_no_run',
+            state: 'empty'
+        });
     });
 });
