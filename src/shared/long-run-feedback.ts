@@ -70,6 +70,15 @@ export interface SafeExpansionImpactRow {
     runtimeStatus: 'wired' | 'read_model_only';
 }
 
+const WARD_CACHE_SAFE_EXPANSION_IMPACT_ROW: SafeExpansionImpactRow = {
+    id: 'ward_cache',
+    label: 'Ward cache: future safe hazard/reward candidate',
+    surface: 'hazard_reward_contract',
+    objectiveImpact: 'Documented as a read-model-only candidate until hazard runtime tuning is separately versioned.',
+    perfectMemoryImpact: 'neutral',
+    runtimeStatus: 'read_model_only'
+};
+
 export interface FindableDistributionRow {
     id: FindableKind;
     label: string;
@@ -417,14 +426,7 @@ export const SAFE_EXPANSION_IMPACT_ROWS: readonly SafeExpansionImpactRow[] = [
         perfectMemoryImpact: 'safe',
         runtimeStatus: 'wired'
     },
-    {
-        id: 'ward_cache',
-        label: 'Ward cache: future safe hazard/reward candidate',
-        surface: 'hazard_reward_contract',
-        objectiveImpact: 'Documented as a read-model-only candidate until hazard runtime tuning is separately versioned.',
-        perfectMemoryImpact: 'neutral',
-        runtimeStatus: 'read_model_only'
-    }
+    WARD_CACHE_SAFE_EXPANSION_IMPACT_ROW
 ] as const;
 
-export const WARD_CACHE_CONTRACT_ROW = SAFE_EXPANSION_IMPACT_ROWS.find((row) => row.id === 'ward_cache')!;
+export const WARD_CACHE_CONTRACT_ROW = WARD_CACHE_SAFE_EXPANSION_IMPACT_ROW;
