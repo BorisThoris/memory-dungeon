@@ -68,15 +68,19 @@ export const pickShiftingSpotlightKeys = (
     const shuffled = [...keys];
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = pickRngIndex(rng, i + 1);
-        const tmp = shuffled[i]!;
-        shuffled[i] = shuffled[j]!;
-        shuffled[j] = tmp;
+        const keyAtI = shuffled[i];
+        const keyAtJ = shuffled[j];
+        if (keyAtI !== undefined && keyAtJ !== undefined) {
+            shuffled[i] = keyAtJ;
+            shuffled[j] = keyAtI;
+        }
     }
 
+    const firstPairKey = shuffled[0] ?? null;
     if (shuffled.length === 1) {
-        return { wardPairKey: null, bountyPairKey: shuffled[0]! };
+        return { wardPairKey: null, bountyPairKey: firstPairKey };
     }
-    return { wardPairKey: shuffled[0]!, bountyPairKey: shuffled[1]! };
+    return { wardPairKey: firstPairKey, bountyPairKey: shuffled[1] ?? null };
 };
 
 export const shiftingSpotlightMatchDelta = (board: BoardState | undefined, matchedPairKey: string): number => {
