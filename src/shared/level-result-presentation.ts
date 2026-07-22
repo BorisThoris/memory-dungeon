@@ -43,6 +43,18 @@ const withAtmosphere = (mechanicDetail: string, atmosphere: string): string => `
 const nonNegativePresentationCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+type LevelResultRouteChoice = NonNullable<LevelResult['routeChoices']>[number];
+
+const levelResultRouteChoices = (value: unknown): LevelResultRouteChoice[] =>
+    Array.isArray(value)
+        ? value.filter((choice): choice is LevelResultRouteChoice => {
+              if (typeof choice !== 'object' || choice == null) {
+                  return false;
+              }
+              return typeof (choice as { label?: unknown }).label === 'string';
+          })
+        : [];
+
 export const getFloorClearCausalityRows = (
     result: LevelResult,
     powersUsedThisRun: boolean,
@@ -307,14 +319,15 @@ export const getFloorClearCausalityRows = (
         tokens: powersUsedThisRun ? ['forfeit', 'cost'] : ['safe', 'objective']
     });
 
-    if (result.routeChoices?.length) {
-        const choiceLabels = result.routeChoices.map((choice) => choice.label).join(', ');
+    const routeChoices = levelResultRouteChoices(result.routeChoices);
+    if (routeChoices.length) {
+        const choiceLabels = routeChoices.map((choice) => choice.label).join(', ');
         rows.push({
             id: 'route_choice',
             group: 'route',
             label: 'Next route',
             detail: withAtmosphere(
-                `${result.routeChoices.length} connected room choice${result.routeChoices.length === 1 ? '' : 's'} opened in the route archive: ${choiceLabels}.`,
+                `${routeChoices.length} connected room choice${routeChoices.length === 1 ? '' : 's'} opened in the route archive: ${choiceLabels}.`,
                 'The next route is now written into the archive margin.'
             ),
             tokens: ['objective', 'reward', 'risk']

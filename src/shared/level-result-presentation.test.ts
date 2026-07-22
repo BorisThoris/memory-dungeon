@@ -132,7 +132,8 @@ describe('floor clear causality presentation', () => {
                 hazardTileTriggers: Number.POSITIVE_INFINITY,
                 recallMatches: Number.NaN,
                 recallMistakes: Number.POSITIVE_INFINITY,
-                recallBonusScore: Number.NaN
+                recallBonusScore: Number.NaN,
+                routeChoices: Number.NaN as unknown as LevelResult['routeChoices']
             },
             false
         );
@@ -146,6 +147,7 @@ describe('floor clear causality presentation', () => {
         );
         expect(rows.find((row) => row.id === 'hazard_tiles')).toBeUndefined();
         expect(rows.find((row) => row.id === 'recall_focus')).toBeUndefined();
+        expect(rows.find((row) => row.id === 'route_choice')).toBeUndefined();
     });
 
     it('summarizes hazard tile triggers by kind', () => {
