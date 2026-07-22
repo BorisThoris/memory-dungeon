@@ -28,6 +28,12 @@ import { isSprungTrapTile } from './tile-state-rules';
 const nonNegativeEnemyHazardCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
+const positiveEnemyHazardCount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
+
+const enemyHazardsForBoard = (board: Pick<BoardState, 'enemyHazards'> | null | undefined): EnemyHazardState[] =>
+    Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
+
 const flippedTileCount = (board: BoardState | null | undefined): number => (Array.isArray(board?.flippedTileIds) ? board.flippedTileIds.length : 0);
 
 export interface EnemyHazardPatternDefinition {
@@ -250,7 +256,7 @@ export const advanceEnemyHazardsOnBoard = (board: BoardState, steps: number = 1)
     if (hazards.length === 0 || safeSteps <= 0) {
         return board;
     }
-    const sourceHazards = board.enemyHazards ?? [];
+    const sourceHazards = enemyHazardsForBoard(board);
     const activeIds = new Set(hazards.map((hazard) => hazard.id));
     const nextTurn = nonNegativeEnemyHazardCount(board.enemyHazardTurn) + safeSteps;
     const occupied = new Set<string>();
@@ -273,15 +279,16 @@ export const damageFirstRevealedEnemyHazard = (
     board: BoardState,
     amount: number
 ): { board: BoardState; defeated: number; bossDefeated: number; score: number } => {
-    const target = activeEnemyHazardsForBoard(board).find((hazard) => hazard.state === 'revealed' && hazard.hp > 0);
-    if (!target || amount <= 0) {
+    const damage = positiveEnemyHazardCount(amount);
+    const target = activeEnemyHazardsForBoard(board).find((hazard) => hazard.state === 'revealed' && positiveEnemyHazardCount(hazard.hp) > 0);
+    if (!target || damage <= 0) {
         return { board, defeated: 0, bossDefeated: 0, score: 0 };
     }
-    const nextHp = Math.max(0, target.hp - amount);
+    const nextHp = Math.max(0, positiveEnemyHazardCount(target.hp) - damage);
     const defeated = nextHp === 0 ? 1 : 0;
     const nextBoard: BoardState = {
         ...board,
-        enemyHazards: board.enemyHazards?.map((hazard) =>
+        enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
             hazard.id === target.id
                 ? {
                       ...hazard,
@@ -326,7 +333,7 @@ export const applyEnemyHazardClick = (
     const lostLives = Math.max(0, currentLives - lives);
     const revealedBoard: BoardState = {
         ...board,
-        enemyHazards: board.enemyHazards?.map((candidate) =>
+        enemyHazards: enemyHazardsForBoard(board).map((candidate) =>
             candidate.id === hazard.id ? { ...candidate, state: 'revealed' as const } : candidate
         )
     };
@@ -352,7 +359,7 @@ export const applyEnemyHazardClick = (
 export const defeatEnemyHazardsForFloorClear = (
     board: BoardState
 ): { board: BoardState; defeated: number; bossesDefeated: number } => {
-    const active = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    const active = enemyHazardsForBoard(board).filter((hazard) => hazard.state !== 'defeated');
     if (active.length === 0) {
         return { board, defeated: 0, bossesDefeated: 0 };
     }
@@ -361,7 +368,7 @@ export const defeatEnemyHazardsForFloorClear = (
     return {
         board: {
             ...board,
-            enemyHazards: board.enemyHazards?.map((hazard) =>
+            enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
                 activeIds.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
             )
         },
@@ -396,7 +403,7 @@ export const defeatEnemyHazardsBlockingLastPair = (
     }
     const blockedTileIds = new Set(lastPairTileIds);
     const blockingHazards =
-        board.enemyHazards?.filter(
+        enemyHazardsForBoard(board).filter(
             (hazard) =>
                 hazard.state === 'hidden' &&
                 (blockedTileIds.has(hazard.currentTileId) || blockedTileIds.has(hazard.nextTileId))
@@ -408,7 +415,7 @@ export const defeatEnemyHazardsBlockingLastPair = (
     return {
         board: {
             ...board,
-            enemyHazards: board.enemyHazards?.map((hazard) =>
+            enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
                 blockingIds.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
             )
         },

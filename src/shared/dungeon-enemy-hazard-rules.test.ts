@@ -139,6 +139,59 @@ describe('dungeon enemy hazard rules', () => {
         });
     });
 
+    it('ignores malformed enemy hazard arrays before action updates', () => {
+        const board = {
+            ...boardWith([tile('a', 'a'), tile('b', 'b')]),
+            enemyHazards: Number.NaN as unknown as BoardState['enemyHazards']
+        };
+
+        expect(advanceEnemyHazardsOnBoard(board)).toBe(board);
+        expect(damageFirstRevealedEnemyHazard(board, 1)).toEqual({
+            board,
+            defeated: 0,
+            bossDefeated: 0,
+            score: 0
+        });
+        expect(defeatEnemyHazardsForFloorClear(board)).toEqual({
+            board,
+            defeated: 0,
+            bossesDefeated: 0
+        });
+        expect(defeatEnemyHazardsBlockingLastPair(board)).toEqual({
+            board,
+            defeated: 0,
+            bossesDefeated: 0
+        });
+    });
+
+    it('ignores malformed revealed hazard damage amounts', () => {
+        const board = boardWith(
+            [tile('a', 'a'), tile('b', 'b'), tile('c', 'c')],
+            [hazard('h1', 'a', 'b', { state: 'revealed', hp: 1 })]
+        );
+
+        expect(damageFirstRevealedEnemyHazard(board, Number.NaN)).toEqual({
+            board,
+            defeated: 0,
+            bossDefeated: 0,
+            score: 0
+        });
+    });
+
+    it('excludes revealed hazards with malformed hit points from damage resolution', () => {
+        const board = boardWith(
+            [tile('a', 'a'), tile('b', 'b'), tile('c', 'c')],
+            [hazard('h1', 'a', 'b', { state: 'revealed', hp: Number.POSITIVE_INFINITY })]
+        );
+
+        expect(damageFirstRevealedEnemyHazard(board, 1)).toEqual({
+            board,
+            defeated: 0,
+            bossDefeated: 0,
+            score: 0
+        });
+    });
+
     it('does not apply contact damage from stale cleared-tile hazards', () => {
         const board = boardWith(
             [tile('a', 'done', { state: 'matched' }), tile('b', 'done', { state: 'matched' })],
