@@ -28,9 +28,6 @@ import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { isSprungTrapTile } from './tile-state-rules';
 
-const positiveEnemyHazardCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
-
 const flippedTileCount = (board: BoardState | null | undefined): number => runArrayCount(board?.flippedTileIds);
 
 export interface EnemyHazardPatternDefinition {
@@ -276,12 +273,12 @@ export const damageFirstRevealedEnemyHazard = (
     board: BoardState,
     amount: number
 ): { board: BoardState; defeated: number; bossDefeated: number; score: number } => {
-    const damage = positiveEnemyHazardCount(amount);
-    const target = activeEnemyHazardsForBoard(board).find((hazard) => hazard.state === 'revealed' && positiveEnemyHazardCount(hazard.hp) > 0);
+    const damage = runNonNegativeInteger(amount);
+    const target = activeEnemyHazardsForBoard(board).find((hazard) => hazard.state === 'revealed' && runNonNegativeInteger(hazard.hp) > 0);
     if (!target || damage <= 0) {
         return { board, defeated: 0, bossDefeated: 0, score: 0 };
     }
-    const nextHp = Math.max(0, positiveEnemyHazardCount(target.hp) - damage);
+    const nextHp = Math.max(0, runNonNegativeInteger(target.hp) - damage);
     const defeated = nextHp === 0 ? 1 : 0;
     const nextBoard: BoardState = {
         ...board,
