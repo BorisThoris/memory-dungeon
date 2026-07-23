@@ -37,6 +37,27 @@ const ACTION_FEEDBACK_LANE_LABELS: Record<ActionFeedbackLaneId, ActionFeedbackLa
     trait: 'Trait'
 };
 
+const ACTION_FEEDBACK_DETAIL_TONES: readonly VisualHudAnnouncementDetail['tone'][] = [
+    'chain',
+    'reward',
+    'risk',
+    'guard',
+    'trait',
+    'objective',
+    'info'
+];
+
+const isActionFeedbackDetail = (value: unknown): value is VisualHudAnnouncementDetail => {
+    if (value == null || typeof value !== 'object') {
+        return false;
+    }
+    const detail = value as { label?: unknown; tone?: unknown };
+    return typeof detail.label === 'string' && ACTION_FEEDBACK_DETAIL_TONES.includes(detail.tone as VisualHudAnnouncementDetail['tone']);
+};
+
+const actionFeedbackDetails = (value: GameScreenActionFeedbackRailProps['details'] | unknown): VisualHudAnnouncementDetail[] =>
+    Array.isArray(value) ? value.filter(isActionFeedbackDetail) : [];
+
 const actionFeedbackLaneId = (detail: VisualHudAnnouncementDetail): ActionFeedbackLaneId => {
     const normalized = detail.label.toLowerCase();
     if (detail.tone === 'risk') {
@@ -739,13 +760,14 @@ export const GameScreenActionFeedbackRail = ({
     signal,
     tone
 }: GameScreenActionFeedbackRailProps) => {
-    const stackLabel = stackBadgeLabel(burstTier, details);
-    const stackRead = stackSummary(burstTier, details, followup);
-    const impactCue = actionFeedbackImpactCue(burstTier, details, followup);
+    const displayedDetails = actionFeedbackDetails(details);
+    const stackLabel = stackBadgeLabel(burstTier, displayedDetails);
+    const stackRead = stackSummary(burstTier, displayedDetails, followup);
+    const impactCue = actionFeedbackImpactCue(burstTier, displayedDetails, followup);
     const tempoCue = actionFeedbackTempoCue(burstTier, impactCue);
     const tempoBeat = actionFeedbackTempoBeat(tempoCue);
     const sequenceCue = actionFeedbackSequenceCue({ burstTier, followup, impactCue, stackRead, tempoCue });
-    const payoffIntensity = actionFeedbackPayoffIntensity({ burstTier, details, impactCue, stackRead });
+    const payoffIntensity = actionFeedbackPayoffIntensity({ burstTier, details: displayedDetails, impactCue, stackRead });
     const displayedCrescendo = crescendo ?? actionFeedbackDerivedCrescendo(payoffIntensity);
     const payoffBeatCount = actionFeedbackPayoffBeatCount(payoffIntensity, displayedCrescendo);
     const impactAction = actionFeedbackImpactAction(impactCue);
@@ -755,7 +777,7 @@ export const GameScreenActionFeedbackRail = ({
     const payoffScreenCue = actionFeedbackPayoffScreenCue(payoffIntensity, displayedCrescendo);
     const tempoAudioCue = actionFeedbackTempoAudioCue(tempoCue);
     const tempoScreenCue = actionFeedbackTempoScreenCue(tempoCue);
-    const laneMap = actionFeedbackLaneMap(details);
+    const laneMap = actionFeedbackLaneMap(displayedDetails);
     const primaryLane = laneMap?.[0] ?? null;
     return (
         <div
@@ -881,9 +903,9 @@ export const GameScreenActionFeedbackRail = ({
                 </span>
             </span>
             <strong>{message}</strong>
-            {details.length > 0 ? (
+            {displayedDetails.length > 0 ? (
                 <span className={styles.actionFeedbackDetails} data-testid="action-feedback-details">
-                    {details.map((detail) => (
+                    {displayedDetails.map((detail) => (
                         <span
                             data-action-feedback-detail={detail.tone}
                             data-action-feedback-detail-kind={actionFeedbackDetailKind(detail.label)}
