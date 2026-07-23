@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { FLIP_PAR_BONUS_SCORE, type RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import {
+    formatLevelResultObjectiveLine,
     formatLevelResultTagLabel,
     getDungeonLevelResultTags,
     getLevelResultTagDefinitions,
@@ -55,6 +56,24 @@ describe('REG-048 secondary objective clarity', () => {
             }
         };
         expect(getSecondaryObjectiveProgress(completed)?.status).toBe('completed');
+    });
+
+    it('normalizes malformed objective bonus score before formatting level result copy', () => {
+        expect(
+            formatLevelResultObjectiveLine({
+                level: 1,
+                scoreGained: 100,
+                rating: 'S++',
+                livesRemaining: 5,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'perfect',
+                clearLifeGained: 1,
+                featuredObjectiveId: 'flip_par',
+                featuredObjectiveCompleted: true,
+                objectiveBonusScore: Number.POSITIVE_INFINITY
+            })
+        ).toBe('Flip par: Complete');
     });
 
     it('generates dungeon result tags from rule state without reward-bearing duplicates', () => {

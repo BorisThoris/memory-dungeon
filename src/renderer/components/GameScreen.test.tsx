@@ -322,6 +322,53 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByText(/Clean clears, safe routes, shops, rests, and shrines can restore them/i)).toBeInTheDocument();
     });
 
+    it('normalizes malformed floor-clear counters before rendering overlay copy', () => {
+        const fixture = levelCompleteRunFixture();
+        const malformed: RunState = {
+            ...fixture,
+            findablesClaimedThisFloor: Number.POSITIVE_INFINITY,
+            findablesTotalThisFloor: Number.NaN,
+            relicFavorProgress: Number.NaN,
+            stats: {
+                ...fixture.stats,
+                bestStreak: Number.NaN,
+                comboShards: Number.POSITIVE_INFINITY,
+                totalScore: Number.POSITIVE_INFINITY
+            },
+            lastLevelResult: {
+                ...fixture.lastLevelResult!,
+                level: Number.POSITIVE_INFINITY,
+                scoreGained: Number.NaN,
+                mistakes: Number.POSITIVE_INFINITY,
+                livesRemaining: Number.POSITIVE_INFINITY,
+                featuredObjectiveId: 'flip_par',
+                featuredObjectiveCompleted: true,
+                objectiveBonusScore: Number.POSITIVE_INFINITY,
+                featuredObjectiveStreak: Number.NaN,
+                featuredObjectiveStreakBonus: Number.POSITIVE_INFINITY,
+                relicFavorGained: Number.NaN,
+                endlessRiskWagerOutcome: 'lost',
+                endlessRiskWagerStreakLost: Number.POSITIVE_INFINITY,
+                traitRouteObjectiveRequired: Number.POSITIVE_INFINITY,
+                traitRouteObjectiveProgress: Number.NaN
+            }
+        };
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={malformed} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.getByText(/Level 0 cleared\. Score \+0\./i)).toBeInTheDocument();
+        expect(screen.getByTestId('floor-clear-result-stack')).not.toHaveTextContent(/NaN|Infinity/);
+        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('Score pop+0');
+        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Objective paid+0 score');
+        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Objective streakx0');
+    });
+
     it('surfaces first-clear onboarding completion copy after completion is durable', () => {
         const saveData = { ...createDefaultSaveData(), onboardingDismissed: true };
         act(() => {

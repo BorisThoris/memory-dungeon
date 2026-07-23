@@ -165,6 +165,9 @@ const DESKTOP_FULL_BLEED_TILE_BOARD_FRAME_STYLE: CSSProperties = {
     width: '100%'
 };
 
+const gameScreenDisplayInteger = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 interface GameScreenProps {
     achievements: AchievementId[];
     run: RunState;
@@ -1142,7 +1145,7 @@ const getNextFloorSignalScreenCue = (
 };
 
 const getFloorClearChainCashoutLabels = (run: RunState): string[] => {
-    const bestStreak = Math.max(0, Math.floor(run.stats.bestStreak ?? 0));
+    const bestStreak = gameScreenDisplayInteger(run.stats.bestStreak);
     if (bestStreak < 4) {
         return [];
     }
@@ -1164,10 +1167,13 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
     if (!result) {
         return [];
     }
-    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
-    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
+    const pickupTotal = gameScreenDisplayInteger(run.findablesTotalThisFloor);
+    const pickupClaimed = gameScreenDisplayInteger(run.findablesClaimedThisFloor);
     const missedPickups = Math.max(0, pickupTotal - pickupClaimed);
-    const bestStreak = Math.max(0, run.stats.bestStreak ?? 0);
+    const bestStreak = gameScreenDisplayInteger(run.stats.bestStreak);
+    const scoreGained = gameScreenDisplayInteger(result.scoreGained);
+    const objectiveBonusScore = gameScreenDisplayInteger(result.objectiveBonusScore);
+    const mistakes = gameScreenDisplayInteger(result.mistakes);
     const traitPaid = Boolean(result.traitRouteObjectiveCompleted);
     const objectivePaid = Boolean(result.featuredObjectiveCompleted);
     const chainTarget = getChainTargetFeedback(bestStreak);
@@ -1184,12 +1190,12 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
             ? rewardStack.join(' + ')
             : bestStreak >= 3
               ? `x${bestStreak} chain`
-              : `+${result.scoreGained.toLocaleString()} score`;
+              : `+${scoreGained.toLocaleString()} score`;
     const cashoutDetail = [
         traitPaid
             ? result.traitRouteObjectiveReward ?? 'Trait route cashout paid.'
             : objectivePaid
-              ? `+${(result.objectiveBonusScore ?? 0).toLocaleString()} objective score`
+              ? `+${objectiveBonusScore.toLocaleString()} objective score`
               : null,
         chainCashoutValue ? `Chain cashout: ${chainCashoutValue}.` : null
     ]
@@ -1202,7 +1208,7 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
               ? 'trait route missed'
               : result.perfect
                 ? 'perfect clear'
-                : `${result.mistakes} miss${result.mistakes === 1 ? '' : 'es'}`;
+                : `${mistakes} miss${mistakes === 1 ? '' : 'es'}`;
     const nextValue =
         missedPickups > 0
             ? 'claim pickups'
@@ -1250,12 +1256,13 @@ const getFloorClearPayoffStackSignal = (
         return null;
     }
 
+    const bestStreak = gameScreenDisplayInteger(run.stats.bestStreak);
     const lanes = [
         result.traitRouteObjectiveCompleted ? 'Trait route' : null,
         result.featuredObjectiveCompleted ? 'Objective' : null,
-        run.findablesClaimedThisFloor > 0 ? 'Pickup' : null,
-        getFloorClearChainCashoutLabels(run).length > 0 ? 'Chain cashout' : run.stats.bestStreak >= 3 ? 'Chain' : null,
-        run.stats.comboShards > 0 ? 'Shard' : null,
+        gameScreenDisplayInteger(run.findablesClaimedThisFloor) > 0 ? 'Pickup' : null,
+        getFloorClearChainCashoutLabels(run).length > 0 ? 'Chain cashout' : bestStreak >= 3 ? 'Chain' : null,
+        gameScreenDisplayInteger(run.stats.comboShards) > 0 ? 'Shard' : null,
         favorBankedPickCount > 0 ? 'Relic pick' : null
     ].filter((lane): lane is string => lane != null);
     const missedRows = floorClearCashoutRows.filter((row) => row.tone === 'missed');
@@ -1309,13 +1316,15 @@ const getPickupStackToastText = (
 ): string => {
     const baseText = getFindableToastText(claimedKind);
     const nextReward = getChainRewardForecastCues(
-        pickupState.currentStreak,
-        pickupState.comboShards,
-        pickupState.lives
+        gameScreenDisplayInteger(pickupState.currentStreak),
+        gameScreenDisplayInteger(pickupState.comboShards),
+        gameScreenDisplayInteger(pickupState.lives)
     )[0];
+    const pickupClaimed = gameScreenDisplayInteger(pickupState.findablesClaimedThisFloor);
+    const pickupTotal = gameScreenDisplayInteger(pickupState.findablesTotalThisFloor);
     const pickupProgress =
-        pickupState.findablesTotalThisFloor > 0
-            ? `Pickups ${pickupState.findablesClaimedThisFloor}/${pickupState.findablesTotalThisFloor}.`
+        pickupTotal > 0
+            ? `Pickups ${pickupClaimed}/${pickupTotal}.`
             : null;
 
     if (nextReward?.urgency === 'next') {
@@ -1336,10 +1345,10 @@ const getFloorClearCarryForwardCue = (run: RunState, favorBankedPickCount: numbe
     if (!result) {
         return null;
     }
-    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
-    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
+    const pickupTotal = gameScreenDisplayInteger(run.findablesTotalThisFloor);
+    const pickupClaimed = gameScreenDisplayInteger(run.findablesClaimedThisFloor);
     const missedPickups = Math.max(0, pickupTotal - pickupClaimed);
-    const bestStreak = Math.max(0, run.stats.bestStreak ?? 0);
+    const bestStreak = gameScreenDisplayInteger(run.stats.bestStreak);
     const chainCashoutLabels = getFloorClearChainCashoutLabels(run);
 
     if (favorBankedPickCount > 0) {
@@ -1401,7 +1410,7 @@ const getFloorClearActionSequenceCue = ({
         return null;
     }
 
-    const chainTarget = getChainTargetFeedback(Math.max(0, run.stats.bestStreak ?? 0));
+    const chainTarget = getChainTargetFeedback(gameScreenDisplayInteger(run.stats.bestStreak));
     const missedRow = cashoutRows.find((row) => row.tone === 'missed');
     const nextRow = cashoutRows.find((row) => row.id === 'next');
     const first = routeChoiceRequired
@@ -2022,7 +2031,7 @@ const getMatchFloaterJackpotCue = (payload: MatchScorePop): MatchFloaterJackpotC
             beatCount: Math.max(3, crescendo?.beatCount ?? 0) as 3 | 4 | 5,
             label: summary?.label ?? 'Cashout',
             tier: 'cashout',
-            value: summary?.value ?? rewardBurst?.value ?? payload.routeRewardText ?? `+${payload.amount.toLocaleString()}`
+            value: summary?.value ?? rewardBurst?.value ?? payload.routeRewardText ?? `+${gameScreenDisplayInteger(payload.amount).toLocaleString()}`
         };
     }
     return null;
@@ -3341,15 +3350,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const cameraViewportMode = deriveCameraViewportMode(settingsCameraViewportModePreference, viewportWantsMobileCamera);
     const clearLifeBonusLabel = run.lastLevelResult ? getClearLifeBonusLabel(run.lastLevelResult) : null;
     const objectiveBonusLine =
-        run.lastLevelResult && (run.lastLevelResult.objectiveBonusScore ?? 0) > 0
-            ? `Objective bonuses: +${run.lastLevelResult.objectiveBonusScore!.toLocaleString()}`
+        run.lastLevelResult && gameScreenDisplayInteger(run.lastLevelResult.objectiveBonusScore) > 0
+            ? `Objective bonuses: +${gameScreenDisplayInteger(run.lastLevelResult.objectiveBonusScore).toLocaleString()}`
             : null;
     const bonusTagsLine = run.lastLevelResult ? formatBonusTagsLine(run.lastLevelResult.bonusTags) : null;
     const traitRouteObjectiveLine =
         run.lastLevelResult?.traitRouteObjectiveRequired != null
             ? run.lastLevelResult.traitRouteObjectiveCompleted
                 ? `Trait routes: Complete (${run.lastLevelResult.traitRouteObjectiveReward ?? 'trait route cashout'})`
-                : `Trait routes: ${run.lastLevelResult.traitRouteObjectiveProgress ?? 0}/${run.lastLevelResult.traitRouteObjectiveRequired}`
+                : `Trait routes: ${gameScreenDisplayInteger(run.lastLevelResult.traitRouteObjectiveProgress)}/${gameScreenDisplayInteger(run.lastLevelResult.traitRouteObjectiveRequired)}`
             : null;
     const endlessChapterActive =
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
@@ -3366,39 +3375,39 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const floorClearCausalityRows = run.lastLevelResult
         ? getFloorClearCausalityRows(run.lastLevelResult, run.powersUsedThisRun, currentFloorIdentity)
         : [];
-    const favorGained = run.lastLevelResult?.relicFavorGained ?? 0;
+    const favorGained = gameScreenDisplayInteger(run.lastLevelResult?.relicFavorGained);
     const favorBankedPickCount = countFavorBonusPicksBanked(run.relicFavorProgress, favorGained);
     const floorClearMomentumRows = run.lastLevelResult
         ? [
               {
                   id: 'score',
                   label: 'Score pop',
-                  value: `+${run.lastLevelResult.scoreGained.toLocaleString()}`
+                  value: `+${gameScreenDisplayInteger(run.lastLevelResult.scoreGained).toLocaleString()}`
               },
               {
                   id: 'rating',
                   label: 'Rating',
                   value: run.lastLevelResult.rating
               },
-              run.stats.bestStreak > 0
+              gameScreenDisplayInteger(run.stats.bestStreak) > 0
                   ? {
                         id: 'streak',
                         label: 'Best chain',
-                        value: `x${run.stats.bestStreak}`
+                        value: `x${gameScreenDisplayInteger(run.stats.bestStreak)}`
                     }
                   : null,
-              run.findablesTotalThisFloor > 0
+              gameScreenDisplayInteger(run.findablesTotalThisFloor) > 0
                   ? {
                         id: 'pickups',
                         label: 'Pickups',
-                        value: `${run.findablesClaimedThisFloor}/${run.findablesTotalThisFloor}`
+                        value: `${gameScreenDisplayInteger(run.findablesClaimedThisFloor)}/${gameScreenDisplayInteger(run.findablesTotalThisFloor)}`
                     }
                   : null,
-              run.stats.comboShards > 0
+              gameScreenDisplayInteger(run.stats.comboShards) > 0
                   ? {
                         id: 'shards',
                         label: 'Shards',
-                        value: `${run.stats.comboShards}`
+                        value: `${gameScreenDisplayInteger(run.stats.comboShards)}`
                     }
                   : null,
               favorGained > 0
@@ -3430,7 +3439,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         id: 'featured-objective',
                         label: run.lastLevelResult.featuredObjectiveCompleted ? 'Objective paid' : 'Objective missed',
                         value: run.lastLevelResult.featuredObjectiveCompleted
-                            ? `+${(run.lastLevelResult.objectiveBonusScore ?? 0).toLocaleString()} score`
+                            ? `+${gameScreenDisplayInteger(run.lastLevelResult.objectiveBonusScore).toLocaleString()} score`
                             : 'Payout lost',
                         tone: run.lastLevelResult.featuredObjectiveCompleted ? 'reward' : 'risk'
                     }
@@ -3439,12 +3448,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   ? {
                         id: 'objective-streak',
                         label: 'Objective streak',
-                        value: `x${run.lastLevelResult.featuredObjectiveStreak ?? 0}${
-                            (run.lastLevelResult.featuredObjectiveStreakBonus ?? 0) > 0
-                                ? ` +${run.lastLevelResult.featuredObjectiveStreakBonus!.toLocaleString()}`
+                        value: `x${gameScreenDisplayInteger(run.lastLevelResult.featuredObjectiveStreak)}${
+                            gameScreenDisplayInteger(run.lastLevelResult.featuredObjectiveStreakBonus) > 0
+                                ? ` +${gameScreenDisplayInteger(run.lastLevelResult.featuredObjectiveStreakBonus).toLocaleString()}`
                                 : ''
                         }`,
-                        tone: (run.lastLevelResult.featuredObjectiveStreak ?? 0) > 1 ? 'momentum' : 'neutral'
+                        tone: gameScreenDisplayInteger(run.lastLevelResult.featuredObjectiveStreak) > 1 ? 'momentum' : 'neutral'
                     }
                   : null,
               run.lastLevelResult.traitRouteObjectiveRequired != null
@@ -3453,7 +3462,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         label: run.lastLevelResult.traitRouteObjectiveCompleted ? 'Trait route paid' : 'Trait route',
                         value: run.lastLevelResult.traitRouteObjectiveCompleted
                             ? run.lastLevelResult.traitRouteObjectiveReward ?? 'Trait route cashout'
-                            : `${run.lastLevelResult.traitRouteObjectiveProgress ?? 0}/${run.lastLevelResult.traitRouteObjectiveRequired}`,
+                            : `${gameScreenDisplayInteger(run.lastLevelResult.traitRouteObjectiveProgress)}/${gameScreenDisplayInteger(run.lastLevelResult.traitRouteObjectiveRequired)}`,
                         tone: run.lastLevelResult.traitRouteObjectiveCompleted ? 'trait' : 'neutral'
                     }
                   : null,
@@ -3466,8 +3475,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 : 'Wager lost',
                         value:
                             run.lastLevelResult.endlessRiskWagerOutcome === 'won'
-                                ? `+${run.lastLevelResult.endlessRiskWagerFavorGained ?? 0} Favor`
-                                : `-${run.lastLevelResult.endlessRiskWagerStreakLost ?? 0} streak`,
+                                ? `+${gameScreenDisplayInteger(run.lastLevelResult.endlessRiskWagerFavorGained)} Favor`
+                                : `-${gameScreenDisplayInteger(run.lastLevelResult.endlessRiskWagerStreakLost)} streak`,
                         tone: run.lastLevelResult.endlessRiskWagerOutcome === 'won' ? 'reward' : 'risk'
                     }
                   : null
@@ -3491,15 +3500,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const offeredRiskWagerFavor = ENDLESS_RISK_WAGER_BONUS_FAVOR + (wagerSuretyActive ? 1 : 0);
     const endlessRiskWagerOutcomeLine =
         run.lastLevelResult?.endlessRiskWagerOutcome === 'won'
-            ? `Risk wager won: +${run.lastLevelResult.endlessRiskWagerFavorGained ?? 0} Favor`
+            ? `Risk wager won: +${gameScreenDisplayInteger(run.lastLevelResult.endlessRiskWagerFavorGained)} Favor`
             : run.lastLevelResult?.endlessRiskWagerOutcome === 'lost'
-              ? `Risk wager lost: -${run.lastLevelResult.endlessRiskWagerStreakLost ?? 0} streak`
+              ? `Risk wager lost: -${gameScreenDisplayInteger(run.lastLevelResult.endlessRiskWagerStreakLost)} streak`
               : null;
     const featuredObjectiveStreakLine =
         run.lastLevelResult?.featuredObjectiveId != null
-            ? `Objective streak: x${run.lastLevelResult.featuredObjectiveStreak ?? 0}${
-                  (run.lastLevelResult.featuredObjectiveStreakBonus ?? 0) > 0
-                      ? ` (+${run.lastLevelResult.featuredObjectiveStreakBonus!.toLocaleString()})`
+            ? `Objective streak: x${gameScreenDisplayInteger(run.lastLevelResult.featuredObjectiveStreak)}${
+                  gameScreenDisplayInteger(run.lastLevelResult.featuredObjectiveStreakBonus) > 0
+                      ? ` (+${gameScreenDisplayInteger(run.lastLevelResult.featuredObjectiveStreakBonus).toLocaleString()})`
                       : ''
               }`
             : null;
@@ -4995,7 +5004,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     {boardFloaterPayload.kind === 'match' ? (
                                         <span className={styles.boardFloaterScore}>
                                             {boardFloaterPayload.routeRewardText ??
-                                                `+${boardFloaterPayload.amount.toLocaleString()}`}
+                                                `+${gameScreenDisplayInteger(boardFloaterPayload.amount).toLocaleString()}`}
                                         </span>
                                     ) : null}
                                     {boardFloaterPayload.kind === 'match' && boardFloaterPayload.chainDepth >= 3 ? (
@@ -5898,7 +5907,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         headerPlateTone="success"
                         ornamentalHeaderPlate
                         quietHeaderPlate
-                        subtitle={`Level ${run.lastLevelResult.level} cleared. Score +${run.lastLevelResult.scoreGained}. Try Daily or Scholar contract from the menu for different goals.`}
+                        subtitle={`Level ${gameScreenDisplayInteger(run.lastLevelResult.level)} cleared. Score +${gameScreenDisplayInteger(run.lastLevelResult.scoreGained)}. Try Daily or Scholar contract from the menu for different goals.`}
                         title="Floor cleared"
                     >
                         <div
@@ -6762,19 +6771,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             <StatTile
                                 density="minimal"
                                 label="Mistakes"
-                                value={run.lastLevelResult.mistakes}
+                                value={gameScreenDisplayInteger(run.lastLevelResult.mistakes)}
                                 valueFirst
                             />
                             <StatTile
                                 density="minimal"
                                 label="Lives"
-                                value={run.lastLevelResult.livesRemaining}
+                                value={gameScreenDisplayInteger(run.lastLevelResult.livesRemaining)}
                                 valueFirst
                             />
                             <StatTile
                                 density="minimal"
                                 label="Total"
-                                value={run.stats.totalScore.toLocaleString()}
+                                value={gameScreenDisplayInteger(run.stats.totalScore).toLocaleString()}
                                 valueFirst
                             />
                         </div>

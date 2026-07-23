@@ -284,7 +284,8 @@ export const formatLevelResultObjectiveLine = (result: LevelResult): string | nu
     }
     const label = getFeaturedObjectiveLabel(result.featuredObjectiveId) ?? result.featuredObjectiveId;
     if (result.featuredObjectiveCompleted) {
-        const bonus = result.objectiveBonusScore ? ` (+${result.objectiveBonusScore} score)` : '';
+        const objectiveBonusScore = runNonNegativeInteger(result.objectiveBonusScore);
+        const bonus = objectiveBonusScore > 0 ? ` (+${objectiveBonusScore} score)` : '';
         return `${label}: Complete${bonus}`;
     }
     return `${label}: Missed — no objective bonus.`;
