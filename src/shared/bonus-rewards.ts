@@ -16,7 +16,7 @@ import {
     getRunInventoryItemPayoutRows,
     type RunInventoryItemId
 } from './run-inventory';
-import { runNonNegativeInteger } from './run-number-guards';
+import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitBuildRewardRowsForBoard } from './trait-build-rewards';
 
@@ -410,6 +410,7 @@ export const rollBonusRewardDraft = ({
     board?: BoardState | null;
 }): BonusRewardInstance[] => {
     const safeLedger = normalizeBonusRewardLedger(ledger);
+    const draftCount = Math.max(1, Math.min(3, runNonNegativeIntegerWithFallback(count, 3)));
     const candidates = rewardIdsForRouteKind(routeKind);
     const seed = hashStringToSeed(`bonusRewardDraft:${rulesVersion}:${runSeed}:${floor}:${routeKind}`);
     const ordered = applyLoadoutRewardBias(
@@ -426,7 +427,7 @@ export const rollBonusRewardDraft = ({
         if (instance.eligible || selected.length === 0) {
             selected.push(instance);
         }
-        if (selected.length >= Math.max(1, Math.min(3, Math.floor(count)))) {
+        if (selected.length >= draftCount) {
             break;
         }
     }

@@ -284,6 +284,20 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         });
     });
 
+    it('normalizes malformed reward draft counts before selecting candidates', () => {
+        const base = {
+            runSeed: 75_002,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 6,
+            routeKind: 'treasure' as const
+        };
+
+        expect(rollBonusRewardDraft({ ...base, count: 2.9 })).toHaveLength(2);
+        expect(rollBonusRewardDraft({ ...base, count: -1 })).toHaveLength(1);
+        expect(rollBonusRewardDraft({ ...base, count: Number.NaN })).toHaveLength(3);
+        expect(rollBonusRewardDraft({ ...base, count: Number.POSITIVE_INFINITY })).toHaveLength(3);
+    });
+
     it('biases reward drafts toward starting loadout identity without breaking determinism', () => {
         const base = {
             runSeed: 75_120,
