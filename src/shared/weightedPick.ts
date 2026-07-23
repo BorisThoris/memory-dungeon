@@ -4,13 +4,18 @@
  */
 import { normalizeRngRoll } from './rng';
 
+const normalizeWeight = (weight: number): number => (Number.isFinite(weight) ? Math.max(0, weight) : 0);
+
+const normalizePickCount = (count: number, max: number): number =>
+    Number.isFinite(count) ? Math.min(Math.max(0, Math.floor(count)), max) : max;
+
 /** Pick an index 0..weights.length-1 proportional to non-negative weights. If all weights are zero, picks uniformly. */
 export const pickWeightedIndex = (rng: () => number, weights: readonly number[]): number => {
     if (weights.length === 0) {
         return 0;
     }
     let total = 0;
-    const safe = weights.map((w) => (Number.isFinite(w) ? Math.max(0, w) : 0));
+    const safe = weights.map(normalizeWeight);
     for (const w of safe) {
         total += w;
     }
@@ -41,10 +46,10 @@ export const pickWeightedWithoutReplacement = <T>(
     }
     const pool = items.map((x) => ({
         value: x.value,
-        weight: Number.isFinite(x.weight) ? Math.max(0, x.weight) : 0
+        weight: normalizeWeight(x.weight)
     }));
     const out: T[] = [];
-    const take = Number.isFinite(k) ? Math.min(Math.floor(k), pool.length) : pool.length;
+    const take = normalizePickCount(k, pool.length);
     for (let n = 0; n < take; n += 1) {
         const ws = pool.map((p) => p.weight);
         const idx = pickWeightedIndex(rng, ws);
