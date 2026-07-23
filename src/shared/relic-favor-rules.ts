@@ -3,10 +3,18 @@ import { runNonNegativeInteger } from './run-number-guards';
 
 export const RELIC_FAVOR_PER_BONUS_PICK = 3;
 
+type RelicFavorCounters = {
+    bonusRelicPicksNextOffer?: RunState['bonusRelicPicksNextOffer'];
+    favorBonusRelicPicksNextOffer?: RunState['favorBonusRelicPicksNextOffer'];
+    relicFavorProgress?: RunState['relicFavorProgress'];
+};
+
+type NormalizedRelicFavorCounters = Required<RelicFavorCounters>;
+
 export const gainRelicFavor = (
-    run: RunState,
+    run: RelicFavorCounters,
     favorGain: number
-): Pick<RunState, 'bonusRelicPicksNextOffer' | 'favorBonusRelicPicksNextOffer' | 'relicFavorProgress'> => {
+): NormalizedRelicFavorCounters => {
     const gain = runNonNegativeInteger(favorGain);
     if (gain <= 0) {
         return {

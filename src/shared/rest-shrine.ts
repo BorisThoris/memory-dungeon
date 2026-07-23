@@ -1,4 +1,5 @@
 import { MAX_GUARD_TOKENS, MAX_LIVES, type RunState } from './contracts';
+import { gainRelicFavor } from './relic-favor-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -121,18 +122,6 @@ export interface RestShrinePurchaseResult {
     relicFavorProgress?: number;
 }
 
-const gainOneFavorProgress = (
-    run: RunState
-): Pick<RunState, 'bonusRelicPicksNextOffer' | 'favorBonusRelicPicksNextOffer' | 'relicFavorProgress'> => {
-    const total = runNonNegativeInteger(run.relicFavorProgress) + 1;
-    const bonusPicks = Math.floor(total / 3);
-    return {
-        bonusRelicPicksNextOffer: runNonNegativeInteger(run.bonusRelicPicksNextOffer) + bonusPicks,
-        favorBonusRelicPicksNextOffer: runNonNegativeInteger(run.favorBonusRelicPicksNextOffer) + bonusPicks,
-        relicFavorProgress: total % 3
-    };
-};
-
 export const purchaseRestShrineService = (
     run: RunState,
     services: readonly RestShrineServiceState[],
@@ -163,7 +152,7 @@ export const purchaseRestShrineService = (
     } else if (service.serviceId === 'boss_ward') {
         nextRun = { ...nextRun, dungeonMasterKeys: runNonNegativeInteger(nextRun.dungeonMasterKeys) + 1 };
     } else {
-        nextRun = { ...nextRun, ...gainOneFavorProgress(nextRun) };
+        nextRun = { ...nextRun, ...gainRelicFavor(nextRun, 1) };
     }
 
     return {

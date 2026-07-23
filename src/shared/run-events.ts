@@ -1,5 +1,6 @@
 import { hashStringToSeed } from './rng';
 import { MAX_GUARD_TOKENS, MAX_LIVES, type RunState } from './contracts';
+import { gainRelicFavor } from './relic-favor-rules';
 import { gainRunInventoryItem, getDungeonKeyTotal } from './run-inventory';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -877,14 +878,7 @@ export const chooseRunEventOption = (
     if (choice.effect === 'gain_shop_gold') {
         next = { ...next, shopGold: runNonNegativeInteger(next.shopGold) + 2 };
     } else if (choice.effect === 'gain_relic_favor') {
-        const total = runNonNegativeInteger(next.relicFavorProgress) + 1;
-        const bonusPicks = Math.floor(total / 3);
-        next = {
-            ...next,
-            bonusRelicPicksNextOffer: runNonNegativeInteger(next.bonusRelicPicksNextOffer) + bonusPicks,
-            favorBonusRelicPicksNextOffer: runNonNegativeInteger(next.favorBonusRelicPicksNextOffer) + bonusPicks,
-            relicFavorProgress: total % 3
-        };
+        next = { ...next, ...gainRelicFavor(next, 1) };
     } else if (choice.effect === 'heal_or_guard') {
         next =
             runNonNegativeInteger(next.lives) < MAX_LIVES
@@ -1122,17 +1116,6 @@ export const getRunEventToneAuditRows = (): RunEventToneAuditRow[] =>
         };
     });
 
-const gainOneFavor = (run: RunState): RunState => {
-    const total = runNonNegativeInteger(run.relicFavorProgress) + 1;
-    const bonusPicks = Math.floor(total / 3);
-    return {
-        ...run,
-        bonusRelicPicksNextOffer: runNonNegativeInteger(run.bonusRelicPicksNextOffer) + bonusPicks,
-        favorBonusRelicPicksNextOffer: runNonNegativeInteger(run.favorBonusRelicPicksNextOffer) + bonusPicks,
-        relicFavorProgress: total % 3
-    };
-};
-
 const gainRunScoreReward = (run: RunState): RunState => {
     const stats = normalizeSessionStats(run.stats);
     const totalScore = stats.totalScore + 25;
@@ -1163,7 +1146,7 @@ export const applyRunEventChoice = (
         case 'gain_shop_gold':
             return { run: { ...run, shopGold: runNonNegativeInteger(run.shopGold) + 2 }, applied: true };
         case 'gain_relic_favor':
-            return { run: gainOneFavor(run), applied: true };
+            return { run: { ...run, ...gainRelicFavor(run, 1) }, applied: true };
         case 'heal_or_guard':
             if (runNonNegativeInteger(run.lives) < MAX_LIVES) {
                 return { run: { ...run, lives: runNonNegativeInteger(run.lives) + 1 }, applied: true };
