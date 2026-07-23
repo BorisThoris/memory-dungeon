@@ -4,13 +4,11 @@ import {
     getBoardTraitInteractionPreviewLines,
     type TileTraitInteractionTag
 } from './tile-trait-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitOpportunitySummary } from './trait-opportunities';
 
 export const TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD = 25;
-
-const nonNegativeTraitRouteObjectiveCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const traitRouteTags = (value: unknown): TileTraitInteractionTag[] => Array.isArray(value) ? value : [];
 
@@ -75,8 +73,8 @@ export const applyTraitRouteObjectiveProgress = (
     run: RunState,
     interactionTags: readonly TileTraitInteractionTag[]
 ): TraitRouteObjectiveApplyResult => {
-    const required = nonNegativeTraitRouteObjectiveCount(run.traitRouteObjectiveRequiredThisFloor);
-    const currentProgress = nonNegativeTraitRouteObjectiveCount(run.traitRouteObjectiveProgressThisFloor);
+    const required = runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor);
+    const currentProgress = runNonNegativeInteger(run.traitRouteObjectiveProgressThisFloor);
     const comboShards = normalizeSessionStats(run.stats).comboShards;
     const active = required > 0;
     const triggeredTags = traitRouteTags(run.traitRouteObjectiveTriggeredTagsThisFloor);
@@ -130,11 +128,11 @@ export const applyTraitRouteObjectiveProgress = (
 };
 
 export const getTraitRouteObjectiveStatus = (run: RunState): TraitRouteObjectiveStatus | null => {
-    const required = nonNegativeTraitRouteObjectiveCount(run.traitRouteObjectiveRequiredThisFloor);
+    const required = runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor);
     if (required <= 0) {
         return null;
     }
-    const progress = Math.min(nonNegativeTraitRouteObjectiveCount(run.traitRouteObjectiveProgressThisFloor), required);
+    const progress = Math.min(runNonNegativeInteger(run.traitRouteObjectiveProgressThisFloor), required);
     const completed = run.traitRouteObjectiveCompletedThisFloor;
     const remaining = Math.max(0, required - progress);
     const urgency: TraitRouteObjectiveStatus['urgency'] = completed

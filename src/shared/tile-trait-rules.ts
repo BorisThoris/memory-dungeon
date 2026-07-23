@@ -14,6 +14,7 @@ import { normalizeRewardPerkIds } from './bonus-rewards';
 import { runRelicIds } from './relics';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runArrayCount } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 export {
@@ -76,9 +77,6 @@ export const TILE_TRAIT_MATCH_SCORE_BONUS: Partial<Record<TileTraitKind, number>
     cursed: 15,
     heavy: 35
 };
-
-const nonNegativeTraitCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
     runRelicIds(run.relicIds).includes(relicId);
@@ -852,9 +850,9 @@ export const resolveTileTraitEffects = ({
     const comboShards = stats.comboShards;
     const guardTokens = stats.guardTokens;
     const currentStreak = stats.currentStreak;
-    const matchResolutionsThisFloor = nonNegativeTraitCount(run.matchResolutionsThisFloor);
-    const peekCharges = nonNegativeTraitCount(run.peekCharges);
-    const recallFocus = nonNegativeTraitCount(run.recallFocus);
+    const matchResolutionsThisFloor = runNonNegativeInteger(run.matchResolutionsThisFloor);
+    const peekCharges = runNonNegativeInteger(run.peekCharges);
+    const recallFocus = runNonNegativeInteger(run.recallFocus);
 
     if (source === 'match') {
         result.comboShardGain = hasTrait('sealed') && comboShards < MAX_COMBO_SHARDS ? 1 : 0;
