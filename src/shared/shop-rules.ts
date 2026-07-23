@@ -12,6 +12,7 @@ import {
 } from './contracts';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { gainRunInventoryItem } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import {
     getTileTraitInteractionPreviewLines,
@@ -244,7 +245,7 @@ const runNeedsLockedExitShopInsurance = (run: RunState): boolean => {
     if (lock.lockKind === 'none' || lock.lockKind === 'lever') {
         return false;
     }
-    const hasRunKey = nonNegativeShopCount(run.dungeonKeys[lock.lockKind]) > 0 || nonNegativeShopCount(run.dungeonMasterKeys) > 0;
+    const hasRunKey = runNonNegativeInteger(run.dungeonKeys[lock.lockKind]) > 0 || runNonNegativeInteger(run.dungeonMasterKeys) > 0;
     const hasReachableKeySource = countReachableExitKeySources(board, lock.lockKind) > 0;
     return !hasRunKey && !hasReachableKeySource;
 };
@@ -401,7 +402,7 @@ export const getShopWalletPacing = (run: RunState): {
     const level = run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
     return {
         earnedThisFloor: getShopGoldRewardForFloor(level),
-        totalWallet: nonNegativeShopCount(run.shopGold),
+        totalWallet: runNonNegativeInteger(run.shopGold),
         sinkCostTotal: runShopOffers(run.shopOffers).reduce((sum, offer) => sum + offer.cost, 0),
         conversionAtRunEnd: 'unspent_shop_gold_expires'
     };
@@ -414,13 +415,10 @@ export const getRunShopWalletPacing = (run: RunState): {
     conversionAtRunEnd: 'unspent_shop_gold_expires';
 } => ({
     earnedThisFloor: getShopGoldRewardForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel),
-    totalWallet: nonNegativeShopCount(run.shopGold),
+    totalWallet: runNonNegativeInteger(run.shopGold),
     sinkCostTotal: runShopOffers(run.shopOffers).reduce((sum, offer) => sum + offer.cost, 0),
     conversionAtRunEnd: 'unspent_shop_gold_expires'
 });
-
-const nonNegativeShopCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const runShopOffers = (value: unknown): RunShopOfferState[] => Array.isArray(value) ? value : [];
 
@@ -485,12 +483,12 @@ export const createRunShopOffers = (run: RunState): RunShopOfferState[] => {
 
 export const canRerollShopOffers = (run: RunState): boolean =>
     runShopOffers(run.shopOffers).length > 0 &&
-    nonNegativeShopCount(run.shopRerolls) < 1 &&
-    nonNegativeShopCount(run.shopGold) >= getShopRerollCostForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel);
+    runNonNegativeInteger(run.shopRerolls) < 1 &&
+    runNonNegativeInteger(run.shopGold) >= getShopRerollCostForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel);
 
 export const getRunShopReadModel = (run: RunState): RunShopReadModel => {
     const plan = getRunShopStockPlan(run);
-    const wallet = nonNegativeShopCount(run.shopGold);
+    const wallet = runNonNegativeInteger(run.shopGold);
     const shopOffers = runShopOffers(run.shopOffers);
     const availableOfferCount = shopOffers.filter((offer) => {
         const currentCompatibility = getShopOfferCompatibility(run, offer.itemId);
@@ -515,14 +513,14 @@ export const rerollShopOffers = (run: RunState): RunState => {
         return run;
     }
     const cost = getShopRerollCostForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel);
-    const nextRun = { ...run, shopGold: nonNegativeShopCount(run.shopGold) - cost, shopRerolls: nonNegativeShopCount(run.shopRerolls) + 1 };
+    const nextRun = { ...run, shopGold: runNonNegativeInteger(run.shopGold) - cost, shopRerolls: runNonNegativeInteger(run.shopRerolls) + 1 };
     return { ...nextRun, shopOffers: createRunShopOffers(nextRun) };
 };
 
 export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
     const shopOffers = runShopOffers(run.shopOffers);
     const offer = shopOffers.find((item) => item.id === offerId);
-    const wallet = nonNegativeShopCount(run.shopGold);
+    const wallet = runNonNegativeInteger(run.shopGold);
     if (!offer || offer.purchased || wallet < offer.cost) {
         return run;
     }

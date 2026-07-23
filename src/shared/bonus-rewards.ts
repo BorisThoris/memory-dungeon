@@ -16,6 +16,7 @@ import {
     getRunInventoryItemPayoutRows,
     type RunInventoryItemId
 } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitBuildRewardRowsForBoard } from './trait-build-rewards';
 
@@ -241,7 +242,7 @@ const normalizeBonusRewardLedger = (ledger: BonusRewardLedger): BonusRewardLedge
     if (ledger.claimedRewardIds && typeof ledger.claimedRewardIds === 'object' && !Array.isArray(ledger.claimedRewardIds)) {
         const savedRewardIds = ledger.claimedRewardIds as Partial<Record<BonusRewardId, unknown>>;
         for (const id of BONUS_REWARD_IDS) {
-            const safeCount = nonNegativeLedgerCount(savedRewardIds[id]);
+            const safeCount = runNonNegativeInteger(savedRewardIds[id]);
             if (safeCount > 0) {
                 claimedRewardIds[id] = safeCount;
             }
@@ -253,8 +254,8 @@ const normalizeBonusRewardLedger = (ledger: BonusRewardLedger): BonusRewardLedge
             ? [...new Set(ledger.claimedInstanceIds.filter((id): id is string => typeof id === 'string'))]
             : [],
         claimedRewardIds,
-        discoveredSecretRooms: nonNegativeLedgerCount(ledger.discoveredSecretRooms),
-        openedTreasureRooms: nonNegativeLedgerCount(ledger.openedTreasureRooms)
+        discoveredSecretRooms: runNonNegativeInteger(ledger.discoveredSecretRooms),
+        openedTreasureRooms: runNonNegativeInteger(ledger.openedTreasureRooms)
     };
 };
 
@@ -274,14 +275,8 @@ const rewardIdsForRouteKind = (routeKind: RunMapNodeKind | 'unknown'): BonusRewa
     return ['bonus_shards', 'trait_toolkit', 'trait_streak_lens', 'echo_conduit_lens', 'hazard_ward', 'hazard_banisher', 'supply_cache', 'key_insurance', 'chest_gold', 'secret_favor'];
 };
 
-const nonNegativeLedgerCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const nonNegativeFiniteAmount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const rewardCount = (ledger: BonusRewardLedger, id: BonusRewardId): number =>
-    nonNegativeLedgerCount(ledger.claimedRewardIds?.[id]);
+    runNonNegativeInteger(ledger.claimedRewardIds?.[id]);
 
 const isEligible = (definition: BonusRewardDefinition, floor: number, ledger: BonusRewardLedger): string | null => {
     if (floor < 2) {
@@ -491,12 +486,12 @@ export const resolveBonusRewardRoomByInstanceId = ({
 };
 
 const gainFavor = (run: RunState, progress: number): RunState => {
-    const total = nonNegativeFiniteAmount(run.relicFavorProgress) + nonNegativeFiniteAmount(progress);
+    const total = runNonNegativeInteger(run.relicFavorProgress) + runNonNegativeInteger(progress);
     const bonusPicks = Math.floor(total / 3);
     return {
         ...run,
-        bonusRelicPicksNextOffer: nonNegativeFiniteAmount(run.bonusRelicPicksNextOffer) + bonusPicks,
-        favorBonusRelicPicksNextOffer: nonNegativeFiniteAmount(run.favorBonusRelicPicksNextOffer) + bonusPicks,
+        bonusRelicPicksNextOffer: runNonNegativeInteger(run.bonusRelicPicksNextOffer) + bonusPicks,
+        favorBonusRelicPicksNextOffer: runNonNegativeInteger(run.favorBonusRelicPicksNextOffer) + bonusPicks,
         relicFavorProgress: total % 3
     };
 };
@@ -655,7 +650,7 @@ const rewardPerkReadiness = (
 ): Pick<RewardPerkReadinessRow, 'meterPercent' | 'readiness' | 'readinessDetail' | 'readinessLabel'> => {
     switch (id) {
         case 'free_first_swap_per_floor': {
-            const freeSetupAvailable = run.regionShuffleFreeThisFloor || nonNegativeFiniteAmount(run.regionShuffleCharges) > 0;
+            const freeSetupAvailable = run.regionShuffleFreeThisFloor || runNonNegativeInteger(run.regionShuffleCharges) > 0;
             return freeSetupAvailable
                 ? {
                       meterPercent: 100,
@@ -758,10 +753,10 @@ const applyBonusRewardPayout = (
     const gained: string[] = [];
     const capped: string[] = [];
     let cappedPickupParts = 0;
-    const shopGoldGain = nonNegativeFiniteAmount(payout.shopGold);
-    const scoreGain = nonNegativeFiniteAmount(payout.score);
-    const favorProgressGain = nonNegativeFiniteAmount(payout.relicFavorProgress);
-    const comboShardGain = nonNegativeFiniteAmount(payout.comboShards);
+    const shopGoldGain = runNonNegativeInteger(payout.shopGold);
+    const scoreGain = runNonNegativeInteger(payout.score);
+    const favorProgressGain = runNonNegativeInteger(payout.relicFavorProgress);
+    const comboShardGain = runNonNegativeInteger(payout.comboShards);
     const stats = normalizeSessionStats(run.stats);
     const currentComboShards = stats.comboShards;
     const nextComboShards = Math.min(MAX_COMBO_SHARDS, currentComboShards + comboShardGain);
@@ -780,7 +775,7 @@ const applyBonusRewardPayout = (
     let nextRun: RunState = {
         ...run,
         rewardPerkIds: nextRewardPerkIds,
-        shopGold: nonNegativeFiniteAmount(run.shopGold) + shopGoldGain,
+        shopGold: runNonNegativeInteger(run.shopGold) + shopGoldGain,
         stats: {
             ...stats,
             totalScore: stats.totalScore + scoreGain,
@@ -833,8 +828,8 @@ const applyBonusRewardPayout = (
             ...nextRun,
             stats: {
                 ...nextRun.stats,
-                totalScore: nonNegativeFiniteAmount(nextRun.stats.totalScore) + overflowScore,
-                currentLevelScore: nonNegativeFiniteAmount(nextRun.stats.currentLevelScore) + overflowScore
+                totalScore: runNonNegativeInteger(nextRun.stats.totalScore) + overflowScore,
+                currentLevelScore: runNonNegativeInteger(nextRun.stats.currentLevelScore) + overflowScore
             }
         };
         gained.push(`+${overflowScore} overflow score`);

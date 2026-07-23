@@ -30,6 +30,7 @@ import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { createNewRun } from './run-creation-rules';
 import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run-map';
 import { getDungeonKeyTotal } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getRunShopStockPlan, SHOP_KEY_ITEM_BY_KIND } from './shop-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles, enemyHazardsForBoard } from './enemy-hazard-board-rules';
@@ -195,9 +196,6 @@ const pickFinalPairKey = (board: BoardState): string | null => {
     return realPairKeys(board)[0] ?? null;
 };
 
-const nonNegativeSoftlockContractCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const projectionExitResourceState = (
     board: BoardState
 ): Pick<BoardState, 'dungeonKeysHeld' | 'dungeonKeysHeldByKind' | 'dungeonLeverCount'> => {
@@ -207,19 +205,19 @@ const projectionExitResourceState = (
         lock.lockKind !== 'lever' &&
         countReachableExitKeySources(board, lock.lockKind) > 0;
     const needsLever = lock.lockKind === 'lever';
-    const dungeonKeysHeld = needsKey ? Math.max(nonNegativeSoftlockContractCount(board.dungeonKeysHeld), 1) : board.dungeonKeysHeld;
+    const dungeonKeysHeld = needsKey ? Math.max(runNonNegativeInteger(board.dungeonKeysHeld), 1) : board.dungeonKeysHeld;
     const dungeonKeysHeldByKind =
         needsKey && lock.lockKind !== 'none' && lock.lockKind !== 'lever'
             ? {
                   ...(board.dungeonKeysHeldByKind ?? {}),
-                  [lock.lockKind]: Math.max(nonNegativeSoftlockContractCount(board.dungeonKeysHeldByKind?.[lock.lockKind]), 1)
+                  [lock.lockKind]: Math.max(runNonNegativeInteger(board.dungeonKeysHeldByKind?.[lock.lockKind]), 1)
               }
             : board.dungeonKeysHeldByKind;
     return {
         dungeonKeysHeld,
         dungeonKeysHeldByKind,
         dungeonLeverCount: needsLever
-            ? Math.max(nonNegativeSoftlockContractCount(board.dungeonLeverCount), nonNegativeSoftlockContractCount(lock.requiredLeverCount))
+            ? Math.max(runNonNegativeInteger(board.dungeonLeverCount), runNonNegativeInteger(lock.requiredLeverCount))
             : board.dungeonLeverCount
     };
 };
@@ -277,12 +275,12 @@ const addCoverage = (
     if (board.dungeonShopTileId || board.tiles.some((tile) => tile.dungeonCardKind === 'shop')) coverage.shops += 1;
     if (
         board.tiles.some((tile) => tile.dungeonCardKind === 'key' || tile.dungeonCardEffectId === 'room_key_cache') ||
-        nonNegativeSoftlockContractCount(board.dungeonKeysHeld) > 0 ||
+        runNonNegativeInteger(board.dungeonKeysHeld) > 0 ||
         getDungeonKeyTotal(board.dungeonKeysHeldByKind) > 0
     ) {
         coverage.keys += 1;
     }
-    if (board.tiles.some((tile) => tile.dungeonCardKind === 'lever') || nonNegativeSoftlockContractCount(board.dungeonLeverCount) > 0) {
+    if (board.tiles.some((tile) => tile.dungeonCardKind === 'lever') || runNonNegativeInteger(board.dungeonLeverCount) > 0) {
         coverage.levers += 1;
     }
     if (board.tiles.some((tile) => tile.tileTraitKind != null)) coverage.traits += 1;
