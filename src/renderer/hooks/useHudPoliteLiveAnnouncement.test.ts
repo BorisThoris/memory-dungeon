@@ -578,6 +578,46 @@ describe('useHudPoliteLiveAnnouncement', () => {
         );
     });
 
+    it('announces normalized recall focus when stale run data has malformed caps', async () => {
+        const { result, rerender } = renderHook(
+            (p: { pairs: number; recallFocus: number; recallFocusMax: number; recallMatches: number; recallBonus: number }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    boardLevel: 2,
+                    pairCount: 4,
+                    matchedPairs: p.pairs,
+                    recallFocus: p.recallFocus,
+                    recallFocusMax: p.recallFocusMax,
+                    recallMatchesThisFloor: p.recallMatches,
+                    recallBonusScoreThisFloor: p.recallBonus
+                }),
+            {
+                initialProps: {
+                    pairs: 0,
+                    recallFocus: Number.NaN,
+                    recallFocusMax: Number.POSITIVE_INFINITY,
+                    recallMatches: 0,
+                    recallBonus: 0
+                }
+            }
+        );
+
+        await act(async () => {
+            rerender({
+                pairs: 1,
+                recallFocus: 2.9,
+                recallFocusMax: Number.POSITIVE_INFINITY,
+                recallMatches: 1,
+                recallBonus: 8
+            });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe(
+            'Match resolved. 1/4 pairs cleared. Recall focus 2/3; +8 memory score.'
+        );
+    });
+
     it('announces when a later match stabilizes forgotten tile memory', async () => {
         const { result, rerender } = renderHook(
             (p: { pairs: number; recallFocus: number; recallMatches: number; recallBonus: number; forgotten: number }) =>

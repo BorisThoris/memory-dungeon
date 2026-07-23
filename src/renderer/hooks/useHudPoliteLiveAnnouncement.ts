@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Tile, TileTraitKind } from '../../shared/contracts';
 import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
+import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
 import { getChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
@@ -142,12 +143,12 @@ interface UseHudPoliteLiveAnnouncementResult {
 
 const nowMs = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now());
 
-const normalizeRecallFocusForAnnouncement = (focus: number, max: number): number => {
-    const boundedMax = Number.isFinite(max) ? Math.max(0, Math.floor(max)) : 3;
-    if (!Number.isFinite(focus)) {
-        return 0;
-    }
-    return Math.min(boundedMax, Math.max(0, Math.floor(focus)));
+const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focus: number; max: number } => {
+    const boundedMax = runNonNegativeIntegerWithFallback(max, 3);
+    return {
+        focus: Math.min(boundedMax, runNonNegativeInteger(focus)),
+        max: boundedMax
+    };
 };
 
 /**
@@ -283,7 +284,10 @@ export const useHudPoliteLiveAnnouncement = ({
         pin: number;
     } | null>(null);
     const safeWardSnapRef = useRef<{ level: number; wardsUsed: number } | null>(null);
-    const normalizedRecallFocus = normalizeRecallFocusForAnnouncement(recallFocus, recallFocusMax);
+    const { focus: normalizedRecallFocusValue, max: normalizedRecallFocusMax } = normalizeRecallFocusForAnnouncement(
+        recallFocus,
+        recallFocusMax
+    );
 
     const queueRef = useRef(new Map<string, { text: string; priority: HudAnnouncePriority }>());
     const rafIdRef = useRef<number | null>(null);
@@ -527,7 +531,7 @@ export const useHudPoliteLiveAnnouncement = ({
             objectiveProgress,
             objectiveRequired,
             objectiveLabel,
-            recallFocus: normalizedRecallFocus,
+            recallFocus: normalizedRecallFocusValue,
             recallMatches: recallMatchesThisFloor,
             recallMistakes: recallMistakesThisFloor,
             recallBonusScore: recallBonusScoreThisFloor,
@@ -564,7 +568,7 @@ export const useHudPoliteLiveAnnouncement = ({
         const dungeonEnemyDefeatDelta = dungeonEnemiesDefeatedThisFloor - snap.dungeonEnemiesDefeated;
         const enemyHazardHitDelta = enemyHazardHitsThisFloor - snap.enemyHazardHits;
         const enemyHazardDefeatDelta = enemyHazardsDefeatedThisFloor - snap.enemyHazardsDefeated;
-        const recallFocusLost = normalizedRecallFocus < snap.recallFocus;
+        const recallFocusLost = normalizedRecallFocusValue < snap.recallFocus;
 
         if (lifeDelta < 0) {
             lines.push(`Life lost. ${lives} ${lives === 1 ? 'life remains' : 'lives remain'}.`);
@@ -599,8 +603,8 @@ export const useHudPoliteLiveAnnouncement = ({
             const forgottenCount = Math.max(forgottenDelta, forgottenTileCountThisFloor);
             lines.push(
                 forgottenCount > 0
-                    ? `Memory aid used. Recall focus ${normalizedRecallFocus}/${recallFocusMax}; ${forgottenCount} ${forgottenCount === 1 ? 'tile memory is' : 'tile memories are'} unstable.`
-                    : `Memory aid used. Recall focus ${normalizedRecallFocus}/${recallFocusMax}.`
+                    ? `Memory aid used. Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}; ${forgottenCount} ${forgottenCount === 1 ? 'tile memory is' : 'tile memories are'} unstable.`
+                    : `Memory aid used. Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}.`
             );
         }
 
@@ -626,8 +630,8 @@ export const useHudPoliteLiveAnnouncement = ({
             if (recallMatchDelta > 0) {
                 lines.push(
                     recallBonusDelta > 0
-                        ? `Recall focus ${normalizedRecallFocus}/${recallFocusMax}; +${recallBonusDelta} memory score.`
-                        : `Recall focus ${normalizedRecallFocus}/${recallFocusMax}.`
+                        ? `Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}; +${recallBonusDelta} memory score.`
+                        : `Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}.`
                 );
             }
             if (forgottenDelta < 0) {
@@ -705,7 +709,7 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocus}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${countTileTraitTotal(tileTraitMatches)}:${countTileTraitTotal(tileTraitMismatches)}:${volatileTraitShuffles}`,
+                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${countTileTraitTotal(tileTraitMatches)}:${countTileTraitTotal(tileTraitMismatches)}:${volatileTraitShuffles}`,
                 priority: lifeDelta < 0 || enemyHazardHitDelta > 0 ? 'error' : 'info'
             });
         }
@@ -730,8 +734,8 @@ export const useHudPoliteLiveAnnouncement = ({
         enemyHazardHitsThisFloor,
         enemyHazardsDefeatedThisFloor,
         recallBonusScoreThisFloor,
-        recallFocusMax,
-        normalizedRecallFocus,
+        normalizedRecallFocusMax,
+        normalizedRecallFocusValue,
         recallMatchesThisFloor,
         recallMistakesThisFloor,
         shuffleCharges,
