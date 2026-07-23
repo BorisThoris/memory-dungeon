@@ -7,6 +7,7 @@ import type {
     RouteNodeType
 } from './contracts';
 import { createMulberry32, hashStringToSeed } from './rng';
+import { runNonNegativeIntegerWithFallback } from './run-number-guards';
 
 /**
  * Rules version that introduced authored endless chapters with featured objectives.
@@ -274,7 +275,7 @@ export interface ChapterActBiomePresentation {
 export const getChapterActBiomeForCycleFloor = (
     cycleFloor: number
 ): (ChapterActBiomeDefinition & { actFloorNumber: number; actFloorCount: number }) => {
-    const safeCycleFloor = Number.isFinite(cycleFloor) ? cycleFloor : 1;
+    const safeCycleFloor = runNonNegativeIntegerWithFallback(cycleFloor, 1);
     const normalized = ((Math.max(1, safeCycleFloor) - 1) % ENDLESS_CYCLE_FLOOR_COUNT) + 1;
     const definition = CHAPTER_ACT_BIOME_STRUCTURE.find(
         (act) => normalized >= act.firstCycleFloor && normalized <= act.lastCycleFloor
@@ -579,7 +580,7 @@ export const pickFloorScheduleEntry = (
     if (gameMode !== 'endless' || rulesVersion < FLOOR_SCHEDULE_RULES_VERSION) {
         return EMPTY_FLOOR_SCHEDULE_ENTRY;
     }
-    const safeLevel = Number.isFinite(level) ? level : 1;
+    const safeLevel = runNonNegativeIntegerWithFallback(level, 1);
     const idx = Math.max(0, safeLevel - 1) % ENDLESS_FLOOR_CYCLE.length;
     const base = ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
     const rng = createMulberry32(hashStringToSeed(`floorSchedule:${rulesVersion}:${runSeed}:${level}`));

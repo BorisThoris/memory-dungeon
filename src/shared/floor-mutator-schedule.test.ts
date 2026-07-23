@@ -168,6 +168,25 @@ describe('pickFloorScheduleEntry', () => {
         });
     });
 
+    it('normalizes fractional and negative cycle inputs before resolving chapter metadata', () => {
+        expect(getChapterActBiomeForCycleFloor(9.9)).toMatchObject({
+            actId: 'act_3_convergence',
+            biomeId: 'spire_convergence',
+            actFloorNumber: 1
+        });
+        expect(getChapterActBiomeForCycleFloor(-2)).toMatchObject({
+            actId: 'act_1_survey',
+            biomeId: 'lantern_academy',
+            actFloorNumber: 1
+        });
+
+        expect(pickFloorScheduleEntry(42, rv, 7.9, 'endless')).toMatchObject({
+            floorTag: 'boss',
+            floorArchetypeId: 'trap_hall',
+            cycleFloor: 7
+        });
+    });
+
     it('exposes act and biome hooks for UI, palette, audio, and route previews', () => {
         expect(getChapterActBiomePresentation(2)).toMatchObject({
             actId: 'act_1_survey',
