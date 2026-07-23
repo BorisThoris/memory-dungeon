@@ -407,15 +407,15 @@ export interface RunBuildProfile {
     tooltip: string;
 }
 
-const relicArray = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
+export const runRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
 
-const mutatorArray = (value: unknown): MutatorId[] => Array.isArray(value) ? value : [];
+export const runMutatorIds = (value: unknown): MutatorId[] => Array.isArray(value) ? value : [];
 
-const hasRunRelic = (run: Pick<RunState, 'relicIds'>, id: RelicId): boolean => relicArray(run.relicIds).includes(id);
+const hasRunRelic = (run: Pick<RunState, 'relicIds'>, id: RelicId): boolean => runRelicIds(run.relicIds).includes(id);
 
 export const getRunBuildProfile = (run: Pick<RunState, 'relicIds'>): RunBuildProfile => {
     const scoreByArchetype = new Map<RelicBuildArchetype, { score: number; relicIds: RelicId[] }>();
-    for (const relicId of relicArray(run.relicIds)) {
+    for (const relicId of runRelicIds(run.relicIds)) {
         const row = RELIC_DRAFT[relicId];
         if (!row) continue;
         for (const archetype of row.archetypes) {
@@ -544,7 +544,7 @@ export const getRelicDraftContext = (run: RunState, clearedFloor: number): Relic
     return {
         isScheduledEndless,
         clearedFloor,
-        currentMutators: isScheduledEndless ? [...mutatorArray(run.activeMutators)] : [],
+        currentMutators: isScheduledEndless ? [...runMutatorIds(run.activeMutators)] : [],
         nextMutators,
         pendingRouteType: isScheduledEndless ? pendingRouteType : null,
         activeRouteType: isScheduledEndless ? activeRouteType : null,

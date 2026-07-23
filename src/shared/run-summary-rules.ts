@@ -1,17 +1,12 @@
 import {
     type AchievementId,
-    type MutatorId,
-    type RelicId,
     type RunState
 } from './contracts';
+import { runMutatorIds, runRelicIds } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 
 const nonNegativeInteger = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const summaryMutatorIds = (value: unknown): MutatorId[] => Array.isArray(value) ? value : [];
-
-const summaryRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
 
 const summaryArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
 
@@ -35,8 +30,8 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             runRulesVersion: nonNegativeInteger(run.runRulesVersion),
             gameMode: run.gameMode,
             dailyDateKeyUtc: run.dailyDateKeyUtc ?? undefined,
-            activeMutators: [...summaryMutatorIds(run.activeMutators)],
-            relicIds: [...summaryRelicIds(run.relicIds)],
+            activeMutators: [...runMutatorIds(run.activeMutators)],
+            relicIds: [...runRelicIds(run.relicIds)],
             payoffPickupClaimed: Math.min(nonNegativeInteger(run.findablesClaimedThisFloor), payoffPickupTotal),
             payoffPickupTotal,
             payoffPressureExtra: stats.mismatches + stats.volatileTraitShuffles,

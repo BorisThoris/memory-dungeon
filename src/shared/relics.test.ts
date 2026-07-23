@@ -20,6 +20,8 @@ import {
     relicMilestoneIndexForFloor,
     needsRelicPick,
     rollRelicOptions,
+    runMutatorIds,
+    runRelicIds,
     RELIC_BUILD_ARCHETYPE_DEFINITIONS,
     RELIC_BUILD_ARCHETYPE_ORDER,
     RELIC_DRAFT,
@@ -479,6 +481,16 @@ describe('rollRelicOptions', () => {
         expect(context.currentMutators).toEqual([]);
         expect(context.hasChapterCompass).toBe(false);
         expect(isRelicDraftEligible('chapter_compass', run)).toBe(true);
+    });
+
+    it('normalizes run relic and mutator arrays through shared helpers', () => {
+        const relicIds: RelicId[] = ['chapter_compass'];
+        const mutatorIds: MutatorId[] = ['short_memorize'];
+
+        expect(runRelicIds(relicIds)).toBe(relicIds);
+        expect(runRelicIds(Number.NaN)).toEqual([]);
+        expect(runMutatorIds(mutatorIds)).toBe(mutatorIds);
+        expect(runMutatorIds(null)).toEqual([]);
     });
 
     it('ignores malformed relic arrays before building run profiles', () => {

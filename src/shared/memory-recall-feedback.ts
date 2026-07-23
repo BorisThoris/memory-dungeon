@@ -10,6 +10,7 @@ import {
 } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
+import { runMutatorIds, runRelicIds } from './relics';
 import { routeChoicesForResult } from './route-choice-rules';
 import { getCurrentDungeonNode } from './run-map';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -82,15 +83,13 @@ const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
 const nonNegativeMemoryFeedbackCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const runMutatorIds = (run: RunState): MutatorId[] => Array.isArray(run.activeMutators) ? run.activeMutators : [];
-
-const runRelicIds = (run: RunState): RelicId[] => Array.isArray(run.relicIds) ? run.relicIds : [];
-
 const runTileIds = (value: unknown): string[] => Array.isArray(value) ? value : [];
 
-const hasRunMutator = (run: RunState, mutatorId: MutatorId): boolean => runMutatorIds(run).includes(mutatorId);
+const hasRunMutator = (run: RunState, mutatorId: MutatorId): boolean =>
+    runMutatorIds(run.activeMutators).includes(mutatorId);
 
-const hasRunRelic = (run: RunState, relicId: RelicId): boolean => runRelicIds(run).includes(relicId);
+const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
+    runRelicIds(run.relicIds).includes(relicId);
 
 const isMemorySolvablePair = (pairKey: string, tiles: readonly Tile[]): boolean =>
     tiles.length === 2 && !isSingletonUtilityPairKey(pairKey);
@@ -641,7 +640,7 @@ const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => Memor
 };
 
 const buildMemoryTaxLines = (run: RunState): MemoryFeedbackLine[] =>
-    unique(runMutatorIds(run))
+    unique(runMutatorIds(run.activeMutators))
         .flatMap((mutator) => {
             const copy = MEMORY_TAX_MUTATOR_COPY[mutator];
             return copy
@@ -656,7 +655,7 @@ const buildMemoryTaxLines = (run: RunState): MemoryFeedbackLine[] =>
         .slice(0, 4);
 
 const buildMemoryAssistLines = (run: RunState): MemoryFeedbackLine[] =>
-    unique(runRelicIds(run))
+    unique(runRelicIds(run.relicIds))
         .flatMap((relicId) => {
             const makeLine = MEMORY_ASSIST_RELIC_COPY[relicId];
             return makeLine ? [makeLine(run)] : [];

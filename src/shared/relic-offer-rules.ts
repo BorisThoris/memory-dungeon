@@ -7,6 +7,7 @@ import {
     isRelicDraftEligible,
     needsRelicPick,
     relicMilestoneIndexForFloor,
+    runRelicIds,
     rollRelicOptions,
     skipRelicOfferMilestone
 } from './relics';
@@ -17,8 +18,6 @@ export const MAX_RELIC_PICKS_PER_OFFER = 3;
 /** Total relic selections this milestone visit (minimum 1). See `openRelicOffer`. */
 const nonNegativeFiniteInteger = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const runRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
 
 const recurringRelicPickBonusCount = (run: RunState): number => {
     let n = 0;
