@@ -1,6 +1,7 @@
 import { type RelicId, type RunState } from './contracts';
 import { hasMutator } from './mutators';
 import { runRelicIds } from './relics';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export interface ScoreParasiteFloorAdvance {
     lives: number;
@@ -8,16 +9,13 @@ export interface ScoreParasiteFloorAdvance {
     parasiteWardRemaining: number;
 }
 
-const nonNegativeParasiteCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
     runRelicIds(run.relicIds).includes(relicId);
 
 export const advanceScoreParasiteFloor = (run: RunState): ScoreParasiteFloorAdvance => {
-    let parasiteFloors = nonNegativeParasiteCount(run.parasiteFloors) + 1;
-    let lives = nonNegativeParasiteCount(run.lives);
-    let parasiteWardRemaining = nonNegativeParasiteCount(run.parasiteWardRemaining);
+    let parasiteFloors = runNonNegativeInteger(run.parasiteFloors) + 1;
+    let lives = runNonNegativeInteger(run.lives);
+    let parasiteWardRemaining = runNonNegativeInteger(run.parasiteWardRemaining);
 
     if (hasMutator(run, 'score_parasite') && parasiteFloors >= 4) {
         parasiteFloors = 0;
@@ -44,8 +42,8 @@ export const getParasiteFloorsAfterFeaturedObjectiveClear = (
         hasRunRelic(run, 'parasite_ledger') &&
         hasMutator(run, 'score_parasite')
     ) {
-        return Math.max(0, nonNegativeParasiteCount(run.parasiteFloors) - 1);
+        return Math.max(0, runNonNegativeInteger(run.parasiteFloors) - 1);
     }
 
-    return nonNegativeParasiteCount(run.parasiteFloors);
+    return runNonNegativeInteger(run.parasiteFloors);
 };
