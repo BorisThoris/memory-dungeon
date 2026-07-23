@@ -9,7 +9,7 @@ import {
 import type { MechanicTokenId } from './mechanic-feedback';
 import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { getRunEconomyRows } from './run-economy';
-import { runStringArray } from './run-array-guards';
+import { runArrayCount } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type FeedbackCauseKind =
@@ -97,8 +97,6 @@ const causeRow = (
     ariaLive: row.ariaLive ?? `${row.label}: ${row.summary}. ${row.detail}`
 });
 
-const runFeedbackArrayCount = (value: unknown): number => runStringArray(value).length;
-
 export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribution => {
     if (!run.powersUsedThisRun) {
         return {
@@ -115,7 +113,7 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
     if (run.gambitThirdFlipUsed) actions.push('gambit');
     if (run.shuffleUsedThisFloor || stats.shufflesUsed > 0) actions.push('shuffle or swap');
     if (stats.pairsDestroyed > 0) actions.push('destroy pair');
-    if (runFeedbackArrayCount(run.peekRevealedTileIds) > 0) actions.push('peek');
+    if (runArrayCount(run.peekRevealedTileIds) > 0) actions.push('peek');
     const firstAction = actions[0] ?? 'assist or wild action';
     const latestAction = actions[actions.length - 1] ?? firstAction;
 
@@ -134,8 +132,8 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
     const objective = getDungeonObjectiveStatus(run);
     const dungeon = getDungeonBoardPresentation(run);
     const pm = getPerfectMemoryAttribution(run);
-    const forgottenTileCount = runFeedbackArrayCount(run.forgottenTileIdsThisFloor);
-    const matchedPairCount = runFeedbackArrayCount(run.matchedPairKeysThisRun);
+    const forgottenTileCount = runArrayCount(run.forgottenTileIdsThisFloor);
+    const matchedPairCount = runArrayCount(run.matchedPairKeysThisRun);
 
     if (objective.progress > 0 || objective.completed) {
         rows.push(

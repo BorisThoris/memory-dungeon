@@ -23,6 +23,7 @@ import {
 } from './enemy-hazard-board-rules';
 import { addPendingMemorizeBonusForLostLives } from './recall-rules';
 import { hashStringToSeed } from './rng';
+import { runArrayCount } from './run-array-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { isSprungTrapTile } from './tile-state-rules';
 
@@ -32,7 +33,7 @@ const nonNegativeEnemyHazardCount = (value: unknown): number =>
 const positiveEnemyHazardCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
 
-const flippedTileCount = (board: BoardState | null | undefined): number => (Array.isArray(board?.flippedTileIds) ? board.flippedTileIds.length : 0);
+const flippedTileCount = (board: BoardState | null | undefined): number => runArrayCount(board?.flippedTileIds);
 
 export interface EnemyHazardPatternDefinition {
     pattern: EnemyHazardPattern;

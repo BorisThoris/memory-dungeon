@@ -8,7 +8,7 @@ import {
     type PerfectMemoryImpact
 } from './mechanic-feedback';
 import { runRelicIds } from './relics';
-import { runStringArray } from './run-array-guards';
+import { runArrayCount, runStringArray } from './run-array-guards';
 
 export type PowerVerbId =
     | 'shuffle'
@@ -51,8 +51,6 @@ const locksPerfectMemory = perfectMemoryImpactCopy('locks_perfect_memory');
 
 const nonNegativePowerVerbCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const powerVerbArrayCount = (value: unknown): number => runStringArray(value).length;
 
 const powerVerbArrayIncludes = (value: unknown, item: string): boolean => runStringArray(value).includes(item);
 
@@ -124,7 +122,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
         mechanicClass: 'tool',
         tokens: ['hidden_known', 'build'],
         purpose: 'Mark remembered locations without revealing or changing tiles.',
-        cost: `${powerVerbArrayCount(run.pinnedTileIds)} pinned now; pins are slot-limited.`,
+        cost: `${runArrayCount(run.pinnedTileIds)} pinned now; pins are slot-limited.`,
         consequence: 'Records your read only; it does not reveal or solve cards.',
         perfectMemoryImpact: 'allowed',
         perfectMemoryCopy: perfectMemoryImpactCopy('allowed'),
