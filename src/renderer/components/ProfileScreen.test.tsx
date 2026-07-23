@@ -274,4 +274,33 @@ describe('ProfileScreen', () => {
             'Profile recent run payoff lanes. Chain: 1. Protect chain. Combo live. Cash: 3. Cash reward. Route cashout.'
         );
     });
+
+    it('normalizes malformed saved last-run counters before rendering recent descent', () => {
+        const saveData = createDefaultSaveData();
+        saveData.lastRunSummary = {
+            totalScore: Number.NaN,
+            bestScore: Number.POSITIVE_INFINITY,
+            levelsCleared: Number.NaN,
+            highestLevel: Number.POSITIVE_INFINITY,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: Number.NaN,
+            perfectClears: Number.NEGATIVE_INFINITY,
+            activeMutators: Number.NaN as unknown as NonNullable<SaveData['lastRunSummary']>['activeMutators'],
+            relicIds: Number.NaN as unknown as NonNullable<SaveData['lastRunSummary']>['relicIds'],
+            payoffPickupClaimed: Number.NaN,
+            payoffPickupTotal: Number.POSITIVE_INFINITY,
+            payoffPressureExtra: Number.NaN,
+            gameMode: 'endless'
+        };
+        profileStoreMocks.saveData = saveData;
+
+        render(<ProfileScreen />);
+
+        const recentRun = screen.getByTestId('profile-recent-run');
+        expect(recentRun).toHaveTextContent('Floor 0');
+        expect(recentRun).toHaveTextContent('0 score / Floor 0 / 0 streak');
+        expect(recentRun).not.toHaveTextContent(/NaN|Infinity/);
+        expect(screen.getByTestId('profile-recent-run-signals')).not.toHaveTextContent(/NaN|Infinity/);
+    });
 });

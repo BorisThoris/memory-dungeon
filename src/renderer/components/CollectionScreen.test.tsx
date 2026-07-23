@@ -363,6 +363,35 @@ describe('CollectionScreen REG-093 reward gallery', () => {
         expect(payoffSignals).toHaveAccessibleName(/Chain chase: x10 next/i);
     });
 
+    it('normalizes malformed saved last-run counters before rendering archive summaries', () => {
+        const saveData = createDefaultSaveData();
+        saveData.bestScore = Number.POSITIVE_INFINITY;
+        saveData.lastRunSummary = {
+            totalScore: Number.NaN,
+            bestScore: Number.POSITIVE_INFINITY,
+            levelsCleared: Number.NaN,
+            highestLevel: Number.POSITIVE_INFINITY,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: Number.NaN,
+            perfectClears: Number.NEGATIVE_INFINITY,
+            activeMutators: Number.NaN as unknown as NonNullable<SaveData['lastRunSummary']>['activeMutators'],
+            relicIds: Number.NaN as unknown as NonNullable<SaveData['lastRunSummary']>['relicIds'],
+            payoffPickupClaimed: Number.NaN,
+            payoffPickupTotal: Number.POSITIVE_INFINITY,
+            payoffPressureExtra: Number.NaN,
+            gameMode: 'endless'
+        };
+        collectionStoreMocks.saveData = saveData;
+
+        render(<CollectionScreen />);
+
+        const body = screen.getByTestId('meta-screen-body');
+        expect(body).toHaveTextContent('Last run: 0 pts · Floor 0 · 0 clears · Streak 0');
+        expect(body).not.toHaveTextContent(/NaN|Infinity/);
+        expect(screen.getByTestId('collection-last-run-payoff-signals')).not.toHaveTextContent(/NaN|Infinity/);
+    });
+
     it('normalizes relic pick counts before displaying relic mastery', () => {
         const saveData = createDefaultSaveData();
         saveData.playerStats = {

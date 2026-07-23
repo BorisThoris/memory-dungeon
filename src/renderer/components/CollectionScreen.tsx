@@ -81,6 +81,9 @@ const formatRewardSignalLabel = (
     return rowCopy ? `${label}. ${rowCopy}` : label;
 };
 
+const collectionDisplayInteger = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const CollectionScreen = () => {
     const bodyScrollRef = useRef<HTMLDivElement | null>(null);
     const { closeSubscreen, saveData, settings } = useAppStore(
@@ -102,6 +105,12 @@ const CollectionScreen = () => {
     const rewardSignalsLabel = formatRewardSignalLabel('Collection reward signals', rewardSignals);
     const rewardGalleryLabel = formatRewardSignalLabel('Collection reward gallery', rewardGalleryRows);
     const lastRunPayoffRows = summary ? getRunPayoffSignals(summary, { includeChainTarget: true }).slice(0, 4) : [];
+    const summaryDisplay = {
+        bestStreak: collectionDisplayInteger(summary?.bestStreak),
+        highestLevel: collectionDisplayInteger(summary?.highestLevel),
+        levelsCleared: collectionDisplayInteger(summary?.levelsCleared),
+        totalScore: collectionDisplayInteger(summary?.totalScore)
+    };
     const lastRunPayoffRowsLabel = formatRunPayoffSignalsLabel('Collection last run payoff signals', lastRunPayoffRows);
     const lastRunPayoffLaneMap = getRunPayoffLaneMap(lastRunPayoffRows);
     const primaryLastRunPayoffLane = lastRunPayoffLaneMap[0] ?? null;
@@ -125,6 +134,7 @@ const CollectionScreen = () => {
     const dailyArchiveRows = getDailyArchiveRows(saveData);
     const relicPickCountById = new Map(getRelicPickCountRows(ps?.relicPickCounts).map((row) => [row.id, row.count]));
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
+    const bestScoreDisplay = collectionDisplayInteger(saveData.bestScore);
     const handleBack = (): void => {
         resumeUiSfxContext();
         playUiBackSfx(uiGain);
@@ -442,7 +452,10 @@ const CollectionScreen = () => {
                         <h2 className={styles.sectionTitle}>Bests and last run</h2>
                         <div className={styles.statRow}>
                             <span>
-                                Best score<strong>{saveData.bestScore > 0 ? saveData.bestScore.toLocaleString() : '—'}</strong>
+                                Best score
+                                <strong>
+                                    {bestScoreDisplay > 0 ? bestScoreDisplay.toLocaleString() : '—'}
+                                </strong>
                             </span>
                             <span>
                                 Best no-powers floor<strong>{ps?.bestFloorNoPowers ?? 0}</strong>
@@ -451,8 +464,8 @@ const CollectionScreen = () => {
                         {summary ? (
                             <>
                             <p className={metaStyles.subtitle}>
-                                Last run: {summary.totalScore.toLocaleString()} pts · Floor {summary.highestLevel} ·{' '}
-                                {summary.levelsCleared} clears · Streak {summary.bestStreak}
+                                Last run: {summaryDisplay.totalScore.toLocaleString()} pts · Floor {summaryDisplay.highestLevel} ·{' '}
+                                {summaryDisplay.levelsCleared} clears · Streak {summaryDisplay.bestStreak}
                             </p>
                             <div
                                 aria-label={lastRunPayoffRowsLabel}

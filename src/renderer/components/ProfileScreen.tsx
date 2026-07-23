@@ -41,6 +41,9 @@ const formatProgressionImpactLabel = (
     return rowCopy ? `${label}. ${rowCopy}.` : label;
 };
 
+const profileDisplayInteger = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const ProfileScreen = () => {
     const [nowMs, setNowMs] = useState(() => Date.now());
     const { claimMetaProgressionReward, closeSubscreen, openSettings, saveData, settings, steamConnected } = useAppStore(
@@ -56,8 +59,13 @@ const ProfileScreen = () => {
 
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
     const lastRunSummary = saveData.lastRunSummary;
+    const lastRunDisplay = {
+        bestStreak: profileDisplayInteger(lastRunSummary?.bestStreak),
+        highestLevel: profileDisplayInteger(lastRunSummary?.highestLevel),
+        totalScore: profileDisplayInteger(lastRunSummary?.totalScore)
+    };
     const lastRunLabel = lastRunSummary
-        ? `${lastRunSummary.totalScore.toLocaleString()} score / Floor ${lastRunSummary.highestLevel} / ${lastRunSummary.bestStreak} streak`
+        ? `${lastRunDisplay.totalScore.toLocaleString()} score / Floor ${lastRunDisplay.highestLevel} / ${lastRunDisplay.bestStreak} streak`
         : 'No descent recorded yet.';
     const recentRunSignalRows = lastRunSummary ? getRunPayoffSignals(lastRunSummary, { includeChainTarget: true }).slice(0, 4) : [];
     const recentRunPayoffLaneMap = getRunPayoffLaneMap(recentRunSignalRows);
@@ -263,7 +271,7 @@ const ProfileScreen = () => {
                             <div>
                                 <span className={styles.panelKicker}>Recent Descent</span>
                                 <strong className={styles.panelHeading}>
-                                    {lastRunSummary ? `Floor ${lastRunSummary.highestLevel}` : 'No active record'}
+                                    {lastRunSummary ? `Floor ${lastRunDisplay.highestLevel}` : 'No active record'}
                                 </strong>
                             </div>
                         </div>
