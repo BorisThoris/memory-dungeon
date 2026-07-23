@@ -120,6 +120,9 @@ const RUN_PAYOFF_LANE_BEATS_BY_ID: Record<RunPayoffLaneId, RunPayoffBeatCount> =
     risk: 2
 };
 
+const finiteNonNegativeInteger = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const runPayoffArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
 
 const runPayoffLaneId = (row: Pick<RunPayoffSignalRow, 'id' | 'tone'>): RunPayoffLaneId => {
@@ -203,48 +206,51 @@ export const getRunPayoffSignals = (
     options: RunPayoffSignalOptions = {}
 ): RunPayoffSignalRow[] => {
     const rows: (Omit<RunPayoffSignalRow, 'action' | 'audioCue' | 'screenCue'> & { priority: number })[] = [];
-    const pickupClaimed = Math.max(0, options.pickupClaimed ?? summary.payoffPickupClaimed ?? 0);
-    const pickupTotal = Math.max(0, options.pickupTotal ?? summary.payoffPickupTotal ?? 0);
+    const bestStreak = finiteNonNegativeInteger(summary.bestStreak);
+    const perfectClears = finiteNonNegativeInteger(summary.perfectClears);
+    const totalScore = finiteNonNegativeInteger(summary.totalScore);
+    const pickupClaimed = finiteNonNegativeInteger(options.pickupClaimed ?? summary.payoffPickupClaimed);
+    const pickupTotal = finiteNonNegativeInteger(options.pickupTotal ?? summary.payoffPickupTotal);
     const relicCount = runPayoffArrayCount(summary.relicIds);
-    const perkCount = Math.max(0, options.rewardPerkCount ?? summary.payoffRewardPerkCount ?? 0);
+    const perkCount = finiteNonNegativeInteger(options.rewardPerkCount ?? summary.payoffRewardPerkCount);
     const mutatorCount = runPayoffArrayCount(summary.activeMutators);
-    const pressureCount = mutatorCount + Math.max(0, options.pressureExtra ?? summary.payoffPressureExtra ?? 0);
+    const pressureCount = mutatorCount + finiteNonNegativeInteger(options.pressureExtra ?? summary.payoffPressureExtra);
 
-    if (summary.bestStreak >= 10) {
+    if (bestStreak >= 10) {
         rows.push({
             arcadeCue: 'Combo live',
             id: 'combo-tier',
             label: 'Combo tier',
             nextCue: 'Protect the chain and cash the next reward band',
-            value: `x${summary.bestStreak}`,
+            value: `x${bestStreak}`,
             tone: 'chain',
             priority: 100
         });
-    } else if (summary.bestStreak >= 4) {
+    } else if (bestStreak >= 4) {
         rows.push({
             arcadeCue: 'Chain cashout',
             id: 'chain-threshold',
-            label: summary.bestStreak >= 6 ? 'Chain cashout' : 'Chain burst',
-            nextCue: summary.bestStreak >= 6
+            label: bestStreak >= 6 ? 'Chain cashout' : 'Chain burst',
+            nextCue: bestStreak >= 6
                 ? 'Repeat the cashout, then push the next reward threshold'
                 : 'Push the next chain reward threshold',
-            value: `x${summary.bestStreak}`,
+            value: `x${bestStreak}`,
             tone: 'chain',
             priority: 90
         });
     } else {
         rows.push({
-            arcadeCue: summary.bestStreak > 0 ? 'Prime chain' : 'Prime payoff',
+            arcadeCue: bestStreak > 0 ? 'Prime chain' : 'Prime payoff',
             id: 'chain-seed',
             label: 'Chain primer',
             nextCue: 'Open with safe matches before chasing bonuses',
-            value: `x${summary.bestStreak}`,
+            value: `x${bestStreak}`,
             tone: 'chain',
             priority: 35
         });
     }
 
-    const chainTarget = getChainTargetFeedback(summary.bestStreak);
+    const chainTarget = getChainTargetFeedback(bestStreak);
     if (options.includeChainTarget && chainTarget.band !== 'mastery') {
         rows.push({
             arcadeCue: 'Next chase',
@@ -253,7 +259,7 @@ export const getRunPayoffSignals = (
             nextCue: 'Aim the next run at this reward band',
             value: chainTarget.payoffValue,
             tone: 'chain',
-            priority: summary.bestStreak >= 3 ? 88 : 36
+            priority: bestStreak >= 3 ? 88 : 36
         });
     }
 
@@ -281,13 +287,13 @@ export const getRunPayoffSignals = (
         });
     }
 
-    if (summary.perfectClears > 0) {
+    if (perfectClears > 0) {
         rows.push({
             arcadeCue: 'Clean floor',
             id: 'perfect-clears',
             label: 'Perfects',
             nextCue: 'Use memory tools to preserve no-miss floors',
-            value: `${summary.perfectClears}`,
+            value: `${perfectClears}`,
             tone: 'reward',
             priority: 76
         });
@@ -321,11 +327,11 @@ export const getRunPayoffSignals = (
 
     if (rows.length < 3) {
         rows.push({
-            arcadeCue: summary.totalScore > 0 ? 'Score banked' : 'Prime score',
+            arcadeCue: totalScore > 0 ? 'Score banked' : 'Prime score',
             id: 'score-bank',
             label: 'Score pop bank',
             nextCue: 'Push streaks for bigger score pops',
-            value: summary.totalScore.toLocaleString(),
+            value: totalScore.toLocaleString(),
             tone: 'reward',
             priority: 30
         });
