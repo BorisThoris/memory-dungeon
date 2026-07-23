@@ -40,9 +40,10 @@ interface ChainMilestonePreview {
 }
 
 export const getChainMomentumTier = (streak: number): ChainMomentumTier => {
-    if (streak >= 10) return 'combo';
-    if (streak >= 6) return 'surge';
-    if (streak >= 3) return 'chain';
+    const safeStreak = runNonNegativeInteger(streak);
+    if (safeStreak >= 10) return 'combo';
+    if (safeStreak >= 6) return 'surge';
+    if (safeStreak >= 3) return 'chain';
     return 'building';
 };
 
@@ -60,10 +61,10 @@ export const getChainMomentumLabel = (tier: ChainMomentumTier): string => {
 };
 
 export const getChainMomentumCue = (streak?: number): string => {
-    if (streak == null || !Number.isFinite(streak) || streak < 3) {
+    const depth = runNonNegativeInteger(streak);
+    if (depth < 3) {
         return '';
     }
-    const depth = Math.floor(streak);
     if (depth >= 10) {
         return 'Combo live';
     }
@@ -144,6 +145,9 @@ const stepForRewardCue = (cue: ChainRewardForecastCue): number => {
     return COMBO_SHARD_STREAK_STEP;
 };
 
+const chainRewardStackSize = (stackSize: number | undefined): number =>
+    Math.max(1, runNonNegativeInteger(stackSize ?? 1));
+
 export const getChainRewardProgress = (
     streak: number,
     cue: ChainRewardForecastCue | null | undefined
@@ -167,7 +171,7 @@ export const getChainRewardProgress = (
 };
 
 export const getChainRewardUrgencyCopy = (cue: Pick<ChainRewardForecastCue, 'distance' | 'stackSize' | 'tone' | 'urgency'>): string => {
-    const stackSize = Math.max(1, Math.floor(cue.stackSize ?? 1));
+    const stackSize = chainRewardStackSize(cue.stackSize);
     if (stackSize >= 3) {
         if (cue.urgency === 'next') return 'Triple cashout';
         if (cue.urgency === 'soon') return 'Triple prime';
@@ -188,7 +192,7 @@ export const getChainRewardUrgencyCopy = (cue: Pick<ChainRewardForecastCue, 'dis
 };
 
 export const getChainRewardStackLabel = (cue: Pick<ChainRewardForecastCue, 'stackSize'>): string | null => {
-    const stackSize = Math.max(1, Math.floor(cue.stackSize ?? 1));
+    const stackSize = chainRewardStackSize(cue.stackSize);
     return stackSize >= 2 ? `${stackSize}x stack` : null;
 };
 

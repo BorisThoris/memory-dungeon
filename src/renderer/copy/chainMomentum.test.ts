@@ -18,12 +18,15 @@ describe('chainMomentum copy helpers', () => {
         expect(getChainMomentumTier(3)).toBe('chain');
         expect(getChainMomentumTier(6)).toBe('surge');
         expect(getChainMomentumTier(10)).toBe('combo');
+        expect(getChainMomentumTier(Number.POSITIVE_INFINITY)).toBe('building');
         expect(getChainMomentumLabel('surge')).toBe('Surge');
     });
 
     it('announces the next visible payoff threshold', () => {
         expect(getChainMomentumCue(2)).toBe('');
+        expect(getChainMomentumCue(Number.POSITIVE_INFINITY)).toBe('');
         expect(getChainMomentumCue(3)).toBe('3 matches to x6');
+        expect(getChainMomentumCue(3.9)).toBe('3 matches to x6');
         expect(getChainMomentumCue(5)).toBe('1 match to x6');
         expect(getChainMomentumCue(6)).toBe('4 matches to x10');
         expect(getChainMomentumCue(9)).toBe('1 match to x10');
@@ -163,11 +166,21 @@ describe('chainMomentum copy helpers', () => {
         expect(getChainRewardUrgencyCopy(getChainRewardForecastCues(3, 1, 4)[0]!)).toBe('Double cashout');
         expect(getChainRewardUrgencyCopy(getChainRewardForecastCues(5, 1, 4).find((cue) => cue.tone === 'guard')!)).toBe('Double prime');
         expect(getChainRewardUrgencyCopy(getChainRewardForecastCues(3, 1, 4).find((cue) => cue.tone === 'heal')!)).toBe('Combo chase');
+        expect(
+            getChainRewardUrgencyCopy({
+                distance: 1,
+                stackSize: Number.POSITIVE_INFINITY,
+                tone: 'reward',
+                urgency: 'next'
+            })
+        ).toBe('One-away cashout');
     });
 
     it('names stacked reward forecast badge counts', () => {
         expect(getChainRewardStackLabel({ stackSize: 2 })).toBe('2x stack');
         expect(getChainRewardStackLabel({ stackSize: 3 })).toBe('3x stack');
+        expect(getChainRewardStackLabel({ stackSize: 3.9 })).toBe('3x stack');
+        expect(getChainRewardStackLabel({ stackSize: Number.POSITIVE_INFINITY })).toBeNull();
         expect(getChainRewardStackLabel({})).toBeNull();
     });
 
