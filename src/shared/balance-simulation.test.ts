@@ -323,6 +323,17 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(greedy.greedLifeCosts).toBe(greedy.routeChoiceCounts.greed);
     });
 
+    it('falls back to shipped balance profiles when profile filters are malformed', () => {
+        const result = runDungeonBalanceProfileSimulation({
+            seeds: [42_001],
+            floors: 3,
+            rulesVersion: GAME_RULES_VERSION,
+            profiles: { length: 2 } as never
+        });
+
+        expect(result.profiles.map((profile) => profile.profile)).toEqual(DUNGEON_BALANCE_PROFILES.map((profile) => profile.id));
+    });
+
     it(
         'keeps tile trait distribution present across longer deterministic samples',
         () => {

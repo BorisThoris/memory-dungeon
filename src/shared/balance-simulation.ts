@@ -1097,12 +1097,20 @@ const sampleRewardPotential = (sample: BalanceSimulationReport['samples'][number
     sample.treasureRewardPairs +
     sample.findablePickupPairs;
 
+const selectedDungeonBalanceProfileIds = (value: unknown): DungeonBalanceProfileId[] =>
+    Array.isArray(value)
+        ? value.filter((profileId): profileId is DungeonBalanceProfileId =>
+              DUNGEON_BALANCE_PROFILES.some((profile) => profile.id === profileId)
+          )
+        : [];
+
 export const runDungeonBalanceProfileSimulation = (
     input: BalanceSimulationInput & { profiles?: readonly DungeonBalanceProfileId[] }
 ): DungeonBalanceProfileReport => {
     const base = runBalanceSimulation(input);
-    const selectedProfiles = input.profiles?.length
-        ? DUNGEON_BALANCE_PROFILES.filter((profile) => input.profiles?.includes(profile.id))
+    const profileIds = selectedDungeonBalanceProfileIds(input.profiles);
+    const selectedProfiles = profileIds.length > 0
+        ? DUNGEON_BALANCE_PROFILES.filter((profile) => profileIds.includes(profile.id))
         : DUNGEON_BALANCE_PROFILES;
     const samplesBySeed = base.seeds.map((sampleSeed) =>
         base.samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor)
