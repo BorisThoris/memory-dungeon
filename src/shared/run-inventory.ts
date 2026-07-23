@@ -5,6 +5,7 @@ import {
     type RunState
 } from './contracts';
 import { runMutatorIds, runRelicIds } from './relics';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunInventoryItemId =
@@ -235,9 +236,6 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
 
 export const DUNGEON_KEY_SPEND_ORDER = ['iron', 'treasure', 'shrine', 'boss', 'trap'] as const satisfies readonly DungeonKeyKind[];
 
-const nonNegativeQuantity = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const dungeonKeyRecord = (value: unknown): Partial<Record<DungeonKeyKind, number>> =>
     value != null && typeof value === 'object' && !Array.isArray(value) ? value as Partial<Record<DungeonKeyKind, number>> : {};
 
@@ -255,7 +253,7 @@ export const getDungeonKeyQuantityRows = (value: unknown): DungeonKeyQuantityRow
     const dungeonKeys = dungeonKeyRecord(value);
     return DUNGEON_KEY_SPEND_ORDER.map((kind) => ({
         kind,
-        quantity: nonNegativeQuantity(dungeonKeys[kind])
+        quantity: runNonNegativeInteger(dungeonKeys[kind])
     }));
 };
 
@@ -266,7 +264,7 @@ export const getRunInventoryItemPayoutRows = (value: unknown): RunInventoryItemP
     const payouts = value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
     return RUN_INVENTORY_ITEM_IDS.map((id) => ({
         id,
-        amount: nonNegativeQuantity(payouts[id])
+        amount: runNonNegativeInteger(payouts[id])
     }));
 };
 
@@ -275,31 +273,31 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
     const stats = normalizeSessionStats(run.stats);
     switch (id) {
         case 'shuffle_charge':
-            return nonNegativeQuantity(run.shuffleCharges) + (run.freeShuffleThisFloor ? 1 : 0);
+            return runNonNegativeInteger(run.shuffleCharges) + (run.freeShuffleThisFloor ? 1 : 0);
         case 'region_shuffle_charge':
-            return nonNegativeQuantity(run.regionShuffleCharges) + (run.regionShuffleFreeThisFloor ? 1 : 0);
+            return runNonNegativeInteger(run.regionShuffleCharges) + (run.regionShuffleFreeThisFloor ? 1 : 0);
         case 'destroy_charge':
-            return nonNegativeQuantity(run.destroyPairCharges);
+            return runNonNegativeInteger(run.destroyPairCharges);
         case 'peek_charge':
-            return nonNegativeQuantity(run.peekCharges);
+            return runNonNegativeInteger(run.peekCharges);
         case 'stray_remove_charge':
-            return nonNegativeQuantity(run.strayRemoveCharges);
+            return runNonNegativeInteger(run.strayRemoveCharges);
         case 'flash_pair_charge':
-            return nonNegativeQuantity(run.flashPairCharges);
+            return runNonNegativeInteger(run.flashPairCharges);
         case 'undo_charge':
-            return nonNegativeQuantity(run.undoUsesThisFloor);
+            return runNonNegativeInteger(run.undoUsesThisFloor);
         case 'gambit_token':
             return run.gambitAvailableThisFloor && !run.gambitThirdFlipUsed ? 1 : 0;
         case 'wild_match_token':
-            return nonNegativeQuantity(run.wildMatchesRemaining);
+            return runNonNegativeInteger(run.wildMatchesRemaining);
         case 'iron_key':
             return getDungeonKeyTotal(dungeonKeys);
         case 'master_key':
-            return nonNegativeQuantity(run.dungeonMasterKeys);
+            return runNonNegativeInteger(run.dungeonMasterKeys);
         case 'guard_token':
-            return nonNegativeQuantity(stats.guardTokens);
+            return runNonNegativeInteger(stats.guardTokens);
         case 'combo_shard':
-            return nonNegativeQuantity(stats.comboShards);
+            return runNonNegativeInteger(stats.comboShards);
         case 'relic_loadout':
             return runRelicIds(run.relicIds).length;
         case 'mutator_loadout':
@@ -445,15 +443,12 @@ export interface RunInventoryGainFeedback extends RunInventoryGainPreview {
     noPickupLabel: string | null;
 }
 
-const nonNegativeFiniteAmount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 export const previewRunInventoryItemGain = (
     run: RunState,
     itemId: RunInventoryItemId,
     amount: number = 1
 ): RunInventoryGainPreview => {
-    const requested = nonNegativeFiniteAmount(amount);
+    const requested = runNonNegativeInteger(amount);
     const definition = RUN_INVENTORY_CATALOG[itemId];
     const quantity = getRunInventoryItemQuantity(run, itemId);
     if (!definition) {
@@ -579,33 +574,33 @@ export const gainRunInventoryItem = (
     }
     switch (itemId) {
         case 'shuffle_charge':
-            return { ...run, shuffleCharges: nonNegativeQuantity(run.shuffleCharges) + gain };
+            return { ...run, shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + gain };
         case 'region_shuffle_charge':
-            return { ...run, regionShuffleCharges: nonNegativeQuantity(run.regionShuffleCharges) + gain };
+            return { ...run, regionShuffleCharges: runNonNegativeInteger(run.regionShuffleCharges) + gain };
         case 'destroy_charge':
-            return { ...run, destroyPairCharges: nonNegativeQuantity(run.destroyPairCharges) + gain };
+            return { ...run, destroyPairCharges: runNonNegativeInteger(run.destroyPairCharges) + gain };
         case 'peek_charge':
-            return { ...run, peekCharges: nonNegativeQuantity(run.peekCharges) + gain };
+            return { ...run, peekCharges: runNonNegativeInteger(run.peekCharges) + gain };
         case 'stray_remove_charge':
-            return { ...run, strayRemoveCharges: nonNegativeQuantity(run.strayRemoveCharges) + gain };
+            return { ...run, strayRemoveCharges: runNonNegativeInteger(run.strayRemoveCharges) + gain };
         case 'flash_pair_charge':
-            return { ...run, flashPairCharges: nonNegativeQuantity(run.flashPairCharges) + gain };
+            return { ...run, flashPairCharges: runNonNegativeInteger(run.flashPairCharges) + gain };
         case 'undo_charge':
-            return { ...run, undoUsesThisFloor: nonNegativeQuantity(run.undoUsesThisFloor) + gain };
+            return { ...run, undoUsesThisFloor: runNonNegativeInteger(run.undoUsesThisFloor) + gain };
         case 'gambit_token':
             return { ...run, gambitAvailableThisFloor: true, gambitThirdFlipUsed: false };
         case 'wild_match_token':
-            return { ...run, wildMatchesRemaining: nonNegativeQuantity(run.wildMatchesRemaining) + gain };
+            return { ...run, wildMatchesRemaining: runNonNegativeInteger(run.wildMatchesRemaining) + gain };
         case 'iron_key':
-            return { ...run, dungeonKeys: { ...dungeonKeyRecord(run.dungeonKeys), iron: nonNegativeQuantity(dungeonKeyRecord(run.dungeonKeys).iron) + gain } };
+            return { ...run, dungeonKeys: { ...dungeonKeyRecord(run.dungeonKeys), iron: runNonNegativeInteger(dungeonKeyRecord(run.dungeonKeys).iron) + gain } };
         case 'master_key':
-            return { ...run, dungeonMasterKeys: nonNegativeQuantity(run.dungeonMasterKeys) + gain };
+            return { ...run, dungeonMasterKeys: runNonNegativeInteger(run.dungeonMasterKeys) + gain };
         case 'guard_token':
             {
                 const stats = normalizeSessionStats(run.stats);
                 return {
                     ...run,
-                    stats: { ...stats, guardTokens: Math.min(MAX_GUARD_TOKENS, nonNegativeQuantity(stats.guardTokens) + gain) }
+                    stats: { ...stats, guardTokens: Math.min(MAX_GUARD_TOKENS, runNonNegativeInteger(stats.guardTokens) + gain) }
                 };
             }
         case 'combo_shard':
@@ -613,7 +608,7 @@ export const gainRunInventoryItem = (
                 const stats = normalizeSessionStats(run.stats);
                 return {
                     ...run,
-                    stats: { ...stats, comboShards: Math.min(MAX_COMBO_SHARDS, nonNegativeQuantity(stats.comboShards) + gain) }
+                    stats: { ...stats, comboShards: Math.min(MAX_COMBO_SHARDS, runNonNegativeInteger(stats.comboShards) + gain) }
                 };
             }
         default:
@@ -630,42 +625,42 @@ export const useRunInventoryItem = (run: RunState, itemId: RunInventoryItemId): 
         case 'shuffle_charge':
             return run.freeShuffleThisFloor
                 ? { run: { ...run, freeShuffleThisFloor: false }, itemId, applied: true }
-                : { run: { ...run, shuffleCharges: Math.max(0, nonNegativeQuantity(run.shuffleCharges) - 1) }, itemId, applied: true };
+                : { run: { ...run, shuffleCharges: Math.max(0, runNonNegativeInteger(run.shuffleCharges) - 1) }, itemId, applied: true };
         case 'region_shuffle_charge':
             return run.regionShuffleFreeThisFloor
                 ? { run: { ...run, regionShuffleFreeThisFloor: false }, itemId, applied: true }
-                : { run: { ...run, regionShuffleCharges: Math.max(0, nonNegativeQuantity(run.regionShuffleCharges) - 1) }, itemId, applied: true };
+                : { run: { ...run, regionShuffleCharges: Math.max(0, runNonNegativeInteger(run.regionShuffleCharges) - 1) }, itemId, applied: true };
         case 'destroy_charge':
-            return { run: { ...run, destroyPairCharges: Math.max(0, nonNegativeQuantity(run.destroyPairCharges) - 1) }, itemId, applied: true };
+            return { run: { ...run, destroyPairCharges: Math.max(0, runNonNegativeInteger(run.destroyPairCharges) - 1) }, itemId, applied: true };
         case 'peek_charge':
-            return { run: { ...run, peekCharges: Math.max(0, nonNegativeQuantity(run.peekCharges) - 1) }, itemId, applied: true };
+            return { run: { ...run, peekCharges: Math.max(0, runNonNegativeInteger(run.peekCharges) - 1) }, itemId, applied: true };
         case 'stray_remove_charge':
-            return { run: { ...run, strayRemoveCharges: Math.max(0, nonNegativeQuantity(run.strayRemoveCharges) - 1) }, itemId, applied: true };
+            return { run: { ...run, strayRemoveCharges: Math.max(0, runNonNegativeInteger(run.strayRemoveCharges) - 1) }, itemId, applied: true };
         case 'flash_pair_charge':
-            return { run: { ...run, flashPairCharges: Math.max(0, nonNegativeQuantity(run.flashPairCharges) - 1) }, itemId, applied: true };
+            return { run: { ...run, flashPairCharges: Math.max(0, runNonNegativeInteger(run.flashPairCharges) - 1) }, itemId, applied: true };
         case 'undo_charge':
-            return { run: { ...run, undoUsesThisFloor: Math.max(0, nonNegativeQuantity(run.undoUsesThisFloor) - 1) }, itemId, applied: true };
+            return { run: { ...run, undoUsesThisFloor: Math.max(0, runNonNegativeInteger(run.undoUsesThisFloor) - 1) }, itemId, applied: true };
         case 'gambit_token':
             return { run: { ...run, gambitAvailableThisFloor: false, gambitThirdFlipUsed: true }, itemId, applied: true };
         case 'wild_match_token':
-            return { run: { ...run, wildMatchesRemaining: Math.max(0, nonNegativeQuantity(run.wildMatchesRemaining) - 1) }, itemId, applied: true };
+            return { run: { ...run, wildMatchesRemaining: Math.max(0, runNonNegativeInteger(run.wildMatchesRemaining) - 1) }, itemId, applied: true };
         case 'iron_key': {
             const dungeonKeys = dungeonKeyRecord(run.dungeonKeys);
-            const spendKind = DUNGEON_KEY_SPEND_ORDER.find((kind) => nonNegativeQuantity(dungeonKeys[kind] ?? 0) > 0);
+            const spendKind = DUNGEON_KEY_SPEND_ORDER.find((kind) => runNonNegativeInteger(dungeonKeys[kind] ?? 0) > 0);
             if (!spendKind) {
                 return { run, itemId, applied: false, reason: 'unavailable' };
             }
             return {
                 run: {
                     ...run,
-                    dungeonKeys: { ...dungeonKeys, [spendKind]: Math.max(0, nonNegativeQuantity(dungeonKeys[spendKind] ?? 0) - 1) }
+                    dungeonKeys: { ...dungeonKeys, [spendKind]: Math.max(0, runNonNegativeInteger(dungeonKeys[spendKind] ?? 0) - 1) }
                 },
                 itemId,
                 applied: true
             };
         }
         case 'master_key':
-            return { run: { ...run, dungeonMasterKeys: Math.max(0, nonNegativeQuantity(run.dungeonMasterKeys) - 1) }, itemId, applied: true };
+            return { run: { ...run, dungeonMasterKeys: Math.max(0, runNonNegativeInteger(run.dungeonMasterKeys) - 1) }, itemId, applied: true };
         default:
             return { run, itemId, applied: false, reason: 'not_usable' };
     }

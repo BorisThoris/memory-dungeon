@@ -1,5 +1,6 @@
 import type { RunState } from './contracts';
 import { getDungeonKeyTotal } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunEconomyBucket = 'score' | 'temporary_run' | 'durable_meta';
@@ -115,14 +116,11 @@ export const runEconomyDefinitionById = RUN_ECONOMY_DEFINITIONS.reduce<Record<st
     {}
 );
 
-const nonNegativeRunEconomyCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const valueFor = (run: RunState, id: string): string => {
     const stats = normalizeSessionStats(run.stats);
     switch (id) {
         case 'shop_gold':
-            return String(nonNegativeRunEconomyCount(run.shopGold));
+            return String(runNonNegativeInteger(run.shopGold));
         case 'score':
             return String(stats.totalScore);
         case 'combo_shards':
@@ -130,14 +128,14 @@ const valueFor = (run: RunState, id: string): string => {
         case 'guard_tokens':
             return `${stats.guardTokens}/2`;
         case 'relic_favor':
-            return `${nonNegativeRunEconomyCount(run.relicFavorProgress)}/3`;
+            return `${runNonNegativeInteger(run.relicFavorProgress)}/3`;
         case 'dungeon_keys': {
-            return `${getDungeonKeyTotal(run.dungeonKeys)} keys · ${nonNegativeRunEconomyCount(run.dungeonMasterKeys)} master`;
+            return `${getDungeonKeyTotal(run.dungeonKeys)} keys · ${runNonNegativeInteger(run.dungeonMasterKeys)} master`;
         }
         case 'findable_pickups':
-            return `${nonNegativeRunEconomyCount(run.findablesClaimedThisFloor)}/${nonNegativeRunEconomyCount(run.findablesTotalThisFloor)}`;
+            return `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)}`;
         case 'assist_charges':
-            return `Shuffle ${nonNegativeRunEconomyCount(run.shuffleCharges)} · Row ${nonNegativeRunEconomyCount(run.regionShuffleCharges)} · Destroy ${nonNegativeRunEconomyCount(run.destroyPairCharges)} · Peek ${nonNegativeRunEconomyCount(run.peekCharges)} · Stray ${nonNegativeRunEconomyCount(run.strayRemoveCharges)}`;
+            return `Shuffle ${runNonNegativeInteger(run.shuffleCharges)} · Row ${runNonNegativeInteger(run.regionShuffleCharges)} · Destroy ${runNonNegativeInteger(run.destroyPairCharges)} · Peek ${runNonNegativeInteger(run.peekCharges)} · Stray ${runNonNegativeInteger(run.strayRemoveCharges)}`;
         default:
             return '0';
     }
@@ -147,7 +145,7 @@ const numericValueFor = (run: RunState, id: string): number => {
     const stats = normalizeSessionStats(run.stats);
     switch (id) {
         case 'shop_gold':
-            return nonNegativeRunEconomyCount(run.shopGold);
+            return runNonNegativeInteger(run.shopGold);
         case 'score':
             return stats.totalScore;
         case 'combo_shards':
@@ -155,18 +153,18 @@ const numericValueFor = (run: RunState, id: string): number => {
         case 'guard_tokens':
             return stats.guardTokens;
         case 'relic_favor':
-            return nonNegativeRunEconomyCount(run.relicFavorProgress);
+            return runNonNegativeInteger(run.relicFavorProgress);
         case 'dungeon_keys':
-            return getDungeonKeyTotal(run.dungeonKeys) + nonNegativeRunEconomyCount(run.dungeonMasterKeys);
+            return getDungeonKeyTotal(run.dungeonKeys) + runNonNegativeInteger(run.dungeonMasterKeys);
         case 'findable_pickups':
-            return nonNegativeRunEconomyCount(run.findablesClaimedThisFloor);
+            return runNonNegativeInteger(run.findablesClaimedThisFloor);
         case 'assist_charges':
             return (
-                nonNegativeRunEconomyCount(run.shuffleCharges) +
-                nonNegativeRunEconomyCount(run.regionShuffleCharges) +
-                nonNegativeRunEconomyCount(run.destroyPairCharges) +
-                nonNegativeRunEconomyCount(run.peekCharges) +
-                nonNegativeRunEconomyCount(run.strayRemoveCharges)
+                runNonNegativeInteger(run.shuffleCharges) +
+                runNonNegativeInteger(run.regionShuffleCharges) +
+                runNonNegativeInteger(run.destroyPairCharges) +
+                runNonNegativeInteger(run.peekCharges) +
+                runNonNegativeInteger(run.strayRemoveCharges)
             );
         default:
             return 0;
