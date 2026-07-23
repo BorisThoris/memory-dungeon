@@ -1,3 +1,5 @@
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
+
 export interface ActiveTimer {
     deadline: number;
     timeout: ReturnType<typeof setTimeout>;
@@ -9,8 +11,7 @@ export const clearActiveTimer = (timer: ActiveTimer | null): void => {
     }
 };
 
-const normalizeTimerDuration = (duration: number): number =>
-    Number.isFinite(duration) ? Math.max(0, Math.floor(duration)) : 0;
+const normalizeTimerDuration = (duration: number): number => runNonNegativeInteger(duration);
 
 export const createActiveTimer = (duration: number, onElapsed: () => void): ActiveTimer => {
     const safeDuration = normalizeTimerDuration(duration);

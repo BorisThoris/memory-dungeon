@@ -44,6 +44,21 @@ describe('activeTimer', () => {
         vi.useRealTimers();
     });
 
+    it('returns fallback when timer deadline is malformed', () => {
+        vi.useFakeTimers();
+        vi.setSystemTime(2000);
+
+        const timer = {
+            deadline: Number.POSITIVE_INFINITY,
+            timeout: setTimeout(() => undefined, 0)
+        };
+
+        expect(getActiveTimerRemainingMs(timer, 125)).toBe(125);
+        clearActiveTimer(timer);
+
+        vi.useRealTimers();
+    });
+
     it('floors fractional durations for stable deadlines and scheduled delays', () => {
         vi.useFakeTimers();
         vi.setSystemTime(3000);
