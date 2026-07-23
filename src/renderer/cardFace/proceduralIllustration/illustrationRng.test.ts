@@ -29,6 +29,7 @@ describe('createIllustrationRng', () => {
 
         expect(rng.nextInt(Number.NaN)).toBe(0);
         expect(rng.nextInt(Number.POSITIVE_INFINITY)).toBe(0);
+        expect(rng.nextInt(-2)).toBe(0);
         expect(rng.nextIntInclusive(Number.NaN, 4)).toBe(0);
         expect(rng.nextIntInclusive(3.8, Number.POSITIVE_INFINITY)).toBe(3);
         expect(rng.nextIntInclusive(7.8, 2.2)).toBe(7);

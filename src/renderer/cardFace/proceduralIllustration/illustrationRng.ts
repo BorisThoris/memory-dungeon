@@ -1,3 +1,5 @@
+import { runNonNegativeInteger } from '../../../shared/run-number-guards';
+
 export type IllustrationRng = {
     nextU32: () => number;
     /** In [0, 1) */
@@ -8,8 +10,6 @@ export type IllustrationRng = {
     nextIntInclusive: (min: number, max: number) => number;
     pickWeighted: <T>(entries: readonly { value: T; weight: number }[]) => T;
 };
-
-const positiveInteger = (value: number): number => (Number.isFinite(value) && value > 0 ? Math.floor(value) : 0);
 
 const positiveWeight = (value: number): number => (Number.isFinite(value) && value > 0 ? value : 0);
 
@@ -27,7 +27,7 @@ export const createIllustrationRng = (seed: number): IllustrationRng => {
     const nextFloat01 = (): number => nextU32() / 4294967296;
 
     const nextInt = (max: number): number => {
-        const normalizedMax = positiveInteger(max);
+        const normalizedMax = runNonNegativeInteger(max);
         if (normalizedMax <= 0) {
             return 0;
         }
