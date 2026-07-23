@@ -22,6 +22,7 @@ import {
     getPermanentUpgradeRows
 } from '../../shared/meta-progression';
 import { getCollectionRewardSignals, getMetaProgressionRunImpactRows } from '../../shared/meta-reward-signals';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { ACHIEVEMENT_IDS, getRelicPickCountRows } from '../../shared/save-data';
 import {
     CALLSIGN_SYMBOLS,
@@ -81,9 +82,6 @@ const formatRewardSignalLabel = (
     return rowCopy ? `${label}. ${rowCopy}` : label;
 };
 
-const collectionDisplayInteger = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const CollectionScreen = () => {
     const bodyScrollRef = useRef<HTMLDivElement | null>(null);
     const { closeSubscreen, saveData, settings } = useAppStore(
@@ -106,10 +104,10 @@ const CollectionScreen = () => {
     const rewardGalleryLabel = formatRewardSignalLabel('Collection reward gallery', rewardGalleryRows);
     const lastRunPayoffRows = summary ? getRunPayoffSignals(summary, { includeChainTarget: true }).slice(0, 4) : [];
     const summaryDisplay = {
-        bestStreak: collectionDisplayInteger(summary?.bestStreak),
-        highestLevel: collectionDisplayInteger(summary?.highestLevel),
-        levelsCleared: collectionDisplayInteger(summary?.levelsCleared),
-        totalScore: collectionDisplayInteger(summary?.totalScore)
+        bestStreak: runNonNegativeInteger(summary?.bestStreak),
+        highestLevel: runNonNegativeInteger(summary?.highestLevel),
+        levelsCleared: runNonNegativeInteger(summary?.levelsCleared),
+        totalScore: runNonNegativeInteger(summary?.totalScore)
     };
     const lastRunPayoffRowsLabel = formatRunPayoffSignalsLabel('Collection last run payoff signals', lastRunPayoffRows);
     const lastRunPayoffLaneMap = getRunPayoffLaneMap(lastRunPayoffRows);
@@ -134,7 +132,7 @@ const CollectionScreen = () => {
     const dailyArchiveRows = getDailyArchiveRows(saveData);
     const relicPickCountById = new Map(getRelicPickCountRows(ps?.relicPickCounts).map((row) => [row.id, row.count]));
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
-    const bestScoreDisplay = collectionDisplayInteger(saveData.bestScore);
+    const bestScoreDisplay = runNonNegativeInteger(saveData.bestScore);
     const handleBack = (): void => {
         resumeUiSfxContext();
         playUiBackSfx(uiGain);

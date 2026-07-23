@@ -6,6 +6,7 @@ import type { MutatorId, RelicId, RewardPerkId, RunState } from '../../shared/co
 import { buildDailyResultsLoopRows } from '../../shared/daily-archive';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { buildRunJournalEntry } from '../../shared/run-history';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
 import { playGameOverOpenSfx, playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
@@ -61,9 +62,6 @@ const gameOverRewardPerkIds = (value: unknown): RewardPerkId[] =>
 
 const gameOverFlipHistory = (value: unknown): string[] =>
     Array.isArray(value) ? value.filter((id): id is string => typeof id === 'string') : [];
-
-const gameOverDisplayInteger = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const runModeIdentityLine = (summary: NonNullable<RunState['lastRunSummary']>): string => {
     if (summary.activeContract?.noShuffle) {
@@ -129,9 +127,9 @@ const runMomentumRecapRows = (
     run: RunState,
     summary: NonNullable<RunState['lastRunSummary']>
 ): { id: string; label: string; value: string; detail: string; tone: 'chain' | 'reward' | 'build' | 'risk' }[] => {
-    const bestStreak = gameOverDisplayInteger(summary.bestStreak);
-    const pickupClaimed = gameOverDisplayInteger(run.findablesClaimedThisFloor);
-    const pickupTotal = gameOverDisplayInteger(run.findablesTotalThisFloor);
+    const bestStreak = runNonNegativeInteger(summary.bestStreak);
+    const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
+    const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
     const traitRouteComplete =
         run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor);
     const summaryActiveMutators = gameOverMutatorIds(summary.activeMutators);
@@ -145,8 +143,8 @@ const runMomentumRecapRows = (
     const buildDetailWithPerk = topPerkCue ? `${buildDetail} Perk next: ${topPerkCue}` : buildDetail;
     const pressureCount =
         summaryActiveMutators.length +
-        gameOverDisplayInteger(run.stats.mismatches) +
-        gameOverDisplayInteger(run.stats.volatileTraitShuffles);
+        runNonNegativeInteger(run.stats.mismatches) +
+        runNonNegativeInteger(run.stats.volatileTraitShuffles);
     const nextFocus =
         bestStreak < 4
             ? {
@@ -270,8 +268,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         () =>
             summary
                 ? gameOverScreenCopy.politeRunSummary(
-                      gameOverDisplayInteger(summary.totalScore),
-                      gameOverDisplayInteger(summary.highestLevel)
+                      runNonNegativeInteger(summary.totalScore),
+                      runNonNegativeInteger(summary.highestLevel)
                   )
                 : '',
         [summary]
@@ -294,12 +292,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const summaryActiveMutators = gameOverMutatorIds(summary.activeMutators);
     const summaryRelicIds = gameOverRelicIds(summary.relicIds);
     const summaryDisplay = {
-        bestScore: gameOverDisplayInteger(summary.bestScore),
-        bestStreak: gameOverDisplayInteger(summary.bestStreak),
-        highestLevel: gameOverDisplayInteger(summary.highestLevel),
-        levelsCleared: gameOverDisplayInteger(summary.levelsCleared),
-        perfectClears: gameOverDisplayInteger(summary.perfectClears),
-        totalScore: gameOverDisplayInteger(summary.totalScore)
+        bestScore: runNonNegativeInteger(summary.bestScore),
+        bestStreak: runNonNegativeInteger(summary.bestStreak),
+        highestLevel: runNonNegativeInteger(summary.highestLevel),
+        levelsCleared: runNonNegativeInteger(summary.levelsCleared),
+        perfectClears: runNonNegativeInteger(summary.perfectClears),
+        totalScore: runNonNegativeInteger(summary.totalScore)
     };
     const rewardPerkIds = gameOverRewardPerkIds(run.rewardPerkIds);
     const flipHistory = gameOverFlipHistory(run.flipHistory);
@@ -329,8 +327,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         pickupClaimed: run.findablesClaimedThisFloor,
         pickupTotal: run.findablesTotalThisFloor,
         pressureExtra:
-            gameOverDisplayInteger(run.stats.mismatches) +
-            gameOverDisplayInteger(run.stats.volatileTraitShuffles),
+            runNonNegativeInteger(run.stats.mismatches) +
+            runNonNegativeInteger(run.stats.volatileTraitShuffles),
         rewardPerkCount: rewardPerkIds.length,
         routePaid: run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor),
         routeRewardText: run.traitRouteObjectiveRewardTextThisFloor

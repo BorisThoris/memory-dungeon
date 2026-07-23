@@ -3,6 +3,7 @@ import { getDailyArchiveSummary } from './daily-archive';
 import { getMetaProgressionBoard, getMetaProgressionFeedback } from './meta-progression';
 import { getObjectiveBoardItems } from './objective-board';
 import { runMutatorIds, runRelicIds } from './relics';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type MetaScreenId = 'collection' | 'inventory' | 'codex';
@@ -94,9 +95,6 @@ const metaRowBoardMoment = (row: ReturnType<typeof getMetaProgressionBoard>['row
     return row.gameplayAffecting ? 'Changes a future board decision' : 'Archive identity reward';
 };
 
-const metaDisplayInteger = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 export const getMetaProgressionRunImpactRows = (save: SaveData): MetaProgressionRunImpactRow[] => {
     const board = getMetaProgressionBoard(save);
     return board.rows.slice(0, 6).map((row) => {
@@ -163,8 +161,8 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
     const relicCount = runRelicIds(run.relicIds).length;
     const mutatorCount = runMutatorIds(run.activeMutators).length;
     const stats = normalizeSessionStats(run.stats);
-    const lives = metaDisplayInteger(run.lives);
-    const shopGold = metaDisplayInteger(run.shopGold);
+    const lives = runNonNegativeInteger(run.lives);
+    const shopGold = runNonNegativeInteger(run.shopGold);
     return [
         {
             id: 'inventory_build_value',

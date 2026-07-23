@@ -6,6 +6,7 @@ import { getDailyStreakEthicsRow } from '../../shared/daily-archive';
 import { getObjectiveBoardItems } from '../../shared/objective-board';
 import { buildProfileSaveShellSummary, getProfileSummaryRows, getSaveTrustRows } from '../../shared/profile-summary';
 import { getMetaProgressionRunImpactRows } from '../../shared/meta-reward-signals';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getRelicPickCountRows } from '../../shared/save-data';
 import { formatNextUtcReset } from '../../shared/utc-countdown';
 import { useEffect, useState } from 'react';
@@ -41,9 +42,6 @@ const formatProgressionImpactLabel = (
     return rowCopy ? `${label}. ${rowCopy}.` : label;
 };
 
-const profileDisplayInteger = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const ProfileScreen = () => {
     const [nowMs, setNowMs] = useState(() => Date.now());
     const { claimMetaProgressionReward, closeSubscreen, openSettings, saveData, settings, steamConnected } = useAppStore(
@@ -60,9 +58,9 @@ const ProfileScreen = () => {
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
     const lastRunSummary = saveData.lastRunSummary;
     const lastRunDisplay = {
-        bestStreak: profileDisplayInteger(lastRunSummary?.bestStreak),
-        highestLevel: profileDisplayInteger(lastRunSummary?.highestLevel),
-        totalScore: profileDisplayInteger(lastRunSummary?.totalScore)
+        bestStreak: runNonNegativeInteger(lastRunSummary?.bestStreak),
+        highestLevel: runNonNegativeInteger(lastRunSummary?.highestLevel),
+        totalScore: runNonNegativeInteger(lastRunSummary?.totalScore)
     };
     const lastRunLabel = lastRunSummary
         ? `${lastRunDisplay.totalScore.toLocaleString()} score / Floor ${lastRunDisplay.highestLevel} / ${lastRunDisplay.bestStreak} streak`

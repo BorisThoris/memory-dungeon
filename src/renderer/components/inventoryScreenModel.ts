@@ -8,6 +8,7 @@ import { getPerfectMemoryAttribution } from '../../shared/long-run-feedback';
 import { getInventoryRewardSignal } from '../../shared/meta-reward-signals';
 import { getRunEconomyRows } from '../../shared/run-economy';
 import { getRunInventoryRows, getRunLoadoutSummary, type RunInventoryItemId, type RunInventoryRow } from '../../shared/run-inventory';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getRunBuildProfile } from '../../shared/relics';
 import { getRunStartingLoadoutRow } from '../../shared/starting-loadouts';
 import {
@@ -23,9 +24,6 @@ export const createInventoryQuantityMap = (run: RunState): Map<string, number> =
     const inventoryRows = getRunInventoryRows(run);
     return new Map(inventoryRows.map((row) => [row.id, row.quantity]));
 };
-
-const finiteNonNegativeInteger = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const getActiveTraitBuildRows = (run: RunState) => {
     const relicTraitBuildRows = getTraitBuildRewardRows().filter((row) =>
@@ -54,16 +52,16 @@ type InventoryPayoffEngineSignal = {
 };
 
 export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSignal[] => {
-    const pickupClaimed = finiteNonNegativeInteger(run.findablesClaimedThisFloor);
-    const pickupTotal = finiteNonNegativeInteger(run.findablesTotalThisFloor);
-    const traitRequired = finiteNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor);
-    const traitProgress = finiteNonNegativeInteger(run.traitRouteObjectiveProgressThisFloor);
+    const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
+    const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
+    const traitRequired = runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor);
+    const traitProgress = runNonNegativeInteger(run.traitRouteObjectiveProgressThisFloor);
     const traitComplete = run.traitRouteObjectiveCompletedThisFloor || run.traitRouteObjectiveRewardClaimedThisFloor;
     const traitRouteStatus = getTraitRouteObjectiveStatus(run);
-    const comboShards = finiteNonNegativeInteger(run.stats.comboShards);
-    const currentStreak = finiteNonNegativeInteger(run.stats.currentStreak);
-    const bestStreak = finiteNonNegativeInteger(run.stats.bestStreak);
-    const guardTokens = finiteNonNegativeInteger(run.stats.guardTokens);
+    const comboShards = runNonNegativeInteger(run.stats.comboShards);
+    const currentStreak = runNonNegativeInteger(run.stats.currentStreak);
+    const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
+    const guardTokens = runNonNegativeInteger(run.stats.guardTokens);
     const chainTarget = getChainTargetFeedback(Math.max(currentStreak, bestStreak));
     return [
         {
@@ -134,24 +132,24 @@ export const getInventoryPayoffEngineSignal = (
     const activeLanes = runLoopSignals.filter((signal) => {
         if (signal.id === 'chain') {
             return (
-                finiteNonNegativeInteger(run.stats.currentStreak) >= 3 ||
-                finiteNonNegativeInteger(run.stats.bestStreak) >= 3
+                runNonNegativeInteger(run.stats.currentStreak) >= 3 ||
+                runNonNegativeInteger(run.stats.bestStreak) >= 3
             );
         }
         if (signal.id === 'pickup') {
             return (
-                finiteNonNegativeInteger(run.findablesTotalThisFloor) >
-                finiteNonNegativeInteger(run.findablesClaimedThisFloor)
+                runNonNegativeInteger(run.findablesTotalThisFloor) >
+                runNonNegativeInteger(run.findablesClaimedThisFloor)
             );
         }
         if (signal.id === 'resource') {
             return (
-                finiteNonNegativeInteger(run.stats.comboShards) >= 2 ||
-                finiteNonNegativeInteger(run.stats.guardTokens) > 0
+                runNonNegativeInteger(run.stats.comboShards) >= 2 ||
+                runNonNegativeInteger(run.stats.guardTokens) > 0
             );
         }
         return (
-            finiteNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor) > 0 ||
+            runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor) > 0 ||
             run.traitRouteObjectiveCompletedThisFloor ||
             run.traitRouteObjectiveRewardClaimedThisFloor
         );
