@@ -147,6 +147,27 @@ describe('getMemoryRecallFeedback', () => {
         expect(feedback.penalties.find((line) => line.id === 'memorize-recovery')).toBeUndefined();
     });
 
+    it('ignores malformed route choice payloads before building recall pressure', () => {
+        const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
+            lastLevelResult: {
+                level: 1,
+                scoreGained: 100,
+                rating: 'A',
+                livesRemaining: 4,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'none',
+                clearLifeGained: 0,
+                routeChoices: { length: 3 } as never
+            }
+        });
+
+        const feedback = getMemoryRecallFeedback(run);
+
+        expect(feedback.choices).toEqual([]);
+        expect(feedback.burden.detail).not.toContain('route decisions');
+    });
+
     it('calls out patrol and revealed enemy memory pressure', () => {
         const run = makeRun(
             [

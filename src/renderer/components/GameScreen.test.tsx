@@ -5410,6 +5410,29 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.getByText(/Vendor alcove available: 1 services, 5 shop gold/)).toBeTruthy();
     });
 
+    it('ignores malformed route choice payloads in the floor-clear result', () => {
+        const baseRun = levelCompleteRunFixture();
+        const run: RunState = {
+            ...baseRun,
+            lastLevelResult: {
+                ...baseRun.lastLevelResult!,
+                routeChoices: { length: 3 } as never
+            }
+        };
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'false');
+        expect(screen.queryByTestId('route-choice-panel')).toBeNull();
+        expect(screen.getByRole('button', { name: /^Continue$/i })).toBeTruthy();
+    });
+
     it('shows selected route copy instead of route buttons after a route is locked', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false });
         const run: RunState = {

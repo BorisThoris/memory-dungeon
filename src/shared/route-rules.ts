@@ -12,6 +12,8 @@ export {
     ROUTE_MYSTERY_SHOP_GOLD_REWARD,
     generateRouteChoices,
     getRouteChoiceAvailability,
+    isRouteChoice,
+    routeChoicesForResult,
     type RouteChoiceAvailability
 } from './route-choice-rules';
 

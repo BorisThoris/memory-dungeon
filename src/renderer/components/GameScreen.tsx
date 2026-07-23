@@ -20,7 +20,7 @@ import { formatLevelResultObjectiveLine } from '../../shared/secondary-objective
 import {
     canOfferEndlessRiskWager
 } from '../../shared/objective-rules';
-import { getRouteChoiceAvailability } from '../../shared/route-rules';
+import { getRouteChoiceAvailability, routeChoicesForResult } from '../../shared/route-rules';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
     canRegionShuffle,
@@ -3544,7 +3544,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         'Risk wager decision signals',
         visibleRiskWagerSignalRows
     );
-    const routeChoiceRequired = Boolean(run.lastLevelResult?.routeChoices && !run.pendingRouteCardPlan);
+    const routeChoices = useMemo(() => routeChoicesForResult(run.lastLevelResult), [run.lastLevelResult]);
+    const routeChoiceRequired = routeChoices.length > 0 && !run.pendingRouteCardPlan;
     const floorClearActionSequenceCue = getFloorClearActionSequenceCue({
         carryForwardCue: floorClearCarryForwardCue,
         cashoutRows: floorClearCashoutRows,
@@ -3560,8 +3561,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const currentDungeonNode = run.dungeonRun?.nodes.find((node) => node.id === run.dungeonRun.currentNodeId) ?? null;
     const dungeonMapPresentation = getDungeonMapPresentation(run.dungeonRun);
     const dungeonRouteDecisionPresentation =
-        routeChoiceRequired && run.lastLevelResult?.routeChoices
-            ? getDungeonRouteDecisionPresentation(run.dungeonRun, run.lastLevelResult.routeChoices)
+        routeChoiceRequired
+            ? getDungeonRouteDecisionPresentation(run.dungeonRun, routeChoices)
             : null;
     const memoryRecallFeedback = useMemo(() => getMemoryRecallFeedback(run), [run]);
     const routeChoiceMemoryById = useMemo(
@@ -3569,7 +3570,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         [memoryRecallFeedback.choices]
     );
     const routeChoiceRecommendation = useMemo(() => {
-        if (!routeChoiceRequired || !run.lastLevelResult?.routeChoices || !dungeonRouteDecisionPresentation) {
+        if (!routeChoiceRequired || !dungeonRouteDecisionPresentation) {
             return null;
         }
 
@@ -3581,7 +3582,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
 
         return dungeonRouteDecisionPresentation.rows
             .map((row, index) => {
-                const choice = run.lastLevelResult?.routeChoices?.find((option) => option.id === row.id);
+                const choice = routeChoices.find((option) => option.id === row.id);
                 const availability = choice ? getRouteChoiceAvailability(run, choice) : { available: true as const };
                 if (!availability.available) {
                     return null;
@@ -3626,6 +3627,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         firstRouteChoiceRequired,
         routeChoiceMemoryById,
         routeChoiceRequired,
+        routeChoices,
         run
     ]);
     const memoryRecallPanelRows = useMemo(
@@ -6221,7 +6223,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 Vendor alcove available: {run.shopOffers.length} services, {run.shopGold} shop gold.
                             </p>
                         ) : null}
-                        {routeChoiceRequired && run.lastLevelResult.routeChoices ? (
+                        {routeChoiceRequired ? (
                             <section
                                 aria-labelledby="dungeon-route-choice-title"
                                 className={styles.dungeonMapChoicePanel}
@@ -6239,7 +6241,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     {routeChoiceRequiredCopy}
                                 </p>
                                 <span className={styles.dungeonMapChoiceSummary}>
-                                    {dungeonRouteDecisionPresentation?.summary ?? run.lastLevelResult.routeChoices
+                                    {dungeonRouteDecisionPresentation?.summary ?? routeChoices
                                         .map((option) => `${option.label}: ${option.detail}`)
                                         .join(' · ')}
                                 </span>
@@ -6347,7 +6349,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 </div>
                                 <div className={styles.dungeonMapChoiceActions}>
                                     {dungeonRouteDecisionPresentation?.rows.map((row) => {
-                                        const choice = run.lastLevelResult?.routeChoices?.find((option) => option.id === row.id);
+                                        const choice = routeChoices.find((option) => option.id === row.id);
                                         const availability = choice
                                             ? getRouteChoiceAvailability(run, choice)
                                             : { available: true as const };

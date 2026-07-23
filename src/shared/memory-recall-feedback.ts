@@ -10,6 +10,7 @@ import {
 } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
+import { routeChoicesForResult } from './route-choice-rules';
 import { getCurrentDungeonNode } from './run-map';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
@@ -695,7 +696,7 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const focusLabel = focusLabelFor(focus);
     const activeThreatCount = activeEnemyHazards.length + revealedEnemyTiles.length;
     const roomIdentity = roomIdentityFor(run);
-    const routeChoices = run.lastLevelResult?.routeChoices ?? [];
+    const routeChoices = routeChoicesForResult(run.lastLevelResult);
     const totalNextCleanMatchBonus = nextCleanMatchBonus + clueBonus;
     const burden = buildMemoryBurden({
         forgottenTileCount: forgottenTileIds.length,

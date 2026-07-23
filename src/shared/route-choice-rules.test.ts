@@ -5,7 +5,8 @@ import {
     ROUTE_GREED_SCORE_REWARD,
     ROUTE_GREED_SHOP_GOLD_REWARD,
     generateRouteChoices,
-    getRouteChoiceAvailability
+    getRouteChoiceAvailability,
+    routeChoicesForResult
 } from './route-choice-rules';
 
 const run = (overrides: Partial<RunState> = {}): RunState =>
@@ -46,5 +47,44 @@ describe('route choice rules', () => {
             label: 'Unavailable at 1 life'
         });
         expect(getRouteChoiceAvailability(run({ lives: 1 }), safe)).toEqual({ available: true });
+    });
+
+    it('normalizes malformed route choice payloads from level results', () => {
+        const choices = generateRouteChoices(run(), 2);
+        const safe = choices[0]!;
+        const greed = choices[1]!;
+
+        expect(
+            routeChoicesForResult({
+                level: 1,
+                scoreGained: 100,
+                rating: 'S',
+                livesRemaining: 3,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'none',
+                clearLifeGained: 0,
+                routeChoices: [
+                    safe,
+                    { id: 'broken', routeType: 'safe', label: 'Broken' },
+                    { ...greed, detail: 12 },
+                    greed
+                ] as never
+            })
+        ).toEqual([safe, greed]);
+
+        expect(
+            routeChoicesForResult({
+                level: 1,
+                scoreGained: 100,
+                rating: 'S',
+                livesRemaining: 3,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'none',
+                clearLifeGained: 0,
+                routeChoices: { length: 2 } as never
+            })
+        ).toEqual([]);
     });
 });
