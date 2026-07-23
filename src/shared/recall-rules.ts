@@ -9,13 +9,11 @@ import {
     type RunState,
     type Tile
 } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export const FORGOTTEN_TILE_LEDGER_LIMIT = 16;
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value));
-
-const nonNegativeRecallCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const rememberForgottenTiles = (
     forgottenTileIdsThisFloor: readonly string[] | null | undefined,
@@ -47,7 +45,7 @@ export const tileHasRecallClue = (tile: Tile): boolean =>
     tile.scoutRevealSource != null ||
     tile.dungeonCardState === 'revealed';
 
-export const normalizeRecallFocus = (focus: number): number => clamp(nonNegativeRecallCount(focus), 0, RECALL_FOCUS_MAX);
+export const normalizeRecallFocus = (focus: number): number => clamp(runNonNegativeInteger(focus), 0, RECALL_FOCUS_MAX);
 
 export const calculateRecallMatchBonus = (run: RunState, tiles: readonly Tile[]): number => {
     if (run.gameMode === 'puzzle') {
@@ -67,12 +65,12 @@ export const addPendingMemorizeBonusForLostLives = (
     pendingMemorizeBonusMs: number,
     lostLives: number
 ): number =>
-    nonNegativeRecallCount(lostLives) <= 0
-        ? nonNegativeRecallCount(pendingMemorizeBonusMs)
+    runNonNegativeInteger(lostLives) <= 0
+        ? runNonNegativeInteger(pendingMemorizeBonusMs)
         : Math.min(
               MAX_PENDING_MEMORIZE_BONUS_MS,
-              nonNegativeRecallCount(pendingMemorizeBonusMs) +
-                  MEMORIZE_BONUS_PER_LIFE_LOST_MS * nonNegativeRecallCount(lostLives)
+              runNonNegativeInteger(pendingMemorizeBonusMs) +
+                  MEMORIZE_BONUS_PER_LIFE_LOST_MS * runNonNegativeInteger(lostLives)
           );
 
 export const getMemorizePhaseRecallFocusForRoute = (
@@ -88,9 +86,9 @@ export const getMemorizePhaseRecallFocusForRoute = (
         return INITIAL_RECALL_FOCUS;
     }
 
-    const recallMatches = nonNegativeRecallCount(previous.recallMatches);
-    const recallMistakes = nonNegativeRecallCount(previous.recallMistakes);
-    const recallBonusScore = nonNegativeRecallCount(previous.recallBonusScore);
+    const recallMatches = runNonNegativeInteger(previous.recallMatches);
+    const recallMistakes = runNonNegativeInteger(previous.recallMistakes);
+    const recallBonusScore = runNonNegativeInteger(previous.recallBonusScore);
     let focus =
         recallMistakes > 0
             ? 0

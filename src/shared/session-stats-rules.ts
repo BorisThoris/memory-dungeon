@@ -1,4 +1,5 @@
 import type { Rating, SessionStats, Tile, TileTraitKind } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
 import { calculateRating } from './scoring-rules';
 
 export const TILE_TRAIT_COUNT_KINDS: readonly TileTraitKind[] = [
@@ -25,9 +26,6 @@ export const createTileTraitCountStats = (): Record<TileTraitKind, number> => ({
     stasis: 0
 });
 
-const nonNegativeSessionCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const isRecord = (value: unknown): value is Record<string, unknown> =>
     value != null && typeof value === 'object' && !Array.isArray(value);
 
@@ -38,7 +36,7 @@ export const normalizeTileTraitCountStats = (counts: unknown): Record<TileTraitK
     const source = isRecord(counts) ? counts : {};
     const next = createTileTraitCountStats();
     for (const kind of TILE_TRAIT_COUNT_KINDS) {
-        next[kind] = nonNegativeSessionCount(source[kind]);
+        next[kind] = runNonNegativeInteger(source[kind]);
     }
     return next;
 };
@@ -87,26 +85,26 @@ export const createSessionStats = (bestScore: number): SessionStats => ({
 
 export const normalizeSessionStats = (stats: unknown, bestScoreFallback = 0): SessionStats => {
     const source = isRecord(stats) ? stats : {};
-    const tries = nonNegativeSessionCount(source.tries);
+    const tries = runNonNegativeInteger(source.tries);
     return {
-        totalScore: nonNegativeSessionCount(source.totalScore),
-        currentLevelScore: nonNegativeSessionCount(source.currentLevelScore),
-        bestScore: nonNegativeSessionCount(source.bestScore ?? bestScoreFallback),
+        totalScore: runNonNegativeInteger(source.totalScore),
+        currentLevelScore: runNonNegativeInteger(source.currentLevelScore),
+        bestScore: runNonNegativeInteger(source.bestScore ?? bestScoreFallback),
         tries,
         rating: isRating(source.rating) ? source.rating : calculateRating(tries),
-        levelsCleared: nonNegativeSessionCount(source.levelsCleared),
-        matchesFound: nonNegativeSessionCount(source.matchesFound),
-        mismatches: nonNegativeSessionCount(source.mismatches),
-        highestLevel: Math.max(1, nonNegativeSessionCount(source.highestLevel)),
-        currentStreak: nonNegativeSessionCount(source.currentStreak),
-        bestStreak: nonNegativeSessionCount(source.bestStreak),
-        perfectClears: nonNegativeSessionCount(source.perfectClears),
-        guardTokens: nonNegativeSessionCount(source.guardTokens),
-        comboShards: nonNegativeSessionCount(source.comboShards),
+        levelsCleared: runNonNegativeInteger(source.levelsCleared),
+        matchesFound: runNonNegativeInteger(source.matchesFound),
+        mismatches: runNonNegativeInteger(source.mismatches),
+        highestLevel: Math.max(1, runNonNegativeInteger(source.highestLevel)),
+        currentStreak: runNonNegativeInteger(source.currentStreak),
+        bestStreak: runNonNegativeInteger(source.bestStreak),
+        perfectClears: runNonNegativeInteger(source.perfectClears),
+        guardTokens: runNonNegativeInteger(source.guardTokens),
+        comboShards: runNonNegativeInteger(source.comboShards),
         tileTraitMatches: normalizeTileTraitCountStats(source.tileTraitMatches),
         tileTraitMismatches: normalizeTileTraitCountStats(source.tileTraitMismatches),
-        volatileTraitShuffles: nonNegativeSessionCount(source.volatileTraitShuffles),
-        shufflesUsed: nonNegativeSessionCount(source.shufflesUsed),
-        pairsDestroyed: nonNegativeSessionCount(source.pairsDestroyed)
+        volatileTraitShuffles: runNonNegativeInteger(source.volatileTraitShuffles),
+        shufflesUsed: runNonNegativeInteger(source.shufflesUsed),
+        pairsDestroyed: runNonNegativeInteger(source.pairsDestroyed)
     };
 };

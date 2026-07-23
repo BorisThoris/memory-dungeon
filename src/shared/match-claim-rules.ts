@@ -13,12 +13,10 @@ import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { getDungeonMatchReward, type DungeonMatchReward } from './dungeon-match-reward-rules';
 import { getRouteCardReward, type RouteCardReward } from './route-card-reward-rules';
 import { runStringArray } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import { isWildPairKey } from './tile-identity';
-
-const nonNegativeMatchClaimCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export interface MatchClaimContext {
     anchorSealClaimed: boolean;
@@ -132,12 +130,12 @@ export const createMatchedPairClaimBoard = ({
     secondTileId: string;
     thirdTileId?: string;
 }): BoardState => {
-    const nextKeysHeld = Math.max(0, nonNegativeMatchClaimCount(board.dungeonKeysHeld) + context.dungeonReward.keysHeldDelta);
+    const nextKeysHeld = Math.max(0, runNonNegativeInteger(board.dungeonKeysHeld) + context.dungeonReward.keysHeldDelta);
     const nextKeysHeldByKind = (() => {
         if (context.dungeonReward.keysHeldDelta === 0) {
             return board.dungeonKeysHeldByKind;
         }
-        const current = nonNegativeMatchClaimCount(board.dungeonKeysHeldByKind?.[context.matchedDungeonKeyKind]);
+        const current = runNonNegativeInteger(board.dungeonKeysHeldByKind?.[context.matchedDungeonKeyKind]);
         const next = Math.max(0, current + context.dungeonReward.keysHeldDelta);
         return {
             ...(board.dungeonKeysHeldByKind ?? {}),
@@ -147,7 +145,7 @@ export const createMatchedPairClaimBoard = ({
     return {
         ...board,
         flippedTileIds: [],
-        matchedPairs: nonNegativeMatchClaimCount(board.matchedPairs) + 1,
+        matchedPairs: runNonNegativeInteger(board.matchedPairs) + 1,
         tiles: board.tiles.map((tile) => {
             if (tile.id === firstTileId || tile.id === secondTileId) {
                 return clearDungeonCardFields({
@@ -170,6 +168,6 @@ export const createMatchedPairClaimBoard = ({
         selectedGatewayRouteType: board.selectedGatewayRouteType ?? context.dungeonReward.gatewayRouteType ?? null,
         dungeonKeysHeld: nextKeysHeld,
         dungeonKeysHeldByKind: nextKeysHeldByKind,
-        dungeonLeverCount: nonNegativeMatchClaimCount(board.dungeonLeverCount) + (context.matchedDungeonKind === 'lever' ? 1 : 0)
+        dungeonLeverCount: runNonNegativeInteger(board.dungeonLeverCount) + (context.matchedDungeonKind === 'lever' ? 1 : 0)
     };
 };
