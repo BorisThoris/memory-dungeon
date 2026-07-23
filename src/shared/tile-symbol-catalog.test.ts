@@ -23,11 +23,13 @@ describe('tile-symbol-catalog', () => {
     it('clamps invalid levels to bracket logic', () => {
         expect(getSymbolSetIndexForLevel(0)).toBe(0);
         expect(getSymbolSetIndexForLevel(Number.NaN)).toBe(0);
+        expect(getSymbolSetIndexForLevel(Number.POSITIVE_INFINITY)).toBe(0);
         expect(getSymbolSetForLevel(Number.NaN)).toBe(NUMBER_SYMBOLS);
     });
 
     it('returns the catalog slice for each band', () => {
         expect(getSymbolSetForLevel(4)).toBe(NUMBER_SYMBOLS);
+        expect(getSymbolSetForLevel(9.9)).toBe(LETTER_SYMBOLS);
         expect(getSymbolSetForLevel(10)).toBe(LETTER_SYMBOLS);
         expect(getSymbolSetForLevel(20)).toBe(CALLSIGN_SYMBOLS);
     });

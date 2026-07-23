@@ -3,6 +3,7 @@
  *
  * Symbol band floor thresholds and balance process: `docs/BALANCE_NOTES.md` (section *Symbol band thresholds*).
  */
+import { runNonNegativeInteger } from './run-number-guards';
 
 /** Inclusive last floor level for the numeric (two-digit rank) symbol band. See `docs/BALANCE_NOTES.md`. */
 export const SYMBOL_BAND_LAST_LEVEL_NUMERIC = 8;
@@ -122,7 +123,7 @@ export const ALL_TILE_SYMBOLS_FOR_GALLERY: TileSymbolEntry[] = [
  * Thresholds are balance-owned; see `docs/BALANCE_NOTES.md`.
  */
 export const getSymbolSetIndexForLevel = (level: number): number => {
-    const L = Number.isFinite(level) ? Math.max(1, Math.floor(level)) : 1;
+    const L = Math.max(1, runNonNegativeInteger(level));
     if (L <= SYMBOL_BAND_LAST_LEVEL_NUMERIC) {
         return 0;
     }
