@@ -1,3 +1,5 @@
+import { runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
+
 interface PreloadAudioBuffersOptions<Key extends string> {
     concurrency?: number;
     decode: (arrayBuffer: ArrayBuffer) => Promise<AudioBuffer>;
@@ -9,6 +11,9 @@ interface PreloadAudioBuffersOptions<Key extends string> {
 
 const DEFAULT_AUDIO_PRELOAD_CONCURRENCY = 3;
 const DEFAULT_AUDIO_PRELOAD_TIMEOUT_MS = 1500;
+
+const positiveIntegerOption = (value: number, fallback: number): number =>
+    Math.max(1, runNonNegativeIntegerWithFallback(value, fallback));
 
 const defaultFetchArrayBuffer = async (url: string): Promise<ArrayBuffer | null> => {
     const res = await fetch(url);
@@ -31,8 +36,8 @@ export const preloadAudioBuffers = async <Key extends string>({
     urlForKey
 }: PreloadAudioBuffersOptions<Key>): Promise<Map<Key, AudioBuffer>> => {
     const loaded = new Map<Key, AudioBuffer>();
-    const safeConcurrency = Number.isFinite(concurrency) ? Math.max(1, Math.floor(concurrency)) : DEFAULT_AUDIO_PRELOAD_CONCURRENCY;
-    const safeTimeoutMs = Number.isFinite(timeoutMs) ? Math.max(1, Math.floor(timeoutMs)) : DEFAULT_AUDIO_PRELOAD_TIMEOUT_MS;
+    const safeConcurrency = positiveIntegerOption(concurrency, DEFAULT_AUDIO_PRELOAD_CONCURRENCY);
+    const safeTimeoutMs = positiveIntegerOption(timeoutMs, DEFAULT_AUDIO_PRELOAD_TIMEOUT_MS);
     const uniqueKeys = [...new Set(keys)];
     const workerCount = Math.max(1, Math.min(safeConcurrency, uniqueKeys.length));
     let cursor = 0;

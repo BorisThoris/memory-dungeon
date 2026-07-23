@@ -76,6 +76,64 @@ describe('preloadAudioBuffers', () => {
         expect([...loaded.keys()]).toEqual(['click', 'confirm']);
     });
 
+    it('falls back to default concurrency for malformed preload options', async () => {
+        const active = { count: 0, max: 0 };
+        const releaseQueue: Array<() => void> = [];
+        const fetchArrayBuffer = vi.fn(async () => {
+            active.count += 1;
+            active.max = Math.max(active.max, active.count);
+            await new Promise<void>((resolve) => {
+                releaseQueue.push(resolve);
+            });
+            active.count -= 1;
+            return new ArrayBuffer(8);
+        });
+        const decode = vi.fn(async () => ({ duration: 0.1 }) as AudioBuffer);
+
+        const preload = preloadAudioBuffers({
+            concurrency: Number.POSITIVE_INFINITY,
+            decode,
+            fetchArrayBuffer,
+            keys: ['a', 'b', 'c', 'd'],
+            urlForKey: (key) => `${key}.wav`
+        });
+
+        await vi.waitFor(() => expect(fetchArrayBuffer).toHaveBeenCalledTimes(3));
+        releaseQueue.splice(0).forEach((release) => release());
+        await vi.waitFor(() => expect(fetchArrayBuffer).toHaveBeenCalledTimes(4));
+        releaseQueue.splice(0).forEach((release) => release());
+
+        await expect(preload).resolves.toHaveProperty('size', 4);
+        expect(active.max).toBe(3);
+    });
+
+    it('falls back to default timeout for malformed preload options', async () => {
+        vi.useFakeTimers();
+
+        const fetchArrayBuffer = vi.fn(async () => new Promise<ArrayBuffer>(() => undefined));
+        const decode = vi.fn(async () => ({ duration: 0.1 }) as AudioBuffer);
+
+        try {
+            const preload = preloadAudioBuffers({
+                decode,
+                fetchArrayBuffer,
+                keys: ['stalled'],
+                timeoutMs: Number.POSITIVE_INFINITY,
+                urlForKey: (key) => `${key}.wav`
+            });
+
+            await vi.advanceTimersByTimeAsync(1499);
+            expect(fetchArrayBuffer).toHaveBeenCalledTimes(1);
+
+            await vi.advanceTimersByTimeAsync(1);
+
+            await expect(preload).resolves.toEqual(new Map());
+            expect(decode).not.toHaveBeenCalled();
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
     it('does not let a stalled fetch or decode hold the preload queue open', async () => {
         vi.useFakeTimers();
 
