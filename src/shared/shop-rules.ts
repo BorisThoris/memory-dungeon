@@ -200,11 +200,13 @@ export const SHOP_ITEM_CATALOG: Record<
 
 export const getShopItemCatalogRows = () => SHOP_ITEM_IDS.map((itemId) => SHOP_ITEM_CATALOG[itemId]);
 
+const getSafeShopFloorLevel = (level: unknown): number => Math.max(1, runNonNegativeInteger(level));
+
 export const getShopGoldRewardForFloor = (level: number): number =>
-    Math.min(8, FLOOR_CLEAR_GOLD_BASE + Math.max(0, Math.floor(level) - 1));
+    Math.min(8, FLOOR_CLEAR_GOLD_BASE + getSafeShopFloorLevel(level) - 1);
 
 export const getShopRerollCostForFloor = (level: number): number =>
-    1 + Math.floor(Math.max(0, Math.floor(level) - 1) / 3);
+    1 + Math.floor((getSafeShopFloorLevel(level) - 1) / 3);
 
 export type RunShopSource = 'floor_clear_shop' | 'board_shop';
 
@@ -328,7 +330,7 @@ const loadoutStockBias = (run: RunState): RunShopItemId[] => {
 };
 
 export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
-    const level = run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
+    const level = getSafeShopFloorLevel(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel);
     const source: RunShopSource = run.board?.dungeonShopTileId ? 'board_shop' : 'floor_clear_shop';
     const routeType = run.board?.routeWorldProfile?.routeType ?? run.pendingRouteCardPlan?.routeType ?? null;
     const itemIds: RunShopItemId[] = routeStockTemplate(routeType, source, run.shopRerolls);

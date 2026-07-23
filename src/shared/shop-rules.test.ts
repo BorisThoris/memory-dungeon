@@ -47,9 +47,15 @@ describe('shop rules', () => {
 
     it('defines deterministic floor rewards, reroll cost, and stock plans', () => {
         expect(getShopGoldRewardForFloor(1)).toBe(2);
+        expect(getShopGoldRewardForFloor(1.9)).toBe(2);
         expect(getShopGoldRewardForFloor(99)).toBe(8);
+        expect(getShopGoldRewardForFloor(Number.NaN)).toBe(2);
+        expect(getShopGoldRewardForFloor(Number.POSITIVE_INFINITY)).toBe(2);
         expect(getShopRerollCostForFloor(1)).toBe(1);
+        expect(getShopRerollCostForFloor(1.9)).toBe(1);
         expect(getShopRerollCostForFloor(7)).toBe(3);
+        expect(getShopRerollCostForFloor(Number.NaN)).toBe(1);
+        expect(getShopRerollCostForFloor(Number.POSITIVE_INFINITY)).toBe(1);
         expect(SHOP_ITEM_CATALOG.heal_life.stackLimit).toBe(MAX_LIVES);
 
         const run = makePlayingRun();
@@ -396,6 +402,26 @@ describe('shop rules', () => {
         expect(getRunShopStockPlan(run)).toMatchObject({
             level: 1,
             rerollCost: getShopRerollCostForFloor(1)
+        });
+        expect(getShopWalletPacing(run).earnedThisFloor).toBe(getShopGoldRewardForFloor(1));
+        expect(getRunShopWalletPacing(run).earnedThisFloor).toBe(getShopGoldRewardForFloor(1));
+    });
+
+    it('normalizes malformed board levels before shop stock and pacing', () => {
+        const baseRun = makePlayingRun();
+        const run = {
+            ...baseRun,
+            board: { ...baseRun.board!, level: Number.NaN },
+            shopGold: 10
+        };
+
+        expect(getRunShopStockPlan(run)).toMatchObject({
+            level: 1,
+            rerollCost: getShopRerollCostForFloor(1)
+        });
+        expect(getRunShopReadModel({ ...run, shopOffers: createRunShopOffers(run) })).toMatchObject({
+            level: 1,
+            rerollCost: 1
         });
         expect(getShopWalletPacing(run).earnedThisFloor).toBe(getShopGoldRewardForFloor(1));
         expect(getRunShopWalletPacing(run).earnedThisFloor).toBe(getShopGoldRewardForFloor(1));
