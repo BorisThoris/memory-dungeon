@@ -23,6 +23,29 @@ describe('route choice outcome rules', () => {
         });
     });
 
+    it('ignores malformed route choice payloads before applying outcomes', () => {
+        const run = createPlayablePathFixture('floorClearWithRouteChoices').run!;
+        const malformedRouteChoices = {
+            find: () => {
+                throw new Error('raw route choice lookup should not run');
+            },
+            length: 1
+        };
+        const malformedRun: RunState = {
+            ...run,
+            lastLevelResult: {
+                ...run.lastLevelResult!,
+                routeChoices: malformedRouteChoices as never
+            }
+        };
+
+        expect(applyRouteChoiceOutcome(malformedRun, 'missing-choice')).toMatchObject({
+            run: malformedRun,
+            applied: false,
+            reason: 'missing_choice'
+        });
+    });
+
     it('applies safe, greed, and mystery outcomes from playable fixtures', () => {
         const safeRun = createPlayablePathFixture('floorClearWithRouteChoices').run!;
         const safeChoice = safeRun.lastLevelResult!.routeChoices!.find((choice) => choice.routeType === 'safe')!;

@@ -14,7 +14,8 @@ import {
     ROUTE_GREED_SCORE_REWARD,
     ROUTE_GREED_SHOP_GOLD_REWARD,
     ROUTE_MYSTERY_SHOP_GOLD_REWARD,
-    getRouteChoiceAvailability
+    getRouteChoiceAvailability,
+    routeChoicesForResult
 } from './route-choice-rules';
 import { createRouteCardPlan } from './route-card-plan-rules';
 import {
@@ -36,7 +37,7 @@ export interface RouteChoiceOutcomeResult {
 const withSelectedDungeonRoute = (
     run: RunState,
     choiceId: string,
-    routeChoices: readonly RouteChoice[] = run.lastLevelResult?.routeChoices ?? []
+    routeChoices: readonly RouteChoice[] = routeChoicesForResult(run.lastLevelResult)
 ): RunState => {
     const selected = selectDungeonNode(getRunDungeonMapState(run), choiceId);
     if (selected.selectedNodeId === choiceId || routeChoices.length === 0) {
@@ -153,7 +154,7 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
     if (run.status !== 'levelComplete' || nonNegativeRouteCount(run.lives) <= 0) {
         return { run, applied: false, reason: 'invalid_status' };
     }
-    const routeChoices = run.lastLevelResult?.routeChoices ?? [];
+    const routeChoices = routeChoicesForResult(run.lastLevelResult);
     const choice: RouteChoice | undefined = routeChoices.find((item) => item.id === choiceId);
     if (!choice) {
         return { run, applied: false, reason: 'missing_choice' };
