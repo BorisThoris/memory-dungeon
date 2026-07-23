@@ -4,6 +4,7 @@ import {
     hashStringToSeed,
     shuffleWithRng
 } from './rng';
+import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
 const tileIsSafeHazardEffectTarget = (tile: Tile): boolean =>
@@ -17,9 +18,6 @@ const tileIsSafeHazardEffectTarget = (tile: Tile): boolean =>
 
 const sourceTilesHaveStasisWard = (sourceTiles: readonly Tile[]): boolean =>
     sourceTiles.some((tile) => tile.tileTraitKind === 'stasis');
-
-const nonNegativeHazardEffectCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const applyShuffleSnareHazard = (board: BoardState, run: RunState): { board: BoardState; triggered: boolean } => {
     const hiddenEntries: { index: number; tile: Tile }[] = [];
@@ -125,7 +123,7 @@ export const applySafeHazardWardMismatch = (
     wardChargeSpent: boolean;
     traitWardUsed: boolean;
 } => {
-    const hasWardCharge = nonNegativeHazardEffectCount(run.safeHazardWardChargesThisFloor) > 0;
+    const hasWardCharge = runNonNegativeInteger(run.safeHazardWardChargesThisFloor) > 0;
     const hasStasisWard = !hasWardCharge && sourceTilesHaveStasisWard(sourceTiles);
     const canWardHazard = hasWardCharge || hasStasisWard;
     const blocksSnare = canWardHazard && mismatchHazards.has('shuffle_snare');

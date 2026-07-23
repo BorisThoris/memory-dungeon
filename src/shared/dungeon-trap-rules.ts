@@ -1,5 +1,6 @@
 import type { BoardState, RunState, Tile } from './contracts';
 import { revealOneHiddenDungeonHazardPair } from './dungeon-enemy-card-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export const DUNGEON_TRAP_SCORE_PENALTY = 10;
@@ -12,9 +13,6 @@ export interface SpringArmedDungeonTrapsResult {
     run: RunState;
 }
 
-const nonNegativeTrapCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 export const springArmedDungeonTraps = (
     run: RunState,
     board: BoardState,
@@ -25,9 +23,9 @@ export const springArmedDungeonTraps = (
         return { run, board, alarmTriggered: false, enemyWoken: false };
     }
     const stats = normalizeSessionStats(run.stats);
-    let lives = nonNegativeTrapCount(run.lives);
+    let lives = runNonNegativeInteger(run.lives);
     let guardTokens = stats.guardTokens;
-    let shopGold = nonNegativeTrapCount(run.shopGold);
+    let shopGold = runNonNegativeInteger(run.shopGold);
     let triggered = 0;
     let alarmTriggered = false;
     let snareDisablesShuffle = false;
@@ -75,7 +73,7 @@ export const springArmedDungeonTraps = (
     );
     const nextBoard: BoardState = {
         ...board,
-        matchedPairs: Math.min(nonNegativeTrapCount(board.pairCount), nonNegativeTrapCount(board.matchedPairs) + triggered),
+        matchedPairs: Math.min(runNonNegativeInteger(board.pairCount), runNonNegativeInteger(board.matchedPairs) + triggered),
         tiles: board.tiles.map((candidate) =>
             keys.includes(candidate.pairKey) && candidate.dungeonCardKind === 'trap'
                 ? { ...candidate, dungeonCardState: 'resolved' as const, state: 'flipped' as const }
@@ -98,8 +96,8 @@ export const springArmedDungeonTraps = (
             freeShuffleThisFloor: snareDisablesShuffle ? false : run.freeShuffleThisFloor,
             regionShuffleFreeThisFloor: snareDisablesShuffle ? false : run.regionShuffleFreeThisFloor,
             shopGold,
-            dungeonTrapsTriggered: nonNegativeTrapCount(run.dungeonTrapsTriggered) + triggered,
-            dungeonTrapsResolvedThisFloor: nonNegativeTrapCount(run.dungeonTrapsResolvedThisFloor) + triggered,
+            dungeonTrapsTriggered: runNonNegativeInteger(run.dungeonTrapsTriggered) + triggered,
+            dungeonTrapsResolvedThisFloor: runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor) + triggered,
             stats: {
                 ...stats,
                 totalScore: Math.max(0, stats.totalScore - scorePenalty),
