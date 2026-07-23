@@ -9,6 +9,7 @@ import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { defeatEnemyHazardsForFloorClear } from './dungeon-enemy-hazard-rules';
 import { gainRelicFavor } from './relic-favor-rules';
 import { createRouteCardPlanForRoute } from './route-card-plan-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import {
     EXIT_PAIR_KEY,
@@ -17,9 +18,6 @@ import {
 
 export const DUNGEON_OBJECTIVE_SCORE_REWARD = 35;
 export const DUNGEON_OBJECTIVE_FAVOR_REWARD = 1;
-
-const nonNegativeDungeonExitCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export type DungeonExitActivationSpend = 'none' | 'key' | 'master_key';
 
@@ -177,18 +175,18 @@ export const createDungeonExitActivationTransition = (
             ...objectiveReward.run,
             dungeonKeys: nextKeys,
             dungeonMasterKeys: activationSpend.spendsMasterKey
-                ? Math.max(0, nonNegativeDungeonExitCount(run.dungeonMasterKeys) - 1)
-                : nonNegativeDungeonExitCount(run.dungeonMasterKeys),
+                ? Math.max(0, runNonNegativeInteger(run.dungeonMasterKeys) - 1)
+                : runNonNegativeInteger(run.dungeonMasterKeys),
             dungeonEnemiesDefeated:
-                nonNegativeDungeonExitCount(objectiveReward.run.dungeonEnemiesDefeated) +
+                runNonNegativeInteger(objectiveReward.run.dungeonEnemiesDefeated) +
                 floorClearHazards.bossesDefeated,
             dungeonEnemiesDefeatedThisFloor:
-                nonNegativeDungeonExitCount(objectiveReward.run.dungeonEnemiesDefeatedThisFloor) +
+                runNonNegativeInteger(objectiveReward.run.dungeonEnemiesDefeatedThisFloor) +
                 floorClearHazards.bossesDefeated,
             enemyHazardsDefeatedThisFloor:
-                nonNegativeDungeonExitCount(objectiveReward.run.enemyHazardsDefeatedThisFloor) +
+                runNonNegativeInteger(objectiveReward.run.enemyHazardsDefeatedThisFloor) +
                 floorClearHazards.defeated,
-            dungeonGatewaysUsed: nonNegativeDungeonExitCount(run.dungeonGatewaysUsed) + 1,
+            dungeonGatewaysUsed: runNonNegativeInteger(run.dungeonGatewaysUsed) + 1,
             pendingRouteCardPlan:
                 run.pendingRouteCardPlan == null && routeType
                     ? createRouteCardPlanForRoute(
