@@ -189,6 +189,35 @@ describe('runResolutionController', () => {
         );
     });
 
+    it('normalizes malformed summary arrays before run completion telemetry', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+        const harness = createHarness(baseRun);
+        const gameOverRun: RunState = {
+            ...baseRun,
+            achievementsEnabled: false,
+            activeMutators: { length: 3 },
+            relicIds: { length: 2 },
+            lives: 0,
+            status: 'gameOver',
+            stats: {
+                ...baseRun.stats,
+                bestScore: 200,
+                highestLevel: 2,
+                totalScore: 200
+            }
+        } as unknown as RunState;
+
+        harness.controller.applyResolvedRun(gameOverRun);
+
+        expect(telemetryMocks.trackEvent).toHaveBeenCalledWith(
+            'run_complete',
+            expect.objectContaining({
+                mutatorCount: 0,
+                relicCount: 0
+            })
+        );
+    });
+
     it('sets the achievement bridge notice when unlock persistence reports failures', async () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
         const harness = createHarness(baseRun);

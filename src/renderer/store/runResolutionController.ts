@@ -74,6 +74,8 @@ interface RunResolutionController {
     applyResolvedRun: (resolvedRun: RunState) => void;
 }
 
+const telemetryArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
+
 export const createRunResolutionController = ({
     getSfxGain,
     getState,
@@ -163,8 +165,8 @@ export const createRunResolutionController = ({
                     practice: nextRun.practiceMode,
                     highestLevel: summary.highestLevel,
                     totalScore: summary.totalScore,
-                    mutatorCount: summary.activeMutators?.length ?? 0,
-                    relicCount: summary.relicIds?.length ?? 0
+                    mutatorCount: telemetryArrayCount(summary.activeMutators),
+                    relicCount: telemetryArrayCount(summary.relicIds)
                 });
             }
 
