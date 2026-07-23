@@ -12,6 +12,7 @@ import {
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { hasMutator } from './mutators';
 import { runRelicIds } from './relics';
+import { runNonNegativeInteger } from './run-number-guards';
 import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
 
 const ECHO_EXTRA_RESOLVE_MS = 380;
@@ -41,7 +42,8 @@ export const getPresentationMutatorMatchPenalty = (run: RunState): number => {
 };
 
 export const getMemorizeDuration = (level: number): number => {
-    const decaySteps = Math.floor(Math.max(level - 1, 0) / MEMORIZE_DECAY_EVERY_N_LEVELS);
+    const safeLevel = Math.max(1, runNonNegativeInteger(level));
+    const decaySteps = Math.floor((safeLevel - 1) / MEMORIZE_DECAY_EVERY_N_LEVELS);
     return Math.max(MEMORIZE_MIN_MS, MEMORIZE_BASE_MS - MEMORIZE_STEP_MS * decaySteps);
 };
 
@@ -130,6 +132,6 @@ export const computeFlipResolveDelayMs = (
 };
 
 export const calculateLevelClearBonus = (level: number): number =>
-    50 * (typeof level === 'number' && Number.isFinite(level) ? Math.max(0, Math.floor(level)) : 0);
+    50 * runNonNegativeInteger(level);
 
 export const calculatePerfectClearBonus = (): number => 25;

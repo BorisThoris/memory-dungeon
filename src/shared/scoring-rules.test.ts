@@ -16,8 +16,11 @@ import {
 describe('scoring-rules', () => {
     it('calculates memorize duration and run modifiers', () => {
         expect(getMemorizeDuration(1)).toBe(1300);
+        expect(getMemorizeDuration(1.9)).toBe(1300);
         expect(getMemorizeDuration(3)).toBe(1250);
         expect(getMemorizeDuration(29)).toBe(600);
+        expect(getMemorizeDuration(Number.NaN)).toBe(1300);
+        expect(getMemorizeDuration(Number.POSITIVE_INFINITY)).toBe(1300);
 
         const short = createNewRun(0, { activeMutators: ['short_memorize'] });
         expect(getMemorizeDurationForRun(short, 1)).toBe(950);
@@ -61,8 +64,10 @@ describe('scoring-rules', () => {
         expect(calculateRating(1)).toBe('S');
         expect(calculateRating(9)).toBe('F');
         expect(calculateMatchScore(2, 3, 1.5)).toBe(82);
+        expect(calculateLevelClearBonus(4.9)).toBe(200);
         expect(calculateLevelClearBonus(4)).toBe(200);
         expect(calculateLevelClearBonus(Number.NaN)).toBe(0);
+        expect(calculateLevelClearBonus(Number.POSITIVE_INFINITY)).toBe(0);
         expect(calculatePerfectClearBonus()).toBe(25);
     });
 
