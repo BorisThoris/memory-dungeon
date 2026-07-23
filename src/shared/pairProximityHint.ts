@@ -1,14 +1,15 @@
 import type { BoardState, Tile } from './contracts';
+import { getSafeBoardColumns } from './board-grid-dimensions';
 import { DECOY_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './turn-resolution';
 
-const safeBoardColumns = (board: BoardState): number =>
-    typeof board.columns === 'number' && Number.isFinite(board.columns) ? Math.max(1, Math.floor(board.columns)) : 1;
-
-const indexToPos = (board: BoardState, index: number): { col: number; row: number } => ({
-    row: Math.floor(index / safeBoardColumns(board)),
-    col: index % safeBoardColumns(board)
-});
+const indexToPos = (board: BoardState, index: number): { col: number; row: number } => {
+    const columns = getSafeBoardColumns(board);
+    return {
+        row: Math.floor(index / columns),
+        col: index % columns
+    };
+};
 
 const manhattan = (a: { col: number; row: number }, b: { col: number; row: number }): number =>
     Math.abs(a.row - b.row) + Math.abs(a.col - b.col);

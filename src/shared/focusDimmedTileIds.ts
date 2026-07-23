@@ -1,12 +1,5 @@
 import type { BoardState, RunStatus } from './contracts';
-
-const safeBoardColumns = (board: BoardState): number =>
-    typeof board.columns === 'number' && Number.isFinite(board.columns) ? Math.max(1, Math.floor(board.columns)) : 1;
-
-const safeBoardRows = (board: BoardState, columns: number): number =>
-    typeof board.rows === 'number' && Number.isFinite(board.rows)
-        ? Math.max(1, Math.floor(board.rows))
-        : Math.max(1, Math.ceil(board.tiles.length / columns));
+import { getSafeBoardColumns, getSafeBoardRows } from './board-grid-dimensions';
 
 /**
  * Hidden tiles to dim when focus-assist is on and exactly one tile is flipped (orthogonal neighbors + open stay bright).
@@ -30,8 +23,8 @@ export const computeFocusDimmedTileIds = (
     if (board.tiles[idx]?.state !== 'flipped') {
         return undefined;
     }
-    const c = safeBoardColumns(board);
-    const rows = safeBoardRows(board, c);
+    const c = getSafeBoardColumns(board);
+    const rows = getSafeBoardRows(board, c);
     const row = Math.floor(idx / c);
     const col = idx % c;
     const neighborIdx: number[] = [];
