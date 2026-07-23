@@ -718,11 +718,7 @@ const buildMatchScorePopPayoffLadder = ({
 
 const matchScorePopLaneCount = (payoffLaneMap: readonly MatchScorePopPayoffLaneMapEntry[] | undefined): number =>
     Array.isArray(payoffLaneMap)
-        ? payoffLaneMap.reduce(
-              (total, lane) =>
-                  total + (typeof lane.count === 'number' && Number.isFinite(lane.count) ? Math.max(0, Math.floor(lane.count)) : 0),
-              0
-          )
+        ? payoffLaneMap.reduce((total, lane) => total + runNonNegativeInteger(lane.count), 0)
         : 0;
 
 export const buildMatchScorePopCrescendo = ({
@@ -980,8 +976,8 @@ export function buildMismatchScorePopPayload(
         tileIdC ? [tileIdA, tileIdB, tileIdC] : [tileIdA, tileIdB],
         'mismatch'
     );
-    const previousStreak = Number.isFinite(run.stats.currentStreak) ? Math.floor(run.stats.currentStreak) : 0;
-    const nextStreak = Number.isFinite(next.stats.currentStreak) ? Math.floor(next.stats.currentStreak) : 0;
+    const previousStreak = runNonNegativeInteger(run.stats.currentStreak);
+    const nextStreak = runNonNegativeInteger(next.stats.currentStreak);
     const brokenChainDepth = previousStreak > 1 && nextStreak < previousStreak ? previousStreak : 0;
     const payload: MismatchScorePop = { tileIdA, tileIdB, key };
     if (tileIdC !== undefined) {

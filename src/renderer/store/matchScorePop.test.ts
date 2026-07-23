@@ -1132,6 +1132,27 @@ describe('buildMismatchScorePopPayload', () => {
         });
     });
 
+    it('normalizes malformed mismatch streak counters before broken-chain copy', () => {
+        const run = minimalRun({
+            board: {
+                level: 2,
+                flippedTileIds: ['x', 'y'],
+                tiles: []
+            } as unknown as BoardState,
+            stats: { mismatches: 1, currentStreak: Number.POSITIVE_INFINITY } as RunState['stats']
+        });
+        const next = {
+            ...run,
+            stats: { ...run.stats, mismatches: 2, currentStreak: Number.NaN }
+        };
+
+        expect(buildMismatchScorePopPayload(run, next, 'malformed-break')).toEqual({
+            tileIdA: 'x',
+            tileIdB: 'y',
+            key: 'miss-2-malformed-break-x-y'
+        });
+    });
+
     it('gambit triple miss includes tileIdC and extended key', () => {
         const run = minimalRun({
             board: {
