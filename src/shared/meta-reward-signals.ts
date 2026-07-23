@@ -94,6 +94,9 @@ const metaRowBoardMoment = (row: ReturnType<typeof getMetaProgressionBoard>['row
     return row.gameplayAffecting ? 'Changes a future board decision' : 'Archive identity reward';
 };
 
+const metaDisplayInteger = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const getMetaProgressionRunImpactRows = (save: SaveData): MetaProgressionRunImpactRow[] => {
     const board = getMetaProgressionBoard(save);
     return board.rows.slice(0, 6).map((row) => {
@@ -160,13 +163,15 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
     const relicCount = runRelicIds(run.relicIds).length;
     const mutatorCount = runMutatorIds(run.activeMutators).length;
     const stats = normalizeSessionStats(run.stats);
+    const lives = metaDisplayInteger(run.lives);
+    const shopGold = metaDisplayInteger(run.shopGold);
     return [
         {
             id: 'inventory_build_value',
             screen: 'inventory',
             kind: relicCount > 0 ? 'discovery' : 'next_goal',
             title: relicCount > 0 ? `${relicCount} relic(s) shaping this build` : 'First relic still ahead',
-            body: `${mutatorCount} active mutator(s) | ${run.shopGold} shop gold | ${stats.comboShards} shard(s).`,
+            body: `${mutatorCount} active mutator(s) | ${shopGold} shop gold | ${stats.comboShards} shard(s).`,
             cta: relicCount > 0 ? 'Use this snapshot to plan the next floor.' : 'Clear milestone floors to draft relics.'
         },
         {
@@ -174,7 +179,7 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
             screen: 'inventory',
             kind: 'progress',
             title: `Floor ${run.board?.level ?? stats.highestLevel}`,
-            body: `${stats.totalScore.toLocaleString()} score | ${run.lives} life/lives remaining.`,
+            body: `${stats.totalScore.toLocaleString()} score | ${lives} life/lives remaining.`,
             cta: run.achievementsEnabled ? 'Achievements remain eligible.' : 'Practice/debug state: achievements disabled.'
         }
     ];

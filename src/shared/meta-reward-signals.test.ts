@@ -5,6 +5,7 @@ import {
     getCodexRewardSignal,
     getCollectionRewardSignal,
     getInventoryRewardSignal,
+    getInventoryRewardSignals,
     getMetaProgressionRunImpactRows
 } from './meta-reward-signals';
 import { createDefaultSaveData } from './save-data';
@@ -44,12 +45,22 @@ describe('REG-011 meta reward signals', () => {
     });
 
     it('normalizes malformed inventory stats before building copy', () => {
-        const inventory = getInventoryRewardSignal({
+        const run = {
             ...createNewRun(0),
+            lives: Number.POSITIVE_INFINITY,
+            shopGold: Number.NaN,
             stats: Number.NaN as unknown as RunState['stats']
-        });
+        };
 
-        expect(inventory.body).toContain('0 shard(s)');
+        const [buildValue, runProgress] = getInventoryRewardSignals(run);
+        if (!buildValue || !runProgress) {
+            throw new Error('Expected inventory build and run progress reward signals');
+        }
+
+        expect(buildValue.body).toContain('0 shop gold');
+        expect(buildValue.body).toContain('0 shard(s)');
+        expect(runProgress.body).toContain('0 life/lives remaining');
+        expect(`${buildValue.body} ${runProgress.body}`).not.toMatch(/NaN|Infinity/);
     });
 
     it('translates permanent profile unlocks into next-run impact rows', () => {
