@@ -12,14 +12,13 @@ import type { BoardState } from './contracts';
 import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { getDungeonMatchReward, type DungeonMatchReward } from './dungeon-match-reward-rules';
 import { getRouteCardReward, type RouteCardReward } from './route-card-reward-rules';
+import { runStringArray } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import { isWildPairKey } from './tile-identity';
 
 const nonNegativeMatchClaimCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const matchClaimTileIds = (value: unknown): string[] => Array.isArray(value) ? value : [];
 
 export interface MatchClaimContext {
     anchorSealClaimed: boolean;
@@ -113,8 +112,8 @@ export const deriveMatchClaimContext = ({
         pinLatticeRewarded:
             claimedRouteCardKind === 'pin_lattice' &&
             run.pinLatticeRewardsThisFloor < 1 &&
-            matchClaimTileIds(run.pinnedTileIds).includes(firstTileId) &&
-            matchClaimTileIds(run.pinnedTileIds).includes(secondTileId),
+            runStringArray(run.pinnedTileIds).includes(firstTileId) &&
+            runStringArray(run.pinnedTileIds).includes(secondTileId),
         routeCardReward,
         usedWild: isWildPairKey(firstTile.pairKey) || isWildPairKey(secondTile.pairKey)
     };

@@ -4,11 +4,10 @@ import {
     type RunState
 } from './contracts';
 import { runRelicIds } from './relics';
+import { runStringArray } from './run-array-guards';
 
 const nonNegativePowerStateCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const powerStateTileIds = (value: unknown): string[] => Array.isArray(value) ? value : [];
 
 const hasRelic = (run: RunState, relicId: RelicId): boolean =>
     runRelicIds(run.relicIds).includes(relicId);
@@ -29,7 +28,7 @@ export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
         return run;
     }
 
-    const currentPinnedTileIds = powerStateTileIds(run.pinnedTileIds);
+    const currentPinnedTileIds = runStringArray(run.pinnedTileIds);
     const isPinned = currentPinnedTileIds.includes(tileId);
     let pinnedTileIds: string[];
 
