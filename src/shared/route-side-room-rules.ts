@@ -11,6 +11,7 @@ import {
 import { createRestShrineServices } from './rest-shrine';
 import { applyRunEventChoice, rollRunEventRoom } from './run-events';
 import { getRunInventoryItemPayoutRows } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getTraitOpportunitySummary } from './trait-opportunities';
 
 const BONUS_REWARD_NEXT_CUES = {
@@ -28,9 +29,6 @@ const BONUS_REWARD_NEXT_CUES = {
     stasis_lockbox: 'Route Stasis clusters with swap and guard buffer.',
     hazard_banisher: 'Check the first board beat; hazard pressure should already be reduced.'
 } as const;
-
-const nonNegativeRouteSideRoomCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const bonusRewardPerks = (value: unknown): NonNullable<BonusRewardPayout['rewardPerks']> =>
     Array.isArray(value)
@@ -85,7 +83,7 @@ const bonusRewardChoiceImpact = (
         option.payout.relicFavorProgress,
         option.payout.score,
         getRunInventoryItemPayoutRows(option.payout.inventoryItems).filter(({ amount }) => amount > 0).length
-    ].filter((value) => nonNegativeRouteSideRoomCount(value) > 0).length;
+    ].filter((value) => runNonNegativeInteger(value) > 0).length;
     return {
         rewardImpactBeats: resourceLaneCount > 1 ? 4 : 2,
         rewardImpactCue: resourceLaneCount > 1 ? 'Reward burst' : 'Resource',

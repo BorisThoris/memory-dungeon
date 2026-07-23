@@ -17,6 +17,7 @@ import {
     ROUTE_CARD_GREED_SHOP_GOLD_REWARD,
     ROUTE_CARD_MYSTERY_SHOP_GOLD_REWARD
 } from './route-choice-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 type MysteryRouteCardOutcome = 'shop_gold' | 'combo_shard' | 'relic_favor';
@@ -38,9 +39,6 @@ export const emptyRouteCardReward = (): RouteCardReward => ({
     comboShards: 0,
     relicFavor: 0
 });
-
-const nonNegativeRouteCardRewardCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const mysteryRouteCardOutcomeFor = (run: RunState, level: number, pairKey: string): MysteryRouteCardOutcome => {
     const outcomes: MysteryRouteCardOutcome[] = ['shop_gold', 'combo_shard', 'relic_favor'];
@@ -148,7 +146,7 @@ export const getRouteCardReward = (
         };
     }
     if (kind === 'parasite_vessel') {
-        return nonNegativeRouteCardRewardCount(run.parasiteFloors) > 0
+        return runNonNegativeInteger(run.parasiteFloors) > 0
             ? {
                   ...emptyRouteCardReward(),
                   relicFavor: 1

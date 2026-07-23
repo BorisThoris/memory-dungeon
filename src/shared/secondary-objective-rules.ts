@@ -13,6 +13,7 @@ import {
 } from './contracts';
 import { usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { runRelicIds } from './relics';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number> = {
     scholar_style: SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
@@ -25,9 +26,6 @@ export const getFeaturedObjectiveBonusScore = (id: FeaturedObjectiveId): number 
     FEATURED_OBJECTIVE_BONUS_SCORES[id];
 
 export const getFlipParLimit = (pairCount: number): number => Math.ceil(pairCount * 1.25) + 2;
-
-const nonNegativeObjectiveCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
     runRelicIds(run.relicIds).includes(relicId);
@@ -45,7 +43,7 @@ export const isFeaturedObjectiveCompleted = (
         case 'cursed_last':
             return Boolean(board.cursedPairKey) && !run.cursedMatchedEarlyThisFloor;
         case 'flip_par':
-            return board.pairCount >= 2 && nonNegativeObjectiveCount(run.matchResolutionsThisFloor) <= getFlipParLimit(board.pairCount);
+            return board.pairCount >= 2 && runNonNegativeInteger(run.matchResolutionsThisFloor) <= getFlipParLimit(board.pairCount);
         default:
             return false;
     }
@@ -75,7 +73,7 @@ export const getDefaultClearObjectiveBonus = (
         bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.cursed_last;
         bonusTags.push('cursed_last');
     }
-    if (board.pairCount >= 2 && nonNegativeObjectiveCount(run.matchResolutionsThisFloor) <= getFlipParLimit(board.pairCount)) {
+    if (board.pairCount >= 2 && runNonNegativeInteger(run.matchResolutionsThisFloor) <= getFlipParLimit(board.pairCount)) {
         bonusScore += FEATURED_OBJECTIVE_BONUS_SCORES.flip_par;
         bonusTags.push('flip_par');
     }
@@ -114,7 +112,7 @@ export const getFeaturedObjectiveClearResult = ({
     const endlessRiskWagerOutcome =
         activeEndlessRiskWager != null ? (completed ? 'won' as const : 'lost' as const) : undefined;
     const hasWagerSurety = hasRunRelic(run, 'wager_surety');
-    const previousFeaturedObjectiveStreak = nonNegativeObjectiveCount(run.featuredObjectiveStreak);
+    const previousFeaturedObjectiveStreak = runNonNegativeInteger(run.featuredObjectiveStreak);
     const featuredObjectiveStreak =
         objectiveId != null
             ? completed
@@ -127,7 +125,7 @@ export const getFeaturedObjectiveClearResult = ({
             : previousFeaturedObjectiveStreak;
     const endlessRiskWagerStreakLost =
         activeEndlessRiskWager != null && !completed
-            ? Math.max(0, nonNegativeObjectiveCount(activeEndlessRiskWager.streakAtRisk) - featuredObjectiveStreak)
+            ? Math.max(0, runNonNegativeInteger(activeEndlessRiskWager.streakAtRisk) - featuredObjectiveStreak)
             : undefined;
     const featuredObjectiveStreakBonus =
         objectiveId != null && completed
@@ -139,7 +137,7 @@ export const getFeaturedObjectiveClearResult = ({
     const relicFavorGained = objectiveId != null && completed ? (board.floorTag === 'boss' ? 2 : 1) : 0;
     const endlessRiskWagerFavorGained =
         completed && activeEndlessRiskWager
-            ? nonNegativeObjectiveCount(activeEndlessRiskWager.bonusFavorOnSuccess) + (hasWagerSurety ? 1 : 0)
+            ? runNonNegativeInteger(activeEndlessRiskWager.bonusFavorOnSuccess) + (hasWagerSurety ? 1 : 0)
             : 0;
 
     return {

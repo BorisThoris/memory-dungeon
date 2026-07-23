@@ -1,6 +1,7 @@
 import type { BoardState, FeaturedObjectiveId, LevelResult, RunState } from './contracts';
 import { getFeaturedObjectiveLabel } from './floor-mutator-schedule';
 import { runArrayCount } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getFeaturedObjectiveRewardCopy, getFlipParLimit } from './secondary-objective-rules';
 import { getTraitRouteObjectiveStatus } from './trait-route-objectives';
 
@@ -140,21 +141,18 @@ const uniqueTags = <Tag extends string>(tags: readonly Tag[]): Tag[] => [...new 
 const isLevelResultTagId = (value: string): value is LevelResultTagId =>
     Object.prototype.hasOwnProperty.call(LEVEL_RESULT_TAG_DEFINITIONS, value);
 
-const nonNegativeSecondaryObjectiveCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 export const getDungeonLevelResultTags = (run: RunState, board: BoardState, perfect: boolean): LevelResultTagId[] => {
     const tags: LevelResultTagId[] = [];
-    if (board.floorTag === 'boss' && nonNegativeSecondaryObjectiveCount(run.dungeonEnemiesDefeatedThisFloor) > 0) {
+    if (board.floorTag === 'boss' && runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) > 0) {
         tags.push('boss_defeated');
     }
-    if (nonNegativeSecondaryObjectiveCount(run.dungeonTrapsResolvedThisFloor) > 0) {
+    if (runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor) > 0) {
         tags.push('traps_disarmed');
     }
-    if (nonNegativeSecondaryObjectiveCount(run.dungeonTreasuresOpenedThisFloor) > 0) {
+    if (runNonNegativeInteger(run.dungeonTreasuresOpenedThisFloor) > 0) {
         tags.push('treasure_claimed');
     }
-    if (nonNegativeSecondaryObjectiveCount(run.dungeonGatewaysUsedThisFloor) > 0 || board.selectedGatewayRouteType != null) {
+    if (runNonNegativeInteger(run.dungeonGatewaysUsedThisFloor) > 0 || board.selectedGatewayRouteType != null) {
         tags.push('route_claimed');
     }
     if (
@@ -230,7 +228,7 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
             break;
         case 'flip_par': {
             const limit = getFlipParLimit(board.pairCount);
-            const matchResolutionsThisFloor = nonNegativeSecondaryObjectiveCount(run.matchResolutionsThisFloor);
+            const matchResolutionsThisFloor = runNonNegativeInteger(run.matchResolutionsThisFloor);
             state = matchResolutionsThisFloor > limit ? 'failed' : 'active';
             condition = `Stay within match-resolution par (${matchResolutionsThisFloor}/${limit}).`;
             failureReason = state === 'failed' ? `Match-resolution par exceeded (${matchResolutionsThisFloor}/${limit}).` : null;
