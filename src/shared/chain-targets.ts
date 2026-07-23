@@ -1,3 +1,5 @@
+import { runNonNegativeInteger } from './run-number-guards';
+
 export type ChainTargetBand = 'seed' | 'reward' | 'combo' | 'mastery';
 
 export interface ChainTargetFeedback {
@@ -10,11 +12,8 @@ export interface ChainTargetFeedback {
     payoffValue: string;
 }
 
-const nonNegativeChainCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 export const getChainTargetFeedback = (bestStreakInput: number | null | undefined): ChainTargetFeedback => {
-    const bestStreak = nonNegativeChainCount(bestStreakInput);
+    const bestStreak = runNonNegativeInteger(bestStreakInput);
     if (bestStreak >= 10) {
         return {
             band: 'mastery',

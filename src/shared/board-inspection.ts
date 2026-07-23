@@ -15,6 +15,7 @@ import {
     isSingletonUtilityPairKey
 } from './tile-identity';
 import { getFloorHeldDungeonKeyCount } from './dungeon-key-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 
 /** When the board includes a wild joker, returns its tile id; otherwise null. */
 export const getWildTileIdFromBoard = (board: BoardState): string | null =>
@@ -22,9 +23,6 @@ export const getWildTileIdFromBoard = (board: BoardState): string | null =>
 
 export const boardHasGlassDecoy = (board: BoardState): boolean =>
     board.tiles.some((tile) => tile.pairKey === DECOY_PAIR_KEY && tile.tileHazardKind !== 'mirror_decoy');
-
-const nonNegativeBoardInspectionCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 /** Pairs where both tiles are still hidden (eligible for shuffle / destroy targeting). */
 export const countFullyHiddenPairs = (board: BoardState): number => {
@@ -148,7 +146,7 @@ const countUnclearedDungeonPairs = (tiles: readonly Tile[], predicate: (tile: Ti
 };
 
 export const countReachableExitLeverSources = (board: BoardState): number =>
-    nonNegativeBoardInspectionCount(board.dungeonLeverCount) +
+    runNonNegativeInteger(board.dungeonLeverCount) +
     countUnclearedDungeonPairs(
         board.tiles,
         (tile) => tile.dungeonCardKind === 'lever' && tile.dungeonCardEffectId === 'lever_floor'
@@ -210,7 +208,7 @@ export const getEffectivePrimaryExitLock = ({
         ? board.tiles.find((tile) => tile.id === board.dungeonExitTileId) ?? null
         : board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY) ?? null;
     const rawLockKind = primaryExit?.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
-    const rawRequiredLeverCount = nonNegativeBoardInspectionCount(
+    const rawRequiredLeverCount = runNonNegativeInteger(
         primaryExit?.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount
     );
 
@@ -224,8 +222,8 @@ export const getEffectivePrimaryExitLock = ({
     }
 
     const hasRunKey =
-        nonNegativeBoardInspectionCount(dungeonKeys[rawLockKind]) > 0 ||
-        nonNegativeBoardInspectionCount(dungeonMasterKeys) > 0;
+        runNonNegativeInteger(dungeonKeys[rawLockKind]) > 0 ||
+        runNonNegativeInteger(dungeonMasterKeys) > 0;
     const hasReachableKeySource = countReachableExitKeySources(board, rawLockKind as DungeonKeyKind) > 0;
     const terminalKeySoftlockFallback =
         !boardHasActionableProgressionPair(board) && !hasRunKey && !hasReachableKeySource;
@@ -250,7 +248,7 @@ export const repairDungeonExitSoftlocks = (
         return board;
     }
     const exitLockKind = primaryExit.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
-    const requiredLeverCount = nonNegativeBoardInspectionCount(
+    const requiredLeverCount = runNonNegativeInteger(
         primaryExit.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount
     );
     let repairedLockKind = exitLockKind;
@@ -267,8 +265,8 @@ export const repairDungeonExitSoftlocks = (
     } else if (exitLockKind !== 'none') {
         const requiredKeyKind = exitLockKind as DungeonKeyKind;
         const hasRunKey =
-            nonNegativeBoardInspectionCount(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
-            nonNegativeBoardInspectionCount(options.dungeonMasterKeys) > 0;
+            runNonNegativeInteger(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
+            runNonNegativeInteger(options.dungeonMasterKeys) > 0;
         const pendingFallback =
             options.preservePendingKeyFallback === true && boardHasActionableProgressionPair(board);
         if (!hasRunKey && countReachableExitKeySources(board, requiredKeyKind) < 1 && !pendingFallback) {
@@ -436,7 +434,7 @@ export const inspectBoardFairness = (
     });
     const exitLockKind = effectivePrimaryExitLock.lockKind;
     const requiredLeverCount = effectivePrimaryExitLock.requiredLeverCount;
-    if (exitLockKind === 'lever' && nonNegativeBoardInspectionCount(board.dungeonLeverCount) < requiredLeverCount) {
+    if (exitLockKind === 'lever' && runNonNegativeInteger(board.dungeonLeverCount) < requiredLeverCount) {
         const reachableLevers = countReachableExitLeverSources(board);
         if (reachableLevers < requiredLeverCount) {
             structurallyClearable = false;
@@ -451,8 +449,8 @@ export const inspectBoardFairness = (
     if (exitLockKind !== 'none' && exitLockKind !== 'lever') {
         const requiredKeyKind = exitLockKind as DungeonKeyKind;
         const hasRunKey =
-            nonNegativeBoardInspectionCount(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
-            nonNegativeBoardInspectionCount(options.dungeonMasterKeys) > 0;
+            runNonNegativeInteger(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
+            runNonNegativeInteger(options.dungeonMasterKeys) > 0;
         if (
             !hasRunKey &&
             countReachableExitKeySources(board, requiredKeyKind) < 1 &&
@@ -604,12 +602,12 @@ export const inspectBoardFairness = (
             return true;
         }
         if (effectivePrimaryExitLock.lockKind === 'lever') {
-            return nonNegativeBoardInspectionCount(board.dungeonLeverCount) >= effectivePrimaryExitLock.requiredLeverCount;
+            return runNonNegativeInteger(board.dungeonLeverCount) >= effectivePrimaryExitLock.requiredLeverCount;
         }
         const requiredKeyKind = effectivePrimaryExitLock.lockKind as DungeonKeyKind;
         return (
-            nonNegativeBoardInspectionCount(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
-            nonNegativeBoardInspectionCount(options.dungeonMasterKeys) > 0 ||
+            runNonNegativeInteger(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
+            runNonNegativeInteger(options.dungeonMasterKeys) > 0 ||
             countReachableExitKeySources(board, requiredKeyKind) > 0
         );
     })();
