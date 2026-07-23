@@ -4,6 +4,7 @@ import { getRunBuildProfile, runMutatorIds, runRelicIds } from './relics';
 import { runArrayCount } from './run-array-guards';
 import { getDungeonKeyTotal } from './run-inventory';
 import { getRepairedSelectedDungeonNode, repairDungeonRunMapProgression } from './run-map';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunHistoryPersistence = 'persisted_summary' | 'ephemeral_run' | 'derived_export';
@@ -51,9 +52,6 @@ export interface RunHistoryEntry {
 
 export const MAX_DUNGEON_JOURNAL_ROWS = 8;
 
-const nonNegativeRunHistoryCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const getRunHistoryBuildProfile = (run: RunState) => getRunBuildProfile({ relicIds: runRelicIds(run.relicIds) });
 
 const getPersistedSummaryPayoffStack = (
@@ -62,15 +60,15 @@ const getPersistedSummaryPayoffStack = (
     if (!summary) {
         return null;
     }
-    const bestStreak = nonNegativeRunHistoryCount(summary.bestStreak);
+    const bestStreak = runNonNegativeInteger(summary.bestStreak);
     const hasChainPayoff = bestStreak >= 4;
     const hasComboPayoff = bestStreak >= 10;
     const payoffLanes = [
         hasChainPayoff,
         summary.payoffRoutePaid === true,
-        nonNegativeRunHistoryCount(summary.payoffPickupTotal) > 0,
-        nonNegativeRunHistoryCount(summary.perfectClears) > 0,
-        runRelicIds(summary.relicIds).length + nonNegativeRunHistoryCount(summary.payoffRewardPerkCount) > 0
+        runNonNegativeInteger(summary.payoffPickupTotal) > 0,
+        runNonNegativeInteger(summary.perfectClears) > 0,
+        runRelicIds(summary.relicIds).length + runNonNegativeInteger(summary.payoffRewardPerkCount) > 0
     ].filter(Boolean).length;
     if (payoffLanes < 3) {
         return null;
@@ -105,9 +103,9 @@ const idLabel = (id: string | null | undefined): string | null =>
     id ? id.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()) : null;
 
 const summaryScoreCopy = (summary: RunSummary): string => {
-    const totalScore = nonNegativeRunHistoryCount(summary.totalScore);
-    const highestLevel = nonNegativeRunHistoryCount(summary.highestLevel);
-    const levelsCleared = nonNegativeRunHistoryCount(summary.levelsCleared);
+    const totalScore = runNonNegativeInteger(summary.totalScore);
+    const highestLevel = runNonNegativeInteger(summary.highestLevel);
+    const levelsCleared = runNonNegativeInteger(summary.levelsCleared);
     return `${totalScore} score · floor ${highestLevel} · ${levelsCleared} clears`;
 };
 
@@ -144,7 +142,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         run.board?.selectedGatewayRouteType ??
         run.board?.routeWorldProfile?.routeType ??
         null;
-    const keyCount = getDungeonKeyTotal(run.dungeonKeys) + nonNegativeRunHistoryCount(run.dungeonMasterKeys);
+    const keyCount = getDungeonKeyTotal(run.dungeonKeys) + runNonNegativeInteger(run.dungeonMasterKeys);
 
     rows.push({
         id: 'dungeon_node',
@@ -172,12 +170,12 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         });
     }
 
-    if (bossId || nonNegativeRunHistoryCount(run.dungeonEnemiesDefeated) > 0 || run.board?.floorTag === 'boss') {
+    if (bossId || runNonNegativeInteger(run.dungeonEnemiesDefeated) > 0 || run.board?.floorTag === 'boss') {
         rows.push({
             id: 'dungeon_boss',
             label: 'Boss pressure',
             value: bossId ? idLabel(bossId)! : 'No active boss identity',
-            detail: `${nonNegativeRunHistoryCount(run.dungeonEnemiesDefeated)} enemies defeated this run; ${nonNegativeRunHistoryCount(run.dungeonEnemiesDefeatedThisFloor)} this floor.`,
+            detail: `${runNonNegativeInteger(run.dungeonEnemiesDefeated)} enemies defeated this run; ${runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor)} this floor.`,
             persistence: 'derived_export',
             exportSafe: true,
             offlineOnly: true
@@ -199,7 +197,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
             ]
                 .filter(Boolean)
                 .join(' / '),
-            detail: `${nonNegativeRunHistoryCount(run.dungeonTrapsResolvedThisFloor)} traps resolved this floor; ${nonNegativeRunHistoryCount(run.dungeonGatewaysUsed)} gateways used this run.`,
+            detail: `${runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor)} traps resolved this floor; ${runNonNegativeInteger(run.dungeonGatewaysUsed)} gateways used this run.`,
             persistence: 'derived_export',
             exportSafe: true,
             offlineOnly: true
@@ -209,19 +207,19 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
     rows.push({
         id: 'dungeon_rewards',
         label: 'Dungeon rewards',
-        value: `${nonNegativeRunHistoryCount(run.dungeonTreasuresOpened)} treasures, ${keyCount} keys, ${nonNegativeRunHistoryCount(run.shopGold)} shop gold`,
-        detail: `${runRelicIds(run.relicIds).length} relics carried; ${nonNegativeRunHistoryCount(run.bonusRelicPicksNextOffer) + nonNegativeRunHistoryCount(run.favorBonusRelicPicksNextOffer)} bonus relic picks banked.`,
+        value: `${runNonNegativeInteger(run.dungeonTreasuresOpened)} treasures, ${keyCount} keys, ${runNonNegativeInteger(run.shopGold)} shop gold`,
+        detail: `${runRelicIds(run.relicIds).length} relics carried; ${runNonNegativeInteger(run.bonusRelicPicksNextOffer) + runNonNegativeInteger(run.favorBonusRelicPicksNextOffer)} bonus relic picks banked.`,
         persistence: 'derived_export',
         exportSafe: true,
         offlineOnly: true
     });
 
-    if (run.status === 'gameOver' || nonNegativeRunHistoryCount(run.lives) <= 0) {
+    if (run.status === 'gameOver' || runNonNegativeInteger(run.lives) <= 0) {
         rows.push({
             id: 'dungeon_outcome',
             label: 'Run outcome',
-            value: nonNegativeRunHistoryCount(run.lives) <= 0 ? 'Defeated in the dungeon' : 'Run ended',
-            detail: `${nonNegativeRunHistoryCount(run.enemyHazardHitsThisFloor)} enemy hazard hits this floor; ${stats.bestStreak} best streak.`,
+            value: runNonNegativeInteger(run.lives) <= 0 ? 'Defeated in the dungeon' : 'Run ended',
+            detail: `${runNonNegativeInteger(run.enemyHazardHitsThisFloor)} enemy hazard hits this floor; ${stats.bestStreak} best streak.`,
             persistence: 'persisted_summary',
             exportSafe: true,
             offlineOnly: true
@@ -348,7 +346,7 @@ export const buildRunJournalRowsFromSave = (save: SaveData): RunHistoryJournalRo
             id: 'last_summary',
             label: 'Last run summary',
             value: summary
-                ? `${summary.gameMode ?? 'classic'} · ${nonNegativeRunHistoryCount(summary.totalScore)} score · floor ${nonNegativeRunHistoryCount(summary.highestLevel)}`
+                ? `${summary.gameMode ?? 'classic'} · ${runNonNegativeInteger(summary.totalScore)} score · floor ${runNonNegativeInteger(summary.highestLevel)}`
                 : 'No persisted run summary',
             persistence: 'persisted_summary',
             exportSafe: true
@@ -385,8 +383,8 @@ export const buildRunHistoryExportString = (run: RunState): string => {
         .filter((row) => row.id.startsWith('dungeon_') && row.exportSafe)
         .slice(0, 3)
         .map((row) => `${row.label}: ${row.value}`);
-    const highestLevel = nonNegativeRunHistoryCount(summary.highestLevel);
-    const totalScore = nonNegativeRunHistoryCount(summary.totalScore);
+    const highestLevel = runNonNegativeInteger(summary.highestLevel);
+    const totalScore = runNonNegativeInteger(summary.totalScore);
     return [
         `Run ${summary.gameMode ?? 'classic'} floor ${highestLevel}`,
         `${totalScore} local score`,
