@@ -7,6 +7,7 @@
  */
 import { hashPairKey } from '../../shared/hashPairKey';
 import { FEATURE_CARD_RASTER_DECK } from '../../shared/feature-flags';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import type { CardFaceOverlayColors } from './cardFaceOverlayPalette';
 import { drawProceduralTarotIllustrationPanel } from './cardIllustrationDraw';
 import { computeIllustrationPixelRect } from './cardIllustrationRect';
@@ -31,7 +32,7 @@ const paletteSig = (p: CardFaceOverlayColors): string =>
 
 /** Deterministic pair key for library slot `0 .. CARD_RASTER_SLOT_COUNT - 1`. */
 export const rasterDeckPairKeyForSlot = (slot: number): string => {
-    const s = Math.max(0, Math.min(CARD_RASTER_SLOT_COUNT - 1, Math.floor(slot)));
+    const s = Math.min(CARD_RASTER_SLOT_COUNT - 1, runNonNegativeInteger(slot));
     return `__raster-deck-${s.toString().padStart(2, '0')}`;
 };
 

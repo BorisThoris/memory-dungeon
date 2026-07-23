@@ -16,9 +16,12 @@ describe('cardRasterDeck', () => {
     it('uses 30 stable slot pair keys', () => {
         expect(CARD_RASTER_SLOT_COUNT).toBe(30);
         expect(rasterDeckPairKeyForSlot(0)).toBe('__raster-deck-00');
+        expect(rasterDeckPairKeyForSlot(2.9)).toBe('__raster-deck-02');
         expect(rasterDeckPairKeyForSlot(29)).toBe('__raster-deck-29');
         expect(rasterDeckPairKeyForSlot(99)).toBe('__raster-deck-29');
         expect(rasterDeckPairKeyForSlot(-3)).toBe('__raster-deck-00');
+        expect(rasterDeckPairKeyForSlot(Number.NaN)).toBe('__raster-deck-00');
+        expect(rasterDeckPairKeyForSlot(Number.POSITIVE_INFINITY)).toBe('__raster-deck-00');
     });
 
     it('clears panel cache without throwing', () => {
