@@ -12,9 +12,7 @@ import {
     calculateLevelClearBonus,
     calculatePerfectClearBonus
 } from './scoring-rules';
-
-const nonNegativeLevelClearCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+import { runNonNegativeInteger } from './run-number-guards';
 
 export const getClearLifeReason = (tries: number): ClearLifeReason => {
     if (tries === 0) return 'perfect';
@@ -44,11 +42,11 @@ export const applyFloorClearEnemyHazardDefeats = (
         run: {
             ...run,
             dungeonEnemiesDefeated:
-                nonNegativeLevelClearCount(run.dungeonEnemiesDefeated) + floorClearHazards.bossesDefeated,
+                runNonNegativeInteger(run.dungeonEnemiesDefeated) + floorClearHazards.bossesDefeated,
             dungeonEnemiesDefeatedThisFloor:
-                nonNegativeLevelClearCount(run.dungeonEnemiesDefeatedThisFloor) + floorClearHazards.bossesDefeated,
+                runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) + floorClearHazards.bossesDefeated,
             enemyHazardsDefeatedThisFloor:
-                nonNegativeLevelClearCount(run.enemyHazardsDefeatedThisFloor) + floorClearHazards.defeated
+                runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor) + floorClearHazards.defeated
         },
         board: finalizedBoard
     };
@@ -114,9 +112,6 @@ export interface FloorClearScoreResult {
     scoreGained: number;
 }
 
-const nonNegativeFloorScoreTerm = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 export const calculateFloorClearScore = ({
     bossTrophyCacheScore,
     currentLevelScore,
@@ -137,12 +132,12 @@ export const calculateFloorClearScore = ({
     const levelBonus = calculateLevelClearBonus(level);
     const perfectBonus = perfect ? calculatePerfectClearBonus() : 0;
     const preBossSubtotal =
-        nonNegativeFloorScoreTerm(currentLevelScore) +
+        runNonNegativeInteger(currentLevelScore) +
         levelBonus +
         perfectBonus +
-        nonNegativeFloorScoreTerm(objectiveBonus) +
-        nonNegativeFloorScoreTerm(featuredObjectiveStreakBonus) +
-        nonNegativeFloorScoreTerm(bossTrophyCacheScore);
+        runNonNegativeInteger(objectiveBonus) +
+        runNonNegativeInteger(featuredObjectiveStreakBonus) +
+        runNonNegativeInteger(bossTrophyCacheScore);
     return {
         levelBonus,
         perfectBonus,

@@ -12,6 +12,7 @@ import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
 import { runMutatorIds, runRelicIds } from './relics';
 import { runStringArray } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { routeChoicesForResult } from './route-choice-rules';
 import { getCurrentDungeonNode } from './run-map';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -80,9 +81,6 @@ export interface MemorySymbolMap {
 }
 
 const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
-
-const nonNegativeMemoryFeedbackCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const hasRunMutator = (run: RunState, mutatorId: MutatorId): boolean =>
     runMutatorIds(run.activeMutators).includes(mutatorId);
@@ -742,8 +740,8 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: 'reward'
         });
     }
-    const lanternWardScouts = nonNegativeMemoryFeedbackCount(run.lanternWardScoutsThisFloor);
-    const omenSealScouts = nonNegativeMemoryFeedbackCount(run.omenSealScoutsThisFloor);
+    const lanternWardScouts = runNonNegativeInteger(run.lanternWardScoutsThisFloor);
+    const omenSealScouts = runNonNegativeInteger(run.omenSealScoutsThisFloor);
     if (lanternWardScouts > 0 || omenSealScouts > 0) {
         clues.push({
             id: 'scout-sources',
@@ -805,7 +803,7 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: 'danger'
         });
     }
-    const pendingMemorizeBonusMs = nonNegativeMemoryFeedbackCount(run.pendingMemorizeBonusMs);
+    const pendingMemorizeBonusMs = runNonNegativeInteger(run.pendingMemorizeBonusMs);
     if (pendingMemorizeBonusMs > 0) {
         penalties.push({
             id: 'memorize-recovery',

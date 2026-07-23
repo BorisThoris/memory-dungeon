@@ -1,6 +1,7 @@
 import type { FloorIdentityContract } from './boss-encounters';
 import type { LevelResult } from './contracts';
 import type { MechanicTokenId } from './mechanic-feedback';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export type FloorClearCausalityGroup = 'performance' | 'encounter' | 'objective' | 'assist' | 'reward' | 'route' | 'hazard';
 
@@ -40,9 +41,6 @@ const clearLifeDetail = (result: LevelResult): string | null => {
 
 const withAtmosphere = (mechanicDetail: string, atmosphere: string): string => `${mechanicDetail} ${atmosphere}`;
 
-const nonNegativePresentationCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 type LevelResultRouteChoice = NonNullable<LevelResult['routeChoices']>[number];
 
 const levelResultRouteChoices = (value: unknown): LevelResultRouteChoice[] =>
@@ -60,35 +58,35 @@ export const getFloorClearCausalityRows = (
     powersUsedThisRun: boolean,
     floorIdentity?: FloorIdentityContract | null
 ): FloorClearCausalityRow[] => {
-    const mistakes = nonNegativePresentationCount(result.mistakes);
-    const scoreGained = nonNegativePresentationCount(result.scoreGained);
-    const objectiveBonusScore = nonNegativePresentationCount(result.objectiveBonusScore);
-    const relicFavorGained = nonNegativePresentationCount(result.relicFavorGained);
-    const endlessRiskWagerFavorGained = nonNegativePresentationCount(result.endlessRiskWagerFavorGained);
-    const endlessRiskWagerStreakLost = nonNegativePresentationCount(result.endlessRiskWagerStreakLost);
-    const bossTrophyCacheScore = nonNegativePresentationCount(result.bossTrophyCacheScore);
-    const hazardTileTriggers = nonNegativePresentationCount(result.hazardTileTriggers);
-    const hazardShuffleSnares = nonNegativePresentationCount(result.hazardShuffleSnares);
-    const hazardCascadeCaches = nonNegativePresentationCount(result.hazardCascadeCaches);
-    const hazardMirrorDecoys = nonNegativePresentationCount(result.hazardMirrorDecoys);
-    const hazardFragileCacheClaims = nonNegativePresentationCount(result.hazardFragileCacheClaims);
-    const hazardFragileCacheBreaks = nonNegativePresentationCount(result.hazardFragileCacheBreaks);
-    const hazardTollCaches = nonNegativePresentationCount(result.hazardTollCaches);
-    const hazardFuseCaches = nonNegativePresentationCount(result.hazardFuseCaches);
-    const hazardFuseCacheExpiredClaims = nonNegativePresentationCount(result.hazardFuseCacheExpiredClaims);
-    const lanternWardScouts = nonNegativePresentationCount(result.lanternWardScouts);
-    const omenSealScouts = nonNegativePresentationCount(result.omenSealScouts);
-    const mimicCacheClaims = nonNegativePresentationCount(result.mimicCacheClaims);
-    const mimicCacheBites = nonNegativePresentationCount(result.mimicCacheBites);
-    const anchorSealUses = nonNegativePresentationCount(result.anchorSealUses);
-    const loadedGatewayPlans = nonNegativePresentationCount(result.loadedGatewayPlans);
-    const catalystAltarUpgrades = nonNegativePresentationCount(result.catalystAltarUpgrades);
-    const parasiteVesselConversions = nonNegativePresentationCount(result.parasiteVesselConversions);
-    const pinLatticeRewards = nonNegativePresentationCount(result.pinLatticeRewards);
-    const safeHazardWardsUsed = nonNegativePresentationCount(result.safeHazardWardsUsed);
-    const recallMatches = nonNegativePresentationCount(result.recallMatches);
-    const recallMistakes = nonNegativePresentationCount(result.recallMistakes);
-    const recallBonusScore = nonNegativePresentationCount(result.recallBonusScore);
+    const mistakes = runNonNegativeInteger(result.mistakes);
+    const scoreGained = runNonNegativeInteger(result.scoreGained);
+    const objectiveBonusScore = runNonNegativeInteger(result.objectiveBonusScore);
+    const relicFavorGained = runNonNegativeInteger(result.relicFavorGained);
+    const endlessRiskWagerFavorGained = runNonNegativeInteger(result.endlessRiskWagerFavorGained);
+    const endlessRiskWagerStreakLost = runNonNegativeInteger(result.endlessRiskWagerStreakLost);
+    const bossTrophyCacheScore = runNonNegativeInteger(result.bossTrophyCacheScore);
+    const hazardTileTriggers = runNonNegativeInteger(result.hazardTileTriggers);
+    const hazardShuffleSnares = runNonNegativeInteger(result.hazardShuffleSnares);
+    const hazardCascadeCaches = runNonNegativeInteger(result.hazardCascadeCaches);
+    const hazardMirrorDecoys = runNonNegativeInteger(result.hazardMirrorDecoys);
+    const hazardFragileCacheClaims = runNonNegativeInteger(result.hazardFragileCacheClaims);
+    const hazardFragileCacheBreaks = runNonNegativeInteger(result.hazardFragileCacheBreaks);
+    const hazardTollCaches = runNonNegativeInteger(result.hazardTollCaches);
+    const hazardFuseCaches = runNonNegativeInteger(result.hazardFuseCaches);
+    const hazardFuseCacheExpiredClaims = runNonNegativeInteger(result.hazardFuseCacheExpiredClaims);
+    const lanternWardScouts = runNonNegativeInteger(result.lanternWardScouts);
+    const omenSealScouts = runNonNegativeInteger(result.omenSealScouts);
+    const mimicCacheClaims = runNonNegativeInteger(result.mimicCacheClaims);
+    const mimicCacheBites = runNonNegativeInteger(result.mimicCacheBites);
+    const anchorSealUses = runNonNegativeInteger(result.anchorSealUses);
+    const loadedGatewayPlans = runNonNegativeInteger(result.loadedGatewayPlans);
+    const catalystAltarUpgrades = runNonNegativeInteger(result.catalystAltarUpgrades);
+    const parasiteVesselConversions = runNonNegativeInteger(result.parasiteVesselConversions);
+    const pinLatticeRewards = runNonNegativeInteger(result.pinLatticeRewards);
+    const safeHazardWardsUsed = runNonNegativeInteger(result.safeHazardWardsUsed);
+    const recallMatches = runNonNegativeInteger(result.recallMatches);
+    const recallMistakes = runNonNegativeInteger(result.recallMistakes);
+    const recallBonusScore = runNonNegativeInteger(result.recallBonusScore);
     const rows: FloorClearCausalityRow[] = [
         {
             id: 'performance_score',

@@ -4,6 +4,7 @@ import { buildMetaProgressionRunDelta } from './meta-progression-delta';
 import { getMetaProgressionFeedback } from './meta-progression';
 import { runMutatorIds, runRelicIds } from './relics';
 import { buildRunHistoryExportString } from './run-history';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getStartingLoadoutDefinition } from './starting-loadouts';
 
 export interface GameOverNextRunRow {
@@ -15,19 +16,16 @@ export interface GameOverNextRunRow {
     localOnly: true;
 }
 
-const nonNegativeNextRunCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const runItBackDetail = (summary: RunSummary | null, run: RunState): string => {
     if (!summary) {
         return 'Complete a run to unlock a restart recommendation.';
     }
-    const pickupClaimed = nonNegativeNextRunCount(run.findablesClaimedThisFloor);
-    const pickupTotal = nonNegativeNextRunCount(run.findablesTotalThisFloor);
-    const totalScore = nonNegativeNextRunCount(summary.totalScore);
-    const highestLevel = nonNegativeNextRunCount(summary.highestLevel);
-    const levelsCleared = nonNegativeNextRunCount(summary.levelsCleared);
-    const bestStreak = nonNegativeNextRunCount(summary.bestStreak);
+    const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
+    const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
+    const totalScore = runNonNegativeInteger(summary.totalScore);
+    const highestLevel = runNonNegativeInteger(summary.highestLevel);
+    const levelsCleared = runNonNegativeInteger(summary.levelsCleared);
+    const bestStreak = runNonNegativeInteger(summary.bestStreak);
     const pickupCopy = pickupTotal > 0 ? ` / pickups ${pickupClaimed}/${pickupTotal}` : '';
     const chainCopy = bestStreak > 0 ? ` / best chain x${bestStreak}` : ' / chain not started';
     return `${totalScore.toLocaleString()} score / floor ${highestLevel} / ${levelsCleared} clear(s)${chainCopy}${pickupCopy}`;
@@ -78,9 +76,9 @@ const modeLabel = (summary: RunSummary): string => {
 const getFallbackNextGoalRow = (summary: RunSummary | null): GameOverNextRunRow => ({
     id: 'next_goal',
     title: 'Next goal',
-    value: summary && nonNegativeNextRunCount(summary.highestLevel) < 5 ? 'Reach floor 5' : 'Push a cleaner run',
-    detail: nonNegativeNextRunCount(summary?.perfectClears) > 0
-        ? `${nonNegativeNextRunCount(summary?.perfectClears)} perfect floor(s) logged.`
+    value: summary && runNonNegativeInteger(summary.highestLevel) < 5 ? 'Reach floor 5' : 'Push a cleaner run',
+    detail: runNonNegativeInteger(summary?.perfectClears) > 0
+        ? `${runNonNegativeInteger(summary?.perfectClears)} perfect floor(s) logged.`
         : 'Perfect floors and no-assist runs unlock mastery.',
     actionHint: 'Choose Classic for long-run progression or Daily for UTC archive progress.',
     localOnly: true
