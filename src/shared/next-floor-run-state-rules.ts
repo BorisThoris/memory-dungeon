@@ -5,6 +5,7 @@ import {
     type RelicId,
     type RunState
 } from './contracts';
+import { normalizeRewardPerkIds } from './bonus-rewards';
 import {
     boardHasGlassDecoy,
     getWildTileIdFromBoard
@@ -57,7 +58,7 @@ export const createNextFloorRunState = (
     options: CreateNextFloorRunStateOptions
 ): RunState => {
     const hasRewardPerk = (id: NonNullable<RunState['rewardPerkIds']>[number]): boolean =>
-        (run.rewardPerkIds ?? []).includes(id);
+        normalizeRewardPerkIds(run.rewardPerkIds).includes(id);
     const canUseHazardBanisher = hasRewardPerk('hazard_banish_per_floor') && !run.activeContract?.noDestroy;
     const hazardBanish = canUseHazardBanisher
         ? banishOneHazardPair(options.board)

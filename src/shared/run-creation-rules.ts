@@ -12,7 +12,7 @@ import {
     type Tile,
     type WeakerShuffleMode
 } from './contracts';
-import { createBonusRewardLedger } from './bonus-rewards';
+import { createBonusRewardLedger, normalizeRewardPerkIds } from './bonus-rewards';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { DAILY_MUTATOR_TABLE } from './mutators';
@@ -258,7 +258,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         freeShuffleThisFloor: runWithRelics.relicIds.includes('first_shuffle_free_per_floor'),
         regionShuffleFreeThisFloor:
             runWithRelics.relicIds.includes('region_shuffle_free_first') ||
-            (runWithRelics.rewardPerkIds ?? []).includes('free_first_swap_per_floor'),
+            normalizeRewardPerkIds(runWithRelics.rewardPerkIds).includes('free_first_swap_per_floor'),
         timerState: createTimerState({ memorizeRemainingMs: memorizeMs })
     };
 };

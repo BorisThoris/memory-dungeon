@@ -1,4 +1,5 @@
 import type { RewardPerkId, RunState, StartingLoadoutId } from './contracts';
+import { normalizeRewardPerkIds } from './bonus-rewards';
 import { gainRunInventoryItem } from './run-inventory';
 
 export interface StartingLoadoutDefinition {
@@ -86,7 +87,7 @@ export const applyStartingLoadout = (run: RunState, id: StartingLoadoutId | null
             break;
         case 'route_tactician': {
             next = gainRunInventoryItem(next, 'region_shuffle_charge');
-            const perkIds: RewardPerkId[] = [...(next.rewardPerkIds ?? []), 'free_first_swap_per_floor'];
+            const perkIds: RewardPerkId[] = [...normalizeRewardPerkIds(next.rewardPerkIds), 'free_first_swap_per_floor'];
             next = {
                 ...next,
                 rewardPerkIds: [...new Set(perkIds)]

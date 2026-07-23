@@ -608,7 +608,7 @@ const REWARD_PERK_ARCADE_CUES: Record<RewardPerkId, string> = {
 const isRewardPerkId = (id: unknown): id is RewardPerkId =>
     typeof id === 'string' && Object.prototype.hasOwnProperty.call(REWARD_PERK_LABELS, id);
 
-const normalizeRewardPerkIds = (value: unknown): RewardPerkId[] =>
+export const normalizeRewardPerkIds = (value: unknown): RewardPerkId[] =>
     Array.isArray(value) ? value.filter(isRewardPerkId) : [];
 
 export const getRewardPerkRows = (run: Pick<RunState, 'rewardPerkIds'>) =>

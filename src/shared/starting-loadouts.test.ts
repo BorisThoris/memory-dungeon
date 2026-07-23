@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { RunState } from './contracts';
 import { createNewRun } from './game-core';
 import {
     STARTING_LOADOUT_IDS,
@@ -41,6 +42,17 @@ describe('starting loadouts', () => {
         expect(tactician.board?.tiles.map((tile) => tile.tileTraitKind ?? null)).not.toEqual(
             base.board?.tiles.map((tile) => tile.tileTraitKind ?? null)
         );
+    });
+
+    it('treats malformed reward perks as empty before applying route tactician', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 91_002 }),
+            rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds']
+        };
+
+        const tactician = applyStartingLoadout(run, 'route_tactician');
+
+        expect(tactician.rewardPerkIds).toEqual(['free_first_swap_per_floor']);
     });
 
     it('returns player-facing rows for active loadouts only', () => {

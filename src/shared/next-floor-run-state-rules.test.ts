@@ -204,4 +204,26 @@ describe('createNextFloorRunState', () => {
             'shuffle_snare'
         ]);
     });
+
+    it('treats malformed reward perks as empty before restoring floor benefits', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 18 }),
+            rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'],
+            regionShuffleFreeThisFloor: false,
+            destroyPairCharges: 0
+        };
+
+        const next = createNextFloorRunState(run, {
+            lives: run.lives,
+            activeMutators: run.activeMutators,
+            dungeonRun: run.dungeonRun,
+            board: run.board!,
+            parasiteFloors: run.parasiteFloors,
+            parasiteWardRemaining: run.parasiteWardRemaining,
+            memorizeRemainingMs: 1000
+        });
+
+        expect(next.regionShuffleFreeThisFloor).toBe(false);
+        expect(next.destroyPairCharges).toBe(0);
+    });
 });
