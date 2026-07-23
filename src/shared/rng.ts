@@ -1,5 +1,7 @@
 /** Deterministic PRNG + shuffle for seeded runs (daily, export/import, puzzles). */
 
+import { runNonNegativeInteger } from './run-number-guards';
+
 export const hashStringToSeed = (str: string): number => {
     let h = 2166136261;
     for (let i = 0; i < str.length; i += 1) {
@@ -25,7 +27,7 @@ export const normalizeRngRoll = (value: number): number =>
     Number.isFinite(value) ? Math.min(1 - Number.EPSILON, Math.max(0, value)) : 0;
 
 export const pickRngIndex = (rng: () => number, length: number): number => {
-    const safeLength = Number.isFinite(length) ? Math.max(0, Math.floor(length)) : 0;
+    const safeLength = runNonNegativeInteger(length);
     return safeLength > 0 ? Math.floor(normalizeRngRoll(rng()) * safeLength) : 0;
 };
 

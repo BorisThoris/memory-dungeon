@@ -87,6 +87,7 @@ describe('pickRngIndex', () => {
         expect(pickRngIndex(() => 1, 3)).toBe(2);
         expect(pickRngIndex(() => 0.5, 3.9)).toBe(1);
         expect(pickRngIndex(() => 0.5, Number.POSITIVE_INFINITY)).toBe(0);
+        expect(pickRngIndex(() => 0.5, -2)).toBe(0);
         expect(pickRngIndex(() => 0.5, 0)).toBe(0);
     });
 
