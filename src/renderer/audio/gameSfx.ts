@@ -1,4 +1,5 @@
 import type { RunState } from '../../shared/contracts';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues } from '../copy/chainMomentum';
@@ -266,7 +267,7 @@ const tileTraitCountTotal = (value: unknown): number => {
         return 0;
     }
     const counts = value as Record<string, unknown>;
-    return TILE_TRAIT_COUNT_KINDS.reduce((sum, kind) => sum + Math.max(0, Math.floor(finiteNumber(counts[kind]))), 0);
+    return TILE_TRAIT_COUNT_KINDS.reduce((sum, kind) => sum + runNonNegativeInteger(counts[kind]), 0);
 };
 
 const resolvedTraitRouteProgressCount = (before: RunState, after: RunState): number =>
@@ -583,11 +584,7 @@ const playRewardPerkPopSfx = (gain: number, perkProcCount: number): void => {
 
 const countPayoffLanesFromPayload = (payload: MatchPayoffSfxPayload): number => {
     const explicitLaneCount = Array.isArray(payload.payoffLaneMap)
-        ? payload.payoffLaneMap.reduce(
-              (sum, lane) =>
-                  sum + (typeof lane.count === 'number' && Number.isFinite(lane.count) ? Math.max(0, Math.floor(lane.count)) : 0),
-              0
-          )
+        ? payload.payoffLaneMap.reduce((sum, lane) => sum + runNonNegativeInteger(lane.count), 0)
         : 0;
     if (explicitLaneCount > 0) {
         return explicitLaneCount;

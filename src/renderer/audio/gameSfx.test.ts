@@ -342,6 +342,42 @@ describe('gameSfx', () => {
         expect(createOscillator).not.toHaveBeenCalled();
     });
 
+    it('floors fractional payoff lane counts before classifying payoff audio tiers', () => {
+        const createOscillator = vi.fn(() => ({
+            type: 'sine' as OscillatorType,
+            frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn(),
+            start: vi.fn(),
+            stop: vi.fn(),
+            addEventListener: vi.fn()
+        }));
+        const createGain = vi.fn(() => ({
+            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn()
+        }));
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                createOscillator = createOscillator;
+                createGain = createGain;
+                close = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        playMatchPayoffSfx(sfxGainFromSettings(1, 1), {
+            payoffLaneMap: [{ count: 2.9 }, { count: 0.9 }],
+            payoffSummary: { label: 'Score hit', value: '+15', tier: 'score' }
+        });
+
+        expect(createOscillator).toHaveBeenCalledTimes(1);
+        expect(createOscillator.mock.results[0]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
+            2900,
+            expect.any(Number)
+        );
+    });
+
     it('plays distinct procedural mismatch recovery crescendo cues by recovery tier', () => {
         const createOscillator = vi.fn(() => {
             const o = {
