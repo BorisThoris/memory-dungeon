@@ -38,6 +38,9 @@ interface ChainMilestonePreview {
     tone: ChainMomentumTier;
 }
 
+const nonNegativeInteger = (value: number): number =>
+    Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const getChainMomentumTier = (streak: number): ChainMomentumTier => {
     if (streak >= 10) return 'combo';
     if (streak >= 6) return 'surge';
@@ -78,13 +81,13 @@ export const getChainMomentumSubline = (streak: number, traitRouteActive: boolea
     if (traitRouteActive) {
         return 'Trait route live';
     }
-    const safeStreak = Math.max(0, Math.floor(Number.isFinite(streak) ? streak : 0));
+    const safeStreak = nonNegativeInteger(streak);
     const earlyDistance = Math.max(1, 3 - safeStreak);
     return getChainMomentumCue(streak) || `${earlyDistance} ${earlyDistance === 1 ? 'match' : 'matches'} to x3`;
 };
 
 export const getChainMilestonePreview = (streak: number): ChainMilestonePreview => {
-    const safeStreak = Math.max(0, Math.floor(Number.isFinite(streak) ? streak : 0));
+    const safeStreak = nonNegativeInteger(streak);
     if (safeStreak >= 10) {
         return {
             actionLabel: 'Hold combo',
@@ -129,7 +132,7 @@ export const getChainMilestonePreview = (streak: number): ChainMilestonePreview 
 };
 
 const nextMultipleAfter = (streak: number, step: number): number => {
-    const safeStreak = Math.max(0, Math.floor(Number.isFinite(streak) ? streak : 0));
+    const safeStreak = nonNegativeInteger(streak);
     return Math.max(step, Math.ceil((safeStreak + 1) / step) * step);
 };
 
@@ -150,7 +153,7 @@ export const getChainRewardProgress = (
     if (!cue) {
         return null;
     }
-    const safeStreak = Math.max(0, Math.floor(Number.isFinite(streak) ? streak : 0));
+    const safeStreak = nonNegativeInteger(streak);
     const total = stepForRewardCue(cue);
     const previousTarget = Math.max(0, cue.targetStreak - total);
     const filled = Math.max(0, Math.min(total, safeStreak - previousTarget));
@@ -212,9 +215,9 @@ export const getChainRewardForecastCues = (
     const guardStreak = nextMultipleAfter(streak, COMBO_GUARD_STREAK_STEP);
     const healStreak = nextMultipleAfter(streak, CHAIN_HEAL_STREAK_STEP);
     const cues: ChainRewardForecastCue[] = [];
-    const safeStreak = Math.max(0, Math.floor(Number.isFinite(streak) ? streak : 0));
-    const safeComboShards = Math.max(0, Math.floor(Number.isFinite(comboShards) ? comboShards : 0));
-    const safeLives = Math.max(0, Math.floor(Number.isFinite(lives) ? lives : 0));
+    const safeStreak = nonNegativeInteger(streak);
+    const safeComboShards = nonNegativeInteger(comboShards);
+    const safeLives = nonNegativeInteger(lives);
     const cueMeta = (
         targetStreak: number
     ): Pick<ChainRewardForecastCue, 'actionLabel' | 'chaseLabel' | 'distance' | 'distanceLabel' | 'targetStreak' | 'urgency'> => {

@@ -176,4 +176,65 @@ describe('chainMomentum copy helpers', () => {
         expect(getChainRewardLaneAction('soon')).toBe('Prime cashout');
         expect(getChainRewardLaneAction('later')).toBe('Hold streak');
     });
+
+    it('normalizes malformed reward forecast inputs before building visible copy', () => {
+        const cues = getChainRewardForecastCues(Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY);
+
+        expect(cues).toEqual([
+            {
+                actionLabel: 'Soon',
+                chaseLabel: 'Prime',
+                distance: 2,
+                distanceLabel: '2 matches',
+                id: 'shard-2',
+                label: 'x2 +1 shard',
+                targetStreak: 2,
+                tone: 'reward',
+                urgency: 'soon'
+            },
+            {
+                actionLabel: 'Later',
+                chaseLabel: 'Hold streak',
+                distance: 4,
+                distanceLabel: '4 matches',
+                id: 'guard-4',
+                label: 'x4 +1 guard',
+                targetStreak: 4,
+                tone: 'guard',
+                urgency: 'later'
+            },
+            {
+                actionLabel: 'Later',
+                chaseLabel: 'Hold streak',
+                distance: 8,
+                distanceLabel: '8 matches',
+                id: 'heal-8',
+                label: 'x8 +1 life',
+                targetStreak: 8,
+                tone: 'heal',
+                urgency: 'later'
+            }
+        ]);
+        expect(cues.map((cue) => `${cue.id} ${cue.label} ${cue.distanceLabel}`).join(' ')).not.toMatch(
+            /NaN|Infinity/
+        );
+    });
+
+    it('normalizes fractional and malformed progress values for reward pips', () => {
+        const cue = getChainRewardForecastCues(3.9, 1.9, 4.9)[0]!;
+
+        expect(cue).toMatchObject({
+            distance: 1,
+            distanceLabel: '1 match',
+            id: 'shard-4',
+            label: 'x4 +1 shard'
+        });
+        expect(getChainRewardProgress(Number.POSITIVE_INFINITY, cue)).toEqual({
+            filled: 0,
+            label: '0/2',
+            remainingLabel: '4 matches left',
+            targetLabel: 'x4 +1 shard',
+            total: 2
+        });
+    });
 });
