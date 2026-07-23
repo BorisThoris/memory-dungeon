@@ -1,5 +1,6 @@
 import type { RunSummary } from '../../shared/contracts';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 type RunPayoffSignalTone = 'chain' | 'reward' | 'build' | 'risk';
 
@@ -120,9 +121,6 @@ const RUN_PAYOFF_LANE_BEATS_BY_ID: Record<RunPayoffLaneId, RunPayoffBeatCount> =
     risk: 2
 };
 
-const finiteNonNegativeInteger = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const runPayoffArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
 
 const runPayoffLaneId = (row: Pick<RunPayoffSignalRow, 'id' | 'tone'>): RunPayoffLaneId => {
@@ -206,15 +204,15 @@ export const getRunPayoffSignals = (
     options: RunPayoffSignalOptions = {}
 ): RunPayoffSignalRow[] => {
     const rows: (Omit<RunPayoffSignalRow, 'action' | 'audioCue' | 'screenCue'> & { priority: number })[] = [];
-    const bestStreak = finiteNonNegativeInteger(summary.bestStreak);
-    const perfectClears = finiteNonNegativeInteger(summary.perfectClears);
-    const totalScore = finiteNonNegativeInteger(summary.totalScore);
-    const pickupClaimed = finiteNonNegativeInteger(options.pickupClaimed ?? summary.payoffPickupClaimed);
-    const pickupTotal = finiteNonNegativeInteger(options.pickupTotal ?? summary.payoffPickupTotal);
+    const bestStreak = runNonNegativeInteger(summary.bestStreak);
+    const perfectClears = runNonNegativeInteger(summary.perfectClears);
+    const totalScore = runNonNegativeInteger(summary.totalScore);
+    const pickupClaimed = runNonNegativeInteger(options.pickupClaimed ?? summary.payoffPickupClaimed);
+    const pickupTotal = runNonNegativeInteger(options.pickupTotal ?? summary.payoffPickupTotal);
     const relicCount = runPayoffArrayCount(summary.relicIds);
-    const perkCount = finiteNonNegativeInteger(options.rewardPerkCount ?? summary.payoffRewardPerkCount);
+    const perkCount = runNonNegativeInteger(options.rewardPerkCount ?? summary.payoffRewardPerkCount);
     const mutatorCount = runPayoffArrayCount(summary.activeMutators);
-    const pressureCount = mutatorCount + finiteNonNegativeInteger(options.pressureExtra ?? summary.payoffPressureExtra);
+    const pressureCount = mutatorCount + runNonNegativeInteger(options.pressureExtra ?? summary.payoffPressureExtra);
 
     if (bestStreak >= 10) {
         rows.push({

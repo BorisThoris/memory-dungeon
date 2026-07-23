@@ -1,6 +1,7 @@
 /**
  * Match-score floater live region (`aria-live`). Centralized for a11y review and future i18n.
  */
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getChainMomentumCue } from './chainMomentum';
 
 export const matchScoreFloaterChainCue = getChainMomentumCue;
@@ -34,9 +35,6 @@ const enrichTraitLaneMapLiveText = (text: string): string =>
         return current.replace(lanePattern, `$1${action}. `);
     }, text);
 
-const matchScoreDisplayAmount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 export function matchScoreFloaterLiveRegionText(
     amount: number,
     traitInteractionTexts: readonly string[] = [],
@@ -52,7 +50,7 @@ export function matchScoreFloaterLiveRegionText(
     crescendoText?: string,
     chainMilestoneText?: string
 ): string {
-    const base = `Plus ${matchScoreDisplayAmount(amount).toLocaleString()} points`;
+    const base = `Plus ${runNonNegativeInteger(amount).toLocaleString()} points`;
     const headline = feedbackHeadline ? `${feedbackHeadline}. ` : '';
     const chainCue = matchScoreFloaterChainCue(chainDepth);
     const streak =

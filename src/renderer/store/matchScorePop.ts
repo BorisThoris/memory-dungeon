@@ -3,6 +3,7 @@ import { getMatchFloaterAnchorTileIds, getMismatchFloaterAnchorTileIds } from '.
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
 import { formatTileTraitInteractionTags, resolveTileTraitEffects } from '../../shared/tile-trait-rules';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { detectClaimedFindableKind } from '../copy/hudActionFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy, type ChainRewardForecastCue } from '../copy/chainMomentum';
@@ -176,9 +177,6 @@ const nextRewardPayoffLabel = (cue: ChainRewardForecastCue): string => {
     }
     return `${cue.actionLabel} shard`;
 };
-
-const matchScoreDisplayAmount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const formatGain = (amount: number, singular: string, plural = `${singular}s`): string =>
     `+${amount} ${amount === 1 ? singular : plural}`;
@@ -375,7 +373,7 @@ const buildMatchScorePopPayoffChips = ({
         arcadeCue: 'Score pop',
         id: 'score',
         label: 'Score',
-        value: `+${matchScoreDisplayAmount(amount).toLocaleString()}`,
+        value: `+${runNonNegativeInteger(amount).toLocaleString()}`,
         tone: 'score'
     };
     const metaChips: MatchScorePopPayoffChip[] = [];
@@ -616,7 +614,7 @@ export const buildMatchScorePopPayoffSummary = ({
     if (chainDepth >= 3) {
         return { label: 'Chain hit', value: `x${Math.floor(chainDepth)} streak`, tier: 'chain' };
     }
-    return { label: 'Score hit', value: `+${matchScoreDisplayAmount(amount).toLocaleString()}`, tier: 'score' };
+    return { label: 'Score hit', value: `+${runNonNegativeInteger(amount).toLocaleString()}`, tier: 'score' };
 };
 
 export const buildMatchScorePopImpactCue = ({
