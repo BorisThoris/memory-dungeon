@@ -91,6 +91,7 @@ import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-r
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
+import { runStringArray } from './run-array-guards';
 export {
     completeRelicPickAndAdvance
 } from './relic-pick-advance-rules';
@@ -319,8 +320,6 @@ export {
 
 const nonNegativeRunCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const runStringArray = (value: unknown): string[] => Array.isArray(value) ? value : [];
 
 const flippedTileIdsForRun = (run: RunState): string[] | null =>
     Array.isArray(run.board?.flippedTileIds)

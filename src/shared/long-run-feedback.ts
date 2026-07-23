@@ -9,6 +9,7 @@ import {
 import type { MechanicTokenId } from './mechanic-feedback';
 import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { getRunEconomyRows } from './run-economy';
+import { runStringArray } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type FeedbackCauseKind =
@@ -96,7 +97,7 @@ const causeRow = (
     ariaLive: row.ariaLive ?? `${row.label}: ${row.summary}. ${row.detail}`
 });
 
-const runFeedbackArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
+const runFeedbackArrayCount = (value: unknown): number => runStringArray(value).length;
 
 export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribution => {
     if (!run.powersUsedThisRun) {

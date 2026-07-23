@@ -11,6 +11,7 @@ import {
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
 import { runMutatorIds, runRelicIds } from './relics';
+import { runStringArray } from './run-array-guards';
 import { routeChoicesForResult } from './route-choice-rules';
 import { getCurrentDungeonNode } from './run-map';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -82,8 +83,6 @@ const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
 
 const nonNegativeMemoryFeedbackCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const runTileIds = (value: unknown): string[] => Array.isArray(value) ? value : [];
 
 const hasRunMutator = (run: RunState, mutatorId: MutatorId): boolean =>
     runMutatorIds(run.activeMutators).includes(mutatorId);
@@ -627,7 +626,7 @@ const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => Memor
     }),
     pin_cap_plus_one: (run) => ({
         id: 'memory-assist-pin-cap',
-        label: `Pin capacity ${runTileIds(run.pinnedTileIds).length}/${run.activeContract?.maxPinsTotalRun ?? 'expanded'}`,
+        label: `Pin capacity ${runStringArray(run.pinnedTileIds).length}/${run.activeContract?.maxPinsTotalRun ?? 'expanded'}`,
         detail: 'Expanded pin space lets the player author a safer path through noisy symbol bands.',
         tone: 'stable'
     }),
@@ -666,8 +665,8 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const board = run.board;
     const tiles = board?.tiles ?? [];
     const rememberedClueTiles = tiles.filter(tileHasRecallClue);
-    const forgottenTileIds = runTileIds(run.forgottenTileIdsThisFloor);
-    const pinnedTileIds = runTileIds(run.pinnedTileIds);
+    const forgottenTileIds = runStringArray(run.forgottenTileIdsThisFloor);
+    const pinnedTileIds = runStringArray(run.pinnedTileIds);
     const forgottenSet = new Set(forgottenTileIds);
     const forgottenSymbols = unique(
         tiles

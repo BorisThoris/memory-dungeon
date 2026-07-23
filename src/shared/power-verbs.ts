@@ -8,6 +8,7 @@ import {
     type PerfectMemoryImpact
 } from './mechanic-feedback';
 import { runRelicIds } from './relics';
+import { runStringArray } from './run-array-guards';
 
 export type PowerVerbId =
     | 'shuffle'
@@ -51,9 +52,9 @@ const locksPerfectMemory = perfectMemoryImpactCopy('locks_perfect_memory');
 const nonNegativePowerVerbCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const powerVerbArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
+const powerVerbArrayCount = (value: unknown): number => runStringArray(value).length;
 
-const powerVerbArrayIncludes = (value: unknown, item: string): boolean => Array.isArray(value) && value.includes(item);
+const powerVerbArrayIncludes = (value: unknown, item: string): boolean => runStringArray(value).includes(item);
 
 const hasOpenFlip = (run: RunState): boolean =>
     run.board ? !Array.isArray(run.board.flippedTileIds) || run.board.flippedTileIds.length > 0 : false;
