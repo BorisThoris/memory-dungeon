@@ -6,5 +6,8 @@ export const runNonNegativeIntegerWithFallback = (value: unknown, fallback: numb
         ? Math.max(0, Math.floor(value))
         : runNonNegativeInteger(fallback);
 
+export const runNonNegativeIntegerOrFallback = (value: unknown, fallback: number): number =>
+    typeof value === 'number' && Number.isFinite(value) ? runNonNegativeInteger(value) : fallback;
+
 export const runFiniteIntegerDelta = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.trunc(value) : 0;

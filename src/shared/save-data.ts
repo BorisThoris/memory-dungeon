@@ -19,6 +19,7 @@ import { z } from 'zod';
 import { COSMETIC_IDS } from './cosmetic-ids';
 import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
 import { utcDateKeyMinusOneDay } from './rng';
+import { runNonNegativeIntegerOrFallback } from './run-number-guards';
 import { RELIC_POOL } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 import { evaluateSaveMigrationGate, isRecognizedSaveSchemaVersion } from './version-gate';
@@ -162,8 +163,7 @@ const isRelicId = (value: unknown): value is RelicId =>
 const isStartingLoadoutId = (value: unknown): value is StartingLoadoutId =>
     typeof value === 'string' && STARTING_LOADOUT_ID_SET.has(value);
 
-const finiteNonNegativeInteger = (value: unknown, fallback: number): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : fallback;
+const finiteNonNegativeInteger = runNonNegativeIntegerOrFallback;
 
 const finiteClampedNumber = (
     value: unknown,

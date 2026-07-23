@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { runFiniteIntegerDelta, runNonNegativeInteger, runNonNegativeIntegerWithFallback } from './run-number-guards';
+import {
+    runFiniteIntegerDelta,
+    runNonNegativeInteger,
+    runNonNegativeIntegerOrFallback,
+    runNonNegativeIntegerWithFallback
+} from './run-number-guards';
 
 describe('run number guards', () => {
     it('normalizes runtime counters to non-negative integers', () => {
@@ -20,5 +25,11 @@ describe('run number guards', () => {
         expect(runNonNegativeIntegerWithFallback(4.9, 1)).toBe(4);
         expect(runNonNegativeIntegerWithFallback(Number.NaN, 3.9)).toBe(3);
         expect(runNonNegativeIntegerWithFallback(Number.POSITIVE_INFINITY, -1)).toBe(0);
+    });
+
+    it('preserves the exact fallback when runtime counters are malformed', () => {
+        expect(runNonNegativeIntegerOrFallback(4.9, 1)).toBe(4);
+        expect(runNonNegativeIntegerOrFallback(Number.NaN, 3.9)).toBe(3.9);
+        expect(runNonNegativeIntegerOrFallback(Number.POSITIVE_INFINITY, Number.NaN)).toBeNaN();
     });
 });
