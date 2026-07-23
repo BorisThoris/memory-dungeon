@@ -19,6 +19,7 @@ import type {
 } from './contracts';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { hashStringToSeed } from './rng';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getTraitBuildRewardRowsForLoadout, getTraitBuildRewardRowsForRelic } from './trait-build-rewards';
 import { pickWeightedWithoutReplacement } from './weightedPick';
 
@@ -790,17 +791,14 @@ const makeRng = (seed: number): (() => number) => {
     };
 };
 
-const nonNegativeRelicOfferCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 export const needsRelicPick = (run: RunState): boolean => {
     if (run.gameMode === 'puzzle') {
         return false;
     }
-    if (nonNegativeRelicOfferCount(run.lives) <= 0) {
+    if (runNonNegativeInteger(run.lives) <= 0) {
         return false;
     }
-    if (nonNegativeRelicOfferCount(run.relicTiersClaimed) >= MAX_RELIC_PICKS_PER_RUN) {
+    if (runNonNegativeInteger(run.relicTiersClaimed) >= MAX_RELIC_PICKS_PER_RUN) {
         return false;
     }
     if (run.status !== 'levelComplete' || !run.lastLevelResult) {
@@ -811,7 +809,7 @@ export const needsRelicPick = (run: RunState): boolean => {
     if (idx === null) {
         return false;
     }
-    return nonNegativeRelicOfferCount(run.relicTiersClaimed) <= idx && !run.relicOffer;
+    return runNonNegativeInteger(run.relicTiersClaimed) <= idx && !run.relicOffer;
 };
 
 export const skipRelicOfferMilestone = (run: RunState): RunState => {
@@ -826,7 +824,7 @@ export const skipRelicOfferMilestone = (run: RunState): RunState => {
         ...run,
         bonusRelicPicksNextOffer: 0,
         favorBonusRelicPicksNextOffer: 0,
-        relicTiersClaimed: Math.max(nonNegativeRelicOfferCount(run.relicTiersClaimed), idx + 1),
+        relicTiersClaimed: Math.max(runNonNegativeInteger(run.relicTiersClaimed), idx + 1),
         relicOffer: null
     };
 };
@@ -922,11 +920,11 @@ export const RELIC_OFFER_SERVICE_CATALOG: Record<
 };
 
 const relicOfferServiceUseCount = (run: RunState, serviceId: RelicOfferServiceId): number =>
-    nonNegativeRelicOfferCount(run.relicOffer?.serviceUses?.[serviceId] ?? 0);
+    runNonNegativeInteger(run.relicOffer?.serviceUses?.[serviceId] ?? 0);
 
 export const createRelicOfferServices = (run: RunState): RelicOfferServiceState[] => {
     const offer = run.relicOffer;
-    const wallet = nonNegativeRelicOfferCount(run.shopGold);
+    const wallet = runNonNegativeInteger(run.shopGold);
     return RELIC_OFFER_SERVICE_IDS.map((serviceId) => {
         const base = RELIC_OFFER_SERVICE_CATALOG[serviceId];
         let unavailableReason: string | null = null;
@@ -1062,7 +1060,7 @@ export const applyRelicOfferService = (
     let pickRound = offer.pickRound;
     let upgradedOffer = offer.upgradedOffer ?? false;
     let options = [...offer.options];
-    const paidRun: RunState = { ...run, shopGold: nonNegativeRelicOfferCount(run.shopGold) - service.cost };
+    const paidRun: RunState = { ...run, shopGold: runNonNegativeInteger(run.shopGold) - service.cost };
 
     if (serviceId === 'ban_option') {
         const banTarget = targetRelicId && options.includes(targetRelicId) ? targetRelicId : options[0];

@@ -12,12 +12,9 @@ import {
     skipRelicOfferMilestone
 } from './relics';
 import { applyRelicImmediate } from './relic-immediate-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export const MAX_RELIC_PICKS_PER_OFFER = 3;
-
-/** Total relic selections this milestone visit (minimum 1). See `openRelicOffer`. */
-const nonNegativeFiniteInteger = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const recurringRelicPickBonusCount = (run: RunState): number => {
     let n = 0;
@@ -27,7 +24,7 @@ const recurringRelicPickBonusCount = (run: RunState): number => {
     if (run.gameMode === 'daily') {
         n += 1;
     }
-    n += nonNegativeFiniteInteger(run.metaRelicDraftExtraPerMilestone);
+    n += runNonNegativeInteger(run.metaRelicDraftExtraPerMilestone);
     if (run.activeContract?.bonusRelicDraftPick) {
         n += 1;
     }
@@ -35,7 +32,7 @@ const recurringRelicPickBonusCount = (run: RunState): number => {
 };
 
 export const computeRelicOfferPickBudget = (run: RunState): number => {
-    const bankedBonusPicks = nonNegativeFiniteInteger(run.bonusRelicPicksNextOffer);
+    const bankedBonusPicks = runNonNegativeInteger(run.bonusRelicPicksNextOffer);
     const total = 1 + bankedBonusPicks + recurringRelicPickBonusCount(run);
     return Math.max(1, Math.min(MAX_RELIC_PICKS_PER_OFFER, total));
 };
@@ -50,9 +47,9 @@ export const openRelicOffer = (run: RunState): RunState => {
         return run;
     }
     const picksRemaining = computeRelicOfferPickBudget(run);
-    const bankedBonusPicks = nonNegativeFiniteInteger(run.bonusRelicPicksNextOffer);
+    const bankedBonusPicks = runNonNegativeInteger(run.bonusRelicPicksNextOffer);
     const consumedBankedBonusPicks = Math.min(bankedBonusPicks, Math.max(0, picksRemaining - 1));
-    const favorBonusPicks = nonNegativeFiniteInteger(run.favorBonusRelicPicksNextOffer);
+    const favorBonusPicks = runNonNegativeInteger(run.favorBonusRelicPicksNextOffer);
     const consumedFavorBonusPicks = Math.min(favorBonusPicks, consumedBankedBonusPicks);
     const options = rollRelicOptions(run, tierIndex, cleared, 0);
     if (options.length === 0) {
@@ -90,7 +87,7 @@ export type RelicPickAdvanceResult =
     | { kind: 'advanceToNextLevel'; run: RunState };
 
 export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): RelicPickAdvanceResult => {
-    if (run.status !== 'levelComplete' || nonNegativeFiniteInteger(run.lives) <= 0) {
+    if (run.status !== 'levelComplete' || runNonNegativeInteger(run.lives) <= 0) {
         return { kind: 'unchanged', run };
     }
     const offer = run.relicOffer;
@@ -104,7 +101,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
     };
     next = applyRelicImmediate(next, relicId);
 
-    const remainingAfter = Math.max(0, nonNegativeFiniteInteger(offer.picksRemaining) - 1);
+    const remainingAfter = Math.max(0, runNonNegativeInteger(offer.picksRemaining) - 1);
 
     if (remainingAfter > 0) {
         const cleared = run.lastLevelResult!.level;
@@ -112,7 +109,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
         if (tierIndex === null) {
             return { kind: 'unchanged', run };
         }
-        const newPickRound = nonNegativeFiniteInteger(offer.pickRound) + 1;
+        const newPickRound = runNonNegativeInteger(offer.pickRound) + 1;
         const newOptions = rollRelicOptions(next, tierIndex, cleared, newPickRound);
         const contextualOptionReasons = getRelicDraftOptionReasons(next, cleared, newOptions);
         if (newOptions.length === 0) {
@@ -120,7 +117,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
                 kind: 'advanceToNextLevel',
                 run: {
                     ...next,
-                    relicTiersClaimed: nonNegativeFiniteInteger(run.relicTiersClaimed) + 1,
+                    relicTiersClaimed: runNonNegativeInteger(run.relicTiersClaimed) + 1,
                     relicOffer: null
                 }
             };
@@ -157,7 +154,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
         kind: 'advanceToNextLevel',
         run: {
             ...next,
-            relicTiersClaimed: nonNegativeFiniteInteger(run.relicTiersClaimed) + 1,
+            relicTiersClaimed: runNonNegativeInteger(run.relicTiersClaimed) + 1,
             relicOffer: null
         }
     };
