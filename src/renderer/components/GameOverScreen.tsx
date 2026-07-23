@@ -62,6 +62,9 @@ const gameOverRewardPerkIds = (value: unknown): RewardPerkId[] =>
 const gameOverFlipHistory = (value: unknown): string[] =>
     Array.isArray(value) ? value.filter((id): id is string => typeof id === 'string') : [];
 
+const gameOverDisplayInteger = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const runModeIdentityLine = (summary: NonNullable<RunState['lastRunSummary']>): string => {
     if (summary.activeContract?.noShuffle) {
         return gameOverScreenCopy.modeIdentity.scholar;
@@ -126,8 +129,9 @@ const runMomentumRecapRows = (
     run: RunState,
     summary: NonNullable<RunState['lastRunSummary']>
 ): { id: string; label: string; value: string; detail: string; tone: 'chain' | 'reward' | 'build' | 'risk' }[] => {
-    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
-    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
+    const bestStreak = gameOverDisplayInteger(summary.bestStreak);
+    const pickupClaimed = gameOverDisplayInteger(run.findablesClaimedThisFloor);
+    const pickupTotal = gameOverDisplayInteger(run.findablesTotalThisFloor);
     const traitRouteComplete =
         run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor);
     const summaryActiveMutators = gameOverMutatorIds(summary.activeMutators);
@@ -140,11 +144,11 @@ const runMomentumRecapRows = (
         : 'Drafted relics and perks define the next build attempt.';
     const buildDetailWithPerk = topPerkCue ? `${buildDetail} Perk next: ${topPerkCue}` : buildDetail;
     const pressureCount =
-        Math.max(0, summaryActiveMutators.length) +
-        Math.max(0, run.stats.mismatches) +
-        Math.max(0, run.stats.volatileTraitShuffles);
+        summaryActiveMutators.length +
+        gameOverDisplayInteger(run.stats.mismatches) +
+        gameOverDisplayInteger(run.stats.volatileTraitShuffles);
     const nextFocus =
-        summary.bestStreak < 4
+        bestStreak < 4
             ? {
                   value: 'Rebuild chain',
                   detail: 'Aim for x4+ before chasing side rewards.',
@@ -178,11 +182,11 @@ const runMomentumRecapRows = (
         {
             id: 'chain',
             label: 'Chain engine',
-            value: summary.bestStreak > 0 ? `x${summary.bestStreak}` : 'not started',
+            value: bestStreak > 0 ? `x${bestStreak}` : 'not started',
             detail:
-                summary.bestStreak >= 10
+                bestStreak >= 10
                     ? 'Combo-tier streak reached.'
-                    : summary.bestStreak >= 4
+                    : bestStreak >= 4
                       ? 'Reward thresholds were in reach.'
                       : 'Short chains left reward momentum on the table.',
             tone: 'chain'
@@ -265,7 +269,10 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const politeRunSummaryText = useMemo(
         () =>
             summary
-                ? gameOverScreenCopy.politeRunSummary(summary.totalScore, summary.highestLevel)
+                ? gameOverScreenCopy.politeRunSummary(
+                      gameOverDisplayInteger(summary.totalScore),
+                      gameOverDisplayInteger(summary.highestLevel)
+                  )
                 : '',
         [summary]
     );
@@ -286,6 +293,14 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
 
     const summaryActiveMutators = gameOverMutatorIds(summary.activeMutators);
     const summaryRelicIds = gameOverRelicIds(summary.relicIds);
+    const summaryDisplay = {
+        bestScore: gameOverDisplayInteger(summary.bestScore),
+        bestStreak: gameOverDisplayInteger(summary.bestStreak),
+        highestLevel: gameOverDisplayInteger(summary.highestLevel),
+        levelsCleared: gameOverDisplayInteger(summary.levelsCleared),
+        perfectClears: gameOverDisplayInteger(summary.perfectClears),
+        totalScore: gameOverDisplayInteger(summary.totalScore)
+    };
     const rewardPerkIds = gameOverRewardPerkIds(run.rewardPerkIds);
     const flipHistory = gameOverFlipHistory(run.flipHistory);
     const flipCount = flipHistory.length;
@@ -296,9 +311,9 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         ...summaryRelicIds.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) }))
     ];
     const outcomeSignals = [
-        { kind: 'score', label: 'Score', value: summary.totalScore.toLocaleString() },
-        { kind: 'chain', label: 'Best chain', value: `x${summary.bestStreak}` },
-        { kind: 'perfect', label: 'Perfect clears', value: `${summary.perfectClears}` },
+        { kind: 'score', label: 'Score', value: summaryDisplay.totalScore.toLocaleString() },
+        { kind: 'chain', label: 'Best chain', value: `x${summaryDisplay.bestStreak}` },
+        { kind: 'perfect', label: 'Perfect clears', value: `${summaryDisplay.perfectClears}` },
         summaryRelicIds.length > 0
             ? { kind: 'build', label: 'Prime', value: `${summaryRelicIds.length} relic${summaryRelicIds.length === 1 ? '' : 's'}` }
             : null,
@@ -313,7 +328,9 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const payoffBurstRows = getRunPayoffSignals(summary, {
         pickupClaimed: run.findablesClaimedThisFloor,
         pickupTotal: run.findablesTotalThisFloor,
-        pressureExtra: Math.max(0, run.stats.mismatches) + Math.max(0, run.stats.volatileTraitShuffles),
+        pressureExtra:
+            gameOverDisplayInteger(run.stats.mismatches) +
+            gameOverDisplayInteger(run.stats.volatileTraitShuffles),
         rewardPerkCount: rewardPerkIds.length,
         routePaid: run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor),
         routeRewardText: run.traitRouteObjectiveRewardTextThisFloor
@@ -377,8 +394,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     data-testid="game-over-above-fold-summary"
                 >
                     <div className={styles.mobileOutcomeCopy}>
-                        <strong>{summary.totalScore.toLocaleString()} score</strong>
-                        <span>Floor {summary.highestLevel} / {summary.levelsCleared} clears / {summary.bestStreak} streak</span>
+                        <strong>{summaryDisplay.totalScore.toLocaleString()} score</strong>
+                        <span>Floor {summaryDisplay.highestLevel} / {summaryDisplay.levelsCleared} clears / {summaryDisplay.bestStreak} streak</span>
                     </div>
                     <UiButton
                         fullWidth
@@ -422,11 +439,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             </ScreenTitle>
                         </div>
                         <div
-                            aria-label={`Total score ${summary.totalScore.toLocaleString()}`}
+                            aria-label={`Total score ${summaryDisplay.totalScore.toLocaleString()}`}
                             className={styles.scoreHero}
                         >
                             <span className={styles.scoreHeroLabel}>{gameOverScreenCopy.scoreLabel}</span>
-                            <span className={styles.scoreHeroValue}>{summary.totalScore.toLocaleString()}</span>
+                            <span className={styles.scoreHeroValue}>{summaryDisplay.totalScore.toLocaleString()}</span>
                         </div>
                         <div
                             aria-label={outcomeSignalsLabel}
@@ -613,7 +630,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             ))}
                         </div>
                         <img alt="" className={styles.divider} src={UI_ART.dividerOrnament} />
-                        <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summary.highestLevel)}</p>
+                        <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summaryDisplay.highestLevel)}</p>
 
                         {metaItems.length > 0 ? (
                             <div className={styles.metaStrip} data-testid="game-over-meta-strip">
@@ -633,27 +650,27 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.highestFloor}
-                                value={summary.highestLevel}
+                                value={summaryDisplay.highestLevel}
                             />
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.bestStreak}
-                                value={summary.bestStreak}
+                                value={summaryDisplay.bestStreak}
                             />
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.perfectFloors}
-                                value={summary.perfectClears}
+                                value={summaryDisplay.perfectClears}
                             />
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.floorsCleared}
-                                value={summary.levelsCleared}
+                                value={summaryDisplay.levelsCleared}
                             />
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.bestScore}
-                                value={summary.bestScore.toLocaleString()}
+                                value={summaryDisplay.bestScore.toLocaleString()}
                             />
                         </div>
 

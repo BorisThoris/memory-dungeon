@@ -398,23 +398,47 @@ describe('GameOverScreen (REF-031)', () => {
         const run = gameOverRunFixture();
         const malformedRun: RunState = {
             ...run,
+            findablesClaimedThisFloor: Number.NaN,
+            findablesTotalThisFloor: Number.POSITIVE_INFINITY,
             flipHistory: Number.NaN as unknown as RunState['flipHistory'],
             rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'],
+            stats: {
+                ...run.stats,
+                mismatches: Number.NaN,
+                volatileTraitShuffles: Number.POSITIVE_INFINITY
+            },
             lastRunSummary: run.lastRunSummary
                 ? {
                       ...run.lastRunSummary,
                       activeMutators: Number.NaN as unknown as NonNullable<RunState['lastRunSummary']>['activeMutators'],
-                      relicIds: Number.NaN as unknown as NonNullable<RunState['lastRunSummary']>['relicIds']
+                      bestScore: Number.POSITIVE_INFINITY,
+                      bestStreak: Number.NaN,
+                      highestLevel: Number.POSITIVE_INFINITY,
+                      levelsCleared: Number.NaN,
+                      perfectClears: Number.NEGATIVE_INFINITY,
+                      relicIds: Number.NaN as unknown as NonNullable<RunState['lastRunSummary']>['relicIds'],
+                      totalScore: Number.NaN
                   }
                 : null
         };
 
         render(<GameOverScreen run={malformedRun} />);
 
+        expect(screen.getByLabelText('Run summary announcement')).toHaveTextContent(
+            'Expedition complete. Final score 0. Highest floor 0.'
+        );
+        expect(screen.getByTestId('game-over-above-fold-summary')).toHaveTextContent(
+            '0 scoreFloor 0 / 0 clears / 0 streak'
+        );
+        expect(screen.getByLabelText('Total score 0')).toHaveTextContent('0');
+        expect(screen.getByText('Floor 0 reached before the archive sealed - details below.')).toBeInTheDocument();
         const signals = screen.getByTestId('game-over-outcome-signals');
+        expect(signals).toHaveTextContent('Score0Best chainx0Perfect clears0');
+        expect(signals).not.toHaveTextContent(/NaN|Infinity/);
         expect(signals.querySelector('[data-outcome-signal="build"]')).toBeNull();
         expect(signals.querySelector('[data-outcome-signal="pressure"]')).toBeNull();
         expect(screen.getByTestId('game-over-momentum-recap')).toHaveTextContent('0 relics / 0 perks');
+        expect(screen.getByTestId('game-over-momentum-recap')).not.toHaveTextContent(/NaN|Infinity/);
         expect(screen.queryByTestId('game-over-detail-drawer')).not.toBeInTheDocument();
         expect(screen.getByText('No flip history stored for this run.')).toBeInTheDocument();
     });
