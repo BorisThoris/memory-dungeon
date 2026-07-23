@@ -3,6 +3,7 @@ import {
     type RelicId,
     type RunState
 } from './contracts';
+import { runRelicIds } from './relics';
 
 const nonNegativePowerStateCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
@@ -10,7 +11,7 @@ const nonNegativePowerStateCount = (value: unknown): number =>
 const powerStateTileIds = (value: unknown): string[] => Array.isArray(value) ? value : [];
 
 const hasRelic = (run: RunState, relicId: RelicId): boolean =>
-    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+    runRelicIds(run.relicIds).includes(relicId);
 
 export const maxPinnedTilesForRun = (run: RunState): number =>
     MAX_PINNED_TILES + (hasRelic(run, 'pin_cap_plus_one') ? 1 : 0);

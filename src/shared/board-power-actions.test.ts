@@ -255,6 +255,17 @@ describe('board power actions', () => {
         expect(shuffled.freeShuffleThisFloor).toBe(false);
     });
 
+    it('ignores malformed relic ids before direct shuffle charge accounting', () => {
+        const shuffled = applyShuffle(run({
+            shuffleCharges: 1,
+            freeShuffleThisFloor: true,
+            relicIds: Number.NaN as unknown as RunState['relicIds']
+        }));
+
+        expect(shuffled.shuffleCharges).toBe(0);
+        expect(shuffled.freeShuffleThisFloor).toBe(true);
+    });
+
     it('applies row shuffle only to rows with at least two hidden tiles', () => {
         const state = run({
             board: board([

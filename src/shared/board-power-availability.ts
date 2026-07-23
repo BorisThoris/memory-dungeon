@@ -1,13 +1,14 @@
 import type { RelicId, RunState } from './contracts';
 import { countFullyHiddenPairs } from './board-inspection';
 import { tileIsDestroyEligiblePreview } from './board-power-targeting';
+import { runRelicIds } from './relics';
 
 const nonNegativePowerCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
 
-const hasRelic = (run: RunState, relicId: RelicId): boolean => Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+const hasRelic = (run: RunState, relicId: RelicId): boolean => runRelicIds(run.relicIds).includes(relicId);
 
 export const canShuffleBoard = (run: RunState): boolean => {
     const board = run.board;

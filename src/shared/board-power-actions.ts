@@ -29,6 +29,7 @@ import {
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
+import { runRelicIds } from './relics';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
 
@@ -39,7 +40,7 @@ const stringArray = (value: unknown): string[] => (Array.isArray(value) ? value.
 
 const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
 
-const hasRelic = (run: RunState, relicId: RelicId): boolean => Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+const hasRelic = (run: RunState, relicId: RelicId): boolean => runRelicIds(run.relicIds).includes(relicId);
 
 type TileEntry = {
     index: number;
