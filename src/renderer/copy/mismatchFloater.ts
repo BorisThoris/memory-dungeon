@@ -1,4 +1,5 @@
 import { getChainTargetFeedback } from '../../shared/chain-targets';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 type MismatchFloaterContext = {
     brokenChainDepth?: number;
@@ -9,8 +10,7 @@ type MismatchFloaterContext = {
 };
 
 const normalizeBrokenChainDepth = (context: MismatchFloaterContext = {}): number => {
-    const depth = context.brokenChainDepth ?? 0;
-    return Number.isFinite(depth) ? Math.max(0, Math.floor(depth)) : 0;
+    return runNonNegativeInteger(context.brokenChainDepth);
 };
 
 const chainBreakLiveText = (context: MismatchFloaterContext = {}): string =>
