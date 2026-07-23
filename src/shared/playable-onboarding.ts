@@ -1,5 +1,6 @@
 import type { BoardState, RunState, SaveData } from './contracts';
 import { runArrayCount } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
@@ -52,9 +53,6 @@ const isSafeOnboardingTile = (board: BoardState, pairKey: string, tileId: string
     );
 };
 
-const nonNegativeOnboardingCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const firstUnmatchedPair = (board: BoardState | null): string[] => {
     if (!board) {
         return [];
@@ -85,7 +83,7 @@ const getStepCopy = (
                 detail: 'A miss costs tempo, not the run. Use the marked pair to rebuild streak before spending a rescue tool.'
             };
         }
-        if (nonNegativeOnboardingCount(run.board?.matchedPairs) >= nonNegativeOnboardingCount(run.board?.pairCount) - 1) {
+        if (runNonNegativeInteger(run.board?.matchedPairs) >= runNonNegativeInteger(run.board?.pairCount) - 1) {
             return {
                 title: 'Exit in sight',
                 prompt: 'Clear the final pair',
@@ -110,7 +108,7 @@ const getStepCopy = (
     const flippedCount = runArrayCount(run.board?.flippedTileIds);
     if (
         (stats.mismatches > 0 || stats.tries > 0) &&
-        nonNegativeOnboardingCount(run.board?.matchedPairs) === 0
+        runNonNegativeInteger(run.board?.matchedPairs) === 0
     ) {
         return {
             title: 'Recover from the miss',
@@ -141,7 +139,7 @@ export const getPlayableOnboardingScenario = ({
     powersFtueSeen?: boolean;
 }): OnboardingScenario => {
     const completed = onboardingDismissed;
-    const matchedPairs = nonNegativeOnboardingCount(board?.matchedPairs);
+    const matchedPairs = runNonNegativeInteger(board?.matchedPairs);
     const targetTileIds = firstUnmatchedPair(board);
     const activeId: OnboardingStepId = completed
         ? 'handoff'

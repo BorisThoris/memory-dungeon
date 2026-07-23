@@ -1,4 +1,5 @@
 import type { RunState, SaveData } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getRelicPickTotal } from './save-data';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -96,19 +97,16 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
     }
 ] as const;
 
-const nonNegativeQuestCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const progressFor = (save: SaveData, id: QuestCampaignStepId): number => {
     switch (id) {
         case 'first_lantern':
             return save.achievements.ACH_FIRST_CLEAR ? 1 : 0;
         case 'scholar_oath':
-            return nonNegativeQuestCount(save.playerStats?.bestFloorNoPowers);
+            return runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
         case 'gauntlet_proof':
-            return save.lastRunSummary?.gameMode === 'gauntlet' ? nonNegativeQuestCount(save.lastRunSummary.levelsCleared) : 0;
+            return save.lastRunSummary?.gameMode === 'gauntlet' ? runNonNegativeInteger(save.lastRunSummary.levelsCleared) : 0;
         case 'daily_rhythm':
-            return nonNegativeQuestCount(save.playerStats?.dailiesCompleted);
+            return runNonNegativeInteger(save.playerStats?.dailiesCompleted);
         case 'relic_apprentice':
             return getRelicPickTotal(save.playerStats?.relicPickCounts);
         default:
@@ -171,8 +169,8 @@ export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContract
         });
     }
     if (run.activeContract?.maxPinsTotalRun != null) {
-        const pinsPlacedCountThisRun = nonNegativeQuestCount(run.pinsPlacedCountThisRun);
-        const maxPinsTotalRun = nonNegativeQuestCount(run.activeContract.maxPinsTotalRun);
+        const pinsPlacedCountThisRun = runNonNegativeInteger(run.pinsPlacedCountThisRun);
+        const maxPinsTotalRun = runNonNegativeInteger(run.activeContract.maxPinsTotalRun);
         const failed = pinsPlacedCountThisRun > maxPinsTotalRun;
         rows.push({
             id: 'pin_vow',
@@ -204,7 +202,7 @@ export const getQuestCampaignRows = buildQuestCampaignRows;
 export const questCampaignSummary = getQuestCampaignSummary;
 
 export const getQuestContractForRunSummary = (summary: { gameMode?: string; levelsCleared?: number } | null): QuestCampaignStepId | null => {
-    const levelsCleared = nonNegativeQuestCount(summary?.levelsCleared);
+    const levelsCleared = runNonNegativeInteger(summary?.levelsCleared);
     if (summary?.gameMode === 'gauntlet' && levelsCleared >= 1) {
         return 'gauntlet_proof';
     }

@@ -11,6 +11,7 @@ import { activeEnemyHazardsForBoard, allRealBoardPairsCleared } from './enemy-ha
 import { dungeonKeyKindArticleLabel } from './dungeon-key-copy';
 import { getFloorHeldDungeonKeyCount } from './dungeon-key-rules';
 import { getDungeonKeyQuantityRows } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
 import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 
 /**
@@ -131,9 +132,6 @@ const groupTilesByPairKey = (tiles: readonly Tile[]): Map<string, Tile[]> => {
 
 const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
 
-const nonNegativeDungeonTopologyCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const bossObjectiveAlreadySettled = (board: BoardState): boolean => {
     if (board.dungeonObjectiveId !== 'defeat_boss' || board.dungeonBossId == null) {
         return false;
@@ -147,7 +145,7 @@ const bossObjectiveAlreadySettled = (board: BoardState): boolean => {
 
 const requirementForExit = (lockKind: DungeonExitLockKind, requiredLeverCount: number): DungeonTopologyRequirement => {
     if (lockKind === 'none') return { kind: 'none' };
-    if (lockKind === 'lever') return { kind: 'lever', count: nonNegativeDungeonTopologyCount(requiredLeverCount) };
+    if (lockKind === 'lever') return { kind: 'lever', count: runNonNegativeInteger(requiredLeverCount) };
     return { kind: 'key', keyKind: lockKind };
 };
 
@@ -335,7 +333,7 @@ export const createDungeonBoardTopology = (
         : board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY) ?? null;
     if (primaryExit) {
         const lockKind = primaryExit.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
-        const requiredLeverCount = nonNegativeDungeonTopologyCount(
+        const requiredLeverCount = runNonNegativeInteger(
             primaryExit.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount
         );
         const exitNodeId = `exit:${primaryExit.id}`;
@@ -413,8 +411,8 @@ export const inspectDungeonBoardTopology = (
             initialKeyKinds.add(keyKind);
         }
     }
-    const carriedMasterKeys = nonNegativeDungeonTopologyCount(options.dungeonMasterKeys);
-    const carriedLeverCount = nonNegativeDungeonTopologyCount(board.dungeonLeverCount);
+    const carriedMasterKeys = runNonNegativeInteger(options.dungeonMasterKeys);
+    const carriedLeverCount = runNonNegativeInteger(board.dungeonLeverCount);
 
     const firstPassReachable = collectReachableNodeIds(
         graph,
@@ -472,7 +470,7 @@ export const inspectDungeonBoardTopology = (
     for (const exitNodeId of exitNodeIds) {
         const exit = graph.getNodeAttributes(exitNodeId);
         const lockKind = exit.lockKind ?? 'none';
-        const requiredLeverCount = nonNegativeDungeonTopologyCount(exit.requiredLeverCount);
+        const requiredLeverCount = runNonNegativeInteger(exit.requiredLeverCount);
         if (lockKind === 'lever' && reachableLeverCount < requiredLeverCount) {
             issues.push({
                 code: 'topology_exit_lever_source_shortage',

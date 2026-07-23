@@ -5,6 +5,7 @@
 import type { SaveData } from './contracts';
 import { cosmeticUnlockTag, type CosmeticId } from './cosmetics';
 import { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getRelicPickTotal, normalizeSaveData } from './save-data';
 
 export { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
@@ -84,19 +85,16 @@ export const parseHonorUnlockTag = (tag: string): HonorUnlockId | null => {
 export const hasHonorUnlock = (save: SaveData, id: HonorUnlockId): boolean =>
     (save.unlocks ?? []).includes(honorUnlockTag(id));
 
-const nonNegativeHonorCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 /** Which honors are earned given current save stats (independent of whether tags are already stored). */
 export const eligibleHonorUnlockIds = (save: SaveData): HonorUnlockId[] => {
     const ps = save.playerStats;
-    const dailies = nonNegativeHonorCount(ps?.dailiesCompleted);
-    const streak = nonNegativeHonorCount(ps?.dailyStreakCosmetic);
-    const bestNp = nonNegativeHonorCount(ps?.bestFloorNoPowers);
-    const bestScore = nonNegativeHonorCount(save.bestScore);
+    const dailies = runNonNegativeInteger(ps?.dailiesCompleted);
+    const streak = runNonNegativeInteger(ps?.dailyStreakCosmetic);
+    const bestNp = runNonNegativeInteger(ps?.bestFloorNoPowers);
+    const bestScore = runNonNegativeInteger(save.bestScore);
     const relicPicks = getRelicPickTotal(ps?.relicPickCounts);
     const last = save.lastRunSummary;
-    const lastLevelsCleared = nonNegativeHonorCount(last?.levelsCleared);
+    const lastLevelsCleared = runNonNegativeInteger(last?.levelsCleared);
 
     const earned: HonorUnlockId[] = [];
     if (dailies >= 1) earned.push('honor_daily_initiate');

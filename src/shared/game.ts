@@ -92,6 +92,7 @@ import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rul
 import { resolveTileTraitEffects } from './tile-trait-rules';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { runStringArray } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 export {
     completeRelicPickAndAdvance
 } from './relic-pick-advance-rules';
@@ -318,9 +319,6 @@ export {
     grantBonusRelicPickNextOffer
 } from './relic-immediate-rules';
 
-const nonNegativeRunCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const flippedTileIdsForRun = (run: RunState): string[] | null =>
     Array.isArray(run.board?.flippedTileIds)
         ? run.board.flippedTileIds.filter((id): id is string => typeof id === 'string')
@@ -331,10 +329,10 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     run = floorClearHazards.run;
     board = floorClearHazards.board;
     const stats = normalizeSessionStats(run.stats);
-    const tries = nonNegativeRunCount(stats.tries);
-    const livesBeforeClear = nonNegativeRunCount(run.lives);
-    const currentLevelScoreBeforeClear = nonNegativeRunCount(stats.currentLevelScore);
-    const totalScoreBeforeClear = nonNegativeRunCount(stats.totalScore);
+    const tries = runNonNegativeInteger(stats.tries);
+    const livesBeforeClear = runNonNegativeInteger(run.lives);
+    const currentLevelScoreBeforeClear = runNonNegativeInteger(stats.currentLevelScore);
+    const totalScoreBeforeClear = runNonNegativeInteger(stats.totalScore);
     const perfect = tries === 0;
     const clearLifeReason = getClearLifeReason(tries);
     const clearLifeGained = clearLifeReason !== 'none' && livesBeforeClear < MAX_LIVES ? 1 : 0;
@@ -366,7 +364,7 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     bonusTags.push(...getDungeonLevelResultTags(run, board, perfect));
     const bankedScoreBeforeClear = Math.max(0, totalScoreBeforeClear - currentLevelScoreBeforeClear);
     const totalScore = bankedScoreBeforeClear + scoreGained;
-    const bestScore = Math.max(nonNegativeRunCount(stats.bestScore), totalScore);
+    const bestScore = Math.max(runNonNegativeInteger(stats.bestScore), totalScore);
     const rating = calculateRating(tries);
     const lives = Math.min(MAX_LIVES, livesBeforeClear + clearLifeGained);
     const totalRelicFavorGained =
@@ -418,7 +416,7 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
         bonusRelicPicksNextOffer: relicFavor.bonusRelicPicksNextOffer,
         favorBonusRelicPicksNextOffer: relicFavor.favorBonusRelicPicksNextOffer,
         relicFavorProgress: relicFavor.relicFavorProgress,
-        shopGold: nonNegativeRunCount(run.shopGold) + getShopGoldRewardForFloor(board.level),
+        shopGold: runNonNegativeInteger(run.shopGold) + getShopGoldRewardForFloor(board.level),
         shopOffers: run.shopOffers,
         parasiteFloors,
         featuredObjectiveStreak: featuredObjectiveClear.featuredObjectiveStreak,
@@ -441,11 +439,11 @@ const finalizeLevel = (run: RunState, board: BoardState): RunState => {
             bestScore,
             currentLevelScore: scoreGained,
             rating,
-            levelsCleared: nonNegativeRunCount(stats.levelsCleared) + 1,
-            highestLevel: Math.max(nonNegativeRunCount(stats.highestLevel), board.level),
+            levelsCleared: runNonNegativeInteger(stats.levelsCleared) + 1,
+            highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), board.level),
             perfectClears: perfect
-                ? nonNegativeRunCount(stats.perfectClears) + 1
-                : nonNegativeRunCount(stats.perfectClears)
+                ? runNonNegativeInteger(stats.perfectClears) + 1
+                : runNonNegativeInteger(stats.perfectClears)
         },
         timerState: clearResolveState(run),
         lastLevelResult
@@ -645,13 +643,13 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             lives,
             board: spunG.board,
             shiftingSpotlightNonce: spunG.shiftingSpotlightNonce,
-            wildMatchesRemaining: usedWild ? 0 : nonNegativeRunCount(wildMatchesRemaining),
-            peekCharges: nonNegativeRunCount(run.peekCharges) + nonNegativeRunCount(traitReward.peekChargeGain),
-            shuffleCharges: nonNegativeRunCount(run.shuffleCharges) + nonNegativeRunCount(traitReward.shuffleChargeGain),
+            wildMatchesRemaining: usedWild ? 0 : runNonNegativeInteger(wildMatchesRemaining),
+            peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),
+            shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + runNonNegativeInteger(traitReward.shuffleChargeGain),
             regionShuffleCharges:
-                nonNegativeRunCount(run.regionShuffleCharges) + nonNegativeRunCount(traitReward.regionShuffleChargeGain),
-            flashPairCharges: nonNegativeRunCount(run.flashPairCharges) + nonNegativeRunCount(traitReward.flashPairChargeGain),
-            shopGold: nonNegativeRunCount(economy.shopGold) + nonNegativeRunCount(traitReward.shopGoldGain),
+                runNonNegativeInteger(run.regionShuffleCharges) + runNonNegativeInteger(traitReward.regionShuffleChargeGain),
+            flashPairCharges: runNonNegativeInteger(run.flashPairCharges) + runNonNegativeInteger(traitReward.flashPairChargeGain),
+            shopGold: runNonNegativeInteger(economy.shopGold) + runNonNegativeInteger(traitReward.shopGoldGain),
             dungeonKeys: economy.dungeonKeys,
             dungeonMasterKeys: economy.dungeonMasterKeys,
             bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
@@ -671,24 +669,24 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             ...progress,
             stats: {
                 ...stats,
-                totalScore: nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
+                totalScore: runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
                 currentLevelScore:
-                    nonNegativeRunCount(scoring.currentLevelScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
+                    runNonNegativeInteger(scoring.currentLevelScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
                 bestScore: Math.max(
-                    nonNegativeRunCount(scoring.bestScore),
-                    nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus)
+                    runNonNegativeInteger(scoring.bestScore),
+                    runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus)
                 ),
-                matchesFound: nonNegativeRunCount(stats.matchesFound) + 1,
-                currentStreak: nonNegativeRunCount(scoring.currentStreak),
-                bestStreak: Math.max(nonNegativeRunCount(stats.bestStreak), nonNegativeRunCount(scoring.currentStreak)),
-                highestLevel: Math.max(nonNegativeRunCount(stats.highestLevel), nonNegativeRunCount(board.level)),
+                matchesFound: runNonNegativeInteger(stats.matchesFound) + 1,
+                currentStreak: runNonNegativeInteger(scoring.currentStreak),
+                bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), runNonNegativeInteger(scoring.currentStreak)),
+                highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
                 guardTokens: Math.min(
                     MAX_GUARD_TOKENS,
-                    nonNegativeRunCount(survivalReward.guardTokens) + nonNegativeRunCount(traitReward.guardTokenGain)
+                    runNonNegativeInteger(survivalReward.guardTokens) + runNonNegativeInteger(traitReward.guardTokenGain)
                 ),
                 comboShards: Math.min(
                     MAX_COMBO_SHARDS,
-                    nonNegativeRunCount(survivalReward.comboShards) + nonNegativeRunCount(traitRouteObjective.comboShardGain)
+                    runNonNegativeInteger(survivalReward.comboShards) + runNonNegativeInteger(traitRouteObjective.comboShardGain)
                 ),
                 tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [tileMatchA, tileMatchB])
             },
@@ -902,13 +900,13 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             board: spun.board,
             shiftingSpotlightNonce: spun.shiftingSpotlightNonce,
             powersUsedThisRun: usedWild ? true : run.powersUsedThisRun,
-            wildMatchesRemaining: usedWild ? 0 : nonNegativeRunCount(wildMatchesRemaining),
-            peekCharges: nonNegativeRunCount(run.peekCharges) + nonNegativeRunCount(traitReward.peekChargeGain),
-            shuffleCharges: nonNegativeRunCount(run.shuffleCharges) + nonNegativeRunCount(traitReward.shuffleChargeGain),
+            wildMatchesRemaining: usedWild ? 0 : runNonNegativeInteger(wildMatchesRemaining),
+            peekCharges: runNonNegativeInteger(run.peekCharges) + runNonNegativeInteger(traitReward.peekChargeGain),
+            shuffleCharges: runNonNegativeInteger(run.shuffleCharges) + runNonNegativeInteger(traitReward.shuffleChargeGain),
             regionShuffleCharges:
-                nonNegativeRunCount(run.regionShuffleCharges) + nonNegativeRunCount(traitReward.regionShuffleChargeGain),
-            flashPairCharges: nonNegativeRunCount(run.flashPairCharges) + nonNegativeRunCount(traitReward.flashPairChargeGain),
-            shopGold: nonNegativeRunCount(economy.shopGold) + nonNegativeRunCount(traitReward.shopGoldGain),
+                runNonNegativeInteger(run.regionShuffleCharges) + runNonNegativeInteger(traitReward.regionShuffleChargeGain),
+            flashPairCharges: runNonNegativeInteger(run.flashPairCharges) + runNonNegativeInteger(traitReward.flashPairChargeGain),
+            shopGold: runNonNegativeInteger(economy.shopGold) + runNonNegativeInteger(traitReward.shopGoldGain),
             dungeonKeys: economy.dungeonKeys,
             dungeonMasterKeys: economy.dungeonMasterKeys,
             bonusRelicPicksNextOffer: routeFavor.bonusRelicPicksNextOffer,
@@ -928,24 +926,24 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             ...progress,
             stats: {
                 ...stats,
-                totalScore: nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
+                totalScore: runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
                 currentLevelScore:
-                    nonNegativeRunCount(scoring.currentLevelScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus),
+                    runNonNegativeInteger(scoring.currentLevelScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus),
                 bestScore: Math.max(
-                    nonNegativeRunCount(scoring.bestScore),
-                    nonNegativeRunCount(scoring.totalScore) + nonNegativeRunCount(traitRouteObjective.scoreBonus)
+                    runNonNegativeInteger(scoring.bestScore),
+                    runNonNegativeInteger(scoring.totalScore) + runNonNegativeInteger(traitRouteObjective.scoreBonus)
                 ),
-                matchesFound: nonNegativeRunCount(stats.matchesFound) + 1,
-                currentStreak: nonNegativeRunCount(scoring.currentStreak),
-                bestStreak: Math.max(nonNegativeRunCount(stats.bestStreak), nonNegativeRunCount(scoring.currentStreak)),
-                highestLevel: Math.max(nonNegativeRunCount(stats.highestLevel), nonNegativeRunCount(board.level)),
+                matchesFound: runNonNegativeInteger(stats.matchesFound) + 1,
+                currentStreak: runNonNegativeInteger(scoring.currentStreak),
+                bestStreak: Math.max(runNonNegativeInteger(stats.bestStreak), runNonNegativeInteger(scoring.currentStreak)),
+                highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(board.level)),
                 guardTokens: Math.min(
                     MAX_GUARD_TOKENS,
-                    nonNegativeRunCount(survivalReward.guardTokens) + nonNegativeRunCount(traitReward.guardTokenGain)
+                    runNonNegativeInteger(survivalReward.guardTokens) + runNonNegativeInteger(traitReward.guardTokenGain)
                 ),
                 comboShards: Math.min(
                     MAX_COMBO_SHARDS,
-                    nonNegativeRunCount(survivalReward.comboShards) + nonNegativeRunCount(traitRouteObjective.comboShardGain)
+                    runNonNegativeInteger(survivalReward.comboShards) + runNonNegativeInteger(traitRouteObjective.comboShardGain)
                 ),
                 tileTraitMatches: addTileTraitCountStats(stats.tileTraitMatches, [firstTile, secondTile])
             },
