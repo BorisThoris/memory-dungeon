@@ -250,6 +250,59 @@ describe('runResolutionController', () => {
         );
     });
 
+    it('does not replay earlier achievement unlocks across rapid sequential resolutions', () => {
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
+        const harness = createHarness(baseRun);
+        const firstClearRun: RunState = {
+            ...baseRun,
+            achievementsEnabled: true,
+            status: 'levelComplete',
+            stats: {
+                ...baseRun.stats,
+                levelsCleared: 1
+            }
+        };
+
+        harness.controller.applyResolvedRun(firstClearRun);
+        expect(harness.state.newlyUnlockedAchievements).toEqual(['ACH_FIRST_CLEAR']);
+        expect(harness.persistSaveDataThenUnlockAchievements).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                achievements: expect.objectContaining({
+                    ACH_FIRST_CLEAR: true,
+                    ACH_LEVEL_FIVE: false
+                })
+            }),
+            ['ACH_FIRST_CLEAR']
+        );
+
+        const levelFiveRun: RunState = {
+            ...firstClearRun,
+            stats: {
+                ...firstClearRun.stats,
+                highestLevel: 5
+            }
+        };
+
+        harness.controller.applyResolvedRun(levelFiveRun);
+
+        expect(harness.state.newlyUnlockedAchievements).toEqual(['ACH_LEVEL_FIVE']);
+        expect(harness.state.saveData.achievements).toMatchObject({
+            ACH_FIRST_CLEAR: true,
+            ACH_LEVEL_FIVE: true
+        });
+        expect(harness.state.saveData.unlocks).toEqual(['achievement:ACH_FIRST_CLEAR', 'achievement:ACH_LEVEL_FIVE']);
+        expect(harness.persistSaveDataThenUnlockAchievements).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                achievements: expect.objectContaining({
+                    ACH_FIRST_CLEAR: true,
+                    ACH_LEVEL_FIVE: true
+                }),
+                unlocks: ['achievement:ACH_FIRST_CLEAR', 'achievement:ACH_LEVEL_FIVE']
+            }),
+            ['ACH_LEVEL_FIVE']
+        );
+    });
+
     it('repairs impossible primary exit locks before storing a resolved run', () => {
         const baseRun = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'endless' });
         const harness = createHarness(baseRun);
