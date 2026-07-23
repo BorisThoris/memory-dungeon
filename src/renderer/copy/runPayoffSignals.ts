@@ -1,5 +1,6 @@
 import type { RunSummary } from '../../shared/contracts';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
+import { runArrayCount } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 type RunPayoffSignalTone = 'chain' | 'reward' | 'build' | 'risk';
@@ -121,8 +122,6 @@ const RUN_PAYOFF_LANE_BEATS_BY_ID: Record<RunPayoffLaneId, RunPayoffBeatCount> =
     risk: 2
 };
 
-const runPayoffArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
-
 const runPayoffLaneId = (row: Pick<RunPayoffSignalRow, 'id' | 'tone'>): RunPayoffLaneId => {
     if (row.tone === 'build') {
         return 'build';
@@ -209,9 +208,9 @@ export const getRunPayoffSignals = (
     const totalScore = runNonNegativeInteger(summary.totalScore);
     const pickupClaimed = runNonNegativeInteger(options.pickupClaimed ?? summary.payoffPickupClaimed);
     const pickupTotal = runNonNegativeInteger(options.pickupTotal ?? summary.payoffPickupTotal);
-    const relicCount = runPayoffArrayCount(summary.relicIds);
+    const relicCount = runArrayCount(summary.relicIds);
     const perkCount = runNonNegativeInteger(options.rewardPerkCount ?? summary.payoffRewardPerkCount);
-    const mutatorCount = runPayoffArrayCount(summary.activeMutators);
+    const mutatorCount = runArrayCount(summary.activeMutators);
     const pressureCount = mutatorCount + runNonNegativeInteger(options.pressureExtra ?? summary.payoffPressureExtra);
 
     if (bestStreak >= 10) {

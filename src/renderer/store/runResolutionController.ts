@@ -9,6 +9,7 @@ import type {
 } from '../../shared/contracts';
 import { createRunSummary } from '../../shared/game-core';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
+import { runArrayCount } from '../../shared/run-array-guards';
 import {
     mergeBestFloorNoPowers,
     mergeDailyComplete,
@@ -73,8 +74,6 @@ interface RunResolutionController {
     applyResolveBoardTurn: (run: RunState) => void;
     applyResolvedRun: (resolvedRun: RunState) => void;
 }
-
-const telemetryArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
 export const createRunResolutionController = ({
     getSfxGain,
@@ -165,8 +164,8 @@ export const createRunResolutionController = ({
                     practice: nextRun.practiceMode,
                     highestLevel: summary.highestLevel,
                     totalScore: summary.totalScore,
-                    mutatorCount: telemetryArrayCount(summary.activeMutators),
-                    relicCount: telemetryArrayCount(summary.relicIds)
+                    mutatorCount: runArrayCount(summary.activeMutators),
+                    relicCount: runArrayCount(summary.relicIds)
                 });
             }
 
