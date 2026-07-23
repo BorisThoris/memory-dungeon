@@ -4,14 +4,12 @@ import {
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey
 } from './tile-identity';
+import { runNonNegativeInteger } from './run-number-guards';
 
 const isEnemyHazardRelevantPairTile = (tile: Tile): boolean =>
     !isSingletonUtilityPairKey(tile.pairKey) &&
     tile.pairKey !== DECOY_PAIR_KEY &&
     tile.pairKey !== WILD_PAIR_KEY;
-
-const nonNegativeEnemyHazardCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const enemyHazardsForBoard = (board: Pick<BoardState, 'enemyHazards'> | null | undefined): EnemyHazardState[] =>
     Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
@@ -143,10 +141,10 @@ export const clearFinalPairEnemyHazardOccupationForRun = (run: RunState): RunSta
     return {
         ...run,
         board: boardAfterClearedTiles,
-        dungeonEnemiesDefeated: nonNegativeEnemyHazardCount(run.dungeonEnemiesDefeated) + bossHazardsToClear,
+        dungeonEnemiesDefeated: runNonNegativeInteger(run.dungeonEnemiesDefeated) + bossHazardsToClear,
         dungeonEnemiesDefeatedThisFloor:
-            nonNegativeEnemyHazardCount(run.dungeonEnemiesDefeatedThisFloor) + bossHazardsToClear,
+            runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) + bossHazardsToClear,
         enemyHazardsDefeatedThisFloor:
-            nonNegativeEnemyHazardCount(run.enemyHazardsDefeatedThisFloor) + hazardsToClear.length
+            runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor) + hazardsToClear.length
     };
 };

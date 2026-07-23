@@ -24,11 +24,9 @@ import {
 import { addPendingMemorizeBonusForLostLives } from './recall-rules';
 import { hashStringToSeed } from './rng';
 import { runArrayCount } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { isSprungTrapTile } from './tile-state-rules';
-
-const nonNegativeEnemyHazardCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const positiveEnemyHazardCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
@@ -250,14 +248,14 @@ export const createEnemyHazardsForBoard = ({
 };
 
 export const advanceEnemyHazardsOnBoard = (board: BoardState, steps: number = 1): BoardState => {
-    const safeSteps = nonNegativeEnemyHazardCount(steps);
+    const safeSteps = runNonNegativeInteger(steps);
     const hazards = activeEnemyHazardsForBoard(board);
     if (hazards.length === 0 || safeSteps <= 0) {
         return board;
     }
     const sourceHazards = enemyHazardsForBoard(board);
     const activeIds = new Set(hazards.map((hazard) => hazard.id));
-    const nextTurn = nonNegativeEnemyHazardCount(board.enemyHazardTurn) + safeSteps;
+    const nextTurn = runNonNegativeInteger(board.enemyHazardTurn) + safeSteps;
     const occupied = new Set<string>();
     const nextHazards = sourceHazards.map((hazard, index) => {
         if (!activeIds.has(hazard.id)) {
@@ -324,9 +322,9 @@ export const applyEnemyHazardClick = (
         return cleanedRun;
     }
     const advanceHazards = options.advanceHazards ?? true;
-    const guardTokens = nonNegativeEnemyHazardCount(cleanedRun.stats.guardTokens);
-    const currentLives = nonNegativeEnemyHazardCount(cleanedRun.lives);
-    const damage = nonNegativeEnemyHazardCount(hazard.damage);
+    const guardTokens = runNonNegativeInteger(cleanedRun.stats.guardTokens);
+    const currentLives = runNonNegativeInteger(cleanedRun.lives);
+    const damage = runNonNegativeInteger(hazard.damage);
     const consumesGuardToken = guardTokens > 0;
     const lives = consumesGuardToken ? currentLives : Math.max(0, currentLives - damage);
     const lostLives = Math.max(0, currentLives - lives);
@@ -347,7 +345,7 @@ export const applyEnemyHazardClick = (
         lives,
         pendingMemorizeBonusMs: addPendingMemorizeBonusForLostLives(cleanedRun.pendingMemorizeBonusMs, lostLives),
         board: advancedBoard,
-        enemyHazardHitsThisFloor: nonNegativeEnemyHazardCount(cleanedRun.enemyHazardHitsThisFloor) + 1,
+        enemyHazardHitsThisFloor: runNonNegativeInteger(cleanedRun.enemyHazardHitsThisFloor) + 1,
         stats: {
             ...cleanedRun.stats,
             guardTokens: consumesGuardToken ? Math.max(0, guardTokens - 1) : guardTokens
@@ -432,10 +430,10 @@ export const clearLastPairEnemyHazardSoftlock = (run: RunState, board: BoardStat
         ...run,
         board: cleared.board,
         dungeonEnemiesDefeated:
-            nonNegativeEnemyHazardCount(run.dungeonEnemiesDefeated) + nonNegativeEnemyHazardCount(cleared.bossesDefeated),
+            runNonNegativeInteger(run.dungeonEnemiesDefeated) + runNonNegativeInteger(cleared.bossesDefeated),
         dungeonEnemiesDefeatedThisFloor:
-            nonNegativeEnemyHazardCount(run.dungeonEnemiesDefeatedThisFloor) + nonNegativeEnemyHazardCount(cleared.bossesDefeated),
+            runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) + runNonNegativeInteger(cleared.bossesDefeated),
         enemyHazardsDefeatedThisFloor:
-            nonNegativeEnemyHazardCount(run.enemyHazardsDefeatedThisFloor) + nonNegativeEnemyHazardCount(cleared.defeated)
+            runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor) + runNonNegativeInteger(cleared.defeated)
     };
 };
