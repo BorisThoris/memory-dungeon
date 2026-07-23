@@ -1,4 +1,5 @@
 import type { SaveData } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getDailyStreakEthicsState } from './save-data';
 
 export type DailyArchiveScope = 'daily' | 'weekly' | 'season';
@@ -73,9 +74,6 @@ const parseDateKeyUtc = (dateKey: string | null | undefined): Date | null => {
 const formatDateKey = (date: Date): string =>
     `${date.getUTCFullYear()}${String(date.getUTCMonth() + 1).padStart(2, '0')}${String(date.getUTCDate()).padStart(2, '0')}`;
 
-const nonNegativeDailyArchiveCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const dateFromTimestampMs = (timestampMs: number): Date => {
     const date = new Date(timestampMs);
     if (Number.isFinite(date.getTime())) {
@@ -114,8 +112,8 @@ export const seasonKeyForDaily = (dateKey: string): string => seasonKey(parseDat
 
 export const getDailyArchiveSummary = (save: SaveData, nowMs: number = Date.now()): DailyArchiveSummary => {
     const ps = save.playerStats;
-    const completed = nonNegativeDailyArchiveCount(ps?.dailiesCompleted);
-    const streak = nonNegativeDailyArchiveCount(ps?.dailyStreakCosmetic);
+    const completed = runNonNegativeInteger(ps?.dailiesCompleted);
+    const streak = runNonNegativeInteger(ps?.dailyStreakCosmetic);
     const lastKey = ps?.lastDailyDateKeyUtc ?? null;
     const lastDate = parseDateKeyUtc(lastKey);
     const validLastKey = lastDate ? lastKey : null;
@@ -187,7 +185,7 @@ export const buildDailyArchiveShareString = (save: SaveData): string => {
     const last = save.lastRunSummary;
     const score =
         last?.gameMode === 'daily'
-            ? ` · ${nonNegativeDailyArchiveCount(last.totalScore)} pts · ${nonNegativeDailyArchiveCount(last.levelsCleared)} clear(s)`
+            ? ` · ${runNonNegativeInteger(last.totalScore)} pts · ${runNonNegativeInteger(last.levelsCleared)} clear(s)`
             : '';
     return `Daily ${dailyKey}${score} · ${summary.dailiesCompleted} local-only daily clear(s) · streak ${summary.streak}`;
 };
@@ -209,19 +207,19 @@ export const buildDailyResultsShareString = (
 export const buildDailyResultsLoopRows = (save: SaveData, nowMs: number = Date.now()): DailyResultsLoopRow[] => {
     const summary = getDailyArchiveSummary(save, nowMs);
     const last = save.lastRunSummary;
-    const dailyScore = last?.gameMode === 'daily' ? nonNegativeDailyArchiveCount(last.totalScore) : null;
-    const dailyFloor = last?.gameMode === 'daily' ? nonNegativeDailyArchiveCount(last.highestLevel) : null;
+    const dailyScore = last?.gameMode === 'daily' ? runNonNegativeInteger(last.totalScore) : null;
+    const dailyFloor = last?.gameMode === 'daily' ? runNonNegativeInteger(last.highestLevel) : null;
 
     return summary.rows
         .filter((row): row is DailyArchiveIdentity & { scope: 'daily' | 'weekly' } => row.scope === 'daily' || row.scope === 'weekly')
         .map((row) => {
             const currentAttempt =
                 row.scope === 'daily' && dailyScore !== null
-                    ? `${dailyScore} score · floor ${dailyFloor ?? 0} · ${nonNegativeDailyArchiveCount(last?.levelsCleared)} clear(s)`
+                    ? `${dailyScore} score · floor ${dailyFloor ?? 0} · ${runNonNegativeInteger(last?.levelsCleared)} clear(s)`
                     : 'No current local attempt recorded for this window';
             const personalBest =
                 row.scope === 'daily'
-                    ? `${nonNegativeDailyArchiveCount(save.bestScore)} all-mode best · ${summary.dailiesCompleted} daily clear(s)`
+                    ? `${runNonNegativeInteger(save.bestScore)} all-mode best · ${summary.dailiesCompleted} daily clear(s)`
                     : `${summary.dailiesCompleted} cumulative daily clear(s) this local profile`;
             const shareString = buildDailyResultsShareString(save, row.scope, nowMs);
 

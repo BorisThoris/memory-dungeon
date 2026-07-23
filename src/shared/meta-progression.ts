@@ -9,6 +9,7 @@ import {
     type CosmeticId
 } from './cosmetics';
 import { countEligibleHonors } from './honorUnlocks';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getRelicPickTotal, normalizeSaveData } from './save-data';
 
 export type MetaProgressionTrack = 'permanent_upgrade' | 'cosmetic';
@@ -134,9 +135,6 @@ export interface MetaProgressionMilestoneRow {
     reward: string;
 }
 
-const nonNegativeMetaProgressionCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const META_MARKS_PER_LEVEL = 5;
 
 const META_PROGRESS_MILESTONES: Array<{
@@ -152,8 +150,8 @@ const META_PROGRESS_MILESTONES: Array<{
 
 export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceRow[] => {
     const achievementProgress = getAchievementProgressSummary(save.achievements);
-    const dailies = Math.min(7, nonNegativeMetaProgressionCount(save.playerStats?.dailiesCompleted));
-    const noPowers = Math.min(5, nonNegativeMetaProgressionCount(save.playerStats?.bestFloorNoPowers));
+    const dailies = Math.min(7, runNonNegativeInteger(save.playerStats?.dailiesCompleted));
+    const noPowers = Math.min(5, runNonNegativeInteger(save.playerStats?.bestFloorNoPowers));
     const relics = Math.min(10, getRelicPickTotal(save.playerStats?.relicPickCounts));
     const relicsToNextMark = relics >= 10 ? null : relics % 2 === 0 ? 2 : 1;
     return [
@@ -225,8 +223,8 @@ const lockedStatusForProgress = (current: number, target: number, owned: boolean
     enabled ? statusForProgress(current, target, owned) : owned ? 'owned' : 'locked';
 
 export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] => {
-    const dailies = nonNegativeMetaProgressionCount(save.playerStats?.dailiesCompleted);
-    const bestNoPowers = nonNegativeMetaProgressionCount(save.playerStats?.bestFloorNoPowers);
+    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+    const bestNoPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
         {
             id: 'upgrade_relic_shrine_extra_pick',
@@ -309,7 +307,7 @@ export const getMetaProgressionSummary = (
 export const getMetaProgressionBoard = (save: SaveData): MetaProgressionBoard => {
     const rows = getMetaProgressionRows(save);
     const summary = getMetaProgressionSummary(save);
-    const honorMarks = nonNegativeMetaProgressionCount(summary.honorMarks);
+    const honorMarks = runNonNegativeInteger(summary.honorMarks);
     const shortTermRows = rows.filter((row) => !isDeferredMetaProgressionRow(row));
     const nextReward =
         shortTermRows.find((row) => row.status === 'available') ??
@@ -423,7 +421,7 @@ export const getMetaProgressionDifficultyTierLabel = (tier: MetaProgressionDiffi
 };
 
 const metaMarksRequiredForLevel = (level: number): number =>
-    Math.max(0, (nonNegativeMetaProgressionCount(level) - 1) * META_MARKS_PER_LEVEL);
+    Math.max(0, (runNonNegativeInteger(level) - 1) * META_MARKS_PER_LEVEL);
 
 export const getMetaProgressionMilestones = (save: SaveData): MetaProgressionMilestoneRow[] => {
     const board = getMetaProgressionBoard(save);
@@ -517,8 +515,8 @@ const legacyStatus = (owned: boolean, current: number, target: number): LegacyMe
     owned ? 'owned' : current > 0 || current >= target ? 'in_progress' : 'locked';
 
 export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[] => {
-    const dailies = nonNegativeMetaProgressionCount(save.playerStats?.dailiesCompleted);
-    const noPowers = nonNegativeMetaProgressionCount(save.playerStats?.bestFloorNoPowers);
+    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+    const noPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
         {
             id: 'relic_shrine_extra_pick',
@@ -552,8 +550,8 @@ export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[]
 
 /** One row per cosmetic track (daily/mastery/relic gating), not the aggregate summary from `getCosmeticTrackProgressSummary`. */
 export const getCosmeticTrackDefinitionRows = (save: SaveData): CosmeticTrackRow[] => {
-    const dailies = nonNegativeMetaProgressionCount(save.playerStats?.dailiesCompleted);
-    const noPowers = nonNegativeMetaProgressionCount(save.playerStats?.bestFloorNoPowers);
+    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+    const noPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
         {
             trackId: 'starter',

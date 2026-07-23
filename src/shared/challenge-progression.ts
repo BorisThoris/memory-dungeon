@@ -4,6 +4,7 @@ import {
     getMetaProgressionFeedback,
     type MetaProgressionDifficultyTier
 } from './meta-progression';
+import { runNonNegativeInteger } from './run-number-guards';
 import { RUN_MODE_CATALOG, type RunModeDefinition } from './run-mode-catalog';
 
 export type ChallengeGateStatus = 'available' | 'locked' | 'deferred';
@@ -34,9 +35,6 @@ export interface ChallengeModeGateRow {
 const puzzleCompleted = (save: SaveData, puzzleId: string): boolean =>
     save.playerStats?.puzzleCompletions?.[puzzleId]?.completed === true;
 
-const nonNegativeChallengeProgressCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const gateIdForMode = (mode: RunModeDefinition): ChallengeGateId => {
     if (mode.id === 'classic') return 'classic_open';
     if (mode.id === 'daily') return 'daily_local_seed';
@@ -50,7 +48,7 @@ const gateIdForMode = (mode: RunModeDefinition): ChallengeGateId => {
 
 const rowForMode = (save: SaveData, mode: RunModeDefinition): ChallengeModeGateRow => {
     const firstClear = save.achievements.ACH_FIRST_CLEAR ? 1 : 0;
-    const dailies = nonNegativeChallengeProgressCount(save.playerStats?.dailiesCompleted);
+    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
     const starterPuzzleDone = puzzleCompleted(save, 'starter_pairs') ? 1 : 0;
     const gateId = gateIdForMode(mode);
 

@@ -1,5 +1,6 @@
 import type { AchievementId, RunState, SaveData } from './contracts';
 import { ACHIEVEMENT_CATALOG, type AchievementCodexEntry } from './mechanics-encyclopedia';
+import { runNonNegativeInteger } from './run-number-guards';
 import { ACHIEVEMENT_IDS } from './save-data';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -35,9 +36,6 @@ export const getAchievementProgressSummary = (input: unknown): AchievementProgre
         total: rows.length
     };
 };
-
-const nonNegativeAchievementCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): AchievementId[] => {
     if (!run.achievementsEnabled) {
@@ -79,7 +77,7 @@ export const evaluateAchievementUnlocks = (run: RunState, saveData: SaveData): A
         unlocked.push('ACH_ENDLESS_TEN');
     }
 
-    if (nonNegativeAchievementCount(saveData.playerStats?.dailiesCompleted) >= 7 && !saveData.achievements.ACH_SEVEN_DAILIES) {
+    if (runNonNegativeInteger(saveData.playerStats?.dailiesCompleted) >= 7 && !saveData.achievements.ACH_SEVEN_DAILIES) {
         unlocked.push('ACH_SEVEN_DAILIES');
     }
 
