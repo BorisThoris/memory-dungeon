@@ -11,6 +11,9 @@ describe('matchScoreFloaterLiveRegionText', () => {
         expect(matchScoreFloaterLiveRegionText(Number.POSITIVE_INFINITY, [], 'Score pop', Number.NaN)).toBe(
             'Score pop. Plus 0 points'
         );
+        expect(matchScoreFloaterLiveRegionText(25, [], 'Combo', Number.POSITIVE_INFINITY)).toBe(
+            'Combo. Plus 25 points'
+        );
     });
 
     it('includes trait interaction text when present', () => {
@@ -266,5 +269,11 @@ describe('matchScoreFloaterLiveRegionText', () => {
 
     it('does not announce low-depth streak noise for ordinary matches', () => {
         expect(matchScoreFloaterLiveRegionText(99, [], 'Score pop', 2)).toBe('Score pop. Plus 99 points');
+    });
+
+    it('floors fractional chain depth before announcing streak copy', () => {
+        expect(matchScoreFloaterLiveRegionText(99, [], 'Chain', 3.9)).toBe(
+            'Chain. Plus 99 points. 3 match streak, 3 matches to x6'
+        );
     });
 });

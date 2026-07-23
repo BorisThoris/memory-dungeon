@@ -52,11 +52,11 @@ export function matchScoreFloaterLiveRegionText(
 ): string {
     const base = `Plus ${runNonNegativeInteger(amount).toLocaleString()} points`;
     const headline = feedbackHeadline ? `${feedbackHeadline}. ` : '';
-    const chainCue = matchScoreFloaterChainCue(chainDepth);
-    const streak =
-        chainDepth != null && Number.isFinite(chainDepth) && chainDepth >= 3
-            ? `. ${Math.floor(chainDepth)} match streak${chainCue ? `, ${chainCue}` : ''}`
-            : '';
+    const safeChainDepth = chainDepth == null ? null : runNonNegativeInteger(chainDepth);
+    const chainCue = matchScoreFloaterChainCue(safeChainDepth ?? undefined);
+    const streak = safeChainDepth != null && safeChainDepth >= 3
+        ? `. ${safeChainDepth} match streak${chainCue ? `, ${chainCue}` : ''}`
+        : '';
     const rewardForecast =
         chainRewardForecastTexts.length > 0
             ? `. Next rewards: ${chainRewardForecastTexts.slice(0, 2).join(', ')}`
