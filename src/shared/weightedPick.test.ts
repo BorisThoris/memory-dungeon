@@ -98,6 +98,16 @@ describe('weightedPick', () => {
                     { value: 'a', weight: 1 },
                     { value: 'b', weight: 1 }
                 ],
+                9
+            )
+        ).toEqual(['b', 'a']);
+        expect(
+            pickWeightedWithoutReplacement(
+                () => 0.75,
+                [
+                    { value: 'a', weight: 1 },
+                    { value: 'b', weight: 1 }
+                ],
                 Number.NaN
             )
         ).toEqual(['b', 'a']);

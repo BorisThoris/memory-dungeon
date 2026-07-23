@@ -3,11 +3,12 @@
  * returning values in [0, 1) so runs stay deterministic when seeded elsewhere.
  */
 import { normalizeRngRoll } from './rng';
+import { runNonNegativeIntegerWithFallback } from './run-number-guards';
 
 const normalizeWeight = (weight: number): number => (Number.isFinite(weight) ? Math.max(0, weight) : 0);
 
 const normalizePickCount = (count: number, max: number): number =>
-    Number.isFinite(count) ? Math.min(Math.max(0, Math.floor(count)), max) : max;
+    Math.min(runNonNegativeIntegerWithFallback(count, max), max);
 
 /** Pick an index 0..weights.length-1 proportional to non-negative weights. If all weights are zero, picks uniformly. */
 export const pickWeightedIndex = (rng: () => number, weights: readonly number[]): number => {
