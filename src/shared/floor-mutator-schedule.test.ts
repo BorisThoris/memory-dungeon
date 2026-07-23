@@ -350,6 +350,15 @@ describe('floor archetype progression contract', () => {
         }
     });
 
+    it('normalizes malformed progression report sample counts', () => {
+        expect(getFloorArchetypeProgressionReport(2.9).floorsSampled).toBe(2);
+        expect(getFloorArchetypeProgressionReport(-1).floorsSampled).toBe(0);
+
+        const malformed = getFloorArchetypeProgressionReport(Number.NaN);
+        expect(malformed.floorsSampled).toBe(ENDLESS_CYCLE_FLOOR_COUNT);
+        expect(malformed.rows).toHaveLength(ENDLESS_CYCLE_FLOOR_COUNT);
+    });
+
     it('keeps one-cycle role counts inside authored frequency bands', () => {
         const report = getFloorArchetypeProgressionReport(ENDLESS_CYCLE_FLOOR_COUNT);
 

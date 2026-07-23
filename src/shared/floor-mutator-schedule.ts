@@ -491,7 +491,7 @@ export const getFloorArchetypeProgressionReport = (
     const floorTagCounts = emptyFloorTagCounts();
     const featuredObjectiveCounts: Partial<Record<FeaturedObjectiveId, number>> = {};
     const rows: FloorArchetypeProgressionRow[] = [];
-    const floorsSampled = Math.max(0, Math.floor(floors));
+    const floorsSampled = runNonNegativeIntegerWithFallback(floors, ENDLESS_CYCLE_FLOOR_COUNT);
 
     for (let level = 1; level <= floorsSampled; level += 1) {
         const row = progressionRowForEntry(
