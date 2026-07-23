@@ -13,7 +13,7 @@ const isEnemyHazardRelevantPairTile = (tile: Tile): boolean =>
 const nonNegativeEnemyHazardCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const enemyHazardsForBoard = (board: Pick<BoardState, 'enemyHazards'> | null | undefined): EnemyHazardState[] =>
+export const enemyHazardsForBoard = (board: Pick<BoardState, 'enemyHazards'> | null | undefined): EnemyHazardState[] =>
     Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
 
 export const enemyHazardEligibleTiles = (tiles: readonly Tile[]): Tile[] =>
@@ -132,7 +132,7 @@ export const clearFinalPairEnemyHazardOccupationForRun = (run: RunState): RunSta
     const boardAfterClearedTiles = defeatEnemyHazardsOnClearedTiles(boardAfterFinalPair);
     const finalPairIds = new Set(finalPairHazards.map((hazard) => hazard.id));
     const clearedTileHazards = enemyHazardsForBoard(boardAfterFinalPair).filter((hazard) => {
-        const updated = boardAfterClearedTiles.enemyHazards?.find((candidate) => candidate.id === hazard.id);
+        const updated = enemyHazardsForBoard(boardAfterClearedTiles).find((candidate) => candidate.id === hazard.id);
         return !finalPairIds.has(hazard.id) && hazard.state !== 'defeated' && updated?.state === 'defeated';
     });
     const hazardsToClear = [...finalPairHazards, ...clearedTileHazards];

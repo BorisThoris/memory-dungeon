@@ -8,7 +8,8 @@ import {
     collectEnemyHazardsOccupyingFinalPair,
     defeatEnemyHazardOccupationOnFinalPair,
     defeatEnemyHazardsOnClearedTiles,
-    enemyHazardEligibleTiles
+    enemyHazardEligibleTiles,
+    enemyHazardsForBoard
 } from './enemy-hazard-board-rules';
 import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 
@@ -24,6 +25,14 @@ describe('enemy hazard board rules', () => {
         ];
 
         expect(enemyHazardEligibleTiles(tiles).map((candidate) => candidate.id)).toEqual(['a']);
+    });
+
+    it('normalizes board enemy hazard arrays through one shared helper', () => {
+        const hazards = [hazard('hazard-a', 'a', 'b')];
+
+        expect(enemyHazardsForBoard(boardWith([tile('a', 'pair-a'), tile('b', 'pair-a')], hazards))).toBe(hazards);
+        expect(enemyHazardsForBoard(null)).toEqual([]);
+        expect(enemyHazardsForBoard({ enemyHazards: Number.NaN as unknown as BoardState['enemyHazards'] })).toEqual([]);
     });
 
     it('collects and defeats hazards occupying the final remaining real pair', () => {

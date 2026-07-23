@@ -18,7 +18,8 @@ import {
     activeEnemyHazardsForBoard,
     clearFinalPairEnemyHazardOccupationForRun,
     defeatEnemyHazardOccupationOnFinalPair,
-    enemyHazardEligibleTiles
+    enemyHazardEligibleTiles,
+    enemyHazardsForBoard
 } from './enemy-hazard-board-rules';
 import { addPendingMemorizeBonusForLostLives } from './recall-rules';
 import { hashStringToSeed } from './rng';
@@ -30,9 +31,6 @@ const nonNegativeEnemyHazardCount = (value: unknown): number =>
 
 const positiveEnemyHazardCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
-
-const enemyHazardsForBoard = (board: Pick<BoardState, 'enemyHazards'> | null | undefined): EnemyHazardState[] =>
-    Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
 
 const flippedTileCount = (board: BoardState | null | undefined): number => (Array.isArray(board?.flippedTileIds) ? board.flippedTileIds.length : 0);
 

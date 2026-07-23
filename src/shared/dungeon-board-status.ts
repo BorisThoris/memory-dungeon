@@ -3,7 +3,6 @@ import type {
     DungeonBossId,
     DungeonExitLockKind,
     DungeonKeyKind,
-    EnemyHazardState,
     EnemyHazardKind,
     EnemyHazardPattern,
     RouteNodeType,
@@ -21,7 +20,7 @@ import {
     countReachableExitKeySources,
     getEffectivePrimaryExitLock
 } from './board-inspection';
-import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
+import { activeEnemyHazardsForBoard, enemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { dungeonKeyKindArticleLabel, dungeonKeyKindLabel } from './dungeon-key-copy';
 import { getDungeonKeyTotal } from './run-inventory';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -34,9 +33,6 @@ const nonNegativeDungeonStatusCountWithFallback = (value: unknown, fallback: num
     typeof value === 'number' && Number.isFinite(value)
         ? Math.max(0, Math.floor(value))
         : nonNegativeDungeonStatusCount(fallback);
-
-const enemyHazardsForStatusBoard = (board: Pick<BoardState, 'enemyHazards'> | null | undefined): EnemyHazardState[] =>
-    Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
 
 export interface DungeonExitStatus {
     exitTile: Tile | null;
@@ -359,7 +355,7 @@ export const getDungeonEnemyLifecycleStatus = (runOrBoard: RunState | BoardState
         ) ?? [];
     const resolvedEnemyPairs = countResolvedDungeonPairs(board?.tiles ?? [], (tile) => tile.dungeonCardKind === 'enemy');
     const counterOnlyDefeated = Math.max(0, defeatedEnemyCounter - resolvedEnemyPairs);
-    const movingHazards = enemyHazardsForStatusBoard(board);
+    const movingHazards = enemyHazardsForBoard(board);
     const activeMovingHazards = activeEnemyHazardsForBoard(board);
 
     return {
@@ -412,7 +408,7 @@ export const getDungeonBossReadModel = (
         bossId ??
         board?.dungeonBossId ??
         board?.tiles.find((tile) => tile.dungeonBossId != null)?.dungeonBossId ??
-        enemyHazardsForStatusBoard(board).find((hazard) => hazard.bossId != null)?.bossId ??
+        enemyHazardsForBoard(board).find((hazard) => hazard.bossId != null)?.bossId ??
         null;
     const definition = getDungeonBossDefinition(resolvedBossId);
     if (!definition) {
@@ -424,7 +420,7 @@ export const getDungeonBossReadModel = (
     const activeBossTiles = bossTiles.filter(
         (tile) => tile.state !== 'matched' && tile.state !== 'removed' && tile.dungeonCardState !== 'resolved'
     );
-    const bossHazards = enemyHazardsForStatusBoard(board).filter((hazard) => hazard.bossId === definition.id);
+    const bossHazards = enemyHazardsForBoard(board).filter((hazard) => hazard.bossId === definition.id);
     const activeBossHazards = activeEnemyHazardsForBoard(board).filter((hazard) => hazard.bossId === definition.id);
     const bossTileMaxHp = (tile: Tile): number =>
         nonNegativeDungeonStatusCountWithFallback(tile.dungeonCardMaxHp, definition.hp);
@@ -539,7 +535,7 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
     if (objectiveId === 'pacify_floor') {
         const activeEnemyPairs = countDungeonPairs(board.tiles, (tile) => tile.dungeonCardKind === 'enemy');
         const resolvedEnemyPairs = countResolvedDungeonPairs(board.tiles, (tile) => tile.dungeonCardKind === 'enemy');
-        const movingEnemyHazards = enemyHazardsForStatusBoard(board);
+        const movingEnemyHazards = enemyHazardsForBoard(board);
         const activeMovingEnemyHazardIds = new Set(activeEnemyHazardsForBoard(board).map((hazard) => hazard.id));
         const resolvedMovingEnemyHazards = movingEnemyHazards.filter(
             (hazard) => hazard.state === 'defeated' || !activeMovingEnemyHazardIds.has(hazard.id)
@@ -581,7 +577,7 @@ export const getDungeonObjectiveStatus = (run: RunState): DungeonObjectiveStatus
     }
 
     if (objectiveId === 'defeat_boss') {
-        const bossHazards = enemyHazardsForStatusBoard(board).filter((hazard) => hazard.bossId);
+        const bossHazards = enemyHazardsForBoard(board).filter((hazard) => hazard.bossId);
         const activeBossHazards = activeEnemyHazardsForBoard(board).filter((hazard) => hazard.bossId);
         if (bossHazards.length > 0) {
             const required = Math.max(1, ...bossHazards.map((hazard) => nonNegativeDungeonStatusCountWithFallback(hazard.maxHp, 1)));

@@ -7,8 +7,7 @@ import {
     type MutatorId,
     type RunState,
     type RouteNodeType,
-    type Tile,
-    type EnemyHazardState
+    type Tile
 } from './contracts';
 import { buildBoard, type BuildBoardOptions } from './board-build-rules';
 import { countFindablePairs } from './board-generation';
@@ -33,7 +32,7 @@ import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run
 import { getDungeonKeyTotal } from './run-inventory';
 import { getRunShopStockPlan, SHOP_KEY_ITEM_BY_KIND } from './shop-rules';
 import { normalizeSessionStats } from './session-stats-rules';
-import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles } from './enemy-hazard-board-rules';
+import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles, enemyHazardsForBoard } from './enemy-hazard-board-rules';
 import {
     formatDungeonBoardTopologyIssue,
     formatDungeonRunMapTopologyIssue,
@@ -199,9 +198,6 @@ const pickFinalPairKey = (board: BoardState): string | null => {
 const nonNegativeSoftlockContractCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const enemyHazardsForSoftlockBoard = (board: Pick<BoardState, 'enemyHazards'> | null | undefined): EnemyHazardState[] =>
-    Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
-
 const projectionExitResourceState = (
     board: BoardState
 ): Pick<BoardState, 'dungeonKeysHeld' | 'dungeonKeysHeldByKind' | 'dungeonLeverCount'> => {
@@ -247,7 +243,7 @@ export const createFinalPairFairnessProjection = (board: BoardState): BoardState
         flippedTileIds: [],
         matchedPairs: countMatchedPairs(tiles),
         ...projectionExitResourceState(board),
-        enemyHazards: enemyHazardsForSoftlockBoard(board).map((hazard) =>
+        enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
             activeTileIds.has(hazard.currentTileId) && activeTileIds.has(hazard.nextTileId)
                 ? hazard
                 : { ...hazard, state: 'defeated' as const, hp: 0 }
@@ -262,7 +258,7 @@ export const createClearedBoardFairnessProjection = (board: BoardState): BoardSt
     return defeatEnemyHazardsOnClearedTiles({
         ...board,
         tiles,
-        enemyHazards: enemyHazardsForSoftlockBoard(board),
+        enemyHazards: enemyHazardsForBoard(board),
         flippedTileIds: [],
         matchedPairs: countMatchedPairs(tiles),
         dungeonExitActivated: board.dungeonExitTileId != null ? true : board.dungeonExitActivated,
@@ -291,7 +287,7 @@ const addCoverage = (
     }
     if (board.tiles.some((tile) => tile.tileTraitKind != null)) coverage.traits += 1;
     if (board.tiles.some((tile) => tile.pairKey === EXIT_PAIR_KEY || tile.dungeonCardKind === 'exit')) coverage.exits += 1;
-    const enemyHazardCount = enemyHazardsForSoftlockBoard(board).length;
+    const enemyHazardCount = enemyHazardsForBoard(board).length;
     if (board.tiles.some((tile) => tile.tileHazardKind != null) || enemyHazardCount > 0) coverage.hazards += 1;
     if (board.tiles.some((tile) => tile.dungeonCardKind === 'enemy') || enemyHazardCount > 0) {
         coverage.enemies += 1;
@@ -472,7 +468,7 @@ const recordPlayableClearInspection = (
     }));
     const staleEnemyHazards =
         solved.status === 'levelComplete'
-            ? enemyHazardsForSoftlockBoard(solved.board).filter((hazard) => hazard.state !== 'defeated')
+            ? enemyHazardsForBoard(solved.board).filter((hazard) => hazard.state !== 'defeated')
             : [];
     if (
         solved.status === 'levelComplete' &&
