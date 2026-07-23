@@ -177,6 +177,9 @@ const nextRewardPayoffLabel = (cue: ChainRewardForecastCue): string => {
     return `${cue.actionLabel} shard`;
 };
 
+const matchScoreDisplayAmount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 const formatGain = (amount: number, singular: string, plural = `${singular}s`): string =>
     `+${amount} ${amount === 1 ? singular : plural}`;
 
@@ -372,7 +375,7 @@ const buildMatchScorePopPayoffChips = ({
         arcadeCue: 'Score pop',
         id: 'score',
         label: 'Score',
-        value: `+${amount.toLocaleString()}`,
+        value: `+${matchScoreDisplayAmount(amount).toLocaleString()}`,
         tone: 'score'
     };
     const metaChips: MatchScorePopPayoffChip[] = [];
@@ -613,7 +616,7 @@ export const buildMatchScorePopPayoffSummary = ({
     if (chainDepth >= 3) {
         return { label: 'Chain hit', value: `x${Math.floor(chainDepth)} streak`, tier: 'chain' };
     }
-    return { label: 'Score hit', value: `+${amount.toLocaleString()}`, tier: 'score' };
+    return { label: 'Score hit', value: `+${matchScoreDisplayAmount(amount).toLocaleString()}`, tier: 'score' };
 };
 
 export const buildMatchScorePopImpactCue = ({
@@ -813,7 +816,7 @@ export function buildMatchScorePopPayload(
         return null;
     }
     const amount = next.stats.totalScore - run.stats.totalScore;
-    if (amount <= 0) {
+    if (!Number.isFinite(amount) || amount <= 0) {
         return null;
     }
     const { tileIdA, tileIdB } = anchor;

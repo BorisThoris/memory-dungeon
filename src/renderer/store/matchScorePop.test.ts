@@ -108,6 +108,22 @@ describe('buildMatchScorePopPayload', () => {
         expect(buildMatchScorePopPayload(run, next, 'k')).toBeNull();
     });
 
+    it('returns null when score delta is malformed', () => {
+        const run = minimalRun({
+            board: {
+                level: 1,
+                flippedTileIds: ['a', 'b'],
+                tiles: []
+            } as unknown as BoardState,
+            stats: { matchesFound: 2, totalScore: 10 } as RunState['stats']
+        });
+        const next = {
+            ...run,
+            stats: { ...run.stats, matchesFound: 3, totalScore: Number.POSITIVE_INFINITY }
+        };
+        expect(buildMatchScorePopPayload(run, next, 'k')).toBeNull();
+    });
+
     it('gambit match anchors to resolveGambitThree pair (not third tile)', () => {
         const run = minimalRun({
             board: {
@@ -809,6 +825,20 @@ describe('buildMatchScorePopPayload', () => {
         expect(buildMatchScorePopImpactCue({ chainDepth: 2, payoffSummary })).toEqual({
             label: 'Perk pop',
             tone: 'trait'
+        });
+    });
+
+    it('normalizes malformed score-hit amount before rendering payoff summary', () => {
+        expect(
+            buildMatchScorePopPayoffSummary({
+                amount: Number.POSITIVE_INFINITY,
+                chainDepth: 1,
+                traitInteractionTexts: []
+            })
+        ).toEqual({
+            label: 'Score hit',
+            value: '+0',
+            tier: 'score'
         });
     });
 

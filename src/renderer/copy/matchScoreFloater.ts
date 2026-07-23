@@ -34,6 +34,9 @@ const enrichTraitLaneMapLiveText = (text: string): string =>
         return current.replace(lanePattern, `$1${action}. `);
     }, text);
 
+const matchScoreDisplayAmount = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export function matchScoreFloaterLiveRegionText(
     amount: number,
     traitInteractionTexts: readonly string[] = [],
@@ -49,7 +52,7 @@ export function matchScoreFloaterLiveRegionText(
     crescendoText?: string,
     chainMilestoneText?: string
 ): string {
-    const base = `Plus ${amount.toLocaleString()} points`;
+    const base = `Plus ${matchScoreDisplayAmount(amount).toLocaleString()} points`;
     const headline = feedbackHeadline ? `${feedbackHeadline}. ` : '';
     const chainCue = matchScoreFloaterChainCue(chainDepth);
     const streak =

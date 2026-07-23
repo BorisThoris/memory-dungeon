@@ -6,6 +6,13 @@ describe('matchScoreFloaterLiveRegionText', () => {
         expect(matchScoreFloaterLiveRegionText(99)).toMatch(/^Plus 99 points$/);
     });
 
+    it('normalizes malformed amount before announcing score text', () => {
+        expect(matchScoreFloaterLiveRegionText(Number.NaN)).toBe('Plus 0 points');
+        expect(matchScoreFloaterLiveRegionText(Number.POSITIVE_INFINITY, [], 'Score pop', Number.NaN)).toBe(
+            'Score pop. Plus 0 points'
+        );
+    });
+
     it('includes trait interaction text when present', () => {
         expect(matchScoreFloaterLiveRegionText(99, ['Echo + Sealed: combo shard'])).toBe(
             'Plus 99 points. Echo + Sealed: combo shard'
