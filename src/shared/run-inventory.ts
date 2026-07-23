@@ -4,6 +4,7 @@ import {
     MAX_GUARD_TOKENS,
     type RunState
 } from './contracts';
+import { runMutatorIds, runRelicIds } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunInventoryItemId =
@@ -237,9 +238,6 @@ export const DUNGEON_KEY_SPEND_ORDER = ['iron', 'treasure', 'shrine', 'boss', 't
 const nonNegativeQuantity = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const stringArray = (value: unknown): string[] =>
-    Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
-
 const dungeonKeyRecord = (value: unknown): Partial<Record<DungeonKeyKind, number>> =>
     value != null && typeof value === 'object' && !Array.isArray(value) ? value as Partial<Record<DungeonKeyKind, number>> : {};
 
@@ -303,9 +301,9 @@ export const getRunInventoryItemQuantity = (run: RunState, id: RunInventoryItemI
         case 'combo_shard':
             return nonNegativeQuantity(stats.comboShards);
         case 'relic_loadout':
-            return stringArray(run.relicIds).length;
+            return runRelicIds(run.relicIds).length;
         case 'mutator_loadout':
-            return stringArray(run.activeMutators).length;
+            return runMutatorIds(run.activeMutators).length;
         case 'contract_loadout':
             return run.activeContract ? 1 : 0;
         default:
@@ -391,14 +389,14 @@ export const getRunLoadoutRows = (run: RunState): RunInventoryRow[] =>
 export const RUN_LOADOUT_SLOT_LIMIT = 4;
 
 export const getRunInventoryLoadoutRows = (run: RunState): RunLoadoutSlotRow[] => [
-    ...stringArray(run.relicIds).map((id) => ({
+    ...runRelicIds(run.relicIds).map((id) => ({
         id: `relic:${id}`,
         label: id.replace(/_/g, ' '),
         source: 'relic' as const,
         mutableDuringRun: false,
         changeWindow: 'Relic draft or relic service only.'
     })),
-    ...stringArray(run.activeMutators).map((id) => ({
+    ...runMutatorIds(run.activeMutators).map((id) => ({
         id: `mutator:${id}`,
         label: id.replace(/_/g, ' '),
         source: 'mutator' as const,
