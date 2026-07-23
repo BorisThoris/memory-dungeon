@@ -10,6 +10,7 @@ import {
     type Tile,
     type TileTraitKind
 } from './contracts';
+import { runRelicIds } from './relics';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { normalizeSessionStats } from './session-stats-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
@@ -80,7 +81,7 @@ const nonNegativeTraitCount = (value: unknown): number =>
 const traitArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
 
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+    runRelicIds(run.relicIds).includes(relicId);
 
 export interface TileTraitEffectResult {
     comboShardGain: number;

@@ -8,6 +8,7 @@ import {
     type StartingLoadoutId
 } from './contracts';
 import { hashStringToSeed } from './rng';
+import { runRelicIds } from './relics';
 import type { RunMapNodeKind } from './run-map';
 import {
     gainRunInventoryItem,
@@ -505,7 +506,7 @@ const shouldApplyShrineEchoTreasurePayout = (
     ledger: BonusRewardLedger,
     reward: BonusRewardInstance
 ): boolean =>
-    (run.relicIds ?? []).includes('shrine_echo') &&
+    runRelicIds(run.relicIds).includes('shrine_echo') &&
     reward.roomKind === 'treasure_chest' &&
     ledger.openedTreasureRooms === 0;
 

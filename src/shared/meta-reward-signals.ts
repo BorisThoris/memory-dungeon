@@ -2,6 +2,7 @@ import type { RunState, SaveData } from './contracts';
 import { getDailyArchiveSummary } from './daily-archive';
 import { getMetaProgressionBoard, getMetaProgressionFeedback } from './meta-progression';
 import { getObjectiveBoardItems } from './objective-board';
+import { runMutatorIds, runRelicIds } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export type MetaScreenId = 'collection' | 'inventory' | 'codex';
@@ -156,8 +157,8 @@ export const getInventoryRewardSignals = (run: RunState | null): MetaRewardSigna
             }
         ];
     }
-    const relicCount = Array.isArray(run.relicIds) ? run.relicIds.length : 0;
-    const mutatorCount = Array.isArray(run.activeMutators) ? run.activeMutators.length : 0;
+    const relicCount = runRelicIds(run.relicIds).length;
+    const mutatorCount = runMutatorIds(run.activeMutators).length;
     const stats = normalizeSessionStats(run.stats);
     return [
         {

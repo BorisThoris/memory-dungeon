@@ -7,6 +7,7 @@ import {
     type MemoryTaxScore,
     type PerfectMemoryImpact
 } from './mechanic-feedback';
+import { runRelicIds } from './relics';
 
 export type PowerVerbId =
     | 'shuffle'
@@ -73,7 +74,7 @@ const hasPeekTarget = (run: RunState): boolean =>
 
 const hasRowShufflePayment = (run: RunState): boolean =>
     nonNegativePowerVerbCount(run.regionShuffleCharges) > 0 ||
-    (run.regionShuffleFreeThisFloor && powerVerbArrayIncludes(run.relicIds, 'region_shuffle_free_first'));
+    (run.regionShuffleFreeThisFloor && runRelicIds(run.relicIds).includes('region_shuffle_free_first'));
 
 const hiddenTileCount = (run: RunState): number =>
     (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden').length;
