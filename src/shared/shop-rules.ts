@@ -422,7 +422,7 @@ export const getRunShopWalletPacing = (run: RunState): {
 const nonNegativeShopCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const runShopOffers = (value: unknown): RunShopOfferState[] => Array.isArray(value) ? value : [];
+export const runShopOffers = (value: unknown): RunShopOfferState[] => Array.isArray(value) ? value : [];
 
 const getShopOfferCompatibility = (
     run: RunState,

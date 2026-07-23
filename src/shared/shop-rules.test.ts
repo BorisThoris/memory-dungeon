@@ -15,6 +15,7 @@ import {
     getShopWalletPacing,
     purchaseShopOffer,
     rerollShopOffers,
+    runShopOffers,
     SHOP_ITEM_CATALOG,
     SHOP_ITEM_IDS
 } from './shop-rules';
@@ -33,6 +34,15 @@ describe('shop rules', () => {
     it('keeps shop item catalog rows aligned with the shared item order', () => {
         expect(Object.keys(SHOP_ITEM_CATALOG)).toEqual([...SHOP_ITEM_IDS]);
         expect(getShopItemCatalogRows().map((item) => item.itemId)).toEqual([...SHOP_ITEM_IDS]);
+    });
+
+    it('normalizes shop offer arrays through one shared helper', () => {
+        const run = makePlayingRun();
+        const offers = createRunShopOffers(run);
+
+        expect(runShopOffers(offers)).toBe(offers);
+        expect(runShopOffers(null)).toEqual([]);
+        expect(runShopOffers(Number.NaN)).toEqual([]);
     });
 
     it('defines deterministic floor rewards, reroll cost, and stock plans', () => {

@@ -1,9 +1,7 @@
-import { type BoardState, type RunShopOfferState, type RunState, type Tile } from './contracts';
+import { type BoardState, type RunState, type Tile } from './contracts';
 import { advanceEnemyHazardsOnBoard } from './dungeon-enemy-hazard-rules';
-import { createRunShopOffers } from './shop-rules';
+import { createRunShopOffers, runShopOffers } from './shop-rules';
 import { EXIT_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
-
-const dungeonRevealShopOffers = (value: unknown): RunShopOfferState[] => Array.isArray(value) ? value : [];
 
 export const revealDungeonExit = (run: RunState, tileId: string): RunState => {
     if (run.status !== 'playing' || !run.board) {
@@ -56,7 +54,7 @@ export const revealDungeonShop = (run: RunState, tileId: string): RunState => {
         board: nextBoard,
         dungeonShopVisitedThisFloor: true
     };
-    const existingShopOffers = dungeonRevealShopOffers(run.shopOffers);
+    const existingShopOffers = runShopOffers(run.shopOffers);
     return {
         ...nextRun,
         shopOffers: existingShopOffers.length > 0 ? existingShopOffers : createRunShopOffers(nextRun)
