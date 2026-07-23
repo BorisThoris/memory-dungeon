@@ -12,6 +12,7 @@ import {
     type FeaturedObjectiveId
 } from './contracts';
 import { usesEndlessFloorSchedule } from './floor-mutator-schedule';
+import { runRelicIds } from './relics';
 
 export const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number> = {
     scholar_style: SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
@@ -29,7 +30,7 @@ const nonNegativeObjectiveCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+    runRelicIds(run.relicIds).includes(relicId);
 
 export const isFeaturedObjectiveCompleted = (
     run: RunState,

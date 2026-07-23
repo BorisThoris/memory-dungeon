@@ -1,5 +1,6 @@
 import { type RelicId, type RunState } from './contracts';
 import { hasMutator } from './mutators';
+import { runRelicIds } from './relics';
 
 export interface ScoreParasiteFloorAdvance {
     lives: number;
@@ -11,7 +12,7 @@ const nonNegativeParasiteCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+    runRelicIds(run.relicIds).includes(relicId);
 
 export const advanceScoreParasiteFloor = (run: RunState): ScoreParasiteFloorAdvance => {
     let parasiteFloors = nonNegativeParasiteCount(run.parasiteFloors) + 1;

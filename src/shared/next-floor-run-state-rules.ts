@@ -12,11 +12,12 @@ import {
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
+import { runRelicIds } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+    runRelicIds(run.relicIds).includes(relicId);
 
 export interface CreateNextFloorRunStateOptions {
     lives: number;

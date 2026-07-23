@@ -11,12 +11,13 @@ import {
 } from './contracts';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { hasMutator } from './mutators';
+import { runRelicIds } from './relics';
 import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
 
 const ECHO_EXTRA_RESOLVE_MS = 380;
 
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    Array.isArray(run.relicIds) && run.relicIds.includes(relicId);
+    runRelicIds(run.relicIds).includes(relicId);
 
 /** Documented in `docs/BALANCE_NOTES.md` (presentation mutator match penalties). */
 export const PRESENTATION_MUTATOR_MATCH_PENALTIES = {
