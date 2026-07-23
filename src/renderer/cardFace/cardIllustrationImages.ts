@@ -3,6 +3,8 @@
  * tarot panels via {@link drawIllustrationInCanvasOverlay} without waiting on first decode.
  */
 
+import { runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
+
 const imagesByUrl = new Map<string, HTMLImageElement>();
 const pendingImagesByUrl = new Map<string, Promise<void>>();
 
@@ -13,13 +15,8 @@ export interface PreloadCardIllustrationImagesOptions {
 const DEFAULT_CARD_ILLUSTRATION_PRELOAD_CONCURRENCY = 4;
 const CARD_ILLUSTRATION_PRELOAD_TIMEOUT_MS = 1500;
 
-const normalizeConcurrency = (concurrency: number | undefined): number => {
-    if (concurrency == null || !Number.isFinite(concurrency)) {
-        return DEFAULT_CARD_ILLUSTRATION_PRELOAD_CONCURRENCY;
-    }
-
-    return Math.max(1, Math.floor(concurrency));
-};
+const normalizeConcurrency = (concurrency: number | undefined): number =>
+    Math.max(1, runNonNegativeIntegerWithFallback(concurrency, DEFAULT_CARD_ILLUSTRATION_PRELOAD_CONCURRENCY));
 
 export const preloadCardIllustrationImages = async (
     urls: readonly string[],

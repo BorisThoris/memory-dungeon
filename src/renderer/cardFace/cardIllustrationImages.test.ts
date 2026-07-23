@@ -58,6 +58,51 @@ describe('preloadCardIllustrationImages', () => {
         expect(requestedUrls).toEqual(['a.png', 'b.png', 'c.png']);
     });
 
+    it('normalizes malformed preload concurrency before starting workers', async () => {
+        const active = { count: 0, max: 0 };
+        const releaseQueue: Array<() => void> = [];
+
+        class MockImage {
+            decoding: 'async' | 'auto' | 'sync' = 'auto';
+            naturalWidth = 64;
+            onerror: (() => void) | null = null;
+            onload: (() => void) | null = null;
+
+            decode = vi.fn(async () => undefined);
+
+            set src(_value: string) {
+                active.count += 1;
+                active.max = Math.max(active.max, active.count);
+                releaseQueue.push(() => {
+                    active.count -= 1;
+                    this.onload?.();
+                });
+            }
+        }
+
+        Object.defineProperty(globalThis, 'Image', {
+            configurable: true,
+            value: MockImage
+        });
+
+        const { preloadCardIllustrationImages } = await import('./cardIllustrationImages');
+        const preload = preloadCardIllustrationImages(['a.png', 'b.png', 'c.png', 'd.png', 'e.png'], {
+            concurrency: Number.NaN
+        });
+
+        await vi.waitFor(() => expect(releaseQueue).toHaveLength(4));
+        expect(active.max).toBe(4);
+        releaseQueue.splice(0).forEach((release) => release());
+        await vi.waitFor(() => expect(releaseQueue).toHaveLength(1));
+        releaseQueue.splice(0).forEach((release) => release());
+        await preload;
+
+        const negativeConcurrencyPreload = preloadCardIllustrationImages(['f.png'], { concurrency: -2 });
+        await vi.waitFor(() => expect(releaseQueue).toHaveLength(1));
+        releaseQueue.splice(0).forEach((release) => release());
+        await negativeConcurrencyPreload;
+    });
+
     it('caches the image after async decode completes', async () => {
         let decodeResolve: (() => void) | null = null;
 
