@@ -1,6 +1,6 @@
 import type { DungeonBossId, DungeonRunMapState, DungeonRunNode, RunState, SaveData, RunSummary } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
-import { getRunBuildProfile } from './relics';
+import { getRunBuildProfile, runMutatorIds, runRelicIds } from './relics';
 import { getDungeonKeyTotal } from './run-inventory';
 import { getRepairedSelectedDungeonNode, repairDungeonRunMapProgression } from './run-map';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -55,13 +55,7 @@ const nonNegativeRunHistoryCount = (value: unknown): number =>
 
 const runHistoryArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
-const runHistoryArray = <T>(value: unknown): T[] => (Array.isArray(value) ? value : []);
-
-const runRelicIds = (run: RunState): RunState['relicIds'] => runHistoryArray(run.relicIds);
-
-const runMutatorIds = (run: RunState): RunState['activeMutators'] => runHistoryArray(run.activeMutators);
-
-const getRunHistoryBuildProfile = (run: RunState) => getRunBuildProfile({ relicIds: runRelicIds(run) });
+const getRunHistoryBuildProfile = (run: RunState) => getRunBuildProfile({ relicIds: runRelicIds(run.relicIds) });
 
 const getPersistedSummaryPayoffStack = (
     summary: RunSummary | null
@@ -263,8 +257,8 @@ export const buildRunReplayLink = buildRunShareKey;
 export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
     const summary = run.lastRunSummary;
     const buildProfile = getRunHistoryBuildProfile(run);
-    const relicIds = runRelicIds(run);
-    const mutatorIds = runMutatorIds(run);
+    const relicIds = runRelicIds(run.relicIds);
+    const mutatorIds = runMutatorIds(run.activeMutators);
     const flipHistoryCount = runHistoryArrayCount(run.flipHistory);
     const matchedPairKeyCount = runHistoryArrayCount(run.matchedPairKeysThisRun);
     const build: RunHistoryBuildSnapshot = {
