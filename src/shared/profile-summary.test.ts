@@ -21,6 +21,16 @@ describe('REG-032 profile summary and save trust shell', () => {
         expect(rows.every((row) => row.source.length > 0)).toBe(true);
     });
 
+    it('normalizes malformed best score before building profile summary rows', () => {
+        const save = createDefaultSaveData();
+        save.bestScore = Number.POSITIVE_INFINITY;
+
+        const rows = getProfileSummaryRows(save);
+
+        expect(rows.find((row) => row.id === 'best_score')?.value).toBe('0');
+        expect(rows.map((row) => row.value).join(' ')).not.toMatch(/NaN|Infinity/);
+    });
+
     it('counts earned honors separately from owned gameplay upgrades', () => {
         const save = createDefaultSaveData();
         save.bestScore = 2400;

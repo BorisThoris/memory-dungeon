@@ -3,6 +3,7 @@ import { FEATURE_CLOUD_SAVE } from './feature-flags';
 import { countEligibleHonors } from './honorUnlocks';
 import { getMetaProgressionBoard, getMetaProgressionFeedback } from './meta-progression';
 import { buildRunJournalRowsFromSave } from './run-history';
+import { runNonNegativeInteger } from './run-number-guards';
 import type { SaveData } from './contracts';
 
 export type CloudSyncState = 'not_available' | 'available';
@@ -84,7 +85,7 @@ export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
     return [
         { id: 'profile_level', label: 'Profile level', value: String(summary.profileLevel), source: 'Honor marks' },
         { id: 'honor_marks', label: 'Honor marks', value: String(summary.honorMarks), source: 'Achievements/dailies/mastery' },
-        { id: 'best_score', label: 'Best score', value: save.bestScore.toLocaleString('en-US'), source: 'SaveData.bestScore' },
+        { id: 'best_score', label: 'Best score', value: runNonNegativeInteger(save.bestScore).toLocaleString('en-US'), source: 'SaveData.bestScore' },
         { id: 'cosmetics', label: 'Cosmetics owned', value: String(summary.cosmeticOwned), source: 'unlock tags' },
         { id: 'history', label: 'Run history rows', value: String(summary.runHistoryEntries), source: 'last run journal' },
         { id: 'daily_streak', label: 'Daily streak', value: String(summary.dailyStreak), source: 'playerStats.dailyStreakCosmetic' }
