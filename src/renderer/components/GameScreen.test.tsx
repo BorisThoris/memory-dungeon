@@ -2750,6 +2750,61 @@ describe('GameScreen (OVR-014)', () => {
         }
     });
 
+    it('ignores malformed match floater array payloads before rendering payoff rows', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const playing = finishMemorizePhase(base);
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={playing} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        act(() => {
+            useAppStore.setState({
+                matchScorePop: {
+                    amount: 45,
+                    chainDepth: 4,
+                    feedbackHeadline: 'Reward',
+                    feedbackIntensity: 'high',
+                    feedbackSignal: { label: 'Route', tone: 'route' },
+                    impactCue: { label: 'Stack cashout', tone: 'reward' },
+                    payoffSummary: {
+                        label: 'Stack cashout',
+                        value: '2 payoffs: Route + Pickup',
+                        tier: 'reward'
+                    },
+                    payoffLadder: {
+                        first: 'Route cashout',
+                        lanes: { length: 2 } as never,
+                        then: 'Pickup cashout',
+                        keep: 'Prime next',
+                        tone: 'reward'
+                    },
+                    payoffLaneMap: { length: 2 } as never,
+                    payoffChips: { length: 3 } as never,
+                    chainRewardForecastCues: { length: 1 } as never,
+                    traitInteractionTexts: { length: 2 } as never,
+                    tileIdA: 'a',
+                    tileIdB: 'b',
+                    key: 'malformed-match-floater-arrays'
+                }
+            });
+        });
+
+        expect(screen.getByTestId('match-score-floater')).toHaveTextContent('Reward');
+        expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-tier', 'stack');
+        expect(screen.queryByTestId('match-score-floater-payoff-lane-map')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('match-score-floater-reward-forecast')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('match-score-floater-payoff-chips')).not.toBeInTheDocument();
+        expect(screen.getByTestId('match-score-floater-payoff-ladder-summary')).toHaveTextContent('No lanes');
+        expect(screen.getByTestId('match-score-floater-payoff-ladder-summary')).toHaveAttribute(
+            'data-match-payoff-ladder-count',
+            '0'
+        );
+    });
+
     it('renders super-stack match floaters with distinct payoff attributes and copy', () => {
         const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
         const playing = finishMemorizePhase(base);
