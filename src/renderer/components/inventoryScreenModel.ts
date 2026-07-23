@@ -24,6 +24,9 @@ export const createInventoryQuantityMap = (run: RunState): Map<string, number> =
     return new Map(inventoryRows.map((row) => [row.id, row.quantity]));
 };
 
+const finiteNonNegativeInteger = (value: unknown): number =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+
 export const getActiveTraitBuildRows = (run: RunState) => {
     const relicTraitBuildRows = getTraitBuildRewardRows().filter((row) =>
         row.relicIds.some((relicId) => run.relicIds.includes(relicId))
@@ -51,14 +54,16 @@ type InventoryPayoffEngineSignal = {
 };
 
 export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSignal[] => {
-    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
-    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
-    const traitRequired = Math.max(0, run.traitRouteObjectiveRequiredThisFloor ?? 0);
-    const traitProgress = Math.max(0, run.traitRouteObjectiveProgressThisFloor ?? 0);
+    const pickupClaimed = finiteNonNegativeInteger(run.findablesClaimedThisFloor);
+    const pickupTotal = finiteNonNegativeInteger(run.findablesTotalThisFloor);
+    const traitRequired = finiteNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor);
+    const traitProgress = finiteNonNegativeInteger(run.traitRouteObjectiveProgressThisFloor);
     const traitComplete = run.traitRouteObjectiveCompletedThisFloor || run.traitRouteObjectiveRewardClaimedThisFloor;
     const traitRouteStatus = getTraitRouteObjectiveStatus(run);
-    const currentStreak = Math.max(0, run.stats.currentStreak ?? 0);
-    const bestStreak = Math.max(0, run.stats.bestStreak ?? 0);
+    const comboShards = finiteNonNegativeInteger(run.stats.comboShards);
+    const currentStreak = finiteNonNegativeInteger(run.stats.currentStreak);
+    const bestStreak = finiteNonNegativeInteger(run.stats.bestStreak);
+    const guardTokens = finiteNonNegativeInteger(run.stats.guardTokens);
     const chainTarget = getChainTargetFeedback(Math.max(currentStreak, bestStreak));
     return [
         {
@@ -88,18 +93,20 @@ export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSigna
         {
             id: 'resource',
             label: 'Burst bank',
-            value: `${Math.max(0, run.stats.comboShards ?? 0)} shards / ${Math.max(0, run.stats.guardTokens ?? 0)} guards`,
+            value: `${comboShards} shards / ${guardTokens} guards`,
             detail: 'Shards push burst rewards; guards preserve tempo after misses.',
-            nextCue:
-                Math.max(0, run.stats.comboShards ?? 0) >= 2
-                    ? 'Shard burst is primed'
-                    : 'Build x6 chain pressure',
+            nextCue: comboShards >= 2 ? 'Shard burst is primed' : 'Build x6 chain pressure',
             tone: 'resource'
         },
         {
             id: 'trait',
             label: 'Trait route',
-            value: traitRequired > 0 ? `${Math.min(traitProgress, traitRequired)}/${traitRequired}` : traitComplete ? 'paid' : 'scout',
+            value:
+                traitRequired > 0
+                    ? `${Math.min(traitProgress, traitRequired)}/${traitRequired}`
+                    : traitComplete
+                      ? 'paid'
+                      : 'scout',
             detail: traitRouteStatus
                 ? `${traitRouteStatus.stateLabel}: ${traitRouteStatus.reward}.`
                 : traitComplete
@@ -126,16 +133,25 @@ export const getInventoryPayoffEngineSignal = (
 ): InventoryPayoffEngineSignal => {
     const activeLanes = runLoopSignals.filter((signal) => {
         if (signal.id === 'chain') {
-            return Math.max(0, run.stats.currentStreak ?? 0) >= 3 || Math.max(0, run.stats.bestStreak ?? 0) >= 3;
+            return (
+                finiteNonNegativeInteger(run.stats.currentStreak) >= 3 ||
+                finiteNonNegativeInteger(run.stats.bestStreak) >= 3
+            );
         }
         if (signal.id === 'pickup') {
-            return Math.max(0, run.findablesTotalThisFloor ?? 0) > Math.max(0, run.findablesClaimedThisFloor ?? 0);
+            return (
+                finiteNonNegativeInteger(run.findablesTotalThisFloor) >
+                finiteNonNegativeInteger(run.findablesClaimedThisFloor)
+            );
         }
         if (signal.id === 'resource') {
-            return Math.max(0, run.stats.comboShards ?? 0) >= 2 || Math.max(0, run.stats.guardTokens ?? 0) > 0;
+            return (
+                finiteNonNegativeInteger(run.stats.comboShards) >= 2 ||
+                finiteNonNegativeInteger(run.stats.guardTokens) > 0
+            );
         }
         return (
-            Math.max(0, run.traitRouteObjectiveRequiredThisFloor ?? 0) > 0 ||
+            finiteNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor) > 0 ||
             run.traitRouteObjectiveCompletedThisFloor ||
             run.traitRouteObjectiveRewardClaimedThisFloor
         );
