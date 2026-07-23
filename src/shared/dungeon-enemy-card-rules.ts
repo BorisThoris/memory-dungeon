@@ -1,5 +1,6 @@
 import type { BoardState, Tile } from './contracts';
 import { DUNGEON_ENEMY_DEFEAT_SCORE } from './dungeon-match-reward-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export const clearDungeonCardFields = (tile: Tile): Tile => ({
     ...tile,
@@ -14,12 +15,6 @@ export const clearDungeonCardFields = (tile: Tile): Tile => ({
     scoutRevealSource: undefined
 });
 
-const positiveDungeonEnemyHp = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
-
-const nonNegativeDungeonEnemyDamage = (value: number): number =>
-    Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
-
 export const activeDungeonEnemyPairKeys = (board: BoardState): string[] => [
     ...new Set(
         board.tiles
@@ -29,7 +24,7 @@ export const activeDungeonEnemyPairKeys = (board: BoardState): string[] => [
                     tile.dungeonCardState === 'revealed' &&
                     tile.state !== 'matched' &&
                     tile.state !== 'removed' &&
-                    positiveDungeonEnemyHp(tile.dungeonCardHp) > 0
+                    runNonNegativeInteger(tile.dungeonCardHp) > 0
             )
             .map((tile) => tile.pairKey)
     )
@@ -39,7 +34,7 @@ export const damageFirstActiveDungeonEnemy = (
     board: BoardState,
     amount: number
 ): { board: BoardState; defeated: number; score: number } => {
-    const damage = nonNegativeDungeonEnemyDamage(amount);
+    const damage = runNonNegativeInteger(amount);
     if (damage <= 0) {
         return { board, defeated: 0, score: 0 };
     }
@@ -47,7 +42,7 @@ export const damageFirstActiveDungeonEnemy = (
     if (!pairKey) {
         return { board, defeated: 0, score: 0 };
     }
-    const currentHp = positiveDungeonEnemyHp(
+    const currentHp = runNonNegativeInteger(
         board.tiles.find((tile) => tile.pairKey === pairKey && tile.dungeonCardKind === 'enemy')?.dungeonCardHp
     );
     if (currentHp <= 0) {
