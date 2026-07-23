@@ -8,6 +8,7 @@ import {
     type StartingLoadoutId
 } from './contracts';
 import { hashStringToSeed } from './rng';
+import { gainRelicFavor } from './relic-favor-rules';
 import { runRelicIds } from './relics';
 import type { RunMapNodeKind } from './run-map';
 import {
@@ -486,17 +487,6 @@ export const resolveBonusRewardRoomByInstanceId = ({
     return bonusRewardInstanceForDefinition(BONUS_REWARD_CATALOG[rewardId], runSeed, rulesVersion, floor, safeLedger);
 };
 
-const gainFavor = (run: RunState, progress: number): RunState => {
-    const total = runNonNegativeInteger(run.relicFavorProgress) + runNonNegativeInteger(progress);
-    const bonusPicks = Math.floor(total / 3);
-    return {
-        ...run,
-        bonusRelicPicksNextOffer: runNonNegativeInteger(run.bonusRelicPicksNextOffer) + bonusPicks,
-        favorBonusRelicPicksNextOffer: runNonNegativeInteger(run.favorBonusRelicPicksNextOffer) + bonusPicks,
-        relicFavorProgress: total % 3
-    };
-};
-
 const shouldApplyShrineEchoTreasurePayout = (
     run: RunState,
     ledger: BonusRewardLedger,
@@ -791,7 +781,7 @@ const applyBonusRewardPayout = (
         gained.push(`+${scoreGain} score`);
     }
     if (favorProgressGain > 0) {
-        nextRun = gainFavor(nextRun, favorProgressGain);
+        nextRun = { ...nextRun, ...gainRelicFavor(nextRun, favorProgressGain) };
         gained.push(`+${favorProgressGain} relic Favor progress`);
     }
     for (const perkId of normalizeRewardPerkIds(payout.rewardPerks)) {
@@ -911,7 +901,7 @@ export const claimBonusReward = (
 
     let { run: nextRun, feedback } = previewBonusRewardClaim(run, reward);
     if (shouldApplyShrineEchoTreasurePayout(run, safeLedger, reward)) {
-        nextRun = gainFavor(nextRun, 1);
+        nextRun = { ...nextRun, ...gainRelicFavor(nextRun, 1) };
         feedback = {
             ...feedback,
             gained: [...feedback.gained, 'Shrine Echo: +1 relic Favor progress']
