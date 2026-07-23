@@ -1,6 +1,7 @@
 import type { DungeonBossId, DungeonRunMapState, DungeonRunNode, RunState, SaveData, RunSummary } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { getRunBuildProfile, runMutatorIds, runRelicIds } from './relics';
+import { runArrayCount } from './run-array-guards';
 import { getDungeonKeyTotal } from './run-inventory';
 import { getRepairedSelectedDungeonNode, repairDungeonRunMapProgression } from './run-map';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -52,8 +53,6 @@ export const MAX_DUNGEON_JOURNAL_ROWS = 8;
 
 const nonNegativeRunHistoryCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const runHistoryArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
 const getRunHistoryBuildProfile = (run: RunState) => getRunBuildProfile({ relicIds: runRelicIds(run.relicIds) });
 
@@ -259,8 +258,8 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
     const buildProfile = getRunHistoryBuildProfile(run);
     const relicIds = runRelicIds(run.relicIds);
     const mutatorIds = runMutatorIds(run.activeMutators);
-    const flipHistoryCount = runHistoryArrayCount(run.flipHistory);
-    const matchedPairKeyCount = runHistoryArrayCount(run.matchedPairKeysThisRun);
+    const flipHistoryCount = runArrayCount(run.flipHistory);
+    const matchedPairKeyCount = runArrayCount(run.matchedPairKeysThisRun);
     const build: RunHistoryBuildSnapshot = {
         relicIds: [...relicIds],
         mutatorIds: [...mutatorIds],
@@ -369,7 +368,7 @@ export const buildRunJournalRowsFromSave = (save: SaveData): RunHistoryJournalRo
         {
             id: 'encore_pairs',
             label: 'Encore pair keys',
-            value: `${runHistoryArrayCount(save.playerStats?.encorePairKeysLastRun)} pair keys remembered locally`,
+            value: `${runArrayCount(save.playerStats?.encorePairKeysLastRun)} pair keys remembered locally`,
             persistence: 'persisted_summary',
             exportSafe: false
         }

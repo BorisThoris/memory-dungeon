@@ -3,12 +3,11 @@ import {
     type RunState
 } from './contracts';
 import { runMutatorIds, runRelicIds } from './relics';
+import { runArrayCount } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 const nonNegativeInteger = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const summaryArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
 
 export const createRunSummary = (run: RunState, unlockedAchievements: AchievementId[]): RunState => ({
     ...run,
@@ -35,7 +34,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             payoffPickupClaimed: Math.min(nonNegativeInteger(run.findablesClaimedThisFloor), payoffPickupTotal),
             payoffPickupTotal,
             payoffPressureExtra: stats.mismatches + stats.volatileTraitShuffles,
-            payoffRewardPerkCount: summaryArrayCount(run.rewardPerkIds),
+            payoffRewardPerkCount: runArrayCount(run.rewardPerkIds),
             payoffRoutePaid: run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor),
             payoffRouteRewardText: run.traitRouteObjectiveRewardTextThisFloor,
             startingLoadoutId: run.startingLoadoutId ?? null,

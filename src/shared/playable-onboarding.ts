@@ -1,4 +1,5 @@
 import type { BoardState, RunState, SaveData } from './contracts';
+import { runArrayCount } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
@@ -54,8 +55,6 @@ const isSafeOnboardingTile = (board: BoardState, pairKey: string, tileId: string
 const nonNegativeOnboardingCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const onboardingArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
-
 const firstUnmatchedPair = (board: BoardState | null): string[] => {
     if (!board) {
         return [];
@@ -108,7 +107,7 @@ const getStepCopy = (
         };
     }
 
-    const flippedCount = onboardingArrayCount(run.board?.flippedTileIds);
+    const flippedCount = runArrayCount(run.board?.flippedTileIds);
     if (
         (stats.mismatches > 0 || stats.tries > 0) &&
         nonNegativeOnboardingCount(run.board?.matchedPairs) === 0

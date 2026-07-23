@@ -1,5 +1,6 @@
 import type { BoardState, FeaturedObjectiveId, LevelResult, RunState } from './contracts';
 import { getFeaturedObjectiveLabel } from './floor-mutator-schedule';
+import { runArrayCount } from './run-array-guards';
 import { getFeaturedObjectiveRewardCopy, getFlipParLimit } from './secondary-objective-rules';
 import { getTraitRouteObjectiveStatus } from './trait-route-objectives';
 
@@ -142,8 +143,6 @@ const isLevelResultTagId = (value: string): value is LevelResultTagId =>
 const nonNegativeSecondaryObjectiveCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
-const secondaryObjectiveArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
-
 export const getDungeonLevelResultTags = (run: RunState, board: BoardState, perfect: boolean): LevelResultTagId[] => {
     const tags: LevelResultTagId[] = [];
     if (board.floorTag === 'boss' && nonNegativeSecondaryObjectiveCount(run.dungeonEnemiesDefeatedThisFloor) > 0) {
@@ -160,7 +159,7 @@ export const getDungeonLevelResultTags = (run: RunState, board: BoardState, perf
     }
     if (
         perfect &&
-        secondaryObjectiveArrayCount(run.peekRevealedTileIds) === 0 &&
+        runArrayCount(run.peekRevealedTileIds) === 0 &&
         !run.shuffleUsedThisFloor &&
         !run.destroyUsedThisFloor
     ) {

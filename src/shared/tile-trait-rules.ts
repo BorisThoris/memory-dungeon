@@ -13,6 +13,7 @@ import {
 import { normalizeRewardPerkIds } from './bonus-rewards';
 import { runRelicIds } from './relics';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
+import { runArrayCount } from './run-array-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 export {
@@ -78,8 +79,6 @@ export const TILE_TRAIT_MATCH_SCORE_BONUS: Partial<Record<TileTraitKind, number>
 
 const nonNegativeTraitCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const traitArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
 
 const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
     runRelicIds(run.relicIds).includes(relicId);
@@ -739,7 +738,7 @@ export const applyVolatileMismatchTrait = (
     const stats = normalizeSessionStats(run.stats);
     const rng = createMulberry32(
         hashStringToSeed(
-            `volatileTrait:${run.runRulesVersion}:${run.runSeed}:${board.level}:${stats.mismatches}:${traitArrayCount(run.flipHistory)}`
+            `volatileTrait:${run.runRulesVersion}:${run.runSeed}:${board.level}:${stats.mismatches}:${runArrayCount(run.flipHistory)}`
         )
     );
     const nextTiles = [...board.tiles];
