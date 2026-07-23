@@ -2,6 +2,7 @@ import type { RunState, RunSummary, SaveData } from './contracts';
 import { getChainTargetFeedback } from './chain-targets';
 import { buildMetaProgressionRunDelta } from './meta-progression-delta';
 import { getMetaProgressionFeedback } from './meta-progression';
+import { runMutatorIds, runRelicIds } from './relics';
 import { buildRunHistoryExportString } from './run-history';
 import { getStartingLoadoutDefinition } from './starting-loadouts';
 
@@ -16,8 +17,6 @@ export interface GameOverNextRunRow {
 
 const nonNegativeNextRunCount = (value: unknown): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
-const itemCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
 const runItBackDetail = (summary: RunSummary | null, run: RunState): string => {
     if (!summary) {
@@ -118,8 +117,8 @@ const getMetaNextGoalRow = (save: SaveData, previousSave?: SaveData): GameOverNe
 export const getGameOverNextRunRows = (run: RunState, save?: SaveData, previousSave?: SaveData): GameOverNextRunRow[] => {
     const summary = run.lastRunSummary;
     const runLabel = summary ? modeLabel(summary) : 'No completed run';
-    const relicCount = summary ? itemCount(summary.relicIds) : itemCount(run.relicIds);
-    const mutatorCount = summary ? itemCount(summary.activeMutators) : itemCount(run.activeMutators);
+    const relicCount = summary ? runRelicIds(summary.relicIds).length : runRelicIds(run.relicIds).length;
+    const mutatorCount = summary ? runMutatorIds(summary.activeMutators).length : runMutatorIds(run.activeMutators).length;
     const buildCount = `${relicCount} relic(s) / ${mutatorCount} mutator(s)`;
     const activeContract = summary?.activeContract ?? run.activeContract;
     const startingLoadout = getStartingLoadoutDefinition(summary?.startingLoadoutId ?? run.startingLoadoutId);
