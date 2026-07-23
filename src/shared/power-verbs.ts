@@ -9,6 +9,7 @@ import {
 } from './mechanic-feedback';
 import { runRelicIds } from './relics';
 import { runArrayCount, runStringArray } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export type PowerVerbId =
     | 'shuffle'
@@ -49,9 +50,6 @@ export const POWER_VERB_GROUPS = {
 const onlyWhilePlaying = (run: RunState): string | null => (run.status === 'playing' ? null : 'Only while playing.');
 const locksPerfectMemory = perfectMemoryImpactCopy('locks_perfect_memory');
 
-const nonNegativePowerVerbCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const powerVerbArrayIncludes = (value: unknown, item: string): boolean => runStringArray(value).includes(item);
 
 const hasOpenFlip = (run: RunState): boolean =>
@@ -72,7 +70,7 @@ const hasPeekTarget = (run: RunState): boolean =>
     );
 
 const hasRowShufflePayment = (run: RunState): boolean =>
-    nonNegativePowerVerbCount(run.regionShuffleCharges) > 0 ||
+    runNonNegativeInteger(run.regionShuffleCharges) > 0 ||
     (run.regionShuffleFreeThisFloor && runRelicIds(run.relicIds).includes('region_shuffle_free_first'));
 
 const hiddenTileCount = (run: RunState): number =>
@@ -101,18 +99,18 @@ const destroyDisabledReason = (run: RunState, destroyPairCharges: number): strin
               : null);
 
 export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
-    const shuffleCharges = nonNegativePowerVerbCount(run.shuffleCharges);
-    const regionShuffleCharges = nonNegativePowerVerbCount(run.regionShuffleCharges);
-    const peekCharges = nonNegativePowerVerbCount(run.peekCharges);
-    const destroyPairCharges = nonNegativePowerVerbCount(run.destroyPairCharges);
-    const strayRemoveCharges = nonNegativePowerVerbCount(run.strayRemoveCharges);
-    const flashPairCharges = nonNegativePowerVerbCount(run.flashPairCharges);
-    const undoUsesThisFloor = nonNegativePowerVerbCount(run.undoUsesThisFloor);
-    const pinsPlacedCountThisRun = nonNegativePowerVerbCount(run.pinsPlacedCountThisRun);
+    const shuffleCharges = runNonNegativeInteger(run.shuffleCharges);
+    const regionShuffleCharges = runNonNegativeInteger(run.regionShuffleCharges);
+    const peekCharges = runNonNegativeInteger(run.peekCharges);
+    const destroyPairCharges = runNonNegativeInteger(run.destroyPairCharges);
+    const strayRemoveCharges = runNonNegativeInteger(run.strayRemoveCharges);
+    const flashPairCharges = runNonNegativeInteger(run.flashPairCharges);
+    const undoUsesThisFloor = runNonNegativeInteger(run.undoUsesThisFloor);
+    const pinsPlacedCountThisRun = runNonNegativeInteger(run.pinsPlacedCountThisRun);
     const maxPinsTotalRun =
         run.activeContract?.maxPinsTotalRun == null
             ? null
-            : nonNegativePowerVerbCount(run.activeContract.maxPinsTotalRun);
+            : runNonNegativeInteger(run.activeContract.maxPinsTotalRun);
 
     return [
     {

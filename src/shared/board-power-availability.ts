@@ -2,9 +2,7 @@ import type { RelicId, RunState } from './contracts';
 import { countFullyHiddenPairs } from './board-inspection';
 import { tileIsDestroyEligiblePreview } from './board-power-targeting';
 import { runRelicIds } from './relics';
-
-const nonNegativePowerCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+import { runNonNegativeInteger } from './run-number-guards';
 
 const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
 
@@ -17,14 +15,14 @@ export const canShuffleBoard = (run: RunState): boolean => {
         board != null &&
         hasClearFlipState(run) &&
         !run.activeContract?.noShuffle &&
-        (nonNegativePowerCount(run.shuffleCharges) > 0 ||
+        (runNonNegativeInteger(run.shuffleCharges) > 0 ||
             (run.freeShuffleThisFloor && hasRelic(run, 'first_shuffle_free_per_floor'))) &&
         countFullyHiddenPairs(board) >= 2
     );
 };
 
 export const canDestroyPair = (run: RunState, tileId: string): boolean => {
-    if (run.status !== 'playing' || !run.board || !hasClearFlipState(run) || nonNegativePowerCount(run.destroyPairCharges) <= 0) {
+    if (run.status !== 'playing' || !run.board || !hasClearFlipState(run) || runNonNegativeInteger(run.destroyPairCharges) <= 0) {
         return false;
     }
 
@@ -38,7 +36,7 @@ export const canRegionShuffle = (run: RunState): boolean => {
         board != null &&
         hasClearFlipState(run) &&
         !run.activeContract?.noShuffle &&
-        (nonNegativePowerCount(run.regionShuffleCharges) > 0 ||
+        (runNonNegativeInteger(run.regionShuffleCharges) > 0 ||
             (run.regionShuffleFreeThisFloor && hasRelic(run, 'region_shuffle_free_first'))) &&
         countFullyHiddenPairs(board) >= 1
     );
@@ -66,7 +64,7 @@ export const canSwapHiddenTiles = (run: RunState, firstTileId: string, secondTil
         !hasClearFlipState(run) ||
         run.activeContract?.noShuffle ||
         firstTileId === secondTileId ||
-        (nonNegativePowerCount(run.regionShuffleCharges) <= 0 && !(run.regionShuffleFreeThisFloor && hasRelic(run, 'region_shuffle_free_first')))
+        (runNonNegativeInteger(run.regionShuffleCharges) <= 0 && !(run.regionShuffleFreeThisFloor && hasRelic(run, 'region_shuffle_free_first')))
     ) {
         return false;
     }

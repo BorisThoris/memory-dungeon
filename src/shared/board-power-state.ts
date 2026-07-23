@@ -5,9 +5,7 @@ import {
 } from './contracts';
 import { runRelicIds } from './relics';
 import { runStringArray } from './run-array-guards';
-
-const nonNegativePowerStateCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+import { runNonNegativeInteger } from './run-number-guards';
 
 const hasRelic = (run: RunState, relicId: RelicId): boolean =>
     runRelicIds(run.relicIds).includes(relicId);
@@ -36,8 +34,8 @@ export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
         pinnedTileIds = currentPinnedTileIds.filter((id) => id !== tileId);
     } else if (currentPinnedTileIds.length < maxPinnedTilesForRun(run)) {
         const cap = run.activeContract?.maxPinsTotalRun;
-        const pinsPlacedCountThisRun = nonNegativePowerStateCount(run.pinsPlacedCountThisRun);
-        if (cap != null && pinsPlacedCountThisRun >= nonNegativePowerStateCount(cap)) {
+        const pinsPlacedCountThisRun = runNonNegativeInteger(run.pinsPlacedCountThisRun);
+        if (cap != null && pinsPlacedCountThisRun >= runNonNegativeInteger(cap)) {
             return run;
         }
         pinnedTileIds = [...currentPinnedTileIds, tileId];
@@ -57,6 +55,6 @@ export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
 };
 
 export const toggleStrayRemoveArmed = (run: RunState): RunState =>
-    nonNegativePowerStateCount(run.strayRemoveCharges) > 0 && run.status === 'playing'
+    runNonNegativeInteger(run.strayRemoveCharges) > 0 && run.status === 'playing'
         ? { ...run, strayRemoveArmed: !run.strayRemoveArmed }
         : run;

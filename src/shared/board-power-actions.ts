@@ -30,11 +30,9 @@ import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import { runRelicIds } from './relics';
+import { runNonNegativeInteger } from './run-number-guards';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
-
-const nonNegativePowerCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const stringArray = (value: unknown): string[] => (Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : []);
 
@@ -78,7 +76,7 @@ export const applyDestroyPairTransition = (
 
     const board: BoardState = {
         ...run.board,
-        matchedPairs: nonNegativePowerCount(run.board.matchedPairs) + 1,
+        matchedPairs: runNonNegativeInteger(run.board.matchedPairs) + 1,
         tiles: run.board.tiles.map((t) =>
             pairTileIds.includes(t.id)
                 ? {
@@ -104,17 +102,17 @@ export const applyDestroyPairTransition = (
         ...run,
         powersUsedThisRun: true,
         destroyUsedThisFloor: true,
-        destroyPairCharges: Math.max(0, nonNegativePowerCount(run.destroyPairCharges) - 1),
+        destroyPairCharges: Math.max(0, runNonNegativeInteger(run.destroyPairCharges) - 1),
         pinnedTileIds,
         board: spunDestroy.board,
         shiftingSpotlightNonce: spunDestroy.shiftingSpotlightNonce,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, pairTileIds),
-        parasiteFloors: hasMutator(run, 'score_parasite') ? 0 : nonNegativePowerCount(run.parasiteFloors),
+        parasiteFloors: hasMutator(run, 'score_parasite') ? 0 : runNonNegativeInteger(run.parasiteFloors),
         stats: {
             ...stats,
-            matchesFound: nonNegativePowerCount(stats.matchesFound) + 1,
-            pairsDestroyed: nonNegativePowerCount(stats.pairsDestroyed) + 1
+            matchesFound: runNonNegativeInteger(stats.matchesFound) + 1,
+            pairsDestroyed: runNonNegativeInteger(stats.pairsDestroyed) + 1
         }
     };
 
@@ -138,7 +136,7 @@ export const applyShuffle = (run: RunState): RunState => {
         }
     });
 
-    const shuffleNonce = nonNegativePowerCount(run.shuffleNonce);
+    const shuffleNonce = runNonNegativeInteger(run.shuffleNonce);
     const shuffleRng = createMulberry32(
         deriveShuffleRngSeed(run.runSeed, board.level, shuffleNonce, run.runRulesVersion)
     );
@@ -168,7 +166,7 @@ export const applyShuffle = (run: RunState): RunState => {
         });
     }
 
-    let nextCharges = nonNegativePowerCount(run.shuffleCharges);
+    let nextCharges = runNonNegativeInteger(run.shuffleCharges);
     let nextFree = run.freeShuffleThisFloor;
     if (nextFree && hasRelic(run, 'first_shuffle_free_per_floor')) {
         nextFree = false;
@@ -200,7 +198,7 @@ export const applyShuffle = (run: RunState): RunState => {
         },
         stats: {
             ...stats,
-            shufflesUsed: nonNegativePowerCount(stats.shufflesUsed) + 1
+            shufflesUsed: runNonNegativeInteger(stats.shufflesUsed) + 1
         }
     };
 };
@@ -222,7 +220,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
     }
 
     let nextFree = run.regionShuffleFreeThisFloor;
-    let nextCharges = nonNegativePowerCount(run.regionShuffleCharges);
+    let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
     if (nextFree && hasRelic(run, 'region_shuffle_free_first')) {
         nextFree = false;
     } else if (nextCharges > 0) {
@@ -231,7 +229,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         return run;
     }
 
-    const shuffleNonce = nonNegativePowerCount(run.shuffleNonce);
+    const shuffleNonce = runNonNegativeInteger(run.shuffleNonce);
     const shuffleRng = createMulberry32(
         deriveShuffleRngSeed(run.runSeed, board.level, shuffleNonce, run.runRulesVersion)
     );
@@ -261,7 +259,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
         },
         stats: {
             ...stats,
-            shufflesUsed: nonNegativePowerCount(stats.shufflesUsed) + 1
+            shufflesUsed: runNonNegativeInteger(stats.shufflesUsed) + 1
         }
     };
 };
@@ -277,7 +275,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
     }
 
     let nextFree = run.regionShuffleFreeThisFloor;
-    let nextCharges = nonNegativePowerCount(run.regionShuffleCharges);
+    let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
     if (nextFree && hasRelic(run, 'region_shuffle_free_first')) {
         nextFree = false;
     } else if (nextCharges > 0) {
@@ -300,7 +298,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
         ...run,
         powersUsedThisRun: true,
         shuffleUsedThisFloor: true,
-        shuffleNonce: nonNegativePowerCount(run.shuffleNonce) + 1,
+        shuffleNonce: runNonNegativeInteger(run.shuffleNonce) + 1,
         regionShuffleCharges: nextCharges,
         regionShuffleFreeThisFloor: nextFree,
         regionShuffleRowArmed: null,
@@ -313,13 +311,13 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
         },
         stats: {
             ...stats,
-            shufflesUsed: nonNegativePowerCount(stats.shufflesUsed) + 1
+            shufflesUsed: runNonNegativeInteger(stats.shufflesUsed) + 1
         }
     };
 };
 
 export const applyFlashPair = (run: RunState): RunState => {
-    const flashPairCharges = nonNegativePowerCount(run.flashPairCharges);
+    const flashPairCharges = runNonNegativeInteger(run.flashPairCharges);
     if (run.status !== 'playing' || !run.board || flashPairCharges < 1) {
         return run;
     }
@@ -342,7 +340,7 @@ export const applyFlashPair = (run: RunState): RunState => {
     if (complete.length === 0) {
         return run;
     }
-    const shuffleNonce = nonNegativePowerCount(run.shuffleNonce);
+    const shuffleNonce = runNonNegativeInteger(run.shuffleNonce);
     const rng = createMulberry32(
         hashStringToSeed(`flashPair:${run.runRulesVersion}:${run.runSeed}:${run.board.level}:${shuffleNonce}`)
     );
@@ -361,7 +359,7 @@ export const applyFlashPair = (run: RunState): RunState => {
 };
 
 export const applyPeek = (run: RunState, tileId: string): RunState => {
-    const peekCharges = nonNegativePowerCount(run.peekCharges);
+    const peekCharges = runNonNegativeInteger(run.peekCharges);
     if (run.status !== 'playing' || !run.board || peekCharges < 1) {
         return run;
     }
@@ -399,7 +397,7 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
 };
 
 export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
-    const strayRemoveCharges = nonNegativePowerCount(run.strayRemoveCharges);
+    const strayRemoveCharges = runNonNegativeInteger(run.strayRemoveCharges);
     if (!run.strayRemoveArmed || run.status !== 'playing' || !run.board || strayRemoveCharges < 1) {
         return run;
     }
@@ -449,7 +447,7 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
 };
 
 export const cancelResolvingWithUndo = (run: RunState): RunState => {
-    const undoUsesThisFloor = nonNegativePowerCount(run.undoUsesThisFloor);
+    const undoUsesThisFloor = runNonNegativeInteger(run.undoUsesThisFloor);
     if (run.status !== 'resolving' || !run.board || undoUsesThisFloor < 1) {
         return run;
     }
