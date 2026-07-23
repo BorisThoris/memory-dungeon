@@ -7,6 +7,7 @@ import {
 import { getDungeonBossDefinition } from './dungeon-boss-rules';
 import { getDungeonCardKindDefinition } from './dungeon-cards';
 import { dungeonKeyKindArticleLabel, dungeonKeyKindLabel } from './dungeon-key-copy';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export type DungeonRoomEffectId = Extract<DungeonCardEffectId, `room_${string}`>;
 export type DungeonRoomTrigger = 'reveal' | 'reveal_or_reuse';
@@ -34,9 +35,6 @@ export interface DungeonRoomReadModel {
     blockedText: string | null;
     copy: string;
 }
-
-const nonNegativeDungeonCardReadCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export const DUNGEON_ROOM_EFFECT_DEFINITIONS: Record<DungeonRoomEffectId, DungeonRoomEffectDefinition> = {
     room_campfire: {
@@ -161,9 +159,9 @@ export const getDungeonRoomReadModel = (
     const roomKeyKind = tile.dungeonKeyKind ?? 'iron';
     const roomKeyArticleLabel = dungeonKeyKindArticleLabel(roomKeyKind);
     const used = tile.dungeonRoomUsed === true || tile.dungeonCardState === 'resolved';
-    const hasMatchingKey = nonNegativeDungeonCardReadCount(run?.dungeonKeys?.[roomKeyKind]) > 0;
-    const hasMasterKey = nonNegativeDungeonCardReadCount(run?.dungeonMasterKeys) > 0;
-    const forgeCanPay = nonNegativeDungeonCardReadCount(run?.shopGold) >= 2;
+    const hasMatchingKey = runNonNegativeInteger(run?.dungeonKeys?.[roomKeyKind]) > 0;
+    const hasMasterKey = runNonNegativeInteger(run?.dungeonMasterKeys) > 0;
+    const forgeCanPay = runNonNegativeInteger(run?.shopGold) >= 2;
     const effectiveDefinition =
         definition.effectId === 'room_locked_cache'
             ? {
@@ -333,7 +331,7 @@ const effectiveExitLockForTile = (
     if (!options?.board) {
         return {
             lockKind: tile.dungeonExitLockKind ?? 'none',
-            requiredLeverCount: nonNegativeDungeonCardReadCount(tile.dungeonExitRequiredLeverCount),
+            requiredLeverCount: runNonNegativeInteger(tile.dungeonExitRequiredLeverCount),
             keyFallbackPending: false
         };
     }
@@ -345,8 +343,8 @@ const effectiveExitLockForTile = (
     const hasRunKey =
         effectivePrimaryExitLock.lockKind !== 'none' &&
         effectivePrimaryExitLock.lockKind !== 'lever' &&
-        (nonNegativeDungeonCardReadCount(options.run?.dungeonKeys?.[effectivePrimaryExitLock.lockKind]) > 0 ||
-            nonNegativeDungeonCardReadCount(options.run?.dungeonMasterKeys) > 0);
+        (runNonNegativeInteger(options.run?.dungeonKeys?.[effectivePrimaryExitLock.lockKind]) > 0 ||
+            runNonNegativeInteger(options.run?.dungeonMasterKeys) > 0);
     const keyFallbackPending =
         effectivePrimaryExitLock.exitTile?.id === tile.id &&
         effectivePrimaryExitLock.lockKind !== 'none' &&
@@ -357,7 +355,7 @@ const effectiveExitLockForTile = (
     if (effectivePrimaryExitLock.exitTile?.id !== tile.id) {
         return {
             lockKind: tile.dungeonExitLockKind ?? options.board.dungeonExitLockKind ?? 'none',
-            requiredLeverCount: nonNegativeDungeonCardReadCount(
+            requiredLeverCount: runNonNegativeInteger(
                 tile.dungeonExitRequiredLeverCount ?? options.board.dungeonExitRequiredLeverCount
             ),
             keyFallbackPending: false
@@ -445,13 +443,13 @@ export const getDungeonCardCopy = (tile: Tile, options?: DungeonCardCopyOptions)
     }
     const bossDefinition = getDungeonBossDefinition(tile.dungeonBossId);
     if (bossDefinition) {
-        return `Dungeon boss: ${tile.label}. ${bossDefinition.cardCopy} HP ${nonNegativeDungeonCardReadCount(tile.dungeonCardHp)}.`;
+        return `Dungeon boss: ${tile.label}. ${bossDefinition.cardCopy} HP ${runNonNegativeInteger(tile.dungeonCardHp)}.`;
     }
     if (tile.dungeonCardEffectId === 'enemy_stalker') {
-        return `Dungeon enemy: ${tile.label}. Wakes when traps spring and attacks on mismatches. HP ${nonNegativeDungeonCardReadCount(tile.dungeonCardHp)}.`;
+        return `Dungeon enemy: ${tile.label}. Wakes when traps spring and attacks on mismatches. HP ${runNonNegativeInteger(tile.dungeonCardHp)}.`;
     }
     const kindCopy = getDungeonCardKindDefinition(tile.dungeonCardKind).copyLabel;
-    const hp = tile.dungeonCardKind === 'enemy' && tile.dungeonCardHp != null ? ` HP ${nonNegativeDungeonCardReadCount(tile.dungeonCardHp)}.` : '';
+    const hp = tile.dungeonCardKind === 'enemy' && tile.dungeonCardHp != null ? ` HP ${runNonNegativeInteger(tile.dungeonCardHp)}.` : '';
     const boss = tile.dungeonBossId ? ' Boss pair.' : '';
     return `${kindCopy}: ${tile.label}.${boss}${hp}`;
 };
