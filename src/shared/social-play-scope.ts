@@ -58,6 +58,9 @@ export const SOCIAL_PLAY_SCOPE_DECISION = {
 export const getShippedSocialPlayDecision = (): SocialPlayDecisionRow =>
     SOCIAL_PLAY_DECISIONS.find((row) => row.status === 'shipped') ?? SHIPPED_SOCIAL_PLAY_DECISION;
 
+const socialShareInteger = (value: number | null): number | null =>
+    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : null;
+
 export const buildSocialShareCopy = ({
     mode,
     score,
@@ -67,7 +70,9 @@ export const buildSocialShareCopy = ({
     score: number | null;
     seed: number | null;
 }): string => {
-    const seedCopy = seed == null ? 'seed unavailable' : `seed ${seed}`;
-    const scoreCopy = score == null ? 'no score yet' : `${score.toLocaleString()} local score`;
+    const displaySeed = socialShareInteger(seed);
+    const displayScore = socialShareInteger(score);
+    const seedCopy = displaySeed == null ? 'seed unavailable' : `seed ${displaySeed}`;
+    const scoreCopy = displayScore == null ? 'no score yet' : `${displayScore.toLocaleString()} local score`;
     return `${mode} · ${scoreCopy} · ${seedCopy} · share-only v1, no online rank`;
 };
