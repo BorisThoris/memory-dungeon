@@ -71,7 +71,7 @@ const getPersistedSummaryPayoffStack = (
         summary.payoffRoutePaid === true,
         nonNegativeRunHistoryCount(summary.payoffPickupTotal) > 0,
         nonNegativeRunHistoryCount(summary.perfectClears) > 0,
-        runHistoryArrayCount(summary.relicIds) + nonNegativeRunHistoryCount(summary.payoffRewardPerkCount) > 0
+        runRelicIds(summary.relicIds).length + nonNegativeRunHistoryCount(summary.payoffRewardPerkCount) > 0
     ].filter(Boolean).length;
     if (payoffLanes < 3) {
         return null;
@@ -211,7 +211,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         id: 'dungeon_rewards',
         label: 'Dungeon rewards',
         value: `${nonNegativeRunHistoryCount(run.dungeonTreasuresOpened)} treasures, ${keyCount} keys, ${nonNegativeRunHistoryCount(run.shopGold)} shop gold`,
-        detail: `${runHistoryArrayCount(run.relicIds)} relics carried; ${nonNegativeRunHistoryCount(run.bonusRelicPicksNextOffer) + nonNegativeRunHistoryCount(run.favorBonusRelicPicksNextOffer)} bonus relic picks banked.`,
+        detail: `${runRelicIds(run.relicIds).length} relics carried; ${nonNegativeRunHistoryCount(run.bonusRelicPicksNextOffer) + nonNegativeRunHistoryCount(run.favorBonusRelicPicksNextOffer)} bonus relic picks banked.`,
         persistence: 'derived_export',
         exportSafe: true,
         offlineOnly: true
