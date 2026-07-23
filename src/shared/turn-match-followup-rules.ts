@@ -2,10 +2,8 @@ import type { RouteNodeType, RunState } from './contracts';
 import { loadedGatewayRouteTypeFor } from './loaded-gateway-rules';
 import { hasMutator } from './mutators';
 import { createRouteCardPlanForRoute } from './route-card-plan-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
-
-const nonNegativeFollowupCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export interface TurnMatchFollowupResult {
     nBackMatchCounter: number;
@@ -28,7 +26,7 @@ export const resolveTurnMatchFollowup = ({
     loadedGatewayClaimed,
     dungeonGatewayRouteType
 }: TurnMatchFollowupInput): TurnMatchFollowupResult => {
-    const nBackMatchCounter = nonNegativeFollowupCount(run.nBackMatchCounter) + 1;
+    const nBackMatchCounter = runNonNegativeInteger(run.nBackMatchCounter) + 1;
     const nBackAnchorPairKey =
         hasMutator(run, 'n_back_anchor') && nBackMatchCounter % 2 === 0 ? encoreKey : run.nBackAnchorPairKey;
     const loadedGatewayRouteType = loadedGatewayClaimed ? loadedGatewayRouteTypeFor(run, matchedPairKey) : null;
