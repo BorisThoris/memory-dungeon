@@ -16,6 +16,7 @@ import {
 import {
     clearResolveState
 } from './run-timer-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 import { calculateRating } from './scoring-rules';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
@@ -24,9 +25,6 @@ import {
     applyVolatileMismatchTrait,
     calculateTileTraitMismatchPenalty
 } from './tile-trait-rules';
-
-const nonNegativeMismatchCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export interface MismatchPenalty {
     consumesGuardToken: boolean;
@@ -58,10 +56,10 @@ export const calculateMismatchPenalty = (
     triesDelta: number
 ): MismatchPenalty => {
     const stats = normalizeSessionStats(run.stats);
-    const safeTries = nonNegativeMismatchCount(stats.tries);
-    const safeTriesDelta = nonNegativeMismatchCount(triesDelta);
-    const safeGuardTokens = nonNegativeMismatchCount(stats.guardTokens);
-    const safeLives = nonNegativeMismatchCount(run.lives);
+    const safeTries = runNonNegativeInteger(stats.tries);
+    const safeTriesDelta = runNonNegativeInteger(triesDelta);
+    const safeGuardTokens = runNonNegativeInteger(stats.guardTokens);
+    const safeLives = runNonNegativeInteger(run.lives);
     const tries = safeTries + safeTriesDelta;
     const hasGraceMismatch = hasFirstMismatchGrace(
         { ...run, lives: safeLives, stats: { ...stats, guardTokens: safeGuardTokens, tries: safeTries } },
@@ -161,40 +159,40 @@ export const resolveMismatchTurnTransition = ({
         shiftingSpotlightNonce: spunMiss.shiftingSpotlightNonce,
         pinnedTileIds: snareHazard.triggered ? [] : run.pinnedTileIds,
         hazardTileTriggersThisFloor:
-            nonNegativeMismatchCount(run.hazardTileTriggersThisFloor) +
+            runNonNegativeInteger(run.hazardTileTriggersThisFloor) +
             (snareHazard.triggered ? 1 : 0) +
             (mirrorTriggered ? 1 : 0) +
-            nonNegativeMismatchCount(fragileBreak.brokenCount) +
+            runNonNegativeInteger(fragileBreak.brokenCount) +
             (volatileTrait.triggered ? 1 : 0),
         hazardShuffleSnaresThisFloor:
-            nonNegativeMismatchCount(run.hazardShuffleSnaresThisFloor) + (snareHazard.triggered ? 1 : 0),
+            runNonNegativeInteger(run.hazardShuffleSnaresThisFloor) + (snareHazard.triggered ? 1 : 0),
         hazardMirrorDecoysThisFloor:
-            nonNegativeMismatchCount(run.hazardMirrorDecoysThisFloor) + (mirrorTriggered ? 1 : 0),
+            runNonNegativeInteger(run.hazardMirrorDecoysThisFloor) + (mirrorTriggered ? 1 : 0),
         hazardFragileCacheBreaksThisFloor:
-            nonNegativeMismatchCount(run.hazardFragileCacheBreaksThisFloor) + nonNegativeMismatchCount(fragileBreak.brokenCount),
+            runNonNegativeInteger(run.hazardFragileCacheBreaksThisFloor) + runNonNegativeInteger(fragileBreak.brokenCount),
         safeHazardWardChargesThisFloor:
-            Math.max(0, nonNegativeMismatchCount(run.safeHazardWardChargesThisFloor) - (wardedHazards.wardChargeSpent ? 1 : 0)),
+            Math.max(0, runNonNegativeInteger(run.safeHazardWardChargesThisFloor) - (wardedHazards.wardChargeSpent ? 1 : 0)),
         safeHazardWardsUsedThisFloor:
-            nonNegativeMismatchCount(run.safeHazardWardsUsedThisFloor) + (wardedHazards.wardUsed ? 1 : 0),
+            runNonNegativeInteger(run.safeHazardWardsUsedThisFloor) + (wardedHazards.wardUsed ? 1 : 0),
         pendingMemorizeBonusMs,
-        peekCharges: Math.max(0, nonNegativeMismatchCount(run.peekCharges) - nonNegativeMismatchCount(traitPenalty.peekChargeLoss)),
+        peekCharges: Math.max(0, runNonNegativeInteger(run.peekCharges) - runNonNegativeInteger(traitPenalty.peekChargeLoss)),
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
         recallMistakesThisFloor:
-            nonNegativeMismatchCount(run.recallMistakesThisFloor) + 1 + nonNegativeMismatchCount(traitPenalty.recallMistakesDelta),
+            runNonNegativeInteger(run.recallMistakesThisFloor) + 1 + runNonNegativeInteger(traitPenalty.recallMistakesDelta),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, tileIds),
         decoyFlippedThisFloor: run.decoyFlippedThisFloor || decoyTouched,
         stats: {
             ...trapStats,
             tries: penalty.tries,
-            mismatches: nonNegativeMismatchCount(trapStats.mismatches) + 1,
-            currentStreak: Math.floor(nonNegativeMismatchCount(stats.currentStreak) / 2),
+            mismatches: runNonNegativeInteger(trapStats.mismatches) + 1,
+            currentStreak: Math.floor(runNonNegativeInteger(stats.currentStreak) / 2),
             rating: calculateRating(penalty.tries),
-            highestLevel: Math.max(nonNegativeMismatchCount(stats.highestLevel), nonNegativeMismatchCount(advancedTrapBoard.level)),
-            guardTokens: nonNegativeMismatchCount(enemyAttack.guardTokens),
+            highestLevel: Math.max(runNonNegativeInteger(stats.highestLevel), runNonNegativeInteger(advancedTrapBoard.level)),
+            guardTokens: runNonNegativeInteger(enemyAttack.guardTokens),
             tileTraitMismatches: addTileTraitCountStats(trapStats.tileTraitMismatches, sourceTiles),
             volatileTraitShuffles:
-                nonNegativeMismatchCount(trapStats.volatileTraitShuffles) + (volatileTrait.triggered ? 1 : 0)
+                runNonNegativeInteger(trapStats.volatileTraitShuffles) + (volatileTrait.triggered ? 1 : 0)
         },
         timerState: clearResolveState(run)
     };

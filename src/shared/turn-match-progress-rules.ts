@@ -1,7 +1,5 @@
 import type { RunState } from './contracts';
-
-const nonNegativeProgressCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
+import { runNonNegativeInteger } from './run-number-guards';
 
 export interface TurnMatchProgressResult {
     cursedMatchedEarlyThisFloor: boolean;
@@ -95,73 +93,73 @@ export const resolveTurnMatchProgress = ({
     resolvedDungeonTraps,
     usedDungeonGateways
 }: TurnMatchProgressInput): TurnMatchProgressResult => {
-    const safeFindablesClaimedDelta = nonNegativeProgressCount(findablesClaimedDelta);
-    const safeRouteWardCharges = nonNegativeProgressCount(routeCardSafeHazardWardCharges);
-    const safeFindableWardGain = nonNegativeProgressCount(findableSafeHazardWardGain);
-    const safeDefeatedDungeonEnemies = nonNegativeProgressCount(defeatedDungeonEnemies);
-    const safeDefeatedEnemyHazards = nonNegativeProgressCount(defeatedEnemyHazards);
-    const safeOpenedDungeonTreasures = nonNegativeProgressCount(openedDungeonTreasures);
-    const safeResolvedDungeonTraps = nonNegativeProgressCount(resolvedDungeonTraps);
-    const safeUsedDungeonGateways = nonNegativeProgressCount(usedDungeonGateways);
+    const safeFindablesClaimedDelta = runNonNegativeInteger(findablesClaimedDelta);
+    const safeRouteWardCharges = runNonNegativeInteger(routeCardSafeHazardWardCharges);
+    const safeFindableWardGain = runNonNegativeInteger(findableSafeHazardWardGain);
+    const safeDefeatedDungeonEnemies = runNonNegativeInteger(defeatedDungeonEnemies);
+    const safeDefeatedEnemyHazards = runNonNegativeInteger(defeatedEnemyHazards);
+    const safeOpenedDungeonTreasures = runNonNegativeInteger(openedDungeonTreasures);
+    const safeResolvedDungeonTraps = runNonNegativeInteger(resolvedDungeonTraps);
+    const safeUsedDungeonGateways = runNonNegativeInteger(usedDungeonGateways);
 
     return {
         cursedMatchedEarlyThisFloor: run.cursedMatchedEarlyThisFloor || cursedMatchedEarly,
-        matchResolutionsThisFloor: nonNegativeProgressCount(run.matchResolutionsThisFloor) + 1,
-        findablesClaimedThisFloor: nonNegativeProgressCount(run.findablesClaimedThisFloor) + safeFindablesClaimedDelta,
+        matchResolutionsThisFloor: runNonNegativeInteger(run.matchResolutionsThisFloor) + 1,
+        findablesClaimedThisFloor: runNonNegativeInteger(run.findablesClaimedThisFloor) + safeFindablesClaimedDelta,
         safeHazardWardChargesThisFloor: Math.min(
             1,
-            nonNegativeProgressCount(run.safeHazardWardChargesThisFloor) + safeRouteWardCharges + safeFindableWardGain
+            runNonNegativeInteger(run.safeHazardWardChargesThisFloor) + safeRouteWardCharges + safeFindableWardGain
         ),
         hazardTileTriggersThisFloor:
-            nonNegativeProgressCount(run.hazardTileTriggersThisFloor) +
+            runNonNegativeInteger(run.hazardTileTriggersThisFloor) +
             (cascadeHazardTriggered ? 1 : 0) +
             (fragileCacheClaimed ? 1 : 0) +
             (tollCacheClaimed ? 1 : 0) +
             (fuseCacheClaimed ? 1 : 0),
         hazardCascadeCachesThisFloor:
-            nonNegativeProgressCount(run.hazardCascadeCachesThisFloor) + (cascadeHazardTriggered ? 1 : 0),
+            runNonNegativeInteger(run.hazardCascadeCachesThisFloor) + (cascadeHazardTriggered ? 1 : 0),
         hazardFragileCacheClaimsThisFloor:
-            nonNegativeProgressCount(run.hazardFragileCacheClaimsThisFloor) + (fragileCacheClaimed ? 1 : 0),
+            runNonNegativeInteger(run.hazardFragileCacheClaimsThisFloor) + (fragileCacheClaimed ? 1 : 0),
         hazardTollCachesThisFloor:
-            nonNegativeProgressCount(run.hazardTollCachesThisFloor) + (tollCacheClaimed ? 1 : 0),
+            runNonNegativeInteger(run.hazardTollCachesThisFloor) + (tollCacheClaimed ? 1 : 0),
         hazardFuseCachesThisFloor:
-            nonNegativeProgressCount(run.hazardFuseCachesThisFloor) + (fuseCacheClaimed ? 1 : 0),
+            runNonNegativeInteger(run.hazardFuseCachesThisFloor) + (fuseCacheClaimed ? 1 : 0),
         hazardFuseCacheExpiredClaimsThisFloor:
-            nonNegativeProgressCount(run.hazardFuseCacheExpiredClaimsThisFloor) + (fuseCacheClaimed && !fuseCacheFresh ? 1 : 0),
-        lanternWardScoutsThisFloor: nonNegativeProgressCount(run.lanternWardScoutsThisFloor) + (lanternScouted ? 1 : 0),
+            runNonNegativeInteger(run.hazardFuseCacheExpiredClaimsThisFloor) + (fuseCacheClaimed && !fuseCacheFresh ? 1 : 0),
+        lanternWardScoutsThisFloor: runNonNegativeInteger(run.lanternWardScoutsThisFloor) + (lanternScouted ? 1 : 0),
         omenSealScoutsThisFloor:
-            nonNegativeProgressCount(run.omenSealScoutsThisFloor) + (findableScouted ? 1 : 0) + (omenScouted ? 1 : 0),
-        mimicCacheClaimsThisFloor: nonNegativeProgressCount(run.mimicCacheClaimsThisFloor) + (mimicCacheClaimed ? 1 : 0),
-        mimicCacheBitesThisFloor: nonNegativeProgressCount(run.mimicCacheBitesThisFloor) + (mimicCacheBite ? 1 : 0),
+            runNonNegativeInteger(run.omenSealScoutsThisFloor) + (findableScouted ? 1 : 0) + (omenScouted ? 1 : 0),
+        mimicCacheClaimsThisFloor: runNonNegativeInteger(run.mimicCacheClaimsThisFloor) + (mimicCacheClaimed ? 1 : 0),
+        mimicCacheBitesThisFloor: runNonNegativeInteger(run.mimicCacheBitesThisFloor) + (mimicCacheBite ? 1 : 0),
         mimicCacheGuardBitesThisFloor:
-            nonNegativeProgressCount(run.mimicCacheGuardBitesThisFloor) + (mimicCacheGuardBite ? 1 : 0),
+            runNonNegativeInteger(run.mimicCacheGuardBitesThisFloor) + (mimicCacheGuardBite ? 1 : 0),
         anchorSealChargesThisFloor:
-            Math.max(0, nonNegativeProgressCount(run.anchorSealChargesThisFloor) - (anchorSealUsed ? 1 : 0)) +
+            Math.max(0, runNonNegativeInteger(run.anchorSealChargesThisFloor) - (anchorSealUsed ? 1 : 0)) +
             (anchorSealClaimed ? 1 : 0),
-        anchorSealUsesThisFloor: nonNegativeProgressCount(run.anchorSealUsesThisFloor) + (anchorSealUsed ? 1 : 0),
+        anchorSealUsesThisFloor: runNonNegativeInteger(run.anchorSealUsesThisFloor) + (anchorSealUsed ? 1 : 0),
         loadedGatewayPlansThisFloor:
-            nonNegativeProgressCount(run.loadedGatewayPlansThisFloor) + (loadedGatewayClaimed ? 1 : 0),
+            runNonNegativeInteger(run.loadedGatewayPlansThisFloor) + (loadedGatewayClaimed ? 1 : 0),
         catalystAltarUpgradesThisFloor:
-            nonNegativeProgressCount(run.catalystAltarUpgradesThisFloor) + (catalystAltarUpgraded ? 1 : 0),
+            runNonNegativeInteger(run.catalystAltarUpgradesThisFloor) + (catalystAltarUpgraded ? 1 : 0),
         parasiteVesselConversionsThisFloor:
-            nonNegativeProgressCount(run.parasiteVesselConversionsThisFloor) + (parasiteVesselConverted ? 1 : 0),
+            runNonNegativeInteger(run.parasiteVesselConversionsThisFloor) + (parasiteVesselConverted ? 1 : 0),
         pinLatticeRewardsThisFloor:
-            nonNegativeProgressCount(run.pinLatticeRewardsThisFloor) + (pinLatticeRewarded ? 1 : 0),
+            runNonNegativeInteger(run.pinLatticeRewardsThisFloor) + (pinLatticeRewarded ? 1 : 0),
         parasiteFloors: parasiteVesselConverted
-            ? Math.max(0, nonNegativeProgressCount(run.parasiteFloors) - 1)
-            : nonNegativeProgressCount(run.parasiteFloors),
-        dungeonEnemiesDefeated: nonNegativeProgressCount(run.dungeonEnemiesDefeated) + safeDefeatedDungeonEnemies,
+            ? Math.max(0, runNonNegativeInteger(run.parasiteFloors) - 1)
+            : runNonNegativeInteger(run.parasiteFloors),
+        dungeonEnemiesDefeated: runNonNegativeInteger(run.dungeonEnemiesDefeated) + safeDefeatedDungeonEnemies,
         dungeonEnemiesDefeatedThisFloor:
-            nonNegativeProgressCount(run.dungeonEnemiesDefeatedThisFloor) + safeDefeatedDungeonEnemies,
+            runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) + safeDefeatedDungeonEnemies,
         enemyHazardsDefeatedThisFloor:
-            nonNegativeProgressCount(run.enemyHazardsDefeatedThisFloor) + safeDefeatedEnemyHazards,
-        dungeonTreasuresOpened: nonNegativeProgressCount(run.dungeonTreasuresOpened) + safeOpenedDungeonTreasures,
+            runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor) + safeDefeatedEnemyHazards,
+        dungeonTreasuresOpened: runNonNegativeInteger(run.dungeonTreasuresOpened) + safeOpenedDungeonTreasures,
         dungeonTreasuresOpenedThisFloor:
-            nonNegativeProgressCount(run.dungeonTreasuresOpenedThisFloor) + safeOpenedDungeonTreasures,
+            runNonNegativeInteger(run.dungeonTreasuresOpenedThisFloor) + safeOpenedDungeonTreasures,
         dungeonTrapsResolvedThisFloor:
-            nonNegativeProgressCount(run.dungeonTrapsResolvedThisFloor) + safeResolvedDungeonTraps,
-        dungeonGatewaysUsed: nonNegativeProgressCount(run.dungeonGatewaysUsed) + safeUsedDungeonGateways,
+            runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor) + safeResolvedDungeonTraps,
+        dungeonGatewaysUsed: runNonNegativeInteger(run.dungeonGatewaysUsed) + safeUsedDungeonGateways,
         dungeonGatewaysUsedThisFloor:
-            nonNegativeProgressCount(run.dungeonGatewaysUsedThisFloor) + safeUsedDungeonGateways
+            runNonNegativeInteger(run.dungeonGatewaysUsedThisFloor) + safeUsedDungeonGateways
     };
 };

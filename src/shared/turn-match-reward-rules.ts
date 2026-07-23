@@ -8,10 +8,8 @@ import {
 import { COMBO_SHARD_STREAK_STEP, applyComboShardGain } from './combo-shard-rules';
 import type { DungeonMatchReward } from './dungeon-match-reward-rules';
 import type { RouteCardReward } from './route-card-reward-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
-
-const nonNegativeRewardCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 export interface ResolvedMatchSurvivalRewardInput {
     catalystAltarUpgraded: boolean;
@@ -43,13 +41,13 @@ export const calculateResolvedMatchSurvivalReward = ({
     run
 }: ResolvedMatchSurvivalRewardInput): ResolvedMatchSurvivalReward => {
     const meditation = run.gameMode === 'meditation';
-    const safeCurrentStreak = nonNegativeRewardCount(currentStreak);
-    const safeLives = nonNegativeRewardCount(run.lives);
-    const routeGuardTokens = nonNegativeRewardCount(routeCardReward.guardTokens);
-    const dungeonGuardTokens = nonNegativeRewardCount(dungeonReward.guardTokens);
-    const routeComboShards = nonNegativeRewardCount(routeCardReward.comboShards);
-    const dungeonComboShards = nonNegativeRewardCount(dungeonReward.comboShards);
-    const safeFindableComboShardGain = nonNegativeRewardCount(findableComboShardGain);
+    const safeCurrentStreak = runNonNegativeInteger(currentStreak);
+    const safeLives = runNonNegativeInteger(run.lives);
+    const routeGuardTokens = runNonNegativeInteger(routeCardReward.guardTokens);
+    const dungeonGuardTokens = runNonNegativeInteger(dungeonReward.guardTokens);
+    const routeComboShards = runNonNegativeInteger(routeCardReward.comboShards);
+    const dungeonComboShards = runNonNegativeInteger(dungeonReward.comboShards);
+    const safeFindableComboShardGain = runNonNegativeInteger(findableComboShardGain);
     const stats = normalizeSessionStats(run.stats);
     const guardTokenGain =
         meditation || safeCurrentStreak <= 0 || safeCurrentStreak % COMBO_GUARD_STREAK_STEP !== 0 ? 0 : 1;
