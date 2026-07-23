@@ -14,7 +14,9 @@ import {
     preloadTileTextureImages,
     prewarmTileFaceOverlayTextures,
     resetDemandDrivenOverlayPrewarmForTest,
-    runDemandDrivenTileFaceOverlayPrewarmSession
+    runDemandDrivenTileFaceOverlayPrewarmSession,
+    subscribeTextureImageUpdates,
+    TILE_TEXTURE_IMAGE_IDS
 } from './tileTextures';
 
 vi.mock('../cardFace/proceduralIllustration/drawProceduralTarotIllustration', () => ({
@@ -49,6 +51,18 @@ describe('tileTextures layout', () => {
         expect(aspect).toBeCloseTo(CARD_PLANE_WIDTH / CARD_PLANE_HEIGHT, 2);
         expect(width).toBeGreaterThan(2);
         expect(height).toBeGreaterThan(2);
+    });
+
+    it('keeps tile texture image preload ids in card-surface order', () => {
+        expect(TILE_TEXTURE_IMAGE_IDS).toEqual([
+            'cardReference',
+            'cardFace',
+            'cardFaceNormal',
+            'cardBackNormal',
+            'edge',
+            'panelRoughness',
+            'edgeRoughness'
+        ]);
     });
 
     it('reuses the same overlay texture after warm-up requests', () => {
@@ -170,6 +184,61 @@ describe('tileTextures layout', () => {
         }
     });
 
+    it('drops cancelled demand-driven idle prewarm callbacks when cancelIdleCallback is unavailable', () => {
+        clearTileTextureCachesForDebug();
+        const previousRequestIdleCallback = window.requestIdleCallback;
+        const previousCancelIdleCallback = window.cancelIdleCallback;
+        const callbacks: IdleRequestCallback[] = [];
+        window.requestIdleCallback = ((callback: IdleRequestCallback) => {
+            callbacks.push(callback);
+            return callbacks.length - 1;
+        }) as typeof window.requestIdleCallback;
+        Object.defineProperty(window, 'cancelIdleCallback', {
+            configurable: true,
+            value: undefined
+        });
+
+        try {
+            runDemandDrivenTileFaceOverlayPrewarmSession(['pair-cancelled'], 'medium');
+            expect(callbacks).toHaveLength(1);
+
+            resetDemandDrivenOverlayPrewarmForTest();
+            callbacks[0]?.({
+                didTimeout: false,
+                timeRemaining: () => 50
+            } as IdleDeadline);
+
+            expect(getIllustrationPipelineDebugState().illustrationBitmap.entryCount).toBe(0);
+        } finally {
+            window.requestIdleCallback = previousRequestIdleCallback;
+            window.cancelIdleCallback = previousCancelIdleCallback;
+        }
+    });
+
+    it('falls back to timer prewarm steps when requestIdleCallback throws', async () => {
+        vi.useFakeTimers();
+        clearTileTextureCachesForDebug();
+        const previousRequestIdleCallback = window.requestIdleCallback;
+        const previousCancelIdleCallback = window.cancelIdleCallback;
+        window.requestIdleCallback = (() => {
+            throw new Error('idle scheduler unavailable');
+        }) as typeof window.requestIdleCallback;
+        window.cancelIdleCallback = (() => undefined) as typeof window.cancelIdleCallback;
+
+        try {
+            const stop = prewarmTileFaceOverlayTextures([baseTile('idle-fallback', 'pair-idle-fallback')], 'medium', 'active');
+            await vi.advanceTimersByTimeAsync(0);
+            stop();
+
+            const state = getIllustrationPipelineDebugState();
+            expect(state.overlayPrewarm.completedCount).toBe(1);
+        } finally {
+            window.requestIdleCallback = previousRequestIdleCallback;
+            window.cancelIdleCallback = previousCancelIdleCallback;
+            vi.useRealTimers();
+        }
+    });
+
     it('shares in-flight tile texture image loads across concurrent preloads', async () => {
         clearTileTextureCachesForDebug();
         const originalImage = globalThis.Image;
@@ -199,13 +268,13 @@ describe('tileTextures layout', () => {
             const first = preloadTileTextureImages();
             const second = preloadTileTextureImages();
 
-            await vi.waitFor(() => expect(releaseQueue).toHaveLength(7));
-            expect(requestedUrls).toHaveLength(7);
+            await vi.waitFor(() => expect(releaseQueue).toHaveLength(TILE_TEXTURE_IMAGE_IDS.length));
+            expect(requestedUrls).toHaveLength(TILE_TEXTURE_IMAGE_IDS.length);
             releaseQueue.splice(0).forEach((release) => release());
             await Promise.all([first, second]);
 
             await preloadTileTextureImages();
-            expect(requestedUrls).toHaveLength(7);
+            expect(requestedUrls).toHaveLength(TILE_TEXTURE_IMAGE_IDS.length);
         } finally {
             Object.defineProperty(globalThis, 'Image', {
                 configurable: true,
@@ -214,7 +283,67 @@ describe('tileTextures layout', () => {
         }
     });
 
-    it('resolves tile texture preloads when image requests stall', async () => {
+    it('recovers on the bounded retry and ignores stale callbacks from the failed attempt', async () => {
+        clearTileTextureCachesForDebug();
+        const originalImage = globalThis.Image;
+        const failingListener = vi.fn(() => {
+            throw new Error('observer failed');
+        });
+        const healthyListener = vi.fn();
+        const unsubscribeFailing = subscribeTextureImageUpdates(failingListener);
+        const unsubscribeHealthy = subscribeTextureImageUpdates(healthyListener);
+        const requests: Array<{
+            onerror: (() => void) | null;
+            onload: (() => void) | null;
+        }> = [];
+
+        class MockImage {
+            decoding: 'async' | 'auto' | 'sync' = 'auto';
+            complete = true;
+            naturalHeight = 64;
+            naturalWidth = 64;
+            onerror: (() => void) | null = null;
+            onload: (() => void) | null = null;
+
+            set src(_value: string) {
+                requests.push(this);
+            }
+        }
+
+        Object.defineProperty(globalThis, 'Image', {
+            configurable: true,
+            value: MockImage
+        });
+
+        try {
+            const first = preloadTileTextureImages();
+            const expectedRequestCount = TILE_TEXTURE_IMAGE_IDS.length;
+            await vi.waitFor(() => expect(requests).toHaveLength(expectedRequestCount));
+            requests.slice(0, expectedRequestCount).forEach((image) => image.onerror?.());
+            await first;
+
+            const retry = preloadTileTextureImages();
+            await vi.waitFor(() => expect(requests).toHaveLength(expectedRequestCount * 2));
+            requests.slice(expectedRequestCount, expectedRequestCount * 2).forEach((image) => image.onload?.());
+            await retry;
+
+            requests.slice(0, expectedRequestCount).forEach((image) => image.onerror?.());
+            await preloadTileTextureImages();
+
+            expect(requests).toHaveLength(expectedRequestCount * 2);
+            expect(failingListener).toHaveBeenCalledTimes(expectedRequestCount);
+            expect(healthyListener).toHaveBeenCalledTimes(expectedRequestCount);
+        } finally {
+            unsubscribeFailing();
+            unsubscribeHealthy();
+            Object.defineProperty(globalThis, 'Image', {
+                configurable: true,
+                value: originalImage
+            });
+        }
+    });
+
+    it('retries stalled tile texture preloads once, then keeps the bounded failure', async () => {
         clearTileTextureCachesForDebug();
         vi.useFakeTimers();
         const originalImage = globalThis.Image;
@@ -243,10 +372,15 @@ describe('tileTextures layout', () => {
 
             await vi.advanceTimersByTimeAsync(1500);
             await expect(preload).resolves.toBeUndefined();
-            expect(requestedCount).toBe(7);
+            expect(requestedCount).toBe(TILE_TEXTURE_IMAGE_IDS.length);
+
+            const retry = preloadTileTextureImages();
+            expect(requestedCount).toBe(TILE_TEXTURE_IMAGE_IDS.length * 2);
+            await vi.advanceTimersByTimeAsync(1500);
+            await expect(retry).resolves.toBeUndefined();
 
             await preloadTileTextureImages();
-            expect(requestedCount).toBe(7);
+            expect(requestedCount).toBe(TILE_TEXTURE_IMAGE_IDS.length * 2);
         } finally {
             vi.useRealTimers();
             Object.defineProperty(globalThis, 'Image', {

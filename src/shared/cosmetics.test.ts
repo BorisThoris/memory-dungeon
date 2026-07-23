@@ -3,6 +3,8 @@ import { createDefaultSaveData } from './save-data';
 import {
     CARD_THEME_CATALOG,
     COSMETIC_CATALOG,
+    COSMETIC_IDS,
+    getCosmeticCatalogRows,
     getCosmeticTrackRows,
     getCardThemeRows,
     getCosmeticRows,
@@ -16,11 +18,8 @@ describe('REG-025 cosmetics catalog', () => {
         const save = createDefaultSaveData();
         save.unlocks = ['cosmetic:crest_daily_bronze', 'cosmetic:title_ascendant_v'];
 
-        expect(Object.keys(COSMETIC_CATALOG)).toEqual(expect.arrayContaining([
-            'crest_daily_bronze',
-            'title_ascendant_v',
-            'card_back_classic'
-        ] satisfies CosmeticId[]));
+        expect(Object.keys(COSMETIC_CATALOG)).toEqual(COSMETIC_IDS satisfies readonly CosmeticId[]);
+        expect(getCosmeticCatalogRows().map((row) => row.id)).toEqual(COSMETIC_IDS);
         expect(unlockedCosmeticIds(save)).toEqual(['crest_daily_bronze', 'title_ascendant_v']);
 
         const rows = getCosmeticRows(save);

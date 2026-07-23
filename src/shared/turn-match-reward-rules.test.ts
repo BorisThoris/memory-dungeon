@@ -53,6 +53,49 @@ describe('turn match reward rules', () => {
         expect(reward.guardTokens).toBe(MAX_GUARD_TOKENS);
     });
 
+    it('normalizes malformed survival reward counters before cap and conversion checks', () => {
+        const reward = calculateResolvedMatchSurvivalReward({
+            catalystAltarUpgraded: false,
+            currentStreak: Number.NaN,
+            dungeonReward: { comboShards: Number.NaN, guardTokens: Number.POSITIVE_INFINITY },
+            findableComboShardGain: 1.9,
+            mimicCacheBite: false,
+            mimicCacheFatalBite: false,
+            mimicCacheGuardBite: false,
+            routeCardReward: { comboShards: 2.9, guardTokens: 1.9 },
+            run: run({
+                lives: 2.9,
+                stats: {
+                    ...run().stats,
+                    comboShards: Number.POSITIVE_INFINITY,
+                    guardTokens: Number.NaN
+                }
+            })
+        });
+
+        expect(reward.guardTokens).toBe(1);
+        expect(reward.comboShards).toBe(0);
+        expect(reward.lives).toBe(3);
+    });
+
+    it('normalizes malformed stat records before cap and conversion checks', () => {
+        const reward = calculateResolvedMatchSurvivalReward({
+            catalystAltarUpgraded: false,
+            currentStreak: 4,
+            dungeonReward: emptyReward,
+            findableComboShardGain: 1,
+            mimicCacheBite: false,
+            mimicCacheFatalBite: false,
+            mimicCacheGuardBite: false,
+            routeCardReward: emptyReward,
+            run: run({ stats: Number.NaN as unknown as RunState['stats'] })
+        });
+
+        expect(reward.guardTokens).toBe(1);
+        expect(reward.comboShards).toBe(2);
+        expect(reward.lives).toBe(4);
+    });
+
     it('does not award streak combo or guard bonuses in meditation', () => {
         const reward = calculateResolvedMatchSurvivalReward({
             catalystAltarUpgraded: false,

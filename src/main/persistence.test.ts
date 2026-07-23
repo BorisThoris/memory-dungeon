@@ -95,6 +95,49 @@ describe('PersistenceService', () => {
         expect(read.settings.weakerShuffleMode).toBe(createDefaultSaveData().settings.weakerShuffleMode);
     });
 
+    it('does not let a stale game snapshot overwrite separately persisted settings', () => {
+        const p = new PersistenceService();
+        const staleSave = p.getSaveData();
+        p.saveSettings({
+            ...staleSave.settings,
+            displayMode: 'fullscreen',
+            reduceMotion: true
+        });
+
+        const committed = p.saveGame({ ...staleSave, bestScore: 9001 });
+
+        expect(committed.bestScore).toBe(9001);
+        expect(committed.settings).toMatchObject({ displayMode: 'fullscreen', reduceMotion: true });
+        expect(p.getSaveData()).toEqual(committed);
+    });
+
+    it('rejects invalid persistence roots without replacing stored save data', () => {
+        const repository = new MemorySaveRepository({ ...createDefaultSaveData(), bestScore: 77 });
+        const p = new PersistenceService(repository);
+
+        expect(() => p.saveGame(['not', 'a', 'save'])).toThrow('recognized field');
+        expect(() => p.saveGame({ undocumentedSave: true })).toThrow('recognized field');
+        expect(() => p.saveSettings('not settings')).toThrow('recognized field');
+        expect(() => p.saveSettings({ undocumentedSetting: true })).toThrow('recognized field');
+        expect((repository.getSaveData() as SaveData).bestScore).toBe(77);
+    });
+
+    it('rejects a non-object repository payload as a read failure', () => {
+        const p = new PersistenceService(new MemorySaveRepository(['corrupt']));
+
+        expect(() => p.getSaveData()).toThrow('recognized field');
+    });
+
+    it('does not downgrade a save written by a newer app schema', () => {
+        const futureSave = { ...createDefaultSaveData(), schemaVersion: createDefaultSaveData().schemaVersion + 1 };
+        const repository = new MemorySaveRepository(futureSave);
+        const p = new PersistenceService(repository);
+
+        expect(() => p.getSaveData()).toThrow('newer unsupported schema version');
+        expect(() => p.saveGame(futureSave)).toThrow('newer unsupported schema version');
+        expect(repository.getSaveData()).toBe(futureSave);
+    });
+
     it('unlockAchievement merges into achievements without dropping others', () => {
         const p = new PersistenceService();
         p.unlockAchievement('ACH_FIRST_CLEAR');
@@ -105,5 +148,16 @@ describe('PersistenceService', () => {
                 expect(data.achievements[id]).toBe(false);
             }
         });
+    });
+
+    it('does not rewrite save data for an achievement already persisted locally', () => {
+        const saveData = createDefaultSaveData();
+        saveData.achievements.ACH_FIRST_CLEAR = true;
+        const repository = new MemorySaveRepository(saveData);
+        const write = vi.spyOn(repository, 'setSaveData');
+        const p = new PersistenceService(repository);
+
+        expect(p.unlockAchievement('ACH_FIRST_CLEAR')).toEqual(saveData);
+        expect(write).not.toHaveBeenCalled();
     });
 });

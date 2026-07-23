@@ -44,4 +44,16 @@ describe('traitInteractionLaneMap', () => {
         expect(getTraitInteractionLaneId('Echo mirror recall focus')).toBe('recall');
         expect(getTraitInteractionLaneId('Plain score bump')).toBe('score');
     });
+
+    it('ignores malformed trait interaction line arrays before grouping lanes', () => {
+        expect(buildTraitInteractionLaneMap({ length: 2 } as unknown as string[])).toEqual([]);
+        expect(buildTraitInteractionLaneMap([
+            'Echo + Sealed: combo shard',
+            Number.NaN,
+            '',
+            null
+        ] as unknown as string[])).toEqual([
+            { id: 'shard', label: 'Shard', count: 1, cue: 'Echo + Sealed: combo shard' }
+        ]);
+    });
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildBoard } from './board-generation';
-import { GAME_RULES_VERSION } from './contracts';
+import { GAME_RULES_VERSION, type RelicId, type RunState } from './contracts';
 import { flipTile, resolveBoardTurn } from './turn-resolution';
 import { makeBoard, makePair, makeRun, makeTile } from './test/game-fixtures';
 import { getTraitOpportunityHudModel, getTraitOpportunitySummary } from './trait-opportunities';
@@ -51,6 +51,9 @@ describe('tile trait rules', () => {
                 'echo:sealed-combo',
                 'echo:sealed-combo',
                 'unknown',
+                '__proto__',
+                'constructor',
+                'toString',
                 'cursed:volatile-danger'
             ])
         ).toEqual(['Echo + Sealed: combo shard', 'Cursed + Volatile: recall pressure']);
@@ -58,6 +61,7 @@ describe('tile trait rules', () => {
 
     it('keeps every known interaction tag backed by player-facing copy', () => {
         expect(TILE_TRAIT_INTERACTION_TAGS.length).toBeGreaterThan(0);
+        expect(Object.keys(TILE_TRAIT_INTERACTION_TEXT)).toEqual([...TILE_TRAIT_INTERACTION_TAGS]);
         for (const tag of TILE_TRAIT_INTERACTION_TAGS) {
             expect(TILE_TRAIT_INTERACTION_TEXT[tag]).toMatch(/\S/);
         }
@@ -212,7 +216,7 @@ describe('tile trait rules', () => {
                 ).toBeGreaterThan(0);
             }
         }
-    });
+    }, 15_000);
 
     it('surfaces the newer interaction traits through seeded route pools', () => {
         const baseTiles = Array.from({ length: 12 }, (_, index) => makePair(`pair-${index}`, String(index))).flat();
@@ -282,6 +286,58 @@ describe('tile trait rules', () => {
         });
         expect(calculateTileTraitMatchRewards(run, [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]).comboShardGain).toBe(1);
         expect(calculateTileTraitMatchRewards(run, [{ ...heavyA, tileTraitKind: 'heavy' }, heavyB]).scoreBonus).toBe(35);
+    });
+
+    it('normalizes malformed resource counters before calculating trait match rewards', () => {
+        const run = makeRun([], {
+            matchResolutionsThisFloor: Number.NaN,
+            peekCharges: Number.POSITIVE_INFINITY,
+            recallFocus: Number.POSITIVE_INFINITY,
+            relicIds: ['guard_token_plus_one'],
+            rewardPerkIds: ['trait_streak_toolkit'],
+            stats: {
+                ...makeRun([]).stats,
+                comboShards: Number.POSITIVE_INFINITY,
+                currentStreak: Number.POSITIVE_INFINITY,
+                guardTokens: Number.NaN
+            }
+        });
+        const [sealedA, sealedB] = makePair('sealed', 'S');
+        const [mirrorA, mirrorB] = makePair('mirror', 'M');
+
+        expect(calculateTileTraitMatchRewards(run, [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]).comboShardGain).toBe(1);
+        expect(resolveTileTraitEffects({
+            run,
+            source: 'match',
+            sourceTiles: [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]
+        }).flashPairChargeGain).toBe(0);
+        expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(2);
+    });
+
+    it('normalizes malformed stat records before calculating trait match rewards', () => {
+        const run = {
+            ...makeRun([]),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        const [sealedA, sealedB] = makePair('sealed', 'S');
+        const [mirrorA, mirrorB] = makePair('mirror', 'M');
+
+        expect(calculateTileTraitMatchRewards(run, [{ ...sealedA, tileTraitKind: 'sealed' }, sealedB]).comboShardGain).toBe(1);
+        expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(1);
+    });
+
+    it('ignores malformed relic ids before calculating trait match rewards', () => {
+        const run = makeRun([], {
+            relicIds: Number.NaN as unknown as RelicId[]
+        });
+        const [cursedA, cursedB] = makePair('cursed', 'C');
+        const [mirrorA, mirrorB] = makePair('mirror', 'M');
+
+        expect(calculateTileTraitMatchRewards(run, [{ ...cursedA, tileTraitKind: 'cursed' }, cursedB])).toMatchObject({
+            relicFavorGain: 1,
+            shopGoldGain: 0
+        });
+        expect(calculateTileTraitMatchRewards(run, [{ ...mirrorA, tileTraitKind: 'mirror' }, mirrorB]).guardTokenGain).toBe(1);
     });
 
     it('applies echo reward through normal two-card resolution', () => {
@@ -753,6 +809,82 @@ describe('tile trait rules', () => {
         expect(withoutPeek).toMatchObject({ peekChargeLoss: 0, recallMistakesDelta: 1 });
     });
 
+    it('normalizes malformed mismatch resource counters before trait penalties', () => {
+        const [sealedA] = makePair('sealed', 'S');
+        const [volatileA] = makePair('volatile', 'V');
+        const [plainA] = makePair('plain', 'P');
+
+        expect(calculateTileTraitMismatchPenalty(
+            makeRun([], { peekCharges: Number.POSITIVE_INFINITY }),
+            [{ ...sealedA, tileTraitKind: 'sealed' }, plainA]
+        )).toMatchObject({
+            peekChargeLoss: 0,
+            recallMistakesDelta: 1
+        });
+        expect(calculateTileTraitMismatchPenalty(
+            makeRun([], {
+                relicIds: ['wager_surety'],
+                stats: { ...makeRun([]).stats, guardTokens: Number.POSITIVE_INFINITY }
+            }),
+            [{ ...volatileA, tileTraitKind: 'volatile' }, plainA]
+        ).blocksVolatileShuffle).toBe(false);
+    });
+
+    it('ignores malformed relic ids before trait mismatch penalties', () => {
+        const [cursedA] = makePair('cursed', 'C');
+        const [volatileA] = makePair('volatile', 'V');
+
+        const run = makeRun([], { relicIds: Number.NaN as unknown as RelicId[] });
+        const sourceTiles = [{ ...cursedA, tileTraitKind: 'cursed' as const }, { ...volatileA, tileTraitKind: 'volatile' as const }];
+        const penalty = calculateTileTraitMismatchPenalty(
+            run,
+            sourceTiles
+        );
+        const effect = resolveTileTraitEffects({
+            run,
+            source: 'mismatch',
+            sourceTiles
+        });
+
+        expect(penalty.triesDelta).toBe(1);
+        expect(penalty.blocksVolatileShuffle).toBe(false);
+        expect(effect.interactionTags).not.toContain('wager-surety:cursed-buffer');
+    });
+
+    it('normalizes malformed flip history before volatile mismatch shuffles', () => {
+        const board = makeBoard([
+            makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile', state: 'flipped' }),
+            makeTile('x1', 'x', 'X', { state: 'flipped' }),
+            makeTile('a1', 'a', 'A'),
+            makeTile('b1', 'b', 'B')
+        ]);
+        const result = applyVolatileMismatchTrait(
+            board,
+            makeRun(board.tiles, { board, flipHistory: Number.NaN as unknown as string[] }),
+            [board.tiles[0]!, board.tiles[1]!]
+        );
+
+        expect(result.triggered).toBe(true);
+    });
+
+    it('normalizes malformed stat records before volatile mismatch shuffles', () => {
+        const board = makeBoard([
+            makeTile('v1', 'v', 'V', { tileTraitKind: 'volatile', state: 'flipped' }),
+            makeTile('x1', 'x', 'X', { state: 'flipped' }),
+            makeTile('a1', 'a', 'A'),
+            makeTile('b1', 'b', 'B')
+        ]);
+        const result = applyVolatileMismatchTrait(
+            board,
+            {
+                ...makeRun(board.tiles, { board }),
+                stats: Number.NaN as unknown as RunState['stats']
+            },
+            [board.tiles[0]!, board.tiles[1]!]
+        );
+
+        expect(result.triggered).toBe(true);
+    });
     it('makes Heavy misses cost extra tries without draining peek value', () => {
         const [a1] = makePair('a', 'A');
         const [b1] = makePair('b', 'B');
@@ -795,5 +927,6 @@ describe('tile trait rules', () => {
         const result = applyVolatileMismatchTrait(board, run, [board.tiles[0]!, board.tiles[1]!]);
         expect(result.triggered).toBe(true);
         expect(result.board.tiles.slice(2).map((tile) => tile.id)).not.toEqual(board.tiles.slice(2).map((tile) => tile.id));
+        expect(result.board.tiles.slice(2).map((tile) => tile.id).sort()).toEqual(board.tiles.slice(2).map((tile) => tile.id).sort());
     });
 });

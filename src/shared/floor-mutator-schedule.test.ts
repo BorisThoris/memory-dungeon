@@ -151,6 +151,23 @@ describe('pickFloorScheduleEntry', () => {
         });
     });
 
+    it('falls back to the first authored floor for non-finite cycle inputs', () => {
+        expect(getChapterActBiomeForCycleFloor(Number.NaN)).toMatchObject({
+            actId: 'act_1_survey',
+            biomeId: 'lantern_academy',
+            actFloorNumber: 1,
+            actFloorCount: 4
+        });
+
+        expect(pickFloorScheduleEntry(42, rv, Number.NaN, 'endless')).toMatchObject({
+            mutators: ['wide_recall'],
+            floorTag: 'normal',
+            floorArchetypeId: 'survey_hall',
+            featuredObjectiveId: 'flip_par',
+            cycleFloor: 1
+        });
+    });
+
     it('exposes act and biome hooks for UI, palette, audio, and route previews', () => {
         expect(getChapterActBiomePresentation(2)).toMatchObject({
             actId: 'act_1_survey',

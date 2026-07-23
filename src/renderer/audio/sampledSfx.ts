@@ -4,27 +4,49 @@
  */
 
 import sfxManifest from '../assets/audio/sfx/manifest.json';
+import { buildAudioUrlMapByFilename } from './audioGlobUrlMap';
+import { sfxManifestSchema } from './audioManifestBoundary';
 import { preloadAudioBuffers } from './preloadAudioBuffers';
 import { getSharedAudioContext } from './webAudioContext';
 
 type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'pressure' | 'shuffle';
 
-type ManifestEntry = { file: string; category: SfxCategory };
-
 export type SfxSampleKey = keyof typeof sfxManifest.entries;
 
-const manifest = sfxManifest as {
-    version: number;
-    entries: Record<SfxSampleKey, ManifestEntry>;
-    matchTierDepthRanges: Record<'match-tier-low' | 'match-tier-mid' | 'match-tier-high', [number, number]>;
-};
+const manifest = sfxManifestSchema.parse(sfxManifest);
+
+export const SFX_SAMPLE_KEYS = [
+    'flip',
+    'gambitCommit',
+    'match-tier-low',
+    'match-tier-mid',
+    'match-tier-high',
+    'mismatch',
+    'power-arm',
+    'destroy-pair',
+    'peek-power',
+    'stray-power',
+    'shuffle-full',
+    'shuffle-quick',
+    'floor-clear',
+    'relic-offer-open',
+    'countdown-pressure',
+    'relic-pick',
+    'wager-arm'
+] as const satisfies readonly SfxSampleKey[];
+
+export const MATCH_TIER_SAMPLE_KEYS = [
+    'match-tier-low',
+    'match-tier-mid',
+    'match-tier-high'
+] as const satisfies readonly SfxSampleKey[];
 
 const globUrls = import.meta.glob<string>('../assets/audio/sfx/*.ogg', {
     eager: true,
     query: '?url',
     import: 'default'
 });
-const urlsByFilename = new Map(Object.entries(globUrls).map(([path, url]) => [path.replace(/^.*\//, ''), url]));
+const urlsByFilename = buildAudioUrlMapByFilename(globUrls);
 
 const MAX_POLYPHONY: Record<SfxCategory, number> = {
     flip: 5,
@@ -84,8 +106,8 @@ function urlForFilename(filename: string): string | undefined {
 export function resolveMatchTierSampleKey(chainDepth: number): SfxSampleKey {
     const t = Math.max(1, Math.min(chainDepth, 14));
     const ranges = manifest.matchTierDepthRanges;
-    const entries = Object.entries(ranges) as [SfxSampleKey, [number, number]][];
-    for (const [key, [lo, hi]] of entries) {
+    for (const key of MATCH_TIER_SAMPLE_KEYS) {
+        const [lo, hi] = ranges[key];
         if (t >= lo && t <= hi) {
             return key;
         }
@@ -176,7 +198,7 @@ export async function preloadSampledSfx(): Promise<void> {
 
     const loaded = await preloadAudioBuffers({
         decode: (arrayBuffer) => ctx.decodeAudioData(arrayBuffer),
-        keys: Object.keys(manifest.entries) as SfxSampleKey[],
+        keys: [...SFX_SAMPLE_KEYS],
         urlForKey: (key) => {
             const file = manifest.entries[key]?.file;
             return file ? urlForFilename(file) : undefined;

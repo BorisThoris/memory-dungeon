@@ -91,7 +91,8 @@ export function useFitShellZoom({
             return;
         }
 
-        let raf = 0;
+        let outerRaf: number | null = null;
+        let innerRaf: number | null = null;
         let delayed = 0;
         let cancelled = false;
 
@@ -133,21 +134,38 @@ export function useFitShellZoom({
             });
         };
 
+        const cancelScheduledFrames = (): void => {
+            if (outerRaf !== null) {
+                cancelAnimationFrame(outerRaf);
+                outerRaf = null;
+            }
+            if (innerRaf !== null) {
+                cancelAnimationFrame(innerRaf);
+                innerRaf = null;
+            }
+        };
+
         /** Double rAF: run after layout + fonts/paint for stable box metrics. */
         const schedule = (): void => {
-            cancelAnimationFrame(raf);
-            raf = requestAnimationFrame(() => {
-                requestAnimationFrame(recompute);
+            cancelScheduledFrames();
+            outerRaf = requestAnimationFrame(() => {
+                outerRaf = null;
+                innerRaf = requestAnimationFrame(() => {
+                    innerRaf = null;
+                    recompute();
+                });
             });
         };
 
         schedule();
 
-        const fontsDone = document.fonts?.ready?.then(() => {
-            if (!cancelled) {
-                schedule();
-            }
-        });
+        const fontsDone = document.fonts?.ready
+            ?.then(() => {
+                if (!cancelled) {
+                    schedule();
+                }
+            })
+            .catch(() => undefined);
 
         delayed = window.setTimeout(() => {
             if (!cancelled) {
@@ -157,7 +175,7 @@ export function useFitShellZoom({
 
         return () => {
             cancelled = true;
-            cancelAnimationFrame(raf);
+            cancelScheduledFrames();
             window.clearTimeout(delayed);
             void fontsDone;
         };

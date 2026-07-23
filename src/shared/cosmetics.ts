@@ -1,15 +1,11 @@
 import type { SaveData } from './contracts';
+import { COSMETIC_IDS, type CosmeticId } from './cosmetic-ids';
+
+export { COSMETIC_IDS, type CosmeticId } from './cosmetic-ids';
 
 export type CosmeticSlot = 'title' | 'crest' | 'card_back';
 export type CardThemeId = 'classic_card_back';
 export type CosmeticStatus = 'owned' | 'locked';
-export type CosmeticId =
-    | 'title_seeker'
-    | 'crest_lantern'
-    | 'card_back_classic'
-    | 'crest_daily_bronze'
-    | 'title_ascendant_v';
-
 export interface CosmeticDefinition {
     id: CosmeticId;
     slot: CosmeticSlot;
@@ -103,19 +99,33 @@ export const CARD_THEME_CATALOG = {
     }
 } as const;
 
-const catalogRows = (): CosmeticDefinition[] => Object.values(COSMETIC_CATALOG);
+const buildClassicCardThemeRow = (): CardThemeRow => ({
+    id: 'classic_card_back',
+    cosmeticId: null,
+    label: 'Shared Card Back',
+    status: 'owned',
+    equipped: true,
+    asset: CARD_THEME_CATALOG.card_back_classic.asset,
+    previewAsset: CARD_THEME_CATALOG.card_back_classic.asset.back,
+    fallbackAsset: CARD_THEME_CATALOG.card_back_classic.fallbackAsset,
+    unlockSource: 'Default',
+    readability: 'All hidden cards use this same shared back; hidden-card theme variants are not available.'
+});
+
+export const getCosmeticCatalogRows = (): CosmeticDefinition[] =>
+    COSMETIC_IDS.map((id) => COSMETIC_CATALOG[id]);
 
 const ownedCosmeticTags = (save: SaveData): Set<string> => new Set(save.unlocks ?? []);
 
 export const cosmeticUnlockTag = (id: string): string => `${COSMETIC_UNLOCK_PREFIX}${id}`;
 
 export const unlockedCosmeticIds = (save: SaveData): CosmeticId[] =>
-    catalogRows()
+    getCosmeticCatalogRows()
         .map((row) => row.id)
         .filter((id) => ownedCosmeticTags(save).has(cosmeticUnlockTag(id)) && !COSMETIC_CATALOG[id].defaultOwned);
 
 export const cosmeticIsOwned = (save: SaveData, id: string): boolean => {
-    const def = catalogRows().find((entry) => entry.id === id);
+    const def = getCosmeticCatalogRows().find((entry) => entry.id === id);
     if (!def) {
         return false;
     }
@@ -124,13 +134,13 @@ export const cosmeticIsOwned = (save: SaveData, id: string): boolean => {
 
 export const deriveCosmeticStates = (save: SaveData): CosmeticStateRow[] => {
     const firstOwnedBySlot = new Map<CosmeticSlot, string>();
-    for (const def of catalogRows()) {
+    for (const def of getCosmeticCatalogRows()) {
         if (cosmeticIsOwned(save, def.id) && !firstOwnedBySlot.has(def.slot)) {
             firstOwnedBySlot.set(def.slot, def.id);
         }
     }
 
-    return catalogRows().map((def) => {
+    return getCosmeticCatalogRows().map((def) => {
         const owned = cosmeticIsOwned(save, def.id);
         return {
             ...def,
@@ -154,24 +164,11 @@ export const getEquippedCosmeticId = (save: SaveData, slot: CosmeticSlot): Cosme
 
 export const getCardThemeRows = (save: SaveData): CardThemeRow[] => {
     void save;
-    return [
-        {
-            id: 'classic_card_back',
-            cosmeticId: null,
-            label: 'Shared Card Back',
-            status: 'owned',
-            equipped: true,
-            asset: CARD_THEME_CATALOG.card_back_classic.asset,
-            previewAsset: CARD_THEME_CATALOG.card_back_classic.asset.back,
-            fallbackAsset: CARD_THEME_CATALOG.card_back_classic.fallbackAsset,
-            unlockSource: 'Default',
-            readability: 'All hidden cards use this same shared back; hidden-card theme variants are not available.'
-        }
-    ];
+    return [buildClassicCardThemeRow()];
 };
 
 export const getEquippedCardTheme = (save: SaveData): CardThemeRow =>
-    getCardThemeRows(save).find((row) => row.equipped) ?? getCardThemeRows(save)[0]!;
+    getCardThemeRows(save).find((row) => row.equipped) ?? buildClassicCardThemeRow();
 
 export const resolveEquippedCardTheme = getEquippedCardTheme;
 

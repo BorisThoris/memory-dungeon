@@ -1,5 +1,5 @@
 import type { AchievementUnlockResult, DesktopApi, DisplayMode, SaveData, Settings } from '../shared/contracts';
-import { createDefaultSaveData, normalizeSaveData, normalizeUnknownSaveData } from '../shared/save-data';
+import { createDefaultSaveData, normalizeSaveData, normalizeUnknownSaveDataOrThrow } from '../shared/save-data';
 
 const STORAGE_KEY = 'memory-dungeon-save-data';
 
@@ -7,26 +7,20 @@ const getBrowserStorage = (): Storage | null => {
     if (typeof window === 'undefined') {
         return null;
     }
-    try {
-        return window.localStorage ?? null;
-    } catch (error) {
-        console.warn('[desktop-client] localStorage unavailable; using in-memory defaults', error);
-        return null;
-    }
+    return window.localStorage ?? null;
 };
 
 const readLocalSave = (): SaveData => {
-    const storage = getBrowserStorage();
-    if (!storage) {
-        return createDefaultSaveData();
-    }
-
     let rawValue: string | null = null;
     try {
+        const storage = getBrowserStorage();
+        if (!storage) {
+            throw new Error('Browser storage is unavailable.');
+        }
         rawValue = storage.getItem(STORAGE_KEY);
     } catch (error) {
-        console.warn('[desktop-client] localStorage read unavailable; using in-memory defaults', error);
-        return createDefaultSaveData();
+        console.error('[desktop-client] localStorage read unavailable', error);
+        throw error;
     }
 
     if (!rawValue) {
@@ -34,7 +28,7 @@ const readLocalSave = (): SaveData => {
     }
 
     try {
-        return normalizeUnknownSaveData(JSON.parse(rawValue));
+        return normalizeUnknownSaveDataOrThrow(JSON.parse(rawValue));
     } catch (error) {
         console.error('[desktop-client] localStorage read failed', error);
         throw error;
@@ -46,9 +40,10 @@ const writeLocalSave = (saveData: SaveData): SaveData => {
 
     try {
         const storage = getBrowserStorage();
-        if (storage) {
-            storage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+        if (!storage) {
+            throw new Error('Browser storage is unavailable.');
         }
+        storage.setItem(STORAGE_KEY, JSON.stringify(normalized));
     } catch (error) {
         console.error('[desktop-client] localStorage write failed', error);
         throw error;
@@ -69,7 +64,8 @@ const fallbackClient: DesktopApi = {
         return readLocalSave();
     },
     async saveGame(data: SaveData): Promise<SaveData> {
-        return writeLocalSave(data);
+        const currentSave = readLocalSave();
+        return writeLocalSave({ ...data, settings: currentSave.settings });
     },
     async unlockAchievement(): Promise<AchievementUnlockResult> {
         return { ok: false, reason: 'not_connected' };
@@ -100,4 +96,3 @@ const pickDesktopBridge = (): DesktopApi => {
 };
 
 export const desktopClient: DesktopApi = pickDesktopBridge();
-

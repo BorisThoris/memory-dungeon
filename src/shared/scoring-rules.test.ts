@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MATCH_DELAY_MS } from './contracts';
+import { MATCH_DELAY_MS, type RelicId } from './contracts';
 import { createNewRun } from './game-core';
 import {
     calculateLevelClearBonus,
@@ -24,6 +24,15 @@ describe('scoring-rules', () => {
 
         const meditation = createNewRun(0, { gameMode: 'meditation' });
         expect(getMemorizeDurationForRun(meditation, 1)).toBe(Math.floor(1300 * 1.55));
+    });
+
+    it('ignores malformed relic ids when calculating run memorize duration', () => {
+        const run = {
+            ...createNewRun(0, { activeMutators: ['short_memorize'] }),
+            relicIds: Number.NaN as unknown as RelicId[]
+        };
+
+        expect(getMemorizeDurationForRun(run, 1)).toBe(950);
     });
 
     it('applies boss identity pressure to boss-floor memorize time', () => {
@@ -53,6 +62,7 @@ describe('scoring-rules', () => {
         expect(calculateRating(9)).toBe('F');
         expect(calculateMatchScore(2, 3, 1.5)).toBe(82);
         expect(calculateLevelClearBonus(4)).toBe(200);
+        expect(calculateLevelClearBonus(Number.NaN)).toBe(0);
         expect(calculatePerfectClearBonus()).toBe(25);
     });
 
@@ -90,6 +100,17 @@ describe('scoring-rules', () => {
                 echoFeedbackEnabled: true
             })
         ).toBe(MATCH_DELAY_MS * 2 + 380);
+    });
+
+    it('returns no resolve delay for malformed flipped tile ids', () => {
+        const run = createNewRun(0, { fixedBoard: null });
+
+        expect(
+            computeFlipResolveDelayMs(run, Number.NaN as unknown as string[], {
+                resolveDelayMultiplier: 2,
+                echoFeedbackEnabled: true
+            })
+        ).toBe(0);
     });
 
     it('sums presentation mutator match penalties', () => {

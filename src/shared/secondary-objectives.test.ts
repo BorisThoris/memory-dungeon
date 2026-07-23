@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { FLIP_PAR_BONUS_SCORE } from './contracts';
+import { FLIP_PAR_BONUS_SCORE, type RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import {
+    formatLevelResultObjectiveLine,
+    formatLevelResultTagLabel,
     getDungeonLevelResultTags,
     getLevelResultTagDefinitions,
     getSecondaryObjectiveProgress,
@@ -26,6 +28,14 @@ describe('REG-048 secondary objective clarity', () => {
         const failedRow = getSecondaryObjectiveProgress(failed);
         expect(failedRow?.status).toBe('failed');
         expect(failedRow?.failureReason).toMatch(/par exceeded/i);
+
+        const malformed = {
+            ...active,
+            matchResolutionsThisFloor: Number.POSITIVE_INFINITY
+        };
+        const malformedRow = getSecondaryObjectiveProgress(malformed);
+        expect(malformedRow?.status).toBe('active');
+        expect(malformedRow?.condition).toContain('(0/');
     });
 
     it('returns completed status from level result for floor-clear celebration', () => {
@@ -46,6 +56,24 @@ describe('REG-048 secondary objective clarity', () => {
             }
         };
         expect(getSecondaryObjectiveProgress(completed)?.status).toBe('completed');
+    });
+
+    it('normalizes malformed objective bonus score before formatting level result copy', () => {
+        expect(
+            formatLevelResultObjectiveLine({
+                level: 1,
+                scoreGained: 100,
+                rating: 'S++',
+                livesRemaining: 5,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'perfect',
+                clearLifeGained: 1,
+                featuredObjectiveId: 'flip_par',
+                featuredObjectiveCompleted: true,
+                objectiveBonusScore: Number.POSITIVE_INFINITY
+            })
+        ).toBe('Flip par: Complete');
     });
 
     it('generates dungeon result tags from rule state without reward-bearing duplicates', () => {
@@ -93,6 +121,31 @@ describe('REG-048 secondary objective clarity', () => {
                 false
             )
         ).toEqual([]);
+
+        expect(
+            getDungeonLevelResultTags(
+                {
+                    ...run,
+                    dungeonEnemiesDefeatedThisFloor: Number.POSITIVE_INFINITY,
+                    dungeonTrapsResolvedThisFloor: Number.NaN,
+                    dungeonTreasuresOpenedThisFloor: Number.NEGATIVE_INFINITY,
+                    dungeonGatewaysUsedThisFloor: Number.NaN
+                },
+                { ...run.board!, floorTag: 'boss' },
+                false
+            )
+        ).toEqual([]);
+
+        expect(
+            getDungeonLevelResultTags(
+                {
+                    ...run,
+                    peekRevealedTileIds: Number.NaN as unknown as RunState['peekRevealedTileIds']
+                },
+                run.board!,
+                true
+            )
+        ).toEqual(['perfect_scout']);
     });
 
     it('prioritizes the top three visible result tags for floor-clear copy', () => {
@@ -105,6 +158,11 @@ describe('REG-048 secondary objective clarity', () => {
         ]);
 
         expect(visible.map((tag) => tag.id)).toEqual(['traps_disarmed', 'treasure_claimed', 'boss_floor']);
+    });
+
+    it.each(['__proto__', 'constructor', 'toString'])('rejects prototype result tag %s', (tag) => {
+        expect(getLevelResultTagDefinitions([tag])).toEqual([]);
+        expect(formatLevelResultTagLabel(tag)).toBe(tag);
     });
 
     it('includes active trait route objectives in secondary objective rows', () => {

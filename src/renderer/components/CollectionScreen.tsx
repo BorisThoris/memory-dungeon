@@ -1,10 +1,9 @@
 import { useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ACHIEVEMENT_BY_ID } from '../../shared/achievements';
-import type { RelicId } from '../../shared/contracts';
 import {
-    COSMETIC_CATALOG,
     cosmeticUnlockTag,
+    getCosmeticCatalogRows,
     getOwnedCosmeticIds,
     getEquippedCosmeticId
 } from '../../shared/cosmetics';
@@ -13,7 +12,7 @@ import {
     HONOR_UNLOCK_CATALOG,
     HONOR_UNLOCK_ORDER
 } from '../../shared/honorUnlocks';
-import { RELIC_CATALOG } from '../../shared/game-catalog';
+import { getRelicCatalogRows } from '../../shared/game-catalog';
 import { getCollectionGalleryRows } from '../../shared/collection-reward-gallery';
 import { getDailyArchiveRows } from '../../shared/daily-archive';
 import {
@@ -23,7 +22,8 @@ import {
     getPermanentUpgradeRows
 } from '../../shared/meta-progression';
 import { getCollectionRewardSignals, getMetaProgressionRunImpactRows } from '../../shared/meta-reward-signals';
-import { ACHIEVEMENT_IDS } from '../../shared/save-data';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
+import { ACHIEVEMENT_IDS, getRelicPickCountRows } from '../../shared/save-data';
 import {
     CALLSIGN_SYMBOLS,
     LETTER_SYMBOLS as LETTER_TILES,
@@ -103,6 +103,12 @@ const CollectionScreen = () => {
     const rewardSignalsLabel = formatRewardSignalLabel('Collection reward signals', rewardSignals);
     const rewardGalleryLabel = formatRewardSignalLabel('Collection reward gallery', rewardGalleryRows);
     const lastRunPayoffRows = summary ? getRunPayoffSignals(summary, { includeChainTarget: true }).slice(0, 4) : [];
+    const summaryDisplay = {
+        bestStreak: runNonNegativeInteger(summary?.bestStreak),
+        highestLevel: runNonNegativeInteger(summary?.highestLevel),
+        levelsCleared: runNonNegativeInteger(summary?.levelsCleared),
+        totalScore: runNonNegativeInteger(summary?.totalScore)
+    };
     const lastRunPayoffRowsLabel = formatRunPayoffSignalsLabel('Collection last run payoff signals', lastRunPayoffRows);
     const lastRunPayoffLaneMap = getRunPayoffLaneMap(lastRunPayoffRows);
     const primaryLastRunPayoffLane = lastRunPayoffLaneMap[0] ?? null;
@@ -124,7 +130,9 @@ const CollectionScreen = () => {
     const permanentUpgradeRows = getPermanentUpgradeRows(saveData);
     const cosmeticTrackRows = getMetaCosmeticTrackRows(saveData);
     const dailyArchiveRows = getDailyArchiveRows(saveData);
+    const relicPickCountById = new Map(getRelicPickCountRows(ps?.relicPickCounts).map((row) => [row.id, row.count]));
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
+    const bestScoreDisplay = runNonNegativeInteger(saveData.bestScore);
     const handleBack = (): void => {
         resumeUiSfxContext();
         playUiBackSfx(uiGain);
@@ -305,7 +313,7 @@ const CollectionScreen = () => {
                                 Cosmetic slots are visual-only. Owned/equipped state uses local unlock tags; no gameplay power is attached.
                             </p>
                             <div className={`${styles.grid} ${metaStyles.metaLongList}`}>
-                                {(Object.values(COSMETIC_CATALOG)).map((cosmetic) => {
+                                {getCosmeticCatalogRows().map((cosmetic) => {
                                     const owned = getOwnedCosmeticIds(saveData).includes(cosmetic.id);
                                     const equipped = getEquippedCosmeticId(saveData, cosmetic.slot) === cosmetic.id;
                                     return (
@@ -419,9 +427,9 @@ const CollectionScreen = () => {
                                 Tier tint reflects how often each relic has been picked across runs (cosmetic only).
                             </p>
                             <div className={`${styles.grid} ${metaStyles.metaLongList}`}>
-                                {(Object.keys(RELIC_CATALOG) as RelicId[]).map((id) => {
-                                    const def = RELIC_CATALOG[id];
-                                    const picks = ps?.relicPickCounts[id] ?? 0;
+                                {getRelicCatalogRows().map((def) => {
+                                    const id = def.id;
+                                    const picks = relicPickCountById.get(id) ?? 0;
                                     const tierClass =
                                         picks >= 3 ? styles.relicTierForged : picks >= 1 ? styles.relicTierKnown : styles.relicTierLatent;
                                     return (
@@ -442,7 +450,10 @@ const CollectionScreen = () => {
                         <h2 className={styles.sectionTitle}>Bests and last run</h2>
                         <div className={styles.statRow}>
                             <span>
-                                Best score<strong>{saveData.bestScore > 0 ? saveData.bestScore.toLocaleString() : '—'}</strong>
+                                Best score
+                                <strong>
+                                    {bestScoreDisplay > 0 ? bestScoreDisplay.toLocaleString() : '—'}
+                                </strong>
                             </span>
                             <span>
                                 Best no-powers floor<strong>{ps?.bestFloorNoPowers ?? 0}</strong>
@@ -451,8 +462,8 @@ const CollectionScreen = () => {
                         {summary ? (
                             <>
                             <p className={metaStyles.subtitle}>
-                                Last run: {summary.totalScore.toLocaleString()} pts · Floor {summary.highestLevel} ·{' '}
-                                {summary.levelsCleared} clears · Streak {summary.bestStreak}
+                                Last run: {summaryDisplay.totalScore.toLocaleString()} pts · Floor {summaryDisplay.highestLevel} ·{' '}
+                                {summaryDisplay.levelsCleared} clears · Streak {summaryDisplay.bestStreak}
                             </p>
                             <div
                                 aria-label={lastRunPayoffRowsLabel}

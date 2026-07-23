@@ -1,7 +1,18 @@
 import { act, render } from '@testing-library/react';
 import { createRef, useRef } from 'react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { computeFitShellZoomFactor, useFitShellZoom } from './useFitShellZoom';
+
+const originalDocumentFonts = document.fonts;
+
+afterEach(() => {
+    vi.restoreAllMocks();
+    vi.useRealTimers();
+    Object.defineProperty(document, 'fonts', {
+        configurable: true,
+        value: originalDocumentFonts
+    });
+});
 
 /** Documents unwrap math used in `useFitShellZoom` (zoomed box → intrinsic). */
 const intrinsicFromZoomed = (size: number, appliedZoom: number): number => Math.max(2, size / Math.max(0.02, appliedZoom));
@@ -109,6 +120,120 @@ const readFitZoomFromDom = (container: HTMLElement): number =>
     Number(container.querySelector('[data-testid="fit-zoom-readout"]')?.getAttribute('data-fit-zoom') ?? Number.NaN);
 
 describe('useFitShellZoom', () => {
+    it('cancels a pending outer animation frame whose id is zero', () => {
+        const requestAnimationFrame = vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => 0);
+        const cancelAnimationFrame = vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => undefined);
+
+        const FitProbe = () => {
+            const measureRef = useRef<HTMLDivElement | null>(null);
+            useFitShellZoom({
+                measureRef,
+                viewportHeight: 700,
+                viewportWidth: 900
+            });
+            return <div ref={measureRef} />;
+        };
+        const { unmount } = render(<FitProbe />);
+
+        expect(requestAnimationFrame).toHaveBeenCalledTimes(1);
+
+        unmount();
+
+        expect(cancelAnimationFrame).toHaveBeenCalledWith(0);
+    });
+
+    it('cancels pending inner frames when rescheduling and unmounting', () => {
+        vi.useFakeTimers();
+        let nextFrameId = 0;
+        const frames = new Map<number, FrameRequestCallback>();
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+            nextFrameId += 1;
+            frames.set(nextFrameId, callback);
+            return nextFrameId;
+        });
+        vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((frameId) => {
+            frames.delete(frameId);
+        });
+
+        const FitProbe = () => {
+            const measureRef = useRef<HTMLDivElement | null>(null);
+            useFitShellZoom({
+                measureRef,
+                viewportHeight: 700,
+                viewportWidth: 900
+            });
+            return (
+                <div ref={measureRef}>
+                    <div />
+                </div>
+            );
+        };
+        const { unmount } = render(<FitProbe />);
+        expect(frames.size).toBe(1);
+
+        const outerFrame = [...frames.entries()][0];
+        expect(outerFrame).toBeDefined();
+        frames.delete(outerFrame![0]);
+        outerFrame![1](0);
+        expect(frames.size).toBe(1);
+        const staleInnerFrameId = [...frames.keys()][0];
+
+        act(() => vi.advanceTimersByTime(420));
+
+        expect(frames.has(staleInnerFrameId!)).toBe(false);
+        expect(frames.size).toBe(1);
+
+        const replacementOuterFrame = [...frames.entries()][0];
+        expect(replacementOuterFrame).toBeDefined();
+        frames.delete(replacementOuterFrame![0]);
+        replacementOuterFrame![1](0);
+        expect(frames.size).toBe(1);
+
+        unmount();
+        expect(frames.size).toBe(0);
+    });
+
+    it('ignores rejected font readiness and keeps the delayed fit retry', async () => {
+        vi.useFakeTimers();
+        let nextFrameId = 0;
+        const frames = new Map<number, FrameRequestCallback>();
+        vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+            nextFrameId += 1;
+            frames.set(nextFrameId, callback);
+            return nextFrameId;
+        });
+        vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((frameId) => {
+            frames.delete(frameId);
+        });
+        Object.defineProperty(document, 'fonts', {
+            configurable: true,
+            value: {
+                ready: Promise.reject(new Error('font readiness unavailable'))
+            }
+        });
+
+        const FitProbe = () => {
+            const measureRef = useRef<HTMLDivElement | null>(null);
+            useFitShellZoom({
+                measureRef,
+                viewportHeight: 700,
+                viewportWidth: 900
+            });
+            return <div ref={measureRef} />;
+        };
+        render(<FitProbe />);
+
+        await act(async () => {
+            await Promise.resolve();
+        });
+
+        expect(frames.size).toBe(1);
+
+        act(() => vi.advanceTimersByTime(420));
+
+        expect(frames.size).toBe(1);
+    });
+
     it('resets fit zoom to 1 when disabled after a shrink', async () => {
         const FitProbe = (p: { enabled: boolean; vw: number; vh: number; ow: number; oh: number }) => {
             const measureRef = useRef<HTMLDivElement | null>(null);

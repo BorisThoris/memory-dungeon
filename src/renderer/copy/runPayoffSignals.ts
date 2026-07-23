@@ -1,9 +1,10 @@
 import type { RunSummary } from '../../shared/contracts';
 import { getChainTargetFeedback } from '../../shared/chain-targets';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
-export type RunPayoffSignalTone = 'chain' | 'reward' | 'build' | 'risk';
+type RunPayoffSignalTone = 'chain' | 'reward' | 'build' | 'risk';
 
-export type RunPayoffSignalRow = {
+type RunPayoffSignalRow = {
     action: RunPayoffSignalAction;
     arcadeCue: string;
     audioCue: RunPayoffSignalAudioCue;
@@ -15,7 +16,7 @@ export type RunPayoffSignalRow = {
     value: string;
 };
 
-export type RunPayoffSignalAction =
+type RunPayoffSignalAction =
     | 'Protect chain'
     | 'Chase target'
     | 'Cash reward'
@@ -25,7 +26,7 @@ export type RunPayoffSignalAction =
     | 'Reduce risk'
     | 'Bank score';
 
-export type RunPayoffSignalAudioCue =
+type RunPayoffSignalAudioCue =
     | 'run-payoff-chain'
     | 'run-payoff-target'
     | 'run-payoff-cashout'
@@ -35,16 +36,16 @@ export type RunPayoffSignalAudioCue =
     | 'run-payoff-risk'
     | 'run-payoff-score';
 
-export type RunPayoffSignalScreenCue = 'pulse' | 'snap' | 'burst' | 'guard';
+type RunPayoffSignalScreenCue = 'pulse' | 'snap' | 'burst' | 'guard';
 
-export type RunPayoffBurstSignal = {
+type RunPayoffBurstSignal = {
     action: 'Chase again' | 'Prime next' | 'Rebuild super stack';
     label: 'Combo burst' | 'Payoff burst' | 'Payoff stack' | 'Super stack';
     tone: 'chain' | 'reward' | 'super';
     value: string;
 };
 
-export type RunPayoffCrescendoSignal = {
+type RunPayoffCrescendoSignal = {
     audioCue: 'prime-pop' | 'cashout-pop' | 'stack-burst' | 'super-burst';
     beatCount: 2 | 3 | 4 | 5;
     detail: string;
@@ -53,16 +54,16 @@ export type RunPayoffCrescendoSignal = {
     tier: 'prime' | 'cashout' | 'stack' | 'super';
 };
 
-export type RunPayoffSequenceSignal = {
+type RunPayoffSequenceSignal = {
     first: string;
     keep: string;
     then: string;
     tone: 'chain' | 'reward' | 'super';
 };
 
-export type RunPayoffLaneId = 'chain' | 'cash' | 'build' | 'risk';
+type RunPayoffLaneId = 'chain' | 'cash' | 'build' | 'risk';
 
-export type RunPayoffLaneMapEntry = {
+type RunPayoffLaneMapEntry = {
     action: 'Protect chain' | 'Cash reward' | 'Build route' | 'Reduce risk';
     count: number;
     id: RunPayoffLaneId;
@@ -70,9 +71,9 @@ export type RunPayoffLaneMapEntry = {
     cue: string;
 };
 
-export type RunPayoffBeatCount = 1 | 2 | 3 | 4;
-export type RunPayoffLaneAudioCue = 'run-payoff-lane-chain' | 'run-payoff-lane-cash' | 'run-payoff-lane-build' | 'run-payoff-lane-risk';
-export type RunPayoffLaneScreenCue = 'burst' | 'cashout' | 'build' | 'risk';
+type RunPayoffBeatCount = 1 | 2 | 3 | 4;
+type RunPayoffLaneAudioCue = 'run-payoff-lane-chain' | 'run-payoff-lane-cash' | 'run-payoff-lane-build' | 'run-payoff-lane-risk';
+type RunPayoffLaneScreenCue = 'burst' | 'cashout' | 'build' | 'risk';
 
 type RunPayoffSignalOptions = {
     includeChainTarget?: boolean;
@@ -119,6 +120,8 @@ const RUN_PAYOFF_LANE_BEATS_BY_ID: Record<RunPayoffLaneId, RunPayoffBeatCount> =
     chain: 4,
     risk: 2
 };
+
+const runPayoffArrayCount = (value: unknown): number => Array.isArray(value) ? value.length : 0;
 
 const runPayoffLaneId = (row: Pick<RunPayoffSignalRow, 'id' | 'tone'>): RunPayoffLaneId => {
     if (row.tone === 'build') {
@@ -201,48 +204,51 @@ export const getRunPayoffSignals = (
     options: RunPayoffSignalOptions = {}
 ): RunPayoffSignalRow[] => {
     const rows: (Omit<RunPayoffSignalRow, 'action' | 'audioCue' | 'screenCue'> & { priority: number })[] = [];
-    const pickupClaimed = Math.max(0, options.pickupClaimed ?? summary.payoffPickupClaimed ?? 0);
-    const pickupTotal = Math.max(0, options.pickupTotal ?? summary.payoffPickupTotal ?? 0);
-    const relicCount = summary.relicIds?.length ?? 0;
-    const perkCount = Math.max(0, options.rewardPerkCount ?? summary.payoffRewardPerkCount ?? 0);
-    const mutatorCount = Math.max(0, summary.activeMutators?.length ?? 0);
-    const pressureCount = mutatorCount + Math.max(0, options.pressureExtra ?? summary.payoffPressureExtra ?? 0);
+    const bestStreak = runNonNegativeInteger(summary.bestStreak);
+    const perfectClears = runNonNegativeInteger(summary.perfectClears);
+    const totalScore = runNonNegativeInteger(summary.totalScore);
+    const pickupClaimed = runNonNegativeInteger(options.pickupClaimed ?? summary.payoffPickupClaimed);
+    const pickupTotal = runNonNegativeInteger(options.pickupTotal ?? summary.payoffPickupTotal);
+    const relicCount = runPayoffArrayCount(summary.relicIds);
+    const perkCount = runNonNegativeInteger(options.rewardPerkCount ?? summary.payoffRewardPerkCount);
+    const mutatorCount = runPayoffArrayCount(summary.activeMutators);
+    const pressureCount = mutatorCount + runNonNegativeInteger(options.pressureExtra ?? summary.payoffPressureExtra);
 
-    if (summary.bestStreak >= 10) {
+    if (bestStreak >= 10) {
         rows.push({
             arcadeCue: 'Combo live',
             id: 'combo-tier',
             label: 'Combo tier',
             nextCue: 'Protect the chain and cash the next reward band',
-            value: `x${summary.bestStreak}`,
+            value: `x${bestStreak}`,
             tone: 'chain',
             priority: 100
         });
-    } else if (summary.bestStreak >= 4) {
+    } else if (bestStreak >= 4) {
         rows.push({
             arcadeCue: 'Chain cashout',
             id: 'chain-threshold',
-            label: summary.bestStreak >= 6 ? 'Chain cashout' : 'Chain burst',
-            nextCue: summary.bestStreak >= 6
+            label: bestStreak >= 6 ? 'Chain cashout' : 'Chain burst',
+            nextCue: bestStreak >= 6
                 ? 'Repeat the cashout, then push the next reward threshold'
                 : 'Push the next chain reward threshold',
-            value: `x${summary.bestStreak}`,
+            value: `x${bestStreak}`,
             tone: 'chain',
             priority: 90
         });
     } else {
         rows.push({
-            arcadeCue: summary.bestStreak > 0 ? 'Prime chain' : 'Prime payoff',
+            arcadeCue: bestStreak > 0 ? 'Prime chain' : 'Prime payoff',
             id: 'chain-seed',
             label: 'Chain primer',
             nextCue: 'Open with safe matches before chasing bonuses',
-            value: `x${summary.bestStreak}`,
+            value: `x${bestStreak}`,
             tone: 'chain',
             priority: 35
         });
     }
 
-    const chainTarget = getChainTargetFeedback(summary.bestStreak);
+    const chainTarget = getChainTargetFeedback(bestStreak);
     if (options.includeChainTarget && chainTarget.band !== 'mastery') {
         rows.push({
             arcadeCue: 'Next chase',
@@ -251,7 +257,7 @@ export const getRunPayoffSignals = (
             nextCue: 'Aim the next run at this reward band',
             value: chainTarget.payoffValue,
             tone: 'chain',
-            priority: summary.bestStreak >= 3 ? 88 : 36
+            priority: bestStreak >= 3 ? 88 : 36
         });
     }
 
@@ -279,13 +285,13 @@ export const getRunPayoffSignals = (
         });
     }
 
-    if (summary.perfectClears > 0) {
+    if (perfectClears > 0) {
         rows.push({
             arcadeCue: 'Clean floor',
             id: 'perfect-clears',
             label: 'Perfects',
             nextCue: 'Use memory tools to preserve no-miss floors',
-            value: `${summary.perfectClears}`,
+            value: `${perfectClears}`,
             tone: 'reward',
             priority: 76
         });
@@ -319,11 +325,11 @@ export const getRunPayoffSignals = (
 
     if (rows.length < 3) {
         rows.push({
-            arcadeCue: summary.totalScore > 0 ? 'Score banked' : 'Prime score',
+            arcadeCue: totalScore > 0 ? 'Score banked' : 'Prime score',
             id: 'score-bank',
             label: 'Score pop bank',
             nextCue: 'Push streaks for bigger score pops',
-            value: summary.totalScore.toLocaleString(),
+            value: totalScore.toLocaleString(),
             tone: 'reward',
             priority: 30
         });

@@ -12,7 +12,7 @@ import {
     type Tile,
     type WeakerShuffleMode
 } from './contracts';
-import { createBonusRewardLedger } from './bonus-rewards';
+import { createBonusRewardLedger, normalizeRewardPerkIds } from './bonus-rewards';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { DAILY_MUTATOR_TABLE } from './mutators';
@@ -24,7 +24,7 @@ import { boardHasGlassDecoy, getWildTileIdFromBoard } from './board-inspection';
 import { DECOY_PAIR_KEY } from './tile-identity';
 import { getMemorizeDurationForRun } from './scoring-rules';
 import { createSessionStats } from './session-stats-rules';
-import { createTimerState } from './run-timer-rules';
+import { createTimerState, normalizeTimerTimestampMs } from './run-timer-rules';
 import { buildBoard } from './board-build-rules';
 import { applyStartingLoadout } from './starting-loadouts';
 
@@ -258,7 +258,7 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
         freeShuffleThisFloor: runWithRelics.relicIds.includes('first_shuffle_free_per_floor'),
         regionShuffleFreeThisFloor:
             runWithRelics.relicIds.includes('region_shuffle_free_first') ||
-            (runWithRelics.rewardPerkIds ?? []).includes('free_first_swap_per_floor'),
+            normalizeRewardPerkIds(runWithRelics.rewardPerkIds).includes('free_first_swap_per_floor'),
         timerState: createTimerState({ memorizeRemainingMs: memorizeMs })
     };
 };
@@ -286,7 +286,8 @@ export const createWildRun = (bestScore: number, extra: Partial<CreateRunOptions
 export const createDailyRun = (bestScore: number, extra: Partial<CreateRunOptions> = {}): RunState => {
     const runSeed = deriveDailyRunSeed(GAME_RULES_VERSION);
     const mutIndex = deriveDailyMutatorIndex(runSeed, DAILY_MUTATOR_TABLE.length);
-    const activeMutators = [DAILY_MUTATOR_TABLE[mutIndex]!];
+    const dailyMutator = DAILY_MUTATOR_TABLE[mutIndex] ?? DAILY_MUTATOR_TABLE[0];
+    const activeMutators = dailyMutator ? [dailyMutator] : [];
 
     return createNewRun(bestScore, {
         runSeed,
@@ -337,5 +338,8 @@ export const createPuzzleRun = (
     });
 };
 
-export const isGauntletExpired = (run: RunState): boolean =>
-    run.status !== 'paused' && run.gauntletDeadlineMs !== null && Date.now() > run.gauntletDeadlineMs;
+export const isGauntletExpired = (run: RunState): boolean => {
+    const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
+    const nowMs = normalizeTimerTimestampMs(Date.now());
+    return run.status !== 'paused' && gauntletDeadlineMs !== null && nowMs !== null && nowMs > gauntletDeadlineMs;
+};

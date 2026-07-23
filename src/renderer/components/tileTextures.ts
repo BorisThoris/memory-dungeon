@@ -53,8 +53,8 @@ type IdleWindow = Window &
         requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number;
     };
 type PrewarmScheduleHandle =
-    | { id: number; type: 'idle' }
-    | { id: number; type: 'timeout' };
+    | { cancelled: boolean; id: number; type: 'idle' }
+    | { cancelled: boolean; id: number; type: 'timeout' };
 
 type OverlayTextureCacheDebugState = {
     createdCount: number;
@@ -284,6 +284,16 @@ const textureImageUrls = {
 
 type TextureImageId = keyof typeof textureImageUrls;
 
+export const TILE_TEXTURE_IMAGE_IDS = [
+    'cardReference',
+    'cardFace',
+    'cardFaceNormal',
+    'cardBackNormal',
+    'edge',
+    'panelRoughness',
+    'edgeRoughness'
+] as const satisfies readonly TextureImageId[];
+
 const invalidateCachesAfterImageLoad = (id: TextureImageId): void => {
     if (id === 'cardReference') {
         invalidateVersionedTileFaceTextureCaches();
@@ -299,6 +309,7 @@ const invalidateCachesAfterImageLoad = (id: TextureImageId): void => {
 };
 
 interface TextureImageState {
+    attempts: number;
     image: HTMLImageElement | null;
     promise?: Promise<void>;
     status: 'loading' | 'loaded' | 'error';
@@ -306,15 +317,25 @@ interface TextureImageState {
 
 const textureImages = new Map<TextureImageId, TextureImageState>();
 const TILE_TEXTURE_IMAGE_LOAD_TIMEOUT_MS = 1500;
+const TILE_TEXTURE_IMAGE_MAX_ATTEMPTS = 2;
 
 const emitTextureImageUpdate = (): void => {
-    textureImageUpdateListeners.forEach((listener) => listener());
+    for (const listener of textureImageUpdateListeners) {
+        try {
+            listener();
+        } catch {
+            // Cache observers must not interrupt image state transitions.
+        }
+    }
 };
 
-const startTextureImageLoad = (id: TextureImageId): Promise<void> => {
+const startTextureImageLoad = (id: TextureImageId, retryFailed: boolean): Promise<void> => {
     const existing = textureImages.get(id);
 
-    if (existing?.status === 'loaded' || existing?.status === 'error') {
+    if (
+        existing?.status === 'loaded' ||
+        (existing?.status === 'error' && (!retryFailed || existing.attempts >= TILE_TEXTURE_IMAGE_MAX_ATTEMPTS))
+    ) {
         return Promise.resolve();
     }
 
@@ -324,6 +345,7 @@ const startTextureImageLoad = (id: TextureImageId): Promise<void> => {
 
     const image = new Image();
     image.decoding = 'async';
+    const attempts = (existing?.attempts ?? 0) + 1;
 
     const promise = new Promise<void>((resolve) => {
         let resolved = false;
@@ -342,27 +364,33 @@ const startTextureImageLoad = (id: TextureImageId): Promise<void> => {
         };
 
         image.onload = () => {
-            textureImages.set(id, { image, status: 'loaded' });
+            if (textureImages.get(id)?.promise !== promise) {
+                resolveOnce();
+                return;
+            }
+            textureImages.set(id, { attempts, image, status: 'loaded' });
             invalidateCachesAfterImageLoad(id);
             emitTextureImageUpdate();
             resolveOnce();
         };
 
         image.onerror = () => {
-            textureImages.set(id, { image: null, status: 'error' });
+            if (textureImages.get(id)?.promise === promise) {
+                textureImages.set(id, { attempts, image: null, status: 'error' });
+            }
             resolveOnce();
         };
 
         timeoutHandle = globalThis.setTimeout(() => {
             const current = textureImages.get(id);
-            if (current?.status === 'loading') {
-                textureImages.set(id, { image: null, status: 'error' });
+            if (current?.status === 'loading' && current.promise === promise) {
+                textureImages.set(id, { attempts, image: null, status: 'error' });
             }
             resolveOnce();
         }, TILE_TEXTURE_IMAGE_LOAD_TIMEOUT_MS);
     });
 
-    textureImages.set(id, { image: null, promise, status: 'loading' });
+    textureImages.set(id, { attempts, image: null, promise, status: 'loading' });
     image.src = textureImageUrls[id];
 
     return promise;
@@ -374,8 +402,7 @@ export const preloadTileTextureImages = (): Promise<void> => {
         return Promise.resolve();
     }
 
-    const ids = Object.keys(textureImageUrls) as TextureImageId[];
-    return Promise.all(ids.map(startTextureImageLoad)).then(() => undefined);
+    return Promise.all(TILE_TEXTURE_IMAGE_IDS.map((id) => startTextureImageLoad(id, true))).then(() => undefined);
 };
 
 const hashString = (value: string): number => {
@@ -413,7 +440,7 @@ const getTextureImage = (imageId: TextureImageId): HTMLImageElement | null => {
     }
 
     if (!current) {
-        void startTextureImageLoad(imageId);
+        void startTextureImageLoad(imageId, false);
     }
 
     return null;
@@ -521,23 +548,35 @@ const getIdleWindow = (): IdleWindow | null => (typeof window === 'undefined' ? 
 const schedulePrewarmStep = (callback: IdleRequestCallback): PrewarmScheduleHandle => {
     const idleWindow = getIdleWindow();
     if (idleWindow?.requestIdleCallback) {
-        return { id: idleWindow.requestIdleCallback(callback, { timeout: 120 }), type: 'idle' };
+        const handle: PrewarmScheduleHandle = { cancelled: false, id: -1, type: 'idle' };
+        try {
+            handle.id = idleWindow.requestIdleCallback((deadline) => {
+                if (!handle.cancelled) {
+                    callback(deadline);
+                }
+            }, { timeout: 120 });
+            return handle;
+        } catch {
+            // Fall through to the timer scheduler when the idle API is present but unusable.
+        }
     }
-    return {
-        id: window.setTimeout(() => {
+    const handle: PrewarmScheduleHandle = { cancelled: false, id: -1, type: 'timeout' };
+    handle.id = window.setTimeout(() => {
+        if (!handle.cancelled) {
             callback({
                 didTimeout: false,
                 timeRemaining: () => 0
             } as IdleDeadline);
-        }, 0),
-        type: 'timeout'
-    };
+        }
+    }, 0);
+    return handle;
 };
 
 const cancelPrewarmStep = (handle: PrewarmScheduleHandle | null): void => {
     if (!handle) {
         return;
     }
+    handle.cancelled = true;
     if (handle.type === 'idle') {
         getIdleWindow()?.cancelIdleCallback?.(handle.id);
         return;

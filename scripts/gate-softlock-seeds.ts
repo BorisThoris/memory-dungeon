@@ -5,38 +5,7 @@ import {
     type EndlessSimulationHealthReport
 } from './sim-endless';
 import { GAME_RULES_VERSION } from '../src/shared/contracts';
-
-const numArg = (argv: readonly string[], name: string, def: number): number => {
-    const raw = argv.find((arg) => arg.startsWith(`--${name}=`))?.split('=')[1];
-    return raw != null ? Number(raw) : def;
-};
-
-const seedsArg = (argv: readonly string[], def: readonly number[]): number[] => {
-    const raw = argv.find((arg) => arg.startsWith('--seeds='))?.split('=')[1];
-    if (!raw) {
-        return [...def];
-    }
-    const parsed = raw
-        .split(/[,\s]+/)
-        .map((part) => Number(part.trim()))
-        .filter((seed) => Number.isSafeInteger(seed) && seed > 0);
-    return parsed.length > 0 ? parsed : [...def];
-};
-
-const stressSeedsArg = (argv: readonly string[]): number => {
-    const raw = argv.find((arg) => arg.startsWith('--stressSeeds='))?.split('=')[1];
-    return raw != null ? Math.max(0, Math.floor(Number(raw))) : 0;
-};
-
-const generateStressSeeds = (count: number, baseSeed: number): number[] => {
-    const seeds: number[] = [];
-    let state = Math.max(1, Math.floor(baseSeed)) >>> 0;
-    for (let index = 0; index < count; index += 1) {
-        state = (Math.imul(state, 1_664_525) + 1_013_904_223) >>> 0;
-        seeds.push(10_000 + (state % 990_000));
-    }
-    return seeds;
-};
+import { readFlooredNumericCliArg, resolveSeedSweep } from './seed-sweep-options';
 
 const formatFailure = (seed: number, report: EndlessSimulationHealthReport): string =>
     [
@@ -45,8 +14,8 @@ const formatFailure = (seed: number, report: EndlessSimulationHealthReport): str
     ].join('\n');
 
 export const runSoftlockSeedGate = (argv: readonly string[]): number => {
-    const floors = Math.max(1, Math.floor(numArg(argv, 'floors', 1000)));
-    const rulesVersion = Math.max(1, Math.floor(numArg(argv, 'rulesVersion', GAME_RULES_VERSION)));
+    const floors = Math.max(1, readFlooredNumericCliArg(argv, 'floors', 1000));
+    const rulesVersion = Math.max(1, readFlooredNumericCliArg(argv, 'rulesVersion', GAME_RULES_VERSION));
     const defaultSeeds = [
         42_001,
         42_002,
@@ -65,11 +34,7 @@ export const runSoftlockSeedGate = (argv: readonly string[]): number => {
         720_031,
         880_037
     ];
-    const stressSeedCount = stressSeedsArg(argv);
-    const seeds =
-        stressSeedCount > 0
-            ? generateStressSeeds(stressSeedCount, Math.floor(numArg(argv, 'stressSeedBase', 42_001)))
-            : seedsArg(argv, defaultSeeds);
+    const seeds = resolveSeedSweep(argv, defaultSeeds);
     const failures: string[] = [];
 
     process.stdout.write(`# Softlock seed gate\n\n`);

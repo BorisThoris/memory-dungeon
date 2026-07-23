@@ -1,12 +1,18 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { hashPairKey } from '../../shared/hashPairKey';
 import {
     CARD_RASTER_SLOT_COUNT,
+    isCardRasterDeckEnabled,
     rasterDeckPairKeyForSlot,
     clearRasterDeckPanelCache
 } from './cardRasterDeck';
 
 describe('cardRasterDeck', () => {
+    afterEach(() => {
+        vi.restoreAllMocks();
+        window.localStorage.clear();
+    });
+
     it('uses 30 stable slot pair keys', () => {
         expect(CARD_RASTER_SLOT_COUNT).toBe(30);
         expect(rasterDeckPairKeyForSlot(0)).toBe('__raster-deck-00');
@@ -25,5 +31,13 @@ describe('cardRasterDeck', () => {
         expect(a).toBe(b);
         const c = Math.abs(hashPairKey('beta')) % CARD_RASTER_SLOT_COUNT;
         expect(typeof c).toBe('number');
+    });
+
+    it('fails closed when the dev localStorage override cannot be read', () => {
+        vi.spyOn(window.localStorage, 'getItem').mockImplementation(() => {
+            throw new Error('storage access denied');
+        });
+
+        expect(isCardRasterDeckEnabled()).toBe(false);
     });
 });

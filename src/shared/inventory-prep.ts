@@ -1,5 +1,6 @@
 import type { RunState } from './contracts';
 import { getRunInventoryLoadoutRows, getRunInventoryRows } from './run-inventory';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export interface InventoryPrepRow {
     id: 'run_prep' | 'loadout_capacity' | 'mutable_windows' | 'empty_state';
@@ -31,12 +32,13 @@ export const getInventoryPrepRows = (run: RunState | null): InventoryPrepRow[] =
     const inventory = getRunInventoryRows(run);
     const loadout = getRunInventoryLoadoutRows(run);
     const mutable = inventory.filter((row) => row.kind === 'consumable' && row.available).length;
+    const stats = normalizeSessionStats(run.stats);
     return [
         {
             id: 'run_prep',
             label: 'Prep status',
             title: 'Run prep snapshot',
-            value: `${run.gameMode} | floor ${run.board?.level ?? run.stats.highestLevel}`,
+            value: `${run.gameMode} | floor ${run.board?.level ?? stats.highestLevel}`,
             detail: 'Mode, floor, lives, achievements, and power-use state are visible before returning to play.',
             actionHint: 'Offline ready: continue the active run.',
             status: 'ready',

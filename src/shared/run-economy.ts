@@ -1,4 +1,7 @@
 import type { RunState } from './contracts';
+import { getDungeonKeyTotal } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunEconomyBucket = 'score' | 'temporary_run' | 'durable_meta';
 export type RunEconomyPersistence = 'temporary_run' | 'run_summary' | 'player_stats';
@@ -20,6 +23,16 @@ export interface RunEconomyRow extends RunEconomyDefinition {
     numericValue: number;
 }
 
+const SCORE_RUN_ECONOMY_DEFINITION = {
+    id: 'score',
+    label: 'Score',
+    bucket: 'score',
+    purpose: 'Score is performance value only; it is never spendable.',
+    source: 'matches, floor clears, findables, objective bonuses',
+    sink: 'local best-score comparison and run summary; never spendable',
+    persistence: 'run_summary'
+} as const satisfies RunEconomyDefinition;
+
 export const RUN_ECONOMY_DEFINITIONS = [
     {
         id: 'shop_gold',
@@ -30,15 +43,7 @@ export const RUN_ECONOMY_DEFINITIONS = [
         sink: 'buy local vendor services; resets at run end',
         persistence: 'temporary_run'
     },
-    {
-        id: 'score',
-        label: 'Score',
-        bucket: 'score',
-        purpose: 'Score is performance value only; it is never spendable.',
-        source: 'matches, floor clears, findables, objective bonuses',
-        sink: 'local best-score comparison and run summary; never spendable',
-        persistence: 'run_summary'
-    },
+    SCORE_RUN_ECONOMY_DEFINITION,
     {
         id: 'combo_shards',
         label: 'Combo shards',
@@ -112,60 +117,69 @@ export const runEconomyDefinitionById = RUN_ECONOMY_DEFINITIONS.reduce<Record<st
 );
 
 const valueFor = (run: RunState, id: string): string => {
+    const stats = normalizeSessionStats(run.stats);
     switch (id) {
         case 'shop_gold':
-            return String(run.shopGold);
+            return String(runNonNegativeInteger(run.shopGold));
         case 'score':
-            return String(run.stats.totalScore);
+            return String(stats.totalScore);
         case 'combo_shards':
-            return `${run.stats.comboShards}/2`;
+            return `${stats.comboShards}/2`;
         case 'guard_tokens':
-            return `${run.stats.guardTokens}/2`;
+            return `${stats.guardTokens}/2`;
         case 'relic_favor':
-            return `${run.relicFavorProgress}/3`;
+            return `${runNonNegativeInteger(run.relicFavorProgress)}/3`;
         case 'dungeon_keys': {
-            const keyCount = Object.values(run.dungeonKeys).reduce((sum, count) => sum + (count ?? 0), 0);
-            return `${keyCount} keys · ${run.dungeonMasterKeys} master`;
+            return `${getDungeonKeyTotal(run.dungeonKeys)} keys · ${runNonNegativeInteger(run.dungeonMasterKeys)} master`;
         }
         case 'findable_pickups':
-            return `${run.findablesClaimedThisFloor}/${run.findablesTotalThisFloor}`;
+            return `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)}`;
         case 'assist_charges':
-            return `Shuffle ${run.shuffleCharges} · Row ${run.regionShuffleCharges} · Destroy ${run.destroyPairCharges} · Peek ${run.peekCharges} · Stray ${run.strayRemoveCharges}`;
+            return `Shuffle ${runNonNegativeInteger(run.shuffleCharges)} · Row ${runNonNegativeInteger(run.regionShuffleCharges)} · Destroy ${runNonNegativeInteger(run.destroyPairCharges)} · Peek ${runNonNegativeInteger(run.peekCharges)} · Stray ${runNonNegativeInteger(run.strayRemoveCharges)}`;
         default:
             return '0';
     }
 };
 
 const numericValueFor = (run: RunState, id: string): number => {
+    const stats = normalizeSessionStats(run.stats);
     switch (id) {
         case 'shop_gold':
-            return run.shopGold;
+            return runNonNegativeInteger(run.shopGold);
         case 'score':
-            return run.stats.totalScore;
+            return stats.totalScore;
         case 'combo_shards':
-            return run.stats.comboShards;
+            return stats.comboShards;
         case 'guard_tokens':
-            return run.stats.guardTokens;
+            return stats.guardTokens;
         case 'relic_favor':
-            return run.relicFavorProgress;
+            return runNonNegativeInteger(run.relicFavorProgress);
         case 'dungeon_keys':
-            return Object.values(run.dungeonKeys).reduce((sum, count) => sum + (count ?? 0), 0) + run.dungeonMasterKeys;
+            return getDungeonKeyTotal(run.dungeonKeys) + runNonNegativeInteger(run.dungeonMasterKeys);
         case 'findable_pickups':
-            return run.findablesClaimedThisFloor;
+            return runNonNegativeInteger(run.findablesClaimedThisFloor);
         case 'assist_charges':
-            return run.shuffleCharges + run.regionShuffleCharges + run.destroyPairCharges + run.peekCharges + run.strayRemoveCharges;
+            return (
+                runNonNegativeInteger(run.shuffleCharges) +
+                runNonNegativeInteger(run.regionShuffleCharges) +
+                runNonNegativeInteger(run.destroyPairCharges) +
+                runNonNegativeInteger(run.peekCharges) +
+                runNonNegativeInteger(run.strayRemoveCharges)
+            );
         default:
             return 0;
     }
 };
 
+const buildRunEconomyRow = (run: RunState, definition: RunEconomyDefinition): RunEconomyRow => ({
+    ...definition,
+    key: definition.id,
+    value: valueFor(run, definition.id),
+    numericValue: numericValueFor(run, definition.id)
+});
+
 export const getRunEconomyRows = (run: RunState): RunEconomyRow[] =>
-    RUN_ECONOMY_DEFINITIONS.map((definition) => ({
-        ...definition,
-        key: definition.id,
-        value: valueFor(run, definition.id),
-        numericValue: numericValueFor(run, definition.id)
-    }));
+    RUN_ECONOMY_DEFINITIONS.map((definition) => buildRunEconomyRow(run, definition));
 
 export const getRunEconomySnapshot = (run: RunState): {
     score: RunEconomyRow;
@@ -174,7 +188,7 @@ export const getRunEconomySnapshot = (run: RunState): {
 } => {
     const rows = getRunEconomyRows(run);
     return {
-        score: rows.find((row) => row.id === 'score')!,
+        score: rows.find((row) => row.id === 'score') ?? buildRunEconomyRow(run, SCORE_RUN_ECONOMY_DEFINITION),
         temporaryRunCurrencies: rows.filter((row) => row.bucket === 'temporary_run'),
         durableMeta: rows.filter((row) => row.bucket === 'durable_meta')
     };

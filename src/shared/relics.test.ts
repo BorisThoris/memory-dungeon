@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { RouteNodeType, RunState } from './contracts';
+import type { MutatorId, RelicId, RouteNodeType, RunState } from './contracts';
 import { createDailyRun, createNewRun } from './game-core';
 import { pickFloorScheduleEntry } from './floor-mutator-schedule';
 import {
@@ -12,12 +12,21 @@ import {
     getRelicDraftRow,
     getRelicRoleAuditRows,
     getRelicDraftOptionReasons,
+    getRelicDraftOptionReasonRows,
     getRunBuildProfile,
+    hasRelicDraftOptionReasons,
     isRelicDraftEligible,
     effectiveRelicDraftWeight,
     relicMilestoneIndexForFloor,
     needsRelicPick,
     rollRelicOptions,
+    runMutatorIds,
+    runRelicIds,
+    RELIC_BUILD_ARCHETYPE_DEFINITIONS,
+    RELIC_BUILD_ARCHETYPE_ORDER,
+    RELIC_DRAFT,
+    RELIC_OFFER_SERVICE_CATALOG,
+    RELIC_OFFER_SERVICE_IDS,
     RELIC_POOL
 } from './relics';
 
@@ -126,18 +135,33 @@ describe('effectiveRelicDraftWeight', () => {
 });
 
 describe('rollRelicOptions', () => {
+    it('keeps the explicit relic pool aligned with draft rows', () => {
+        expect(RELIC_POOL).toEqual([
+            'chapter_compass',
+            'combo_shard_plus_step',
+            'destroy_bank_plus_one',
+            'extra_shuffle_charge',
+            'first_shuffle_free_per_floor',
+            'guard_token_plus_one',
+            'memorize_bonus_ms',
+            'memorize_under_short_memorize',
+            'parasite_ledger',
+            'parasite_ward_once',
+            'peek_charge_plus_one',
+            'pin_cap_plus_one',
+            'region_shuffle_free_first',
+            'shrine_echo',
+            'stray_charge_plus_one',
+            'wager_surety'
+        ]);
+        expect(Object.keys(RELIC_DRAFT).sort()).toEqual([...RELIC_POOL].sort());
+    });
+
     it('DNG-051 groups relics into dungeon-facing build archetypes', () => {
         const summaries = getRelicBuildArchetypeSummaries();
 
-        expect(summaries.map((summary) => summary.id)).toEqual([
-            'guard_tank',
-            'trap_control',
-            'treasure_greed',
-            'boss_hunter',
-            'route_gambler',
-            'reveal_scout',
-            'combo_shard_engine'
-        ]);
+        expect(Object.keys(RELIC_BUILD_ARCHETYPE_DEFINITIONS)).toEqual([...RELIC_BUILD_ARCHETYPE_ORDER]);
+        expect(summaries.map((summary) => summary.id)).toEqual([...RELIC_BUILD_ARCHETYPE_ORDER]);
         expect(summaries.map((summary) => summary.label)).toEqual([
             'The Warden',
             'The Saboteur',
@@ -294,6 +318,8 @@ describe('rollRelicOptions', () => {
         expect(a).toEqual(b);
         expect(a).toHaveLength(3);
         expect(Object.values(reasons ?? {})).toContain('Answers short memorize');
+        expect(hasRelicDraftOptionReasons(reasons)).toBe(true);
+        expect(getRelicDraftOptionReasonRows(reasons).map((row) => row.reason)).toContain('Answers short memorize');
     });
 
     it('keeps non-Endless drafts on base odds except hard filters', () => {
@@ -316,6 +342,23 @@ describe('rollRelicOptions', () => {
         expect(isRelicDraftEligible('chapter_compass', daily)).toBe(false);
         expect(isRelicDraftEligible('wager_surety', daily)).toBe(false);
         expect(isRelicDraftEligible('parasite_ledger', daily)).toBe(false);
+    });
+
+    it('reads relic draft option reasons in relic pool order', () => {
+        const reasons = {
+            unknown_relic: 'ignored',
+            wager_surety: 'Protects wager',
+            chapter_compass: 'Improves future chapter drafts'
+        } as unknown as Partial<Record<RelicId, string>>;
+
+        expect(hasRelicDraftOptionReasons(reasons)).toBe(true);
+        expect(getRelicDraftOptionReasonRows(reasons)).toEqual([
+            { id: 'chapter_compass', reason: 'Improves future chapter drafts' },
+            { id: 'wager_surety', reason: 'Protects wager' }
+        ]);
+        expect(hasRelicDraftOptionReasons({ unknown_relic: 'ignored' } as unknown as Partial<Record<RelicId, string>>)).toBe(
+            false
+        );
     });
 
     it('chapter_compass strengthens contextual spotlight weights without adding draft slots', () => {
@@ -426,6 +469,39 @@ describe('rollRelicOptions', () => {
         expect(getContextualRelicDraftWeight('peek_charge_plus_one', traitContext, 0)).toBeGreaterThan(
             getContextualRelicDraftWeight('peek_charge_plus_one', neutral, 0)
         );
+    });
+
+    it('ignores malformed relic and mutator arrays before deriving draft context', () => {
+        const run = levelCompleteRun(3, 0, {
+            activeMutators: Number.NaN as unknown as MutatorId[],
+            relicIds: Number.NaN as unknown as RelicId[]
+        });
+        const context = getRelicDraftContext(run, 3);
+
+        expect(context.currentMutators).toEqual([]);
+        expect(context.hasChapterCompass).toBe(false);
+        expect(isRelicDraftEligible('chapter_compass', run)).toBe(true);
+    });
+
+    it('normalizes run relic and mutator arrays through shared helpers', () => {
+        const relicIds: RelicId[] = ['chapter_compass'];
+        const mutatorIds: MutatorId[] = ['short_memorize'];
+
+        expect(runRelicIds(relicIds)).toBe(relicIds);
+        expect(runRelicIds(Number.NaN)).toEqual([]);
+        expect(runMutatorIds(mutatorIds)).toBe(mutatorIds);
+        expect(runMutatorIds(null)).toEqual([]);
+    });
+
+    it('ignores malformed relic arrays before building run profiles', () => {
+        const profile = getRunBuildProfile({ relicIds: Number.NaN as unknown as RelicId[] });
+
+        expect(profile).toEqual({
+            primary: null,
+            signals: [],
+            summary: 'First relic still ahead',
+            tooltip: 'Draft a relic to begin shaping a run build.'
+        });
     });
 
     it('uses starting loadout as early relic draft build context before matching traits appear', () => {
@@ -562,7 +638,8 @@ describe('REG-078 relic offer services', () => {
         const run = openOfferRun();
         const rows = createRelicOfferServices(run);
 
-        expect(rows.map((row) => row.serviceId)).toEqual(['reroll_offer', 'ban_option', 'upgrade_offer']);
+        expect(Object.keys(RELIC_OFFER_SERVICE_CATALOG)).toEqual([...RELIC_OFFER_SERVICE_IDS]);
+        expect(rows.map((row) => row.serviceId)).toEqual([...RELIC_OFFER_SERVICE_IDS]);
         expect(rows.every((row) => row.available && row.cost > 0)).toBe(true);
         expect(createRelicOfferServices({ ...run, shopGold: 0 }).every((row) => !row.available)).toBe(true);
     });
@@ -581,6 +658,27 @@ describe('REG-078 relic offer services', () => {
         expect(banned.run.relicOffer?.bannedRelicIds).toContain(run.relicOffer!.options[1]);
         expect(banned.run.relicOffer?.options).not.toContain(run.relicOffer!.options[1]);
         expect(banned.run.relicOffer?.options).toHaveLength(3);
+    });
+
+    it('normalizes malformed relic service wallets and use counters before charging', () => {
+        const run = {
+            ...openOfferRun(),
+            shopGold: 5.9,
+            relicOffer: {
+                ...openOfferRun().relicOffer!,
+                serviceUses: {
+                    reroll_offer: Number.NaN
+                }
+            }
+        };
+
+        expect(createRelicOfferServices({ ...run, shopGold: Number.NaN }).every((row) => !row.available)).toBe(true);
+
+        const rerolled = applyRelicOfferService(run, 'reroll_offer');
+
+        expect(rerolled.applied).toBe(true);
+        expect(rerolled.run.shopGold).toBe(3);
+        expect(rerolled.run.relicOffer?.serviceUses?.reroll_offer).toBe(1);
     });
 
     it('persists banned relic ids into subsequent reroll rounds in the same visit', () => {
@@ -628,11 +726,13 @@ describe('REG-078 relic offer services', () => {
             'No relic options remain.'
         ]);
 
-        const result = applyRelicOfferService(run, 'reroll_offer');
-        expect(result.applied).toBe(false);
-        expect(result.reason).toBe('unavailable');
-        expect(result.run.shopGold).toBe(run.shopGold);
-        expect(result.run.relicOffer?.options).toEqual([]);
+        for (const serviceId of RELIC_OFFER_SERVICE_IDS) {
+            const result = applyRelicOfferService(run, serviceId);
+            expect(result.applied).toBe(false);
+            expect(result.reason).toBe('unavailable');
+            expect(result.run.shopGold).toBe(run.shopGold);
+            expect(result.run.relicOffer?.options).toEqual([]);
+        }
     });
 
     it('does not charge or replace the offer when a service would exhaust the remaining pool', () => {

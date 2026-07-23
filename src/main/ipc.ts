@@ -7,12 +7,7 @@ import type { PersistenceService } from './persistence';
 import type { SteamAdapter } from './steam';
 
 const applyDisplayMode = (window: BrowserWindow, mode: DisplayMode): void => {
-    try {
-        window.setFullScreen(mode === 'fullscreen');
-    } catch (error) {
-        console.error('[ipc] setFullScreen failed', mode, error);
-        throw error;
-    }
+    window.setFullScreen(mode === 'fullscreen');
 };
 
 export const registerIpcHandlers = (
@@ -79,17 +74,22 @@ export const registerIpcHandlers = (
     register(IPC_CHANNELS_LEGACY_DESKTOP.setDisplayMode, setDisplayMode);
 
     const saveSettings = (_event: IpcMainInvokeEvent, settings: unknown): Settings => {
+        let saveData: SaveData;
         try {
-            const saveData = persistence.saveSettings(settings);
-            const window = getMainWindow();
-            if (window && !window.isDestroyed()) {
-                applyDisplayMode(window, saveData.settings.displayMode);
-            }
-            return saveData.settings;
+            saveData = persistence.saveSettings(settings);
         } catch (error) {
             console.error('[ipc] save-settings failed', error);
             throw error;
         }
+        const window = getMainWindow();
+        if (window && !window.isDestroyed()) {
+            try {
+                applyDisplayMode(window, saveData.settings.displayMode);
+            } catch (error) {
+                console.error('[ipc] saved display mode could not be applied', saveData.settings.displayMode, error);
+            }
+        }
+        return saveData.settings;
     };
     register(IPC_CHANNELS.saveSaveSettings, saveSettings);
     register(IPC_CHANNELS_LEGACY_DESKTOP.saveSettings, saveSettings);

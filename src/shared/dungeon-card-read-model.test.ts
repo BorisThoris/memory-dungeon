@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import type { BoardState, RunState, Tile } from './contracts';
-import { DUNGEON_CARD_EFFECT_DEFINITIONS } from './dungeon-cards';
+import type { BoardState, DungeonCardEffectId, RunState, Tile } from './contracts';
+import { DUNGEON_CARD_EFFECT_DEFINITIONS, DUNGEON_CARD_EFFECT_ORDER } from './dungeon-cards';
 import {
     DUNGEON_ROOM_EFFECT_DEFINITIONS,
     getDungeonCardCopy,
+    getDungeonRoomEffectDefinition,
     getDungeonRoomReadModel,
     getDungeonTreasureRewardDefinition,
     getDungeonTreasureReadModel
@@ -25,11 +26,16 @@ const roomTile = (effectId: Tile['dungeonCardEffectId'], overrides: Partial<Tile
 
 describe('dungeon card read models', () => {
     it('covers every room effect id from the dungeon card catalog', () => {
-        const roomEffectIds = Object.values(DUNGEON_CARD_EFFECT_DEFINITIONS)
+        const roomEffectIds = DUNGEON_CARD_EFFECT_ORDER
+            .map((effectId) => DUNGEON_CARD_EFFECT_DEFINITIONS[effectId])
             .filter((definition) => definition.kind === 'room')
             .map((definition) => definition.effectId);
 
-        expect(Object.keys(DUNGEON_ROOM_EFFECT_DEFINITIONS).sort()).toEqual([...roomEffectIds].sort());
+        expect(Object.keys(DUNGEON_ROOM_EFFECT_DEFINITIONS)).toEqual([...roomEffectIds]);
+    });
+
+    it.each(['__proto__', 'constructor', 'toString'])('rejects prototype room effect id %s', (effectId) => {
+        expect(getDungeonRoomEffectDefinition(effectId as DungeonCardEffectId)).toBeNull();
     });
 
     it('reports reusable forge availability from run gold', () => {
@@ -46,6 +52,11 @@ describe('dungeon card read models', () => {
             canUse: true,
             blockedText: null,
             used: false
+        });
+        expect(getDungeonRoomReadModel(tile, { shopGold: Number.POSITIVE_INFINITY } as RunState)).toMatchObject({
+            effectId: 'room_forge',
+            canUse: false,
+            blockedText: 'Needs 2 shop gold.'
         });
     });
 
@@ -69,6 +80,15 @@ describe('dungeon card read models', () => {
         ).toMatchObject({
             canUse: true,
             blockedText: null
+        });
+        expect(
+            getDungeonRoomReadModel(tile, {
+                dungeonKeys: { iron: Number.POSITIVE_INFINITY },
+                dungeonMasterKeys: Number.NaN
+            } as RunState)
+        ).toMatchObject({
+            canUse: false,
+            blockedText: 'Needs an iron key or master key.'
         });
     });
 
@@ -213,6 +233,44 @@ describe('dungeon card read models', () => {
                 dungeonRouteType: 'greed'
             } as Tile)
         ).toContain('Selects greed route');
+    });
+
+    it('normalizes malformed dungeon card copy counters before display', () => {
+        const bossCopy = getDungeonCardCopy({
+            id: 'boss',
+            pairKey: 'boss',
+            label: 'Bell-Rush Sentinel',
+            state: 'hidden',
+            symbol: 'S',
+            dungeonCardKind: 'enemy',
+            dungeonBossId: 'rush_sentinel',
+            dungeonCardHp: Number.POSITIVE_INFINITY
+        } as Tile);
+        const enemyCopy = getDungeonCardCopy({
+            id: 'enemy',
+            pairKey: 'enemy',
+            label: 'Stalker',
+            state: 'hidden',
+            symbol: 'E',
+            dungeonCardKind: 'enemy',
+            dungeonCardEffectId: 'enemy_stalker',
+            dungeonCardHp: Number.NaN
+        } as Tile);
+        const exitCopy = getDungeonCardCopy({
+            id: 'exit',
+            pairKey: 'exit',
+            label: 'Lever Exit',
+            state: 'hidden',
+            symbol: 'X',
+            dungeonCardKind: 'exit',
+            dungeonExitLockKind: 'lever',
+            dungeonExitRequiredLeverCount: Number.POSITIVE_INFINITY
+        } as Tile);
+
+        expect(`${bossCopy} ${enemyCopy} ${exitCopy}`).not.toMatch(/NaN|Infinity/);
+        expect(bossCopy).toContain('HP 0');
+        expect(enemyCopy).toContain('HP 0');
+        expect(exitCopy).toContain('Requires 1 lever(s)');
     });
 
     it('uses tile key kind in key and lock card copy', () => {

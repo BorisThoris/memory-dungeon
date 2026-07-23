@@ -3,6 +3,7 @@
  * Centralized for a11y review and future i18n (RDUI-007).
  */
 import type { RelicId, RelicOfferState, RunState } from '../../shared/contracts';
+import { hasRelicDraftOptionReasons } from '../../shared/relics';
 
 export const relicEffectLabels: Record<RelicId, string> = {
     extra_shuffle_charge: '+1 archive shuffle charge for trap halls (now)',
@@ -74,7 +75,7 @@ export function buildRelicDraftBonusFootnoteLines(run: RunState): string[] {
 
     const lines: string[] = [];
 
-    if (offer.contextualOptionReasons && Object.keys(offer.contextualOptionReasons).length > 0) {
+    if (hasRelicDraftOptionReasons(offer.contextualOptionReasons)) {
         lines.push('At least one choice is chapter-aligned for this Endless route.');
     }
 

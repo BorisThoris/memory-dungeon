@@ -53,6 +53,21 @@ describe('dungeon boss rules', () => {
         ).toBe('destroy_charge');
     });
 
+    it('ignores malformed lightweight hazard arrays before deriving boss pressure', () => {
+        expect(
+            getActiveDungeonBossPressureRule({
+                dungeonBossId: null,
+                enemyHazards: Number.NaN as unknown as []
+            })
+        ).toBeNull();
+        expect(
+            getActiveDungeonBossPressureRule({
+                dungeonBossId: 'spire_observer',
+                enemyHazards: Number.NaN as unknown as []
+            })?.shopPriorityItemId
+        ).toBe('peek_charge');
+    });
+
     it('keeps the rush sentinel combo-shard reward distinct from baseline boss rewards', () => {
         expect(DUNGEON_BOSS_DEFINITIONS.rush_sentinel.reward).toMatchObject({
             score: DUNGEON_BOSS_DEFEAT_SCORE + 10,

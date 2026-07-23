@@ -1,4 +1,6 @@
 import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -8,7 +10,42 @@ type GateChangedPayload = {
     reasons: { gateId: string; file: string; reason: string }[];
 };
 
+type GateChangedModule = {
+    GATES: Readonly<Record<string, string>>;
+    changedPathsFromGit: (base: string | null, cwd?: string) => string[];
+    selectGatesForChangedPaths: (paths: readonly string[]) => GateChangedPayload;
+};
+
 const scriptPath = path.join(process.cwd(), 'scripts', 'gate-changed.mjs');
+const packageScripts = (
+    JSON.parse(readFileSync(path.join(process.cwd(), 'package.json'), 'utf8')) as {
+        scripts: Record<string, string>;
+    }
+).scripts;
+
+const loadGateChanged = async (): Promise<GateChangedModule> => {
+    // @ts-expect-error scripts are runtime ESM modules without generated TypeScript declarations.
+    return (await import('../../scripts/gate-changed.mjs')) as GateChangedModule;
+};
+
+const referencedPackageScripts = (command: string): string[] =>
+    [...command.matchAll(/(?:^|\s)yarn\s+([\w:-]+)/gu)].map((match) => match[1]);
+
+const packageScriptClosure = (scriptName: string, visited = new Set<string>()): Set<string> => {
+    if (visited.has(scriptName) || packageScripts[scriptName] == null) {
+        return visited;
+    }
+    visited.add(scriptName);
+    for (const referencedScript of referencedPackageScripts(packageScripts[scriptName])) {
+        packageScriptClosure(referencedScript, visited);
+    }
+    return visited;
+};
+
+const testFilesRunByPackageScript = (scriptName: string): string[] =>
+    [...packageScriptClosure(scriptName)].flatMap(
+        (referencedScript) => packageScripts[referencedScript]?.match(/src\/[^\s"']+\.test\.tsx?/gu) ?? []
+    );
 
 const runGateChanged = (...paths: string[]): GateChangedPayload =>
     JSON.parse(
@@ -56,6 +93,246 @@ describe('gate:changed selector', () => {
 
         expect(payload.gates).toEqual(expect.arrayContaining([{ id: 'longRun', command: 'yarn gate:long-run' }]));
         expect(payload.reasons.filter((reason) => reason.gateId === 'longRun')).toHaveLength(5);
+    });
+
+    it('routes long-run CLI contract tests back through the long-run gate', () => {
+        const payload = runGateChanged(
+            'src/shared/gate-long-run-script.test.ts',
+            'src/shared/sim-endless-output.test.ts'
+        );
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([
+                { id: 'longRun', command: 'yarn gate:long-run' },
+                {
+                    id: 'changedTests',
+                    command:
+                        'yarn vitest run "src/shared/gate-long-run-script.test.ts" "src/shared/sim-endless-output.test.ts" --maxWorkers=2'
+                }
+            ])
+        );
+        expect(payload.reasons.filter((reason) => reason.gateId === 'longRun')).toHaveLength(2);
+    });
+
+    it('keeps selector and simulation contract tests wired into their selected gates', () => {
+        expect(packageScripts['gate:systems']).toContain('src/shared/gate-changed.test.ts');
+        expect(packageScripts['gate:long-run']).toContain('src/shared/gate-long-run-script.test.ts');
+        expect(packageScripts['gate:long-run']).toContain('src/shared/seed-sweep-options.test.ts');
+        expect(packageScripts['gate:long-run']).toContain('src/shared/sim-endless-output.test.ts');
+        expect(packageScripts.test).toBe('vitest run --maxWorkers=2');
+        expect(packageScripts['gate:gameplay']).toContain('yarn test');
+        expect(packageScripts['gate:gameplay']).not.toContain('yarn test --maxWorkers=2');
+        expect(packageScripts['gate:long-run']).toContain('--maxWorkers=1');
+        expect(packageScripts['gate:readability-long-run']).toContain('--maxWorkers=2');
+        expect(packageScripts['gate:long-run-ui-feedback']).toContain('--maxWorkers=2');
+    });
+
+    it('routes every explicitly gated test to a selected gate that executes it', async () => {
+        const { selectGatesForChangedPaths } = await loadGateChanged();
+        const gateScriptNames = Object.keys(packageScripts).filter((scriptName) => scriptName.startsWith('gate:'));
+        const explicitlyGatedTests = [...new Set(gateScriptNames.flatMap(testFilesRunByPackageScript))].sort();
+        const uncovered = explicitlyGatedTests.flatMap((file) => {
+            const selectedGates = selectGatesForChangedPaths([file]).gates;
+            const reachesTest = selectedGates.some(({ id, command }) => {
+                if (id === 'changedTests') {
+                    return command.includes(JSON.stringify(file));
+                }
+                const selectedScript = command.match(/^yarn\s+([\w:-]+)$/u)?.[1];
+                return selectedScript != null && testFilesRunByPackageScript(selectedScript).includes(file);
+            });
+            return reachesTest ? [] : [{ file, selectedGateIds: selectedGates.map(({ id }) => id) }];
+        });
+
+        expect(explicitlyGatedTests.length).toBeGreaterThan(60);
+        expect(uncovered).toEqual([]);
+    });
+
+    it('keeps every static gate reachable and backed by a package script', async () => {
+        const { GATES, selectGatesForChangedPaths } = await loadGateChanged();
+        const trackedPaths = execFileSync('git', ['ls-files', '-z'], { encoding: 'utf8' }).split('\0').filter(Boolean);
+        const reachableGateIds = new Set(
+            trackedPaths.flatMap((file) =>
+                selectGatesForChangedPaths([file]).gates
+                    .filter(({ id }) => id !== 'changedTests')
+                    .map(({ id }) => id)
+            )
+        );
+
+        expect([...reachableGateIds].sort()).toEqual(Object.keys(GATES).sort());
+        for (const [gateId, command] of Object.entries(GATES)) {
+            const packageScript = command.match(/^yarn\s+([\w:-]+)$/u)?.[1];
+            expect(packageScript, gateId).toBeDefined();
+            expect(packageScripts[packageScript ?? ''], gateId).toBeTypeOf('string');
+        }
+    });
+
+    it('runs changed Vitest files directly with normalized paths and bounded workers', () => {
+        const payload = runGateChanged(
+            './src/shared/rng.test.ts',
+            'src\\renderer\\breakpoints.test.ts',
+            'src/shared/rng.test.ts',
+            'README.md'
+        );
+        const changedTests = payload.gates.find(({ id }) => id === 'changedTests');
+
+        expect(changedTests).toEqual({
+            id: 'changedTests',
+            command:
+                'yarn vitest run "src/shared/rng.test.ts" "src/renderer/breakpoints.test.ts" --maxWorkers=2'
+        });
+        expect(payload.reasons.filter(({ gateId }) => gateId === 'changedTests')).toEqual([
+            {
+                gateId: 'changedTests',
+                file: 'src/shared/rng.test.ts',
+                reason: 'changed Vitest files should execute directly'
+            },
+            {
+                gateId: 'changedTests',
+                file: 'src/renderer/breakpoints.test.ts',
+                reason: 'changed Vitest files should execute directly'
+            }
+        ]);
+    });
+
+    it('discovers Git paths without scheduling deleted tests', async () => {
+        const { changedPathsFromGit } = await loadGateChanged();
+        const repository = mkdtempSync(path.join(tmpdir(), 'memory-dungeon-gate-changed-'));
+        const sourceDirectory = path.join(repository, 'src');
+        mkdirSync(sourceDirectory);
+
+        try {
+            execFileSync('git', ['init', '--quiet'], { cwd: repository });
+            for (const file of ['deleted.test.ts', 'keep.test.ts', 'rename-old.test.ts', 'worktree-only.test.ts']) {
+                writeFileSync(path.join(sourceDirectory, file), `export const value = '${file}';\n`, 'utf8');
+            }
+            execFileSync('git', ['add', '.'], { cwd: repository });
+            execFileSync(
+                'git',
+                [
+                    '-c',
+                    'user.name=Gate Test',
+                    '-c',
+                    'user.email=gate-test@example.com',
+                    'commit',
+                    '--quiet',
+                    '-m',
+                    'fixture'
+                ],
+                { cwd: repository }
+            );
+            const base = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repository, encoding: 'utf8' }).trim();
+
+            unlinkSync(path.join(sourceDirectory, 'deleted.test.ts'));
+            writeFileSync(path.join(sourceDirectory, 'keep.test.ts'), 'export const value = 2;\n', 'utf8');
+            execFileSync('git', ['mv', 'src/rename-old.test.ts', 'src/rename-new.test.ts'], { cwd: repository });
+            writeFileSync(path.join(sourceDirectory, 'untracked test.test.ts'), 'export const value = 3;\n', 'utf8');
+
+            expect(changedPathsFromGit(null, repository)).toEqual([
+                'src/keep.test.ts',
+                'src/rename-new.test.ts',
+                'src/untracked test.test.ts'
+            ]);
+
+            execFileSync('git', ['add', '--all'], { cwd: repository });
+            execFileSync(
+                'git',
+                [
+                    '-c',
+                    'user.name=Gate Test',
+                    '-c',
+                    'user.email=gate-test@example.com',
+                    'commit',
+                    '--quiet',
+                    '-m',
+                    'changed fixture'
+                ],
+                { cwd: repository }
+            );
+            expect(changedPathsFromGit(base, repository)).toEqual([
+                'src/keep.test.ts',
+                'src/rename-new.test.ts',
+                'src/untracked test.test.ts'
+            ]);
+
+            writeFileSync(path.join(sourceDirectory, 'keep.test.ts'), 'export const value = 4;\n', 'utf8');
+            writeFileSync(path.join(sourceDirectory, 'worktree-only.test.ts'), 'export const value = 5;\n', 'utf8');
+            expect(changedPathsFromGit(base, repository)).toEqual([
+                'src/keep.test.ts',
+                'src/rename-new.test.ts',
+                'src/untracked test.test.ts',
+                'src/worktree-only.test.ts'
+            ]);
+        } finally {
+            rmSync(repository, { recursive: true, force: true });
+        }
+    });
+
+    it('includes every tracked Vitest file in the dynamic changed-test gate', async () => {
+        const { selectGatesForChangedPaths } = await loadGateChanged();
+        const trackedTests = execFileSync('git', ['ls-files', 'src'], { encoding: 'utf8' })
+            .split(/\r?\n/u)
+            .filter((file) => /^src\/.*\.test\.tsx?$/u.test(file));
+        const payload = selectGatesForChangedPaths(trackedTests);
+        const changedTests = payload.gates.find(({ id }) => id === 'changedTests');
+
+        expect(trackedTests.length).toBeGreaterThan(350);
+        expect(payload.reasons.filter(({ gateId }) => gateId === 'changedTests')).toHaveLength(trackedTests.length);
+        for (const file of trackedTests) {
+            expect(changedTests?.command).toContain(JSON.stringify(file));
+        }
+        expect(changedTests?.command.endsWith('--maxWorkers=2')).toBe(true);
+    });
+
+    it('gives every tracked production source file a specific gate instead of the generic fallback', async () => {
+        const { selectGatesForChangedPaths } = await loadGateChanged();
+        const productionFiles = execFileSync('git', ['ls-files', '-z', 'src'], { encoding: 'utf8' })
+            .split('\0')
+            .filter((file) => /\.(?:css|json|ts|tsx)$/u.test(file) && !/\.test\.tsx?$/u.test(file));
+
+        expect(productionFiles.length).toBeGreaterThan(400);
+        for (const file of productionFiles) {
+            const payload = selectGatesForChangedPaths([file]);
+            expect(payload.reasons.some((reason) => reason.file === file), file).toBe(true);
+            expect(
+                payload.reasons.some(
+                    (reason) =>
+                        reason.file === file &&
+                        reason.reason === 'fallback gate for changed files without a narrower mapping'
+                ),
+                file
+            ).toBe(false);
+        }
+    });
+
+    it('verifies an unmapped source file even when another changed file selects focused gates', () => {
+        const payload = runGateChanged('src/shared/achievements.ts', 'src/shared/game.ts');
+
+        expect(payload.gates).toEqual(
+            expect.arrayContaining([
+                { id: 'verify', command: 'yarn verify' },
+                { id: 'actionLoop', command: 'yarn gate:action-loop' }
+            ])
+        );
+        expect(payload.reasons).toContainEqual({
+            gateId: 'verify',
+            file: 'src/shared/achievements.ts',
+            reason: 'source file without a narrower mapping requires full typecheck and unit coverage'
+        });
+    });
+
+    it('selects every dependent simulation gate for the shared seed sweep contract', () => {
+        const payload = runGateChanged('scripts/seed-sweep-options.ts');
+
+        expect(payload.gates.map((gate) => gate.id)).toEqual(
+            expect.arrayContaining([
+                'longRun',
+                'dungeonTopologyAudit',
+                'simHealth',
+                'simSoftlockSeeds',
+                'softlockFull'
+            ])
+        );
+        expect(payload.reasons.every((reason) => reason.file === 'scripts/seed-sweep-options.ts')).toBe(true);
     });
 
     it('selects the blueprint browser smoke for system diagram explorer changes', () => {
@@ -226,6 +503,38 @@ describe('gate:changed selector', () => {
         ).toBe(true);
     });
 
+    it('selects full softlock stress for every boundary path in isolation', async () => {
+        const { selectGatesForChangedPaths } = await loadGateChanged();
+        const boundaryPaths = [
+            'scripts/gate-softlock-seeds.ts',
+            'scripts/audit-dungeon-topology.ts',
+            'scripts/seed-sweep-options.ts',
+            'src/shared/playthrough-solver.ts',
+            'src/shared/run-progression-repair.ts',
+            'src/shared/softlock-fairness.ts',
+            'src/shared/board-generation.ts',
+            'src/shared/board-build-rules.ts',
+            'src/shared/board-inspection.ts',
+            'src/shared/dungeon-topology.ts',
+            'src/shared/dungeon-board-status.ts',
+            'src/shared/dungeon-exit-rules.ts',
+            'src/shared/dungeon-enemy-hazard-rules.ts',
+            'src/shared/enemy-hazard-board-rules.ts',
+            'src/shared/floor-mutator-schedule.ts',
+            'src/shared/run-map.ts',
+            'src/shared/game.ts'
+        ];
+
+        for (const file of boundaryPaths) {
+            const payload = selectGatesForChangedPaths([file]);
+            expect(payload.gates.map((gate) => gate.id), file).toContain('softlockFull');
+            expect(
+                payload.reasons.some((reason) => reason.gateId === 'softlockFull' && reason.file === file),
+                file
+            ).toBe(true);
+        }
+    });
+
     it('selects expensive softlock gates for dungeon topology graph changes', () => {
         const payload = runGateChanged('src/shared/dungeon-topology.ts');
         const gateIds = payload.gates.map((gate) => gate.id);
@@ -304,7 +613,12 @@ describe('gate:changed selector', () => {
         const supportPayload = runGateChanged('src/shared/gameplay-rules-edit-map.test.ts');
         expect(supportPayload.gates.map((gate) => gate.id)).not.toContain('actionLoop');
         expect(supportPayload.gates.map((gate) => gate.id)).not.toContain('simSoftlockSeeds');
-        expect(supportPayload.gates).toEqual([{ id: 'systems', command: 'yarn gate:systems' }]);
+        expect(supportPayload.gates).toEqual([
+            {
+                id: 'changedTests',
+                command: 'yarn vitest run "src/shared/gameplay-rules-edit-map.test.ts" --maxWorkers=2'
+            }
+        ]);
     });
 
     it('selects renderer, audio, asset, and persistence focused gates', () => {
@@ -322,6 +636,7 @@ describe('gate:changed selector', () => {
             'scripts/card-pipeline/export-card-normal-webp.mjs',
             'scripts/audit-renderer-assets.mjs',
             'docs/AUDIO_INTEGRATION.md',
+            'src/shared/save-data.ts',
             'src/main/persistence.ts'
         );
 
@@ -396,6 +711,11 @@ describe('gate:changed selector', () => {
         expect(
             payload.reasons.some(
                 (reason) => reason.gateId === 'audioFeedback' && reason.file === 'docs/AUDIO_INTEGRATION.md'
+            )
+        ).toBe(true);
+        expect(
+            payload.reasons.some(
+                (reason) => reason.gateId === 'persistence' && reason.file === 'src/shared/save-data.ts'
             )
         ).toBe(true);
     });

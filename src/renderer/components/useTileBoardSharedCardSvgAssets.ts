@@ -42,7 +42,7 @@ export const useTileBoardSharedCardSvgAssets = (): TileBoardSharedCardSvgAssetSt
             }
             setSharedCardFrontGeometry(assets.frontGeometry);
             setSharedCardBackLayers(assets.backLayers);
-        })();
+        })().catch(() => undefined);
         return () => {
             cancelled = true;
         };

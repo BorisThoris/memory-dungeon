@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { copyToneAllowsPlayerFacingText } from './copy-tone';
 import { createNewRun } from './game-core';
-import { GAME_RULES_VERSION } from './contracts';
+import { GAME_RULES_VERSION, type RunState } from './contracts';
 import {
     RUN_EVENT_TABLE,
     applyRunEventChoice,
@@ -275,6 +275,77 @@ describe('REG-074 run event rooms', () => {
         });
     });
 
+    it('normalizes malformed counters before applying score event rewards', () => {
+        const event = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_205, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_score'))!;
+        const choice = event.options.find((option) => option.effect === 'gain_score')!;
+        const run = {
+            ...createNewRun(0),
+            stats: {
+                ...createNewRun(0).stats,
+                totalScore: Number.NaN,
+                currentLevelScore: -12.5,
+                bestScore: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const result = applyRunEventChoice(run, event, choice.id);
+
+        expect(result.applied).toBe(true);
+        expect(result.run.stats.totalScore).toBe(25);
+        expect(result.run.stats.currentLevelScore).toBe(25);
+        expect(result.run.stats.bestScore).toBe(25);
+    });
+
+    it('normalizes malformed stat records before applying score event rewards', () => {
+        const event = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_208, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_score'))!;
+        const choice = event.options.find((option) => option.effect === 'gain_score')!;
+        const result = applyRunEventChoice(
+            {
+                ...createNewRun(0),
+                stats: Number.NaN as unknown as RunState['stats']
+            },
+            event,
+            choice.id
+        );
+
+        expect(result.applied).toBe(true);
+        expect(result.run.stats.totalScore).toBe(25);
+        expect(result.run.stats.currentLevelScore).toBe(25);
+        expect(result.run.stats.bestScore).toBe(25);
+    });
+
+    it('normalizes malformed counters before applying economy event rewards', () => {
+        const goldEvent = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_206, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_shop_gold'))!;
+        const favorEvent = Array.from({ length: 40 }, (_, floor) =>
+            rollRunEventRoom({ runSeed: 74_207, rulesVersion: GAME_RULES_VERSION, floor })
+        ).find((candidate) => candidate.options.some((option) => option.effect === 'gain_relic_favor'))!;
+        const goldChoice = goldEvent.options.find((option) => option.effect === 'gain_shop_gold')!;
+        const favorChoice = favorEvent.options.find((option) => option.effect === 'gain_relic_favor')!;
+
+        const goldResult = applyRunEventChoice({ ...createNewRun(0), shopGold: Number.NaN }, goldEvent, goldChoice.id);
+        const favorResult = applyRunEventChoice(
+            {
+                ...createNewRun(0),
+                relicFavorProgress: Number.POSITIVE_INFINITY,
+                bonusRelicPicksNextOffer: -2,
+                favorBonusRelicPicksNextOffer: Number.NaN
+            },
+            favorEvent,
+            favorChoice.id
+        );
+
+        expect(goldResult.run.shopGold).toBe(2);
+        expect(favorResult.run.relicFavorProgress).toBe(1);
+        expect(favorResult.run.bonusRelicPicksNextOffer).toBe(0);
+        expect(favorResult.run.favorBonusRelicPicksNextOffer).toBe(0);
+    });
+
     it('builds event preview state from the active run counters before resolving a choice', () => {
         const run = {
             ...createNewRun(0),
@@ -312,6 +383,29 @@ describe('REG-074 run event rooms', () => {
             relicFavorProgress: 0,
             bonusRelicPicksNextOffer: 2,
             favorBonusRelicPicksNextOffer: 2
+        });
+    });
+
+    it('normalizes malformed key records before event previews', () => {
+        const run = {
+            ...createNewRun(0),
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys']
+        };
+
+        expect(createRunEventPreviewState(run).ironKeys).toBe(0);
+    });
+
+    it('normalizes malformed stat records before event previews', () => {
+        const run = {
+            ...createNewRun(0),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(createRunEventPreviewState(run)).toMatchObject({
+            totalScore: 0,
+            currentLevelScore: 0,
+            bestScore: 0,
+            guardTokens: 0
         });
     });
 

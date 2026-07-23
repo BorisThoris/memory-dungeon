@@ -3,6 +3,8 @@ import {
     DUNGEON_BOSS_DEFEAT_SCORE,
     getDungeonBossDefinition
 } from './dungeon-boss-rules';
+import { getFloorHeldDungeonKeyCount } from './dungeon-key-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export const DUNGEON_TRAP_DISARM_SCORE_REWARD = 10;
 export const DUNGEON_TRAP_DISARM_GOLD_REWARD = 1;
@@ -136,11 +138,9 @@ export const getDungeonMatchReward = (run: RunState, first: Tile, second: Tile):
     }
     if (kind === 'lock') {
         const lockKeyKind: DungeonKeyKind = first.dungeonKeyKind ?? second.dungeonKeyKind ?? 'iron';
-        const floorHeldKeyCount =
-            (run.board?.dungeonKeysHeldByKind?.[lockKeyKind] ?? 0) +
-            (run.board?.dungeonKeysHeldByKind == null && lockKeyKind === 'iron' ? (run.board?.dungeonKeysHeld ?? 0) : 0);
-        const hasTypedKey = (run.dungeonKeys[lockKeyKind] ?? 0) > 0 || floorHeldKeyCount > 0;
-        const hasMasterKey = run.dungeonMasterKeys > 0;
+        const floorHeldKeyCount = getFloorHeldDungeonKeyCount(run.board, lockKeyKind);
+        const hasTypedKey = runNonNegativeInteger(run.dungeonKeys[lockKeyKind]) > 0 || floorHeldKeyCount > 0;
+        const hasMasterKey = runNonNegativeInteger(run.dungeonMasterKeys) > 0;
         return hasTypedKey || hasMasterKey
             ? {
                   ...emptyDungeonMatchReward(),

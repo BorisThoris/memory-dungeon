@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { RunState } from './contracts';
 import { createNewRun } from './game-core';
 import { HAZARD_TILE_DEFINITIONS } from './hazard-tiles';
 import {
@@ -30,6 +31,32 @@ describe('GLD-FB long-run feedback read models', () => {
             summary: 'Perfect Memory locked by gambit.',
             tokens: ['locked', 'forfeit']
         });
+    });
+
+    it('ignores malformed Perfect Memory action arrays before attribution', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 91_005, activeMutators: [] }),
+            powersUsedThisRun: true,
+            peekRevealedTileIds: Number.NaN as unknown as string[]
+        };
+
+        expect(getPerfectMemoryAttribution(run)).toEqual({
+            locked: true,
+            firstAction: 'assist or wild action',
+            latestAction: 'assist or wild action',
+            summary: 'Perfect Memory locked by assist or wild action.',
+            tokens: ['locked', 'forfeit']
+        });
+    });
+
+    it('normalizes malformed Perfect Memory stats before attribution', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 91_007, activeMutators: [] }),
+            powersUsedThisRun: true,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(getPerfectMemoryAttribution(run).firstAction).toBe('assist or wild action');
     });
 
     it('builds shared cause rows and touch HUD detail rows from the run state', () => {
@@ -100,6 +127,22 @@ describe('GLD-FB long-run feedback read models', () => {
             'Focus 3/3, +24 score'
         );
         expect(getTouchHudDetailRows(run).find((row) => row.id === 'memory')?.value).toBe('3/3');
+    });
+
+    it('ignores malformed run arrays before building cause rows', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 91_006, activeMutators: [] }),
+            forgottenTileIdsThisFloor: Number.NaN as unknown as string[],
+            matchedPairKeysThisRun: Number.NaN as unknown as string[],
+            recallMatchesThisFloor: 1,
+            recallBonusScoreThisFloor: 8
+        } satisfies RunState;
+
+        const rows = getInRunCauseRows(run);
+
+        expect(rows.map((row) => row.id)).toContain('recall-focus');
+        expect(rows.map((row) => row.id)).not.toContain('latest-match-route');
+        expect(rows.find((row) => row.id === 'recall-focus')?.detail).toContain('0 forgotten tile marker(s)');
     });
 
     it('publishes terminology and safe expansion contract matrices', () => {

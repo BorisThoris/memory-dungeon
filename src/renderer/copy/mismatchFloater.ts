@@ -1,6 +1,7 @@
 import { getChainTargetFeedback } from '../../shared/chain-targets';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
-export type MismatchFloaterContext = {
+type MismatchFloaterContext = {
     brokenChainDepth?: number;
     brokenChainRewardCue?: {
         distanceLabel: string;
@@ -9,8 +10,7 @@ export type MismatchFloaterContext = {
 };
 
 const normalizeBrokenChainDepth = (context: MismatchFloaterContext = {}): number => {
-    const depth = context.brokenChainDepth ?? 0;
-    return Number.isFinite(depth) ? Math.max(0, Math.floor(depth)) : 0;
+    return runNonNegativeInteger(context.brokenChainDepth);
 };
 
 const chainBreakLiveText = (context: MismatchFloaterContext = {}): string =>
@@ -29,11 +29,11 @@ const chainBreakTargetText = (context: MismatchFloaterContext = {}): string =>
         ? ` Next chase: ${getChainTargetFeedback(normalizeBrokenChainDepth(context)).value}.`
         : '';
 
-const RECOVERY_LANE_LIVE_ACTIONS: Readonly<Record<string, string>> = {
-    Lost: 'Save cashout',
-    Tool: 'Trigger tool',
-    Risk: 'Route away'
-};
+const RECOVERY_LANE_LIVE_ACTION_ROWS = [
+    { lane: 'Lost', action: 'Save cashout' },
+    { lane: 'Tool', action: 'Trigger tool' },
+    { lane: 'Risk', action: 'Route away' }
+] as const;
 
 const enrichRecoveryLaneMapLiveText = (text: string): string => {
     const withChainActions = text.replace(/(Chain:\s+(\d+)\.\s+)(?!Reset chain\.|Rebuild chain\.)/gu, (_match, prefix, count) => {
@@ -47,7 +47,7 @@ const enrichRecoveryLaneMapLiveText = (text: string): string => {
             return `${prefix}${action}. ${cue}.`;
         }
     );
-    return Object.entries(RECOVERY_LANE_LIVE_ACTIONS).reduce((current, [lane, action]) => {
+    return RECOVERY_LANE_LIVE_ACTION_ROWS.reduce((current, { lane, action }) => {
         const lanePattern = new RegExp(`(${lane}:\\s+\\d+\\.\\s+)(?!${action.replace(/\s+/gu, '\\s+')}\\.)`, 'gu');
         return current.replace(lanePattern, `$1${action}. `);
     }, withRecoverActions);
@@ -113,7 +113,7 @@ export function mismatchFloaterRecoveryHint(traitInteractionTexts: readonly stri
     return 'Recover - prime with tools';
 }
 
-export type MismatchFloaterSignal = {
+type MismatchFloaterSignal = {
     label: 'Miss' | 'Risk' | 'Break';
     tone: 'miss' | 'penalty' | 'break';
 };
@@ -147,27 +147,27 @@ export type MismatchFloaterRecoveryLaneMapEntry = {
     cue: string;
 };
 
-export type MismatchFloaterRecoveryBurst = {
+type MismatchFloaterRecoveryBurst = {
     label: 'Recover' | 'Chain broken' | 'Reward lost' | 'Route risk' | 'Trait surge';
     value: string;
     tier: 'recover' | 'break' | 'lost-reward' | 'risk';
 };
 
-export type MismatchFloaterNextAction = {
+type MismatchFloaterNextAction = {
     arcadeCue: 'Safe pair' | 'Recover route' | 'Rebuild chase' | 'Save cashout';
     label: 'Recover now' | 'Recover route' | 'Rebuild chain' | 'Save streak';
     value: string;
     tone: 'recover' | 'risk' | 'lost-reward';
 };
 
-export type MismatchFloaterRecoveryStack = {
+type MismatchFloaterRecoveryStack = {
     label: 'Recovery stack' | 'Risk stack' | 'Lost reward stack';
     value: string;
     detail: string;
     tone: 'recover' | 'risk' | 'lost-reward' | 'break';
 };
 
-export type MismatchFloaterRecoverySequence = {
+type MismatchFloaterRecoverySequence = {
     first: string;
     keep: string;
     label: 'Recovery sequence';
@@ -175,7 +175,7 @@ export type MismatchFloaterRecoverySequence = {
     tone: 'recover' | 'risk' | 'lost-reward' | 'break';
 };
 
-export type MismatchFloaterRecoveryCrescendo = {
+type MismatchFloaterRecoveryCrescendo = {
     beatCount: 2 | 3 | 4 | 5;
     detail: string;
     label: 'Recover beat' | 'Break beat' | 'Risk beat' | 'Lost reward burst' | 'Trait surge burst';

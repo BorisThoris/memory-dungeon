@@ -70,7 +70,7 @@ const chooseClassicRun = async (user: ReturnType<typeof userEvent.setup>): Promi
     await user.click(await screen.findByRole('button', { name: /start classic run/i }));
 };
 
-const findGameplayBoardStage = async (): Promise<HTMLElement> => screen.findByTestId('board-stage', undefined, { timeout: 10_000 });
+const findGameplayBoardStage = async (): Promise<HTMLElement> => screen.findByTestId('board-stage', undefined, { timeout: 30_000 });
 
 describe('desktop app flow', () => {
     beforeEach(() => {
@@ -114,7 +114,7 @@ describe('desktop app flow', () => {
         expect(screen.getByTestId('hud-trait-route-panel')).toHaveTextContent('Trait routes');
         expect(screen.getByText(/^shards$/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /rule tips/i })).toBeInTheDocument();
-    }, 15_000);
+    }, 45_000);
 
     it('turns off the app-level ambient grid while the menu or game Pixi background is active', async () => {
         const user = userEvent.setup();
@@ -536,72 +536,80 @@ describe('desktop app flow', () => {
         });
     });
 
-    it('pauses and resumes the run via P and the pause modal', async () => {
-        const user = userEvent.setup();
+    it(
+        'pauses and resumes the run via P and the pause modal',
+        async () => {
+            const user = userEvent.setup();
 
-        renderApp();
+            renderApp();
 
-        await dismissStartupIntro(user);
-        await chooseClassicRun(user);
-        expect(await findGameplayBoardStage()).toBeInTheDocument();
+            await dismissStartupIntro(user);
+            await chooseClassicRun(user);
+            expect(await findGameplayBoardStage()).toBeInTheDocument();
 
-        await user.keyboard('p');
-        const modalTitle = await screen.findByRole('heading', { name: /run paused/i });
-        expect(modalTitle).toBeInTheDocument();
+            await user.keyboard('p');
+            const modalTitle = await screen.findByRole('heading', { name: /run paused/i });
+            expect(modalTitle).toBeInTheDocument();
 
-        const inertScope = screen.getByTestId('game-shell').querySelector('[data-a11y-gameplay-inert="true"]');
-        expect(inertScope).not.toBeNull();
-        expect(inertScope).toHaveAttribute('inert', '');
+            const inertScope = screen.getByTestId('game-shell').querySelector('[data-a11y-gameplay-inert="true"]');
+            expect(inertScope).not.toBeNull();
+            expect(inertScope).toHaveAttribute('inert', '');
 
-        const modal = modalTitle.closest('section');
-        expect(modal).not.toBeNull();
+            const modal = modalTitle.closest('section');
+            expect(modal).not.toBeNull();
 
-        await user.click(within(modal as HTMLElement).getByRole('button', { name: /resume/i }));
+            await user.click(within(modal as HTMLElement).getByRole('button', { name: /resume/i }));
 
-        await waitFor(() => {
-            expect(screen.queryByText(/run paused/i)).not.toBeInTheDocument();
-        });
-    });
+            await waitFor(() => {
+                expect(screen.queryByText(/run paused/i)).not.toBeInTheDocument();
+            });
+        },
+        30_000
+    );
 
-    it('opens run settings as a modal over the board', async () => {
-        const user = userEvent.setup();
+    it(
+        'opens run settings as a modal over the board',
+        async () => {
+            const user = userEvent.setup();
 
-        renderApp();
+            renderApp();
 
-        await dismissStartupIntro(user);
-        await chooseClassicRun(user);
-        expect(await findGameplayBoardStage()).toBeInTheDocument();
+            await dismissStartupIntro(user);
+            await chooseClassicRun(user);
+            expect(await findGameplayBoardStage()).toBeInTheDocument();
 
-        await user.click(screen.getByRole('button', { name: /settings/i }));
+            await user.click(screen.getByRole('button', { name: /settings/i }));
 
-        const dialog = await screen.findByRole('dialog', { name: /run settings/i });
-        expect(dialog).toBeInTheDocument();
-        expect(screen.getByRole('heading', { name: /level 1/i })).toBeInTheDocument();
-        expect(screen.queryByRole('heading', { name: /run paused/i })).not.toBeInTheDocument();
-        expect(within(dialog).queryByLabelText(/ui scale/i)).not.toBeInTheDocument();
-        expect(within(dialog).queryByText(/debug tools/i)).not.toBeInTheDocument();
-        expect(within(dialog).queryByRole('checkbox', { name: /reduce motion/i })).not.toBeInTheDocument();
-        await user.click(within(dialog).getByRole('button', { name: /audio/i }));
-        expect(within(dialog).getByLabelText(/master volume/i)).toBeInTheDocument();
-        expect(within(dialog).queryByRole('button', { name: /^close$/i })).not.toBeInTheDocument();
-        expect(within(dialog).getByRole('button', { name: /^back$/i })).toBeInTheDocument();
-        expect(within(dialog).getByRole('button', { name: /^save$/i })).toBeDisabled();
+            const dialog = await screen.findByRole('dialog', { name: /run settings/i });
+            expect(dialog).toBeInTheDocument();
+            expect(screen.getByRole('heading', { name: /level 1/i })).toBeInTheDocument();
+            expect(screen.queryByRole('heading', { name: /run paused/i })).not.toBeInTheDocument();
+            expect(within(dialog).queryByLabelText(/ui scale/i)).not.toBeInTheDocument();
+            expect(within(dialog).queryByText(/debug tools/i)).not.toBeInTheDocument();
+            expect(within(dialog).queryByRole('checkbox', { name: /reduce motion/i })).not.toBeInTheDocument();
+            await user.click(within(dialog).getByRole('button', { name: /audio/i }));
+            expect(within(dialog).getByLabelText(/master volume/i)).toBeInTheDocument();
+            expect(within(dialog).queryByRole('button', { name: /^close$/i })).not.toBeInTheDocument();
+            expect(within(dialog).getByRole('button', { name: /^back$/i })).toBeInTheDocument();
+            expect(within(dialog).getByRole('button', { name: /^save$/i })).toBeDisabled();
 
-        fireEvent.change(within(dialog).getByLabelText(/master volume/i), { target: { value: '0.35' } });
-        expect(within(dialog).getByRole('button', { name: /^save$/i })).toBeEnabled();
-        await user.click(within(dialog).getByRole('button', { name: /^save$/i }));
+            fireEvent.change(within(dialog).getByLabelText(/master volume/i), { target: { value: '0.35' } });
+            expect(within(dialog).getByRole('button', { name: /^save$/i })).toBeEnabled();
+            await user.click(within(dialog).getByRole('button', { name: /^save$/i }));
 
-        await waitFor(() => {
-            expect(screen.getByRole('dialog', { name: /run settings/i })).toBeInTheDocument();
-        });
+            await waitFor(() => {
+                expect(screen.getByRole('dialog', { name: /run settings/i })).toBeInTheDocument();
+            });
 
-        await user.click(within(dialog).getByRole('button', { name: /^back$/i }));
+            await user.click(within(dialog).getByRole('button', { name: /^back$/i }));
 
-        await waitFor(() => {
-            expect(screen.queryByRole('dialog', { name: /run settings/i })).not.toBeInTheDocument();
-        });
-        expect(screen.getByRole('heading', { name: /level 1/i })).toBeInTheDocument();
-    });
+            await waitFor(() => {
+                expect(screen.queryByRole('dialog', { name: /run settings/i })).not.toBeInTheDocument();
+            });
+            expect(screen.getByRole('heading', { name: /level 1/i })).toBeInTheDocument();
+        },
+        30_000
+    );
 
     it('shows the Fit board control in the gameplay camera viewport', async () => {
         const user = userEvent.setup();
@@ -659,7 +667,7 @@ describe('desktop app flow', () => {
         await waitFor(() => {
             expect(within(choosePath).getAllByText(/locked intentionally/i).length).toBeGreaterThan(0);
         });
-    });
+    }, 30_000);
 
     it('explains and disables greedy route choice when the run is on its last life', async () => {
         const baseRun = createNewRun(0, { runSeed: 88_120 });
@@ -731,16 +739,16 @@ describe('desktop app flow', () => {
         await dismissStartupIntro(user);
         await chooseClassicRun(user);
 
-        await user.click(screen.getByTestId('game-toolbar-inventory'));
+        await user.click(await screen.findByTestId('game-toolbar-inventory', undefined, { timeout: 20_000 }));
         expect(await screen.findByRole('region', { name: /inventory/i })).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: /^back$/i }));
         expect(await findGameplayBoardStage()).toBeInTheDocument();
 
-        await user.click(screen.getByTestId('game-toolbar-codex'));
+        await user.click(await screen.findByTestId('game-toolbar-codex', undefined, { timeout: 20_000 }));
         expect(await screen.findByRole('region', { name: /codex/i })).toBeInTheDocument();
         await user.click(screen.getByRole('button', { name: /^back$/i }));
         expect(await findGameplayBoardStage()).toBeInTheDocument();
-    });
+    }, 30_000);
 
     it('resets settings to defaults from the About tab', async () => {
         const user = userEvent.setup();

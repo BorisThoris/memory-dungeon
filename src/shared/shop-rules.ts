@@ -12,6 +12,8 @@ import {
 } from './contracts';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { gainRunInventoryItem } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 import {
     getTileTraitInteractionPreviewLines,
     hasTraitSwapSetupOpportunity
@@ -30,6 +32,21 @@ export const SHOP_KEY_ITEM_BY_KIND: Record<DungeonKeyKind, RunShopItemId> = {
     boss: 'boss_key',
     trap: 'trap_key'
 };
+
+export const SHOP_ITEM_IDS = [
+    'heal_life',
+    'peek_charge',
+    'region_shuffle_charge',
+    'destroy_charge',
+    'trait_cleanse',
+    'trait_routing_kit',
+    'iron_key',
+    'treasure_key',
+    'shrine_key',
+    'boss_key',
+    'trap_key',
+    'master_key'
+] as const satisfies readonly RunShopItemId[];
 
 export const SHOP_ITEM_CATALOG: Record<
     RunShopItemId,
@@ -181,6 +198,8 @@ export const SHOP_ITEM_CATALOG: Record<
     }
 };
 
+export const getShopItemCatalogRows = () => SHOP_ITEM_IDS.map((itemId) => SHOP_ITEM_CATALOG[itemId]);
+
 export const getShopGoldRewardForFloor = (level: number): number =>
     Math.min(8, FLOOR_CLEAR_GOLD_BASE + Math.max(0, Math.floor(level) - 1));
 
@@ -226,7 +245,7 @@ const runNeedsLockedExitShopInsurance = (run: RunState): boolean => {
     if (lock.lockKind === 'none' || lock.lockKind === 'lever') {
         return false;
     }
-    const hasRunKey = (run.dungeonKeys[lock.lockKind] ?? 0) > 0 || run.dungeonMasterKeys > 0;
+    const hasRunKey = runNonNegativeInteger(run.dungeonKeys[lock.lockKind]) > 0 || runNonNegativeInteger(run.dungeonMasterKeys) > 0;
     const hasReachableKeySource = countReachableExitKeySources(board, lock.lockKind) > 0;
     return !hasRunKey && !hasReachableKeySource;
 };
@@ -309,7 +328,7 @@ const loadoutStockBias = (run: RunState): RunShopItemId[] => {
 };
 
 export const getRunShopStockPlan = (run: RunState): RunShopStockPlan => {
-    const level = run.board?.level ?? run.stats.highestLevel;
+    const level = run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
     const source: RunShopSource = run.board?.dungeonShopTileId ? 'board_shop' : 'floor_clear_shop';
     const routeType = run.board?.routeWorldProfile?.routeType ?? run.pendingRouteCardPlan?.routeType ?? null;
     const itemIds: RunShopItemId[] = routeStockTemplate(routeType, source, run.shopRerolls);
@@ -380,11 +399,11 @@ export const getShopWalletPacing = (run: RunState): {
     sinkCostTotal: number;
     conversionAtRunEnd: 'unspent_shop_gold_expires';
 } => {
-    const level = run.board?.level ?? run.stats.highestLevel;
+    const level = run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
     return {
         earnedThisFloor: getShopGoldRewardForFloor(level),
-        totalWallet: run.shopGold,
-        sinkCostTotal: run.shopOffers.reduce((sum, offer) => sum + offer.cost, 0),
+        totalWallet: runNonNegativeInteger(run.shopGold),
+        sinkCostTotal: runShopOffers(run.shopOffers).reduce((sum, offer) => sum + offer.cost, 0),
         conversionAtRunEnd: 'unspent_shop_gold_expires'
     };
 };
@@ -395,11 +414,13 @@ export const getRunShopWalletPacing = (run: RunState): {
     sinkCostTotal: number;
     conversionAtRunEnd: 'unspent_shop_gold_expires';
 } => ({
-    earnedThisFloor: getShopGoldRewardForFloor(run.board?.level ?? run.stats.highestLevel),
-    totalWallet: run.shopGold,
-    sinkCostTotal: run.shopOffers.reduce((sum, offer) => sum + offer.cost, 0),
+    earnedThisFloor: getShopGoldRewardForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel),
+    totalWallet: runNonNegativeInteger(run.shopGold),
+    sinkCostTotal: runShopOffers(run.shopOffers).reduce((sum, offer) => sum + offer.cost, 0),
     conversionAtRunEnd: 'unspent_shop_gold_expires'
 });
+
+export const runShopOffers = (value: unknown): RunShopOfferState[] => Array.isArray(value) ? value : [];
 
 const getShopOfferCompatibility = (
     run: RunState,
@@ -461,24 +482,26 @@ export const createRunShopOffers = (run: RunState): RunShopOfferState[] => {
 };
 
 export const canRerollShopOffers = (run: RunState): boolean =>
-    run.shopOffers.length > 0 &&
-    run.shopRerolls < 1 &&
-    run.shopGold >= getShopRerollCostForFloor(run.board?.level ?? run.stats.highestLevel);
+    runShopOffers(run.shopOffers).length > 0 &&
+    runNonNegativeInteger(run.shopRerolls) < 1 &&
+    runNonNegativeInteger(run.shopGold) >= getShopRerollCostForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel);
 
 export const getRunShopReadModel = (run: RunState): RunShopReadModel => {
     const plan = getRunShopStockPlan(run);
-    const availableOfferCount = run.shopOffers.filter((offer) => {
+    const wallet = runNonNegativeInteger(run.shopGold);
+    const shopOffers = runShopOffers(run.shopOffers);
+    const availableOfferCount = shopOffers.filter((offer) => {
         const currentCompatibility = getShopOfferCompatibility(run, offer.itemId);
-        return !offer.purchased && currentCompatibility.compatible && run.shopGold >= offer.cost;
+        return !offer.purchased && currentCompatibility.compatible && wallet >= offer.cost;
     }).length;
     return {
         source: plan.source,
         level: plan.level,
         routeType: plan.routeType,
-        offerCount: run.shopOffers.length,
+        offerCount: shopOffers.length,
         availableOfferCount,
-        purchasedOfferCount: run.shopOffers.filter((offer) => offer.purchased).length,
-        wallet: run.shopGold,
+        purchasedOfferCount: shopOffers.filter((offer) => offer.purchased).length,
+        wallet,
         rerollCost: plan.rerollCost,
         canReroll: canRerollShopOffers(run),
         previewCopy: plan.previewCopy
@@ -489,14 +512,16 @@ export const rerollShopOffers = (run: RunState): RunState => {
     if (!canRerollShopOffers(run)) {
         return run;
     }
-    const cost = getShopRerollCostForFloor(run.board?.level ?? run.stats.highestLevel);
-    const nextRun = { ...run, shopGold: run.shopGold - cost, shopRerolls: run.shopRerolls + 1 };
+    const cost = getShopRerollCostForFloor(run.board?.level ?? normalizeSessionStats(run.stats).highestLevel);
+    const nextRun = { ...run, shopGold: runNonNegativeInteger(run.shopGold) - cost, shopRerolls: runNonNegativeInteger(run.shopRerolls) + 1 };
     return { ...nextRun, shopOffers: createRunShopOffers(nextRun) };
 };
 
 export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
-    const offer = run.shopOffers.find((item) => item.id === offerId);
-    if (!offer || offer.purchased || run.shopGold < offer.cost) {
+    const shopOffers = runShopOffers(run.shopOffers);
+    const offer = shopOffers.find((item) => item.id === offerId);
+    const wallet = runNonNegativeInteger(run.shopGold);
+    if (!offer || offer.purchased || wallet < offer.cost) {
         return run;
     }
 
@@ -507,8 +532,8 @@ export const purchaseShopOffer = (run: RunState, offerId: string): RunState => {
 
     let next: RunState = {
         ...run,
-        shopGold: run.shopGold - offer.cost,
-        shopOffers: run.shopOffers.map((item) => (item.id === offerId ? { ...item, purchased: true } : item))
+        shopGold: wallet - offer.cost,
+        shopOffers: shopOffers.map((item) => (item.id === offerId ? { ...item, purchased: true } : item))
     };
 
     switch (offer.itemId) {

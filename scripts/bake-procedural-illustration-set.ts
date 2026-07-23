@@ -22,11 +22,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium, type Browser } from 'playwright-core';
 import waitOn from 'wait-on';
-import { parseBakeTierTokenList, type OverlayDrawTier } from '../src/renderer/cardFace/overlayDrawTier';
+import type { OverlayDrawTier } from '../src/renderer/cardFace/overlayDrawTier';
 import { computeIllustrationPixelRect } from '../src/renderer/cardFace/cardIllustrationRect';
 import { GAMEPLAY_CARD_VISUALS } from '../src/renderer/components/gameplayVisualConfig';
 import { CARD_PLANE_HEIGHT, CARD_PLANE_WIDTH } from '../src/renderer/components/tileShatter';
 import { ILLUSTRATION_GEN_SCHEMA_VERSION } from '../src/renderer/cardFace/proceduralIllustration/illustrationSchemaVersion';
+import { parseBakeProceduralIllustrationSetArgs } from './bake-procedural-illustration-set-options';
 
 /** Must match `STATIC_CARD_TEXTURE_*` in `tileTextures.ts`. */
 const STATIC_CARD_TEXTURE_HEIGHT = 1024;
@@ -37,38 +38,6 @@ const STATIC_CARD_TEXTURE_WIDTH = Math.max(
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
-
-function parseArgs(argv: string[]): {
-    port: number;
-    tiers: OverlayDrawTier[];
-    includeFullCanvas: boolean;
-    fixturePath: string;
-    outDir: string;
-} {
-    let port = 5173;
-    let tiers: OverlayDrawTier[] = ['full'];
-    let includeFullCanvas = false;
-    let fixturePath = path.join(ROOT, 'e2e/fixtures/tile-card-face-illustration-regression.json');
-    let outDir = path.join(ROOT, 'output/baked-procedural-illustrations');
-
-    for (const arg of argv) {
-        if (arg.startsWith('--port=')) {
-            port = Number(arg.slice('--port='.length));
-        } else if (arg.startsWith('--tiers=')) {
-            const raw = arg.slice('--tiers='.length);
-            const parts = raw.split(',').map((s) => s.trim());
-            tiers = parseBakeTierTokenList(parts);
-        } else if (arg === '--include-full-canvas') {
-            includeFullCanvas = true;
-        } else if (arg.startsWith('--fixture=')) {
-            fixturePath = path.resolve(ROOT, arg.slice('--fixture='.length));
-        } else if (arg.startsWith('--out=')) {
-            outDir = path.resolve(ROOT, arg.slice('--out='.length));
-        }
-    }
-
-    return { port, tiers, includeFullCanvas, fixturePath, outDir };
-}
 
 function sanitizePairKey(pairKey: string): string {
     return pairKey.replace(/[^a-zA-Z0-9-_]/g, '_');
@@ -105,7 +74,7 @@ async function ensureDevServer(port: number): Promise<{ stop: () => void }> {
 
 async function main(): Promise<void> {
     const argv = process.argv.slice(2);
-    const { port, tiers, includeFullCanvas, fixturePath, outDir } = parseArgs(argv);
+    const { port, tiers, includeFullCanvas, fixturePath, outDir } = parseBakeProceduralIllustrationSetArgs(argv);
 
     const fixture = JSON.parse(readFileSync(fixturePath, 'utf8')) as { pairKeys: string[] };
     const pairKeys = fixture.pairKeys;
@@ -281,7 +250,9 @@ function decodePngDataUrl(value: string): Buffer {
     return Buffer.from(base64, 'base64');
 }
 
-main().catch((err: unknown) => {
-    console.error(err);
-    process.exit(1);
-});
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+    main().catch((err: unknown) => {
+        console.error(err);
+        process.exit(1);
+    });
+}

@@ -30,6 +30,17 @@ describe('dungeon-run-state-rules', () => {
         expect(dungeonRun.currentFloor).toBe(4);
     });
 
+    it('normalizes malformed stat records before creating a boardless fallback map', () => {
+        const run: RunState = {
+            ...createNewRun(0, { runSeed: 43 }),
+            dungeonRun: undefined as unknown as RunState['dungeonRun'],
+            board: null,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(getRunDungeonMapState(run).currentFloor).toBe(1);
+    });
+
     it('uses the current dungeon route approach when deriving memorize recall focus', () => {
         const base = createNewRun(0);
         const run: RunState = {

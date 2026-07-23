@@ -1,35 +1,36 @@
 /**
  * Match-score floater live region (`aria-live`). Centralized for a11y review and future i18n.
  */
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getChainMomentumCue } from './chainMomentum';
 
 export const matchScoreFloaterChainCue = getChainMomentumCue;
 
-const PAYOFF_LANE_LIVE_ACTIONS: Readonly<Record<string, string>> = {
-    Route: 'Cash route',
-    Pickup: 'Claim pickup',
-    Trait: 'Cash trait',
-    Chain: 'Cash chain'
-};
+const PAYOFF_LANE_LIVE_ACTION_ROWS = [
+    { lane: 'Route', action: 'Cash route' },
+    { lane: 'Pickup', action: 'Claim pickup' },
+    { lane: 'Trait', action: 'Cash trait' },
+    { lane: 'Chain', action: 'Cash chain' }
+] as const;
 
-const TRAIT_LANE_LIVE_ACTIONS: Readonly<Record<string, string>> = {
-    Block: 'Deny match',
-    Guard: 'Protect run',
-    Recall: 'Set memory',
-    Risk: 'Watch hazard',
-    Score: 'Cash score',
-    Shard: 'Cash shard',
-    Tool: 'Use tool'
-};
+const TRAIT_LANE_LIVE_ACTION_ROWS = [
+    { lane: 'Block', action: 'Deny match' },
+    { lane: 'Guard', action: 'Protect run' },
+    { lane: 'Recall', action: 'Set memory' },
+    { lane: 'Risk', action: 'Watch hazard' },
+    { lane: 'Score', action: 'Cash score' },
+    { lane: 'Shard', action: 'Cash shard' },
+    { lane: 'Tool', action: 'Use tool' }
+] as const;
 
 const enrichPayoffLaneMapLiveText = (text: string): string =>
-    Object.entries(PAYOFF_LANE_LIVE_ACTIONS).reduce((current, [lane, action]) => {
+    PAYOFF_LANE_LIVE_ACTION_ROWS.reduce((current, { lane, action }) => {
         const lanePattern = new RegExp(`(${lane}:\\s+\\d+\\.\\s+)(?!${action.replace(/\s+/gu, '\\s+')}\\.)`, 'gu');
         return current.replace(lanePattern, `$1${action}. `);
     }, text);
 
 const enrichTraitLaneMapLiveText = (text: string): string =>
-    Object.entries(TRAIT_LANE_LIVE_ACTIONS).reduce((current, [lane, action]) => {
+    TRAIT_LANE_LIVE_ACTION_ROWS.reduce((current, { lane, action }) => {
         const lanePattern = new RegExp(`(${lane}:\\s+\\d+\\.\\s+)(?!${action.replace(/\s+/gu, '\\s+')}\\.)`, 'gu');
         return current.replace(lanePattern, `$1${action}. `);
     }, text);
@@ -49,7 +50,7 @@ export function matchScoreFloaterLiveRegionText(
     crescendoText?: string,
     chainMilestoneText?: string
 ): string {
-    const base = `Plus ${amount.toLocaleString()} points`;
+    const base = `Plus ${runNonNegativeInteger(amount).toLocaleString()} points`;
     const headline = feedbackHeadline ? `${feedbackHeadline}. ` : '';
     const chainCue = matchScoreFloaterChainCue(chainDepth);
     const streak =

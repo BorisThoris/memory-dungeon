@@ -17,10 +17,11 @@ import { getFloorClearCausalityRows } from '../../shared/level-result-presentati
 import { getFloorIdentityContract } from '../../shared/boss-encounters';
 import { getPlayableOnboardingStep, type OnboardingStepId } from '../../shared/playable-onboarding';
 import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import {
     canOfferEndlessRiskWager
 } from '../../shared/objective-rules';
-import { getRouteChoiceAvailability } from '../../shared/route-rules';
+import { getRouteChoiceAvailability, routeChoicesForResult } from '../../shared/route-rules';
 import { getTraitRouteObjectiveStatus } from '../../shared/trait-route-objectives';
 import {
     canRegionShuffle,
@@ -36,8 +37,9 @@ import { getMemoryRecallFeedback } from '../../shared/memory-recall-feedback';
 import { getDungeonMapPresentation, getDungeonRouteDecisionPresentation, getRepairedSelectedDungeonNode } from '../../shared/run-map';
 import { useNotificationStore } from '@cross-repo-libs/notifications';
 import type { CSSProperties } from 'react';
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
+import { runPersistenceInBackground } from '../store/backgroundPersistence';
 import { UI_ART } from '../assets/ui';
 import { isNarrowShortLandscapeForMenuStack } from '../breakpoints';
 import { deriveCameraViewportMode, latchPhoneWidthForMobileCamera } from '../../shared/cameraViewportMode';
@@ -50,6 +52,7 @@ import {
 } from '../../shared/floor-mutator-schedule';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import { useDistractionChannelTick } from '../hooks/useDistractionChannelTick';
+import { useEffectiveReducedMotion } from '../hooks/useEffectiveReducedMotion';
 import { useLatestRef } from '../hooks/useLatestRef';
 import {
     detectClaimedFindableKind,
@@ -115,28 +118,16 @@ import {
 import { getStickyBlockedTileId } from '../gameplay/stickyFingersBlockedTileId';
 import { useGameScreenPowerTileHints } from './useGameScreenPowerTileHints';
 import { useGameScreenTraitRouteTargets } from './useGameScreenTraitRouteTargets';
-import type { MatchScorePop, MatchScorePopPayoffLaneMapEntry, MismatchScorePop } from '../store/matchScorePop';
+import type { MatchScorePop, MatchScorePopPayoffChip, MatchScorePopPayoffLaneMapEntry, MismatchScorePop } from '../store/matchScorePop';
 
-const subscribeOsPrefersReducedMotion = (onStoreChange: () => void): (() => void) => {
-    if (typeof window === 'undefined') {
-        return () => {};
-    }
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    mq.addEventListener('change', onStoreChange);
-    return () => mq.removeEventListener('change', onStoreChange);
-};
-
-const getOsPrefersReducedMotionSnapshot = (): boolean =>
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const getOsPrefersReducedMotionServerSnapshot = (): boolean => false;
 import { MUTATOR_CATALOG } from '../../shared/mechanics-encyclopedia';
 import {
     getChainRewardForecastCues,
     getChainRewardLaneAction,
     getChainRewardProgress,
     getChainRewardStackLabel,
-    getChainRewardUrgencyCopy
+    getChainRewardUrgencyCopy,
+    type ChainRewardForecastCue
 } from '../copy/chainMomentum';
 import { matchScoreFloaterChainCue, matchScoreFloaterLiveRegionText } from '../copy/matchScoreFloater';
 import {
@@ -181,8 +172,8 @@ interface GameScreenProps {
     suppressStatusOverlays?: boolean;
 }
 
-const matchPayoffLaneMapAttr = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[] | undefined): string =>
-    laneMap?.map((lane) => `${lane.id}:${lane.count}`).join('>') ?? 'none';
+const matchPayoffLaneMapAttr = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[]): string =>
+    laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${lane.count}`).join('>') : 'none';
 
 const matchPayoffLaneAction = (
     lane: MatchScorePopPayoffLaneMapEntry
@@ -202,17 +193,122 @@ const matchPayoffLaneAction = (
     return 'Prime next';
 };
 
-const matchPayoffLaneActionMapAttr = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[] | undefined): string =>
-    laneMap?.map((lane) => `${lane.id}:${matchPayoffLaneAction(lane)}:${lane.count}`).join('>') ?? 'none';
+const matchPayoffLaneActionMapAttr = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[]): string =>
+    laneMap.length > 0 ? laneMap.map((lane) => `${lane.id}:${matchPayoffLaneAction(lane)}:${lane.count}`).join('>') : 'none';
 
-const matchPayoffLaneMapLabel = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[] | undefined): string => {
-    if (!laneMap?.length) {
+const matchPayoffLaneMapLabel = (laneMap: readonly MatchScorePopPayoffLaneMapEntry[]): string => {
+    if (laneMap.length === 0) {
         return '';
     }
     return `Match payoff lane map. ${laneMap
         .map((lane) => `${lane.label}: ${lane.count}. ${matchPayoffLaneAction(lane)}. ${lane.cue}.`)
         .join(' ')}`;
 };
+
+const MATCH_PAYOFF_CHIP_IDS: readonly MatchScorePopPayoffChip['id'][] = [
+    'score',
+    'streak',
+    'cascade',
+    'tier',
+    'trait',
+    'pickup',
+    'route',
+    'chainReward',
+    'next'
+];
+
+const MATCH_PAYOFF_CHIP_TONES: readonly MatchScorePopPayoffChip['tone'][] = [
+    'score',
+    'chain',
+    'trait',
+    'pickup',
+    'route',
+    'reward',
+    'guard',
+    'heal'
+];
+
+const MATCH_PAYOFF_LANE_IDS: readonly MatchScorePopPayoffLaneMapEntry['id'][] = ['route', 'pickup', 'trait', 'chain', 'build'];
+const MATCH_PAYOFF_LANE_TONES: readonly MatchScorePopPayoffLaneMapEntry['tone'][] = ['route', 'pickup', 'trait', 'chain', 'reward'];
+
+const isMatchPayoffChip = (value: unknown): value is MatchScorePopPayoffChip => {
+    if (value == null || typeof value !== 'object') {
+        return false;
+    }
+    const chip = value as { arcadeCue?: unknown; id?: unknown; label?: unknown; tone?: unknown; value?: unknown };
+    return (
+        typeof chip.label === 'string' &&
+        typeof chip.value === 'string' &&
+        MATCH_PAYOFF_CHIP_IDS.includes(chip.id as MatchScorePopPayoffChip['id']) &&
+        MATCH_PAYOFF_CHIP_TONES.includes(chip.tone as MatchScorePopPayoffChip['tone']) &&
+        (chip.arcadeCue == null || typeof chip.arcadeCue === 'string')
+    );
+};
+
+const matchPayoffChips = (value: unknown): MatchScorePopPayoffChip[] =>
+    Array.isArray(value) ? value.filter(isMatchPayoffChip) : [];
+
+const isMatchPayoffLane = (value: unknown): value is MatchScorePopPayoffLaneMapEntry => {
+    if (value == null || typeof value !== 'object') {
+        return false;
+    }
+    const lane = value as { count?: unknown; cue?: unknown; id?: unknown; label?: unknown; tone?: unknown };
+    return (
+        typeof lane.label === 'string' &&
+        typeof lane.cue === 'string' &&
+        typeof lane.count === 'number' &&
+        Number.isFinite(lane.count) &&
+        MATCH_PAYOFF_LANE_IDS.includes(lane.id as MatchScorePopPayoffLaneMapEntry['id']) &&
+        MATCH_PAYOFF_LANE_TONES.includes(lane.tone as MatchScorePopPayoffLaneMapEntry['tone'])
+    );
+};
+
+const matchPayoffLaneMap = (value: unknown): MatchScorePopPayoffLaneMapEntry[] =>
+    Array.isArray(value) ? value.filter(isMatchPayoffLane) : [];
+
+const matchPayoffLadderLanes = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((lane): lane is string => typeof lane === 'string') : [];
+
+const MATCH_CHAIN_REWARD_TONES: readonly ChainRewardForecastCue['tone'][] = ['reward', 'guard', 'heal'];
+const MATCH_CHAIN_REWARD_URGENCIES: readonly ChainRewardForecastCue['urgency'][] = ['next', 'soon', 'later'];
+
+const isMatchChainRewardForecastCue = (value: unknown): value is ChainRewardForecastCue => {
+    if (value == null || typeof value !== 'object') {
+        return false;
+    }
+    const cue = value as {
+        actionLabel?: unknown;
+        chaseLabel?: unknown;
+        distance?: unknown;
+        distanceLabel?: unknown;
+        id?: unknown;
+        label?: unknown;
+        stackSize?: unknown;
+        targetStreak?: unknown;
+        tone?: unknown;
+        urgency?: unknown;
+    };
+    return (
+        typeof cue.actionLabel === 'string' &&
+        typeof cue.chaseLabel === 'string' &&
+        typeof cue.distance === 'number' &&
+        Number.isFinite(cue.distance) &&
+        typeof cue.distanceLabel === 'string' &&
+        typeof cue.id === 'string' &&
+        typeof cue.label === 'string' &&
+        typeof cue.targetStreak === 'number' &&
+        Number.isFinite(cue.targetStreak) &&
+        MATCH_CHAIN_REWARD_TONES.includes(cue.tone as ChainRewardForecastCue['tone']) &&
+        MATCH_CHAIN_REWARD_URGENCIES.includes(cue.urgency as ChainRewardForecastCue['urgency']) &&
+        (cue.stackSize == null || (typeof cue.stackSize === 'number' && Number.isFinite(cue.stackSize)))
+    );
+};
+
+const matchChainRewardForecastCues = (value: unknown): ChainRewardForecastCue[] =>
+    Array.isArray(value) ? value.filter(isMatchChainRewardForecastCue) : [];
+
+const matchTraitInteractionTexts = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((text): text is string => typeof text === 'string') : [];
 
 const mismatchRecoveryLaneMapAttr = (laneMap: readonly MismatchFloaterRecoveryLaneMapEntry[] | null): string =>
     laneMap?.map((lane) => `${lane.id}:${lane.count}`).join('>') ?? 'none';
@@ -1047,7 +1143,7 @@ const getNextFloorSignalScreenCue = (
 };
 
 const getFloorClearChainCashoutLabels = (run: RunState): string[] => {
-    const bestStreak = Math.max(0, Math.floor(run.stats.bestStreak ?? 0));
+    const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
     if (bestStreak < 4) {
         return [];
     }
@@ -1069,10 +1165,13 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
     if (!result) {
         return [];
     }
-    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
-    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
+    const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
+    const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
     const missedPickups = Math.max(0, pickupTotal - pickupClaimed);
-    const bestStreak = Math.max(0, run.stats.bestStreak ?? 0);
+    const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
+    const scoreGained = runNonNegativeInteger(result.scoreGained);
+    const objectiveBonusScore = runNonNegativeInteger(result.objectiveBonusScore);
+    const mistakes = runNonNegativeInteger(result.mistakes);
     const traitPaid = Boolean(result.traitRouteObjectiveCompleted);
     const objectivePaid = Boolean(result.featuredObjectiveCompleted);
     const chainTarget = getChainTargetFeedback(bestStreak);
@@ -1089,12 +1188,12 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
             ? rewardStack.join(' + ')
             : bestStreak >= 3
               ? `x${bestStreak} chain`
-              : `+${result.scoreGained.toLocaleString()} score`;
+              : `+${scoreGained.toLocaleString()} score`;
     const cashoutDetail = [
         traitPaid
             ? result.traitRouteObjectiveReward ?? 'Trait route cashout paid.'
             : objectivePaid
-              ? `+${(result.objectiveBonusScore ?? 0).toLocaleString()} objective score`
+              ? `+${objectiveBonusScore.toLocaleString()} objective score`
               : null,
         chainCashoutValue ? `Chain cashout: ${chainCashoutValue}.` : null
     ]
@@ -1107,7 +1206,7 @@ const getFloorClearCashoutRows = (run: RunState): FloorClearCashoutRow[] => {
               ? 'trait route missed'
               : result.perfect
                 ? 'perfect clear'
-                : `${result.mistakes} miss${result.mistakes === 1 ? '' : 'es'}`;
+                : `${mistakes} miss${mistakes === 1 ? '' : 'es'}`;
     const nextValue =
         missedPickups > 0
             ? 'claim pickups'
@@ -1155,12 +1254,13 @@ const getFloorClearPayoffStackSignal = (
         return null;
     }
 
+    const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
     const lanes = [
         result.traitRouteObjectiveCompleted ? 'Trait route' : null,
         result.featuredObjectiveCompleted ? 'Objective' : null,
-        run.findablesClaimedThisFloor > 0 ? 'Pickup' : null,
-        getFloorClearChainCashoutLabels(run).length > 0 ? 'Chain cashout' : run.stats.bestStreak >= 3 ? 'Chain' : null,
-        run.stats.comboShards > 0 ? 'Shard' : null,
+        runNonNegativeInteger(run.findablesClaimedThisFloor) > 0 ? 'Pickup' : null,
+        getFloorClearChainCashoutLabels(run).length > 0 ? 'Chain cashout' : bestStreak >= 3 ? 'Chain' : null,
+        runNonNegativeInteger(run.stats.comboShards) > 0 ? 'Shard' : null,
         favorBankedPickCount > 0 ? 'Relic pick' : null
     ].filter((lane): lane is string => lane != null);
     const missedRows = floorClearCashoutRows.filter((row) => row.tone === 'missed');
@@ -1214,13 +1314,15 @@ const getPickupStackToastText = (
 ): string => {
     const baseText = getFindableToastText(claimedKind);
     const nextReward = getChainRewardForecastCues(
-        pickupState.currentStreak,
-        pickupState.comboShards,
-        pickupState.lives
+        runNonNegativeInteger(pickupState.currentStreak),
+        runNonNegativeInteger(pickupState.comboShards),
+        runNonNegativeInteger(pickupState.lives)
     )[0];
+    const pickupClaimed = runNonNegativeInteger(pickupState.findablesClaimedThisFloor);
+    const pickupTotal = runNonNegativeInteger(pickupState.findablesTotalThisFloor);
     const pickupProgress =
-        pickupState.findablesTotalThisFloor > 0
-            ? `Pickups ${pickupState.findablesClaimedThisFloor}/${pickupState.findablesTotalThisFloor}.`
+        pickupTotal > 0
+            ? `Pickups ${pickupClaimed}/${pickupTotal}.`
             : null;
 
     if (nextReward?.urgency === 'next') {
@@ -1241,10 +1343,10 @@ const getFloorClearCarryForwardCue = (run: RunState, favorBankedPickCount: numbe
     if (!result) {
         return null;
     }
-    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
-    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
+    const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
+    const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
     const missedPickups = Math.max(0, pickupTotal - pickupClaimed);
-    const bestStreak = Math.max(0, run.stats.bestStreak ?? 0);
+    const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
     const chainCashoutLabels = getFloorClearChainCashoutLabels(run);
 
     if (favorBankedPickCount > 0) {
@@ -1306,7 +1408,7 @@ const getFloorClearActionSequenceCue = ({
         return null;
     }
 
-    const chainTarget = getChainTargetFeedback(Math.max(0, run.stats.bestStreak ?? 0));
+    const chainTarget = getChainTargetFeedback(runNonNegativeInteger(run.stats.bestStreak));
     const missedRow = cashoutRows.find((row) => row.tone === 'missed');
     const nextRow = cashoutRows.find((row) => row.id === 'next');
     const first = routeChoiceRequired
@@ -1732,7 +1834,7 @@ type MatchFloaterJackpotCue = {
 const getMatchFloaterHeat = (payload: MatchScorePop): MatchFloaterHeat => {
     const impactLabel = payload.impactCue.label.toLowerCase();
     const payoffSummaryLabel = payload.payoffSummary?.label.toLowerCase() ?? '';
-    const payoffChipCues = payload.payoffChips?.map((chip) => chip.arcadeCue?.toLowerCase() ?? '') ?? [];
+    const payoffChipCues = matchPayoffChips(payload.payoffChips).map((chip) => chip.arcadeCue?.toLowerCase() ?? '');
 
     if (payoffSummaryLabel === 'super stack' || impactLabel === 'super stack') {
         return 'stack';
@@ -1890,7 +1992,8 @@ const getBoardFloaterPayoffSummaryScreenCue = (
 const getMatchFloaterJackpotCue = (payload: MatchScorePop): MatchFloaterJackpotCue | null => {
     const summary = payload.payoffSummary;
     const rewardBurst = payload.rewardBurst;
-    const laneCount = Math.max(payload.payoffLaneMap?.length ?? 0, summary ? actualMatchPayoffLaneCount(summary, payload.payoffChips) : 0);
+    const payoffChips = matchPayoffChips(payload.payoffChips);
+    const laneCount = Math.max(matchPayoffLaneMap(payload.payoffLaneMap).length, summary ? actualMatchPayoffLaneCount(summary, payoffChips) : 0);
     const impactLabel = payload.impactCue.label;
     const impactLabelLower = impactLabel.toLowerCase();
     const crescendo = payload.crescendo;
@@ -1926,7 +2029,7 @@ const getMatchFloaterJackpotCue = (payload: MatchScorePop): MatchFloaterJackpotC
             beatCount: Math.max(3, crescendo?.beatCount ?? 0) as 3 | 4 | 5,
             label: summary?.label ?? 'Cashout',
             tier: 'cashout',
-            value: summary?.value ?? rewardBurst?.value ?? payload.routeRewardText ?? `+${payload.amount.toLocaleString()}`
+            value: summary?.value ?? rewardBurst?.value ?? payload.routeRewardText ?? `+${runNonNegativeInteger(payload.amount).toLocaleString()}`
         };
     }
     return null;
@@ -2062,7 +2165,7 @@ const getBoardFloaterTraitLaneScreenCue = (
 const getBoardFloaterPayoffLadderBeatCount = (
     ladder: NonNullable<MatchScorePop['payoffLadder']>
 ): 3 | 4 | 5 => {
-    const laneCount = ladder.lanes?.length ?? 0;
+    const laneCount = matchPayoffLadderLanes(ladder.lanes).length;
     if (ladder.tone === 'combo' || laneCount >= 4) {
         return 5;
     }
@@ -2075,7 +2178,7 @@ const getBoardFloaterPayoffLadderBeatCount = (
 const getBoardFloaterPayoffLadderAudioCue = (
     ladder: NonNullable<MatchScorePop['payoffLadder']>
 ): 'payoff-ladder-chain' | 'payoff-ladder-reward' | 'payoff-ladder-super' => {
-    const laneCount = ladder.lanes?.length ?? 0;
+    const laneCount = matchPayoffLadderLanes(ladder.lanes).length;
     if (ladder.tone === 'combo' || laneCount >= 4) {
         return 'payoff-ladder-super';
     }
@@ -2088,7 +2191,7 @@ const getBoardFloaterPayoffLadderAudioCue = (
 const getBoardFloaterPayoffLadderScreenCue = (
     ladder: NonNullable<MatchScorePop['payoffLadder']>
 ): 'burst' | 'pulse' | 'super' => {
-    const laneCount = ladder.lanes?.length ?? 0;
+    const laneCount = matchPayoffLadderLanes(ladder.lanes).length;
     if (ladder.tone === 'combo' || laneCount >= 4) {
         return 'super';
     }
@@ -2126,7 +2229,7 @@ const getBoardFloaterChainMilestoneBeatCount = (
 };
 
 const getMismatchFloaterHeat = (payload: MismatchScorePop): MismatchFloaterHeat => {
-    const traitRiskCount = payload.traitInteractionTexts?.length ?? 0;
+    const traitRiskCount = matchTraitInteractionTexts(payload.traitInteractionTexts).length;
     if (payload.brokenChainRewardCue) {
         return 'lost-reward';
     }
@@ -2464,12 +2567,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         }))
     );
     const settingsReduceMotion = useAppStore((state) => state.settings.reduceMotion);
-    const osPrefersReducedMotion = useSyncExternalStore(
-        subscribeOsPrefersReducedMotion,
-        getOsPrefersReducedMotionSnapshot,
-        getOsPrefersReducedMotionServerSnapshot
-    );
-    const boardFloaterReducedMotion = settingsReduceMotion || osPrefersReducedMotion;
+    const reduceMotion = useEffectiveReducedMotion(settingsReduceMotion);
 
     const { matchScorePop, mismatchScorePop, dismissMatchScorePop, dismissMismatchScorePop } = useAppStore(
         useShallow((state) => ({
@@ -2489,7 +2587,46 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   : null,
         [matchScorePop, mismatchScorePop]
     );
-    const boardFloaterDurationMs = matchScoreFloatDurationMs(boardFloaterReducedMotion, boardFloaterPayload);
+    const boardFloaterDurationMs = matchScoreFloatDurationMs(reduceMotion, boardFloaterPayload);
+    const boardFloaterMatchPayoffChips = useMemo(
+        () => (boardFloaterPayload?.kind === 'match' ? matchPayoffChips(boardFloaterPayload.payoffChips) : []),
+        [boardFloaterPayload]
+    );
+    const boardFloaterMatchPayoffLaneMap = useMemo(
+        () => (boardFloaterPayload?.kind === 'match' ? matchPayoffLaneMap(boardFloaterPayload.payoffLaneMap) : []),
+        [boardFloaterPayload]
+    );
+    const boardFloaterMatchChainRewardForecastCues = useMemo(
+        () =>
+            boardFloaterPayload?.kind === 'match'
+                ? matchChainRewardForecastCues(boardFloaterPayload.chainRewardForecastCues)
+                : [],
+        [boardFloaterPayload]
+    );
+    const boardFloaterMatchPayoffLadder = useMemo(
+        () =>
+            boardFloaterPayload?.kind === 'match' && boardFloaterPayload.payoffLadder
+                ? {
+                      ...boardFloaterPayload.payoffLadder,
+                      lanes: matchPayoffLadderLanes(boardFloaterPayload.payoffLadder.lanes)
+                  }
+                : null,
+        [boardFloaterPayload]
+    );
+    const boardFloaterMatchTraitInteractionTexts = useMemo(
+        () =>
+            boardFloaterPayload?.kind === 'match'
+                ? matchTraitInteractionTexts(boardFloaterPayload.traitInteractionTexts)
+                : [],
+        [boardFloaterPayload]
+    );
+    const boardFloaterMismatchTraitInteractionTexts = useMemo(
+        () =>
+            boardFloaterPayload?.kind === 'miss'
+                ? matchTraitInteractionTexts(boardFloaterPayload.traitInteractionTexts)
+                : [],
+        [boardFloaterPayload]
+    );
     const boardFloaterDetailLines = useMemo(() => {
         if (!boardFloaterPayload) {
             return [];
@@ -2498,17 +2635,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             return [
                 boardFloaterPayload.pickupRewardText,
                 boardFloaterPayload.chainRewardText,
-                ...(boardFloaterPayload.traitInteractionTexts ?? [])
+                ...boardFloaterMatchTraitInteractionTexts
             ].filter((line): line is string => Boolean(line));
         }
-        return boardFloaterPayload.traitInteractionTexts ?? [];
-    }, [boardFloaterPayload]);
+        return boardFloaterMismatchTraitInteractionTexts;
+    }, [boardFloaterMatchTraitInteractionTexts, boardFloaterMismatchTraitInteractionTexts, boardFloaterPayload]);
     const boardFloaterTraitLaneMap = useMemo(
         () =>
             boardFloaterPayload?.kind === 'match'
-                ? buildTraitInteractionLaneMap(boardFloaterPayload.traitInteractionTexts)
+                ? buildTraitInteractionLaneMap(boardFloaterMatchTraitInteractionTexts)
                 : [],
-        [boardFloaterPayload]
+        [boardFloaterMatchTraitInteractionTexts, boardFloaterPayload]
     );
     const boardFloaterTraitLaneMapAttr = traitInteractionLaneMapAttr(boardFloaterTraitLaneMap);
     const boardFloaterTraitLaneActionMapAttr = traitInteractionLaneActionMapAttr(boardFloaterTraitLaneMap);
@@ -2548,10 +2685,10 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 boardFloaterDetailLines,
                 boardFloaterPayload.feedbackHeadline,
                 boardFloaterPayload.chainDepth,
-                boardFloaterPayload.chainRewardForecastCues?.map(
+                boardFloaterMatchChainRewardForecastCues.map(
                     (cue) =>
                         `${getChainRewardLaneAction(cue.urgency)}: ${getChainRewardUrgencyCopy(cue)}: ${cue.distanceLabel} to ${cue.label}`
-                ) ?? [],
+                ),
                 boardFloaterPayload.rewardBurst
                     ? `${boardFloaterPayload.rewardBurst.label}: ${boardFloaterPayload.rewardBurst.action}: ${boardFloaterPayload.rewardBurst.value}`
                     : undefined,
@@ -2561,14 +2698,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 boardFloaterPayload.payoffSummary
                     ? `${boardFloaterPayload.payoffSummary.label}: ${boardFloaterPayload.payoffSummary.value}`
                     : undefined,
-                boardFloaterPayload.payoffLadder
-                    ? `${boardFloaterPayload.impactCue.label}. First: ${boardFloaterPayload.payoffLadder.first}. Then: ${boardFloaterPayload.payoffLadder.then}. Keep: ${boardFloaterPayload.payoffLadder.keep}${
-                          boardFloaterPayload.payoffLadder.lanes?.length
-                              ? `. Lanes: ${boardFloaterPayload.payoffLadder.lanes.join(' to ')}`
+                boardFloaterMatchPayoffLadder
+                    ? `${boardFloaterPayload.impactCue.label}. First: ${boardFloaterMatchPayoffLadder.first}. Then: ${boardFloaterMatchPayoffLadder.then}. Keep: ${boardFloaterMatchPayoffLadder.keep}${
+                          boardFloaterMatchPayoffLadder.lanes.length > 0
+                              ? `. Lanes: ${boardFloaterMatchPayoffLadder.lanes.join(' to ')}`
                               : ''
                       }`
                     : boardFloaterPayload.impactCue.label,
-                matchPayoffLaneMapLabel(boardFloaterPayload.payoffLaneMap),
+                matchPayoffLaneMapLabel(boardFloaterMatchPayoffLaneMap),
                 boardFloaterTraitLaneMap.length > 0
                     ? formatTraitInteractionLaneMapLabel('Match trait interaction lanes', boardFloaterTraitLaneMap)
                     : undefined,
@@ -2597,6 +2734,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         );
     }, [
         boardFloaterDetailLines,
+        boardFloaterMatchChainRewardForecastCues,
+        boardFloaterMatchPayoffLadder,
+        boardFloaterMatchPayoffLaneMap,
         boardFloaterMismatchRecovery,
         boardFloaterMismatchRecoveryCrescendo,
         boardFloaterPayload,
@@ -2684,19 +2824,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   tone: boardFloaterPayload.payoffSummary.tier,
                   laneCount: actualMatchPayoffLaneCount(
                       boardFloaterPayload.payoffSummary,
-                      boardFloaterPayload.payoffChips
+                      boardFloaterMatchPayoffChips
                   ),
-                  firstCue: boardFloaterPayload.payoffChips?.[0]?.arcadeCue ?? boardFloaterPayload.impactCue.label,
+                  firstCue: boardFloaterMatchPayoffChips[0]?.arcadeCue ?? boardFloaterPayload.impactCue.label,
                   sequenceFirstCue:
-                      boardFloaterPayload.payoffChips?.find((chip) => chip.id !== 'score')?.arcadeCue ??
+                      boardFloaterMatchPayoffChips.find((chip) => chip.id !== 'score')?.arcadeCue ??
                       boardFloaterPayload.impactCue.label,
                   nextCue:
-                      boardFloaterPayload.payoffChips?.find((chip) => chip.id === 'next')?.arcadeCue ??
+                      boardFloaterMatchPayoffChips.find((chip) => chip.id === 'next')?.arcadeCue ??
                       boardFloaterPayload.rewardBurst?.value ??
                       null,
                   sequenceKeepCue:
-                      boardFloaterPayload.chainRewardForecastCues?.[0]?.chaseLabel ??
-                      boardFloaterPayload.payoffChips?.find((chip) => chip.id === 'next')?.value ??
+                      boardFloaterMatchChainRewardForecastCues[0]?.chaseLabel ??
+                      boardFloaterMatchPayoffChips.find((chip) => chip.id === 'next')?.value ??
                       'Chase next safe match'
               }
             : null;
@@ -2706,7 +2846,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardFloaterJackpotCue =
         boardFloaterPayload?.kind === 'match' ? getMatchFloaterJackpotCue(boardFloaterPayload) : null;
     const boardFloaterPrimaryPayoffLane =
-        boardFloaterPayload?.kind === 'match' ? boardFloaterPayload.payoffLaneMap?.[0] ?? null : null;
+        boardFloaterPayload?.kind === 'match' ? boardFloaterMatchPayoffLaneMap[0] ?? null : null;
     const boardFloaterChainMilestoneFill =
         boardFloaterPayload?.kind === 'match' && boardFloaterPayload.chainMilestone
             ? Math.round(
@@ -3054,7 +3194,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             if (ids.length === 0) {
                 return;
             }
-            const infoDuration = settingsReduceMotion ? 3500 : 5500;
+            const infoDuration = reduceMotion ? 3500 : 5500;
             const { showAchievement } = useNotificationStore.getState();
             for (const achievementId of ids) {
                 if (seenAchievementToastIdsRef.current.has(achievementId)) {
@@ -3091,7 +3231,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         run.lastLevelResult,
         run.relicOffer,
         run.status,
-        settingsReduceMotion,
+        reduceMotion,
         suppressStatusOverlays
     ]);
 
@@ -3116,7 +3256,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             const claimedKind = detectClaimedFindableKind(previousSnapshot.tiles, run.board.tiles);
             if (claimedKind != null) {
                 const { showInfo } = useNotificationStore.getState();
-                const infoDuration = settingsReduceMotion ? 2200 : 3200;
+                const infoDuration = reduceMotion ? 2200 : 3200;
                 showInfo(
                     getPickupStackToastText(
                         {
@@ -3144,26 +3284,26 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         run.lives,
         run.stats.comboShards,
         run.stats.currentStreak,
-        settingsReduceMotion
+        reduceMotion
     ]);
 
     /** Persist `powersFtueSeen` once the player leaves tutorial floors (pair markers no longer needed). */
     useEffect(() => {
         const level = run.board?.level;
         if (level !== undefined && level > TUTORIAL_PAIR_MARKER_MAX_LEVEL && !saveData.powersFtueSeen) {
-            void dismissPowersFtue();
+            runPersistenceInBackground(dismissPowersFtue);
         }
     }, [dismissPowersFtue, run.board?.level, saveData.powersFtueSeen]);
 
     const distractionHudOn =
         run.activeMutators.includes('distraction_channel') &&
         settingsDistractionChannelEnabled &&
-        !settingsReduceMotion &&
+        !reduceMotion &&
         run.status === 'playing';
     const distractionTick = useDistractionChannelTick(distractionHudOn);
     const { tiltRef: gameFieldTiltRef } = usePlatformTiltField({
         enabled: true,
-        reduceMotion: settingsReduceMotion,
+        reduceMotion,
         surfaceRef: shellRef,
         strength: 1
     });
@@ -3208,15 +3348,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const cameraViewportMode = deriveCameraViewportMode(settingsCameraViewportModePreference, viewportWantsMobileCamera);
     const clearLifeBonusLabel = run.lastLevelResult ? getClearLifeBonusLabel(run.lastLevelResult) : null;
     const objectiveBonusLine =
-        run.lastLevelResult && (run.lastLevelResult.objectiveBonusScore ?? 0) > 0
-            ? `Objective bonuses: +${run.lastLevelResult.objectiveBonusScore!.toLocaleString()}`
+        run.lastLevelResult && runNonNegativeInteger(run.lastLevelResult.objectiveBonusScore) > 0
+            ? `Objective bonuses: +${runNonNegativeInteger(run.lastLevelResult.objectiveBonusScore).toLocaleString()}`
             : null;
     const bonusTagsLine = run.lastLevelResult ? formatBonusTagsLine(run.lastLevelResult.bonusTags) : null;
     const traitRouteObjectiveLine =
         run.lastLevelResult?.traitRouteObjectiveRequired != null
             ? run.lastLevelResult.traitRouteObjectiveCompleted
                 ? `Trait routes: Complete (${run.lastLevelResult.traitRouteObjectiveReward ?? 'trait route cashout'})`
-                : `Trait routes: ${run.lastLevelResult.traitRouteObjectiveProgress ?? 0}/${run.lastLevelResult.traitRouteObjectiveRequired}`
+                : `Trait routes: ${runNonNegativeInteger(run.lastLevelResult.traitRouteObjectiveProgress)}/${runNonNegativeInteger(run.lastLevelResult.traitRouteObjectiveRequired)}`
             : null;
     const endlessChapterActive =
         run.gameMode === 'endless' && usesEndlessFloorSchedule(run.gameMode, run.runRulesVersion);
@@ -3233,39 +3373,39 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const floorClearCausalityRows = run.lastLevelResult
         ? getFloorClearCausalityRows(run.lastLevelResult, run.powersUsedThisRun, currentFloorIdentity)
         : [];
-    const favorGained = run.lastLevelResult?.relicFavorGained ?? 0;
+    const favorGained = runNonNegativeInteger(run.lastLevelResult?.relicFavorGained);
     const favorBankedPickCount = countFavorBonusPicksBanked(run.relicFavorProgress, favorGained);
     const floorClearMomentumRows = run.lastLevelResult
         ? [
               {
                   id: 'score',
                   label: 'Score pop',
-                  value: `+${run.lastLevelResult.scoreGained.toLocaleString()}`
+                  value: `+${runNonNegativeInteger(run.lastLevelResult.scoreGained).toLocaleString()}`
               },
               {
                   id: 'rating',
                   label: 'Rating',
                   value: run.lastLevelResult.rating
               },
-              run.stats.bestStreak > 0
+              runNonNegativeInteger(run.stats.bestStreak) > 0
                   ? {
                         id: 'streak',
                         label: 'Best chain',
-                        value: `x${run.stats.bestStreak}`
+                        value: `x${runNonNegativeInteger(run.stats.bestStreak)}`
                     }
                   : null,
-              run.findablesTotalThisFloor > 0
+              runNonNegativeInteger(run.findablesTotalThisFloor) > 0
                   ? {
                         id: 'pickups',
                         label: 'Pickups',
-                        value: `${run.findablesClaimedThisFloor}/${run.findablesTotalThisFloor}`
+                        value: `${runNonNegativeInteger(run.findablesClaimedThisFloor)}/${runNonNegativeInteger(run.findablesTotalThisFloor)}`
                     }
                   : null,
-              run.stats.comboShards > 0
+              runNonNegativeInteger(run.stats.comboShards) > 0
                   ? {
                         id: 'shards',
                         label: 'Shards',
-                        value: `${run.stats.comboShards}`
+                        value: `${runNonNegativeInteger(run.stats.comboShards)}`
                     }
                   : null,
               favorGained > 0
@@ -3297,7 +3437,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         id: 'featured-objective',
                         label: run.lastLevelResult.featuredObjectiveCompleted ? 'Objective paid' : 'Objective missed',
                         value: run.lastLevelResult.featuredObjectiveCompleted
-                            ? `+${(run.lastLevelResult.objectiveBonusScore ?? 0).toLocaleString()} score`
+                            ? `+${runNonNegativeInteger(run.lastLevelResult.objectiveBonusScore).toLocaleString()} score`
                             : 'Payout lost',
                         tone: run.lastLevelResult.featuredObjectiveCompleted ? 'reward' : 'risk'
                     }
@@ -3306,12 +3446,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                   ? {
                         id: 'objective-streak',
                         label: 'Objective streak',
-                        value: `x${run.lastLevelResult.featuredObjectiveStreak ?? 0}${
-                            (run.lastLevelResult.featuredObjectiveStreakBonus ?? 0) > 0
-                                ? ` +${run.lastLevelResult.featuredObjectiveStreakBonus!.toLocaleString()}`
+                        value: `x${runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreak)}${
+                            runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreakBonus) > 0
+                                ? ` +${runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreakBonus).toLocaleString()}`
                                 : ''
                         }`,
-                        tone: (run.lastLevelResult.featuredObjectiveStreak ?? 0) > 1 ? 'momentum' : 'neutral'
+                        tone: runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreak) > 1 ? 'momentum' : 'neutral'
                     }
                   : null,
               run.lastLevelResult.traitRouteObjectiveRequired != null
@@ -3320,7 +3460,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         label: run.lastLevelResult.traitRouteObjectiveCompleted ? 'Trait route paid' : 'Trait route',
                         value: run.lastLevelResult.traitRouteObjectiveCompleted
                             ? run.lastLevelResult.traitRouteObjectiveReward ?? 'Trait route cashout'
-                            : `${run.lastLevelResult.traitRouteObjectiveProgress ?? 0}/${run.lastLevelResult.traitRouteObjectiveRequired}`,
+                            : `${runNonNegativeInteger(run.lastLevelResult.traitRouteObjectiveProgress)}/${runNonNegativeInteger(run.lastLevelResult.traitRouteObjectiveRequired)}`,
                         tone: run.lastLevelResult.traitRouteObjectiveCompleted ? 'trait' : 'neutral'
                     }
                   : null,
@@ -3333,8 +3473,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 : 'Wager lost',
                         value:
                             run.lastLevelResult.endlessRiskWagerOutcome === 'won'
-                                ? `+${run.lastLevelResult.endlessRiskWagerFavorGained ?? 0} Favor`
-                                : `-${run.lastLevelResult.endlessRiskWagerStreakLost ?? 0} streak`,
+                                ? `+${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerFavorGained)} Favor`
+                                : `-${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerStreakLost)} streak`,
                         tone: run.lastLevelResult.endlessRiskWagerOutcome === 'won' ? 'reward' : 'risk'
                     }
                   : null
@@ -3358,15 +3498,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const offeredRiskWagerFavor = ENDLESS_RISK_WAGER_BONUS_FAVOR + (wagerSuretyActive ? 1 : 0);
     const endlessRiskWagerOutcomeLine =
         run.lastLevelResult?.endlessRiskWagerOutcome === 'won'
-            ? `Risk wager won: +${run.lastLevelResult.endlessRiskWagerFavorGained ?? 0} Favor`
+            ? `Risk wager won: +${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerFavorGained)} Favor`
             : run.lastLevelResult?.endlessRiskWagerOutcome === 'lost'
-              ? `Risk wager lost: -${run.lastLevelResult.endlessRiskWagerStreakLost ?? 0} streak`
+              ? `Risk wager lost: -${runNonNegativeInteger(run.lastLevelResult.endlessRiskWagerStreakLost)} streak`
               : null;
     const featuredObjectiveStreakLine =
         run.lastLevelResult?.featuredObjectiveId != null
-            ? `Objective streak: x${run.lastLevelResult.featuredObjectiveStreak ?? 0}${
-                  (run.lastLevelResult.featuredObjectiveStreakBonus ?? 0) > 0
-                      ? ` (+${run.lastLevelResult.featuredObjectiveStreakBonus!.toLocaleString()})`
+            ? `Objective streak: x${runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreak)}${
+                  runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreakBonus) > 0
+                      ? ` (+${runNonNegativeInteger(run.lastLevelResult.featuredObjectiveStreakBonus).toLocaleString()})`
                       : ''
               }`
             : null;
@@ -3411,7 +3551,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         'Risk wager decision signals',
         visibleRiskWagerSignalRows
     );
-    const routeChoiceRequired = Boolean(run.lastLevelResult?.routeChoices && !run.pendingRouteCardPlan);
+    const routeChoices = useMemo(() => routeChoicesForResult(run.lastLevelResult), [run.lastLevelResult]);
+    const routeChoiceRequired = routeChoices.length > 0 && !run.pendingRouteCardPlan;
     const floorClearActionSequenceCue = getFloorClearActionSequenceCue({
         carryForwardCue: floorClearCarryForwardCue,
         cashoutRows: floorClearCashoutRows,
@@ -3427,8 +3568,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const currentDungeonNode = run.dungeonRun?.nodes.find((node) => node.id === run.dungeonRun.currentNodeId) ?? null;
     const dungeonMapPresentation = getDungeonMapPresentation(run.dungeonRun);
     const dungeonRouteDecisionPresentation =
-        routeChoiceRequired && run.lastLevelResult?.routeChoices
-            ? getDungeonRouteDecisionPresentation(run.dungeonRun, run.lastLevelResult.routeChoices)
+        routeChoiceRequired
+            ? getDungeonRouteDecisionPresentation(run.dungeonRun, routeChoices)
             : null;
     const memoryRecallFeedback = useMemo(() => getMemoryRecallFeedback(run), [run]);
     const routeChoiceMemoryById = useMemo(
@@ -3436,7 +3577,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         [memoryRecallFeedback.choices]
     );
     const routeChoiceRecommendation = useMemo(() => {
-        if (!routeChoiceRequired || !run.lastLevelResult?.routeChoices || !dungeonRouteDecisionPresentation) {
+        if (!routeChoiceRequired || !dungeonRouteDecisionPresentation) {
             return null;
         }
 
@@ -3448,7 +3589,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
 
         return dungeonRouteDecisionPresentation.rows
             .map((row, index) => {
-                const choice = run.lastLevelResult?.routeChoices?.find((option) => option.id === row.id);
+                const choice = routeChoices.find((option) => option.id === row.id);
                 const availability = choice ? getRouteChoiceAvailability(run, choice) : { available: true as const };
                 if (!availability.available) {
                     return null;
@@ -3493,6 +3634,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         firstRouteChoiceRequired,
         routeChoiceMemoryById,
         routeChoiceRequired,
+        routeChoices,
         run
     ]);
     const memoryRecallPanelRows = useMemo(
@@ -3706,7 +3848,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         gambitThirdPickActive,
         gambitOpportunityFlippedIds:
             gambitThirdPickActive && run.board ? run.board.flippedTileIds : null,
-        reduceMotion: settingsReduceMotion,
+        reduceMotion,
         hazardTileTriggersThisFloor: run.hazardTileTriggersThisFloor,
         hazardShuffleSnaresThisFloor: run.hazardShuffleSnaresThisFloor,
         hazardCascadeCachesThisFloor: run.hazardCascadeCachesThisFloor,
@@ -3768,11 +3910,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             run.stats.tries === 0
     );
     useEffect(() => {
+        let active = true;
         if (showTutorialPairMarkers && showForgivenessHint && !compactTouchChrome) {
             queueMicrotask(() => {
-                setRulesHintsExpanded(true);
+                if (active) {
+                    setRulesHintsExpanded(true);
+                }
             });
         }
+        return () => {
+            active = false;
+        };
     }, [compactTouchChrome, showForgivenessHint, showTutorialPairMarkers]);
 
     const hiddenTileCount = run.board?.tiles.filter((tile) => tile.state === 'hidden').length ?? 0;
@@ -3887,7 +4035,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardPresentationClass =
         settingsBoardPresentation === 'spaghetti'
             ? styles.boardStageSpaghetti
-            : settingsBoardPresentation === 'breathing' && !settingsReduceMotion
+            : settingsBoardPresentation === 'breathing' && !reduceMotion
               ? styles.boardStageBreathing
               : '';
     const destroyDisabled = run.destroyPairCharges < 1 && !destroyPairArmed;
@@ -3920,7 +4068,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 fieldTiltRef={gameFieldTiltRef}
                 graphicsQuality={settingsGraphicsQuality}
                 height={height}
-                reduceMotion={settingsReduceMotion}
+                reduceMotion={reduceMotion}
                 width={width}
             />
             <div
@@ -3960,7 +4108,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             gauntletRemainingMs={gauntletRemainingMs}
                             politeHudAnnouncement={politeHudAnnouncement}
                             politeHudAnnouncementPriority={politeHudAnnouncementPriority}
-                            reduceMotion={settingsReduceMotion}
+                            reduceMotion={reduceMotion}
                             run={run}
                         />
 
@@ -4261,7 +4409,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     cameraViewportMode ? undefined : DESKTOP_FULL_BLEED_TILE_BOARD_FRAME_STYLE
                                 }
                                 graphicsQuality={settingsGraphicsQuality}
-                                reduceMotion={settingsReduceMotion}
+                                reduceMotion={reduceMotion}
                                 runStatus={run.status}
                                 showTutorialPairMarkers={showTutorialPairMarkers}
                                 silhouetteDuringPlay={silhouetteDuringPlay}
@@ -4300,7 +4448,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         boardFloaterPayload.kind === 'match'
                                             ? styles.matchScoreFloater
                                             : styles.mismatchScoreFloater
-                                    } ${boardFloaterReducedMotion ? styles.matchScoreFloaterReduced : ''}`}
+                                    } ${reduceMotion ? styles.matchScoreFloaterReduced : ''}`}
                                     data-testid={
                                         boardFloaterPayload.kind === 'match'
                                             ? 'match-score-floater'
@@ -4628,9 +4776,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             </span>
                                         </span>
                                     ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.payoffLaneMap?.length ? (
+                                    {boardFloaterPayload.kind === 'match' && boardFloaterMatchPayoffLaneMap.length > 0 ? (
                                         <span
-                                            aria-label={matchPayoffLaneMapLabel(boardFloaterPayload.payoffLaneMap)}
+                                            aria-label={matchPayoffLaneMapLabel(boardFloaterMatchPayoffLaneMap)}
                                             className={styles.boardFloaterPayoffLaneMap}
                                             data-match-payoff-lane-primary={boardFloaterPrimaryPayoffLane?.id ?? 'none'}
                                             data-match-payoff-lane-primary-action={
@@ -4649,9 +4797,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     : 'none'
                                             }
                                             data-match-payoff-lane-actions={matchPayoffLaneActionMapAttr(
-                                                boardFloaterPayload.payoffLaneMap
+                                                boardFloaterMatchPayoffLaneMap
                                             )}
-                                            data-match-payoff-lane-map={matchPayoffLaneMapAttr(boardFloaterPayload.payoffLaneMap)}
+                                            data-match-payoff-lane-map={matchPayoffLaneMapAttr(boardFloaterMatchPayoffLaneMap)}
                                             data-match-payoff-lane-primary-screen-cue={
                                                 boardFloaterPrimaryPayoffLane
                                                     ? getBoardFloaterPayoffLaneScreenCue(boardFloaterPrimaryPayoffLane)
@@ -4661,17 +4809,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         >
                                             <span
                                                 className={styles.boardFloaterPayoffLaneMapSummary}
-                                                data-match-payoff-lane-count={boardFloaterPayload.payoffLaneMap.length}
+                                                data-match-payoff-lane-count={boardFloaterMatchPayoffLaneMap.length}
                                                 data-testid="match-score-floater-payoff-lane-map-summary"
                                             >
                                                 <small>Lanes</small>
                                                 <b>
-                                                    {boardFloaterPayload.payoffLaneMap.length}{' '}
-                                                    {boardFloaterPayload.payoffLaneMap.length === 1 ? 'lane' : 'lanes'}
+                                                    {boardFloaterMatchPayoffLaneMap.length}{' '}
+                                                    {boardFloaterMatchPayoffLaneMap.length === 1 ? 'lane' : 'lanes'}
                                                 </b>
                                                 <span aria-hidden="true" className={styles.boardFloaterPayoffLaneMapSummaryBeatPips}>
                                                     {Array.from(
-                                                        { length: Math.max(2, Math.min(5, boardFloaterPayload.payoffLaneMap.length + 1)) },
+                                                        { length: Math.max(2, Math.min(5, boardFloaterMatchPayoffLaneMap.length + 1)) },
                                                         (_, index) => (
                                                             <i
                                                                 data-match-payoff-lane-map-summary-beat={index + 1}
@@ -4725,7 +4873,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     </span>
                                                 </span>
                                             ) : null}
-                                            {boardFloaterPayload.payoffLaneMap.map((lane) => (
+                                            {boardFloaterMatchPayoffLaneMap.map((lane) => (
                                                 <span
                                                     data-match-payoff-lane={lane.id}
                                                     data-match-payoff-lane-action={matchPayoffLaneAction(lane)}
@@ -4753,43 +4901,45 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                             ))}
                                         </span>
                                     ) : null}
-                                    {boardFloaterPayload.kind === 'match' && boardFloaterPayload.payoffLadder ? (
+                                    {boardFloaterPayload.kind === 'match' && boardFloaterMatchPayoffLadder ? (
                                         <span
-                                            aria-label={`Match payoff ladder. First: ${boardFloaterPayload.payoffLadder.first}. Then: ${boardFloaterPayload.payoffLadder.then}. Keep: ${boardFloaterPayload.payoffLadder.keep}.${
-                                                boardFloaterPayload.payoffLadder.lanes?.length
-                                                    ? ` Lanes: ${boardFloaterPayload.payoffLadder.lanes.join(' to ')}.`
+                                            aria-label={`Match payoff ladder. First: ${boardFloaterMatchPayoffLadder.first}. Then: ${boardFloaterMatchPayoffLadder.then}. Keep: ${boardFloaterMatchPayoffLadder.keep}.${
+                                                boardFloaterMatchPayoffLadder.lanes.length > 0
+                                                    ? ` Lanes: ${boardFloaterMatchPayoffLadder.lanes.join(' to ')}.`
                                                     : ''
                                             }`}
                                             className={styles.boardFloaterPayoffLadder}
                                             data-match-payoff-ladder-audio={getBoardFloaterPayoffLadderAudioCue(
-                                                boardFloaterPayload.payoffLadder
+                                                boardFloaterMatchPayoffLadder
                                             )}
                                             data-match-payoff-ladder-beats={getBoardFloaterPayoffLadderBeatCount(
-                                                boardFloaterPayload.payoffLadder
+                                                boardFloaterMatchPayoffLadder
                                             )}
                                             data-match-payoff-ladder-lanes={
-                                                boardFloaterPayload.payoffLadder.lanes?.join('|') ?? undefined
+                                                boardFloaterMatchPayoffLadder.lanes.length > 0
+                                                    ? boardFloaterMatchPayoffLadder.lanes.join('|')
+                                                    : undefined
                                             }
                                             data-match-payoff-ladder-screen-cue={getBoardFloaterPayoffLadderScreenCue(
-                                                boardFloaterPayload.payoffLadder
+                                                boardFloaterMatchPayoffLadder
                                             )}
-                                            data-match-payoff-ladder-tone={boardFloaterPayload.payoffLadder.tone}
+                                            data-match-payoff-ladder-tone={boardFloaterMatchPayoffLadder.tone}
                                             data-testid="match-score-floater-payoff-ladder"
                                         >
                                             <span
                                                 className={styles.boardFloaterPayoffLadderSummary}
-                                                data-match-payoff-ladder-count={boardFloaterPayload.payoffLadder.lanes?.length ?? 0}
+                                                data-match-payoff-ladder-count={boardFloaterMatchPayoffLadder.lanes.length}
                                                 data-testid="match-score-floater-payoff-ladder-summary"
                                             >
                                                 <small>Ladder</small>
                                                 <b>
-                                                    {(boardFloaterPayload.payoffLadder.lanes?.length ?? 0) > 0
-                                                        ? `${boardFloaterPayload.payoffLadder.lanes!.length} lanes`
+                                                    {boardFloaterMatchPayoffLadder.lanes.length > 0
+                                                        ? `${boardFloaterMatchPayoffLadder.lanes.length} lanes`
                                                         : 'No lanes'}
                                                 </b>
                                                 <span aria-hidden="true" className={styles.boardFloaterPayoffLadderSummaryBeatPips}>
                                                     {Array.from(
-                                                        { length: Math.max(2, Math.min(5, (boardFloaterPayload.payoffLadder.lanes?.length ?? 0) + 1)) },
+                                                        { length: Math.max(2, Math.min(5, boardFloaterMatchPayoffLadder.lanes.length + 1)) },
                                                         (_, index) => (
                                                             <i
                                                                 data-match-payoff-ladder-summary-beat={index + 1}
@@ -4803,14 +4953,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 </span>
                                             </span>
                                             <small>First</small>
-                                            <b data-match-payoff-ladder-step="first">{boardFloaterPayload.payoffLadder.first}</b>
+                                            <b data-match-payoff-ladder-step="first">{boardFloaterMatchPayoffLadder.first}</b>
                                             <small>Then</small>
-                                            <b data-match-payoff-ladder-step="then">{boardFloaterPayload.payoffLadder.then}</b>
+                                            <b data-match-payoff-ladder-step="then">{boardFloaterMatchPayoffLadder.then}</b>
                                             <small>Keep</small>
-                                            <b data-match-payoff-ladder-step="keep">{boardFloaterPayload.payoffLadder.keep}</b>
-                                            {boardFloaterPayload.payoffLadder.lanes?.length ? (
+                                            <b data-match-payoff-ladder-step="keep">{boardFloaterMatchPayoffLadder.keep}</b>
+                                            {boardFloaterMatchPayoffLadder.lanes.length > 0 ? (
                                                 <span className={styles.boardFloaterPayoffLaneStrip}>
-                                                    {boardFloaterPayload.payoffLadder.lanes.map((lane, index) => (
+                                                    {boardFloaterMatchPayoffLadder.lanes.map((lane, index) => (
                                                         <i data-match-payoff-lane-index={index + 1} key={`${lane}-${index}`}>
                                                             <span aria-hidden="true" className={styles.boardFloaterPayoffLaneIndexPips}>
                                                                 {Array.from(
@@ -4835,7 +4985,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                 {Array.from(
                                                     {
                                                         length: getBoardFloaterPayoffLadderBeatCount(
-                                                            boardFloaterPayload.payoffLadder
+                                                            boardFloaterMatchPayoffLadder
                                                         )
                                                     },
                                                     (_, index) => (
@@ -4852,7 +5002,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     {boardFloaterPayload.kind === 'match' ? (
                                         <span className={styles.boardFloaterScore}>
                                             {boardFloaterPayload.routeRewardText ??
-                                                `+${boardFloaterPayload.amount.toLocaleString()}`}
+                                                `+${runNonNegativeInteger(boardFloaterPayload.amount).toLocaleString()}`}
                                         </span>
                                     ) : null}
                                     {boardFloaterPayload.kind === 'match' && boardFloaterPayload.chainDepth >= 3 ? (
@@ -4895,9 +5045,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         </span>
                                     ) : null}
                                     {boardFloaterPayload.kind === 'match' &&
-                                    (boardFloaterPayload.chainRewardForecastCues?.length ?? 0) > 0 ? (
+                                    boardFloaterMatchChainRewardForecastCues.length > 0 ? (
                                         <span
-                                            aria-label={`Match score floater reward forecast. ${boardFloaterPayload.chainRewardForecastCues!
+                                            aria-label={`Match score floater reward forecast. ${boardFloaterMatchChainRewardForecastCues
                                                 .slice(0, 3)
                                                 .map((cue) => {
                                                     const stackLabel = getChainRewardStackLabel(cue);
@@ -4913,17 +5063,17 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         >
                                             <span
                                                 className={styles.boardFloaterRewardForecastSummary}
-                                                data-chain-reward-forecast-count={boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length}
+                                                data-chain-reward-forecast-count={boardFloaterMatchChainRewardForecastCues.slice(0, 3).length}
                                                 data-testid="match-score-floater-reward-forecast-summary"
                                             >
                                                 <small>Forecast</small>
                                                 <b>
-                                                    {boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length}{' '}
-                                                    {boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length === 1 ? 'reward' : 'rewards'}
+                                                    {boardFloaterMatchChainRewardForecastCues.slice(0, 3).length}{' '}
+                                                    {boardFloaterMatchChainRewardForecastCues.slice(0, 3).length === 1 ? 'reward' : 'rewards'}
                                                 </b>
                                                 <span aria-hidden="true" className={styles.boardFloaterRewardForecastSummaryBeatPips}>
                                                     {Array.from(
-                                                        { length: Math.max(2, Math.min(5, boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).length + 1)) },
+                                                        { length: Math.max(2, Math.min(5, boardFloaterMatchChainRewardForecastCues.slice(0, 3).length + 1)) },
                                                         (_, index) => (
                                                             <i
                                                                 data-chain-reward-forecast-summary-beat={index + 1}
@@ -4936,7 +5086,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                                     )}
                                                 </span>
                                             </span>
-                                            {boardFloaterPayload.chainRewardForecastCues!.slice(0, 3).map((cue) => {
+                                            {boardFloaterMatchChainRewardForecastCues.slice(0, 3).map((cue) => {
                                                 const stackLabel = getChainRewardStackLabel(cue);
                                                 const progress = getChainRewardProgress(boardFloaterPayload.chainDepth, cue);
                                                 const beatCount = getBoardFloaterRewardForecastBeatCount(cue);
@@ -5009,15 +5159,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         </span>
                                     ) : null}
                                     {boardFloaterPayload.kind === 'match' &&
-                                    (boardFloaterPayload.payoffChips?.length ?? 0) > 0 ? (
+                                    boardFloaterMatchPayoffChips.length > 0 ? (
                                         <span
-                                            aria-label={`Match score payoff chips. ${boardFloaterPayload.payoffChips!
+                                            aria-label={`Match score payoff chips. ${boardFloaterMatchPayoffChips
                                                 .map((chip) => `${chip.arcadeCue ? `${chip.arcadeCue}: ` : ''}${chip.label}: ${chip.value}`)
                                                 .join('. ')}.`}
                                             className={styles.boardFloaterPayoffChips}
                                             data-testid="match-score-floater-payoff-chips"
                                         >
-                                            {boardFloaterPayload.payoffChips!.map((chip) => (
+                                            {boardFloaterMatchPayoffChips.map((chip) => (
                                                 <span
                                                     data-match-payoff-arcade-cue={chip.arcadeCue ?? 'none'}
                                                     data-match-payoff-arcade-screen-cue={getMatchPayoffChipScreenCue(chip)}
@@ -5755,7 +5905,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         headerPlateTone="success"
                         ornamentalHeaderPlate
                         quietHeaderPlate
-                        subtitle={`Level ${run.lastLevelResult.level} cleared. Score +${run.lastLevelResult.scoreGained}. Try Daily or Scholar contract from the menu for different goals.`}
+                        subtitle={`Level ${runNonNegativeInteger(run.lastLevelResult.level)} cleared. Score +${runNonNegativeInteger(run.lastLevelResult.scoreGained)}. Try Daily or Scholar contract from the menu for different goals.`}
                         title="Floor cleared"
                     >
                         <div
@@ -6080,7 +6230,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 Vendor alcove available: {run.shopOffers.length} services, {run.shopGold} shop gold.
                             </p>
                         ) : null}
-                        {routeChoiceRequired && run.lastLevelResult.routeChoices ? (
+                        {routeChoiceRequired ? (
                             <section
                                 aria-labelledby="dungeon-route-choice-title"
                                 className={styles.dungeonMapChoicePanel}
@@ -6098,7 +6248,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                     {routeChoiceRequiredCopy}
                                 </p>
                                 <span className={styles.dungeonMapChoiceSummary}>
-                                    {dungeonRouteDecisionPresentation?.summary ?? run.lastLevelResult.routeChoices
+                                    {dungeonRouteDecisionPresentation?.summary ?? routeChoices
                                         .map((option) => `${option.label}: ${option.detail}`)
                                         .join(' · ')}
                                 </span>
@@ -6206,7 +6356,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 </div>
                                 <div className={styles.dungeonMapChoiceActions}>
                                     {dungeonRouteDecisionPresentation?.rows.map((row) => {
-                                        const choice = run.lastLevelResult?.routeChoices?.find((option) => option.id === row.id);
+                                        const choice = routeChoices.find((option) => option.id === row.id);
                                         const availability = choice
                                             ? getRouteChoiceAvailability(run, choice)
                                             : { available: true as const };
@@ -6619,19 +6769,19 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             <StatTile
                                 density="minimal"
                                 label="Mistakes"
-                                value={run.lastLevelResult.mistakes}
+                                value={runNonNegativeInteger(run.lastLevelResult.mistakes)}
                                 valueFirst
                             />
                             <StatTile
                                 density="minimal"
                                 label="Lives"
-                                value={run.lastLevelResult.livesRemaining}
+                                value={runNonNegativeInteger(run.lastLevelResult.livesRemaining)}
                                 valueFirst
                             />
                             <StatTile
                                 density="minimal"
                                 label="Total"
-                                value={run.stats.totalScore.toLocaleString()}
+                                value={runNonNegativeInteger(run.stats.totalScore).toLocaleString()}
                                 valueFirst
                             />
                         </div>

@@ -134,6 +134,7 @@ import {
 import {
     canRerollShopOffers,
     createRunShopOffers,
+    getShopGoldRewardForFloor,
     getRunShopReadModel,
     getRunShopStockPlan,
     getShopWalletPacing,
@@ -195,6 +196,36 @@ describe('tilesArePairMatch', () => {
     });
 });
 
+describe('flipTile malformed board guards', () => {
+    it('refuses to flip when the board flip id list is malformed', () => {
+        const [a1, a2] = createPair('a', 'A');
+        const run = createRun([a1, a2], {
+            board: {
+                ...createBoard([a1, a2]),
+                flippedTileIds: Number.NaN as unknown as string[]
+            }
+        });
+
+        expect(flipTile(run, a1.id)).toBe(run);
+    });
+
+    it('refuses to resolve when the board flip id list is malformed', () => {
+        const [a1, a2] = createPair('a', 'A');
+        const run = createRun([a1, a2], {
+            status: 'resolving',
+            board: {
+                ...createBoard([
+                    { ...a1, state: 'flipped' as const },
+                    { ...a2, state: 'flipped' as const }
+                ]),
+                flippedTileIds: Number.NaN as unknown as string[]
+            }
+        });
+
+        expect(resolveBoardTurn(run)).toBe(run);
+    });
+});
+
 describe('getMatchFloaterAnchorTileIds', () => {
     it('returns null when run has no board', () => {
         expect(getMatchFloaterAnchorTileIds(null)).toBeNull();
@@ -227,6 +258,13 @@ describe('getMatchFloaterAnchorTileIds', () => {
         run.board!.flippedTileIds = ['a', 'b', 'c'];
         expect(getMatchFloaterAnchorTileIds(run)).toBeNull();
     });
+
+    it('returns null when floater flip ids are malformed', () => {
+        const run = createRun([createTile('a', 'p1', '1'), createTile('b', 'p1', '2')]);
+        run.board!.flippedTileIds = Number.NaN as unknown as string[];
+
+        expect(getMatchFloaterAnchorTileIds(run)).toBeNull();
+    });
 });
 
 describe('getMismatchFloaterAnchorTileIds', () => {
@@ -245,6 +283,13 @@ describe('getMismatchFloaterAnchorTileIds', () => {
             tileIdB: 'b',
             tileIdC: 'c'
         });
+    });
+
+    it('returns null when mismatch floater flip ids are malformed', () => {
+        const run = createRun([createTile('a', 'p1', '1'), createTile('b', 'p2', '2')]);
+        run.board!.flippedTileIds = Number.NaN as unknown as string[];
+
+        expect(getMismatchFloaterAnchorTileIds(run)).toBeNull();
     });
 });
 
@@ -353,6 +398,47 @@ describe('Recall Focus memory loop', () => {
         expect(resolved.stats.currentLevelScore).toBe(
             calculateMatchScore(1, 1, 1) + RECALL_FOCUS_MAX * RECALL_FOCUS_MATCH_SCORE
         );
+    });
+
+    it('normalizes malformed persisted counters when assembling a resolved match', () => {
+        const base = createRun([
+            createTile('a1', 'A', 'A'),
+            createTile('a2', 'A', 'A'),
+            createTile('b1', 'B', 'B'),
+            createTile('b2', 'B', 'B')
+        ]);
+        const run = {
+            ...base,
+            peekCharges: Number.NaN,
+            shuffleCharges: 1.9,
+            regionShuffleCharges: Number.POSITIVE_INFINITY,
+            flashPairCharges: -2,
+            shopGold: Number.NaN,
+            wildMatchesRemaining: 1.9,
+            stats: {
+                ...base.stats,
+                matchesFound: Number.NaN,
+                bestStreak: Number.POSITIVE_INFINITY,
+                highestLevel: Number.NaN,
+                guardTokens: Number.NaN,
+                comboShards: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const resolved = resolveBoardTurn(flipTile(flipTile(run, 'a1'), 'a2'));
+
+        expect(resolved.peekCharges).toBe(0);
+        expect(resolved.shuffleCharges).toBe(1);
+        expect(resolved.regionShuffleCharges).toBe(0);
+        expect(resolved.flashPairCharges).toBe(0);
+        expect(resolved.shopGold).toBe(0);
+        expect(resolved.wildMatchesRemaining).toBe(1);
+        expect(resolved.stats.matchesFound).toBe(1);
+        expect(resolved.stats.currentStreak).toBe(1);
+        expect(resolved.stats.bestStreak).toBe(1);
+        expect(resolved.stats.highestLevel).toBe(1);
+        expect(resolved.stats.guardTokens).toBe(0);
+        expect(resolved.stats.comboShards).toBe(0);
     });
 
     it('degrades focus and records forgotten tiles on mismatch and shuffle', () => {
@@ -758,6 +844,59 @@ describe('GLD-P0-003 lifecycle advance guards', () => {
         expect(next).not.toBe(cleared);
         expect(next.board?.level).toBe((cleared.board?.level ?? 0) + 1);
         expect(next.status).toBe('memorize');
+    });
+
+    it('normalizes malformed active mutators before advancing to the next board', () => {
+        const cleared = {
+            ...playPerfectFloors(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 30_004 }), 1),
+            activeMutators: Number.NaN as unknown as RunState['activeMutators'],
+            wildMenuRun: true
+        };
+
+        const next = advanceToNextLevel(cleared);
+
+        expect(next.status).toBe('memorize');
+        expect(next.activeMutators).toEqual([]);
+    });
+
+    it('normalizes malformed matched-pair history before appending encore keys', () => {
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, fixedBoard: null }));
+        const [first, second] = [...new Set(run.board!.tiles.map((tile) => tile.pairKey))]
+            .filter((pairKey) => !SOLVER_IGNORED_PAIR_KEYS.has(pairKey))
+            .map((pairKey) => run.board!.tiles.filter((tile) => tile.pairKey === pairKey && tile.state === 'hidden'))
+            .find((tiles) => tiles.length === 2)!;
+        const resolved = resolveBoardTurn(
+            flipTile(
+                flipTile({
+                    ...run,
+                    matchedPairKeysThisRun: Number.NaN as unknown as string[]
+                }, first.id),
+                second.id
+            )
+        );
+
+        expect(resolved.matchedPairKeysThisRun).toEqual([first.pairKey]);
+    });
+
+    it('normalizes malformed stats before resolving matched pairs', () => {
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, fixedBoard: null }));
+        const [first, second] = [...new Set(run.board!.tiles.map((tile) => tile.pairKey))]
+            .filter((pairKey) => !SOLVER_IGNORED_PAIR_KEYS.has(pairKey))
+            .map((pairKey) => run.board!.tiles.filter((tile) => tile.pairKey === pairKey && tile.state === 'hidden'))
+            .find((tiles) => tiles.length === 2)!;
+
+        const resolved = resolveBoardTurn(
+            flipTile(
+                flipTile({
+                    ...run,
+                    stats: Number.NaN as unknown as RunState['stats']
+                }, first.id),
+                second.id
+            )
+        );
+
+        expect(resolved.stats.matchesFound).toBe(1);
+        expect(resolved.stats.highestLevel).toBeGreaterThanOrEqual(1);
     });
 
     it('does not build the next board when a levelComplete run is already dead', () => {
@@ -6963,6 +7102,39 @@ describe('game rules', () => {
         expect(resolved.lastLevelResult?.clearLifeGained).toBe(1);
     });
 
+    it('normalizes malformed persisted counters when finalizing a cleared floor', () => {
+        const tiles: Tile[] = [createTile('a1', 'A', 'A'), createTile('a2', 'A', 'A')];
+        const started = {
+            ...createRun(tiles),
+            lives: 3.8,
+            shopGold: Number.NaN,
+            stats: {
+                ...createRun(tiles).stats,
+                tries: Number.NaN,
+                totalScore: Number.NaN,
+                currentLevelScore: -12,
+                bestScore: Number.POSITIVE_INFINITY,
+                levelsCleared: Number.NaN,
+                highestLevel: Number.NaN,
+                perfectClears: Number.NaN
+            }
+        };
+
+        const resolved = resolveBoardTurn(flipTile(flipTile(started, 'a1'), 'a2'));
+
+        expect(resolved.status).toBe('levelComplete');
+        expect(resolved.lives).toBe(4);
+        expect(resolved.shopGold).toBe(getShopGoldRewardForFloor(1));
+        expect(resolved.stats.totalScore).toBe(155);
+        expect(resolved.stats.currentLevelScore).toBe(155);
+        expect(resolved.stats.bestScore).toBe(155);
+        expect(resolved.stats.levelsCleared).toBe(1);
+        expect(resolved.stats.highestLevel).toBe(1);
+        expect(resolved.stats.perfectClears).toBe(1);
+        expect(resolved.lastLevelResult?.mistakes).toBe(0);
+        expect(resolved.lastLevelResult?.livesRemaining).toBe(4);
+    });
+
     it('scales streak score within a level before the clear bonus lands', () => {
         const tiles: Tile[] = [
             createTile('a1', 'A', 'A'),
@@ -7812,6 +7984,25 @@ describe('gambit third flip', () => {
         expect(resolved.status).toBe('playing');
     });
 
+    it('refuses gambit resolution when a flipped tile id is stale', () => {
+        const run = createRun(twoPairTiles, {
+            status: 'resolving',
+            board: {
+                ...createBoard([
+                    { ...twoPairTiles[0], state: 'flipped' as const },
+                    { ...twoPairTiles[2], state: 'flipped' as const },
+                    twoPairTiles[1],
+                    twoPairTiles[3]
+                ]),
+                flippedTileIds: ['a1', 'b1', 'missing']
+            },
+            gambitAvailableThisFloor: true,
+            gambitThirdFlipUsed: false
+        });
+
+        expect(resolveBoardTurn(run)).toBe(run);
+    });
+
     it('gambit miss forces game over when maxMismatches would be exceeded', () => {
         const threePairTiles: Tile[] = [
             createTile('a1', 'p1', 'A'),
@@ -8402,6 +8593,15 @@ describe('gauntlet deadline', () => {
         expect(isGauntletExpired(run)).toBe(false);
     });
 
+    it('ignores malformed gauntlet deadlines for expiry checks', () => {
+        const run: RunState = {
+            ...createNewRun(0, { gameMode: 'puzzle' }),
+            gameMode: 'gauntlet',
+            gauntletDeadlineMs: Number.NaN
+        };
+        expect(isGauntletExpired(run)).toBe(false);
+    });
+
     it('extends the deadline on each gauntlet floor clear', () => {
         const started = finishMemorizePhase(createGauntletRun(0, 60_000));
         const deadline = 1_900_000;
@@ -8409,6 +8609,14 @@ describe('gauntlet deadline', () => {
 
         expect(finished.status).toBe('levelComplete');
         expect(finished.gauntletDeadlineMs).toBe(deadline + GAUNTLET_FLOOR_CLEAR_TIME_BONUS_MS);
+    });
+
+    it('drops malformed gauntlet deadlines on floor clear instead of extending them', () => {
+        const started = finishMemorizePhase(createGauntletRun(0, 60_000));
+        const finished = clearRealPairs({ ...started, gauntletDeadlineMs: Number.POSITIVE_INFINITY });
+
+        expect(finished.status).toBe('levelComplete');
+        expect(finished.gauntletDeadlineMs).toBeNull();
     });
 
     it('does not expire while paused and extends the deadline by paused wall-clock time on resume', () => {

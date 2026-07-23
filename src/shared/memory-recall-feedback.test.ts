@@ -3,6 +3,8 @@ import {
     RECALL_CLUE_MATCH_SCORE,
     RECALL_FOCUS_MATCH_SCORE,
     RECALL_FOCUS_MAX,
+    type MutatorId,
+    type RelicId,
     type RouteChoice,
     type RunState
 } from './contracts';
@@ -127,6 +129,43 @@ describe('getMemoryRecallFeedback', () => {
             'The louder stair promises value, but every card remembers the noise.',
             'The unindexed door offers a clue first and an answer later.'
         ]);
+    });
+
+    it('normalizes malformed scout and recovery counters before building feedback copy', () => {
+        const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
+            lanternWardScoutsThisFloor: Number.POSITIVE_INFINITY,
+            omenSealScoutsThisFloor: 1.9,
+            pendingMemorizeBonusMs: Number.POSITIVE_INFINITY
+        });
+
+        const feedback = getMemoryRecallFeedback(run);
+
+        expect([...feedback.clues, ...feedback.penalties].map((line) => line.detail).join(' ')).not.toMatch(/NaN|Infinity/);
+        expect(feedback.clues.find((line) => line.id === 'scout-sources')).toMatchObject({
+            detail: '0 Lantern Ward and 1 Omen Seal clue reads this floor.'
+        });
+        expect(feedback.penalties.find((line) => line.id === 'memorize-recovery')).toBeUndefined();
+    });
+
+    it('ignores malformed route choice payloads before building recall pressure', () => {
+        const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
+            lastLevelResult: {
+                level: 1,
+                scoreGained: 100,
+                rating: 'A',
+                livesRemaining: 4,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'none',
+                clearLifeGained: 0,
+                routeChoices: { length: 3 } as never
+            }
+        });
+
+        const feedback = getMemoryRecallFeedback(run);
+
+        expect(feedback.choices).toEqual([]);
+        expect(feedback.burden.detail).not.toContain('route decisions');
     });
 
     it('calls out patrol and revealed enemy memory pressure', () => {
@@ -514,6 +553,27 @@ describe('getMemoryRecallFeedback', () => {
         ]);
     });
 
+    it('labels recall plan entries from unresolved tiles when the pair lead is cleared', () => {
+        const run = makeRun(
+            [
+                makeTile('a1', 'A', 'Cleared Rune', { state: 'matched' }),
+                makeTile('a2', 'A', 'Live Rune'),
+                makeTile('b1', 'B', 'Rune B'),
+                makeTile('b2', 'B', 'Rune B')
+            ],
+            {
+                forgottenTileIdsThisFloor: ['a2']
+            }
+        );
+
+        expect(getMemoryRecallFeedback(run).recallPlan[0]).toEqual(
+            expect.objectContaining({
+                id: 'recall-plan-forget-risk',
+                label: 'Forgetting risk: Live Rune'
+            })
+        );
+    });
+
     it('keeps singleton utility cards out of pair-memory counters', () => {
         const run = makeRun([
             makeTile('a1', 'A', 'Rune A'),
@@ -608,6 +668,23 @@ describe('getMemoryRecallFeedback', () => {
         );
         expect(feedback.focus).toBe(1);
         expect(feedback.rememberedClueTileCount).toBe(0);
+    });
+
+    it('ignores malformed memory arrays before building feedback copy', () => {
+        const run = makeRun([makeTile('a1', 'A', 'A'), makeTile('a2', 'A', 'A')], {
+            activeMutators: Number.NaN as unknown as MutatorId[],
+            relicIds: Number.NaN as unknown as RelicId[],
+            pinnedTileIds: Number.NaN as unknown as string[],
+            forgottenTileIdsThisFloor: Number.NaN as unknown as string[],
+            recallFocus: 1
+        });
+
+        const feedback = getMemoryRecallFeedback(run);
+
+        expect(feedback.penalties.map((line) => line.id)).not.toContain('memory-tax-short_memorize');
+        expect(feedback.upgrades.map((line) => line.id)).not.toContain('memorize-relic');
+        expect(feedback.symbols.map((line) => line.id)).not.toContain('pinned-symbols');
+        expect(feedback.forgottenTileCount).toBe(0);
     });
 
     it('normalizes stale recall focus before showing next-match bonus', () => {

@@ -857,22 +857,26 @@ export const getDevE2ePairPositionsJson = (
         return undefined;
     }
 
-    const byKey: Record<string, { row: number; col: number }[]> = {};
+    const pairKeys: string[] = [];
+    const byKey = new Map<string, { row: number; col: number }[]>();
     board.tiles.forEach((tile, index) => {
         const { row, column } = getTilePosition(index, board.columns);
         const k = tile.pairKey;
-        if (!byKey[k]) {
-            byKey[k] = [];
+        const positions = byKey.get(k);
+        if (positions) {
+            positions.push({ row, col: column });
+        } else {
+            pairKeys.push(k);
+            byKey.set(k, [{ row, col: column }]);
         }
-        byKey[k]!.push({ row, col: column });
     });
-    const keys = Object.keys(byKey).filter((k) => byKey[k]!.length === 2);
+    const keys = pairKeys.filter((k) => byKey.get(k)?.length === 2);
     if (keys.length < 2) {
         return undefined;
     }
     const slim: Record<string, { row: number; col: number }[]> = {};
     for (const k of keys) {
-        slim[k] = byKey[k]!;
+        slim[k] = byKey.get(k)!;
     }
     return JSON.stringify(slim);
 };

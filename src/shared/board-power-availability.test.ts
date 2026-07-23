@@ -64,6 +64,28 @@ describe('board power availability rules', () => {
         }))).toBe(true);
     });
 
+    it('fails closed when board power open-flip state is malformed', () => {
+        const malformed = run({
+            board: { ...run().board!, flippedTileIds: Number.NaN as unknown as string[] }
+        });
+
+        expect(canShuffleBoard(malformed)).toBe(false);
+        expect(canDestroyPair(malformed, 'a1')).toBe(false);
+        expect(canRegionShuffle(malformed)).toBe(false);
+        expect(canRegionShuffleRow(malformed, 0)).toBe(false);
+        expect(canSwapHiddenTiles(malformed, 'a1', 'b1')).toBe(false);
+    });
+
+    it('fails closed for playing runs without a board', () => {
+        const boardless = run({ board: null });
+
+        expect(canShuffleBoard(boardless)).toBe(false);
+        expect(canDestroyPair(boardless, 'a1')).toBe(false);
+        expect(canRegionShuffle(boardless)).toBe(false);
+        expect(canRegionShuffleRow(boardless, 0)).toBe(false);
+        expect(canSwapHiddenTiles(boardless, 'a1', 'b1')).toBe(false);
+    });
+
     it('checks destroy availability through the shared targeting predicate', () => {
         expect(canDestroyPair(run(), 'a1')).toBe(true);
         expect(canDestroyPair(run({ destroyPairCharges: 0 }), 'a1')).toBe(false);
@@ -146,6 +168,11 @@ describe('board power availability rules', () => {
             regionShuffleFreeThisFloor: true,
             relicIds: ['region_shuffle_free_first']
         }))).toBe(true);
+        expect(canRegionShuffle(run({
+            regionShuffleCharges: 0,
+            regionShuffleFreeThisFloor: true,
+            relicIds: Number.NaN as unknown as []
+        }))).toBe(false);
     });
 
     it('allows tile swap only for two hidden tiles with row/swap payment and no open flip', () => {

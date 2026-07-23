@@ -10,7 +10,8 @@ import {
     formatDungeonRunMapTopologyDiagnostics,
     formatDungeonRunMapTopologyIssue,
     inspectDungeonBoardTopology,
-    inspectDungeonRunMapTopology
+    inspectDungeonRunMapTopology,
+    type DungeonBoardTopologyOptions
 } from './dungeon-topology';
 import { GAME_RULES_VERSION } from './contracts';
 import { EXIT_PAIR_KEY } from './tile-identity';
@@ -38,6 +39,19 @@ const board = (tiles: Tile[], overrides: Partial<BoardState> = {}): BoardState =
 });
 
 describe('dungeon topology graph', () => {
+    it('handles empty board topology without relying on tile or queue assertions', () => {
+        const source = board([], { pairCount: 0, rows: 0 });
+        const graph = createDungeonBoardTopology(source);
+        const report = inspectDungeonBoardTopology(source);
+
+        expect(graph.nodes()).toEqual(['start']);
+        expect(report).toMatchObject({
+            hasExitRoute: false,
+            reachableNodeIds: ['start'],
+            issues: []
+        });
+    });
+
     it('models board progression resources as graph nodes', () => {
         const source = board(
             [
@@ -237,6 +251,40 @@ describe('dungeon topology graph', () => {
             hasExitRoute: true,
             issues: []
         });
+    });
+
+    it('normalizes malformed carried and floor-held resources before topology reachability', () => {
+        const source = board(
+            [
+                tile('a1', 'a', { state: 'matched' }),
+                tile('a2', 'a', { state: 'matched' }),
+                tile('exit', EXIT_PAIR_KEY, {
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'treasure'
+                })
+            ],
+            {
+                pairCount: 1,
+                matchedPairs: 1,
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'treasure',
+                dungeonKeysHeldByKind: { treasure: Number.POSITIVE_INFINITY },
+                dungeonLeverCount: Number.NaN
+            }
+        );
+
+        const malformedCarriedKeys = { treasure: Number.NaN, missing_key: 1 } as DungeonBoardTopologyOptions['dungeonKeys'];
+        const report = inspectDungeonBoardTopology(source, {
+            dungeonKeys: malformedCarriedKeys,
+            dungeonMasterKeys: Number.POSITIVE_INFINITY
+        });
+
+        expect(report.obtainableKeyKinds).toEqual([]);
+        expect(report.graph.hasNode('run-key:missing_key')).toBe(false);
+        expect(report.hasExitRoute).toBe(false);
+        expect(report.issues.map((issue) => issue.code)).toEqual(
+            expect.arrayContaining(['topology_exit_lock_source_missing'])
+        );
     });
 
     it('treats carried run keys as typed exit resources', () => {

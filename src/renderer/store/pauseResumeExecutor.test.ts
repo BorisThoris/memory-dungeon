@@ -24,7 +24,7 @@ const createPausedRun = (): RunState => ({
     }
 });
 
-const createDeps = (state: PauseResumeExecutorState): PauseResumeExecutorDeps<PauseResumeExecutorState> => ({
+const createDeps = (state: PauseResumeExecutorState): PauseResumeExecutorDeps => ({
     applyResolvedRun: vi.fn(),
     clearAllTimers: vi.fn(),
     freezeRun: vi.fn((run) => ({ ...run, status: 'paused' })),

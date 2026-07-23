@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { RENDERER_THEME, buildRendererThemeStyle } from './theme';
+import { RENDERER_THEME, buildRendererThemeStyle, forEachRendererThemeCssVar } from './theme';
 
 describe('REG-014 design-system density tokens', () => {
     it('defines shared density tokens for shells, cards, controls, and lists', () => {
@@ -23,5 +23,20 @@ describe('buildRendererThemeStyle', () => {
         expect(motionOn['--theme-modal-scrim-bg' as keyof typeof motionOn]).toBe('var(--theme-scrim-dialog)');
         expect(motionOff['--theme-modal-scrim-bg' as keyof typeof motionOff]).toBe('var(--theme-scrim-heavy)');
         expect(motionOff['--theme-modal-scrim-backdrop-filter' as keyof typeof motionOff]).toBe('none');
+    });
+});
+
+describe('forEachRendererThemeCssVar', () => {
+    it('visits each renderer theme CSS var with its value', () => {
+        const visited = new Map<string, string>();
+
+        forEachRendererThemeCssVar((key, value) => {
+            visited.set(key, value);
+        });
+
+        expect([...visited.keys()]).toEqual(Object.keys(RENDERER_THEME.cssVars));
+        for (const [key, value] of Object.entries(RENDERER_THEME.cssVars)) {
+            expect(visited.get(key)).toBe(value);
+        }
     });
 });

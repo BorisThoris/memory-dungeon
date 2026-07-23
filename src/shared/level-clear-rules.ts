@@ -12,6 +12,7 @@ import {
     calculateLevelClearBonus,
     calculatePerfectClearBonus
 } from './scoring-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export const getClearLifeReason = (tries: number): ClearLifeReason => {
     if (tries === 0) return 'perfect';
@@ -40,11 +41,12 @@ export const applyFloorClearEnemyHazardDefeats = (
     return {
         run: {
             ...run,
-            dungeonEnemiesDefeated: run.dungeonEnemiesDefeated + floorClearHazards.bossesDefeated,
+            dungeonEnemiesDefeated:
+                runNonNegativeInteger(run.dungeonEnemiesDefeated) + floorClearHazards.bossesDefeated,
             dungeonEnemiesDefeatedThisFloor:
-                (run.dungeonEnemiesDefeatedThisFloor ?? 0) + floorClearHazards.bossesDefeated,
+                runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) + floorClearHazards.bossesDefeated,
             enemyHazardsDefeatedThisFloor:
-                (run.enemyHazardsDefeatedThisFloor ?? 0) + floorClearHazards.defeated
+                runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor) + floorClearHazards.defeated
         },
         board: finalizedBoard
     };
@@ -130,12 +132,12 @@ export const calculateFloorClearScore = ({
     const levelBonus = calculateLevelClearBonus(level);
     const perfectBonus = perfect ? calculatePerfectClearBonus() : 0;
     const preBossSubtotal =
-        currentLevelScore +
+        runNonNegativeInteger(currentLevelScore) +
         levelBonus +
         perfectBonus +
-        objectiveBonus +
-        featuredObjectiveStreakBonus +
-        bossTrophyCacheScore;
+        runNonNegativeInteger(objectiveBonus) +
+        runNonNegativeInteger(featuredObjectiveStreakBonus) +
+        runNonNegativeInteger(bossTrophyCacheScore);
     return {
         levelBonus,
         perfectBonus,

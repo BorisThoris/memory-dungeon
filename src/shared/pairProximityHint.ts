@@ -2,9 +2,12 @@ import type { BoardState, Tile } from './contracts';
 import { DECOY_PAIR_KEY } from './tile-identity';
 import { tilesArePairMatch } from './turn-resolution';
 
+const safeBoardColumns = (board: BoardState): number =>
+    typeof board.columns === 'number' && Number.isFinite(board.columns) ? Math.max(1, Math.floor(board.columns)) : 1;
+
 const indexToPos = (board: BoardState, index: number): { col: number; row: number } => ({
-    row: Math.floor(index / board.columns),
-    col: index % board.columns
+    row: Math.floor(index / safeBoardColumns(board)),
+    col: index % safeBoardColumns(board)
 });
 
 const manhattan = (a: { col: number; row: number }, b: { col: number; row: number }): number =>
@@ -22,7 +25,10 @@ export const getPairProximityGridDistance = (board: BoardState, tileId: string):
     if (selfIndex < 0) {
         return null;
     }
-    const tile = board.tiles[selfIndex]!;
+    const tile = board.tiles[selfIndex];
+    if (!tile) {
+        return null;
+    }
     if (tile.state !== 'flipped') {
         return null;
     }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { BoardState, Tile } from './contracts';
+import type { BoardState, RunState, Tile } from './contracts';
 import { createNewRun } from './run-creation-rules';
 import { calculateMatchScore } from './scoring-rules';
 import {
@@ -66,6 +66,79 @@ describe('resolveTurnMatchScoringSummary', () => {
         expect(result.totalScore).toBe(10 + expectedMatchScore);
         expect(result.currentLevelScore).toBe(5 + expectedMatchScore);
         expect(result.bestScore).toBe(10 + expectedMatchScore);
+    });
+
+    it('normalizes malformed persisted score counters before summarizing a match', () => {
+        const base = createNewRun(41, { gameMode: 'puzzle', activeMutators: [] });
+        const run = {
+            ...base,
+            stats: {
+                ...base.stats,
+                totalScore: Number.NaN,
+                currentLevelScore: -4,
+                bestScore: Number.POSITIVE_INFINITY,
+                currentStreak: Number.NaN
+            }
+        };
+        const [first, second] = firstPair(run.board!);
+
+        const result = resolveTurnMatchScoringSummary({
+            run,
+            sourceBoard: run.board!,
+            resolvedBoard: run.board!,
+            matchedPairKey: first.pairKey,
+            matchedTiles: [first, second],
+            encorePairKeys: [],
+            findableScoreBonus: Number.NaN,
+            routeCardScore: 3.8,
+            dungeonScore: Number.POSITIVE_INFINITY,
+            enemyDamageScore: -5,
+            hazardDamageScore: 2.5,
+            fragileCacheClaimed: false,
+            fuseCacheFresh: false,
+            pinLatticeRewarded: false,
+            tollCacheClaimed: false
+        });
+
+        const expectedMatchScore = calculateMatchScore(run.board!.level, 1, run.matchScoreMultiplier) + 3 + 2;
+        expect(result.currentStreak).toBe(1);
+        expect(result.matchScore).toBe(expectedMatchScore);
+        expect(result.totalScore).toBe(expectedMatchScore);
+        expect(result.currentLevelScore).toBe(expectedMatchScore);
+        expect(result.bestScore).toBe(expectedMatchScore);
+    });
+
+    it('normalizes malformed stat records before summarizing a match', () => {
+        const base = createNewRun(42, { gameMode: 'puzzle', activeMutators: [] });
+        const run = {
+            ...base,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        const [first, second] = firstPair(run.board!);
+
+        const result = resolveTurnMatchScoringSummary({
+            run,
+            sourceBoard: run.board!,
+            resolvedBoard: run.board!,
+            matchedPairKey: first.pairKey,
+            matchedTiles: [first, second],
+            encorePairKeys: [],
+            findableScoreBonus: 0,
+            routeCardScore: 0,
+            dungeonScore: 0,
+            enemyDamageScore: 0,
+            hazardDamageScore: 0,
+            fragileCacheClaimed: false,
+            fuseCacheFresh: false,
+            pinLatticeRewarded: false,
+            tollCacheClaimed: false
+        });
+
+        const expectedMatchScore = calculateMatchScore(run.board!.level, 1, run.matchScoreMultiplier);
+        expect(result.currentStreak).toBe(1);
+        expect(result.totalScore).toBe(expectedMatchScore);
+        expect(result.currentLevelScore).toBe(expectedMatchScore);
+        expect(result.bestScore).toBe(expectedMatchScore);
     });
 
     it('flags cursed pairs matched before the final pair', () => {

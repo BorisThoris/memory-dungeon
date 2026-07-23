@@ -20,15 +20,13 @@ export interface LevelCompleteShopExecutorState {
     view: ViewState;
 }
 
-export interface LevelCompleteShopExecutorDeps<State extends LevelCompleteShopExecutorState> {
+export interface LevelCompleteShopExecutorDeps {
     applyResolvedRun: (run: RunState) => void;
-    getState: () => State;
-    setState: (patch: Partial<State> | ShopOpenSurfacePatch) => void;
+    getState: () => LevelCompleteShopExecutorState;
+    setState: (patch: ShopOpenSurfacePatch) => void;
 }
 
-export const executeOpenShopFromLevelComplete = <State extends LevelCompleteShopExecutorState>(
-    deps: LevelCompleteShopExecutorDeps<State>
-): void => {
+export const executeOpenShopFromLevelComplete = (deps: LevelCompleteShopExecutorDeps): void => {
     const { run, view } = deps.getState();
     if (run && view === 'playing' && run.status === 'levelComplete' && run.lives <= 0) {
         const gameOverRun = createDeadInterludeGameOverRun(run);

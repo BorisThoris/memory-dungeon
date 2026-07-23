@@ -1,8 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import type { AchievementId } from './contracts';
-import { ACHIEVEMENT_BY_ID, ACHIEVEMENTS, evaluateAchievementUnlocks } from './achievements';
+import type { AchievementId, RunState } from './contracts';
+import {
+    ACHIEVEMENT_BY_ID,
+    ACHIEVEMENTS,
+    evaluateAchievementUnlocks,
+    getAchievementProgressRows,
+    getAchievementProgressSummary
+} from './achievements';
 import { createNewRun } from './game-core';
-import { createDefaultSaveData } from './save-data';
+import { ACHIEVEMENT_IDS, createDefaultSaveData, createAchievementState } from './save-data';
 
 describe('achievement catalog copy', () => {
     it('every AchievementId has non-empty title and description', () => {
@@ -15,6 +21,29 @@ describe('achievement catalog copy', () => {
             expect(a.description.trim().length).toBeGreaterThan(0);
         }
         expect(ACHIEVEMENTS.length).toBe(ids.length);
+    });
+
+    it('keeps achievement catalog, display order, and default save state aligned', () => {
+        expect(Object.keys(ACHIEVEMENT_BY_ID).sort()).toEqual([...ACHIEVEMENT_IDS].sort());
+        expect(ACHIEVEMENTS.map((row) => row.id)).toEqual([...ACHIEVEMENT_IDS]);
+        expect(Object.keys(createAchievementState()).sort()).toEqual([...ACHIEVEMENT_IDS].sort());
+    });
+
+    it('builds bounded progress rows in achievement order', () => {
+        const state = {
+            ACH_FIRST_CLEAR: true,
+            ACH_LEVEL_FIVE: 'yes',
+            ACH_SCORE_THOUSAND: false,
+            BAD_ACHIEVEMENT: true
+        };
+        const rows = getAchievementProgressRows(state);
+
+        expect(rows.map((row) => row.id)).toEqual([...ACHIEVEMENT_IDS]);
+        expect(rows.find((row) => row.id === 'ACH_FIRST_CLEAR')?.earned).toBe(true);
+        expect(rows.find((row) => row.id === 'ACH_LEVEL_FIVE')?.earned).toBe(false);
+        expect(rows.find((row) => row.id === 'ACH_SCORE_THOUSAND')?.earned).toBe(false);
+        expect(getAchievementProgressSummary(state)).toEqual({ earned: 1, total: ACHIEVEMENT_IDS.length });
+        expect(getAchievementProgressSummary(['ACH_FIRST_CLEAR'])).toEqual({ earned: 0, total: ACHIEVEMENT_IDS.length });
     });
 });
 
@@ -90,6 +119,31 @@ describe('achievement rules', () => {
         saveData.achievements.ACH_FIRST_CLEAR = true;
 
         expect(evaluateAchievementUnlocks(run, saveData)).toEqual([]);
+    });
+
+    it('normalizes malformed stat counters before checking threshold achievements', () => {
+        const run = {
+            ...createNewRun(0),
+            stats: {
+                ...createNewRun(0).stats,
+                totalScore: Number.POSITIVE_INFINITY,
+                levelsCleared: Number.NaN,
+                highestLevel: Number.POSITIVE_INFINITY
+            }
+        };
+        const saveData = createDefaultSaveData();
+        saveData.playerStats = { ...saveData.playerStats!, dailiesCompleted: Number.POSITIVE_INFINITY };
+
+        expect(evaluateAchievementUnlocks(run, saveData)).toEqual([]);
+    });
+
+    it('normalizes malformed stat records before checking threshold achievements', () => {
+        const run = {
+            ...createNewRun(0),
+            stats: Number.NaN
+        };
+
+        expect(evaluateAchievementUnlocks(run as unknown as RunState, createDefaultSaveData())).toEqual([]);
     });
 
     it('unlocks ACH_ENDLESS_TEN when endless run reaches floor 10', () => {

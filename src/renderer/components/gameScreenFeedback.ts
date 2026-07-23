@@ -2,7 +2,7 @@ import type { RunState } from '../../shared/contracts';
 
 export type VisualHudAnnouncementSignalTone = 'chain' | 'reward' | 'risk' | 'guard' | 'trait' | 'objective' | 'info';
 
-export interface VisualHudAnnouncementSignal {
+interface VisualHudAnnouncementSignal {
     label: string;
     tone: VisualHudAnnouncementSignalTone;
 }
@@ -12,7 +12,7 @@ export interface VisualHudAnnouncementDetail {
     tone: VisualHudAnnouncementSignalTone;
 }
 
-export interface VisualHudAnnouncementImpact {
+interface VisualHudAnnouncementImpact {
     burstTier: 'none' | 'chain' | 'reward' | 'combo' | 'risk' | 'trait';
     details: VisualHudAnnouncementDetail[];
     level: 'low' | 'medium' | 'high';

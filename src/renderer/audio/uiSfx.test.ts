@@ -16,6 +16,7 @@ import {
     preloadUiSfx,
     resumeUiSfxContext,
     silenceAllUiSampleVoices,
+    UI_SFX_SAMPLE_KEYS,
     uiSfxGainFromSettings,
     uiSfxSampleKeyForCue
 } from './uiSfx';
@@ -50,7 +51,9 @@ describe('uiSfx', () => {
     it('keeps sampled UI coverage backed by runtime OGG files', () => {
         const uiAssetDir = path.resolve(process.cwd(), 'src/renderer/assets/audio/ui');
 
-        for (const [key, entry] of Object.entries(uiSfxManifest.entries)) {
+        expect(Object.keys(uiSfxManifest.entries)).toEqual([...UI_SFX_SAMPLE_KEYS]);
+        for (const key of UI_SFX_SAMPLE_KEYS) {
+            const entry = uiSfxManifest.entries[key];
             expect(entry.file, `manifest key ${key} should use runtime OGG`).toMatch(/\.ogg$/);
             const assetPath = path.join(uiAssetDir, entry.file);
             expect(fs.existsSync(assetPath), `manifest key ${key} points to missing file ${entry.file}`).toBe(true);

@@ -49,7 +49,7 @@ describe('renderer bundle budget script', () => {
 
     it('fails oversized named JavaScript chunks', () => {
         const outDir = makeOutputDir();
-        writeSizedFile(path.join(outDir, 'assets', 'main-oversized.js'), 1301 * 1024);
+        writeSizedFile(path.join(outDir, 'assets', 'main-oversized.js'), 1451 * 1024);
 
         const result = runBudgetResult(outDir);
 

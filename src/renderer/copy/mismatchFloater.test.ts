@@ -27,6 +27,12 @@ describe('mismatchFloaterLiveRegionText', () => {
         );
     });
 
+    it('normalizes malformed broken chain depth before building recovery copy', () => {
+        expect(mismatchFloaterLiveRegionText([], null, { brokenChainDepth: Number.POSITIVE_INFINITY })).toBe(
+            'No match. Next action: Safe pair: Safe match. Recovery sequence: First Safe match. Then Prime x3 loop. Keep Re-prime chain. Recover with a safe match. Chain reset'
+        );
+    });
+
     it('announces the reward target lost when a high streak breaks near payoff', () => {
         expect(
             mismatchFloaterLiveRegionText([], null, {

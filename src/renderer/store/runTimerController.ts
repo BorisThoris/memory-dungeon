@@ -237,18 +237,28 @@ export const createRunTimerController = ({
         run.status === 'paused' || run.status === 'levelComplete' || run.status === 'gameOver' ? run : freezeRun(run);
 
     const resumeRunWithTimers = (run: RunState): RunState => {
-        const resumedRun = resumeRun(run);
+        let resumedRun = resumeRun(run);
+        const memorizeRemainingMs = resumedRun.timerState.memorizeRemainingMs;
 
-        if (shouldScheduleMemorizeTimerOnResume(resumedRun)) {
-            scheduleMemorizeTimer(resumedRun.timerState.memorizeRemainingMs!);
+        if (shouldScheduleMemorizeTimerOnResume(resumedRun) && memorizeRemainingMs !== null) {
+            if (memorizeRemainingMs <= 0) {
+                resumedRun = finishMemorizePhase(resumedRun);
+            } else {
+                scheduleMemorizeTimer(memorizeRemainingMs);
+            }
         }
 
         if (resumedRun.status === 'resolving' && resumedRun.timerState.resolveRemainingMs !== null) {
             scheduleResolveTimer(resumedRun.timerState.resolveRemainingMs);
         }
 
-        if (shouldScheduleDebugRevealTimerOnResume(resumedRun)) {
-            scheduleDebugRevealTimer(resumedRun.timerState.debugRevealRemainingMs!);
+        const debugRevealRemainingMs = resumedRun.timerState.debugRevealRemainingMs;
+        if (shouldScheduleDebugRevealTimerOnResume(resumedRun) && debugRevealRemainingMs !== null) {
+            if (debugRevealRemainingMs <= 0) {
+                resumedRun = disableDebugPeek(resumedRun);
+            } else {
+                scheduleDebugRevealTimer(debugRevealRemainingMs);
+            }
         }
 
         return resumedRun;

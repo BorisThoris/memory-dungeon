@@ -2,6 +2,8 @@ import type { RouteNodeType, RunState } from './contracts';
 import { loadedGatewayRouteTypeFor } from './loaded-gateway-rules';
 import { hasMutator } from './mutators';
 import { createRouteCardPlanForRoute } from './route-card-plan-rules';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export interface TurnMatchFollowupResult {
     nBackMatchCounter: number;
@@ -24,23 +26,24 @@ export const resolveTurnMatchFollowup = ({
     loadedGatewayClaimed,
     dungeonGatewayRouteType
 }: TurnMatchFollowupInput): TurnMatchFollowupResult => {
-    const nBackMatchCounter = run.nBackMatchCounter + 1;
+    const nBackMatchCounter = runNonNegativeInteger(run.nBackMatchCounter) + 1;
     const nBackAnchorPairKey =
         hasMutator(run, 'n_back_anchor') && nBackMatchCounter % 2 === 0 ? encoreKey : run.nBackAnchorPairKey;
     const loadedGatewayRouteType = loadedGatewayClaimed ? loadedGatewayRouteTypeFor(run, matchedPairKey) : null;
+    const sourceLevel = run.board?.level ?? normalizeSessionStats(run.stats).highestLevel;
 
     const pendingRouteCardPlan =
         run.pendingRouteCardPlan == null && loadedGatewayRouteType
             ? createRouteCardPlanForRoute(
                   run,
                   loadedGatewayRouteType,
-                  `loaded_gateway:${run.runRulesVersion}:${run.runSeed}:${run.board?.level ?? run.stats.highestLevel}:${matchedPairKey}`
+                  `loaded_gateway:${run.runRulesVersion}:${run.runSeed}:${sourceLevel}:${matchedPairKey}`
               )
             : run.pendingRouteCardPlan == null && dungeonGatewayRouteType
             ? createRouteCardPlanForRoute(
                   run,
                   dungeonGatewayRouteType,
-                  `gateway:${run.runRulesVersion}:${run.runSeed}:${run.board?.level ?? run.stats.highestLevel}:${dungeonGatewayRouteType}`
+                  `gateway:${run.runRulesVersion}:${run.runSeed}:${sourceLevel}:${dungeonGatewayRouteType}`
               )
             : run.pendingRouteCardPlan;
 

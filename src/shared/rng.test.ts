@@ -1,3 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 import {
     createMulberry32,
@@ -5,8 +8,16 @@ import {
     deriveDailyRunSeed,
     deriveLevelTileRngSeed,
     hashStringToSeed,
-    shuffleWithRng
+    pickRngIndex,
+    shuffleWithRng,
+    utcDateKeyMinusOneDay
 } from './rng';
+
+const listTypeScriptFiles = (dir: string): string[] =>
+    readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+        const path = resolve(dir, entry.name);
+        return entry.isDirectory() ? listTypeScriptFiles(path) : [path];
+    });
 
 describe('hashStringToSeed', () => {
     it('is deterministic for the same input', () => {
@@ -59,6 +70,35 @@ describe('shuffleWithRng', () => {
         expect(spy).not.toHaveBeenCalled();
         spy.mockRestore();
     });
+
+    it('normalizes malformed rng rolls while preserving a permutation', () => {
+        const input = ['a', 'b', 'c'];
+
+        expect(shuffleWithRng(() => Number.NaN, input)).toEqual(['b', 'c', 'a']);
+        expect(shuffleWithRng(() => Number.POSITIVE_INFINITY, input)).toEqual(['b', 'c', 'a']);
+        expect(shuffleWithRng(() => 1, input)).toEqual(['a', 'b', 'c']);
+        expect(input).toEqual(['a', 'b', 'c']);
+    });
+});
+
+describe('pickRngIndex', () => {
+    it('normalizes malformed rolls and lengths into bounded indexes', () => {
+        expect(pickRngIndex(() => Number.NaN, 3)).toBe(0);
+        expect(pickRngIndex(() => 1, 3)).toBe(2);
+        expect(pickRngIndex(() => 0.5, 3.9)).toBe(1);
+        expect(pickRngIndex(() => 0.5, Number.POSITIVE_INFINITY)).toBe(0);
+        expect(pickRngIndex(() => 0.5, 0)).toBe(0);
+    });
+
+    it('keeps shared rule code on normalized rng index helpers', () => {
+        const sharedDir = resolve(fileURLToPath(import.meta.url), '..');
+        const offenders = listTypeScriptFiles(sharedDir)
+            .filter((file) => !file.endsWith('.test.ts') && !file.endsWith('/rng.ts'))
+            .filter((file) => /Math\.floor\(\s*rng\(\)\s*\*/u.test(readFileSync(file, 'utf8')))
+            .map((file) => file.slice(sharedDir.length + 1));
+
+        expect(offenders).toEqual([]);
+    });
 });
 
 describe('derived seeds', () => {
@@ -74,5 +114,11 @@ describe('derived seeds', () => {
     it('deriveDailyMutatorIndex is bounded', () => {
         expect(deriveDailyMutatorIndex(123456, 8)).toBeGreaterThanOrEqual(0);
         expect(deriveDailyMutatorIndex(123456, 8)).toBeLessThan(8);
+    });
+
+    it('subtracts one UTC day only for valid compact daily keys', () => {
+        expect(utcDateKeyMinusOneDay('20260301')).toBe('20260228');
+        expect(utcDateKeyMinusOneDay('20260231')).toBe('20260231');
+        expect(utcDateKeyMinusOneDay('2026-03-01')).toBe('2026-03-01');
     });
 });

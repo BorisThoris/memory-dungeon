@@ -7,6 +7,9 @@ import {
     type MemoryTaxScore,
     type PerfectMemoryImpact
 } from './mechanic-feedback';
+import { runRelicIds } from './relics';
+import { runArrayCount, runStringArray } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export type PowerVerbId =
     | 'shuffle'
@@ -47,7 +50,10 @@ export const POWER_VERB_GROUPS = {
 const onlyWhilePlaying = (run: RunState): string | null => (run.status === 'playing' ? null : 'Only while playing.');
 const locksPerfectMemory = perfectMemoryImpactCopy('locks_perfect_memory');
 
-const hasOpenFlip = (run: RunState): boolean => (run.board?.flippedTileIds.length ?? 0) > 0;
+const powerVerbArrayIncludes = (value: unknown, item: string): boolean => runStringArray(value).includes(item);
+
+const hasOpenFlip = (run: RunState): boolean =>
+    run.board ? !Array.isArray(run.board.flippedTileIds) || run.board.flippedTileIds.length > 0 : false;
 
 const hasDestroyTarget = (run: RunState): boolean => {
     const tiles = run.board?.tiles ?? [];
@@ -60,19 +66,19 @@ const hasDestroyTarget = (run: RunState): boolean => {
 
 const hasPeekTarget = (run: RunState): boolean =>
     (run.board?.tiles ?? []).some(
-        (tile) => tile.state === 'hidden' && !run.peekRevealedTileIds.includes(tile.id)
+        (tile) => tile.state === 'hidden' && !powerVerbArrayIncludes(run.peekRevealedTileIds, tile.id)
     );
 
 const hasRowShufflePayment = (run: RunState): boolean =>
-    run.regionShuffleCharges > 0 ||
-    (run.regionShuffleFreeThisFloor && run.relicIds.includes('region_shuffle_free_first'));
+    runNonNegativeInteger(run.regionShuffleCharges) > 0 ||
+    (run.regionShuffleFreeThisFloor && runRelicIds(run.relicIds).includes('region_shuffle_free_first'));
 
 const hiddenTileCount = (run: RunState): number =>
     (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden').length;
 
-const peekDisabledReason = (run: RunState): string | null =>
+const peekDisabledReason = (run: RunState, peekCharges: number): string | null =>
     onlyWhilePlaying(run) ??
-    (run.peekCharges < 1
+    (peekCharges < 1
         ? 'No peek charges.'
         : hasOpenFlip(run)
           ? 'Resolve the current flip first.'
@@ -80,11 +86,11 @@ const peekDisabledReason = (run: RunState): string | null =>
             ? 'No hidden peek targets.'
             : null);
 
-const destroyDisabledReason = (run: RunState): string | null =>
+const destroyDisabledReason = (run: RunState, destroyPairCharges: number): string | null =>
     onlyWhilePlaying(run) ??
     (run.activeContract?.noDestroy
         ? 'Scholar contract disables destroy.'
-        : run.destroyPairCharges < 1
+        : destroyPairCharges < 1
           ? 'No destroy charges.'
           : hasOpenFlip(run)
             ? 'Resolve the current flip first.'
@@ -92,7 +98,21 @@ const destroyDisabledReason = (run: RunState): string | null =>
               ? 'No fully hidden pair to destroy.'
               : null);
 
-export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
+export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
+    const shuffleCharges = runNonNegativeInteger(run.shuffleCharges);
+    const regionShuffleCharges = runNonNegativeInteger(run.regionShuffleCharges);
+    const peekCharges = runNonNegativeInteger(run.peekCharges);
+    const destroyPairCharges = runNonNegativeInteger(run.destroyPairCharges);
+    const strayRemoveCharges = runNonNegativeInteger(run.strayRemoveCharges);
+    const flashPairCharges = runNonNegativeInteger(run.flashPairCharges);
+    const undoUsesThisFloor = runNonNegativeInteger(run.undoUsesThisFloor);
+    const pinsPlacedCountThisRun = runNonNegativeInteger(run.pinsPlacedCountThisRun);
+    const maxPinsTotalRun =
+        run.activeContract?.maxPinsTotalRun == null
+            ? null
+            : runNonNegativeInteger(run.activeContract.maxPinsTotalRun);
+
+    return [
     {
         id: 'pin',
         label: 'Pin',
@@ -100,15 +120,15 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'tool',
         tokens: ['hidden_known', 'build'],
         purpose: 'Mark remembered locations without revealing or changing tiles.',
-        cost: `${run.pinnedTileIds.length} pinned now; pins are slot-limited.`,
+        cost: `${runArrayCount(run.pinnedTileIds)} pinned now; pins are slot-limited.`,
         consequence: 'Records your read only; it does not reveal or solve cards.',
         perfectMemoryImpact: 'allowed',
         perfectMemoryCopy: perfectMemoryImpactCopy('allowed'),
         memoryTax: CORE_SAFE_MEMORY_TAX,
         disabledReason:
             onlyWhilePlaying(run) ??
-            (run.activeContract?.maxPinsTotalRun != null &&
-            run.pinsPlacedCountThisRun >= run.activeContract.maxPinsTotalRun
+            (maxPinsTotalRun != null &&
+            pinsPlacedCountThisRun >= maxPinsTotalRun
                 ? 'Pin vow placement cap reached.'
                 : null)
     },
@@ -119,12 +139,12 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'bailout',
         tokens: ['hidden_known', 'cost', 'forfeit'],
         purpose: 'Briefly reveal one hidden tile when memory needs a cue.',
-        cost: `${run.peekCharges} peek charge(s).`,
+        cost: `${peekCharges} peek charge(s).`,
         consequence: 'Spends a charge for exact information on one tile.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, informationBypass: 2, uiComprehensionLoad: 1 },
-        disabledReason: peekDisabledReason(run)
+        disabledReason: peekDisabledReason(run, peekCharges)
     },
     {
         id: 'flash_pair',
@@ -133,12 +153,12 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'bailout',
         tokens: ['hidden_known', 'cost', 'forfeit'],
         purpose: 'Reveal one random hidden pair briefly in Practice or Wild runs.',
-        cost: `${run.flashPairCharges} flash charge(s).`,
+        cost: `${flashPairCharges} flash charge(s).`,
         consequence: 'Temporarily shows a pair and counts as an assist.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, informationBypass: 2, mistakeRecovery: 1, uiComprehensionLoad: 1 },
-        disabledReason: onlyWhilePlaying(run) ?? (run.flashPairCharges < 1 ? 'No flash charges.' : null)
+        disabledReason: onlyWhilePlaying(run) ?? (flashPairCharges < 1 ? 'No flash charges.' : null)
     },
     {
         id: 'shuffle',
@@ -147,7 +167,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'locked'],
         purpose: 'Re-roll hidden tile positions when the layout is no longer useful.',
-        cost: run.activeContract?.noShuffle ? 'Locked by Scholar contract.' : `${run.shuffleCharges} full-board charge(s).`,
+        cost: run.activeContract?.noShuffle ? 'Locked by Scholar contract.' : `${shuffleCharges} full-board charge(s).`,
         consequence: 'Breaks the current spatial read and counts as an assist.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
@@ -156,9 +176,9 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
             onlyWhilePlaying(run) ??
             (run.activeContract?.noShuffle
                 ? 'Scholar contract disables full-board shuffle.'
-                : run.shuffleCharges < 1
+                : shuffleCharges < 1
                   ? 'No shuffle charges.'
-                  : run.board?.flippedTileIds.length
+                  : hasOpenFlip(run)
                     ? 'Resolve the current flip first.'
                     : null)
     },
@@ -169,7 +189,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'locked'],
         purpose: 'Shuffle one row while preserving the rest of your spatial read.',
-        cost: `${run.regionShuffleCharges} row/swap charge(s); relics may make the first row shuffle or tile swap free.`,
+        cost: `${regionShuffleCharges} row/swap charge(s); relics may make the first row shuffle or tile swap free.`,
         consequence: 'Breaks memory for one row and counts as an assist.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
@@ -191,7 +211,7 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'locked'],
         purpose: 'Exchange two hidden tile positions to set up trait adjacency or repair a bad layout read.',
-        cost: `${run.regionShuffleCharges} row/swap charge(s); relics may make the first row shuffle or tile swap free.`,
+        cost: `${regionShuffleCharges} row/swap charge(s); relics may make the first row shuffle or tile swap free.`,
         consequence: 'Invalidates memory for the two moved tiles and counts as an assist.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
@@ -215,12 +235,12 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'resolved', 'locked'],
         purpose: 'Remove a fully hidden pair for no match score.',
-        cost: `${run.destroyPairCharges} destroy charge(s).`,
+        cost: `${destroyPairCharges} destroy charge(s).`,
         consequence: 'Forfeits match score and pickups/rewards on that pair.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, mistakeRecovery: 2, boardCompletionRisk: 1, uiComprehensionLoad: 1 },
-        disabledReason: destroyDisabledReason(run)
+        disabledReason: destroyDisabledReason(run, destroyPairCharges)
     },
     {
         id: 'stray_remove',
@@ -229,12 +249,12 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'resolved'],
         purpose: 'Remove one completion-safe hidden singleton to reduce overload.',
-        cost: `${run.strayRemoveCharges} stray-remove charge(s).`,
+        cost: `${strayRemoveCharges} stray-remove charge(s).`,
         consequence: 'Blocks normal pairs, removes one legal singleton tile, and counts as an assist.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, mistakeRecovery: 1, boardCompletionRisk: 1, uiComprehensionLoad: 1 },
-        disabledReason: onlyWhilePlaying(run) ?? (run.strayRemoveCharges < 1 ? 'No stray-remove charges.' : null)
+        disabledReason: onlyWhilePlaying(run) ?? (strayRemoveCharges < 1 ? 'No stray-remove charges.' : null)
     },
     {
         id: 'undo_resolve',
@@ -243,12 +263,12 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit'],
         purpose: 'Cancel a resolving flip before it commits.',
-        cost: `${run.undoUsesThisFloor} undo use(s) this floor.`,
+        cost: `${undoUsesThisFloor} undo use(s) this floor.`,
         consequence: 'Rewinds a pending mistake window and counts as an assist.',
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, mistakeRecovery: 2, uiComprehensionLoad: 1 },
-        disabledReason: run.undoUsesThisFloor < 1 ? 'No undo uses this floor.' : null
+        disabledReason: undoUsesThisFloor < 1 ? 'No undo uses this floor.' : null
     },
     {
         id: 'gambit',
@@ -264,7 +284,8 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => [
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, mistakeRecovery: 2, hiddenPunishment: 1, uiComprehensionLoad: 2 },
         disabledReason: run.gambitAvailableThisFloor ? null : 'Gambit already used this floor.'
     }
-];
+    ];
+};
 
 export const getPowerVerbTeachingRows = getPowerVerbRows;
 

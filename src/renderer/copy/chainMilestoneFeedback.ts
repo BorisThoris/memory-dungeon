@@ -1,3 +1,5 @@
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
+
 export type ChainMilestoneFeedback = {
     action: 'Start chain' | 'Push surge' | 'Hold combo';
     audioCue: 'chain-start-ping' | 'surge-hit-ping' | 'combo-hit-ping';
@@ -13,8 +15,8 @@ export const getChainMilestoneFeedback = (
     previousStreak: number,
     nextStreak: number
 ): ChainMilestoneFeedback | undefined => {
-    const previous = Math.max(0, Math.floor(Number.isFinite(previousStreak) ? previousStreak : 0));
-    const next = Math.max(0, Math.floor(Number.isFinite(nextStreak) ? nextStreak : 0));
+    const previous = runNonNegativeInteger(previousStreak);
+    const next = runNonNegativeInteger(nextStreak);
     if (previous < 10 && next >= 10) {
         return {
             action: 'Hold combo',

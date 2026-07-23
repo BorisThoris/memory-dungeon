@@ -1,10 +1,17 @@
 import {
     MAX_PINNED_TILES,
+    type RelicId,
     type RunState
 } from './contracts';
+import { runRelicIds } from './relics';
+import { runStringArray } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
+
+const hasRelic = (run: RunState, relicId: RelicId): boolean =>
+    runRelicIds(run.relicIds).includes(relicId);
 
 export const maxPinnedTilesForRun = (run: RunState): number =>
-    MAX_PINNED_TILES + (run.relicIds.includes('pin_cap_plus_one') ? 1 : 0);
+    MAX_PINNED_TILES + (hasRelic(run, 'pin_cap_plus_one') ? 1 : 0);
 
 export const armRegionShuffleRow = (run: RunState, row: number | null): RunState =>
     run.status === 'playing' && run.board ? { ...run, regionShuffleRowArmed: row } : run;
@@ -19,21 +26,23 @@ export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
         return run;
     }
 
-    const isPinned = run.pinnedTileIds.includes(tileId);
+    const currentPinnedTileIds = runStringArray(run.pinnedTileIds);
+    const isPinned = currentPinnedTileIds.includes(tileId);
     let pinnedTileIds: string[];
 
     if (isPinned) {
-        pinnedTileIds = run.pinnedTileIds.filter((id) => id !== tileId);
-    } else if (run.pinnedTileIds.length < maxPinnedTilesForRun(run)) {
+        pinnedTileIds = currentPinnedTileIds.filter((id) => id !== tileId);
+    } else if (currentPinnedTileIds.length < maxPinnedTilesForRun(run)) {
         const cap = run.activeContract?.maxPinsTotalRun;
-        if (cap != null && run.pinsPlacedCountThisRun >= cap) {
+        const pinsPlacedCountThisRun = runNonNegativeInteger(run.pinsPlacedCountThisRun);
+        if (cap != null && pinsPlacedCountThisRun >= runNonNegativeInteger(cap)) {
             return run;
         }
-        pinnedTileIds = [...run.pinnedTileIds, tileId];
+        pinnedTileIds = [...currentPinnedTileIds, tileId];
         return {
             ...run,
             pinnedTileIds,
-            pinsPlacedCountThisRun: run.pinsPlacedCountThisRun + 1
+            pinsPlacedCountThisRun: pinsPlacedCountThisRun + 1
         };
     } else {
         return run;
@@ -46,6 +55,6 @@ export const togglePinnedTile = (run: RunState, tileId: string): RunState => {
 };
 
 export const toggleStrayRemoveArmed = (run: RunState): RunState =>
-    run.strayRemoveCharges > 0 && run.status === 'playing'
+    runNonNegativeInteger(run.strayRemoveCharges) > 0 && run.status === 'playing'
         ? { ...run, strayRemoveArmed: !run.strayRemoveArmed }
         : run;

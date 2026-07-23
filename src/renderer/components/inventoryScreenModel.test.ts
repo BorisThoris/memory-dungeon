@@ -125,6 +125,38 @@ describe('inventoryScreenModel', () => {
         });
     });
 
+    it('normalizes malformed run loop counters before building inventory payoff copy', () => {
+        const run = {
+            ...createNewRun(0),
+            findablesClaimedThisFloor: Number.NaN,
+            findablesTotalThisFloor: Number.POSITIVE_INFINITY,
+            stats: {
+                ...createNewRun(0).stats,
+                bestStreak: Number.NaN,
+                comboShards: Number.POSITIVE_INFINITY,
+                currentStreak: Number.NaN,
+                guardTokens: Number.NEGATIVE_INFINITY
+            },
+            traitRouteObjectiveProgressThisFloor: Number.NaN,
+            traitRouteObjectiveRequiredThisFloor: Number.POSITIVE_INFINITY
+        };
+
+        const signals = getInventoryRunLoopSignals(run);
+
+        expect(signals).toMatchObject([
+            { id: 'chain', value: 'ready' },
+            { id: 'pickup', value: '0' },
+            { id: 'resource', nextCue: 'Build x6 chain pressure', value: '0 shards / 0 guards' },
+            { id: 'trait', value: 'scout' }
+        ]);
+        expect(signals.map((signal) => `${signal.value} ${signal.nextCue}`).join(' ')).not.toMatch(/NaN|Infinity/);
+        expect(getInventoryPayoffEngineSignal(run, signals)).toMatchObject({
+            label: 'Prime payoff',
+            value: 'Prime beat',
+            tone: 'setup'
+        });
+    });
+
     it('uses shared trait route action cues in run loop signals', () => {
         const [traitSignal] = getInventoryRunLoopSignals({
             ...createNewRun(0),

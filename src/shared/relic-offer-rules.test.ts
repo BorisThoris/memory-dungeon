@@ -109,4 +109,70 @@ describe('relic-offer-rules', () => {
         expect(secondResult.run.relicTiersClaimed).toBe(1);
         expect(secondResult.run.relicIds).toEqual(expect.arrayContaining([first, second]));
     });
+
+    it('normalizes malformed multi-pick offer counters before continuing', () => {
+        const opened = openRelicOffer(grantBonusRelicPickNextOffer(levelCompleteRun(), 1));
+        const relicId = opened.relicOffer!.options[0]!;
+        const run = {
+            ...opened,
+            relicOffer: {
+                ...opened.relicOffer!,
+                picksRemaining: 2.9,
+                pickRound: Number.NaN
+            }
+        };
+
+        const result = createRelicPickAdvanceResult(run, relicId);
+
+        expect(result.kind).toBe('offerContinues');
+        if (result.kind !== 'offerContinues') {
+            return;
+        }
+        expect(result.run.relicOffer?.picksRemaining).toBe(1);
+        expect(result.run.relicOffer?.pickRound).toBe(1);
+    });
+
+    it('normalizes malformed relic ids before appending selected relics', () => {
+        const opened = openRelicOffer(levelCompleteRun({
+            relicIds: Number.NaN as unknown as RunState['relicIds']
+        }));
+        const relicId = opened.relicOffer!.options[0]!;
+
+        const result = createRelicPickAdvanceResult(opened, relicId);
+
+        expect(result.kind).toBe('advanceToNextLevel');
+        if (result.kind !== 'advanceToNextLevel') {
+            return;
+        }
+        expect(result.run.relicIds).toEqual([relicId]);
+    });
+
+    it('normalizes malformed claimed tier counters before finalizing an offer', () => {
+        const opened = openRelicOffer(levelCompleteRun());
+        const relicId = opened.relicOffer!.options[0]!;
+
+        const result = createRelicPickAdvanceResult({
+            ...opened,
+            relicTiersClaimed: Number.POSITIVE_INFINITY
+        }, relicId);
+
+        expect(result.kind).toBe('advanceToNextLevel');
+        if (result.kind !== 'advanceToNextLevel') {
+            return;
+        }
+        expect(result.run.relicTiersClaimed).toBe(1);
+        expect(result.run.relicOffer).toBeNull();
+    });
+
+    it('normalizes malformed lives before opening or advancing relic offers', () => {
+        const unopened = levelCompleteRun({ lives: Number.NaN });
+
+        expect(openRelicOffer(unopened).relicOffer).toBeNull();
+
+        const opened = openRelicOffer(levelCompleteRun());
+        const relicId = opened.relicOffer!.options[0]!;
+        const result = createRelicPickAdvanceResult({ ...opened, lives: Number.POSITIVE_INFINITY }, relicId);
+
+        expect(result).toEqual({ kind: 'unchanged', run: { ...opened, lives: Number.POSITIVE_INFINITY } });
+    });
 });

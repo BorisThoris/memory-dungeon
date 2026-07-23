@@ -209,6 +209,53 @@ describe('runPayoffSignals', () => {
         });
     });
 
+    it('ignores malformed summary arrays before deriving payoff signal counts', () => {
+        const rows = getRunPayoffSignals(
+            summaryFixture({
+                activeMutators: Number.NaN as unknown as RunSummary['activeMutators'],
+                bestStreak: Number.NaN,
+                perfectClears: Number.POSITIVE_INFINITY,
+                relicIds: Number.NaN as unknown as RunSummary['relicIds'],
+                totalScore: Number.NaN
+            })
+        );
+
+        expect(rows.map((row) => row.id)).toEqual(['chain-seed', 'score-bank']);
+        expect(rows[0]).toMatchObject({ arcadeCue: 'Prime payoff', value: 'x0' });
+        expect(rows[1]).toMatchObject({ arcadeCue: 'Prime score', value: '0' });
+        expect(rows.map((row) => row.id)).not.toContain('build-engines');
+        expect(rows.map((row) => row.id)).not.toContain('pressure-burst');
+        expect(rows.map((row) => row.value).join(' ')).not.toMatch(/NaN|Infinity/);
+    });
+
+    it('normalizes malformed payoff counters from summary and caller options', () => {
+        const rows = getRunPayoffSignals(
+            summaryFixture({
+                bestStreak: 4.9,
+                payoffPickupClaimed: Number.NaN,
+                payoffPickupTotal: Number.POSITIVE_INFINITY,
+                payoffPressureExtra: Number.NaN,
+                payoffRewardPerkCount: Number.POSITIVE_INFINITY,
+                totalScore: 1250.9
+            }),
+            {
+                pickupClaimed: Number.NaN,
+                pickupTotal: 3.9,
+                pressureExtra: Number.POSITIVE_INFINITY,
+                rewardPerkCount: 2.9
+            }
+        );
+
+        expect(rows.map((row) => row.id)).toEqual(['chain-threshold', 'build-engines', 'pickup-claim']);
+        expect(rows.find((row) => row.id === 'chain-threshold')).toMatchObject({ value: 'x4' });
+        expect(rows.find((row) => row.id === 'pickup-claim')).toMatchObject({
+            arcadeCue: 'Left value',
+            value: '0/3'
+        });
+        expect(rows.find((row) => row.id === 'build-engines')).toMatchObject({ value: '2' });
+        expect(formatRunPayoffSignalsLabel('Recent run payoff signals', rows)).not.toMatch(/NaN|Infinity/);
+    });
+
     it('can add a next chain target for recent-run archive surfaces', () => {
         const rows = getRunPayoffSignals(summaryFixture({ bestStreak: 7 }), { includeChainTarget: true });
 

@@ -20,13 +20,13 @@ export interface LevelCompleteContinuationExecutorState {
     view: ViewState;
 }
 
-export interface LevelCompleteContinuationExecutorDeps<State extends LevelCompleteContinuationExecutorState> {
+export interface LevelCompleteContinuationExecutorDeps {
     applyResolvedRun: (run: RunState) => void;
     clearAllTimers: () => void;
     continueToNextLevel: () => void;
-    getState: () => State;
+    getState: () => LevelCompleteContinuationExecutorState;
     prepareMemorizeTimerForBoardReady: (run: RunState) => void;
-    setState: (patch: Partial<State> | ContinuationPatch) => void;
+    setState: (patch: ContinuationPatch) => void;
 }
 
 const routeDeadInterludeRunToGameOver = (
@@ -43,9 +43,9 @@ const routeDeadInterludeRunToGameOver = (
     return true;
 };
 
-const applyContinuationResult = <State extends LevelCompleteContinuationExecutorState>(
+const applyContinuationResult = (
     continuation: LevelCompleteContinuationSurfaceResult,
-    deps: LevelCompleteContinuationExecutorDeps<State>
+    deps: LevelCompleteContinuationExecutorDeps
 ): void => {
     if (continuation.kind === 'gameOver') {
         deps.applyResolvedRun(continuation.run);
@@ -59,9 +59,7 @@ const applyContinuationResult = <State extends LevelCompleteContinuationExecutor
     }
 };
 
-export const executeContinueToNextLevel = <State extends LevelCompleteContinuationExecutorState>(
-    deps: LevelCompleteContinuationExecutorDeps<State>
-): void => {
+export const executeContinueToNextLevel = (deps: LevelCompleteContinuationExecutorDeps): void => {
     const { run } = deps.getState();
 
     if (!run || run.status !== 'levelComplete') {
@@ -83,9 +81,9 @@ export const executeContinueToNextLevel = <State extends LevelCompleteContinuati
     );
 };
 
-export const executeChooseRouteAndContinue = <State extends LevelCompleteContinuationExecutorState>(
+export const executeChooseRouteAndContinue = (
     choiceId: string,
-    deps: LevelCompleteContinuationExecutorDeps<State>
+    deps: LevelCompleteContinuationExecutorDeps
 ): void => {
     const { run, view } = deps.getState();
 

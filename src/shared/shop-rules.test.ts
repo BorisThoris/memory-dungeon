@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_LIVES, type BoardState, type Tile } from './contracts';
+import { MAX_LIVES, type BoardState, type RunState, type Tile } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { buildBoard } from './board-build-rules';
 import { EXIT_PAIR_KEY } from './tile-identity';
@@ -7,13 +7,17 @@ import {
     canRerollShopOffers,
     createRunShopOffers,
     getRunShopReadModel,
+    getRunShopWalletPacing,
     getRunShopStockPlan,
     getShopGoldRewardForFloor,
+    getShopItemCatalogRows,
     getShopRerollCostForFloor,
     getShopWalletPacing,
     purchaseShopOffer,
     rerollShopOffers,
-    SHOP_ITEM_CATALOG
+    runShopOffers,
+    SHOP_ITEM_CATALOG,
+    SHOP_ITEM_IDS
 } from './shop-rules';
 
 const makePlayingRun = () => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 4242 }));
@@ -27,6 +31,20 @@ const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Til
 });
 
 describe('shop rules', () => {
+    it('keeps shop item catalog rows aligned with the shared item order', () => {
+        expect(Object.keys(SHOP_ITEM_CATALOG)).toEqual([...SHOP_ITEM_IDS]);
+        expect(getShopItemCatalogRows().map((item) => item.itemId)).toEqual([...SHOP_ITEM_IDS]);
+    });
+
+    it('normalizes shop offer arrays through one shared helper', () => {
+        const run = makePlayingRun();
+        const offers = createRunShopOffers(run);
+
+        expect(runShopOffers(offers)).toBe(offers);
+        expect(runShopOffers(null)).toEqual([]);
+        expect(runShopOffers(Number.NaN)).toEqual([]);
+    });
+
     it('defines deterministic floor rewards, reroll cost, and stock plans', () => {
         expect(getShopGoldRewardForFloor(1)).toBe(2);
         expect(getShopGoldRewardForFloor(99)).toBe(8);
@@ -158,6 +176,14 @@ describe('shop rules', () => {
         expect(getRunShopStockPlan({ ...run, board: lockedBoard, dungeonKeys: { iron: 1 } }).itemIds[0]).not.toBe(
             'iron_key'
         );
+        expect(
+            getRunShopStockPlan({
+                ...run,
+                board: lockedBoard,
+                dungeonKeys: { iron: Number.POSITIVE_INFINITY },
+                dungeonMasterKeys: Number.NaN
+            }).itemIds[0]
+        ).toBe('iron_key');
         expect(getRunShopStockPlan({ ...run, board: boardWithKeyPair }).itemIds[0]).not.toBe('iron_key');
         expect(getRunShopStockPlan({ ...run, board: lockedBoard }).itemIds[0]).toBe('iron_key');
     });
@@ -288,6 +314,26 @@ describe('shop rules', () => {
         });
     });
 
+    it('normalizes malformed shop offers for reads, rerolls, pacing, and purchases', () => {
+        const run = {
+            ...makePlayingRun(),
+            shopGold: 10,
+            shopOffers: Number.NaN as unknown as RunState['shopOffers']
+        };
+
+        expect(canRerollShopOffers(run)).toBe(false);
+        expect(rerollShopOffers(run)).toBe(run);
+        expect(purchaseShopOffer(run, 'missing')).toBe(run);
+        expect(getRunShopReadModel(run)).toMatchObject({
+            offerCount: 0,
+            availableOfferCount: 0,
+            purchasedOfferCount: 0,
+            canReroll: false
+        });
+        expect(getShopWalletPacing(run).sinkCostTotal).toBe(0);
+        expect(getRunShopWalletPacing(run).sinkCostTotal).toBe(0);
+    });
+
     it('prevents incompatible, unaffordable, duplicate, and second-reroll purchases', () => {
         const fullLifeRun = { ...makePlayingRun(), lives: MAX_LIVES, shopGold: 10 };
         const run = { ...fullLifeRun, shopOffers: createRunShopOffers(fullLifeRun) };
@@ -315,6 +361,44 @@ describe('shop rules', () => {
         expect(rerolled.shopGold).toBe(9);
         expect(canRerollShopOffers(rerolled)).toBe(false);
         expect(rerollShopOffers(rerolled)).toBe(rerolled);
+    });
+
+    it('normalizes malformed shop wallets before read models, rerolls, and purchases', () => {
+        const fullLifeRun = { ...makePlayingRun(), lives: MAX_LIVES, shopGold: Number.NaN };
+        const run = { ...fullLifeRun, shopOffers: createRunShopOffers(fullLifeRun) };
+        const peek = run.shopOffers.find((offer) => offer.itemId === 'peek_charge')!;
+
+        expect(getRunShopReadModel(run)).toMatchObject({
+            availableOfferCount: 0,
+            wallet: 0,
+            canReroll: false
+        });
+        expect(getShopWalletPacing(run).totalWallet).toBe(0);
+        expect(purchaseShopOffer(run, peek.id)).toBe(run);
+
+        const funded = { ...run, shopGold: 10.9, shopRerolls: Number.NaN };
+        const purchased = purchaseShopOffer(funded, peek.id);
+        expect(purchased.shopGold).toBe(10 - peek.cost);
+        expect(purchased.peekCharges).toBe(funded.peekCharges + 1);
+
+        const rerolled = rerollShopOffers(funded);
+        expect(rerolled.shopGold).toBe(10 - getShopRerollCostForFloor(funded.board!.level));
+        expect(rerolled.shopRerolls).toBe(1);
+    });
+
+    it('normalizes malformed stat records before boardless shop level fallbacks', () => {
+        const run = {
+            ...makePlayingRun(),
+            board: null,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(getRunShopStockPlan(run)).toMatchObject({
+            level: 1,
+            rerollCost: getShopRerollCostForFloor(1)
+        });
+        expect(getShopWalletPacing(run).earnedThisFloor).toBe(getShopGoldRewardForFloor(1));
+        expect(getRunShopWalletPacing(run).earnedThisFloor).toBe(getShopGoldRewardForFloor(1));
     });
 
     it('purchases typed key offers into matching run key inventory', () => {

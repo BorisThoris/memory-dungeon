@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { RelicId } from '../../shared/contracts';
 import { playRelicChoiceCrescendoSfx, resumeAudioContext } from '../audio/gameSfx';
@@ -514,5 +514,69 @@ describe('RelicDraftOfferPanel', () => {
         expect(playRelicChoiceCrescendoSfx).toHaveBeenCalledTimes(2);
         expect(playRelicChoiceCrescendoSfx).toHaveBeenNthCalledWith(1, 0.75, 'stack', 4);
         expect(playRelicChoiceCrescendoSfx).toHaveBeenNthCalledWith(2, 0.75, 'prime', 2);
+    });
+
+    it('drops a queued round announcement when that round is no longer current', async () => {
+        const pendingMicrotasks: VoidFunction[] = [];
+        vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
+            pendingMicrotasks.push(callback);
+        });
+        const panelForRound = (pickRound: number) => (
+            <RelicDraftOfferPanel
+                descriptionById={{ extra_shuffle_charge: '+1 shuffle charge.' } as Record<RelicId, string>}
+                onPick={vi.fn()}
+                optionIds={['extra_shuffle_charge']}
+                pickRound={pickRound}
+            />
+        );
+        const { rerender } = render(panelForRound(0));
+
+        rerender(panelForRound(1));
+        expect(pendingMicrotasks).toHaveLength(1);
+
+        rerender(panelForRound(0));
+        await act(async () => {
+            pendingMicrotasks.shift()?.();
+        });
+
+        expect(screen.getByRole('status')).toBeEmptyDOMElement();
+    });
+
+    it('re-arms the live region before repeating a round announcement', async () => {
+        vi.useFakeTimers();
+        const panelForRound = (pickRound: number) => (
+            <RelicDraftOfferPanel
+                descriptionById={{ extra_shuffle_charge: '+1 shuffle charge.' } as Record<RelicId, string>}
+                onPick={vi.fn()}
+                optionIds={['extra_shuffle_charge']}
+                pickRound={pickRound}
+            />
+        );
+        const { rerender, unmount } = render(panelForRound(0));
+
+        try {
+            rerender(panelForRound(1));
+            await act(async () => {
+                await Promise.resolve();
+            });
+            expect(screen.getByRole('status')).toBeEmptyDOMElement();
+            act(() => {
+                vi.advanceTimersByTime(0);
+            });
+            expect(screen.getByRole('status')).toHaveTextContent('The shrine redraws new relic choices.');
+
+            rerender(panelForRound(2));
+            await act(async () => {
+                await Promise.resolve();
+            });
+            expect(screen.getByRole('status')).toBeEmptyDOMElement();
+            act(() => {
+                vi.advanceTimersByTime(0);
+            });
+            expect(screen.getByRole('status')).toHaveTextContent('The shrine redraws new relic choices.');
+        } finally {
+            unmount();
+            vi.useRealTimers();
+        }
     });
 });

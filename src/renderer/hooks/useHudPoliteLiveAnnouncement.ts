@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { HazardTileKind, Tile, TileTraitKind } from '../../shared/contracts';
-import { getHazardTileLiveCopy } from '../../shared/hazard-tiles';
+import type { Tile, TileTraitKind } from '../../shared/contracts';
+import { getHazardTileLiveCopy, HAZARD_TILE_KINDS } from '../../shared/hazard-tiles';
 import { getChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
@@ -21,13 +21,6 @@ export {
     formatHudActionFeedbackText,
     getFindableToastText
 } from '../copy/hudActionFeedback';
-
-const flushThenSet = (text: string, set: (value: string) => void): void => {
-    set('');
-    queueMicrotask(() => {
-        set(text);
-    });
-};
 
 /** Min interval between polite live-region updates (anti-spam for screen readers). */
 const POLITE_HUD_THROTTLE_MS = 400;
@@ -163,7 +156,6 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): number
  * and throttles display cadence so screen readers get summaries, not chatter.
  */
 const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
-const HAZARD_ANNOUNCEMENT_ORDER = ['shuffle_snare', 'cascade_cache', 'mirror_decoy', 'fragile_cache', 'toll_cache', 'fuse_cache'] as const satisfies readonly HazardTileKind[];
 
 export const useHudPoliteLiveAnnouncement = ({
     gauntletRemainingMs,
@@ -295,24 +287,36 @@ export const useHudPoliteLiveAnnouncement = ({
 
     const queueRef = useRef(new Map<string, { text: string; priority: HudAnnouncePriority }>());
     const rafIdRef = useRef<number | null>(null);
-    const lastDisplayedAtRef = useRef(0);
+    const lastDisplayedAtRef = useRef<number | null>(null);
     const throttleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const pendingThrottledAnnouncementRef = useRef<{ text: string; priority: HudAnnouncePriority } | null>(null);
+    const livePublishTokenRef = useRef(0);
+
+    const flushThenSetMessage = useCallback((text: string): void => {
+        const token = livePublishTokenRef.current + 1;
+        livePublishTokenRef.current = token;
+        setMessage('');
+        queueMicrotask(() => {
+            if (livePublishTokenRef.current === token) {
+                setMessage(text);
+            }
+        });
+    }, []);
 
     const tryDeliver = useCallback((text: string, priority: HudAnnouncePriority) => {
         const now = nowMs();
         const last = lastDisplayedAtRef.current;
-        const elapsed = last === 0 ? POLITE_HUD_THROTTLE_MS : now - last;
+        const elapsed = last === null ? POLITE_HUD_THROTTLE_MS : now - last;
 
         const fire = (): void => {
             setMessagePriority(priority);
-            flushThenSet(text, setMessage);
+            flushThenSetMessage(text);
             lastDisplayedAtRef.current = nowMs();
             throttleTimerRef.current = null;
             pendingThrottledAnnouncementRef.current = null;
         };
 
-        if (last === 0 || elapsed >= POLITE_HUD_THROTTLE_MS) {
+        if (last === null || elapsed >= POLITE_HUD_THROTTLE_MS) {
             if (throttleTimerRef.current) {
                 clearTimeout(throttleTimerRef.current);
                 throttleTimerRef.current = null;
@@ -334,13 +338,13 @@ export const useHudPoliteLiveAnnouncement = ({
             const pending = pendingThrottledAnnouncementRef.current;
             if (pending) {
                 setMessagePriority(pending.priority);
-                flushThenSet(pending.text, setMessage);
+                flushThenSetMessage(pending.text);
                 lastDisplayedAtRef.current = nowMs();
             }
             throttleTimerRef.current = null;
             pendingThrottledAnnouncementRef.current = null;
         }, wait);
-    }, []);
+    }, [flushThenSetMessage]);
 
     const flushAnnouncementQueue = useCallback(() => {
         if (queueRef.current.size === 0) {
@@ -391,6 +395,7 @@ export const useHudPoliteLiveAnnouncement = ({
             if (throttleTimerRef.current) {
                 clearTimeout(throttleTimerRef.current);
             }
+            livePublishTokenRef.current += 1;
         },
         []
     );
@@ -798,7 +803,7 @@ export const useHudPoliteLiveAnnouncement = ({
             return;
         }
 
-        const firedKinds = HAZARD_ANNOUNCEMENT_ORDER.filter((kind) => {
+        const firedKinds = HAZARD_TILE_KINDS.filter((kind) => {
             if (kind === 'shuffle_snare') return hazardShuffleSnaresThisFloor > snap.shuffleSnare;
             if (kind === 'cascade_cache') return hazardCascadeCachesThisFloor > snap.cascadeCache;
             if (kind === 'mirror_decoy') return hazardMirrorDecoysThisFloor > snap.mirrorDecoy;

@@ -10,6 +10,10 @@ import {
 } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
+import { runMutatorIds, runRelicIds } from './relics';
+import { runStringArray } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
+import { routeChoicesForResult } from './route-choice-rules';
 import { getCurrentDungeonNode } from './run-map';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
@@ -77,6 +81,12 @@ export interface MemorySymbolMap {
 }
 
 const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
+
+const hasRunMutator = (run: RunState, mutatorId: MutatorId): boolean =>
+    runMutatorIds(run.activeMutators).includes(mutatorId);
+
+const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
+    runRelicIds(run.relicIds).includes(relicId);
 
 const isMemorySolvablePair = (pairKey: string, tiles: readonly Tile[]): boolean =>
     tiles.length === 2 && !isSingletonUtilityPairKey(pairKey);
@@ -167,7 +177,11 @@ const buildRecallPlan = (tiles: readonly Tile[], pinnedTileIds: readonly string[
         const unresolvedTiles = pairTiles.filter((tile) => !tileIsCleared(tile));
         const knownUnresolved = unresolvedTiles.filter((tile) => tileIsKnownToMemory(tile, pinnedSet));
         const forgottenUnresolved = unresolvedTiles.filter((tile) => forgottenSet.has(tile.id));
-        const label = tileMemoryLabel(pairTiles[0]!);
+        const labelTile = unresolvedTiles[0] ?? pairTiles[0];
+        if (!labelTile) {
+            continue;
+        }
+        const label = tileMemoryLabel(labelTile);
 
         if (forgottenUnresolved.length > 0) {
             forgottenReads.push(label);
@@ -597,10 +611,10 @@ const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => Memor
     memorize_under_short_memorize: (run) => ({
         id: 'memory-assist-short-memorize-answer',
         label: 'Short-study answer',
-        detail: run.activeMutators.includes('short_memorize')
+        detail: hasRunMutator(run, 'short_memorize')
             ? 'This relic directly answers the active short-study tax.'
             : 'Banked for the next short-study floor so fast encoding stays fair.',
-        tone: run.activeMutators.includes('short_memorize') ? 'reward' : 'stable'
+        tone: hasRunMutator(run, 'short_memorize') ? 'reward' : 'stable'
     }),
     peek_charge_plus_one: (run) => ({
         id: 'memory-assist-peek-charge',
@@ -610,7 +624,7 @@ const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => Memor
     }),
     pin_cap_plus_one: (run) => ({
         id: 'memory-assist-pin-cap',
-        label: `Pin capacity ${run.pinnedTileIds.length}/${run.activeContract?.maxPinsTotalRun ?? 'expanded'}`,
+        label: `Pin capacity ${runStringArray(run.pinnedTileIds).length}/${run.activeContract?.maxPinsTotalRun ?? 'expanded'}`,
         detail: 'Expanded pin space lets the player author a safer path through noisy symbol bands.',
         tone: 'stable'
     }),
@@ -623,7 +637,7 @@ const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => Memor
 };
 
 const buildMemoryTaxLines = (run: RunState): MemoryFeedbackLine[] =>
-    unique(run.activeMutators)
+    unique(runMutatorIds(run.activeMutators))
         .flatMap((mutator) => {
             const copy = MEMORY_TAX_MUTATOR_COPY[mutator];
             return copy
@@ -638,7 +652,7 @@ const buildMemoryTaxLines = (run: RunState): MemoryFeedbackLine[] =>
         .slice(0, 4);
 
 const buildMemoryAssistLines = (run: RunState): MemoryFeedbackLine[] =>
-    unique(run.relicIds)
+    unique(runRelicIds(run.relicIds))
         .flatMap((relicId) => {
             const makeLine = MEMORY_ASSIST_RELIC_COPY[relicId];
             return makeLine ? [makeLine(run)] : [];
@@ -649,7 +663,8 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const board = run.board;
     const tiles = board?.tiles ?? [];
     const rememberedClueTiles = tiles.filter(tileHasRecallClue);
-    const forgottenTileIds = run.forgottenTileIdsThisFloor ?? [];
+    const forgottenTileIds = runStringArray(run.forgottenTileIdsThisFloor);
+    const pinnedTileIds = runStringArray(run.pinnedTileIds);
     const forgottenSet = new Set(forgottenTileIds);
     const forgottenSymbols = unique(
         tiles
@@ -664,8 +679,8 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const focus = normalizeRecallFocus(run.recallFocus);
     const nextCleanMatchBonus = focus * RECALL_FOCUS_MATCH_SCORE;
     const clueBonus = rememberedClueTiles.length > 0 ? RECALL_CLUE_MATCH_SCORE : 0;
-    const symbolMap = buildSymbolMap(tiles, run.pinnedTileIds, forgottenTileIds);
-    const recallPlan = buildRecallPlan(tiles, run.pinnedTileIds, forgottenTileIds);
+    const symbolMap = buildSymbolMap(tiles, pinnedTileIds, forgottenTileIds);
+    const recallPlan = buildRecallPlan(tiles, pinnedTileIds, forgottenTileIds);
     const overloadScore =
         run.recallMistakesThisFloor +
         Math.ceil(forgottenTileIds.length / 2) +
@@ -677,7 +692,7 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
     const focusLabel = focusLabelFor(focus);
     const activeThreatCount = activeEnemyHazards.length + revealedEnemyTiles.length;
     const roomIdentity = roomIdentityFor(run);
-    const routeChoices = run.lastLevelResult?.routeChoices ?? [];
+    const routeChoices = routeChoicesForResult(run.lastLevelResult);
     const totalNextCleanMatchBonus = nextCleanMatchBonus + clueBonus;
     const burden = buildMemoryBurden({
         forgottenTileCount: forgottenTileIds.length,
@@ -725,11 +740,13 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: 'reward'
         });
     }
-    if ((run.lanternWardScoutsThisFloor ?? 0) > 0 || (run.omenSealScoutsThisFloor ?? 0) > 0) {
+    const lanternWardScouts = runNonNegativeInteger(run.lanternWardScoutsThisFloor);
+    const omenSealScouts = runNonNegativeInteger(run.omenSealScoutsThisFloor);
+    if (lanternWardScouts > 0 || omenSealScouts > 0) {
         clues.push({
             id: 'scout-sources',
             label: 'Scout trail active',
-            detail: `${run.lanternWardScoutsThisFloor ?? 0} Lantern Ward and ${run.omenSealScoutsThisFloor ?? 0} Omen Seal clue reads this floor.`,
+            detail: `${lanternWardScouts} Lantern Ward and ${omenSealScouts} Omen Seal clue reads this floor.`,
             tone: 'stable'
         });
     }
@@ -768,10 +785,10 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: 'watch'
         });
     }
-    if (run.pinnedTileIds.length > 0) {
+    if (pinnedTileIds.length > 0) {
         symbols.push({
             id: 'pinned-symbols',
-            label: `${run.pinnedTileIds.length} pinned tile${run.pinnedTileIds.length === 1 ? '' : 's'}`,
+            label: `${pinnedTileIds.length} pinned tile${pinnedTileIds.length === 1 ? '' : 's'}`,
             detail: 'Pins preserve player-authored memory without locking Perfect Memory.',
             tone: 'stable'
         });
@@ -786,11 +803,12 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: 'danger'
         });
     }
-    if (run.pendingMemorizeBonusMs > 0) {
+    const pendingMemorizeBonusMs = runNonNegativeInteger(run.pendingMemorizeBonusMs);
+    if (pendingMemorizeBonusMs > 0) {
         penalties.push({
             id: 'memorize-recovery',
             label: 'Recovery memorize time banked',
-            detail: `+${Math.min(run.pendingMemorizeBonusMs, MAX_PENDING_MEMORIZE_BONUS_MS)}ms will soften the next memorization phase.`,
+            detail: `+${Math.min(pendingMemorizeBonusMs, MAX_PENDING_MEMORIZE_BONUS_MS)}ms will soften the next memorization phase.`,
             tone: 'stable'
         });
     }
@@ -807,7 +825,7 @@ export const getMemoryRecallFeedback = (run: RunState): MemoryRecallFeedback => 
             tone: totalNextCleanMatchBonus > 0 ? 'reward' : 'watch'
         }
     ];
-    if (run.relicIds.includes('memorize_bonus_ms')) {
+    if (hasRunRelic(run, 'memorize_bonus_ms')) {
         upgrades.push({
             id: 'memorize-relic',
             label: 'Memorize upgrade owned',

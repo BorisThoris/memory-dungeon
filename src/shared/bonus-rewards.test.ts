@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
     BONUS_REWARD_CATALOG,
+    BONUS_REWARD_IDS,
     claimBonusReward,
     createBonusRewardLedger,
     previewBonusRewardClaim,
@@ -10,7 +11,8 @@ import {
     getBonusRewardRows,
     getPrimaryRewardPerkReadinessRow,
     getRewardPerkReadinessRows,
-    getRewardPerkRows
+    getRewardPerkRows,
+    type BonusRewardPayout
 } from './bonus-rewards';
 import { buildBoard } from './board-build-rules';
 import { GAME_RULES_VERSION, MAX_COMBO_SHARDS, MAX_GUARD_TOKENS, type RunState } from './contracts';
@@ -264,6 +266,8 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(draft.map((reward) => reward.id)).toEqual(
             expect.arrayContaining(['trait_toolkit', 'key_insurance'])
         );
+        expect(Object.keys(BONUS_REWARD_CATALOG)).toEqual([...BONUS_REWARD_IDS]);
+        expect(getBonusRewardRows().map((reward) => reward.id)).toEqual([...BONUS_REWARD_IDS]);
         expect(getBonusRewardRows().find((reward) => reward.id === 'trait_toolkit')).toMatchObject({
             label: 'Trait toolkit',
             summaryText: '+1 row/swap charge, +1 peek charge, and +10 score.',
@@ -457,6 +461,11 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
             createBonusRewardLedger(),
             room
         );
+        const malformedRunResult = claimBonusReward(
+            { ...run, rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'] },
+            createBonusRewardLedger(),
+            room
+        );
 
         expect(result.claimed).toBe(true);
         expect(result.run.rewardPerkIds).toContain('echo_conduit_double');
@@ -471,6 +480,9 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(duplicate.feedback.gained).not.toContain(
             'Perk next: Match Echo touching Conduit before cashing adjacent Sealed.'
         );
+        expect(malformedRunResult.claimed).toBe(true);
+        expect(malformedRunResult.run.rewardPerkIds).toEqual(['echo_conduit_double']);
+        expect(malformedRunResult.feedback.gained).toEqual(expect.arrayContaining(['Unlock Echo Conduit Double']));
         expect(getRewardPerkRows({ rewardPerkIds: ['hazard_banish_per_floor'] })[0]).toMatchObject({
             label: 'Hazard Banish',
             detail: 'Each new floor clears one hazard marker before play; if none exists, it grants a destroy charge.',
@@ -551,6 +563,59 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         });
     });
 
+    it('normalizes malformed reward perk readiness counters before projecting rows', () => {
+        const rows = getRewardPerkReadinessRows({
+            ...makeRun(),
+            activeContract: null,
+            matchResolutionsThisFloor: 0,
+            regionShuffleCharges: Number.POSITIVE_INFINITY,
+            regionShuffleFreeThisFloor: false,
+            rewardPerkIds: ['free_first_swap_per_floor', 'trait_streak_toolkit'],
+            stats: { ...makeRun().stats, currentStreak: Number.NaN }
+        });
+
+        expect(rows.find((row) => row.id === 'free_first_swap_per_floor')).toMatchObject({
+            readiness: 'spent',
+            readinessLabel: 'Prime spent'
+        });
+        expect(rows.find((row) => row.id === 'trait_streak_toolkit')).toMatchObject({
+            meterPercent: 0,
+            readiness: 'soon',
+            readinessLabel: '0/2 chain'
+        });
+        expect(rows.map((row) => `${row.readinessLabel} ${row.readinessDetail}`).join(' ')).not.toMatch(/NaN|Infinity/);
+
+        const malformedStatsRows = getRewardPerkReadinessRows({
+            ...makeRun(),
+            activeContract: null,
+            matchResolutionsThisFloor: 0,
+            rewardPerkIds: ['trait_streak_toolkit'],
+            stats: Number.NaN as unknown as RunState['stats']
+        });
+        expect(malformedStatsRows.find((row) => row.id === 'trait_streak_toolkit')).toMatchObject({
+            meterPercent: 0,
+            readiness: 'soon',
+            readinessLabel: '0/2 chain'
+        });
+
+        expect(getRewardPerkRows({ rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'] })).toEqual([]);
+        expect(getRewardPerkRows({
+            rewardPerkIds: [
+                'trait_streak_toolkit',
+                '__proto__',
+                'constructor',
+                Number.NaN
+            ] as unknown as RunState['rewardPerkIds']
+        }).map((row) => row.id)).toEqual(['trait_streak_toolkit']);
+        expect(getRewardPerkReadinessRows({
+            ...makeRun(),
+            activeContract: null,
+            matchResolutionsThisFloor: 0,
+            rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'],
+            stats: Number.NaN as unknown as RunState['stats']
+        })).toEqual([]);
+    });
+
     it('resolves a saved reward instance even when the current route roll picks another candidate', () => {
         const instanceId = `${GAME_RULES_VERSION}:75008:5:bonus_shards`;
         const resolved = resolveBonusRewardRoomByInstanceId({
@@ -566,6 +631,16 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
             instanceId,
             eligible: true
         });
+    });
+
+    it.each(['__proto__', 'constructor', 'toString'])('rejects prototype reward id %s', (rewardId) => {
+        expect(resolveBonusRewardRoomByInstanceId({
+            runSeed: 75_008,
+            rulesVersion: GAME_RULES_VERSION,
+            floor: 5,
+            routeKind: 'event',
+            instanceId: `${GAME_RULES_VERSION}:75008:5:${rewardId}`
+        })).toBeNull();
     });
 
     it('reports capped pickup feedback while still applying useful inventory rewards', () => {
@@ -672,6 +747,64 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.feedback.capped).toEqual(['Combo shards already full', 'Guard tokens already full']);
     });
 
+    it('normalizes malformed saved score counters before adding overflow score', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_015,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 7,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.bonus_shards,
+            eligible: true,
+            unavailableReason: null
+        };
+        const run = {
+            ...makeRun(room.runSeed, room.rulesVersion),
+            stats: {
+                ...makeRun().stats,
+                totalScore: Number.POSITIVE_INFINITY,
+                currentLevelScore: Number.NaN,
+                comboShards: MAX_COMBO_SHARDS,
+                guardTokens: MAX_GUARD_TOKENS
+            }
+        } as RunState;
+        const result = claimBonusReward(run, createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.stats.totalScore).toBe(10);
+        expect(result.run.stats.currentLevelScore).toBe(10);
+        expect(result.feedback.gained).toEqual(['+10 overflow score']);
+    });
+
+    it('normalizes malformed stat records before applying bonus reward payouts', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_016,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 7,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.bonus_shards,
+            eligible: true,
+            unavailableReason: null
+        };
+        const result = claimBonusReward(
+            {
+                ...makeRun(room.runSeed, room.rulesVersion),
+                stats: Number.NaN as unknown as RunState['stats']
+            },
+            createBonusRewardLedger(),
+            room
+        );
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.stats.comboShards).toBe(1);
+        expect(result.run.stats.guardTokens).toBe(1);
+        expect(result.run.stats.currentLevelScore).toBe(0);
+        expect(result.run.stats.totalScore).toBe(0);
+    });
+
     it('previews ineligible reward feedback without mutating the run', () => {
         const room = {
             ...rollBonusRewardRoom({
@@ -729,6 +862,11 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
     });
 
     it('ignores malformed numeric reward payloads before they can poison run counters', () => {
+        const malformedInventoryItems = {
+            peek_charge: Number.NaN,
+            destroy_charge: 1.8,
+            missing_item: 99
+        } as BonusRewardPayout['inventoryItems'];
         const room = {
             ...rollBonusRewardRoom({
                 runSeed: 75_011,
@@ -742,7 +880,7 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
                 score: Number.POSITIVE_INFINITY,
                 comboShards: Number.NEGATIVE_INFINITY,
                 relicFavorProgress: -2,
-                inventoryItems: { peek_charge: Number.NaN, destroy_charge: 1.8 }
+                inventoryItems: malformedInventoryItems
             },
             eligible: true,
             unavailableReason: null
@@ -759,5 +897,65 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.run.destroyPairCharges).toBe(1);
         expect(result.run.peekCharges).toBe(0);
         expect(result.feedback.gained).toEqual(['+1 destroy charge']);
+
+        const malformedPerks = claimBonusReward(
+            run,
+            createBonusRewardLedger(),
+            {
+                ...room,
+                payout: {
+                    rewardPerks: Number.NaN as unknown as BonusRewardPayout['rewardPerks']
+                }
+            }
+        );
+        expect(malformedPerks.claimed).toBe(true);
+        expect(malformedPerks.run.rewardPerkIds).toEqual([]);
+        expect(malformedPerks.feedback.gained).toEqual([]);
+
+        const mixedPerks = claimBonusReward(
+            run,
+            createBonusRewardLedger(),
+            {
+                ...room,
+                payout: {
+                    rewardPerks: [
+                        'trait_streak_toolkit',
+                        '__proto__',
+                        Number.NaN
+                    ] as unknown as BonusRewardPayout['rewardPerks']
+                }
+            }
+        );
+        expect(mixedPerks.claimed).toBe(true);
+        expect(mixedPerks.run.rewardPerkIds).toEqual(['trait_streak_toolkit']);
+        expect(mixedPerks.feedback.gained).toEqual(expect.arrayContaining(['Unlock Trait Streak Flash']));
+    });
+
+    it('normalizes malformed saved relic Favor counters before carrying bonus picks', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_012,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 7,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.secret_favor,
+            payout: { relicFavorProgress: 4.9 },
+            eligible: true,
+            unavailableReason: null
+        };
+        const run = {
+            ...makeRun(room.runSeed, room.rulesVersion),
+            relicFavorProgress: Number.NaN,
+            bonusRelicPicksNextOffer: Number.POSITIVE_INFINITY,
+            favorBonusRelicPicksNextOffer: Number.NaN
+        };
+        const result = claimBonusReward(run, createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run.relicFavorProgress).toBe(1);
+        expect(result.run.bonusRelicPicksNextOffer).toBe(1);
+        expect(result.run.favorBonusRelicPicksNextOffer).toBe(1);
+        expect(result.feedback.gained).toContain('+4 relic Favor progress');
     });
 });

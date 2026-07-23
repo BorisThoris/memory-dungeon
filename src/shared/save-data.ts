@@ -1,13 +1,11 @@
 import {
+    MUTATOR_IDS,
+    RESOLVE_DELAY_MULTIPLIER_MIN,
     SAVE_SCHEMA_VERSION,
     type AchievementId,
     type AchievementState,
-    type BoardPresentationMode,
-    type BoardScreenSpaceAA,
-    type CameraViewportModePreference,
-    type DisplayMode,
+    type ContractFlags,
     type GameMode,
-    type GraphicsQualityPreset,
     type MutatorId,
     type PlayerStatsPersisted,
     type RelicId,
@@ -15,13 +13,15 @@ import {
     type RunState,
     type SaveData,
     type Settings,
-    type StartingLoadoutId,
-    type WeakerShuffleMode
+    type StartingLoadoutId
 } from './contracts';
 import { z } from 'zod';
+import { COSMETIC_IDS } from './cosmetic-ids';
+import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
 import { utcDateKeyMinusOneDay } from './rng';
 import { RELIC_POOL } from './relics';
-import { evaluateSaveMigrationGate } from './version-gate';
+import { normalizeSessionStats } from './session-stats-rules';
+import { evaluateSaveMigrationGate, isRecognizedSaveSchemaVersion } from './version-gate';
 
 export type DailyStreakFreezePolicy = 'not_supported';
 
@@ -61,7 +61,33 @@ export const DEFAULT_SETTINGS: Settings = {
     pairProximityHintsEnabled: true
 };
 
-export const ACHIEVEMENT_IDS: AchievementId[] = [
+const DISPLAY_MODE_VALUES = ['windowed', 'fullscreen'] as const satisfies readonly Settings['displayMode'][];
+const GRAPHICS_QUALITY_VALUES = ['low', 'medium', 'high'] as const satisfies readonly Settings['graphicsQuality'][];
+const BOARD_SCREEN_SPACE_AA_VALUES = ['auto', 'smaa', 'msaa', 'off'] as const satisfies readonly Settings['boardScreenSpaceAA'][];
+const BOARD_PRESENTATION_VALUES = ['standard', 'spaghetti', 'breathing'] as const satisfies readonly Settings['boardPresentation'][];
+const CAMERA_VIEWPORT_MODE_PREFERENCE_VALUES = [
+    'auto',
+    'always',
+    'never'
+] as const satisfies readonly Settings['cameraViewportModePreference'][];
+const WEAKER_SHUFFLE_MODE_VALUES = ['full', 'rows_only'] as const satisfies readonly Settings['weakerShuffleMode'][];
+
+type NumericSettingsKey =
+    | 'masterVolume'
+    | 'musicVolume'
+    | 'sfxVolume'
+    | 'uiScale'
+    | 'resolveDelayMultiplier';
+
+export const SETTINGS_NUMERIC_RANGES = {
+    masterVolume: { min: 0, max: 1 },
+    musicVolume: { min: 0, max: 1 },
+    sfxVolume: { min: 0, max: 1 },
+    uiScale: { min: 0.8, max: 1.4 },
+    resolveDelayMultiplier: { min: RESOLVE_DELAY_MULTIPLIER_MIN, max: 2.5 }
+} as const satisfies Record<NumericSettingsKey, { min: number; max: number }>;
+
+export const ACHIEVEMENT_IDS = [
     'ACH_FIRST_CLEAR',
     'ACH_LEVEL_FIVE',
     'ACH_SCORE_THOUSAND',
@@ -69,7 +95,7 @@ export const ACHIEVEMENT_IDS: AchievementId[] = [
     'ACH_LAST_LIFE',
     'ACH_ENDLESS_TEN',
     'ACH_SEVEN_DAILIES'
-];
+] as const satisfies readonly AchievementId[];
 
 export const createAchievementState = (): AchievementState =>
     ACHIEVEMENT_IDS.reduce<AchievementState>(
@@ -80,6 +106,8 @@ export const createAchievementState = (): AchievementState =>
         {} as AchievementState
     );
 
+const createPuzzleCompletionMap = (): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => Object.create(null);
+
 const defaultPlayerStats = (): PlayerStatsPersisted => ({
     bestFloorNoPowers: 0,
     dailiesCompleted: 0,
@@ -87,72 +115,145 @@ const defaultPlayerStats = (): PlayerStatsPersisted => ({
     dailyStreakCosmetic: 0,
     relicPickCounts: {},
     encorePairKeysLastRun: [],
-    puzzleCompletions: {},
+    puzzleCompletions: createPuzzleCompletionMap(),
     relicShrineExtraPickUnlocked: false
 });
 
-const RELIC_ID_SET = new Set<RelicId>(RELIC_POOL);
-const GAME_MODE_SET = new Set<GameMode>(['endless', 'daily', 'puzzle', 'gauntlet', 'meditation']);
-const STARTING_LOADOUT_ID_SET = new Set<StartingLoadoutId>([
+const ACHIEVEMENT_ID_SET: ReadonlySet<string> = new Set(ACHIEVEMENT_IDS);
+const RELIC_ID_SET: ReadonlySet<string> = new Set(RELIC_POOL);
+const MUTATOR_ID_SET: ReadonlySet<string> = new Set(MUTATOR_IDS);
+const GAME_MODE_SET: ReadonlySet<string> = new Set(['endless', 'daily', 'puzzle', 'gauntlet', 'meditation']);
+const STARTING_LOADOUT_ID_SET: ReadonlySet<string> = new Set([
     'memory_scout',
     'route_tactician',
     'cursebreaker',
     'vaultbreaker'
 ]);
+const VALID_UNLOCK_TAG_SET: ReadonlySet<string> = new Set([
+    ...ACHIEVEMENT_IDS.map((id) => `achievement:${id}`),
+    ...COSMETIC_IDS.map((id) => `cosmetic:${id}`),
+    ...HONOR_UNLOCK_IDS.map((id) => `honor:${id}`)
+]);
+
+const PERSISTED_COLLECTION_LIMITS = {
+    encorePairKeys: 80,
+    entryTextLength: 128,
+    inspectedEntries: 1024,
+    puzzleCompletions: 256,
+    unlockTags: 128
+} as const;
+const PERSISTED_SUMMARY_TEXT_LIMIT = 256;
+
+const isUnknownRecord = (value: unknown): value is Record<string, unknown> =>
+    Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+
+const isAchievementId = (value: unknown): value is AchievementId =>
+    typeof value === 'string' && ACHIEVEMENT_ID_SET.has(value);
+
+const isGameMode = (value: unknown): value is GameMode =>
+    typeof value === 'string' && GAME_MODE_SET.has(value);
+
+const isMutatorId = (value: unknown): value is MutatorId =>
+    typeof value === 'string' && MUTATOR_ID_SET.has(value);
+
+const isRelicId = (value: unknown): value is RelicId =>
+    typeof value === 'string' && RELIC_ID_SET.has(value);
+
+const isStartingLoadoutId = (value: unknown): value is StartingLoadoutId =>
+    typeof value === 'string' && STARTING_LOADOUT_ID_SET.has(value);
 
 const finiteNonNegativeInteger = (value: unknown, fallback: number): number =>
     typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : fallback;
 
-const finiteNonNegativeNumber = (value: unknown, fallback: number): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, value) : fallback;
+const finiteClampedNumber = (
+    value: unknown,
+    fallback: number,
+    range: { readonly min: number; readonly max: number }
+): number =>
+    typeof value === 'number' && Number.isFinite(value)
+        ? Math.min(range.max, Math.max(range.min, value))
+        : fallback;
 
-const stringOrNull = (value: unknown, fallback: string | null): string | null =>
-    typeof value === 'string' ? value : value === null ? null : fallback;
+const normalizeDailyDateKeyUtc = (value: unknown): string | null => {
+    if (typeof value !== 'string') {
+        return null;
+    }
+    const compact = /^\d{8}$/.test(value) ? value : /^\d{4}-\d{2}-\d{2}$/.test(value) ? value.replaceAll('-', '') : null;
+    if (!compact) {
+        return null;
+    }
+    const year = Number(compact.slice(0, 4));
+    const month = Number(compact.slice(4, 6)) - 1;
+    const day = Number(compact.slice(6, 8));
+    const date = new Date(Date.UTC(year, month, day));
+    return date.getUTCFullYear() === year && date.getUTCMonth() === month && date.getUTCDate() === day ? compact : null;
+};
 
 const normalizeAchievements = (input: unknown): AchievementState => {
     const out = createAchievementState();
-    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    if (!isUnknownRecord(input)) {
         return out;
     }
-    const source = input as Partial<Record<AchievementId, unknown>>;
     for (const id of ACHIEVEMENT_IDS) {
-        out[id] = source[id] === true;
+        out[id] = input[id] === true;
     }
     return out;
 };
 
+export interface RelicPickCountRow {
+    id: RelicId;
+    count: number;
+}
+
+export const getRelicPickCountRows = (input: unknown): RelicPickCountRow[] => {
+    const counts = isUnknownRecord(input) ? input : {};
+    return RELIC_POOL.map((id) => ({
+        id,
+        count: finiteNonNegativeInteger(counts[id], 0)
+    }));
+};
+
+export const getRelicPickTotal = (input: unknown): number =>
+    getRelicPickCountRows(input).reduce((sum, row) => sum + row.count, 0);
+
 const normalizeRelicPickCounts = (input: unknown): PlayerStatsPersisted['relicPickCounts'] => {
-    if (!input || typeof input !== 'object' || Array.isArray(input)) {
-        return {};
-    }
     const out: PlayerStatsPersisted['relicPickCounts'] = {};
-    for (const [id, value] of Object.entries(input as Record<string, unknown>)) {
-        if (RELIC_ID_SET.has(id as RelicId)) {
-            const count = finiteNonNegativeInteger(value, 0);
-            if (count > 0) {
-                out[id as RelicId] = count;
-            }
+    for (const { id, count } of getRelicPickCountRows(input)) {
+        if (count > 0) {
+            out[id] = count;
         }
     }
     return out;
 };
 
 const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPersisted['puzzleCompletions']> => {
-    if (!input || typeof input !== 'object' || Array.isArray(input)) {
-        return {};
+    if (!isUnknownRecord(input)) {
+        return createPuzzleCompletionMap();
     }
-    const out: NonNullable<PlayerStatsPersisted['puzzleCompletions']> = {};
-    for (const [id, value] of Object.entries(input as Record<string, unknown>)) {
-        if (typeof id !== 'string' || id.length === 0 || !value || typeof value !== 'object' || Array.isArray(value)) {
+    const out = createPuzzleCompletionMap();
+    let inspected = 0;
+    let retained = 0;
+    for (const id in input) {
+        if (!Object.prototype.hasOwnProperty.call(input, id)) {
             continue;
         }
-        const record = value as Record<string, unknown>;
-        if (record.completed !== true) {
+        if (
+            inspected >= PERSISTED_COLLECTION_LIMITS.inspectedEntries ||
+            retained >= PERSISTED_COLLECTION_LIMITS.puzzleCompletions
+        ) {
+            break;
+        }
+        inspected += 1;
+        const value = input[id];
+        if (id.length === 0 || id.length > PERSISTED_COLLECTION_LIMITS.entryTextLength || !isUnknownRecord(value)) {
+            continue;
+        }
+        if (value.completed !== true) {
             continue;
         }
         const bestMistakes =
-            record.bestMistakes === null ? null : finiteNonNegativeInteger(record.bestMistakes, Number.NaN);
-        const bestScore = finiteNonNegativeInteger(record.bestScore, Number.NaN);
+            value.bestMistakes === null ? null : finiteNonNegativeInteger(value.bestMistakes, Number.NaN);
+        const bestScore = finiteNonNegativeInteger(value.bestScore, Number.NaN);
         if ((bestMistakes !== null && !Number.isFinite(bestMistakes)) || !Number.isFinite(bestScore)) {
             continue;
         }
@@ -161,6 +262,7 @@ const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPers
             bestMistakes,
             bestScore
         };
+        retained += 1;
     }
     return out;
 };
@@ -169,24 +271,80 @@ const normalizeUnlocks = (input: unknown): string[] => {
     if (!Array.isArray(input)) {
         return [];
     }
-    const allowedPrefixes = ['achievement:', 'cosmetic:', 'honor:'];
-    return [...new Set(input)]
-        .filter((value): value is string => typeof value === 'string')
-        .filter((value) => allowedPrefixes.some((prefix) => value.startsWith(prefix)));
+    const out = new Set<string>();
+    for (const value of input.slice(0, PERSISTED_COLLECTION_LIMITS.inspectedEntries)) {
+        if (
+            typeof value === 'string' &&
+            value.length <= PERSISTED_COLLECTION_LIMITS.entryTextLength &&
+            VALID_UNLOCK_TAG_SET.has(value)
+        ) {
+            out.add(value);
+            if (out.size >= PERSISTED_COLLECTION_LIMITS.unlockTags) {
+                break;
+            }
+        }
+    }
+    return [...out];
 };
 
 const normalizeStringLedger = (input: unknown, limit: number): string[] => {
     if (!Array.isArray(input)) {
         return [];
     }
-    return [...new Set(input.filter((value): value is string => typeof value === 'string'))].slice(0, limit);
+    const out = new Set<string>();
+    for (const value of input.slice(0, PERSISTED_COLLECTION_LIMITS.inspectedEntries)) {
+        if (
+            typeof value === 'string' &&
+            value.length > 0 &&
+            value.length <= PERSISTED_COLLECTION_LIMITS.entryTextLength
+        ) {
+            out.add(value);
+            if (out.size >= limit) {
+                break;
+            }
+        }
+    }
+    return [...out];
+};
+
+const normalizeContractFlags = (input: unknown): ContractFlags | null => {
+    if (
+        !isUnknownRecord(input) ||
+        typeof input.noShuffle !== 'boolean' ||
+        typeof input.noDestroy !== 'boolean' ||
+        (input.maxMismatches !== null &&
+            (typeof input.maxMismatches !== 'number' || !Number.isFinite(input.maxMismatches)))
+    ) {
+        return null;
+    }
+    if (
+        input.maxPinsTotalRun !== undefined &&
+        input.maxPinsTotalRun !== null &&
+        (typeof input.maxPinsTotalRun !== 'number' || !Number.isFinite(input.maxPinsTotalRun))
+    ) {
+        return null;
+    }
+    return {
+        noShuffle: input.noShuffle,
+        noDestroy: input.noDestroy,
+        maxMismatches:
+            input.maxMismatches === null ? null : finiteNonNegativeInteger(input.maxMismatches, 0),
+        ...(input.maxPinsTotalRun === null
+            ? { maxPinsTotalRun: null }
+            : typeof input.maxPinsTotalRun === 'number'
+              ? { maxPinsTotalRun: finiteNonNegativeInteger(input.maxPinsTotalRun, 0) }
+              : {}),
+        ...(typeof input.bonusRelicDraftPick === 'boolean'
+            ? { bonusRelicDraftPick: input.bonusRelicDraftPick }
+            : {})
+    };
 };
 
 const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
-    if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    if (!isUnknownRecord(input)) {
         return null;
     }
-    const source = input as Record<string, unknown>;
+    const source = input;
     const totalScore = finiteNonNegativeInteger(source.totalScore, Number.NaN);
     const bestScore = finiteNonNegativeInteger(source.bestScore, Number.NaN);
     const levelsCleared = finiteNonNegativeInteger(source.levelsCleared, Number.NaN);
@@ -200,26 +358,41 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
     const runSeed = source.runSeed === undefined ? undefined : finiteNonNegativeInteger(source.runSeed, Number.NaN);
     const runRulesVersion =
         source.runRulesVersion === undefined ? undefined : finiteNonNegativeInteger(source.runRulesVersion, Number.NaN);
-    const gameMode = GAME_MODE_SET.has(source.gameMode as GameMode) ? (source.gameMode as GameMode) : undefined;
+    const gameMode = isGameMode(source.gameMode) ? source.gameMode : undefined;
+    const dailyDateKeyUtc = normalizeDailyDateKeyUtc(source.dailyDateKeyUtc);
+    const activeContract = normalizeContractFlags(source.activeContract);
     const activeMutators = Array.isArray(source.activeMutators)
-        ? [...new Set(source.activeMutators.filter((value): value is MutatorId => typeof value === 'string'))]
+        ? [...new Set(source.activeMutators.filter(isMutatorId))]
         : undefined;
     const relicIds = Array.isArray(source.relicIds)
-        ? [...new Set(source.relicIds.filter((value): value is RelicId => RELIC_ID_SET.has(value as RelicId)))]
+        ? [...new Set(source.relicIds.filter(isRelicId))]
         : undefined;
-    const startingLoadoutId = STARTING_LOADOUT_ID_SET.has(source.startingLoadoutId as StartingLoadoutId)
-        ? (source.startingLoadoutId as StartingLoadoutId)
+    const startingLoadoutId = isStartingLoadoutId(source.startingLoadoutId)
+        ? source.startingLoadoutId
         : source.startingLoadoutId === null
           ? null
           : undefined;
-    const payoffPickupClaimed =
+    const payoffPickupClaimedRaw =
         source.payoffPickupClaimed === undefined ? undefined : finiteNonNegativeInteger(source.payoffPickupClaimed, Number.NaN);
     const payoffPickupTotal =
         source.payoffPickupTotal === undefined ? undefined : finiteNonNegativeInteger(source.payoffPickupTotal, Number.NaN);
+    const payoffPickupClaimed =
+        typeof payoffPickupClaimedRaw === 'number' &&
+        typeof payoffPickupTotal === 'number' &&
+        Number.isFinite(payoffPickupClaimedRaw) &&
+        Number.isFinite(payoffPickupTotal)
+            ? Math.min(payoffPickupClaimedRaw, payoffPickupTotal)
+            : payoffPickupClaimedRaw;
     const payoffPressureExtra =
         source.payoffPressureExtra === undefined ? undefined : finiteNonNegativeInteger(source.payoffPressureExtra, Number.NaN);
     const payoffRewardPerkCount =
         source.payoffRewardPerkCount === undefined ? undefined : finiteNonNegativeInteger(source.payoffRewardPerkCount, Number.NaN);
+    const payoffRouteRewardText =
+        typeof source.payoffRouteRewardText === 'string'
+            ? source.payoffRouteRewardText.slice(0, PERSISTED_SUMMARY_TEXT_LIMIT)
+            : source.payoffRouteRewardText === null
+              ? null
+              : undefined;
 
     return {
         totalScore,
@@ -228,14 +401,14 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         highestLevel,
         achievementsEnabled: source.achievementsEnabled === true,
         unlockedAchievements: Array.isArray(source.unlockedAchievements)
-            ? [...new Set(source.unlockedAchievements.filter((id): id is AchievementId => ACHIEVEMENT_IDS.includes(id as AchievementId)))]
+            ? [...new Set(source.unlockedAchievements.filter(isAchievementId))]
             : [],
         bestStreak,
         perfectClears,
         ...(Number.isFinite(runSeed) ? { runSeed } : {}),
         ...(Number.isFinite(runRulesVersion) ? { runRulesVersion } : {}),
         ...(gameMode ? { gameMode } : {}),
-        ...(typeof source.dailyDateKeyUtc === 'string' ? { dailyDateKeyUtc: source.dailyDateKeyUtc } : {}),
+        ...(dailyDateKeyUtc ? { dailyDateKeyUtc } : {}),
         ...(activeMutators ? { activeMutators } : {}),
         ...(relicIds ? { relicIds } : {}),
         ...(Number.isFinite(payoffPickupClaimed) ? { payoffPickupClaimed } : {}),
@@ -243,13 +416,16 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
         ...(Number.isFinite(payoffPressureExtra) ? { payoffPressureExtra } : {}),
         ...(Number.isFinite(payoffRewardPerkCount) ? { payoffRewardPerkCount } : {}),
         ...(typeof source.payoffRoutePaid === 'boolean' ? { payoffRoutePaid: source.payoffRoutePaid } : {}),
-        ...(typeof source.payoffRouteRewardText === 'string' || source.payoffRouteRewardText === null
-            ? { payoffRouteRewardText: source.payoffRouteRewardText }
-            : {}),
+        ...(payoffRouteRewardText !== undefined ? { payoffRouteRewardText } : {}),
         ...(startingLoadoutId !== undefined ? { startingLoadoutId } : {}),
         ...(typeof source.practiceMode === 'boolean' ? { practiceMode: source.practiceMode } : {}),
         ...(typeof source.wildMenuRun === 'boolean' ? { wildMenuRun: source.wildMenuRun } : {}),
-        ...(typeof source.dungeonShowcaseRun === 'boolean' ? { dungeonShowcaseRun: source.dungeonShowcaseRun } : {})
+        ...(typeof source.dungeonShowcaseRun === 'boolean' ? { dungeonShowcaseRun: source.dungeonShowcaseRun } : {}),
+        ...(source.activeContract === null
+            ? { activeContract: null }
+            : activeContract
+              ? { activeContract }
+              : {})
     };
 };
 
@@ -298,6 +474,8 @@ export const settingsBoundarySchema = z.object({
     weakerShuffleMode: z.unknown().optional()
 });
 
+type SettingsBoundary = z.output<typeof settingsBoundarySchema>;
+
 export const saveDataBoundarySchema = objectBoundarySchema.extend({
     achievements: unknownRecordBoundarySchema,
     bestScore: z.unknown().optional(),
@@ -314,19 +492,144 @@ export const saveDataBoundarySchema = objectBoundarySchema.extend({
     unlocks: z.unknown().optional()
 });
 
+const SETTINGS_BOUNDARY_KEYS: readonly string[] = settingsBoundarySchema.keyof().options;
+const SAVE_DATA_BOUNDARY_KEYS: readonly string[] = saveDataBoundarySchema.keyof().options;
+
+const hasRecognizedOwnField = (input: unknown, keys: readonly string[]): boolean =>
+    isUnknownRecord(input) && keys.some((key) => Object.prototype.hasOwnProperty.call(input, key));
+
+type SaveDataNormalizationInput = {
+    schemaVersion?: unknown;
+    bestScore?: unknown;
+    achievements?: unknown;
+    settings?: SettingsBoundary | Partial<Settings>;
+    onboardingDismissed?: unknown;
+    firstRunHelpDismissed?: unknown;
+    lastRunSummary?: unknown;
+    playerStats?: unknown;
+    unlocks?: unknown;
+    powersFtueSeen?: unknown;
+};
+
+const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settings => {
+    const source = input ?? {};
+    const debugFlags = isUnknownRecord(source.debugFlags) ? source.debugFlags : {};
+    const oneOf = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
+        typeof value === 'string' && (allowed as readonly string[]).includes(value) ? (value as T) : fallback;
+
+    return {
+        masterVolume: finiteClampedNumber(
+            source.masterVolume,
+            DEFAULT_SETTINGS.masterVolume,
+            SETTINGS_NUMERIC_RANGES.masterVolume
+        ),
+        musicVolume: finiteClampedNumber(
+            source.musicVolume,
+            DEFAULT_SETTINGS.musicVolume,
+            SETTINGS_NUMERIC_RANGES.musicVolume
+        ),
+        sfxVolume: finiteClampedNumber(
+            source.sfxVolume,
+            DEFAULT_SETTINGS.sfxVolume,
+            SETTINGS_NUMERIC_RANGES.sfxVolume
+        ),
+        displayMode: oneOf(source.displayMode, DISPLAY_MODE_VALUES, DEFAULT_SETTINGS.displayMode),
+        uiScale: finiteClampedNumber(source.uiScale, DEFAULT_SETTINGS.uiScale, SETTINGS_NUMERIC_RANGES.uiScale),
+        reduceMotion: typeof source.reduceMotion === 'boolean' ? source.reduceMotion : DEFAULT_SETTINGS.reduceMotion,
+        graphicsQuality: oneOf(source.graphicsQuality, GRAPHICS_QUALITY_VALUES, DEFAULT_SETTINGS.graphicsQuality),
+        boardScreenSpaceAA: oneOf(
+            source.boardScreenSpaceAA,
+            BOARD_SCREEN_SPACE_AA_VALUES,
+            DEFAULT_SETTINGS.boardScreenSpaceAA
+        ),
+        boardBloomEnabled:
+            typeof source.boardBloomEnabled === 'boolean'
+                ? source.boardBloomEnabled
+                : DEFAULT_SETTINGS.boardBloomEnabled,
+        debugFlags: {
+            showDebugTools:
+                typeof debugFlags.showDebugTools === 'boolean'
+                    ? debugFlags.showDebugTools
+                    : DEFAULT_SETTINGS.debugFlags.showDebugTools,
+            allowBoardReveal:
+                typeof debugFlags.allowBoardReveal === 'boolean'
+                    ? debugFlags.allowBoardReveal
+                    : DEFAULT_SETTINGS.debugFlags.allowBoardReveal,
+            disableAchievementsOnDebug:
+                typeof debugFlags.disableAchievementsOnDebug === 'boolean'
+                    ? debugFlags.disableAchievementsOnDebug
+                    : DEFAULT_SETTINGS.debugFlags.disableAchievementsOnDebug
+        },
+        boardPresentation: oneOf(source.boardPresentation, BOARD_PRESENTATION_VALUES, DEFAULT_SETTINGS.boardPresentation),
+        cameraViewportModePreference: oneOf(
+            source.cameraViewportModePreference,
+            CAMERA_VIEWPORT_MODE_PREFERENCE_VALUES,
+            DEFAULT_SETTINGS.cameraViewportModePreference
+        ),
+        tileFocusAssist:
+            typeof source.tileFocusAssist === 'boolean' ? source.tileFocusAssist : DEFAULT_SETTINGS.tileFocusAssist,
+        resolveDelayMultiplier: finiteClampedNumber(
+            source.resolveDelayMultiplier,
+            DEFAULT_SETTINGS.resolveDelayMultiplier,
+            SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier
+        ),
+        weakerShuffleMode: oneOf(
+            source.weakerShuffleMode,
+            WEAKER_SHUFFLE_MODE_VALUES,
+            DEFAULT_SETTINGS.weakerShuffleMode
+        ),
+        echoFeedbackEnabled:
+            typeof source.echoFeedbackEnabled === 'boolean'
+                ? source.echoFeedbackEnabled
+                : DEFAULT_SETTINGS.echoFeedbackEnabled,
+        distractionChannelEnabled:
+            typeof source.distractionChannelEnabled === 'boolean'
+                ? source.distractionChannelEnabled
+                : DEFAULT_SETTINGS.distractionChannelEnabled,
+        shuffleScoreTaxEnabled:
+            typeof source.shuffleScoreTaxEnabled === 'boolean'
+                ? source.shuffleScoreTaxEnabled
+                : DEFAULT_SETTINGS.shuffleScoreTaxEnabled,
+        pairProximityHintsEnabled:
+            typeof source.pairProximityHintsEnabled === 'boolean'
+                ? source.pairProximityHintsEnabled
+                : DEFAULT_SETTINGS.pairProximityHintsEnabled
+    };
+};
+
 export const normalizeUnknownSaveData = (input: unknown): SaveData => {
     const parsed = saveDataBoundarySchema.safeParse(input);
-    return normalizeSaveData(parsed.success ? (parsed.data as Partial<SaveData>) : null);
+    return normalizeSaveData(parsed.success ? parsed.data : null);
+};
+
+export const normalizeUnknownSaveDataOrThrow = (input: unknown): SaveData => {
+    const parsed = saveDataBoundarySchema.safeParse(input);
+    if (!parsed.success || !hasRecognizedOwnField(input, SAVE_DATA_BOUNDARY_KEYS)) {
+        throw new TypeError('Save data must be an object with at least one recognized field.');
+    }
+    if (
+        isRecognizedSaveSchemaVersion(parsed.data.schemaVersion) &&
+        parsed.data.schemaVersion > SAVE_SCHEMA_VERSION
+    ) {
+        throw new TypeError('Save data uses a newer unsupported schema version.');
+    }
+    return normalizeSaveData(parsed.data);
 };
 
 export const normalizeUnknownSettings = (input: unknown): Settings => {
     const parsed = settingsBoundarySchema.safeParse(input);
-    return normalizeSaveData({
-        settings: parsed.success ? (parsed.data as unknown as Settings) : undefined
-    }).settings;
+    return normalizeSettings(parsed.success ? parsed.data : undefined);
 };
 
-export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData => {
+export const normalizeUnknownSettingsOrThrow = (input: unknown): Settings => {
+    const parsed = settingsBoundarySchema.safeParse(input);
+    if (!parsed.success || !hasRecognizedOwnField(input, SETTINGS_BOUNDARY_KEYS)) {
+        throw new TypeError('Settings must be an object with at least one recognized field.');
+    }
+    return normalizeSettings(parsed.data);
+};
+
+export const normalizeSaveData = (input?: SaveDataNormalizationInput | null): SaveData => {
     const defaults = createDefaultSaveData();
 
     if (!input) {
@@ -334,52 +637,10 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
     }
     const migrationGate = evaluateSaveMigrationGate(input);
 
-    const mergedSettingsBase: Settings = {
-        ...defaults.settings,
-        ...(input.settings ?? {}),
-        debugFlags: {
-            ...defaults.settings.debugFlags,
-            ...(input.settings?.debugFlags ?? {})
-        }
-    };
-    const aaRaw = mergedSettingsBase.boardScreenSpaceAA as BoardScreenSpaceAA | undefined;
-    const boardScreenSpaceAA: BoardScreenSpaceAA =
-        aaRaw === 'auto' || aaRaw === 'smaa' || aaRaw === 'msaa' || aaRaw === 'off' ? aaRaw : defaults.settings.boardScreenSpaceAA;
-    const gqRaw = mergedSettingsBase.graphicsQuality as GraphicsQualityPreset | undefined;
-    const graphicsQuality: GraphicsQualityPreset =
-        gqRaw === 'low' || gqRaw === 'medium' || gqRaw === 'high' ? gqRaw : defaults.settings.graphicsQuality;
-    const boardBloomEnabled =
-        typeof mergedSettingsBase.boardBloomEnabled === 'boolean'
-            ? mergedSettingsBase.boardBloomEnabled
-            : defaults.settings.boardBloomEnabled;
-    const pairProximityHintsEnabled =
-        typeof mergedSettingsBase.pairProximityHintsEnabled === 'boolean'
-            ? mergedSettingsBase.pairProximityHintsEnabled
-            : defaults.settings.pairProximityHintsEnabled;
-    const cvRaw = mergedSettingsBase.cameraViewportModePreference as CameraViewportModePreference | undefined;
-    const cameraViewportModePreference: CameraViewportModePreference =
-        cvRaw === 'auto' || cvRaw === 'always' || cvRaw === 'never'
-            ? cvRaw
-            : defaults.settings.cameraViewportModePreference;
-    const displayModeRaw = mergedSettingsBase.displayMode as DisplayMode | undefined;
-    const displayMode: DisplayMode =
-        displayModeRaw === 'windowed' || displayModeRaw === 'fullscreen'
-            ? displayModeRaw
-            : defaults.settings.displayMode;
-    const weakerShuffleRaw = mergedSettingsBase.weakerShuffleMode as WeakerShuffleMode | undefined;
-    const weakerShuffleMode: WeakerShuffleMode =
-        weakerShuffleRaw === 'full' || weakerShuffleRaw === 'rows_only'
-            ? weakerShuffleRaw
-            : defaults.settings.weakerShuffleMode;
-    const boardPresentationRaw = mergedSettingsBase.boardPresentation as BoardPresentationMode | undefined;
-    const boardPresentation: BoardPresentationMode =
-        boardPresentationRaw === 'standard' || boardPresentationRaw === 'spaghetti' || boardPresentationRaw === 'breathing'
-            ? boardPresentationRaw
-            : defaults.settings.boardPresentation;
-
     const mergedAchievements = normalizeAchievements(input.achievements);
-    const psIn: Partial<PlayerStatsPersisted> = input.playerStats ?? {};
-    const dailiesCount = finiteNonNegativeInteger(psIn.dailiesCompleted, defaultPlayerStats().dailiesCompleted);
+    const playerStatsDefaults = defaultPlayerStats();
+    const psIn = isUnknownRecord(input.playerStats) ? input.playerStats : {};
+    const dailiesCount = finiteNonNegativeInteger(psIn.dailiesCompleted, playerStatsDefaults.dailiesCompleted);
     const relicPickCounts = normalizeRelicPickCounts(psIn.relicPickCounts);
     const relicShrineExtraPickUnlocked = psIn.relicShrineExtraPickUnlocked === true;
     const lastRunSummary =
@@ -389,77 +650,23 @@ export const normalizeSaveData = (input?: Partial<SaveData> | null): SaveData =>
         schemaVersion: SAVE_SCHEMA_VERSION,
         bestScore: finiteNonNegativeInteger(input.bestScore, defaults.bestScore),
         achievements: mergedAchievements,
-        settings: {
-            ...mergedSettingsBase,
-            masterVolume: finiteNonNegativeNumber(mergedSettingsBase.masterVolume, defaults.settings.masterVolume),
-            musicVolume: finiteNonNegativeNumber(mergedSettingsBase.musicVolume, defaults.settings.musicVolume),
-            sfxVolume: finiteNonNegativeNumber(mergedSettingsBase.sfxVolume, defaults.settings.sfxVolume),
-            uiScale: finiteNonNegativeNumber(mergedSettingsBase.uiScale, defaults.settings.uiScale),
-            resolveDelayMultiplier: finiteNonNegativeNumber(
-                mergedSettingsBase.resolveDelayMultiplier,
-                defaults.settings.resolveDelayMultiplier
-            ),
-            reduceMotion:
-                typeof mergedSettingsBase.reduceMotion === 'boolean'
-                    ? mergedSettingsBase.reduceMotion
-                    : defaults.settings.reduceMotion,
-            boardScreenSpaceAA,
-            boardBloomEnabled,
-            graphicsQuality,
-            cameraViewportModePreference,
-            pairProximityHintsEnabled,
-            displayMode,
-            weakerShuffleMode,
-            boardPresentation,
-            tileFocusAssist:
-                typeof mergedSettingsBase.tileFocusAssist === 'boolean'
-                    ? mergedSettingsBase.tileFocusAssist
-                    : defaults.settings.tileFocusAssist,
-            echoFeedbackEnabled:
-                typeof mergedSettingsBase.echoFeedbackEnabled === 'boolean'
-                    ? mergedSettingsBase.echoFeedbackEnabled
-                    : defaults.settings.echoFeedbackEnabled,
-            distractionChannelEnabled:
-                typeof mergedSettingsBase.distractionChannelEnabled === 'boolean'
-                    ? mergedSettingsBase.distractionChannelEnabled
-                    : defaults.settings.distractionChannelEnabled,
-            shuffleScoreTaxEnabled:
-                typeof mergedSettingsBase.shuffleScoreTaxEnabled === 'boolean'
-                    ? mergedSettingsBase.shuffleScoreTaxEnabled
-                    : defaults.settings.shuffleScoreTaxEnabled,
-            debugFlags: {
-                showDebugTools:
-                    typeof mergedSettingsBase.debugFlags.showDebugTools === 'boolean'
-                        ? mergedSettingsBase.debugFlags.showDebugTools
-                        : defaults.settings.debugFlags.showDebugTools,
-                allowBoardReveal:
-                    typeof mergedSettingsBase.debugFlags.allowBoardReveal === 'boolean'
-                        ? mergedSettingsBase.debugFlags.allowBoardReveal
-                        : defaults.settings.debugFlags.allowBoardReveal,
-                disableAchievementsOnDebug:
-                    typeof mergedSettingsBase.debugFlags.disableAchievementsOnDebug === 'boolean'
-                        ? mergedSettingsBase.debugFlags.disableAchievementsOnDebug
-                        : defaults.settings.debugFlags.disableAchievementsOnDebug
-            }
-        },
+        settings: normalizeSettings(input.settings),
         onboardingDismissed: typeof input.onboardingDismissed === 'boolean' ? input.onboardingDismissed : defaults.onboardingDismissed,
         firstRunHelpDismissed:
             typeof input.firstRunHelpDismissed === 'boolean' ? input.firstRunHelpDismissed : defaults.firstRunHelpDismissed,
         lastRunSummary,
         playerStats: {
-            ...defaultPlayerStats(),
-            ...(input.playerStats ?? {}),
-            bestFloorNoPowers: finiteNonNegativeInteger(psIn.bestFloorNoPowers, defaultPlayerStats().bestFloorNoPowers),
+            bestFloorNoPowers: finiteNonNegativeInteger(psIn.bestFloorNoPowers, playerStatsDefaults.bestFloorNoPowers),
             dailiesCompleted: dailiesCount,
-            lastDailyDateKeyUtc: stringOrNull(psIn.lastDailyDateKeyUtc, defaultPlayerStats().lastDailyDateKeyUtc),
+            lastDailyDateKeyUtc: normalizeDailyDateKeyUtc(psIn.lastDailyDateKeyUtc),
             dailyStreakCosmetic: finiteNonNegativeInteger(
                 psIn.dailyStreakCosmetic,
-                defaultPlayerStats().dailyStreakCosmetic
+                playerStatsDefaults.dailyStreakCosmetic
             ),
-            encorePairKeysLastRun: Array.isArray(input.playerStats?.encorePairKeysLastRun)
-                ? normalizeStringLedger(input.playerStats.encorePairKeysLastRun, 80)
-                : defaultPlayerStats().encorePairKeysLastRun,
-            puzzleCompletions: normalizePuzzleCompletions(input.playerStats?.puzzleCompletions),
+            encorePairKeysLastRun: Array.isArray(psIn.encorePairKeysLastRun)
+                ? normalizeStringLedger(psIn.encorePairKeysLastRun, PERSISTED_COLLECTION_LIMITS.encorePairKeys)
+                : playerStatsDefaults.encorePairKeysLastRun,
+            puzzleCompletions: normalizePuzzleCompletions(psIn.puzzleCompletions),
             relicPickCounts,
             relicShrineExtraPickUnlocked
         },
@@ -522,8 +729,12 @@ export const mergePuzzleCompletion = (save: SaveData, run: RunState): SaveData =
     const ps = save.playerStats ?? defaultPlayerStats();
     const completions = ps.puzzleCompletions ?? {};
     const existing = completions[run.puzzleId];
-    const mistakes = run.lastLevelResult?.mistakes ?? run.stats.tries;
-    const score = run.stats.totalScore;
+    const stats = normalizeSessionStats(run.stats);
+    const mistakes = finiteNonNegativeInteger(run.lastLevelResult?.mistakes ?? stats.tries, 0);
+    const score = stats.totalScore;
+    const existingBestMistakes =
+        existing?.bestMistakes == null ? null : finiteNonNegativeInteger(existing.bestMistakes, mistakes);
+    const existingBestScore = finiteNonNegativeInteger(existing?.bestScore, 0);
 
     return normalizeSaveData({
         ...save,
@@ -534,10 +745,10 @@ export const mergePuzzleCompletion = (save: SaveData, run: RunState): SaveData =
                 [run.puzzleId]: {
                     completed: true,
                     bestMistakes:
-                        existing?.bestMistakes == null
+                        existingBestMistakes == null
                             ? mistakes
-                            : Math.min(existing.bestMistakes, mistakes),
-                    bestScore: Math.max(existing?.bestScore ?? 0, score)
+                            : Math.min(existingBestMistakes, mistakes),
+                    bestScore: Math.max(existingBestScore, score)
                 }
             }
         }
@@ -546,12 +757,14 @@ export const mergePuzzleCompletion = (save: SaveData, run: RunState): SaveData =
 
 export const mergeBestFloorNoPowers = (save: SaveData, floor: number): SaveData => {
     const ps = save.playerStats ?? defaultPlayerStats();
-    if (floor <= ps.bestFloorNoPowers) {
+    const nextFloor = finiteNonNegativeInteger(floor, 0);
+    const bestFloorNoPowers = finiteNonNegativeInteger(ps.bestFloorNoPowers, 0);
+    if (nextFloor <= bestFloorNoPowers) {
         return save;
     }
     return normalizeSaveData({
         ...save,
-        playerStats: { ...ps, bestFloorNoPowers: floor }
+        playerStats: { ...ps, bestFloorNoPowers: nextFloor }
     });
 };
 
@@ -568,7 +781,7 @@ export const mergeRelicPickStat = (save: SaveData, relicId: RelicId): SaveData =
     const ps = save.playerStats ?? defaultPlayerStats();
     const relicPickCounts: PlayerStatsPersisted['relicPickCounts'] = {
         ...ps.relicPickCounts,
-        [relicId]: (ps.relicPickCounts[relicId] ?? 0) + 1
+        [relicId]: finiteNonNegativeInteger(ps.relicPickCounts[relicId], 0) + 1
     };
     return normalizeSaveData({
         ...save,

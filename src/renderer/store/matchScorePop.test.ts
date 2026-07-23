@@ -92,6 +92,39 @@ describe('buildMatchScorePopPayload', () => {
         });
     });
 
+    it('normalizes malformed current streak before building match score payload feedback', () => {
+        const run = minimalRun({
+            board: {
+                level: 3,
+                rows: 2,
+                columns: 2,
+                flippedTileIds: ['t1', 't2'],
+                tiles: []
+            } as unknown as BoardState,
+            stats: { matchesFound: 2, totalScore: 40 } as RunState['stats']
+        });
+        const next = {
+            ...run,
+            stats: { ...run.stats, currentStreak: Number.POSITIVE_INFINITY, matchesFound: 3, totalScore: 55 }
+        };
+        const pop = buildMatchScorePopPayload(run, next, 'malformed-streak');
+
+        expect(pop).toMatchObject({
+            chainDepth: 1,
+            feedbackHeadline: 'Score pop',
+            feedbackIntensity: 'low',
+            feedbackSignal: { label: 'Score', tone: 'score' },
+            impactCue: { label: 'Score pop', tone: 'score' },
+            payoffSummary: { label: 'Score hit', value: '+15', tier: 'score' }
+        });
+        expect(pop?.crescendo).toMatchObject({
+            audioCue: 'score-pop',
+            detail: '+15',
+            tier: 'score'
+        });
+        expect(JSON.stringify(pop)).not.toMatch(/NaN|Infinity/);
+    });
+
     it('returns null when score delta is not positive', () => {
         const run = minimalRun({
             board: {
@@ -104,6 +137,22 @@ describe('buildMatchScorePopPayload', () => {
         const next = {
             ...run,
             stats: { ...run.stats, matchesFound: 3, totalScore: 10 }
+        };
+        expect(buildMatchScorePopPayload(run, next, 'k')).toBeNull();
+    });
+
+    it('returns null when score delta is malformed', () => {
+        const run = minimalRun({
+            board: {
+                level: 1,
+                flippedTileIds: ['a', 'b'],
+                tiles: []
+            } as unknown as BoardState,
+            stats: { matchesFound: 2, totalScore: 10 } as RunState['stats']
+        });
+        const next = {
+            ...run,
+            stats: { ...run.stats, matchesFound: 3, totalScore: Number.POSITIVE_INFINITY }
         };
         expect(buildMatchScorePopPayload(run, next, 'k')).toBeNull();
     });
@@ -449,6 +498,50 @@ describe('buildMatchScorePopPayload', () => {
             keep: 'Hold streak',
             tone: 'reward'
         });
+    });
+
+    it('normalizes malformed chain reward counters before building cashout copy', () => {
+        const baseRun = minimalRun({
+            lives: Number.NaN,
+            board: {
+                level: 3,
+                rows: 2,
+                columns: 2,
+                flippedTileIds: ['t1', 't2'],
+                tiles: [
+                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' },
+                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' }
+                ]
+            } as unknown as BoardState,
+            stats: {
+                ...minimalRun({}).stats,
+                matchesFound: 2,
+                totalScore: 40,
+                comboShards: Number.POSITIVE_INFINITY,
+                guardTokens: Number.NaN,
+                currentStreak: 3
+            }
+        });
+        const pop = buildMatchScorePopPayload(
+            baseRun,
+            {
+                ...baseRun,
+                lives: Number.POSITIVE_INFINITY,
+                stats: {
+                    ...baseRun.stats,
+                    comboShards: Number.POSITIVE_INFINITY,
+                    guardTokens: Number.POSITIVE_INFINITY,
+                    matchesFound: 3,
+                    totalScore: 75,
+                    currentStreak: 4
+                }
+            },
+            'malformed-cashout'
+        );
+
+        expect(pop?.chainRewardText).toBeUndefined();
+        expect(pop?.payoffSummary?.value).not.toMatch(/NaN|Infinity/);
+        expect(pop?.payoffChips?.map((chip) => chip.value).join(' ')).not.toMatch(/NaN|Infinity/);
     });
 
     it('summarizes four-channel match rewards as a super stack', () => {
@@ -812,6 +905,91 @@ describe('buildMatchScorePopPayload', () => {
         });
     });
 
+    it('normalizes malformed score-hit amount before rendering payoff summary', () => {
+        expect(
+            buildMatchScorePopPayoffSummary({
+                amount: Number.POSITIVE_INFINITY,
+                chainDepth: 1,
+                traitInteractionTexts: []
+            })
+        ).toEqual({
+            label: 'Score hit',
+            value: '+0',
+            tier: 'score'
+        });
+    });
+
+    it('normalizes malformed chain depth before classifying match pop feedback', () => {
+        const payoffSummary = buildMatchScorePopPayoffSummary({
+            amount: 45,
+            chainDepth: Number.POSITIVE_INFINITY,
+            traitInteractionTexts: []
+        });
+
+        expect(getMatchScorePopFeedbackProfile(Number.POSITIVE_INFINITY, 0)).toEqual({
+            feedbackHeadline: 'Score pop',
+            feedbackIntensity: 'low'
+        });
+        expect(
+            getMatchScorePopSignal({
+                chainDepth: Number.POSITIVE_INFINITY,
+                hasPickupReward: false,
+                hasRouteReward: false,
+                traitInteractionCount: 0
+            })
+        ).toEqual({
+            label: 'Score',
+            tone: 'score'
+        });
+        expect(payoffSummary).toEqual({
+            label: 'Score hit',
+            value: '+45',
+            tier: 'score'
+        });
+        expect(buildMatchScorePopImpactCue({ chainDepth: Number.POSITIVE_INFINITY, payoffSummary })).toEqual({
+            label: 'Score pop',
+            tone: 'score'
+        });
+        expect(
+            buildMatchScorePopCrescendo({
+                chainDepth: Number.POSITIVE_INFINITY,
+                impactCue: { label: 'Score pop', tone: 'score' },
+                payoffSummary
+            })
+        ).toEqual({
+            audioCue: 'score-pop',
+            beatCount: 1,
+            detail: '+45',
+            label: 'Score pop',
+            screenCue: 'tick',
+            tier: 'score'
+        });
+    });
+
+    it('floors fractional chain depth before rendering streak feedback', () => {
+        const payoffSummary = buildMatchScorePopPayoffSummary({
+            amount: 45,
+            chainDepth: 3.9,
+            traitInteractionTexts: []
+        });
+
+        expect(payoffSummary).toEqual({
+            label: 'Chain hit',
+            value: 'x3 streak',
+            tier: 'chain'
+        });
+        expect(
+            buildMatchScorePopCrescendo({
+                chainDepth: 3.9,
+                impactCue: { label: 'Prime chain', tone: 'chain' },
+                payoffSummary
+            })
+        ).toMatchObject({
+            detail: 'x3 streak',
+            tier: 'prime'
+        });
+    });
+
     it('classifies match pop crescendo tiers for arcade feedback', () => {
         expect(
             buildMatchScorePopCrescendo({
@@ -891,6 +1069,28 @@ describe('buildMatchScorePopPayload', () => {
             label: 'Super burst',
             screenCue: 'super',
             tier: 'super'
+        });
+    });
+
+    it('ignores malformed payoff lane counts before classifying match pop crescendo tiers', () => {
+        expect(
+            buildMatchScorePopCrescendo({
+                chainDepth: 1,
+                impactCue: { label: 'Score pop', tone: 'score' },
+                payoffLaneMap: [
+                    { id: 'route', label: 'Route', count: Number.NaN, tone: 'route', cue: 'Route cashout' },
+                    { id: 'pickup', label: 'Pickup', count: Number.POSITIVE_INFINITY, tone: 'pickup', cue: 'Pickup cashout' },
+                    { id: 'trait', label: 'Trait', count: -2, tone: 'trait', cue: 'Trait cashout' }
+                ],
+                payoffSummary: { label: 'Score hit', value: '+15', tier: 'score' }
+            })
+        ).toEqual({
+            audioCue: 'score-pop',
+            beatCount: 1,
+            detail: '+15',
+            label: 'Score pop',
+            screenCue: 'tick',
+            tier: 'score'
         });
     });
 
@@ -1033,6 +1233,27 @@ describe('buildMismatchScorePopPayload', () => {
                 urgency: 'soon'
             },
             key: 'miss-2-break-x-y'
+        });
+    });
+
+    it('normalizes malformed mismatch streak counters before broken-chain copy', () => {
+        const run = minimalRun({
+            board: {
+                level: 2,
+                flippedTileIds: ['x', 'y'],
+                tiles: []
+            } as unknown as BoardState,
+            stats: { mismatches: 1, currentStreak: Number.POSITIVE_INFINITY } as RunState['stats']
+        });
+        const next = {
+            ...run,
+            stats: { ...run.stats, mismatches: 2, currentStreak: Number.NaN }
+        };
+
+        expect(buildMismatchScorePopPayload(run, next, 'malformed-break')).toEqual({
+            tileIdA: 'x',
+            tileIdB: 'y',
+            key: 'miss-2-malformed-break-x-y'
         });
     });
 

@@ -1,5 +1,6 @@
 import { MAX_LIVES, type RouteNodeType, type RouteSideRoomState, type RunState } from './contracts';
 import {
+    type BonusRewardPayout,
     claimBonusReward,
     getRewardPerkRows,
     previewBonusRewardClaim,
@@ -9,6 +10,8 @@ import {
 } from './bonus-rewards';
 import { createRestShrineServices } from './rest-shrine';
 import { applyRunEventChoice, rollRunEventRoom } from './run-events';
+import { getRunInventoryItemPayoutRows } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getTraitOpportunitySummary } from './trait-opportunities';
 
 const BONUS_REWARD_NEXT_CUES = {
@@ -27,11 +30,25 @@ const BONUS_REWARD_NEXT_CUES = {
     hazard_banisher: 'Check the first board beat; hazard pressure should already be reduced.'
 } as const;
 
+const bonusRewardPerks = (value: unknown): NonNullable<BonusRewardPayout['rewardPerks']> =>
+    Array.isArray(value)
+        ? value.filter((item): item is NonNullable<BonusRewardPayout['rewardPerks']>[number] => typeof item === 'string')
+        : [];
+
+const safeTraitBuildLabel = (value: unknown): value is string =>
+    typeof value === 'string' && value !== '__proto__' && value !== 'constructor' && value !== 'prototype';
+
+const traitBuildLabels = (value: unknown): NonNullable<ReturnType<typeof rollBonusRewardDraft>[number]['traitBuildLabels']> =>
+    Array.isArray(value) ? value.filter(safeTraitBuildLabel) : [];
+
+const sideRoomChoices = (value: unknown): NonNullable<RouteSideRoomState['choices']> => (Array.isArray(value) ? value : []);
+
 const bonusRewardChoiceImpact = (
     option: ReturnType<typeof rollBonusRewardDraft>[number],
     nextCue: string,
     traitBuildReason?: string,
-    perkCue?: string
+    perkCue?: string,
+    rewardPerkCount = 0
 ): Pick<
     NonNullable<RouteSideRoomState['choices']>[number],
     'rewardImpactBeats' | 'rewardImpactCue' | 'rewardImpactDetail' | 'rewardImpactKind'
@@ -44,7 +61,7 @@ const bonusRewardChoiceImpact = (
             rewardImpactKind: 'build'
         };
     }
-    if (perkCue || (option.payout.rewardPerks?.length ?? 0) > 0) {
+    if (perkCue || rewardPerkCount > 0) {
         return {
             rewardImpactBeats: 4,
             rewardImpactCue: 'Perk online',
@@ -65,8 +82,8 @@ const bonusRewardChoiceImpact = (
         option.payout.comboShards,
         option.payout.relicFavorProgress,
         option.payout.score,
-        option.payout.inventoryItems ? Object.keys(option.payout.inventoryItems).length : 0
-    ].filter((value) => Number(value ?? 0) > 0).length;
+        getRunInventoryItemPayoutRows(option.payout.inventoryItems).filter(({ amount }) => amount > 0).length
+    ].filter((value) => runNonNegativeInteger(value) > 0).length;
     return {
         rewardImpactBeats: resourceLaneCount > 1 ? 4 : 2,
         rewardImpactCue: resourceLaneCount > 1 ? 'Reward burst' : 'Resource',
@@ -120,12 +137,14 @@ const buildBonusSideRoom = (
         : draft[0]?.instanceId;
     const traitOpportunity = getTraitOpportunitySummary(run.board);
     const choices = draft.map((option) => {
-        const perkCue = getRewardPerkRows({ rewardPerkIds: option.payout.rewardPerks ?? [] })[0]?.nextCue;
+        const rewardPerks = bonusRewardPerks(option.payout.rewardPerks);
+        const optionTraitBuildLabels = traitBuildLabels(option.traitBuildLabels);
+        const perkCue = getRewardPerkRows({ rewardPerkIds: rewardPerks })[0]?.nextCue;
         const nextCue = perkCue ?? BONUS_REWARD_NEXT_CUES[option.id];
-        const traitBuildReason = option.traitBuildLabels?.some((label) => traitOpportunity.buildLabels.includes(label))
+        const traitBuildReason = optionTraitBuildLabels.some((label) => traitOpportunity.buildLabels.includes(label))
             ? traitOpportunity.reason ?? undefined
             : undefined;
-        const rewardImpact = bonusRewardChoiceImpact(option, nextCue, traitBuildReason, perkCue);
+        const rewardImpact = bonusRewardChoiceImpact(option, nextCue, traitBuildReason, perkCue, rewardPerks.length);
         return {
             id: option.instanceId,
             label: option.label,
@@ -133,7 +152,7 @@ const buildBonusSideRoom = (
                 ? previewBonusRewardClaim(run, option).feedback.summary || option.summaryText
                 : (option.unavailableReason ?? option.summaryText),
             primary: option.instanceId === primaryInstanceId,
-            traitBuildLabels: [...(option.traitBuildLabels ?? [])],
+            traitBuildLabels: optionTraitBuildLabels,
             traitBuildReason,
             rewardPerkNextCue: perkCue,
             nextCue,
@@ -192,7 +211,10 @@ export const openRouteSideRoom = (run: RunState): RunState => {
 
     if (routeType === 'mystery' && nodeKind === 'event') {
         const event = rollRunEventRoom({ runSeed: run.runSeed, rulesVersion: run.runRulesVersion, floor });
-        const choice = event.options.find((option) => option.effect !== 'skip') ?? event.options[0]!;
+        const choice = event.options.find((option) => option.effect !== 'skip') ?? event.options[0];
+        if (!choice) {
+            return run;
+        }
         return {
             ...run,
             sideRoom: {
@@ -225,7 +247,7 @@ export const openRouteSideRoom = (run: RunState): RunState => {
 
 export const claimRouteSideRoomPrimary = (run: RunState): RunState => {
     const eventChoiceId = run.sideRoom?.payload.kind === 'event_choice' ? run.sideRoom.payload.choiceId : undefined;
-    const choiceId = run.sideRoom?.choices?.find((choice) => choice.primary)?.id ?? eventChoiceId;
+    const choiceId = sideRoomChoices(run.sideRoom?.choices).find((choice) => choice.primary)?.id ?? eventChoiceId;
     return choiceId ? claimRouteSideRoomChoice(run, choiceId) : claimRouteSideRoomChoice(run);
 };
 

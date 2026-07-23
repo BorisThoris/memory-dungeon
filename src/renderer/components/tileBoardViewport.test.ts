@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
     DESKTOP_STAGE_FIT_MARGIN,
     clampBoardZoom,
@@ -13,9 +13,15 @@ import {
     resolveDraggedBoardViewport,
     resolvePinchBoardViewport,
     resolveWheelBoardViewport,
+    safelyReleasePointerCapture,
+    safelySetPointerCapture,
     screenPointToWorld,
     type TileBoardScreenPoint
 } from './tileBoardViewport';
+
+afterEach(() => {
+    vi.unstubAllGlobals();
+});
 
 describe('tileBoardViewport', () => {
     it('screenPointToWorld scales linearly with viewport dimensions (stable normalized ray)', () => {
@@ -53,8 +59,29 @@ describe('tileBoardViewport', () => {
         rafQueue[0]!(0);
 
         expect(flushed).toEqual([{ w: 300, h: 70 }]);
+    });
 
-        vi.unstubAllGlobals();
+    it('coalesces and cancels a pending animation frame whose id is zero', () => {
+        const rafQueue: FrameRequestCallback[] = [];
+        vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback): number => {
+            rafQueue.push(callback);
+            return 0;
+        });
+        const cancelAnimationFrame = vi.fn();
+        vi.stubGlobal('cancelAnimationFrame', cancelAnimationFrame);
+        const onFlush = vi.fn();
+        const notifier = createRafCoalescedViewportNotifier(onFlush);
+
+        notifier.schedule(100, 50);
+        notifier.schedule(200, 60);
+
+        expect(rafQueue).toHaveLength(1);
+
+        notifier.cancel();
+
+        expect(cancelAnimationFrame).toHaveBeenCalledWith(0);
+        rafQueue[0]!(0);
+        expect(onFlush).not.toHaveBeenCalled();
     });
 
     it('REG-001 keeps mobile camera fit board-first on phone portrait', () => {
@@ -220,5 +247,33 @@ describe('tileBoardViewport', () => {
         expect(next.panX).toBe(25);
         expect(next.panY).toBe(-30);
         expect(next.zoom).toBe(1.5);
+    });
+
+    it('contains unavailable pointer capture APIs so board gesture cleanup can continue', () => {
+        const setPointerCapture = vi.fn(() => {
+            throw new Error('pointer capture unavailable');
+        });
+        const releasePointerCapture = vi.fn(() => {
+            throw new Error('pointer release unavailable');
+        });
+        const hasPointerCapture = vi.fn(() => true);
+
+        expect(safelySetPointerCapture({ setPointerCapture }, 7)).toBe(false);
+        expect(() => safelyReleasePointerCapture({ hasPointerCapture, releasePointerCapture }, 7)).not.toThrow();
+        expect(hasPointerCapture).toHaveBeenCalledWith(7);
+        expect(releasePointerCapture).toHaveBeenCalledWith(7);
+    });
+
+    it('reports successful pointer capture and skips release when not captured', () => {
+        const setPointerCapture = vi.fn();
+        const releasePointerCapture = vi.fn();
+        const hasPointerCapture = vi.fn(() => false);
+
+        expect(safelySetPointerCapture({ setPointerCapture }, 9)).toBe(true);
+        safelyReleasePointerCapture({ hasPointerCapture, releasePointerCapture }, 9);
+
+        expect(setPointerCapture).toHaveBeenCalledWith(9);
+        expect(hasPointerCapture).toHaveBeenCalledWith(9);
+        expect(releasePointerCapture).not.toHaveBeenCalled();
     });
 });

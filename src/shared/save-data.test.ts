@@ -8,19 +8,27 @@ import {
     shouldDungeonSaveFieldRequireMigration
 } from './dungeon-save-migration';
 import { createNewRun, createPuzzleRun } from './game-core';
+import { RELIC_POOL } from './relics';
 import {
     createAchievementState,
     createDefaultSaveData,
     DEFAULT_SETTINGS,
+    getRelicPickCountRows,
+    getRelicPickTotal,
     mergeDailyComplete,
+    mergeBestFloorNoPowers,
     mergePuzzleCompletion,
+    mergeRelicPickStat,
     normalizeSaveData,
     normalizeUnknownSaveData,
+    normalizeUnknownSaveDataOrThrow,
     normalizeUnknownSettings,
+    normalizeUnknownSettingsOrThrow,
     saveDataBoundarySchema,
-    settingsBoundarySchema
+    settingsBoundarySchema,
+    SETTINGS_NUMERIC_RANGES
 } from './save-data';
-import type { RunSummary, SaveData } from './contracts';
+import type { RunState, RunSummary, SaveData, Settings } from './contracts';
 import {
     CURRENT_VERSION_GATE,
     formatVersionGateSummary,
@@ -51,6 +59,38 @@ describe('save normalization', () => {
         expect(normalizeUnknownSaveData({ bestScore: 42 }).bestScore).toBe(42);
         expect(normalizeUnknownSaveData({ bestScore: 42, playerStats: 'bad', settings: 'bad' }).bestScore).toBe(42);
         expect(normalizeUnknownSaveData({ bestScore: 42, playerStats: 'bad', settings: 'bad' }).settings).toEqual(DEFAULT_SETTINGS);
+        expect(() => normalizeUnknownSaveDataOrThrow(['not', 'a', 'save'])).toThrow('recognized field');
+        expect(() => normalizeUnknownSaveDataOrThrow({})).toThrow('recognized field');
+        expect(() => normalizeUnknownSaveDataOrThrow({ injectedRoot: 'discard' })).toThrow('recognized field');
+        expect(normalizeUnknownSaveDataOrThrow({ bestScore: 42 }).bestScore).toBe(42);
+        expect(() => normalizeUnknownSaveDataOrThrow({ schemaVersion: SAVE_SCHEMA_VERSION + 1 })).toThrow(
+            'newer unsupported schema version'
+        );
+        expect(normalizeUnknownSaveDataOrThrow({ schemaVersion: SAVE_SCHEMA_VERSION + 0.5 }).schemaVersion).toBe(
+            SAVE_SCHEMA_VERSION
+        );
+    });
+
+    it('strips unknown save, settings, and player-stat fields at the persistence boundary', () => {
+        const save = normalizeUnknownSaveData({
+            bestScore: 42,
+            injectedRoot: 'discard',
+            settings: {
+                displayMode: 'fullscreen',
+                injectedSetting: 'discard'
+            },
+            playerStats: {
+                dailiesCompleted: 3,
+                injectedStat: 'discard'
+            }
+        });
+
+        expect(save.bestScore).toBe(42);
+        expect(save.settings.displayMode).toBe('fullscreen');
+        expect(save.playerStats?.dailiesCompleted).toBe(3);
+        expect(save).not.toHaveProperty('injectedRoot');
+        expect(save.settings).not.toHaveProperty('injectedSetting');
+        expect(save.playerStats).not.toHaveProperty('injectedStat');
     });
 
     it('uses a schema boundary for raw settings payloads before normalization', () => {
@@ -60,6 +100,46 @@ describe('save normalization', () => {
         expect(normalizeUnknownSettings('not settings')).toEqual(DEFAULT_SETTINGS);
         expect(normalizeUnknownSettings({ displayMode: 'fullscreen', debugFlags: 'bad' }).displayMode).toBe('fullscreen');
         expect(normalizeUnknownSettings({ displayMode: 'kiosk' }).displayMode).toBe(DEFAULT_SETTINGS.displayMode);
+        expect(() => normalizeUnknownSettingsOrThrow('not settings')).toThrow('recognized field');
+        expect(() => normalizeUnknownSettingsOrThrow({})).toThrow('recognized field');
+        expect(() => normalizeUnknownSettingsOrThrow({ injectedSetting: true })).toThrow('recognized field');
+    });
+
+    it('clamps persisted numeric settings to the live control ranges', () => {
+        expect(
+            normalizeUnknownSettings({
+                masterVolume: -1,
+                musicVolume: 2,
+                sfxVolume: Number.NaN,
+                uiScale: 0,
+                resolveDelayMultiplier: 99
+            })
+        ).toMatchObject({
+            masterVolume: SETTINGS_NUMERIC_RANGES.masterVolume.min,
+            musicVolume: SETTINGS_NUMERIC_RANGES.musicVolume.max,
+            sfxVolume: DEFAULT_SETTINGS.sfxVolume,
+            uiScale: SETTINGS_NUMERIC_RANGES.uiScale.min,
+            resolveDelayMultiplier: SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.max
+        });
+
+        expect(
+            normalizeSaveData({
+                settings: {
+                    ...DEFAULT_SETTINGS,
+                    masterVolume: 5,
+                    musicVolume: -5,
+                    sfxVolume: 5,
+                    uiScale: 5,
+                    resolveDelayMultiplier: -5
+                }
+            }).settings
+        ).toMatchObject({
+            masterVolume: SETTINGS_NUMERIC_RANGES.masterVolume.max,
+            musicVolume: SETTINGS_NUMERIC_RANGES.musicVolume.min,
+            sfxVolume: SETTINGS_NUMERIC_RANGES.sfxVolume.max,
+            uiScale: SETTINGS_NUMERIC_RANGES.uiScale.max,
+            resolveDelayMultiplier: SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.min
+        });
     });
 
     it('property-checks raw save and settings boundaries against arbitrary malformed payloads', () => {
@@ -158,6 +238,34 @@ describe('save normalization', () => {
         expect(saveData.settings.boardPresentation).toBe(DEFAULT_SETTINGS.boardPresentation);
     });
 
+    it('normalizes every persisted string-union setting through the same allowlist boundary', () => {
+        const cases = [
+            { key: 'displayMode', valid: 'fullscreen', invalid: 'kiosk' },
+            { key: 'graphicsQuality', valid: 'high', invalid: 'ultra' },
+            { key: 'boardScreenSpaceAA', valid: 'msaa', invalid: 'txaa' },
+            { key: 'boardPresentation', valid: 'breathing', invalid: 'wide' },
+            { key: 'cameraViewportModePreference', valid: 'never', invalid: 'sometimes' },
+            { key: 'weakerShuffleMode', valid: 'rows_only', invalid: 'columns_only' }
+        ] as const satisfies readonly {
+            key: keyof Settings;
+            valid: string;
+            invalid: string;
+        }[];
+
+        for (const { key, valid, invalid } of cases) {
+            expect(normalizeUnknownSettings({ [key]: valid })[key], `${key} valid raw setting`).toBe(valid);
+            expect(normalizeUnknownSettings({ [key]: invalid })[key], `${key} invalid raw setting`).toBe(
+                DEFAULT_SETTINGS[key]
+            );
+            expect(
+                normalizeSaveData({
+                    settings: { ...DEFAULT_SETTINGS, [key]: invalid } as Settings
+                }).settings[key],
+                `${key} invalid save setting`
+            ).toBe(DEFAULT_SETTINGS[key]);
+        }
+    });
+
     it('keeps the relic shrine upgrade claim-driven when seven-dailies progress is present', () => {
         const fromAchievement = normalizeSaveData({
             achievements: { ...createAchievementState(), ACH_SEVEN_DAILIES: true }
@@ -201,6 +309,45 @@ describe('save normalization', () => {
         const missedDay = mergeDailyComplete(second, '20260428');
         expect(missedDay.playerStats?.dailyStreakCosmetic).toBe(1);
         expect(Object.keys(missedDay.playerStats ?? {})).not.toContain('streakFreezeCount');
+    });
+
+    it('canonicalizes legacy daily date keys and rejects impossible persisted dates', () => {
+        expect(
+            normalizeSaveData({
+                playerStats: { ...createDefaultSaveData().playerStats!, lastDailyDateKeyUtc: '2026-04-30' },
+                lastRunSummary: {
+                    totalScore: 1,
+                    bestScore: 1,
+                    levelsCleared: 1,
+                    highestLevel: 1,
+                    achievementsEnabled: true,
+                    unlockedAchievements: [],
+                    bestStreak: 1,
+                    perfectClears: 0,
+                    dailyDateKeyUtc: '2026-04-30'
+                }
+            })
+        ).toMatchObject({
+            playerStats: { lastDailyDateKeyUtc: '20260430' },
+            lastRunSummary: { dailyDateKeyUtc: '20260430' }
+        });
+
+        const invalid = normalizeSaveData({
+            playerStats: { ...createDefaultSaveData().playerStats!, lastDailyDateKeyUtc: '20260231' },
+            lastRunSummary: {
+                totalScore: 1,
+                bestScore: 1,
+                levelsCleared: 1,
+                highestLevel: 1,
+                achievementsEnabled: true,
+                unlockedAchievements: [],
+                bestStreak: 1,
+                perfectClears: 0,
+                dailyDateKeyUtc: 'not-a-date'
+            }
+        });
+        expect(invalid.playerStats?.lastDailyDateKeyUtc).toBeNull();
+        expect(invalid.lastRunSummary?.dailyDateKeyUtc).toBeUndefined();
     });
 
     it('table-driven legacy / partial fixtures normalize without undefined leaks (REF-065)', () => {
@@ -349,6 +496,78 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary).toBeNull();
     });
 
+    it('builds bounded relic pick rows in catalog order', () => {
+        const counts = {
+            guard_token_plus_one: 2.8,
+            extra_shuffle_charge: -1,
+            missing_relic: 99,
+            parasite_ledger: Number.NaN
+        };
+        const rows = getRelicPickCountRows(counts);
+
+        expect(rows.map((row) => row.id)).toEqual(RELIC_POOL);
+        expect(rows.find((row) => row.id === 'guard_token_plus_one')?.count).toBe(2);
+        expect(rows.find((row) => row.id === 'extra_shuffle_charge')?.count).toBe(0);
+        expect(rows.find((row) => row.id === 'parasite_ledger')?.count).toBe(0);
+        expect(getRelicPickTotal(counts)).toBe(2);
+        expect(getRelicPickTotal(['guard_token_plus_one'])).toBe(0);
+    });
+
+    it('bounds persisted collections and rejects unknown or oversized identifiers', () => {
+        const expectedLimits = {
+            encorePairKeys: 80,
+            entryTextLength: 128,
+            puzzleCompletions: 256
+        };
+        const puzzleCompletions = Object.fromEntries(
+            Array.from({ length: expectedLimits.puzzleCompletions + 20 }, (_, index) => [
+                `puzzle_${index}`,
+                { completed: true, bestMistakes: index, bestScore: index }
+            ])
+        );
+        const oversized = 'x'.repeat(expectedLimits.entryTextLength + 1);
+
+        const normalized = normalizeSaveData({
+            unlocks: [
+                `honor:${oversized}`,
+                'achievement:BAD_ACHIEVEMENT',
+                'cosmetic:future_cosmetic',
+                'honor:future_honor',
+                'cosmetic:crest_daily_bronze',
+                'cosmetic:crest_daily_bronze'
+            ],
+            playerStats: {
+                ...createDefaultSaveData().playerStats!,
+                encorePairKeysLastRun: [oversized, '', ...Array.from({ length: 100 }, (_, index) => `pair_${index}`)],
+                puzzleCompletions: { [oversized]: { completed: true, bestMistakes: 0, bestScore: 1 }, ...puzzleCompletions }
+            }
+        });
+
+        expect(normalized.unlocks).toEqual(['cosmetic:crest_daily_bronze']);
+        expect(normalized.unlocks).not.toContain(`honor:${oversized}`);
+        expect(normalized.playerStats?.encorePairKeysLastRun).toHaveLength(expectedLimits.encorePairKeys);
+        expect(normalized.playerStats?.encorePairKeysLastRun).not.toContain(oversized);
+        expect(Object.keys(normalized.playerStats?.puzzleCompletions ?? {})).toHaveLength(
+            expectedLimits.puzzleCompletions
+        );
+        expect(normalized.playerStats?.puzzleCompletions).not.toHaveProperty(oversized);
+    });
+
+    it('keeps caller-supplied puzzle ids as own dictionary keys without prototype mutation', () => {
+        const puzzleCompletions = JSON.parse(`{
+            "__proto__":{"completed":true,"bestMistakes":1,"bestScore":10},
+            "constructor":{"completed":true,"bestMistakes":2,"bestScore":20},
+            "toString":{"completed":true,"bestMistakes":3,"bestScore":30}
+        }`);
+
+        const normalized = normalizeUnknownSaveData({ playerStats: { puzzleCompletions } });
+        const completions = normalized.playerStats?.puzzleCompletions;
+
+        expect(Object.getPrototypeOf(completions)).toBeNull();
+        expect(Object.keys(completions ?? {})).toEqual(['__proto__', 'constructor', 'toString']);
+        expect(completions?.__proto__).toEqual({ completed: true, bestMistakes: 1, bestScore: 10 });
+    });
+
     it('dedupes save-loaded reward and run summary ledgers before they can replay duplicates', () => {
         const normalized = normalizeSaveData({
             playerStats: {
@@ -367,7 +586,7 @@ describe('save normalization', () => {
                 runSeed: 73002,
                 runRulesVersion: GAME_RULES_VERSION,
                 gameMode: 'endless',
-                activeMutators: ['short_memorize', 'short_memorize', 'wide_recall'],
+                activeMutators: ['short_memorize', 'retired_mutator', 'short_memorize', 'wide_recall'],
                 relicIds: ['extra_shuffle_charge', 'extra_shuffle_charge', 'guard_token_plus_one'],
                 payoffPickupClaimed: 2.9,
                 payoffPickupTotal: 3,
@@ -375,7 +594,14 @@ describe('save normalization', () => {
                 payoffRewardPerkCount: 1,
                 payoffRoutePaid: true,
                 payoffRouteRewardText: '+1 combo shard',
-                startingLoadoutId: 'route_tactician'
+                startingLoadoutId: 'route_tactician',
+                activeContract: {
+                    noShuffle: true,
+                    noDestroy: false,
+                    maxMismatches: 2.8,
+                    maxPinsTotalRun: 10.9,
+                    bonusRelicDraftPick: true
+                }
             }
         });
 
@@ -390,12 +616,47 @@ describe('save normalization', () => {
         expect(normalized.lastRunSummary?.payoffRoutePaid).toBe(true);
         expect(normalized.lastRunSummary?.payoffRouteRewardText).toBe('+1 combo shard');
         expect(normalized.lastRunSummary?.startingLoadoutId).toBe('route_tactician');
+        expect(normalized.lastRunSummary?.activeContract).toEqual({
+            noShuffle: true,
+            noDestroy: false,
+            maxMismatches: 2,
+            maxPinsTotalRun: 10,
+            bonusRelicDraftPick: true
+        });
+        expect(
+            normalizeSaveData({
+                lastRunSummary: {
+                    ...normalized.lastRunSummary!,
+                    payoffPickupClaimed: 7,
+                    payoffPickupTotal: 3
+                }
+            }).lastRunSummary
+        ).toMatchObject({
+            payoffPickupClaimed: 3,
+            payoffPickupTotal: 3
+        });
+        expect(
+            normalizeSaveData({
+                lastRunSummary: {
+                    ...normalized.lastRunSummary!,
+                    payoffRouteRewardText: 'x'.repeat(300)
+                }
+            }).lastRunSummary?.payoffRouteRewardText
+        ).toHaveLength(256);
         expect(normalizeSaveData({
             lastRunSummary: {
                 ...normalized.lastRunSummary!,
                 startingLoadoutId: 'missing_loadout' as unknown as RunSummary['startingLoadoutId']
             }
         }).lastRunSummary?.startingLoadoutId).toBeUndefined();
+        expect(
+            normalizeSaveData({
+                lastRunSummary: {
+                    ...normalized.lastRunSummary!,
+                    activeContract: { noShuffle: 'yes' } as unknown as RunSummary['activeContract']
+                }
+            }).lastRunSummary?.activeContract
+        ).toBeUndefined();
     });
 
     it('DNG-073 drops summaries from future save schemas instead of trusting obsolete active-run data', () => {
@@ -450,6 +711,69 @@ describe('save normalization', () => {
             completed: true,
             bestMistakes: 0,
             bestScore: 150
+        });
+    });
+
+    it('normalizes malformed merge counters before updating persisted progress', () => {
+        const puzzle = BUILTIN_PUZZLES.starter_pairs!;
+        const save = {
+            ...createDefaultSaveData(),
+            playerStats: {
+                ...createDefaultSaveData().playerStats!,
+                bestFloorNoPowers: Number.NaN,
+                relicPickCounts: {
+                    guard_token_plus_one: Number.POSITIVE_INFINITY
+                },
+                puzzleCompletions: {
+                    starter_pairs: {
+                        completed: true,
+                        bestMistakes: Number.POSITIVE_INFINITY,
+                        bestScore: Number.NaN
+                    }
+                }
+            }
+        } as SaveData;
+        const puzzleRun = {
+            ...createPuzzleRun(0, puzzle.id, puzzle.tiles),
+            status: 'levelComplete' as const,
+            lastLevelResult: {
+                level: 1,
+                scoreGained: 0,
+                rating: 'S' as const,
+                livesRemaining: 5,
+                perfect: true,
+                mistakes: Number.POSITIVE_INFINITY,
+                clearLifeReason: 'none' as const,
+                clearLifeGained: 0
+            },
+            stats: {
+                ...createNewRun(0).stats,
+                tries: Number.NaN,
+                totalScore: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const mergedPuzzle = mergePuzzleCompletion(save, puzzleRun);
+        expect(mergedPuzzle.playerStats?.puzzleCompletions?.starter_pairs).toEqual({
+            completed: true,
+            bestMistakes: 0,
+            bestScore: 0
+        });
+
+        const malformedStatsRun = {
+            ...puzzleRun,
+            lastLevelResult: null,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        expect(mergePuzzleCompletion(save, malformedStatsRun).playerStats?.puzzleCompletions?.starter_pairs).toEqual({
+            completed: true,
+            bestMistakes: 0,
+            bestScore: 0
+        });
+        expect(mergeBestFloorNoPowers(save, Number.POSITIVE_INFINITY)).toBe(save);
+        expect(mergeBestFloorNoPowers(save, 3.9).playerStats?.bestFloorNoPowers).toBe(3);
+        expect(mergeRelicPickStat(save, 'guard_token_plus_one').playerStats?.relicPickCounts).toEqual({
+            guard_token_plus_one: 1
         });
     });
 

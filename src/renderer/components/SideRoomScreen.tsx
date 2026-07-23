@@ -18,6 +18,13 @@ import styles from './SideRoomScreen.module.css';
 const routeLabel = (routeType: RouteNodeType): string =>
     routeType === 'safe' ? 'Safe route' : routeType === 'greed' ? 'Greedy route' : 'Mystery route';
 
+type SideRoomChoice = NonNullable<RouteSideRoomState['choices']>[number];
+
+const sideRoomChoices = (value: RouteSideRoomState['choices'] | unknown): SideRoomChoice[] => (Array.isArray(value) ? value : []);
+
+const sideRoomTraitBuildLabels = (value: SideRoomChoice['traitBuildLabels'] | unknown): string[] =>
+    Array.isArray(value) ? value.filter((label): label is string => typeof label === 'string') : [];
+
 const sideRoomNodeKindStamp = (sideRoom: RouteSideRoomState): string => {
     if (sideRoom.nodeKind) {
         return sideRoom.nodeKind;
@@ -172,8 +179,9 @@ const sideRoomBoardMoment = (
     rewardSegments: readonly { label: string; kind: 'gain' | 'capped' | 'neutral' }[]
 ): { label: 'Board moment'; value: string; tone: 'build' | 'route' | 'safety' | 'reward' | 'neutral' } => {
     const detail = sideRoom.primaryDetail.toLowerCase();
-    const hasChoices = Boolean(sideRoom.choices && sideRoom.choices.length > 0);
-    if (hasChoices && sideRoom.choices?.some((choice) => choice.traitBuildReason || choice.traitBuildLabels?.length)) {
+    const choices = sideRoomChoices(sideRoom.choices);
+    const hasChoices = choices.length > 0;
+    if (hasChoices && choices.some((choice) => choice.traitBuildReason || sideRoomTraitBuildLabels(choice.traitBuildLabels).length > 0)) {
         return { label: 'Board moment', value: 'Pick a build lane', tone: 'build' };
     }
     if (hasChoices) {
@@ -208,7 +216,7 @@ const primaryActionSignals = (
     sideRoom: RouteSideRoomState,
     rewardSegments: readonly { label: string; kind: 'gain' | 'capped' | 'neutral' }[]
 ): { id: string; label: string; value: string; tone: 'action' | 'gain' | 'cost' | 'route' | 'neutral' }[] => {
-    const hasChoices = Boolean(sideRoom.choices && sideRoom.choices.length > 0);
+    const hasChoices = sideRoomChoices(sideRoom.choices).length > 0;
     const hasGain = rewardSegments.some((segment) => segment.kind === 'gain') || sideRoom.primaryDetail.includes('+');
     const hasCost = /\b(lose|spend|cost|pay|damage|risk|forfeit|sacrifice|curse|cursed)\b/i.test(sideRoom.primaryDetail);
     const action =
@@ -287,11 +295,10 @@ const primaryActionSignalScreenCue = (
     return 'pulse';
 };
 
-const choiceSignalChips = (
-    choice: NonNullable<RouteSideRoomState['choices']>[number]
-): { label: string; tone: 'gain' | 'cost' | 'build' | 'neutral' }[] => {
+const choiceSignalChips = (choice: SideRoomChoice): { label: string; tone: 'gain' | 'cost' | 'build' | 'neutral' }[] => {
     const detail = choice.detail.toLowerCase();
     const chips: { label: string; tone: 'gain' | 'cost' | 'build' | 'neutral' }[] = [];
+    const traitLabels = sideRoomTraitBuildLabels(choice.traitBuildLabels);
 
     if (choice.traitBuildReason) {
         chips.push({ label: 'Best fit', tone: 'build' });
@@ -302,7 +309,7 @@ const choiceSignalChips = (
     if (/\b(lose|spend|cost|pay|damage|risk|forfeit|sacrifice|curse|cursed)\b/i.test(choice.detail)) {
         chips.push({ label: 'Cost', tone: 'cost' });
     }
-    if (choice.traitBuildLabels && choice.traitBuildLabels.length > 0) {
+    if (traitLabels.length > 0) {
         chips.push({ label: 'Route prime', tone: 'build' });
     }
     if (choice.nextCue ?? choice.rewardPerkNextCue) {
@@ -368,9 +375,7 @@ const choiceSignalScreenCue = (chip: ReturnType<typeof choiceSignalChips>[number
     return 'pulse';
 };
 
-const choicePayoffRows = (
-    choice: NonNullable<RouteSideRoomState['choices']>[number]
-): { id: string; label: string; value: string; tone: 'gain' | 'cost' | 'build' | 'neutral' }[] => {
+const choicePayoffRows = (choice: SideRoomChoice): { id: string; label: string; value: string; tone: 'gain' | 'cost' | 'build' | 'neutral' }[] => {
     const segments = choice.detail
         .split(';')
         .map((segment) => segment.trim())
@@ -389,10 +394,11 @@ const choicePayoffRows = (
     if (costSegment && costSegment !== rewardSegment) {
         rows.push({ id: 'cost', label: 'Cost', value: costSegment, tone: 'cost' });
     }
+    const traitLabels = sideRoomTraitBuildLabels(choice.traitBuildLabels);
     if (choice.traitBuildReason) {
         rows.push({ id: 'build', label: 'Prime', value: choice.traitBuildReason, tone: 'build' });
-    } else if (choice.traitBuildLabels && choice.traitBuildLabels.length > 0) {
-        rows.push({ id: 'build', label: 'Prime', value: choice.traitBuildLabels.slice(0, 2).join(' / '), tone: 'build' });
+    } else if (traitLabels.length > 0) {
+        rows.push({ id: 'build', label: 'Prime', value: traitLabels.slice(0, 2).join(' / '), tone: 'build' });
     }
     const nextCue = choice.nextCue ?? choice.rewardPerkNextCue;
     if (nextCue) {
@@ -492,13 +498,12 @@ const sideRoomChoiceBuildRouteTone = (traitKinds: readonly TileTraitKind[]): Sid
     return 'build';
 };
 
-const sideRoomChoiceBuildRoutes = (
-    choice: NonNullable<RouteSideRoomState['choices']>[number]
-): SideRoomChoiceBuildRoute[] => {
-    if (!choice.traitBuildLabels || choice.traitBuildLabels.length === 0) {
+const sideRoomChoiceBuildRoutes = (choice: SideRoomChoice): SideRoomChoiceBuildRoute[] => {
+    const traitLabels = sideRoomTraitBuildLabels(choice.traitBuildLabels);
+    if (traitLabels.length === 0) {
         return [];
     }
-    const labelSet = new Set(choice.traitBuildLabels);
+    const labelSet = new Set(traitLabels);
     return getTraitBuildRewardRows()
         .filter((row) => labelSet.has(row.label))
         .map((row) => ({
@@ -525,13 +530,13 @@ const sideRoomChoiceBuildRouteLabel = (routes: readonly SideRoomChoiceBuildRoute
         : 'Choice build routes';
 
 const choiceImpactBurst = (
-    choice: NonNullable<RouteSideRoomState['choices']>[number],
+    choice: SideRoomChoice,
     payoffRows: ReturnType<typeof choicePayoffRows>
 ): { label: string; value: string; tone: 'build' | 'gain' | 'neutral' } => {
     if (choice.traitBuildReason) {
         return {
             label: 'Best fit',
-            value: choice.traitBuildLabels?.[0] ?? 'Current board',
+            value: sideRoomTraitBuildLabels(choice.traitBuildLabels)[0] ?? 'Current board',
             tone: 'build'
         };
     }
@@ -800,9 +805,7 @@ const sideRoomChoiceLaneForRows = (payoffRows: ReturnType<typeof choicePayoffRow
     return 'route';
 };
 
-const buildSideRoomChoiceLaneMap = (
-    choices: NonNullable<RouteSideRoomState['choices']>
-): SideRoomChoiceLaneMapEntry[] => {
+const buildSideRoomChoiceLaneMap = (choices: readonly SideRoomChoice[]): SideRoomChoiceLaneMapEntry[] => {
     const lanes = new Map<SideRoomChoiceLaneId, { count: number; cue: string }>();
     for (const choice of choices) {
         const payoffRows = choicePayoffRows(choice);
@@ -899,7 +902,7 @@ const sideRoomChoiceLaneScreenCue = (
 
 const trimTerminalPunctuation = (value: string): string => value.trim().replace(/[.!?]+$/, '');
 
-const choiceActionAriaLabel = (choice: NonNullable<RouteSideRoomState['choices']>[number]): string => {
+const choiceActionAriaLabel = (choice: SideRoomChoice): string => {
     const payoffRows = choicePayoffRows(choice);
     const impactBurst = choiceImpactBurst(choice, payoffRows);
     const payoffStack = choicePayoffStack(payoffRows);
@@ -907,10 +910,8 @@ const choiceActionAriaLabel = (choice: NonNullable<RouteSideRoomState['choices']
     const payoff = payoffRows
         .map((row) => `${row.label}: ${row.value}`)
         .join('. ');
-    const buildLabels =
-        choice.traitBuildLabels && choice.traitBuildLabels.length > 0
-            ? `Route primes: ${choice.traitBuildLabels.slice(0, 2).join(' / ')}.`
-            : '';
+    const traitLabels = sideRoomTraitBuildLabels(choice.traitBuildLabels);
+    const buildLabels = traitLabels.length > 0 ? `Route primes: ${traitLabels.slice(0, 2).join(' / ')}.` : '';
     const nextCueValue = choice.nextCue ?? choice.rewardPerkNextCue;
     const nextCue = nextCueValue ? `Next cue: ${nextCueValue}.` : '';
     const recommendation = choice.traitBuildReason ? `Recommended: ${choice.traitBuildReason}.` : '';
@@ -921,7 +922,7 @@ const choiceActionAriaLabel = (choice: NonNullable<RouteSideRoomState['choices']
     return `${choice.label}. ${heatCue.label}: ${heatCue.value}. ${heatCue.detail}. ${impactBurst.label}: ${impactBurst.value}. ${stack}${recommendation}${payoff}${payoff ? '. ' : ''}${buildLabels}${nextCue}${detailSuffix}`.trim();
 };
 
-const choiceActionDescription = (choice: NonNullable<RouteSideRoomState['choices']>[number]): string => {
+const choiceActionDescription = (choice: SideRoomChoice): string => {
     const payoffRows = choicePayoffRows(choice);
     const payoffStack = choicePayoffStack(payoffRows);
     const impactBurst = choiceImpactBurst(choice, payoffRows);
@@ -971,6 +972,7 @@ const SideRoomScreen = () => {
     }
 
     const sideRoom = run.sideRoom;
+    const choices = sideRoomChoices(sideRoom.choices);
     const nodeKindStamp = sideRoomNodeKindStamp(sideRoom);
     const rewardSegments = rewardFeedbackSegments(sideRoom);
     const rewardSummary = rewardFeedbackSummary(rewardSegments);
@@ -993,7 +995,7 @@ const SideRoomScreen = () => {
         'Reward feedback breakdown',
         rewardSegments.map((segment) => ({ label: segment.kind, value: segment.label }))
     );
-    const choiceLaneMap = sideRoom.choices ? buildSideRoomChoiceLaneMap(sideRoom.choices) : [];
+    const choiceLaneMap = buildSideRoomChoiceLaneMap(choices);
     const primaryChoiceLane = choiceLaneMap[0] ?? null;
     const choiceLaneMapAttr = sideRoomChoiceLaneMapAttr(choiceLaneMap);
     const choiceLaneMapAccessibleLabel = sideRoomChoiceLaneMapLabel(choiceLaneMap);
@@ -1128,7 +1130,7 @@ const SideRoomScreen = () => {
                             ))}
                         </ul>
                     ) : null}
-                    {sideRoom.choices && sideRoom.choices.length > 0 ? (
+                    {choices.length > 0 ? (
                         <div className={styles.choiceList}>
                             {choiceLaneMap.length > 1 ? (
                                 <div
@@ -1219,7 +1221,8 @@ const SideRoomScreen = () => {
                                     ))}
                                 </div>
                             ) : null}
-                            {sideRoom.choices.map((choice) => {
+                            {choices.map((choice) => {
+                                const traitLabels = sideRoomTraitBuildLabels(choice.traitBuildLabels);
                                 const signalChips = choiceSignalChips(choice);
                                 const payoffRows = choicePayoffRows(choice);
                                 const impactBurst = choiceImpactBurst(choice, payoffRows);
@@ -1350,9 +1353,9 @@ const SideRoomScreen = () => {
                                                 })}
                                             </div>
                                         ) : null}
-                                        {choice.traitBuildLabels && choice.traitBuildLabels.length > 0 ? (
+                                        {traitLabels.length > 0 ? (
                                             <div className={styles.traitBuildTags} aria-label="Trait build archetypes">
-                                                {choice.traitBuildLabels.map((label) => (
+                                                {traitLabels.map((label) => (
                                                     <span key={label}>{label}</span>
                                                 ))}
                                             </div>
@@ -1436,7 +1439,7 @@ const SideRoomScreen = () => {
                 <footer className={styles.actions}>
                     <OverlayActionDock
                         actions={[
-                            ...(sideRoom.choices || sideRoom.skipLabel !== sideRoom.primaryLabel
+                            ...(choices.length > 0 || sideRoom.skipLabel !== sideRoom.primaryLabel
                                 ? [
                                       {
                                           label: sideRoom.skipLabel,
@@ -1449,8 +1452,8 @@ const SideRoomScreen = () => {
                                       }
                                   ]
                                 : []),
-                            ...(sideRoom.choices && sideRoom.choices.length > 0
-                                ? sideRoom.choices.map((choice) => ({
+                            ...(choices.length > 0
+                                ? choices.map((choice) => ({
                                       label: choice.label,
                                       description: choiceActionDescription(choice),
                                       ariaLabel: choiceActionAriaLabel(choice),

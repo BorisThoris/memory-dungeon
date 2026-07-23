@@ -54,8 +54,22 @@ const hudAnnouncementMock = vi.hoisted(() => ({
     getFindableToastText: vi.fn((kind: string) => (kind === 'shard_spark' ? 'Shard spark +1 combo shard' : `${kind} reward`))
 }));
 
+const viewportSizeMock = vi.hoisted(() => ({
+    height: 800,
+    width: 1280
+}));
+
+const gameLeftToolbarMock = vi.hoisted(() => ({
+    props: null as { rulesHintsExpanded?: boolean } | null
+}));
+
 vi.mock('./MainMenuBackground', () => ({ default: () => null }));
-vi.mock('./GameLeftToolbar', () => ({ default: () => null }));
+vi.mock('./GameLeftToolbar', () => ({
+    default: (props: { rulesHintsExpanded?: boolean }) => {
+        gameLeftToolbarMock.props = props;
+        return null;
+    }
+}));
 vi.mock('./GameplayHudBar', () => ({ default: () => null }));
 vi.mock('./TileBoard', () => ({
     default: forwardRef(function TileBoardStub(
@@ -133,7 +147,7 @@ vi.mock('./TileBoard', () => ({
     })
 }));
 vi.mock('../hooks/useViewportSize', () => ({
-    useViewportSize: () => ({ width: 1280, height: 800 })
+    useViewportSize: () => viewportSizeMock
 }));
 vi.mock('../hooks/useDistractionChannelTick', () => ({
     useDistractionChannelTick: () => 0
@@ -202,6 +216,9 @@ describe('GameScreen (OVR-014)', () => {
         hudAnnouncementMock.claimedFindableKind = null;
         hudAnnouncementMock.message = '';
         hudAnnouncementMock.priority = 'info';
+        gameLeftToolbarMock.props = null;
+        viewportSizeMock.height = 800;
+        viewportSizeMock.width = 1280;
         useNotificationStore.setState({
             notifications: [],
             maxNotifications: 5,
@@ -219,6 +236,47 @@ describe('GameScreen (OVR-014)', () => {
                 ...BOARD_FLOATER_POP_CLEAR
             });
         });
+    });
+
+    it('drops queued rule-hint expansion when compact chrome takes over first', async () => {
+        const pendingMicrotasks: VoidFunction[] = [];
+        const queueMicrotaskSpy = vi.spyOn(globalThis, 'queueMicrotask').mockImplementation((callback) => {
+            pendingMicrotasks.push(callback);
+        });
+        const run = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
+        const view = render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        try {
+            expect(gameLeftToolbarMock.props?.rulesHintsExpanded).toBe(false);
+
+            viewportSizeMock.width = 844;
+            viewportSizeMock.height = 390;
+            view.rerender(
+                <PlatformTiltProvider>
+                    <NotificationHost>
+                        <GameScreen achievements={[]} run={run} />
+                    </NotificationHost>
+                </PlatformTiltProvider>
+            );
+
+            await act(async () => {
+                while (pendingMicrotasks.length > 0) {
+                    pendingMicrotasks.shift()?.();
+                    await Promise.resolve();
+                }
+            });
+
+            expect(gameLeftToolbarMock.props?.rulesHintsExpanded).toBe(false);
+        } finally {
+            view.unmount();
+            queueMicrotaskSpy.mockRestore();
+        }
     });
 
     it('defers achievement toasts while the floor-cleared modal is visible, then emits after leaving levelComplete', () => {
@@ -262,6 +320,53 @@ describe('GameScreen (OVR-014)', () => {
 
         expect(screen.getByText(/Lives carry across the run/i)).toBeInTheDocument();
         expect(screen.getByText(/Clean clears, safe routes, shops, rests, and shrines can restore them/i)).toBeInTheDocument();
+    });
+
+    it('normalizes malformed floor-clear counters before rendering overlay copy', () => {
+        const fixture = levelCompleteRunFixture();
+        const malformed: RunState = {
+            ...fixture,
+            findablesClaimedThisFloor: Number.POSITIVE_INFINITY,
+            findablesTotalThisFloor: Number.NaN,
+            relicFavorProgress: Number.NaN,
+            stats: {
+                ...fixture.stats,
+                bestStreak: Number.NaN,
+                comboShards: Number.POSITIVE_INFINITY,
+                totalScore: Number.POSITIVE_INFINITY
+            },
+            lastLevelResult: {
+                ...fixture.lastLevelResult!,
+                level: Number.POSITIVE_INFINITY,
+                scoreGained: Number.NaN,
+                mistakes: Number.POSITIVE_INFINITY,
+                livesRemaining: Number.POSITIVE_INFINITY,
+                featuredObjectiveId: 'flip_par',
+                featuredObjectiveCompleted: true,
+                objectiveBonusScore: Number.POSITIVE_INFINITY,
+                featuredObjectiveStreak: Number.NaN,
+                featuredObjectiveStreakBonus: Number.POSITIVE_INFINITY,
+                relicFavorGained: Number.NaN,
+                endlessRiskWagerOutcome: 'lost',
+                endlessRiskWagerStreakLost: Number.POSITIVE_INFINITY,
+                traitRouteObjectiveRequired: Number.POSITIVE_INFINITY,
+                traitRouteObjectiveProgress: Number.NaN
+            }
+        };
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={malformed} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.getByText(/Level 0 cleared\. Score \+0\./i)).toBeInTheDocument();
+        expect(screen.getByTestId('floor-clear-result-stack')).not.toHaveTextContent(/NaN|Infinity/);
+        expect(screen.getByTestId('floor-clear-momentum-strip')).toHaveTextContent('Score pop+0');
+        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Objective paid+0 score');
+        expect(screen.getByTestId('floor-clear-objective-strip')).toHaveTextContent('Objective streakx0');
     });
 
     it('surfaces first-clear onboarding completion copy after completion is durable', () => {
@@ -2690,6 +2795,61 @@ describe('GameScreen (OVR-014)', () => {
         } finally {
             vi.useRealTimers();
         }
+    });
+
+    it('ignores malformed match floater array payloads before rendering payoff rows', () => {
+        const base = createNewRun(0, { echoFeedbackEnabled: false, gameMode: 'puzzle' });
+        const playing = finishMemorizePhase(base);
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={playing} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        act(() => {
+            useAppStore.setState({
+                matchScorePop: {
+                    amount: 45,
+                    chainDepth: 4,
+                    feedbackHeadline: 'Reward',
+                    feedbackIntensity: 'high',
+                    feedbackSignal: { label: 'Route', tone: 'route' },
+                    impactCue: { label: 'Stack cashout', tone: 'reward' },
+                    payoffSummary: {
+                        label: 'Stack cashout',
+                        value: '2 payoffs: Route + Pickup',
+                        tier: 'reward'
+                    },
+                    payoffLadder: {
+                        first: 'Route cashout',
+                        lanes: { length: 2 } as never,
+                        then: 'Pickup cashout',
+                        keep: 'Prime next',
+                        tone: 'reward'
+                    },
+                    payoffLaneMap: { length: 2 } as never,
+                    payoffChips: { length: 3 } as never,
+                    chainRewardForecastCues: { length: 1 } as never,
+                    traitInteractionTexts: { length: 2 } as never,
+                    tileIdA: 'a',
+                    tileIdB: 'b',
+                    key: 'malformed-match-floater-arrays'
+                }
+            });
+        });
+
+        expect(screen.getByTestId('match-score-floater')).toHaveTextContent('Reward');
+        expect(screen.getByTestId('match-score-floater')).toHaveAttribute('data-match-jackpot-tier', 'stack');
+        expect(screen.queryByTestId('match-score-floater-payoff-lane-map')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('match-score-floater-reward-forecast')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('match-score-floater-payoff-chips')).not.toBeInTheDocument();
+        expect(screen.getByTestId('match-score-floater-payoff-ladder-summary')).toHaveTextContent('No lanes');
+        expect(screen.getByTestId('match-score-floater-payoff-ladder-summary')).toHaveAttribute(
+            'data-match-payoff-ladder-count',
+            '0'
+        );
     });
 
     it('renders super-stack match floaters with distinct payoff attributes and copy', () => {
@@ -5295,6 +5455,29 @@ describe('GameScreen (OVR-014)', () => {
         expect(screen.queryByRole('button', { name: /visit shop/i })).toBeNull();
         expect(screen.queryByTestId('shop-offer-panel')).toBeNull();
         expect(screen.getByText(/Vendor alcove available: 1 services, 5 shop gold/)).toBeTruthy();
+    });
+
+    it('ignores malformed route choice payloads in the floor-clear result', () => {
+        const baseRun = levelCompleteRunFixture();
+        const run: RunState = {
+            ...baseRun,
+            lastLevelResult: {
+                ...baseRun.lastLevelResult!,
+                routeChoices: { length: 3 } as never
+            }
+        };
+
+        render(
+            <PlatformTiltProvider>
+                <NotificationHost>
+                    <GameScreen achievements={[]} run={run} />
+                </NotificationHost>
+            </PlatformTiltProvider>
+        );
+
+        expect(screen.getByTestId('floor-clear-result-stack')).toHaveAttribute('data-route-choice-required', 'false');
+        expect(screen.queryByTestId('route-choice-panel')).toBeNull();
+        expect(screen.getByRole('button', { name: /^Continue$/i })).toBeTruthy();
     });
 
     it('shows selected route copy instead of route buttons after a route is locked', () => {

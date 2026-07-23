@@ -1,5 +1,5 @@
-import { FINDABLE_KIND_SPAWN_WEIGHTS, RECALL_FOCUS_MAX, type FindableKind, type RunState } from './contracts';
-import { getFindableKindLabel, getFindableRewardCopy } from './findables';
+import { RECALL_FOCUS_MAX, type FindableKind, type RunState } from './contracts';
+import { getFindableKindLabel, getFindableRewardCopy, getFindableSpawnWeightRows } from './findables';
 import {
     getDungeonBoardPresentation,
     getDungeonBoardStatus,
@@ -9,6 +9,8 @@ import {
 import type { MechanicTokenId } from './mechanic-feedback';
 import { getMemoryRecallFeedback } from './memory-recall-feedback';
 import { getRunEconomyRows } from './run-economy';
+import { runArrayCount } from './run-array-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type FeedbackCauseKind =
     | 'match_reward'
@@ -69,6 +71,15 @@ export interface SafeExpansionImpactRow {
     runtimeStatus: 'wired' | 'read_model_only';
 }
 
+const WARD_CACHE_SAFE_EXPANSION_IMPACT_ROW: SafeExpansionImpactRow = {
+    id: 'ward_cache',
+    label: 'Ward cache: future safe hazard/reward candidate',
+    surface: 'hazard_reward_contract',
+    objectiveImpact: 'Documented as a read-model-only candidate until hazard runtime tuning is separately versioned.',
+    perfectMemoryImpact: 'neutral',
+    runtimeStatus: 'read_model_only'
+};
+
 export interface FindableDistributionRow {
     id: FindableKind;
     label: string;
@@ -97,11 +108,12 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
         };
     }
 
+    const stats = normalizeSessionStats(run.stats);
     const actions: string[] = [];
     if (run.gambitThirdFlipUsed) actions.push('gambit');
-    if (run.shuffleUsedThisFloor || run.stats.shufflesUsed > 0) actions.push('shuffle or swap');
-    if (run.stats.pairsDestroyed > 0) actions.push('destroy pair');
-    if (run.peekRevealedTileIds.length > 0) actions.push('peek');
+    if (run.shuffleUsedThisFloor || stats.shufflesUsed > 0) actions.push('shuffle or swap');
+    if (stats.pairsDestroyed > 0) actions.push('destroy pair');
+    if (runArrayCount(run.peekRevealedTileIds) > 0) actions.push('peek');
     const firstAction = actions[0] ?? 'assist or wild action';
     const latestAction = actions[actions.length - 1] ?? firstAction;
 
@@ -116,9 +128,12 @@ export const getPerfectMemoryAttribution = (run: RunState): PerfectMemoryAttribu
 
 export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
     const rows: FeedbackCauseRow[] = [];
+    const stats = normalizeSessionStats(run.stats);
     const objective = getDungeonObjectiveStatus(run);
     const dungeon = getDungeonBoardPresentation(run);
     const pm = getPerfectMemoryAttribution(run);
+    const forgottenTileCount = runArrayCount(run.forgottenTileIdsThisFloor);
+    const matchedPairCount = runArrayCount(run.matchedPairKeysThisRun);
 
     if (objective.progress > 0 || objective.completed) {
         rows.push(
@@ -183,7 +198,7 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
         run.recallMatchesThisFloor > 0 ||
         run.recallMistakesThisFloor > 0 ||
         run.recallBonusScoreThisFloor > 0 ||
-        run.forgottenTileIdsThisFloor.length > 0
+        forgottenTileCount > 0
     ) {
         const recall = getMemoryRecallFeedback(run);
         rows.push(
@@ -192,20 +207,20 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
                 kind: 'recall_feedback',
                 label: 'Recall',
                 summary: `Focus ${recall.focus}/${RECALL_FOCUS_MAX}, +${run.recallBonusScoreThisFloor} score`,
-                detail: `${run.recallMatchesThisFloor} remembered match(es), ${run.recallMistakesThisFloor} lapse(s), ${run.forgottenTileIdsThisFloor.length} forgotten tile marker(s) etched into the room log. ${recall.atmosphericSummary} ${recall.atmosphericBeat} Next memory move: ${recall.nextMemoryMove.label}.`,
+                detail: `${run.recallMatchesThisFloor} remembered match(es), ${run.recallMistakesThisFloor} lapse(s), ${forgottenTileCount} forgotten tile marker(s) etched into the room log. ${recall.atmosphericSummary} ${recall.atmosphericBeat} Next memory move: ${recall.nextMemoryMove.label}.`,
                 tokens: ['hidden_known', run.recallMistakesThisFloor > 0 ? 'risk' : 'momentum'],
                 priority: 35
             })
         );
     }
 
-    if (run.matchedPairKeysThisRun.length > 0) {
+    if (matchedPairCount > 0) {
         rows.push(
             causeRow({
                 id: 'latest-match-route',
                 kind: 'route_reward',
                 label: 'Route',
-                summary: `${run.matchedPairKeysThisRun.length} pair(s) resolved this run`,
+                summary: `${matchedPairCount} pair(s) resolved this run`,
                 detail:
                     run.pendingRouteCardPlan?.routeType != null
                         ? `${run.pendingRouteCardPlan.routeType} route plan is pending.`
@@ -230,13 +245,13 @@ export const getInRunCauseRows = (run: RunState): FeedbackCauseRow[] => {
         );
     }
 
-    if (run.shopGold > 0 || run.stats.comboShards > 0 || run.stats.guardTokens > 0) {
+    if (run.shopGold > 0 || stats.comboShards > 0 || stats.guardTokens > 0) {
         rows.push(
             causeRow({
                 id: 'economy',
                 kind: 'economy_delta',
                 label: 'Economy',
-                summary: `${run.shopGold} gold, ${run.stats.comboShards}/2 shards, ${run.stats.guardTokens}/2 guard`,
+                summary: `${run.shopGold} gold, ${stats.comboShards}/2 shards, ${stats.guardTokens}/2 guard`,
                 detail: 'Temporary run resources shifted as caches, route cards, shops, and pickups resolved.',
                 tokens: ['reward', 'cost'],
                 priority: 60
@@ -316,7 +331,8 @@ export const getTouchHudDetailRows = (run: RunState): TouchHudDetailRow[] => {
 };
 
 export const getFindableDistributionRows = (run: RunState): FindableDistributionRow[] => {
-    const totalWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
+    const findableSpawnWeightRows = getFindableSpawnWeightRows();
+    const totalWeight = findableSpawnWeightRows.reduce((sum, row) => sum + row.weight, 0);
     const totalKinds = new Map<FindableKind, number>();
     const tilesByPair = new Map<string, FindableKind>();
 
@@ -330,13 +346,13 @@ export const getFindableDistributionRows = (run: RunState): FindableDistribution
         totalKinds.set(kind, (totalKinds.get(kind) ?? 0) + 1);
     }
 
-    return (Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]).map((kind) => ({
-        id: kind,
-        label: getFindableKindLabel(kind),
-        spawnWeight: FINDABLE_KIND_SPAWN_WEIGHTS[kind],
-        targetShare: totalWeight > 0 ? FINDABLE_KIND_SPAWN_WEIGHTS[kind] / totalWeight : 0,
+    return findableSpawnWeightRows.map((row) => ({
+        id: row.id,
+        label: getFindableKindLabel(row.id),
+        spawnWeight: row.weight,
+        targetShare: totalWeight > 0 ? row.weight / totalWeight : 0,
         claimedTotalThisFloor: run.findablesClaimedThisFloor,
-        totalThisFloor: totalKinds.get(kind) ?? 0
+        totalThisFloor: totalKinds.get(row.id) ?? 0
     }));
 };
 
@@ -409,14 +425,7 @@ export const SAFE_EXPANSION_IMPACT_ROWS: readonly SafeExpansionImpactRow[] = [
         perfectMemoryImpact: 'safe',
         runtimeStatus: 'wired'
     },
-    {
-        id: 'ward_cache',
-        label: 'Ward cache: future safe hazard/reward candidate',
-        surface: 'hazard_reward_contract',
-        objectiveImpact: 'Documented as a read-model-only candidate until hazard runtime tuning is separately versioned.',
-        perfectMemoryImpact: 'neutral',
-        runtimeStatus: 'read_model_only'
-    }
+    WARD_CACHE_SAFE_EXPANSION_IMPACT_ROW
 ] as const;
 
-export const WARD_CACHE_CONTRACT_ROW = SAFE_EXPANSION_IMPACT_ROWS.find((row) => row.id === 'ward_cache')!;
+export const WARD_CACHE_CONTRACT_ROW = WARD_CACHE_SAFE_EXPANSION_IMPACT_ROW;

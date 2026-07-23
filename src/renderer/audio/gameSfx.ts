@@ -1,4 +1,6 @@
 import type { RunState } from '../../shared/contracts';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
+import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues } from '../copy/chainMomentum';
 import {
@@ -44,10 +46,10 @@ export const sfxGainFromSettings = (masterVolume: number, sfxVolume: number): nu
     clamp01(masterVolume) * clamp01(sfxVolume);
 
 type SfxCategory = 'flip' | 'match' | 'mismatch' | 'power' | 'pressure' | 'shuffle';
-export type ChainOpportunityBeatSfxTier = 'cashout' | 'follow-up' | 'route' | 'setup' | 'surge';
-export type MismatchRecoveryCrescendoSfxTier = 'break' | 'lost-reward' | 'recover' | 'risk' | 'trait-surge';
+type ChainOpportunityBeatSfxTier = 'cashout' | 'follow-up' | 'route' | 'setup' | 'surge';
+type MismatchRecoveryCrescendoSfxTier = 'break' | 'lost-reward' | 'recover' | 'risk' | 'trait-surge';
 export type RelicChoiceCrescendoSfxTier = 'cashout' | 'prime' | 'rare' | 'stack';
-export type MatchPayoffSfxPayload = {
+type MatchPayoffSfxPayload = {
     cascadeCue?: { tier: 'chain' | 'combo' | 'reward' } | null;
     impactCue?: { label: string } | null;
     payoffLaneMap?: readonly { count: number }[] | null;
@@ -260,14 +262,12 @@ const hasResolvedResourceReward = (before: RunState, after: RunState): boolean =
 
 const arrayLength = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
-const recordValueTotal = (value: unknown): number => {
+const tileTraitCountTotal = (value: unknown): number => {
     if (value == null || typeof value !== 'object') {
         return 0;
     }
-    return Object.values(value as Record<string, unknown>).reduce<number>(
-        (sum, entry) => sum + Math.max(0, Math.floor(finiteNumber(entry))),
-        0
-    );
+    const counts = value as Record<string, unknown>;
+    return TILE_TRAIT_COUNT_KINDS.reduce((sum, kind) => sum + runNonNegativeInteger(counts[kind]), 0);
 };
 
 const resolvedTraitRouteProgressCount = (before: RunState, after: RunState): number =>
@@ -323,7 +323,7 @@ const brokenChainDepth = (before: RunState, after: RunState): number => {
 const resolvedTraitMismatchCount = (before: RunState, after: RunState): number =>
     Math.max(
         0,
-        recordValueTotal(after.stats.tileTraitMismatches) - recordValueTotal(before.stats.tileTraitMismatches)
+        tileTraitCountTotal(after.stats.tileTraitMismatches) - tileTraitCountTotal(before.stats.tileTraitMismatches)
     );
 
 const hasNearBrokenChainReward = (before: RunState, chainDepthLost: number): boolean =>
@@ -583,7 +583,9 @@ const playRewardPerkPopSfx = (gain: number, perkProcCount: number): void => {
 };
 
 const countPayoffLanesFromPayload = (payload: MatchPayoffSfxPayload): number => {
-    const explicitLaneCount = payload.payoffLaneMap?.reduce((sum, lane) => sum + Math.max(0, lane.count), 0) ?? 0;
+    const explicitLaneCount = Array.isArray(payload.payoffLaneMap)
+        ? payload.payoffLaneMap.reduce((sum, lane) => sum + runNonNegativeInteger(lane.count), 0)
+        : 0;
     if (explicitLaneCount > 0) {
         return explicitLaneCount;
     }

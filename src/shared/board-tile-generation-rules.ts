@@ -1,13 +1,10 @@
-import {
-    FINDABLE_KIND_SPAWN_WEIGHTS,
-    type FindableKind,
-    type MutatorId,
-    type Tile
-} from './contracts';
+import { type FindableKind, type MutatorId, type Tile } from './contracts';
+import { getFindableSpawnWeightRows } from './findables';
 import {
     createMulberry32,
     deriveLevelTileRngSeed,
     hashStringToSeed,
+    pickRngIndex,
     shuffleWithRng
 } from './rng';
 import {
@@ -51,7 +48,7 @@ export const pickCursedPairKey = (
         return null;
     }
     const rng = createMulberry32(hashStringToSeed(`cursed:${rulesVersion}:${runSeed}:${level}`));
-    return realKeys[Math.floor(rng() * realKeys.length)]!;
+    return realKeys[pickRngIndex(rng, realKeys.length)] ?? null;
 };
 
 export const createTiles = (
@@ -117,18 +114,16 @@ export const countFindablePairs = (tiles: readonly Tile[]): number =>
     new Set(tiles.filter((tile) => tile.findableKind != null).map((tile) => tile.pairKey)).size;
 
 const pickFindableKind = (roll: number): FindableKind => {
-    const rows = (Object.entries(FINDABLE_KIND_SPAWN_WEIGHTS) as [FindableKind, number][]).filter(
-        ([, weight]) => weight > 0
-    );
-    const total = rows.reduce((sum, [, weight]) => sum + weight, 0);
+    const rows = getFindableSpawnWeightRows().filter((row) => row.weight > 0);
+    const total = rows.reduce((sum, row) => sum + row.weight, 0);
     let cursor = roll * total;
-    for (const [kind, weight] of rows) {
-        if (cursor < weight) {
-            return kind;
+    for (const row of rows) {
+        if (cursor < row.weight) {
+            return row.id;
         }
-        cursor -= weight;
+        cursor -= row.weight;
     }
-    return rows[rows.length - 1]?.[0] ?? 'shard_spark';
+    return rows[rows.length - 1]?.id ?? 'shard_spark';
 };
 
 export const assignFindableKindsToTiles = (
@@ -170,10 +165,13 @@ export const assignFindableKindsToTiles = (
     }
     const keys = [...eligibleKeys];
     for (let i = keys.length - 1; i > 0; i--) {
-        const j = Math.floor(rng() * (i + 1));
-        const tmp = keys[i]!;
-        keys[i] = keys[j]!;
-        keys[j] = tmp;
+        const j = pickRngIndex(rng, i + 1);
+        const keyAtI = keys[i];
+        const keyAtJ = keys[j];
+        if (keyAtI !== undefined && keyAtJ !== undefined) {
+            keys[i] = keyAtJ;
+            keys[j] = keyAtI;
+        }
     }
     const picked = keys.slice(0, n);
     const kindByKey = new Map<string, FindableKind>();

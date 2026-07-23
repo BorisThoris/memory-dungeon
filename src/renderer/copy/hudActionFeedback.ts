@@ -50,13 +50,15 @@ export const getFindableAnnouncementText = (kind: FindableKind): string =>
 export const getFindableToastText = (kind: FindableKind): string =>
     `${getFindableKindLabel(kind)} ${getFindableRewardCopy(kind)}`;
 
+const isNonEmptyHudSentence = (value: string): boolean => value.length > 0;
+
 const splitHudAnnouncementSentences = (text: string): string[] =>
     text
         .replace(/\s+/g, ' ')
         .trim()
         .match(/[^.?!]+[.?!]?/g)
         ?.map((part) => part.trim())
-        .filter(Boolean) ?? [];
+        .filter(isNonEmptyHudSentence) ?? [];
 
 export const formatHudActionFeedbackText = (
     text: string,
@@ -86,12 +88,12 @@ export const formatHudActionFeedbackText = (
     }
 
     const clipped = normalized.slice(0, maxChars - 3).replace(/\s+\S*$/, '').trim();
-    return `${clipped}...`;
+    return clipped.length > 0 ? `${clipped}...` : '';
 };
 
-export type HudActionFeedbackTone = 'info' | 'reward' | 'trait' | 'chain' | 'danger';
+type HudActionFeedbackTone = 'info' | 'reward' | 'trait' | 'chain' | 'danger';
 
-export interface HudActionFeedbackProfile {
+interface HudActionFeedbackProfile {
     label: string;
     tone: HudActionFeedbackTone;
 }

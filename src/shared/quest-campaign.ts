@@ -1,4 +1,7 @@
 import type { RunState, SaveData } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
+import { getRelicPickTotal } from './save-data';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type QuestCampaignStepId =
     | 'first_lantern'
@@ -94,21 +97,18 @@ export const QUEST_CAMPAIGN_LADDER: readonly QuestCampaignDefinition[] = [
     }
 ] as const;
 
-const relicPickTotal = (save: SaveData): number =>
-    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
-
 const progressFor = (save: SaveData, id: QuestCampaignStepId): number => {
     switch (id) {
         case 'first_lantern':
             return save.achievements.ACH_FIRST_CLEAR ? 1 : 0;
         case 'scholar_oath':
-            return save.playerStats?.bestFloorNoPowers ?? 0;
+            return runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
         case 'gauntlet_proof':
-            return save.lastRunSummary?.gameMode === 'gauntlet' ? (save.lastRunSummary.levelsCleared ?? 0) : 0;
+            return save.lastRunSummary?.gameMode === 'gauntlet' ? runNonNegativeInteger(save.lastRunSummary.levelsCleared) : 0;
         case 'daily_rhythm':
-            return save.playerStats?.dailiesCompleted ?? 0;
+            return runNonNegativeInteger(save.playerStats?.dailiesCompleted);
         case 'relic_apprentice':
-            return relicPickTotal(save);
+            return getRelicPickTotal(save.playerStats?.relicPickCounts);
         default:
             return 0;
     }
@@ -155,6 +155,7 @@ export interface ActiveQuestContractRow {
 
 export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContractRow[] => {
     const rows: ActiveQuestContractRow[] = [];
+    const stats = normalizeSessionStats(run.stats);
     if (run.activeContract?.noShuffle && run.activeContract.noDestroy) {
         const failed = run.shuffleUsedThisFloor || run.destroyUsedThisFloor;
         rows.push({
@@ -168,23 +169,26 @@ export const buildActiveQuestContractRows = (run: RunState): ActiveQuestContract
         });
     }
     if (run.activeContract?.maxPinsTotalRun != null) {
-        const failed = run.pinsPlacedCountThisRun > run.activeContract.maxPinsTotalRun;
+        const pinsPlacedCountThisRun = runNonNegativeInteger(run.pinsPlacedCountThisRun);
+        const maxPinsTotalRun = runNonNegativeInteger(run.activeContract.maxPinsTotalRun);
+        const failed = pinsPlacedCountThisRun > maxPinsTotalRun;
         rows.push({
             id: 'pin_vow',
             label: 'Pin Vow',
             status: failed ? 'failed' : 'active',
-            progressLabel: `${run.pinsPlacedCountThisRun}/${run.activeContract.maxPinsTotalRun} pins`,
+            progressLabel: `${pinsPlacedCountThisRun}/${maxPinsTotalRun} pins`,
             failureReason: failed ? 'Pin placement cap exceeded; retry on the next run.' : null,
             retryPolicy: 'retry_next_run',
             offlineOnly: true
         });
     }
     if (run.gameMode === 'gauntlet') {
+        const levelsCleared = stats.levelsCleared;
         rows.push({
             id: 'gauntlet_proof',
             label: 'Gauntlet Proof',
-            status: run.stats.levelsCleared >= 1 ? 'completed' : 'active',
-            progressLabel: `${Math.min(run.stats.levelsCleared, 1)}/1 timed clears`,
+            status: levelsCleared >= 1 ? 'completed' : 'active',
+            progressLabel: `${Math.min(levelsCleared, 1)}/1 timed clears`,
             failureReason: run.gauntletDeadlineMs != null && Date.now() > run.gauntletDeadlineMs ? 'Timer expired; retry the same preset.' : null,
             retryPolicy: 'retry_same_mode',
             offlineOnly: true
@@ -198,13 +202,14 @@ export const getQuestCampaignRows = buildQuestCampaignRows;
 export const questCampaignSummary = getQuestCampaignSummary;
 
 export const getQuestContractForRunSummary = (summary: { gameMode?: string; levelsCleared?: number } | null): QuestCampaignStepId | null => {
-    if (summary?.gameMode === 'gauntlet' && (summary.levelsCleared ?? 0) >= 1) {
+    const levelsCleared = runNonNegativeInteger(summary?.levelsCleared);
+    if (summary?.gameMode === 'gauntlet' && levelsCleared >= 1) {
         return 'gauntlet_proof';
     }
-    if (summary?.gameMode === 'daily' && (summary.levelsCleared ?? 0) >= 1) {
+    if (summary?.gameMode === 'daily' && levelsCleared >= 1) {
         return 'daily_rhythm';
     }
-    if ((summary?.levelsCleared ?? 0) >= 1) {
+    if (levelsCleared >= 1) {
         return 'first_lantern';
     }
     return null;

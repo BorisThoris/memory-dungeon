@@ -23,24 +23,28 @@ export const CARD_ILLUSTRATION_REGISTRY: CardIllustrationRegistry = {
     nonDigitFallbackPool: weightedFacePanelPool
 };
 
+const getSortedRegistryMapUrls = (record: Record<string, string> | undefined): string[] =>
+    record == null
+        ? []
+        : Object.keys(record)
+              .sort((a, b) => a.localeCompare(b))
+              .map((key) => record[key]!)
+              .filter((url) => url.length > 0);
+
+export const getCardIllustrationRegistryUrlRows = (
+    registry: CardIllustrationRegistry = CARD_ILLUSTRATION_REGISTRY
+): string[] => [
+    ...getSortedRegistryMapUrls(registry.bySymbol),
+    ...getSortedRegistryMapUrls(registry.bySymbolVariant),
+    ...registry.numericFallbackPool,
+    ...registry.nonDigitFallbackPool,
+    ...LEGACY_SVG_ILLUSTRATION_URLS
+];
+
 /** Unique URLs for preload (deduped). */
 export const getAllCardIllustrationUrls = (): string[] => {
     const set = new Set<string>();
-    for (const url of Object.values(CARD_ILLUSTRATION_REGISTRY.bySymbol)) {
-        set.add(url);
-    }
-    if (CARD_ILLUSTRATION_REGISTRY.bySymbolVariant) {
-        for (const url of Object.values(CARD_ILLUSTRATION_REGISTRY.bySymbolVariant)) {
-            set.add(url);
-        }
-    }
-    for (const url of CARD_ILLUSTRATION_REGISTRY.numericFallbackPool) {
-        set.add(url);
-    }
-    for (const url of CARD_ILLUSTRATION_REGISTRY.nonDigitFallbackPool) {
-        set.add(url);
-    }
-    for (const url of LEGACY_SVG_ILLUSTRATION_URLS) {
+    for (const url of getCardIllustrationRegistryUrlRows()) {
         set.add(url);
     }
     return [...set];

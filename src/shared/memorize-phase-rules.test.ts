@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { INITIAL_RECALL_FOCUS } from './contracts';
+import { INITIAL_RECALL_FOCUS, type RunState } from './contracts';
 import { createNewRun } from './run-creation-rules';
 import { finishMemorizePhase } from './memorize-phase-rules';
 
@@ -33,5 +33,22 @@ describe('finishMemorizePhase', () => {
         };
 
         expect(finishMemorizePhase(run)).toBe(run);
+    });
+
+    it('normalizes malformed timer state while finishing memorize', () => {
+        const run = {
+            ...createNewRun(0, { echoFeedbackEnabled: false }),
+            timerState: Number.NaN as unknown as RunState['timerState']
+        };
+
+        const next = finishMemorizePhase(run);
+
+        expect(next.status).toBe('playing');
+        expect(next.timerState).toMatchObject({
+            memorizeRemainingMs: null,
+            resolveRemainingMs: null,
+            pausedFromStatus: null,
+            gauntletPausedAtMs: null
+        });
     });
 });

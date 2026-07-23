@@ -1,4 +1,7 @@
 import type { BoardState, RunState, SaveData } from './contracts';
+import { runArrayCount } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 import { isSingletonUtilityPairKey } from './tile-identity';
 
 export type OnboardingStepId = 'first_match' | 'recovery' | 'handoff';
@@ -71,15 +74,16 @@ const getStepCopy = (
     run: RunState,
     step: OnboardingStepRow
 ): Pick<PlayableOnboardingPrompt, 'title' | 'prompt' | 'detail'> => {
+    const stats = normalizeSessionStats(run.stats);
     if (step.id === 'recovery') {
-        if (run.stats.mismatches > 0) {
+        if (stats.mismatches > 0) {
             return {
                 title: 'Recover and continue',
                 prompt: 'Stabilize the next pair',
                 detail: 'A miss costs tempo, not the run. Use the marked pair to rebuild streak before spending a rescue tool.'
             };
         }
-        if ((run.board?.matchedPairs ?? 0) >= (run.board?.pairCount ?? 0) - 1) {
+        if (runNonNegativeInteger(run.board?.matchedPairs) >= runNonNegativeInteger(run.board?.pairCount) - 1) {
             return {
                 title: 'Exit in sight',
                 prompt: 'Clear the final pair',
@@ -101,8 +105,11 @@ const getStepCopy = (
         };
     }
 
-    const flippedCount = run.board?.flippedTileIds.length ?? 0;
-    if ((run.stats.mismatches > 0 || run.stats.tries > 0) && (run.board?.matchedPairs ?? 0) === 0) {
+    const flippedCount = runArrayCount(run.board?.flippedTileIds);
+    if (
+        (stats.mismatches > 0 || stats.tries > 0) &&
+        runNonNegativeInteger(run.board?.matchedPairs) === 0
+    ) {
         return {
             title: 'Recover from the miss',
             prompt: 'Use the marked pair to stabilize',
@@ -132,7 +139,7 @@ export const getPlayableOnboardingScenario = ({
     powersFtueSeen?: boolean;
 }): OnboardingScenario => {
     const completed = onboardingDismissed;
-    const matchedPairs = board?.matchedPairs ?? 0;
+    const matchedPairs = runNonNegativeInteger(board?.matchedPairs);
     const targetTileIds = firstUnmatchedPair(board);
     const activeId: OnboardingStepId = completed
         ? 'handoff'

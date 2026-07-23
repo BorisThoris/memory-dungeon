@@ -168,6 +168,46 @@ describe('board power actions', () => {
         expect(result.boardComplete).toBe(true);
     });
 
+    it('normalizes fractional destroy charges and malformed destroy stats before spending', () => {
+        const state = run({
+            destroyPairCharges: 1.8,
+            board: { ...defaultBoard(), matchedPairs: Number.NaN },
+            parasiteFloors: Number.POSITIVE_INFINITY
+        });
+        const result = applyDestroyPairTransition({
+            ...state,
+            stats: {
+                ...state.stats,
+                matchesFound: Number.NaN,
+                pairsDestroyed: Number.POSITIVE_INFINITY
+            }
+        }, 'a1', {
+            isBoardComplete: () => false,
+            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
+        });
+
+        expect(result.changed).toBe(true);
+        expect(result.run.destroyPairCharges).toBe(0);
+        expect(result.run.stats.matchesFound).toBe(1);
+        expect(result.run.stats.pairsDestroyed).toBe(1);
+        expect(result.run.board!.matchedPairs).toBe(1);
+        expect(result.run.parasiteFloors).toBe(0);
+    });
+
+    it('normalizes malformed stat blocks before applying destroy accounting', () => {
+        const result = applyDestroyPairTransition(run({
+            stats: Number.NaN as unknown as RunState['stats']
+        }), 'a1', {
+            isBoardComplete: () => false,
+            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
+        });
+
+        expect(result.changed).toBe(true);
+        expect(result.run.stats.matchesFound).toBe(1);
+        expect(result.run.stats.pairsDestroyed).toBe(1);
+        expect(result.run.stats.highestLevel).toBe(1);
+    });
+
     it('applies full-board shuffle accounting without disturbing visible matched tiles', () => {
         const state = run({
             board: board([
@@ -195,6 +235,15 @@ describe('board power actions', () => {
         expect(shuffled.board!.tiles.find((t) => t.id === 'matched')?.state).toBe('matched');
     });
 
+    it('normalizes malformed stat blocks before applying shuffle accounting', () => {
+        const shuffled = applyShuffle(run({
+            stats: Number.NaN as unknown as RunState['stats']
+        }));
+
+        expect(shuffled.stats.shufflesUsed).toBe(1);
+        expect(shuffled.stats.highestLevel).toBe(1);
+    });
+
     it('uses the first-shuffle relic free charge before spending normal charges', () => {
         const shuffled = applyShuffle(run({
             shuffleCharges: 1,
@@ -204,6 +253,17 @@ describe('board power actions', () => {
 
         expect(shuffled.shuffleCharges).toBe(1);
         expect(shuffled.freeShuffleThisFloor).toBe(false);
+    });
+
+    it('ignores malformed relic ids before direct shuffle charge accounting', () => {
+        const shuffled = applyShuffle(run({
+            shuffleCharges: 1,
+            freeShuffleThisFloor: true,
+            relicIds: Number.NaN as unknown as RunState['relicIds']
+        }));
+
+        expect(shuffled.shuffleCharges).toBe(0);
+        expect(shuffled.freeShuffleThisFloor).toBe(true);
     });
 
     it('applies row shuffle only to rows with at least two hidden tiles', () => {
@@ -229,6 +289,16 @@ describe('board power actions', () => {
         expect(shuffled.stats.shufflesUsed).toBe(1);
         expect(shuffled.board!.tiles[2]?.id).toBe('b1');
         expect(shuffled.board!.tiles[3]?.id).toBe('b2');
+    });
+
+    it('normalizes malformed stat blocks before applying row shuffle accounting', () => {
+        const shuffled = applyRegionShuffle(run({
+            regionShuffleRowArmed: 0,
+            stats: Number.NaN as unknown as RunState['stats']
+        }), 0);
+
+        expect(shuffled.stats.shufflesUsed).toBe(1);
+        expect(shuffled.stats.highestLevel).toBe(1);
     });
 
     it('swaps two hidden tile positions using row-shuffle charge accounting', () => {
@@ -257,6 +327,15 @@ describe('board power actions', () => {
         expect(swapped.forgottenTileIdsThisFloor).toEqual(expect.arrayContaining(['a1', 'b2']));
         expect(swapped.stats.shufflesUsed).toBe(1);
         expect(swapped.board!.tiles.map((item) => item.id)).toEqual(['b2', 'a2', 'b1', 'a1']);
+    });
+
+    it('normalizes malformed stat blocks before applying tile swap accounting', () => {
+        const swapped = applyTileSwap(run({
+            stats: Number.NaN as unknown as RunState['stats']
+        }), 'a1', 'b2');
+
+        expect(swapped.stats.shufflesUsed).toBe(1);
+        expect(swapped.stats.highestLevel).toBe(1);
     });
 
     it('uses the free row-shuffle relic charge for tile swaps before spending normal charges', () => {
@@ -298,6 +377,74 @@ describe('board power actions', () => {
         expect(flashed.powersUsedThisRun).toBe(true);
         expect(flashed.shuffleNonce).toBe(1);
         expect(flashed.flashPairRevealedTileIds).toEqual(['a1', 'a2']);
+    });
+
+    it('normalizes fractional direct power charges before spending', () => {
+        const undoBoard = defaultBoard();
+        const flashed = applyFlashPair(run({
+            board: board([
+                tile('a1', 'A'),
+                tile('a2', 'A')
+            ]),
+            flashPairCharges: 1.8,
+            shuffleNonce: Number.NaN
+        }));
+        const peeked = applyPeek(run({ peekCharges: 1.8 }), 'a1');
+        const removed = applyStrayRemove(run({
+            board: board([
+                tile('w1', WILD_PAIR_KEY),
+                tile('a1', 'A')
+            ]),
+            strayRemoveCharges: 1.8,
+            strayRemoveArmed: true
+        }), 'w1');
+        const undone = cancelResolvingWithUndo(run({
+            status: 'resolving',
+            board: {
+                ...undoBoard,
+                flippedTileIds: ['a1'],
+                tiles: undoBoard.tiles.map((t) => (t.id === 'a1' ? { ...t, state: 'flipped' } : t))
+            },
+            undoUsesThisFloor: 1.8,
+            timerState: {
+                memorizeRemainingMs: null,
+                resolveRemainingMs: 100,
+                debugRevealRemainingMs: null,
+                pausedFromStatus: null
+            }
+        }));
+
+        expect(flashed.flashPairCharges).toBe(0);
+        expect(flashed.shuffleNonce).toBe(1);
+        expect(peeked.peekCharges).toBe(0);
+        expect(removed.strayRemoveCharges).toBe(0);
+        expect(undone.undoUsesThisFloor).toBe(0);
+    });
+
+    it('fails closed when direct power action open-flip state is malformed', () => {
+        const malformedBoard = {
+            ...defaultBoard(),
+            flippedTileIds: Number.NaN as unknown as string[]
+        };
+        const malformed = run({ board: malformedBoard });
+
+        expect(applyShuffle(malformed)).toBe(malformed);
+        expect(applyRegionShuffle(malformed, 0)).toBe(malformed);
+        expect(applyTileSwap(malformed, 'a1', 'b1')).toBe(malformed);
+        expect(applyFlashPair(malformed)).toBe(malformed);
+        expect(applyPeek(malformed, 'a1')).toBe(malformed);
+        expect(applyStrayRemove(malformed, 'a1')).toBe(malformed);
+        expect(applyDestroyPairTransition(malformed, 'a1', {
+            isBoardComplete: () => false,
+            rotateShiftingSpotlight: (_run, rotatedBoard) => ({ board: rotatedBoard, shiftingSpotlightNonce: 0 })
+        })).toEqual({ run: malformed, boardComplete: false, changed: false });
+
+        const resolving = run({
+            status: 'resolving',
+            board: malformedBoard,
+            undoUsesThisFloor: 1
+        });
+        expect(cancelResolvingWithUndo(resolving)).toBe(resolving);
     });
 
     it('does not flash pair outside practice or wild menu runs', () => {

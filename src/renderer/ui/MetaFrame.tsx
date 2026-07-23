@@ -69,7 +69,7 @@ function readFallbackRadiusPx(root: HTMLElement): number {
 
 /**
  * META-003: ornamental “forged gold” vector frame for meta surfaces. Wraps existing {@link Panel}
- * (or other blocks). Cornice geometry is driven by `ResizeObserver` + the first child’s
+ * (or other blocks). Cornice geometry follows `ResizeObserver` + the first child’s
  * `border-radius` so rails follow real rounded rects (no stretched 100×100 viewBox mismatch).
  * Direct slot children are stamped with `data-meta-framed` so redundant CSS borders / plate lines
  * can be suppressed (see `MetaFrame.module.css`, `Panel.module.css`, `UiButton.module.css`).
@@ -135,14 +135,25 @@ const MetaFrame = ({ as: Tag = 'div', children, className = '', ...rest }: MetaF
             });
         };
 
-        const ro = new ResizeObserver(() => {
+        if (typeof ResizeObserver === 'undefined') {
             measure();
-        });
-        ro.observe(root);
+            return;
+        }
+
+        let ro: ResizeObserver | null = null;
+        try {
+            ro = new ResizeObserver(() => {
+                measure();
+            });
+            ro.observe(root);
+        } catch {
+            ro?.disconnect();
+            ro = null;
+        }
         measure();
 
         return () => {
-            ro.disconnect();
+            ro?.disconnect();
         };
     }, []);
 

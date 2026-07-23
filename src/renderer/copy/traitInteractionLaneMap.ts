@@ -27,7 +27,7 @@ export const TRAIT_INTERACTION_LANE_LABELS: Record<TraitInteractionLaneId, Trait
     tool: 'Tool'
 };
 
-export const TRAIT_INTERACTION_LANE_ACTIONS: Record<TraitInteractionLaneId, string> = {
+const TRAIT_INTERACTION_LANE_ACTIONS: Record<TraitInteractionLaneId, string> = {
     block: 'Deny match',
     guard: 'Protect run',
     recall: 'Set memory',
@@ -70,12 +70,15 @@ export const getTraitInteractionLaneId = (line: string): TraitInteractionLaneId 
 export const buildTraitInteractionLaneMap = (
     lines: readonly string[] | undefined
 ): TraitInteractionLaneMapEntry[] => {
-    if (!lines?.length) {
+    const normalizedLines = Array.isArray(lines)
+        ? lines.filter((line): line is string => typeof line === 'string' && line.trim().length > 0)
+        : [];
+    if (normalizedLines.length === 0) {
         return [];
     }
 
     const lanes = new Map<TraitInteractionLaneId, { count: number; cue: string }>();
-    for (const line of lines) {
+    for (const line of normalizedLines) {
         const id = getTraitInteractionLaneId(line);
         const existing = lanes.get(id);
         lanes.set(id, {

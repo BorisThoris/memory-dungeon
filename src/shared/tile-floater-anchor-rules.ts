@@ -12,6 +12,9 @@ export interface MismatchFloaterAnchorTileIds {
     tileIdC?: string;
 }
 
+const stringTileIds = (ids: unknown): string[] | null =>
+    Array.isArray(ids) && ids.every((id): id is string => typeof id === 'string') ? ids : null;
+
 /**
  * CARD-008: Tile ids for match-score board floater (two-flip or gambit matched pair).
  * Mirrors gambit pairing and renderer `tileResolvingSelection.gambitMatchPairIds`.
@@ -24,7 +27,10 @@ export const getMatchFloaterAnchorTileIds = (
     if (!board) {
         return null;
     }
-    const ids = board.flippedTileIds;
+    const ids = stringTileIds(board.flippedTileIds);
+    if (!ids) {
+        return null;
+    }
     if (ids.length === 2) {
         return { tileIdA: ids[0], tileIdB: ids[1] };
     }
@@ -47,7 +53,10 @@ export const getMismatchFloaterAnchorTileIds = (
     if (!board) {
         return null;
     }
-    const ids = board.flippedTileIds;
+    const ids = stringTileIds(board.flippedTileIds);
+    if (!ids) {
+        return null;
+    }
     if (ids.length === 2) {
         return { tileIdA: ids[0], tileIdB: ids[1] };
     }

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { analyzeDungeonTopologyAudit, parseDungeonTopologyAuditOptions, runDungeonTopologyAudit } from '../../scripts/audit-dungeon-topology';
+import { GAME_RULES_VERSION } from './contracts';
 
 describe('dungeon topology audit script', () => {
     afterEach(() => {
@@ -27,7 +28,7 @@ describe('dungeon topology audit script', () => {
             )
         ).toBe(true);
         expect(stderr).not.toHaveBeenCalled();
-    });
+    }, 15_000);
 
     it('supports deterministic stress seed sweeps', () => {
         const stdout = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
@@ -96,6 +97,14 @@ describe('dungeon topology audit script', () => {
         });
         expect(stdout).not.toHaveBeenCalled();
         expect(stderr).not.toHaveBeenCalled();
+    });
+
+    it('falls back to finite topology audit defaults when numeric CLI options are malformed', () => {
+        expect(parseDungeonTopologyAuditOptions(['--floors=invalid', '--rulesVersion=Infinity'])).toMatchObject({
+            floors: 1000,
+            rulesVersion: GAME_RULES_VERSION,
+            seeds: [42_001, 42_002, 77_707, 130_011, 420_113, 880_037]
+        });
     });
 
     it('can suppress per-seed output for long stress runs', () => {

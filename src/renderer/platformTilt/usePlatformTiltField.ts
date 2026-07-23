@@ -13,10 +13,20 @@ interface PointerCapabilities {
     fine: boolean;
 }
 
+type TiltPointerMediaQueryList = MediaQueryList & {
+    addListener?: (listener: () => void) => void;
+    removeListener?: (listener: () => void) => void;
+};
+
 interface CssTiltWrite {
     x: string;
     y: string;
 }
+
+const clearTiltCssVars = (node: HTMLElement | null): void => {
+    node?.style.removeProperty('--tilt-x');
+    node?.style.removeProperty('--tilt-y');
+};
 
 export const shouldUseGyroForPointerCapabilities = (
     { coarse, fine }: PointerCapabilities,
@@ -56,6 +66,22 @@ const normalizePointerInViewport = (clientX: number, clientY: number): TiltVecto
     const y = clamp((clientY / height) * 2 - 1, -1, 1);
 
     return applyDeadzoneTilt({ x, y });
+};
+
+const addTiltPointerListener = (mediaQuery: TiltPointerMediaQueryList, listener: () => void): void => {
+    if (typeof mediaQuery.addEventListener === 'function') {
+        mediaQuery.addEventListener('change', listener);
+        return;
+    }
+    mediaQuery.addListener?.(listener);
+};
+
+const removeTiltPointerListener = (mediaQuery: TiltPointerMediaQueryList, listener: () => void): void => {
+    if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', listener);
+        return;
+    }
+    mediaQuery.removeListener?.(listener);
 };
 
 interface UsePlatformTiltFieldOptions {
@@ -175,8 +201,14 @@ export const usePlatformTiltField = ({
             return;
         }
 
-        const fineQuery = window.matchMedia('(pointer: fine)');
-        const coarseQuery = window.matchMedia('(pointer: coarse)');
+        let fineQuery: TiltPointerMediaQueryList;
+        let coarseQuery: TiltPointerMediaQueryList;
+        try {
+            fineQuery = window.matchMedia('(pointer: fine)');
+            coarseQuery = window.matchMedia('(pointer: coarse)');
+        } catch {
+            return;
+        }
 
         const updatePointerCapabilities = (): void => {
             pointerCapabilitiesRef.current = {
@@ -186,29 +218,23 @@ export const usePlatformTiltField = ({
         };
 
         updatePointerCapabilities();
-        fineQuery.addEventListener?.('change', updatePointerCapabilities);
-        coarseQuery.addEventListener?.('change', updatePointerCapabilities);
+        addTiltPointerListener(fineQuery, updatePointerCapabilities);
+        addTiltPointerListener(coarseQuery, updatePointerCapabilities);
 
         return () => {
-            fineQuery.removeEventListener?.('change', updatePointerCapabilities);
-            coarseQuery.removeEventListener?.('change', updatePointerCapabilities);
+            removeTiltPointerListener(fineQuery, updatePointerCapabilities);
+            removeTiltPointerListener(coarseQuery, updatePointerCapabilities);
         };
     }, []);
 
     useEffect(() => {
-        const surfaceNode = surfaceRef.current;
-
         if (!enabled || motionParallaxSuppressed || suspended) {
             tiltRef.current = zeroTilt();
             sourceRef.current = 'none';
             lastFrameRef.current = null;
             lastCssTiltRef.current = null;
             lastCssNodeRef.current = null;
-
-            if (surfaceNode) {
-                surfaceNode.style.removeProperty('--tilt-x');
-                surfaceNode.style.removeProperty('--tilt-y');
-            }
+            clearTiltCssVars(surfaceRef.current);
 
             return;
         }
@@ -240,6 +266,13 @@ export const usePlatformTiltField = ({
             const sx = (tiltRef.current.x * strength).toFixed(4);
             const sy = (tiltRef.current.y * strength).toFixed(4);
             const node = surfaceRef.current;
+            const previousNode = lastCssNodeRef.current;
+
+            if (previousNode && previousNode !== node) {
+                clearTiltCssVars(previousNode);
+                lastCssTiltRef.current = null;
+                lastCssNodeRef.current = null;
+            }
 
             const nextCssTilt = { x: sx, y: sy };
             if (node && shouldCommitTiltCssVars(lastCssTiltRef.current, lastCssNodeRef.current, nextCssTilt, node)) {
@@ -256,14 +289,10 @@ export const usePlatformTiltField = ({
 
         return () => {
             window.cancelAnimationFrame(frameId);
+            clearTiltCssVars(lastCssNodeRef.current);
             lastFrameRef.current = null;
             lastCssTiltRef.current = null;
             lastCssNodeRef.current = null;
-
-            if (surfaceNode) {
-                surfaceNode.style.removeProperty('--tilt-x');
-                surfaceNode.style.removeProperty('--tilt-y');
-            }
         };
     }, [enabled, motionParallaxSuppressed, strength, surfaceRef, gyroTiltRef, suspended]);
 

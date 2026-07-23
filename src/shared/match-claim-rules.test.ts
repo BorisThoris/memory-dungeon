@@ -66,6 +66,25 @@ describe('match claim rules', () => {
         expect(context.routeCardReward.shopGold).toBe(1);
     });
 
+    it('normalizes malformed stat records before deriving route-special predicates', () => {
+        const first = tile('a1', 'A', {
+            routeSpecialKind: 'mimic_cache'
+        });
+        const second = tile('a2', 'A');
+        const base = runWith([first, second], { lives: 1 });
+        const context = deriveMatchClaimContext({
+            firstTile: first,
+            firstTileId: first.id,
+            run: { ...base, stats: Number.NaN as unknown as RunState['stats'] },
+            secondTile: second,
+            secondTileId: second.id
+        });
+
+        expect(context.mimicCacheGuardBite).toBe(false);
+        expect(context.mimicCacheFatalBite).toBe(true);
+        expect(context.catalystAltarUpgraded).toBe(false);
+    });
+
     it('uses the non-wild pair key and reports wild usage when one matched tile is wild', () => {
         const first = tile('wild', WILD_PAIR_KEY);
         const second = tile('b1', 'B', { routeSpecialKind: 'loaded_gateway' });
@@ -181,11 +200,53 @@ describe('match claim rules', () => {
         expect(nextBoard.dungeonKeysHeldByKind).toEqual({ treasure: 0 });
     });
 
+    it('normalizes malformed board counters while claiming a matched pair', () => {
+        const keyA = tile('key-a', 'K', {
+            dungeonCardEffectId: 'key_iron',
+            dungeonCardKind: 'key',
+            dungeonKeyKind: 'treasure'
+        });
+        const keyB = tile('key-b', 'K', {
+            dungeonCardEffectId: 'key_iron',
+            dungeonCardKind: 'key',
+            dungeonKeyKind: 'treasure'
+        });
+        const run = runWith([keyA, keyB], {
+            board: {
+                ...boardWith([keyA, keyB]),
+                matchedPairs: Number.NaN,
+                dungeonKeysHeld: Number.POSITIVE_INFINITY,
+                dungeonKeysHeldByKind: { treasure: Number.NaN },
+                dungeonLeverCount: Number.NaN
+            }
+        });
+        const context = deriveMatchClaimContext({
+            firstTile: keyA,
+            firstTileId: keyA.id,
+            run,
+            secondTile: keyB,
+            secondTileId: keyB.id
+        });
+
+        const nextBoard = createMatchedPairClaimBoard({
+            board: run.board!,
+            context,
+            firstTileId: keyA.id,
+            secondTileId: keyB.id
+        });
+
+        expect(nextBoard.matchedPairs).toBe(1);
+        expect(nextBoard.dungeonKeysHeld).toBe(1);
+        expect(nextBoard.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
+        expect(nextBoard.dungeonLeverCount).toBe(0);
+    });
+
     it('requires both matched tiles to be pinned before granting pin lattice reward', () => {
         const first = tile('p1', 'P', { routeSpecialKind: 'pin_lattice' });
         const second = tile('p2', 'P');
         const unpinnedRun = runWith([first, second], { pinnedTileIds: ['p1'] });
         const pinnedRun = runWith([first, second], { pinnedTileIds: ['p1', 'p2'] });
+        const malformedRun = runWith([first, second], { pinnedTileIds: Number.NaN as unknown as string[] });
 
         expect(
             deriveMatchClaimContext({
@@ -205,6 +266,15 @@ describe('match claim rules', () => {
                 secondTileId: second.id
             }).pinLatticeRewarded
         ).toBe(true);
+        expect(
+            deriveMatchClaimContext({
+                firstTile: first,
+                firstTileId: first.id,
+                run: malformedRun,
+                secondTile: second,
+                secondTileId: second.id
+            }).pinLatticeRewarded
+        ).toBe(false);
     });
 
     it('creates the matched-pair board claim and clears claimed tile metadata', () => {

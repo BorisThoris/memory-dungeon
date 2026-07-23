@@ -3,7 +3,7 @@ import { createNewRun } from '../../shared/run-creation-rules';
 import {
     executeContinueFromShop,
     executeShopCloseToFloorSummary,
-    type ShopCloseExecutorDeps,
+    type ContinueFromShopExecutorDeps,
     type ShopCloseExecutorState
 } from './shopCloseExecutor';
 
@@ -16,7 +16,7 @@ const createState = (overrides: Partial<ShopCloseExecutorState> = {}): ShopClose
     ...overrides
 });
 
-const createDeps = (state: ShopCloseExecutorState): ShopCloseExecutorDeps<ShopCloseExecutorState> => ({
+const createDeps = (state: ShopCloseExecutorState): ContinueFromShopExecutorDeps => ({
     applyResolvedRun: vi.fn(),
     continueToNextLevel: vi.fn(),
     getState: vi.fn(() => state),
@@ -93,7 +93,7 @@ describe('executeContinueFromShop', () => {
         };
         const deps = createDeps(createState({ run, shopReturnMode: 'floor' }));
 
-        executeContinueFromShop(deps as ShopCloseExecutorDeps<ShopCloseExecutorState> & { continueToNextLevel: () => void });
+        executeContinueFromShop(deps);
 
         expect(deps.resumeRunWithTimers).toHaveBeenCalledWith(run);
         expect(deps.setState).toHaveBeenCalledWith({
@@ -108,7 +108,7 @@ describe('executeContinueFromShop', () => {
         const state = createState({ run: null });
         const deps = createDeps(state);
 
-        executeContinueFromShop(deps as ShopCloseExecutorDeps<ShopCloseExecutorState> & { continueToNextLevel: () => void });
+        executeContinueFromShop(deps);
 
         expect(deps.setState).toHaveBeenCalledWith({
             run: null,
@@ -126,7 +126,7 @@ describe('executeContinueFromShop', () => {
             }
         }));
 
-        executeContinueFromShop(deps as ShopCloseExecutorDeps<ShopCloseExecutorState> & { continueToNextLevel: () => void });
+        executeContinueFromShop(deps);
 
         expect(deps.setState).toHaveBeenCalledWith({ shopReturnMode: null });
         expect(deps.continueToNextLevel).toHaveBeenCalledTimes(1);

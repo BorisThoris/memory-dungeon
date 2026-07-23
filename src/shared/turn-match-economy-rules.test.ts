@@ -117,4 +117,30 @@ describe('resolveTurnMatchEconomy', () => {
         expect(result.dungeonKeys).toBe(run.dungeonKeys);
         expect(result.dungeonMasterKeys).toBe(0);
     });
+
+    it('normalizes malformed economy counters and reward deltas before applying them', () => {
+        const run = {
+            ...createNewRun(0),
+            shopGold: Number.NaN,
+            dungeonKeys: { treasure: 1.9 },
+            dungeonMasterKeys: Number.POSITIVE_INFINITY
+        };
+
+        const result = resolveTurnMatchEconomy({
+            run,
+            routeCardShopGold: 2.9,
+            dungeonShopGold: Number.NaN,
+            dungeonKeysDelta: -1.9,
+            dungeonMasterKeysDelta: -1.9,
+            tollCacheClaimed: false,
+            fuseCacheClaimed: false,
+            fuseCacheFresh: false,
+            matchedDungeonKind: 'lock',
+            matchedDungeonKeyKind: 'treasure'
+        });
+
+        expect(result.shopGold).toBe(2);
+        expect(result.dungeonKeys).toEqual({ treasure: 0 });
+        expect(result.dungeonMasterKeys).toBe(0);
+    });
 });

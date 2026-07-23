@@ -14,8 +14,24 @@ export const createTimerState = (overrides?: Partial<RunState['timerState']>): R
     ...overrides
 });
 
+const timerStateForRun = (value: unknown): RunState['timerState'] =>
+    value && typeof value === 'object' && !Array.isArray(value)
+        ? createTimerState(value as Partial<RunState['timerState']>)
+        : createTimerState();
+
+export const normalizeTimerTimestampMs = (value: unknown): number | null =>
+    typeof value === 'number' && Number.isFinite(value) ? value : null;
+
+export const extendTimerTimestampMs = (value: unknown, deltaMs: number): number | null => {
+    const timestamp = normalizeTimerTimestampMs(value);
+    const safeDelta = normalizeTimerTimestampMs(deltaMs);
+    return timestamp !== null && safeDelta !== null
+        ? normalizeTimerTimestampMs(timestamp + Math.max(0, safeDelta))
+        : timestamp;
+};
+
 export const clearResolveState = (run: RunState): RunState['timerState'] => ({
-    ...run.timerState,
+    ...timerStateForRun(run.timerState),
     resolveRemainingMs: null,
     pausedFromStatus: null
 });
@@ -27,16 +43,19 @@ export const pauseRun = (run: RunState): RunState => {
     if (!isResumableStatus(run.status)) {
         return run;
     }
+    const timerState = timerStateForRun(run.timerState);
+    const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
     const gauntletPausedAtMs =
-        run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null
-            ? Date.now()
-            : (run.timerState.gauntletPausedAtMs ?? null);
+        run.gameMode === 'gauntlet' && gauntletDeadlineMs !== null
+            ? normalizeTimerTimestampMs(Date.now())
+            : (timerState.gauntletPausedAtMs ?? null);
 
     return {
         ...run,
+        gauntletDeadlineMs,
         status: 'paused',
         timerState: {
-            ...run.timerState,
+            ...timerState,
             pausedFromStatus: run.status,
             gauntletPausedAtMs
         }
@@ -44,7 +63,9 @@ export const pauseRun = (run: RunState): RunState => {
 };
 
 export const resumeRun = (run: RunState): RunState => {
-    if (run.status !== 'paused' || !run.timerState.pausedFromStatus) {
+    const timerState = timerStateForRun(run.timerState);
+    const pausedFromStatus = timerState.pausedFromStatus;
+    if (run.status !== 'paused' || !pausedFromStatus || !isResumableStatus(pausedFromStatus)) {
         return run;
     }
     if (run.lives <= 0) {
@@ -57,13 +78,13 @@ export const resumeRun = (run: RunState): RunState => {
             relicOffer: null,
             shopOffers: [],
             timerState: {
-                ...run.timerState,
+                ...timerState,
                 pausedFromStatus: null,
                 gauntletPausedAtMs: null
             }
         };
     }
-    if (run.timerState.pausedFromStatus === 'resolving') {
+    if (pausedFromStatus === 'resolving') {
         if (!run.board) {
             return {
                 ...run,
@@ -74,19 +95,19 @@ export const resumeRun = (run: RunState): RunState => {
                 relicOffer: null,
                 shopOffers: [],
                 timerState: {
-                    ...run.timerState,
+                    ...timerState,
                     resolveRemainingMs: null,
                     pausedFromStatus: null,
                     gauntletPausedAtMs: null
                 }
             };
         }
-        if (run.board.flippedTileIds.length < 2) {
+        if (!Array.isArray(run.board.flippedTileIds) || run.board.flippedTileIds.length < 2) {
             return {
                 ...run,
                 status: 'playing',
                 timerState: {
-                    ...run.timerState,
+                    ...timerState,
                     resolveRemainingMs: null,
                     pausedFromStatus: null,
                     gauntletPausedAtMs: null
@@ -94,19 +115,19 @@ export const resumeRun = (run: RunState): RunState => {
             };
         }
     }
-    const gauntletPausedAtMs = run.timerState.gauntletPausedAtMs ?? null;
+    const gauntletDeadlineMs = normalizeTimerTimestampMs(run.gauntletDeadlineMs);
+    const gauntletPausedAtMs = normalizeTimerTimestampMs(timerState.gauntletPausedAtMs);
     const gauntletPauseDeltaMs =
-        run.gameMode === 'gauntlet' && run.gauntletDeadlineMs !== null && gauntletPausedAtMs !== null
+        run.gameMode === 'gauntlet' && gauntletDeadlineMs !== null && gauntletPausedAtMs !== null
             ? Math.max(0, Date.now() - gauntletPausedAtMs)
             : 0;
 
     return {
         ...run,
-        gauntletDeadlineMs:
-            run.gauntletDeadlineMs !== null ? run.gauntletDeadlineMs + gauntletPauseDeltaMs : run.gauntletDeadlineMs,
-        status: run.timerState.pausedFromStatus,
+        gauntletDeadlineMs: extendTimerTimestampMs(gauntletDeadlineMs, gauntletPauseDeltaMs),
+        status: pausedFromStatus,
         timerState: {
-            ...run.timerState,
+            ...timerState,
             pausedFromStatus: null,
             gauntletPausedAtMs: null
         }
@@ -119,7 +140,7 @@ export const enableDebugPeek = (run: RunState, disableAchievementsOnDebug: boole
     debugUsed: true,
     achievementsEnabled: disableAchievementsOnDebug ? false : run.achievementsEnabled,
     timerState: {
-        ...run.timerState,
+        ...timerStateForRun(run.timerState),
         debugRevealRemainingMs: DEBUG_REVEAL_MS
     }
 });
@@ -130,7 +151,7 @@ export const disableDebugPeek = (run: RunState): RunState =>
               ...run,
               debugPeekActive: false,
               timerState: {
-                  ...run.timerState,
+                  ...timerStateForRun(run.timerState),
                   debugRevealRemainingMs: null
               }
           }

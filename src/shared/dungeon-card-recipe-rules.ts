@@ -47,8 +47,9 @@ export const capDungeonCardRecipeForBudget = (
     const selectedIndexes = new Set<number>();
     const take = (predicate: (card: DungeonCardAssignment) => boolean): void => {
         for (let index = 0; index < cards.length && selected.length < capacity; index += 1) {
-            if (!selectedIndexes.has(index) && predicate(cards[index]!)) {
-                selected.push(cards[index]!);
+            const card = cards[index];
+            if (card !== undefined && !selectedIndexes.has(index) && predicate(card)) {
+                selected.push(card);
                 selectedIndexes.add(index);
             }
         }
@@ -134,19 +135,21 @@ const treasureCard = (level: number, floorArchetypeId: FloorArchetypeId | null):
     label: floorArchetypeId === 'treasure_gallery' || level >= 5 ? 'Gallery Cache' : 'Coin Memory'
 });
 
+const dungeonKeyKindTitle = (keyKind: DungeonKeyKind): string => `${keyKind.charAt(0).toUpperCase()}${keyKind.slice(1)}`;
+
 const lockCard = (keyKind: DungeonKeyKind = 'iron'): DungeonCardAssignment => ({
     kind: 'lock',
     effectId: 'lock_cache',
     symbol: 'L',
-    label: keyKind === 'iron' ? 'Sealed Cache' : `${keyKind[0]!.toUpperCase()}${keyKind.slice(1)} Cache Lock`,
+    label: keyKind === 'iron' ? 'Sealed Cache' : `${dungeonKeyKindTitle(keyKind)} Cache Lock`,
     keyKind
 });
 const keyLabelForKind = (keyKind: DungeonKeyKind): string =>
-    keyKind === 'iron' ? 'Iron Memory Key' : `${keyKind[0]!.toUpperCase()}${keyKind.slice(1)} Memory Key`;
+    keyKind === 'iron' ? 'Iron Memory Key' : `${dungeonKeyKindTitle(keyKind)} Memory Key`;
 const keyCard = (keyKind: DungeonKeyKind = 'iron'): DungeonCardAssignment => ({
     kind: 'key',
     effectId: 'key_iron',
-    symbol: keyKind === 'iron' ? 'K' : keyKind[0]!.toUpperCase(),
+    symbol: keyKind === 'iron' ? 'K' : dungeonKeyKindTitle(keyKind).charAt(0),
     label: keyLabelForKind(keyKind),
     keyKind
 });

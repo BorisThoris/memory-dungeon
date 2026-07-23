@@ -19,6 +19,7 @@ import type {
 } from './contracts';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { hashStringToSeed } from './rng';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getTraitBuildRewardRowsForLoadout, getTraitBuildRewardRowsForRelic } from './trait-build-rewards';
 import { pickWeightedWithoutReplacement } from './weightedPick';
 
@@ -28,6 +29,12 @@ export const RELIC_FIRST_MILESTONE_FLOOR = 3;
 export const RELIC_MILESTONE_STEP = 3;
 /** Cap total relic picks per run (Endless scaling safety). */
 export const MAX_RELIC_PICKS_PER_RUN = 12;
+
+export const RELIC_OFFER_SERVICE_IDS = [
+    'reroll_offer',
+    'ban_option',
+    'upgrade_offer'
+] as const satisfies readonly RelicOfferServiceId[];
 
 /** Draft rarity — affects base weight and how fast odds rise with {@link relicMilestoneIndexForFloor}. */
 export type RelicDraftRarity = 'common' | 'uncommon' | 'rare';
@@ -53,6 +60,16 @@ export type RelicBuildArchetype =
     | 'route_gambler'
     | 'reveal_scout'
     | 'combo_shard_engine';
+
+export const RELIC_BUILD_ARCHETYPE_ORDER = [
+    'guard_tank',
+    'trap_control',
+    'treasure_greed',
+    'boss_hunter',
+    'route_gambler',
+    'reveal_scout',
+    'combo_shard_engine'
+] as const satisfies readonly RelicBuildArchetype[];
 
 type RelicContractForbid = keyof Pick<ContractFlags, 'noShuffle' | 'noDestroy'>;
 
@@ -236,8 +253,25 @@ export const RELIC_DRAFT: Record<RelicId, RelicDraftRow> = {
     parasite_ledger: { rarity: 'uncommon', weight: 38, tags: ['parasite'], archetypes: ['combo_shard_engine', 'boss_hunter'] }
 };
 
-/** Stable iteration order for docs / balance checks. */
-export const RELIC_POOL: RelicId[] = (Object.keys(RELIC_DRAFT) as RelicId[]).sort((a, b) => a.localeCompare(b));
+/** Stable iteration order for docs / balance checks. Keep alphabetical for compatibility with existing draft rolls. */
+export const RELIC_POOL = [
+    'chapter_compass',
+    'combo_shard_plus_step',
+    'destroy_bank_plus_one',
+    'extra_shuffle_charge',
+    'first_shuffle_free_per_floor',
+    'guard_token_plus_one',
+    'memorize_bonus_ms',
+    'memorize_under_short_memorize',
+    'parasite_ledger',
+    'parasite_ward_once',
+    'peek_charge_plus_one',
+    'pin_cap_plus_one',
+    'region_shuffle_free_first',
+    'shrine_echo',
+    'stray_charge_plus_one',
+    'wager_surety'
+] as const satisfies readonly RelicId[];
 
 const RELIC_SYNERGY_RULES_VERSION = 14;
 const ENDLESS_SYNERGY_RELICS = new Set<RelicId>(['chapter_compass', 'wager_surety', 'parasite_ledger']);
@@ -343,7 +377,7 @@ export const getRelicBuildArchetypeSummaries = (): {
     deferredHooks: string[];
     relicIds: RelicId[];
 }[] =>
-    (Object.keys(RELIC_BUILD_ARCHETYPE_DEFINITIONS) as RelicBuildArchetype[]).map((id) => {
+    RELIC_BUILD_ARCHETYPE_ORDER.map((id) => {
         const definition = getRelicBuildArchetypeDefinition(id);
         return {
             id,
@@ -374,11 +408,15 @@ export interface RunBuildProfile {
     tooltip: string;
 }
 
-const RELIC_BUILD_ARCHETYPE_ORDER = Object.keys(RELIC_BUILD_ARCHETYPE_DEFINITIONS) as RelicBuildArchetype[];
+export const runRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
+
+export const runMutatorIds = (value: unknown): MutatorId[] => Array.isArray(value) ? value : [];
+
+const hasRunRelic = (run: Pick<RunState, 'relicIds'>, id: RelicId): boolean => runRelicIds(run.relicIds).includes(id);
 
 export const getRunBuildProfile = (run: Pick<RunState, 'relicIds'>): RunBuildProfile => {
     const scoreByArchetype = new Map<RelicBuildArchetype, { score: number; relicIds: RelicId[] }>();
-    for (const relicId of run.relicIds) {
+    for (const relicId of runRelicIds(run.relicIds)) {
         const row = RELIC_DRAFT[relicId];
         if (!row) continue;
         for (const archetype of row.archetypes) {
@@ -507,7 +545,7 @@ export const getRelicDraftContext = (run: RunState, clearedFloor: number): Relic
     return {
         isScheduledEndless,
         clearedFloor,
-        currentMutators: isScheduledEndless ? [...run.activeMutators] : [],
+        currentMutators: isScheduledEndless ? [...runMutatorIds(run.activeMutators)] : [],
         nextMutators,
         pendingRouteType: isScheduledEndless ? pendingRouteType : null,
         activeRouteType: isScheduledEndless ? activeRouteType : null,
@@ -523,12 +561,12 @@ export const getRelicDraftContext = (run: RunState, clearedFloor: number): Relic
         activeTraitKinds: getActiveTraitKinds(run),
         activeOrAcceptedRiskWager: isScheduledEndless && run.endlessRiskWager != null,
         favorNearRelicPick: isScheduledEndless && run.relicFavorProgress >= 2,
-        hasChapterCompass: run.relicIds.includes('chapter_compass')
+        hasChapterCompass: hasRunRelic(run, 'chapter_compass')
     };
 };
 
 export const isRelicDraftEligible = (id: RelicId, run: RunState): boolean => {
-    if (run.relicIds.includes(id)) {
+    if (hasRunRelic(run, id)) {
         return false;
     }
     if (run.runRulesVersion < RELIC_SYNERGY_RULES_VERSION && ENDLESS_SYNERGY_RELICS.has(id)) {
@@ -614,6 +652,18 @@ export const getRelicDraftReason = (id: RelicId, context: RelicDraftContext): st
     getHardRelicDraftReason(id, context) ??
     getRouteRelicDraftReason(id, context) ??
     getTraitBuildRelicDraftReason(id, context);
+
+export const getRelicDraftOptionReasonRows = (
+    reasons: Partial<Record<RelicId, string>> | null | undefined
+): Array<{ id: RelicId; reason: string }> =>
+    RELIC_POOL.flatMap((id) => {
+        const reason = reasons?.[id];
+        return reason ? [{ id, reason }] : [];
+    });
+
+export const hasRelicDraftOptionReasons = (
+    reasons: Partial<Record<RelicId, string>> | null | undefined
+): boolean => getRelicDraftOptionReasonRows(reasons).length > 0;
 
 export const getContextualRelicDraftWeight = (
     id: RelicId,
@@ -745,10 +795,10 @@ export const needsRelicPick = (run: RunState): boolean => {
     if (run.gameMode === 'puzzle') {
         return false;
     }
-    if (run.lives <= 0) {
+    if (runNonNegativeInteger(run.lives) <= 0) {
         return false;
     }
-    if (run.relicTiersClaimed >= MAX_RELIC_PICKS_PER_RUN) {
+    if (runNonNegativeInteger(run.relicTiersClaimed) >= MAX_RELIC_PICKS_PER_RUN) {
         return false;
     }
     if (run.status !== 'levelComplete' || !run.lastLevelResult) {
@@ -759,7 +809,7 @@ export const needsRelicPick = (run: RunState): boolean => {
     if (idx === null) {
         return false;
     }
-    return run.relicTiersClaimed <= idx && !run.relicOffer;
+    return runNonNegativeInteger(run.relicTiersClaimed) <= idx && !run.relicOffer;
 };
 
 export const skipRelicOfferMilestone = (run: RunState): RunState => {
@@ -774,7 +824,7 @@ export const skipRelicOfferMilestone = (run: RunState): RunState => {
         ...run,
         bonusRelicPicksNextOffer: 0,
         favorBonusRelicPicksNextOffer: 0,
-        relicTiersClaimed: Math.max(run.relicTiersClaimed, idx + 1),
+        relicTiersClaimed: Math.max(runNonNegativeInteger(run.relicTiersClaimed), idx + 1),
         relicOffer: null
     };
 };
@@ -845,10 +895,10 @@ export const getRelicDraftOptionReasons = (
             reasons[id] = reason;
         }
     }
-    return Object.keys(reasons).length > 0 ? reasons : undefined;
+    return hasRelicDraftOptionReasons(reasons) ? reasons : undefined;
 };
 
-const RELIC_OFFER_SERVICE_CATALOG: Record<
+export const RELIC_OFFER_SERVICE_CATALOG: Record<
     RelicOfferServiceId,
     { label: string; description: string; cost: number }
 > = {
@@ -870,18 +920,19 @@ const RELIC_OFFER_SERVICE_CATALOG: Record<
 };
 
 const relicOfferServiceUseCount = (run: RunState, serviceId: RelicOfferServiceId): number =>
-    run.relicOffer?.serviceUses?.[serviceId] ?? 0;
+    runNonNegativeInteger(run.relicOffer?.serviceUses?.[serviceId] ?? 0);
 
 export const createRelicOfferServices = (run: RunState): RelicOfferServiceState[] => {
     const offer = run.relicOffer;
-    return (Object.keys(RELIC_OFFER_SERVICE_CATALOG) as RelicOfferServiceId[]).map((serviceId) => {
+    const wallet = runNonNegativeInteger(run.shopGold);
+    return RELIC_OFFER_SERVICE_IDS.map((serviceId) => {
         const base = RELIC_OFFER_SERVICE_CATALOG[serviceId];
         let unavailableReason: string | null = null;
         if (!offer) {
             unavailableReason = 'No relic offer is open.';
         } else if (relicOfferServiceUseCount(run, serviceId) > 0) {
             unavailableReason = 'Already used this relic service during this visit.';
-        } else if (run.shopGold < base.cost) {
+        } else if (wallet < base.cost) {
             unavailableReason = 'Not enough shop gold.';
         } else if (offer.options.length === 0) {
             unavailableReason = 'No relic options remain.';
@@ -1009,10 +1060,18 @@ export const applyRelicOfferService = (
     let pickRound = offer.pickRound;
     let upgradedOffer = offer.upgradedOffer ?? false;
     let options = [...offer.options];
-    const paidRun: RunState = { ...run, shopGold: run.shopGold - service.cost };
+    const paidRun: RunState = { ...run, shopGold: runNonNegativeInteger(run.shopGold) - service.cost };
 
     if (serviceId === 'ban_option') {
-        const banTarget = targetRelicId && options.includes(targetRelicId) ? targetRelicId : options[0]!;
+        const banTarget = targetRelicId && options.includes(targetRelicId) ? targetRelicId : options[0];
+        if (!banTarget) {
+            return {
+                run: { ...run, relicOffer: { ...offer, services: createRelicOfferServices(run) } },
+                applied: false,
+                serviceId,
+                reason: 'unavailable'
+            };
+        }
         bannedRelicIds.push(banTarget);
         options = options.filter((id) => id !== banTarget);
         options = fillRelicOptions(paidRun, tierIndex, cleared, pickRound + 1, options, bannedRelicIds);
@@ -1050,4 +1109,3 @@ export const applyRelicOfferService = (
         serviceId
     };
 };
-

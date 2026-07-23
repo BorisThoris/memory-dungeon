@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { type RelicId, type RewardPerkId } from './contracts';
+import { type RelicId, type RewardPerkId, type RunState } from './contracts';
 import { createNewRun } from './game';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { createRunShopOffers } from './shop-rules';
@@ -100,6 +100,49 @@ describe('createNextFloorRunState', () => {
         expect(next.regionShuffleFreeThisFloor).toBe(true);
     });
 
+    it('ignores malformed relic ids before restoring per-floor relic flags', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 15 }),
+            relicIds: Number.NaN as unknown as RelicId[],
+            freeShuffleThisFloor: false,
+            regionShuffleFreeThisFloor: false
+        };
+        const next = createNextFloorRunState(run, {
+            lives: run.lives,
+            activeMutators: run.activeMutators,
+            dungeonRun: run.dungeonRun,
+            board: run.board!,
+            parasiteFloors: run.parasiteFloors,
+            parasiteWardRemaining: run.parasiteWardRemaining,
+            memorizeRemainingMs: 1000
+        });
+
+        expect(next.freeShuffleThisFloor).toBe(false);
+        expect(next.regionShuffleFreeThisFloor).toBe(false);
+    });
+
+    it('normalizes malformed stat records before resetting next-floor stats', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 17 }),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+        const next = createNextFloorRunState(run, {
+            lives: run.lives,
+            activeMutators: run.activeMutators,
+            dungeonRun: run.dungeonRun,
+            board: { ...run.board!, level: 4 },
+            parasiteFloors: run.parasiteFloors,
+            parasiteWardRemaining: run.parasiteWardRemaining,
+            memorizeRemainingMs: 1000
+        });
+
+        expect(next.stats.totalScore).toBe(0);
+        expect(next.stats.currentLevelScore).toBe(0);
+        expect(next.stats.tries).toBe(0);
+        expect(next.stats.currentStreak).toBe(0);
+        expect(next.stats.highestLevel).toBe(4);
+    });
+
     it('restores durable reward perk floor benefits without bypassing contracts', () => {
         const run = {
             ...createNewRun(0, { runSeed: 16 }),
@@ -160,5 +203,27 @@ describe('createNextFloorRunState', () => {
             'shuffle_snare',
             'shuffle_snare'
         ]);
+    });
+
+    it('treats malformed reward perks as empty before restoring floor benefits', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 18 }),
+            rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds'],
+            regionShuffleFreeThisFloor: false,
+            destroyPairCharges: 0
+        };
+
+        const next = createNextFloorRunState(run, {
+            lives: run.lives,
+            activeMutators: run.activeMutators,
+            dungeonRun: run.dungeonRun,
+            board: run.board!,
+            parasiteFloors: run.parasiteFloors,
+            parasiteWardRemaining: run.parasiteWardRemaining,
+            memorizeRemainingMs: 1000
+        });
+
+        expect(next.regionShuffleFreeThisFloor).toBe(false);
+        expect(next.destroyPairCharges).toBe(0);
     });
 });

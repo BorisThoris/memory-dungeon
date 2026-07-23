@@ -17,7 +17,7 @@ const createState = (overrides: Partial<LevelCompleteShopExecutorState> = {}): L
 
 const createDeps = (
     state: LevelCompleteShopExecutorState
-): LevelCompleteShopExecutorDeps<LevelCompleteShopExecutorState> => ({
+): LevelCompleteShopExecutorDeps => ({
     applyResolvedRun: vi.fn(),
     getState: vi.fn(() => state),
     setState: vi.fn()

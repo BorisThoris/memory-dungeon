@@ -22,6 +22,8 @@ describe('tile-symbol-catalog', () => {
 
     it('clamps invalid levels to bracket logic', () => {
         expect(getSymbolSetIndexForLevel(0)).toBe(0);
+        expect(getSymbolSetIndexForLevel(Number.NaN)).toBe(0);
+        expect(getSymbolSetForLevel(Number.NaN)).toBe(NUMBER_SYMBOLS);
     });
 
     it('returns the catalog slice for each band', () => {

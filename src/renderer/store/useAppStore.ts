@@ -34,7 +34,11 @@ import {
 import { desktopClient } from '../desktop-client';
 import { createRunResolutionController } from './runResolutionController';
 import { createRunTimerController } from './runTimerController';
-import { persistSaveDataThenUnlockAchievements } from './achievementPersistence';
+import {
+    ACHIEVEMENT_SYNC_FAILURE_NOTICE,
+    persistSaveDataThenUnlockAchievements,
+    syncPersistedAchievements
+} from './achievementPersistence';
 import {
     persistSaveData,
     persistSaveSettings,
@@ -108,6 +112,7 @@ import {
     resumeUiSfxContext
 } from '../audio/uiSfx';
 import type { StoreNavigationAction } from './navigationModel';
+import { runPersistenceInBackground } from './backgroundPersistence';
 import { createHydratedAppStatePatch } from './hydrationController';
 import { createRunLifecycleController } from './runLifecycleController';
 import { createAppStoreInitialState } from './appStoreInitialState';
@@ -175,14 +180,14 @@ const scheduleDebugRevealTimer = (duration: number): void => runTimerController.
 const scheduleResolveTimer = (duration: number): void => runTimerController.scheduleResolveTimer(duration);
 const syncGauntletExpiryWatch = (): void => runTimerController.syncGauntletExpiryWatch();
 
-const sideRoomActionController = createSideRoomActionController<AppState>({
+const sideRoomActionController = createSideRoomActionController({
     applyResolvedRun,
     continueToNextLevel: () => useAppStore.getState().continueToNextLevel(),
     getState: () => useAppStore.getState(),
     setState: (patch) => useAppStore.setState(patch)
 });
 
-const runLifecycleController = createRunLifecycleController<AppState>({
+const runLifecycleController = createRunLifecycleController({
     clearAllTimers,
     getState: () => useAppStore.getState(),
     playRunStartSfx: playRunStartUiSfxFromStore,
@@ -278,7 +283,15 @@ export const useAppStore = create<AppState>((set, get) => ({
 
         set({ hydrating: true });
 
-        set(await createHydratedAppStatePatch({ desktop: desktopClient, persistSaveData: persistSaveDataSafely }));
+        const patch = await createHydratedAppStatePatch({ desktop: desktopClient, persistSaveData: persistSaveDataSafely });
+        set(patch);
+        runPersistenceInBackground(() =>
+            syncPersistedAchievements(patch.saveData, patch.steamConnected).then(({ failures }) => {
+                if (failures.length > 0) {
+                    set({ achievementBridgeNotice: ACHIEVEMENT_SYNC_FAILURE_NOTICE });
+                }
+            })
+        );
     },
 
     startRun: () => {
@@ -339,7 +352,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         playRelicPickSfx(sfxGainFromStore());
         set(result.patch);
         prepareMemorizeTimerForBoardReady(result.patch.run);
-        void persistSaveDataSafely(result.nextSave);
+        runPersistenceInBackground(() => persistSaveDataSafely(result.nextSave));
     },
 
     applyRelicOfferService: (serviceId, targetRelicId) => {

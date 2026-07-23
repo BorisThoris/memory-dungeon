@@ -11,7 +11,7 @@ import {
 } from '../../shared/floor-mutator-schedule';
 import { getSecondaryObjectiveStatusRows } from '../../shared/secondary-objectives';
 import { getDefaultDifficultyProfile } from '../../shared/difficulty-profile';
-import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
+import { getBuiltinPuzzle } from '../../shared/builtin-puzzles';
 import { getFindableRows } from '../../shared/findables';
 import { getHazardTileBoardSummary } from '../../shared/hazard-tiles';
 import { getTraitOpportunityHudModel, getTraitOpportunitySummary } from '../../shared/trait-opportunities';
@@ -26,6 +26,7 @@ import { getRunEconomyEntry } from '../../shared/run-economy';
 import { getRunBuildProfile } from '../../shared/relics';
 import { RELIC_FAVOR_PER_BONUS_PICK } from '../../shared/relic-favor-rules';
 import { SHOP_ITEM_CATALOG } from '../../shared/shop-rules';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import codexBookUrl from '../assets/ui/icons/icon-codex-book-v1.svg?url';
 import scoreParasiteCrystalUrl from '../assets/ui/icons/icon-score-parasite-crystal.svg?url';
 import shuffleIconUrl from '../assets/ui/icons/icon-shuffle-v1.svg?url';
@@ -1295,7 +1296,7 @@ const GameplayHudBar = ({
         run.activeMutators.includes('wide_recall') &&
         !run.wildMenuRun &&
         run.activeContract == null;
-    const puzzleModeTitle = run.puzzleId ? (BUILTIN_PUZZLES[run.puzzleId]?.title ?? run.puzzleId) : null;
+    const puzzleModeTitle = run.puzzleId ? (getBuiltinPuzzle(run.puzzleId)?.title ?? run.puzzleId) : null;
     const hudModeLabel =
         dailyDateStripKey != null
             ? 'Daily challenge'
@@ -1867,7 +1868,7 @@ const GameplayHudBar = ({
                         <div className={`${styles.hudSegment} ${styles.hudScoreSegment}`}>
                             <span className={styles.statKey}>Score</span>
                             <span className={`${styles.statVal} ${styles.statValScore}`}>
-                                {run.stats.totalScore.toLocaleString()}
+                                {runNonNegativeInteger(run.stats.totalScore).toLocaleString()}
                             </span>
                         </div>
                     </div>

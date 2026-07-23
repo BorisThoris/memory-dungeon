@@ -86,6 +86,122 @@ describe('StartupIntro', () => {
         expect(uiSfxMocks.playIntroStingSfx).toHaveBeenCalledTimes(1);
     });
 
+    it('does not restart critical asset preload when the completion callback changes', () => {
+        mockHasWebGLSupport.mockReturnValue(true);
+        mockPreloadStartupCriticalAssets.mockImplementation(() => new Promise(() => {}));
+        const firstOnComplete = vi.fn();
+        const nextOnComplete = vi.fn();
+        const rendered = renderIntro(<StartupIntro onComplete={firstOnComplete} reduceMotion={false} />);
+
+        expect(mockPreloadStartupCriticalAssets).toHaveBeenCalledTimes(1);
+
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <StartupIntro onComplete={nextOnComplete} reduceMotion={false} />
+            </PlatformTiltProvider>
+        );
+
+        expect(mockPreloadStartupCriticalAssets).toHaveBeenCalledTimes(1);
+    });
+
+    it('preserves its completion deadline while adopting the latest callback', async () => {
+        const firstOnComplete = vi.fn();
+        const nextOnComplete = vi.fn();
+        const rendered = renderIntro(<StartupIntro onComplete={firstOnComplete} reduceMotion={false} />);
+
+        await flushIntroPreload();
+        act(() => {
+            vi.advanceTimersByTime(1000);
+        });
+
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <StartupIntro onComplete={nextOnComplete} reduceMotion={false} />
+            </PlatformTiltProvider>
+        );
+        act(() => {
+            vi.advanceTimersByTime(3200);
+        });
+
+        expect(firstOnComplete).not.toHaveBeenCalled();
+        expect(nextOnComplete).toHaveBeenCalledTimes(1);
+    });
+
+    it('preserves preload and total runtime when reduced motion changes mid-intro', async () => {
+        const onComplete = vi.fn();
+        const rendered = renderIntro(<StartupIntro onComplete={onComplete} reduceMotion={false} />);
+
+        await flushIntroPreload();
+        act(() => {
+            vi.advanceTimersByTime(1000);
+        });
+
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <StartupIntro onComplete={onComplete} reduceMotion />
+            </PlatformTiltProvider>
+        );
+        expect(mockPreloadStartupCriticalAssets).toHaveBeenCalledTimes(1);
+
+        act(() => {
+            vi.advanceTimersByTime(3200);
+        });
+        expect(onComplete).toHaveBeenCalledTimes(1);
+    });
+
+    it('returns focus to the menu root after the intro unmounts', () => {
+        const menuRoot = document.createElement('div');
+        menuRoot.dataset.testid = 'main-menu-focus-root';
+        menuRoot.tabIndex = -1;
+        document.body.append(menuRoot);
+
+        try {
+            menuRoot.focus();
+            const rendered = renderIntro(<StartupIntro onComplete={vi.fn()} reduceMotion={false} />);
+            act(() => {
+                vi.advanceTimersByTime(20);
+            });
+            expect(screen.getByRole('dialog', { name: /startup relic intro/i })).toHaveFocus();
+
+            rendered.unmount();
+            act(() => {
+                vi.advanceTimersByTime(20);
+            });
+
+            expect(menuRoot).toHaveFocus();
+        } finally {
+            menuRoot.remove();
+        }
+    });
+
+    it('does not override focus claimed after the intro unmounts', () => {
+        const menuRoot = document.createElement('div');
+        menuRoot.dataset.testid = 'main-menu-focus-root';
+        menuRoot.tabIndex = -1;
+        const nextSurfaceButton = document.createElement('button');
+        document.body.append(menuRoot, nextSurfaceButton);
+
+        try {
+            menuRoot.focus();
+            const rendered = renderIntro(<StartupIntro onComplete={vi.fn()} reduceMotion={false} />);
+            act(() => {
+                vi.advanceTimersByTime(20);
+            });
+            expect(screen.getByRole('dialog', { name: /startup relic intro/i })).toHaveFocus();
+
+            rendered.unmount();
+            nextSurfaceButton.focus();
+            act(() => {
+                vi.advanceTimersByTime(20);
+            });
+
+            expect(nextSurfaceButton).toHaveFocus();
+        } finally {
+            menuRoot.remove();
+            nextSurfaceButton.remove();
+        }
+    });
+
     it('uses the shortened reduced-motion runtime and supports keyboard skip', async () => {
         const onComplete = vi.fn();
 
@@ -251,6 +367,59 @@ describe('StartupIntro motion CTA', () => {
 
         expect(requestPermissionSpy).toHaveBeenCalledTimes(1);
         expect(onComplete).not.toHaveBeenCalled();
+    });
+
+    it('supports legacy pointer media query listener APIs', async () => {
+        const listeners = new Set<() => void>();
+        const addListener = vi.fn((listener: () => void) => listeners.add(listener));
+        const removeListener = vi.fn((listener: () => void) => listeners.delete(listener));
+        window.matchMedia = vi.fn((query: string) => {
+            const coarse = query.includes('pointer: coarse');
+
+            return {
+                matches: coarse,
+                media: query,
+                addListener,
+                removeListener,
+                dispatchEvent: vi.fn(),
+                onchange: null
+            } as unknown as MediaQueryList;
+        }) as typeof window.matchMedia;
+        const { unmount } = renderIntro(<StartupIntro onComplete={vi.fn()} reduceMotion={false} />);
+
+        await flushIntroPreload();
+
+        expect(await screen.findByTestId('intro-motion-cta')).toBeInTheDocument();
+        expect(addListener).toHaveBeenCalledWith(expect.any(Function));
+
+        unmount();
+
+        expect(removeListener).toHaveBeenCalledWith(addListener.mock.calls[0]?.[0]);
+        expect(listeners).toHaveLength(0);
+    });
+
+    it('keeps the intro usable when pointer media queries are unavailable', async () => {
+        window.matchMedia = undefined as unknown as typeof window.matchMedia;
+
+        renderIntro(<StartupIntro onComplete={vi.fn()} reduceMotion={false} />);
+
+        await flushIntroPreload();
+
+        expect(screen.getByRole('dialog', { name: /startup relic intro/i })).toBeInTheDocument();
+        expect(screen.queryByTestId('intro-motion-cta')).not.toBeInTheDocument();
+    });
+
+    it('keeps the intro usable when pointer media queries throw', async () => {
+        window.matchMedia = vi.fn(() => {
+            throw new Error('media query unavailable');
+        }) as typeof window.matchMedia;
+
+        renderIntro(<StartupIntro onComplete={vi.fn()} reduceMotion={false} />);
+
+        await flushIntroPreload();
+
+        expect(screen.getByRole('dialog', { name: /startup relic intro/i })).toBeInTheDocument();
+        expect(screen.queryByTestId('intro-motion-cta')).not.toBeInTheDocument();
     });
 
     it('lets a normal overlay pointer-down still complete the intro after exit timing', async () => {

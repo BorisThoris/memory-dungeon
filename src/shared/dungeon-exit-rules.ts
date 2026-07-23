@@ -9,6 +9,8 @@ import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { defeatEnemyHazardsForFloorClear } from './dungeon-enemy-hazard-rules';
 import { gainRelicFavor } from './relic-favor-rules';
 import { createRouteCardPlanForRoute } from './route-card-plan-rules';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 import {
     EXIT_PAIR_KEY,
     isSingletonUtilityPairKey
@@ -122,6 +124,8 @@ export const applyDungeonExitObjectiveReward = (
         (objective.completed || (objective.objectiveId === 'claim_route' && status.routeType != null)) &&
         objective.objectiveId !== 'find_exit';
     const favor = gainRelicFavor(run, rewarded ? DUNGEON_OBJECTIVE_FAVOR_REWARD : 0);
+    const stats = normalizeSessionStats(run.stats);
+    const totalScore = stats.totalScore + DUNGEON_OBJECTIVE_SCORE_REWARD;
 
     return {
         rewarded,
@@ -129,9 +133,10 @@ export const applyDungeonExitObjectiveReward = (
             ...run,
             stats: rewarded
                 ? {
-                      ...run.stats,
-                      totalScore: run.stats.totalScore + DUNGEON_OBJECTIVE_SCORE_REWARD,
-                      currentLevelScore: run.stats.currentLevelScore + DUNGEON_OBJECTIVE_SCORE_REWARD
+                      ...stats,
+                      totalScore,
+                      currentLevelScore: stats.currentLevelScore + DUNGEON_OBJECTIVE_SCORE_REWARD,
+                      bestScore: Math.max(stats.bestScore, totalScore)
                   }
                 : run.stats,
             bonusRelicPicksNextOffer: favor.bonusRelicPicksNextOffer,
@@ -170,15 +175,18 @@ export const createDungeonExitActivationTransition = (
             ...objectiveReward.run,
             dungeonKeys: nextKeys,
             dungeonMasterKeys: activationSpend.spendsMasterKey
-                ? Math.max(0, run.dungeonMasterKeys - 1)
-                : run.dungeonMasterKeys,
+                ? Math.max(0, runNonNegativeInteger(run.dungeonMasterKeys) - 1)
+                : runNonNegativeInteger(run.dungeonMasterKeys),
             dungeonEnemiesDefeated:
-                objectiveReward.run.dungeonEnemiesDefeated + floorClearHazards.bossesDefeated,
+                runNonNegativeInteger(objectiveReward.run.dungeonEnemiesDefeated) +
+                floorClearHazards.bossesDefeated,
             dungeonEnemiesDefeatedThisFloor:
-                (objectiveReward.run.dungeonEnemiesDefeatedThisFloor ?? 0) + floorClearHazards.bossesDefeated,
+                runNonNegativeInteger(objectiveReward.run.dungeonEnemiesDefeatedThisFloor) +
+                floorClearHazards.bossesDefeated,
             enemyHazardsDefeatedThisFloor:
-                (objectiveReward.run.enemyHazardsDefeatedThisFloor ?? 0) + floorClearHazards.defeated,
-            dungeonGatewaysUsed: run.dungeonGatewaysUsed + 1,
+                runNonNegativeInteger(objectiveReward.run.enemyHazardsDefeatedThisFloor) +
+                floorClearHazards.defeated,
+            dungeonGatewaysUsed: runNonNegativeInteger(run.dungeonGatewaysUsed) + 1,
             pendingRouteCardPlan:
                 run.pendingRouteCardPlan == null && routeType
                     ? createRouteCardPlanForRoute(

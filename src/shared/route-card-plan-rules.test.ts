@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import type { RunState } from './contracts';
 import { createNewRun } from './game-core';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import { createRouteCardPlan, createRouteCardPlanForRoute } from './route-card-plan-rules';
@@ -28,6 +29,20 @@ describe('route card plan rules', () => {
         expect(createRouteCardPlan(run, { id: 'choice-b', label: 'Safe', detail: 'Recover.', routeType: 'safe' })).toMatchObject({
             choiceId: 'choice-b',
             routeType: 'safe'
+        });
+    });
+
+    it('normalizes malformed stat records before falling back to highest level', () => {
+        const run = {
+            ...createNewRun(0),
+            board: null,
+            lastLevelResult: null,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(createRouteCardPlanForRoute(run, 'greed', 'choice-c')).toMatchObject({
+            sourceLevel: 1,
+            targetLevel: 2
         });
     });
 });

@@ -90,6 +90,47 @@ describe('dungeon match reward rules', () => {
             score: DUNGEON_LOCK_SCORE_REWARD
         });
     });
+
+    it('ignores malformed run keys when rewarding locked caches', () => {
+        const malformedRun = {
+            ...createNewRun(0),
+            dungeonKeys: { iron: Number.POSITIVE_INFINITY },
+            dungeonMasterKeys: Number.NaN
+        };
+
+        expect(getDungeonMatchReward(malformedRun, tile({ dungeonCardKind: 'lock', dungeonCardEffectId: 'lock_cache' }), tile()))
+            .toMatchObject({
+                keysHeldDelta: 0,
+                masterKeysHeldDelta: 0,
+                keysSpent: 0,
+                score: 5
+            });
+    });
+
+    it('ignores malformed floor-held keys when rewarding locked caches', () => {
+        const baseRun = createNewRun(0);
+        const malformedHeldKeyRun = {
+            ...baseRun,
+            dungeonKeys: {},
+            dungeonMasterKeys: 0,
+            board: baseRun.board
+                ? {
+                      ...baseRun.board,
+                      dungeonKeysHeldByKind: { iron: Number.POSITIVE_INFINITY },
+                      dungeonKeysHeld: Number.NaN
+                  }
+                : baseRun.board
+        };
+
+        expect(
+            getDungeonMatchReward(malformedHeldKeyRun, tile({ dungeonCardKind: 'lock', dungeonCardEffectId: 'lock_cache' }), tile())
+        ).toMatchObject({
+            keysHeldDelta: 0,
+            masterKeysHeldDelta: 0,
+            keysSpent: 0,
+            score: 5
+        });
+    });
 });
 
 const tile = (extra: Partial<Tile> = {}): Tile => ({

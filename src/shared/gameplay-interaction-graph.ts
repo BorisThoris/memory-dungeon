@@ -1,4 +1,5 @@
 import graphData from './gameplay-interaction-graph-data.json';
+import { z } from 'zod';
 
 export type GameplayInteractionMechanicKind =
     | 'trait'
@@ -85,7 +86,72 @@ export interface GameplayInteractionGraphAudit {
     shopCounterplayWithoutPriorityGuardIds: string[];
 }
 
-export const gameplayInteractionGraph = graphData as GameplayInteractionGraph;
+const nonEmptyStringSchema = z.string().min(1);
+const mechanicKindSchema = z.enum([
+    'trait',
+    'power',
+    'hazard',
+    'boss',
+    'exit',
+    'lock',
+    'shop',
+    'objective',
+    'safety'
+]);
+const edgeKindSchema = z.enum([
+    'synergy',
+    'risk',
+    'counterplay',
+    'enables',
+    'guarded_by',
+    'unblocks',
+    'blocks',
+    'priority_guard'
+]);
+const stringListSchema = z.array(nonEmptyStringSchema);
+
+export const gameplayInteractionGraphSchema = z
+    .object({
+        version: z.number().int().positive(),
+        mechanics: z.array(
+            z
+                .object({
+                    id: nonEmptyStringSchema,
+                    label: nonEmptyStringSchema,
+                    kind: mechanicKindSchema,
+                    role: nonEmptyStringSchema,
+                    evidence: stringListSchema,
+                    reads: stringListSchema,
+                    writes: stringListSchema,
+                    enables: stringListSchema,
+                    blocks: stringListSchema,
+                    softlockGuards: stringListSchema,
+                    tests: stringListSchema
+                })
+                .strict()
+        ),
+        edges: z.array(
+            z
+                .object({
+                    source: nonEmptyStringSchema,
+                    target: nonEmptyStringSchema,
+                    kind: edgeKindSchema,
+                    label: nonEmptyStringSchema
+                })
+                .strict()
+        ),
+        coverage: z
+            .object({
+                tileTraits: stringListSchema,
+                blockingKinds: z.array(mechanicKindSchema),
+                requiredObjectives: stringListSchema,
+                requiredSafetyNodes: stringListSchema
+            })
+            .strict()
+    })
+    .strict();
+
+export const gameplayInteractionGraph: GameplayInteractionGraph = gameplayInteractionGraphSchema.parse(graphData);
 
 export const getGameplayInteractionMechanicById = (id: string): GameplayInteractionMechanic | null =>
     gameplayInteractionGraph.mechanics.find((mechanic) => mechanic.id === id) ?? null;

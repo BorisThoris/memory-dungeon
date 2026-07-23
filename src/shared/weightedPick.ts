@@ -2,6 +2,12 @@
  * Small in-repo weighted random helpers (no npm deps). Uses an injected `rng`
  * returning values in [0, 1) so runs stay deterministic when seeded elsewhere.
  */
+import { normalizeRngRoll } from './rng';
+
+const normalizeWeight = (weight: number): number => (Number.isFinite(weight) ? Math.max(0, weight) : 0);
+
+const normalizePickCount = (count: number, max: number): number =>
+    Number.isFinite(count) ? Math.min(Math.max(0, Math.floor(count)), max) : max;
 
 /** Pick an index 0..weights.length-1 proportional to non-negative weights. If all weights are zero, picks uniformly. */
 export const pickWeightedIndex = (rng: () => number, weights: readonly number[]): number => {
@@ -9,14 +15,14 @@ export const pickWeightedIndex = (rng: () => number, weights: readonly number[])
         return 0;
     }
     let total = 0;
-    const safe = weights.map((w) => Math.max(0, w));
+    const safe = weights.map(normalizeWeight);
     for (const w of safe) {
         total += w;
     }
     if (total <= 0) {
-        return Math.min(weights.length - 1, Math.floor(rng() * weights.length));
+        return Math.min(weights.length - 1, Math.floor(normalizeRngRoll(rng()) * weights.length));
     }
-    let r = rng() * total;
+    let r = normalizeRngRoll(rng()) * total;
     for (let i = 0; i < safe.length; i += 1) {
         r -= safe[i];
         if (r < 0) {
@@ -38,14 +44,19 @@ export const pickWeightedWithoutReplacement = <T>(
     if (items.length === 0 || k <= 0) {
         return [];
     }
-    const pool = items.map((x) => ({ value: x.value, weight: Math.max(0, x.weight) }));
+    const pool = items.map((x) => ({
+        value: x.value,
+        weight: normalizeWeight(x.weight)
+    }));
     const out: T[] = [];
-    const take = Math.min(k, pool.length);
+    const take = normalizePickCount(k, pool.length);
     for (let n = 0; n < take; n += 1) {
         const ws = pool.map((p) => p.weight);
         const idx = pickWeightedIndex(rng, ws);
-        out.push(pool[idx]!.value);
-        pool.splice(idx, 1);
+        const [selected] = pool.splice(idx, 1);
+        if (selected !== undefined) {
+            out.push(selected.value);
+        }
     }
     return out;
 };

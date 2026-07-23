@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
+import type { RunState } from './contracts';
 import { createNewRun } from './game-core';
 import {
     getCodexRewardSignal,
     getCollectionRewardSignal,
     getInventoryRewardSignal,
+    getInventoryRewardSignals,
     getMetaProgressionRunImpactRows
 } from './meta-reward-signals';
 import { createDefaultSaveData } from './save-data';
@@ -29,6 +31,36 @@ describe('REG-011 meta reward signals', () => {
         const codex = getCodexRewardSignal();
         expect(codex.id).toBe('codex_learning_goal');
         expect(codex.cta).toMatch(/Guides|Tables/i);
+    });
+
+    it('ignores malformed inventory relic and mutator arrays before building copy', () => {
+        const inventory = getInventoryRewardSignal({
+            ...createNewRun(0),
+            relicIds: Number.NaN as unknown as RunState['relicIds'],
+            activeMutators: Number.NaN as unknown as RunState['activeMutators']
+        });
+
+        expect(inventory.title).toBe('First relic still ahead');
+        expect(inventory.body).toContain('0 active mutator(s)');
+    });
+
+    it('normalizes malformed inventory stats before building copy', () => {
+        const run = {
+            ...createNewRun(0),
+            lives: Number.POSITIVE_INFINITY,
+            shopGold: Number.NaN,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        const [buildValue, runProgress] = getInventoryRewardSignals(run);
+        if (!buildValue || !runProgress) {
+            throw new Error('Expected inventory build and run progress reward signals');
+        }
+
+        expect(buildValue.body).toContain('0 shop gold');
+        expect(buildValue.body).toContain('0 shard(s)');
+        expect(runProgress.body).toContain('0 life/lives remaining');
+        expect(`${buildValue.body} ${runProgress.body}`).not.toMatch(/NaN|Infinity/);
     });
 
     it('translates permanent profile unlocks into next-run impact rows', () => {

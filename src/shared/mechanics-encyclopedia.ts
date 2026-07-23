@@ -264,8 +264,16 @@ export const MECHANICS_GLOSSARY_TERMS: readonly MechanicsGlossaryTerm[] = [
     }
 ];
 
+const DEFAULT_MECHANICS_GLOSSARY_TERM: MechanicsGlossaryTerm = {
+    id: 'lives',
+    preferredLabel: 'Lives',
+    shortDefinition: 'Run-wide health. Lives carry between floors; mismatches can remove them after grace/guard protection.',
+    avoidLabels: ['hearts as currency', 'energy'],
+    surfaces: ['HUD', 'Game over', 'Settings']
+};
+
 export const glossaryTermById = (id: MechanicsGlossaryTerm['id']): MechanicsGlossaryTerm =>
-    MECHANICS_GLOSSARY_TERMS.find((term) => term.id === id)!;
+    MECHANICS_GLOSSARY_TERMS.find((term) => term.id === id) ?? DEFAULT_MECHANICS_GLOSSARY_TERM;
 
 export const MECHANICS_GLOSSARY = MECHANICS_GLOSSARY_TERMS;
 
@@ -499,7 +507,7 @@ export const GAME_MODE_CODEX: GameModeCodexEntry[] = [
     {
         id: 'puzzle',
         title: 'Puzzle',
-        description: 'Fixed handcrafted boards from the built-in puzzle set; optional JSON import for local playtests.'
+        description: 'Fixed handcrafted boards from the built-in puzzle set; puzzle JSON menu import is not enabled in this build.'
     },
     {
         id: 'gauntlet',

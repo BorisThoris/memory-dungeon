@@ -77,6 +77,22 @@ describe('run timer rules', () => {
         const noFlips = resumeRun(noFlipsPause);
         expect(noFlips.status).toBe('playing');
         expect(noFlips.timerState.resolveRemainingMs).toBeNull();
+
+        const malformedFlipsPause: RunState = {
+            ...playing,
+            status: 'paused',
+            board: playing.board
+                ? { ...playing.board, flippedTileIds: Number.NaN as unknown as string[] }
+                : playing.board,
+            timerState: {
+                ...playing.timerState,
+                pausedFromStatus: 'resolving',
+                resolveRemainingMs: 120
+            }
+        };
+        const malformedFlips = resumeRun(malformedFlipsPause);
+        expect(malformedFlips.status).toBe('playing');
+        expect(malformedFlips.timerState.resolveRemainingMs).toBeNull();
     });
 
     it('extends gauntlet deadlines by paused wall-clock time', () => {
@@ -88,6 +104,63 @@ describe('run timer rules', () => {
         const resumed = resumeRun(paused);
         expect(resumed.gauntletDeadlineMs).toBe((playing.gauntletDeadlineMs ?? 0) + 1_500);
         expect(resumed.timerState.gauntletPausedAtMs).toBeNull();
+    });
+
+    it('normalizes malformed gauntlet timer fields while pausing and resuming', () => {
+        const playing = finishMemorizePhase(createGauntletRun(0, 60_000));
+        const malformedDeadline = pauseRun({
+            ...playing,
+            gauntletDeadlineMs: Number.POSITIVE_INFINITY
+        });
+        expect(malformedDeadline.gauntletDeadlineMs).toBeNull();
+        expect(malformedDeadline.timerState.gauntletPausedAtMs).toBeNull();
+
+        vi.useFakeTimers();
+        vi.setSystemTime(2_000);
+        const malformedPauseTime = resumeRun({
+            ...playing,
+            status: 'paused',
+            timerState: {
+                ...playing.timerState,
+                pausedFromStatus: 'playing',
+                gauntletPausedAtMs: Number.NaN
+            }
+        });
+        expect(malformedPauseTime.gauntletDeadlineMs).toBe(playing.gauntletDeadlineMs);
+        expect(malformedPauseTime.timerState.gauntletPausedAtMs).toBeNull();
+    });
+
+    it('normalizes malformed timer state objects at transition boundaries', () => {
+        const playing = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
+        const malformedTimerRun = {
+            ...playing,
+            timerState: Number.NaN as unknown as RunState['timerState']
+        };
+
+        expect(clearResolveState(malformedTimerRun)).toEqual(createTimerState());
+
+        const paused = pauseRun(malformedTimerRun);
+        expect(paused.status).toBe('paused');
+        expect(paused.timerState).toMatchObject({
+            pausedFromStatus: 'playing',
+            resolveRemainingMs: null,
+            gauntletPausedAtMs: null
+        });
+
+        const invalidPaused = {
+            ...playing,
+            status: 'paused' as const,
+            timerState: {
+                ...playing.timerState,
+                pausedFromStatus: 'invalid' as unknown as RunState['timerState']['pausedFromStatus']
+            }
+        };
+        expect(resumeRun(invalidPaused)).toBe(invalidPaused);
+
+        expect(enableDebugPeek(malformedTimerRun, true).timerState).toMatchObject({
+            debugRevealRemainingMs: DEBUG_REVEAL_MS,
+            pausedFromStatus: null
+        });
     });
 
     it('toggles debug peek timers and achievement disabling', () => {

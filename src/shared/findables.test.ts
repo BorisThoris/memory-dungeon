@@ -6,7 +6,7 @@ import {
     FINDABLE_MATCH_SCOUT_REVEALS,
     FINDABLE_MATCH_SCORE
 } from './contracts';
-import { getFindableRewardText, getFindableRows } from './findables';
+import { getFindableRewardText, getFindableRows, getFindableSpawnWeightRows } from './findables';
 
 describe('REG-049 findable reward copy', () => {
     it('keeps reward rows aligned with scoring constants', () => {
@@ -66,5 +66,11 @@ describe('REG-049 findable reward copy', () => {
             ward_spark: 15,
             scout_glint: 15
         });
+        expect(getFindableSpawnWeightRows()).toEqual([
+            { id: 'shard_spark', label: 'Shard spark', weight: 35 },
+            { id: 'score_glint', label: 'Score glint', weight: 35 },
+            { id: 'ward_spark', label: 'Ward spark', weight: 15 },
+            { id: 'scout_glint', label: 'Scout glint', weight: 15 }
+        ]);
     });
 });

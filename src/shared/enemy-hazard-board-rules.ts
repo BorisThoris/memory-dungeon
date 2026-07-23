@@ -4,11 +4,15 @@ import {
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey
 } from './tile-identity';
+import { runNonNegativeInteger } from './run-number-guards';
 
 const isEnemyHazardRelevantPairTile = (tile: Tile): boolean =>
     !isSingletonUtilityPairKey(tile.pairKey) &&
     tile.pairKey !== DECOY_PAIR_KEY &&
     tile.pairKey !== WILD_PAIR_KEY;
+
+export const enemyHazardsForBoard = (board: Pick<BoardState, 'enemyHazards'> | null | undefined): EnemyHazardState[] =>
+    Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
 
 export const enemyHazardEligibleTiles = (tiles: readonly Tile[]): Tile[] =>
     tiles.filter(
@@ -46,13 +50,17 @@ export const enemyHazardReferencesOnlyClearedTiles = (
     return allRealBoardPairsCleared(board) && hazard.state !== 'defeated';
 };
 
-export const activeEnemyHazardsForBoard = (board: BoardState | null | undefined): NonNullable<BoardState['enemyHazards']> =>
-    board?.enemyHazards?.filter(
+export const activeEnemyHazardsForBoard = (board: BoardState | null | undefined): NonNullable<BoardState['enemyHazards']> => {
+    if (!board) {
+        return [];
+    }
+    return enemyHazardsForBoard(board).filter(
         (hazard) => hazard.state !== 'defeated' && !enemyHazardReferencesOnlyClearedTiles(board, hazard)
-    ) ?? [];
+    );
+};
 
 export const collectEnemyHazardsOccupyingFinalPair = (board: BoardState): EnemyHazardState[] => {
-    const activeHazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    const activeHazards = enemyHazardsForBoard(board).filter((hazard) => hazard.state !== 'defeated');
     if (activeHazards.length === 0) {
         return [];
     }
@@ -90,7 +98,7 @@ export const defeatEnemyHazardOccupationOnFinalPair = (board: BoardState): Board
     const hazardsToClear = new Set(activeHazards.map((hazard) => hazard.id));
     return {
         ...board,
-        enemyHazards: board.enemyHazards?.map((hazard) =>
+        enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
             hazardsToClear.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
         )
     };
@@ -100,14 +108,14 @@ export const defeatEnemyHazardsOnClearedTiles = (board: BoardState): BoardState 
     if (!allRealBoardPairsCleared(board)) {
         return board;
     }
-    const activeHazards = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    const activeHazards = enemyHazardsForBoard(board).filter((hazard) => hazard.state !== 'defeated');
     if (activeHazards.length === 0) {
         return board;
     }
     const ids = new Set(activeHazards.map((hazard) => hazard.id));
     return {
         ...board,
-        enemyHazards: board.enemyHazards?.map((hazard) =>
+        enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
             ids.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
         )
     };
@@ -121,8 +129,8 @@ export const clearFinalPairEnemyHazardOccupationForRun = (run: RunState): RunSta
     const boardAfterFinalPair = defeatEnemyHazardOccupationOnFinalPair(run.board);
     const boardAfterClearedTiles = defeatEnemyHazardsOnClearedTiles(boardAfterFinalPair);
     const finalPairIds = new Set(finalPairHazards.map((hazard) => hazard.id));
-    const clearedTileHazards = (boardAfterFinalPair.enemyHazards ?? []).filter((hazard) => {
-        const updated = boardAfterClearedTiles.enemyHazards?.find((candidate) => candidate.id === hazard.id);
+    const clearedTileHazards = enemyHazardsForBoard(boardAfterFinalPair).filter((hazard) => {
+        const updated = enemyHazardsForBoard(boardAfterClearedTiles).find((candidate) => candidate.id === hazard.id);
         return !finalPairIds.has(hazard.id) && hazard.state !== 'defeated' && updated?.state === 'defeated';
     });
     const hazardsToClear = [...finalPairHazards, ...clearedTileHazards];
@@ -133,8 +141,10 @@ export const clearFinalPairEnemyHazardOccupationForRun = (run: RunState): RunSta
     return {
         ...run,
         board: boardAfterClearedTiles,
-        dungeonEnemiesDefeated: run.dungeonEnemiesDefeated + bossHazardsToClear,
-        dungeonEnemiesDefeatedThisFloor: (run.dungeonEnemiesDefeatedThisFloor ?? 0) + bossHazardsToClear,
-        enemyHazardsDefeatedThisFloor: (run.enemyHazardsDefeatedThisFloor ?? 0) + hazardsToClear.length
+        dungeonEnemiesDefeated: runNonNegativeInteger(run.dungeonEnemiesDefeated) + bossHazardsToClear,
+        dungeonEnemiesDefeatedThisFloor:
+            runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) + bossHazardsToClear,
+        enemyHazardsDefeatedThisFloor:
+            runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor) + hazardsToClear.length
     };
 };

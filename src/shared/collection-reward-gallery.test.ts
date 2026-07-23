@@ -57,4 +57,24 @@ describe('REG-093 collection reward gallery', () => {
         });
         expect(profileGoal?.unlockHint).toMatch(/seven Daily Challenge floors/i);
     });
+
+    it('normalizes malformed relic pick counters before projecting gallery progress', () => {
+        const save = createDefaultSaveData();
+        save.playerStats = {
+            ...save.playerStats!,
+            relicPickCounts: {
+                guard_token_plus_one: Number.POSITIVE_INFINITY,
+                parasite_ledger: 1.9
+            }
+        };
+
+        const relics = getCollectionRewardGalleryRows(save).find((row) => row.id === 'relics');
+
+        expect(relics).toMatchObject({
+            owned: 1,
+            status: 'in_progress',
+            progressLabel: '1/10 discovery marks',
+            tone: 'Gold'
+        });
+    });
 });

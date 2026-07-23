@@ -38,13 +38,24 @@ export const loadTileBoardSharedCardSvgAssets = async ({
     loadBackLayers,
     loadFrontGeometry
 }: LoadTileBoardSharedCardSvgAssetsInput): Promise<TileBoardSharedCardSvgAssets | null> => {
-    const frontGeometry = await loadFrontGeometry(frontUrl);
+    let frontGeometry: BufferGeometry | null;
+    try {
+        frontGeometry = await loadFrontGeometry(frontUrl);
+    } catch {
+        return null;
+    }
 
     if (frontGeometry == null) {
         return null;
     }
 
-    const backLayers = await loadBackLayers(backUrl);
+    let backLayers: CardBackSvgLayerGeometry[] | null;
+    try {
+        backLayers = await loadBackLayers(backUrl);
+    } catch {
+        frontGeometry.dispose();
+        return null;
+    }
 
     if (backLayers == null) {
         frontGeometry.dispose();

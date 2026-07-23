@@ -2,8 +2,10 @@ import {
     INITIAL_REGION_SHUFFLE_CHARGES,
     type BoardState,
     type MutatorId,
+    type RelicId,
     type RunState
 } from './contracts';
+import { normalizeRewardPerkIds } from './bonus-rewards';
 import {
     boardHasGlassDecoy,
     getWildTileIdFromBoard
@@ -11,7 +13,12 @@ import {
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
+import { runRelicIds } from './relics';
+import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
+
+const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
+    runRelicIds(run.relicIds).includes(relicId);
 
 export interface CreateNextFloorRunStateOptions {
     lives: number;
@@ -51,13 +58,14 @@ export const createNextFloorRunState = (
     options: CreateNextFloorRunStateOptions
 ): RunState => {
     const hasRewardPerk = (id: NonNullable<RunState['rewardPerkIds']>[number]): boolean =>
-        (run.rewardPerkIds ?? []).includes(id);
+        normalizeRewardPerkIds(run.rewardPerkIds).includes(id);
     const canUseHazardBanisher = hasRewardPerk('hazard_banish_per_floor') && !run.activeContract?.noDestroy;
     const hazardBanish = canUseHazardBanisher
         ? banishOneHazardPair(options.board)
         : { board: options.board, banished: false };
     const nextBoard = hazardBanish.board;
     const traitRouteObjective = getTraitRouteObjectiveSeed(nextBoard);
+    const stats = normalizeSessionStats(run.stats);
 
     return {
         ...run,
@@ -76,9 +84,9 @@ export const createNextFloorRunState = (
         parasiteFloors: options.parasiteFloors,
         parasiteWardRemaining: options.parasiteWardRemaining,
         stickyBlockIndex: null,
-        freeShuffleThisFloor: run.relicIds.includes('first_shuffle_free_per_floor'),
+        freeShuffleThisFloor: hasRunRelic(run, 'first_shuffle_free_per_floor'),
         regionShuffleFreeThisFloor:
-            run.relicIds.includes('region_shuffle_free_first') || hasRewardPerk('free_first_swap_per_floor'),
+            hasRunRelic(run, 'region_shuffle_free_first') || hasRewardPerk('free_first_swap_per_floor'),
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,
         gambitThirdFlipUsed: false,
@@ -141,11 +149,11 @@ export const createNextFloorRunState = (
         timerState: createTimerState({ memorizeRemainingMs: options.memorizeRemainingMs }),
         lastLevelResult: null,
         stats: {
-            ...run.stats,
+            ...stats,
             tries: 0,
             currentLevelScore: 0,
             rating: calculateRating(0),
-            highestLevel: Math.max(run.stats.highestLevel, nextBoard.level),
+            highestLevel: Math.max(stats.highestLevel, nextBoard.level),
             currentStreak: 0
         }
     };

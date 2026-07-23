@@ -136,6 +136,15 @@ const hazardMemoryTax = (score: Partial<MemoryTaxScore>): MemoryTaxScore => ({
     ...score
 });
 
+export const HAZARD_TILE_KINDS = [
+    'shuffle_snare',
+    'cascade_cache',
+    'mirror_decoy',
+    'fragile_cache',
+    'toll_cache',
+    'fuse_cache'
+] as const satisfies readonly HazardTileKind[];
+
 export const HAZARD_TILE_DEFINITIONS: Record<HazardTileKind, HazardTileDefinition> = {
     shuffle_snare: {
         kind: 'shuffle_snare',
@@ -287,7 +296,8 @@ export const HAZARD_TILE_DEFINITIONS: Record<HazardTileKind, HazardTileDefinitio
     }
 };
 
-export const getHazardTileDefinitions = (): HazardTileDefinition[] => Object.values(HAZARD_TILE_DEFINITIONS);
+export const getHazardTileDefinitions = (): HazardTileDefinition[] =>
+    HAZARD_TILE_KINDS.map((kind) => HAZARD_TILE_DEFINITIONS[kind]);
 
 export const getHazardTileDefinition = (kind: HazardTileKind): HazardTileDefinition => HAZARD_TILE_DEFINITIONS[kind];
 
@@ -315,6 +325,16 @@ const objectiveImpact = (
     copy: string,
     tokens: MechanicTokenId[]
 ): HazardTileObjectiveImpactRow => ({ objectiveId, impact, copy, tokens });
+
+const fallbackObjectiveImpact = (
+    objectiveId: HazardTileObjectiveImpactRow['objectiveId']
+): HazardTileObjectiveImpactRow =>
+    objectiveImpact(
+        objectiveId,
+        'preserves',
+        'No authored hazard-objective edge case is available, so the hazard is treated as preserving objective state.',
+        ['safe', 'objective']
+    );
 
 export const HAZARD_TILE_OBJECTIVE_BALANCE_ROWS: readonly HazardTileObjectiveBalanceRow[] = [
     {
@@ -430,8 +450,9 @@ export const getHazardTileObjectiveImpact = (
     objectiveId: HazardTileObjectiveImpactRow['objectiveId']
 ): HazardTileObjectiveImpactRow =>
     HAZARD_TILE_OBJECTIVE_BALANCE_ROWS
-        .find((row) => row.kind === kind)!
-        .objectiveImpacts.find((impact) => impact.objectiveId === objectiveId)!;
+        .find((row) => row.kind === kind)
+        ?.objectiveImpacts.find((impact) => impact.objectiveId === objectiveId) ??
+    fallbackObjectiveImpact(objectiveId);
 
 export const getHazardTileBoardSummary = (board: BoardState | null | undefined): HazardTileBoardSummary => {
     if (!board) {

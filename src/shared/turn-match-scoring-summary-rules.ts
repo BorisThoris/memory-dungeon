@@ -1,6 +1,7 @@
 import type { BoardState, RunState, Tile } from './contracts';
 import { calculateRecallMatchBonus } from './recall-rules';
 import { getPresentationMutatorMatchPenalty } from './scoring-rules';
+import { normalizeSessionStats } from './session-stats-rules';
 import { shiftingSpotlightMatchDelta } from './shifting-spotlight-rules';
 import { calculateResolvedMatchScore } from './turn-match-score-rules';
 
@@ -52,7 +53,8 @@ export const resolveTurnMatchScoringSummary = ({
     pinLatticeRewarded,
     tollCacheClaimed
 }: TurnMatchScoringSummaryInput): TurnMatchScoringSummaryResult => {
-    const currentStreak = run.stats.currentStreak + 1;
+    const stats = normalizeSessionStats(run.stats);
+    const currentStreak = stats.currentStreak + 1;
     const encoreKey = matchedPairKey;
     const cursedMatchedEarly =
         Boolean(sourceBoard.cursedPairKey && encoreKey === sourceBoard.cursedPairKey && sourceBoard.matchedPairs < sourceBoard.pairCount - 1);
@@ -78,9 +80,9 @@ export const resolveTurnMatchScoringSummary = ({
         tollCacheClaimed,
         presentationPenalty
     });
-    const totalScore = run.stats.totalScore + matchScore;
-    const currentLevelScore = run.stats.currentLevelScore + matchScore;
-    const bestScore = Math.max(run.stats.bestScore, totalScore);
+    const totalScore = stats.totalScore + matchScore;
+    const currentLevelScore = stats.currentLevelScore + matchScore;
+    const bestScore = Math.max(stats.bestScore, totalScore);
 
     return {
         currentStreak,

@@ -8,8 +8,16 @@ import {
     type StartingLoadoutId
 } from './contracts';
 import { hashStringToSeed } from './rng';
+import { runRelicIds } from './relics';
 import type { RunMapNodeKind } from './run-map';
-import { gainRunInventoryItem, getRunInventoryGainFeedback, type RunInventoryItemId } from './run-inventory';
+import {
+    gainRunInventoryItem,
+    getRunInventoryGainFeedback,
+    getRunInventoryItemPayoutRows,
+    type RunInventoryItemId
+} from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitBuildRewardRowsForBoard } from './trait-build-rewards';
 
 export type BonusRewardRoomKind = 'treasure_chest' | 'secret_room' | 'bonus_cache';
@@ -48,6 +56,24 @@ export interface BonusRewardInstance extends BonusRewardDefinition {
     eligible: boolean;
     unavailableReason: string | null;
 }
+
+export const BONUS_REWARD_IDS = [
+    'chest_gold',
+    'secret_favor',
+    'bonus_shards',
+    'supply_cache',
+    'trait_toolkit',
+    'key_insurance',
+    'hazard_ward',
+    'free_swap_floor',
+    'echo_conduit_lens',
+    'trait_streak_lens',
+    'cursed_opener_contract',
+    'stasis_lockbox',
+    'hazard_banisher'
+] as const satisfies readonly BonusRewardId[];
+
+const DEFAULT_BONUS_REWARD_ID: BonusRewardId = 'bonus_shards';
 
 export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> = {
     chest_gold: {
@@ -201,6 +227,9 @@ export const BONUS_REWARD_CATALOG: Record<BonusRewardId, BonusRewardDefinition> 
     }
 };
 
+const isBonusRewardId = (value: string): value is BonusRewardId =>
+    Object.prototype.hasOwnProperty.call(BONUS_REWARD_CATALOG, value);
+
 export const createBonusRewardLedger = (): BonusRewardLedger => ({
     claimedInstanceIds: [],
     claimedRewardIds: {},
@@ -211,12 +240,11 @@ export const createBonusRewardLedger = (): BonusRewardLedger => ({
 const normalizeBonusRewardLedger = (ledger: BonusRewardLedger): BonusRewardLedger => {
     const claimedRewardIds: BonusRewardLedger['claimedRewardIds'] = {};
     if (ledger.claimedRewardIds && typeof ledger.claimedRewardIds === 'object' && !Array.isArray(ledger.claimedRewardIds)) {
-        for (const [id, count] of Object.entries(ledger.claimedRewardIds) as [BonusRewardId, unknown][]) {
-            if (BONUS_REWARD_CATALOG[id]) {
-                const safeCount = nonNegativeLedgerCount(count);
-                if (safeCount > 0) {
-                    claimedRewardIds[id] = safeCount;
-                }
+        const savedRewardIds = ledger.claimedRewardIds as Partial<Record<BonusRewardId, unknown>>;
+        for (const id of BONUS_REWARD_IDS) {
+            const safeCount = runNonNegativeInteger(savedRewardIds[id]);
+            if (safeCount > 0) {
+                claimedRewardIds[id] = safeCount;
             }
         }
     }
@@ -226,8 +254,8 @@ const normalizeBonusRewardLedger = (ledger: BonusRewardLedger): BonusRewardLedge
             ? [...new Set(ledger.claimedInstanceIds.filter((id): id is string => typeof id === 'string'))]
             : [],
         claimedRewardIds,
-        discoveredSecretRooms: nonNegativeLedgerCount(ledger.discoveredSecretRooms),
-        openedTreasureRooms: nonNegativeLedgerCount(ledger.openedTreasureRooms)
+        discoveredSecretRooms: runNonNegativeInteger(ledger.discoveredSecretRooms),
+        openedTreasureRooms: runNonNegativeInteger(ledger.openedTreasureRooms)
     };
 };
 
@@ -247,11 +275,8 @@ const rewardIdsForRouteKind = (routeKind: RunMapNodeKind | 'unknown'): BonusRewa
     return ['bonus_shards', 'trait_toolkit', 'trait_streak_lens', 'echo_conduit_lens', 'hazard_ward', 'hazard_banisher', 'supply_cache', 'key_insurance', 'chest_gold', 'secret_favor'];
 };
 
-const nonNegativeLedgerCount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
-
 const rewardCount = (ledger: BonusRewardLedger, id: BonusRewardId): number =>
-    nonNegativeLedgerCount(ledger.claimedRewardIds?.[id]);
+    runNonNegativeInteger(ledger.claimedRewardIds?.[id]);
 
 const isEligible = (definition: BonusRewardDefinition, floor: number, ledger: BonusRewardLedger): string | null => {
     if (floor < 2) {
@@ -314,7 +339,7 @@ const applyBoardTraitRewardBias = (
         const rank = buildRows.findIndex((row) => labels.includes(row.label));
         return rank < 0 ? Number.MAX_SAFE_INTEGER : rank;
     };
-    const matchingCatalogRewards = (Object.keys(BONUS_REWARD_CATALOG) as BonusRewardId[])
+    const matchingCatalogRewards = BONUS_REWARD_IDS
         .filter((id) => (BONUS_REWARD_CATALOG[id].traitBuildLabels ?? []).some((label) => buildLabels.has(label)))
         .sort((a, b) => rankByBuildLabel(a) - rankByBuildLabel(b));
     const preferred = candidates
@@ -331,7 +356,7 @@ const selectBonusRewardDefinition = (
 ): BonusRewardDefinition => {
     const orderedCandidates = rotateRewardCandidates(candidates, preferredIndex);
     const eligibleRewardId = orderedCandidates.find((id) => isEligible(BONUS_REWARD_CATALOG[id], floor, ledger) === null);
-    return BONUS_REWARD_CATALOG[eligibleRewardId ?? orderedCandidates[0]!];
+    return BONUS_REWARD_CATALOG[eligibleRewardId ?? orderedCandidates[0] ?? DEFAULT_BONUS_REWARD_ID];
 };
 
 export const rollBonusRewardRoom = ({
@@ -453,18 +478,20 @@ export const resolveBonusRewardRoomByInstanceId = ({
     if (!instanceId.startsWith(prefix)) {
         return null;
     }
-    const rewardId = instanceId.slice(prefix.length) as BonusRewardId;
-    const definition = BONUS_REWARD_CATALOG[rewardId];
-    return definition ? bonusRewardInstanceForDefinition(definition, runSeed, rulesVersion, floor, safeLedger) : null;
+    const rewardId = instanceId.slice(prefix.length);
+    if (!isBonusRewardId(rewardId)) {
+        return null;
+    }
+    return bonusRewardInstanceForDefinition(BONUS_REWARD_CATALOG[rewardId], runSeed, rulesVersion, floor, safeLedger);
 };
 
 const gainFavor = (run: RunState, progress: number): RunState => {
-    const total = run.relicFavorProgress + progress;
+    const total = runNonNegativeInteger(run.relicFavorProgress) + runNonNegativeInteger(progress);
     const bonusPicks = Math.floor(total / 3);
     return {
         ...run,
-        bonusRelicPicksNextOffer: run.bonusRelicPicksNextOffer + bonusPicks,
-        favorBonusRelicPicksNextOffer: run.favorBonusRelicPicksNextOffer + bonusPicks,
+        bonusRelicPicksNextOffer: runNonNegativeInteger(run.bonusRelicPicksNextOffer) + bonusPicks,
+        favorBonusRelicPicksNextOffer: runNonNegativeInteger(run.favorBonusRelicPicksNextOffer) + bonusPicks,
         relicFavorProgress: total % 3
     };
 };
@@ -474,7 +501,7 @@ const shouldApplyShrineEchoTreasurePayout = (
     ledger: BonusRewardLedger,
     reward: BonusRewardInstance
 ): boolean =>
-    (run.relicIds ?? []).includes('shrine_echo') &&
+    runRelicIds(run.relicIds).includes('shrine_echo') &&
     reward.roomKind === 'treasure_chest' &&
     ledger.openedTreasureRooms === 0;
 
@@ -513,9 +540,6 @@ const pushUnique = (labels: string[], label: string): void => {
         labels.push(label);
     }
 };
-
-const nonNegativeFiniteAmount = (value: unknown): number =>
-    typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.floor(value)) : 0;
 
 const formatRewardUnit = (amount: number, singular: string, plural = `${singular}s`): string =>
     amount === 1 ? singular : plural;
@@ -576,8 +600,14 @@ const REWARD_PERK_ARCADE_CUES: Record<RewardPerkId, string> = {
     hazard_banish_per_floor: 'Trap erased'
 };
 
+const isRewardPerkId = (id: unknown): id is RewardPerkId =>
+    typeof id === 'string' && Object.prototype.hasOwnProperty.call(REWARD_PERK_LABELS, id);
+
+export const normalizeRewardPerkIds = (value: unknown): RewardPerkId[] =>
+    Array.isArray(value) ? value.filter(isRewardPerkId) : [];
+
 export const getRewardPerkRows = (run: Pick<RunState, 'rewardPerkIds'>) =>
-    (run.rewardPerkIds ?? []).map((id) => ({
+    normalizeRewardPerkIds(run.rewardPerkIds).map((id) => ({
         id,
         label: REWARD_PERK_LABELS[id],
         detail: REWARD_PERK_DETAILS[id],
@@ -620,7 +650,7 @@ const rewardPerkReadiness = (
 ): Pick<RewardPerkReadinessRow, 'meterPercent' | 'readiness' | 'readinessDetail' | 'readinessLabel'> => {
     switch (id) {
         case 'free_first_swap_per_floor': {
-            const freeSetupAvailable = run.regionShuffleFreeThisFloor || run.regionShuffleCharges > 0;
+            const freeSetupAvailable = run.regionShuffleFreeThisFloor || runNonNegativeInteger(run.regionShuffleCharges) > 0;
             return freeSetupAvailable
                 ? {
                       meterPercent: 100,
@@ -643,7 +673,7 @@ const rewardPerkReadiness = (
                 readinessLabel: 'Needs Echo + Conduit'
             };
         case 'trait_streak_toolkit': {
-            const streak = Math.max(0, Math.floor(run.stats.currentStreak ?? 0));
+            const streak = normalizeSessionStats(run.stats).currentStreak;
             const progress = Math.min(2, streak);
             return progress >= 2
                 ? {
@@ -723,11 +753,12 @@ const applyBonusRewardPayout = (
     const gained: string[] = [];
     const capped: string[] = [];
     let cappedPickupParts = 0;
-    const shopGoldGain = nonNegativeFiniteAmount(payout.shopGold);
-    const scoreGain = nonNegativeFiniteAmount(payout.score);
-    const favorProgressGain = nonNegativeFiniteAmount(payout.relicFavorProgress);
-    const comboShardGain = nonNegativeFiniteAmount(payout.comboShards);
-    const currentComboShards = nonNegativeFiniteAmount(run.stats.comboShards);
+    const shopGoldGain = runNonNegativeInteger(payout.shopGold);
+    const scoreGain = runNonNegativeInteger(payout.score);
+    const favorProgressGain = runNonNegativeInteger(payout.relicFavorProgress);
+    const comboShardGain = runNonNegativeInteger(payout.comboShards);
+    const stats = normalizeSessionStats(run.stats);
+    const currentComboShards = stats.comboShards;
     const nextComboShards = Math.min(MAX_COMBO_SHARDS, currentComboShards + comboShardGain);
     if (comboShardGain > 0) {
         const actual = nextComboShards - currentComboShards;
@@ -740,13 +771,15 @@ const applyBonusRewardPayout = (
         }
     }
 
+    let nextRewardPerkIds = normalizeRewardPerkIds(run.rewardPerkIds);
     let nextRun: RunState = {
         ...run,
-        shopGold: nonNegativeFiniteAmount(run.shopGold) + shopGoldGain,
+        rewardPerkIds: nextRewardPerkIds,
+        shopGold: runNonNegativeInteger(run.shopGold) + shopGoldGain,
         stats: {
-            ...run.stats,
-            totalScore: nonNegativeFiniteAmount(run.stats.totalScore) + scoreGain,
-            currentLevelScore: nonNegativeFiniteAmount(run.stats.currentLevelScore) + scoreGain,
+            ...stats,
+            totalScore: stats.totalScore + scoreGain,
+            currentLevelScore: stats.currentLevelScore + scoreGain,
             comboShards: nextComboShards
         }
     };
@@ -760,21 +793,21 @@ const applyBonusRewardPayout = (
         nextRun = gainFavor(nextRun, favorProgressGain);
         gained.push(`+${favorProgressGain} relic Favor progress`);
     }
-    for (const perkId of payout.rewardPerks ?? []) {
-        if ((nextRun.rewardPerkIds ?? []).includes(perkId)) {
+    for (const perkId of normalizeRewardPerkIds(payout.rewardPerks)) {
+        if (nextRewardPerkIds.includes(perkId)) {
             continue;
         }
-        nextRun = { ...nextRun, rewardPerkIds: [...(nextRun.rewardPerkIds ?? []), perkId] };
+        nextRewardPerkIds = [...nextRewardPerkIds, perkId];
+        nextRun = { ...nextRun, rewardPerkIds: nextRewardPerkIds };
         gained.push(`Unlock ${REWARD_PERK_LABELS[perkId]}`);
         gained.push(`Perk next: ${REWARD_PERK_NEXT_CUES[perkId]}`);
     }
-    for (const [itemId, amount] of Object.entries(payout.inventoryItems ?? {}) as [RunInventoryItemId, number][]) {
-        const safeAmount = nonNegativeFiniteAmount(amount);
-        if (safeAmount <= 0) {
+    for (const { id: itemId, amount } of getRunInventoryItemPayoutRows(payout.inventoryItems)) {
+        if (amount <= 0) {
             continue;
         }
-        const preview = getRunInventoryGainFeedback(nextRun, itemId, safeAmount);
-        nextRun = gainRunInventoryItem(nextRun, itemId, safeAmount);
+        const preview = getRunInventoryGainFeedback(nextRun, itemId, amount);
+        nextRun = gainRunInventoryItem(nextRun, itemId, amount);
         if (preview.gainedLabel) {
             gained.push(preview.gainedLabel);
         }
@@ -795,8 +828,8 @@ const applyBonusRewardPayout = (
             ...nextRun,
             stats: {
                 ...nextRun.stats,
-                totalScore: nextRun.stats.totalScore + overflowScore,
-                currentLevelScore: nextRun.stats.currentLevelScore + overflowScore
+                totalScore: runNonNegativeInteger(nextRun.stats.totalScore) + overflowScore,
+                currentLevelScore: runNonNegativeInteger(nextRun.stats.currentLevelScore) + overflowScore
             }
         };
         gained.push(`+${overflowScore} overflow score`);
@@ -904,13 +937,16 @@ export const claimBonusReward = (
 };
 
 export const getBonusRewardRows = () =>
-    Object.values(BONUS_REWARD_CATALOG).map((reward) => ({
-        id: reward.id,
-        roomKind: reward.roomKind,
-        label: reward.label,
-        trigger: reward.trigger,
-        eligibility: reward.eligibility,
-        antiGrindLimit: `${reward.antiGrindLimit.maxClaims} per run`,
-        summaryText: reward.summaryText,
-        traitBuildLabels: [...(reward.traitBuildLabels ?? [])]
-    }));
+    BONUS_REWARD_IDS.map((id) => {
+        const reward = BONUS_REWARD_CATALOG[id];
+        return {
+            id: reward.id,
+            roomKind: reward.roomKind,
+            label: reward.label,
+            trigger: reward.trigger,
+            eligibility: reward.eligibility,
+            antiGrindLimit: `${reward.antiGrindLimit.maxClaims} per run`,
+            summaryText: reward.summaryText,
+            traitBuildLabels: [...(reward.traitBuildLabels ?? [])]
+        };
+    });

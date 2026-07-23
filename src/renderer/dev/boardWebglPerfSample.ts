@@ -22,12 +22,24 @@ const SAMPLE_FRAMES = 120;
 export const boardWebglPerfSampleEnabled = (): boolean =>
     import.meta.env.DEV &&
     typeof window !== 'undefined' &&
-    window.localStorage.getItem('perfBoard') === '1';
+    (() => {
+        try {
+            return window.localStorage.getItem('perfBoard') === '1';
+        } catch {
+            return false;
+        }
+    })();
 
 export const boardWebglPerfSampleVerboseEnabled = (): boolean =>
     import.meta.env.DEV &&
     typeof window !== 'undefined' &&
-    window.localStorage.getItem('perfBoardVerbose') === '1';
+    (() => {
+        try {
+            return window.localStorage.getItem('perfBoardVerbose') === '1';
+        } catch {
+            return false;
+        }
+    })();
 
 export const boardWebglPerfSampleAccumulate = (deltaMs: number): void => {
     if (!import.meta.env.DEV) {

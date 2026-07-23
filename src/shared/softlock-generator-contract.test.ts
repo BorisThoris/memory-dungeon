@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { buildBoard } from './board-build-rules';
 import { inspectRunFairness } from './board-inspection';
-import { GAME_RULES_VERSION, type BoardState, type Tile } from './contracts';
+import { GAME_RULES_VERSION, type BoardState, type EnemyHazardState, type Tile } from './contracts';
 import { advanceToNextLevel } from './next-floor-transition-rules';
 import { inspectDungeonRunMapProgression } from './run-map';
 import { getRunShopStockPlan } from './shop-rules';
@@ -11,6 +11,8 @@ import {
     createClearedBoardFairnessProjection,
     createFinalPairFairnessProjection,
     createGeneratedBoardSolverRun,
+    createShopStockInspectionRun,
+    DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS,
     formatSoftlockGeneratorFailure,
     runSoftlockGeneratorContract,
     solveGeneratedBoardByExhaustingPairs
@@ -22,6 +24,19 @@ const tile = (id: string, pairKey: string, state: Tile['state'] = 'hidden'): Til
     state,
     symbol: id,
     label: id
+});
+
+const hazard = (id: string, currentTileId: string, nextTileId: string): EnemyHazardState => ({
+    id,
+    kind: 'sentinel',
+    label: id,
+    currentTileId,
+    nextTileId,
+    pattern: 'patrol',
+    state: 'revealed',
+    damage: 1,
+    hp: 1,
+    maxHp: 1
 });
 
 const projectionBoard = (overrides: Partial<BoardState> = {}): BoardState => ({
@@ -51,6 +66,17 @@ const projectionBoard = (overrides: Partial<BoardState> = {}): BoardState => ({
 });
 
 describe('softlock generator contract', () => {
+    it('keeps route-pressure scenarios cycling through authored route types', () => {
+        const routePressure = DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS.find((scenario) => scenario.id === 'route_pressure');
+
+        expect(routePressure).toBeTruthy();
+        expect(
+            routePressure?.seeds.flatMap((seed) =>
+                routePressure.floors.map((floor) => routePressure.optionsForFloor({ seed, floor }).routeCardPlan?.routeType)
+            )
+        ).toEqual(expect.arrayContaining(['safe', 'greed', 'mystery']));
+    });
+
     it('checks seeded floors across locks, shops, traits, hazards, bosses, and final-pair projections', () => {
         const result = runSoftlockGeneratorContract();
 
@@ -77,7 +103,7 @@ describe('softlock generator contract', () => {
         for (const [key, count] of Object.entries(result.coverage)) {
             expect(count, `${key} coverage`).toBeGreaterThan(0);
         }
-    });
+    }, 15_000);
 
     it('uses generated-board run context when checking locked-exit shop stock', () => {
         const board = projectionBoard({
@@ -108,6 +134,17 @@ describe('softlock generator contract', () => {
         expect(run.board?.level).toBe(6);
         expect(run.dungeonRun.currentFloor).toBe(6);
         expect(plan.itemIds[0]).toBe('iron_key');
+
+        const malformedStatsRun = createShopStockInspectionRun(
+            {
+                ...run,
+                stats: Number.NaN as unknown as typeof run.stats
+            },
+            board
+        );
+        expect(malformedStatsRun.stats.highestLevel).toBe(6);
+        expect(malformedStatsRun.stats.totalScore).toBe(0);
+        expect(getRunShopStockPlan(malformedStatsRun).itemIds[0]).toBe('iron_key');
     });
 
     it('executes generated boards through pair exhaustion and primary exit activation', () => {
@@ -213,6 +250,40 @@ describe('softlock generator contract', () => {
         ]).failures.map(formatSoftlockGeneratorFailure)).toEqual([]);
     });
 
+    it('normalizes malformed projection enemy hazards before contract checks', () => {
+        const board = projectionBoard({
+            enemyHazards: Number.NaN as unknown as BoardState['enemyHazards']
+        });
+
+        const finalPairProjection = createFinalPairFairnessProjection(board);
+        const clearedProjection = createClearedBoardFairnessProjection(board);
+
+        expect(finalPairProjection?.enemyHazards).toEqual([]);
+        expect(clearedProjection.enemyHazards).toEqual([]);
+        expect(createGeneratedBoardSolverRun(finalPairProjection!, 130_112).board?.enemyHazards).toEqual([]);
+    });
+
+    it('keeps only final-pair enemy hazards active in final-pair projections', () => {
+        const board = projectionBoard({
+            tiles: projectionBoard().tiles.map((candidate) =>
+                candidate.pairKey === 'key'
+                    ? { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'iron' as const }
+                    : candidate
+            ),
+            enemyHazards: [
+                hazard('on-final', 'key-a', 'key-b'),
+                hazard('off-final', 'a1', 'a2')
+            ]
+        });
+
+        const projected = createFinalPairFairnessProjection(board);
+
+        expect(projected?.enemyHazards).toMatchObject([
+            { id: 'on-final', state: 'revealed', hp: 1 },
+            { id: 'off-final', state: 'defeated', hp: 0 }
+        ]);
+    });
+
     it('uses the primary exit tile lock when granting final-pair projection resources', () => {
         const board = projectionBoard({
             tiles: projectionBoard().tiles.map((candidate) =>
@@ -230,6 +301,28 @@ describe('softlock generator contract', () => {
 
     it('preserves key kind when granting final-pair projection resources', () => {
         const board = projectionBoard({
+            tiles: projectionBoard().tiles.map((candidate) => {
+                if (candidate.pairKey === 'key') {
+                    return { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'treasure' as const };
+                }
+                if (candidate.pairKey === '__exit__') {
+                    return { ...candidate, dungeonExitLockKind: 'treasure' as const };
+                }
+                return candidate;
+            })
+        });
+
+        const projected = createFinalPairFairnessProjection(board);
+
+        expect(projected?.dungeonKeysHeld).toBe(1);
+        expect(projected?.dungeonKeysHeldByKind).toEqual({ treasure: 1 });
+    });
+
+    it('normalizes malformed projection resource counters before granting fallbacks', () => {
+        const board = projectionBoard({
+            dungeonKeysHeld: Number.POSITIVE_INFINITY,
+            dungeonKeysHeldByKind: { treasure: Number.NaN },
+            dungeonLeverCount: Number.POSITIVE_INFINITY,
             tiles: projectionBoard().tiles.map((candidate) => {
                 if (candidate.pairKey === 'key') {
                     return { ...candidate, dungeonCardKind: 'key' as const, dungeonKeyKind: 'treasure' as const };

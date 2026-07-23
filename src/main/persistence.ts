@@ -1,5 +1,9 @@
 import type { AchievementId, SaveData, Settings } from '../shared/contracts';
-import { normalizeSaveData, normalizeUnknownSaveData, normalizeUnknownSettings } from '../shared/save-data';
+import {
+    normalizeSaveData,
+    normalizeUnknownSaveDataOrThrow,
+    normalizeUnknownSettingsOrThrow
+} from '../shared/save-data';
 import { ElectronStoreSaveRepository, type SaveRepository } from './saveRepository';
 
 type PersistenceWriteErrorCode = 'quota' | 'permission' | 'busy' | 'unknown';
@@ -44,7 +48,7 @@ export class PersistenceService {
     }
 
     getSaveData(): SaveData {
-        return normalizeUnknownSaveData(this.repository.getSaveData());
+        return normalizeUnknownSaveDataOrThrow(this.repository.getSaveData());
     }
 
     getSettings(): Settings {
@@ -52,7 +56,7 @@ export class PersistenceService {
     }
 
     saveSettings(settings: unknown): SaveData {
-        const normalizedSettings = normalizeUnknownSettings(settings);
+        const normalizedSettings = normalizeUnknownSettingsOrThrow(settings);
         const nextSave = normalizeSaveData({
             ...this.getSaveData(),
             settings: normalizedSettings
@@ -63,13 +67,20 @@ export class PersistenceService {
     }
 
     saveGame(saveData: unknown): SaveData {
-        const nextSave = normalizeUnknownSaveData(saveData);
+        const normalizedSave = normalizeUnknownSaveDataOrThrow(saveData);
+        const nextSave = normalizeSaveData({
+            ...normalizedSave,
+            settings: this.getSettings()
+        });
         this.commitSaveData(nextSave);
         return nextSave;
     }
 
     unlockAchievement(achievementId: AchievementId): SaveData {
         const saveData = this.getSaveData();
+        if (saveData.achievements[achievementId]) {
+            return saveData;
+        }
         const nextSave = normalizeSaveData({
             ...saveData,
             achievements: {

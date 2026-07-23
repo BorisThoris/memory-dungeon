@@ -9,6 +9,7 @@ import {
     type RunState,
     type Tile
 } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
 
 export const FORGOTTEN_TILE_LEDGER_LIMIT = 16;
 
@@ -44,7 +45,7 @@ export const tileHasRecallClue = (tile: Tile): boolean =>
     tile.scoutRevealSource != null ||
     tile.dungeonCardState === 'revealed';
 
-export const normalizeRecallFocus = (focus: number): number => clamp(focus, 0, RECALL_FOCUS_MAX);
+export const normalizeRecallFocus = (focus: number): number => clamp(runNonNegativeInteger(focus), 0, RECALL_FOCUS_MAX);
 
 export const calculateRecallMatchBonus = (run: RunState, tiles: readonly Tile[]): number => {
     if (run.gameMode === 'puzzle') {
@@ -64,11 +65,12 @@ export const addPendingMemorizeBonusForLostLives = (
     pendingMemorizeBonusMs: number,
     lostLives: number
 ): number =>
-    lostLives <= 0
-        ? pendingMemorizeBonusMs
+    runNonNegativeInteger(lostLives) <= 0
+        ? runNonNegativeInteger(pendingMemorizeBonusMs)
         : Math.min(
               MAX_PENDING_MEMORIZE_BONUS_MS,
-              pendingMemorizeBonusMs + MEMORIZE_BONUS_PER_LIFE_LOST_MS * lostLives
+              runNonNegativeInteger(pendingMemorizeBonusMs) +
+                  MEMORIZE_BONUS_PER_LIFE_LOST_MS * runNonNegativeInteger(lostLives)
           );
 
 export const getMemorizePhaseRecallFocusForRoute = (
@@ -84,8 +86,9 @@ export const getMemorizePhaseRecallFocusForRoute = (
         return INITIAL_RECALL_FOCUS;
     }
 
-    const recallMatches = previous.recallMatches ?? 0;
-    const recallMistakes = previous.recallMistakes ?? 0;
+    const recallMatches = runNonNegativeInteger(previous.recallMatches);
+    const recallMistakes = runNonNegativeInteger(previous.recallMistakes);
+    const recallBonusScore = runNonNegativeInteger(previous.recallBonusScore);
     let focus =
         recallMistakes > 0
             ? 0
@@ -97,7 +100,7 @@ export const getMemorizePhaseRecallFocusForRoute = (
         focus += 1;
     } else if (currentRouteType === 'greed' && recallMistakes > 0) {
         focus -= 1;
-    } else if (currentRouteType === 'mystery' && recallMistakes === 0 && (previous.recallBonusScore ?? 0) > 0) {
+    } else if (currentRouteType === 'mystery' && recallMistakes === 0 && recallBonusScore > 0) {
         focus += 1;
     }
 

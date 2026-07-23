@@ -3,7 +3,7 @@ import type { GraphicsQualityPreset } from '../../shared/contracts';
 import { FEATURE_CARD_OPENTYPE_GLYPHS } from '../../shared/feature-flags';
 
 let cachedFont: opentype.Font | null = null;
-let loadStarted = false;
+let loadPromise: Promise<void> | null = null;
 const listeners = new Set<() => void>();
 
 export const subscribeCardRankFontLoaded = (fn: () => void): (() => void) => {
@@ -15,7 +15,11 @@ export const subscribeCardRankFontLoaded = (fn: () => void): (() => void) => {
 
 const notify = (): void => {
     for (const fn of listeners) {
-        fn();
+        try {
+            fn();
+        } catch {
+            // Texture invalidation observers must not invalidate the loaded font.
+        }
     }
 };
 
@@ -23,12 +27,16 @@ const notify = (): void => {
  * Preloads Source Sans 3 800 for vector rank drawing when enabled + high quality.
  * Safe to call multiple times; notifies subscribers once parsed.
  */
-export const preloadCardRankOpentypeFont = (graphicsQuality: GraphicsQualityPreset): void => {
-    if (!FEATURE_CARD_OPENTYPE_GLYPHS || graphicsQuality !== 'high' || loadStarted) {
-        return;
+export const preloadCardRankOpentypeFont = (graphicsQuality: GraphicsQualityPreset): Promise<void> => {
+    if (!FEATURE_CARD_OPENTYPE_GLYPHS || graphicsQuality !== 'high' || cachedFont) {
+        return Promise.resolve();
     }
-    loadStarted = true;
-    void (async () => {
+
+    if (loadPromise) {
+        return loadPromise;
+    }
+
+    loadPromise = (async () => {
         try {
             const { default: fontUrl } = await import(
                 '@fontsource/source-sans-3/files/source-sans-3-latin-800-normal.woff2?url'
@@ -43,7 +51,17 @@ export const preloadCardRankOpentypeFont = (graphicsQuality: GraphicsQualityPres
         } catch {
             cachedFont = null;
         }
-    })();
+    })().finally(() => {
+        loadPromise = null;
+    });
+
+    return loadPromise;
+};
+
+export const resetCardRankOpentypeFontForTests = (): void => {
+    cachedFont = null;
+    loadPromise = null;
+    listeners.clear();
 };
 
 /**

@@ -158,21 +158,23 @@ export interface ChapterActBiomeDefinition {
     gateRule: string;
 }
 
+const SURVEY_GROUNDS_CHAPTER_ACT_BIOME = {
+    actId: 'act_1_survey',
+    actTitle: 'Act I — Survey Grounds',
+    firstCycleFloor: 1,
+    lastCycleFloor: 4,
+    biomeId: 'lantern_academy',
+    biomeTitle: 'Lantern Academy',
+    biomeTone: 'Readable halls, early treasure, and silhouette onboarding.',
+    paletteHook: 'warm_lantern_gold',
+    audioHook: 'lantern_study_pulse',
+    pressureCue: 'Readable recall pressure with one early reward reset.',
+    routePreview: 'Expect readable halls, a speed check, treasure relief, then silhouette pressure.',
+    gateRule: 'Floors 1-4 of each endless cycle.'
+} as const satisfies ChapterActBiomeDefinition;
+
 export const CHAPTER_ACT_BIOME_STRUCTURE: readonly ChapterActBiomeDefinition[] = [
-    {
-        actId: 'act_1_survey',
-        actTitle: 'Act I — Survey Grounds',
-        firstCycleFloor: 1,
-        lastCycleFloor: 4,
-        biomeId: 'lantern_academy',
-        biomeTitle: 'Lantern Academy',
-        biomeTone: 'Readable halls, early treasure, and silhouette onboarding.',
-        paletteHook: 'warm_lantern_gold',
-        audioHook: 'lantern_study_pulse',
-        pressureCue: 'Readable recall pressure with one early reward reset.',
-        routePreview: 'Expect readable halls, a speed check, treasure relief, then silhouette pressure.',
-        gateRule: 'Floors 1-4 of each endless cycle.'
-    },
+    SURVEY_GROUNDS_CHAPTER_ACT_BIOME,
     {
         actId: 'act_2_shadow',
         actTitle: 'Act II — Shadow Archive',
@@ -202,6 +204,9 @@ export const CHAPTER_ACT_BIOME_STRUCTURE: readonly ChapterActBiomeDefinition[] =
         gateRule: 'Floors 9-12 of each endless cycle.'
     }
 ] as const;
+
+const DEFAULT_CHAPTER_ACT_BIOME_DEFINITION: ChapterActBiomeDefinition =
+    SURVEY_GROUNDS_CHAPTER_ACT_BIOME;
 
 export const ENDLESS_CYCLE_FLOOR_COUNT = 12;
 
@@ -269,10 +274,11 @@ export interface ChapterActBiomePresentation {
 export const getChapterActBiomeForCycleFloor = (
     cycleFloor: number
 ): (ChapterActBiomeDefinition & { actFloorNumber: number; actFloorCount: number }) => {
-    const normalized = ((Math.max(1, cycleFloor) - 1) % ENDLESS_CYCLE_FLOOR_COUNT) + 1;
+    const safeCycleFloor = Number.isFinite(cycleFloor) ? cycleFloor : 1;
+    const normalized = ((Math.max(1, safeCycleFloor) - 1) % ENDLESS_CYCLE_FLOOR_COUNT) + 1;
     const definition = CHAPTER_ACT_BIOME_STRUCTURE.find(
         (act) => normalized >= act.firstCycleFloor && normalized <= act.lastCycleFloor
-    )!;
+    ) ?? DEFAULT_CHAPTER_ACT_BIOME_DEFINITION;
     return {
         ...definition,
         actFloorNumber: normalized - definition.firstCycleFloor + 1,
@@ -363,6 +369,8 @@ const ENDLESS_FLOOR_CYCLE: FloorScheduleEntry[] = [
     makeEntry(11, 'parasite_tithe', 'scholar_style', ['score_parasite'], 'normal'),
     makeEntry(12, 'spotlight_hunt', 'cursed_last', ['shifting_spotlight'], 'normal')
 ];
+
+const DEFAULT_ENDLESS_FLOOR_ENTRY = ENDLESS_FLOOR_CYCLE[0] ?? EMPTY_FLOOR_SCHEDULE_ENTRY;
 
 const FLOOR_ARCHETYPE_FREQUENCY_BANDS: readonly FloorArchetypeFrequencyBand[] = [
     { role: 'baseline', minPerCycle: 1, maxPerCycle: 2 },
@@ -571,8 +579,9 @@ export const pickFloorScheduleEntry = (
     if (gameMode !== 'endless' || rulesVersion < FLOOR_SCHEDULE_RULES_VERSION) {
         return EMPTY_FLOOR_SCHEDULE_ENTRY;
     }
-    const idx = Math.max(0, level - 1) % ENDLESS_FLOOR_CYCLE.length;
-    const base = ENDLESS_FLOOR_CYCLE[idx]!;
+    const safeLevel = Number.isFinite(level) ? level : 1;
+    const idx = Math.max(0, safeLevel - 1) % ENDLESS_FLOOR_CYCLE.length;
+    const base = ENDLESS_FLOOR_CYCLE[idx] ?? DEFAULT_ENDLESS_FLOOR_ENTRY;
     const rng = createMulberry32(hashStringToSeed(`floorSchedule:${rulesVersion}:${runSeed}:${level}`));
     /** Optional micro-variation: swap in distraction_channel on ~1/4 boss floors (seeded). */
     if (base.floorTag === 'boss' && rng() < 0.25) {

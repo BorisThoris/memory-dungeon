@@ -8,12 +8,14 @@ import {
     MIMIC_CACHE_BLIND_SHOP_GOLD_REWARD,
     MIMIC_CACHE_CONTROLLED_SCORE_REWARD,
     MIMIC_CACHE_CONTROLLED_SHOP_GOLD_REWARD,
-    PARASITE_VESSEL_FALLBACK_SCORE_REWARD
+    PARASITE_VESSEL_FALLBACK_SCORE_REWARD,
+    type RunState
 } from './contracts';
 import { createNewRun } from './game-core';
 import {
     ROUTE_CARD_GREED_SCORE_REWARD,
-    ROUTE_CARD_GREED_SHOP_GOLD_REWARD
+    ROUTE_CARD_GREED_SHOP_GOLD_REWARD,
+    ROUTE_CARD_MYSTERY_SHOP_GOLD_REWARD
 } from './route-choice-rules';
 import { emptyRouteCardReward, getRouteCardReward } from './route-card-reward-rules';
 
@@ -31,6 +33,17 @@ describe('route card reward rules', () => {
         expect(getRouteCardReward(run, 1, 'a', 'guard_cache')).toMatchObject({
             guardTokens: 0,
             safeHazardWardCharges: 1
+        });
+        expect(
+            getRouteCardReward(
+                { ...run, stats: { ...run.stats, guardTokens: Number.POSITIVE_INFINITY } },
+                1,
+                'a',
+                'guard_cache'
+            )
+        ).toMatchObject({
+            guardTokens: 1,
+            safeHazardWardCharges: 0
         });
     });
 
@@ -72,5 +85,52 @@ describe('route card reward rules', () => {
         expect(getRouteCardReward({ ...run, parasiteFloors: 1 }, 1, 'a', 'parasite_vessel')).toMatchObject({
             relicFavor: 1
         });
+        expect(
+            getRouteCardReward(
+                { ...run, stats: { ...run.stats, comboShards: Number.POSITIVE_INFINITY } },
+                1,
+                'a',
+                'catalyst_altar'
+            )
+        ).toMatchObject({
+            score: CATALYST_ALTAR_FALLBACK_SCORE_REWARD
+        });
+        expect(getRouteCardReward({ ...run, parasiteFloors: Number.NaN }, 1, 'a', 'parasite_vessel')).toMatchObject({
+            score: PARASITE_VESSEL_FALLBACK_SCORE_REWARD
+        });
+    });
+
+    it('normalizes malformed stat records before stateful route-card rewards', () => {
+        const run = {
+            ...createNewRun(0),
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        expect(getRouteCardReward(run, 1, 'a', 'guard_cache')).toMatchObject({
+            guardTokens: 1,
+            safeHazardWardCharges: 0
+        });
+        expect(getRouteCardReward(run, 1, 'a', 'catalyst_altar')).toMatchObject({
+            score: CATALYST_ALTAR_FALLBACK_SCORE_REWARD
+        });
+    });
+
+    it('selects each deterministic mystery veil reward lane', () => {
+        const seen = new Set<string>();
+
+        for (let seed = 0; seed < 100 && seen.size < 3; seed += 1) {
+            const reward = getRouteCardReward({ ...createNewRun(0), runSeed: seed }, 3, `pair-${seed}`, 'mystery_veil');
+            if (reward.shopGold === ROUTE_CARD_MYSTERY_SHOP_GOLD_REWARD) {
+                seen.add('shop_gold');
+            }
+            if (reward.comboShards === 1) {
+                seen.add('combo_shard');
+            }
+            if (reward.relicFavor === 1) {
+                seen.add('relic_favor');
+            }
+        }
+
+        expect(seen).toEqual(new Set(['shop_gold', 'combo_shard', 'relic_favor']));
     });
 });

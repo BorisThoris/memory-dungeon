@@ -1,7 +1,11 @@
 import type { DungeonBossId, DungeonRunMapState, DungeonRunNode, RunState, SaveData, RunSummary } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
-import { getRunBuildProfile } from './relics';
+import { getRunBuildProfile, runMutatorIds, runRelicIds } from './relics';
+import { runArrayCount } from './run-array-guards';
+import { getDungeonKeyTotal } from './run-inventory';
 import { getRepairedSelectedDungeonNode, repairDungeonRunMapProgression } from './run-map';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type RunHistoryPersistence = 'persisted_summary' | 'ephemeral_run' | 'derived_export';
 
@@ -48,20 +52,23 @@ export interface RunHistoryEntry {
 
 export const MAX_DUNGEON_JOURNAL_ROWS = 8;
 
+const getRunHistoryBuildProfile = (run: RunState) => getRunBuildProfile({ relicIds: runRelicIds(run.relicIds) });
+
 const getPersistedSummaryPayoffStack = (
     summary: RunSummary | null
 ): { label: 'Combo burst' | 'Payoff burst' | 'Payoff stack' | 'Super stack'; lanes: number } | null => {
     if (!summary) {
         return null;
     }
-    const hasChainPayoff = summary.bestStreak >= 4;
-    const hasComboPayoff = summary.bestStreak >= 10;
+    const bestStreak = runNonNegativeInteger(summary.bestStreak);
+    const hasChainPayoff = bestStreak >= 4;
+    const hasComboPayoff = bestStreak >= 10;
     const payoffLanes = [
         hasChainPayoff,
         summary.payoffRoutePaid === true,
-        (summary.payoffPickupTotal ?? 0) > 0,
-        summary.perfectClears > 0,
-        (summary.relicIds?.length ?? 0) + (summary.payoffRewardPerkCount ?? 0) > 0
+        runNonNegativeInteger(summary.payoffPickupTotal) > 0,
+        runNonNegativeInteger(summary.perfectClears) > 0,
+        runRelicIds(summary.relicIds).length + runNonNegativeInteger(summary.payoffRewardPerkCount) > 0
     ].filter(Boolean).length;
     if (payoffLanes < 3) {
         return null;
@@ -95,6 +102,13 @@ const contractLabel = (run: Pick<RunState, 'activeContract' | 'practiceMode'>): 
 const idLabel = (id: string | null | undefined): string | null =>
     id ? id.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()) : null;
 
+const summaryScoreCopy = (summary: RunSummary): string => {
+    const totalScore = runNonNegativeInteger(summary.totalScore);
+    const highestLevel = runNonNegativeInteger(summary.highestLevel);
+    const levelsCleared = runNonNegativeInteger(summary.levelsCleared);
+    return `${totalScore} score · floor ${highestLevel} · ${levelsCleared} clears`;
+};
+
 const currentDungeonNode = (dungeonRun: DungeonRunMapState): DungeonRunNode | null =>
     dungeonRun.nodes.find((node) => node.id === dungeonRun.currentNodeId) ?? null;
 
@@ -108,12 +122,13 @@ const bossIdForRun = (run: RunState): DungeonBossId | null =>
     null;
 
 export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] => {
-    if (run.gameMode !== 'endless' || run.dungeonRun.nodes.length === 0) {
+    if (run.gameMode !== 'endless' || !Array.isArray(run.dungeonRun?.nodes) || run.dungeonRun.nodes.length === 0) {
         return [];
     }
 
     const dungeonRun = repairDungeonRunMapProgression(run.dungeonRun);
     const rows: RunHistoryJournalRow[] = [];
+    const stats = normalizeSessionStats(run.stats);
     const currentNode = currentDungeonNode(dungeonRun);
     const selectedNode = getRepairedSelectedDungeonNode(dungeonRun);
     const clearedNodes = dungeonRun.nodes.filter((node) => node.status === 'cleared').length;
@@ -127,7 +142,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         run.board?.selectedGatewayRouteType ??
         run.board?.routeWorldProfile?.routeType ??
         null;
-    const keyCount = Object.values(run.dungeonKeys).reduce((sum, count) => sum + (count ?? 0), run.dungeonMasterKeys);
+    const keyCount = getDungeonKeyTotal(run.dungeonKeys) + runNonNegativeInteger(run.dungeonMasterKeys);
 
     rows.push({
         id: 'dungeon_node',
@@ -155,12 +170,12 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
         });
     }
 
-    if (bossId || run.dungeonEnemiesDefeated > 0 || run.board?.floorTag === 'boss') {
+    if (bossId || runNonNegativeInteger(run.dungeonEnemiesDefeated) > 0 || run.board?.floorTag === 'boss') {
         rows.push({
             id: 'dungeon_boss',
             label: 'Boss pressure',
             value: bossId ? idLabel(bossId)! : 'No active boss identity',
-            detail: `${run.dungeonEnemiesDefeated} enemies defeated this run; ${run.dungeonEnemiesDefeatedThisFloor} this floor.`,
+            detail: `${runNonNegativeInteger(run.dungeonEnemiesDefeated)} enemies defeated this run; ${runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor)} this floor.`,
             persistence: 'derived_export',
             exportSafe: true,
             offlineOnly: true
@@ -182,7 +197,7 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
             ]
                 .filter(Boolean)
                 .join(' / '),
-            detail: `${run.dungeonTrapsResolvedThisFloor} traps resolved this floor; ${run.dungeonGatewaysUsed} gateways used this run.`,
+            detail: `${runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor)} traps resolved this floor; ${runNonNegativeInteger(run.dungeonGatewaysUsed)} gateways used this run.`,
             persistence: 'derived_export',
             exportSafe: true,
             offlineOnly: true
@@ -192,19 +207,19 @@ export const buildDungeonJournalRows = (run: RunState): RunHistoryJournalRow[] =
     rows.push({
         id: 'dungeon_rewards',
         label: 'Dungeon rewards',
-        value: `${run.dungeonTreasuresOpened} treasures, ${keyCount} keys, ${run.shopGold} shop gold`,
-        detail: `${run.relicIds.length} relics carried; ${run.bonusRelicPicksNextOffer + run.favorBonusRelicPicksNextOffer} bonus relic picks banked.`,
+        value: `${runNonNegativeInteger(run.dungeonTreasuresOpened)} treasures, ${keyCount} keys, ${runNonNegativeInteger(run.shopGold)} shop gold`,
+        detail: `${runRelicIds(run.relicIds).length} relics carried; ${runNonNegativeInteger(run.bonusRelicPicksNextOffer) + runNonNegativeInteger(run.favorBonusRelicPicksNextOffer)} bonus relic picks banked.`,
         persistence: 'derived_export',
         exportSafe: true,
         offlineOnly: true
     });
 
-    if (run.status === 'gameOver' || run.lives <= 0) {
+    if (run.status === 'gameOver' || runNonNegativeInteger(run.lives) <= 0) {
         rows.push({
             id: 'dungeon_outcome',
             label: 'Run outcome',
-            value: run.lives <= 0 ? 'Defeated in the dungeon' : 'Run ended',
-            detail: `${run.enemyHazardHitsThisFloor} enemy hazard hits this floor; ${run.stats.bestStreak} best streak.`,
+            value: runNonNegativeInteger(run.lives) <= 0 ? 'Defeated in the dungeon' : 'Run ended',
+            detail: `${runNonNegativeInteger(run.enemyHazardHitsThisFloor)} enemy hazard hits this floor; ${stats.bestStreak} best streak.`,
             persistence: 'persisted_summary',
             exportSafe: true,
             offlineOnly: true
@@ -226,7 +241,7 @@ export const buildRunShareKey = (run: RunState): RunShareKey => {
         shareSupported,
         reason: shareSupported
             ? 'Local seed/rules/mode share recipe only; it does not include flip playback, route choices, or importable replay data.'
-            : 'Fixed/imported puzzle boards require their tile payload; do not invent a share key.',
+            : 'Fixed or caller-supplied puzzle boards require their tile payload; do not invent a share key.',
         seed,
         rulesVersion,
         localOnly: true,
@@ -238,10 +253,14 @@ export const buildRunReplayLink = buildRunShareKey;
 
 export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
     const summary = run.lastRunSummary;
-    const buildProfile = getRunBuildProfile(run);
+    const buildProfile = getRunHistoryBuildProfile(run);
+    const relicIds = runRelicIds(run.relicIds);
+    const mutatorIds = runMutatorIds(run.activeMutators);
+    const flipHistoryCount = runArrayCount(run.flipHistory);
+    const matchedPairKeyCount = runArrayCount(run.matchedPairKeysThisRun);
     const build: RunHistoryBuildSnapshot = {
-        relicIds: [...run.relicIds],
-        mutatorIds: [...run.activeMutators],
+        relicIds: [...relicIds],
+        mutatorIds: [...mutatorIds],
         contract: contractLabel(run),
         mode: run.gameMode
     };
@@ -250,9 +269,7 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
         {
             id: 'summary',
             label: 'Run summary',
-            value: summary
-                ? `${summary.totalScore} score · floor ${summary.highestLevel} · ${summary.levelsCleared} clears`
-                : 'No resolved summary yet',
+            value: summary ? summaryScoreCopy(summary) : 'No resolved summary yet',
             persistence: 'persisted_summary',
             exportSafe: true,
             offlineOnly: true
@@ -270,7 +287,7 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
             id: 'share',
             label: 'Share key',
             value: share.shareKey,
-            detail: `${run.flipHistory.length} flip ids are local-only; ${share.reason}`,
+            detail: `${flipHistoryCount} flip ids are local-only; ${share.reason}`,
             persistence: 'derived_export',
             exportSafe: share.shareSupported,
             offlineOnly: true
@@ -278,8 +295,8 @@ export const buildRunHistoryEntry = (run: RunState): RunHistoryEntry => {
         {
             id: 'encore',
             label: 'Encore keys',
-            value: `${run.flipHistory.length} tile ids kept until this run is dismissed`,
-            detail: `${run.matchedPairKeysThisRun.length} matched pair keys for local encore bonus.`,
+            value: `${flipHistoryCount} tile ids kept until this run is dismissed`,
+            detail: `${matchedPairKeyCount} matched pair keys for local encore bonus.`,
             persistence: 'ephemeral_run',
             exportSafe: false,
             offlineOnly: true
@@ -309,7 +326,7 @@ export const buildRunJournalEntry = (run: RunState): {
     localOnly: true;
 } => {
     const entry = buildRunHistoryEntry(run);
-    const buildProfile = getRunBuildProfile(run);
+    const buildProfile = getRunHistoryBuildProfile(run);
     return {
         journalId: entry.share.shareKey,
         buildSummary: buildProfile.primary
@@ -329,7 +346,7 @@ export const buildRunJournalRowsFromSave = (save: SaveData): RunHistoryJournalRo
             id: 'last_summary',
             label: 'Last run summary',
             value: summary
-                ? `${summary.gameMode ?? 'classic'} · ${summary.totalScore} score · floor ${summary.highestLevel}`
+                ? `${summary.gameMode ?? 'classic'} · ${runNonNegativeInteger(summary.totalScore)} score · floor ${runNonNegativeInteger(summary.highestLevel)}`
                 : 'No persisted run summary',
             persistence: 'persisted_summary',
             exportSafe: true
@@ -349,7 +366,7 @@ export const buildRunJournalRowsFromSave = (save: SaveData): RunHistoryJournalRo
         {
             id: 'encore_pairs',
             label: 'Encore pair keys',
-            value: `${save.playerStats?.encorePairKeysLastRun.length ?? 0} pair keys remembered locally`,
+            value: `${runArrayCount(save.playerStats?.encorePairKeysLastRun)} pair keys remembered locally`,
             persistence: 'persisted_summary',
             exportSafe: false
         }
@@ -366,9 +383,11 @@ export const buildRunHistoryExportString = (run: RunState): string => {
         .filter((row) => row.id.startsWith('dungeon_') && row.exportSafe)
         .slice(0, 3)
         .map((row) => `${row.label}: ${row.value}`);
+    const highestLevel = runNonNegativeInteger(summary.highestLevel);
+    const totalScore = runNonNegativeInteger(summary.totalScore);
     return [
-        `Run ${summary.gameMode ?? 'classic'} floor ${summary.highestLevel}`,
-        `${summary.totalScore} local score`,
+        `Run ${summary.gameMode ?? 'classic'} floor ${highestLevel}`,
+        `${totalScore} local score`,
         `build ${entry.build.relicIds.length} relics/${entry.build.mutatorIds.length} mutators`,
         ...dungeonRows,
         entry.share.shareSupported ? `share ${entry.share.shareKey}` : 'share unavailable',

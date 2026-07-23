@@ -91,6 +91,32 @@ describe('recall rules', () => {
         );
     });
 
+    it('normalizes malformed recall counters before deriving focus and recovery bonus', () => {
+        expect(normalizeRecallFocus(Number.NaN)).toBe(0);
+        expect(normalizeRecallFocus(Number.POSITIVE_INFINITY)).toBe(0);
+        expect(addPendingMemorizeBonusForLostLives(Number.NaN, Number.POSITIVE_INFINITY)).toBe(0);
+        expect(
+            getMemorizePhaseRecallFocusForRoute(
+                runWithLastResult({
+                    recallMatches: Number.POSITIVE_INFINITY,
+                    recallMistakes: Number.NaN,
+                    recallBonusScore: Number.POSITIVE_INFINITY
+                }),
+                'mystery'
+            )
+        ).toBe(INITIAL_RECALL_FOCUS);
+        expect(
+            getMemorizePhaseRecallFocusForRoute(
+                runWithLastResult({
+                    recallMatches: Number.NaN,
+                    recallMistakes: Number.POSITIVE_INFINITY,
+                    recallBonusScore: Number.NaN
+                }),
+                'greed'
+            )
+        ).toBe(INITIAL_RECALL_FOCUS);
+    });
+
     it('derives next memorize focus from prior recall and route context', () => {
         expect(getMemorizePhaseRecallFocusForRoute(createNewRun(0, { echoFeedbackEnabled: false }), null)).toBe(
             INITIAL_RECALL_FOCUS

@@ -56,6 +56,31 @@ describe('hydrationController', () => {
         expect(persistSaveData).not.toHaveBeenCalled();
     });
 
+    it('captures synchronous desktop bridge throws in the same protected recovery path', async () => {
+        const persistSaveData = vi.fn();
+
+        const patch = await createHydratedAppStatePatch({
+            desktop: {
+                getSaveData: () => {
+                    throw new Error('synchronous save bridge failure');
+                },
+                isSteamConnected: () => {
+                    throw new Error('synchronous Steam bridge failure');
+                }
+            },
+            persistSaveData
+        });
+
+        expect(patch).toMatchObject({
+            hydrated: true,
+            saveReadFailureNotice: SAVE_READ_FAILURE_NOTICE,
+            saveWritesBlockedByReadFailure: true,
+            steamConnected: false
+        });
+        expect(patch.saveData).toEqual(createDefaultSaveData());
+        expect(persistSaveData).not.toHaveBeenCalled();
+    });
+
     it('normalizes malformed Steam connection bridge responses to offline', async () => {
         const patch = await createHydratedAppStatePatch({
             desktop: {

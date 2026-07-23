@@ -1,5 +1,7 @@
 import type { BoardState, FeaturedObjectiveId, LevelResult, RunState } from './contracts';
 import { getFeaturedObjectiveLabel } from './floor-mutator-schedule';
+import { runArrayCount } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getFeaturedObjectiveRewardCopy, getFlipParLimit } from './secondary-objective-rules';
 import { getTraitRouteObjectiveStatus } from './trait-route-objectives';
 
@@ -134,37 +136,40 @@ export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultT
     }
 };
 
-const uniqueTags = (tags: readonly string[]): string[] => [...new Set(tags)];
+const uniqueTags = <Tag extends string>(tags: readonly Tag[]): Tag[] => [...new Set(tags)];
+
+const isLevelResultTagId = (value: string): value is LevelResultTagId =>
+    Object.prototype.hasOwnProperty.call(LEVEL_RESULT_TAG_DEFINITIONS, value);
 
 export const getDungeonLevelResultTags = (run: RunState, board: BoardState, perfect: boolean): LevelResultTagId[] => {
     const tags: LevelResultTagId[] = [];
-    if (board.floorTag === 'boss' && (run.dungeonEnemiesDefeatedThisFloor ?? 0) > 0) {
+    if (board.floorTag === 'boss' && runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) > 0) {
         tags.push('boss_defeated');
     }
-    if ((run.dungeonTrapsResolvedThisFloor ?? 0) > 0) {
+    if (runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor) > 0) {
         tags.push('traps_disarmed');
     }
-    if ((run.dungeonTreasuresOpenedThisFloor ?? 0) > 0) {
+    if (runNonNegativeInteger(run.dungeonTreasuresOpenedThisFloor) > 0) {
         tags.push('treasure_claimed');
     }
-    if ((run.dungeonGatewaysUsedThisFloor ?? 0) > 0 || board.selectedGatewayRouteType != null) {
+    if (runNonNegativeInteger(run.dungeonGatewaysUsedThisFloor) > 0 || board.selectedGatewayRouteType != null) {
         tags.push('route_claimed');
     }
     if (
         perfect &&
-        run.peekRevealedTileIds.length === 0 &&
+        runArrayCount(run.peekRevealedTileIds) === 0 &&
         !run.shuffleUsedThisFloor &&
         !run.destroyUsedThisFloor
     ) {
         tags.push('perfect_scout');
     }
-    return uniqueTags(tags) as LevelResultTagId[];
+    return uniqueTags(tags);
 };
 
 export const getLevelResultTagDefinitions = (tags: readonly string[] = []): LevelResultTagDefinition[] =>
     uniqueTags(tags)
-        .map((id) => LEVEL_RESULT_TAG_DEFINITIONS[id as LevelResultTagId])
-        .filter((definition): definition is LevelResultTagDefinition => definition != null)
+        .filter(isLevelResultTagId)
+        .map((id) => LEVEL_RESULT_TAG_DEFINITIONS[id])
         .sort((a, b) => b.priority - a.priority);
 
 export const getVisibleLevelResultTags = (
@@ -173,7 +178,7 @@ export const getVisibleLevelResultTags = (
 ): LevelResultTagDefinition[] => getLevelResultTagDefinitions(tags).slice(0, maxVisible);
 
 export const formatLevelResultTagLabel = (tag: string): string =>
-    LEVEL_RESULT_TAG_DEFINITIONS[tag as LevelResultTagId]?.label ?? tag;
+    isLevelResultTagId(tag) ? LEVEL_RESULT_TAG_DEFINITIONS[tag].label : tag;
 
 export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjectiveProgress | null => {
     const board = run.board;
@@ -223,13 +228,14 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
             break;
         case 'flip_par': {
             const limit = getFlipParLimit(board.pairCount);
-            state = run.matchResolutionsThisFloor > limit ? 'failed' : 'active';
-            condition = `Stay within match-resolution par (${run.matchResolutionsThisFloor}/${limit}).`;
-            failureReason = state === 'failed' ? `Match-resolution par exceeded (${run.matchResolutionsThisFloor}/${limit}).` : null;
+            const matchResolutionsThisFloor = runNonNegativeInteger(run.matchResolutionsThisFloor);
+            state = matchResolutionsThisFloor > limit ? 'failed' : 'active';
+            condition = `Stay within match-resolution par (${matchResolutionsThisFloor}/${limit}).`;
+            failureReason = state === 'failed' ? `Match-resolution par exceeded (${matchResolutionsThisFloor}/${limit}).` : null;
             detail =
                 state === 'failed'
                     ? `Failed: ${failureReason}`
-                    : `Stay within ${run.matchResolutionsThisFloor}/${limit} match resolutions.`;
+                    : `Stay within ${matchResolutionsThisFloor}/${limit} match resolutions.`;
             break;
         }
         default:
@@ -278,7 +284,8 @@ export const formatLevelResultObjectiveLine = (result: LevelResult): string | nu
     }
     const label = getFeaturedObjectiveLabel(result.featuredObjectiveId) ?? result.featuredObjectiveId;
     if (result.featuredObjectiveCompleted) {
-        const bonus = result.objectiveBonusScore ? ` (+${result.objectiveBonusScore} score)` : '';
+        const objectiveBonusScore = runNonNegativeInteger(result.objectiveBonusScore);
+        const bonus = objectiveBonusScore > 0 ? ` (+${objectiveBonusScore} score)` : '';
         return `${label}: Complete${bonus}`;
     }
     return `${label}: Missed — no objective bonus.`;

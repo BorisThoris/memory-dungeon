@@ -8,6 +8,7 @@ import { getPerfectMemoryAttribution } from '../../shared/long-run-feedback';
 import { getInventoryRewardSignal } from '../../shared/meta-reward-signals';
 import { getRunEconomyRows } from '../../shared/run-economy';
 import { getRunInventoryRows, getRunLoadoutSummary, type RunInventoryItemId, type RunInventoryRow } from '../../shared/run-inventory';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getRunBuildProfile } from '../../shared/relics';
 import { getRunStartingLoadoutRow } from '../../shared/starting-loadouts';
 import {
@@ -33,7 +34,7 @@ export const getActiveTraitBuildRows = (run: RunState) => {
     );
 };
 
-export type InventoryRunLoopSignal = {
+type InventoryRunLoopSignal = {
     id: 'chain' | 'pickup' | 'resource' | 'trait';
     label: string;
     value: string;
@@ -42,7 +43,7 @@ export type InventoryRunLoopSignal = {
     tone: 'chain' | 'reward' | 'resource' | 'trait';
 };
 
-export type InventoryPayoffEngineSignal = {
+type InventoryPayoffEngineSignal = {
     label: 'Super stack' | 'Payoff engine' | 'Prime payoff';
     value: string;
     detail: string;
@@ -51,14 +52,16 @@ export type InventoryPayoffEngineSignal = {
 };
 
 export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSignal[] => {
-    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
-    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
-    const traitRequired = Math.max(0, run.traitRouteObjectiveRequiredThisFloor ?? 0);
-    const traitProgress = Math.max(0, run.traitRouteObjectiveProgressThisFloor ?? 0);
+    const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
+    const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
+    const traitRequired = runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor);
+    const traitProgress = runNonNegativeInteger(run.traitRouteObjectiveProgressThisFloor);
     const traitComplete = run.traitRouteObjectiveCompletedThisFloor || run.traitRouteObjectiveRewardClaimedThisFloor;
     const traitRouteStatus = getTraitRouteObjectiveStatus(run);
-    const currentStreak = Math.max(0, run.stats.currentStreak ?? 0);
-    const bestStreak = Math.max(0, run.stats.bestStreak ?? 0);
+    const comboShards = runNonNegativeInteger(run.stats.comboShards);
+    const currentStreak = runNonNegativeInteger(run.stats.currentStreak);
+    const bestStreak = runNonNegativeInteger(run.stats.bestStreak);
+    const guardTokens = runNonNegativeInteger(run.stats.guardTokens);
     const chainTarget = getChainTargetFeedback(Math.max(currentStreak, bestStreak));
     return [
         {
@@ -88,18 +91,20 @@ export const getInventoryRunLoopSignals = (run: RunState): InventoryRunLoopSigna
         {
             id: 'resource',
             label: 'Burst bank',
-            value: `${Math.max(0, run.stats.comboShards ?? 0)} shards / ${Math.max(0, run.stats.guardTokens ?? 0)} guards`,
+            value: `${comboShards} shards / ${guardTokens} guards`,
             detail: 'Shards push burst rewards; guards preserve tempo after misses.',
-            nextCue:
-                Math.max(0, run.stats.comboShards ?? 0) >= 2
-                    ? 'Shard burst is primed'
-                    : 'Build x6 chain pressure',
+            nextCue: comboShards >= 2 ? 'Shard burst is primed' : 'Build x6 chain pressure',
             tone: 'resource'
         },
         {
             id: 'trait',
             label: 'Trait route',
-            value: traitRequired > 0 ? `${Math.min(traitProgress, traitRequired)}/${traitRequired}` : traitComplete ? 'paid' : 'scout',
+            value:
+                traitRequired > 0
+                    ? `${Math.min(traitProgress, traitRequired)}/${traitRequired}`
+                    : traitComplete
+                      ? 'paid'
+                      : 'scout',
             detail: traitRouteStatus
                 ? `${traitRouteStatus.stateLabel}: ${traitRouteStatus.reward}.`
                 : traitComplete
@@ -126,16 +131,25 @@ export const getInventoryPayoffEngineSignal = (
 ): InventoryPayoffEngineSignal => {
     const activeLanes = runLoopSignals.filter((signal) => {
         if (signal.id === 'chain') {
-            return Math.max(0, run.stats.currentStreak ?? 0) >= 3 || Math.max(0, run.stats.bestStreak ?? 0) >= 3;
+            return (
+                runNonNegativeInteger(run.stats.currentStreak) >= 3 ||
+                runNonNegativeInteger(run.stats.bestStreak) >= 3
+            );
         }
         if (signal.id === 'pickup') {
-            return Math.max(0, run.findablesTotalThisFloor ?? 0) > Math.max(0, run.findablesClaimedThisFloor ?? 0);
+            return (
+                runNonNegativeInteger(run.findablesTotalThisFloor) >
+                runNonNegativeInteger(run.findablesClaimedThisFloor)
+            );
         }
         if (signal.id === 'resource') {
-            return Math.max(0, run.stats.comboShards ?? 0) >= 2 || Math.max(0, run.stats.guardTokens ?? 0) > 0;
+            return (
+                runNonNegativeInteger(run.stats.comboShards) >= 2 ||
+                runNonNegativeInteger(run.stats.guardTokens) > 0
+            );
         }
         return (
-            Math.max(0, run.traitRouteObjectiveRequiredThisFloor ?? 0) > 0 ||
+            runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor) > 0 ||
             run.traitRouteObjectiveCompletedThisFloor ||
             run.traitRouteObjectiveRewardClaimedThisFloor
         );
@@ -176,9 +190,9 @@ export const getInventoryPayoffEngineSignal = (
     };
 };
 
-export type InventoryToolActionCueTone = 'chain' | 'route' | 'recovery' | 'key' | 'build';
+type InventoryToolActionCueTone = 'chain' | 'route' | 'recovery' | 'key' | 'build';
 
-export interface InventoryToolActionCue {
+interface InventoryToolActionCue {
     label: string;
     detail: string;
     tone: InventoryToolActionCueTone;
@@ -279,7 +293,7 @@ export const getInventoryToolActionCue = (row: RunInventoryRow): InventoryToolAc
     };
 };
 
-export type InventoryScreenInventoryRow = RunInventoryRow & {
+type InventoryScreenInventoryRow = RunInventoryRow & {
     actionCue: InventoryToolActionCue;
 };
 

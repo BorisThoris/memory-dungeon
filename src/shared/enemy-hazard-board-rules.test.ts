@@ -8,7 +8,8 @@ import {
     collectEnemyHazardsOccupyingFinalPair,
     defeatEnemyHazardOccupationOnFinalPair,
     defeatEnemyHazardsOnClearedTiles,
-    enemyHazardEligibleTiles
+    enemyHazardEligibleTiles,
+    enemyHazardsForBoard
 } from './enemy-hazard-board-rules';
 import { DECOY_PAIR_KEY, EXIT_PAIR_KEY, WILD_PAIR_KEY } from './tile-identity';
 
@@ -24,6 +25,14 @@ describe('enemy hazard board rules', () => {
         ];
 
         expect(enemyHazardEligibleTiles(tiles).map((candidate) => candidate.id)).toEqual(['a']);
+    });
+
+    it('normalizes board enemy hazard arrays through one shared helper', () => {
+        const hazards = [hazard('hazard-a', 'a', 'b')];
+
+        expect(enemyHazardsForBoard(boardWith([tile('a', 'pair-a'), tile('b', 'pair-a')], hazards))).toBe(hazards);
+        expect(enemyHazardsForBoard(null)).toEqual([]);
+        expect(enemyHazardsForBoard({ enemyHazards: Number.NaN as unknown as BoardState['enemyHazards'] })).toEqual([]);
     });
 
     it('collects and defeats hazards occupying the final remaining real pair', () => {
@@ -59,6 +68,22 @@ describe('enemy hazard board rules', () => {
         });
     });
 
+    it('normalizes malformed defeat counters when clearing final-pair hazards', () => {
+        const run = {
+            ...createNewRun(0),
+            board: boardWith([tile('a', 'final-a')], [hazard('boss-a', 'a', 'a', { bossId: 'rush_sentinel' })]),
+            dungeonEnemiesDefeated: Number.NaN,
+            dungeonEnemiesDefeatedThisFloor: 1.9,
+            enemyHazardsDefeatedThisFloor: Number.POSITIVE_INFINITY
+        };
+
+        expect(clearFinalPairEnemyHazardOccupationForRun(run)).toMatchObject({
+            dungeonEnemiesDefeated: 1,
+            dungeonEnemiesDefeatedThisFloor: 2,
+            enemyHazardsDefeatedThisFloor: 1
+        });
+    });
+
     it('hides and defeats stale hazards that only reference cleared board tiles', () => {
         const board = boardWith([
             tile('a', 'pair-a', { state: 'matched' }),
@@ -89,6 +114,20 @@ describe('enemy hazard board rules', () => {
         expect(defeatEnemyHazardsOnClearedTiles(board).enemyHazards).toMatchObject([
             { id: 'warden', hp: 0, state: 'defeated' }
         ]);
+    });
+
+    it('ignores malformed enemy hazard arrays before board cleanup', () => {
+        const board = {
+            ...boardWith([tile('a', 'pair-a'), tile('b', 'pair-a')]),
+            enemyHazards: Number.NaN as unknown as BoardState['enemyHazards']
+        };
+        const run = { ...createNewRun(0), board };
+
+        expect(activeEnemyHazardsForBoard(board)).toEqual([]);
+        expect(collectEnemyHazardsOccupyingFinalPair(board)).toEqual([]);
+        expect(defeatEnemyHazardOccupationOnFinalPair(board)).toBe(board);
+        expect(defeatEnemyHazardsOnClearedTiles(board)).toBe(board);
+        expect(clearFinalPairEnemyHazardOccupationForRun(run)).toBe(run);
     });
 
     it('hides stale boss hazards once their referenced tiles are cleared even before the floor is complete', () => {

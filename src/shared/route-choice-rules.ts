@@ -14,6 +14,22 @@ export interface RouteChoiceAvailability {
     label?: string;
 }
 
+export const isRouteChoice = (value: unknown): value is RouteChoice => {
+    if (value == null || typeof value !== 'object') {
+        return false;
+    }
+    const choice = value as { detail?: unknown; id?: unknown; label?: unknown; routeType?: unknown };
+    return (
+        typeof choice.id === 'string' &&
+        (choice.routeType === 'safe' || choice.routeType === 'greed' || choice.routeType === 'mystery') &&
+        typeof choice.label === 'string' &&
+        typeof choice.detail === 'string'
+    );
+};
+
+export const routeChoicesForResult = (lastLevelResult: LevelResult | null | undefined): readonly RouteChoice[] =>
+    Array.isArray(lastLevelResult?.routeChoices) ? lastLevelResult.routeChoices.filter(isRouteChoice) : [];
+
 export const generateRouteChoices = (run: RunState, nextLevel: number): NonNullable<LevelResult['routeChoices']> => {
     const baseId = `${run.runRulesVersion}:${run.runSeed}:${nextLevel}`;
     const greedDetail =

@@ -134,6 +134,45 @@ describe('SideRoomScreen', () => {
         }
     });
 
+    it('ignores malformed side-room choice lists before rendering choice actions', () => {
+        const saveData = createDefaultSaveData();
+        const run = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 51 });
+        useAppStore.setState({
+            hydrated: true,
+            hydrating: false,
+            view: 'sideRoom',
+            saveData,
+            settings: saveData.settings,
+            run: {
+                ...run,
+                status: 'levelComplete',
+                sideRoom: {
+                    id: 'malformed-choice-list-test',
+                    kind: 'bonus_reward',
+                    routeType: 'greed',
+                    nodeKind: 'treasure',
+                    floor: 3,
+                    title: 'Greed Treasure cache',
+                    body: 'A malformed persisted choice list should fall back to the primary side-room action.',
+                    primaryLabel: 'Claim cache',
+                    primaryDetail: '+1 guard token; +4 score',
+                    skipLabel: 'Leave it',
+                    choices: { length: 2 } as never,
+                    payload: { kind: 'bonus_reward', instanceId: 'missing' }
+                }
+            }
+        });
+
+        render(<SideRoomScreen />);
+
+        expect(screen.getByRole('dialog', { name: /route side room/i })).toBeInTheDocument();
+        expect(screen.queryByTestId('side-room-choice-lane-map')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('side-room-choice-malformed-choice-list-test')).not.toBeInTheDocument();
+        expect(screen.getByTestId('side-room-primary-action-signals')).toHaveTextContent('Claim');
+        expect(screen.getByRole('button', { name: 'Claim cache' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Leave it' })).toBeInTheDocument();
+    });
+
     it('breaks bonus reward feedback into gained and capped pickup chips', () => {
         const saveData = createDefaultSaveData();
         const run = createNewRun(0, { echoFeedbackEnabled: false, runSeed: 48 });

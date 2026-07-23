@@ -9,6 +9,10 @@ export type IllustrationRng = {
     pickWeighted: <T>(entries: readonly { value: T; weight: number }[]) => T;
 };
 
+const positiveInteger = (value: number): number => (Number.isFinite(value) && value > 0 ? Math.floor(value) : 0);
+
+const positiveWeight = (value: number): number => (Number.isFinite(value) && value > 0 ? value : 0);
+
 /** Mulberry32 — fast deterministic PRNG for illustration rolls. */
 export const createIllustrationRng = (seed: number): IllustrationRng => {
     let state = seed >>> 0;
@@ -23,35 +27,48 @@ export const createIllustrationRng = (seed: number): IllustrationRng => {
     const nextFloat01 = (): number => nextU32() / 4294967296;
 
     const nextInt = (max: number): number => {
-        if (max <= 0) {
+        const normalizedMax = positiveInteger(max);
+        if (normalizedMax <= 0) {
             return 0;
         }
-        return nextU32() % max;
+        return nextU32() % normalizedMax;
     };
 
     const nextIntInclusive = (min: number, max: number): number => {
-        if (max <= min) {
-            return min;
+        if (!Number.isFinite(min)) {
+            return 0;
         }
-        return min + nextInt(max - min + 1);
+        const normalizedMin = Math.floor(min);
+        if (!Number.isFinite(max)) {
+            return normalizedMin;
+        }
+        const normalizedMax = Math.floor(max);
+        if (normalizedMax <= normalizedMin) {
+            return normalizedMin;
+        }
+        return normalizedMin + nextInt(normalizedMax - normalizedMin + 1);
     };
 
     const pickWeighted = <T>(entries: readonly { value: T; weight: number }[]): T => {
+        const first = entries[0];
+        if (!first) {
+            throw new RangeError('pickWeighted requires at least one entry.');
+        }
         let total = 0;
         for (const e of entries) {
-            total += Math.max(0, e.weight);
+            total += positiveWeight(e.weight);
         }
         if (total <= 0) {
-            return entries[0]!.value;
+            return first.value;
         }
         let r = nextFloat01() * total;
         for (const e of entries) {
-            r -= e.weight;
+            r -= positiveWeight(e.weight);
             if (r <= 0) {
                 return e.value;
             }
         }
-        return entries[entries.length - 1]!.value;
+        return entries[entries.length - 1]?.value ?? first.value;
     };
 
     return { nextU32, nextFloat01, nextInt, nextIntInclusive, pickWeighted };

@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION } from './contracts';
+import { DUNGEON_CARD_KIND_ORDER } from './dungeon-cards';
 import {
     createDungeonRunMapState,
     createRunMapState,
     chooseRunMapNode,
     clearCurrentDungeonNode,
+    DUNGEON_NODE_CARD_FAMILY_BOUNDS_BY_KIND,
     enterSelectedDungeonNode,
     generateRunMapChoices,
     getDungeonMapPresentation,
@@ -408,8 +410,7 @@ describe('REG-069 run map route nodes', () => {
 
     it('DNG-011 covers every dungeon node kind with a renderable contract', () => {
         const contracts = getDungeonNodeTypeContracts();
-
-        expect(contracts.map((contract) => contract.kind)).toEqual([
+        const contractKinds = [
             'entrance',
             'combat',
             'elite',
@@ -420,10 +421,17 @@ describe('REG-069 run map route nodes', () => {
             'event',
             'boss',
             'exit'
-        ]);
+        ];
+        const validBoundsFamilies = new Set([...DUNGEON_CARD_KIND_ORDER, 'boss']);
+
+        expect(contracts.map((contract) => contract.kind)).toEqual(contractKinds);
+        expect(Object.keys(DUNGEON_NODE_CARD_FAMILY_BOUNDS_BY_KIND)).toEqual(contractKinds);
         expect(contracts.every((contract) => contract.label.length > 0)).toBe(true);
         expect(contracts.every((contract) => contract.rewardPolicy.length > 0)).toBe(true);
         expect(contracts.every((contract) => Object.keys(contract.cardFamilyBounds).length > 0)).toBe(true);
+        for (const contract of contracts) {
+            expect(Object.keys(contract.cardFamilyBounds).every((family) => validBoundsFamilies.has(family))).toBe(true);
+        }
         expect(getDungeonNodeTypeContract('boss')).toMatchObject({
             floorTag: 'boss',
             defaultObjectiveId: 'defeat_boss',

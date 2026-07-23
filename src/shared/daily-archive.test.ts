@@ -1,8 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createDefaultSaveData } from './save-data';
 import {
     buildDailyArchiveShareString,
     buildDailyResultsLoopRows,
+    dailyArchiveDateKeyForTimestamp,
     getDailyStreakEthicsRow,
     getDailyArchiveRows,
     getDailyArchiveSummary,
@@ -11,6 +12,10 @@ import {
 } from './daily-archive';
 
 describe('REG-083 daily weekly season archive', () => {
+    afterEach(() => {
+        vi.useRealTimers();
+    });
+
     it('derives offline daily, weekly, and season archive rows from local save data', () => {
         const save = createDefaultSaveData();
         save.playerStats = {
@@ -72,6 +77,75 @@ describe('REG-083 daily weekly season archive', () => {
         expect(share).toContain('Daily 20260425');
         expect(share).toContain('local-only');
         expect(share).not.toMatch(/rank|leaderboard|account/i);
+    });
+
+    it('normalizes malformed archive counters before building summaries and share strings', () => {
+        const save = createDefaultSaveData();
+        save.bestScore = Number.POSITIVE_INFINITY;
+        save.playerStats = {
+            ...save.playerStats!,
+            dailiesCompleted: Number.POSITIVE_INFINITY,
+            dailyStreakCosmetic: Number.NaN,
+            lastDailyDateKeyUtc: '20260425'
+        };
+        save.lastRunSummary = {
+            totalScore: Number.POSITIVE_INFINITY,
+            bestScore: 0,
+            levelsCleared: Number.NaN,
+            highestLevel: Number.POSITIVE_INFINITY,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: 0,
+            perfectClears: 0,
+            gameMode: 'daily',
+            dailyDateKeyUtc: '20260425'
+        };
+
+        const summary = getDailyArchiveSummary(save);
+        const share = buildDailyArchiveShareString(save);
+        const loopRows = buildDailyResultsLoopRows(save);
+
+        expect(summary.completedDailies).toBe(0);
+        expect(summary.currentStreak).toBe(0);
+        expect(share).toContain('0 pts · 0 clear(s)');
+        expect(share).not.toMatch(/NaN|Infinity/);
+        expect(loopRows[0]?.currentAttempt).toBe('0 score · floor 0 · 0 clear(s)');
+        expect(loopRows[0]?.personalBest).toBe('0 all-mode best · 0 daily clear(s)');
+    });
+
+    it('rejects impossible compact UTC keys instead of rolling them into archive windows', () => {
+        expect(weekKeyForDaily('20260231')).toBe('week:none');
+        expect(seasonKeyForDaily('20261301')).toBe('season:none');
+
+        const save = createDefaultSaveData();
+        save.playerStats = {
+            ...save.playerStats!,
+            dailiesCompleted: 1,
+            dailyStreakCosmetic: 2,
+            lastDailyDateKeyUtc: '20260231'
+        };
+
+        const summary = getDailyArchiveSummary(save, Date.UTC(2026, 1, 28, 12));
+
+        expect(summary.lastDailyDateKeyUtc).toBeNull();
+        expect(summary.rows[0]).toMatchObject({
+            archiveKey: '20260228',
+            comparisonString: 'Last daily unknown · 1 local clears · streak 2',
+            key: '20260228'
+        });
+        expect(summary.rows[1]?.archiveKey).toBe(weekKeyForDaily('20260228'));
+        expect(summary.rows[2]?.archiveKey).toBe(seasonKeyForDaily('20260228'));
+    });
+
+    it('falls back to the current UTC date for malformed archive timestamps', () => {
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date(Date.UTC(2026, 3, 30, 12)));
+
+        expect(dailyArchiveDateKeyForTimestamp(Number.NaN)).toBe('20260430');
+
+        const summary = getDailyArchiveSummary(createDefaultSaveData(), Number.POSITIVE_INFINITY);
+        expect(summary.rows[0]?.archiveKey).toBe('20260430');
+        expect(summary.rows[0]?.comparisonString).toContain('Today 20260430');
     });
 
     it('REG-023 builds local daily and weekly results loop rows', () => {

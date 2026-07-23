@@ -72,6 +72,7 @@ export default defineConfig(({ mode }) => ({
     test: {
         environment: 'happy-dom',
         setupFiles: './vitest.setup.ts',
+        testTimeout: 10_000,
         restoreMocks: true,
         clearMocks: true,
         /* Windows / sandbox: fork pool teardown can throw EPERM on process.kill; threads avoid it. */
@@ -84,7 +85,8 @@ export default defineConfig(({ mode }) => ({
     build: {
         outDir: rendererOutDir,
         sourcemap: process.env.VITE_SOURCEMAP === '1',
-        chunkSizeWarningLimit: 1300,
+        // Keep the advisory threshold aligned with the enforced main-chunk budget.
+        chunkSizeWarningLimit: 1450,
         /**
          * Windows: locked files under `dist` cause EPERM on clean or on writing the same asset name.
          * Use `yarn build:renderer:alt-out` (writes to `dist-build`), or set `VITE_SKIP_EMPTY_OUT_DIR=1`

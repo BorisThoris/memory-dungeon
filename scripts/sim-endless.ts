@@ -5,11 +5,11 @@
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
-    FINDABLE_KIND_SPAWN_WEIGHTS,
     GAME_RULES_VERSION,
     type BoardState,
     type FindableKind
 } from '../src/shared/contracts';
+import { getFindableSpawnWeightRows } from '../src/shared/findables';
 import { pickFloorScheduleEntry } from '../src/shared/floor-mutator-schedule';
 import { buildBoard } from '../src/shared/board-generation';
 import { getEffectivePrimaryExitLock, inspectBoardFairness } from '../src/shared/board-inspection';
@@ -25,16 +25,20 @@ import {
     hasTraitRewardInteractionFloor,
     hasTraitSwapSetupOpportunity
 } from '../src/shared/tile-trait-rules';
-
-const numArg = (argv: readonly string[], name: string, def: number): number => {
-    const raw = argv.find((a) => a.startsWith(`--${name}=`))?.split('=')[1];
-    return raw != null ? Number(raw) : def;
-};
+import { readFlooredNumericCliArg, readPositiveFlooredNumericCliArg } from './seed-sweep-options';
 
 export interface EndlessSimulationCsvInput {
     floors: number;
     runSeed: number;
     rulesVersion?: number;
+}
+
+export interface EndlessSimulationCliOptions {
+    floors: number;
+    runSeed: number;
+    summaryMode: boolean;
+    checkMode: boolean;
+    out?: string;
 }
 
 export interface EndlessSimulationHealthReport {
@@ -286,9 +290,9 @@ export const buildEndlessSimulationCsv = ({
         ...Object.entries(traitMetricCounts)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `traitMetric,${k},${v}`),
-        ...Object.entries(FINDABLE_KIND_SPAWN_WEIGHTS)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([k, v]) => `findableTargetWeight,${k},${v}`),
+        ...getFindableSpawnWeightRows()
+            .sort((a, b) => a.id.localeCompare(b.id))
+            .map((row) => `findableTargetWeight,${row.id},${row.weight}`),
         ...Object.entries(objectiveCounts)
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([k, v]) => `dungeonObjective,${k},${v}`),
@@ -397,7 +401,7 @@ const readEndlessSimulationMetrics = (input: EndlessSimulationCsvInput): Endless
 export const evaluateEndlessSimulationHealth = (
     metrics: EndlessSimulationHealthMetrics,
     floors: number,
-    expectedRewardKinds = Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length
+    expectedRewardKinds = getFindableSpawnWeightRows().length
 ): EndlessSimulationHealthReport => {
     const safeFloors = Math.max(1, Math.floor(floors));
     const issues = [
@@ -456,8 +460,10 @@ export const analyzeEndlessSimulationHealth = (input: EndlessSimulationCsvInput)
     return evaluateEndlessSimulationHealth(metrics, floors);
 };
 
-export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string => {
-    const metrics = readEndlessSimulationMetrics(input);
+const formatEndlessSimulationSummary = (
+    input: EndlessSimulationCsvInput,
+    metrics: EndlessSimulationHealthMetrics
+): string => {
     const floors = Math.max(1, Math.floor(input.floors));
     const pct = (value: number) => `${((value / floors) * 100).toFixed(1)}%`;
 
@@ -479,16 +485,33 @@ export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput):
     ].join('\n');
 };
 
+export const buildEndlessSimulationSummary = (input: EndlessSimulationCsvInput): string =>
+    formatEndlessSimulationSummary(input, readEndlessSimulationMetrics(input));
+
+export const parseEndlessSimulationCliOptions = (argv: readonly string[]): EndlessSimulationCliOptions => {
+    const outPrefix = '--out=';
+    const out = argv.find((arg) => arg.startsWith(outPrefix))?.slice(outPrefix.length);
+
+    return {
+        floors: Math.max(1, readFlooredNumericCliArg(argv, 'floors', 10_000)),
+        runSeed: readPositiveFlooredNumericCliArg(argv, 'seed', 42_001),
+        summaryMode: argv.includes('--summary'),
+        checkMode: argv.includes('--check'),
+        ...(out ? { out } : {})
+    };
+};
+
 const runCli = (argv: readonly string[]): void => {
-    const floors = Math.max(1, Math.floor(numArg(argv, 'floors', 10_000)));
-    const runSeed = Math.floor(numArg(argv, 'seed', 42_001));
+    const { floors, runSeed, summaryMode, checkMode, out } = parseEndlessSimulationCliOptions(argv);
     const input = { floors, runSeed };
-    const summaryMode = argv.includes('--summary');
-    const checkMode = argv.includes('--check');
-    const output = summaryMode || checkMode ? buildEndlessSimulationSummary(input) : buildEndlessSimulationCsv(input);
+    const health = checkMode ? analyzeEndlessSimulationHealth(input) : null;
+    const output = health
+        ? formatEndlessSimulationSummary(input, health.metrics)
+        : summaryMode
+          ? buildEndlessSimulationSummary(input)
+          : buildEndlessSimulationCsv(input);
     process.stdout.write(output);
-    if (checkMode) {
-        const health = analyzeEndlessSimulationHealth(input);
+    if (health) {
         if (health.ok) {
             process.stdout.write('Endless simulation health check passed\n');
         } else {
@@ -497,7 +520,6 @@ const runCli = (argv: readonly string[]): void => {
         }
     }
 
-    const out = argv.find((a) => a.startsWith('--out='))?.split('=')[1];
     if (out) {
         writeFileSync(out, output, 'utf8');
     }

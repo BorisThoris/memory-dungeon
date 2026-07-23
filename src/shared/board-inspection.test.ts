@@ -2,9 +2,11 @@ import { describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from './contracts';
 import {
     boardHasGlassDecoy,
+    countReachableExitLeverSources,
     countReachableExitKeySources,
     getWildTileIdFromBoard,
     inspectBoardFairness,
+    inspectRunFairness,
     isBoardComplete,
     repairDungeonExitSoftlocks
 } from './board-inspection';
@@ -78,6 +80,21 @@ describe('board-inspection', () => {
 
         expect(countReachableExitKeySources(inspected, 'iron')).toBe(0);
         expect(countReachableExitKeySources(inspected, 'treasure')).toBe(1);
+    });
+
+    it('normalizes malformed floor-held key and lever counters during source counts', () => {
+        const inspected = {
+            ...board([tile('exit', EXIT_PAIR_KEY, { dungeonCardKind: 'exit', dungeonExitLockKind: 'treasure' })]),
+            dungeonExitTileId: 'exit',
+            dungeonExitLockKind: 'treasure' as const,
+            dungeonKeysHeld: Number.POSITIVE_INFINITY,
+            dungeonKeysHeldByKind: { treasure: Number.NaN },
+            dungeonLeverCount: Number.POSITIVE_INFINITY
+        } satisfies BoardState;
+
+        expect(countReachableExitKeySources(inspected, 'iron')).toBe(0);
+        expect(countReachableExitKeySources(inspected, 'treasure')).toBe(0);
+        expect(countReachableExitLeverSources(inspected)).toBe(0);
     });
 
     it('normalizes stale board-level exit lock metadata to the primary exit tile during repair', () => {
@@ -177,6 +194,26 @@ describe('board-inspection', () => {
         expect(inspected.hasCompletionRoute).toBe(true);
     });
 
+    it('reports mismatched dungeon card metadata without assuming a primary dungeon tile', () => {
+        const inspected = inspectBoardFairness(
+            board([
+                tile('key-a', 'key', { dungeonCardKind: 'key', dungeonCardEffectId: 'key_iron' }),
+                tile('key-b', 'key', { dungeonCardKind: 'lever', dungeonCardEffectId: 'lever_floor' })
+            ])
+        );
+
+        expect(inspected.complete).toBe(false);
+        expect(inspected.issues).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    code: 'dungeon_card_pair_mismatch',
+                    pairKey: 'key',
+                    tileIds: ['key-a', 'key-b']
+                })
+            ])
+        );
+    });
+
     it('still reports active enemy hazards on cleared tiles while unresolved pairs remain', () => {
         const inspected = inspectBoardFairness({
             ...board([
@@ -261,5 +298,48 @@ describe('board-inspection', () => {
         expect(inspected.complete).toBe(true);
         expect(inspected.hasCompletionRoute).toBe(true);
         expect(inspected.issues).toEqual([]);
+    });
+
+    it('reports malformed flipped tile ids instead of throwing during fairness inspection', () => {
+        const malformed = {
+            ...board([
+                tile('a1', 'a', { state: 'flipped' }),
+                tile('a2', 'a')
+            ]),
+            flippedTileIds: Number.NaN as unknown as string[]
+        };
+
+        const inspected = inspectBoardFairness(malformed);
+
+        expect(inspected.issues).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    code: 'flipped_tile_reference_missing',
+                    message: 'flippedTileIds is malformed and cannot be inspected.'
+                })
+            ])
+        );
+    });
+
+    it('reports malformed resolving flip ids as a run-level issue', () => {
+        const malformed = {
+            status: 'resolving',
+            board: {
+                ...board([
+                    tile('a1', 'a', { state: 'flipped' }),
+                    tile('a2', 'a', { state: 'flipped' })
+                ]),
+                flippedTileIds: Number.NaN as unknown as string[]
+            },
+            dungeonKeys: {},
+            dungeonMasterKeys: 0
+        } as unknown as Parameters<typeof inspectRunFairness>[0];
+
+        const inspected = inspectRunFairness(malformed);
+
+        expect(inspected.intentionalBlockers).not.toContain('resolving_flips');
+        expect(inspected.issues.map((issue) => issue.code)).toEqual(
+            expect.arrayContaining(['flipped_tile_reference_missing', 'run_resolving_without_flipped_tiles'])
+        );
     });
 });

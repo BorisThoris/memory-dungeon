@@ -18,12 +18,17 @@ import {
     activeEnemyHazardsForBoard,
     clearFinalPairEnemyHazardOccupationForRun,
     defeatEnemyHazardOccupationOnFinalPair,
-    enemyHazardEligibleTiles
+    enemyHazardEligibleTiles,
+    enemyHazardsForBoard
 } from './enemy-hazard-board-rules';
 import { addPendingMemorizeBonusForLostLives } from './recall-rules';
 import { hashStringToSeed } from './rng';
+import { runArrayCount } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { isSprungTrapTile } from './tile-state-rules';
+
+const flippedTileCount = (board: BoardState | null | undefined): number => runArrayCount(board?.flippedTileIds);
 
 export interface EnemyHazardPatternDefinition {
     pattern: EnemyHazardPattern;
@@ -100,7 +105,7 @@ const pickHazardTileId = (
     if (candidates.length === 0) {
         return null;
     }
-    return candidates[Math.abs(turn + offset) % candidates.length]!.id;
+    return candidates[Math.abs(turn + offset) % candidates.length]?.id ?? null;
 };
 
 const buildEnemyHazard = ({
@@ -240,14 +245,16 @@ export const createEnemyHazardsForBoard = ({
 };
 
 export const advanceEnemyHazardsOnBoard = (board: BoardState, steps: number = 1): BoardState => {
+    const safeSteps = runNonNegativeInteger(steps);
     const hazards = activeEnemyHazardsForBoard(board);
-    if (hazards.length === 0 || steps <= 0) {
+    if (hazards.length === 0 || safeSteps <= 0) {
         return board;
     }
+    const sourceHazards = enemyHazardsForBoard(board);
     const activeIds = new Set(hazards.map((hazard) => hazard.id));
-    const nextTurn = (board.enemyHazardTurn ?? 0) + steps;
+    const nextTurn = runNonNegativeInteger(board.enemyHazardTurn) + safeSteps;
     const occupied = new Set<string>();
-    const nextHazards = board.enemyHazards!.map((hazard, index) => {
+    const nextHazards = sourceHazards.map((hazard, index) => {
         if (!activeIds.has(hazard.id)) {
             return hazard;
         }
@@ -266,15 +273,16 @@ export const damageFirstRevealedEnemyHazard = (
     board: BoardState,
     amount: number
 ): { board: BoardState; defeated: number; bossDefeated: number; score: number } => {
-    const target = activeEnemyHazardsForBoard(board).find((hazard) => hazard.state === 'revealed' && hazard.hp > 0);
-    if (!target || amount <= 0) {
+    const damage = runNonNegativeInteger(amount);
+    const target = activeEnemyHazardsForBoard(board).find((hazard) => hazard.state === 'revealed' && runNonNegativeInteger(hazard.hp) > 0);
+    if (!target || damage <= 0) {
         return { board, defeated: 0, bossDefeated: 0, score: 0 };
     }
-    const nextHp = Math.max(0, target.hp - amount);
+    const nextHp = Math.max(0, runNonNegativeInteger(target.hp) - damage);
     const defeated = nextHp === 0 ? 1 : 0;
     const nextBoard: BoardState = {
         ...board,
-        enemyHazards: board.enemyHazards?.map((hazard) =>
+        enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
             hazard.id === target.id
                 ? {
                       ...hazard,
@@ -306,17 +314,20 @@ export const applyEnemyHazardClick = (
         (cleanedRun.status === 'resolving' &&
             cleanedRun.gambitAvailableThisFloor &&
             !cleanedRun.gambitThirdFlipUsed &&
-            board?.flippedTileIds.length === 2);
+            flippedTileCount(board) === 2);
     if (!board || !hazard || !tile || tile.state !== 'hidden' || !canApplyContact) {
         return cleanedRun;
     }
     const advanceHazards = options.advanceHazards ?? true;
-    const consumesGuardToken = cleanedRun.stats.guardTokens > 0;
-    const lives = consumesGuardToken ? cleanedRun.lives : Math.max(0, cleanedRun.lives - hazard.damage);
-    const lostLives = Math.max(0, cleanedRun.lives - lives);
+    const guardTokens = runNonNegativeInteger(cleanedRun.stats.guardTokens);
+    const currentLives = runNonNegativeInteger(cleanedRun.lives);
+    const damage = runNonNegativeInteger(hazard.damage);
+    const consumesGuardToken = guardTokens > 0;
+    const lives = consumesGuardToken ? currentLives : Math.max(0, currentLives - damage);
+    const lostLives = Math.max(0, currentLives - lives);
     const revealedBoard: BoardState = {
         ...board,
-        enemyHazards: board.enemyHazards?.map((candidate) =>
+        enemyHazards: enemyHazardsForBoard(board).map((candidate) =>
             candidate.id === hazard.id ? { ...candidate, state: 'revealed' as const } : candidate
         )
     };
@@ -331,10 +342,10 @@ export const applyEnemyHazardClick = (
         lives,
         pendingMemorizeBonusMs: addPendingMemorizeBonusForLostLives(cleanedRun.pendingMemorizeBonusMs, lostLives),
         board: advancedBoard,
-        enemyHazardHitsThisFloor: (cleanedRun.enemyHazardHitsThisFloor ?? 0) + 1,
+        enemyHazardHitsThisFloor: runNonNegativeInteger(cleanedRun.enemyHazardHitsThisFloor) + 1,
         stats: {
             ...cleanedRun.stats,
-            guardTokens: consumesGuardToken ? cleanedRun.stats.guardTokens - 1 : cleanedRun.stats.guardTokens
+            guardTokens: consumesGuardToken ? Math.max(0, guardTokens - 1) : guardTokens
         }
     };
 };
@@ -342,7 +353,7 @@ export const applyEnemyHazardClick = (
 export const defeatEnemyHazardsForFloorClear = (
     board: BoardState
 ): { board: BoardState; defeated: number; bossesDefeated: number } => {
-    const active = board.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? [];
+    const active = enemyHazardsForBoard(board).filter((hazard) => hazard.state !== 'defeated');
     if (active.length === 0) {
         return { board, defeated: 0, bossesDefeated: 0 };
     }
@@ -351,7 +362,7 @@ export const defeatEnemyHazardsForFloorClear = (
     return {
         board: {
             ...board,
-            enemyHazards: board.enemyHazards?.map((hazard) =>
+            enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
                 activeIds.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
             )
         },
@@ -386,7 +397,7 @@ export const defeatEnemyHazardsBlockingLastPair = (
     }
     const blockedTileIds = new Set(lastPairTileIds);
     const blockingHazards =
-        board.enemyHazards?.filter(
+        enemyHazardsForBoard(board).filter(
             (hazard) =>
                 hazard.state === 'hidden' &&
                 (blockedTileIds.has(hazard.currentTileId) || blockedTileIds.has(hazard.nextTileId))
@@ -398,7 +409,7 @@ export const defeatEnemyHazardsBlockingLastPair = (
     return {
         board: {
             ...board,
-            enemyHazards: board.enemyHazards?.map((hazard) =>
+            enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
                 blockingIds.has(hazard.id) ? { ...hazard, hp: 0, state: 'defeated' as const } : hazard
             )
         },
@@ -415,10 +426,11 @@ export const clearLastPairEnemyHazardSoftlock = (run: RunState, board: BoardStat
     return {
         ...run,
         board: cleared.board,
-        dungeonEnemiesDefeated: run.dungeonEnemiesDefeated + cleared.bossesDefeated,
+        dungeonEnemiesDefeated:
+            runNonNegativeInteger(run.dungeonEnemiesDefeated) + runNonNegativeInteger(cleared.bossesDefeated),
         dungeonEnemiesDefeatedThisFloor:
-            (run.dungeonEnemiesDefeatedThisFloor ?? 0) + cleared.bossesDefeated,
+            runNonNegativeInteger(run.dungeonEnemiesDefeatedThisFloor) + runNonNegativeInteger(cleared.bossesDefeated),
         enemyHazardsDefeatedThisFloor:
-            (run.enemyHazardsDefeatedThisFloor ?? 0) + cleared.defeated
+            runNonNegativeInteger(run.enemyHazardsDefeatedThisFloor) + runNonNegativeInteger(cleared.defeated)
     };
 };

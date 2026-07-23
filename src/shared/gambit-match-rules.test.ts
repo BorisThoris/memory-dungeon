@@ -67,5 +67,10 @@ describe('gambit match rules', () => {
             tile('a', 'A'),
             tile('b', 'A')
         ], ['a', 'b', 'missing']))).toBeNull();
+        expect(selectGambitMatchedPair(board([
+            tile('a', 'A'),
+            tile('b', 'A'),
+            tile('c', 'C')
+        ], Number.NaN as unknown as string[]))).toBeNull();
     });
 });

@@ -4,19 +4,13 @@
  */
 import type { SaveData } from './contracts';
 import { cosmeticUnlockTag, type CosmeticId } from './cosmetics';
-import { normalizeSaveData } from './save-data';
+import { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
+import { runNonNegativeInteger } from './run-number-guards';
+import { getRelicPickTotal, normalizeSaveData } from './save-data';
+
+export { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
 
 export const HONOR_UNLOCK_PREFIX = 'honor:' as const;
-
-export type HonorUnlockId =
-    | 'honor_daily_initiate'
-    | 'honor_daily_streak_3'
-    | 'honor_daily_streak_7'
-    | 'honor_ascendant_5'
-    | 'honor_ascendant_10'
-    | 'honor_score_maestro'
-    | 'honor_relic_habit'
-    | 'honor_gauntlet_proof';
 
 export interface HonorUnlockDefinition {
     id: HonorUnlockId;
@@ -68,16 +62,7 @@ export const HONOR_UNLOCK_CATALOG: Record<HonorUnlockId, HonorUnlockDefinition> 
 };
 
 /** Stable display order for Collection / UI. */
-export const HONOR_UNLOCK_ORDER: HonorUnlockId[] = [
-    'honor_daily_initiate',
-    'honor_daily_streak_3',
-    'honor_daily_streak_7',
-    'honor_ascendant_5',
-    'honor_ascendant_10',
-    'honor_score_maestro',
-    'honor_relic_habit',
-    'honor_gauntlet_proof'
-];
+export const HONOR_UNLOCK_ORDER = HONOR_UNLOCK_IDS;
 
 const HONOR_COSMETIC_UNLOCKS: Partial<Record<HonorUnlockId, CosmeticId>> = {
     honor_daily_initiate: 'crest_daily_bronze',
@@ -86,12 +71,15 @@ const HONOR_COSMETIC_UNLOCKS: Partial<Record<HonorUnlockId, CosmeticId>> = {
 
 export const honorUnlockTag = (id: HonorUnlockId): string => `${HONOR_UNLOCK_PREFIX}${id}`;
 
+const isHonorUnlockId = (value: string): value is HonorUnlockId =>
+    Object.prototype.hasOwnProperty.call(HONOR_UNLOCK_CATALOG, value);
+
 export const parseHonorUnlockTag = (tag: string): HonorUnlockId | null => {
     if (!tag.startsWith(HONOR_UNLOCK_PREFIX)) {
         return null;
     }
-    const id = tag.slice(HONOR_UNLOCK_PREFIX.length) as HonorUnlockId;
-    return id in HONOR_UNLOCK_CATALOG ? id : null;
+    const id = tag.slice(HONOR_UNLOCK_PREFIX.length);
+    return isHonorUnlockId(id) ? id : null;
 };
 
 export const hasHonorUnlock = (save: SaveData, id: HonorUnlockId): boolean =>
@@ -100,11 +88,13 @@ export const hasHonorUnlock = (save: SaveData, id: HonorUnlockId): boolean =>
 /** Which honors are earned given current save stats (independent of whether tags are already stored). */
 export const eligibleHonorUnlockIds = (save: SaveData): HonorUnlockId[] => {
     const ps = save.playerStats;
-    const dailies = ps?.dailiesCompleted ?? 0;
-    const streak = ps?.dailyStreakCosmetic ?? 0;
-    const bestNp = ps?.bestFloorNoPowers ?? 0;
-    const relicPicks = Object.values(ps?.relicPickCounts ?? {}).reduce((a, b) => a + (b ?? 0), 0);
+    const dailies = runNonNegativeInteger(ps?.dailiesCompleted);
+    const streak = runNonNegativeInteger(ps?.dailyStreakCosmetic);
+    const bestNp = runNonNegativeInteger(ps?.bestFloorNoPowers);
+    const bestScore = runNonNegativeInteger(save.bestScore);
+    const relicPicks = getRelicPickTotal(ps?.relicPickCounts);
     const last = save.lastRunSummary;
+    const lastLevelsCleared = runNonNegativeInteger(last?.levelsCleared);
 
     const earned: HonorUnlockId[] = [];
     if (dailies >= 1) earned.push('honor_daily_initiate');
@@ -112,9 +102,9 @@ export const eligibleHonorUnlockIds = (save: SaveData): HonorUnlockId[] => {
     if (streak >= 7) earned.push('honor_daily_streak_7');
     if (bestNp >= 5) earned.push('honor_ascendant_5');
     if (bestNp >= 10) earned.push('honor_ascendant_10');
-    if (save.bestScore >= 2000) earned.push('honor_score_maestro');
+    if (bestScore >= 2000) earned.push('honor_score_maestro');
     if (relicPicks >= 10) earned.push('honor_relic_habit');
-    if (last?.gameMode === 'gauntlet' && (last.levelsCleared ?? 0) >= 1) earned.push('honor_gauntlet_proof');
+    if (last?.gameMode === 'gauntlet' && lastLevelsCleared >= 1) earned.push('honor_gauntlet_proof');
 
     return [...new Set(earned)];
 };

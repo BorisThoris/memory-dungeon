@@ -1,5 +1,6 @@
+import { ACHIEVEMENTS } from './achievements';
+import { MUTATOR_IDS } from './contracts';
 import {
-    ACHIEVEMENT_CATALOG,
     CODEX_CORE_TOPICS,
     ENCYCLOPEDIA_CONTRACT_TOPICS,
     ENCYCLOPEDIA_FEATURED_RUN_TOPICS,
@@ -8,10 +9,9 @@ import {
     ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS,
     ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS,
     GAME_MODE_CODEX,
-    MUTATOR_CATALOG,
-    RELIC_CATALOG,
     VISUAL_ENDLESS_MODE_LOCKED
 } from './mechanics-encyclopedia';
+import { RELIC_POOL } from './relics';
 import { getTileTraitCodexRows, getTileTraitInteractionCodexRows } from './tile-trait-codex';
 
 export type CodexKnowledgeSectionId =
@@ -43,6 +43,9 @@ export const getCodexKnowledgeSectionRows = (): CodexKnowledgeSectionRow[] => {
         getTileTraitCodexRows().length +
         getTileTraitInteractionCodexRows().length;
     const modeCount = GAME_MODE_CODEX.length + 1;
+    const achievementCount = ACHIEVEMENTS.length;
+    const relicCount = RELIC_POOL.length;
+    const mutatorCount = MUTATOR_IDS.length;
     return [
         {
             id: 'guides',
@@ -55,7 +58,7 @@ export const getCodexKnowledgeSectionRows = (): CodexKnowledgeSectionRow[] => {
         {
             id: 'tables',
             title: 'Reference tables',
-            entryCount: Object.keys(ACHIEVEMENT_CATALOG).length + Object.keys(RELIC_CATALOG).length + Object.keys(MUTATOR_CATALOG).length,
+            entryCount: achievementCount + relicCount + mutatorCount,
             description: 'Stable ID-backed tables for achievements, relics, and mutators.',
             deepLink: '#codex-achievements',
             localOnly: true
@@ -71,7 +74,7 @@ export const getCodexKnowledgeSectionRows = (): CodexKnowledgeSectionRow[] => {
         {
             id: 'achievements',
             title: 'Achievements',
-            entryCount: Object.keys(ACHIEVEMENT_CATALOG).length,
+            entryCount: achievementCount,
             description: 'Steam/local achievement names and consequences stay aligned with the encyclopedia.',
             deepLink: '#codex-achievements',
             localOnly: true
@@ -79,7 +82,7 @@ export const getCodexKnowledgeSectionRows = (): CodexKnowledgeSectionRow[] => {
         {
             id: 'relics',
             title: 'Relics',
-            entryCount: Object.keys(RELIC_CATALOG).length,
+            entryCount: relicCount,
             description: 'Run-build modifiers and draft consequences.',
             deepLink: '#codex-relics',
             localOnly: true
@@ -87,7 +90,7 @@ export const getCodexKnowledgeSectionRows = (): CodexKnowledgeSectionRow[] => {
         {
             id: 'mutators',
             title: 'Mutators',
-            entryCount: Object.keys(MUTATOR_CATALOG).length,
+            entryCount: mutatorCount,
             description: 'Floor pressure, presentation, and scoring modifiers.',
             deepLink: '#codex-mutators',
             localOnly: true

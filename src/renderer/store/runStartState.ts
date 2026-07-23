@@ -1,5 +1,5 @@
 import type { MutatorId, RunState, SaveData, Settings } from '../../shared/contracts';
-import { BUILTIN_PUZZLES } from '../../shared/builtin-puzzles';
+import { getBuiltinPuzzle } from '../../shared/builtin-puzzles';
 import {
     createDailyRun,
     createDungeonShowcaseRun,
@@ -118,7 +118,7 @@ export const createRunStartPlan = ({
             run = createNewRun(bestScore, { practiceMode: true, ...meta });
             break;
         case 'puzzle': {
-            const puzzle = BUILTIN_PUZZLES[request.puzzleId];
+            const puzzle = getBuiltinPuzzle(request.puzzleId);
             if (!puzzle) {
                 return null;
             }
@@ -173,7 +173,7 @@ export const createRestartRun = (previousRun: RunState | null, saveData: SaveDat
     }
 
     if (previousRun?.gameMode === 'puzzle' && previousRun.puzzleId) {
-        const puzzle = BUILTIN_PUZZLES[previousRun.puzzleId];
+        const puzzle = getBuiltinPuzzle(previousRun.puzzleId);
         return puzzle ? createPuzzleRun(bestScore, puzzle.id, puzzle.tiles, 1, meta) : createNewRun(bestScore, meta);
     }
 

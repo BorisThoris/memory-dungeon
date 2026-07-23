@@ -23,6 +23,13 @@ describe('weightedPick', () => {
         expect(counts[1]).toBeGreaterThan(counts[2]);
     });
 
+    it('pickWeightedIndex ignores malformed weights and rng rolls', () => {
+        expect(pickWeightedIndex(() => Number.NaN, [Number.NaN, 4, Number.POSITIVE_INFINITY])).toBe(1);
+        expect(pickWeightedIndex(() => 0.5, [Number.NaN, 4, Number.POSITIVE_INFINITY])).toBe(1);
+        expect(pickWeightedIndex(() => 0.5, [-10, 4, -2])).toBe(1);
+        expect(pickWeightedIndex(() => Number.POSITIVE_INFINITY, [0, 0, 0])).toBe(0);
+    });
+
     it('pickWeightedWithoutReplacement is deterministic', () => {
         const rng = makeRng(99);
         const a = pickWeightedWithoutReplacement(
@@ -59,5 +66,50 @@ describe('weightedPick', () => {
             3
         );
         expect(new Set(out).size).toBe(3);
+    });
+
+    it('pickWeightedWithoutReplacement normalizes malformed weights and counts', () => {
+        expect(
+            pickWeightedWithoutReplacement(
+                () => 0.75,
+                [
+                    { value: 'a', weight: Number.NaN },
+                    { value: 'b', weight: 1 },
+                    { value: 'c', weight: Number.POSITIVE_INFINITY }
+                ],
+                Number.POSITIVE_INFINITY
+            )
+        ).toEqual(['b', 'c', 'a']);
+        expect(
+            pickWeightedWithoutReplacement(
+                () => 0.75,
+                [
+                    { value: 'a', weight: -1 },
+                    { value: 'b', weight: 1 },
+                    { value: 'c', weight: Number.NaN }
+                ],
+                1.9
+            )
+        ).toEqual(['b']);
+        expect(
+            pickWeightedWithoutReplacement(
+                () => 0.75,
+                [
+                    { value: 'a', weight: 1 },
+                    { value: 'b', weight: 1 }
+                ],
+                Number.NaN
+            )
+        ).toEqual(['b', 'a']);
+        expect(
+            pickWeightedWithoutReplacement(
+                () => 0.75,
+                [
+                    { value: 'a', weight: 1 },
+                    { value: 'b', weight: 1 }
+                ],
+                -1
+            )
+        ).toEqual([]);
     });
 });

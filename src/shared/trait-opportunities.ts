@@ -159,7 +159,7 @@ export const getTraitOpportunityTileIds = (board: BoardState | null | undefined)
     new Set(getTraitOpportunitySummary(board).tiles.map((tile) => tile.tileId));
 
 export const getSelectedTraitFollowupTileIds = (board: BoardState | null | undefined): Set<string> => {
-    if (!board || board.flippedTileIds.length !== 1) {
+    if (!board || !Array.isArray(board.flippedTileIds) || board.flippedTileIds.length !== 1) {
         return new Set();
     }
 
@@ -196,6 +196,7 @@ export const getTraitOpportunityHighlight = (board: BoardState | null | undefine
     const surgeTileIds = getTraitComboSurgeTileIds(board);
     if (summary.interactionLines.length > 0) {
         const tone = surgeTileIds.size > 0 ? 'surge' : 'ready';
+        const primaryLine = summary.interactionLines[0] ?? 'Match or move traits together to light a route.';
         const buildLabel =
             summary.buildLabels[0] ??
             (summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Trait route');
@@ -203,7 +204,7 @@ export const getTraitOpportunityHighlight = (board: BoardState | null | undefine
             active: true,
             buildLabel,
             headline: tone === 'surge' ? 'Combo surge ready' : 'Chain route ready',
-            primaryLine: summary.interactionLines[0]!,
+            primaryLine,
             secondaryLine: summary.interactionLines[1] ?? null,
             tileIds: summary.tiles.map((tile) => tile.tileId),
             tone
@@ -251,8 +252,11 @@ export const getTraitSwapRouteHints = (
     let order = 0;
     for (let i = 0; i < hiddenTiles.length; i += 1) {
         for (let j = i + 1; j < hiddenTiles.length; j += 1) {
-            const first = hiddenTiles[i]!;
-            const second = hiddenTiles[j]!;
+            const first = hiddenTiles[i];
+            const second = hiddenTiles[j];
+            if (!first || !second) {
+                continue;
+            }
             const preview = getTraitSwapOpportunityPreviewWithContext(board, first.id, second.id, context);
             if (preview.matchCreatedLines.length === 0) {
                 continue;
@@ -351,8 +355,12 @@ const createBoardWithSwappedTiles = (board: BoardState, firstTileId: string, sec
         return null;
     }
     const tiles = [...board.tiles];
-    const first = tiles[firstIndex]!;
-    tiles[firstIndex] = tiles[secondIndex]!;
+    const first = tiles[firstIndex];
+    const second = tiles[secondIndex];
+    if (!first || !second) {
+        return null;
+    }
+    tiles[firstIndex] = second;
     tiles[secondIndex] = first;
     return { ...board, tiles };
 };

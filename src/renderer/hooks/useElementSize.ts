@@ -1,24 +1,28 @@
-import { useEffect, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useState, type RefCallback } from 'react';
 
 export interface ElementFootprint {
     height: number;
     width: number;
 }
 
-export const useElementSize = <T extends HTMLElement>(): [RefObject<T | null>, ElementFootprint | null] => {
-    const elementRef = useRef<T | null>(null);
+export const useElementSize = <T extends HTMLElement>(): [RefCallback<T>, ElementFootprint | null] => {
+    const [element, setElement] = useState<T | null>(null);
     const [size, setSize] = useState<ElementFootprint | null>(null);
+    const elementRef = useCallback((nextElement: T | null): void => {
+        setElement(nextElement);
+        if (!nextElement) {
+            setSize(null);
+        }
+    }, []);
 
     useEffect(() => {
-        const element = elementRef.current;
-
         if (!element) {
             return;
         }
 
-        let frameId = 0;
+        let frameId: number | null = null;
         const updateSize = (): void => {
-            frameId = 0;
+            frameId = null;
             const nextRect = element.getBoundingClientRect();
 
             if (nextRect.width < 1 || nextRect.height < 1) {
@@ -43,33 +47,43 @@ export const useElementSize = <T extends HTMLElement>(): [RefObject<T | null>, E
             });
         };
         const scheduleUpdate = (): void => {
-            if (frameId) {
+            if (frameId !== null) {
                 window.cancelAnimationFrame(frameId);
             }
 
             frameId = window.requestAnimationFrame(updateSize);
         };
-        const resizeObserver =
-            typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => scheduleUpdate());
+        let resizeObserver: ResizeObserver | null = null;
+        try {
+            resizeObserver = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => scheduleUpdate());
+        } catch {
+            resizeObserver = null;
+        }
 
-        resizeObserver?.observe(element);
+        try {
+            resizeObserver?.observe(element);
 
-        if (element.parentElement) {
-            resizeObserver?.observe(element.parentElement);
+            if (element.parentElement) {
+                resizeObserver?.observe(element.parentElement);
+            }
+        } catch {
+            resizeObserver?.disconnect();
+            resizeObserver = null;
         }
 
         scheduleUpdate();
         window.addEventListener('resize', scheduleUpdate);
 
         return () => {
-            if (frameId) {
+            if (frameId !== null) {
                 window.cancelAnimationFrame(frameId);
+                frameId = null;
             }
 
             resizeObserver?.disconnect();
             window.removeEventListener('resize', scheduleUpdate);
         };
-    }, []);
+    }, [element]);
 
     return [elementRef, size];
 };

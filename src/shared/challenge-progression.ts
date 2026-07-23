@@ -4,6 +4,7 @@ import {
     getMetaProgressionFeedback,
     type MetaProgressionDifficultyTier
 } from './meta-progression';
+import { runNonNegativeInteger } from './run-number-guards';
 import { RUN_MODE_CATALOG, type RunModeDefinition } from './run-mode-catalog';
 
 export type ChallengeGateStatus = 'available' | 'locked' | 'deferred';
@@ -47,7 +48,7 @@ const gateIdForMode = (mode: RunModeDefinition): ChallengeGateId => {
 
 const rowForMode = (save: SaveData, mode: RunModeDefinition): ChallengeModeGateRow => {
     const firstClear = save.achievements.ACH_FIRST_CLEAR ? 1 : 0;
-    const dailies = save.playerStats?.dailiesCompleted ?? 0;
+    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
     const starterPuzzleDone = puzzleCompleted(save, 'starter_pairs') ? 1 : 0;
     const gateId = gateIdForMode(mode);
 

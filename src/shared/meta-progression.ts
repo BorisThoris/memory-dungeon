@@ -1,13 +1,16 @@
+import { getAchievementProgressSummary } from './achievements';
 import type { SaveData } from './contracts';
 import {
     COSMETIC_CATALOG,
     cosmeticIsOwned,
     cosmeticUnlockTag,
     deriveCosmeticStates,
+    getCosmeticCatalogRows,
     type CosmeticId
 } from './cosmetics';
 import { countEligibleHonors } from './honorUnlocks';
-import { normalizeSaveData } from './save-data';
+import { runNonNegativeInteger } from './run-number-guards';
+import { getRelicPickTotal, normalizeSaveData } from './save-data';
 
 export type MetaProgressionTrack = 'permanent_upgrade' | 'cosmetic';
 export type MetaProgressionStatus = 'owned' | 'available' | 'locked';
@@ -132,9 +135,6 @@ export interface MetaProgressionMilestoneRow {
     reward: string;
 }
 
-const totalRelicPicks = (save: SaveData): number =>
-    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
-
 const META_MARKS_PER_LEVEL = 5;
 
 const META_PROGRESS_MILESTONES: Array<{
@@ -149,21 +149,20 @@ const META_PROGRESS_MILESTONES: Array<{
 ];
 
 export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceRow[] => {
-    const achievements = Object.values(save.achievements).filter(Boolean).length;
-    const achievementTotal = Object.keys(save.achievements).length;
-    const dailies = Math.min(7, save.playerStats?.dailiesCompleted ?? 0);
-    const noPowers = Math.min(5, save.playerStats?.bestFloorNoPowers ?? 0);
-    const relics = Math.min(10, totalRelicPicks(save));
+    const achievementProgress = getAchievementProgressSummary(save.achievements);
+    const dailies = Math.min(7, runNonNegativeInteger(save.playerStats?.dailiesCompleted));
+    const noPowers = Math.min(5, runNonNegativeInteger(save.playerStats?.bestFloorNoPowers));
+    const relics = Math.min(10, getRelicPickTotal(save.playerStats?.relicPickCounts));
     const relicsToNextMark = relics >= 10 ? null : relics % 2 === 0 ? 2 : 1;
     return [
         {
             id: 'achievements',
             label: 'Achievements',
-            marks: achievements * 2,
-            cap: achievementTotal * 2,
-            progress: { current: achievements, target: achievementTotal },
-            nextMarkCopy: achievements < achievementTotal ? 'Earn one more achievement for 2 honor marks.' : null,
-            nextMarkUnitsRemaining: achievements < achievementTotal ? 1 : null
+            marks: achievementProgress.earned * 2,
+            cap: achievementProgress.total * 2,
+            progress: { current: achievementProgress.earned, target: achievementProgress.total },
+            nextMarkCopy: achievementProgress.earned < achievementProgress.total ? 'Earn one more achievement for 2 honor marks.' : null,
+            nextMarkUnitsRemaining: achievementProgress.earned < achievementProgress.total ? 1 : null
         },
         {
             id: 'daily_archive',
@@ -224,8 +223,8 @@ const lockedStatusForProgress = (current: number, target: number, owned: boolean
     enabled ? statusForProgress(current, target, owned) : owned ? 'owned' : 'locked';
 
 export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] => {
-    const dailies = save.playerStats?.dailiesCompleted ?? 0;
-    const bestNoPowers = save.playerStats?.bestFloorNoPowers ?? 0;
+    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+    const bestNoPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
         {
             id: 'upgrade_relic_shrine_extra_pick',
@@ -263,7 +262,7 @@ export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] =>
 };
 
 export const getMetaCosmeticTrackRows = (save: SaveData): MetaProgressionRow[] =>
-    (Object.values(COSMETIC_CATALOG) as Array<(typeof COSMETIC_CATALOG)[CosmeticId]>)
+    getCosmeticCatalogRows()
         .filter((cosmetic) => cosmetic.defaultOwned !== true)
         .map((cosmetic) => ({
             id: `cosmetic_track_${cosmetic.id}`,
@@ -308,7 +307,7 @@ export const getMetaProgressionSummary = (
 export const getMetaProgressionBoard = (save: SaveData): MetaProgressionBoard => {
     const rows = getMetaProgressionRows(save);
     const summary = getMetaProgressionSummary(save);
-    const honorMarks = summary.honorMarks;
+    const honorMarks = runNonNegativeInteger(summary.honorMarks);
     const shortTermRows = rows.filter((row) => !isDeferredMetaProgressionRow(row));
     const nextReward =
         shortTermRows.find((row) => row.status === 'available') ??
@@ -421,7 +420,8 @@ export const getMetaProgressionDifficultyTierLabel = (tier: MetaProgressionDiffi
     }
 };
 
-const metaMarksRequiredForLevel = (level: number): number => Math.max(0, (level - 1) * META_MARKS_PER_LEVEL);
+const metaMarksRequiredForLevel = (level: number): number =>
+    Math.max(0, (runNonNegativeInteger(level) - 1) * META_MARKS_PER_LEVEL);
 
 export const getMetaProgressionMilestones = (save: SaveData): MetaProgressionMilestoneRow[] => {
     const board = getMetaProgressionBoard(save);
@@ -515,8 +515,8 @@ const legacyStatus = (owned: boolean, current: number, target: number): LegacyMe
     owned ? 'owned' : current > 0 || current >= target ? 'in_progress' : 'locked';
 
 export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[] => {
-    const dailies = save.playerStats?.dailiesCompleted ?? 0;
-    const noPowers = save.playerStats?.bestFloorNoPowers ?? 0;
+    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+    const noPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
     return [
         {
             id: 'relic_shrine_extra_pick',
@@ -549,35 +549,39 @@ export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[]
 };
 
 /** One row per cosmetic track (daily/mastery/relic gating), not the aggregate summary from `getCosmeticTrackProgressSummary`. */
-export const getCosmeticTrackDefinitionRows = (save: SaveData): CosmeticTrackRow[] => [
-    {
-        trackId: 'starter',
-        cosmeticId: 'title_seeker',
-        label: COSMETIC_CATALOG.title_seeker.label,
-        status: 'owned',
-        owned: 1,
-        progress: { current: 1, target: 1 },
-        gameplayAffecting: false
-    },
-    {
-        trackId: 'daily',
-        cosmeticId: 'crest_daily_bronze',
-        label: COSMETIC_CATALOG.crest_daily_bronze.label,
-        status: legacyStatus(cosmeticIsOwned(save, 'crest_daily_bronze'), save.playerStats?.dailiesCompleted ?? 0, 3),
-        owned: cosmeticIsOwned(save, 'crest_daily_bronze') ? 1 : 0,
-        progress: { current: Math.min(save.playerStats?.dailiesCompleted ?? 0, 3), target: 3 },
-        gameplayAffecting: false
-    },
-    {
-        trackId: 'mastery',
-        cosmeticId: 'title_ascendant_v',
-        label: COSMETIC_CATALOG.title_ascendant_v.label,
-        status: legacyStatus(cosmeticIsOwned(save, 'title_ascendant_v'), save.playerStats?.bestFloorNoPowers ?? 0, 5),
-        owned: cosmeticIsOwned(save, 'title_ascendant_v') ? 1 : 0,
-        progress: { current: Math.min(save.playerStats?.bestFloorNoPowers ?? 0, 5), target: 5 },
-        gameplayAffecting: false
-    }
-];
+export const getCosmeticTrackDefinitionRows = (save: SaveData): CosmeticTrackRow[] => {
+    const dailies = runNonNegativeInteger(save.playerStats?.dailiesCompleted);
+    const noPowers = runNonNegativeInteger(save.playerStats?.bestFloorNoPowers);
+    return [
+        {
+            trackId: 'starter',
+            cosmeticId: 'title_seeker',
+            label: COSMETIC_CATALOG.title_seeker.label,
+            status: 'owned',
+            owned: 1,
+            progress: { current: 1, target: 1 },
+            gameplayAffecting: false
+        },
+        {
+            trackId: 'daily',
+            cosmeticId: 'crest_daily_bronze',
+            label: COSMETIC_CATALOG.crest_daily_bronze.label,
+            status: legacyStatus(cosmeticIsOwned(save, 'crest_daily_bronze'), dailies, 3),
+            owned: cosmeticIsOwned(save, 'crest_daily_bronze') ? 1 : 0,
+            progress: { current: Math.min(dailies, 3), target: 3 },
+            gameplayAffecting: false
+        },
+        {
+            trackId: 'mastery',
+            cosmeticId: 'title_ascendant_v',
+            label: COSMETIC_CATALOG.title_ascendant_v.label,
+            status: legacyStatus(cosmeticIsOwned(save, 'title_ascendant_v'), noPowers, 5),
+            owned: cosmeticIsOwned(save, 'title_ascendant_v') ? 1 : 0,
+            progress: { current: Math.min(noPowers, 5), target: 5 },
+            gameplayAffecting: false
+        }
+    ];
+};
 
 /** Aggregate owned/total per track for collection UI. Lives here to avoid a cosmetics/meta-progression import cycle. */
 export const getCosmeticTrackProgressSummary = (save: SaveData) => {

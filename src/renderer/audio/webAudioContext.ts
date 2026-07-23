@@ -21,7 +21,11 @@ export const getSharedAudioContext = (): AudioContext | null => {
 export const resumeSharedAudioContext = (): void => {
     const ctx = getSharedAudioContext();
     if (ctx && ctx.state === 'suspended') {
-        void ctx.resume();
+        try {
+            void Promise.resolve(ctx.resume()).catch(() => undefined);
+        } catch {
+            // Audio hosts can throw synchronously while a context is closing.
+        }
     }
 };
 

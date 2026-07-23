@@ -1,4 +1,5 @@
 import type { RewardPerkId, RunState, StartingLoadoutId } from './contracts';
+import { normalizeRewardPerkIds } from './bonus-rewards';
 import { gainRunInventoryItem } from './run-inventory';
 
 export interface StartingLoadoutDefinition {
@@ -12,6 +13,13 @@ export interface StartingLoadoutDefinition {
     }[];
     firstFloorDecision: string;
 }
+
+export const STARTING_LOADOUT_IDS = [
+    'memory_scout',
+    'route_tactician',
+    'cursebreaker',
+    'vaultbreaker'
+] as const satisfies readonly StartingLoadoutId[];
 
 export const STARTING_LOADOUTS: Record<StartingLoadoutId, StartingLoadoutDefinition> = {
     memory_scout: {
@@ -64,6 +72,9 @@ export const getStartingLoadoutDefinition = (
     id: StartingLoadoutId | null | undefined
 ): StartingLoadoutDefinition | null => (id ? STARTING_LOADOUTS[id] ?? null : null);
 
+export const getStartingLoadoutRows = (): StartingLoadoutDefinition[] =>
+    STARTING_LOADOUT_IDS.map((id) => STARTING_LOADOUTS[id]);
+
 export const applyStartingLoadout = (run: RunState, id: StartingLoadoutId | null | undefined): RunState => {
     if (!id) {
         return run;
@@ -76,7 +87,7 @@ export const applyStartingLoadout = (run: RunState, id: StartingLoadoutId | null
             break;
         case 'route_tactician': {
             next = gainRunInventoryItem(next, 'region_shuffle_charge');
-            const perkIds: RewardPerkId[] = [...(next.rewardPerkIds ?? []), 'free_first_swap_per_floor'];
+            const perkIds: RewardPerkId[] = [...normalizeRewardPerkIds(next.rewardPerkIds), 'free_first_swap_per_floor'];
             next = {
                 ...next,
                 rewardPerkIds: [...new Set(perkIds)]

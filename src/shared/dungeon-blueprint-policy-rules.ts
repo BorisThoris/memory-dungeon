@@ -11,7 +11,8 @@ import type {
 import { createDungeonEncounterContext } from './dungeon-encounter-context-rules';
 import {
     createMulberry32,
-    hashStringToSeed
+    hashStringToSeed,
+    pickRngIndex
 } from './rng';
 import { NUMBER_SYMBOLS } from './tile-symbol-catalog';
 
@@ -211,6 +212,8 @@ export const roomEffectForFloor = (
         return null;
     }
     const rng = createMulberry32(hashStringToSeed(`dungeonRoom:${rulesVersion}:${runSeed}:${level}`));
+    const pickRoomEffect = (options: readonly DungeonCardEffectId[]): DungeonCardEffectId | null =>
+        options[pickRngIndex(rng, options.length)] ?? null;
     if (dungeonNodeKind === 'rest') {
         const options: DungeonCardEffectId[] = [
             'room_campfire',
@@ -220,15 +223,15 @@ export const roomEffectForFloor = (
             'room_scrying_lens',
             'room_armory'
         ];
-        return options[Math.floor(rng() * options.length)]!;
+        return pickRoomEffect(options);
     }
     if (dungeonNodeKind === 'event') {
         const options: DungeonCardEffectId[] = ['room_map', 'room_omen_archive', 'room_scrying_lens', 'room_forge'];
-        return options[Math.floor(rng() * options.length)]!;
+        return pickRoomEffect(options);
     }
     if (dungeonNodeKind === 'treasure') {
         const options: DungeonCardEffectId[] = ['room_key_cache', 'room_locked_cache', 'room_armory', 'room_scrying_lens'];
-        return options[Math.floor(rng() * options.length)]!;
+        return pickRoomEffect(options);
     }
     if (dungeonNodeKind === 'trap') {
         return 'room_trap_workshop';
@@ -267,7 +270,7 @@ export const roomEffectForFloor = (
                           'room_armory',
                           'room_key_cache'
                       ];
-    return options[Math.floor(rng() * options.length)]!;
+    return pickRoomEffect(options);
 };
 
 export const chooseRoomEffectsForFloor = (

@@ -266,6 +266,38 @@ describe('useAppStore timers', () => {
         expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('{not-valid-json');
     });
 
+    it('treats valid JSON with a non-object save root as a protected read failure', async () => {
+        window.localStorage.setItem('memory-dungeon-save-data', '["corrupt"]');
+        useAppStore.setState({ hydrated: false, hydrating: false });
+
+        await useAppStore.getState().hydrate();
+
+        expect(useAppStore.getState().saveWritesBlockedByReadFailure).toBe(true);
+        expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('["corrupt"]');
+    });
+
+    it('protects an unrecognizable object-shaped browser save from autosave', async () => {
+        window.localStorage.setItem('memory-dungeon-save-data', '{"undocumentedSave":true}');
+        useAppStore.setState({ hydrated: false, hydrating: false });
+
+        await useAppStore.getState().hydrate();
+
+        expect(useAppStore.getState().saveWritesBlockedByReadFailure).toBe(true);
+        expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('{"undocumentedSave":true}');
+    });
+
+    it('protects a browser save from a newer schema instead of downgrading it', async () => {
+        const defaultSave = createDefaultSaveData();
+        const futureSave = JSON.stringify({ ...defaultSave, schemaVersion: defaultSave.schemaVersion + 1 });
+        window.localStorage.setItem('memory-dungeon-save-data', futureSave);
+        useAppStore.setState({ hydrated: false, hydrating: false });
+
+        await useAppStore.getState().hydrate();
+
+        expect(useAppStore.getState().saveWritesBlockedByReadFailure).toBe(true);
+        expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe(futureSave);
+    });
+
     it('claims a ready meta progression reward and applies it to future run starts', () => {
         const saveData = createDefaultSaveData();
         saveData.playerStats = {

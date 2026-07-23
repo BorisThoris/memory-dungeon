@@ -221,17 +221,16 @@ export const formatVersionGateSummary = (manifest: VersionManifest): string =>
         `onlineAuthority=${manifest.onlineAuthority}`
     ].join(' · ');
 
+export const isRecognizedSaveSchemaVersion = (value: unknown): value is number =>
+    typeof value === 'number' && Number.isInteger(value) && value >= 0;
+
 export const evaluateSaveMigrationGate = (
-    input?: { schemaVersion?: number; lastRunSummary?: unknown } | null
+    input?: { schemaVersion?: unknown; lastRunSummary?: unknown } | null
 ): { keepLastRunSummary: boolean; sourceSchemaVersion: number | null; normalizedSchemaVersion: number } => {
-    const sourceSchemaVersion =
-        typeof input?.schemaVersion === 'number' && Number.isFinite(input.schemaVersion)
-            ? input.schemaVersion
-            : null;
+    const sourceSchemaVersion = isRecognizedSaveSchemaVersion(input?.schemaVersion) ? input.schemaVersion : null;
     return {
         sourceSchemaVersion,
         normalizedSchemaVersion: SAVE_SCHEMA_VERSION,
         keepLastRunSummary: sourceSchemaVersion === null || sourceSchemaVersion <= SAVE_SCHEMA_VERSION
     };
 };
-

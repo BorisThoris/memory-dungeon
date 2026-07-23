@@ -14,9 +14,11 @@ describe('hazard tile effect rules', () => {
     it('triggers shuffle snare only when at least two safe hidden targets exist', () => {
         const run = createNewRun(0);
         const board = boardWith([tile('a', 'a'), tile('b', 'b')]);
+        const result = applyShuffleSnareHazard(board, run);
 
         expect(applyShuffleSnareHazard(boardWith([tile('a', 'a')]), run)).toMatchObject({ triggered: false });
-        expect(applyShuffleSnareHazard(board, run).triggered).toBe(true);
+        expect(result.triggered).toBe(true);
+        expect(result.board.tiles.map((candidate) => candidate.id).sort()).toEqual(board.tiles.map((candidate) => candidate.id).sort());
     });
 
     it('removes a complete safe target pair for cascade cache', () => {
@@ -61,6 +63,23 @@ describe('hazard tile effect rules', () => {
             traitWardUsed: false,
             snareHazard: { triggered: false },
             fragileBreak: { brokenCount: 1 }
+        });
+    });
+
+    it('normalizes malformed ward charges before blocking hazard effects', () => {
+        const run = { ...createNewRun(0), safeHazardWardChargesThisFloor: Number.POSITIVE_INFINITY };
+        const board = boardWith([
+            tile('snare-a', 'snare-a', { tileHazardKind: 'shuffle_snare' }),
+            tile('safe-a', 'safe-a'),
+            tile('safe-b', 'safe-b')
+        ]);
+        const result = applySafeHazardWardMismatch(run, board, [board.tiles[0]!], new Set(['shuffle_snare']));
+
+        expect(result).toMatchObject({
+            wardUsed: false,
+            wardChargeSpent: false,
+            traitWardUsed: false,
+            snareHazard: { triggered: true }
         });
     });
 

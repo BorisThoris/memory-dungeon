@@ -11,6 +11,7 @@ import {
     getMetaProgressionMilestones,
     getMetaProgressionBoard,
     getMetaProgressionRows,
+    getPermanentUpgradeRows,
     metaProgressionSummary
 } from './meta-progression';
 
@@ -179,6 +180,51 @@ describe('REG-080 permanent upgrade tree and cosmetic track', () => {
         ]);
         expect(sources.find((row) => row.id === 'daily_archive')?.nextMarkCopy).toBeNull();
         expect(sources.find((row) => row.id === 'relic_mastery')?.nextMarkCopy).toBe('Pick 1 more relic for 1 honor mark.');
+    });
+
+    it('normalizes malformed persisted counters before projecting meta progression rows', () => {
+        const save = createDefaultSaveData();
+        save.playerStats = {
+            ...save.playerStats!,
+            dailiesCompleted: Number.POSITIVE_INFINITY,
+            bestFloorNoPowers: Number.NaN,
+            relicPickCounts: {
+                guard_token_plus_one: Number.POSITIVE_INFINITY,
+                parasite_ledger: 1.9
+            }
+        };
+
+        const sources = getMetaHonorMarkSourceRows(save);
+        expect(sources.map((row) => [row.id, row.marks, row.progress])).toEqual([
+            ['achievements', 0, { current: 0, target: 7 }],
+            ['daily_archive', 0, { current: 0, target: 7 }],
+            ['no_powers_mastery', 0, { current: 0, target: 5 }],
+            ['relic_mastery', 0, { current: 1, target: 10 }]
+        ]);
+
+        const board = getMetaProgressionBoard(save);
+        expect(board.level).toBe(1);
+        expect(board.levelProgress).toEqual({ current: 0, target: 5 });
+        expect(board.nextReward).toMatchObject({
+            id: 'upgrade_relic_shrine_extra_pick',
+            status: 'locked',
+            progress: { current: 0, target: 7 }
+        });
+
+        expect(getPermanentUpgradeRows(save).map((row) => [row.id, row.status, row.progress])).toEqual([
+            ['upgrade_relic_shrine_extra_pick', 'locked', { current: 0, target: 7 }],
+            ['upgrade_scholar_prep_slot', 'locked', { current: 0, target: 8 }]
+        ]);
+        expect(buildPermanentUpgradeRows(save).map((row) => [row.id, row.status, row.progress])).toEqual([
+            ['relic_shrine_extra_pick', 'locked', { current: 0, target: 7 }],
+            ['ascendant_title_track', 'locked', { current: 0, target: 5 }],
+            ['daily_cosmetic_track', 'locked', { current: 0, target: 3 }]
+        ]);
+        expect(getCosmeticTrackDefinitionRows(save).map((row) => [row.trackId, row.status, row.progress])).toEqual([
+            ['starter', 'owned', { current: 1, target: 1 }],
+            ['daily', 'locked', { current: 0, target: 3 }],
+            ['mastery', 'locked', { current: 0, target: 5 }]
+        ]);
     });
 
     it('selects the nearest unfinished honor-mark source for motivation surfaces', () => {

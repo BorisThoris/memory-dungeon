@@ -24,7 +24,7 @@
 | `yarn typecheck:shared` | `tsc -p tsconfig.shared.json --noEmit` — optional narrow check for `src/shared` only (no `composite` split; see TypeScript note below) |
 | `yarn lint` | ESLint + `scripts/check-test-file-extensions.mjs` (REF-093: no JSX in `.test.ts`) |
 | `yarn gate:systems` | Action-loop, rewards/economy, navigation, system-diagram drift, quiet topology audit, endless health, and multi-seed softlock gates |
-| `yarn gate:changed` | Selects focused gates from explicit paths or the current Git diff; route-map edits pull navigation, long-run, topology, softlock seeds, and full softlock stress |
+| `yarn gate:changed` | Selects focused gates from explicit paths or the current Git diff; route-map edits pull navigation, long-run, topology, softlock seeds, and full softlock stress, while source files without a narrower mapping fall back to `yarn verify` |
 | `yarn gate:long-run` | Long-run pacing, relic, balance, route-share, and 1000-floor endless sampler gate |
 | `yarn depcheck` | Unused/missing dependency scan ([`.depcheckrc.json`](../../.depcheckrc.json); ignores CSS-imported fonts + script runner bins) |
 | `yarn knip` | Unused files / dependency issues ([`knip.json`](../../knip.json); scopes `files`, `dependencies`, `unlisted`, `unresolved`; sets `NODE_OPTIONS=--experimental-require-module` for Knip on Node 22) |
@@ -33,7 +33,7 @@
 | `yarn gate:package-hygiene` | Combined dependency, unused-file, production-entry, and unused-export scan (concise `depcheck` wrapper, `knip`, `knip:production`, `knip:exports`) selected by `gate:changed` for package/tooling edits. |
 | `yarn audit:renderer-assets` | `scripts/audit-renderer-assets.mjs` — lists `src/renderer/assets/**` files whose basename has no TS/CSS/markdown reference under `src/`, `scripts/`, `e2e/`, `public/` (manual triage; not a delete pass) |
 | `yarn audit:summary` | `scripts/audit-summary.mjs` — condenses `yarn audit --json` into severity totals, unique advisory groups, patched ranges, and sample dependency paths |
-| `yarn test` | Vitest run |
+| `yarn test` | Vitest run with at most two workers for stable full-suite memory use |
 | `yarn test:watch` | Vitest watch |
 | `yarn test:e2e` | Full Playwright suite |
 | `yarn test:e2e:illustration-regression` | Golden comparison for procedural card illustration (`e2e/tile-card-face-illustration-regression.spec.ts`, `--workers=1`) |

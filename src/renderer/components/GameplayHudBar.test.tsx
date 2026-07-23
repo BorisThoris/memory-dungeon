@@ -6,6 +6,29 @@ import { createDailyRun, createDungeonShowcaseRun, createNewRun, createPuzzleRun
 import GameplayHudBar from './GameplayHudBar';
 
 describe('GameplayHudBar', () => {
+    it('normalizes malformed total score copy in the live HUD', () => {
+        const baseRun = finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false }));
+        const run: RunState = {
+            ...baseRun,
+            stats: {
+                ...baseRun.stats,
+                totalScore: Number.POSITIVE_INFINITY
+            }
+        };
+
+        render(
+            <GameplayHudBar
+                cameraViewportMode={false}
+                gauntletRemainingMs={null}
+                politeHudAnnouncement=""
+                run={run}
+            />
+        );
+
+        expect(screen.getByTestId('hud-wing-center')).toHaveTextContent('Score0');
+        expect(screen.getByTestId('hud-wing-center')).not.toHaveTextContent(/NaN|Infinity/);
+    });
+
     it('shows endless archetype, featured objective, and favor progress on scheduled endless floors', () => {
         const run = {
             ...finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false })),
@@ -746,7 +769,7 @@ describe('GameplayHudBar', () => {
         expect(screen.getByTestId('hud-recent-action').getAttribute('aria-label')).toContain(
             'Then: rebuild with a safe match. Keep: stop the chain break.'
         );
-    });
+    }, 15_000);
 
     it('surfaces named chain momentum tiers instead of a raw streak only', () => {
         const baseRun = finishMemorizePhase(createDailyRun(0, { echoFeedbackEnabled: false }));

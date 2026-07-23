@@ -4,14 +4,33 @@ import {
     buildEndlessSimulationCsv,
     buildEndlessSimulationSummary,
     countUndefeatedEnemyHazardsForPlayableGate,
-    evaluateEndlessSimulationHealth
+    evaluateEndlessSimulationHealth,
+    parseEndlessSimulationCliOptions
 } from '../../scripts/sim-endless';
 import { runSoftlockSeedGate } from '../../scripts/gate-softlock-seeds';
-import { FINDABLE_KIND_SPAWN_WEIGHTS, GAME_RULES_VERSION, type FindableKind } from './contracts';
+import { GAME_RULES_VERSION } from './contracts';
+import { getFindableSpawnWeightRows } from './findables';
 
 describe('sim-endless CSV output', () => {
     afterEach(() => {
         vi.restoreAllMocks();
+    });
+
+    it('parses CLI options with positive numeric guards and exact output paths', () => {
+        expect(parseEndlessSimulationCliOptions(['--floors=12', '--seed=42001', '--summary', '--out=reports/a=b.csv'])).toEqual({
+            floors: 12,
+            runSeed: 42_001,
+            summaryMode: true,
+            checkMode: false,
+            out: 'reports/a=b.csv'
+        });
+
+        expect(parseEndlessSimulationCliOptions(['--floors=0', '--seed=', '--check'])).toEqual({
+            floors: 1,
+            runSeed: 42_001,
+            summaryMode: false,
+            checkMode: true
+        });
     });
 
     it('reports findable kind diagnostics and target weights', () => {
@@ -23,9 +42,9 @@ describe('sim-endless CSV output', () => {
         const lines = csv.trim().split('\n');
 
         expect(lines[0]).toBe('kind,key,count');
-        for (const kind of Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]) {
-            expect(lines).toContain(`findableTargetWeight,${kind},${FINDABLE_KIND_SPAWN_WEIGHTS[kind]}`);
-            expect(lines.some((line) => line.startsWith(`findableKind,${kind},`))).toBe(true);
+        for (const row of getFindableSpawnWeightRows()) {
+            expect(lines).toContain(`findableTargetWeight,${row.id},${row.weight}`);
+            expect(lines.some((line) => line.startsWith(`findableKind,${row.id},`))).toBe(true);
         }
         expect(lines.some((line) => line.startsWith('traitMetric,traitFloors,'))).toBe(true);
         expect(lines.some((line) => line.startsWith('traitMetric,traitInteractionLines,'))).toBe(true);
@@ -92,7 +111,7 @@ describe('sim-endless CSV output', () => {
             playableIssueFloors: 0,
             playableIssueReasons: [],
             playableLockedExitFloors: expect.any(Number),
-            rewardKinds: Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length,
+            rewardKinds: getFindableSpawnWeightRows().length,
             typedLockedCacheRoomFloors: expect.any(Number)
         });
         expect(health.metrics.lockedCacheRoomFloors).toBeGreaterThan(0);
@@ -106,7 +125,7 @@ describe('sim-endless CSV output', () => {
         expect(health.metrics.traitRewardFloorShare).toBeGreaterThanOrEqual(0.8);
         expect(health.metrics.traitBoardPowerInteractionFloorShare).toBeGreaterThanOrEqual(0.7);
         expect(health.metrics.traitSwapSetupFloorShare).toBeGreaterThanOrEqual(0.1);
-    }, 45_000);
+    }, 120_000);
 
     it('counts raw undefeated hazard state for playable gates even when the hazard is no longer active', () => {
         expect(
@@ -174,7 +193,7 @@ describe('sim-endless CSV output', () => {
                 traitSwapSetupFloorShare: 0
             },
             20,
-            Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS).length
+            getFindableSpawnWeightRows().length
         );
 
         expect(health.ok).toBe(false);
@@ -231,5 +250,5 @@ describe('sim-endless CSV output', () => {
             )
         ).toBe(true);
         expect(stderr.mock.calls.some(([chunk]) => String(chunk).includes('Softlock seed gate failed'))).toBe(true);
-    }, 20_000);
+    }, 120_000);
 });

@@ -2,13 +2,13 @@
 
 Puzzles are **fixed layouts** keyed by id in `src/shared/builtin-puzzles.ts` (or future JSON loader with the same shape).
 
-## Quick playtest import (not a shipped puzzle)
+## Authored payload validation
 
-The main menu **Import puzzle JSON** action loads a file and runs `parsePuzzleImportJson` → `createPuzzleRun` with an ephemeral `import:…` id. Use the same **tile** shape as below; validation requires **4–64** tiles and **exactly two** tiles per non-decoy `pairKey`. This path is for **local iteration**; shipping puzzles still go through `BUILTIN_PUZZLES` and PR review.
+`puzzle-import.ts` validates the layout-only tile payload shape used by builtins, tests, and future local authoring tools: **4–64** hidden tiles, unique tile ids, non-empty text fields, and **exactly two** tiles per non-decoy `pairKey`. Unknown tile metadata is rejected. The current menu exposes the built-in puzzle library only; it does not provide a puzzle JSON file picker or parser. Shipping puzzles still go through `BUILTIN_PUZZLES` and PR review.
 
 ## Optional systems (`fixedTiles`)
 
-Procedural-only mechanics (**cursed pair** seeding, **shifting_spotlight** ward/bounty keys, etc.) are **not** implied by a bare tile list. They run when `createPuzzleRun` / `buildBoard` callers attach them—same as endless boards. Shipped **builtin** ids are summarized in the table at the top of [`src/shared/builtin-puzzles.ts`](../src/shared/builtin-puzzles.ts) (currently layout-only). **Import JSON** validates pair structure only; authors who need special objectives must use code paths that supply those fields.
+Procedural-only mechanics (**cursed pair** seeding, **shifting_spotlight** ward/bounty keys, etc.) are **not** implied by a bare tile list. They run when `createPuzzleRun` / `buildBoard` callers attach them—same as endless boards. Shipped **builtin** ids are summarized in the table at the top of [`src/shared/builtin-puzzles.ts`](../src/shared/builtin-puzzles.ts) (currently layout-only). Authors who need special objectives must use code paths that supply those fields.
 
 ## Data shape
 
@@ -21,6 +21,8 @@ Procedural-only mechanics (**cursed pair** seeding, **shifting_spotlight** ward/
 ```
 
 - `columns` × `rows` are derived from tile count (same rules as `buildBoard` pair count).  
+- Tile ids must be unique after trimming; `symbol` and `label` must be non-empty.
+- Every imported tile starts with `state: 'hidden'`; partially completed board state is not imported.
 - Use **even** tile count; each `pairKey` appears on **exactly two** tiles.  
 - Symbols must stay readable at minimum tile size (see ideas doc: picture superiority).
 

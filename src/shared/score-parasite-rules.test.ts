@@ -53,6 +53,43 @@ describe('advanceScoreParasiteFloor', () => {
             parasiteWardRemaining: 0
         });
     });
+
+    it('normalizes malformed counters before advancing pressure', () => {
+        expect(advanceScoreParasiteFloor({
+            ...createNewRun(0),
+            lives: 2.9,
+            parasiteFloors: Number.NaN,
+            parasiteWardRemaining: Number.POSITIVE_INFINITY
+        })).toEqual({
+            lives: 2,
+            parasiteFloors: 1,
+            parasiteWardRemaining: 0
+        });
+
+        expect(advanceScoreParasiteFloor({
+            ...createNewRun(0),
+            activeMutators: ['score_parasite'] satisfies MutatorId[],
+            lives: 2.9,
+            parasiteFloors: 3.9,
+            parasiteWardRemaining: 1.9
+        })).toEqual({
+            lives: 2,
+            parasiteFloors: 0,
+            parasiteWardRemaining: 0
+        });
+
+        expect(advanceScoreParasiteFloor({
+            ...createNewRun(0),
+            activeMutators: ['score_parasite'] satisfies MutatorId[],
+            lives: 2.9,
+            parasiteFloors: 3.9,
+            parasiteWardRemaining: Number.NaN
+        })).toEqual({
+            lives: 1,
+            parasiteFloors: 0,
+            parasiteWardRemaining: 0
+        });
+    });
 });
 
 describe('getParasiteFloorsAfterFeaturedObjectiveClear', () => {
@@ -81,5 +118,31 @@ describe('getParasiteFloorsAfterFeaturedObjectiveClear', () => {
             relicIds: ['parasite_ledger'] satisfies RelicId[],
             activeMutators: []
         }, true)).toBe(3);
+    });
+
+    it('normalizes malformed parasite pressure before applying featured objective clears', () => {
+        const run = {
+            ...createNewRun(0),
+            activeMutators: ['score_parasite'] satisfies MutatorId[],
+            relicIds: ['parasite_ledger'] satisfies RelicId[],
+            parasiteFloors: 2.9
+        };
+
+        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(1);
+        expect(getParasiteFloorsAfterFeaturedObjectiveClear({
+            ...run,
+            parasiteFloors: Number.NaN
+        }, true)).toBe(0);
+    });
+
+    it('ignores malformed relic ids before applying featured objective clears', () => {
+        const run = {
+            ...createNewRun(0),
+            activeMutators: ['score_parasite'] satisfies MutatorId[],
+            relicIds: Number.NaN as unknown as RelicId[],
+            parasiteFloors: 3
+        };
+
+        expect(getParasiteFloorsAfterFeaturedObjectiveClear(run, true)).toBe(3);
     });
 });

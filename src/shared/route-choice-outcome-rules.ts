@@ -14,13 +14,16 @@ import {
     ROUTE_GREED_SCORE_REWARD,
     ROUTE_GREED_SHOP_GOLD_REWARD,
     ROUTE_MYSTERY_SHOP_GOLD_REWARD,
-    getRouteChoiceAvailability
+    getRouteChoiceAvailability,
+    routeChoicesForResult
 } from './route-choice-rules';
 import { createRouteCardPlan } from './route-card-plan-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 import {
     revealDungeonChoices,
     selectDungeonNode
 } from './run-map';
+import { normalizeSessionStats } from './session-stats-rules';
 
 type MysteryRouteOutcome = 'shop_gold' | 'combo_shard' | 'relic_favor';
 
@@ -35,7 +38,7 @@ export interface RouteChoiceOutcomeResult {
 const withSelectedDungeonRoute = (
     run: RunState,
     choiceId: string,
-    routeChoices: readonly RouteChoice[] = run.lastLevelResult?.routeChoices ?? []
+    routeChoices: readonly RouteChoice[] = routeChoicesForResult(run.lastLevelResult)
 ): RunState => {
     const selected = selectDungeonNode(getRunDungeonMapState(run), choiceId);
     if (selected.selectedNodeId === choiceId || routeChoices.length === 0) {
@@ -53,36 +56,39 @@ const withSelectedDungeonRoute = (
 const mysteryRouteOutcomeFor = (run: RunState, clearedFloor: number): MysteryRouteOutcome => {
     const outcomes: MysteryRouteOutcome[] = ['shop_gold', 'combo_shard', 'relic_favor'];
     const seed = hashStringToSeed(`routeMystery:${run.runRulesVersion}:${run.runSeed}:${clearedFloor}`);
-    return outcomes[Math.abs(seed) % outcomes.length]!;
+    return outcomes[Math.abs(seed) % outcomes.length] ?? 'relic_favor';
 };
 
 const addRouteScore = (run: RunState, score: number): RunState => {
-    const totalScore = run.stats.totalScore + score;
-    const bestScore = Math.max(run.stats.bestScore, totalScore);
+    const scoreGain = runNonNegativeInteger(score);
+    const stats = normalizeSessionStats(run.stats);
+    const totalScore = stats.totalScore + scoreGain;
+    const bestScore = Math.max(stats.bestScore, totalScore);
     return {
         ...run,
         stats: {
-            ...run.stats,
+            ...stats,
             totalScore,
-            currentLevelScore: run.stats.currentLevelScore + score,
+            currentLevelScore: stats.currentLevelScore + scoreGain,
             bestScore
         },
         lastLevelResult: run.lastLevelResult
             ? {
                   ...run.lastLevelResult,
-                  scoreGained: run.lastLevelResult.scoreGained + score
+                  scoreGained: runNonNegativeInteger(run.lastLevelResult.scoreGained) + scoreGain
               }
             : run.lastLevelResult
     };
 };
 
 const applySafeRouteRecallStabilization = (run: RunState): { run: RunState; summarySuffix: string } => {
-    const recallLapses = run.lastLevelResult?.recallMistakes ?? 0;
+    const recallLapses = runNonNegativeInteger(run.lastLevelResult?.recallMistakes);
     if (recallLapses <= 0) {
         return { run, summarySuffix: '' };
     }
-    const pendingMemorizeBonusMs = addPendingMemorizeBonusForLostLives(run.pendingMemorizeBonusMs, 1);
-    const gainedMs = pendingMemorizeBonusMs - run.pendingMemorizeBonusMs;
+    const pendingMemorizeBonusBefore = runNonNegativeInteger(run.pendingMemorizeBonusMs);
+    const pendingMemorizeBonusMs = addPendingMemorizeBonusForLostLives(pendingMemorizeBonusBefore, 1);
+    const gainedMs = pendingMemorizeBonusMs - pendingMemorizeBonusBefore;
     if (gainedMs <= 0) {
         return { run, summarySuffix: '' };
     }
@@ -93,36 +99,39 @@ const applySafeRouteRecallStabilization = (run: RunState): { run: RunState; summ
 };
 
 const applySafeRouteRecoveryToll = (run: RunState): { run: RunState; summarySuffix: string } => {
-    if (run.shopGold <= 0) {
+    const shopGold = runNonNegativeInteger(run.shopGold);
+    if (shopGold <= 0) {
         return { run, summarySuffix: '' };
     }
     return {
-        run: { ...run, shopGold: run.shopGold - 1 },
+        run: { ...run, shopGold: shopGold - 1 },
         summarySuffix: ' Spent 1 shop gold.'
     };
 };
 
 const applyMysteryRouteOutcome = (run: RunState): { run: RunState; summaryText: string } => {
-    const clearedFloor = run.lastLevelResult?.level ?? run.board?.level ?? run.stats.highestLevel;
+    const stats = normalizeSessionStats(run.stats);
+    const clearedFloor = run.lastLevelResult?.level ?? run.board?.level ?? stats.highestLevel;
     const outcome = mysteryRouteOutcomeFor(run, clearedFloor);
     if (outcome === 'shop_gold') {
         return {
-            run: { ...run, shopGold: run.shopGold + ROUTE_MYSTERY_SHOP_GOLD_REWARD },
+            run: { ...run, shopGold: runNonNegativeInteger(run.shopGold) + ROUTE_MYSTERY_SHOP_GOLD_REWARD },
             summaryText: `Mystery route: +${ROUTE_MYSTERY_SHOP_GOLD_REWARD} shop gold.`
         };
     }
     if (outcome === 'combo_shard') {
-        const comboShards = Math.min(MAX_COMBO_SHARDS, run.stats.comboShards + 1);
+        const comboShardsBefore = stats.comboShards;
+        const comboShards = Math.min(MAX_COMBO_SHARDS, comboShardsBefore + 1);
         return {
             run: {
                 ...run,
                 stats: {
-                    ...run.stats,
+                    ...stats,
                     comboShards
                 }
             },
             summaryText:
-                comboShards > run.stats.comboShards
+                comboShards > comboShardsBefore
                     ? 'Mystery route: +1 combo shard.'
                     : 'Mystery route: combo shards already full.'
         };
@@ -140,10 +149,10 @@ const applyMysteryRouteOutcome = (run: RunState): { run: RunState; summaryText: 
 };
 
 export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteChoiceOutcomeResult => {
-    if (run.status !== 'levelComplete' || run.lives <= 0) {
+    if (run.status !== 'levelComplete' || runNonNegativeInteger(run.lives) <= 0) {
         return { run, applied: false, reason: 'invalid_status' };
     }
-    const routeChoices = run.lastLevelResult?.routeChoices ?? [];
+    const routeChoices = routeChoicesForResult(run.lastLevelResult);
     const choice: RouteChoice | undefined = routeChoices.find((item) => item.id === choiceId);
     if (!choice) {
         return { run, applied: false, reason: 'missing_choice' };
@@ -162,14 +171,15 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
     }
     const pendingRouteCardPlan = createRouteCardPlan(run, choice);
     if (choice.routeType === 'safe') {
-        if (run.lives < MAX_LIVES) {
+        if (runNonNegativeInteger(run.lives) < MAX_LIVES) {
             const tolled = applySafeRouteRecoveryToll(run);
+            const lives = runNonNegativeInteger(tolled.run.lives) + 1;
             const nextRun = applySafeRouteRecallStabilization({
                 ...tolled.run,
-                lives: tolled.run.lives + 1,
+                lives,
                 pendingRouteCardPlan,
                 lastLevelResult: tolled.run.lastLevelResult
-                    ? { ...tolled.run.lastLevelResult, livesRemaining: tolled.run.lives + 1 }
+                    ? { ...tolled.run.lastLevelResult, livesRemaining: lives }
                     : tolled.run.lastLevelResult
             });
             return {
@@ -179,8 +189,10 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
                 summaryText: `Safe route: +1 life.${tolled.summarySuffix}${nextRun.summarySuffix}`
             };
         }
-        const guardTokens = Math.min(MAX_GUARD_TOKENS, run.stats.guardTokens + 1);
-        const guardGained = guardTokens > run.stats.guardTokens;
+        const stats = normalizeSessionStats(run.stats);
+        const guardTokensBefore = stats.guardTokens;
+        const guardTokens = Math.min(MAX_GUARD_TOKENS, guardTokensBefore + 1);
+        const guardGained = guardTokens > guardTokensBefore;
         const tolled = guardGained ? applySafeRouteRecoveryToll(run) : { run, summarySuffix: '' };
         const guardSummary = guardGained
             ? 'Safe route: +1 guard token.'
@@ -188,7 +200,7 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
         const nextRun = applySafeRouteRecallStabilization({
             ...tolled.run,
             pendingRouteCardPlan,
-            stats: { ...tolled.run.stats, guardTokens }
+            stats: { ...normalizeSessionStats(tolled.run.stats), guardTokens }
         });
         return {
             run: withSelectedDungeonRoute(nextRun.run, choiceId, routeChoices),
@@ -199,13 +211,14 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
     }
     if (choice.routeType === 'greed') {
         const scored = addRouteScore(run, ROUTE_GREED_SCORE_REWARD);
+        const lives = Math.max(0, runNonNegativeInteger(scored.lives) - 1);
         const nextRun = {
             ...scored,
-            lives: scored.lives - 1,
-            shopGold: scored.shopGold + ROUTE_GREED_SHOP_GOLD_REWARD,
+            lives,
+            shopGold: runNonNegativeInteger(scored.shopGold) + ROUTE_GREED_SHOP_GOLD_REWARD,
             pendingRouteCardPlan,
             lastLevelResult: scored.lastLevelResult
-                ? { ...scored.lastLevelResult, livesRemaining: scored.lives - 1 }
+                ? { ...scored.lastLevelResult, livesRemaining: lives }
                 : scored.lastLevelResult
         };
         return {

@@ -16,8 +16,10 @@ export interface FindableRewardRow {
     destroyRule: string;
 }
 
-export const FINDABLE_REWARD_ROWS: readonly FindableRewardRow[] = [
-    {
+const FINDABLE_REWARD_ROW_ORDER = ['shard_spark', 'score_glint', 'ward_spark', 'scout_glint'] as const satisfies readonly FindableKind[];
+
+const FINDABLE_REWARD_ROW_BY_KIND = {
+    shard_spark: {
         kind: 'shard_spark',
         label: 'Shard spark',
         marker: 'Gold diamond corner glyph',
@@ -25,7 +27,7 @@ export const FINDABLE_REWARD_ROWS: readonly FindableRewardRow[] = [
         claimRule: 'Match the carrier pair.',
         destroyRule: 'Destroy forfeits the shard.'
     },
-    {
+    score_glint: {
         kind: 'score_glint',
         label: 'Score glint',
         marker: 'Cyan ring corner glyph',
@@ -33,7 +35,7 @@ export const FINDABLE_REWARD_ROWS: readonly FindableRewardRow[] = [
         claimRule: 'Match the carrier pair.',
         destroyRule: 'Destroy forfeits the score.'
     },
-    {
+    ward_spark: {
         kind: 'ward_spark',
         label: 'Ward spark',
         marker: 'Green shield corner glyph',
@@ -41,7 +43,7 @@ export const FINDABLE_REWARD_ROWS: readonly FindableRewardRow[] = [
         claimRule: 'Match the carrier pair.',
         destroyRule: 'Destroy forfeits the ward.'
     },
-    {
+    scout_glint: {
         kind: 'scout_glint',
         label: 'Scout glint',
         marker: 'Violet eye corner glyph',
@@ -49,10 +51,13 @@ export const FINDABLE_REWARD_ROWS: readonly FindableRewardRow[] = [
         claimRule: 'Match the carrier pair.',
         destroyRule: 'Destroy forfeits the scout.'
     }
-] as const;
+} as const satisfies Record<FindableKind, FindableRewardRow>;
 
-export const getFindableRewardRow = (kind: FindableKind): FindableRewardRow =>
-    FINDABLE_REWARD_ROWS.find((row) => row.kind === kind)!;
+export const FINDABLE_REWARD_ROWS: readonly FindableRewardRow[] = FINDABLE_REWARD_ROW_ORDER.map(
+    (kind) => FINDABLE_REWARD_ROW_BY_KIND[kind]
+);
+
+export const getFindableRewardRow = (kind: FindableKind): FindableRewardRow => FINDABLE_REWARD_ROW_BY_KIND[kind];
 
 export const getFindableKindLabel = (kind: FindableKind): string => getFindableRewardRow(kind).label;
 

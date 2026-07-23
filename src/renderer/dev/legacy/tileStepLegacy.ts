@@ -5,4 +5,10 @@
 export const readTileStepLegacy = (): boolean =>
     import.meta.env.DEV &&
     typeof window !== 'undefined' &&
-    window.localStorage.getItem('tileStepLegacy') === '1';
+    (() => {
+        try {
+            return window.localStorage.getItem('tileStepLegacy') === '1';
+        } catch {
+            return false;
+        }
+    })();

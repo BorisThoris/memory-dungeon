@@ -52,4 +52,16 @@ describe('mismatch-grace-rules', () => {
         expect(hasFirstMismatchGrace(guarded.run, guarded.board)).toBe(false);
         expect(hasFirstMismatchGrace(lastLife.run, lastLife.board)).toBe(false);
     });
+
+    it('normalizes malformed stat records before checking first mismatch grace', () => {
+        const { board, run } = withRun(
+            {
+                lives: 2,
+                stats: Number.NaN as unknown as RunState['stats']
+            },
+            { level: 3 }
+        );
+
+        expect(hasFirstMismatchGrace(run, board)).toBe(true);
+    });
 });

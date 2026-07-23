@@ -14,6 +14,8 @@ import {
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey
 } from './tile-identity';
+import { getFloorHeldDungeonKeyCount } from './dungeon-key-rules';
+import { runNonNegativeInteger } from './run-number-guards';
 
 /** When the board includes a wild joker, returns its tile id; otherwise null. */
 export const getWildTileIdFromBoard = (board: BoardState): string | null =>
@@ -144,7 +146,7 @@ const countUnclearedDungeonPairs = (tiles: readonly Tile[], predicate: (tile: Ti
 };
 
 export const countReachableExitLeverSources = (board: BoardState): number =>
-    (board.dungeonLeverCount ?? 0) +
+    runNonNegativeInteger(board.dungeonLeverCount) +
     countUnclearedDungeonPairs(
         board.tiles,
         (tile) => tile.dungeonCardKind === 'lever' && tile.dungeonCardEffectId === 'lever_floor'
@@ -155,9 +157,7 @@ export const countReachableExitKeySources = (board: BoardState, keyKind: Dungeon
         board.tiles,
         (tile) => tile.dungeonCardKind === 'key' && (tile.dungeonKeyKind ?? 'iron') === keyKind
     );
-    const floorHeldKeyCount =
-        (board.dungeonKeysHeldByKind?.[keyKind] ?? 0) +
-        (board.dungeonKeysHeldByKind == null && keyKind === 'iron' ? (board.dungeonKeysHeld ?? 0) : 0);
+    const floorHeldKeyCount = getFloorHeldDungeonKeyCount(board, keyKind);
     const roomKeyCacheCount =
         keyKind === 'iron'
             ? board.tiles.filter((tile) => !tileIsClearedForFairness(tile) && tile.dungeonCardEffectId === 'room_key_cache').length
@@ -208,7 +208,9 @@ export const getEffectivePrimaryExitLock = ({
         ? board.tiles.find((tile) => tile.id === board.dungeonExitTileId) ?? null
         : board.tiles.find((tile) => tile.pairKey === EXIT_PAIR_KEY) ?? null;
     const rawLockKind = primaryExit?.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
-    const rawRequiredLeverCount = primaryExit?.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount ?? 0;
+    const rawRequiredLeverCount = runNonNegativeInteger(
+        primaryExit?.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount
+    );
 
     if (!primaryExit || rawLockKind === 'none' || rawLockKind === 'lever') {
         return {
@@ -219,7 +221,9 @@ export const getEffectivePrimaryExitLock = ({
         };
     }
 
-    const hasRunKey = (dungeonKeys[rawLockKind] ?? 0) > 0 || dungeonMasterKeys > 0;
+    const hasRunKey =
+        runNonNegativeInteger(dungeonKeys[rawLockKind]) > 0 ||
+        runNonNegativeInteger(dungeonMasterKeys) > 0;
     const hasReachableKeySource = countReachableExitKeySources(board, rawLockKind as DungeonKeyKind) > 0;
     const terminalKeySoftlockFallback =
         !boardHasActionableProgressionPair(board) && !hasRunKey && !hasReachableKeySource;
@@ -244,7 +248,9 @@ export const repairDungeonExitSoftlocks = (
         return board;
     }
     const exitLockKind = primaryExit.dungeonExitLockKind ?? board.dungeonExitLockKind ?? 'none';
-    const requiredLeverCount = primaryExit.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount ?? 0;
+    const requiredLeverCount = runNonNegativeInteger(
+        primaryExit.dungeonExitRequiredLeverCount ?? board.dungeonExitRequiredLeverCount
+    );
     let repairedLockKind = exitLockKind;
     let repairedLeverCount = requiredLeverCount;
 
@@ -258,7 +264,9 @@ export const repairDungeonExitSoftlocks = (
         }
     } else if (exitLockKind !== 'none') {
         const requiredKeyKind = exitLockKind as DungeonKeyKind;
-        const hasRunKey = (options.dungeonKeys?.[requiredKeyKind] ?? 0) > 0 || (options.dungeonMasterKeys ?? 0) > 0;
+        const hasRunKey =
+            runNonNegativeInteger(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
+            runNonNegativeInteger(options.dungeonMasterKeys) > 0;
         const pendingFallback =
             options.preservePendingKeyFallback === true && boardHasActionableProgressionPair(board);
         if (!hasRunKey && countReachableExitKeySources(board, requiredKeyKind) < 1 && !pendingFallback) {
@@ -426,7 +434,7 @@ export const inspectBoardFairness = (
     });
     const exitLockKind = effectivePrimaryExitLock.lockKind;
     const requiredLeverCount = effectivePrimaryExitLock.requiredLeverCount;
-    if (exitLockKind === 'lever' && (board.dungeonLeverCount ?? 0) < requiredLeverCount) {
+    if (exitLockKind === 'lever' && runNonNegativeInteger(board.dungeonLeverCount) < requiredLeverCount) {
         const reachableLevers = countReachableExitLeverSources(board);
         if (reachableLevers < requiredLeverCount) {
             structurallyClearable = false;
@@ -440,7 +448,9 @@ export const inspectBoardFairness = (
     }
     if (exitLockKind !== 'none' && exitLockKind !== 'lever') {
         const requiredKeyKind = exitLockKind as DungeonKeyKind;
-        const hasRunKey = (options.dungeonKeys?.[requiredKeyKind] ?? 0) > 0 || (options.dungeonMasterKeys ?? 0) > 0;
+        const hasRunKey =
+            runNonNegativeInteger(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
+            runNonNegativeInteger(options.dungeonMasterKeys) > 0;
         if (
             !hasRunKey &&
             countReachableExitKeySources(board, requiredKeyKind) < 1 &&
@@ -482,13 +492,20 @@ export const inspectBoardFairness = (
         (tile) => !isSingletonUtilityPairKey(tile.pairKey) && tile.state === 'hidden'
     );
 
-    for (const flippedId of board.flippedTileIds) {
-        if (!board.tiles.some((tile) => tile.id === flippedId && tile.state === 'flipped')) {
-            issues.push({
-                code: 'flipped_tile_reference_missing',
-                message: `flippedTileIds references "${flippedId}", but no matching flipped tile exists.`,
-                tileIds: [flippedId]
-            });
+    if (!Array.isArray(board.flippedTileIds)) {
+        issues.push({
+            code: 'flipped_tile_reference_missing',
+            message: 'flippedTileIds is malformed and cannot be inspected.'
+        });
+    } else {
+        for (const flippedId of board.flippedTileIds) {
+            if (!board.tiles.some((tile) => tile.id === flippedId && tile.state === 'flipped')) {
+                issues.push({
+                    code: 'flipped_tile_reference_missing',
+                    message: `flippedTileIds references "${flippedId}", but no matching flipped tile exists.`,
+                    tileIds: [flippedId]
+                });
+            }
         }
     }
 
@@ -501,7 +518,10 @@ export const inspectBoardFairness = (
             continue;
         }
         const tileIds = tiles.map((tile) => tile.id);
-        const first = dungeonTiles[0]!;
+        const first = dungeonTiles[0];
+        if (!first) {
+            continue;
+        }
         if (
             tiles.length !== dungeonTiles.length ||
             dungeonTiles.some(
@@ -582,12 +602,12 @@ export const inspectBoardFairness = (
             return true;
         }
         if (effectivePrimaryExitLock.lockKind === 'lever') {
-            return (board.dungeonLeverCount ?? 0) >= effectivePrimaryExitLock.requiredLeverCount;
+            return runNonNegativeInteger(board.dungeonLeverCount) >= effectivePrimaryExitLock.requiredLeverCount;
         }
         const requiredKeyKind = effectivePrimaryExitLock.lockKind as DungeonKeyKind;
         return (
-            (options.dungeonKeys?.[requiredKeyKind] ?? 0) > 0 ||
-            (options.dungeonMasterKeys ?? 0) > 0 ||
+            runNonNegativeInteger(options.dungeonKeys?.[requiredKeyKind]) > 0 ||
+            runNonNegativeInteger(options.dungeonMasterKeys) > 0 ||
             countReachableExitKeySources(board, requiredKeyKind) > 0
         );
     })();
@@ -667,7 +687,7 @@ export const inspectRunFairness = (run: RunState): RunFairnessReport => {
         intentionalBlockers.push('level_complete');
     }
     if (run.status === 'resolving') {
-        if (run.board.flippedTileIds.length >= 2) {
+        if (Array.isArray(run.board.flippedTileIds) && run.board.flippedTileIds.length >= 2) {
             intentionalBlockers.push('resolving_flips');
         } else {
             issues.push({

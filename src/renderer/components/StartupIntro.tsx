@@ -28,6 +28,7 @@ import type { TiltVector } from '../platformTilt/platformTiltTypes';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { playIntroStingSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { useElementSize, type ElementFootprint } from '../hooks/useElementSize';
+import { useLatestRef } from '../hooks/useLatestRef';
 import { useAppStore } from '../store/useAppStore';
 import { RENDERER_THEME } from '../styles/theme';
 import {
@@ -53,6 +54,33 @@ interface StartupIntroProps {
 
 type IntroRenderMode = 'three' | 'fallback';
 type IntroPhase = 'enter' | 'idle' | 'exit';
+
+type StartupIntroPointerMediaQueryList = MediaQueryList & {
+    addListener?: (listener: () => void) => void;
+    removeListener?: (listener: () => void) => void;
+};
+
+const addStartupIntroPointerListener = (
+    mediaQuery: StartupIntroPointerMediaQueryList,
+    listener: () => void
+): void => {
+    if (typeof mediaQuery.addEventListener === 'function') {
+        mediaQuery.addEventListener('change', listener);
+        return;
+    }
+    mediaQuery.addListener?.(listener);
+};
+
+const removeStartupIntroPointerListener = (
+    mediaQuery: StartupIntroPointerMediaQueryList,
+    listener: () => void
+): void => {
+    if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', listener);
+        return;
+    }
+    mediaQuery.removeListener?.(listener);
+};
 
 interface ParticleDefinition {
     baseX: number;
@@ -544,7 +572,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     const exitStartedRef = useRef(false);
     const assetsReadyRef = useRef(false);
     const skipRequestedRef = useRef(false);
-    const introStartMsRef = useRef(0);
+    const introStartMsRef = useRef<number | null>(null);
     const timeGateTimeoutRef = useRef<number | null>(null);
     const manualExitTimeoutRef = useRef<number | null>(null);
     const targetFootprint = sceneFrameSize;
@@ -560,16 +588,19 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
         [enterDurationMs, exitDurationMs]
     );
     const uiGain = uiSfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
+    const completionValuesRef = useLatestRef({ onComplete, uiGain });
+    const introTimingValuesRef = useLatestRef({ autoExitDelay, exitDurationMs });
     const completeIntro = useCallback(() => {
         if (completedRef.current) {
             return;
         }
 
         completedRef.current = true;
+        const completionValues = completionValuesRef.current;
         resumeUiSfxContext();
-        playIntroStingSfx(uiGain);
-        onComplete();
-    }, [onComplete, uiGain]);
+        playIntroStingSfx(completionValues.uiGain);
+        completionValues.onComplete();
+    }, [completionValuesRef]);
     const beginExit = useCallback(() => {
         if (completedRef.current || exitStartedRef.current) {
             return;
@@ -584,10 +615,11 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
             window.clearTimeout(manualExitTimeoutRef.current);
         }
         setPhase('exit');
+        const currentExitDurationMs = introTimingValuesRef.current.exitDurationMs;
         manualExitTimeoutRef.current = window.setTimeout(() => {
             completeIntro();
-        }, exitDurationMs);
-    }, [completeIntro, exitDurationMs]);
+        }, currentExitDurationMs);
+    }, [completeIntro, introTimingValuesRef]);
 
     const tryBeginExitWhenReady = useCallback(() => {
         if (completedRef.current || exitStartedRef.current) {
@@ -596,11 +628,13 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
         if (!assetsReadyRef.current) {
             return;
         }
-        const elapsed = performance.now() - introStartMsRef.current;
-        if (skipRequestedRef.current || elapsed >= autoExitDelay) {
+        const startMs = introStartMsRef.current ?? performance.now();
+        introStartMsRef.current = startMs;
+        const elapsed = performance.now() - startMs;
+        if (skipRequestedRef.current || elapsed >= introTimingValuesRef.current.autoExitDelay) {
             beginExit();
         }
-    }, [autoExitDelay, beginExit]);
+    }, [beginExit, introTimingValuesRef]);
 
     const requestSkip = useCallback(() => {
         skipRequestedRef.current = true;
@@ -630,6 +664,15 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
             const menuRoot = document.querySelector<HTMLElement>('[data-testid="main-menu-focus-root"]');
             const returnTarget = menuRoot ?? previousFocusRef.current;
             window.requestAnimationFrame(() => {
+                const activeElement = document.activeElement;
+                if (
+                    activeElement instanceof HTMLElement &&
+                    activeElement !== document.body &&
+                    activeElement !== document.documentElement &&
+                    document.contains(activeElement)
+                ) {
+                    return;
+                }
                 returnTarget?.focus({ preventScroll: true });
             });
         };
@@ -648,20 +691,25 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     }, []);
 
     useEffect(() => {
-        if (typeof window === 'undefined') {
+        if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
             return;
         }
 
-        const mq = window.matchMedia('(pointer: coarse)');
+        let mq: StartupIntroPointerMediaQueryList;
+        try {
+            mq = window.matchMedia('(pointer: coarse)');
+        } catch {
+            return;
+        }
         const sync = (): void => {
             setTouchPrimary(mq.matches);
         };
 
         sync();
-        mq.addEventListener('change', sync);
+        addStartupIntroPointerListener(mq, sync);
 
         return () => {
-            mq.removeEventListener('change', sync);
+            removeStartupIntroPointerListener(mq, sync);
         };
     }, []);
 
@@ -680,10 +728,13 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     }, [enterDurationMs, phase]);
 
     useEffect(() => {
-        introStartMsRef.current = performance.now();
+        const now = performance.now();
+        const startMs = introStartMsRef.current ?? now;
+        introStartMsRef.current = startMs;
+        const remainingMs = Math.max(0, autoExitDelay - (now - startMs));
         timeGateTimeoutRef.current = window.setTimeout(() => {
             tryBeginExitWhenReady();
-        }, autoExitDelay);
+        }, remainingMs);
 
         return () => {
             if (timeGateTimeoutRef.current !== null) {
@@ -710,7 +761,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
 
     useEffect(() => {
         if (graphicsQuality) {
-            preloadCardRankOpentypeFont(graphicsQuality);
+            void preloadCardRankOpentypeFont(graphicsQuality);
         }
     }, [graphicsQuality]);
 

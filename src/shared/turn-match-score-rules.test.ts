@@ -82,4 +82,23 @@ describe('turn match score rules', () => {
             )
         );
     });
+
+    it('normalizes malformed score inputs before resolving match score', () => {
+        expect(calculateMatchScore(Number.NaN, Number.POSITIVE_INFINITY, Number.NaN)).toBe(20);
+        expect(calculateResolvedMatchScore({
+            ...baseInput,
+            level: Number.NaN,
+            currentStreak: Number.POSITIVE_INFINITY,
+            matchScoreMultiplier: Number.NaN,
+            recallBonus: Number.NaN,
+            encoreBonus: -3,
+            findableScoreBonus: 4.8,
+            routeCardScore: Number.POSITIVE_INFINITY,
+            dungeonScore: -2,
+            enemyDamageScore: 5.5,
+            hazardDamageScore: Number.NaN,
+            spotlightDelta: -6.5,
+            presentationPenalty: Number.NaN
+        })).toBe(20 + 4 + 5 - 7);
+    });
 });

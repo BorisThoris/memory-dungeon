@@ -1,5 +1,4 @@
 import {
-    FINDABLE_KIND_SPAWN_WEIGHTS,
     GAME_RULES_VERSION,
     INITIAL_LIVES,
     MAX_LIVES,
@@ -13,7 +12,8 @@ import {
 import { buildBoard, countFindablePairs } from './board-generation';
 import { countReachableExitKeySources, getEffectivePrimaryExitLock, inspectBoardFairness } from './board-inspection';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
-import { getShopGoldRewardForFloor, SHOP_ITEM_CATALOG } from './shop-rules';
+import { getShopGoldRewardForFloor, getShopItemCatalogRows, SHOP_ITEM_CATALOG } from './shop-rules';
+import { FINDABLE_REWARD_ROWS, getFindableSpawnWeightRows } from './findables';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { RELIC_DRAFT, RELIC_POOL, type RelicDraftRarity } from './relics';
 import {
@@ -69,7 +69,7 @@ export interface BalanceSimulationReport {
         bossMovingEnemyHazards: number;
         hazardTileCount: number;
         contactRisk: number;
-        floorBand: 'early' | 'mid' | 'late';
+        floorBand: BalanceSimulationFloorBand;
         relicFavorPotential: number;
         comboShardPotential: number;
         guardRewardPotential: number;
@@ -99,7 +99,7 @@ export interface BalanceSimulationReport {
         traitRewardPickupFloors: number;
         traitBoardPowerInteractionOpportunities: number;
         deadTraitFloors: number;
-        deadTraitFloorsByBand: Record<'early' | 'mid' | 'late', number>;
+        deadTraitFloorsByBand: Record<BalanceSimulationFloorBand, number>;
         tileTraitKindCounts: Record<TileTraitKind, number>;
         bossFloors: number;
         breatherFloors: number;
@@ -230,6 +230,10 @@ export const DUNGEON_BALANCE_PROFILES: readonly DungeonBalanceProfileDefinition[
     { id: 'high_skill', riskTolerance: 0.84, rewardBias: 1.08, guardEfficiency: 0.95, shopVisitBias: 1.06 }
 ] as const;
 
+export const BALANCE_SIMULATION_FLOOR_BANDS = ['early', 'mid', 'late'] as const;
+
+export type BalanceSimulationFloorBand = (typeof BALANCE_SIMULATION_FLOOR_BANDS)[number];
+
 const statusFor = (value: number, targetMin: number, targetMax: number): BalanceSimulationRow['status'] =>
     value < targetMin ? 'below_range' : value > targetMax ? 'above_range' : 'within_range';
 
@@ -279,11 +283,13 @@ const simulationNodeKindForFloor = (floor: number, floorTag: string): DungeonRun
     return 'combat';
 };
 
-const floorBandFor = (floor: number): 'early' | 'mid' | 'late' =>
+const floorBandFor = (floor: number): BalanceSimulationFloorBand =>
     floor <= 4 ? 'early' : floor <= 8 ? 'mid' : 'late';
 
 const uniquePairCount = <T>(items: readonly T[], keyFor: (item: T) => string | null): number =>
     new Set(items.map(keyFor).filter((key): key is string => key != null)).size;
+
+export const BALANCE_SIMULATION_FINDABLE_KINDS: readonly FindableKind[] = FINDABLE_REWARD_ROWS.map((row) => row.kind);
 
 const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     shard_spark: 0,
@@ -292,7 +298,7 @@ const emptyFindableKindCounts = (): Record<FindableKind, number> => ({
     scout_glint: 0
 });
 
-const TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
+export const BALANCE_SIMULATION_TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
     'echo',
     'volatile',
     'mirror',
@@ -342,11 +348,17 @@ const countTileTraitKinds = (tiles: readonly Tile[]): Record<TileTraitKind, numb
     return counts;
 };
 
+const getFindableKindTotal = (counts: Record<FindableKind, number>): number =>
+    BALANCE_SIMULATION_FINDABLE_KINDS.reduce((sum, kind) => sum + counts[kind], 0);
+
+const getTileTraitKindTotal = (counts: Record<TileTraitKind, number>): number =>
+    BALANCE_SIMULATION_TILE_TRAIT_KINDS.reduce((sum, kind) => sum + counts[kind], 0);
+
 const sumFindableKindCounts = (
     counts: readonly Record<FindableKind, number>[]
 ): Record<FindableKind, number> =>
     counts.reduce((totals, sampleCounts) => {
-        for (const kind of Object.keys(totals) as FindableKind[]) {
+        for (const kind of BALANCE_SIMULATION_FINDABLE_KINDS) {
             totals[kind] += sampleCounts[kind];
         }
         return totals;
@@ -356,7 +368,7 @@ const sumTileTraitKindCounts = (
     counts: readonly Record<TileTraitKind, number>[]
 ): Record<TileTraitKind, number> =>
     counts.reduce((totals, sampleCounts) => {
-        for (const kind of TILE_TRAIT_KINDS) {
+        for (const kind of BALANCE_SIMULATION_TILE_TRAIT_KINDS) {
             totals[kind] += sampleCounts[kind];
         }
         return totals;
@@ -365,8 +377,8 @@ const sumTileTraitKindCounts = (
 export const getFindableKindShares = (
     counts: Record<FindableKind, number>
 ): Record<FindableKind, number> => {
-    const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
-    return (Object.keys(counts) as FindableKind[]).reduce<Record<FindableKind, number>>(
+    const total = getFindableKindTotal(counts);
+    return BALANCE_SIMULATION_FINDABLE_KINDS.reduce<Record<FindableKind, number>>(
         (shares, kind) => ({
             ...shares,
             [kind]: total === 0 ? 0 : counts[kind] / total
@@ -378,8 +390,8 @@ export const getFindableKindShares = (
 export const getTileTraitKindShares = (
     counts: Record<TileTraitKind, number>
 ): Record<TileTraitKind, number> => {
-    const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
-    return TILE_TRAIT_KINDS.reduce<Record<TileTraitKind, number>>(
+    const total = getTileTraitKindTotal(counts);
+    return BALANCE_SIMULATION_TILE_TRAIT_KINDS.reduce<Record<TileTraitKind, number>>(
         (shares, kind) => ({
             ...shares,
             [kind]: total === 0 ? 0 : counts[kind] / total
@@ -442,7 +454,17 @@ const shopServiceSpendShareForProfile = (profile: DungeonBalanceProfileId): numb
     }
 };
 
+const ROUTE_NODE_TYPES: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
+
 const emptyRouteChoiceCounts = (): Record<RouteNodeType, number> => ({ safe: 0, greed: 0, mystery: 0 });
+
+const getRouteChoiceTotal = (counts: Record<RouteNodeType, number>): number =>
+    ROUTE_NODE_TYPES.reduce((sum, type) => sum + counts[type], 0);
+
+const getDominantRouteChoiceShare = (counts: Record<RouteNodeType, number>): number => {
+    const total = getRouteChoiceTotal(counts);
+    return total === 0 ? 0 : Math.max(...ROUTE_NODE_TYPES.map((type) => counts[type])) / total;
+};
 
 const chooseProfileRoute = (
     profile: DungeonBalanceProfileId,
@@ -476,7 +498,7 @@ export const runBalanceSimulation = ({
     const safeFloors = Math.max(1, Math.floor(floors));
     const safeSeeds = seeds && seeds.length > 0 ? [...seeds] : [seed ?? 0];
     const floorNumbers = Array.from({ length: safeFloors }, (_, index) => index + 1);
-    const shopSinkPerVisit = Object.values(SHOP_ITEM_CATALOG)
+    const shopSinkPerVisit = getShopItemCatalogRows()
         .filter((item) => !ALTERNATE_LOCK_KEY_SHOP_ITEMS.has(item.itemId))
         .reduce((sum, item) => sum + item.baseCost, 0);
     const samples = safeSeeds.flatMap((sampleSeed) =>
@@ -529,7 +551,7 @@ export const runBalanceSimulation = ({
             );
             const findableKindCounts = countFindableKinds(board.tiles);
             const tileTraitKindCounts = countTileTraitKinds(board.tiles);
-            const tileTraitPairs = Object.values(tileTraitKindCounts).reduce((sum, count) => sum + count, 0);
+            const tileTraitPairs = getTileTraitKindTotal(tileTraitKindCounts);
             const traitComboOpportunityPairs = countTraitComboOpportunityPairs(board);
             const traitMatchRouteFloors = traitComboOpportunityPairs > 0 ? 1 : 0;
             const traitSwapSetupOpportunities = hasTraitSwapSetupOpportunity(board) ? 1 : 0;
@@ -620,13 +642,14 @@ export const runBalanceSimulation = ({
     const traitRewardPickupFloorCounts = samples.map((sample) => sample.traitRewardPickupFloors);
     const traitBoardPowerInteractionOpportunityCounts = samples.map((sample) => sample.traitBoardPowerInteractionOpportunities);
     const deadTraitFloorCounts = samples.map((sample) => sample.deadTraitFloors);
-    const deadTraitFloorsByBand = samples.reduce<Record<'early' | 'mid' | 'late', number>>(
+    const deadTraitFloorsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
         (counts, sample) => ({ ...counts, [sample.floorBand]: counts[sample.floorBand] + sample.deadTraitFloors }),
         { early: 0, mid: 0, late: 0 }
     );
     const aggregateTileTraitKindCounts = sumTileTraitKindCounts(samples.map((sample) => sample.tileTraitKindCounts));
     const tileTraitKindShares = getTileTraitKindShares(aggregateTileTraitKindCounts);
-    const totalFindableWeight = Object.values(FINDABLE_KIND_SPAWN_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
+    const findableSpawnWeightRows = getFindableSpawnWeightRows();
+    const totalFindableWeight = findableSpawnWeightRows.reduce((sum, weightRow) => sum + weightRow.weight, 0);
     const bossFloors = safeSeeds.flatMap((seed) =>
         floorNumbers.map((floor) => pickFloorScheduleEntry(seed, rulesVersion, floor, 'endless').floorTag === 'boss' ? 1 : 0)
     );
@@ -636,7 +659,15 @@ export const runBalanceSimulation = ({
     const openerHazardCounts = samples.filter((sample) => sample.floor === 1).map((sample) => sample.hazardTileCount);
     const pressureStepUps = safeSeeds.flatMap((sampleSeed) => {
         const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
-        return seedSamples.slice(1).map((sample, index) => samplePressure(sample) - samplePressure(seedSamples[index]!));
+        const stepUps: number[] = [];
+        for (let index = 1; index < seedSamples.length; index += 1) {
+            const previous = seedSamples[index - 1];
+            const sample = seedSamples[index];
+            if (previous && sample) {
+                stepUps.push(samplePressure(sample) - samplePressure(previous));
+            }
+        }
+        return stepUps;
     });
     const recoveryDebtStreaks = safeSeeds.map((sampleSeed) => {
         const seedSamples = samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor);
@@ -645,7 +676,7 @@ export const runBalanceSimulation = ({
     const pressureFloorRelief = samples
         .filter((sample) => samplePressure(sample) >= 2.5)
         .map((sample) => sample.recoveryReliefPotential);
-    const rewardTotalsByBand = samples.reduce<Record<'early' | 'mid' | 'late', number>>(
+    const rewardTotalsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
         (totals, sample) => ({
             ...totals,
             [sample.floorBand]:
@@ -662,11 +693,11 @@ export const runBalanceSimulation = ({
         }),
         { early: 0, mid: 0, late: 0 }
     );
-    const sampleCountsByBand = samples.reduce<Record<'early' | 'mid' | 'late', number>>(
+    const sampleCountsByBand = samples.reduce<Record<BalanceSimulationFloorBand, number>>(
         (counts, sample) => ({ ...counts, [sample.floorBand]: counts[sample.floorBand] + 1 }),
         { early: 0, mid: 0, late: 0 }
     );
-    const rewardAverageByBand = (Object.keys(rewardTotalsByBand) as Array<keyof typeof rewardTotalsByBand>).map((band) =>
+    const rewardAverageByBand = BALANCE_SIMULATION_FLOOR_BANDS.map((band) =>
         sampleCountsByBand[band] === 0 ? 0 : rewardTotalsByBand[band] / sampleCountsByBand[band]
     );
 
@@ -759,7 +790,7 @@ export const runBalanceSimulation = ({
             0,
             'getBoardTraitInteractionPreviewLines'
         ),
-        ...TILE_TRAIT_KINDS.map((kind) =>
+        ...BALANCE_SIMULATION_TILE_TRAIT_KINDS.map((kind) =>
             row(
                 `tile_trait_share_${kind}`,
                 `Tile trait ${kind} observed share`,
@@ -769,12 +800,12 @@ export const runBalanceSimulation = ({
                 'assignTileTraitsToGeneratedBoard'
             )
         ),
-        ...(Object.keys(FINDABLE_KIND_SPAWN_WEIGHTS) as FindableKind[]).map((kind) => {
-            const targetShare = FINDABLE_KIND_SPAWN_WEIGHTS[kind] / totalFindableWeight;
+        ...findableSpawnWeightRows.map((weightRow) => {
+            const targetShare = weightRow.weight / totalFindableWeight;
             return row(
-                `findable_share_${kind}`,
-                `Findable ${kind} observed share`,
-                Number(findableKindShares[kind].toFixed(2)),
+                `findable_share_${weightRow.id}`,
+                `Findable ${weightRow.id} observed share`,
+                Number(findableKindShares[weightRow.id].toFixed(2)),
                 Math.max(0, Number((targetShare - 0.18).toFixed(2))),
                 Math.min(1, Number((targetShare + 0.18).toFixed(2))),
                 'FINDABLE_KIND_SPAWN_WEIGHTS'
@@ -1038,11 +1069,19 @@ export const BALANCE_SIMULATION_BASELINE = {
     shopSinkBudget: { min: 84, max: 84 }
 } as const;
 
+export const BALANCE_SIMULATION_BASELINE_KEYS = [
+    'totalShopGoldEarned',
+    'findablePickupPairs',
+    'bossFloors',
+    'breatherFloors',
+    'shopSinkBudget'
+] as const satisfies readonly (keyof typeof BALANCE_SIMULATION_BASELINE)[];
+
 export const assertBalanceSimulationWithinBaseline = (
     report: BalanceSimulationReport,
     baseline: typeof BALANCE_SIMULATION_BASELINE
 ): { ok: boolean; issues: string[] } => {
-    const issues = (Object.keys(baseline) as Array<keyof typeof baseline>).flatMap((key) => {
+    const issues = BALANCE_SIMULATION_BASELINE_KEYS.flatMap((key) => {
         const value = report.aggregate[key];
         const range = baseline[key];
         return value < range.min || value > range.max ? [`${key}:${value} outside ${range.min}-${range.max}`] : [];
@@ -1058,12 +1097,20 @@ const sampleRewardPotential = (sample: BalanceSimulationReport['samples'][number
     sample.treasureRewardPairs +
     sample.findablePickupPairs;
 
+const selectedDungeonBalanceProfileIds = (value: unknown): DungeonBalanceProfileId[] =>
+    Array.isArray(value)
+        ? value.filter((profileId): profileId is DungeonBalanceProfileId =>
+              DUNGEON_BALANCE_PROFILES.some((profile) => profile.id === profileId)
+          )
+        : [];
+
 export const runDungeonBalanceProfileSimulation = (
     input: BalanceSimulationInput & { profiles?: readonly DungeonBalanceProfileId[] }
 ): DungeonBalanceProfileReport => {
     const base = runBalanceSimulation(input);
-    const selectedProfiles = input.profiles?.length
-        ? DUNGEON_BALANCE_PROFILES.filter((profile) => input.profiles?.includes(profile.id))
+    const profileIds = selectedDungeonBalanceProfileIds(input.profiles);
+    const selectedProfiles = profileIds.length > 0
+        ? DUNGEON_BALANCE_PROFILES.filter((profile) => profileIds.includes(profile.id))
         : DUNGEON_BALANCE_PROFILES;
     const samplesBySeed = base.seeds.map((sampleSeed) =>
         base.samples.filter((sample) => sample.seed === sampleSeed).sort((a, b) => a.floor - b.floor)
@@ -1250,9 +1297,7 @@ export const runDungeonBalanceProfileSimulation = (
         const shopsVisited = Math.round(
             base.samples.filter((sample) => sample.dungeonNodeKind === 'shop').length * profile.shopVisitBias
         );
-        const totalRouteChoices = Object.values(routeChoiceCounts).reduce((sum, count) => sum + count, 0);
-        const dominantRouteShare =
-            totalRouteChoices === 0 ? 0 : Math.max(...Object.values(routeChoiceCounts)) / totalRouteChoices;
+        const dominantRouteShare = getDominantRouteChoiceShare(routeChoiceCounts);
         const seedFloorClearShares = seedOutcomes.map((outcome) => outcome.floorsCleared / Math.max(1, base.floors));
         const worstSeedFloorsClearedShare = seedFloorClearShares.length === 0 ? 0 : Math.min(...seedFloorClearShares);
         const bestSeedFloorsClearedShare = seedFloorClearShares.length === 0 ? 0 : Math.max(...seedFloorClearShares);

@@ -1,5 +1,10 @@
 import type { TileTraitKind } from './contracts';
-import { TILE_TRAIT_COPY, TILE_TRAIT_INTERACTION_TEXT, type TileTraitInteractionTag } from './tile-trait-rules';
+import {
+    TILE_TRAIT_COPY,
+    TILE_TRAIT_INTERACTION_TAGS,
+    TILE_TRAIT_INTERACTION_TEXT,
+    type TileTraitInteractionTag
+} from './tile-trait-rules';
 
 export interface TileTraitCodexRow {
     id: string;
@@ -60,7 +65,7 @@ export const getTileTraitCodexRows = (): TileTraitCodexRow[] =>
     });
 
 export const getTileTraitInteractionCodexRows = (): TileTraitCodexRow[] =>
-    (Object.keys(TILE_TRAIT_INTERACTION_TEXT) as TileTraitInteractionTag[]).map((tag) => ({
+    TILE_TRAIT_INTERACTION_TAGS.map((tag) => ({
         id: `trait-interaction-${tag}`,
         title: TILE_TRAIT_INTERACTION_TEXT[tag],
         description: INTERACTION_DESCRIPTIONS[tag]

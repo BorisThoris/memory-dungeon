@@ -192,6 +192,48 @@ describe('applyDungeonExitObjectiveReward', () => {
         expect(result.rewarded).toBe(true);
         expect(result.run.stats.totalScore).toBe(10 + DUNGEON_OBJECTIVE_SCORE_REWARD);
         expect(result.run.stats.currentLevelScore).toBe(3 + DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.bestScore).toBe(10 + DUNGEON_OBJECTIVE_SCORE_REWARD);
+    });
+
+    it('normalizes malformed score counters before rewarding exit objectives', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 24 }),
+            board: {
+                ...createNewRun(0, { runSeed: 24 }).board!,
+                dungeonObjectiveId: 'claim_route'
+            } satisfies BoardState,
+            stats: {
+                ...createNewRun(0, { runSeed: 24 }).stats,
+                totalScore: Number.NaN,
+                currentLevelScore: -4.5,
+                bestScore: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const result = applyDungeonExitObjectiveReward(run, { routeType: 'safe' });
+
+        expect(result.rewarded).toBe(true);
+        expect(result.run.stats.totalScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.currentLevelScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.bestScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+    });
+
+    it('normalizes malformed stat records before rewarding exit objectives', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 25 }),
+            board: {
+                ...createNewRun(0, { runSeed: 25 }).board!,
+                dungeonObjectiveId: 'claim_route'
+            } satisfies BoardState,
+            stats: Number.NaN as unknown as RunState['stats']
+        };
+
+        const result = applyDungeonExitObjectiveReward(run, { routeType: 'safe' });
+
+        expect(result.rewarded).toBe(true);
+        expect(result.run.stats.totalScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.currentLevelScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
+        expect(result.run.stats.bestScore).toBe(DUNGEON_OBJECTIVE_SCORE_REWARD);
     });
 
     it('does not reward the default find-exit objective', () => {
@@ -344,6 +386,42 @@ describe('createDungeonExitActivationTransition', () => {
         expect(transition?.run.dungeonEnemiesDefeated).toBe(2);
         expect(transition?.run.dungeonEnemiesDefeatedThisFloor).toBe(1);
         expect(transition?.run.enemyHazardsDefeatedThisFloor).toBe(3);
+    });
+
+    it('normalizes malformed dungeon counters when activating exits', () => {
+        const base = createNewRun(0, { runSeed: 2405 });
+        const board = {
+            ...createBoard([
+                tile('exit', EXIT_PAIR_KEY, {
+                    state: 'flipped',
+                    dungeonCardState: 'revealed',
+                    dungeonExitLockKind: 'iron'
+                }),
+                tile('a1', 'a'),
+                tile('a2', 'a')
+            ]),
+            enemyHazards: [hazard()]
+        };
+        const run: RunState = {
+            ...base,
+            status: 'playing',
+            board,
+            dungeonKeys: { iron: 0 },
+            dungeonMasterKeys: 1.9,
+            dungeonGatewaysUsed: Number.NaN,
+            dungeonEnemiesDefeated: Number.POSITIVE_INFINITY,
+            dungeonEnemiesDefeatedThisFloor: 1.9,
+            enemyHazardsDefeatedThisFloor: Number.NaN
+        };
+
+        const transition = createDungeonExitActivationTransition(run, 'master_key');
+
+        expect(transition).not.toBeNull();
+        expect(transition?.run.dungeonMasterKeys).toBe(0);
+        expect(transition?.run.dungeonGatewaysUsed).toBe(1);
+        expect(transition?.run.dungeonEnemiesDefeated).toBe(1);
+        expect(transition?.run.dungeonEnemiesDefeatedThisFloor).toBe(2);
+        expect(transition?.run.enemyHazardsDefeatedThisFloor).toBe(1);
     });
 
     it('allows a cleared boss floor to exit when only a stale boss patrol overlay remains', () => {

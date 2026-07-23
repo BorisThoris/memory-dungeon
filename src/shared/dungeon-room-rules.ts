@@ -14,6 +14,8 @@ import {
 } from './dungeon-room-targeting-rules';
 import { addRunDungeonKey } from './dungeon-key-rules';
 import { gainRelicFavor } from './relic-favor-rules';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 import {
     ROOM_PAIR_KEY,
     isSingletonUtilityPairKey
@@ -24,10 +26,26 @@ export const DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD = 50;
 export const DUNGEON_KEY_CACHE_SCORE_REWARD = 15;
 export const DUNGEON_OMEN_ARCHIVE_SCORE_REWARD = 15;
 
+const gainDungeonRoomScore = (run: RunState, score: number): RunState => {
+    const scoreGain = runNonNegativeInteger(score);
+    const stats = normalizeSessionStats(run.stats);
+    const totalScore = runNonNegativeInteger(stats.totalScore) + scoreGain;
+    return {
+        ...run,
+        stats: {
+            ...stats,
+            totalScore,
+            currentLevelScore: runNonNegativeInteger(stats.currentLevelScore) + scoreGain,
+            bestScore: Math.max(runNonNegativeInteger(stats.bestScore), totalScore)
+        }
+    };
+};
+
 export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
     if (run.status !== 'playing' || !run.board) {
         return run;
     }
+    const stats = normalizeSessionStats(run.stats);
     const tile = run.board.tiles.find((candidate) => candidate.id === tileId);
     if (!tile || tile.pairKey !== ROOM_PAIR_KEY || tile.dungeonCardKind !== 'room') {
         return run;
@@ -46,115 +64,79 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
         markUsed = true;
     } else if (effectId === 'room_campfire') {
         nextRun =
-            run.lives < MAX_LIVES
-                ? { ...run, lives: Math.min(MAX_LIVES, run.lives + 1) }
-                : {
-                      ...run,
-                      stats: {
-                          ...run.stats,
-                          totalScore: run.stats.totalScore + 15,
-                          currentLevelScore: run.stats.currentLevelScore + 15
-                      }
-                  };
+            runNonNegativeInteger(run.lives) < MAX_LIVES
+                ? { ...run, lives: Math.min(MAX_LIVES, runNonNegativeInteger(run.lives) + 1) }
+                : gainDungeonRoomScore(run, 15);
     } else if (effectId === 'room_fountain') {
         nextRun = {
             ...run,
-            stats: { ...run.stats, guardTokens: Math.min(MAX_GUARD_TOKENS, run.stats.guardTokens + 1) }
+            stats: { ...stats, guardTokens: Math.min(MAX_GUARD_TOKENS, runNonNegativeInteger(stats.guardTokens) + 1) }
         };
     } else if (effectId === 'room_map') {
         nextRun = run;
     } else if (effectId === 'room_forge') {
-        if (run.shopGold >= 2) {
+        if (runNonNegativeInteger(run.shopGold) >= 2) {
             nextRun = {
                 ...run,
-                shopGold: run.shopGold - 2,
-                destroyPairCharges: run.destroyPairCharges + 1
+                shopGold: runNonNegativeInteger(run.shopGold) - 2,
+                destroyPairCharges: runNonNegativeInteger(run.destroyPairCharges) + 1
             };
         }
         markUsed = false;
     } else if (effectId === 'room_shrine') {
         nextRun =
-            run.shopGold > 0
+            runNonNegativeInteger(run.shopGold) > 0
                 ? {
                       ...run,
-                      shopGold: run.shopGold - 1,
+                      shopGold: runNonNegativeInteger(run.shopGold) - 1,
                       stats: {
-                          ...run.stats,
-                          guardTokens: Math.min(MAX_GUARD_TOKENS, run.stats.guardTokens + 1)
+                          ...stats,
+                          guardTokens: Math.min(MAX_GUARD_TOKENS, runNonNegativeInteger(stats.guardTokens) + 1)
                       }
                   }
-                : {
-                      ...run,
-                      stats: {
-                          ...run.stats,
-                          totalScore: run.stats.totalScore + 10,
-                          currentLevelScore: run.stats.currentLevelScore + 10
-                      }
-                  };
+                : gainDungeonRoomScore(run, 10);
     } else if (effectId === 'room_scrying_lens') {
         nextRun = run;
     } else if (effectId === 'room_armory') {
         nextRun = {
             ...run,
-            destroyPairCharges: run.destroyPairCharges + 1
+            destroyPairCharges: runNonNegativeInteger(run.destroyPairCharges) + 1
         };
     } else if (effectId === 'room_key_cache') {
         nextRun = {
-            ...run,
-            dungeonKeys: addRunDungeonKey(run.dungeonKeys, 'iron', 1),
-            stats: {
-                ...run.stats,
-                totalScore: run.stats.totalScore + DUNGEON_KEY_CACHE_SCORE_REWARD,
-                currentLevelScore: run.stats.currentLevelScore + DUNGEON_KEY_CACHE_SCORE_REWARD,
-                bestScore: Math.max(run.stats.bestScore, run.stats.totalScore + DUNGEON_KEY_CACHE_SCORE_REWARD)
-            }
+            ...gainDungeonRoomScore(run, DUNGEON_KEY_CACHE_SCORE_REWARD),
+            dungeonKeys: addRunDungeonKey(run.dungeonKeys, 'iron', 1)
         };
     } else if (effectId === 'room_trap_workshop') {
         nextRun = {
             ...run,
             dungeonTrapsResolvedThisFloor: trapWorkshopUpdates.resolved
-                ? (run.dungeonTrapsResolvedThisFloor ?? 0) + 1
-                : run.dungeonTrapsResolvedThisFloor
+                ? runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor) + 1
+                : runNonNegativeInteger(run.dungeonTrapsResolvedThisFloor)
         };
     } else if (effectId === 'room_omen_archive') {
         const favor = gainRelicFavor(run, 1);
         nextRun = {
-            ...run,
+            ...gainDungeonRoomScore(run, DUNGEON_OMEN_ARCHIVE_SCORE_REWARD),
             bonusRelicPicksNextOffer: favor.bonusRelicPicksNextOffer,
             favorBonusRelicPicksNextOffer: favor.favorBonusRelicPicksNextOffer,
-            relicFavorProgress: favor.relicFavorProgress,
-            stats: {
-                ...run.stats,
-                totalScore: run.stats.totalScore + DUNGEON_OMEN_ARCHIVE_SCORE_REWARD,
-                currentLevelScore: run.stats.currentLevelScore + DUNGEON_OMEN_ARCHIVE_SCORE_REWARD,
-                bestScore: Math.max(run.stats.bestScore, run.stats.totalScore + DUNGEON_OMEN_ARCHIVE_SCORE_REWARD)
-            }
+            relicFavorProgress: favor.relicFavorProgress
         };
     } else if (effectId === 'room_locked_cache') {
         const keyKind: DungeonKeyKind = tile.dungeonKeyKind ?? 'iron';
-        if ((run.dungeonKeys[keyKind] ?? 0) > 0) {
+        if (runNonNegativeInteger(run.dungeonKeys[keyKind]) > 0) {
             openedLockedCache = true;
             nextRun = {
-                ...run,
+                ...gainDungeonRoomScore(run, DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD),
                 dungeonKeys: addRunDungeonKey(run.dungeonKeys, keyKind, -1),
-                shopGold: run.shopGold + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD,
-                stats: {
-                    ...run.stats,
-                    totalScore: run.stats.totalScore + DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD,
-                    currentLevelScore: run.stats.currentLevelScore + DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD
-                }
+                shopGold: runNonNegativeInteger(run.shopGold) + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD
             };
-        } else if (run.dungeonMasterKeys > 0) {
+        } else if (runNonNegativeInteger(run.dungeonMasterKeys) > 0) {
             openedLockedCache = true;
             nextRun = {
-                ...run,
-                dungeonMasterKeys: run.dungeonMasterKeys - 1,
-                shopGold: run.shopGold + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD,
-                stats: {
-                    ...run.stats,
-                    totalScore: run.stats.totalScore + DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD,
-                    currentLevelScore: run.stats.currentLevelScore + DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD
-                }
+                ...gainDungeonRoomScore(run, DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD),
+                dungeonMasterKeys: Math.max(0, runNonNegativeInteger(run.dungeonMasterKeys) - 1),
+                shopGold: runNonNegativeInteger(run.shopGold) + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD
             };
         }
         markUsed = openedLockedCache;

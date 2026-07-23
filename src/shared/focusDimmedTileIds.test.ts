@@ -110,4 +110,50 @@ describe('computeFocusDimmedTileIds', () => {
         };
         expect(computeFocusDimmedTileIds(board, 'playing', true)).toBeUndefined();
     });
+
+    it('returns undefined when flippedTileIds is malformed', () => {
+        const board: BoardState = {
+            level: 1,
+            pairCount: 2,
+            columns: 2,
+            rows: 2,
+            tiles: [
+                tile('a', 'A', 'flipped'),
+                tile('b', 'A', 'hidden'),
+                tile('c', 'B', 'hidden'),
+                tile('d', 'B', 'hidden')
+            ],
+            flippedTileIds: Number.NaN as unknown as string[],
+            matchedPairs: 0,
+            floorArchetypeId: null,
+            featuredObjectiveId: null
+        };
+
+        expect(computeFocusDimmedTileIds(board, 'playing', true)).toBeUndefined();
+    });
+
+    it('normalizes malformed board dimensions before choosing neighbors', () => {
+        const board: BoardState = {
+            level: 1,
+            pairCount: 2,
+            columns: Number.NaN,
+            rows: Number.NaN,
+            tiles: [
+                tile('a', 'A', 'flipped'),
+                tile('b', 'A', 'hidden'),
+                tile('c', 'B', 'hidden'),
+                tile('d', 'B', 'hidden')
+            ],
+            flippedTileIds: ['a'],
+            matchedPairs: 0,
+            floorArchetypeId: null,
+            featuredObjectiveId: null
+        };
+
+        const dim = computeFocusDimmedTileIds(board, 'playing', true);
+        expect(dim).toBeDefined();
+        expect(dim!.has('b')).toBe(false);
+        expect(dim!.has('c')).toBe(true);
+        expect(dim!.has('d')).toBe(true);
+    });
 });

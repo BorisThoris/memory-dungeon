@@ -1,4 +1,6 @@
 import type { RunState, SaveData } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
+import { getRelicPickTotal } from './save-data';
 
 export type ObjectiveBoardStatus = 'active' | 'completed' | 'locked';
 
@@ -20,16 +22,13 @@ export interface ObjectiveBoardItem {
     reward: string;
 }
 
-const relicPickTotal = (save: SaveData): number =>
-    Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
-
 export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => {
     const ps = save.playerStats;
     const last = save.lastRunSummary;
-    const dailies = ps?.dailiesCompleted ?? 0;
-    const bestNoPowers = ps?.bestFloorNoPowers ?? 0;
-    const relicPicks = relicPickTotal(save);
-    const gauntletClears = last?.gameMode === 'gauntlet' ? (last.levelsCleared ?? 0) : 0;
+    const dailies = runNonNegativeInteger(ps?.dailiesCompleted);
+    const bestNoPowers = runNonNegativeInteger(ps?.bestFloorNoPowers);
+    const relicPicks = getRelicPickTotal(ps?.relicPickCounts);
+    const gauntletClears = last?.gameMode === 'gauntlet' ? runNonNegativeInteger(last.levelsCleared) : 0;
 
     return [
         {
@@ -78,8 +77,8 @@ export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => 
 export const getObjectiveBoardItems = (save: SaveData): ObjectiveBoardItem[] => {
     const ps = save.playerStats;
     const firstClear = save.achievements.ACH_FIRST_CLEAR;
-    const dailies = ps?.dailiesCompleted ?? 0;
-    const bestNoPowers = ps?.bestFloorNoPowers ?? 0;
+    const dailies = runNonNegativeInteger(ps?.dailiesCompleted);
+    const bestNoPowers = runNonNegativeInteger(ps?.bestFloorNoPowers);
     return [
         {
             id: 'first_clear',
@@ -155,11 +154,13 @@ export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgre
         });
     }
     if (run.activeContract?.maxPinsTotalRun != null) {
+        const pinsPlacedCountThisRun = runNonNegativeInteger(run.pinsPlacedCountThisRun);
+        const maxPinsTotalRun = runNonNegativeInteger(run.activeContract.maxPinsTotalRun);
         rows.push({
             id: 'pin_vow',
             label: 'Pin vow',
-            state: run.pinsPlacedCountThisRun > run.activeContract.maxPinsTotalRun ? 'failed' : 'active',
-            detail: `${run.pinsPlacedCountThisRun}/${run.activeContract.maxPinsTotalRun} pins`
+            state: pinsPlacedCountThisRun > maxPinsTotalRun ? 'failed' : 'active',
+            detail: `${pinsPlacedCountThisRun}/${maxPinsTotalRun} pins`
         });
     }
     return rows;

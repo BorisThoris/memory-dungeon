@@ -1,5 +1,7 @@
 import {
     useCallback,
+    useEffect,
+    useRef,
     type KeyboardEvent as ReactKeyboardEvent,
     type PointerEvent as ReactPointerEvent,
     type RefObject
@@ -7,14 +9,31 @@ import {
 
 /** Pixels of horizontal movement before a library mode card press becomes a drag (preserves tap-to-run). */
 const LIBRARY_CARD_DRAG_SLOP_PX = 7;
+const DRAG_CLICK_SUPPRESSION_TIMEOUT_MS = 500;
 
-function suppressNextDocumentClick(): void {
+type DragSessionCleanup = () => void;
+
+function suppressNextScrollerClick(scroller: HTMLElement): DragSessionCleanup {
+    let timeoutId: number | null = null;
+    const cleanup = (): void => {
+        document.removeEventListener('click', handler, true);
+        if (timeoutId !== null) {
+            window.clearTimeout(timeoutId);
+            timeoutId = null;
+        }
+    };
     const handler = (e: MouseEvent): void => {
+        const target = e.target;
+        if (!(target instanceof Node) || !scroller.contains(target)) {
+            return;
+        }
         e.preventDefault();
         e.stopImmediatePropagation();
-        document.removeEventListener('click', handler, true);
+        cleanup();
     };
     document.addEventListener('click', handler, true);
+    timeoutId = window.setTimeout(cleanup, DRAG_CLICK_SUPPRESSION_TIMEOUT_MS);
+    return cleanup;
 }
 
 /**
@@ -26,7 +45,8 @@ function suppressNextDocumentClick(): void {
  * - Skips drag when the pointer targets form controls, links, or Gauntlet duration buttons.
  * - Library mode rows are `<button>` inside `[data-library-card-cell]` (stable; CSS module class names are
  *   hashed and must not be used in `closest()`). Those presses use a movement slop so a tap still fires
- *   `click`, while a drag scrolls the tray. Gauntlet preset buttons live under `[data-gauntlet-presets]`.
+ *   `click`, while a drag scrolls the tray. Completed drags suppress only their bounded in-tray click;
+ *   cancellation never suppresses a later command. Gauntlet preset buttons live under `[data-gauntlet-presets]`.
  * - Other non-interactive surfaces inside the scroller drag immediately (legacy behavior).
  *
  * **Modals:** When an `aria-modal="true"` dialog is mounted (e.g. gameplay `OverlayModal`), pointer and keyboard
@@ -44,12 +64,32 @@ function isModalDialogActive(): boolean {
     return document.querySelector('[role="dialog"][aria-modal="true"]') != null;
 }
 
+function shouldUseSmoothKeyboardScroll(): boolean {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+        return false;
+    }
+    try {
+        return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch {
+        return false;
+    }
+}
+
 export function useDragScroll(scrollerRef: RefObject<HTMLElement | null>): {
     onPointerDownCapture: (event: ReactPointerEvent<HTMLElement>) => void;
     /** Capture phase so Arrow keys work while focus is on nested tiles (e.g. library `<button>`s). */
     onKeyDownCapture: (event: ReactKeyboardEvent<HTMLElement>) => void;
     tabIndex: 0;
 } {
+    const activeDragCleanupRef = useRef<DragSessionCleanup | null>(null);
+
+    useEffect(() => {
+        return () => {
+            activeDragCleanupRef.current?.();
+            activeDragCleanupRef.current = null;
+        };
+    }, []);
+
     const onKeyDownCapture = useCallback(
         (event: ReactKeyboardEvent<HTMLElement>) => {
             if (isModalDialogActive()) {
@@ -90,10 +130,7 @@ export function useDragScroll(scrollerRef: RefObject<HTMLElement | null>): {
                 return;
             }
 
-            const smoothOk =
-                typeof window !== 'undefined' &&
-                typeof window.matchMedia === 'function' &&
-                !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const smoothOk = shouldUseSmoothKeyboardScroll();
             const behavior: ScrollBehavior = smoothOk ? 'smooth' : 'auto';
 
             event.preventDefault();
@@ -119,6 +156,8 @@ export function useDragScroll(scrollerRef: RefObject<HTMLElement | null>): {
 
     const onPointerDownCapture = useCallback(
         (event: ReactPointerEvent<HTMLElement>) => {
+            activeDragCleanupRef.current?.();
+            activeDragCleanupRef.current = null;
             if (isModalDialogActive()) {
                 return;
             }
@@ -143,7 +182,7 @@ export function useDragScroll(scrollerRef: RefObject<HTMLElement | null>): {
             }
 
             if (target.closest('[data-library-card-cell] button')) {
-                startLibraryCardDrag(event, el);
+                activeDragCleanupRef.current = startLibraryCardDrag(event, el);
                 return;
             }
 
@@ -151,33 +190,7 @@ export function useDragScroll(scrollerRef: RefObject<HTMLElement | null>): {
                 return;
             }
 
-            const startX = event.clientX;
-            const startScroll = el.scrollLeft;
-            const pointerId = event.pointerId;
-            try {
-                el.setPointerCapture(pointerId);
-            } catch {
-                return;
-            }
-            const onMove = (ev: PointerEvent): void => {
-                if (ev.pointerId !== pointerId) {
-                    return;
-                }
-                el.scrollLeft = startScroll - (ev.clientX - startX);
-            };
-            const onEnd = (): void => {
-                el.removeEventListener('pointermove', onMove);
-                el.removeEventListener('pointerup', onEnd);
-                el.removeEventListener('pointercancel', onEnd);
-                try {
-                    el.releasePointerCapture(pointerId);
-                } catch {
-                    /* ignore */
-                }
-            };
-            el.addEventListener('pointermove', onMove);
-            el.addEventListener('pointerup', onEnd);
-            el.addEventListener('pointercancel', onEnd);
+            activeDragCleanupRef.current = startSurfaceDrag(event, el);
         },
         [scrollerRef]
     );
@@ -185,11 +198,53 @@ export function useDragScroll(scrollerRef: RefObject<HTMLElement | null>): {
     return { onPointerDownCapture, onKeyDownCapture, tabIndex: 0 as const };
 }
 
-function startLibraryCardDrag(event: ReactPointerEvent<HTMLElement>, el: HTMLElement): void {
+function startSurfaceDrag(event: ReactPointerEvent<HTMLElement>, el: HTMLElement): DragSessionCleanup | null {
     const startX = event.clientX;
     const startScroll = el.scrollLeft;
     const pointerId = event.pointerId;
-    let dragging = false;
+    try {
+        el.setPointerCapture(pointerId);
+    } catch {
+        return null;
+    }
+    let captured = true;
+
+    const cleanup = (): void => {
+        el.removeEventListener('pointermove', onMove);
+        el.removeEventListener('pointerup', onEnd);
+        el.removeEventListener('pointercancel', onEnd);
+        if (captured) {
+            captured = false;
+            try {
+                el.releasePointerCapture(pointerId);
+            } catch {
+                /* ignore */
+            }
+        }
+    };
+    const onMove = (ev: PointerEvent): void => {
+        if (ev.pointerId !== pointerId) {
+            return;
+        }
+        el.scrollLeft = startScroll - (ev.clientX - startX);
+    };
+    const onEnd = (ev: PointerEvent): void => {
+        if (ev.pointerId === pointerId) {
+            cleanup();
+        }
+    };
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup', onEnd);
+    el.addEventListener('pointercancel', onEnd);
+    return cleanup;
+}
+
+function startLibraryCardDrag(event: ReactPointerEvent<HTMLElement>, el: HTMLElement): DragSessionCleanup {
+    const startX = event.clientX;
+    const startScroll = el.scrollLeft;
+    const pointerId = event.pointerId;
+    let captured = false;
+    let clickSuppressionCleanup: DragSessionCleanup | null = null;
 
     const cleanupWindow = (): void => {
         window.removeEventListener('pointermove', onWindowMove);
@@ -197,59 +252,77 @@ function startLibraryCardDrag(event: ReactPointerEvent<HTMLElement>, el: HTMLEle
         window.removeEventListener('pointercancel', onWindowUpEarly);
     };
 
+    const cleanupElement = (): void => {
+        el.removeEventListener('pointermove', onElMove);
+        el.removeEventListener('pointerup', onElEnd);
+        el.removeEventListener('pointercancel', onElEnd);
+    };
+
+    const cleanup = (): void => {
+        cleanupWindow();
+        cleanupElement();
+        if (captured) {
+            captured = false;
+            try {
+                el.releasePointerCapture(pointerId);
+            } catch {
+                /* ignore */
+            }
+        }
+        clickSuppressionCleanup?.();
+        clickSuppressionCleanup = null;
+    };
+
+    const onElMove = (ev: PointerEvent): void => {
+        if (ev.pointerId !== pointerId) {
+            return;
+        }
+        el.scrollLeft = startScroll - (ev.clientX - startX);
+    };
+
+    const onElEnd = (ev: PointerEvent): void => {
+        if (ev.pointerId !== pointerId) {
+            return;
+        }
+        const shouldSuppressClick = ev.type === 'pointerup';
+        cleanup();
+        if (shouldSuppressClick) {
+            clickSuppressionCleanup = suppressNextScrollerClick(el);
+        }
+    };
+
     const onWindowMove = (ev: PointerEvent): void => {
         if (ev.pointerId !== pointerId) {
             return;
         }
         const dx = ev.clientX - startX;
-        if (!dragging) {
-            if (Math.abs(dx) < LIBRARY_CARD_DRAG_SLOP_PX) {
-                return;
-            }
-            dragging = true;
-            cleanupWindow();
-            try {
-                el.setPointerCapture(pointerId);
-            } catch {
-                return;
-            }
-
-            const onElMove = (e2: PointerEvent): void => {
-                if (e2.pointerId !== pointerId) {
-                    return;
-                }
-                el.scrollLeft = startScroll - (e2.clientX - startX);
-            };
-            const onElEnd = (e2: PointerEvent): void => {
-                if (e2.pointerId !== pointerId) {
-                    return;
-                }
-                el.removeEventListener('pointermove', onElMove);
-                el.removeEventListener('pointerup', onElEnd);
-                el.removeEventListener('pointercancel', onElEnd);
-                try {
-                    el.releasePointerCapture(pointerId);
-                } catch {
-                    /* ignore */
-                }
-                suppressNextDocumentClick();
-            };
-            el.addEventListener('pointermove', onElMove);
-            el.addEventListener('pointerup', onElEnd);
-            el.addEventListener('pointercancel', onElEnd);
-            el.scrollLeft = startScroll - dx;
+        if (Math.abs(dx) < LIBRARY_CARD_DRAG_SLOP_PX) {
             return;
         }
+        cleanupWindow();
+        try {
+            el.setPointerCapture(pointerId);
+            captured = true;
+        } catch {
+            el.scrollLeft = startScroll - dx;
+            clickSuppressionCleanup = suppressNextScrollerClick(el);
+            return;
+        }
+        el.addEventListener('pointermove', onElMove);
+        el.addEventListener('pointerup', onElEnd);
+        el.addEventListener('pointercancel', onElEnd);
+        el.scrollLeft = startScroll - dx;
     };
 
     const onWindowUpEarly = (ev: PointerEvent): void => {
         if (ev.pointerId !== pointerId) {
             return;
         }
-        cleanupWindow();
+        cleanup();
     };
 
     window.addEventListener('pointermove', onWindowMove);
     window.addEventListener('pointerup', onWindowUpEarly);
     window.addEventListener('pointercancel', onWindowUpEarly);
+    return cleanup;
 }

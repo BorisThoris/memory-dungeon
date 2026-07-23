@@ -89,6 +89,49 @@ describe('dungeon board status', () => {
         });
     });
 
+    it('normalizes malformed key and lever counters before projecting exit status', () => {
+        const board = {
+            dungeonExitLockKind: 'iron',
+            dungeonLeverCount: Number.POSITIVE_INFINITY,
+            tiles: [
+                tile({
+                    id: 'exit',
+                    pairKey: EXIT_PAIR_KEY,
+                    label: 'Iron Exit',
+                    state: 'flipped',
+                    dungeonCardKind: 'exit',
+                    dungeonExitLockKind: 'iron'
+                }),
+                tile({
+                    id: 'key-a',
+                    pairKey: 'iron-key',
+                    dungeonCardKind: 'key',
+                    dungeonKeyKind: 'iron'
+                }),
+                tile({
+                    id: 'key-b',
+                    pairKey: 'iron-key',
+                    dungeonCardKind: 'key',
+                    dungeonKeyKind: 'iron'
+                })
+            ]
+        } as BoardState;
+        const statusRun = run(board, {
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys'],
+            dungeonMasterKeys: Number.POSITIVE_INFINITY
+        });
+
+        expect(getDungeonExitStatus(statusRun)).toMatchObject({
+            hasMatchingKey: false,
+            hasMasterKey: false,
+            canActivate: false
+        });
+        expect(getDungeonBoardStatus(statusRun)).toMatchObject({
+            keyCount: 0,
+            leverCount: 0
+        });
+    });
+
     it('treats an unreachable primary key lock as open instead of softlocking progression', () => {
         const board = {
             dungeonExitTileId: 'exit',
@@ -385,6 +428,58 @@ describe('dungeon board status', () => {
         });
     });
 
+    it('normalizes malformed boss and enemy counters before projecting lifecycle status', () => {
+        const board = {
+            floorTag: 'boss',
+            dungeonBossId: 'rush_sentinel',
+            dungeonObjectiveId: 'defeat_boss',
+            enemyHazards: Number.NaN as unknown as BoardState['enemyHazards'],
+            tiles: [
+                tile({
+                    id: 'boss-a',
+                    pairKey: 'boss',
+                    state: 'flipped',
+                    dungeonCardKind: 'enemy',
+                    dungeonBossId: 'rush_sentinel',
+                    dungeonCardHp: Number.POSITIVE_INFINITY,
+                    dungeonCardMaxHp: 3
+                }),
+                tile({
+                    id: 'boss-b',
+                    pairKey: 'boss',
+                    state: 'hidden',
+                    dungeonCardKind: 'enemy',
+                    dungeonBossId: 'rush_sentinel',
+                    dungeonCardHp: Number.NaN,
+                    dungeonCardMaxHp: Number.POSITIVE_INFINITY
+                })
+            ]
+        } as BoardState;
+        const bossRun = run(board, {
+            dungeonEnemiesDefeatedThisFloor: Number.POSITIVE_INFINITY
+        });
+
+        expect(getDungeonEnemyLifecycleStatus(bossRun)).toMatchObject({
+            enemyCardPairCount: 1,
+            defeatedEnemyCardPairCount: 0,
+            movingEnemyHazardCount: 0,
+            defeatedMovingEnemyHazardCount: 0
+        });
+        expect(getDungeonBossReadModel(bossRun)).toMatchObject({
+            hp: 3,
+            maxHp: 3,
+            phase: 'opening',
+            movingPatrolCount: 0,
+            activeMovingPatrolCount: 0
+        });
+        expect(getDungeonObjectiveStatus(bossRun)).toMatchObject({
+            objectiveId: 'defeat_boss',
+            completed: false,
+            progress: 0,
+            required: 3
+        });
+    });
+
     it('does not treat resolved visible enemy and boss cards as active threats', () => {
         const board = {
             floorTag: 'boss',
@@ -497,6 +592,46 @@ describe('dungeon board status', () => {
         expect(getDungeonBoardPresentation(staleRun).combatForecastText).toBeNull();
     });
 
+    it('normalizes malformed objective progress counters before projecting dungeon objectives', () => {
+        const trapBoard = {
+            dungeonObjectiveId: 'disarm_traps',
+            tiles: [
+                tile({
+                    id: 'trap-a',
+                    pairKey: 'trap',
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'hidden'
+                }),
+                tile({
+                    id: 'trap-b',
+                    pairKey: 'trap',
+                    dungeonCardKind: 'trap',
+                    dungeonCardState: 'hidden'
+                })
+            ]
+        } as BoardState;
+
+        expect(getDungeonObjectiveStatus(run(trapBoard, {
+            dungeonTrapsResolvedThisFloor: Number.POSITIVE_INFINITY
+        }))).toMatchObject({
+            objectiveId: 'disarm_traps',
+            completed: false,
+            progress: 0,
+            required: 1
+        });
+
+        expect(getDungeonObjectiveStatus(run({
+            ...trapBoard,
+            dungeonObjectiveId: 'claim_route'
+        }, {
+            dungeonGatewaysUsedThisFloor: Number.POSITIVE_INFINITY
+        }))).toMatchObject({
+            objectiveId: 'claim_route',
+            completed: false,
+            progress: 0
+        });
+    });
+
     it('counts stale patrol overlays as resolved for fully matched pacify floors', () => {
         const board = {
             dungeonObjectiveId: 'pacify_floor',
@@ -528,6 +663,53 @@ describe('dungeon board status', () => {
             progress: 1,
             required: 1
         });
+    });
+
+    it('normalizes malformed stats before forecasting combat pressure', () => {
+        const board = {
+            tiles: [
+                tile({
+                    id: 'enemy-a',
+                    pairKey: 'enemy',
+                    state: 'flipped',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardHp: 2,
+                    dungeonCardMaxHp: 2
+                }),
+                tile({
+                    id: 'enemy-b',
+                    pairKey: 'enemy',
+                    state: 'flipped',
+                    dungeonCardKind: 'enemy',
+                    dungeonCardHp: 2,
+                    dungeonCardMaxHp: 2
+                })
+            ],
+            matchedPairs: 0,
+            pairCount: 1,
+            enemyHazards: [
+                {
+                    id: 'patrol',
+                    kind: 'sentinel',
+                    label: 'Patrol',
+                    pattern: 'patrol',
+                    state: 'revealed',
+                    currentTileId: 'enemy-a',
+                    nextTileId: 'enemy-b',
+                    damage: 1,
+                    hp: 1,
+                    maxHp: 1
+                }
+            ]
+        } as BoardState;
+
+        expect(
+            getDungeonBoardPresentation(
+                run(board, {
+                    stats: Number.NaN as unknown as RunState['stats']
+                })
+            ).combatForecastText
+        ).toBe('No guard: patrol contact costs up to 1 life.');
     });
 
     it('separates defeated boss state from the remaining hidden-exit step', () => {

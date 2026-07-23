@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type {
     BoardState,
+    RelicId,
     RunState,
     Tile
 } from './contracts';
@@ -67,9 +68,28 @@ describe('board power state rules', () => {
     it('honors pin capacity from relics and contracts', () => {
         const relicRun = run({ relicIds: ['pin_cap_plus_one'] });
         expect(maxPinnedTilesForRun(relicRun)).toBe(maxPinnedTilesForRun(run()) + 1);
+        expect(maxPinnedTilesForRun(run({ relicIds: Number.NaN as unknown as RelicId[] }))).toBe(maxPinnedTilesForRun(run()));
 
         const capped = run({
             activeContract: { maxPinsTotalRun: 0 } as RunState['activeContract']
+        });
+        expect(togglePinnedTile(capped, 'a1')).toBe(capped);
+    });
+
+    it('normalizes malformed pin placement counters before pinning', () => {
+        const pinned = togglePinnedTile(run({ pinsPlacedCountThisRun: Number.NaN }), 'a1');
+        expect(pinned.pinnedTileIds).toEqual(['a1']);
+        expect(pinned.pinsPlacedCountThisRun).toBe(1);
+
+        const pinnedFromMalformedIds = togglePinnedTile(
+            run({ pinnedTileIds: Number.NaN as unknown as string[] }),
+            'a1'
+        );
+        expect(pinnedFromMalformedIds.pinnedTileIds).toEqual(['a1']);
+
+        const capped = run({
+            activeContract: { maxPinsTotalRun: 1.9 } as RunState['activeContract'],
+            pinsPlacedCountThisRun: 1.9
         });
         expect(togglePinnedTile(capped, 'a1')).toBe(capped);
     });
@@ -78,5 +98,11 @@ describe('board power state rules', () => {
         expect(toggleStrayRemoveArmed(run()).strayRemoveArmed).toBe(true);
         expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: 0 })).strayRemoveArmed).toBe(false);
         expect(toggleStrayRemoveArmed(run({ status: 'paused' })).strayRemoveArmed).toBe(false);
+    });
+
+    it('normalizes malformed stray remove charges before arming', () => {
+        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: Number.NaN })).strayRemoveArmed).toBe(false);
+        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: Number.POSITIVE_INFINITY })).strayRemoveArmed).toBe(false);
+        expect(toggleStrayRemoveArmed(run({ strayRemoveCharges: 1.9 })).strayRemoveArmed).toBe(true);
     });
 });

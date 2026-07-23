@@ -1,5 +1,5 @@
 import type { SaveData, Settings } from '../../shared/contracts';
-import { normalizeUnknownSaveData, normalizeUnknownSettings } from '../../shared/save-data';
+import { normalizeUnknownSaveDataOrThrow, normalizeUnknownSettingsOrThrow } from '../../shared/save-data';
 import { desktopClient } from '../desktop-client';
 
 let consecutiveWriteFailures = 0;
@@ -22,6 +22,14 @@ let lastFailedOperation: PersistenceWriteOperation | null = null;
 /** Wired once from `useAppStore` so we can surface disk errors without circular imports. */
 export const registerPersistenceWriteFailureHandler = (fn: ((detail: WriteFailDetail) => void) | null): void => {
     onWriteFail = fn;
+};
+
+const notifyWriteFailure = (detail: WriteFailDetail): void => {
+    try {
+        onWriteFail?.(detail);
+    } catch (error) {
+        console.error('[persist] write failure handler failed', error);
+    }
 };
 
 const SHORT_NOTICE =
@@ -63,14 +71,14 @@ export const saveHealthCopyForSnapshot = (snapshot: SaveHealthSnapshot): string 
 
 export const persistSaveData = async (saveData: SaveData): Promise<SaveData> => {
     try {
-        const out = normalizeUnknownSaveData(await desktopClient.saveGame(saveData));
+        const out = normalizeUnknownSaveDataOrThrow(await desktopClient.saveGame(saveData));
         resetSaveHealth();
         return out;
     } catch (error) {
         consecutiveWriteFailures += 1;
         lastFailedOperation = 'game';
         console.error('[persist] saveGame failed', error);
-        onWriteFail?.({
+        notifyWriteFailure({
             consecutive: consecutiveWriteFailures,
             op: 'game'
         });
@@ -80,14 +88,14 @@ export const persistSaveData = async (saveData: SaveData): Promise<SaveData> => 
 
 export const persistSaveSettings = async (settings: Settings): Promise<Settings> => {
     try {
-        const out = normalizeUnknownSettings(await desktopClient.saveSettings(settings));
+        const out = normalizeUnknownSettingsOrThrow(await desktopClient.saveSettings(settings));
         resetSaveHealth();
         return out;
     } catch (error) {
         consecutiveWriteFailures += 1;
         lastFailedOperation = 'settings';
         console.error('[persist] saveSettings failed', error);
-        onWriteFail?.({
+        notifyWriteFailure({
             consecutive: consecutiveWriteFailures,
             op: 'settings'
         });

@@ -4,15 +4,20 @@ import {
     MEMORIZE_DECAY_EVERY_N_LEVELS,
     MEMORIZE_MIN_MS,
     MEMORIZE_STEP_MS,
+    type RelicId,
     type Rating,
     type RunState,
     type Tile
 } from './contracts';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { hasMutator } from './mutators';
+import { runRelicIds } from './relics';
 import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
 
 const ECHO_EXTRA_RESOLVE_MS = 380;
+
+const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
+    runRelicIds(run.relicIds).includes(relicId);
 
 /** Documented in `docs/BALANCE_NOTES.md` (presentation mutator match penalties). */
 export const PRESENTATION_MUTATOR_MATCH_PENALTIES = {
@@ -45,10 +50,10 @@ export const getMemorizeDurationForRun = (run: RunState, level: number): number 
     if (hasMutator(run, 'short_memorize')) {
         ms = Math.max(MEMORIZE_MIN_MS, ms - 350);
     }
-    if (run.relicIds.includes('memorize_bonus_ms')) {
+    if (hasRunRelic(run, 'memorize_bonus_ms')) {
         ms += 280;
     }
-    if (run.relicIds.includes('memorize_under_short_memorize') && hasMutator(run, 'short_memorize')) {
+    if (hasRunRelic(run, 'memorize_under_short_memorize') && hasMutator(run, 'short_memorize')) {
         ms += 220;
     }
     if (run.gameMode === 'meditation') {
@@ -75,7 +80,12 @@ export const calculateMatchScore = (
     level: number,
     currentStreak: number,
     multiplier: number = 1
-): number => Math.floor((20 + 5 * Math.max(level - 1, 0) + 10 * Math.max(currentStreak, 0)) * multiplier);
+): number => {
+    const levelOffset = typeof level === 'number' && Number.isFinite(level) ? Math.max(level - 1, 0) : 0;
+    const streak = typeof currentStreak === 'number' && Number.isFinite(currentStreak) ? Math.max(currentStreak, 0) : 0;
+    const scoreMultiplier = typeof multiplier === 'number' && Number.isFinite(multiplier) ? Math.max(0, multiplier) : 1;
+    return Math.floor((20 + 5 * levelOffset + 10 * streak) * scoreMultiplier);
+};
 
 /** Exported for UI resolving highlights (gambit 3-flip) - keep in sync with `resolveGambitThree`. */
 export const tilesArePairMatch = (a: Tile, b: Tile): boolean => {
@@ -100,7 +110,7 @@ export const computeFlipResolveDelayMs = (
     flippedTileIds: string[],
     opts: { resolveDelayMultiplier: number; echoFeedbackEnabled: boolean }
 ): number => {
-    if (flippedTileIds.length !== 2 || !run.board) {
+    if (!Array.isArray(flippedTileIds) || flippedTileIds.length !== 2 || !run.board) {
         return 0;
     }
     const [firstId, secondId] = flippedTileIds;
@@ -119,6 +129,7 @@ export const computeFlipResolveDelayMs = (
     return ms;
 };
 
-export const calculateLevelClearBonus = (level: number): number => 50 * level;
+export const calculateLevelClearBonus = (level: number): number =>
+    50 * (typeof level === 'number' && Number.isFinite(level) ? Math.max(0, Math.floor(level)) : 0);
 
 export const calculatePerfectClearBonus = (): number => 25;

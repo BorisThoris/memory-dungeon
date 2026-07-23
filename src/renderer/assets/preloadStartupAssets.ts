@@ -2,7 +2,7 @@ import { getAllCardIllustrationUrls } from '../cardFace/cardIllustrationRegistry
 import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImages';
 import { preloadTileTextureImages } from '../components/tileTextures';
 import { loadRelicTextures, type RelicTextureSet } from '../components/startupIntroTextures';
-import { MODE_CARD_ART, UI_ART } from './ui';
+import { getUiArtRows, MODE_CARD_ART, MODE_POSTER_KEYS } from './ui';
 
 type IdleWindow = Window &
     typeof globalThis & {
@@ -56,26 +56,50 @@ const preloadRasterUrls = async (urls: readonly string[], concurrency = 4): Prom
     await Promise.all(Array.from({ length: workerCount }, () => worker()));
 };
 
+const settleRasterPreload = async (operation: () => Promise<void>): Promise<void> => {
+    try {
+        await operation();
+    } catch {
+        // Raster warm-up is optional; callers retain CSS/canvas fallbacks.
+    }
+};
+
 const scheduleIdleWarmup = (callback: () => void, fallbackDelayMs: number): (() => void) => {
     const idleWindow = window as IdleWindow;
+    let cancelled = false;
+    const run = (): void => {
+        if (!cancelled) {
+            callback();
+        }
+    };
 
     if (typeof idleWindow.requestIdleCallback === 'function') {
-        const idleHandle = idleWindow.requestIdleCallback(callback, { timeout: 2500 });
-        return () => idleWindow.cancelIdleCallback?.(idleHandle);
+        try {
+            const idleHandle = idleWindow.requestIdleCallback(run, { timeout: 2500 });
+            return () => {
+                cancelled = true;
+                idleWindow.cancelIdleCallback?.(idleHandle);
+            };
+        } catch {
+            // Some embedded browser shells expose requestIdleCallback but reject scheduling.
+        }
     }
 
-    const timerHandle = window.setTimeout(callback, fallbackDelayMs);
-    return () => window.clearTimeout(timerHandle);
+    const timerHandle = window.setTimeout(run, fallbackDelayMs);
+    return () => {
+        cancelled = true;
+        window.clearTimeout(timerHandle);
+    };
 };
 
 /** Deduped first-screen UI rasters so MainMenu and gameplay shells decode before first paint. */
 export const preloadUiRasterImages = (): Promise<void> => {
-    const urls = [...Object.values(UI_ART)];
+    const urls = getUiArtRows().map((row) => row.assetUrl);
     return preloadRasterUrls(urls, 4);
 };
 
 export const preloadModePosterRasterImages = (): Promise<void> => {
-    const urls = [...Object.values(MODE_CARD_ART), MODE_CARD_ART.fallback];
+    const urls = [...MODE_POSTER_KEYS.map((key) => MODE_CARD_ART[key]), MODE_CARD_ART.fallback];
     return preloadRasterUrls(urls, 3);
 };
 
@@ -87,7 +111,9 @@ export const warmModePosterRasterImagesInBackground = (): void => {
     modePosterPreloadStarted = true;
     cancelModePosterWarmup = scheduleIdleWarmup(() => {
         cancelModePosterWarmup = null;
-        void preloadModePosterRasterImages().catch(() => undefined);
+        void preloadModePosterRasterImages().catch(() => {
+            modePosterPreloadStarted = false;
+        });
     }, 350);
 };
 
@@ -99,7 +125,9 @@ export const warmCardIllustrationsInBackground = (): void => {
     cardIllustrationPreloadStarted = true;
     const run = (): void => {
         cancelCardIllustrationWarmup = null;
-        void preloadCardIllustrationImages(getAllCardIllustrationUrls()).catch(() => undefined);
+        void preloadCardIllustrationImages(getAllCardIllustrationUrls()).catch(() => {
+            cardIllustrationPreloadStarted = false;
+        });
     };
     cancelCardIllustrationWarmup = scheduleIdleWarmup(run, 250);
 };
@@ -134,8 +162,8 @@ export const preloadStartupCriticalAssets = async (
         : Promise.resolve(null);
 
     const [, , relicTextureSet] = await Promise.all([
-        preloadTileTextureImages(),
-        preloadUiRasterImages(),
+        settleRasterPreload(preloadTileTextureImages),
+        settleRasterPreload(preloadUiRasterImages),
         relicPromise
     ]);
 

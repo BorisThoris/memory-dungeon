@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { BONUS_REWARD_CATALOG } from './bonus-rewards';
 import { createNewRun } from './game-core';
 import { createPlayablePathFixture } from './playable-path-fixtures';
 import {
@@ -66,6 +67,24 @@ describe('route side-room rules', () => {
         expect(skipRouteSideRoom({ ...bonusRun, status: 'playing' as const })).toMatchObject({
             sideRoom: bonusRun.sideRoom
         });
+    });
+
+    it('falls back to event payload choices when persisted side-room choices are malformed', () => {
+        const eventRun = createPlayablePathFixture('sideRoomChoice').run!;
+        const malformedChoicesRun = {
+            ...eventRun,
+            sideRoom: eventRun.sideRoom
+                ? {
+                      ...eventRun.sideRoom,
+                      choices: { length: 2 } as never
+                  }
+                : eventRun.sideRoom
+        };
+
+        const claimed = claimRouteSideRoomPrimary(malformedChoicesRun);
+
+        expect(claimed.sideRoom).toBeNull();
+        expect(claimed).not.toBe(malformedChoicesRun);
     });
 
     it('opens bonus side rooms as deterministic reward drafts and claims the clicked reward', () => {
@@ -203,5 +222,54 @@ describe('route side-room rules', () => {
                 })
             ])
         );
+    });
+
+    it('normalizes malformed payout lanes before ranking bonus reward impact', () => {
+        const originalPayout = BONUS_REWARD_CATALOG.key_insurance.payout;
+        const originalTraitBuildLabels = BONUS_REWARD_CATALOG.key_insurance.traitBuildLabels;
+        BONUS_REWARD_CATALOG.key_insurance.payout = {
+            shopGold: 1,
+            comboShards: Number.NaN,
+            relicFavorProgress: Number.POSITIVE_INFINITY,
+            score: Number.NaN,
+            inventoryItems: {
+                unknown_item: 99
+            } as typeof BONUS_REWARD_CATALOG.key_insurance.payout.inventoryItems,
+            rewardPerks: Number.NaN as unknown as typeof BONUS_REWARD_CATALOG.key_insurance.payout.rewardPerks
+        };
+        BONUS_REWARD_CATALOG.key_insurance.traitBuildLabels = [
+            Number.NaN,
+            '__proto__'
+        ] as unknown as typeof BONUS_REWARD_CATALOG.key_insurance.traitBuildLabels;
+        try {
+            const run = createNewRun(210_503, { startingLoadoutId: 'vaultbreaker' });
+            const opened = openRouteSideRoom({
+                ...run,
+                status: 'levelComplete',
+                pendingRouteCardPlan: {
+                    choiceId: 'greed',
+                    routeType: 'greed',
+                    sourceLevel: 3,
+                    targetLevel: 4
+                }
+            });
+
+            expect(opened.sideRoom?.choices).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        label: 'Key insurance',
+                        nextCue: 'Keep the iron key for the next locked entrance.',
+                        rewardPerkNextCue: undefined,
+                        rewardImpactBeats: 2,
+                        rewardImpactCue: 'Resource',
+                        rewardImpactKind: 'resource',
+                        traitBuildLabels: []
+                    })
+                ])
+            );
+        } finally {
+            BONUS_REWARD_CATALOG.key_insurance.payout = originalPayout;
+            BONUS_REWARD_CATALOG.key_insurance.traitBuildLabels = originalTraitBuildLabels;
+        }
     });
 });

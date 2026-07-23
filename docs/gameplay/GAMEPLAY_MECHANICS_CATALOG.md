@@ -252,7 +252,7 @@ Source: [`RunState`](../../src/shared/contracts.ts) interface.
 | `activeContract` | Scholar / pin vow constraints | [epic-contracts-challenge-runs](./epic-contracts-challenge-runs.md) |
 | `practiceMode` | Practice run flag | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `dailyDateKeyUtc` | Daily challenge date key | [epic-modes-and-runs](./epic-modes-and-runs.md) |
-| `puzzleId` | Built-in id or `import:…` for user-imported JSON puzzles | [epic-modes-and-runs](./epic-modes-and-runs.md) |
+| `puzzleId` | Built-in id or caller-supplied puzzle id; no user puzzle JSON menu flow is wired | [epic-modes-and-runs](./epic-modes-and-runs.md) |
 | `stickyBlockIndex` | Sticky fingers: blocked slot for next opening flip | [epic-mutators](./epic-mutators.md) |
 | `parasiteFloors` | Score parasite pressure counter | [epic-lives-and-pressure](./epic-lives-and-pressure.md) |
 | `freeShuffleThisFloor` | Relic: first shuffle free this floor | [epic-relics](./epic-relics.md) |

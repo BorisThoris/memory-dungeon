@@ -1,7 +1,9 @@
 import type { SaveData } from './contracts';
+import { getAchievementProgressSummary } from './achievements';
 import { getCosmeticRows, getOwnedCosmeticIds } from './cosmetics';
 import { getMetaProgressionBoard } from './meta-progression';
 import { buildRunJournalRowsFromSave } from './run-history';
+import { getRelicPickTotal } from './save-data';
 
 export type CollectionRewardGalleryStatus = 'owned' | 'in_progress' | 'missing';
 export type CollectionRewardGalleryTone = 'Gold' | 'Cyan' | 'Violet' | 'Muted';
@@ -44,11 +46,11 @@ const statusForMetaReward = (
 };
 
 export const getCollectionRewardGalleryRows = (save: SaveData): CollectionRewardGalleryRow[] => {
-    const achievements = Object.values(save.achievements);
+    const achievementProgress = getAchievementProgressSummary(save.achievements);
     const meta = getMetaProgressionBoard(save);
     const cosmeticsOwned = getOwnedCosmeticIds(save).length;
     const cosmeticsTotal = getCosmeticRows(save).length;
-    const relicPickTotal = Object.values(save.playerStats?.relicPickCounts ?? {}).reduce((sum, count) => sum + (count ?? 0), 0);
+    const relicPickTotal = getRelicPickTotal(save.playerStats?.relicPickCounts);
     const historyRows = buildRunJournalRowsFromSave(save);
 
     return [
@@ -56,10 +58,10 @@ export const getCollectionRewardGalleryRows = (save: SaveData): CollectionReward
             id: 'achievements',
             title: 'Achievement gallery',
             description: 'Steam/local achievements earned from mastery milestones.',
-            owned: achievements.filter(Boolean).length,
-            status: statusFor(achievements.filter(Boolean).length, achievements.length),
-            total: achievements.length,
-            progressLabel: `${achievements.filter(Boolean).length}/${achievements.length} lit`,
+            owned: achievementProgress.earned,
+            status: statusFor(achievementProgress.earned, achievementProgress.total),
+            total: achievementProgress.total,
+            progressLabel: `${achievementProgress.earned}/${achievementProgress.total} lit`,
             unlockHint: 'Clear floors, protect lives, and chase score milestones.',
             nextAction: 'Clear floors, protect lives, and chase score milestones.',
             gameplayImpact: 'Mastery goals push clean chains, safer clears, and higher-score routes.',

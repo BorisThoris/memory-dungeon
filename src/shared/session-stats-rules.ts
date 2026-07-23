@@ -1,4 +1,5 @@
-import type { SessionStats, Tile, TileTraitKind } from './contracts';
+import type { Rating, SessionStats, Tile, TileTraitKind } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
 import { calculateRating } from './scoring-rules';
 
 export const TILE_TRAIT_COUNT_KINDS: readonly TileTraitKind[] = [
@@ -25,14 +26,26 @@ export const createTileTraitCountStats = (): Record<TileTraitKind, number> => ({
     stasis: 0
 });
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+    value != null && typeof value === 'object' && !Array.isArray(value);
+
+const isRating = (value: unknown): value is Rating =>
+    value === 'S++' || value === 'S' || value === 'A' || value === 'B' || value === 'C' || value === 'D';
+
+export const normalizeTileTraitCountStats = (counts: unknown): Record<TileTraitKind, number> => {
+    const source = isRecord(counts) ? counts : {};
+    const next = createTileTraitCountStats();
+    for (const kind of TILE_TRAIT_COUNT_KINDS) {
+        next[kind] = runNonNegativeInteger(source[kind]);
+    }
+    return next;
+};
+
 export const addTileTraitCountStats = (
     counts: Partial<Record<TileTraitKind, number>> | undefined,
     tiles: readonly Tile[]
 ): Record<TileTraitKind, number> => {
-    const next = createTileTraitCountStats();
-    for (const kind of TILE_TRAIT_COUNT_KINDS) {
-        next[kind] = counts?.[kind] ?? 0;
-    }
+    const next = normalizeTileTraitCountStats(counts);
     const countedPairTraits = new Set<string>();
     for (const tile of tiles) {
         if (!tile.tileTraitKind) {
@@ -69,3 +82,29 @@ export const createSessionStats = (bestScore: number): SessionStats => ({
     shufflesUsed: 0,
     pairsDestroyed: 0
 });
+
+export const normalizeSessionStats = (stats: unknown, bestScoreFallback = 0): SessionStats => {
+    const source = isRecord(stats) ? stats : {};
+    const tries = runNonNegativeInteger(source.tries);
+    return {
+        totalScore: runNonNegativeInteger(source.totalScore),
+        currentLevelScore: runNonNegativeInteger(source.currentLevelScore),
+        bestScore: runNonNegativeInteger(source.bestScore ?? bestScoreFallback),
+        tries,
+        rating: isRating(source.rating) ? source.rating : calculateRating(tries),
+        levelsCleared: runNonNegativeInteger(source.levelsCleared),
+        matchesFound: runNonNegativeInteger(source.matchesFound),
+        mismatches: runNonNegativeInteger(source.mismatches),
+        highestLevel: Math.max(1, runNonNegativeInteger(source.highestLevel)),
+        currentStreak: runNonNegativeInteger(source.currentStreak),
+        bestStreak: runNonNegativeInteger(source.bestStreak),
+        perfectClears: runNonNegativeInteger(source.perfectClears),
+        guardTokens: runNonNegativeInteger(source.guardTokens),
+        comboShards: runNonNegativeInteger(source.comboShards),
+        tileTraitMatches: normalizeTileTraitCountStats(source.tileTraitMatches),
+        tileTraitMismatches: normalizeTileTraitCountStats(source.tileTraitMismatches),
+        volatileTraitShuffles: runNonNegativeInteger(source.volatileTraitShuffles),
+        shufflesUsed: runNonNegativeInteger(source.shufflesUsed),
+        pairsDestroyed: runNonNegativeInteger(source.pairsDestroyed)
+    };
+};

@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { useRef } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
@@ -182,6 +182,29 @@ describe('MainMenuBackground', () => {
         expect(initSpy).toHaveBeenCalledWith(expect.objectContaining({ antialias: false }));
     });
 
+    it('caps high-DPR renderer resolution and reapplies the cap when quality changes', async () => {
+        vi.spyOn(window, 'devicePixelRatio', 'get').mockReturnValue(4);
+        const { rerender } = render(
+            <PlatformTiltProvider>
+                <MenuBackgroundHarness graphicsQuality="low" height={800} reduceMotion={false} width={1280} />
+            </PlatformTiltProvider>
+        );
+
+        await waitFor(() => {
+            expect(applicationInstances[0]?.renderer.resolution).toBe(1.25);
+        });
+
+        rerender(
+            <PlatformTiltProvider>
+                <MenuBackgroundHarness graphicsQuality="high" height={800} reduceMotion={false} width={1280} />
+            </PlatformTiltProvider>
+        );
+
+        await waitFor(() => {
+            expect(applicationInstances[0]?.renderer.resolution).toBe(2.5);
+        });
+    });
+
     it('rebuilds the animated scene when graphics quality changes without waiting for resize', async () => {
         const { rerender } = render(
             <PlatformTiltProvider>
@@ -208,6 +231,42 @@ describe('MainMenuBackground', () => {
         });
     });
 
+    it('uses the latest quality and motion props when Pixi initialization settles', async () => {
+        let resolveInit: (() => void) | null = null;
+        initSpy.mockImplementationOnce(
+            () =>
+                new Promise<void>((resolve) => {
+                    resolveInit = resolve;
+                })
+        );
+        vi.spyOn(window, 'devicePixelRatio', 'get').mockReturnValue(4);
+        const rendered = render(
+            <PlatformTiltProvider>
+                <MenuBackgroundHarness graphicsQuality="low" height={800} reduceMotion={false} width={1280} />
+            </PlatformTiltProvider>
+        );
+
+        await waitFor(() => {
+            expect(initSpy).toHaveBeenCalledTimes(1);
+            expect(resolveInit).not.toBeNull();
+        });
+        rendered.rerender(
+            <PlatformTiltProvider>
+                <MenuBackgroundHarness graphicsQuality="high" height={600} reduceMotion width={900} />
+            </PlatformTiltProvider>
+        );
+        await act(async () => {
+            resolveInit?.();
+            await Promise.resolve();
+        });
+
+        await waitFor(() => {
+            expect(applicationInstances[0]?.renderer.resolution).toBe(2.5);
+        });
+        expect(tickerAddSpy).not.toHaveBeenCalled();
+        expect(startSpy).not.toHaveBeenCalled();
+    });
+
     it('builds a static scene when reduced motion is enabled', async () => {
         renderMenuBackground({ height: 720, reduceMotion: true, width: 1280 });
 
@@ -218,6 +277,30 @@ describe('MainMenuBackground', () => {
         expect(tickerAddSpy).not.toHaveBeenCalled();
         expect(startSpy).not.toHaveBeenCalled();
         expect(renderSpy).toHaveBeenCalled();
+    });
+
+    it('keeps an initially hidden menu idle and resumes it when the tab becomes visible', async () => {
+        let visibilityState: DocumentVisibilityState = 'hidden';
+        vi.spyOn(document, 'visibilityState', 'get').mockImplementation(() => visibilityState);
+        renderMenuBackground({ height: 720, reduceMotion: false, width: 1280 });
+
+        await waitFor(() => {
+            expect(initSpy).toHaveBeenCalledTimes(1);
+        });
+        expect(tickerAddSpy).not.toHaveBeenCalled();
+        expect(startSpy).not.toHaveBeenCalled();
+
+        visibilityState = 'visible';
+        act(() => document.dispatchEvent(new Event('visibilitychange')));
+
+        expect(tickerAddSpy).toHaveBeenCalledTimes(1);
+        expect(startSpy).toHaveBeenCalledTimes(1);
+
+        visibilityState = 'hidden';
+        act(() => document.dispatchEvent(new Event('visibilitychange')));
+
+        expect(tickerRemoveSpy).toHaveBeenCalledTimes(1);
+        expect(stopSpy).toHaveBeenCalledTimes(1);
     });
 
     it('falls back to the static CSS background when Pixi initialization fails', async () => {

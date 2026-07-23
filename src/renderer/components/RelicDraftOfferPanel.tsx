@@ -997,14 +997,35 @@ const RelicDraftOfferPanel = ({
             return undefined;
         }
         const msg = relicDraftRoundAdvancedAnnouncement();
+        let active = true;
+        let announceId: number | null = null;
+        let clearId: number | null = null;
         queueMicrotask(() => {
-            setPoliteMessage(msg);
-        });
-        const clearId = window.setTimeout(() => {
+            if (!active) {
+                return;
+            }
             setPoliteMessage('');
-        }, 1500);
+            announceId = window.setTimeout(() => {
+                announceId = null;
+                if (!active) {
+                    return;
+                }
+                setPoliteMessage(msg);
+                clearId = window.setTimeout(() => {
+                    if (active) {
+                        setPoliteMessage('');
+                    }
+                }, 1500);
+            }, 0);
+        });
         return () => {
-            window.clearTimeout(clearId);
+            active = false;
+            if (announceId !== null) {
+                window.clearTimeout(announceId);
+            }
+            if (clearId !== null) {
+                window.clearTimeout(clearId);
+            }
         };
     }, [pickRound]);
 

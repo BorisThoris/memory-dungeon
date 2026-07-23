@@ -4,9 +4,13 @@ import {
     getBoardTraitInteractionPreviewLines,
     type TileTraitInteractionTag
 } from './tile-trait-rules';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitOpportunitySummary } from './trait-opportunities';
 
 export const TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD = 25;
+
+const traitRouteTags = (value: unknown): TileTraitInteractionTag[] => Array.isArray(value) ? value : [];
 
 export interface TraitRouteObjectiveSeed {
     required: number;
@@ -61,7 +65,7 @@ export const getTraitRouteObjectiveSeed = (board: BoardState | null | undefined)
 };
 
 export const getTraitRouteObjectiveRewardText = (run: Pick<RunState, 'stats'>): string =>
-    run.stats.comboShards < MAX_COMBO_SHARDS
+    normalizeSessionStats(run.stats).comboShards < MAX_COMBO_SHARDS
         ? '+1 combo shard'
         : `+${TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD} score`;
 
@@ -69,18 +73,22 @@ export const applyTraitRouteObjectiveProgress = (
     run: RunState,
     interactionTags: readonly TileTraitInteractionTag[]
 ): TraitRouteObjectiveApplyResult => {
-    const active = run.traitRouteObjectiveRequiredThisFloor > 0;
+    const required = runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor);
+    const currentProgress = runNonNegativeInteger(run.traitRouteObjectiveProgressThisFloor);
+    const comboShards = normalizeSessionStats(run.stats).comboShards;
+    const active = required > 0;
+    const triggeredTags = traitRouteTags(run.traitRouteObjectiveTriggeredTagsThisFloor);
     const newTags = [...new Set(interactionTags)].filter(
-        (tag) => !run.traitRouteObjectiveTriggeredTagsThisFloor.includes(tag)
+        (tag) => !triggeredTags.includes(tag)
     );
     if (!active || newTags.length === 0) {
         return {
             runPatch: {
                 traitRouteObjectiveCompletedThisFloor: run.traitRouteObjectiveCompletedThisFloor,
-                traitRouteObjectiveProgressThisFloor: run.traitRouteObjectiveProgressThisFloor,
+                traitRouteObjectiveProgressThisFloor: currentProgress,
                 traitRouteObjectiveRewardClaimedThisFloor: run.traitRouteObjectiveRewardClaimedThisFloor,
                 traitRouteObjectiveRewardTextThisFloor: run.traitRouteObjectiveRewardTextThisFloor,
-                traitRouteObjectiveTriggeredTagsThisFloor: [...run.traitRouteObjectiveTriggeredTagsThisFloor]
+                traitRouteObjectiveTriggeredTagsThisFloor: [...triggeredTags]
             },
             comboShardGain: 0,
             scoreBonus: 0,
@@ -88,13 +96,10 @@ export const applyTraitRouteObjectiveProgress = (
         };
     }
 
-    const progress = Math.min(
-        run.traitRouteObjectiveRequiredThisFloor,
-        run.traitRouteObjectiveProgressThisFloor + newTags.length
-    );
-    const completed = progress >= run.traitRouteObjectiveRequiredThisFloor;
+    const progress = Math.min(required, currentProgress + newTags.length);
+    const completed = progress >= required;
     const claimReward = completed && !run.traitRouteObjectiveRewardClaimedThisFloor;
-    const comboShardGain = claimReward && run.stats.comboShards < MAX_COMBO_SHARDS ? 1 : 0;
+    const comboShardGain = claimReward && comboShards < MAX_COMBO_SHARDS ? 1 : 0;
     const scoreBonus = claimReward && comboShardGain === 0 ? TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD : 0;
     const routeText = formatTileTraitInteractionTags(newTags).slice(0, 1)[0] ?? 'Trait route';
     const rewardText = claimReward
@@ -110,25 +115,26 @@ export const applyTraitRouteObjectiveProgress = (
             traitRouteObjectiveRewardClaimedThisFloor: claimReward || run.traitRouteObjectiveRewardClaimedThisFloor,
             traitRouteObjectiveRewardTextThisFloor: rewardText ?? run.traitRouteObjectiveRewardTextThisFloor,
             traitRouteObjectiveTriggeredTagsThisFloor: [
-                ...run.traitRouteObjectiveTriggeredTagsThisFloor,
+                ...triggeredTags,
                 ...newTags
             ]
         },
         comboShardGain,
         scoreBonus,
-        feedback: `Trait route ${progress}/${run.traitRouteObjectiveRequiredThisFloor}: ${routeText}${
+        feedback: `Trait route ${progress}/${required}: ${routeText}${
             rewardText ? ` (${rewardText})` : ''
         }`
     };
 };
 
 export const getTraitRouteObjectiveStatus = (run: RunState): TraitRouteObjectiveStatus | null => {
-    if (run.traitRouteObjectiveRequiredThisFloor <= 0) {
+    const required = runNonNegativeInteger(run.traitRouteObjectiveRequiredThisFloor);
+    if (required <= 0) {
         return null;
     }
-    const progress = Math.min(run.traitRouteObjectiveProgressThisFloor, run.traitRouteObjectiveRequiredThisFloor);
+    const progress = Math.min(runNonNegativeInteger(run.traitRouteObjectiveProgressThisFloor), required);
     const completed = run.traitRouteObjectiveCompletedThisFloor;
-    const remaining = Math.max(0, run.traitRouteObjectiveRequiredThisFloor - progress);
+    const remaining = Math.max(0, required - progress);
     const urgency: TraitRouteObjectiveStatus['urgency'] = completed
         ? 'paid'
         : remaining <= 1
@@ -156,11 +162,11 @@ export const getTraitRouteObjectiveStatus = (run: RunState): TraitRouteObjective
         actionLabel,
         active: true,
         completed,
-        detail: `Trigger trait routes (${progress}/${run.traitRouteObjectiveRequiredThisFloor}).`,
+        detail: `Trigger trait routes (${progress}/${required}).`,
         label: 'Trait routes',
         progress,
         remaining,
-        required: run.traitRouteObjectiveRequiredThisFloor,
+        required,
         reward: run.traitRouteObjectiveRewardClaimedThisFloor
             ? run.traitRouteObjectiveRewardTextThisFloor ?? 'Trait route cashout'
             : getTraitRouteObjectiveRewardText(run),

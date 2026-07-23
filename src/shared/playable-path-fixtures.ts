@@ -24,7 +24,8 @@ import {
 } from './dungeon-rules';
 import {
     applyRouteChoiceOutcome,
-    openRouteSideRoom
+    openRouteSideRoom,
+    routeChoicesForResult
 } from './route-rules';
 import { createRunShopOffers } from './shop-rules';
 
@@ -276,7 +277,10 @@ const clearPlayableFloor = (run: RunState): RunState => {
     }
     let current = run;
     for (const ids of pairTileIds(run.board)) {
-        current = resolveBoardTurn(flipTile(flipTile(current, ids[0]!), ids[1]!));
+        const [firstId, secondId] = ids;
+        if (firstId && secondId) {
+            current = resolveBoardTurn(flipTile(flipTile(current, firstId), secondId));
+        }
     }
     return leaveThroughExit(current);
 };
@@ -316,7 +320,7 @@ const sideRoomForRoute = (
     options: { withShop?: boolean } = {}
 ): RunState => {
     const cleared = floorClearWithRouteChoices();
-    const choice = cleared.lastLevelResult?.routeChoices?.find((item) => item.routeType === routeType);
+    const choice = routeChoicesForResult(cleared.lastLevelResult).find((item) => item.routeType === routeType);
     if (!choice) {
         throw new Error(`Missing ${routeType} route choice in playable-path fixture.`);
     }

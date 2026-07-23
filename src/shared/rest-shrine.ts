@@ -1,7 +1,16 @@
 import { MAX_GUARD_TOKENS, MAX_LIVES, type RunState } from './contracts';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 
 export type RestShrineServiceId = 'rest_heal' | 'guard_focus' | 'shrine_bargain' | 'boss_ward';
 export type RestShrineRisk = 'safe' | 'risk';
+
+export const REST_SHRINE_SERVICE_IDS = [
+    'rest_heal',
+    'guard_focus',
+    'shrine_bargain',
+    'boss_ward'
+] as const satisfies readonly RestShrineServiceId[];
 
 export interface RestShrineServiceDefinition {
     serviceId: RestShrineServiceId;
@@ -63,20 +72,21 @@ export const REST_SHRINE_SERVICE_CATALOG: Record<RestShrineServiceId, RestShrine
 };
 
 export const createRestShrineServices = (run: RunState): RestShrineServiceState[] =>
-    (Object.keys(REST_SHRINE_SERVICE_CATALOG) as RestShrineServiceId[]).map((serviceId, index) => {
+    REST_SHRINE_SERVICE_IDS.map((serviceId, index) => {
         const base = REST_SHRINE_SERVICE_CATALOG[serviceId];
+        const stats = normalizeSessionStats(run.stats);
         const unavailableReason =
-            serviceId === 'rest_heal' && run.lives >= MAX_LIVES
+            serviceId === 'rest_heal' && runNonNegativeInteger(run.lives) >= MAX_LIVES
                 ? 'Life already full.'
-                : serviceId === 'guard_focus' && run.stats.guardTokens >= MAX_GUARD_TOKENS
+                : serviceId === 'guard_focus' && stats.guardTokens >= MAX_GUARD_TOKENS
                   ? 'Guard bank full.'
-                  : serviceId === 'boss_ward' && run.dungeonMasterKeys > 0
+                  : serviceId === 'boss_ward' && runNonNegativeInteger(run.dungeonMasterKeys) > 0
                     ? 'Master key already held.'
                     : null;
         const available = unavailableReason == null;
         return {
             ...base,
-            id: `${run.runRulesVersion}:${run.runSeed}:${run.board?.level ?? run.stats.highestLevel}:rest:${index}`,
+            id: `${run.runRulesVersion}:${run.runSeed}:${run.board?.level ?? stats.highestLevel}:rest:${index}`,
             available,
             unavailableReason,
             purchased: false
@@ -84,18 +94,22 @@ export const createRestShrineServices = (run: RunState): RestShrineServiceState[
     });
 
 export const restShrineServiceCanAfford = (run: RunState, service: RestShrineServiceState): boolean =>
-    service.available && run.shopGold >= service.cost;
+    service.available && runNonNegativeInteger(run.shopGold) >= service.cost;
 
 export const getRestShrineReadModel = (
     run: RunState,
     services: readonly RestShrineServiceState[] = createRestShrineServices(run)
-): RestShrineReadModel => ({
-    serviceCount: services.length,
-    availableCount: services.filter((service) => service.available && !service.purchased).length,
-    affordableCount: services.filter((service) => !service.purchased && restShrineServiceCanAfford(run, service)).length,
-    purchasedCount: services.filter((service) => service.purchased).length,
-    previewCopy: `${services.length} rest shrine services; ${services.filter((service) => restShrineServiceCanAfford(run, service)).length} affordable with ${run.shopGold} shop gold.`
-});
+): RestShrineReadModel => {
+    const affordableCount = services.filter((service) => !service.purchased && restShrineServiceCanAfford(run, service)).length;
+    const wallet = runNonNegativeInteger(run.shopGold);
+    return {
+        serviceCount: services.length,
+        availableCount: services.filter((service) => service.available && !service.purchased).length,
+        affordableCount,
+        purchasedCount: services.filter((service) => service.purchased).length,
+        previewCopy: `${services.length} rest shrine services; ${affordableCount} affordable with ${wallet} shop gold.`
+    };
+};
 
 export interface RestShrinePurchaseResult {
     run: RunState;
@@ -107,12 +121,14 @@ export interface RestShrinePurchaseResult {
     relicFavorProgress?: number;
 }
 
-const gainOneFavorProgress = (run: RunState): Pick<RunState, 'bonusRelicPicksNextOffer' | 'favorBonusRelicPicksNextOffer' | 'relicFavorProgress'> => {
-    const total = run.relicFavorProgress + 1;
+const gainOneFavorProgress = (
+    run: RunState
+): Pick<RunState, 'bonusRelicPicksNextOffer' | 'favorBonusRelicPicksNextOffer' | 'relicFavorProgress'> => {
+    const total = runNonNegativeInteger(run.relicFavorProgress) + 1;
     const bonusPicks = Math.floor(total / 3);
     return {
-        bonusRelicPicksNextOffer: run.bonusRelicPicksNextOffer + bonusPicks,
-        favorBonusRelicPicksNextOffer: run.favorBonusRelicPicksNextOffer + bonusPicks,
+        bonusRelicPicksNextOffer: runNonNegativeInteger(run.bonusRelicPicksNextOffer) + bonusPicks,
+        favorBonusRelicPicksNextOffer: runNonNegativeInteger(run.favorBonusRelicPicksNextOffer) + bonusPicks,
         relicFavorProgress: total % 3
     };
 };
@@ -136,16 +152,16 @@ export const purchaseRestShrineService = (
         return { run, services: [...services], purchased: false, reason: 'insufficient_funds' };
     }
 
-    let nextRun: RunState = { ...run, shopGold: run.shopGold - service.cost };
+    let nextRun: RunState = { ...run, shopGold: runNonNegativeInteger(run.shopGold) - service.cost };
     if (service.serviceId === 'rest_heal') {
-        nextRun = { ...nextRun, lives: Math.min(MAX_LIVES, nextRun.lives + 1) };
+        nextRun = { ...nextRun, lives: Math.min(MAX_LIVES, runNonNegativeInteger(nextRun.lives) + 1) };
     } else if (service.serviceId === 'guard_focus') {
         nextRun = {
             ...nextRun,
-            stats: { ...nextRun.stats, guardTokens: Math.min(MAX_GUARD_TOKENS, nextRun.stats.guardTokens + 1) }
+            stats: { ...nextRun.stats, guardTokens: Math.min(MAX_GUARD_TOKENS, runNonNegativeInteger(nextRun.stats.guardTokens) + 1) }
         };
     } else if (service.serviceId === 'boss_ward') {
-        nextRun = { ...nextRun, dungeonMasterKeys: nextRun.dungeonMasterKeys + 1 };
+        nextRun = { ...nextRun, dungeonMasterKeys: runNonNegativeInteger(nextRun.dungeonMasterKeys) + 1 };
     } else {
         nextRun = { ...nextRun, ...gainOneFavorProgress(nextRun) };
     }

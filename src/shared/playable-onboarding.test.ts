@@ -83,6 +83,56 @@ describe('REG-026 playable onboarding', () => {
         ]);
     });
 
+    it('normalizes malformed onboarding counters before choosing tutorial state', () => {
+        const run = finishMemorizePhase(createNewRun(0, { onboardingSafeFirstFloor: true }));
+        const malformedRun = {
+            ...run,
+            board: run.board
+                ? {
+                      ...run.board,
+                      matchedPairs: Number.POSITIVE_INFINITY,
+                      pairCount: Number.NaN,
+                      flippedTileIds: Number.NaN as unknown as string[]
+                  }
+                : null,
+            stats: {
+                ...run.stats,
+                tries: Number.NaN,
+                mismatches: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const scenario = getPlayableOnboardingScenario({
+            board: malformedRun.board,
+            onboardingDismissed: false
+        });
+        const step = getPlayableOnboardingStep(malformedRun, {
+            onboardingDismissed: false,
+            powersFtueSeen: false
+        });
+
+        expect(scenario.activeStep?.id).toBe('first_match');
+        expect(scenario.steps.map((row) => [row.id, row.status])).toEqual([
+            ['first_match', 'active'],
+            ['recovery', 'locked'],
+            ['handoff', 'locked']
+        ]);
+        expect(step?.title).toBe('Make your first match');
+        expect(step?.targetTileIds).toHaveLength(2);
+
+        const malformedStatsStep = getPlayableOnboardingStep(
+            {
+                ...run,
+                stats: Number.NaN as unknown as typeof run.stats
+            },
+            {
+                onboardingDismissed: false,
+                powersFtueSeen: false
+            }
+        );
+        expect(malformedStatsStep?.title).toBe('Make your first match');
+    });
+
     it('turns the first reward into the final-pair route-choice setup on the safe first room', () => {
         const run = finishMemorizePhase(createNewRun(0, { onboardingSafeFirstFloor: true }));
         const first = getPlayableOnboardingStep(run, { onboardingDismissed: false, powersFtueSeen: false })!;

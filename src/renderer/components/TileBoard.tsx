@@ -69,6 +69,8 @@ import {
     resolveDraggedBoardViewport,
     resolvePinchBoardViewport,
     resolveWheelBoardViewport,
+    safelyReleasePointerCapture,
+    safelySetPointerCapture,
     screenPointToWorld,
     type TileBoardGesturePoint,
     type TileBoardPinchGestureSnapshot,
@@ -105,6 +107,7 @@ import { getTraitRouteReadabilityBeatCount } from './tileBoardReadability';
 import { TileBoardErrorBoundary } from './tileBoardWebglBoundary';
 import { canUseWebGL } from './tileBoardWebglSupport';
 import { TileBoardPrestageOverlay } from './TileBoardPrestageOverlay';
+import { getTileBoardCanvasContextConfig } from './tileBoardCanvasContext';
 import { useTileBoardWebglContextRecovery } from './useTileBoardWebglContextRecovery';
 
 /** Minimum time the pre-board “gather / release” motif stays visible while GPU warm-up runs in parallel. */
@@ -885,6 +888,31 @@ const cardTraitLaneScreenCue = (laneId: TraitInteractionLaneId | string): 'burst
     return 'burst';
 };
 
+const boardTraitLaneAudioCue = (
+    laneId: TraitInteractionLaneId | string
+): 'trait_route_focus' | 'trait_route_guard' | 'trait_route_reward' => {
+    if (laneId === 'shard') {
+        return 'trait_route_reward';
+    }
+    if (laneId === 'guard') {
+        return 'trait_route_guard';
+    }
+    return 'trait_route_focus';
+};
+
+const boardTraitLaneScreenCue = (laneId: TraitInteractionLaneId | string | null | undefined): 'burst' | 'guard' | 'none' | 'pulse' => {
+    if (laneId === 'shard') {
+        return 'burst';
+    }
+    if (laneId === 'guard') {
+        return 'guard';
+    }
+    if (laneId == null) {
+        return 'none';
+    }
+    return 'pulse';
+};
+
 const parseCountAttribute = (value: string): Map<string, number> => {
     const counts = new Map<string, number>();
     for (const entry of value.split(/[;>]/u)) {
@@ -975,6 +1003,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const boardAppRef = useRef<HTMLDivElement>(null);
     const shuffleClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const entranceClearTimeoutRef = useRef<number | null>(null);
+    const entranceMotionKeyRef = useRef<string | null>(null);
+    const entranceReadyFrameRef = useRef<number | null>(null);
     const [shuffleAnimating, setShuffleAnimating] = useState(false);
     const [shuffleMotionDeadlineMs, setShuffleMotionDeadlineMs] = useState(0);
     /** Mirrors FLIP motion budget for WebGL FX-013 staggered deal-Z (0 = inactive). */
@@ -986,6 +1016,25 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     const [boardEntranceAnimating, setBoardEntranceAnimating] = useState(false);
     const [boardPreStage, setBoardPreStage] = useState<'dealIn' | 'idle' | 'loading'>('idle');
     const prestageRunIdRef = useRef(0);
+    const cancelBoardEntranceWork = useCallback((): void => {
+        prestageRunIdRef.current += 1;
+        if (entranceClearTimeoutRef.current !== null) {
+            window.clearTimeout(entranceClearTimeoutRef.current);
+            entranceClearTimeoutRef.current = null;
+        }
+        if (entranceReadyFrameRef.current !== null) {
+            window.cancelAnimationFrame(entranceReadyFrameRef.current);
+            entranceReadyFrameRef.current = null;
+        }
+        entranceMotionKeyRef.current = null;
+    }, []);
+    const resetBoardEntranceMotionState = useCallback((): void => {
+        setBoardEntranceMotionDeadlineMs(0);
+        setBoardEntranceMotionBudgetMs(0);
+        setBoardEntranceStaggerTileCount(0);
+        setBoardEntranceAnimating(false);
+        setBoardPreStage('idle');
+    }, []);
     const sceneHandleRef = useRef<TileBoardSceneHandle | null>(null);
     const stageRef = useRef<HTMLDivElement>(null);
     const hoverTiltRef = useRef<TileHoverTiltState>({ tileId: null, x: 0, y: 0 });
@@ -1160,20 +1209,33 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             trapCount === 1
                 ? `Trap resolved${trapLabel === 'Trap' ? '' : `: ${trapLabel}`}. ${trapEffect}; ${trapNext}.`
                 : `${trapCount} traps resolved. ${trapEffect}; ${trapNext}.`;
+        let active = true;
         queueMicrotask(() => {
+            if (!active) {
+                return;
+            }
             setTrapResolutionMessage(message);
             setTrapResolutionDetails({ count: trapCount, effect: trapEffect, next: trapNext });
         });
-        return undefined;
+        return () => {
+            active = false;
+        };
     }, [board.tiles, resolvedTrapTileCount]);
 
     useEffect(() => {
         if (resolvedTrapTileCount === 0 && trapResolutionMessage) {
+            let active = true;
             queueMicrotask(() => {
-                setTrapResolutionMessage('');
-                setTrapResolutionDetails(null);
+                if (active) {
+                    setTrapResolutionMessage('');
+                    setTrapResolutionDetails(null);
+                }
             });
+            return () => {
+                active = false;
+            };
         }
+        return undefined;
     }, [resolvedTrapTileCount, trapResolutionMessage]);
 
     useEffect(() => {
@@ -1216,21 +1278,46 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
     useEffect(() => {
         if (reduceMotion) {
+            cancelBoardEntranceWork();
+            const runId = prestageRunIdRef.current;
             prevBoardEntranceKeyRef.current = boardEntranceKey;
             queueMicrotask(() => {
-                setBoardPreStage('idle');
-                requestAnimationFrame(() => notifyMemorizeBoardReady(boardEntranceKey));
+                if (runId !== prestageRunIdRef.current) {
+                    return;
+                }
+                resetBoardEntranceMotionState();
+                entranceReadyFrameRef.current = window.requestAnimationFrame(() => {
+                    entranceReadyFrameRef.current = null;
+                    if (
+                        runId === prestageRunIdRef.current &&
+                        prevBoardEntranceKeyRef.current === boardEntranceKey
+                    ) {
+                        notifyMemorizeBoardReady(boardEntranceKey);
+                    }
+                });
             });
-            return;
+            return () => {
+                if (runId === prestageRunIdRef.current) {
+                    cancelBoardEntranceWork();
+                }
+            };
         }
         if (prevBoardEntranceKeyRef.current === boardEntranceKey) {
             notifyMemorizeBoardReady(boardEntranceKey);
             return;
         }
 
-        prestageRunIdRef.current += 1;
+        if (entranceMotionKeyRef.current === boardEntranceKey) {
+            return;
+        }
+
+        cancelBoardEntranceWork();
         const runId = prestageRunIdRef.current;
         queueMicrotask(() => {
+            if (runId !== prestageRunIdRef.current) {
+                return;
+            }
+            resetBoardEntranceMotionState();
             setBoardPreStage('loading');
         });
 
@@ -1239,27 +1326,32 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             const motionBudgetMs = computeBoardEntranceMotionBudgetMs(tileCountForBudget);
             const deadline = performance.now() + motionBudgetMs;
 
-            if (entranceClearTimeoutRef.current) {
-                clearTimeout(entranceClearTimeoutRef.current);
-                entranceClearTimeoutRef.current = null;
-            }
-
             setBoardEntranceMotionDeadlineMs(deadline);
             setBoardEntranceMotionBudgetMs(motionBudgetMs);
             setBoardEntranceStaggerTileCount(tileCountForBudget);
             setBoardEntranceAnimating(true);
             setBoardPreStage('dealIn');
 
-            entranceClearTimeoutRef.current = window.setTimeout(() => {
-                prevBoardEntranceKeyRef.current = boardEntranceKey;
-                setBoardEntranceMotionDeadlineMs(0);
-                setBoardEntranceMotionBudgetMs(0);
-                setBoardEntranceStaggerTileCount(0);
-                setBoardEntranceAnimating(false);
-                setBoardPreStage('idle');
+            entranceMotionKeyRef.current = boardEntranceKey;
+            const timeoutId = window.setTimeout(() => {
+                if (
+                    entranceClearTimeoutRef.current !== timeoutId ||
+                    entranceMotionKeyRef.current !== boardEntranceKey
+                ) {
+                    return;
+                }
                 entranceClearTimeoutRef.current = null;
-                requestAnimationFrame(() => notifyMemorizeBoardReady(boardEntranceKey));
+                entranceMotionKeyRef.current = null;
+                prevBoardEntranceKeyRef.current = boardEntranceKey;
+                resetBoardEntranceMotionState();
+                entranceReadyFrameRef.current = window.requestAnimationFrame(() => {
+                    entranceReadyFrameRef.current = null;
+                    if (prevBoardEntranceKeyRef.current === boardEntranceKey) {
+                        notifyMemorizeBoardReady(boardEntranceKey);
+                    }
+                });
             }, motionBudgetMs + 100);
+            entranceClearTimeoutRef.current = timeoutId;
         };
 
         void (async () => {
@@ -1288,17 +1380,22 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         })();
 
         return () => {
-            prestageRunIdRef.current += 1;
+            if (runId === prestageRunIdRef.current) {
+                prestageRunIdRef.current += 1;
+            }
         };
-    }, [board.tiles, boardEntranceKey, notifyMemorizeBoardReady, reduceMotion]);
+    }, [
+        board.tiles,
+        boardEntranceKey,
+        cancelBoardEntranceWork,
+        notifyMemorizeBoardReady,
+        reduceMotion,
+        resetBoardEntranceMotionState
+    ]);
 
     useEffect(
-        () => () => {
-            if (entranceClearTimeoutRef.current) {
-                clearTimeout(entranceClearTimeoutRef.current);
-            }
-        },
-        []
+        () => () => cancelBoardEntranceWork(),
+        [cancelBoardEntranceWork]
     );
 
     /**
@@ -1311,7 +1408,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
     useEffect(() => {
         const pickable = getPickableTileIds(board, interactive, allowGambitThirdFlip);
+        let active = true;
         queueMicrotask(() => {
+            if (!active) {
+                return;
+            }
             setFocusedTileId((cur) => {
                 if (pickable.length === 0) {
                     return null;
@@ -1322,6 +1423,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 return null;
             });
         });
+        return () => {
+            active = false;
+        };
     }, [board, interactive, allowGambitThirdFlip]);
 
     const traitRewardHotText = useMemo(() => {
@@ -2945,7 +3049,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         : undefined;
 
     useEffect(() => {
+        let active = true;
         queueMicrotask(() => {
+            if (!active) {
+                return;
+            }
             if (!focusedTileLabel) {
                 setBoardLiveMessage('');
                 return;
@@ -2971,6 +3079,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 `Focus: ${focusedTileLabel}${bestOpportunityLiveText}${rewardLeadLiveText}${traitModeLiveText}${boardOpportunityLaneMapLiveText}${stackLiveText}${chainLiveText}`
             );
         });
+        return () => {
+            active = false;
+        };
     }, [
         boardChainAccessibilitySummary,
         boardOpportunityCompassRows,
@@ -2998,16 +3109,8 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             sceneHandleRef.current?.getTileClientRectById(tileId) ?? null,
         runShuffleAnimation: (applyShuffle: () => void) => {
             const g = shuffleSfxGain;
-            prestageRunIdRef.current += 1;
-            setBoardPreStage('idle');
-            if (entranceClearTimeoutRef.current) {
-                clearTimeout(entranceClearTimeoutRef.current);
-                entranceClearTimeoutRef.current = null;
-            }
-            setBoardEntranceMotionDeadlineMs(0);
-            setBoardEntranceMotionBudgetMs(0);
-            setBoardEntranceStaggerTileCount(0);
-            setBoardEntranceAnimating(false);
+            cancelBoardEntranceWork();
+            resetBoardEntranceMotionState();
 
             if (reduceMotion) {
                 if (shuffleClearTimeoutRef.current) {
@@ -3052,7 +3155,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 applyShuffle();
             });
         }
-    }), [board.columns, board.rows, board.tiles, reduceMotion, shuffleSfxGain]);
+    }), [
+        board.columns,
+        board.rows,
+        board.tiles,
+        cancelBoardEntranceWork,
+        reduceMotion,
+        resetBoardEntranceMotionState,
+        shuffleSfxGain
+    ]);
 
     useEffect(
         () => () => {
@@ -3078,8 +3189,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
     /** Cap DPR for GPU cost (PERF-001 + internal adaptive motion tier). */
     const dpr = Math.min(deviceDpr, adaptive.dprCap);
     const resolvedBoardAa = adaptive.resolvedAa;
-    /** Native framebuffer antialias; the legacy `smaa` setting falls back here now that post-FX is disabled. */
-    const glAntialias = resolvedBoardAa !== 'off';
+    const canvasContext = getTileBoardCanvasContextConfig(resolvedBoardAa, webglCanvasRemountKey);
     /** Avoid forcing discrete/high-power GPU contexts unless the player explicitly chose high quality. */
     const glPowerPreference: WebGLPowerPreference = graphicsQuality === 'high' ? 'high-performance' : 'default';
     const boardWorldWidth = useMemo(
@@ -3722,7 +3832,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 startWorldY: startWorld.panY
             };
 
-            stageNode.setPointerCapture(event.pointerId);
+            safelySetPointerCapture(stageNode, event.pointerId);
 
             if (event.button !== 0) {
                 syncGestureActive(true);
@@ -3794,9 +3904,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             mouseDragSnapshotRef.current = null;
             syncGestureActive(false);
             syncSelectionSuppressed(false);
-            if (stageNode.hasPointerCapture(event.pointerId)) {
-                stageNode.releasePointerCapture(event.pointerId);
-            }
+            safelyReleasePointerCapture(stageNode, event.pointerId);
             stopMouseEvent(event);
 
             if (shouldPick) {
@@ -4169,10 +4277,10 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     aria-hidden
                                     className={styles.canvas}
                                     dpr={dpr}
-                                    key={`tile-board-${webglCanvasRemountKey}-${resolvedBoardAa}`}
+                                    key={canvasContext.key}
                                     gl={{
                                         alpha: true,
-                                        antialias: glAntialias,
+                                        antialias: canvasContext.antialias,
                                         powerPreference: glPowerPreference,
                                         premultipliedAlpha: false
                                     }}
@@ -4602,6 +4710,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                         className={styles.chainOpportunityTraitLaneMap}
                                         data-trait-interaction-lane-actions={boardTraitInteractionLaneActionMapAttrValue}
                                         data-trait-interaction-lane-map={boardTraitInteractionLaneMapAttrValue}
+                                        data-trait-interaction-lane-primary-audio="trait_route_focus"
                                         data-trait-interaction-lane-primary={
                                             primaryBoardTraitInteractionLane?.id ?? 'none'
                                         }
@@ -4610,6 +4719,9 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                 ? getTraitInteractionLaneAction(primaryBoardTraitInteractionLane.id)
                                                 : 'none'
                                         }
+                                        data-trait-interaction-lane-primary-screen-cue={boardTraitLaneScreenCue(
+                                            primaryBoardTraitInteractionLane?.id
+                                        )}
                                         data-testid="chain-opportunity-trait-lane-map"
                                     >
                                         <span
@@ -4652,6 +4764,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                             <span
                                                 data-trait-interaction-lane={lane.id}
                                                 data-trait-interaction-lane-action={getTraitInteractionLaneAction(lane.id)}
+                                                data-trait-interaction-lane-audio={boardTraitLaneAudioCue(lane.id)}
                                                 data-trait-interaction-lane-count={lane.count}
                                                 data-trait-interaction-lane-beats={Math.max(2, Math.min(5, lane.count + 1))}
                                                 data-trait-interaction-lane-focus={
@@ -4659,6 +4772,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                                         ? 'primary'
                                                         : 'support'
                                                 }
+                                                data-trait-interaction-lane-screen-cue={boardTraitLaneScreenCue(lane.id)}
                                                 key={lane.id}
                                             >
                                                 <small>{lane.label}</small>
@@ -5413,6 +5527,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                                     <span
                                         className={styles.chainOpportunitySurge}
                                         data-chain-opportunity-surge-beats={4}
+                                        data-chain-opportunity-surge-audio="trait_route_surge"
                                         data-chain-opportunity-surge-screen-cue="burst"
                                         data-chain-opportunity-surge="true"
                                         data-chain-opportunity-surge-tone="surge"

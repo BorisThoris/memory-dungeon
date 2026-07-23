@@ -21,6 +21,8 @@ import { repairRunProgressionSoftlocks } from '../../shared/run-progression-repa
 import { resolveBoardTurn } from '../../shared/turn-resolution';
 import { trackEvent } from '../../shared/telemetry';
 import { playFloorClearSfx, playMatchPayoffSfx, playResolveSfx, resumeAudioContext } from '../audio/gameSfx';
+import { ACHIEVEMENT_SYNC_FAILURE_NOTICE } from './achievementPersistence';
+import { runPersistenceInBackground } from './backgroundPersistence';
 import {
     BOARD_FLOATER_POP_CLEAR,
     buildMatchScorePopPayload,
@@ -71,6 +73,8 @@ interface RunResolutionController {
     applyResolveBoardTurn: (run: RunState) => void;
     applyResolvedRun: (resolvedRun: RunState) => void;
 }
+
+const telemetryArrayCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
 export const createRunResolutionController = ({
     getSfxGain,
@@ -161,8 +165,8 @@ export const createRunResolutionController = ({
                     practice: nextRun.practiceMode,
                     highestLevel: summary.highestLevel,
                     totalScore: summary.totalScore,
-                    mutatorCount: summary.activeMutators?.length ?? 0,
-                    relicCount: summary.relicIds?.length ?? 0
+                    mutatorCount: telemetryArrayCount(summary.activeMutators),
+                    relicCount: telemetryArrayCount(summary.relicIds)
                 });
             }
 
@@ -188,16 +192,17 @@ export const createRunResolutionController = ({
         }
 
         if (unlockedAchievements.length > 0) {
-            void persistSaveDataThenUnlockAchievements(nextSave, unlockedAchievements).then(({ failures }) => {
-                if (failures.length > 0) {
-                    setState({
-                        achievementBridgeNotice:
-                            'Some achievements could not sync with Steam. Your unlocks are saved in this build.'
-                    });
-                }
-            });
+            runPersistenceInBackground(() =>
+                persistSaveDataThenUnlockAchievements(nextSave, unlockedAchievements).then(({ failures }) => {
+                    if (failures.length > 0) {
+                        setState({
+                            achievementBridgeNotice: ACHIEVEMENT_SYNC_FAILURE_NOTICE
+                        });
+                    }
+                })
+            );
         } else {
-            void persistSaveData(nextSave);
+            runPersistenceInBackground(() => persistSaveData(nextSave));
         }
     };
 

@@ -3,9 +3,9 @@
  *
  * OVR-010 / A11Y-004 — parity contract: mount captures prior `document.activeElement`, moves initial focus to the
  * first tabbable inside the dialog surface on the next animation frame, registers `handleTabFocusTrapEvent` on
- * `document` in capture phase for Tab / Shift+Tab, and restores the prior element on unmount via
- * `modalFocusReturnStack` (LIFO for nested modals). Call sites differ only in container ref
- * (`OverlayModal` dialog node vs `SettingsScreen` modal shell).
+ * `document` in capture phase for Tab / Shift+Tab, gives only the top nested modal keyboard ownership, and restores
+ * the prior element on unmount via `modalFocusReturnStack` (entry-owned restoration). Call sites differ only in
+ * container ref (`OverlayModal` dialog node vs `SettingsScreen` modal shell).
  */
 
 export type TabTrapKeyboardEvent = Pick<KeyboardEvent, 'key' | 'shiftKey'> & { preventDefault(): void };
@@ -34,6 +34,14 @@ export const getFocusableElements = (container: HTMLElement | null): HTMLElement
     }
 
     return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((element) => {
+        const explicitTabIndex = element.getAttribute('tabindex');
+        if (explicitTabIndex !== null) {
+            const tabIndex = Number.parseInt(explicitTabIndex, 10);
+            if (Number.isFinite(tabIndex) && tabIndex < 0) {
+                return false;
+            }
+        }
+
         if (element.hasAttribute('disabled') || element.getAttribute('aria-hidden') === 'true') {
             return false;
         }

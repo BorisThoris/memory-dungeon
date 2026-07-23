@@ -13,25 +13,29 @@ interface FlipTileTransitionDeps {
     finalizeLevel: (run: RunState, board: BoardState) => RunState;
 }
 
+const stringArray = (value: unknown): string[] | null =>
+    Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : null;
+
 export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDeps) =>
     (run: RunState, tileId: string): RunState => {
         const runAfterFinalPairCleanup = clearFinalPairEnemyHazardOccupationForRun(run);
         if (!runAfterFinalPairCleanup.board) {
             return run;
         }
+        const cleanupFlippedTileIds = stringArray(runAfterFinalPairCleanup.board.flippedTileIds);
 
         const gambitThirdWhileResolving =
             runAfterFinalPairCleanup.status === 'resolving' &&
             runAfterFinalPairCleanup.gambitAvailableThisFloor &&
             !runAfterFinalPairCleanup.gambitThirdFlipUsed &&
-            runAfterFinalPairCleanup.board.flippedTileIds.length === 2;
+            cleanupFlippedTileIds?.length === 2;
 
         if (runAfterFinalPairCleanup.status !== 'playing' && !gambitThirdWhileResolving) {
             return runAfterFinalPairCleanup;
         }
 
         const runAfterFlashClear =
-            runAfterFinalPairCleanup.flashPairRevealedTileIds.length > 0
+            (stringArray(runAfterFinalPairCleanup.flashPairRevealedTileIds)?.length ?? 0) > 0
                 ? { ...runAfterFinalPairCleanup, flashPairRevealedTileIds: [] }
                 : runAfterFinalPairCleanup;
         const boardBeforeLastPairFailsafe = runAfterFlashClear.board;
@@ -43,25 +47,29 @@ export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDe
         if (!board) {
             return runAfterLastPairFailsafe;
         }
+        const currentFlippedTileIds = stringArray(board.flippedTileIds);
+        if (!currentFlippedTileIds) {
+            return runAfterLastPairFailsafe;
+        }
 
         const allowThird =
             runAfterLastPairFailsafe.gambitAvailableThisFloor &&
             !runAfterLastPairFailsafe.gambitThirdFlipUsed &&
-            board.flippedTileIds.length === 2;
+            currentFlippedTileIds.length === 2;
         const maxFlips = allowThird ? 3 : 2;
-        if (board.flippedTileIds.length >= maxFlips) {
+        if (currentFlippedTileIds.length >= maxFlips) {
             return runAfterLastPairFailsafe;
         }
 
         const tile = board.tiles.find((candidate) => candidate.id === tileId);
 
-        if (!tile || tile.state !== 'hidden' || board.flippedTileIds.includes(tileId)) {
+        if (!tile || tile.state !== 'hidden' || currentFlippedTileIds.includes(tileId)) {
             return runAfterLastPairFailsafe;
         }
 
         const tileIndex = board.tiles.findIndex((candidate) => candidate.id === tileId);
         if (
-            board.flippedTileIds.length === 0 &&
+            currentFlippedTileIds.length === 0 &&
             runAfterLastPairFailsafe.stickyBlockIndex !== null &&
             tileIndex === runAfterLastPairFailsafe.stickyBlockIndex
         ) {
@@ -87,8 +95,14 @@ export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDe
         if (!revealedBoard) {
             return runAfterDungeonReveal;
         }
+        const revealedFlippedTileIds = stringArray(revealedBoard.flippedTileIds);
+        if (!revealedFlippedTileIds) {
+            return runAfterDungeonReveal;
+        }
         const peekRevealedTileIds =
-            runAfterDungeonReveal.peekRevealedTileIds.length > 0 ? ([] as string[]) : runAfterDungeonReveal.peekRevealedTileIds;
+            (stringArray(runAfterDungeonReveal.peekRevealedTileIds)?.length ?? 0) > 0
+                ? ([] as string[])
+                : runAfterDungeonReveal.peekRevealedTileIds;
         if (
             tile.state === 'hidden' &&
             tile.dungeonCardKind === 'trap' &&
@@ -110,8 +124,8 @@ export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDe
                 : trapResolvedRun;
         }
 
-        const flippedTileIds = [...revealedBoard.flippedTileIds, tileId];
-        const firstFlippedId = revealedBoard.flippedTileIds[0] ?? null;
+        const flippedTileIds = [...revealedFlippedTileIds, tileId];
+        const firstFlippedId = revealedFlippedTileIds[0] ?? null;
         const firstFlippedTile = firstFlippedId
             ? revealedBoard.tiles.find((candidate) => candidate.id === firstFlippedId) ?? null
             : null;

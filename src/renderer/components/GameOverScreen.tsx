@@ -2,10 +2,11 @@ import { useEffect, useMemo, useRef } from 'react';
 import { ACHIEVEMENTS } from '../../shared/achievements';
 import { getRewardPerkRows } from '../../shared/bonus-rewards';
 import { MUTATOR_CATALOG, RELIC_CATALOG } from '../../shared/game-catalog';
-import type { MutatorId, RelicId, RunState } from '../../shared/contracts';
+import type { MutatorId, RelicId, RewardPerkId, RunState } from '../../shared/contracts';
 import { buildDailyResultsLoopRows } from '../../shared/daily-archive';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { buildRunJournalEntry } from '../../shared/run-history';
+import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
 import { playGameOverOpenSfx, playUiBackSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
@@ -29,6 +30,7 @@ import {
     getRunPayoffSignals
 } from '../copy/runPayoffSignals';
 import { useViewportSize } from '../hooks/useViewportSize';
+import { useEffectiveReducedMotion } from '../hooks/useEffectiveReducedMotion';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { Eyebrow, Panel, ScreenTitle, StatTile, UiButton } from '../ui';
 import { useAppStore } from '../store/useAppStore';
@@ -42,6 +44,24 @@ interface GameOverScreenProps {
 const mutatorLabel = (id: MutatorId): string => MUTATOR_CATALOG[id].title;
 
 const relicLabel = (id: RelicId): string => RELIC_CATALOG[id].title;
+
+const gameOverMutatorIds = (value: unknown): MutatorId[] =>
+    Array.isArray(value)
+        ? value.filter((id): id is MutatorId => typeof id === 'string' && id in MUTATOR_CATALOG)
+        : [];
+
+const gameOverRelicIds = (value: unknown): RelicId[] =>
+    Array.isArray(value)
+        ? value.filter((id): id is RelicId => typeof id === 'string' && id in RELIC_CATALOG)
+        : [];
+
+const gameOverRewardPerkIds = (value: unknown): RewardPerkId[] =>
+    Array.isArray(value)
+        ? value.filter((id): id is RewardPerkId => typeof id === 'string')
+        : [];
+
+const gameOverFlipHistory = (value: unknown): string[] =>
+    Array.isArray(value) ? value.filter((id): id is string => typeof id === 'string') : [];
 
 const runModeIdentityLine = (summary: NonNullable<RunState['lastRunSummary']>): string => {
     if (summary.activeContract?.noShuffle) {
@@ -107,22 +127,26 @@ const runMomentumRecapRows = (
     run: RunState,
     summary: NonNullable<RunState['lastRunSummary']>
 ): { id: string; label: string; value: string; detail: string; tone: 'chain' | 'reward' | 'build' | 'risk' }[] => {
-    const pickupClaimed = Math.max(0, run.findablesClaimedThisFloor ?? 0);
-    const pickupTotal = Math.max(0, run.findablesTotalThisFloor ?? 0);
+    const bestStreak = runNonNegativeInteger(summary.bestStreak);
+    const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
+    const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
     const traitRouteComplete =
         run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor);
-    const perkCount = run.rewardPerkIds?.length ?? 0;
-    const topPerkCue = getRewardPerkRows(run)[0]?.nextCue;
+    const summaryActiveMutators = gameOverMutatorIds(summary.activeMutators);
+    const summaryRelicIds = gameOverRelicIds(summary.relicIds);
+    const rewardPerkIds = gameOverRewardPerkIds(run.rewardPerkIds);
+    const perkCount = rewardPerkIds.length;
+    const topPerkCue = getRewardPerkRows({ rewardPerkIds })[0]?.nextCue;
     const buildDetail = traitRouteComplete
         ? `Trait route paid: ${run.traitRouteObjectiveRewardTextThisFloor ?? 'trait route cashout'}.`
         : 'Drafted relics and perks define the next build attempt.';
     const buildDetailWithPerk = topPerkCue ? `${buildDetail} Perk next: ${topPerkCue}` : buildDetail;
     const pressureCount =
-        Math.max(0, summary.activeMutators?.length ?? 0) +
-        Math.max(0, run.stats.mismatches) +
-        Math.max(0, run.stats.volatileTraitShuffles);
+        summaryActiveMutators.length +
+        runNonNegativeInteger(run.stats.mismatches) +
+        runNonNegativeInteger(run.stats.volatileTraitShuffles);
     const nextFocus =
-        summary.bestStreak < 4
+        bestStreak < 4
             ? {
                   value: 'Rebuild chain',
                   detail: 'Aim for x4+ before chasing side rewards.',
@@ -134,7 +158,7 @@ const runMomentumRecapRows = (
                     detail: 'Prioritize visible reward pairs before the floor ends.',
                     tone: 'reward' as const
                 }
-              : (summary.relicIds?.length ?? 0) === 0 && perkCount === 0
+              : summaryRelicIds.length === 0 && perkCount === 0
                 ? {
                       value: 'Draft engine',
                       detail: 'Take a relic or perk that changes the next route plan.',
@@ -156,11 +180,11 @@ const runMomentumRecapRows = (
         {
             id: 'chain',
             label: 'Chain engine',
-            value: summary.bestStreak > 0 ? `x${summary.bestStreak}` : 'not started',
+            value: bestStreak > 0 ? `x${bestStreak}` : 'not started',
             detail:
-                summary.bestStreak >= 10
+                bestStreak >= 10
                     ? 'Combo-tier streak reached.'
-                    : summary.bestStreak >= 4
+                    : bestStreak >= 4
                       ? 'Reward thresholds were in reach.'
                       : 'Short chains left reward momentum on the table.',
             tone: 'chain'
@@ -175,7 +199,7 @@ const runMomentumRecapRows = (
         {
             id: 'build',
             label: 'Build engines',
-            value: `${summary.relicIds?.length ?? 0} relics / ${perkCount} perks`,
+            value: `${summaryRelicIds.length} relics / ${perkCount} perks`,
             detail: buildDetailWithPerk,
             tone: 'build'
         },
@@ -228,9 +252,10 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
             settings: state.settings
         }))
     );
+    const reduceMotion = useEffectiveReducedMotion(settings.reduceMotion);
     const { tiltRef: fieldTiltRef } = usePlatformTiltField({
         enabled: true,
-        reduceMotion: settings.reduceMotion,
+        reduceMotion,
         surfaceRef: shellRef,
         strength: 1
     });
@@ -242,7 +267,10 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     const politeRunSummaryText = useMemo(
         () =>
             summary
-                ? gameOverScreenCopy.politeRunSummary(summary.totalScore, summary.highestLevel)
+                ? gameOverScreenCopy.politeRunSummary(
+                      runNonNegativeInteger(summary.totalScore),
+                      runNonNegativeInteger(summary.highestLevel)
+                  )
                 : '',
         [summary]
     );
@@ -261,33 +289,47 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
         .map((achievementId) => ACHIEVEMENTS.find((achievement) => achievement.id === achievementId))
         .filter((achievement): achievement is (typeof ACHIEVEMENTS)[number] => Boolean(achievement));
 
-    const flipCount = run.flipHistory?.length ?? 0;
+    const summaryActiveMutators = gameOverMutatorIds(summary.activeMutators);
+    const summaryRelicIds = gameOverRelicIds(summary.relicIds);
+    const summaryDisplay = {
+        bestScore: runNonNegativeInteger(summary.bestScore),
+        bestStreak: runNonNegativeInteger(summary.bestStreak),
+        highestLevel: runNonNegativeInteger(summary.highestLevel),
+        levelsCleared: runNonNegativeInteger(summary.levelsCleared),
+        perfectClears: runNonNegativeInteger(summary.perfectClears),
+        totalScore: runNonNegativeInteger(summary.totalScore)
+    };
+    const rewardPerkIds = gameOverRewardPerkIds(run.rewardPerkIds);
+    const flipHistory = gameOverFlipHistory(run.flipHistory);
+    const flipCount = flipHistory.length;
     const journalEntry = buildRunJournalEntry(run);
     const nextRunRows = getGameOverNextRunRows(run, saveData, runStartSaveData ?? undefined);
     const metaItems = [
-        ...(summary.activeMutators?.map((id) => ({ kind: 'mutator' as const, label: mutatorLabel(id) })) ?? []),
-        ...(summary.relicIds?.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) })) ?? [])
+        ...summaryActiveMutators.map((id) => ({ kind: 'mutator' as const, label: mutatorLabel(id) })),
+        ...summaryRelicIds.map((id) => ({ kind: 'relic' as const, label: relicLabel(id) }))
     ];
     const outcomeSignals = [
-        { kind: 'score', label: 'Score', value: summary.totalScore.toLocaleString() },
-        { kind: 'chain', label: 'Best chain', value: `x${summary.bestStreak}` },
-        { kind: 'perfect', label: 'Perfect clears', value: `${summary.perfectClears}` },
-        summary.relicIds && summary.relicIds.length > 0
-            ? { kind: 'build', label: 'Prime', value: `${summary.relicIds.length} relic${summary.relicIds.length === 1 ? '' : 's'}` }
+        { kind: 'score', label: 'Score', value: summaryDisplay.totalScore.toLocaleString() },
+        { kind: 'chain', label: 'Best chain', value: `x${summaryDisplay.bestStreak}` },
+        { kind: 'perfect', label: 'Perfect clears', value: `${summaryDisplay.perfectClears}` },
+        summaryRelicIds.length > 0
+            ? { kind: 'build', label: 'Prime', value: `${summaryRelicIds.length} relic${summaryRelicIds.length === 1 ? '' : 's'}` }
             : null,
-        summary.activeMutators && summary.activeMutators.length > 0
+        summaryActiveMutators.length > 0
             ? {
                   kind: 'pressure',
                   label: 'Pressure',
-                  value: `${summary.activeMutators.length} mutator${summary.activeMutators.length === 1 ? '' : 's'}`
+                  value: `${summaryActiveMutators.length} mutator${summaryActiveMutators.length === 1 ? '' : 's'}`
               }
             : null
     ].filter((row): row is { kind: string; label: string; value: string } => row != null);
     const payoffBurstRows = getRunPayoffSignals(summary, {
         pickupClaimed: run.findablesClaimedThisFloor,
         pickupTotal: run.findablesTotalThisFloor,
-        pressureExtra: Math.max(0, run.stats.mismatches) + Math.max(0, run.stats.volatileTraitShuffles),
-        rewardPerkCount: run.rewardPerkIds?.length ?? 0,
+        pressureExtra:
+            runNonNegativeInteger(run.stats.mismatches) +
+            runNonNegativeInteger(run.stats.volatileTraitShuffles),
+        rewardPerkCount: rewardPerkIds.length,
         routePaid: run.traitRouteObjectiveCompletedThisFloor || Boolean(run.traitRouteObjectiveRewardClaimedThisFloor),
         routeRewardText: run.traitRouteObjectiveRewardTextThisFloor
     });
@@ -324,7 +366,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 fieldTiltRef={fieldTiltRef}
                 graphicsQuality={settings.graphicsQuality}
                 height={height}
-                reduceMotion={settings.reduceMotion}
+                reduceMotion={reduceMotion}
                 width={width}
             />
             <div
@@ -350,8 +392,8 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     data-testid="game-over-above-fold-summary"
                 >
                     <div className={styles.mobileOutcomeCopy}>
-                        <strong>{summary.totalScore.toLocaleString()} score</strong>
-                        <span>Floor {summary.highestLevel} / {summary.levelsCleared} clears / {summary.bestStreak} streak</span>
+                        <strong>{summaryDisplay.totalScore.toLocaleString()} score</strong>
+                        <span>Floor {summaryDisplay.highestLevel} / {summaryDisplay.levelsCleared} clears / {summaryDisplay.bestStreak} streak</span>
                     </div>
                     <UiButton
                         fullWidth
@@ -395,11 +437,11 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             </ScreenTitle>
                         </div>
                         <div
-                            aria-label={`Total score ${summary.totalScore.toLocaleString()}`}
+                            aria-label={`Total score ${summaryDisplay.totalScore.toLocaleString()}`}
                             className={styles.scoreHero}
                         >
                             <span className={styles.scoreHeroLabel}>{gameOverScreenCopy.scoreLabel}</span>
-                            <span className={styles.scoreHeroValue}>{summary.totalScore.toLocaleString()}</span>
+                            <span className={styles.scoreHeroValue}>{summaryDisplay.totalScore.toLocaleString()}</span>
                         </div>
                         <div
                             aria-label={outcomeSignalsLabel}
@@ -586,7 +628,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             ))}
                         </div>
                         <img alt="" className={styles.divider} src={UI_ART.dividerOrnament} />
-                        <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summary.highestLevel)}</p>
+                        <p className={styles.copy}>{gameOverScreenCopy.floorCaption(summaryDisplay.highestLevel)}</p>
 
                         {metaItems.length > 0 ? (
                             <div className={styles.metaStrip} data-testid="game-over-meta-strip">
@@ -606,27 +648,27 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.highestFloor}
-                                value={summary.highestLevel}
+                                value={summaryDisplay.highestLevel}
                             />
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.bestStreak}
-                                value={summary.bestStreak}
+                                value={summaryDisplay.bestStreak}
                             />
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.perfectFloors}
-                                value={summary.perfectClears}
+                                value={summaryDisplay.perfectClears}
                             />
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.floorsCleared}
-                                value={summary.levelsCleared}
+                                value={summaryDisplay.levelsCleared}
                             />
                             <StatTile
                                 density="minimal"
                                 label={gameOverScreenCopy.statLabels.bestScore}
-                                value={summary.bestScore.toLocaleString()}
+                                value={summaryDisplay.bestScore.toLocaleString()}
                             />
                         </div>
 
@@ -751,12 +793,12 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     </Panel>
                 ) : null}
 
-                {(run.flipHistory?.length ?? 0) > 0 ? (
+                {flipHistory.length > 0 ? (
                     <Panel className={styles.detailsPanel} padding="md" variant="muted">
                         <details className={styles.timelineDetails} data-testid="game-over-detail-drawer">
                             <summary>{gameOverScreenCopy.flipTimelineSummary}</summary>
                             <ol className={styles.ghostSteps}>
-                                {run.flipHistory!.map((id, index) => (
+                                {flipHistory.map((id, index) => (
                                     <li key={`${id}-${index}`}>
                                         <span className={styles.ghostStepIndex}>{index + 1}</span>
                                         <code>{id}</code>

@@ -163,6 +163,11 @@ export const getDungeonBossPressureRule = (
     bossId: DungeonBossId | null | undefined
 ): DungeonBossPressureRule | null => (bossId ? DUNGEON_BOSS_PRESSURE_RULES[bossId] ?? null : null);
 
+const dungeonBossEnemyHazards = (
+    board: { enemyHazards?: readonly { bossId?: DungeonBossId | null; state?: string | null }[] } | null | undefined
+): readonly { bossId?: DungeonBossId | null; state?: string | null }[] =>
+    Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
+
 export const getActiveDungeonBossPressureRule = (
     board:
         | BoardState
@@ -173,7 +178,7 @@ export const getActiveDungeonBossPressureRule = (
     const activeHazardBossId =
         board && 'tiles' in board
             ? activeEnemyHazardsForBoard(board).find((hazard) => hazard.bossId != null)?.bossId
-            : board?.enemyHazards?.find((hazard) => hazard.bossId != null && hazard.state !== 'defeated')?.bossId;
+            : dungeonBossEnemyHazards(board).find((hazard) => hazard.bossId != null && hazard.state !== 'defeated')?.bossId;
     const bossId =
         board?.dungeonBossId ??
         activeHazardBossId ??

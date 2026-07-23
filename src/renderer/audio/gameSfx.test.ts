@@ -26,7 +26,7 @@ import {
     playWagerArmSfx,
     sfxGainFromSettings
 } from './gameSfx';
-import { preloadSampledSfx } from './sampledSfx';
+import { MATCH_TIER_SAMPLE_KEYS, preloadSampledSfx, resolveMatchTierSampleKey, SFX_SAMPLE_KEYS } from './sampledSfx';
 
 describe('gameSfx', () => {
     const oscillators: {
@@ -308,6 +308,74 @@ describe('gameSfx', () => {
         });
 
         expect(createOscillator).not.toHaveBeenCalled();
+    });
+
+    it('ignores malformed payoff lane counts before classifying payoff audio tiers', () => {
+        const createOscillator = vi.fn(() => ({
+            type: 'sine' as OscillatorType,
+            frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn(),
+            start: vi.fn(),
+            stop: vi.fn(),
+            addEventListener: vi.fn()
+        }));
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                createOscillator = createOscillator;
+                createGain = vi.fn();
+                close = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        playMatchPayoffSfx(sfxGainFromSettings(1, 1), {
+            payoffLaneMap: [
+                { count: Number.NaN },
+                { count: Number.POSITIVE_INFINITY },
+                { count: -4 }
+            ],
+            payoffSummary: { label: 'Score hit', value: '+15', tier: 'score' }
+        });
+
+        expect(createOscillator).not.toHaveBeenCalled();
+    });
+
+    it('floors fractional payoff lane counts before classifying payoff audio tiers', () => {
+        const createOscillator = vi.fn(() => ({
+            type: 'sine' as OscillatorType,
+            frequency: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn(),
+            start: vi.fn(),
+            stop: vi.fn(),
+            addEventListener: vi.fn()
+        }));
+        const createGain = vi.fn(() => ({
+            gain: { setValueAtTime: vi.fn(), exponentialRampToValueAtTime: vi.fn() },
+            connect: vi.fn()
+        }));
+        vi.stubGlobal(
+            'AudioContext',
+            class {
+                currentTime = 0;
+                destination = {};
+                createOscillator = createOscillator;
+                createGain = createGain;
+                close = (): Promise<void> => Promise.resolve();
+            }
+        );
+
+        playMatchPayoffSfx(sfxGainFromSettings(1, 1), {
+            payoffLaneMap: [{ count: 2.9 }, { count: 0.9 }],
+            payoffSummary: { label: 'Score hit', value: '+15', tier: 'score' }
+        });
+
+        expect(createOscillator).toHaveBeenCalledTimes(1);
+        expect(createOscillator.mock.results[0]?.value.frequency.exponentialRampToValueAtTime).toHaveBeenCalledWith(
+            2900,
+            expect.any(Number)
+        );
     });
 
     it('plays distinct procedural mismatch recovery crescendo cues by recovery tier', () => {
@@ -1256,7 +1324,7 @@ describe('gameSfx', () => {
                 matchesFound: 2,
                 tries: 3,
                 currentStreak: 0,
-                tileTraitMismatches: { volatile: 1, mirror: 1 }
+                tileTraitMismatches: { volatile: 1, mirror: 1, missing_trait: 99 }
             }
         } as unknown as RunState;
 
@@ -1442,7 +1510,9 @@ describe('gameSfx', () => {
     });
 
     it('keeps sampled gameplay coverage backed by manifest entries and files', () => {
-        const manifestKeys = new Set(Object.keys(sfxManifest.entries));
+        expect(Object.keys(sfxManifest.entries)).toEqual([...SFX_SAMPLE_KEYS]);
+        expect(Object.keys(sfxManifest.matchTierDepthRanges)).toEqual([...MATCH_TIER_SAMPLE_KEYS]);
+        const manifestKeys = new Set(SFX_SAMPLE_KEYS);
         const sfxAssetDir = path.resolve(process.cwd(), 'src/renderer/assets/audio/sfx');
 
         for (const row of AUDIO_INTERACTION_COVERAGE) {
@@ -1453,11 +1523,22 @@ describe('gameSfx', () => {
             }
         }
 
-        for (const [key, entry] of Object.entries(sfxManifest.entries)) {
+        for (const key of SFX_SAMPLE_KEYS) {
+            const entry = sfxManifest.entries[key];
             expect(entry.file, `manifest key ${key} should use runtime OGG`).toMatch(/\.ogg$/);
             const assetPath = path.join(sfxAssetDir, entry.file);
             expect(fs.existsSync(assetPath), `manifest key ${key} points to missing file ${entry.file}`).toBe(true);
         }
+    });
+
+    it('resolves sampled match tiers through the explicit tier order', () => {
+        expect(resolveMatchTierSampleKey(Number.NaN)).toBe('match-tier-low');
+        expect(resolveMatchTierSampleKey(1)).toBe('match-tier-low');
+        expect(resolveMatchTierSampleKey(5)).toBe('match-tier-low');
+        expect(resolveMatchTierSampleKey(6)).toBe('match-tier-mid');
+        expect(resolveMatchTierSampleKey(10)).toBe('match-tier-mid');
+        expect(resolveMatchTierSampleKey(11)).toBe('match-tier-high');
+        expect(resolveMatchTierSampleKey(99)).toBe('match-tier-high');
     });
 
     it('keeps the countdown pressure cue covered by first-run asset checks', () => {

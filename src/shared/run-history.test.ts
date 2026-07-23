@@ -144,6 +144,66 @@ describe('REG-085 run history, share keys, and journal', () => {
         expect(buildRunHistoryExportString(run)).not.toMatch(/token|email|path/i);
     });
 
+    it('normalizes malformed dungeon journal counters before export', () => {
+        const base = completedRun();
+        const run: RunState = {
+            ...base,
+            status: 'gameOver',
+            lives: Number.NaN,
+            gameMode: 'endless',
+            board: base.board
+                ? {
+                      ...base.board,
+                      dungeonObjectiveId: 'defeat_boss'
+                  }
+                : base.board,
+            dungeonEnemiesDefeated: Number.POSITIVE_INFINITY,
+            dungeonEnemiesDefeatedThisFloor: Number.NaN,
+            dungeonTrapsResolvedThisFloor: Number.POSITIVE_INFINITY,
+            dungeonGatewaysUsed: Number.NaN,
+            dungeonTreasuresOpened: Number.POSITIVE_INFINITY,
+            dungeonKeys: Number.NaN as unknown as RunState['dungeonKeys'],
+            dungeonMasterKeys: Number.NaN,
+            enemyHazardHitsThisFloor: Number.POSITIVE_INFINITY,
+            shopGold: Number.NaN,
+            relicIds: Number.NaN as unknown as RunState['relicIds'],
+            bonusRelicPicksNextOffer: Number.POSITIVE_INFINITY,
+            favorBonusRelicPicksNextOffer: 1.9,
+            stats: {
+                ...base.stats,
+                bestStreak: Number.POSITIVE_INFINITY
+            }
+        };
+
+        const rows = buildDungeonJournalRows(run);
+        const exportText = buildRunHistoryExportString(run);
+
+        expect(rows.find((row) => row.id === 'dungeon_rewards')?.value).toBe('0 treasures, 0 keys, 0 shop gold');
+        expect(rows.find((row) => row.id === 'dungeon_rewards')?.detail).toContain('0 relics carried');
+        expect(rows.find((row) => row.id === 'dungeon_rewards')?.detail).toContain('1 bonus relic picks banked');
+        expect(rows.find((row) => row.id === 'dungeon_objective')?.detail).toContain('0 traps resolved this floor; 0 gateways used this run.');
+        expect(rows.find((row) => row.id === 'dungeon_outcome')?.detail).toContain('0 enemy hazard hits this floor; 0 best streak.');
+        expect(exportText).not.toMatch(/NaN|Infinity/);
+    });
+
+    it('normalizes malformed run history arrays before build and playback rows', () => {
+        const run: RunState = {
+            ...completedRun(),
+            relicIds: Number.NaN as unknown as RunState['relicIds'],
+            activeMutators: Number.NaN as unknown as RunState['activeMutators'],
+            flipHistory: Number.NaN as unknown as string[],
+            matchedPairKeysThisRun: Number.NaN as unknown as string[]
+        };
+
+        const entry = buildRunHistoryEntry(run);
+
+        expect(entry.build.relicIds).toEqual([]);
+        expect(entry.build.mutatorIds).toEqual([]);
+        expect(entry.journalRows.find((row) => row.id === 'build')?.value).toContain('0 relics · 0 mutators');
+        expect(entry.journalRows.find((row) => row.id === 'share')?.detail).toContain('0 flip ids are local-only');
+        expect(entry.journalRows.find((row) => row.id === 'encore')?.detail).toContain('0 matched pair keys');
+    });
+
     it('does not derive a dungeon journal boss row from stale cleared-tile hazards', () => {
         const base = completedRun();
         const run: RunState = {
@@ -265,5 +325,35 @@ describe('REG-085 run history, share keys, and journal', () => {
             persistence: 'persisted_summary',
             exportSafe: true
         });
+    });
+
+    it('normalizes malformed save-derived journal counters before rendering rows', () => {
+        const save = createDefaultSaveData();
+        save.lastRunSummary = {
+            totalScore: Number.NaN,
+            bestScore: 0,
+            levelsCleared: 0,
+            highestLevel: Number.POSITIVE_INFINITY,
+            achievementsEnabled: true,
+            unlockedAchievements: [],
+            bestStreak: 4,
+            perfectClears: 0,
+            relicIds: Number.NaN as unknown as [],
+            payoffPickupClaimed: 0,
+            payoffPickupTotal: 0,
+            payoffRewardPerkCount: Number.NaN,
+            payoffRoutePaid: false,
+            gameMode: 'endless'
+        };
+        save.playerStats = {
+            ...save.playerStats!,
+            encorePairKeysLastRun: Number.NaN as unknown as string[]
+        };
+
+        const rows = buildRunJournalRowsFromSave(save);
+
+        expect(rows.find((row) => row.id === 'last_summary')?.value).toBe('endless · 0 score · floor 0');
+        expect(rows.find((row) => row.id === 'last_payoff_stack')).toBeUndefined();
+        expect(rows.find((row) => row.id === 'encore_pairs')?.value).toBe('0 pair keys remembered locally');
     });
 });

@@ -17,6 +17,8 @@ import {
     ROUTE_CARD_GREED_SHOP_GOLD_REWARD,
     ROUTE_CARD_MYSTERY_SHOP_GOLD_REWARD
 } from './route-choice-rules';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 
 type MysteryRouteCardOutcome = 'shop_gold' | 'combo_shard' | 'relic_favor';
 
@@ -41,7 +43,7 @@ export const emptyRouteCardReward = (): RouteCardReward => ({
 const mysteryRouteCardOutcomeFor = (run: RunState, level: number, pairKey: string): MysteryRouteCardOutcome => {
     const outcomes: MysteryRouteCardOutcome[] = ['shop_gold', 'combo_shard', 'relic_favor'];
     const seed = hashStringToSeed(`routeCardMystery:${run.runRulesVersion}:${run.runSeed}:${level}:${pairKey}`);
-    return outcomes[Math.abs(seed) % outcomes.length]!;
+    return outcomes[Math.abs(seed) % outcomes.length] ?? 'relic_favor';
 };
 
 export const getRouteCardReward = (
@@ -51,11 +53,12 @@ export const getRouteCardReward = (
     kind: RouteSpecialKind | RouteCardKind | null,
     routeSpecialRevealed = false
 ): RouteCardReward => {
+    const stats = normalizeSessionStats(run.stats);
     if (kind === 'safe_ward') {
         return { ...emptyRouteCardReward(), guardTokens: 1 };
     }
     if (kind === 'guard_cache') {
-        return run.stats.guardTokens >= MAX_GUARD_TOKENS
+        return stats.guardTokens >= MAX_GUARD_TOKENS
             ? { ...emptyRouteCardReward(), safeHazardWardCharges: 1 }
             : { ...emptyRouteCardReward(), guardTokens: 1 };
     }
@@ -137,13 +140,13 @@ export const getRouteCardReward = (
         return {
             ...emptyRouteCardReward(),
             score:
-                run.stats.comboShards > 0
+                stats.comboShards > 0
                     ? CATALYST_ALTAR_UPGRADED_SCORE_REWARD
                     : CATALYST_ALTAR_FALLBACK_SCORE_REWARD
         };
     }
     if (kind === 'parasite_vessel') {
-        return run.parasiteFloors > 0
+        return runNonNegativeInteger(run.parasiteFloors) > 0
             ? {
                   ...emptyRouteCardReward(),
                   relicFavor: 1

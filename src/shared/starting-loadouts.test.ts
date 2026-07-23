@@ -1,17 +1,22 @@
 import { describe, expect, it } from 'vitest';
+import type { RunState } from './contracts';
 import { createNewRun } from './game-core';
-import { STARTING_LOADOUTS, applyStartingLoadout, getRunStartingLoadoutRow } from './starting-loadouts';
+import {
+    STARTING_LOADOUT_IDS,
+    STARTING_LOADOUTS,
+    applyStartingLoadout,
+    getRunStartingLoadoutRow,
+    getStartingLoadoutRows
+} from './starting-loadouts';
 
 describe('starting loadouts', () => {
     it('defines distinct early-run identities', () => {
-        expect(Object.keys(STARTING_LOADOUTS)).toEqual([
-            'memory_scout',
-            'route_tactician',
-            'cursebreaker',
-            'vaultbreaker'
-        ]);
-        expect(new Set(Object.values(STARTING_LOADOUTS).map((row) => row.firstFloorDecision)).size).toBe(4);
-        for (const row of Object.values(STARTING_LOADOUTS)) {
+        const rows = getStartingLoadoutRows();
+
+        expect(Object.keys(STARTING_LOADOUTS)).toEqual([...STARTING_LOADOUT_IDS]);
+        expect(rows.map((row) => row.id)).toEqual([...STARTING_LOADOUT_IDS]);
+        expect(new Set(rows.map((row) => row.firstFloorDecision)).size).toBe(4);
+        for (const row of rows) {
             expect(row.impactSignals.map((signal) => signal.tone)).toEqual(['resource', 'build', 'payoff']);
             expect(row.impactSignals.every((signal) => signal.label.length > 0 && signal.value.length > 0)).toBe(true);
         }
@@ -37,6 +42,17 @@ describe('starting loadouts', () => {
         expect(tactician.board?.tiles.map((tile) => tile.tileTraitKind ?? null)).not.toEqual(
             base.board?.tiles.map((tile) => tile.tileTraitKind ?? null)
         );
+    });
+
+    it('treats malformed reward perks as empty before applying route tactician', () => {
+        const run = {
+            ...createNewRun(0, { runSeed: 91_002 }),
+            rewardPerkIds: Number.NaN as unknown as RunState['rewardPerkIds']
+        };
+
+        const tactician = applyStartingLoadout(run, 'route_tactician');
+
+        expect(tactician.rewardPerkIds).toEqual(['free_first_swap_per_floor']);
     });
 
     it('returns player-facing rows for active loadouts only', () => {

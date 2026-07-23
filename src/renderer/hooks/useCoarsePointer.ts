@@ -10,12 +10,47 @@ const readCoarsePointer = (): boolean => {
         return false;
     }
 
-    const coarse = window.matchMedia('(pointer: coarse)').matches;
-    const anyFine = window.matchMedia('(any-pointer: fine)').matches;
-    const canHover = window.matchMedia('(hover: hover)').matches;
+    let coarse = false;
+    let anyFine = false;
+    let canHover = false;
+    try {
+        coarse = window.matchMedia('(pointer: coarse)').matches;
+        anyFine = window.matchMedia('(any-pointer: fine)').matches;
+        canHover = window.matchMedia('(hover: hover)').matches;
+    } catch {
+        return false;
+    }
+
     const hybridTouchLaptop = coarse && anyFine && canHover;
 
     return coarse && !hybridTouchLaptop;
+};
+
+type PointerMediaQueryList = MediaQueryList & {
+    addListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+    removeListener?: (listener: (event: MediaQueryListEvent) => void) => void;
+};
+
+const addMediaQueryChangeListener = (
+    mediaQuery: PointerMediaQueryList,
+    listener: (event: MediaQueryListEvent) => void
+): void => {
+    if (typeof mediaQuery.addEventListener === 'function') {
+        mediaQuery.addEventListener('change', listener);
+        return;
+    }
+    mediaQuery.addListener?.(listener);
+};
+
+const removeMediaQueryChangeListener = (
+    mediaQuery: PointerMediaQueryList,
+    listener: (event: MediaQueryListEvent) => void
+): void => {
+    if (typeof mediaQuery.removeEventListener === 'function') {
+        mediaQuery.removeEventListener('change', listener);
+        return;
+    }
+    mediaQuery.removeListener?.(listener);
 };
 
 export const useCoarsePointer = (): boolean => {
@@ -26,23 +61,30 @@ export const useCoarsePointer = (): boolean => {
             return;
         }
 
-        const coarseMq = window.matchMedia('(pointer: coarse)');
-        const fineMq = window.matchMedia('(any-pointer: fine)');
-        const hoverMq = window.matchMedia('(hover: hover)');
+        let coarseMq: PointerMediaQueryList;
+        let fineMq: PointerMediaQueryList;
+        let hoverMq: PointerMediaQueryList;
+        try {
+            coarseMq = window.matchMedia('(pointer: coarse)');
+            fineMq = window.matchMedia('(any-pointer: fine)');
+            hoverMq = window.matchMedia('(hover: hover)');
+        } catch {
+            return;
+        }
 
         const sync = (): void => {
             setCoarsePointer(readCoarsePointer());
         };
 
         sync();
-        coarseMq.addEventListener('change', sync);
-        fineMq.addEventListener('change', sync);
-        hoverMq.addEventListener('change', sync);
+        addMediaQueryChangeListener(coarseMq, sync);
+        addMediaQueryChangeListener(fineMq, sync);
+        addMediaQueryChangeListener(hoverMq, sync);
 
         return () => {
-            coarseMq.removeEventListener('change', sync);
-            fineMq.removeEventListener('change', sync);
-            hoverMq.removeEventListener('change', sync);
+            removeMediaQueryChangeListener(coarseMq, sync);
+            removeMediaQueryChangeListener(fineMq, sync);
+            removeMediaQueryChangeListener(hoverMq, sync);
         };
     }, []);
 

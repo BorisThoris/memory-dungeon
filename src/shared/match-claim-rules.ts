@@ -12,6 +12,9 @@ import type { BoardState } from './contracts';
 import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { getDungeonMatchReward, type DungeonMatchReward } from './dungeon-match-reward-rules';
 import { getRouteCardReward, type RouteCardReward } from './route-card-reward-rules';
+import { runStringArray } from './run-array-guards';
+import { runNonNegativeInteger } from './run-number-guards';
+import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import { isWildPairKey } from './tile-identity';
 
@@ -70,15 +73,16 @@ export const deriveMatchClaimContext = ({
         claimedRouteCardKind,
         claimedRouteSpecialRevealed
     );
+    const stats = normalizeSessionStats(run.stats);
     const mimicCacheClaimed = claimedRouteCardKind === 'mimic_cache';
     const mimicCacheBite = mimicCacheClaimed && !claimedRouteSpecialRevealed;
-    const mimicCacheGuardBite = mimicCacheBite && run.stats.guardTokens > 0;
+    const mimicCacheGuardBite = mimicCacheBite && stats.guardTokens > 0;
     const matchedDungeonKind = firstTile.dungeonCardKind ?? secondTile.dungeonCardKind ?? null;
     const dungeonReward = getDungeonMatchReward(run, firstTile, secondTile);
 
     return {
         anchorSealClaimed: claimedRouteCardKind === 'anchor_seal',
-        catalystAltarUpgraded: claimedRouteCardKind === 'catalyst_altar' && run.stats.comboShards > 0,
+        catalystAltarUpgraded: claimedRouteCardKind === 'catalyst_altar' && stats.comboShards > 0,
         claimedFindableKind,
         claimedRouteCardKind,
         claimedRouteSpecialRevealed,
@@ -106,8 +110,8 @@ export const deriveMatchClaimContext = ({
         pinLatticeRewarded:
             claimedRouteCardKind === 'pin_lattice' &&
             run.pinLatticeRewardsThisFloor < 1 &&
-            run.pinnedTileIds.includes(firstTileId) &&
-            run.pinnedTileIds.includes(secondTileId),
+            runStringArray(run.pinnedTileIds).includes(firstTileId) &&
+            runStringArray(run.pinnedTileIds).includes(secondTileId),
         routeCardReward,
         usedWild: isWildPairKey(firstTile.pairKey) || isWildPairKey(secondTile.pairKey)
     };
@@ -126,12 +130,12 @@ export const createMatchedPairClaimBoard = ({
     secondTileId: string;
     thirdTileId?: string;
 }): BoardState => {
-    const nextKeysHeld = Math.max(0, (board.dungeonKeysHeld ?? 0) + context.dungeonReward.keysHeldDelta);
+    const nextKeysHeld = Math.max(0, runNonNegativeInteger(board.dungeonKeysHeld) + context.dungeonReward.keysHeldDelta);
     const nextKeysHeldByKind = (() => {
         if (context.dungeonReward.keysHeldDelta === 0) {
             return board.dungeonKeysHeldByKind;
         }
-        const current = board.dungeonKeysHeldByKind?.[context.matchedDungeonKeyKind] ?? 0;
+        const current = runNonNegativeInteger(board.dungeonKeysHeldByKind?.[context.matchedDungeonKeyKind]);
         const next = Math.max(0, current + context.dungeonReward.keysHeldDelta);
         return {
             ...(board.dungeonKeysHeldByKind ?? {}),
@@ -141,7 +145,7 @@ export const createMatchedPairClaimBoard = ({
     return {
         ...board,
         flippedTileIds: [],
-        matchedPairs: board.matchedPairs + 1,
+        matchedPairs: runNonNegativeInteger(board.matchedPairs) + 1,
         tiles: board.tiles.map((tile) => {
             if (tile.id === firstTileId || tile.id === secondTileId) {
                 return clearDungeonCardFields({
@@ -164,6 +168,6 @@ export const createMatchedPairClaimBoard = ({
         selectedGatewayRouteType: board.selectedGatewayRouteType ?? context.dungeonReward.gatewayRouteType ?? null,
         dungeonKeysHeld: nextKeysHeld,
         dungeonKeysHeldByKind: nextKeysHeldByKind,
-        dungeonLeverCount: (board.dungeonLeverCount ?? 0) + (context.matchedDungeonKind === 'lever' ? 1 : 0)
+        dungeonLeverCount: runNonNegativeInteger(board.dungeonLeverCount) + (context.matchedDungeonKind === 'lever' ? 1 : 0)
     };
 };

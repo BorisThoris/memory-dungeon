@@ -29,8 +29,11 @@ import {
 import { EXIT_PAIR_KEY, isSingletonUtilityPairKey } from './tile-identity';
 import { createNewRun } from './run-creation-rules';
 import { createDungeonRunMapState, inspectDungeonRunMapProgression } from './run-map';
+import { getDungeonKeyTotal } from './run-inventory';
+import { runNonNegativeInteger } from './run-number-guards';
 import { getRunShopStockPlan, SHOP_KEY_ITEM_BY_KIND } from './shop-rules';
-import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles } from './enemy-hazard-board-rules';
+import { normalizeSessionStats } from './session-stats-rules';
+import { activeEnemyHazardsForBoard, defeatEnemyHazardsOnClearedTiles, enemyHazardsForBoard } from './enemy-hazard-board-rules';
 import {
     formatDungeonBoardTopologyIssue,
     formatDungeonRunMapTopologyIssue,
@@ -101,6 +104,7 @@ const COVERAGE_KEYS: readonly SoftlockContractCoverageKey[] = [
 ];
 
 const ROUTE_TYPES: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
+const DEFAULT_ROUTE_TYPE: RouteNodeType = 'safe';
 
 const coverageTemplate = (): Record<SoftlockContractCoverageKey, number> =>
     Object.fromEntries(COVERAGE_KEYS.map((key) => [key, 0])) as Record<SoftlockContractCoverageKey, number>;
@@ -169,6 +173,16 @@ export const solveGeneratedBoardByExhaustingPairs = (board: BoardState, seed: nu
     return solveRunByExhaustingPlayablePairsWithTrace(run).run;
 };
 
+export const createShopStockInspectionRun = (run: RunState, board: BoardState): RunState => ({
+    ...run,
+    status: 'playing',
+    shopRerolls: 0,
+    stats: {
+        ...normalizeSessionStats(run.stats),
+        highestLevel: Math.max(1, board.level)
+    }
+});
+
 const solveGeneratedBoardByExhaustingPairsWithTrace = (board: BoardState, seed: number): PlaythroughSolverTrace => {
     return solveRunByExhaustingPlayablePairsWithTrace(createGeneratedBoardSolverRun(board, seed));
 };
@@ -191,19 +205,19 @@ const projectionExitResourceState = (
         lock.lockKind !== 'lever' &&
         countReachableExitKeySources(board, lock.lockKind) > 0;
     const needsLever = lock.lockKind === 'lever';
-    const dungeonKeysHeld = needsKey ? Math.max(board.dungeonKeysHeld ?? 0, 1) : board.dungeonKeysHeld;
+    const dungeonKeysHeld = needsKey ? Math.max(runNonNegativeInteger(board.dungeonKeysHeld), 1) : board.dungeonKeysHeld;
     const dungeonKeysHeldByKind =
         needsKey && lock.lockKind !== 'none' && lock.lockKind !== 'lever'
             ? {
                   ...(board.dungeonKeysHeldByKind ?? {}),
-                  [lock.lockKind]: Math.max(board.dungeonKeysHeldByKind?.[lock.lockKind] ?? 0, 1)
+                  [lock.lockKind]: Math.max(runNonNegativeInteger(board.dungeonKeysHeldByKind?.[lock.lockKind]), 1)
               }
             : board.dungeonKeysHeldByKind;
     return {
         dungeonKeysHeld,
         dungeonKeysHeldByKind,
         dungeonLeverCount: needsLever
-            ? Math.max(board.dungeonLeverCount ?? 0, lock.requiredLeverCount)
+            ? Math.max(runNonNegativeInteger(board.dungeonLeverCount), runNonNegativeInteger(lock.requiredLeverCount))
             : board.dungeonLeverCount
     };
 };
@@ -227,7 +241,7 @@ export const createFinalPairFairnessProjection = (board: BoardState): BoardState
         flippedTileIds: [],
         matchedPairs: countMatchedPairs(tiles),
         ...projectionExitResourceState(board),
-        enemyHazards: board.enemyHazards?.map((hazard) =>
+        enemyHazards: enemyHazardsForBoard(board).map((hazard) =>
             activeTileIds.has(hazard.currentTileId) && activeTileIds.has(hazard.nextTileId)
                 ? hazard
                 : { ...hazard, state: 'defeated' as const, hp: 0 }
@@ -242,6 +256,7 @@ export const createClearedBoardFairnessProjection = (board: BoardState): BoardSt
     return defeatEnemyHazardsOnClearedTiles({
         ...board,
         tiles,
+        enemyHazards: enemyHazardsForBoard(board),
         flippedTileIds: [],
         matchedPairs: countMatchedPairs(tiles),
         dungeonExitActivated: board.dungeonExitTileId != null ? true : board.dungeonExitActivated,
@@ -260,18 +275,19 @@ const addCoverage = (
     if (board.dungeonShopTileId || board.tiles.some((tile) => tile.dungeonCardKind === 'shop')) coverage.shops += 1;
     if (
         board.tiles.some((tile) => tile.dungeonCardKind === 'key' || tile.dungeonCardEffectId === 'room_key_cache') ||
-        (board.dungeonKeysHeld ?? 0) > 0 ||
-        Object.values(board.dungeonKeysHeldByKind ?? {}).some((count) => (count ?? 0) > 0)
+        runNonNegativeInteger(board.dungeonKeysHeld) > 0 ||
+        getDungeonKeyTotal(board.dungeonKeysHeldByKind) > 0
     ) {
         coverage.keys += 1;
     }
-    if (board.tiles.some((tile) => tile.dungeonCardKind === 'lever') || (board.dungeonLeverCount ?? 0) > 0) {
+    if (board.tiles.some((tile) => tile.dungeonCardKind === 'lever') || runNonNegativeInteger(board.dungeonLeverCount) > 0) {
         coverage.levers += 1;
     }
     if (board.tiles.some((tile) => tile.tileTraitKind != null)) coverage.traits += 1;
     if (board.tiles.some((tile) => tile.pairKey === EXIT_PAIR_KEY || tile.dungeonCardKind === 'exit')) coverage.exits += 1;
-    if (board.tiles.some((tile) => tile.tileHazardKind != null) || (board.enemyHazards?.length ?? 0) > 0) coverage.hazards += 1;
-    if (board.tiles.some((tile) => tile.dungeonCardKind === 'enemy') || (board.enemyHazards?.length ?? 0) > 0) {
+    const enemyHazardCount = enemyHazardsForBoard(board).length;
+    if (board.tiles.some((tile) => tile.tileHazardKind != null) || enemyHazardCount > 0) coverage.hazards += 1;
+    if (board.tiles.some((tile) => tile.dungeonCardKind === 'enemy') || enemyHazardCount > 0) {
         coverage.enemies += 1;
     }
     if (board.dungeonBossId != null || board.tiles.some((tile) => tile.dungeonBossId != null)) coverage.bosses += 1;
@@ -395,15 +411,7 @@ const recordShopStockInspection = (
     }
     result.checkedShopPlans += 1;
     const run = createGeneratedBoardSolverRun(board, seed);
-    const plan = getRunShopStockPlan({
-        ...run,
-        status: 'playing',
-        shopRerolls: 0,
-        stats: {
-            ...run.stats,
-            highestLevel: Math.max(1, board.level)
-        }
-    });
+    const plan = getRunShopStockPlan(createShopStockInspectionRun(run, board));
     const requiredKeyItem = requiredShopInsuranceItemForBoard(board);
     if ((requiredKeyItem && plan.itemIds.includes(requiredKeyItem)) || plan.itemIds.includes('master_key')) {
         return;
@@ -458,7 +466,7 @@ const recordPlayableClearInspection = (
     }));
     const staleEnemyHazards =
         solved.status === 'levelComplete'
-            ? solved.board?.enemyHazards?.filter((hazard) => hazard.state !== 'defeated') ?? []
+            ? enemyHazardsForBoard(solved.board).filter((hazard) => hazard.state !== 'defeated')
             : [];
     if (
         solved.status === 'levelComplete' &&
@@ -620,7 +628,7 @@ export const DEFAULT_SOFTLOCK_GENERATOR_SCENARIOS: readonly SoftlockGeneratorSce
         seeds: [70_101, 70_202],
         floors: [2, 4, 6, 8],
         optionsForFloor: ({ seed, floor }) => {
-            const routeType = ROUTE_TYPES[(seed + floor) % ROUTE_TYPES.length]!;
+            const routeType = ROUTE_TYPES[(seed + floor) % ROUTE_TYPES.length] ?? DEFAULT_ROUTE_TYPE;
             return scenarioOptions(seed, floor, {
                 routeCardPlan: {
                     choiceId: `contract:${routeType}:${seed}:${floor}`,

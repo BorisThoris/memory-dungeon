@@ -65,6 +65,61 @@ export interface DungeonCardKnowledge {
     stateLabel: string;
 }
 
+export const DUNGEON_CARD_KIND_ORDER = [
+    'enemy',
+    'trap',
+    'treasure',
+    'shrine',
+    'gateway',
+    'key',
+    'lock',
+    'exit',
+    'lever',
+    'shop',
+    'room'
+] as const satisfies readonly DungeonCardKind[];
+
+export const DUNGEON_CARD_EFFECT_ORDER = [
+    'enemy_sentry',
+    'enemy_elite',
+    'enemy_stalker',
+    'trap_spikes',
+    'trap_curse',
+    'trap_mimic',
+    'trap_alarm',
+    'trap_snare',
+    'trap_hex',
+    'treasure_gold',
+    'treasure_cache',
+    'treasure_shard',
+    'shrine_guard',
+    'gateway_safe',
+    'gateway_greed',
+    'gateway_mystery',
+    'gateway_depth',
+    'key_iron',
+    'key_master',
+    'lock_cache',
+    'exit_safe',
+    'exit_greed',
+    'exit_mystery',
+    'exit_boss',
+    'lever_floor',
+    'rune_seal',
+    'shop_vendor',
+    'room_campfire',
+    'room_fountain',
+    'room_map',
+    'room_forge',
+    'room_shrine',
+    'room_scrying_lens',
+    'room_armory',
+    'room_locked_cache',
+    'room_key_cache',
+    'room_trap_workshop',
+    'room_omen_archive'
+] as const satisfies readonly DungeonCardEffectId[];
+
 export const DUNGEON_CARD_KIND_DEFINITIONS: Record<DungeonCardKind, DungeonCardKindDefinition> = {
     enemy: {
         kind: 'enemy',
@@ -510,7 +565,7 @@ export const getDungeonCardEffectDefinition = (
 ): DungeonCardEffectDefinition => DUNGEON_CARD_EFFECT_DEFINITIONS[effectId];
 
 export const getDungeonCardHelpRows = (): DungeonCardKindDefinition[] =>
-    Object.values(DUNGEON_CARD_KIND_DEFINITIONS);
+    DUNGEON_CARD_KIND_ORDER.map((kind) => DUNGEON_CARD_KIND_DEFINITIONS[kind]);
 
 export const getDungeonCardKnowledge = (tile: Tile, faceUp: boolean = false): DungeonCardKnowledge => {
     if (!tile.dungeonCardKind) {
