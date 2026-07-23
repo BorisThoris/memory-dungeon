@@ -190,9 +190,15 @@ const buildChainRewardText = (before: RunState, after: RunState, chainDepth: num
     if (chainDepth < 3) {
         return undefined;
     }
-    const comboShardGain = Math.max(0, (after.stats.comboShards ?? 0) - (before.stats.comboShards ?? 0));
-    const guardGain = Math.max(0, (after.stats.guardTokens ?? 0) - (before.stats.guardTokens ?? 0));
-    const lifeGain = Math.max(0, (after.lives ?? 0) - (before.lives ?? 0));
+    const comboShardGain = Math.max(
+        0,
+        runNonNegativeInteger(after.stats.comboShards) - runNonNegativeInteger(before.stats.comboShards)
+    );
+    const guardGain = Math.max(
+        0,
+        runNonNegativeInteger(after.stats.guardTokens) - runNonNegativeInteger(before.stats.guardTokens)
+    );
+    const lifeGain = Math.max(0, runNonNegativeInteger(after.lives) - runNonNegativeInteger(before.lives));
     const parts = [
         comboShardGain > 0 ? formatGain(comboShardGain, 'combo shard') : null,
         guardGain > 0 ? formatGain(guardGain, 'guard token') : null,

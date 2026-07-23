@@ -467,6 +467,50 @@ describe('buildMatchScorePopPayload', () => {
         });
     });
 
+    it('normalizes malformed chain reward counters before building cashout copy', () => {
+        const baseRun = minimalRun({
+            lives: Number.NaN,
+            board: {
+                level: 3,
+                rows: 2,
+                columns: 2,
+                flippedTileIds: ['t1', 't2'],
+                tiles: [
+                    { id: 't1', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' },
+                    { id: 't2', pairKey: 'pk', symbol: 'a', label: 'a', state: 'flipped' }
+                ]
+            } as unknown as BoardState,
+            stats: {
+                ...minimalRun({}).stats,
+                matchesFound: 2,
+                totalScore: 40,
+                comboShards: Number.POSITIVE_INFINITY,
+                guardTokens: Number.NaN,
+                currentStreak: 3
+            }
+        });
+        const pop = buildMatchScorePopPayload(
+            baseRun,
+            {
+                ...baseRun,
+                lives: Number.POSITIVE_INFINITY,
+                stats: {
+                    ...baseRun.stats,
+                    comboShards: Number.POSITIVE_INFINITY,
+                    guardTokens: Number.POSITIVE_INFINITY,
+                    matchesFound: 3,
+                    totalScore: 75,
+                    currentStreak: 4
+                }
+            },
+            'malformed-cashout'
+        );
+
+        expect(pop?.chainRewardText).toBeUndefined();
+        expect(pop?.payoffSummary?.value).not.toMatch(/NaN|Infinity/);
+        expect(pop?.payoffChips?.map((chip) => chip.value).join(' ')).not.toMatch(/NaN|Infinity/);
+    });
+
     it('summarizes four-channel match rewards as a super stack', () => {
         const run = minimalRun({
             lives: 4,
