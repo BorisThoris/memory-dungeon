@@ -3,6 +3,7 @@ import {
     runFiniteIntegerDelta,
     runNonNegativeInteger,
     runNonNegativeIntegerOrFallback,
+    runNonNegativeIntegerOrNull,
     runNonNegativeIntegerWithFallback
 } from './run-number-guards';
 
@@ -31,5 +32,12 @@ describe('run number guards', () => {
         expect(runNonNegativeIntegerOrFallback(4.9, 1)).toBe(4);
         expect(runNonNegativeIntegerOrFallback(Number.NaN, 3.9)).toBe(3.9);
         expect(runNonNegativeIntegerOrFallback(Number.POSITIVE_INFINITY, Number.NaN)).toBeNaN();
+    });
+
+    it('uses null for unavailable runtime counters', () => {
+        expect(runNonNegativeIntegerOrNull(4.9)).toBe(4);
+        expect(runNonNegativeIntegerOrNull(-1.9)).toBe(0);
+        expect(runNonNegativeIntegerOrNull(Number.NaN)).toBeNull();
+        expect(runNonNegativeIntegerOrNull(null)).toBeNull();
     });
 });
