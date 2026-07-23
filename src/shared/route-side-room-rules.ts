@@ -43,6 +43,8 @@ const safeTraitBuildLabel = (value: unknown): value is string =>
 const traitBuildLabels = (value: unknown): NonNullable<ReturnType<typeof rollBonusRewardDraft>[number]['traitBuildLabels']> =>
     Array.isArray(value) ? value.filter(safeTraitBuildLabel) : [];
 
+const sideRoomChoices = (value: unknown): NonNullable<RouteSideRoomState['choices']> => (Array.isArray(value) ? value : []);
+
 const bonusRewardChoiceImpact = (
     option: ReturnType<typeof rollBonusRewardDraft>[number],
     nextCue: string,
@@ -247,7 +249,7 @@ export const openRouteSideRoom = (run: RunState): RunState => {
 
 export const claimRouteSideRoomPrimary = (run: RunState): RunState => {
     const eventChoiceId = run.sideRoom?.payload.kind === 'event_choice' ? run.sideRoom.payload.choiceId : undefined;
-    const choiceId = run.sideRoom?.choices?.find((choice) => choice.primary)?.id ?? eventChoiceId;
+    const choiceId = sideRoomChoices(run.sideRoom?.choices).find((choice) => choice.primary)?.id ?? eventChoiceId;
     return choiceId ? claimRouteSideRoomChoice(run, choiceId) : claimRouteSideRoomChoice(run);
 };
 

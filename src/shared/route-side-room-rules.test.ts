@@ -69,6 +69,24 @@ describe('route side-room rules', () => {
         });
     });
 
+    it('falls back to event payload choices when persisted side-room choices are malformed', () => {
+        const eventRun = createPlayablePathFixture('sideRoomChoice').run!;
+        const malformedChoicesRun = {
+            ...eventRun,
+            sideRoom: eventRun.sideRoom
+                ? {
+                      ...eventRun.sideRoom,
+                      choices: { length: 2 } as never
+                  }
+                : eventRun.sideRoom
+        };
+
+        const claimed = claimRouteSideRoomPrimary(malformedChoicesRun);
+
+        expect(claimed.sideRoom).toBeNull();
+        expect(claimed).not.toBe(malformedChoicesRun);
+    });
+
     it('opens bonus side rooms as deterministic reward drafts and claims the clicked reward', () => {
         const bonusRun = createPlayablePathFixture('sideRoomSkip').run!;
         const choices = bonusRun.sideRoom!.choices!;
