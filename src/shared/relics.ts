@@ -412,7 +412,7 @@ export const runRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ?
 
 export const runMutatorIds = (value: unknown): MutatorId[] => Array.isArray(value) ? value : [];
 
-const hasRunRelic = (run: Pick<RunState, 'relicIds'>, id: RelicId): boolean => runRelicIds(run.relicIds).includes(id);
+export const hasRunRelic = (run: Pick<RunState, 'relicIds'>, id: RelicId): boolean => runRelicIds(run.relicIds).includes(id);
 
 export const getRunBuildProfile = (run: Pick<RunState, 'relicIds'>): RunBuildProfile => {
     const scoreByArchetype = new Map<RelicBuildArchetype, { score: number; relicIds: RelicId[] }>();

@@ -1,12 +1,10 @@
-import type { RelicId, RunState } from './contracts';
+import type { RunState } from './contracts';
 import { countFullyHiddenPairs } from './board-inspection';
 import { tileIsDestroyEligiblePreview } from './board-power-targeting';
-import { runRelicIds } from './relics';
+import { hasRunRelic } from './relics';
 import { runNonNegativeInteger } from './run-number-guards';
 
 const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
-
-const hasRelic = (run: RunState, relicId: RelicId): boolean => runRelicIds(run.relicIds).includes(relicId);
 
 export const canShuffleBoard = (run: RunState): boolean => {
     const board = run.board;
@@ -16,7 +14,7 @@ export const canShuffleBoard = (run: RunState): boolean => {
         hasClearFlipState(run) &&
         !run.activeContract?.noShuffle &&
         (runNonNegativeInteger(run.shuffleCharges) > 0 ||
-            (run.freeShuffleThisFloor && hasRelic(run, 'first_shuffle_free_per_floor'))) &&
+            (run.freeShuffleThisFloor && hasRunRelic(run, 'first_shuffle_free_per_floor'))) &&
         countFullyHiddenPairs(board) >= 2
     );
 };
@@ -37,7 +35,7 @@ export const canRegionShuffle = (run: RunState): boolean => {
         hasClearFlipState(run) &&
         !run.activeContract?.noShuffle &&
         (runNonNegativeInteger(run.regionShuffleCharges) > 0 ||
-            (run.regionShuffleFreeThisFloor && hasRelic(run, 'region_shuffle_free_first'))) &&
+            (run.regionShuffleFreeThisFloor && hasRunRelic(run, 'region_shuffle_free_first'))) &&
         countFullyHiddenPairs(board) >= 1
     );
 };
@@ -64,7 +62,8 @@ export const canSwapHiddenTiles = (run: RunState, firstTileId: string, secondTil
         !hasClearFlipState(run) ||
         run.activeContract?.noShuffle ||
         firstTileId === secondTileId ||
-        (runNonNegativeInteger(run.regionShuffleCharges) <= 0 && !(run.regionShuffleFreeThisFloor && hasRelic(run, 'region_shuffle_free_first')))
+        (runNonNegativeInteger(run.regionShuffleCharges) <= 0 &&
+            !(run.regionShuffleFreeThisFloor && hasRunRelic(run, 'region_shuffle_free_first')))
     ) {
         return false;
     }

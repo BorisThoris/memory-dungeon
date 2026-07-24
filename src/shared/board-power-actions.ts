@@ -1,6 +1,5 @@
 import type {
     BoardState,
-    RelicId,
     RunState
 } from './contracts';
 import {
@@ -29,7 +28,7 @@ import {
 import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
-import { runRelicIds } from './relics';
+import { hasRunRelic } from './relics';
 import { runNonNegativeInteger } from './run-number-guards';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
@@ -37,8 +36,6 @@ const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
 const stringArray = (value: unknown): string[] => (Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : []);
 
 const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
-
-const hasRelic = (run: RunState, relicId: RelicId): boolean => runRelicIds(run.relicIds).includes(relicId);
 
 type TileEntry = {
     index: number;
@@ -168,7 +165,7 @@ export const applyShuffle = (run: RunState): RunState => {
 
     let nextCharges = runNonNegativeInteger(run.shuffleCharges);
     let nextFree = run.freeShuffleThisFloor;
-    if (nextFree && hasRelic(run, 'first_shuffle_free_per_floor')) {
+    if (nextFree && hasRunRelic(run, 'first_shuffle_free_per_floor')) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;
@@ -221,7 +218,7 @@ export const applyRegionShuffle = (run: RunState, rowIndex: number): RunState =>
 
     let nextFree = run.regionShuffleFreeThisFloor;
     let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
-    if (nextFree && hasRelic(run, 'region_shuffle_free_first')) {
+    if (nextFree && hasRunRelic(run, 'region_shuffle_free_first')) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;
@@ -276,7 +273,7 @@ export const applyTileSwap = (run: RunState, firstTileId: string, secondTileId: 
 
     let nextFree = run.regionShuffleFreeThisFloor;
     let nextCharges = runNonNegativeInteger(run.regionShuffleCharges);
-    if (nextFree && hasRelic(run, 'region_shuffle_free_first')) {
+    if (nextFree && hasRunRelic(run, 'region_shuffle_free_first')) {
         nextFree = false;
     } else if (nextCharges > 0) {
         nextCharges -= 1;

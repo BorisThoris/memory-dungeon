@@ -1,17 +1,13 @@
 import {
     MAX_PINNED_TILES,
-    type RelicId,
     type RunState
 } from './contracts';
-import { runRelicIds } from './relics';
+import { hasRunRelic } from './relics';
 import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 
-const hasRelic = (run: RunState, relicId: RelicId): boolean =>
-    runRelicIds(run.relicIds).includes(relicId);
-
 export const maxPinnedTilesForRun = (run: RunState): number =>
-    MAX_PINNED_TILES + (hasRelic(run, 'pin_cap_plus_one') ? 1 : 0);
+    MAX_PINNED_TILES + (hasRunRelic(run, 'pin_cap_plus_one') ? 1 : 0);
 
 export const armRegionShuffleRow = (run: RunState, row: number | null): RunState =>
     run.status === 'playing' && run.board ? { ...run, regionShuffleRowArmed: row } : run;
