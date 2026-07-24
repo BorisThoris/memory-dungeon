@@ -4,7 +4,7 @@ import { tileIsDestroyEligiblePreview } from './board-power-targeting';
 import { hasRunRelic } from './relics';
 import { runNonNegativeInteger } from './run-number-guards';
 
-const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
+export const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
 
 export const canShuffleBoard = (run: RunState): boolean => {
     const board = run.board;

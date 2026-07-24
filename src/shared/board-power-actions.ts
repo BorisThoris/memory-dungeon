@@ -16,6 +16,7 @@ import {
 import { DECOY_PAIR_KEY } from './tile-identity';
 import {
     canDestroyPair,
+    hasClearFlipState,
     canRegionShuffle,
     canSwapHiddenTiles,
     canShuffleBoard
@@ -33,8 +34,6 @@ import { runFilteredStringArray } from './run-array-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
-
-const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
 
 type TileEntry = {
     index: number;
