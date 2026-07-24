@@ -17,6 +17,7 @@ import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { DAILY_MUTATOR_TABLE } from './mutators';
 import { applyRelicImmediate } from './relic-immediate-rules';
+import { hasRunRelic } from './relics';
 import { deriveDailyMutatorIndex, deriveDailyRunSeed, formatDailyDateKeyUtc } from './rng';
 import { createDungeonRunMapState } from './run-map';
 import { countFindablePairs } from './board-tile-generation-rules';
@@ -255,9 +256,9 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
 
     return {
         ...runWithRelics,
-        freeShuffleThisFloor: runWithRelics.relicIds.includes('first_shuffle_free_per_floor'),
+        freeShuffleThisFloor: hasRunRelic(runWithRelics, 'first_shuffle_free_per_floor'),
         regionShuffleFreeThisFloor:
-            runWithRelics.relicIds.includes('region_shuffle_free_first') ||
+            hasRunRelic(runWithRelics, 'region_shuffle_free_first') ||
             hasRewardPerk(runWithRelics, 'free_first_swap_per_floor'),
         timerState: createTimerState({ memorizeRemainingMs: memorizeMs })
     };
