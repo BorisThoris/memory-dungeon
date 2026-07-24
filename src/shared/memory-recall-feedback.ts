@@ -9,6 +9,7 @@ import {
     type Tile
 } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
+import { hasMutator } from './mutators';
 import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
 import { hasRunRelic, runMutatorIds, runRelicIds } from './relics';
 import { runStringArray } from './run-array-guards';
@@ -81,9 +82,6 @@ export interface MemorySymbolMap {
 }
 
 const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
-
-const hasRunMutator = (run: RunState, mutatorId: MutatorId): boolean =>
-    runMutatorIds(run.activeMutators).includes(mutatorId);
 
 const isMemorySolvablePair = (pairKey: string, tiles: readonly Tile[]): boolean =>
     tiles.length === 2 && !isSingletonUtilityPairKey(pairKey);
@@ -608,10 +606,10 @@ const MEMORY_ASSIST_RELIC_COPY: Partial<Record<RelicId, (run: RunState) => Memor
     memorize_under_short_memorize: (run) => ({
         id: 'memory-assist-short-memorize-answer',
         label: 'Short-study answer',
-        detail: hasRunMutator(run, 'short_memorize')
+        detail: hasMutator(run, 'short_memorize')
             ? 'This relic directly answers the active short-study tax.'
             : 'Banked for the next short-study floor so fast encoding stays fair.',
-        tone: hasRunMutator(run, 'short_memorize') ? 'reward' : 'stable'
+        tone: hasMutator(run, 'short_memorize') ? 'reward' : 'stable'
     }),
     peek_charge_plus_one: (run) => ({
         id: 'memory-assist-peek-charge',
