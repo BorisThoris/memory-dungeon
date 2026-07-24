@@ -1,6 +1,6 @@
-import { type RelicId, type RunState } from './contracts';
+import type { RunState } from './contracts';
 import { hasMutator } from './mutators';
-import { runRelicIds } from './relics';
+import { hasRunRelic } from './relics';
 import { runNonNegativeInteger } from './run-number-guards';
 
 export interface ScoreParasiteFloorAdvance {
@@ -8,9 +8,6 @@ export interface ScoreParasiteFloorAdvance {
     parasiteFloors: number;
     parasiteWardRemaining: number;
 }
-
-const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    runRelicIds(run.relicIds).includes(relicId);
 
 export const advanceScoreParasiteFloor = (run: RunState): ScoreParasiteFloorAdvance => {
     let parasiteFloors = runNonNegativeInteger(run.parasiteFloors) + 1;

@@ -4,21 +4,17 @@ import {
     MEMORIZE_DECAY_EVERY_N_LEVELS,
     MEMORIZE_MIN_MS,
     MEMORIZE_STEP_MS,
-    type RelicId,
     type Rating,
     type RunState,
     type Tile
 } from './contracts';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { hasMutator } from './mutators';
-import { runRelicIds } from './relics';
+import { hasRunRelic } from './relics';
 import { runNonNegativeInteger } from './run-number-guards';
 import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
 
 const ECHO_EXTRA_RESOLVE_MS = 380;
-
-const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    runRelicIds(run.relicIds).includes(relicId);
 
 /** Documented in `docs/BALANCE_NOTES.md` (presentation mutator match penalties). */
 export const PRESENTATION_MUTATOR_MATCH_PENALTIES = {

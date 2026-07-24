@@ -11,7 +11,7 @@ import {
     type TileTraitKind
 } from './contracts';
 import { normalizeRewardPerkIds } from './bonus-rewards';
-import { runRelicIds } from './relics';
+import { hasRunRelic } from './relics';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -77,9 +77,6 @@ export const TILE_TRAIT_MATCH_SCORE_BONUS: Partial<Record<TileTraitKind, number>
     cursed: 15,
     heavy: 35
 };
-
-const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    runRelicIds(run.relicIds).includes(relicId);
 
 export interface TileTraitEffectResult {
     comboShardGain: number;

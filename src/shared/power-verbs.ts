@@ -7,7 +7,7 @@ import {
     type MemoryTaxScore,
     type PerfectMemoryImpact
 } from './mechanic-feedback';
-import { runRelicIds } from './relics';
+import { hasRunRelic } from './relics';
 import { runArrayCount, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -71,7 +71,7 @@ const hasPeekTarget = (run: RunState): boolean =>
 
 const hasRowShufflePayment = (run: RunState): boolean =>
     runNonNegativeInteger(run.regionShuffleCharges) > 0 ||
-    (run.regionShuffleFreeThisFloor && runRelicIds(run.relicIds).includes('region_shuffle_free_first'));
+    (run.regionShuffleFreeThisFloor && hasRunRelic(run, 'region_shuffle_free_first'));
 
 const hiddenTileCount = (run: RunState): number =>
     (run.board?.tiles ?? []).filter((tile) => tile.state === 'hidden').length;

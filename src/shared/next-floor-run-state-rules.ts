@@ -2,7 +2,6 @@ import {
     INITIAL_REGION_SHUFFLE_CHARGES,
     type BoardState,
     type MutatorId,
-    type RelicId,
     type RunState
 } from './contracts';
 import { normalizeRewardPerkIds } from './bonus-rewards';
@@ -13,12 +12,9 @@ import {
 import { countFindablePairs } from './board-tile-generation-rules';
 import { createTimerState } from './run-timer-rules';
 import { calculateRating } from './scoring-rules';
-import { runRelicIds } from './relics';
+import { hasRunRelic } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
-
-const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    runRelicIds(run.relicIds).includes(relicId);
 
 export interface CreateNextFloorRunStateOptions {
     lives: number;

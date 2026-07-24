@@ -10,7 +10,7 @@ import {
 } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
 import { normalizeRecallFocus, tileHasRecallClue } from './recall-rules';
-import { runMutatorIds, runRelicIds } from './relics';
+import { hasRunRelic, runMutatorIds, runRelicIds } from './relics';
 import { runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { routeChoicesForResult } from './route-choice-rules';
@@ -84,9 +84,6 @@ const unique = <T>(values: readonly T[]): T[] => [...new Set(values)];
 
 const hasRunMutator = (run: RunState, mutatorId: MutatorId): boolean =>
     runMutatorIds(run.activeMutators).includes(mutatorId);
-
-const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    runRelicIds(run.relicIds).includes(relicId);
 
 const isMemorySolvablePair = (pairKey: string, tiles: readonly Tile[]): boolean =>
     tiles.length === 2 && !isSingletonUtilityPairKey(pairKey);

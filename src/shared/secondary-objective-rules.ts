@@ -6,13 +6,12 @@ import {
     FEATURED_OBJECTIVE_STREAK_MISS_DECAY,
     FLIP_PAR_BONUS_SCORE,
     GLASS_WITNESS_BONUS_SCORE,
-    type RelicId,
     type RunState,
     SCHOLAR_STYLE_FLOOR_BONUS_SCORE,
     type FeaturedObjectiveId
 } from './contracts';
 import { usesEndlessFloorSchedule } from './floor-mutator-schedule';
-import { runRelicIds } from './relics';
+import { hasRunRelic } from './relics';
 import { runNonNegativeInteger } from './run-number-guards';
 
 export const FEATURED_OBJECTIVE_BONUS_SCORES: Record<FeaturedObjectiveId, number> = {
@@ -26,9 +25,6 @@ export const getFeaturedObjectiveBonusScore = (id: FeaturedObjectiveId): number 
     FEATURED_OBJECTIVE_BONUS_SCORES[id];
 
 export const getFlipParLimit = (pairCount: number): number => Math.ceil(pairCount * 1.25) + 2;
-
-const hasRunRelic = (run: RunState, relicId: RelicId): boolean =>
-    runRelicIds(run.relicIds).includes(relicId);
 
 export const isFeaturedObjectiveCompleted = (
     run: RunState,
