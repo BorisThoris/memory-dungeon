@@ -70,7 +70,7 @@ export const calculateMismatchPenalty = (
     const contractFail = run.activeContract?.maxMismatches != null && tries > run.activeContract.maxMismatches;
     const lives = contractFail ? 0 : lostLife ? safeLives - 1 : safeLives;
     const status: RunStatus = lives <= 0 || contractFail ? 'gameOver' : 'playing';
-    const guardTokens = consumesGuardToken ? Math.max(0, safeGuardTokens - 1) : safeGuardTokens;
+    const guardTokens = consumesGuardToken ? decrementRunCounter(safeGuardTokens) : safeGuardTokens;
 
     return {
         consumesGuardToken,

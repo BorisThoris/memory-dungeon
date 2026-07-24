@@ -134,7 +134,7 @@ export const resolveTurnMatchProgress = ({
         mimicCacheGuardBitesThisFloor:
             runNonNegativeInteger(run.mimicCacheGuardBitesThisFloor) + (mimicCacheGuardBite ? 1 : 0),
         anchorSealChargesThisFloor:
-            Math.max(0, runNonNegativeInteger(run.anchorSealChargesThisFloor) - (anchorSealUsed ? 1 : 0)) +
+            decrementRunCounter(run.anchorSealChargesThisFloor, anchorSealUsed ? 1 : 0) +
             (anchorSealClaimed ? 1 : 0),
         anchorSealUsesThisFloor: runNonNegativeInteger(run.anchorSealUsesThisFloor) + (anchorSealUsed ? 1 : 0),
         loadedGatewayPlansThisFloor:

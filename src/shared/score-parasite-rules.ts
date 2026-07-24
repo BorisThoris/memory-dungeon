@@ -19,7 +19,7 @@ export const advanceScoreParasiteFloor = (run: RunState): ScoreParasiteFloorAdva
         if (parasiteWardRemaining > 0) {
             parasiteWardRemaining -= 1;
         } else {
-            lives = Math.max(0, lives - 1);
+            lives = decrementRunCounter(lives);
         }
     }
 

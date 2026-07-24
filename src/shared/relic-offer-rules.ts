@@ -48,7 +48,7 @@ export const openRelicOffer = (run: RunState): RunState => {
     }
     const picksRemaining = computeRelicOfferPickBudget(run);
     const bankedBonusPicks = runNonNegativeInteger(run.bonusRelicPicksNextOffer);
-    const consumedBankedBonusPicks = Math.min(bankedBonusPicks, Math.max(0, picksRemaining - 1));
+    const consumedBankedBonusPicks = Math.min(bankedBonusPicks, decrementRunCounter(picksRemaining));
     const favorBonusPicks = runNonNegativeInteger(run.favorBonusRelicPicksNextOffer);
     const consumedFavorBonusPicks = Math.min(favorBonusPicks, consumedBankedBonusPicks);
     const options = rollRelicOptions(run, tierIndex, cleared, 0);
