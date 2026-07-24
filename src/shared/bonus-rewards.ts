@@ -17,7 +17,7 @@ import {
     getRunInventoryItemPayoutRows,
     type RunInventoryItemId
 } from './run-inventory';
-import { runFilteredArray } from './run-array-guards';
+import { runFilteredArray, runFilteredStringArray } from './run-array-guards';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitBuildRewardRowsForBoard } from './trait-build-rewards';
@@ -252,9 +252,7 @@ const normalizeBonusRewardLedger = (ledger: BonusRewardLedger): BonusRewardLedge
     }
 
     return {
-        claimedInstanceIds: Array.isArray(ledger.claimedInstanceIds)
-            ? [...new Set(ledger.claimedInstanceIds.filter((id): id is string => typeof id === 'string'))]
-            : [],
+        claimedInstanceIds: [...new Set(runFilteredStringArray(ledger.claimedInstanceIds))],
         claimedRewardIds,
         discoveredSecretRooms: runNonNegativeInteger(ledger.discoveredSecretRooms),
         openedTreasureRooms: runNonNegativeInteger(ledger.openedTreasureRooms)

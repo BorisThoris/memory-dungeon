@@ -53,9 +53,7 @@ const gameOverRelicIds = (value: unknown): RelicId[] =>
     runFilteredArray(value, (id): id is RelicId => typeof id === 'string' && id in RELIC_CATALOG);
 
 const gameOverRewardPerkIds = (value: unknown): RewardPerkId[] =>
-    Array.isArray(value)
-        ? value.filter((id): id is RewardPerkId => typeof id === 'string')
-        : [];
+    runFilteredArray(value, (id): id is RewardPerkId => typeof id === 'string');
 
 const gameOverFlipHistory = (value: unknown): string[] => runFilteredStringArray(value);
 
