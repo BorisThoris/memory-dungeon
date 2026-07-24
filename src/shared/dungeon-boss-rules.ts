@@ -1,5 +1,6 @@
 import type { BoardState, DungeonBossId, DungeonRunNodeKind, EnemyHazardKind, EnemyHazardPattern, RunShopItemId } from './contracts';
 import { activeEnemyHazardsForBoard } from './enemy-hazard-board-rules';
+import { runArray } from './run-array-guards';
 
 export const DUNGEON_BOSS_DEFEAT_SCORE = 70;
 
@@ -166,7 +167,7 @@ export const getDungeonBossPressureRule = (
 const dungeonBossEnemyHazards = (
     board: { enemyHazards?: readonly { bossId?: DungeonBossId | null; state?: string | null }[] } | null | undefined
 ): readonly { bossId?: DungeonBossId | null; state?: string | null }[] =>
-    Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
+    runArray(board?.enemyHazards);
 
 export const getActiveDungeonBossPressureRule = (
     board:

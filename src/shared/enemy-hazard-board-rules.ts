@@ -4,6 +4,7 @@ import {
     WILD_PAIR_KEY,
     isSingletonUtilityPairKey
 } from './tile-identity';
+import { runArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 
 const isEnemyHazardRelevantPairTile = (tile: Tile): boolean =>
@@ -12,7 +13,7 @@ const isEnemyHazardRelevantPairTile = (tile: Tile): boolean =>
     tile.pairKey !== WILD_PAIR_KEY;
 
 export const enemyHazardsForBoard = (board: Pick<BoardState, 'enemyHazards'> | null | undefined): EnemyHazardState[] =>
-    Array.isArray(board?.enemyHazards) ? board.enemyHazards : [];
+    runArray(board?.enemyHazards);
 
 export const enemyHazardEligibleTiles = (tiles: readonly Tile[]): Tile[] =>
     tiles.filter(
