@@ -1,3 +1,5 @@
+import { runFilteredArray } from '../../shared/run-array-guards';
+
 export type TraitInteractionLaneId = 'shard' | 'guard' | 'tool' | 'risk' | 'block' | 'recall' | 'score';
 
 export interface TraitInteractionLaneMapEntry {
@@ -70,9 +72,7 @@ export const getTraitInteractionLaneId = (line: string): TraitInteractionLaneId 
 export const buildTraitInteractionLaneMap = (
     lines: readonly string[] | undefined
 ): TraitInteractionLaneMapEntry[] => {
-    const normalizedLines = Array.isArray(lines)
-        ? lines.filter((line): line is string => typeof line === 'string' && line.trim().length > 0)
-        : [];
+    const normalizedLines = runFilteredArray(lines, (line): line is string => typeof line === 'string' && line.trim().length > 0);
     if (normalizedLines.length === 0) {
         return [];
     }

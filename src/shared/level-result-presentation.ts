@@ -1,6 +1,7 @@
 import type { FloorIdentityContract } from './boss-encounters';
 import type { LevelResult } from './contracts';
 import type { MechanicTokenId } from './mechanic-feedback';
+import { runFilteredArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 
 export type FloorClearCausalityGroup = 'performance' | 'encounter' | 'objective' | 'assist' | 'reward' | 'route' | 'hazard';
@@ -44,14 +45,12 @@ const withAtmosphere = (mechanicDetail: string, atmosphere: string): string => `
 type LevelResultRouteChoice = NonNullable<LevelResult['routeChoices']>[number];
 
 const levelResultRouteChoices = (value: unknown): LevelResultRouteChoice[] =>
-    Array.isArray(value)
-        ? value.filter((choice): choice is LevelResultRouteChoice => {
-              if (typeof choice !== 'object' || choice == null) {
-                  return false;
-              }
-              return typeof (choice as { label?: unknown }).label === 'string';
-          })
-        : [];
+    runFilteredArray(value, (choice): choice is LevelResultRouteChoice => {
+        if (typeof choice !== 'object' || choice == null) {
+            return false;
+        }
+        return typeof (choice as { label?: unknown }).label === 'string';
+    });
 
 export const getFloorClearCausalityRows = (
     result: LevelResult,

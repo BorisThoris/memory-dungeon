@@ -3,6 +3,7 @@ import { getMatchFloaterAnchorTileIds, getMismatchFloaterAnchorTileIds } from '.
 import { routeSpecialLabel, routeSpecialRewardLine } from '../../shared/route-world';
 import { formatTileTraitInteractionTags, resolveTileTraitEffects } from '../../shared/tile-trait-rules';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
+import { runArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { detectClaimedFindableKind } from '../copy/hudActionFeedback';
@@ -727,9 +728,7 @@ const buildMatchScorePopPayoffLadder = ({
 };
 
 const matchScorePopLaneCount = (payoffLaneMap: readonly MatchScorePopPayoffLaneMapEntry[] | undefined): number =>
-    Array.isArray(payoffLaneMap)
-        ? payoffLaneMap.reduce((total, lane) => total + runNonNegativeInteger(lane.count), 0)
-        : 0;
+    runArray<MatchScorePopPayoffLaneMapEntry>(payoffLaneMap).reduce((total, lane) => total + runNonNegativeInteger(lane.count), 0);
 
 export const buildMatchScorePopCrescendo = ({
     chainDepth,

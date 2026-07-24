@@ -1,5 +1,5 @@
 import type { RunState } from '../../shared/contracts';
-import { runArrayCount, runFilteredStringArray } from '../../shared/run-array-guards';
+import { runArray, runArrayCount, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
@@ -580,9 +580,10 @@ const playRewardPerkPopSfx = (gain: number, perkProcCount: number): void => {
 };
 
 const countPayoffLanesFromPayload = (payload: MatchPayoffSfxPayload): number => {
-    const explicitLaneCount = Array.isArray(payload.payoffLaneMap)
-        ? payload.payoffLaneMap.reduce((sum, lane) => sum + runNonNegativeInteger(lane.count), 0)
-        : 0;
+    const explicitLaneCount = runArray<{ count: number }>(payload.payoffLaneMap).reduce(
+        (sum, lane) => sum + runNonNegativeInteger(lane.count),
+        0
+    );
     if (explicitLaneCount > 0) {
         return explicitLaneCount;
     }
