@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
     decrementRunCounter,
     runFiniteNumber,
+    runFiniteNumberOrFallback,
     runFiniteNumberOrNull,
+    runFiniteFlooredIntegerDelta,
     runFiniteIntegerDelta,
     runNonNegativeInteger,
     runNonNegativeIntegerOrFallback,
@@ -21,6 +23,13 @@ describe('run number guards', () => {
         expect(runFiniteNumberOrNull(null)).toBeNull();
     });
 
+    it('preserves the exact fallback when runtime numbers are malformed', () => {
+        expect(runFiniteNumberOrFallback(2.9, 1)).toBe(2.9);
+        expect(runFiniteNumberOrFallback(-1.9, 1)).toBe(-1.9);
+        expect(runFiniteNumberOrFallback(Number.NaN, 1.5)).toBe(1.5);
+        expect(runFiniteNumberOrFallback(Number.POSITIVE_INFINITY, Number.NaN)).toBeNaN();
+    });
+
     it('normalizes runtime counters to non-negative integers', () => {
         expect(runNonNegativeInteger(2.9)).toBe(2);
         expect(runNonNegativeInteger(-1.9)).toBe(0);
@@ -33,6 +42,13 @@ describe('run number guards', () => {
         expect(runFiniteIntegerDelta(-1.9)).toBe(-1);
         expect(runFiniteIntegerDelta(Number.NaN)).toBe(0);
         expect(runFiniteIntegerDelta(Number.POSITIVE_INFINITY)).toBe(0);
+    });
+
+    it('normalizes signed integer deltas with floor semantics', () => {
+        expect(runFiniteFlooredIntegerDelta(2.9)).toBe(2);
+        expect(runFiniteFlooredIntegerDelta(-1.9)).toBe(-2);
+        expect(runFiniteFlooredIntegerDelta(Number.NaN)).toBe(0);
+        expect(runFiniteFlooredIntegerDelta(Number.POSITIVE_INFINITY)).toBe(0);
     });
 
     it('uses a normalized fallback when runtime counters are malformed', () => {

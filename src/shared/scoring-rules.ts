@@ -11,7 +11,7 @@ import {
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { hasMutator } from './mutators';
 import { hasRunRelic } from './relics';
-import { runNonNegativeInteger } from './run-number-guards';
+import { runFiniteNumber, runFiniteNumberOrFallback, runNonNegativeInteger } from './run-number-guards';
 import { DECOY_PAIR_KEY, isWildPairKey } from './tile-identity';
 
 const ECHO_EXTRA_RESOLVE_MS = 380;
@@ -79,9 +79,9 @@ export const calculateMatchScore = (
     currentStreak: number,
     multiplier: number = 1
 ): number => {
-    const levelOffset = typeof level === 'number' && Number.isFinite(level) ? Math.max(level - 1, 0) : 0;
-    const streak = typeof currentStreak === 'number' && Number.isFinite(currentStreak) ? Math.max(currentStreak, 0) : 0;
-    const scoreMultiplier = typeof multiplier === 'number' && Number.isFinite(multiplier) ? Math.max(0, multiplier) : 1;
+    const levelOffset = Math.max(runFiniteNumber(level) - 1, 0);
+    const streak = Math.max(runFiniteNumber(currentStreak), 0);
+    const scoreMultiplier = Math.max(0, runFiniteNumberOrFallback(multiplier, 1));
     return Math.floor((20 + 5 * levelOffset + 10 * streak) * scoreMultiplier);
 };
 
