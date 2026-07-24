@@ -17,6 +17,7 @@ import { getFloorClearCausalityRows } from '../../shared/level-result-presentati
 import { getFloorIdentityContract } from '../../shared/boss-encounters';
 import { getPlayableOnboardingStep, type OnboardingStepId } from '../../shared/playable-onboarding';
 import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
+import { runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import {
     canOfferEndlessRiskWager
@@ -266,8 +267,7 @@ const isMatchPayoffLane = (value: unknown): value is MatchScorePopPayoffLaneMapE
 const matchPayoffLaneMap = (value: unknown): MatchScorePopPayoffLaneMapEntry[] =>
     Array.isArray(value) ? value.filter(isMatchPayoffLane) : [];
 
-const matchPayoffLadderLanes = (value: unknown): string[] =>
-    Array.isArray(value) ? value.filter((lane): lane is string => typeof lane === 'string') : [];
+const matchPayoffLadderLanes = (value: unknown): string[] => runFilteredStringArray(value);
 
 const MATCH_CHAIN_REWARD_TONES: readonly ChainRewardForecastCue['tone'][] = ['reward', 'guard', 'heal'];
 const MATCH_CHAIN_REWARD_URGENCIES: readonly ChainRewardForecastCue['urgency'][] = ['next', 'soon', 'later'];
@@ -307,8 +307,7 @@ const isMatchChainRewardForecastCue = (value: unknown): value is ChainRewardFore
 const matchChainRewardForecastCues = (value: unknown): ChainRewardForecastCue[] =>
     Array.isArray(value) ? value.filter(isMatchChainRewardForecastCue) : [];
 
-const matchTraitInteractionTexts = (value: unknown): string[] =>
-    Array.isArray(value) ? value.filter((text): text is string => typeof text === 'string') : [];
+const matchTraitInteractionTexts = (value: unknown): string[] => runFilteredStringArray(value);
 
 const mismatchRecoveryLaneMapAttr = (laneMap: readonly MismatchFloaterRecoveryLaneMapEntry[] | null): string =>
     laneMap?.map((lane) => `${lane.id}:${lane.count}`).join('>') ?? 'none';

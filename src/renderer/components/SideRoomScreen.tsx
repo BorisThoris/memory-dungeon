@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import type { RouteNodeType, RouteSideRoomState, TileTraitKind } from '../../shared/contracts';
+import { runFilteredStringArray } from '../../shared/run-array-guards';
 import { getTraitBuildRewardRows } from '../../shared/trait-build-rewards';
 import {
     playUiBackSfx,
@@ -22,8 +23,7 @@ type SideRoomChoice = NonNullable<RouteSideRoomState['choices']>[number];
 
 const sideRoomChoices = (value: RouteSideRoomState['choices'] | unknown): SideRoomChoice[] => (Array.isArray(value) ? value : []);
 
-const sideRoomTraitBuildLabels = (value: SideRoomChoice['traitBuildLabels'] | unknown): string[] =>
-    Array.isArray(value) ? value.filter((label): label is string => typeof label === 'string') : [];
+const sideRoomTraitBuildLabels = (value: SideRoomChoice['traitBuildLabels'] | unknown): string[] => runFilteredStringArray(value);
 
 const sideRoomNodeKindStamp = (sideRoom: RouteSideRoomState): string => {
     if (sideRoom.nodeKind) {

@@ -6,6 +6,7 @@ import type { MutatorId, RelicId, RewardPerkId, RunState } from '../../shared/co
 import { buildDailyResultsLoopRows } from '../../shared/daily-archive';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { buildRunJournalEntry } from '../../shared/run-history';
+import { runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
@@ -60,8 +61,7 @@ const gameOverRewardPerkIds = (value: unknown): RewardPerkId[] =>
         ? value.filter((id): id is RewardPerkId => typeof id === 'string')
         : [];
 
-const gameOverFlipHistory = (value: unknown): string[] =>
-    Array.isArray(value) ? value.filter((id): id is string => typeof id === 'string') : [];
+const gameOverFlipHistory = (value: unknown): string[] => runFilteredStringArray(value);
 
 const runModeIdentityLine = (summary: NonNullable<RunState['lastRunSummary']>): string => {
     if (summary.activeContract?.noShuffle) {
