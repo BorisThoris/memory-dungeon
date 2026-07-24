@@ -16,7 +16,7 @@ import {
 import {
     clearResolveState
 } from './run-timer-rules';
-import { runNonNegativeInteger } from './run-number-guards';
+import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { calculateRating } from './scoring-rules';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { rotateRunShiftingSpotlight } from './shifting-spotlight-rules';
@@ -171,11 +171,11 @@ export const resolveMismatchTurnTransition = ({
         hazardFragileCacheBreaksThisFloor:
             runNonNegativeInteger(run.hazardFragileCacheBreaksThisFloor) + runNonNegativeInteger(fragileBreak.brokenCount),
         safeHazardWardChargesThisFloor:
-            Math.max(0, runNonNegativeInteger(run.safeHazardWardChargesThisFloor) - (wardedHazards.wardChargeSpent ? 1 : 0)),
+            decrementRunCounter(run.safeHazardWardChargesThisFloor, wardedHazards.wardChargeSpent ? 1 : 0),
         safeHazardWardsUsedThisFloor:
             runNonNegativeInteger(run.safeHazardWardsUsedThisFloor) + (wardedHazards.wardUsed ? 1 : 0),
         pendingMemorizeBonusMs,
-        peekCharges: Math.max(0, runNonNegativeInteger(run.peekCharges) - runNonNegativeInteger(traitPenalty.peekChargeLoss)),
+        peekCharges: decrementRunCounter(run.peekCharges, traitPenalty.peekChargeLoss),
         stickyBlockIndex: null,
         recallFocus: decreaseRecallFocus(run),
         recallMistakesThisFloor:

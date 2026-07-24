@@ -8,7 +8,7 @@ import {
 import { COMBO_SHARD_STREAK_STEP, applyComboShardGain } from './combo-shard-rules';
 import type { DungeonMatchReward } from './dungeon-match-reward-rules';
 import type { RouteCardReward } from './route-card-reward-rules';
-import { runNonNegativeInteger } from './run-number-guards';
+import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export interface ResolvedMatchSurvivalRewardInput {
@@ -51,22 +51,23 @@ export const calculateResolvedMatchSurvivalReward = ({
     const stats = normalizeSessionStats(run.stats);
     const guardTokenGain =
         meditation || safeCurrentStreak <= 0 || safeCurrentStreak % COMBO_GUARD_STREAK_STEP !== 0 ? 0 : 1;
-    const guardTokensBeforeRewards =
-        Math.max(0, stats.guardTokens - (mimicCacheGuardBite ? 1 : 0));
+    const guardTokensBeforeRewards = decrementRunCounter(stats.guardTokens, mimicCacheGuardBite ? 1 : 0);
+    const comboShardsBeforeRewards = decrementRunCounter(stats.comboShards, catalystAltarUpgraded ? 1 : 0);
+    const livesBeforeComboReward = decrementRunCounter(safeLives, mimicCacheBite && !mimicCacheGuardBite ? 1 : 0);
     const guardTokens = Math.min(
         MAX_GUARD_TOKENS,
         guardTokensBeforeRewards + guardTokenGain + routeGuardTokens + dungeonGuardTokens
     );
     const comboShardReward = meditation
         ? applyComboShardGain(
-              Math.max(0, stats.comboShards - (catalystAltarUpgraded ? 1 : 0)),
-              mimicCacheFatalBite ? 0 : Math.max(0, safeLives - (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0)),
+              comboShardsBeforeRewards,
+              mimicCacheFatalBite ? 0 : livesBeforeComboReward,
               safeFindableComboShardGain + routeComboShards + dungeonComboShards,
               false
           )
         : applyComboShardGain(
-              Math.max(0, stats.comboShards - (catalystAltarUpgraded ? 1 : 0)),
-              mimicCacheFatalBite ? 0 : Math.max(0, safeLives - (mimicCacheBite && !mimicCacheGuardBite ? 1 : 0)),
+              comboShardsBeforeRewards,
+              mimicCacheFatalBite ? 0 : livesBeforeComboReward,
               (safeCurrentStreak > 0 && safeCurrentStreak % COMBO_SHARD_STREAK_STEP === 0 ? 1 : 0) +
                   safeFindableComboShardGain +
                   routeComboShards +
