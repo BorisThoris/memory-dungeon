@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+    decrementRunCounter,
     runFiniteIntegerDelta,
     runNonNegativeInteger,
     runNonNegativeIntegerOrFallback,
@@ -39,5 +40,13 @@ describe('run number guards', () => {
         expect(runNonNegativeIntegerOrNull(-1.9)).toBe(0);
         expect(runNonNegativeIntegerOrNull(Number.NaN)).toBeNull();
         expect(runNonNegativeIntegerOrNull(null)).toBeNull();
+    });
+
+    it('decrements runtime counters without going below zero', () => {
+        expect(decrementRunCounter(3.9)).toBe(2);
+        expect(decrementRunCounter(3, 2.9)).toBe(1);
+        expect(decrementRunCounter(1, 4)).toBe(0);
+        expect(decrementRunCounter(Number.NaN)).toBe(0);
+        expect(decrementRunCounter(3, Number.POSITIVE_INFINITY)).toBe(3);
     });
 });
