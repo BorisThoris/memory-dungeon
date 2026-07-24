@@ -21,7 +21,7 @@ import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
 import { utcDateKeyMinusOneDay } from './rng';
 import { runArray, runFilteredArray } from './run-array-guards';
 import { isRunRecord } from './run-record-guards';
-import { runNonNegativeIntegerOrFallback } from './run-number-guards';
+import { runFiniteNumberOrFallback, runNonNegativeIntegerOrFallback } from './run-number-guards';
 import { RELIC_POOL } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 import { evaluateSaveMigrationGate, isRecognizedSaveSchemaVersion } from './version-gate';
@@ -172,9 +172,7 @@ const finiteClampedNumber = (
     fallback: number,
     range: { readonly min: number; readonly max: number }
 ): number =>
-    typeof value === 'number' && Number.isFinite(value)
-        ? Math.min(range.max, Math.max(range.min, value))
-        : fallback;
+    Math.min(range.max, Math.max(range.min, runFiniteNumberOrFallback(value, fallback)));
 
 const normalizeDailyDateKeyUtc = (value: unknown): string | null => {
     if (typeof value !== 'string') {
