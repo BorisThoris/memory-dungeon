@@ -6,7 +6,7 @@ import type { MutatorId, RelicId, RewardPerkId, RunState } from '../../shared/co
 import { buildDailyResultsLoopRows } from '../../shared/daily-archive';
 import { getGameOverNextRunRows } from '../../shared/game-over-next-run';
 import { buildRunJournalEntry } from '../../shared/run-history';
-import { runFilteredStringArray } from '../../shared/run-array-guards';
+import { runFilteredArray, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { useShallow } from 'zustand/react/shallow';
 import { UI_ART } from '../assets/ui';
@@ -47,14 +47,10 @@ const mutatorLabel = (id: MutatorId): string => MUTATOR_CATALOG[id].title;
 const relicLabel = (id: RelicId): string => RELIC_CATALOG[id].title;
 
 const gameOverMutatorIds = (value: unknown): MutatorId[] =>
-    Array.isArray(value)
-        ? value.filter((id): id is MutatorId => typeof id === 'string' && id in MUTATOR_CATALOG)
-        : [];
+    runFilteredArray(value, (id): id is MutatorId => typeof id === 'string' && id in MUTATOR_CATALOG);
 
 const gameOverRelicIds = (value: unknown): RelicId[] =>
-    Array.isArray(value)
-        ? value.filter((id): id is RelicId => typeof id === 'string' && id in RELIC_CATALOG)
-        : [];
+    runFilteredArray(value, (id): id is RelicId => typeof id === 'string' && id in RELIC_CATALOG);
 
 const gameOverRewardPerkIds = (value: unknown): RewardPerkId[] =>
     Array.isArray(value)

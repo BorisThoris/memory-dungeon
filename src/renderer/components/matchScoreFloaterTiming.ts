@@ -1,3 +1,5 @@
+import { runArrayCount } from '../../shared/run-array-guards';
+
 /** Single source for match-score floater animation / dismiss timing (ms). */
 export const MATCH_SCORE_FLOAT_MS_FULL = 780;
 export const MATCH_SCORE_FLOAT_MS_REDUCED = 500;
@@ -12,8 +14,6 @@ type MatchScoreFloatTimingProfile = {
     payoffLaneMap?: readonly unknown[] | null;
     rewardBurst?: unknown;
 };
-
-const payoffLaneMapCount = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
 
 export function matchScoreFloatDurationMs(
     reducedMotion: boolean,
@@ -35,7 +35,7 @@ export function matchScoreFloatDurationMs(
                 : tier === 'prime'
                   ? 150
                   : 0;
-    const laneBonus = Math.min(payoffLaneMapCount(profile.payoffLaneMap), 4) * 70;
+    const laneBonus = Math.min(runArrayCount(profile.payoffLaneMap), 4) * 70;
     const milestoneBonus = profile.chainMilestone ? 120 : 0;
     const rewardBonus = profile.rewardBurst ? 120 : 0;
     const motionScale = reducedMotion ? 0.62 : 1;
