@@ -1,7 +1,7 @@
 import type { RunState } from './contracts';
 import { hasMutator } from './mutators';
 import { hasRunRelic } from './relics';
-import { runNonNegativeInteger } from './run-number-guards';
+import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
 export interface ScoreParasiteFloorAdvance {
     lives: number;
@@ -39,7 +39,7 @@ export const getParasiteFloorsAfterFeaturedObjectiveClear = (
         hasRunRelic(run, 'parasite_ledger') &&
         hasMutator(run, 'score_parasite')
     ) {
-        return Math.max(0, runNonNegativeInteger(run.parasiteFloors) - 1);
+        return decrementRunCounter(run.parasiteFloors);
     }
 
     return runNonNegativeInteger(run.parasiteFloors);

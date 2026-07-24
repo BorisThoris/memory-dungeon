@@ -9,7 +9,7 @@ import { clearDungeonCardFields } from './dungeon-enemy-card-rules';
 import { defeatEnemyHazardsForFloorClear } from './dungeon-enemy-hazard-rules';
 import { gainRelicFavor } from './relic-favor-rules';
 import { createRouteCardPlanForRoute } from './route-card-plan-rules';
-import { runNonNegativeInteger } from './run-number-guards';
+import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import {
     EXIT_PAIR_KEY,
@@ -175,7 +175,7 @@ export const createDungeonExitActivationTransition = (
             ...objectiveReward.run,
             dungeonKeys: nextKeys,
             dungeonMasterKeys: activationSpend.spendsMasterKey
-                ? Math.max(0, runNonNegativeInteger(run.dungeonMasterKeys) - 1)
+                ? decrementRunCounter(run.dungeonMasterKeys)
                 : runNonNegativeInteger(run.dungeonMasterKeys),
             dungeonEnemiesDefeated:
                 runNonNegativeInteger(objectiveReward.run.dungeonEnemiesDefeated) +

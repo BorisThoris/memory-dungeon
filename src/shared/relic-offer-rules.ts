@@ -12,7 +12,7 @@ import {
     skipRelicOfferMilestone
 } from './relics';
 import { applyRelicImmediate } from './relic-immediate-rules';
-import { runNonNegativeInteger } from './run-number-guards';
+import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
 export const MAX_RELIC_PICKS_PER_OFFER = 3;
 
@@ -101,7 +101,7 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
     };
     next = applyRelicImmediate(next, relicId);
 
-    const remainingAfter = Math.max(0, runNonNegativeInteger(offer.picksRemaining) - 1);
+    const remainingAfter = decrementRunCounter(offer.picksRemaining);
 
     if (remainingAfter > 0) {
         const cleared = run.lastLevelResult!.level;

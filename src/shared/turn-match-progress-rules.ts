@@ -1,5 +1,5 @@
 import type { RunState } from './contracts';
-import { runNonNegativeInteger } from './run-number-guards';
+import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
 export interface TurnMatchProgressResult {
     cursedMatchedEarlyThisFloor: boolean;
@@ -146,7 +146,7 @@ export const resolveTurnMatchProgress = ({
         pinLatticeRewardsThisFloor:
             runNonNegativeInteger(run.pinLatticeRewardsThisFloor) + (pinLatticeRewarded ? 1 : 0),
         parasiteFloors: parasiteVesselConverted
-            ? Math.max(0, runNonNegativeInteger(run.parasiteFloors) - 1)
+            ? decrementRunCounter(run.parasiteFloors)
             : runNonNegativeInteger(run.parasiteFloors),
         dungeonEnemiesDefeated: runNonNegativeInteger(run.dungeonEnemiesDefeated) + safeDefeatedDungeonEnemies,
         dungeonEnemiesDefeatedThisFloor:

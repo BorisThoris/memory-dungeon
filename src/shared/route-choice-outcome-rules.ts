@@ -18,7 +18,7 @@ import {
     routeChoicesForResult
 } from './route-choice-rules';
 import { createRouteCardPlan } from './route-card-plan-rules';
-import { runNonNegativeInteger } from './run-number-guards';
+import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import {
     revealDungeonChoices,
     selectDungeonNode
@@ -211,7 +211,7 @@ export const applyRouteChoiceOutcome = (run: RunState, choiceId: string): RouteC
     }
     if (choice.routeType === 'greed') {
         const scored = addRouteScore(run, ROUTE_GREED_SCORE_REWARD);
-        const lives = Math.max(0, runNonNegativeInteger(scored.lives) - 1);
+        const lives = decrementRunCounter(scored.lives);
         const nextRun = {
             ...scored,
             lives,

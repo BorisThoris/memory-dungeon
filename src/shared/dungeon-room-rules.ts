@@ -14,7 +14,7 @@ import {
 } from './dungeon-room-targeting-rules';
 import { addRunDungeonKey } from './dungeon-key-rules';
 import { gainRelicFavor } from './relic-favor-rules';
-import { runNonNegativeInteger } from './run-number-guards';
+import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import {
     ROOM_PAIR_KEY,
@@ -135,7 +135,7 @@ export const revealDungeonRoom = (run: RunState, tileId: string): RunState => {
             openedLockedCache = true;
             nextRun = {
                 ...gainDungeonRoomScore(run, DUNGEON_LOCKED_ROOM_CACHE_SCORE_REWARD),
-                dungeonMasterKeys: Math.max(0, runNonNegativeInteger(run.dungeonMasterKeys) - 1),
+                dungeonMasterKeys: decrementRunCounter(run.dungeonMasterKeys),
                 shopGold: runNonNegativeInteger(run.shopGold) + DUNGEON_LOCKED_ROOM_CACHE_GOLD_REWARD
             };
         }

@@ -29,7 +29,7 @@ import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import { hasRunRelic } from './relics';
-import { runNonNegativeInteger } from './run-number-guards';
+import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
 
@@ -99,7 +99,7 @@ export const applyDestroyPairTransition = (
         ...run,
         powersUsedThisRun: true,
         destroyUsedThisFloor: true,
-        destroyPairCharges: Math.max(0, runNonNegativeInteger(run.destroyPairCharges) - 1),
+        destroyPairCharges: decrementRunCounter(run.destroyPairCharges),
         pinnedTileIds,
         board: spunDestroy.board,
         shiftingSpotlightNonce: spunDestroy.shiftingSpotlightNonce,
