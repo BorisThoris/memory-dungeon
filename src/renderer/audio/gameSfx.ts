@@ -1,4 +1,5 @@
 import type { RunState } from '../../shared/contracts';
+import { runArrayCount, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
@@ -260,8 +261,6 @@ const hasResolvedResourceReward = (before: RunState, after: RunState): boolean =
     );
 };
 
-const arrayLength = (value: unknown): number => (Array.isArray(value) ? value.length : 0);
-
 const tileTraitCountTotal = (value: unknown): number => {
     if (value == null || typeof value !== 'object') {
         return 0;
@@ -274,15 +273,13 @@ const resolvedTraitRouteProgressCount = (before: RunState, after: RunState): num
     Math.max(
         0,
         finiteNumber(after.traitRouteObjectiveProgressThisFloor) - finiteNumber(before.traitRouteObjectiveProgressThisFloor),
-        arrayLength(after.traitRouteObjectiveTriggeredTagsThisFloor) - arrayLength(before.traitRouteObjectiveTriggeredTagsThisFloor)
+        runArrayCount(after.traitRouteObjectiveTriggeredTagsThisFloor) - runArrayCount(before.traitRouteObjectiveTriggeredTagsThisFloor)
     );
 
 const resolvedRewardPerkProcCount = (before: RunState, after: RunState): number => {
-    const beforeTags = new Set(
-        Array.isArray(before.traitRouteObjectiveTriggeredTagsThisFloor) ? before.traitRouteObjectiveTriggeredTagsThisFloor : []
-    );
-    return (Array.isArray(after.traitRouteObjectiveTriggeredTagsThisFloor) ? after.traitRouteObjectiveTriggeredTagsThisFloor : []).filter(
-        (tag) => typeof tag === 'string' && tag.startsWith('reward-perk:') && !beforeTags.has(tag)
+    const beforeTags = new Set(runFilteredStringArray(before.traitRouteObjectiveTriggeredTagsThisFloor));
+    return runFilteredStringArray(after.traitRouteObjectiveTriggeredTagsThisFloor).filter(
+        (tag) => tag.startsWith('reward-perk:') && !beforeTags.has(tag)
     ).length;
 };
 
