@@ -19,6 +19,7 @@ import { z } from 'zod';
 import { COSMETIC_IDS } from './cosmetic-ids';
 import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
 import { utcDateKeyMinusOneDay } from './rng';
+import { runArray, runFilteredArray } from './run-array-guards';
 import { runNonNegativeIntegerOrFallback } from './run-number-guards';
 import { RELIC_POOL } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -268,11 +269,8 @@ const normalizePuzzleCompletions = (input: unknown): NonNullable<PlayerStatsPers
 };
 
 const normalizeUnlocks = (input: unknown): string[] => {
-    if (!Array.isArray(input)) {
-        return [];
-    }
     const out = new Set<string>();
-    for (const value of input.slice(0, PERSISTED_COLLECTION_LIMITS.inspectedEntries)) {
+    for (const value of runArray<unknown>(input).slice(0, PERSISTED_COLLECTION_LIMITS.inspectedEntries)) {
         if (
             typeof value === 'string' &&
             value.length <= PERSISTED_COLLECTION_LIMITS.entryTextLength &&
@@ -288,11 +286,8 @@ const normalizeUnlocks = (input: unknown): string[] => {
 };
 
 const normalizeStringLedger = (input: unknown, limit: number): string[] => {
-    if (!Array.isArray(input)) {
-        return [];
-    }
     const out = new Set<string>();
-    for (const value of input.slice(0, PERSISTED_COLLECTION_LIMITS.inspectedEntries)) {
+    for (const value of runArray<unknown>(input).slice(0, PERSISTED_COLLECTION_LIMITS.inspectedEntries)) {
         if (
             typeof value === 'string' &&
             value.length > 0 &&
@@ -362,10 +357,10 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
     const dailyDateKeyUtc = normalizeDailyDateKeyUtc(source.dailyDateKeyUtc);
     const activeContract = normalizeContractFlags(source.activeContract);
     const activeMutators = Array.isArray(source.activeMutators)
-        ? [...new Set(source.activeMutators.filter(isMutatorId))]
+        ? [...new Set(runFilteredArray(source.activeMutators, isMutatorId))]
         : undefined;
     const relicIds = Array.isArray(source.relicIds)
-        ? [...new Set(source.relicIds.filter(isRelicId))]
+        ? [...new Set(runFilteredArray(source.relicIds, isRelicId))]
         : undefined;
     const startingLoadoutId = isStartingLoadoutId(source.startingLoadoutId)
         ? source.startingLoadoutId
