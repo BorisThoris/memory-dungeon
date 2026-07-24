@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { runArrayCount, runStringArray } from './run-array-guards';
+import { runArrayCount, runFilteredStringArray, runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 
 describe('run array guards', () => {
     it('passes through runtime string arrays and treats malformed values as empty', () => {
@@ -14,5 +14,12 @@ describe('run array guards', () => {
         expect(runArrayCount(['a', 'b'])).toBe(2);
         expect(runArrayCount({ length: Number.POSITIVE_INFINITY })).toBe(0);
         expect(runArrayCount(Number.NaN)).toBe(0);
+    });
+
+    it('filters runtime arrays to string values', () => {
+        expect(runFilteredStringArray(['a', 1, 'b', null])).toEqual(['a', 'b']);
+        expect(runFilteredStringArray(Number.NaN)).toEqual([]);
+        expect(runFilteredStringArrayOrNull(['a', 1, 'b', null])).toEqual(['a', 'b']);
+        expect(runFilteredStringArrayOrNull(Number.NaN)).toBeNull();
     });
 });

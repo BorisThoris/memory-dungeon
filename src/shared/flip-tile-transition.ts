@@ -8,13 +8,11 @@ import { EXIT_PAIR_KEY, ROOM_PAIR_KEY, SHOP_PAIR_KEY } from './tile-identity';
 import { computeFlipResolveDelayMs, tilesArePairMatch } from './scoring-rules';
 import { clearResolveState } from './run-timer-rules';
 import { revealDungeonExit, revealDungeonShop } from './dungeon-reveal-rules';
+import { runFilteredStringArrayOrNull } from './run-array-guards';
 
 interface FlipTileTransitionDeps {
     finalizeLevel: (run: RunState, board: BoardState) => RunState;
 }
-
-const stringArray = (value: unknown): string[] | null =>
-    Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : null;
 
 export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDeps) =>
     (run: RunState, tileId: string): RunState => {
@@ -22,7 +20,7 @@ export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDe
         if (!runAfterFinalPairCleanup.board) {
             return run;
         }
-        const cleanupFlippedTileIds = stringArray(runAfterFinalPairCleanup.board.flippedTileIds);
+        const cleanupFlippedTileIds = runFilteredStringArrayOrNull(runAfterFinalPairCleanup.board.flippedTileIds);
 
         const gambitThirdWhileResolving =
             runAfterFinalPairCleanup.status === 'resolving' &&
@@ -35,7 +33,7 @@ export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDe
         }
 
         const runAfterFlashClear =
-            (stringArray(runAfterFinalPairCleanup.flashPairRevealedTileIds)?.length ?? 0) > 0
+            (runFilteredStringArrayOrNull(runAfterFinalPairCleanup.flashPairRevealedTileIds)?.length ?? 0) > 0
                 ? { ...runAfterFinalPairCleanup, flashPairRevealedTileIds: [] }
                 : runAfterFinalPairCleanup;
         const boardBeforeLastPairFailsafe = runAfterFlashClear.board;
@@ -47,7 +45,7 @@ export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDe
         if (!board) {
             return runAfterLastPairFailsafe;
         }
-        const currentFlippedTileIds = stringArray(board.flippedTileIds);
+        const currentFlippedTileIds = runFilteredStringArrayOrNull(board.flippedTileIds);
         if (!currentFlippedTileIds) {
             return runAfterLastPairFailsafe;
         }
@@ -95,12 +93,12 @@ export const createFlipTileTransition = ({ finalizeLevel }: FlipTileTransitionDe
         if (!revealedBoard) {
             return runAfterDungeonReveal;
         }
-        const revealedFlippedTileIds = stringArray(revealedBoard.flippedTileIds);
+        const revealedFlippedTileIds = runFilteredStringArrayOrNull(revealedBoard.flippedTileIds);
         if (!revealedFlippedTileIds) {
             return runAfterDungeonReveal;
         }
         const peekRevealedTileIds =
-            (stringArray(runAfterDungeonReveal.peekRevealedTileIds)?.length ?? 0) > 0
+            (runFilteredStringArrayOrNull(runAfterDungeonReveal.peekRevealedTileIds)?.length ?? 0) > 0
                 ? ([] as string[])
                 : runAfterDungeonReveal.peekRevealedTileIds;
         if (

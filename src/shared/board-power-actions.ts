@@ -29,11 +29,10 @@ import { clearResolveState } from './run-timer-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 import { hiddenUnlessSprungTrap } from './tile-state-rules';
 import { hasRunRelic } from './relics';
+import { runFilteredStringArray } from './run-array-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
 const SHUFFLE_SCORE_TAX_FACTOR = 0.94;
-
-const stringArray = (value: unknown): string[] => (Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : []);
 
 const hasClearFlipState = (run: RunState): boolean => Array.isArray(run.board?.flippedTileIds) && run.board.flippedTileIds.length === 0;
 
@@ -91,7 +90,7 @@ export const applyDestroyPairTransition = (
         )
     };
 
-    const pinnedTileIds = stringArray(run.pinnedTileIds).filter((id) => !pairTileIds.includes(id));
+    const pinnedTileIds = runFilteredStringArray(run.pinnedTileIds).filter((id) => !pairTileIds.includes(id));
     const spunDestroy = options.rotateShiftingSpotlight(run, board);
     const stats = normalizeSessionStats(run.stats);
 
@@ -367,7 +366,7 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
     if (!tile || tile.state !== 'hidden') {
         return run;
     }
-    const peekRevealedTileIds = stringArray(run.peekRevealedTileIds);
+    const peekRevealedTileIds = runFilteredStringArray(run.peekRevealedTileIds);
     if (peekRevealedTileIds.includes(tileId)) {
         return run;
     }
@@ -451,7 +450,7 @@ export const cancelResolvingWithUndo = (run: RunState): RunState => {
     if (!Array.isArray(run.board.flippedTileIds)) {
         return run;
     }
-    const ids = stringArray(run.board.flippedTileIds);
+    const ids = runFilteredStringArray(run.board.flippedTileIds);
     const board: BoardState = {
         ...run.board,
         flippedTileIds: [],
