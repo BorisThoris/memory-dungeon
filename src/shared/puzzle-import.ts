@@ -2,6 +2,7 @@ import type { PuzzleDifficulty, PuzzleGoal, PuzzlePackId } from './contracts';
 import type { SaveData } from './contracts';
 import { z } from 'zod';
 import { BUILTIN_PUZZLE_IDS, BUILTIN_PUZZLES } from './builtin-puzzles';
+import { isRunRecord } from './run-record-guards';
 import { DECOY_PAIR_KEY } from './tile-identity';
 
 const puzzleTileSchema = z.object({
@@ -105,12 +106,9 @@ export interface PuzzlePackProgressRow extends PuzzlePackSummary {
     offlineOnly: true;
 }
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-    value !== null && typeof value === 'object' && !Array.isArray(value);
-
 export const validatePuzzleImportPayload = (payload: unknown): PuzzleImportResult => {
     const errors: string[] = [];
-    if (!isRecord(payload)) {
+    if (!isRunRecord(payload)) {
         return {
             ok: false,
             errors: [

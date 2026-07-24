@@ -1,4 +1,5 @@
 import type { Rating, SessionStats, Tile, TileTraitKind } from './contracts';
+import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { calculateRating } from './scoring-rules';
 
@@ -26,14 +27,11 @@ export const createTileTraitCountStats = (): Record<TileTraitKind, number> => ({
     stasis: 0
 });
 
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-    value != null && typeof value === 'object' && !Array.isArray(value);
-
 const isRating = (value: unknown): value is Rating =>
     value === 'S++' || value === 'S' || value === 'A' || value === 'B' || value === 'C' || value === 'D';
 
 export const normalizeTileTraitCountStats = (counts: unknown): Record<TileTraitKind, number> => {
-    const source = isRecord(counts) ? counts : {};
+    const source = runRecord(counts);
     const next = createTileTraitCountStats();
     for (const kind of TILE_TRAIT_COUNT_KINDS) {
         next[kind] = runNonNegativeInteger(source[kind]);
@@ -84,7 +82,7 @@ export const createSessionStats = (bestScore: number): SessionStats => ({
 });
 
 export const normalizeSessionStats = (stats: unknown, bestScoreFallback = 0): SessionStats => {
-    const source = isRecord(stats) ? stats : {};
+    const source = runRecord(stats);
     const tries = runNonNegativeInteger(source.tries);
     return {
         totalScore: runNonNegativeInteger(source.totalScore),

@@ -5,6 +5,7 @@ import {
     type RunState
 } from './contracts';
 import { runMutatorIds, runRelicIds } from './relics';
+import { runRecord } from './run-record-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 
@@ -237,7 +238,7 @@ export const RUN_INVENTORY_CATALOG: Record<RunInventoryItemId, RunInventoryDefin
 export const DUNGEON_KEY_SPEND_ORDER = ['iron', 'treasure', 'shrine', 'boss', 'trap'] as const satisfies readonly DungeonKeyKind[];
 
 const dungeonKeyRecord = (value: unknown): Partial<Record<DungeonKeyKind, number>> =>
-    value != null && typeof value === 'object' && !Array.isArray(value) ? value as Partial<Record<DungeonKeyKind, number>> : {};
+    runRecord(value) as Partial<Record<DungeonKeyKind, number>>;
 
 export interface DungeonKeyQuantityRow {
     kind: DungeonKeyKind;
@@ -261,7 +262,7 @@ export const getDungeonKeyTotal = (value: unknown): number =>
     getDungeonKeyQuantityRows(value).reduce((sum, row) => sum + row.quantity, 0);
 
 export const getRunInventoryItemPayoutRows = (value: unknown): RunInventoryItemPayoutRow[] => {
-    const payouts = value != null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+    const payouts = runRecord(value);
     return RUN_INVENTORY_ITEM_IDS.map((id) => ({
         id,
         amount: runNonNegativeInteger(payouts[id])

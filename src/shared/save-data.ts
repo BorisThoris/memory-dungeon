@@ -20,6 +20,7 @@ import { COSMETIC_IDS } from './cosmetic-ids';
 import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
 import { utcDateKeyMinusOneDay } from './rng';
 import { runArray, runFilteredArray } from './run-array-guards';
+import { isRunRecord } from './run-record-guards';
 import { runNonNegativeIntegerOrFallback } from './run-number-guards';
 import { RELIC_POOL } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -147,7 +148,7 @@ const PERSISTED_COLLECTION_LIMITS = {
 const PERSISTED_SUMMARY_TEXT_LIMIT = 256;
 
 const isUnknownRecord = (value: unknown): value is Record<string, unknown> =>
-    Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+    isRunRecord(value);
 
 const isAchievementId = (value: unknown): value is AchievementId =>
     typeof value === 'string' && ACHIEVEMENT_ID_SET.has(value);

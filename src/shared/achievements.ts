@@ -1,5 +1,6 @@
 import type { AchievementId, RunState, SaveData } from './contracts';
 import { ACHIEVEMENT_CATALOG, type AchievementCodexEntry } from './mechanics-encyclopedia';
+import { runRecord } from './run-record-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { ACHIEVEMENT_IDS } from './save-data';
 import { normalizeSessionStats } from './session-stats-rules';
@@ -21,11 +22,8 @@ export interface AchievementProgressSummary {
     total: number;
 }
 
-const achievementStateRecord = (input: unknown): Record<string, unknown> =>
-    input !== null && typeof input === 'object' && !Array.isArray(input) ? input as Record<string, unknown> : {};
-
 export const getAchievementProgressRows = (input: unknown): AchievementProgressRow[] => {
-    const state = achievementStateRecord(input);
+    const state = runRecord(input);
     return ACHIEVEMENT_IDS.map((id) => ({ id, earned: state[id] === true }));
 };
 
