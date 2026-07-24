@@ -11,6 +11,7 @@ import {
 import { createRestShrineServices } from './rest-shrine';
 import { applyRunEventChoice, rollRunEventRoom } from './run-events';
 import { getRunInventoryItemPayoutRows } from './run-inventory';
+import { runFilteredArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getTraitOpportunitySummary } from './trait-opportunities';
 
@@ -31,15 +32,13 @@ const BONUS_REWARD_NEXT_CUES = {
 } as const;
 
 const bonusRewardPerks = (value: unknown): NonNullable<BonusRewardPayout['rewardPerks']> =>
-    Array.isArray(value)
-        ? value.filter((item): item is NonNullable<BonusRewardPayout['rewardPerks']>[number] => typeof item === 'string')
-        : [];
+    runFilteredArray(value, (item): item is NonNullable<BonusRewardPayout['rewardPerks']>[number] => typeof item === 'string');
 
 const safeTraitBuildLabel = (value: unknown): value is string =>
     typeof value === 'string' && value !== '__proto__' && value !== 'constructor' && value !== 'prototype';
 
 const traitBuildLabels = (value: unknown): NonNullable<ReturnType<typeof rollBonusRewardDraft>[number]['traitBuildLabels']> =>
-    Array.isArray(value) ? value.filter(safeTraitBuildLabel) : [];
+    runFilteredArray(value, safeTraitBuildLabel);
 
 const sideRoomChoices = (value: unknown): NonNullable<RouteSideRoomState['choices']> => (Array.isArray(value) ? value : []);
 

@@ -1,4 +1,5 @@
 import type { LevelResult, RouteChoice, RunState } from './contracts';
+import { runFilteredArray } from './run-array-guards';
 import { getRouteTraitForecastLine } from './tile-trait-rules';
 
 export const ROUTE_GREED_SHOP_GOLD_REWARD = 3;
@@ -28,7 +29,7 @@ export const isRouteChoice = (value: unknown): value is RouteChoice => {
 };
 
 export const routeChoicesForResult = (lastLevelResult: LevelResult | null | undefined): readonly RouteChoice[] =>
-    Array.isArray(lastLevelResult?.routeChoices) ? lastLevelResult.routeChoices.filter(isRouteChoice) : [];
+    runFilteredArray(lastLevelResult?.routeChoices, isRouteChoice);
 
 export const generateRouteChoices = (run: RunState, nextLevel: number): NonNullable<LevelResult['routeChoices']> => {
     const baseId = `${run.runRulesVersion}:${run.runSeed}:${nextLevel}`;

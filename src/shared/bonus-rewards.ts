@@ -17,6 +17,7 @@ import {
     getRunInventoryItemPayoutRows,
     type RunInventoryItemId
 } from './run-inventory';
+import { runFilteredArray } from './run-array-guards';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitBuildRewardRowsForBoard } from './trait-build-rewards';
@@ -595,7 +596,7 @@ const isRewardPerkId = (id: unknown): id is RewardPerkId =>
     typeof id === 'string' && Object.prototype.hasOwnProperty.call(REWARD_PERK_LABELS, id);
 
 export const normalizeRewardPerkIds = (value: unknown): RewardPerkId[] =>
-    Array.isArray(value) ? value.filter(isRewardPerkId) : [];
+    runFilteredArray(value, isRewardPerkId);
 
 export const hasRewardPerk = (run: Pick<RunState, 'rewardPerkIds'>, id: RewardPerkId): boolean =>
     normalizeRewardPerkIds(run.rewardPerkIds).includes(id);

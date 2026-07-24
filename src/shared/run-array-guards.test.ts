@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { runArrayCount, runFilteredStringArray, runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
+import { runArrayCount, runFilteredArray, runFilteredStringArray, runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 
 describe('run array guards', () => {
     it('passes through runtime string arrays and treats malformed values as empty', () => {
@@ -21,5 +21,16 @@ describe('run array guards', () => {
         expect(runFilteredStringArray(Number.NaN)).toEqual([]);
         expect(runFilteredStringArrayOrNull(['a', 1, 'b', null])).toEqual(['a', 'b']);
         expect(runFilteredStringArrayOrNull(Number.NaN)).toBeNull();
+    });
+
+    it('filters runtime arrays with typed predicates', () => {
+        const values = [{ id: 'a' }, { id: 1 }, null, { id: 'b' }];
+
+        expect(
+            runFilteredArray(values, (item): item is { id: string } =>
+                item != null && typeof item === 'object' && typeof (item as { id?: unknown }).id === 'string'
+            )
+        ).toEqual([{ id: 'a' }, { id: 'b' }]);
+        expect(runFilteredArray(null, (item): item is string => typeof item === 'string')).toEqual([]);
     });
 });

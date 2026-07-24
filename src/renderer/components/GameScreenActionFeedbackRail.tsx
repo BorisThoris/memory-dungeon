@@ -1,4 +1,5 @@
 import styles from './GameScreen.module.css';
+import { runFilteredArray } from '../../shared/run-array-guards';
 import { getStackCashoutLaneCount, type VisualHudAnnouncementDetail } from './gameScreenFeedback';
 import type { MatchScorePop, MatchScorePopCrescendo } from '../store/matchScorePop';
 
@@ -56,7 +57,7 @@ const isActionFeedbackDetail = (value: unknown): value is VisualHudAnnouncementD
 };
 
 const actionFeedbackDetails = (value: GameScreenActionFeedbackRailProps['details'] | unknown): VisualHudAnnouncementDetail[] =>
-    Array.isArray(value) ? value.filter(isActionFeedbackDetail) : [];
+    runFilteredArray(value, isActionFeedbackDetail);
 
 const actionFeedbackLaneId = (detail: VisualHudAnnouncementDetail): ActionFeedbackLaneId => {
     const normalized = detail.label.toLowerCase();

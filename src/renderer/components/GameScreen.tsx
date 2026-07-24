@@ -17,7 +17,7 @@ import { getFloorClearCausalityRows } from '../../shared/level-result-presentati
 import { getFloorIdentityContract } from '../../shared/boss-encounters';
 import { getPlayableOnboardingStep, type OnboardingStepId } from '../../shared/playable-onboarding';
 import { formatLevelResultObjectiveLine } from '../../shared/secondary-objectives';
-import { runFilteredStringArray } from '../../shared/run-array-guards';
+import { runFilteredArray, runFilteredStringArray } from '../../shared/run-array-guards';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import {
     canOfferEndlessRiskWager
@@ -247,7 +247,7 @@ const isMatchPayoffChip = (value: unknown): value is MatchScorePopPayoffChip => 
 };
 
 const matchPayoffChips = (value: unknown): MatchScorePopPayoffChip[] =>
-    Array.isArray(value) ? value.filter(isMatchPayoffChip) : [];
+    runFilteredArray(value, isMatchPayoffChip);
 
 const isMatchPayoffLane = (value: unknown): value is MatchScorePopPayoffLaneMapEntry => {
     if (value == null || typeof value !== 'object') {
@@ -265,7 +265,7 @@ const isMatchPayoffLane = (value: unknown): value is MatchScorePopPayoffLaneMapE
 };
 
 const matchPayoffLaneMap = (value: unknown): MatchScorePopPayoffLaneMapEntry[] =>
-    Array.isArray(value) ? value.filter(isMatchPayoffLane) : [];
+    runFilteredArray(value, isMatchPayoffLane);
 
 const matchPayoffLadderLanes = (value: unknown): string[] => runFilteredStringArray(value);
 
@@ -305,7 +305,7 @@ const isMatchChainRewardForecastCue = (value: unknown): value is ChainRewardFore
 };
 
 const matchChainRewardForecastCues = (value: unknown): ChainRewardForecastCue[] =>
-    Array.isArray(value) ? value.filter(isMatchChainRewardForecastCue) : [];
+    runFilteredArray(value, isMatchChainRewardForecastCue);
 
 const matchTraitInteractionTexts = (value: unknown): string[] => runFilteredStringArray(value);
 
