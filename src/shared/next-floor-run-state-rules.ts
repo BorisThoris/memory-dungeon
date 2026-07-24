@@ -4,7 +4,7 @@ import {
     type MutatorId,
     type RunState
 } from './contracts';
-import { normalizeRewardPerkIds } from './bonus-rewards';
+import { hasRewardPerk } from './bonus-rewards';
 import {
     boardHasGlassDecoy,
     getWildTileIdFromBoard
@@ -53,9 +53,7 @@ export const createNextFloorRunState = (
     run: RunState,
     options: CreateNextFloorRunStateOptions
 ): RunState => {
-    const hasRewardPerk = (id: NonNullable<RunState['rewardPerkIds']>[number]): boolean =>
-        normalizeRewardPerkIds(run.rewardPerkIds).includes(id);
-    const canUseHazardBanisher = hasRewardPerk('hazard_banish_per_floor') && !run.activeContract?.noDestroy;
+    const canUseHazardBanisher = hasRewardPerk(run, 'hazard_banish_per_floor') && !run.activeContract?.noDestroy;
     const hazardBanish = canUseHazardBanisher
         ? banishOneHazardPair(options.board)
         : { board: options.board, banished: false };
@@ -82,7 +80,7 @@ export const createNextFloorRunState = (
         stickyBlockIndex: null,
         freeShuffleThisFloor: hasRunRelic(run, 'first_shuffle_free_per_floor'),
         regionShuffleFreeThisFloor:
-            hasRunRelic(run, 'region_shuffle_free_first') || hasRewardPerk('free_first_swap_per_floor'),
+            hasRunRelic(run, 'region_shuffle_free_first') || hasRewardPerk(run, 'free_first_swap_per_floor'),
         undoUsesThisFloor: 1,
         gambitAvailableThisFloor: true,
         gambitThirdFlipUsed: false,

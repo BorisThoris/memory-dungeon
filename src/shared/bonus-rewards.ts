@@ -597,6 +597,9 @@ const isRewardPerkId = (id: unknown): id is RewardPerkId =>
 export const normalizeRewardPerkIds = (value: unknown): RewardPerkId[] =>
     Array.isArray(value) ? value.filter(isRewardPerkId) : [];
 
+export const hasRewardPerk = (run: Pick<RunState, 'rewardPerkIds'>, id: RewardPerkId): boolean =>
+    normalizeRewardPerkIds(run.rewardPerkIds).includes(id);
+
 export const getRewardPerkRows = (run: Pick<RunState, 'rewardPerkIds'>) =>
     normalizeRewardPerkIds(run.rewardPerkIds).map((id) => ({
         id,

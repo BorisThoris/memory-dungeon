@@ -10,7 +10,7 @@ import {
     type Tile,
     type TileTraitKind
 } from './contracts';
-import { normalizeRewardPerkIds } from './bonus-rewards';
+import { hasRewardPerk } from './bonus-rewards';
 import { hasRunRelic } from './relics';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runArrayCount } from './run-array-guards';
@@ -367,9 +367,6 @@ const tileCanShuffleFromVolatileMiss = (tile: Tile, blockedPairKeys: ReadonlySet
     tile.routeSpecialKind == null &&
     tile.findableKind == null &&
     tile.tileHazardKind == null;
-
-const hasRewardPerk = (run: RunState, id: NonNullable<RunState['rewardPerkIds']>[number]): boolean =>
-    normalizeRewardPerkIds(run.rewardPerkIds).includes(id);
 
 const DEFAULT_TRAIT_INTERACTION_SEED: readonly [TileTraitKind, TileTraitKind] = ['conduit', 'echo'];
 
