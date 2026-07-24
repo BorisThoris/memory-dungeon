@@ -4,6 +4,7 @@ import {
     type RunState
 } from './contracts';
 import { isResumableLifecycleState, lifecycleStateFromRunStatus } from './run-lifecycle-machine';
+import { runFiniteNumberOrNull } from './run-number-guards';
 
 export const createTimerState = (overrides?: Partial<RunState['timerState']>): RunState['timerState'] => ({
     memorizeRemainingMs: null,
@@ -20,7 +21,7 @@ const timerStateForRun = (value: unknown): RunState['timerState'] =>
         : createTimerState();
 
 export const normalizeTimerTimestampMs = (value: unknown): number | null =>
-    typeof value === 'number' && Number.isFinite(value) ? value : null;
+    runFiniteNumberOrNull(value);
 
 export const extendTimerTimestampMs = (value: unknown, deltaMs: number): number | null => {
     const timestamp = normalizeTimerTimestampMs(value);

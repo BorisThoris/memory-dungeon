@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
     decrementRunCounter,
+    runFiniteNumber,
+    runFiniteNumberOrNull,
     runFiniteIntegerDelta,
     runNonNegativeInteger,
     runNonNegativeIntegerOrFallback,
@@ -9,6 +11,16 @@ import {
 } from './run-number-guards';
 
 describe('run number guards', () => {
+    it('normalizes runtime numbers without rounding finite values', () => {
+        expect(runFiniteNumber(2.9)).toBe(2.9);
+        expect(runFiniteNumber(-1.9)).toBe(-1.9);
+        expect(runFiniteNumber(Number.NaN)).toBe(0);
+        expect(runFiniteNumber(Number.POSITIVE_INFINITY)).toBe(0);
+        expect(runFiniteNumberOrNull(2.9)).toBe(2.9);
+        expect(runFiniteNumberOrNull(Number.NaN)).toBeNull();
+        expect(runFiniteNumberOrNull(null)).toBeNull();
+    });
+
     it('normalizes runtime counters to non-negative integers', () => {
         expect(runNonNegativeInteger(2.9)).toBe(2);
         expect(runNonNegativeInteger(-1.9)).toBe(0);

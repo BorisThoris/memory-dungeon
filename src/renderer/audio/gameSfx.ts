@@ -1,6 +1,6 @@
 import type { RunState } from '../../shared/contracts';
 import { runArray, runArrayCount, runFilteredStringArray } from '../../shared/run-array-guards';
-import { runNonNegativeInteger } from '../../shared/run-number-guards';
+import { runFiniteNumber, runNonNegativeInteger } from '../../shared/run-number-guards';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { getChainMilestoneFeedback, type ChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues } from '../copy/chainMomentum';
@@ -245,19 +245,17 @@ const playMismatchSfx = (gain: number): void => {
     });
 };
 
-const finiteNumber = (value: unknown): number => (typeof value === 'number' && Number.isFinite(value) ? value : 0);
-
 const hasResolvedResourceReward = (before: RunState, after: RunState): boolean => {
     const beforeStats = before.stats;
     const afterStats = after.stats;
     return (
-        finiteNumber(afterStats.comboShards) > finiteNumber(beforeStats.comboShards) ||
-        finiteNumber(afterStats.guardTokens) > finiteNumber(beforeStats.guardTokens) ||
-        finiteNumber(after.shopGold) > finiteNumber(before.shopGold) ||
-        finiteNumber(after.relicFavorProgress) > finiteNumber(before.relicFavorProgress) ||
-        finiteNumber(after.favorBonusRelicPicksNextOffer) > finiteNumber(before.favorBonusRelicPicksNextOffer) ||
-        finiteNumber(after.safeHazardWardChargesThisFloor) > finiteNumber(before.safeHazardWardChargesThisFloor) ||
-        finiteNumber(after.flashPairCharges) > finiteNumber(before.flashPairCharges)
+        runFiniteNumber(afterStats.comboShards) > runFiniteNumber(beforeStats.comboShards) ||
+        runFiniteNumber(afterStats.guardTokens) > runFiniteNumber(beforeStats.guardTokens) ||
+        runFiniteNumber(after.shopGold) > runFiniteNumber(before.shopGold) ||
+        runFiniteNumber(after.relicFavorProgress) > runFiniteNumber(before.relicFavorProgress) ||
+        runFiniteNumber(after.favorBonusRelicPicksNextOffer) > runFiniteNumber(before.favorBonusRelicPicksNextOffer) ||
+        runFiniteNumber(after.safeHazardWardChargesThisFloor) > runFiniteNumber(before.safeHazardWardChargesThisFloor) ||
+        runFiniteNumber(after.flashPairCharges) > runFiniteNumber(before.flashPairCharges)
     );
 };
 
@@ -272,7 +270,7 @@ const tileTraitCountTotal = (value: unknown): number => {
 const resolvedTraitRouteProgressCount = (before: RunState, after: RunState): number =>
     Math.max(
         0,
-        finiteNumber(after.traitRouteObjectiveProgressThisFloor) - finiteNumber(before.traitRouteObjectiveProgressThisFloor),
+        runFiniteNumber(after.traitRouteObjectiveProgressThisFloor) - runFiniteNumber(before.traitRouteObjectiveProgressThisFloor),
         runArrayCount(after.traitRouteObjectiveTriggeredTagsThisFloor) - runArrayCount(before.traitRouteObjectiveTriggeredTagsThisFloor)
     );
 
@@ -284,13 +282,13 @@ const resolvedRewardPerkProcCount = (before: RunState, after: RunState): number 
 };
 
 const hasResolvedChainRewardCashout = (before: RunState, after: RunState): boolean => {
-    if (finiteNumber(after.stats.currentStreak) < 3) {
+    if (runFiniteNumber(after.stats.currentStreak) < 3) {
         return false;
     }
     return (
-        finiteNumber(after.stats.comboShards) > finiteNumber(before.stats.comboShards) ||
-        finiteNumber(after.stats.guardTokens) > finiteNumber(before.stats.guardTokens) ||
-        finiteNumber(after.lives) > finiteNumber(before.lives)
+        runFiniteNumber(after.stats.comboShards) > runFiniteNumber(before.stats.comboShards) ||
+        runFiniteNumber(after.stats.guardTokens) > runFiniteNumber(before.stats.guardTokens) ||
+        runFiniteNumber(after.lives) > runFiniteNumber(before.lives)
     );
 };
 
@@ -312,8 +310,8 @@ const resolvedRewardChannelCount = (
 };
 
 const brokenChainDepth = (before: RunState, after: RunState): number => {
-    const beforeStreak = Math.floor(finiteNumber(before.stats.currentStreak));
-    const afterStreak = Math.floor(finiteNumber(after.stats.currentStreak));
+    const beforeStreak = Math.floor(runFiniteNumber(before.stats.currentStreak));
+    const afterStreak = Math.floor(runFiniteNumber(after.stats.currentStreak));
     return beforeStreak >= 3 && afterStreak < beforeStreak ? beforeStreak : 0;
 };
 
@@ -327,23 +325,23 @@ const hasNearBrokenChainReward = (before: RunState, chainDepthLost: number): boo
     chainDepthLost > 0 &&
     (getChainRewardForecastCues(
         chainDepthLost,
-        finiteNumber(before.stats.comboShards),
-        finiteNumber(before.lives)
+        runFiniteNumber(before.stats.comboShards),
+        runFiniteNumber(before.lives)
     )[0]?.distance ?? Number.POSITIVE_INFINITY) <= 2;
 
 const hasArmedNearChainReward = (before: RunState, after: RunState): boolean => {
     if (hasResolvedChainRewardCashout(before, after)) {
         return false;
     }
-    const chainDepth = Math.floor(finiteNumber(after.stats.currentStreak));
+    const chainDepth = Math.floor(runFiniteNumber(after.stats.currentStreak));
     if (chainDepth < 4) {
         return false;
     }
     return (
         getChainRewardForecastCues(
             chainDepth,
-            finiteNumber(after.stats.comboShards),
-            finiteNumber(after.lives)
+            runFiniteNumber(after.stats.comboShards),
+            runFiniteNumber(after.lives)
         )[0]?.distance === 1
     );
 };
@@ -434,7 +432,7 @@ export const playChainOpportunityBeatSfx = (
     if (gain <= 0.001) {
         return;
     }
-    const safeBeatCount = Math.max(2, Math.min(5, Math.floor(finiteNumber(beatCount))));
+    const safeBeatCount = Math.max(2, Math.min(5, Math.floor(runFiniteNumber(beatCount))));
     const profile: Record<ChainOpportunityBeatSfxTier, { frequency: number; frequencyEnd: number; gainScale: number; type: OscillatorType }> = {
         cashout: { frequency: 1520, frequencyEnd: 2480, gainScale: 0.24, type: 'triangle' },
         'follow-up': { frequency: 980, frequencyEnd: 1460, gainScale: 0.18, type: 'sine' },
@@ -461,7 +459,7 @@ export const playMismatchRecoveryCrescendoSfx = (
     if (gain <= 0.001) {
         return;
     }
-    const safeBeatCount = Math.max(2, Math.min(5, Math.floor(finiteNumber(beatCount))));
+    const safeBeatCount = Math.max(2, Math.min(5, Math.floor(runFiniteNumber(beatCount))));
     const profile: Record<MismatchRecoveryCrescendoSfxTier, { frequency: number; frequencyEnd: number; gainScale: number; type: OscillatorType }> = {
         break: { frequency: 420, frequencyEnd: 220, gainScale: 0.18, type: 'sawtooth' },
         'lost-reward': { frequency: 720, frequencyEnd: 320, gainScale: 0.2, type: 'triangle' },
@@ -488,7 +486,7 @@ export const playRelicChoiceCrescendoSfx = (
     if (gain <= 0.001) {
         return;
     }
-    const safeBeatCount = Math.max(2, Math.min(5, Math.floor(finiteNumber(beatCount))));
+    const safeBeatCount = Math.max(2, Math.min(5, Math.floor(runFiniteNumber(beatCount))));
     const profile: Record<RelicChoiceCrescendoSfxTier, { frequency: number; frequencyEnd: number; gainScale: number; type: OscillatorType }> = {
         cashout: { frequency: 1180, frequencyEnd: 1780, gainScale: 0.18, type: 'sine' },
         prime: { frequency: 720, frequencyEnd: 1080, gainScale: 0.13, type: 'triangle' },
@@ -529,7 +527,7 @@ const playResolvedCascadeAccentSfx = (gain: number, chainDepth: number, rewardCh
 };
 
 const playChainRewardCashoutSfx = (gain: number, after: RunState): void => {
-    const chainDepth = Math.max(3, Math.min(12, Math.floor(finiteNumber(after.stats.currentStreak))));
+    const chainDepth = Math.max(3, Math.min(12, Math.floor(runFiniteNumber(after.stats.currentStreak))));
     playTone({
         frequency: 1420 + chainDepth * 36,
         frequencyEnd: 2320 + chainDepth * 54,
@@ -541,7 +539,7 @@ const playChainRewardCashoutSfx = (gain: number, after: RunState): void => {
 };
 
 const playNearChainRewardArmedSfx = (gain: number, after: RunState): void => {
-    const chainDepth = Math.max(4, Math.min(12, Math.floor(finiteNumber(after.stats.currentStreak))));
+    const chainDepth = Math.max(4, Math.min(12, Math.floor(runFiniteNumber(after.stats.currentStreak))));
     playTone({
         frequency: 1040 + chainDepth * 28,
         frequencyEnd: 1680 + chainDepth * 42,
@@ -705,7 +703,7 @@ export const playResolveSfx = (before: RunState, after: RunState, gain: number):
             playRewardPerkPopSfx(gain, rewardPerkProcCount);
         }
         const rewardChannelCount = resolvedRewardChannelCount(before, after, chainMilestone);
-        playResolvedCascadeAccentSfx(gain, Math.max(1, Math.floor(finiteNumber(after.stats.currentStreak))), rewardChannelCount);
+        playResolvedCascadeAccentSfx(gain, Math.max(1, Math.floor(runFiniteNumber(after.stats.currentStreak))), rewardChannelCount);
         if (rewardChannelCount === 2) {
             playStackedRewardSetupSfx(gain, rewardChannelCount);
         }
