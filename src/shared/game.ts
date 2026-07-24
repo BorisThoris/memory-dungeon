@@ -91,7 +91,7 @@ import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-r
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
-import { runStringArray } from './run-array-guards';
+import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 export {
     completeRelicPickAndAdvance
@@ -320,9 +320,7 @@ export {
 } from './relic-immediate-rules';
 
 const flippedTileIdsForRun = (run: RunState): string[] | null =>
-    Array.isArray(run.board?.flippedTileIds)
-        ? run.board.flippedTileIds.filter((id): id is string => typeof id === 'string')
-        : null;
+    runFilteredStringArrayOrNull(run.board?.flippedTileIds);
 
 const finalizeLevel = (run: RunState, board: BoardState): RunState => {
     const floorClearHazards = applyFloorClearEnemyHazardDefeats(run, board);
