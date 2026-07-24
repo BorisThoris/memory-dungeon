@@ -348,7 +348,7 @@ export const applyFlashPair = (run: RunState): RunState => {
     const pairIds = picked.slice(0, 2);
     return {
         ...run,
-        flashPairCharges: Math.max(0, flashPairCharges - 1),
+        flashPairCharges: decrementRunCounter(flashPairCharges),
         powersUsedThisRun: true,
         shuffleNonce: shuffleNonce + 1,
         flashPairRevealedTileIds: pairIds
@@ -385,7 +385,7 @@ export const applyPeek = (run: RunState, tileId: string): RunState => {
     return {
         ...run,
         board,
-        peekCharges: Math.max(0, peekCharges - 1),
+        peekCharges: decrementRunCounter(peekCharges),
         powersUsedThisRun: true,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
@@ -435,7 +435,7 @@ export const applyStrayRemove = (run: RunState, tileId: string): RunState => {
     return {
         ...run,
         powersUsedThisRun: true,
-        strayRemoveCharges: Math.max(0, strayRemoveCharges - 1),
+        strayRemoveCharges: decrementRunCounter(strayRemoveCharges),
         strayRemoveArmed: false,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, [tileId]),
@@ -461,7 +461,7 @@ export const cancelResolvingWithUndo = (run: RunState): RunState => {
         ...run,
         status: 'playing',
         board,
-        undoUsesThisFloor: Math.max(0, undoUsesThisFloor - 1),
+        undoUsesThisFloor: decrementRunCounter(undoUsesThisFloor),
         powersUsedThisRun: true,
         recallFocus: decreaseRecallFocus(run),
         forgottenTileIdsThisFloor: rememberForgottenTiles(run.forgottenTileIdsThisFloor, ids),
