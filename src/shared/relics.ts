@@ -19,6 +19,7 @@ import type {
 } from './contracts';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { hashStringToSeed } from './rng';
+import { runArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getTraitBuildRewardRowsForLoadout, getTraitBuildRewardRowsForRelic } from './trait-build-rewards';
 import { pickWeightedWithoutReplacement } from './weightedPick';
@@ -408,9 +409,9 @@ export interface RunBuildProfile {
     tooltip: string;
 }
 
-export const runRelicIds = (value: unknown): RelicId[] => Array.isArray(value) ? value : [];
+export const runRelicIds = (value: unknown): RelicId[] => runArray(value);
 
-export const runMutatorIds = (value: unknown): MutatorId[] => Array.isArray(value) ? value : [];
+export const runMutatorIds = (value: unknown): MutatorId[] => runArray(value);
 
 export const hasRunRelic = (run: Pick<RunState, 'relicIds'>, id: RelicId): boolean => runRelicIds(run.relicIds).includes(id);
 

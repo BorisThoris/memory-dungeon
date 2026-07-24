@@ -12,6 +12,7 @@ import {
 } from './contracts';
 import { getActiveDungeonBossPressureRule } from './dungeon-boss-rules';
 import { gainRunInventoryItem } from './run-inventory';
+import { runArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import {
@@ -422,7 +423,7 @@ export const getRunShopWalletPacing = (run: RunState): {
     conversionAtRunEnd: 'unspent_shop_gold_expires'
 });
 
-export const runShopOffers = (value: unknown): RunShopOfferState[] => Array.isArray(value) ? value : [];
+export const runShopOffers = (value: unknown): RunShopOfferState[] => runArray(value);
 
 const getShopOfferCompatibility = (
     run: RunState,

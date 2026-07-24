@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { runArrayCount, runFilteredArray, runFilteredStringArray, runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
+import { runArray, runArrayCount, runFilteredArray, runFilteredStringArray, runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 
 describe('run array guards', () => {
     it('passes through runtime string arrays and treats malformed values as empty', () => {
         const ids = ['a1', 'b2'];
 
+        expect(runArray<string>(ids)).toBe(ids);
+        expect(runArray<string>(Number.NaN)).toEqual([]);
         expect(runStringArray(ids)).toBe(ids);
         expect(runStringArray(Number.NaN)).toEqual([]);
         expect(runStringArray(null)).toEqual([]);

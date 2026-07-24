@@ -4,13 +4,14 @@ import {
     getBoardTraitInteractionPreviewLines,
     type TileTraitInteractionTag
 } from './tile-trait-rules';
+import { runArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitOpportunitySummary } from './trait-opportunities';
 
 export const TRAIT_ROUTE_OBJECTIVE_SCORE_REWARD = 25;
 
-const traitRouteTags = (value: unknown): TileTraitInteractionTag[] => Array.isArray(value) ? value : [];
+const traitRouteTags = (value: unknown): TileTraitInteractionTag[] => runArray(value);
 
 export interface TraitRouteObjectiveSeed {
     required: number;

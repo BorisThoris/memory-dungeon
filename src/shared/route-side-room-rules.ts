@@ -11,7 +11,7 @@ import {
 import { createRestShrineServices } from './rest-shrine';
 import { applyRunEventChoice, rollRunEventRoom } from './run-events';
 import { getRunInventoryItemPayoutRows } from './run-inventory';
-import { runFilteredArray } from './run-array-guards';
+import { runArray, runFilteredArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { getTraitOpportunitySummary } from './trait-opportunities';
 
@@ -40,7 +40,7 @@ const safeTraitBuildLabel = (value: unknown): value is string =>
 const traitBuildLabels = (value: unknown): NonNullable<ReturnType<typeof rollBonusRewardDraft>[number]['traitBuildLabels']> =>
     runFilteredArray(value, safeTraitBuildLabel);
 
-const sideRoomChoices = (value: unknown): NonNullable<RouteSideRoomState['choices']> => (Array.isArray(value) ? value : []);
+const sideRoomChoices = (value: unknown): NonNullable<RouteSideRoomState['choices']> => runArray(value);
 
 const bonusRewardChoiceImpact = (
     option: ReturnType<typeof rollBonusRewardDraft>[number],
