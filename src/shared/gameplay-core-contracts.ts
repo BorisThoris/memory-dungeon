@@ -1,5 +1,13 @@
 import { z } from 'zod';
-import type { FindableKind, RelicId, RelicOfferServiceId, RewardPerkId, RunStatus, TileTraitKind } from './contracts';
+import type {
+    BonusRewardId,
+    FindableKind,
+    RelicId,
+    RelicOfferServiceId,
+    RewardPerkId,
+    RunStatus,
+    TileTraitKind
+} from './contracts';
 import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
@@ -36,6 +44,37 @@ export const GAMEPLAY_RELIC_OFFER_SERVICE_IDS = [
     'ban_option',
     'upgrade_offer'
 ] as const satisfies readonly RelicOfferServiceId[];
+
+export const GAMEPLAY_BONUS_REWARD_RULES = {
+    chest_gold: { maxClaims: 2, minFloor: 2, roomKind: 'treasure_chest' },
+    secret_favor: { maxClaims: 1, minFloor: 3, roomKind: 'secret_room' },
+    bonus_shards: { maxClaims: 2, minFloor: 2, roomKind: 'bonus_cache' },
+    supply_cache: { maxClaims: 2, minFloor: 2, roomKind: 'bonus_cache' },
+    trait_toolkit: { maxClaims: 2, minFloor: 2, roomKind: 'bonus_cache' },
+    key_insurance: { maxClaims: 2, minFloor: 2, roomKind: 'bonus_cache' },
+    hazard_ward: { maxClaims: 2, minFloor: 2, roomKind: 'bonus_cache' },
+    free_swap_floor: { maxClaims: 1, minFloor: 2, roomKind: 'bonus_cache' },
+    echo_conduit_lens: { maxClaims: 1, minFloor: 2, roomKind: 'bonus_cache' },
+    trait_streak_lens: { maxClaims: 1, minFloor: 2, roomKind: 'bonus_cache' },
+    cursed_opener_contract: { maxClaims: 1, minFloor: 2, roomKind: 'bonus_cache' },
+    stasis_lockbox: { maxClaims: 1, minFloor: 2, roomKind: 'bonus_cache' },
+    hazard_banisher: { maxClaims: 1, minFloor: 2, roomKind: 'bonus_cache' }
+} as const satisfies Record<
+    BonusRewardId,
+    { maxClaims: number; minFloor: number; roomKind: 'treasure_chest' | 'secret_room' | 'bonus_cache' }
+>;
+
+export const GAMEPLAY_BONUS_REWARD_IDS = Object.keys(GAMEPLAY_BONUS_REWARD_RULES) as BonusRewardId[];
+
+export const GAMEPLAY_RUN_EVENT_EFFECTS = [
+    'gain_shop_gold',
+    'gain_relic_favor',
+    'heal_or_guard',
+    'gain_iron_key',
+    'gain_destroy_charge',
+    'gain_score',
+    'skip'
+] as const;
 
 export const GAMEPLAY_FINDABLE_KINDS = [
     'shard_spark',
@@ -897,6 +936,23 @@ export const VAULTBREAKER_DEFINITIONS = z.array(gameplayContentDefinitionSchema)
         ]
     },
     {
+        id: 'relic.shrine_echo.treasure_claim',
+        version: 1,
+        buildId: 'treasure_greed',
+        source: { kind: 'relic', id: 'shrine_echo' },
+        trigger: 'content.claimed',
+        conditions: [{ kind: 'relic.active', relicId: 'shrine_echo' }],
+        effects: [
+            { kind: 'relic_favor.grant', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.shrine_echo.treasure_claimed',
+                message: 'Shrine Echo converted the first treasure claim into one Favor progress.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
         id: 'findable.score_glint',
         version: 1,
         buildId: 'treasure_greed',
@@ -1275,6 +1331,14 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('side_room.resolve'),
+            action: z.enum(['claim', 'skip']),
+            choiceId: z.string().min(1).max(200).optional()
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('relic.pick'),
             relicId: z.enum(GAMEPLAY_RELIC_IDS)
         })
@@ -1629,6 +1693,43 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('side_room.resolved'),
+            roomId: z.string().min(1).max(220),
+            roomKind: z.enum(['rest_shrine', 'run_event', 'bonus_reward']),
+            routeType: z.enum(['safe', 'greed', 'mystery']),
+            nodeKind: z.enum(['combat', 'shop', 'elite', 'rest', 'event', 'treasure']),
+            action: z.enum(['claim', 'skip']),
+            choiceId: z.string().min(1).max(200).nullable(),
+            outcome: z.enum(['rest_healed', 'event_applied', 'bonus_claimed', 'skipped']),
+            rewardId: z.enum(GAMEPLAY_BONUS_REWARD_IDS).nullable(),
+            eventEffect: z.enum(GAMEPLAY_RUN_EVENT_EFFECTS).nullable(),
+            livesBefore: z.number().int().nonnegative(),
+            livesAfter: z.number().int().nonnegative(),
+            shopGoldBefore: z.number().int().nonnegative(),
+            shopGoldAfter: z.number().int().nonnegative(),
+            totalScoreBefore: z.number().int().nonnegative(),
+            totalScoreAfter: z.number().int().nonnegative(),
+            guardTokensBefore: z.number().int().nonnegative(),
+            guardTokensAfter: z.number().int().nonnegative(),
+            comboShardsBefore: z.number().int().nonnegative(),
+            comboShardsAfter: z.number().int().nonnegative(),
+            relicFavorBefore: z.number().int().nonnegative(),
+            relicFavorAfter: z.number().int().nonnegative(),
+            destroyChargesBefore: z.number().int().nonnegative(),
+            destroyChargesAfter: z.number().int().nonnegative(),
+            peekChargesBefore: z.number().int().nonnegative(),
+            peekChargesAfter: z.number().int().nonnegative(),
+            regionShuffleChargesBefore: z.number().int().nonnegative(),
+            regionShuffleChargesAfter: z.number().int().nonnegative(),
+            ironKeysBefore: z.number().int().nonnegative(),
+            ironKeysAfter: z.number().int().nonnegative(),
+            rewardPerkCountBefore: z.number().int().nonnegative(),
+            rewardPerkCountAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('relic.picked'),
             relicId: z.enum(GAMEPLAY_RELIC_IDS),
             definitionId: z.string().min(1).max(120),
@@ -1903,6 +2004,19 @@ export const createGameplayRouteChooseCommand = (commandId: string, choiceId: st
         commandId,
         type: 'route.choose',
         choiceId
+    });
+
+export const createGameplaySideRoomResolveCommand = (
+    commandId: string,
+    action: 'claim' | 'skip',
+    choiceId?: string
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'side_room.resolve',
+        action,
+        ...(choiceId ? { choiceId } : {})
     });
 
 export const createGameplayRelicPickCommand = (commandId: string, relicId: RelicId): GameplayCommand =>

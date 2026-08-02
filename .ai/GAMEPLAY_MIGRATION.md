@@ -305,6 +305,19 @@ Relic-draft shaping now shares the same deterministic boundary as the final sele
 
 Graph v19 extends relic draft progression across shop-gold funding, deterministic offer shaping, typed feedback, persistence, and replay.
 
+## Twenty-first vertical slice: Flat Typed Route Side Rooms
+
+Between-floor rest, event, bonus-reward, and skip choices now cross one replayable boundary instead of an opaque Zustand callback or a reward command nested inside another journal:
+
+1. `side_room.resolve` accepts an explicit claim or skip intent and validates live `levelComplete` state, event identity and choice, visible bonus-draft membership, reward floor/secret/anti-grind limits, and a deterministic primary fallback.
+2. Rest healing and cost, all seeded run-event effects, all thirteen bonus-reward definitions, the reward ledger, and first-treasure Shrine Echo Favor are applied by the core under one command id.
+3. `side_room.resolved` records room/route identity, selected outcome, reward or event effect, and exact before/after deltas for lives, gold, score, guard, shards, Favor, tools, keys, and durable reward perks.
+4. Bonus payouts reuse schema-owned content definitions without appending nested commands; direct tests require the pure reducer to leave journals untouched and prove JSON replay parity against mature legacy outcomes.
+5. The side-room surface now accepts typed intent rather than an arbitrary mutation callback, appends exactly one outer command, projects typed reward/side-room feedback, and preserves the established shop or next-floor continuation.
+6. The seeded simulation forces a rejected baseline side-room probe without perturbing its stable random definition census.
+
+Graph v20 connects route commitments through side-room choice, build rewards, economy, feedback, bounded persistence, replay, and downstream run flow.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

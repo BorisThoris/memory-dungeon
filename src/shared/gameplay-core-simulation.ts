@@ -15,6 +15,7 @@ import {
     createGameplayRelicPickCommand,
     createGameplayRelicOfferServiceCommand,
     createGameplayRouteChooseCommand,
+    createGameplaySideRoomResolveCommand,
     createGameplayShuffleCommand,
     createGameplayShopPurchaseCommand,
     createGameplayStrayRemoveCommand,
@@ -101,7 +102,9 @@ const commandForStep = (
     step: number,
     invalidTraitChance: number
 ): GameplayCommand => {
-    const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
+    const definitions = GAMEPLAY_CONTENT_DEFINITIONS.filter(
+        (definition) => definition.id !== 'relic.shrine_echo.treasure_claim'
+    );
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
     const actionIndex = pickRngIndex(rng, definitions.length + 12);
     const wildMatchPair = step === 0 ? availableWildMatchPair(run) : null;
@@ -136,6 +139,9 @@ const commandForStep = (
     }
     if (step === 5) {
         return createGameplayRelicOfferServiceCommand(commandId, 'reroll_offer');
+    }
+    if (step === 6) {
+        return createGameplaySideRoomResolveCommand(commandId, 'skip');
     }
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);

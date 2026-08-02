@@ -7,11 +7,6 @@ import type {
     SubscreenReturnView
 } from '../../shared/contracts';
 import { isGauntletExpired } from '../../shared/game-core';
-import {
-    claimRouteSideRoomChoice,
-    claimRouteSideRoomPrimary,
-    skipRouteSideRoom
-} from '../../shared/route-rules';
 import { trackEvent } from '../../shared/telemetry';
 import { executeRunStartRequest } from './runStartExecutor';
 import type { RunStartRequest } from './runStartState';
@@ -444,15 +439,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     },
 
     claimSideRoomPrimary: () => {
-        sideRoomActionController.applySideRoomAction(claimRouteSideRoomPrimary);
+        sideRoomActionController.resolveSideRoom('claim');
     },
 
     claimSideRoomChoice: (choiceId: string) => {
-        sideRoomActionController.applySideRoomAction((sideRoomRun) => claimRouteSideRoomChoice(sideRoomRun, choiceId));
+        sideRoomActionController.resolveSideRoom('claim', choiceId);
     },
 
     skipSideRoom: () => {
-        sideRoomActionController.applySideRoomAction(skipRouteSideRoom);
+        sideRoomActionController.resolveSideRoom('skip');
     },
 
     closeSubscreen: () => {

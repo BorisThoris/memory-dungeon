@@ -43,7 +43,7 @@ describe('sideRoomActionController', () => {
         const run = createPlayablePathFixture('sideRoomPrimary').run!;
         const harness = createHarness({ run, view: 'playing' });
 
-        harness.controller.applySideRoomAction(() => ({ ...run, sideRoom: null }));
+        harness.controller.resolveSideRoom('skip');
 
         expect(harness.patches).toEqual([]);
         expect(harness.applyResolvedRun).not.toHaveBeenCalled();
@@ -52,38 +52,26 @@ describe('sideRoomActionController', () => {
 
     it('applies successful side-room actions and continues when returning to play', () => {
         const run = createPlayablePathFixture('sideRoomPrimary').run!;
-        const nextRun = { ...run, sideRoom: null, shopOffers: [] };
         const harness = createHarness({ run, view: 'sideRoom' });
 
-        harness.controller.applySideRoomAction(() => nextRun);
+        harness.controller.resolveSideRoom('claim');
 
-        expect(harness.patches).toEqual([{ run: nextRun, view: 'playing' }]);
+        expect(harness.patches).toEqual([
+            expect.objectContaining({
+                run: expect.objectContaining({ sideRoom: null }),
+                view: 'playing'
+            })
+        ]);
         expect(harness.continueToNextLevel).toHaveBeenCalledTimes(1);
         expect(harness.applyResolvedRun).not.toHaveBeenCalled();
-        expect(harness.playRewardClaimFeedback).not.toHaveBeenCalled();
+        expect(harness.playRewardClaimFeedback).toHaveBeenCalledTimes(1);
     });
 
     it('plays reward feedback only when a typed reward-claim event is appended', () => {
         const run = createPlayablePathFixture('sideRoomPrimary').run!;
-        const nextRun = {
-            ...run,
-            sideRoom: null,
-            shopOffers: [],
-            gameplayEventJournal: [{
-                schemaVersion: 1,
-                commandId: 'claim-1',
-                eventId: 'claim-1:0',
-                sequence: 0,
-                source: { kind: 'bonus_reward', id: 'hazard_ward' },
-                type: 'feedback.requested',
-                cue: 'build.hazard_ward.claimed',
-                message: 'Hazard Ward claimed.',
-                tone: 'reward'
-            }]
-        } as unknown as RunState;
         const harness = createHarness({ run, view: 'sideRoom' });
 
-        harness.controller.applySideRoomAction(() => nextRun);
+        harness.controller.resolveSideRoom('claim');
 
         expect(harness.playRewardClaimFeedback).toHaveBeenCalledTimes(1);
     });
@@ -91,7 +79,7 @@ describe('sideRoomActionController', () => {
     it('routes invalid missing run state through the surface patch', () => {
         const harness = createHarness({ run: null, view: 'sideRoom' });
 
-        harness.controller.applySideRoomAction((run) => run);
+        harness.controller.resolveSideRoom('skip');
 
         expect(harness.patches).toEqual([{ view: 'menu' }]);
         expect(harness.continueToNextLevel).not.toHaveBeenCalled();
@@ -104,7 +92,7 @@ describe('sideRoomActionController', () => {
         };
         const harness = createHarness({ run, view: 'sideRoom' });
 
-        harness.controller.applySideRoomAction((sideRoomRun) => sideRoomRun);
+        harness.controller.resolveSideRoom('skip');
 
         expect(harness.applyResolvedRun).toHaveBeenCalledWith(expect.objectContaining({ lives: 0, status: 'gameOver' }));
         expect(harness.patches).toEqual([]);
@@ -113,12 +101,15 @@ describe('sideRoomActionController', () => {
 
     it('does not continue when a side-room result opens the summary shop', () => {
         const run = createPlayablePathFixture('sideRoomThenShop').run!;
-        const nextRun = { ...run, sideRoom: null };
         const harness = createHarness({ run, view: 'sideRoom' });
 
-        harness.controller.applySideRoomAction(() => nextRun);
+        harness.controller.resolveSideRoom('skip');
 
-        expect(harness.patches[0]).toMatchObject({ run: nextRun, shopReturnMode: 'summary', view: 'shop' });
+        expect(harness.patches[0]).toMatchObject({
+            run: { sideRoom: null },
+            shopReturnMode: 'summary',
+            view: 'shop'
+        });
         expect(harness.continueToNextLevel).not.toHaveBeenCalled();
     });
 
@@ -126,7 +117,7 @@ describe('sideRoomActionController', () => {
         const run = createNewRun(0);
         const harness = createHarness({ run, view: 'sideRoom' });
 
-        harness.controller.applySideRoomAction((sideRoomRun) => sideRoomRun);
+        harness.controller.resolveSideRoom('skip');
 
         expect(harness.patches).toEqual([{ view: 'playing' }]);
     });

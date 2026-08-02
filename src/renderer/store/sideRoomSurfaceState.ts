@@ -1,6 +1,9 @@
 import type { RunState, ViewState } from '../../shared/contracts';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
+import { createGameplaySideRoomResolveCommand } from '../../shared/gameplay-core-contracts';
+import { reduceGameplayCommand } from '../../shared/gameplay-core';
+import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
     getNewGameplayFeedback,
     type GameplayFeedbackPresentation
@@ -89,7 +92,8 @@ export const createDeadInterludeGameOverRun = (run: RunState): RunState | null =
 export const createSideRoomActionSurfaceResult = (
     view: ViewState,
     run: RunState | null,
-    applyAction: (run: RunState) => RunState
+    action: 'claim' | 'skip',
+    choiceId?: string
 ): SideRoomActionSurfaceResult => {
     if (view !== 'sideRoom') {
         return { kind: 'ignored' };
@@ -108,15 +112,24 @@ export const createSideRoomActionSurfaceResult = (
         return { kind: 'playing', patch: { view: 'playing' } };
     }
 
-    const nextRun = applyAction(run);
-    if (nextRun === run) {
+    const command = createGameplaySideRoomResolveCommand(
+        `side-room:${run.runSeed}:${run.sideRoom.id}:${action}:${choiceId ?? 'primary'}`,
+        action,
+        choiceId
+    );
+    const result = reduceGameplayCommand(run, command);
+    if (!result.accepted) {
         return { kind: 'ignored' };
     }
+    const nextRun = appendGameplayJournal(result.run, [command], result.events);
 
     const patch = createSideRoomResultSurfacePatch(nextRun);
+    const feedback = getNewGameplayFeedback(run, nextRun).find(
+        (item) => item.audioCategory === 'reward-claim' || item.audioCategory === 'side-room'
+    ) ?? null;
     return {
         continueAfterPatch: shouldContinueAfterSideRoomResult(patch),
-        feedback: getNewGameplayFeedback(run, nextRun).find((item) => item.audioCategory === 'reward-claim') ?? null,
+        feedback,
         kind: 'applied',
         patch
     };

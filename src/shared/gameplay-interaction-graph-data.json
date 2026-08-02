@@ -1,5 +1,5 @@
 {
-  "version": 19,
+  "version": 20,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -390,6 +390,19 @@
       "blocks": [],
       "softlockGuards": ["route-choice-availability", "greed-needs-more-lives", "single-pending-route-plan"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/renderer/store/levelCompleteContinuationExecutor.test.ts", "src/shared/gameplay-core-simulation.test.ts"]
+    },
+    {
+      "id": "progression.route_side_room",
+      "label": "Typed Route Side-Room Resolution",
+      "kind": "progression",
+      "role": "flat_replayable_between_floor_reward_choice",
+      "evidence": ["src/shared/route-side-room-rules.ts", "src/shared/run-events.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/renderer/store/sideRoomSurfaceState.ts", "src/renderer/store/sideRoomActionController.ts", "src/renderer/store/gameplayFeedbackAdapter.ts"],
+      "reads": ["levelComplete", "routeSideRoom", "bonusRewardLedger", "relicIds", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "destroyPairCharges", "peekCharges", "regionShuffleCharges", "dungeonKeys", "rewardPerkIds"],
+      "writes": ["routeSideRoom", "bonusRewardLedger", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "destroyPairCharges", "peekCharges", "regionShuffleCharges", "dungeonKeys", "rewardPerkIds", "gameplayCommandJournal", "gameplayEventJournal", "feedbackLines"],
+      "enables": ["progression.run_flow", "progression.relic_draft", "build.emergency_toolkit", "build.treasure_greed"],
+      "blocks": [],
+      "softlockGuards": ["strict-side-room-command", "live-level-complete-interlude", "event-key-and-choice-validation", "bonus-reward-anti-grind-ledger", "schema-owned-bonus-payout", "single-flat-command-journal", "skip-preserves-reward-state"],
+      "tests": ["src/shared/gameplay-core.test.ts", "src/shared/route-side-room-rules.test.ts", "src/renderer/store/sideRoomSurfaceState.test.ts", "src/renderer/store/sideRoomActionController.test.ts", "src/renderer/store/useAppStore.test.ts", "src/shared/gameplay-core-simulation.test.ts"]
     },
     {
       "id": "stats.session_tracking",
@@ -891,8 +904,8 @@
       "kind": "relic",
       "role": "future_relic_selection_source",
       "evidence": ["src/shared/relics.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core-adapters.ts", "src/shared/relic-offer-rules.ts"],
-      "reads": ["relicOffer", "relicIds", "bonusRelicPicksNextOffer"],
-      "writes": ["relicIds", "bonusRelicPicksNextOffer", "feedbackLines"],
+      "reads": ["relicOffer", "relicIds", "bonusRelicPicksNextOffer", "bonusRewardLedger"],
+      "writes": ["relicIds", "bonusRelicPicksNextOffer", "relicFavorProgress", "feedbackLines"],
       "enables": ["progression.relic_draft", "build.treasure_greed"],
       "blocks": [],
       "softlockGuards": ["draft-eligibility", "definition-version-gate", "next-offer-consumption"],
@@ -2150,6 +2163,17 @@
     { "source": "persistence.run_summary", "target": "simulation.gameplay_replay", "kind": "enables", "label": "retains replay diagnostics" },
     { "source": "simulation.gameplay_replay", "target": "core.gameplay_commands", "kind": "tested_by", "label": "replays command log" },
     { "source": "route.mystery", "target": "route.choice", "kind": "enables", "label": "turns revealed uncertainty into an informed commitment" },
+    { "source": "route.choice", "target": "progression.route_side_room", "kind": "enables", "label": "opens the deterministic rest event or reward interlude" },
+    { "source": "progression.route_side_room", "target": "core.gameplay_commands", "kind": "triggers", "label": "submits one strict claim or skip command" },
+    { "source": "core.gameplay_commands", "target": "progression.route_side_room", "kind": "modifies", "label": "owns event reward ledger and exact resource consequences" },
+    { "source": "progression.route_side_room", "target": "progression.run_flow", "kind": "modifies", "label": "clears the interlude before shop or next-floor continuation" },
+    { "source": "progression.route_side_room", "target": "economy.score_and_rewards", "kind": "modifies", "label": "applies schema-owned score Favor and inventory payouts" },
+    { "source": "relic.shrine_echo", "target": "progression.route_side_room", "kind": "modifies", "label": "converts the first treasure claim into Favor" },
+    { "source": "progression.route_side_room", "target": "economy.shop_gold", "kind": "modifies", "label": "records exact rest cost or event and reward gold" },
+    { "source": "progression.route_side_room", "target": "progression.relic_draft", "kind": "grants", "label": "converts Favor and Shrine Echo treasure into future build choice" },
+    { "source": "progression.route_side_room", "target": "feedback.gameplay_hud", "kind": "displays", "label": "projects typed rest event reward or skip feedback" },
+    { "source": "progression.route_side_room", "target": "persistence.run_summary", "kind": "persists", "label": "retains one flat side-room command and its domain events" },
+    { "source": "progression.route_side_room", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "replays rest event bonus and skip outcomes" },
     { "source": "route.mystery", "target": "progression.run_flow", "kind": "modifies", "label": "changes next decision" }
   ],
   "coverage": {

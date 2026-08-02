@@ -57,11 +57,11 @@ describe('sideRoomSurfaceState', () => {
     it('ignores side-room actions outside the side-room view', () => {
         const run = createPlayablePathFixture('sideRoomPrimary').run!;
 
-        expect(createSideRoomActionSurfaceResult('playing', run, () => run)).toEqual({ kind: 'ignored' });
+        expect(createSideRoomActionSurfaceResult('playing', run, 'skip')).toEqual({ kind: 'ignored' });
     });
 
     it('routes missing side-room run state back to menu', () => {
-        expect(createSideRoomActionSurfaceResult('sideRoom', null, (run) => run)).toEqual({
+        expect(createSideRoomActionSurfaceResult('sideRoom', null, 'skip')).toEqual({
             kind: 'menu',
             patch: { view: 'menu' }
         });
@@ -70,7 +70,7 @@ describe('sideRoomSurfaceState', () => {
     it('routes invalid side-room run state back to playing', () => {
         const run = createNewRun(0);
 
-        expect(createSideRoomActionSurfaceResult('sideRoom', run, () => run)).toEqual({
+        expect(createSideRoomActionSurfaceResult('sideRoom', run, 'skip')).toEqual({
             kind: 'playing',
             patch: { view: 'playing' }
         });
@@ -90,7 +90,7 @@ describe('sideRoomSurfaceState', () => {
             sideRoom: null,
             status: 'gameOver'
         });
-        expect(createSideRoomActionSurfaceResult('sideRoom', run, () => run)).toMatchObject({
+        expect(createSideRoomActionSurfaceResult('sideRoom', run, 'skip')).toMatchObject({
             kind: 'gameOver',
             run: {
                 sideRoom: null,
@@ -101,15 +101,22 @@ describe('sideRoomSurfaceState', () => {
 
     it('returns an applied patch and continuation flag for successful side-room actions', () => {
         const run = createPlayablePathFixture('sideRoomPrimary').run!;
-        const nextRun = { ...run, sideRoom: null, shopOffers: [] };
-        const result = createSideRoomActionSurfaceResult('sideRoom', run, () => nextRun);
+        const result = createSideRoomActionSurfaceResult('sideRoom', run, 'claim');
 
-        expect(result).toEqual({
+        expect(result).toMatchObject({
             continueAfterPatch: true,
-            feedback: null,
+            feedback: { audioCategory: 'side-room', cue: 'side_room.rest_healed' },
             kind: 'applied',
             patch: {
-                run: nextRun,
+                run: {
+                    sideRoom: null,
+                    gameplayCommandJournal: expect.arrayContaining([
+                        expect.objectContaining({ type: 'side_room.resolve', action: 'claim' })
+                    ]),
+                    gameplayEventJournal: expect.arrayContaining([
+                        expect.objectContaining({ type: 'side_room.resolved', outcome: 'rest_healed' })
+                    ])
+                },
                 view: 'playing'
             }
         });
@@ -117,8 +124,7 @@ describe('sideRoomSurfaceState', () => {
 
     it('returns an applied patch without continuation when a side-room result opens the summary shop', () => {
         const run = createPlayablePathFixture('sideRoomThenShop').run!;
-        const nextRun = { ...run, sideRoom: null };
-        const result = createSideRoomActionSurfaceResult('sideRoom', run, () => nextRun);
+        const result = createSideRoomActionSurfaceResult('sideRoom', run, 'skip');
 
         expect(result).toMatchObject({
             continueAfterPatch: false,

@@ -18,7 +18,7 @@ interface SideRoomActionControllerDeps {
 }
 
 interface SideRoomActionController {
-    applySideRoomAction: (applyAction: (run: RunState) => RunState) => void;
+    resolveSideRoom: (action: 'claim' | 'skip', choiceId?: string) => void;
 }
 
 export const createSideRoomActionController = ({
@@ -28,9 +28,9 @@ export const createSideRoomActionController = ({
     playRewardClaimFeedback,
     setState
 }: SideRoomActionControllerDeps): SideRoomActionController => ({
-    applySideRoomAction: (applyAction) => {
+    resolveSideRoom: (action, choiceId) => {
         const { run, view } = getState();
-        const result = createSideRoomActionSurfaceResult(view, run, applyAction);
+        const result = createSideRoomActionSurfaceResult(view, run, action, choiceId);
         if (result.kind === 'ignored') {
             return;
         }
@@ -39,7 +39,10 @@ export const createSideRoomActionController = ({
             return;
         }
         setState(result.patch);
-        if (result.kind === 'applied' && result.feedback?.audioCategory === 'reward-claim') {
+        if (
+            result.kind === 'applied'
+            && (result.feedback?.audioCategory === 'reward-claim' || result.feedback?.audioCategory === 'side-room')
+        ) {
             playRewardClaimFeedback();
         }
         if (result.kind === 'applied' && result.continueAfterPatch) {

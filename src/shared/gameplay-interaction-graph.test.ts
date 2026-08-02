@@ -382,6 +382,7 @@ describe('gameplay interaction graph', () => {
             ['bonus_reward.cursed_opener_contract', 'reward.cursed_opener_contract'],
             ['reward_perk.cursed_opener_greed', 'perk.cursed_opener_greed'],
             ['relic.shrine_echo', 'relic.shrine_echo'],
+            ['relic.shrine_echo.treasure_claim', 'relic.shrine_echo'],
             ['findable.score_glint', 'findable.score_glint']
         ]);
 
@@ -725,7 +726,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(19);
+        expect(gameplayInteractionGraph.version).toBe(20);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -748,7 +749,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects typed route selection from floor clear through exact replayable consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(19);
+        expect(gameplayInteractionGraph.version).toBe(20);
         expect(byId.get('route.choice')).toMatchObject({
             kind: 'route',
             role: 'replayable_between_floor_commitment',
@@ -789,7 +790,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects relic drafting and offer shaping to typed build acquisition, economy, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(19);
+        expect(gameplayInteractionGraph.version).toBe(20);
         expect(byId.get('progression.relic_draft')).toMatchObject({
             kind: 'progression',
             role: 'typed_replayable_build_selection_and_offer_shaping',
@@ -813,6 +814,35 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'progression.relic_draft', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'progression.relic_draft', target: 'persistence.run_summary', kind: 'persists' }),
             expect.objectContaining({ source: 'progression.relic_draft', target: 'simulation.gameplay_replay', kind: 'tested_by' })
+        ]));
+    });
+
+    it('connects flat typed side-room choices from routes through rewards, feedback, persistence, and replay', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        expect(gameplayInteractionGraph.version).toBe(20);
+        expect(byId.get('progression.route_side_room')).toMatchObject({
+            kind: 'progression',
+            role: 'flat_replayable_between_floor_reward_choice',
+            evidence: expect.arrayContaining([
+                'src/shared/gameplay-core.ts',
+                'src/renderer/store/sideRoomSurfaceState.ts',
+                'src/renderer/store/sideRoomActionController.ts'
+            ]),
+            tests: expect.arrayContaining([
+                'src/shared/gameplay-core.test.ts',
+                'src/renderer/store/useAppStore.test.ts'
+            ])
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'route.choice', target: 'progression.route_side_room', kind: 'enables' }),
+            expect.objectContaining({ source: 'progression.route_side_room', target: 'core.gameplay_commands', kind: 'triggers' }),
+            expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.route_side_room', kind: 'modifies' }),
+            expect.objectContaining({ source: 'progression.route_side_room', target: 'progression.run_flow', kind: 'modifies' }),
+            expect.objectContaining({ source: 'progression.route_side_room', target: 'economy.score_and_rewards', kind: 'modifies' }),
+            expect.objectContaining({ source: 'relic.shrine_echo', target: 'progression.route_side_room', kind: 'modifies' }),
+            expect.objectContaining({ source: 'progression.route_side_room', target: 'feedback.gameplay_hud', kind: 'displays' }),
+            expect.objectContaining({ source: 'progression.route_side_room', target: 'persistence.run_summary', kind: 'persists' }),
+            expect.objectContaining({ source: 'progression.route_side_room', target: 'simulation.gameplay_replay', kind: 'tested_by' })
         ]));
     });
 });

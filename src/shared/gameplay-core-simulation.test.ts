@@ -131,6 +131,7 @@ describe('seeded gameplay core simulation', () => {
                 'route.choose',
                 'relic.pick',
                 'relic.offer_service_use',
+                'side_room.resolve',
                 'wild_match.consume'
             ])
         );
@@ -138,6 +139,7 @@ describe('seeded gameplay core simulation', () => {
         expect(first.commandTypeCounts['route.choose']).toBe(1);
         expect(first.commandTypeCounts['relic.pick']).toBe(1);
         expect(first.commandTypeCounts['relic.offer_service_use']).toBe(1);
+        expect(first.commandTypeCounts['side_room.resolve']).toBe(1);
         expect(first.eventTypeCounts['wild_match.consumed']).toBe(1);
         expect(first.finalRun.wildMatchesRemaining).toBe(0);
     });

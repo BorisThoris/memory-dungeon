@@ -69,6 +69,13 @@ describe('gameplayFeedbackAdapter', () => {
                 message: 'Relic offer rerolled.',
                 source: { kind: 'system', id: 'relic_offer' },
                 tone: 'information'
+            }),
+            event(4, {
+                type: 'feedback.requested',
+                cue: 'side_room.rest_healed',
+                message: 'Rest completed.',
+                source: { kind: 'system', id: 'route_side_room' },
+                tone: 'reward'
             })
         ]);
 
@@ -76,7 +83,8 @@ describe('gameplayFeedbackAdapter', () => {
             'relic-pick',
             'reward-claim',
             'match-resolution',
-            'relic-service'
+            'relic-service',
+            'side-room'
         ]);
     });
 

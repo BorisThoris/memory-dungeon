@@ -18,6 +18,7 @@ export type GameplayFeedbackAudioCategory =
     | 'exit-activate'
     | 'parasite'
     | 'route-choice'
+    | 'side-room'
     | 'wild-match'
     | 'undo'
     | 'wager';
@@ -71,6 +72,9 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'route_choice') {
         return 'route-choice';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'route_side_room') {
+        return 'side-room';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'relic_offer') {
         return 'relic-service';
