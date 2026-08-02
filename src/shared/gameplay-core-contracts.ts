@@ -908,6 +908,19 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             type: z.literal('board.stray_remove'),
             targetTileId: z.string().min(1).max(160)
         })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('risk_wager.accept')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.gambit_commit'),
+            targetTileId: z.string().min(1).max(160)
+        })
         .strict()
 ]);
 
@@ -1046,6 +1059,28 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('risk_wager.accepted'),
+            acceptedOnLevel: z.number().int().positive(),
+            targetLevel: z.number().int().positive(),
+            streakAtRisk: z.number().int().nonnegative(),
+            bonusFavorOnSuccess: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.gambit_commit.requested'),
+            targetTileId: z.string().min(1).max(160),
+            committedTileIds: z.tuple([
+                z.string().min(1).max(160),
+                z.string().min(1).max(160),
+                z.string().min(1).max(160)
+            ])
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('currency.changed'),
             currency: z.literal('shop_gold'),
             requested: z.number().int().positive(),
@@ -1164,5 +1199,20 @@ export const createGameplayStrayRemoveCommand = (commandId: string, targetTileId
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'board.stray_remove',
+        targetTileId
+    });
+
+export const createGameplayRiskWagerAcceptCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'risk_wager.accept'
+    });
+
+export const createGameplayGambitCommitCommand = (commandId: string, targetTileId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.gambit_commit',
         targetTileId
     });

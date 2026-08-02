@@ -3,6 +3,8 @@ import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import type { BoardState, RunState, Tile } from '../../shared/contracts';
 import { buildBoard, countFindablePairs } from '../../shared/board-generation';
 import { createNewRun } from '../../shared/game-core';
+import { createGameplayGambitCommitCommand } from '../../shared/gameplay-core-contracts';
+import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { WILD_PAIR_KEY } from '../../shared/tile-identity';
 import {
     canPauseRunSurface,
@@ -824,9 +826,66 @@ describe('run surface state helpers', () => {
         expect(result.kind).toBe('flipped');
         if (result.kind === 'flipped') {
             expect(result.playFlipSfx).toBe(true);
-            expect(result.playGambitCommitSfx).toBe(true);
+            expect(result.events).toEqual([
+                expect.objectContaining({ type: 'board.gambit_commit.requested' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.gambit.committed' })
+            ]);
             expect(result.run.board!.flippedTileIds).toHaveLength(3);
+            expect(result.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.gambit_commit', targetTileId: third.id })
+            ]);
             expect(result.resolveDelayMs).toBe(result.run.timerState.resolveRemainingMs);
+        }
+    });
+
+    it('persists a fatal third-pick trap without claiming a Gambit commitment', () => {
+        const runSeed = 51;
+        const baseRun = createNewRun(0, { echoFeedbackEnabled: false, runSeed });
+        const generated = buildBoard(5, {
+            runSeed,
+            runRulesVersion: baseRun.runRulesVersion,
+            dungeonNodeKind: 'trap',
+            gameMode: 'endless'
+        });
+        const trapTile = generated.tiles.find((tile) => tile.dungeonCardKind === 'trap')!;
+        const ordinary = generated.tiles.filter(
+            (tile) => tile.pairKey !== trapTile.pairKey
+        ).slice(0, 2);
+        const flippedTileIds = ordinary.map((tile) => tile.id);
+        const boardWithMismatch = {
+            ...generated,
+            flippedTileIds,
+            tiles: generated.tiles.map((tile) =>
+                tile.dungeonCardKind === 'trap'
+                    ? { ...tile, dungeonCardEffectId: 'trap_spikes' as const }
+                    : flippedTileIds.includes(tile.id)
+                      ? { ...tile, state: 'flipped' as const }
+                      : tile
+            )
+        };
+        const run = {
+            ...baseRun,
+            board: boardWithMismatch,
+            status: 'resolving' as const,
+            lives: 1,
+            gambitAvailableThisFloor: true,
+            gambitThirdFlipUsed: false,
+            stats: { ...baseRun.stats, guardTokens: 0 }
+        };
+
+        const commandResult = reduceGameplayCommand(
+            run,
+            createGameplayGambitCommitCommand('fatal-trap-commit', trapTile.id)
+        );
+        expect(commandResult.accepted).toBe(true);
+
+        const result = createGambitThirdPickPressResult(run, trapTile.id);
+
+        expect(result.kind).toBe('flipGameOver');
+        if (result.kind === 'flipGameOver') {
+            expect(result.run.status).toBe('gameOver');
+            expect(result.events).toEqual([]);
+            expect(result.run.gameplayCommandJournal).toBeUndefined();
         }
     });
 
@@ -888,7 +947,9 @@ describe('run surface state helpers', () => {
         });
         if (result.kind === 'flipped') {
             expect(result.run.board!.flippedTileIds).toEqual(['a1', 'b1', 'a2']);
-            expect(result.playGambitCommitSfx).toBe(true);
+            expect(result.events).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.gambit.committed' })
+            ]));
         }
     });
 });

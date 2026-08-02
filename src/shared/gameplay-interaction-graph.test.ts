@@ -444,4 +444,34 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'build.reveal_scout', target: 'progression.relic_draft', kind: 'consequence' })
         ]));
     });
+
+    it('connects the Route Gambler from per-floor commitment through wager Favor cash-out', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+
+        expect(byId.get('build.route_gambler')).toMatchObject({
+            kind: 'build',
+            role: 'risk_commitment_and_rescue_build'
+        });
+        expect(byId.get('inventory.gambit_token')).toMatchObject({
+            kind: 'inventory',
+            role: 'per_floor_third_flip_resource'
+        });
+        expect(byId.get('power.gambit')).toMatchObject({
+            kind: 'power',
+            role: 'mismatch_rescue_with_failure_cost'
+        });
+        expect(byId.get('objective.risk_wager')).toMatchObject({
+            kind: 'objective',
+            role: 'optional_streak_for_favor_commitment'
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'progression.run_flow', target: 'inventory.gambit_token', kind: 'grants' }),
+            expect.objectContaining({ source: 'inventory.gambit_token', target: 'power.gambit', kind: 'enables' }),
+            expect.objectContaining({ source: 'power.gambit', target: 'objective.floor_clear', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'objective.featured_streak', target: 'objective.risk_wager', kind: 'gates' }),
+            expect.objectContaining({ source: 'objective.risk_wager', target: 'economy.relic_favor', kind: 'grants' }),
+            expect.objectContaining({ source: 'relic.wager_surety', target: 'objective.risk_wager', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'build.route_gambler', target: 'power.gambit', kind: 'consequence' })
+        ]));
+    });
 });

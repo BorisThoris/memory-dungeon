@@ -4,7 +4,13 @@ import {
     type GameplayEvent
 } from '../../shared/gameplay-core-contracts';
 
-export type GameplayFeedbackAudioCategory = 'match-resolution' | 'peek' | 'relic-pick' | 'reward-claim';
+export type GameplayFeedbackAudioCategory =
+    | 'gambit-commit'
+    | 'match-resolution'
+    | 'peek'
+    | 'relic-pick'
+    | 'reward-claim'
+    | 'wager';
 
 export interface GameplayFeedbackPresentation {
     audioCategory: GameplayFeedbackAudioCategory;
@@ -28,6 +34,12 @@ const audioCategoryFor = (
 ): GameplayFeedbackAudioCategory => {
     if (feedback.source.kind === 'power' && feedback.cue === 'power.peek.used') {
         return 'peek';
+    }
+    if (feedback.source.kind === 'power' && feedback.cue === 'power.gambit.committed') {
+        return 'gambit-commit';
+    }
+    if (feedback.source.kind === 'system' && feedback.cue === 'build.route_gambler.wager_accepted') {
+        return 'wager';
     }
     if (feedback.source.kind === 'relic' && feedback.cue.endsWith('.claimed')) {
         return 'relic-pick';

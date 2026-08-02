@@ -22,6 +22,7 @@ import {
 import { runNonNegativeInteger } from './run-number-guards';
 import { runStringArray } from './run-array-guards';
 import { gainRelicFavor } from './relic-favor-rules';
+import { acceptEndlessRiskWager } from './risk-wager-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export interface GameplayCommandResult {
@@ -42,6 +43,8 @@ const SYSTEM_SOURCE: GameplaySource = { kind: 'system', id: 'gameplay-core' };
 const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
 const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
 const STRAY_REMOVE_SOURCE: GameplaySource = { kind: 'power', id: 'stray_remove' };
+const RISK_WAGER_SOURCE: GameplaySource = { kind: 'system', id: 'risk_wager' };
+const GAMBIT_SOURCE: GameplaySource = { kind: 'power', id: 'gambit' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
     ? Omit<T, 'schemaVersion' | 'eventId' | 'commandId' | 'sequence' | 'source'>
@@ -451,6 +454,73 @@ const applyPeekCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+const applyRiskWagerAcceptCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'risk_wager.accept' }>
+): GameplayCommandResult => {
+    const nextRun = acceptEndlessRiskWager(run);
+    if (nextRun === run || nextRun.endlessRiskWager === null) {
+        return rejectedResult(run, command.commandId, 'The Endless risk wager is not available.', command);
+    }
+    const wager = nextRun.endlessRiskWager;
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, RISK_WAGER_SOURCE, events);
+    writeEvent({
+        type: 'risk_wager.accepted',
+        acceptedOnLevel: wager.acceptedOnLevel,
+        targetLevel: wager.targetLevel,
+        streakAtRisk: wager.streakAtRisk,
+        bonusFavorOnSuccess: wager.bonusFavorOnSuccess
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'build.route_gambler.wager_accepted',
+        message: `Wager accepted for floor ${wager.targetLevel}: ${wager.streakAtRisk} objective streak is at risk for ${wager.bonusFavorOnSuccess} Favor.`,
+        tone: 'warning'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyGambitCommitCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.gambit_commit' }>
+): GameplayCommandResult => {
+    const flippedTileIds = run.board?.flippedTileIds;
+    const target = run.board?.tiles.find((tile) => tile.id === command.targetTileId);
+    if (
+        run.status !== 'resolving' ||
+        !run.gambitAvailableThisFloor ||
+        run.gambitThirdFlipUsed ||
+        !Array.isArray(flippedTileIds) ||
+        flippedTileIds.length !== 2 ||
+        flippedTileIds.some((tileId) => typeof tileId !== 'string') ||
+        !target ||
+        target.state !== 'hidden' ||
+        flippedTileIds.includes(command.targetTileId)
+    ) {
+        return rejectedResult(run, command.commandId, 'Gambit cannot commit this third tile.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, GAMBIT_SOURCE, events);
+    const committedTileIds: [string, string, string] = [
+        flippedTileIds[0]!,
+        flippedTileIds[1]!,
+        command.targetTileId
+    ];
+    writeEvent({
+        type: 'board.gambit_commit.requested',
+        targetTileId: command.targetTileId,
+        committedTileIds
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.gambit.committed',
+        message: `Gambit committed ${committedTileIds.join(', ')} as a three-tile rescue.`,
+        tone: 'warning'
+    });
+    return { run, command, events, accepted: true };
+};
+
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
@@ -465,6 +535,12 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.stray_remove') {
         return applyStrayRemoveCommand(run, command);
+    }
+    if (command.type === 'risk_wager.accept') {
+        return applyRiskWagerAcceptCommand(run, command);
+    }
+    if (command.type === 'board.gambit_commit') {
+        return applyGambitCommitCommand(run, command);
     }
     const definition = getGameplayContentDefinition(command.definitionId);
     if (!definition) {

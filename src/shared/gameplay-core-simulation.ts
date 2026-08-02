@@ -3,8 +3,10 @@ import { tileIsStrayEligiblePreview } from './board-power-targeting';
 import {
     GAMEPLAY_CONTENT_DEFINITIONS,
     createGameplayDefinitionCommand,
+    createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
+    createGameplayRiskWagerAcceptCommand,
     createGameplayStrayRemoveCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
@@ -73,7 +75,7 @@ const commandForStep = (
     invalidTraitChance: number
 ): GameplayCommand => {
     const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
-    const actionIndex = pickRngIndex(rng, definitions.length + 3);
+    const actionIndex = pickRngIndex(rng, definitions.length + 5);
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);
@@ -95,6 +97,14 @@ const commandForStep = (
         if (target) {
             return createGameplayStrayRemoveCommand(commandId, target);
         }
+    }
+    if (actionIndex === definitions.length + 3) {
+        return createGameplayRiskWagerAcceptCommand(commandId);
+    }
+    if (actionIndex === definitions.length + 4) {
+        const targets = availablePeekTargets(run);
+        const target = targets[pickRngIndex(rng, targets.length)] ?? 'missing-gambit-target';
+        return createGameplayGambitCommitCommand(commandId, target);
     }
 
     const definition = definitions[actionIndex % definitions.length] ?? definitions[0];

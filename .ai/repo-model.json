@@ -5,18 +5,18 @@
     "name": "memory-dungeon",
     "trackedFileCount": 2377,
     "codeFileCount": 876,
-    "exportedSymbolCount": 3183,
+    "exportedSymbolCount": 3185,
     "contentItemCount": 56,
-    "mechanicCount": 86,
-    "stateFieldCount": 109,
-    "relationshipCount": 8462
+    "mechanicCount": 90,
+    "stateFieldCount": 113,
+    "relationshipCount": 8566
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 11784,
-      "sha256": "4769723d4d7725d16cf64e59ac1545ffb4ae3d21b4531e4e43732add8db15c95"
+      "bytes": 13435,
+      "sha256": "f1aab037debdc71173e8b3e508015b9ce6100899bff9f5a4d1f4f9dc42d90f0e"
     },
     {
       "path": ".ai/README.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21312,
-      "sha256": "2fd169ec13e4deab4918ef416ede69fae26632c0b79c15be3a503dea4de2c3af"
+      "bytes": 21383,
+      "sha256": "8de8d3e530a32bcb490293775f48edaecde30f9f7861e2786202f908510b9fb5"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -3903,8 +3903,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 27290,
-      "sha256": "32131a1ef79fd2b452879251aa80d5ab527bf1ed2cd25ac8ef70fcb1d9f8fe2f"
+      "bytes": 27375,
+      "sha256": "c0858a087d9bf998c9a853992f08bf54a16cc57eee8f8c0a827804eb6ad02e1a"
     },
     {
       "path": "packages/notifications/package.json",
@@ -9183,14 +9183,14 @@
     {
       "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
       "category": "test",
-      "bytes": 4264,
-      "sha256": "f039a638ebf0c0893a4015384e31f235485286ef6acf26703b40d619b56f3d94"
+      "bytes": 5109,
+      "sha256": "5dcb303958a08550f81f132224220a7f0d9697288d0eb8b524e6080e69a9c8ed"
     },
     {
       "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "category": "source",
-      "bytes": 3526,
-      "sha256": "4364b6adc90b4c78fc3bf70f463866ee56e679e15c7d8856fff782653e5090e1"
+      "bytes": 3839,
+      "sha256": "f38ab68dfe8ceda970d9ca684456b80c7944f531bb30772f140b88ceabba234e"
     },
     {
       "path": "src/renderer/store/hydrationController.test.ts",
@@ -9351,14 +9351,14 @@
     {
       "path": "src/renderer/store/riskWagerSurfaceState.test.ts",
       "category": "test",
-      "bytes": 673,
-      "sha256": "54781f66945ac010b80e5d398cddaa9aadc59e868b8d6ea06581779abe6364a0"
+      "bytes": 2044,
+      "sha256": "7345d0792b90c5861bbe36ee219f337f3619fd5f0a1b92c6ba3ba96a57f4cee2"
     },
     {
       "path": "src/renderer/store/riskWagerSurfaceState.ts",
       "category": "source",
-      "bytes": 540,
-      "sha256": "2fb45b17b968689d43fbde6c26af89bf280cd71406a0fe5c60137b178c4621cd"
+      "bytes": 1157,
+      "sha256": "8129b09652eb443edd719465910fe33e84475c4a24185e6aaba1977b3c4eccf9"
     },
     {
       "path": "src/renderer/store/runLifecycleController.test.ts",
@@ -9423,14 +9423,14 @@
     {
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "category": "test",
-      "bytes": 32549,
-      "sha256": "a6b3aca799a79797b7efa68e5b2ad7bb446a60f16d8ba8ccb127b558c4b6e2c9"
+      "bytes": 35195,
+      "sha256": "c8d7ef34312edeaaa14058cfe462aff2cd6ea07d03b8336d3a1de98651031813"
     },
     {
       "path": "src/renderer/store/runSurfaceState.ts",
       "category": "source",
-      "bytes": 18505,
-      "sha256": "ed5e083d9cd5a788301c5f2bca145acbf8658809403d223323bedb88d1ff49ac"
+      "bytes": 19401,
+      "sha256": "3be1ae7be4459444f85cd9c3741ebfe1e1eba5c434bf5038f9a5bbac424f5d34"
     },
     {
       "path": "src/renderer/store/runTimerController.test.ts",
@@ -9555,14 +9555,14 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 110785,
-      "sha256": "19fd1fe1ae884de734355636ce93fcac71d87f13db59bbf61b9ccc795bd73310"
+      "bytes": 111249,
+      "sha256": "12096d96444d006f03bf90f9b0974060d22ad7c0d112a753e1800627a5be5c12"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 26829,
-      "sha256": "9a7330999ec20336e4ee3082a1d8496054b94d0a6ca0256b3e131f61e2e59c1e"
+      "bytes": 27100,
+      "sha256": "978f800aa664193da8ac571b365d6f9774af3897affc5cb4e12bfd0bd2b6dd38"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -10605,44 +10605,44 @@
     {
       "path": "src/shared/gameplay-core-contracts.ts",
       "category": "source",
-      "bytes": 38670,
-      "sha256": "c6593431c590f4d24fc8a7c136fa915af276ba5eeea845ae0afac79ecb3b5be2"
+      "bytes": 40258,
+      "sha256": "aa68797a220459e6821ca411fa09e70b7c55bbdcb400f4065f9254d684154968"
     },
     {
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "category": "test",
-      "bytes": 4463,
-      "sha256": "61206cfb003abc1efb527d9b812304c8a4df1400fd32ae90d31a9293c95df0bd"
+      "bytes": 4539,
+      "sha256": "0fd2f804b80eb5e09a883eb5dc54daf3292c87c922f887d7403017f19148aec3"
     },
     {
       "path": "src/shared/gameplay-core-simulation.ts",
       "category": "source",
-      "bytes": 9240,
-      "sha256": "e2634bbaac00494b540ba8589cf78490b712d45b010d3dc65160b508deb31f25"
+      "bytes": 9711,
+      "sha256": "126b485dd3ab4ebaff096612f81589cc26d4d8390929a34084c3aeba62459617"
     },
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 27408,
-      "sha256": "fb9928d0831993618c0963f4b894f2781a6cee94cf334dea6f7d0763e4e1f554"
+      "bytes": 30921,
+      "sha256": "c8319d373e39cb8e5f64092e1ef66fc274afde4da6dc5a6840faec9775fb4053"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 21771,
-      "sha256": "548988507350ca83346df2b5a1b0e48b23f10011be5eabec3bdd2f142c0995b5"
+      "bytes": 24849,
+      "sha256": "655bd78126edaafb61baa68143364a5d93d9d1d133090474c87f69c1f6f6f0a2"
     },
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 102202,
-      "sha256": "5efef7c9a33edd50a98471744249a2800cb7b8c8dfadb76f0fccc27861bdef31"
+      "bytes": 108994,
+      "sha256": "b17a9e0d1ddb1c1f862685f9fd42691a3ea99ada4df212dbbd0532b45087dcf9"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 27189,
-      "sha256": "3cee69ec23bb51080cde63a0bdbabe27116a473db98b5bf0c0b28f8140d0c477"
+      "bytes": 28975,
+      "sha256": "25c9dd6350015a5849ea60a908fda472f7aaf38e8792642ca3cf858d176ce913"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -21397,7 +21397,7 @@
       "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 121,
+      "lineCount": 145,
       "imports": [
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -21410,7 +21410,7 @@
       "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 91,
+      "lineCount": 103,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts"
@@ -21928,9 +21928,10 @@
       "path": "src/renderer/store/riskWagerSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 21,
+      "lineCount": 52,
       "imports": [
         "file:src/renderer/store/riskWagerSurfaceState.ts",
+        "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts"
       ],
       "exports": [],
@@ -21941,10 +21942,12 @@
       "path": "src/renderer/store/riskWagerSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 23,
+      "lineCount": 36,
       "imports": [
         "file:src/shared/contracts.ts",
-        "file:src/shared/objective-rules.ts"
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-core.ts",
+        "file:src/shared/gameplay-journal.ts"
       ],
       "exports": [
         "symbol:src/renderer/store/riskWagerSurfaceState.ts#createRiskWagerSurfaceResult"
@@ -22146,13 +22149,15 @@
       "path": "src/renderer/store/runSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 895,
+      "lineCount": 956,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/shared/board-generation.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/game-core.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-core.ts",
         "file:src/shared/tile-identity.ts"
       ],
       "exports": [],
@@ -22163,7 +22168,7 @@
       "path": "src/renderer/store/runSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 642,
+      "lineCount": 664,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/shared/board-powers.ts",
@@ -22567,7 +22572,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 2750,
+      "lineCount": 2757,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
@@ -22591,7 +22596,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 856,
+      "lineCount": 859,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -22600,6 +22605,7 @@
         "file:src/renderer/store/appStoreInitialState.ts",
         "file:src/renderer/store/appStoreTypes.ts",
         "file:src/renderer/store/backgroundPersistence.ts",
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/hydrationController.ts",
         "file:src/renderer/store/levelCompleteContinuationExecutor.ts",
         "file:src/renderer/store/levelCompleteShopExecutor.ts",
@@ -24116,6 +24122,7 @@
         "file:src/renderer/store/metaOverlayState.test.ts",
         "file:src/renderer/store/pauseResumeExecutor.test.ts",
         "file:src/renderer/store/relicOfferSurfaceState.test.ts",
+        "file:src/renderer/store/riskWagerSurfaceState.test.ts",
         "file:src/renderer/store/runLifecycleController.test.ts",
         "file:src/renderer/store/runResolutionController.test.ts",
         "file:src/renderer/store/runSettingsPatch.test.ts",
@@ -26548,7 +26555,7 @@
       "path": "src/shared/gameplay-core-contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1169,
+      "lineCount": 1219,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/run-inventory-contracts.ts"
@@ -26557,8 +26564,10 @@
         "symbol:src/shared/gameplay-core-contracts.ts#COMBO_SHARD_ENGINE_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#CONDUIT_CARTOGRAPHER_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayDefinitionCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
+        "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
         "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CORE_SCHEMA_VERSION",
@@ -26590,6 +26599,7 @@
       ],
       "testedBy": [
         "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+        "file:src/renderer/store/runSurfaceState.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-interaction-graph.test.ts",
         "file:src/shared/gameplay-journal.test.ts",
@@ -26601,7 +26611,7 @@
       "path": "src/shared/gameplay-core-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 115,
+      "lineCount": 117,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-simulation.ts"
@@ -26614,7 +26624,7 @@
       "path": "src/shared/gameplay-core-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 223,
+      "lineCount": 233,
       "imports": [
         "file:src/shared/board-power-targeting.ts",
         "file:src/shared/contracts.ts",
@@ -26637,7 +26647,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 571,
+      "lineCount": 667,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -26657,13 +26667,14 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 498,
+      "lineCount": 574,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
         "file:src/shared/relic-favor-rules.ts",
+        "file:src/shared/risk-wager-rules.ts",
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-inventory.ts",
         "file:src/shared/run-number-guards.ts",
@@ -26676,6 +26687,7 @@
         "symbol:src/shared/gameplay-core.ts#replayGameplayCommands"
       ],
       "testedBy": [
+        "file:src/renderer/store/runSurfaceState.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-journal.test.ts",
         "file:src/shared/run-summary-rules.test.ts"
@@ -26686,7 +26698,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1401,
+      "lineCount": 1472,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26696,7 +26708,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 448,
+      "lineCount": 478,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -39021,39 +39033,39 @@
       "kind": "type",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
       "line": 7,
-      "endLine": 7
+      "endLine": 13
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackPresentation",
       "name": "GameplayFeedbackPresentation",
       "kind": "interface",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 9,
-      "endLine": 18
+      "line": 15,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getLatestGameplayFeedback",
       "name": "getLatestGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 80,
-      "endLine": 82
+      "line": 92,
+      "endLine": 94
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getNewGameplayFeedback",
       "name": "getNewGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 84,
-      "endLine": 90
+      "line": 96,
+      "endLine": 102
     },
     {
       "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback",
       "name": "projectGameplayFeedback",
       "kind": "value",
       "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
-      "line": 60,
-      "endLine": 78
+      "line": 72,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/store/hydrationController.ts#createHydratedAppStatePatch",
@@ -39684,8 +39696,8 @@
       "name": "createRiskWagerSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/riskWagerSurfaceState.ts",
-      "line": 11,
-      "endLine": 22
+      "line": 15,
+      "endLine": 35
     },
     {
       "id": "symbol:src/renderer/store/runLifecycleController.ts#createRunLifecycleController",
@@ -39804,176 +39816,176 @@
       "name": "canPauseRunSurface",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 121,
-      "endLine": 122
+      "line": 122,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#clearRunSurfaceArmedModes",
       "name": "clearRunSurfaceArmedModes",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 585,
-      "endLine": 594
+      "line": 607,
+      "endLine": 616
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createArmedBoardPowerPressResult",
       "name": "createArmedBoardPowerPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 406,
-      "endLine": 492
+      "line": 407,
+      "endLine": 493
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPinModeToggleResult",
       "name": "createBoardPinModeToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 124,
-      "endLine": 150
+      "line": 125,
+      "endLine": 151
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createBoardPowerContactPolicy",
       "name": "createBoardPowerContactPolicy",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 382,
-      "endLine": 404
+      "line": 383,
+      "endLine": 405
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createDestroyPairArmedToggleResult",
       "name": "createDestroyPairArmedToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 152,
-      "endLine": 188
+      "line": 153,
+      "endLine": 189
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createFlashPairSurfaceResult",
       "name": "createFlashPairSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 365,
-      "endLine": 380
+      "line": 366,
+      "endLine": 381
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createGambitThirdPickPressResult",
       "name": "createGambitThirdPickPressResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 535,
-      "endLine": 583
+      "line": 536,
+      "endLine": 605
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createOrdinaryTileFlipResult",
       "name": "createOrdinaryTileFlipResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 494,
-      "endLine": 533
+      "line": 495,
+      "endLine": 534
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPausedRunSurfacePatch",
       "name": "createPausedRunSurfacePatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 635,
-      "endLine": 641
+      "line": 657,
+      "endLine": 663
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createPeekModeToggleResult",
       "name": "createPeekModeToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 190,
-      "endLine": 232
+      "line": 191,
+      "endLine": 233
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleArmSurfaceResult",
       "name": "createRegionShuffleArmSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 319,
-      "endLine": 340
+      "line": 320,
+      "endLine": 341
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRegionShuffleSurfaceResult",
       "name": "createRegionShuffleSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 342,
-      "endLine": 363
+      "line": 343,
+      "endLine": 364
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunSurfaceReset",
       "name": "createRunSurfaceReset",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 110,
-      "endLine": 119
+      "line": 111,
+      "endLine": 120
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithArmedModesClearedPatch",
       "name": "createRunWithArmedModesClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 615,
-      "endLine": 622
+      "line": 637,
+      "endLine": 644
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardInteractionClearedPatch",
       "name": "createRunWithBoardInteractionClearedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 624,
-      "endLine": 633
+      "line": 646,
+      "endLine": 655
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithBoardPowersDisarmedPatch",
       "name": "createRunWithBoardPowersDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 605,
-      "endLine": 613
+      "line": 627,
+      "endLine": 635
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createRunWithPeekDisarmedPatch",
       "name": "createRunWithPeekDisarmedPatch",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 596,
-      "endLine": 603
+      "line": 618,
+      "endLine": 625
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createShuffleBoardSurfaceResult",
       "name": "createShuffleBoardSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 302,
-      "endLine": 317
+      "line": 303,
+      "endLine": 318
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createStrayArmToggleResult",
       "name": "createStrayArmToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 278,
-      "endLine": 300
+      "line": 279,
+      "endLine": 301
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#createTileSwapToggleResult",
       "name": "createTileSwapToggleResult",
       "kind": "value",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 234,
-      "endLine": 276
+      "line": 235,
+      "endLine": 277
     },
     {
       "id": "symbol:src/renderer/store/runSurfaceState.ts#RunSurfaceState",
       "name": "RunSurfaceState",
       "kind": "interface",
       "file": "src/renderer/store/runSurfaceState.ts",
-      "line": 30,
-      "endLine": 40
+      "line": 31,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/store/runTimerController.ts#createRunTimerController",
@@ -40284,8 +40296,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 265,
-      "endLine": 845
+      "line": 266,
+      "endLine": 848
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -48620,32 +48632,48 @@
       "name": "createGameplayDefinitionCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1127,
-      "endLine": 1144
+      "line": 1162,
+      "endLine": 1179
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
+      "name": "createGameplayGambitCommitCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 1212,
+      "endLine": 1218
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "name": "createGameplayPeekCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1146,
-      "endLine": 1152
+      "line": 1181,
+      "endLine": 1187
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "name": "createGameplayPinToggleCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1154,
-      "endLine": 1160
+      "line": 1189,
+      "endLine": 1195
+    },
+    {
+      "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
+      "name": "createGameplayRiskWagerAcceptCommand",
+      "kind": "value",
+      "file": "src/shared/gameplay-core-contracts.ts",
+      "line": 1205,
+      "endLine": 1210
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayStrayRemoveCommand",
       "name": "createGameplayStrayRemoveCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1162,
-      "endLine": 1168
+      "line": 1197,
+      "endLine": 1203
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GAMEPLAY_CONTENT_DEFINITIONS",
@@ -48708,8 +48736,8 @@
       "name": "GameplayCommand",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1119,
-      "endLine": 1119
+      "line": 1154,
+      "endLine": 1154
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayCommandSchema",
@@ -48717,7 +48745,7 @@
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
       "line": 873,
-      "endLine": 912
+      "endLine": 925
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayCondition",
@@ -48772,16 +48800,16 @@
       "name": "GameplayEvent",
       "kind": "type",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1120,
-      "endLine": 1120
+      "line": 1155,
+      "endLine": 1155
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#gameplayEventSchema",
       "name": "gameplayEventSchema",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 922,
-      "endLine": 1117
+      "line": 935,
+      "endLine": 1152
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#GameplayFacts",
@@ -48820,8 +48848,8 @@
       "name": "getGameplayContentDefinition",
       "kind": "value",
       "file": "src/shared/gameplay-core-contracts.ts",
-      "line": 1124,
-      "endLine": 1125
+      "line": 1159,
+      "endLine": 1160
     },
     {
       "id": "symbol:src/shared/gameplay-core-contracts.ts#SABOTEUR_DEFINITIONS",
@@ -48868,56 +48896,56 @@
       "name": "GameplayCoreSimulationOptions",
       "kind": "interface",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 18,
-      "endLine": 22
+      "line": 20,
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#GameplayCoreSimulationReport",
       "name": "GameplayCoreSimulationReport",
       "kind": "interface",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 24,
-      "endLine": 36
+      "line": 26,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/gameplay-core-simulation.ts#runGameplayCoreSimulation",
       "name": "runGameplayCoreSimulation",
       "kind": "value",
       "file": "src/shared/gameplay-core-simulation.ts",
-      "line": 171,
-      "endLine": 222
+      "line": 181,
+      "endLine": 232
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayCommandResult",
       "name": "GameplayCommandResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 27,
-      "endLine": 32
+      "line": 28,
+      "endLine": 33
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#GameplayReplayResult",
       "name": "GameplayReplayResult",
       "kind": "interface",
       "file": "src/shared/gameplay-core.ts",
-      "line": 34,
-      "endLine": 39
+      "line": 35,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#reduceGameplayCommand",
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 454,
-      "endLine": 482
+      "line": 524,
+      "endLine": 558
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 484,
-      "endLine": 497
+      "line": 560,
+      "endLine": 573
     },
     {
       "id": "symbol:src/shared/gameplay-interaction-graph.ts#auditGameplayInteractionGraph",
@@ -57971,7 +57999,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 12
+          "line": 19
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58027,7 +58055,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 8
+          "line": 15
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58077,7 +58105,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 7
+          "line": 14
         },
         {
           "path": "src/shared/relics.test.ts",
@@ -58120,7 +58148,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 14
+          "line": 21
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -58155,7 +58183,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 369
+          "line": 372
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -58169,7 +58197,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 11
+          "line": 18
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58200,6 +58228,70 @@
       ]
     },
     {
+      "id": "mechanic:build.route_gambler",
+      "mechanicId": "build.route_gambler",
+      "label": "Route Gambler Build",
+      "kind": "build",
+      "role": "risk_commitment_and_rescue_build",
+      "evidence": [
+        {
+          "path": "src/shared/relics.ts",
+          "line": 15
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 445
+        },
+        {
+          "path": "src/shared/risk-wager-rules.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/store/riskWagerSurfaceState.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.ts",
+          "line": 1
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 131
+        },
+        {
+          "path": "src/shared/risk-wager-rules.test.ts",
+          "line": 1
+        },
+        {
+          "path": "src/renderer/store/riskWagerSurfaceState.test.ts",
+          "line": 47
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/renderer/store/useAppStore.test.ts",
+          "line": 3
+        }
+      ],
+      "enables": [
+        "objective.risk_wager",
+        "inventory.gambit_token",
+        "power.gambit",
+        "economy.relic_favor",
+        "route.mystery"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "explicit-wager-acceptance",
+        "one-gambit-per-floor",
+        "failure-cost-retained"
+      ]
+    },
+    {
       "id": "mechanic:build.trap_control",
       "mechanicId": "build.trap_control",
       "label": "The Saboteur Build",
@@ -58226,7 +58318,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 10
+          "line": 17
         },
         {
           "path": "src/shared/game.test.ts",
@@ -58281,7 +58373,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 13
+          "line": 20
         },
         {
           "path": "src/shared/bonus-rewards.test.ts",
@@ -58347,7 +58439,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 9
+          "line": 16
         },
         {
           "path": "src/shared/gameplay-journal.test.ts",
@@ -58370,6 +58462,7 @@
         "build.treasure_greed",
         "build.boss_hunter",
         "build.reveal_scout",
+        "build.route_gambler",
         "persistence.run_summary",
         "simulation.gameplay_replay"
       ],
@@ -58476,7 +58569,7 @@
       "evidence": [
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 233
+          "line": 236
         },
         {
           "path": "src/shared/turn-match-economy-rules.ts",
@@ -58490,7 +58583,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 261
+          "line": 270
         },
         {
           "path": "src/shared/turn-match-economy-rules.test.ts",
@@ -58632,7 +58725,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 26
+          "line": 35
         }
       ],
       "enables": [
@@ -58681,7 +58774,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 259
+          "line": 268
         }
       ],
       "enables": [
@@ -58729,7 +58822,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 8
+          "line": 15
         }
       ],
       "enables": [
@@ -58961,7 +59054,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 8
+          "line": 15
         }
       ],
       "enables": [
@@ -59013,7 +59106,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 59
+          "line": 68
         }
       ],
       "enables": [
@@ -59024,6 +59117,54 @@
         "non-negative-counter",
         "no-destroy-contract",
         "completion-safe-target"
+      ]
+    },
+    {
+      "id": "mechanic:inventory.gambit_token",
+      "mechanicId": "inventory.gambit_token",
+      "label": "Gambit Token",
+      "kind": "inventory",
+      "role": "per_floor_third_flip_resource",
+      "evidence": [
+        {
+          "path": "src/shared/run-inventory.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/run-creation-rules.ts",
+          "line": 175
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.ts",
+          "line": 85
+        },
+        {
+          "path": "src/shared/flip-tile-transition.ts",
+          "line": 25
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/run-inventory.test.ts",
+          "line": 20
+        },
+        {
+          "path": "src/shared/game.test.ts",
+          "line": 29
+        },
+        {
+          "path": "src/shared/next-floor-run-state-rules.test.ts",
+          "line": 1
+        }
+      ],
+      "enables": [
+        "power.gambit"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "one-per-floor",
+        "rearmed-at-floor-start",
+        "non-stackable-token"
       ]
     },
     {
@@ -59065,7 +59206,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 66
+          "line": 75
         }
       ],
       "enables": [
@@ -59113,7 +59254,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 92
+          "line": 101
         }
       ],
       "enables": [
@@ -59454,6 +59595,62 @@
       ]
     },
     {
+      "id": "mechanic:objective.risk_wager",
+      "mechanicId": "objective.risk_wager",
+      "label": "Endless Risk Wager",
+      "kind": "objective",
+      "role": "optional_streak_for_favor_commitment",
+      "evidence": [
+        {
+          "path": "src/shared/risk-wager-rules.ts",
+          "line": 2
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 25
+        },
+        {
+          "path": "src/shared/game.ts",
+          "line": 218
+        },
+        {
+          "path": "src/renderer/store/riskWagerSurfaceState.ts",
+          "line": 3
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/risk-wager-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/shared/game.test.ts",
+          "line": 13
+        },
+        {
+          "path": "src/renderer/store/riskWagerSurfaceState.test.ts",
+          "line": 3
+        }
+      ],
+      "enables": [
+        "economy.relic_favor",
+        "progression.relic_draft",
+        "build.route_gambler"
+      ],
+      "blocks": [
+        "featuredObjectiveStreak"
+      ],
+      "softlockGuards": [
+        "optional-explicit-acceptance",
+        "completed-objective-gate",
+        "wager-surety-loss-floor"
+      ]
+    },
+    {
       "id": "mechanic:perk.cursed_opener_greed",
       "mechanicId": "perk.cursed_opener_greed",
       "label": "Cursed Opener Greed",
@@ -59476,7 +59673,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 259
+          "line": 268
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -59521,7 +59718,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 7
+          "line": 14
         }
       ],
       "enables": [
@@ -59625,6 +59822,68 @@
       ]
     },
     {
+      "id": "mechanic:power.gambit",
+      "mechanicId": "power.gambit",
+      "label": "Gambit Third Flip",
+      "kind": "power",
+      "role": "mismatch_rescue_with_failure_cost",
+      "evidence": [
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 47
+        },
+        {
+          "path": "src/shared/flip-tile-transition.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/gambit-match-rules.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/game.ts",
+          "line": 82
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.ts",
+          "line": 4
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/gameplay-core.test.ts",
+          "line": 23
+        },
+        {
+          "path": "src/shared/gambit-match-rules.test.ts",
+          "line": 4
+        },
+        {
+          "path": "src/shared/game.test.ts",
+          "line": 19
+        },
+        {
+          "path": "src/renderer/store/runSurfaceState.test.ts",
+          "line": 6
+        },
+        {
+          "path": "src/renderer/store/useAppStore.test.ts",
+          "line": 18
+        }
+      ],
+      "enables": [
+        "objective.floor_clear",
+        "build.route_gambler"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "exactly-two-flipped",
+        "hidden-third-target",
+        "one-per-floor",
+        "gambit-failure-penalty"
+      ]
+    },
+    {
       "id": "mechanic:power.peek",
       "mechanicId": "power.peek",
       "label": "Peek Power",
@@ -59641,7 +59900,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
-          "line": 4
+          "line": 5
         },
         {
           "path": "src/renderer/store/tilePressController.ts",
@@ -59659,7 +59918,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 10
+          "line": 12
         },
         {
           "path": "src/renderer/store/tilePressController.test.ts",
@@ -59774,7 +60033,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
-          "line": 5
+          "line": 6
         }
       ],
       "tests": [
@@ -59788,7 +60047,7 @@
         },
         {
           "path": "src/renderer/store/runSurfaceState.test.ts",
-          "line": 22
+          "line": 24
         }
       ],
       "enables": [
@@ -60000,7 +60259,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 25
+          "line": 34
         },
         {
           "path": "src/shared/dungeon-boss-clear-rules.test.ts",
@@ -60062,7 +60321,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 8
+          "line": 15
         }
       ],
       "enables": [
@@ -60111,7 +60370,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 13
+          "line": 20
         }
       ],
       "enables": [
@@ -60161,7 +60420,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 14
+          "line": 21
         }
       ],
       "enables": [
@@ -60202,7 +60461,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 25
+          "line": 34
         },
         {
           "path": "src/shared/score-parasite-rules.test.ts",
@@ -60301,7 +60560,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 389
+          "line": 398
         }
       ],
       "enables": [
@@ -60342,7 +60601,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 25
+          "line": 34
         },
         {
           "path": "src/shared/relic-immediate-rules.test.ts",
@@ -60432,7 +60691,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 25
+          "line": 6
         },
         {
           "path": "src/shared/secondary-objective-rules.test.ts",
@@ -60616,7 +60875,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 5
+          "line": 12
         }
       ],
       "enables": [
@@ -60658,7 +60917,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 7
+          "line": 14
         }
       ],
       "enables": [
@@ -60787,7 +61046,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 349
+          "line": 6
         }
       ],
       "enables": [
@@ -61290,7 +61549,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 9
+          "line": 16
         },
         {
           "path": "src/shared/gameplay-core-simulation.test.ts",
@@ -61750,7 +62009,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 66
+          "line": 75
         }
       ],
       "enables": [
@@ -61875,6 +62134,7 @@
         "mechanic:build.conduit_cartographer",
         "mechanic:build.guard_tank",
         "mechanic:build.reveal_scout",
+        "mechanic:build.route_gambler",
         "mechanic:build.trap_control",
         "mechanic:build.treasure_greed"
       ]
@@ -62125,9 +62385,15 @@
       "id": "state:endlessRiskWager",
       "name": "endlessRiskWager",
       "readBy": [
-        "mechanic:objective.featured_streak"
+        "mechanic:build.route_gambler",
+        "mechanic:core.gameplay_commands",
+        "mechanic:objective.featured_streak",
+        "mechanic:objective.risk_wager"
       ],
-      "writtenBy": []
+      "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:objective.risk_wager"
+      ]
     },
     {
       "id": "state:endlessRiskWagerOutcome",
@@ -62210,11 +62476,15 @@
       "id": "state:featuredObjectiveStreak",
       "name": "featuredObjectiveStreak",
       "readBy": [
+        "mechanic:build.route_gambler",
+        "mechanic:core.gameplay_commands",
         "mechanic:objective.featured_streak",
+        "mechanic:objective.risk_wager",
         "mechanic:relic.wager_surety"
       ],
       "writtenBy": [
-        "mechanic:objective.featured_streak"
+        "mechanic:objective.featured_streak",
+        "mechanic:objective.risk_wager"
       ]
     },
     {
@@ -62241,8 +62511,10 @@
         "mechanic:findable.scout_glint",
         "mechanic:findable.shard_spark",
         "mechanic:findable.ward_spark",
+        "mechanic:objective.risk_wager",
         "mechanic:perk.cursed_opener_greed",
         "mechanic:perk.echo_conduit_double",
+        "mechanic:power.gambit",
         "mechanic:power.peek",
         "mechanic:power.pin",
         "mechanic:power.stray_remove",
@@ -62282,7 +62554,9 @@
       "id": "state:flippedTileIds",
       "name": "flippedTileIds",
       "readBy": [
-        "mechanic:board.cleanup"
+        "mechanic:board.cleanup",
+        "mechanic:core.gameplay_commands",
+        "mechanic:power.gambit"
       ],
       "writtenBy": [
         "mechanic:board.cleanup"
@@ -62302,9 +62576,49 @@
       ]
     },
     {
+      "id": "state:gambitAvailableThisFloor",
+      "name": "gambitAvailableThisFloor",
+      "readBy": [
+        "mechanic:build.route_gambler",
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.gambit_token",
+        "mechanic:power.gambit"
+      ],
+      "writtenBy": [
+        "mechanic:inventory.gambit_token",
+        "mechanic:power.gambit"
+      ]
+    },
+    {
+      "id": "state:gambitCommitRequests",
+      "name": "gambitCommitRequests",
+      "readBy": [
+        "mechanic:power.gambit"
+      ],
+      "writtenBy": [
+        "mechanic:core.gameplay_commands",
+        "mechanic:power.gambit"
+      ]
+    },
+    {
+      "id": "state:gambitThirdFlipUsed",
+      "name": "gambitThirdFlipUsed",
+      "readBy": [
+        "mechanic:build.route_gambler",
+        "mechanic:core.gameplay_commands",
+        "mechanic:inventory.gambit_token",
+        "mechanic:power.gambit"
+      ],
+      "writtenBy": [
+        "mechanic:inventory.gambit_token",
+        "mechanic:power.gambit"
+      ]
+    },
+    {
       "id": "state:gameMode",
       "name": "gameMode",
       "readBy": [
+        "mechanic:objective.risk_wager",
         "mechanic:progression.shard_to_life"
       ],
       "writtenBy": []
@@ -62414,6 +62728,7 @@
       "name": "lastLevelResult",
       "readBy": [
         "mechanic:feedback.gameplay_hud",
+        "mechanic:objective.risk_wager",
         "mechanic:progression.run_flow"
       ],
       "writtenBy": [
@@ -62652,6 +62967,7 @@
       ],
       "writtenBy": [
         "mechanic:power.destroy_pair",
+        "mechanic:power.gambit",
         "mechanic:power.peek",
         "mechanic:power.region_shuffle",
         "mechanic:power.stray_remove",
@@ -62689,6 +63005,7 @@
       "name": "relicFavorProgress",
       "readBy": [
         "mechanic:build.reveal_scout",
+        "mechanic:build.route_gambler",
         "mechanic:core.gameplay_commands",
         "mechanic:economy.relic_favor",
         "mechanic:economy.score_and_rewards",
@@ -62699,6 +63016,7 @@
         "mechanic:core.gameplay_commands",
         "mechanic:economy.relic_favor",
         "mechanic:economy.score_and_rewards",
+        "mechanic:objective.risk_wager",
         "mechanic:reward.secret_favor"
       ]
     },
@@ -62817,6 +63135,7 @@
       "readBy": [
         "mechanic:build.conduit_cartographer",
         "mechanic:build.reveal_scout",
+        "mechanic:build.route_gambler",
         "mechanic:progression.run_flow",
         "mechanic:route.mystery"
       ],
@@ -63072,6 +63391,7 @@
         "mechanic:hazard.enemy_patrol",
         "mechanic:hazard.tile_pressure",
         "mechanic:objective.floor_clear",
+        "mechanic:power.gambit",
         "mechanic:power.peek",
         "mechanic:power.pin",
         "mechanic:power.stray_remove",
@@ -63137,6 +63457,16 @@
       ],
       "writtenBy": [
         "mechanic:economy.score_and_rewards"
+      ]
+    },
+    {
+      "id": "state:tries",
+      "name": "tries",
+      "readBy": [
+        "mechanic:objective.floor_clear"
+      ],
+      "writtenBy": [
+        "mechanic:power.gambit"
       ]
     },
     {
@@ -63422,6 +63752,27 @@
       "label": "converts secrets into future build selection"
     },
     {
+      "id": "consequence:mechanic:build.route_gambler->mechanic:economy.relic_favor:cashes successful risks into future build choices",
+      "source": "mechanic:build.route_gambler",
+      "target": "mechanic:economy.relic_favor",
+      "kind": "consequence",
+      "label": "cashes successful risks into future build choices"
+    },
+    {
+      "id": "consequence:mechanic:build.route_gambler->mechanic:objective.risk_wager:pushes earned streak into an optional Favor bet",
+      "source": "mechanic:build.route_gambler",
+      "target": "mechanic:objective.risk_wager",
+      "kind": "consequence",
+      "label": "pushes earned streak into an optional Favor bet"
+    },
+    {
+      "id": "consequence:mechanic:build.route_gambler->mechanic:power.gambit:turns one floor token into a chosen rescue commitment",
+      "source": "mechanic:build.route_gambler",
+      "target": "mechanic:power.gambit",
+      "kind": "consequence",
+      "label": "turns one floor token into a chosen rescue commitment"
+    },
+    {
       "id": "consequence:mechanic:build.trap_control->mechanic:power.destroy_pair:turns trap pressure into target selection",
       "source": "mechanic:build.trap_control",
       "target": "mechanic:power.destroy_pair",
@@ -63506,6 +63857,13 @@
       "label": "spends one charge"
     },
     {
+      "id": "consumes:mechanic:power.gambit->mechanic:inventory.gambit_token:commits the floor token on rescue or miss",
+      "source": "mechanic:power.gambit",
+      "target": "mechanic:inventory.gambit_token",
+      "kind": "consumes",
+      "label": "commits the floor token on rescue or miss"
+    },
+    {
       "id": "consumes:mechanic:power.peek->mechanic:inventory.peek_charge:spends one charge",
       "source": "mechanic:power.peek",
       "target": "mechanic:inventory.peek_charge",
@@ -63562,6 +63920,13 @@
       "label": "removes pair safely"
     },
     {
+      "id": "counterplay:mechanic:power.gambit->mechanic:objective.floor_clear:can rescue a mismatched pair while retaining failure cost",
+      "source": "mechanic:power.gambit",
+      "target": "mechanic:objective.floor_clear",
+      "kind": "counterplay",
+      "label": "can rescue a mismatched pair while retaining failure cost"
+    },
+    {
       "id": "counterplay:mechanic:power.region_shuffle->mechanic:trait.drift:repositions route",
       "source": "mechanic:power.region_shuffle",
       "target": "mechanic:trait.drift",
@@ -63588,6 +63953,13 @@
       "target": "mechanic:hazard.score_parasite",
       "kind": "counterplay",
       "label": "requests objective-based parasite relief"
+    },
+    {
+      "id": "counterplay:mechanic:relic.wager_surety->mechanic:objective.risk_wager:softens loss without erasing wager failure",
+      "source": "mechanic:relic.wager_surety",
+      "target": "mechanic:objective.risk_wager",
+      "kind": "counterplay",
+      "label": "softens loss without erasing wager failure"
     },
     {
       "id": "counterplay:mechanic:safety.guard_absorption->mechanic:hazard.enemy_patrol:absorbs patrol contact",
@@ -64092,6 +64464,13 @@
       "label": "shows destroy bank"
     },
     {
+      "id": "displays:mechanic:inventory.gambit_token->mechanic:feedback.gameplay_hud:shows whether the floor rescue remains",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows whether the floor rescue remains"
+    },
+    {
       "id": "displays:mechanic:inventory.guard_token->mechanic:feedback.gameplay_hud:shows current guard balance",
       "source": "mechanic:inventory.guard_token",
       "target": "mechanic:feedback.gameplay_hud",
@@ -64127,6 +64506,13 @@
       "label": "shows wager risk and retained streak"
     },
     {
+      "id": "displays:mechanic:objective.risk_wager->mechanic:feedback.gameplay_hud:shows target floor stakes win and loss",
+      "source": "mechanic:objective.risk_wager",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "shows target floor stakes win and loss"
+    },
+    {
       "id": "displays:mechanic:perk.cursed_opener_greed->mechanic:feedback.gameplay_hud:shows opener payout cause",
       "source": "mechanic:perk.cursed_opener_greed",
       "target": "mechanic:feedback.gameplay_hud",
@@ -64139,6 +64525,13 @@
       "target": "mechanic:feedback.gameplay_hud",
       "kind": "displays",
       "label": "shows trigger cause"
+    },
+    {
+      "id": "displays:mechanic:power.gambit->mechanic:feedback.gameplay_hud:emits the typed third-flip commitment cue",
+      "source": "mechanic:power.gambit",
+      "target": "mechanic:feedback.gameplay_hud",
+      "kind": "displays",
+      "label": "emits the typed third-flip commitment cue"
     },
     {
       "id": "displays:mechanic:power.peek->mechanic:feedback.gameplay_hud:shows target and balance",
@@ -64451,6 +64844,13 @@
       "target": "mechanic:power.destroy_pair",
       "kind": "enables",
       "label": "funds pair removal"
+    },
+    {
+      "id": "enables:mechanic:inventory.gambit_token->mechanic:power.gambit:funds one third-flip rescue per floor",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "mechanic:power.gambit",
+      "kind": "enables",
+      "label": "funds one third-flip rescue per floor"
     },
     {
       "id": "enables:mechanic:inventory.guard_token->mechanic:safety.guard_absorption:buffers the next damage source",
@@ -77250,6 +77650,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayGambitCommitCommand",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPeekCommand",
@@ -77259,6 +77665,12 @@
       "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayPinToggleCommand",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/gameplay-core-contracts.ts->symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "symbol:src/shared/gameplay-core-contracts.ts#createGameplayRiskWagerAcceptCommand",
       "kind": "exports"
     },
     {
@@ -83677,6 +84089,20 @@
       "label": "resolves streak and wager at floor clear"
     },
     {
+      "id": "gates:mechanic:objective.featured_streak->mechanic:objective.risk_wager:completed streak unlocks the optional wager",
+      "source": "mechanic:objective.featured_streak",
+      "target": "mechanic:objective.risk_wager",
+      "kind": "gates",
+      "label": "completed streak unlocks the optional wager"
+    },
+    {
+      "id": "gates:mechanic:objective.risk_wager->mechanic:objective.floor_clear:target floor completion resolves the accepted wager",
+      "source": "mechanic:objective.risk_wager",
+      "target": "mechanic:objective.floor_clear",
+      "kind": "gates",
+      "label": "target floor completion resolves the accepted wager"
+    },
+    {
       "id": "gates:mechanic:trait.conduit->mechanic:perk.echo_conduit_double:adjacency condition",
       "source": "mechanic:trait.conduit",
       "target": "mechanic:perk.echo_conduit_double",
@@ -83719,6 +84145,13 @@
       "label": "converts objective and wager wins into Favor"
     },
     {
+      "id": "grants:mechanic:objective.risk_wager->mechanic:economy.relic_favor:successful wager cashes out as Favor",
+      "source": "mechanic:objective.risk_wager",
+      "target": "mechanic:economy.relic_favor",
+      "kind": "grants",
+      "label": "successful wager cashes out as Favor"
+    },
+    {
       "id": "grants:mechanic:perk.cursed_opener_greed->mechanic:economy.shop_gold:converts opener risk into gold",
       "source": "mechanic:perk.cursed_opener_greed",
       "target": "mechanic:economy.shop_gold",
@@ -83731,6 +84164,13 @@
       "target": "mechanic:inventory.peek_charge",
       "kind": "grants",
       "label": "creates extra charge"
+    },
+    {
+      "id": "grants:mechanic:progression.run_flow->mechanic:inventory.gambit_token:rearms one Gambit token at run and floor start",
+      "source": "mechanic:progression.run_flow",
+      "target": "mechanic:inventory.gambit_token",
+      "kind": "grants",
+      "label": "rearms one Gambit token at run and floor start"
     },
     {
       "id": "grants:mechanic:relic.chapter_compass->mechanic:inventory.peek_charge:grants one preparation Peek",
@@ -83957,6 +84397,13 @@
       "label": "typed key source audit"
     },
     {
+      "id": "guarded_by:mechanic:objective.risk_wager->mechanic:relic.wager_surety:Wager Surety preserves a minimum streak after loss",
+      "source": "mechanic:objective.risk_wager",
+      "target": "mechanic:relic.wager_surety",
+      "kind": "guarded_by",
+      "label": "Wager Surety preserves a minimum streak after loss"
+    },
+    {
       "id": "guarded_by:mechanic:room.locked_cache->mechanic:safety.softlock_fairness:optional cache cannot block clear",
       "source": "mechanic:room.locked_cache",
       "target": "mechanic:safety.softlock_fairness",
@@ -84170,6 +84617,36 @@
       "id": "implemented_by:mechanic:build.reveal_scout->file:src/shared/gameplay-core.ts",
       "source": "mechanic:build.reveal_scout",
       "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.route_gambler->file:src/renderer/store/riskWagerSurfaceState.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/renderer/store/riskWagerSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.route_gambler->file:src/renderer/store/runSurfaceState.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/renderer/store/runSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.route_gambler->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.route_gambler->file:src/shared/relics.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/shared/relics.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:build.route_gambler->file:src/shared/risk-wager-rules.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/shared/risk-wager-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -84539,6 +85016,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:inventory.gambit_token->file:src/shared/flip-tile-transition.ts",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "file:src/shared/flip-tile-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.gambit_token->file:src/shared/next-floor-run-state-rules.ts",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "file:src/shared/next-floor-run-state-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.gambit_token->file:src/shared/run-creation-rules.ts",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "file:src/shared/run-creation-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:inventory.gambit_token->file:src/shared/run-inventory.ts",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "file:src/shared/run-inventory.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:inventory.guard_token->file:src/shared/dungeon-enemy-hazard-rules.ts",
       "source": "mechanic:inventory.guard_token",
       "target": "file:src/shared/dungeon-enemy-hazard-rules.ts",
@@ -84725,6 +85226,30 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:objective.risk_wager->file:src/renderer/store/riskWagerSurfaceState.ts",
+      "source": "mechanic:objective.risk_wager",
+      "target": "file:src/renderer/store/riskWagerSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:objective.risk_wager->file:src/shared/game.ts",
+      "source": "mechanic:objective.risk_wager",
+      "target": "file:src/shared/game.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:objective.risk_wager->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:objective.risk_wager",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:objective.risk_wager->file:src/shared/risk-wager-rules.ts",
+      "source": "mechanic:objective.risk_wager",
+      "target": "file:src/shared/risk-wager-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:perk.cursed_opener_greed->file:src/shared/gameplay-core-contracts.ts",
       "source": "mechanic:perk.cursed_opener_greed",
       "target": "file:src/shared/gameplay-core-contracts.ts",
@@ -84794,6 +85319,36 @@
       "id": "implemented_by:mechanic:power.destroy_pair->file:src/shared/board-power-availability.ts",
       "source": "mechanic:power.destroy_pair",
       "target": "file:src/shared/board-power-availability.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.gambit->file:src/renderer/store/runSurfaceState.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/renderer/store/runSurfaceState.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.gambit->file:src/shared/flip-tile-transition.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/shared/flip-tile-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.gambit->file:src/shared/gambit-match-rules.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/shared/gambit-match-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.gambit->file:src/shared/game.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/shared/game.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.gambit->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/shared/gameplay-core.ts",
       "kind": "implemented_by"
     },
     {
@@ -93341,6 +93896,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/riskWagerSurfaceState.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/store/riskWagerSurfaceState.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/riskWagerSurfaceState.test.ts->src/shared/game-core.ts",
       "source": "file:src/renderer/store/riskWagerSurfaceState.test.ts",
       "target": "file:src/shared/game-core.ts",
@@ -93353,9 +93914,21 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/store/riskWagerSurfaceState.ts->src/shared/objective-rules.ts",
+      "id": "imports:src/renderer/store/riskWagerSurfaceState.ts->src/shared/gameplay-core-contracts.ts",
       "source": "file:src/renderer/store/riskWagerSurfaceState.ts",
-      "target": "file:src/shared/objective-rules.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/riskWagerSurfaceState.ts->src/shared/gameplay-core.ts",
+      "source": "file:src/renderer/store/riskWagerSurfaceState.ts",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/riskWagerSurfaceState.ts->src/shared/gameplay-journal.ts",
+      "source": "file:src/renderer/store/riskWagerSurfaceState.ts",
+      "target": "file:src/shared/gameplay-journal.ts",
       "kind": "imports"
     },
     {
@@ -93680,6 +94253,18 @@
       "id": "imports:src/renderer/store/runSurfaceState.test.ts->src/shared/game-core.ts",
       "source": "file:src/renderer/store/runSurfaceState.test.ts",
       "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/runSurfaceState.test.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/renderer/store/runSurfaceState.test.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/runSurfaceState.test.ts->src/shared/gameplay-core.ts",
+      "source": "file:src/renderer/store/runSurfaceState.test.ts",
+      "target": "file:src/shared/gameplay-core.ts",
       "kind": "imports"
     },
     {
@@ -94280,6 +94865,12 @@
       "id": "imports:src/renderer/store/useAppStore.ts->src/renderer/store/backgroundPersistence.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/renderer/store/backgroundPersistence.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
       "kind": "imports"
     },
     {
@@ -97928,6 +98519,12 @@
       "id": "imports:src/shared/gameplay-core.ts->src/shared/relic-favor-rules.ts",
       "source": "file:src/shared/gameplay-core.ts",
       "target": "file:src/shared/relic-favor-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/gameplay-core.ts->src/shared/risk-wager-rules.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/shared/risk-wager-rules.ts",
       "kind": "imports"
     },
     {
@@ -102906,6 +103503,13 @@
       "label": "applies and consumes typed stray charges"
     },
     {
+      "id": "modifies:mechanic:core.gameplay_commands->mechanic:objective.risk_wager:accepts eligible wagers and records their exact stakes",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:objective.risk_wager",
+      "kind": "modifies",
+      "label": "accepts eligible wagers and records their exact stakes"
+    },
+    {
       "id": "modifies:mechanic:core.gameplay_commands->mechanic:power.pin:executes typed pin decisions",
       "source": "mechanic:core.gameplay_commands",
       "target": "mechanic:power.pin",
@@ -103258,6 +103862,42 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:build.route_gambler->state:endlessRiskWager",
+      "source": "mechanic:build.route_gambler",
+      "target": "state:endlessRiskWager",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.route_gambler->state:featuredObjectiveStreak",
+      "source": "mechanic:build.route_gambler",
+      "target": "state:featuredObjectiveStreak",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.route_gambler->state:gambitAvailableThisFloor",
+      "source": "mechanic:build.route_gambler",
+      "target": "state:gambitAvailableThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.route_gambler->state:gambitThirdFlipUsed",
+      "source": "mechanic:build.route_gambler",
+      "target": "state:gambitThirdFlipUsed",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.route_gambler->state:relicFavorProgress",
+      "source": "mechanic:build.route_gambler",
+      "target": "state:relicFavorProgress",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:build.route_gambler->state:routeChoices",
+      "source": "mechanic:build.route_gambler",
+      "target": "state:routeChoices",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:build.trap_control->state:destroyPairCharges",
       "source": "mechanic:build.trap_control",
       "target": "state:destroyPairCharges",
@@ -103354,6 +103994,12 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:core.gameplay_commands->state:endlessRiskWager",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:endlessRiskWager",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:core.gameplay_commands->state:endlessRiskWagerOutcome",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:endlessRiskWagerOutcome",
@@ -103363,6 +104009,30 @@
       "id": "reads:mechanic:core.gameplay_commands->state:featuredObjectiveCompleted",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:featuredObjectiveCompleted",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:featuredObjectiveStreak",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:featuredObjectiveStreak",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:flippedTileIds",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:flippedTileIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:gambitAvailableThisFloor",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:gambitAvailableThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:core.gameplay_commands->state:gambitThirdFlipUsed",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:gambitThirdFlipUsed",
       "kind": "reads"
     },
     {
@@ -103816,6 +104486,18 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:inventory.gambit_token->state:gambitAvailableThisFloor",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "state:gambitAvailableThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:inventory.gambit_token->state:gambitThirdFlipUsed",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "state:gambitThirdFlipUsed",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:inventory.guard_token->state:guardTokens",
       "source": "mechanic:inventory.guard_token",
       "target": "state:guardTokens",
@@ -103948,6 +104630,36 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:objective.floor_clear->state:tries",
+      "source": "mechanic:objective.floor_clear",
+      "target": "state:tries",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:objective.risk_wager->state:endlessRiskWager",
+      "source": "mechanic:objective.risk_wager",
+      "target": "state:endlessRiskWager",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:objective.risk_wager->state:featuredObjectiveStreak",
+      "source": "mechanic:objective.risk_wager",
+      "target": "state:featuredObjectiveStreak",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:objective.risk_wager->state:gameMode",
+      "source": "mechanic:objective.risk_wager",
+      "target": "state:gameMode",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:objective.risk_wager->state:lastLevelResult",
+      "source": "mechanic:objective.risk_wager",
+      "target": "state:lastLevelResult",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:perk.cursed_opener_greed->state:matchResolutionsThisFloor",
       "source": "mechanic:perk.cursed_opener_greed",
       "target": "state:matchResolutionsThisFloor",
@@ -104023,6 +104735,36 @@
       "id": "reads:mechanic:power.destroy_pair->state:noDestroy",
       "source": "mechanic:power.destroy_pair",
       "target": "state:noDestroy",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.gambit->state:flippedTileIds",
+      "source": "mechanic:power.gambit",
+      "target": "state:flippedTileIds",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.gambit->state:gambitAvailableThisFloor",
+      "source": "mechanic:power.gambit",
+      "target": "state:gambitAvailableThisFloor",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.gambit->state:gambitCommitRequests",
+      "source": "mechanic:power.gambit",
+      "target": "state:gambitCommitRequests",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.gambit->state:gambitThirdFlipUsed",
+      "source": "mechanic:power.gambit",
+      "target": "state:gambitThirdFlipUsed",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:power.gambit->state:tileStates",
+      "source": "mechanic:power.gambit",
+      "target": "state:tileStates",
       "kind": "reads"
     },
     {
@@ -104902,6 +105644,20 @@
       "kind": "reads"
     },
     {
+      "id": "risk:mechanic:build.route_gambler->mechanic:route.mystery:prefers contextual Greed and Mystery opportunities",
+      "source": "mechanic:build.route_gambler",
+      "target": "mechanic:route.mystery",
+      "kind": "risk",
+      "label": "prefers contextual Greed and Mystery opportunities"
+    },
+    {
+      "id": "risk:mechanic:objective.risk_wager->mechanic:objective.featured_streak:failed wager spends the committed streak",
+      "source": "mechanic:objective.risk_wager",
+      "target": "mechanic:objective.featured_streak",
+      "kind": "risk",
+      "label": "failed wager spends the committed streak"
+    },
+    {
       "id": "risk:mechanic:trait.conduit->mechanic:trait.stasis:lock pulse",
       "source": "mechanic:trait.conduit",
       "target": "mechanic:trait.stasis",
@@ -105153,6 +105909,36 @@
       "id": "tested_by:mechanic:build.reveal_scout->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:build.reveal_scout",
       "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.route_gambler->file:src/renderer/store/riskWagerSurfaceState.test.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/renderer/store/riskWagerSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.route_gambler->file:src/renderer/store/runSurfaceState.test.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/renderer/store/runSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.route_gambler->file:src/renderer/store/useAppStore.test.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.route_gambler->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:build.route_gambler->file:src/shared/risk-wager-rules.test.ts",
+      "source": "mechanic:build.route_gambler",
+      "target": "file:src/shared/risk-wager-rules.test.ts",
       "kind": "tested_by"
     },
     {
@@ -105481,6 +106267,24 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:inventory.gambit_token->file:src/shared/game.test.ts",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.gambit_token->file:src/shared/next-floor-run-state-rules.test.ts",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "file:src/shared/next-floor-run-state-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:inventory.gambit_token->file:src/shared/run-inventory.test.ts",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "file:src/shared/run-inventory.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:inventory.guard_token->file:src/shared/dungeon-enemy-hazard-rules.test.ts",
       "source": "mechanic:inventory.guard_token",
       "target": "file:src/shared/dungeon-enemy-hazard-rules.test.ts",
@@ -105643,6 +106447,30 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:objective.risk_wager->file:src/renderer/store/riskWagerSurfaceState.test.ts",
+      "source": "mechanic:objective.risk_wager",
+      "target": "file:src/renderer/store/riskWagerSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:objective.risk_wager->file:src/shared/game.test.ts",
+      "source": "mechanic:objective.risk_wager",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:objective.risk_wager->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:objective.risk_wager",
+      "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:objective.risk_wager->file:src/shared/risk-wager-rules.test.ts",
+      "source": "mechanic:objective.risk_wager",
+      "target": "file:src/shared/risk-wager-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:mechanic:perk.cursed_opener_greed->file:src/shared/gameplay-core.test.ts",
       "source": "mechanic:perk.cursed_opener_greed",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -105700,6 +106528,36 @@
       "id": "tested_by:mechanic:power.destroy_pair->file:src/shared/board-power-availability.test.ts",
       "source": "mechanic:power.destroy_pair",
       "target": "file:src/shared/board-power-availability.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.gambit->file:src/renderer/store/runSurfaceState.test.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/renderer/store/runSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.gambit->file:src/renderer/store/useAppStore.test.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.gambit->file:src/shared/gambit-match-rules.test.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/shared/gambit-match-rules.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.gambit->file:src/shared/game.test.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/shared/game.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:power.gambit->file:src/shared/gameplay-core.test.ts",
+      "source": "mechanic:power.gambit",
+      "target": "file:src/shared/gameplay-core.test.ts",
       "kind": "tested_by"
     },
     {
@@ -108812,6 +109670,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/store/riskWagerSurfaceState.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/store/riskWagerSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/store/runLifecycleController.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/store/runLifecycleController.test.ts",
@@ -110528,6 +111392,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/renderer/store/runSurfaceState.test.ts",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "file:src/renderer/store/runSurfaceState.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/shared/gameplay-core.test.ts",
       "source": "file:src/shared/gameplay-core-contracts.ts",
       "target": "file:src/shared/gameplay-core.test.ts",
@@ -110555,6 +111425,12 @@
       "id": "tested_by:src/shared/gameplay-core-simulation.ts->file:src/shared/gameplay-core-simulation.test.ts",
       "source": "file:src/shared/gameplay-core-simulation.ts",
       "target": "file:src/shared/gameplay-core-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-core.ts->file:src/renderer/store/runSurfaceState.test.ts",
+      "source": "file:src/shared/gameplay-core.ts",
+      "target": "file:src/renderer/store/runSurfaceState.test.ts",
       "kind": "tested_by"
     },
     {
@@ -112482,6 +113358,13 @@
       "label": "emits typed wager-loss floor request"
     },
     {
+      "id": "triggers:mechanic:core.gameplay_commands->mechanic:power.gambit:validates and journals a third-flip commitment",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:power.gambit",
+      "kind": "triggers",
+      "label": "validates and journals a third-flip commitment"
+    },
+    {
       "id": "triggers:mechanic:core.gameplay_commands->mechanic:progression.shard_to_life:emits typed match shard request",
       "source": "mechanic:core.gameplay_commands",
       "target": "mechanic:progression.shard_to_life",
@@ -112812,6 +113695,12 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:build.route_gambler->state:buildPlan",
+      "source": "mechanic:build.route_gambler",
+      "target": "state:buildPlan",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:build.trap_control->state:buildPlan",
       "source": "mechanic:build.trap_control",
       "target": "state:buildPlan",
@@ -112860,6 +113749,12 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:core.gameplay_commands->state:endlessRiskWager",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:endlessRiskWager",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:core.gameplay_commands->state:featuredStreakFloorRequests",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:featuredStreakFloorRequests",
@@ -112869,6 +113764,12 @@
       "id": "writes:mechanic:core.gameplay_commands->state:feedbackLines",
       "source": "mechanic:core.gameplay_commands",
       "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:core.gameplay_commands->state:gambitCommitRequests",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "state:gambitCommitRequests",
       "kind": "writes"
     },
     {
@@ -113178,6 +114079,18 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:inventory.gambit_token->state:gambitAvailableThisFloor",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "state:gambitAvailableThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:inventory.gambit_token->state:gambitThirdFlipUsed",
+      "source": "mechanic:inventory.gambit_token",
+      "target": "state:gambitThirdFlipUsed",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:inventory.guard_token->state:guardTokens",
       "source": "mechanic:inventory.guard_token",
       "target": "state:guardTokens",
@@ -113274,6 +114187,30 @@
       "kind": "writes"
     },
     {
+      "id": "writes:mechanic:objective.risk_wager->state:endlessRiskWager",
+      "source": "mechanic:objective.risk_wager",
+      "target": "state:endlessRiskWager",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:objective.risk_wager->state:featuredObjectiveStreak",
+      "source": "mechanic:objective.risk_wager",
+      "target": "state:featuredObjectiveStreak",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:objective.risk_wager->state:feedbackLines",
+      "source": "mechanic:objective.risk_wager",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:objective.risk_wager->state:relicFavorProgress",
+      "source": "mechanic:objective.risk_wager",
+      "target": "state:relicFavorProgress",
+      "kind": "writes"
+    },
+    {
       "id": "writes:mechanic:perk.cursed_opener_greed->state:feedbackLines",
       "source": "mechanic:perk.cursed_opener_greed",
       "target": "state:feedbackLines",
@@ -113331,6 +114268,42 @@
       "id": "writes:mechanic:power.destroy_pair->state:removedTiles",
       "source": "mechanic:power.destroy_pair",
       "target": "state:removedTiles",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.gambit->state:feedbackLines",
+      "source": "mechanic:power.gambit",
+      "target": "state:feedbackLines",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.gambit->state:gambitAvailableThisFloor",
+      "source": "mechanic:power.gambit",
+      "target": "state:gambitAvailableThisFloor",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.gambit->state:gambitCommitRequests",
+      "source": "mechanic:power.gambit",
+      "target": "state:gambitCommitRequests",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.gambit->state:gambitThirdFlipUsed",
+      "source": "mechanic:power.gambit",
+      "target": "state:gambitThirdFlipUsed",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.gambit->state:powersUsedThisRun",
+      "source": "mechanic:power.gambit",
+      "target": "state:powersUsedThisRun",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:power.gambit->state:tries",
+      "source": "mechanic:power.gambit",
+      "target": "state:tries",
       "kind": "writes"
     },
     {
@@ -114214,14 +115187,8 @@
     {
       "severity": "warning",
       "code": "unmodeled_content_family",
-      "subject": "build_archetype",
-      "detail": "1 source-declared items lack mechanic nodes: route_gambler"
-    },
-    {
-      "severity": "warning",
-      "code": "unmodeled_content_family",
       "subject": "inventory_item",
-      "detail": "10 source-declared items lack mechanic nodes: contract_loadout, flash_pair_charge, gambit_token, master_key, mutator_loadout, region_shuffle_charge, relic_loadout, shuffle_charge, undo_charge, wild_match_token"
+      "detail": "9 source-declared items lack mechanic nodes: contract_loadout, flash_pair_charge, master_key, mutator_loadout, region_shuffle_charge, relic_loadout, shuffle_charge, undo_charge, wild_match_token"
     },
     {
       "severity": "warning",

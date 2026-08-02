@@ -1,6 +1,7 @@
 import type { RunState, Tile, ViewState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import {
+    createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
     createGameplayStrayRemoveCommand
 } from '../../shared/gameplay-core-contracts';
@@ -96,14 +97,14 @@ type GambitThirdPickPressResult =
           run: RunState;
           hazardContact: EnemyHazardContactResult | null;
           playFlipSfx: boolean;
-          playGambitCommitSfx: boolean;
+          events: GameplayEvent[];
       }
     | {
           kind: 'flipped';
           run: RunState;
           hazardContact: EnemyHazardContactResult | null;
           playFlipSfx: boolean;
-          playGambitCommitSfx: boolean;
+          events: GameplayEvent[];
           resolveDelayMs: number | null;
       };
 
@@ -548,16 +549,37 @@ export const createGambitThirdPickPressResult = (
     }
 
     const actionRun = hazardRun;
+    const command = createGameplayGambitCommitCommand(
+        `gambit-commit:${actionRun.runSeed}:${actionRun.board?.level ?? 0}:${actionRun.board?.flippedTileIds.join('+') ?? 'none'}:${tileId}`,
+        tileId
+    );
+    const commandResult = reduceGameplayCommand(actionRun, command);
+    if (!commandResult.accepted) {
+        return { kind: 'unchanged', hazardContact };
+    }
     const flippedBefore = actionRun.board?.flippedTileIds.length ?? 0;
-    const nextRun = flipTile(actionRun, tileId);
+    const transitionedRun = flipTile(actionRun, tileId);
 
-    if (nextRun === actionRun) {
+    const flippedAfter = transitionedRun.board?.flippedTileIds.length ?? 0;
+    const committed =
+        transitionedRun !== actionRun &&
+        flippedAfter === 3 &&
+        transitionedRun.board?.flippedTileIds.includes(tileId) === true;
+    if (!committed && transitionedRun.status === 'gameOver') {
+        return {
+            kind: 'flipGameOver',
+            run: transitionedRun,
+            hazardContact,
+            playFlipSfx: flippedAfter > flippedBefore,
+            events: []
+        };
+    }
+    if (!committed) {
         return { kind: 'unchanged', hazardContact };
     }
 
-    const flippedAfter = nextRun.board?.flippedTileIds.length ?? 0;
+    const nextRun = appendGameplayJournal(transitionedRun, [command], commandResult.events);
     const playFlipSfx = flippedAfter > flippedBefore;
-    const playGambitCommitSfx = playFlipSfx && flippedAfter === 3;
 
     if (nextRun.status === 'gameOver') {
         return {
@@ -565,7 +587,7 @@ export const createGambitThirdPickPressResult = (
             run: nextRun,
             hazardContact,
             playFlipSfx,
-            playGambitCommitSfx
+            events: commandResult.events
         };
     }
 
@@ -574,7 +596,7 @@ export const createGambitThirdPickPressResult = (
         run: nextRun,
         hazardContact,
         playFlipSfx,
-        playGambitCommitSfx,
+        events: commandResult.events,
         resolveDelayMs:
             nextRun.status === 'resolving' && nextRun.timerState.resolveRemainingMs !== null
                 ? nextRun.timerState.resolveRemainingMs

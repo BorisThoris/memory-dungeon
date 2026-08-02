@@ -96,7 +96,9 @@ describe('seeded gameplay core simulation', () => {
                 'findable.scout_glint',
                 'board.peek',
                 'board.pin_toggle',
-                'board.stray_remove'
+                'board.stray_remove',
+                'risk_wager.accept',
+                'board.gambit_commit'
             ])
         );
     });

@@ -91,6 +91,7 @@ import {
 } from './levelCompleteContinuationExecutor';
 import { createMenuSurfacePatch } from './menuSurfaceState';
 import { createRiskWagerSurfaceResult } from './riskWagerSurfaceState';
+import { projectGameplayFeedback } from './gameplayFeedbackAdapter';
 import {
     playDestroyPairSfx,
     playFlipSfx,
@@ -534,7 +535,7 @@ export const useAppStore = create<AppState>((set, get) => ({
                 void resumeAudioContext();
                 const g = sfxGainFromStore();
                 playFlipSfx(g);
-                if (result.playGambitCommitSfx) {
+                if (projectGameplayFeedback(result.events).some((feedback) => feedback.audioCategory === 'gambit-commit')) {
                     playGambitCommitSfx(g);
                 }
             }
@@ -777,8 +778,10 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
 
-        void resumeAudioContext();
-        playWagerArmSfx(sfxGainFromStore());
+        if (projectGameplayFeedback(result.events).some((feedback) => feedback.audioCategory === 'wager')) {
+            void resumeAudioContext();
+            playWagerArmSfx(sfxGainFromStore());
+        }
         set(result.patch);
     },
 

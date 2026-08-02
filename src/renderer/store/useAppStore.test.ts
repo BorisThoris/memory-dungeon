@@ -2476,6 +2476,13 @@ describe('useAppStore timers', () => {
         expect(gameSfxMocks.resumeAudioContext).toHaveBeenCalled();
         expect(gameSfxMocks.playWagerArmSfx).toHaveBeenCalledTimes(1);
         expect(run).not.toBe(useAppStore.getState().run);
+        expect(useAppStore.getState().run?.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'risk_wager.accept' })
+        ]);
+        expect(useAppStore.getState().run?.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'risk_wager.accepted', targetLevel: 2 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.route_gambler.wager_accepted' })
+        ]));
     });
 
     it('REG-088: first classic run can clear, continue, end locally, and persist first-win progress', async () => {

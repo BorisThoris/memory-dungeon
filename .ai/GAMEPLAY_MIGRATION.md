@@ -119,6 +119,20 @@ The Seer joins information sources, memory markers, safe correction, and future 
 
 The renderer only converts presses into commands and projects feedback. Board legality remains in the existing pure Pin and Stray rules, and Scout target selection remains in the deterministic dungeon-scout rule, so replay gained coverage without creating a second gameplay implementation.
 
+## Eighth vertical slice: The Route Gambler
+
+The Route Gambler makes optional risk, one-floor rescue capacity, and Favor cash-out one explicit loop:
+
+1. An eligible Endless wager is accepted through `risk_wager.accept`; the core calls the established pure eligibility rule and emits the target floor, streak at risk, and exact Favor payout.
+2. Illegal or duplicate wagers are rejected without mutation, so the renderer no longer reports a wager sound for a no-op press.
+3. Run and floor start remain the authoritative source of one non-stackable Gambit token; the semantic graph now exposes that lifecycle instead of treating the flags as unrelated state.
+4. A third-flip choice enters the core as `board.gambit_commit`, which requires resolving state, an unused floor token, exactly two flipped tiles, and a hidden distinct target.
+5. Enemy contact and dungeon-card behavior still execute through the established transition. The command and its typed commitment feedback are only journaled if the chosen tile actually becomes the third flipped tile.
+6. Existing Gambit resolution retains both outcomes: a valid pair can rescue the turn, while a failed three-card commitment spends the token and keeps its extra-tries penalty.
+7. Successful wagers cash out through the existing Favor-to-relic-draft economy; Wager Surety softens a loss without removing its failure consequence.
+
+The renderer derives wager and Gambit audio exclusively from typed feedback categories. Seeded simulation generates both new command forms, and the graph connects floor start → Gambit token → rescue decision plus objective streak → wager → Favor → relic draft.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

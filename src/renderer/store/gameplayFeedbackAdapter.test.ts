@@ -72,6 +72,30 @@ describe('gameplayFeedbackAdapter', () => {
         ]);
     });
 
+    it('classifies Route Gambler commitment and wager cues from typed sources', () => {
+        const presentations = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'power.gambit.committed',
+                message: 'Gambit committed.',
+                source: { kind: 'power', id: 'gambit' },
+                tone: 'warning'
+            }),
+            event(1, {
+                type: 'feedback.requested',
+                cue: 'build.route_gambler.wager_accepted',
+                message: 'Wager accepted.',
+                source: { kind: 'system', id: 'risk_wager' },
+                tone: 'warning'
+            })
+        ]);
+
+        expect(presentations.map((item) => item.audioCategory)).toEqual([
+            'gambit-commit',
+            'wager'
+        ]);
+    });
+
     it('adds the actual typed overflow score to otherwise ambiguous proc feedback', () => {
         const presentation = projectGameplayFeedback([
             event(0, {

@@ -2,7 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { applyPeek, applyStrayRemove } from './board-power-actions';
 import { togglePinnedTile } from './board-power-state';
 import { BONUS_REWARD_CATALOG, previewBonusRewardClaim } from './bonus-rewards';
-import type { BoardState, RunState, Tile } from './contracts';
+import {
+    ENDLESS_RISK_WAGER_BONUS_FAVOR,
+    ENDLESS_RISK_WAGER_MIN_STREAK,
+    GAME_RULES_VERSION,
+    type BoardState,
+    type RunState,
+    type Tile
+} from './contracts';
 import {
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
     COMBO_SHARD_ENGINE_DEFINITIONS,
@@ -13,8 +20,10 @@ import {
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
+    createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
     createGameplayPinToggleCommand,
+    createGameplayRiskWagerAcceptCommand,
     createGameplayStrayRemoveCommand,
     gameplayCommandSchema,
     gameplayContentDefinitionSchema,
@@ -527,6 +536,93 @@ describe('deterministic gameplay core', () => {
             expect.objectContaining({ type: 'feedback.requested', cue: 'power.peek.used' })
         ]);
         expect(result.events.every((event) => gameplayEventSchema.safeParse(event).success)).toBe(true);
+    });
+
+    it('accepts an eligible Route Gambler wager and emits its complete risk contract', () => {
+        const initial = run({
+            status: 'levelComplete',
+            gameMode: 'endless',
+            runRulesVersion: GAME_RULES_VERSION,
+            relicOffer: null,
+            endlessRiskWager: null,
+            featuredObjectiveStreak: ENDLESS_RISK_WAGER_MIN_STREAK,
+            lastLevelResult: {
+                level: 4,
+                scoreGained: 100,
+                rating: 'S',
+                livesRemaining: 3,
+                perfect: true,
+                mistakes: 0,
+                clearLifeReason: 'perfect',
+                clearLifeGained: 1,
+                featuredObjectiveId: 'flip_par',
+                featuredObjectiveCompleted: true
+            }
+        });
+        const result = reduceGameplayCommand(
+            initial,
+            createGameplayRiskWagerAcceptCommand('accept-wager')
+        );
+
+        expect(result.accepted).toBe(true);
+        expect(result.run.endlessRiskWager).toEqual({
+            acceptedOnLevel: 4,
+            targetLevel: 5,
+            streakAtRisk: ENDLESS_RISK_WAGER_MIN_STREAK,
+            bonusFavorOnSuccess: ENDLESS_RISK_WAGER_BONUS_FAVOR
+        });
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'risk_wager.accepted',
+                targetLevel: 5,
+                streakAtRisk: ENDLESS_RISK_WAGER_MIN_STREAK
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                cue: 'build.route_gambler.wager_accepted',
+                tone: 'warning'
+            })
+        ]);
+    });
+
+    it('validates and records a Gambit third-flip commitment without preempting board resolution', () => {
+        const gambitBoard = board();
+        gambitBoard.flippedTileIds = ['echo-a', 'conduit-a'];
+        gambitBoard.tiles = gambitBoard.tiles.map((candidate) =>
+            gambitBoard.flippedTileIds.includes(candidate.id)
+                ? { ...candidate, state: 'flipped' as const }
+                : candidate
+        );
+        const initial = run({
+            status: 'resolving',
+            board: gambitBoard,
+            gambitAvailableThisFloor: true,
+            gambitThirdFlipUsed: false
+        });
+        const result = reduceGameplayCommand(
+            initial,
+            createGameplayGambitCommitCommand('commit-gambit', 'echo-b')
+        );
+
+        expect(result.accepted).toBe(true);
+        expect(result.run).toBe(initial);
+        expect(result.events).toEqual([
+            expect.objectContaining({
+                type: 'board.gambit_commit.requested',
+                targetTileId: 'echo-b',
+                committedTileIds: ['echo-a', 'conduit-a', 'echo-b']
+            }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'power.gambit.committed' })
+        ]);
+
+        const rejected = reduceGameplayCommand(
+            { ...initial, gambitThirdFlipUsed: true },
+            createGameplayGambitCommitCommand('spent-gambit', 'echo-b')
+        );
+        expect(rejected.accepted).toBe(false);
+        expect(rejected.events).toEqual([
+            expect.objectContaining({ type: 'command.rejected', reason: expect.stringContaining('cannot commit') })
+        ]);
     });
 
     it('replays a JSON-round-tripped build sequence deterministically', () => {
