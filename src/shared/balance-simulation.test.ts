@@ -272,6 +272,24 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
             expect(profile.routeChoiceCounts.safe + profile.routeChoiceCounts.greed + profile.routeChoiceCounts.mystery).toBe(
                 profile.floorsCleared
             );
+            expect(profile.routeAcceptedChoices).toBe(profile.floorsCleared);
+            expect(profile.routeRejectedChoices).toBe(0);
+            expect(Object.values(profile.routeOutcomeCounts).reduce((sum, count) => sum + count, 0)).toBe(
+                profile.routeAcceptedChoices
+            );
+            expect(
+                profile.routeOutcomeCounts.mystery_shop_gold +
+                    profile.routeOutcomeCounts.mystery_combo_shard +
+                    profile.routeOutcomeCounts.mystery_combo_shard_capped +
+                    profile.routeOutcomeCounts.mystery_relic_favor
+            ).toBe(profile.routeChoiceCounts.mystery);
+            expect(profile.routeScoreDelta).toBe(profile.routeChoiceCounts.greed * 35);
+            expect(profile.routeLifeDelta).toBeGreaterThanOrEqual(-profile.routeChoiceCounts.greed);
+            expect(profile.routeShopGoldDelta).toBeGreaterThanOrEqual(-profile.safeRouteTollSpend);
+            expect(profile.routeGuardDelta).toBeGreaterThanOrEqual(0);
+            expect(profile.routeComboShardDelta).toBeGreaterThanOrEqual(0);
+            expect(profile.routeFavorDelta).toBeGreaterThanOrEqual(0);
+            expect(profile.routeMemorizeBonusMsDelta).toBeGreaterThanOrEqual(0);
             expect(profile.dominantRouteShare).toBeLessThanOrEqual(result.bounds.maxDominantRouteShare);
             expect(profile.safeRouteTollSpend).toBeGreaterThanOrEqual(0);
             expect(profile.greedLifeCosts).toBeGreaterThanOrEqual(0);
@@ -318,6 +336,8 @@ describe('REG-086 balance simulation economy and drop-rate tuning', () => {
         expect(greedy.healingPurchased).toBeGreaterThanOrEqual(cautious.healingPurchased);
         expect(greedy.routeChoiceCounts.greed).toBeGreaterThan(cautious.routeChoiceCounts.greed);
         expect(cautious.routeChoiceCounts.safe).toBeGreaterThan(cautious.routeChoiceCounts.greed);
+        expect(greedy.routeScoreDelta).toBeGreaterThan(cautious.routeScoreDelta);
+        expect(cautious.routeLifeDelta).toBeGreaterThan(greedy.routeLifeDelta);
         expect(highSkill.safeRouteTollSpend).toBeGreaterThan(0);
         expect(greedy.safeRouteTollSpend).toBeGreaterThan(0);
         expect(greedy.greedLifeCosts).toBe(greedy.routeChoiceCounts.greed);

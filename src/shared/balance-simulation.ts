@@ -6,6 +6,7 @@ import {
     type FindableKind,
     type MutatorId,
     type RouteNodeType,
+    type RunState,
     type TileTraitKind,
     type Tile
 } from './contracts';
@@ -23,6 +24,16 @@ import {
     hasTraitRewardInteractionFloor,
     hasTraitSwapSetupOpportunity
 } from './tile-trait-rules';
+import {
+    createGameplayRouteChooseCommand,
+    type GameplayEvent
+} from './gameplay-core-contracts';
+import { reduceGameplayCommand } from './gameplay-core';
+import { createNewRun } from './run-creation-rules';
+import {
+    generateRouteChoices,
+    type RouteChoiceOutcomeKind
+} from './route-rules';
 
 export interface BalanceSimulationInput {
     seeds?: readonly number[];
@@ -173,6 +184,16 @@ export interface DungeonBalanceProfileMetrics {
     recoveryDebtFloors: number;
     maxRecoveryDebtStreak: number;
     routeChoiceCounts: Record<RouteNodeType, number>;
+    routeOutcomeCounts: Record<RouteChoiceOutcomeKind, number>;
+    routeAcceptedChoices: number;
+    routeRejectedChoices: number;
+    routeLifeDelta: number;
+    routeShopGoldDelta: number;
+    routeScoreDelta: number;
+    routeGuardDelta: number;
+    routeComboShardDelta: number;
+    routeFavorDelta: number;
+    routeMemorizeBonusMsDelta: number;
     dominantRouteShare: number;
     safeRouteTollSpend: number;
     greedLifeCosts: number;
@@ -455,8 +476,72 @@ const shopServiceSpendShareForProfile = (profile: DungeonBalanceProfileId): numb
 };
 
 const ROUTE_NODE_TYPES: readonly RouteNodeType[] = ['safe', 'greed', 'mystery'];
+const ROUTE_OUTCOME_KINDS: readonly RouteChoiceOutcomeKind[] = [
+    'safe_life',
+    'safe_guard',
+    'safe_guard_capped',
+    'greed',
+    'mystery_shop_gold',
+    'mystery_combo_shard',
+    'mystery_combo_shard_capped',
+    'mystery_relic_favor'
+];
 
 const emptyRouteChoiceCounts = (): Record<RouteNodeType, number> => ({ safe: 0, greed: 0, mystery: 0 });
+const emptyRouteOutcomeCounts = (): Record<RouteChoiceOutcomeKind, number> =>
+    Object.fromEntries(ROUTE_OUTCOME_KINDS.map((kind) => [kind, 0])) as Record<RouteChoiceOutcomeKind, number>;
+
+type RouteChoiceSelectedEvent = Extract<GameplayEvent, { type: 'route.choice_selected' }>;
+
+const evaluateProfileRouteThroughGameplayCore = (
+    sourceRun: RunState,
+    routeType: RouteNodeType,
+    lives: number,
+    shopGold: number,
+    sample: BalanceSimulationReport['samples'][number],
+    profileId: DungeonBalanceProfileId
+): { run: RunState; event: RouteChoiceSelectedEvent | null; accepted: boolean } => {
+    const completedRun: RunState = {
+        ...sourceRun,
+        status: 'levelComplete',
+        board: sourceRun.board ? { ...sourceRun.board, level: sample.floor } : sourceRun.board,
+        lives,
+        shopGold,
+        pendingRouteCardPlan: null,
+        sideRoom: null,
+        lastLevelResult: {
+            level: sample.floor,
+            scoreGained: 0,
+            rating: 'B',
+            livesRemaining: lives,
+            perfect: false,
+            mistakes: 0,
+            clearLifeReason: 'none',
+            clearLifeGained: 0,
+            recallMistakes: 0
+        }
+    };
+    const routeChoices = generateRouteChoices(completedRun, sample.floor + 1);
+    const choice = routeChoices.find((candidate) => candidate.routeType === routeType);
+    if (!choice) {
+        return { run: sourceRun, event: null, accepted: false };
+    }
+    const commandRun: RunState = {
+        ...completedRun,
+        lastLevelResult: { ...completedRun.lastLevelResult!, routeChoices }
+    };
+    const result = reduceGameplayCommand(
+        commandRun,
+        createGameplayRouteChooseCommand(
+            `balance-route:${profileId}:${sample.seed}:${sample.floor}`,
+            choice.id
+        )
+    );
+    const event = result.events.find(
+        (candidate): candidate is RouteChoiceSelectedEvent => candidate.type === 'route.choice_selected'
+    ) ?? null;
+    return { run: result.run, event, accepted: result.accepted };
+};
 
 const getRouteChoiceTotal = (counts: Record<RouteNodeType, number>): number =>
     ROUTE_NODE_TYPES.reduce((sum, type) => sum + counts[type], 0);
@@ -1134,6 +1219,16 @@ export const runDungeonBalanceProfileSimulation = (
         let healingSpend = 0;
         let shopSpendBudget = 0;
         const routeChoiceCounts = emptyRouteChoiceCounts();
+        const routeOutcomeCounts = emptyRouteOutcomeCounts();
+        let routeAcceptedChoices = 0;
+        let routeRejectedChoices = 0;
+        let routeLifeDelta = 0;
+        let routeShopGoldDelta = 0;
+        let routeScoreDelta = 0;
+        let routeGuardDelta = 0;
+        let routeComboShardDelta = 0;
+        let routeFavorDelta = 0;
+        let routeMemorizeBonusMsDelta = 0;
         let safeRouteTollSpend = 0;
         let greedLifeCosts = 0;
         let shopServiceSpend = 0;
@@ -1160,6 +1255,11 @@ export const runDungeonBalanceProfileSimulation = (
             let seedBossWins = 0;
             let seedBossAttempts = 0;
             let unhealedLowLifeStreak = 0;
+            let routeRun = createNewRun(0, {
+                gameMode: 'endless',
+                runSeed: seedSamples[0]?.seed ?? 0,
+                runRulesVersionOverride: base.rulesVersion
+            });
 
             for (const sample of seedSamples) {
                 shopGold += Math.floor(sample.shopGoldEarned * profile.rewardBias);
@@ -1230,23 +1330,41 @@ export const runDungeonBalanceProfileSimulation = (
                         seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
                     }
                     const routeChoice = chooseProfileRoute(profile.id, lives, sample);
-                    routeChoiceCounts[routeChoice] += 1;
-                    if (routeChoice === 'safe') {
-                        if (lives < MAX_LIVES) {
-                            if (shopGold > 0) {
-                                shopGold -= 1;
-                                safeRouteTollSpend += 1;
-                            }
-                            lives += 1;
+                    const routeEvaluation = evaluateProfileRouteThroughGameplayCore(
+                        routeRun,
+                        routeChoice,
+                        lives,
+                        shopGold,
+                        sample,
+                        profile.id
+                    );
+                    if (routeEvaluation.accepted && routeEvaluation.event) {
+                        const event = routeEvaluation.event;
+                        routeRun = routeEvaluation.run;
+                        routeAcceptedChoices += 1;
+                        routeChoiceCounts[event.routeType] += 1;
+                        routeOutcomeCounts[event.outcome] += 1;
+                        routeLifeDelta += event.livesAfter - event.livesBefore;
+                        routeShopGoldDelta += event.shopGoldAfter - event.shopGoldBefore;
+                        routeScoreDelta += event.totalScoreAfter - event.totalScoreBefore;
+                        routeGuardDelta += event.guardTokensAfter - event.guardTokensBefore;
+                        routeComboShardDelta += event.comboShardsAfter - event.comboShardsBefore;
+                        routeFavorDelta += event.relicFavorAfter - event.relicFavorBefore;
+                        routeMemorizeBonusMsDelta += event.memorizeBonusMsAfter - event.memorizeBonusMsBefore;
+                        safeRouteTollSpend += Math.max(0, event.shopGoldBefore - event.shopGoldAfter);
+                        greedLifeCosts += event.routeType === 'greed'
+                            ? Math.max(0, event.livesBefore - event.livesAfter)
+                            : 0;
+                        lives = event.livesAfter;
+                        shopGold = event.shopGoldAfter;
+                        if (event.routeType === 'greed') {
+                            rewardClaims += 1.5;
+                        } else if (event.routeType === 'mystery') {
+                            rewardClaims += 1;
                         }
-                    } else if (routeChoice === 'greed' && lives > 1) {
-                        lives -= 1;
-                        shopGold += 2;
-                        greedLifeCosts += 1;
-                        rewardClaims += 1.5;
                         maxShopGoldHeld = Math.max(maxShopGoldHeld, shopGold);
-                    } else if (routeChoice === 'mystery') {
-                        rewardClaims += 1;
+                    } else {
+                        routeRejectedChoices += 1;
                     }
                     minLivesRemaining = Math.min(minLivesRemaining, lives);
                     seedMinLivesRemaining = Math.min(seedMinLivesRemaining, lives);
@@ -1333,6 +1451,16 @@ export const runDungeonBalanceProfileSimulation = (
             recoveryDebtFloors,
             maxRecoveryDebtStreak,
             routeChoiceCounts,
+            routeOutcomeCounts,
+            routeAcceptedChoices,
+            routeRejectedChoices,
+            routeLifeDelta,
+            routeShopGoldDelta,
+            routeScoreDelta,
+            routeGuardDelta,
+            routeComboShardDelta,
+            routeFavorDelta,
+            routeMemorizeBonusMsDelta,
             dominantRouteShare: Number(dominantRouteShare.toFixed(2)),
             safeRouteTollSpend,
             greedLifeCosts,
@@ -1386,7 +1514,7 @@ export const runDungeonBalanceProfileSimulation = (
             'Profiles are broad deterministic guardrails, not exact win-rate claims.',
             'Bounds intentionally report profile/seed/floor context so balance failures are actionable.',
             'Profile diagnostics carry lives and healing across each seed to catch survivability cliffs hidden by average loss rates.',
-            'Route-choice diagnostics model safe, greed, and mystery pressure so one route cannot silently become the default answer.',
+            'Route-choice diagnostics execute the same typed command as live play and retain exact outcome/resource deltas so one route cannot silently become the default answer.',
             'Wallet-carry diagnostics keep profile survivability from masking runaway unspent shop gold.',
             'Recovery-debt diagnostics catch clustered pressure floors whose local guard, shop, room, or key relief is too thin.',
             'Low-life exposure diagnostics catch runs that survive on paper while spending too many floors near collapse.',

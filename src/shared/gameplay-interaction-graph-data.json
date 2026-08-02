@@ -1,5 +1,5 @@
 {
-  "version": 16,
+  "version": 17,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -1651,6 +1651,19 @@
       "blocks": [],
       "softlockGuards": ["json-round-trip", "deterministic-event-order", "nonnegative-inventory", "seed-sweep"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/gameplay-core-simulation.test.ts"]
+    },
+    {
+      "id": "simulation.build_evaluation",
+      "label": "Typed Build Strategy Evaluation",
+      "kind": "simulation",
+      "role": "route_outcome_and_strategy_balance_gate",
+      "evidence": ["src/shared/balance-simulation.ts", "src/shared/gameplay-core.ts", "src/shared/route-choice-outcome-rules.ts"],
+      "reads": ["routeChoices", "gameplayEvents", "lives", "shopGold", "totalScore", "guardTokens", "comboShards", "relicFavorProgress", "pendingMemorizeBonusMs"],
+      "writes": ["balanceProfileReport"],
+      "enables": ["build.route_gambler", "economy.score_and_rewards", "safety.softlock_fairness"],
+      "blocks": [],
+      "softlockGuards": ["typed-route-command-only", "one-outcome-per-cleared-floor", "zero-rejected-profile-choices", "multi-seed-profile-bounds"],
+      "tests": ["src/shared/balance-simulation.test.ts"]
     }
   ],
   "edges": [
@@ -1723,6 +1736,11 @@
     { "source": "route.choice", "target": "feedback.gameplay_hud", "kind": "displays", "label": "emits the selected payoff and cost" },
     { "source": "route.choice", "target": "persistence.run_summary", "kind": "persists", "label": "journals the choice and exact outcome" },
     { "source": "route.choice", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "participates in deterministic command replay" },
+    { "source": "route.choice", "target": "simulation.build_evaluation", "kind": "tested_by", "label": "scores exact typed route outcomes across profiles" },
+    { "source": "core.gameplay_commands", "target": "simulation.build_evaluation", "kind": "tested_by", "label": "drives profile route transitions without parallel reward arithmetic" },
+    { "source": "simulation.build_evaluation", "target": "build.route_gambler", "kind": "tested_by", "label": "measures risk preference against survival and reward deltas" },
+    { "source": "simulation.build_evaluation", "target": "economy.score_and_rewards", "kind": "tested_by", "label": "checks live gold score shard and Favor consequences" },
+    { "source": "simulation.build_evaluation", "target": "safety.softlock_fairness", "kind": "guarded_by", "label": "keeps per-seed survival within profile bounds" },
     { "source": "objective.floor_clear", "target": "feedback.gameplay_hud", "kind": "enables", "label": "shows floor clear" },
     { "source": "progression.run_flow", "target": "feedback.gameplay_hud", "kind": "enables", "label": "route feedback" },
     { "source": "stats.session_tracking", "target": "feedback.gameplay_hud", "kind": "enables", "label": "stat feedback" },

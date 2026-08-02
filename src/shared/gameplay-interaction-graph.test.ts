@@ -722,7 +722,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(16);
+        expect(gameplayInteractionGraph.version).toBe(17);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -745,7 +745,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects typed route selection from floor clear through exact replayable consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(16);
+        expect(gameplayInteractionGraph.version).toBe(17);
         expect(byId.get('route.choice')).toMatchObject({
             kind: 'route',
             role: 'replayable_between_floor_commitment',
@@ -764,6 +764,23 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'route.choice', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'route.choice', target: 'persistence.run_summary', kind: 'persists' }),
             expect.objectContaining({ source: 'route.choice', target: 'simulation.gameplay_replay', kind: 'tested_by' })
+        ]));
+    });
+
+    it('evaluates route strategy through typed outcomes instead of parallel reward arithmetic', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        expect(byId.get('simulation.build_evaluation')).toMatchObject({
+            kind: 'simulation',
+            role: 'route_outcome_and_strategy_balance_gate',
+            evidence: expect.arrayContaining(['src/shared/balance-simulation.ts']),
+            tests: ['src/shared/balance-simulation.test.ts']
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'route.choice', target: 'simulation.build_evaluation', kind: 'tested_by' }),
+            expect.objectContaining({ source: 'core.gameplay_commands', target: 'simulation.build_evaluation', kind: 'tested_by' }),
+            expect.objectContaining({ source: 'simulation.build_evaluation', target: 'build.route_gambler', kind: 'tested_by' }),
+            expect.objectContaining({ source: 'simulation.build_evaluation', target: 'economy.score_and_rewards', kind: 'tested_by' }),
+            expect.objectContaining({ source: 'simulation.build_evaluation', target: 'safety.softlock_fairness', kind: 'guarded_by' })
         ]));
     });
 });

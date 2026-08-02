@@ -7,16 +7,16 @@
     "codeFileCount": 877,
     "exportedSymbolCount": 3210,
     "contentItemCount": 56,
-    "mechanicCount": 127,
-    "stateFieldCount": 136,
-    "relationshipCount": 9397
+    "mechanicCount": 128,
+    "stateFieldCount": 137,
+    "relationshipCount": 9420
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 28304,
-      "sha256": "6987a6a460efbe7d675688e62d85159c5024537a658eb6628680f9a8d40559b4"
+      "bytes": 29388,
+      "sha256": "fa9ca065d1774d4645f6c075cec644d79ecbea08195a9c6229f2420fbf334052"
     },
     {
       "path": ".ai/README.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21639,
-      "sha256": "bd8ff88ad43215b77bf7101d1a1060526d233077ce1ee5b374c99a9cb701d79f"
+      "bytes": 21763,
+      "sha256": "42008b18f9b37a3e2aeb92dff8d4cf78db6c0845856d1d2ca2e578600be597ef"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -9783,14 +9783,14 @@
     {
       "path": "src/shared/balance-simulation.test.ts",
       "category": "test",
-      "bytes": 26775,
-      "sha256": "66a746db91f8108d9a84bf37d5b95e7876cacfae0d016cc4d90b9d3d1e768e92"
+      "bytes": 28178,
+      "sha256": "a2f25b9686a007c5f57e8e5e2cc8120ef2a57c46c39d0c330b783921e5c7f9e2"
     },
     {
       "path": "src/shared/balance-simulation.ts",
       "category": "source",
-      "bytes": 65491,
-      "sha256": "53b5bff7ec429c7a3e20c8e91a2bf468aac12095f0431d319e169ca91e0a4acd"
+      "bytes": 70749,
+      "sha256": "2d43c0fa747c219783476a28abb5eb442e3aa5b804781e00e0e0ae375be4c0e0"
     },
     {
       "path": "src/shared/blueprintAstPoc.ts",
@@ -10635,14 +10635,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 169320,
-      "sha256": "55e240907a138ff151c2cfc4ebc9ab45570458fcc5d1c73d31062734be08d1f0"
+      "bytes": 171032,
+      "sha256": "b4807ef24e05001817935931e5b83396b23f34ee6b0414d150b3c90b27e1fe79"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 48704,
-      "sha256": "68105739d96200ff7de9f3cfd4dc1d00811f3bd880581fb5566ea70108b89b1e"
+      "bytes": 49998,
+      "sha256": "7c3b76875d45075d31d83fccd20abd0459b2de8ec58b0886d174b5b033802885"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -23054,7 +23054,7 @@
       "path": "src/shared/balance-simulation.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 521,
+      "lineCount": 541,
       "imports": [
         "file:src/shared/balance-simulation.ts",
         "file:src/shared/contracts.ts",
@@ -23068,7 +23068,7 @@
       "path": "src/shared/balance-simulation.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1481,
+      "lineCount": 1609,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-inspection.ts",
@@ -23076,7 +23076,11 @@
         "file:src/shared/enemy-hazard-board-rules.ts",
         "file:src/shared/findables.ts",
         "file:src/shared/floor-mutator-schedule.ts",
+        "file:src/shared/gameplay-core-contracts.ts",
+        "file:src/shared/gameplay-core.ts",
         "file:src/shared/relics.ts",
+        "file:src/shared/route-rules.ts",
+        "file:src/shared/run-creation-rules.ts",
         "file:src/shared/shop-rules.ts",
         "file:src/shared/tile-trait-rules.ts"
       ],
@@ -26752,7 +26756,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2137,
+      "lineCount": 2155,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26762,7 +26766,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 770,
+      "lineCount": 787,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -41092,168 +41096,168 @@
       "name": "assertBalanceSimulationWithinBaseline",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1080,
-      "endLine": 1090
+      "line": 1165,
+      "endLine": 1175
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#assertDungeonBalanceProfilesWithinBounds",
       "name": "assertDungeonBalanceProfilesWithinBounds",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1399,
-      "endLine": 1480
+      "line": 1527,
+      "endLine": 1608
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BALANCE_SIMULATION_BASELINE",
       "name": "BALANCE_SIMULATION_BASELINE",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1064,
-      "endLine": 1070
+      "line": 1149,
+      "endLine": 1155
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BALANCE_SIMULATION_BASELINE_KEYS",
       "name": "BALANCE_SIMULATION_BASELINE_KEYS",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1072,
-      "endLine": 1078
+      "line": 1157,
+      "endLine": 1163
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BALANCE_SIMULATION_FINDABLE_KINDS",
       "name": "BALANCE_SIMULATION_FINDABLE_KINDS",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 292,
-      "endLine": 292
+      "line": 313,
+      "endLine": 313
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BALANCE_SIMULATION_FLOOR_BANDS",
       "name": "BALANCE_SIMULATION_FLOOR_BANDS",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 233,
-      "endLine": 233
+      "line": 254,
+      "endLine": 254
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BALANCE_SIMULATION_TILE_TRAIT_KINDS",
       "name": "BALANCE_SIMULATION_TILE_TRAIT_KINDS",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 301,
-      "endLine": 311
+      "line": 322,
+      "endLine": 332
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BalanceSimulationFloorBand",
       "name": "BalanceSimulationFloorBand",
       "kind": "type",
       "file": "src/shared/balance-simulation.ts",
-      "line": 235,
-      "endLine": 235
+      "line": 256,
+      "endLine": 256
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BalanceSimulationInput",
       "name": "BalanceSimulationInput",
       "kind": "interface",
       "file": "src/shared/balance-simulation.ts",
-      "line": 27,
-      "endLine": 32
+      "line": 38,
+      "endLine": 43
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BalanceSimulationReport",
       "name": "BalanceSimulationReport",
       "kind": "interface",
       "file": "src/shared/balance-simulation.ts",
-      "line": 44,
-      "endLine": 133
+      "line": 55,
+      "endLine": 144
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#BalanceSimulationRow",
       "name": "BalanceSimulationRow",
       "kind": "interface",
       "file": "src/shared/balance-simulation.ts",
-      "line": 34,
-      "endLine": 42
+      "line": 45,
+      "endLine": 53
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#DUNGEON_BALANCE_PROFILES",
       "name": "DUNGEON_BALANCE_PROFILES",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 226,
-      "endLine": 231
+      "line": 247,
+      "endLine": 252
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#DungeonBalanceProfileDefinition",
       "name": "DungeonBalanceProfileDefinition",
       "kind": "interface",
       "file": "src/shared/balance-simulation.ts",
-      "line": 137,
-      "endLine": 143
+      "line": 148,
+      "endLine": 154
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#DungeonBalanceProfileId",
       "name": "DungeonBalanceProfileId",
       "kind": "type",
       "file": "src/shared/balance-simulation.ts",
-      "line": 135,
-      "endLine": 135
+      "line": 146,
+      "endLine": 146
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#DungeonBalanceProfileMetrics",
       "name": "DungeonBalanceProfileMetrics",
       "kind": "interface",
       "file": "src/shared/balance-simulation.ts",
-      "line": 145,
-      "endLine": 194
+      "line": 156,
+      "endLine": 215
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#DungeonBalanceProfileReport",
       "name": "DungeonBalanceProfileReport",
       "kind": "interface",
       "file": "src/shared/balance-simulation.ts",
-      "line": 196,
-      "endLine": 224
+      "line": 217,
+      "endLine": 245
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#getFindableKindShares",
       "name": "getFindableKindShares",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 377,
-      "endLine": 388
+      "line": 398,
+      "endLine": 409
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#getTileTraitKindShares",
       "name": "getTileTraitKindShares",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 390,
-      "endLine": 401
+      "line": 411,
+      "endLine": 422
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#runBalanceSimulation",
       "name": "runBalanceSimulation",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 492,
-      "endLine": 1059
+      "line": 577,
+      "endLine": 1144
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#runDungeonBalanceProfileSimulation",
       "name": "runDungeonBalanceProfileSimulation",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1107,
-      "endLine": 1397
+      "line": 1192,
+      "endLine": 1525
     },
     {
       "id": "symbol:src/shared/balance-simulation.ts#summarizeBalanceSimulation",
       "name": "summarizeBalanceSimulation",
       "kind": "value",
       "file": "src/shared/balance-simulation.ts",
-      "line": 1061,
-      "endLine": 1062
+      "line": 1146,
+      "endLine": 1147
     },
     {
       "id": "symbol:src/shared/blueprintAstPoc.ts#BLUEPRINT_AST_POC",
@@ -63749,6 +63753,45 @@
       ]
     },
     {
+      "id": "mechanic:simulation.build_evaluation",
+      "mechanicId": "simulation.build_evaluation",
+      "label": "Typed Build Strategy Evaluation",
+      "kind": "simulation",
+      "role": "route_outcome_and_strategy_balance_gate",
+      "evidence": [
+        {
+          "path": "src/shared/balance-simulation.ts",
+          "line": 13
+        },
+        {
+          "path": "src/shared/gameplay-core.ts",
+          "line": 577
+        },
+        {
+          "path": "src/shared/route-choice-outcome-rules.ts",
+          "line": 1
+        }
+      ],
+      "tests": [
+        {
+          "path": "src/shared/balance-simulation.test.ts",
+          "line": 1
+        }
+      ],
+      "enables": [
+        "build.route_gambler",
+        "economy.score_and_rewards",
+        "safety.softlock_fairness"
+      ],
+      "blocks": [],
+      "softlockGuards": [
+        "typed-route-command-only",
+        "one-outcome-per-cleared-floor",
+        "zero-rejected-profile-choices",
+        "multi-seed-profile-bounds"
+      ]
+    },
+    {
       "id": "mechanic:simulation.gameplay_replay",
       "mechanicId": "simulation.gameplay_replay",
       "label": "Seeded Gameplay Core Simulation",
@@ -64007,7 +64050,7 @@
         },
         {
           "path": "src/shared/balance-simulation.ts",
-          "line": 9
+          "line": 10
         },
         {
           "path": "src/renderer/components/GameplayHudBar.tsx",
@@ -64294,6 +64337,14 @@
       "writtenBy": []
     },
     {
+      "id": "state:balanceProfileReport",
+      "name": "balanceProfileReport",
+      "readBy": [],
+      "writtenBy": [
+        "mechanic:simulation.build_evaluation"
+      ]
+    },
+    {
       "id": "state:boardRows",
       "name": "boardRows",
       "readBy": [
@@ -64415,7 +64466,8 @@
         "mechanic:inventory.combo_shard",
         "mechanic:progression.shard_to_life",
         "mechanic:relic.combo_shard_plus_step",
-        "mechanic:route.choice"
+        "mechanic:route.choice",
+        "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
@@ -65036,6 +65088,7 @@
       "name": "gameplayEvents",
       "readBy": [
         "mechanic:persistence.run_summary",
+        "mechanic:simulation.build_evaluation",
         "mechanic:simulation.gameplay_replay"
       ],
       "writtenBy": [
@@ -65069,6 +65122,7 @@
         "mechanic:reward.stasis_lockbox",
         "mechanic:route.choice",
         "mechanic:safety.guard_absorption",
+        "mechanic:simulation.build_evaluation",
         "mechanic:trait.volatile",
         "mechanic:trait.volatile_heavy_guard"
       ],
@@ -65153,7 +65207,8 @@
         "mechanic:progression.shard_to_life",
         "mechanic:relic.parasite_ward_once",
         "mechanic:route.choice",
-        "mechanic:safety.guard_absorption"
+        "mechanic:safety.guard_absorption",
+        "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
@@ -65383,7 +65438,8 @@
       "id": "state:pendingMemorizeBonusMs",
       "name": "pendingMemorizeBonusMs",
       "readBy": [
-        "mechanic:phase.memorize"
+        "mechanic:phase.memorize",
+        "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
         "mechanic:route.choice"
@@ -65537,7 +65593,8 @@
         "mechanic:economy.score_and_rewards",
         "mechanic:feedback.gameplay_hud",
         "mechanic:reward.secret_favor",
-        "mechanic:route.choice"
+        "mechanic:route.choice",
+        "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
@@ -65689,7 +65746,8 @@
         "mechanic:build.route_gambler",
         "mechanic:progression.run_flow",
         "mechanic:route.choice",
-        "mechanic:route.mystery"
+        "mechanic:route.mystery",
+        "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
         "mechanic:objective.floor_clear"
@@ -65886,7 +65944,8 @@
         "mechanic:shop.master_key",
         "mechanic:shop.trait_cleanse",
         "mechanic:shop.trait_routing_kit",
-        "mechanic:shop.typed_key"
+        "mechanic:shop.typed_key",
+        "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
         "mechanic:core.gameplay_commands",
@@ -66118,7 +66177,8 @@
       "readBy": [
         "mechanic:economy.score_and_rewards",
         "mechanic:feedback.gameplay_hud",
-        "mechanic:route.choice"
+        "mechanic:route.choice",
+        "mechanic:simulation.build_evaluation"
       ],
       "writtenBy": [
         "mechanic:economy.score_and_rewards",
@@ -88272,6 +88332,13 @@
       "label": "completion route"
     },
     {
+      "id": "guarded_by:mechanic:simulation.build_evaluation->mechanic:safety.softlock_fairness:keeps per-seed survival within profile bounds",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "mechanic:safety.softlock_fairness",
+      "kind": "guarded_by",
+      "label": "keeps per-seed survival within profile bounds"
+    },
+    {
       "id": "implemented_by:mechanic:board.cleanup->file:src/shared/board-inspection.ts",
       "source": "mechanic:board.cleanup",
       "target": "file:src/shared/board-inspection.ts",
@@ -90723,6 +90790,24 @@
       "id": "implemented_by:mechanic:shop.typed_key->file:src/shared/shop-rules.ts",
       "source": "mechanic:shop.typed_key",
       "target": "file:src/shared/shop-rules.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:simulation.build_evaluation->file:src/shared/balance-simulation.ts",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "file:src/shared/balance-simulation.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:simulation.build_evaluation->file:src/shared/gameplay-core.ts",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:simulation.build_evaluation->file:src/shared/route-choice-outcome-rules.ts",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "file:src/shared/route-choice-outcome-rules.ts",
       "kind": "implemented_by"
     },
     {
@@ -99978,9 +100063,33 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/shared/balance-simulation.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/shared/balance-simulation.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/balance-simulation.ts->src/shared/gameplay-core.ts",
+      "source": "file:src/shared/balance-simulation.ts",
+      "target": "file:src/shared/gameplay-core.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/shared/balance-simulation.ts->src/shared/relics.ts",
       "source": "file:src/shared/balance-simulation.ts",
       "target": "file:src/shared/relics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/balance-simulation.ts->src/shared/route-rules.ts",
+      "source": "file:src/shared/balance-simulation.ts",
+      "target": "file:src/shared/route-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/balance-simulation.ts->src/shared/run-creation-rules.ts",
+      "source": "file:src/shared/balance-simulation.ts",
+      "target": "file:src/shared/run-creation-rules.ts",
       "kind": "imports"
     },
     {
@@ -111348,6 +111457,60 @@
       "kind": "reads"
     },
     {
+      "id": "reads:mechanic:simulation.build_evaluation->state:comboShards",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:comboShards",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:gameplayEvents",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:gameplayEvents",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:guardTokens",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:guardTokens",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:lives",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:lives",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:pendingMemorizeBonusMs",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:pendingMemorizeBonusMs",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:relicFavorProgress",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:relicFavorProgress",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:routeChoices",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:routeChoices",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:shopGold",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:shopGold",
+      "kind": "reads"
+    },
+    {
+      "id": "reads:mechanic:simulation.build_evaluation->state:totalScore",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:totalScore",
+      "kind": "reads"
+    },
+    {
       "id": "reads:mechanic:simulation.gameplay_replay->state:gameplayCommands",
       "source": "mechanic:simulation.gameplay_replay",
       "target": "state:gameplayCommands",
@@ -112044,6 +112207,13 @@
       "source": "mechanic:core.gameplay_commands",
       "target": "file:src/shared/gameplay-journal.test.ts",
       "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:core.gameplay_commands->mechanic:simulation.build_evaluation:drives profile route transitions without parallel reward arithmetic",
+      "source": "mechanic:core.gameplay_commands",
+      "target": "mechanic:simulation.build_evaluation",
+      "kind": "tested_by",
+      "label": "drives profile route transitions without parallel reward arithmetic"
     },
     {
       "id": "tested_by:mechanic:core.gameplay_commands->mechanic:simulation.gameplay_replay:deterministic replay",
@@ -113663,6 +113833,13 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:mechanic:route.choice->mechanic:simulation.build_evaluation:scores exact typed route outcomes across profiles",
+      "source": "mechanic:route.choice",
+      "target": "mechanic:simulation.build_evaluation",
+      "kind": "tested_by",
+      "label": "scores exact typed route outcomes across profiles"
+    },
+    {
       "id": "tested_by:mechanic:route.choice->mechanic:simulation.gameplay_replay:participates in deterministic command replay",
       "source": "mechanic:route.choice",
       "target": "mechanic:simulation.gameplay_replay",
@@ -113842,6 +114019,26 @@
       "source": "mechanic:shop.typed_key",
       "target": "file:src/shared/shop-rules.test.ts",
       "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:simulation.build_evaluation->file:src/shared/balance-simulation.test.ts",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "file:src/shared/balance-simulation.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:mechanic:simulation.build_evaluation->mechanic:build.route_gambler:measures risk preference against survival and reward deltas",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "mechanic:build.route_gambler",
+      "kind": "tested_by",
+      "label": "measures risk preference against survival and reward deltas"
+    },
+    {
+      "id": "tested_by:mechanic:simulation.build_evaluation->mechanic:economy.score_and_rewards:checks live gold score shard and Favor consequences",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "mechanic:economy.score_and_rewards",
+      "kind": "tested_by",
+      "label": "checks live gold score shard and Favor consequences"
     },
     {
       "id": "tested_by:mechanic:simulation.gameplay_replay->file:src/shared/gameplay-core-simulation.test.ts",
@@ -122857,6 +123054,12 @@
       "id": "writes:mechanic:shop.typed_key->state:shopGold",
       "source": "mechanic:shop.typed_key",
       "target": "state:shopGold",
+      "kind": "writes"
+    },
+    {
+      "id": "writes:mechanic:simulation.build_evaluation->state:balanceProfileReport",
+      "source": "mechanic:simulation.build_evaluation",
+      "target": "state:balanceProfileReport",
       "kind": "writes"
     },
     {

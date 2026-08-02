@@ -267,6 +267,18 @@ The between-floor Safe, Greed, or Mystery commitment now crosses the determinist
 
 Graph v16 connects floor clear, route commitment, the command core, exact economy/progression consequences, typed feedback, persistence, and deterministic simulation. This also establishes event data for later build-aware route outcome scoring in the headless evaluator.
 
+## Typed route outcome evaluation
+
+The dungeon balance profiler now consumes the live route command rather than maintaining separate Safe, Greed, and Mystery reward arithmetic:
+
+1. Each seed and strategy profile carries a real run-state sidecar across its abstract pressure simulation.
+2. Every cleared-floor decision generates the same choices as live play and executes `route.choose` through the core.
+3. The profiler reads `route.choice_selected` and accumulates accepted/rejected decisions, outcome kinds, life, shop-gold, score, guard, combo-shard, Favor, and memorize-time deltas.
+4. Profile tests require exactly one accepted typed outcome per cleared floor, zero rejected authored choices, exact Greed score, and Mystery outcome accounting.
+5. This removed a real drift bug: the old model awarded Greed two shop gold while live gameplay awards three, and it ignored Mystery's deterministic resource branch.
+
+Graph v17 adds the typed build-strategy evaluator as an executable balance gate connected to route choice, the command core, economy, Route Gambler strategy, and per-seed fairness bounds.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -286,5 +298,5 @@ Implemented in the Conduit Cartographer vertical slice:
 Still required before the vertical slice is complete:
 
 - migrate remaining legacy feedback producers onto the common journal adapter as their gameplay definitions move into the core;
-- score typed route-choice outcomes in the headless build evaluator so build profiles can be compared on decision quality as well as resource safety;
+- extend typed profile evaluation beyond routes as additional build-defining combat and reward decisions enter the command core;
 - continue migrating cohesive player builds rather than adding isolated definitions, using the graph diagnostics to choose the next least-overlapping loop.
