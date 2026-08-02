@@ -344,6 +344,19 @@ The live delayed match seam now resolves as one gameplay transaction instead of 
 
 Graph v23 connects delayed input, match/mismatch and Gambit resolution, schema effects, Wild consumption, pair-triggered floor clearing, Slayer hooks, feedback, bounded persistence, and replay.
 
+## Twenty-fourth vertical slice: Flat Typed Destroy Completion
+
+Destroy Pair now owns its completion consequence instead of handing a complete board back to a wrapper for a second transition:
+
+1. `board.destroy_pair` still delegates legality, charge consumption, pair removal, reward forfeiture, Recall cost, parasite relief, and Spotlight rotation to the established pure action.
+2. When `board.pair_destroyed.boardComplete` is true, the reducer invokes the core-independent floor finalizer before returning, under the same command id and event list.
+3. The live wrapper now only appends the accepted command and events; it does not inspect the event and finalize again.
+4. Direct reducer tests prove final-Destroy `levelComplete` state, untouched reducer journals, JSON replay equality, and exact board-completion events.
+5. Live tests require one `board.destroy_pair` journal entry with no nested `effects.apply` command on a completed floor.
+6. Non-final Destroy behavior, `noDestroy`, exit-source protection, reward forfeiture, and softlock guards remain unchanged.
+
+Graph v24 connects Destroy removal directly to the completed-floor run flow, flat persistence, feedback, and replay. Dungeon Exit activation is now the remaining common floor-finalizer handoff.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

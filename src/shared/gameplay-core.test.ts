@@ -478,6 +478,37 @@ describe('deterministic gameplay core', () => {
         ]);
         expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
         expect(rejected).toMatchObject({ accepted: false, run: { destroyPairCharges: 2 } });
+
+        const finalBase = createNewRun(0, { runSeed: 4412 });
+        const finalRun: RunState = {
+            ...finalBase,
+            status: 'playing',
+            destroyPairCharges: 1,
+            board: {
+                ...board(),
+                pairCount: 1,
+                matchedPairs: 0,
+                tiles: [tile('final-a', 'final'), tile('final-b', 'final')]
+            }
+        };
+        const finalCommand = createGameplayDestroyPairCommand('destroy-final', 'final-a');
+        const finalResult = reduceGameplayCommand(finalRun, finalCommand);
+        expect(finalResult).toMatchObject({
+            accepted: true,
+            run: { status: 'levelComplete', board: { matchedPairs: 1 } },
+            events: expect.arrayContaining([
+                expect.objectContaining({ type: 'board.pair_destroyed', boardComplete: true })
+            ])
+        });
+        expect(finalResult.run.gameplayCommandJournal).toEqual(finalRun.gameplayCommandJournal);
+        expect(replayGameplayCommands(
+            finalRun,
+            [JSON.parse(JSON.stringify(finalCommand))]
+        )).toMatchObject({
+            run: finalResult.run,
+            events: finalResult.events,
+            acceptedCommandIds: ['destroy-final']
+        });
     });
 
     it('advances score-parasite pressure through a typed floor command and records ward or life outcomes', () => {

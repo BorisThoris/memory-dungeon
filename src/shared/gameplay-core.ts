@@ -101,6 +101,15 @@ const SIDE_ROOM_SOURCE: GameplaySource = { kind: 'system', id: 'route_side_room'
 const RELIC_OFFER_SOURCE: GameplaySource = { kind: 'system', id: 'relic_offer' };
 const WILD_JOKER_SOURCE: GameplaySource = { kind: 'system', id: 'wild_joker' };
 const BOARD_TURN_SOURCE: GameplaySource = { kind: 'system', id: 'board_turn' };
+const finalizeLevelThroughCore = createFinalizeLevelTransition({
+    resolveSlayerFloorClear: (run, input, _legacyCommandId, execution) => {
+        if (!execution) {
+            throw new Error('Core-owned floor clear requires an outer execution context.');
+        }
+        return resolveSlayerFloorClearEffects(run, input, execution.commandId, execution.events);
+    },
+    appendGameplayJournal: (run) => run
+});
 const appendReindexedEvents = (
     commandId: string,
     sourceEvents: readonly GameplayEvent[],
@@ -269,7 +278,10 @@ const applyDestroyPairCommand = (
         message: `${target.label} pair removed; ${destroyChargesAfter} Destroy charge${destroyChargesAfter === 1 ? '' : 's'} remain${transition.boardComplete ? ' and the floor route is clear' : ''}.`,
         tone: 'information'
     });
-    return { run: nextRun, command, events, accepted: true };
+    const resolvedRun = transition.boardComplete && nextRun.board
+        ? finalizeLevelThroughCore(nextRun, nextRun.board, { commandId: command.commandId, events })
+        : nextRun;
+    return { run: resolvedRun, command, events, accepted: true };
 };
 
 const applyPeekCommand = (
@@ -1349,22 +1361,8 @@ const applyBoardTurnResolveCommand = (
     }
 
     const events: GameplayEvent[] = [];
-    const finalizeLevel = createFinalizeLevelTransition({
-        resolveSlayerFloorClear: (candidateRun, input, _legacyCommandId, execution) => {
-            if (!execution) {
-                throw new Error('Core-owned floor clear requires an outer execution context.');
-            }
-            return resolveSlayerFloorClearEffects(
-                candidateRun,
-                input,
-                execution.commandId,
-                execution.events
-            );
-        },
-        appendGameplayJournal: (candidateRun) => candidateRun
-    });
     const resolveTurn = createResolveBoardTurnTransition({
-        finalizeLevel,
+        finalizeLevel: finalizeLevelThroughCore,
         resolveFindableMatchReward: resolveBoardTurnFindableReward,
         consumeWildMatch: consumeBoardTurnWildMatch
     });

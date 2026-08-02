@@ -9,14 +9,14 @@
     "contentItemCount": 56,
     "mechanicCount": 130,
     "stateFieldCount": 144,
-    "relationshipCount": 9671
+    "relationshipCount": 9674
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 37216,
-      "sha256": "a3a940c231305c4ed65e4fb17ac4367692c70b303fb06c7351f13c84dbe370b7"
+      "bytes": 38483,
+      "sha256": "16b4f8b73224580e407462500bfb7f1f037a082470a2f89f15c5bf2d52c4b386"
     },
     {
       "path": ".ai/README.md",
@@ -831,8 +831,8 @@
     {
       "path": "docs/internal-wiki/APP_ANALYSIS.md",
       "category": "documentation",
-      "bytes": 21930,
-      "sha256": "622621cb3f46a1d0cf787a0042881f29b512f7129b7f86338388e2a04190be7a"
+      "bytes": 21914,
+      "sha256": "69a6864472f2ed7aca39097198e227096429912032e7280004337a7df866a8af"
     },
     {
       "path": "docs/internal-wiki/ARCHITECTURE.md",
@@ -10527,8 +10527,8 @@
     {
       "path": "src/shared/floor-completion-transitions.ts",
       "category": "source",
-      "bytes": 1697,
-      "sha256": "257724d539825c378493e6d5a4ad5a69b17e003ac27c0a106048f2f020e3e2ca"
+      "bytes": 1436,
+      "sha256": "f3a94a271c1e8e9e56d078b45bf31975a7bef2e5bce3840be34bbbde4deddf95"
     },
     {
       "path": "src/shared/floor-mutator-schedule.test.ts",
@@ -10599,8 +10599,8 @@
     {
       "path": "src/shared/game.test.ts",
       "category": "test",
-      "bytes": 378837,
-      "sha256": "ed8a1ba12008d31bbb7524c73aca2a6d84de54464fddb3e9496e67ba96e32dcb"
+      "bytes": 378924,
+      "sha256": "f0c2a90aedd11d1459bc71fd70718a64446fb48c18d424f29893cc68fb49a70b"
     },
     {
       "path": "src/shared/game.ts",
@@ -10635,14 +10635,14 @@
     {
       "path": "src/shared/gameplay-core.test.ts",
       "category": "test",
-      "bytes": 80285,
-      "sha256": "fb26e99e6ae70991139fe8b39fd781a09dc6d0afa144b71f76df28c9a47693f5"
+      "bytes": 81545,
+      "sha256": "9e366f39be69afcf0b0d1edf3f12ff2b3d78a969de70bd2a9e212b81ce48ffaf"
     },
     {
       "path": "src/shared/gameplay-core.ts",
       "category": "source",
-      "bytes": 67525,
-      "sha256": "c6f871dcf6f79614df93f9e1723b5d7deb770e7fbeb56e965c59e72c8a2cc561"
+      "bytes": 67602,
+      "sha256": "694bc2588c0c2862abd534fa05ef0ba6f07f6fd87fb31ad8792e8a24106f8d3e"
     },
     {
       "path": "src/shared/gameplay-effect-transition.test.ts",
@@ -10659,14 +10659,14 @@
     {
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "category": "source",
-      "bytes": 181530,
-      "sha256": "fcaaeb3ae511ec567d54ebba3fd1131cfbf4fce6ccf07161e67816907040785c"
+      "bytes": 181815,
+      "sha256": "f73c167ad7960b1e06a198bb6339e885fb710635e87b92946c4c9faab3814924"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "category": "test",
-      "bytes": 58760,
-      "sha256": "7400b583238c13f65695c31f03dd54e105807a5b433c4f3f1d8435e6bc7ab43d"
+      "bytes": 58901,
+      "sha256": "a9f3335c6a827efbd9b15270c95fb474e7eb336f4e5a18782c68f2c99b0a3608"
     },
     {
       "path": "src/shared/gameplay-interaction-graph.ts",
@@ -26024,7 +26024,7 @@
       "path": "src/shared/floor-completion-transitions.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 38,
+      "lineCount": 33,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/dungeon-exit-rules.ts",
@@ -26378,7 +26378,7 @@
       "path": "src/shared/game.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 8771,
+      "lineCount": 8772,
       "imports": [
         "file:src/shared/board-generation.ts",
         "file:src/shared/board-powers.ts",
@@ -26805,7 +26805,7 @@
       "path": "src/shared/gameplay-core.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 1782,
+      "lineCount": 1813,
       "imports": [
         "file:src/shared/board-power-actions.ts",
         "file:src/shared/board-power-state.ts",
@@ -26835,7 +26835,7 @@
       "path": "src/shared/gameplay-core.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1560,
+      "lineCount": 1558,
       "imports": [
         "file:src/shared/board-inspection.ts",
         "file:src/shared/board-power-actions.ts",
@@ -26928,7 +26928,7 @@
       "path": "src/shared/gameplay-interaction-graph-data.json",
       "layer": "shared",
       "role": "production",
-      "lineCount": 2216,
+      "lineCount": 2217,
       "imports": [],
       "exports": [],
       "testedBy": []
@@ -26938,7 +26938,7 @@
       "path": "src/shared/gameplay-interaction-graph.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 912,
+      "lineCount": 913,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/gameplay-core-contracts.ts",
@@ -46932,8 +46932,8 @@
       "name": "createActivateDungeonExit",
       "kind": "value",
       "file": "src/shared/floor-completion-transitions.ts",
-      "line": 30,
-      "endLine": 37
+      "line": 25,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/floor-completion-transitions.ts#createApplyDestroyPair",
@@ -46941,7 +46941,7 @@
       "kind": "value",
       "file": "src/shared/floor-completion-transitions.ts",
       "line": 11,
-      "endLine": 28
+      "endLine": 23
     },
     {
       "id": "symbol:src/shared/floor-mutator-schedule.ts#CHAPTER_ACT_BIOME_STRUCTURE",
@@ -49588,16 +49588,16 @@
       "name": "reduceGameplayCommand",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1459,
-      "endLine": 1544
+      "line": 1457,
+      "endLine": 1542
     },
     {
       "id": "symbol:src/shared/gameplay-core.ts#replayGameplayCommands",
       "name": "replayGameplayCommands",
       "kind": "value",
       "file": "src/shared/gameplay-core.ts",
-      "line": 1546,
-      "endLine": 1559
+      "line": 1544,
+      "endLine": 1557
     },
     {
       "id": "symbol:src/shared/gameplay-effect-transition.ts#applyGameplayDefinitionTransition",
@@ -59184,7 +59184,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 176
+          "line": 185
         },
         {
           "path": "src/shared/gameplay-core-adapters.ts",
@@ -59305,7 +59305,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 337
+          "line": 349
         },
         {
           "path": "src/shared/relics.ts",
@@ -61283,7 +61283,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 910
+          "line": 922
         },
         {
           "path": "src/shared/tile-trait-rules.ts",
@@ -61293,7 +61293,7 @@
       "tests": [
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 752
+          "line": 783
         },
         {
           "path": "src/shared/tile-trait-rules.test.ts",
@@ -61595,7 +61595,7 @@
       "mechanicId": "power.destroy_pair",
       "label": "Destroy Pair",
       "kind": "power",
-      "role": "typed_completion_safe_pair_removal",
+      "role": "flat_typed_completion_safe_pair_removal_and_floor_clear",
       "evidence": [
         {
           "path": "src/shared/gameplay-core-contracts.ts",
@@ -61616,6 +61616,14 @@
         {
           "path": "src/shared/floor-completion-transitions.ts",
           "line": 3
+        },
+        {
+          "path": "src/shared/floor-clear-transition.ts",
+          "line": 196
+        },
+        {
+          "path": "src/shared/slayer-floor-clear-transition.ts",
+          "line": 1
         },
         {
           "path": "src/renderer/store/runSurfaceState.ts",
@@ -61658,7 +61666,7 @@
         "exit-source-protection",
         "noDestroy-contract",
         "destroy-forfeits-pair-reward",
-        "journal-before-finalize"
+        "single-outer-command-finalize"
       ]
     },
     {
@@ -63655,7 +63663,7 @@
         },
         {
           "path": "src/shared/gameplay-core.test.ts",
-          "line": 1631
+          "line": 1662
         }
       ],
       "enables": [
@@ -64483,7 +64491,7 @@
         },
         {
           "path": "src/shared/gameplay-core.ts",
-          "line": 337
+          "line": 349
         },
         {
           "path": "src/shared/route-choice-outcome-rules.ts",
@@ -69326,6 +69334,13 @@
       "target": "mechanic:objective.floor_clear",
       "kind": "enables",
       "label": "starts informed tile play"
+    },
+    {
+      "id": "enables:mechanic:power.destroy_pair->mechanic:progression.run_flow:produces the completed-floor result when the removed pair is last",
+      "source": "mechanic:power.destroy_pair",
+      "target": "mechanic:progression.run_flow",
+      "kind": "enables",
+      "label": "produces the completed-floor result when the removed pair is last"
     },
     {
       "id": "enables:mechanic:progression.run_flow->mechanic:feedback.gameplay_hud:route feedback",
@@ -90822,6 +90837,12 @@
       "kind": "implemented_by"
     },
     {
+      "id": "implemented_by:mechanic:power.destroy_pair->file:src/shared/floor-clear-transition.ts",
+      "source": "mechanic:power.destroy_pair",
+      "target": "file:src/shared/floor-clear-transition.ts",
+      "kind": "implemented_by"
+    },
+    {
       "id": "implemented_by:mechanic:power.destroy_pair->file:src/shared/floor-completion-transitions.ts",
       "source": "mechanic:power.destroy_pair",
       "target": "file:src/shared/floor-completion-transitions.ts",
@@ -90837,6 +90858,12 @@
       "id": "implemented_by:mechanic:power.destroy_pair->file:src/shared/gameplay-core.ts",
       "source": "mechanic:power.destroy_pair",
       "target": "file:src/shared/gameplay-core.ts",
+      "kind": "implemented_by"
+    },
+    {
+      "id": "implemented_by:mechanic:power.destroy_pair->file:src/shared/slayer-floor-clear-transition.ts",
+      "source": "mechanic:power.destroy_pair",
+      "target": "file:src/shared/slayer-floor-clear-transition.ts",
       "kind": "implemented_by"
     },
     {

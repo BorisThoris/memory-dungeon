@@ -706,7 +706,7 @@ describe('gameplay interaction graph', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
         expect(byId.get('power.destroy_pair')).toMatchObject({
             kind: 'power',
-            role: 'typed_completion_safe_pair_removal',
+            role: 'flat_typed_completion_safe_pair_removal_and_floor_clear',
             tests: expect.arrayContaining([
                 'src/shared/gameplay-core.test.ts',
                 'src/renderer/store/runSurfaceState.test.ts'
@@ -717,6 +717,7 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'power.destroy_pair', target: 'inventory.destroy_charge', kind: 'consumes' }),
             expect.objectContaining({ source: 'core.gameplay_commands', target: 'power.destroy_pair', kind: 'modifies' }),
             expect.objectContaining({ source: 'power.destroy_pair', target: 'objective.floor_clear', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'power.destroy_pair', target: 'progression.run_flow', kind: 'enables' }),
             expect.objectContaining({ source: 'power.destroy_pair', target: 'feedback.gameplay_hud', kind: 'displays' }),
             expect.objectContaining({ source: 'power.destroy_pair', target: 'simulation.gameplay_replay', kind: 'tested_by' }),
             expect.objectContaining({ source: 'build.emergency_toolkit', target: 'power.destroy_pair', kind: 'consequence' }),
@@ -726,7 +727,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects Hazard Banish acquisition to its typed floor-start removal or Destroy fallback', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(23);
+        expect(gameplayInteractionGraph.version).toBe(24);
         expect(byId.get('perk.hazard_banish_per_floor')).toMatchObject({
             kind: 'perk',
             role: 'durable_floor_start_hazard_or_destroy_conversion',
@@ -749,7 +750,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects typed route selection from floor clear through exact replayable consequences', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(23);
+        expect(gameplayInteractionGraph.version).toBe(24);
         expect(byId.get('route.choice')).toMatchObject({
             kind: 'route',
             role: 'replayable_between_floor_commitment',
@@ -790,7 +791,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects relic drafting and offer shaping to typed build acquisition, economy, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(23);
+        expect(gameplayInteractionGraph.version).toBe(24);
         expect(byId.get('progression.relic_draft')).toMatchObject({
             kind: 'progression',
             role: 'typed_replayable_build_selection_and_offer_shaping',
@@ -819,7 +820,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed side-room choices from routes through rewards, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(23);
+        expect(gameplayInteractionGraph.version).toBe(24);
         expect(byId.get('progression.route_side_room')).toMatchObject({
             kind: 'progression',
             role: 'flat_replayable_between_floor_reward_choice',
@@ -848,7 +849,7 @@ describe('gameplay interaction graph', () => {
 
     it('connects flat typed floor advancement through pressure, board preparation, feedback, persistence, and replay', () => {
         const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
-        expect(gameplayInteractionGraph.version).toBe(23);
+        expect(gameplayInteractionGraph.version).toBe(24);
         expect(byId.get('progression.run_flow')).toMatchObject({
             kind: 'progression',
             role: 'typed_flat_replayable_floor_transition',

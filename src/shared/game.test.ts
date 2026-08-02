@@ -7574,9 +7574,10 @@ describe('board powers', () => {
         const cleared = applyDestroyPair(lastPairRun, 'b1');
         expect(cleared.status).toBe('levelComplete');
         expect(cleared.lastLevelResult?.level).toBe(1);
-        expect(cleared.gameplayCommandJournal).toEqual(expect.arrayContaining([
+        expect(cleared.gameplayCommandJournal).toEqual([
             expect.objectContaining({ type: 'board.destroy_pair', targetTileId: 'b1' })
-        ]));
+        ]);
+        expect(cleared.gameplayCommandJournal?.map((command) => command.type)).not.toContain('effects.apply');
         expect(cleared.gameplayEventJournal).toEqual(expect.arrayContaining([
             expect.objectContaining({ type: 'board.pair_destroyed', boardComplete: true })
         ]));

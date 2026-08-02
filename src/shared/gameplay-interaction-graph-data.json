@@ -1,5 +1,5 @@
 {
-  "version": 23,
+  "version": 24,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -148,13 +148,13 @@
       "id": "power.destroy_pair",
       "label": "Destroy Pair",
       "kind": "power",
-      "role": "typed_completion_safe_pair_removal",
-      "evidence": ["src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/board-power-actions.ts", "src/shared/board-power-availability.ts", "src/shared/floor-completion-transitions.ts", "src/renderer/store/runSurfaceState.ts"],
+      "role": "flat_typed_completion_safe_pair_removal_and_floor_clear",
+      "evidence": ["src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/board-power-actions.ts", "src/shared/board-power-availability.ts", "src/shared/floor-completion-transitions.ts", "src/shared/floor-clear-transition.ts", "src/shared/slayer-floor-clear-transition.ts", "src/renderer/store/runSurfaceState.ts"],
       "reads": ["destroyPairCharges", "noDestroy", "tileStates", "exitSources", "recallFocus", "parasiteFloors", "shiftingSpotlightNonce"],
       "writes": ["destroyPairCharges", "tileStates", "matchedPairs", "forgottenTileIdsThisFloor", "powersUsedThisRun", "recallFocus", "parasiteFloors", "shiftingSpotlightNonce", "gameplayCommands", "gameplayEvents", "feedbackLines"],
       "enables": ["objective.floor_clear", "build.trap_control", "build.emergency_toolkit"],
       "blocks": ["pair_rewards"],
-      "softlockGuards": ["exactly-two-hidden-pair", "clear-flip-state", "exit-source-protection", "noDestroy-contract", "destroy-forfeits-pair-reward", "journal-before-finalize"],
+      "softlockGuards": ["exactly-two-hidden-pair", "clear-flip-state", "exit-source-protection", "noDestroy-contract", "destroy-forfeits-pair-reward", "single-outer-command-finalize"],
       "tests": ["src/shared/gameplay-core.test.ts", "src/shared/board-power-actions.test.ts", "src/shared/board-power-availability.test.ts", "src/shared/game.test.ts", "src/renderer/store/runSurfaceState.test.ts"]
     },
     {
@@ -1712,6 +1712,7 @@
     { "source": "power.tile_swap", "target": "trait.conduit", "kind": "counterplay", "label": "sets adjacency" },
     { "source": "power.region_shuffle", "target": "trait.drift", "kind": "counterplay", "label": "repositions route" },
     { "source": "power.destroy_pair", "target": "objective.floor_clear", "kind": "counterplay", "label": "removes pair safely" },
+    { "source": "power.destroy_pair", "target": "progression.run_flow", "kind": "enables", "label": "produces the completed-floor result when the removed pair is last" },
     { "source": "shop.trait_cleanse", "target": "trait.cursed", "kind": "counterplay", "label": "softens danger" },
     { "source": "shop.trait_cleanse", "target": "feedback.gameplay_hud", "kind": "enables", "label": "shows cleanse relief" },
     { "source": "shop.trait_routing_kit", "target": "power.tile_swap", "kind": "counterplay", "label": "funds swap route" },

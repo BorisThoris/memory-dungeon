@@ -8,7 +8,7 @@ interface FloorCompletionTransitionDeps {
     finalizeLevel: (run: RunState, board: BoardState) => RunState;
 }
 
-export const createApplyDestroyPair = ({ finalizeLevel }: FloorCompletionTransitionDeps) =>
+export const createApplyDestroyPair = (_dependencies: FloorCompletionTransitionDeps) =>
     (run: RunState, tileId: string): RunState => {
         const command = createGameplayDestroyPairCommand(
             `destroy-pair:${run.runSeed}:${run.board?.level ?? 0}:${run.destroyPairCharges}:${tileId}`,
@@ -19,12 +19,7 @@ export const createApplyDestroyPair = ({ finalizeLevel }: FloorCompletionTransit
             return run;
         }
         const journaledRun = appendGameplayJournal(result.run, [command], result.events);
-        const boardComplete = result.events.some(
-            (event) => event.type === 'board.pair_destroyed' && event.boardComplete
-        );
-        return boardComplete && journaledRun.board
-            ? finalizeLevel(journaledRun, journaledRun.board)
-            : journaledRun;
+        return journaledRun;
     };
 
 export const createActivateDungeonExit = ({ finalizeLevel }: FloorCompletionTransitionDeps) =>
