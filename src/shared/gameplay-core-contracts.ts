@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { RelicId, RewardPerkId, RunStatus, TileTraitKind } from './contracts';
+import type { FindableKind, RelicId, RewardPerkId, RunStatus, TileTraitKind } from './contracts';
 import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
@@ -13,8 +13,16 @@ export const GAMEPLAY_REWARD_PERK_IDS = [
 ] as const satisfies readonly RewardPerkId[];
 
 export const GAMEPLAY_RELIC_IDS = [
+    'combo_shard_plus_step',
     'guard_token_plus_one'
 ] as const satisfies readonly RelicId[];
+
+export const GAMEPLAY_FINDABLE_KINDS = [
+    'shard_spark',
+    'score_glint',
+    'ward_spark',
+    'scout_glint'
+] as const satisfies readonly FindableKind[];
 
 export const GAMEPLAY_TILE_TRAIT_KINDS = [
     'echo',
@@ -39,7 +47,7 @@ export const GAMEPLAY_RUN_STATUSES = [
 
 export const gameplaySourceSchema = z
     .object({
-        kind: z.enum(['bonus_reward', 'relic', 'reward_perk', 'power', 'trait', 'system']),
+        kind: z.enum(['bonus_reward', 'relic', 'reward_perk', 'findable', 'power', 'trait', 'system']),
         id: z.string().min(1).max(120)
     })
     .strict();
@@ -47,7 +55,8 @@ export const gameplaySourceSchema = z
 export const gameplayFactsSchema = z
     .object({
         matchedTraits: z.array(z.enum(GAMEPLAY_TILE_TRAIT_KINDS)).default([]),
-        adjacentTraits: z.array(z.enum(GAMEPLAY_TILE_TRAIT_KINDS)).default([])
+        adjacentTraits: z.array(z.enum(GAMEPLAY_TILE_TRAIT_KINDS)).default([]),
+        matchedFindables: z.array(z.enum(GAMEPLAY_FINDABLE_KINDS)).default([])
     })
     .strict();
 
@@ -88,6 +97,12 @@ export const gameplayConditionSchema = z.discriminatedUnion('kind', [
             kind: z.literal('trait.adjacent'),
             trait: z.enum(GAMEPLAY_TILE_TRAIT_KINDS)
         })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('findable.matched'),
+            findable: z.enum(GAMEPLAY_FINDABLE_KINDS)
+        })
         .strict()
 ]);
 
@@ -122,6 +137,12 @@ export const gameplayEffectSchema = z.discriminatedUnion('kind', [
         .strict(),
     z
         .object({
+            kind: z.literal('combo_shard.request'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
             kind: z.literal('feedback.emit'),
             cue: z.string().min(1).max(120),
             message: z.string().min(1).max(500),
@@ -136,7 +157,7 @@ export const gameplayContentDefinitionSchema = z
         version: z.number().int().positive(),
         buildId: z.string().min(1).max(120),
         source: gameplaySourceSchema,
-        trigger: z.enum(['content.claimed', 'trait.match', 'power.used']),
+        trigger: z.enum(['content.claimed', 'trait.match', 'findable.match', 'power.used']),
         conditions: z.array(gameplayConditionSchema),
         effects: z.array(gameplayEffectSchema).min(1)
     })
@@ -279,9 +300,85 @@ export const WARDEN_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse
     }
 ]);
 
+export const COMBO_SHARD_ENGINE_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'bonus_reward.bonus_shards',
+        version: 1,
+        buildId: 'combo_shard_engine',
+        source: { kind: 'bonus_reward', id: 'bonus_shards' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'combo_shard', amount: 1 },
+            { kind: 'inventory.grant', itemId: 'guard_token', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.bonus_shards.claimed',
+                message: 'Bonus Shards added one combo shard and one guard token.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.combo_shard_plus_step',
+        version: 1,
+        buildId: 'combo_shard_engine',
+        source: { kind: 'relic', id: 'combo_shard_plus_step' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'combo_shard', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.combo_shard_relic.claimed',
+                message: 'The Catalyst relic added one combo shard.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'findable.shard_spark',
+        version: 1,
+        buildId: 'combo_shard_engine',
+        source: { kind: 'findable', id: 'shard_spark' },
+        trigger: 'findable.match',
+        conditions: [{ kind: 'findable.matched', findable: 'shard_spark' }],
+        effects: [
+            { kind: 'combo_shard.request', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.shard_spark.matched',
+                message: 'Shard Spark requested one combo shard through match reward resolution.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.combo_shard_plus_step.sealed_match',
+        version: 1,
+        buildId: 'combo_shard_engine',
+        source: { kind: 'relic', id: 'combo_shard_plus_step' },
+        trigger: 'trait.match',
+        conditions: [
+            { kind: 'relic.active', relicId: 'combo_shard_plus_step' },
+            { kind: 'trait.matched', trait: 'sealed' }
+        ],
+        effects: [
+            { kind: 'inventory.grant_or_score', itemId: 'combo_shard', amount: 1, fallbackScore: 18 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.combo_shard_relic.sealed_triggered',
+                message: 'Sealed invoked the Catalyst relic for a combo shard or overflow score.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
 export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...CONDUIT_CARTOGRAPHER_DEFINITIONS,
-    ...WARDEN_DEFINITIONS
+    ...WARDEN_DEFINITIONS,
+    ...COMBO_SHARD_ENGINE_DEFINITIONS
 ] as const satisfies readonly GameplayContentDefinition[];
 
 export type GameplaySource = z.infer<typeof gameplaySourceSchema>;
@@ -302,7 +399,7 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
             type: z.literal('effects.apply'),
             definitionId: z.string().min(1).max(120),
             definitionVersion: z.number().int().positive(),
-            facts: gameplayFactsSchema.default({ matchedTraits: [], adjacentTraits: [] })
+            facts: gameplayFactsSchema.default({ matchedTraits: [], adjacentTraits: [], matchedFindables: [] })
         })
         .strict(),
     z
@@ -353,6 +450,13 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             totalAfter: z.number().int().nonnegative(),
             currentLevelBefore: z.number().int().nonnegative(),
             currentLevelAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('combo_shard.requested'),
+            amount: z.number().int().positive()
         })
         .strict(),
     z

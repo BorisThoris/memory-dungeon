@@ -46,6 +46,17 @@ The Warden is the first defensive slice and deliberately proves a different loop
 
 The effect language now owns the reusable `inventory.grant_or_score` rule and emits a typed `score.changed` event for the overflow branch. Live reward claims, relic picks, and trait matches use the same journaled reducer; existing damage rules remain compatibility consumers until damage commands become the next relevant ownership boundary.
 
+## Third vertical slice: Combo Shard Engine
+
+The Catalyst slice connects momentum pickups to a real survival consequence:
+
+1. Canonical Bonus Shards and the Combo Shard Head Start relic grant capped shard inventory through content commands.
+2. Sealed matches invoke the equipped relic and convert a full shard bank into explicit overflow score.
+3. Matching a Shard Spark emits `combo_shard.requested`; the compatibility adapter passes that typed request into the existing match-survival resolver.
+4. At the third effective shard and below maximum life, the existing deterministic conversion spends shards for one life; Meditation continues to disable that conversion.
+
+The request-event boundary avoids duplicating the nuanced streak, mimic, route, dungeon, life-cap, and Meditation rules in two reducers. It is intentionally temporary: when match survival becomes command-owned, the typed request can be consumed inside the core without changing content definitions or journal history.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

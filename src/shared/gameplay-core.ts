@@ -89,6 +89,8 @@ const conditionFailure = (run: RunState, condition: GameplayCondition, facts: Ga
             return facts.matchedTraits.includes(condition.trait) ? null : `${condition.trait} was not matched`;
         case 'trait.adjacent':
             return facts.adjacentTraits.includes(condition.trait) ? null : `${condition.trait} was not adjacent`;
+        case 'findable.matched':
+            return facts.matchedFindables.includes(condition.findable) ? null : `${condition.findable} was not matched`;
     }
 };
 
@@ -202,6 +204,9 @@ const applyDefinition = (
                 writeEvent({ type: 'reward_perk.granted', perkId: effect.perkId, newlyGranted });
                 break;
             }
+            case 'combo_shard.request':
+                writeEvent({ type: 'combo_shard.requested', amount: effect.amount });
+                break;
             case 'feedback.emit':
                 writeEvent({
                     type: 'feedback.requested',

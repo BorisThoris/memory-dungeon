@@ -7,7 +7,11 @@ import {
     validateGameplayInteractionGraph
 } from './gameplay-interaction-graph';
 import type { TileTraitKind } from './contracts';
-import { CONDUIT_CARTOGRAPHER_DEFINITIONS, WARDEN_DEFINITIONS } from './gameplay-core-contracts';
+import {
+    COMBO_SHARD_ENGINE_DEFINITIONS,
+    CONDUIT_CARTOGRAPHER_DEFINITIONS,
+    WARDEN_DEFINITIONS
+} from './gameplay-core-contracts';
 
 const TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
     'echo',
@@ -265,6 +269,42 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'inventory.guard_token', target: 'safety.guard_absorption', kind: 'enables' }),
                 expect.objectContaining({ source: 'safety.guard_absorption', target: 'inventory.guard_token', kind: 'consumes' }),
                 expect.objectContaining({ source: 'build.guard_tank', target: 'safety.guard_absorption', kind: 'consequence' })
+            ])
+        );
+    });
+
+    it('connects Combo Shard Engine sources through typed match requests into life conversion', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const sourceNodeByDefinition = new Map([
+            ['bonus_reward.bonus_shards', 'reward.bonus_shards'],
+            ['relic.combo_shard_plus_step', 'relic.combo_shard_plus_step'],
+            ['findable.shard_spark', 'findable.shard_spark'],
+            ['relic.combo_shard_plus_step.sealed_match', 'relic.combo_shard_plus_step']
+        ]);
+
+        for (const definition of COMBO_SHARD_ENGINE_DEFINITIONS) {
+            const nodeId = sourceNodeByDefinition.get(definition.id);
+            expect(nodeId, definition.id).toBeTruthy();
+            expect(byId.get(nodeId!), definition.id).toMatchObject({
+                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+            });
+        }
+
+        expect(byId.get('build.combo_shard_engine')).toMatchObject({ kind: 'build', role: 'momentum_to_life_build' });
+        expect(byId.get('inventory.combo_shard')).toMatchObject({
+            kind: 'inventory',
+            role: 'bounded_life_conversion_resource'
+        });
+        expect(byId.get('progression.shard_to_life')).toMatchObject({ kind: 'progression', role: 'resource_consequence' });
+        expect(gameplayInteractionGraph.edges).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ source: 'reward.bonus_shards', target: 'inventory.combo_shard', kind: 'grants' }),
+                expect.objectContaining({ source: 'findable.shard_spark', target: 'core.gameplay_commands', kind: 'triggers' }),
+                expect.objectContaining({ source: 'trait.sealed', target: 'relic.combo_shard_plus_step', kind: 'triggers' }),
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'progression.shard_to_life', kind: 'triggers' }),
+                expect.objectContaining({ source: 'inventory.combo_shard', target: 'progression.shard_to_life', kind: 'enables' }),
+                expect.objectContaining({ source: 'progression.shard_to_life', target: 'inventory.combo_shard', kind: 'consumes' }),
+                expect.objectContaining({ source: 'build.combo_shard_engine', target: 'progression.shard_to_life', kind: 'consequence' })
             ])
         );
     });

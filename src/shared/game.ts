@@ -91,6 +91,7 @@ import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-r
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
 import { appendGameplayJournal } from './gameplay-journal';
+import { resolveFindableMatchRewardThroughGameplayCore } from './gameplay-core-adapters';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -488,6 +489,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             catalystAltarUpgraded,
             dungeonReward,
             dungeonTrapResolvedDelta,
+            claimedFindableKind,
             findableComboShardGain,
             findableSafeHazardWardGain,
             findableScoreBonus,
@@ -505,6 +507,14 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             routeCardReward,
             usedWild
         } = matchClaimContext;
+        const findableReward = resolveFindableMatchRewardThroughGameplayCore(
+            run,
+            claimedFindableKind,
+            `findable-match:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${matchedPairKey}:gambit`
+        );
+        const resolvedFindableComboShardGain = findableReward.migrated
+            ? findableReward.comboShardGain
+            : findableComboShardGain;
 
         const resolution = resolveTurnMatchBoardResolution({
             run,
@@ -557,7 +567,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             catalystAltarUpgraded,
             currentStreak: scoring.currentStreak,
             dungeonReward,
-            findableComboShardGain: findableComboShardGain + traitReward.comboShardGain,
+            findableComboShardGain: resolvedFindableComboShardGain + traitReward.comboShardGain,
             mimicCacheBite,
             mimicCacheFatalBite,
             mimicCacheGuardBite,
@@ -635,8 +645,8 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
 
         const journaledRun = appendGameplayJournal(
             run,
-            traitReward.gameplayCommands ?? [],
-            traitReward.gameplayEvents ?? []
+            [...findableReward.commands, ...(traitReward.gameplayCommands ?? [])],
+            [...findableReward.events, ...(traitReward.gameplayEvents ?? [])]
         );
         const nextRun: RunState = {
             ...journaledRun,
@@ -752,6 +762,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             catalystAltarUpgraded,
             dungeonReward,
             dungeonTrapResolvedDelta,
+            claimedFindableKind,
             findableComboShardGain,
             findableSafeHazardWardGain,
             findableScoreBonus,
@@ -769,6 +780,14 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             routeCardReward,
             usedWild
         } = matchClaimContext;
+        const findableReward = resolveFindableMatchRewardThroughGameplayCore(
+            run,
+            claimedFindableKind,
+            `findable-match:${run.runSeed}:${run.board.level}:${runNonNegativeInteger(run.matchResolutionsThisFloor)}:${matchedPairKey}:match`
+        );
+        const resolvedFindableComboShardGain = findableReward.migrated
+            ? findableReward.comboShardGain
+            : findableComboShardGain;
 
         const resolution = resolveTurnMatchBoardResolution({
             run,
@@ -820,7 +839,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             catalystAltarUpgraded,
             currentStreak: scoring.currentStreak,
             dungeonReward,
-            findableComboShardGain: findableComboShardGain + traitReward.comboShardGain,
+            findableComboShardGain: resolvedFindableComboShardGain + traitReward.comboShardGain,
             mimicCacheBite,
             mimicCacheFatalBite,
             mimicCacheGuardBite,
@@ -899,8 +918,8 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
 
         const journaledRun = appendGameplayJournal(
             run,
-            traitReward.gameplayCommands ?? [],
-            traitReward.gameplayEvents ?? []
+            [...findableReward.commands, ...(traitReward.gameplayCommands ?? [])],
+            [...findableReward.events, ...(traitReward.gameplayEvents ?? [])]
         );
         const nextRun: RunState = {
             ...journaledRun,

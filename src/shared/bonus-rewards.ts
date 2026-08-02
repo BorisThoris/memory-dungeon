@@ -743,8 +743,20 @@ export const getPrimaryRewardPerkReadinessRow = (
         .sort((a, b) => REWARD_PERK_BOARD_CUE_PRIORITY[b.id] - REWARD_PERK_BOARD_CUE_PRIORITY[a.id])[0] ?? null;
 
 const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string>> = {
+    bonus_shards: 'bonus_reward.bonus_shards',
     echo_conduit_lens: 'bonus_reward.echo_conduit_lens',
     hazard_ward: 'bonus_reward.hazard_ward'
+};
+
+const bonusRewardMatchesMigratedDefinition = (reward: BonusRewardInstance): boolean => {
+    if (reward.id !== 'bonus_shards') {
+        return true;
+    }
+    return (
+        runNonNegativeInteger(reward.payout.comboShards) === 1 &&
+        runNonNegativeInteger(reward.payout.inventoryItems?.guard_token) === 1 &&
+        runNonNegativeInteger(reward.payout.inventoryItems?.combo_shard) === 0
+    );
 };
 
 const applyBonusRewardPayout = (
@@ -860,7 +872,9 @@ export const previewBonusRewardClaim = (
         };
     }
     const legacyApplied = applyBonusRewardPayout(run, reward.payout);
-    const definitionId = MIGRATED_BONUS_REWARD_DEFINITION_IDS[reward.id];
+    const definitionId = bonusRewardMatchesMigratedDefinition(reward)
+        ? MIGRATED_BONUS_REWARD_DEFINITION_IDS[reward.id]
+        : undefined;
     const applied = !definitionId
         ? legacyApplied
         : (() => {
@@ -881,10 +895,18 @@ export const previewBonusRewardClaim = (
                                 peekCharges: journaledRun.peekCharges,
                                 rewardPerkIds: journaledRun.rewardPerkIds
                             }
-                          : {
+                          : reward.id === 'hazard_ward'
+                            ? {
                                 destroyPairCharges: journaledRun.destroyPairCharges,
                                 stats: { ...legacyStats, guardTokens: coreStats.guardTokens }
-                            }),
+                              }
+                            : {
+                                  stats: {
+                                      ...legacyStats,
+                                      comboShards: coreStats.comboShards,
+                                      guardTokens: coreStats.guardTokens
+                                  }
+                              }),
                       gameplayCommandJournal: journaledRun.gameplayCommandJournal,
                       gameplayEventJournal: journaledRun.gameplayEventJournal
                   }

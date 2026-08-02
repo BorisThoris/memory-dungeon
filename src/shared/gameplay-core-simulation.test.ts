@@ -36,7 +36,7 @@ const initialRun = (seed: number): RunState => ({
     peekCharges: 0,
     recallFocus: 3,
     rewardPerkIds: [],
-    relicIds: ['guard_token_plus_one'],
+    relicIds: ['combo_shard_plus_step', 'guard_token_plus_one'],
     powersUsedThisRun: false,
     forgottenTileIdsThisFloor: [],
     peekRevealedTileIds: [],
@@ -62,6 +62,10 @@ describe('seeded gameplay core simulation', () => {
                 'relic.guard_token_plus_one',
                 'trait.volatile_heavy_guard',
                 'relic.guard_token_plus_one.mirror_match',
+                'bonus_reward.bonus_shards',
+                'relic.combo_shard_plus_step',
+                'findable.shard_spark',
+                'relic.combo_shard_plus_step.sealed_match',
                 'board.peek'
             ])
         );

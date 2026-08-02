@@ -84,6 +84,12 @@ const commandForStep = (
             adjacentTraits: invalid ? [] : adjacentTraits
         });
     }
+    if (definition.trigger === 'findable.match') {
+        const matchedFindables = definition.conditions
+            .filter((condition) => condition.kind === 'findable.matched')
+            .map((condition) => condition.findable);
+        return createGameplayDefinitionCommand(commandId, definition.id, { matchedFindables });
+    }
     return createGameplayDefinitionCommand(commandId, definition.id);
 };
 

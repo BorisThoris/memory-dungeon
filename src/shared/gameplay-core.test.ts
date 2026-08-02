@@ -4,6 +4,7 @@ import { BONUS_REWARD_CATALOG, previewBonusRewardClaim } from './bonus-rewards';
 import type { BoardState, RunState, Tile } from './contracts';
 import {
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
+    COMBO_SHARD_ENGINE_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
@@ -13,7 +14,10 @@ import {
     gameplayEventSchema
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
-import { applyRelicImmediateThroughGameplayCore } from './gameplay-core-adapters';
+import {
+    applyRelicImmediateThroughGameplayCore,
+    resolveFindableMatchRewardThroughGameplayCore
+} from './gameplay-core-adapters';
 import { applyRelicImmediate } from './relic-immediate-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
 
@@ -171,10 +175,46 @@ describe('deterministic gameplay core', () => {
         );
     });
 
+    it('models Combo Shard sources, typed match requests, and capped Sealed overflow', () => {
+        expect(COMBO_SHARD_ENGINE_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.bonus_shards',
+            'relic.combo_shard_plus_step',
+            'findable.shard_spark',
+            'relic.combo_shard_plus_step.sealed_match'
+        ]);
+        const initial = run({
+            relicIds: ['combo_shard_plus_step'],
+            stats: { ...run().stats, comboShards: 2, guardTokens: 0 }
+        });
+        const pickup = resolveFindableMatchRewardThroughGameplayCore(initial, 'shard_spark', 'catalyst-findable');
+        const overflow = reduceGameplayCommand(
+            initial,
+            createGameplayDefinitionCommand('catalyst-overflow', 'relic.combo_shard_plus_step.sealed_match', {
+                matchedTraits: ['sealed']
+            })
+        );
+
+        expect(pickup).toMatchObject({ migrated: true, comboShardGain: 1 });
+        expect(pickup.events).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'combo_shard.requested', amount: 1, source: { kind: 'findable', id: 'shard_spark' } }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'build.shard_spark.matched' })
+            ])
+        );
+        expect(overflow.run.stats).toMatchObject({ comboShards: 2, totalScore: 18, currentLevelScore: 18 });
+        expect(overflow.events).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'inventory.changed', itemId: 'combo_shard', applied: 0 }),
+                expect.objectContaining({ type: 'score.changed', reason: 'inventory_overflow', amount: 18 })
+            ])
+        );
+    });
+
     it('routes migrated relic immediates through the core while preserving legacy fallbacks', () => {
         const initial = run({ peekCharges: 2, shuffleCharges: 1 });
         const migrated = applyRelicImmediateThroughGameplayCore(initial, 'peek_charge_plus_one', 'adapter-peek');
         const migratedGuard = applyRelicImmediateThroughGameplayCore(initial, 'guard_token_plus_one', 'adapter-guard');
+        const migratedCombo = applyRelicImmediateThroughGameplayCore(initial, 'combo_shard_plus_step', 'adapter-combo');
         const legacy = applyRelicImmediateThroughGameplayCore(initial, 'extra_shuffle_charge', 'adapter-shuffle');
 
         expect(migrated).toMatchObject({ migrated: true, run: { peekCharges: 3 } });
@@ -186,6 +226,7 @@ describe('deterministic gameplay core', () => {
         );
         expect(legacy).toMatchObject({ migrated: false, run: { shuffleCharges: 2 }, events: [] });
         expect(migratedGuard).toMatchObject({ migrated: true, run: { stats: { guardTokens: 1 } } });
+        expect(migratedCombo).toMatchObject({ migrated: true, run: { stats: { comboShards: 1 } } });
     });
 
     it('models exactly the extra Peek granted by the existing Echo-Conduit perk condition', () => {

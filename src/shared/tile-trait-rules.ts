@@ -1004,12 +1004,19 @@ export const resolveTileTraitEffects = ({
         }
 
         if (hasTrait('sealed') && hasRunRelic(run, 'combo_shard_plus_step')) {
-            const acceptedShardGain = Math.max(0, MAX_COMBO_SHARDS - (comboShards + result.comboShardGain));
-            if (acceptedShardGain > 0) {
-                result.comboShardGain += 1;
-            } else {
-                result.scoreBonus += 18;
-            }
+            const projectedComboShards = Math.min(MAX_COMBO_SHARDS, comboShards + result.comboShardGain);
+            const projectedRun = {
+                ...run,
+                stats: { ...stats, comboShards: projectedComboShards }
+            };
+            const coreResult = applyCoreTraitDefinition(
+                'relic.combo_shard_plus_step.sealed_match',
+                'catalyst-sealed',
+                projectedRun
+            );
+            const coreStats = normalizeSessionStats(coreResult.run.stats);
+            result.comboShardGain += coreStats.comboShards - projectedComboShards;
+            result.scoreBonus += coreStats.totalScore - stats.totalScore;
             result.interactionTags.push('catalyst-thread:sealed-engine');
         }
 

@@ -7752,6 +7752,15 @@ describe('board powers', () => {
             expect(resolved.lives).toBe(4);
             expect(resolved.stats.comboShards).toBe(0);
             expect(resolved.findablesClaimedThisFloor).toBe(1);
+            expect(resolved.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ definitionId: 'findable.shard_spark' })
+            ]);
+            expect(resolved.gameplayEventJournal).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ type: 'combo_shard.requested', amount: 1 }),
+                    expect.objectContaining({ type: 'feedback.requested', cue: 'build.shard_spark.matched' })
+                ])
+            );
             expect(
                 resolved.board?.tiles.filter((t) => t.pairKey === 'A').every((t) => t.findableKind === undefined)
             ).toBe(true);

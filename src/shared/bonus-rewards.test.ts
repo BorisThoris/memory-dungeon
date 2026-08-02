@@ -716,6 +716,13 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         expect(result.feedback.gained).toContain('+1 guard token');
         expect(result.feedback.gained).toContain('+5 overflow score');
         expect(result.run.stats.currentLevelScore).toBe(run.stats.currentLevelScore + 5);
+        expect(result.run.gameplayEventJournal).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'inventory.changed', itemId: 'combo_shard', applied: 0 }),
+                expect.objectContaining({ type: 'inventory.changed', itemId: 'guard_token', applied: 1 }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'build.bonus_shards.claimed' })
+            ])
+        );
     });
 
     it('pluralizes multi-shard reward feedback for future pickup variety', () => {
