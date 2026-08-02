@@ -76,6 +76,13 @@ describe('gameplayFeedbackAdapter', () => {
                 message: 'Rest completed.',
                 source: { kind: 'system', id: 'route_side_room' },
                 tone: 'reward'
+            }),
+            event(5, {
+                type: 'feedback.requested',
+                cue: 'floor.advance.ready',
+                message: 'Next floor ready.',
+                source: { kind: 'system', id: 'floor_advance' },
+                tone: 'information'
             })
         ]);
 
@@ -84,7 +91,8 @@ describe('gameplayFeedbackAdapter', () => {
             'reward-claim',
             'match-resolution',
             'relic-service',
-            'side-room'
+            'side-room',
+            'floor-advance'
         ]);
     });
 

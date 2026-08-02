@@ -156,6 +156,15 @@ describe('levelCompleteSurfaceState', () => {
                 view: 'playing'
             });
             expect(result.run.status).toBe('memorize');
+            expect(result.run.gameplayCommandJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'floor.advance' })
+            ]));
+            expect(result.run.gameplayCommandJournal?.map((command) => command.type)).not.toContain('floor.parasite_advance');
+            expect(result.run.gameplayCommandJournal?.map((command) => command.type)).not.toContain('floor.hazard_banish');
+            expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'floor.advanced', outcome: 'memorize' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'floor.advance.ready' })
+            ]));
         }
     });
 });

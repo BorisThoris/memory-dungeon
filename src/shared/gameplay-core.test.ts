@@ -39,6 +39,7 @@ import {
     createGameplayDestroyPairCommand,
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
+    createGameplayFloorAdvanceCommand,
     createGameplayGambitCommitCommand,
     createGameplayHazardBanishCommand,
     createGameplayParasiteAdvanceCommand,
@@ -80,6 +81,7 @@ import {
     claimRouteSideRoomPrimary,
     skipRouteSideRoom
 } from './route-side-room-rules';
+import { advanceToNextLevel } from './next-floor-transition-rules';
 
 const tile = (id: string, pairKey: string, tileTraitKind?: Tile['tileTraitKind']): Tile => ({
     id,
@@ -433,6 +435,81 @@ describe('deterministic gameplay core', () => {
                 cue: 'hazard.score_parasite.life_lost'
             })
         ]);
+    });
+
+    it('advances a complete floor through one flat replayable command', () => {
+        const fixtureRun = createPlayablePathFixture('floorClearWithRouteChoices').run!;
+        const initial: RunState = {
+            ...fixtureRun,
+            activeMutators: ['score_parasite'],
+            parasiteFloors: 3,
+            parasiteWardRemaining: 1,
+            rewardPerkIds: ['hazard_banish_per_floor'],
+            destroyPairCharges: 0
+        };
+        const command = createGameplayFloorAdvanceCommand('floor-advance-flat');
+        const legacy = advanceToNextLevel(initial);
+        const result = reduceGameplayCommand(initial, command);
+
+        expect(result).toMatchObject({ accepted: true, run: { status: 'memorize', parasiteFloors: 0 } });
+        expect(result.run).toEqual(legacy);
+        expect(result.run.gameplayCommandJournal).toEqual(initial.gameplayCommandJournal);
+        expect(result.run.gameplayEventJournal).toEqual(initial.gameplayEventJournal);
+        expect(result.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({
+                type: 'score_parasite.advanced',
+                commandId: command.commandId,
+                wardConsumed: true,
+                lifeLost: false
+            }),
+            expect.objectContaining({
+                type: 'hazard_banish.resolved',
+                commandId: command.commandId
+            }),
+            expect.objectContaining({
+                type: 'floor.advanced',
+                commandId: command.commandId,
+                fromFloor: initial.board!.level,
+                toFloor: initial.board!.level + 1,
+                outcome: 'memorize',
+                hazardBanishOutcome: expect.any(String),
+                boardPairCount: result.run.board!.pairCount,
+                boardTileCount: result.run.board!.tiles.length,
+                livesBefore: initial.lives,
+                livesAfter: result.run.lives,
+                parasitePressureBefore: 3,
+                parasitePressureAfter: 0,
+                parasiteWardBefore: 1,
+                parasiteWardAfter: 0
+            }),
+            expect.objectContaining({
+                type: 'feedback.requested',
+                source: { kind: 'system', id: 'floor_advance' },
+                cue: 'floor.advance.ready'
+            })
+        ]));
+        expect(result.events.every((event, sequence) =>
+            event.commandId === command.commandId &&
+            event.sequence === sequence &&
+            event.eventId === `${command.commandId}:${sequence}`
+        )).toBe(true);
+        expect(replayGameplayCommands(initial, [JSON.parse(JSON.stringify(command))]).run).toEqual(result.run);
+
+        const defeated = reduceGameplayCommand(
+            { ...initial, lives: 1, parasiteWardRemaining: 0 },
+            createGameplayFloorAdvanceCommand('floor-advance-defeated')
+        );
+        expect(defeated).toMatchObject({ accepted: true, run: { status: 'gameOver', lives: 0 } });
+        expect(defeated.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'floor.advanced', outcome: 'game_over', boardPairCount: 0 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'floor.advance.defeated', tone: 'warning' })
+        ]));
+
+        const rejected = reduceGameplayCommand(
+            { ...initial, sideRoom: createPlayablePathFixture('sideRoomSkip').run!.sideRoom },
+            createGameplayFloorAdvanceCommand('floor-advance-blocked')
+        );
+        expect(rejected).toMatchObject({ accepted: false, run: expect.objectContaining({ status: 'levelComplete' }) });
     });
 
     it('consumes exactly one Wild Match token for a resolved wildcard bridge', () => {

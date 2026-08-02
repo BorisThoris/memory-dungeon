@@ -51,6 +51,7 @@ import { createRelicPickTransitionResult } from './relic-pick-transition-rules';
 import { repairRunProgressionSoftlocks } from './run-progression-repair';
 import { applyRelicOfferService, hasRunRelic, RELIC_OFFER_SERVICE_CATALOG } from './relics';
 import { applyRunEventChoice, rollRunEventRoom, type RunEventChoiceEffect } from './run-events';
+import { advanceToNextLevel } from './next-floor-transition-rules';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -82,6 +83,7 @@ const SHOP_SOURCE: GameplaySource = { kind: 'shop', id: 'run_shop' };
 const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit' };
 const SCORE_PARASITE_SOURCE: GameplaySource = { kind: 'system', id: 'score_parasite' };
 const HAZARD_BANISH_SOURCE: GameplaySource = { kind: 'reward_perk', id: 'hazard_banish_per_floor' };
+const FLOOR_ADVANCE_SOURCE: GameplaySource = { kind: 'system', id: 'floor_advance' };
 const ROUTE_CHOICE_SOURCE: GameplaySource = { kind: 'system', id: 'route_choice' };
 const SIDE_ROOM_SOURCE: GameplaySource = { kind: 'system', id: 'route_side_room' };
 const RELIC_OFFER_SOURCE: GameplaySource = { kind: 'system', id: 'relic_offer' };
@@ -113,6 +115,22 @@ const makeEventWriter = (commandId: string, source: GameplaySource, events: Game
             })
         );
     };
+
+const appendReindexedEvents = (
+    commandId: string,
+    sourceEvents: readonly GameplayEvent[],
+    targetEvents: GameplayEvent[]
+): void => {
+    for (const event of sourceEvents) {
+        const sequence = targetEvents.length;
+        targetEvents.push(gameplayEventSchema.parse({
+            ...event,
+            commandId,
+            eventId: `${commandId}:${sequence}`,
+            sequence
+        }));
+    }
+};
 
 const rejectedResult = (run: RunState, commandId: string, reason: string, command: GameplayCommand | null): GameplayCommandResult => {
     const events: GameplayEvent[] = [];
@@ -1020,6 +1038,98 @@ const applyHazardBanishCommand = (
     return { run: resolved.run, command, events, accepted: true };
 };
 
+const applyFloorAdvanceCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'floor.advance' }>
+): GameplayCommandResult => {
+    if (run.status !== 'levelComplete' || !run.board) {
+        return rejectedResult(run, command.commandId, 'Floor advancement requires a cleared floor.', command);
+    }
+    if (runNonNegativeInteger(run.lives) <= 0) {
+        return rejectedResult(run, command.commandId, 'A defeated run cannot advance to another floor.', command);
+    }
+    if (run.gameMode === 'puzzle') {
+        return rejectedResult(run, command.commandId, 'Puzzle runs do not advance into procedural floors.', command);
+    }
+    if (run.sideRoom || run.relicOffer) {
+        return rejectedResult(run, command.commandId, 'Resolve the current floor interlude before advancing.', command);
+    }
+
+    const fromFloor = run.board.level;
+    const events: GameplayEvent[] = [];
+    const parasiteResult = applyParasiteAdvanceCommand(run, {
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId: command.commandId,
+        type: 'floor.parasite_advance'
+    });
+    if (!parasiteResult.accepted) {
+        return rejectedResult(run, command.commandId, 'Floor parasite pressure could not be resolved.', command);
+    }
+    appendReindexedEvents(command.commandId, parasiteResult.events, events);
+
+    let nextRun = advanceToNextLevel(run, {
+        parasiteAdvance: {
+            lives: parasiteResult.run.lives,
+            parasiteFloors: parasiteResult.run.parasiteFloors,
+            parasiteWardRemaining: parasiteResult.run.parasiteWardRemaining
+        },
+        resolveHazardBanish: false
+    });
+    let hazardBanishOutcome: 'contract_blocked' | 'hazard_removed' | 'destroy_charge_granted' | null = null;
+    if (nextRun.status === 'memorize' && hasGameplayRewardPerk(nextRun, 'hazard_banish_per_floor')) {
+        const hazardResult = applyHazardBanishCommand(nextRun, {
+            schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+            commandId: command.commandId,
+            type: 'floor.hazard_banish'
+        });
+        if (!hazardResult.accepted) {
+            throw new Error('Hazard Banish was active on the prepared floor but its typed transition rejected.');
+        }
+        nextRun = hazardResult.run;
+        hazardBanishOutcome = hazardResult.events.find(
+            (event): event is Extract<GameplayEvent, { type: 'hazard_banish.resolved' }> =>
+                event.type === 'hazard_banish.resolved'
+        )?.outcome ?? null;
+        appendReindexedEvents(command.commandId, hazardResult.events, events);
+    }
+
+    const nextBoard = nextRun.status === 'memorize' ? nextRun.board : null;
+    const writeEvent = makeEventWriter(command.commandId, FLOOR_ADVANCE_SOURCE, events);
+    writeEvent({
+        type: 'floor.advanced',
+        fromFloor,
+        toFloor: fromFloor + 1,
+        outcome: nextRun.status === 'gameOver' ? 'game_over' : 'memorize',
+        nextFloorTag: nextBoard?.floorTag ?? null,
+        nextFloorArchetypeId: nextBoard?.floorArchetypeId ?? null,
+        nextFeaturedObjectiveId: nextBoard?.featuredObjectiveId ?? null,
+        selectedDungeonNodeId: run.dungeonRun?.selectedNodeId ?? null,
+        boardPairCount: nextBoard?.pairCount ?? 0,
+        boardTileCount: nextBoard?.tiles.length ?? 0,
+        memorizeRemainingMs: nextRun.status === 'memorize'
+            ? nextRun.timerState?.memorizeRemainingMs ?? null
+            : null,
+        livesBefore: runNonNegativeInteger(run.lives),
+        livesAfter: runNonNegativeInteger(nextRun.lives),
+        parasitePressureBefore: runNonNegativeInteger(run.parasiteFloors),
+        parasitePressureAfter: runNonNegativeInteger(nextRun.parasiteFloors),
+        parasiteWardBefore: runNonNegativeInteger(run.parasiteWardRemaining),
+        parasiteWardAfter: runNonNegativeInteger(nextRun.parasiteWardRemaining),
+        hazardBanishOutcome,
+        destroyChargesBefore: runNonNegativeInteger(run.destroyPairCharges),
+        destroyChargesAfter: runNonNegativeInteger(nextRun.destroyPairCharges)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: nextRun.status === 'gameOver' ? 'floor.advance.defeated' : 'floor.advance.ready',
+        message: nextRun.status === 'gameOver'
+            ? 'Score Parasite ended the run before the next floor could be prepared.'
+            : `Floor ${fromFloor + 1} is ready to memorize (${nextBoard?.pairCount ?? 0} pairs).`,
+        tone: nextRun.status === 'gameOver' ? 'warning' : 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
 const applyRouteChooseCommand = (
     run: RunState,
     command: Extract<GameplayCommand, { type: 'route.choose' }>
@@ -1464,6 +1574,9 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'floor.hazard_banish') {
         return applyHazardBanishCommand(run, command);
+    }
+    if (command.type === 'floor.advance') {
+        return applyFloorAdvanceCommand(run, command);
     }
     if (command.type === 'route.choose') {
         return applyRouteChooseCommand(run, command);

@@ -23,11 +23,20 @@ import { getMemorizeDurationForRun } from './scoring-rules';
 import { buildBoard } from './board-build-rules';
 import { createNextFloorRunState } from './next-floor-run-state-rules';
 import { runMutatorIds } from './relics';
-import { createGameplayParasiteAdvanceCommand } from './gameplay-core-contracts';
-import { reduceGameplayCommand } from './gameplay-core';
-import { appendGameplayJournal } from './gameplay-journal';
+import {
+    advanceScoreParasiteFloor,
+    type ScoreParasiteFloorAdvance
+} from './score-parasite-rules';
 
-export const advanceToNextLevel = (run: RunState): RunState => {
+export interface AdvanceToNextLevelOptions {
+    parasiteAdvance?: ScoreParasiteFloorAdvance;
+    resolveHazardBanish?: boolean;
+}
+
+export const advanceToNextLevel = (
+    run: RunState,
+    options: AdvanceToNextLevelOptions = {}
+): RunState => {
     if (run.status !== 'levelComplete' || !run.board) {
         return run;
     }
@@ -76,14 +85,13 @@ export const advanceToNextLevel = (run: RunState): RunState => {
     nextFloorTag = floorTagForDungeonNode(selectedDungeonNode?.kind, nextFloorTag);
     nextFloorArchetypeId = floorArchetypeForDungeonNode(selectedDungeonNode?.kind, nextFloorArchetypeId);
 
-    const parasiteCommand = createGameplayParasiteAdvanceCommand(
-        `floor-advance:${run.runSeed}:${nextLevelNum}`
-    );
-    const parasiteResult = reduceGameplayCommand(run, parasiteCommand);
-    if (!parasiteResult.accepted) {
-        throw new Error('Score-parasite floor advance command was unexpectedly rejected.');
-    }
-    const transitionRun = appendGameplayJournal(parasiteResult.run, [parasiteCommand], parasiteResult.events);
+    const parasiteAdvance = options.parasiteAdvance ?? advanceScoreParasiteFloor(run);
+    const transitionRun: RunState = {
+        ...run,
+        lives: parasiteAdvance.lives,
+        parasiteFloors: parasiteAdvance.parasiteFloors,
+        parasiteWardRemaining: parasiteAdvance.parasiteWardRemaining
+    };
     const parasiteFloors = transitionRun.parasiteFloors;
     const lives = transitionRun.lives;
     const nextParasiteWard = transitionRun.parasiteWardRemaining;
@@ -132,5 +140,5 @@ export const advanceToNextLevel = (run: RunState): RunState => {
         parasiteFloors,
         parasiteWardRemaining: nextParasiteWard,
         memorizeRemainingMs: memorizeWithBonus
-    });
+    }, { resolveHazardBanish: options.resolveHazardBanish });
 };

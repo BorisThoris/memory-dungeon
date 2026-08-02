@@ -203,18 +203,12 @@ describe('createNextFloorRunState', () => {
             'shuffle_snare',
             'shuffle_snare'
         ]);
-        expect(next.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'hazard_banish.resolved', outcome: 'hazard_removed' })
-        ]));
-        expect(fallbackNext.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'hazard_banish.resolved', outcome: 'destroy_charge_granted' })
-        ]));
-        expect(noDestroyNext.gameplayEventJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'hazard_banish.resolved', outcome: 'contract_blocked' })
-        ]));
-        expect(next.gameplayCommandJournal).toEqual(expect.arrayContaining([
-            expect.objectContaining({ type: 'floor.hazard_banish' })
-        ]));
+        expect(next.gameplayCommandJournal).toEqual(run.gameplayCommandJournal);
+        expect(next.gameplayEventJournal).toEqual(run.gameplayEventJournal);
+        expect(fallbackNext.gameplayCommandJournal).toEqual(run.gameplayCommandJournal);
+        expect(fallbackNext.gameplayEventJournal).toEqual(run.gameplayEventJournal);
+        expect(noDestroyNext.gameplayCommandJournal).toEqual(noDestroyRun.gameplayCommandJournal);
+        expect(noDestroyNext.gameplayEventJournal).toEqual(noDestroyRun.gameplayEventJournal);
     });
 
     it('treats malformed reward perks as empty before restoring floor benefits', () => {

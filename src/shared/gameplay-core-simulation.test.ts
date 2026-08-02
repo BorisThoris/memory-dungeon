@@ -128,6 +128,7 @@ describe('seeded gameplay core simulation', () => {
                 'dungeon.exit_activate',
                 'board.destroy_pair',
                 'floor.hazard_banish',
+                'floor.advance',
                 'route.choose',
                 'relic.pick',
                 'relic.offer_service_use',
@@ -140,6 +141,7 @@ describe('seeded gameplay core simulation', () => {
         expect(first.commandTypeCounts['relic.pick']).toBe(1);
         expect(first.commandTypeCounts['relic.offer_service_use']).toBe(1);
         expect(first.commandTypeCounts['side_room.resolve']).toBe(1);
+        expect(first.commandTypeCounts['floor.advance']).toBe(1);
         expect(first.eventTypeCounts['wild_match.consumed']).toBe(1);
         expect(first.finalRun.wildMatchesRemaining).toBe(0);
     });

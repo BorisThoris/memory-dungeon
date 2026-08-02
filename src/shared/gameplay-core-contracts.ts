@@ -1324,6 +1324,12 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...commandBase,
+            type: z.literal('floor.advance')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
             type: z.literal('route.choose'),
             choiceId: z.string().min(1).max(160)
         })
@@ -1652,6 +1658,31 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             targetPairKey: z.string().min(1).max(160).nullable(),
             hazardKind: z.string().min(1).max(120).nullable(),
             affectedTileIds: z.array(z.string().min(1).max(160)),
+            destroyChargesBefore: z.number().int().nonnegative(),
+            destroyChargesAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('floor.advanced'),
+            fromFloor: z.number().int().nonnegative(),
+            toFloor: z.number().int().positive(),
+            outcome: z.enum(['memorize', 'game_over']),
+            nextFloorTag: z.enum(['normal', 'breather', 'boss']).nullable(),
+            nextFloorArchetypeId: z.string().min(1).max(120).nullable(),
+            nextFeaturedObjectiveId: z.string().min(1).max(120).nullable(),
+            selectedDungeonNodeId: z.string().min(1).max(160).nullable(),
+            boardPairCount: z.number().int().nonnegative(),
+            boardTileCount: z.number().int().nonnegative(),
+            memorizeRemainingMs: z.number().int().nonnegative().nullable(),
+            livesBefore: z.number().int().nonnegative(),
+            livesAfter: z.number().int().nonnegative(),
+            parasitePressureBefore: z.number().int().nonnegative(),
+            parasitePressureAfter: z.number().int().nonnegative(),
+            parasiteWardBefore: z.number().int().nonnegative(),
+            parasiteWardAfter: z.number().int().nonnegative(),
+            hazardBanishOutcome: z.enum(['contract_blocked', 'hazard_removed', 'destroy_charge_granted']).nullable(),
             destroyChargesBefore: z.number().int().nonnegative(),
             destroyChargesAfter: z.number().int().nonnegative()
         })
@@ -1996,6 +2027,13 @@ export const createGameplayHazardBanishCommand = (commandId: string): GameplayCo
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'floor.hazard_banish'
+    });
+
+export const createGameplayFloorAdvanceCommand = (commandId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'floor.advance'
     });
 
 export const createGameplayRouteChooseCommand = (commandId: string, choiceId: string): GameplayCommand =>

@@ -15,9 +15,7 @@ import { calculateRating } from './scoring-rules';
 import { hasRunRelic } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
-import { createGameplayHazardBanishCommand } from './gameplay-core-contracts';
-import { reduceGameplayCommand } from './gameplay-core';
-import { appendGameplayJournal } from './gameplay-journal';
+import { resolveHazardBanisherFloorStart } from './hazard-banisher-rules';
 
 export interface CreateNextFloorRunStateOptions {
     lives: number;
@@ -31,7 +29,8 @@ export interface CreateNextFloorRunStateOptions {
 
 export const createNextFloorRunState = (
     run: RunState,
-    options: CreateNextFloorRunStateOptions
+    options: CreateNextFloorRunStateOptions,
+    behavior: { resolveHazardBanish?: boolean } = {}
 ): RunState => {
     const nextBoard = options.board;
     const traitRouteObjective = getTraitRouteObjectiveSeed(nextBoard);
@@ -126,15 +125,12 @@ export const createNextFloorRunState = (
             currentStreak: 0
         }
     };
-    if (!hasRewardPerk(run, 'hazard_banish_per_floor')) {
+    if (behavior.resolveHazardBanish === false || !hasRewardPerk(run, 'hazard_banish_per_floor')) {
         return nextRun;
     }
-    const command = createGameplayHazardBanishCommand(
-        `hazard-banish:${run.runSeed}:${nextBoard.level}`
-    );
-    const result = reduceGameplayCommand(nextRun, command);
-    if (!result.accepted) {
-        throw new Error('Hazard Banish floor-start command was unexpectedly rejected.');
+    const resolved = resolveHazardBanisherFloorStart(nextRun);
+    if (resolved.outcome === 'inactive') {
+        throw new Error('Hazard Banish was active before next-floor construction but inactive after it.');
     }
-    return appendGameplayJournal(result.run, [command], result.events);
+    return resolved.run;
 };

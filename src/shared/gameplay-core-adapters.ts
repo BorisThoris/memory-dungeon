@@ -1,6 +1,7 @@
 import type { FindableKind, RelicId, RunState } from './contracts';
 import {
     createGameplayDefinitionCommand,
+    createGameplayFloorAdvanceCommand,
     createGameplayWildMatchConsumeCommand,
     type GameplayCommand,
     type GameplayEvent
@@ -45,6 +46,13 @@ export interface GameplayWildMatchAdapterResult {
     run: RunState;
     commands: GameplayCommand[];
     events: GameplayEvent[];
+}
+
+export interface GameplayFloorAdvanceAdapterResult {
+    run: RunState;
+    command: GameplayCommand;
+    events: GameplayEvent[];
+    accepted: boolean;
 }
 
 const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
@@ -228,4 +236,19 @@ export const consumeWildMatchThroughGameplayCore = (
         throw new Error('Wild match consumption command was unexpectedly rejected.');
     }
     return { run: result.run, commands: [command], events: result.events };
+};
+
+/** Owns one complete floor transition without journaling nested parasite or floor-start perk commands. */
+export const advanceFloorThroughGameplayCore = (
+    run: RunState,
+    commandId: string
+): GameplayFloorAdvanceAdapterResult => {
+    const command = createGameplayFloorAdvanceCommand(commandId);
+    const result = reduceGameplayCommand(run, command);
+    return {
+        accepted: result.accepted,
+        command,
+        events: result.events,
+        run: result.accepted ? appendGameplayJournal(result.run, [command], result.events) : run
+    };
 };

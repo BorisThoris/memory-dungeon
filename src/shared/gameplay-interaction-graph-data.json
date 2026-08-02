@@ -1,5 +1,5 @@
 {
-  "version": 20,
+  "version": 21,
   "mechanics": [
     {
       "id": "trait.echo",
@@ -369,14 +369,14 @@
       "id": "progression.run_flow",
       "label": "Run Progression Flow",
       "kind": "progression",
-      "role": "state_transition",
-      "evidence": ["src/shared/next-floor-transition-rules.ts", "src/shared/relic-offer-rules.ts", "src/shared/route-choice-rules.ts"],
-      "reads": ["levelComplete", "lastLevelResult", "routeChoices", "selectedDungeonNodeId", "powersUsedThisRun", "nextFloor", "relicOffer"],
-      "writes": ["nextFloor", "relicOffer", "pendingRouteCardPlan"],
-      "enables": ["objective.floor_clear"],
+      "role": "typed_flat_replayable_floor_transition",
+      "evidence": ["src/shared/next-floor-transition-rules.ts", "src/shared/next-floor-run-state-rules.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-core-adapters.ts", "src/renderer/store/levelCompleteSurfaceState.ts", "src/renderer/store/relicOfferSurfaceState.ts", "src/renderer/store/gameplayFeedbackAdapter.ts"],
+      "reads": ["levelComplete", "lastLevelResult", "routeChoices", "selectedDungeonNodeId", "powersUsedThisRun", "nextFloor", "relicOffer", "sideRoom", "lives", "parasiteFloors", "parasiteWardRemaining", "rewardPerkIds", "pendingMemorizeBonusMs"],
+      "writes": ["nextFloor", "relicOffer", "pendingRouteCardPlan", "tileStates", "lives", "parasiteFloors", "parasiteWardRemaining", "destroyPairCharges", "timerState", "gameplayCommandJournal", "gameplayEventJournal", "feedbackLines"],
+      "enables": ["objective.floor_clear", "phase.memorize"],
       "blocks": [],
-      "softlockGuards": ["navigation-contracts"],
-      "tests": ["src/shared/relic-offer-rules.test.ts", "src/shared/route-choice-rules.test.ts", "src/shared/next-floor-run-state-rules.test.ts"]
+      "softlockGuards": ["navigation-contracts", "strict-floor-advance-command", "side-room-and-relic-interlude-gate", "deterministic-board-generation", "parasite-before-board", "hazard-banish-after-board", "single-flat-command-journal", "pure-transition-no-journal"],
+      "tests": ["src/shared/gameplay-core.test.ts", "src/shared/gameplay-core-simulation.test.ts", "src/shared/game.test.ts", "src/shared/next-floor-run-state-rules.test.ts", "src/renderer/store/levelCompleteSurfaceState.test.ts", "src/renderer/store/levelCompleteContinuationExecutor.test.ts", "src/renderer/store/relicOfferSurfaceState.test.ts", "src/renderer/store/gameplayFeedbackAdapter.test.ts"]
     },
     {
       "id": "route.choice",
@@ -2174,6 +2174,13 @@
     { "source": "progression.route_side_room", "target": "feedback.gameplay_hud", "kind": "displays", "label": "projects typed rest event reward or skip feedback" },
     { "source": "progression.route_side_room", "target": "persistence.run_summary", "kind": "persists", "label": "retains one flat side-room command and its domain events" },
     { "source": "progression.route_side_room", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "replays rest event bonus and skip outcomes" },
+    { "source": "progression.run_flow", "target": "core.gameplay_commands", "kind": "triggers", "label": "submits one strict floor advance command" },
+    { "source": "core.gameplay_commands", "target": "progression.run_flow", "kind": "modifies", "label": "owns parasite pressure board construction and floor-start perk consequences" },
+    { "source": "progression.run_flow", "target": "hazard.score_parasite", "kind": "triggers", "label": "advances chapter pressure before constructing the next board" },
+    { "source": "progression.run_flow", "target": "phase.memorize", "kind": "enables", "label": "prepares the deterministic board and study timer" },
+    { "source": "progression.run_flow", "target": "feedback.gameplay_hud", "kind": "displays", "label": "projects typed floor readiness parasite and banish outcomes" },
+    { "source": "progression.run_flow", "target": "persistence.run_summary", "kind": "persists", "label": "retains one flat floor command and its exact domain events" },
+    { "source": "progression.run_flow", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "replays deterministic floor advancement and rejection" },
     { "source": "route.mystery", "target": "progression.run_flow", "kind": "modifies", "label": "changes next decision" }
   ],
   "coverage": {

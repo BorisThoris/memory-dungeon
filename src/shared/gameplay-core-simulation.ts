@@ -6,6 +6,7 @@ import {
     createGameplayDestroyPairCommand,
     createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
+    createGameplayFloorAdvanceCommand,
     createGameplayGambitCommitCommand,
     createGameplayHazardBanishCommand,
     createGameplayPeekCommand,
@@ -142,6 +143,9 @@ const commandForStep = (
     }
     if (step === 6) {
         return createGameplaySideRoomResolveCommand(commandId, 'skip');
+    }
+    if (step === 7) {
+        return createGameplayFloorAdvanceCommand(commandId);
     }
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);

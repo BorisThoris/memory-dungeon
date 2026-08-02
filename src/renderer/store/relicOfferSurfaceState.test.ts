@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { GAME_RULES_VERSION, type RelicId, type RunState } from '../../shared/contracts';
 import { createDefaultSaveData } from '../../shared/save-data';
+import { createPlayablePathFixture } from '../../shared/playable-path-fixtures';
 import { makePair, makeRun } from '../../shared/test/game-fixtures';
 import {
     createRelicOfferServiceSurfaceResult,
@@ -90,6 +91,33 @@ describe('relicOfferSurfaceState', () => {
             audioCategory: 'relic-pick',
             cue: 'build.extra_shuffle_charge.claimed'
         });
+    });
+
+    it('journals one flat floor advance after the final endless relic pick', () => {
+        const fixture = createPlayablePathFixture('relicDraft');
+        const relicId = fixture.run!.relicOffer!.options[0]!;
+        const result = createRelicPickSurfaceResult({
+            relicId,
+            run: {
+                ...fixture.run!,
+                relicOffer: { ...fixture.run!.relicOffer!, picksRemaining: 1 }
+            },
+            saveData: fixture.saveData
+        });
+
+        expect(result.kind).toBe('accepted');
+        if (result.kind !== 'accepted') return;
+        expect(result.patch.run.status).toBe('memorize');
+        expect(result.patch.run.gameplayCommandJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'relic.pick', relicId }),
+            expect.objectContaining({ type: 'floor.advance' })
+        ]));
+        expect(result.patch.run.gameplayCommandJournal?.map((command) => command.type)).not.toContain('floor.parasite_advance');
+        expect(result.patch.run.gameplayCommandJournal?.map((command) => command.type)).not.toContain('floor.hazard_banish');
+        expect(result.patch.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'relic.picked', relicId, outcome: 'advance_ready' }),
+            expect.objectContaining({ type: 'floor.advanced', outcome: 'memorize' })
+        ]));
     });
 
     it('projects migrated relic pick feedback from the typed gameplay journal', () => {

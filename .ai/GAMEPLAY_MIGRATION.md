@@ -318,6 +318,19 @@ Between-floor rest, event, bonus-reward, and skip choices now cross one replayab
 
 Graph v20 connects route commitments through side-room choice, build rewards, economy, feedback, bounded persistence, replay, and downstream run flow.
 
+## Twenty-second vertical slice: Flat Typed Floor Advancement
+
+The cleared-floor boundary now prepares the next playable board through one replayable command instead of nesting parasite and Hazard Banish commands inside an untyped transition:
+
+1. `floor.advance` validates the cleared-floor state, puzzle-mode boundary, and unresolved side-room or relic-draft gates before any mutation.
+2. The existing deterministic schedule, dungeon-node selection, board generator, memorize-time calculation, and per-floor reset rules remain the calculation authority; their pure transition no longer appends journals.
+3. Score Parasite pressure resolves before board construction and Hazard Banish resolves after the new board exists, while both retain their typed domain and feedback events under the single outer command id.
+4. `floor.advanced` records source/target floors, resulting phase, board shape and authored context, memorize duration, life/parasite/ward deltas, Hazard Banish outcome, and Destroy balance.
+5. Normal continuation and a final endless relic pick both use the same command adapter; puzzle relic picks preserve the established no-advance behavior.
+6. Direct reducer tests require journals to remain unchanged, JSON replay reproduces the generated board exactly, and the seeded simulation forces the strict command form without perturbing its random content census.
+
+Graph v21 connects floor clear and relic drafting through flat run advancement, parasite pressure, floor-start perks, deterministic board preparation, memorize feedback, persistence, and replay.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

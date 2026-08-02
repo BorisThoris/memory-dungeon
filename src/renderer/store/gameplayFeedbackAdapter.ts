@@ -16,6 +16,7 @@ export type GameplayFeedbackAudioCategory =
     | 'reward-claim'
     | 'shop-purchase'
     | 'exit-activate'
+    | 'floor-advance'
     | 'parasite'
     | 'route-choice'
     | 'side-room'
@@ -69,6 +70,9 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'score_parasite') {
         return 'parasite';
+    }
+    if (feedback.source.kind === 'system' && feedback.source.id === 'floor_advance') {
+        return 'floor-advance';
     }
     if (feedback.source.kind === 'system' && feedback.source.id === 'route_choice') {
         return 'route-choice';

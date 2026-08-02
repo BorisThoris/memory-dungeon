@@ -5,7 +5,7 @@ import {
 } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
-import { advanceToNextLevel } from '../../shared/next-floor-transition-rules';
+import { advanceFloorThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { mergeRelicPickStat, normalizeSaveData } from '../../shared/save-data';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
@@ -65,7 +65,13 @@ export const createRelicPickSurfaceResult = ({
         return { kind: 'ignored' };
     }
     const journaledRun = appendGameplayJournal(result.run, [command], result.events);
-    const nextRun = pickEvent.outcome === 'advance_ready' ? advanceToNextLevel(journaledRun) : journaledRun;
+    const floorAdvance = pickEvent.outcome === 'advance_ready'
+        ? advanceFloorThroughGameplayCore(
+              journaledRun,
+              `floor-advance:${journaledRun.runSeed}:${(journaledRun.board?.level ?? 0) + 1}`
+          )
+        : null;
+    const nextRun = floorAdvance?.accepted ? floorAdvance.run : journaledRun;
 
     const nextSave = mergeHonorUnlockTags(normalizeSaveData(mergeRelicPickStat(saveData, relicId)));
 

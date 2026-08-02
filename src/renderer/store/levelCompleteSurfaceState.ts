@@ -1,5 +1,6 @@
 import type { RunState } from '../../shared/contracts';
-import { advanceToNextLevel, openRelicOffer } from '../../shared/game-core';
+import { openRelicOffer } from '../../shared/game-core';
+import { advanceFloorThroughGameplayCore } from '../../shared/gameplay-core-adapters';
 import { needsRelicPick } from '../../shared/relics';
 import { repairRunProgressionSoftlocks } from '../../shared/run-progression-repair';
 import { createRunWithBoardInteractionClearedPatch, type RunSurfaceState } from './runSurfaceState';
@@ -137,7 +138,14 @@ export const createLevelCompleteContinuationSurfaceResult = (
         };
     }
 
-    const advancedRun = advanceToNextLevel(nextRun);
+    const floorAdvance = advanceFloorThroughGameplayCore(
+        nextRun,
+        `floor-advance:${nextRun.runSeed}:${(nextRun.board?.level ?? 0) + 1}`
+    );
+    if (!floorAdvance.accepted) {
+        return { kind: 'runOnly', patch: { run: nextRun } };
+    }
+    const advancedRun = floorAdvance.run;
 
     if (advancedRun.status === 'gameOver') {
         return { kind: 'gameOver', run: advancedRun };
