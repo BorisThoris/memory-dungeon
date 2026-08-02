@@ -26,7 +26,7 @@ const CONTENT_REGISTRIES = [
     { kind: 'build_archetype', file: 'src/shared/relics.ts', variable: 'RELIC_BUILD_ARCHETYPE_ORDER', mechanicPrefix: 'build' },
     { kind: 'relic', file: 'src/shared/relics.ts', variable: 'RELIC_POOL', mechanicPrefix: 'relic' },
     { kind: 'findable', file: 'src/shared/findables.ts', variable: 'FINDABLE_REWARD_ROW_ORDER', mechanicPrefix: 'findable' },
-    { kind: 'inventory_item', file: 'src/shared/run-inventory.ts', variable: 'RUN_INVENTORY_ITEM_IDS', mechanicPrefix: 'inventory' },
+    { kind: 'inventory_item', file: 'src/shared/run-inventory-contracts.ts', variable: 'RUN_INVENTORY_ITEM_IDS', mechanicPrefix: 'inventory' },
     { kind: 'bonus_reward', file: 'src/shared/bonus-rewards.ts', variable: 'BONUS_REWARD_IDS', mechanicPrefix: 'reward' }
 ];
 const PLAYER_VISIBLE_STATES = new Set([

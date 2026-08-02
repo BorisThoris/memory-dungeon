@@ -6,6 +6,7 @@ import { runMutatorIds, runRelicIds } from './relics';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
+import { getGameplayJournalSummaryFields } from './gameplay-journal';
 
 export const createRunSummary = (run: RunState, unlockedAchievements: AchievementId[]): RunState => ({
     ...run,
@@ -39,7 +40,8 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             practiceMode: run.practiceMode,
             wildMenuRun: run.wildMenuRun,
             dungeonShowcaseRun: run.dungeonShowcaseRun,
-            activeContract: run.activeContract ? { ...run.activeContract } : null
+            activeContract: run.activeContract ? { ...run.activeContract } : null,
+            ...getGameplayJournalSummaryFields(run)
         };
     })()
 });

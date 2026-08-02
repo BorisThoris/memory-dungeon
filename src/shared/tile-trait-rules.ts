@@ -11,6 +11,12 @@ import {
     type TileTraitKind
 } from './contracts';
 import { hasRewardPerk } from './bonus-rewards';
+import {
+    createGameplayDefinitionCommand,
+    type GameplayCommand,
+    type GameplayEvent
+} from './gameplay-core-contracts';
+import { reduceGameplayCommand } from './gameplay-core';
 import { hasRunRelic } from './relics';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
 import { runArrayCount } from './run-array-guards';
@@ -95,6 +101,8 @@ export interface TileTraitEffectResult {
     peekChargeLoss: number;
     recallMistakesDelta: number;
     triesDelta: number;
+    gameplayEvents?: GameplayEvent[];
+    gameplayCommands?: GameplayCommand[];
 }
 
 export interface TileTraitEffectContext {
@@ -866,7 +874,20 @@ export const resolveTileTraitEffects = ({
         }
 
         if (hasTrait('echo') && adjacentTraitKinds.has('conduit') && hasRewardPerk(run, 'echo_conduit_double')) {
-            result.peekChargeGain += 1;
+            const sourceHash = hashStringToSeed(sourceTiles.map((tile) => tile.id).sort().join('|'));
+            const command = createGameplayDefinitionCommand(
+                `trait-match:${run.runSeed}:${board?.level ?? 0}:${matchResolutionsThisFloor}:${sourceHash}`,
+                'reward_perk.echo_conduit_double',
+                { matchedTraits: [...traits], adjacentTraits: [...adjacentTraitKinds] }
+            );
+            const coreResult = reduceGameplayCommand(run, command);
+            if (!coreResult.accepted) {
+                throw new Error('Migrated Echo/Conduit trait command rejected.');
+            }
+            result.peekChargeGain +=
+                runNonNegativeInteger(coreResult.run.peekCharges) - peekCharges;
+            result.gameplayEvents = coreResult.events;
+            result.gameplayCommands = [command];
             if (adjacentTraitKinds.has('sealed') && comboShards + result.comboShardGain < MAX_COMBO_SHARDS) {
                 result.comboShardGain += 1;
             }

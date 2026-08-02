@@ -215,7 +215,10 @@ describe('gameplay interaction graph', () => {
         expect(byId.get('core.gameplay_commands')).toMatchObject({ kind: 'core', role: 'authoritative_command_reducer' });
         expect(byId.get('inventory.peek_charge')).toMatchObject({ kind: 'inventory', role: 'build_resource' });
         expect(byId.get('power.peek')).toMatchObject({ kind: 'power', role: 'information_conversion' });
-        expect(byId.get('persistence.run_save')).toMatchObject({ kind: 'persistence' });
+        expect(byId.get('persistence.run_summary')).toMatchObject({
+            kind: 'persistence',
+            role: 'bounded_journal_persistence'
+        });
         expect(byId.get('simulation.gameplay_replay')).toMatchObject({ kind: 'simulation' });
         expect(gameplayInteractionGraph.edges).toEqual(
             expect.arrayContaining([
@@ -226,7 +229,7 @@ describe('gameplay interaction graph', () => {
                 expect.objectContaining({ source: 'power.peek', target: 'inventory.peek_charge', kind: 'consumes' }),
                 expect.objectContaining({ source: 'power.peek', target: 'route.mystery', kind: 'consequence' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'feedback.gameplay_hud', kind: 'displays' }),
-                expect.objectContaining({ source: 'core.gameplay_commands', target: 'persistence.run_save', kind: 'persists' }),
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'persistence.run_summary', kind: 'persists' }),
                 expect.objectContaining({ source: 'core.gameplay_commands', target: 'simulation.gameplay_replay', kind: 'tested_by' })
             ])
         );

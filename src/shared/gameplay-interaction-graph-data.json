@@ -396,13 +396,13 @@
       "label": "Deterministic Gameplay Command Core",
       "kind": "core",
       "role": "authoritative_command_reducer",
-      "evidence": ["src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/tilePressController.ts", ".ai/GAMEPLAY_MIGRATION.md"],
+      "evidence": ["src/shared/gameplay-core-contracts.ts", "src/shared/gameplay-core.ts", "src/shared/gameplay-core-adapters.ts", "src/shared/gameplay-journal.ts", "src/renderer/store/runSurfaceState.ts", "src/renderer/store/tilePressController.ts", ".ai/GAMEPLAY_MIGRATION.md"],
       "reads": ["gameplayCommands", "rewardPerkIds", "peekCharges", "tileTraitKind", "adjacentTraits"],
-      "writes": ["gameplayEvents", "rewardPerkIds", "peekCharges", "peekRevealedTileIds", "feedbackLines"],
-      "enables": ["build.conduit_cartographer", "persistence.run_save", "simulation.gameplay_replay"],
+      "writes": ["gameplayEvents", "gameplayCommandJournal", "gameplayEventJournal", "rewardPerkIds", "peekCharges", "peekRevealedTileIds", "feedbackLines"],
+      "enables": ["build.conduit_cartographer", "persistence.run_summary", "simulation.gameplay_replay"],
       "blocks": [],
       "softlockGuards": ["strict-command-schema", "definition-version-gate", "atomic-condition-rejection"],
-      "tests": ["src/shared/gameplay-core.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/tilePressController.test.ts"]
+      "tests": ["src/shared/gameplay-core.test.ts", "src/shared/gameplay-journal.test.ts", "src/renderer/store/runSurfaceState.test.ts", "src/renderer/store/tilePressController.test.ts"]
     },
     {
       "id": "build.conduit_cartographer",
@@ -496,30 +496,30 @@
       "tests": ["src/shared/route-choice-rules.test.ts", "src/shared/trait-opportunities.test.ts", "src/shared/relics.test.ts"]
     },
     {
-      "id": "persistence.run_save",
-      "label": "Run Save Persistence",
+      "id": "persistence.run_summary",
+      "label": "Completed Run Journal Persistence",
       "kind": "persistence",
-      "role": "command_state_persistence",
-      "evidence": ["src/shared/save-data.ts", "src/main/persistence.ts", "src/shared/gameplay-core-contracts.ts"],
-      "reads": ["rewardPerkIds", "relicIds", "peekCharges", "peekRevealedTileIds", "gameplayEvents"],
+      "role": "bounded_journal_persistence",
+      "evidence": ["src/shared/gameplay-journal.ts", "src/shared/run-summary-rules.ts", "src/shared/save-data.ts", "src/main/persistence.ts"],
+      "reads": ["gameplayCommands", "gameplayEvents", "gameplayCommandJournal", "gameplayEventJournal"],
       "writes": ["saveReport"],
       "enables": ["simulation.gameplay_replay"],
       "blocks": [],
-      "softlockGuards": ["save-version-gate", "normalization"],
-      "tests": ["src/shared/save-data.test.ts", "src/main/persistence.test.ts", "src/shared/gameplay-core.test.ts"]
+      "softlockGuards": ["save-version-gate", "schema-normalization", "bounded-retention"],
+      "tests": ["src/shared/gameplay-journal.test.ts", "src/shared/run-summary-rules.test.ts", "src/shared/save-data.test.ts", "src/shared/version-gate.test.ts"]
     },
     {
       "id": "simulation.gameplay_replay",
-      "label": "Gameplay Command Replay",
+      "label": "Seeded Gameplay Core Simulation",
       "kind": "simulation",
       "role": "determinism_gate",
-      "evidence": ["src/shared/gameplay-core.ts", "src/shared/gameplay-core-contracts.ts", "src/shared/balance-simulation.ts"],
+      "evidence": ["src/shared/gameplay-core.ts", "src/shared/gameplay-core-simulation.ts", "scripts/sim-gameplay-core.ts"],
       "reads": ["gameplayCommands", "gameplayEvents"],
       "writes": ["replayReport"],
       "enables": ["safety.softlock_fairness"],
       "blocks": [],
-      "softlockGuards": ["json-round-trip", "deterministic-event-order"],
-      "tests": ["src/shared/gameplay-core.test.ts", "src/shared/balance-simulation.test.ts"]
+      "softlockGuards": ["json-round-trip", "deterministic-event-order", "nonnegative-inventory", "seed-sweep"],
+      "tests": ["src/shared/gameplay-core.test.ts", "src/shared/gameplay-core-simulation.test.ts"]
     }
   ],
   "edges": [
@@ -609,9 +609,9 @@
     { "source": "power.peek", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows target and balance" },
     { "source": "perk.echo_conduit_double", "target": "feedback.gameplay_hud", "kind": "displays", "label": "shows trigger cause" },
     { "source": "build.conduit_cartographer", "target": "route.mystery", "kind": "consequence", "label": "converts information into route choice" },
-    { "source": "core.gameplay_commands", "target": "persistence.run_save", "kind": "persists", "label": "serializable command state" },
+    { "source": "core.gameplay_commands", "target": "persistence.run_summary", "kind": "persists", "label": "bounded completed-run journal" },
     { "source": "core.gameplay_commands", "target": "simulation.gameplay_replay", "kind": "tested_by", "label": "deterministic replay" },
-    { "source": "persistence.run_save", "target": "simulation.gameplay_replay", "kind": "enables", "label": "restores replay state" },
+    { "source": "persistence.run_summary", "target": "simulation.gameplay_replay", "kind": "enables", "label": "retains replay diagnostics" },
     { "source": "simulation.gameplay_replay", "target": "core.gameplay_commands", "kind": "tested_by", "label": "replays command log" },
     { "source": "route.mystery", "target": "progression.run_flow", "kind": "modifies", "label": "changes next decision" }
   ],

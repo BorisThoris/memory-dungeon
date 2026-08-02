@@ -90,6 +90,7 @@ import { resolveTurnMatchProgress } from './turn-match-progress-rules';
 import { resolveTurnMatchBoardResolution } from './turn-match-board-resolution-rules';
 import { resolveTurnMatchScoringSummary } from './turn-match-scoring-summary-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
+import { appendGameplayJournal } from './gameplay-journal';
 import { addTileTraitCountStats, normalizeSessionStats } from './session-stats-rules';
 import { runFilteredStringArrayOrNull, runStringArray } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -632,8 +633,13 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         });
         const stats = normalizeSessionStats(run.stats);
 
+        const journaledRun = appendGameplayJournal(
+            run,
+            traitReward.gameplayCommands ?? [],
+            traitReward.gameplayEvents ?? []
+        );
         const nextRun: RunState = {
-            ...run,
+            ...journaledRun,
             gambitThirdFlipUsed: true,
             gambitAvailableThisFloor: false,
             powersUsedThisRun: true,
@@ -891,8 +897,13 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
         });
         const stats = normalizeSessionStats(run.stats);
 
+        const journaledRun = appendGameplayJournal(
+            run,
+            traitReward.gameplayCommands ?? [],
+            traitReward.gameplayEvents ?? []
+        );
         const nextRun: RunState = {
-            ...run,
+            ...journaledRun,
             status: mimicCacheFatalBite ? 'gameOver' : 'playing',
             lives,
             board: spun.board,

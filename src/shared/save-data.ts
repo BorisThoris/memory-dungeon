@@ -25,6 +25,7 @@ import { runFiniteNumberOrFallback, runNonNegativeIntegerOrFallback } from './ru
 import { RELIC_POOL } from './relics';
 import { normalizeSessionStats } from './session-stats-rules';
 import { evaluateSaveMigrationGate, isRecognizedSaveSchemaVersion } from './version-gate';
+import { normalizeGameplayJournalSnapshot } from './gameplay-journal';
 
 export type DailyStreakFreezePolicy = 'not_supported';
 
@@ -387,6 +388,10 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
             : source.payoffRouteRewardText === null
               ? null
               : undefined;
+    const gameplayJournal = normalizeGameplayJournalSnapshot({
+        gameplayCommandJournal: source.gameplayCommandJournal,
+        gameplayEventJournal: source.gameplayEventJournal
+    });
 
     return {
         totalScore,
@@ -419,7 +424,13 @@ const normalizeLastRunSummary = (input: unknown): RunSummary | null => {
             ? { activeContract: null }
             : activeContract
               ? { activeContract }
-              : {})
+              : {}),
+        ...(gameplayJournal.commands.length > 0
+            ? { gameplayCommandJournal: gameplayJournal.commands }
+            : {}),
+        ...(gameplayJournal.events.length > 0
+            ? { gameplayEventJournal: gameplayJournal.events }
+            : {})
     };
 };
 

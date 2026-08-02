@@ -37,7 +37,7 @@ After this proof slice, migrate the other source-derived content families build 
 
 ## Current slice status
 
-Implemented in the first command-core increment:
+Implemented in the Conduit Cartographer vertical slice:
 
 - strict, versioned schemas for sources, facts, conditions, effects, commands, content definitions, and domain events;
 - pure command reduction over existing reward, relic, inventory, trait, and Peek primitives;
@@ -45,11 +45,14 @@ Implemented in the first command-core increment:
 - deterministic event IDs/order and JSON-round-trippable command replay;
 - parity tests for Echo Conduit Lens, Peek Charge relic, Echo/Conduit perk bonus, and Peek board legality;
 - live renderer Peek actions routed through the command core, with audio driven by the typed feedback event instead of a parallel hardcoded cause;
+- live Echo Conduit Lens claims, Peek relic picks, and Echo-Conduit trait rewards routed through compatibility adapters into the same core;
+- bounded, schema-validated command/event journals retained on the run and copied into completed-run summaries under save schema v6;
+- malformed and duplicate journal entries normalized away, with deterministic retention limits of 64 commands and 256 events;
+- seeded headless command simulation with seed sweeps, JSON replay equality, schema checks, event-order checks, and nonnegative-inventory assertions;
 - semantic graph coverage from content choice through state, feedback, route consequence, persistence boundary, and replay gate.
 
 Still required before the vertical slice is complete:
 
-- route live bonus-reward, relic-pick, and trait-match actions through the command core adapters;
-- persist the command/event journal with save-version migration and bounded retention;
-- consume typed feedback events in renderer/audio/accessibility adapters;
-- execute Conduit Cartographer through the headless balance simulator and add seeded fairness assertions.
+- consume every typed feedback event in common renderer/audio/accessibility adapters (Peek audio is the first migrated consumer);
+- add route-choice outcome scoring to the headless build evaluation once route decisions enter the command core;
+- migrate the next cohesive player build rather than adding isolated definitions.

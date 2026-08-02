@@ -25,7 +25,7 @@
 | Constant | Location | Value (last audit) |
 |----------|----------|---------------------|
 | `GAME_RULES_VERSION` | `contracts.ts` | **14** |
-| `SAVE_SCHEMA_VERSION` | `contracts.ts` | **5** |
+| `SAVE_SCHEMA_VERSION` | `contracts.ts` | **6** |
 | `FLOOR_SCHEDULE_RULES_VERSION` | `floor-mutator-schedule.ts` | **3** |
 
 Bump **`GAME_RULES_VERSION`** when pair generation, scoring, or player-facing rules change; **`SAVE_SCHEMA_VERSION`** when save merge/migration changes; **`FLOOR_SCHEDULE_RULES_VERSION`** when endless floor mutator **schedule** rules change — and extend **`floor-mutator-schedule.test.ts`** per the module header checklist.

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { RewardPerkId, RunStatus, TileTraitKind } from './contracts';
-import { RUN_INVENTORY_ITEM_IDS } from './run-inventory';
+import { RUN_INVENTORY_ITEM_IDS } from './run-inventory-contracts';
 
 export const GAMEPLAY_CORE_SCHEMA_VERSION = 1 as const;
 
@@ -167,7 +167,6 @@ export const CONDUIT_CARTOGRAPHER_DEFINITIONS = z.array(gameplayContentDefinitio
         source: { kind: 'reward_perk', id: 'echo_conduit_double' },
         trigger: 'trait.match',
         conditions: [
-            { kind: 'run.status_is', status: 'playing' },
             { kind: 'reward_perk.active', perkId: 'echo_conduit_double' },
             { kind: 'trait.matched', trait: 'echo' },
             { kind: 'trait.adjacent', trait: 'conduit' }

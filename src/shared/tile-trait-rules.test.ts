@@ -511,6 +511,12 @@ describe('tile trait rules', () => {
         expect(echoEffect.interactionTags).toEqual(
             expect.arrayContaining(['reward-perk:echo-conduit-double', 'reward-perk:trait-streak-flash'])
         );
+        expect(echoEffect.gameplayEvents).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'inventory.changed', itemId: 'peek_charge', applied: 1 }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'build.echo_conduit_double.triggered' })
+            ])
+        );
         expect(cursedEffect.shopGoldGain).toBe(1);
         expect(cursedEffect.scoreBonus).toBe(40);
         expect(cursedEffect.interactionTags).toContain('reward-perk:cursed-opener-greed');

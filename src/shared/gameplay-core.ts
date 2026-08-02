@@ -1,8 +1,8 @@
 import { applyPeek } from './board-power-actions';
-import { hasRewardPerk, normalizeRewardPerkIds } from './bonus-rewards';
-import type { RunState } from './contracts';
+import type { RewardPerkId, RunState } from './contracts';
 import {
     GAMEPLAY_CORE_SCHEMA_VERSION,
+    GAMEPLAY_REWARD_PERK_IDS,
     gameplayCommandSchema,
     gameplayEventSchema,
     getGameplayContentDefinition,
@@ -36,9 +36,18 @@ export interface GameplayReplayResult {
 
 const SYSTEM_SOURCE: GameplaySource = { kind: 'system', id: 'gameplay-core' };
 const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
+const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
     ? Omit<T, 'schemaVersion' | 'eventId' | 'commandId' | 'sequence' | 'source'>
     : never;
+
+const normalizeGameplayRewardPerkIds = (value: unknown): RewardPerkId[] =>
+    Array.isArray(value)
+        ? value.filter((id): id is RewardPerkId => typeof id === 'string' && gameplayRewardPerkIds.has(id as RewardPerkId))
+        : [];
+
+const hasGameplayRewardPerk = (run: Pick<RunState, 'rewardPerkIds'>, perkId: RewardPerkId): boolean =>
+    normalizeGameplayRewardPerkIds(run.rewardPerkIds).includes(perkId);
 
 const makeEventWriter = (commandId: string, source: GameplaySource, events: GameplayEvent[]) =>
     (event: GameplayEventPayload): void => {
@@ -70,7 +79,7 @@ const conditionFailure = (run: RunState, condition: GameplayCondition, facts: Ga
                 ? null
                 : `${condition.itemId} is below ${condition.amount}`;
         case 'reward_perk.active':
-            return hasRewardPerk(run, condition.perkId) ? null : `${condition.perkId} is not active`;
+            return hasGameplayRewardPerk(run, condition.perkId) ? null : `${condition.perkId} is not active`;
         case 'trait.matched':
             return facts.matchedTraits.includes(condition.trait) ? null : `${condition.trait} was not matched`;
         case 'trait.adjacent':
@@ -142,7 +151,7 @@ const applyDefinition = (
                 break;
             }
             case 'reward_perk.grant': {
-                const rewardPerkIds = normalizeRewardPerkIds(nextRun.rewardPerkIds);
+                const rewardPerkIds = normalizeGameplayRewardPerkIds(nextRun.rewardPerkIds);
                 const newlyGranted = !rewardPerkIds.includes(effect.perkId);
                 if (newlyGranted) {
                     nextRun = { ...nextRun, rewardPerkIds: [...rewardPerkIds, effect.perkId] };

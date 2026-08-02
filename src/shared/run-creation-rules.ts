@@ -13,10 +13,10 @@ import {
     type WeakerShuffleMode
 } from './contracts';
 import { createBonusRewardLedger, hasRewardPerk } from './bonus-rewards';
+import { applyRelicImmediateThroughGameplayCore } from './gameplay-core-adapters';
 import { getTraitRouteObjectiveSeed } from './trait-route-objectives';
 import { pickFloorScheduleEntry, usesEndlessFloorSchedule } from './floor-mutator-schedule';
 import { DAILY_MUTATOR_TABLE } from './mutators';
-import { applyRelicImmediate } from './relic-immediate-rules';
 import { hasRunRelic } from './relics';
 import { deriveDailyMutatorIndex, deriveDailyRunSeed, formatDailyDateKeyUtc } from './rng';
 import { createDungeonRunMapState } from './run-map';
@@ -249,7 +249,11 @@ export const createNewRun = (bestScore: number, options: CreateRunOptions = {}):
 
     let runWithRelics = applyStartingLoadout(run, options.startingLoadoutId ?? null);
     for (const relicId of runWithRelics.relicIds) {
-        runWithRelics = applyRelicImmediate(runWithRelics, relicId);
+        runWithRelics = applyRelicImmediateThroughGameplayCore(
+            runWithRelics,
+            relicId,
+            `starting-relic:${runWithRelics.runSeed}:${relicId}`
+        ).run;
     }
 
     const memorizeMs = getMemorizeDurationForRun(runWithRelics, 1) + runWithRelics.pendingMemorizeBonusMs;

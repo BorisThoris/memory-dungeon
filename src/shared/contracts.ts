@@ -6,7 +6,7 @@
  * (`.github/pull_request_template.md`). See docs/refinement-tasks REF-066. For optional payloads, consider aligning
  * with TypeScript `exactOptionalPropertyTypes` when feasible.
  */
-export const SAVE_SCHEMA_VERSION = 5;
+export const SAVE_SCHEMA_VERSION = 6;
 /** Bump when generation rules change (tile order, mutators, pair layout). */
 export const GAME_RULES_VERSION = 33;
 export const INITIAL_LIVES = 4;
@@ -863,6 +863,28 @@ export interface RunSummary {
     wildMenuRun?: boolean;
     dungeonShowcaseRun?: boolean;
     activeContract?: ContractFlags | null;
+    /** Bounded, schema-validated command evidence from the completed run. */
+    gameplayCommandJournal?: GameplayCommandJournalEntry[];
+    /** Bounded, schema-validated event evidence from the completed run. */
+    gameplayEventJournal?: GameplayEventJournalEntry[];
+}
+
+export interface GameplayCommandJournalEntry {
+    schemaVersion: number;
+    commandId: string;
+    type: string;
+}
+
+export interface GameplayEventJournalEntry {
+    schemaVersion: number;
+    eventId: string;
+    commandId: string;
+    sequence: number;
+    type: string;
+    source: {
+        kind: string;
+        id: string;
+    };
 }
 
 export interface RunTimerState {
@@ -943,6 +965,10 @@ export interface RunState {
     traitRouteObjectiveTriggeredTagsThisFloor: string[];
     /** Durable perks claimed from route reward drafts; optional for old run snapshots/tests. */
     rewardPerkIds?: RewardPerkId[];
+    /** Run-local deterministic command journal; persisted only through the bounded final summary. */
+    gameplayCommandJournal?: GameplayCommandJournalEntry[];
+    /** Run-local deterministic event journal; persisted only through the bounded final summary. */
+    gameplayEventJournal?: GameplayEventJournalEntry[];
     /**
      * Copied from save at run start: meta unlock grants +1 relic pick at **each** milestone (`relicShrineExtraPickUnlocked`).
      */

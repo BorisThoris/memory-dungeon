@@ -3,6 +3,9 @@ import type { RunState } from './contracts';
 import { createNewRun, finishMemorizePhase } from './game-core';
 import { createRunSummary } from './run-summary-rules';
 import { normalizeSaveData } from './save-data';
+import { createGameplayDefinitionCommand } from './gameplay-core-contracts';
+import { reduceGameplayCommand } from './gameplay-core';
+import { appendGameplayJournal } from './gameplay-journal';
 
 describe('createRunSummary', () => {
     it('persists final payoff counters for archive recap surfaces', () => {
@@ -50,9 +53,12 @@ describe('createRunSummary', () => {
                 startingLoadoutId: 'route_tactician'
             })
         );
+        const command = createGameplayDefinitionCommand('summary-lens', 'bonus_reward.echo_conduit_lens');
+        const commandResult = reduceGameplayCommand(run, command);
+        const journaledRun = appendGameplayJournal(commandResult.run, [command], commandResult.events);
         const summary = createRunSummary(
             {
-                ...run,
+                ...journaledRun,
                 status: 'gameOver',
                 traitRouteObjectiveCompletedThisFloor: true,
                 traitRouteObjectiveRewardClaimedThisFloor: true,
@@ -63,6 +69,8 @@ describe('createRunSummary', () => {
         const serializedSummary = JSON.parse(JSON.stringify(summary));
 
         expect(normalizeSaveData({ lastRunSummary: serializedSummary }).lastRunSummary).toEqual(serializedSummary);
+        expect(summary.gameplayCommandJournal).toEqual([command]);
+        expect(summary.gameplayEventJournal).toEqual(commandResult.events);
     });
 
     it('normalizes malformed runtime counters before persisting a summary', () => {

@@ -1,5 +1,6 @@
 import type { RelicId, RelicOfferServiceId, RunState } from './contracts';
 import { hasMutator } from './mutators';
+import { applyRelicImmediateThroughGameplayCore } from './gameplay-core-adapters';
 import {
     applyRelicOfferService,
     getRelicDraftOptionReasons,
@@ -11,7 +12,6 @@ import {
     rollRelicOptions,
     skipRelicOfferMilestone
 } from './relics';
-import { applyRelicImmediate } from './relic-immediate-rules';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 
 export const MAX_RELIC_PICKS_PER_OFFER = 3;
@@ -99,7 +99,11 @@ export const createRelicPickAdvanceResult = (run: RunState, relicId: RelicId): R
         ...run,
         relicIds: [...runRelicIds(run.relicIds), relicId]
     };
-    next = applyRelicImmediate(next, relicId);
+    next = applyRelicImmediateThroughGameplayCore(
+        next,
+        relicId,
+        `relic-pick:${run.runSeed}:${offer.tier}:${offer.pickRound}:${relicId}`
+    ).run;
 
     const remainingAfter = decrementRunCounter(offer.picksRemaining);
 

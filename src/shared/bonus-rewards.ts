@@ -7,6 +7,9 @@ import {
     type RunState,
     type StartingLoadoutId
 } from './contracts';
+import { createGameplayDefinitionCommand } from './gameplay-core-contracts';
+import { reduceGameplayCommand } from './gameplay-core';
+import { appendGameplayJournal } from './gameplay-journal';
 import { hashStringToSeed } from './rng';
 import { gainRelicFavor } from './relic-favor-rules';
 import { hasRunRelic } from './relics';
@@ -851,7 +854,31 @@ export const previewBonusRewardClaim = (
             reason: 'ineligible'
         };
     }
-    const applied = applyBonusRewardPayout(run, reward.payout);
+    const legacyApplied = applyBonusRewardPayout(run, reward.payout);
+    const applied =
+        reward.id !== 'echo_conduit_lens'
+            ? legacyApplied
+            : (() => {
+                  const command = createGameplayDefinitionCommand(
+                      `bonus-reward:${reward.instanceId}`,
+                      'bonus_reward.echo_conduit_lens'
+                  );
+                  const coreResult = reduceGameplayCommand(run, command);
+                  if (!coreResult.accepted) {
+                      throw new Error(`Migrated bonus reward command rejected: ${reward.id}`);
+                  }
+                  const journaledRun = appendGameplayJournal(coreResult.run, [command], coreResult.events);
+                  return {
+                      ...legacyApplied,
+                      run: {
+                          ...legacyApplied.run,
+                          peekCharges: journaledRun.peekCharges,
+                          rewardPerkIds: journaledRun.rewardPerkIds,
+                          gameplayCommandJournal: journaledRun.gameplayCommandJournal,
+                          gameplayEventJournal: journaledRun.gameplayEventJournal
+                      }
+                  };
+              })();
     return {
         eligible: true,
         rewardId: reward.id,

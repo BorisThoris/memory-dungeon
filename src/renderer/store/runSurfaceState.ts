@@ -2,6 +2,7 @@ import type { RunState, Tile, ViewState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { createGameplayPeekCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
+import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
     applyDestroyPair,
     applyFlashPair,
@@ -457,7 +458,11 @@ export const createArmedBoardPowerPressResult = ({
         );
         const result = reduceGameplayCommand(run, command);
         return result.accepted
-            ? { kind: 'peekApplied', run: result.run, events: result.events }
+            ? {
+                  kind: 'peekApplied',
+                  run: appendGameplayJournal(result.run, [command], result.events),
+                  events: result.events
+              }
             : { kind: 'handled' };
     }
 

@@ -12,6 +12,7 @@ import {
     gameplayEventSchema
 } from './gameplay-core-contracts';
 import { reduceGameplayCommand, replayGameplayCommands } from './gameplay-core';
+import { applyRelicImmediateThroughGameplayCore } from './gameplay-core-adapters';
 import { applyRelicImmediate } from './relic-immediate-rules';
 import { resolveTileTraitEffects } from './tile-trait-rules';
 
@@ -125,6 +126,21 @@ describe('deterministic gameplay core', () => {
             type: 'inventory.changed',
             source: { kind: 'relic', id: 'peek_charge_plus_one' }
         });
+    });
+
+    it('routes migrated relic immediates through the core while preserving legacy fallbacks', () => {
+        const initial = run({ peekCharges: 2, shuffleCharges: 1 });
+        const migrated = applyRelicImmediateThroughGameplayCore(initial, 'peek_charge_plus_one', 'adapter-peek');
+        const legacy = applyRelicImmediateThroughGameplayCore(initial, 'extra_shuffle_charge', 'adapter-shuffle');
+
+        expect(migrated).toMatchObject({ migrated: true, run: { peekCharges: 3 } });
+        expect(migrated.events).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ type: 'inventory.changed', source: { kind: 'relic', id: 'peek_charge_plus_one' } }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'build.peek_relic.claimed' })
+            ])
+        );
+        expect(legacy).toMatchObject({ migrated: false, run: { shuffleCharges: 2 }, events: [] });
     });
 
     it('models exactly the extra Peek granted by the existing Echo-Conduit perk condition', () => {

@@ -8,43 +8,9 @@ import { runMutatorIds, runRelicIds } from './relics';
 import { runRecord } from './run-record-guards';
 import { decrementRunCounter, runNonNegativeInteger } from './run-number-guards';
 import { normalizeSessionStats } from './session-stats-rules';
+import { RUN_INVENTORY_ITEM_IDS, type RunInventoryItemId } from './run-inventory-contracts';
 
-export type RunInventoryItemId =
-    | 'shuffle_charge'
-    | 'region_shuffle_charge'
-    | 'destroy_charge'
-    | 'peek_charge'
-    | 'stray_remove_charge'
-    | 'flash_pair_charge'
-    | 'undo_charge'
-    | 'gambit_token'
-    | 'wild_match_token'
-    | 'iron_key'
-    | 'master_key'
-    | 'guard_token'
-    | 'combo_shard'
-    | 'relic_loadout'
-    | 'mutator_loadout'
-    | 'contract_loadout';
-
-export const RUN_INVENTORY_ITEM_IDS = [
-    'shuffle_charge',
-    'region_shuffle_charge',
-    'destroy_charge',
-    'peek_charge',
-    'stray_remove_charge',
-    'flash_pair_charge',
-    'undo_charge',
-    'gambit_token',
-    'wild_match_token',
-    'iron_key',
-    'master_key',
-    'guard_token',
-    'combo_shard',
-    'relic_loadout',
-    'mutator_loadout',
-    'contract_loadout'
-] as const satisfies readonly RunInventoryItemId[];
+export { RUN_INVENTORY_ITEM_IDS, type RunInventoryItemId } from './run-inventory-contracts';
 
 export type RunInventoryItemKind = 'consumable' | 'loadout';
 export type RunInventoryMutability = 'mid_run' | 'floor_only' | 'shop_or_rest' | 'draft_only' | 'locked';
