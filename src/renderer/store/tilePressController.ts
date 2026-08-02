@@ -7,6 +7,7 @@ import {
     type MismatchScorePop
 } from './matchScorePop';
 import { createDungeonTilePressSurfaceResult } from './dungeonPressSurfaceState';
+import { projectGameplayFeedback } from './gameplayFeedbackAdapter';
 import {
     clearRunSurfaceArmedModes,
     createArmedBoardPowerPressResult,
@@ -172,11 +173,7 @@ export const createPlayingTilePressSurfaceResult = ({
             return { kind: 'patch', patch: { run: armedPowerPressResult.run }, audio, resolveDelayMs: null };
         }
         if (armedPowerPressResult.kind === 'peekApplied') {
-            if (
-                armedPowerPressResult.events.some(
-                    (event) => event.type === 'feedback.requested' && event.cue === 'power.peek.used'
-                )
-            ) {
+            if (projectGameplayFeedback(armedPowerPressResult.events).some((feedback) => feedback.audioCategory === 'peek')) {
                 audio.push({ kind: 'peekPower' });
             }
             return {

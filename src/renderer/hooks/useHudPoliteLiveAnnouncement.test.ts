@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Tile } from '../../shared/contracts';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import { getHudActionFeedbackProfile } from '../copy/hudActionFeedback';
+import type { GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
 import { formatHudActionFeedbackText, useHudPoliteLiveAnnouncement } from './useHudPoliteLiveAnnouncement';
 
 const base = {
@@ -376,6 +377,37 @@ describe('useHudPoliteLiveAnnouncement', () => {
             'Match resolved. 1/4 pairs cleared. Disarm traps: 1/2. Combo shard gained. 1 available.'
         );
         expect(result.current.priority).toBe('info');
+    });
+
+    it('uses one typed reward message instead of duplicate legacy resource-gain copy', async () => {
+        const feedback: GameplayFeedbackPresentation = {
+            audioCategory: 'reward-claim',
+            commandId: 'reward-1',
+            cue: 'build.bonus_shards.claimed',
+            eventId: 'reward-1:2',
+            message: 'Bonus Shards added one combo shard and one guard token.',
+            priority: 'info',
+            source: { kind: 'bonus_reward', id: 'bonus_shards' },
+            tone: 'reward'
+        };
+        const { result, rerender } = renderHook(
+            (p: { feedback: GameplayFeedbackPresentation | null; guards: number; shards: number }) =>
+                useHudPoliteLiveAnnouncement({
+                    ...base,
+                    gameplayFeedback: p.feedback,
+                    guardTokens: p.guards,
+                    comboShards: p.shards
+                }),
+            { initialProps: { feedback: null as GameplayFeedbackPresentation | null, guards: 0, shards: 0 } }
+        );
+
+        await act(async () => {
+            rerender({ feedback, guards: 1, shards: 1 });
+        });
+        await flushRaf();
+
+        expect(result.current.message).toBe('Bonus Shards added one combo shard and one guard token.');
+        expect(result.current.message).not.toContain('available');
     });
 
     it('summarizes stacked reward cashouts in the live-region action summary', async () => {

@@ -5,6 +5,7 @@ import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../
 import { getChainMilestoneFeedback } from '../copy/chainMilestoneFeedback';
 import { getChainRewardForecastCues, getChainRewardUrgencyCopy } from '../copy/chainMomentum';
 import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
+import type { GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
 import {
     GAUNTLET_WARN_SECS,
     changedTileTraitLabels,
@@ -70,6 +71,7 @@ const payoffIntensityAnnouncementLine = ({
 };
 
 interface HudPoliteLiveAnnouncementInput {
+    gameplayFeedback?: GameplayFeedbackPresentation | null;
     gauntletRemainingMs: number | null;
     gauntletActive: boolean;
     scoreParasiteActive: boolean;
@@ -159,6 +161,7 @@ const normalizeRecallFocusForAnnouncement = (focus: number, max: number): { focu
 const CHAIN_MILESTONE_THRESHOLDS = [3, 6, 10] as const;
 
 export const useHudPoliteLiveAnnouncement = ({
+    gameplayFeedback = null,
     gauntletRemainingMs,
     gauntletActive,
     scoreParasiteActive,
@@ -259,6 +262,11 @@ export const useHudPoliteLiveAnnouncement = ({
         enemyHazardHits: number;
         enemyHazardsDefeated: number;
     } | null>(null);
+    const announcedGameplayFeedbackEventIdRef = useRef<string | null>(null);
+    const newGameplayFeedback =
+        gameplayFeedback && gameplayFeedback.eventId !== announcedGameplayFeedbackEventIdRef.current
+            ? gameplayFeedback
+            : null;
     const chainSnapRef = useRef<{ level: number | null; streak: number } | null>(null);
     const hazardSnapRef = useRef<{
         level: number;
@@ -494,7 +502,11 @@ export const useHudPoliteLiveAnnouncement = ({
             return;
         }
 
-        if (boardLevel === snap.level && findablesClaimedThisFloor > snap.claimed) {
+        if (
+            boardLevel === snap.level &&
+            findablesClaimedThisFloor > snap.claimed &&
+            newGameplayFeedback?.source.kind !== 'findable'
+        ) {
             const claimedKind = detectClaimedFindableKind(snap.tiles, boardTiles);
             if (claimedKind != null) {
                 queuePoliteAnnouncement(getFindableAnnouncementText(claimedKind), {
@@ -505,11 +517,18 @@ export const useHudPoliteLiveAnnouncement = ({
         }
 
         pickupSnapRef.current = nextSnap;
-    }, [boardLevel, boardTiles, findablesClaimedThisFloor, queuePoliteAnnouncement]);
+    }, [boardLevel, boardTiles, findablesClaimedThisFloor, newGameplayFeedback, queuePoliteAnnouncement]);
 
     useEffect(() => {
         if (boardLevel === null) {
             actionSnapRef.current = null;
+            if (newGameplayFeedback) {
+                queuePoliteAnnouncement(newGameplayFeedback.message, {
+                    dedupeKey: `gameplay-event:${newGameplayFeedback.eventId}`,
+                    priority: newGameplayFeedback.priority
+                });
+                announcedGameplayFeedbackEventIdRef.current = newGameplayFeedback.eventId;
+            }
             return;
         }
 
@@ -544,10 +563,17 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (snap === null || snap.level !== boardLevel) {
             actionSnapRef.current = nextSnap;
+            if (newGameplayFeedback) {
+                queuePoliteAnnouncement(newGameplayFeedback.message, {
+                    dedupeKey: `gameplay-event:${newGameplayFeedback.eventId}`,
+                    priority: newGameplayFeedback.priority
+                });
+                announcedGameplayFeedbackEventIdRef.current = newGameplayFeedback.eventId;
+            }
             return;
         }
 
-        const lines: string[] = [];
+        const lines: string[] = newGameplayFeedback ? [newGameplayFeedback.message] : [];
         const lifeDelta = lives - snap.lives;
         const guardDelta = guardTokens - snap.guardTokens;
         const shardDelta = comboShards - snap.comboShards;
@@ -576,7 +602,7 @@ export const useHudPoliteLiveAnnouncement = ({
             lines.push(`Life restored. ${lives} ${lives === 1 ? 'life available' : 'lives available'}.`);
         } else if (guardDelta < 0) {
             lines.push(`Guard token spent. ${guardTokens} guard ${guardTokens === 1 ? 'token remains' : 'tokens remain'}.`);
-        } else if (guardDelta > 0) {
+        } else if (guardDelta > 0 && !newGameplayFeedback) {
             lines.push(`${pluralize(guardDelta, 'guard token')} gained. ${guardTokens} available.`);
         }
 
@@ -681,7 +707,7 @@ export const useHudPoliteLiveAnnouncement = ({
             );
         }
 
-        if (shardDelta > 0) {
+        if (shardDelta > 0 && !newGameplayFeedback) {
             lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'gained')}. ${comboShards} available.`);
         } else if (shardDelta < 0) {
             lines.push(`${resourceDeltaCopy(shardDelta, 'Combo shard', 'combo shard', 'spent')}. ${comboShards} available.`);
@@ -709,12 +735,18 @@ export const useHudPoliteLiveAnnouncement = ({
 
         if (lines.length > 0) {
             queuePoliteAnnouncement(lines.join(' '), {
-                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${countTileTraitTotal(tileTraitMatches)}:${countTileTraitTotal(tileTraitMismatches)}:${volatileTraitShuffles}`,
-                priority: lifeDelta < 0 || enemyHazardHitDelta > 0 ? 'error' : 'info'
+                dedupeKey: `action:${boardLevel}:${matchedPairs}:${mismatches}:${lives}:${guardTokens}:${comboShards}:${shopGold}:${shuffleCharges}:${regionShuffleCharges}:${stickyBlockIndex ?? 'none'}:${objectiveProgress}:${normalizedRecallFocusValue}:${normalizedRecallFocusMax}:${recallMatchesThisFloor}:${recallMistakesThisFloor}:${forgottenTileCountThisFloor}:${dungeonEnemiesDefeatedThisFloor}:${enemyHazardHitsThisFloor}:${enemyHazardsDefeatedThisFloor}:${countTileTraitTotal(tileTraitMatches)}:${countTileTraitTotal(tileTraitMismatches)}:${volatileTraitShuffles}:${newGameplayFeedback?.eventId ?? 'legacy'}`,
+                priority:
+                    lifeDelta < 0 || enemyHazardHitDelta > 0 || newGameplayFeedback?.priority === 'error'
+                        ? 'error'
+                        : 'info'
             });
         }
 
         actionSnapRef.current = nextSnap;
+        if (newGameplayFeedback) {
+            announcedGameplayFeedbackEventIdRef.current = newGameplayFeedback.eventId;
+        }
     }, [
         boardLevel,
         chainMatchStreak,
@@ -724,6 +756,7 @@ export const useHudPoliteLiveAnnouncement = ({
         lives,
         matchedPairs,
         mismatches,
+        newGameplayFeedback,
         objectiveLabel,
         objectiveProgress,
         objectiveRequired,

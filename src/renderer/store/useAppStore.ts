@@ -184,6 +184,10 @@ const sideRoomActionController = createSideRoomActionController({
     applyResolvedRun,
     continueToNextLevel: () => useAppStore.getState().continueToNextLevel(),
     getState: () => useAppStore.getState(),
+    playRewardClaimFeedback: () => {
+        void resumeAudioContext();
+        playRelicPickSfx(sfxGainFromStore());
+    },
     setState: (patch) => useAppStore.setState(patch)
 });
 
@@ -348,8 +352,12 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
         clearAllTimers();
-        void resumeAudioContext();
-        playRelicPickSfx(sfxGainFromStore());
+        // Migrated relics prove their cue came from the gameplay journal; legacy
+        // relics retain the established pick sound until their core migration.
+        if (!result.feedback || result.feedback.audioCategory === 'relic-pick') {
+            void resumeAudioContext();
+            playRelicPickSfx(sfxGainFromStore());
+        }
         set(result.patch);
         prepareMemorizeTimerForBoardReady(result.patch.run);
         runPersistenceInBackground(() => persistSaveDataSafely(result.nextSave));

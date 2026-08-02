@@ -13,6 +13,7 @@ interface SideRoomActionControllerDeps {
     applyResolvedRun: (run: RunState) => void;
     continueToNextLevel: () => void;
     getState: () => SideRoomActionControllerState;
+    playRewardClaimFeedback: () => void;
     setState: (patch: SideRoomActionSurfacePatch) => void;
 }
 
@@ -24,6 +25,7 @@ export const createSideRoomActionController = ({
     applyResolvedRun,
     continueToNextLevel,
     getState,
+    playRewardClaimFeedback,
     setState
 }: SideRoomActionControllerDeps): SideRoomActionController => ({
     applySideRoomAction: (applyAction) => {
@@ -37,6 +39,9 @@ export const createSideRoomActionController = ({
             return;
         }
         setState(result.patch);
+        if (result.kind === 'applied' && result.feedback?.audioCategory === 'reward-claim') {
+            playRewardClaimFeedback();
+        }
         if (result.kind === 'applied' && result.continueAfterPatch) {
             continueToNextLevel();
         }

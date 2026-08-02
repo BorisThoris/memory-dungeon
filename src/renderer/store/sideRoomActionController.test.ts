@@ -15,11 +15,13 @@ const createHarness = (initialState: TestState) => {
         state = { ...state, run };
     });
     const continueToNextLevel = vi.fn();
+    const playRewardClaimFeedback = vi.fn();
     const patches: Partial<TestState>[] = [];
     const controller = createSideRoomActionController({
         applyResolvedRun,
         continueToNextLevel,
         getState: () => state,
+        playRewardClaimFeedback,
         setState: (patch) => {
             patches.push(patch);
             state = { ...state, ...patch };
@@ -31,6 +33,7 @@ const createHarness = (initialState: TestState) => {
         continueToNextLevel,
         controller,
         getState: () => state,
+        playRewardClaimFeedback,
         patches
     };
 };
@@ -57,6 +60,32 @@ describe('sideRoomActionController', () => {
         expect(harness.patches).toEqual([{ run: nextRun, view: 'playing' }]);
         expect(harness.continueToNextLevel).toHaveBeenCalledTimes(1);
         expect(harness.applyResolvedRun).not.toHaveBeenCalled();
+        expect(harness.playRewardClaimFeedback).not.toHaveBeenCalled();
+    });
+
+    it('plays reward feedback only when a typed reward-claim event is appended', () => {
+        const run = createPlayablePathFixture('sideRoomPrimary').run!;
+        const nextRun = {
+            ...run,
+            sideRoom: null,
+            shopOffers: [],
+            gameplayEventJournal: [{
+                schemaVersion: 1,
+                commandId: 'claim-1',
+                eventId: 'claim-1:0',
+                sequence: 0,
+                source: { kind: 'bonus_reward', id: 'hazard_ward' },
+                type: 'feedback.requested',
+                cue: 'build.hazard_ward.claimed',
+                message: 'Hazard Ward claimed.',
+                tone: 'reward'
+            }]
+        } as unknown as RunState;
+        const harness = createHarness({ run, view: 'sideRoom' });
+
+        harness.controller.applySideRoomAction(() => nextRun);
+
+        expect(harness.playRewardClaimFeedback).toHaveBeenCalledTimes(1);
     });
 
     it('routes invalid missing run state through the surface patch', () => {

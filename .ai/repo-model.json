@@ -3,20 +3,20 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 2375,
-    "codeFileCount": 874,
-    "exportedSymbolCount": 3168,
+    "trackedFileCount": 2377,
+    "codeFileCount": 876,
+    "exportedSymbolCount": 3173,
     "contentItemCount": 56,
     "mechanicCount": 52,
     "stateFieldCount": 80,
-    "relationshipCount": 7840
+    "relationshipCount": 7858
   },
   "inventory": [
     {
       "path": ".ai/GAMEPLAY_MIGRATION.md",
       "category": "other",
-      "bytes": 5926,
-      "sha256": "2a7d6ca3561b9df83ae7b1547f3313e0b25e32576f807cccc10ecffb4b0bedf2"
+      "bytes": 6783,
+      "sha256": "472ceb61c1d1fb025db583a83c8ea6565cb09b8059fe82a35a5d304b4ff0d601"
     },
     {
       "path": ".ai/README.md",
@@ -3903,8 +3903,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 26785,
-      "sha256": "4b19c4f8b7062d8660b0c933bec38b7cb27380adf93fda0e1d99c4cba273d6aa"
+      "bytes": 27038,
+      "sha256": "7c00558059f2b4311a971a4d93d3b5e0bc8c88785eef35d0287832ea238aafe6"
     },
     {
       "path": "packages/notifications/package.json",
@@ -7449,8 +7449,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 372981,
-      "sha256": "b41c1878fdeb3bb8396c25f40fed584063f09247a863a5059476e9516a91c9c8"
+      "bytes": 373239,
+      "sha256": "64f1830efb682f86fd892ca308e9e19050835bc7674d4cf16fb22b2ab68e5893"
     },
     {
       "path": "src/renderer/components/GameScreenActionFeedbackRail.test.tsx",
@@ -8985,14 +8985,14 @@
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "category": "test",
-      "bytes": 47336,
-      "sha256": "8505106f3cd30dc40937f622bcb1cb55be31ea1760391ccdbac419bd6c5e8f48"
+      "bytes": 48767,
+      "sha256": "59be8e7c78e492fd3a05879398e3d2cc6dae9f4deb14ad2f47ad58306577d244"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "category": "source",
-      "bytes": 42364,
-      "sha256": "e48baf536d5a603f16fc2f72d725c720fc94da088a294603b2543472070087e4"
+      "bytes": 44086,
+      "sha256": "900a3ae9d812728f234353361f7f794711812839e42c8cc9dcaad1f06077f23a"
     },
     {
       "path": "src/renderer/hooks/useLatestRef.ts",
@@ -9181,6 +9181,18 @@
       "sha256": "146951368cbf7680bec7849f71a96c244c6a9cac82ac24340e885090c7597218"
     },
     {
+      "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "category": "test",
+      "bytes": 4264,
+      "sha256": "f039a638ebf0c0893a4015384e31f235485286ef6acf26703b40d619b56f3d94"
+    },
+    {
+      "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
+      "category": "source",
+      "bytes": 3526,
+      "sha256": "4364b6adc90b4c78fc3bf70f463866ee56e679e15c7d8856fff782653e5090e1"
+    },
+    {
       "path": "src/renderer/store/hydrationController.test.ts",
       "category": "test",
       "bytes": 3320,
@@ -9327,14 +9339,14 @@
     {
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "category": "test",
-      "bytes": 3550,
-      "sha256": "d49df3976f85878431a1f15a5af2c257213dfbf2d5fbaa8d4f015552453318ae"
+      "bytes": 4163,
+      "sha256": "9f6e57b300b8eca0c7d06da9718b0cd21befdc08f0fa1277efd5f57d00660255"
     },
     {
       "path": "src/renderer/store/relicOfferSurfaceState.ts",
       "category": "source",
-      "bytes": 2226,
-      "sha256": "8899dfb9c5d047d0f89ff73fe14712f47f3bac934f1bcb9ae6a2a7d59a20a5da"
+      "bytes": 2510,
+      "sha256": "382d60da8128c26cadb4f83397abd9ce45995a48087e3e92ea4c0c7acdca05e3"
     },
     {
       "path": "src/renderer/store/riskWagerSurfaceState.test.ts",
@@ -9495,26 +9507,26 @@
     {
       "path": "src/renderer/store/sideRoomActionController.test.ts",
       "category": "test",
-      "bytes": 3966,
-      "sha256": "06ffd646d723f2450c4171467b2b8d66315a8cbaa818957ecc5439ddc95c50ad"
+      "bytes": 5093,
+      "sha256": "b9d22d775dadb8d8076087086fe070c428e720000e8092762f13968207d79fab"
     },
     {
       "path": "src/renderer/store/sideRoomActionController.ts",
       "category": "source",
-      "bytes": 1330,
-      "sha256": "55bbf7efd7d03923f1fc85657e46d78800fc23aadfbbb3e2fca952e0d6c4c72b"
+      "bytes": 1543,
+      "sha256": "a3a25cc1f6352816d98763eb86d442b6351c44732ba83813d39531006bebc655"
     },
     {
       "path": "src/renderer/store/sideRoomSurfaceState.test.ts",
       "category": "test",
-      "bytes": 4489,
-      "sha256": "9b934efd7807afa3acd385b043a2411a173d99959c3c28b0404fe3e0033a6396"
+      "bytes": 4517,
+      "sha256": "4c13cecf1122269f7fb04dddda0b5ce2e9f04cd896c0491e05f3cacd7dfd1e05"
     },
     {
       "path": "src/renderer/store/sideRoomSurfaceState.ts",
       "category": "source",
-      "bytes": 3219,
-      "sha256": "190d32f7c923953e561388add45d0ca04869b9cd4e2310a2167f256a2464c7cf"
+      "bytes": 3505,
+      "sha256": "7b5b09f9a9d9f8b7a7e3160f0345fd79fbf59ae6ea15edd9f59c9bea68dab946"
     },
     {
       "path": "src/renderer/store/tilePressAudioCues.test.ts",
@@ -9537,8 +9549,8 @@
     {
       "path": "src/renderer/store/tilePressController.ts",
       "category": "source",
-      "bytes": 9241,
-      "sha256": "c295bebaefcdf520a87f56e33cf26cc63fffdda2c32c7ba6a92c703dd637bf31"
+      "bytes": 9233,
+      "sha256": "c303ec88f2327b23848a65eb99179f4ec32a13d0d27534ae62466f6981bbcff1"
     },
     {
       "path": "src/renderer/store/useAppStore.test.ts",
@@ -9549,8 +9561,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 26442,
-      "sha256": "0d4e479eeb870140bbf48a60d91a162ab5416aeb1d82eac2523ffadc1935b6e7"
+      "bytes": 26829,
+      "sha256": "9a7330999ec20336e4ee3082a1d8496054b94d0a6ca0256b3e131f61e2e59c1e"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -16545,7 +16557,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 6856,
+      "lineCount": 6862,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -16584,6 +16596,7 @@
         "file:src/renderer/keyboard/gameplayShortcuts.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
         "file:src/renderer/store/backgroundPersistence.ts",
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
@@ -20856,11 +20869,12 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1262,
+      "lineCount": 1294,
       "imports": [
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/hudActionFeedback.ts",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/contracts.ts"
       ],
       "exports": [],
@@ -20871,12 +20885,13 @@
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1063,
+      "lineCount": 1096,
       "imports": [
         "file:src/renderer/copy/chainMilestoneFeedback.ts",
         "file:src/renderer/copy/chainMomentum.ts",
         "file:src/renderer/copy/gameplayHints.ts",
         "file:src/renderer/copy/hudActionFeedback.ts",
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/hazard-tiles.ts",
         "file:src/shared/run-number-guards.ts"
@@ -21378,6 +21393,41 @@
       ]
     },
     {
+      "id": "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "path": "src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 121,
+      "imports": [
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+        "file:src/shared/gameplay-core-contracts.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "path": "src/renderer/store/gameplayFeedbackAdapter.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 91,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/gameplay-core-contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackAudioCategory",
+        "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackPresentation",
+        "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getLatestGameplayFeedback",
+        "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getNewGameplayFeedback",
+        "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback"
+      ],
+      "testedBy": [
+        "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+        "file:src/renderer/store/gameplayFeedbackAdapter.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/store/hydrationController.test.ts",
       "path": "src/renderer/store/hydrationController.test.ts",
       "layer": "renderer",
@@ -21841,7 +21891,7 @@
       "path": "src/renderer/store/relicOfferSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 104,
+      "lineCount": 122,
       "imports": [
         "file:src/renderer/store/relicOfferSurfaceState.ts",
         "file:src/shared/contracts.ts",
@@ -21856,8 +21906,9 @@
       "path": "src/renderer/store/relicOfferSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 81,
+      "lineCount": 87,
       "imports": [
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/honorUnlocks.ts",
@@ -22372,7 +22423,7 @@
       "path": "src/renderer/store/sideRoomActionController.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 105,
+      "lineCount": 134,
       "imports": [
         "file:src/renderer/store/sideRoomActionController.ts",
         "file:src/shared/contracts.ts",
@@ -22387,7 +22438,7 @@
       "path": "src/renderer/store/sideRoomActionController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 45,
+      "lineCount": 50,
       "imports": [
         "file:src/renderer/store/sideRoomSurfaceState.ts",
         "file:src/shared/contracts.ts"
@@ -22404,7 +22455,7 @@
       "path": "src/renderer/store/sideRoomSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 132,
+      "lineCount": 133,
       "imports": [
         "file:src/renderer/store/sideRoomSurfaceState.ts",
         "file:src/shared/contracts.ts",
@@ -22419,8 +22470,9 @@
       "path": "src/renderer/store/sideRoomSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 118,
+      "lineCount": 124,
       "imports": [
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/shared/contracts.ts"
@@ -22488,9 +22540,10 @@
       "path": "src/renderer/store/tilePressController.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 265,
+      "lineCount": 262,
       "imports": [
         "file:src/renderer/store/dungeonPressSurfaceState.ts",
+        "file:src/renderer/store/gameplayFeedbackAdapter.ts",
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/shared/board-powers.ts",
@@ -22536,7 +22589,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 848,
+      "lineCount": 856,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -26523,6 +26576,7 @@
         "symbol:src/shared/gameplay-core-contracts.ts#WARDEN_DEFINITIONS"
       ],
       "testedBy": [
+        "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
         "file:src/shared/gameplay-core.test.ts",
         "file:src/shared/gameplay-interaction-graph.test.ts",
         "file:src/shared/gameplay-journal.test.ts",
@@ -33931,8 +33985,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 6855,
-      "endLine": 6855
+      "line": 6861,
+      "endLine": 6861
     },
     {
       "id": "symbol:src/renderer/components/GameScreenActionFeedbackRail.tsx#GameScreenActionFeedbackRail",
@@ -38547,32 +38601,32 @@
       "name": "detectClaimedFindableKind",
       "kind": "ExportSpecifier",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#formatHudActionFeedbackText",
       "name": "formatHudActionFeedbackText",
       "kind": "ExportSpecifier",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#getFindableToastText",
       "name": "getFindableToastText",
       "kind": "ExportSpecifier",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 23,
-      "endLine": 23
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts#useHudPoliteLiveAnnouncement",
       "name": "useHudPoliteLiveAnnouncement",
       "kind": "value",
       "file": "src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
-      "line": 161,
-      "endLine": 1062
+      "line": 163,
+      "endLine": 1095
     },
     {
       "id": "symbol:src/renderer/hooks/useLatestRef.ts#useLatestRef",
@@ -38941,6 +38995,46 @@
       "file": "src/renderer/store/dungeonPressSurfaceState.ts",
       "line": 30,
       "endLine": 71
+    },
+    {
+      "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackAudioCategory",
+      "name": "GameplayFeedbackAudioCategory",
+      "kind": "type",
+      "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
+      "line": 7,
+      "endLine": 7
+    },
+    {
+      "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackPresentation",
+      "name": "GameplayFeedbackPresentation",
+      "kind": "interface",
+      "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
+      "line": 9,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getLatestGameplayFeedback",
+      "name": "getLatestGameplayFeedback",
+      "kind": "value",
+      "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
+      "line": 80,
+      "endLine": 82
+    },
+    {
+      "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getNewGameplayFeedback",
+      "name": "getNewGameplayFeedback",
+      "kind": "value",
+      "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
+      "line": 84,
+      "endLine": 90
+    },
+    {
+      "id": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback",
+      "name": "projectGameplayFeedback",
+      "kind": "value",
+      "file": "src/renderer/store/gameplayFeedbackAdapter.ts",
+      "line": 60,
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/store/hydrationController.ts#createHydratedAppStatePatch",
@@ -39555,16 +39649,16 @@
       "name": "createRelicOfferServiceSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/relicOfferSurfaceState.ts",
-      "line": 61,
-      "endLine": 80
+      "line": 67,
+      "endLine": 86
     },
     {
       "id": "symbol:src/renderer/store/relicOfferSurfaceState.ts#createRelicPickSurfaceResult",
       "name": "createRelicPickSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/relicOfferSurfaceState.ts",
-      "line": 29,
-      "endLine": 59
+      "line": 34,
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/store/riskWagerSurfaceState.ts#createRiskWagerSurfaceResult",
@@ -40083,48 +40177,48 @@
       "name": "createSideRoomActionController",
       "kind": "value",
       "file": "src/renderer/store/sideRoomActionController.ts",
-      "line": 23,
-      "endLine": 44
+      "line": 24,
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/store/sideRoomSurfaceState.ts#createDeadInterludeGameOverRun",
       "name": "createDeadInterludeGameOverRun",
       "kind": "value",
       "file": "src/renderer/store/sideRoomSurfaceState.ts",
-      "line": 68,
-      "endLine": 82
+      "line": 73,
+      "endLine": 87
     },
     {
       "id": "symbol:src/renderer/store/sideRoomSurfaceState.ts#createSideRoomActionSurfaceResult",
       "name": "createSideRoomActionSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/sideRoomSurfaceState.ts",
-      "line": 84,
-      "endLine": 117
+      "line": 89,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/store/sideRoomSurfaceState.ts#createSideRoomResultSurfacePatch",
       "name": "createSideRoomResultSurfacePatch",
       "kind": "value",
       "file": "src/renderer/store/sideRoomSurfaceState.ts",
-      "line": 23,
-      "endLine": 35
+      "line": 27,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/store/sideRoomSurfaceState.ts#shouldContinueAfterSideRoomResult",
       "name": "shouldContinueAfterSideRoomResult",
       "kind": "value",
       "file": "src/renderer/store/sideRoomSurfaceState.ts",
-      "line": 37,
-      "endLine": 38
+      "line": 41,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/store/sideRoomSurfaceState.ts#SideRoomActionSurfacePatch",
       "name": "SideRoomActionSurfacePatch",
       "kind": "type",
       "file": "src/renderer/store/sideRoomSurfaceState.ts",
-      "line": 66,
-      "endLine": 66
+      "line": 71,
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/store/tilePressAudioCues.ts#playTilePressAudioCues",
@@ -40147,32 +40241,32 @@
       "name": "createPlayingTilePressSurfaceResult",
       "kind": "value",
       "file": "src/renderer/store/tilePressController.ts",
-      "line": 49,
-      "endLine": 264
+      "line": 50,
+      "endLine": 261
     },
     {
       "id": "symbol:src/renderer/store/tilePressController.ts#PlayingTilePressSurfaceResult",
       "name": "PlayingTilePressSurfaceResult",
       "kind": "type",
       "file": "src/renderer/store/tilePressController.ts",
-      "line": 43,
-      "endLine": 47
+      "line": 44,
+      "endLine": 48
     },
     {
       "id": "symbol:src/renderer/store/tilePressController.ts#TilePressAudioCue",
       "name": "TilePressAudioCue",
       "kind": "type",
       "file": "src/renderer/store/tilePressController.ts",
-      "line": 21,
-      "endLine": 27
+      "line": 22,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/store/useAppStore.ts#useAppStore",
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 261,
-      "endLine": 837
+      "line": 265,
+      "endLine": 845
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -58110,7 +58204,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 3851
+          "line": 3857
         }
       ],
       "tests": [
@@ -67231,6 +67325,36 @@
       "id": "exports:src/renderer/store/dungeonPressSurfaceState.ts->symbol:src/renderer/store/dungeonPressSurfaceState.ts#createDungeonTilePressSurfaceResult",
       "source": "file:src/renderer/store/dungeonPressSurfaceState.ts",
       "target": "symbol:src/renderer/store/dungeonPressSurfaceState.ts#createDungeonTilePressSurfaceResult",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/gameplayFeedbackAdapter.ts->symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackAudioCategory",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackAudioCategory",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/gameplayFeedbackAdapter.ts->symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackPresentation",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#GameplayFeedbackPresentation",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/gameplayFeedbackAdapter.ts->symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getLatestGameplayFeedback",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getLatestGameplayFeedback",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/gameplayFeedbackAdapter.ts->symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getNewGameplayFeedback",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#getNewGameplayFeedback",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/gameplayFeedbackAdapter.ts->symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "symbol:src/renderer/store/gameplayFeedbackAdapter.ts#projectGameplayFeedback",
       "kind": "exports"
     },
     {
@@ -84349,6 +84473,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/store/matchScorePop.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/store/matchScorePop.ts",
@@ -88651,6 +88781,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "target": "file:src/shared/contracts.ts",
@@ -88678,6 +88814,12 @@
       "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/renderer/copy/hudActionFeedback.ts",
       "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
       "target": "file:src/renderer/copy/hudActionFeedback.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
       "kind": "imports"
     },
     {
@@ -89026,6 +89168,30 @@
       "id": "imports:src/renderer/store/dungeonPressSurfaceState.ts->src/shared/dungeon-rules.ts",
       "source": "file:src/renderer/store/dungeonPressSurfaceState.ts",
       "target": "file:src/shared/dungeon-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/gameplayFeedbackAdapter.test.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/gameplayFeedbackAdapter.test.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/gameplayFeedbackAdapter.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/gameplayFeedbackAdapter.ts->src/shared/gameplay-core-contracts.ts",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "file:src/shared/gameplay-core-contracts.ts",
       "kind": "imports"
     },
     {
@@ -89512,6 +89678,12 @@
       "id": "imports:src/renderer/store/relicOfferSurfaceState.test.ts->src/shared/test/game-fixtures.ts",
       "source": "file:src/renderer/store/relicOfferSurfaceState.test.ts",
       "target": "file:src/shared/test/game-fixtures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/relicOfferSurfaceState.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/store/relicOfferSurfaceState.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
       "kind": "imports"
     },
     {
@@ -90241,6 +90413,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/sideRoomSurfaceState.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/store/sideRoomSurfaceState.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/sideRoomSurfaceState.ts->src/renderer/store/matchScorePop.ts",
       "source": "file:src/renderer/store/sideRoomSurfaceState.ts",
       "target": "file:src/renderer/store/matchScorePop.ts",
@@ -90316,6 +90494,12 @@
       "id": "imports:src/renderer/store/tilePressController.ts->src/renderer/store/dungeonPressSurfaceState.ts",
       "source": "file:src/renderer/store/tilePressController.ts",
       "target": "file:src/renderer/store/dungeonPressSurfaceState.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/tilePressController.ts->src/renderer/store/gameplayFeedbackAdapter.ts",
+      "source": "file:src/renderer/store/tilePressController.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
       "kind": "imports"
     },
     {
@@ -102483,6 +102667,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/store/gameplayFeedbackAdapter.ts->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/store/gameplayFeedbackAdapter.ts->file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "source": "file:src/renderer/store/gameplayFeedbackAdapter.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/store/hydrationController.ts->file:src/renderer/store/hydrationController.test.ts",
       "source": "file:src/renderer/store/hydrationController.ts",
       "target": "file:src/renderer/store/hydrationController.test.ts",
@@ -105198,6 +105394,12 @@
       "id": "tested_by:src/shared/gameplay-core-adapters.ts->file:src/shared/gameplay-core.test.ts",
       "source": "file:src/shared/gameplay-core-adapters.ts",
       "target": "file:src/shared/gameplay-core.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/gameplay-core-contracts.ts->file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
+      "source": "file:src/shared/gameplay-core-contracts.ts",
+      "target": "file:src/renderer/store/gameplayFeedbackAdapter.test.ts",
       "kind": "tested_by"
     },
     {

@@ -74,6 +74,7 @@ import { GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { StatTile } from '../ui';
 import { useAppStore } from '../store/useAppStore';
+import { getLatestGameplayFeedback } from '../store/gameplayFeedbackAdapter';
 import GameLeftToolbar from './GameLeftToolbar';
 import { GameScreenActionFeedbackRail } from './GameScreenActionFeedbackRail';
 import { GameScreenDungeonRunStrip } from './GameScreenDungeonRunStrip';
@@ -3807,11 +3808,16 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         void resumeAudioContext();
         playCountdownPressureSfx(shuffleSfxGain);
     }, [gauntletActive, gauntletRemainingMs, run.status, shuffleSfxGain]);
+    const typedGameplayFeedback = useMemo(
+        () => getLatestGameplayFeedback(run),
+        [run.gameplayEventJournal]
+    );
     const {
         message: politeHudAnnouncement,
         priority: politeHudAnnouncementPriority,
         queuePoliteAnnouncement
     } = useHudPoliteLiveAnnouncement({
+        gameplayFeedback: typedGameplayFeedback,
         boardLevel: run.board?.level ?? null,
         boardTiles: run.board?.tiles ?? [],
         findablesClaimedThisFloor: run.findablesClaimedThisFloor,

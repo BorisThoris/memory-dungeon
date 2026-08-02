@@ -3,11 +3,16 @@ import { applyRelicOfferServiceToRun, completeRelicPickAndAdvance } from '../../
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
 import { mergeRelicPickStat, normalizeSaveData } from '../../shared/save-data';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
+import {
+    getNewGameplayFeedback,
+    type GameplayFeedbackPresentation
+} from './gameplayFeedbackAdapter';
 
 type RelicPickSurfaceResult =
     | { kind: 'ignored' }
     | {
           kind: 'accepted';
+          feedback: GameplayFeedbackPresentation | null;
           nextSave: SaveData;
           patch: Pick<
               RunSurfaceState,
@@ -48,6 +53,7 @@ export const createRelicPickSurfaceResult = ({
 
     return {
         kind: 'accepted',
+        feedback: getNewGameplayFeedback(run, nextRun).find((item) => item.audioCategory === 'relic-pick') ?? null,
         nextSave,
         patch: {
             run: nextRun,

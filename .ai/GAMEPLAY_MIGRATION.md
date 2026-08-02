@@ -57,6 +57,19 @@ The Catalyst slice connects momentum pickups to a real survival consequence:
 
 The request-event boundary avoids duplicating the nuanced streak, mimic, route, dungeon, life-cap, and Meditation rules in two reducers. It is intentionally temporary: when match survival becomes command-owned, the typed request can be consumed inside the core without changing content definitions or journal history.
 
+## Shared renderer feedback boundary
+
+All migrated slices now cross one read-only renderer adapter. It validates persisted journal entries, deduplicates by core-owned event ID, preserves the typed message and tone, and assigns only presentation ownership:
+
+- Peek cues are played by the tile-action controller;
+- relic-pick cues are played by the relic action;
+- bonus-reward cues are played by the side-room claim action;
+- trait, findable, and proc cues remain inside match resolution so existing payoff audio is not doubled;
+- every category enters the same polite accessibility queue;
+- typed inventory overflow is expanded with the actual converted score amount.
+
+The adapter never mutates the run or infers whether an effect happened. Commands and events remain gameplay truth; Zustand, React, and audio only decide how a validated event is presented.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:
@@ -75,6 +88,6 @@ Implemented in the Conduit Cartographer vertical slice:
 
 Still required before the vertical slice is complete:
 
-- consume every typed feedback event in common renderer/audio/accessibility adapters (Peek audio is the first migrated consumer);
+- migrate remaining legacy feedback producers onto the common journal adapter as their gameplay definitions move into the core;
 - add route-choice outcome scoring to the headless build evaluation once route decisions enter the command core;
 - migrate the next cohesive player build rather than adding isolated definitions.

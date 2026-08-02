@@ -80,6 +80,24 @@ describe('relicOfferSurfaceState', () => {
         expect(result.patch.tileSwapFirstTileId).toBeNull();
         expect(result.patch.saveData.playerStats?.relicPickCounts?.extra_shuffle_charge).toBe(1);
         expect(result.patch.settings).toBe(result.nextSave.settings);
+        expect(result.feedback).toBeNull();
+    });
+
+    it('projects migrated relic pick feedback from the typed gameplay journal', () => {
+        const result = createRelicPickSurfaceResult({
+            relicId: 'peek_charge_plus_one',
+            run: offeredRun(),
+            saveData: createDefaultSaveData()
+        });
+
+        expect(result).toMatchObject({
+            kind: 'accepted',
+            feedback: {
+                audioCategory: 'relic-pick',
+                cue: 'build.peek_relic.claimed',
+                source: { kind: 'relic', id: 'peek_charge_plus_one' }
+            }
+        });
     });
 
     it('applies relic offer services only while an offer is open', () => {

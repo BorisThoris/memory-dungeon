@@ -106,6 +106,7 @@ describe('sideRoomSurfaceState', () => {
 
         expect(result).toEqual({
             continueAfterPatch: true,
+            feedback: null,
             kind: 'applied',
             patch: {
                 run: nextRun,

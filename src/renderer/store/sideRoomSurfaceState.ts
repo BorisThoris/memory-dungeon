@@ -1,6 +1,10 @@
 import type { RunState, ViewState } from '../../shared/contracts';
 import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import { clearRunSurfaceArmedModes, type RunSurfaceState } from './runSurfaceState';
+import {
+    getNewGameplayFeedback,
+    type GameplayFeedbackPresentation
+} from './gameplayFeedbackAdapter';
 
 type SideRoomResultSurfacePatch =
     | {
@@ -59,6 +63,7 @@ type SideRoomActionSurfaceResult =
       }
     | {
           continueAfterPatch: boolean;
+          feedback: GameplayFeedbackPresentation | null;
           kind: 'applied';
           patch: SideRoomResultSurfacePatch;
       };
@@ -111,6 +116,7 @@ export const createSideRoomActionSurfaceResult = (
     const patch = createSideRoomResultSurfacePatch(nextRun);
     return {
         continueAfterPatch: shouldContinueAfterSideRoomResult(patch),
+        feedback: getNewGameplayFeedback(run, nextRun).find((item) => item.audioCategory === 'reward-claim') ?? null,
         kind: 'applied',
         patch
     };
