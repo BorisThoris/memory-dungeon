@@ -60,6 +60,8 @@ Bump **`GAME_RULES_VERSION`** when pair generation, scoring, or player-facing ru
 
 ## Gameplay & product bullets (compressed)
 
+- **AI-first gameplay core:** Seven cohesive build slices now cross the strict command/event boundary: Conduit Cartographer, Warden, Combo Shard Engine, Saboteur, Vaultbreaker, Slayer, and Seer. Seer makes Secret Favor, Scout Glint, Memory Nail, Stray Hook, Pin, and Stray Remove queryable and replayable as one information-control loop; architecture and status live in [`.ai/GAMEPLAY_MIGRATION.md`](../../.ai/GAMEPLAY_MIGRATION.md).
+
 - **Ship gate:** REG-068’s reusable acceptance bar lives in [Complete product definition of done](../product/COMPLETE_PRODUCT_DEFINITION_OF_DONE.md). Use it before opening broad run-map/economy work, and keep REG-119 as the later close-the-loop acceptance report.
 - **Modes:** Classic, daily, endless (floor schedule), gauntlet, meditation, puzzle — mode gates live in shared helpers + `game.ts` constructors; endless uses **`pickFloorScheduleEntry`** / **`usesEndlessFloorSchedule`** when rules version ≥ schedule version.
 - **Powers & meta:** `powersUsedThisRun` gates **Perfect Memory** (`ACH_PERFECT_CLEAR`); pins do not set the flag — see encyclopedia + `RunState` JSDoc. Inventory exposes a **muted hint** via `copy/inventoryScreen.ts` aligned with that contract.

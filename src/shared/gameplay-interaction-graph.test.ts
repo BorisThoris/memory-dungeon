@@ -11,6 +11,7 @@ import {
     COMBO_SHARD_ENGINE_DEFINITIONS,
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
+    SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS
@@ -403,6 +404,44 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'economy.relic_favor', target: 'progression.relic_draft', kind: 'grants' }),
             expect.objectContaining({ source: 'safety.parasite_ward', target: 'hazard.score_parasite', kind: 'counterplay' }),
             expect.objectContaining({ source: 'build.boss_hunter', target: 'reward.boss_trophy_cache', kind: 'consequence' })
+        ]));
+    });
+
+    it('connects the Seer from secrets and Scout Glints through Pin, Peek, and safe correction decisions', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const sourceNodeByDefinition = new Map([
+            ['bonus_reward.secret_favor', 'reward.secret_favor'],
+            ['relic.stray_charge_plus_one', 'relic.stray_charge_plus_one'],
+            ['relic.pin_cap_plus_one', 'relic.pin_cap_plus_one'],
+            ['findable.scout_glint', 'findable.scout_glint']
+        ]);
+
+        for (const definition of SEER_DEFINITIONS) {
+            const nodeId = sourceNodeByDefinition.get(definition.id);
+            expect(nodeId, definition.id).toBeTruthy();
+            expect(byId.get(nodeId!), definition.id).toMatchObject({
+                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+            });
+        }
+
+        expect(byId.get('build.reveal_scout')).toMatchObject({ kind: 'build', role: 'information_control_build' });
+        expect(byId.get('inventory.stray_remove_charge')).toMatchObject({
+            kind: 'inventory',
+            role: 'bounded_board_control_resource'
+        });
+        expect(byId.get('power.pin')).toMatchObject({ kind: 'power', role: 'player_authored_memory_marker' });
+        expect(byId.get('power.stray_remove')).toMatchObject({ kind: 'power', role: 'completion_safe_board_control' });
+        expect(byId.get('board.scout_reveal')).toMatchObject({ kind: 'board', role: 'information_consequence' });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'reward.secret_favor', target: 'inventory.peek_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'reward.secret_favor', target: 'economy.relic_favor', kind: 'grants' }),
+            expect.objectContaining({ source: 'relic.stray_charge_plus_one', target: 'inventory.stray_remove_charge', kind: 'grants' }),
+            expect.objectContaining({ source: 'relic.pin_cap_plus_one', target: 'power.pin', kind: 'modifies' }),
+            expect.objectContaining({ source: 'findable.scout_glint', target: 'board.scout_reveal', kind: 'triggers' }),
+            expect.objectContaining({ source: 'inventory.stray_remove_charge', target: 'power.stray_remove', kind: 'enables' }),
+            expect.objectContaining({ source: 'power.stray_remove', target: 'objective.floor_clear', kind: 'counterplay' }),
+            expect.objectContaining({ source: 'board.scout_reveal', target: 'route.mystery', kind: 'consequence' }),
+            expect.objectContaining({ source: 'build.reveal_scout', target: 'progression.relic_draft', kind: 'consequence' })
         ]));
     });
 });

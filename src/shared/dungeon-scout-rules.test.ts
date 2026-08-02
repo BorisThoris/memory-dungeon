@@ -50,6 +50,7 @@ describe('dungeon scout rules', () => {
         const board = boardWith([tile('route-a', 'route', { routeSpecialKind: 'secret_door' })]);
 
         expect(applyFindableScoutGlint(board, run, 'score_glint')).toEqual({ board, scouted: false });
+        expect(applyFindableScoutGlint(board, run, 'scout_glint', 0)).toEqual({ board, scouted: false });
         expect(applyFindableScoutGlint(board, run, 'scout_glint').board.tiles[0]).toMatchObject({
             routeSpecialRevealed: true,
             routeSpecialRevealSource: 'omen_seal'

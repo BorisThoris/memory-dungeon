@@ -1,8 +1,11 @@
 import type { RunState } from './contracts';
+import { tileIsStrayEligiblePreview } from './board-power-targeting';
 import {
     GAMEPLAY_CONTENT_DEFINITIONS,
     createGameplayDefinitionCommand,
     createGameplayPeekCommand,
+    createGameplayPinToggleCommand,
+    createGameplayStrayRemoveCommand,
     gameplayCommandSchema,
     gameplayEventSchema,
     type GameplayCommand,
@@ -52,6 +55,16 @@ const availablePeekTargets = (run: RunState): string[] => {
         .sort((left, right) => left.localeCompare(right));
 };
 
+const availableStrayTargets = (run: RunState): string[] => {
+    const board = run.board;
+    return board
+        ? board.tiles
+              .filter((tile) => tileIsStrayEligiblePreview(board, tile.id))
+              .map((tile) => tile.id)
+              .sort((left, right) => left.localeCompare(right))
+        : [];
+};
+
 const commandForStep = (
     run: RunState,
     rng: () => number,
@@ -60,13 +73,27 @@ const commandForStep = (
     invalidTraitChance: number
 ): GameplayCommand => {
     const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
-    const actionIndex = pickRngIndex(rng, definitions.length + 1);
+    const actionIndex = pickRngIndex(rng, definitions.length + 3);
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);
         const target = targets[pickRngIndex(rng, targets.length)];
         if (target) {
             return createGameplayPeekCommand(commandId, target);
+        }
+    }
+    if (actionIndex === definitions.length + 1) {
+        const targets = availablePeekTargets(run);
+        const target = targets[pickRngIndex(rng, targets.length)];
+        if (target) {
+            return createGameplayPinToggleCommand(commandId, target);
+        }
+    }
+    if (actionIndex === definitions.length + 2) {
+        const targets = availableStrayTargets(run);
+        const target = targets[pickRngIndex(rng, targets.length)];
+        if (target) {
+            return createGameplayStrayRemoveCommand(commandId, target);
         }
     }
 

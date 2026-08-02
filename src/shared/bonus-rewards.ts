@@ -748,10 +748,17 @@ const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string
     cursed_opener_contract: 'bonus_reward.cursed_opener_contract',
     echo_conduit_lens: 'bonus_reward.echo_conduit_lens',
     hazard_banisher: 'bonus_reward.hazard_banisher',
-    hazard_ward: 'bonus_reward.hazard_ward'
+    hazard_ward: 'bonus_reward.hazard_ward',
+    secret_favor: 'bonus_reward.secret_favor'
 };
 
 const bonusRewardMatchesMigratedDefinition = (reward: BonusRewardInstance): boolean => {
+    if (reward.id === 'secret_favor') {
+        return (
+            runNonNegativeInteger(reward.payout.relicFavorProgress) === 1 &&
+            runNonNegativeInteger(reward.payout.inventoryItems?.peek_charge) === 1
+        );
+    }
     if (reward.id !== 'bonus_shards') {
         return true;
     }
@@ -898,6 +905,13 @@ export const previewBonusRewardClaim = (
                                 peekCharges: journaledRun.peekCharges,
                                 rewardPerkIds: journaledRun.rewardPerkIds
                             }
+                          : reward.id === 'secret_favor'
+                            ? {
+                                  peekCharges: journaledRun.peekCharges,
+                                  relicFavorProgress: journaledRun.relicFavorProgress,
+                                  bonusRelicPicksNextOffer: journaledRun.bonusRelicPicksNextOffer,
+                                  favorBonusRelicPicksNextOffer: journaledRun.favorBonusRelicPicksNextOffer
+                              }
                           : reward.id === 'chest_gold'
                             ? {
                                 dungeonKeys: journaledRun.dungeonKeys,

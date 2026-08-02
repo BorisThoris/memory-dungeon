@@ -46,6 +46,7 @@ export interface TurnMatchBoardResolutionInput {
     firstTileId: string;
     secondTileId: string;
     thirdTileId?: string;
+    findableScoutGain?: number;
 }
 
 export const resolveTurnMatchBoardResolution = ({
@@ -56,7 +57,8 @@ export const resolveTurnMatchBoardResolution = ({
     secondTile,
     firstTileId,
     secondTileId,
-    thirdTileId
+    thirdTileId,
+    findableScoutGain
 }: TurnMatchBoardResolutionInput): TurnMatchBoardResolutionResult => {
     const boardBeforeEnemyDamage = createMatchedPairClaimBoard({
         board,
@@ -70,7 +72,12 @@ export const resolveTurnMatchBoardResolution = ({
         (firstTile.dungeonCardEffectId ?? secondTile.dungeonCardEffectId) === 'rune_seal'
             ? resolveOneArmedTrapPair(boardBeforeEnemyDamage)
             : boardBeforeEnemyDamage;
-    const findableScout = applyFindableScoutGlint(dungeonEffectBoard, run, context.claimedFindableKind);
+    const findableScout = applyFindableScoutGlint(
+        dungeonEffectBoard,
+        run,
+        context.claimedFindableKind,
+        findableScoutGain
+    );
     const matchedHazards = hazardKindsInTiles(board.tiles, [firstTileId, secondTileId]);
     const cascadeHazard = matchedHazards.has('cascade_cache')
         ? applyCascadeCacheHazard(findableScout.board, run, context.matchedPairKey)

@@ -20,6 +20,7 @@ export interface GameplayMatchRewardAdapterResult {
     comboShardGain: number;
     safeHazardWardGain: number;
     scoreGain: number;
+    scoutRevealGain: number;
     migrated: boolean;
 }
 
@@ -47,7 +48,9 @@ const RELIC_IMMEDIATE_DEFINITION_IDS: Partial<Record<RelicId, string>> = {
     shrine_echo: 'relic.shrine_echo',
     chapter_compass: 'relic.chapter_compass',
     wager_surety: 'relic.wager_surety',
-    parasite_ledger: 'relic.parasite_ledger'
+    parasite_ledger: 'relic.parasite_ledger',
+    stray_charge_plus_one: 'relic.stray_charge_plus_one',
+    pin_cap_plus_one: 'relic.pin_cap_plus_one'
 };
 
 /**
@@ -92,9 +95,19 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
               ? 'findable.ward_spark'
               : findableKind === 'score_glint'
                 ? 'findable.score_glint'
-              : null;
+              : findableKind === 'scout_glint'
+                ? 'findable.scout_glint'
+                : null;
     if (!definitionId || !findableKind) {
-        return { commands: [], events: [], comboShardGain: 0, safeHazardWardGain: 0, scoreGain: 0, migrated: false };
+        return {
+            commands: [],
+            events: [],
+            comboShardGain: 0,
+            safeHazardWardGain: 0,
+            scoreGain: 0,
+            scoutRevealGain: 0,
+            migrated: false
+        };
     }
     const command = createGameplayDefinitionCommand(commandId, definitionId, {
         matchedFindables: [findableKind]
@@ -116,6 +129,10 @@ export const resolveFindableMatchRewardThroughGameplayCore = (
         ),
         scoreGain: result.events.reduce(
             (sum, event) => sum + (event.type === 'score.requested' ? event.amount : 0),
+            0
+        ),
+        scoutRevealGain: result.events.reduce(
+            (sum, event) => sum + (event.type === 'scout_reveal.requested' ? event.amount : 0),
             0
         ),
         migrated: true

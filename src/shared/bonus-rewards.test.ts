@@ -559,6 +559,45 @@ describe('REG-075 treasure, secret room, and bonus rewards', () => {
         ]));
     });
 
+    it('routes Secret Favor through the Seer command journal while preserving payout feedback', () => {
+        const room = {
+            ...rollBonusRewardRoom({
+                runSeed: 75_129,
+                rulesVersion: GAME_RULES_VERSION,
+                floor: 6,
+                routeKind: 'event'
+            }),
+            ...BONUS_REWARD_CATALOG.secret_favor,
+            eligible: true,
+            unavailableReason: null
+        };
+        const initial = {
+            ...makeRun(room.runSeed, room.rulesVersion),
+            relicFavorProgress: 2,
+            bonusRelicPicksNextOffer: 0,
+            favorBonusRelicPicksNextOffer: 0,
+            peekCharges: 0
+        } as RunState;
+        const result = claimBonusReward(initial, createBonusRewardLedger(), room);
+
+        expect(result.claimed).toBe(true);
+        expect(result.run).toMatchObject({
+            peekCharges: 1,
+            relicFavorProgress: 0,
+            bonusRelicPicksNextOffer: 1,
+            favorBonusRelicPicksNextOffer: 1
+        });
+        expect(result.feedback.gained).toEqual(expect.arrayContaining([
+            '+1 relic Favor progress',
+            '+1 peek charge'
+        ]));
+        expect(result.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'relic_favor.changed', progressBefore: 2, progressAfter: 0 }),
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'peek_charge', applied: 1 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.secret_favor.claimed' })
+        ]));
+    });
+
     it('unlocks durable reward perks from build-defining draft rows without duplicating them', () => {
         const room = {
             ...rollBonusRewardRoom({

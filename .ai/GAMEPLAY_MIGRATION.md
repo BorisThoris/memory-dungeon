@@ -106,6 +106,19 @@ The Slayer connects boss preparation to objective execution and future build gro
 
 The floor-clear orchestrator journals every typed cause and supplies the requested amounts to existing pure calculators. Direct calculator callers retain legacy defaults, so parity tests can compare old and migrated behavior while live runs use the command-owned source boundary.
 
+## Seventh vertical slice: The Seer
+
+The Seer joins information sources, memory markers, safe correction, and future relic choice into one decision loop:
+
+1. Secret Favor grants one Peek and one Favor progress through a single typed reward command; Favor conversion still banks future relic picks at the established threshold.
+2. Scout Glint emits `scout_reveal.requested`; the compatibility adapter passes that request into the deterministic omen-style selector for a hidden hazard, dungeon family, or route special.
+3. Memory Nail emits an explicit pin-capacity request at acquisition, while the established capacity rule continues to derive the live extra slot from the owned relic.
+4. Pin presses are now serializable `board.pin_toggle` commands with typed board and feedback events.
+5. Stray Hook grants typed `stray_remove_charge` inventory, and each chosen removal is a serializable `board.stray_remove` command that retains the established completion-safe target guard.
+6. Peek, Scout, Pin, and Stray Remove turn discovered information into player-authored board decisions; Secret Favor compounds successful exploration into later relic drafts.
+
+The renderer only converts presses into commands and projects feedback. Board legality remains in the existing pure Pin and Stray rules, and Scout target selection remains in the deterministic dungeon-scout rule, so replay gained coverage without creating a second gameplay implementation.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

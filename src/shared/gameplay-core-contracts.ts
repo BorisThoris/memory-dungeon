@@ -19,7 +19,9 @@ export const GAMEPLAY_RELIC_IDS = [
     'shrine_echo',
     'chapter_compass',
     'wager_surety',
-    'parasite_ledger'
+    'parasite_ledger',
+    'stray_charge_plus_one',
+    'pin_cap_plus_one'
 ] as const satisfies readonly RelicId[];
 
 export const GAMEPLAY_FINDABLE_KINDS = [
@@ -234,6 +236,24 @@ export const gameplayEffectSchema = z.discriminatedUnion('kind', [
     z
         .object({
             kind: z.literal('parasite_ward.grant'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('relic_favor.grant'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('pin_capacity.request'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            kind: z.literal('scout_reveal.request'),
             amount: z.number().int().positive()
         })
         .strict(),
@@ -757,13 +777,86 @@ export const SLAYER_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse
     }
 ]);
 
+export const SEER_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'bonus_reward.secret_favor',
+        version: 1,
+        buildId: 'reveal_scout',
+        source: { kind: 'bonus_reward', id: 'secret_favor' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'relic_favor.grant', amount: 1 },
+            { kind: 'inventory.grant', itemId: 'peek_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.secret_favor.claimed',
+                message: 'Secret Shrine added one Favor progress and one Peek charge.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.stray_charge_plus_one',
+        version: 1,
+        buildId: 'reveal_scout',
+        source: { kind: 'relic', id: 'stray_charge_plus_one' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'stray_remove_charge', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.stray_hook.claimed',
+                message: 'Stray Hook added one completion-safe stray-removal charge.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'relic.pin_cap_plus_one',
+        version: 1,
+        buildId: 'reveal_scout',
+        source: { kind: 'relic', id: 'pin_cap_plus_one' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'pin_capacity.request', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.memory_nail.claimed',
+                message: 'Memory Nail expanded simultaneous pin capacity by one tile.',
+                tone: 'reward'
+            }
+        ]
+    },
+    {
+        id: 'findable.scout_glint',
+        version: 1,
+        buildId: 'reveal_scout',
+        source: { kind: 'findable', id: 'scout_glint' },
+        trigger: 'findable.match',
+        conditions: [{ kind: 'findable.matched', findable: 'scout_glint' }],
+        effects: [
+            { kind: 'scout_reveal.request', amount: 1 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.scout_glint.matched',
+                message: 'Scout Glint requested one deterministic hazard or dungeon-family reveal.',
+                tone: 'information'
+            }
+        ]
+    }
+]);
+
 export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...CONDUIT_CARTOGRAPHER_DEFINITIONS,
     ...WARDEN_DEFINITIONS,
     ...COMBO_SHARD_ENGINE_DEFINITIONS,
     ...SABOTEUR_DEFINITIONS,
     ...VAULTBREAKER_DEFINITIONS,
-    ...SLAYER_DEFINITIONS
+    ...SLAYER_DEFINITIONS,
+    ...SEER_DEFINITIONS
 ] as const satisfies readonly GameplayContentDefinition[];
 
 export type GameplaySource = z.infer<typeof gameplaySourceSchema>;
@@ -799,6 +892,20 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
         .object({
             ...commandBase,
             type: z.literal('board.peek'),
+            targetTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.pin_toggle'),
+            targetTileId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('board.stray_remove'),
             targetTileId: z.string().min(1).max(160)
         })
         .strict()
@@ -885,6 +992,55 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
             applied: z.number().int().nonnegative(),
             before: z.number().int().nonnegative(),
             after: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('relic_favor.changed'),
+            requested: z.number().int().positive(),
+            progressBefore: z.number().int().nonnegative(),
+            progressAfter: z.number().int().nonnegative(),
+            bonusPicksBefore: z.number().int().nonnegative(),
+            bonusPicksAfter: z.number().int().nonnegative(),
+            favorBonusPicksBefore: z.number().int().nonnegative(),
+            favorBonusPicksAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('pin_capacity.requested'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('scout_reveal.requested'),
+            amount: z.number().int().positive()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.pin_changed'),
+            targetTileId: z.string().min(1).max(160),
+            pinned: z.boolean(),
+            pinnedCountBefore: z.number().int().nonnegative(),
+            pinnedCountAfter: z.number().int().nonnegative(),
+            pinCapacity: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('board.stray_removed'),
+            targetTileId: z.string().min(1).max(160),
+            strayChargesBefore: z.number().int().nonnegative(),
+            strayChargesAfter: z.number().int().nonnegative(),
+            recallFocusBefore: z.number().int().nonnegative(),
+            recallFocusAfter: z.number().int().nonnegative()
         })
         .strict(),
     z
@@ -992,5 +1148,21 @@ export const createGameplayPeekCommand = (commandId: string, targetTileId: strin
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'board.peek',
+        targetTileId
+    });
+
+export const createGameplayPinToggleCommand = (commandId: string, targetTileId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.pin_toggle',
+        targetTileId
+    });
+
+export const createGameplayStrayRemoveCommand = (commandId: string, targetTileId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'board.stray_remove',
         targetTileId
     });

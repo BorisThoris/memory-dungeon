@@ -126,6 +126,9 @@ export const applyOmenSealScout = (board: BoardState, run: RunState): { board: B
 export const applyFindableScoutGlint = (
     board: BoardState,
     run: RunState,
-    claimedKind: FindableKind | null
+    claimedKind: FindableKind | null,
+    requestedScoutReveals = claimedKind === 'scout_glint' ? 1 : 0
 ): { board: BoardState; scouted: boolean } =>
-    claimedKind === 'scout_glint' ? applyScoutReveal(board, run, 'omen_seal') : { board, scouted: false };
+    claimedKind === 'scout_glint' && requestedScoutReveals > 0
+        ? applyScoutReveal(board, run, 'omen_seal')
+        : { board, scouted: false };

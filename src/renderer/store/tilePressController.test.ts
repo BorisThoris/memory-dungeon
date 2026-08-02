@@ -124,6 +124,13 @@ describe('tile press controller', () => {
         if (result.kind === 'patch') {
             expect(result.patch.run?.pinnedTileIds).toEqual([tile.id]);
             expect(result.patch.run?.board?.flippedTileIds).toEqual([]);
+            expect(result.patch.run?.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.pin_toggle', targetTileId: tile.id })
+            ]);
+            expect(result.patch.run?.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'board.pin_changed', targetTileId: tile.id, pinned: true }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.pin.toggled' })
+            ]));
             expect(result.audio).toEqual([]);
         }
     });

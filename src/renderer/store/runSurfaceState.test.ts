@@ -581,6 +581,14 @@ describe('run surface state helpers', () => {
         if (applied.kind === 'strayApplied') {
             expect(applied.run.board!.tiles.find((tile) => tile.id === 'wild')!.state).toBe('removed');
             expect(applied.run.strayRemoveCharges).toBe(activeRun.strayRemoveCharges - 1);
+            expect(applied.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'board.stray_remove', targetTileId: 'wild' })
+            ]);
+            expect(applied.run.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'inventory.changed', itemId: 'stray_remove_charge', applied: -1 }),
+                expect.objectContaining({ type: 'board.stray_removed', targetTileId: 'wild' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'power.stray_remove.used' })
+            ]));
         }
 
         expect(

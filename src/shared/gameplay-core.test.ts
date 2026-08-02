@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { applyPeek } from './board-power-actions';
+import { applyPeek, applyStrayRemove } from './board-power-actions';
+import { togglePinnedTile } from './board-power-state';
 import { BONUS_REWARD_CATALOG, previewBonusRewardClaim } from './bonus-rewards';
 import type { BoardState, RunState, Tile } from './contracts';
 import {
@@ -7,11 +8,14 @@ import {
     COMBO_SHARD_ENGINE_DEFINITIONS,
     GAMEPLAY_CORE_SCHEMA_VERSION,
     SABOTEUR_DEFINITIONS,
+    SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
     VAULTBREAKER_DEFINITIONS,
     WARDEN_DEFINITIONS,
     createGameplayDefinitionCommand,
     createGameplayPeekCommand,
+    createGameplayPinToggleCommand,
+    createGameplayStrayRemoveCommand,
     gameplayCommandSchema,
     gameplayContentDefinitionSchema,
     gameplayEventSchema
@@ -351,6 +355,91 @@ describe('deterministic gameplay core', () => {
         expect(lost).toMatchObject({ riskWagerFavorGain: 0, riskWagerStreakFloor: 1, parasiteRelief: 0 });
         expect(lost.events).toEqual(expect.arrayContaining([
             expect.objectContaining({ type: 'featured_streak_floor.requested', reason: 'risk_wager_loss', amount: 1 })
+        ]));
+    });
+
+    it('models the Seer reward, relic tools, Scout Glint, and board decisions as one information-control build', () => {
+        expect(SEER_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.secret_favor',
+            'relic.stray_charge_plus_one',
+            'relic.pin_cap_plus_one',
+            'findable.scout_glint'
+        ]);
+        const initial = run({
+            peekCharges: 0,
+            strayRemoveCharges: 0,
+            pinnedTileIds: [],
+            pinsPlacedCountThisRun: 0,
+            relicFavorProgress: 2,
+            bonusRelicPicksNextOffer: 0,
+            favorBonusRelicPicksNextOffer: 0
+        });
+        const reward = reduceGameplayCommand(
+            initial,
+            createGameplayDefinitionCommand('seer-secret', 'bonus_reward.secret_favor')
+        );
+        const strayRelic = applyRelicImmediateThroughGameplayCore(
+            reward.run,
+            'stray_charge_plus_one',
+            'seer-stray-hook'
+        );
+        const pinRelic = applyRelicImmediateThroughGameplayCore(
+            strayRelic.run,
+            'pin_cap_plus_one',
+            'seer-memory-nail'
+        );
+        const glint = resolveFindableMatchRewardThroughGameplayCore(
+            pinRelic.run,
+            'scout_glint',
+            'seer-scout-glint'
+        );
+
+        expect(reward.run).toMatchObject({
+            peekCharges: 1,
+            relicFavorProgress: 0,
+            bonusRelicPicksNextOffer: 1,
+            favorBonusRelicPicksNextOffer: 1
+        });
+        expect(reward.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'relic_favor.changed', progressBefore: 2, progressAfter: 0 }),
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'peek_charge', applied: 1 })
+        ]));
+        expect(strayRelic).toMatchObject({ migrated: true, run: { strayRemoveCharges: 1 } });
+        expect(pinRelic).toMatchObject({ migrated: true });
+        expect(pinRelic.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'pin_capacity.requested', amount: 1 })
+        ]));
+        expect(glint).toMatchObject({ migrated: true, scoutRevealGain: 1 });
+        expect(glint.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'scout_reveal.requested', amount: 1 }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'build.scout_glint.matched' })
+        ]));
+
+        const pinCommand = createGameplayPinToggleCommand('seer-pin', 'echo-a');
+        const pinned = reduceGameplayCommand(pinRelic.run, pinCommand);
+        expect(pinned.accepted).toBe(true);
+        expect(pinned.run).toEqual(togglePinnedTile(pinRelic.run, 'echo-a'));
+        expect(pinned.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'board.pin_changed', targetTileId: 'echo-a', pinned: true })
+        ]));
+
+        const strayRun = {
+            ...strayRelic.run,
+            board: {
+                ...board(),
+                pairCount: 1,
+                tiles: [tile('wild', '__wild__'), tile('plain-a', 'plain'), tile('plain-b', 'plain')]
+            },
+            strayRemoveArmed: true,
+            recallFocus: 2
+        } as RunState;
+        const strayCommand = createGameplayStrayRemoveCommand('seer-stray', 'wild');
+        const removed = reduceGameplayCommand(strayRun, strayCommand);
+        expect(removed.accepted).toBe(true);
+        expect(removed.run).toEqual(applyStrayRemove(strayRun, 'wild'));
+        expect(removed.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'inventory.changed', itemId: 'stray_remove_charge', applied: -1 }),
+            expect.objectContaining({ type: 'board.stray_removed', targetTileId: 'wild', recallFocusAfter: 1 })
         ]));
     });
 

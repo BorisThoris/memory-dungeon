@@ -7854,6 +7854,13 @@ describe('board powers', () => {
             expect(resolved.omenSealScoutsThisFloor).toBe(1);
             expect(trapTiles.every((tile) => tile.dungeonCardState === 'revealed')).toBe(true);
             expect(trapTiles.every((tile) => tile.scoutRevealSource === 'omen_seal')).toBe(true);
+            expect(resolved.gameplayCommandJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'effects.apply', definitionId: 'findable.scout_glint' })
+            ]));
+            expect(resolved.gameplayEventJournal).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'scout_reveal.requested', amount: 1 }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'build.scout_glint.matched' })
+            ]));
         });
 
         it('forfeits findable on destroy without score or claim counter', () => {

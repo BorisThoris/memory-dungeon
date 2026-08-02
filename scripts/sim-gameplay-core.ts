@@ -23,14 +23,15 @@ const board: BoardState = {
     level: 1,
     pairCount: 3,
     columns: 3,
-    rows: 2,
+    rows: 3,
     tiles: [
         tile('echo-a', 'echo', 'echo'),
         tile('echo-b', 'echo', 'echo'),
         tile('conduit-a', 'conduit', 'conduit'),
         tile('conduit-b', 'conduit', 'conduit'),
         tile('plain-a', 'plain'),
-        tile('plain-b', 'plain')
+        tile('plain-b', 'plain'),
+        tile('wild', '__wild__')
     ],
     flippedTileIds: [],
     matchedPairs: 0,
@@ -43,6 +44,8 @@ const initialRun = {
     runSeed: seed,
     runRulesVersion: 1,
     peekCharges: 0,
+    strayRemoveCharges: 1,
+    strayRemoveArmed: true,
     recallFocus: 3,
     rewardPerkIds: [],
     relicIds: [

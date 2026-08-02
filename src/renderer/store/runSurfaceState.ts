@@ -1,6 +1,9 @@
 import type { RunState, Tile, ViewState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
-import { createGameplayPeekCommand } from '../../shared/gameplay-core-contracts';
+import {
+    createGameplayPeekCommand,
+    createGameplayStrayRemoveCommand
+} from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
@@ -8,7 +11,6 @@ import {
     applyFlashPair,
     applyRegionShuffle,
     applyShuffle,
-    applyStrayRemove,
     applyTileSwap,
     armRegionShuffleRow,
     collectDestroyEligibleTileIds,
@@ -423,9 +425,16 @@ export const createArmedBoardPowerPressResult = ({
     const canApplyAfterContact = !enemyContacted || canContinueSinglePowerAfterContact;
 
     if (canApplyAfterContact && run.strayRemoveArmed) {
-        const nextRun = applyStrayRemove(run, tileId);
-        if (nextRun !== run) {
-            return { kind: 'strayApplied', run: nextRun };
+        const command = createGameplayStrayRemoveCommand(
+            `stray-remove:${run.runSeed}:${run.board?.level ?? 0}:${run.strayRemoveCharges}:${tileId}`,
+            tileId
+        );
+        const result = reduceGameplayCommand(run, command);
+        if (result.accepted) {
+            return {
+                kind: 'strayApplied',
+                run: appendGameplayJournal(result.run, [command], result.events)
+            };
         }
         return enemyContacted ? { kind: 'persistEnemyContact', run } : { kind: 'handled' };
     }

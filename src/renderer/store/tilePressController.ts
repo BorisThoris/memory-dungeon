@@ -1,6 +1,8 @@
 import type { RunState, ViewState } from '../../shared/contracts';
 import { applyEnemyHazardClick } from '../../shared/turn-resolution';
-import { togglePinnedTile } from '../../shared/board-powers';
+import { createGameplayPinToggleCommand } from '../../shared/gameplay-core-contracts';
+import { reduceGameplayCommand } from '../../shared/gameplay-core';
+import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
     BOARD_FLOATER_POP_CLEAR,
     type MatchScorePop,
@@ -142,10 +144,19 @@ export const createPlayingTilePressSurfaceResult = ({
     }
 
     if (!enemyContacted && boardPinMode) {
-        const nextRun = togglePinnedTile(actionRun, tileId);
-        return nextRun === actionRun
+        const command = createGameplayPinToggleCommand(
+            `pin-toggle:${actionRun.runSeed}:${actionRun.board?.level ?? 0}:${Array.isArray(actionRun.pinnedTileIds) ? actionRun.pinnedTileIds.length : 0}:${tileId}`,
+            tileId
+        );
+        const result = reduceGameplayCommand(actionRun, command);
+        return !result.accepted
             ? { kind: 'ignored', audio }
-            : { kind: 'patch', patch: { run: nextRun }, audio, resolveDelayMs: null };
+            : {
+                  kind: 'patch',
+                  patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+                  audio,
+                  resolveDelayMs: null
+              };
     }
 
     const armedPowerPressResult = createArmedBoardPowerPressResult({

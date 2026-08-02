@@ -17,14 +17,15 @@ const initialRun = (seed: number): RunState => ({
         level: 1,
         pairCount: 3,
         columns: 3,
-        rows: 2,
+        rows: 3,
         tiles: [
             tile('echo-a', 'echo', 'echo'),
             tile('echo-b', 'echo', 'echo'),
             tile('conduit-a', 'conduit', 'conduit'),
             tile('conduit-b', 'conduit', 'conduit'),
             tile('plain-a', 'plain'),
-            tile('plain-b', 'plain')
+            tile('plain-b', 'plain'),
+            tile('wild', '__wild__')
         ],
         flippedTileIds: [],
         matchedPairs: 0,
@@ -34,6 +35,8 @@ const initialRun = (seed: number): RunState => ({
     runSeed: seed,
     runRulesVersion: 1,
     peekCharges: 0,
+    strayRemoveCharges: 1,
+    strayRemoveArmed: true,
     recallFocus: 3,
     rewardPerkIds: [],
     relicIds: [
@@ -51,14 +54,14 @@ const initialRun = (seed: number): RunState => ({
 
 describe('seeded gameplay core simulation', () => {
     it('is deterministic, replayable, schema-valid, and invariant-clean', () => {
-        const first = runGameplayCoreSimulation(initialRun(7241), { seed: 7241, steps: 128 });
-        const second = runGameplayCoreSimulation(initialRun(7241), { seed: 7241, steps: 128 });
+        const first = runGameplayCoreSimulation(initialRun(7241), { seed: 7241, steps: 384 });
+        const second = runGameplayCoreSimulation(initialRun(7241), { seed: 7241, steps: 384 });
 
         expect(first).toEqual(second);
-        expect(first.commands).toHaveLength(128);
+        expect(first.commands).toHaveLength(384);
         expect(first.replayDeterministic).toBe(true);
         expect(first.invariantViolations).toEqual([]);
-        expect(first.acceptedCommandIds.length + first.rejectedCommandIds.length).toBe(128);
+        expect(first.acceptedCommandIds.length + first.rejectedCommandIds.length).toBe(384);
         expect(Object.keys(first.commandTypeCounts)).toEqual(
             expect.arrayContaining([
                 'bonus_reward.echo_conduit_lens',
@@ -87,7 +90,13 @@ describe('seeded gameplay core simulation', () => {
                 'relic.wager_surety.wager_won',
                 'relic.wager_surety.wager_lost',
                 'relic.parasite_ledger.featured_objective',
-                'board.peek'
+                'bonus_reward.secret_favor',
+                'relic.stray_charge_plus_one',
+                'relic.pin_cap_plus_one',
+                'findable.scout_glint',
+                'board.peek',
+                'board.pin_toggle',
+                'board.stray_remove'
             ])
         );
     });

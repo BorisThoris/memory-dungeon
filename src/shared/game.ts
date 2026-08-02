@@ -545,6 +545,9 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
         const resolvedFindableScoreBonus = findableReward.migrated
             ? findableReward.scoreGain
             : findableScoreBonus;
+        const resolvedFindableScoutGain = findableReward.migrated
+            ? findableReward.scoutRevealGain
+            : claimedFindableKind === 'scout_glint' ? 1 : 0;
 
         const resolution = resolveTurnMatchBoardResolution({
             run,
@@ -552,6 +555,7 @@ const resolveGambitThree = (run: RunState, encorePairKeys: string[]): RunState =
             context: matchClaimContext,
             firstTile: tileMatchA,
             secondTile: tileMatchB,
+            findableScoutGain: resolvedFindableScoutGain,
             firstTileId: matchA,
             secondTileId: matchB,
             thirdTileId: thirdId
@@ -824,6 +828,9 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
         const resolvedFindableScoreBonus = findableReward.migrated
             ? findableReward.scoreGain
             : findableScoreBonus;
+        const resolvedFindableScoutGain = findableReward.migrated
+            ? findableReward.scoutRevealGain
+            : claimedFindableKind === 'scout_glint' ? 1 : 0;
 
         const resolution = resolveTurnMatchBoardResolution({
             run,
@@ -831,6 +838,7 @@ const resolveTwoFlippedTiles = (run: RunState, encorePairKeys: string[]): RunSta
             context: matchClaimContext,
             firstTile,
             secondTile,
+            findableScoutGain: resolvedFindableScoutGain,
             firstTileId: firstId,
             secondTileId: secondId
         });

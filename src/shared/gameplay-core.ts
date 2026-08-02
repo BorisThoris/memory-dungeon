@@ -1,4 +1,5 @@
-import { applyPeek } from './board-power-actions';
+import { applyPeek, applyStrayRemove } from './board-power-actions';
+import { maxPinnedTilesForRun, togglePinnedTile } from './board-power-state';
 import type { RewardPerkId, RunState } from './contracts';
 import {
     GAMEPLAY_CORE_SCHEMA_VERSION,
@@ -19,6 +20,8 @@ import {
     useRunInventoryItem
 } from './run-inventory';
 import { runNonNegativeInteger } from './run-number-guards';
+import { runStringArray } from './run-array-guards';
+import { gainRelicFavor } from './relic-favor-rules';
 import { normalizeSessionStats } from './session-stats-rules';
 
 export interface GameplayCommandResult {
@@ -37,6 +40,8 @@ export interface GameplayReplayResult {
 
 const SYSTEM_SOURCE: GameplaySource = { kind: 'system', id: 'gameplay-core' };
 const PEEK_SOURCE: GameplaySource = { kind: 'power', id: 'peek' };
+const PIN_SOURCE: GameplaySource = { kind: 'power', id: 'pin' };
+const STRAY_REMOVE_SOURCE: GameplaySource = { kind: 'power', id: 'stray_remove' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
     ? Omit<T, 'schemaVersion' | 'eventId' | 'commandId' | 'sequence' | 'source'>
@@ -299,6 +304,30 @@ const applyDefinition = (
                 });
                 break;
             }
+            case 'relic_favor.grant': {
+                const progressBefore = runNonNegativeInteger(nextRun.relicFavorProgress);
+                const bonusPicksBefore = runNonNegativeInteger(nextRun.bonusRelicPicksNextOffer);
+                const favorBonusPicksBefore = runNonNegativeInteger(nextRun.favorBonusRelicPicksNextOffer);
+                const favor = gainRelicFavor(nextRun, effect.amount);
+                nextRun = { ...nextRun, ...favor };
+                writeEvent({
+                    type: 'relic_favor.changed',
+                    requested: effect.amount,
+                    progressBefore,
+                    progressAfter: favor.relicFavorProgress,
+                    bonusPicksBefore,
+                    bonusPicksAfter: favor.bonusRelicPicksNextOffer,
+                    favorBonusPicksBefore,
+                    favorBonusPicksAfter: favor.favorBonusRelicPicksNextOffer
+                });
+                break;
+            }
+            case 'pin_capacity.request':
+                writeEvent({ type: 'pin_capacity.requested', amount: effect.amount });
+                break;
+            case 'scout_reveal.request':
+                writeEvent({ type: 'scout_reveal.requested', amount: effect.amount });
+                break;
             case 'feedback.emit':
                 writeEvent({
                     type: 'feedback.requested',
@@ -309,6 +338,74 @@ const applyDefinition = (
                 break;
         }
     }
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyPinToggleCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.pin_toggle' }>
+): GameplayCommandResult => {
+    const nextRun = togglePinnedTile(run, command.targetTileId);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Pin toggle is not legal for the current run and target.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, PIN_SOURCE, events);
+    const before = runStringArray(run.pinnedTileIds);
+    const after = runStringArray(nextRun.pinnedTileIds);
+    const pinned = after.includes(command.targetTileId);
+    writeEvent({
+        type: 'board.pin_changed',
+        targetTileId: command.targetTileId,
+        pinned,
+        pinnedCountBefore: before.length,
+        pinnedCountAfter: after.length,
+        pinCapacity: maxPinnedTilesForRun(nextRun)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.pin.toggled',
+        message: `${command.targetTileId} was ${pinned ? 'pinned' : 'unpinned'}; ${after.length}/${maxPinnedTilesForRun(nextRun)} pins active.`,
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyStrayRemoveCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'board.stray_remove' }>
+): GameplayCommandResult => {
+    const nextRun = applyStrayRemove(run, command.targetTileId);
+    if (nextRun === run) {
+        return rejectedResult(run, command.commandId, 'Stray Remove is not legal for the current run and target.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, STRAY_REMOVE_SOURCE, events);
+    const before = runNonNegativeInteger(run.strayRemoveCharges);
+    const after = runNonNegativeInteger(nextRun.strayRemoveCharges);
+    writeEvent({
+        type: 'inventory.changed',
+        itemId: 'stray_remove_charge',
+        operation: 'consume',
+        requested: 1,
+        applied: after - before,
+        before,
+        after
+    });
+    writeEvent({
+        type: 'board.stray_removed',
+        targetTileId: command.targetTileId,
+        strayChargesBefore: before,
+        strayChargesAfter: after,
+        recallFocusBefore: runNonNegativeInteger(run.recallFocus),
+        recallFocusAfter: runNonNegativeInteger(nextRun.recallFocus)
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'power.stray_remove.used',
+        message: `Stray Remove cleared ${command.targetTileId}; ${after} charge${after === 1 ? '' : 's'} remain.`,
+        tone: 'information'
+    });
     return { run: nextRun, command, events, accepted: true };
 };
 
@@ -362,6 +459,12 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     const command = parsed.data;
     if (command.type === 'board.peek') {
         return applyPeekCommand(run, command);
+    }
+    if (command.type === 'board.pin_toggle') {
+        return applyPinToggleCommand(run, command);
+    }
+    if (command.type === 'board.stray_remove') {
+        return applyStrayRemoveCommand(run, command);
     }
     const definition = getGameplayContentDefinition(command.definitionId);
     if (!definition) {
