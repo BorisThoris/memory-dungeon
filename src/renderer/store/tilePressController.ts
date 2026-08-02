@@ -172,7 +172,13 @@ export const createPlayingTilePressSurfaceResult = ({
             return { kind: 'patch', patch: { run: armedPowerPressResult.run }, audio, resolveDelayMs: null };
         }
         if (armedPowerPressResult.kind === 'peekApplied') {
-            audio.push({ kind: 'peekPower' });
+            if (
+                armedPowerPressResult.events.some(
+                    (event) => event.type === 'feedback.requested' && event.cue === 'power.peek.used'
+                )
+            ) {
+                audio.push({ kind: 'peekPower' });
+            }
             return {
                 kind: 'patch',
                 patch: createRunWithPeekDisarmedPatch(armedPowerPressResult.run),

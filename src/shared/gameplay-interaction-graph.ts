@@ -2,13 +2,28 @@ import graphData from './gameplay-interaction-graph-data.json';
 import { z } from 'zod';
 
 export type GameplayInteractionMechanicKind =
+    | 'board'
     | 'trait'
     | 'power'
+    | 'build'
+    | 'core'
+    | 'economy'
+    | 'feedback'
+    | 'findable'
     | 'hazard'
     | 'boss'
     | 'exit'
+    | 'inventory'
     | 'lock'
+    | 'perk'
+    | 'persistence'
+    | 'progression'
+    | 'relic'
+    | 'reward'
+    | 'route'
+    | 'simulation'
     | 'shop'
+    | 'stats'
     | 'objective'
     | 'safety';
 
@@ -20,7 +35,17 @@ export type GameplayInteractionEdgeKind =
     | 'guarded_by'
     | 'unblocks'
     | 'blocks'
-    | 'priority_guard';
+    | 'priority_guard'
+    | 'belongs_to'
+    | 'consumes'
+    | 'consequence'
+    | 'displays'
+    | 'gates'
+    | 'grants'
+    | 'modifies'
+    | 'persists'
+    | 'tested_by'
+    | 'triggers';
 
 export interface GameplayInteractionMechanic {
     id: string;
@@ -88,13 +113,28 @@ export interface GameplayInteractionGraphAudit {
 
 const nonEmptyStringSchema = z.string().min(1);
 const mechanicKindSchema = z.enum([
+    'board',
     'trait',
     'power',
+    'build',
+    'core',
+    'economy',
+    'feedback',
+    'findable',
     'hazard',
     'boss',
     'exit',
+    'inventory',
     'lock',
+    'perk',
+    'persistence',
+    'progression',
+    'relic',
+    'reward',
+    'route',
+    'simulation',
     'shop',
+    'stats',
     'objective',
     'safety'
 ]);
@@ -106,7 +146,17 @@ const edgeKindSchema = z.enum([
     'guarded_by',
     'unblocks',
     'blocks',
-    'priority_guard'
+    'priority_guard',
+    'belongs_to',
+    'consumes',
+    'consequence',
+    'displays',
+    'gates',
+    'grants',
+    'modifies',
+    'persists',
+    'tested_by',
+    'triggers'
 ]);
 const stringListSchema = z.array(nonEmptyStringSchema);
 

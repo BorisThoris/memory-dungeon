@@ -611,6 +611,12 @@ describe('run surface state helpers', () => {
         if (applied.kind === 'peekApplied') {
             expect(applied.run.peekCharges).toBe(activeRun.peekCharges - 1);
             expect(applied.run.peekRevealedTileIds).toContain(tileId);
+            expect(applied.events).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({ type: 'board.peeked', targetTileId: tileId }),
+                    expect.objectContaining({ type: 'feedback.requested', cue: 'power.peek.used' })
+                ])
+            );
         }
 
         const blockedRun = {

@@ -34,3 +34,22 @@ The slice is complete only when:
 - no source of truth is duplicated between the shared core and Zustand/React.
 
 After this proof slice, migrate the other source-derived content families build by build, prioritizing connections that reduce the `unmodeled_content_family` diagnostics rather than maximizing raw mechanic count.
+
+## Current slice status
+
+Implemented in the first command-core increment:
+
+- strict, versioned schemas for sources, facts, conditions, effects, commands, content definitions, and domain events;
+- pure command reduction over existing reward, relic, inventory, trait, and Peek primitives;
+- atomic condition rejection with explainable events;
+- deterministic event IDs/order and JSON-round-trippable command replay;
+- parity tests for Echo Conduit Lens, Peek Charge relic, Echo/Conduit perk bonus, and Peek board legality;
+- live renderer Peek actions routed through the command core, with audio driven by the typed feedback event instead of a parallel hardcoded cause;
+- semantic graph coverage from content choice through state, feedback, route consequence, persistence boundary, and replay gate.
+
+Still required before the vertical slice is complete:
+
+- route live bonus-reward, relic-pick, and trait-match actions through the command core adapters;
+- persist the command/event journal with save-version migration and bounded retention;
+- consume typed feedback events in renderer/audio/accessibility adapters;
+- execute Conduit Cartographer through the headless balance simulator and add seeded fairness assertions.

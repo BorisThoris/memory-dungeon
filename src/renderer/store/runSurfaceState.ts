@@ -1,8 +1,10 @@
 import type { RunState, Tile, ViewState } from '../../shared/contracts';
+import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
+import { createGameplayPeekCommand } from '../../shared/gameplay-core-contracts';
+import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import {
     applyDestroyPair,
     applyFlashPair,
-    applyPeek,
     applyRegionShuffle,
     applyShuffle,
     applyStrayRemove,
@@ -57,7 +59,7 @@ type ArmedBoardPowerPressResult =
     | { kind: 'handled' }
     | { kind: 'persistEnemyContact'; run: RunState }
     | { kind: 'strayApplied'; run: RunState }
-    | { kind: 'peekApplied'; run: RunState }
+    | { kind: 'peekApplied'; run: RunState; events: GameplayEvent[] }
     | { kind: 'tileSwapFirstSelected'; tileId: string }
     | { kind: 'tileSwapFirstCleared' }
     | { kind: 'tileSwapApplied'; run: RunState }
@@ -449,8 +451,14 @@ export const createArmedBoardPowerPressResult = ({
         run.board &&
         run.board.flippedTileIds.length === 0
     ) {
-        const nextRun = applyPeek(run, tileId);
-        return nextRun === run ? { kind: 'handled' } : { kind: 'peekApplied', run: nextRun };
+        const command = createGameplayPeekCommand(
+            `peek:${run.runSeed}:${run.board.level}:${run.peekCharges}:${tileId}`,
+            tileId
+        );
+        const result = reduceGameplayCommand(run, command);
+        return result.accepted
+            ? { kind: 'peekApplied', run: result.run, events: result.events }
+            : { kind: 'handled' };
     }
 
     if (canApplyAfterContact && destroyPairArmed) {

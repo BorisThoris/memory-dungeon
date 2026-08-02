@@ -7,6 +7,7 @@ import {
     validateGameplayInteractionGraph
 } from './gameplay-interaction-graph';
 import type { TileTraitKind } from './contracts';
+import { CONDUIT_CARTOGRAPHER_DEFINITIONS } from './gameplay-core-contracts';
 
 const TILE_TRAIT_KINDS: readonly TileTraitKind[] = [
     'echo',
@@ -190,6 +191,43 @@ describe('gameplay interaction graph', () => {
                 'Keep trait routing tools available when the graph shows swap-created trait routes.',
                 'Keep boss and lock counterplay ahead of optional rewards in shop priority.',
                 'Add a topology, softlock-fairness, or generator-contract case for every new blocking edge.'
+            ])
+        );
+    });
+
+    it('connects the first command-core build from content choice through persistence and consequence', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        const prefixBySourceKind = {
+            bonus_reward: 'reward',
+            relic: 'relic',
+            reward_perk: 'perk'
+        } as const;
+
+        for (const definition of CONDUIT_CARTOGRAPHER_DEFINITIONS) {
+            const prefix = prefixBySourceKind[definition.source.kind as keyof typeof prefixBySourceKind];
+            expect(prefix, definition.id).toBeTruthy();
+            expect(byId.get(`${prefix}.${definition.source.id}`), definition.id).toMatchObject({
+                evidence: expect.arrayContaining(['src/shared/gameplay-core-contracts.ts']),
+                tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+            });
+        }
+
+        expect(byId.get('core.gameplay_commands')).toMatchObject({ kind: 'core', role: 'authoritative_command_reducer' });
+        expect(byId.get('inventory.peek_charge')).toMatchObject({ kind: 'inventory', role: 'build_resource' });
+        expect(byId.get('power.peek')).toMatchObject({ kind: 'power', role: 'information_conversion' });
+        expect(byId.get('persistence.run_save')).toMatchObject({ kind: 'persistence' });
+        expect(byId.get('simulation.gameplay_replay')).toMatchObject({ kind: 'simulation' });
+        expect(gameplayInteractionGraph.edges).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ source: 'reward.echo_conduit_lens', target: 'perk.echo_conduit_double', kind: 'grants' }),
+                expect.objectContaining({ source: 'relic.peek_charge_plus_one', target: 'inventory.peek_charge', kind: 'grants' }),
+                expect.objectContaining({ source: 'trait.echo', target: 'perk.echo_conduit_double', kind: 'triggers' }),
+                expect.objectContaining({ source: 'trait.conduit', target: 'perk.echo_conduit_double', kind: 'gates' }),
+                expect.objectContaining({ source: 'power.peek', target: 'inventory.peek_charge', kind: 'consumes' }),
+                expect.objectContaining({ source: 'power.peek', target: 'route.mystery', kind: 'consequence' }),
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'feedback.gameplay_hud', kind: 'displays' }),
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'persistence.run_save', kind: 'persists' }),
+                expect.objectContaining({ source: 'core.gameplay_commands', target: 'simulation.gameplay_replay', kind: 'tested_by' })
             ])
         );
     });

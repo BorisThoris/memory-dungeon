@@ -128,6 +128,26 @@ describe('tile press controller', () => {
         }
     });
 
+    it('consumes typed Peek feedback from the gameplay core as the audio cue source', () => {
+        const run = playingRun({ peekCharges: 1 });
+        const tile = run.board!.tiles[0]!;
+
+        const result = createPlayingTilePressSurfaceResult({
+            boardPinMode: false,
+            destroyPairArmed: false,
+            peekModeArmed: true,
+            run,
+            tileId: tile.id
+        });
+
+        expect(result.kind).toBe('patch');
+        if (result.kind === 'patch') {
+            expect(result.patch.run?.peekCharges).toBe(0);
+            expect(result.patch.run?.peekRevealedTileIds).toContain(tile.id);
+            expect(result.audio).toEqual([{ kind: 'peekPower' }]);
+        }
+    });
+
     it('selects then swaps hidden tiles while tile swap is armed', () => {
         const run = playingRun({ regionShuffleCharges: 1 });
         const first = run.board!.tiles[0]!;
