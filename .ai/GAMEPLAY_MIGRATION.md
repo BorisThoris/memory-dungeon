@@ -159,6 +159,19 @@ The Memory Scout turns study time, clean trait play, temporary recall, and bound
 
 The versioned graph connects reward choice to perk, clean trait match, Flash inventory, deterministic reveal, study-window counterplay, floor-reset Undo, HUD feedback, replay, and persistence. Seeded simulation generates both new command forms and retains exact JSON replay and nonnegative inventory invariants.
 
+## Eleventh vertical slice: The Locksmith
+
+The Locksmith makes pre-lock insurance, shop fallback, and the final lock spend one replayable extraction loop:
+
+1. Key Insurance grants one iron key, one shop gold, and 10 score through a typed reward command before lock pressure spikes.
+2. Shop purchases now enter the core as `shop.purchase`; the reducer delegates compatibility, affordability, item application, and purchased-offer state to the established pure shop rule.
+3. A successful purchase journals the exact offer, item, cost, wallet delta, Master Key delta, and typed feedback. Invalid, sold, unaffordable, or incompatible offers remain no-ops and are not journaled by the live surface.
+4. Exit activation now enters the core as `dungeon.exit_activate` with the exact selected spend. When the UI omits a choice, the existing pure selector preserves free activation first, matching typed key second, and Master Key fallback last.
+5. The reducer delegates board sealing, objective reward, hazard cleanup, route-plan creation, and key consumption to the established pure exit transition, then journals the activated tile, lock spend, key kind, Master Key delta, gateway delta, and route.
+6. Master Keys remain universal one-lock resources for exits and locked caches; explicit typed keys remain preferred so flexible fallback value is not wasted.
+
+The graph connects reward insurance and shop gold to typed and Master Key inventories, lock/caches, explicit exit activation, HUD feedback, persistence, and seeded replay. Direct parity tests cover successful Master Key purchase and spend, while existing shop, exit, topology, and softlock tests retain authority over legality.
+
 ## Current slice status
 
 Implemented in the Conduit Cartographer vertical slice:

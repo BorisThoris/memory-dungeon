@@ -32,6 +32,9 @@ import { runStringArray } from './run-array-guards';
 import { gainRelicFavor } from './relic-favor-rules';
 import { acceptEndlessRiskWager } from './risk-wager-rules';
 import { normalizeSessionStats } from './session-stats-rules';
+import { purchaseShopOffer } from './shop-rules';
+import { createDungeonExitActivationTransition } from './dungeon-exit-rules';
+import { getDungeonExitStatus } from './dungeon-board-status';
 
 export interface GameplayCommandResult {
     run: RunState;
@@ -58,6 +61,8 @@ const REGION_SHUFFLE_SOURCE: GameplaySource = { kind: 'power', id: 'region_shuff
 const TILE_SWAP_SOURCE: GameplaySource = { kind: 'power', id: 'tile_swap' };
 const FLASH_PAIR_SOURCE: GameplaySource = { kind: 'power', id: 'flash_pair' };
 const UNDO_RESOLVE_SOURCE: GameplaySource = { kind: 'power', id: 'undo_resolve' };
+const SHOP_SOURCE: GameplaySource = { kind: 'shop', id: 'run_shop' };
+const DUNGEON_EXIT_SOURCE: GameplaySource = { kind: 'system', id: 'dungeon_exit' };
 const gameplayRewardPerkIds = new Set<RewardPerkId>(GAMEPLAY_REWARD_PERK_IDS);
 type GameplayEventPayload<T = GameplayEvent> = T extends GameplayEvent
     ? Omit<T, 'schemaVersion' | 'eventId' | 'commandId' | 'sequence' | 'source'>
@@ -748,6 +753,86 @@ const applyUndoResolveCommand = (
     return { run: nextRun, command, events, accepted: true };
 };
 
+const applyShopPurchaseCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'shop.purchase' }>
+): GameplayCommandResult => {
+    const offer = (Array.isArray(run.shopOffers) ? run.shopOffers : []).find(
+        (candidate) => candidate.id === command.offerId
+    );
+    const nextRun = purchaseShopOffer(run, command.offerId);
+    if (nextRun === run || !offer) {
+        return rejectedResult(run, command.commandId, 'Shop offer cannot be purchased.', command);
+    }
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, SHOP_SOURCE, events);
+    const shopGoldBefore = runNonNegativeInteger(run.shopGold);
+    const shopGoldAfter = runNonNegativeInteger(nextRun.shopGold);
+    const masterKeysBefore = runNonNegativeInteger(run.dungeonMasterKeys);
+    const masterKeysAfter = runNonNegativeInteger(nextRun.dungeonMasterKeys);
+    writeEvent({
+        type: 'shop.offer_purchased',
+        offerId: offer.id,
+        itemId: offer.itemId,
+        cost: runNonNegativeInteger(offer.cost),
+        shopGoldBefore,
+        shopGoldAfter,
+        masterKeysBefore,
+        masterKeysAfter
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: offer.itemId === 'master_key' ? 'shop.master_key.purchased' : 'shop.offer.purchased',
+        message: `${offer.label} purchased for ${shopGoldBefore - shopGoldAfter} shop gold.`,
+        tone: 'reward'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
+const applyDungeonExitActivateCommand = (
+    run: RunState,
+    command: Extract<GameplayCommand, { type: 'dungeon.exit_activate' }>
+): GameplayCommandResult => {
+    const status = getDungeonExitStatus(run);
+    const transition = createDungeonExitActivationTransition(run, command.spend);
+    if (!transition || !status.exitTile) {
+        return rejectedResult(run, command.commandId, 'Dungeon exit cannot be activated with the requested spend.', command);
+    }
+    const nextRun = transition.run;
+    const events: GameplayEvent[] = [];
+    const writeEvent = makeEventWriter(command.commandId, DUNGEON_EXIT_SOURCE, events);
+    const masterKeysBefore = runNonNegativeInteger(run.dungeonMasterKeys);
+    const masterKeysAfter = runNonNegativeInteger(nextRun.dungeonMasterKeys);
+    const gatewayUsesBefore = runNonNegativeInteger(run.dungeonGatewaysUsed);
+    const gatewayUsesAfter = runNonNegativeInteger(nextRun.dungeonGatewaysUsed);
+    const keyKind =
+        command.spend === 'key' && status.lockKind !== 'none' && status.lockKind !== 'lever'
+            ? status.lockKind
+            : null;
+    writeEvent({
+        type: 'dungeon.exit_activated',
+        exitTileId: status.exitTile.id,
+        spend: command.spend,
+        keyKind,
+        masterKeysBefore,
+        masterKeysAfter,
+        gatewayUsesBefore,
+        gatewayUsesAfter,
+        routeType: status.routeType ?? null
+    });
+    writeEvent({
+        type: 'feedback.requested',
+        cue: 'dungeon.exit.activated',
+        message: command.spend === 'master_key'
+            ? `Master Key opened the ${status.lockKind} exit.`
+            : command.spend === 'key'
+              ? `${status.lockKind} key opened the exit.`
+              : 'Dungeon exit activated without spending a key.',
+        tone: 'information'
+    });
+    return { run: nextRun, command, events, accepted: true };
+};
+
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
@@ -783,6 +868,12 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.undo_resolve') {
         return applyUndoResolveCommand(run, command);
+    }
+    if (command.type === 'shop.purchase') {
+        return applyShopPurchaseCommand(run, command);
+    }
+    if (command.type === 'dungeon.exit_activate') {
+        return applyDungeonExitActivateCommand(run, command);
     }
     const definition = getGameplayContentDefinition(command.definitionId);
     if (!definition) {

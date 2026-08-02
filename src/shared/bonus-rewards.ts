@@ -750,6 +750,7 @@ const MIGRATED_BONUS_REWARD_DEFINITION_IDS: Partial<Record<BonusRewardId, string
     free_swap_floor: 'bonus_reward.free_swap_floor',
     hazard_banisher: 'bonus_reward.hazard_banisher',
     hazard_ward: 'bonus_reward.hazard_ward',
+    key_insurance: 'bonus_reward.key_insurance',
     secret_favor: 'bonus_reward.secret_favor',
     stasis_lockbox: 'bonus_reward.stasis_lockbox',
     trait_streak_lens: 'bonus_reward.trait_streak_lens',

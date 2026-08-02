@@ -12,6 +12,7 @@ import {
     COMBO_SHARD_ENGINE_DEFINITIONS,
     CONDUIT_CARTOGRAPHER_DEFINITIONS,
     MEMORY_SCOUT_DEFINITIONS,
+    LOCKSMITH_DEFINITIONS,
     SABOTEUR_DEFINITIONS,
     SEER_DEFINITIONS,
     SLAYER_DEFINITIONS,
@@ -562,6 +563,39 @@ describe('gameplay interaction graph', () => {
             expect.objectContaining({ source: 'inventory.undo_charge', target: 'power.undo_resolve', kind: 'enables' }),
             expect.objectContaining({ source: 'power.undo_resolve', target: 'objective.floor_clear', kind: 'counterplay' }),
             expect.objectContaining({ source: 'build.memory_scout', target: 'power.flash_pair', kind: 'consequence' })
+        ]));
+    });
+
+    it('connects Locksmith from insurance and shop purchase through explicit lock spend', () => {
+        const byId = new Map(gameplayInteractionGraph.mechanics.map((mechanic) => [mechanic.id, mechanic]));
+        expect(LOCKSMITH_DEFINITIONS.map((definition) => definition.id)).toEqual([
+            'bonus_reward.key_insurance'
+        ]);
+        expect(byId.get('reward.key_insurance')).toMatchObject({
+            kind: 'reward',
+            role: 'pre_lock_typed_key_insurance',
+            tests: expect.arrayContaining(['src/shared/gameplay-core.test.ts'])
+        });
+        expect(byId.get('shop.master_key')).toMatchObject({
+            kind: 'shop',
+            role: 'universal_lock_fallback_purchase'
+        });
+        expect(byId.get('inventory.master_key')).toMatchObject({
+            kind: 'inventory',
+            role: 'universal_single_lock_resource'
+        });
+        expect(byId.get('build.locksmith')).toMatchObject({
+            kind: 'build',
+            role: 'lock_insurance_and_extraction_build'
+        });
+        expect(gameplayInteractionGraph.edges).toEqual(expect.arrayContaining([
+            expect.objectContaining({ source: 'reward.key_insurance', target: 'inventory.iron_key', kind: 'grants' }),
+            expect.objectContaining({ source: 'shop.master_key', target: 'inventory.master_key', kind: 'grants' }),
+            expect.objectContaining({ source: 'inventory.master_key', target: 'exit.primary', kind: 'unblocks' }),
+            expect.objectContaining({ source: 'inventory.master_key', target: 'room.locked_cache', kind: 'unblocks' }),
+            expect.objectContaining({ source: 'exit.primary', target: 'inventory.master_key', kind: 'consumes' }),
+            expect.objectContaining({ source: 'exit.primary', target: 'core.gameplay_commands', kind: 'triggers' }),
+            expect.objectContaining({ source: 'build.locksmith', target: 'lock.typed_key', kind: 'counterplay' })
         ]));
     });
 });

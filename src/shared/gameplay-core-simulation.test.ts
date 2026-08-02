@@ -108,6 +108,7 @@ describe('seeded gameplay core simulation', () => {
                 'reward_perk.trait_streak_toolkit',
                 'relic.memorize_bonus_ms',
                 'relic.memorize_under_short_memorize',
+                'bonus_reward.key_insurance',
                 'board.peek',
                 'board.pin_toggle',
                 'board.stray_remove',
@@ -117,7 +118,9 @@ describe('seeded gameplay core simulation', () => {
                 'board.region_shuffle',
                 'board.tile_swap',
                 'board.flash_pair',
-                'board.undo_resolve'
+                'board.undo_resolve',
+                'shop.purchase',
+                'dungeon.exit_activate'
             ])
         );
     });

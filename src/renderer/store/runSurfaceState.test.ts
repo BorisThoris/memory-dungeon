@@ -5,13 +5,14 @@ import { buildBoard, countFindablePairs } from '../../shared/board-generation';
 import { createNewRun } from '../../shared/game-core';
 import { createGameplayGambitCommitCommand } from '../../shared/gameplay-core-contracts';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
-import { WILD_PAIR_KEY } from '../../shared/tile-identity';
+import { EXIT_PAIR_KEY, WILD_PAIR_KEY } from '../../shared/tile-identity';
 import {
     canPauseRunSurface,
     clearRunSurfaceArmedModes,
     createArmedBoardPowerPressResult,
     createBoardPinModeToggleResult,
     createDestroyPairArmedToggleResult,
+    createDungeonExitActivationSurfaceResult,
     createFlashPairSurfaceResult,
     createGambitThirdPickPressResult,
     createOrdinaryTileFlipResult,
@@ -562,6 +563,55 @@ describe('run surface state helpers', () => {
             run: { ...resolving, undoUsesThisFloor: 0 },
             view: 'playing'
         })).toEqual({ kind: 'ignored' });
+    });
+
+    it('journals the exact Master Key spend when activating a locked exit', () => {
+        const base = createNewRun(0, { runSeed: 51_001 });
+        const lockedRun: RunState = {
+            ...base,
+            status: 'playing',
+            dungeonKeys: { iron: 0 },
+            dungeonMasterKeys: 1,
+            dungeonGatewaysUsed: 0,
+            board: {
+                ...base.board!,
+                pairCount: 1,
+                matchedPairs: 0,
+                flippedTileIds: ['exit'],
+                dungeonExitTileId: 'exit',
+                dungeonExitLockKind: 'iron',
+                tiles: [
+                    {
+                        id: 'exit',
+                        pairKey: EXIT_PAIR_KEY,
+                        label: 'Exit',
+                        symbol: 'E',
+                        state: 'flipped',
+                        dungeonCardKind: 'exit',
+                        dungeonCardState: 'revealed',
+                        dungeonExitLockKind: 'iron'
+                    },
+                    { id: 'a1', pairKey: 'a', label: 'A', symbol: 'A', state: 'hidden' },
+                    { id: 'a2', pairKey: 'a', label: 'A', symbol: 'A', state: 'hidden' }
+                ]
+            }
+        };
+        const result = createDungeonExitActivationSurfaceResult({
+            run: lockedRun,
+            spend: 'master_key',
+            view: 'playing'
+        });
+        expect(result.kind).toBe('applied');
+        if (result.kind === 'applied') {
+            expect(result.patch.run).toMatchObject({ dungeonMasterKeys: 0, dungeonGatewaysUsed: 1 });
+            expect(result.patch.run.gameplayCommandJournal).toEqual([
+                expect.objectContaining({ type: 'dungeon.exit_activate', spend: 'master_key' })
+            ]);
+            expect(result.events).toEqual(expect.arrayContaining([
+                expect.objectContaining({ type: 'dungeon.exit_activated', spend: 'master_key' }),
+                expect.objectContaining({ type: 'feedback.requested', cue: 'dungeon.exit.activated' })
+            ]));
+        }
     });
 
     it('creates the board-power contact policy for enemy-contact presses', () => {

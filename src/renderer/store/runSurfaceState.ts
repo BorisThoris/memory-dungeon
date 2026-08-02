@@ -1,6 +1,7 @@
 import type { RunState, Tile, ViewState } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import {
+    createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
@@ -10,6 +11,11 @@ import {
     createGameplayTileSwapCommand,
     createGameplayUndoResolveCommand
 } from '../../shared/gameplay-core-contracts';
+import {
+    chooseDungeonExitActivationSpend,
+    type DungeonExitActivationSpend
+} from '../../shared/dungeon-exit-rules';
+import { getDungeonExitStatus } from '../../shared/dungeon-board-status';
 import { reduceGameplayCommand } from '../../shared/gameplay-core';
 import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
@@ -418,6 +424,34 @@ export const createUndoResolvingSurfaceResult = ({
 
     const command = createGameplayUndoResolveCommand(
         `undo-resolve:${run.runSeed}:${run.board?.level ?? 0}:${run.board?.flippedTileIds.join('+') ?? 'none'}:${run.undoUsesThisFloor}`
+    );
+    const result = reduceGameplayCommand(run, command);
+    return !result.accepted
+        ? { kind: 'ignored' }
+        : {
+              kind: 'applied',
+              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              playArmSfx: false,
+              events: result.events
+          };
+};
+
+export const createDungeonExitActivationSurfaceResult = ({
+    run,
+    spend,
+    view
+}: {
+    run: RunState | null;
+    spend?: DungeonExitActivationSpend;
+    view: ViewState;
+}): RunSurfaceRunPatchResult => {
+    if (!run || view !== 'playing' || run.status !== 'playing') {
+        return { kind: 'ignored' };
+    }
+    const resolvedSpend = spend ?? chooseDungeonExitActivationSpend(getDungeonExitStatus(run));
+    const command = createGameplayDungeonExitActivateCommand(
+        `dungeon-exit:${run.runSeed}:${run.board?.level ?? 0}:${run.dungeonGatewaysUsed}:${resolvedSpend}`,
+        resolvedSpend
     );
     const result = reduceGameplayCommand(run, command);
     return !result.accepted

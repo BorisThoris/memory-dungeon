@@ -60,7 +60,7 @@ Bump **`GAME_RULES_VERSION`** when pair generation, scoring, or player-facing ru
 
 ## Gameplay & product bullets (compressed)
 
-- **AI-first gameplay core:** Ten cohesive build slices now cross the strict command/event boundary: Conduit Cartographer, Warden, Combo Shard Engine, Saboteur, Vaultbreaker, Slayer, Seer, Route Gambler, Board Tactician, and Memory Scout. Memory Scout connects study-window relics and clean trait streaks to earned Flash Pair recall, while journaled Undo preserves its focus cost and clears the live resolve timer only after a legal recovery; architecture and status live in [`.ai/GAMEPLAY_MIGRATION.md`](../../.ai/GAMEPLAY_MIGRATION.md).
+- **AI-first gameplay core:** Eleven cohesive build slices now cross the strict command/event boundary: Conduit Cartographer, Warden, Combo Shard Engine, Saboteur, Vaultbreaker, Slayer, Seer, Route Gambler, Board Tactician, Memory Scout, and Locksmith. Locksmith connects Key Insurance and journaled shop purchases to typed/Master Key inventory, then records the exact spend that opens a locked exit while preserving free → matching key → Master Key priority; architecture and status live in [`.ai/GAMEPLAY_MIGRATION.md`](../../.ai/GAMEPLAY_MIGRATION.md).
 
 - **Ship gate:** REG-068’s reusable acceptance bar lives in [Complete product definition of done](../product/COMPLETE_PRODUCT_DEFINITION_OF_DONE.md). Use it before opening broad run-map/economy work, and keep REG-119 as the later close-the-loop acceptance report.
 - **Modes:** Classic, daily, endless (floor schedule), gauntlet, meditation, puzzle — mode gates live in shared helpers + `game.ts` constructors; endless uses **`pickFloorScheduleEntry`** / **`usesEndlessFloorSchedule`** when rules version ≥ schedule version.

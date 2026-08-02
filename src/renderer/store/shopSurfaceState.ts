@@ -1,6 +1,9 @@
 import type { RunState, ViewState } from '../../shared/contracts';
+import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
+import { createGameplayShopPurchaseCommand } from '../../shared/gameplay-core-contracts';
+import { reduceGameplayCommand } from '../../shared/gameplay-core';
+import { appendGameplayJournal } from '../../shared/gameplay-journal';
 import {
-    purchaseShopOffer,
     rerollShopOffers
 } from '../../shared/shop-rules';
 import type { StoreNavigationTransition } from './navigationModel';
@@ -39,6 +42,7 @@ type ShopActionSurfaceResult =
     | {
           kind: 'applied';
           patch: { run: RunState };
+          events?: GameplayEvent[];
       };
 
 export const shouldResumeShopRunOnClose = (
@@ -122,12 +126,18 @@ export const createShopPurchaseSurfaceResult = ({
         return { kind: 'ignored' };
     }
 
-    return {
-        kind: 'applied',
-        patch: {
-            run: purchaseShopOffer(run, offerId)
-        }
-    };
+    const command = createGameplayShopPurchaseCommand(
+        `shop-purchase:${run.runSeed}:${run.board?.level ?? 0}:${run.shopRerolls}:${offerId}`,
+        offerId
+    );
+    const result = reduceGameplayCommand(run, command);
+    return !result.accepted
+        ? { kind: 'ignored' }
+        : {
+              kind: 'applied',
+              patch: { run: appendGameplayJournal(result.run, [command], result.events) },
+              events: result.events
+          };
 };
 
 export const createShopRerollSurfaceResult = ({

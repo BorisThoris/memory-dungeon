@@ -3,6 +3,7 @@ import { tileIsStrayEligiblePreview } from './board-power-targeting';
 import {
     GAMEPLAY_CONTENT_DEFINITIONS,
     createGameplayDefinitionCommand,
+    createGameplayDungeonExitActivateCommand,
     createGameplayFlashPairCommand,
     createGameplayGambitCommitCommand,
     createGameplayPeekCommand,
@@ -10,6 +11,7 @@ import {
     createGameplayRegionShuffleCommand,
     createGameplayRiskWagerAcceptCommand,
     createGameplayShuffleCommand,
+    createGameplayShopPurchaseCommand,
     createGameplayStrayRemoveCommand,
     createGameplayTileSwapCommand,
     createGameplayUndoResolveCommand,
@@ -80,7 +82,7 @@ const commandForStep = (
     invalidTraitChance: number
 ): GameplayCommand => {
     const definitions = GAMEPLAY_CONTENT_DEFINITIONS;
-    const actionIndex = pickRngIndex(rng, definitions.length + 10);
+    const actionIndex = pickRngIndex(rng, definitions.length + 12);
     const commandId = `sim:${seed}:${String(step).padStart(4, '0')}`;
     if (actionIndex === definitions.length) {
         const targets = availablePeekTargets(run);
@@ -130,6 +132,13 @@ const commandForStep = (
     }
     if (actionIndex === definitions.length + 9) {
         return createGameplayUndoResolveCommand(commandId);
+    }
+    if (actionIndex === definitions.length + 10) {
+        const offerId = (Array.isArray(run.shopOffers) ? run.shopOffers : [])[0]?.id ?? 'missing-shop-offer';
+        return createGameplayShopPurchaseCommand(commandId, offerId);
+    }
+    if (actionIndex === definitions.length + 11) {
+        return createGameplayDungeonExitActivateCommand(commandId, 'master_key');
     }
 
     const definition = definitions[actionIndex % definitions.length] ?? definitions[0];

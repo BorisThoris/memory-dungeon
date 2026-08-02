@@ -12,9 +12,6 @@ import {
     claimRouteSideRoomPrimary,
     skipRouteSideRoom
 } from '../../shared/route-rules';
-import {
-    activateDungeonExit
-} from '../../shared/dungeon-rules';
 import { trackEvent } from '../../shared/telemetry';
 import { executeRunStartRequest } from './runStartExecutor';
 import type { RunStartRequest } from './runStartState';
@@ -47,6 +44,7 @@ import {
 import {
     createBoardPinModeToggleResult,
     createDestroyPairArmedToggleResult,
+    createDungeonExitActivationSurfaceResult,
     createFlashPairSurfaceResult,
     createGambitThirdPickPressResult,
     createPeekModeToggleResult,
@@ -598,16 +596,13 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     activateDungeonExitFromPrompt: (spend) => {
         const { run, view } = get();
-        if (!run || view !== 'playing') {
-            return;
-        }
-        const nextRun = activateDungeonExit(run, spend);
-        if (nextRun === run) {
+        const result = createDungeonExitActivationSurfaceResult({ run, spend, view });
+        if (result.kind === 'ignored') {
             set({ dungeonExitPromptOpen: true });
             return;
         }
         set({ dungeonExitPromptOpen: false });
-        applyResolvedRun(nextRun);
+        applyResolvedRun(result.patch.run);
     },
 
     togglePeekMode: () => {

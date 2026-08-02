@@ -11,6 +11,8 @@ export type GameplayFeedbackAudioCategory =
     | 'peek'
     | 'relic-pick'
     | 'reward-claim'
+    | 'shop-purchase'
+    | 'exit-activate'
     | 'undo'
     | 'wager';
 
@@ -45,6 +47,12 @@ const audioCategoryFor = (
     }
     if (feedback.source.kind === 'power' && feedback.cue === 'power.undo_resolve.used') {
         return 'undo';
+    }
+    if (feedback.source.kind === 'shop') {
+        return 'shop-purchase';
+    }
+    if (feedback.source.kind === 'system' && feedback.cue === 'dungeon.exit.activated') {
+        return 'exit-activate';
     }
     if (feedback.source.kind === 'system' && feedback.cue === 'build.route_gambler.wager_accepted') {
         return 'wager';

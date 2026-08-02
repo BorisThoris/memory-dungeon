@@ -117,6 +117,27 @@ describe('gameplayFeedbackAdapter', () => {
         expect(presentations.map((item) => item.audioCategory)).toEqual(['flash-pair', 'undo']);
     });
 
+    it('classifies Locksmith shop and exit cues from typed sources', () => {
+        const presentations = projectGameplayFeedback([
+            event(0, {
+                type: 'feedback.requested',
+                cue: 'shop.master_key.purchased',
+                message: 'Master Key purchased.',
+                source: { kind: 'shop', id: 'run_shop' },
+                tone: 'reward'
+            }),
+            event(1, {
+                type: 'feedback.requested',
+                cue: 'dungeon.exit.activated',
+                message: 'Exit activated.',
+                source: { kind: 'system', id: 'dungeon_exit' },
+                tone: 'information'
+            })
+        ]);
+
+        expect(presentations.map((item) => item.audioCategory)).toEqual(['shop-purchase', 'exit-activate']);
+    });
+
     it('adds the actual typed overflow score to otherwise ambiguous proc feedback', () => {
         const presentation = projectGameplayFeedback([
             event(0, {

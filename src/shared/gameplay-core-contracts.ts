@@ -59,7 +59,7 @@ export const GAMEPLAY_RUN_STATUSES = [
 
 export const gameplaySourceSchema = z
     .object({
-        kind: z.enum(['bonus_reward', 'relic', 'reward_perk', 'findable', 'power', 'trait', 'system']),
+        kind: z.enum(['bonus_reward', 'relic', 'reward_perk', 'findable', 'power', 'shop', 'trait', 'system']),
         id: z.string().min(1).max(120)
     })
     .strict();
@@ -750,6 +750,28 @@ export const MEMORY_SCOUT_DEFINITIONS = z.array(gameplayContentDefinitionSchema)
     }
 ]);
 
+export const LOCKSMITH_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
+    {
+        id: 'bonus_reward.key_insurance',
+        version: 1,
+        buildId: 'locksmith',
+        source: { kind: 'bonus_reward', id: 'key_insurance' },
+        trigger: 'content.claimed',
+        conditions: [],
+        effects: [
+            { kind: 'inventory.grant', itemId: 'iron_key', amount: 1 },
+            { kind: 'currency.grant', currency: 'shop_gold', amount: 1 },
+            { kind: 'score.grant', reason: 'content_reward', amount: 10 },
+            {
+                kind: 'feedback.emit',
+                cue: 'build.key_insurance.claimed',
+                message: 'Key Insurance added one iron key, one shop gold, and 10 score.',
+                tone: 'reward'
+            }
+        ]
+    }
+]);
+
 export const VAULTBREAKER_DEFINITIONS = z.array(gameplayContentDefinitionSchema).parse([
     {
         id: 'bonus_reward.chest_gold',
@@ -1060,6 +1082,7 @@ export const GAMEPLAY_CONTENT_DEFINITIONS = [
     ...SABOTEUR_DEFINITIONS,
     ...BOARD_TACTICIAN_DEFINITIONS,
     ...MEMORY_SCOUT_DEFINITIONS,
+    ...LOCKSMITH_DEFINITIONS,
     ...VAULTBREAKER_DEFINITIONS,
     ...SLAYER_DEFINITIONS,
     ...SEER_DEFINITIONS
@@ -1159,6 +1182,20 @@ export const gameplayCommandSchema = z.discriminatedUnion('type', [
         .object({
             ...commandBase,
             type: z.literal('board.undo_resolve')
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('shop.purchase'),
+            offerId: z.string().min(1).max(160)
+        })
+        .strict(),
+    z
+        .object({
+            ...commandBase,
+            type: z.literal('dungeon.exit_activate'),
+            spend: z.enum(['none', 'key', 'master_key'])
         })
         .strict()
 ]);
@@ -1382,6 +1419,33 @@ export const gameplayEventSchema = z.discriminatedUnion('type', [
     z
         .object({
             ...eventBase,
+            type: z.literal('shop.offer_purchased'),
+            offerId: z.string().min(1).max(160),
+            itemId: z.string().min(1).max(120),
+            cost: z.number().int().nonnegative(),
+            shopGoldBefore: z.number().int().nonnegative(),
+            shopGoldAfter: z.number().int().nonnegative(),
+            masterKeysBefore: z.number().int().nonnegative(),
+            masterKeysAfter: z.number().int().nonnegative()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
+            type: z.literal('dungeon.exit_activated'),
+            exitTileId: z.string().min(1).max(160),
+            spend: z.enum(['none', 'key', 'master_key']),
+            keyKind: z.enum(['iron', 'treasure', 'shrine', 'boss', 'trap']).nullable(),
+            masterKeysBefore: z.number().int().nonnegative(),
+            masterKeysAfter: z.number().int().nonnegative(),
+            gatewayUsesBefore: z.number().int().nonnegative(),
+            gatewayUsesAfter: z.number().int().nonnegative(),
+            routeType: z.string().min(1).max(80).nullable()
+        })
+        .strict(),
+    z
+        .object({
+            ...eventBase,
             type: z.literal('currency.changed'),
             currency: z.literal('shop_gold'),
             requested: z.number().int().positive(),
@@ -1558,4 +1622,23 @@ export const createGameplayUndoResolveCommand = (commandId: string): GameplayCom
         schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
         commandId,
         type: 'board.undo_resolve'
+    });
+
+export const createGameplayShopPurchaseCommand = (commandId: string, offerId: string): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'shop.purchase',
+        offerId
+    });
+
+export const createGameplayDungeonExitActivateCommand = (
+    commandId: string,
+    spend: 'none' | 'key' | 'master_key'
+): GameplayCommand =>
+    gameplayCommandSchema.parse({
+        schemaVersion: GAMEPLAY_CORE_SCHEMA_VERSION,
+        commandId,
+        type: 'dungeon.exit_activate',
+        spend
     });

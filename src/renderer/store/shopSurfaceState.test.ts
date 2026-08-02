@@ -176,6 +176,19 @@ describe('shopSurfaceState', () => {
         }
         expect(result.patch.run.peekCharges).toBe(shopRun.peekCharges + 1);
         expect(result.patch.run.shopGold).toBe(shopRun.shopGold - offer.cost);
+        expect(result.patch.run.gameplayCommandJournal).toEqual([
+            expect.objectContaining({ type: 'shop.purchase', offerId: offer.id })
+        ]);
+        expect(result.events).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'shop.offer_purchased', offerId: offer.id }),
+            expect.objectContaining({ type: 'feedback.requested', cue: 'shop.offer.purchased' })
+        ]));
+        expect(createShopPurchaseSurfaceResult({
+            offerId: 'missing-offer',
+            run: shopRun,
+            shopReturnMode: 'summary',
+            view: 'shop'
+        })).toEqual({ kind: 'ignored' });
     });
 
     it('applies shop rerolls only on a usable shop surface', () => {
